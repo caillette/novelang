@@ -1,0 +1,20 @@
+=== section0 w01
+
+p000 w001
+
+--- speech010 w011 :: w012 w013
+
+--- speech020 w021 w022
+
+--| escaped030 w031
+
+--+ continued040
+
+p040 w041
+w042
+
+p050
+
+=== section1 s11
+
+p100

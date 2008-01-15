@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+
+<document>
+
+
+  <chapter> <title>Structure</title>
+
+    <section> <title>Tags</title>
+      <tag>Sample</tag>
+      <tag>Other tag</tag>
+      <paragraph>
+        <tag>Sample</tag>
+      </paragraph>
+    </section>
+
+    <section> <title>Identifiers</title>
+      <paragraph> <identifier>1</identifier>
+        Les identifiants doivent être unique à travers l'ensemble des documents référencés.
+        Ils sont optionnels.
+      </paragraph>
+    </section>
+   
+  </chapter>
+
+  <chapter> <title>Paragraphs</title>
+
+    <section> <title>Un peu de dialogue</title>
+      <speech-sequence>
+        <speech>
+          Vous aimez les chiens
+          <questionmark />
+        </speech>
+        <speech>
+          Je les aime cuits à point.
+        </speech>
+        <speech-escaped>      <!-- Treated as casual paragraph but does not break -->
+          Et il ajouta : <!-- (possible) closing quotes at end of speech sequence -->
+        </speech-escaped>
+        <speech-continued> <!-- Right-angled quote appears at beginning -->
+          Et avec de la moutarde.
+        </speech-continued>
+      </speech-sequence>
+
+
+      <paragraph>
+        <!-- EMDash inside a line -->
+        Il répondit <semicolon/> <inlinespeech>moi non plus</inlinespeech>.
+      </paragraph>
+
+      <!-- Name of person speaking -->
+      <speech> <teller>L'homme"</teller>
+        Bla.
+      </speech>
+      <speech> <teller>L'autre homme"</teller>
+        Bla !
+      </speech>
+
+    </section>
+
+    <section> <title>Incises</title>
+      <paragraph>
+        Il aimait les chiens <interpolatedclause>ces amis de l'homme</interpolatedclause>
+        avec de la moutarde
+        <!-- No "closing" dash because of immediately following period: -->
+        <interpolatedclause noclosing="true">et cuits à point</interpolatedclause>.
+      </paragraph>
+    </section>
+
+    <section> <title>Citations</title>
+      <paragraph>
+        Il a dit <quote>tu ne le sais pas encore mais tu es déjà mort</quote>.
+      </paragraph>
+      <paragraph>
+        Il a dit <quote>L'autre a dit <quote>quelque chose</quote></quote>.
+      </paragraph>
+      <quotedtext>
+        <paragraph>
+          Ceci est un texte cité.
+        </paragraph>
+        <paragraph>
+          Éventuellement sur plusieurs paragraphes.
+        </paragraph>
+      </quotedtext>
+    </section>
+
+  </chapter>
+
+  <chapter> <title>Miscellaneous</title>
+
+    <section> <title>Comments</title>
+      <paragraph>
+        For comments in original text, XML comments are ok.
+      </paragraph>
+      <paragraph>
+        <processing-comment>For comments generated through processing, there is a special tag
+        for dynamic hiding.</processing-comment>
+      </paragraph>
+    </section>    
+
+    <section> <title>Augmented characters</title>
+      <paragraph> <!-- may include non-breakable space rendering time -->
+        <semicolon/>
+        <question-mark/>
+        <exclamation-mark/>
+        <ellipsis/>
+        <apostrophe/>
+      </paragraph>
+    </section>
+
+    <section> <title>URI</title>
+      <paragraph>
+        <uri link="http://mon.uri.com" >Description de l'URI</uri>
+      </paragraph>
+    </section>
+
+    <section> <title>Numbering</title>
+      <ordinal number="1" ending="er" />
+    </section>
+
+  </chapter>
+
+
+
+</document>
+
