@@ -1,8 +1,8 @@
 
 ***
-  style = "default" // SOFTBREAK supported
+  style style-name-here // SOFTBREAK supported, style remains attached to chapter separator above.
 
-=== style = "foo"
+=== style another-style
 
 include `t00 w01  w2`
 include f10 "s20 w21" 1 2 3..4

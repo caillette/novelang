@@ -158,33 +158,89 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Content7.g" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/antlr/Content7.g">
-          <provider selected="true" editor-type-id="grammar">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Structure7.g" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/antlr/Structure7.g">
-          <provider selected="true" editor-type-id="grammar">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="structure-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/structure-1.sample">
+      <file leaf-file-name="ParserTest.java" pinned="true" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/ParserTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="32" selection-start="56" selection-end="56" vertical-scroll-proportion="0.046767537">
+            <state line="36" column="3" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.023383768">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="structure-2.sample" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../samples/structure-2.sample">
+      <file leaf-file-name="Content8.g" pinned="true" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/antlr/Content8.g">
+          <provider selected="true" editor-type-id="grammar">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sections-3.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/sections-3.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="0" selection-start="0" selection-end="62" vertical-scroll-proportion="0.11691885">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sections-2.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/sections-2.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="0" selection-start="66" selection-end="66" vertical-scroll-proportion="0.16368638">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sections-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="4" selection-start="59" selection-end="59" vertical-scroll-proportion="0.16368638">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="quotes-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/quotes-1.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="1" selection-start="36" selection-end="36" vertical-scroll-proportion="0.09353507">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="parenthesis-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="paragraphbody-2.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-2.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="0" selection-start="87" selection-end="87" vertical-scroll-proportion="0.16368638">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="blockquote-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/blockquote-1.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="paragraphbody-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="0" selection-start="118" selection-end="118" vertical-scroll-proportion="0.303989">
               <folding />
             </state>
           </provider>
@@ -567,17 +623,25 @@
   </component>
   <component name="RestoreUpdateTree" />
   <component name="RunManager" selected="JUnit.ParserTest">
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
+    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="/Applications/IntelliJ IDEA 6.0.app/bin/appletviewer.policy" />
       <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <module name="" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <module name="" />
@@ -598,25 +662,17 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
       <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="/Applications/IntelliJ IDEA 6.0.app/bin/appletviewer.policy" />
       <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <module name="" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
     </configuration>
     <configuration default="false" name="ParserTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <pattern value="novelang.parser.*" />
@@ -836,71 +892,30 @@
     <option name="myLastEditedConfigurable" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/antlr/Content5.g">
-      <provider selected="true" editor-type-id="grammar">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../samples/speechsequence-1.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="4" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0261348">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/quotes-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="60" selection-end="60" vertical-scroll-proportion="0.14030261">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="17" selection-start="116" selection-end="116" vertical-scroll-proportion="0.25722146">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/antlr/Content6.g">
-      <provider selected="true" editor-type-id="grammar">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/ParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="14" selection-start="2535" selection-end="2535" vertical-scroll-proportion="0.3318078">
+        <state line="36" column="3" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.023383768">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
+    <entry file="file://$PROJECT_DIR$/../samples/speechsequence-2.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="35" selection-start="85" selection-end="85" vertical-scroll-proportion="0.18707015">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/blockquote-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="6" selection-start="61" selection-end="61" vertical-scroll-proportion="0.32737276">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/antlr/Content7.g">
-      <provider selected="true" editor-type-id="grammar">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/antlr/Structure7.g">
-      <provider selected="true" editor-type-id="grammar">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../samples/structure-1.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="32" selection-start="56" selection-end="56" vertical-scroll-proportion="0.046767537">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -910,6 +925,67 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/sections-3.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="0" selection-end="62" vertical-scroll-proportion="0.11691885">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/sections-2.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="66" selection-end="66" vertical-scroll-proportion="0.16368638">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="4" selection-start="59" selection-end="59" vertical-scroll-proportion="0.16368638">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/quotes-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="1" selection-start="36" selection-end="36" vertical-scroll-proportion="0.09353507">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="118" selection-end="118" vertical-scroll-proportion="0.303989">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-2.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="87" selection-end="87" vertical-scroll-proportion="0.16368638">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/blockquote-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/antlr/Content8.g">
+      <provider selected="true" editor-type-id="grammar">
+        <state />
       </provider>
     </entry>
   </component>

@@ -60,6 +60,11 @@ public class ParserTest {
   }
 
   @Test
+  public void sections3() throws IOException, RecognitionException {
+    runParserOnResource( "/sections-3.sample" ) ;
+  }
+
+  @Test
   public void speechSequence1() throws IOException, RecognitionException {
     runParserOnResource( "/speechsequence-1.sample" ) ;
   }
@@ -77,6 +82,11 @@ public class ParserTest {
   @Test
   public void paragraphBody1() throws IOException, RecognitionException {
     runParserOnResource( "/paragraphbody-1.sample" ) ;
+  }
+
+  @Test
+  public void paragraphBody2() throws IOException, RecognitionException {
+    runParserOnResource( "/paragraphbody-2.sample" ) ;
   }
 
   @Test
@@ -102,15 +112,15 @@ public class ParserTest {
 // =======
 
 
-  private Content7Lexer lexer ;
-  private Content7Parser parser ;
+  private Content8Lexer lexer ;
+  private Content8Parser parser ;
 
 
   private void initializeParser( String testString ) throws IOException {
     final CharStream stream = new ANTLRStringStream( testString ) ;
-    lexer = new Content7Lexer( stream ) ;
+    lexer = new Content8Lexer( stream ) ;
     final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
-    parser = new Content7Parser( tokens ) ;
+    parser = new Content8Parser( tokens ) ;
   }
 
   private static String readResource( String resourceName ) throws IOException {
