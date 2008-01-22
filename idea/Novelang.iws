@@ -104,6 +104,21 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <line_breakpoints>
+      <breakpoint url="jar://$PROJECT_DIR$/../../../JavaProducts/junit/junit-4.4/junit-4.4-src.zip!/org/junit/runners/Parameterized.java" line="86" class="org.junit.runners.Parameterized.TestClassRunnerForParameters" package="org.junit.runners">
+        <option name="ENABLED" value="true" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -158,89 +173,51 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ParserTest.java" pinned="true" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/ParserTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="3" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.023383768">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Content8.g" pinned="true" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../src/antlr/Content8.g">
+      <file leaf-file-name="AntlrStructure.g" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrStructure.g">
           <provider selected="true" editor-type-id="grammar">
             <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sections-3.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/sections-3.sample">
+      <file leaf-file-name="AntlrStructureParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructureParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="0" selection-end="62" vertical-scroll-proportion="0.11691885">
+            <state line="1239" column="18" selection-start="42864" selection-end="42864" vertical-scroll-proportion="0.33286518">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sections-2.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/sections-2.sample">
+      <file leaf-file-name="structure-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/structure-1.sample">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="0" selection-start="66" selection-end="66" vertical-scroll-proportion="0.16368638">
+            <state line="10" column="14" selection-start="177" selection-end="177" vertical-scroll-proportion="0.2338377">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sections-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
+      <file leaf-file-name="AntlrPart.g" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
+          <provider selected="true" editor-type-id="grammar">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StructureParserSupport.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/parser/StructureParserSupport.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="4" selection-start="59" selection-end="59" vertical-scroll-proportion="0.16368638">
+            <state line="72" column="69" selection-start="2208" selection-end="2208" vertical-scroll-proportion="0.2517194">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="quotes-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/quotes-1.sample">
+      <file leaf-file-name="Chapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/Chapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="1" selection-start="36" selection-end="36" vertical-scroll-proportion="0.09353507">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="parenthesis-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="paragraphbody-2.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-2.sample">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="0" selection-start="87" selection-end="87" vertical-scroll-proportion="0.16368638">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="blockquote-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/blockquote-1.sample">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="paragraphbody-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="0" selection-start="118" selection-end="118" vertical-scroll-proportion="0.303989">
+            <state line="22" column="17" selection-start="863" selection-end="863" vertical-scroll-proportion="0.14030261">
               <folding />
             </state>
           </provider>
@@ -369,11 +346,7 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/antlr-runtime-3.0.1.jar" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/antlr-runtime-3.0.1.jar!/org/antlr/runtime" />
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -395,7 +368,131 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/antlr-runtime-3.0.1.jar" />
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/org" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/org/junit" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="lib" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/org" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/org/junit" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/org/junit/runners" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="lib" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/org" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="lib" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/junit" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="lib" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/junit" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../lib/junit-4.4.jar!/junit/framework" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -526,6 +623,40 @@
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/parser" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/parser/implementation" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/model" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
@@ -576,6 +707,10 @@
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr/novelang/parser/antlr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
       </PATH>
     </subPane>
   </component>
@@ -590,7 +725,7 @@
       <showLibraryContents />
       <hideEmptyPackages />
       <abbreviatePackageNames />
-      <showStructure Favorites="false" ProjectPane="false" Scope="false" PackagesPane="false" />
+      <showStructure PackagesPane="false" ProjectPane="false" Scope="false" Favorites="false" />
       <autoscrollToSource ProjectPane="true" />
       <autoscrollFromSource ProjectPane="true" />
       <sortByType />
@@ -609,7 +744,12 @@
   <component name="ReadonlyStatusHandler">
     <option name="SHOW_DIALOG" value="true" />
   </component>
-  <component name="RecentsManager" />
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="novelang.parser" />
+      <recent name="novelang.parser.implementation" />
+    </key>
+  </component>
   <component name="Regex">
     <option name="pos1" value="218" />
     <option name="pos2" value="218" />
@@ -622,7 +762,36 @@
     <option name="showLabels" value="true" />
   </component>
   <component name="RestoreUpdateTree" />
-  <component name="RunManager" selected="JUnit.ParserTest">
+  <component name="RunManager" selected="JUnit.novelang.parser">
+    <tempConfiguration default="false" name="StructureParserTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+      <pattern value="novelang.parser.*" />
+      <module name="Novelang" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="novelang.parser" />
+      <option name="MAIN_CLASS_NAME" value="novelang.parser.StructureParserTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </tempConfiguration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
@@ -636,12 +805,17 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="/Applications/IntelliJ IDEA 6.0.app/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <module name="" />
@@ -662,25 +836,13 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="/Applications/IntelliJ IDEA 6.0.app/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-    </configuration>
-    <configuration default="false" name="ParserTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+    <configuration default="false" name="PartParserTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <pattern value="novelang.parser.*" />
       <module name="Novelang" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
       <option name="PACKAGE_NAME" value="novelang.parser" />
-      <option name="MAIN_CLASS_NAME" value="novelang.parser.ParserTest" />
+      <option name="MAIN_CLASS_NAME" value="novelang.parser.PartParserTest" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="" />
@@ -692,6 +854,33 @@
       </option>
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="53680" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
+    <configuration default="false" name="novelang.parser" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+      <module name="Novelang" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="PACKAGE_NAME" value="novelang.parser" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="51943" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
@@ -779,7 +968,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1440" height="874" extended-state="6" />
+    <frame x="0" y="22" width="1440" height="874" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
@@ -790,7 +979,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19985622" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" order="8" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1994852" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="6" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
@@ -892,98 +1081,54 @@
     <option name="myLastEditedConfigurable" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../samples/speechsequence-1.sample">
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/parser/implementation/DefaultStructureParserFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="45" column="0" selection-start="1845" selection-end="1845" vertical-scroll-proportion="0.8060345">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/ParserTest.java">
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/Chapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="3" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.023383768">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/speechsequence-2.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="22" column="17" selection-start="863" selection-end="863" vertical-scroll-proportion="0.14030261">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../samples/structure-1.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="10" column="14" selection-start="177" selection-end="177" vertical-scroll-proportion="0.2338377">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/structure-2.sample">
+    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/__Test___input.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-3.sample">
+    <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
+      <provider selected="true" editor-type-id="grammar">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/parser/StructureParserSupport.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="0" selection-end="62" vertical-scroll-proportion="0.11691885">
+        <state line="72" column="69" selection-start="2208" selection-end="2208" vertical-scroll-proportion="0.2517194">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-2.sample">
+    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructureParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="66" selection-end="66" vertical-scroll-proportion="0.16368638">
+        <state line="1239" column="18" selection-start="42864" selection-end="42864" vertical-scroll-proportion="0.33286518">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="4" selection-start="59" selection-end="59" vertical-scroll-proportion="0.16368638">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/quotes-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="1" selection-start="36" selection-end="36" vertical-scroll-proportion="0.09353507">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="118" selection-end="118" vertical-scroll-proportion="0.303989">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-2.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="87" selection-end="87" vertical-scroll-proportion="0.16368638">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/blockquote-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/antlr/Content8.g">
+    <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrStructure.g">
       <provider selected="true" editor-type-id="grammar">
         <state />
       </provider>

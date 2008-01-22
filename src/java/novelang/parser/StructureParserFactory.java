@@ -17,12 +17,15 @@
  */
 package novelang.parser;
 
-import org.antlr.runtime.RecognitionException;
+import com.google.inject.ImplementedBy;
+import novelang.parser.implementation.DefaultStructureParserFactory;
 
 /**
  * @author Laurent Caillette
  */
-public interface NovelangParser {
+@ImplementedBy( DefaultStructureParserFactory.class )
+public interface StructureParserFactory {
 
-  void document() throws RecognitionException;
+  StructureParser createParser( String text ) ;
+  
 }

@@ -1,14 +1,5 @@
+:autogenerate
 
-***
-  style style-name-here // SOFTBREAK supported, style remains attached to chapter separator above.
-
-=== style another-style
-
-include `t00 w01  w2`
-include f10 "s20 w21" 1 2 3..4
-
-===
-
-include `t00 w01  w2`
-include f10 "s20 w21" 1 2 3..4
-
+# path/to/file0.np
+# path/to/file1.np
+# path/with/wilc*rds/*.np

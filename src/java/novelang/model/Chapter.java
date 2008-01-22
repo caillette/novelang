@@ -20,5 +20,5 @@ package novelang.model;
 /**
  * @author Laurent Caillette
  */
-public interface Chapter extends Identifiable, Taggable {
+public interface Chapter {
 }

@@ -15,13 +15,18 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model;
+package novelang.parser;
+
+import org.antlr.runtime.RecognitionException;
 
 /**
  * @author Laurent Caillette
  */
-public interface Document {
+public interface GenericParser {
 
-  Iterable< Chapter > getChapters() ;
+  boolean hasProblem() ;
+  
+  Iterable< RecognitionException > getProblems() ;
 
+  void parse() throws RecognitionException;
 }

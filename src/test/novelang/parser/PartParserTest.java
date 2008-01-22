@@ -29,13 +29,21 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import novelang.ResourceTools;
+import novelang.parser.implementation.DefaultPartParserFactory;
+import junit.framework.TestSuite;
 
 /**
  * Tests for parser using external files.
  *
+ * Yes, JUnit's Parametrized runner is supposed to avoid typing all these methods
+ * but it sucks as test names are like {@code test[0], test[1]...}
+ * and it would require to move tests like {@code testIllFormedDocument()}
+ * to another class.
+ *
  * @author Laurent Caillette
  */
-public class ParserTest {
+public class PartParserTest extends AbstractParserTest< PartParser > {
+
 
   /**
    * Get sure that errors are detected.
@@ -43,9 +51,8 @@ public class ParserTest {
   @Test
   public void detectIllFormedDocument() throws IOException, RecognitionException {
     initializeParser( "ill-formed document" ) ;
-    parser.document() ;
-    List< RecognitionException > parserExceptions = parser.getExceptions() ;
-    assertFalse( "Parser failed to throw exceptions", parserExceptions.isEmpty() ) ;
+    parser.parse() ;
+    assertTrue( "Parser failed to throw exceptions", parser.hasProblem() ) ;
   }
 
 
@@ -106,48 +113,12 @@ public class ParserTest {
   }
 
 
-
 // =======
 // Fixture
 // =======
 
 
-  private Content8Lexer lexer ;
-  private Content8Parser parser ;
-
-
-  private void initializeParser( String testString ) throws IOException {
-    final CharStream stream = new ANTLRStringStream( testString ) ;
-    lexer = new Content8Lexer( stream ) ;
-    final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
-    parser = new Content8Parser( tokens ) ;
+  protected PartParser createParser( String s ) {
+    return new DefaultPartParserFactory().createParser( s ) ;
   }
-
-  private static String readResource( String resourceName ) throws IOException {
-    return ResourceTools.readStringResource(
-        ParserTest.class,
-        resourceName,
-        Charset.forName( "ISO-8859-1" )
-    ) ;
-  }
-
-  private void checkNoParserException() {
-    List< RecognitionException > parserExceptions = parser.getExceptions() ;
-    assertTrue( "Parser threw exceptions -- see output", parserExceptions.isEmpty() ) ;
-  }
-
-  private void runParserOnResource( String resourceName )
-      throws IOException, RecognitionException
-  {
-    runParserOnString( readResource( resourceName ) ) ;
-  }
-
-  private void runParserOnString( String text )
-      throws IOException, RecognitionException
-  {
-    initializeParser( text ) ;
-    parser.document() ;
-    checkNoParserException() ;
-  }
-
 }

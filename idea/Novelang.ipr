@@ -869,9 +869,13 @@
         <root url="jar://$PROJECT_DIR$/../lib/logback-classic-0.9.8.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/slf4j-api-1.4.3.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/logback-core-0.9.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/guice-1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/google-collect-snapshot-20071022.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/../../../JavaProducts/junit/junit-4.4/junit-4.4-src.zip!/" />
+      </SOURCES>
     </library>
   </component>
   <component name="uidesigner-configuration">

@@ -1,24 +1,39 @@
-grammar Content7 ;
+grammar AntlrPart ;
+
 
 // Backtracking causes predicates to fail silently, 
-// thus disabling nesting depth limitation.
-//options { output = AST ; } //backtrack = true ; memoize = true ; } 
+// as it disables nesting depth limitation.
+options { output = AST ; } //backtrack = true ; memoize = true ; } 
 
 tokens {
   DOCUMENT ;
   SECTION  ;
   TITLE ;
+  LOCUTOR ;
+  PARAGRAPH_PLAIN ;
+  PARAGRAPH_SPEECH ;
+  PARAGRAPH_SPEECH_CONTINUED ;
+  PARAGRAPH_SPEECH_ESCAPED ;
+  BLOCKQUOTE ;
+  QUOTE ;
+  EMPHASIS ;
+  PARENTHESIS ;
+  INTERPOLATEDCLAUSE ;
+  INTERPOLATEDCLAUSE_SILENTEND ;
+  WORD ;
+  WORDTRAIL ;
 }
 	
+//scope WordScope { StringBuffer buffer } 
 
 @parser::header { 
-  package novelang.parser ;
+  package novelang.parser.antlr ;
 } 
 
 @lexer::header { 
-  package novelang.parser ;
+  package novelang.parser.antlr ;
 } 
-	
+
 @parser::members {
   final List< RecognitionException > exceptions = 
       new ArrayList<RecognitionException>() ;
@@ -42,49 +57,53 @@ tokens {
 document 
   : section
     ( HARDBREAK section )* 
-    SOFTBREAK*
+      // Looks strange but helps supporting arbitrary 
+      // volume of white garbage at the end of the file:
+    ( ( SOFTBREAK | HARDBREAK ) WHITESPACE? )* 
     EOF 
-//    -> ^( DOCUMENT section* )
+    -> ^( DOCUMENT section* )
   ;
 	
 section 
-  : SECTION_DELIMITER 
-    textLine?     
-    ( HARDBREAK ( paragraph | blockQuote ) )+
-//    -> ^( SECTION paragraph* blockQuote* )
+  : SECTION_DELIMITER WHITESPACE? 
+    ( textLine WHITESPACE? )?
+    ( HARDBREAK WHITESPACE ? ( paragraph | blockQuote ) )+ 
+    WHITESPACE?
+    -> ^( SECTION ^( TITLE textLine )? paragraph* blockQuote* )
   ;
     
 /** A single line of text with no break inside.
  */    
 textLine
-	:	WHITESPACE? word 
+	:	word 
 	  ( WHITESPACE ( word | wordTrail ) )*
-	  WHITESPACE?
+	  -> word* wordTrail*
 	;
-	
+
 paragraph
-  : (   speechOpening 
-      | SPEECH_ESCAPE 
-      | SPEECH_CONTINUATOR
-    )?
-    WHITESPACE?
-    paragraphBody
+  : 
+    ( SPEECH_OPENER ( WHITESPACE locutor )? WHITESPACE? paragraphBody )
+    -> ^( PARAGRAPH_SPEECH locutor? paragraphBody )
+  | ( SPEECH_ESCAPE WHITESPACE? paragraphBody )
+    -> ^( PARAGRAPH_SPEECH_ESCAPED paragraphBody ) 
+  | ( SPEECH_CONTINUATOR WHITESPACE? paragraphBody )
+    -> ^( PARAGRAPH_SPEECH_CONTINUED paragraphBody )
+  | paragraphBody
+    -> ^( PARAGRAPH_PLAIN paragraphBody )
   ;
-  
+
 blockQuote
   : OPENING_BLOCKQUOTE 
     wideBreak? 
     paragraphBody ( HARDBREAK paragraphBody )* 
     HARDBREAK? 
     CLOSING_BLOCKQUOTE
+    -> ^( BLOCKQUOTE ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
 
-speechOpening
-	:	SPEECH_OPENER ( WHITESPACE locutor )?
-	;
-  
 locutor
  	: word ( WHITESPACE word )* WHITESPACE? LOCUTOR_DELIMITER
+ 	  -> ^( LOCUTOR word* )
  	;
  	  
 paragraphBody 
@@ -109,6 +128,7 @@ quotingText
     wideBreak? 
     DOUBLE_QUOTE
     { -- quoteDepth ; }
+    -> ^( QUOTE quotingTextItem* wordTrail* )
   ;
 
 quotingTextItem
@@ -119,14 +139,15 @@ quotingTextItem
   ;   
   
 parenthesizingText
-  : OPENING_PARENTHESIS 
+  : LEFT_PARENTHESIS 
     { ++ parenthesisDepth < 3 }?
     wideBreak?
     parenthesizingTextItem
     ( ( wideBreak parenthesizingTextItem ) | ( wideBreak? wordTrail ) )*
     wideBreak?
-    CLOSING_PARENTHESIS
+    RIGHT_PARENTHESIS
     { -- parenthesisDepth ; }
+    -> ^( PARENTHESIS parenthesizingTextItem* wordTrail* )
   ;
 
 parenthesizingTextItem
@@ -137,14 +158,15 @@ parenthesizingTextItem
   ;   
 
 emphasizingText
-  : EMPHASIS_DELIMITER 
+  : SOLIDUS 
     { ++ emphasisDepth < 2 }?
     wideBreak?
     emphasizingTextItem
     ( ( wideBreak emphasizingTextItem ) | ( wideBreak? wordTrail ) )*
     wideBreak? 
-    EMPHASIS_DELIMITER
+    SOLIDUS
     { -- emphasisDepth ; }
+    -> ^( EMPHASIS emphasizingTextItem* wordTrail* )
   ;
   
 emphasizingTextItem  
@@ -161,8 +183,12 @@ interpolatedClause
     interpolatedClauseItem
     ( ( wideBreak interpolatedClauseItem ) | ( wideBreak? wordTrail ) )*
     wideBreak? 
-    ( INTERPOLATED_CLAUSE_DELIMITER | INTERPOLATED_CLAUSE_SILENT_END )
-    { -- interpolatedClauseDepth ; }
+    (   INTERPOLATED_CLAUSE_DELIMITER 
+        -> ^( INTERPOLATEDCLAUSE interpolatedClauseItem* wordTrail* )
+      | INTERPOLATED_CLAUSE_SILENT_END 
+        -> ^( INTERPOLATEDCLAUSE_SILENTEND interpolatedClauseItem* wordTrail* )
+    )
+    { -- interpolatedClauseDepth ; }    
   ;	  
   
 interpolatedClauseItem  
@@ -176,22 +202,26 @@ interpolatedClauseItem
 /** Is PUNCTUATION_SIGN enough?
   */
 wordTrail
-	:	PUNCTUATION_SIGN
-	;
-
-	
-word 
-  : ( LETTER | DIGIT )+
-    ( ( SINGLE_QUOTE | DASH ) ( LETTER | DIGIT )+ )*
-  ; 
+  :	PUNCTUATION_SIGN
+    -> ^( WORDTRAIL PUNCTUATION_SIGN )
+  ;
 
 wideBreak 
-	:	( WHITESPACE | ( WHITESPACE? SOFTBREAK WHITESPACE? ) )
+	:	( WHITESPACE | ( WHITESPACE? SOFTBREAK WHITESPACE? ) ) ->
   ;
+  
+word : SYMBOL -> ^( WORD SYMBOL ) ;  
+
+/** Use a token (uppercase name) to aggregate other tokens.
+ */
+SYMBOL 
+  : ( LETTER | DIGIT )+
+    ( ( APOSTROPHE | HYPHEN_MINUS ) ( LETTER | DIGIT )+ )*
+  ; 
 
 PUNCTUATION_SIGN 
   : COMMA 
-  | PERIOD 
+  | FULL_STOP 
   | ELLIPSIS 
   | QUESTION_MARK 
   | EXCLAMATION_MARK 
@@ -204,14 +234,26 @@ WHITESPACE : ( ' ' | '\t' )+ ;
 
 
 fragment COMMA : ',' ;
-fragment PERIOD : '.' ;
+fragment FULL_STOP : '.' ;
 fragment ELLIPSIS : '...' ;
 fragment QUESTION_MARK : '?' ;
 fragment EXCLAMATION_MARK : '!' ;
 fragment SEMICOLON : ';' ;
 
-OPENING_PARENTHESIS : '(' ;
-CLOSING_PARENTHESIS : ')' ;
+fragment LETTER 
+  : 'a'..'z' 
+  | 'A'..'Z' 
+  | '&oelig;' 
+  | '&OElig' 
+  | '&aelig;' 
+  | '&AElig' 
+  ;
+
+fragment DIGIT : '0'..'9';
+  
+
+LEFT_PARENTHESIS : '(' ;
+RIGHT_PARENTHESIS : ')' ;
 
 OPENING_BLOCKQUOTE : '<<<' ;
 CLOSING_BLOCKQUOTE : '>>>' ;
@@ -219,13 +261,13 @@ CLOSING_BLOCKQUOTE : '>>>' ;
 INTERPOLATED_CLAUSE_DELIMITER : '--' ;
 INTERPOLATED_CLAUSE_SILENT_END : '-_' ;
 
-EMPHASIS_DELIMITER : '/' ;
+SOLIDUS : '/' ;
 
-DASH : '-' ;
+HYPHEN_MINUS : '-' ;
 
-SINGLE_QUOTE : '\'' ;
+APOSTROPHE : '\'' ;
 DOUBLE_QUOTE : '\"' ;
-BACKQUOTE : '`' ;
+GRAVE_ACCENT : '`' ;
 
 
 SPEECH_OPENER : '---' ;
@@ -237,18 +279,6 @@ LOCUTOR_DELIMITER : '::' ;
 CHAPTER_DELIMITER : '***' ;
 SECTION_DELIMITER : '===' ;
 
-
-LETTER 
-  : 'a'..'z' 
-  | 'A'..'Z' 
-  | '&oelig;' 
-  | '&OElig' 
-  | '&aelig;' 
-  | '&AElig' 
-  ;
-
-DIGIT : '0'..'9';
-  
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
 
