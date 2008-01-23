@@ -17,13 +17,13 @@ tokens {
   INTERVAL ;
 }
 
-scope ChapterScope { novelang.parser.StructureParserSupport.Chapter chapter } 
-scope SectionScope { novelang.parser.StructureParserSupport.Section section } 
+scope ChapterScope { StructureParserSupport.Chapter chapter } 
+scope SectionScope { StructureParserSupport.Section section } 
 
 
 @parser::header { 
   package novelang.parser.antlr ;
-  
+  import novelang.parser.StructureParserSupport ;
 } 
 
 @lexer::header { 
@@ -33,10 +33,9 @@ scope SectionScope { novelang.parser.StructureParserSupport.Section section }
 	
 @parser::members {
 
-  private final novelang.parser.StructureParserSupport support =
-      new novelang.parser.StructureParserSupport() ;
+  private final StructureParserSupport support = new StructureParserSupport() ;
 
-	public novelang.parser.StructureParserSupport getSupport() {
+	public StructureParserSupport getSupport() {
 	  return support ;
 	}
 	
@@ -102,13 +101,13 @@ pathDelimiter
 chapter
   scope ChapterScope ;
   : CHAPTER_INTRODUCER 
-    { novelang.parser.StructureParserSupport.Chapter chapter =
-          new novelang.parser.StructureParserSupport.Chapter() ;
+    { StructureParserSupport.Chapter chapter = new StructureParserSupport.Chapter() ;
       support.addChapter( chapter ) ;      
       { $ChapterScope::chapter = chapter ; }
     }
-    WHITESPACE? ( title WHITESPACE? )?
-    { $ChapterScope::chapter.setTitle( $title.text ) ; }
+    WHITESPACE? ( title WHITESPACE? 
+      { $ChapterScope::chapter.setTitle( $title.text ) ; }
+    )?
     LINEBREAK
     ( style WHITESPACE? LINEBREAK )?
     section ( LINEBREAK section )* 
@@ -118,8 +117,7 @@ chapter
 section
   scope SectionScope ;
   : SECTION_INTRODUCER 
-    { novelang.parser.StructureParserSupport.Section section =
-          new novelang.parser.StructureParserSupport.Section() ;
+    { StructureParserSupport.Section section = new StructureParserSupport.Section() ;
       $ChapterScope::chapter.addSection( section ) ;      
       $SectionScope::section = section ; 
     }  

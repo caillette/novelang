@@ -183,7 +183,7 @@
       <file leaf-file-name="AntlrStructureParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructureParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1239" column="18" selection-start="42864" selection-end="42864" vertical-scroll-proportion="0.33286518">
+            <state line="1237" column="36" selection-start="42785" selection-end="42785" vertical-scroll-proportion="0.33286518">
               <folding />
             </state>
           </provider>
@@ -192,7 +192,7 @@
       <file leaf-file-name="structure-1.sample" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../samples/structure-1.sample">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="14" selection-start="177" selection-end="177" vertical-scroll-proportion="0.2338377">
+            <state line="10" column="14" selection-start="177" selection-end="177" vertical-scroll-proportion="0.023383768">
               <folding />
             </state>
           </provider>
@@ -208,7 +208,7 @@
       <file leaf-file-name="StructureParserSupport.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/parser/StructureParserSupport.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="69" selection-start="2208" selection-end="2208" vertical-scroll-proportion="0.2517194">
+            <state line="72" column="69" selection-start="2208" selection-end="2208" vertical-scroll-proportion="0.023383768">
               <folding />
             </state>
           </provider>
@@ -217,7 +217,7 @@
       <file leaf-file-name="Chapter.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/Chapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="17" selection-start="863" selection-end="863" vertical-scroll-proportion="0.14030261">
+            <state line="22" column="17" selection-start="863" selection-end="863" vertical-scroll-proportion="0.023383768">
               <folding />
             </state>
           </provider>
@@ -725,7 +725,7 @@
       <showLibraryContents />
       <hideEmptyPackages />
       <abbreviatePackageNames />
-      <showStructure PackagesPane="false" ProjectPane="false" Scope="false" Favorites="false" />
+      <showStructure Favorites="false" PackagesPane="false" Scope="false" ProjectPane="false" />
       <autoscrollToSource ProjectPane="true" />
       <autoscrollFromSource ProjectPane="true" />
       <sortByType />
@@ -785,26 +785,6 @@
         <option name="Make" value="true" />
       </method>
     </tempConfiguration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-    </configuration>
-    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <module name="" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -832,6 +812,26 @@
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="wholeProject" />
       </option>
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <module name="" />
       <method>
         <option name="Make" value="true" />
       </method>
@@ -1088,23 +1088,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/Chapter.java">
+    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/__Test___input.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="17" selection-start="863" selection-end="863" vertical-scroll-proportion="0.14030261">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../samples/structure-1.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="14" selection-start="177" selection-end="177" vertical-scroll-proportion="0.2338377">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/__Test___input.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="10" column="14" selection-start="177" selection-end="177" vertical-scroll-proportion="0.023383768">
           <folding />
         </state>
       </provider>
@@ -1116,14 +1109,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/java/novelang/parser/StructureParserSupport.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="69" selection-start="2208" selection-end="2208" vertical-scroll-proportion="0.2517194">
+        <state line="72" column="69" selection-start="2208" selection-end="2208" vertical-scroll-proportion="0.023383768">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/Chapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="17" selection-start="863" selection-end="863" vertical-scroll-proportion="0.023383768">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructureParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1239" column="18" selection-start="42864" selection-end="42864" vertical-scroll-proportion="0.33286518">
+        <state line="1237" column="36" selection-start="42785" selection-end="42785" vertical-scroll-proportion="0.33286518">
           <folding />
         </state>
       </provider>
