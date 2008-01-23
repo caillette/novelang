@@ -26,6 +26,7 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import org.junit.Assert;
 import novelang.ResourceTools;
+import novelang.model.implementation.Book;
 
 /**
  * @author Laurent Caillette
@@ -33,11 +34,13 @@ import novelang.ResourceTools;
 public abstract class AbstractParserTest< P extends GenericParser > {
 
   protected P parser ;
+  protected Book book = new Book( getClass().getName() ) ;
 
-  protected abstract P createParser( String s ) ;
+
+  protected abstract P createParser( Book book, String s ) ;
 
   protected final void initializeParser( String testString ) throws IOException {
-    parser = createParser( testString ) ;
+    parser = createParser( book, testString ) ;
   }
 
   protected final static String readResource( String resourceName ) throws IOException {
@@ -60,7 +63,7 @@ public abstract class AbstractParserTest< P extends GenericParser > {
   protected final void runParserOnString( String text )
       throws IOException, RecognitionException
   {
-    initializeParser( text ) ;
+    initializeParser(  text ) ;
     parser.parse() ;
     checkNoParserException() ;
   }

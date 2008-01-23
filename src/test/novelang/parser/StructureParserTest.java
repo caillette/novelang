@@ -20,10 +20,12 @@ package novelang.parser;
 import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Assert;
 import novelang.parser.implementation.DefaultStructureParserFactory;
+import novelang.model.implementation.Book;
+import novelang.model.implementation.Chapter;
 import com.google.common.collect.Lists;
 
 /**
@@ -54,12 +56,19 @@ public class StructureParserTest extends AbstractParserTest< StructureParser > {
     runParserOnResource( "/structure-1.sample" ) ;
   }
 
-  @Test @Ignore
+  @Test
+  public void structure1AndTheBook() throws IOException, RecognitionException {
+    runParserOnResource( "/structure-1.sample" ) ;
+    final Iterable< Chapter > chapters = book.getChapters() ;
+    Assert.assertTrue( chapters.iterator().hasNext() ) ;
+  }
+
+  @Test
   public void structure2() throws IOException, RecognitionException {
     runParserOnResource( "/structure-2.sample" ) ;
   }
 
-  @Test @Ignore
+  @Test 
   public void structure3() throws IOException, RecognitionException {
     runParserOnResource( "/structure-3.sample" ) ;
   }
@@ -71,7 +80,7 @@ public class StructureParserTest extends AbstractParserTest< StructureParser > {
 // =======
 
 
-  protected StructureParser createParser( String s ) {
-    return new DefaultStructureParserFactory().createParser( s ) ;
+  protected StructureParser createParser( Book book, String s ) {
+    return new DefaultStructureParserFactory().createParser( book, s ) ;
   }
 }

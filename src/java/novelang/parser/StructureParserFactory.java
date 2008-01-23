@@ -19,6 +19,7 @@ package novelang.parser;
 
 import com.google.inject.ImplementedBy;
 import novelang.parser.implementation.DefaultStructureParserFactory;
+import novelang.model.structural.StructuralBook;
 
 /**
  * @author Laurent Caillette
@@ -26,6 +27,6 @@ import novelang.parser.implementation.DefaultStructureParserFactory;
 @ImplementedBy( DefaultStructureParserFactory.class )
 public interface StructureParserFactory {
 
-  StructureParser createParser( String text ) ;
+  StructureParser createParser( StructuralBook book, String structureAsText ) ;
   
 }

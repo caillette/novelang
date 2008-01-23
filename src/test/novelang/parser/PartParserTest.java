@@ -29,6 +29,7 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import novelang.ResourceTools;
+import novelang.model.implementation.Book;
 import novelang.parser.implementation.DefaultPartParserFactory;
 import junit.framework.TestSuite;
 
@@ -118,7 +119,7 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 // =======
 
 
-  protected PartParser createParser( String s ) {
+  protected PartParser createParser( Book book, String s ) {
     return new DefaultPartParserFactory().createParser( s ) ;
   }
 }

@@ -26,7 +26,7 @@ public interface GenericParser {
 
   boolean hasProblem() ;
   
-  Iterable< RecognitionException > getProblems() ;
+  Iterable< Exception > getProblems() ;
 
   void parse() throws RecognitionException;
 }

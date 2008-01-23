@@ -17,13 +17,15 @@ tokens {
   INTERVAL ;
 }
 
-scope ChapterScope { StructureParserSupport.Chapter chapter } 
-scope SectionScope { StructureParserSupport.Section section } 
+scope ChapterScope { StructuralChapter chapter } 
+scope SectionScope { StructuralSection section } 
 
 
 @parser::header { 
   package novelang.parser.antlr ;
-  import novelang.parser.StructureParserSupport ;
+  import novelang.model.structural.StructuralBook ;
+  import novelang.model.structural.StructuralChapter ;
+  import novelang.model.structural.StructuralSection ;
 } 
 
 @lexer::header { 
@@ -33,19 +35,17 @@ scope SectionScope { StructureParserSupport.Section section }
 	
 @parser::members {
 
-  private final StructureParserSupport support = new StructureParserSupport() ;
+  private StructuralBook book ;
 
-	public StructureParserSupport getSupport() {
-	  return support ;
-	}
-	
 	@Override
 	public void reportError( RecognitionException e ) {
 	  super.reportError( e ) ;
-	  support.addException( e ) ;
+	  book.addStructureParsingException( e ) ;
 	}
 	
-	
+  public void setBook( StructuralBook book ) {
+    this.book = book ; 
+	}
 }
 	
 
@@ -71,7 +71,7 @@ part
   : OCTOTHORPE WHITESPACE genericFileName WHITESPACE?
     { 
       final String text = $genericFileName.text ;
-      support.addPart( text ) ;
+      book.addPartReference( text ) ;
     }    
     -> ^( PART genericFileName )  
 /*    -> { new CommonTree( new CommonToken( 
@@ -101,8 +101,7 @@ pathDelimiter
 chapter
   scope ChapterScope ;
   : CHAPTER_INTRODUCER 
-    { StructureParserSupport.Chapter chapter = new StructureParserSupport.Chapter() ;
-      support.addChapter( chapter ) ;      
+    { StructuralChapter chapter = book.createChapter() ;
       { $ChapterScope::chapter = chapter ; }
     }
     WHITESPACE? ( title WHITESPACE? 
@@ -117,8 +116,7 @@ chapter
 section
   scope SectionScope ;
   : SECTION_INTRODUCER 
-    { StructureParserSupport.Section section = new StructureParserSupport.Section() ;
-      $ChapterScope::chapter.addSection( section ) ;      
+    { StructuralSection section = $ChapterScope::chapter.createSection() ;
       $SectionScope::section = section ; 
     }  
     WHITESPACE? 

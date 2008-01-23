@@ -25,13 +25,14 @@ import novelang.parser.antlr.AntlrStructureLexer;
 import novelang.parser.antlr.AntlrStructureParser;
 import novelang.parser.StructureParser;
 import novelang.parser.StructureParserFactory;
+import novelang.model.structural.StructuralBook;
 
 /**
  * @author Laurent Caillette
  */
 public class DefaultStructureParserFactory implements StructureParserFactory {
 
-  public StructureParser createParser( final String text ) {
+  public StructureParser createParser( final StructuralBook book, final String text ) {
 
     return new StructureParser() {
 
@@ -40,18 +41,22 @@ public class DefaultStructureParserFactory implements StructureParserFactory {
       private final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
       private final AntlrStructureParser parser = new AntlrStructureParser( tokens ) ;
 
+      {
+        parser.setBook( book ) ;
+      }
+      
       public boolean hasProblem() {
-        return ! parser.getSupport().getExceptions().iterator().hasNext() ;
+        return book.getStructureParsingExceptions().iterator().hasNext();
       }
 
-      public Iterable< RecognitionException > getProblems() {
-        return parser.getSupport().getExceptions() ;
+      public Iterable< Exception > getProblems() {
+        return book.getStructureParsingExceptions();
       }
 
       public void parse() throws RecognitionException {
-        parser.structure() ;
+        parser.structure();
       }
 
-    } ;
+    };
   }
 }

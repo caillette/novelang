@@ -35,11 +35,11 @@ tokens {
 } 
 
 @parser::members {
-  final List< RecognitionException > exceptions = 
-      new ArrayList<RecognitionException>() ;
+  final List< Exception > exceptions = 
+      new ArrayList< Exception>() ;
 
-	public List< RecognitionException > getExceptions() {
-	  return new ArrayList< RecognitionException >( exceptions ) ;
+	public List< Exception > getExceptions() {
+	  return new ArrayList< Exception >( exceptions ) ;
 	}
 	
 	@Override

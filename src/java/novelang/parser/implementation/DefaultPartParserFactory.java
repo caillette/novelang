@@ -44,7 +44,7 @@ public class DefaultPartParserFactory implements PartParserFactory {
         return ! parser.getExceptions().isEmpty() ;
       }
 
-      public Iterable<RecognitionException> getProblems() {
+      public Iterable< Exception > getProblems() {
         return parser.getExceptions() ;
       }
 
