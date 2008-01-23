@@ -23,6 +23,7 @@ scope SectionScope { StructuralSection section }
 
 @parser::header { 
   package novelang.parser.antlr ;
+  import novelang.model.common.Locator;
   import novelang.model.structural.StructuralBook ;
   import novelang.model.structural.StructuralChapter ;
   import novelang.model.structural.StructuralSection ;
@@ -35,7 +36,11 @@ scope SectionScope { StructuralSection section }
 	
 @parser::members {
 
-  private StructuralBook book ;
+  /**
+   * This needs to be set here because ANTLWorks doesn't know about it.
+   */
+  private StructuralBook book = 
+      new novelang.model.implementation.Book( "Debug only" ) ;
 
 	@Override
 	public void reportError( RecognitionException e ) {
@@ -59,7 +64,6 @@ structure
     ) 
     LINEBREAK?
     EOF
-//    -> ^( STRUCTURE parts chapter* )
   ;
   
 	parts
@@ -74,12 +78,6 @@ part
       book.addPartReference( text ) ;
     }    
     -> ^( PART genericFileName )  
-/*    -> { new CommonTree( new CommonToken( 
-             PART, 
-             $genericFileName.text 
-         ) ) 
-       }
-*/       
   ;
  
 genericFileName
@@ -104,11 +102,14 @@ chapter
     { StructuralChapter chapter = book.createChapter() ;
       { $ChapterScope::chapter = chapter ; }
     }
-    WHITESPACE? ( title WHITESPACE? 
+    WHITESPACE? 
+    ( title WHITESPACE? 
       { $ChapterScope::chapter.setTitle( $title.text ) ; }
     )?
     LINEBREAK
-    ( style WHITESPACE? LINEBREAK )?
+    ( style WHITESPACE? LINEBREAK 
+      { $ChapterScope::chapter.setStyle( $style.text ) ; }
+    )?
     section ( LINEBREAK section )* 
     -> ^( CHAPTER ^( TITLE title )? style? section* )
   ;
@@ -116,7 +117,11 @@ chapter
 section
   scope SectionScope ;
   : SECTION_INTRODUCER 
-    { StructuralSection section = $ChapterScope::chapter.createSection() ;
+    { final Locator locator = $ChapterScope::chapter.createLocator(
+          ( ( Token )input.LT( 1 ) ).getLine(),
+          ( ( Token )input.LT( 1 ) ).getCharPositionInLine()
+      ) ;
+      StructuralSection section = $ChapterScope::chapter.createSection( locator ) ;
       $SectionScope::section = section ; 
     }  
     WHITESPACE? 
@@ -124,7 +129,9 @@ section
       { $SectionScope::section.setTitle( $title.text ) ; }
     )?
     LINEBREAK
-    ( style WHITESPACE? LINEBREAK )?
+    ( style WHITESPACE? LINEBREAK 
+      { $SectionScope::section.setStyle( $style.text ) ; }
+    )?
     inclusion WHITESPACE?
     ( LINEBREAK inclusion WHITESPACE? )*
     -> ^( SECTION ^( TITLE title )? style? inclusion* )

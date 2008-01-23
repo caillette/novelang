@@ -25,6 +25,7 @@ import org.antlr.runtime.RecognitionException;
 import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import org.junit.Assert;
+import org.apache.commons.lang.ClassUtils;
 import novelang.ResourceTools;
 import novelang.model.implementation.Book;
 
@@ -34,7 +35,7 @@ import novelang.model.implementation.Book;
 public abstract class AbstractParserTest< P extends GenericParser > {
 
   protected P parser ;
-  protected Book book = new Book( getClass().getName() ) ;
+  protected Book book = new Book( ClassUtils.getShortClassName( getClass() ) ) ;
 
 
   protected abstract P createParser( Book book, String s ) ;
