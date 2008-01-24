@@ -18,14 +18,15 @@
 package novelang.model.implementation;
 
 import novelang.model.structural.StructuralSection;
+import novelang.model.common.Location;
 
 /**
  * @author Laurent Caillette
  */
 public class Section extends Container implements StructuralSection {
   
-  public Section( BookContext context, int position ) {
-    super( context.derive( "section[" + position + "]" ) ) ;
+  public Section( BookContext context, Location location, int position ) {
+    super( context.derive( "section[" + position + "]" ), location ) ;
   }
 
 

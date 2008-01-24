@@ -17,17 +17,14 @@
  */
 package novelang.model.implementation;
 
-import org.slf4j.Logger;
-import novelang.model.common.Locator;
+import novelang.model.common.Location;
 
 /**
  * @author Laurent Caillette
  */
 public interface BookContext {
 
-  Locator createStructureLocator( int line, int column ) ;
-
-  Logger getLogger() ;
+  Location createStructureLocator( int line, int column ) ;
 
   String asString() ;
 

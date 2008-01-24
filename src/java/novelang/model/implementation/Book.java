@@ -24,59 +24,75 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import novelang.model.structural.StructuralBook;
-import novelang.model.common.Locator;
+import novelang.model.common.Location;
 
 /**
  * @author Laurent Caillette
  */
 public class Book implements StructuralBook {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( Book.class ) ;
+
   private final List< Exception > structureCreationExceptions = Lists.newArrayList() ;
-  private final List< String > parts = Lists.newArrayList() ;
+  private final List< Part > parts = Lists.newArrayList() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
 
   private final String identifier;
-  private final Logger logger ;
   private final BookContext context ;
 
 
   public Book( String identifier ) {
     this.identifier = Objects.nonNull( identifier ) ;
-    logger = LoggerFactory.getLogger( Book.class.getName() + "#" + identifier ) ;
 
     context = new DefaultBookContext(
-        "TODO:structureFileName",
+        "todo structureFileName",
         "book[" + this.identifier + "]"
     ) ;
+
+    LOGGER.info( "Created {}", context.asString() ) ;
   }
 
 
   public void addStructureParsingException( Exception ex ) {
     Objects.nonNull( ex ) ;
     structureCreationExceptions.add( ex ) ;
-    logger.debug( "Added exception for structure parsing: {}", ex ) ;
+    LOGGER.debug( "Added exception for structure parsing: {} to {}", ex, this ) ;
   }
 
   public Iterable< Exception > getStructureParsingExceptions() {
     return Lists.immutableList( structureCreationExceptions ) ;
   }
 
-  public void addPartReference( String partFileName ) {
+  public Part createPart( String partFileName, Location location ) {
     Objects.nonNull( partFileName ) ;
-    parts.add( partFileName ) ;
-    logger.debug( "Added part: {}", partFileName ) ;
+    Objects.nonNull( location ) ;
+    final Part part = new Part( context, partFileName, location ) ;
+    parts.add( part ) ;
+    LOGGER.debug( "Created and added {} from {}", part, part.getLocation() ) ;
+    return part ;
   }
 
-  public Chapter createChapter() {
+  public Chapter createChapter( Location location ) {
     final int position = chapters.size();
-    final Chapter chapter = new Chapter( context, position ) ;
+    final Chapter chapter = new Chapter( context, location, position ) ;
     chapters.add( chapter ) ;
-    logger.debug( "Created and added chapter: {}", chapter ) ;
+    LOGGER.debug( "Created and added {} from {}", chapter, chapter.getLocation() ) ;
     return chapter;
   }
 
   public Iterable< Chapter > getChapters() {
     return Lists.immutableList( chapters ) ;
+  }
+
+
+
+  @Override
+  public String toString() {
+    return context.asString() + "@" + System.identityHashCode( this ) ;
+  }
+
+  public Location createStructuralLocator( int line, int column ) {
+    return context.createStructureLocator( line, column ) ;
   }
 
   private class DefaultBookContext implements BookContext {
@@ -90,12 +106,8 @@ public class Book implements StructuralBook {
       this.name = bookName;
     }
 
-    public Locator createStructureLocator( int line, int column ) {
-      return new Locator( structureFileName, line, column ) ;
-    }
-
-    public Logger getLogger() {
-      return logger ;
+    public Location createStructureLocator( int line, int column ) {
+      return new Location( structureFileName, line, column ) ;
     }
 
     public String asString() {

@@ -18,22 +18,27 @@
 package novelang.model.implementation;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
+import novelang.model.common.LocatorFactory;
+import novelang.model.common.Location;
 
 /**
  * @author Laurent Caillette
  */
-public class Container {
+public class Container implements LocatorFactory {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( Container.class ) ;
 
   private final BookContext context ;
+  private final Location location;
   private String title ;
   private String style ;
 
-
-  public Container( BookContext context ) {
+  public Container( BookContext context, Location location ) {
     this.context = Objects.nonNull( context ) ;
+    this.location = Objects.nonNull( location ) ;
   }
-
 
   protected BookContext getContext() {
     return context;
@@ -45,7 +50,7 @@ public class Container {
 
   public void setTitle( String title ) {
     this.title = Objects.nonNull( title ) ;
-    context.getLogger().debug( "Title set to '{}' for {}", title, this ) ;
+    LOGGER.debug( "Title set to '{}' for {}", title, this ) ;
   }
 
   public String getStyle() {
@@ -54,12 +59,20 @@ public class Container {
 
   public void setStyle( String style ) {
     this.style = Objects.nonNull( style ) ;
-    context.getLogger().debug( "Style set to '{}' for {}", title, this ) ;
+    LOGGER.debug( "Style set to '{}' for {}", title, this ) ;
+  }
+
+  public Location createStructuralLocator( int line, int column ) {
+    return getContext().createStructureLocator( line, column ) ;
+  }
+
+  public Location getLocation() {
+    return location;
   }
 
   @Override
   public String toString() {
     return getContext().asString() + "@" + System.identityHashCode( this ) ;
   }
-  
+
 }

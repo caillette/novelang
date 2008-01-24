@@ -17,16 +17,17 @@
  */
 package novelang.model.structural;
 
-import novelang.model.common.Locator;
+import novelang.model.common.Location;
+import novelang.model.common.LocatorFactory;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralChapter {
+public interface StructuralChapter extends LocatorFactory {
 
   void setTitle( String title ) ;
   void setStyle( String style ) ;
-  Locator createLocator( int line, int column ) ;
-  StructuralSection createSection( Locator locator ) ;
+  Location createLocation( int line, int column ) ;
+  StructuralSection createSection( Location location ) ;
 
 }

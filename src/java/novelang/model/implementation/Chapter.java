@@ -19,8 +19,10 @@ package novelang.model.implementation;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.model.structural.StructuralChapter;
-import novelang.model.common.Locator;
+import novelang.model.common.Location;
 import com.google.common.collect.Lists;
 
 /**
@@ -28,22 +30,24 @@ import com.google.common.collect.Lists;
  */
 public class Chapter extends Container implements StructuralChapter {
 
-  private final List< Section > sections = Lists.newArrayList() ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Chapter.class ) ;
 
-  public Chapter( BookContext context, int position ) {
-    super( context.derive( "chapter[" + position + "]" ) );
+    private final List< Section > sections = Lists.newArrayList() ;
+
+  public Chapter( BookContext context, Location location, int position ) {
+    super( context.derive( "chapter[" + position + "]" ), location );
   }
 
-  public Section createSection( Locator locator ) {
+  public Section createSection( Location location ) {
     final int position = sections.size() ;
-    final Section section = new Section( getContext(), position ) ;
+    final Section section = new Section( getContext(), location, position ) ;
     sections.add( position, section ) ;
-    getContext().getLogger().debug( 
-        "Created and added section: {}", section ) ;
+    LOGGER.debug(
+        "Created and added section: {} from {}", section, location ) ;
     return section ;
   }
 
-  public Locator createLocator( int line, int column ) {
+  public Location createLocation( int line, int column ) {
     return getContext().createStructureLocator( line, column ) ;
   }
 

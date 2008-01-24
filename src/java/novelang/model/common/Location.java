@@ -20,14 +20,14 @@ package novelang.model.common;
 /**
  * @author Laurent Caillette
  */
-public class Locator {
+public class Location {
 
   private final String fileName ;
   private final int line ;
   private final int column ;
 
 
-  public Locator( String fileName, int line, int column ) {
+  public Location( String fileName, int line, int column ) {
     this.fileName = fileName;
     this.line = line;
     this.column = column;
@@ -44,5 +44,10 @@ public class Locator {
 
   public int getColumn() {
     return column;
+  }
+
+  @Override
+  public String toString() {
+    return line + ":" + column + ":'" + fileName + "'";
   }
 }

@@ -15,14 +15,13 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
-
-import novelang.model.common.LocatorFactory;
+package novelang.model.common;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralSection extends LocatorFactory {
-  void setTitle( String title ) ;
-  void setStyle( String style ) ;  
+public interface LocatorFactory {
+
+  Location createStructuralLocator( int line, int column ) ;
+
 }

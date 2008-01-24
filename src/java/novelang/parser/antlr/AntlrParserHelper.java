@@ -15,14 +15,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser.antlr;
 
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
+import novelang.model.common.Location;
 import novelang.model.common.LocatorFactory;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralSection extends LocatorFactory {
-  void setTitle( String title ) ;
-  void setStyle( String style ) ;  
+public final class AntlrParserHelper {
+
+  private AntlrParserHelper() { }
+
+  public static Location createLocation( LocatorFactory factory, TokenStream input ) {
+    return factory.createStructuralLocator(
+        ( ( Token ) input.LT( 1 ) ).getLine(),
+        ( ( Token ) input.LT( 1 ) ).getCharPositionInLine()
+    ) ;
+  }
+
+
 }

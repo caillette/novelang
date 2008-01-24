@@ -15,24 +15,37 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.model.implementation;
 
-import novelang.model.common.LocatorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import novelang.model.structural.StructuralPart;
 import novelang.model.common.Location;
-import novelang.model.implementation.Part;
+import com.google.common.base.Objects;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralBook extends LocatorFactory {
-  
-  void addStructureParsingException( Exception ex ) ;
+public class Part implements StructuralPart {
 
-  Iterable< Exception > getStructureParsingExceptions() ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Container.class ) ;
 
-  Part createPart( String partFileName, Location location ) ;
+  private final BookContext context ;
+  private final String fileName ;
+  private final Location location;
 
-  StructuralChapter createChapter( Location location ) ;
+  public Part( BookContext context, String fileName, Location location ) {
+    this.context = Objects.nonNull( context ).derive( "part[" + fileName + "]" ) ;
+    this.fileName = fileName ;
+    this.location = Objects.nonNull( location ) ;
+  }
 
+  public Location getLocation() {
+    return location;
+  }
 
+  @Override
+  public String toString() {
+    return context.asString() + "@" + System.identityHashCode( this ) ;
+  }
 }

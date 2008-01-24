@@ -17,12 +17,8 @@
  */
 package novelang.model.structural;
 
-import novelang.model.common.LocatorFactory;
-
 /**
  * @author Laurent Caillette
  */
-public interface StructuralSection extends LocatorFactory {
-  void setTitle( String title ) ;
-  void setStyle( String style ) ;  
+public interface StructuralPart {
 }

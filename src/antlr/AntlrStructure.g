@@ -23,7 +23,7 @@ scope SectionScope { StructuralSection section }
 
 @parser::header { 
   package novelang.parser.antlr ;
-  import novelang.model.common.Locator;
+  import novelang.model.common.Location;
   import novelang.model.structural.StructuralBook ;
   import novelang.model.structural.StructuralChapter ;
   import novelang.model.structural.StructuralSection ;
@@ -40,7 +40,7 @@ scope SectionScope { StructuralSection section }
    * This needs to be set here because ANTLWorks doesn't know about it.
    */
   private StructuralBook book = 
-      new novelang.model.implementation.Book( "Debug only" ) ;
+      new novelang.model.implementation.Book( "Fake book only needed by ANTLRWorks for debugging" ) ;
 
 	@Override
 	public void reportError( RecognitionException e ) {
@@ -74,8 +74,9 @@ structure
 part 
   : OCTOTHORPE WHITESPACE genericFileName WHITESPACE?
     { 
-      final String text = $genericFileName.text ;
-      book.addPartReference( text ) ;
+      final String fileName = $genericFileName.text ;
+      final Location location = AntlrParserHelper.createLocation( book, input ) ;
+      book.createPart( fileName, location ) ;
     }    
     -> ^( PART genericFileName )  
   ;
@@ -99,7 +100,9 @@ pathDelimiter
 chapter
   scope ChapterScope ;
   : CHAPTER_INTRODUCER 
-    { StructuralChapter chapter = book.createChapter() ;
+    { final Location location = AntlrParserHelper.createLocation( 
+          book, input ) ;
+      final StructuralChapter chapter = book.createChapter( location ) ;
       { $ChapterScope::chapter = chapter ; }
     }
     WHITESPACE? 
@@ -117,11 +120,9 @@ chapter
 section
   scope SectionScope ;
   : SECTION_INTRODUCER 
-    { final Locator locator = $ChapterScope::chapter.createLocator(
-          ( ( Token )input.LT( 1 ) ).getLine(),
-          ( ( Token )input.LT( 1 ) ).getCharPositionInLine()
-      ) ;
-      StructuralSection section = $ChapterScope::chapter.createSection( locator ) ;
+    { final Location location = AntlrParserHelper.createLocation( 
+          $ChapterScope::chapter, input ) ;
+      StructuralSection section = $ChapterScope::chapter.createSection( location ) ;
       $SectionScope::section = section ; 
     }  
     WHITESPACE? 
