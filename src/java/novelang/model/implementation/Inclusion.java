@@ -23,13 +23,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
+import novelang.model.weaved.WeavedInclusion;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
 import com.google.common.base.Objects;
 
 /**
  * @author Laurent Caillette
  */
-public class Inclusion extends Element implements StructuralInclusion {
+public class Inclusion extends Element implements StructuralInclusion, WeavedInclusion {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Inclusion.class ) ;
   private final List< ParagraphRange > paragraphRanges = Lists.newArrayList() ;
@@ -69,6 +71,43 @@ public class Inclusion extends Element implements StructuralInclusion {
 
   }
 
+  public Iterable< Integer > calculateParagraphIndexes( int paragraphCount ) {
+    final List< Integer > toBeIncluded = Lists.newArrayList() ;
+
+    if( paragraphRanges.isEmpty() ) {
+      for( Integer i = 1 ; i <= paragraphCount ; i++ ) {
+        toBeIncluded.add( i ) ;
+      }
+    } else {
+
+      for( final ParagraphRange range : paragraphRanges ) {
+        final Iterable< Integer > paragraphsInRange = range.expand() ;
+
+        for( Integer paragraph : paragraphsInRange ) {
+          if( paragraph > paragraphCount ) {
+            // TODO report problem.
+          }
+          if( paragraph == 0 ) {
+            paragraph = paragraphCount ;
+          } else  if( paragraph < 0 ) {
+            if( paragraph < ( 0 - paragraphCount ) ) {
+              // TODO report problem.
+            } else {
+              paragraph = paragraphCount + paragraph ;
+            }
+          }
+          if( toBeIncluded.contains( paragraph ) ) {
+            // TODO report problem.
+          } else {
+            toBeIncluded.add( paragraph ) ;
+          }
+        }
+      }
+    }
+
+    return toBeIncluded ;
+  }
+
   private static class ParagraphRange {
 
     private final Location location ;
@@ -93,6 +132,20 @@ public class Inclusion extends Element implements StructuralInclusion {
 
     public int getEnd() {
       return end;
+    }
+
+    public Iterable< Integer > expand() {
+      final List< Integer > paragraphs = Lists.newArrayList() ;
+      if( start < end ) {
+        for( int i = start ; i <= end ; i++ ) {
+          paragraphs.add( i ) ;
+        }
+      } else {
+        for( int i = end; i <= start ; i++ ) {
+          paragraphs.add( i ) ;
+        }
+      }
+      return paragraphs ;
     }
   }
 }

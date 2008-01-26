@@ -17,9 +17,12 @@
  */
 package novelang.model.implementation;
 
+import java.util.List;
+
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
@@ -28,7 +31,7 @@ import com.google.common.base.Objects;
 
   protected final BookContext context ;
   protected final Location location;
-
+  private final List< Exception > problems = Lists.newArrayList() ;
 
   public Element( BookContext context, Location location ) {
     this.context = Objects.nonNull( context ) ;
@@ -51,4 +54,10 @@ import com.google.common.base.Objects;
   public String toString() {
     return getContext().asString() + "@" + System.identityHashCode( this ) ;
   }
+
+  protected final void collect( Exception exception ) {
+    problems.add( Objects.nonNull( exception ) ) ;
+  }
+
+
 }
