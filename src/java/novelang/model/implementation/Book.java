@@ -37,16 +37,15 @@ public class Book implements StructuralBook {
   private final List< Part > parts = Lists.newArrayList() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
 
-  private final String identifier;
   private final BookContext context ;
 
 
   public Book( String identifier ) {
-    this.identifier = Objects.nonNull( identifier ) ;
+    identifier = Objects.nonNull( identifier ) ;
 
     context = new DefaultBookContext(
         "todo structureFileName",
-        "book[" + this.identifier + "]"
+        "book[" + identifier + "]"
     ) ;
 
     LOGGER.info( "Created {}", context.asString() ) ;
@@ -91,7 +90,7 @@ public class Book implements StructuralBook {
     return context.asString() + "@" + System.identityHashCode( this ) ;
   }
 
-  public Location createStructuralLocator( int line, int column ) {
+  public Location createLocation( int line, int column ) {
     return context.createStructureLocator( line, column ) ;
   }
 

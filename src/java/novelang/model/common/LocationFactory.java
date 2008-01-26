@@ -20,8 +20,8 @@ package novelang.model.common;
 /**
  * @author Laurent Caillette
  */
-public interface LocatorFactory {
+public interface LocationFactory {
 
-  Location createStructuralLocator( int line, int column ) ;
+  Location createLocation( int line, int column ) ;
 
 }

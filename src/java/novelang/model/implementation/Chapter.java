@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 /**
  * @author Laurent Caillette
  */
-public class Chapter extends Container implements StructuralChapter {
+public class Chapter extends StyledElement implements StructuralChapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Chapter.class ) ;
 
@@ -51,8 +51,4 @@ public class Chapter extends Container implements StructuralChapter {
     return getContext().createStructureLocator( line, column ) ;
   }
 
-//  @Override
-//  public String toString() {
-//    return getContext().asString() + "@" + System.identityHashCode( this ) ;
-//  }
 }

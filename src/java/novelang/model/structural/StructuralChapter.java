@@ -18,12 +18,12 @@
 package novelang.model.structural;
 
 import novelang.model.common.Location;
-import novelang.model.common.LocatorFactory;
+import novelang.model.common.LocationFactory;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralChapter extends LocatorFactory {
+public interface StructuralChapter extends LocationFactory {
 
   void setTitle( String title ) ;
   void setStyle( String style ) ;

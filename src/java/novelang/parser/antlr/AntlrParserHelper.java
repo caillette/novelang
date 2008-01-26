@@ -20,7 +20,8 @@ package novelang.parser.antlr;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import novelang.model.common.Location;
-import novelang.model.common.LocatorFactory;
+import novelang.model.common.LocationFactory;
+import com.google.common.base.Objects;
 
 /**
  * @author Laurent Caillette
@@ -29,11 +30,24 @@ public final class AntlrParserHelper {
 
   private AntlrParserHelper() { }
 
-  public static Location createLocation( LocatorFactory factory, TokenStream input ) {
-    return factory.createStructuralLocator(
+  public static Location createLocation( LocationFactory factory, TokenStream input ) {
+    return factory.createLocation(
         ( ( Token ) input.LT( 1 ) ).getLine(),
         ( ( Token ) input.LT( 1 ) ).getCharPositionInLine()
     ) ;
+  }
+
+  public static int parseReversibleNumber( String number ) {
+    number = Objects.nonNull( number ) ;
+    final int minusSignAdjustment ;
+    if( number.endsWith( "-") ) {
+      number = number.substring( 0, number.length() - 1 ) ;
+      minusSignAdjustment = -1 ;
+    } else {
+      minusSignAdjustment = 1 ;
+    }
+    return Integer.parseInt( number ) * minusSignAdjustment ;
+
   }
 
 

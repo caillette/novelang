@@ -17,17 +17,36 @@
  */
 package novelang.model.implementation;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.model.structural.StructuralSection;
+import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
+import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
  */
-public class Section extends Container implements StructuralSection {
-  
+public class Section extends StyledElement implements StructuralSection {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( Section.class ) ;
+
+  private final List< Inclusion > inclusions = Lists.newArrayList() ;
+
   public Section( BookContext context, Location location, int position ) {
     super( context.derive( "section[" + position + "]" ), location ) ;
   }
 
-
+  public StructuralInclusion createInclusion( Location location, String identifier ) {
+    final int position = inclusions.size() ;
+    final Inclusion inclusion = new Inclusion( getContext(), location, position, identifier ) ;
+    inclusions.add( position, inclusion ) ;
+    LOGGER.debug(
+        "Created and added inclusion: '{}' {} from {}",
+        new Object[] { identifier, inclusion, location }
+    ) ;
+    return inclusion ;
+  }
 }

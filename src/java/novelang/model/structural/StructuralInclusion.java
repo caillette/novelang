@@ -17,20 +17,27 @@
  */
 package novelang.model.structural;
 
+import novelang.model.common.Location;
+import novelang.model.common.LocationFactory;
+
 /**
  * @author Laurent Caillette
  */
-public interface StructuralInclusion {
+public interface StructuralInclusion extends LocationFactory {
+
+  Location createLocation( int line, int column ) ;
 
   /**
    * Adds a reference to several paragraphs.
-   * @see #addParagraph(int) for meaning of parameters.
+   * @see #addParagraph(novelang.model.common.Location, int) for meaning of parameters.
    */
-  void addParagraphRange( int from, int to ) ;
+  void addParagraphRange( Location location, int from, int to ) ;
 
   /**
    * Adds a reference to one paragraph.
    * @param index 1 means first, 0 means last, less than 0 means reverse count from last.
    */
-  void addParagraph( int index ) ;
+  void addParagraph( Location location, int index ) ;
+
+  void setCollateWithPrevious( boolean collate ) ;
 }

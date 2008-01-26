@@ -19,6 +19,7 @@ tokens {
 
 scope ChapterScope { StructuralChapter chapter } 
 scope SectionScope { StructuralSection section } 
+scope InclusionScope { StructuralInclusion inclusion } 
 
 
 @parser::header { 
@@ -27,6 +28,7 @@ scope SectionScope { StructuralSection section }
   import novelang.model.structural.StructuralBook ;
   import novelang.model.structural.StructuralChapter ;
   import novelang.model.structural.StructuralSection ;
+  import novelang.model.structural.StructuralInclusion ;
 } 
 
 @lexer::header { 
@@ -100,8 +102,7 @@ pathDelimiter
 chapter
   scope ChapterScope ;
   : CHAPTER_INTRODUCER 
-    { final Location location = AntlrParserHelper.createLocation( 
-          book, input ) ;
+    { final Location location = AntlrParserHelper.createLocation( book, input ) ;
       final StructuralChapter chapter = book.createChapter( location ) ;
       { $ChapterScope::chapter = chapter ; }
     }
@@ -122,7 +123,7 @@ section
   : SECTION_INTRODUCER 
     { final Location location = AntlrParserHelper.createLocation( 
           $ChapterScope::chapter, input ) ;
-      StructuralSection section = $ChapterScope::chapter.createSection( location ) ;
+      final StructuralSection section = $ChapterScope::chapter.createSection( location ) ;
       $SectionScope::section = section ; 
     }  
     WHITESPACE? 
@@ -149,26 +150,68 @@ title
   ;
 
 inclusion
+  scope InclusionScope ;
 /*  : ( '+' | '\\' ) WHITESPACE
     identifier
     ( WHITESPACE paragraphReferences )?     
 */
-  : ( ( PLUS_SIGN WHITESPACE identifier ( WHITESPACE paragraphReferences )? )
+  // TODO find in the book how to avoid this copy-paste.
+  : ( ( PLUS_SIGN WHITESPACE identifier 
+        { final Location location = AntlrParserHelper.createLocation( 
+              $ChapterScope::chapter, input ) ;
+          final StructuralInclusion inclusion = 
+              $SectionScope::section.createInclusion( location, $identifier.text ) ;
+          $InclusionScope::inclusion = inclusion ; 
+          inclusion.setCollateWithPrevious( false ) ;
+        }  
+        ( WHITESPACE paragraphReferences )? 
+      )
       -> ^( INCLUSION ^( IDENTIFIER identifier ) paragraphReferences* )
     )
-  | ( ( VERTICAL_LINE WHITESPACE identifier ( WHITESPACE paragraphReferences )? )
+  | ( ( VERTICAL_LINE WHITESPACE identifier 
+        { final Location location = AntlrParserHelper.createLocation( 
+              $ChapterScope::chapter, input ) ;
+          final StructuralInclusion inclusion = 
+              $SectionScope::section.createInclusion( location, $identifier.text ) ;
+          $InclusionScope::inclusion = inclusion ; 
+          inclusion.setCollateWithPrevious( true ) ;
+        }  
+        ( WHITESPACE paragraphReferences )? 
+      )
       -> ^( INCLUSION_APPENDING ^( IDENTIFIER identifier ) paragraphReferences* )
     )
   ;   
 
 paragraphReferences
   : PARAGRAPH_REFERENCES_INTRODUCER
-    ( WHITESPACE ( reversibleNumber | paragraphInterval ) )+
-    -> ^( PARAGRAPH reversibleNumber* paragraphInterval* )
+    ( WHITESPACE ( 
+        includedParagraphIndex 
+      | includedParagraphRange 
+    ) )+
+    -> ^( PARAGRAPH includedParagraphIndex* includedParagraphRange* )
   ;
   
-paragraphInterval
-  :	n1 = positiveNumber '..' n2 = positiveNumber
+includedParagraphIndex  
+  : reversibleNumber
+    { final Location location = AntlrParserHelper.createLocation( 
+          $InclusionScope::inclusion, input ) ;
+      $InclusionScope::inclusion.addParagraph( 
+          location, 
+          AntlrParserHelper.parseReversibleNumber( $reversibleNumber.text ) 
+      ) ;
+    }
+  ;
+  
+includedParagraphRange
+  :	n1 = reversibleNumber '..' n2 = reversibleNumber
+    { final Location location = AntlrParserHelper.createLocation( 
+          $InclusionScope::inclusion, input ) ;
+      $InclusionScope::inclusion.addParagraphRange( 
+          location, 
+          AntlrParserHelper.parseReversibleNumber( $n1.text ),
+          AntlrParserHelper.parseReversibleNumber( $n2.text ) 
+      ) ;
+    }
    -> ^( INTERVAL $n1 $n2 ) 
   ;
 

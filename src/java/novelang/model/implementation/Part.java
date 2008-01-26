@@ -28,7 +28,7 @@ import com.google.common.base.Objects;
  */
 public class Part implements StructuralPart {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( Container.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
 
   private final BookContext context ;
   private final String fileName ;

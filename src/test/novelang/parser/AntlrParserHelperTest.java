@@ -15,24 +15,24 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser;
 
-import novelang.model.common.LocationFactory;
-import novelang.model.common.Location;
-import novelang.model.implementation.Part;
+import org.junit.Test;
+import org.junit.Assert;
+import novelang.parser.antlr.AntlrParserHelper;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralBook extends LocationFactory {
-  
-  void addStructureParsingException( Exception ex ) ;
+public class AntlrParserHelperTest {
 
-  Iterable< Exception > getStructureParsingExceptions() ;
-
-  Part createPart( String partFileName, Location location ) ;
-
-  StructuralChapter createChapter( Location location ) ;
-
-
+  @Test
+  public void reversibleNumberParsing() {
+    Assert.assertEquals( 0, AntlrParserHelper.parseReversibleNumber( "0" ) ) ;
+    Assert.assertEquals( 0, AntlrParserHelper.parseReversibleNumber( "0-" ) ) ;
+    Assert.assertEquals( 3, AntlrParserHelper.parseReversibleNumber( "3" ) ) ;
+    Assert.assertEquals( -3, AntlrParserHelper.parseReversibleNumber( "3-" ) ) ;
+    Assert.assertEquals( 33, AntlrParserHelper.parseReversibleNumber( "33" ) ) ;
+    Assert.assertEquals( -33, AntlrParserHelper.parseReversibleNumber( "33-" ) ) ;
+  }
 }
