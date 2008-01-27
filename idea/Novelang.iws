@@ -173,10 +173,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PartTest.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="PartTest.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../src/test/novelang/model/implementation/PartTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="12" selection-start="1758" selection-end="1758" vertical-scroll-proportion="0.24896836">
+            <state line="53" column="28" selection-start="1857" selection-end="1857" vertical-scroll-proportion="0.24209079">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -184,10 +184,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Part.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Part.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Part.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="127" column="5" selection-start="4041" selection-end="4041" vertical-scroll-proportion="0.39752406">
+            <state line="86" column="47" selection-start="2971" selection-end="2971" vertical-scroll-proportion="0.56121045">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WeavedPart.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedPart.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="26" column="2" selection-start="922" selection-end="922" vertical-scroll-proportion="0.2338377">
               <folding />
             </state>
           </provider>
@@ -219,7 +228,7 @@
       <file leaf-file-name="StructuralPart.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/structural/StructuralPart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="7" selection-start="935" selection-end="935" vertical-scroll-proportion="0.2338377">
+            <state line="24" column="17" selection-start="910" selection-end="910" vertical-scroll-proportion="0.18707015">
               <folding />
             </state>
           </provider>
@@ -1806,13 +1815,6 @@
     <option name="myLastEditedConfigurable" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Book.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="147" column="5" selection-start="5018" selection-end="5018" vertical-scroll-proportion="1.6081082">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/PartTokens.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="25" column="9" selection-start="900" selection-end="900" vertical-scroll-proportion="0.75482625">
@@ -1871,18 +1873,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/novelang/model/implementation/PartTest.java">
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/IdentifierHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="12" selection-start="1758" selection-end="1758" vertical-scroll-proportion="0.24896836">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/structural/StructuralPart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="7" selection-start="935" selection-end="935" vertical-scroll-proportion="0.2338377">
+        <state line="24" column="13" selection-start="894" selection-end="894" vertical-scroll-proportion="0.18707015">
           <folding />
         </state>
       </provider>
@@ -1892,22 +1885,38 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedPart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="2" selection-start="922" selection-end="922" vertical-scroll-proportion="0.2338377">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/structural/StructuralPart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="17" selection-start="910" selection-end="910" vertical-scroll-proportion="0.18707015">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
       <provider selected="true" editor-type-id="grammar">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/IdentifierHelper.java">
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Part.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="13" selection-start="894" selection-end="894" vertical-scroll-proportion="0.18707015">
+        <state line="86" column="47" selection-start="2971" selection-end="2971" vertical-scroll-proportion="0.56121045">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Part.java">
+    <entry file="file://$PROJECT_DIR$/../src/test/novelang/model/implementation/PartTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="5" selection-start="4041" selection-end="4041" vertical-scroll-proportion="0.39752406">
-          <folding />
+        <state line="53" column="28" selection-start="1857" selection-end="1857" vertical-scroll-proportion="0.24209079">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

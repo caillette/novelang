@@ -44,7 +44,7 @@ public class Part extends Element implements StructuralPart, WeavedPart {
   private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
 
   private final String fileName ;
-  private final Multimap< String, Tree > identifiedSectionTree = Multimaps.newHashMultimap() ;
+  private final Multimap< String, Tree > identifiedSectionTrees = Multimaps.newHashMultimap() ;
 
   private Tree tree ;
 
@@ -101,18 +101,24 @@ public class Part extends Element implements StructuralPart, WeavedPart {
 // Identifiers
 // ===========
 
-  private boolean identifiersFound ;
+  private boolean identifiersSpotted;
 
   /**
-   * Finds Section identifiers from inside the {@link #getTree()}.
-   * Doing it from inside the grammar would be more elegant but I'm not sure I'll know how
-   * to concatenate tokens well.
+   * Finds Section identifiers from inside the {@link #getTree() tree}.
+   * At the first glance it seems better to do it from the grammar but
+   * I'm not sure on how to concatenate tokens.
+   * First I thought it would imply tons of ugly Java code embedded in the grammar,
+   * implying a "lightweight"
+   * version for having the {@code Part} member correctly initialized when using ANTLWorks
+   * debugger (see what's done with the {@code Book} in {@code AntlrStructure.g}).
+   * But the grammar could depend on a lightweight interface and create an instance
+   * doing nothing by default, bypassing all dependencies to the {@code BookContext}.
    */
-  public void findIdentifiers() {
-    if( identifiersFound ) {
-      throw new IllegalStateException( "Identifiers already found" ) ;
+  public void spotIdentifiers() {
+    if( identifiersSpotted ) {
+      throw new IllegalStateException( "Identifiers already spotted" ) ;
     }
-    identifiersFound = true ;
+    identifiersSpotted = true ;
 
     for( final Tree sectionCandidate : tree.getChildren() ) {
       if( PartTokens.SECTION.name().equals( sectionCandidate.getText() ) ) {
@@ -129,7 +135,7 @@ public class Part extends Element implements StructuralPart, WeavedPart {
   }
 
   private void addSectionIdentifier( Tree sectionTree, String identifier ) {
-    identifiedSectionTree.put( identifier, sectionTree ) ;
+    identifiedSectionTrees.put( identifier, sectionTree ) ;
     LOGGER.debug( "Added section identifier '{}' to {}", identifier, this ) ;
   }
 

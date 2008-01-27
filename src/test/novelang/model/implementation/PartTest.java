@@ -51,7 +51,7 @@ public class PartTest {
   public void findIdentifiersOk() throws IOException {
     final Part part = book1.createPart( SECTIONS_1, location ) ;
     part.load() ;
-    part.findIdentifiers() ;
+    part.spotIdentifiers() ;
   }
 
   @Before

@@ -78,8 +78,9 @@ section
   ;
 
 sectionIdentifier
-  :	 APOSTROPHE textLine
-    -> textLine
+  :	 APOSTROPHE word 
+	  ( WHITESPACE ( word | wordTrail ) )*
+	  -> word* wordTrail*
   ;
   
 sectionTitle 

@@ -24,6 +24,6 @@ import novelang.model.common.Tree;
  */
 public interface WeavedPart {
 
-  Tree getTree() ;
+  
 
 }
