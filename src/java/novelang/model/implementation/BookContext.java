@@ -17,7 +17,11 @@
  */
 package novelang.model.implementation;
 
+import java.io.File;
+import java.nio.charset.Charset;
+
 import novelang.model.common.Location;
+import novelang.parser.PartParser;
 
 /**
  * @author Laurent Caillette
@@ -29,5 +33,11 @@ public interface BookContext {
   String asString() ;
 
   BookContext derive( String extension ) ;
+
+  File relativizeFile( String fileName ) ;
+
+  Charset getEncoding() ;
+
+  PartParser createParser( String text ) ;
 
 }

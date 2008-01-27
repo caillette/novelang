@@ -19,6 +19,7 @@ package novelang.model.implementation;
 
 import java.util.List;
 import java.util.Arrays;
+import java.io.File;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -120,7 +121,8 @@ public class InclusionTest {
 
   @Before
   public void setUp() {
-    final Book book = new Book( ClassUtils.getShortClassName( getClass() ) ) ;
+    String bookName = ClassUtils.getShortClassName( getClass() );
+    final Book book = new Book( bookName, new File( bookName ) ) ;
     final Location location = book.createLocation( 0, 0 ) ;
     inclusion = ( Inclusion ) book.createChapter( location )
         .createSection( location ).createInclusion( location, "i" ) ;

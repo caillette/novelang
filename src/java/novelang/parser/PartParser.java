@@ -17,11 +17,14 @@
  */
 package novelang.parser;
 
+import org.antlr.runtime.RecognitionException;
+import novelang.model.common.Tree;
+
 /**
  * @author Laurent Caillette
  */
 public interface PartParser extends GenericParser {
 
-//  void part() throws RecognitionException ;
+  Tree parse() throws RecognitionException;
 
 }

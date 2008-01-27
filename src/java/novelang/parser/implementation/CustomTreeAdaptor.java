@@ -15,15 +15,20 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser.implementation;
 
-import novelang.model.common.Tree;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.TreeAdaptor;
+import org.antlr.runtime.Token;
+import novelang.parser.antlr.CustomTree;
 
 /**
  * @author Laurent Caillette
- */
-public interface StructuralPart {
+*/
+/*package*/ class CustomTreeAdaptor extends CommonTreeAdaptor {
+  static final TreeAdaptor INSTANCE = new CustomTreeAdaptor();
 
-  void findIdentifiers() ;
-
+  public Object create( Token payload ) {
+    return new CustomTree( payload ) ;
+  }
 }

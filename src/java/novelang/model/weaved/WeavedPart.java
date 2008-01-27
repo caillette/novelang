@@ -15,15 +15,15 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.model.weaved;
 
 import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralPart {
+public interface WeavedPart {
 
-  void findIdentifiers() ;
+  Tree getTree() ;
 
 }

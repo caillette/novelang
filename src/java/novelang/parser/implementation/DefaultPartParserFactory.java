@@ -25,6 +25,7 @@ import novelang.parser.PartParserFactory;
 import novelang.parser.PartParser;
 import novelang.parser.antlr.AntlrPartLexer;
 import novelang.parser.antlr.AntlrPartParser;
+import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
@@ -40,6 +41,10 @@ public class DefaultPartParserFactory implements PartParserFactory {
       private final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
       private final AntlrPartParser parser = new AntlrPartParser( tokens ) ;
 
+      {
+        parser.setTreeAdaptor( CustomTreeAdaptor.INSTANCE ) ;
+      }
+
       public boolean hasProblem() {
         return ! parser.getExceptions().isEmpty() ;
       }
@@ -48,10 +53,11 @@ public class DefaultPartParserFactory implements PartParserFactory {
         return parser.getExceptions() ;
       }
 
-      public void parse() throws RecognitionException {
-        parser.document() ;
+      public Tree parse() throws RecognitionException {
+        return ( Tree ) parser.document().getTree() ;
       }
 
     } ;
   }
+
 }

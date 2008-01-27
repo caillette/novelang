@@ -8,7 +8,8 @@ options { output = AST ; } //backtrack = true ; memoize = true ; }
 tokens {
   DOCUMENT ;
   SECTION  ;
-  TITLE ;
+  SECTION_TITLE ;
+  SECTION_IDENTIFIER ;
   LOCUTOR ;
   PARAGRAPH_PLAIN ;
   PARAGRAPH_SPEECH ;
@@ -66,11 +67,24 @@ document
 	
 section 
   : SECTION_DELIMITER WHITESPACE? 
-    ( textLine WHITESPACE? )?
+    ( ( sectionTitle | sectionIdentifier ) WHITESPACE? )?
     ( HARDBREAK WHITESPACE ? ( paragraph | blockQuote ) )+ 
     WHITESPACE?
-    -> ^( SECTION ^( TITLE textLine )? paragraph* blockQuote* )
+    -> ^( SECTION 
+           ^( SECTION_TITLE sectionTitle )?
+           ^( SECTION_IDENTIFIER sectionIdentifier )?
+           paragraph* blockQuote* 
+       )
   ;
+
+sectionIdentifier
+  :	 APOSTROPHE textLine
+    -> textLine
+  ;
+  
+sectionTitle 
+  :	textLine
+  ;  
     
 /** A single line of text with no break inside.
  */    

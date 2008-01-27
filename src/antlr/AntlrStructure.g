@@ -42,7 +42,7 @@ scope InclusionScope { StructuralInclusion inclusion }
    * This needs to be set here because ANTLWorks doesn't know about it.
    */
   private StructuralBook book = 
-      new novelang.model.implementation.Book( "Fake book only needed by ANTLRWorks for debugging" ) ;
+      new novelang.model.implementation.Book() ;
 
 	@Override
 	public void reportError( RecognitionException e ) {

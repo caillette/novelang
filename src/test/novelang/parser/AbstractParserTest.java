@@ -18,6 +18,7 @@
 package novelang.parser;
 
 import java.io.IOException;
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.MissingResourceException;
 
@@ -35,7 +36,8 @@ import novelang.model.implementation.Book;
 public abstract class AbstractParserTest< P extends GenericParser > {
 
   protected P parser ;
-  protected Book book = new Book( ClassUtils.getShortClassName( getClass() ) ) ;
+  String bookName = ClassUtils.getShortClassName( getClass() );
+  protected final Book book = new Book( bookName, new File( bookName ) ) ;
 
 
   protected abstract P createParser( Book book, String s ) ;

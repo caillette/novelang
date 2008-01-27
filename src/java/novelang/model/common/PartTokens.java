@@ -15,15 +15,29 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
-
-import novelang.model.common.Tree;
+package novelang.model.common;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralPart {
+public enum PartTokens {
 
-  void findIdentifiers() ;
+  DOCUMENT,
+  SECTION,
+  SECTION_TITLE,
+  SECTION_IDENTIFIER,
+  LOCUTOR,
+  PARAGRAPH_PLAIN,
+  PARAGRAPH_SPEECH,
+  PARAGRAPH_SPEECH_CONTINUED,
+  PARAGRAPH_SPEECH_ESCAPED,
+  BLOCKQUOTE,
+  QUOTE,
+  EMPHASIS,
+  PARENTHESIS,
+  INTERPOLATEDCLAUSE,
+  INTERPOLATEDCLAUSE_SILENTEND,
+  WORD,
+  WORDTRAIL,
 
 }

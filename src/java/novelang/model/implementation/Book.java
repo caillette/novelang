@@ -18,6 +18,8 @@
 package novelang.model.implementation;
 
 import java.util.List;
+import java.io.File;
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,9 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import novelang.model.structural.StructuralBook;
 import novelang.model.common.Location;
+import novelang.parser.PartParser;
+import novelang.parser.PartParserFactory;
+import novelang.parser.implementation.DefaultPartParserFactory;
 
 /**
  * @author Laurent Caillette
@@ -33,21 +38,37 @@ public class Book implements StructuralBook {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Book.class ) ;
 
+  private static final String CHARSET_NAME = "ISO-8859-1" ;
+  private final Charset encoding;
+
   private final List< Exception > structureCreationExceptions = Lists.newArrayList() ;
   private final List< Part > parts = Lists.newArrayList() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
 
   private final BookContext context ;
+  private final File bookFile ;
+  private static final String DEBUG = "Only_for_debugging_ANTLR_Structure_parser";
 
 
-  public Book( String identifier ) {
-    identifier = Objects.nonNull( identifier ) ;
-
+  /**
+   * This constructor is supposed to be called only from
+   * {@link novelang.parser.antlr.AntlrStructureParser} because it needs a non-null {@code Book}
+   * instance for running inside ANTLRWorks debugger.
+   * It should never be used otherwise.
+   */
+  public Book() {
     context = new DefaultBookContext(
-        "todo structureFileName",
-        "book[" + identifier + "]"
+        "book[" + DEBUG + "]", null
     ) ;
+    bookFile = new File( DEBUG ) ;
+    encoding = Charset.forName( CHARSET_NAME ) ;
+  }
 
+  public Book( String identifier, File bookFile ) {
+    this.bookFile = Objects.nonNull( bookFile ) ;
+    identifier = Objects.nonNull( identifier ) ;
+    context = new DefaultBookContext( "book[" + identifier + "]", bookFile ) ;
+    encoding = Charset.forName( CHARSET_NAME ) ;
     LOGGER.info( "Created {}", context.asString() ) ;
   }
 
@@ -62,6 +83,11 @@ public class Book implements StructuralBook {
     return Lists.immutableList( structureCreationExceptions ) ;
   }
 
+  /**
+   * TODO: Add a {@code void addGenericPart(...)} method for supporting wildcards.
+   * It will be called at the end of Structure file parsing.
+   * This {@code createPart} method should be called at Weaving time, after wildcard resolution.
+   */
   public Part createPart( String partFileName, Location location ) {
     Objects.nonNull( partFileName ) ;
     Objects.nonNull( location ) ;
@@ -96,28 +122,37 @@ public class Book implements StructuralBook {
 
   private class DefaultBookContext implements BookContext {
 
-    private final String structureFileName ;
+    private final File structureFile;
     private final String name;
 
 
-    public DefaultBookContext( String structureFileName, String bookName ) {
-      this.structureFileName = structureFileName;
+    public DefaultBookContext( String bookName, File structureFile ) {
+      this.structureFile = structureFile;
       this.name = bookName;
     }
 
     public Location createStructureLocator( int line, int column ) {
-      return new Location( structureFileName, line, column ) ;
+      return new Location( structureFile.getName(), line, column ) ;
     }
 
     public String asString() {
-          return name;
-        }
+      return name;
+    }
 
     public BookContext derive( String extension ) {
-          return new DefaultBookContext(
-              structureFileName,
-              name + ":" + extension
-          ) ;
-        }
+      return new DefaultBookContext( name + ":" + extension, structureFile ) ;
+    }
+
+    public File relativizeFile( String fileName ) {
+      return new File( structureFile.getParentFile(), fileName ) ;
+    }
+
+    public Charset getEncoding() {
+      return encoding ;
+    }
+
+    public PartParser createParser( String text ) {
+      return new DefaultPartParserFactory().createParser( text );
+    }
   }
 }

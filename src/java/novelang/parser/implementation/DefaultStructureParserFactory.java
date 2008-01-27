@@ -26,6 +26,7 @@ import novelang.parser.antlr.AntlrStructureParser;
 import novelang.parser.StructureParser;
 import novelang.parser.StructureParserFactory;
 import novelang.model.structural.StructuralBook;
+import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
@@ -43,6 +44,7 @@ public class DefaultStructureParserFactory implements StructureParserFactory {
 
       {
         parser.setBook( book ) ;
+        parser.setTreeAdaptor( CustomTreeAdaptor.INSTANCE ) ;
       }
       
       public boolean hasProblem() {
@@ -53,8 +55,8 @@ public class DefaultStructureParserFactory implements StructureParserFactory {
         return book.getStructureParsingExceptions();
       }
 
-      public void parse() throws RecognitionException {
-        parser.structure();
+      public Tree parse() throws RecognitionException {
+        return ( Tree ) parser.structure().getTree() ;
       }
 
     };

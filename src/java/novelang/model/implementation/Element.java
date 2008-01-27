@@ -50,6 +50,10 @@ import com.google.common.collect.Lists;
     return location;
   }
 
+  public Iterable< Exception > getProblems() {
+    return Lists.immutableList( problems ) ;
+  }
+
   @Override
   public String toString() {
     return getContext().asString() + "@" + System.identityHashCode( this ) ;
