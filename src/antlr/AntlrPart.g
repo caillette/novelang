@@ -78,8 +78,8 @@ section
   ;
 
 sectionIdentifier
-  :	 APOSTROPHE word 
-	  ( WHITESPACE ( word | wordTrail ) )*
+  :	 APOSTROPHE w1 = word 
+	  ( WHITESPACE ( w2 += word | w3 += wordTrail ) )*
 	  -> word* wordTrail*
   ;
   

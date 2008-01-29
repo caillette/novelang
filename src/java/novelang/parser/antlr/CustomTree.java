@@ -23,15 +23,28 @@ import java.util.Iterator;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.Token;
 import novelang.model.common.Tree;
+import novelang.model.common.LocationFactory;
+import novelang.model.common.Location;
 
 /**
  * @author Laurent Caillette
  */
 public class CustomTree extends CommonTree implements Tree {
 
-	public CustomTree( Token token ) {
+  private final LocationFactory locationFactory ;
+  private Location location ;
+
+  public CustomTree( LocationFactory locationFactory, Token token ) {
 		super( token ) ;
-	}
+    this.locationFactory = locationFactory ;
+  }
+
+  public Location getLocation() {
+    if( location == null ) {
+      location = locationFactory.createLocation( getLine(), getCharPositionInLine() ) ;
+    }
+    return location ;
+  }
 
   public Tree getChildAt( int i ) {
     return ( Tree ) getChild( i ) ;
@@ -56,10 +69,11 @@ public class CustomTree extends CommonTree implements Tree {
           }
 
           public void remove() {
-            throw new UnsupportedOperationException( "remove" ) ;
+            throw new UnsupportedOperationException( "remove()" ) ;
           }
         };
       }
     };
   }
+
 }

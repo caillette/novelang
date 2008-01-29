@@ -120,6 +120,6 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 
 
   protected PartParser createParser( Book book, String s ) {
-    return new DefaultPartParserFactory().createParser( s ) ;
+    return new DefaultPartParserFactory().createParser( book, s ) ;
   }
 }

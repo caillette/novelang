@@ -24,6 +24,5 @@ import novelang.model.common.Tree;
  */
 public interface StructuralPart {
 
-  void spotIdentifiers() ;
 
 }

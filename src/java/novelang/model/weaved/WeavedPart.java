@@ -18,12 +18,13 @@
 package novelang.model.weaved;
 
 import novelang.model.common.Tree;
+import com.google.common.collect.Multimap;
 
 /**
  * @author Laurent Caillette
  */
 public interface WeavedPart {
 
-  
-
+  void load() ;
+  Multimap< String, Tree > getIdentifiers() ;
 }

@@ -42,10 +42,7 @@ import com.google.common.collect.Multimaps;
 public class Part extends Element implements StructuralPart, WeavedPart {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
-
   private final String fileName ;
-  private final Multimap< String, Tree > identifiedSectionTrees = Multimaps.newHashMultimap() ;
-
   private Tree tree ;
 
   public Part( BookContext context, String fileName, Location location ) {
@@ -59,7 +56,7 @@ public class Part extends Element implements StructuralPart, WeavedPart {
 
   private boolean loaded = false ;
 
-  public boolean load() {
+  public void load() {
     if( loaded ) {
       throw new IllegalStateException( "Part already loaded" ) ;
     }
@@ -82,13 +79,10 @@ public class Part extends Element implements StructuralPart, WeavedPart {
         LOGGER.warn( "Could not parse file", e ) ;
         collect( e ) ;
       }
-      return true ;
     } catch( IOException e ) {
       LOGGER.warn( "Could not load file", e ) ;
       collect( e ) ;
-      return false ;
     }
-
 
   }
 
@@ -101,8 +95,6 @@ public class Part extends Element implements StructuralPart, WeavedPart {
 // Identifiers
 // ===========
 
-  private boolean identifiersSpotted;
-
   /**
    * Finds Section identifiers from inside the {@link #getTree() tree}.
    * At the first glance it seems better to do it from the grammar but
@@ -114,29 +106,23 @@ public class Part extends Element implements StructuralPart, WeavedPart {
    * But the grammar could depend on a lightweight interface and create an instance
    * doing nothing by default, bypassing all dependencies to the {@code BookContext}.
    */
-  public void spotIdentifiers() {
-    if( identifiersSpotted ) {
-      throw new IllegalStateException( "Identifiers already spotted" ) ;
-    }
-    identifiersSpotted = true ;
+  public Multimap< String, Tree > getIdentifiers() {
+
+    final Multimap< String, Tree > identifiedSectionTrees = Multimaps.newHashMultimap() ;
 
     for( final Tree sectionCandidate : tree.getChildren() ) {
       if( PartTokens.SECTION.name().equals( sectionCandidate.getText() ) ) {
         for( final Tree identifierCandidate : sectionCandidate.getChildren() ) {
           if( PartTokens.SECTION_IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
-            addSectionIdentifier(
-                sectionCandidate,
-                IdentifierHelper.createIdentifier( identifierCandidate )
-            ) ;
+            final String identifier = IdentifierHelper.createIdentifier( identifierCandidate ) ;
+            identifiedSectionTrees.put( identifier, sectionCandidate ) ;
+            LOGGER.debug( "Recognized section identifier '{}' inside {}", identifier, this ) ;
           }
         }
       }
     }
-  }
 
-  private void addSectionIdentifier( Tree sectionTree, String identifier ) {
-    identifiedSectionTrees.put( identifier, sectionTree ) ;
-    LOGGER.debug( "Added section identifier '{}' to {}", identifier, this ) ;
+    return Multimaps.newArrayListMultimap( identifiedSectionTrees ) ;
   }
 
 

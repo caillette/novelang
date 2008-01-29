@@ -26,13 +26,14 @@ import novelang.parser.PartParser;
 import novelang.parser.antlr.AntlrPartLexer;
 import novelang.parser.antlr.AntlrPartParser;
 import novelang.model.common.Tree;
+import novelang.model.common.LocationFactory;
 
 /**
  * @author Laurent Caillette
  */
 public class DefaultPartParserFactory implements PartParserFactory {
 
-  public PartParser createParser( final String text ) {
+  public PartParser createParser( final LocationFactory locationFactory, final String text ) {
 
     return new PartParser() {
 
@@ -42,7 +43,7 @@ public class DefaultPartParserFactory implements PartParserFactory {
       private final AntlrPartParser parser = new AntlrPartParser( tokens ) ;
 
       {
-        parser.setTreeAdaptor( CustomTreeAdaptor.INSTANCE ) ;
+        parser.setTreeAdaptor( new CustomTreeAdaptor( locationFactory ) ) ;
       }
 
       public boolean hasProblem() {

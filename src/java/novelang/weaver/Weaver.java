@@ -15,34 +15,30 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.common;
+package novelang.weaver;
+
+import novelang.model.weaved.WeavedBook;
+import novelang.model.weaved.WeavedPart;
 
 /**
  * @author Laurent Caillette
  */
-public interface Tree {
+public class Weaver {
 
-  /**
-   * This can't be called {@code getChild()} because it would clash with
-   * {@link org.antlr.runtime.tree.Tree#getChild(int)} which returns a
-   * {@link org.antlr.runtime.tree.Tree}.
-   */
-  Tree getChildAt( int i ) ;
+  private final WeavedBook book ;
 
-  int getChildCount() ;
+  public Weaver( WeavedBook book ) {
+    this.book = book;
+  }
 
-  Iterable< Tree > getChildren() ;
+  public void weave() {
 
-  String getText() ;
+    for( final WeavedPart part : book.getParts() ) {
+      part.load() ;
+      part.getIdentifiers() ;
+    }
 
-  String toStringTree() ;
+  }
 
-  String toString() ;
-
-  /**
-   * TODO support this, through a {@link novelang.model.common.LocationFactory} parameter
-   * to the {@link novelang.parser.PartParserFactory#createParser(String)} method.
-   */
-  Location getLocation() ;
 
 }

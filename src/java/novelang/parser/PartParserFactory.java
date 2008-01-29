@@ -17,10 +17,12 @@
  */
 package novelang.parser;
 
+import novelang.model.common.LocationFactory;
+
 /**
  * @author Laurent Caillette
  */
 public interface PartParserFactory {
 
-  PartParser createParser( String content ) ;
+  PartParser createParser( LocationFactory locationFactory, String content ) ;
 }

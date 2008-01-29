@@ -42,7 +42,7 @@ public class PartTest {
   @Test
   public void loadPartOk() throws IOException {
     final Part part = book1.createPart( SECTIONS_1, location ) ;
-    Assert.assertTrue( part.load() ) ;
+    part.load() ;
     Assert.assertNotNull( part.getTree() ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
@@ -51,7 +51,7 @@ public class PartTest {
   public void findIdentifiersOk() throws IOException {
     final Part part = book1.createPart( SECTIONS_1, location ) ;
     part.load() ;
-    part.spotIdentifiers() ;
+    part.getIdentifiers() ;
   }
 
   @Before

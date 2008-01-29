@@ -21,14 +21,20 @@ import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.runtime.Token;
 import novelang.parser.antlr.CustomTree;
+import novelang.model.common.LocationFactory;
 
 /**
  * @author Laurent Caillette
 */
 /*package*/ class CustomTreeAdaptor extends CommonTreeAdaptor {
-  static final TreeAdaptor INSTANCE = new CustomTreeAdaptor();
+
+  private final LocationFactory locationFactory ;
+
+  public CustomTreeAdaptor( LocationFactory locationFactory ) {
+    this.locationFactory = locationFactory;
+  }
 
   public Object create( Token payload ) {
-    return new CustomTree( payload ) ;
+    return new CustomTree( locationFactory, payload ) ;
   }
 }

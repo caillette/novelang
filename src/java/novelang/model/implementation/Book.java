@@ -18,6 +18,7 @@
 package novelang.model.implementation;
 
 import java.util.List;
+import java.util.Collection;
 import java.io.File;
 import java.nio.charset.Charset;
 
@@ -25,8 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import novelang.model.structural.StructuralBook;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
+import novelang.model.weaved.IdentifierNotUniqueException;
 import novelang.parser.PartParser;
 import novelang.parser.PartParserFactory;
 import novelang.parser.implementation.DefaultPartParserFactory;
@@ -42,7 +47,13 @@ public class Book implements StructuralBook {
   private final Charset encoding;
 
   private final List< Exception > structureCreationExceptions = Lists.newArrayList() ;
+
+  /**
+   * This should be scoped to the method resolving generic Parts and loading Trees.
+   * We don't need to keep Parts -- even using automatic chapter generation?
+   */
   private final List< Part > parts = Lists.newArrayList() ;
+  private final Multimap< String, Tree > allIdentifiers = Multimaps.newHashMultimap() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
 
   private final BookContext context ;
@@ -109,7 +120,21 @@ public class Book implements StructuralBook {
     return Lists.immutableList( chapters ) ;
   }
 
-
+  public void gatherIdentifiers() {
+    allIdentifiers.clear() ;
+    for( final Part part : parts ) {
+      allIdentifiers.putAll( part.getIdentifiers() ) ;
+    }
+    for( final String identifier : allIdentifiers.keySet() ) {
+      final Collection< Tree > trees = allIdentifiers.get( identifier ) ;
+      if( trees.size() > 0 ) {
+        // TODO better name.
+        final IdentifierNotUniqueException notUniqueException = new IdentifierNotUniqueException( identifier, trees );
+        addStructureParsingException( notUniqueException ) ;
+        LOGGER.warn( "Same identifer found several times", notUniqueException ) ;
+      }
+    }
+  }
 
   @Override
   public String toString() {
@@ -152,7 +177,7 @@ public class Book implements StructuralBook {
     }
 
     public PartParser createParser( String text ) {
-      return new DefaultPartParserFactory().createParser( text );
+      return new DefaultPartParserFactory().createParser( Book.this, text );
     }
   }
 }

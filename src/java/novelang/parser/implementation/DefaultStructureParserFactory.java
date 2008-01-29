@@ -44,7 +44,7 @@ public class DefaultStructureParserFactory implements StructureParserFactory {
 
       {
         parser.setBook( book ) ;
-        parser.setTreeAdaptor( CustomTreeAdaptor.INSTANCE ) ;
+        parser.setTreeAdaptor( new CustomTreeAdaptor( book ) ) ;
       }
       
       public boolean hasProblem() {
