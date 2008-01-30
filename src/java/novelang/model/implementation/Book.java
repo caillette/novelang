@@ -20,10 +20,14 @@ package novelang.model.implementation;
 import java.util.List;
 import java.util.Collection;
 import java.io.File;
+import java.io.IOException;
+import java.io.FileReader;
 import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.io.IOUtils;
+import org.antlr.runtime.RecognitionException;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -32,20 +36,26 @@ import novelang.model.structural.StructuralBook;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import novelang.model.weaved.IdentifierNotUniqueException;
+import novelang.model.weaved.WeavedPart;
+import novelang.model.weaved.WeavedBook;
 import novelang.parser.PartParser;
-import novelang.parser.PartParserFactory;
+import novelang.parser.StructureParser;
 import novelang.parser.implementation.DefaultPartParserFactory;
+import novelang.parser.implementation.DefaultStructureParserFactory;
 
 /**
  * @author Laurent Caillette
  */
-public class Book implements StructuralBook {
+public class Book implements StructuralBook, WeavedBook {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Book.class ) ;
 
   private static final String CHARSET_NAME = "ISO-8859-1" ;
   private final Charset encoding;
 
+  /**
+   * TODO find a better name.
+   */
   private final List< Exception > structureCreationExceptions = Lists.newArrayList() ;
 
   /**
@@ -58,7 +68,7 @@ public class Book implements StructuralBook {
 
   private final BookContext context ;
   private final File bookFile ;
-  private static final String DEBUG = "Only_for_debugging_ANTLR_Structure_parser";
+  private static final String DEBUG = "Only_for_debugging_AntlrStructureParser_with_ANTLRWorks" ;
 
 
   /**
@@ -69,7 +79,7 @@ public class Book implements StructuralBook {
    */
   public Book() {
     context = new DefaultBookContext(
-        "book[" + DEBUG + "]", null
+        "book[" + DEBUG + "]", new File( DEBUG )
     ) ;
     bookFile = new File( DEBUG ) ;
     encoding = Charset.forName( CHARSET_NAME ) ;
@@ -80,24 +90,68 @@ public class Book implements StructuralBook {
     identifier = Objects.nonNull( identifier ) ;
     context = new DefaultBookContext( "book[" + identifier + "]", bookFile ) ;
     encoding = Charset.forName( CHARSET_NAME ) ;
-    LOGGER.info( "Created {}", context.asString() ) ;
+    LOGGER.info( "Created {} referencing file {}", this, bookFile.getAbsolutePath() ) ;
   }
 
-
-  public void addStructureParsingException( Exception ex ) {
-    Objects.nonNull( ex ) ;
-    structureCreationExceptions.add( ex ) ;
-    LOGGER.debug( "Added exception for structure parsing: {} to {}", ex, this ) ;
+  public void collect( Exception ex ) {
+    structureCreationExceptions.add( Objects.nonNull( ex ) ) ;
+    LOGGER.debug( "Added exception for structure parsing: {} to {}", ex.getClass(), this ) ;
   }
 
   public Iterable< Exception > getStructureParsingExceptions() {
     return Lists.immutableList( structureCreationExceptions ) ;
   }
 
+  public void loadStructure() throws IOException {
+
+    final File localFile = context.relativizeFile( bookFile.getName() ) ;
+    LOGGER.info( "Attempting to load file '{}' from {}", localFile.getAbsolutePath(), this ) ;
+
+    try {
+      final FileReader reader = new FileReader( localFile ) ;
+      final String content = new String(
+          IOUtils.toByteArray( reader, context.getEncoding().name() ) ) ;
+      loadStructure( content ) ;
+    } catch( IOException e ) {
+      LOGGER.warn( "Could not load file", e ) ;
+      collect( e ) ;
+    }
+
+  }
+
+  /**
+   * For tests only.
+   */
+  protected void loadStructure( String text ) {
+    final StructureParser parser = new DefaultStructureParserFactory()
+        .createParser( this, text ) ;
+
+    try {
+      // Yeah we do it here!
+      parser.parse() ;
+    } catch( RecognitionException e ) {
+      LOGGER.warn( "Could not parse file", e ) ;
+      collect( e ) ;
+    }
+  }
+
+  protected Tree getTree( String identifier ) {
+    final Collection< Tree > trees = allIdentifiers.get( identifier ) ;
+    if( 1 != trees.size() ) {
+      throw new RuntimeException(
+          "Internal inconsistency (forgot to call #gatherIdentifiers()?)" ) ;
+    }
+    return trees.iterator().next() ;
+  }
+
   /**
    * TODO: Add a {@code void addGenericPart(...)} method for supporting wildcards.
    * It will be called at the end of Structure file parsing.
    * This {@code createPart} method should be called at Weaving time, after wildcard resolution.
+   *
+   * @param partFileName name of the Part file, relative to Structure file.
+   * @param location location inside the Structure file.
+   * @return a non-null Part object.
    */
   public Part createPart( String partFileName, Location location ) {
     Objects.nonNull( partFileName ) ;
@@ -120,20 +174,31 @@ public class Book implements StructuralBook {
     return Lists.immutableList( chapters ) ;
   }
 
+  public void loadParts() {
+    LOGGER.info( "Loading Parts for {}", this ) ;
+    for( final WeavedPart part : parts ) {
+      part.load() ;
+      part.getIdentifiers() ;
+    }
+  }
+
   public void gatherIdentifiers() {
+    LOGGER.info( "Gathering identifiers for {}", this ) ;
     allIdentifiers.clear() ;
     for( final Part part : parts ) {
       allIdentifiers.putAll( part.getIdentifiers() ) ;
     }
     for( final String identifier : allIdentifiers.keySet() ) {
       final Collection< Tree > trees = allIdentifiers.get( identifier ) ;
-      if( trees.size() > 0 ) {
-        // TODO better name.
-        final IdentifierNotUniqueException notUniqueException = new IdentifierNotUniqueException( identifier, trees );
-        addStructureParsingException( notUniqueException ) ;
-        LOGGER.warn( "Same identifer found several times", notUniqueException ) ;
+      if( trees.size() > 1 ) {
+        final IdentifierNotUniqueException notUniqueException =
+            new IdentifierNotUniqueException( identifier, trees ) ;
+        collect( notUniqueException ) ;
+        LOGGER.warn( "Same identifer found several times from {}\n{}",
+            notUniqueException.getMessage() ) ;
       }
     }
+    LOGGER.info( "Found {} identifiers in {}", allIdentifiers.keySet().size(), this ) ;
   }
 
   @Override
@@ -176,8 +241,5 @@ public class Book implements StructuralBook {
       return encoding ;
     }
 
-    public PartParser createParser( String text ) {
-      return new DefaultPartParserFactory().createParser( Book.this, text );
-    }
   }
 }

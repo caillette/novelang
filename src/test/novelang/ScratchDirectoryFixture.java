@@ -111,13 +111,22 @@ public class ScratchDirectoryFixture {
 // Specialized dirs
 // ================
 
-  private static final String BOOK = "book-1" ;
+  private static final String BOOK_1 = "book-1" ;
 
   private File book1Root;
 
   public File getBook1Directory() throws IOException {
-    book1Root = createIfNotExists( book1Root, BOOK ) ;
+    book1Root = createIfNotExists( book1Root, BOOK_1 ) ;
     return book1Root;
+  }
+
+  private static final String BOOK_4 = "book-4" ;
+
+  private File book4Root;
+
+  public File getBook4Directory() throws IOException {
+    book4Root = createIfNotExists( book4Root, BOOK_4 ) ;
+    return book4Root;
   }
 
 

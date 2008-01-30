@@ -27,12 +27,17 @@ public class IdentifierHelper {
   private IdentifierHelper() { }
 
   /**
-   * Concatenates subtokens of a {@link novelang.model.common.PartTokens#SECTION_TITLE} (skipping the intermediary
-   * level defining what subtokens are made of, like {@link novelang.model.common.PartTokens#WORD}s).
+   * Concatenates subtokens of a {@link novelang.model.common.PartTokens#SECTION_TITLE}
+   * (skipping the intermediary level defining what subtokens are made of,
+   * like {@link novelang.model.common.PartTokens#WORD}s).
    *
    * @param tokenOwner a {@code Tree} containing all subtokens to create the identifier from.
    */
   public static String createIdentifier( Tree tokenOwner ) {
+    if( PartTokens.SECTION_IDENTIFIER.name() != tokenOwner.getText() ) {
+      throw new IllegalArgumentException(
+          "Token not of expected kind: " + tokenOwner.toStringTree() ) ;
+    }
     final StringBuffer buffer = new StringBuffer() ;
     final Iterator< Tree > children = tokenOwner.getChildren().iterator() ;
     while( children.hasNext() ) {

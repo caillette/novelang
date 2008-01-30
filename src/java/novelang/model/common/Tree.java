@@ -18,6 +18,10 @@
 package novelang.model.common;
 
 /**
+ * Narrows the contract over an Abstract Syntax Tree.
+ * This class doesn't mean to provide a true separation from ANTLR's logic because
+ * if we use another parser (that's not planned) the AST may look quite different.
+ *
  * @author Laurent Caillette
  */
 public interface Tree {
@@ -39,10 +43,6 @@ public interface Tree {
 
   String toString() ;
 
-  /**
-   * TODO support this, through a {@link novelang.model.common.LocationFactory} parameter
-   * to the {@link novelang.parser.PartParserFactory#createParser(String)} method.
-   */
   Location getLocation() ;
 
 }

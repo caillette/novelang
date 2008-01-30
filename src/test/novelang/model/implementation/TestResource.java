@@ -15,26 +15,38 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.weaver;
-
-import novelang.model.weaved.WeavedBook;
-import novelang.model.weaved.WeavedPart;
+package novelang.model.implementation;
 
 /**
  * @author Laurent Caillette
  */
-public class Weaver {
+public enum TestResource {
 
-  private final WeavedBook book ;
+  BLOCKQUOTE_1( "/blockquote-1.sample"),
+  PARAGRAPHBODY_1( "/paragraphbody-1.sample"),
+  PARAGRAPHBODY_2( "/paragraphbody-2.sample"),
+  PARENTHESIS_1( "/parenthesis-1.sample"),
+  QUOTES_1( "/quotes-1.sample"),
+  SECTIONS_1( "/sections-1.sample"),
+  SECTIONS_2( "/sections-2.sample"),
+  SECTIONS_3( "/sections-3.sample"),
+  SPEECHSEQUENCE_1( "/speechsequence-1.sample"),
+  SPEECHSEQUENCE_2( "/speechsequence-2.sample"),
 
-  public Weaver( WeavedBook book ) {
-    this.book = book;
+  STRUCTURE_1( "/structure-1.sample"),
+  STRUCTURE_2( "/structure-2.sample"),
+  STRUCTURE_3( "/structure-3.sample"),
+  STRUCTURE_4( "/structure-4.sample"),
+  ;
+
+  private final String path ;
+
+  TestResource( String path ) {
+    this.path = path ;
   }
 
-  public void weave() {
-    book.loadParts() ;
-    book.gatherIdentifiers() ;
+
+  public String path() {
+    return path;
   }
-
-
 }

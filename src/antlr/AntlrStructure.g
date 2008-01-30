@@ -47,7 +47,7 @@ scope InclusionScope { StructuralInclusion inclusion }
 	@Override
 	public void reportError( RecognitionException e ) {
 	  super.reportError( e ) ;
-	  book.addStructureParsingException( e ) ;
+	  book.collect( e ) ;
 	}
 	
   public void setBook( StructuralBook book ) {
@@ -67,8 +67,8 @@ structure
     LINEBREAK?
     EOF
   ;
-  
-	parts
+ 
+parts
   : part ( LINEBREAK part )*
     -> part*
   ;
@@ -85,7 +85,7 @@ part
  
 genericFileName
   :	n += pathDelimiter? n += genericFileNameItem 
-    ( n += pathDelimiter n += genericFileNameItem )+
+    ( n += pathDelimiter n += genericFileNameItem )*
     -> $n* 
   ;
     

@@ -26,7 +26,7 @@ import novelang.model.implementation.Part;
  */
 public interface StructuralBook extends LocationFactory {
   
-  void addStructureParsingException( Exception ex ) ;
+  void collect( Exception ex ) ;
 
   Iterable< Exception > getStructureParsingExceptions() ;
 

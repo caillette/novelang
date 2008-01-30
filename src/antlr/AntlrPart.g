@@ -77,13 +77,13 @@ section
        )
   ;
 
-sectionIdentifier
+sectionTitle
   :	 APOSTROPHE w1 = word 
 	  ( WHITESPACE ( w2 += word | w3 += wordTrail ) )*
 	  -> word* wordTrail*
   ;
   
-sectionTitle 
+ sectionIdentifier
   :	textLine
   ;  
     

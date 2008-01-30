@@ -40,9 +40,9 @@ public class IdentifierNotUniqueException extends Exception {
     identifier = Objects.nonNull( identifier ) ;
     trees = Objects.nonNull( trees ) ;
     final StringBuffer buffer = new StringBuffer() ;
-    buffer.append( "More than one usage of identifier '" ).append( identifier ).append( "': \n" ) ;
+    buffer.append( "More than one usage of identifier '" ).append( identifier ).append( "':" ) ;
     for( final Tree tree : trees ) {
-      buffer.append( "    ").append( tree.getLocation() ).append( "\n" ) ;
+      buffer.append( "\n    ").append( tree.getLocation() ) ;
     }
     return buffer.toString() ;
   }

@@ -38,6 +38,4 @@ public interface BookContext {
 
   Charset getEncoding() ;
 
-  PartParser createParser( String text ) ;
-
 }

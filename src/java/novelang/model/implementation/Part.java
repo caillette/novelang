@@ -32,6 +32,7 @@ import novelang.model.common.PartTokens;
 import novelang.model.common.IdentifierHelper;
 import novelang.model.weaved.WeavedPart;
 import novelang.parser.PartParser;
+import novelang.parser.implementation.DefaultPartParserFactory;
 import com.google.common.base.Objects;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -41,7 +42,7 @@ import com.google.common.collect.Multimaps;
  */
 public class Part extends Element implements StructuralPart, WeavedPart {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Part.class ) ;
   private final String fileName ;
   private Tree tree ;
 
@@ -69,10 +70,11 @@ public class Part extends Element implements StructuralPart, WeavedPart {
       final FileReader reader = new FileReader( localFile ) ;
       final String content = new String(
           IOUtils.toByteArray( reader, getContext().getEncoding().name() ) ) ;
-      final PartParser parser = getContext().createParser( content ) ;
+      final PartParser parser =
+          new DefaultPartParserFactory().createParser( this, content ) ;
       try {
 
-        // Yeah we get it here!
+        // Yeah we do it here!
         tree = parser.parse() ;
 
       } catch( RecognitionException e ) {
@@ -90,6 +92,9 @@ public class Part extends Element implements StructuralPart, WeavedPart {
     return tree ;
   }
 
+  public Location createLocation( int line, int column ) {
+    return new Location( fileName, line, column ) ;
+  }
 
 // ===========
 // Identifiers
@@ -99,12 +104,8 @@ public class Part extends Element implements StructuralPart, WeavedPart {
    * Finds Section identifiers from inside the {@link #getTree() tree}.
    * At the first glance it seems better to do it from the grammar but
    * I'm not sure on how to concatenate tokens.
-   * First I thought it would imply tons of ugly Java code embedded in the grammar,
-   * implying a "lightweight"
-   * version for having the {@code Part} member correctly initialized when using ANTLWorks
-   * debugger (see what's done with the {@code Book} in {@code AntlrStructure.g}).
-   * But the grammar could depend on a lightweight interface and create an instance
-   * doing nothing by default, bypassing all dependencies to the {@code BookContext}.
+   * If I find how to do I should just add a Multimap member to the grammar file and
+   * get it after parsing.
    */
   public Multimap< String, Tree > getIdentifiers() {
 
@@ -116,7 +117,7 @@ public class Part extends Element implements StructuralPart, WeavedPart {
           if( PartTokens.SECTION_IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
             final String identifier = IdentifierHelper.createIdentifier( identifierCandidate ) ;
             identifiedSectionTrees.put( identifier, sectionCandidate ) ;
-            LOGGER.debug( "Recognized section identifier '{}' inside {}", identifier, this ) ;
+            LOGGER.debug( "Recognized Section identifier '{}' inside {}", identifier, this ) ;
           }
         }
       }

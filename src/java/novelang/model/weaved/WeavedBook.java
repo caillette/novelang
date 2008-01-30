@@ -22,8 +22,12 @@ package novelang.model.weaved;
  */
 public interface WeavedBook {
 
-  Iterable< WeavedPart > getParts() ;
+  void loadParts() ;
 
-  Iterable< WeavedChapter > getChapters() ;
+  void gatherIdentifiers() ;
+
+//  Iterable< WeavedPart > getParts() ;
+
+//  Iterable< WeavedChapter > getChapters() ;
 
 }
