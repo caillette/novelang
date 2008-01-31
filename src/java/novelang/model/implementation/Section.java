@@ -56,11 +56,48 @@ public class Section extends StyledElement implements StructuralSection, WeavedS
   }
 
 
-  public Tree buildRawTree( Map< String, Tree > identifiers ) {
-    final MutableTree rawSectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
+  public Tree buildTree( Map< String, Tree > identifiers ) {
+    final MutableTree sectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
     for( final Inclusion inclusion : inclusions ) {
-      rawSectionTree.addChild( inclusion.buildRawTree( identifiers ) ) ;
+      // TODO don't take all paragraphs inconditionally.
+      for( final Tree tree : inclusion.buildTrees( identifiers ) ) {
+        sectionTree.addChild( tree ) ;
+      }
     }
-    return rawSectionTree ;
+    return enhanceSectionTree( sectionTree ) ;
   }
+
+  /**
+   * Gathers contiguous speech items in a {@link NodeKind#_SPEECH_SEQUENCE} node.
+   */
+  private Tree enhanceSectionTree( Tree rawSectionTree ) {
+    final MutableTree enhancedSectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
+    MutableTree speechSequenceTree = null ;
+    for( final Tree maybeParagraphTree : rawSectionTree.getChildren() ) {
+      if( maybeParagraphTree.isOneOf(
+          NodeKind.PARAGRAPH_SPEECH,
+          NodeKind.PARAGRAPH_SPEECH_CONTINUED,
+          NodeKind.PARAGRAPH_SPEECH_ESCAPED
+      ) ) {
+        if( null == speechSequenceTree ) {
+          speechSequenceTree = new DefaultMutableTree( NodeKind._SPEECH_SEQUENCE ) ;
+        }
+        speechSequenceTree.addChild( maybeParagraphTree ) ;
+      } else {
+        if( null == speechSequenceTree ) {
+          enhancedSectionTree.addChild( maybeParagraphTree ) ;
+        } else {
+          enhancedSectionTree.addChild( speechSequenceTree ) ;
+          speechSequenceTree = null ;
+          enhancedSectionTree.addChild( maybeParagraphTree ) ;
+        }
+      }
+    }
+    if( null != speechSequenceTree ) {
+      enhancedSectionTree.addChild( speechSequenceTree ) ;
+    }
+    return enhancedSectionTree ;
+  }
+
+
 }

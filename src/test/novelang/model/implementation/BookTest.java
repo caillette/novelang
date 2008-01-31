@@ -28,6 +28,7 @@ import novelang.ResourceTools;
 import novelang.ScratchDirectoryFixture;
 import novelang.renderer.PlainTextRenderer;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
 
 /**
  * 
@@ -46,7 +47,8 @@ public class BookTest {
     Assert.assertNotNull( book1.getTree( "section0 w01 w02" ) ) ;
     Assert.assertNotNull( book1.getTree( "section1 s11" ) ) ;
 
-    System.out.println( "tree = " + PlainTextRenderer.renderAsString( book1.getTree( "section0 w01" ) ) ) ;
+    final Tree bookTree = book1.createBookTree();
+    System.out.println( "Synthetic tree = " + PlainTextRenderer.renderAsString( bookTree ) ) ;
 
   }
 

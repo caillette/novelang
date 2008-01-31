@@ -49,8 +49,11 @@ public class PlainTextRenderer {
     final NodeKind token = Enum.valueOf( NodeKind.class, text ) ;
     switch( token ) {
 
-      case PART:
+      case _BOOK :
+      case PART :
+      case CHAPTER :
       case SECTION :
+      case _SPEECH_SEQUENCE :
       case PARAGRAPH_PLAIN :
       case PARAGRAPH_SPEECH :
       case PARAGRAPH_SPEECH_CONTINUED :

@@ -28,5 +28,5 @@ import com.google.common.collect.Multimap;
  */
 public interface WeavedChapter {
 
-  Tree buildRawTree( Map< String, Tree > identifiers ) ;
+  Tree buildTree( Map< String, Tree > identifiers ) ;
 }

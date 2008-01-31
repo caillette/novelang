@@ -32,6 +32,6 @@ public interface WeavedInclusion {
    */
   Iterable< Integer >  calculateParagraphIndexes( int total ) ;
 
-  Tree buildRawTree( Map< String, Tree > identifiers ) ;
+  Iterable< Tree > buildTrees( Map< String, Tree > identifiers ) ;
 
 }

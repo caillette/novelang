@@ -32,5 +32,5 @@ public interface StructuralChapter extends LocationFactory {
   void setStyle( String style ) ;
   Location createLocation( int line, int column ) ;
   StructuralSection createSection( Location location ) ;
-  Tree buildRawTree( Map< String, Tree > identifiers ) ;
+  Tree buildTree( Map< String, Tree > identifiers ) ;
 }

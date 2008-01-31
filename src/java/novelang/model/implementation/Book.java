@@ -202,7 +202,11 @@ public class Book implements StructuralBook, WeavedBook {
             notUniqueException.getMessage() ) ;
       }
     }
-    LOGGER.info( "Found {} identifiers in {}", multipleTreesFromPartsByIdentifier.keySet().size(), this ) ;
+    LOGGER.info(
+        "Found {} identifiers in {}",
+        multipleTreesFromPartsByIdentifier.keySet().size(),
+        this
+    ) ;
   }
 
   
@@ -225,68 +229,12 @@ public class Book implements StructuralBook, WeavedBook {
     final Map< String, Tree > treesFromPartsByIdentifier =
         Collections.unmodifiableMap( mutableIdentifiers ) ;
 
-    final MutableTree rawTree = new DefaultMutableTree( NodeKind._BOOK ) ;
+    final MutableTree bookTree = new DefaultMutableTree( NodeKind._BOOK ) ;
     for( final WeavedChapter chapter : chapters ) {
-      rawTree.addChild( chapter.buildRawTree( treesFromPartsByIdentifier ) ) ;
+      bookTree.addChild( chapter.buildTree( treesFromPartsByIdentifier ) ) ;
     }
 
-    return enhanceBookTree( rawTree ) ;
-  }
-
-  private Tree enhanceBookTree( Tree rawBookTree ) {
-    final MutableTree enhancedBookTree = new DefaultMutableTree( NodeKind._BOOK ) ;
-    for( Tree maybeChapterTree : rawBookTree.getChildren() ) {
-      if( maybeChapterTree.isOneOf( NodeKind.CHAPTER ) ) {
-        enhancedBookTree.addChild( enhanceChapterTree( maybeChapterTree ) ); ;
-      } else {
-        enhancedBookTree.addChild( maybeChapterTree ) ;
-      }
-    }
-    return enhancedBookTree ;
-  }
-
-  private Tree enhanceChapterTree( Tree rawChapterTree ) {
-    final MutableTree enhancedChapterTree = new DefaultMutableTree( NodeKind.CHAPTER ) ;
-    for( Tree maybeSectionTree : rawChapterTree.getChildren() ) {
-      if( maybeSectionTree.isOneOf( NodeKind.SECTION ) ) {
-        enhancedChapterTree.addChild( enhanceSectionTree( maybeSectionTree ) ) ;
-      } else {
-        enhancedChapterTree.addChild( maybeSectionTree ) ;
-      }
-    }
-    return enhancedChapterTree ;
-  }
-
-  /**
-   * Gathers contiguous speech items in a {@link NodeKind#_SPEECH_SEQUENCE} node.
-   */
-  private Tree enhanceSectionTree( Tree rawSectionTree ) {
-    final MutableTree enhancedSectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
-    MutableTree speechSequenceTree = null ;
-    for( final Tree maybeParagraphTree : rawSectionTree.getChildren() ) {
-      if( maybeParagraphTree.isOneOf(
-          NodeKind.PARAGRAPH_SPEECH,
-          NodeKind.PARAGRAPH_SPEECH_CONTINUED,
-          NodeKind.PARAGRAPH_SPEECH_ESCAPED
-      ) ) {
-        if( null == speechSequenceTree ) {
-          speechSequenceTree = new DefaultMutableTree( NodeKind._SPEECH_SEQUENCE ) ;
-        }
-        speechSequenceTree.addChild( maybeParagraphTree ) ;
-      } else {
-        if( null == speechSequenceTree ) {
-          enhancedSectionTree.addChild( maybeParagraphTree ) ;
-        } else {
-          enhancedSectionTree.addChild( speechSequenceTree ) ;
-          speechSequenceTree = null ;
-          enhancedSectionTree.addChild( maybeParagraphTree ) ;
-        }
-      }
-    }
-    if( null != speechSequenceTree ) {
-      enhancedSectionTree.addChild( speechSequenceTree ) ;
-    }
-    return enhancedSectionTree ;
+    return bookTree ;
   }
 
 

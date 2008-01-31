@@ -27,7 +27,6 @@ import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import novelang.model.weaved.WeavedInclusion;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
 import com.google.common.base.Objects;
 
 /**
@@ -72,9 +71,14 @@ public class Inclusion extends Element implements StructuralInclusion, WeavedInc
     LOGGER.debug( "CollateWithPrevious set to '{}' for {}", collateWithPrevious, this ) ;
   }
 
-  public Tree buildRawTree( Map< String, Tree > identifiers ) {
+  public Iterable< Tree > buildTrees( Map< String, Tree > identifiers ) {
     // TODO treat paragraphs correctly.
-    return identifiers.get( identifier ) ;
+    final Tree sectionTree = identifiers.get( identifier ) ;
+    final List< Tree > trees = Lists.newArrayList() ;
+    for( Tree tree : sectionTree.getChildren() ) {
+      trees.add( tree ) ;
+    }
+    return trees ;
   }
 
 

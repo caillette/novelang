@@ -56,11 +56,13 @@ public class Chapter extends StyledElement implements StructuralChapter, WeavedC
     return getContext().createStructureLocator( line, column ) ;
   }
 
-  public Tree buildRawTree( Map< String, Tree > identifiers ) {
-    final MutableTree rawChapterTree = new DefaultMutableTree( NodeKind.CHAPTER ) ;
+  public Tree buildTree( Map< String, Tree > identifiers ) {
+    final MutableTree chapterTree = new DefaultMutableTree( NodeKind.CHAPTER ) ;
     for( final Section section : sections ) {
-      rawChapterTree.addChild( section.buildRawTree( identifiers ) ) ;
+      chapterTree.addChild( section.buildTree( identifiers ) ) ;
     }
-    return rawChapterTree ;
+    return chapterTree ;
   }
+
+
 }
