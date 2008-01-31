@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.apache.commons.lang.ClassUtils;
 import novelang.ResourceTools;
 import novelang.ScratchDirectoryFixture;
+import novelang.renderer.PlainTextRenderer;
 import novelang.model.common.Location;
 
 /**
@@ -45,15 +46,17 @@ public class BookTest {
     Assert.assertNotNull( book1.getTree( "section0 w01 w02" ) ) ;
     Assert.assertNotNull( book1.getTree( "section1 s11" ) ) ;
 
+    System.out.println( "tree = " + PlainTextRenderer.renderAsString( book1.getTree( "section0 w01" ) ) ) ;
+
   }
 
 // =======
 // Fixture
 // =======
 
-  private static final String STRUCTURE_4 = TestResource.STRUCTURE_4.path() ;
-  private static final String SECTIONS_1 = TestResource.SECTIONS_1.path() ;
-  private static final String SPEECHSEQUENCE_1 = TestResource.SPEECHSEQUENCE_1.path() ;
+  private static final String STRUCTURE_4 = TestResources.STRUCTURE_4 ;
+  private static final String SECTIONS_1 = TestResources.SECTIONS_1 ;
+  private static final String SPEECHSEQUENCE_1 = TestResources.SPEECHSEQUENCE_1 ;
   private File book1Directory;
   private String testName;
   private Book book1;

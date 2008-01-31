@@ -19,6 +19,8 @@ package novelang.model.implementation;
 
 import java.util.List;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Collections;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileReader;
@@ -32,15 +34,17 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.Maps;
 import novelang.model.structural.StructuralBook;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
+import novelang.model.common.MutableTree;
+import novelang.model.common.NodeKind;
 import novelang.model.weaved.IdentifierNotUniqueException;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.weaved.WeavedBook;
-import novelang.parser.PartParser;
+import novelang.model.weaved.WeavedChapter;
 import novelang.parser.StructureParser;
-import novelang.parser.implementation.DefaultPartParserFactory;
 import novelang.parser.implementation.DefaultStructureParserFactory;
 
 /**
@@ -63,7 +67,7 @@ public class Book implements StructuralBook, WeavedBook {
    * We don't need to keep Parts -- even using automatic chapter generation?
    */
   private final List< Part > parts = Lists.newArrayList() ;
-  private final Multimap< String, Tree > allIdentifiers = Multimaps.newHashMultimap() ;
+  private final Multimap< String, Tree > multipleTreesFromPartsByIdentifier = Multimaps.newHashMultimap() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
 
   private final BookContext context ;
@@ -136,7 +140,7 @@ public class Book implements StructuralBook, WeavedBook {
   }
 
   protected Tree getTree( String identifier ) {
-    final Collection< Tree > trees = allIdentifiers.get( identifier ) ;
+    final Collection< Tree > trees = multipleTreesFromPartsByIdentifier.get( identifier ) ;
     if( 1 != trees.size() ) {
       throw new RuntimeException(
           "Internal inconsistency (forgot to call #gatherIdentifiers()?)" ) ;
@@ -184,12 +188,12 @@ public class Book implements StructuralBook, WeavedBook {
 
   public void gatherIdentifiers() {
     LOGGER.info( "Gathering identifiers for {}", this ) ;
-    allIdentifiers.clear() ;
+    multipleTreesFromPartsByIdentifier.clear() ;
     for( final Part part : parts ) {
-      allIdentifiers.putAll( part.getIdentifiers() ) ;
+      multipleTreesFromPartsByIdentifier.putAll( part.getIdentifiers() ) ;
     }
-    for( final String identifier : allIdentifiers.keySet() ) {
-      final Collection< Tree > trees = allIdentifiers.get( identifier ) ;
+    for( final String identifier : multipleTreesFromPartsByIdentifier.keySet() ) {
+      final Collection< Tree > trees = multipleTreesFromPartsByIdentifier.get( identifier ) ;
       if( trees.size() > 1 ) {
         final IdentifierNotUniqueException notUniqueException =
             new IdentifierNotUniqueException( identifier, trees ) ;
@@ -198,8 +202,97 @@ public class Book implements StructuralBook, WeavedBook {
             notUniqueException.getMessage() ) ;
       }
     }
-    LOGGER.info( "Found {} identifiers in {}", allIdentifiers.keySet().size(), this ) ;
+    LOGGER.info( "Found {} identifiers in {}", multipleTreesFromPartsByIdentifier.keySet().size(), this ) ;
   }
+
+  
+// ==================
+// Book tree creation
+// ==================
+
+  /**
+   * {@code Chapter}s and their subelements feed a {@code MutableTree} using a map of {@code Tree}s
+   * that was loaded by the {@code Part}s. Then this raw tree becomes a synthetic one after
+   * all global enhancements like on speeches.
+   */
+  public Tree createBookTree() {
+
+    final Map< String, Tree > mutableIdentifiers = Maps.newHashMap() ;
+    for( String identifier : multipleTreesFromPartsByIdentifier.keySet() ) {
+      mutableIdentifiers.put(
+          identifier, multipleTreesFromPartsByIdentifier.get( identifier ).iterator().next() ) ;
+    }
+    final Map< String, Tree > treesFromPartsByIdentifier =
+        Collections.unmodifiableMap( mutableIdentifiers ) ;
+
+    final MutableTree rawTree = new DefaultMutableTree( NodeKind._BOOK ) ;
+    for( final WeavedChapter chapter : chapters ) {
+      rawTree.addChild( chapter.buildRawTree( treesFromPartsByIdentifier ) ) ;
+    }
+
+    return enhanceBookTree( rawTree ) ;
+  }
+
+  private Tree enhanceBookTree( Tree rawBookTree ) {
+    final MutableTree enhancedBookTree = new DefaultMutableTree( NodeKind._BOOK ) ;
+    for( Tree maybeChapterTree : rawBookTree.getChildren() ) {
+      if( maybeChapterTree.isOneOf( NodeKind.CHAPTER ) ) {
+        enhancedBookTree.addChild( enhanceChapterTree( maybeChapterTree ) ); ;
+      } else {
+        enhancedBookTree.addChild( maybeChapterTree ) ;
+      }
+    }
+    return enhancedBookTree ;
+  }
+
+  private Tree enhanceChapterTree( Tree rawChapterTree ) {
+    final MutableTree enhancedChapterTree = new DefaultMutableTree( NodeKind.CHAPTER ) ;
+    for( Tree maybeSectionTree : rawChapterTree.getChildren() ) {
+      if( maybeSectionTree.isOneOf( NodeKind.SECTION ) ) {
+        enhancedChapterTree.addChild( enhanceSectionTree( maybeSectionTree ) ) ;
+      } else {
+        enhancedChapterTree.addChild( maybeSectionTree ) ;
+      }
+    }
+    return enhancedChapterTree ;
+  }
+
+  /**
+   * Gathers contiguous speech items in a {@link NodeKind#_SPEECH_SEQUENCE} node.
+   */
+  private Tree enhanceSectionTree( Tree rawSectionTree ) {
+    final MutableTree enhancedSectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
+    MutableTree speechSequenceTree = null ;
+    for( final Tree maybeParagraphTree : rawSectionTree.getChildren() ) {
+      if( maybeParagraphTree.isOneOf(
+          NodeKind.PARAGRAPH_SPEECH,
+          NodeKind.PARAGRAPH_SPEECH_CONTINUED,
+          NodeKind.PARAGRAPH_SPEECH_ESCAPED
+      ) ) {
+        if( null == speechSequenceTree ) {
+          speechSequenceTree = new DefaultMutableTree( NodeKind._SPEECH_SEQUENCE ) ;
+        }
+        speechSequenceTree.addChild( maybeParagraphTree ) ;
+      } else {
+        if( null == speechSequenceTree ) {
+          enhancedSectionTree.addChild( maybeParagraphTree ) ;
+        } else {
+          enhancedSectionTree.addChild( speechSequenceTree ) ;
+          speechSequenceTree = null ;
+          enhancedSectionTree.addChild( maybeParagraphTree ) ;
+        }
+      }
+    }
+    if( null != speechSequenceTree ) {
+      enhancedSectionTree.addChild( speechSequenceTree ) ;
+    }
+    return enhancedSectionTree ;
+  }
+
+
+// ===============
+// Other utilities
+// ===============
 
   @Override
   public String toString() {

@@ -17,8 +17,11 @@
  */
 package novelang.model.structural;
 
+import java.util.Map;
+
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
+import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
@@ -29,5 +32,5 @@ public interface StructuralChapter extends LocationFactory {
   void setStyle( String style ) ;
   Location createLocation( int line, int column ) ;
   StructuralSection createSection( Location location ) ;
-
+  Tree buildRawTree( Map< String, Tree > identifiers ) ;
 }

@@ -18,21 +18,26 @@
 package novelang.model.implementation;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.model.structural.StructuralChapter;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
+import novelang.model.common.MutableTree;
+import novelang.model.common.NodeKind;
+import novelang.model.weaved.WeavedChapter;
 import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
  */
-public class Chapter extends StyledElement implements StructuralChapter {
+public class Chapter extends StyledElement implements StructuralChapter, WeavedChapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Chapter.class ) ;
 
-    private final List< Section > sections = Lists.newArrayList() ;
+  private final List< Section > sections = Lists.newArrayList() ;
 
   public Chapter( BookContext context, Location location, int position ) {
     super( context.derive( "chapter[" + position + "]" ), location );
@@ -51,4 +56,11 @@ public class Chapter extends StyledElement implements StructuralChapter {
     return getContext().createStructureLocator( line, column ) ;
   }
 
+  public Tree buildRawTree( Map< String, Tree > identifiers ) {
+    final MutableTree rawChapterTree = new DefaultMutableTree( NodeKind.CHAPTER ) ;
+    for( final Section section : sections ) {
+      rawChapterTree.addChild( section.buildRawTree( identifiers ) ) ;
+    }
+    return rawChapterTree ;
+  }
 }

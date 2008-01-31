@@ -6,7 +6,7 @@ grammar AntlrPart ;
 options { output = AST ; } //backtrack = true ; memoize = true ; } 
 
 tokens {
-  DOCUMENT ;
+  PART ;
   SECTION  ;
   SECTION_TITLE ;
   SECTION_IDENTIFIER ;
@@ -55,14 +55,14 @@ tokens {
 	private int interpolatedClauseDepth = 0 ;
 }
 
-document 
+part 
   : section
     ( HARDBREAK section )* 
       // Looks strange but helps supporting arbitrary 
       // volume of white garbage at the end of the file:
     ( ( SOFTBREAK | HARDBREAK ) WHITESPACE? )* 
     EOF 
-    -> ^( DOCUMENT section* )
+    -> ^( PART section* )
   ;
 	
 section 

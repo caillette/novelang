@@ -32,8 +32,8 @@ import novelang.model.common.Location;
  * @author Laurent Caillette
  */
 public class PartTest {
-  private static final String STRUCTURE_1 = TestResource.STRUCTURE_1.path() ;
-  private static final String SECTIONS_1 = TestResource.SECTIONS_1.path() ;
+  private static final String STRUCTURE_1 = TestResources.STRUCTURE_1 ;
+  private static final String SECTIONS_1 = TestResources.SECTIONS_1 ;
   private File book1Directory;
   private String testName;
   private Book book1;

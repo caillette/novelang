@@ -17,8 +17,15 @@
  */
 package novelang.model.weaved;
 
+import java.util.Map;
+
+import novelang.model.common.Tree;
+
 /**
  * @author Laurent Caillette
  */
 public interface WeavedSection {
+
+  Tree buildRawTree( Map< String, Tree > identifiers ) ;
+
 }

@@ -131,7 +131,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Book.java" line="140" class="novelang.model.implementation.Book" package="novelang.model.implementation">
+      <breakpoint url="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Book.java" line="144" class="novelang.model.implementation.Book" package="novelang.model.implementation">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -199,10 +199,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BookTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/novelang/model/implementation/BookTest.java">
+      <file leaf-file-name="Book.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Book.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="3" selection-start="1109" selection-end="1109" vertical-scroll-proportion="-0.17297298">
+            <state line="241" column="53" selection-start="8946" selection-end="8946" vertical-scroll-proportion="0.6547455">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultMutableTree.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/DefaultMutableTree.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="83" column="0" selection-start="2367" selection-end="2367" vertical-scroll-proportion="0.8184319">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -210,20 +219,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Tree.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/Tree.java">
+      <file leaf-file-name="Chapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Chapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="0" selection-start="1462" selection-end="1462" vertical-scroll-proportion="0.87297297">
+            <state line="59" column="25" selection-start="2194" selection-end="2194" vertical-scroll-proportion="0.7482806">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Book.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Book.java">
+      <file leaf-file-name="WeavedChapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedChapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="179" column="19" selection-start="6440" selection-end="6440" vertical-scroll-proportion="0.73513514">
+            <state line="30" column="0" selection-start="1031" selection-end="1088" vertical-scroll-proportion="0.2338377">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WeavedSection.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedSection.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="28" column="0" selection-start="946" selection-end="946" vertical-scroll-proportion="0.18707015">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -231,17 +251,28 @@
       <file leaf-file-name="Section.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Section.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="13" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.18378378">
+            <state line="59" column="25" selection-start="2234" selection-end="2234" vertical-scroll-proportion="0.3562586">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Inclusion.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Inclusion.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Inclusion.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="0" selection-start="1535" selection-end="1535" vertical-scroll-proportion="0.33243242">
+            <state line="65" column="7" selection-start="2357" selection-end="2357" vertical-scroll-proportion="0.11691885">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NodeKind.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/NodeKind.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="74" column="0" selection-start="2028" selection-end="2028" vertical-scroll-proportion="1.3562586">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -249,43 +280,18 @@
       <file leaf-file-name="WeavedInclusion.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedInclusion.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="17" selection-start="870" selection-end="870" vertical-scroll-proportion="0.27567568">
-              <folding />
+            <state line="34" column="56" selection-start="1246" selection-end="1246" vertical-scroll-proportion="0.32737276">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WeavedBook.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedBook.java">
+      <file leaf-file-name="StructuralChapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/structural/StructuralChapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="0" selection-start="1023" selection-end="1023" vertical-scroll-proportion="0.51891893">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Part.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Part.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="85" column="20" selection-start="2959" selection-end="2959" vertical-scroll-proportion="0.73513514">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IdentifierHelper.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/IdentifierHelper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="23" selection-start="1304" selection-end="1304" vertical-scroll-proportion="0.87297297">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sections-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="20" selection-start="20" selection-end="20" vertical-scroll-proportion="0.0">
+            <state line="33" column="52" selection-start="1235" selection-end="1235" vertical-scroll-proportion="0.303989">
               <folding />
             </state>
           </provider>
@@ -636,6 +642,32 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/renderer" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/parser" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
@@ -692,6 +724,36 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/parser" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/parser/antlr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/model" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
@@ -723,6 +785,10 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/model" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/java/novelang/model/structural" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -1375,7 +1441,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="4" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="12" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45045045" order="2" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45045045" order="2" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946082" order="2" />
       <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="6" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4903475" order="4" />
@@ -1470,109 +1536,113 @@
     <option name="myLastEditedConfigurable" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/IdentifierNotUniqueException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="3" selection-start="1771" selection-end="1771" vertical-scroll-proportion="1.6357388">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/weaver/Weaver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="13" selection-start="943" selection-end="943" vertical-scroll-proportion="0.33243242">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="20" selection-start="20" selection-end="20" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/speechsequence-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrStructure.g">
+      <provider selected="true" editor-type-id="grammar">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/Tree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="1462" selection-end="1462" vertical-scroll-proportion="0.87297297">
+        <state line="47" column="0" selection-start="1490" selection-end="1490" vertical-scroll-proportion="0.72489685">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/novelang/model/implementation/BookTest.java">
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/parser/antlr/CustomTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="3" selection-start="1109" selection-end="1109" vertical-scroll-proportion="-0.17297298">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedBook.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="1023" selection-end="1023" vertical-scroll-proportion="0.51891893">
+        <state line="49" column="17" selection-start="1621" selection-end="1621" vertical-scroll-proportion="0.58459425">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Book.java">
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Element.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="179" column="19" selection-start="6440" selection-end="6440" vertical-scroll-proportion="0.73513514">
+        <state line="16" column="3" selection-start="783" selection-end="783" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/StyledElement.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="17" selection-start="1616" selection-end="1616" vertical-scroll-proportion="0.47027028">
+        <state line="28" column="43" selection-start="1086" selection-end="1086" vertical-scroll-proportion="0.18707015">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/structure-4.sample">
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/structural/StructuralChapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="16" selection-start="37" selection-end="37" vertical-scroll-proportion="0.09189189">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/IdentifierHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="23" selection-start="1304" selection-end="1304" vertical-scroll-proportion="0.87297297">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Part.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="20" selection-start="2959" selection-end="2959" vertical-scroll-proportion="0.73513514">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Section.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="13" selection-start="1141" selection-end="1141" vertical-scroll-proportion="0.18378378">
+        <state line="33" column="52" selection-start="1235" selection-end="1235" vertical-scroll-proportion="0.303989">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedInclusion.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="17" selection-start="870" selection-end="870" vertical-scroll-proportion="0.27567568">
+        <state line="34" column="56" selection-start="1246" selection-end="1246" vertical-scroll-proportion="0.32737276">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedChapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="0" selection-start="1031" selection-end="1088" vertical-scroll-proportion="0.2338377">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/weaved/WeavedSection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="0" selection-start="946" selection-end="946" vertical-scroll-proportion="0.18707015">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Section.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="25" selection-start="2234" selection-end="2234" vertical-scroll-proportion="0.3562586">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Inclusion.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1535" selection-end="1535" vertical-scroll-proportion="0.33243242">
+        <state line="65" column="7" selection-start="2357" selection-end="2357" vertical-scroll-proportion="0.11691885">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/NodeKind.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="0" selection-start="2028" selection-end="2028" vertical-scroll-proportion="1.3562586">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Chapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="25" selection-start="2194" selection-end="2194" vertical-scroll-proportion="0.7482806">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/DefaultMutableTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="0" selection-start="2367" selection-end="2367" vertical-scroll-proportion="0.8184319">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/implementation/Book.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="241" column="53" selection-start="8946" selection-end="8946" vertical-scroll-proportion="0.6547455">
           <folding />
         </state>
       </provider>

@@ -18,18 +18,23 @@
 package novelang.model.implementation;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.model.structural.StructuralSection;
 import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
+import novelang.model.common.MutableTree;
+import novelang.model.common.NodeKind;
+import novelang.model.weaved.WeavedSection;
 import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
  */
-public class Section extends StyledElement implements StructuralSection {
+public class Section extends StyledElement implements StructuralSection, WeavedSection {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Section.class ) ;
 
@@ -48,5 +53,14 @@ public class Section extends StyledElement implements StructuralSection {
         new Object[] { identifier, inclusion, location }
     ) ;
     return inclusion ;
+  }
+
+
+  public Tree buildRawTree( Map< String, Tree > identifiers ) {
+    final MutableTree rawSectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
+    for( final Inclusion inclusion : inclusions ) {
+      rawSectionTree.addChild( inclusion.buildRawTree( identifiers ) ) ;
+    }
+    return rawSectionTree ;
   }
 }

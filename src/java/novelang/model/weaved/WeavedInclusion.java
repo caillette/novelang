@@ -17,6 +17,10 @@
  */
 package novelang.model.weaved;
 
+import java.util.Map;
+
+import novelang.model.common.Tree;
+
 /**
  * @author Laurent Caillette
  */
@@ -27,4 +31,7 @@ public interface WeavedInclusion {
    * @param total the number of paragraphs on which to apply ranges and indexes.
    */
   Iterable< Integer >  calculateParagraphIndexes( int total ) ;
+
+  Tree buildRawTree( Map< String, Tree > identifiers ) ;
+
 }

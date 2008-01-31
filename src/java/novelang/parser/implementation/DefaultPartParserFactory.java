@@ -55,7 +55,7 @@ public class DefaultPartParserFactory implements PartParserFactory {
       }
 
       public Tree parse() throws RecognitionException {
-        return ( Tree ) parser.document().getTree() ;
+        return ( Tree ) parser.part().getTree() ;
       }
 
     } ;

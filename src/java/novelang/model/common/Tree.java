@@ -45,4 +45,6 @@ public interface Tree {
 
   Location getLocation() ;
 
+  boolean isOneOf( NodeKind... nodeKind ) ;
+
 }

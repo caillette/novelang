@@ -17,8 +17,16 @@
  */
 package novelang.model.weaved;
 
+import java.util.Map;
+
+import novelang.model.common.Tree;
+import novelang.model.common.MutableTree;
+import com.google.common.collect.Multimap;
+
 /**
  * @author Laurent Caillette
  */
 public interface WeavedChapter {
+
+  Tree buildRawTree( Map< String, Tree > identifiers ) ;
 }

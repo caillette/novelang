@@ -18,11 +18,13 @@
 package novelang.model.implementation;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
 import novelang.model.weaved.WeavedInclusion;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
@@ -68,8 +70,13 @@ public class Inclusion extends Element implements StructuralInclusion, WeavedInc
   public void setCollateWithPrevious( boolean collateWithPrevious ) {
     this.collateWithPrevious = collateWithPrevious;
     LOGGER.debug( "CollateWithPrevious set to '{}' for {}", collateWithPrevious, this ) ;
-
   }
+
+  public Tree buildRawTree( Map< String, Tree > identifiers ) {
+    // TODO treat paragraphs correctly.
+    return identifiers.get( identifier ) ;
+  }
+
 
   public Iterable< Integer > calculateParagraphIndexes( int paragraphCount ) {
     final List< Integer > toBeIncluded = Lists.newArrayList() ;

@@ -25,6 +25,7 @@ import org.antlr.runtime.Token;
 import novelang.model.common.Tree;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Location;
+import novelang.model.common.NodeKind;
 
 /**
  * @author Laurent Caillette
@@ -44,6 +45,15 @@ public class CustomTree extends CommonTree implements Tree {
       location = locationFactory.createLocation( getLine(), getCharPositionInLine() ) ;
     }
     return location ;
+  }
+
+  public boolean isOneOf( NodeKind... kinds ) {
+    for( NodeKind kind : kinds ) {
+      if( NodeKind.is( this, kind ) ) {
+        return true ;
+      }
+    }
+    return false ;
   }
 
   public Tree getChildAt( int i ) {
@@ -71,9 +81,9 @@ public class CustomTree extends CommonTree implements Tree {
           public void remove() {
             throw new UnsupportedOperationException( "remove()" ) ;
           }
-        };
+        } ;
       }
-    };
+    } ;
   }
 
 }

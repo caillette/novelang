@@ -28,7 +28,7 @@ import org.antlr.runtime.RecognitionException;
 import novelang.model.structural.StructuralPart;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
-import novelang.model.common.PartTokens;
+import novelang.model.common.NodeKind;
 import novelang.model.common.IdentifierHelper;
 import novelang.model.weaved.WeavedPart;
 import novelang.parser.PartParser;
@@ -112,9 +112,9 @@ public class Part extends Element implements StructuralPart, WeavedPart {
     final Multimap< String, Tree > identifiedSectionTrees = Multimaps.newHashMultimap() ;
 
     for( final Tree sectionCandidate : tree.getChildren() ) {
-      if( PartTokens.SECTION.name().equals( sectionCandidate.getText() ) ) {
+      if( NodeKind.SECTION.name().equals( sectionCandidate.getText() ) ) {
         for( final Tree identifierCandidate : sectionCandidate.getChildren() ) {
-          if( PartTokens.SECTION_IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
+          if( NodeKind.SECTION_IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
             final String identifier = IdentifierHelper.createIdentifier( identifierCandidate ) ;
             identifiedSectionTrees.put( identifier, sectionCandidate ) ;
             LOGGER.debug( "Recognized Section identifier '{}' inside {}", identifier, this ) ;
