@@ -15,17 +15,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.weaved;
+package novelang.jetty;
 
-import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
 
-import novelang.model.common.Tree;
+import org.mortbay.jetty.handler.AbstractHandler;
+import org.mortbay.jetty.Request;
 
 /**
  * @author Laurent Caillette
  */
-public interface WeavedSection {
+public class HelloHandler extends AbstractHandler {
 
-  Tree buildTree( Map< String, Tree > identifiers ) ;
-
+  public void handle(
+      String target,
+      HttpServletRequest request,
+      HttpServletResponse response,
+      int dispatch
+  )
+      throws IOException, ServletException {
+    response.setContentType( "text/html" ) ;
+    response.setStatus( HttpServletResponse.SC_OK ) ;
+    response.getWriter().println( "<h1>Hello</h1>" ) ;
+    ( ( Request ) request ).setHandled( true ) ;
+  }
 }

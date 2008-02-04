@@ -871,6 +871,9 @@
         <root url="jar://$PROJECT_DIR$/../lib/logback-core-0.9.8.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/guice-1.0.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/google-collect-snapshot-20071022.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/jetty-util-6.1.7.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/jetty-6.1.7.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/servlet-api-2.5-6.1.7.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>

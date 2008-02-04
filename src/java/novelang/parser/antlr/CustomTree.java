@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Laurent Caillette
+ * Copyright (C) 2008 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,18 +32,14 @@ import novelang.model.common.NodeKind;
  */
 public class CustomTree extends CommonTree implements Tree {
 
-  private final LocationFactory locationFactory ;
-  private Location location ;
+  private final Location location ;
 
   public CustomTree( LocationFactory locationFactory, Token token ) {
 		super( token ) ;
-    this.locationFactory = locationFactory ;
+    this.location = locationFactory.createLocation( getLine(), getCharPositionInLine() ) ;
   }
 
   public Location getLocation() {
-    if( location == null ) {
-      location = locationFactory.createLocation( getLine(), getCharPositionInLine() ) ;
-    }
     return location ;
   }
 
