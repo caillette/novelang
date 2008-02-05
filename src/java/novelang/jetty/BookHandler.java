@@ -51,16 +51,23 @@ public class BookHandler extends AbstractHandler {
   )
       throws IOException, ServletException
   {
-    final Book book = new Book( bookIdentifier, structureFile ) ;
-    book.loadStructure() ;
-    final Weaver weaver = new Weaver( book ) ;
-    weaver.weave() ;
-    final PlainTextRenderer renderer = new PlainTextRenderer() ;
+    if( target.startsWith( "/" + bookIdentifier ) ) {
 
-    response.setContentType( "text/html" ) ;
-    response.setStatus( HttpServletResponse.SC_OK ) ;
-    renderer.render( book.createBookTree(), response.getOutputStream() ) ;
-    ( ( Request ) request ).setHandled( true ) ;
+      final Book book = new Book( bookIdentifier, structureFile ) ;
+      book.loadStructure() ;
+      final Weaver weaver = new Weaver( book ) ;
+      weaver.weave() ;
+
+      if( target.endsWith( ".txt" ) ) {
+        final PlainTextRenderer renderer = new PlainTextRenderer() ;
+        response.setContentType( "text/html" ) ;
+        response.setStatus( HttpServletResponse.SC_OK ) ;
+        renderer.render( book.createBookTree(), response.getOutputStream() ) ;
+        ( ( Request ) request ).setHandled( true ) ;
+      } else {
+
+      }
+    }
   }
 
 }

@@ -46,8 +46,8 @@ public class PlainTextRenderer {
 
   private void doRender( Tree tree, PrintWriter writer, int indent ) {
     final String text = tree.getText() ;
-    final NodeKind token = Enum.valueOf( NodeKind.class, text ) ;
-    switch( token ) {
+    final NodeKind nodeKind = Enum.valueOf( NodeKind.class, text ) ;
+    switch( nodeKind ) {
 
       case _BOOK :
       case PART :
@@ -59,7 +59,7 @@ public class PlainTextRenderer {
       case PARAGRAPH_SPEECH_CONTINUED :
       case PARAGRAPH_SPEECH_ESCAPED :
       case QUOTE :
-        doRenderContainer( tree, writer, token, indent ) ;
+        doRenderContainer( tree, writer, nodeKind, indent ) ;
         break ;
 
       case WORD :
