@@ -97,6 +97,11 @@ public class Book implements StructuralBook, WeavedBook {
     LOGGER.info( "Created {} referencing file {}", this, bookFile.getAbsolutePath() ) ;
   }
 
+
+  public Charset getEncoding() {
+    return encoding;
+  }
+
   public void collect( Exception ex ) {
     structureCreationExceptions.add( Objects.nonNull( ex ) ) ;
     LOGGER.debug( "Added exception for structure parsing: {} to {}", ex.getClass(), this ) ;

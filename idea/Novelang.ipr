@@ -874,6 +874,12 @@
         <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/jetty-util-6.1.7.jar!/" />
         <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/jetty-6.1.7.jar!/" />
         <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/servlet-api-2.5-6.1.7.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/dom4j-1.6.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/avalon-framework-4.2.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/batik-all-1.6.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/xmlgraphics-commons-1.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/fop-0.94.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/commons-logging-1.1.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>

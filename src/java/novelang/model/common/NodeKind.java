@@ -70,7 +70,13 @@ public enum NodeKind {
    */
   public static boolean is( Tree tree, NodeKind nodeKind ) {
     Objects.nonNull( nodeKind ) ;
-    return ( null != tree && NAMES.contains( tree.getText() ) ) ;
+    final String text = tree.getText();
+    // TODO is everything useful here?
+    return
+        null != tree &&
+        NAMES.contains( text ) &&
+        nodeKind.name().equals( text )
+    ;
   }
 
   public static void ensure( Tree tree, NodeKind nodeKind ) {

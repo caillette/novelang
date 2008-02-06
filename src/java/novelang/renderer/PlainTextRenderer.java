@@ -20,25 +20,37 @@ package novelang.renderer;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
+import novelang.model.implementation.Book;
 
 /**
  * A scratch version of a Renderer.
  *
  * @author Laurent Caillette
  */
-public class PlainTextRenderer {
+public class PlainTextRenderer implements Renderer {
 
   public static String renderAsString( Tree tree ) {
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
-    new PlainTextRenderer().render( tree, outputStream ) ;
+    new PlainTextRenderer().renderTree( tree, outputStream ) ;
     final String renderer = new String( outputStream.toByteArray() ) ;
     return renderer ; 
   }
 
-  public void render( Tree tree, OutputStream stream ) {
+  public void renderBook( Book book, OutputStream stream ) {
+    final PrintWriter writer = new PrintWriter( stream ) ;
+    doRender( book.createBookTree(), writer, 0 ) ;
+    writer.flush() ;
+  }
+
+  public String getMimeType() {
+    return "text/plain" ;
+  }
+
+  private void renderTree( Tree tree, OutputStream stream ) {
     final PrintWriter writer = new PrintWriter( stream ) ;
     doRender( tree, writer, 0 ) ;
     writer.flush() ;
@@ -78,8 +90,8 @@ public class PlainTextRenderer {
   }
 
   private void doRenderContainer( Tree tree, PrintWriter writer, NodeKind token, int indent ) {
-    final String indentPlus = spaces( indent + 1 ) ;
-    final String indentMinus = spaces( indent - 1 ) ;
+    final String indentPlus = RenderTools.spaces( indent + 1 ) ;
+    final String indentMinus = RenderTools.spaces( indent - 1 ) ;
     writer.append( token.name() ).append( " { \n" ).append( indentPlus ) ;
     doRender( tree.getChildren(), writer, indent + 1 ) ;
     writer.append( "\n" ).append( indentMinus ).append( "}\n" ).append( indentMinus ) ;
@@ -89,14 +101,6 @@ public class PlainTextRenderer {
     for( final Tree tree : trees ) {
       doRender( tree, writer, indent + 1 ) ;
     }
-  }
-
-  private static final String spaces( int size ) {
-    final StringBuffer buffer = new StringBuffer() ;
-    for( int i = 0 ; i < size ; i++ ) {
-      buffer.append( "  " ) ;
-    }
-    return buffer.toString() ;
   }
 
 }

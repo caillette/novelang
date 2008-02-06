@@ -12,6 +12,7 @@
     <content url="file://$MODULE_DIR$/../src">
       <sourceFolder url="file://$MODULE_DIR$/../src/antlr" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../src/style" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../src/test" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />

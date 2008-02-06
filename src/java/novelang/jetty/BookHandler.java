@@ -29,6 +29,9 @@ import com.google.common.base.Objects;
 import novelang.model.implementation.Book;
 import novelang.weaver.Weaver;
 import novelang.renderer.PlainTextRenderer;
+import novelang.renderer.XmlRenderer;
+import novelang.renderer.Renderer;
+import novelang.renderer.PdfRenderer;
 
 /**
  * @author Laurent Caillette
@@ -59,15 +62,25 @@ public class BookHandler extends AbstractHandler {
       weaver.weave() ;
 
       if( target.endsWith( ".txt" ) ) {
-        final PlainTextRenderer renderer = new PlainTextRenderer() ;
-        response.setContentType( "text/html" ) ;
-        response.setStatus( HttpServletResponse.SC_OK ) ;
-        renderer.render( book.createBookTree(), response.getOutputStream() ) ;
-        ( ( Request ) request ).setHandled( true ) ;
-      } else {
-
+        serve( request, response, new PlainTextRenderer(), book ) ;
+      } else if( target.endsWith( ".xml" ) ) {
+        serve( request, response, new XmlRenderer(), book ) ;
+      } else if( target.endsWith( ".pdf" ) ) {
+        serve( request, response, new PdfRenderer(), book ) ;
       }
     }
+  }
+
+  private void serve(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      Renderer renderer,
+      Book book
+  ) throws IOException {
+    response.setContentType( renderer.getMimeType() ) ;
+    response.setStatus( HttpServletResponse.SC_OK ) ;
+    renderer.renderBook( book, response.getOutputStream() ) ;
+    ( ( Request ) request ).setHandled( true ) ;
   }
 
 }

@@ -17,18 +17,15 @@
  */
 package novelang.renderer;
 
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamSource;
-
 /**
  * @author Laurent Caillette
  */
-public class SaxProducer {
-
-
-  public SaxProducer() {
-    final TransformerFactory transformerFactory = TransformerFactory.newInstance() ;
-//    final Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
+public class RenderTools {
+  static final String spaces( int size ) {
+    final StringBuffer buffer = new StringBuffer() ;
+    for( int i = 0 ; i < size ; i++ ) {
+      buffer.append( "  " ) ;
+    }
+    return buffer.toString() ;
   }
 }
