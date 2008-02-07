@@ -78,13 +78,13 @@
             <fo:page-number/>
           </fo:block>
         </fo:static-content>
+
         <fo:flow
             flow-name="xsl-region-body"
             font-size="13pt"
             font-family="Georgia"
             line-height="18pt"
         >
-          <fo:block>Main flow here</fo:block>
           <xsl:apply-templates />
         </fo:flow>
 
@@ -95,7 +95,6 @@
 
   <xsl:template match="n:chapter">
     <fo:block space-before="250pt" >
-      <fo:block>Chapter here!</fo:block>
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
@@ -149,7 +148,6 @@
         text-indent="1em" 
         text-align="justify"
     >
-      <fo:block>Some paragraph-plain here!</fo:block>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

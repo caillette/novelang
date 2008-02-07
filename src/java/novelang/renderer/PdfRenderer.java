@@ -21,20 +21,11 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.net.URL;
 import java.net.MalformedURLException;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.Templates;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
@@ -53,8 +44,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
+import com.google.common.base.Objects;
 
 /**
  * @author Laurent Caillette
@@ -63,61 +54,89 @@ public class PdfRenderer extends XmlRenderer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( PdfRenderer.class ) ;
   private static final String NOVELANG_STYLES_DIR = "novelang.styles.dir" ;
-  private static final boolean DEBUG = false ;
-  private static final String DEFAULT_FO_STYLESHEET = DEBUG ? "identity.xsl" : "fo.xsl" ;
-
-  private static final File stylesDir ;
+  private static final String DEFAULT_FO_STYLESHEET = /*"identity.xsl"*/ "fo.xsl" ;
+  private static final EntityResolver ENTITY_RESOLVER ;
+  private static final File STYLES_DIR ;
 
   static {
     final String stylesDirName = System.getProperty( NOVELANG_STYLES_DIR ) ;
     if( StringUtils.isBlank( stylesDirName ) ) {
-      stylesDir = null ;
       LOGGER.debug( "No directory set for styles" ) ;
+      throw new RuntimeException( // TODO load resource.
+          "No default stylesheet supported yet, set -D" + NOVELANG_STYLES_DIR + " instead" ) ;
     } else {
       final File dir = new File( stylesDirName ) ;
       if( dir.exists() ) {
         try {
-          stylesDir = dir.getCanonicalFile() ;
+          STYLES_DIR = dir.getCanonicalFile() ;
         } catch( IOException e ) {
           throw new RuntimeException( e );
         }
-        LOGGER.info( "Styles directory set to '{}'", stylesDir.getAbsolutePath() ) ;
+        LOGGER.info( "Styles directory set to '{}'", STYLES_DIR.getAbsolutePath() ) ;
       } else {
-        stylesDir = null ;
-        LOGGER.warn( "Styles directory '{}' does not exist", stylesDir.getAbsolutePath() ) ;
+        STYLES_DIR = null ;
+        LOGGER.warn( "Styles directory '{}' does not exist", STYLES_DIR.getAbsolutePath() ) ;
       }
     }
-  }
-
-  private final File stylesheet ;
-  private final EntityResolver entityResolver ;
-
-  public PdfRenderer() {
-    if( null == stylesDir ) {
-      throw new RuntimeException(
-          "No default stylesheet supported yet, set -D" + NOVELANG_STYLES_DIR + " instead") ;
-    }
-    stylesheet = new File( stylesDir, DEFAULT_FO_STYLESHEET ) ;
     try {
-      entityResolver = new LocalEntityResolver( stylesDir.toURL().toExternalForm() ) ;
+      ENTITY_RESOLVER = new LocalEntityResolver( STYLES_DIR.toURL().toExternalForm() ) ;
     } catch( MalformedURLException e ) {
       throw new RuntimeException( e );
     }
   }
 
+  private final File stylesheet ; // TODO use URL like for LocalEntityResolver
 
-  public String getMimeType() {
-    if( DEBUG ) {
-      return "text/plain" ;
-    } else {
-      return "application/pdf" ;
+  public PdfRenderer() {
+    stylesheet = new File( STYLES_DIR, DEFAULT_FO_STYLESHEET ) ;
+  }
+
+// ================
+// Debug properties
+// ================
+
+  public enum ForcedMimeType {
+    TEXT( "text/plain"),
+    XML( "text/xml" ),
+    PDF( "application/pdf" ) ;
+
+    private final String identifier ;
+    private ForcedMimeType( String identifier ) {
+      this.identifier = identifier ;
+    }
+    public String getIdentifier() {
+      return identifier;
     }
   }
 
+  private ForcedMimeType forcedMimeType = ForcedMimeType.PDF ;
+
+  public void setForcedMimeType( ForcedMimeType forcedMimeType ) {
+    this.forcedMimeType = Objects.nonNull( forcedMimeType ) ;
+  }
+
+  public String getMimeType() {
+    return forcedMimeType.getIdentifier() ;
+  }
+
+  private boolean applyFop = true ;
+
+  public void setApplyFop( boolean applyFop ) {
+    this.applyFop = applyFop;
+  }
+
+// ==========
+// Generation
+// ==========
+
+  /**
+   * Creates a {@code ContentHandler} piped to a stylesheet producing Formatting Objects (FO)
+   * to the PDF generator (Apache FOP).
+   * When {@link #applyFop} is set to true, formatted XML is produced instead.
+   */
   protected ContentHandler createContentHandler( OutputStream outputStream, Charset encoding )
       throws Exception
   {
-
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
 
@@ -125,7 +144,7 @@ public class PdfRenderer extends XmlRenderer {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
     reader.setContentHandler( templatesHandler ) ;
-    reader.setEntityResolver( entityResolver ) ;
+    reader.setEntityResolver( ENTITY_RESOLVER ) ;
     reader.parse( new InputSource( new FileReader( stylesheet ) ) ) ;
 
     final Templates templates = templatesHandler.getTemplates() ;
@@ -134,10 +153,10 @@ public class PdfRenderer extends XmlRenderer {
 
     final ContentHandler sinkContentHandler ;
 
-    if( DEBUG ) {
-      sinkContentHandler = super.createContentHandler( outputStream, encoding ) ;
-    } else {
+    if( applyFop ) {
       sinkContentHandler = createFopContentHandler( outputStream ) ;
+    } else {
+      sinkContentHandler = super.createContentHandler( outputStream, encoding ) ;
     }
 
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
@@ -149,7 +168,6 @@ public class PdfRenderer extends XmlRenderer {
   private final ContentHandler createFopContentHandler( OutputStream outputStream )
       throws FOPException
   {
-
     final FopFactory fopFactory = FopFactory.newInstance() ;
     final FOUserAgent foUserAgent = fopFactory.newFOUserAgent() ;
 
@@ -164,10 +182,14 @@ public class PdfRenderer extends XmlRenderer {
 
   }
 
-  private class LocalEntityResolver implements EntityResolver {
+  /**
+   * Fetches local files in the same directory as the stylesheet.
+   * This is because the {@code systemId} as read by the stylesheet loader is prefixed
+   * with current directory (bug?).
+   */
+  private static class LocalEntityResolver implements EntityResolver {
 
     private final String resourcePrefix ;
-
 
     public LocalEntityResolver( String resourcePrefix ) {
       this.resourcePrefix = resourcePrefix ;
@@ -178,12 +200,13 @@ public class PdfRenderer extends XmlRenderer {
         String systemId
     ) throws SAXException, IOException {
       systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;      
-      LOGGER.info( "Attempting to resolve entity publicId='{} systemId='{}'", publicId, systemId ) ;
+      LOGGER.debug( "Attempting to resolve entity publicId='{} systemId='{}'", publicId, systemId ) ;
       final URL entityUrl = new URL( resourcePrefix + systemId ) ;
       final InputSource inputSource = new InputSource( entityUrl.openStream() ) ;
       LOGGER.debug( "Resolved entity '{}'", entityUrl.toExternalForm() ) ;
       return inputSource ;
     }
   }
+
 
 }

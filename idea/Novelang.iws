@@ -203,19 +203,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="fo.xsl" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="fo.xsl" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/style/fo.xsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="63" column="58" selection-start="1653" selection-end="1653" vertical-scroll-proportion="0.3313253">
+            <state line="150" column="28" selection-start="3702" selection-end="3702" vertical-scroll-proportion="0.66566265">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PdfRenderer.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ISOnum.pen" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/style/ISOnum.pen">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="97" column="14" selection-start="4484" selection-end="4489" vertical-scroll-proportion="0.556196">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PdfRenderer.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/renderer/PdfRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="44" selection-start="2518" selection-end="2518" vertical-scroll-proportion="-0.6368876">
+            <state line="125" column="3" selection-start="4224" selection-end="4224" vertical-scroll-proportion="0.19596542">
               <folding />
             </state>
           </provider>
@@ -224,7 +233,7 @@
       <file leaf-file-name="XmlRenderer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/java/novelang/renderer/XmlRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="150" column="98" selection-start="4702" selection-end="4702" vertical-scroll-proportion="0.4409222">
+            <state line="150" column="98" selection-start="4702" selection-end="4702" vertical-scroll-proportion="0.556196">
               <folding />
             </state>
           </provider>
@@ -1974,7 +1983,7 @@
   </component>
   <component name="com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectRootMasterDetailsConfigurable" proportions="0.11111111" version="1">
     <option name="myPlainMode" value="false" />
-    <option name="myLastEditedConfigurable" value="Novelang" />
+    <option name="myLastEditedConfigurable" value="lib" />
   </component>
   <component name="com.intellij.profile.ui.ErrorOptionsConfigurable" proportions="" version="1">
     <option name="myLastEditedConfigurable" />
@@ -2031,13 +2040,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/style/ISOnum.pen">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="13" selection-start="3479" selection-end="3483" vertical-scroll-proportion="-1.4270073">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/style/ISOpub.pen">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-6.5145984">
@@ -2052,13 +2054,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/NodeKind.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="12" selection-start="999" selection-end="999" vertical-scroll-proportion="0.26224783">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/style/docbook2fo.xsl">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.8403614">
@@ -2068,21 +2063,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/java/novelang/renderer/XmlRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="98" selection-start="4702" selection-end="4702" vertical-scroll-proportion="0.4409222">
+        <state line="150" column="98" selection-start="4702" selection-end="4702" vertical-scroll-proportion="0.556196">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/java/novelang/renderer/PdfRenderer.java">
+    <entry file="file://$PROJECT_DIR$/../src/style/ISOnum.pen">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="44" selection-start="2518" selection-end="2518" vertical-scroll-proportion="-0.6368876">
+        <state line="97" column="14" selection-start="4484" selection-end="4489" vertical-scroll-proportion="0.556196">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/style/fo.xsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="58" selection-start="1653" selection-end="1653" vertical-scroll-proportion="0.3313253">
+        <state line="150" column="28" selection-start="3702" selection-end="3702" vertical-scroll-proportion="0.66566265">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/model/common/NodeKind.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="12" selection-start="999" selection-end="999" vertical-scroll-proportion="0.26224783">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/java/novelang/renderer/PdfRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="3" selection-start="4224" selection-end="4224" vertical-scroll-proportion="0.19596542">
           <folding />
         </state>
       </provider>
