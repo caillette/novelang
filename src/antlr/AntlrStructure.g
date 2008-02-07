@@ -6,9 +6,10 @@ tokens {
   STRUCTURE ;
   PART ;
   CHAPTER ;
+  CHAPTER_TITLE ;
   SECTION ;
   STYLE ;
-  TITLE ;
+  SECTION_TITLE ;
   IDENTIFIER ;
   INCLUSION ;
   INCLUSION_APPENDING ;
@@ -109,13 +110,14 @@ chapter
     WHITESPACE? 
     ( title WHITESPACE? 
       { $ChapterScope::chapter.setTitle( $title.text ) ; }
+      -> ^( CHAPTER_TITLE title )
     )?
     LINEBREAK
     ( style WHITESPACE? LINEBREAK 
       { $ChapterScope::chapter.setStyle( $style.text ) ; }
     )?
     section ( LINEBREAK section )* 
-    -> ^( CHAPTER ^( TITLE title )? style? section* )
+    -> ^( CHAPTER ^( SECTION_TITLE title )? style? section* )
   ;
   
 section
@@ -129,6 +131,7 @@ section
     WHITESPACE? 
     ( title WHITESPACE? 
       { $SectionScope::section.setTitle( $title.text ) ; }
+      -> ^( SECTION_TITLE title )
     )?
     LINEBREAK
     ( style WHITESPACE? LINEBREAK 
@@ -136,7 +139,7 @@ section
     )?
     inclusion WHITESPACE?
     ( LINEBREAK inclusion WHITESPACE? )*
-    -> ^( SECTION ^( TITLE title )? style? inclusion* )
+    -> ^( SECTION ^( SECTION_TITLE title )? style? inclusion* )
   ;
 
 style
@@ -147,6 +150,7 @@ style
 
 title
   : word ( WHITESPACE word )*
+    -> word*
   ;
 
 inclusion

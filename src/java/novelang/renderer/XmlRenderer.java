@@ -93,6 +93,7 @@ public class XmlRenderer implements Renderer {
         endElement( contentHandler, text ) ;
         break ;
 
+      case SECTION_TITLE :
       case WORD :
       case WORDTRAIL :
         for( Tree wordToken : tree.getChildren() ) {

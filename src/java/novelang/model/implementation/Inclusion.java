@@ -26,6 +26,7 @@ import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import novelang.model.weaved.WeavedInclusion;
+import novelang.model.weaved.UnknownIdentifierException;
 import com.google.common.collect.Lists;
 import com.google.common.base.Objects;
 
@@ -72,11 +73,15 @@ public class Inclusion extends Element implements StructuralInclusion, WeavedInc
   }
 
   public Iterable< Tree > buildTrees( Map< String, Tree > identifiers ) {
+    final List< Tree > trees = Lists.newArrayList() ;
     // TODO treat paragraphs correctly.
     final Tree sectionTree = identifiers.get( identifier ) ;
-    final List< Tree > trees = Lists.newArrayList() ;
-    for( Tree tree : sectionTree.getChildren() ) {
-      trees.add( tree ) ;
+    if( null == sectionTree ) {
+      collect( new UnknownIdentifierException( identifier ) ) ;
+    } else {
+      for( Tree tree : sectionTree.getChildren() ) {
+        trees.add( tree ) ;
+      }
     }
     return trees ;
   }

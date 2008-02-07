@@ -33,6 +33,7 @@ public class ServerMain {
   private static final Logger LOGGER = LoggerFactory.getLogger( ServerMain.class ) ;
 
   private static final String HELLO = "-hello" ;
+  private static final int HTTP_SERVER_PORT = 8080;
 
   private static HandlerCollection readArguments( String[] args ) {
     final HandlerCollection handlers = new HandlerCollection() ;
@@ -66,9 +67,10 @@ public class ServerMain {
 
   public static void main( String[] args ) throws Exception {
     final HandlerCollection handlers = readArguments( args ) ;
-    final Server server = new Server( 8080 ) ;
+    final Server server = new Server( HTTP_SERVER_PORT ) ;
     server.setHandler( handlers ) ;
     server.start() ;
+    LOGGER.info( "Server started on port " + HTTP_SERVER_PORT ) ;
   }
 
 }

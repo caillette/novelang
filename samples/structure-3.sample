@@ -17,10 +17,11 @@
 
 // Get back implicitely to chapter's style from here.
 
+
 ===
 
-+ `id30`
-\ `id40`   // Merge first § of this one with last § of previous.
++ id30
+| id40   // Merge first § of this one with last § of previous.
 
 
 
@@ -29,6 +30,4 @@
 
 ===
 
-+ `id50`
-
-
++ id50

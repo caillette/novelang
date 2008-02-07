@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
 import novelang.model.structural.StructuralSection;
 import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
@@ -58,6 +59,11 @@ public class Section extends StyledElement implements StructuralSection, WeavedS
 
   public Tree buildTree( Map< String, Tree > identifiers ) {
     final MutableTree sectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
+//    if( ! StringUtils.isBlank( getTitle() ) ) {
+//      final MutableTree titleTree = new DefaultMutableTree( NodeKind.SECTION_TITLE ) ;
+//      titleTree.addChild( new DefaultMutableTree( getTitle() ) ) ;
+//      sectionTree.addChild( titleTree ) ;
+//    }
     for( final Inclusion inclusion : inclusions ) {
       // TODO don't take all paragraphs inconditionally.
       for( final Tree tree : inclusion.buildTrees( identifiers ) ) {

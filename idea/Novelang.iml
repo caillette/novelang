@@ -3,6 +3,9 @@
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="true">
     <exclude-output />
+    <content url="file://$MODULE_DIR$/../configuration">
+      <sourceFolder url="file://$MODULE_DIR$/../configuration/test" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/generated">
       <sourceFolder url="file://$MODULE_DIR$/generated/antlr" isTestSource="false" />
     </content>
