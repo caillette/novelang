@@ -21,7 +21,10 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.net.URL;
+import java.net.MalformedURLException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.Source;
@@ -49,6 +52,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -57,12 +61,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class PdfRenderer extends XmlRenderer {
 
-  private static final String NOVELANG_STYLES_DIR = "novelang.styles.dir" ;
-  private static final String DEFAULT_FO_STYLESHEET = "identity.xsl" ;
-
   private static final Logger LOGGER = LoggerFactory.getLogger( PdfRenderer.class ) ;
+  private static final String NOVELANG_STYLES_DIR = "novelang.styles.dir" ;
+  private static final boolean DEBUG = false ;
+  private static final String DEFAULT_FO_STYLESHEET = DEBUG ? "identity.xsl" : "fo.xsl" ;
 
   private static final File stylesDir ;
+
   static {
     final String stylesDirName = System.getProperty( NOVELANG_STYLES_DIR ) ;
     if( StringUtils.isBlank( stylesDirName ) ) {
@@ -71,7 +76,11 @@ public class PdfRenderer extends XmlRenderer {
     } else {
       final File dir = new File( stylesDirName ) ;
       if( dir.exists() ) {
-        stylesDir = dir ;
+        try {
+          stylesDir = dir.getCanonicalFile() ;
+        } catch( IOException e ) {
+          throw new RuntimeException( e );
+        }
         LOGGER.info( "Styles directory set to '{}'", stylesDir.getAbsolutePath() ) ;
       } else {
         stylesDir = null ;
@@ -81,6 +90,7 @@ public class PdfRenderer extends XmlRenderer {
   }
 
   private final File stylesheet ;
+  private final EntityResolver entityResolver ;
 
   public PdfRenderer() {
     if( null == stylesDir ) {
@@ -88,12 +98,20 @@ public class PdfRenderer extends XmlRenderer {
           "No default stylesheet supported yet, set -D" + NOVELANG_STYLES_DIR + " instead") ;
     }
     stylesheet = new File( stylesDir, DEFAULT_FO_STYLESHEET ) ;
+    try {
+      entityResolver = new LocalEntityResolver( stylesDir.toURL().toExternalForm() ) ;
+    } catch( MalformedURLException e ) {
+      throw new RuntimeException( e );
+    }
   }
 
 
   public String getMimeType() {
-//    return "application/pdf" ;
-    return "text/plain" ;
+    if( DEBUG ) {
+      return "text/plain" ;
+    } else {
+      return "application/pdf" ;
+    }
   }
 
   protected ContentHandler createContentHandler( OutputStream outputStream, Charset encoding )
@@ -107,6 +125,7 @@ public class PdfRenderer extends XmlRenderer {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
     reader.setContentHandler( templatesHandler ) ;
+    reader.setEntityResolver( entityResolver ) ;
     reader.parse( new InputSource( new FileReader( stylesheet ) ) ) ;
 
     final Templates templates = templatesHandler.getTemplates() ;
@@ -115,9 +134,11 @@ public class PdfRenderer extends XmlRenderer {
 
     final ContentHandler sinkContentHandler ;
 
-    // Useful to see the transformation result.
-    sinkContentHandler = super.createContentHandler( outputStream, encoding ) ;
-//    sinkContentHandler = createFopContentHandler( outputStream ) ;
+    if( DEBUG ) {
+      sinkContentHandler = super.createContentHandler( outputStream, encoding ) ;
+    } else {
+      sinkContentHandler = createFopContentHandler( outputStream ) ;
+    }
 
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
 
@@ -142,4 +163,27 @@ public class PdfRenderer extends XmlRenderer {
     return fop.getDefaultHandler() ;
 
   }
+
+  private class LocalEntityResolver implements EntityResolver {
+
+    private final String resourcePrefix ;
+
+
+    public LocalEntityResolver( String resourcePrefix ) {
+      this.resourcePrefix = resourcePrefix ;
+    }
+
+    public InputSource resolveEntity(
+        String publicId,
+        String systemId
+    ) throws SAXException, IOException {
+      systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;      
+      LOGGER.info( "Attempting to resolve entity publicId='{} systemId='{}'", publicId, systemId ) ;
+      final URL entityUrl = new URL( resourcePrefix + systemId ) ;
+      final InputSource inputSource = new InputSource( entityUrl.openStream() ) ;
+      LOGGER.debug( "Resolved entity '{}'", entityUrl.toExternalForm() ) ;
+      return inputSource ;
+    }
+  }
+
 }

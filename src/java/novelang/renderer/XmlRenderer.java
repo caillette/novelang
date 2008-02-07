@@ -72,9 +72,11 @@ public class XmlRenderer implements Renderer {
 
     final String text = tree.getText() ;
     final NodeKind nodeKind = Enum.valueOf( NodeKind.class, text ) ;
+    boolean declareNamespace = false ;
     switch( nodeKind ) {
 
       case _BOOK :
+        declareNamespace = true ;
       case PART :
       case CHAPTER :
       case SECTION :
@@ -84,7 +86,7 @@ public class XmlRenderer implements Renderer {
       case PARAGRAPH_SPEECH_CONTINUED :
       case PARAGRAPH_SPEECH_ESCAPED :
       case QUOTE :
-        startElement( contentHandler, text ) ;
+        startElement( contentHandler, text, declareNamespace ) ;
         for( Tree subtree : tree.getChildren() ) {
           renderTree( contentHandler, subtree ) ;
         }
@@ -113,17 +115,42 @@ public class XmlRenderer implements Renderer {
     return result ;
   }
 
+  private static final String NAMESPACE_URI = "http://novelang.org/book-xml/1.0" ;
+  private static final String NAME_QUALIFIER = "n" ;
   private static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl() ;
   private static final char[] WORD_SEPARATOR = new char[] { ' ' } ;
 
-  private void startElement( ContentHandler contentHandler, String tokenName ) throws SAXException {
-    final String name = tokenNameAsXmlElementName( tokenName ) ;
-    contentHandler.startElement( "", "", name, EMPTY_ATTRIBUTES ) ;
+  private void startElement(
+      ContentHandler contentHandler,
+      String tokenName,
+      boolean declareNamespace
+  ) throws SAXException {
+    tokenName = tokenNameAsXmlElementName( tokenName ) ;
+    final Attributes attributes ;
+    if( declareNamespace ) {
+      final AttributesImpl mutableAttributes = new AttributesImpl() ;
+      mutableAttributes.addAttribute(
+          NAMESPACE_URI,
+          NAME_QUALIFIER,
+          "xmlns:" + NAME_QUALIFIER,
+          "CDATA",
+          NAMESPACE_URI
+      ) ;
+      attributes = mutableAttributes ;
+    } else {
+      attributes = EMPTY_ATTRIBUTES ;
+    }
+    contentHandler.startElement( 
+        NAMESPACE_URI,
+        tokenName,
+        NAME_QUALIFIER + ":" + tokenName,
+        attributes
+    ) ;
   }
 
   private void endElement( ContentHandler contentHandler, String tokenName ) throws SAXException {
-    final String name = tokenNameAsXmlElementName( tokenName ) ;
-    contentHandler.endElement( "", "", name ) ;
+    tokenName = tokenNameAsXmlElementName( tokenName ) ;
+    contentHandler.endElement( NAMESPACE_URI, tokenName, NAME_QUALIFIER + ":" + tokenName ) ;
   }
 
   private void word( ContentHandler contentHandler, String word ) throws SAXException {

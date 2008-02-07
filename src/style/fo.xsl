@@ -21,6 +21,7 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:n="http://novelang.org/book-xml/1.0"
 >
   <xsl:param name="time"/>
   <xsl:param name="filename"/>
@@ -39,15 +40,14 @@
             master-name="PageMaster"
         >
 
-          <!-- precedence doesn't seem to work -->
-          <fo:region-before extent="10mm" precedence="true" />
-
           <fo:region-body
               margin-top="10mm"
               margin-bottom="15mm"
               column-count="1"
               column-gap="0mm"
           />
+
+          <fo:region-before extent="10mm" />
 
           <fo:region-after extent="10mm"/>
 
@@ -61,10 +61,9 @@
         <fo:static-content flow-name="xsl-region-before">
           <fo:block text-align="right">
             <fo:inline font-size="80%">
-            [<xsl:value-of select="$filename" />&nbsp;<xsl:value-of select="$time" />] &copy; Laurent Caillette 2002-2007
+            [<xsl:value-of select="$filename" />&nbsp;<xsl:value-of select="$time" />] &copy; Laurent Caillette 2002-2008
             </fo:inline>
           </fo:block>
-        
         </fo:static-content>
 
         <fo:static-content flow-name="xsl-region-after">
@@ -85,6 +84,7 @@
             font-family="Georgia"
             line-height="18pt"
         >
+          <fo:block>Main flow here</fo:block>
           <xsl:apply-templates />
         </fo:flow>
 
@@ -93,21 +93,14 @@
     </fo:root>
   </xsl:template>
 
-  <xsl:template match="chapter">
+  <xsl:template match="n:chapter">
     <fo:block space-before="250pt" >
-      <!--
-        The preceding-sibling returns a set of nodes of the same level
-        than the one currently processed. Index starts at 1 and it
-        seems that closest node is given first (reverse order).
-      -->
-      <xsl:if test="name(preceding-sibling::*[1])='chapter'" >
-        <xsl:attribute name="break-before" >page</xsl:attribute>
-      </xsl:if>
+      <fo:block>Chapter here!</fo:block>
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="chapter/title">
+  <xsl:template match="n:chapter/title">
     <fo:block
         font-size="15pt"
         font-weight="bold"
@@ -151,11 +144,12 @@
   </xsl:template>
 
 
-  <xsl:template match="para">
+  <xsl:template match="n:paragraph-plain">
     <fo:block 
         text-indent="1em" 
         text-align="justify"
     >
+      <fo:block>Some paragraph-plain here!</fo:block>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

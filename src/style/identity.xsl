@@ -7,8 +7,6 @@
   <xsl:output method = "xml" />
 
   <xsl:template match = "*" >
-    Finally I got something !
-<!--
     <xsl:element name = "{name(.)}" >
       <xsl:for-each select = "@*" >
         <xsl:attribute name = "{name(.)}" >
@@ -17,7 +15,6 @@
       </xsl:for-each>
       <xsl:apply-templates />
     </xsl:element>
--->
   </xsl:template>
 
 </xsl:stylesheet>
