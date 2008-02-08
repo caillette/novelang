@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
@@ -30,18 +31,18 @@ import novelang.model.common.Location;
 
   private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
 
-  private String title ;
+  private Tree title ;
   private String style ;
 
   public StyledElement( BookContext context, Location location ) {
     super( context, location ) ;
   }
 
-  public String getTitle() {
+  public Tree getTitle() {
     return title;
   }
 
-  public void setTitle( String title ) {
+  public void setTitle( Tree title ) {
     this.title = Objects.nonNull( title ) ;
     LOGGER.debug( "Title set to '{}' for {}", title, this ) ;
   }

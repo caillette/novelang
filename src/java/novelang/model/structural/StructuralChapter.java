@@ -28,7 +28,7 @@ import novelang.model.common.Tree;
  */
 public interface StructuralChapter extends LocationFactory {
 
-  void setTitle( String title ) ;
+  void setTitle( Tree title ) ;
   void setStyle( String style ) ;
   Location createLocation( int line, int column ) ;
   StructuralSection createSection( Location location ) ;

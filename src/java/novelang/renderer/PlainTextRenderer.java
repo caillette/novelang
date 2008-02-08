@@ -65,6 +65,7 @@ public class PlainTextRenderer implements Renderer {
       case PART :
       case CHAPTER :
       case SECTION :
+      case TITLE :
       case _SPEECH_SEQUENCE :
       case PARAGRAPH_PLAIN :
       case PARAGRAPH_SPEECH :

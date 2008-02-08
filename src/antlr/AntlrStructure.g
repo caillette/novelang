@@ -109,7 +109,7 @@ chapter
     }
     WHITESPACE? 
     ( title WHITESPACE? 
-      { $ChapterScope::chapter.setTitle( $title.text ) ; }
+      { $ChapterScope::chapter.setTitle( ( novelang.model.common.Tree ) $title.tree ) ; }
     )?
     LINEBREAK
     ( style WHITESPACE? LINEBREAK 
@@ -129,7 +129,7 @@ section
     }  
     WHITESPACE? 
     ( title WHITESPACE? 
-      { $SectionScope::section.setTitle( $title.text ) ; }
+      { $SectionScope::section.setTitle( ( novelang.model.common.Tree ) $title.tree ) ; }
     )?
     LINEBREAK
     ( style WHITESPACE? LINEBREAK 

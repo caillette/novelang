@@ -64,11 +64,6 @@ public class Section extends StyledElement implements StructuralSection, WeavedS
     // instead of passing AST from Structure file.
     // Maybe the right type for the title would be a Tree.
     
-//    if( ! StringUtils.isBlank( getTitle() ) ) {
-//      final MutableTree titleTree = new DefaultMutableTree( NodeKind.SECTION_TITLE ) ;
-//      titleTree.addChild( new DefaultMutableTree( getTitle() ) ) ;
-//      sectionTree.addChild( titleTree ) ;
-//    }
     for( final Inclusion inclusion : inclusions ) {
       // TODO don't take all paragraphs inconditionally.
       for( final Tree tree : inclusion.buildTrees( identifiers ) ) {
@@ -83,6 +78,11 @@ public class Section extends StyledElement implements StructuralSection, WeavedS
    */
   private Tree enhanceSectionTree( Tree rawSectionTree ) {
     final MutableTree enhancedSectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
+
+    if( getTitle() != null ) {
+      enhancedSectionTree.addChild( getTitle() ) ;
+    }
+
     MutableTree speechSequenceTree = null ;
     for( final Tree maybeParagraphTree : rawSectionTree.getChildren() ) {
       if( maybeParagraphTree.isOneOf(

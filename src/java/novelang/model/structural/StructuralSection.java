@@ -19,13 +19,14 @@ package novelang.model.structural;
 
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
  */
 public interface StructuralSection extends LocationFactory {
 
-  void setTitle( String title ) ;
+  void setTitle( Tree title ) ;
 
   void setStyle( String style ) ;
 
