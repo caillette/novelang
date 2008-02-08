@@ -6,16 +6,16 @@ tokens {
   STRUCTURE ;
   PART ;
   CHAPTER ;
-  CHAPTER_TITLE ;
+  TITLE ;
   SECTION ;
   STYLE ;
-  SECTION_TITLE ;
   IDENTIFIER ;
   INCLUSION ;
   INCLUSION_APPENDING ;
   PARAGRAPH ;
   POSITION ;
   INTERVAL ;
+  WORD ;
 }
 
 scope ChapterScope { StructuralChapter chapter } 
@@ -110,14 +110,13 @@ chapter
     WHITESPACE? 
     ( title WHITESPACE? 
       { $ChapterScope::chapter.setTitle( $title.text ) ; }
-      -> ^( CHAPTER_TITLE title )
     )?
     LINEBREAK
     ( style WHITESPACE? LINEBREAK 
       { $ChapterScope::chapter.setStyle( $style.text ) ; }
     )?
     section ( LINEBREAK section )* 
-    -> ^( CHAPTER ^( SECTION_TITLE title )? style? section* )
+    -> ^( CHAPTER title? style? section* )
   ;
   
 section
@@ -131,7 +130,6 @@ section
     WHITESPACE? 
     ( title WHITESPACE? 
       { $SectionScope::section.setTitle( $title.text ) ; }
-      -> ^( SECTION_TITLE title )
     )?
     LINEBREAK
     ( style WHITESPACE? LINEBREAK 
@@ -139,7 +137,7 @@ section
     )?
     inclusion WHITESPACE?
     ( LINEBREAK inclusion WHITESPACE? )*
-    -> ^( SECTION ^( SECTION_TITLE title )? style? inclusion* )
+    -> ^( SECTION title? style? inclusion* )
   ;
 
 style
@@ -150,7 +148,7 @@ style
 
 title
   : word ( WHITESPACE word )*
-    -> word*
+    -> ^( TITLE word* )
   ;
 
 inclusion
@@ -233,10 +231,11 @@ positiveNumber
 reversibleNumber
   : DIGIT+ HYPHEN_MINUS?
   ;
-	
-word 
-  : ( LETTER | DIGIT )+
-    ( ( APOSTROPHE | HYPHEN_MINUS ) ( LETTER | DIGIT )+ )*
+
+word
+  : ( w += LETTER | w += DIGIT )
+    ( w += APOSTROPHE | w += HYPHEN_MINUS | w += LETTER | w += DIGIT )*
+    -> ^( WORD $w+ )
   ; 
 
 
@@ -263,7 +262,7 @@ CHAPTER_INTRODUCER : '***' ;
 SECTION_INTRODUCER : '===' ;
 PARAGRAPH_REFERENCES_INTRODUCER : '<<' ;
 
-LETTER 
+LETTER
   : 'a'..'z' 
   | 'A'..'Z' 
   ;

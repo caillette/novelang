@@ -77,6 +77,7 @@ public class Inclusion extends Element implements StructuralInclusion, WeavedInc
     // TODO treat paragraphs correctly.
     final Tree sectionTree = identifiers.get( identifier ) ;
     if( null == sectionTree ) {
+      LOGGER.warn( "Unknown identifier '{}' found by {}", identifier, this ) ;
       collect( new UnknownIdentifierException( identifier ) ) ;
     } else {
       for( Tree tree : sectionTree.getChildren() ) {

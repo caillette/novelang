@@ -80,6 +80,7 @@ public class XmlRenderer implements Renderer {
       case PART :
       case CHAPTER :
       case SECTION :
+      case TITLE :
       case _SPEECH_SEQUENCE :
       case PARAGRAPH_PLAIN :
       case PARAGRAPH_SPEECH :
@@ -93,7 +94,6 @@ public class XmlRenderer implements Renderer {
         endElement( contentHandler, text ) ;
         break ;
 
-      case SECTION_TITLE :
       case WORD :
       case WORDTRAIL :
         for( Tree wordToken : tree.getChildren() ) {
