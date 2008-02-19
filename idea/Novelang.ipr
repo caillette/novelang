@@ -2,6 +2,13 @@
 <project version="4" relativePaths="true">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
+    <buildFile url="file://$PROJECT_DIR$/../build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -871,15 +878,15 @@
         <root url="jar://$PROJECT_DIR$/../lib/logback-core-0.9.8.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/guice-1.0.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/google-collect-snapshot-20071022.jar!/" />
-        <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/jetty-util-6.1.7.jar!/" />
-        <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/jetty-6.1.7.jar!/" />
-        <root url="jar://$PROJECT_DIR$/../../../JavaProducts/mortbay.com/jetty-6.1.7/lib/servlet-api-2.5-6.1.7.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/dom4j-1.6.1.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/avalon-framework-4.2.0.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/batik-all-1.6.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/xmlgraphics-commons-1.2.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/fop-0.94.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/jcl104-over-slf4j-1.4.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/jetty-util-6.1.7.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/servlet-api-2.5-6.1.7.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/jetty-6.1.7.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>

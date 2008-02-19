@@ -20,7 +20,6 @@ package novelang.renderer;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.Charset;
 
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
@@ -40,14 +39,11 @@ public class PlainTextRenderer implements Renderer {
     return renderer ; 
   }
 
-  public void renderBook( Book book, OutputStream stream ) {
+  public String renderBook( Book book, OutputStream stream ) {
     final PrintWriter writer = new PrintWriter( stream ) ;
     doRender( book.createBookTree(), writer, 0 ) ;
     writer.flush() ;
-  }
-
-  public String getMimeType() {
-    return "text/plain" ;
+    return RenditionMimeType.TEXT.getMimeName() ;
   }
 
   private void renderTree( Tree tree, OutputStream stream ) {

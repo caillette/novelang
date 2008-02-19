@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+
+<project basedir="." name="Novelang build file" >
+
+  <description>
+    Build system for Novelang.
+    
+    Prerequisites:
+    Set path to required libraries in ${user.home}/novelang.build.properties
+    file. Required properties are described in ./build.properties file.
+    
+    With Ant-1.6.5 launch with: ant -lib lib {other options} {targets}
+    in order to allow optional task to find dependencies like JUnit.
+    This is not needed with Ant-1.7.0-RC1.
+    No other version of Ant have been used at this time.
+    
+    Distribution is meant to be self-building so it carries some test stuff.
+
+    ------------------------------------
+
+    Copyright (C) 2006 Laurent Caillette
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+  </description>
+  
+  <target name="init" >
+  
+    <pathconvert property="basedir.fullpath" dirsep="/" >      
+      <path>
+        <pathelement location="${basedir}" />
+      </path>
+    </pathconvert>
+    <echo>basedir.fullpath = ${basedir.fullpath}</echo>
+    
+    <tstamp>
+      <format property="timestamp" pattern="yyyy-MM-dd_HH.mm" />
+    </tstamp>
+
+    <!-- Overrides any property defined in build.properties -->
+    <property file="${user.home}/novelang.build.properties" />
+    
+    <property file="build.properties" />
+
+    <patternset id="resource-patterns" >
+      <include name="**/*.properties" />
+      <include name="**/*.xml" />
+      <include name="**/*.png" />
+      <include name="**/*.jpeg" />
+      <include name="**/*.jpg" />
+      <include name="**/*.gif" />
+      <include name="**/*.css" />      
+      <include name="**/*.html" />
+      <include name="**/*.xhtml" />
+      <include name="**/*.dtd" />
+      <include name="**/*.txt" />
+      <include name="**/*.bin" />
+      <include name="**/*.st" />
+    </patternset>
+
+    <path id="deploy-libs" >
+      <fileset dir="${lib.deploy.dir}" includes="*.jar" />
+    </path>
+
+    <path id="build-libs" >
+      <fileset dir="${lib.build.dir}" includes="*.jar" />
+    </path>
+
+    <path id="antlr-sources" >
+      <fileset dir="${source.antlr.dir}" includes="*.g"/>
+    </path>
+
+
+  </target>
+  
+  <target name="target-dir" depends="init" >
+    <mkdir dir="${target.dir}" />
+    <mkdir dir="${target.mainclasses.dir}" />
+  </target>
+  
+  <target name="clean" depends="init" >
+    <delete dir="${target.dir}" />  
+  </target>
+  
+  
+  <!--
+    =======
+    Compile
+    =======  
+  -->
+
+  <target name="antlr-generate" depends="init, target-dir" >
+
+    <pathconvert
+        refid="antlr-sources"
+        property="antlrsources"
+        dirsep="/"
+        pathsep=" "
+    >
+      <map from="${basedir.fullpath}/" to="" />
+    </pathconvert>
+
+    <echo>antlrsources='${antlrsources}'</echo>
+
+    <java
+        classname="org.antlr.Tool"
+        failonerror="true"
+    >
+      <classpath refid="build-libs" />
+      <arg line="-fo ${target.antlr.generated.dir} ${antlrsources}" />
+    </java>
+  </target>
+  
+  <target name="main-compile" depends="init, target-dir, antlr-generate" >
+    
+
+    <javac 
+        destdir="${target.mainclasses.dir}"
+        source="${compiler.source}"
+        target="${compiler.target}"
+    >
+      <classpath>
+        <path refid="deploy-libs" />
+      </classpath>
+      <src path="${source.main.dir}" />
+      <src path="${target.antlr.generated.dir}" />
+    </javac>
+    
+    <copy todir="${target.mainclasses.dir}" >
+      <fileset dir="${source.main.dir}" >
+        <patternset refid="resource-patterns" />
+      </fileset>
+      <fileset dir="${configuration.main.dir}" >
+        <patternset refid="resource-patterns" />
+      </fileset>
+    </copy>
+    
+  </target>
+  
+  <target name="test-compile" depends="main-compile" >
+    
+    <mkdir dir="${target.testclasses.dir}" />    
+    
+    <javac 
+        destdir="${target.testclasses.dir}"
+        srcdir="${source.test.dir}"
+        source="${compiler.source}"
+        target="${compiler.target}"
+    >
+      <classpath>
+        <path refid="deploy-libs" />
+        <pathelement path="${target.mainclasses.dir}" />
+      </classpath>
+    </javac>
+
+    <copy todir="${target.testclasses.dir}" >
+      <fileset dir="${source.test.dir}" >
+        <patternset refid="resource-patterns" />
+      </fileset>
+      <fileset dir="${configuration.test.dir}" >
+        <patternset refid="resource-patterns" />
+      </fileset>
+    </copy>
+    
+  </target>
+  
+  
+  
+  <!--
+    ====
+    Test
+    ====  
+  -->  
+
+  <target name="test" depends="init, target-dir" >
+
+    <delete dir="${target.testreports.dir}" />
+    <mkdir dir="${target.testreports.dir}" />    
+
+    <junit printsummary="yes" haltonfailure="no" >
+      <classpath>
+        <path refid="deploy-libs" />
+        <pathelement location="${target.mainclasses.dir}" />
+        <pathelement location="${target.testclasses.dir}" />
+        <pathelement location="${source.samples.dir}" />
+      </classpath>
+      <batchtest fork="yes" todir="${target.testreports.dir}" >
+        <fileset 
+            dir="${target.testclasses.dir}" 
+            includes="**/*Test.class"
+            excludes="**/Abstract*Test.class"
+        />
+      </batchtest>
+      <formatter type="plain"/>
+    </junit>
+  </target>
+  
+  <!--
+    =======
+    Package
+    =======
+  -->
+  
+  <target name="jar" depends="init, target-dir" >
+    <delete file="${jar.path}" />
+    <jar
+        destfile="${jar.path}"
+        basedir="${target.mainclasses.dir}"
+    >
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+      </manifest>
+    </jar>
+  </target>
+  
+
+  <target 
+      name="build-all" 
+      depends="clean, main-compile, test-compile, test, jar" 
+  />
+    
+</project>

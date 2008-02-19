@@ -60,10 +60,6 @@ public class Section extends StyledElement implements StructuralSection, WeavedS
   public Tree buildTree( Map< String, Tree > identifiers ) {
     final MutableTree sectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
 
-    // TODO: find a way to inject TITLE node which has been lost as parser built an object tree
-    // instead of passing AST from Structure file.
-    // Maybe the right type for the title would be a Tree.
-    
     for( final Inclusion inclusion : inclusions ) {
       // TODO don't take all paragraphs inconditionally.
       for( final Tree tree : inclusion.buildTrees( identifiers ) ) {

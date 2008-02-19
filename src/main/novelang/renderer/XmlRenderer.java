@@ -36,7 +36,7 @@ import novelang.model.implementation.Book;
  */
 public class XmlRenderer implements Renderer {
 
-  public void renderBook( Book book, OutputStream outputStream ) {
+  public String renderBook( Book book, OutputStream outputStream ) {
     try {
       final ContentHandler contentHandler =
           createContentHandler( outputStream, book.getEncoding() ) ;
@@ -46,11 +46,11 @@ public class XmlRenderer implements Renderer {
     } catch( Exception e ) {
       throw new RuntimeException( e );
     }
-
+    return getMimeType() ;
   }
 
-  public String getMimeType() {
-    return "text/xml" ;
+  protected String getMimeType() {
+    return RenditionMimeType.XML.getMimeName() ;
   }
 
   protected ContentHandler createContentHandler( OutputStream outputStream, Charset encoding )

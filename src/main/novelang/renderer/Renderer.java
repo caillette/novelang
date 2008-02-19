@@ -17,15 +17,24 @@
  */
 package novelang.renderer;
 
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+
+import novelang.model.common.Tree;
+import novelang.model.implementation.Book;
+
 /**
  * @author Laurent Caillette
  */
-public class RenderTools {
-  static final String spaces( int size ) {
-    final StringBuffer buffer = new StringBuffer() ;
-    for( int i = 0 ; i < size ; i++ ) {
-      buffer.append( "  " ) ;
-    }
-    return buffer.toString() ;
-  }
+public interface Renderer {
+
+  /**
+   * Renders the book.
+   * @param book
+   * @param outputStream
+   * @return the MIME type of rendered book (useful when it changes to text or HTML because of
+   *     encountered problems).
+   */
+  String renderBook( Book book, OutputStream outputStream ) ;
+
 }

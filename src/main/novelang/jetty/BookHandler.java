@@ -77,10 +77,10 @@ public class BookHandler extends AbstractHandler {
       Renderer renderer,
       Book book
   ) throws IOException {
-    response.setContentType( renderer.getMimeType() ) ;
     response.setStatus( HttpServletResponse.SC_OK ) ;
-    renderer.renderBook( book, response.getOutputStream() ) ;
+    final String mimeType = renderer.renderBook( book, response.getOutputStream() ) ;
     ( ( Request ) request ).setHandled( true ) ;
+    response.setContentType( mimeType ) ;
   }
 
 }

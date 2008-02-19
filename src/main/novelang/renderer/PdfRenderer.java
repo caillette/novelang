@@ -91,32 +91,18 @@ public class PdfRenderer extends XmlRenderer {
     stylesheet = new File( STYLES_DIR, DEFAULT_FO_STYLESHEET ) ;
   }
 
+  protected String getMimeType() {
+    return forcedMimeType.getMimeName() ;
+  }
+
 // ================
 // Debug properties
 // ================
 
-  public enum ForcedMimeType {
-    TEXT( "text/plain"),
-    XML( "text/xml" ),
-    PDF( "application/pdf" ) ;
+  private RenditionMimeType forcedMimeType = RenditionMimeType.PDF ;
 
-    private final String identifier ;
-    private ForcedMimeType( String identifier ) {
-      this.identifier = identifier ;
-    }
-    public String getIdentifier() {
-      return identifier;
-    }
-  }
-
-  private ForcedMimeType forcedMimeType = ForcedMimeType.PDF ;
-
-  public void setForcedMimeType( ForcedMimeType forcedMimeType ) {
+  public void setForcedMimeType( RenditionMimeType forcedMimeType ) {
     this.forcedMimeType = Objects.nonNull( forcedMimeType ) ;
-  }
-
-  public String getMimeType() {
-    return forcedMimeType.getIdentifier() ;
   }
 
   private boolean applyFop = true ;

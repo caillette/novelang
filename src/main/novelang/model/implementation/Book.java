@@ -60,7 +60,7 @@ public class Book implements StructuralBook, WeavedBook {
   /**
    * TODO find a better name.
    */
-  private final List< Exception > structureCreationExceptions = Lists.newArrayList() ;
+  private final List< Exception > problems = Lists.newArrayList() ;
 
   /**
    * This should be scoped to the method resolving generic Parts and loading Trees.
@@ -103,12 +103,12 @@ public class Book implements StructuralBook, WeavedBook {
   }
 
   public void collect( Exception ex ) {
-    structureCreationExceptions.add( Objects.nonNull( ex ) ) ;
+    problems.add( Objects.nonNull( ex ) ) ;
     LOGGER.debug( "Added exception for structure parsing: {} to {}", ex.getClass(), this ) ;
   }
 
   public Iterable< Exception > getStructureParsingExceptions() {
-    return Lists.immutableList( structureCreationExceptions ) ;
+    return Lists.immutableList( problems ) ;
   }
 
   public void loadStructure() throws IOException {

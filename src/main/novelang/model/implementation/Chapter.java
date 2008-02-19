@@ -58,6 +58,9 @@ public class Chapter extends StyledElement implements StructuralChapter, WeavedC
 
   public Tree buildTree( Map< String, Tree > identifiers ) {
     final MutableTree chapterTree = new DefaultMutableTree( NodeKind.CHAPTER ) ;
+    if( null != getTitle() ) {
+      chapterTree.addChild( getTitle() ) ;
+    }
     for( final Section section : sections ) {
       chapterTree.addChild( section.buildTree( identifiers ) ) ;
     }

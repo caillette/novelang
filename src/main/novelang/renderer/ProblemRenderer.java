@@ -18,17 +18,15 @@
 package novelang.renderer;
 
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 
-import novelang.model.common.Tree;
 import novelang.model.implementation.Book;
 
 /**
  * @author Laurent Caillette
  */
-public interface Renderer {
-
-  void renderBook( Book book, OutputStream outputStream ) ;
-
-  String getMimeType() ;
+public class ProblemRenderer implements Renderer {
+  
+  public String renderBook( Book book, OutputStream outputStream ) {
+    return null ;
+  }
 }
