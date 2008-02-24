@@ -23,6 +23,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * 
@@ -51,14 +52,24 @@ public class ServerMain {
         final String bookIdentifier = args[ i ] ;
         if( i + 1 < args.length ) {
           final String structureFileName = args[ i + 1 ] ;
-          final File structureFile = new File( structureFileName ) ;
+
+          // Seems needed when using files kept in MacOSX FileVault.
+          // TODO support absolute file names?
+          // Otherwise the file has no parent and does not exist (java.io.File#exists() == false).
+          final File structureFile = new File(
+              System.getProperty( "user.dir" ) +
+              SystemUtils.FILE_SEPARATOR +
+              structureFileName
+          ) ;
+          LOGGER.debug( "Adding book '{}' referencing '{}'", bookIdentifier, structureFileName ) ;
+          
           if( structureFile.exists() ) {
             handlers.addHandler( new BookHandler( bookIdentifier, structureFile ) ); ;
           } else {
-            LOGGER.error( "File does not exist: '" + structureFile + "'" ) ;
+            LOGGER.error( "File does not exist: '{}'", structureFile.getAbsolutePath() ) ;
           }
         } else {
-          LOGGER.error( "No structure file declared for book '" + bookIdentifier + "'" ) ;
+          LOGGER.error( "No structure file declared for book '{}'", bookIdentifier ) ;
         }
       }
     }
@@ -66,6 +77,7 @@ public class ServerMain {
   }
 
   public static void main( String[] args ) throws Exception {
+    LOGGER.info( "SecurityManager: {}", System.getSecurityManager() ) ;    
     final HandlerCollection handlers = readArguments( args ) ;
     final Server server = new Server( HTTP_SERVER_PORT ) ;
     server.setHandler( handlers ) ;

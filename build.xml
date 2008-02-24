@@ -75,14 +75,15 @@
       <fileset dir="${source.antlr.dir}" includes="*.g"/>
     </path>
 
-
   </target>
+
   
   <target name="target-dir" depends="init" >
     <mkdir dir="${target.dir}" />
     <mkdir dir="${target.mainclasses.dir}" />
   </target>
-  
+
+
   <target name="clean" depends="init" >
     <delete dir="${target.dir}" />  
   </target>
@@ -116,13 +117,15 @@
     </java>
   </target>
   
+
   <target name="main-compile" depends="init, target-dir, antlr-generate" >
-    
 
     <javac 
         destdir="${target.mainclasses.dir}"
         source="${compiler.source}"
         target="${compiler.target}"
+        debug="on"
+        debuglevel="lines,vars,source"
     >
       <classpath>
         <path refid="deploy-libs" />
@@ -141,7 +144,8 @@
     </copy>
     
   </target>
-  
+
+
   <target name="test-compile" depends="main-compile" >
     
     <mkdir dir="${target.testclasses.dir}" />    
@@ -212,7 +216,7 @@
   <target name="start-httpd" depends="init" >
     
     <loadfile
-        srcfile="${configuration.test.dir}/books.txt"
+        srcfile="${novelang.httpd.books}"
         property="books"
         failonerror="true"
     >
@@ -232,6 +236,7 @@
         <pathelement location="${configuration.main.dir}" />
       </classpath>
       <arg line="${books}" />
+      <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
     </java>
 
   </target>
