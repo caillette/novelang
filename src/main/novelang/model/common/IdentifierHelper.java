@@ -27,7 +27,7 @@ public class IdentifierHelper {
   private IdentifierHelper() { }
 
   /**
-   * Concatenates subtokens of a {@link novelang.model.common.NodeKind#SECTION_TITLE}
+   * Concatenates subtokens of a {@link novelang.model.common.NodeKind#SECTION_IDENTIFIER}
    * (skipping the intermediary level defining what subtokens are made of,
    * like {@link novelang.model.common.NodeKind#WORD}s).
    *
