@@ -4,18 +4,11 @@
 
   <description>
     Build system for Novelang.
-    
-    Prerequisites:
-    Set path to required libraries in ${user.home}/novelang.build.properties
-    file. Required properties are described in ./build.properties file.
-    
-    With Ant-1.6.5 launch with: ant -lib lib {other options} {targets}
-    in order to allow optional task to find dependencies like JUnit.
-    This is not needed with Ant-1.7.0-RC1.
-    No other version of Ant have been used at this time.
-    
-    Distribution is meant to be self-building so it carries some test stuff.
 
+    Novelang is a lightweight authoring tool for writing novels.
+    
+    Ant-1.7.0 required. Use other version at your own risk!
+    
     ------------------------------------
 
     Copyright (C) 2006 Laurent Caillette
@@ -78,7 +71,7 @@
       <fileset dir="${lib.build.dir}" includes="*.jar" />
     </path>
 
-    <path id="antlr-sources" >
+    <path id="antlr-grammars" >
       <fileset dir="${source.antlr.dir}" includes="*.g"/>
     </path>
 
@@ -104,12 +97,12 @@
   <target name="antlr-generate" depends="init, target-dir" >
 
     <pathconvert
-        refid="antlr-sources"
+        refid="antlr-grammars"
         property="antlrsources"
         dirsep="/"
         pathsep=" "
     >
-      <map from="${basedir.fullpath}/" to="" />
+      <map from="${basedir.fullpath}/" to="" /> <!-- Needed, really? -->
     </pathconvert>
 
     <echo>antlrsources='${antlrsources}'</echo>
@@ -161,6 +154,7 @@
     >
       <classpath>
         <path refid="deploy-libs" />
+        <path refid="build-libs" />
         <pathelement path="${target.mainclasses.dir}" />
       </classpath>
     </javac>
@@ -191,6 +185,7 @@
 
     <junit printsummary="yes" haltonfailure="no" >
       <classpath>
+        <path refid="build-libs" />
         <path refid="deploy-libs" />
         <pathelement location="${target.mainclasses.dir}" />
         <pathelement location="${target.testclasses.dir}" />
@@ -207,28 +202,38 @@
     </junit>
   </target>
   
-  <!--
-    =======
-    Package
-    =======
-  -->
-  
-  <target name="jar" depends="init, target-dir" >
-    <delete file="${jar.path}" />
-    <jar
-        destfile="${jar.path}"
-        basedir="${target.mainclasses.dir}"
-    >
-      <manifest>
-        <attribute name="Built-By" value="${user.name}" />
-      </manifest>
-    </jar>
-  </target>
-  
 
-  <target 
-      name="build-all" 
-      depends="clean, main-compile, test-compile, test, jar" 
-  />
+  <!--
+    ===================
+    Start / stop server
+    ===================
+  -->
+
+  <target name="start-httpd" depends="init" >
     
+    <loadfile
+        srcfile="${configuration.test.dir}/books.txt"
+        property="books"
+        failonerror="true"
+    >
+      <!-- TODO replace line breaks by spaces -->
+    </loadfile>
+
+    <echoproperties/>
+
+    <java
+        classname="novelang.jetty.ServerMain"
+        failonerror="true"
+        fork="true"
+    >
+      <classpath>
+        <path refid="deploy-libs" />
+        <pathelement location="${target.mainclasses.dir}" />
+        <pathelement location="${configuration.main.dir}" />
+      </classpath>
+      <arg line="${books}" />
+    </java>
+
+  </target>
+
 </project>
