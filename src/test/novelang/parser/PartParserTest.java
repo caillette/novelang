@@ -18,20 +18,14 @@
 package novelang.parser;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.MissingResourceException;
-import java.util.List;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
+import org.junit.Ignore;
 import org.antlr.runtime.RecognitionException;
-import novelang.ResourceTools;
 import novelang.model.implementation.Book;
 import novelang.parser.implementation.DefaultPartParserFactory;
-import junit.framework.TestSuite;
 
 /**
  * Tests for parser using external files.
@@ -100,6 +94,59 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
   @Test
   public void blockQuote1() throws IOException, RecognitionException {
     runParserOnResource( "/blockquote-1.sample" ) ;
+  }
+
+  /**
+   * Get sure that errors are detected.
+   */
+  @Test
+  public void unicodeBad() throws IOException, RecognitionException {
+    initializeParser(
+        "=== \n" +
+        "\n" +
+        "\u2981" // Z NOTATION SPOT 
+    ) ;
+    parser.parse() ;
+    assertTrue( "Parser failed to throw exceptions", parser.hasProblem() ) ;
+  }
+
+  @Test
+  public void unicodeOk0() throws IOException, RecognitionException {
+    runParserOnString(
+        "=== \n" +
+        "\n" +
+        "\u00e0" +
+        "\u00c0" +
+
+        "\u00e6" +
+        "\u00c6" +
+
+        "\u00e8" +
+        "\u00c8" +
+
+        "\u00e9" +
+        "\u00c9" +
+
+        "\u0153" +
+        "\u0152" +
+
+        "\u00f9" +
+        "\u00d9" +
+
+        " and that's all!"
+
+    ) ;
+  }
+
+  @Test
+  public void unicodeOk1() throws IOException, RecognitionException {
+    runParserOnResource( "/unicode-1.sample" ) ;
+  }
+
+  @Test
+//  @Ignore
+  public void unicodeOk2() throws IOException, RecognitionException {
+    runParserOnResource( "/unicode-2.sample" ) ;
   }
 
   @Test

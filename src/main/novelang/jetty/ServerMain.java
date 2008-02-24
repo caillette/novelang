@@ -61,6 +61,7 @@ public class ServerMain {
               SystemUtils.FILE_SEPARATOR +
               structureFileName
           ) ;
+
           LOGGER.debug( "Adding book '{}' referencing '{}'", bookIdentifier, structureFileName ) ;
           
           if( structureFile.exists() ) {

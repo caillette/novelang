@@ -258,10 +258,55 @@ fragment SEMICOLON : ';' ;
 fragment LETTER 
   : 'a'..'z' 
   | 'A'..'Z' 
-  | '&oelig;' 
-  | '&OElig' 
-  | '&aelig;' 
-  | '&AElig' 
+
+  | '\u00e0' // LATIN SMALL LETTER A WITH GRAVE  
+  | '\u00c0' // LATIN CAPITAL LETTER A WITH GRAVE  
+
+  | '\u00e2' // LATIN SMALL LETTER A WITH CIRCUMFLEX (&acirc;)
+  | '\u00c2' // LATIN CAPITAL LETTER A WITH CIRCUMFLEX (&Acirc;)
+
+  | '\u00e6' // LATIN SMALL LETTER AE
+  | '\u00c6' // LATIN CAPITAL LETTER AE
+  
+  | '\u00e7' // LATIN SMALL LETTER C WITH CEDILLA (&ccedil;)
+  | '\u00c7' // LATIN CAPITAL LETTER C WITH CEDILLA (&Ccedil;)  
+
+  | '\u00e8' // LATIN SMALL LETTER E WITH GRAVE (&egrave;)
+  | '\u00c8' // LATIN CAPITAL LETTER E WITH GRAVE (&Egrave;)
+  
+  | '\u00e9' // LATIN SMALL LETTER E WITH ACUTE 
+  | '\u00c9' // LATIN CAPITAL LETTER E WITH ACUTE
+
+  | '\u00eA' // LATIN SMALL LETTER E WITH CIRCUMFLEX (&ecirc;)
+  | '\u00cA' // LATIN CAPITAL LETTER E WITH CIRCUMFLEX (&Ecirc;)
+
+  | '\u00ee' // LATIN SMALL LETTER I WITH CIRCUMFLEX (&icirc;)
+  | '\u00ce' // LATIN SMALL LETTER I WITH CIRCUMFLEX (&icirc;)  
+  
+  | '\u00eb' // LATIN SMALL LETTER E WITH DIAERESIS (&euml;)
+  | '\u00cb' // LATIN CAPITAL LETTER E WITH DIAERESIS (&Euml;)  
+
+  | '\u00ef' // LATIN SMALL LETTER I WITH DIAERESIS (&iuml;)
+  | '\u00cf' // LATIN CAPITAL LETTER I WITH DIAERESIS (&Iuml;)
+  
+  | '\u00f4' // LATIN SMALL LETTER O WITH CIRCUMFLEX (&ocirc;)
+  | '\u00d4' // LATIN CAPITAL LETTER O WITH CIRCUMFLEX (&Ocirc;)
+  
+  | '\u00f6' // LATIN SMALL LETTER O WITH DIAERESIS (&ouml;)
+  | '\u00d6' // LATIN CAPITAL LETTER O WITH DIAERESIS (&Ouml;)
+  
+  | '\u00f9' // LATIN SMALL LETTER U WITH GRAVE (&ugrave;)
+  | '\u00d9' // LATIN CAPITAL LETTER U WITH GRAVE (&Ugrave;)
+
+  | '\u00fb' // LATIN SMALL LETTER U WITH CIRCUMFLEX (&ucirc;)
+  | '\u00db' // LATIN CAPITAL LETTER U WITH CIRCUMFLEX (&Ucirc;)
+  
+  | '\u00fc' // LATIN SMALL LETTER U WITH DIAERESIS (&uuml;)
+  | '\u00dc' // LATIN CAPITAL LETTER U WITH DIAERESIS (&Uuml;)
+    
+  | '\u0153' // LATIN SMALL LIGATURE OE
+  | '\u0152' // LATIN CAPITAL LIGATURE OE
+
   ;
 
 fragment DIGIT : '0'..'9';
