@@ -32,6 +32,7 @@ import novelang.model.common.NodeKind;
 import novelang.model.common.IdentifierHelper;
 import novelang.model.weaved.WeavedPart;
 import novelang.parser.PartParser;
+import novelang.parser.PartParserFactory;
 import novelang.parser.implementation.DefaultPartParserFactory;
 import com.google.common.base.Objects;
 import com.google.common.collect.Multimap;
@@ -45,6 +46,19 @@ public class Part extends Element implements StructuralPart, WeavedPart {
   private static final Logger LOGGER = LoggerFactory.getLogger( Part.class ) ;
   private final String fileName ;
   private Tree tree ;
+
+  /**
+   * TODO
+   */
+  public Part(
+      Location locationInBook,
+      PartParserFactory partParserFactory,
+      String encoding,
+      String partFileName
+  ) {
+    super( null, null ) ;
+    throw new UnsupportedOperationException( "Part" ) ;
+  }
 
   public Part( BookContext context, String fileName, Location location ) {
     super( Objects.nonNull( context ).derive( "part[" + fileName + "]" ), location ) ;
@@ -89,6 +103,9 @@ public class Part extends Element implements StructuralPart, WeavedPart {
   }
 
   public Tree getTree() {
+    if( ! loaded ) {
+      throw new IllegalStateException( "Part not loaded yet" ) ;
+    }
     return tree ;
   }
 
@@ -108,6 +125,10 @@ public class Part extends Element implements StructuralPart, WeavedPart {
    * get it after parsing.
    */
   public Multimap< String, Tree > getIdentifiers() {
+
+    if( ! loaded ) {
+      throw new IllegalStateException( "Part not loaded yet" ) ;
+    }
 
     final Multimap< String, Tree > identifiedSectionTrees = Multimaps.newHashMultimap() ;
 

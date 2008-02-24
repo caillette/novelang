@@ -118,7 +118,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Part.java" line="71" class="novelang.model.implementation.Part" package="novelang.model.implementation">
+      <breakpoint url="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Part.java" line="85" class="novelang.model.implementation.Part" package="novelang.model.implementation">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -206,7 +206,16 @@
       <file leaf-file-name="PartParserTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/PartParserTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="7" selection-start="3932" selection-end="3932" vertical-scroll-proportion="0.24352331">
+            <state line="148" column="8" selection-start="4023" selection-end="4023" vertical-scroll-proportion="0.19944979">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractParserTest.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/AbstractParserTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="54" column="3" selection-start="1903" selection-end="1903" vertical-scroll-proportion="0.31636864">
               <folding />
             </state>
           </provider>
@@ -215,70 +224,25 @@
       <file leaf-file-name="unicode-1.sample" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../samples/unicode-1.sample">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="1" selection-start="36" selection-end="36" vertical-scroll-proportion="0.5284974">
+            <state line="3" column="1" selection-start="82" selection-end="82" vertical-scroll-proportion="0.07015131">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="unicode-2.sample" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="unicode-2.sample" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../samples/unicode-2.sample">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="1" selection-start="46" selection-end="46" vertical-scroll-proportion="0.5284974">
+            <state line="25" column="0" selection-start="142" selection-end="142" vertical-scroll-proportion="0.48418158">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Part.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Part.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="12" selection-start="3653" selection-end="3653" vertical-scroll-proportion="0.3341969">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AntlrPart__.g" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrPart__.g">
+      <file leaf-file-name="AntlrStructure.g" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrStructure.g">
           <provider selected="true" editor-type-id="grammar">
             <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AntlrPartLexer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrPartLexer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="13" selection-start="244" selection-end="244" vertical-scroll-proportion="0.3207547">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AntlrPart.tokens" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrPart.tokens">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.5414507">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AntlrStructure.tokens" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructure.tokens">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AntlrStructureLexer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructureLexer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="13" selection-start="252" selection-end="252" vertical-scroll-proportion="-31.846361">
-              <folding />
-            </state>
           </provider>
         </entry>
       </file>
@@ -801,6 +765,44 @@
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang/model" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang/model/weaved" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/.." />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang/model" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang/model/structural" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
@@ -833,6 +835,36 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang/model/implementation" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/.." />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/main/novelang/model" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -891,44 +923,6 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Novelang.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Novelang" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/.." />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr/novelang" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr/novelang/parser" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr/novelang/parser/antlr" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -1564,7 +1558,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="4" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13156003" order="1" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="12" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42985842" order="2" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42985842" order="2" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946082" order="2" />
       <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="6" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45817247" order="4" />
@@ -1676,16 +1670,58 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/AbstractParserTest.java">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="23" selection-start="2065" selection-end="2065" vertical-scroll-proportion="0.33333334">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/novelang/ResourceTools.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/structural/StructuralPart.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="0" selection-start="2134" selection-end="2134" vertical-scroll-proportion="0.3126615">
+        <state line="24" column="17" selection-start="910" selection-end="910" vertical-scroll-proportion="0.3316062">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/weaved/WeavedPart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="17" selection-start="949" selection-end="949" vertical-scroll-proportion="0.3316062">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Book.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="89" column="3" selection-start="3304" selection-end="3304" vertical-scroll-proportion="0.3773585">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/BookContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="0" selection-start="1195" selection-end="1195" vertical-scroll-proportion="0.3316062">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Element.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="18" selection-start="1068" selection-end="1068" vertical-scroll-proportion="-0.24093264">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Part.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="22" selection-start="1942" selection-end="1942" vertical-scroll-proportion="0.48445597">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/unicode-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="1" selection-start="82" selection-end="82" vertical-scroll-proportion="0.07015131">
           <folding />
         </state>
       </provider>
@@ -1695,82 +1731,28 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/StructureParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="24" selection-start="1601" selection-end="1601" vertical-scroll-proportion="0.50904393">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
       <provider selected="true" editor-type-id="grammar">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructure.tokens">
+    <entry file="file://$PROJECT_DIR$/../samples/unicode-2.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrStructureLexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="13" selection-start="252" selection-end="252" vertical-scroll-proportion="-31.846361">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrPart.tokens">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.5414507">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrPartLexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="244" selection-end="244" vertical-scroll-proportion="0.3207547">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Part.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="12" selection-start="3653" selection-end="3653" vertical-scroll-proportion="0.3341969">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generated/antlr/novelang/parser/antlr/AntlrPart__.g">
-      <provider selected="true" editor-type-id="grammar">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/unicode-1.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="1" selection-start="36" selection-end="36" vertical-scroll-proportion="0.5284974">
+        <state line="25" column="0" selection-start="142" selection-end="142" vertical-scroll-proportion="0.48418158">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/PartParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="7" selection-start="3932" selection-end="3932" vertical-scroll-proportion="0.24352331">
+        <state line="148" column="8" selection-start="4023" selection-end="4023" vertical-scroll-proportion="0.19944979">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/unicode-2.sample">
+    <entry file="file://$PROJECT_DIR$/../src/test/novelang/parser/AbstractParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="1" selection-start="46" selection-end="46" vertical-scroll-proportion="0.5284974">
+        <state line="54" column="3" selection-start="1903" selection-end="1903" vertical-scroll-proportion="0.31636864">
           <folding />
         </state>
       </provider>
