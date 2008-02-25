@@ -48,11 +48,11 @@ public class DefaultStructureParserFactory implements StructureParserFactory {
       }
       
       public boolean hasProblem() {
-        return book.getStructureParsingExceptions().iterator().hasNext();
+        return book.getProblems().iterator().hasNext();
       }
 
       public Iterable< Exception > getProblems() {
-        return book.getStructureParsingExceptions();
+        return book.getProblems();
       }
 
       public Tree parse() throws RecognitionException {

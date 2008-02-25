@@ -20,6 +20,7 @@ package novelang.model.implementation;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,9 @@ import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import novelang.model.common.NodeKind;
 import novelang.model.common.IdentifierHelper;
+import novelang.model.common.LocationFactory;
 import novelang.model.weaved.WeavedPart;
+import novelang.model.renderable.Renderable;
 import novelang.parser.PartParser;
 import novelang.parser.PartParserFactory;
 import novelang.parser.implementation.DefaultPartParserFactory;
@@ -41,32 +44,66 @@ import com.google.common.collect.Multimaps;
 /**
  * @author Laurent Caillette
  */
-public class Part extends Element implements StructuralPart, WeavedPart {
+public class Part
+    extends Element 
+    implements LocationFactory, StructuralPart, WeavedPart, Renderable
+{
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Part.class ) ;
-  private final String fileName ;
+  private final File partFile;
   private Tree tree ;
+  private final String nameOfThis ;
+  private final Charset encoding ;
+  private final PartParserFactory partParserFactory ;
 
   /**
-   * TODO
+   * A constructor for creating a {@code Part} with no owning {@code Book}.
+   *
+   * @param partFile a non-null File object referencing a (hopefully) parseable Part.
    */
-  public Part(
+  public Part( File partFile ) {
+    this(
+        new Location( partFile.getAbsolutePath(), 0, 0 ),
+        new DefaultPartParserFactory(),
+        Element.DEFAULT_CHARSET,
+        "part[" + partFile.getName() + "]",
+        partFile
+    ) ;
+    this.load() ;
+  }
+
+  /**
+   * The constructor that does the real job.
+   *
+   * @param locationInBook may be null, a non-null value will be inferred then.
+   * @param partParserFactory
+   * @param encoding
+   * @param nameOfThis something to return from {@code toString()}.
+   * @param partFile the real Part file on the filesystem.
+   */
+  protected Part(
       Location locationInBook,
       PartParserFactory partParserFactory,
-      String encoding,
-      String partFileName
+      Charset encoding,
+      String nameOfThis,
+      File partFile
   ) {
-    super( null, null ) ;
-    throw new UnsupportedOperationException( "Part" ) ;
+    super( locationInBook ) ;
+    this.partParserFactory = Objects.nonNull( partParserFactory ) ;
+    this.encoding = Objects.nonNull( encoding ) ;
+    this.nameOfThis = Objects.nonNull( nameOfThis ) + "@" + System.identityHashCode( this ) ;
+    this.partFile = Objects.nonNull( partFile ) ;
   }
 
   public Part( BookContext context, String fileName, Location location ) {
-    super( Objects.nonNull( context ).derive( "part[" + fileName + "]" ), location ) ;
-    this.fileName = fileName ;
-  }
+    this(
+        location,
+        new DefaultPartParserFactory(),
+        Element.DEFAULT_CHARSET,
+        context.derive( "part[" + fileName + "]" ).asString(),
+        context.relativizeFile( fileName )
+    ) ;
 
-  public Location getLocation() {
-    return location;
   }
 
   private boolean loaded = false ;
@@ -77,15 +114,13 @@ public class Part extends Element implements StructuralPart, WeavedPart {
     }
     loaded = true ;
 
-    final File localFile = getContext().relativizeFile( fileName ) ;
-    LOGGER.info( "Attempting to load file '{}' from {}", localFile.getAbsolutePath(), this ) ;
+    LOGGER.info( "Attempting to load file '{}' from {}", partFile.getAbsolutePath(), this ) ;
 
     try {
-      final FileReader reader = new FileReader( localFile ) ;
+      final FileReader reader = new FileReader( partFile ) ;
       final String content = new String(
-          IOUtils.toByteArray( reader, getContext().getEncoding().name() ) ) ;
-      final PartParser parser =
-          new DefaultPartParserFactory().createParser( this, content ) ;
+          IOUtils.toByteArray( reader, encoding.name() ) ) ;
+      final PartParser parser = partParserFactory.createParser( this, content ) ;
       try {
 
         // Yeah we do it here!
@@ -110,7 +145,11 @@ public class Part extends Element implements StructuralPart, WeavedPart {
   }
 
   public Location createLocation( int line, int column ) {
-    return new Location( fileName, line, column ) ;
+    return new Location( partFile.getAbsolutePath(), line, column ) ;
+  }
+
+  public Charset getEncoding() {
+    return encoding ;
   }
 
 // ===========
@@ -148,4 +187,8 @@ public class Part extends Element implements StructuralPart, WeavedPart {
   }
 
 
+  @Override
+  public String toString() {
+    return nameOfThis ;
+  }
 }

@@ -15,27 +15,32 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.renderer;
+package novelang.model.implementation;
 
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-
-import novelang.model.renderable.Renderable;
+import novelang.model.common.Location;
 
 /**
  * @author Laurent Caillette
  */
-public interface Renderer {
+public class ContextualizedElement extends Element {
 
-  /**
-   * Renders the book.
-   * @param rendered
-   * @param outputStream @return the MIME type of rendered book (useful when it changes to text or HTML for
-   *     displaying problems).
-   */
-  RenditionMimeType render(
-      Renderable rendered,
-      OutputStream outputStream
-  ) ;
+  protected final BookContext context ;
 
+  public ContextualizedElement( BookContext context, Location location ) {
+    super( location ) ;
+    this.context = context ;
+  }
+
+  public Location createLocation( int line, int column ) {
+    return getContext().createStructureLocator( line, column ) ;
+  }
+
+  protected BookContext getContext() {
+    return context;
+  }
+
+  @Override
+  public String toString() {
+    return getContext().asString() + "@" + System.identityHashCode( this ) ;
+  }
 }

@@ -44,17 +44,17 @@ import novelang.model.weaved.IdentifierNotUniqueException;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.weaved.WeavedBook;
 import novelang.model.weaved.WeavedChapter;
+import novelang.model.renderable.Renderable;
 import novelang.parser.StructureParser;
 import novelang.parser.implementation.DefaultStructureParserFactory;
 
 /**
  * @author Laurent Caillette
  */
-public class Book implements StructuralBook, WeavedBook {
+public class Book implements StructuralBook, WeavedBook, Renderable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Book.class ) ;
 
-  private static final String CHARSET_NAME = "ISO-8859-1" ;
   private final Charset encoding;
 
   /**
@@ -86,14 +86,14 @@ public class Book implements StructuralBook, WeavedBook {
         "book[" + DEBUG + "]", new File( DEBUG )
     ) ;
     bookFile = new File( DEBUG ) ;
-    encoding = Charset.forName( CHARSET_NAME ) ;
+    encoding = Element.DEFAULT_CHARSET ;
   }
 
   public Book( String identifier, File bookFile ) {
     this.bookFile = Objects.nonNull( bookFile ) ;
     identifier = Objects.nonNull( identifier ) ;
     context = new DefaultBookContext( "book[" + identifier + "]", bookFile ) ;
-    encoding = Charset.forName( CHARSET_NAME ) ;
+    encoding = Charset.forName( Element.CHARSET_NAME ) ;
     LOGGER.info( "Created {} referencing file {}", this, bookFile.getAbsolutePath() ) ;
   }
 
@@ -104,11 +104,15 @@ public class Book implements StructuralBook, WeavedBook {
 
   public void collect( Exception ex ) {
     problems.add( Objects.nonNull( ex ) ) ;
-    LOGGER.debug( "Added exception for structure parsing: {} to {}", ex.getClass(), this ) ;
+    LOGGER.debug( "Added problem: {} to {}", ex.getClass(), this ) ;
   }
 
-  public Iterable< Exception > getStructureParsingExceptions() {
+  public Iterable< Exception > getProblems() {
     return Lists.immutableList( problems ) ;
+  }
+
+  public boolean hasProblem() {
+    return ! problems.isEmpty() ;
   }
 
   public void loadStructure() throws IOException {
@@ -224,7 +228,7 @@ public class Book implements StructuralBook, WeavedBook {
    * that was loaded by the {@code Part}s. Then this raw tree becomes a synthetic one after
    * all global enhancements like on speeches.
    */
-  public Tree createBookTree() {
+  public Tree getTree() {
 
     final Map< String, Tree > mutableIdentifiers = Maps.newHashMap() ;
     for( String identifier : multipleTreesFromPartsByIdentifier.keySet() ) {

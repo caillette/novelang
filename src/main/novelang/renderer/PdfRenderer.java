@@ -91,8 +91,8 @@ public class PdfRenderer extends XmlRenderer {
     stylesheet = new File( STYLES_DIR, DEFAULT_FO_STYLESHEET ) ;
   }
 
-  protected String getMimeType() {
-    return forcedMimeType.getMimeName() ;
+  protected RenditionMimeType getMimeType() {
+    return forcedMimeType ;
   }
 
 // ================

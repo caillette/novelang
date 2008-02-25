@@ -17,26 +17,20 @@
  */
 package novelang.jetty;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 
-import org.mortbay.jetty.handler.AbstractHandler;
-import org.mortbay.jetty.Request;
 import com.google.common.base.Objects;
 import novelang.model.implementation.Book;
 import novelang.weaver.Weaver;
-import novelang.renderer.PlainTextRenderer;
-import novelang.renderer.XmlRenderer;
-import novelang.renderer.Renderer;
-import novelang.renderer.PdfRenderer;
 
 /**
  * @author Laurent Caillette
  */
-public class BookHandler extends AbstractHandler {
+public class BookHandler extends AbstractDocumentHandler {
 
   private final String bookIdentifier ;
   private final File structureFile;
@@ -61,26 +55,9 @@ public class BookHandler extends AbstractHandler {
       final Weaver weaver = new Weaver( book ) ;
       weaver.weave() ;
 
-      if( target.endsWith( ".txt" ) ) {
-        serve( request, response, new PlainTextRenderer(), book ) ;
-      } else if( target.endsWith( ".xml" ) ) {
-        serve( request, response, new XmlRenderer(), book ) ;
-      } else if( target.endsWith( ".pdf" ) ) {
-        serve( request, response, new PdfRenderer(), book ) ;
-      }
-    }
-  }
+      serve( request, response, book, target ) ;
 
-  private void serve(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Renderer renderer,
-      Book book
-  ) throws IOException {
-    response.setStatus( HttpServletResponse.SC_OK ) ;
-    final String mimeType = renderer.renderBook( book, response.getOutputStream() ) ;
-    ( ( Request ) request ).setHandled( true ) ;
-    response.setContentType( mimeType ) ;
+    }
   }
 
 }

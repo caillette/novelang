@@ -29,19 +29,19 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import novelang.model.common.Tree;
 import novelang.model.common.NodeKind;
-import novelang.model.implementation.Book;
+import novelang.model.renderable.Renderable;
 
 /**
  * @author Laurent Caillette
  */
 public class XmlRenderer implements Renderer {
 
-  public String renderBook( Book book, OutputStream outputStream ) {
+  public RenditionMimeType render( Renderable rendered, OutputStream outputStream ) {
     try {
       final ContentHandler contentHandler =
-          createContentHandler( outputStream, book.getEncoding() ) ;
+          createContentHandler( outputStream, rendered.getEncoding() ) ;
       contentHandler.startDocument() ;
-      renderTree( contentHandler, book.createBookTree() ) ;
+      renderTree( contentHandler, rendered.getTree() ) ;
       contentHandler.endDocument() ; // Does that flush?
     } catch( Exception e ) {
       throw new RuntimeException( e );
@@ -49,8 +49,8 @@ public class XmlRenderer implements Renderer {
     return getMimeType() ;
   }
 
-  protected String getMimeType() {
-    return RenditionMimeType.XML.getMimeName() ;
+  protected RenditionMimeType getMimeType() {
+    return RenditionMimeType.XML ;
   }
 
   protected ContentHandler createContentHandler( OutputStream outputStream, Charset encoding )

@@ -28,7 +28,7 @@ public interface StructuralBook extends LocationFactory {
   
   void collect( Exception ex ) ;
 
-  Iterable< Exception > getStructureParsingExceptions() ;
+  Iterable< Exception > getProblems() ;
 
   Part createPart( String partFileName, Location location ) ;
 

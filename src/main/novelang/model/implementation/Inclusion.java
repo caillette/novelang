@@ -33,7 +33,10 @@ import com.google.common.base.Objects;
 /**
  * @author Laurent Caillette
  */
-public class Inclusion extends Element implements StructuralInclusion, WeavedInclusion {
+public class Inclusion
+    extends ContextualizedElement
+    implements StructuralInclusion, WeavedInclusion
+{
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Inclusion.class ) ;
   private final List< ParagraphRange > paragraphRanges = Lists.newArrayList() ;

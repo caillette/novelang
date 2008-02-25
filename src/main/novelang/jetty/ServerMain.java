@@ -80,6 +80,7 @@ public class ServerMain {
   public static void main( String[] args ) throws Exception {
     LOGGER.info( "SecurityManager: {}", System.getSecurityManager() ) ;    
     final HandlerCollection handlers = readArguments( args ) ;
+    handlers.addHandler( new PartHandler( new File( SystemUtils.USER_DIR ) ) ) ;
     final Server server = new Server( HTTP_SERVER_PORT ) ;
     server.setHandler( handlers ) ;
     server.start() ;

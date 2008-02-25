@@ -27,7 +27,10 @@ import novelang.model.common.Tree;
 /**
  * @author Laurent Caillette
  */
-/*package*/ class StyledElement extends Element implements LocationFactory {
+/*package*/ class StyledElement
+    extends ContextualizedElement
+    implements LocationFactory
+{
 
   private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
 
