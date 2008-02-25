@@ -76,8 +76,8 @@ public class XmlRenderer implements Renderer {
     switch( nodeKind ) {
 
       case _BOOK :
-        declareNamespace = true ;
       case PART :
+        declareNamespace = true ;
       case CHAPTER :
       case SECTION :
       case TITLE :

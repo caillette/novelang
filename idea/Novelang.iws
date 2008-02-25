@@ -199,28 +199,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Location.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/Location.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="0" selection-start="1109" selection-end="1109" vertical-scroll-proportion="0.33241758">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProblemRenderer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/ProblemRenderer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="3" selection-start="1119" selection-end="1119" vertical-scroll-proportion="0.5604396">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PlainTextRenderer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PlainTextRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="20" selection-start="1690" selection-end="1690" vertical-scroll-proportion="0.4010989">
+            <state line="33" column="13" selection-start="1150" selection-end="1150" vertical-scroll-proportion="-1.956044">
               <folding />
             </state>
           </provider>
@@ -229,7 +211,7 @@
       <file leaf-file-name="XmlRenderer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/XmlRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="68" selection-start="1540" selection-end="1540" vertical-scroll-proportion="0.4945055">
+            <state line="79" column="0" selection-start="2604" selection-end="2604" vertical-scroll-proportion="0.2802198">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -237,19 +219,37 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BookHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/BookHandler.java">
+      <file leaf-file-name="speechsequence-2.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/speechsequence-2.sample">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="0" selection-start="1711" selection-end="1711" vertical-scroll-proportion="0.42307693">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Renderer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/Renderer.java">
+      <file leaf-file-name="parenthesis-1.sample" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="11" selection-start="1048" selection-end="1048" vertical-scroll-proportion="0.5631868">
+            <state line="8" column="40" selection-start="90" selection-end="90" vertical-scroll-proportion="0.37362638">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="paragraphbody-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="paragraphbody-2.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-2.sample">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -266,10 +266,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PartHandler.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="PartHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/PartHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="3" selection-start="2358" selection-end="2358" vertical-scroll-proportion="0.9395604">
+            <state line="57" column="47" selection-start="1918" selection-end="1918" vertical-scroll-proportion="0.33241758">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -816,6 +816,10 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/style" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -1873,84 +1877,6 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PdfRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="25" selection-start="3523" selection-end="3523" vertical-scroll-proportion="0.37823835">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Element.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="33" selection-start="1758" selection-end="1758" vertical-scroll-proportion="0.53108805">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/novelang/jetty/PartHandlerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1647" selection-end="1647" vertical-scroll-proportion="0.7967033">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/renderable/Renderable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="25" selection-start="1026" selection-end="1026" vertical-scroll-proportion="0.507772">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/XmlRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="68" selection-start="1540" selection-end="1540" vertical-scroll-proportion="0.4945055">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PlainTextRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="20" selection-start="1690" selection-end="1690" vertical-scroll-proportion="0.4010989">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/ProblemRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="3" selection-start="1119" selection-end="1119" vertical-scroll-proportion="0.5604396">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/BookHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="0" selection-start="1711" selection-end="1711" vertical-scroll-proportion="0.42307693">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/Renderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="11" selection-start="1048" selection-end="1048" vertical-scroll-proportion="0.5631868">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/AbstractDocumentHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="0" selection-start="2075" selection-end="2129" vertical-scroll-proportion="0.6868132">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/ServerMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="82" column="75" selection-start="3081" selection-end="3081" vertical-scroll-proportion="0.6098901">
@@ -1981,10 +1907,82 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/PartHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="3" selection-start="2358" selection-end="2358" vertical-scroll-proportion="0.9395604">
+        <state line="57" column="47" selection-start="1918" selection-end="1918" vertical-scroll-proportion="0.33241758">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PlainTextRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="13" selection-start="1150" selection-end="1150" vertical-scroll-proportion="-1.956044">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/style/fo.xsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="0" selection-start="420" selection-end="420" vertical-scroll-proportion="0.048710603">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/unicode-2.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/unicode-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/structure-4.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/XmlRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="0" selection-start="2604" selection-end="2604" vertical-scroll-proportion="0.2802198">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/speechsequence-2.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-2.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="40" selection-start="90" selection-end="90" vertical-scroll-proportion="0.37362638">
+          <folding />
         </state>
       </provider>
     </entry>
