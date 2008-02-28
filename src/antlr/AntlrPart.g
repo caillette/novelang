@@ -259,6 +259,8 @@ fragment LETTER
   : 'a'..'z' 
   | 'A'..'Z' 
 
+  // http://www.fileformat.info/info/unicode
+
   | '\u00e0' // LATIN SMALL LETTER A WITH GRAVE  
   | '\u00c0' // LATIN CAPITAL LETTER A WITH GRAVE  
 

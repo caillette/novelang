@@ -237,6 +237,7 @@
       </classpath>
       <arg line="${books}" />
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
+      <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
     </java>
 
   </target>

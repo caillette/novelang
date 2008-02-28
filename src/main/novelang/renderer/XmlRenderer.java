@@ -86,6 +86,8 @@ public class XmlRenderer implements Renderer {
       case PARAGRAPH_SPEECH :
       case PARAGRAPH_SPEECH_CONTINUED :
       case PARAGRAPH_SPEECH_ESCAPED :
+      case PARENTHESIS :
+      case EMPHASIS :
       case QUOTE :
         startElement( contentHandler, text, declareNamespace ) ;
         for( Tree subtree : tree.getChildren() ) {

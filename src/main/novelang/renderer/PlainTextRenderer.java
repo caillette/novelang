@@ -68,6 +68,8 @@ public class PlainTextRenderer implements Renderer {
       case PARAGRAPH_SPEECH :
       case PARAGRAPH_SPEECH_CONTINUED :
       case PARAGRAPH_SPEECH_ESCAPED :
+      case EMPHASIS :
+      case PARENTHESIS :
       case QUOTE :
         doRenderContainer( tree, writer, nodeKind, indent ) ;
         break ;
