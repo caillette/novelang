@@ -7,9 +7,10 @@ options { output = AST ; } //backtrack = true ; memoize = true ; }
 
 tokens {
   PART ;
+  CHAPTER ;
   SECTION  ;
-  SECTION_TITLE ;
-  SECTION_IDENTIFIER ;
+  TITLE ;
+  IDENTIFIER ;
   LOCUTOR ;
   PARAGRAPH_PLAIN ;
   PARAGRAPH_SPEECH ;
@@ -56,37 +57,50 @@ tokens {
 }
 
 part 
-  : section
-    ( HARDBREAK section )* 
-      // Looks strange but helps supporting arbitrary 
-      // volume of white garbage at the end of the file:
+  : ( SOFTBREAK | HARDBREAK )*
+    (   ( section ( HARDBREAK section )* ) 
+      | ( chapter ( HARDBREAK chapter )* )
+    )
+    // Looks strange but helps supporting arbitrary 
+    // volume of white garbage at the end of the file:
     ( ( SOFTBREAK | HARDBREAK ) WHITESPACE? )* 
     EOF 
-    -> ^( PART section* )
+    -> ^( PART  section* chapter* )
   ;
+  
+chapter 
+  : CHAPTER_DELIMITER WHITESPACE?
+    ( ( title | identifier ) WHITESPACE? )?
+    ( HARDBREAK WHITESPACE ? section )+ 
+    -> ^( CHAPTER
+           title?
+           identifier?
+           section*
+        )
+  ;	  
 	
 section 
   : SECTION_DELIMITER WHITESPACE? 
-    ( ( sectionTitle | sectionIdentifier ) WHITESPACE? )?
+    ( ( title | identifier ) WHITESPACE? )?
     ( HARDBREAK WHITESPACE ? ( paragraph | blockQuote ) )+ 
     WHITESPACE?
     -> ^( SECTION 
-           ^( SECTION_TITLE sectionTitle )?
-           ^( SECTION_IDENTIFIER sectionIdentifier )?
+           title?
+           identifier?
            paragraph* blockQuote* 
-       )
+        )
   ;
 
-sectionTitle
+title
   :	 APOSTROPHE word 
 	  ( WHITESPACE ( word | wordTrail ) )*
-	  -> ^( SECTION_TITLE word* wordTrail* )
+	  -> ^( TITLE word* wordTrail* )
   ;
   
- sectionIdentifier
+ identifier
   :	 word 
 	  ( WHITESPACE ( word | wordTrail ) )*
-	  -> ^( SECTION_IDENTIFIER word* wordTrail* )
+	  -> ^( IDENTIFIER word* wordTrail* )
   ;
     
 /** A single line of text with no break inside.

@@ -1,0 +1,86 @@
+gunit AntlrPart ;
+
+@header {
+  package novelang.parser.antlr ;
+}
+
+
+part :
+
+
+//
+// Chapter delimiter.
+//
+<<*** c0
+
+=== s0
+
+p0
+
+>> -> (PART (CHAPTER (IDENTIFIER (WORD c0)) (SECTION (IDENTIFIER (WORD s0)) (PARAGRAPH_PLAIN (WORD p0)))))
+
+
+//
+// Support leading breaks and several sections with no chapter.
+//
+<<
+
+===
+
+p0
+
+===
+
+p1
+
+>> -> (PART (SECTION (PARAGRAPH_PLAIN (WORD p0))) (SECTION (PARAGRAPH_PLAIN (WORD p1))))
+
+
+
+section :
+
+
+//
+// Vanilla: one section with one paragraph.
+//
+<<=== s00
+
+p10 w11.>> -> (SECTION (IDENTIFIER (WORD s00)) (PARAGRAPH_PLAIN (WORD p10) (WORD w11) (WORDTRAIL .)))
+
+
+//
+// Vanilla: anonymous section.
+//
+<<===
+
+p0>> -> (SECTION (PARAGRAPH_PLAIN (WORD p0)))
+
+
+//
+//
+//
+<<===
+
+p0 w01
+w02
+
+p1 w11
+w12>> -> (SECTION (PARAGRAPH_PLAIN (WORD p0) (WORD w01) (WORD w02)) (PARAGRAPH_PLAIN (WORD p1) (WORD w11) (WORD w12)))
+
+
+
+title :
+
+"'some title" -> (TITLE (WORD some) (WORD title))
+"'some title !" -> (TITLE (WORD some) (WORD title) (WORDTRAIL !))
+
+identifier :
+"identifier" -> (IDENTIFIER (WORD identifier))
+
+
+
+/*
+locutor :
+"the guy :: " -> (LOCUTOR (WORD the) (WORD guy))
+*/
+ 
