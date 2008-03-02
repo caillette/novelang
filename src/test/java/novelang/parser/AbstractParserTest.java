@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.apache.commons.lang.ClassUtils;
 import novelang.ResourceTools;
 import novelang.model.implementation.Book;
+import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
@@ -67,7 +68,8 @@ public abstract class AbstractParserTest< P extends GenericParser > {
       throws IOException, RecognitionException
   {
     initializeParser(  text ) ;
-    parser.parse() ;
+    final Tree tree = parser.parse();
+    Assert.assertNotNull( tree ) ;
     checkNoParserException() ;
   }
 

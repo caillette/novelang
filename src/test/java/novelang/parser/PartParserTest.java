@@ -67,6 +67,11 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
   }
 
   @Test
+  public void sections4() throws IOException, RecognitionException {
+    runParserOnResource( "/sections-4.sample" ) ;
+  }
+
+  @Test
   public void speechSequence1() throws IOException, RecognitionException {
     runParserOnResource( "/speechsequence-1.sample" ) ;
   }

@@ -78,14 +78,16 @@ section
   ;
 
 sectionTitle
-  :	 APOSTROPHE w1 = word 
-	  ( WHITESPACE ( w2 += word | w3 += wordTrail ) )*
-	  -> word* wordTrail*
+  :	 APOSTROPHE word 
+	  ( WHITESPACE ( word | wordTrail ) )*
+	  -> ^( SECTION_TITLE word* wordTrail* )
   ;
   
  sectionIdentifier
-  :	textLine
-  ;  
+  :	 word 
+	  ( WHITESPACE ( word | wordTrail ) )*
+	  -> ^( SECTION_IDENTIFIER word* wordTrail* )
+  ;
     
 /** A single line of text with no break inside.
  */    
@@ -241,6 +243,7 @@ PUNCTUATION_SIGN
   | QUESTION_MARK 
   | EXCLAMATION_MARK 
   | SEMICOLON 
+  | COLON 
   ;
 
 HARDBREAK : SOFTBREAK SOFTBREAK+ ; 
@@ -254,6 +257,7 @@ fragment ELLIPSIS : '...' ;
 fragment QUESTION_MARK : '?' ;
 fragment EXCLAMATION_MARK : '!' ;
 fragment SEMICOLON : ';' ;
+fragment COLON : ':' ;
 
 fragment LETTER 
   : 'a'..'z' 

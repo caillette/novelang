@@ -72,7 +72,11 @@
     </path>
 
     <path id="antlr-grammars" >
-      <fileset dir="${source.antlr.dir}" includes="*.g"/>
+      <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
+    </path>
+
+    <path id="antlr-gunit" >
+      <fileset dir="${source.test.antlr.dir}" includes="*.gunit"/>
     </path>
 
   </target>
@@ -95,30 +99,59 @@
     =======  
   -->
 
-  <target name="antlr-generate" depends="init, target-dir" >
+  <target name="antlr-generate-main" depends="init, target-dir" >
 
     <pathconvert
         refid="antlr-grammars"
-        property="antlrsources"
+        property="antlr-main-sources"
         dirsep="/"
         pathsep=" "
     >
       <map from="${basedir.fullpath}/" to="" /> <!-- Needed, really? -->
     </pathconvert>
 
-    <echo>antlrsources='${antlrsources}'</echo>
+    <echo>antlrsources='${antlr-main-sources}'</echo>
 
     <java
         classname="org.antlr.Tool"
         failonerror="true"
     >
       <classpath refid="build-libs" />
-      <arg line="-fo ${target.antlr.generated.dir} ${antlrsources}" />
+      <arg line="-fo ${target.antlr.generated.main.dir} ${antlr-main-sources}" />
     </java>
-  </target>
-  
 
-  <target name="main-compile" depends="init, target-dir, antlr-generate" >
+  </target>
+
+
+  <target name="antlr-test" depends="init, target-dir, main-compile" description="GUnit tests" >
+
+    <pathconvert
+        refid="antlr-gunit"
+        property="antlr-test-sources"
+        dirsep="/"
+        pathsep=" "
+    >
+      <map from="${basedir.fullpath}/" to="" /> <!-- Needed, really? -->
+    </pathconvert>
+
+    <echo>antlrsources='${antlr-test-sources}'</echo>
+
+    <java
+        classname="org.antlr.gunit.Interp"
+        failonerror="true"
+    >
+      <classpath>
+        <path refid="build-libs" />
+        <pathelement path="${target.mainclasses.dir}" />
+
+      </classpath>
+      <arg line="${antlr-test-sources}" />
+    </java>
+
+  </target>
+
+
+  <target name="main-compile" depends="init, target-dir, antlr-generate-main" >
 
     <javac 
         destdir="${target.mainclasses.dir}"
@@ -130,12 +163,12 @@
       <classpath>
         <path refid="deploy-libs" />
       </classpath>
-      <src path="${source.main.dir}" />
-      <src path="${target.antlr.generated.dir}" />
+      <src path="${source.main.java.dir}" />
+      <src path="${target.antlr.generated.main.dir}" />
     </javac>
     
     <copy todir="${target.mainclasses.dir}" >
-      <fileset dir="${source.main.dir}" >
+      <fileset dir="${source.main.java.dir}" >
         <patternset refid="resource-patterns" />
       </fileset>
       <fileset dir="${configuration.main.dir}" >
@@ -146,13 +179,13 @@
   </target>
 
 
-  <target name="test-compile" depends="main-compile" >
+  <target name="test-compile" depends="main-compile, antlr-test" >
     
     <mkdir dir="${target.testclasses.dir}" />    
-    
-    <javac 
+
+    <javac
         destdir="${target.testclasses.dir}"
-        srcdir="${source.test.dir}"
+        srcdir="${source.test.java.dir}"
         source="${compiler.source}"
         target="${compiler.target}"
     >
@@ -164,7 +197,7 @@
     </javac>
 
     <copy todir="${target.testclasses.dir}" >
-      <fileset dir="${source.test.dir}" >
+      <fileset dir="${source.test.java.dir}" >
         <patternset refid="resource-patterns" />
       </fileset>
       <fileset dir="${configuration.test.dir}" >

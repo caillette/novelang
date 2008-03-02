@@ -9,7 +9,8 @@
       <sourceFolder url="file://$MODULE_DIR$/../samples" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../src/antlr" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../src/main" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../src/test/antlr" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../.git" />
       <excludeFolder url="file://$MODULE_DIR$/test-files" />
       <excludeFolder url="file://$MODULE_DIR$/../lib" />

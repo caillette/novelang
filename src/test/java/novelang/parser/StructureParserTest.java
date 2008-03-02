@@ -68,7 +68,8 @@ public class StructureParserTest extends AbstractParserTest< StructureParser > {
     runParserOnResource( "/structure-2.sample" ) ;
   }
 
-  @Test 
+  @Test
+  @Ignore
   public void structure3() throws IOException, RecognitionException {
     runParserOnResource( "/structure-3.sample" ) ;
   }

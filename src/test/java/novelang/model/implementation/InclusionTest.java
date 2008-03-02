@@ -24,6 +24,7 @@ import java.io.File;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.apache.commons.lang.ClassUtils;
 import novelang.model.common.Location;
 import com.google.common.collect.Lists;
@@ -86,6 +87,7 @@ public class InclusionTest {
   }
 
   @Test
+  @Ignore
   public void weirdInterval() {
     addParagraphRange( -1, 1 ) ;
     checkAllThere( 3, Arrays.asList( 1, 2 ) ) ;    
