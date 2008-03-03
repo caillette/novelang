@@ -94,13 +94,19 @@ section
            paragraph* blockQuote* 
         )
   ;
-
+/*
 title
   :	 APOSTROPHE word 
 	  ( WHITESPACE ( word | punctuationSign ) )*
 	  -> ^( TITLE word* punctuationSign* )
   ;
-  
+*/  
+title
+  :	 APOSTROPHE paragraphBody
+	  -> ^( TITLE paragraphBody )
+  ;
+
+
  identifier
   :	 word 
 	  ( WHITESPACE ( word | punctuationSign ) )*
@@ -257,8 +263,9 @@ word : SYMBOL -> ^( WORD SYMBOL ) ;
 /** Use a token (uppercase name) to aggregate other tokens.
  */
 SYMBOL 
-  : ( LETTER | DIGIT )
-    ( APOSTROPHE | HYPHEN_MINUS | LETTER | DIGIT )*
+  : ( LETTER | DIGIT )+
+    ( ( HYPHEN_MINUS | APOSTROPHE ) ( LETTER | DIGIT )+ )*
+    APOSTROPHE?
   ; 
 
 punctuationSign

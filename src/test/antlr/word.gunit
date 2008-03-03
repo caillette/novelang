@@ -1,0 +1,19 @@
+gunit AntlrPart ;
+
+@header {
+  package novelang.parser.antlr ;
+}
+
+word :
+
+"w" -> (WORD w)
+"Www" -> (WORD Www)
+"123" -> (WORD 123)
+"123-456" -> (WORD 123-456)
+
+
+"w'" OK
+
+"'w" FAIL
+"w-'" FAIL
+"w-'w" FAIL

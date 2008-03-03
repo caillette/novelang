@@ -174,7 +174,7 @@ public class Part
     for( final Tree sectionCandidate : tree.getChildren() ) {
       if( NodeKind.SECTION.name().equals( sectionCandidate.getText() ) ) {
         for( final Tree identifierCandidate : sectionCandidate.getChildren() ) {
-          if( NodeKind.SECTION_IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
+          if( NodeKind.IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
             final String identifier = IdentifierHelper.createIdentifier( identifierCandidate ) ;
             identifiedSectionTrees.put( identifier, sectionCandidate ) ;
             LOGGER.debug( "Recognized Section identifier '{}' inside {}", identifier, this ) ;

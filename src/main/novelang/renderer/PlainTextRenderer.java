@@ -54,8 +54,7 @@ public class PlainTextRenderer implements Renderer {
   }
 
   private void doRender( Tree tree, PrintWriter writer, int indent ) {
-    final String text = tree.getText() ;
-    final NodeKind nodeKind = Enum.valueOf( NodeKind.class, text ) ;
+    final NodeKind nodeKind = NodeKind.getToken( tree ) ;
     switch( nodeKind ) {
 
       case _BOOK :
@@ -80,8 +79,9 @@ public class PlainTextRenderer implements Renderer {
         }
         break ;
 
-      case WORDTRAIL :
-        writer.append( " " ).append( tree.getChildAt( 0 ).getText() ).append( " " ) ;
+      case PUNCTUATION_SIGN :
+        writer.append( RenderTools.generatePunctuationSign( tree, " " ) ) ;
+
       default :
         break ;
 
@@ -96,6 +96,7 @@ public class PlainTextRenderer implements Renderer {
     doRender( tree.getChildren(), writer, indent + 1 ) ;
     writer.append( "\n" ).append( indentMinus ).append( "}\n" ).append( indentMinus ) ;
   }
+
 
   private void doRender( Iterable< Tree > trees, PrintWriter writer, int indent ) {
     for( final Tree tree : trees ) {

@@ -8,6 +8,7 @@ title :
 
 "'some title" -> (TITLE (WORD some) (WORD title))
 "'some title !" -> (TITLE (WORD some) (WORD title) (PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK))
+"'some (title) !" -> (TITLE (WORD some) (PARENTHESIS (WORD title)) (PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK))
 
 identifier :
 "identifier" -> (IDENTIFIER (WORD identifier))

@@ -272,6 +272,7 @@
       <arg line="${books}" />
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
       <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
+      <jvmarg value="-Dnovelang.styles.dir=${source.style.dir}" />
     </java>
 
   </target>

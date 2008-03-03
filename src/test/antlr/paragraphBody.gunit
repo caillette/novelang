@@ -4,37 +4,6 @@ gunit AntlrPart ;
   package novelang.parser.antlr ;
 }
 
-// Need to use this rule because an expected AST must define only one tree.
-// So we can't use paragraphBody here.
-paragraph :
-
-//
-// Punctuation signs.
-//
-
-"w0," -> (PARAGRAPH_PLAIN (WORD w0) (PUNCTUATION_SIGN SIGN_COMMA))
-"w0;" -> (PARAGRAPH_PLAIN (WORD w0) (PUNCTUATION_SIGN SIGN_SEMICOLON))
-"w0." -> (PARAGRAPH_PLAIN (WORD w0) (PUNCTUATION_SIGN SIGN_FULLSTOP))
-"w0?" -> (PARAGRAPH_PLAIN (WORD w0) (PUNCTUATION_SIGN SIGN_QUESTIONMARK))
-"w0!" -> (PARAGRAPH_PLAIN (WORD w0) (PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK))
-"w0:" -> (PARAGRAPH_PLAIN (WORD w0) (PUNCTUATION_SIGN SIGN_COLON))
-"w0..." -> (PARAGRAPH_PLAIN (WORD w0) (PUNCTUATION_SIGN SIGN_ELLIPSIS))
-
-"w0, w1 ; w2. w3 ? w4 ! w5 : w6..." OK
-
-/*
-"w0.." FAIL
-"w0,," FAIL
-"w0??" FAIL
-"w0;;" FAIL
-*/
-
-"w0 w1'/w2/." -> (PARAGRAPH_PLAIN (WORD w0) (WORD w1') (EMPHASIS (WORD w2)) (PUNCTUATION_SIGN SIGN_FULLSTOP))
-
-<<w0 /w1
-w2/.>>    OK
-
-
 paragraphBody :
 
 //
@@ -83,7 +52,15 @@ paragraphBody :
 <<(w0 -- w1 (w2 -- w3 -- ) --)>> FAIL // Interpolated clauses depth limited to 1.
 
 
+//
+// Nesting across several lines.
+//
 
+<</w1
+(w2
+-- w3
+"w4
+w5"--)/.>>    OK
 
 
 

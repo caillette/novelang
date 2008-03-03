@@ -97,11 +97,18 @@ public class XmlRenderer implements Renderer {
         break ;
 
       case WORD :
-      case WORDTRAIL :
         for( Tree wordToken : tree.getChildren() ) {
           word( contentHandler, wordToken.getText() ) ;
         }
         break ;
+
+
+      case PUNCTUATION_SIGN :
+        final String punctuationSignName = tree.getChildAt( 0 ).getText() ;
+        startElement( contentHandler, punctuationSignName, false ) ;
+        endElement( contentHandler, punctuationSignName ) ;
+        break ;
+
 
       default :
         break ;
