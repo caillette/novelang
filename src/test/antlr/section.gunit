@@ -1,0 +1,38 @@
+gunit AntlrPart ;
+
+@header {
+  package novelang.parser.antlr ;
+}
+
+
+section :
+
+
+//
+// Vanilla: one section with one paragraph.
+//
+<<=== s00
+
+p10 w11.>> -> (SECTION (IDENTIFIER (WORD s00)) (PARAGRAPH_PLAIN (WORD p10) (WORD w11) (WORDTRAIL .)))
+
+
+//
+// Vanilla: anonymous section.
+//
+<<===
+
+p0>> -> (SECTION (PARAGRAPH_PLAIN (WORD p0)))
+
+
+//
+//
+//
+<<===
+
+p0 w01
+w02
+
+p1 w11
+w12>> -> (SECTION (PARAGRAPH_PLAIN (WORD p0) (WORD w01) (WORD w02)) (PARAGRAPH_PLAIN (WORD p1) (WORD w11) (WORD w12)))
+
+

@@ -136,8 +136,9 @@
 
     <echo>antlrsources='${antlr-test-sources}'</echo>
 
+    <!-- Use a wrapper for running several GUnit suites at once. -->
     <java
-        classname="org.antlr.gunit.Interp"
+        classname="novelang.gunit.Launcher"
         failonerror="true"
     >
       <classpath>

@@ -1,0 +1,21 @@
+gunit AntlrPart ;
+
+@header {
+  package novelang.parser.antlr ;
+}
+
+title :
+
+"'some title" -> (TITLE (WORD some) (WORD title))
+"'some title !" -> (TITLE (WORD some) (WORD title) (WORDTRAIL !))
+
+identifier :
+"identifier" -> (IDENTIFIER (WORD identifier))
+
+
+
+/*
+locutor :
+"the guy :: " -> (LOCUTOR (WORD the) (WORD guy))
+*/
+ 
