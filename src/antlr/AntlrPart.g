@@ -1,9 +1,6 @@
 grammar AntlrPart ;
 
-
-// Backtracking causes predicates to fail silently, 
-// as it disables nesting depth limitation.
-options { output = AST ; } //backtrack = true ; memoize = true ; } 
+options { output = AST ; } 
 
 tokens {
   PART ;
@@ -23,7 +20,14 @@ tokens {
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
   WORD ;
-  WORDTRAIL ;
+  PUNCTUATION_SIGN ;
+  SIGN_COMMA ;
+  SIGN_FULLSTOP ;
+  SIGN_ELLIPSIS ;
+  SIGN_QUESTIONMARK ;
+  SIGN_EXCLAMATIONMARK ;
+  SIGN_SEMICOLON ;
+  SIGN_COLON ;
 }
 	
 //scope WordScope { StringBuffer buffer } 
@@ -93,22 +97,22 @@ section
 
 title
   :	 APOSTROPHE word 
-	  ( WHITESPACE ( word | wordTrail ) )*
-	  -> ^( TITLE word* wordTrail* )
+	  ( WHITESPACE ( word | punctuationSign ) )*
+	  -> ^( TITLE word* punctuationSign* )
   ;
   
  identifier
   :	 word 
-	  ( WHITESPACE ( word | wordTrail ) )*
-	  -> ^( IDENTIFIER word* wordTrail* )
+	  ( WHITESPACE ( word | punctuationSign ) )*
+	  -> ^( IDENTIFIER word* punctuationSign* )
   ;
     
 /** A single line of text with no break inside.
  */    
 textLine
 	:	word 
-	  ( WHITESPACE ( word | wordTrail ) )*
-	  -> word* wordTrail*
+	  ( WHITESPACE ( word | punctuationSign ) )*
+	  -> word* punctuationSign*
 	;
 
 paragraph
@@ -125,7 +129,7 @@ paragraph
 
 blockQuote
   : OPENING_BLOCKQUOTE 
-    wideBreak? 
+//    wideBreak? 
     paragraphBody ( HARDBREAK paragraphBody )* 
     HARDBREAK? 
     CLOSING_BLOCKQUOTE
@@ -138,9 +142,22 @@ locutor
  	;
  	  
 paragraphBody 
-  : paragraphItem 
-    ( ( wideBreak paragraphItem ) | ( wideBreak? wordTrail ) )*
-  ;
+  : (   ( word ( wideBreak word )* )
+      | parenthesizingText
+      | quotingText
+      | emphasizingText
+      | interpolatedClause
+    )
+    ( wideBreak?     
+      (   parenthesizingText
+        | quotingText
+        | emphasizingText
+        | interpolatedClause    
+        | punctuationSign
+      )
+      ( wideBreak? word ( wideBreak word )* )?
+    )*
+  ;   
 
 paragraphItem
   : word
@@ -155,11 +172,11 @@ quotingText
     { ++ quoteDepth < 2 }?
     wideBreak?
     quotingTextItem
-    ( ( wideBreak quotingTextItem ) | ( wideBreak? wordTrail ) )*    
+    ( ( wideBreak quotingTextItem ) | ( wideBreak? punctuationSign ) )*    
     wideBreak? 
     DOUBLE_QUOTE
     { -- quoteDepth ; }
-    -> ^( QUOTE quotingTextItem* wordTrail* )
+    -> ^( QUOTE quotingTextItem* punctuationSign* )
   ;
 
 quotingTextItem
@@ -174,11 +191,11 @@ parenthesizingText
     { ++ parenthesisDepth < 3 }?
     wideBreak?
     parenthesizingTextItem
-    ( ( wideBreak parenthesizingTextItem ) | ( wideBreak? wordTrail ) )*
+    ( ( wideBreak parenthesizingTextItem ) | ( wideBreak? punctuationSign ) )*
     wideBreak?
     RIGHT_PARENTHESIS
     { -- parenthesisDepth ; }
-    -> ^( PARENTHESIS parenthesizingTextItem* wordTrail* )
+    -> ^( PARENTHESIS parenthesizingTextItem* punctuationSign* )
   ;
 
 parenthesizingTextItem
@@ -193,11 +210,11 @@ emphasizingText
     { ++ emphasisDepth < 2 }?
     wideBreak?
     emphasizingTextItem
-    ( ( wideBreak emphasizingTextItem ) | ( wideBreak? wordTrail ) )*
+    ( ( wideBreak emphasizingTextItem ) | ( wideBreak? punctuationSign ) )*
     wideBreak? 
     SOLIDUS
     { -- emphasisDepth ; }
-    -> ^( EMPHASIS emphasizingTextItem* wordTrail* )
+    -> ^( EMPHASIS emphasizingTextItem* punctuationSign* )
   ;
   
 emphasizingTextItem  
@@ -212,12 +229,12 @@ interpolatedClause
     { ++ interpolatedClauseDepth < 2 }?
     wideBreak?
     interpolatedClauseItem
-    ( ( wideBreak interpolatedClauseItem ) | ( wideBreak? wordTrail ) )*
+    ( ( wideBreak interpolatedClauseItem ) | ( wideBreak? punctuationSign ) )*
     wideBreak? 
     (   INTERPOLATED_CLAUSE_DELIMITER 
-        -> ^( INTERPOLATEDCLAUSE interpolatedClauseItem* wordTrail* )
+        -> ^( INTERPOLATEDCLAUSE interpolatedClauseItem* punctuationSign* )
       | INTERPOLATED_CLAUSE_SILENT_END 
-        -> ^( INTERPOLATEDCLAUSE_SILENTEND interpolatedClauseItem* wordTrail* )
+        -> ^( INTERPOLATEDCLAUSE_SILENTEND interpolatedClauseItem* punctuationSign* )
     )
     { -- interpolatedClauseDepth ; }    
   ;	  
@@ -230,12 +247,6 @@ interpolatedClauseItem
   ;   
 
 
-/** Is PUNCTUATION_SIGN enough?
-  */
-wordTrail
-  :	PUNCTUATION_SIGN
-    -> ^( WORDTRAIL PUNCTUATION_SIGN )
-  ;
 
 wideBreak 
 	:	( WHITESPACE | ( WHITESPACE? SOFTBREAK WHITESPACE? ) ) ->
@@ -246,32 +257,34 @@ word : SYMBOL -> ^( WORD SYMBOL ) ;
 /** Use a token (uppercase name) to aggregate other tokens.
  */
 SYMBOL 
-  : ( LETTER | DIGIT )+
-    ( ( APOSTROPHE | HYPHEN_MINUS ) ( LETTER | DIGIT )+ )*
+  : ( LETTER | DIGIT )
+    ( APOSTROPHE | HYPHEN_MINUS | LETTER | DIGIT )*
   ; 
 
-PUNCTUATION_SIGN 
-  : COMMA 
-  | FULL_STOP 
-  | ELLIPSIS 
-  | QUESTION_MARK 
-  | EXCLAMATION_MARK 
-  | SEMICOLON 
-  | COLON 
+punctuationSign
+  : COMMA -> ^( PUNCTUATION_SIGN SIGN_COMMA )
+  | FULL_STOP  -> ^( PUNCTUATION_SIGN SIGN_FULLSTOP )
+  | ELLIPSIS -> ^( PUNCTUATION_SIGN SIGN_ELLIPSIS )
+  | QUESTION_MARK -> ^( PUNCTUATION_SIGN SIGN_QUESTIONMARK )
+  | EXCLAMATION_MARK -> ^( PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK )
+  | SEMICOLON -> ^( PUNCTUATION_SIGN SIGN_SEMICOLON )
+  | COLON -> ^( PUNCTUATION_SIGN SIGN_COLON )
   ;
+
+
 
 HARDBREAK : SOFTBREAK SOFTBREAK+ ; 
 SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
 WHITESPACE : ( ' ' | '\t' )+ ;
 
 
-fragment COMMA : ',' ;
-fragment FULL_STOP : '.' ;
-fragment ELLIPSIS : '...' ;
-fragment QUESTION_MARK : '?' ;
-fragment EXCLAMATION_MARK : '!' ;
-fragment SEMICOLON : ';' ;
-fragment COLON : ':' ;
+COMMA : ',' ;
+FULL_STOP : '.' ;
+ELLIPSIS : '...' ;
+QUESTION_MARK : '?' ;
+EXCLAMATION_MARK : '!' ;
+SEMICOLON : ';' ;
+COLON : ':' ;
 
 fragment LETTER 
   : 'a'..'z' 

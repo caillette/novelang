@@ -175,19 +175,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="part.gunit" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/antlr/part.gunit">
+      <file leaf-file-name="paragraphBody.gunit" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/test/antlr/paragraphBody.gunit">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="0" selection-start="75" selection-end="75" vertical-scroll-proportion="0.41129032">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="section.gunit" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/antlr/section.gunit">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="0" selection-start="492" selection-end="492" vertical-scroll-proportion="0.9596774">
+            <state line="6" column="37" selection-start="103" selection-end="103" vertical-scroll-proportion="0.26631853">
               <folding />
             </state>
           </provider>
@@ -196,16 +187,16 @@
       <file leaf-file-name="title.gunit" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/test/antlr/title.gunit">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="65" selection-end="65" vertical-scroll-proportion="0.21963824">
+            <state line="9" column="89" selection-start="214" selection-end="214" vertical-scroll-proportion="0.33417085">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Method.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../../../JavaProducts/javasoft/jdk/1.5.0/jdk-1_5_0-src/j2se/src/share/classes/java/lang/reflect/Method.java">
+      <file leaf-file-name="section.gunit" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/test/antlr/section.gunit">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="549" column="63" selection-start="21471" selection-end="21471" vertical-scroll-proportion="0.2248062">
+            <state line="15" column="117" selection-start="257" selection-end="257" vertical-scroll-proportion="0.66579634">
               <folding />
             </state>
           </provider>
@@ -979,6 +970,24 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang.ipr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/.." />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../samples" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
     </subPane>
   </component>
   <component name="ProjectReloadState">
@@ -1546,7 +1555,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="874" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="15" />
@@ -1556,7 +1565,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21567218" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42857143" order="10" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4144144" order="10" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="6" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="7" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="11" />
@@ -1675,95 +1684,6 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../samples/sections-2.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/parser/implementation/DefaultStructureParserFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="34" selection-start="1268" selection-end="1268" vertical-scroll-proportion="0.1401099">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrStructure.g">
-      <provider selected="true" editor-type-id="grammar">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/parser/implementation/DefaultPartParserFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="0" selection-start="2131" selection-end="2131" vertical-scroll-proportion="0.35900962">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-4.sample">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="49" selection-end="49" vertical-scroll-proportion="0.21045393">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/PartParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="13" selection-start="1462" selection-end="1462" vertical-scroll-proportion="0.19669876">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
-      <provider selected="true" editor-type-id="grammar">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/antlr/part.gunit">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="75" selection-end="75" vertical-scroll-proportion="0.41129032">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/antlr/section.gunit">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="492" selection-end="492" vertical-scroll-proportion="0.9596774">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../build.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="144" column="35" selection-start="4006" selection-end="4006" vertical-scroll-proportion="0.4728682">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/gunit/Launcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="1589" selection-end="1589" vertical-scroll-proportion="0.4392765">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/antlr/title.gunit">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="65" selection-end="65" vertical-scroll-proportion="0.21963824">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../lib/build/gunit-1.0.1.jar!/org/antlr/gunit/Interp.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="462" selection-end="567" vertical-scroll-proportion="0.59408605">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../build.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state line="35" column="0" selection-start="990" selection-end="990" vertical-scroll-proportion="0.63049096">
@@ -1774,6 +1694,95 @@
     <entry file="file://$PROJECT_DIR$/../../../JavaProducts/javasoft/jdk/1.5.0/jdk-1_5_0-src/j2se/src/share/classes/java/lang/reflect/Method.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="549" column="63" selection-start="21471" selection-end="21471" vertical-scroll-proportion="0.2248062">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/antlr/part.gunit">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="75" selection-end="75" vertical-scroll-proportion="0.3883249">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-2.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="6" selection-end="47" vertical-scroll-proportion="0.083129585">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/paragraphbody-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="0" selection-start="9" selection-end="117" vertical-scroll-proportion="0.4987775">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/quotes-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/parenthesis-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/sections-2.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/sections-3.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.29095355">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/sections-4.sample">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="15" selection-start="29" selection-end="44" vertical-scroll-proportion="0.16625917">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
+      <provider selected="true" editor-type-id="grammar">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/antlr/title.gunit">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="89" selection-start="214" selection-end="214" vertical-scroll-proportion="0.33417085">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/antlr/paragraphBody.gunit">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="37" selection-start="103" selection-end="103" vertical-scroll-proportion="0.26631853">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/antlr/section.gunit">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="117" selection-start="257" selection-end="257" vertical-scroll-proportion="0.66579634">
           <folding />
         </state>
       </provider>

@@ -7,7 +7,7 @@ gunit AntlrPart ;
 title :
 
 "'some title" -> (TITLE (WORD some) (WORD title))
-"'some title !" -> (TITLE (WORD some) (WORD title) (WORDTRAIL !))
+"'some title !" -> (TITLE (WORD some) (WORD title) (PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK))
 
 identifier :
 "identifier" -> (IDENTIFIER (WORD identifier))
