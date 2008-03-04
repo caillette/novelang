@@ -17,6 +17,9 @@
  */
 package novelang.parser.implementation;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -27,6 +30,8 @@ import novelang.parser.antlr.AntlrPartLexer;
 import novelang.parser.antlr.AntlrPartParser;
 import novelang.model.common.Tree;
 import novelang.model.common.LocationFactory;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
@@ -47,11 +52,14 @@ public class DefaultPartParserFactory implements PartParserFactory {
       }
 
       public boolean hasProblem() {
-        return ! parser.getExceptions().isEmpty() ;
+        return ! parser.getProblems().iterator().hasNext() ;
       }
 
       public Iterable< Exception > getProblems() {
-        return parser.getExceptions() ;
+        final List< Exception > problems = Lists.newArrayList() ;
+        Iterables.addAll( problems, lexer.getProblems() ) ;
+        Iterables.addAll( problems, parser.getProblems() ) ;
+        return Lists.immutableList( problems ) ;
       }
 
       public Tree parse() throws RecognitionException {

@@ -89,6 +89,7 @@ public class PdfRenderer extends XmlRenderer {
 
   public PdfRenderer() {
     stylesheet = new File( STYLES_DIR, DEFAULT_FO_STYLESHEET ) ;
+    LOGGER.info( "Loaded stylesheet from '{}'", stylesheet.getAbsolutePath() ) ;
   }
 
   protected RenditionMimeType getMimeType() {

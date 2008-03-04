@@ -81,6 +81,7 @@ public class XmlRenderer implements Renderer {
       case CHAPTER :
       case SECTION :
       case TITLE :
+      case IDENTIFIER :
       case _SPEECH_SEQUENCE :
       case PARAGRAPH_PLAIN :
       case PARAGRAPH_SPEECH :
@@ -89,6 +90,7 @@ public class XmlRenderer implements Renderer {
       case PARENTHESIS :
       case EMPHASIS :
       case QUOTE :
+      case BLOCKQUOTE :
         startElement( contentHandler, text, declareNamespace ) ;
         for( Tree subtree : tree.getChildren() ) {
           renderTree( contentHandler, subtree ) ;

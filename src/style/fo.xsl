@@ -99,7 +99,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:chapter/title">
+  <xsl:template match="n:chapter/n:title">
     <fo:block
         font-size="15pt"
         font-weight="bold"
@@ -110,13 +110,13 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="section">
+  <xsl:template match="n:section">
     <fo:block padding-top="13pt" >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="section/title">
+  <xsl:template match="n:section/n:title">
     <fo:inline
         font-size="13pt"
         font-weight="bold"
@@ -126,7 +126,7 @@
     </fo:inline>
   </xsl:template>
 
-  <xsl:template match="blockquote/para">
+  <xsl:template match="n:blockquote">
     <fo:block 
         text-align="justify"
         text-indent="0em"
@@ -157,14 +157,16 @@
     Using '&raquo;' and '&laquo;' requires a fix in ISOnum.pen file 
     <!ENTITY laquo  "&#xAB;" > <!ENTITY raquo  "&#xBB;" >
   -->
-  <xsl:template match="quote">&laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>
+  <xsl:template match="n:quote"> &laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>
 
-  <xsl:template match="foreignphrase"><fo:inline font-style="italic"><xsl:apply-templates/></fo:inline></xsl:template>
+  <xsl:template match="n:emphasis"><fo:inline font-style="italic"><xsl:apply-templates/></fo:inline></xsl:template>
 
-  <xsl:template match="emphasis"><fo:inline font-style="italic"><xsl:apply-templates/></fo:inline></xsl:template>
+  <xsl:template match="n:parenthesis">(<xsl:apply-templates/>)</xsl:template>
 
 
-  <xsl:template match="sign-fullstop">. </xsl:template>
+  <xsl:template match="n:sign-fullstop">. </xsl:template>
+  <xsl:template match="n:sign-comma">, </xsl:template>
+  <xsl:template match="n:sign-exclamationmark">&nbsp;! </xsl:template>
 
 </xsl:stylesheet>
 

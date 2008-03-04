@@ -126,6 +126,10 @@ public class Part
         // Yeah we do it here!
         tree = parser.parse() ;
 
+        for( final Exception exception : parser.getProblems() ) {
+          collect( exception ) ;
+        }
+
       } catch( RecognitionException e ) {
         LOGGER.warn( "Could not parse file", e ) ;
         collect( e ) ;

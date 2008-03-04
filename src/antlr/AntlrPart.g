@@ -40,18 +40,33 @@ tokens {
   package novelang.parser.antlr ;
 } 
 
-@parser::members {
-  final List< Exception > exceptions = 
+@lexer::members {
+  final List< Exception > problems = 
       new ArrayList< Exception>() ;
 
-	public List< Exception > getExceptions() {
-	  return new ArrayList< Exception >( exceptions ) ;
+	public Iterable< Exception > getProblems() {
+	  return new ArrayList< Exception >( problems ) ;
+	}
+	
+	@Override
+	public void reportError( RecognitionException e ) {
+	  // super.reportError( e ) ; // Disabled printing on console.
+	  problems.add( e ) ;
+	}
+}
+
+@parser::members {
+  final List< Exception > problems = 
+      new ArrayList< Exception>() ;
+
+	public Iterable< Exception > getProblems() {
+	  return new ArrayList< Exception >( problems ) ;
 	}
 	
 	@Override
 	public void reportError( RecognitionException e ) {
 	  super.reportError( e ) ;
-	  exceptions.add( e ) ;
+	  problems.add( e ) ;
 	}
 	
 	private int quoteDepth = 0 ;
@@ -135,7 +150,7 @@ paragraph
 
 blockQuote
   : OPENING_BLOCKQUOTE 
-//    wideBreak? 
+    wideBreak? 
     paragraphBody ( HARDBREAK paragraphBody )* 
     HARDBREAK? 
     CLOSING_BLOCKQUOTE

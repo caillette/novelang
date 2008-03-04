@@ -22,9 +22,11 @@ import java.io.PrintWriter;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 
+import org.antlr.runtime.RecognitionException;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
 import novelang.model.renderable.Renderable;
+import novelang.parser.ProblemDescription;
 
 /**
  * A scratch version of a Renderer.
@@ -42,9 +44,23 @@ public class PlainTextRenderer implements Renderer {
 
   public RenditionMimeType render( Renderable rendered, OutputStream stream ) {
     final PrintWriter writer = new PrintWriter( stream ) ;
-    doRender( rendered.getTree(), writer, 0 ) ;
+    if( rendered.hasProblem() ) {
+      doRender( rendered.getProblems(), writer ) ;
+    } else {
+      doRender( rendered.getTree(), writer, 0 ) ;
+    }
     writer.flush() ;
     return RenditionMimeType.TEXT ;
+  }
+
+  private void doRender( Iterable< Exception > problems, PrintWriter writer ) {
+    for( final Exception exception : problems ) {
+      if( exception instanceof ProblemDescription ) {
+        writer.println( exception ) ; 
+      } else {
+        exception.printStackTrace( writer ) ;
+      }
+    }
   }
 
   private void renderTree( Tree tree, OutputStream stream ) {
@@ -70,6 +86,7 @@ public class PlainTextRenderer implements Renderer {
       case EMPHASIS :
       case PARENTHESIS :
       case QUOTE :
+      case BLOCKQUOTE :
         doRenderContainer( tree, writer, nodeKind, indent ) ;
         break ;
 

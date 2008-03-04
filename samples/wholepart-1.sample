@@ -1,8 +1,13 @@
-*** Chapter one
+***'Chapter one
 
-=== Section one one
+==='Section one one (with /style/!)
 
 This is a single-line paragraph.
 
 This is another paragraph.
 It is split over /two lines/.
+
+<<<
+This is a "blockquote".
+
+There can be several paragraphs inside.>>>
