@@ -175,80 +175,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AntlrPart.g" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
-          <provider selected="true" editor-type-id="grammar">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="word.gunit" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/antlr/word.gunit">
+      <file leaf-file-name="fo.xsl" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/style/fo.xsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.5125628">
+            <state line="119" column="14" selection-start="3005" selection-end="3005" vertical-scroll-proportion="0.57349396">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="unicode-1.sample" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/unicode-1.sample">
+      <file leaf-file-name="XmlRenderer.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/XmlRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="1" selection-start="112" selection-end="112" vertical-scroll-proportion="0.76884425">
+            <state line="36" column="13" selection-start="1297" selection-end="1297" vertical-scroll-proportion="-1.1469879">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PartParserTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/PartParserTest.java">
+      <file leaf-file-name="wholepart-1.sample" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/wholepart-1.sample">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="146" column="14" selection-start="3947" selection-end="3947" vertical-scroll-proportion="0.35929647">
+            <state line="2" column="19" selection-start="36" selection-end="36" vertical-scroll-proportion="0.07906977">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlainTextRenderer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PlainTextRenderer.java">
+      <file leaf-file-name="title.gunit" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/test/antlr/title.gunit">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="40" selection-start="2024" selection-end="2024" vertical-scroll-proportion="-0.16080402">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PdfRenderer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PdfRenderer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="12" selection-start="2469" selection-end="2469" vertical-scroll-proportion="0.33159268">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../build.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="274" column="51" selection-start="7421" selection-end="7421" vertical-scroll-proportion="0.8442211">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.properties" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../build.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="28" selection-start="816" selection-end="816" vertical-scroll-proportion="0.72613066">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NodeKind.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/NodeKind.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="12" selection-start="999" selection-end="999" vertical-scroll-proportion="-0.5125628">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -996,6 +953,10 @@
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../src/style" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
@@ -1289,7 +1250,7 @@
     <option name="showLabels" value="true" />
   </component>
   <component name="RestoreUpdateTree" />
-  <component name="RunManager" selected="JUnit.novelang">
+  <component name="RunManager" selected="Application.ServerMain">
     <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
@@ -1343,7 +1304,7 @@
     </configuration>
     <configuration default="false" name="ServerMain" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" value="novelang.jetty.ServerMain" />
-      <option name="VM_PARAMETERS" value="-Dnovelang.styles.dir=../src/style" />
+      <option name="VM_PARAMETERS" value="-Dnovelang.styles.dir=src/style" />
       <option name="PROGRAM_PARAMETERS" value="book4 samples/structure-4.sample" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/.." />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -1798,14 +1759,14 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21567218" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4144144" order="10" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4144144" order="10" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="6" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="7" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="11" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="4" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14090583" order="1" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="12" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37323037" order="2" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37323037" order="2" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13515456" order="2" />
       <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="6" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45817247" order="4" />
@@ -1917,48 +1878,51 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../samples/sections-4.sample">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/NodeKind.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="49" selection-end="49" vertical-scroll-proportion="0.35581395">
+        <state line="28" column="12" selection-start="999" selection-end="999" vertical-scroll-proportion="-0.4744186">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-3.sample">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PlainTextRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="56" column="40" selection-start="2024" selection-end="2024" vertical-scroll-proportion="-0.14883721">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-2.sample">
+    <entry file="file://$PROJECT_DIR$/../build.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="12" selection-start="52" selection-end="52" vertical-scroll-proportion="0.15813954">
+        <state line="28" column="28" selection-start="816" selection-end="816" vertical-scroll-proportion="0.67209303">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/XmlRenderer.java">
+    <entry file="file://$PROJECT_DIR$/../src/test/antlr/section.gunit">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="0" selection-start="3577" selection-end="3577" vertical-scroll-proportion="-0.94939756">
+        <state line="49" column="5" selection-start="646" selection-end="646" vertical-scroll-proportion="0.84096384">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/RenderTools.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PdfRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="0" selection-start="1356" selection-end="1356" vertical-scroll-proportion="0.2767442">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="64" column="12" selection-start="2469" selection-end="2469" vertical-scroll-proportion="0.3060241">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-1.sample">
+    <entry file="file://$PROJECT_DIR$/../build.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="275" column="28" selection-start="7465" selection-end="7465" vertical-scroll-proportion="1.5906976">
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrStructure.g">
+      <provider selected="true" editor-type-id="grammar">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/antlr/AntlrPart.g">
@@ -1966,58 +1930,51 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/antlr/word.gunit">
+    <entry file="file://$PROJECT_DIR$/../samples/blockquote-1.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.5125628">
+        <state line="4" column="3" selection-start="17" selection-end="17" vertical-scroll-proportion="0.15813954">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/unicode-1.sample">
+    <entry file="file://$PROJECT_DIR$/../samples/structure-4.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="1" selection-start="112" selection-end="112" vertical-scroll-proportion="0.76884425">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/PartParserTest.java">
+    <entry file="file://$PROJECT_DIR$/../samples/sections-4.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="146" column="14" selection-start="3947" selection-end="3947" vertical-scroll-proportion="0.35929647">
+        <state line="4" column="14" selection-start="43" selection-end="43" vertical-scroll-proportion="0.15813954">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/NodeKind.java">
+    <entry file="file://$PROJECT_DIR$/../src/test/antlr/title.gunit">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="12" selection-start="999" selection-end="999" vertical-scroll-proportion="-0.5125628">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PlainTextRenderer.java">
+    <entry file="file://$PROJECT_DIR$/../samples/wholepart-1.sample">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="40" selection-start="2024" selection-end="2024" vertical-scroll-proportion="-0.16080402">
+        <state line="2" column="19" selection-start="36" selection-end="36" vertical-scroll-proportion="0.07906977">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/PdfRenderer.java">
+    <entry file="file://$PROJECT_DIR$/../src/style/fo.xsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="12" selection-start="2469" selection-end="2469" vertical-scroll-proportion="0.33159268">
+        <state line="119" column="14" selection-start="3005" selection-end="3005" vertical-scroll-proportion="0.57349396">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../build.xml">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/renderer/XmlRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="274" column="51" selection-start="7421" selection-end="7421" vertical-scroll-proportion="0.8442211">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../build.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="28" selection-start="816" selection-end="816" vertical-scroll-proportion="0.72613066">
+        <state line="36" column="13" selection-start="1297" selection-end="1297" vertical-scroll-proportion="-1.1469879">
           <folding />
         </state>
       </provider>

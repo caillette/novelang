@@ -163,9 +163,8 @@
 
   <xsl:template match="emphasis"><fo:inline font-style="italic"><xsl:apply-templates/></fo:inline></xsl:template>
 
-  <xsl:template match="glossaryterm"><fo:inline font-family="sans-serif" font-size="13pt"><xsl:apply-templates/></fo:inline></xsl:template>
 
-  <xsl:template match="emdash">&mdash;</xsl:template>
+  <xsl:template match="sign-fullstop">. </xsl:template>
 
 </xsl:stylesheet>
 
