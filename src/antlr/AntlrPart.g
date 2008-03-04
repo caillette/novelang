@@ -33,11 +33,13 @@ tokens {
 //scope WordScope { StringBuffer buffer } 
 
 @parser::header { 
-  package novelang.parser.antlr ;
+package novelang.parser.antlr ;
+import novelang.parser.ProblemDescription;
 } 
 
 @lexer::header { 
-  package novelang.parser.antlr ;
+package novelang.parser.antlr ;
+import novelang.parser.ProblemDescription;
 } 
 
 @lexer::members {
@@ -49,10 +51,9 @@ tokens {
 	}
 	
 	@Override
-	public void reportError( RecognitionException e ) {
-	  // super.reportError( e ) ; // Disabled printing on console.
-	  problems.add( e ) ;
-	}
+  public void emitErrorMessage( String string ) {
+    problems.add( new ProblemDescription( string ) ) ;
+  }
 }
 
 @parser::members {
@@ -64,10 +65,9 @@ tokens {
 	}
 	
 	@Override
-	public void reportError( RecognitionException e ) {
-	  super.reportError( e ) ;
-	  problems.add( e ) ;
-	}
+  public void emitErrorMessage( String string ) {
+    problems.add( new ProblemDescription( string ) ) ;
+  }
 	
 	private int quoteDepth = 0 ;
 	private int parenthesisDepth = 0 ;
