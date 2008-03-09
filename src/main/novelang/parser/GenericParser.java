@@ -19,6 +19,7 @@ package novelang.parser;
 
 import org.antlr.runtime.RecognitionException;
 import novelang.model.common.Tree;
+import novelang.model.common.Problem;
 
 /**
  * @author Laurent Caillette
@@ -27,7 +28,7 @@ public interface GenericParser {
 
   boolean hasProblem() ;
   
-  Iterable< Exception > getProblems() ;
+  Iterable< Problem > getProblems() ;
 
   Tree parse() throws RecognitionException;
 }

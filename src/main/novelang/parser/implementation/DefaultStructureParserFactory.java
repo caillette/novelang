@@ -23,10 +23,12 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import novelang.parser.antlr.AntlrStructureLexer;
 import novelang.parser.antlr.AntlrStructureParser;
+import novelang.parser.antlr.StructureGrammarDelegate;
 import novelang.parser.StructureParser;
 import novelang.parser.StructureParserFactory;
 import novelang.model.structural.StructuralBook;
 import novelang.model.common.Tree;
+import novelang.model.common.Problem;
 
 /**
  * @author Laurent Caillette
@@ -41,18 +43,19 @@ public class DefaultStructureParserFactory implements StructureParserFactory {
       private final AntlrStructureLexer lexer = new AntlrStructureLexer( stream ) ;
       private final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
       private final AntlrStructureParser parser = new AntlrStructureParser( tokens ) ;
+      private final StructureGrammarDelegate delegate = new StructureGrammarDelegate( book ) ;
 
       {
-        parser.setBook( book ) ;
+        parser.setDelegate( delegate ) ;
         parser.setTreeAdaptor( new CustomTreeAdaptor( book ) ) ;
       }
       
       public boolean hasProblem() {
-        return book.getProblems().iterator().hasNext();
+        return delegate.getProblems().iterator().hasNext();
       }
 
-      public Iterable< Exception > getProblems() {
-        return book.getProblems();
+      public Iterable< Problem > getProblems() {
+        return delegate.getProblems();
       }
 
       public Tree parse() throws RecognitionException {

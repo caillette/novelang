@@ -24,4 +24,10 @@ public interface LocationFactory {
 
   Location createLocation( int line, int column ) ;
 
+/*
+  Problem createProblem( String message ) ;
+
+*/
+
+
 }

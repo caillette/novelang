@@ -15,25 +15,17 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser.implementation;
 
-import novelang.model.common.LocationFactory;
-import novelang.model.common.Location;
 import novelang.model.common.Problem;
-import novelang.model.implementation.Part;
 
 /**
+ * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
+ *
  * @author Laurent Caillette
  */
-public interface StructuralBook extends LocationFactory {
-  
-  void collect( Problem ex ) ;
+public interface GrammarDelegate {
 
   Iterable< Problem > getProblems() ;
-
-  Part createPart( String partFileName, Location location ) ;
-
-  StructuralChapter createChapter( Location location ) ;
-
 
 }

@@ -24,36 +24,30 @@ scope InclusionScope { StructuralInclusion inclusion }
 
 
 @parser::header { 
-  package novelang.parser.antlr ;
-  import novelang.model.common.Location;
-  import novelang.model.structural.StructuralBook ;
-  import novelang.model.structural.StructuralChapter ;
-  import novelang.model.structural.StructuralSection ;
-  import novelang.model.structural.StructuralInclusion ;
+package novelang.parser.antlr ;
+import novelang.model.common.Location;
+import novelang.model.structural.StructuralBook ;
+import novelang.model.structural.StructuralChapter ;
+import novelang.model.structural.StructuralSection ;
+import novelang.model.structural.StructuralInclusion ;
+import novelang.parser.antlr.StructureGrammarDelegate;
 } 
 
 @lexer::header { 
-  package novelang.parser.antlr ;
-  
+  package novelang.parser.antlr ;  
 } 
 	
 @parser::members {
+private StructureGrammarDelegate delegate ;
 
-  /**
-   * This needs to be set here because ANTLWorks doesn't know about it.
-   */
-  private StructuralBook book = 
-      new novelang.model.implementation.Book() ;
+public void setDelegate( StructureGrammarDelegate delegate ) {
+  this.delegate = delegate ;
+}
 
-	@Override
-	public void reportError( RecognitionException e ) {
-	  super.reportError( e ) ;
-	  book.collect( e ) ;
-	}
-	
-  public void setBook( StructuralBook book ) {
-    this.book = book ; 
-	}
+@Override
+public void emitErrorMessage( String string ) {
+  delegate.report( string ) ;
+}
 }
 	
 
@@ -78,8 +72,7 @@ part
   : OCTOTHORPE WHITESPACE genericFileName WHITESPACE?
     { 
       final String fileName = $genericFileName.text ;
-      final Location location = AntlrParserHelper.createLocation( book, input ) ;
-      book.createPart( fileName, location ) ;
+      delegate.createPart( fileName, input ) ;
     }    
     -> ^( PART genericFileName )  
   ;
@@ -103,8 +96,7 @@ pathDelimiter
 chapter
   scope ChapterScope ;
   : CHAPTER_INTRODUCER 
-    { final Location location = AntlrParserHelper.createLocation( book, input ) ;
-      final StructuralChapter chapter = book.createChapter( location ) ;
+    { final StructuralChapter chapter = delegate.createChapter( input ) ;
       { $ChapterScope::chapter = chapter ; }
     }
     WHITESPACE? 
@@ -122,10 +114,7 @@ chapter
 section
   scope SectionScope ;
   : SECTION_INTRODUCER 
-    { final Location location = AntlrParserHelper.createLocation( 
-          $ChapterScope::chapter, input ) ;
-      final StructuralSection section = $ChapterScope::chapter.createSection( location ) ;
-      $SectionScope::section = section ; 
+    { $SectionScope::section = AntlrParserHelper.createSection( $ChapterScope::chapter, input ) ; 
     }  
     WHITESPACE? 
     ( title WHITESPACE? 
@@ -159,24 +148,24 @@ inclusion
 */
   // TODO find in the book how to avoid this copy-paste.
   : ( ( PLUS_SIGN WHITESPACE identifier 
-        { final Location location = AntlrParserHelper.createLocation( 
-              $ChapterScope::chapter, input ) ;
-          final StructuralInclusion inclusion = 
-              $SectionScope::section.createInclusion( location, $identifier.text ) ;
-          $InclusionScope::inclusion = inclusion ; 
-          inclusion.setCollateWithPrevious( false ) ;
+        { $InclusionScope::inclusion = AntlrParserHelper.createInclusion(
+              $SectionScope::section,
+              input,
+              $identifier.text
+          ) ; 
+          $InclusionScope::inclusion.setCollateWithPrevious( false ) ;
         }  
         ( WHITESPACE paragraphReferences )? 
       )
       -> ^( INCLUSION ^( IDENTIFIER identifier ) paragraphReferences* )
     )
   | ( ( VERTICAL_LINE WHITESPACE identifier 
-        { final Location location = AntlrParserHelper.createLocation( 
-              $ChapterScope::chapter, input ) ;
-          final StructuralInclusion inclusion = 
-              $SectionScope::section.createInclusion( location, $identifier.text ) ;
-          $InclusionScope::inclusion = inclusion ; 
-          inclusion.setCollateWithPrevious( true ) ;
+        { $InclusionScope::inclusion = AntlrParserHelper.createInclusion(
+              $SectionScope::section,
+              input,
+              $identifier.text
+          ) ; 
+          $InclusionScope::inclusion.setCollateWithPrevious( true ) ;
         }  
         ( WHITESPACE paragraphReferences )? 
       )
@@ -195,25 +184,12 @@ paragraphReferences
   
 includedParagraphIndex  
   : reversibleNumber
-    { final Location location = AntlrParserHelper.createLocation( 
-          $InclusionScope::inclusion, input ) ;
-      $InclusionScope::inclusion.addParagraph( 
-          location, 
-          AntlrParserHelper.parseReversibleNumber( $reversibleNumber.text ) 
-      ) ;
-    }
+    { AntlrParserHelper.addParagraph( $InclusionScope::inclusion, input, $reversibleNumber.text ) ; }
   ;
   
 includedParagraphRange
   :	n1 = reversibleNumber '..' n2 = reversibleNumber
-    { final Location location = AntlrParserHelper.createLocation( 
-          $InclusionScope::inclusion, input ) ;
-      $InclusionScope::inclusion.addParagraphRange( 
-          location, 
-          AntlrParserHelper.parseReversibleNumber( $n1.text ),
-          AntlrParserHelper.parseReversibleNumber( $n2.text ) 
-      ) ;
-    }
+    { AntlrParserHelper.addParagraphRange( $InclusionScope::inclusion, input, $n1.text, $n2.text ) ; }
    -> ^( INTERVAL $n1 $n2 ) 
   ;
 

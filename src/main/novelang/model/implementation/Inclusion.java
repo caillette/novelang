@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
+import novelang.model.common.Problem;
 import novelang.model.weaved.WeavedInclusion;
 import novelang.model.weaved.UnknownIdentifierException;
 import com.google.common.collect.Lists;
@@ -81,7 +82,9 @@ public class Inclusion
     final Tree sectionTree = identifiers.get( identifier ) ;
     if( null == sectionTree ) {
       LOGGER.warn( "Unknown identifier '{}' found by {}", identifier, this ) ;
-      collect( new UnknownIdentifierException( identifier ) ) ;
+      final UnknownIdentifierException unknownIdentifierException =
+          new UnknownIdentifierException( identifier );
+      collect( Problem.createProblem( this, unknownIdentifierException ) ) ;
     } else {
       for( Tree tree : sectionTree.getChildren() ) {
         trees.add( tree ) ;

@@ -28,8 +28,10 @@ import novelang.parser.PartParserFactory;
 import novelang.parser.PartParser;
 import novelang.parser.antlr.AntlrPartLexer;
 import novelang.parser.antlr.AntlrPartParser;
+import novelang.parser.antlr.AntlrGrammarDelegate;
 import novelang.model.common.Tree;
 import novelang.model.common.LocationFactory;
+import novelang.model.common.Problem;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -46,19 +48,21 @@ public class DefaultPartParserFactory implements PartParserFactory {
       private final AntlrPartLexer lexer = new AntlrPartLexer( stream ) ;
       private final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
       private final AntlrPartParser parser = new AntlrPartParser( tokens ) ;
+      private final AntlrGrammarDelegate grammarDelegate =
+          new AntlrGrammarDelegate( locationFactory ) ;
 
       {
         parser.setTreeAdaptor( new CustomTreeAdaptor( locationFactory ) ) ;
+        parser.setGrammarDelegate( grammarDelegate ) ;
       }
 
       public boolean hasProblem() {
-        return ! parser.getProblems().iterator().hasNext() ;
+        return grammarDelegate.getProblems().iterator().hasNext() ;
       }
 
-      public Iterable< Exception > getProblems() {
-        final List< Exception > problems = Lists.newArrayList() ;
-        Iterables.addAll( problems, lexer.getProblems() ) ;
-        Iterables.addAll( problems, parser.getProblems() ) ;
+      public Iterable< Problem > getProblems() {
+        final List< Problem > problems = Lists.newArrayList() ;
+        Iterables.addAll( problems, grammarDelegate.getProblems() ) ;
         return Lists.immutableList( problems ) ;
       }
 

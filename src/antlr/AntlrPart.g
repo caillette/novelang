@@ -34,45 +34,34 @@ tokens {
 
 @parser::header { 
 package novelang.parser.antlr ;
-import novelang.parser.ProblemDescription;
+import novelang.parser.antlr.AntlrGrammarDelegate;
 } 
 
 @lexer::header { 
 package novelang.parser.antlr ;
-import novelang.parser.ProblemDescription;
 } 
 
 @lexer::members {
-  final List< Exception > problems = 
-      new ArrayList< Exception>() ;
-
-	public Iterable< Exception > getProblems() {
-	  return new ArrayList< Exception >( problems ) ;
-	}
-	
-	@Override
-  public void emitErrorMessage( String string ) {
-    problems.add( new ProblemDescription( string ) ) ;
-  }
+  // TODO delete this once sure we don't need to hack inside the lexer.
 }
 
 @parser::members {
-  final List< Exception > problems = 
-      new ArrayList< Exception>() ;
 
-	public Iterable< Exception > getProblems() {
-	  return new ArrayList< Exception >( problems ) ;
-	}
+private AntlrGrammarDelegate delegate ;
+
+public void setGrammarDelegate( AntlrGrammarDelegate delegate ) {
+  this.delegate = delegate ;
+}
 	
-	@Override
-  public void emitErrorMessage( String string ) {
-    problems.add( new ProblemDescription( string ) ) ;
-  }
+@Override
+public void emitErrorMessage( String string ) {
+  delegate.report( string ) ;
+}
 	
-	private int quoteDepth = 0 ;
-	private int parenthesisDepth = 0 ;
-	private int emphasisDepth = 0 ;
-	private int interpolatedClauseDepth = 0 ;
+private int quoteDepth = 0 ;
+private int parenthesisDepth = 0 ;
+private int emphasisDepth = 0 ;
+private int interpolatedClauseDepth = 0 ;
 }
 
 part 

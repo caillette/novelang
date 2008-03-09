@@ -20,13 +20,14 @@ package novelang.model.renderable;
 import java.nio.charset.Charset;
 
 import novelang.model.common.Tree;
+import novelang.model.common.Problem;
 
 /**
  * @author Laurent Caillette
  */
 public interface Renderable {
 
-  Iterable< Exception > getProblems() ;
+  Iterable< Problem > getProblems() ;
 
   Charset getEncoding() ;
 

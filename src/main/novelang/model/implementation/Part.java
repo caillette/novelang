@@ -32,6 +32,7 @@ import novelang.model.common.Tree;
 import novelang.model.common.NodeKind;
 import novelang.model.common.IdentifierHelper;
 import novelang.model.common.LocationFactory;
+import novelang.model.common.Problem;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.renderable.Renderable;
 import novelang.parser.PartParser;
@@ -126,17 +127,17 @@ public class Part
         // Yeah we do it here!
         tree = parser.parse() ;
 
-        for( final Exception exception : parser.getProblems() ) {
-          collect( exception ) ;
+        for( final Problem problem : parser.getProblems() ) {
+          collect( problem ) ;
         }
 
       } catch( RecognitionException e ) {
         LOGGER.warn( "Could not parse file", e ) ;
-        collect( e ) ;
+        collect( Problem.createProblem( this, e ) ) ;
       }
     } catch( IOException e ) {
       LOGGER.warn( "Could not load file", e ) ;
-      collect( e ) ;
+      collect( Problem.createProblem( this, e ) ) ;
     }
 
   }
@@ -151,6 +152,7 @@ public class Part
   public Location createLocation( int line, int column ) {
     return new Location( partFile.getAbsolutePath(), line, column ) ;
   }
+
 
   public Charset getEncoding() {
     return encoding ;

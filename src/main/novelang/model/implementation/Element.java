@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
+import novelang.model.common.Problem;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -31,7 +32,7 @@ import com.google.common.collect.Lists;
 /*package*/ class Element /*implements LocationFactory*/ {
 
   protected final Location location;
-  private final List< Exception > problems = Lists.newArrayList() ;
+  private final List< Problem > problems = Lists.newArrayList() ;
   protected static final String CHARSET_NAME = "ISO-8859-1" ;
   protected static final Charset DEFAULT_CHARSET ;
   static {
@@ -46,7 +47,7 @@ import com.google.common.collect.Lists;
     return location;
   }
 
-  public Iterable< Exception > getProblems() {
+  public Iterable< Problem > getProblems() {
     return Lists.immutableList( problems ) ;
   }
 
@@ -54,8 +55,8 @@ import com.google.common.collect.Lists;
     return ! problems.isEmpty() ;
   }
 
-  protected final void collect( Exception exception ) {
-    problems.add( Objects.nonNull( exception ) ) ;
+  protected final void collect( Problem problem ) {
+    problems.add( Objects.nonNull( problem ) ) ;
   }
 
 

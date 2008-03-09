@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import org.antlr.runtime.RecognitionException;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
+import novelang.model.common.Problem;
 import novelang.model.renderable.Renderable;
 import novelang.parser.ProblemDescription;
 
@@ -53,13 +54,9 @@ public class PlainTextRenderer implements Renderer {
     return RenditionMimeType.TEXT ;
   }
 
-  private void doRender( Iterable< Exception > problems, PrintWriter writer ) {
-    for( final Exception exception : problems ) {
-      if( exception instanceof ProblemDescription ) {
-        writer.println( exception ) ; 
-      } else {
-        exception.printStackTrace( writer ) ;
-      }
+  private void doRender( Iterable< Problem > problems, PrintWriter writer ) {
+    for( final Problem problem : problems ) {
+        writer.println( problem.getLocation() + problem.getMessage() ) ; 
     }
   }
 

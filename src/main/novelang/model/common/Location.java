@@ -28,9 +28,9 @@ public class Location {
 
 
   public Location( String fileName, int line, int column ) {
-    this.fileName = fileName;
-    this.line = line;
-    this.column = column;
+    this.fileName = fileName ;
+    this.line = line ;
+    this.column = column ;
   }
 
 
@@ -48,6 +48,10 @@ public class Location {
 
   @Override
   public String toString() {
-    return line + ":" + column + ":'" + fileName + "'";
+    return
+        ( -1 == line && -1 == column ? "-:-" :   
+        line + ":" + column
+        ) + ":'" + fileName + "'"
+    ;
   }
 }

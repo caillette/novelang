@@ -15,25 +15,35 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser.antlr;
 
-import novelang.model.common.LocationFactory;
+import org.antlr.runtime.TokenStream;
 import novelang.model.common.Location;
-import novelang.model.common.Problem;
 import novelang.model.implementation.Part;
+import novelang.model.structural.StructuralChapter;
+import novelang.model.structural.StructuralBook;
+import novelang.parser.implementation.GrammarDelegate;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralBook extends LocationFactory {
-  
-  void collect( Problem ex ) ;
+public class StructureGrammarDelegate extends AntlrGrammarDelegate {
 
-  Iterable< Problem > getProblems() ;
+  private final StructuralBook book ;
 
-  Part createPart( String partFileName, Location location ) ;
+  public StructureGrammarDelegate( StructuralBook book ) {
+    super( book ) ;
+    this.book = book ;
+  }
 
-  StructuralChapter createChapter( Location location ) ;
+  public Part createPart( String partFileName, TokenStream input ) {
+    final Location location = AntlrParserHelper.createLocation( book, input ) ;
+    return book.createPart( partFileName, location ) ;
+  }
 
+  public StructuralChapter createChapter( TokenStream input ) {
+    final Location location = AntlrParserHelper.createLocation( book, input ) ;
+    return book.createChapter( location ) ;
+  }
 
 }

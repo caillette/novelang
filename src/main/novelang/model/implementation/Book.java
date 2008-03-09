@@ -40,6 +40,7 @@ import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import novelang.model.common.MutableTree;
 import novelang.model.common.NodeKind;
+import novelang.model.common.Problem;
 import novelang.model.weaved.IdentifierNotUniqueException;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.weaved.WeavedBook;
@@ -57,10 +58,7 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
 
   private final Charset encoding;
 
-  /**
-   * TODO find a better name.
-   */
-  private final List< Exception > problems = Lists.newArrayList() ;
+  private final List< Problem > problems = Lists.newArrayList() ;
 
   /**
    * This should be scoped to the method resolving generic Parts and loading Trees.
@@ -102,12 +100,12 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
     return encoding;
   }
 
-  public void collect( Exception ex ) {
+  public void collect( Problem ex ) {
     problems.add( Objects.nonNull( ex ) ) ;
     LOGGER.debug( "Added problem: {} to {}", ex.getClass(), this ) ;
   }
 
-  public Iterable< Exception > getProblems() {
+  public Iterable< Problem > getProblems() {
     return Lists.immutableList( problems ) ;
   }
 
@@ -127,7 +125,7 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
       loadStructure( content ) ;
     } catch( IOException e ) {
       LOGGER.warn( "Could not load file", e ) ;
-      collect( e ) ;
+      collect( Problem.createProblem( this, e ) ) ;
     }
 
   }
@@ -144,7 +142,7 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
       parser.parse() ;
     } catch( RecognitionException e ) {
       LOGGER.warn( "Could not parse file", e ) ;
-      collect( e ) ;
+      collect( Problem.createProblem( this, e ) ) ;
     }
   }
 
@@ -206,7 +204,7 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
       if( trees.size() > 1 ) {
         final IdentifierNotUniqueException notUniqueException =
             new IdentifierNotUniqueException( identifier, trees ) ;
-        collect( notUniqueException ) ;
+        collect( Problem.createProblem( this, notUniqueException ) ) ;
         LOGGER.warn( "Same identifer found several times from {}\n{}",
             notUniqueException.getMessage() ) ;
       }

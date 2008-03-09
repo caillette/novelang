@@ -15,25 +15,37 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser.antlr;
+
+import java.util.List;
 
 import novelang.model.common.LocationFactory;
-import novelang.model.common.Location;
 import novelang.model.common.Problem;
-import novelang.model.implementation.Part;
+import novelang.parser.implementation.GrammarDelegate;
+import com.google.common.collect.Lists;
 
 /**
+ * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
+ *
  * @author Laurent Caillette
  */
-public interface StructuralBook extends LocationFactory {
-  
-  void collect( Problem ex ) ;
+public class AntlrGrammarDelegate implements GrammarDelegate {
 
-  Iterable< Problem > getProblems() ;
+  private final LocationFactory locationFactory ;
+  private final List< Problem > problems = Lists.newArrayList() ;
 
-  Part createPart( String partFileName, Location location ) ;
+  public AntlrGrammarDelegate( LocationFactory locationFactory ) {
+    this.locationFactory = locationFactory;
+  }
 
-  StructuralChapter createChapter( Location location ) ;
+  public void report( String antlrMessage ) {
+    problems.add( Problem.createProblem( locationFactory, antlrMessage ) ) ;
+  }
+
+  public Iterable< Problem > getProblems() {
+    return Lists.immutableList( problems ) ;
+  }
+
 
 
 }
