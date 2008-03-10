@@ -22,6 +22,7 @@ import novelang.model.common.Problem;
 import static novelang.parser.antlr.TreeHelper.tree;
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.RecognitionException;
 import junit.framework.AssertionFailedError;
@@ -173,7 +174,7 @@ public class BetterPartParserTest {
   }
 
   @Test
-  public void section() throws RecognitionException {
+  public void section1() throws RecognitionException {
 
     // Vanilla: one section with one paragraph.
     section(
@@ -215,11 +216,15 @@ public class BetterPartParserTest {
             tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" )
      ) ) ) ;
 
+  }
 
+  @Test
+  @Ignore
+  public void section2() throws RecognitionException {
 
     // Sections with trailing whitespaces everywhere.
     section(
-        "=== " + BREAK +
+        "===  " + BREAK +
         "  " + BREAK +
         "p0 w01  " + BREAK +
         "w02 " + BREAK +
@@ -263,6 +268,14 @@ public class BetterPartParserTest {
   @Test
   public void paragraphBody2() throws RecognitionException {
 
+    paragraphBody( "\"w00\" w01 w02 \" w03 w04 ! \"." ) ;
+    paragraphBody( "w10 \"w11\" \"w12\", \"w13\"" ) ;
+    paragraphBody( "\"w20 w21... w22\" !" ) ;
+
+    paragraphBody( "\"p00 (w01) w02.\" w04 (w05 \"w06 (w07)\".)." ) ;
+    paragraphBody( "p10 -- w11 w12 --." ) ;
+    paragraphBody( "p20 -- w21 w22 -_." ) ;
+
     paragraphBody( "\"w0 (w1)\"") ;
     paragraphBody( "\"w0 (w1 /w2/)\"") ;
     paragraphBody( "\"w0 (w1 /w2 (w3)/)\"") ;
@@ -271,7 +284,7 @@ public class BetterPartParserTest {
     paragraphBody( "/w0 (w1, \"w2\")/ ?") ;
     paragraphBody( "(w0 !)") ;
     paragraphBody( "(w0 \"w1\"...)") ;
-    paragraphBody( "(w0 \"w1/w2/\") : w3 !") ;
+    paragraphBody( "(w0 \"w1 /w2/\") : w3 !") ;
 
     paragraphBody(
         "/w1" + BREAK +

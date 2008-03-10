@@ -32,7 +32,7 @@ public class TreeHelper {
 
   public static final LocationFactory LOCATION_FACTORY = new LocationFactory() {
     public Location createLocation( int line, int column ) {
-      return new Location( "", 0, 0 ) ;
+      return new Location( "", line, column ) ;
     }
   } ;
 

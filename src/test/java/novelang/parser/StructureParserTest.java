@@ -37,7 +37,7 @@ import novelang.model.implementation.Chapter;
  *
  * @author Laurent Caillette
  */
-public class StructureParserTest extends AbstractParserTest<BookParser> {
+public class StructureParserTest extends AbstractParserTest< BookParser > {
 
 
   /**
