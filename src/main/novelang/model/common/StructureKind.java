@@ -15,34 +15,30 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.jetty;
-
-import java.io.File;
-
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.HandlerCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.SystemUtils;
+package novelang.model.common;
 
 /**
- * 
+ * TODO: rename this to "structure" and rename "structure" to "aggregation" or whatever.
+ *
  * @author Laurent Caillette
  */
-public class ServerMain {
+public enum StructureKind {
+  BOOK( "nlb" ),
+  PART( "nlp" ) ;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ServerMain.class ) ;
-
-  private static final int HTTP_SERVER_PORT = 8080;
+  private final String[] fileExtension ;
 
 
-  public static void main( String[] args ) throws Exception {
-    final HandlerCollection handlers = new HandlerCollection() ;
-    handlers.addHandler( new DocumentHandler( new File( SystemUtils.USER_DIR ) ) ) ;
-    final Server server = new Server( HTTP_SERVER_PORT ) ;
-    server.setHandler( handlers ) ;
-    server.start() ;
-    LOGGER.info( "Server started on port " + HTTP_SERVER_PORT ) ;
+  StructureKind( String... fileExtension ) {
+    this.fileExtension = fileExtension ;
+  }
+
+  public String getPathToken() {
+    return name().toLowerCase() ;
+  }
+
+  public String[] getFileExtensions() {
+    return fileExtension.clone() ;
   }
 
 }

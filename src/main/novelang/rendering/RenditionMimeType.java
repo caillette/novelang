@@ -15,19 +15,29 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.renderer;
-
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-
-import novelang.model.renderable.Renderable;
+package novelang.rendering;
 
 /**
  * @author Laurent Caillette
- */
-public class ProblemRenderer implements Renderer {
+*/
+public enum RenditionMimeType {
   
-  public RenditionMimeType render( Renderable rendered, OutputStream outputStream ) {
-    return null ;
+  TXT( "text/plain" ),
+  XML( "text/xml" ),
+  PDF( "application/pdf" ),
+  HTML( "text/html" ) ;
+
+  private final String identifier ;
+
+  private RenditionMimeType( String identifier ) {
+    this.identifier = identifier ;
+  }
+
+  public String getMimeName() {
+    return identifier;
+  }
+
+  public String getFileExtension() {
+    return name().toLowerCase() ;
   }
 }

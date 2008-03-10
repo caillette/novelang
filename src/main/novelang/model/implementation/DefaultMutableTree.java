@@ -25,7 +25,7 @@ import novelang.model.common.Location;
 import novelang.model.common.MutableTree;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
-import novelang.renderer.PlainTextRenderer;
+import novelang.rendering.PlainTextRenderer;
 
 /**
  * @author Laurent Caillette

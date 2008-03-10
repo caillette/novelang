@@ -49,9 +49,8 @@ public class Location {
   @Override
   public String toString() {
     return
-        ( -1 == line && -1 == column ? "-:-" :   
-        line + ":" + column
-        ) + ":'" + fileName + "'"
+        ( -1 == line && -1 == column ? "-:-" : line + ":" + column ) +
+        ":'" + fileName + "'"
     ;
   }
 }

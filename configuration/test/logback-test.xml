@@ -18,11 +18,11 @@
   </logger>
 
   <logger name="novelang" >
-    <level value="INFO" />
+    <level value="DEBUG" />
   </logger>
 
   <logger name="novelang.model.implementation.StyledElement" >
-    <level value="DEBUG" />
+    <level value="INFO" />
   </logger>
 
   <root>

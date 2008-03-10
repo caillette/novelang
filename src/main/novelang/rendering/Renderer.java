@@ -15,22 +15,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.renderer;
+package novelang.rendering;
+
+import java.io.OutputStream;
+
+import novelang.model.renderable.Renderable;
 
 /**
  * @author Laurent Caillette
-*/
-public enum RenditionMimeType {
-  
-  TEXT( "text/plain" ),
-  XML( "text/xml" ),
-  PDF( "application/pdf" ) ;
+ */
+public interface Renderer {
 
-  private final String identifier ;
-  private RenditionMimeType( String identifier ) {
-    this.identifier = identifier ;
-  }
-  public String getMimeName() {
-    return identifier;
-  }
+  /**
+   * Renders the book.
+   * @param rendered
+   * @param outputStream @return the MIME type of rendered book (useful when it changes to text or HTML for
+   *     displaying problems).
+   */
+  void render(
+      Renderable rendered,
+      OutputStream outputStream
+  ) ;
+
+  RenditionMimeType getMimeType() ;
+
 }

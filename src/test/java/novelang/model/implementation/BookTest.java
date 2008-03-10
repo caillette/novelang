@@ -26,7 +26,7 @@ import org.junit.Assert;
 import org.apache.commons.lang.ClassUtils;
 import novelang.ResourceTools;
 import novelang.ScratchDirectoryFixture;
-import novelang.renderer.PlainTextRenderer;
+import novelang.rendering.PlainTextRenderer;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
 

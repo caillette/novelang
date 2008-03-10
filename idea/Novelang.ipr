@@ -40,7 +40,8 @@
       <entry name="?*.html" />
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
-      <entry name="*.sample" />
+      <entry name="*.nlp" />
+      <entry name="*.nlb" />
     </wildcardResourcePatterns>
   </component>
   <component name="DataSourceManagerImpl" />

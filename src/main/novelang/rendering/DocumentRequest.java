@@ -15,27 +15,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.renderer;
+package novelang.rendering;
 
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-
-import novelang.model.renderable.Renderable;
+import novelang.model.common.StructureKind;
 
 /**
  * @author Laurent Caillette
  */
-public interface Renderer {
+public interface DocumentRequest {
 
-  /**
-   * Renders the book.
-   * @param rendered
-   * @param outputStream @return the MIME type of rendered book (useful when it changes to text or HTML for
-   *     displaying problems).
-   */
-  RenditionMimeType render(
-      Renderable rendered,
-      OutputStream outputStream
-  ) ;
+  RenditionMimeType getDocumentMimeType() ;
 
+  boolean getDisplayProblems() ;
+
+  String getOriginalTarget() ;
+
+  StructureKind getStructureKind() ; 
+
+  String getDocumentSourceName() ;
+  
 }

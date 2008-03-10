@@ -15,26 +15,22 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.renderer;
+package novelang.rendering;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.Charset;
 
-import org.antlr.runtime.RecognitionException;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
-import novelang.model.common.Problem;
 import novelang.model.renderable.Renderable;
-import novelang.parser.ProblemDescription;
 
 /**
  * A scratch version of a Renderer.
  *
  * @author Laurent Caillette
  */
-public class PlainTextRenderer implements Renderer {
+public class PlainTextRenderer extends AbstractRenderer {
 
   public static String renderAsString( Tree tree ) {
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
@@ -43,21 +39,18 @@ public class PlainTextRenderer implements Renderer {
     return renderer ; 
   }
 
-  public RenditionMimeType render( Renderable rendered, OutputStream stream ) {
-    final PrintWriter writer = new PrintWriter( stream ) ;
+  public void render( Renderable rendered, OutputStream stream ) {
     if( rendered.hasProblem() ) {
-      doRender( rendered.getProblems(), writer ) ;
+      renderProblems( rendered.getProblems(), stream ) ;
     } else {
+      final PrintWriter writer = new PrintWriter( stream ) ;
       doRender( rendered.getTree(), writer, 0 ) ;
+      writer.flush() ;
     }
-    writer.flush() ;
-    return RenditionMimeType.TEXT ;
   }
 
-  private void doRender( Iterable< Problem > problems, PrintWriter writer ) {
-    for( final Problem problem : problems ) {
-        writer.println( problem.getLocation() + problem.getMessage() ) ; 
-    }
+  public RenditionMimeType getMimeType() {
+    return RenditionMimeType.TXT;
   }
 
   private void renderTree( Tree tree, OutputStream stream ) {

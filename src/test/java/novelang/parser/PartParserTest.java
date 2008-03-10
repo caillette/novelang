@@ -22,7 +22,6 @@ import java.util.MissingResourceException;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.antlr.runtime.RecognitionException;
 import novelang.model.implementation.Book;
 import novelang.parser.implementation.DefaultPartParserFactory;
@@ -53,7 +52,7 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 
   @Test
   public void sections1() throws IOException, RecognitionException {
-    runParserOnResource( "/sections-1.sample" ) ;
+    runParserOnResource( "/sections-1.nlp" ) ;
   }
 
   @Test
@@ -73,7 +72,7 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 
   @Test
   public void speechSequence1() throws IOException, RecognitionException {
-    runParserOnResource( "/speechsequence-1.sample" ) ;
+    runParserOnResource( "/speechsequence-1.nlp" ) ;
   }
 
   @Test
@@ -145,7 +144,7 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 
   @Test
   public void unicodeOk1() throws IOException, RecognitionException {
-    runParserOnResource( "/unicode-1.sample" ) ;
+    runParserOnResource( "/unicode-1.nlp" ) ;
   }
 
   @Test
@@ -156,7 +155,7 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 
   @Test
   public void readResourceOk() throws IOException {
-    final String resource = readResource( "/sections-1.sample" ) ;
+    final String resource = readResource( "/sections-1.nlp" ) ;
     assertFalse( "".equals( resource ) );
   }
 

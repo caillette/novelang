@@ -15,30 +15,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.jetty;
+package novelang.rendering;
 
-import org.junit.Test;
-import org.junit.Assert;
+import java.io.PrintWriter;
+import java.io.OutputStream;
+
+import novelang.model.common.Problem;
 
 /**
  * @author Laurent Caillette
  */
+public abstract class AbstractRenderer implements Renderer {
 
-
-public class PartHandlerTest {
-
-  @Test
-  public void interpretTarget() {
-    Assert.assertEquals( "/part.ext", PartHandler.extractPath( "/parts/part.ext" ) ) ;
-    Assert.assertEquals( "/part-_.ext", PartHandler.extractPath( "/parts/part-_.ext" ) ) ;
-    Assert.assertEquals( "/stuff/part.ext", PartHandler.extractPath( "/parts/stuff/part.ext" ) ) ;
-    Assert.assertEquals( "/dir/subdir/part.ext", PartHandler.extractPath( "/parts/dir/subdir/part.ext" ) ) ;
-
-    Assert.assertNull( PartHandler.extractPath( "/PARTS/part.ext" ) ) ;
-    Assert.assertNull( PartHandler.extractPath( "/parts/../part.ext" ) ) ;
-    Assert.assertNull( PartHandler.extractPath( "/parts//part.ext" ) ) ;
-    Assert.assertNull( PartHandler.extractPath( "/parts/part." ) ) ;
-
+  protected RenditionMimeType renderProblems(
+      Iterable< Problem > problems,
+      OutputStream outputStream
+  ) {
+    final PrintWriter writer = new PrintWriter( outputStream ) ;
+    for( final Problem problem : problems ) {
+      writer.println( problem.getLocation() ) ;
+      writer.println( "    " + problem.getMessage() ) ;
+    }
+    writer.flush() ;    
+    return RenditionMimeType.TXT;
   }
-
 }

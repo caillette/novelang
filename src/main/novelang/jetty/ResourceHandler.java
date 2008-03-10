@@ -17,28 +17,18 @@
  */
 package novelang.jetty;
 
-import java.io.File;
 import java.io.IOException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
 
-import com.google.common.base.Objects;
-import novelang.model.implementation.Book;
-import novelang.weaver.Weaver;
+import org.mortbay.jetty.handler.AbstractHandler;
+import org.mortbay.jetty.Request;
 
 /**
  * @author Laurent Caillette
  */
-public class BookHandler extends AbstractDocumentHandler {
-
-  private final String bookIdentifier ;
-  private final File structureFile;
-
-  public BookHandler( String bookIdentifier, File structureFile ) {
-    this.bookIdentifier = Objects.nonNull( bookIdentifier ) ;
-    this.structureFile = Objects.nonNull( structureFile ) ;
-  }
+public class ResourceHandler extends AbstractHandler {
 
   public void handle(
       String target,
@@ -46,18 +36,12 @@ public class BookHandler extends AbstractDocumentHandler {
       HttpServletResponse response,
       int dispatch
   )
-      throws IOException, ServletException
-  {
-    if( target.startsWith( "/" + bookIdentifier ) ) {
-
-      final Book book = new Book( bookIdentifier, structureFile ) ;
-      book.loadStructure() ;
-      final Weaver weaver = new Weaver( book ) ;
-      weaver.weave() ;
-
-      serve( request, response, book, target ) ;
-
-    }
+      throws IOException, ServletException {
+    response.setContentType( "text/html" ) ;
+    response.setStatus( HttpServletResponse.SC_NOT_FOUND ) ;
+    response.getWriter().println(
+        "<html><body><h1>Not found: " + request.getPathInfo() + "</h1></html></body>" ) ;
+    ( ( Request ) request ).setHandled( true ) ;
   }
 
 }

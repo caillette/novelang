@@ -15,7 +15,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.renderer;
+package novelang.rendering;
 
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -34,22 +34,25 @@ import novelang.model.renderable.Renderable;
 /**
  * @author Laurent Caillette
  */
-public class XmlRenderer implements Renderer {
+public class XmlRenderer extends AbstractRenderer {
 
-  public RenditionMimeType render( Renderable rendered, OutputStream outputStream ) {
-    try {
-      final ContentHandler contentHandler =
-          createContentHandler( outputStream, rendered.getEncoding() ) ;
-      contentHandler.startDocument() ;
-      renderTree( contentHandler, rendered.getTree() ) ;
-      contentHandler.endDocument() ; // Does that flush?
-    } catch( Exception e ) {
-      throw new RuntimeException( e );
+  public void render( Renderable rendered, OutputStream outputStream ) {
+    if( rendered.hasProblem() ) {
+      renderProblems( rendered.getProblems(), outputStream ) ;
+    } else {
+      try {
+        final ContentHandler contentHandler =
+            createContentHandler( outputStream, rendered.getEncoding() ) ;
+        contentHandler.startDocument() ;
+        renderTree( contentHandler, rendered.getTree() ) ;
+        contentHandler.endDocument() ; // Does that flush?
+      } catch( Exception e ) {
+        throw new RuntimeException( e );
+      }
     }
-    return getMimeType() ;
   }
 
-  protected RenditionMimeType getMimeType() {
+  public RenditionMimeType getMimeType() {
     return RenditionMimeType.XML ;
   }
 

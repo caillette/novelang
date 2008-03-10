@@ -15,34 +15,41 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.jetty;
+package novelang.model.common;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.SystemUtils;
+import novelang.model.implementation.Part;
 
 /**
- * 
  * @author Laurent Caillette
  */
-public class ServerMain {
+public class FileLookupHelper {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ServerMain.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( FileLookupHelper.class ) ;
 
-  private static final int HTTP_SERVER_PORT = 8080;
+  private FileLookupHelper() { }
 
-
-  public static void main( String[] args ) throws Exception {
-    final HandlerCollection handlers = new HandlerCollection() ;
-    handlers.addHandler( new DocumentHandler( new File( SystemUtils.USER_DIR ) ) ) ;
-    final Server server = new Server( HTTP_SERVER_PORT ) ;
-    server.setHandler( handlers ) ;
-    server.start() ;
-    LOGGER.info( "Server started on port " + HTTP_SERVER_PORT ) ;
+  public static File load( 
+      File basedir,
+      String fileNameNoExtension,
+      String... fileExtensions
+  ) throws FileNotFoundException {
+    final StringBuffer buffer = new StringBuffer( "Not found:" ) ;
+    for( final String extension : fileExtensions ) {
+      final File file = new File( basedir, fileNameNoExtension + "." + extension ) ;
+      if( file.exists() ) {
+        return file ;
+      } else {
+        buffer.append( "\n    '" ) ;
+        buffer.append( file.getAbsolutePath() ) ;
+        buffer.append( "'" ) ;
+      }
+    }
+    throw new FileNotFoundException( buffer.toString() ) ;
   }
 
 }
