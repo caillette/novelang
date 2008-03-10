@@ -123,33 +123,6 @@
   </target>
 
 
-  <target name="antlr-test" depends="init, target-dir, main-compile" description="GUnit tests" >
-
-    <pathconvert
-        refid="antlr-gunit"
-        property="antlr-test-sources"
-        dirsep="/"
-        pathsep=" "
-    >
-      <map from="${basedir.fullpath}/" to="" /> <!-- Needed, really? -->
-    </pathconvert>
-
-    <echo>antlrsources='${antlr-test-sources}'</echo>
-
-    <!-- Use a wrapper for running several GUnit suites at once. -->
-    <java
-        classname="novelang.gunit.Launcher"
-        failonerror="true"
-    >
-      <classpath>
-        <path refid="build-libs" />
-        <pathelement path="${target.mainclasses.dir}" />
-
-      </classpath>
-      <arg line="${antlr-test-sources}" />
-    </java>
-
-  </target>
 
 
   <target name="main-compile" depends="init, target-dir, antlr-generate-main" >
@@ -180,7 +153,7 @@
   </target>
 
 
-  <target name="test-compile" depends="main-compile, antlr-test" >
+  <target name="test-compile" depends="main-compile" >
     
     <mkdir dir="${target.testclasses.dir}" />    
 

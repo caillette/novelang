@@ -15,18 +15,34 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.parser;
+package novelang.parser.antlr;
 
-import com.google.inject.ImplementedBy;
-import novelang.parser.implementation.DefaultStructureParserFactory;
+import org.antlr.runtime.TokenStream;
+import novelang.model.common.Location;
+import novelang.model.implementation.Part;
+import novelang.model.structural.StructuralChapter;
 import novelang.model.structural.StructuralBook;
 
 /**
  * @author Laurent Caillette
  */
-@ImplementedBy( DefaultStructureParserFactory.class )
-public interface StructureParserFactory {
+public class BookGrammarDelegate extends AntlrGrammarDelegate {
 
-  StructureParser createParser( StructuralBook book, String structureAsText ) ;
-  
+  private final StructuralBook book ;
+
+  public BookGrammarDelegate( StructuralBook book ) {
+    super( book ) ;
+    this.book = book ;
+  }
+
+  public Part createPart( String partFileName, TokenStream input ) {
+    final Location location = AntlrParserHelper.createLocation( book, input ) ;
+    return book.createPart( partFileName, location ) ;
+  }
+
+  public StructuralChapter createChapter( TokenStream input ) {
+    final Location location = AntlrParserHelper.createLocation( book, input ) ;
+    return book.createChapter( location ) ;
+  }
+
 }

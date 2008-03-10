@@ -21,7 +21,7 @@ package novelang.parser;
  * @author Laurent Caillette
  */
 
-public interface StructureParser extends GenericParser {
+public interface BookParser extends GenericParser {
 
 
 }

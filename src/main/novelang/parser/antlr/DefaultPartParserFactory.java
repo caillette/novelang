@@ -15,10 +15,9 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.parser.implementation;
+package novelang.parser.antlr;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.ANTLRStringStream;
@@ -42,35 +41,44 @@ public class DefaultPartParserFactory implements PartParserFactory {
 
   public PartParser createParser( final LocationFactory locationFactory, final String text ) {
 
-    return new PartParser() {
-
-      private final CharStream stream = new ANTLRStringStream( text ) ;
-      private final AntlrPartLexer lexer = new AntlrPartLexer( stream ) ;
-      private final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
-      private final AntlrPartParser parser = new AntlrPartParser( tokens ) ;
-      private final AntlrGrammarDelegate grammarDelegate =
-          new AntlrGrammarDelegate( locationFactory ) ;
-
-      {
-        parser.setTreeAdaptor( new CustomTreeAdaptor( locationFactory ) ) ;
-        parser.setGrammarDelegate( grammarDelegate ) ;
-      }
-
-      public boolean hasProblem() {
-        return grammarDelegate.getProblems().iterator().hasNext() ;
-      }
-
-      public Iterable< Problem > getProblems() {
-        final List< Problem > problems = Lists.newArrayList() ;
-        Iterables.addAll( problems, grammarDelegate.getProblems() ) ;
-        return Lists.immutableList( problems ) ;
-      }
-
-      public Tree parse() throws RecognitionException {
-        return ( Tree ) parser.part().getTree() ;
-      }
-
-    } ;
+    return new DelegatingPartParser( text, locationFactory ) ;
   }
 
+  protected static class DelegatingPartParser implements PartParser {
+
+    private final CharStream stream;
+    private final AntlrPartLexer lexer;
+    private final CommonTokenStream tokens;
+    private final AntlrPartParser parser;
+    private final AntlrGrammarDelegate grammarDelegate;
+
+    public DelegatingPartParser( String text, LocationFactory locationFactory ) {
+      stream = new ANTLRStringStream( text );
+      lexer = new AntlrPartLexer( stream );
+      tokens = new CommonTokenStream( lexer );
+      parser = new AntlrPartParser( tokens );
+      grammarDelegate = new AntlrGrammarDelegate( locationFactory );
+      parser.setTreeAdaptor( new CustomTreeAdaptor( locationFactory ) );
+      parser.setGrammarDelegate( grammarDelegate );
+    }
+
+    public boolean hasProblem() {
+      return grammarDelegate.getProblems().iterator().hasNext() ;
+    }
+
+    public Iterable<Problem> getProblems() {
+      final List< Problem > problems = Lists.newArrayList() ;
+      Iterables.addAll( problems, grammarDelegate.getProblems() ) ;
+      return Lists.immutableList( problems ) ;
+    }
+
+    public Tree parse() throws RecognitionException {
+      return ( Tree ) parser.part().getTree() ;
+    }
+
+    protected AntlrPartParser getAntlrParser() {
+      return parser ;
+    }
+
+  }
 }

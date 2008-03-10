@@ -37,7 +37,7 @@ import novelang.model.weaved.WeavedPart;
 import novelang.model.renderable.Renderable;
 import novelang.parser.PartParser;
 import novelang.parser.PartParserFactory;
-import novelang.parser.implementation.DefaultPartParserFactory;
+import novelang.parser.antlr.DefaultPartParserFactory;
 import com.google.common.base.Objects;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;

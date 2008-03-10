@@ -46,8 +46,8 @@ import novelang.model.weaved.WeavedPart;
 import novelang.model.weaved.WeavedBook;
 import novelang.model.weaved.WeavedChapter;
 import novelang.model.renderable.Renderable;
-import novelang.parser.StructureParser;
-import novelang.parser.implementation.DefaultStructureParserFactory;
+import novelang.parser.BookParser;
+import novelang.parser.antlr.DefaultBookParserFactory;
 
 /**
  * @author Laurent Caillette
@@ -134,7 +134,7 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
    * For tests only.
    */
   protected void loadStructure( String text ) {
-    final StructureParser parser = new DefaultStructureParserFactory()
+    final BookParser parser = new DefaultBookParserFactory()
         .createParser( this, text ) ;
 
     try {

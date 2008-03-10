@@ -30,6 +30,7 @@ import org.apache.commons.lang.ClassUtils;
 import novelang.ResourceTools;
 import novelang.model.implementation.Book;
 import novelang.model.common.Tree;
+import novelang.model.common.Problem;
 
 /**
  * @author Laurent Caillette
@@ -56,7 +57,13 @@ public abstract class AbstractParserTest< P extends GenericParser > {
   }
 
   protected final void checkNoParserException() {
-    assertFalse( "Parser threw exceptions -- see output", parser.hasProblem() ) ;
+    final StringBuffer buffer = new StringBuffer( "Problems: " ) ;
+    for( final Problem problem : parser.getProblems() ) {
+      buffer.append( "\n    " ) ;
+      buffer.append( problem.getLocation() ) ;
+      buffer.append( problem.getMessage() ) ;
+    }
+    assertFalse( buffer.toString(), parser.hasProblem() ) ;
   }
 
   protected final void runParserOnResource( String resourceName )
@@ -69,8 +76,8 @@ public abstract class AbstractParserTest< P extends GenericParser > {
   {
     initializeParser(  text ) ;
     final Tree tree = parser.parse();
-    Assert.assertNotNull( tree ) ;
     checkNoParserException() ;
+    Assert.assertNotNull( tree ) ;
   }
 
   @Test

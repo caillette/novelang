@@ -15,17 +15,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.parser.implementation;
+package novelang.parser.antlr;
 
-import novelang.model.common.Problem;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.TreeAdaptor;
+import org.antlr.runtime.Token;
+import novelang.parser.antlr.CustomTree;
+import novelang.model.common.LocationFactory;
 
 /**
- * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
- *
  * @author Laurent Caillette
- */
-public interface GrammarDelegate {
+*/
+/*package*/ class CustomTreeAdaptor extends CommonTreeAdaptor {
 
-  Iterable< Problem > getProblems() ;
+  private final LocationFactory locationFactory ;
 
+  public CustomTreeAdaptor( LocationFactory locationFactory ) {
+    this.locationFactory = locationFactory;
+  }
+
+  public Object create( Token payload ) {
+    return new CustomTree( locationFactory, payload ) ;
+  }
 }

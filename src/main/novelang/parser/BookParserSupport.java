@@ -26,7 +26,7 @@ import org.antlr.runtime.RecognitionException;
 /**
  * @author Laurent Caillette
  */
-public class StructureParserSupport {
+public class BookParserSupport {
 
   private final List< RecognitionException > exceptions = new ArrayList< RecognitionException >() ;
   private final List< Chapter > chapters = new ArrayList< Chapter >() ;

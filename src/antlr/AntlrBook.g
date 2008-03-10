@@ -1,4 +1,4 @@
-grammar AntlrStructure;
+grammar AntlrBook;
 
 options { output = AST ; } 
 
@@ -30,7 +30,7 @@ import novelang.model.structural.StructuralBook ;
 import novelang.model.structural.StructuralChapter ;
 import novelang.model.structural.StructuralSection ;
 import novelang.model.structural.StructuralInclusion ;
-import novelang.parser.antlr.StructureGrammarDelegate;
+import novelang.parser.antlr.BookGrammarDelegate;
 } 
 
 @lexer::header { 
@@ -38,9 +38,9 @@ import novelang.parser.antlr.StructureGrammarDelegate;
 } 
 	
 @parser::members {
-private StructureGrammarDelegate delegate ;
+private BookGrammarDelegate delegate ;
 
-public void setDelegate( StructureGrammarDelegate delegate ) {
+public void setDelegate( BookGrammarDelegate delegate ) {
   this.delegate = delegate ;
 }
 

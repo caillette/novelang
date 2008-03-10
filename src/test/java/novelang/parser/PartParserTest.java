@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
 import novelang.model.implementation.Book;
-import novelang.parser.implementation.DefaultPartParserFactory;
+import novelang.parser.antlr.DefaultPartParserFactory;
 
 /**
  * Tests for parser using external files.
@@ -57,17 +57,17 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 
   @Test
   public void sections2() throws IOException, RecognitionException {
-    runParserOnResource( "/sections-2.sample" ) ;
+    runParserOnResource( "/sections-2.nlp" ) ;
   }
 
   @Test
   public void sections3() throws IOException, RecognitionException {
-    runParserOnResource( "/sections-3.sample" ) ;
+    runParserOnResource( "/sections-3.nlp" ) ;
   }
 
   @Test
   public void sections4() throws IOException, RecognitionException {
-    runParserOnResource( "/sections-4.sample" ) ;
+    runParserOnResource( "/sections-4.nlp" ) ;
   }
 
   @Test
@@ -77,27 +77,27 @@ public class PartParserTest extends AbstractParserTest< PartParser > {
 
   @Test
   public void speechSequence2() throws IOException, RecognitionException {
-    runParserOnResource( "/speechsequence-2.sample" ) ;
+    runParserOnResource( "/speechsequence-2.nlp" ) ;
   }
 
   @Test
   public void quotes1() throws IOException, RecognitionException {
-    runParserOnResource( "/quotes-1.sample" ) ;
+    runParserOnResource( "/quotes-1.nlp" ) ;
   }
 
   @Test
   public void paragraphBody1() throws IOException, RecognitionException {
-    runParserOnResource( "/paragraphbody-1.sample" ) ;
+    runParserOnResource( "/paragraphbody-1.nlp" ) ;
   }
 
   @Test
   public void paragraphBody2() throws IOException, RecognitionException {
-    runParserOnResource( "/paragraphbody-2.sample" ) ;
+    runParserOnResource( "/paragraphbody-2.nlp" ) ;
   }
 
   @Test
   public void blockQuote1() throws IOException, RecognitionException {
-    runParserOnResource( "/blockquote-1.sample" ) ;
+    runParserOnResource( "/blockquote-1.nlp" ) ;
   }
 
   /**

@@ -15,23 +15,32 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.parser;
+package novelang.parser.antlr;
 
-import novelang.model.structural.StructuralBook;
+import static novelang.model.common.NodeKind.WORD;
+import org.junit.Test;
+import static novelang.model.common.NodeKind.* ;
+import static novelang.parser.antlr.TreeHelper.tree ;
 
 /**
- * {@link novelang.parser.antlr.AntlrStructureParser} delegates access to
- * {@link novelang.model.structural.StructuralBook}.
- * 
  * @author Laurent Caillette
  */
-public class StructureHelper {
+public class TreeHelperTest {
 
-  private final StructuralBook book ;
-
-  public StructureHelper( StructuralBook book ) {
-    this.book = book;
+  @Test
+  public void testEqualityOk() {
+    TreeHelper.assertEquals(
+        tree( TITLE, tree( WORD, "w0" ) ),
+        tree( TITLE, tree( WORD, "w0" ) )
+    ) ;
   }
 
+  @Test( expected = org.junit.ComparisonFailure.class )
+  public void testEqualityFail() {
+    TreeHelper.assertEquals(
+        tree( TITLE, tree( WORD, "xx" ) ),
+        tree( TITLE, tree( WORD, "w0" ) )
+    ) ;
+  }
 
 }

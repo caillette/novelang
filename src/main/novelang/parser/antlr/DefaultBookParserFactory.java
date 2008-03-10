@@ -15,17 +15,17 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.parser.implementation;
+package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
-import novelang.parser.antlr.AntlrStructureLexer;
-import novelang.parser.antlr.AntlrStructureParser;
-import novelang.parser.antlr.StructureGrammarDelegate;
-import novelang.parser.StructureParser;
-import novelang.parser.StructureParserFactory;
+import novelang.parser.antlr.AntlrBookLexer;
+import novelang.parser.antlr.AntlrBookParser;
+import novelang.parser.antlr.BookGrammarDelegate;
+import novelang.parser.BookParser;
+import novelang.parser.BookParserFactory;
 import novelang.model.structural.StructuralBook;
 import novelang.model.common.Tree;
 import novelang.model.common.Problem;
@@ -33,17 +33,17 @@ import novelang.model.common.Problem;
 /**
  * @author Laurent Caillette
  */
-public class DefaultStructureParserFactory implements StructureParserFactory {
+public class DefaultBookParserFactory implements BookParserFactory {
 
-  public StructureParser createParser( final StructuralBook book, final String text ) {
+  public BookParser createParser( final StructuralBook book, final String text ) {
 
-    return new StructureParser() {
+    return new BookParser() {
 
       private final CharStream stream = new ANTLRStringStream( text ) ;
-      private final AntlrStructureLexer lexer = new AntlrStructureLexer( stream ) ;
+      private final AntlrBookLexer lexer = new AntlrBookLexer( stream ) ;
       private final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
-      private final AntlrStructureParser parser = new AntlrStructureParser( tokens ) ;
-      private final StructureGrammarDelegate delegate = new StructureGrammarDelegate( book ) ;
+      private final AntlrBookParser parser = new AntlrBookParser( tokens ) ;
+      private final BookGrammarDelegate delegate = new BookGrammarDelegate( book ) ;
 
       {
         parser.setDelegate( delegate ) ;

@@ -15,26 +15,18 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.parser.implementation;
+package novelang.parser;
 
-import org.antlr.runtime.tree.CommonTreeAdaptor;
-import org.antlr.runtime.tree.TreeAdaptor;
-import org.antlr.runtime.Token;
-import novelang.parser.antlr.CustomTree;
-import novelang.model.common.LocationFactory;
+import com.google.inject.ImplementedBy;
+import novelang.parser.antlr.DefaultBookParserFactory;
+import novelang.model.structural.StructuralBook;
 
 /**
  * @author Laurent Caillette
-*/
-/*package*/ class CustomTreeAdaptor extends CommonTreeAdaptor {
+ */
+@ImplementedBy( DefaultBookParserFactory.class )
+public interface BookParserFactory {
 
-  private final LocationFactory locationFactory ;
-
-  public CustomTreeAdaptor( LocationFactory locationFactory ) {
-    this.locationFactory = locationFactory;
-  }
-
-  public Object create( Token payload ) {
-    return new CustomTree( locationFactory, payload ) ;
-  }
+  BookParser createParser( StructuralBook book, String structureAsText ) ;
+  
 }

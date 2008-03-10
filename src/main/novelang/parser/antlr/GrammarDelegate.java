@@ -17,35 +17,15 @@
  */
 package novelang.parser.antlr;
 
-import java.util.List;
-
-import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
-import novelang.parser.antlr.GrammarDelegate;
-import com.google.common.collect.Lists;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
  *
  * @author Laurent Caillette
  */
-public class AntlrGrammarDelegate implements GrammarDelegate {
+public interface GrammarDelegate {
 
-  private final LocationFactory locationFactory ;
-  private final List< Problem > problems = Lists.newArrayList() ;
-
-  public AntlrGrammarDelegate( LocationFactory locationFactory ) {
-    this.locationFactory = locationFactory;
-  }
-
-  public void report( String antlrMessage ) {
-    problems.add( Problem.createProblem( locationFactory, antlrMessage ) ) ;
-  }
-
-  public Iterable< Problem > getProblems() {
-    return Lists.immutableList( problems ) ;
-  }
-
-
+  Iterable< Problem > getProblems() ;
 
 }
