@@ -75,7 +75,7 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
 
   /**
    * This constructor is supposed to be called only from
-   * {@link novelang.parser.antlr.AntlrStructureParser} because it needs a non-null {@code Book}
+   * {@link novelang.parser.antlr.AntlrBookParser} because it needs a non-null {@code Book}
    * instance for running inside ANTLRWorks debugger.
    * It should never be used otherwise.
    */

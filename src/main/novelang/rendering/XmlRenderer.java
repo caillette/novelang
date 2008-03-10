@@ -102,8 +102,10 @@ public class XmlRenderer extends AbstractRenderer {
         break ;
 
       case WORD :
-        for( Tree wordToken : tree.getChildren() ) {
-          word( contentHandler, wordToken.getText() ) ;
+        boolean first = true ;
+        for( final Tree wordToken : tree.getChildren() ) {
+          word( contentHandler, wordToken.getText(), first ) ;
+          first = false ;
         }
         break ;
 
@@ -168,7 +170,11 @@ public class XmlRenderer extends AbstractRenderer {
     contentHandler.endElement( NAMESPACE_URI, tokenName, NAME_QUALIFIER + ":" + tokenName ) ;
   }
 
-  private void word( ContentHandler contentHandler, String word ) throws SAXException {
+  private void word(
+      ContentHandler contentHandler,
+      String word,
+      boolean separatorBefore
+  ) throws SAXException {
     contentHandler.characters( WORD_SEPARATOR, 0, 1 ) ;
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
   }

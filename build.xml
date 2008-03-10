@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project basedir="." name="Novelang build file" >
+<project basedir="." name="Novelang build file" default="clean-run-tests" >
 
   <description>
     Build system for Novelang.
@@ -73,10 +73,6 @@
 
     <path id="antlr-grammars" >
       <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
-    </path>
-
-    <path id="antlr-gunit" >
-      <fileset dir="${source.test.antlr.dir}" includes="*.gunit"/>
     </path>
 
   </target>
@@ -212,6 +208,12 @@
       <formatter type="plain"/>
     </junit>
   </target>
+
+  <target
+      name="clean-run-tests"
+      depends="clean, test-compile, test"
+      description="Run this one to run tests from clean"
+  /> 
   
 
   <!--
