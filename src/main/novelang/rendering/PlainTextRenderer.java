@@ -60,6 +60,12 @@ public class PlainTextRenderer extends AbstractRenderer {
   }
 
   private void doRender( Tree tree, PrintWriter writer, int indent ) {
+
+    if( ! NodeKind.treeTextHasNodeKindName( tree ) ) {
+      throw new IllegalArgumentException(
+          "This tree has no NodeKind: " + tree + " => '" + tree.toStringTree() + "'" ) ;
+    }
+
     final NodeKind nodeKind = NodeKind.getToken( tree ) ;
     switch( nodeKind ) {
 

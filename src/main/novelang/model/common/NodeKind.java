@@ -76,17 +76,24 @@ public enum NodeKind {
   /**
    * Returns if a given {@code Tree} is of expected kind.
    * @param tree may be null.
-   * @param nodeKind may not be null.
    */
-  public static boolean is( Tree tree, NodeKind nodeKind ) {
-    Objects.nonNull( nodeKind ) ;
+  public boolean is( Tree tree ) {
+    if( null == tree ) {
+      return false ;
+    }
     final String text = tree.getText();
-    // TODO is everything useful here?
     return
-        null != tree &&
         NAMES.contains( text ) &&
-        nodeKind.name().equals( text )
+        name().equals( text )
     ;
+  }
+
+  public static boolean treeTextHasNodeKindName( Tree tree ) {
+    if( null == tree ) {
+      return false ;
+    }
+    final String text = tree.getText() ;
+    return null != tree && NAMES.contains( text ) ;
   }
 
   public static void ensure( Tree tree, NodeKind nodeKind ) {

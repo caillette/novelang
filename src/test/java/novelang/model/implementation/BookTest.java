@@ -43,9 +43,9 @@ public class BookTest {
     book1.loadParts() ;
     book1.gatherIdentifiers() ;
 
-    Assert.assertNotNull( book1.getTree( "section0 w01" ) ) ;
-    Assert.assertNotNull( book1.getTree( "section0 w01 w02" ) ) ;
-    Assert.assertNotNull( book1.getTree( "section1 s11" ) ) ;
+    Assert.assertNotNull( book1.getTree( "SpeechSequence1nlpSection0" ) ) ;
+    Assert.assertNotNull( book1.getTree( "SpeechSequence1nlpSection1" ) ) ;
+    Assert.assertNotNull( book1.getTree( "Section1nlp" ) ) ;
 
     final Tree bookTree = book1.getTree();
     System.out.println( "Synthetic tree = " + PlainTextRenderer.renderAsString( bookTree ) ) ;

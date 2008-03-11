@@ -19,11 +19,11 @@ package novelang.parser.antlr;
 
 import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Problem;
+import novelang.model.common.Tree;
 import static novelang.parser.antlr.TreeHelper.tree;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.RecognitionException;
 import junit.framework.AssertionFailedError;
 
@@ -219,18 +219,17 @@ public class BetterPartParserTest {
   }
 
   @Test
-  @Ignore
   public void section2() throws RecognitionException {
 
     // Sections with trailing whitespaces everywhere.
     section(
         "===  " + BREAK +
         "  " + BREAK +
-        "p0 w01  " + BREAK +
+        " p0 w01  " + BREAK +
         "w02 " + BREAK +
         "  " + BREAK +
         "p1 w11  " + BREAK +
-        "w12 ",
+        " w12 ",
         tree(
             SECTION,
             tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ), tree( WORD, "w01" ), tree( WORD, "w02" ) ),

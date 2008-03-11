@@ -17,16 +17,20 @@
  */
 package novelang.model.implementation;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 
-import org.junit.Test;
+import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Before;
-import org.apache.commons.lang.ClassUtils;
-import novelang.ScratchDirectoryFixture;
+import org.junit.Test;
 import novelang.ResourceTools;
+import novelang.ScratchDirectoryFixture;
 import novelang.model.common.Location;
+import novelang.model.common.Tree;
+import static novelang.model.common.NodeKind.*;
+import novelang.parser.antlr.TreeHelper;
+import static novelang.parser.antlr.TreeHelper.tree;
 
 /**
  * @author Laurent Caillette
@@ -43,7 +47,32 @@ public class PartTest {
   public void loadPartOk() throws IOException {
     final Part part = book1.createPart( SECTIONS_1, location ) ;
     part.load() ;
-    Assert.assertNotNull( part.getTree() ) ;
+    final Tree partTree = part.getTree();
+    Assert.assertNotNull( partTree ) ;
+    final Tree expected = tree( PART,  
+        tree( SECTION,
+            tree( IDENTIFIER, tree( WORD, "Section1nlp" ) ),
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
+        ),
+        tree( SECTION,
+            tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
+            tree( PARAGRAPH_PLAIN,
+                tree( WORD, "p10" ),
+                tree( WORD, "w101" ),
+                tree( WORD, "w102" )
+            )
+        )
+    ) ;
+    TreeHelper.assertEquals( expected, partTree ) ;
+
+//=== Section1nlp
+//
+//p00 w001
+//
+//=== 'section1 w11
+//
+//p10 w101
+//w102
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
 

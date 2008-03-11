@@ -73,6 +73,10 @@ public class XmlRenderer extends AbstractRenderer {
 
   private void renderTree( ContentHandler contentHandler, Tree tree ) throws SAXException {
 
+    if( ! NodeKind.treeTextHasNodeKindName( tree ) ) {
+      throw new IllegalArgumentException( "This tree has no NodeKind: " + tree.toStringTree() ) ;
+    }
+
     final String text = tree.getText() ;
     final NodeKind nodeKind = Enum.valueOf( NodeKind.class, text ) ;
     boolean declareNamespace = false ;
@@ -118,8 +122,7 @@ public class XmlRenderer extends AbstractRenderer {
 
 
       default :
-        break ;
-//        throw new RuntimeException( "Unsupported token: " + text ) ;
+        throw new RuntimeException( "Unsupported token: " + text ) ;
 
     }
   }

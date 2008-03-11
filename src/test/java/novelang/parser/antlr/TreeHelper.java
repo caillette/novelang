@@ -17,12 +17,15 @@
  */
 package novelang.parser.antlr;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 import org.antlr.runtime.ClassicToken;
-import org.antlr.runtime.tree.Tree;
 import org.junit.Assert;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
+import novelang.model.common.Tree;
 import novelang.parser.antlr.CustomTree;
 
 /**
@@ -52,7 +55,7 @@ public class TreeHelper {
         LOCATION_FACTORY,
         new ClassicToken( 0, nodeKind.name() )
     ) ;
-    final CustomTree child = ( CustomTree ) tree( text ) ;
+    final Tree child = tree( text ) ;
     tree.addChild( child ) ;
     return tree ;
 
@@ -88,7 +91,23 @@ public class TreeHelper {
   }
 
   public static void assertEquals( Tree expected, Tree actual ) {
-    Assert.assertEquals( expected.toStringTree(), actual.toStringTree() ) ;
+    Assert.assertEquals(
+        normalizeSpaces( expected.toStringTree() ),
+        normalizeSpaces( actual.toStringTree() )
+    ) ;
+  }
+
+
+  private static final Pattern SPACE_NORMALIZER_PATTERN = Pattern.compile( " +" ) ;
+
+  public static String normalizeSpaces( String s ) {
+    final Matcher matcher = SPACE_NORMALIZER_PATTERN.matcher( s ) ;
+    final StringBuffer buffer = new StringBuffer() ;
+    while( matcher.find() ) {
+      matcher.appendReplacement( buffer, " " ) ;
+    }
+    matcher.appendTail( buffer ) ;
+    return buffer.toString() ;
   }
 
 

@@ -55,7 +55,11 @@ public void setGrammarDelegate( AntlrGrammarDelegate delegate ) {
 	
 @Override
 public void emitErrorMessage( String string ) {
-  delegate.report( string ) ;
+  if( null == delegate ) {
+    super.emitErrorMessage( string ) ;
+  } else {
+    delegate.report( string ) ;
+  }
 }
 	
 private int quoteDepth = 0 ;
@@ -65,21 +69,19 @@ private int interpolatedClauseDepth = 0 ;
 }
 
 part 
-  : ( SOFTBREAK | HARDBREAK )*
-    (   ( section ( HARDBREAK section )* ) 
-      | ( chapter ( HARDBREAK chapter )* )
+  : ( mediumBreak | largeBreak )?
+    (   ( section ( largeBreak section )* ) 
+      | ( chapter ( largeBreak chapter )* )
     )
-    // Looks strange but helps supporting arbitrary 
-    // volume of white garbage at the end of the file:
-    ( ( SOFTBREAK | HARDBREAK ) WHITESPACE? )* 
+    ( mediumBreak | largeBreak )?
     EOF 
     -> ^( PART  section* chapter* )
   ;
   
 chapter 
-  : CHAPTER_DELIMITER WHITESPACE?
-    ( ( title | identifier ) WHITESPACE? )?
-    ( HARDBREAK WHITESPACE ? section )+ 
+  : CHAPTER_DELIMITER 
+    ( smallBreak? ( title | identifier ) )?
+    ( largeBreak section )+ 
     -> ^( CHAPTER
            title?
            identifier?
@@ -88,23 +90,16 @@ chapter
   ;	  
 	
 section 
-  : SECTION_DELIMITER WHITESPACE? 
-    ( ( title | identifier ) WHITESPACE? )?
-    ( HARDBREAK WHITESPACE ? ( paragraph | blockQuote ) )+ 
-    WHITESPACE?
+  : SECTION_DELIMITER 
+    ( smallBreak? ( title | identifier ) )?
+    ( largeBreak ( paragraph | blockQuote ) )+ 
     -> ^( SECTION 
            title?
            identifier?
            paragraph* blockQuote* 
         )
   ;
-/*
-title
-  :	 APOSTROPHE word 
-	  ( WHITESPACE ( word | punctuationSign ) )*
-	  -> ^( TITLE word* punctuationSign* )
-  ;
-*/  
+
 title
   :	 APOSTROPHE paragraphBody
 	  -> ^( TITLE paragraphBody )
@@ -113,21 +108,13 @@ title
 
  identifier
   :	 word 
-	  ( WHITESPACE ( word | punctuationSign ) )*
+	  ( smallBreak ( word | punctuationSign ) )*
 	  -> ^( IDENTIFIER word* punctuationSign* )
   ;
     
-/** A single line of text with no break inside.
- */    
-textLine
-	:	word 
-	  ( WHITESPACE ( word | punctuationSign ) )*
-	  -> word* punctuationSign*
-	;
-
 paragraph
   : 
-    ( SPEECH_OPENER ( WHITESPACE locutor )? WHITESPACE? paragraphBody )
+    ( SPEECH_OPENER ( smallBreak locutor )? smallBreak? paragraphBody )
     -> ^( PARAGRAPH_SPEECH locutor? paragraphBody )
   | ( SPEECH_ESCAPE WHITESPACE? paragraphBody )
     -> ^( PARAGRAPH_SPEECH_ESCAPED paragraphBody ) 
@@ -139,33 +126,34 @@ paragraph
 
 blockQuote
   : OPENING_BLOCKQUOTE 
-    wideBreak? 
-    paragraphBody ( HARDBREAK paragraphBody )* 
-    HARDBREAK? 
+    mediumBreak?
+    paragraphBody ( largeBreak paragraphBody )* 
+    mediumBreak?
     CLOSING_BLOCKQUOTE
     -> ^( BLOCKQUOTE ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
 
 locutor
- 	: word ( WHITESPACE word )* WHITESPACE? LOCUTOR_DELIMITER
+ 	: word ( smallBreak word )* smallBreak? LOCUTOR_DELIMITER
  	  -> ^( LOCUTOR word* )
  	;
  	  
 paragraphBody 
-  : (   ( word ( wideBreak word )* )
+  : (   ( word ( mediumBreak word )* )
       | parenthesizingText
       | quotingText
       | emphasizingText
       | interpolatedClause
     )
-    ( wideBreak?     
+    ( mediumBreak?
       (   parenthesizingText
         | quotingText
         | emphasizingText
         | interpolatedClause    
         | punctuationSign
       )
-      ( wideBreak? word ( wideBreak word )* )?
+      ( mediumBreak 
+        word ( smallBreak word )* )?
     )*
   ;   
 
@@ -180,10 +168,10 @@ paragraphItem
 quotingText
   : DOUBLE_QUOTE 
     { ++ quoteDepth < 2 }?
-    wideBreak?
+    mediumBreak?
     quotingTextItem
-    ( ( wideBreak quotingTextItem ) | ( wideBreak? punctuationSign ) )*    
-    wideBreak? 
+    ( ( mediumBreak quotingTextItem ) | ( smallBreak? punctuationSign ) )*    
+    mediumBreak? 
     DOUBLE_QUOTE
     { -- quoteDepth ; }
     -> ^( QUOTE quotingTextItem* punctuationSign* )
@@ -199,10 +187,10 @@ quotingTextItem
 parenthesizingText
   : LEFT_PARENTHESIS 
     { ++ parenthesisDepth < 3 }?
-    wideBreak?
+    mediumBreak?
     parenthesizingTextItem
-    ( ( wideBreak parenthesizingTextItem ) | ( wideBreak? punctuationSign ) )*
-    wideBreak?
+    ( ( mediumBreak parenthesizingTextItem ) | ( smallBreak? punctuationSign ) )*
+    mediumBreak?
     RIGHT_PARENTHESIS
     { -- parenthesisDepth ; }
     -> ^( PARENTHESIS parenthesizingTextItem* punctuationSign* )
@@ -218,10 +206,10 @@ parenthesizingTextItem
 emphasizingText
   : SOLIDUS 
     { ++ emphasisDepth < 2 }?
-    wideBreak?
+    mediumBreak?
     emphasizingTextItem
-    ( ( wideBreak emphasizingTextItem ) | ( wideBreak? punctuationSign ) )*
-    wideBreak? 
+    ( ( mediumBreak emphasizingTextItem ) | ( smallBreak? punctuationSign ) )*
+    mediumBreak? 
     SOLIDUS
     { -- emphasisDepth ; }
     -> ^( EMPHASIS emphasizingTextItem* punctuationSign* )
@@ -237,10 +225,10 @@ emphasizingTextItem
 interpolatedClause
   :	INTERPOLATED_CLAUSE_DELIMITER 
     { ++ interpolatedClauseDepth < 2 }?
-    wideBreak?
+    smallBreak?
     interpolatedClauseItem
-    ( ( wideBreak interpolatedClauseItem ) | ( wideBreak? punctuationSign ) )*
-    wideBreak? 
+    ( ( mediumBreak interpolatedClauseItem ) | ( smallBreak? punctuationSign ) )*
+    smallBreak? 
     (   INTERPOLATED_CLAUSE_DELIMITER 
         -> ^( INTERPOLATEDCLAUSE interpolatedClauseItem* punctuationSign* )
       | INTERPOLATED_CLAUSE_SILENT_END 
@@ -256,11 +244,29 @@ interpolatedClauseItem
   | emphasizingText
   ;   
 
-
-
-wideBreak 
-	:	( WHITESPACE | ( WHITESPACE? SOFTBREAK WHITESPACE? ) ) ->
+/** Use between words, when everything is kept on the same line.
+ */
+smallBreak
+  : WHITESPACE
+    ->
   ;
+
+/** Use inside a paragraph, when lines are together with no blank line in the middle.
+ */
+mediumBreak
+  : ( WHITESPACE
+      | ( WHITESPACE? SOFTBREAK WHITESPACE? )
+    ) // Parenthesis seems useful to make the rewrite rule apply for the whole.
+    ->
+  ;
+
+/** One blank line in the middle, white spaces everywhere.
+ */
+largeBreak
+  : ( ( WHITESPACE? SOFTBREAK ) ( WHITESPACE? SOFTBREAK )+ WHITESPACE? )
+    ->
+  ;
+
   
 word : SYMBOL -> ^( WORD SYMBOL ) ;  
 
@@ -282,9 +288,7 @@ punctuationSign
   | COLON -> ^( PUNCTUATION_SIGN SIGN_COLON )
   ;
 
-
-
-HARDBREAK : SOFTBREAK SOFTBREAK+ ; 
+  
 SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
 WHITESPACE : ( ' ' | '\t' )+ ;
 

@@ -45,7 +45,7 @@ public class CustomTree extends CommonTree implements Tree {
 
   public boolean isOneOf( NodeKind... kinds ) {
     for( NodeKind kind : kinds ) {
-      if( NodeKind.is( this, kind ) ) {
+      if( kind.is( this ) ) {
         return true ;
       }
     }
@@ -82,4 +82,7 @@ public class CustomTree extends CommonTree implements Tree {
     } ;
   }
 
+  public void addChild( Tree child ) {
+    super.addChild( ( CustomTree ) child ) ;
+  }
 }
