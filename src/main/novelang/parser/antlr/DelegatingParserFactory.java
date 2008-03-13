@@ -15,26 +15,20 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
-
-import novelang.model.common.LocationFactory;
-import novelang.model.common.Location;
-import novelang.model.common.Problem;
-import novelang.model.common.Tree;
-import novelang.model.implementation.Part;
+package novelang.parser.antlr;
 
 /**
  * @author Laurent Caillette
  */
-public interface StructuralBook extends LocationFactory {
-  
-  Iterable< Problem > getProblems() ;
+public class DelegatingParserFactory< T extends GrammarDelegate > {
 
-  Part createPart( String partFileName, Location location ) ;
+  private final T delegate ;
 
-  StructuralChapter createChapter( Location location ) ;
+  public DelegatingParserFactory( T delegate ) {
+    this.delegate = delegate ;
+  }
 
-  void setIdentifier( Tree identifier ) ;
-
-
+  public T getDelegate() {
+    return delegate ;
+  }
 }

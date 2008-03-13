@@ -35,6 +35,7 @@ import novelang.model.common.Tree;
   private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
 
   private Tree title ;
+  private Tree identifier ;
   private String style ;
 
   public StyledElement( BookContext context, Location location ) {
@@ -48,6 +49,15 @@ import novelang.model.common.Tree;
   public void setTitle( Tree title ) {
     this.title = Objects.nonNull( title ) ;
     LOGGER.debug( "Title set to '{}' for {}", title, this ) ;
+  }
+
+  public Tree getIdentifier() {
+    return identifier ;
+  }
+
+  public void setIdentifier( Tree identifier ) {
+    this.identifier = Objects.nonNull( identifier ) ;
+    LOGGER.debug( "Identifier set to '{}' for {}", title, this ) ;
   }
 
   public String getStyle() {

@@ -17,22 +17,9 @@
  */
 package novelang.parser.antlr;
 
-import java.util.List;
-
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
 import novelang.parser.PartParserFactory;
 import novelang.parser.PartParser;
-import novelang.parser.antlr.AntlrPartLexer;
-import novelang.parser.antlr.AntlrPartParser;
-import novelang.parser.antlr.AntlrGrammarDelegate;
-import novelang.model.common.Tree;
 import novelang.model.common.LocationFactory;
-import novelang.model.common.Problem;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
@@ -40,45 +27,7 @@ import com.google.common.collect.Lists;
 public class DefaultPartParserFactory implements PartParserFactory {
 
   public PartParser createParser( final LocationFactory locationFactory, final String text ) {
-
     return new DelegatingPartParser( text, locationFactory ) ;
   }
 
-  protected static class DelegatingPartParser implements PartParser {
-
-    private final CharStream stream;
-    private final AntlrPartLexer lexer;
-    private final CommonTokenStream tokens;
-    private final AntlrPartParser parser;
-    private final AntlrGrammarDelegate grammarDelegate;
-
-    public DelegatingPartParser( String text, LocationFactory locationFactory ) {
-      stream = new ANTLRStringStream( text );
-      lexer = new AntlrPartLexer( stream );
-      tokens = new CommonTokenStream( lexer );
-      parser = new AntlrPartParser( tokens );
-      grammarDelegate = new AntlrGrammarDelegate( locationFactory );
-      parser.setTreeAdaptor( new CustomTreeAdaptor( locationFactory ) );
-      parser.setGrammarDelegate( grammarDelegate );
-    }
-
-    public boolean hasProblem() {
-      return grammarDelegate.getProblems().iterator().hasNext() ;
-    }
-
-    public Iterable<Problem> getProblems() {
-      final List< Problem > problems = Lists.newArrayList() ;
-      Iterables.addAll( problems, grammarDelegate.getProblems() ) ;
-      return Lists.immutableList( problems ) ;
-    }
-
-    public Tree parse() throws RecognitionException {
-      return ( Tree ) parser.part().getTree() ;
-    }
-
-    protected AntlrPartParser getAntlrParser() {
-      return parser ;
-    }
-
-  }
 }

@@ -19,6 +19,7 @@ package novelang.model.implementation;
 
 import java.util.List;
 
+import org.antlr.runtime.tree.CommonTree;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import novelang.model.common.Location;
@@ -32,25 +33,34 @@ import novelang.rendering.PlainTextRenderer;
  */
 public class DefaultMutableTree implements MutableTree {
 
-  private final NodeKind nodeKind ;
+//  private final NodeKind nodeKind ;
   private final String text ;
   private final List< Tree > children = Lists.newArrayList() ;
 
 
   public DefaultMutableTree( NodeKind nodeKind ) {
-    this.nodeKind = Objects.nonNull( nodeKind ) ;
+//    this.nodeKind = Objects.nonNull( nodeKind ) ;
     this.text = nodeKind.name() ;
   }
 
   public DefaultMutableTree( String text ) {
-    this.nodeKind = null ; // TODO support UNKNOWN or whatever.
+//    this.nodeKind = null ; // TODO support UNKNOWN or whatever.
     this.text = Objects.nonNull( text ) ;
   }
 
-  public MutableTree createChild( NodeKind nodeKind ) {
-    final MutableTree child = new DefaultMutableTree( nodeKind ) ;
+  public DefaultMutableTree( String text, String child ) {
+    this( text ) ;
+    createChild( child ) ;
+  }
+
+  public MutableTree createChild( String text ) {
+    final MutableTree child = new DefaultMutableTree( text ) ;
     addChild( child ) ;
     return child ;
+  }
+
+  public MutableTree createChild( NodeKind nodeKind ) {
+    return createChild( Objects.nonNull( nodeKind ).name() ) ;
   }
 
   public void addChild( Tree child ) {
@@ -82,9 +92,11 @@ public class DefaultMutableTree implements MutableTree {
   }
 
   public boolean isOneOf( NodeKind... kinds ) {
-    for( NodeKind kind : kinds ) {
-      if( nodeKind == kind ) {
-        return true ;
+    if( NodeKind.treeTextHasNodeKindName( this ) ) {
+      for( NodeKind kind : kinds ) {
+        if( getText().equals( kind.name() ) ) {
+          return true ;
+        }
       }
     }
     return false ;

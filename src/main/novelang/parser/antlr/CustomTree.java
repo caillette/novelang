@@ -17,30 +17,40 @@
  */
 package novelang.parser.antlr;
 
-import java.util.List;
 import java.util.Iterator;
 
-import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.Token;
-import novelang.model.common.Tree;
+import org.antlr.runtime.tree.CommonTree;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Location;
 import novelang.model.common.NodeKind;
+import novelang.model.common.Tree;
+import novelang.model.implementation.DefaultMutableTree;
 
 /**
  * @author Laurent Caillette
  */
-public class CustomTree extends CommonTree implements Tree {
+public class CustomTree
+    extends CommonTree
+    implements
+    novelang.model.common.MutableTree
+{
 
-  private final Location location ;
+  private final LocationFactory locationFactory ;
 
   public CustomTree( LocationFactory locationFactory, Token token ) {
 		super( token ) ;
-    this.location = locationFactory.createLocation( getLine(), getCharPositionInLine() ) ;
+    this.locationFactory = locationFactory ;
   }
 
   public Location getLocation() {
-    return location ;
+    if( null == token ) {
+      return locationFactory.createLocation( -1, -1 ) ;
+
+    } else {
+      return locationFactory.createLocation( 
+          token.getLine(), token.getCharPositionInLine()) ;
+    }
   }
 
   public boolean isOneOf( NodeKind... kinds ) {
@@ -52,15 +62,11 @@ public class CustomTree extends CommonTree implements Tree {
     return false ;
   }
 
-  public Tree getChildAt( int i ) {
-    return ( Tree ) getChild( i ) ;
-  }
+  public Iterable< novelang.model.common.Tree > getChildren() {
+    return new Iterable< novelang.model.common.Tree >() {
 
-  public Iterable< Tree > getChildren() {
-    return new Iterable< Tree >() {
-
-      public Iterator< Tree > iterator() {
-        return new Iterator< Tree >() {
+      public Iterator< novelang.model.common.Tree > iterator() {
+        return new Iterator< novelang.model.common.Tree >() {
 
           private int position = 0 ;
 
@@ -68,8 +74,8 @@ public class CustomTree extends CommonTree implements Tree {
             return position < getChildCount() ;
           }
 
-          public Tree next() {
-            final Tree next = getChildAt( position ) ;
+          public novelang.model.common.Tree next() {
+            final novelang.model.common.Tree next = getChildAt( position ) ;
             position++ ;
             return next ;
           }
@@ -82,7 +88,15 @@ public class CustomTree extends CommonTree implements Tree {
     } ;
   }
 
+
   public void addChild( Tree child ) {
-    super.addChild( ( CustomTree ) child ) ;
+    final CommonTree commonTree = ( CommonTree ) child ;
+    addChild( commonTree ) ;
   }
+
+  public Tree getChildAt( int i ) {
+    return ( Tree ) getChild( i ) ;
+  }
+
+
 }

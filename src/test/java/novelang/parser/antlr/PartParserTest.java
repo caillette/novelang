@@ -17,12 +17,12 @@
  */
 package novelang.parser.antlr;
 
+import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import org.junit.Test;
 import junit.framework.AssertionFailedError;
 import static novelang.model.common.NodeKind.*;
-import novelang.model.common.Problem;
 import novelang.model.common.Tree;
 import static novelang.parser.antlr.TreeHelper.tree;
 
@@ -33,7 +33,6 @@ import static novelang.parser.antlr.TreeHelper.tree;
  * @author Laurent Caillette
  */
 public class PartParserTest {
-  private static final String BREAK = "\n" ;
 
   @Test
   public void title() throws RecognitionException {
@@ -409,7 +408,7 @@ public class PartParserTest {
   }
 
   private static Tree title( String text ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().title().getTree() ;
     checkSanity( parser );
     return tree;
@@ -421,7 +420,7 @@ public class PartParserTest {
   }
 
   private static Tree identifier( String text ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().identifier().getTree() ;
     checkSanity( parser );
     return tree;
@@ -434,16 +433,16 @@ public class PartParserTest {
   }
 
   private static Tree word( String text ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().word().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
   private static void wordFails( String s ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( s ) ;
+    final DelegatingPartParser parser = createPartParser( s ) ;
     parser.getAntlrParser().word() ;
-    final String readableProblemList = createProblemList( parser.getProblems() );
+    final String readableProblemList = AntlrTestHelper.createProblemList( parser.getProblems() ) ;
     final boolean parserHasProblem = parser.hasProblem();
     Assert.assertTrue( readableProblemList, parserHasProblem ) ;
   }
@@ -454,7 +453,7 @@ public class PartParserTest {
   }
 
   private static Tree paragraph( String text ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().paragraph().getTree() ;
     checkSanity( parser );
     return tree;
@@ -466,7 +465,7 @@ public class PartParserTest {
   }
 
   private static Tree section( String text ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().section().getTree() ;
     checkSanity( parser );
     return tree;
@@ -480,16 +479,16 @@ public class PartParserTest {
   }
 
   private static Tree paragraphBody( String text ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().paragraphBody().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
   private static void paragraphBodyFails( String s ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( s ) ;
+    final DelegatingPartParser parser = createPartParser( s ) ;
     parser.getAntlrParser().paragraphBody() ;
-    final String readableProblemList = createProblemList( parser.getProblems() ) ;
+    final String readableProblemList = AntlrTestHelper.createProblemList( parser.getProblems() ) ;
     final boolean parserHasProblem = parser.hasProblem() ;
     Assert.assertTrue( readableProblemList, parserHasProblem ) ;
   }
@@ -502,7 +501,7 @@ public class PartParserTest {
   }
 
   private static Tree part( String text ) throws RecognitionException {
-    final DefaultPartParserFactory.DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().part().getTree() ;
     checkSanity( parser );
     return tree;
@@ -513,26 +512,16 @@ public class PartParserTest {
 // Boring utilities
 // ================
 
-  private static void checkSanity( DefaultPartParserFactory.DelegatingPartParser parser ) {
+  private static void checkSanity( DelegatingPartParser parser ) {
     if( parser.hasProblem() ) {
       throw new AssertionFailedError(
-          "Parser has problems. " + createProblemList( parser.getProblems() ) ) ;
+          "Parser has problems. " + AntlrTestHelper.createProblemList( parser.getProblems() ) ) ;
     }
   }
 
-  private static String createProblemList( Iterable< Problem > problems ) {
-    final StringBuffer buffer = new StringBuffer( "Problems:" ) ;
-    for( final Problem problem : problems ) {
-      buffer.append( "\n    " ) ;
-      buffer.append( problem.getMessage() ) ;
-      buffer.append( "  at  " ) ;
-      buffer.append( problem.getLocation() ) ;
-    }
-    return buffer.toString() ;
-  }
 
-  private static DefaultPartParserFactory.DelegatingPartParser createPartParser( String text ) {
-    return ( DefaultPartParserFactory.DelegatingPartParser )
+  private static DelegatingPartParser createPartParser( String text ) {
+    return ( DelegatingPartParser )
         new DefaultPartParserFactory().createParser( TreeHelper.LOCATION_FACTORY, text );
   }
 }

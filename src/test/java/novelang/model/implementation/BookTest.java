@@ -43,6 +43,8 @@ public class BookTest {
     book1.loadParts() ;
     book1.gatherIdentifiers() ;
 
+    Assert.assertFalse( book1.hasProblem() ) ;
+
     Assert.assertNotNull( book1.getTree( "SpeechSequence1nlpSection0" ) ) ;
     Assert.assertNotNull( book1.getTree( "SpeechSequence1nlpSection1" ) ) ;
     Assert.assertNotNull( book1.getTree( "Section1nlp" ) ) ;

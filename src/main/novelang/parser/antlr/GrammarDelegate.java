@@ -17,15 +17,46 @@
  */
 package novelang.parser.antlr;
 
+import java.util.List;
+
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.CommonToken;
+import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
+import novelang.model.common.Location;
+import com.google.common.collect.Lists;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
  *
  * @author Laurent Caillette
  */
-public interface GrammarDelegate {
+public abstract class GrammarDelegate {
 
-  Iterable< Problem > getProblems() ;
+  private final LocationFactory locationFactory ;
+  private final List< Problem > problems = Lists.newArrayList() ;
 
+  public GrammarDelegate( LocationFactory locationFactory ) {
+    this.locationFactory = locationFactory ;
+  }
+
+  public void report( String antlrMessage ) {
+    problems.add( Problem.createProblem( locationFactory, antlrMessage ) ) ;
+  }
+
+  public Iterable< Problem > getProblems() {
+    return Lists.immutableList( problems ) ;
+  }
+
+  public LocationFactory getLocationFactory() {
+    return locationFactory;
+  }
+
+  public Tree createTree( int tokenIdentifier, String tokenPayload ) {
+    return new CustomTree(
+        getLocationFactory(),
+        new CommonToken( tokenIdentifier, tokenPayload )
+    ) ;
+  }
 }

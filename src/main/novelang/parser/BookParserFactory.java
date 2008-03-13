@@ -24,7 +24,6 @@ import novelang.model.structural.StructuralBook;
 /**
  * @author Laurent Caillette
  */
-@ImplementedBy( DefaultBookParserFactory.class )
 public interface BookParserFactory {
 
   BookParser createParser( StructuralBook book, String structureAsText ) ;

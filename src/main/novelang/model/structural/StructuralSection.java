@@ -28,6 +28,8 @@ public interface StructuralSection extends LocationFactory {
 
   void setTitle( Tree title ) ;
 
+  void setIdentifier( Tree title ) ;
+
   void setStyle( String style ) ;
 
   StructuralInclusion createInclusion( Location location, String identifier ) ;

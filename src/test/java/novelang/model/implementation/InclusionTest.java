@@ -123,7 +123,7 @@ public class InclusionTest {
 
   @Before
   public void setUp() {
-    String bookName = ClassUtils.getShortClassName( getClass() );
+    final String bookName = ClassUtils.getShortClassName( getClass() );
     final Book book = new Book( bookName, new File( bookName ) ) ;
     final Location location = book.createLocation( 0, 0 ) ;
     inclusion = ( Inclusion ) book.createChapter( location )

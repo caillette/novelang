@@ -15,26 +15,35 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser.antlr;
 
+import java.util.List;
+
+import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.RecognitionException;
+import novelang.parser.PartParser;
 import novelang.model.common.LocationFactory;
-import novelang.model.common.Location;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
-import novelang.model.implementation.Part;
+import novelang.model.structural.StructuralBook;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
 
 /**
  * @author Laurent Caillette
- */
-public interface StructuralBook extends LocationFactory {
+*/
+class DelegatingPartParser
+    extends AbstractDelegatingParser< PartGrammarDelegate >
+    implements PartParser
+{
+  public DelegatingPartParser( String text, LocationFactory locationFactory ) {
+    super( text, new PartGrammarDelegate( locationFactory ) ) ;
+  }
+
+  public Tree parse() throws RecognitionException {
+    return ( Tree ) getAntlrParser().part().getTree() ;
+  }
   
-  Iterable< Problem > getProblems() ;
-
-  Part createPart( String partFileName, Location location ) ;
-
-  StructuralChapter createChapter( Location location ) ;
-
-  void setIdentifier( Tree identifier ) ;
-
-
 }

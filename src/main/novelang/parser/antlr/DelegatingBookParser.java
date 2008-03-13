@@ -15,26 +15,36 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.structural;
+package novelang.parser.antlr;
 
-import novelang.model.common.LocationFactory;
-import novelang.model.common.Location;
-import novelang.model.common.Problem;
+import org.antlr.runtime.RecognitionException;
+import novelang.parser.BookParser;
+import novelang.model.structural.StructuralBook;
 import novelang.model.common.Tree;
-import novelang.model.implementation.Part;
+import com.sun.java_cup.internal.parser;
 
 /**
  * @author Laurent Caillette
- */
-public interface StructuralBook extends LocationFactory {
-  
-  Iterable< Problem > getProblems() ;
+*/
+public class DelegatingBookParser
+    extends AbstractDelegatingParser< BookGrammarDelegate >
+    implements BookParser
+{
 
-  Part createPart( String partFileName, Location location ) ;
+  public DelegatingBookParser( String text, StructuralBook book ) {
+    super( text, new BookGrammarDelegate( book ) ) ;
+  }
 
-  StructuralChapter createChapter( Location location ) ;
+  public boolean getScopesEnabled() {
+    return getDelegate().getScopesEnabled() ;
+  }
 
-  void setIdentifier( Tree identifier ) ;
+  public void setScopesEnabled( boolean scopesEnabled ) {
+    getDelegate().setScopesEnabled( scopesEnabled ) ;
+  }
 
+  public Tree parse() throws RecognitionException {
+    return ( Tree ) getAntlrParser().book().getTree() ;
+  }
 
 }

@@ -52,13 +52,9 @@ import novelang.parser.antlr.DefaultBookParserFactory;
 /**
  * @author Laurent Caillette
  */
-public class Book implements StructuralBook, WeavedBook, Renderable {
+public class Book extends StyledElement implements StructuralBook, WeavedBook, Renderable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Book.class ) ;
-
-  private final Charset encoding;
-
-  private final List< Problem > problems = Lists.newArrayList() ;
 
   /**
    * This should be scoped to the method resolving generic Parts and loading Trees.
@@ -68,49 +64,27 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
   private final Multimap< String, Tree > multipleTreesFromPartsByIdentifier = Multimaps.newHashMultimap() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
 
-  private final BookContext context ;
   private final File bookFile ;
-  private static final String DEBUG = "Only_for_debugging_AntlrStructureParser_with_ANTLRWorks" ;
+  public static final String DEBUG = "Only_for_debugging_AntlrStructureParser_with_ANTLRWorks" ;
 
-
-  /**
-   * This constructor is supposed to be called only from
-   * {@link novelang.parser.antlr.AntlrBookParser} because it needs a non-null {@code Book}
-   * instance for running inside ANTLRWorks debugger.
-   * It should never be used otherwise.
-   */
-  public Book() {
-    context = new DefaultBookContext(
-        "book[" + DEBUG + "]", new File( DEBUG )
-    ) ;
-    bookFile = new File( DEBUG ) ;
-    encoding = Element.DEFAULT_CHARSET ;
+  private static final Charset ENCODING ;
+  static {
+    ENCODING = Charset.forName( Element.CHARSET_NAME ) ;
   }
 
   public Book( String identifier, File bookFile ) {
+    super(
+        new DefaultBookContext( "book[" + identifier + "]", bookFile, ENCODING ),
+        new Location( bookFile.getAbsolutePath(), -1, -1 )
+    ) ;
     this.bookFile = Objects.nonNull( bookFile ) ;
     identifier = Objects.nonNull( identifier ) ;
-    context = new DefaultBookContext( "book[" + identifier + "]", bookFile ) ;
-    encoding = Charset.forName( Element.CHARSET_NAME ) ;
     LOGGER.info( "Created {} referencing file {}", this, bookFile.getAbsolutePath() ) ;
   }
 
 
   public Charset getEncoding() {
-    return encoding;
-  }
-
-  public void collect( Problem ex ) {
-    problems.add( Objects.nonNull( ex ) ) ;
-    LOGGER.debug( "Added problem: {} to {}", ex.getClass(), this ) ;
-  }
-
-  public Iterable< Problem > getProblems() {
-    return Lists.immutableList( problems ) ;
-  }
-
-  public boolean hasProblem() {
-    return ! problems.isEmpty() ;
+    return getContext().getEncoding() ;
   }
 
   public void loadStructure() throws IOException {
@@ -258,15 +232,17 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
     return context.createStructureLocator( line, column ) ;
   }
 
-  private class DefaultBookContext implements BookContext {
+  private static class DefaultBookContext implements BookContext {
 
     private final File structureFile;
     private final String name;
+    private final Charset encoding ;
 
 
-    public DefaultBookContext( String bookName, File structureFile ) {
+    public DefaultBookContext( String bookName, File structureFile, Charset encoding ) {
       this.structureFile = structureFile;
       this.name = bookName;
+      this.encoding = encoding ;
     }
 
     public Location createStructureLocator( int line, int column ) {
@@ -278,7 +254,7 @@ public class Book implements StructuralBook, WeavedBook, Renderable {
     }
 
     public BookContext derive( String extension ) {
-      return new DefaultBookContext( name + ":" + extension, structureFile ) ;
+      return new DefaultBookContext( name + ":" + extension, structureFile, encoding ) ;
     }
 
     public File relativizeFile( String fileName ) {

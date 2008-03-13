@@ -25,6 +25,5 @@ import novelang.model.common.Tree;
  */
 public interface PartParser extends GenericParser {
 
-  Tree parse() throws RecognitionException;
 
 }

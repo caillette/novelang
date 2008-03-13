@@ -29,12 +29,21 @@ tokens {
   SIGN_SEMICOLON ;
   SIGN_COLON ;
 }
+
+// Scopes are only for Book.
 	
-//scope WordScope { StringBuffer buffer } 
+scope ChapterScope { StructuralChapter chapter } 
+scope SectionScope { StructuralSection section } 
+scope InclusionScope { StructuralInclusion inclusion } 
+
 
 @parser::header { 
 package novelang.parser.antlr ;
-import novelang.parser.antlr.AntlrGrammarDelegate;
+import novelang.parser.antlr.GrammarDelegate;
+import novelang.parser.antlr.BookGrammarDelegate;
+import novelang.model.structural.StructuralChapter;
+import novelang.model.structural.StructuralSection;
+import novelang.model.structural.StructuralInclusion;
 } 
 
 @lexer::header { 
@@ -47,12 +56,22 @@ package novelang.parser.antlr ;
 
 @parser::members {
 
-private AntlrGrammarDelegate delegate ;
+private GrammarDelegate delegate ;
 
-public void setGrammarDelegate( AntlrGrammarDelegate delegate ) {
+// Only used when parsing some Book file.
+private BookGrammarDelegate bookDelegate ;
+
+public void setGrammarDelegate( GrammarDelegate delegate ) {
   this.delegate = delegate ;
+  if( delegate instanceof BookGrammarDelegate ) {
+    bookDelegate = ( BookGrammarDelegate ) delegate ;
+  }
 }
-	
+		
+private boolean areScopesEnabled() {
+  return bookDelegate != null && bookDelegate.getScopesEnabled() ;
+}
+		
 @Override
 public void emitErrorMessage( String string ) {
   if( null == delegate ) {
@@ -68,6 +87,13 @@ private int emphasisDepth = 0 ;
 private int interpolatedClauseDepth = 0 ;
 }
 
+
+
+// ==================
+// Part-related rules
+// ==================
+
+
 part 
   : ( mediumBreak | largeBreak )?
     (   ( section ( largeBreak section )* ) 
@@ -79,7 +105,7 @@ part
   ;
   
 chapter 
-  : CHAPTER_DELIMITER 
+  : CHAPTER_INTRODUCER 
     ( smallBreak? ( title | identifier ) )?
     ( largeBreak section )+ 
     -> ^( CHAPTER
@@ -90,7 +116,7 @@ chapter
   ;	  
 	
 section 
-  : SECTION_DELIMITER 
+  : SECTION_INTRODUCER 
     ( smallBreak? ( title | identifier ) )?
     ( largeBreak ( paragraph | blockQuote ) )+ 
     -> ^( SECTION 
@@ -98,18 +124,6 @@ section
            identifier?
            paragraph* blockQuote* 
         )
-  ;
-
-title
-  :	 APOSTROPHE paragraphBody
-	  -> ^( TITLE paragraphBody )
-  ;
-
-
- identifier
-  :	 word 
-	  ( smallBreak ( word | punctuationSign ) )*
-	  -> ^( IDENTIFIER word* punctuationSign* )
   ;
     
 paragraph
@@ -134,10 +148,25 @@ blockQuote
   ;  
 
 locutor
- 	: word ( smallBreak word )* smallBreak? LOCUTOR_DELIMITER
+ 	: word ( smallBreak word )* smallBreak? LOCUTOR_INTRODUCER
  	  -> ^( LOCUTOR word* )
  	;
- 	  
+
+
+// =================================
+// Shared rules (both Part and Book)
+// =================================
+
+title
+  :	 APOSTROPHE paragraphBody
+	  -> ^( TITLE paragraphBody )
+  ;
+
+ identifier
+  :	paragraphBody
+	  -> ^( IDENTIFIER paragraphBody )
+  ;
+
 paragraphBody 
   : (   ( word ( mediumBreak word )* )
       | parenthesizingText
@@ -243,7 +272,7 @@ interpolatedClauseItem
   | parenthesizingText
   | emphasizingText
   ;   
-
+  
 /** Use between words, when everything is kept on the same line.
  */
 smallBreak
@@ -256,7 +285,7 @@ smallBreak
 mediumBreak
   : ( WHITESPACE
       | ( WHITESPACE? SOFTBREAK WHITESPACE? )
-    ) // Parenthesis seems useful to make the rewrite rule apply for the whole.
+    ) // Parenthesis needed to make the rewrite rule apply for the whole.
     ->
   ;
 
@@ -266,17 +295,20 @@ largeBreak
   : ( ( WHITESPACE? SOFTBREAK ) ( WHITESPACE? SOFTBREAK )+ WHITESPACE? )
     ->
   ;
-
   
-word : SYMBOL -> ^( WORD SYMBOL ) ;  
+word 
+  : s = symbol
+    -> ^( WORD { delegate.createTree( WORD, $s.text ) } )	
+  ;  
 
-/** Use a token (uppercase name) to aggregate other tokens.
+/** This intermediary rule is useful as I didn't find how to
+ * concatenate Tokens from inside the rewrite rule.
  */
-SYMBOL 
+symbol 
   : ( LETTER | DIGIT )+
     ( ( HYPHEN_MINUS | APOSTROPHE ) ( LETTER | DIGIT )+ )*
     APOSTROPHE?
-  ; 
+  ;  
 
 punctuationSign
   : COMMA -> ^( PUNCTUATION_SIGN SIGN_COMMA )
@@ -289,19 +321,184 @@ punctuationSign
   ;
 
   
+  
+  
+  
+  
+  
+  
+// ==================
+// Book-related rules
+// ==================
+
+book
+  : ( mediumBreak | largeBreak )?
+    (   ( ':autogenerate' largeBreak bookParts )
+      | ( bookParts
+          largeBreak
+          bookChapter ( largeBreak bookChapter )*
+        )
+    ) 
+    ( mediumBreak | largeBreak )?
+    EOF
+  ;
+
+bookParts
+  : bookPart ( ( mediumBreak | largeBreak ) bookPart )*
+  ;
+ 
+
+bookPart 
+  : NUMBER_SIGN smallBreak? genericFileName 
+    { 
+      final String fileName = $genericFileName.text ;
+      bookDelegate.createPart( fileName, input ) ;
+    }    
+  ;
+
+genericFileName
+  :	SOLIDUS? genericFileNameItem 
+    ( SOLIDUS genericFileNameItem )*
+  ;
+
+/** '..' is forbidden for security reasons.
+ */    
+genericFileNameItem 
+  : ( LETTER | DIGIT | HYPHEN_MINUS | ASTERISK | ( FULL_STOP ~FULL_STOP ) )+
+  ;
+
+
+bookChapter
+  scope ChapterScope ;
+  : CHAPTER_INTRODUCER 
+    { if( areScopesEnabled() ) { 
+        final StructuralChapter chapter = bookDelegate.createChapter( input ) ;
+        $ChapterScope::chapter = chapter ; 
+      }
+    }    
+    ( smallBreak? title
+      { if( areScopesEnabled() ) {
+        $ChapterScope::chapter.setTitle( 
+            ( novelang.model.common.Tree ) $title.tree ) ; }
+      }       
+    )?
+    ( mediumBreak | largeBreak )
+    ( style ( mediumBreak | largeBreak )
+      { if( areScopesEnabled() ) {
+        $ChapterScope::chapter.setStyle( $style.text ) ; }
+      }
+    )?
+    bookSection ( largeBreak bookSection )* 
+  ;
+  
+
+bookSection
+  scope SectionScope ;
+  : SECTION_INTRODUCER 
+    { if( areScopesEnabled() ) {
+      $SectionScope::section = AntlrParserHelper.createSection( 
+          $ChapterScope::chapter, input ) ; 
+      }  
+    }    
+    ( smallBreak? title 
+      { if( areScopesEnabled() ) {
+          $SectionScope::section.setTitle( 
+              ( novelang.model.common.Tree ) $title.tree ) ; }
+        }
+    )?
+    ( mediumBreak | largeBreak )
+    ( style ( mediumBreak | largeBreak )
+      { if( areScopesEnabled() ) {
+        $SectionScope::section.setStyle( $style.text ) ; }
+      }
+    )?
+    inclusion
+    ( ( mediumBreak | largeBreak ) inclusion )*
+  ;
+
+style // Don't mess the Lexer, use litteral here.
+	:	':style' !smallBreak word
+	;
+
+inclusion
+  scope InclusionScope ;
+  // TODO find how to collate or not depending on the first symbol.
+  : ( ( PLUS_SIGN | VERTICAL_LINE ) 
+      smallBreak? identifier 
+      { if( areScopesEnabled() ) {
+          $InclusionScope::inclusion = AntlrParserHelper.createInclusion(
+              $SectionScope::section,
+              input,
+              $identifier.text
+          ) ; 
+          $InclusionScope::inclusion.setCollateWithPrevious( false ) ;
+        }
+      }  
+      ( ( mediumBreak | largeBreak ) paragraphReferences )? 
+    )
+  ;   
+
+paragraphReferences
+  : PARAGRAPH_REFERENCES_INTRODUCER
+    ( ( mediumBreak | largeBreak ) 
+      ( includedParagraphIndex | includedParagraphRange ) 
+    )+
+  ;
+
+includedParagraphIndex  
+  : postsignedInteger
+    { if( areScopesEnabled() ) {
+        AntlrParserHelper.addParagraph( 
+            $InclusionScope::inclusion, input, $postsignedInteger.text ) ; 
+      }
+    }        
+  ;
+  
+includedParagraphRange
+  :	n1 = postsignedInteger '..' n2 = postsignedInteger
+    { if( areScopesEnabled() ) {
+        AntlrParserHelper.addParagraphRange( 
+            $InclusionScope::inclusion, input, $n1.text, $n2.text ) ; 
+      }
+    }
+  ;
+
+positiveInteger : DIGIT+ ;
+
+postsignedInteger : DIGIT+ HYPHEN_MINUS? ;
+
+
+
+
+// ======
+// Tokens
+// ======
+
 SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
 WHITESPACE : ( ' ' | '\t' )+ ;
 
 
-COMMA : ',' ;
-FULL_STOP : '.' ;
-ELLIPSIS : '...' ;
-QUESTION_MARK : '?' ;
-EXCLAMATION_MARK : '!' ;
-SEMICOLON : ';' ;
+APOSTROPHE : '\'' ;
+ASTERISK : '*' ;
 COLON : ':' ;
+COMMA : ',' ;
+DOUBLE_QUOTE : '\"' ;
+ELLIPSIS : '...' ;
+EXCLAMATION_MARK : '!' ;
+FULL_STOP : '.' ;
+GRAVE_ACCENT : '`' ;
+HYPHEN_MINUS : '-' ;
+LEFT_PARENTHESIS : '(' ;
+NUMBER_SIGN : '#' ;
+PLUS_SIGN : '+' ;
+QUESTION_MARK : '?' ;
+RIGHT_PARENTHESIS : ')' ;
+SEMICOLON : ';' ;
+SOLIDUS : '/' ;
+VERTICAL_LINE : '|' ;
 
-fragment LETTER 
+
+LETTER 
   : 'a'..'z' 
   | 'A'..'Z' 
 
@@ -360,36 +557,20 @@ fragment LETTER
 
   ;
 
-fragment DIGIT : '0'..'9';
+
+DIGIT : '0'..'9';
   
-
-LEFT_PARENTHESIS : '(' ;
-RIGHT_PARENTHESIS : ')' ;
-
 OPENING_BLOCKQUOTE : '<<<' ;
 CLOSING_BLOCKQUOTE : '>>>' ;
-
 INTERPOLATED_CLAUSE_DELIMITER : '--' ;
 INTERPOLATED_CLAUSE_SILENT_END : '-_' ;
-
-SOLIDUS : '/' ;
-
-HYPHEN_MINUS : '-' ;
-
-APOSTROPHE : '\'' ;
-DOUBLE_QUOTE : '\"' ;
-GRAVE_ACCENT : '`' ;
-
-
 SPEECH_OPENER : '---' ;
 SPEECH_CONTINUATOR : '--+' ;
 SPEECH_ESCAPE : '--|' ;
-
-LOCUTOR_DELIMITER : '::' ;
-
-CHAPTER_DELIMITER : '***' ;
-SECTION_DELIMITER : '===' ;
-
+LOCUTOR_INTRODUCER : '::' ;
+CHAPTER_INTRODUCER : '***' ;
+SECTION_INTRODUCER : '===' ;
+PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
 

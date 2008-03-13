@@ -26,7 +26,7 @@ import novelang.model.structural.StructuralBook;
 /**
  * @author Laurent Caillette
  */
-public class BookGrammarDelegate extends AntlrGrammarDelegate {
+public class BookGrammarDelegate extends GrammarDelegate {
 
   private final StructuralBook book ;
 
@@ -45,4 +45,13 @@ public class BookGrammarDelegate extends AntlrGrammarDelegate {
     return book.createChapter( location ) ;
   }
 
+  private boolean scopesEnabled ;
+
+  public boolean getScopesEnabled() {
+    return scopesEnabled;
+  }
+
+  public void setScopesEnabled( boolean scopesEnabled ) {
+    this.scopesEnabled = scopesEnabled;
+  }
 }

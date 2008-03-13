@@ -17,18 +17,9 @@
  */
 package novelang.parser.antlr;
 
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import novelang.parser.antlr.AntlrBookLexer;
-import novelang.parser.antlr.AntlrBookParser;
-import novelang.parser.antlr.BookGrammarDelegate;
 import novelang.parser.BookParser;
 import novelang.parser.BookParserFactory;
 import novelang.model.structural.StructuralBook;
-import novelang.model.common.Tree;
-import novelang.model.common.Problem;
 
 /**
  * @author Laurent Caillette
@@ -36,32 +27,7 @@ import novelang.model.common.Problem;
 public class DefaultBookParserFactory implements BookParserFactory {
 
   public BookParser createParser( final StructuralBook book, final String text ) {
-
-    return new BookParser() {
-
-      private final CharStream stream = new ANTLRStringStream( text ) ;
-      private final AntlrBookLexer lexer = new AntlrBookLexer( stream ) ;
-      private final CommonTokenStream tokens = new CommonTokenStream( lexer ) ;
-      private final AntlrBookParser parser = new AntlrBookParser( tokens ) ;
-      private final BookGrammarDelegate delegate = new BookGrammarDelegate( book ) ;
-
-      {
-        parser.setDelegate( delegate ) ;
-        parser.setTreeAdaptor( new CustomTreeAdaptor( book ) ) ;
-      }
-      
-      public boolean hasProblem() {
-        return delegate.getProblems().iterator().hasNext();
-      }
-
-      public Iterable< Problem > getProblems() {
-        return delegate.getProblems();
-      }
-
-      public Tree parse() throws RecognitionException {
-        return ( Tree ) parser.structure().getTree() ;
-      }
-
-    };
+    return new DelegatingBookParser( text, book );
   }
+
 }

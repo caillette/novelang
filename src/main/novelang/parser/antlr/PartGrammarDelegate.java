@@ -15,27 +15,16 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.parser;
+package novelang.parser.antlr;
+
+import novelang.model.common.LocationFactory;
 
 /**
  * @author Laurent Caillette
  */
-public class ProblemDescription extends Exception {
+public class PartGrammarDelegate extends GrammarDelegate {
 
-  public ProblemDescription( String[] descriptions, Exception cause ) {
-    super( merge( descriptions ), cause ) ;
-  }
-
-  public ProblemDescription( String message ) {
-    super( message ) ;
-  }
-
-  private static String merge( String[] strings ) {
-    final StringBuffer buffer = new StringBuffer() ;
-    for( int i = 0 ; i < strings.length ; i++ ) {
-      buffer.append( strings[ i ] ) ;
-      buffer.append( "\n" ) ;
-    }
-    return buffer.toString() ;
+  public PartGrammarDelegate( LocationFactory locationFactory ) {
+    super( locationFactory ) ;
   }
 }
