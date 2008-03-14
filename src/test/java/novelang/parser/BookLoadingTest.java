@@ -37,7 +37,7 @@ import novelang.model.implementation.Chapter;
  *
  * @author Laurent Caillette
  */
-public class StructureParserTest extends AbstractParserTest< BookParser > {
+public class BookLoadingTest extends AbstractParserTest< BookParser > {
 
 
   /**
@@ -68,7 +68,6 @@ public class StructureParserTest extends AbstractParserTest< BookParser > {
   }
 
   @Test
-  @Ignore
   public void structure3() throws IOException, RecognitionException {
     runParserOnResource( "/structure-3.nlb" ) ;
   }

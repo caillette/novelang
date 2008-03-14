@@ -57,6 +57,52 @@ public class BookParserTest {
         "+ included"
     ) ;
 
+    book(
+        "# path/to/part " + BREAK +
+        " " + BREAK +
+        "***'some (title) " + BREAK +
+        "  " + BREAK +
+        "=== 'chapter identifier " + BREAK +
+        " " + BREAK +
+        " + included" + BREAK +
+        " " + BREAK +
+        " "
+    ) ;
+
+
+    book(
+        "# 123/4/56" + BREAK +
+        "# path/to/file1.np" + BREAK +
+        "# path/with/wilcards/*.np" + BREAK +
+        BREAK +
+        "*** 'Optional chapter title" + BREAK +
+        BREAK +
+        "=== 'Optional section title" + BREAK +
+        ":style override-chapter-style-with-section-style" + BREAK +
+        BREAK +
+        "+ id00" + BREAK +
+        "+ id10" + BREAK +
+        BREAK +
+        "+ id20 <= 1  3  5..7     0-  1-" + BREAK +
+        BREAK +
+        BREAK +
+        "===" + BREAK +
+        BREAK +
+        "+ id30" + BREAK +
+        "| id40" + BREAK +
+        BREAK +
+        BREAK +
+        BREAK +
+        "***" + BREAK +
+        ":style chapter-style" + BREAK +
+        BREAK +
+        "===" + BREAK +
+        BREAK +
+        "+ id50" + BREAK +
+        BREAK +
+        BREAK
+    ) ;
+
   }
 
   @Test
@@ -83,6 +129,13 @@ public class BookParserTest {
   public void bookPart() throws RecognitionException {
     bookPart( "# path/to/part" ) ;
     bookPart( "#path/t-o/part.nlp" ) ;
+    bookPart( "#path/to/*.nlp" ) ;
+
+    bookPart(
+        "# w*/*.e",
+        TreeHelper.multiTokenTree( "# w*/*.e" )
+    ) ;
+
     bookPartFails( "#path/to/forbidden/../place" ) ;
   }
 
@@ -154,6 +207,11 @@ public class BookParserTest {
     final Tree tree = ( Tree ) parser.getAntlrParser().bookChapter().getTree() ;
     checkSanity( parser ) ;
     return tree;
+  }
+
+  private static void bookPart( String text, Tree expectedTree ) throws RecognitionException {
+    final Tree actualTree = bookPart( text ) ;
+    TreeHelper.assertEquals( expectedTree, actualTree ) ;
   }
 
   private static Tree bookPart( String text ) throws RecognitionException {

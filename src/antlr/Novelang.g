@@ -1,5 +1,23 @@
 grammar Novelang ;
 
+/*
+ * Copyright (C) 2008 Laurent Caillette
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 options { output = AST ; } 
 
 tokens {
@@ -481,6 +499,8 @@ postsignedInteger : DIGIT+ HYPHEN_MINUS? ;
 SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
 WHITESPACE : ( ' ' | '\t' )+ ;
 
+// All namings respect Unicode standard.
+// http://www.fileformat.info/info/unicode
 
 APOSTROPHE : '\'' ;
 ASTERISK : '*' ;
@@ -506,8 +526,6 @@ VERTICAL_LINE : '|' ;
 LETTER 
   : 'a'..'z' 
   | 'A'..'Z' 
-
-  // http://www.fileformat.info/info/unicode
 
   | '\u00e0' // LATIN SMALL LETTER A WITH GRAVE  
   | '\u00c0' // LATIN CAPITAL LETTER A WITH GRAVE  
@@ -577,12 +595,19 @@ CHAPTER_INTRODUCER : '***' ;
 SECTION_INTRODUCER : '===' ;
 PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
 
+
+
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
 
+/** We can't use '/*' because it gets confused with wildcards in file names.
+ */
 BLOCK_COMMENT
-  : '{' ( options { greedy = false ; } : . )* '}' { $channel = HIDDEN ; }
+  : '{{' ( options { greedy = false ; } : . )* '}}' { $channel = HIDDEN ; }
   ;
 
+/** As we don't support '/*' we avoid confusion by not supporting
+ * usually-associated '//'.
+ */
 LINE_COMMENT
-  : '%' ~('\n'|'\r')* '\r'? '\n' { $channel=HIDDEN ; }
+  : '%%' ~('\n'|'\r')* '\r'? '\n' { $channel=HIDDEN ; }
   ;

@@ -90,6 +90,16 @@ public class TreeHelper {
     return tree ;
   }
 
+  public static Tree multiTokenTree( String text ) {
+    final CustomTree tree = new CustomTree( LOCATION_FACTORY, null ) ;
+    for( int i = 0 ; i < text.length() ; i++ ) {
+      final String s = String.valueOf( text.charAt( i ) ) ;
+      final Tree child = tree( s ) ;
+      tree.addChild( child ) ;
+    }
+    return tree ;
+  }
+
   public static void assertEquals( Tree expected, Tree actual ) {
     Assert.assertEquals(
         normalizeSpaces( expected.toStringTree() ),

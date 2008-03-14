@@ -17,41 +17,44 @@
  */
 package novelang.parser.antlr;
 
-import org.antlr.runtime.TokenStream;
-import novelang.model.common.Location;
-import novelang.model.implementation.Part;
-import novelang.model.structural.StructuralChapter;
 import novelang.model.structural.StructuralBook;
+import novelang.model.structural.StructuralChapter;
+import novelang.model.common.Problem;
+import novelang.model.common.Location;
+import novelang.model.common.Tree;
+import novelang.model.implementation.Part;
 
 /**
+ * A delegate to be instantiated by default inside the {@code NovelangParser} allowing it
+ * to run from AntlrWorks.
+ *
  * @author Laurent Caillette
  */
-public class BookGrammarDelegate extends GrammarDelegate {
+public class QuietGrammarDelegate extends BookGrammarDelegate {
 
-  private final StructuralBook book ;
-
-  public BookGrammarDelegate( StructuralBook book ) {
-    super( book ) ;
-    this.book = book ;
+  public QuietGrammarDelegate() {
+    super( new NullStructuralBook() ) ;
   }
 
-  public Part createPart( String partFileName, TokenStream input ) {
-    final Location location = AntlrParserHelper.createLocation( book, input ) ;
-    return book.createPart( partFileName, location ) ;
+  private static class NullStructuralBook implements StructuralBook {
+
+    public Iterable< Problem > getProblems() {
+      return null ;
+    }
+
+    public Part createPart( String partFileName, Location location ) {
+      return null ;
+    }
+
+    public StructuralChapter createChapter( Location location ) {
+      return null;
+    }
+
+    public void setIdentifier( Tree identifier ) { }
+
+    public Location createLocation( int line, int column ) {
+      return new Location( "(No location)", line, column ) ;
+    }
   }
 
-  public StructuralChapter createChapter( TokenStream input ) {
-    final Location location = AntlrParserHelper.createLocation( book, input ) ;
-    return book.createChapter( location ) ;
-  }
-
-  private boolean scopesEnabled = true ;
-
-  public boolean getScopesEnabled() {
-    return scopesEnabled;
-  }
-
-  public void setScopesEnabled( boolean scopesEnabled ) {
-    this.scopesEnabled = scopesEnabled;
-  }
 }

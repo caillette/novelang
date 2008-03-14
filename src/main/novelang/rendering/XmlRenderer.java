@@ -90,6 +90,7 @@ public class XmlRenderer extends AbstractRenderer {
       case TITLE :
       case IDENTIFIER :
       case _SPEECH_SEQUENCE :
+      case LOCUTOR :
       case PARAGRAPH_PLAIN :
       case PARAGRAPH_SPEECH :
       case PARAGRAPH_SPEECH_CONTINUED :

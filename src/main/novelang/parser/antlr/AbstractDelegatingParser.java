@@ -33,15 +33,15 @@ import com.google.common.collect.Iterables;
  */
 public abstract class AbstractDelegatingParser< T extends GrammarDelegate > {
 
-  private final AntlrPartParser parser ;
+  private final NovelangParser parser ;
   private final T delegate;
 
   public AbstractDelegatingParser( String text, T delegate ) {
     this.delegate = delegate ;
     CharStream stream = new ANTLRStringStream( text );
-    AntlrPartLexer lexer = new AntlrPartLexer( stream );
+    NovelangLexer lexer = new NovelangLexer( stream );
     CommonTokenStream tokens = new CommonTokenStream( lexer );
-    parser = new AntlrPartParser( tokens ) ;
+    parser = new NovelangParser( tokens ) ;
     parser.setTreeAdaptor( new CustomTreeAdaptor( delegate.getLocationFactory() ) ) ;
     parser.setGrammarDelegate( delegate ) ;
   }
@@ -58,7 +58,7 @@ public abstract class AbstractDelegatingParser< T extends GrammarDelegate > {
 
   public abstract Tree parse() throws RecognitionException ;
 
-  protected AntlrPartParser getAntlrParser() {
+  protected NovelangParser getAntlrParser() {
     return parser ;
   }
 
