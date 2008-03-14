@@ -34,7 +34,13 @@ public class SymbolUnescape {
   private static final Map< String, String > symbols = Maps.newHashMap() ;
 
   static {
-    symbols.put( "percentsign", "\u0025" ) ;
+    symbols.put( "percent", "%" ) ;
+    symbols.put( "equals", "=" ) ;
+    symbols.put( "dollar", "$" ) ;
+    symbols.put( "lt", "<" ) ;
+    symbols.put( "gt", ">" ) ;
+    symbols.put( "tilde", "~" ) ;
+    symbols.put( "deg", "\u00b0" ) ;
     symbols.put( "oelig", "\u0153" ) ;
     symbols.put( "OElig", "\u0152" ) ;
   }

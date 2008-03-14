@@ -26,8 +26,8 @@
   <xsl:param name="time"/>
   <xsl:param name="filename"/>
 
-  <xsl:template match="/">
-    <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <xsl:template match="/" >
+    <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" >
 
       <fo:layout-master-set>
         <fo:simple-page-master
@@ -58,15 +58,15 @@
           initial-page-number="1" 
           master-reference="PageMaster"
       >
-        <fo:static-content flow-name="xsl-region-before">
-          <fo:block text-align="right">
-            <fo:inline font-size="80%">
+        <fo:static-content flow-name="xsl-region-before" >
+          <fo:block text-align="right" >
+            <fo:inline font-size="80%" >
             [<xsl:value-of select="$filename" />&nbsp;<xsl:value-of select="$time" />] &copy; Laurent Caillette 2002-2008
             </fo:inline>
           </fo:block>
         </fo:static-content>
 
-        <fo:static-content flow-name="xsl-region-after">
+        <fo:static-content flow-name="xsl-region-after" >
           <fo:block>
             <fo:leader 
                 leader-pattern="rule" 
@@ -74,7 +74,7 @@
                 leader-length="33%"
             />
           </fo:block>
-          <fo:block text-align="left">
+          <fo:block text-align="left" >
             <fo:page-number/>
           </fo:block>
         </fo:static-content>
@@ -93,13 +93,13 @@
     </fo:root>
   </xsl:template>
 
-  <xsl:template match="n:chapter">
+  <xsl:template match="n:chapter" >
     <fo:block space-before="250pt" >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:chapter/n:title">
+  <xsl:template match="n:chapter/n:title" >
     <fo:block
         font-size="15pt"
         font-weight="bold"
@@ -110,13 +110,13 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:section">
+  <xsl:template match="n:section" >
     <fo:block padding-top="13pt" >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:section/n:title">
+  <xsl:template match="n:section/n:title" >
     <fo:inline
         font-size="13pt"
         font-weight="bold"
@@ -126,7 +126,7 @@
     </fo:inline>
   </xsl:template>
 
-  <xsl:template match="n:blockquote">
+  <xsl:template match="n:blockquote" >
     <fo:block 
         text-align="justify"
         text-indent="0em"
@@ -143,30 +143,72 @@
   </xsl:template>
 
 
-  <xsl:template match="n:paragraph-plain">
-    <fo:block 
-        text-indent="1em" 
+  <xsl:template match="n:paragraph-plain" >
+    <fo:block
+        text-indent="1em"
         text-align="justify"
     >
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
 
-  <!-- 
+  <xsl:template match="n:paragraph-speech" >
+    <xsl:call-template name="speech" >
+      <xsl:with-param name="speech-symbol" >&mdash;</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template match="n:paragraph-speech-continued" >
+    <xsl:call-template name="speech" >
+      <xsl:with-param name="speech-symbol" >&raquo;</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  
+  
+  <xsl:template name="speech" >
+    <xsl:param name = "speech-symbol" />
+    <fo:block
+        text-align="justify"
+        text-indent="1em"
+    >
+      <fo:inline>
+        <xsl:if test="n:locutor" >
+          <xsl:value-of select="n:locutor" />&nbsp;:
+        </xsl:if>
+      </fo:inline>
+      <fo:inline
+          text-align="justify"
+          text-indent="1em"
+          
+      >
+        <xsl:value-of select="$speech-symbol" />
+        <xsl:apply-templates/>
+      </fo:inline>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="n:locutor" />
+
+  <!--
     Forrest 0.8 bug!
     Using '&raquo;' and '&laquo;' requires a fix in ISOnum.pen file 
     <!ENTITY laquo  "&#xAB;" > <!ENTITY raquo  "&#xBB;" >
   -->
-  <xsl:template match="n:quote"> &laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>
+  <!--<xsl:template match="n:quote" > &laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>-->
 
-  <xsl:template match="n:emphasis"><fo:inline font-style="italic"><xsl:apply-templates/></fo:inline></xsl:template>
+  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
 
-  <xsl:template match="n:parenthesis">(<xsl:apply-templates/>)</xsl:template>
+  <xsl:template match="n:emphasis" ><fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline></xsl:template>
 
+  <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
-  <xsl:template match="n:sign-fullstop">. </xsl:template>
-  <xsl:template match="n:sign-comma">, </xsl:template>
-  <xsl:template match="n:sign-exclamationmark">&nbsp;! </xsl:template>
+  <xsl:template match="n:sign-colon" >&nbsp;: </xsl:template>
+  <xsl:template match="n:sign-comma" >, </xsl:template>
+  <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
+  <xsl:template match="n:sign-exclamationmark" >&nbsp;! </xsl:template>
+  <xsl:template match="n:sign-fullstop" >. </xsl:template>
+  <xsl:template match="n:sign-questionmark" >&nbsp;? </xsl:template>
+  <xsl:template match="n:sign-exclamationmark" >&nbsp;? </xsl:template>
 
 </xsl:stylesheet>
 

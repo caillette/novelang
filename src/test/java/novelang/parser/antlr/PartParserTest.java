@@ -84,7 +84,7 @@ public class PartParserTest {
   @Test
   public void word2() throws RecognitionException {
 
-    word( "&percentsign;", tree( WORD, "%" ) ) ;
+    word( "&percent;", tree( WORD, "%" ) ) ;
 
   }
 
