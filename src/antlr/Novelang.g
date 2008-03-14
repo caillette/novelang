@@ -1,5 +1,3 @@
-grammar Novelang ;
-
 /*
  * Copyright (C) 2008 Laurent Caillette
  *
@@ -22,6 +20,8 @@ grammar Novelang ;
  * much in common, like breaks, titles and identifiers.
  * This is because ANTLR v3.0.1 doesn't support something like grammar inclusion.
  */
+grammar Novelang ;
+
 options { output = AST ; } 
 
 tokens {

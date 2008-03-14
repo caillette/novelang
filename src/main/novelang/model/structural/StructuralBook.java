@@ -34,7 +34,4 @@ public interface StructuralBook extends LocationFactory {
 
   StructuralChapter createChapter( Location location ) ;
 
-  void setIdentifier( Tree identifier ) ;
-
-
 }

@@ -20,6 +20,7 @@ package novelang.model.implementation;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.FileInputStream;
 import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
@@ -118,9 +119,9 @@ public class Part
     LOGGER.info( "Attempting to load file '{}' from {}", partFile.getAbsolutePath(), this ) ;
 
     try {
-      final FileReader reader = new FileReader( partFile ) ;
-      final String content = new String(
-          IOUtils.toByteArray( reader, encoding.name() ) ) ;
+      final FileInputStream inputStream = new FileInputStream( partFile ); ;
+      final String content = IOUtils.toString( inputStream, encoding.name() ) ;
+
       final PartParser parser = partParserFactory.createParser( this, content ) ;
       try {
 

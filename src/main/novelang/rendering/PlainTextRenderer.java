@@ -69,23 +69,6 @@ public class PlainTextRenderer extends AbstractRenderer {
     final NodeKind nodeKind = NodeKind.getToken( tree ) ;
     switch( nodeKind ) {
 
-      case _BOOK :
-      case PART :
-      case CHAPTER :
-      case SECTION :
-      case TITLE :
-      case _SPEECH_SEQUENCE :
-      case PARAGRAPH_PLAIN :
-      case PARAGRAPH_SPEECH :
-      case PARAGRAPH_SPEECH_CONTINUED :
-      case PARAGRAPH_SPEECH_ESCAPED :
-      case EMPHASIS :
-      case PARENTHESIS :
-      case QUOTE :
-      case BLOCKQUOTE :
-        doRenderContainer( tree, writer, nodeKind, indent ) ;
-        break ;
-
       case WORD :
         for( Tree wordToken : tree.getChildren() ) {
           writer.append( wordToken.getText() ).append( " " ) ;
@@ -94,9 +77,12 @@ public class PlainTextRenderer extends AbstractRenderer {
 
       case PUNCTUATION_SIGN :
         writer.append( RenderTools.generatePunctuationSign( tree, " " ) ) ;
+        break ;
 
       default :
+        doRenderContainer( tree, writer, nodeKind, indent ) ;
         break ;
+
 
     }
 

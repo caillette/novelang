@@ -95,7 +95,7 @@
     =======  
   -->
 
-  <target name="antlr-generate-main" depends="init, target-dir" >
+  <target name="antlr-generate" depends="init, target-dir" >
 
     <pathconvert
         refid="antlr-grammars"
@@ -121,7 +121,7 @@
 
 
 
-  <target name="main-compile" depends="init, target-dir, antlr-generate-main" >
+  <target name="main-compile" depends="init, target-dir, antlr-generate" >
 
     <javac 
         destdir="${target.mainclasses.dir}"
@@ -224,16 +224,6 @@
 
   <target name="start-httpd" depends="init" >
     
-    <loadfile
-        srcfile="${novelang.httpd.books}"
-        property="books"
-        failonerror="true"
-    >
-      <!-- TODO replace line breaks by spaces -->
-    </loadfile>
-
-    <echoproperties/>
-
     <java
         classname="novelang.jetty.ServerMain"
         failonerror="true"
@@ -244,7 +234,6 @@
         <pathelement location="${target.mainclasses.dir}" />
         <pathelement location="${configuration.main.dir}" />
       </classpath>
-      <arg line="${books}" />
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
       <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
       <jvmarg value="-Dnovelang.styles.dir=${source.style.dir}" />
