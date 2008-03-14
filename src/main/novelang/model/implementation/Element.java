@@ -20,6 +20,8 @@ package novelang.model.implementation;
 import java.util.List;
 import java.nio.charset.Charset;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
@@ -30,6 +32,8 @@ import com.google.common.collect.Lists;
  * @author Laurent Caillette
  */
 /*package*/ class Element /*implements LocationFactory*/ {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( Element.class ) ;
 
   protected final Location location;
   private final List< Problem > problems = Lists.newArrayList() ;
@@ -56,6 +60,7 @@ import com.google.common.collect.Lists;
   }
 
   protected final void collect( Problem problem ) {
+    LOGGER.debug( "Collecting Problem: " + problem ) ;
     problems.add( Objects.nonNull( problem ) ) ;
   }
 

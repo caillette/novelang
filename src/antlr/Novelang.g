@@ -59,6 +59,10 @@ scope SectionScope { StructuralSection section }
 scope InclusionScope { StructuralInclusion inclusion } 
 
 
+@lexer::header { 
+package novelang.parser.antlr ;
+} 
+
 @parser::header { 
 package novelang.parser.antlr ;
 import novelang.parser.antlr.GrammarDelegate;
@@ -69,9 +73,14 @@ import novelang.model.structural.StructuralSection;
 import novelang.model.structural.StructuralInclusion;
 } 
 
-@lexer::header { 
-package novelang.parser.antlr ;
-} 
+@lexer::members {
+
+private GrammarDelegate delegate = new QuietGrammarDelegate() ;
+
+public void setGrammarDelegate( GrammarDelegate delegate ) {
+  this.delegate = delegate ;
+}
+}
 
 @parser::members {
 
@@ -201,7 +210,7 @@ paragraphBody
         | punctuationSign
       )
       ( mediumBreak 
-        word ( smallBreak word )* )?
+        word ( mediumBreak word )* )?
     )*
   ;   
 
@@ -325,11 +334,13 @@ word
  * concatenate Tokens from inside the rewrite rule.
  */
 symbol 
-  : ( LETTER | DIGIT )+
-    ( ( HYPHEN_MINUS | APOSTROPHE ) ( LETTER | DIGIT )+ )*
+  : ( LETTER | DIGIT | ESCAPED_CHARACTER )+
+    ( ( HYPHEN_MINUS | APOSTROPHE ) 
+      ( LETTER | DIGIT | ESCAPED_CHARACTER )+ 
+    )*
     APOSTROPHE?
   ;  
-
+  
 punctuationSign
   : COMMA -> ^( PUNCTUATION_SIGN SIGN_COMMA )
   | FULL_STOP  -> ^( PUNCTUATION_SIGN SIGN_FULLSTOP )
@@ -507,6 +518,7 @@ WHITESPACE : ( ' ' | '\t' )+ ;
 // All namings respect Unicode standard.
 // http://www.fileformat.info/info/unicode
 
+AMPERSAND : '&' ;
 APOSTROPHE : '\'' ;
 ASTERISK : '*' ;
 COLON : ':' ;
@@ -600,7 +612,15 @@ CHAPTER_INTRODUCER : '***' ;
 SECTION_INTRODUCER : '===' ;
 PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
 
-
+ESCAPED_CHARACTER 
+  : AMPERSAND LETTER+ SEMICOLON
+    { setText( delegate.escapeSymbol( 
+          getText().substring(1, getText().length() - 1 ), 
+          getLine(),
+          getCharPositionInLine() 
+      ) ) ;
+    }
+  ;
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
 

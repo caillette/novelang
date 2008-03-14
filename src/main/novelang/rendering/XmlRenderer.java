@@ -97,6 +97,8 @@ public class XmlRenderer extends AbstractRenderer {
       case PARAGRAPH_SPEECH_ESCAPED :
       case PARENTHESIS :
       case EMPHASIS :
+      case INTERPOLATEDCLAUSE :
+      case INTERPOLATEDCLAUSE_SILENTEND :
       case QUOTE :
       case BLOCKQUOTE :
         startElement( contentHandler, text, declareNamespace ) ;

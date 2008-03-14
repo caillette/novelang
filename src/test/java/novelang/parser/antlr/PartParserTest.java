@@ -68,7 +68,7 @@ public class PartParserTest {
   }
 
   @Test
-  public void word() throws RecognitionException {
+  public void word1() throws RecognitionException {
 
     word( "w",       tree( WORD, "w" ) ) ;
     word( "Www",     tree( WORD, "Www" ) ) ;
@@ -78,6 +78,13 @@ public class PartParserTest {
     wordFails( "'w" ) ;
     wordFails( "'w-" ) ;
 //    wordFails( "w--w" ) ;
+
+  }
+
+  @Test
+  public void word2() throws RecognitionException {
+
+    word( "&percentsign;", tree( WORD, "%" ) ) ;
 
   }
 
@@ -271,6 +278,14 @@ public class PartParserTest {
 
   }
 
+  @Test
+  public void paragraphBody4() throws RecognitionException {
+    paragraphBody(
+        "w0." + BREAK +
+        "w1" + BREAK +
+        "w2"
+    ) ;
+  }
 
   @Test
   public void paragraphBody1() throws RecognitionException {

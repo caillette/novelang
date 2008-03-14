@@ -25,6 +25,8 @@ import org.antlr.runtime.CommonToken;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
 import novelang.model.common.Location;
+import novelang.parser.SymbolUnescape;
+import novelang.parser.UnsupportedEscapedSymbolException;
 import com.google.common.collect.Lists;
 
 /**
@@ -58,5 +60,16 @@ public abstract class GrammarDelegate {
         getLocationFactory(),
         new CommonToken( tokenIdentifier, tokenPayload )
     ) ;
+  }
+
+  public String escapeSymbol( String unescaped, int line, int column ) {
+    try {
+      return SymbolUnescape.unescape( unescaped ) ;
+    } catch( UnsupportedEscapedSymbolException e ) {
+      final Location location = locationFactory.createLocation( line, column ) ;
+      problems.add( Problem.createProblem(
+          "Cannot unescape: '" + unescaped + "'", location ) ) ;
+      return "<unescaped:" + unescaped + ">" ;
+    }
   }
 }

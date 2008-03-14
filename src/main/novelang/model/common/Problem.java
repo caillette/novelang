@@ -44,6 +44,10 @@ public class Problem {
     return message;
   }
 
+  @Override
+  public String toString() {
+    return getLocation() + " " + getMessage() ;
+  }
 
   /**
    * Kinda dependency towards ANTLR formatting but who cares?.
@@ -88,5 +92,9 @@ public class Problem {
     }
     final Location location = locationFactory.createLocation( line, column ) ;
     return new Problem( location, bareMessage ) ;
+  }
+
+  public static Problem createProblem( String message, Location location ) {
+    return new Problem( location, message ) ;
   }
 }
