@@ -18,6 +18,10 @@ grammar Novelang ;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+/** This grammar contains logic for both Part and Book as they have 
+ * much in common, like breaks, titles and identifiers.
+ * This is because ANTLR v3.0.1 doesn't support something like grammar inclusion.
+ */
 options { output = AST ; } 
 
 tokens {
@@ -116,7 +120,7 @@ part
     )
     ( mediumBreak | largeBreak )?
     EOF 
-    -> ^( PART  section* chapter* )
+    -> ^( PART section* chapter* )
   ;
   
 chapter 
@@ -312,7 +316,8 @@ largeBreak
   ;
   
 word 
-  : s = symbol   // We need QuietGrammarDelegate for this:
+  : s = symbol 
+    // QuietGrammarDelegate helps doing this from AntlrWorks debugger:
     -> ^( WORD { delegate.createTree( WORD, $s.text ) } )	
   ;  
 
