@@ -310,6 +310,10 @@ public class PartParserTest {
         INTERPOLATEDCLAUSE_SILENTEND, tree( WORD, "w0" )
     ) ) ;
 
+    paragraphBody( "[w0]", tree(
+        SQUARE_BRACKETS, tree( WORD, "w0" )
+    ) ) ;
+
   }
 
   @Test
@@ -320,13 +324,14 @@ public class PartParserTest {
     paragraphBody( "\"w20 w21... w22\" !" ) ;
 
     paragraphBody( "\"p00 (w01) w02.\" w04 (w05 \"w06 (w07)\".)." ) ;
+    paragraphBody( "\"p00 (w01) w02.\"w04(w05 \"[w06] (w07)\".)." ) ;
     paragraphBody( "p10 -- w11 w12 --." ) ;
     paragraphBody( "p20 -- w21 w22 -_." ) ;
 
     paragraphBody( "\"w0 (w1)\"") ;
     paragraphBody( "\"w0 (w1 /w2/)\"") ;
     paragraphBody( "\"w0 (w1 /w2 (w3)/)\"") ;
-    paragraphBody( "\"(w0 -- w1 (w2) --)\"") ;
+    paragraphBody( "\"(w0 -- w1 (w2 [w3]) --)\"") ;
     paragraphBody( "/w0 (w1)/.") ;
     paragraphBody( "/w0 (w1, \"w2\")/ ?") ;
     paragraphBody( "(w0 !)") ;
@@ -356,6 +361,9 @@ public class PartParserTest {
 
     // Interpolated clauses depth limited to 1.
     paragraphBodyFails( "(w0 -- w1 (w2 -- w3 -- ) --)" ) ;
+
+    // Interpolated clauses depth limited to 1.
+    paragraphBodyFails( "[w0 -- w1 [w2] --]" ) ;
 
   }
 

@@ -39,6 +39,7 @@ tokens {
   QUOTE ;
   EMPHASIS ;
   PARENTHESIS ;
+  SQUARE_BRACKETS ;
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
   WORD ;
@@ -111,6 +112,7 @@ public void emitErrorMessage( String string ) {
 	
 private int quoteDepth = 0 ;
 private int parenthesisDepth = 0 ;
+private int squareBracketsDepth = 0 ;
 private int emphasisDepth = 0 ;
 private int interpolatedClauseDepth = 0 ;
 }
@@ -198,6 +200,7 @@ title
 paragraphBody 
   : (   ( word ( mediumBreak word )* )
       | parenthesizingText
+      | bracketingText
       | quotingText
       | emphasizingText
       | interpolatedClause
@@ -209,7 +212,7 @@ paragraphBody
         | interpolatedClause    
         | punctuationSign
       )
-      ( mediumBreak 
+      ( mediumBreak?
         word ( mediumBreak word )* )?
     )*
   ;   
@@ -217,6 +220,7 @@ paragraphBody
 paragraphItem
   : word
   | parenthesizingText
+  | bracketingText
   | quotingText
   | emphasizingText
   | interpolatedClause
@@ -237,6 +241,7 @@ quotingText
 quotingTextItem
   : word
   | parenthesizingText
+  | bracketingText
   | emphasizingText
   | interpolatedClause
   ;   
@@ -256,6 +261,27 @@ parenthesizingText
 parenthesizingTextItem
   : word
   | quotingText
+  | bracketingText
+  | emphasizingText
+  | interpolatedClause
+  ;   
+
+bracketingText
+  : LEFT_SQUARE_BRACKET
+    { ++ squareBracketsDepth < 2 }?
+    mediumBreak?
+    parenthesizingTextItem
+    ( ( mediumBreak parenthesizingTextItem ) | ( smallBreak? punctuationSign ) )*
+    mediumBreak?
+    RIGHT_SQUARE_BRACKET
+    { -- squareBracketsDepth ; }
+    -> ^( SQUARE_BRACKETS parenthesizingTextItem* punctuationSign* )
+  ;
+
+bracketingTextItem
+  : word
+  | quotingText
+  | parenthesizingText
   | emphasizingText
   | interpolatedClause
   ;   
@@ -275,6 +301,7 @@ emphasizingText
 emphasizingTextItem  
   : word
   | quotingText
+  | bracketingText
   | parenthesizingText
   | interpolatedClause
   ;   
@@ -298,6 +325,7 @@ interpolatedClauseItem
   : word
   | quotingText
   | parenthesizingText
+  | bracketingText
   | emphasizingText
   ;   
   
@@ -530,11 +558,13 @@ FULL_STOP : '.' ;
 GRAVE_ACCENT : '`' ;
 HYPHEN_MINUS : '-' ;
 LEFT_PARENTHESIS : '(' ;
+LEFT_SQUARE_BRACKET : '[' ;
 LOW_LINE : '_' ;
 NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
 QUESTION_MARK : '?' ;
 RIGHT_PARENTHESIS : ')' ;
+RIGHT_SQUARE_BRACKET : ']' ;
 SEMICOLON : ';' ;
 SOLIDUS : '/' ;
 VERTICAL_LINE : '|' ;
