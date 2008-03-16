@@ -207,6 +207,7 @@ paragraphBody
     )
     ( mediumBreak?
       (   parenthesizingText
+        | bracketingText
         | quotingText
         | emphasizingText
         | interpolatedClause    
@@ -215,15 +216,6 @@ paragraphBody
       ( mediumBreak?
         word ( mediumBreak word )* )?
     )*
-  ;   
-
-paragraphItem
-  : word
-  | parenthesizingText
-  | bracketingText
-  | quotingText
-  | emphasizingText
-  | interpolatedClause
   ;   
   
 quotingText
@@ -270,12 +262,12 @@ bracketingText
   : LEFT_SQUARE_BRACKET
     { ++ squareBracketsDepth < 2 }?
     mediumBreak?
-    parenthesizingTextItem
-    ( ( mediumBreak parenthesizingTextItem ) | ( smallBreak? punctuationSign ) )*
+    bracketingTextItem
+    ( ( mediumBreak bracketingTextItem ) | ( smallBreak? punctuationSign ) )*
     mediumBreak?
     RIGHT_SQUARE_BRACKET
     { -- squareBracketsDepth ; }
-    -> ^( SQUARE_BRACKETS parenthesizingTextItem* punctuationSign* )
+    -> ^( SQUARE_BRACKETS bracketingTextItem* punctuationSign* )
   ;
 
 bracketingTextItem

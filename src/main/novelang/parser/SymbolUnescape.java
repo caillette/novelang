@@ -22,7 +22,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Maps;
-import novelang.model.common.Location;
+import com.google.common.collect.ImmutableMapBuilder;
 
 /**
  * @author Laurent Caillette
@@ -31,24 +31,29 @@ public class SymbolUnescape {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( SymbolUnescape.class ) ;
 
-  private static final Map< String, String > symbols = Maps.newHashMap() ;
+  private static final Map< String, String > SYMBOLS = Maps.newHashMap() ;
 
   static {
-    symbols.put( "percent", "%" ) ;
-    symbols.put( "equals", "=" ) ;
-    symbols.put( "dollar", "$" ) ;
-    symbols.put( "lt", "<" ) ;
-    symbols.put( "gt", ">" ) ;
-    symbols.put( "tilde", "~" ) ;
-    symbols.put( "deg", "\u00b0" ) ;
-    symbols.put( "oelig", "\u0153" ) ;
-    symbols.put( "OElig", "\u0152" ) ;
+    SYMBOLS.put( "percent", "%" ) ;
+    SYMBOLS.put( "equals", "=" ) ;
+    SYMBOLS.put( "dollar", "$" ) ;
+    SYMBOLS.put( "lt", "<" ) ;
+    SYMBOLS.put( "gt", ">" ) ;
+    SYMBOLS.put( "tilde", "~" ) ;
+    SYMBOLS.put( "deg", "\u00b0" ) ;
+    SYMBOLS.put( "oelig", "\u0153" ) ;
+    SYMBOLS.put( "OElig", "\u0152" ) ;
   }
+
+  public static Map< String, String > getDefinitions() {
+    return ImmutableMapBuilder.fromMap( SYMBOLS ).getMap() ;
+  }
+
 
   public static String unescape( String escaped )
       throws UnsupportedEscapedSymbolException
   {
-    final String unescaped = symbols.get( escaped ) ;
+    final String unescaped = SYMBOLS.get( escaped ) ;
     if( null == unescaped ) {
       final UnsupportedEscapedSymbolException exception =
           new UnsupportedEscapedSymbolException( escaped ) ;
@@ -56,6 +61,26 @@ public class SymbolUnescape {
       throw exception ;
     } else {
       return unescaped ;
+    }
+  }
+
+  public static class SymbolDefinition {
+    private final String unescaped ;
+    private final String escaped ;
+
+
+    public SymbolDefinition( String unescaped, String escaped ) {
+      this.unescaped = unescaped;
+      this.escaped = escaped;
+    }
+
+
+    public String getUnescaped() {
+      return unescaped;
+    }
+
+    public String getEscaped() {
+      return escaped;
     }
   }
 }

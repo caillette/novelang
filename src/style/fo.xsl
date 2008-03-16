@@ -202,13 +202,14 @@
 
   <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
-  <xsl:template match="n:sign-colon" >&nbsp;: </xsl:template>
-  <xsl:template match="n:sign-comma" >, </xsl:template>
+  <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
+
+  <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
+  <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
-  <xsl:template match="n:sign-exclamationmark" >&nbsp;! </xsl:template>
-  <xsl:template match="n:sign-fullstop" >. </xsl:template>
-  <xsl:template match="n:sign-questionmark" >&nbsp;? </xsl:template>
-  <xsl:template match="n:sign-exclamationmark" >&nbsp;? </xsl:template>
+  <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
+  <xsl:template match="n:sign-fullstop" >.</xsl:template>
+  <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
 
 </xsl:stylesheet>
 

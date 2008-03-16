@@ -51,17 +51,32 @@ public enum NodeKind {
   WORD,
 
   PUNCTUATION_SIGN,
-  SIGN_COMMA,
-  SIGN_FULLSTOP,
-  SIGN_ELLIPSIS,
-  SIGN_QUESTIONMARK,
-  SIGN_EXCLAMATIONMARK,
-  SIGN_SEMICOLON,
-  SIGN_COLON,
+  SIGN_COMMA( true ),
+  SIGN_FULLSTOP( true ),
+  SIGN_ELLIPSIS( true ),
+  SIGN_QUESTIONMARK( true ),
+  SIGN_EXCLAMATIONMARK( true ),
+  SIGN_SEMICOLON( true ),
+  SIGN_COLON( true ),
 
   ;
 
-  public static NodeKind getToken( Tree tree ) {
+  private final boolean punctuationSign ;
+
+
+  private NodeKind() {
+    punctuationSign = false ;
+  }
+
+  NodeKind( boolean punctuationSign ) {
+    this.punctuationSign = punctuationSign;
+  }
+
+  public boolean isPunctuationSign() {
+    return punctuationSign;
+  }
+
+  public static NodeKind ofRoot( Tree tree ) {
     return Enum.valueOf( NodeKind.class, tree.getText() ) ;
   }
 
@@ -78,7 +93,7 @@ public enum NodeKind {
    * Returns if a given {@code Tree} is of expected kind.
    * @param tree may be null.
    */
-  public boolean is( Tree tree ) {
+  public boolean isRoot( Tree tree ) {
     if( null == tree ) {
       return false ;
     }
@@ -89,7 +104,7 @@ public enum NodeKind {
     ;
   }
 
-  public static boolean treeTextHasNodeKindName( Tree tree ) {
+  public static boolean rootHasNodeKindName( Tree tree ) {
     if( null == tree ) {
       return false ;
     }
@@ -104,7 +119,7 @@ public enum NodeKind {
     if( ! NAMES.contains( nodeText ) ) {
       throw new RuntimeException( "Not a known node kind: '" + nodeText + "'" ) ;
     }
-    if( nodeKind != getToken( tree ) ) {
+    if( nodeKind != ofRoot( tree ) ) {
       throw new RuntimeException( "Expected: " + nodeKind + ", got: " + nodeText ) ;
     }
   }

@@ -19,7 +19,6 @@ package novelang.jetty;
 
 import java.io.IOException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
@@ -30,12 +29,13 @@ import org.mortbay.jetty.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.rendering.Renderer;
-import novelang.rendering.PlainTextRenderer;
-import novelang.rendering.XmlRenderer;
-import novelang.rendering.PdfRenderer;
 import novelang.rendering.DocumentRequest;
 import novelang.rendering.ProblemPrinter;
 import novelang.rendering.RenditionMimeType;
+import novelang.rendering.GenericRenderer;
+import novelang.rendering.PlainTextWriter;
+import novelang.rendering.PdfWriter;
+import novelang.rendering.XmlWriter;
 import novelang.model.renderable.Renderable;
 import novelang.model.common.StructureKind;
 import novelang.model.common.Problem;
@@ -117,13 +117,13 @@ public class DocumentHandler extends AbstractHandler {
       final RenditionMimeType mimeType = documentRequest.getDocumentMimeType() ;
       switch( mimeType ) {
         case PDF :
-          serve( request, response, new PdfRenderer(), rendered ) ;
+          serve( request, response, new GenericRenderer( new PdfWriter() ), rendered ) ;
           break;
         case TXT :
-          serve( request, response, new PlainTextRenderer(), rendered ) ;
+          serve( request, response, new GenericRenderer( new PlainTextWriter() ), rendered ) ;
           break;
         case XML :
-          serve( request, response, new XmlRenderer(), rendered ) ;
+          serve( request, response, new GenericRenderer( new XmlWriter() ), rendered ) ;
           break ;
         default :
           final IllegalArgumentException illegalArgumentException =

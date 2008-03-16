@@ -17,6 +17,8 @@
  */
 package novelang.parser.antlr;
 
+import java.util.Map;
+
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
@@ -25,10 +27,11 @@ import junit.framework.AssertionFailedError;
 import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Tree;
 import static novelang.parser.antlr.TreeHelper.tree;
+import novelang.parser.SymbolUnescape;
 
 /**
  * GUnit sucks as it has completely obscure failures and stupid reports,
- * but I took some ideas from it anyways.
+ * but it has some nice ideas to borrow.
  *
  * @author Laurent Caillette
  */
@@ -77,15 +80,15 @@ public class PartParserTest {
 
     wordFails( "'w" ) ;
     wordFails( "'w-" ) ;
-//    wordFails( "w--w" ) ;
 
   }
 
   @Test
   public void word2() throws RecognitionException {
-
-    word( "&percent;", tree( WORD, "%" ) ) ;
-
+    final Map< String,String > map = SymbolUnescape.getDefinitions() ;
+    for( String key : map.keySet() ) {
+      word( "&" + key + ";", tree( WORD, map.get( key ) ) ) ;
+    }
   }
 
   @Test
@@ -115,7 +118,7 @@ public class PartParserTest {
 
 
     // Following tests are for paragraphBody rule. But we need to rely on a rule
-    // returning a sole tree as GUnit doesn't support exepecting more than one.
+    // returning a sole tree as test primitives don't assert on more than one.
 
 
     paragraph( "w0,", tree(
@@ -338,6 +341,9 @@ public class PartParserTest {
     paragraphBody( "(w0 \"w1\"...)") ;
     paragraphBody( "(w0 \"w1 /w2/\") : w3 !") ;
 
+
+    paragraphBody( "\"w00\"(w01)/w02/--w03--[w04]" ) ;
+
     paragraphBody(
         "/w1" + BREAK +
         "(w2 " + BREAK +
@@ -362,7 +368,7 @@ public class PartParserTest {
     // Interpolated clauses depth limited to 1.
     paragraphBodyFails( "(w0 -- w1 (w2 -- w3 -- ) --)" ) ;
 
-    // Interpolated clauses depth limited to 1.
+    // Square brackets depth limited to 1.
     paragraphBodyFails( "[w0 -- w1 [w2] --]" ) ;
 
   }

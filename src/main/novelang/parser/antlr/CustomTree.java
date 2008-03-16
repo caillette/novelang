@@ -25,7 +25,6 @@ import novelang.model.common.LocationFactory;
 import novelang.model.common.Location;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
-import novelang.model.implementation.DefaultMutableTree;
 
 /**
  * @author Laurent Caillette
@@ -55,7 +54,7 @@ public class CustomTree
 
   public boolean isOneOf( NodeKind... kinds ) {
     for( NodeKind kind : kinds ) {
-      if( kind.is( this ) ) {
+      if( kind.isRoot( this ) ) {
         return true ;
       }
     }

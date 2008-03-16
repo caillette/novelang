@@ -19,14 +19,12 @@ package novelang.model.implementation;
 
 import java.util.List;
 
-import org.antlr.runtime.tree.CommonTree;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import novelang.model.common.Location;
 import novelang.model.common.MutableTree;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
-import novelang.rendering.PlainTextRenderer;
 
 /**
  * @author Laurent Caillette
@@ -84,7 +82,8 @@ public class DefaultMutableTree implements MutableTree {
   }
 
   public String toStringTree() {
-    return PlainTextRenderer.renderAsString( this ) ;
+    throw new UnsupportedOperationException( "toStringTree" ) ;
+//    return OldPlainTextRenderer.renderAsString( this ) ;
   }
 
   public Location getLocation() {
@@ -92,7 +91,7 @@ public class DefaultMutableTree implements MutableTree {
   }
 
   public boolean isOneOf( NodeKind... kinds ) {
-    if( NodeKind.treeTextHasNodeKindName( this ) ) {
+    if( NodeKind.rootHasNodeKindName( this ) ) {
       for( NodeKind kind : kinds ) {
         if( getText().equals( kind.name() ) ) {
           return true ;

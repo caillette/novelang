@@ -50,9 +50,9 @@ import com.google.common.base.Objects;
 /**
  * @author Laurent Caillette
  */
-public class PdfRenderer extends XmlRenderer {
+public class PdfWriter extends XmlWriter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( PdfRenderer.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( PdfWriter.class ) ;
   private static final String NOVELANG_STYLES_DIR = "novelang.styles.dir" ;
   private static final String DEFAULT_FO_STYLESHEET = /*"identity.xsl"*/ "fo.xsl" ;
   private static final EntityResolver ENTITY_RESOLVER ;
@@ -87,7 +87,7 @@ public class PdfRenderer extends XmlRenderer {
 
   private final File stylesheet ; // TODO use URL like for LocalEntityResolver
 
-  public PdfRenderer() {
+  public PdfWriter() {
     stylesheet = new File( STYLES_DIR, DEFAULT_FO_STYLESHEET ) ;
     LOGGER.info( "Loaded stylesheet from '{}'", stylesheet.getAbsolutePath() ) ;
   }

@@ -26,7 +26,6 @@ import org.junit.Assert;
 import org.apache.commons.lang.ClassUtils;
 import novelang.ResourceTools;
 import novelang.ScratchDirectoryFixture;
-import novelang.rendering.PlainTextRenderer;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
 
@@ -50,7 +49,7 @@ public class BookTest {
     Assert.assertNotNull( book1.getTree( "Section1nlp" ) ) ;
 
     final Tree bookTree = book1.getTree();
-    System.out.println( "Synthetic tree = " + PlainTextRenderer.renderAsString( bookTree ) ) ;
+//    System.out.println( "Synthetic tree = " + OldPlainTextRenderer.renderAsString( bookTree ) ) ;
 
   }
 

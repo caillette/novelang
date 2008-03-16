@@ -25,47 +25,4 @@ import novelang.model.common.NodeKind;
  */
 public class RenderTools {
 
-  static final String spaces( int size ) {
-    final StringBuffer buffer = new StringBuffer() ;
-    for( int i = 0 ; i < size ; i++ ) {
-      buffer.append( "  " ) ;
-    }
-    return buffer.toString() ;
-  }
-
-  static NodeKind getNodeKind( Tree tree ) {
-    return Enum.valueOf( NodeKind.class, tree.getText() ) ;
-  }
-
-  static String generatePunctuationSign( Tree tree, String nonBreakableSpace ) {
-    
-    final NodeKind treeNodeKind = getNodeKind( tree );
-    if( NodeKind.PUNCTUATION_SIGN != treeNodeKind ) {
-      throw new IllegalArgumentException(
-          "Expected tree of " + NodeKind.PUNCTUATION_SIGN +
-          ", got " + treeNodeKind + " instead"
-      ) ;
-    }
-
-    final NodeKind signNodeKind = getNodeKind( tree.getChildAt( 0 ) ) ;
-
-    switch( signNodeKind ) {
-      case SIGN_COLON :
-        return nonBreakableSpace + ": " ;
-      case SIGN_COMMA :
-        return ", " ;
-      case SIGN_ELLIPSIS :
-        return "\u8230 " ;
-      case SIGN_EXCLAMATIONMARK :
-        return nonBreakableSpace + "! " ;
-      case SIGN_FULLSTOP :
-        return ". " ;
-      case SIGN_QUESTIONMARK :
-        return nonBreakableSpace + "? " ;
-      case SIGN_SEMICOLON :
-        return nonBreakableSpace + "; " ;
-      default :
-        return "<unsupported: " + signNodeKind.name() + ">" ;
-    }
-  }
 }

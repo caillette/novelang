@@ -5,9 +5,13 @@
 This is a single-line paragraph.
 
 This is another paragraph.
-It is split over /two lines/.
+It is split over /two lines/. There are some [brackets] here.
 
 <<<
 This is a "blockquote".
 
 There can be several paragraphs inside.>>>
+
+=== Section two
+
+Some escaped characters: &oelig; &OElig; &dollar; &deg;...
