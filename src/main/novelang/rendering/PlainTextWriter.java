@@ -54,7 +54,7 @@ public class PlainTextWriter implements FragmentWriter {
   }
 
   public void write( NodePath path, String word ) throws Exception {
-    writer./*append( spaces( path.getDepth() ) ).*/append( word ) ;
+    writer.append( word ) ;
   }
 
 

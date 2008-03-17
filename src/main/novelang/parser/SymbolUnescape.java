@@ -35,11 +35,19 @@ public class SymbolUnescape {
 
   static {
     SYMBOLS.put( "percent", "%" ) ;
+    SYMBOLS.put( "plus", "+" ) ;
     SYMBOLS.put( "equals", "=" ) ;
     SYMBOLS.put( "dollar", "$" ) ;
+    SYMBOLS.put( "euro", "\u20ac" ) ;
+    SYMBOLS.put( "amp", "&" ) ;
+    SYMBOLS.put( "solidus", "/" ) ;
     SYMBOLS.put( "lt", "<" ) ;
     SYMBOLS.put( "gt", ">" ) ;
     SYMBOLS.put( "tilde", "~" ) ;
+    SYMBOLS.put( "snip", "[...]" ) ; // TODO remove this and support litteral.
+    SYMBOLS.put( "rp", ")" ) ;
+    SYMBOLS.put( "quot", "\"" ) ;
+    SYMBOLS.put( "fullstop", "." ) ;
     SYMBOLS.put( "deg", "\u00b0" ) ;
     SYMBOLS.put( "oelig", "\u0153" ) ;
     SYMBOLS.put( "OElig", "\u0152" ) ;

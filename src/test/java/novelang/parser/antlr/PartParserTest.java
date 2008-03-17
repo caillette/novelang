@@ -92,7 +92,7 @@ public class PartParserTest {
   }
 
   @Test
-  public void paragraph() throws RecognitionException {
+  public void paragraph1() throws RecognitionException {
 
     paragraph( "--- w0", tree(
         PARAGRAPH_SPEECH,
@@ -171,6 +171,40 @@ public class PartParserTest {
         tree( PUNCTUATION_SIGN, SIGN_FULLSTOP )
     ) ) ;
 
+  }
+
+  @Test
+  public void paragraph2() throws RecognitionException {
+
+    paragraphBody(
+        "\"w1 w2. w3 w4." + BREAK +
+        "w5 !\"" + BREAK +
+        "w6 w7."
+    ) ;
+
+    paragraphBody(
+        "/w1./" + BREAK +
+        "w2. w3."
+    ) ;
+
+    paragraphBody(
+        "/w0./ " + BREAK +
+        "  w1. w2. w3. " + BREAK +
+        "  w4 : w5 w6. " + BREAK +
+        "  \"w7 w8 ?\"."
+    ) ;
+
+    paragraphBody(
+        "..."
+    ) ;
+
+    paragraphBody(
+        "[...]"
+    ) ;
+
+    paragraphBody(
+        "...w0"
+    ) ;
 
 /*
 "w0.." FAIL
@@ -278,7 +312,34 @@ public class PartParserTest {
       )
     ) ;
 
+  }
 
+  @Test
+  public void section4() throws RecognitionException {
+    section(
+        "===" + BREAK +
+        BREAK +
+        "<<< w0 w1" + BREAK +
+        BREAK +
+        ">>>"
+    ) ;
+  }
+
+  @Test
+  public void section5() throws RecognitionException {
+    section(
+        "===" + BREAK +
+        BREAK +
+        "/w0/" + BREAK +
+        "w1"
+    ) ;
+    
+    section(
+        "===" + BREAK +
+        BREAK +
+        "(w0)" + BREAK +
+        "w1"
+    ) ;
   }
 
   @Test
@@ -351,6 +412,7 @@ public class PartParserTest {
         "\"w4 " + BREAK +
         "w5\"--)/."
     ) ;
+
   }
 
   @Test

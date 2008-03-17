@@ -170,9 +170,9 @@ paragraph
 
 blockQuote
   : OPENING_BLOCKQUOTE 
-    mediumBreak?
+    ( mediumBreak | largeBreak )?
     paragraphBody ( largeBreak paragraphBody )* 
-    mediumBreak?
+    ( mediumBreak | largeBreak )?
     CLOSING_BLOCKQUOTE
     -> ^( BLOCKQUOTE ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
@@ -198,24 +198,27 @@ title
   ;
 
 paragraphBody 
-  : (   ( word ( mediumBreak word )* )
-      | parenthesizingText
-      | bracketingText
-      | quotingText
-      | emphasizingText
-      | interpolatedClause
-    )
-    ( mediumBreak?
-      (   parenthesizingText
+  : ELLIPSIS |
+    ( ELLIPSIS?
+      (   ( word ( mediumBreak word )* )
+        | parenthesizingText
         | bracketingText
         | quotingText
         | emphasizingText
-        | interpolatedClause    
-        | punctuationSign
+        | interpolatedClause
       )
       ( mediumBreak?
-        word ( mediumBreak word )* )?
-    )*
+        (   parenthesizingText
+          | bracketingText
+          | quotingText
+          | emphasizingText
+          | interpolatedClause    
+          | punctuationSign
+        )
+        ( mediumBreak?
+          word ( mediumBreak word )* )?
+      )*
+    )
   ;   
   
 quotingText
