@@ -890,7 +890,7 @@
         <root url="jar://$PROJECT_DIR$/../lib/servlet-api-2.5-6.1.7.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/jetty-6.1.7.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/build/junit-4.4.jar!/" />
-        <root url="jar://$PROJECT_DIR$/../lib/build/gunit-1.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/easymock-2.3.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>

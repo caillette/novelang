@@ -21,6 +21,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
+import novelang.model.common.NodePath;
+
 /**
  * @author Laurent Caillette
  */
@@ -40,18 +42,19 @@ public class PlainTextWriter implements FragmentWriter {
     writer.flush() ;
   }
 
-  public void start( Path kinship, boolean wholeDocument ) throws Exception {
-    final String indentPlus = spaces( kinship.getDepth() ) ;
+  public void start( NodePath kinship, boolean wholeDocument ) throws Exception {
+    final String indentPlus = spaces( kinship.getDepth() + 1 ) ;
     writer.append( kinship.getCurrent().name() ).append( " { \n" ).append( indentPlus ) ;
   }
 
-  public void end( Path path, boolean wholeDocument ) throws Exception {
-    final String indentMinus = spaces( path.getDepth() ) ;
-    writer.append( "\n" ).append( indentMinus ).append( "}\n" ).append( indentMinus ) ;
+  public void end( NodePath path ) throws Exception {
+    final String indent = spaces( path.getDepth() ) ;
+    final String indentMinus = spaces( path.getDepth() - 1 ) ;
+    writer.append( "\n" ).append( indent ).append( "}\n" ).append( indentMinus ) ;
   }
 
-  public void just( String word ) throws Exception {
-    writer.append( word ) ;
+  public void write( NodePath path, String word ) throws Exception {
+    writer./*append( spaces( path.getDepth() ) ).*/append( word ) ;
   }
 
 

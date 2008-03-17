@@ -67,14 +67,14 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
   private final File bookFile ;
   public static final String DEBUG = "Only_for_debugging_AntlrStructureParser_with_ANTLRWorks" ;
 
-  private static final Charset ENCODING ;
+  public static final Charset DEFAULT_ENCODING;
   static {
-    ENCODING = Charset.forName( Element.CHARSET_NAME ) ;
+    DEFAULT_ENCODING = Charset.forName( Element.CHARSET_NAME ) ;
   }
 
   public Book( String identifier, File bookFile ) {
     super(
-        new DefaultBookContext( "book[" + identifier + "]", bookFile, ENCODING ),
+        new DefaultBookContext( "book[" + identifier + "]", bookFile, DEFAULT_ENCODING ),
         new Location( bookFile.getAbsolutePath(), -1, -1 )
     ) ;
     this.bookFile = Objects.nonNull( bookFile ) ;

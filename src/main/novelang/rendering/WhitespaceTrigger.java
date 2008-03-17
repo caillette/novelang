@@ -25,18 +25,25 @@ import novelang.model.common.NodeKind;
 import com.google.common.collect.Sets;
 
 /**
+ * Determines wether a whitespace should be added between two Nodes of known type.
+ * 
  * @author Laurent Caillette
  */
 public class WhitespaceTrigger {
 
   private static final Set< Sequence > SEQUENCES = Sets.newHashSet() ;
   static {
-    add( WORD,  WORD ) ;
-    add( SQUARE_BRACKETS, WORD ) ;
-    add( PARENTHESIS, WORD ) ;
     add( EMPHASIS, WORD ) ;
     add( INTERPOLATEDCLAUSE, WORD ) ;
+    add( PARENTHESIS, WORD ) ;
+    add( PUNCTUATION_SIGN,  WORD ) ;
     add( QUOTE, WORD ) ;
+    add( SQUARE_BRACKETS, WORD ) ;
+    add( WORD, EMPHASIS ) ;
+    add( WORD, PARENTHESIS ) ;
+    add( WORD, QUOTE ) ;
+    add( WORD, SQUARE_BRACKETS ) ;
+    add( WORD, WORD ) ;
   }
 
   private static void add( NodeKind nodeKind1, NodeKind nodeKind2 ) {
@@ -47,10 +54,6 @@ public class WhitespaceTrigger {
 
     if( null == first ) {
       return false ;
-    }
-
-    if( null != first && first.isPunctuationSign() ) {
-      return true ;
     }
 
     final Sequence sequence = new Sequence( first, second ) ;

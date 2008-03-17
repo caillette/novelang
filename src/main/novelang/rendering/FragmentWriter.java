@@ -20,8 +20,7 @@ package novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import com.google.common.base.Objects;
-import novelang.model.common.NodeKind;
+import novelang.model.common.NodePath;
 
 /**
  * @author Laurent Caillette
@@ -31,43 +30,11 @@ public interface FragmentWriter {
   void startWriting( OutputStream outputStream, Charset encoding ) throws Exception ;
   void finishWriting() throws Exception ;
 
-  void start( Path kinship, boolean wholeDocument ) throws Exception ;
-  void end( Path kinship, boolean wholeDocument ) throws Exception ;
-  void just( String word ) throws Exception ;
+  void start( NodePath kinship, boolean wholeDocument ) throws Exception ;
+  void end( NodePath kinship ) throws Exception ;
+  void write( NodePath kinship, String word ) throws Exception ;
 
   RenditionMimeType getMimeType() ;
 
 
-  /**
-   * Represents the stack of Node Kinds preceding current tree.
-   */
-  class Path {
-
-    final int depth ;
-    final NodeKind current ;
-
-    public Path() {
-      depth = 0 ;
-      current = null ;
-    }
-
-    public Path( NodeKind current ) {
-      depth = 1 ;
-      this.current = Objects.nonNull( current ) ;
-    }
-
-    public Path( Path previous, NodeKind current ) {
-      depth = previous.getDepth() + 1 ;
-      this.current = Objects.nonNull( current ) ;
-    }    
-
-    public int getDepth() {
-      return depth ;
-    }
-
-    public NodeKind getCurrent() {
-      return current;
-    }
-
-  }
 }

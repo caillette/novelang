@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import novelang.model.common.Problem;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
+import novelang.model.common.NodePath;
 import novelang.model.renderable.Renderable;
 import com.google.common.base.Objects;
 
@@ -31,10 +32,18 @@ import com.google.common.base.Objects;
  */
 public class GenericRenderer implements Renderer {
 
-  private final FragmentWriter fragmentWriter;
+  private final FragmentWriter fragmentWriter ;
+  private final String whitespace ;
+
+  private static final String DEFAULT_WHITESPACE = " " ;
 
   public GenericRenderer( FragmentWriter fragmentWriter ) {
+    this( fragmentWriter, DEFAULT_WHITESPACE ) ;
+  }
+
+  public GenericRenderer( FragmentWriter fragmentWriter, String whitespace ) {
     this.fragmentWriter = Objects.nonNull( fragmentWriter ) ;
+    this.whitespace = whitespace ;
   }
 
   final public void render( Renderable rendered, OutputStream outputStream ) {
@@ -44,7 +53,7 @@ public class GenericRenderer implements Renderer {
       try {
         fragmentWriter.startWriting( outputStream, rendered.getEncoding() ) ;
         final Tree root = rendered.getTree();
-        renderTree( root, new FragmentWriter.Path( NodeKind.ofRoot( root ) ), null ) ;
+        renderTree( root, null, null ) ;
         fragmentWriter.finishWriting() ;
       } catch( Exception e ) {
         throw new RuntimeException( e );
@@ -56,23 +65,22 @@ public class GenericRenderer implements Renderer {
     return fragmentWriter.getMimeType() ;
   }
 
-
   private void renderTree(
       Tree tree,
-      FragmentWriter.Path kinship,
+      NodePath kinship,
       NodeKind previous
   ) throws Exception {
 
     final NodeKind nodeKind = NodeKind.ofRoot( tree ) ;
-    final FragmentWriter.Path newPath = new FragmentWriter.Path( kinship, nodeKind ) ;
+    final NodePath newPath = (
+        null == kinship ? new NodePath( nodeKind ) : new NodePath( kinship, nodeKind ) ) ;
     boolean declareNamespace = false ;
 
     switch( nodeKind ) {
 
       case WORD :
-        maybeWriteWhitespace( previous, nodeKind ) ;
         final Tree wordTree = tree.getChildAt( 0 ) ;
-        fragmentWriter.just( wordTree.getText() ) ;
+        fragmentWriter.write( newPath, wordTree.getText() ) ;
         break ;
 
       case SIGN_COLON :
@@ -83,7 +91,7 @@ public class GenericRenderer implements Renderer {
       case SIGN_QUESTIONMARK :
       case SIGN_SEMICOLON :
         fragmentWriter.start( newPath, false ); ;
-        fragmentWriter.end( newPath, false ) ;
+        fragmentWriter.end( newPath ) ;
         break ;
 
       case _BOOK :
@@ -92,21 +100,27 @@ public class GenericRenderer implements Renderer {
 
       default :
         fragmentWriter.start( newPath, declareNamespace ) ;
+        previous = null ;
         for( Tree subtree : tree.getChildren() ) {
-          maybeWriteWhitespace( previous, nodeKind ) ;
-          renderTree( subtree, newPath, nodeKind ) ;
-          previous = nodeKind ;
+          final NodeKind subtreeNodeKind = NodeKind.ofRoot( subtree );
+          maybeWriteWhitespace( newPath, previous, subtreeNodeKind ) ;
+          renderTree( subtree, newPath, previous ) ;
+          previous = subtreeNodeKind;
         }
-        fragmentWriter.end( newPath, declareNamespace ) ;
+        fragmentWriter.end( newPath ) ;
         break ;
 
     }
 
   }
 
-  private void maybeWriteWhitespace( NodeKind previous, NodeKind nodeKind ) throws Exception {
+  private void maybeWriteWhitespace(
+      NodePath path,
+      NodeKind previous,
+      NodeKind nodeKind
+  ) throws Exception {
     if( WhitespaceTrigger.isTrigger( previous, nodeKind ) ) {
-      fragmentWriter.just( "¨" ) ;
+      fragmentWriter.write( path, whitespace ) ;
     }
   }
 

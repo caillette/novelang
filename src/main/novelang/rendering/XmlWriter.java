@@ -25,6 +25,7 @@ import org.dom4j.io.OutputFormat;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.helpers.AttributesImpl;
+import novelang.model.common.NodePath;
 
 /**
  * @author Laurent Caillette
@@ -45,7 +46,7 @@ public class XmlWriter implements FragmentWriter {
     }
   }
 
-  public void start( Path kinship, boolean wholeDocument ) throws Exception {
+  public void start( NodePath kinship, boolean wholeDocument ) throws Exception {
     final String tokenName = tokenNameAsXmlElementName( kinship.getCurrent().name() ) ;
     final Attributes attributes ;
     if( wholeDocument ) { // Declare the namespace.
@@ -70,12 +71,12 @@ public class XmlWriter implements FragmentWriter {
 
   }
 
-  public void end( Path kinship, boolean wholeDocument ) throws Exception {
+  public void end( NodePath kinship ) throws Exception {
     final String tokenName = tokenNameAsXmlElementName( kinship.getCurrent().name() ) ;
     contentHandler.endElement( NAMESPACE_URI, tokenName, NAME_QUALIFIER + ":" + tokenName ) ;
   }
 
-  public void just( String word ) throws Exception {
+  public void write( NodePath kinship, String word ) throws Exception {
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
   }
 
