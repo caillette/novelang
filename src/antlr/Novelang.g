@@ -198,27 +198,24 @@ title
   ;
 
 paragraphBody 
-  : ELLIPSIS |
-    ( ELLIPSIS?
-      (   ( word ( mediumBreak word )* )
-        | parenthesizingText
+  : (   ( word ( mediumBreak word )* )
+      | parenthesizingText
+      | bracketingText
+      | quotingText
+      | emphasizingText
+      | interpolatedClause
+    )
+    ( mediumBreak?
+      (   parenthesizingText
         | bracketingText
         | quotingText
         | emphasizingText
-        | interpolatedClause
+        | interpolatedClause             
+        | punctuationSign
       )
       ( mediumBreak?
-        (   parenthesizingText
-          | bracketingText
-          | quotingText
-          | emphasizingText
-          | interpolatedClause    
-          | punctuationSign
-        )
-        ( mediumBreak?
-          word ( mediumBreak word )* )?
-      )*
-    )
+        word ( mediumBreak word )* )?
+    )*
   ;   
   
 quotingText

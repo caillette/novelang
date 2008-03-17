@@ -34,6 +34,7 @@ public class SymbolUnescape {
   private static final Map< String, String > SYMBOLS = Maps.newHashMap() ;
 
   static {
+    SYMBOLS.put( "hellip", "\u2026" ) ;
     SYMBOLS.put( "percent", "%" ) ;
     SYMBOLS.put( "plus", "+" ) ;
     SYMBOLS.put( "equals", "=" ) ;
