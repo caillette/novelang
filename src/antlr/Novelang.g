@@ -43,7 +43,10 @@ tokens {
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
   WORD ;
+  WORDBLOCK ; // TODO: get rid of this.
+  
   ELLIPSIS_OPENING ;
+  APOSTROPHE_WORDMATE ;
 
   PUNCTUATION_SIGN ;
 
@@ -181,8 +184,10 @@ blockQuote
   ;  
 
 locutor
- 	: word ( smallBreak word )* smallBreak? LOCUTOR_INTRODUCER
- 	  -> ^( LOCUTOR word* )
+ 	: word 
+ 	  ( smallBreak word )* 
+ 	  smallBreak? LOCUTOR_INTRODUCER
+ 	  -> ^( LOCUTOR word* ) // TODO fix this, apostrophe is swallowed.
  	;
 
 
@@ -203,7 +208,7 @@ title
 paragraphBody
   :   openingEllipsis
     | ( openingEllipsis?
-        ( ( word ( mediumBreak word )* ( smallBreak? punctuationSign )? )
+        ( ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* )
           ( mediumBreak?
             (   parenthesizingText
               | bracketingText
@@ -211,10 +216,12 @@ paragraphBody
               | emphasizingText
               | interpolatedClause             
             )
-            ( mediumBreak?
-              word ( mediumBreak word )* 
+            (   ( ( mediumBreak?
+                    ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign ) )* )
+                  )              
+                )            
+              | ( smallBreak? punctuationSign )
             )?
-            ( smallBreak? punctuationSign )?
           )*
         )  
       )
@@ -225,7 +232,8 @@ paragraphBody
             | interpolatedClause             
           )
           ( mediumBreak?
-            word ( mediumBreak word )* 
+            word
+            ( mediumBreak word )* 
           )?
           ( smallBreak? punctuationSign )?
         )+   
@@ -361,22 +369,21 @@ largeBreak
   : ( ( WHITESPACE? SOFTBREAK ) ( WHITESPACE? SOFTBREAK )+ WHITESPACE? )
     ->
   ;
-  
-word 
-  : s = symbol 
-    // QuietGrammarDelegate helps doing this from AntlrWorks debugger:
-    -> ^( WORD { delegate.createTree( WORD, $s.text ) } )	
+    
+word
+  : w = rawWord 
+    // QuietGrammarDelegate helps running this from AntlrWorks debugger:
+    -> ^( WORD { delegate.createTree( WORD, $w.text ) } )	
   ;  
 
 /** This intermediary rule is useful as I didn't find how to
  * concatenate Tokens from inside the rewrite rule.
  */
-symbol 
+rawWord 
   : ( LETTER | DIGIT | ESCAPED_CHARACTER )+
-    ( ( HYPHEN_MINUS | APOSTROPHE ) 
+    ( HYPHEN_MINUS 
       ( LETTER | DIGIT | ESCAPED_CHARACTER )+ 
     )*
-    APOSTROPHE?
   ;  
   
 openingEllipsis
@@ -391,6 +398,7 @@ punctuationSign
   | EXCLAMATION_MARK -> ^( PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK )
   | SEMICOLON -> ^( PUNCTUATION_SIGN SIGN_SEMICOLON )
   | COLON -> ^( PUNCTUATION_SIGN SIGN_COLON )
+  | APOSTROPHE -> ^( APOSTROPHE_WORDMATE )
   ;
 
   

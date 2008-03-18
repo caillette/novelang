@@ -208,6 +208,8 @@
 
   <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
 
+  <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
+
   <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
   <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>

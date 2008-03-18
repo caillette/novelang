@@ -127,6 +127,26 @@ public class PartParserTest {
         tree( PUNCTUATION_SIGN, SIGN_COMMA )
     ) ) ;
 
+    paragraph( "w0,w1", tree(
+        PARAGRAPH_PLAIN,
+        tree( WORD, "w0" ),
+        tree( PUNCTUATION_SIGN, SIGN_COMMA ),
+        tree( WORD, "w1" )
+    ) ); ;
+
+    paragraph( "w0'", tree(
+        PARAGRAPH_PLAIN,
+        tree( WORD, "w0" ),
+        tree( APOSTROPHE_WORDMATE )
+    ) ) ;
+
+    paragraph( "w0'w1", tree(
+        PARAGRAPH_PLAIN,
+        tree( WORD, "w0" ),
+        tree( APOSTROPHE_WORDMATE ),
+        tree( WORD, "w1" )
+    ) ) ;
+
     paragraph( "w0;", tree(
         PARAGRAPH_PLAIN,
         tree( WORD, "w0" ),
@@ -163,11 +183,13 @@ public class PartParserTest {
         tree( PUNCTUATION_SIGN, SIGN_ELLIPSIS )
     ) ) ;
 
-    paragraph( "w0 w1'/w2/.", tree(
+    paragraph( "w0 w1'w2/w3/.", tree(
         PARAGRAPH_PLAIN,
         tree( WORD, "w0" ),
-        tree( WORD, "w1'" ),
-        tree( EMPHASIS, tree( WORD, "w2" ) ),
+        tree( WORD, "w1" ),
+        tree( APOSTROPHE_WORDMATE ),
+        tree( WORD, "w2" ),
+        tree( EMPHASIS, tree( WORD, "w3" ) ),
         tree( PUNCTUATION_SIGN, SIGN_FULLSTOP )
     ) ) ;
 
@@ -206,12 +228,20 @@ public class PartParserTest {
         "[...]"
     ) ;
 
-/*
-"w0.." FAIL
-"w0,," FAIL
-"w0??" FAIL
-"w0;;" FAIL
-*/
+
+    paragraphBody( "w1 w2, w3 w4." ) ;
+
+  }
+
+  @Test
+  public void paragraph3() throws RecognitionException {
+
+    paragraph( "(w0'w1)" ) ;
+    paragraph( "(w0,w1)" ) ;
+    paragraph( "\"w0'w1\"" ) ;
+    paragraph( "\"w0,w1\"" ) ;
+    paragraph( "--w0'w1--" ) ;
+    paragraph( "--w0,w1--" ) ;
 
   }
 
@@ -494,6 +524,26 @@ public class PartParserTest {
 
   }
 
+  @Test
+  public void chapter1() throws RecognitionException {
+
+    chapter( "***" + BREAK +
+        BREAK +
+        "===" + BREAK +
+        BREAK +
+        "w0, w1."
+    ) ;
+
+    chapter( "***" + BREAK +
+        BREAK +
+        "===" + BREAK +
+        BREAK +
+        "w0 : w1."
+    ) ;
+
+  }
+
+
 // ========================================
 // Wrappers for parser rules.
 // First-class methods in Java are welcome!
@@ -566,6 +616,18 @@ public class PartParserTest {
   private static Tree section( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().section().getTree() ;
+    checkSanity( parser );
+    return tree;
+  }
+
+  private static void chapter( String text, Tree expectedTree ) throws RecognitionException {
+    final Tree actualTree = chapter( text ) ;
+    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  private static Tree chapter( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().chapter().getTree() ;
     checkSanity( parser );
     return tree;
   }
