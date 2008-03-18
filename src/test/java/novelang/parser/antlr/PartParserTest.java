@@ -199,11 +199,11 @@ public class PartParserTest {
     ) ;
 
     paragraphBody(
-        "[...]"
+        "...w0"
     ) ;
 
     paragraphBody(
-        "...w0"
+        "[...]"
     ) ;
 
 /*
@@ -327,6 +327,7 @@ public class PartParserTest {
 
   @Test
   public void section5() throws RecognitionException {
+
     section(
         "===" + BREAK +
         BREAK +
@@ -338,6 +339,13 @@ public class PartParserTest {
         "===" + BREAK +
         BREAK +
         "(w0)" + BREAK +
+        "w1"
+    ) ;
+
+    section(
+        "===" + BREAK +
+        BREAK +
+        "\"w0\"" + BREAK +
         "w1"
     ) ;
   }

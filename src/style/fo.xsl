@@ -94,7 +94,11 @@
   </xsl:template>
 
   <xsl:template match="n:chapter" >
-    <fo:block space-before="250pt" >
+    <fo:block
+        break-before="page"
+        padding-top="230pt" 
+
+    >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
@@ -104,14 +108,14 @@
         font-size="15pt"
         font-weight="bold"
         line-height="20pt"
-        keep-with-next="always"
+        keep-with-next.within-page="always"
     >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
 
   <xsl:template match="n:section" >
-    <fo:block padding-top="13pt" >
+    <fo:block padding-top="20pt" >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
@@ -121,6 +125,7 @@
         font-size="13pt"
         font-weight="bold"
         line-height="35pt"
+        keep-with-next.within-page="always"
     >
       <xsl:apply-templates />
     </fo:inline>
@@ -136,7 +141,7 @@
         padding-after="8pt"
         font-size="12.5pt" 
         line-height="13pt" 
-        keep-together.within-page="always"
+        keep-with-next.within-page="always"
     > 
       <xsl:apply-templates/>
     </fo:block>
@@ -178,10 +183,9 @@
       </fo:inline>
       <fo:inline
           text-align="justify"
-          text-indent="1em"
-          
+          text-indent="1em"          
       >
-        <xsl:value-of select="$speech-symbol" />
+        <xsl:value-of select="$speech-symbol" />&nbsp;
         <xsl:apply-templates/>
       </fo:inline>
     </fo:block>
@@ -189,13 +193,7 @@
 
   <xsl:template match="n:locutor" />
 
-  <!--
-    Forrest 0.8 bug!
-    Using '&raquo;' and '&laquo;' requires a fix in ISOnum.pen file 
-    <!ENTITY laquo  "&#xAB;" > <!ENTITY raquo  "&#xBB;" >
-  -->
-  <!--<xsl:template match="n:quote" > &laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>-->
-
+  
   <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
 
   <xsl:template match="n:emphasis" ><fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline></xsl:template>
@@ -203,6 +201,12 @@
   <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
   <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
+
+  <xsl:template match="n:interpolatedclause" >&ndash;&nbsp;<xsl:apply-templates/>&nbsp;&ndash;</xsl:template>
+
+  <xsl:template match="n:interpolatedclause-silentend" >&ndash;&nbsp;<xsl:apply-templates/></xsl:template>
+
+  <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
 
   <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
   <xsl:template match="n:sign-comma" >,</xsl:template>

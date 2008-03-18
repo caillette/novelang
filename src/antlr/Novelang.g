@@ -43,7 +43,10 @@ tokens {
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
   WORD ;
+  ELLIPSIS_OPENING ;
+
   PUNCTUATION_SIGN ;
+
   SIGN_COMMA ;
   SIGN_FULLSTOP ;
   SIGN_ELLIPSIS ;
@@ -197,26 +200,37 @@ title
 	  -> ^( IDENTIFIER paragraphBody )
   ;
 
-paragraphBody 
-  : (   ( word ( mediumBreak word )* )
-      | parenthesizingText
-      | bracketingText
-      | quotingText
-      | emphasizingText
-      | interpolatedClause
-    )
-    ( mediumBreak?
-      (   parenthesizingText
-        | bracketingText
-        | quotingText
-        | emphasizingText
-        | interpolatedClause             
-        | punctuationSign
+paragraphBody
+  :   openingEllipsis
+    | ( openingEllipsis?
+        ( ( word ( mediumBreak word )* ( smallBreak? punctuationSign )? )
+          ( mediumBreak?
+            (   parenthesizingText
+              | bracketingText
+              | quotingText
+              | emphasizingText
+              | interpolatedClause             
+            )
+            ( mediumBreak?
+              word ( mediumBreak word )* 
+            )?
+            ( smallBreak? punctuationSign )?
+          )*
+        )  
       )
-      ( mediumBreak?
-        word ( mediumBreak word )* )?
-    )*
-  ;   
+    | ( ( (   parenthesizingText
+            | bracketingText
+            | quotingText
+            | emphasizingText
+            | interpolatedClause             
+          )
+          ( mediumBreak?
+            word ( mediumBreak word )* 
+          )?
+          ( smallBreak? punctuationSign )?
+        )+   
+      )     
+  ;
   
 quotingText
   : DOUBLE_QUOTE 
@@ -262,8 +276,12 @@ bracketingText
   : LEFT_SQUARE_BRACKET
     { ++ squareBracketsDepth < 2 }?
     mediumBreak?
-    bracketingTextItem
-    ( ( mediumBreak bracketingTextItem ) | ( smallBreak? punctuationSign ) )*
+    ( openingEllipsis
+      | ( openingEllipsis?
+          bracketingTextItem
+          ( ( mediumBreak bracketingTextItem ) | ( smallBreak? punctuationSign ) )*
+        )
+    )
     mediumBreak?
     RIGHT_SQUARE_BRACKET
     { -- squareBracketsDepth ; }
@@ -361,6 +379,10 @@ symbol
     APOSTROPHE?
   ;  
   
+openingEllipsis
+  : ELLIPSIS -> ^( ELLIPSIS_OPENING )
+  ;
+
 punctuationSign
   : COMMA -> ^( PUNCTUATION_SIGN SIGN_COMMA )
   | FULL_STOP  -> ^( PUNCTUATION_SIGN SIGN_FULLSTOP )

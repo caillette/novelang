@@ -35,12 +35,17 @@ public class WhitespaceTrigger {
   static {
     add( EMPHASIS, WORD ) ;
     add( INTERPOLATEDCLAUSE, WORD ) ;
+    add( INTERPOLATEDCLAUSE_SILENTEND, WORD ) ;
     add( PARENTHESIS, WORD ) ;
-    add( PUNCTUATION_SIGN,  WORD ) ;
+    add( PUNCTUATION_SIGN, PARENTHESIS ) ;
+    add( PUNCTUATION_SIGN, QUOTE ) ;
+    add( PUNCTUATION_SIGN, WORD ) ;
     add( QUOTE, WORD ) ;
     add( SQUARE_BRACKETS, WORD ) ;
-    add( WORD, EMPHASIS ) ;
+    add( WORD, INTERPOLATEDCLAUSE ) ;
+    add( WORD, INTERPOLATEDCLAUSE_SILENTEND ) ;
     add( WORD, PARENTHESIS ) ;
+    add( WORD, EMPHASIS ) ;
     add( WORD, QUOTE ) ;
     add( WORD, SQUARE_BRACKETS ) ;
     add( WORD, WORD ) ;
