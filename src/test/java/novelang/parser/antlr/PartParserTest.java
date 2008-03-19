@@ -162,7 +162,7 @@ public class PartParserTest {
   }
 
   @Test
-  public void paragraphIsWwordsWithCommaInTheMiddle1() throws RecognitionException {
+  public void paragraphIsWordsWithCommaInTheMiddle1() throws RecognitionException {
     paragraph( "w0,w1", tree(
         PARAGRAPH_PLAIN,
         tree( WORD, "w0" ),
@@ -322,7 +322,9 @@ public class PartParserTest {
   }
 
   @Test
-  public void paragraphIsParenthesizedWordsWithApostropheInTheMiddle() throws RecognitionException {
+  public void paragraphIsParenthesizedWordsWithApostropheInTheMiddle()
+      throws RecognitionException
+  {
     paragraph( "(w0'w1)" ) ;
   }
 
@@ -352,7 +354,39 @@ public class PartParserTest {
   }
 
   @Test
-  public void sectionHasIdentifierAndOneParagraphWithTwoWordsAndAPeriod() throws RecognitionException {
+  public void paragraphIsQuoteOfOneWordThenParenthesis() throws RecognitionException {
+    paragraph(
+        "\"w0(w1)\"",
+        tree(
+            PARAGRAPH_PLAIN,
+            tree(
+                QUOTE,
+                tree( WORD, "w0" ),
+                tree( PARENTHESIS, tree( WORD, "w1" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void paragraphIsQuoteOfOneWordThenSpaceParenthesis() throws RecognitionException {
+    paragraph(
+        "\"w0 (w1)\"",
+        tree(
+            PARAGRAPH_PLAIN,
+            tree(
+                QUOTE,
+                tree( WORD, "w0" ),
+                tree( PARENTHESIS, tree( WORD, "w1" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void sectionHasIdentifierAndOneParagraphWithTwoWordsAndAPeriod()
+      throws RecognitionException
+  {
     section(
         "=== s00" + BREAK +
         BREAK +
@@ -469,7 +503,9 @@ public class PartParserTest {
   }
 
   @Test
-  public void sectionHasOneParagraphWithParenthesisThenWordOnTwoLines() throws RecognitionException {
+  public void sectionHasOneParagraphWithParenthesisThenWordOnTwoLines()
+      throws RecognitionException
+  {
     section(
         "===" + BREAK +
         BREAK +
@@ -489,7 +525,9 @@ public class PartParserTest {
   }
 
   @Test
-  public void paragraphBodyHasThreeWordsOnThreeLinesAndFullStopAtEndOfFirstLine() throws RecognitionException {
+  public void paragraphBodyHasThreeWordsOnThreeLinesAndFullStopAtEndOfFirstLine()
+      throws RecognitionException
+  {
     paragraphBody(
         "w0." + BREAK +
         "w1" + BREAK +
@@ -540,37 +578,52 @@ public class PartParserTest {
   }
 
   @Test
-  public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle1() throws RecognitionException {
+  public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle1()
+      throws RecognitionException
+  {
     paragraphBody( "\"w00\" w01 w02 \" w03 w04 ! \"." ) ;
   }
 
   @Test
-  public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle2() throws RecognitionException {
+  public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle2()
+      throws RecognitionException
+  {
     paragraphBody( "w10 \"w11\" \"w12\", \"w13\"" ) ;
   }
 
   @Test
-  public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle3() throws RecognitionException {
+  public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle3()
+      throws RecognitionException
+  {
     paragraphBody( "\"w20 w21... w22\" !" ) ;
   }
 
   @Test
-  public void paragraphBodyHasQuotesAndParenthesisAndPunctuationSignsAndWordsInTheMiddle() throws RecognitionException {
+  public void paragraphBodyHasQuotesAndParenthesisAndPunctuationSignsAndWordsInTheMiddle()
+      throws RecognitionException
+  {
     paragraphBody( "\"p00 (w01) w02.\" w04 (w05 \"w06 (w07)\".)." ) ;
   }
 
   @Test
-  public void paragraphBodyHasQuotesAndParenthesisAndBracketsAndPunctuationSignsAndWordsInTheMiddle() throws RecognitionException {
+  public void
+  paragraphBodyHasQuotesAndParenthesisAndBracketsAndPunctuationSignsAndWordsInTheMiddle()
+      throws RecognitionException
+  {
     paragraphBody( "\"p00 (w01) w02.\"w04(w05 \"[w06] (w07)\".)." ) ;
   }
 
   @Test
-  public void paragraphBodyHasWordThenInterpolatedClauseThenFullStop() throws RecognitionException {
+  public void paragraphBodyHasWordThenInterpolatedClauseThenFullStop()
+      throws RecognitionException
+  {
     paragraphBody( "p10 -- w11 w12 --." ) ;
   }
 
   @Test
-  public void paragraphBodyHasWordThenInterpolatedClauseSilentEndThenFullStop() throws RecognitionException {
+  public void paragraphBodyHasWordThenInterpolatedClauseSilentEndThenFullStop()
+      throws RecognitionException
+  {
     paragraphBody( "p20 -- w21 w22 -_." ) ;
   }
 
@@ -751,12 +804,12 @@ public class PartParserTest {
   }
 
 
-// ========================================
+// ===============================================
 // Wrappers for parser rules.
-// First-class methods in Java are welcome!
-// Yes this is verbose but totally readable
-// stuff. Reflexion would be a mess.
-// ========================================
+// First-class methods in Java would be welcome!
+// Yes this is verbose but totally readable stuff.
+// Reflexion would be a mess.
+// ===============================================
 
   private static void title( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = title( text ) ;
@@ -848,14 +901,15 @@ public class PartParserTest {
 
   private static Tree paragraphBody( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().paragraphBody( NovelangParser.ENABLE_ALL ).getTree() ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().
+        paragraphBody().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
   private static void paragraphBodyFails( String s ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( s ) ;
-    parser.getAntlrParser().paragraphBody( NovelangParser.ENABLE_ALL ) ;
+    parser.getAntlrParser().paragraphBody() ;
     final String readableProblemList = AntlrTestHelper.createProblemList( parser.getProblems() ) ;
     final boolean parserHasProblem = parser.hasProblem() ;
     Assert.assertTrue( readableProblemList, parserHasProblem ) ;

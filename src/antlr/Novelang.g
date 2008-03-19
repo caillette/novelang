@@ -43,7 +43,6 @@ tokens {
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
   WORD ;
-  WORDBLOCK ; // TODO: get rid of this.
   
   ELLIPSIS_OPENING ;
   APOSTROPHE_WORDMATE ;
@@ -57,9 +56,11 @@ tokens {
   SIGN_EXCLAMATIONMARK ;
   SIGN_SEMICOLON ;
   SIGN_COLON ;
+  
+  NO_PARAGRAPHBODY_RESTRICTION ; // Internal use only.
 }
 
-// Scopes are only for Book.
+// Book-reserved scopes.
 	
 scope ChapterScope { StructuralChapter chapter } 
 scope SectionScope { StructuralSection section } 
@@ -90,6 +91,9 @@ public void setGrammarDelegate( GrammarDelegate delegate ) {
 }
 
 @parser::members {
+
+// Tell paragraphBody accepts everything.
+public static final int ALLOW_ALL = -1 ;
 
 private GrammarDelegate delegate = new QuietGrammarDelegate() ;
 
@@ -177,7 +181,8 @@ paragraph
 blockQuote
   : OPENING_BLOCKQUOTE 
     ( mediumBreak | largeBreak )?
-    paragraphBody ( largeBreak paragraphBody )* 
+    paragraphBody 
+    ( largeBreak paragraphBody )* 
     ( mediumBreak | largeBreak )?
     CLOSING_BLOCKQUOTE
     -> ^( BLOCKQUOTE ^( PARAGRAPH_PLAIN paragraphBody )* )
@@ -200,21 +205,24 @@ title
 	  -> ^( TITLE paragraphBody )
   ;
 
- identifier
+identifier
   :	paragraphBody
 	  -> ^( IDENTIFIER paragraphBody )
   ;
+  
+paragraphBody : paragraphBodyConstrained[ ALLOW_ALL ];
 
-paragraphBody
+paragraphBodyConstrained [ int disable ]
   :   openingEllipsis
     | ( openingEllipsis?
         ( ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* )
-          ( mediumBreak?
-            (   parenthesizingText
-              | bracketingText
-              | quotingText
-              | emphasizingText
-              | interpolatedClause             
+          ( //options { backtrack = true ; } :
+            (   
+                ( { $paragraphBodyConstrained.disable != PARENTHESIS }? ( ( mediumBreak? parenthesizingText ) => parenthesizingText ) ) 
+              | ( { $paragraphBodyConstrained.disable != QUOTE }? ( ( mediumBreak? quotingText ) => quotingText ) ) 
+              | ( { $paragraphBodyConstrained.disable != SQUARE_BRACKETS }? ( mediumBreak? bracketingText ) => bracketingText )
+              | ( { $paragraphBodyConstrained.disable != EMPHASIS }? ( mediumBreak? emphasizingText ) => emphasizingText )
+              | ( { $paragraphBodyConstrained.disable != INTERPOLATEDCLAUSE }? ( mediumBreak? interpolatedClause ) => interpolatedClause )
             )
             (   ( ( mediumBreak?
                     ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign ) )* )
@@ -225,11 +233,12 @@ paragraphBody
           )*
         )  
       )
-    | ( ( (   parenthesizingText
-            | bracketingText
-            | quotingText
-            | emphasizingText
-            | interpolatedClause             
+    | ( ( (     
+                ( { $paragraphBodyConstrained.disable != PARENTHESIS }? ( ( mediumBreak? parenthesizingText ) => parenthesizingText ) ) 
+              | ( { $paragraphBodyConstrained.disable != QUOTE }? ( ( mediumBreak? quotingText ) => quotingText ) ) 
+              | ( { $paragraphBodyConstrained.disable != SQUARE_BRACKETS }? ( mediumBreak? bracketingText ) => bracketingText )
+              | ( { $paragraphBodyConstrained.disable != EMPHASIS }? ( mediumBreak? emphasizingText ) => emphasizingText )
+              | ( { $paragraphBodyConstrained.disable != INTERPOLATEDCLAUSE }? ( mediumBreak? interpolatedClause ) => interpolatedClause )
           )
           ( mediumBreak?
             word
@@ -240,112 +249,65 @@ paragraphBody
       )     
   ;
   
-quotingText
-  : DOUBLE_QUOTE 
-    { ++ quoteDepth < 2 }?
-    mediumBreak?
-    quotingTextItem
-    ( ( mediumBreak quotingTextItem ) | ( smallBreak? punctuationSign ) )*    
-    mediumBreak? 
-    DOUBLE_QUOTE
-    { -- quoteDepth ; }
-    -> ^( QUOTE quotingTextItem* punctuationSign* )
-  ;
-
-quotingTextItem
-  : word
-  | parenthesizingText
-  | bracketingText
-  | emphasizingText
-  | interpolatedClause
-  ;   
-  
 parenthesizingText
   : LEFT_PARENTHESIS 
-    { ++ parenthesisDepth < 3 }?
+//    { ++ parenthesisDepth < 3 }?
     mediumBreak?
-    parenthesizingTextItem
-    ( ( mediumBreak parenthesizingTextItem ) | ( smallBreak? punctuationSign ) )*
+    paragraphBodyConstrained[ PARENTHESIS ]
     mediumBreak?
     RIGHT_PARENTHESIS
-    { -- parenthesisDepth ; }
-    -> ^( PARENTHESIS parenthesizingTextItem* punctuationSign* )
+//    { -- parenthesisDepth ; }
+    -> ^( PARENTHESIS paragraphBodyConstrained )
   ;
 
-parenthesizingTextItem
-  : word
-  | quotingText
-  | bracketingText
-  | emphasizingText
-  | interpolatedClause
-  ;   
-
+quotingText
+  : DOUBLE_QUOTE 
+//    options { backtrack = true ; } :
+//    { ++ quoteDepth < 2 }?
+    mediumBreak?
+    paragraphBodyConstrained[ QUOTE ]
+    mediumBreak? 
+    DOUBLE_QUOTE
+//    { -- quoteDepth ; }
+    -> ^( QUOTE paragraphBodyConstrained )
+  ;
+  
 bracketingText
   : LEFT_SQUARE_BRACKET
-    { ++ squareBracketsDepth < 2 }?
+//    { ++ squareBracketsDepth < 2 }?
     mediumBreak?
-    ( openingEllipsis
-      | ( openingEllipsis?
-          bracketingTextItem
-          ( ( mediumBreak bracketingTextItem ) | ( smallBreak? punctuationSign ) )*
-        )
-    )
+    paragraphBodyConstrained[SQUARE_BRACKETS ]
     mediumBreak?
     RIGHT_SQUARE_BRACKET
-    { -- squareBracketsDepth ; }
-    -> ^( SQUARE_BRACKETS bracketingTextItem* punctuationSign* )
+//    { -- squareBracketsDepth ; }
+    -> ^( SQUARE_BRACKETS paragraphBodyConstrained )
   ;
-
-bracketingTextItem
-  : word
-  | quotingText
-  | parenthesizingText
-  | emphasizingText
-  | interpolatedClause
-  ;   
 
 emphasizingText
   : SOLIDUS 
-    { ++ emphasisDepth < 2 }?
+//    { ++ emphasisDepth < 2 }?
     mediumBreak?
-    emphasizingTextItem
-    ( ( mediumBreak emphasizingTextItem ) | ( smallBreak? punctuationSign ) )*
+    paragraphBodyConstrained[ EMPHASIS ]
     mediumBreak? 
     SOLIDUS
-    { -- emphasisDepth ; }
-    -> ^( EMPHASIS emphasizingTextItem* punctuationSign* )
+//    { -- emphasisDepth ; }
+    -> ^( EMPHASIS paragraphBodyConstrained )
   ;
   
-emphasizingTextItem  
-  : word
-  | quotingText
-  | bracketingText
-  | parenthesizingText
-  | interpolatedClause
-  ;   
-
 interpolatedClause
   :	INTERPOLATED_CLAUSE_DELIMITER 
-    { ++ interpolatedClauseDepth < 2 }?
+//    { ++ interpolatedClauseDepth < 2 }?
     smallBreak?
-    interpolatedClauseItem
-    ( ( mediumBreak interpolatedClauseItem ) | ( smallBreak? punctuationSign ) )*
+    paragraphBodyConstrained[ INTERPOLATEDCLAUSE ]
     smallBreak? 
     (   INTERPOLATED_CLAUSE_DELIMITER 
-        -> ^( INTERPOLATEDCLAUSE interpolatedClauseItem* punctuationSign* )
+        -> ^( INTERPOLATEDCLAUSE paragraphBodyConstrained )
       | INTERPOLATED_CLAUSE_SILENT_END 
-        -> ^( INTERPOLATEDCLAUSE_SILENTEND interpolatedClauseItem* punctuationSign* )
+        -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBodyConstrained )
     )
-    { -- interpolatedClauseDepth ; }    
+//    { -- interpolatedClauseDepth ; }    
   ;	  
-  
-interpolatedClauseItem  
-  : word
-  | quotingText
-  | parenthesizingText
-  | bracketingText
-  | emphasizingText
-  ;   
+
   
 /** Use between words, when everything is kept on the same line.
  */
@@ -374,6 +336,7 @@ word
   : w = rawWord 
     // QuietGrammarDelegate helps running this from AntlrWorks debugger:
     -> ^( WORD { delegate.createTree( WORD, $w.text ) } )	
+//    -> ^( WORD $word.text )	
   ;  
 
 /** This intermediary rule is useful as I didn't find how to
@@ -414,11 +377,11 @@ punctuationSign
 
 book
   : ( mediumBreak | largeBreak )?
-    (   ( ':autogenerate' largeBreak bookParts )
-      | ( bookParts
+    (   ( bookParts
           largeBreak
           bookChapter ( largeBreak bookChapter )*
         )
+//      | ( ':autogenerate' largeBreak bookParts )
     ) 
     ( mediumBreak | largeBreak )?
     EOF
