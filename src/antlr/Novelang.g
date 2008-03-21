@@ -210,102 +210,100 @@ identifier
 	  -> ^( IDENTIFIER paragraphBody )
   ;
   
-paragraphBody : paragraphBodyConstrained[ ALLOW_ALL ];
-
-paragraphBodyConstrained [ int disable ]
+paragraphBody 
   :   openingEllipsis
     | ( openingEllipsis?
         ( ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* )
-          ( //options { backtrack = true ; } :
-            (   
-                ( { $paragraphBodyConstrained.disable != PARENTHESIS }? ( ( mediumBreak? parenthesizingText ) => parenthesizingText ) ) 
-              | ( { $paragraphBodyConstrained.disable != QUOTE }? ( ( mediumBreak? quotingText ) => quotingText ) ) 
-              | ( { $paragraphBodyConstrained.disable != SQUARE_BRACKETS }? ( mediumBreak? bracketingText ) => bracketingText )
-              | ( { $paragraphBodyConstrained.disable != EMPHASIS }? ( mediumBreak? emphasizingText ) => emphasizingText )
-              | ( { $paragraphBodyConstrained.disable != INTERPOLATEDCLAUSE }? ( mediumBreak? interpolatedClause ) => interpolatedClause )
-            )
-            (   ( ( mediumBreak?
-                    ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign ) )* )
-                  )              
-                )            
+          ( mediumBreak?
+            nestedParagraph
+            (   ( mediumBreak?
+                  ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* )
+                )              
               | ( smallBreak? punctuationSign )
             )?
           )*
         )  
       )
-    | ( ( (     
-                ( { $paragraphBodyConstrained.disable != PARENTHESIS }? ( ( mediumBreak? parenthesizingText ) => parenthesizingText ) ) 
-              | ( { $paragraphBodyConstrained.disable != QUOTE }? ( ( mediumBreak? quotingText ) => quotingText ) ) 
-              | ( { $paragraphBodyConstrained.disable != SQUARE_BRACKETS }? ( mediumBreak? bracketingText ) => bracketingText )
-              | ( { $paragraphBodyConstrained.disable != EMPHASIS }? ( mediumBreak? emphasizingText ) => emphasizingText )
-              | ( { $paragraphBodyConstrained.disable != INTERPOLATEDCLAUSE }? ( mediumBreak? interpolatedClause ) => interpolatedClause )
-          )
-          ( mediumBreak?
-            word
-            ( mediumBreak word )* 
+    | ( nestedParagraph
+        ( mediumBreak? 
+          ( word  
+            ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* 
+            mediumBreak?
           )?
+          nestedParagraph
           ( smallBreak? punctuationSign )?
-        )+   
+        )*
       )     
   ;
+
+/** The grammar is not ambiguous. But, as any kind of nested paragraph may be called
+ *  from paragraphBody rule, we voluntarily ignore if it was called from inside
+ *  a quotingText rule (or another one which has no symmetric delimiters).
+ *  In order to avoid explosion of rules we introduced this ambiguity.
+ */ 
+nestedParagraph
+  :  
+                parenthesizingText  
+              | bracketingText 
+              | { quoteDepth < 1 }? ( quotingText ) //=> quotingText
+              | { emphasisDepth < 1 }? ( emphasizingText ) //=> emphasizingText
+              | { interpolatedClauseDepth < 1 }? 
+                    ( interpolatedClause ) //=> interpolatedClause
+  ;  
   
 parenthesizingText
   : LEFT_PARENTHESIS 
-//    { ++ parenthesisDepth < 3 }?
+    { ++ parenthesisDepth ; }
     mediumBreak?
-    paragraphBodyConstrained[ PARENTHESIS ]
+    paragraphBody 
     mediumBreak?
     RIGHT_PARENTHESIS
-//    { -- parenthesisDepth ; }
-    -> ^( PARENTHESIS paragraphBodyConstrained )
+    { -- parenthesisDepth ; }
+    -> ^( PARENTHESIS paragraphBody )
   ;
 
 quotingText
   : DOUBLE_QUOTE 
-//    options { backtrack = true ; } :
-//    { ++ quoteDepth < 2 }?
+    { ++ quoteDepth ; }
     mediumBreak?
-    paragraphBodyConstrained[ QUOTE ]
-    mediumBreak? 
+    /*( paragraphBody mediumBreak? ) =>*/ paragraphBody
     DOUBLE_QUOTE
-//    { -- quoteDepth ; }
-    -> ^( QUOTE paragraphBodyConstrained )
+    { -- quoteDepth ; }
+    -> ^( QUOTE paragraphBody )
   ;
   
 bracketingText
   : LEFT_SQUARE_BRACKET
-//    { ++ squareBracketsDepth < 2 }?
+    { ++ squareBracketsDepth ; }
     mediumBreak?
-    paragraphBodyConstrained[SQUARE_BRACKETS ]
+    paragraphBody
     mediumBreak?
     RIGHT_SQUARE_BRACKET
-//    { -- squareBracketsDepth ; }
-    -> ^( SQUARE_BRACKETS paragraphBodyConstrained )
+    { -- squareBracketsDepth ; }
+    -> ^( SQUARE_BRACKETS paragraphBody )
   ;
 
 emphasizingText
   : SOLIDUS 
-//    { ++ emphasisDepth < 2 }?
+    { ++ emphasisDepth ; }
     mediumBreak?
-    paragraphBodyConstrained[ EMPHASIS ]
-    mediumBreak? 
+    /*( paragraphBody mediumBreak? ) => */paragraphBody
     SOLIDUS
-//    { -- emphasisDepth ; }
-    -> ^( EMPHASIS paragraphBodyConstrained )
+    { -- emphasisDepth ; }
+    -> ^( EMPHASIS paragraphBody )
   ;
   
 interpolatedClause
   :	INTERPOLATED_CLAUSE_DELIMITER 
-//    { ++ interpolatedClauseDepth < 2 }?
+    { ++ interpolatedClauseDepth ; }
     smallBreak?
-    paragraphBodyConstrained[ INTERPOLATEDCLAUSE ]
-    smallBreak? 
+    /*( paragraphBody smallBreak? ) => */paragraphBody
     (   INTERPOLATED_CLAUSE_DELIMITER 
-        -> ^( INTERPOLATEDCLAUSE paragraphBodyConstrained )
+        -> ^( INTERPOLATEDCLAUSE paragraphBody )
       | INTERPOLATED_CLAUSE_SILENT_END 
-        -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBodyConstrained )
+        -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBody )
     )
-//    { -- interpolatedClauseDepth ; }    
+    { -- interpolatedClauseDepth ; }    
   ;	  
 
   
