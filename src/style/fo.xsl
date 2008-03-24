@@ -23,7 +23,7 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
-  <xsl:param name="time"/>
+  <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
 
   <xsl:template match="/" >
@@ -61,7 +61,7 @@
         <fo:static-content flow-name="xsl-region-before" >
           <fo:block text-align="right" >
             <fo:inline font-size="80%" >
-            [<xsl:value-of select="$filename" />&nbsp;<xsl:value-of select="$time" />] &copy; Laurent Caillette 2002-2008
+              [<xsl:value-of select="$timestamp" />] &copy; Laurent Caillette 2002-2008
             </fo:inline>
           </fo:block>
         </fo:static-content>
@@ -210,12 +210,12 @@
 
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 
-  <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
-  <xsl:template match="n:sign-comma" >,</xsl:template>
-  <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
-  <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
+  <xsl:template match="n:sign-colon" >&nbsp;: </xsl:template>
+  <xsl:template match="n:sign-comma" >, </xsl:template>
+  <xsl:template match="n:sign-ellipsis" >&hellip; </xsl:template>
+  <xsl:template match="n:sign-exclamationmark" >&nbsp;! </xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>
-  <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
+  <xsl:template match="n:sign-questionmark" >&nbsp;? </xsl:template>
 
 </xsl:stylesheet>
 

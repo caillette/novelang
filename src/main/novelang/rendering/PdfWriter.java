@@ -26,6 +26,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
@@ -46,6 +47,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.helpers.XMLReaderFactory;
 import com.google.common.base.Objects;
+import novelang.model.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette
@@ -121,7 +123,11 @@ public class PdfWriter extends XmlWriter {
    * to the PDF generator (Apache FOP).
    * When {@link #applyFop} is set to true, formatted XML is produced instead.
    */
-  protected ContentHandler createContentHandler( OutputStream outputStream, Charset encoding )
+  protected ContentHandler createContentHandler(
+      OutputStream outputStream,
+      TreeMetadata treeMetadata,
+      Charset encoding
+  )
       throws Exception
   {
     final SAXTransformerFactory saxTransformerFactory =
@@ -137,18 +143,29 @@ public class PdfWriter extends XmlWriter {
     final Templates templates = templatesHandler.getTemplates() ;
     final TransformerHandler transformerHandler =
         saxTransformerFactory.newTransformerHandler( templates ) ;
+    configure( transformerHandler.getTransformer(), treeMetadata ) ;
 
     final ContentHandler sinkContentHandler ;
 
     if( applyFop ) {
       sinkContentHandler = createFopContentHandler( outputStream ) ;
     } else {
-      sinkContentHandler = super.createContentHandler( outputStream, encoding ) ;
+      sinkContentHandler = super.createContentHandler(
+          outputStream, treeMetadata, encoding ) ;
     }
 
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
 
     return transformerHandler ;
+
+  }
+
+
+  private void configure( Transformer transformer, TreeMetadata treeMetadata ) {
+    transformer.setParameter(
+        "timestamp",
+        treeMetadata.getCreationTimestampAsString()
+    ) ;
 
   }
 

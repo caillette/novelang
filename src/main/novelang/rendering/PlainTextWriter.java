@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
 import novelang.model.common.NodePath;
+import novelang.model.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette
@@ -34,8 +35,15 @@ public class PlainTextWriter implements FragmentWriter {
     return RenditionMimeType.TXT ;
   }
 
-  public void startWriting( OutputStream outputStream, Charset encoding ) throws Exception {
+  public void startWriting(
+      OutputStream outputStream,
+      TreeMetadata treeMetadata,
+      Charset encoding
+  ) throws Exception {
     writer = new PrintWriter( outputStream ) ;
+    writer.append( "Timestamp: " );
+    writer.append( treeMetadata.getCreationTimestampAsString() );
+    writer.println() ;
   }
 
   public void finishWriting() throws Exception {

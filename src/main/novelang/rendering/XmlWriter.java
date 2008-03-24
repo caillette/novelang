@@ -26,6 +26,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import novelang.model.common.NodePath;
+import novelang.model.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette
@@ -33,9 +34,18 @@ import novelang.model.common.NodePath;
 public class XmlWriter implements FragmentWriter {
 
   private ContentHandler contentHandler ;
+  private TreeMetadata treeMetadata ;
 
-  public void startWriting( OutputStream outputStream, Charset encoding ) throws Exception {
-    contentHandler = createContentHandler( outputStream, encoding ) ;
+
+  protected void configure( ContentHandler contentHandler, TreeMetadata treeMetadata ) {
+  }
+
+  public void startWriting(
+      OutputStream outputStream,
+      TreeMetadata treeMetadata,
+      Charset encoding
+  ) throws Exception {
+    contentHandler = createContentHandler( outputStream, treeMetadata, encoding ) ;
     contentHandler.startDocument() ;
   }
 
@@ -84,7 +94,11 @@ public class XmlWriter implements FragmentWriter {
     return RenditionMimeType.XML ;
   }
 
-  protected ContentHandler createContentHandler( OutputStream outputStream, Charset encoding )
+  protected ContentHandler createContentHandler(
+      OutputStream outputStream,
+      TreeMetadata treeMetadata,
+      Charset encoding
+  )
       throws Exception
   {
     return new XMLWriter(

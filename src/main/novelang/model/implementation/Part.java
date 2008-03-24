@@ -34,6 +34,7 @@ import novelang.model.common.NodeKind;
 import novelang.model.common.IdentifierHelper;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
+import novelang.model.common.TreeMetadata;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.renderable.Renderable;
 import novelang.parser.PartParser;
@@ -54,6 +55,7 @@ public class Part
   private static final Logger LOGGER = LoggerFactory.getLogger( Part.class ) ;
   private final File partFile;
   private Tree tree ;
+  private TreeMetadata treeMetadata ;
   private final String nameOfThis ;
   private final Charset encoding ;
   private final PartParserFactory partParserFactory ;
@@ -141,6 +143,8 @@ public class Part
       collect( Problem.createProblem( this, e ) ) ;
     }
 
+    treeMetadata = treeMetadata = MetadataHelper.createMetadata( tree ) ;
+
   }
 
   public Tree getTree() {
@@ -148,6 +152,14 @@ public class Part
       throw new IllegalStateException( "Part not loaded yet" ) ;
     }
     return tree ;
+  }
+
+  public TreeMetadata getTreeMetadata() {
+    if( ! loaded ) {
+      throw new IllegalStateException( "Part not loaded yet" ) ;
+    }
+    return treeMetadata ;
+
   }
 
   public Location createLocation( int line, int column ) {

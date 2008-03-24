@@ -15,32 +15,13 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.rendering;
-
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-
-import novelang.model.common.NodePath;
-import novelang.model.common.TreeMetadata;
+package novelang.model.common;
 
 /**
  * @author Laurent Caillette
  */
-public interface FragmentWriter {
+public interface TreeMetadata {
 
-  void startWriting(
-      OutputStream outputStream,
-      TreeMetadata treeMetadata,
-      Charset encoding
-  ) throws Exception ;
+  public String getCreationTimestampAsString() ;
   
-  void finishWriting() throws Exception ;
-
-  void start( NodePath kinship, boolean wholeDocument ) throws Exception ;
-  void end( NodePath kinship ) throws Exception ;
-  void write( NodePath kinship, String word ) throws Exception ;
-
-  RenditionMimeType getMimeType() ;
-
-
 }

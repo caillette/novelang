@@ -41,6 +41,7 @@ import novelang.model.common.Tree;
 import novelang.model.common.MutableTree;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Problem;
+import novelang.model.common.TreeMetadata;
 import novelang.model.weaved.IdentifierNotUniqueException;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.weaved.WeavedBook;
@@ -63,6 +64,7 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
   private final List< Part > parts = Lists.newArrayList() ;
   private final Multimap< String, Tree > multipleTreesFromPartsByIdentifier = Multimaps.newHashMultimap() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
+  private TreeMetadata treeMetadata ;
 
   private final File bookFile ;
   public static final String DEBUG = "Only_for_debugging_AntlrStructureParser_with_ANTLRWorks" ;
@@ -215,9 +217,14 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
       bookTree.addChild( chapter.buildTree( treesFromPartsByIdentifier ) ) ;
     }
 
+    treeMetadata = MetadataHelper.createMetadata( bookTree ) ;
+
     return bookTree ;
   }
 
+  public TreeMetadata getTreeMetadata() {
+    return treeMetadata ;
+  }
 
 // ===============
 // Other utilities

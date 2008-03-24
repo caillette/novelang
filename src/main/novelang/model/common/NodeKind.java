@@ -30,6 +30,9 @@ public enum NodeKind {
 
   _BOOK,
   PART,
+
+  _META_TIMESTAMP,
+
   CHAPTER,
   SECTION,
   TITLE,

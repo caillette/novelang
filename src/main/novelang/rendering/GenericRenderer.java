@@ -24,7 +24,9 @@ import novelang.model.common.Problem;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
 import novelang.model.common.NodePath;
+import novelang.model.common.TreeMetadata;
 import novelang.model.renderable.Renderable;
+import novelang.model.implementation.MetadataHelper;
 import com.google.common.base.Objects;
 
 /**
@@ -46,13 +48,20 @@ public class GenericRenderer implements Renderer {
     this.whitespace = whitespace ;
   }
 
-  final public void render( Renderable rendered, OutputStream outputStream ) {
+  final public void render(
+      Renderable rendered,
+      OutputStream outputStream
+  ) {
     if( rendered.hasProblem() ) {
       renderProblems( rendered.getProblems(), outputStream ) ;
     } else {
       try {
-        fragmentWriter.startWriting( outputStream, rendered.getEncoding() ) ;
-        final Tree root = rendered.getTree();
+        fragmentWriter.startWriting(
+            outputStream,
+            rendered.getTreeMetadata(),
+            rendered.getEncoding()
+        ) ;
+        final Tree root = rendered.getTree() ;
         renderTree( root, null, null ) ;
         fragmentWriter.finishWriting() ;
       } catch( Exception e ) {
@@ -74,13 +83,20 @@ public class GenericRenderer implements Renderer {
     final NodeKind nodeKind = NodeKind.ofRoot( tree ) ;
     final NodePath newPath = (
         null == kinship ? new NodePath( nodeKind ) : new NodePath( kinship, nodeKind ) ) ;
-    boolean declareNamespace = false ;
+    boolean rootElement = false ;
 
     switch( nodeKind ) {
 
       case WORD :
         final Tree wordTree = tree.getChildAt( 0 ) ;
         fragmentWriter.write( newPath, wordTree.getText() ) ;
+        break ;
+
+      case _META_TIMESTAMP :
+        fragmentWriter.start( newPath, false ) ;
+        final Tree timestampTree = tree.getChildAt( 0 ) ;
+        fragmentWriter.write( newPath, timestampTree.getText() ) ;
+        fragmentWriter.end( newPath ) ;
         break ;
 
       case SIGN_COLON :
@@ -96,10 +112,10 @@ public class GenericRenderer implements Renderer {
 
       case _BOOK :
       case PART :
-        declareNamespace = true ;
+        rootElement = true ;
 
       default :
-        fragmentWriter.start( newPath, declareNamespace ) ;
+        fragmentWriter.start( newPath, rootElement ) ;
         previous = null ;
         for( Tree subtree : tree.getChildren() ) {
           final NodeKind subtreeNodeKind = NodeKind.ofRoot( subtree );

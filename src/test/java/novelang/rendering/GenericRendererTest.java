@@ -29,7 +29,9 @@ import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Tree;
 import novelang.model.common.NodePath;
 import novelang.model.common.Problem;
+import novelang.model.common.TreeMetadata;
 import novelang.model.implementation.Book;
+import novelang.model.implementation.MetadataHelper;
 import novelang.model.renderable.Renderable;
 import static novelang.parser.antlr.TreeHelper.tree;
 import com.google.common.collect.Lists;
@@ -86,6 +88,7 @@ public class GenericRendererTest {
   }
 
   private static Renderable createRenderable( final Tree tree ) {
+    final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
         return Lists.immutableList() ;
@@ -99,6 +102,9 @@ public class GenericRendererTest {
       public Tree getTree() {
         return tree ;
       }
+      public TreeMetadata getTreeMetadata() {
+        return treeMetadata ;
+      }
     } ;
   }
 
@@ -106,7 +112,14 @@ public class GenericRendererTest {
 
     private PrintWriter writer ;
 
-    public void startWriting( OutputStream outputStream, Charset encoding ) throws Exception {
+
+    public void configure( TreeMetadata treeMetadata ) { }
+
+    public void startWriting(
+        OutputStream outputStream,
+        TreeMetadata treeMetadata,
+        Charset encoding
+    ) throws Exception {
       writer = new PrintWriter( outputStream ) ;
     }
 

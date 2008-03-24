@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
+import org.junit.Ignore;
 import static novelang.model.common.NodeKind.*;
 import static novelang.parser.antlr.TreeHelper.tree;
 import novelang.parser.SymbolUnescape;
@@ -592,6 +593,13 @@ public class PartParserTest {
   }
 
   @Test
+  public void paragraphBodyHasQuotesAndWordAndSpaceAndQuotes()
+      throws RecognitionException
+  {
+    paragraph( "\"w0\"w2 \"w3\"" ) ;
+  }
+
+  @Test
   public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle1()
       throws RecognitionException
   {
@@ -720,27 +728,27 @@ public class PartParserTest {
     ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphBodyFailsOnQuoteDepthExceeding1() throws RecognitionException {
     paragraphFails( "(w0 \"w1 (w2 \"w3\")\")" ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphBodyFailsOnEmphasisDepthExceeding1() throws RecognitionException {
     paragraphFails( "(w0 /w1 (w2 /w3/)/)" ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphBodyFailsOnParenthesisDepthExceeding2() throws RecognitionException {
     paragraphFails( "(w0 /w1 (w2 \"w3 (w4)\")/)" ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphBodyFailsOnInterpolatedClauseDepthExceeding1() throws RecognitionException {
     paragraphFails( "(w0 -- w1 (w2 -- w3 -- ) --)" ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphBodyFailsOnSquareBracketsDepthExceeding1() throws RecognitionException {
     paragraphFails( "[w0 -- w1 [w2] --]" ) ;
   }

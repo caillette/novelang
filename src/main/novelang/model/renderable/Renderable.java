@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 
 import novelang.model.common.Tree;
 import novelang.model.common.Problem;
+import novelang.model.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette
@@ -34,5 +35,7 @@ public interface Renderable {
   boolean hasProblem() ;
 
   Tree getTree() ;
+
+  TreeMetadata getTreeMetadata() ;
 
 }

@@ -232,7 +232,7 @@ paragraphBody
         ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( nestedParagraph ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )
           ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
         )*    
         ( mediumBreak?
@@ -255,7 +255,7 @@ paragraphBodyNoQuote
         ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
           ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
         )*    
         ( mediumBreak?
@@ -277,7 +277,7 @@ paragraphBodyNoEmphasis
         ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
           ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
         )*    
         ( mediumBreak?
@@ -299,7 +299,7 @@ paragraphBodyNoInterpolatedClause
         ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
           ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
         )*    
         ( mediumBreak?

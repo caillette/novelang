@@ -891,6 +891,7 @@
         <root url="jar://$PROJECT_DIR$/../lib/jetty-6.1.7.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/build/junit-4.4.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/easymock-2.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/joda-time-1.5.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
