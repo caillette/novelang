@@ -60,6 +60,14 @@ tokens {
   NO_PARAGRAPHBODY_RESTRICTION ; // Internal use only.
 }
 
+
+scope ParagraphScope { 
+  boolean inQuotes ;
+  boolean inInterpolatedClause ;
+  boolean inEmphasis ;
+}
+
+
 // Book-reserved scopes.
 	
 scope ChapterScope { StructuralChapter chapter } 
@@ -120,9 +128,9 @@ public void emitErrorMessage( String string ) {
   }
 }
 	
-private int quoteDepth = 0 ;
 private int parenthesisDepth = 0 ;
 private int squareBracketsDepth = 0 ;
+private int quoteDepth = 0 ;
 private int emphasisDepth = 0 ;
 private int interpolatedClauseDepth = 0 ;
 }
@@ -167,6 +175,7 @@ section
   ;
     
 paragraph
+scope ParagraphScope ;
   : 
     ( SPEECH_OPENER ( smallBreak locutor )? smallBreak? paragraphBody )
     -> ^( PARAGRAPH_SPEECH locutor? paragraphBody )
@@ -213,97 +222,176 @@ identifier
 paragraphBody 
   :   openingEllipsis
     | ( openingEllipsis?
-        ( ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* )
-          ( mediumBreak?
-            nestedParagraph
-            (   ( mediumBreak?
-                  ( word ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* )
-                )              
-              | ( smallBreak? punctuationSign )
-            )?
-          )*
-        )  
-      )
-    | ( nestedParagraph
-        ( mediumBreak? 
-          ( word  
-            ( ( mediumBreak word ) | ( smallBreak? punctuationSign word? ) )* 
-            mediumBreak?
-          )?
-          nestedParagraph
-          ( smallBreak? punctuationSign )?
+        nestedWordSequence 
+        ( mediumBreak?
+          ( nestedParagraph ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedWordSequence )?
         )*
-      )     
+      )
+    | ( nestedParagraph ( smallBreak? punctuationSign )? 
+        ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
+        ( mediumBreak?
+          nestedWordSequence
+          ( nestedParagraph ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
+        )*    
+        ( mediumBreak?
+          nestedWordSequence
+        )?
+      )  
   ;
 
-/** The grammar is not ambiguous. But, as any kind of nested paragraph may be called
- *  from paragraphBody rule, we voluntarily ignore if it was called from inside
- *  a quotingText rule (or another one which has no symmetric delimiters).
- *  In order to avoid explosion of rules we introduced this ambiguity.
- */ 
+  
+paragraphBodyNoQuote
+  :   openingEllipsis
+    | ( openingEllipsis?
+        nestedWordSequence 
+        ( mediumBreak?
+          ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedWordSequence )?
+        )*
+      )
+    | ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? 
+        ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
+        ( mediumBreak?
+          nestedWordSequence
+          ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
+        )*    
+        ( mediumBreak?
+          nestedWordSequence
+        )?
+      )  
+  ;
+  
+paragraphBodyNoEmphasis
+  :   openingEllipsis
+    | ( openingEllipsis?
+        nestedWordSequence 
+        ( mediumBreak?
+          ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedWordSequence )?
+        )*
+      )
+    | ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? 
+        ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
+        ( mediumBreak?
+          nestedWordSequence
+          ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
+        )*    
+        ( mediumBreak?
+          nestedWordSequence
+        )?
+      )  
+  ;
+  
+paragraphBodyNoInterpolatedClause
+  :   openingEllipsis
+    | ( openingEllipsis?
+        nestedWordSequence 
+        ( mediumBreak?
+          ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedWordSequence )?
+        )*
+      )
+    | ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? 
+        ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
+        ( mediumBreak?
+          nestedWordSequence
+          ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
+          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
+        )*    
+        ( mediumBreak?
+          nestedWordSequence
+        )?
+      )  
+  ;
+
+nestedWordSequence
+  : word 
+    (   ( mediumBreak word ) 
+      | ( smallBreak? punctuationSign ) 
+      | ( smallBreak? punctuationSign word ) 
+    )*
+  ;
+  
 nestedParagraph
-  :  
-                parenthesizingText  
-              | bracketingText 
-              | { quoteDepth < 1 }? ( quotingText ) //=> quotingText
-              | { emphasisDepth < 1 }? ( emphasizingText ) //=> emphasizingText
-              | { interpolatedClauseDepth < 1 }? 
-                    ( interpolatedClause ) //=> interpolatedClause
+  : parenthesizingText  
+  | bracketingText 
+  | quotingText 
+  | emphasizingText
+  | interpolatedClause
   ;  
   
+nestedParagraphNoQuote
+  : parenthesizingText  
+  | bracketingText 
+  | emphasizingText
+  | interpolatedClause
+  ;  
+  
+nestedParagraphNoEmphasis
+  : parenthesizingText  
+  | bracketingText 
+  | quotingText 
+  | interpolatedClause
+  ;  
+  
+nestedParagraphNoInterpolatedClause
+  : parenthesizingText  
+  | bracketingText 
+  | quotingText 
+  | emphasizingText
+  ;  
+
 parenthesizingText
   : LEFT_PARENTHESIS 
-    { ++ parenthesisDepth ; }
     mediumBreak?
     paragraphBody 
     mediumBreak?
     RIGHT_PARENTHESIS
-    { -- parenthesisDepth ; }
     -> ^( PARENTHESIS paragraphBody )
   ;
 
 quotingText
-  : DOUBLE_QUOTE 
-    { ++ quoteDepth ; }
-    mediumBreak?
-    /*( paragraphBody mediumBreak? ) =>*/ paragraphBody
-    DOUBLE_QUOTE
-    { -- quoteDepth ; }
-    -> ^( QUOTE paragraphBody )
-  ;
-  
+  : ( DOUBLE_QUOTE      
+      mediumBreak?
+      paragraphBodyNoQuote
+      mediumBreak?
+      DOUBLE_QUOTE
+    )
+    -> ^( QUOTE paragraphBodyNoQuote )
+  ;  
 bracketingText
   : LEFT_SQUARE_BRACKET
-    { ++ squareBracketsDepth ; }
     mediumBreak?
     paragraphBody
     mediumBreak?
     RIGHT_SQUARE_BRACKET
-    { -- squareBracketsDepth ; }
     -> ^( SQUARE_BRACKETS paragraphBody )
   ;
 
 emphasizingText
   : SOLIDUS 
-    { ++ emphasisDepth ; }
     mediumBreak?
-    /*( paragraphBody mediumBreak? ) => */paragraphBody
+    paragraphBodyNoEmphasis
+    mediumBreak?
     SOLIDUS
-    { -- emphasisDepth ; }
-    -> ^( EMPHASIS paragraphBody )
+    -> ^( EMPHASIS paragraphBodyNoEmphasis )
   ;
   
 interpolatedClause
   :	INTERPOLATED_CLAUSE_DELIMITER 
-    { ++ interpolatedClauseDepth ; }
     smallBreak?
-    /*( paragraphBody smallBreak? ) => */paragraphBody
-    (   INTERPOLATED_CLAUSE_DELIMITER 
-        -> ^( INTERPOLATEDCLAUSE paragraphBody )
-      | INTERPOLATED_CLAUSE_SILENT_END 
-        -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBody )
+    paragraphBodyNoInterpolatedClause 
+    (   ( ( smallBreak? INTERPOLATED_CLAUSE_DELIMITER )
+            -> ^( INTERPOLATEDCLAUSE paragraphBodyNoInterpolatedClause )
+        )
+      | ( ( smallBreak? INTERPOLATED_CLAUSE_SILENT_END ) 
+          -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBodyNoInterpolatedClause )
+        )
     )
-    { -- interpolatedClauseDepth ; }    
   ;	  
 
   

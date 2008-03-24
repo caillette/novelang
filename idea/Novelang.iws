@@ -104,8 +104,10 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/PartParserTest.java" line="313" class="novelang.parser.antlr.PartParserTest" package="novelang.parser.antlr">
+    <exception_breakpoints>
+      <breakpoint class_name="org.antlr.runtime.tree.RewriteEmptyStreamException" package_name="org.antlr.runtime.tree">
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -118,7 +120,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-    </line_breakpoints>
+    </exception_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -197,36 +199,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GrammarDelegate.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/parser/antlr/GrammarDelegate.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="25" selection-start="2070" selection-end="2070" vertical-scroll-proportion="0.11643836">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Paragraph.g" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/antlr/Paragraph.g">
-          <provider selected="true" editor-type-id="grammar">
-            <state />
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PartParserTest.java" pinned="true" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/PartParserTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="505" column="14" selection-start="12850" selection-end="12850" vertical-scroll-proportion="0.33333334">
-              <folding />
+            <state line="598" column="3" selection-start="15034" selection-end="15034" vertical-scroll-proportion="0.4885845">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fo.xsl" pinned="true" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/style/fo.xsl">
+      <file leaf-file-name="TestLab.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/TestLab.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="210" column="48" selection-start="5534" selection-end="5534" vertical-scroll-proportion="0.28132388">
-              <folding />
+            <state line="41" column="0" selection-start="1267" selection-end="1307" vertical-scroll-proportion="0.65981734">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1593,8 +1583,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
-      <recent name="novelang.rendering.PlainTextWriter" />
       <recent name="novelang.parser.antlr.AntlrTestHelper" />
+      <recent name="novelang.rendering.PlainTextWriter" />
       <recent name="novelang.jetty.HttpDocumentRequest" />
       <recent name="novelang.rendering.DocumentRequest" />
       <recent name="novelang.model.implementation.Element" />
@@ -1629,7 +1619,7 @@
     <option name="showLabels" value="true" />
   </component>
   <component name="RestoreUpdateTree" />
-  <component name="RunManager" selected="JUnit.PartParserTest">
+  <component name="RunManager" selected="JUnit.novelang">
     <tempConfiguration default="false" name="PartParserTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <pattern value="novelang.parser.antlr.*" />
       <module name="Novelang" />
@@ -1646,13 +1636,7 @@
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="wholeProject" />
       </option>
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="49299" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" value="true" />
@@ -2114,7 +2098,7 @@
       <window_info id="Regex" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3951094" order="8" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" order="7" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28324947" order="0" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28324947" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946082" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26126125" order="10" />
@@ -2127,7 +2111,7 @@
       <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.36293435" order="2" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13515456" order="2" />
       <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="6" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42471042" order="4" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26126125" order="4" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="0" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="14" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="9" />
@@ -2236,41 +2220,6 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/WhitespaceTrigger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="14" selection-start="1218" selection-end="1218" vertical-scroll-proportion="0.038812786">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/model/implementation/BookTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="13" selection-start="1194" selection-end="1194" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/scratch.nlp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="8" selection-start="0" selection-end="18" vertical-scroll-proportion="0.11643836">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/AbstractParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="0" selection-start="2466" selection-end="2466" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/BookLoadingTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="65" column="14" selection-start="2222" selection-end="2222" vertical-scroll-proportion="0.33333334">
@@ -2294,14 +2243,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/parser/antlr/GrammarDelegate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="25" selection-start="2070" selection-end="2070" vertical-scroll-proportion="0.11643836">
+        <state line="60" column="25" selection-start="2070" selection-end="2070" vertical-scroll-proportion="0.07015131">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/style/fo.xsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="210" column="48" selection-start="5534" selection-end="5534" vertical-scroll-proportion="0.28132388">
+        <state line="210" column="48" selection-start="5534" selection-end="5534" vertical-scroll-proportion="0.16368638">
           <folding />
         </state>
       </provider>
@@ -2311,6 +2260,45 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/AntlrTestHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="13" selection-start="1057" selection-end="1057" vertical-scroll-proportion="-4.347032">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../lib/antlr-runtime-3.0.1.jar!/org/antlr/runtime/BaseRecognizer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="0" selection-start="1168" selection-end="1168" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../lib/antlr-runtime-3.0.1.jar!/org/antlr/runtime/tree/RewriteRuleElementStream.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="0" selection-start="1064" selection-end="1064" vertical-scroll-proportion="0.17056397">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/TestLab.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="0" selection-start="1267" selection-end="1307" vertical-scroll-proportion="0.65981734">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../src/antlr/Novelang.g">
       <provider selected="true" editor-type-id="grammar">
         <state />
@@ -2318,8 +2306,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/PartParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="505" column="14" selection-start="12850" selection-end="12850" vertical-scroll-proportion="0.33333334">
-          <folding />
+        <state line="598" column="3" selection-start="15034" selection-end="15034" vertical-scroll-proportion="0.4885845">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

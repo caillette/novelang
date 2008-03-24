@@ -17,15 +17,13 @@
  */
 package novelang.parser.antlr;
 
+import static novelang.parser.antlr.AntlrTestHelper.*;
+
 import java.util.Map;
 
-import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import org.antlr.runtime.RecognitionException;
-import org.junit.Assert;
 import org.junit.Test;
-import junit.framework.AssertionFailedError;
 import static novelang.model.common.NodeKind.*;
-import novelang.model.common.Tree;
 import static novelang.parser.antlr.TreeHelper.tree;
 import novelang.parser.SymbolUnescape;
 
@@ -150,6 +148,7 @@ public class PartParserTest {
 
   // Following tests are for paragraphBody rule. But we need to rely on a rule
   // returning a sole tree as test primitives don't assert on more than one.
+  // In addition, the ParagraphScope is declared in paragraph rule so we must get through it.
 
   @Test
   public void paragraphIsWordThenComma() throws RecognitionException {
@@ -254,6 +253,15 @@ public class PartParserTest {
   }
 
   @Test
+  public void paragraphBodyIsEmphasizedWordThenWord()
+      throws RecognitionException
+  {
+    paragraph(
+        "/w0/w1"
+    ) ;
+  }
+
+  @Test
   public void paragraphIsWordsWithApostropheThenEmphasis() throws RecognitionException {
     paragraph( "w0 w1'w2/w3/.", tree(
         PARAGRAPH_PLAIN,
@@ -269,7 +277,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsMultilineQuoteWithPunctuationSigns1() throws RecognitionException {
-    paragraphBody(
+    paragraph(
         "\"w1 w2. w3 w4." + BREAK +
         "w5 !\"" + BREAK +
         "w6 w7."
@@ -278,7 +286,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsMultilineQuoteWithPunctuationSigns2() throws RecognitionException {
-    paragraphBody(
+    paragraph(
         "/w1./" + BREAK +
         "w2. w3."
     ) ;
@@ -286,7 +294,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsEmphasisAndQuoteWithPunctuationSigns1() throws RecognitionException {
-    paragraphBody(
+    paragraph(
         "/w0./ " + BREAK +
         "  w1. w2. w3. " + BREAK +
         "  w4 : w5 w6. " + BREAK +
@@ -297,28 +305,28 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsJustEllipsis() throws RecognitionException {
-    paragraphBody(
+    paragraph(
         "..."
     ) ;
   }
 
   @Test
   public void paragraphIsEllipsisThenWord() throws RecognitionException {
-    paragraphBody(
+    paragraph(
         "...w0"
     ) ;
   }
 
   @Test
   public void paragraphIsEllipsisInsideBrackets() throws RecognitionException {
-    paragraphBody(
+    paragraph(
         "[...]"
     ) ;
   }
 
   @Test
   public void paragraphIsWordsAndPunctuationSigns1() throws RecognitionException {
-    paragraphBody( "w1 w2, w3 w4." ) ;
+    paragraph( "w1 w2, w3 w4." ) ;
   }
 
   @Test
@@ -528,7 +536,7 @@ public class PartParserTest {
   public void paragraphBodyHasThreeWordsOnThreeLinesAndFullStopAtEndOfFirstLine()
       throws RecognitionException
   {
-    paragraphBody(
+    paragraph(
         "w0." + BREAK +
         "w1" + BREAK +
         "w2"
@@ -537,43 +545,49 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustEmphasizedWord() throws RecognitionException {
-    paragraphBody( "/w0/", tree(
-        EMPHASIS, tree( WORD, "w0" )
+    paragraph( "/w0/", tree(
+        PARAGRAPH_PLAIN,
+        tree( EMPHASIS, tree( WORD, "w0" ) )
     ) ) ;
   }
 
   @Test
   public void paragraphBodyIsJustParenthesizedWord() throws RecognitionException {
-    paragraphBody( "(w0)", tree(
-        PARENTHESIS, tree( WORD, "w0" )
+    paragraph( "(w0)", tree(
+        PARAGRAPH_PLAIN,
+        tree( PARENTHESIS, tree( WORD, "w0" ) )
     ) ) ;
   }
 
   @Test
   public void paragraphBodyIsJustQuotedWord() throws RecognitionException {
-    paragraphBody( "\"w0\"", tree(
-        QUOTE, tree( WORD, "w0" )
+    paragraph( "\"w0\"", tree(
+        PARAGRAPH_PLAIN,
+        tree( QUOTE, tree( WORD, "w0" ) )
     ) ) ;
   }
 
   @Test
   public void paragraphBodyIsJustInterpolatedWord() throws RecognitionException {
-    paragraphBody( "-- w0 --", tree(
-        INTERPOLATEDCLAUSE, tree( WORD, "w0" )
+    paragraph( "-- w0 --", tree(
+        PARAGRAPH_PLAIN,
+        tree( INTERPOLATEDCLAUSE, tree( WORD, "w0" ) )
     ) ) ;
   }
 
   @Test
   public void paragraphBodyIsJustInterpolatedWordWithSilentEnd() throws RecognitionException {
-    paragraphBody( "-- w0 -_", tree(
-        INTERPOLATEDCLAUSE_SILENTEND, tree( WORD, "w0" )
+    paragraph( "-- w0 -_", tree(
+        PARAGRAPH_PLAIN,
+        tree( INTERPOLATEDCLAUSE_SILENTEND, tree( WORD, "w0" ) )
     ) ) ;
   }
 
   @Test
   public void paragraphBodyIsJustBracketedWord() throws RecognitionException {
-    paragraphBody( "[w0]", tree(
-        SQUARE_BRACKETS, tree( WORD, "w0" )
+    paragraph( "[w0]", tree(
+        PARAGRAPH_PLAIN,
+        tree( SQUARE_BRACKETS, tree( WORD, "w0" ) )
     ) ) ;
   }
 
@@ -581,28 +595,28 @@ public class PartParserTest {
   public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle1()
       throws RecognitionException
   {
-    paragraphBody( "\"w00\" w01 w02 \" w03 w04 ! \"." ) ;
+    paragraph( "\"w00\" w01 w02 \" w03 w04 ! \"." ) ;
   }
 
   @Test
   public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle2()
       throws RecognitionException
   {
-    paragraphBody( "w10 \"w11\" \"w12\", \"w13\"" ) ;
+    paragraph( "w10 \"w11\" \"w12\", \"w13\"" ) ;
   }
 
   @Test
   public void paragraphBodyHasQuotesAndPunctuationSignsAndWordsInTheMiddle3()
       throws RecognitionException
   {
-    paragraphBody( "\"w20 w21... w22\" !" ) ;
+    paragraph( "\"w20 w21... w22\" !" ) ;
   }
 
   @Test
   public void paragraphBodyHasQuotesAndParenthesisAndPunctuationSignsAndWordsInTheMiddle()
       throws RecognitionException
   {
-    paragraphBody( "\"p00 (w01) w02.\" w04 (w05 \"w06 (w07)\".)." ) ;
+    paragraph( "\"p00 (w01) w02.\" w04 (w05 \"w06 (w07)\".)." ) ;
   }
 
   @Test
@@ -610,38 +624,38 @@ public class PartParserTest {
   paragraphBodyHasQuotesAndParenthesisAndBracketsAndPunctuationSignsAndWordsInTheMiddle()
       throws RecognitionException
   {
-    paragraphBody( "\"p00 (w01) w02.\"w04(w05 \"[w06] (w07)\".)." ) ;
+    paragraph( "\"p00 (w01) w02.\"w04(w05 \"[w06] (w07)\".)." ) ;
   }
 
   @Test
   public void paragraphBodyHasWordThenInterpolatedClauseThenFullStop()
       throws RecognitionException
   {
-    paragraphBody( "p10 -- w11 w12 --." ) ;
+    paragraph( "p10 -- w11 w12 --." ) ;
   }
 
   @Test
   public void paragraphBodyHasWordThenInterpolatedClauseSilentEndThenFullStop()
       throws RecognitionException
   {
-    paragraphBody( "p20 -- w21 w22 -_." ) ;
+    paragraph( "p20 -- w21 w22 -_." ) ;
   }
 
   @Test
   public void paragraphBodyIsQuoteWithWordThenParenthesis() throws RecognitionException {
-    paragraphBody( "\"w0 (w1)\"") ;
+    paragraph( "\"w0 (w1)\"") ;
   }
 
   @Test
   public void paragraphBodyIsNestingQuoteAndParenthesisAndEmphasis() throws RecognitionException {
-    paragraphBody( "\"w0 (w1 /w2/)\"") ;
+    paragraph( "\"w0 (w1 /w2/)\"") ;
   }
 
   @Test
   public void paragraphBodyIsNestingQuoteAndParenthesisAndEmphasisAndParenthesisAgain()
       throws RecognitionException
   {
-    paragraphBody( "\"w0 (w1 /w2 (w3)/)\"") ;
+    paragraph( "\"w0 (w1 /w2 (w3)/)\"") ;
   }
 
   @Test
@@ -649,31 +663,31 @@ public class PartParserTest {
   paragraphBodyIsNestingQuoteAndParenthesisAndInterpolatedClauseAndParenthesisAgainAndBrackets()
       throws RecognitionException
   {
-    paragraphBody( "\"(w0 -- w1 (w2 [w3]) --)\"") ;
+    paragraph( "\"(w0 -- w1 (w2 [w3]) --)\"") ;
   }
 
   @Test
   public void paragraphBodyIsNestingEmphasisAndParenthesis() throws RecognitionException {
-    paragraphBody( "/w0 (w1)/.") ;
+    paragraph( "/w0 (w1)/.") ;
   }
 
   @Test
   public void paragraphBodyIsNestingEmphasisAndParenthesisAndQuotesAndHasQuestionMarkAtTheEnd()
       throws RecognitionException
   {
-    paragraphBody( "/w0 (w1, \"w2\")/ ?") ;
+    paragraph( "/w0 (w1, \"w2\")/ ?") ;
   }
 
   @Test
   public void paragraphBodyIsParenthesisWithWordThenExclamationMark() throws RecognitionException {
-    paragraphBody( "(w0 !)") ;
+    paragraph( "(w0 !)") ;
   }
 
   @Test
   public void paragraphBodyIsParenthesisWithWordAndQuotesAndEllipsisInside()
       throws RecognitionException
   {
-    paragraphBody( "(w0 \"w1\"...)") ;
+    paragraph( "(w0 \"w1\"...)") ;
   }
 
   @Test
@@ -681,7 +695,7 @@ public class PartParserTest {
   paragraphBodyHasNestingParenthesisAndQuoteEmphasisThenSemiColonAndWordAndExclamationMark()
       throws RecognitionException
   {
-    paragraphBody( "(w0 \"w1 /w2/\") : w3 !") ;
+    paragraph( "(w0 \"w1 /w2/\") : w3 !") ;
   }
 
   @Test
@@ -689,7 +703,7 @@ public class PartParserTest {
   paragraphBodyHasQuoteThenParenthesisThenEmphasisThenInterpolatedClauseThenBracketsNoSpace()
       throws RecognitionException
   {
-    paragraphBody( "\"w00\"(w01)/w02/--w03--[w04]" ) ;
+    paragraph( "\"w00\"(w01)/w02/--w03--[w04]" ) ;
   }
 
   @Test
@@ -697,7 +711,7 @@ public class PartParserTest {
   paragraphBodyIsNestingEmphasisAndParenthesisAndInterpolatedClauseAndQuotesOnSeveralLines()
       throws RecognitionException
   {
-    paragraphBody(
+    paragraph(
         "/w1" + BREAK +
         "(w2 " + BREAK +
         "-- w3  " + BREAK +
@@ -708,27 +722,27 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyFailsOnQuoteDepthExceeding1() throws RecognitionException {
-    paragraphBodyFails( "(w0 \"w1 (w2 \"w3\")\")" ) ;
+    paragraphFails( "(w0 \"w1 (w2 \"w3\")\")" ) ;
   }
 
   @Test
   public void paragraphBodyFailsOnEmphasisDepthExceeding1() throws RecognitionException {
-    paragraphBodyFails( "(w0 /w1 (w2 /w3/)/)" ) ;
+    paragraphFails( "(w0 /w1 (w2 /w3/)/)" ) ;
   }
 
   @Test
   public void paragraphBodyFailsOnParenthesisDepthExceeding2() throws RecognitionException {
-    paragraphBodyFails( "(w0 /w1 (w2 \"w3 (w4)\")/)" ) ;
+    paragraphFails( "(w0 /w1 (w2 \"w3 (w4)\")/)" ) ;
   }
 
   @Test
   public void paragraphBodyFailsOnInterpolatedClauseDepthExceeding1() throws RecognitionException {
-    paragraphBodyFails( "(w0 -- w1 (w2 -- w3 -- ) --)" ) ;
+    paragraphFails( "(w0 -- w1 (w2 -- w3 -- ) --)" ) ;
   }
 
   @Test
   public void paragraphBodyFailsOnSquareBracketsDepthExceeding1() throws RecognitionException {
-    paragraphBodyFails( "[w0 -- w1 [w2] --]" ) ;
+    paragraphFails( "[w0 -- w1 [w2] --]" ) ;
   }
 
   @Test public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {
@@ -804,146 +818,4 @@ public class PartParserTest {
   }
 
 
-// ===============================================
-// Wrappers for parser rules.
-// First-class methods in Java would be welcome!
-// Yes this is verbose but totally readable stuff.
-// Reflexion would be a mess.
-// ===============================================
-
-  private static void title( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = title( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree title( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().title().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-  private static void identifier( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = identifier( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree identifier( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().identifier().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-
-  private static void word( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = word( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree word( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().word().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-  private static void wordFails( String s ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( s ) ;
-    parser.getAntlrParser().word() ;
-    final String readableProblemList = AntlrTestHelper.createProblemList( parser.getProblems() ) ;
-    final boolean parserHasProblem = parser.hasProblem();
-    Assert.assertTrue( readableProblemList, parserHasProblem ) ;
-  }
-
-  private static void paragraph( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = paragraph( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree paragraph( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().paragraph().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-  private static void section( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = section( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree section( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().section().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-  private static void chapter( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = chapter( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree chapter( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().chapter().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-  private static void paragraphBody( String text, Tree expectedTree )
-      throws RecognitionException
-  {
-    final Tree actualTree = paragraphBody( text ); ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree paragraphBody( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().
-        paragraphBody().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-  private static void paragraphBodyFails( String s ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( s ) ;
-    parser.getAntlrParser().paragraphBody() ;
-    final String readableProblemList = AntlrTestHelper.createProblemList( parser.getProblems() ) ;
-    final boolean parserHasProblem = parser.hasProblem() ;
-    Assert.assertTrue( readableProblemList, parserHasProblem ) ;
-  }
-
-  private static void part( String text, Tree expectedTree )
-      throws RecognitionException
-  {
-    final Tree actualTree = part( text ); ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
-  }
-
-  private static Tree part( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().part().getTree() ;
-    checkSanity( parser );
-    return tree;
-  }
-
-
-// ================
-// Boring utilities
-// ================
-
-  private static void checkSanity( DelegatingPartParser parser ) {
-    if( parser.hasProblem() ) {
-      throw new AssertionFailedError(
-          "Parser has problems. " + AntlrTestHelper.createProblemList( parser.getProblems() ) ) ;
-    }
-  }
-
-
-  private static DelegatingPartParser createPartParser( String text ) {
-    return ( DelegatingPartParser )
-        new DefaultPartParserFactory().createParser( TreeHelper.LOCATION_FACTORY, text );
-  }
 }
