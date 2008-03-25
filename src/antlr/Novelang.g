@@ -233,7 +233,7 @@ paragraphBody
         ( mediumBreak?
           nestedWordSequence
           ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
+          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )* // TODO factor with previous line
         )*    
         ( mediumBreak?
           nestedWordSequence
@@ -373,11 +373,11 @@ bracketingText
   ;
 
 emphasizingText
-  : SOLIDUS 
+  : EMPHASIS_DELIMITER
     mediumBreak?
     paragraphBodyNoEmphasis
     mediumBreak?
-    SOLIDUS
+    EMPHASIS_DELIMITER
     -> ^( EMPHASIS paragraphBodyNoEmphasis )
   ;
   
@@ -467,7 +467,7 @@ book
           largeBreak
           bookChapter ( largeBreak bookChapter )*
         )
-//      | ( ':autogenerate' largeBreak bookParts )
+      | ( ':autogenerate' largeBreak bookParts )
     ) 
     ( mediumBreak | largeBreak )?
     EOF
@@ -705,6 +705,7 @@ OPENING_BLOCKQUOTE : '<<<' ;
 CLOSING_BLOCKQUOTE : '>>>' ;
 INTERPOLATED_CLAUSE_DELIMITER : '--' ;
 INTERPOLATED_CLAUSE_SILENT_END : '-_' ;
+EMPHASIS_DELIMITER : SOLIDUS SOLIDUS ;
 SPEECH_OPENER : '---' ;
 SPEECH_CONTINUATOR : '--+' ;
 SPEECH_ESCAPE : '--|' ;

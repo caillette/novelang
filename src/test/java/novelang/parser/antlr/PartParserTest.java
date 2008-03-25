@@ -258,13 +258,13 @@ public class PartParserTest {
       throws RecognitionException
   {
     paragraph(
-        "/w0/w1"
+        "//w0//w1"
     ) ;
   }
 
   @Test
   public void paragraphIsWordsWithApostropheThenEmphasis() throws RecognitionException {
-    paragraph( "w0 w1'w2/w3/.", tree(
+    paragraph( "w0 w1'w2//w3//.", tree(
         PARAGRAPH_PLAIN,
         tree( WORD, "w0" ),
         tree( WORD, "w1" ),
@@ -288,7 +288,7 @@ public class PartParserTest {
   @Test
   public void paragraphIsMultilineQuoteWithPunctuationSigns2() throws RecognitionException {
     paragraph(
-        "/w1./" + BREAK +
+        "//w1.//" + BREAK +
         "w2. w3."
     ) ;
   }
@@ -296,7 +296,7 @@ public class PartParserTest {
   @Test
   public void paragraphIsEmphasisAndQuoteWithPunctuationSigns1() throws RecognitionException {
     paragraph(
-        "/w0./ " + BREAK +
+        "//w0.// " + BREAK +
         "  w1. w2. w3. " + BREAK +
         "  w4 : w5 w6. " + BREAK +
         "  \"w7 w8 ?\"."
@@ -506,7 +506,7 @@ public class PartParserTest {
     section(
         "===" + BREAK +
         BREAK +
-        "/w0/" + BREAK +
+        "//w0//" + BREAK +
         "w1"
     ) ;
   }
@@ -546,7 +546,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustEmphasizedWord() throws RecognitionException {
-    paragraph( "/w0/", tree(
+    paragraph( "//w0//", tree(
         PARAGRAPH_PLAIN,
         tree( EMPHASIS, tree( WORD, "w0" ) )
     ) ) ;
@@ -656,14 +656,14 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsNestingQuoteAndParenthesisAndEmphasis() throws RecognitionException {
-    paragraph( "\"w0 (w1 /w2/)\"") ;
+    paragraph( "\"w0 (w1 //w2//)\"") ;
   }
 
   @Test
   public void paragraphBodyIsNestingQuoteAndParenthesisAndEmphasisAndParenthesisAgain()
       throws RecognitionException
   {
-    paragraph( "\"w0 (w1 /w2 (w3)/)\"") ;
+    paragraph( "\"w0 (w1 //w2 (w3)//)\"") ;
   }
 
   @Test
@@ -676,14 +676,14 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsNestingEmphasisAndParenthesis() throws RecognitionException {
-    paragraph( "/w0 (w1)/.") ;
+    paragraph( "//w0 (w1)//.") ;
   }
 
   @Test
   public void paragraphBodyIsNestingEmphasisAndParenthesisAndQuotesAndHasQuestionMarkAtTheEnd()
       throws RecognitionException
   {
-    paragraph( "/w0 (w1, \"w2\")/ ?") ;
+    paragraph( "//w0 (w1, \"w2\")// ?") ;
   }
 
   @Test
@@ -703,7 +703,7 @@ public class PartParserTest {
   paragraphBodyHasNestingParenthesisAndQuoteEmphasisThenSemiColonAndWordAndExclamationMark()
       throws RecognitionException
   {
-    paragraph( "(w0 \"w1 /w2/\") : w3 !") ;
+    paragraph( "(w0 \"w1 //w2//\") : w3 !") ;
   }
 
   @Test
@@ -711,7 +711,7 @@ public class PartParserTest {
   paragraphBodyHasQuoteThenParenthesisThenEmphasisThenInterpolatedClauseThenBracketsNoSpace()
       throws RecognitionException
   {
-    paragraph( "\"w00\"(w01)/w02/--w03--[w04]" ) ;
+    paragraph( "\"w00\"(w01)//w02//--w03--[w04]" ) ;
   }
 
   @Test
@@ -720,11 +720,11 @@ public class PartParserTest {
       throws RecognitionException
   {
     paragraph(
-        "/w1" + BREAK +
+        "//w1" + BREAK +
         "(w2 " + BREAK +
         "-- w3  " + BREAK +
         "\"w4 " + BREAK +
-        "w5\"--)/."
+        "w5\"--)//."
     ) ;
   }
 
