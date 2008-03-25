@@ -17,6 +17,9 @@
  */
 package novelang.model.implementation;
 
+import static novelang.model.common.NodeKind.*;
+import static novelang.parser.antlr.TreeHelper.tree;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -26,7 +29,8 @@ import org.junit.Assert;
 import org.apache.commons.lang.ClassUtils;
 import novelang.ResourceTools;
 import novelang.ScratchDirectoryFixture;
-import novelang.model.common.Location;
+import novelang.parser.antlr.TreeHelper;
+import novelang.parser.antlr.AntlrTestHelper;
 import novelang.model.common.Tree;
 
 /**
@@ -37,19 +41,78 @@ import novelang.model.common.Tree;
 public class BookTest {
 
   @Test
-  public void identifierLookupOk() throws IOException {
-    book1.loadStructure() ;
-    book1.loadParts() ;
-    book1.gatherIdentifiers() ;
+  public void loadSimpleBook() throws IOException {
+    simpleBook.load() ;
 
-    Assert.assertFalse( book1.hasProblem() ) ;
+    Assert.assertFalse( simpleBook.hasProblem() ) ;
 
-    Assert.assertNotNull( book1.getTree( "SpeechSequence1nlpSection0" ) ) ;
-    Assert.assertNotNull( book1.getTree( "SpeechSequence1nlpSection1" ) ) ;
-    Assert.assertNotNull( book1.getTree( "Section1nlp" ) ) ;
+    Assert.assertNotNull( simpleBook.getTree( "small1" ) ) ;
+    Assert.assertNotNull( simpleBook.getTree( "small2" ) ) ;
+    Assert.assertNotNull( simpleBook.getTree( "small3" ) ) ;
+    Assert.assertNotNull( simpleBook.getTree( "small4" ) ) ;
 
-    final Tree bookTree = book1.getTree();
-//    System.out.println( "Synthetic tree = " + OldPlainTextRenderer.renderAsString( bookTree ) ) ;
+    final Tree bookTree = simpleBook.getTree();
+    TreeHelper.assertEquals(
+      tree(
+          _BOOK,
+          tree( CHAPTER,
+              tree( SECTION,
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w10" ) ),
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w20" ) )
+              ),
+              tree( SECTION,
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w30" ) )
+              )
+          ),
+          tree( CHAPTER,
+              tree( SECTION,
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w40" ) )
+              )
+          )
+      ),
+      bookTree
+    ) ;
+
+  }
+
+  @Test
+  public void loadStylishBook() throws IOException {
+    stylishBook.load() ;
+    Assert.assertFalse(
+        AntlrTestHelper.createProblemList( stylishBook.getProblems() ),
+        stylishBook.hasProblem()
+    ) ;
+
+    final Tree bookTree = stylishBook.getTree();
+    TreeHelper.assertEquals(
+      tree(
+          _BOOK,
+          tree( CHAPTER,
+              tree( TITLE, tree( WORD, "Chapter" ), tree( WORD, "one" ) ),
+              tree( STYLE, tree( WORD, "chapter-one-style" ) ),
+              tree( SECTION,
+                  tree( TITLE, tree( WORD, "Section" ), tree( WORD, "one-one" ) ),
+                  tree( STYLE, tree( WORD, "section-one-one-style" ) ),
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w10" ) ),
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w20" ) )
+              ),
+              tree( SECTION,
+                  tree( TITLE, tree( WORD, "Section" ), tree( WORD, "one-two" ) ),
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w30" ) )
+              )
+          ),
+          tree( CHAPTER,
+              tree( TITLE, tree( WORD, "Chapter" ), tree( WORD, "two" ) ),
+              tree( STYLE, tree( WORD, "chapter-two-style" ) ),
+              tree( SECTION,
+                  tree( TITLE, tree( WORD, "Section" ), tree( WORD, "two-two" ) ),
+                  tree( STYLE, tree( WORD, "section-two-two-style" ) ),
+                  tree( PARAGRAPH_PLAIN, tree( WORD, "w40" ) )
+              )
+          )
+      ),
+      bookTree
+    ) ;
 
   }
 
@@ -57,24 +120,29 @@ public class BookTest {
 // Fixture
 // =======
 
-  private static final String STRUCTURE_4 = TestResources.STRUCTURE_4 ;
-  private static final String SECTIONS_1 = TestResources.SECTIONS_1 ;
-  private static final String SPEECHSEQUENCE_1 = TestResources.SPEECHSEQUENCE_1 ;
-  private File book1Directory;
-  private String testName;
-  private Book book1;
-  private Location location;
+  private static final String SIMPLE_BOOK = TestResources.STRUCTURE_5 ;
+  private static final String STYLISH_BOOK = TestResources.STRUCTURE_6 ;
+  private static final String PART_1 = TestResources.SMALL_1 ;
+  private static final String PART_2 = TestResources.SMALL_2 ;
+  private static final String PART_3 = TestResources.SMALL_3 ;
+  private static final String PART_4 = TestResources.SMALL_4 ;
+  private Book simpleBook;
+  private Book stylishBook;
 
   @Before
   public void setUp() throws IOException {
-    testName = ClassUtils.getShortClassName( getClass() ) ;
+    final String testName = ClassUtils.getShortClassName( getClass() );
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
-    book1Directory = scratchDirectoryFixture.getBook4Directory();
-    ResourceTools.copyResourceToFile( getClass(), STRUCTURE_4, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), SECTIONS_1, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), SPEECHSEQUENCE_1, book1Directory ) ;
-    book1 = new Book( testName, new File( book1Directory, STRUCTURE_4 ) );
+    final File book1Directory = scratchDirectoryFixture.getBook4Directory();
+    ResourceTools.copyResourceToFile( getClass(), SIMPLE_BOOK, book1Directory ) ;
+    ResourceTools.copyResourceToFile( getClass(), STYLISH_BOOK, book1Directory ) ;
+    ResourceTools.copyResourceToFile( getClass(), PART_1, book1Directory ) ;
+    ResourceTools.copyResourceToFile( getClass(), PART_2, book1Directory ) ;
+    ResourceTools.copyResourceToFile( getClass(), PART_3, book1Directory ) ;
+    ResourceTools.copyResourceToFile( getClass(), PART_4, book1Directory ) ;
+    simpleBook = new Book( testName, new File( book1Directory, SIMPLE_BOOK ) );
+    stylishBook = new Book( testName, new File( book1Directory, STYLISH_BOOK ) );
   }
 
 }

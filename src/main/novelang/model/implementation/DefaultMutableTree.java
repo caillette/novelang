@@ -82,8 +82,23 @@ public class DefaultMutableTree implements MutableTree {
   }
 
   public String toStringTree() {
-    throw new UnsupportedOperationException( "toStringTree" ) ;
-//    return OldPlainTextRenderer.renderAsString( this ) ;
+    final StringBuffer buffer = new StringBuffer() ;
+    buffer.append( "(" ) ;
+    buffer.append( getText() ) ;
+
+    if( getChildCount() > 0 ) {
+      buffer.append( " " ) ;
+      boolean first = true ;
+      for( final Tree tree : getChildren() ) {
+        if( ! first ) {
+          buffer.append( " " ) ;
+        }
+        buffer.append( tree.toStringTree() ) ;
+        first = false ;
+      }
+    }
+    buffer.append( ")" ) ;
+    return buffer.toString() ;
   }
 
   public Location getLocation() {

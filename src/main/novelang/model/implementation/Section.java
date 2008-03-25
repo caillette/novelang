@@ -59,6 +59,10 @@ public class Section extends StyledElement implements StructuralSection, WeavedS
 
   public Tree buildTree( Map< String, Tree > identifiers ) {
     final MutableTree sectionTree = new DefaultMutableTree( NodeKind.SECTION ) ;
+    final Tree styleTree = getStyle() ;
+    if( null != styleTree ) {
+      sectionTree.addChild( styleTree ) ;
+    }
 
     for( final Inclusion inclusion : inclusions ) {
       // TODO don't take all paragraphs inconditionally.

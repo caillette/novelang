@@ -17,8 +17,8 @@
  */
 package novelang.parser.antlr;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.antlr.runtime.ClassicToken;
 import org.junit.Assert;
@@ -26,9 +26,12 @@ import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
-import novelang.parser.antlr.CustomTree;
 
 /**
+ * Helps building {@link Tree}s for tests.
+ * Dependency towards {@link novelang.parser.antlr.CustomTree} is just for implementation,
+ * it helps tree comparison.
+ *
  * @author Laurent Caillette
  */
 public class TreeHelper {
@@ -110,6 +113,9 @@ public class TreeHelper {
 
   private static final Pattern SPACE_NORMALIZER_PATTERN = Pattern.compile( " +" ) ;
 
+  /**
+   * Replace sequence of spaces by a single one.
+   */
   public static String normalizeSpaces( String s ) {
     final Matcher matcher = SPACE_NORMALIZER_PATTERN.matcher( s ) ;
     final StringBuffer buffer = new StringBuffer() ;

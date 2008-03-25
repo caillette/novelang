@@ -29,7 +29,7 @@ import junit.framework.AssertionFailedError;
 public class AntlrTestHelper {
   static final String BREAK = "\n" ;
 
-  static String createProblemList( Iterable<Problem> problems ) {
+  public static String createProblemList( Iterable<Problem> problems ) {
     final StringBuffer buffer = new StringBuffer( "Problems:" ) ;
     for( final Problem problem : problems ) {
       buffer.append( "\n    " ) ;

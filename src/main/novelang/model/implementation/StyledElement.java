@@ -19,10 +19,12 @@ package novelang.model.implementation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
 import com.google.common.base.Objects;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
+import novelang.model.common.NodeKind;
 
 /**
  * @author Laurent Caillette
@@ -35,7 +37,7 @@ import novelang.model.common.Tree;
   private static final Logger LOGGER = LoggerFactory.getLogger( StyledElement.class ) ;
 
   private Tree title ;
-  private String style ;
+  private Tree style ;
 
   public StyledElement( BookContext context, Location location ) {
     super( context, location ) ;
@@ -50,13 +52,24 @@ import novelang.model.common.Tree;
     LOGGER.debug( "Title set to '{}' for {}", title, this ) ;
   }
 
-  public String getStyle() {
+  public Tree getStyle() {
     return style;
   }
 
-  public void setStyle( String style ) {
+  public void setStyle( Tree style ) {
     this.style = Objects.nonNull( style ) ;
     LOGGER.debug( "Style set to '{}' for {}", title, this ) ;
+  }
+
+  public String getStyleName() {
+    Tree tree = style ;
+    if( null != tree ) {
+      tree = tree.getChildAt( 0 ) ;
+      return tree.getText() ;
+    } else {
+      return null ;
+    }
+
   }
 
 }

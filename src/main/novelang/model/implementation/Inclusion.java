@@ -26,6 +26,7 @@ import novelang.model.structural.StructuralInclusion;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import novelang.model.common.Problem;
+import novelang.model.common.NodeKind;
 import novelang.model.weaved.WeavedInclusion;
 import novelang.model.weaved.UnknownIdentifierException;
 import com.google.common.collect.Lists;
@@ -87,7 +88,9 @@ public class Inclusion
       collect( Problem.createProblem( this, unknownIdentifierException ) ) ;
     } else {
       for( Tree tree : sectionTree.getChildren() ) {
-        trees.add( tree ) ;
+        if( ! NodeKind.IDENTIFIER.isRoot( tree ) ) {
+          trees.add( tree ) ;
+        }
       }
     }
     return trees ;

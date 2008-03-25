@@ -61,11 +61,17 @@ public class Chapter extends StyledElement implements StructuralChapter, WeavedC
     if( null != getTitle() ) {
       chapterTree.addChild( getTitle() ) ;
     }
+    final Tree styleTree = getStyle() ;
+    if( null != styleTree ) {
+      chapterTree.addChild( styleTree ) ;
+    }
     for( final Section section : sections ) {
       chapterTree.addChild( section.buildTree( identifiers ) ) ;
     }
     return chapterTree ;
   }
+
+  
 
 
 }

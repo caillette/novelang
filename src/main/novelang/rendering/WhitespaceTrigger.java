@@ -25,7 +25,7 @@ import novelang.model.common.NodeKind;
 import com.google.common.collect.Sets;
 
 /**
- * Determines wether a whitespace should be added between two Nodes of known type.
+ * Determines when a whitespace should be added between two Nodes of known type.
  * 
  * @author Laurent Caillette
  */
@@ -39,6 +39,7 @@ public class WhitespaceTrigger {
     add( PARENTHESIS, WORD ) ;
     add( PUNCTUATION_SIGN, PARENTHESIS ) ;
     add( PUNCTUATION_SIGN, QUOTE ) ;
+    add( PUNCTUATION_SIGN, EMPHASIS ) ;
     add( PUNCTUATION_SIGN, WORD ) ;
     add( QUOTE, WORD ) ;
     add( SQUARE_BRACKETS, WORD ) ;

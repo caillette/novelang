@@ -30,6 +30,7 @@ tokens {
   SECTION  ;
   TITLE ;
   IDENTIFIER ;
+  STYLE ;
   LOCUTOR ;
   PARAGRAPH_PLAIN ;
   PARAGRAPH_SPEECH ;
@@ -219,6 +220,10 @@ identifier
 	  -> ^( IDENTIFIER paragraphBody )
   ;
   
+/** This rule repeats through paragraphBodyNoXxx rules in order to avoid left-recursion
+ *  with sub-paragraphs which don't have symmetrical delimiters.
+ *  It doesn't seem possible to factor this with using backtracking or whatever.
+ */  
 paragraphBody 
   :   openingEllipsis
     | ( openingEllipsis?
@@ -467,7 +472,7 @@ book
           largeBreak
           bookChapter ( largeBreak bookChapter )*
         )
-      | ( ':autogenerate' largeBreak bookParts )
+      | ( AUTOGENERATE_DIRECTIVE ( mediumBreak | largeBreak ) bookParts )
     ) 
     ( mediumBreak | largeBreak )?
     EOF
@@ -520,10 +525,13 @@ bookChapter
       }       
     )?
     ( mediumBreak | largeBreak )
-    ( style ( mediumBreak | largeBreak )
+    ( style 
       { if( areScopesEnabled() ) {
-        $ChapterScope::chapter.setStyle( $style.text ) ; }
+        $ChapterScope::chapter.setStyle( 
+            ( novelang.model.common.Tree ) $style.tree ) ; 
+        }
       }
+      ( mediumBreak | largeBreak )
     )?
     bookSection ( largeBreak bookSection )* 
   ;
@@ -543,18 +551,24 @@ bookSection
               ( novelang.model.common.Tree ) $title.tree ) ; }
         }
     )?
-    ( mediumBreak | largeBreak )
-    ( style ( mediumBreak | largeBreak )
+    
+    ( ( mediumBreak | largeBreak )
+      style 
       { if( areScopesEnabled() ) {
-        $SectionScope::section.setStyle( $style.text ) ; }
+        $SectionScope::section.setStyle( 
+            ( novelang.model.common.Tree ) $style.tree ) ; 
+        }
       }
+      
     )?
+    largeBreak
     inclusion
     ( ( mediumBreak | largeBreak ) inclusion )*
   ;
 
-style // Don't mess the Lexer, use litteral here.
-	:	':style' !smallBreak word
+style 
+	:	STYLE_DIRECTIVE smallBreak word
+	  -> ^( STYLE word )
 	;
 
 inclusion
@@ -714,6 +728,9 @@ CHAPTER_INTRODUCER : '***' ;
 SECTION_INTRODUCER : '===' ;
 PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
 
+AUTOGENERATE_DIRECTIVE : ':autogenerate' ;
+STYLE_DIRECTIVE : ':style' ;
+	
 ESCAPED_CHARACTER 
   : AMPERSAND LETTER+ SEMICOLON
     { setText( delegate.escapeSymbol( 

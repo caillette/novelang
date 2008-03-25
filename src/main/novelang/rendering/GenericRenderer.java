@@ -17,17 +17,15 @@
  */
 package novelang.rendering;
 
-import java.io.PrintWriter;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
-import novelang.model.common.Problem;
-import novelang.model.common.NodeKind;
-import novelang.model.common.Tree;
-import novelang.model.common.NodePath;
-import novelang.model.common.TreeMetadata;
-import novelang.model.renderable.Renderable;
-import novelang.model.implementation.MetadataHelper;
 import com.google.common.base.Objects;
+import novelang.model.common.NodeKind;
+import novelang.model.common.NodePath;
+import novelang.model.common.Problem;
+import novelang.model.common.Tree;
+import novelang.model.renderable.Renderable;
 
 /**
  * @author Laurent Caillette

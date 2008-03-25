@@ -89,7 +89,7 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
     return getContext().getEncoding() ;
   }
 
-  public void loadStructure() throws IOException {
+  public void loadStructure() {
 
     final File localFile = context.relativizeFile( bookFile.getName() ) ;
     LOGGER.info( "Attempting to load file '{}' from {}", localFile.getAbsolutePath(), this ) ;
@@ -104,6 +104,12 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
       collect( Problem.createProblem( this, e ) ) ;
     }
 
+  }
+
+  public void load() {
+    loadStructure() ;
+    loadParts() ;
+    gatherIdentifiers() ;
   }
 
   /**
@@ -192,6 +198,7 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
     ) ;
   }
 
+
   
 // ==================
 // Book tree creation
@@ -213,6 +220,10 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
         Collections.unmodifiableMap( mutableIdentifiers ) ;
 
     final MutableTree bookTree = new DefaultMutableTree( NodeKind._BOOK ) ;
+    final Tree styleTree = getStyle() ;
+    if( null != styleTree ) {
+      bookTree.addChild( styleTree ) ;
+    }
     for( final WeavedChapter chapter : chapters ) {
       bookTree.addChild( chapter.buildTree( treesFromPartsByIdentifier ) ) ;
     }

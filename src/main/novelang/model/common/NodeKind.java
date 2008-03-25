@@ -38,6 +38,7 @@ public enum NodeKind {
   TITLE,
   IDENTIFIER,
   LOCUTOR,
+  STYLE,
 
   PARAGRAPH_PLAIN,
   _SPEECH_SEQUENCE,
@@ -65,6 +66,7 @@ public enum NodeKind {
   SIGN_COLON( true ),
 
   ;
+
 
   private final boolean punctuationSign ;
 

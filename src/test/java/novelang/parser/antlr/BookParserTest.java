@@ -46,7 +46,7 @@ public class BookParserTest {
   private static final String BREAK = "\n" ;
 
   @Test
-  public void book() throws RecognitionException {
+  public void bookWithJustSomeTitleAndOneSimpleInclusion() throws RecognitionException {
     book(
         "# path/to/part" + BREAK +
         BREAK +
@@ -56,7 +56,12 @@ public class BookParserTest {
         BREAK +
         "+ included"
     ) ;
+  }
 
+  @Test
+  public void bookWithJustSomeTitleAndOneSimpleInclusionAndTrailingSpacesAndBreaks()
+      throws RecognitionException
+  {
     book(
         "# path/to/part " + BREAK +
         " " + BREAK +
@@ -68,8 +73,12 @@ public class BookParserTest {
         " " + BREAK +
         " "
     ) ;
+  }
 
-
+  @Test
+  public void bookWithSeveralPartsAndThreeSectionsAndComplexInclusions()
+      throws RecognitionException
+  {
     book(
         "# 123/4/56" + BREAK +
         "# path/to/file1.np" + BREAK +
@@ -102,11 +111,10 @@ public class BookParserTest {
         BREAK +
         BREAK
     ) ;
-
   }
 
   @Test
-  public void bookChapter() throws RecognitionException {
+  public void bookChapterWithAnonymousItems() throws RecognitionException {
 
     bookChapter(
         "***" + BREAK +
@@ -115,7 +123,12 @@ public class BookParserTest {
         BREAK +
         "+ included"
     ) ;
+  }
 
+  @Test
+  public void bookChapterWithAnonymousItemsAndSomeSpacesAfterChapterIntroducer()
+      throws RecognitionException
+  {
     bookChapter(
         "***  " + BREAK +
         BREAK +
@@ -126,64 +139,113 @@ public class BookParserTest {
   }
 
   @Test
-  public void bookPart() throws RecognitionException {
+  public void bookPartWithStraighPathNoDots() throws RecognitionException {
     bookPart( "# path/to/part" ) ;
-    bookPart( "#path/t-o/part.nlp" ) ;
-    bookPart( "#path/to/*.nlp" ) ;
+  }
 
+  @Test
+  public void bookPartWithDashAndHyphen() throws RecognitionException {
+    bookPart( "#path/t-o/part.nlp" ) ;
+  }
+
+  @Test
+  public void bookPartWithWildcardInFileName() throws RecognitionException {
+    bookPart( "#path/to/*.nlp" ) ;
+  }
+
+  @Test
+  public void bookPartWithWildcardsInDirectoryAndFile() throws RecognitionException {
     bookPart(
         "# w*/*.e",
         TreeHelper.multiTokenTree( "# w*/*.e" )
     ) ;
+  }
 
+  @Test
+  public void bookPartFailsBecauseOfTwoDots() throws RecognitionException {
     bookPartFails( "#path/to/forbidden/../place" ) ;
   }
 
   @Test
-  public void bookSection() throws RecognitionException {
+  public void bookSectionWithTitleOnManyLines() throws RecognitionException {
     bookSection(
        "=== 'w0 w1" + BREAK +
        "w2" + BREAK +
+       BREAK +
        "+ w3"
     ) ;
   }
 
   @Test
-  public void style() throws RecognitionException {
+  public void bookSectionWithTitleOnManyLinesAndStyle() throws RecognitionException {
+    bookSection(
+       "=== 'w0 w1" + BREAK +
+       "w2" + BREAK +
+       ":style w3" + BREAK +
+       BREAK +
+       "+ w4"
+    ) ;
+  }
+
+  @Test
+  public void styleAsOneSingleWord() throws RecognitionException {
     style( ":style this-is-a-style-identifier" ) ;  
   }
 
   @Test
-  public void inclusion() throws RecognitionException {
-
+  public void inclusionWithIdentifierOfJustOneWord() throws RecognitionException {
     inclusion(
         "+ w0" 
     ) ;
+  }
 
+  @Test
+  public void inclusionWithIdentifierOfTwoWordsAndOneParagraph() throws RecognitionException {
     inclusion(
         "+ w0 w1" + BREAK +
         BREAK +
         "<= 1"
     ) ;
+  }
 
+  @Test
+  public void inclusionWithStyledIdentifierAndOneParagraph() throws RecognitionException {
     inclusion(
         "+ w0 (w1)" + BREAK +
         "<= 1"
     ) ;
+  }
 
+  @Test
+  public void inclusionWithAppendingAndOneParagraph() throws RecognitionException {
     inclusion(
         "| w0 (w1)" + BREAK +
         "<= 1"
     ) ;
-
   }
 
   @Test
-  public void paragraphReferences() throws RecognitionException{
+  public void paragraphReferenceWithOneParagraphStraightNumber() throws RecognitionException{
     paragraphReferences( "<= 1" ) ;
+  }
+
+  @Test
+  public void paragraphReferenceWithJustOneParagraphInvertedNumber() throws RecognitionException{
     paragraphReferences( "<= 11-" ) ;
+  }
+
+  @Test
+  public void paragraphReferenceWithTwoNumberedParagraphs() throws RecognitionException{
     paragraphReferences( "<= 1 2" ) ;
+  }
+
+  @Test
+  public void paragraphReferenceWithOneParagraphRange() throws RecognitionException{
     paragraphReferences( "<= 1..2" ) ;
+  }
+
+  @Test
+  public void paragraphReferenceWithStraightAndInvertedNumbersAndRange() throws RecognitionException{
     paragraphReferences( "<= 0- 2..3 45 67-" ) ;
   }
 
