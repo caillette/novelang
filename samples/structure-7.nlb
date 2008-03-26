@@ -1,0 +1,28 @@
+
+# sections-1.nlp
+# speechsequence-1.nlp
+
+
+***'Chapter one
+:style chapter-one-style
+
+==='Section one-one
+:style section-one-one-style
+
++ SpeechSequence1nlpSection0 <=  2..4  0-
++ SpeechSequence1nlpSection1
+
+
+==='Section one-two
+
++ section2 s21
+| section3 s31   %% Merge first § of this one with last § of previous.
+
+
+***'Chapter two
+
+==='Section two-one
+
++ Section1nlp <= 1
+
+

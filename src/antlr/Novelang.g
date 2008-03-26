@@ -205,6 +205,200 @@ locutor
  	  -> ^( LOCUTOR word* ) // TODO fix this, apostrophe is swallowed.
  	;
 
+// =============================================================
+// Part-related URL rules
+// http://gbiv.com/protocols/uri/rfc/rfc3986.html#collected-abnf
+// =============================================================
+
+uri
+  : uriScheme COLON uriHierarchicalPart 
+    ( QUESTION_MARK uriQuery )? 
+    ( NUMBER_SIGN uriFragment )?
+  ;
+  
+uriHierarchicalPart
+  : ( SOLIDUS SOLIDUS uriAuthority uriPathAbsoluteEmpty )
+  | uriPathAbsolute
+  | uriPathRootless
+  | uriPathEmpty
+  ;
+
+uriReference 
+  : uri
+  | uriRelativeRef
+  ;
+
+uriAbsoluteUri 
+  : uriScheme COLON uriHierarchicalPart ( QUESTION_MARK uriQuery )
+  ;
+  
+uriRelativeRef 
+  : uriRelativePart ( COLON uriQuery ) ( NUMBER_SIGN uriFragment )
+  ;
+
+uriRelativePart 
+  : ( SOLIDUS SOLIDUS uriAuthority uriPathAbsoluteEmpty )
+  | uriPathAbsolute
+  | uriPathNoScheme
+  | uriPathEmpty
+  ;
+
+uriScheme
+  : LETTER ( LETTER | DIGIT | PLUS_SIGN | HYPHEN_MINUS | FULL_STOP )*
+  ;
+  
+uriAuthority
+  : ( uriUserinfo COMMERCIAL_AT )? 
+    uriHost 
+    ( COLON uriPort )?
+  ;
+  
+uriUserinfo      
+  : (   uriUnreserved 
+      | uriPctEncoded 
+      | uriSubDelimiters 
+      | COLON
+    )
+  ;
+  
+uriHost
+  : /*uriIpLiteral |*/ uriIpV4Address | uriRegName
+  ;
+  
+uriPort 
+  : DIGIT*
+  ;
+
+uriIpV4Address
+  : uriDecimalOctet FULL_STOP 
+    uriDecimalOctet FULL_STOP 
+    uriDecimalOctet  FULL_STOP 
+    uriDecimalOctet
+  ;
+
+ uriDecimalOctet  // TODO check 10-99 ; 100-199 ; 200-249 ; 250-255
+  : DIGIT ( DIGIT ( DIGIT DIGIT? )? )? 
+  ;
+
+uriRegName
+  : (   uriUnreserved 
+      | uriPctEncoded 
+      | uriSubDelimiters
+     )*
+  ;
+
+uriPath
+  : uriPathAbsoluteEmpty    // begins with "/" or is empty
+  | uriPathAbsolute         // begins with "/" but not "//"
+  | uriPathNoScheme         // begins with a non-colon segment
+  | uriPathRootless         // begins with a segment
+  | uriPathEmpty            // zero characters
+  ;
+
+uriPathAbsoluteEmpty 
+  : ( SOLIDUS uriSegment )*
+  ;
+  
+uriPathAbsolute
+  : SOLIDUS ( uriSegmentNonZero ( SOLIDUS uriSegment )* )?
+  ;
+  
+uriPathNoScheme
+  : uriSegmentNonZeroNoColon ( SOLIDUS uriSegment )*
+  ;
+  
+uriPathRootless
+  : uriSegmentNonZero ( SOLIDUS uriSegment )*
+  ;
+
+uriPathEmpty 
+  : // Empty.
+  ;
+
+uriSegment
+  : uriChar*
+  ;
+  
+uriSegmentNonZero
+  : uriChar+
+  ;
+  
+uriSegmentNonZeroNoColon
+  : ( uriUnreserved | uriPctEncoded | uriSubDelimiters | COMMERCIAL_AT )+
+  ;
+  
+
+uriChar
+  : uriUnreserved 
+  | uriPctEncoded 
+  | uriSubDelimiters 
+  | COLON 
+  | COMMERCIAL_AT 
+  ;
+  
+uriQuery
+  : (   uriChar   
+      | SOLIDUS
+      | QUESTION_MARK
+    )*
+  ;
+  
+uriFragment
+  : (   uriChar
+      | SOLIDUS
+      | QUESTION_MARK
+    )*
+  ;
+
+uriPctEncoded
+  : PERCENT_SIGN hexadecimalDigit hexadecimalDigit
+  ;
+  
+uriUnreserved
+  : LETTER
+  | DIGIT
+  | HYPHEN_MINUS
+  | FULL_STOP
+  | LOW_LINE
+  | TILDE
+  ;
+  
+uriReserved
+  : uriGenericDelimiters | uriSubDelimiters
+  ;    
+ 
+uriGenericDelimiters
+  : COLON
+  | SOLIDUS
+  | QUESTION_MARK
+  | NUMBER_SIGN
+  | LEFT_SQUARE_BRACKET
+  | RIGHT_SQUARE_BRACKET
+  | COMMERCIAL_AT
+  ; 
+
+uriSubDelimiters
+  : EXCLAMATION_MARK
+  | DOLLAR_SIGN
+  | AMPERSAND
+  | APOSTROPHE
+  | LEFT_PARENTHESIS
+  | RIGHT_PARENTHESIS
+  | ASTERISK
+  | PLUS_SIGN
+  | COMMA
+  | SEMICOLON
+  | EQUALS_SIGN
+  ;
+               
+hexadecimalDigit
+  : DIGIT | ( 'a'..'f' | 'A'..'F' )
+  ;               
+               
+               
+               
+               
+
 
 // =================================
 // Shared rules (both Part and Book)
@@ -457,8 +651,7 @@ punctuationSign
 
   
   
-  
-  
+    
   
   
   
@@ -636,8 +829,11 @@ APOSTROPHE : '\'' ;
 ASTERISK : '*' ;
 COLON : ':' ;
 COMMA : ',' ;
+COMMERCIAL_AT : '@' ;
+DOLLAR_SIGN : '$' ;
 DOUBLE_QUOTE : '\"' ;
 ELLIPSIS : '...' ;
+EQUALS_SIGN : '=' ;
 EXCLAMATION_MARK : '!' ;
 FULL_STOP : '.' ;
 GRAVE_ACCENT : '`' ;
@@ -647,11 +843,13 @@ LEFT_SQUARE_BRACKET : '[' ;
 LOW_LINE : '_' ;
 NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
+PERCENT_SIGN : '%' ;
 QUESTION_MARK : '?' ;
 RIGHT_PARENTHESIS : ')' ;
 RIGHT_SQUARE_BRACKET : ']' ;
 SEMICOLON : ';' ;
 SOLIDUS : '/' ;
+TILDE : '~' ;
 VERTICAL_LINE : '|' ;
 
 
