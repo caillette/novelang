@@ -187,6 +187,7 @@ scope ParagraphScope ;
     -> ^( PARAGRAPH_SPEECH_CONTINUED paragraphBody )
   | paragraphBody
     -> ^( PARAGRAPH_PLAIN paragraphBody )
+  | ( url ) => url
   ;
 
 blockQuote
@@ -218,11 +219,18 @@ url
   ;
   
 fileUrl
-  : 'file://' ( urlHost | 'localhost' ) SOLIDUS urlFilePath
+  : ( 'f' 'i' 'l' 'e' COLON SOLIDUS SOLIDUS ) => 'f' 'i' 'l' 'e' COLON SOLIDUS SOLIDUS 
+   ( urlHost ) // Change from spec: don't handle 'localhost' in this rule.
+   SOLIDUS 
+   urlFilePath
   ;
   
 httpUrl
-  : 'http://' urlHostPort ( SOLIDUS httpUrlPath ( QUESTION_MARK httpUrlSearch )? )?
+  : ( 'h' 't' 't' 'p' COLON SOLIDUS SOLIDUS ) => 'h' 't' 't' 'p' COLON SOLIDUS SOLIDUS 
+  urlHostPort 
+    ( SOLIDUS httpUrlPath 
+    ( QUESTION_MARK httpUrlSearch )? 
+    )?
   ;
 
 
@@ -236,7 +244,7 @@ urlLogin
   ;
   
 urlHostPort
-  : urlHost ( COLON urlPort )?
+  : urlHost ( ( COLON urlPort ) )?
   ;
   
 urlHost
@@ -263,7 +271,7 @@ urlHostNumber
   ;
   
 urlPort
-  : DIGIT+ 
+  : digit+ 
   ;
   
 urlUser
@@ -330,18 +338,18 @@ httpUrlSearch
   ;  
                
 urlAlpha
-  : HEX_LETTER 
-  | NON_HEX_LETTER
+  : hexLetter 
+  | nonHexLetter
   ;
   
 urlAlphaDigit
-  : HEX_LETTER 
-  | NON_HEX_LETTER
-  | DIGIT
+  : hexLetter 
+  | nonHexLetter
+  | digit
   ;
   
 urlDigits
-  : DIGIT+
+  : digit+
   ;
   
 urlSafe
@@ -372,7 +380,7 @@ urlReserved
   ;
   
 urlHex
-  : DIGIT | HEX_LETTER
+  : digit | hexLetter
   ;
   
 urlEscape
@@ -380,9 +388,9 @@ urlEscape
   ;
   
 urlUnreserved
-  : HEX_LETTER 
-  | NON_HEX_LETTER
-  | DIGIT 
+  : hexLetter 
+  | nonHexLetter
+  | digit 
   | urlSafe 
   | urlExtra
   ;
@@ -513,7 +521,7 @@ paragraphBodyNoInterpolatedClause
   ;
 
 nestedWordSequence
-  : word 
+  : ( word ) 
     (   ( mediumBreak word ) 
       | ( smallBreak? punctuationSign ) 
       | ( smallBreak? punctuationSign word ) 
@@ -577,11 +585,11 @@ bracketingText
   ;
 
 emphasizingText
-  : EMPHASIS_DELIMITER
+  : SOLIDUS SOLIDUS
     mediumBreak?
     paragraphBodyNoEmphasis
     mediumBreak?
-    EMPHASIS_DELIMITER
+    SOLIDUS SOLIDUS
     -> ^( EMPHASIS paragraphBodyNoEmphasis )
   ;
   
@@ -632,11 +640,23 @@ word
 /** This intermediary rule is useful as I didn't find how to
  * concatenate Tokens from inside the rewrite rule.
  */
-rawWord 
-  : ( HEX_LETTER | NON_HEX_LETTER | DIGIT | ESCAPED_CHARACTER )+
-    ( HYPHEN_MINUS 
-      ( HEX_LETTER | NON_HEX_LETTER | DIGIT | ESCAPED_CHARACTER )+ 
+rawWord returns [ String text ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
+      | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
+      | s3 = digit { buffer.append( $s3.text ) ; }
+      | s4 = escapedCharacter  { buffer.append( $s4.unescaped ) ; }
+    )+
+    ( s5 = HYPHEN_MINUS { buffer.append( $s5.text ) ; }
+      (  s6 = hexLetter { buffer.append( $s6.text ) ; }
+       | s7 = nonHexLetter { buffer.append( $s7.text ) ; }
+       | s8 = digit { buffer.append( $s8.text ) ; }
+       | s9 = escapedCharacter  { buffer.append( $s9.unescaped ) ; } 
+      )+ 
     )*
+    { $text = buffer.toString() ; }
   ;  
   
 openingEllipsis
@@ -698,9 +718,9 @@ genericFileName
 /** '..' is forbidden for security reasons.
  */    
 genericFileNameItem 
-  : (   HEX_LETTER 
-      | NON_HEX_LETTER 
-      | DIGIT 
+  : (   hexLetter 
+      | nonHexLetter 
+      | digit 
       | HYPHEN_MINUS 
       | ASTERISK 
       | LOW_LINE 
@@ -813,60 +833,33 @@ includedParagraphRange
     }
   ;
 
-positiveInteger : DIGIT+ ;
+positiveInteger : digit+ ;
 
-postsignedInteger : DIGIT+ HYPHEN_MINUS? ;
-
-
+postsignedInteger : digit+ HYPHEN_MINUS? ;
 
 
-// ======
-// Tokens
-// ======
-
-SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
-WHITESPACE : ( ' ' | '\t' )+ ;
-
-// All namings respect Unicode standard.
-// http://www.fileformat.info/info/unicode
-
-AMPERSAND : '&' ;
-APOSTROPHE : '\'' ;
-ASTERISK : '*' ;
-COLON : ':' ;
-COMMA : ',' ;
-COMMERCIAL_AT : '@' ;
-DOLLAR_SIGN : '$' ;
-DOUBLE_QUOTE : '\"' ;
-ELLIPSIS : '...' ;
-EQUALS_SIGN : '=' ;
-EXCLAMATION_MARK : '!' ;
-FULL_STOP : '.' ;
-GRAVE_ACCENT : '`' ;
-HYPHEN_MINUS : '-' ;
-LEFT_PARENTHESIS : '(' ;
-LEFT_SQUARE_BRACKET : '[' ;
-LOW_LINE : '_' ;
-NUMBER_SIGN : '#' ;
-PLUS_SIGN : '+' ;
-PERCENT_SIGN : '%' ;
-QUESTION_MARK : '?' ;
-RIGHT_PARENTHESIS : ')' ;
-RIGHT_SQUARE_BRACKET : ']' ;
-SEMICOLON : ';' ;
-SOLIDUS : '/' ;
-TILDE : '~' ;
-VERTICAL_LINE : '|' ;
 
 
-HEX_LETTER
-  : 'a'..'f'
-  | 'A'..'F'
+// ==============
+// Common symbols
+// ==============
+
+/** Notation '0'..'9' giving weird things with Antlr 3.0.1 + AntlrWorks 1.1.7.
+ */
+digit : '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
+
+letters : ( hexLetter | nonHexLetter )+ ;
+
+hexLetter
+  : 'a' | 'b' | 'c' | 'd' | 'e' | 'f'  
+  | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' 
   ;
 
-NON_HEX_LETTER 
-  : 'g'..'z' 
-  | 'G'..'Z' 
+nonHexLetter 
+  : 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' 
+  | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z'   
+  | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' 
+  | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'   
 
   | '\u00e0' // LATIN SMALL LETTER A WITH GRAVE  
   | '\u00c0' // LATIN CAPITAL LETTER A WITH GRAVE  
@@ -921,14 +914,58 @@ NON_HEX_LETTER
 
   ;
 
+escapedCharacter returns [ String unescaped ]
+  : AMPERSAND letters SEMICOLON
+    { $unescaped = delegate.escapeSymbol( 
+          $letters.text, 
+          getLine(),
+          getCharPositionInLine() 
+      ) ;
+    }    
+  ;
 
-DIGIT : '0'..'9';
+
+
+SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
+WHITESPACE : ( ' ' | '\t' )+ ;
+
+// All namings respect Unicode standard.
+// http://www.fileformat.info/info/unicode
+
+AMPERSAND : '&' ;
+APOSTROPHE : '\'' ;
+ASTERISK : '*' ;
+COLON : ':' ;
+COMMA : ',' ;
+COMMERCIAL_AT : '@' ;
+DOLLAR_SIGN : '$' ;
+DOUBLE_QUOTE : '\"' ;
+ELLIPSIS : '...' ;
+EQUALS_SIGN : '=' ;
+EXCLAMATION_MARK : '!' ;
+FULL_STOP : '.' ;
+GRAVE_ACCENT : '`' ;
+HYPHEN_MINUS : '-' ;
+LEFT_PARENTHESIS : '(' ;
+LEFT_SQUARE_BRACKET : '[' ;
+LOW_LINE : '_' ;
+NUMBER_SIGN : '#' ;
+PLUS_SIGN : '+' ;
+PERCENT_SIGN : '%' ;
+QUESTION_MARK : '?' ;
+RIGHT_PARENTHESIS : ')' ;
+RIGHT_SQUARE_BRACKET : ']' ;
+SEMICOLON : ';' ;
+SOLIDUS : '/' ;
+TILDE : '~' ;
+VERTICAL_LINE : '|' ;
+
+
   
 OPENING_BLOCKQUOTE : '<<<' ;
 CLOSING_BLOCKQUOTE : '>>>' ;
 INTERPOLATED_CLAUSE_DELIMITER : '--' ;
 INTERPOLATED_CLAUSE_SILENT_END : '-_' ;
-EMPHASIS_DELIMITER : SOLIDUS SOLIDUS ;
 SPEECH_OPENER : '---' ;
 SPEECH_CONTINUATOR : '--+' ;
 SPEECH_ESCAPE : '--|' ;
@@ -939,16 +976,10 @@ PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
 
 AUTOGENERATE_DIRECTIVE : ':autogenerate' ;
 STYLE_DIRECTIVE : ':style' ;
-	
-ESCAPED_CHARACTER 
-  : AMPERSAND ( HEX_LETTER | NON_HEX_LETTER )+ SEMICOLON
-    { setText( delegate.escapeSymbol( 
-          getText().substring(1, getText().length() - 1 ), 
-          getLine(),
-          getCharPositionInLine() 
-      ) ) ;
-    }
-  ;
+
+//URL_HTTP_SCHEME : 'http://' ;
+//URL_FILE_SCHEME : 'file://' ;
+//URL_LOCALHOST : 'localhost' ;
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
 

@@ -24,6 +24,7 @@ import java.util.Map;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Assert;
 import static novelang.model.common.NodeKind.*;
 import static novelang.parser.antlr.TreeHelper.tree;
 import novelang.parser.SymbolUnescape;
@@ -74,6 +75,21 @@ public class PartParserTest {
   }
 
   @Test
+  public void wordCausedABug1() throws RecognitionException {
+    word( "myIdentifier", tree( WORD, "myIdentifier" ) ) ;
+  }
+
+  @Test
+  /**
+   * This one because {@code 'fi'} was recognized as the start of {@code 'file'}
+   * and the parser generated this error: 
+   * {@code line 1:10 mismatched character 'e' expecting 'l'}.
+   */
+  public void wordCausedABug2() throws RecognitionException {
+    word( "fi", tree( WORD, "fi" ) ) ;
+  }
+
+  @Test
   public void wordIsSingleLetter() throws RecognitionException {
     word( "w",       tree( WORD, "w" ) ) ;
   }
@@ -107,7 +123,9 @@ public class PartParserTest {
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
     final Map< String,String > map = SymbolUnescape.getDefinitions() ;
     for( String key : map.keySet() ) {
-      word( "&" + key + ";", tree( WORD, map.get( key ) ) ) ;
+      final String escaped = "&" + key + ";" ;
+      final String unescaped = map.get( key ) ;
+      word( escaped, tree( WORD, unescaped ) ) ;
     }
   }
 
@@ -801,6 +819,20 @@ public class PartParserTest {
     ) ;
   }
 
+  /**
+   * This one because {@code 'lobs'} was recognized as the start of {@code 'localhost'}
+   * and the parser generated this error:
+   * {@code line 3:3 mismatched character 'b' expecting 'c' }.
+   */
+  @Test
+  public void partMadeOfParticularContent() throws RecognitionException {
+    part(
+      "===" + BREAK +
+      BREAK +
+      " lobs "  // really.
+    ) ;
+  }
+
   @Test
   public void chapterIsAnonymousWithSimpleSectionContainingWordsWithPunctuationSigns1()
       throws RecognitionException
@@ -816,7 +848,7 @@ public class PartParserTest {
   @Test
   public void chapterIsAnonymousWithSimpleSectionContainingWordsWithPunctuationSigns2()
       throws RecognitionException
-  { 
+  {
     chapter( "***" + BREAK +
         BREAK +
         "===" + BREAK +
@@ -826,8 +858,30 @@ public class PartParserTest {
   }
 
   @Test
+  public void chapterContainsUrl()
+      throws RecognitionException
+  {
+    chapter( "***" + BREAK +
+        BREAK +
+        "===" + BREAK +
+        BREAK +
+        "http://google.com"
+    ) ;
+  }
+
+  @Test
   public void urlHttpGoogleDotCom() throws RecognitionException {
     url( "http://google.com", tree( URL, "http://google.com" ) ) ;
+  }
+
+  @Test
+  public void urlHttpLocalhost() throws RecognitionException {
+    url( "http://localhost", tree( URL, "http://localhost" ) ) ;
+  }
+
+  @Test
+  public void urlHttpLocalhost8080() throws RecognitionException {
+    url( "http://localhost:8080", tree( URL, "http://localhost:8080" ) ) ;
   }
 
   @Test
