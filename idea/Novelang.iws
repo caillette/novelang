@@ -216,8 +216,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Novelang.g" pinned="true" current="true" current-in-tab="true">
+      <file leaf-file-name="Novelang.g" pinned="true" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/antlr/Novelang.g">
+          <provider selected="true" editor-type-id="grammar">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PartParserTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/PartParserTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="837" column="4" selection-start="21142" selection-end="21142" vertical-scroll-proportion="0.58596975">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AntlrTestHelper.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/AntlrTestHelper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="153" column="58" selection-start="5834" selection-end="5834" vertical-scroll-proportion="0.7771664">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Url.g" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/antlr/Url.g">
           <provider selected="true" editor-type-id="grammar">
             <state />
           </provider>
@@ -230,15 +257,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="structure-5.nlb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/structure-5.nlb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="9" selection-start="52" selection-end="52" vertical-scroll-proportion="0.07015131">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -261,28 +279,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sections-1.nlp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../samples/sections-1.nlp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="15" selection-start="4" selection-end="15" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="speechsequence-1.nlp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../samples/speechsequence-1.nlp">
           <provider selected="true" editor-type-id="text-editor">
             <state line="15" column="3" selection-start="159" selection-end="159" vertical-scroll-proportion="0.35075653">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BookParserTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/BookParserTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="184" column="0" selection-start="4935" selection-end="4935" vertical-scroll-proportion="0.2957359">
               <folding />
             </state>
           </provider>
@@ -1197,44 +1197,6 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr/novelang" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr/novelang/parser" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/generated/antlr/novelang/parser/antlr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Novelang.ipr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Novelang" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/.." />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/../configuration" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
@@ -1332,14 +1294,14 @@
     <option name="showLabels" value="true" />
   </component>
   <component name="RestoreUpdateTree" />
-  <component name="RunManager" selected="Application.ServerMain">
-    <tempConfiguration default="false" name="BookTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
-      <pattern value="novelang.model.implementation.*" />
+  <component name="RunManager" selected="JUnit.PartParserTest">
+    <tempConfiguration default="false" name="PartParserTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+      <pattern value="novelang.parser.antlr.*" />
       <module name="Novelang" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="novelang.model.implementation" />
-      <option name="MAIN_CLASS_NAME" value="novelang.model.implementation.BookTest" />
+      <option name="PACKAGE_NAME" value="novelang.parser.antlr" />
+      <option name="MAIN_CLASS_NAME" value="novelang.parser.antlr.PartParserTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
@@ -1933,34 +1895,6 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/BookParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="184" column="0" selection-start="4935" selection-end="4935" vertical-scroll-proportion="0.2957359">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/small-4.nlp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="2" selection-start="14" selection-end="14" vertical-scroll-proportion="0.08695652">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-4.nlp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../samples/sections-3.nlp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../samples/sections-2.nlp">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -2026,7 +1960,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/NodeKind.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="6" selection-start="1412" selection-end="1412" vertical-scroll-proportion="0.70151305">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/PartParserTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="837" column="4" selection-start="21142" selection-end="21142" vertical-scroll-proportion="0.58596975">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../src/antlr/Novelang.g">
+      <provider selected="true" editor-type-id="grammar">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/AntlrTestHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="153" column="58" selection-start="5834" selection-end="5834" vertical-scroll-proportion="0.7771664">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/antlr/Url.g">
       <provider selected="true" editor-type-id="grammar">
         <state />
       </provider>

@@ -825,5 +825,27 @@ public class PartParserTest {
     ) ;
   }
 
+  @Test
+  public void urlHttpGoogleDotCom() throws RecognitionException {
+    url( "http://google.com", tree( URL, "http://google.com" ) ) ;
+  }
+
+  @Test
+  public void urlHttpGoogleQuery() throws RecognitionException {
+    url(
+        "http://www.google.com/search?q=url%20specification&sourceid=mozilla2&ie=utf-8&oe=utf-8",
+        tree(
+            URL,
+            "http://www.google.com/search?q=url%20specification&sourceid=mozilla2&ie=utf-8&oe=utf-8"
+        )
+    ) ;
+  }
+
+  @Test
+  public void urlFilePathFileDotNlp() throws RecognitionException {
+    url( "file://path/file.nlp", tree( URL, "file://path/file.nlp" ) ) ;
+  }
+
+
 
 }

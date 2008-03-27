@@ -55,6 +55,7 @@ public enum NodeKind {
   ELLIPSIS_OPENING,
   APOSTROPHE_WORDMATE,
   WORD,
+  URL,
 
   PUNCTUATION_SIGN,
   SIGN_COMMA( true ),

@@ -44,6 +44,7 @@ tokens {
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
   WORD ;
+  URL ;
   
   ELLIPSIS_OPENING ;
   APOSTROPHE_WORDMATE ;
@@ -205,196 +206,200 @@ locutor
  	  -> ^( LOCUTOR word* ) // TODO fix this, apostrophe is swallowed.
  	;
 
-// =============================================================
+
+// ===================================
 // Part-related URL rules
-// http://gbiv.com/protocols/uri/rfc/rfc3986.html#collected-abnf
-// =============================================================
+// http://www.ietf.org/rfc/rfc1738.txt
+// ===================================
 
-uri
-  : uriScheme COLON uriHierarchicalPart 
-    ( QUESTION_MARK uriQuery )? 
-    ( NUMBER_SIGN uriFragment )?
+url
+  : ( http = fileUrl -> ^( URL { delegate.createTree( URL, $http.text ) } )	)
+  | ( file = httpUrl -> ^( URL { delegate.createTree( URL, $file.text ) } )	) 
   ;
   
-uriHierarchicalPart
-  : ( SOLIDUS SOLIDUS uriAuthority uriPathAbsoluteEmpty )
-  | uriPathAbsolute
-  | uriPathRootless
-  | uriPathEmpty
-  ;
-
-uriReference 
-  : uri
-  | uriRelativeRef
-  ;
-
-uriAbsoluteUri 
-  : uriScheme COLON uriHierarchicalPart ( QUESTION_MARK uriQuery )
+fileUrl
+  : 'file://' ( urlHost | 'localhost' ) SOLIDUS urlFilePath
   ;
   
-uriRelativeRef 
-  : uriRelativePart ( COLON uriQuery ) ( NUMBER_SIGN uriFragment )
+httpUrl
+  : 'http://' urlHostPort ( SOLIDUS httpUrlPath ( QUESTION_MARK httpUrlSearch )? )?
   ;
 
-uriRelativePart 
-  : ( SOLIDUS SOLIDUS uriAuthority uriPathAbsoluteEmpty )
-  | uriPathAbsolute
-  | uriPathNoScheme
-  | uriPathEmpty
+
+
+urlIpSchemePart
+  : SOLIDUS SOLIDUS urlLogin ( SOLIDUS urlPath ) 
+  ;
+  
+urlLogin
+  : ( urlUser ( COLON urlPassword )? COMMERCIAL_AT )? urlHostPort 
+  ;
+  
+urlHostPort
+  : urlHost ( COLON urlPort )?
+  ;
+  
+urlHost
+  : urlHostName
+  | urlHostNumber
+  ;
+  
+urlHostName
+  : ( urlDomainLabel FULL_STOP )* urlTopLabel
+  ;
+  
+urlDomainLabel
+  : urlAlphaDigit 
+  | ( urlAlphaDigit ( urlAlphaDigit | HYPHEN_MINUS )* urlAlphaDigit )
+  ;
+  
+urlTopLabel
+  : urlAlpha 
+  | ( urlAlpha ( urlAlphaDigit | HYPHEN_MINUS )* urlAlphaDigit )
+  ;
+  
+urlHostNumber
+  : urlDigits FULL_STOP urlDigits FULL_STOP urlDigits FULL_STOP urlDigits 
+  ;
+  
+urlPort
+  : DIGIT+ 
+  ;
+  
+urlUser
+  : (   urlUChar  
+      | SEMICOLON
+      | QUESTION_MARK
+      | AMPERSAND
+      | EQUALS_SIGN
+    )*
   ;
 
-uriScheme
-  : LETTER ( LETTER | DIGIT | PLUS_SIGN | HYPHEN_MINUS | FULL_STOP )*
+urlPassword
+  : (   urlUChar  
+      | SEMICOLON
+      | QUESTION_MARK
+      | AMPERSAND
+      | EQUALS_SIGN
+    )*
+  ;
+
+urlPath
+  : urlXChar*
   ;
   
-uriAuthority
-  : ( uriUserinfo COMMERCIAL_AT )? 
-    uriHost 
-    ( COLON uriPort )?
+urlFilePath
+  : urlFileSegment ( SOLIDUS urlFileSegment )*
   ;
   
-uriUserinfo      
-  : (   uriUnreserved 
-      | uriPctEncoded 
-      | uriSubDelimiters 
+urlFileSegment
+  : (   urlUChar     
+      | QUESTION_MARK
       | COLON
-    )
-  ;
-  
-uriHost
-  : /*uriIpLiteral |*/ uriIpV4Address | uriRegName
-  ;
-  
-uriPort 
-  : DIGIT*
-  ;
-
-uriIpV4Address
-  : uriDecimalOctet FULL_STOP 
-    uriDecimalOctet FULL_STOP 
-    uriDecimalOctet  FULL_STOP 
-    uriDecimalOctet
-  ;
-
- uriDecimalOctet  // TODO check 10-99 ; 100-199 ; 200-249 ; 250-255
-  : DIGIT ( DIGIT ( DIGIT DIGIT? )? )? 
-  ;
-
-uriRegName
-  : (   uriUnreserved 
-      | uriPctEncoded 
-      | uriSubDelimiters
-     )*
-  ;
-
-uriPath
-  : uriPathAbsoluteEmpty    // begins with "/" or is empty
-  | uriPathAbsolute         // begins with "/" but not "//"
-  | uriPathNoScheme         // begins with a non-colon segment
-  | uriPathRootless         // begins with a segment
-  | uriPathEmpty            // zero characters
-  ;
-
-uriPathAbsoluteEmpty 
-  : ( SOLIDUS uriSegment )*
-  ;
-  
-uriPathAbsolute
-  : SOLIDUS ( uriSegmentNonZero ( SOLIDUS uriSegment )* )?
-  ;
-  
-uriPathNoScheme
-  : uriSegmentNonZeroNoColon ( SOLIDUS uriSegment )*
-  ;
-  
-uriPathRootless
-  : uriSegmentNonZero ( SOLIDUS uriSegment )*
-  ;
-
-uriPathEmpty 
-  : // Empty.
-  ;
-
-uriSegment
-  : uriChar*
-  ;
-  
-uriSegmentNonZero
-  : uriChar+
-  ;
-  
-uriSegmentNonZeroNoColon
-  : ( uriUnreserved | uriPctEncoded | uriSubDelimiters | COMMERCIAL_AT )+
-  ;
-  
-
-uriChar
-  : uriUnreserved 
-  | uriPctEncoded 
-  | uriSubDelimiters 
-  | COLON 
-  | COMMERCIAL_AT 
-  ;
-  
-uriQuery
-  : (   uriChar   
-      | SOLIDUS
-      | QUESTION_MARK
-    )*
-  ;
-  
-uriFragment
-  : (   uriChar
-      | SOLIDUS
-      | QUESTION_MARK
+      | SEMICOLON
+      | COMMERCIAL_AT
+      | AMPERSAND
+      | EQUALS_SIGN
     )*
   ;
 
-uriPctEncoded
-  : PERCENT_SIGN hexadecimalDigit hexadecimalDigit
+  
+httpUrlPath
+  : httpUrlSegment 
+    ( ( SOLIDUS httpUrlPath ) => SOLIDUS httpUrlPath )*
   ;
   
-uriUnreserved
-  : LETTER
+httpUrlSegment
+  : (   urlUChar
+      | SEMICOLON
+      | COLON
+      | COMMERCIAL_AT
+      | AMPERSAND
+      | EQUALS_SIGN
+    )*
+  ;  
+  
+httpUrlSearch
+  : (   urlUChar
+      | SEMICOLON
+      | COLON
+      | COMMERCIAL_AT
+      | AMPERSAND
+      | EQUALS_SIGN
+    )*
+  ;  
+               
+urlAlpha
+  : HEX_LETTER 
+  | NON_HEX_LETTER
+  ;
+  
+urlAlphaDigit
+  : HEX_LETTER 
+  | NON_HEX_LETTER
   | DIGIT
-  | HYPHEN_MINUS
-  | FULL_STOP
-  | LOW_LINE
-  | TILDE
   ;
   
-uriReserved
-  : uriGenericDelimiters | uriSubDelimiters
-  ;    
- 
-uriGenericDelimiters
-  : COLON
-  | SOLIDUS
-  | QUESTION_MARK
-  | NUMBER_SIGN
-  | LEFT_SQUARE_BRACKET
-  | RIGHT_SQUARE_BRACKET
-  | COMMERCIAL_AT
-  ; 
-
-uriSubDelimiters
+urlDigits
+  : DIGIT+
+  ;
+  
+urlSafe
+  : DOLLAR_SIGN
+  | HYPHEN_MINUS
+  | LOW_LINE
+  | FULL_STOP
+  | PLUS_SIGN
+  ;
+  
+urlExtra
   : EXCLAMATION_MARK
-  | DOLLAR_SIGN
-  | AMPERSAND
+  | ASTERISK
   | APOSTROPHE
   | LEFT_PARENTHESIS
   | RIGHT_PARENTHESIS
-  | ASTERISK
-  | PLUS_SIGN
   | COMMA
-  | SEMICOLON
+  ;
+  
+urlReserved
+  : SEMICOLON
+  | SOLIDUS
+  | QUESTION_MARK
+  | COLON
+  | COMMERCIAL_AT
+  | AMPERSAND
   | EQUALS_SIGN
   ;
-               
-hexadecimalDigit
-  : DIGIT | ( 'a'..'f' | 'A'..'F' )
-  ;               
-               
+  
+urlHex
+  : DIGIT | HEX_LETTER
+  ;
+  
+urlEscape
+  : PERCENT_SIGN urlHex urlHex
+  ;
+  
+urlUnreserved
+  : HEX_LETTER 
+  | NON_HEX_LETTER
+  | DIGIT 
+  | urlSafe 
+  | urlExtra
+  ;
+  
+urlUChar
+  : urlUnreserved
+  | urlEscape
+  ;
+  
+urlXChar
+  : urlUnreserved
+  | urlReserved
+  | urlEscape
+  ;
+
+
+
                
                
                
@@ -628,9 +633,9 @@ word
  * concatenate Tokens from inside the rewrite rule.
  */
 rawWord 
-  : ( LETTER | DIGIT | ESCAPED_CHARACTER )+
+  : ( HEX_LETTER | NON_HEX_LETTER | DIGIT | ESCAPED_CHARACTER )+
     ( HYPHEN_MINUS 
-      ( LETTER | DIGIT | ESCAPED_CHARACTER )+ 
+      ( HEX_LETTER | NON_HEX_LETTER | DIGIT | ESCAPED_CHARACTER )+ 
     )*
   ;  
   
@@ -693,7 +698,8 @@ genericFileName
 /** '..' is forbidden for security reasons.
  */    
 genericFileNameItem 
-  : (   LETTER 
+  : (   HEX_LETTER 
+      | NON_HEX_LETTER 
       | DIGIT 
       | HYPHEN_MINUS 
       | ASTERISK 
@@ -853,9 +859,14 @@ TILDE : '~' ;
 VERTICAL_LINE : '|' ;
 
 
-LETTER 
-  : 'a'..'z' 
-  | 'A'..'Z' 
+HEX_LETTER
+  : 'a'..'f'
+  | 'A'..'F'
+  ;
+
+NON_HEX_LETTER 
+  : 'g'..'z' 
+  | 'G'..'Z' 
 
   | '\u00e0' // LATIN SMALL LETTER A WITH GRAVE  
   | '\u00c0' // LATIN CAPITAL LETTER A WITH GRAVE  
@@ -930,7 +941,7 @@ AUTOGENERATE_DIRECTIVE : ':autogenerate' ;
 STYLE_DIRECTIVE : ':style' ;
 	
 ESCAPED_CHARACTER 
-  : AMPERSAND LETTER+ SEMICOLON
+  : AMPERSAND ( HEX_LETTER | NON_HEX_LETTER )+ SEMICOLON
     { setText( delegate.escapeSymbol( 
           getText().substring(1, getText().length() - 1 ), 
           getLine(),
