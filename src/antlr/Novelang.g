@@ -308,6 +308,8 @@ urlFileSegment
       | COMMERCIAL_AT
       | AMPERSAND
       | EQUALS_SIGN
+      | TILDE         // Not in the spec.
+      | NUMBER_SIGN   // Not in the spec.
     )*
   ;
 
@@ -324,6 +326,8 @@ httpUrlSegment
       | COMMERCIAL_AT
       | AMPERSAND
       | EQUALS_SIGN
+      | TILDE          // Not in the spec.
+      | NUMBER_SIGN   // Not in the spec.
     )*
   ;  
   

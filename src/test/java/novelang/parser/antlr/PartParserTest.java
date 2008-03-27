@@ -901,5 +901,17 @@ public class PartParserTest {
   }
 
 
+  @Test
+  public void urlWithTilde() throws RecognitionException {
+    url(
+        "http://domain.org/path/file~tilde#anchor",
+        tree(
+            URL,
+            "http://domain.org/path/file~tilde#anchor"
+        )
+    ) ;
+  }
+
+
 
 }
