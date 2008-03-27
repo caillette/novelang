@@ -90,6 +90,7 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.write( newPath, wordTree.getText() ) ;
         break ;
 
+      case URL :
       case _META_TIMESTAMP :
         fragmentWriter.start( newPath, false ) ;
         final Tree timestampTree = tree.getChildAt( 0 ) ;

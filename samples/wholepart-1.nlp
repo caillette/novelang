@@ -15,3 +15,8 @@ There can be several paragraphs inside.>>>
 === Section two
 
 Some escaped characters: &oelig; &OElig; &dollar; &deg;...
+
+URLs support:
+
+http://google.com
+

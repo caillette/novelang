@@ -918,8 +918,8 @@ escapedCharacter returns [ String unescaped ]
   : AMPERSAND letters SEMICOLON
     { $unescaped = delegate.escapeSymbol( 
           $letters.text, 
-          getLine(),
-          getCharPositionInLine() 
+          0, // getLine(), TODO fix this.
+          0 // getCharPositionInLine() 
       ) ;
     }    
   ;

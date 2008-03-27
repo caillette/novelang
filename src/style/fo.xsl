@@ -157,6 +157,16 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="n:url" >
+    <fo:block>
+      <fo:inline
+          font-style="italic"
+      >
+        <xsl:apply-templates/>
+      </fo:inline>
+    </fo:block>
+  </xsl:template>
+
   <xsl:template match="n:paragraph-speech" >
     <xsl:call-template name="speech" >
       <xsl:with-param name="speech-symbol" >&mdash;</xsl:with-param>
