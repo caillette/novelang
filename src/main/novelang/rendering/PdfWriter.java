@@ -52,124 +52,24 @@ import novelang.model.common.TreeMetadata;
 /**
  * @author Laurent Caillette
  */
-public class PdfWriter extends XmlWriter {
+public class PdfWriter extends XslWriter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( PdfWriter.class ) ;
-  private static final String NOVELANG_STYLES_DIR = "novelang.styles.dir" ;
-  private static final String DEFAULT_FO_STYLESHEET = /*"identity.xsl"*/ "fo.xsl" ;
-  private static final EntityResolver ENTITY_RESOLVER ;
-  private static final File STYLES_DIR ;
-
-  static {
-    final String stylesDirName = System.getProperty( NOVELANG_STYLES_DIR ) ;
-    if( StringUtils.isBlank( stylesDirName ) ) {
-      LOGGER.debug( "No directory set for styles" ) ;
-      throw new RuntimeException( // TODO load resource.
-          "No default stylesheet supported yet, set -D" + NOVELANG_STYLES_DIR + " instead" ) ;
-    } else {
-      final File dir = new File( stylesDirName ) ;
-      if( dir.exists() ) {
-        try {
-          STYLES_DIR = dir.getCanonicalFile() ;
-        } catch( IOException e ) {
-          throw new RuntimeException( e );
-        }
-        LOGGER.info( "Styles directory set to '{}'", STYLES_DIR.getAbsolutePath() ) ;
-      } else {
-        STYLES_DIR = null ;
-        LOGGER.warn( "Styles directory '{}' does not exist", STYLES_DIR.getAbsolutePath() ) ;
-      }
-    }
-    try {
-      ENTITY_RESOLVER = new LocalEntityResolver( STYLES_DIR.toURL().toExternalForm() ) ;
-    } catch( MalformedURLException e ) {
-      throw new RuntimeException( e );
-    }
-  }
-
-  private final File stylesheet ; // TODO use URL like for LocalEntityResolver
+  protected static final String DEFAULT_FO_STYLESHEET =  "pdf.xsl" ; 
 
   public PdfWriter() {
-    stylesheet = new File( STYLES_DIR, DEFAULT_FO_STYLESHEET ) ;
-    LOGGER.info( "Loaded stylesheet from '{}'", stylesheet.getAbsolutePath() ) ;
-  }
-
-  public RenditionMimeType getMimeType() {
-    return forcedMimeType ;
-  }
-
-// ================
-// Debug properties
-// ================
-
-  private RenditionMimeType forcedMimeType = RenditionMimeType.PDF ;
-
-  public void setForcedMimeType( RenditionMimeType forcedMimeType ) {
-    this.forcedMimeType = Objects.nonNull( forcedMimeType ) ;
-  }
-
-  private boolean applyFop = true ;
-
-  public void setApplyFop( boolean applyFop ) {
-    this.applyFop = applyFop;
+    super( DEFAULT_FO_STYLESHEET ) ;
   }
 
 // ==========
 // Generation
 // ==========
 
-  /**
-   * Creates a {@code ContentHandler} piped to a stylesheet producing Formatting Objects (FO)
-   * to the PDF generator (Apache FOP).
-   * When {@link #applyFop} is set to true, formatted XML is produced instead.
-   */
-  protected ContentHandler createContentHandler(
+
+  protected final ContentHandler createSinkContentHandler(
       OutputStream outputStream,
       TreeMetadata treeMetadata,
       Charset encoding
   )
-      throws Exception
-  {
-    final SAXTransformerFactory saxTransformerFactory =
-        ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
-
-    final TemplatesHandler templatesHandler = saxTransformerFactory.newTemplatesHandler() ;
-
-    final XMLReader reader = XMLReaderFactory.createXMLReader() ;
-    reader.setContentHandler( templatesHandler ) ;
-    reader.setEntityResolver( ENTITY_RESOLVER ) ;
-    reader.parse( new InputSource( new FileReader( stylesheet ) ) ) ;
-
-    final Templates templates = templatesHandler.getTemplates() ;
-    final TransformerHandler transformerHandler =
-        saxTransformerFactory.newTransformerHandler( templates ) ;
-    configure( transformerHandler.getTransformer(), treeMetadata ) ;
-
-    final ContentHandler sinkContentHandler ;
-
-    if( applyFop ) {
-      sinkContentHandler = createFopContentHandler( outputStream ) ;
-    } else {
-      sinkContentHandler = super.createContentHandler(
-          outputStream, treeMetadata, encoding ) ;
-    }
-
-    transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
-
-    return transformerHandler ;
-
-  }
-
-
-  private void configure( Transformer transformer, TreeMetadata treeMetadata ) {
-    transformer.setParameter(
-        "timestamp",
-        treeMetadata.getCreationTimestampAsString()
-    ) ;
-
-  }
-
-  private final ContentHandler createFopContentHandler( OutputStream outputStream )
       throws FOPException
   {
     final FopFactory fopFactory = FopFactory.newInstance() ;
@@ -184,32 +84,6 @@ public class PdfWriter extends XmlWriter {
 
     return fop.getDefaultHandler() ;
 
-  }
-
-  /**
-   * Fetches local files in the same directory as the stylesheet.
-   * This is because the {@code systemId} as read by the stylesheet loader is prefixed
-   * with current directory (bug?).
-   */
-  private static class LocalEntityResolver implements EntityResolver {
-
-    private final String resourcePrefix ;
-
-    public LocalEntityResolver( String resourcePrefix ) {
-      this.resourcePrefix = resourcePrefix ;
-    }
-
-    public InputSource resolveEntity(
-        String publicId,
-        String systemId
-    ) throws SAXException, IOException {
-      systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;      
-      LOGGER.debug( "Attempting to resolve entity publicId='{} systemId='{}'", publicId, systemId ) ;
-      final URL entityUrl = new URL( resourcePrefix + systemId ) ;
-      final InputSource inputSource = new InputSource( entityUrl.openStream() ) ;
-      LOGGER.debug( "Resolved entity '{}'", entityUrl.toExternalForm() ) ;
-      return inputSource ;
-    }
   }
 
 

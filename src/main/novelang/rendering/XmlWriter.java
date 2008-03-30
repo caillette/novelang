@@ -35,10 +35,17 @@ public class XmlWriter implements FragmentWriter {
 
   private ContentHandler contentHandler ;
   private TreeMetadata treeMetadata ;
+  private final RenditionMimeType mimeType ;
 
-
-  protected void configure( ContentHandler contentHandler, TreeMetadata treeMetadata ) {
+  public XmlWriter( RenditionMimeType mimeType ) {
+    this.mimeType = mimeType;
   }
+
+  public XmlWriter() {
+    this( RenditionMimeType.XML ) ;
+  }
+
+  protected void configure( ContentHandler contentHandler, TreeMetadata treeMetadata ) { }
 
   public void startWriting(
       OutputStream outputStream,
@@ -90,8 +97,12 @@ public class XmlWriter implements FragmentWriter {
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
   }
 
+  public void writeLitteral( NodePath kinship, String word ) throws Exception {
+    write( kinship, word ) ;
+  }
+
   public RenditionMimeType getMimeType() {
-    return RenditionMimeType.XML ;
+    return mimeType ;
   }
 
   protected ContentHandler createContentHandler(

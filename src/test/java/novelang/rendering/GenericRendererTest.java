@@ -139,6 +139,10 @@ public class GenericRendererTest {
       writer.append( word ) ;
     }
 
+    public void writeLitteral( NodePath kinship, String word ) throws Exception {
+      write( kinship, word ) ;
+    }
+
     public RenditionMimeType getMimeType() {
       return null ;
     }

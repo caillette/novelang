@@ -1,0 +1,60 @@
+***'Novelang, the simplest word processor
+
+==='What it is
+
+Novelang is a word processor that takes plain text files and transforms them
+into nicely-formatted documents like PDF or HTML.
+It keeps you focused on the text you type in and what it means,
+intead of struggling with how it should appear.
+
+{{{
+Novelang is easy because you don't have to struggle with a graphical interface
+with uncountable submenus and floating palettes, that don't handle styles
+and templates in a predictable way, and get slow on big documents.
+In addition, common word processors like Open Office or Microsoft Word
+offer many ways to obtain the same observable results, which may not resists
+to some reformatting -- ever seen people justifying text with //spaces//?-_
+}}}
+
+Novelang gets backs to the basics of text-based interface
+(when computers looked... well, //simple//) adding no magik to what
+you type (bliss). Using Novelang, you take the best of your favorite
+text editor using a very simple syntax to add some formatting hints.
+The magik occurs when you hit refresh in your Web browser, as the
+rigorously-formatted result appears.
+
+Novelang enforces a consistent presentation across a set of documents.
+Again: it doesn't rely on a proprietary, obscure format.
+Just text, that you can read on any computer with almost any text-viewer.
+In addition, text format is smaller, easier to search and manipulate through
+automated processes.
+
+Novelang is free to use and redistribute, under the terms of the
+GNU Public License v2.
+
+
+==='How it works -- my first document -_
+
+...
+
+***'Why we need one more word processor
+
+==='WYSIWIG word processors (Open Office, MS Word...)
+
+...
+
+==='WYSIWIG publishing tools (XPress, InDesign...)
+
+...
+
+==='LaTex
+
+...
+
+==='DocBook
+
+...
+
+==='Wiki syntax
+
+...

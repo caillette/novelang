@@ -65,6 +65,9 @@ public class PlainTextWriter implements FragmentWriter {
     writer.append( word ) ;
   }
 
+  public void writeLitteral( NodePath kinship, String word ) throws Exception {
+    write( kinship, word ) ;
+  }
 
   static final String spaces( int size ) {
     final StringBuffer buffer = new StringBuffer() ;

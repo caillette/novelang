@@ -94,13 +94,19 @@
   </xsl:template>
 
   <xsl:template match="n:chapter" >
-    <fo:block
-        break-before="page"
-        padding-top="230pt" 
-
-    >
-      <xsl:apply-templates />
-    </fo:block>
+    <xsl:choose>
+      <xsl:when test="n:style[text()='standalone']" >
+        <xsl:call-template name="standalone" />
+      </xsl:when>
+      <xsl:when test="n:style[text()='all-emphasized']" >
+        <xsl:call-template name="all-emphasized" />
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:block>
+          <xsl:apply-templates />
+        </fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="n:chapter/n:title" >
@@ -131,6 +137,26 @@
     </fo:inline>
   </xsl:template>
 
+  <xsl:template name="standalone" >
+    <fo:block
+        break-before="page"
+        padding-top="230pt"
+    >
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template name="all-emphasized" >
+    <fo:block
+        break-before="page"
+        padding-top="230pt"
+        text-align="left"
+        font-style="italic"
+    >
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
   <xsl:template match="n:blockquote" >
     <fo:block 
         text-align="justify"
@@ -147,6 +173,7 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-plain" >
     <fo:block
@@ -160,7 +187,7 @@
   <xsl:template match="n:url" >
     <fo:block>
       <fo:inline
-          font-style="italic"
+          font-style="bold"
       >
         <xsl:apply-templates/>
       </fo:inline>
@@ -178,7 +205,6 @@
       <xsl:with-param name="speech-symbol" >&raquo;</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-  
   
   <xsl:template name="speech" >
     <xsl:param name = "speech-symbol" />
@@ -206,7 +232,9 @@
   
   <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
 
-  <xsl:template match="n:emphasis" ><fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline></xsl:template>
+  <xsl:template match="n:emphasis" >
+    <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>
+  </xsl:template>
 
   <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
@@ -220,8 +248,8 @@
 
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 
-  <xsl:template match="n:sign-colon" >&nbsp;: </xsl:template>
-  <xsl:template match="n:sign-comma" >, </xsl:template>
+  <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
+  <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
   <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>

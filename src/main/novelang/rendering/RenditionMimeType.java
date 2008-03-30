@@ -23,6 +23,7 @@ package novelang.rendering;
 public enum RenditionMimeType {
   
   TXT( "text/plain" ),
+  NLP( "text/plain" ),
   XML( "text/xml" ),
   PDF( "application/pdf" ),
   HTML( "text/html" ) ;

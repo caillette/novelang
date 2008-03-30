@@ -20,12 +20,11 @@ package novelang.parser.antlr;
 import java.util.List;
 
 import org.antlr.runtime.tree.Tree;
-import org.antlr.runtime.Token;
 import org.antlr.runtime.CommonToken;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
 import novelang.model.common.Location;
-import novelang.parser.SymbolUnescape;
+import novelang.parser.Symbols;
 import novelang.parser.UnsupportedEscapedSymbolException;
 import com.google.common.collect.Lists;
 
@@ -64,7 +63,7 @@ public abstract class GrammarDelegate {
 
   public String escapeSymbol( String unescaped, int line, int column ) {
     try {
-      return SymbolUnescape.unescape( unescaped ) ;
+      return Symbols.unescape( unescaped ) ;
     } catch( UnsupportedEscapedSymbolException e ) {
       final Location location = locationFactory.createLocation( line, column ) ;
       problems.add( Problem.createProblem(

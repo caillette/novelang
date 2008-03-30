@@ -64,6 +64,8 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
   private final List< Part > parts = Lists.newArrayList() ;
   private final Multimap< String, Tree > multipleTreesFromPartsByIdentifier = Multimaps.newHashMultimap() ;
   private final List< Chapter > chapters = Lists.newArrayList() ;
+
+  private Tree tree ;
   private TreeMetadata treeMetadata ;
 
   private final File bookFile ;
@@ -204,12 +206,20 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
 // Book tree creation
 // ==================
 
+
+  public Tree getTree() {
+    if( null == tree ) {
+      buildTree() ;
+    }
+    return tree ;
+  }
+
   /**
    * {@code Chapter}s and their subelements feed a {@code MutableTree} using a map of {@code Tree}s
    * that was loaded by the {@code Part}s. Then this raw tree becomes a synthetic one after
    * all global enhancements like on speeches.
    */
-  public Tree getTree() {
+  private void buildTree() {
 
     final Map< String, Tree > mutableIdentifiers = Maps.newHashMap() ;
     for( String identifier : multipleTreesFromPartsByIdentifier.keySet() ) {
@@ -230,10 +240,13 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
 
     treeMetadata = MetadataHelper.createMetadata( bookTree ) ;
 
-    return bookTree ;
+    tree = bookTree ;
   }
 
   public TreeMetadata getTreeMetadata() {
+    if( null == treeMetadata ) {
+      buildTree() ;
+    }
     return treeMetadata ;
   }
 

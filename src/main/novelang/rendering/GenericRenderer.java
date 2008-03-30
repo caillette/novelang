@@ -94,7 +94,7 @@ public class GenericRenderer implements Renderer {
       case _META_TIMESTAMP :
         fragmentWriter.start( newPath, false ) ;
         final Tree timestampTree = tree.getChildAt( 0 ) ;
-        fragmentWriter.write( newPath, timestampTree.getText() ) ;
+        fragmentWriter.writeLitteral( newPath, timestampTree.getText() ); ;
         fragmentWriter.end( newPath ) ;
         break ;
 

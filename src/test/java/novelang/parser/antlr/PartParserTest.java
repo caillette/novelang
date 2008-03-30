@@ -24,10 +24,9 @@ import java.util.Map;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 import org.junit.Ignore;
-import org.junit.Assert;
 import static novelang.model.common.NodeKind.*;
 import static novelang.parser.antlr.TreeHelper.tree;
-import novelang.parser.SymbolUnescape;
+import novelang.parser.Symbols;
 
 /**
  * GUnit sucks as it has completely obscure failures and stupid reports,
@@ -121,7 +120,7 @@ public class PartParserTest {
 
   @Test
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
-    final Map< String,String > map = SymbolUnescape.getDefinitions() ;
+    final Map< String,String > map = Symbols.getDefinitions() ;
     for( String key : map.keySet() ) {
       final String escaped = "&" + key + ";" ;
       final String unescaped = map.get( key ) ;

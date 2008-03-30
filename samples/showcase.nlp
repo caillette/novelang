@@ -1,0 +1,45 @@
+***'Chapter one
+
+==='Section one one (with //style// inside the title!)
+
+This is a single-line paragraph.
+
+This is another paragraph.
+It is split over //two lines//. There are some [brackets] here.
+
+<<<
+This is a "blockquote".
+
+There can be several paragraphs inside.>>>
+
+=== Section two
+
+Some escaped characters: &oelig; &OElig; &dollar; &deg;...
+
+Some ISO-8859-1 characters: à À é è ë ê É È Ë Ê ï î Ï Î ö ô Ö Ô ù ü û Ù Ü Û æ Æ ç Ç
+
+
+URLs support:
+
+http://google.com
+
+=== About ellipsis
+
+Brackets support just an ellipsis inside [...].
+
+...Paragraph may start with an ellipsis.
+
+=== Speeches
+
+--- Speeches are paragraphs.
+
+--- somebody said :: They can have "locutors".
+
+--+ Speeches may spread on several paragraphs with "continuation".
+
+--| Continuation implies escaping.
+
+--+ And then it continues again.
+
+
+

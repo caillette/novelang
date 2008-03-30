@@ -4,10 +4,9 @@
 
 
 ***'Chapter one
-:style chapter-one-style
+:style alternate
 
 ==='Section one-one
-:style section-one-one-style
 
 + SpeechSequence1nlpSection0 <=  2..4  0-
 + SpeechSequence1nlpSection1

@@ -15,26 +15,16 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.weaver;
+package novelang.parser;
 
-import novelang.model.weaved.WeavedBook;
-import novelang.model.weaved.WeavedPart;
+import novelang.model.common.Location;
 
 /**
  * @author Laurent Caillette
  */
-public class Weaver {
+public class UnsupportedSymbolException extends Exception {
 
-  private final WeavedBook book ;
-
-  public Weaver( WeavedBook book ) {
-    this.book = book;
+  public UnsupportedSymbolException( String symbol ) {
+    super( "Unsupported symbol: '" + symbol + "'" ) ;
   }
-
-  public void weave() {
-    book.loadParts() ;
-    book.gatherIdentifiers() ;
-  }
-
-
 }

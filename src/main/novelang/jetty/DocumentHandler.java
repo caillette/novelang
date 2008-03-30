@@ -36,6 +36,8 @@ import novelang.rendering.GenericRenderer;
 import novelang.rendering.PlainTextWriter;
 import novelang.rendering.PdfWriter;
 import novelang.rendering.XmlWriter;
+import novelang.rendering.XslWriter;
+import novelang.rendering.NlpWriter;
 import novelang.model.renderable.Renderable;
 import novelang.model.common.StructureKind;
 import novelang.model.common.Problem;
@@ -64,6 +66,7 @@ public class DocumentHandler extends AbstractHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger( DocumentHandler.class ) ;
 
   private final File basedir ;
+
 
   public DocumentHandler( File basedir ) {
     this.basedir = Objects.nonNull( basedir ) ;
@@ -98,7 +101,8 @@ public class DocumentHandler extends AbstractHandler {
           problems,
           originalTarget
       ) ;
-      setAsHandled( request );
+      setAsHandled( request ) ;
+      // TODO redirect to document page if renderable has no problem.
       LOGGER.debug( "Served error request '{}'", originalTarget ) ;
 
     } else if( rendered.hasProblem() ) {
@@ -125,6 +129,17 @@ public class DocumentHandler extends AbstractHandler {
         case XML :
           serve( request, response, new GenericRenderer( new XmlWriter() ), rendered ) ;
           break ;
+        case HTML :
+          serve(
+              request,
+              response,
+              new GenericRenderer( new XslWriter( "html.xsl", RenditionMimeType.HTML ) ),
+              rendered
+          ) ;
+          break ;
+        case NLP :
+          serve( request, response, new GenericRenderer( new NlpWriter() ), rendered ) ;
+          break ;
         default :
           final IllegalArgumentException illegalArgumentException =
               new IllegalArgumentException( "Unsupported: " + mimeType );
@@ -147,9 +162,7 @@ public class DocumentHandler extends AbstractHandler {
             StructureKind.BOOK.getFileExtensions()
         ) ;
         final Book book = new Book( bookFile.getPath(), bookFile );
-        book.loadStructure() ;
-        book.loadParts() ;
-        book.gatherIdentifiers() ;
+        book.load() ;
         return book;
       case PART :
         final File partFile = FileLookupHelper.load(

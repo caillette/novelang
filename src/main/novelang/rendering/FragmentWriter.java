@@ -40,6 +40,11 @@ public interface FragmentWriter {
   void end( NodePath kinship ) throws Exception ;
   void write( NodePath kinship, String word ) throws Exception ;
 
+  /**
+   * Same as {@link #write(novelang.model.common.NodePath, String)} but without escaping.
+   */
+  void writeLitteral( NodePath kinship, String word ) throws Exception ;
+
   RenditionMimeType getMimeType() ;
 
 
