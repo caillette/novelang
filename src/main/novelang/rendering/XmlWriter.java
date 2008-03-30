@@ -34,7 +34,6 @@ import novelang.model.common.TreeMetadata;
 public class XmlWriter implements FragmentWriter {
 
   private ContentHandler contentHandler ;
-  private TreeMetadata treeMetadata ;
   private final RenditionMimeType mimeType ;
 
   public XmlWriter( RenditionMimeType mimeType ) {
@@ -44,8 +43,6 @@ public class XmlWriter implements FragmentWriter {
   public XmlWriter() {
     this( RenditionMimeType.XML ) ;
   }
-
-  protected void configure( ContentHandler contentHandler, TreeMetadata treeMetadata ) { }
 
   public void startWriting(
       OutputStream outputStream,

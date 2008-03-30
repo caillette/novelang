@@ -42,6 +42,7 @@ import novelang.model.common.MutableTree;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Problem;
 import novelang.model.common.TreeMetadata;
+import novelang.model.common.MetadataHelper;
 import novelang.model.weaved.IdentifierNotUniqueException;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.weaved.WeavedBook;

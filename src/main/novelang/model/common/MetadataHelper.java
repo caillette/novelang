@@ -15,7 +15,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.implementation;
+package novelang.model.common;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -24,6 +24,7 @@ import novelang.model.common.MutableTree;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
 import novelang.model.common.TreeMetadata;
+import novelang.model.implementation.DefaultMutableTree;
 
 /**
  * @author Laurent Caillette
@@ -32,16 +33,16 @@ public class MetadataHelper {
 
   private MetadataHelper() { }
 
-  @Deprecated
-  public static Tree addMetadata( Tree tree ) {
-    final MutableTree newTree = new DefaultMutableTree( NodeKind.ofRoot( tree ) ) ;
-    final MutableTree timestampNode = new DefaultMutableTree( NodeKind._META_TIMESTAMP ) ;
-    timestampNode.addChild( new DefaultMutableTree( format( createTimestamp() ) ) ) ;
-    newTree.addChild( timestampNode ) ;
-    for( final Tree child : tree.getChildren() ) {
-      newTree.addChild( child ) ;
+  public static int countWords( Tree tree ) {
+    if( NodeKind.WORD.isRoot( tree ) ) {
+      return 1 ;
+    } else {
+      int childCount = 0 ;
+      for( Tree child : tree.getChildren() ) {
+        childCount += countWords( child ) ;
+      }
+      return childCount ;
     }
-    return newTree ;
   }
 
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
@@ -58,10 +59,15 @@ public class MetadataHelper {
   public static TreeMetadata createMetadata( Tree tree ) {
 
     final String timestampAsString = format( createTimestamp() ) ;
+    final int wordCount = countWords( tree ) ;
 
     return new TreeMetadata() {
       public String getCreationTimestampAsString() {
         return timestampAsString ;
+      }
+
+      public int getWordCount() {
+        return wordCount ;
       }
     } ;
   }

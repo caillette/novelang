@@ -35,6 +35,7 @@ import novelang.model.common.IdentifierHelper;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
 import novelang.model.common.TreeMetadata;
+import novelang.model.common.MetadataHelper;
 import novelang.model.weaved.WeavedPart;
 import novelang.model.renderable.Renderable;
 import novelang.parser.PartParser;
@@ -143,7 +144,7 @@ public class Part
       collect( Problem.createProblem( this, e ) ) ;
     }
 
-    treeMetadata = treeMetadata = MetadataHelper.createMetadata( tree ) ;
+    treeMetadata = MetadataHelper.createMetadata( tree ) ;
 
   }
 

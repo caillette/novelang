@@ -12,6 +12,7 @@
   <xsl:output method="text" omit-xml-declaration="yes" indent="no" />
 
   <xsl:param name="timestamp"/>
+  <xsl:param name="wordcount"/>
   <xsl:param name="filename"/>
 
 
@@ -20,6 +21,7 @@
   <xsl:template match="/" >
 %% Generated on: <xsl:value-of select="$timestamp" />    
 %%         from: <xsl:value-of select="$filename" />
+%%   word count: <xsl:value-of select="$wordcount" />
     <xsl:apply-templates />
   </xsl:template>
 

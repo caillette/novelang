@@ -23,5 +23,6 @@ package novelang.model.common;
 public interface TreeMetadata {
 
   public String getCreationTimestampAsString() ;
-  
+  public int getWordCount() ;
+
 }

@@ -41,7 +41,7 @@ public class GenericRenderer implements Renderer {
     this( fragmentWriter, DEFAULT_WHITESPACE ) ;
   }
 
-  public GenericRenderer( FragmentWriter fragmentWriter, String whitespace ) {
+  protected GenericRenderer( FragmentWriter fragmentWriter, String whitespace ) {
     this.fragmentWriter = Objects.nonNull( fragmentWriter ) ;
     this.whitespace = whitespace ;
   }

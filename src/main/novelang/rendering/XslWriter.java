@@ -132,6 +132,10 @@ public class XslWriter extends XmlWriter {
         "timestamp",
         treeMetadata.getCreationTimestampAsString()
     ) ;
+    transformer.setParameter(
+        "wordcount",
+        treeMetadata.getWordCount()
+    ) ;
   }
 
   protected ContentHandler createSinkContentHandler(
