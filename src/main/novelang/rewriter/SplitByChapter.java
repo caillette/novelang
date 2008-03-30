@@ -42,33 +42,33 @@ import novelang.rendering.NlpWriter;
 
 /**
  * Splits one Part file in many files with the name of its chapters (Identifier or Title).
- * If there are duplicates, a index is added.
- * Original file is left unmodified.
+ * If there is no name, the name '{@value #UNNAMED}' is assigned.
+ * In case of duplicate names, a index is appended.
+ * Original file is left unmodified but other existing files are overwritten.
  *
  * @author Laurent Caillette
  */
 public class SplitByChapter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( SplitByChapter.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( SplitByChapter.class ) ;
 
   private final Part part ;
   private final File targetDirectory ;
+  private static final String UNNAMED = "$unnamed$";
 
   public SplitByChapter( File partFile, File targetDirectory ) {
     this.part = new Part( partFile ) ;
     this.targetDirectory = targetDirectory ;
 
     if( ! targetDirectory.exists() ) {
-      final IllegalArgumentException exception = new IllegalArgumentException(
-          "Does not exist: " + targetDirectory.getAbsolutePath() );
-      LOGGER.error( "Cannot continue", exception ) ;
-      throw exception;
+      final String message = "Does not exist: " + targetDirectory.getAbsolutePath();
+      LOGGER.error( message ) ;
+      throw new IllegalArgumentException( message ) ;
     }
     if( ! targetDirectory.isDirectory() ) {
-      final IllegalArgumentException exception = new IllegalArgumentException(
-          "Not a directory: " + targetDirectory.getAbsolutePath() );
-      LOGGER.error( "Cannot continue", exception ) ;
-      throw exception;
+      final String message = "Not a directory: " + targetDirectory.getAbsolutePath();
+      LOGGER.error( message ) ;
+      throw new IllegalArgumentException( message ) ;
     }
   }
 
@@ -82,7 +82,7 @@ public class SplitByChapter {
     for( final Tree child : part.getTree().getChildren() ) {
       if( NodeKind.CHAPTER.isRoot( child ) ) {
         final String identifier = generateIdentifier( chaptersByIdentifier.keySet(), child ) ;
-        final File chapterFile = new File( targetDirectory, identifier ) ;
+        final File chapterFile = new File( targetDirectory, identifier  + ".nlp" ) ;
         if( chapterFile.exists() ) {
           chapterFile.delete() ;
           LOGGER.info( "Deleted previously existing file '{}'", chapterFile.getAbsolutePath() ) ;
@@ -96,7 +96,7 @@ public class SplitByChapter {
   }
 
   private String generateIdentifier( Set< String > identifiers, Tree chapter ) {
-    String flatName = "$unnamed$" ;
+    String flatName = UNNAMED;
     Tree chapterDesignator = extractSubtree( chapter, NodeKind.IDENTIFIER ) ;
     if( null == chapterDesignator ) {
       chapterDesignator = extractSubtree( chapter, NodeKind.TITLE );
@@ -104,8 +104,7 @@ public class SplitByChapter {
     if( null != chapterDesignator ) {
       flatName = flattenAsName( chapterDesignator ) ;
     }
-    final String chapterName = buildIdentifier( identifiers, flatName ) ;
-    return chapterName ;
+    return buildIdentifier( identifiers, flatName );
   }
 
   private String buildIdentifier( Set< String > identifiers, String flatName ) {

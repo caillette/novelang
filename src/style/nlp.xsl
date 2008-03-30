@@ -29,7 +29,8 @@
 
 
   <xsl:template match="n:chapter" >
-
+&nbsp;
+&nbsp;
 ***<xsl:choose>
       <xsl:when test="n:identifier" >&nbsp;<xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
       <xsl:when test="n:title" >'<xsl:apply-templates select="n:title" mode="header" /></xsl:when>
@@ -122,7 +123,7 @@
 
   <xsl:template match="n:interpolatedclause" >-- <xsl:apply-templates/> --</xsl:template>
 
-  <xsl:template match="n:interpolatedclause-silentend" >-- <xsl:apply-templates/></xsl:template>
+  <xsl:template match="n:interpolatedclause-silentend" >-- <xsl:apply-templates/> -_</xsl:template>
 
   <xsl:template match="n:ellipsis-opening" >...</xsl:template>
 

@@ -102,14 +102,14 @@
         <xsl:call-template name="all-emphasized" />
       </xsl:when>
       <xsl:otherwise>
-        <fo:block>
+        <fo:block padding-top="40pt" >
           <xsl:apply-templates />
         </fo:block>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="n:chapter/n:title" >
+  <xsl:template match="n:chapter/n:title | n:chapter/n:identifier" >
     <fo:block
         font-size="15pt"
         font-weight="bold"
@@ -126,7 +126,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:section/n:title" >
+  <xsl:template match="n:section/n:title | n:section/n:identifier" >
     <fo:inline
         font-size="13pt"
         font-weight="bold"
