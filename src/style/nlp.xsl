@@ -1,9 +1,4 @@
 <?xml version="1.0"?>
-<!DOCTYPE foo
-[
-  <!ENTITY nbsp   "&#160;" ><!--=no break (required) space-->
-]
->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
@@ -29,10 +24,12 @@
 
 
   <xsl:template match="n:chapter" >
-&nbsp;
-&nbsp;
+<xsl:text> 
+
+</xsl:text>
 ***<xsl:choose>
-      <xsl:when test="n:identifier" >&nbsp;<xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
+      <xsl:when test="n:identifier" ><xsl:text> </xsl:text>
+<xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
       <xsl:when test="n:title" >'<xsl:apply-templates select="n:title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
@@ -41,10 +38,11 @@
 
 
   <xsl:template match="n:section" >
-&nbsp;
-&nbsp;
+<xsl:text> 
+
+</xsl:text>
 ===<xsl:choose>
-    <xsl:when test="n:identifier" >&nbsp;<xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
+    <xsl:when test="n:identifier" ><xsl:text> </xsl:text><xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
     <xsl:when test="n:title" >'<xsl:apply-templates select="n:title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
@@ -64,7 +62,9 @@
   </xsl:template>
 
   <xsl:template match="n:paragraph-plain" >
-&nbsp;
+<xsl:text> 
+
+</xsl:text>
 <xsl:apply-templates/>
   </xsl:template>
 
@@ -72,7 +72,9 @@
 
 
   <xsl:template match="n:url" >
-&nbsp;
+<xsl:text> 
+
+</xsl:text>
 <xsl:value-of select="text()" />
   </xsl:template>
 
@@ -99,8 +101,10 @@
 
   <xsl:template name="speech" >
     <xsl:param name="speech-symbol" />
-&nbsp;
-<xsl:value-of select="$speech-symbol" />&nbsp;<xsl:if test="n:locutor" > <xsl:value-of select="n:locutor" /> :: </xsl:if> <xsl:apply-templates/>
+<xsl:text> 
+
+</xsl:text>
+<xsl:value-of select="$speech-symbol" /><xsl:text> </xsl:text><xsl:if test="n:locutor" > <xsl:value-of select="n:locutor" /> :: </xsl:if> <xsl:apply-templates/>
 
   </xsl:template>
 
@@ -129,7 +133,7 @@
 
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 
-  <xsl:template match="n:sign-colon" >:</xsl:template>
+  <xsl:template match="n:sign-colon" > :</xsl:template>
   <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-ellipsis" >...</xsl:template>
   <xsl:template match="n:sign-exclamationmark" > !</xsl:template>

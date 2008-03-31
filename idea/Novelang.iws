@@ -214,7 +214,7 @@
       <file leaf-file-name="SplitByChapter.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/rewriter/SplitByChapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="38" selection-start="2057" selection-end="2057" vertical-scroll-proportion="0.30273974">
+            <state line="55" column="38" selection-start="2057" selection-end="2057" vertical-scroll-proportion="0.3090909">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -225,7 +225,7 @@
       <file leaf-file-name="XslWriter.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/XslWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="119" column="0" selection-start="4513" selection-end="4513" vertical-scroll-proportion="0.56027395">
+            <state line="119" column="0" selection-start="4513" selection-end="4513" vertical-scroll-proportion="0.572028">
               <folding />
             </state>
           </provider>
@@ -252,7 +252,7 @@
       <file leaf-file-name="pdf.xsl" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/style/pdf.xsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="257" column="17" selection-start="6900" selection-end="6900" vertical-scroll-proportion="6.1622005">
+            <state line="257" column="17" selection-start="6900" selection-end="6900" vertical-scroll-proportion="6.295389">
               <folding />
             </state>
           </provider>
@@ -261,7 +261,7 @@
       <file leaf-file-name="Book.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Book.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="13" selection-start="2086" selection-end="2086" vertical-scroll-proportion="-5.1931505">
+            <state line="56" column="13" selection-start="2086" selection-end="2086" vertical-scroll-proportion="-5.302098">
               <folding />
             </state>
           </provider>
@@ -270,7 +270,7 @@
       <file leaf-file-name="novelang.nlp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../documentation/novelang.nlp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="16" selection-start="1463" selection-end="1463" vertical-scroll-proportion="0.7684932">
+            <state line="33" column="16" selection-start="1463" selection-end="1463" vertical-scroll-proportion="0.7846154">
               <folding />
             </state>
           </provider>
@@ -288,7 +288,7 @@
       <file leaf-file-name="GenericRendererTest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/rendering/GenericRendererTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="46" selection-start="3090" selection-end="3090" vertical-scroll-proportion="0.28356165">
+            <state line="90" column="46" selection-start="3090" selection-end="3090" vertical-scroll-proportion="0.2895105">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1562,7 +1562,7 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="4" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" order="15" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26599568" order="0" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26599568" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24155284" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2602564" order="14" />
@@ -1570,7 +1570,7 @@
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="8" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="5" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13156003" order="2" />
+      <window_info id="Ant Build" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13156003" order="2" />
       <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32997844" order="6" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="9" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2717949" order="13" x="475" y="111" width="588" height="804" />
@@ -1712,7 +1712,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/rewriter/SplitByChapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="38" selection-start="2057" selection-end="2057" vertical-scroll-proportion="0.30273974">
+        <state line="55" column="38" selection-start="2057" selection-end="2057" vertical-scroll-proportion="0.3090909">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1721,7 +1721,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/XslWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="119" column="0" selection-start="4513" selection-end="4513" vertical-scroll-proportion="0.56027395">
+        <state line="119" column="0" selection-start="4513" selection-end="4513" vertical-scroll-proportion="0.572028">
           <folding />
         </state>
       </provider>
@@ -1749,14 +1749,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../documentation/novelang.nlp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="16" selection-start="1463" selection-end="1463" vertical-scroll-proportion="0.7684932">
+        <state line="33" column="16" selection-start="1463" selection-end="1463" vertical-scroll-proportion="0.7846154">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/rendering/GenericRendererTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="46" selection-start="3090" selection-end="3090" vertical-scroll-proportion="0.28356165">
+        <state line="90" column="46" selection-start="3090" selection-end="3090" vertical-scroll-proportion="0.2895105">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1786,14 +1786,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/style/pdf.xsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="257" column="17" selection-start="6900" selection-end="6900" vertical-scroll-proportion="6.1622005">
+        <state line="257" column="17" selection-start="6900" selection-end="6900" vertical-scroll-proportion="6.295389">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/implementation/Book.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="13" selection-start="2086" selection-end="2086" vertical-scroll-proportion="-5.1931505">
+        <state line="56" column="13" selection-start="2086" selection-end="2086" vertical-scroll-proportion="-5.302098">
           <folding />
         </state>
       </provider>
