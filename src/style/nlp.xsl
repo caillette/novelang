@@ -134,6 +134,7 @@
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 
   <xsl:template match="n:sign-colon" > :</xsl:template>
+  <xsl:template match="n:sign-semicolon" > ;</xsl:template>
   <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-ellipsis" >...</xsl:template>
   <xsl:template match="n:sign-exclamationmark" > !</xsl:template>

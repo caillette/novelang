@@ -24,6 +24,7 @@ import org.dom4j.io.XMLWriter;
 import org.dom4j.io.OutputFormat;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import novelang.model.common.NodePath;
 import novelang.model.common.TreeMetadata;
@@ -95,7 +96,9 @@ public class XmlWriter implements FragmentWriter {
   }
 
   public void writeLitteral( NodePath kinship, String word ) throws Exception {
-    write( kinship, word ) ;
+    ( ( LexicalHandler ) contentHandler ).startCDATA() ;
+    contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
+    ( ( LexicalHandler ) contentHandler ).endCDATA() ;
   }
 
   public RenditionMimeType getMimeType() {

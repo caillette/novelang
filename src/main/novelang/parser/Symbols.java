@@ -18,12 +18,14 @@
 package novelang.parser;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMapBuilder;
 import com.google.common.collect.BiMap;
+import com.google.common.collect.Sets;
 
 /**
  * @author Laurent Caillette
@@ -32,11 +34,16 @@ public class Symbols {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Symbols.class ) ;
 
-  private static final BiMap< String, String > ESCAPED_SYMBOLS;
-  private static final BiMap< String, String > UNESCAPED_SYMBOLS;
+  private static final BiMap< String, String > ESCAPED_SYMBOLS ;
+  private static final BiMap< String, String > UNESCAPED_SYMBOLS ;
+  private static final Set< String > HTML_ESCAPED ;
 
   static {
+
     final BiMap< String, String > symbols = Maps.newHashBiMap() ;
+    final Set< String > htmlEscaped = Sets.newHashSet() ;
+
+    symbols.put( "apos", "'" ) ;
     symbols.put( "hellip", "\u2026" ) ;
     symbols.put( "percent", "%" ) ;
     symbols.put( "plus", "+" ) ;
@@ -48,22 +55,29 @@ public class Symbols {
     symbols.put( "lt", "<" ) ;
     symbols.put( "gt", ">" ) ;
     symbols.put( "tilde", "~" ) ;
-    symbols.put( "snip", "[...]" ) ; // TODO remove this and support litteral.
+//    symbols.put( "snip", "[...]" ) ; // TODO remove this and support litteral.
     symbols.put( "rp", ")" ) ;
     symbols.put( "quot", "\"" ) ;
     symbols.put( "fullstop", "." ) ;
     symbols.put( "deg", "\u00b0" ) ;
+
     symbols.put( "oelig", "\u0153" ) ;
+    htmlEscaped.add( "oelig" ) ;
     symbols.put( "OElig", "\u0152" ) ;
+    htmlEscaped.add( "OElig" ) ;
 
     ESCAPED_SYMBOLS = Maps.unmodifiableBiMap( symbols ) ;
     UNESCAPED_SYMBOLS = Maps.unmodifiableBiMap( symbols.inverse() ) ;
+    HTML_ESCAPED = Sets.newHashSet( htmlEscaped ) ;
   }
 
   public static Map< String, String > getDefinitions() {
     return ImmutableMapBuilder.fromMap( ESCAPED_SYMBOLS ).getMap() ;
   }
 
+  public static boolean isHtmlEscape( String escaped ) {
+    return HTML_ESCAPED.contains( escaped ) ;
+  }
 
   public static String unescape( String escaped )
       throws UnsupportedEscapedSymbolException

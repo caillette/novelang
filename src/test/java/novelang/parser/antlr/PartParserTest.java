@@ -489,6 +489,25 @@ public class PartParserTest {
   }
 
   @Test
+  public void sectionIsParagraphThenBlockquoteThenParagraph() throws RecognitionException {
+    section(
+      "===" + BREAK +
+      BREAK +
+      "p0" + BREAK +
+      BREAK +
+      "<<< w0" + BREAK +
+      ">>>" + BREAK +
+      BREAK +
+      "p1",
+      tree( SECTION,
+          tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) ),
+          tree( BLOCKQUOTE, tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ) ) ),
+          tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ) )
+      )
+    ) ;
+  }
+
+  @Test
   public void sectionIsAnonymousAndHasBlockquoteWithTwoParagraphs() throws RecognitionException {
     section(
       "===" + BREAK +

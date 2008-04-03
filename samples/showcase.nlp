@@ -12,11 +12,17 @@ Here are some [brackets] here.
 
 === Blockquote demo
 
+This is a paragraph before a "blockquote".
+
 <<<
 This is a "blockquote".
 
-There can be several paragraphs inside.>>>
+There can be several paragraphs inside.
+>>>
 
+This is a paragraph //after// a "blockquote".
+
+There has been a bug with bad ordering of paragraphs and blockquotes.
 
 *** More stuff
 

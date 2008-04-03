@@ -18,6 +18,7 @@
   %ISOlat1;
 ]
 >
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
@@ -102,9 +103,8 @@
         <xsl:call-template name="all-emphasized" />
       </xsl:when>
       <xsl:otherwise>
-        <fo:block padding-top="40pt" >
-          <xsl:apply-templates />
-        </fo:block>
+        <!--<xsl:call-template name="standard" />-->
+        <xsl:call-template name="standalone" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -137,6 +137,12 @@
     </fo:inline>
   </xsl:template>
 
+  <xsl:template name="standard" >
+    <fo:block padding-top="40pt" >
+      <xsl:apply-templates />
+    </fo:block>
+  </xsl:template>
+
   <xsl:template name="standalone" >
     <fo:block
         break-before="page"
@@ -167,7 +173,6 @@
         padding-after="8pt"
         font-size="12.5pt" 
         line-height="13pt" 
-        keep-with-next.within-page="always"
     > 
       <xsl:apply-templates/>
     </fo:block>
@@ -249,6 +254,7 @@
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 
   <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
+  <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>
   <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
   <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>

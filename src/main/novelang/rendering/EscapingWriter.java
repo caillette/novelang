@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 Laurent Caillette
+ * Copyright (C) 2008 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,35 +18,40 @@
 package novelang.rendering;
 
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import novelang.model.common.NodePath;
 import novelang.model.common.TreeMetadata;
+import novelang.parser.Symbols;
 
 /**
  * @author Laurent Caillette
  */
-public class NlpWriter extends EscapingWriter {
+public class EscapingWriter extends XslWriter {
 
-  protected static final String DEFAULT_NLP_STYLESHEET =  "nlp.xsl" ;
-
-  public NlpWriter() {
-    super( DEFAULT_NLP_STYLESHEET, RenditionMimeType.NLP ) ;
+  public EscapingWriter( String xslFileName, RenditionMimeType mimeType ) {
+    super( xslFileName, mimeType );
   }
 
-  protected final ContentHandler createSinkContentHandler(
-      final OutputStream outputStream,
-      TreeMetadata treeMetadata,
-      final Charset encoding
-  )
-      throws Exception
-  {
-
-    // dom4j's XML writer does some clever entity-escaping not good for us.
-    final ContentHandler sink = new TextSink( outputStream );
-
-    return sink ;
+  public void write( NodePath kinship, String word ) throws Exception {
+    final StringBuffer reconstructed = new StringBuffer() ;
+    for( char c : word.toCharArray() ) {
+      final String s = "" + c ; // Let the compiler optimize this!
+      final String escaped = Symbols.escape( s ) ;
+      if( null == escaped ) {
+        reconstructed.append( c ) ;
+      } else {
+        reconstructed.append( "&" ).append( escaped ).append( ";" ) ;
+      }
+    }
+    super.write( kinship, reconstructed.toString() ) ;
   }
+
 
 
 }

@@ -47,6 +47,7 @@ import novelang.model.common.TreeMetadata;
  * @author Laurent Caillette
  */
 public class XslWriter extends XmlWriter {
+
   protected static final Logger LOGGER = LoggerFactory.getLogger( PdfWriter.class ) ;
   protected static final String NOVELANG_STYLES_DIR = "novelang.styles.dir" ;
   protected static final EntityResolver ENTITY_RESOLVER ;

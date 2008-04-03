@@ -168,11 +168,11 @@ chapter
 section 
   : SECTION_INTRODUCER 
     ( smallBreak? ( title | identifier ) )?
-    ( largeBreak ( paragraph | blockQuote ) )+ 
+    ( largeBreak ( p += paragraph | p += blockQuote ) )+ 
     -> ^( SECTION 
            title?
            identifier?
-           paragraph* blockQuote* 
+           $p+ // Keep order.
         )
   ;
     
