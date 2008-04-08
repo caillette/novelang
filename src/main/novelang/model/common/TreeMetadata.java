@@ -17,6 +17,8 @@
  */
 package novelang.model.common;
 
+import java.nio.charset.Charset;
+
 /**
  * @author Laurent Caillette
  */
@@ -24,5 +26,6 @@ public interface TreeMetadata {
 
   public String getCreationTimestampAsString() ;
   public int getWordCount() ;
+  public Charset getEncoding() ;
 
 }

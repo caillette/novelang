@@ -17,14 +17,13 @@
  */
 package novelang.rendering;
 
-import java.io.PrintWriter;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
+import java.io.PrintWriter;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.Attributes;
 
 /**
  * Just write HTML with entities verbatim.
@@ -37,11 +36,9 @@ import org.xml.sax.Attributes;
 public class HtmlSink implements ContentHandler {
 
   private final PrintWriter writer ;
-  private final Charset encoding ;
 
-  public HtmlSink( OutputStream outputStream, Charset encoding ) {
+  public HtmlSink( OutputStream outputStream ) {
     this.writer = new PrintWriter( outputStream, true ) ;
-    this.encoding = encoding;
   }
 
   private static boolean isElementIWorthALineBreak( String elementName ) {
@@ -49,7 +46,8 @@ public class HtmlSink implements ContentHandler {
     return
         upperCaseName.startsWith( "P" )  ||
         upperCaseName.startsWith( "BLOCKQUOTE" ) ||
-        upperCaseName.startsWith( "H" )
+        upperCaseName.startsWith( "H" ) ||
+        upperCaseName.startsWith( "META" )
     ;
   }
 
@@ -61,15 +59,9 @@ public class HtmlSink implements ContentHandler {
   public void startDocument() throws SAXException {
     writer.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"" ) ;
     writer.println( "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" ) ;
-    writer.println( "<html xmlns=\"http://www.w3.org/1999/xhtml\" >" ) ;
-    writer.println( "  <head>" ) ;
-    writer.println( "    <meta http-equiv=\"content-type\" content=\"text/html;charset=\""
-        + encoding.name() + "\" />" ) ;
-    writer.println( "  </head>" ) ;
   }
 
   public void endDocument() throws SAXException {
-    writer.println( "</html>" ) ;
     writer.flush() ;
   }
 
@@ -79,7 +71,12 @@ public class HtmlSink implements ContentHandler {
       String qName,
       Attributes atts
   ) throws SAXException {
-    writer.append( "<" ).append( localName ).append( ">" ) ;
+    writer.append( "<" ).append( localName ) ;
+    for( int i = 0 ; i < atts.getLength() ; i++ ) {
+      writer.append( " " ).append( atts.getLocalName( i ) ).
+          append( "=\"" ).append( atts.getValue( i )).append( "\"" ) ;
+    }
+    writer.append( " >" ) ;
     if( isElementIWorthALineBreak( localName ) ) {
       writer.println() ;
     }

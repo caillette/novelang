@@ -34,7 +34,7 @@
         <fo:simple-page-master
             page-width="210mm"
             page-height="297mm"
-            margin-top="5mm"
+            margin-top="0mm"
             margin-left="45mm"
             margin-right="45mm"
             margin-bottom="7mm"
@@ -42,7 +42,7 @@
         >
 
           <fo:region-body
-              margin-top="10mm"
+              margin-top="15mm"
               margin-bottom="15mm"
               column-count="1"
               column-gap="0mm"
@@ -60,9 +60,9 @@
           master-reference="PageMaster"
       >
         <fo:static-content flow-name="xsl-region-before" >
-          <fo:block text-align="right" >
+          <fo:block text-align="left" >
             <fo:inline font-size="80%" >
-              [<xsl:value-of select="$timestamp" />] &copy; Laurent Caillette 2002-2008
+              [Header here]
             </fo:inline>
           </fo:block>
         </fo:static-content>
@@ -75,9 +75,34 @@
                 leader-length="33%"
             />
           </fo:block>
-          <fo:block text-align="left" >
-            <fo:page-number/>
-          </fo:block>
+
+
+
+          <fo:table>
+            <fo:table-column  />
+            <fo:table-column  />
+            <fo:table-body alignment-baseline="baseline">
+              <fo:table-row>
+                <fo:table-cell >
+                  <fo:block text-align="left"><fo:page-number/></fo:block>
+                </fo:table-cell>
+                <fo:table-cell >
+                  <fo:block text-align="right" >
+                    <fo:inline font-size="80%">
+                      G&eacute;n&eacute;r&eacute; le : <xsl:value-of select="$timestamp" />
+                    </fo:inline>
+                  </fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+            </fo:table-body>
+          </fo:table>
+
+
+
+
+
+
+
         </fo:static-content>
 
         <fo:flow
@@ -103,8 +128,7 @@
         <xsl:call-template name="all-emphasized" />
       </xsl:when>
       <xsl:otherwise>
-        <!--<xsl:call-template name="standard" />-->
-        <xsl:call-template name="standalone" />
+        <xsl:call-template name="standard" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -148,7 +172,7 @@
         break-before="page"
         padding-top="230pt"
     >
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="*[name() != 'n:title' and name() != 'n:identifier']" />
     </fo:block>
   </xsl:template>
 
@@ -181,6 +205,10 @@
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-plain" >
+    <xsl:call-template name="paragraph-plain" />
+  </xsl:template>
+
+  <xsl:template name="paragraph-plain" >
     <fo:block
         text-indent="1em"
         text-align="justify"
@@ -203,6 +231,10 @@
     <xsl:call-template name="speech" >
       <xsl:with-param name="speech-symbol" >&mdash;</xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template match="n:paragraph-speech-escaped" >
+    <xsl:call-template name="paragraph-plain" />
   </xsl:template>
   
   <xsl:template match="n:paragraph-speech-continued" >
@@ -251,7 +283,7 @@
 
   <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
 
-  <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
+  <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
 
   <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
   <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>

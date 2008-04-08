@@ -10,6 +10,7 @@
   <!ENTITY raquo  "&amp;raquo;" >
   <!ENTITY ldquo  "&amp;ldquo;" >
   <!ENTITY rdquo  "&amp;rdquo;" >
+  <!ENTITY rsquo  "&amp;rsquo;" >
   <!ENTITY nbsp   "&amp;nbsp;" >
 ]
 >
@@ -20,16 +21,83 @@
 >
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
+  <xsl:param name="encoding"/>
 
-  <xsl:output method="html" />
+  <xsl:output method="xml" />
 
   <xsl:template match="/" >
+
+    <html> 
+      <head>
+        <xsl:element name="meta" >
+          <xsl:attribute name="http-equiv" >content-type</xsl:attribute>
+          <xsl:attribute name="content" >text/html;charset=<xsl:value-of select="$encoding" /></xsl:attribute>
+        </xsl:element>
+
+        <meta name="Generator" content="Novelang" />
+        <meta name= "Copyright" content="Laurent Caillette 2008" />
+
+        <title>Standard HTML skin</title>
+
+        <style type="text/css">
+
+
+body {
+  width : 400pt ;
+  background : #dddddd ;
+#  font-family : Georgia ;
+}
+
+h1 {
+  font-size : 21pt ;
+}
+
+h2 {
+  font-size : 15pt ;
+}
+
+div.chapter {
+  margin-top : 25pt ;
+  margin-bottom : 5pt ;
+}
+
+div.section {
+  margin-top : 15pt ;
+  margin-bottom : 3pt ;
+}
+
+p {
+  font-size : 13.5pt ;
+	text-indent : 1em ;
+	text-align : justify ;
+	line-height : 1.30 ;
+	margin : 1pt 0pt 0pt 15pt;
+	padding : 0pt ;
+}
+
+blockquote > p {
+  font-size : 12.5pt ;
+	text-indent : 0em ;
+	text-align : justify ;
+	line-height : 1.25 ;
+	margin : 1pt 0pt 0pt 10pt;
+	padding : 0pt ;
+}
+        </style>
+
+      </head>
     <body>
+
+    <!--<p>Encoding = <xsl:value-of select="$encoding" /></p>-->
+
     <xsl:apply-templates />
+
     </body>
+    </html>
   </xsl:template>
 
   <xsl:template match="n:chapter" >
+    <div class="chapter" >
     <xsl:choose>
       <xsl:when test="n:style[text()='standalone']" >
         <xsl:call-template name="standalone" />
@@ -41,6 +109,7 @@
         <xsl:apply-templates />
       </xsl:otherwise>
     </xsl:choose>
+    </div>
   </xsl:template>
 
   <xsl:template match="n:chapter/n:title | n:chapter/n:identifier" >
@@ -48,7 +117,9 @@
   </xsl:template>
 
   <xsl:template match="n:section" >
-    <xsl:apply-templates />
+    <div class="section" >
+      <xsl:apply-templates />
+    </div>
   </xsl:template>
 
   <xsl:template match="n:section/n:title | n:section/n:identifier" >
@@ -125,7 +196,7 @@
 
   <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
 
-  <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
+  <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
 
   <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
   <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>

@@ -58,5 +58,21 @@ Brackets support just an ellipsis inside [...].
 
 --+ And then it continues again.
 
+*** Anonymous sections
 
+===
+
+This is an anonymous section: a section which has no identifier nor title.
+Anonymous sections require some care for rendering : visual separator must
+not be part of the title itself.
+
+===
+
+Here is another anonymous section.
+
+***
+
+=== 
+
+This is an anonymous section inside an anonymous chapter.
 

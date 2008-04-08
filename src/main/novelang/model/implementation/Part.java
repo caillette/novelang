@@ -144,7 +144,7 @@ public class Part
       collect( Problem.createProblem( this, e ) ) ;
     }
 
-    treeMetadata = MetadataHelper.createMetadata( tree ) ;
+    treeMetadata = MetadataHelper.createMetadata( tree, encoding ) ;
 
   }
 

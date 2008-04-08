@@ -42,10 +42,12 @@
       <format property="timestamp" pattern="yyyy-MM-dd_HH.mm" />
     </tstamp>
 
-    <!-- Overrides any property defined in build.properties -->
-    <property file="${user.home}/novelang.build.properties" />
-    
+    <!-- Overrides any other property. -->
+    <property file="${user.dir}/novelang.properties" />
+
     <property file="build.properties" />
+
+    <echo>novelang.style.dir = ${novelang.style.dir}</echo>
 
     <patternset id="resource-patterns" >
       <include name="**/*.properties" />
@@ -233,10 +235,11 @@
         <path refid="deploy-libs" />
         <pathelement location="${target.mainclasses.dir}" />
         <pathelement location="${configuration.main.dir}" />
+        <pathelement location="${source.style.default.dir}" />
       </classpath>
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
       <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
-      <jvmarg value="-Dnovelang.styles.dir=${source.style.dir}" />
+      <jvmarg value="-Dnovelang.styles.dir=${novelang.style.dir}" />
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Xmx512M" />
     </java>

@@ -60,6 +60,6 @@ public class HtmlWriter extends XslWriter {
       TreeMetadata treeMetadata,
       Charset encoding
   ) throws Exception {
-    return new HtmlSink( outputStream, encoding ) ; 
+    return new HtmlSink( outputStream ) ; 
   }
 }

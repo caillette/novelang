@@ -193,7 +193,7 @@ public class SplitByChapter {
     }
 
     public TreeMetadata getTreeMetadata() {
-      return MetadataHelper.createMetadata( child ) ;
+      return MetadataHelper.createMetadata( child, encoding ) ;
     }
   }
 }

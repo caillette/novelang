@@ -88,7 +88,7 @@ public class GenericRendererTest {
   }
 
   private static Renderable createRenderable( final Tree tree ) {
-    final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree ) ;
+    final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree, ENCODING ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
         return Lists.immutableList() ;

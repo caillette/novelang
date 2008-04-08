@@ -239,7 +239,7 @@ public class Book extends StyledElement implements StructuralBook, WeavedBook, R
       bookTree.addChild( chapter.buildTree( treesFromPartsByIdentifier ) ) ;
     }
 
-    treeMetadata = MetadataHelper.createMetadata( bookTree ) ;
+    treeMetadata = MetadataHelper.createMetadata( bookTree, getEncoding() ) ;
 
     tree = bookTree ;
   }

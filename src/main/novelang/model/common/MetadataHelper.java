@@ -17,6 +17,8 @@
  */
 package novelang.model.common;
 
+import java.nio.charset.Charset;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -56,7 +58,7 @@ public class MetadataHelper {
     return TIMESTAMP_FORMATTER.print( timestamp ) ;
   }
 
-  public static TreeMetadata createMetadata( Tree tree ) {
+  public static TreeMetadata createMetadata( Tree tree, final Charset encoding ) {
 
     final String timestampAsString = format( createTimestamp() ) ;
     final int wordCount = countWords( tree ) ;
@@ -68,6 +70,10 @@ public class MetadataHelper {
 
       public int getWordCount() {
         return wordCount ;
+      }
+
+      public Charset getEncoding() {
+        return encoding ;
       }
     } ;
   }
