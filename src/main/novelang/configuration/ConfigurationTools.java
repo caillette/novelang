@@ -30,6 +30,20 @@ import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 
 /**
+ * Builds objects describing how to configure other components.
+ *
+ * <p>
+ * {@link #buildRenderingConfiguration()} creates a {@link ResourceLoader} which attempts to
+ * load resources by looking at, in order:
+ * <ol>
+ *   <li>Directory as given by System property <tt>{@value #NOVELANG_STYLE_DIR_PROPERTYNAME}</tt>
+ *       (maybe absolute or relative to System property {@code user.dir}).
+ *   <li>Directory named <tt>{@value #USER_STYLE_DIR}</tt> under current directory
+ *       (relative to System property {@code user.dir}).
+ *   <li>Application classpath, looking for a resource inside <tt>/{@value #BUNDLED_STYLE_DIR}</tt>
+ *       directory.
+ * </ol>
+ *
  * @author Laurent Caillette
  */
 public class ConfigurationTools {
@@ -45,9 +59,9 @@ public class ConfigurationTools {
 
   private static final String BUNDLED_STYLE_DIR = "style" ;
   private static final String USER_STYLE_DIR = "style" ;
-  protected static final String NOVELANG_STYLE_DIR_PROPERTYNAME = "novelang.styles.dir" ;
+  protected static final String NOVELANG_STYLE_DIR_PROPERTYNAME = "novelang.style.dir" ;
 
-  private static final ResourceLoader styleResourceLoader ;
+  private static final ResourceLoader STYLE_RESOURCE_LOADER;
   
   static {
     final URL userStyleDir ;
@@ -87,12 +101,12 @@ public class ConfigurationTools {
 
     }
 
-    final ResourceLoader classResourceLoader = new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
+    final ResourceLoader classpathResourceLoader = new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
     if( null == userStyleDir ) {
-      styleResourceLoader = classResourceLoader ;
+      STYLE_RESOURCE_LOADER = classpathResourceLoader ;
     } else {
-      styleResourceLoader = ResourceLoaderTools.compose(
-          new UrlResourceLoader( userStyleDir ), classResourceLoader ) ;
+      STYLE_RESOURCE_LOADER = ResourceLoaderTools.compose(
+          new UrlResourceLoader( userStyleDir ), classpathResourceLoader ) ;
     }
   }
 
@@ -100,7 +114,7 @@ public class ConfigurationTools {
   public static RenderingConfiguration buildRenderingConfiguration() {
     return new RenderingConfiguration() {
       public ResourceLoader getResourceLoader() {
-        return styleResourceLoader ;
+        return STYLE_RESOURCE_LOADER;
       }
     } ;
   }

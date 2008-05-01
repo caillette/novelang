@@ -5,9 +5,6 @@
     <option name="ANALYZE_TEST_SOURCES" value="false" />
     <option name="CUSTOM_SCOPE_NAME" value="Project Production Files" />
   </component>
-  <component name="BookmarkManager">
-    <editor_bookmark url="file://$PROJECT_DIR$/../src/resource/style/pdf-symmetrical.xsl" line="174" description="&lt;xsl:apply-templates select=&quot;*[name() != 'n:title'..." />
-  </component>
   <component name="CCaseConfig">
     <option name="checkoutReserved" value="false" />
     <option name="markExternalChangeAsUpToDate" value="true" />
@@ -212,7 +209,7 @@
       <file leaf-file-name="ResourceLoader.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ResourceLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="33" selection-start="1060" selection-end="1060" vertical-scroll-proportion="0.18630137">
+            <state line="26" column="36" selection-start="1126" selection-end="1126" vertical-scroll-proportion="0.20958903">
               <folding />
             </state>
           </provider>
@@ -229,19 +226,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClasspathResourceLoader.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ClasspathResourceLoader.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ClasspathResourceLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="18" selection-start="2454" selection-end="2454" vertical-scroll-proportion="0.57260275">
+            <state line="30" column="18" selection-start="1083" selection-end="1083" vertical-scroll-proportion="0.13972603">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UrlResourceLoader.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="UrlResourceLoader.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/UrlResourceLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="5" selection-start="2750" selection-end="2750" vertical-scroll-proportion="0.2931507">
+            <state line="30" column="3" selection-start="1080" selection-end="1080" vertical-scroll-proportion="0.1630137">
               <folding />
             </state>
           </provider>
@@ -250,7 +247,7 @@
       <file leaf-file-name="ConfigurationTools.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/configuration/ConfigurationTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="51" selection-start="1917" selection-end="1917" vertical-scroll-proportion="0.27945206">
+            <state line="103" column="34" selection-start="3721" selection-end="3721" vertical-scroll-proportion="0.51232874">
               <folding />
             </state>
           </provider>
@@ -1928,13 +1925,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/configuration/ConfigurationTools.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="51" selection-start="1917" selection-end="1917" vertical-scroll-proportion="0.27945206">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/XslWriter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="142" column="44" selection-start="4891" selection-end="4891" vertical-scroll-proportion="0.33424658">
@@ -1965,6 +1955,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ResourceLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="36" selection-start="1126" selection-end="1126" vertical-scroll-proportion="0.20958903">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ResourceLoaderTools.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="50" column="62" selection-start="1842" selection-end="1842" vertical-scroll-proportion="0.74520546">
@@ -1972,23 +1969,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ResourceLoader.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/configuration/ConfigurationTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="33" selection-start="1060" selection-end="1060" vertical-scroll-proportion="0.18630137">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ClasspathResourceLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="18" selection-start="2454" selection-end="2454" vertical-scroll-proportion="0.57260275">
+        <state line="103" column="34" selection-start="3721" selection-end="3721" vertical-scroll-proportion="0.51232874">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/UrlResourceLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="5" selection-start="2750" selection-end="2750" vertical-scroll-proportion="0.2931507">
+        <state line="30" column="3" selection-start="1080" selection-end="1080" vertical-scroll-proportion="0.1630137">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ClasspathResourceLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="18" selection-start="1083" selection-end="1083" vertical-scroll-proportion="0.13972603">
           <folding />
         </state>
       </provider>

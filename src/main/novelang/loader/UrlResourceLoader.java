@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 /**
+ * Loads resources relative to a given URL.
+ * 
  * @author Laurent Caillette
  */
 public class UrlResourceLoader implements ResourceLoader {

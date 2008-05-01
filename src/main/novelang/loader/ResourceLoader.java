@@ -22,8 +22,9 @@ import java.util.MissingResourceException;
 
 /**
  * The most simple contract for loading a resource.
- * An interface is useful here instead of an URL because {@link ClasspathResourceLoader}
- * handles lots of URLs by itself.
+ * An interface is useful here instead of one or several URLs because
+ * {@link ClasspathResourceLoader} handles lots of URLs by itself in a opaque way
+ * (that should stay opaque anyways).
  * 
  * @author Laurent Caillette
  */

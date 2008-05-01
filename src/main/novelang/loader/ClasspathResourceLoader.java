@@ -28,7 +28,7 @@ import org.apache.commons.lang.SystemUtils;
 import com.google.common.base.Objects;
 
 /**
- * Loads a resource relative to the root package of some given class
+ * Loads resources relative to the root package of some given class
  * using its classloader.
  *
  * @author Laurent Caillette
