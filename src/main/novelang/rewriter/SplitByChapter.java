@@ -39,6 +39,8 @@ import novelang.model.implementation.Part;
 import novelang.model.renderable.Renderable;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.NlpWriter;
+import novelang.configuration.RenderingConfiguration;
+import novelang.configuration.ConfigurationTools;
 
 /**
  * Splits one Part file in many files with the name of its chapters (Identifier or Title).
@@ -54,11 +56,17 @@ public class SplitByChapter {
 
   private final Part part ;
   private final File targetDirectory ;
+  private final RenderingConfiguration configuration ;
   private static final String UNNAMED = "$unnamed$";
 
-  public SplitByChapter( File partFile, File targetDirectory ) {
+  public SplitByChapter(
+      RenderingConfiguration configuration,
+      File partFile,
+      File targetDirectory
+  ) {
     this.part = new Part( partFile ) ;
     this.targetDirectory = targetDirectory ;
+    this.configuration = configuration ;
 
     if( ! targetDirectory.exists() ) {
       final String message = "Does not exist: " + targetDirectory.getAbsolutePath();
@@ -88,8 +96,9 @@ public class SplitByChapter {
           LOGGER.info( "Deleted previously existing file '{}'", chapterFile.getAbsolutePath() ) ;
         }
         final FileOutputStream fileOutputStream = new FileOutputStream( chapterFile ) ;
-        final Renderable renderable = new RenderableChapter( child, part.getEncoding() );
-        new GenericRenderer( new NlpWriter() ).render( renderable, fileOutputStream ) ;
+        final Renderable renderable = new RenderableChapter( child, part.getEncoding() ) ;
+        new GenericRenderer( new NlpWriter( configuration ) ).
+            render( renderable, fileOutputStream ) ;
         LOGGER.info( "Wrote to file '{}'", chapterFile.getAbsolutePath() ) ;
       }
     }
@@ -161,8 +170,11 @@ public class SplitByChapter {
     if( 2 != args.length ) {
       throw new IllegalArgumentException( HELP ) ;
     }
-    final SplitByChapter splitByChapter =
-        new SplitByChapter( new File( args[ 0 ] ), new File( args[ 1 ] ) ) ;
+    final SplitByChapter splitByChapter = new SplitByChapter(
+        ConfigurationTools.buildRenderingConfiguration(),
+        new File( args[ 0 ] ),
+        new File( args[ 1 ] )
+    ) ;
     splitByChapter.rewrite() ;
   }
 

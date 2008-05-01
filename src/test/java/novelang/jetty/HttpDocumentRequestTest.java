@@ -34,13 +34,11 @@ public class HttpDocumentRequestTest {
 
   private static final String REQUEST_PATH_BROKEN =
       REQUEST_PATH + HttpDocumentRequest.ERRORPAGE_SUFFIX ;
-  private static final String REQUEST_URL_BROKEN =
-      REQUEST_URL + HttpDocumentRequest.ERRORPAGE_SUFFIX ;
 
   @Test
   public void testInterpretDocumentRequest() {
     final DocumentRequest documentRequest =
-        HttpDocumentRequest.createDocumentRequest( REQUEST_URL, REQUEST_PATH ) ;
+        HttpDocumentRequest.createDocumentRequest( REQUEST_PATH ) ;
     Assert.assertFalse( documentRequest.getDisplayProblems() ) ;
     Assert.assertEquals( REQUEST_URL, documentRequest.getOriginalTarget() ) ;
     Assert.assertEquals( RenditionMimeType.PDF, documentRequest.getDocumentMimeType() ) ;
@@ -51,7 +49,7 @@ public class HttpDocumentRequestTest {
   @Test
   public void testInterpretProblemDisplayRequest() {
     final DocumentRequest documentRequest =
-        HttpDocumentRequest.createDocumentRequest( REQUEST_URL_BROKEN, REQUEST_PATH_BROKEN ) ;
+        HttpDocumentRequest.createDocumentRequest( REQUEST_PATH_BROKEN ) ;
     Assert.assertTrue( documentRequest.getDisplayProblems() ) ;
     Assert.assertEquals( REQUEST_URL, documentRequest.getOriginalTarget() ) ;
     Assert.assertEquals( RenditionMimeType.PDF, documentRequest.getDocumentMimeType() ) ;

@@ -48,6 +48,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.helpers.XMLReaderFactory;
 import com.google.common.base.Objects;
 import novelang.model.common.TreeMetadata;
+import novelang.configuration.RenderingConfiguration;
 
 /**
  * @author Laurent Caillette
@@ -56,14 +57,14 @@ public class PdfWriter extends XslWriter {
 
   protected static final String DEFAULT_FO_STYLESHEET =  "pdf.xsl" ; 
 
-  public PdfWriter() {
-    super( DEFAULT_FO_STYLESHEET ) ;
+  public PdfWriter( RenderingConfiguration configuration ) {
+    super( configuration, DEFAULT_FO_STYLESHEET ) ;
   }
+
 
 // ==========
 // Generation
 // ==========
-
 
   protected final ContentHandler createSinkContentHandler(
       OutputStream outputStream,

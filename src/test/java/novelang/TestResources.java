@@ -15,7 +15,7 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.model.implementation;
+package novelang;
 
 /**
  * @author Laurent Caillette
@@ -42,6 +42,8 @@ public class TestResources {
   public static final String STRUCTURE_4 = "/structure-4.nlb";
   public static final String STRUCTURE_5 = "/structure-5.nlb";
   public static final String STRUCTURE_6 = "/structure-6.nlb";
+
+  public static final String SHOWCASE = "/showcase/showcase.nlp";
 
 
 }

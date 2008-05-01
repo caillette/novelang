@@ -28,14 +28,20 @@ import org.xml.sax.SAXException;
 import novelang.model.common.NodePath;
 import novelang.model.common.TreeMetadata;
 import novelang.parser.Symbols;
+import novelang.loader.ResourceLoader;
+import novelang.configuration.RenderingConfiguration;
 
 /**
  * @author Laurent Caillette
  */
 public class EscapingWriter extends XslWriter {
 
-  public EscapingWriter( String xslFileName, RenditionMimeType mimeType ) {
-    super( xslFileName, mimeType );
+  public EscapingWriter(
+      RenderingConfiguration configuration,
+      String xslFileName,
+      RenditionMimeType mimeType
+  ) {
+    super( configuration, xslFileName, mimeType );
   }
 
   public void write( NodePath kinship, String word ) throws Exception {

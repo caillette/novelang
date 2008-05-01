@@ -46,6 +46,8 @@ import novelang.rendering.Renderer;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
 import novelang.rendering.EscapingWriter;
+import novelang.configuration.RenderingConfiguration;
+import novelang.configuration.ConfigurationTools;
 
 /**
  * This method does all the dispatching of servlet requests.
@@ -119,22 +121,51 @@ public class DocumentHandler extends AbstractHandler {
       LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
 
     } else {
+
       final RenditionMimeType mimeType = documentRequest.getDocumentMimeType() ;
+      final RenderingConfiguration configuration =
+          ConfigurationTools.buildRenderingConfiguration() ;
+
       switch( mimeType ) {
         case PDF :
-          serve( request, response, new GenericRenderer( new PdfWriter() ), rendered ) ;
+          serve(
+              request,
+              response,
+              new GenericRenderer( new PdfWriter( configuration ) ),
+              rendered
+          ) ;
           break;
         case TXT :
-          serve( request, response, new GenericRenderer( new PlainTextWriter() ), rendered ) ;
+          serve(
+              request,
+              response,
+              new GenericRenderer( new PlainTextWriter() ),
+              rendered
+          ) ;
           break;
         case XML :
-          serve( request, response, new GenericRenderer( new XmlWriter()/*new EscapingWriter( "identity.xsl", RenditionMimeType.XML )*/ ), rendered ) ;
+          serve(
+              request,
+              response,
+              new GenericRenderer( new XmlWriter() ),
+              rendered
+          ) ;
           break ;
         case HTML :
-          serve( request, response, new GenericRenderer( new HtmlWriter() ), rendered ) ;
+          serve(
+              request,
+              response,
+              new GenericRenderer( new HtmlWriter( configuration ) ), 
+              rendered
+          ) ;
           break ;
         case NLP :
-          serve( request, response, new GenericRenderer( new NlpWriter() ), rendered ) ;
+          serve(
+              request,
+              response,
+              new GenericRenderer( new NlpWriter( configuration ) ),
+              rendered
+          ) ;
           break ;
         default :
           final IllegalArgumentException illegalArgumentException =

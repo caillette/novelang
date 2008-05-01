@@ -915,7 +915,7 @@ public class PartParserTest {
 
   @Test
   public void urlFilePathFileDotNlp() throws RecognitionException {
-    url( "file://path/file.nlp", tree( URL, "file://path/file.nlp" ) ) ;
+    url( "file://path/file.ppp", tree( URL, "file://path/file.ppp" ) ) ;
   }
 
 

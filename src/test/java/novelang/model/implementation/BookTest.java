@@ -27,8 +27,9 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.Assert;
 import org.apache.commons.lang.ClassUtils;
-import novelang.ResourceTools;
+import novelang.TestResourceTools;
 import novelang.ScratchDirectoryFixture;
+import novelang.TestResources;
 import novelang.parser.antlr.TreeHelper;
 import novelang.parser.antlr.AntlrTestHelper;
 import novelang.model.common.Tree;
@@ -135,12 +136,12 @@ public class BookTest {
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     final File book1Directory = scratchDirectoryFixture.getBook4Directory();
-    ResourceTools.copyResourceToFile( getClass(), SIMPLE_BOOK, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), STYLISH_BOOK, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), PART_1, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), PART_2, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), PART_3, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), PART_4, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), SIMPLE_BOOK, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), STYLISH_BOOK, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), PART_1, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), PART_2, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), PART_3, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), PART_4, book1Directory ) ;
     simpleBook = new Book( testName, new File( book1Directory, SIMPLE_BOOK ) );
     stylishBook = new Book( testName, new File( book1Directory, STYLISH_BOOK ) );
   }

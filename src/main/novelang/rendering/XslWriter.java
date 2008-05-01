@@ -17,13 +17,8 @@
  */
 package novelang.rendering;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -33,7 +28,6 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
@@ -43,60 +37,39 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import novelang.model.common.TreeMetadata;
+import novelang.loader.ResourceLoader;
+import novelang.configuration.RenderingConfiguration;
 
 /**
  * @author Laurent Caillette
  */
 public class XslWriter extends XmlWriter {
 
-  protected static final Logger LOGGER = LoggerFactory.getLogger( PdfWriter.class ) ;
-  protected static final String NOVELANG_STYLES_DIR = "novelang.styles.dir" ;
-  protected static final EntityResolver ENTITY_RESOLVER ;
-  protected static final URL STYLES_DIR ;
+  protected static final Logger LOGGER = LoggerFactory.getLogger( XslWriter.class ) ;
+
+  protected final EntityResolver entityResolver;
   protected static final RenditionMimeType DEFAULT_RENDITION_MIME_TYPE = RenditionMimeType.XML ;
-  protected final URL stylesheet ;
-  private static final String BUNDLED_STYLES_DIR = "/style/";
+
+  protected final String xslFileName ;
+  protected final ResourceLoader resourceLoader;
 
 
-  static {
-    final String stylesDirName = System.getProperty( NOVELANG_STYLES_DIR ) ;
-    if( StringUtils.isBlank( stylesDirName ) ) {
-      LOGGER.debug( "No directory set for styles" ) ;
-      STYLES_DIR = null ;
-    } else {
-      final File dir = new File( stylesDirName ) ;
-      if( dir.exists() ) {
-        try {
-          STYLES_DIR = dir.getCanonicalFile().toURL() ;
-        } catch( IOException e ) {
-          throw new RuntimeException( e );
-        }
-        LOGGER.info( "Styles directory set to '{}'", STYLES_DIR.toExternalForm() ) ;
-      } else {
-        STYLES_DIR = null ;
-        LOGGER.warn( "Styles directory '{}' does not exist", stylesDirName ) ;
-      }
-    }
-    ENTITY_RESOLVER = new LocalEntityResolver() ;
+
+
+  public XslWriter( RenderingConfiguration configuration, String xslFileName ) {
+    this( configuration, xslFileName, DEFAULT_RENDITION_MIME_TYPE ) ;
   }
 
-
-  public XslWriter( String xslFileName ) {
-    this( xslFileName, DEFAULT_RENDITION_MIME_TYPE ) ;
-  }
-
-  public XslWriter( String xslFileName, RenditionMimeType mimeType ) {
+  public XslWriter(
+      RenderingConfiguration configuration,
+      String xslFileName,
+      RenditionMimeType mimeType
+  ) {
     super( mimeType ) ;
-    if( null == STYLES_DIR ) {
-      this.stylesheet = getClass().getResource( BUNDLED_STYLES_DIR + xslFileName ) ;
-    } else {
-      try {
-        this.stylesheet = new URL( STYLES_DIR, xslFileName ) ;
-      } catch( MalformedURLException e ) {
-        throw new RuntimeException( e ) ;
-      }
-    }
-    LOGGER.info( "Using stylesheet '{}'", stylesheet.toExternalForm() ) ;
+    this.resourceLoader = configuration.getResourceLoader() ;
+    this.xslFileName = xslFileName ;
+    entityResolver = new LocalEntityResolver() ;
+
   }
 
   protected final ContentHandler createContentHandler(
@@ -113,8 +86,8 @@ public class XslWriter extends XmlWriter {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
     reader.setContentHandler( templatesHandler ) ;
-    reader.setEntityResolver( ENTITY_RESOLVER ) ;
-    reader.parse( new InputSource( stylesheet.openStream() ) ) ;
+    reader.setEntityResolver( entityResolver ) ;
+    reader.parse( new InputSource( resourceLoader.getInputStream( xslFileName ) ) ) ;
 
     final Templates templates = templatesHandler.getTemplates() ;
     final TransformerHandler transformerHandler =
@@ -158,7 +131,7 @@ public class XslWriter extends XmlWriter {
    * This is because the {@code systemId} as read by the stylesheet loader is prefixed
    * with current directory (bug?).
    */
-  protected static class LocalEntityResolver implements EntityResolver {
+  protected class LocalEntityResolver implements EntityResolver {
 
     public InputSource resolveEntity(
         String publicId,
@@ -166,10 +139,8 @@ public class XslWriter extends XmlWriter {
     ) throws SAXException, IOException {
       systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
       LOGGER.debug(
-          "Attempting to resolve entity publicId='{}' systemId='{}'", publicId, systemId ) ;
-      final URL entityUrl = XslWriter.class.getResource( BUNDLED_STYLES_DIR + systemId ) ;
-      final InputSource inputSource = new InputSource( entityUrl.openStream() ) ;
-      LOGGER.debug( "Resolved entity '{}'", entityUrl.toExternalForm() ) ;
+          "Resolving entity publicId='{}' systemId='{}'", publicId, systemId ) ;
+      final InputSource inputSource = new InputSource( resourceLoader.getInputStream( systemId ) ) ;
       return inputSource ;
     }
   }

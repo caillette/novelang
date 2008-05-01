@@ -97,14 +97,14 @@ public class ScratchDirectoryFixture {
     return testScratchDirectory;
   }
 
-  private File createIfNotExists( File file, String name ) throws IOException {
-    if( null == file ) {
-      file = new File( getTestScratchDirectory(), name ) ;
-      FileUtils.forceMkdir( file ) ;
-      FileUtils.waitFor( file, FILE_EXISTENCE_TIMEOUT_SECONDS ) ;
-      LOGGER.info( "Created '" + file.getAbsolutePath() + "' directory." ) ;
+  private File createIfNotExists( File directory, String name ) throws IOException {
+    if( null == directory ) {
+      directory = new File( getTestScratchDirectory(), name ) ;
+      FileUtils.forceMkdir( directory ) ;
+      FileUtils.waitFor( directory, FILE_EXISTENCE_TIMEOUT_SECONDS ) ;
+      LOGGER.info( "Created '" + directory.getAbsolutePath() + "' directory." ) ;
     }
-    return file ;
+    return directory ;
   }
 
 // ================
@@ -127,6 +127,15 @@ public class ScratchDirectoryFixture {
   public File getBook4Directory() throws IOException {
     book4Root = createIfNotExists( book4Root, BOOK_4 ) ;
     return book4Root;
+  }
+
+  private static final String LOADER = "loader" ;
+
+  private File loaderRoot;
+
+  public File getLoaderDirectory() throws IOException {
+    loaderRoot = createIfNotExists( loaderRoot, LOADER ) ;
+    return loaderRoot;
   }
 
 

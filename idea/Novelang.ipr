@@ -44,6 +44,7 @@
       <entry name="*.nlb" />
       <entry name="*.pen" />
       <entry name="*.xsl" />
+      <entry name="*.txt" />
     </wildcardResourcePatterns>
   </component>
   <component name="DependenciesAnalyzeManager">

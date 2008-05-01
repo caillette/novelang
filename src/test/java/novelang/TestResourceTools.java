@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import java.util.MissingResourceException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +39,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author Laurent Caillette
  */
-public final class ResourceTools {
+public final class TestResourceTools {
 
-  private static final Logger LOG = LoggerFactory.getLogger( ResourceTools.class ) ;
+  private static final Logger LOG = LoggerFactory.getLogger( TestResourceTools.class ) ;
 
-  private ResourceTools() { }
+  private TestResourceTools() { }
 
   public static URL getResourceUrl( Class owningClass, String resourceName ) {
     final String fullName ;
@@ -113,7 +114,8 @@ public final class ResourceTools {
   }
 
   /**
-   * Copy a resource into given directory, no subdirectory created.
+   * Copy a resource into given directory, creating subdirectories if resource name includes
+   * a directory.
    */
   public static File copyResourceToFile(
       Class owningClass,
@@ -123,10 +125,14 @@ public final class ResourceTools {
     final byte[] resourceBytes = readResource( owningClass, resourceName ) ;
     final ByteArrayInputStream inputStream =
         new ByteArrayInputStream( resourceBytes );
+
+    final File expandedDestinationDir =
+        new File( destinationDir, FilenameUtils.getPath( resourceName ) ) ;
+
     final File destinationFile = new File( destinationDir, resourceName ) ;
     final FileOutputStream fileOutputStream ;
     try {
-      destinationDir.mkdirs() ;
+      expandedDestinationDir.mkdirs() ;
       fileOutputStream = new FileOutputStream( destinationFile ) ;
     } catch( FileNotFoundException e ) {
       throw new RuntimeException( e );

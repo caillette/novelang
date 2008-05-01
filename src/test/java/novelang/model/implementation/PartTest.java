@@ -24,8 +24,9 @@ import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import novelang.ResourceTools;
+import novelang.TestResourceTools;
 import novelang.ScratchDirectoryFixture;
+import novelang.TestResources;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import static novelang.model.common.NodeKind.*;
@@ -89,8 +90,8 @@ public class PartTest {
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     book1Directory = scratchDirectoryFixture.getBook1Directory();
-    ResourceTools.copyResourceToFile( getClass(), STRUCTURE_1, book1Directory ) ;
-    ResourceTools.copyResourceToFile( getClass(), SECTIONS_1, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), STRUCTURE_1, book1Directory ) ;
+    TestResourceTools.copyResourceToFile( getClass(), SECTIONS_1, book1Directory ) ;
     book1 = new Book( testName, new File( book1Directory, STRUCTURE_1 ) );
     location = book1.createLocation( 0, 0 );
   }

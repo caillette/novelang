@@ -27,7 +27,8 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import org.junit.Assert;
 import org.apache.commons.lang.ClassUtils;
-import novelang.ResourceTools;
+import novelang.TestResourceTools;
+import novelang.TestResources;
 import novelang.model.implementation.Book;
 import novelang.model.common.Tree;
 import novelang.model.common.Problem;
@@ -49,7 +50,7 @@ public abstract class AbstractParserTest< P extends GenericParser > {
   }
 
   protected final static String readResource( String resourceName ) throws IOException {
-    return ResourceTools.readStringResource(
+    return TestResourceTools.readStringResource(
         AbstractParserTest.class,
         resourceName,
         Charset.forName( "ISO-8859-1" )
@@ -82,7 +83,7 @@ public abstract class AbstractParserTest< P extends GenericParser > {
 
   @Test
   public void readResourceOk() throws IOException {
-    final String resource = readResource( "/sections-1.nlp" ) ;
+    final String resource = readResource( TestResources.SECTIONS_1 ) ;
     Assert.assertFalse( "".equals( resource ) );
   }
 

@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 
 import org.xml.sax.ContentHandler;
 import novelang.model.common.TreeMetadata;
+import novelang.configuration.RenderingConfiguration;
 
 /**
  * @author Laurent Caillette
@@ -30,8 +31,8 @@ public class NlpWriter extends EscapingWriter {
 
   protected static final String DEFAULT_NLP_STYLESHEET =  "nlp.xsl" ;
 
-  public NlpWriter() {
-    super( DEFAULT_NLP_STYLESHEET, RenditionMimeType.NLP ) ;
+  public NlpWriter( RenderingConfiguration configuration ) {
+    super( configuration, DEFAULT_NLP_STYLESHEET, RenditionMimeType.NLP ) ;
   }
 
   protected final ContentHandler createSinkContentHandler(

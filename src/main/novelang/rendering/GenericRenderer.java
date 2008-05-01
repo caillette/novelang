@@ -28,6 +28,9 @@ import novelang.model.common.Tree;
 import novelang.model.renderable.Renderable;
 
 /**
+ * The only implementation of {@code Renderer} making sense as it delegates all specific
+ * tasks to {@link novelang.rendering.FragmentWriter}.
+ *
  * @author Laurent Caillette
  */
 public class GenericRenderer implements Renderer {

@@ -24,6 +24,8 @@ import org.xml.sax.ContentHandler;
 import novelang.model.common.NodePath;
 import novelang.model.common.TreeMetadata;
 import novelang.parser.Symbols;
+import novelang.loader.ResourceLoader;
+import novelang.configuration.RenderingConfiguration;
 
 /**
  * @author Laurent Caillette
@@ -32,8 +34,8 @@ public class HtmlWriter extends XslWriter {
 
   protected static final String DEFAULT_HTML_STYLESHEET =  "html.xsl" ;
 
-  public HtmlWriter() {
-    super( DEFAULT_HTML_STYLESHEET, RenditionMimeType.HTML ) ;
+  public HtmlWriter( RenderingConfiguration configuration ) {
+    super( configuration, DEFAULT_HTML_STYLESHEET, RenditionMimeType.HTML ) ;
   }
 
   public void write( NodePath kinship, String word ) throws Exception {

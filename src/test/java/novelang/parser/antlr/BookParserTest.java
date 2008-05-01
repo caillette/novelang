@@ -145,12 +145,12 @@ public class BookParserTest {
 
   @Test
   public void bookPartWithDashAndHyphen() throws RecognitionException {
-    bookPart( "#path/t-o/part.nlp" ) ;
+    bookPart( "#path/t-o/part.ppp" ) ;
   }
 
   @Test
   public void bookPartWithWildcardInFileName() throws RecognitionException {
-    bookPart( "#path/to/*.nlp" ) ;
+    bookPart( "#path/to/*.ppp" ) ;
   }
 
   @Test

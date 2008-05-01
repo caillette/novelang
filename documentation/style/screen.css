@@ -1,0 +1,41 @@
+body {
+  width : 400pt ;
+  background : #dddddd ;
+#  font-family : Georgia ;
+}
+
+h1 {
+  font-size : 21pt ;
+}
+
+h2 {
+  font-size : 15pt ;
+}
+
+div.chapter {
+  margin-top : 25pt ;
+  margin-bottom : 5pt ;
+}
+
+div.section {
+  margin-top : 15pt ;
+  margin-bottom : 3pt ;
+}
+
+p {
+  font-size : 13.5pt ;
+	text-indent : 1em ;
+	text-align : justify ;
+	line-height : 1.30 ;
+	margin : 1pt 0pt 0pt 15pt;
+	padding : 0pt ;
+}
+
+blockquote > p {
+  font-size : 12.5pt ;
+	text-indent : 0em ;
+	text-align : justify ;
+	line-height : 1.25 ;
+	margin : 1pt 0pt 0pt 10pt;
+	padding : 0pt ;
+}

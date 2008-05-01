@@ -130,6 +130,9 @@ public class HttpDocumentRequest implements DocumentRequest {
 // Factory
 // =======
 
+  /**
+   * Parsing request path. Dynamically crafted according to enums.
+   */
   private static Pattern PATTERN ;
   static {
     final StringBuffer buffer = new StringBuffer() ;
@@ -168,17 +171,13 @@ public class HttpDocumentRequest implements DocumentRequest {
   public static DocumentRequest create( HttpServletRequest httpRequest )
       throws IllegalArgumentException
   {
-
     final String requestPath = httpRequest.getPathInfo() ;
-    final String requestUrl = httpRequest.getRequestURL().toString() ;
-
-    return createDocumentRequest( requestUrl, requestPath ) ;
+    return createDocumentRequest( requestPath ) ;
   }
 
-  protected static DocumentRequest createDocumentRequest( 
-      String requestUrl,
-      String requestPath
-  ) throws IllegalArgumentException {
+  protected static DocumentRequest createDocumentRequest( String requestPath )
+      throws IllegalArgumentException
+  {
 
     final HttpDocumentRequest request = new HttpDocumentRequest() ;
 
