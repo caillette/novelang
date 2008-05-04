@@ -22,6 +22,7 @@ import java.io.File;
 import java.net.URL;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.loader.ResourceLoader;
@@ -115,6 +116,42 @@ public class ConfigurationTools {
     return new RenderingConfiguration() {
       public ResourceLoader getResourceLoader() {
         return STYLE_RESOURCE_LOADER;
+      }
+    } ;
+  }
+
+// =======
+// Content
+// =======
+
+  private static final File CONTENT_ROOT = new File( SystemUtils.USER_DIR ) ;
+
+  public static ContentConfiguration buildContentConfiguration() {
+    return new ContentConfiguration() {
+      public File getContentRoot() {
+        return CONTENT_ROOT ;
+      }
+    } ;
+  }
+
+
+// ==========
+// HttpServer
+// ==========
+
+  private static final RenderingConfiguration RENDERING_CONFIGURATION =
+      buildRenderingConfiguration() ;
+  private static final ContentConfiguration CONTENT_CONFIGURATION =
+      buildContentConfiguration() ;
+
+  public static HttpServerConfiguration buildHttpServerConfiguration() {
+    return new HttpServerConfiguration() {
+      public RenderingConfiguration getRenderingConfiguration() {
+        return RENDERING_CONFIGURATION ;
+      }
+
+      public ContentConfiguration getContentConfiguration() {
+        return CONTENT_CONFIGURATION ;
       }
     } ;
   }

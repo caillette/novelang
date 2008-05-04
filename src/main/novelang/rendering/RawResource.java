@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2006 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,34 +17,38 @@
  */
 package novelang.rendering;
 
-import novelang.model.common.StructureKind;
+import java.util.List;
+import java.util.Arrays;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 /**
+ * All supported raw resources.
+ * That may be a pain to extend for foreign developers but keep it simple for now.
+ *
  * @author Laurent Caillette
  */
-public interface DocumentRequest {
+public enum RawResource {
 
-  /**
-   * Returns the {@code RenditionMimeType}.
-   * @return a non-null object.
-   * @throws IllegalArgumentException if no {@code RenditionMimeType} was defined. 
-   */
-  RenditionMimeType getRenditionMimeType() ;
+  css,
+  gif,
+  jpg,
+  jpeg,
+  png ;
 
-  /**
-   * Returns true if special processing is needed to serve requested content, 
-   * or false if content is served as it is.
-   */
-  boolean isRendered() ;
+  private static final Function< RawResource, String > FILE_EXTENSION_EXTRACTOR =
+      new Function< RawResource, String >() {
+        public String apply( RawResource rawResource ) {
+          return rawResource.name() ;
+        }
+      }
+  ;
 
-  boolean getDisplayProblems() ;
+  public static Iterable< String > getFileExtensions() {
+    final List< RawResource > elements = Arrays.asList( values() ) ;
+    return Lists.transform( elements, FILE_EXTENSION_EXTRACTOR ) ;
+  }
 
-  String getOriginalTarget() ;
 
-  StructureKind getStructureKind() ;
-
-  String getResourceExtension() ;
-
-  String getDocumentSourceName() ;
-  
 }

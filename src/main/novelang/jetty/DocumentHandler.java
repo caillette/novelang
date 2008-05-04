@@ -45,20 +45,21 @@ import novelang.rendering.ProblemPrinter;
 import novelang.rendering.Renderer;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
-import novelang.rendering.EscapingWriter;
 import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ConfigurationTools;
+import novelang.configuration.HttpServerConfiguration;
 
 /**
- * This method does all the dispatching of servlet requests.
+ * Serves rendered content.
  *
  * By now, it re-creates a whole document when an error report is requested.
  * This is because it is not possible to change the type of a requested document without
  * an HTTP redirect. 
- *
+ * <p>
  * Solutions:
- * 1) Cache the Problems in the session.
- * 2) Cache all the Parts and Books and whatever.
+ * <ol>
+ * <li> Cache the Problems in the session.
+ * <li> Cache all the Parts and Books and whatever.
+ * </ol>
  *
  * Solution 1 sounds better as it keeps error display away from complex caching stuff.
  *
@@ -69,13 +70,17 @@ public class DocumentHandler extends AbstractHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger( DocumentHandler.class ) ;
 
   private final File basedir ;
+  private final RenderingConfiguration configuration ;
 
 
-  public DocumentHandler( File basedir ) {
-    this.basedir = Objects.nonNull( basedir ) ;
+  public DocumentHandler( HttpServerConfiguration httpServerConfiguration ) {
+    // TODO move those checks to ConfigurationTools.
+    this.basedir = Objects.nonNull(
+        httpServerConfiguration.getContentConfiguration().getContentRoot() ) ;
     if( ! basedir.exists() ) {
       throw new IllegalArgumentException( "Doesn't exist: '" + basedir.getAbsolutePath() + "'" ) ;
     }
+    configuration = httpServerConfiguration.getRenderingConfiguration() ;
   }
 
 
@@ -86,94 +91,93 @@ public class DocumentHandler extends AbstractHandler {
       int dispatch
   ) throws IOException, ServletException {
 
-    final DocumentRequest documentRequest = HttpDocumentRequest.create( request ) ;
+    final DocumentRequest documentRequest = HttpDocumentRequest.create( request.getPathInfo() ) ;
 
     if( null == documentRequest ) {
       return ;
-    }
+    } else if( documentRequest.isRendered() ) {
+      
+      final ServletOutputStream outputStream = response.getOutputStream();
+      final Renderable rendered = createRenderable( documentRequest ) ;
+      final Iterable<Problem> problems = rendered.getProblems();
 
-    final ServletOutputStream outputStream = response.getOutputStream();
-    final Renderable rendered = createRenderable( documentRequest ) ;
-    final Iterable<Problem> problems = rendered.getProblems();
+      if( documentRequest.getDisplayProblems() ) {
+        final ProblemPrinter problemPrinter = new ProblemPrinter() ;
+        final String originalTarget = documentRequest.getOriginalTarget();
+        problemPrinter.printProblems(
+            outputStream,
+            problems,
+            originalTarget
+        ) ;
+        setAsHandled( request ) ;
+        // TODO redirect to document page if renderable has no problem.
+        LOGGER.debug( "Served error request '{}'", originalTarget ) ;
 
-    if( documentRequest.getDisplayProblems() ) {
-      final ProblemPrinter problemPrinter = new ProblemPrinter() ;
-      final String originalTarget = documentRequest.getOriginalTarget();
-      problemPrinter.printProblems(
-          outputStream,
-          problems,
-          originalTarget
-      ) ;
-      setAsHandled( request ) ;
-      // TODO redirect to document page if renderable has no problem.
-      LOGGER.debug( "Served error request '{}'", originalTarget ) ;
+      } else if( rendered.hasProblem() ) {
+        final ProblemPrinter problemPrinter = new ProblemPrinter() ;
+        final String redirectionTarget =
+            documentRequest.getOriginalTarget() + HttpDocumentRequest.ERRORPAGE_SUFFIX;
+        response.sendRedirect( redirectionTarget ) ;
+        response.setStatus( HttpServletResponse.SC_FOUND ) ;
+        problemPrinter.printProblems(
+            outputStream, problems, request.getQueryString() ) ;
+        response.setContentType( problemPrinter.getMimeType().getMimeName() ) ;
+        setAsHandled( request ) ;
+        LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
 
-    } else if( rendered.hasProblem() ) {
-      final ProblemPrinter problemPrinter = new ProblemPrinter() ;
-      final String redirectionTarget =
-          documentRequest.getOriginalTarget() + HttpDocumentRequest.ERRORPAGE_SUFFIX;
-      response.sendRedirect( redirectionTarget ) ;
-      response.setStatus( HttpServletResponse.SC_FOUND ) ;
-      problemPrinter.printProblems(
-          outputStream, problems, request.getQueryString() ) ;
-      response.setContentType( problemPrinter.getMimeType().getMimeName() ) ;
-      setAsHandled( request ) ;
-      LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+      } else {
 
-    } else {
+        final RenditionMimeType mimeType = documentRequest.getRenditionMimeType() ;
 
-      final RenditionMimeType mimeType = documentRequest.getDocumentMimeType() ;
-      final RenderingConfiguration configuration =
-          ConfigurationTools.buildRenderingConfiguration() ;
+        switch( mimeType ) {
+          case PDF :
+            serve(
+                request,
+                response,
+                new GenericRenderer( new PdfWriter( configuration ) ),
+                rendered
+            ) ;
+            break;
+          case TXT :
+            serve(
+                request,
+                response,
+                new GenericRenderer( new PlainTextWriter() ),
+                rendered
+            ) ;
+            break;
+          case XML :
+            serve(
+                request,
+                response,
+                new GenericRenderer( new XmlWriter() ),
+                rendered
+            ) ;
+            break ;
+          case HTML :
+            serve(
+                request,
+                response,
+                new GenericRenderer( new HtmlWriter( configuration ) ),
+                rendered
+            ) ;
+            break ;
+          case NLP :
+            serve(
+                request,
+                response,
+                new GenericRenderer( new NlpWriter( configuration ) ),
+                rendered
+            ) ;
+            break ;
+          default :
+            final IllegalArgumentException illegalArgumentException =
+                new IllegalArgumentException( "Unsupported: " + mimeType );
+            LOGGER.warn( "Internal error", illegalArgumentException ) ;
+            throw illegalArgumentException;
+        }
 
-      switch( mimeType ) {
-        case PDF :
-          serve(
-              request,
-              response,
-              new GenericRenderer( new PdfWriter( configuration ) ),
-              rendered
-          ) ;
-          break;
-        case TXT :
-          serve(
-              request,
-              response,
-              new GenericRenderer( new PlainTextWriter() ),
-              rendered
-          ) ;
-          break;
-        case XML :
-          serve(
-              request,
-              response,
-              new GenericRenderer( new XmlWriter() ),
-              rendered
-          ) ;
-          break ;
-        case HTML :
-          serve(
-              request,
-              response,
-              new GenericRenderer( new HtmlWriter( configuration ) ), 
-              rendered
-          ) ;
-          break ;
-        case NLP :
-          serve(
-              request,
-              response,
-              new GenericRenderer( new NlpWriter( configuration ) ),
-              rendered
-          ) ;
-          break ;
-        default :
-          final IllegalArgumentException illegalArgumentException =
-              new IllegalArgumentException( "Unsupported: " + mimeType );
-          LOGGER.warn( "Internal error", illegalArgumentException ) ;
-          throw illegalArgumentException;
       }
-
     }
   }
 

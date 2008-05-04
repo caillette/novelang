@@ -38,10 +38,12 @@ public class HttpDocumentRequestTest {
   @Test
   public void testInterpretDocumentRequest() {
     final DocumentRequest documentRequest =
-        HttpDocumentRequest.createDocumentRequest( REQUEST_PATH ) ;
+        HttpDocumentRequest.create( REQUEST_PATH ) ;
     Assert.assertFalse( documentRequest.getDisplayProblems() ) ;
     Assert.assertEquals( REQUEST_URL, documentRequest.getOriginalTarget() ) ;
-    Assert.assertEquals( RenditionMimeType.PDF, documentRequest.getDocumentMimeType() ) ;
+    Assert.assertEquals( RenditionMimeType.PDF, documentRequest.getRenditionMimeType() ) ;
+    Assert.assertTrue( documentRequest.isRendered() ) ;
+    Assert.assertEquals( "pdf", documentRequest.getResourceExtension() ) ;
     Assert.assertEquals( REQUEST_SOURCEFILE, documentRequest.getDocumentSourceName() ) ;
     Assert.assertEquals( StructureKind.PART, documentRequest.getStructureKind() ) ;
   }
@@ -49,10 +51,10 @@ public class HttpDocumentRequestTest {
   @Test
   public void testInterpretProblemDisplayRequest() {
     final DocumentRequest documentRequest =
-        HttpDocumentRequest.createDocumentRequest( REQUEST_PATH_BROKEN ) ;
+        HttpDocumentRequest.create( REQUEST_PATH_BROKEN ) ;
     Assert.assertTrue( documentRequest.getDisplayProblems() ) ;
     Assert.assertEquals( REQUEST_URL, documentRequest.getOriginalTarget() ) ;
-    Assert.assertEquals( RenditionMimeType.PDF, documentRequest.getDocumentMimeType() ) ;
+    Assert.assertEquals( RenditionMimeType.PDF, documentRequest.getRenditionMimeType() ) ;
     Assert.assertEquals( REQUEST_SOURCEFILE, documentRequest.getDocumentSourceName() ) ;
     Assert.assertEquals( StructureKind.PART, documentRequest.getStructureKind() ) ;
   }

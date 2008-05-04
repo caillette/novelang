@@ -17,6 +17,12 @@
  */
 package novelang.rendering;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 /**
  * @author Laurent Caillette
 */
@@ -30,6 +36,14 @@ public enum RenditionMimeType {
 
   private final String identifier ;
 
+  private static final Function< RenditionMimeType,String > FILE_EXTENSION_EXTRACTOR =
+      new Function< RenditionMimeType, String >() {
+        public String apply( RenditionMimeType renditionMimeType ) {
+          return renditionMimeType.getFileExtension() ;
+        }
+      }
+  ;
+
   private RenditionMimeType( String identifier ) {
     this.identifier = identifier ;
   }
@@ -40,5 +54,10 @@ public enum RenditionMimeType {
 
   public String getFileExtension() {
     return name().toLowerCase() ;
+  }
+
+  public static Iterable< String > getFileExtensions() {
+    final List< RenditionMimeType > elements = Arrays.asList( values() ) ;
+    return Lists.transform( elements, FILE_EXTENSION_EXTRACTOR ) ;
   }
 }

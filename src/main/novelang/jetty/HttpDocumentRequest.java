@@ -17,16 +17,20 @@
  */
 package novelang.jetty;
 
-import java.util.regex.Pattern;
+import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.rendering.RenditionMimeType;
-import novelang.rendering.DocumentRequest;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import novelang.model.common.StructureKind;
+import novelang.rendering.DocumentRequest;
+import novelang.rendering.RawResource;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * @author Laurent Caillette
@@ -45,7 +49,8 @@ public class HttpDocumentRequest implements DocumentRequest {
     return
         ClassUtils.getShortClassName( getClass() ) + "[" +
         "isErrorRequest" + "=" + getDisplayProblems() +
-        ";documentMimeType" + "=" + documentMimeType.getMimeName() +
+        ";documentMimeType" + "=" +
+            ( renditionMimeType == null ? "<null>" : renditionMimeType.getMimeName() ) +
         ";structureKind" + "=" + getStructureKind() +
         ";documentSourceName" + "=" + getDocumentSourceName() +
         ";originalTarget" + "=" + getOriginalTarget() +
@@ -58,14 +63,21 @@ public class HttpDocumentRequest implements DocumentRequest {
 // documentMimeType
 // ================
 
-  private RenditionMimeType documentMimeType = RenditionMimeType.PDF ;
+  private RenditionMimeType renditionMimeType = RenditionMimeType.PDF ;
 
-  public RenditionMimeType getDocumentMimeType() {
-    return documentMimeType;
+  public RenditionMimeType getRenditionMimeType() {
+    if( null == renditionMimeType ) {
+      throw new IllegalStateException( "No renditionMimeType defined " ) ;
+    }
+    return renditionMimeType;
   }
 
-  private void setDocumentMimeType( RenditionMimeType documentMimeType ) {
-    this.documentMimeType = documentMimeType;
+  private void setRenditionMimeType( RenditionMimeType renditionMimeType ) {
+    this.renditionMimeType = renditionMimeType;
+  }
+
+  public boolean isRendered() {
+    return null != renditionMimeType ;
   }
 
 // ============
@@ -98,6 +110,21 @@ public class HttpDocumentRequest implements DocumentRequest {
   }
 
 
+// =================
+// ResourceExtension
+// =================
+
+  private String resourceExtension ;
+
+  public String getResourceExtension() {
+    return resourceExtension ;
+  }
+
+  private void setResourceExtension( String resourceExtension ) {
+    this.resourceExtension = resourceExtension;
+  }
+
+
 // ==================
 // documentSourceName
 // ==================
@@ -126,6 +153,14 @@ public class HttpDocumentRequest implements DocumentRequest {
     this.originalTarget = originalTarget;
   }
 
+// =====================
+// targetNoStructureKind
+// =====================
+
+  public String getTargetNoStructureKind() {
+    throw new UnsupportedOperationException( "getTargetNoStructureKind" ) ;
+  }
+
 // =======
 // Factory
 // =======
@@ -152,11 +187,19 @@ public class HttpDocumentRequest implements DocumentRequest {
 
     // The extension defining the MIME type.
     buffer.append( "(?:\\.(" ) ;
-    for( final RenditionMimeType mimeType : RenditionMimeType.values() ) {
-      if( mimeType.ordinal() > 0 ) {
+
+    final List< String > allExtensions = Lists.newArrayList() ;
+    Iterables.addAll( allExtensions, RenditionMimeType.getFileExtensions() ) ;
+    Iterables.addAll( allExtensions, RawResource.getFileExtensions() ) ;
+
+    boolean first = true ;
+    for( final String fileExtension : allExtensions ) {
+      if( first ) {
+        first = false ;
+      } else {
         buffer.append( "|" ) ;
       }
-      buffer.append( mimeType.getFileExtension() ) ;
+      buffer.append( fileExtension ) ;
     }
     buffer.append( ")))" ) ;
 
@@ -168,21 +211,21 @@ public class HttpDocumentRequest implements DocumentRequest {
   }
 
 
-  public static DocumentRequest create( HttpServletRequest httpRequest )
+//  public static DocumentRequest create( HttpServletRequest httpRequest )
+//      throws IllegalArgumentException
+//  {
+//    final String requestPath = httpRequest.getPathInfo() ;
+//    return createDocumentRequest( requestPath ) ;
+//  }
+
+  public static DocumentRequest create( String requestPath )
       throws IllegalArgumentException
   {
-    final String requestPath = httpRequest.getPathInfo() ;
-    return createDocumentRequest( requestPath ) ;
-  }
-
-  protected static DocumentRequest createDocumentRequest( String requestPath )
-      throws IllegalArgumentException
-  {
-
-    final HttpDocumentRequest request = new HttpDocumentRequest() ;
 
     final Matcher matcher = PATTERN.matcher( requestPath ) ;
     if( matcher.find() && matcher.groupCount() >= 3 ) {
+
+      final HttpDocumentRequest request = new HttpDocumentRequest() ;
 
       final String rawStructure = matcher.group( 2 ) ;
       request.setStructureKind( StructureKind.valueOf( rawStructure.toUpperCase() ) ) ;
@@ -191,20 +234,26 @@ public class HttpDocumentRequest implements DocumentRequest {
       request.setDocumentSourceName( rawDocumentSourceName ) ;
 
       final String rawDocumentMimeType = matcher.group( 4 ) ;
-      request.setDocumentMimeType(
+      request.setResourceExtension( rawDocumentMimeType ) ;
+      try {
+        request.setRenditionMimeType(
           RenditionMimeType.valueOf( rawDocumentMimeType.toUpperCase() ) ) ;
+      } catch( IllegalArgumentException e ) {
+        request.setRenditionMimeType( null ) ;
+      }
 
       request.setDisplayProblems( ERRORPAGE_SUFFIX.equals( matcher.group( 5 ) ) ) ;
+
+      request.setOriginalTarget( matcher.group( 1 ) ) ;
+
+      LOGGER.debug( "Parsed: {}", request ) ;
+
+      return request ;
 
     } else {
       return null ;
     }
 
-    request.setOriginalTarget( matcher.group( 1 ) ) ;
-
-    LOGGER.debug( "Parsed: {}", request ) ;
-
-    return request ;
   }
 
 }

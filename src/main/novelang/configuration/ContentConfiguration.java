@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2006 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,36 +15,14 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package novelang.rendering;
+package novelang.configuration;
 
-import novelang.model.common.StructureKind;
+import java.io.File;
 
 /**
  * @author Laurent Caillette
  */
-public interface DocumentRequest {
+public interface ContentConfiguration {
 
-  /**
-   * Returns the {@code RenditionMimeType}.
-   * @return a non-null object.
-   * @throws IllegalArgumentException if no {@code RenditionMimeType} was defined. 
-   */
-  RenditionMimeType getRenditionMimeType() ;
-
-  /**
-   * Returns true if special processing is needed to serve requested content, 
-   * or false if content is served as it is.
-   */
-  boolean isRendered() ;
-
-  boolean getDisplayProblems() ;
-
-  String getOriginalTarget() ;
-
-  StructureKind getStructureKind() ;
-
-  String getResourceExtension() ;
-
-  String getDocumentSourceName() ;
-  
+  File getContentRoot() ;
 }

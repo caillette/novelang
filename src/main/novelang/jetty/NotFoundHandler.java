@@ -25,31 +25,15 @@ import javax.servlet.ServletException;
 
 import org.mortbay.jetty.handler.AbstractHandler;
 import org.mortbay.jetty.Request;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.HttpServerConfiguration;
 import novelang.loader.ResourceLoader;
-import novelang.loader.ResourceNotFoundException;
 import novelang.rendering.DocumentRequest;
 
 /**
  * @author Laurent Caillette
  */
-public class ResourceHandler extends AbstractHandler {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceHandler.class ) ;
-
-  private final ResourceLoader resourceLoader ;
-
-  public ResourceHandler( HttpServerConfiguration httpServerConfiguration ) {
-    this( httpServerConfiguration.getRenderingConfiguration().getResourceLoader() ) ;
-  }
-
-  protected ResourceHandler( ResourceLoader resourceLoader ) {
-    this.resourceLoader = resourceLoader ;
-  }
+public class NotFoundHandler extends AbstractHandler {
 
   public void handle(
       String target,
@@ -59,30 +43,11 @@ public class ResourceHandler extends AbstractHandler {
   )
       throws IOException, ServletException
   {
-    final DocumentRequest documentRequest = HttpDocumentRequest.create( request.getPathInfo() ) ;
-
-    if( null != documentRequest ) {
-
-      try {
-        final InputStream inputStream = resourceLoader.getInputStream(
-            documentRequest.getDocumentSourceName() + "." +
-            documentRequest.getResourceExtension()
-        ) ;
-
-        IOUtils.copy( inputStream, response.getOutputStream() ) ;
-
-        response.setStatus( HttpServletResponse.SC_OK ) ;
-        response.setContentType( documentRequest.getResourceExtension() ) ;
-        ( ( Request ) request ).setHandled( true ) ;
-
-
-        LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
-        
-      } catch( ResourceNotFoundException e ) {
-        // Do nothing, we just don't handle that request.
-      }
-
-    }
+    response.setContentType( "text/html" ) ;
+    response.setStatus( HttpServletResponse.SC_NOT_FOUND ) ;
+    response.getWriter().println(
+        "<html><body><h1>Not found: " + request.getPathInfo() + "</h1></html></body>" ) ;
+    ( ( Request ) request ).setHandled( true ) ;
   }
 
 }
