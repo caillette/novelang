@@ -14,15 +14,33 @@ Here are some [brackets] here.
 
 This is a paragraph before a "blockquote".
 
-<<<
+<<
 This is a "blockquote".
 
 There can be several paragraphs inside.
->>>
+>>
 
 This is a paragraph //after// a "blockquote".
 
 There has been a bug with bad ordering of paragraphs and blockquotes.
+
+
+=== Litteral demo
+
+Litteral is for text taken as it is, including spaces and line breaks.
+
+<<<
+Litteral //here//.
+
+  Identation (2 spaces) to be preserved on this line.
+  
+  Two emtpy lines following:
+
+
+Character escaping also works here:
+&gt;&gt;&gt;
+>>>
+
 
 *** More stuff
 

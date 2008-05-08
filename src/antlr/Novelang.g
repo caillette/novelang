@@ -37,6 +37,7 @@ tokens {
   PARAGRAPH_SPEECH_CONTINUED ;
   PARAGRAPH_SPEECH_ESCAPED ;
   BLOCKQUOTE ;
+  LITTERAL ;
   QUOTE ;
   EMPHASIS ;
   PARENTHESIS ;
@@ -155,7 +156,7 @@ part
   ;
   
 chapter 
-  : CHAPTER_INTRODUCER 
+  : chapterIntroducer 
     ( smallBreak? ( title | identifier ) )?
     ( largeBreak section )+ 
     -> ^( CHAPTER
@@ -166,9 +167,9 @@ chapter
   ;	  
 	
 section 
-  : SECTION_INTRODUCER 
+  : sectionIntroducer 
     ( smallBreak? ( title | identifier ) )?
-    ( largeBreak ( p += paragraph | p += blockQuote ) )+ 
+    ( largeBreak ( p += paragraph | p += blockQuote | p += litteral) )+ 
     -> ^( SECTION 
            title?
            identifier?
@@ -179,7 +180,7 @@ section
 paragraph
 scope ParagraphScope ;
   : 
-    ( SPEECH_OPENER ( smallBreak locutor )? smallBreak? paragraphBody )
+    ( speechOpener ( smallBreak locutor )? smallBreak? paragraphBody )
     -> ^( PARAGRAPH_SPEECH locutor? paragraphBody )
   | ( SPEECH_ESCAPE WHITESPACE? paragraphBody )
     -> ^( PARAGRAPH_SPEECH_ESCAPED paragraphBody ) 
@@ -199,6 +200,50 @@ blockQuote
     CLOSING_BLOCKQUOTE
     -> ^( BLOCKQUOTE ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
+
+litteral
+  : OPENING_LITTERAL 
+    WHITESPACE? SOFTBREAK
+    l = rawLitteral
+    SOFTBREAK CLOSING_LITTERAL
+    -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.text ) } )
+  ;  
+
+rawLitteral
+  : (   SOFTBREAK
+      | WHITESPACE
+      | digit
+      | hexLetter
+      | nonHexLetter 
+      | AMPERSAND 
+      | APOSTROPHE   
+      | ASTERISK
+      | COLON
+      | COMMA 
+      | COMMERCIAL_AT
+      | DOLLAR_SIGN
+      | DOUBLE_QUOTE
+      | ELLIPSIS
+      | EQUALS_SIGN
+      | EXCLAMATION_MARK
+      | FULL_STOP
+      | GRAVE_ACCENT
+      | HYPHEN_MINUS
+      | LEFT_PARENTHESIS
+      | LEFT_SQUARE_BRACKET
+      | LOW_LINE
+      | NUMBER_SIGN
+      | PLUS_SIGN
+      | PERCENT_SIGN
+      | QUESTION_MARK
+      | RIGHT_PARENTHESIS
+      | RIGHT_SQUARE_BRACKET
+      | SEMICOLON
+      | SOLIDUS 
+      | TILDE 
+      | VERTICAL_LINE 
+    )*
+  ;
 
 locutor
  	: word 
@@ -638,7 +683,6 @@ word
   : w = rawWord 
     // QuietGrammarDelegate helps running this from AntlrWorks debugger:
     -> ^( WORD { delegate.createTree( WORD, $w.text ) } )	
-//    -> ^( WORD $word.text )	
   ;  
 
 /** This intermediary rule is useful as I didn't find how to
@@ -735,7 +779,7 @@ genericFileNameItem
 
 bookChapter
   scope ChapterScope ;
-  : CHAPTER_INTRODUCER 
+  : chapterIntroducer 
     { if( areScopesEnabled() ) { 
         final StructuralChapter chapter = bookDelegate.createChapter( input ) ;
         $ChapterScope::chapter = chapter ; 
@@ -762,7 +806,7 @@ bookChapter
 
 bookSection
   scope SectionScope ;
-  : SECTION_INTRODUCER 
+  : sectionIntroducer 
     { if( areScopesEnabled() ) {
       $SectionScope::section = AntlrParserHelper.createSection( 
           $ChapterScope::chapter, input ) ; 
@@ -928,6 +972,9 @@ escapedCharacter returns [ String unescaped ]
     }    
   ;
 
+chapterIntroducer : ASTERISK ASTERISK ASTERISK ;
+sectionIntroducer : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN ;
+speechOpener : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS ;
 
 
 SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
@@ -966,24 +1013,20 @@ VERTICAL_LINE : '|' ;
 
 
   
-OPENING_BLOCKQUOTE : '<<<' ;
-CLOSING_BLOCKQUOTE : '>>>' ;
+OPENING_BLOCKQUOTE : '<<' ;
+CLOSING_BLOCKQUOTE : '>>' ;
+OPENING_LITTERAL : '<<<' ;
+CLOSING_LITTERAL : '>>>' ;
 INTERPOLATED_CLAUSE_DELIMITER : '--' ;
 INTERPOLATED_CLAUSE_SILENT_END : '-_' ;
-SPEECH_OPENER : '---' ;
 SPEECH_CONTINUATOR : '--+' ;
 SPEECH_ESCAPE : '--|' ;
 LOCUTOR_INTRODUCER : '::' ;
-CHAPTER_INTRODUCER : '***' ;
-SECTION_INTRODUCER : '===' ;
 PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
 
 AUTOGENERATE_DIRECTIVE : ':autogenerate' ;
 STYLE_DIRECTIVE : ':style' ;
 
-//URL_HTTP_SCHEME : 'http://' ;
-//URL_FILE_SCHEME : 'file://' ;
-//URL_LOCALHOST : 'localhost' ;
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
 
@@ -994,7 +1037,7 @@ BLOCK_COMMENT
   ;
 
 /** As we don't support '/*' we avoid confusion by not supporting
- * usually-associated '//'.
+ * usually-associated '//', also used for italics.
  */
 LINE_COMMENT
   : '%%' ~('\n'|'\r')* '\r'? '\n' { $channel=HIDDEN ; }

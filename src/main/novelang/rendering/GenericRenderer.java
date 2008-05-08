@@ -95,9 +95,10 @@ public class GenericRenderer implements Renderer {
 
       case URL :
       case _META_TIMESTAMP :
+      case LITTERAL :
         fragmentWriter.start( newPath, false ) ;
-        final Tree timestampTree = tree.getChildAt( 0 ) ;
-        fragmentWriter.writeLitteral( newPath, timestampTree.getText() ); ;
+        final Tree litteralTree = tree.getChildAt( 0 ) ;
+        fragmentWriter.writeLitteral( newPath, litteralTree.getText() ); ;
         fragmentWriter.end( newPath ) ;
         break ;
 

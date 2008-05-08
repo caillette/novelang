@@ -36,16 +36,31 @@
 
         <meta name="Generator" content="Novelang" />
         <meta name= "Copyright" content="Laurent Caillette 2008" />
-
         <title>Novelang documentation here!</title>
 
-         <link rel="stylesheet" type="text/css" href="screen.css" />
+        <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
+        <link rel="stylesheet" type="text/css" href="screen.css" />
       </head>
     <body>
+    <div id="Box">
 
-    <!--<p>Encoding = <xsl:value-of select="$encoding" /></p>-->
+      <div id="Title" >Novelang</div>
 
-    <xsl:apply-templates />
+      <xsl:apply-templates />
+
+
+      <div id="Sidebar">
+
+      <p>By <strong>Laurent Caillette</strong></p>
+
+      <ul><!--&#9733;-->
+      <li><a href="/feeds/">Atom / RSS feeds</a></li>
+      </ul>
+
+
+      </div> <!-- Sidebar -->
+    </div> <!-- Box -->
+
 
     </body>
     </html>
@@ -97,6 +112,12 @@
     </blockquote>
   </xsl:template>
 
+  <xsl:template match="n:litteral" >
+    <pre>
+      <xsl:apply-templates/>
+    </pre>
+  </xsl:template>
+
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-plain | n:paragraph-speech-escaped" >
@@ -106,7 +127,9 @@
   </xsl:template>
 
   <xsl:template match="n:url" >
-    <a><xsl:attribute name="href"><xsl:value-of select="n:url" /></xsl:attribute><xsl:value-of select="n:url" /></a>
+    <p>
+    <a><xsl:attribute name="href"><xsl:value-of select="." /></xsl:attribute><xsl:value-of select="." /></a>
+    </p>
   </xsl:template>
 
   <xsl:template match="n:paragraph-speech" >

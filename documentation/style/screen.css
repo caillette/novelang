@@ -1,41 +1,324 @@
+@charset
+"utf-8"
+;
+
+/*
+	Daring Fireball CSS
+	Copyright (c) 2007 John Gruber. All rights reserved.
+	If you copy without permission, I will mock you.
+	Layout No. 2 / v1.45
+	Thu 25 Oct 2007
+*/
+
+html {
+/* cf. http://www.hicksdesign.co.uk/journal/forcing-scrollbars-now-even-better */
+  height: 100%;
+  margin-bottom: 1px;
+}
+
 body {
-  width : 400pt ;
-  background : #dddddd ;
-#  font-family : Georgia ;
+  margin-top: 0;
+  padding: 0;
+  font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+  line-height: 1.8em;
+  color: #aaa;
+  background-color: #1f2f32; /*#4a525a; /* dark blue slate thing */
+  text-align: left;
+  min-width: 760px;
 }
 
-h1 {
-  font-size : 21pt ;
+a {
+  text-decoration: none;
 }
 
-h2 {
-  font-size : 15pt ;
+a:link {
+  text-decoration: none;
+  color: #ddd;
+  border-color: #888;
+  border-width: 0 0 1px 0;
+  border-style: none none solid none;
+  padding: 3px 0px 2px 0px;
+  background-color: inherit;
 }
 
-div.chapter {
-  margin-top : 25pt ;
-  margin-bottom : 5pt ;
+a:visited {
+  color: #ddd;
+  border-color: #999;
+  border-width: 0 0 1px 0;
+  border-style: none none dotted none;
+  padding: 3px 0px 2px 0px;
+  background-color: inherit;
 }
 
-div.section {
-  margin-top : 15pt ;
-  margin-bottom : 3pt ;
+a:hover {
+  color: white;
+  text-decoration: none;
+  background-color: #606870;
+  border-color: #606870;
+}
+
+a em {
+  padding-bottom: 2px; /* Hack for WebKit; otherwise the underscore padding is 0 */
+}
+
+sup {
+  line-height: 0px;
+}
+
+sup a:link {
+  padding: 3px;
+}
+
+sup a:visited {
+  padding: 3px;
 }
 
 p {
-  font-size : 13.5pt ;
-	text-indent : 1em ;
-	text-align : justify ;
-	line-height : 1.30 ;
-	margin : 1pt 0pt 0pt 15pt;
-	padding : 0pt ;
+  margin: 0 0 1.6em 0;
+  padding: 0;
 }
 
-blockquote > p {
-  font-size : 12.5pt ;
-	text-indent : 0em ;
-	text-align : justify ;
-	line-height : 1.25 ;
-	margin : 1pt 0pt 0pt 10pt;
-	padding : 0pt ;
+h1 {
+  font-family: "Gill Sans", Georgia, serif;
+  font-size: 1.15em; /* was 1.46em for Georgia */
+  line-height: 1.3em;
+  text-align: left;
+  letter-spacing: .3em;
+  font-weight: normal;
+  margin: 3em 0 1.25em 0;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
+  font-size: 0.9em; 
+  text-align: left;
+  font-weight: normal;
+  line-height: 1.8em;
+  letter-spacing: .2em;
+  margin: 3em 0 1.5em 0;
+  text-transform: uppercase;
+}
+
+h1 + h2 {
+  margin-top: 2em;
+}
+
+h2 + h3 {
+  margin-top: 1.5em;
+}
+
+h3 {
+  font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
+  font-size: .91em;
+  text-align: left;
+  font-weight: normal;
+  line-height: 1.8em;
+  letter-spacing: .2em;
+  margin-bottom: 1.4em;
+  margin-top: 3em;
+  text-transform: uppercase;
+}
+
+p + h3 {
+  margin-top: 4em;
+}
+
+pre + h3 {
+  margin-top: 4em;
+}
+
+h6 + h2 {
+  margin-top: 2em;
+}
+
+h4, h5, h6 {
+  font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+  font-size: 1em;
+  text-align: left;
+  font-weight: bold;
+  line-height: 1.8em;
+  margin: 2em 0 0 0;
+}
+
+strong {
+  font-weight: normal;
+  font-size: .91em;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+em em {
+  font-style: normal;
+}
+
+strong strong {
+  font-weight: bold;
+}
+
+blockquote {
+  font-size: 1em;
+  margin: 2em 2em 2em 1em;
+  padding: 0 .75em 0 1.25em;
+  border-left: 1px solid #777;
+  border-right: 0px solid #777;
+}
+
+blockquote strong {
+  font-weight: bold;
+  font-size: 1em;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+cite {
+  font-weight: normal;
+  font-style: italic;
+}
+
+img {
+  margin-top: 5px;
+}
+
+thead {
+  font-weight: bold;
+}
+
+ul, ol {
+  padding-left: 1.25em;
+  margin: 0 0 2em 1em;
+}
+
+pre {
+  font-family: "Bitstream Vera Sans Mono", Courier, Monaco, ProFont, "American Typewriter", "Andale Mono", monospace;
+  line-height: 1.45em;
+  color: #ccc;
+  background-color: inherit;
+  margin: 2em 0 2.5em 0;
+  padding: 5px 0 5px 10px;
+  border-width: 1px 0 1px 0;
+  border-color: #6b6b6b;
+  border-style: dashed;
+}
+
+code {
+  font-family: Monaco, ProFont, "Bitstream Vera Sans Mono", "American Typewriter", "Andale Mono", monospace;
+  font-size: 0.91em; /* 1.09em for Courier */
+}
+
+ul {
+  list-style-type: square;
+}
+
+ul ul {
+  list-style-type: square;
+}
+
+ul ul ul {
+  list-style-type: square;
+}
+
+hr {
+  height: 1px;
+  margin: 2em 1em 4em 0;
+  text-align: center;
+  border-color: #777;
+  border-width: 0;
+  border-style: dotted;
+}
+
+/**** IDs *************************************************************/
+
+#Box {
+  border: 0;
+  width: 520px;
+  height: auto;
+  margin: 0 auto 0 auto;
+  padding: 0;
+  text-align: left;
+}
+
+#Title {
+  font-size: 2em;
+  letter-spacing: .2em;
+  margin: 1em 0 1.5em 0;
+  /*text-transform: uppercase;*/
+}
+
+#Sidebar {
+  position: absolute;
+  top: 191px;
+  margin: 0 0 0 -222px; /* IE/Win 6 Workaround Hack */
+  /*
+    -- Used this instead of the above for Sidebar positioning from Oct 2003 - Feb 2006
+    -- but abandoned it because of the way IE/Win deals with wider-than-425px elements
+    -- with floating:
+    float: left;
+  */
+  width: 160px;
+  height: auto;
+  border: 0px dotted gray;
+  padding: 5px 0 0 0;
+  background-color: transparent;
+  color: #bbb;
+  text-align: right;
+  /*
+    font-size: .91em;
+  */
+  line-height: 1em;
+  font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
+}
+
+#Sidebar ul {
+  margin: 0 0 5em -4em;
+}
+
+#Sidebar li {
+  list-style: none;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+
+#Sidebar p {
+  padding: 0;
+  letter-spacing: 2px;
+  margin: 0 0 5em -3em;
+}
+
+#Sidebar h2 {
+  font-size: 1em;
+  font-weight: normal;
+  margin-bottom: .25em;
+  margin-top: 2em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#Sidebar strong {
+  font-size: 1em;
+  font-weight: normal;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+#Sidebar a {
+  color: #bbb;
+  padding: 4px 1px 4px 1px;
+  text-decoration: none;
+}
+
+#Sidebar a:link {
+  color: #bbb;
+  border: 0;
+}
+
+#Sidebar a:visited {
+  color: #aaa;
+  border: 0;
+}
+
+#Sidebar a:hover {
+  color: #fff;
 }

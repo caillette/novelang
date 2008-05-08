@@ -1,21 +1,15 @@
-***'Novelang, the simplest word processor
+*** The simplest word processor
 
-==='What it is
+===
 
 Novelang is a word processor that takes plain text files and transforms them into nicely-formatted documents like PDF or HTML.
 Unlike mainstream word-processors, it keeps you focused on the text you type in and what it means, instead of struggling with how it should appear.
-
-{{{
-Novelang is easy because you don't have to struggle with a graphical interface with uncountable submenus and floating palettes, that don't handle styles and templates in a predictable way, and get slow on big documents.
-In addition, common word processors like Open Office or Microsoft Word
-offer many ways to obtain the same observable results, which may not resists to some reformatting -- ever seen people justifying text with //spaces//?-_
-}}}
 
 Novelang offers the most simple user interface as it is just text to type inside the text editor of your choice, with a very simple syntax to add some formatting hints.
 The magik occurs when you hit refresh in your Web browser, as the
 rigorously-formatted result appears.
 
-Novelang enforces a consistent presentation across a set of documents without relying on some proprietary, obscure format.
+Novelang enforces a consistent presentation across a set of documents without any proprietary, obscure format.
 Just text, that you can read on any computer with almost any text-viewer.
 In addition, text format is smaller, easier to search and manipulate through automated processes.
 
@@ -23,28 +17,86 @@ Novelang is a project started by Laurent Caillette.
 Novelang software is free to use and redistribute, under the terms of the GNU Public License v2.
 
 
-==='How it works -- my first document -_
 
-...
+*** Quickstart
 
-***'Why we need one more word processor
+=== Install
 
-==='WYSIWIG word processors (Open Office, MS Word...)
+Requirements : Java 5 and Apache's Ant 1&fullstop;7.
 
-...
+First, download the latest version of Novelang, and unzip it in some directory we'll call &dollar;NOVELANG&lowline;DIR. Build the Novelang project :
 
-==='WYSIWIG publishing tools (XPress, InDesign...)
 
-...
 
-==='LaTex
+<<<
+ant -buildfile $NOVELANG_HOME/build.xml clean-run-tests
+>>>
 
-...
 
-==='DocBook
+=== First document
 
-...
+Just create a file with your favorite text editor and name it "first&fullstop;nlp". Content could look like this:
 
-==='Wiki syntax
+<<<
+*** My first chapter
 
-...
+=== My first section
+
+My first paragraph //here//!
+>>>
+
+=== Run!
+
+Then, from the directory where the file is located, launch the Novelang dæmon:
+
+<<<
+ant -buildfile $NOVELANG_HOME/build.xml start-httpd
+>>>
+
+Open your favorite Web browser at this address:
+
+http://localhost:8080/part/first.nlp
+
+And you should see your text, with correct formatting! 
+
+
+
+*** Why we need one more word processor...
+
+
+=== WYSIWIG word processors (Open Office, MS Word...)
+
+The "What You See Is What You Get" paradigm hit its own limits and now those tools are full of needless features. As they got feature-bloated they lose their primary focus, which is to edit document, as they become publishing tools. But since it was not their initial purpose they don't do that well, neither.
+
+In fact I really got bored of struggling with MS Word (but this could apply to others) while all of its pricey options didn't help me to get my text right.
+
+=== WYSIWIG publishing tools (XPress, InDesign...)
+
+Those tools are fine for high-end publishing with ultimate control of every aspect of how the document looks like, but they're definitely not content-oriented.
+
+=== LaTex
+
+http://www.latex-project.org
+
+LaText got it all right. It is based on plain text with simple markup and a powerful macro system. It exists from 20 years and is incredibly mature now.
+
+Why not using LaTex? Because the markup is too verbose for my personal taste, I don't like its macro language, and it's uneasy to setup. 
+
+=== DocBook
+
+http://www.docbook.org
+
+DocBook is an attempt to create a semantic XML markup for technical documentation. It has many great ideas (Novelang borrows some of them) but fails to cover every case and is really too verbose.
+
+=== Wiki
+
+http://www.wikimatrix.org
+
+Wikis are a family Content Management Systems aiming at creating Web sites quickly. They rely on a simplified markup that Novelang is inspired from. Apart of this similarity, Wikis are completely different as wikis are collaborative tools for creating dynamic websites, while Novelang focuses on document generation.
+
+Here are some nice discussions on how to define wiki markup :
+
+http://www.wikicreole.org/wiki/Reasoning
+
+http://daringfireball.net/projects/markdown/syntax
+

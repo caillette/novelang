@@ -473,12 +473,27 @@ public class PartParserTest {
   }
 
   @Test
+  public void sectionIsAnonymousAndHasLitteral() throws RecognitionException {
+    section(
+      "===" + BREAK +
+      BREAK +
+      "<<<" + BREAK +
+      "  Here is some " + BREAK +
+      "  //Litteral// " + BREAK +
+      ">>>",
+      tree( SECTION,
+          tree( LITTERAL, "  Here is some " + BREAK + "  //Litteral// " )
+      )
+    ) ;
+  }
+
+  @Test
   public void sectionIsAnonymousAndHasBlockquoteWithSingleParagraph() throws RecognitionException {
     section(
       "===" + BREAK +
       BREAK +
-      "<<< w0 w1" + BREAK +
-      ">>>",
+      "<< w0 w1" + BREAK +
+      ">>",
       tree( SECTION,
           tree(
               BLOCKQUOTE,
@@ -495,8 +510,8 @@ public class PartParserTest {
       BREAK +
       "p0" + BREAK +
       BREAK +
-      "<<< w0" + BREAK +
-      ">>>" + BREAK +
+      "<< w0" + BREAK +
+      ">>" + BREAK +
       BREAK +
       "p1",
       tree( SECTION,
@@ -512,10 +527,10 @@ public class PartParserTest {
     section(
       "===" + BREAK +
       BREAK +
-      "<<< w0 w1" + BREAK +
+      "<< w0 w1" + BREAK +
       BREAK +
       "w2" + BREAK +
-      ">>>",
+      ">>",
       tree( SECTION,
           tree(
               BLOCKQUOTE,
@@ -531,9 +546,9 @@ public class PartParserTest {
     section(
         "===" + BREAK +
         BREAK +
-        "<<< w0 w1" + BREAK +
+        "<< w0 w1" + BREAK +
         BREAK +
-        ">>>"
+        ">>"
     ) ;
   }
 
@@ -789,7 +804,19 @@ public class PartParserTest {
     paragraphFails( "[w0 -- w1 [w2] --]" ) ;
   }
 
-  @Test public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {
+  @Test
+  public void litteralWithBreaksAndOtherSeparators() throws RecognitionException {
+    final String verbatim = "  Here is some " + BREAK + "//litteral//. " ;
+    litteral(
+        "<<<" + BREAK +
+        verbatim + BREAK +
+        ">>>",
+        tree( LITTERAL, verbatim )
+    ) ;
+  }
+
+  @Test
+  public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {
     part(
         "*** c0" + BREAK +
         BREAK +

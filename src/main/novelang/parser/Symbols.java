@@ -49,6 +49,7 @@ public class Symbols {
     symbols.put( "plus", "+" ) ;
     symbols.put( "equals", "=" ) ;
     symbols.put( "dollar", "$" ) ;
+    symbols.put( "lowline", "_" ) ;
     symbols.put( "euro", "\u20ac" ) ;
     symbols.put( "amp", "&" ) ;
     symbols.put( "solidus", "/" ) ;

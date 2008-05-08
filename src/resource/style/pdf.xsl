@@ -25,7 +25,7 @@
   %Fo;
 
 
-  <!ENTITY legal "D&eacute;pot l&eacute;gal SGDL 2008.04.0057">
+  <!ENTITY legal "(c) Laurent Caillette 2008">
   <!ENTITY author "Laurent Caillette">
   <!ENTITY author-email "laurent.caillette@gmail.com">
   <!ENTITY author-phone "06 60 41 26 83">
@@ -165,27 +165,6 @@
 
 
   <xsl:template name="title-page" >
-    <fo:block
-        break-after="odd-page"
-    >
-      <fo:block padding-top="10pt" font-size="26pt" >
-        &author;
-      </fo:block>
-
-      <fo:block padding-top="10pt" font-size="19pt">
-        <fo:block>&author-email;</fo:block>
-        <fo:block>&author-phone;</fo:block>
-      </fo:block>
-
-      <fo:block padding-top="230pt" font-size="65pt" >Chaman</fo:block>
-      <fo:block padding-top="16pt"  font-size="34pt" >&nbsp;roman</fo:block>
-
-      <fo:block padding-top="280pt" font-size="16pt">
-        <fo:block>&legal;</fo:block>
-        <fo:block>Imprimé le <xsl:value-of select="$timestamp"/></fo:block>
-      </fo:block>
-
-    </fo:block>
     
   </xsl:template>
 

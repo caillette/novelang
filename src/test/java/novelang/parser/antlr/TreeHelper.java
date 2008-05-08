@@ -104,10 +104,28 @@ public class TreeHelper {
   }
 
   public static void assertEquals( Tree expected, Tree actual ) {
-    Assert.assertEquals(
-        normalizeSpaces( expected.toStringTree() ),
-        normalizeSpaces( actual.toStringTree() )
-    ) ;
+    if( NodeKind.LITTERAL.isRoot( expected ) && NodeKind.LITTERAL.isRoot( actual ) ) {
+      Assert.assertEquals(
+          "Ill-formed test: expected LITTERAL node must have exactly one child",
+          1,
+          expected.getChildCount()
+      ) ;
+      Assert.assertEquals( 1, actual.getChildCount() ) ;
+      Assert.assertEquals( expected.getChildAt( 0 ).getText(), actual.getChildAt( 0 ).getText() ) ;
+    } else {
+      Assert.assertEquals( expected.getText(), actual.getText() ) ;
+      Assert.assertEquals( expected.getChildCount(), actual.getChildCount() ) ;
+      for( int index = 0 ; index < expected.getChildCount() ; index++ ) {
+        final Tree expectedChild = expected.getChildAt( index ) ;
+        final Tree actualChild = actual.getChildAt( index ) ;
+        assertEquals( expectedChild, actualChild ) ;
+      }
+    }
+
+//    Assert.assertEquals(
+//        normalizeSpaces( expected.toStringTree() ),
+//        normalizeSpaces( actual.toStringTree() )
+//    ) ;
   }
 
 

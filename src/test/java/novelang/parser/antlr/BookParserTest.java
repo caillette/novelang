@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import junit.framework.AssertionFailedError;
@@ -153,7 +154,7 @@ public class BookParserTest {
     bookPart( "#path/to/*.ppp" ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void bookPartWithWildcardsInDirectoryAndFile() throws RecognitionException {
     bookPart(
         "# w*/*.e",

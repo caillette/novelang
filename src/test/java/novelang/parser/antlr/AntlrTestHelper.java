@@ -116,6 +116,18 @@ public class AntlrTestHelper {
     return tree;
   }
 
+  static void litteral( String text, Tree expectedTree ) throws RecognitionException {
+    final Tree actualTree = litteral( text ) ;
+    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  static Tree litteral( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().litteral().getTree() ;
+    checkSanity( parser );
+    return tree;
+  }
+
   static void chapter( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = chapter( text ) ;
     TreeHelper.assertEquals( expectedTree, actualTree ) ;

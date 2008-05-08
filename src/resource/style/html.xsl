@@ -142,6 +142,10 @@ blockquote > p {
     </blockquote>
   </xsl:template>
 
+  <xsl:template match="n:litteral" >
+    <pre><xsl:apply-templates/></pre>
+  </xsl:template>
+
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-plain | n:paragraph-speech-escaped" >
@@ -151,8 +155,11 @@ blockquote > p {
   </xsl:template>
 
   <xsl:template match="n:url" >
-    <a><xsl:attribute name="href"><xsl:value-of select="n:url" /></xsl:attribute><xsl:value-of select="n:url" /></a>
+    <p>
+    <a><xsl:attribute name="href"><xsl:value-of select="." /></xsl:attribute><xsl:value-of select="." /></a>
+    </p>
   </xsl:template>
+
 
   <xsl:template match="n:paragraph-speech" >
     <xsl:call-template name="speech" >
