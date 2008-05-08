@@ -54,7 +54,7 @@
       <p>By <strong>Laurent Caillette</strong></p>
 
       <ul><!--&#9733;-->
-      <li><a href="/feeds/">Atom / RSS feeds</a></li>
+      <li><a href="/feeds/">Atom / RSS</a></li>
       </ul>
 
 

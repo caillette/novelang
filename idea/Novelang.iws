@@ -7,7 +7,7 @@
   </component>
   <component name="BookmarkManager">
     <editor_bookmark url="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/PartParserTest.java" line="808" number="1" />
-    <editor_bookmark url="file://$PROJECT_DIR$/../documentation/style/screen.css" line="241" description="font-size: 2em;" />
+    <editor_bookmark url="file://$PROJECT_DIR$/../documentation/style/screen.css" line="238" description="font-size: 2em;" />
   </component>
   <component name="CCaseConfig">
     <option name="checkoutReserved" value="false" />
@@ -249,7 +249,7 @@
       <file leaf-file-name="html.xsl" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../documentation/style/html.xsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="114" column="33" selection-start="2876" selection-end="2876" vertical-scroll-proportion="0.5566751">
+            <state line="56" column="38" selection-start="1578" selection-end="1578" vertical-scroll-proportion="2.0564516">
               <folding />
             </state>
           </provider>
@@ -274,7 +274,7 @@
       <file leaf-file-name="screen.css" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../documentation/style/screen.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="306" column="13" selection-start="5196" selection-end="5196" vertical-scroll-proportion="0.45454547">
+            <state line="94" column="19" selection-start="1642" selection-end="1642" vertical-scroll-proportion="0.7320574">
               <folding />
             </state>
           </provider>
@@ -1568,13 +1568,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../documentation/style/html.xsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="33" selection-start="2876" selection-end="2876" vertical-scroll-proportion="0.5566751">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/antlr/Novelang.g">
       <provider selected="true" editor-type-id="grammar">
         <state />
@@ -1587,9 +1580,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../documentation/style/html.xsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="38" selection-start="1578" selection-end="1578" vertical-scroll-proportion="2.0564516">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../documentation/style/screen.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="306" column="13" selection-start="5196" selection-end="5196" vertical-scroll-proportion="0.45454547">
+        <state line="94" column="19" selection-start="1642" selection-end="1642" vertical-scroll-proportion="0.7320574">
           <folding />
         </state>
       </provider>

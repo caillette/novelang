@@ -5,15 +5,16 @@
 Novelang is a word processor that takes plain text files and transforms them into nicely-formatted documents like PDF or HTML.
 Unlike mainstream word-processors, it keeps you focused on the text you type in and what it means, instead of struggling with how it should appear.
 
-Novelang offers the most simple user interface as it is just text to type inside the text editor of your choice, with a very simple syntax to add some formatting hints.
-The magik occurs when you hit refresh in your Web browser, as the
-rigorously-formatted result appears.
+Novelang offers the most simple user interface as it is just text to type inside the text editor of your choice, with a very simple syntax to add some formatting hints. You can see resulting document from your Web browser. 
 
-Novelang enforces a consistent presentation across a set of documents without any proprietary, obscure format.
+Novelang enforces a consistent presentation across a set of documents without any proprietary, obscure format. 
 Just text, that you can read on any computer with almost any text-viewer.
 In addition, text format is smaller, easier to search and manipulate through automated processes.
 
-Novelang is a project started by Laurent Caillette.
+Of course, you can define your own stylesheets for custom presentation.
+
+Novelang is a project started by Laurent Caillette, a software engineer who specializes in Human-Computer Interaction.
+
 Novelang software is free to use and redistribute, under the terms of the GNU Public License v2.
 
 
@@ -61,18 +62,18 @@ And you should see your text, with correct formatting!
 
 
 
-*** Why we need one more word processor...
+*** Why we need one more word processor
 
 
-=== WYSIWIG word processors (Open Office, MS Word...)
+=== WYSIWIG word processors
 
 The "What You See Is What You Get" paradigm hit its own limits and now those tools are full of needless features. As they got feature-bloated they lose their primary focus, which is to edit document, as they become publishing tools. But since it was not their initial purpose they don't do that well, neither.
 
-In fact I really got bored of struggling with MS Word (but this could apply to others) while all of its pricey options didn't help me to get my text right.
+In fact I really got bored of struggling with MS Word (but this could apply to others like Open Office) while all of its pricey options didn't help me to get my text right.
 
-=== WYSIWIG publishing tools (XPress, InDesign...)
+=== WYSIWIG publishing tools
 
-Those tools are fine for high-end publishing with ultimate control of every aspect of how the document looks like, but they're definitely not content-oriented.
+Those tools, like XPress and InDesign, are fine for high-end publishing with ultimate control of every aspect of how the document looks like, but they're definitely not content-oriented.
 
 === LaTex
 
@@ -92,7 +93,7 @@ DocBook is an attempt to create a semantic XML markup for technical documentatio
 
 http://www.wikimatrix.org
 
-Wikis are a family Content Management Systems aiming at creating Web sites quickly. They rely on a simplified markup that Novelang is inspired from. Apart of this similarity, Wikis are completely different as wikis are collaborative tools for creating dynamic websites, while Novelang focuses on document generation.
+Wikis are a family Content Management Systems aiming at creating Web sites quickly. They rely on a simplified markup that Novelang is inspired from. But Wikis are completely different as they are collaborative tools for creating dynamic websites, while Novelang focuses on document generation.
 
 Here are some nice discussions on how to define wiki markup :
 

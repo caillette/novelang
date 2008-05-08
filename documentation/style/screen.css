@@ -29,32 +29,29 @@ body {
 
 a {
   text-decoration: none;
+  border-style: none none dotted none;
+  border-width: 0 0 1px 0;
 }
 
 a:link {
-  text-decoration: none;
-  color: #ddd;
+  color: #aaa;
   border-color: #888;
-  border-width: 0 0 1px 0;
-  border-style: none none solid none;
   padding: 3px 0px 2px 0px;
   background-color: inherit;
 }
 
 a:visited {
-  color: #ddd;
-  border-color: #999;
-  border-width: 0 0 1px 0;
-  border-style: none none dotted none;
+  color: #777;
+  border-color: #777;
   padding: 3px 0px 2px 0px;
   background-color: inherit;
 }
 
 a:hover {
-  color: white;
+  color: #bbb;
   text-decoration: none;
-  background-color: #606870;
-  border-color: #606870;
+  background-color: #455;
+  border-color: #444;
 }
 
 a em {
@@ -95,7 +92,7 @@ h2 {
   text-align: left;
   font-weight: normal;
   line-height: 1.8em;
-  letter-spacing: .2em;
+  letter-spacing: .5em;
   margin: 3em 0 1.5em 0;
   text-transform: uppercase;
 }
@@ -192,7 +189,7 @@ ul, ol {
 pre {
   font-family: "Bitstream Vera Sans Mono", Courier, Monaco, ProFont, "American Typewriter", "Andale Mono", monospace;
   line-height: 1.45em;
-  color: #ccc;
+  color: #999;
   background-color: inherit;
   margin: 2em 0 2.5em 0;
   padding: 5px 0 5px 10px;
@@ -260,7 +257,7 @@ hr {
   border: 0px dotted gray;
   padding: 5px 0 0 0;
   background-color: transparent;
-  color: #bbb;
+  color: #aaa;
   text-align: right;
   /*
     font-size: .91em;
@@ -304,11 +301,11 @@ hr {
 }
 
 #Sidebar a {
-  color: #bbb;
+  color: #aaa;
   padding: 4px 1px 4px 1px;
   text-decoration: none;
 }
-
+/*
 #Sidebar a:link {
   color: #bbb;
   border: 0;
@@ -322,3 +319,4 @@ hr {
 #Sidebar a:hover {
   color: #fff;
 }
+*/
