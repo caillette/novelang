@@ -12,6 +12,13 @@
   <!ENTITY rdquo  "&amp;rdquo;" >
   <!ENTITY rsquo  "&amp;rsquo;" >
   <!ENTITY nbsp   "&amp;nbsp;" >
+
+
+    <!ENTITY usersFeed      "http://groups.google.com/group/novelang-users/feed/atom_v1_0_msgs.xml?num=50" >
+    <!ENTITY developersFeed "http://groups.google.com/group/novelang-developers/feed/atom_v1_0_msgs.xml?num=50" >
+    <!ENTITY usersGroup      "http://groups.google.com/group/novelang-users/topics" >
+    <!ENTITY developersGroup "http://groups.google.com/group/novelang-developers/topics" >
+
 ]
 >
 
@@ -40,6 +47,15 @@
 
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
         <link rel="stylesheet" type="text/css" href="screen.css" />
+
+        <link
+            rel="alternate" type="application/atom+xml" title="User's feed (Atom)"
+            href="&usersFeed;"
+        />
+        <link
+            rel="alternate" type="application/atom+xml" title="Developer's feed (Atom)"
+            href="&developersFeed;"
+        />
       </head>
     <body>
     <div id="Box">
@@ -57,7 +73,8 @@
       <li><a href="http://www.gnu.org/licenses/gpl-3.0.txt">License</a></li>
       <li><a href="http://novelang.sf.net">Sourceforge</a></li>
       <li><a href="http://github.com/caillette/novelang/tree/master">Sources</a></li>
-      <li><a href="/feeds/">Atom / RSS</a></li>
+      <li><a href="&usersGroup;">Users</a></li>
+      <li><a href="&developersGroup;">Developers</a></li>
       </ul>
 
 
