@@ -11,11 +11,11 @@ Novelang enforces a consistent presentation across a set of documents without an
 Just text, that you can read on any computer with almost any text-viewer.
 In addition, text format is smaller, easier to search and manipulate through automated processes.
 
-Of course, you can define your own stylesheets for custom presentation.
+Of course, you can define your own stylesheets for custom presentation. This page was produced with Novelang, using a dedicated stylesheet.
 
 Novelang is a project started by Laurent Caillette, a software engineer who specializes in Human-Computer Interaction.
 
-Novelang software is free to use and redistribute, under the terms of the GNU Public License v2.
+Novelang software is free to use and redistribute, under the terms of the GNU Public License v3.
 
 
 

@@ -54,7 +54,9 @@
       <p>By <strong>Laurent Caillette</strong></p>
 
       <ul><!--&#9733;-->
-      <li><a href="http://www.gnu.org/licenses/gpl-2.0.html">License</a></li>
+      <li><a href="http://www.gnu.org/licenses/gpl-3.0.txt">License</a></li>
+      <li><a href="http://novelang.sf.net">Sourceforge</a></li>
+      <li><a href="http://github.com/caillette/novelang/tree/master">Sources</a></li>
       <li><a href="/feeds/">Atom / RSS</a></li>
       </ul>
 
