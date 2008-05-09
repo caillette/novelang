@@ -36,7 +36,7 @@
 
         <meta name="Generator" content="Novelang" />
         <meta name= "Copyright" content="Laurent Caillette 2008" />
-        <title>Novelang documentation here!</title>
+        <title>Novelang, the simplest word processor</title>
 
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
         <link rel="stylesheet" type="text/css" href="screen.css" />
@@ -54,6 +54,7 @@
       <p>By <strong>Laurent Caillette</strong></p>
 
       <ul><!--&#9733;-->
+      <li><a href="http://www.gnu.org/licenses/gpl-2.0.html">License</a></li>
       <li><a href="/feeds/">Atom / RSS</a></li>
       </ul>
 
