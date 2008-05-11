@@ -181,9 +181,9 @@ scope ParagraphScope ;
   : 
     ( speechOpener ( smallBreak locutor )? smallBreak? paragraphBody )
     -> ^( PARAGRAPH_SPEECH locutor? paragraphBody )
-  | ( SPEECH_ESCAPE WHITESPACE? paragraphBody )
+  | ( speechEscape WHITESPACE? paragraphBody )
     -> ^( PARAGRAPH_SPEECH_ESCAPED paragraphBody ) 
-  | ( SPEECH_CONTINUATOR WHITESPACE? paragraphBody )
+  | ( speechContinuator WHITESPACE? paragraphBody )
     -> ^( PARAGRAPH_SPEECH_CONTINUED paragraphBody )
   | paragraphBody
     -> ^( PARAGRAPH_PLAIN paragraphBody )
@@ -642,13 +642,13 @@ emphasizingText
   ;
   
 interpolatedClause
-  :	INTERPOLATED_CLAUSE_DELIMITER 
+  :	interpolatedClauseDelimiter 
     smallBreak?
     paragraphBodyNoInterpolatedClause 
-    (   ( ( smallBreak? INTERPOLATED_CLAUSE_DELIMITER )
+    (   ( ( smallBreak? interpolatedClauseDelimiter )
             -> ^( INTERPOLATEDCLAUSE paragraphBodyNoInterpolatedClause )
         )
-      | ( ( smallBreak? INTERPOLATED_CLAUSE_SILENT_END ) 
+      | ( ( smallBreak? interpolatedClauseSilentEnd ) 
           -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBodyNoInterpolatedClause )
         )
     )
@@ -974,6 +974,10 @@ escapedCharacter returns [ String unescaped ]
 chapterIntroducer : ASTERISK ASTERISK ASTERISK ;
 sectionIntroducer : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN ;
 speechOpener : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS ;
+interpolatedClauseDelimiter : HYPHEN_MINUS HYPHEN_MINUS  ;
+interpolatedClauseSilentEnd : HYPHEN_MINUS LOW_LINE ;
+speechContinuator : HYPHEN_MINUS HYPHEN_MINUS PLUS_SIGN ;
+speechEscape : HYPHEN_MINUS HYPHEN_MINUS VERTICAL_LINE ;
 
 
 SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
@@ -1016,10 +1020,6 @@ OPENING_BLOCKQUOTE : '<<' ;
 CLOSING_BLOCKQUOTE : '>>' ;
 OPENING_LITTERAL : '<<<' ;
 CLOSING_LITTERAL : '>>>' ;
-INTERPOLATED_CLAUSE_DELIMITER : '--' ;
-INTERPOLATED_CLAUSE_SILENT_END : '-_' ;
-SPEECH_CONTINUATOR : '--+' ;
-SPEECH_ESCAPE : '--|' ;
 LOCUTOR_INTRODUCER : '::' ;
 PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
 
