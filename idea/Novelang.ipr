@@ -444,6 +444,7 @@
         <root url="jar://$PROJECT_DIR$/../lib/build/junit-4.4.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/easymock-2.3.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/joda-time-1.5.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/jopt-simple-2.4-beta2-SNAPSHOT.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>

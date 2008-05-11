@@ -27,12 +27,11 @@ Requirements : Java 5 and Apache's Ant 1&fullstop;7.
 
 First, download the latest version of Novelang, and unzip it in some directory we'll call &dollar;NOVELANG&lowline;DIR. Build the Novelang project :
 
-
-
 <<<
 ant -buildfile $NOVELANG_HOME/build.xml clean-run-tests
 >>>
 
+Right, installation has to be streamlined!
 
 === First document
 
@@ -48,7 +47,7 @@ My first paragraph //here//!
 
 === Run!
 
-Then, from the directory where the file is located, launch the Novelang dæmon:
+Then, from the directory where the file is located, launch the Novelang dæmon (one day I'll write a nicer interface):
 
 <<<
 ant -buildfile $NOVELANG_HOME/build.xml start-httpd
@@ -60,6 +59,12 @@ http://localhost:8080/part/first.nlp
 
 And you should see your text, with correct formatting! 
 
+
+*** Project status
+
+===
+
+Currently, Novelang is a proof-of-concept. It has been used for editing documents of hundreds of kilobytes, but still needs //lots// of polish. 
 
 
 *** Why we need one more word processor
