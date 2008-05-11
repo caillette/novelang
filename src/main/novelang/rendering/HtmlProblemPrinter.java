@@ -30,7 +30,7 @@ import novelang.model.common.Problem;
 /**
  * @author Laurent Caillette
  */
-public class ProblemPrinter {
+public class HtmlProblemPrinter {
   
   public void printProblems(
       OutputStream outputStream,

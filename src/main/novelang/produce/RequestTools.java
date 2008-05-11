@@ -14,36 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package novelang.produce;
 
-package novelang.batch;
-
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.OutputStream;
+import java.io.File;
 
 /**
- * The main class for running in command-line mode.
  *
  * @author Laurent Caillette
  */
-public class Generator {
+public class RequestTools {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( Generator.class ) ;
+  private RequestTools() { throw new Error( "Don't call this" ) ; }
 
-  public static void main( String[] args ) throws IOException {
-    try {
-      final BatchParameters parameters = BatchParameters.parse( args ) ;
-      LOGGER.info( "Successfully parsed: " + parameters ) ;
-
-      for( final String query : parameters.getDocuments() ) {
-        
-      }
-    } catch( ParametersException e ) {
-      System.err.println( e.getMessage() ) ;
-      System.err.println( BatchParameters.HELP ) ;
-      System.exit( -1 ) ;
-    }
+  public static DocumentRequest build( String rawRequest ) {
+    return DocumentRequest.create( rawRequest ) ;
   }
-
+  
 }

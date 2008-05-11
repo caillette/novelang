@@ -28,8 +28,7 @@ import org.mortbay.jetty.Request;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.HttpServerConfiguration;
+import novelang.configuration.ServerConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceNotFoundException;
 import novelang.rendering.DocumentRequest;
@@ -43,8 +42,8 @@ public class ResourceHandler extends AbstractHandler {
 
   private final ResourceLoader resourceLoader ;
 
-  public ResourceHandler( HttpServerConfiguration httpServerConfiguration ) {
-    this( httpServerConfiguration.getRenderingConfiguration().getResourceLoader() ) ;
+  public ResourceHandler( ServerConfiguration serverConfiguration ) {
+    this( serverConfiguration.getRenderingConfiguration().getResourceLoader() ) ;
   }
 
   protected ResourceHandler( ResourceLoader resourceLoader ) {

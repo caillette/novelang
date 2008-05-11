@@ -18,17 +18,12 @@
 package novelang.jetty;
 
 import java.io.IOException;
-import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 
 import org.mortbay.jetty.handler.AbstractHandler;
 import org.mortbay.jetty.Request;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.HttpServerConfiguration;
-import novelang.loader.ResourceLoader;
-import novelang.rendering.DocumentRequest;
 
 /**
  * @author Laurent Caillette

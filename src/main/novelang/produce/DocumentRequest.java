@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package novelang.jetty;
+package novelang.produce;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -27,34 +26,57 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.model.common.StructureKind;
-import novelang.rendering.DocumentRequest;
 import novelang.rendering.RawResource;
 import novelang.rendering.RenditionMimeType;
 
 /**
+ * Contains everything needed to build a specific requested document.
+ * <p>
+ * TODO add more classes: AbstractRequest (base), ProblemDocumentRequest, ResourceRequest.
+ * <p>
+ * TODO remove the copy-paste from novelang.jetty.DocumentRequest.
+ * <p>@
+ * TODO Use some factory method to create the regex parser, with two parameters:
+ * 1) allow error request 2) allow raw resource request.
+ *
  * @author Laurent Caillette
  */
-public class HttpDocumentRequest implements DocumentRequest {
+public class DocumentRequest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDocumentRequest.class ) ;
-
-  public static final String ERRORPAGE_SUFFIX = "/error.html";
-  private static final String ERRORPAGE_SUFFIX_REGEX = "/error\\.html";
-
-  private HttpDocumentRequest() { }
+  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentRequest.class ) ;
 
   @Override
   public String toString() {
     return
         ClassUtils.getShortClassName( getClass() ) + "[" +
-        "isErrorRequest" + "=" + getDisplayProblems() +
-        ";documentMimeType" + "=" +
-            ( renditionMimeType == null ? "<null>" : renditionMimeType.getMimeName() ) +
         ";structureKind" + "=" + getStructureKind() +
         ";documentSourceName" + "=" + getDocumentSourceName() +
         ";originalTarget" + "=" + getOriginalTarget() +
         "]"
     ;
+  }
+
+
+// ==============
+// originalTarget
+// ==============
+
+  private String originalTarget ;
+
+  /**
+   * Returns the initial request, as part of HTTP query or as command-line argument,
+   * that suffices to construct this object.
+   * For a HTTP query like {@code http://localhost:8080/part/samples/showcase/showcase.html}
+   * it returns the value {@code /part/samples/showcase/showcase.html}
+   *
+   * @return a non-null, non-empty String.
+   */
+  public String getOriginalTarget() {
+    return originalTarget;
+  }
+
+  private void setOriginalTarget( String originalTarget ) {
+    this.originalTarget = originalTarget;
   }
 
 
@@ -64,6 +86,11 @@ public class HttpDocumentRequest implements DocumentRequest {
 
   private RenditionMimeType renditionMimeType = RenditionMimeType.PDF ;
 
+  /**
+   * Returns the {@code RenditionMimeType}.
+   * @return a non-null object.
+   * @throws IllegalArgumentException if no {@code RenditionMimeType} was defined.
+   */
   public RenditionMimeType getRenditionMimeType() {
     if( null == renditionMimeType ) {
       throw new IllegalStateException( "No renditionMimeType defined " ) ;
@@ -75,24 +102,6 @@ public class HttpDocumentRequest implements DocumentRequest {
     this.renditionMimeType = renditionMimeType;
   }
 
-  public boolean isRendered() {
-    return null != renditionMimeType ;
-  }
-
-// ============
-// errorRequest
-// ============
-
-  private boolean displayProblems = false ;
-
-  public boolean getDisplayProblems() {
-    return displayProblems;
-  }
-
-  private void setDisplayProblems( boolean displayProblems ) {
-    this.displayProblems = displayProblems;
-  }
-
 
 // =============
 // structureKind
@@ -100,6 +109,10 @@ public class HttpDocumentRequest implements DocumentRequest {
 
   private StructureKind structureKind;
 
+  /**
+   * Wether it's a {@link StructureKind#PART} or {@link StructureKind#BOOK}.
+   * @return a non-null object.
+   */
   public StructureKind getStructureKind() {
     return structureKind;
   }
@@ -115,6 +128,10 @@ public class HttpDocumentRequest implements DocumentRequest {
 
   private String resourceExtension ;
 
+  /**
+   * Returns the extension for this resource (without the dot).
+   * @return a non-null, non-empty String.
+   */
   public String getResourceExtension() {
     return resourceExtension ;
   }
@@ -123,13 +140,18 @@ public class HttpDocumentRequest implements DocumentRequest {
     this.resourceExtension = resourceExtension;
   }
 
-
 // ==================
 // documentSourceName
 // ==================
 
   private String documentSourceName ;
 
+  /**
+   * Returns the document as requested, without extension.
+   * For a HTTP query like {@code http://localhost:8080/part/samples/showcase/showcase.html}
+   * it returns the value {@code /samples/showcase/showcase}
+   * @return  a non-null, non-empty String.
+   */
   public String getDocumentSourceName() {
     return documentSourceName;
   }
@@ -138,27 +160,6 @@ public class HttpDocumentRequest implements DocumentRequest {
     this.documentSourceName = documentSourceName;
   }
 
-// ==============
-// originalTarget
-// ==============
-
-  private String originalTarget ;
-
-  public String getOriginalTarget() {
-    return originalTarget;
-  }
-
-  private void setOriginalTarget( String originalTarget ) {
-    this.originalTarget = originalTarget;
-  }
-
-// =====================
-// targetNoStructureKind
-// =====================
-
-  public String getTargetNoStructureKind() {
-    throw new UnsupportedOperationException( "getTargetNoStructureKind" ) ;
-  }
 
 // =======
 // Factory
@@ -202,9 +203,6 @@ public class HttpDocumentRequest implements DocumentRequest {
     }
     buffer.append( ")))" ) ;
 
-    // Maybe an error report.
-    buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
-
     PATTERN = Pattern.compile( buffer.toString() ) ;
     LOGGER.debug( "Crafted regex {}.", PATTERN.pattern() ) ;
   }
@@ -218,7 +216,7 @@ public class HttpDocumentRequest implements DocumentRequest {
     final Matcher matcher = PATTERN.matcher( requestPath ) ;
     if( matcher.find() && matcher.groupCount() >= 3 ) {
 
-      final HttpDocumentRequest request = new HttpDocumentRequest() ;
+      final DocumentRequest request = new DocumentRequest() ;
 
       final String rawStructure = matcher.group( 2 ) ;
       request.setStructureKind( StructureKind.valueOf( rawStructure.toUpperCase() ) ) ;
@@ -235,8 +233,6 @@ public class HttpDocumentRequest implements DocumentRequest {
         request.setRenditionMimeType( null ) ;
       }
 
-      request.setDisplayProblems( ERRORPAGE_SUFFIX.equals( matcher.group( 5 ) ) ) ;
-
       request.setOriginalTarget( matcher.group( 1 ) ) ;
 
       LOGGER.debug( "Parsed: {}", request ) ;
@@ -249,4 +245,6 @@ public class HttpDocumentRequest implements DocumentRequest {
 
   }
 
+
 }
+

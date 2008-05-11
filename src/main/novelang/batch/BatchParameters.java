@@ -19,6 +19,7 @@ package novelang.batch;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class BatchParameters {
   private BatchParameters() { }
 
   private boolean help ;
-  private String targetDirectory ;
+  private File targetDirectory ;
   private Iterable< String > documents = EMPTY_STRING_LIST ;
 
   public boolean isHelp() {
@@ -54,12 +55,12 @@ public class BatchParameters {
     this.help = help;
   }
 
-  public String getTargetDirectory() {
+  public File getTargetDirectory() {
     return targetDirectory;
   }
 
-  private void setTargetDirectory( String targetDirectory ) {
-    this.targetDirectory = targetDirectory;
+  private void setTargetDirectoryName( String targetDirectoryName ) {
+    this.targetDirectory = new File( targetDirectoryName ) ;
   }
 
   public Iterable< String > getDocuments() {
@@ -154,9 +155,9 @@ public class BatchParameters {
     batchParameters.setHelp( options.has( OPTION_HELP ) ) ;
 
     if( options.has( OPTION_TARGET_DIRECTORY ) ) {
-      batchParameters.setTargetDirectory( ( String ) options.valueOf( OPTION_TARGET_DIRECTORY ) ) ;
+      batchParameters.setTargetDirectoryName( ( String ) options.valueOf( OPTION_TARGET_DIRECTORY ) ) ;
     } else {
-      batchParameters.setTargetDirectory( DEFAULT_TARGET_DIRECTORY ) ;
+      batchParameters.setTargetDirectoryName( DEFAULT_TARGET_DIRECTORY ) ;
     }
 
     batchParameters.setDocuments( options.nonOptionArguments() ) ;
@@ -173,10 +174,12 @@ public class BatchParameters {
 // ====
 
   private static final String GENERAL_HELP =
-      "Usage: \n" +
-      "  " +
-      ClassUtils.getShortClassName( Generator.class ) +
-      " [Options] <document1 [ document2 [...]]> \n\n"
+      "Usage:   " + ClassUtils.getShortClassName( Main.class ) +
+      " [Options] <document [document2 [...]]> \n\n" +
+      "<document>: logical name of a document to generate.\n" +
+      "    Starts with '/part/' or '/book/' (like URLs). \n" +
+      "    Valid names: /part/somedir/mydoc.html or /book/mybook.pdf\n" +
+      "\n"
   ;
 
   /**

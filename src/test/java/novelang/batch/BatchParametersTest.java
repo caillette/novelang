@@ -65,14 +65,17 @@ public class BatchParametersTest {
 
   @Test
   public void targetDirectoryShort() throws ParametersException {
-    Assert.assertEquals( "my/directory", parse( "-t", "my/directory" ).getTargetDirectory() ) ;
+    Assert.assertEquals(
+        "my/directory",
+        parse( "-t", "my/directory" ).getTargetDirectory().getPath()
+    ) ;
   }
 
   @Test
   public void targetDirectoryLong() throws ParametersException {
     Assert.assertEquals(
         "my/directory",
-        parse( "--targetDirectory", "my/directory" ).getTargetDirectory()
+        parse( "--targetDirectory", "my/directory" ).getTargetDirectory().getPath()
     ) ;
   }
 

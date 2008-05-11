@@ -144,8 +144,8 @@ public class ConfigurationTools {
   private static final ContentConfiguration CONTENT_CONFIGURATION =
       buildContentConfiguration() ;
 
-  public static HttpServerConfiguration buildHttpServerConfiguration() {
-    return new HttpServerConfiguration() {
+  public static ServerConfiguration buildServerConfiguration() {
+    return new ServerConfiguration() {
       public RenderingConfiguration getRenderingConfiguration() {
         return RENDERING_CONFIGURATION ;
       }

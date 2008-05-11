@@ -38,12 +38,14 @@ public class MetadataHelper {
   public static int countWords( Tree tree ) {
     if( NodeKind.WORD.isRoot( tree ) ) {
       return 1 ;
-    } else {
+    } else if( null != tree ) {
       int childCount = 0 ;
       for( Tree child : tree.getChildren() ) {
         childCount += countWords( child ) ;
       }
       return childCount ;
+    } else {
+      return -1 ;
     }
   }
 

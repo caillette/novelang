@@ -41,12 +41,12 @@ import novelang.rendering.HtmlWriter;
 import novelang.rendering.NlpWriter;
 import novelang.rendering.PdfWriter;
 import novelang.rendering.PlainTextWriter;
-import novelang.rendering.ProblemPrinter;
+import novelang.rendering.HtmlProblemPrinter;
 import novelang.rendering.Renderer;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
 import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.HttpServerConfiguration;
+import novelang.configuration.ServerConfiguration;
 
 /**
  * Serves rendered content.
@@ -73,14 +73,14 @@ public class DocumentHandler extends AbstractHandler {
   private final RenderingConfiguration configuration ;
 
 
-  public DocumentHandler( HttpServerConfiguration httpServerConfiguration ) {
+  public DocumentHandler( ServerConfiguration serverConfiguration ) {
     // TODO move those checks to ConfigurationTools.
     this.basedir = Objects.nonNull(
-        httpServerConfiguration.getContentConfiguration().getContentRoot() ) ;
+        serverConfiguration.getContentConfiguration().getContentRoot() ) ;
     if( ! basedir.exists() ) {
       throw new IllegalArgumentException( "Doesn't exist: '" + basedir.getAbsolutePath() + "'" ) ;
     }
-    configuration = httpServerConfiguration.getRenderingConfiguration() ;
+    configuration = serverConfiguration.getRenderingConfiguration() ;
   }
 
 
@@ -99,10 +99,10 @@ public class DocumentHandler extends AbstractHandler {
       
       final ServletOutputStream outputStream = response.getOutputStream();
       final Renderable rendered = createRenderable( documentRequest ) ;
-      final Iterable<Problem> problems = rendered.getProblems();
+      final Iterable< Problem > problems = rendered.getProblems();
 
       if( documentRequest.getDisplayProblems() ) {
-        final ProblemPrinter problemPrinter = new ProblemPrinter() ;
+        final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
         final String originalTarget = documentRequest.getOriginalTarget();
         problemPrinter.printProblems(
             outputStream,
@@ -114,7 +114,7 @@ public class DocumentHandler extends AbstractHandler {
         LOGGER.debug( "Served error request '{}'", originalTarget ) ;
 
       } else if( rendered.hasProblem() ) {
-        final ProblemPrinter problemPrinter = new ProblemPrinter() ;
+        final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
         final String redirectionTarget =
             documentRequest.getOriginalTarget() + HttpDocumentRequest.ERRORPAGE_SUFFIX;
         response.sendRedirect( redirectionTarget ) ;

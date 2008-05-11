@@ -246,10 +246,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BatchParametersTest.java" pinned="true" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/batch/BatchParametersTest.java">
+      <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/main/novelang/batch/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.37260273">
+            <state line="100" column="20" selection-start="3664" selection-end="3664" vertical-scroll-proportion="0.5093946">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -257,33 +257,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BatchParameters.java" pinned="true" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/batch/BatchParameters.java">
+      <file leaf-file-name="DocumentRequest.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/DocumentRequest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="85" column="5" selection-start="2401" selection-end="2401" vertical-scroll-proportion="0.6054795">
+            <state line="102" column="3" selection-start="3251" selection-end="3251" vertical-scroll-proportion="0.5678497">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Generator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/batch/Generator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="59" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.41917807">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DocumentHandler.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/DocumentHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="54" selection-start="2439" selection-end="2439" vertical-scroll-proportion="0.006849315">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -468,6 +448,54 @@
           <option name="myItemId" value="Libraries" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="lib" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/lib/google-collect-snapshot-20071022.jar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="lib" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/lib/google-collect-snapshot-20071022.jar" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/lib/google-collect-snapshot-20071022.jar!/com/google/common/base" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Libraries" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.LibraryGroupNode" />
+        </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
@@ -536,6 +564,36 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/test/java/novelang/parser/antlr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/test" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/test/java" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/test/java/novelang/model/implementation" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -695,33 +753,7 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/main/novelang/parser/antlr" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Novelang" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="Novelang" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/main" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/main/novelang/parser" />
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/src/main/novelang/produce" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -1087,11 +1119,11 @@
       <recent name="novelang.renderer.RenderTools" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="novelang.rendering" />
+      <recent name="novelang.grind" />
       <recent name="novelang.batch" />
       <recent name="novelang" />
       <recent name="novelang.model.common" />
-      <recent name="novelang.rendering" />
-      <recent name="novelang.parser.antlr" />
     </key>
   </component>
   <component name="Regex">
@@ -1106,15 +1138,15 @@
     <option name="showLabels" value="true" />
   </component>
   <component name="RunManager" selected="JUnit.novelang">
-    <tempConfiguration default="false" name="BatchParametersTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+    <tempConfiguration default="false" name="BatchParametersTest.printHelp" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
       <pattern value="novelang.batch.*" />
       <module name="Novelang" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="novelang.batch" />
       <option name="MAIN_CLASS_NAME" value="novelang.batch.BatchParametersTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="printHelp" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -1217,34 +1249,6 @@
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
     </configuration>
-    <configuration default="false" name="ClasspathResourceLoaderTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
-      <pattern value="novelang.loader.*" />
-      <module name="Novelang" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="novelang.loader" />
-      <option name="MAIN_CLASS_NAME" value="novelang.loader.ClasspathResourceLoaderTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="ADDITIONAL_CLASS_PATH" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="wholeProject" />
-      </option>
-      <envs />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="52923" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-    </configuration>
     <configuration default="false" name="HttpDaemon" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" value="novelang.jetty.HttpDaemon" />
       <option name="VM_PARAMETERS" value="-Dnovelang.styles.dir=src/resource/style -Xmx512M" />
@@ -1265,6 +1269,9 @@
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
     </configuration>
     <configuration default="false" name="SplitByChapter" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" value="novelang.rewriter.SplitByChapter" />
@@ -1298,6 +1305,73 @@
       <envs />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="55047" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
+    <configuration default="false" name="Generate showcase.html" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" value="novelang.batch.Main" />
+      <option name="VM_PARAMETERS" value="-Dnovelang.styles.dir=src/resource/style -Xmx512M" />
+      <option name="PROGRAM_PARAMETERS" value="--targetDirectory batch-generated /part/samples/showcase/showcase.html" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/.." />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="Novelang" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
+    <configuration default="false" name="Generate broken" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" value="novelang.batch.Main" />
+      <option name="VM_PARAMETERS" value="-Dnovelang.styles.dir=src/resource/style -Xmx512M" />
+      <option name="PROGRAM_PARAMETERS" value="--targetDirectory batch-generated /part/samples/broken.pdf" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/.." />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="Novelang" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
+    <configuration default="false" name="ClasspathResourceLoaderTest" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+      <pattern value="novelang.loader.*" />
+      <module name="Novelang" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="novelang.loader" />
+      <option name="MAIN_CLASS_NAME" value="novelang.loader.ClasspathResourceLoaderTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="52923" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
@@ -1369,14 +1443,16 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
-    <list size="7">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.ClasspathResourceLoaderTest" />
-      <item index="1" class="java.lang.String" itemvalue="Application.ServerMain" />
-      <item index="2" class="java.lang.String" itemvalue="Application.SplitByChapter" />
-      <item index="3" class="java.lang.String" itemvalue="Application.Documentation" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.BookLoadingTest" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.novelang" />
-      <item index="6" class="java.lang.String" itemvalue="JUnit.BatchParametersTest" />
+    <list size="9">
+      <item index="0" class="java.lang.String" itemvalue="Application.HttpDaemon" />
+      <item index="1" class="java.lang.String" itemvalue="Application.SplitByChapter" />
+      <item index="2" class="java.lang.String" itemvalue="Application.Documentation" />
+      <item index="3" class="java.lang.String" itemvalue="Application.Generate showcase.html" />
+      <item index="4" class="java.lang.String" itemvalue="Application.Generate broken" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.ClasspathResourceLoaderTest" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.BookLoadingTest" />
+      <item index="7" class="java.lang.String" itemvalue="JUnit.novelang" />
+      <item index="8" class="java.lang.String" itemvalue="JUnit.BatchParametersTest.printHelp" />
     </list>
   </component>
   <component name="ScopeViewComponent">
@@ -1719,7 +1795,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13299784" order="2" />
       <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32997844" order="6" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="9" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39102563" order="13" x="475" y="111" width="588" height="804" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31282052" order="13" x="475" y="111" width="588" height="804" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20560747" order="3" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39971244" order="1" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39871794" order="3" />
@@ -1829,93 +1905,40 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ResourceLoaderTools.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/configuration/ContentConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
+        <state line="24" column="17" selection-start="812" selection-end="812" vertical-scroll-proportion="0.31941545">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/ResourceNotFoundException.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/package.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="HtmlPreview">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/StructureKind.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="18" selection-start="1152" selection-end="1152" vertical-scroll-proportion="0.7223382">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/loader/UrlResourceLoader.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/Problem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
+        <state line="28" column="13" selection-start="937" selection-end="937" vertical-scroll-proportion="-1.8307692">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/loader/UrlResourceLoaderTest.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/DocumentProducer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/HtmlSink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/HtmlWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/NlpWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/RawResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/TextSink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.5824411">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/XslWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.6507177">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../build.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="324" selection-end="324" vertical-scroll-proportion="0.17348377">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/parser/antlr/BookParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="15" selection-start="1862" selection-end="1862" vertical-scroll-proportion="0.44657534">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/batch/BatchParametersTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="702" selection-end="702" vertical-scroll-proportion="0.37260273">
+        <state line="62" column="6" selection-start="2219" selection-end="2219" vertical-scroll-proportion="-1.0134616">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1924,16 +1947,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/batch/BatchParameters.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="5" selection-start="2401" selection-end="2401" vertical-scroll-proportion="0.6054795">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="77" column="0" selection-start="2226" selection-end="2226" vertical-scroll-proportion="0.47128713">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/batch/Generator.java">
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/DocumentRequest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="59" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.41917807">
+        <state line="27" column="0" selection-start="916" selection-end="916" vertical-scroll-proportion="0.33194155">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1942,8 +1963,70 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/DocumentHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="54" selection-start="2439" selection-end="2439" vertical-scroll-proportion="0.006849315">
+        <state line="67" column="13" selection-start="2398" selection-end="2398" vertical-scroll-proportion="0.33194155">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/rendering/HtmlProblemPrinter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="25" selection-start="1193" selection-end="1193" vertical-scroll-proportion="0.49686846">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/HttpDocumentRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="30" selection-start="1460" selection-end="1460" vertical-scroll-proportion="0.33194155">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/MetadataHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="17" selection-start="1526" selection-end="1526" vertical-scroll-proportion="0.5093946">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/RequestTools.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="48" selection-start="1027" selection-end="1027" vertical-scroll-proportion="0.33194155">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/batch/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="100" column="20" selection-start="3664" selection-end="3664" vertical-scroll-proportion="0.5093946">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/model/implementation/InclusionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="13" selection-start="1128" selection-end="1128" vertical-scroll-proportion="0.31941545">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/test/java/novelang/batch/BatchParametersTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="72" column="0" selection-start="2036" selection-end="2036" vertical-scroll-proportion="0.5093946">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/DocumentRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="102" column="3" selection-start="3251" selection-end="3251" vertical-scroll-proportion="0.5678497">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

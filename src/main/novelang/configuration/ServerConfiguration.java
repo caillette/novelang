@@ -15,14 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang.rendering;
-
-import novelang.model.common.Tree;
-import novelang.model.common.NodeKind;
+package novelang.configuration;
 
 /**
  * @author Laurent Caillette
  */
-public class RenderTools {
-
+public interface ServerConfiguration {
+  RenderingConfiguration getRenderingConfiguration() ;
+  ContentConfiguration getContentConfiguration() ;
 }

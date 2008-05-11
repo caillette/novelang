@@ -21,7 +21,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.HttpServerConfiguration;
+import novelang.configuration.ServerConfiguration;
 import novelang.configuration.ConfigurationTools;
 
 /**
@@ -37,10 +37,10 @@ public class HttpDaemon {
 
   public static void main( String[] args ) throws Exception {
     final HandlerCollection handlers = new HandlerCollection() ;
-    final HttpServerConfiguration httpServerConfiguration =
-        ConfigurationTools.buildHttpServerConfiguration() ;
-    handlers.addHandler( new DocumentHandler( httpServerConfiguration ) ) ;
-    handlers.addHandler( new ResourceHandler( httpServerConfiguration ) ) ;
+    final ServerConfiguration serverConfiguration =
+        ConfigurationTools.buildServerConfiguration() ;
+    handlers.addHandler( new DocumentHandler( serverConfiguration ) ) ;
+    handlers.addHandler( new ResourceHandler( serverConfiguration ) ) ;
     final Server server = new Server( HTTP_SERVER_PORT ) ;
     server.setHandler( handlers ) ;
     server.start() ;
