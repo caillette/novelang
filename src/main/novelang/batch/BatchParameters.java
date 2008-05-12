@@ -104,7 +104,7 @@ public class BatchParameters {
 
     acceptsAll(
         list( OPTION_TARGET_DIRECTORY, OPTION_TARGET_DIRECTORY_LONG ),
-        "Target directory for generation (default is '" + DEFAULT_TARGET_DIRECTORY + "')"
+        "Where generated files go to (default is '" + DEFAULT_TARGET_DIRECTORY + "')"
     ).withRequiredArg().describedAs( "dir" ) ;
 
   } } ;
