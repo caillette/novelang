@@ -67,6 +67,11 @@ public class ConfigurationTools {
   static {
     final URL userStyleDir ;
 
+    LOGGER.info(
+        "Resolving file names from '{}'.",
+        new File( System.getProperty( "user.dir" ) ).getAbsolutePath()
+    ) ;
+
     // First use system property.
     final String stylesDirNameBySystemProperty =
         System.getProperty( NOVELANG_STYLE_DIR_PROPERTYNAME ) ;
@@ -77,14 +82,23 @@ public class ConfigurationTools {
       if( styleDirAsSubdirectory.exists() ) {
         try {
           userStyleDir = styleDirAsSubdirectory.getCanonicalFile().toURL() ;
-          LOGGER.info( "Styles directory set to '{}'", userStyleDir.toExternalForm() ) ;
+          LOGGER.info(
+              "Styles directory set to '{}' " +
+              "(found '" + USER_STYLE_DIR + "' directory under [user.dir] " +
+              "and no system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
+              userStyleDir.toExternalForm() ) ;
           
         } catch( IOException e ) {
           throw new RuntimeException( e ) ;
         }
       } else {
         userStyleDir = null ;
-        LOGGER.warn( "Styles directory '{}' does not exist", stylesDirNameBySystemProperty ) ;
+        LOGGER.warn(
+            "Cannot find directory for custom styles.  " +
+            "(no '{}' directory found under [user.dir], " +
+            "nor system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
+            USER_STYLE_DIR
+        ) ;
       }
     } else {
       final File dir = new File( stylesDirNameBySystemProperty ) ;
@@ -94,10 +108,18 @@ public class ConfigurationTools {
         } catch( IOException e ) {
           throw new RuntimeException( e ) ;
         }
-        LOGGER.info( "Styles directory set to '{}'", userStyleDir.toExternalForm() ) ;
+        LOGGER.info(
+            "Styles directory set to '{}' " +
+            "(from system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
+            userStyleDir.toExternalForm()
+        ) ;
       } else {
         userStyleDir = null ;
-        LOGGER.warn( "Styles directory '{}' does not exist", stylesDirNameBySystemProperty ) ;
+        LOGGER.warn(
+            "Styles directory '{}' does not exist " +
+            "(was set as system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
+            stylesDirNameBySystemProperty
+        ) ;
       }
 
     }

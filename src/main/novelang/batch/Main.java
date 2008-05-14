@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
@@ -46,8 +47,20 @@ public class Main {
   private static final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
   private static final String PROBLEMS_FILENAME = "problems.html";
 
+  /**
+   * Set the {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property and use it
+   * in Logback configuration to log in another place than current directory.
+   */
+  public static final String LOG_DIR_SYSTEMPROPERTYNAME = "novelang.log.dir" ;
+
   public static void main( String[] args ) throws IOException {
     try {
+      LOGGER.debug( "Starting {} with arguments {}",
+          ClassUtils.getShortClassName( Main.class ), asString( args ) ) ;
+      LOGGER.debug( "System property {}='{}'.",
+          LOG_DIR_SYSTEMPROPERTYNAME,
+          System.getProperty( LOG_DIR_SYSTEMPROPERTYNAME )
+      ) ;
       final BatchParameters parameters = BatchParameters.parse( args ) ;
       final File targetDirectory = parameters.getTargetDirectory() ;
       LOGGER.info( "Successfully parsed: " + parameters ) ;
@@ -74,10 +87,30 @@ public class Main {
       }
 
     } catch( ParametersException e ) {
+      LOGGER.error( "Parameters exception {}, printing help and exiting.", e.getMessage() ) ;
       System.err.println( e.getMessage() ) ;
       System.err.println( BatchParameters.HELP ) ;
       System.exit( -1 ) ;
+    } catch( Exception e ) {
+      LOGGER.error( "Fatal", e ) ;
     }
+  }
+
+  // TODO does ToStringBuilder save from doing this?
+  private static String asString( String[] args ) {
+    final StringBuffer buffer = new StringBuffer( "[" ) ;
+    boolean first = true ;
+    for( int i = 0 ; i < args.length ; i++ ) {
+      final String arg = args[ i ] ;
+      if( first ) {
+        first = false ;
+      } else {
+        buffer.append( "," ) ;
+      }
+      buffer.append( arg ) ;
+    }
+    buffer.append( "]" ) ;
+    return buffer.toString() ;
   }
 
   private static void reportProblems(

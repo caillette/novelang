@@ -1,10 +1,12 @@
-<configuration debug="true" >
+<configuration debug="false" >
 
   <appender
       name="FILE"
       class="ch.qos.logback.core.FileAppender"
   >
-    <File>${user.dir}/novelang.log</File>
+    <!-- System property MUST be set -->
+    <File>${novelang.log.dir}/novelang.log</File>
+    
     <Append>false</Append>
     <Encoding>UTF-8</Encoding>
     <BufferedIO>false</BufferedIO>
@@ -29,7 +31,7 @@
   </logger>
 
   <root>
-    <level value="INFO" />
+    <level value="DEBUG" />
     <appender-ref ref="FILE" />
   </root>
 

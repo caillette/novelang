@@ -14,8 +14,7 @@
   <!ENTITY nbsp   "&amp;nbsp;" >
 
 
-    <!ENTITY usersFeed      "http://groups.google.com/group/novelang-users/feed/atom_v1_0_msgs.xml?num=50" >
-    <!ENTITY developersFeed "http://groups.google.com/group/novelang-developers/feed/atom_v1_0_msgs.xml?num=50" >
+    <!ENTITY newsFeed        "http://novelang.blogspot.com/feeds/posts/default" >
     <!ENTITY usersGroup      "http://groups.google.com/group/novelang-users/topics" >
     <!ENTITY developersGroup "http://groups.google.com/group/novelang-developers/topics" >
 
@@ -49,13 +48,11 @@
         <link rel="stylesheet" type="text/css" href="screen.css" />
 
         <link
-            rel="alternate" type="application/atom+xml" title="User's feed (Atom)"
-            href="&usersFeed;"
+            rel="alternate" type="application/atom+xml" title="News feed (Atom)"
+            href="&newsFeed;"
         />
-        <link
-            rel="alternate" type="application/atom+xml" title="Developer's feed (Atom)"
-            href="&developersFeed;"
-        />
+
+
       </head>
     <body>
     <div id="Box">
@@ -67,15 +64,17 @@
 
       <div id="Sidebar">
 
+      <!--http://members.cox.net/timandbeth/spam/spam2.htm  -->
       <p>By <strong>Laurent Caillette</strong></p>
 
       <ul><!--&#9733;-->
-      <li><a href="http://www.gnu.org/licenses/gpl-3.0.txt">License</a></li>
-      <li><a href="http://novelang.sf.net">Sourceforge</a></li>
-      <li><a href="#">Download</a></li>
-      <li><a href="http://github.com/caillette/novelang/tree/master">Sources</a></li>
-      <li><a href="&usersGroup;">Users</a></li>
-      <li><a href="&developersGroup;">Developers</a></li>
+        <li><a href="&newsFeed;">Blog</a></li>
+        <li><a href="&usersGroup;">Users' list</a></li>
+        <li><a href="&developersGroup;">Developers' list</a></li>
+        <li><a href="http://sourceforge.net/projects/novelang">Sourceforge</a></li>
+        <li><a href="http://github.com/caillette/novelang/tree/master">Sources</a></li>
+        <li><a href="#">Download</a></li>
+        <li><a href="http://www.gnu.org/licenses/gpl-3.0.txt">License</a></li>
       </ul>
 
 

@@ -240,6 +240,7 @@ public class DocumentRequest {
       return request ;
 
     } else {
+      LOGGER.debug( "Parsing failed for '{}'", requestPath ) ;
       return null ;
     }
 
