@@ -53,14 +53,16 @@ public class Main {
    */
   public static final String LOG_DIR_SYSTEMPROPERTYNAME = "novelang.log.dir" ;
 
-  public static void main( String[] args ) throws IOException {
+  public static void main( String[] args ) throws Exception {
+
+    LOGGER.debug( "Starting {} with arguments {}",
+        ClassUtils.getShortClassName( Main.class ), asString( args ) ) ;
+    LOGGER.debug( "System property {}='{}'.",
+        LOG_DIR_SYSTEMPROPERTYNAME,
+        System.getProperty( LOG_DIR_SYSTEMPROPERTYNAME )
+    ) ;
+
     try {
-      LOGGER.debug( "Starting {} with arguments {}",
-          ClassUtils.getShortClassName( Main.class ), asString( args ) ) ;
-      LOGGER.debug( "System property {}='{}'.",
-          LOG_DIR_SYSTEMPROPERTYNAME,
-          System.getProperty( LOG_DIR_SYSTEMPROPERTYNAME )
-      ) ;
       final BatchParameters parameters = BatchParameters.parse( args ) ;
       final File targetDirectory = parameters.getTargetDirectory() ;
       LOGGER.info( "Successfully parsed: " + parameters ) ;
@@ -93,6 +95,7 @@ public class Main {
       System.exit( -1 ) ;
     } catch( Exception e ) {
       LOGGER.error( "Fatal", e ) ;
+      throw e ;
     }
   }
 

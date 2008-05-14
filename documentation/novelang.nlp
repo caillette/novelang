@@ -1,17 +1,14 @@
-*** The simplest word processor
+*** The simplest text processor
 
 ===
 
-Novelang is a word processor that takes plain text files and transforms them into nicely-formatted documents like PDF or HTML.
-Unlike mainstream word-processors, it keeps you focused on the text you type in and what it means, instead of struggling with how it should appear.
+Novelang takes plain text files and transforms them into nicely-formatted documents like PDF or HTML.
+Unlike mainstream word-processors, it keeps you focused on the text you type in and what it means, instead of struggling with how it should appear. It relies on the text editor of your choice, with a very simple syntax to add some formatting hints. You can see resulting documents from your Web browser or generate them from command-line. 
 
-Novelang offers the most simple user interface as it is just text to type inside the text editor of your choice, with a very simple syntax to add some formatting hints. You can see resulting document from your Web browser. 
+Plain text is great as it is cross-platform and can be viewed under almost any condition. It takes less space and is easier to manipulate through automated processes, including search.
 
-Novelang enforces a consistent presentation across a set of documents without any proprietary, obscure format. 
-Just text, that you can read on any computer with almost any text-viewer.
-In addition, text format is smaller, easier to search and manipulate through automated processes.
-
-Of course, you can define your own stylesheets for custom presentation. This page was produced with Novelang, using a dedicated stylesheet.
+Novelang enforces a consistent presentation across a set of documents through stylesheets that can be customized.
+This page was produced with Novelang, using a dedicated stylesheet.
 
 Novelang is a project started by Laurent Caillette, a software engineer who specializes in Human-Computer Interaction. You can mail him on Users' mailing list or leave a comment on the Novelang blog (see links).
 

@@ -64,19 +64,32 @@
 
       <div id="Sidebar">
 
-      <!--http://members.cox.net/timandbeth/spam/spam2.htm  -->
-      <p>By <strong>Laurent Caillette</strong></p>
+        <!--http://members.cox.net/timandbeth/spam/spam2.htm  -->
+        <p>By <strong>Laurent Caillette</strong></p>
 
-      <ul><!--&#9733;-->
-        <li><a href="&newsFeed;">Blog</a></li>
-        <li><a href="&usersGroup;">Users' list</a></li>
-        <li><a href="&developersGroup;">Developers' list</a></li>
-        <li><a href="http://sourceforge.net/projects/novelang">Sourceforge</a></li>
-        <li><a href="http://github.com/caillette/novelang/tree/master">Sources</a></li>
-        <li><a href="#">Download</a></li>
-        <li><a href="http://www.gnu.org/licenses/gpl-3.0.txt">License</a></li>
-      </ul>
+        <ul><!--&#9733;-->
+          <li><a href="&newsFeed;">Blog</a></li>
+          <li><a href="&usersGroup;">Users' list</a></li>
+          <li><a href="&developersGroup;">Developers' list</a></li>
+          <li><a href="http://sourceforge.net/projects/novelang">Sourceforge</a></li>
+          <li><a href="http://github.com/caillette/novelang/tree/master">Sources</a></li>
+          <li><a href="#">Download</a></li>
+          <li><a href="http://www.gnu.org/licenses/gpl-3.0.txt">License</a></li>
+        </ul>
 
+
+        <div id="Sponsors" >
+          <!--https://sourceforge.net/project/admin/logo.php?group_id=227480  -->
+          <a href="http://sourceforge.net">
+            <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=3"
+                 width="125" height="37" border="0" alt="SourceForge.net Logo" />
+          </a>
+          <a href="http://github.com" >
+            <img src="http://github.com/images/modules/header/logo.png"
+                 alt="GitHub"
+            />
+          </a>
+        </div> <!-- Sponsors -->
 
       </div> <!-- Sidebar -->
     </div> <!-- Box -->

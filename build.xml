@@ -275,11 +275,33 @@
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Dnovelang.log.dir=${logdestination}" />
       <jvmarg value="-Xmx512M" />
-      <arg value="${target.documentation.page}" />
+      <arg value="${target.documentation.document}" />
       <arg value="-targetDirectory" />
       <arg value="${absolutetarget}" />
     </java>
 
+    <move
+        file="${absolutetarget}/${target.documentation.page}"
+        tofile="${absolutetarget}/index.html"
+    />
+
+    <!-- TODO remove this once supported by batch generation -->
+    <copy
+        file="${source.documentation.dir}/style/screen.css"
+        todir="${target.documentation.site.dir}"
+    />
+
+  </target>
+
+  <target name="publish" depends="init" >
+
+    <input message="Login on remote site" addproperty="user" />
+    <input message="Password on remote site" addproperty="password" />
+
+    <scp todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}">
+      <fileset dir="${target.documentation.site.dir}" />
+    </scp>
+    
   </target>
 
 </project>
