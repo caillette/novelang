@@ -18,7 +18,6 @@
 package novelang.model.implementation;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.nio.charset.Charset;
@@ -27,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.antlr.runtime.RecognitionException;
-import novelang.model.structural.StructuralPart;
 import novelang.model.common.Location;
 import novelang.model.common.Tree;
 import novelang.model.common.NodeKind;
@@ -50,7 +48,7 @@ import com.google.common.collect.Multimaps;
  */
 public class Part
     extends Element 
-    implements LocationFactory, StructuralPart, WeavedPart, Renderable
+    implements LocationFactory, WeavedPart, Renderable
 {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Part.class ) ;

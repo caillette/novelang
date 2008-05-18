@@ -15,6 +15,7 @@
 
 
     <!ENTITY newsFeed        "http://novelang.blogspot.com/feeds/posts/default" >
+    <!ENTITY blog            "http://novelang.blogspot.com" >
     <!ENTITY usersGroup      "http://groups.google.com/group/novelang-users/topics" >
     <!ENTITY developersGroup "http://groups.google.com/group/novelang-developers/topics" >
 
@@ -33,7 +34,7 @@
 
   <xsl:template match="/" >
 
-    <html> 
+    <html>
       <head>
         <xsl:element name="meta" >
           <xsl:attribute name="http-equiv" >content-type</xsl:attribute>
@@ -68,7 +69,7 @@
         <p>By <strong>Laurent Caillette</strong></p>
 
         <ul><!--&#9733;-->
-          <li><a href="&newsFeed;">Blog</a></li>
+          <li><a href="&blog;">Blog</a></li>
           <li><a href="&usersGroup;">Users' list</a></li>
           <li><a href="&developersGroup;">Developers' list</a></li>
           <li><a href="http://sourceforge.net/projects/novelang">Sourceforge</a></li>
@@ -81,14 +82,10 @@
         <div id="Sponsors" >
           <!--https://sourceforge.net/project/admin/logo.php?group_id=227480  -->
           <a href="http://sourceforge.net">
-            <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=3"
+            <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=2"
                  width="125" height="37" border="0" alt="SourceForge.net Logo" />
           </a>
-          <a href="http://github.com" >
-            <img src="http://github.com/images/modules/header/logo.png"
-                 alt="GitHub"
-            />
-          </a>
+
         </div> <!-- Sponsors -->
 
       </div> <!-- Sidebar -->
@@ -170,13 +167,13 @@
       <xsl:with-param name="speech-symbol" >&mdash;</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-  
+
   <xsl:template match="n:paragraph-speech-continued" >
     <xsl:call-template name="speech" >
       <xsl:with-param name="speech-symbol" >&raquo;</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-  
+
   <xsl:template name="speech" >
     <xsl:param name = "speech-symbol" />
     <p>
@@ -190,7 +187,7 @@
 
   <xsl:template match="n:locutor" />
 
-  
+
   <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
 
   <xsl:template match="n:emphasis" >
@@ -218,5 +215,5 @@
   <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
 
 
-  
+
 </xsl:stylesheet>

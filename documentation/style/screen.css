@@ -256,7 +256,7 @@ hr {
     float: left;
   */
   width: 160px;
-  height: auto;
+  height: 100%;
   border: 0px dotted gray;
   padding: 5px 0 0 0;
   background-color: transparent;
@@ -323,3 +323,15 @@ hr {
   color: #fff;
 }
 */
+
+/* TODO fix placement */
+#Sponsors {
+  vertical-align: bottom;
+  visibility: hidden;
+}
+  
+#Sponsors a {
+  text-decoration: none;
+  border-style: none none none none;
+
+}

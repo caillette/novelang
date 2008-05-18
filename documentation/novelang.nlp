@@ -97,9 +97,12 @@ http://www.wikimatrix.org
 
 Wikis are a family Content Management Systems aiming at creating Web sites quickly. They rely on a simplified markup that Novelang is inspired from. But Wikis are completely different as they are collaborative tools for creating dynamic websites, while Novelang focuses on document generation.
 
-Here are some nice discussions on Wiki markup :
+http://daringfireball.net/projects/markdown/syntax
+
+
+=== Other discussions
 
 http://www.wikicreole.org/wiki/Reasoning
 
-http://daringfireball.net/projects/markdown/syntax
+http://www.codinghorror.com/blog/archives/001116.html
 
