@@ -32,6 +32,8 @@ import novelang.configuration.ServerConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceNotFoundException;
 import novelang.rendering.DocumentRequest;
+import novelang.produce.RequestTools;
+import novelang.produce.PolymorphicRequest;
 
 /**
  * @author Laurent Caillette
@@ -58,7 +60,8 @@ public class ResourceHandler extends AbstractHandler {
   )
       throws IOException, ServletException
   {
-    final DocumentRequest documentRequest = HttpDocumentRequest.create( request.getPathInfo() ) ;
+    final PolymorphicRequest documentRequest =
+        RequestTools.createPolymorphicRequest( request.getPathInfo() ) ;
 
     if( null != documentRequest ) {
 

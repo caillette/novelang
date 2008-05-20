@@ -17,15 +17,22 @@
 package novelang.produce;
 
 /**
- *
+ * Helper for creating concrete Requests.
+ * This avoids accessing to package-protected {@link AbstractRequest}.
+ * 
  * @author Laurent Caillette
  */
 public class RequestTools {
+  public static final String ERRORPAGE_SUFFIX = "/error.html";
 
   private RequestTools() { throw new Error( "Don't call this" ) ; }
 
-  public static DocumentRequest build( String rawRequest ) {
-    return DocumentRequest.create( rawRequest ) ;
+  public static DocumentRequest createDocumentRequest( String rawRequest ) {
+    return AbstractRequest.createDocumentRequest( rawRequest ) ;
   }
-  
+
+  public static PolymorphicRequest createPolymorphicRequest( String rawRequest ) {
+    return AbstractRequest.createPolymorphicRequest( rawRequest ) ;
+  }
+
 }

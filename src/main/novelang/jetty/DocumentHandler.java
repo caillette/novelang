@@ -46,6 +46,8 @@ import novelang.rendering.PlainTextWriter;
 import novelang.rendering.Renderer;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
+import novelang.produce.PolymorphicRequest;
+import novelang.produce.RequestTools;
 
 /**
  * Serves rendered content.
@@ -90,7 +92,8 @@ public class DocumentHandler extends AbstractHandler {
       int dispatch
   ) throws IOException, ServletException {
 
-    final DocumentRequest documentRequest = HttpDocumentRequest.create( request.getPathInfo() ) ;
+    final PolymorphicRequest documentRequest =
+        RequestTools.createPolymorphicRequest( request.getPathInfo() ) ;
 
     if( null == documentRequest ) {
       return ;
@@ -115,7 +118,7 @@ public class DocumentHandler extends AbstractHandler {
       } else if( rendered.hasProblem() ) {
         final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
         final String redirectionTarget =
-            documentRequest.getOriginalTarget() + HttpDocumentRequest.ERRORPAGE_SUFFIX;
+            documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX;
         response.sendRedirect( redirectionTarget ) ;
         response.setStatus( HttpServletResponse.SC_FOUND ) ;
         problemPrinter.printProblems(
@@ -180,17 +183,17 @@ public class DocumentHandler extends AbstractHandler {
     }
   }
 
-  private Renderable createRenderable( DocumentRequest documentRequest )
+  private Renderable createRenderable( PolymorphicRequest request )
       throws IOException
   {
-    final StructureKind structureKind = documentRequest.getStructureKind() ;
+    final StructureKind structureKind = request.getStructureKind() ;
     switch( structureKind ) {
       case BOOK :
         throw new UnsupportedOperationException( "createRenderable with Book" ) ;
       case PART :
         final File partFile = FileLookupHelper.load(
             basedir,
-            documentRequest.getDocumentSourceName(),
+            request.getDocumentSourceName(),
             StructureKind.PART.getFileExtensions()
         ) ;
         return new Part( partFile ) ;

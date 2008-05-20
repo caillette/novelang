@@ -134,7 +134,7 @@ public class Main {
       File targetDirectory,
       DocumentProducer documentProducer
   ) throws IOException {
-    final DocumentRequest documentRequest = RequestTools.build( unparsedRequest ) ;
+    final DocumentRequest documentRequest = RequestTools.createDocumentRequest( unparsedRequest ) ;
     final File outputFile = createOutputFile(
         targetDirectory,
         documentRequest
