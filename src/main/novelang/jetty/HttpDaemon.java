@@ -21,8 +21,8 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.ServerConfiguration;
 import novelang.configuration.ConfigurationTools;
+import novelang.configuration.ServerConfiguration;
 
 /**
  * 

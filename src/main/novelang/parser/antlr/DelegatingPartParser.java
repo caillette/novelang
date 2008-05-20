@@ -17,29 +17,20 @@
 
 package novelang.parser.antlr;
 
-import java.util.List;
-
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.RecognitionException;
-import novelang.parser.PartParser;
 import novelang.model.common.LocationFactory;
-import novelang.model.common.Problem;
 import novelang.model.common.Tree;
-import novelang.model.structural.StructuralBook;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
+import novelang.parser.PartParser;
 
 /**
  * @author Laurent Caillette
 */
 class DelegatingPartParser
-    extends AbstractDelegatingParser< PartGrammarDelegate >
+    extends AbstractDelegatingParser
     implements PartParser
 {
   public DelegatingPartParser( String text, LocationFactory locationFactory ) {
-    super( text, new PartGrammarDelegate( locationFactory ) ) ;
+    super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 
   public Tree parse() throws RecognitionException {

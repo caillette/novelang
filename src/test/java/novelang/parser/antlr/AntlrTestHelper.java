@@ -19,9 +19,9 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
+import junit.framework.AssertionFailedError;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
-import junit.framework.AssertionFailedError;
 
 /**
  * @author Laurent Caillette

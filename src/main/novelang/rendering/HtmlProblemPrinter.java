@@ -17,14 +17,10 @@
 
 package novelang.rendering;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.IOException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import novelang.model.renderable.Renderable;
 import novelang.model.common.Problem;
 
 /**

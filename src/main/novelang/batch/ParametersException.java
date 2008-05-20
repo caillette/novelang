@@ -18,7 +18,7 @@
 package novelang.batch;
 
 /**
- * Thrown in case
+ * Thrown when something got wrong when attempting to parse / validate {@link BatchParameters}.
  *
  * @author Laurent Caillette
  */

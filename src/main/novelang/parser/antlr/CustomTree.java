@@ -21,8 +21,8 @@ import java.util.Iterator;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
-import novelang.model.common.LocationFactory;
 import novelang.model.common.Location;
+import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
 

@@ -19,24 +19,37 @@ package novelang.parser.antlr;
 
 import java.util.List;
 
-import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.tree.Tree;
+import com.google.common.collect.Lists;
+import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
-import novelang.model.common.Location;
 import novelang.parser.Symbols;
 import novelang.parser.UnsupportedEscapedSymbolException;
-import com.google.common.collect.Lists;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
  *
  * @author Laurent Caillette
  */
-public abstract class GrammarDelegate {
+public class GrammarDelegate {
 
   private final LocationFactory locationFactory ;
   private final List< Problem > problems = Lists.newArrayList() ;
+
+  /**
+   * With this constructor the {@code LocationFactory} gives only partial information.
+   * Its use is reserved to ANTLR parser, which needs a default {@code GrammarDelegate}
+   * for running in the debugger.
+   */
+  public GrammarDelegate() {
+    this.locationFactory = new LocationFactory() {
+      public Location createLocation( int line, int column ) {
+        return new Location( "<debug>", line, column ) ;
+      }
+    } ;
+  }
 
   public GrammarDelegate( LocationFactory locationFactory ) {
     this.locationFactory = locationFactory ;

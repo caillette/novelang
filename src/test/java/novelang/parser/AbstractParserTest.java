@@ -18,20 +18,18 @@
 package novelang.parser;
 
 import java.io.IOException;
-import java.io.File;
 import java.nio.charset.Charset;
 import java.util.MissingResourceException;
 
 import org.antlr.runtime.RecognitionException;
+import org.apache.commons.lang.ClassUtils;
+import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import org.junit.Test;
-import org.junit.Assert;
-import org.apache.commons.lang.ClassUtils;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.model.implementation.Book;
-import novelang.model.common.Tree;
 import novelang.model.common.Problem;
+import novelang.model.common.Tree;
 
 /**
  * @author Laurent Caillette
@@ -40,13 +38,13 @@ public abstract class AbstractParserTest< P extends GenericParser > {
 
   protected P parser ;
   String bookName = ClassUtils.getShortClassName( getClass() );
-  protected final Book book = new Book( bookName, new File( bookName ) ) ;
+//  protected final Book book = new Book( bookName, new File( bookName ) ) ;
 
 
-  protected abstract P createParser( Book book, String s ) ;
+//  protected abstract P createParser( Book book, String s ) ;
 
   protected final void initializeParser( String testString ) throws IOException {
-    parser = createParser( book, testString ) ;
+//    parser = createParser( book, testString ) ;
   }
 
   protected final static String readResource( String resourceName ) throws IOException {

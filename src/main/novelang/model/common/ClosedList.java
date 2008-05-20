@@ -17,12 +17,12 @@
 
 package novelang.model.common;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Arrays;
 
-import com.google.common.collect.Lists;
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 /**
  * An immutable variant of {@link java.util.List}.

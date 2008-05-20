@@ -29,24 +29,23 @@ import org.mortbay.jetty.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
+import novelang.configuration.RenderingConfiguration;
+import novelang.configuration.ServerConfiguration;
 import novelang.model.common.FileLookupHelper;
 import novelang.model.common.Problem;
 import novelang.model.common.StructureKind;
-import novelang.model.implementation.Book;
 import novelang.model.implementation.Part;
 import novelang.model.renderable.Renderable;
 import novelang.rendering.DocumentRequest;
 import novelang.rendering.GenericRenderer;
+import novelang.rendering.HtmlProblemPrinter;
 import novelang.rendering.HtmlWriter;
 import novelang.rendering.NlpWriter;
 import novelang.rendering.PdfWriter;
 import novelang.rendering.PlainTextWriter;
-import novelang.rendering.HtmlProblemPrinter;
 import novelang.rendering.Renderer;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ServerConfiguration;
 
 /**
  * Serves rendered content.
@@ -187,14 +186,7 @@ public class DocumentHandler extends AbstractHandler {
     final StructureKind structureKind = documentRequest.getStructureKind() ;
     switch( structureKind ) {
       case BOOK :
-        final File bookFile = FileLookupHelper.load(
-            basedir,
-            documentRequest.getDocumentSourceName(),
-            StructureKind.BOOK.getFileExtensions()
-        ) ;
-        final Book book = new Book( bookFile.getPath(), bookFile );
-        book.load() ;
-        return book;
+        throw new UnsupportedOperationException( "createRenderable with Book" ) ;
       case PART :
         final File partFile = FileLookupHelper.load(
             basedir,

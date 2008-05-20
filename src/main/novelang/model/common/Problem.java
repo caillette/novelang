@@ -17,8 +17,8 @@
 
 package novelang.model.common;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.antlr.runtime.RecognitionException;
 import com.google.common.base.Objects;

@@ -17,16 +17,16 @@
 
 package novelang.configuration;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.loader.ResourceLoader;
 import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 

@@ -20,15 +20,15 @@ package novelang.parser.antlr;
 /**
  * @author Laurent Caillette
  */
-public class DelegatingParserFactory< T extends GrammarDelegate > {
+public class DelegatingParserFactory {
 
-  private final T delegate ;
+  private final GrammarDelegate delegate ;
 
-  public DelegatingParserFactory( T delegate ) {
+  public DelegatingParserFactory( GrammarDelegate delegate ) {
     this.delegate = delegate ;
   }
 
-  public T getDelegate() {
+  public GrammarDelegate getDelegate() {
     return delegate ;
   }
 }

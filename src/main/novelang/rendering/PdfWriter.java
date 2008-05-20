@@ -17,38 +17,17 @@
 
 package novelang.rendering;
 
-import java.io.File;
 import java.io.OutputStream;
-import java.io.IOException;
-import java.io.FileReader;
 import java.nio.charset.Charset;
-import java.net.URL;
-import java.net.MalformedURLException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TemplatesHandler;
-import javax.xml.transform.sax.TransformerHandler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.StringUtils;
-import org.apache.fop.apps.FOUserAgent;
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.MimeConstants;
 import org.apache.fop.apps.FOPException;
+import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.XMLReader;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.helpers.XMLReaderFactory;
-import com.google.common.base.Objects;
-import novelang.model.common.TreeMetadata;
 import novelang.configuration.RenderingConfiguration;
+import novelang.model.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette

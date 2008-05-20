@@ -18,7 +18,6 @@
 package novelang.loader;
 
 import java.io.InputStream;
-import java.util.MissingResourceException;
 
 /**
  * The most simple contract for loading a resource.

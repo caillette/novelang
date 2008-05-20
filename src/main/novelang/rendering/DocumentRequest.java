@@ -18,7 +18,6 @@
 package novelang.rendering;
 
 import novelang.model.common.StructureKind;
-import novelang.rendering.RenditionMimeType;
 
 /**
  * Describes all what's needed to serve one document.

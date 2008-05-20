@@ -17,12 +17,11 @@
 
 package novelang.rendering;
 
-import static novelang.model.common.NodeKind.*;
-
 import java.util.Set;
 
-import novelang.model.common.NodeKind;
 import com.google.common.collect.Sets;
+import novelang.model.common.NodeKind;
+import static novelang.model.common.NodeKind.*;
 
 /**
  * Determines when a whitespace should be added between two Nodes of known type.

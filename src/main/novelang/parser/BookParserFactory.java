@@ -17,15 +17,11 @@
 
 package novelang.parser;
 
-import com.google.inject.ImplementedBy;
-import novelang.parser.antlr.DefaultBookParserFactory;
-import novelang.model.structural.StructuralBook;
-
 /**
  * @author Laurent Caillette
  */
 public interface BookParserFactory {
 
-  BookParser createParser( StructuralBook book, String structureAsText ) ;
+//  BookParser createParser( StructuralBook book, String structureAsText ) ;
   
 }

@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import com.google.common.base.Objects;
+import novelang.model.common.MetadataHelper;
 import novelang.model.common.NodeKind;
 import novelang.model.common.NodePath;
 import novelang.model.common.Problem;
@@ -59,7 +60,7 @@ public class GenericRenderer implements Renderer {
       try {
         fragmentWriter.startWriting(
             outputStream,
-            rendered.getTreeMetadata(),
+            MetadataHelper.createMetadata( rendered.getTree(), rendered.getEncoding() ),
             rendered.getEncoding()
         ) ;
         final Tree root = rendered.getTree() ;

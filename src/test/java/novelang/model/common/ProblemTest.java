@@ -17,8 +17,8 @@
 
 package novelang.model.common;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Laurent Caillette

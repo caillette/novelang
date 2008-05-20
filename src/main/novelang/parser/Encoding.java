@@ -14,19 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package novelang.parser;
 
-package novelang.model.weaved;
-
-import java.util.Map;
-
-import novelang.model.common.Tree;
-import novelang.model.common.MutableTree;
-import com.google.common.collect.Multimap;
+import java.nio.charset.Charset;
 
 /**
+ * Default encoding for parsed files.
+ * 
  * @author Laurent Caillette
  */
-public interface WeavedChapter {
+public class Encoding {
 
-  Tree buildTree( Map< String, Tree > identifiers ) ;
+  private Encoding() { }
+
+  public static final Charset DEFAULT ;
+
+  static {
+    DEFAULT = Charset.forName( "ISO-8859-1" ) ;
+  }
+
 }

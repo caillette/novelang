@@ -16,9 +16,6 @@
  */
 package novelang.produce;
 
-import java.io.OutputStream;
-import java.io.File;
-
 /**
  *
  * @author Laurent Caillette

@@ -17,19 +17,9 @@
 
 package novelang.rendering;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import novelang.model.common.NodePath;
-import novelang.model.common.TreeMetadata;
-import novelang.parser.Symbols;
-import novelang.loader.ResourceLoader;
 import novelang.configuration.RenderingConfiguration;
+import novelang.model.common.NodePath;
+import novelang.parser.Symbols;
 
 /**
  * @author Laurent Caillette

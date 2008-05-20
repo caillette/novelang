@@ -19,8 +19,6 @@ package novelang.loader;
 
 import java.net.URL;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * @author Laurent Caillette
  */

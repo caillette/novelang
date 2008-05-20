@@ -17,10 +17,10 @@
 
 package novelang.parser.antlr;
 
-import static novelang.model.common.NodeKind.WORD;
 import org.junit.Test;
-import static novelang.model.common.NodeKind.* ;
-import static novelang.parser.antlr.TreeHelper.tree ;
+import static novelang.model.common.NodeKind.TITLE;
+import static novelang.model.common.NodeKind.WORD;
+import static novelang.parser.antlr.TreeHelper.tree;
 
 /**
  * @author Laurent Caillette

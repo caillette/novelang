@@ -18,7 +18,6 @@
 package novelang.model.common;
 
 import org.apache.commons.lang.ClassUtils;
-import novelang.model.common.NodeKind;
 import com.google.common.base.Objects;
 
 /**

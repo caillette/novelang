@@ -19,24 +19,24 @@ package novelang.parser.antlr;
 
 import java.util.List;
 
-import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.RecognitionException;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
 
 /**
  * @author Laurent Caillette
  */
-public abstract class AbstractDelegatingParser< T extends GrammarDelegate > {
+public abstract class AbstractDelegatingParser {
 
   private final NovelangParser parser ;
-  private final T delegate;
+  private final GrammarDelegate delegate;
 
-  public AbstractDelegatingParser( String text, T delegate ) {
+  public AbstractDelegatingParser( String text, GrammarDelegate delegate ) {
     this.delegate = delegate ;
     CharStream stream = new ANTLRStringStream( text );
     NovelangLexer lexer = new NovelangLexer( stream );
@@ -62,7 +62,7 @@ public abstract class AbstractDelegatingParser< T extends GrammarDelegate > {
     return parser ;
   }
 
-  public T getDelegate() {
+  public GrammarDelegate getDelegate() {
     return delegate ;
   }
 }

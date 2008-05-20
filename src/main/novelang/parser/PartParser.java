@@ -17,9 +17,6 @@
 
 package novelang.parser;
 
-import org.antlr.runtime.RecognitionException;
-import novelang.model.common.Tree;
-
 /**
  * @author Laurent Caillette
  */

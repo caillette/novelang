@@ -18,23 +18,23 @@
 package novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
+import com.google.common.collect.Lists;
+import novelang.model.common.MetadataHelper;
 import static novelang.model.common.NodeKind.*;
-import novelang.model.common.Tree;
 import novelang.model.common.NodePath;
 import novelang.model.common.Problem;
+import novelang.model.common.Tree;
 import novelang.model.common.TreeMetadata;
-import novelang.model.common.MetadataHelper;
-import novelang.model.implementation.Book;
 import novelang.model.renderable.Renderable;
+import novelang.parser.Encoding;
 import static novelang.parser.antlr.TreeHelper.tree;
-import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
@@ -75,26 +75,24 @@ public class GenericRendererTest {
 // Fixture
 // =======
 
-  private static final Charset ENCODING = Book.DEFAULT_ENCODING ;
-
   private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
   private String getRenderedText() {
     try {
-      return new String( outputStream.toByteArray(), ENCODING.name() ) ;
+      return new String( outputStream.toByteArray(), Encoding.DEFAULT.name() ) ;
     } catch( UnsupportedEncodingException e ) {
       throw new RuntimeException( e ) ;
     }
   }
 
   private static Renderable createRenderable( final Tree tree ) {
-    final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree, ENCODING ) ;
+    final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree, Encoding.DEFAULT ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
         return Lists.immutableList() ;
       }
       public Charset getEncoding() {
-        return ENCODING ;
+        return Encoding.DEFAULT ;
       }
       public boolean hasProblem() {
         return false;
@@ -111,9 +109,6 @@ public class GenericRendererTest {
   private static class SimpleFragmentWriter implements FragmentWriter {
 
     private PrintWriter writer ;
-
-
-    public void configure( TreeMetadata treeMetadata ) { }
 
     public void startWriting(
         OutputStream outputStream,

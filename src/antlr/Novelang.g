@@ -70,13 +70,6 @@ scope ParagraphScope {
 }
 
 
-// Book-reserved scopes.
-	
-scope ChapterScope { StructuralChapter chapter } 
-scope SectionScope { StructuralSection section } 
-scope InclusionScope { StructuralInclusion inclusion } 
-
-
 @lexer::header { 
 package novelang.parser.antlr ;
 } 
@@ -84,41 +77,18 @@ package novelang.parser.antlr ;
 @parser::header { 
 package novelang.parser.antlr ;
 import novelang.parser.antlr.GrammarDelegate;
-import novelang.parser.antlr.BookGrammarDelegate;
-import novelang.parser.antlr.QuietGrammarDelegate;
-import novelang.model.structural.StructuralChapter;
-import novelang.model.structural.StructuralSection;
-import novelang.model.structural.StructuralInclusion;
 } 
 
-@lexer::members {
-
-private GrammarDelegate delegate = new QuietGrammarDelegate() ;
-
-public void setGrammarDelegate( GrammarDelegate delegate ) {
-  this.delegate = delegate ;
-}
-}
 
 @parser::members {
 
 // Tell paragraphBody accepts everything.
 public static final int ALLOW_ALL = -1 ;
 
-private GrammarDelegate delegate = new QuietGrammarDelegate() ;
-
-// Only used when parsing some Book file.
-private BookGrammarDelegate bookDelegate ;
+private GrammarDelegate delegate = new GrammarDelegate() ;
 
 public void setGrammarDelegate( GrammarDelegate delegate ) {
   this.delegate = delegate ;
-  if( delegate instanceof BookGrammarDelegate ) {
-    bookDelegate = ( BookGrammarDelegate ) delegate ;
-  }
-}
-		
-private boolean areScopesEnabled() {
-  return bookDelegate != null && bookDelegate.getScopesEnabled() ;
 }
 		
 @Override
@@ -680,7 +650,6 @@ largeBreak
     
 word
   : w = rawWord 
-    // QuietGrammarDelegate helps running this from AntlrWorks debugger:
     -> ^( WORD { delegate.createTree( WORD, $w.text ) } )	
   ;  
 
@@ -731,158 +700,10 @@ punctuationSign
 // Book-related rules
 // ==================
 
-book
-  : ( mediumBreak | largeBreak )?
-    (   ( bookParts
-          largeBreak
-          bookChapter ( largeBreak bookChapter )*
-        )
-      | ( AUTOGENERATE_DIRECTIVE ( mediumBreak | largeBreak ) bookParts )
-    ) 
-    ( mediumBreak | largeBreak )?
-    EOF
-  ;
 
-bookParts
-  : bookPart ( ( mediumBreak | largeBreak ) bookPart )*
-  ;
- 
+//positiveInteger : digit+ ;
 
-bookPart 
-  : NUMBER_SIGN smallBreak? genericFileName 
-    { if( null != bookDelegate ) {
-        final String fileName = $genericFileName.text ;
-        bookDelegate.createPart( fileName, input ) ;
-      }
-    }    
-  ;
-
-genericFileName
-  :	SOLIDUS? genericFileNameItem 
-    ( SOLIDUS genericFileNameItem )*
-  ;
-
-/** '..' is forbidden for security reasons.
- */    
-genericFileNameItem 
-  : (   hexLetter 
-      | nonHexLetter 
-      | digit 
-      | HYPHEN_MINUS 
-      | ASTERISK 
-      | LOW_LINE 
-      | ( FULL_STOP ~FULL_STOP ) 
-    )+
-  ;
-
-
-bookChapter
-  scope ChapterScope ;
-  : chapterIntroducer 
-    { if( areScopesEnabled() ) { 
-        final StructuralChapter chapter = bookDelegate.createChapter( input ) ;
-        $ChapterScope::chapter = chapter ; 
-      }
-    }    
-    ( smallBreak? title
-      { if( areScopesEnabled() ) {
-        $ChapterScope::chapter.setTitle( 
-            ( novelang.model.common.Tree ) $title.tree ) ; }
-      }       
-    )?
-    ( mediumBreak | largeBreak )
-    ( style 
-      { if( areScopesEnabled() ) {
-        $ChapterScope::chapter.setStyle( 
-            ( novelang.model.common.Tree ) $style.tree ) ; 
-        }
-      }
-      ( mediumBreak | largeBreak )
-    )?
-    bookSection ( largeBreak bookSection )* 
-  ;
-  
-
-bookSection
-  scope SectionScope ;
-  : sectionIntroducer 
-    { if( areScopesEnabled() ) {
-      $SectionScope::section = AntlrParserHelper.createSection( 
-          $ChapterScope::chapter, input ) ; 
-      }  
-    }    
-    ( smallBreak? title 
-      { if( areScopesEnabled() ) {
-          $SectionScope::section.setTitle( 
-              ( novelang.model.common.Tree ) $title.tree ) ; }
-        }
-    )?
-    
-    ( ( mediumBreak | largeBreak )
-      style 
-      { if( areScopesEnabled() ) {
-        $SectionScope::section.setStyle( 
-            ( novelang.model.common.Tree ) $style.tree ) ; 
-        }
-      }
-      
-    )?
-    largeBreak
-    inclusion
-    ( ( mediumBreak | largeBreak ) inclusion )*
-  ;
-
-style 
-	:	STYLE_DIRECTIVE smallBreak word
-	  -> ^( STYLE word )
-	;
-
-inclusion
-  scope InclusionScope ;
-  // TODO find how to collate or not depending on the first symbol.
-  : ( ( PLUS_SIGN | VERTICAL_LINE ) 
-      smallBreak? identifier 
-      { if( areScopesEnabled() ) {
-          $InclusionScope::inclusion = AntlrParserHelper.createInclusion(
-              $SectionScope::section,
-              input,
-              $identifier.text
-          ) ; 
-          $InclusionScope::inclusion.setCollateWithPrevious( false ) ;
-        }
-      }  
-      ( ( mediumBreak | largeBreak ) paragraphReferences )? 
-    )
-  ;   
-
-paragraphReferences
-  : PARAGRAPH_REFERENCES_INTRODUCER
-    ( ( mediumBreak | largeBreak ) 
-      ( includedParagraphIndex | includedParagraphRange ) 
-    )+
-  ;
-
-includedParagraphIndex  
-  : postsignedInteger
-    { if( areScopesEnabled() ) {
-        AntlrParserHelper.addParagraph( 
-            $InclusionScope::inclusion, input, $postsignedInteger.text ) ; 
-      }
-    }        
-  ;
-  
-includedParagraphRange
-  :	n1 = postsignedInteger '..' n2 = postsignedInteger
-    { if( areScopesEnabled() ) {
-        AntlrParserHelper.addParagraphRange( 
-            $InclusionScope::inclusion, input, $n1.text, $n2.text ) ; 
-      }
-    }
-  ;
-
-positiveInteger : digit+ ;
-
-postsignedInteger : digit+ HYPHEN_MINUS? ;
+//postsignedInteger : digit+ HYPHEN_MINUS? ;
 
 
 

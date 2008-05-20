@@ -22,11 +22,6 @@ import java.nio.charset.Charset;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import novelang.model.common.MutableTree;
-import novelang.model.common.NodeKind;
-import novelang.model.common.Tree;
-import novelang.model.common.TreeMetadata;
-import novelang.model.implementation.DefaultMutableTree;
 
 /**
  * @author Laurent Caillette

@@ -18,157 +18,126 @@
 package novelang.model.implementation;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 
+import org.antlr.runtime.RecognitionException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.io.IOUtils;
-import org.antlr.runtime.RecognitionException;
-import novelang.model.common.Location;
-import novelang.model.common.Tree;
-import novelang.model.common.NodeKind;
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.ListMultimap;
 import novelang.model.common.IdentifierHelper;
+import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
+import novelang.model.common.NodeKind;
 import novelang.model.common.Problem;
-import novelang.model.common.TreeMetadata;
-import novelang.model.common.MetadataHelper;
-import novelang.model.weaved.WeavedPart;
+import novelang.model.common.Tree;
 import novelang.model.renderable.Renderable;
+import novelang.parser.Encoding;
 import novelang.parser.PartParser;
 import novelang.parser.PartParserFactory;
 import novelang.parser.antlr.DefaultPartParserFactory;
-import com.google.common.base.Objects;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 
 /**
+ * A Part loads a Tree, building a table of identifiers for subnodes
+ * and a list of encountered Problems.
+ *
  * @author Laurent Caillette
  */
-public class Part
-    extends Element 
-    implements LocationFactory, WeavedPart, Renderable
+public class Part implements LocationFactory, Renderable
 {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Part.class ) ;
-  private final File partFile;
-  private Tree tree ;
-  private TreeMetadata treeMetadata ;
-  private final String nameOfThis ;
+
+  private final List< Problem > problems = Lists.newArrayList() ;
+  private final Tree tree ;
+  private final String thisToString ;
+  private final String locationName ;
   private final Charset encoding ;
-  private final PartParserFactory partParserFactory ;
+  private final Multimap< String, Tree > identifiers ;
 
-  /**
-   * A constructor for creating a {@code Part} with no owning {@code Book}.
-   *
-   * @param partFile a non-null File object referencing a (hopefully) parseable Part.
-   */
-  public Part( File partFile ) {
-    this(
-        new Location( partFile.getAbsolutePath(), 0, 0 ),
-        new DefaultPartParserFactory(),
-        Element.DEFAULT_CHARSET,
-        "part[" + partFile.getName() + "]",
-        partFile
-    ) ;
-    this.load() ;
+
+  public Part( String content ) {
+    this.thisToString = ClassUtils.getShortClassName( Part.class ) +
+        "@" + System.identityHashCode( this ) ;
+    this.locationName = "<String>" ;
+    this.encoding = Objects.nonNull( Encoding.DEFAULT ) ;
+    tree = parse( new DefaultPartParserFactory(), content ) ;
+    identifiers = findIdentifiers() ;
   }
 
-  /**
-   * The constructor that does the real job.
-   *
-   * @param locationInBook may be null, a non-null value will be inferred then.
-   * @param partParserFactory
-   * @param encoding
-   * @param nameOfThis something to return from {@code toString()}.
-   * @param partFile the real Part file on the filesystem.
-   */
+  public Part( final File partFile ) {
+    this(
+        partFile,
+        Encoding.DEFAULT,
+        "part[" + partFile.getName() + "]"
+    ) ;
+  }
+
   protected Part(
-      Location locationInBook,
-      PartParserFactory partParserFactory,
+      File partFile,
       Charset encoding,
-      String nameOfThis,
-      File partFile
+      String thisToString
   ) {
-    super( locationInBook ) ;
-    this.partParserFactory = Objects.nonNull( partParserFactory ) ;
+    this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
+    this.locationName = partFile.getName() ;
     this.encoding = Objects.nonNull( encoding ) ;
-    this.nameOfThis = Objects.nonNull( nameOfThis ) + "@" + System.identityHashCode( this ) ;
-    this.partFile = Objects.nonNull( partFile ) ;
+    tree = parse( new DefaultPartParserFactory(), readContent( partFile, encoding ) ) ;
+    identifiers = findIdentifiers() ;
   }
 
-  public Part( BookContext context, String fileName, Location location ) {
-    this(
-        location,
-        new DefaultPartParserFactory(),
-        Element.DEFAULT_CHARSET,
-        context.derive( "part[" + fileName + "]" ).asString(),
-        context.relativizeFile( fileName )
-    ) ;
 
-  }
+// ==============
+// Content access
+// ==============
 
-  private boolean loaded = false ;
-
-  public void load() {
-    if( loaded ) {
-      throw new IllegalStateException( "Part already loaded" ) ;
-    }
-    loaded = true ;
+  private String readContent( File partFile, Charset encoding ) {
 
     LOGGER.info( "Attempting to load file '{}' from {}", partFile.getAbsolutePath(), this ) ;
 
     try {
-      final FileInputStream inputStream = new FileInputStream( partFile ); ;
-      final String content = IOUtils.toString( inputStream, encoding.name() ) ;
+      final FileInputStream inputStream = new FileInputStream( partFile ) ;
+      return IOUtils.toString( inputStream, encoding.name() ) ;
 
-      final PartParser parser = partParserFactory.createParser( this, content ) ;
-      try {
-
-        // Yeah we do it here!
-        tree = parser.parse() ;
-
-        for( final Problem problem : parser.getProblems() ) {
-          collect( problem ) ;
-        }
-
-      } catch( RecognitionException e ) {
-        LOGGER.warn( "Could not parse file", e ) ;
-        collect( Problem.createProblem( this, e ) ) ;
-      }
     } catch( IOException e ) {
       LOGGER.warn( "Could not load file", e ) ;
       collect( Problem.createProblem( this, e ) ) ;
+      return null ;
     }
-
-    treeMetadata = MetadataHelper.createMetadata( tree, encoding ) ;
-
   }
 
-  public Tree getTree() {
-    if( ! loaded ) {
-      throw new IllegalStateException( "Part not loaded yet" ) ;
+  private Tree parse( PartParserFactory partParserFactory, String content ) {
+
+    if( null == content ) {
+      return null ;
     }
+
+    final PartParser parser = partParserFactory.createParser( this, content ) ;
+    Tree tree = null ;
+    try {
+
+      // Yeah we do it here!
+      tree = parser.parse() ;
+
+      for( final Problem problem : parser.getProblems() ) {
+        collect( problem ) ;
+      }
+
+    } catch( RecognitionException e ) {
+      LOGGER.warn( "Could not parse file", e ) ;
+      collect( Problem.createProblem( this, e ) ) ;
+    }
+
     return tree ;
   }
 
-  public TreeMetadata getTreeMetadata() {
-    if( ! loaded ) {
-      throw new IllegalStateException( "Part not loaded yet" ) ;
-    }
-    return treeMetadata ;
-
-  }
-
-  public Location createLocation( int line, int column ) {
-    return new Location( partFile.getAbsolutePath(), line, column ) ;
-  }
-
-
-  public Charset getEncoding() {
-    return encoding ;
-  }
 
 // ===========
 // Identifiers
@@ -181,13 +150,13 @@ public class Part
    * If I find how to do I should just add a Multimap member to the grammar file and
    * get it after parsing.
    */
-  public Multimap< String, Tree > getIdentifiers() {
-
-    if( ! loaded ) {
-      throw new IllegalStateException( "Part not loaded yet" ) ;
-    }
+  private Multimap< String, Tree > findIdentifiers() {
 
     final Multimap< String, Tree > identifiedSectionTrees = Multimaps.newHashMultimap() ;
+
+    if( null == tree ) {
+      return Multimaps.immutableMultimap() ;  
+    }
 
     for( final Tree sectionCandidate : tree.getChildren() ) {
       if( NodeKind.SECTION.name().equals( sectionCandidate.getText() ) ) {
@@ -201,12 +170,58 @@ public class Part
       }
     }
 
-    return Multimaps.newArrayListMultimap( identifiedSectionTrees ) ;
+    final ListMultimap< String, Tree > identifiersFound =
+        Multimaps.newArrayListMultimap( identifiedSectionTrees ) ;
+    return Multimaps.unmodifiableListMultimap( identifiersFound ) ;
   }
 
+  public Multimap< String, Tree > getIdentifiers() {
+    return identifiers ;
+  }
+
+
+// ========
+// Problems
+// ========
+
+  public Iterable< Problem > getProblems() {
+    return Lists.immutableList( problems ) ;
+  }
+
+  public boolean hasProblem() {
+    return ! problems.isEmpty() ;
+  }
+
+  protected final void collect( Problem problem ) {
+    LOGGER.debug( "Collecting Problem: " + problem ) ;
+    problems.add( Objects.nonNull( problem ) ) ;
+  }
+
+
+// ====
+// Misc
+// ====
 
   @Override
   public String toString() {
-    return nameOfThis ;
+    return thisToString;
   }
+
+  /**
+   * Returns result of parsing, may be null if it failed.
+   * @return a possibly null object.
+   */
+  public Tree getTree() {
+    return tree ;
+  }
+
+  public Location createLocation( int line, int column ) {
+    return new Location( locationName, line, column ) ;
+  }
+
+  public Charset getEncoding() {
+    return encoding ;
+  }
+
+
 }

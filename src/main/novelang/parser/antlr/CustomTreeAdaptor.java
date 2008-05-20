@@ -17,10 +17,8 @@
 
 package novelang.parser.antlr;
 
-import org.antlr.runtime.tree.CommonTreeAdaptor;
-import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.runtime.Token;
-import novelang.parser.antlr.CustomTree;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
 import novelang.model.common.LocationFactory;
 
 /**

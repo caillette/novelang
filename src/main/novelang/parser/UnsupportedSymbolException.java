@@ -17,8 +17,6 @@
 
 package novelang.parser;
 
-import novelang.model.common.Location;
-
 /**
  * @author Laurent Caillette
  */

@@ -18,29 +18,29 @@
 package novelang.rewriter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
-import java.nio.charset.Charset;
 
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Lists;
-import novelang.model.common.Tree;
+import com.google.common.collect.Maps;
+import novelang.configuration.ConfigurationTools;
+import novelang.configuration.RenderingConfiguration;
+import novelang.model.common.MetadataHelper;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Problem;
+import novelang.model.common.Tree;
 import novelang.model.common.TreeMetadata;
-import novelang.model.common.MetadataHelper;
 import novelang.model.implementation.Part;
 import novelang.model.renderable.Renderable;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.NlpWriter;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ConfigurationTools;
 
 /**
  * Splits one Part file in many files with the name of its chapters (Identifier or Title).

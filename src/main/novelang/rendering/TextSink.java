@@ -17,13 +17,13 @@
 
 package novelang.rendering;
 
-import java.io.PrintWriter;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.Locator;
 import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
 
 /**
  * 

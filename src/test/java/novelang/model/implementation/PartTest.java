@@ -24,12 +24,11 @@ import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import novelang.TestResourceTools;
 import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.model.common.Location;
-import novelang.model.common.Tree;
 import static novelang.model.common.NodeKind.*;
+import novelang.model.common.Tree;
 import novelang.parser.antlr.TreeHelper;
 import static novelang.parser.antlr.TreeHelper.tree;
 
@@ -37,17 +36,11 @@ import static novelang.parser.antlr.TreeHelper.tree;
  * @author Laurent Caillette
  */
 public class PartTest {
-  private static final String STRUCTURE_1 = TestResources.STRUCTURE_1 ;
-  private static final String SECTIONS_1 = TestResources.SECTIONS_1 ;
-  private File book1Directory;
-  private String testName;
-  private Book book1;
-  private Location location;
+
 
   @Test
   public void loadPartOk() throws IOException {
-    final Part part = book1.createPart( SECTIONS_1, location ) ;
-    part.load() ;
+    final Part part = new Part( sections1File ) ;
     final Tree partTree = part.getTree();
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,  
@@ -66,34 +59,27 @@ public class PartTest {
     ) ;
     TreeHelper.assertEquals( expected, partTree ) ;
 
-//=== Section1nlp
-//
-//p00 w001
-//
-//=== 'section1 w11
-//
-//p10 w101
-//w102
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
 
   @Test
   public void findIdentifiersOk() throws IOException {
-    final Part part = book1.createPart( SECTIONS_1, location ) ;
-    part.load() ;
+    final Part part = new Part( sections1File ) ;
     part.getIdentifiers() ;
   }
 
+  private File book1Directory ;
+  private File sections1File;
+
   @Before
   public void setUp() throws IOException {
-    testName = ClassUtils.getShortClassName( getClass() );
+    final String testName = ClassUtils.getShortClassName( getClass() );
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
-    book1Directory = scratchDirectoryFixture.getBook1Directory();
-    TestResourceTools.copyResourceToFile( getClass(), STRUCTURE_1, book1Directory ) ;
-    TestResourceTools.copyResourceToFile( getClass(), SECTIONS_1, book1Directory ) ;
-    book1 = new Book( testName, new File( book1Directory, STRUCTURE_1 ) );
-    location = book1.createLocation( 0, 0 );
+    book1Directory = scratchDirectoryFixture.getBook1Directory() ;
+
+    TestResourceTools.copyResourceToFile( getClass(), TestResources.SECTIONS_1, book1Directory ) ;
+    sections1File = new File( book1Directory, TestResources.SECTIONS_1 ) ;
   }
 
 }

@@ -17,9 +17,9 @@
 
 package novelang.batch;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +33,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
 /**
- * Command-line arguments, also handles parsing and help.
+ * Command-line arguments, including parsing and help message.
  *
  * @author Laurent Caillette
  */

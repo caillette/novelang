@@ -22,12 +22,14 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Maps;
-import com.google.common.collect.ImmutableMapBuilder;
 import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableMapBuilder;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
+ * Table of escaped symbols, using HTML entity names whenever defined and Unicode names otherwise.
+ *
  * @author Laurent Caillette
  */
 public class Symbols {

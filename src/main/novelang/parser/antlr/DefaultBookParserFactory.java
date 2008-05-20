@@ -17,17 +17,12 @@
 
 package novelang.parser.antlr;
 
-import novelang.parser.BookParser;
 import novelang.parser.BookParserFactory;
-import novelang.model.structural.StructuralBook;
 
 /**
  * @author Laurent Caillette
  */
 public class DefaultBookParserFactory implements BookParserFactory {
 
-  public BookParser createParser( final StructuralBook book, final String text ) {
-    return new DelegatingBookParser( text, book );
-  }
 
 }

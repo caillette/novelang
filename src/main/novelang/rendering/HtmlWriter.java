@@ -21,11 +21,10 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.xml.sax.ContentHandler;
+import novelang.configuration.RenderingConfiguration;
 import novelang.model.common.NodePath;
 import novelang.model.common.TreeMetadata;
 import novelang.parser.Symbols;
-import novelang.loader.ResourceLoader;
-import novelang.configuration.RenderingConfiguration;
 
 /**
  * @author Laurent Caillette

@@ -20,8 +20,8 @@ package novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import org.dom4j.io.XMLWriter;
 import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;

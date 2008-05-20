@@ -29,8 +29,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.MissingResourceException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

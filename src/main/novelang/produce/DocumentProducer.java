@@ -27,7 +27,6 @@ import novelang.configuration.ServerConfiguration;
 import novelang.model.common.FileLookupHelper;
 import novelang.model.common.Problem;
 import novelang.model.common.StructureKind;
-import novelang.model.implementation.Book;
 import novelang.model.implementation.Part;
 import novelang.model.renderable.Renderable;
 import novelang.rendering.GenericRenderer;
@@ -129,14 +128,7 @@ public class DocumentProducer {
     switch( structureKind ) {
       
       case BOOK :
-        final File bookFile = FileLookupHelper.load(
-            basedir,
-            documentRequest.getDocumentSourceName(),
-            StructureKind.BOOK.getFileExtensions()
-        ) ;
-        final Book book = new Book( bookFile.getPath(), bookFile );
-        book.load() ;
-        return book ;
+        throw new UnsupportedOperationException( "createRenderable for BOOK" ) ;
 
       case PART :
         final File partFile = FileLookupHelper.load(

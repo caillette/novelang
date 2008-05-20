@@ -17,16 +17,16 @@
 
 package novelang.loader;
 
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
-import org.junit.Test;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.ClassUtils;
+import org.junit.Test;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;

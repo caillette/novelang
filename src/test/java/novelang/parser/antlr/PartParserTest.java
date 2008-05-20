@@ -17,16 +17,15 @@
 
 package novelang.parser.antlr;
 
-import static novelang.parser.antlr.AntlrTestHelper.*;
-
 import java.util.Map;
 
 import org.antlr.runtime.RecognitionException;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import static novelang.model.common.NodeKind.*;
-import static novelang.parser.antlr.TreeHelper.tree;
 import novelang.parser.Symbols;
+import static novelang.parser.antlr.AntlrTestHelper.*;
+import static novelang.parser.antlr.TreeHelper.tree;
 
 /**
  * GUnit sucks as it has completely obscure failures and stupid reports,
