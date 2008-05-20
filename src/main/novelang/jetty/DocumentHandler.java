@@ -48,6 +48,7 @@ import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
+import novelang.produce.DocumentProducer;
 
 /**
  * Serves rendered content.
@@ -70,18 +71,11 @@ public class DocumentHandler extends AbstractHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( DocumentHandler.class ) ;
 
-  private final File basedir ;
-  private final RenderingConfiguration configuration ;
+  private final DocumentProducer documentProducer ;
 
 
   public DocumentHandler( ServerConfiguration serverConfiguration ) {
-    // TODO move those checks to ConfigurationTools.
-    this.basedir = Objects.nonNull(
-        serverConfiguration.getContentConfiguration().getContentRoot() ) ;
-    if( ! basedir.exists() ) {
-      throw new IllegalArgumentException( "Doesn't exist: '" + basedir.getAbsolutePath() + "'" ) ;
-    }
-    configuration = serverConfiguration.getRenderingConfiguration() ;
+    documentProducer = new DocumentProducer( serverConfiguration ) ;
   }
 
 
@@ -97,128 +91,53 @@ public class DocumentHandler extends AbstractHandler {
 
     if( null == documentRequest ) {
       return ;
-    } else if( documentRequest.isRendered() ) {
-      
+
+    } else {
       final ServletOutputStream outputStream = response.getOutputStream();
-      final Renderable rendered = createRenderable( documentRequest ) ;
-      final Iterable< Problem > problems = rendered.getProblems();
 
-      if( documentRequest.getDisplayProblems() ) {
-        final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
-        final String originalTarget = documentRequest.getOriginalTarget();
-        problemPrinter.printProblems(
-            outputStream,
-            problems,
-            originalTarget
-        ) ;
-        setAsHandled( request ) ;
-        // TODO redirect to document page if renderable has no problem.
-        LOGGER.debug( "Served error request '{}'", originalTarget ) ;
+      if( documentRequest.isRendered() ) {
 
-      } else if( rendered.hasProblem() ) {
-        final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
-        final String redirectionTarget =
-            documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX;
-        response.sendRedirect( redirectionTarget ) ;
-        response.setStatus( HttpServletResponse.SC_FOUND ) ;
-        problemPrinter.printProblems(
-            outputStream, problems, request.getQueryString() ) ;
-        response.setContentType( problemPrinter.getMimeType().getMimeName() ) ;
-        setAsHandled( request ) ;
-        LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+        final Renderable rendered = documentProducer.createRenderable( documentRequest ) ;
 
-      } else {
+        if( documentRequest.getDisplayProblems() ) {
 
-        final RenditionMimeType mimeType = documentRequest.getRenditionMimeType() ;
+          final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
+          final String originalTarget = documentRequest.getOriginalTarget();
+          problemPrinter.printProblems(
+              outputStream,
+              rendered.getProblems(),
+              originalTarget
+          ) ;
+          setAsHandled( request ) ;
+          // TODO redirect to document page if renderable has no problem.
+          LOGGER.debug( "Served error request '{}'", originalTarget ) ;
 
-        switch( mimeType ) {
-          case PDF :
-            serve(
-                request,
-                response,
-                new GenericRenderer( new PdfWriter( configuration ) ),
-                rendered
-            ) ;
-            break;
-          case TXT :
-            serve(
-                request,
-                response,
-                new GenericRenderer( new PlainTextWriter() ),
-                rendered
-            ) ;
-            break;
-          case XML :
-            serve(
-                request,
-                response,
-                new GenericRenderer( new XmlWriter() ),
-                rendered
-            ) ;
-            break ;
-          case HTML :
-            serve(
-                request,
-                response,
-                new GenericRenderer( new HtmlWriter( configuration ) ),
-                rendered
-            ) ;
-            break ;
-          case NLP :
-            serve(
-                request,
-                response,
-                new GenericRenderer( new NlpWriter( configuration ) ),
-                rendered
-            ) ;
-            break ;
-          default :
-            final IllegalArgumentException illegalArgumentException =
-                new IllegalArgumentException( "Unsupported: " + mimeType );
-            LOGGER.warn( "Internal error", illegalArgumentException ) ;
-            throw illegalArgumentException;
+        } else if( rendered.hasProblem() ) {
+
+          final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
+          final String redirectionTarget =
+              documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX;
+          response.sendRedirect( redirectionTarget ) ;
+          response.setStatus( HttpServletResponse.SC_FOUND ) ;
+          problemPrinter.printProblems(
+              outputStream, rendered.getProblems(), request.getQueryString() ) ;
+          response.setContentType( problemPrinter.getMimeType().getMimeName() ) ;
+          setAsHandled( request ) ;
+          LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+
+        } else {
+
+          response.setStatus( HttpServletResponse.SC_OK ) ;
+
+          documentProducer.produce( documentRequest, rendered, outputStream ) ;
+          response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
+          setAsHandled( request ) ;
+          LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+
         }
+      } // Don't handle the non-rendered case, this is left to other handlers.
 
-      }
     }
-  }
-
-  private Renderable createRenderable( PolymorphicRequest request )
-      throws IOException
-  {
-    final StructureKind structureKind = request.getStructureKind() ;
-    switch( structureKind ) {
-      case BOOK :
-        throw new UnsupportedOperationException( "createRenderable with Book" ) ;
-      case PART :
-        final File partFile = FileLookupHelper.load(
-            basedir,
-            request.getDocumentSourceName(),
-            StructureKind.PART.getFileExtensions()
-        ) ;
-        return new Part( partFile ) ;
-      default :
-        throw new IllegalArgumentException( "Unsupported: " + structureKind ) ;
-    }
-  }
-
-  private void serve(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Renderer renderer,
-      Renderable rendered
-  ) throws IOException {
-
-    response.setStatus( HttpServletResponse.SC_OK ) ;
-
-    renderer.render(
-        rendered,
-        response.getOutputStream()
-    ) ;
-    response.setContentType( renderer.getMimeType().getMimeName() ) ;
-    setAsHandled( request ) ;
-
-    LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
   }
 
   private void setAsHandled( HttpServletRequest request ) {

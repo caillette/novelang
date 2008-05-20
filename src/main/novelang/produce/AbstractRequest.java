@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import novelang.model.common.StructureKind;
 import novelang.rendering.RawResource;
 import novelang.rendering.RenditionMimeType;
 
@@ -50,9 +49,6 @@ import novelang.rendering.RenditionMimeType;
   private RenditionMimeType renditionMimeType = RenditionMimeType.PDF ;
 
   public RenditionMimeType getRenditionMimeType() {
-//    if( null == renditionMimeType ) {
-//      throw new IllegalStateException( "No renditionMimeType defined " ) ;
-//    }
     return renditionMimeType;
   }
 
@@ -62,21 +58,6 @@ import novelang.rendering.RenditionMimeType;
 
   public boolean isRendered() {
     return null != renditionMimeType ;
-  }
-
-
-// =============
-// structureKind
-// =============
-
-  private StructureKind structureKind;
-
-  public StructureKind getStructureKind() {
-    return structureKind;
-  }
-
-  private void setStructureKind( StructureKind structureKind ) {
-    this.structureKind = structureKind;
   }
 
 
@@ -131,17 +112,9 @@ import novelang.rendering.RenditionMimeType;
   private static Pattern createPattern( boolean polymorphic ) {
     final StringBuffer buffer = new StringBuffer() ;
 
-    // First the structure.
-    buffer.append( "(/(" ) ;
-    for( final StructureKind structureKind : StructureKind.values() ) {
-      if( structureKind.ordinal() > 0 ) {
-        buffer.append( "|" ) ;
-      }
-      buffer.append( structureKind.getPathToken() ) ;
-    }
-    buffer.append( ")" ) ;
+    buffer.append( "(" ) ;
 
-    // Now the path without extension. No dots for security reasons (forbid '..').
+    // The path without extension. No dots for security reasons (forbid '..').
     buffer.append( "((?:\\/(?:\\w|-|_)+)+)" ) ;
 
     // The extension defining the MIME type.
@@ -198,15 +171,12 @@ import novelang.rendering.RenditionMimeType;
     ;
 
     final Matcher matcher = pattern.matcher( requestPath ) ;
-    if( matcher.find() && matcher.groupCount() >= 3 ) {
+    if( matcher.find() && matcher.groupCount() >= 2 ) {
 
-      final String rawStructure = matcher.group( 2 ) ;
-      request.setStructureKind( StructureKind.valueOf( rawStructure.toUpperCase() ) ) ;
-
-      final String rawDocumentSourceName = matcher.group( 3 ) ;
+      final String rawDocumentSourceName = matcher.group( 2 ) ;
       request.setDocumentSourceName( rawDocumentSourceName ) ;
 
-      final String rawDocumentMimeType = matcher.group( 4 ) ;
+      final String rawDocumentMimeType = matcher.group( 3 ) ;
       request.setResourceExtension( rawDocumentMimeType ) ;
       try {
         request.setRenditionMimeType(
@@ -217,7 +187,7 @@ import novelang.rendering.RenditionMimeType;
 
       if( request instanceof PolymorphicRequest ) {
         ( ( PolymorphicRequest ) request ).setDisplayProblems(
-            RequestTools.ERRORPAGE_SUFFIX.equals( matcher.group( 5 ) ) ) ;
+            RequestTools.ERRORPAGE_SUFFIX.equals( matcher.group( 4 ) ) ) ;
       }
 
       request.setOriginalTarget( matcher.group( 1 ) ) ;

@@ -41,7 +41,6 @@ public class DocumentRequest extends AbstractRequest {
   public String toString() {
     return
         ClassUtils.getShortClassName( getClass() ) + "[" +
-        ";structureKind" + "=" + getStructureKind() +
         ";documentSourceName" + "=" + getDocumentSourceName() +
         ";originalTarget" + "=" + getOriginalTarget() +
         "]"

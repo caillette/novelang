@@ -29,8 +29,8 @@ import novelang.rendering.RenditionMimeType;
 public class RequestTest {
   private static final String REQUEST_BODY = "/path/to/file" ;
 
-  private static final String PDF_REQUEST_PATH = "/part" + REQUEST_BODY + ".pdf" ;
-  private static final String CSS_REQUEST_PATH = "/part" + REQUEST_BODY + ".css" ;
+  private static final String PDF_REQUEST_PATH = REQUEST_BODY + ".pdf" ;
+  private static final String CSS_REQUEST_PATH = REQUEST_BODY + ".css" ;
 
   private static final String REQUEST_PATH_BROKEN =
       PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;
@@ -44,7 +44,6 @@ public class RequestTest {
     Assert.assertTrue( request.isRendered() ) ;
     Assert.assertEquals( "pdf", request.getResourceExtension() ) ;
     Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
-    Assert.assertEquals( StructureKind.PART, request.getStructureKind() ) ;
 
     Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
@@ -57,7 +56,6 @@ public class RequestTest {
     Assert.assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     Assert.assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
-    Assert.assertEquals( StructureKind.PART, request.getStructureKind() ) ;
 
     Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
@@ -70,7 +68,6 @@ public class RequestTest {
     Assert.assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
     Assert.assertNull( request.getRenditionMimeType() ) ;
     Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
-    Assert.assertEquals( StructureKind.PART, request.getStructureKind() ) ;
 
     Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }

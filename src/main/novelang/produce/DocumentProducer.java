@@ -63,12 +63,17 @@ public class DocumentProducer {
   }
 
   public Iterable< Problem > produce(
-      final DocumentRequest request,
+      final AbstractRequest request,
       final OutputStream outputStream
   ) throws IOException {
+    return produce( request, createRenderable( request ), outputStream ) ;
+  }
 
-    // Load the Part, Book or whatever.
-    final Renderable rendered = createRenderable( request ) ;
+  public Iterable< Problem > produce(
+      final AbstractRequest request,
+      final Renderable rendered,
+      final OutputStream outputStream
+  ) throws IOException {
 
     final RenditionMimeType mimeType = request.getRenditionMimeType() ;
 
@@ -121,26 +126,16 @@ public class DocumentProducer {
     renderer.render( rendered, outputStream ) ;
   }
 
-  private Renderable createRenderable( DocumentRequest documentRequest )
+  public Renderable createRenderable( AbstractRequest documentRequest )
       throws IOException
   {
-    final StructureKind structureKind = documentRequest.getStructureKind() ;
-    switch( structureKind ) {
-      
-      case BOOK :
-        throw new UnsupportedOperationException( "createRenderable for BOOK" ) ;
+    final File partFile = FileLookupHelper.load(
+        basedir,
+        documentRequest.getDocumentSourceName(),
+        StructureKind.PART.getFileExtensions()
+    ) ;
+    return new Part( partFile ) ;
 
-      case PART :
-        final File partFile = FileLookupHelper.load(
-            basedir,
-            documentRequest.getDocumentSourceName(),
-            StructureKind.PART.getFileExtensions()
-        ) ;
-        return new Part( partFile ) ;
-
-      default :
-        throw new IllegalArgumentException( "Unsupported: " + structureKind ) ;
-    }
   }
 
 
