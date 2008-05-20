@@ -240,33 +240,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CustomTree.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/parser/antlr/CustomTree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="33" selection-start="1129" selection-end="1129" vertical-scroll-proportion="0.45842695">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MutableTree.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/MutableTree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="38" selection-start="810" selection-end="810" vertical-scroll-proportion="0.26741573">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Tree.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../src/main/novelang/model/common/Tree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="17" selection-start="1012" selection-end="1012" vertical-scroll-proportion="0.42022473">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AbstractRequest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/AbstractRequest.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -307,10 +280,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DocumentProducer.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="DocumentProducer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/DocumentProducer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="80" column="51" selection-start="2752" selection-end="2752" vertical-scroll-proportion="-1.5393258">
+            <state line="135" column="52" selection-start="4219" selection-end="4219" vertical-scroll-proportion="0.56179774">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="book.nlb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../samples/showcase/book.nlb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="39" selection-start="259" selection-end="259" vertical-scroll-proportion="0.6876404">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="showcase.nlp" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../samples/showcase/showcase.nlp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -1187,6 +1178,28 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/samples" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/samples/showcase" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/idea" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
@@ -1218,6 +1231,24 @@
         </PATH_ELEMENT>
         <PATH_ELEMENT>
           <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/idea/generated/antlr/novelang/parser/antlr" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/Users/Shared/Scratch/Novelang/documentation" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -1949,12 +1980,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="874" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="3" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="4" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" order="15" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22214234" order="0" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22214234" order="0" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24155284" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2602564" order="14" />
@@ -2078,30 +2109,6 @@
     <option name="myLastEditedConfigurable" value="IDE Profiles" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/package.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="38" selection-start="272" selection-end="272" vertical-scroll-proportion="0.2125">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="HtmlPreview">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/ResourceHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="8" selection-start="2101" selection-end="2101" vertical-scroll-proportion="0.36830837">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/DocumentHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="120" column="62" selection-start="4451" selection-end="4451" vertical-scroll-proportion="0.33190578">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/jetty/NotFoundHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="13" selection-start="1024" selection-end="1024" vertical-scroll-proportion="0.32762313">
@@ -2194,7 +2201,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/main/novelang/produce/DocumentProducer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="51" selection-start="2752" selection-end="2752" vertical-scroll-proportion="-1.5393258">
+        <state line="135" column="52" selection-start="4219" selection-end="4219" vertical-scroll-proportion="0.56179774">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/showcase/book.nlb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="39" selection-start="259" selection-end="259" vertical-scroll-proportion="0.6876404">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../documentation/novelang.nlp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../samples/showcase/showcase.nlp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>

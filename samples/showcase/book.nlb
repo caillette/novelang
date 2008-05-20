@@ -1,0 +1,40 @@
+
+
+// Insert file's AST inplace:
+
+::insert file://foo.nlp
+
+::insert file://many/*.nlp
+
+
+// Import all identified nodes contained by the file(s):
+
+::import file://foo.nlp
+
+::import file://many/*.nlp
+
+
+::*** Chapter title
+
+::style redefine-chapter-specific-style
+
+::=== Section title
+
+::add Some chapter or section (pulled from imported part) without its title.
+
+::add :withtitle Some section (pulled from imported part) with its title.
+
+::add Some chapter or section
+  :p  Some paragraph    // Add paragraph identified as `Some paragraph`
+  :p+ Some other        // Merge this one with previous ("p+").
+
+{{
+Declaration evaluates to:
+  (MACRO
+    (MACRO_NAME (WORD add))
+    (PARAGRAPH (WORD Some) (WORD Chapter) (WORD or)  (WORD Section))
+    (MACRO_PARAMETER p (PARAGRAPH (WORD paragraph-id1)))
+    (MACRO_PARAMETER p+ (PARAGRAPH (WORD paragraph-id1)))
+  )
+
+}}
