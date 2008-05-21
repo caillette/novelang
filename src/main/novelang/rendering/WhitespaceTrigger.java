@@ -33,6 +33,7 @@ public class WhitespaceTrigger {
   private static final Set< Sequence > SEQUENCES = Sets.newHashSet() ;
   static {
     add( EMPHASIS, WORD ) ;
+    add( EMPHASIS, QUOTE ) ;
     add( INTERPOLATEDCLAUSE, WORD ) ;
     add( INTERPOLATEDCLAUSE_SILENTEND, WORD ) ;
     add( PARENTHESIS, WORD ) ;

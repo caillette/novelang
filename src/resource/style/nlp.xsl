@@ -55,9 +55,9 @@
 
   <xsl:template match="n:blockquote" >
 
-&lt;&lt;&lt;<xsl:apply-templates/>
+&lt;&lt;<xsl:apply-templates/>
 
->>>
+>>
 
   </xsl:template>
 

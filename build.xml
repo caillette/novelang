@@ -226,7 +226,7 @@
   <target name="start-httpd" depends="init" >
     
     <java
-        classname="novelang.jetty.HttpDaemon"
+        classname="novelang.daemon.HttpDaemon"
         failonerror="true"
         fork="true"
     >

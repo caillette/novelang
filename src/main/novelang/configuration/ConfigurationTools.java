@@ -58,7 +58,7 @@ public class ConfigurationTools {
 // Rendering
 // =========
 
-  private static final String BUNDLED_STYLE_DIR = "style" ;
+  public static final String BUNDLED_STYLE_DIR = "style" ;
   private static final String USER_STYLE_DIR = "style" ;
   protected static final String NOVELANG_STYLE_DIR_PROPERTYNAME = "novelang.style.dir" ;
 

@@ -86,7 +86,7 @@ public class ScratchDirectoryFixture {
 
   private File testScratchDirectory;
 
-  private File getTestScratchDirectory() throws IOException {
+  public File getTestScratchDirectory() throws IOException {
     if( null == testScratchDirectory ) {
       testScratchDirectory = new File( getAllFixturesDirectory(), testIdentifier ) ;
       if( testScratchDirectory.exists() ) {
@@ -136,6 +136,15 @@ public class ScratchDirectoryFixture {
   public File getLoaderDirectory() throws IOException {
     loaderRoot = createIfNotExists( loaderRoot, LOADER ) ;
     return loaderRoot;
+  }
+
+  private static final String DAEMON = "daemon" ;
+
+  private File daemonRoot;
+
+  public File getDaemonDirectory() throws IOException {
+    daemonRoot = createIfNotExists( daemonRoot, DAEMON ) ;
+    return daemonRoot;
   }
 
 
