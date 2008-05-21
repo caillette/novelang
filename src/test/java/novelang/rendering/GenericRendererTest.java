@@ -44,9 +44,9 @@ public class GenericRendererTest {
   @Test
   public void whitespace1() throws Exception {
     final Tree tree = tree( PARENTHESIS, tree( WORD, "first" ), tree( WORD, "second") ) ;
-    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "¨" ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
-    Assert.assertEquals( "PARENTHESIS(first¨second)", getRenderedText() ) ;
+    Assert.assertEquals( "PARENTHESIS(first^second)", getRenderedText() ) ;
   }
 
   @Test
@@ -62,10 +62,10 @@ public class GenericRendererTest {
         ),
         tree( WORD, "w3" )
     ) ;
-    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "¨" ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     Assert.assertEquals(
-        "PARAGRAPH_PLAIN(w0¨PARENTHESIS(w1¨w2PUNCTUATION_SIGN(SIGN_FULLSTOP()))¨w3)",
+        "PARAGRAPH_PLAIN(w0^PARENTHESIS(w1^w2PUNCTUATION_SIGN(SIGN_FULLSTOP()))^w3)",
         getRenderedText()
     ) ;
   }
