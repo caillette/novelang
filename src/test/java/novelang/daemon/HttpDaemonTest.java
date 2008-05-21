@@ -140,7 +140,7 @@ public class HttpDaemonTest {
    * let us know about test name so we have to pass it explicitely for creating
    * different directories (avoiding one erasing the other).
    * @link http://twgeeknight.googlecode.com/svn/trunk/JUnit4Playground/src/org/junit/runners/NameAwareTestClassRunner.java
-   *     doesn't work with JUnit 4.4.
+   *     doesn't work with IDEA-7.0.3 (while it works with Ant-1.7.0).
    */
   private void setUp( String testHint ) throws Exception {
 

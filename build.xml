@@ -51,6 +51,8 @@
     <patternset id="resource-patterns" >
       <include name="**/*.properties" />
       <include name="**/*.xml" />
+      <include name="**/*.xsl" />
+      <include name="**/*.pen" />
       <include name="**/*.png" />
       <include name="**/*.jpeg" />
       <include name="**/*.jpg" />
@@ -145,6 +147,11 @@
       <fileset dir="${configuration.main.dir}" >
         <patternset refid="resource-patterns" />
       </fileset>
+      <fileset dir="${source.style.default.dir}" >
+        <patternset refid="resource-patterns" />
+      </fileset>
+
+
     </copy>
     
   </target>
