@@ -44,8 +44,9 @@ public class TestResources {
   public static final String STRUCTURE_6 = "/structure-6.nlb";
 
   public static final String SHOWCASE = "/showcase/showcase.nlp";
-  
-  public static final String SERVED_GOOD = "/served/good.nlp";
+
+  public static final String SERVED_GOOD_NOEXTENSION = "/served/good";
+  public static final String SERVED_GOOD = SERVED_GOOD_NOEXTENSION + ".nlp" ;
 
 
 }

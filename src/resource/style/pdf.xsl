@@ -25,11 +25,7 @@
   %Fo;
 
 
-  <!ENTITY legal "(c) Laurent Caillette 2008">
-  <!ENTITY author "Laurent Caillette">
-  <!ENTITY author-email "laurent.caillette@gmail.com">
-  <!ENTITY author-phone "06 60 41 26 83">
-  <!ENTITY copyright-years "2002-2008">
+  <!ENTITY legal "(c) your name here!">
 
 ] >
 
@@ -134,8 +130,6 @@
         <fo:static-content flow-name="xsl-region-before" >
           <fo:block text-align="right" >
             <fo:inline font-size="80%" >
-              &copy; &author; &copyright-years;
-              &nbsp;&nbsp;
               &legal;
             </fo:inline>
           </fo:block>
