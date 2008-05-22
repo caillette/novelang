@@ -52,7 +52,7 @@ ant -buildfile $NOVELANG_HOME/build.xml start-httpd
 
 Open your favorite Web browser at this address:
 
-http://localhost:8080/part/first.nlp
+http://localhost:8080/first.nlp
 
 And you should see your text, with correct formatting! 
 
