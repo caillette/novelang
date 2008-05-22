@@ -22,8 +22,11 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import novelang.model.common.Problem;
+import novelang.model.common.Location;
 
 /**
+ * Almost does what it claims.
+ * 
  * @author Laurent Caillette
  */
 public class HtmlProblemPrinter {
@@ -41,9 +44,12 @@ public class HtmlProblemPrinter {
         "<p>Requested: <a href=\"" + requestedUri + "\">" + requestedUri + "</a></p>" ) ;
     for( final Problem problem : problems ) {
       writer.println( "<p>" ) ;
-      writer.println( "<pre>" ) ;
-      writer.println( problem.getLocation() ) ;
-      writer.println( "</pre>" ) ;
+      final Location location = problem.getLocation();
+      if( location.getLine() > -1 && location.getColumn() > -1 ) {
+        writer.println( "<pre>" ) ;
+        writer.println( location ) ;
+        writer.println( "</pre>" ) ;
+      }
       writer.println( problem.getMessage() ) ;
       writer.println( "</p>" ) ;
     }

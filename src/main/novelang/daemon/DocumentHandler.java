@@ -18,6 +18,7 @@
 package novelang.daemon;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -29,10 +30,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.ServerConfiguration;
 import novelang.model.renderable.Renderable;
+import novelang.model.common.Problem;
 import novelang.rendering.HtmlProblemPrinter;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
 import novelang.produce.DocumentProducer;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Serves rendered content.
@@ -75,24 +79,34 @@ public class DocumentHandler extends AbstractHandler {
 
     if( null == documentRequest ) {
       return ;
-
     } else {
+
       final ServletOutputStream outputStream = response.getOutputStream();
 
       if( documentRequest.isRendered() ) {
 
-        final Renderable rendered = documentProducer.createRenderable( documentRequest ) ;
+        final Renderable rendered;
+        try {
+          rendered = documentProducer.createRenderable( documentRequest );
+        } catch( IOException e ) {
+          renderProblems(
+              Lists.newArrayList( Problem.createProblem( e ) ),
+              documentRequest.getOriginalTarget(),
+              outputStream
+          ) ;
+          throw e ;
+        }
 
         if( documentRequest.getDisplayProblems() ) {
 
           if( rendered.hasProblem() ) {
-            renderProblemsAsRequested( documentRequest, rendered, outputStream );
+            renderProblemsAsRequested( documentRequest, rendered, outputStream ) ;
           } else {
-            redirectToOriginalTarget( documentRequest, response );
+            redirectToOriginalTarget( documentRequest, response ) ;
           }
 
         } else if( rendered.hasProblem() ) {
-          redirectToProblemPage( documentRequest, response );
+          redirectToProblemPage( documentRequest, response ) ;
         } else {
 
           response.setStatus( HttpServletResponse.SC_OK ) ;
@@ -103,19 +117,25 @@ public class DocumentHandler extends AbstractHandler {
         }
       }
 
-      setAsHandled( request ) ;
+      ( ( Request ) request ).setHandled( true ) ;
     }
   }
 
-  private void redirectToProblemPage( PolymorphicRequest documentRequest, HttpServletResponse response ) throws IOException {
+  private void redirectToProblemPage(
+      PolymorphicRequest documentRequest,
+      HttpServletResponse response
+  ) throws IOException {
     final String redirectionTarget =
-        documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX;
+        documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX ;
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
     LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
   }
 
-  private void redirectToOriginalTarget( PolymorphicRequest documentRequest, HttpServletResponse response ) throws IOException {
+  private void redirectToOriginalTarget(
+      PolymorphicRequest documentRequest,
+      HttpServletResponse response
+  ) throws IOException {
     final String redirectionTarget = documentRequest.getOriginalTarget() ;
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
@@ -123,19 +143,27 @@ public class DocumentHandler extends AbstractHandler {
     LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
   }
 
-  private void renderProblemsAsRequested( PolymorphicRequest documentRequest, Renderable rendered, ServletOutputStream outputStream ) throws IOException {
-    final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
-    final String originalTarget = documentRequest.getOriginalTarget();
-    problemPrinter.printProblems(
-              outputStream,
-              rendered.getProblems(),
-              originalTarget
-          ) ;
-    LOGGER.debug( "Served error request '{}'", originalTarget ) ;
+  private void renderProblemsAsRequested(
+      PolymorphicRequest documentRequest,
+      Renderable rendered,
+      ServletOutputStream outputStream
+  ) throws IOException {
+    renderProblems( rendered.getProblems(), documentRequest.getOriginalTarget(), outputStream ) ;
   }
 
-  private void setAsHandled( HttpServletRequest request ) {
-    ( ( Request ) request ).setHandled( true ) ;
+  private void renderProblems(
+      Iterable< Problem > problems,
+      String originalTarget,
+      OutputStream outputStream
+  ) throws IOException {
+    final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
+    problemPrinter.printProblems(
+        outputStream,
+        problems,
+        originalTarget
+    ) ;
+    LOGGER.debug( "Served error request '{}'", originalTarget ) ;
+
   }
 
 }

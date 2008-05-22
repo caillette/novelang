@@ -59,6 +59,10 @@ public class Problem {
     return new Problem( new Location( "<unknown file>", -1, -1 ), message ) ;
   }
 
+  public static Problem createProblem( Exception exception ) {
+    return new Problem( new Location( "<unknown file>", -1, -1 ), exception.getMessage() ) ;
+  }
+
   public static Problem createProblem(
       LocationFactory locationFactory,
       Exception exception
