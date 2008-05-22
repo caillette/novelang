@@ -27,6 +27,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.produce.RequestTools;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.RenderingConfiguration;
@@ -74,6 +78,57 @@ public class HttpDaemonTest {
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_RESOURCE_NAME ) ) ;
     save( "generated.pdf", generated ) ;
     Assert.assertTrue( generated.length > 100 ) ;
+  }
+
+  @Test
+  public void htmlOk() throws Exception {
+    setUp( "htmlOk" ) ;
+    final byte[] generated = readAsBytes(
+        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_HTML_RESOURCE_NAME ) ) ;
+    save( "generated.html", generated ) ;
+    Assert.assertTrue( generated.length > 100 ) ;
+  }
+
+  @Test
+  public void htmlBrokenCausesRedirection() throws Exception {
+    setUp( "htmlBroken" ) ;
+    final HttpClient httpClient = new HttpClient() ;
+    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( 5000 ) ;
+    final String originalUrlAsString = "http://localhost:" + HTTP_DAEMON_PORT +
+        BROKEN_HTML_RESOURCE_NAME ;
+    HttpMethod method = new GetMethod( originalUrlAsString ) ;
+    method.setFollowRedirects( true ) ;
+    httpClient.executeMethod( method ) ;
+    String responseBody = method.getResponseBodyAsString() ;
+
+    save( "generated.html", responseBody ) ;
+    Assert.assertTrue( responseBody.contains( "Requested:" ) ) ;
+
+    Assert.assertTrue(
+        "Expected link to requested page",
+        responseBody.contains( BROKEN_HTML_RESOURCE_NAME )
+    ) ;
+
+    Assert.assertTrue(
+        "Expected path '" + BROKEN_PATH_AFTER_REDIRECTION + "'",
+        method.getPath().contains( BROKEN_PATH_AFTER_REDIRECTION )
+    ) ;
+  }
+
+  @Test
+  public void htmlNotBrokenCausesRedirection() throws Exception {
+    setUp( "htmlNotBroken" ) ;
+    final HttpClient httpClient = new HttpClient() ;
+    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( 5000 ) ;
+    final String originalUrlAsString = "http://localhost:" + HTTP_DAEMON_PORT +
+        GOOD_HTML_RESOURCE_NAME + RequestTools.ERRORPAGE_SUFFIX ;
+    HttpMethod method = new GetMethod( originalUrlAsString ) ;
+    method.setFollowRedirects( true ) ;
+    httpClient.executeMethod( method ) ;
+    String responseBody = method.getResponseBodyAsString() ;
+
+    save( "generated.html", responseBody ) ;
+    Assert.assertFalse( responseBody.contains( "Requested:" ) ) ;
 
   }
 
@@ -126,9 +181,19 @@ public class HttpDaemonTest {
   private static final int HTTP_DAEMON_PORT = 8081 ;
 
   private static final String GOOD_NLP_RESOURCE_NAME = TestResources.SERVED_GOOD ;
+  private static final String BROKEN_NLP_RESOURCE_NAME = TestResources.SERVED_BROKEN ;
 
   private static final String GOOD_PDF_RESOURCE_NAME =
       TestResources.SERVED_GOOD_NOEXTENSION + ".pdf" ;
+
+  private static final String GOOD_HTML_RESOURCE_NAME =
+      TestResources.SERVED_GOOD_NOEXTENSION + ".html" ;
+
+  private static final String BROKEN_HTML_RESOURCE_NAME =
+      TestResources.SERVED_BROKEN_NOEXTENSION + ".html" ;
+
+  private static final String BROKEN_PATH_AFTER_REDIRECTION =
+      BROKEN_HTML_RESOURCE_NAME + RequestTools.ERRORPAGE_SUFFIX ;
 
 
   private HttpDaemon httpDaemon ;
@@ -153,6 +218,9 @@ public class HttpDaemonTest {
         getClass(), GOOD_NLP_RESOURCE_NAME, contentDirectory ) ;
     goodNlpSource = TestResourceTools.readStringResource(
         getClass(), GOOD_NLP_RESOURCE_NAME, Encoding.DEFAULT ) ;
+
+    TestResourceTools.copyResourceToFile(
+        getClass(), BROKEN_NLP_RESOURCE_NAME, contentDirectory ) ;
 
     httpDaemon = new HttpDaemon( HTTP_DAEMON_PORT, createServerConfiguration( contentDirectory ) ) ;
     httpDaemon.start() ;

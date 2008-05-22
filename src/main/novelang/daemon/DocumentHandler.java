@@ -85,43 +85,53 @@ public class DocumentHandler extends AbstractHandler {
 
         if( documentRequest.getDisplayProblems() ) {
 
-          final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
-          final String originalTarget = documentRequest.getOriginalTarget();
-          problemPrinter.printProblems(
+          if( rendered.hasProblem() ) {
+            renderProblemsAsRequested( documentRequest, rendered, outputStream );
+          } else {
+            redirectToOriginalTarget( documentRequest, response );
+          }
+
+        } else if( rendered.hasProblem() ) {
+          redirectToProblemPage( documentRequest, response );
+        } else {
+
+          response.setStatus( HttpServletResponse.SC_OK ) ;
+          documentProducer.produce( documentRequest, rendered, outputStream ) ;
+          response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
+          LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+
+        }
+      }
+
+      setAsHandled( request ) ;
+    }
+  }
+
+  private void redirectToProblemPage( PolymorphicRequest documentRequest, HttpServletResponse response ) throws IOException {
+    final String redirectionTarget =
+        documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX;
+    response.sendRedirect( redirectionTarget ) ;
+    response.setStatus( HttpServletResponse.SC_FOUND ) ;
+    LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+  }
+
+  private void redirectToOriginalTarget( PolymorphicRequest documentRequest, HttpServletResponse response ) throws IOException {
+    final String redirectionTarget = documentRequest.getOriginalTarget() ;
+    response.sendRedirect( redirectionTarget ) ;
+    response.setStatus( HttpServletResponse.SC_FOUND ) ;
+    response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
+    LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+  }
+
+  private void renderProblemsAsRequested( PolymorphicRequest documentRequest, Renderable rendered, ServletOutputStream outputStream ) throws IOException {
+    final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
+    final String originalTarget = documentRequest.getOriginalTarget();
+    problemPrinter.printProblems(
               outputStream,
               rendered.getProblems(),
               originalTarget
           ) ;
-          setAsHandled( request ) ;
-          // TODO redirect to document page if renderable has no problem.
-          LOGGER.debug( "Served error request '{}'", originalTarget ) ;
-
-        } else if( rendered.hasProblem() ) {
-
-          final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
-          final String redirectionTarget =
-              documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX;
-          response.sendRedirect( redirectionTarget ) ;
-          response.setStatus( HttpServletResponse.SC_FOUND ) ;
-          problemPrinter.printProblems(
-              outputStream, rendered.getProblems(), request.getQueryString() ) ;
-          response.setContentType( problemPrinter.getMimeType().getMimeName() ) ;
-          setAsHandled( request ) ;
-          LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
-
-        } else {
-
-          response.setStatus( HttpServletResponse.SC_OK ) ;
-
-          documentProducer.produce( documentRequest, rendered, outputStream ) ;
-          response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
-          setAsHandled( request ) ;
-          LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
-
-        }
-      } // Don't handle the non-rendered case, this is left to other handlers.
-
-    }
+    LOGGER.debug( "Served error request '{}'", originalTarget ) ;
   }
 
   private void setAsHandled( HttpServletRequest request ) {

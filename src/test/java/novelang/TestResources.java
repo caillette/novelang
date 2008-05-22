@@ -48,5 +48,8 @@ public class TestResources {
   public static final String SERVED_GOOD_NOEXTENSION = "/served/good";
   public static final String SERVED_GOOD = SERVED_GOOD_NOEXTENSION + ".nlp" ;
 
+  public static final String SERVED_BROKEN_NOEXTENSION = "/served/broken";
+  public static final String SERVED_BROKEN = SERVED_BROKEN_NOEXTENSION + ".nlp" ;
+
 
 }

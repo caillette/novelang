@@ -13,6 +13,10 @@
     <level value="WARN" />
   </logger>
 
+  <logger name="httpclient" >
+    <level value="INFO" />
+  </logger>
+
   <logger name="FOP" >
     <level value="WARN" />
   </logger>
