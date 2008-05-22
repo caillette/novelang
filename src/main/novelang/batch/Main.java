@@ -135,6 +135,9 @@ public class Main {
       DocumentProducer documentProducer
   ) throws IOException {
     final DocumentRequest documentRequest = RequestTools.createDocumentRequest( unparsedRequest ) ;
+    if( null == documentRequest ) {
+      throw new IllegalArgumentException( "Could not parse: '" + unparsedRequest + "'" ) ;
+    }
     final File outputFile = createOutputFile(
         targetDirectory,
         documentRequest
