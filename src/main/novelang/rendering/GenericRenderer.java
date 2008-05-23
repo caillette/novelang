@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 import com.google.common.base.Objects;
 import novelang.model.common.MetadataHelper;
 import novelang.model.common.NodeKind;
-import novelang.model.common.NodePath;
+import novelang.model.common.Nodepath;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
 import novelang.model.renderable.Renderable;
@@ -78,13 +78,13 @@ public class GenericRenderer implements Renderer {
 
   private void renderTree(
       Tree tree,
-      NodePath kinship,
+      Nodepath kinship,
       NodeKind previous
   ) throws Exception {
 
     final NodeKind nodeKind = NodeKind.ofRoot( tree ) ;
-    final NodePath newPath = (
-        null == kinship ? new NodePath( nodeKind ) : new NodePath( kinship, nodeKind ) ) ;
+    final Nodepath newPath = (
+        null == kinship ? new Nodepath( nodeKind ) : new Nodepath( kinship, nodeKind ) ) ;
     boolean rootElement = false ;
 
     switch( nodeKind ) {
@@ -135,7 +135,7 @@ public class GenericRenderer implements Renderer {
   }
 
   private void maybeWriteWhitespace(
-      NodePath path,
+      Nodepath path,
       NodeKind previous,
       NodeKind nodeKind
   ) throws Exception {

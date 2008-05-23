@@ -26,7 +26,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
-import novelang.model.common.NodePath;
+import novelang.model.common.Nodepath;
 import novelang.model.common.TreeMetadata;
 
 /**
@@ -61,7 +61,7 @@ public class XmlWriter implements FragmentWriter {
     }
   }
 
-  public void start( NodePath kinship, boolean wholeDocument ) throws Exception {
+  public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
     final String tokenName = tokenNameAsXmlElementName( kinship.getCurrent().name() ) ;
     final Attributes attributes ;
     if( wholeDocument ) { // Declare the namespace.
@@ -86,16 +86,16 @@ public class XmlWriter implements FragmentWriter {
 
   }
 
-  public void end( NodePath kinship ) throws Exception {
+  public void end( Nodepath kinship ) throws Exception {
     final String tokenName = tokenNameAsXmlElementName( kinship.getCurrent().name() ) ;
     contentHandler.endElement( NAMESPACE_URI, tokenName, NAME_QUALIFIER + ":" + tokenName ) ;
   }
 
-  public void write( NodePath kinship, String word ) throws Exception {
+  public void write( Nodepath kinship, String word ) throws Exception {
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
   }
 
-  public void writeLitteral( NodePath kinship, String word ) throws Exception {
+  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
     ( ( LexicalHandler ) contentHandler ).startCDATA() ;
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
     ( ( LexicalHandler ) contentHandler ).endCDATA() ;

@@ -18,7 +18,7 @@
 package novelang.model.common;
 
 /**
- * Narrows the contract over an Abstract Syntax Tree.
+ * Narrows the contract of an Abstract Syntax Tree.
  * This class doesn't mean to provide a true separation from ANTLR's logic because
  * if we use another parser (that's not planned) the AST may look quite different.
  *

@@ -20,7 +20,7 @@ package novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import novelang.model.common.NodePath;
+import novelang.model.common.Nodepath;
 import novelang.model.common.TreeMetadata;
 
 /**
@@ -36,14 +36,14 @@ public interface FragmentWriter {
   
   void finishWriting() throws Exception ;
 
-  void start( NodePath kinship, boolean wholeDocument ) throws Exception ;
-  void end( NodePath kinship ) throws Exception ;
-  void write( NodePath kinship, String word ) throws Exception ;
+  void start( Nodepath kinship, boolean wholeDocument ) throws Exception ;
+  void end( Nodepath kinship ) throws Exception ;
+  void write( Nodepath kinship, String word ) throws Exception ;
 
   /**
-   * Same as {@link #write(novelang.model.common.NodePath, String)} but without escaping.
+   * Same as {@link #write(novelang.model.common.Nodepath , String)} but without escaping.
    */
-  void writeLitteral( NodePath kinship, String word ) throws Exception ;
+  void writeLitteral( Nodepath kinship, String word ) throws Exception ;
 
   RenditionMimeType getMimeType() ;
 

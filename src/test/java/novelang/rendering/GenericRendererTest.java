@@ -28,7 +28,7 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 import novelang.model.common.MetadataHelper;
 import static novelang.model.common.NodeKind.*;
-import novelang.model.common.NodePath;
+import novelang.model.common.Nodepath;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
 import novelang.model.common.TreeMetadata;
@@ -122,19 +122,19 @@ public class GenericRendererTest {
       writer.flush() ;
     }
 
-    public void start( NodePath kinship, boolean wholeDocument ) throws Exception {
+    public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
       writer.append( kinship.getCurrent().name() ).append( "(" ) ;
     }
 
-    public void end( NodePath kinship ) throws Exception {
+    public void end( Nodepath kinship ) throws Exception {
       writer.append( ")" ) ;
     }
 
-    public void write( NodePath kinship, String word ) throws Exception {
+    public void write( Nodepath kinship, String word ) throws Exception {
       writer.append( word ) ;
     }
 
-    public void writeLitteral( NodePath kinship, String word ) throws Exception {
+    public void writeLitteral( Nodepath kinship, String word ) throws Exception {
       write( kinship, word ) ;
     }
 

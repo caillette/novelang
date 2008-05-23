@@ -116,33 +116,39 @@ private int interpolatedClauseDepth = 0 ;
 
 part 
   : ( mediumBreak | largeBreak )?
-    (   ( section ( largeBreak section )* ) 
-      | ( chapter ( largeBreak chapter )* )
+    (   p += chapter 
+      | p += section 
+      | p += paragraph 
+      | p += blockQuote 
+      | p += litteral
     )
+    ( largeBreak (
+        p += chapter 
+      | p += section 
+      | p += paragraph 
+      | p += blockQuote 
+      | p += litteral
+    ) )*      
     ( mediumBreak | largeBreak )?
     EOF 
-    -> ^( PART section* chapter* )
+    -> ^( PART $p+ )
   ;
   
 chapter 
   : chapterIntroducer 
     ( smallBreak? ( title | identifier ) )?
-    ( largeBreak section )+ 
     -> ^( CHAPTER
            title?
            identifier?
-           section*
         )
   ;	  
 	
 section 
   : sectionIntroducer 
     ( smallBreak? ( title | identifier ) )?
-    ( largeBreak ( p += paragraph | p += blockQuote | p += litteral) )+ 
     -> ^( SECTION 
            title?
            identifier?
-           $p+ // Keep order.
         )
   ;
     
@@ -232,18 +238,18 @@ url
   | ( file = httpUrl -> ^( URL { delegate.createTree( URL, $file.text ) } )	) 
   ;
   
-fileUrl
+fileUrl                                       // Grammatical ambiguity in the spec
   : ( 'f' 'i' 'l' 'e' COLON SOLIDUS SOLIDUS ) => 'f' 'i' 'l' 'e' COLON SOLIDUS SOLIDUS 
-   ( urlHost ) // Change from spec: don't handle 'localhost' in this rule.
-   SOLIDUS 
-   urlFilePath
+    ( urlHost ) // Change from spec: don't handle 'localhost' in this rule.
+    SOLIDUS 
+    urlFilePath
   ;
   
-httpUrl
+httpUrl                                       // Grammatical ambiguity in the spec
   : ( 'h' 't' 't' 'p' COLON SOLIDUS SOLIDUS ) => 'h' 't' 't' 'p' COLON SOLIDUS SOLIDUS 
-  urlHostPort 
+    urlHostPort 
     ( SOLIDUS httpUrlPath 
-    ( QUESTION_MARK httpUrlSearch )? 
+      ( QUESTION_MARK httpUrlSearch )? 
     )?
   ;
 
@@ -330,7 +336,7 @@ urlFileSegment
   
 httpUrlPath
   : httpUrlSegment 
-    ( ( SOLIDUS httpUrlPath ) => SOLIDUS httpUrlPath )*
+    ( ( SOLIDUS httpUrlPath ) => SOLIDUS httpUrlPath )* // Grammatical ambiguity in the spec again!
   ;
   
 httpUrlSegment
@@ -341,7 +347,7 @@ httpUrlSegment
       | AMPERSAND
       | EQUALS_SIGN
       | TILDE          // Not in the spec.
-      | NUMBER_SIGN   // Not in the spec.
+      | NUMBER_SIGN    // Not in the spec.
     )*
   ;  
   
@@ -842,10 +848,6 @@ CLOSING_BLOCKQUOTE : '>>' ;
 OPENING_LITTERAL : '<<<' ;
 CLOSING_LITTERAL : '>>>' ;
 LOCUTOR_INTRODUCER : '::' ;
-PARAGRAPH_REFERENCES_INTRODUCER : '<=' ;
-
-AUTOGENERATE_DIRECTIVE : ':autogenerate' ;
-STYLE_DIRECTIVE : ':style' ;
 
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g

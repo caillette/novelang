@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
-import novelang.model.common.NodePath;
+import novelang.model.common.Nodepath;
 import novelang.model.common.TreeMetadata;
 
 /**
@@ -50,22 +50,22 @@ public class PlainTextWriter implements FragmentWriter {
     writer.flush() ;
   }
 
-  public void start( NodePath kinship, boolean wholeDocument ) throws Exception {
+  public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
     final String indentPlus = spaces( kinship.getDepth() + 1 ) ;
     writer.append( kinship.getCurrent().name() ).append( " { \n" ).append( indentPlus ) ;
   }
 
-  public void end( NodePath path ) throws Exception {
+  public void end( Nodepath path ) throws Exception {
     final String indent = spaces( path.getDepth() ) ;
     final String indentMinus = spaces( path.getDepth() - 1 ) ;
     writer.append( "\n" ).append( indent ).append( "}\n" ).append( indentMinus ) ;
   }
 
-  public void write( NodePath path, String word ) throws Exception {
+  public void write( Nodepath path, String word ) throws Exception {
     writer.append( word ) ;
   }
 
-  public void writeLitteral( NodePath kinship, String word ) throws Exception {
+  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
     write( kinship, word ) ;
   }
 

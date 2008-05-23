@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
-import novelang.model.common.NodePath;
+import novelang.model.common.Nodepath;
 import novelang.model.common.TreeMetadata;
 import novelang.parser.Symbols;
 
@@ -37,7 +37,7 @@ public class HtmlWriter extends XslWriter {
     super( configuration, DEFAULT_HTML_STYLESHEET, RenditionMimeType.HTML ) ;
   }
 
-  public void write( NodePath kinship, String word ) throws Exception {
+  public void write( Nodepath kinship, String word ) throws Exception {
     final StringBuffer reconstructed = new StringBuffer() ;
     for( char c : word.toCharArray() ) {
       final String s = "" + c ; // Let the compiler optimize this!
