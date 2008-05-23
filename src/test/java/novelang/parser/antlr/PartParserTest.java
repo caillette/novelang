@@ -409,38 +409,29 @@ public class PartParserTest {
   }
 
   @Test
-  public void sectionHasIdentifierAndOneParagraphWithTwoWordsAndAPeriod()
+  public void sectionHasIdentifier()
       throws RecognitionException
   {
     section(
-        "=== s00" + BREAK +
-        BREAK +
-        "p10 w11.",
+        "=== s00" ,
         tree(
             SECTION,
-            tree( IDENTIFIER, tree( WORD, "s00") ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w11" ),
-            tree( PUNCTUATION_SIGN, SIGN_FULLSTOP )
-     ) ) ) ;
-  }
-
-  @Test
-  public void sectionIsAnonymousWithOneParagraphWithOneWord() throws RecognitionException {
-    section(
-        "===" + BREAK +
-        BREAK +
-        "p0",
-        tree(
-            SECTION,
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p0" )
+            tree( IDENTIFIER, tree( WORD, "s00") )
         )
-     ) ) ;
+    ) ;
   }
 
   @Test
-  public void sectionIsAnonymousWithSeveralMultilineParagraphs() throws RecognitionException {
+  public void sectionIsAnonymous() throws RecognitionException {
     section(
-        "===" + BREAK +
+        "===",
+        tree( SECTION )
+    ) ;
+  }
+
+  @Test
+  public void partWithSeveralMultilineParagraphs() throws RecognitionException {
+    part(
         BREAK +
         "p0 w01" + BREAK +
         "w02" + BREAK +
@@ -448,16 +439,16 @@ public class PartParserTest {
         "p1 w11" + BREAK +
         "w12",
         tree(
-            SECTION,
+            PART,
             tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ), tree( WORD, "w01" ), tree( WORD, "w02" ) ),
             tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" )
      ) ) ) ;
   }
 
   @Test
-  public void sectionIsAnonymousAndHasTrailingSpacesEverywhere() throws RecognitionException {
-    section(
-        "===  " + BREAK +
+  public void partHasTrailingSpacesEverywhere() throws RecognitionException {
+    part(
+        BREAK +
         "  " + BREAK +
         " p0 w01  " + BREAK +
         "w02 " + BREAK +
@@ -465,35 +456,38 @@ public class PartParserTest {
         "p1 w11  " + BREAK +
         " w12 ",
         tree(
-            SECTION,
+            PART,
             tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ), tree( WORD, "w01" ), tree( WORD, "w02" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" )
-     ) ) ) ;
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" ) )
+        )
+    ) ;
   }
 
   @Test
   public void sectionIsAnonymousAndHasLitteral() throws RecognitionException {
-    section(
-      "===" + BREAK +
+    part(
       BREAK +
       "<<<" + BREAK +
       "  Here is some " + BREAK +
       "  //Litteral// " + BREAK +
       ">>>",
-      tree( SECTION,
+      tree( PART,
           tree( LITTERAL, "  Here is some " + BREAK + "  //Litteral// " )
       )
     ) ;
   }
 
   @Test
-  public void sectionIsAnonymousAndHasBlockquoteWithSingleParagraph() throws RecognitionException {
-    section(
+  public void partHasAnonymousSectionAndHasBlockquoteWithSingleParagraph() 
+      throws RecognitionException
+  {
+    part(
       "===" + BREAK +
       BREAK +
       "<< w0 w1" + BREAK +
       ">>",
-      tree( SECTION,
+      tree( PART,
+          tree( SECTION ),
           tree(
               BLOCKQUOTE,
               tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ), tree( WORD, "w1" ) )
@@ -503,8 +497,10 @@ public class PartParserTest {
   }
 
   @Test
-  public void sectionIsParagraphThenBlockquoteThenParagraph() throws RecognitionException {
-    section(
+  public void partIsSectionThenParagraphThenBlockquoteThenParagraph() 
+      throws RecognitionException
+  {
+    part(
       "===" + BREAK +
       BREAK +
       "p0" + BREAK +
@@ -513,7 +509,8 @@ public class PartParserTest {
       ">>" + BREAK +
       BREAK +
       "p1",
-      tree( SECTION,
+      tree( PART,
+          tree( SECTION ),
           tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) ),
           tree( BLOCKQUOTE, tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ) ) ),
           tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ) )
@@ -522,15 +519,18 @@ public class PartParserTest {
   }
 
   @Test
-  public void sectionIsAnonymousAndHasBlockquoteWithTwoParagraphs() throws RecognitionException {
-    section(
+  public void sectionIsAnonymousAndHasBlockquoteWithTwoParagraphs() 
+      throws RecognitionException
+  {
+    part(
       "===" + BREAK +
       BREAK +
       "<< w0 w1" + BREAK +
       BREAK +
       "w2" + BREAK +
       ">>",
-      tree( SECTION,
+      tree( PART,
+          tree( SECTION ),
           tree(
               BLOCKQUOTE,
               tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ), tree( WORD, "w1" ) ),
@@ -542,7 +542,7 @@ public class PartParserTest {
 
   @Test
   public void sectionIsAnonymousAndHasBlockquoteWithBreakInside() throws RecognitionException {
-    section(
+    part(
         "===" + BREAK +
         BREAK +
         "<< w0 w1" + BREAK +
@@ -826,13 +826,13 @@ public class PartParserTest {
           PART,
           tree(
               CHAPTER,
-              tree( IDENTIFIER, tree(WORD, "c0" ) ),
-              tree(
-                  SECTION,
-                  tree( IDENTIFIER, tree( WORD, "s0" ) ),
-                  tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) )
-              )
-          )
+              tree( IDENTIFIER, tree(WORD, "c0" ) )
+          ),
+          tree(
+              SECTION,
+              tree( IDENTIFIER, tree( WORD, "s0" ) )
+          ),
+          tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) )
         )
     ) ;
   }
@@ -849,16 +849,11 @@ public class PartParserTest {
         "===" + BREAK +
         BREAK +
         "p1",
-        tree(
-            PART,
-            tree(
-                SECTION,
-                tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) )
-            ),
-            tree(
-                SECTION,
-                tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ) )
-            )
+        tree( PART,
+            tree( SECTION ),
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) ),
+            tree( SECTION ),
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ) )
         )
     ) ;
   }
