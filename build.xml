@@ -46,7 +46,7 @@
 
     <property file="build.properties" />
 
-    <echo>novelang.style.dir = ${novelang.style.dir}</echo>
+    <!--<echo>novelang.style.dir = ${novelang.style.dir}</echo>-->
 
     <patternset id="resource-patterns" >
       <include name="**/*.properties" />
@@ -245,7 +245,7 @@
       </classpath>
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
       <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
-      <jvmarg value="-Dnovelang.styles.dir=${novelang.style.dir}" />
+      <!--<jvmarg value="-Dnovelang.styles.dir=${novelang.style.dir}" />-->
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Xmx512M" />
     </java>

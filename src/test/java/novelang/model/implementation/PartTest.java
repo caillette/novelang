@@ -44,18 +44,10 @@ public class PartTest {
     final Tree partTree = part.getTree();
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,  
-        tree( SECTION,
-            tree( IDENTIFIER, tree( WORD, "Section1nlp" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
-        ),
-        tree( SECTION,
-            tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
-            tree( PARAGRAPH_PLAIN,
-                tree( WORD, "p10" ),
-                tree( WORD, "w101" ),
-                tree( WORD, "w102" )
-            )
-        )
+        tree( SECTION, tree( IDENTIFIER, tree( WORD, "Section1nlp" ) ) ),
+        tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) ),
+        tree( SECTION, tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ) ),
+        tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
     ) ;
     TreeHelper.assertEquals( expected, partTree ) ;
 
