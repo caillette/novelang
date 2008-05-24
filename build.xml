@@ -246,6 +246,7 @@
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
       <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
       <!--<jvmarg value="-Dnovelang.styles.dir=${novelang.style.dir}" />-->
+      <jvmarg value="-Dnovelang.log.dir=${user.dir}" />
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Xmx512M" />
     </java>

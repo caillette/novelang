@@ -44,24 +44,26 @@ import novelang.rendering.HtmlProblemPrinter;
  */
 public class Main {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
-  private static final String PROBLEMS_FILENAME = "problems.html";
-
   /**
    * Set the {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property and use it
    * in Logback configuration to log in another place than current directory.
    */
   public static final String LOG_DIR_SYSTEMPROPERTYNAME = "novelang.log.dir" ;
 
+  static {
+    System.out.println( "System property " +
+        LOG_DIR_SYSTEMPROPERTYNAME + "='" +
+        System.getProperty( LOG_DIR_SYSTEMPROPERTYNAME )
+    ) ;
+  }
+  
+  private static Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
+  private static final String PROBLEMS_FILENAME = "problems.html";
+
   public static void main( String[] args ) throws Exception {
 
     LOGGER.debug( "Starting {} with arguments {}",
         ClassUtils.getShortClassName( Main.class ), asString( args ) ) ;
-    LOGGER.debug( "System property {}='{}'.",
-        LOG_DIR_SYSTEMPROPERTYNAME,
-        System.getProperty( LOG_DIR_SYSTEMPROPERTYNAME )
-    ) ;
-
     try {
       final BatchParameters parameters = BatchParameters.parse( args ) ;
       final File targetDirectory = parameters.getTargetDirectory() ;
