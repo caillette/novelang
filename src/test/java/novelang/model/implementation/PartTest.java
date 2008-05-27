@@ -40,7 +40,7 @@ public class PartTest {
 
   @Test
   public void loadPartOk() throws IOException {
-    final Part part = new Part( sections1File ) ;
+    final Part part = new Part( justSections ) ;
     final Tree partTree = part.getTree();
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,  
@@ -49,29 +49,87 @@ public class PartTest {
         tree( SECTION, tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ) ),
         tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
     ) ;
-    TreeHelper.assertEquals( expected, partTree ) ;
 
+    TreeHelper.assertEquals( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
 
   @Test
+  public void loadSimpleStructure() throws IOException {
+    final Part part = new Part( simpleStructureFile ) ;
+    final Tree partTree = part.getTree();
+    Assert.assertNotNull( partTree ) ;
+    final Tree expected = tree( PART,
+        tree( CHAPTER,
+            tree( IDENTIFIER, tree( WORD, "Chapter-0" ) ),
+            tree( SECTION,
+                tree( IDENTIFIER, tree( WORD, "Section-0-0" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-0" ) )
+            ),
+            tree( SECTION,
+                tree( IDENTIFIER, tree( WORD, "Section-0-1" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-1-0" ) )
+            )
+        ),
+        tree( CHAPTER,
+            tree( IDENTIFIER, tree( WORD, "Chapter-0" ) ),
+            tree( SECTION,
+                tree( IDENTIFIER, tree( WORD, "Section-0-0" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-0" ) )
+            ),
+            tree( SECTION,
+                tree( IDENTIFIER, tree( WORD, "Section-0-1" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-1-0" ) )
+            )
+        )
+    ) ;
+
+    TreeHelper.assertEquals( expected, partTree ) ;
+    Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+
+  }
+
+  @Test
+  public void loadMessyIdentifiers() throws IOException {
+    final Part part = new Part( messyIdentifiersFile ) ;
+    part.getIdentifiers() ;    
+  }
+
+  @Test
   public void findIdentifiersOk() throws IOException {
-    final Part part = new Part( sections1File ) ;
+    final Part part = new Part( justSections ) ;
     part.getIdentifiers() ;
   }
 
-  private File book1Directory ;
-  private File sections1File;
+  private File justSections;
+  private File messyIdentifiersFile ;
+  private File simpleStructureFile ;
 
   @Before
   public void setUp() throws IOException {
     final String testName = ClassUtils.getShortClassName( getClass() );
-    final ScratchDirectoryFixture scratchDirectoryFixture =
-        new ScratchDirectoryFixture( testName ) ;
-    book1Directory = scratchDirectoryFixture.getBook1Directory() ;
+    final File scratchDirectory = new ScratchDirectoryFixture( testName ).
+        getTestScratchDirectory() ;
 
-    TestResourceTools.copyResourceToFile( getClass(), TestResources.SECTIONS_1, book1Directory ) ;
-    sections1File = new File( book1Directory, TestResources.SECTIONS_1 ) ;
+    justSections = TestResourceTools.copyResourceToFile(
+        getClass(),
+        TestResources.JUST_SECTIONS,
+        scratchDirectory
+    ) ;
+
+
+    messyIdentifiersFile = TestResourceTools.copyResourceToFile(
+        getClass(),
+        TestResources.MESSY_IDENTIFIERS,
+        scratchDirectory
+    ) ;
+
+    simpleStructureFile = TestResourceTools.copyResourceToFile(
+        getClass(),
+        TestResources.SIMPLE_STRUCTURE,
+        scratchDirectory
+    ) ;
+
   }
 
 }

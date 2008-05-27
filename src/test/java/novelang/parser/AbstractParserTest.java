@@ -81,7 +81,7 @@ public abstract class AbstractParserTest< P extends GenericParser > {
 
   @Test
   public void readResourceOk() throws IOException {
-    final String resource = readResource( TestResources.SECTIONS_1 ) ;
+    final String resource = readResource( TestResources.JUST_SECTIONS ) ;
     Assert.assertFalse( "".equals( resource ) );
   }
 

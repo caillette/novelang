@@ -38,8 +38,8 @@ public class TreepathTest {
     final Treepath treepath = Treepath.create( tree ) ;
 
     Assert.assertEquals( 1, treepath.getHeight() ) ;
-    assertSame( tree, treepath.getStart() ) ;
-    assertSame( tree, treepath.getEnd() ) ;
+    assertSame( tree, treepath.getTop() ) ;
+    assertSame( tree, treepath.getBottom() ) ;
     assertSame( tree, treepath.getTreeAtHeight( 0 ) ) ;
   }
 
@@ -62,8 +62,8 @@ public class TreepathTest {
     Assert.assertEquals( 2, treepath.getHeight() ) ;
     assertSame( parent, treepath.getTreeAtHeight( 1 ) ) ;
     assertSame( child, treepath.getTreeAtHeight( 0 )) ;
-    assertSame( parent, treepath.getStart() ) ;
-    assertSame( child, treepath.getEnd() ) ;
+    assertSame( parent, treepath.getTop() ) ;
+    assertSame( child, treepath.getBottom() ) ;
   }
 
   @Test
@@ -80,8 +80,8 @@ public class TreepathTest {
     print("Found: ", findResult ) ;
 
     Assert.assertEquals( 3, findResult.getHeight() ) ;
-    assertSame( grandParent, findResult.getEnd() ) ;
-    assertSame( child, findResult.getStart() ) ;
+    assertSame( grandParent, findResult.getBottom() ) ;
+    assertSame( child, findResult.getTop() ) ;
 
     // Warning: inverted path!
     assertSame( grandParent, findResult.getTreeAtHeight( 0 ) ) ;
@@ -101,8 +101,8 @@ public class TreepathTest {
     print("Treepath: ", treepath ) ;
 
     Assert.assertEquals( 3, treepath.getHeight() ) ;
-    assertSame( parent, treepath.getStart() ) ;
-    assertSame( grandChild, treepath.getEnd() ) ;
+    assertSame( parent, treepath.getTop() ) ;
+    assertSame( grandChild, treepath.getBottom() ) ;
     assertSame( parent, treepath.getTreeAtHeight( 2 ) ) ;
     assertSame( child, treepath.getTreeAtHeight( 1 ) ) ;
     assertSame( grandChild, treepath.getTreeAtHeight( 0 ) ) ;
@@ -126,8 +126,8 @@ public class TreepathTest {
     assertSame( parent, inverted.getTreeAtHeight( 0 ) ) ;
     assertSame( child, inverted.getTreeAtHeight( 1 ) ) ;
     assertSame( grandChild, inverted.getTreeAtHeight( 2 ) ) ;
-    assertSame( grandChild, inverted.getStart() ) ;
-    assertSame( parent, inverted.getEnd() ) ;
+    assertSame( grandChild, inverted.getTop() ) ;
+    assertSame( parent, inverted.getBottom() ) ;
   }
 
 // =======

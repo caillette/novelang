@@ -21,30 +21,30 @@ import com.google.common.base.Objects;
 /**
  * Represents where a {@link Tree} lies inside a bigger owning {@link Tree}.
  * <p>
- * The root is called the "start" and the n<sup>th</sup> child is called "end".
+ * The root is called the "top" and the n<sup>th</sup> child is called "bottom".
  *
  * @author Laurent Caillette
  */
 public final class Treepath {
 
   private final Treepath parent ;
-  private final Tree end ;
+  private final Tree bottom;
 
-  protected Treepath( Treepath parent, Tree end ) {
+  protected Treepath( Treepath parent, Tree bottom ) {
     this.parent = parent ;
-    this.end = Objects.nonNull( end ) ;
+    this.bottom = Objects.nonNull( bottom ) ;
   }
 
-  public Tree getStart() {
+  public Tree getTop() {
     if( null == parent ) {
-      return end ;
+      return bottom;
     } else {
-      return parent.getStart() ;
+      return parent.getTop() ;
     }
   }
 
-  public Tree getEnd() {
-    return end ;
+  public Tree getBottom() {
+    return bottom;
   }
 
   public int getHeight() {
@@ -74,7 +74,7 @@ public final class Treepath {
       throw new IllegalPathHeightException( height ) ;
     }
     if( 0 == height ) {
-      return end ;
+      return bottom;
     } else {
       if( null == parent ) {
         throw new IllegalPathHeightException( height ) ;
@@ -115,7 +115,7 @@ public final class Treepath {
   }
 
   protected static Treepath invert( Treepath treepath ) {
-    Treepath result = create( treepath.getEnd() ) ;
+    Treepath result = create( treepath.getBottom() ) ;
     for( int height = 1 ; height < treepath.getHeight() ; height++ ) {
       result = create( result, treepath.getTreeAtHeight( height ) ) ;
     }
@@ -137,16 +137,16 @@ public final class Treepath {
    * (there is no shared {@code Tree}) object). Expect unwanted results otherwise.
    * </em>
    *
-   * @param start a non-null object.
-   * @param end a non-null object, must be {@code start} or one of its (possibly indirect)
+   * @param top a non-null object.
+   * @param bottom a non-null object, must be {@code start} or one of its (possibly indirect)
    *     children.
    * @return a non-null object.
    */
-  public static Treepath create( Tree start, Tree end ) throws IllegalArgumentException {
-    final Treepath inverted = find( start, end ) ;
+  public static Treepath create( Tree top, Tree bottom ) throws IllegalArgumentException {
+    final Treepath inverted = find( top, bottom ) ;
     if( null == inverted ) {
       throw new IllegalArgumentException(
-          "Could not locate tree: " + start + " doesn't contain " + end ) ;
+          "Could not locate tree: " + top + " doesn't contain " + bottom ) ;
     }
     return invert( inverted ) ;
   }

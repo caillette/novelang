@@ -39,21 +39,46 @@ public class TreeTools {
   }
 
   /**
-   * Returns the sibling on the right of the end of given {@link Treepath}.
+   * Returns the sibling on the left of the end of given {@link Treepath}.
    * <pre>
-   * *t0               *t0'
+   * *t0               *t0
    *  |  \              |  \
-   * *t1  t2    -->    t1' *t2
+   * t1  *t2    -->    *t1  t2
    * </pre>
    * @param treepath non-null object with minimum height of 2.
    * @return non-null if sibling was found, null otherwise.
    */
-  public static Treepath getSiblingAtRight( Treepath treepath ) {
-    throw new UnsupportedOperationException( "getSiblingAtRight" ) ;
+  public static Treepath getPreviousSibling( Treepath treepath ) {
+    if( treepath.getHeight() < 2 ) {
+      throw new IllegalArgumentException( "Treepath must have minimum height of 2" ) ;
+    }
+    final Tree treeToMove = treepath.getBottom() ;
+    final Tree parent = treepath.getTreeAtHeight( 1 ) ;
+    for( int i = parent.getChildCount() - 1 ; i > 0 ; i-- ) {
+      final Tree child = parent.getChildAt( i ) ;
+      if( child == treeToMove ) {
+        return Treepath.create( treepath.getParent(), parent.getChildAt( i - 1 ) ) ;
+      }
+    }
+    return null ;
   }
 
   /**
    * Returns the sibling on the right of the end of given {@link Treepath}.
+   * <pre>
+   * *t0               *t0
+   *  |  \              |  \
+   * *t1  t2    -->    t1  *t2
+   * </pre>
+   * @param treepath non-null object with minimum height of 2.
+   * @return non-null if sibling was found, null otherwise.
+   */
+  public static Treepath getNextSibling( Treepath treepath ) {
+    throw new UnsupportedOperationException( "getNextSibling" ) ;
+  }
+
+  /**
+   * Adds a sibling on the right of bottom of given {@link Treepath}.
    * <pre>
    * *t0          *t0'
    *  |            |  \
@@ -66,12 +91,52 @@ public class TreeTools {
    *
    */
   public static Treepath addSiblingAtRight( Treepath treepath, Tree tree ) {
-    throw new UnsupportedOperationException( "addSibling" ) ;
+    if( treepath.getHeight() < 2 ) {
+      throw new IllegalArgumentException( "Minimum height is 2, got " + treepath.getHeight() ) ;
+    }
+    final Tree oldParent = treepath.getTreeAtHeight( 1 ) ;
+    final MutableTree newparent = new DefaultMutableTree( oldParent.getText() ) ;
+    for( int i = 0 ; i < oldParent.getChildCount() ; i++ ) {
+      newparent.addChild( oldParent.getChildAt( i ) ) ;
+    }
+    newparent.addChild( tree ) ;
+    return Treepath.create(
+        updateBottom( treepath.getParent(), newparent ),
+        treepath.getBottom()
+    ) ;
+  }
+
+  /**
+   * Adds a child on the right of bottom of given {@link Treepath}.
+   * <pre>
+   * *t0            *t0'
+   *  |              |
+   * *t1    -->     *t1'
+   *                 |
+   *                new
+   * </pre>
+   *
+   * @param treepath non-null object.
+   * @param tree non-null object.
+   * @return non-null {@code Treepath} with the same end but with updated parents.
+   *
+   */
+  public static Treepath addChildAtRight( Treepath treepath, Tree tree ) {
+    if( treepath.getHeight() < 1 ) {
+      throw new IllegalArgumentException( "Minimum height is 1, got " + treepath.getHeight() ) ;
+    }
+    final Tree oldParent = treepath.getBottom() ;
+    final MutableTree newparent = new DefaultMutableTree( oldParent.getText() ) ;
+    for( int i = 0 ; i < oldParent.getChildCount() ; i++ ) {
+      newparent.addChild( oldParent.getChildAt( i ) ) ;
+    }
+    newparent.addChild( tree ) ;
+    return updateBottom( treepath, newparent ) ;
   }
 
   /**
    * Returns a {@link Treepath} corresponding to a change of a childhood at the
-   * end of the given {@link Treepath}.
+   * bottom of the given {@link Treepath}.
    * <pre>
    * *t0          *t0'
    *  |            |
@@ -85,14 +150,14 @@ public class TreeTools {
    * @return non-null {@code Treepath} with the same end but with updated parents.
    *
    */
-  public static Treepath reparent( Treepath treepath, Tree newTree ) {
+  public static Treepath updateBottom( Treepath treepath, Tree newTree ) {
     if( null == treepath.getParent() ) {
       return Treepath.create( newTree ) ;
     } else {
       final Treepath parentTreepath = treepath.getParent() ;
-      final Tree oldParent = parentTreepath.getEnd() ;
-      final Tree newParent = reparent( oldParent, treepath.getEnd(), newTree ) ;
-      return Treepath.create( reparent( parentTreepath, newParent ), newTree ) ;
+      final Tree newParent = reparent(
+          parentTreepath.getBottom(), treepath.getBottom(), newTree ) ;
+      return Treepath.create( updateBottom( parentTreepath, newParent ), newTree ) ;
     }
   }
 
@@ -134,8 +199,53 @@ public class TreeTools {
    * @param treepath non-null, minimum depth of 2.
    * @return non-null object.
    */
-  public static Nodepath liftUpRight( Treepath treepath ) {
+  public static Treepath liftUpRight( Treepath treepath ) {
     throw new UnsupportedOperationException( "liftUpRight" ) ;
+  }
+
+  public static Treepath removeBottom( Treepath treepath ) {
+    if( treepath.getHeight() < 2 ) {
+      throw new IllegalArgumentException( "Treepath height must be 2 or more" ) ;
+    }
+    final Tree removed = treepath.getBottom() ;
+    final Tree parentOfRemoved = treepath.getTreeAtHeight( 1 ) ;
+    final MutableTree newTree = new DefaultMutableTree( parentOfRemoved.getText() ) ;
+    for( int i = 0 ; i < parentOfRemoved.getChildCount() ; i++ ) {
+      final Tree child = parentOfRemoved.getChildAt( i ) ;
+      if( child != removed ) {
+        newTree.addChild( child ) ;
+      }
+    }
+    return updateBottom( treepath.getParent(), newTree ) ;
+  }
+
+
+  /**
+   * Removes a {@code Tree} from its direct parent, and adds it as child of its
+   * former previous sibling.
+   * <pre>
+   * *t0              *t0'
+   *  |  \             |
+   * t1  *t2    -->   *t1'
+   *                   |
+   *                  *t2
+   * </pre>
+   *
+   * @param targetTreepath non-null, minimum depth of 2.
+   * @return non-null object representing path to moved {@code Tree} or null
+   *     if there was no left sibling.
+   */
+  public static Treepath moveLeftDown( Treepath targetTreepath ) {
+
+    final Tree moving = targetTreepath.getBottom() ;
+    final Tree futureParent = getPreviousSibling( targetTreepath ).getBottom() ;
+
+    if( null == futureParent ) {
+      return null ;
+    }
+
+    final Treepath afterRemoval = removeBottom( targetTreepath ) ;
+    return addChildAtRight( Treepath.create( afterRemoval, futureParent ), moving ) ;
   }
 
 }

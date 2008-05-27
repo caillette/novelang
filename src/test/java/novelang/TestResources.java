@@ -25,23 +25,9 @@ public class TestResources {
 
   private TestResources() { }
 
-  public static final String QUOTES_1 = "/quotes-1.nlp" ;
-  public static final String SMALL_1 = "/small-1.nlp";
-  public static final String SMALL_2 = "/small-2.nlp";
-  public static final String SMALL_3 = "/small-3.nlp";
-  public static final String SMALL_4 = "/small-4.nlp";
-  public static final String SECTIONS_1 = "/sections-1.nlp";
-  public static final String SECTIONS_2 = "/sections-2.nlp";
-  public static final String SECTIONS_3 = "/sections-3.nlp";
-  public static final String SPEECHSEQUENCE_1 = "/speechsequence-1.nlp";
-  public static final String SPEECHSEQUENCE_2 = "/speechsequence-2.nlp";
-
-  public static final String STRUCTURE_1 = "/structure-1.nlb";
-  public static final String STRUCTURE_2 = "/structure-2.nlb";
-  public static final String STRUCTURE_3 = "/structure-3.nlb";
-  public static final String STRUCTURE_4 = "/structure-4.nlb";
-  public static final String STRUCTURE_5 = "/structure-5.nlb";
-  public static final String STRUCTURE_6 = "/structure-6.nlb";
+  public static final String JUST_SECTIONS = "/just-sections.nlp";
+  public static final String MESSY_IDENTIFIERS = "/messy-identifiers.nlp";
+  public static final String SIMPLE_STRUCTURE = "/simple-structure.nlp";
 
   public static final String SHOWCASE = "/showcase/showcase.nlp";
 

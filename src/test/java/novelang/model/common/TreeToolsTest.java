@@ -26,23 +26,25 @@ import novelang.model.implementation.DefaultMutableTree;
 public class TreeToolsTest {
 
   @Test
-  public void testReparentOk() {
+  public void reparent() {
     final MutableTree parent = new DefaultMutableTree( "parent" ) ;
-    final MutableTree child = new DefaultMutableTree( "child" ) ;
+    final MutableTree child0 = new DefaultMutableTree( "child0" ) ;
+    final MutableTree child1 = new DefaultMutableTree( "child1" ) ;
     final MutableTree grandChild = new DefaultMutableTree( "grandChild" ) ;
-    child.addChild( grandChild ) ;
-    parent.addChild( child ) ;
+    child0.addChild( grandChild ) ;
+    parent.addChild( child0 ) ;
+    parent.addChild( child1 ) ;
     final Treepath original = Treepath.create( parent, grandChild ) ;
 
     final Tree newGrandChild = new DefaultMutableTree( "newGrandChild" ) ;
-    final Treepath reparented = TreeTools.reparent( original, newGrandChild ) ;
+    final Treepath reparented = TreeTools.updateBottom( original, newGrandChild ) ;
 
     Assert.assertEquals( 3, reparented.getHeight() ) ;
 
     Assert.assertEquals( "parent", reparented.getTreeAtHeight( 2 ).getText() ) ;
-    Assert.assertEquals( 1, reparented.getTreeAtHeight( 2 ).getChildCount() ) ;
+    Assert.assertEquals( 2, reparented.getTreeAtHeight( 2 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child", reparented.getTreeAtHeight( 1 ).getText() ) ;
+    Assert.assertEquals( "child0", reparented.getTreeAtHeight( 1 ).getText() ) ;
     Assert.assertEquals( 1, reparented.getTreeAtHeight( 1 ).getChildCount() ) ;
 
     Assert.assertEquals( "newGrandChild", reparented.getTreeAtHeight( 0 ).getText() ) ;
@@ -52,22 +54,79 @@ public class TreeToolsTest {
   }
 
   @Test
-  public void addSiblingAtRightOk() {
+  public void addSiblingAtRight() {
     final MutableTree parent = new DefaultMutableTree( "parent" ) ;
     final MutableTree child0 = new DefaultMutableTree( "child0" ) ;
     final Tree child1 = new DefaultMutableTree( "child1" ) ;
     parent.addChild( child0 ) ;
 
-    final Treepath treepath = TreeTools.addSiblingAtRight( Treepath.create( parent ), child1 ) ;
+    final Treepath treepath = TreeTools.addSiblingAtRight(
+        Treepath.create( parent, child0 ), child1 ) ;
 
-    Assert.assertEquals( 2, treepath.getStart().getChildCount() ) ;
-    Assert.assertEquals( "parent", treepath.getStart().getText() ) ;
+    Assert.assertEquals( "parent", treepath.getTop().getText() ) ;
+    Assert.assertEquals( 2, treepath.getTop().getChildCount() ) ;
 
-    Assert.assertEquals( 0, treepath.getStart().getChildAt( 0 ).getChildCount() ) ;
-    Assert.assertEquals( "child0", treepath.getStart().getChildAt( 0 ).getText() ) ;
+    Assert.assertEquals( "child0", treepath.getTop().getChildAt( 0 ).getText() ) ;
+    Assert.assertEquals( 0, treepath.getTop().getChildAt( 0 ).getChildCount() ) ;
 
-    Assert.assertEquals( 0, treepath.getStart().getChildAt( 1 ).getChildCount() ) ;
-    Assert.assertEquals( "child1", treepath.getStart().getChildAt( 1 ).getText() ) ;
+    Assert.assertEquals( "child1", treepath.getTop().getChildAt( 1 ).getText() ) ;
+    Assert.assertEquals( 0, treepath.getTop().getChildAt( 1 ).getChildCount() ) ;
 
   }
+
+  @Test
+  public void removeBottom() {
+    final MutableTree grandParent = new DefaultMutableTree( "grandParent" ) ;
+    final MutableTree parent = new DefaultMutableTree( "parent" ) ;
+    final MutableTree child1 = new DefaultMutableTree( "child1" ) ;
+    final MutableTree child2 = new DefaultMutableTree( "child2" ) ;
+    parent.addChild( child1 ) ;
+    parent.addChild( child2 ) ;
+    grandParent.addChild( parent ) ;
+
+    final Treepath treepath = Treepath.create( grandParent, child2 ) ;
+    final Treepath afterRemoval = TreeTools.removeBottom( treepath ) ;
+
+
+    Assert.assertEquals( 2, afterRemoval.getHeight() ) ;
+
+    Assert.assertEquals( 1, afterRemoval.getTreeAtHeight( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "grandParent", afterRemoval.getTreeAtHeight( 1 ).getText() ) ;
+
+    Assert.assertEquals( 1, afterRemoval.getTreeAtHeight( 0 ).getChildCount() ) ;
+    Assert.assertEquals( "parent", afterRemoval.getTreeAtHeight( 0 ).getText() ) ;
+
+    Assert.assertSame( child1, afterRemoval.getTreeAtHeight( 0 ).getChildAt( 0 ) ) ;
+
+
+
+  }
+
+  @Test
+  public void moveLeftDown() {
+    final MutableTree parent = new DefaultMutableTree( "parent" ) ;
+    final MutableTree child = new DefaultMutableTree( "child" ) ;
+    final MutableTree moving = new DefaultMutableTree( "moving" ) ;
+    parent.addChild( child ) ;
+    parent.addChild( moving ) ;
+    final Treepath original = Treepath.create( parent, moving ) ;
+
+    final Treepath moved = TreeTools.moveLeftDown( original ) ;
+
+    // Moved child not included in new treepath!
+    Assert.assertEquals( 2, moved.getHeight() ) ;
+
+    Assert.assertEquals( "parent", moved.getTreeAtHeight( 1 ).getText() ) ;
+    Assert.assertEquals( 1, moved.getTreeAtHeight( 1 ).getChildCount() ) ;
+
+    Assert.assertEquals( "child", moved.getTreeAtHeight( 0 ).getText() ) ;
+    Assert.assertEquals( 1, moved.getTreeAtHeight( 0 ).getChildCount() ) ;
+
+    Assert.assertEquals( "moving", moved.getTreeAtHeight( 0 ).getChildAt( 0 ).getText() ) ;
+    Assert.assertEquals( 0, moved.getTreeAtHeight( 0 ).getChildAt( 0 ).getChildCount() ) ;
+
+
+  }
+
+
 }

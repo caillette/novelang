@@ -39,6 +39,7 @@ import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
+import novelang.model.common.Treepath;
 import novelang.model.renderable.Renderable;
 import novelang.parser.Encoding;
 import novelang.parser.PartParser;
@@ -138,6 +139,25 @@ public class Part implements LocationFactory, Renderable
     return tree ;
   }
 
+// ================
+// Rehierachization
+// ================
+
+
+  private static Treepath rehierarchize( Treepath treepath ) {
+    final Tree tree = treepath.getBottom() ;
+    final NodeKind nodeKind = NodeKind.ofRoot( tree ) ;
+    switch( nodeKind ) {
+      case PART :
+        if( tree.getChildCount() > 0 ) {
+          return rehierarchize( Treepath.create( treepath, tree.getChildAt( 0 ) ) ) ;
+        }
+        break ;
+//      case CHAPTER :
+//        final  TreeTools.getSiblingAtRight( treepath ))
+    }
+    return treepath ;
+  }
 
 // ===========
 // Identifiers
