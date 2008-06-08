@@ -16,8 +16,11 @@
  */
 package novelang.model.common;
 
+import java.util.Arrays;
+
 import novelang.model.implementation.DefaultMutableTree;
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -38,17 +41,47 @@ public class TreeTools {
     throw new Error( "TreeTools" ) ;
   }
 
+  public static boolean hasPreviousSibling( Treepath treepath ) throws IllegalArgumentException {
+    if( treepath.getHeight() < 2 ) {
+      throw new IllegalArgumentException( "Treepath must have minimum height of 2" ) ;
+    }
+    final Tree treeToMove = treepath.getBottom() ;
+    final Tree parent = treepath.getTreeAtHeight( 1 ) ;
+    for( int i = parent.getChildCount() - 1 ; i > 0 ; i-- ) {
+      final Tree child = parent.getChildAt( i ) ;
+      if( child == treeToMove ) {
+        return true ;
+      }
+    }
+    return false ;
+  }
+
+  public static boolean hasNextSibling( Treepath treepath ) throws IllegalArgumentException {
+    if( treepath.getHeight() < 2 ) {
+      throw new IllegalArgumentException( "Treepath must have minimum height of 2" ) ;
+    }
+    final Tree treeToMove = treepath.getBottom() ;
+    final Tree parent = treepath.getTreeAtHeight( 1 ) ;
+    for( int i = 0 ; i < parent.getChildCount() - 1 ; i ++ ) {
+      final Tree child = parent.getChildAt( i ) ;
+      if( child == treeToMove ) {
+        return true ;
+      }
+    }
+    return false ;
+  }
+
   /**
-   * Returns the sibling on the left of the end of given {@link Treepath}.
+   * Returns the sibling on the left of the bottom of given {@link Treepath}.
    * <pre>
    * *t0               *t0
    *  |  \              |  \
    * t1  *t2    -->    *t1  t2
    * </pre>
    * @param treepath non-null object with minimum height of 2.
-   * @return non-null if sibling was found, null otherwise.
+   * @return non-null object.
    */
-  public static Treepath getPreviousSibling( Treepath treepath ) {
+  public static Treepath getPreviousSibling( Treepath treepath ) throws IllegalArgumentException {
     if( treepath.getHeight() < 2 ) {
       throw new IllegalArgumentException( "Treepath must have minimum height of 2" ) ;
     }
@@ -60,21 +93,33 @@ public class TreeTools {
         return Treepath.create( treepath.getParent(), parent.getChildAt( i - 1 ) ) ;
       }
     }
-    return null ;
+    throw new IllegalArgumentException( "No previous sibling" ) ;
   }
 
+
   /**
-   * Returns the sibling on the right of the end of given {@link Treepath}.
+   * Returns the sibling on the left of the bottom of given {@link Treepath}.
    * <pre>
-   * *t0               *t0
-   *  |  \              |  \
+   *    *t0               *t0
+   *   /  |              /  |
    * *t1  t2    -->    t1  *t2
    * </pre>
    * @param treepath non-null object with minimum height of 2.
-   * @return non-null if sibling was found, null otherwise.
+   * @return non-null object.
    */
   public static Treepath getNextSibling( Treepath treepath ) {
-    throw new UnsupportedOperationException( "getNextSibling" ) ;
+    if( treepath.getHeight() < 2 ) {
+      throw new IllegalArgumentException( "Treepath must have minimum height of 2" ) ;
+    }
+    final Tree treeToMove = treepath.getBottom() ;
+    final Tree parent = treepath.getTreeAtHeight( 1 ) ;
+    for( int i = 0 ; i < parent.getChildCount() - 1 ; i++ ) {
+      final Tree child = parent.getChildAt( i ) ;
+      if( child == treeToMove ) {
+        return Treepath.create( treepath.getParent(), parent.getChildAt( i + 1 ) ) ;
+      }
+    }
+    throw new IllegalArgumentException( "No next sibling" ) ;
   }
 
   /**
@@ -113,12 +158,12 @@ public class TreeTools {
    *  |              |
    * *t1    -->     *t1'
    *                 |
-   *                new
+   *                *new
    * </pre>
    *
    * @param treepath non-null object.
    * @param tree non-null object.
-   * @return non-null {@code Treepath} with the same end but with updated parents.
+   * @return non-null {@code Treepath} including added tree.
    *
    */
   public static Treepath addChildAtRight( Treepath treepath, Tree tree ) {
@@ -131,7 +176,7 @@ public class TreeTools {
       newparent.addChild( oldParent.getChildAt( i ) ) ;
     }
     newparent.addChild( tree ) ;
-    return updateBottom( treepath, newparent ) ;
+    return Treepath.create( updateBottom( treepath, newparent ), tree ) ;
   }
 
   /**
@@ -185,24 +230,6 @@ public class TreeTools {
 
 
 
-  /**
-   * Removes a {@code Tree} from its direct parent, and adds it as sibling of its
-   * former parent.
-   * <pre>
-   * *t0           *t0'
-   *  |             |  \
-   * *t1    -->    t1' *t2
-   *  |
-   * *t2
-   * </pre>
-   *
-   * @param treepath non-null, minimum depth of 2.
-   * @return non-null object.
-   */
-  public static Treepath liftUpRight( Treepath treepath ) {
-    throw new UnsupportedOperationException( "liftUpRight" ) ;
-  }
-
   public static Treepath removeBottom( Treepath treepath ) {
     if( treepath.getHeight() < 2 ) {
       throw new IllegalArgumentException( "Treepath height must be 2 or more" ) ;
@@ -232,20 +259,101 @@ public class TreeTools {
    * </pre>
    *
    * @param targetTreepath non-null, minimum depth of 2.
-   * @return non-null object representing path to moved {@code Tree} or null
-   *     if there was no left sibling.
+   * @return non-null object representing path to moved {@code Tree}.
+   * @throws IllegalArgumentException if there was no previous sibling.
    */
-  public static Treepath moveLeftDown( Treepath targetTreepath ) {
+  public static Treepath moveLeftDown( Treepath targetTreepath ) throws IllegalArgumentException {
 
     final Tree moving = targetTreepath.getBottom() ;
     final Tree futureParent = getPreviousSibling( targetTreepath ).getBottom() ;
 
     if( null == futureParent ) {
-      return null ;
+      throw new IllegalArgumentException( "No previous sibling" ) ; 
     }
 
     final Treepath afterRemoval = removeBottom( targetTreepath ) ;
     return addChildAtRight( Treepath.create( afterRemoval, futureParent ), moving ) ;
   }
+
+
+// ===============
+// Immutable Trees
+// ===============
+
+  public static Tree tree( String text ) {
+    return new ImmutableTree( text ) ;
+  }
+
+  public static Tree tree( String text, Tree... children ) {
+    return new ImmutableTree( text, children ) ;
+  }
+
+  private static final Tree[] EMPTY_TREE_ARRAY = new Tree[ 0 ] ;
+
+  private static final class ImmutableTree implements Tree {
+    private final String text;
+    private final Location location ;
+    private final Tree[] children ;
+
+    public ImmutableTree( String text ) {
+      this.text = text ;
+      location = null ;
+      this.children = EMPTY_TREE_ARRAY ;
+    }
+
+    public ImmutableTree( String text, Location location ) {
+      this.text = text ;
+      this.location = location ;
+      this.children = EMPTY_TREE_ARRAY ;
+    }
+
+    public ImmutableTree( String text, Tree[] children ) {
+      this.text = text ;
+      this.location = null ;
+      this.children = children;
+    }
+
+    public ImmutableTree( String text, Location location, Tree[] children ) {
+      this.text = text;
+      this.location = location ;
+      this.children = children;
+    }
+
+    public Tree getChildAt( int i ) {
+      return children[ i ] ;
+    }
+
+    public int getChildCount() {
+      return children.length ;
+    }
+
+    public Iterable< Tree > getChildren() {
+      return Lists.immutableList( Arrays.asList( children ) ) ;
+    }
+
+    public String getText() {
+      return text;
+    }
+
+    public String toStringTree() {
+      return null;
+    }
+
+    public Location getLocation() {
+      return location ;
+    }
+
+    public boolean isOneOf( NodeKind... kinds ) {
+      if( NodeKind.rootHasNodeKindName( this ) ) {
+        for( NodeKind kind : kinds ) {
+          if( getText().equals( kind.name() ) ) {
+            return true ;
+          }
+        }
+      }
+      return false ;
+    }
+  }
+
 
 }

@@ -34,7 +34,7 @@ import novelang.model.common.Tree;
 import novelang.model.common.TreeMetadata;
 import novelang.model.renderable.Renderable;
 import novelang.parser.Encoding;
-import static novelang.parser.antlr.TreeHelper.tree;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette

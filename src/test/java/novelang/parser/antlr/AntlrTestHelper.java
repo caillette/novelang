@@ -42,7 +42,7 @@ public class AntlrTestHelper {
 
   static void title( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = title( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree title( String text ) throws RecognitionException {
@@ -54,7 +54,7 @@ public class AntlrTestHelper {
 
   static void identifier( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = identifier( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree identifier( String text ) throws RecognitionException {
@@ -66,7 +66,7 @@ public class AntlrTestHelper {
 
   static void word( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = word( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree word( String text ) throws RecognitionException {
@@ -86,7 +86,7 @@ public class AntlrTestHelper {
 
   static void paragraph( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = paragraph( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree paragraph( String text ) throws RecognitionException {
@@ -106,7 +106,7 @@ public class AntlrTestHelper {
 
   static void section( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = section( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree section( String text ) throws RecognitionException {
@@ -118,7 +118,7 @@ public class AntlrTestHelper {
 
   static void litteral( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = litteral( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree litteral( String text ) throws RecognitionException {
@@ -130,7 +130,7 @@ public class AntlrTestHelper {
 
   static void chapter( String text, Tree expectedTree ) throws RecognitionException {
     final Tree actualTree = chapter( text ) ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree chapter( String text ) throws RecognitionException {
@@ -144,7 +144,7 @@ public class AntlrTestHelper {
       throws RecognitionException
   {
     final Tree actualTree = part( text ); ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree part( String text ) throws RecognitionException {
@@ -158,7 +158,7 @@ public class AntlrTestHelper {
       throws RecognitionException
   {
     final Tree actualTree = url( text ); ;
-    TreeHelper.assertEquals( expectedTree, actualTree ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
   static Tree url( String text ) throws RecognitionException {
@@ -177,6 +177,6 @@ public class AntlrTestHelper {
 
   static DelegatingPartParser createPartParser( String text ) {
     return ( DelegatingPartParser )
-        new DefaultPartParserFactory().createParser( TreeHelper.LOCATION_FACTORY, text );
+        new DefaultPartParserFactory().createParser( TreeFixture.LOCATION_FACTORY, text );
   }
 }

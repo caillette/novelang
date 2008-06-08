@@ -20,7 +20,7 @@ package novelang.parser.antlr;
 import org.junit.Test;
 import static novelang.model.common.NodeKind.TITLE;
 import static novelang.model.common.NodeKind.WORD;
-import static novelang.parser.antlr.TreeHelper.tree;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette
@@ -29,15 +29,15 @@ public class TreeHelperTest {
 
   @Test
   public void testEqualityOk() {
-    TreeHelper.assertEquals(
+    TreeFixture.assertEquals(
         tree( TITLE, tree( WORD, "w0" ) ),
         tree( TITLE, tree( WORD, "w0" ) )
     ) ;
   }
 
-  @Test( expected = org.junit.ComparisonFailure.class )
+  @Test( expected = AssertionError.class )
   public void testEqualityFail() {
-    TreeHelper.assertEquals(
+    TreeFixture.assertEquals(
         tree( TITLE, tree( WORD, "xx" ) ),
         tree( TITLE, tree( WORD, "w0" ) )
     ) ;

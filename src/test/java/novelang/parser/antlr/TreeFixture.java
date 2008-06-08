@@ -26,6 +26,7 @@ import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Tree;
+import novelang.model.common.Treepath;
 
 /**
  * Helps building {@link Tree}s for tests.
@@ -34,7 +35,7 @@ import novelang.model.common.Tree;
  *
  * @author Laurent Caillette
  */
-public class TreeHelper {
+public class TreeFixture {
 
   public static final LocationFactory LOCATION_FACTORY = new LocationFactory() {
     public Location createLocation( int line, int column ) {
@@ -103,7 +104,30 @@ public class TreeHelper {
     return tree ;
   }
 
+  public static void assertEquals( Treepath expected, Treepath actual ) {
+    Assert.assertEquals( "Treepath height", expected.getHeight(), actual.getHeight() ) ;
+    for( int i = 0 ; i < expected.getHeight() ; i++ ) {
+      assertEquals(
+          expected.getTreeAtHeight( i ),
+          actual.getTreeAtHeight( i )
+      ) ;
+    }
+  }
+
   public static void assertEquals( Tree expected, Tree actual ) {
+    try {
+      assertEqualsNoMessage( expected, actual ) ;
+    } catch( AssertionError e ) {
+      final AssertionError assertionError = new AssertionError(
+          e.getMessage() +
+              "\nExpected:\n  " + asString( expected ) +
+              "\nActual:\n  " + asString( actual )
+      ) ;
+      assertionError.setStackTrace( e.getStackTrace() ) ;
+      throw assertionError;
+    }
+  }
+  private static void assertEqualsNoMessage( Tree expected, Tree actual ) {
     if( NodeKind.LITTERAL.isRoot( expected ) && NodeKind.LITTERAL.isRoot( actual ) ) {
       Assert.assertEquals(
           "Ill-formed test: expected LITTERAL node must have exactly one child",
@@ -118,14 +142,9 @@ public class TreeHelper {
       for( int index = 0 ; index < expected.getChildCount() ; index++ ) {
         final Tree expectedChild = expected.getChildAt( index ) ;
         final Tree actualChild = actual.getChildAt( index ) ;
-        assertEquals( expectedChild, actualChild ) ;
+        assertEqualsNoMessage( expectedChild, actualChild ); ;
       }
     }
-
-//    Assert.assertEquals(
-//        normalizeSpaces( expected.toStringTree() ),
-//        normalizeSpaces( actual.toStringTree() )
-//    ) ;
   }
 
 
@@ -144,6 +163,14 @@ public class TreeHelper {
     return buffer.toString() ;
   }
 
+  public static String asString( Tree tree ) {
+    if( null == tree ) {
+      return "<null>" ;
+    } else {
+      return tree.toStringTree() ;
+    }
+
+  }
 
 
 }

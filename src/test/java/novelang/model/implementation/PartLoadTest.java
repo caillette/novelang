@@ -29,13 +29,13 @@ import novelang.TestResourceTools;
 import novelang.TestResources;
 import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Tree;
-import novelang.parser.antlr.TreeHelper;
-import static novelang.parser.antlr.TreeHelper.tree;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette
  */
-public class PartTest {
+public class PartLoadTest {
 
 
   @Test
@@ -50,7 +50,7 @@ public class PartTest {
         tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
     ) ;
 
-    TreeHelper.assertEquals( expected, partTree ) ;
+    TreeFixture.assertEquals( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
 
@@ -84,7 +84,7 @@ public class PartTest {
         )
     ) ;
 
-    TreeHelper.assertEquals( expected, partTree ) ;
+    TreeFixture.assertEquals( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
 
   }
@@ -100,6 +100,12 @@ public class PartTest {
     final Part part = new Part( justSections ) ;
     part.getIdentifiers() ;
   }
+
+
+
+// =======
+// Fixture
+// =======
 
   private File justSections;
   private File messyIdentifiersFile ;

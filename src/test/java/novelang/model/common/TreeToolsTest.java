@@ -19,6 +19,8 @@ package novelang.model.common;
 import org.junit.Test;
 import org.junit.Assert;
 import novelang.model.implementation.DefaultMutableTree;
+import static novelang.model.common.TreeTools.tree;
+import novelang.parser.antlr.TreeFixture;
 
 /**
  * @author Laurent Caillette
@@ -27,16 +29,12 @@ public class TreeToolsTest {
 
   @Test
   public void reparent() {
-    final MutableTree parent = new DefaultMutableTree( "parent" ) ;
-    final MutableTree child0 = new DefaultMutableTree( "child0" ) ;
-    final MutableTree child1 = new DefaultMutableTree( "child1" ) ;
-    final MutableTree grandChild = new DefaultMutableTree( "grandChild" ) ;
-    child0.addChild( grandChild ) ;
-    parent.addChild( child0 ) ;
-    parent.addChild( child1 ) ;
+    final Tree grandChild = tree( "grandChild" ) ;
+    final Tree parent = tree( "parent", tree( "child0", grandChild ), tree( "child1" ) ) ;
+
+    final Tree newGrandChild = tree( "newGrandChild" ) ;
     final Treepath original = Treepath.create( parent, grandChild ) ;
 
-    final Tree newGrandChild = new DefaultMutableTree( "newGrandChild" ) ;
     final Treepath reparented = TreeTools.updateBottom( original, newGrandChild ) ;
 
     Assert.assertEquals( 3, reparented.getHeight() ) ;
@@ -113,17 +111,17 @@ public class TreeToolsTest {
 
     final Treepath moved = TreeTools.moveLeftDown( original ) ;
 
-    // Moved child not included in new treepath!
-    Assert.assertEquals( 2, moved.getHeight() ) ;
+    Assert.assertEquals( 3, moved.getHeight() ) ;
 
-    Assert.assertEquals( "parent", moved.getTreeAtHeight( 1 ).getText() ) ;
+    Assert.assertEquals( "parent", moved.getTreeAtHeight( 2 ).getText() ) ;
+    Assert.assertEquals( 1, moved.getTreeAtHeight( 2 ).getChildCount() ) ;
+
+    Assert.assertEquals( "child", moved.getTreeAtHeight( 1 ).getText() ) ;
     Assert.assertEquals( 1, moved.getTreeAtHeight( 1 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child", moved.getTreeAtHeight( 0 ).getText() ) ;
-    Assert.assertEquals( 1, moved.getTreeAtHeight( 0 ).getChildCount() ) ;
-
-    Assert.assertEquals( "moving", moved.getTreeAtHeight( 0 ).getChildAt( 0 ).getText() ) ;
-    Assert.assertEquals( 0, moved.getTreeAtHeight( 0 ).getChildAt( 0 ).getChildCount() ) ;
+    Assert.assertEquals( "moving", moved.getBottom().getText() ) ;
+    Assert.assertEquals( "moving", moved.getTreeAtHeight( 0 ).getText() ) ;
+    Assert.assertEquals( 0, moved.getTreeAtHeight( 0 ).getChildCount() ) ;
 
 
   }

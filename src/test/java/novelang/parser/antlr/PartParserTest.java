@@ -25,7 +25,7 @@ import org.junit.Test;
 import static novelang.model.common.NodeKind.*;
 import novelang.parser.Symbols;
 import static novelang.parser.antlr.AntlrTestHelper.*;
-import static novelang.parser.antlr.TreeHelper.tree;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * GUnit sucks as it has completely obscure failures and stupid reports,
