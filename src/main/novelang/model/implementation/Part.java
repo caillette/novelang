@@ -132,7 +132,9 @@ public class Part implements LocationFactory, Renderable
 
       // Yeah we do it here!
       tree = parser.parse() ;
-      tree = rehierarchize( Treepath.create( tree ) ).getBottom() ;
+      if( null != tree ) {
+        tree = rehierarchize( Treepath.create( tree ) ).getBottom() ;
+      }
 
       for( final Problem problem : parser.getProblems() ) {
         collect( problem ) ;
@@ -185,6 +187,9 @@ public class Part implements LocationFactory, Renderable
       NodeKind accumulatorKind,
       Set< NodeKind > ignored )
   {
+    if( 0 == part.getBottom().getChildCount() ) {
+      return part ;
+    }
     Treepath treepath = Treepath.create( part, part.getBottom().getChildAt( 0 ) ) ;
 
     while( true ) {

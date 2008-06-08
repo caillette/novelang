@@ -44,10 +44,14 @@ public class PartLoadTest {
     final Tree partTree = part.getTree();
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,  
-        tree( SECTION, tree( IDENTIFIER, tree( WORD, "Section1nlp" ) ) ),
-        tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) ),
-        tree( SECTION, tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ) ),
-        tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
+        tree( SECTION,
+            tree( IDENTIFIER, tree( WORD, "Section1nlp" ) ),
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
+        ),
+        tree( SECTION,
+            tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
+        )
     ) ;
 
     TreeFixture.assertEquals( expected, partTree ) ;
@@ -64,7 +68,8 @@ public class PartLoadTest {
             tree( IDENTIFIER, tree( WORD, "Chapter-0" ) ),
             tree( SECTION,
                 tree( IDENTIFIER, tree( WORD, "Section-0-0" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-0" ) )
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-0" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-1" ) )
             ),
             tree( SECTION,
                 tree( IDENTIFIER, tree( WORD, "Section-0-1" ) ),
@@ -72,14 +77,15 @@ public class PartLoadTest {
             )
         ),
         tree( CHAPTER,
-            tree( IDENTIFIER, tree( WORD, "Chapter-0" ) ),
+            tree( IDENTIFIER, tree( WORD, "Chapter-1" ) ),
             tree( SECTION,
-                tree( IDENTIFIER, tree( WORD, "Section-0-0" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-0" ) )
+                tree( IDENTIFIER, tree( WORD, "Section-1-0" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-0-0" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-0-1" ) )
             ),
             tree( SECTION,
-                tree( IDENTIFIER, tree( WORD, "Section-0-1" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-1-0" ) )
+                tree( IDENTIFIER, tree( WORD, "Section-1-1" ) ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-1-0" ) )
             )
         )
     ) ;

@@ -68,6 +68,54 @@ public class PartRehierarchizeTest {
     ) ;
   }
 
+  @Test
+  public void ignoreChapter() {
+    verify(
+        tree(
+            PART,
+            tree( CHAPTER ),
+            tree( SECTION, tree( PARAGRAPH_PLAIN ) )
+        ),
+        tree(
+            PART,
+            tree( CHAPTER ),
+            tree( SECTION ),
+            tree( PARAGRAPH_PLAIN )
+        ),
+        SECTION,
+        CHAPTER
+    ) ;
+  }
+
+  @Test
+  public void ignoreAndAttachAtUpperLevel() {
+    verify(
+        tree(
+            PART,
+            tree( PARAGRAPH_PLAIN ),
+            tree( CHAPTER ),
+            tree( SECTION, tree( PARAGRAPH_PLAIN ) ),
+            tree( CHAPTER ),
+            tree( SECTION, tree( IDENTIFIER ), tree( BLOCKQUOTE ) ),
+            tree( SECTION )
+        ),
+        tree(
+            PART,
+            tree( PARAGRAPH_PLAIN ),
+            tree( CHAPTER ),
+            tree( SECTION ),
+            tree( PARAGRAPH_PLAIN ),
+            tree( CHAPTER ),
+            tree( SECTION ),
+            tree( IDENTIFIER ),
+            tree( BLOCKQUOTE ),
+            tree( SECTION )
+        ),
+        SECTION,
+        CHAPTER
+    ) ;
+  }
+
 
 // =======
 // Fixture

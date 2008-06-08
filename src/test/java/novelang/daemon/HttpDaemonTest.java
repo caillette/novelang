@@ -91,11 +91,11 @@ public class HttpDaemonTest {
 
   @Test
   public void htmlBrokenCausesRedirection() throws Exception {
-    setUp( "htmlBroken" ) ;
+    setUp( "htmlBrokenCausesRedirection" ) ;
     final HttpClient httpClient = new HttpClient() ;
     httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( 5000 ) ;
-    final String originalUrlAsString = "http://localhost:" + HTTP_DAEMON_PORT +
-        BROKEN_HTML_RESOURCE_NAME ;
+    final String originalUrlAsString =
+        "http://localhost:" + HTTP_DAEMON_PORT + BROKEN_HTML_RESOURCE_NAME ;
     HttpMethod method = new GetMethod( originalUrlAsString ) ;
     method.setFollowRedirects( true ) ;
     httpClient.executeMethod( method ) ;
