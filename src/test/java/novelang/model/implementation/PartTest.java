@@ -35,7 +35,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
 /**
  * @author Laurent Caillette
  */
-public class PartLoadTest {
+public class PartTest {
 
 
   @Test

@@ -25,14 +25,13 @@ import novelang.model.common.Treepath;
 import static novelang.model.common.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import com.google.common.collect.Sets;
 
 /**
  * @author Laurent Caillette
  */
-public class PartRehierarchizeTest {
+public class HierarchizerTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( PartRehierarchizeTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( HierarchizerTest.class ) ;
 
   @Test
   public void justMove() {
@@ -131,10 +130,10 @@ public class PartRehierarchizeTest {
     final Treepath expectedTreepath = Treepath.create( expectedTree ) ;
     final Treepath flatTreepath = Treepath.create( flatTree ) ;
 
-    final Treepath rehierarchized = Part.rehierarchize(
+    final Treepath rehierarchized = Hierarchizer.rehierarchizeFromLeftToRight(
         flatTreepath,
         accumulatorKind,
-        Sets.immutableSet( ignored )
+        new Hierarchizer.ExclusionFilter( ignored )
     ) ;
 
     TreeFixture.assertEquals(

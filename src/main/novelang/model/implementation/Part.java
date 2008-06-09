@@ -22,7 +22,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Set;
 
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
@@ -34,7 +33,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Sets;
 import novelang.model.common.IdentifierHelper;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
@@ -42,8 +40,6 @@ import novelang.model.common.NodeKind;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
 import novelang.model.common.Treepath;
-import novelang.model.common.TreeTools;
-import static novelang.model.common.NodeKind.CHAPTER;
 import static novelang.model.common.NodeKind.SECTION;
 import novelang.model.renderable.Renderable;
 import novelang.parser.Encoding;
@@ -68,7 +64,6 @@ public class Part implements LocationFactory, Renderable
   private final String locationName ;
   private final Charset encoding ;
   private final Multimap< String, Tree > identifiers ;
-  private static final Set< NodeKind > EMPTY_NODE_KIND_SET = Sets.immutableSet();
 
 
   public Part( String content ) {
@@ -133,7 +128,7 @@ public class Part implements LocationFactory, Renderable
       // Yeah we do it here!
       tree = parser.parse() ;
       if( null != tree ) {
-        tree = rehierarchize( Treepath.create( tree ) ).getBottom() ;
+        tree = Hierarchizer.rehierarchize( Treepath.create( tree ) ).getBottom() ;
       }
 
       for( final Problem problem : parser.getProblems() ) {
@@ -148,79 +143,6 @@ public class Part implements LocationFactory, Renderable
     return tree ;
   }
 
-
-// ================
-// Rehierachization
-// ================
-
-  /**
-   * Call this before {@link #rehierarchizeChapters(novelang.model.common.Treepath)}.
-   */
-  private static Treepath rehierarchizeSections( final Treepath part ) {
-    return rehierarchize( part, SECTION, Sets.immutableSet( CHAPTER ) ) ;
-  }
-
-  /**
-   * Call this after {@link #rehierarchizeSections(novelang.model.common.Treepath)}. 
-   */
-  private static Treepath rehierarchizeChapters( final Treepath part ) {
-    return rehierarchize( part, CHAPTER, EMPTY_NODE_KIND_SET ) ;
-  }
-
-  private static Treepath rehierarchize( final Treepath part ) {
-    return rehierarchizeChapters( rehierarchizeSections( part ) ) ;
-  }
-
-
-  /**
-   * Upgrades a degenerated {@code Tree} by making nodes of a given {@code NodeKind} adopt
-   * their rightmost siblings.
-   *
-   * @param part a {@code Treepath} with bottom {@code Tree} of {@code PART} kind.
-   * @param accumulatorKind kind of node becoming the parent of their siblings on the right,
-   *     unless they are of {@code accumulatorKind} or {@code ignored} kind.
-   * @param ignored kind of nodes to skip.
-   * @return the result of the changes.
-   */
-  protected static Treepath rehierarchize(
-      final Treepath part,
-      NodeKind accumulatorKind,
-      Set< NodeKind > ignored )
-  {
-    if( 0 == part.getBottom().getChildCount() ) {
-      return part ;
-    }
-    Treepath treepath = Treepath.create( part, part.getBottom().getChildAt( 0 ) ) ;
-
-    while( true ) {
-      final NodeKind childKind = getKind( treepath );
-      if( accumulatorKind == childKind ) {
-        while( true ) {
-          // Consume all siblings on the right to be reparented.
-          if( TreeTools.hasNextSibling( treepath ) ) {
-            final Treepath next = TreeTools.getNextSibling( treepath ) ;
-            final NodeKind kindOfNext = getKind( next );
-            if( ignored.contains( kindOfNext ) || accumulatorKind == kindOfNext ) {
-              treepath = next ;
-              break ;
-            } else {
-              treepath = TreeTools.moveLeftDown( next ).getParent() ;
-            }
-          } else {
-            return treepath.getParent() ;
-          }
-        }
-      } else if( TreeTools.hasNextSibling( treepath ) ) {
-        treepath = TreeTools.getNextSibling( treepath ) ;
-      } else {
-        return treepath.getParent() ;
-      }
-    }
-  }
-
-  private static NodeKind getKind( Treepath treepath ) {
-    return NodeKind.ofRoot( treepath.getBottom() );
-  }
 
 // ===========
 // Identifiers

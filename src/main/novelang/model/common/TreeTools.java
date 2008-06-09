@@ -267,10 +267,6 @@ public class TreeTools {
     final Tree moving = targetTreepath.getBottom() ;
     final Tree futureParent = getPreviousSibling( targetTreepath ).getBottom() ;
 
-    if( null == futureParent ) {
-      throw new IllegalArgumentException( "No previous sibling" ) ; 
-    }
-
     final Treepath afterRemoval = removeBottom( targetTreepath ) ;
     return addChildAtRight( Treepath.create( afterRemoval, futureParent ), moving ) ;
   }
