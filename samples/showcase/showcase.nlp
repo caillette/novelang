@@ -1,6 +1,6 @@
-***'This is a chapter with a title
+*** This is a chapter with a title
 
-==='This is a section with a title (and //style// inside the title!)
+=== This is a section with a title (and //style// inside the title!)
 
 This is a single-line paragraph.
 

@@ -46,6 +46,7 @@ tokens {
   WORD ;
   URL ;
   
+  BOOK ;
   FUNCTION_CALL ;
   FUNCTION_NAME ;
   VALUED_ARGUMENT_PRIMARY ;
@@ -715,6 +716,15 @@ punctuationSign
 // Book-related rules
 // ==================
 
+book
+  : ( mediumBreak | largeBreak )?
+    functionCall
+    ( largeBreak functionCall )*      
+    ( mediumBreak | largeBreak )?
+    EOF 
+    -> ^( BOOK functionCall* )
+  ;
+  
 
 functionCall
   : name = word 

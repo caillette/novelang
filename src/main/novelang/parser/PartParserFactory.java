@@ -22,7 +22,7 @@ import novelang.model.common.LocationFactory;
 /**
  * @author Laurent Caillette
  */
-public interface PartParserFactory {
+public interface PartParserFactory extends GenericParserFactory {
 
   PartParser createParser( LocationFactory locationFactory, String content ) ;
 }

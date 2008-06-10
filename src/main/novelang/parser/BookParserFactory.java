@@ -17,11 +17,13 @@
 
 package novelang.parser;
 
+import novelang.model.common.LocationFactory;
+
 /**
  * @author Laurent Caillette
  */
-public interface BookParserFactory {
+public interface BookParserFactory extends GenericParserFactory {
 
-//  BookParser createParser( StructuralBook book, String structureAsText ) ;
-  
+  BookParser createParser( LocationFactory locationFactory, String content ) ;
+
 }

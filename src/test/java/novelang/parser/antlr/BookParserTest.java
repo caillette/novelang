@@ -19,6 +19,7 @@ package novelang.parser.antlr;
 import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
 import static novelang.model.common.NodeKind.*;
+import novelang.model.common.Tree;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 
@@ -26,6 +27,18 @@ import static novelang.parser.antlr.AntlrTestHelper.BREAK;
  * @author Laurent Caillette
  */
 public class BookParserTest {
+
+  /**
+   * This is used elsewhere as we must be sure to pass a tree of the same form as the
+   * parser produces.
+   */
+  public static final Tree FUNCTIONCALLWITHURL_TREE = tree( FUNCTION_CALL,
+      tree( FUNCTION_NAME, "function" ),
+      tree(
+          VALUED_ARGUMENT_PRIMARY,
+          tree( URL, "file://my/file" )
+      )
+  );
 
   @Test
   public void functionCallBare() throws RecognitionException {
@@ -49,6 +62,14 @@ public class BookParserTest {
                 tree( WORD, "paragraphbody" )
             )
         )
+    ) ;
+  }
+
+  @Test
+  public void functionCallWithUrl() throws RecognitionException {
+    AntlrTestHelper.functionCall(
+        "function file://my/file",
+        FUNCTIONCALLWITHURL_TREE
     ) ;
   }
 

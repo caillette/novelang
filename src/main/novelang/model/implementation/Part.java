@@ -46,6 +46,7 @@ import novelang.parser.Encoding;
 import novelang.parser.PartParser;
 import novelang.parser.PartParserFactory;
 import novelang.parser.antlr.DefaultPartParserFactory;
+import novelang.reader.AbstractSourceReader;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes
@@ -53,26 +54,24 @@ import novelang.parser.antlr.DefaultPartParserFactory;
  *
  * @author Laurent Caillette
  */
-public class Part implements LocationFactory, Renderable
-{
+public class Part extends AbstractSourceReader {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( Part.class ) ;
-
-  private final List< Problem > problems = Lists.newArrayList() ;
   private final Tree tree ;
-  private final String thisToString ;
-  private final String locationName ;
-  private final Charset encoding ;
   private final Multimap< String, Tree > identifiers ;
 
 
   public Part( String content ) {
-    this.thisToString = ClassUtils.getShortClassName( Part.class ) +
-        "@" + System.identityHashCode( this ) ;
-    this.locationName = "<String>" ;
-    this.encoding = Objects.nonNull( Encoding.DEFAULT ) ;
-    tree = parse( new DefaultPartParserFactory(), content ) ;
+    tree = createTree( content ) ;
     identifiers = findIdentifiers() ;
+  }
+
+  private Tree createTree( String content ) {
+    final Tree rawTree = parse( new DefaultPartParserFactory(), content ) ;
+    if( null == rawTree ) {
+      return null ;
+    } else {
+      return Hierarchizer.rehierarchize( Treepath.create( rawTree ) ).getBottom() ;
+    }
   }
 
   public Part( final File partFile ) {
@@ -88,10 +87,8 @@ public class Part implements LocationFactory, Renderable
       Charset encoding,
       String thisToString
   ) {
-    this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
-    this.locationName = partFile.getName() ;
-    this.encoding = Objects.nonNull( encoding ) ;
-    tree = parse( new DefaultPartParserFactory(), readContent( partFile, encoding ) ) ;
+    super( partFile, encoding, thisToString ) ;
+    tree = createTree( readContent( partFile, encoding ) ) ;
     identifiers = findIdentifiers() ;
   }
 
@@ -100,46 +97,11 @@ public class Part implements LocationFactory, Renderable
 // Content access
 // ==============
 
-  private String readContent( File partFile, Charset encoding ) {
-
-    LOGGER.info( "Attempting to load file '{}' from {}", partFile.getAbsolutePath(), this ) ;
-
-    try {
-      final FileInputStream inputStream = new FileInputStream( partFile ) ;
-      return IOUtils.toString( inputStream, encoding.name() ) ;
-
-    } catch( IOException e ) {
-      LOGGER.warn( "Could not load file", e ) ;
-      collect( Problem.createProblem( this, e ) ) ;
-      return null ;
-    }
-  }
-
-  private Tree parse( PartParserFactory partParserFactory, String content ) {
-
-    if( null == content ) {
-      return null ;
-    }
-
-    final PartParser parser = partParserFactory.createParser( this, content ) ;
-    Tree tree = null ;
-    try {
-
-      // Yeah we do it here!
-      tree = parser.parse() ;
-      if( null != tree ) {
-        tree = Hierarchizer.rehierarchize( Treepath.create( tree ) ).getBottom() ;
-      }
-
-      for( final Problem problem : parser.getProblems() ) {
-        collect( problem ) ;
-      }
-
-    } catch( RecognitionException e ) {
-      LOGGER.warn( "Could not parse file", e ) ;
-      collect( Problem.createProblem( this, e ) ) ;
-    }
-
+  /**
+   * Returns result of parsing, may be null if it failed.
+   * @return a possibly null object.
+   */
+  public Tree getTree() {
     return tree ;
   }
 
@@ -182,50 +144,6 @@ public class Part implements LocationFactory, Renderable
 
   public Multimap< String, Tree > getIdentifiers() {
     return identifiers ;
-  }
-
-
-// ========
-// Problems
-// ========
-
-  public Iterable< Problem > getProblems() {
-    return Lists.immutableList( problems ) ;
-  }
-
-  public boolean hasProblem() {
-    return ! problems.isEmpty() ;
-  }
-
-  protected final void collect( Problem problem ) {
-    LOGGER.debug( "Collecting Problem: " + problem ) ;
-    problems.add( Objects.nonNull( problem ) ) ;
-  }
-
-
-// ====
-// Misc
-// ====
-
-  @Override
-  public String toString() {
-    return thisToString;
-  }
-
-  /**
-   * Returns result of parsing, may be null if it failed.
-   * @return a possibly null object.
-   */
-  public Tree getTree() {
-    return tree ;
-  }
-
-  public Location createLocation( int line, int column ) {
-    return new Location( locationName, line, column ) ;
-  }
-
-  public Charset getEncoding() {
-    return encoding ;
   }
 
 

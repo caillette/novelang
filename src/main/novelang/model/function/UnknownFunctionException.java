@@ -14,20 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package novelang.parser.antlr;
-
-import novelang.parser.BookParserFactory;
-import novelang.parser.BookParser;
-import novelang.parser.PartParser;
-import novelang.model.common.LocationFactory;
+package novelang.model.function;
 
 /**
  * @author Laurent Caillette
  */
-public class DefaultBookParserFactory implements BookParserFactory {
-
-  public BookParser createParser( final LocationFactory locationFactory, final String text ) {
-    return new DelegatingBookParser( text, locationFactory ) ;
+public class UnknownFunctionException extends Exception {
+  public UnknownFunctionException( String name ) {
+    super( "Unknown function: '" + name + "'" ) ;
   }
 }

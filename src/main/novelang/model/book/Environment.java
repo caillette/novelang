@@ -14,20 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package novelang.model.book;
 
-package novelang.parser.antlr;
-
-import novelang.parser.BookParserFactory;
-import novelang.parser.BookParser;
-import novelang.parser.PartParser;
-import novelang.model.common.LocationFactory;
+import novelang.model.implementation.Part;
 
 /**
  * @author Laurent Caillette
  */
-public class DefaultBookParserFactory implements BookParserFactory {
+public class Environment {
 
-  public BookParser createParser( final LocationFactory locationFactory, final String text ) {
-    return new DelegatingBookParser( text, locationFactory ) ;
+  public void addPart( Part part) {
+    throw new UnsupportedOperationException( "addPart" ) ;
   }
+
+  public Iterable< Part > getParts() {
+    throw new UnsupportedOperationException( "getPart" ) ;
+  }
+
 }
