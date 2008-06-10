@@ -46,6 +46,13 @@ tokens {
   WORD ;
   URL ;
   
+  FUNCTION_CALL ;
+  FUNCTION_NAME ;
+  VALUED_ARGUMENT_PRIMARY ;
+  VALUED_ARGUMENT_ANCILLARY ;
+  VALUED_ARGUMENT_MODIFIER ;
+  VALUED_ARGUMENT_FLAG ;
+  
   ELLIPSIS_OPENING ;
   APOSTROPHE_WORDMATE ;
 
@@ -59,7 +66,6 @@ tokens {
   SIGN_SEMICOLON ;
   SIGN_COLON ;
   
-  NO_PARAGRAPHBODY_RESTRICTION ; // Internal use only.
 }
 
 
@@ -136,44 +142,42 @@ part
   
 chapter 
   : chapterIntroducer 
-    ( smallBreak? ( title | identifier ) )?
-    -> ^( CHAPTER
-           title?
-           identifier?
-        )
+    ( smallBreak? title )?
+    ( mediumBreak? headerIdentifier )?
+    -> ^( CHAPTER title? headerIdentifier? )
   ;	  
 	
 section 
   : sectionIntroducer 
-    ( smallBreak? ( title | identifier ) )?
-    -> ^( SECTION 
-           title?
-           identifier?
-        )
+    ( smallBreak? ( title ) )?
+    -> ^( SECTION title? )
   ;
     
 paragraph
 scope ParagraphScope ;
   : 
-    ( speechOpener ( smallBreak locutor )? smallBreak? paragraphBody )
-    -> ^( PARAGRAPH_SPEECH locutor? paragraphBody )
-  | ( speechEscape WHITESPACE? paragraphBody )
-    -> ^( PARAGRAPH_SPEECH_ESCAPED paragraphBody ) 
-  | ( speechContinuator WHITESPACE? paragraphBody )
-    -> ^( PARAGRAPH_SPEECH_CONTINUED paragraphBody )
-  | paragraphBody
-    -> ^( PARAGRAPH_PLAIN paragraphBody )
+    ( ( blockIdentifier mediumBreak)? 
+      speechOpener ( smallBreak locutor )? smallBreak? paragraphBody )
+    -> ^( PARAGRAPH_SPEECH blockIdentifier? locutor? paragraphBody )
+  | ( ( blockIdentifier mediumBreak)? 
+      speechEscape WHITESPACE? paragraphBody )
+    -> ^( PARAGRAPH_SPEECH_ESCAPED blockIdentifier? paragraphBody ) 
+  | ( ( blockIdentifier mediumBreak)? 
+      speechContinuator WHITESPACE? paragraphBody )
+    -> ^( PARAGRAPH_SPEECH_CONTINUED blockIdentifier? paragraphBody )
+  | ( ( blockIdentifier mediumBreak)? paragraphBody )
+    -> ^( PARAGRAPH_PLAIN blockIdentifier? paragraphBody )
   | ( url ) => url
   ;
 
 blockQuote
-  : OPENING_BLOCKQUOTE 
+  : ( blockIdentifier mediumBreak)? OPENING_BLOCKQUOTE 
     ( mediumBreak | largeBreak )?
     paragraphBody 
     ( largeBreak paragraphBody )* 
     ( mediumBreak | largeBreak )?
     CLOSING_BLOCKQUOTE
-    -> ^( BLOCKQUOTE ^( PARAGRAPH_PLAIN paragraphBody )* )
+    -> ^( BLOCKQUOTE blockIdentifier? ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
 
 litteral
@@ -442,13 +446,18 @@ urlXChar
 // =================================
 
 title
-  :	 APOSTROPHE paragraphBody
+  : paragraphBody
 	  -> ^( TITLE paragraphBody )
   ;
 
-identifier
-  :	paragraphBody
-	  -> ^( IDENTIFIER paragraphBody )
+headerIdentifier
+  :	NUMBER_SIGN w = word
+	  -> ^( IDENTIFIER { delegate.createTree( IDENTIFIER, $w.text ) } )
+  ;
+  
+blockIdentifier
+  :	REVERSE_SOLIDUS NUMBER_SIGN w = word
+	  -> ^( IDENTIFIER { delegate.createTree( IDENTIFIER, $w.text ) } )
   ;
   
 /** This rule repeats through paragraphBodyNoXxx rules in order to avoid left-recursion
@@ -707,11 +716,25 @@ punctuationSign
 // ==================
 
 
-//positiveInteger : digit+ ;
-
-//postsignedInteger : digit+ HYPHEN_MINUS? ;
-
-
+functionCall
+  : name = word 
+    ( mediumBreak ( paragraphBody | ( url ) => url | headerIdentifier ) )?
+    ( mediumBreak valuedArgument )*
+    ->  ^( FUNCTION_CALL 
+            ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  
+            ^( VALUED_ARGUMENT_PRIMARY paragraphBody? url? headerIdentifier? )? 
+            valuedArgument* 
+        )
+  ; 
+  
+valuedArgument
+  :	( PLUS_SIGN? blockIdentifier 
+      -> ^( VALUED_ARGUMENT_ANCILLARY ^( VALUED_ARGUMENT_MODIFIER PLUS_SIGN )? blockIdentifier )
+    )
+  | ( DOLLAR_SIGN flag = word 
+      -> ^( VALUED_ARGUMENT_FLAG { delegate.createTree( VALUED_ARGUMENT_FLAG, $flag.text ) } ) 
+    )
+  ;
 
 
 // ==============
@@ -834,6 +857,7 @@ NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
 PERCENT_SIGN : '%' ;
 QUESTION_MARK : '?' ;
+REVERSE_SOLIDUS : '\\' ;
 RIGHT_PARENTHESIS : ')' ;
 RIGHT_SQUARE_BRACKET : ']' ;
 SEMICOLON : ';' ;

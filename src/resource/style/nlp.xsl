@@ -27,10 +27,10 @@
 <xsl:text> 
 
 </xsl:text>
-***<xsl:choose>
+*** <xsl:choose>
       <xsl:when test="n:identifier" ><xsl:text> </xsl:text>
 <xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
-      <xsl:when test="n:title" >'<xsl:apply-templates select="n:title" mode="header" /></xsl:when>
+      <xsl:when test="n:title" > <xsl:apply-templates select="n:title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
   </xsl:template>
@@ -41,9 +41,9 @@
 <xsl:text> 
 
 </xsl:text>
-===<xsl:choose>
+=== <xsl:choose>
     <xsl:when test="n:identifier" ><xsl:text> </xsl:text><xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
-    <xsl:when test="n:title" >'<xsl:apply-templates select="n:title" mode="header" /></xsl:when>
+    <xsl:when test="n:title" > <xsl:apply-templates select="n:title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
     </xsl:template>

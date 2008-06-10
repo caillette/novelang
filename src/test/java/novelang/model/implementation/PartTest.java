@@ -45,7 +45,7 @@ public class PartTest {
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,  
         tree( SECTION,
-            tree( IDENTIFIER, tree( WORD, "Section1nlp" ) ),
+            tree( TITLE, tree( WORD, "Section1nlp" ) ),
             tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
         ),
         tree( SECTION,
@@ -65,26 +65,26 @@ public class PartTest {
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,
         tree( CHAPTER,
-            tree( IDENTIFIER, tree( WORD, "Chapter-0" ) ),
+            tree( TITLE, tree( WORD, "Chapter-0" ) ),
             tree( SECTION,
-                tree( IDENTIFIER, tree( WORD, "Section-0-0" ) ),
+                tree( TITLE, tree( WORD, "Section-0-0" ) ),
                 tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-0" ) ),
                 tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-1" ) )
             ),
             tree( SECTION,
-                tree( IDENTIFIER, tree( WORD, "Section-0-1" ) ),
+                tree( TITLE, tree( WORD, "Section-0-1" ) ),
                 tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-1-0" ) )
             )
         ),
         tree( CHAPTER,
-            tree( IDENTIFIER, tree( WORD, "Chapter-1" ) ),
+            tree( TITLE, tree( WORD, "Chapter-1" ) ),
             tree( SECTION,
-                tree( IDENTIFIER, tree( WORD, "Section-1-0" ) ),
+                tree( TITLE, tree( WORD, "Section-1-0" ) ),
                 tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-0-0" ) ),
                 tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-0-1" ) )
             ),
             tree( SECTION,
-                tree( IDENTIFIER, tree( WORD, "Section-1-1" ) ),
+                tree( TITLE, tree( WORD, "Section-1-1" ) ),
                 tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-1-0" ) )
             )
         )

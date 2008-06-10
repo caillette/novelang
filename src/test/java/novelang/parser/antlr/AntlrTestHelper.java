@@ -52,14 +52,14 @@ public class AntlrTestHelper {
     return tree;
   }
 
-  static void identifier( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = identifier( text ) ;
+  static void headerIdentifier( String text, Tree expectedTree ) throws RecognitionException {
+    final Tree actualTree = headerIdentifier( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree identifier( String text ) throws RecognitionException {
+  static Tree headerIdentifier( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().identifier().getTree() ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().headerIdentifier().getTree() ;
     checkSanity( parser );
     return tree;
   }
@@ -157,7 +157,7 @@ public class AntlrTestHelper {
   static void url( String text, Tree expectedTree )
       throws RecognitionException
   {
-    final Tree actualTree = url( text ); ;
+    final Tree actualTree = url( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
@@ -167,6 +167,36 @@ public class AntlrTestHelper {
     checkSanity( parser );
     return tree;
   }
+
+  static void functionCall( String text, Tree expectedTree )
+      throws RecognitionException
+  {
+    final Tree actualTree = functionCall( text ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  static Tree functionCall( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().functionCall().getTree() ;
+    checkSanity( parser ) ;
+    return tree;
+  }
+
+  static void valuedArgument( String text, Tree expectedTree )
+      throws RecognitionException
+  {
+    final Tree actualTree = valuedArgument( text ); ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  static Tree valuedArgument( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().valuedArgument().getTree() ;
+    checkSanity( parser ) ;
+    return tree;
+  }
+
+
 
   static void checkSanity( DelegatingPartParser parser ) {
     if( parser.hasProblem() ) {

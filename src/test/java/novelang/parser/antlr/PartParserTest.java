@@ -37,7 +37,7 @@ public class PartParserTest {
 
   @Test
   public void titleIsTwoWords() throws RecognitionException {
-    title( "'some title", tree(
+    title( "some title", tree(
         TITLE,
         tree( WORD, "some" ),
         tree( WORD, "title" )
@@ -46,7 +46,7 @@ public class PartParserTest {
 
   @Test
   public void titleIsTwoWordsAndExclamationMark() throws RecognitionException {
-    title( "'some title !", tree(
+    title( "some title !", tree(
         TITLE,
         tree(WORD, "some"),
         tree(WORD, "title"),
@@ -56,7 +56,7 @@ public class PartParserTest {
 
   @Test
   public void titleIsWordsAndParenthesisAndExclamationMark() throws RecognitionException {
-    title( "'some (title) !", tree(
+    title( "some (title) !", tree(
         TITLE,
         tree( WORD, "some" ),
         tree( PARENTHESIS, tree( WORD, "title" ) ),
@@ -66,10 +66,10 @@ public class PartParserTest {
 
   @Test
   public void identifierIsSingleWord() throws RecognitionException {
-    identifier( "myIdentifier", tree(
-        IDENTIFIER,
-        tree( WORD, "myIdentifier" )
-    ) ) ;
+    headerIdentifier(
+        "#my-Identifier",
+        tree( IDENTIFIER, "my-Identifier" )
+    ) ;
   }
 
   @Test
@@ -136,6 +136,19 @@ public class PartParserTest {
   }
 
   @Test
+  public void paragraphIsSimplestSpeechWithIdentifier() throws RecognitionException {
+    paragraph(
+        "\\#identifier" + BREAK +
+        "--- w0",
+        tree(
+            PARAGRAPH_SPEECH,
+            tree( IDENTIFIER, "identifier"),
+            tree( WORD, "w0" )
+        )
+    ) ;
+  }
+
+  @Test
   public void paragraphIsSimplestSpeechEscape() throws RecognitionException {
     paragraph( "--| w0", tree(
         PARAGRAPH_SPEECH_ESCAPED,
@@ -145,12 +158,38 @@ public class PartParserTest {
   }
 
   @Test
+  public void paragraphIsSimplestSpeechEscapeWithIdentifier() throws RecognitionException {
+    paragraph(
+        "\\#identifier" + BREAK +
+        "--| w0",
+        tree(
+            PARAGRAPH_SPEECH_ESCAPED,
+            tree( IDENTIFIER, "identifier"),
+            tree( WORD, "w0" )
+        )
+    ) ;
+  }
+
+  @Test
   public void paragraphIsSimplestSpeechContinued() throws RecognitionException {
     paragraph( "--+ w0", tree(
         PARAGRAPH_SPEECH_CONTINUED,
         tree( WORD, "w0" )
     ) ) ;
 
+  }
+
+  @Test
+  public void paragraphIsSimplestSpeechContinuedWithIdentifier() throws RecognitionException {
+    paragraph(
+        "\\#identifier" + BREAK +
+        "--+ w0",
+        tree(
+            PARAGRAPH_SPEECH_CONTINUED,
+            tree( IDENTIFIER, "identifier"),
+            tree( WORD, "w0" )
+        )
+    ) ;
   }
 
   @Test
@@ -174,8 +213,22 @@ public class PartParserTest {
         tree( WORD, "w0" ),
         tree( PUNCTUATION_SIGN, SIGN_COMMA )
     ) ) ;
-
   }
+
+  @Test
+  public void paragraphSingleWordWithIdentifier() throws RecognitionException {
+    paragraph(
+        "\\#identifier" + BREAK +
+        "w0",
+        tree(
+            PARAGRAPH_PLAIN,
+            tree( IDENTIFIER, "identifier" ),
+            tree( WORD, "w0" )
+        )
+    ) ;
+  }
+
+
 
   @Test
   public void paragraphIsWordsWithCommaInTheMiddle1() throws RecognitionException {
@@ -416,7 +469,7 @@ public class PartParserTest {
         "=== s00" ,
         tree(
             SECTION,
-            tree( IDENTIFIER, tree( WORD, "s00") )
+            tree( TITLE, tree( WORD, "s00") )
         )
     ) ;
   }
@@ -464,7 +517,7 @@ public class PartParserTest {
   }
 
   @Test
-  public void sectionIsAnonymousAndHasLitteral() throws RecognitionException {
+  public void someLitteral() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
@@ -497,7 +550,7 @@ public class PartParserTest {
   }
 
   @Test
-  public void partIsSectionThenParagraphThenBlockquoteThenParagraph() 
+  public void partIsSectionThenParagraphThenBlockquoteThenParagraph()
       throws RecognitionException
   {
     part(
@@ -515,6 +568,25 @@ public class PartParserTest {
           tree( BLOCKQUOTE, tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ) ) ),
           tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ) )
       )
+    ) ;
+  }
+
+  @Test
+  public void blockquoteWithIdentifier()
+      throws RecognitionException
+  {
+    part(
+        "  \\#identifier " + BREAK +
+        "<< w0" + BREAK +
+        ">>",
+        tree(
+            PART,
+            tree(
+                BLOCKQUOTE,
+                tree( IDENTIFIER, "identifier" ),
+                tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ) )
+            )
+        )
     ) ;
   }
 
@@ -826,11 +898,11 @@ public class PartParserTest {
           PART,
           tree(
               CHAPTER,
-              tree( IDENTIFIER, tree(WORD, "c0" ) )
+              tree( TITLE, tree(WORD, "c0" ) )
           ),
           tree(
               SECTION,
-              tree( IDENTIFIER, tree( WORD, "s0" ) )
+              tree( TITLE, tree( WORD, "s0" ) )
           ),
           tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) )
         )
@@ -869,6 +941,32 @@ public class PartParserTest {
       "===" + BREAK +
       BREAK +
       " lobs "  // really.
+    ) ;
+  }
+
+  @Test
+  public void chapterIsAnonymousWithHeaderIdentifier()
+      throws RecognitionException
+  {
+    chapter(
+        "***" + BREAK + "  #identifier",
+        tree( CHAPTER, tree( IDENTIFIER, "identifier" ) )
+    ) ;
+  }
+
+  @Test
+  public void chapterHasTitleAndHeaderIdentifier()
+      throws RecognitionException
+  {
+    chapter(
+        "*** Chapter has" + BREAK +
+        "title " + BREAK +
+        "  #identifier",
+        tree(
+            CHAPTER,
+            tree( TITLE, tree( WORD, "Chapter"), tree( WORD, "has" ), tree( WORD, "title") ),
+            tree( IDENTIFIER, "identifier" )
+        )
     ) ;
   }
 
