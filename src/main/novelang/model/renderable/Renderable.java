@@ -33,7 +33,7 @@ public interface Renderable {
 
   boolean hasProblem() ;
 
-  Tree getTree() ;
+  Tree getDocumentTree() ;
 
 //  TreeMetadata getTreeMetadata() ;
 

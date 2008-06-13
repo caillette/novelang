@@ -24,6 +24,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.net.MalformedURLException;
 
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ public class SplitByChapter {
       RenderingConfiguration configuration,
       File partFile,
       File targetDirectory
-  ) {
+  ) throws MalformedURLException {
     this.part = new Part( partFile ) ;
     this.targetDirectory = targetDirectory ;
     this.configuration = configuration ;
@@ -87,7 +88,7 @@ public class SplitByChapter {
 
   private void rewrite() throws IOException {
     final Map< String, Tree > chaptersByIdentifier = Maps.newHashMap() ;
-    for( final Tree child : part.getTree().getChildren() ) {
+    for( final Tree child : part.getDocumentTree().getChildren() ) {
       if( NodeKind.CHAPTER.isRoot( child ) ) {
         final String identifier = generateIdentifier( chaptersByIdentifier.keySet(), child ) ;
         final File chapterFile = new File( targetDirectory, identifier  + ".nlp" ) ;
@@ -200,7 +201,7 @@ public class SplitByChapter {
       return false ;
     }
 
-    public Tree getTree() {
+    public Tree getDocumentTree() {
       return child;
     }
 

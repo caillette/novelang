@@ -67,7 +67,7 @@ public class PartParserTest {
   @Test
   public void identifierIsSingleWord() throws RecognitionException {
     headerIdentifier(
-        "#my-Identifier",
+        "\\\\my-Identifier",
         tree( IDENTIFIER, "my-Identifier" )
     ) ;
   }
@@ -138,7 +138,7 @@ public class PartParserTest {
   @Test
   public void paragraphIsSimplestSpeechWithIdentifier() throws RecognitionException {
     paragraph(
-        "\\#identifier" + BREAK +
+        "\\identifier" + BREAK +
         "--- w0",
         tree(
             PARAGRAPH_SPEECH,
@@ -160,7 +160,7 @@ public class PartParserTest {
   @Test
   public void paragraphIsSimplestSpeechEscapeWithIdentifier() throws RecognitionException {
     paragraph(
-        "\\#identifier" + BREAK +
+        "\\identifier" + BREAK +
         "--| w0",
         tree(
             PARAGRAPH_SPEECH_ESCAPED,
@@ -182,7 +182,7 @@ public class PartParserTest {
   @Test
   public void paragraphIsSimplestSpeechContinuedWithIdentifier() throws RecognitionException {
     paragraph(
-        "\\#identifier" + BREAK +
+        "\\identifier" + BREAK +
         "--+ w0",
         tree(
             PARAGRAPH_SPEECH_CONTINUED,
@@ -218,7 +218,7 @@ public class PartParserTest {
   @Test
   public void paragraphSingleWordWithIdentifier() throws RecognitionException {
     paragraph(
-        "\\#identifier" + BREAK +
+        "\\identifier" + BREAK +
         "w0",
         tree(
             PARAGRAPH_PLAIN,
@@ -576,7 +576,7 @@ public class PartParserTest {
       throws RecognitionException
   {
     part(
-        "  \\#identifier " + BREAK +
+        "  \\identifier " + BREAK +
         "<< w0" + BREAK +
         ">>",
         tree(
@@ -949,7 +949,7 @@ public class PartParserTest {
       throws RecognitionException
   {
     chapter(
-        "***" + BREAK + "  #identifier",
+        "***" + BREAK + "  \\\\identifier",
         tree( CHAPTER, tree( IDENTIFIER, "identifier" ) )
     ) ;
   }
@@ -961,7 +961,7 @@ public class PartParserTest {
     chapter(
         "*** Chapter has" + BREAK +
         "title " + BREAK +
-        "  #identifier",
+        "  \\\\identifier",
         tree(
             CHAPTER,
             tree( TITLE, tree( WORD, "Chapter"), tree( WORD, "has" ), tree( WORD, "title") ),

@@ -22,6 +22,8 @@ import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Tree;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
+import static novelang.parser.antlr.AntlrTestHelper.functionCall;
+import static novelang.parser.antlr.AntlrTestHelper.valuedArgument;
 
 /**
  * @author Laurent Caillette
@@ -32,7 +34,8 @@ public class BookParserTest {
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
    * parser produces.
    */
-  public static final Tree FUNCTIONCALLWITHURL_TREE = tree( FUNCTION_CALL,
+  public static final Tree FUNCTIONCALLWITHURL_TREE = tree(
+      FUNCTION_CALL,
       tree( FUNCTION_NAME, "function" ),
       tree(
           VALUED_ARGUMENT_PRIMARY,
@@ -42,7 +45,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallBare() throws RecognitionException {
-    AntlrTestHelper.functionCall(
+    functionCall(
         "function",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" )
@@ -52,7 +55,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithParagraphBody() throws RecognitionException {
-    AntlrTestHelper.functionCall(
+    functionCall(
         "function with paragraphbody",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
@@ -67,7 +70,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithUrl() throws RecognitionException {
-    AntlrTestHelper.functionCall(
+    functionCall(
         "function file://my/file",
         FUNCTIONCALLWITHURL_TREE
     ) ;
@@ -75,7 +78,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithFlag() throws RecognitionException {
-    AntlrTestHelper.functionCall(
+    functionCall(
         "function $flag",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
@@ -86,7 +89,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithMoreFlags() throws RecognitionException {
-    AntlrTestHelper.functionCall(
+    functionCall(
         "function $flag1 " + BREAK +
         " $flag2",
         tree( FUNCTION_CALL,
@@ -99,9 +102,9 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithAncillaries() throws RecognitionException {
-    AntlrTestHelper.functionCall(
-        "function \\#identifier1 " + BREAK +
-        " \\#identifier2",
+    functionCall(
+        "function \\identifier1 " + BREAK +
+        " \\identifier2",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
             tree( VALUED_ARGUMENT_ANCILLARY, tree( IDENTIFIER, "identifier1" ) ),
@@ -114,8 +117,8 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifier() throws RecognitionException {
-    AntlrTestHelper.valuedArgument(
-        "\\#identifier",
+    valuedArgument(
+        "\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( IDENTIFIER, "identifier" )
         )
@@ -124,8 +127,8 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifierAndModifier() throws RecognitionException {
-    AntlrTestHelper.valuedArgument(
-        "+\\#identifier",
+    valuedArgument(
+        "+\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( VALUED_ARGUMENT_MODIFIER, "+" ),
             tree( IDENTIFIER, "identifier" )

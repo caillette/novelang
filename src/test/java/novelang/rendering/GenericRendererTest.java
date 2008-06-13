@@ -97,7 +97,7 @@ public class GenericRendererTest {
       public boolean hasProblem() {
         return false;
       }
-      public Tree getTree() {
+      public Tree getDocumentTree() {
         return tree ;
       }
       public TreeMetadata getTreeMetadata() {

@@ -39,7 +39,7 @@ public class FunctionInsertTest {
     final FunctionCall call = definition.instantiate(
         null, BookParserTest.FUNCTIONCALLWITHURL_TREE ) ;
 
-    final Tree initialTree = new DefaultMutableTree( NodeKind._BOOK ) ;
+    final Tree initialTree = new DefaultMutableTree( NodeKind.BOOK ) ;
     final FunctionCall.Result result =
         call.evaluate( new Environment(), Treepath.create( initialTree ) ) ;
 

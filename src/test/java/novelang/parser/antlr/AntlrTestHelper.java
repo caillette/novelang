@@ -196,6 +196,20 @@ public class AntlrTestHelper {
     return tree;
   }
 
+  public static void book( String text, Tree expectedTree )
+      throws RecognitionException
+  {
+    final Tree actualTree = book( text ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  public static Tree book( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().book().getTree() ;
+    checkSanity( parser ) ;
+    return tree;
+  }
+
 
 
   static void checkSanity( DelegatingPartParser parser ) {

@@ -18,8 +18,11 @@ package novelang.model.function;
 
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import com.google.common.collect.Maps;
 import novelang.model.function.builtin.FunctionInsert;
+import novelang.model.function.builtin.FunctionSection;
 
 /**
  * Registry of {@link FunctionDefinition}s.
@@ -28,24 +31,29 @@ import novelang.model.function.builtin.FunctionInsert;
  */
 public class FunctionRegistry {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( FunctionRegistry.class ) ;
+
   private final Map< String, FunctionDefinition > definitions = Maps.newHashMap() ;
 
   public FunctionRegistry( FunctionDefinition... definitions ) {
     for( FunctionDefinition definition : definitions ) {
       this.definitions.put( definition.getName(), definition ) ;
+      LOGGER.debug( "Added function definition: {}", definition.getName() ) ;
     }
   }
 
   public FunctionDefinition getFunctionDeclaration( String name ) throws UnknownFunctionException {
     final FunctionDefinition definition = definitions.get( name ) ;
     if( null == definition ) {
+      LOGGER.warn( "Could not find funtion '{}'", name ) ;
       throw new UnknownFunctionException( name ) ;
     }
     return definition ;
   }
 
   private static final FunctionRegistry BUILTIN_FUNCTIONS = new FunctionRegistry(
-      new FunctionInsert()
+      new FunctionInsert(),
+      new FunctionSection()
   ) ;
 
   public static FunctionRegistry getStandardRegistry() {

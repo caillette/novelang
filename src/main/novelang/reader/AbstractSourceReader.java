@@ -19,8 +19,10 @@ package novelang.reader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.net.URL;
 
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
@@ -57,21 +59,21 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
 
   protected AbstractSourceReader(
-      File partFile,
+      URL partUrl,
       Charset encoding,
       String thisToString
   ) {
     this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
-    this.locationName = partFile.getName() ;
+    this.locationName = partUrl.toExternalForm() ;
     this.encoding = Objects.nonNull( encoding ) ;
   }
 
-  protected String readContent( File partFile, Charset encoding ) {
+  protected String readContent( URL partUrl, Charset encoding ) {
 
-    LOGGER.info( "Attempting to load file '{}' from {}", partFile.getAbsolutePath(), this ) ;
+    LOGGER.info( "Attempting to load file '{}' from {}", partUrl.toExternalForm(), this ) ;
 
     try {
-      final FileInputStream inputStream = new FileInputStream( partFile ) ;
+      final InputStream inputStream = partUrl.openStream() ;
       return IOUtils.toString( inputStream, encoding.name() ) ;
 
     } catch( IOException e ) {
@@ -117,6 +119,12 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   protected final void collect( Problem problem ) {
     LOGGER.debug( "Collecting Problem: " + problem ) ;
     problems.add( Objects.nonNull( problem ) ) ;
+  }
+
+  protected final void collect( Iterable< Problem > problems ) {
+    for( Problem problem : problems ) {
+      collect( problem ) ;
+    }
   }
 
   public Location createLocation( int line, int column ) {

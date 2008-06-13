@@ -16,52 +16,79 @@
  */
 package novelang.model.book;
 
-import java.nio.charset.Charset;
+import java.util.List;
 
 import novelang.model.common.Tree;
 import novelang.model.common.Problem;
-import novelang.model.renderable.Renderable;
+import novelang.model.common.NodeKind;
+import novelang.model.common.Treepath;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionRegistry;
+import novelang.model.function.FunctionDefinition;
+import novelang.model.function.UnknownFunctionException;
+import novelang.model.function.IllegalFunctionCallException;
+import novelang.model.implementation.DefaultMutableTree;
+import novelang.reader.AbstractSourceReader;
+import novelang.parser.antlr.DefaultBookParserFactory;
+import com.google.common.collect.Lists;
 
 /**
+ * Reads a Book file, processes functions and builds a Tree with inclusions and so on.
+ *
  * @author Laurent Caillette
  */
-public class Book implements Renderable {
+public class Book extends AbstractSourceReader {
 
-  private final FunctionRegistry functionRegistry ;
-
-
+  private final Tree documentTree;
 
   public Book( FunctionRegistry functionRegistry, String content ) {
-    this.functionRegistry = functionRegistry;
+    final Tree rawTree = parse( new DefaultBookParserFactory(), content ) ;
+    Iterable< FunctionCall > functionCalls = createFunctionCalls( functionRegistry, rawTree ) ;
+    documentTree = callFunctions( functionCalls, new DefaultMutableTree( NodeKind.BOOK ) ) ;
   }
 
-  public Tree getTree() {
-    throw new UnsupportedOperationException( "getTree" ) ;
+  public Tree getDocumentTree() {
+    return documentTree;
   }
 
-  private static Iterable<FunctionCall> createFunctionCalls( Tree tree ) {
-    throw new UnsupportedOperationException( "createFunctionCalls" ) ;
+  private Iterable< FunctionCall > createFunctionCalls(
+      FunctionRegistry functionRegistry,
+      Tree rawTree
+  ) {
+    final List< FunctionCall > functionCalls = Lists.newArrayList() ;
+    for( int i = 0 ; i < rawTree.getChildCount() ; i++ ) {
+      final Tree functionCallTree = rawTree.getChildAt( i ) ;
+      final Tree functionNameTree = functionCallTree.getChildAt( 0 ) ;
+      final String functionName = functionNameTree.getChildAt( 0 ).getText() ;
+      try {
+        final FunctionDefinition functionDefinition =
+            functionRegistry.getFunctionDeclaration( functionName ) ;
+        final FunctionCall functionCall =
+            functionDefinition.instantiate( functionCallTree.getLocation(), functionCallTree ) ;
+        functionCalls.add( functionCall ) ;
+      } catch( UnknownFunctionException e ) {
+        collect( Problem.createProblem( e ) ) ;
+      } catch( IllegalFunctionCallException e ) {
+        collect( Problem.createProblem( e ) ) ;
+      }
+    }
+    return Lists.immutableList( functionCalls ) ;
+  }
+
+  private Tree callFunctions( Iterable< FunctionCall > functionCalls, Tree tree ) {
+    Treepath book = Treepath.create( tree ) ;
+    for( FunctionCall functionCall : functionCalls ) {
+      FunctionCall.Result result = functionCall.evaluate( null, book ) ;
+      collect( result.getProblems() ) ;
+      final Treepath newBook = result.getBook() ;
+      if( null != newBook ) {
+        book = newBook ;
+      }
+    }
+    return book.getTop() ;
   }
 
   
 
-
-// ==========
-// Renderable
-// ==========
-
-  public Iterable< Problem > getProblems() {
-    throw new UnsupportedOperationException( "getProblems" ) ;
-  }
-
-  public Charset getEncoding() {
-    throw new UnsupportedOperationException( "getEncoding" ) ;
-  }
-
-  public boolean hasProblem() {
-    throw new UnsupportedOperationException( "hasProblem" ) ;
-  }
 
 }

@@ -41,7 +41,7 @@ public class PartTest {
   @Test
   public void loadPartOk() throws IOException {
     final Part part = new Part( justSections ) ;
-    final Tree partTree = part.getTree();
+    final Tree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,  
         tree( SECTION,
@@ -61,7 +61,7 @@ public class PartTest {
   @Test
   public void loadSimpleStructure() throws IOException {
     final Part part = new Part( simpleStructureFile ) ;
-    final Tree partTree = part.getTree();
+    final Tree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final Tree expected = tree( PART,
         tree( CHAPTER,

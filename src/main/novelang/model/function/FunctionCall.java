@@ -20,6 +20,7 @@ import novelang.model.common.Problem;
 import novelang.model.common.Location;
 import novelang.model.common.Treepath;
 import novelang.model.book.Environment;
+import com.google.common.collect.Iterables;
 
 /**
  * @author Laurent Caillette
@@ -36,24 +37,39 @@ public abstract class FunctionCall {
     return location ;
   }
 
+  /**
+   *
+   * @param environment
+   * @param book
+   * @return a non-null {@link Result} instance.
+   */
   public abstract Result evaluate( Environment environment, Treepath book ) ;
 
-  public class Result {
+  public static class Result {
+
     private final Treepath book ;
     private final Iterable< Problem > problems ;
+
+    private static final Iterable< Problem > NO_PROBLEM = Iterables.emptyIterable() ;
 
     public Result(
         Treepath book,
         Iterable< Problem > problems
     ) {
       this.book = book ;
-      this.problems = problems ;
+      this.problems = null == problems ? NO_PROBLEM : problems ;
     }
 
+    /**
+     * May be null.
+     */
     public Treepath getBook() {
       return book ;
     }
 
+    /**
+     * Never null.
+     */
     public Iterable< Problem > getProblems() {
       return problems ;
     }

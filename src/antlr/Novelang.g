@@ -166,7 +166,8 @@ scope ParagraphScope ;
   | ( ( blockIdentifier mediumBreak)? 
       speechContinuator WHITESPACE? paragraphBody )
     -> ^( PARAGRAPH_SPEECH_CONTINUED blockIdentifier? paragraphBody )
-  | ( ( blockIdentifier mediumBreak)? paragraphBody )
+  | ( ( blockIdentifier mediumBreak)? 
+      paragraphBody )
     -> ^( PARAGRAPH_PLAIN blockIdentifier? paragraphBody )
   | ( url ) => url
   ;
@@ -452,12 +453,12 @@ title
   ;
 
 headerIdentifier
-  :	NUMBER_SIGN w = word
+  : REVERSE_SOLIDUS REVERSE_SOLIDUS  w = word
 	  -> ^( IDENTIFIER { delegate.createTree( IDENTIFIER, $w.text ) } )
   ;
   
 blockIdentifier
-  :	REVERSE_SOLIDUS NUMBER_SIGN w = word
+  :	REVERSE_SOLIDUS w = word
 	  -> ^( IDENTIFIER { delegate.createTree( IDENTIFIER, $w.text ) } )
   ;
   
@@ -728,7 +729,12 @@ book
 
 functionCall
   : name = word 
-    ( mediumBreak ( paragraphBody | ( url ) => url | headerIdentifier ) )?
+    ( mediumBreak 
+      (   paragraphBody 
+        | ( url ) => url 
+        | ( headerIdentifier ) => headerIdentifier 
+      ) 
+    )?
     ( mediumBreak valuedArgument )*
     ->  ^( FUNCTION_CALL 
             ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  

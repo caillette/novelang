@@ -2,27 +2,28 @@
 
 // Insert file's AST inplace:
 
-::insert file://foo.nlp
+insert file://foo.nlp
 
-::insert file://many/*.nlp
+insert file://many/*.nlp
 
 
 // Import all identified nodes contained by the file(s):
 
-::import file://foo.nlp
+import file://foo.nlp
 
-::import file://many/*.nlp
+import file://many/*.nlp
 
 
 ::*** Chapter title
 
-::style redefine-chapter-specific-style
+style redefine-chapter-specific-style
 
 ::=== Section title
 
-::add Some chapter or section (pulled from imported part) without its title.
+expand Some chapter or section (pulled from imported part) without its title.
 
-::add :withtitle Some section (pulled from imported part) with its title.
+expand Some section (pulled from imported part) with its title.
+  $withtitle
 
 ::add Some chapter or section
   :p  Some paragraph    // Add paragraph identified as `Some paragraph`

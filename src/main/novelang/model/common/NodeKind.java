@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
  */
 public enum NodeKind {
 
-  _BOOK,
+  BOOK,
   PART,
 
   _META_TIMESTAMP,

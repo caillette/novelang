@@ -60,10 +60,10 @@ public class GenericRenderer implements Renderer {
       try {
         fragmentWriter.startWriting(
             outputStream,
-            MetadataHelper.createMetadata( rendered.getTree(), rendered.getEncoding() ),
+            MetadataHelper.createMetadata( rendered.getDocumentTree(), rendered.getEncoding() ),
             rendered.getEncoding()
         ) ;
-        final Tree root = rendered.getTree() ;
+        final Tree root = rendered.getDocumentTree() ;
         renderTree( root, null, null ) ;
         fragmentWriter.finishWriting() ;
       } catch( Exception e ) {
@@ -114,7 +114,7 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
-      case _BOOK :
+      case BOOK:
       case PART :
         rootElement = true ;
 

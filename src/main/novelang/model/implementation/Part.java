@@ -18,33 +18,19 @@
 package novelang.model.implementation;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
+import java.net.URL;
+import java.net.MalformedURLException;
 
-import org.antlr.runtime.RecognitionException;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.ListMultimap;
 import novelang.model.common.IdentifierHelper;
-import novelang.model.common.Location;
-import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
-import novelang.model.common.Problem;
 import novelang.model.common.Tree;
 import novelang.model.common.Treepath;
 import static novelang.model.common.NodeKind.SECTION;
-import novelang.model.renderable.Renderable;
 import novelang.parser.Encoding;
-import novelang.parser.PartParser;
-import novelang.parser.PartParserFactory;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.reader.AbstractSourceReader;
 
@@ -74,21 +60,22 @@ public class Part extends AbstractSourceReader {
     }
   }
 
-  public Part( final File partFile ) {
+  public Part( final File partFile ) throws MalformedURLException {
     this(
-        partFile,
+        partFile.toURL(), 
         Encoding.DEFAULT,
         "part[" + partFile.getName() + "]"
     ) ;
   }
 
+
   protected Part(
-      File partFile,
+      URL partUrl,
       Charset encoding,
       String thisToString
   ) {
-    super( partFile, encoding, thisToString ) ;
-    tree = createTree( readContent( partFile, encoding ) ) ;
+    super( partUrl, encoding, thisToString ) ;
+    tree = createTree( readContent( partUrl, encoding ) ) ;
     identifiers = findIdentifiers() ;
   }
 
@@ -101,7 +88,7 @@ public class Part extends AbstractSourceReader {
    * Returns result of parsing, may be null if it failed.
    * @return a possibly null object.
    */
-  public Tree getTree() {
+  public Tree getDocumentTree() {
     return tree ;
   }
 
@@ -111,7 +98,7 @@ public class Part extends AbstractSourceReader {
 // ===========
 
   /**
-   * Finds Section identifiers from inside the {@link #getTree() tree}.
+   * Finds Section identifiers from inside the {@link #getDocumentTree() tree}.
    * At the first glance it seems better to do it from the grammar but
    * I'm not sure on how to concatenate tokens.
    * If I find how to do I should just add a Multimap member to the grammar file and
