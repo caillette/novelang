@@ -17,7 +17,12 @@
 package novelang.model.book;
 
 import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import novelang.model.common.Tree;
 import novelang.model.common.Problem;
 import novelang.model.common.NodeKind;
@@ -39,12 +44,22 @@ import com.google.common.collect.Lists;
  */
 public class Book extends AbstractSourceReader {
 
-  private final Tree documentTree;
+  private final Environment environment ;
+  private final Tree documentTree ;
 
-  public Book( FunctionRegistry functionRegistry, String content ) {
+  public Book( FunctionRegistry functionRegistry, File baseDirectory, String content ) {
+    environment =  new Environment( baseDirectory ) ;
     final Tree rawTree = parse( new DefaultBookParserFactory(), content ) ;
     Iterable< FunctionCall > functionCalls = createFunctionCalls( functionRegistry, rawTree ) ;
     documentTree = callFunctions( functionCalls, new DefaultMutableTree( NodeKind.BOOK ) ) ;
+  }
+
+  public Book( FunctionRegistry functionRegistry, File bookFile ) throws IOException {
+    this(
+        functionRegistry,
+        bookFile.getParentFile(),
+        IOUtils.toString( new FileInputStream( bookFile ) )
+    ) ;    
   }
 
   public Tree getDocumentTree() {
@@ -78,7 +93,7 @@ public class Book extends AbstractSourceReader {
   private Tree callFunctions( Iterable< FunctionCall > functionCalls, Tree tree ) {
     Treepath book = Treepath.create( tree ) ;
     for( FunctionCall functionCall : functionCalls ) {
-      FunctionCall.Result result = functionCall.evaluate( null, book ) ;
+      FunctionCall.Result result = functionCall.evaluate( environment, book ) ;
       collect( result.getProblems() ) ;
       final Treepath newBook = result.getBook() ;
       if( null != newBook ) {

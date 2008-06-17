@@ -1022,6 +1022,16 @@ public class PartParserTest {
   }
 
   @Test
+  public void urlFileWithHyphenMinus() throws RecognitionException {
+    url( "file:/path/to-file.ext", tree( URL, "file:/path/to-file.ext" ) ) ;
+  }
+
+  @Test
+  public void urlFileWithHyphenMinusNoPath() throws RecognitionException {
+    url( "file:my-file.ext", tree( URL, "file:my-file.ext" ) ) ;
+  }
+
+  @Test
   public void urlHttpGoogleQuery() throws RecognitionException {
     url(
         "http://www.google.com/search?q=url%20specification&sourceid=mozilla2&ie=utf-8&oe=utf-8",
@@ -1034,7 +1044,7 @@ public class PartParserTest {
 
   @Test
   public void urlFilePathFileDotNlp() throws RecognitionException {
-    url( "file://path/file.ppp", tree( URL, "file://path/file.ppp" ) ) ;
+    url( "file:/path/file.ppp", tree( URL, "file:/path/file.ppp" ) ) ;
   }
 
 

@@ -19,6 +19,7 @@ package novelang.produce;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.FileNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ import novelang.model.common.Problem;
 import novelang.model.common.StructureKind;
 import novelang.model.implementation.Part;
 import novelang.model.renderable.Renderable;
+import novelang.model.book.Book;
+import novelang.model.function.FunctionRegistry;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.HtmlWriter;
 import novelang.rendering.NlpWriter;
@@ -129,12 +132,22 @@ public class DocumentProducer {
   public Renderable createRenderable( AbstractRequest documentRequest )
       throws IOException
   {
-    final File partFile = FileLookupHelper.load(
-        basedir,
-        documentRequest.getDocumentSourceName(),
-        StructureKind.PART.getFileExtensions()
-    ) ;
-    return new Part( partFile ) ;
+
+    try {
+      final File bookFile = FileLookupHelper.load(
+          basedir,
+          documentRequest.getDocumentSourceName(),
+          StructureKind.BOOK.getFileExtensions()
+      ) ;
+      return new Book( FunctionRegistry.getStandardRegistry(), bookFile ) ;
+    } catch( FileNotFoundException e ) {
+      final File partFile = FileLookupHelper.load(
+          basedir,
+          documentRequest.getDocumentSourceName(),
+          StructureKind.PART.getFileExtensions()
+      ) ;
+      return new Part( partFile ) ;
+    }
 
   }
 

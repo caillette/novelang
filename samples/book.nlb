@@ -1,0 +1,6 @@
+insert file:served/good.nlp
+
+section
+  This Section was defined from inside a Book file!
+
+insert file:one-word.nlp

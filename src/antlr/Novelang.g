@@ -157,8 +157,8 @@ section
 paragraph
 scope ParagraphScope ;
   : 
-    ( ( blockIdentifier mediumBreak)? 
-      speechOpener ( smallBreak locutor )? smallBreak? paragraphBody )
+    ( ( blockIdentifier mediumBreak)? speechOpener 
+      ( smallBreak locutor )? smallBreak? paragraphBody )
     -> ^( PARAGRAPH_SPEECH blockIdentifier? locutor? paragraphBody )
   | ( ( blockIdentifier mediumBreak)? 
       speechEscape WHITESPACE? paragraphBody )
@@ -169,7 +169,7 @@ scope ParagraphScope ;
   | ( ( blockIdentifier mediumBreak)? 
       paragraphBody )
     -> ^( PARAGRAPH_PLAIN blockIdentifier? paragraphBody )
-  | ( url ) => url
+  | ( httpUrl ) => ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } ) )
   ;
 
 blockQuote
@@ -240,15 +240,16 @@ locutor
 // ===================================
 
 url
-  : ( http = fileUrl -> ^( URL { delegate.createTree( URL, $http.text ) } )	)
-  | ( file = httpUrl -> ^( URL { delegate.createTree( URL, $file.text ) } )	) 
+  : ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } )	)
+  | ( file = fileUrl -> ^( URL { delegate.createTree( URL, $file.text ) } )	) 
   ;
   
-fileUrl                                       // Grammatical ambiguity in the spec
-  : ( 'f' 'i' 'l' 'e' COLON SOLIDUS SOLIDUS ) => 'f' 'i' 'l' 'e' COLON SOLIDUS SOLIDUS 
-    ( urlHost ) // Change from spec: don't handle 'localhost' in this rule.
-    SOLIDUS 
-    urlFilePath
+fileUrl                                   
+//  : ( 'f' 'i' 'l' 'e' COLON ) //=> 'f' 'i' 'l' 'e' COLON // Grammatical ambiguity in the spec
+    // following removed from the spec!
+//    SOLIDUS SOLIDUS urlHost SOLIDUS 
+//    urlFilePath
+  :	'f' 'i' 'l' 'e' COLON SOLIDUS? urlFilePath 
   ;
   
 httpUrl                                       // Grammatical ambiguity in the spec
@@ -336,7 +337,7 @@ urlFileSegment
       | EQUALS_SIGN
       | TILDE         // Not in the spec.
       | NUMBER_SIGN   // Not in the spec.
-    )*
+    )+                // + added from the spec.
   ;
 
   
@@ -729,12 +730,10 @@ book
 
 functionCall
   : name = word 
-    ( mediumBreak 
-      (   paragraphBody 
-        | ( url ) => url 
-        | ( headerIdentifier ) => headerIdentifier 
-      ) 
-    )?
+     (   smallBreak url 
+       | smallBreak headerIdentifier 
+       | WHITESPACE? SOFTBREAK WHITESPACE? paragraphBody
+     )?
     ( mediumBreak valuedArgument )*
     ->  ^( FUNCTION_CALL 
             ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  

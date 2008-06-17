@@ -24,6 +24,8 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static novelang.parser.antlr.AntlrTestHelper.functionCall;
 import static novelang.parser.antlr.AntlrTestHelper.valuedArgument;
+import static novelang.parser.antlr.AntlrTestHelper.book;
+import novelang.TestResources;
 
 /**
  * @author Laurent Caillette
@@ -34,14 +36,48 @@ public class BookParserTest {
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
    * parser produces.
    */
-  public static final Tree FUNCTIONCALLWITHURL_TREE = tree(
-      FUNCTION_CALL,
-      tree( FUNCTION_NAME, "function" ),
-      tree(
-          VALUED_ARGUMENT_PRIMARY,
-          tree( URL, "file://my/file" )
-      )
-  );
+  public static final Tree createFunctionCallWithUrlTree( String fileName ) {
+    return tree(
+        FUNCTION_CALL,
+        tree( FUNCTION_NAME, "function" ),
+        tree(
+            VALUED_ARGUMENT_PRIMARY,
+            tree( URL, "file:" + fileName )
+        )
+    ) ;
+  }
+
+  @Test
+  public void bookWithOneBareCall() throws RecognitionException {
+    book(
+        "insert file:one-word.nlp",
+        tree( BOOK,
+            tree( FUNCTION_CALL,
+                tree( FUNCTION_NAME, "insert" ),
+                tree( VALUED_ARGUMENT_PRIMARY, tree( URL, "file:one-word.nlp" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void bookWithTwoBareCalls() throws RecognitionException {
+    book(
+        " function1 file:my/file1 " + BREAK + BREAK +
+        "function2 file:/my/file2 " + BREAK + "  "
+        ,
+        tree( BOOK,
+            tree( FUNCTION_CALL,
+                tree( FUNCTION_NAME, "function1" ),
+                tree( VALUED_ARGUMENT_PRIMARY, tree( URL, "file:my/file1" ) )
+            ),
+            tree( FUNCTION_CALL,
+                tree( FUNCTION_NAME, "function2" ),
+                tree( VALUED_ARGUMENT_PRIMARY, tree( URL, "file:/my/file2" ) )
+            )
+        )
+    ) ;
+  }
 
   @Test
   public void functionCallBare() throws RecognitionException {
@@ -56,7 +92,7 @@ public class BookParserTest {
   @Test
   public void functionCallWithParagraphBody() throws RecognitionException {
     functionCall(
-        "function with paragraphbody",
+        "function \n" + " with paragraphbody",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
             tree(
@@ -71,9 +107,9 @@ public class BookParserTest {
   @Test
   public void functionCallWithUrl() throws RecognitionException {
     functionCall(
-        "function file://my/file",
-        FUNCTIONCALLWITHURL_TREE
-    ) ;
+        "function file:my/file",
+        createFunctionCallWithUrlTree( "my/file" )
+    ); ;
   }
 
   @Test

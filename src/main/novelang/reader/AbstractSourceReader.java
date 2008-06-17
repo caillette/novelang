@@ -83,13 +83,13 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     }
   }
 
-  protected Tree parse( GenericParserFactory partParserFactory, String content ) {
+  protected Tree parse( GenericParserFactory parserFactory, String content ) {
 
     if( null == content ) {
       return null ;
     }
 
-    final GenericParser parser = partParserFactory.createParser( this, content ) ;
+    final GenericParser parser = parserFactory.createParser( this, content ) ;
     Tree tree = null ;
     try {
 

@@ -16,17 +16,27 @@
  */
 package novelang.model.function.builtin;
 
+import java.io.File;
+
 import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Before;
+import org.apache.commons.lang.ClassUtils;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
 import novelang.model.function.IllegalFunctionCallException;
 import novelang.model.common.Tree;
 import novelang.model.common.Treepath;
 import novelang.model.common.NodeKind;
+import novelang.model.common.Location;
 import novelang.model.implementation.DefaultMutableTree;
 import novelang.model.book.Environment;
 import novelang.parser.antlr.BookParserTest;
+import novelang.parser.Encoding;
+import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
+import novelang.TestResources;
+import novelang.daemon.HttpDaemon;
 
 /**
  * @author Laurent Caillette
@@ -37,15 +47,38 @@ public class FunctionInsertTest {
   public void testGoodUrl() throws IllegalFunctionCallException {
     final FunctionDefinition definition = new FunctionInsert() ;
     final FunctionCall call = definition.instantiate(
-        null, BookParserTest.FUNCTIONCALLWITHURL_TREE ) ;
+        new Location( "", -1, -1 ), 
+        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() ) ) ;
 
     final Tree initialTree = new DefaultMutableTree( NodeKind.BOOK ) ;
     final FunctionCall.Result result =
-        call.evaluate( new Environment(), Treepath.create( initialTree ) ) ;
+        call.evaluate( new Environment( contentDirectory ), Treepath.create( initialTree ) ) ;
 
     Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
     Assert.assertNotNull( result.getBook() ) ;
 
   }
 
+
+// =======
+// Fixture
+// =======
+
+  private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
+  private File oneWordFile ;
+  private File contentDirectory ;
+
+  @Before
+  public void setUp() throws Exception {
+
+    final String testName = ClassUtils.getShortClassName( getClass() ) ;
+    final ScratchDirectoryFixture scratchDirectoryFixture =
+        new ScratchDirectoryFixture( testName ) ;
+    contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+    oneWordFile = TestResourceTools.copyResourceToFile(
+        getClass(),
+        ONE_WORD_FILENAME,
+        contentDirectory
+    ) ;
+  }
 }

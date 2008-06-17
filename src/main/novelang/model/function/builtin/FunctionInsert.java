@@ -16,9 +16,13 @@
  */
 package novelang.model.function.builtin;
 
+import java.io.File;
+import java.net.MalformedURLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import novelang.model.book.Environment;
 import novelang.model.common.Location;
 import static novelang.model.common.NodeKind.URL;
@@ -73,12 +77,24 @@ public class FunctionInsert implements FunctionDefinition {
       Treepath book,
       String urlAsString
   ) {
-    final Part part = new Part( urlAsString ) ;
+    final String fileName = urlAsString.substring( 5 ) ; // "file:"
+    final File partFile = fileName.startsWith( "/" ) ?
+        new File( fileName ) :
+        new File( environment.getBaseDirectory(), fileName )
+    ;
+    final Part part;
+    try {
+      part = new Part( partFile ) ;
+    } catch( MalformedURLException e ) {
+      return new FunctionCall.Result( book, Lists.newArrayList( Problem.createProblem( e  ) ) ) ;
+    }
     final Tree partTree = part.getDocumentTree() ;
 
-    final Treepath newBook = TreeTools.addChildAtRight( book, partTree ) ;
+    for( final Tree partChild : partTree.getChildren() ) {
+      book = TreeTools.addChildAtRight( book, partChild ) ;
+    }
 
-    return new FunctionCall.Result( newBook, part.getProblems() ) ;
+    return new FunctionCall.Result( book, part.getProblems() ) ;
   }
 
 

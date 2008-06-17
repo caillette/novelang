@@ -176,7 +176,7 @@ public class AntlrTestHelper {
   }
 
   static Tree functionCall( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingBookParser parser = createBookParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().functionCall().getTree() ;
     checkSanity( parser ) ;
     return tree;
@@ -190,7 +190,7 @@ public class AntlrTestHelper {
   }
 
   static Tree valuedArgument( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingBookParser parser = createBookParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().valuedArgument().getTree() ;
     checkSanity( parser ) ;
     return tree;
@@ -204,7 +204,7 @@ public class AntlrTestHelper {
   }
 
   public static Tree book( String text ) throws RecognitionException {
-    final DelegatingPartParser parser = createPartParser( text ) ;
+    final DelegatingBookParser parser = createBookParser( text ) ;
     final Tree tree = ( Tree ) parser.getAntlrParser().book().getTree() ;
     checkSanity( parser ) ;
     return tree;
@@ -212,7 +212,7 @@ public class AntlrTestHelper {
 
 
 
-  static void checkSanity( DelegatingPartParser parser ) {
+  static void checkSanity( AbstractDelegatingParser parser ) {
     if( parser.hasProblem() ) {
       throw new AssertionFailedError(
           "Parser has problems. " + createProblemList( parser.getProblems() ) ) ;
@@ -222,5 +222,10 @@ public class AntlrTestHelper {
   static DelegatingPartParser createPartParser( String text ) {
     return ( DelegatingPartParser )
         new DefaultPartParserFactory().createParser( TreeFixture.LOCATION_FACTORY, text );
+  }
+
+  static DelegatingBookParser createBookParser( String text ) {
+    return ( DelegatingBookParser )
+        new DefaultBookParserFactory().createParser( TreeFixture.LOCATION_FACTORY, text );
   }
 }

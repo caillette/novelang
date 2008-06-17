@@ -16,14 +16,27 @@
  */
 package novelang.model.book;
 
+import java.io.File;
+
 import novelang.model.implementation.Part;
+import com.google.common.base.Objects;
 
 /**
  * @author Laurent Caillette
  */
 public class Environment {
 
-  public void addPart( Part part) {
+  private final File baseDirectory ;
+
+  public Environment( File baseDirectory ) {
+    this.baseDirectory = Objects.nonNull( baseDirectory );
+  }
+
+  public File getBaseDirectory() {
+    return baseDirectory;
+  }
+
+  public void addPart( Part part ) {
     throw new UnsupportedOperationException( "addPart" ) ;
   }
 
