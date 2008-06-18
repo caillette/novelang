@@ -17,46 +17,55 @@
 package novelang.model.function.builtin;
 
 import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Set;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.io.filefilter.AndFileFilter;
-import org.apache.commons.io.filefilter.PrefixFileFilter;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.io.filefilter.NotFileFilter;
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.io.filefilter.OrFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import novelang.model.book.Environment;
 import novelang.model.common.Location;
 import static novelang.model.common.NodeKind.URL;
 import static novelang.model.common.NodeKind.VALUED_ARGUMENT_PRIMARY;
-import static novelang.model.common.NodeKind.VALUED_ARGUMENT_ANCILLARY;
+import static novelang.model.common.NodeKind.TITLE;
+import static novelang.model.common.NodeKind.CHAPTER;
+import static novelang.model.common.NodeKind.WORD;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
 import novelang.model.common.Treepath;
 import novelang.model.common.TreeTools;
 import novelang.model.common.NodeKind;
 import novelang.model.common.StructureKind;
+import novelang.model.common.MutableTree;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
 import novelang.model.function.IllegalFunctionCallException;
 import static novelang.model.function.FunctionTools.verify;
 import novelang.model.implementation.Part;
+import novelang.model.implementation.DefaultMutableTree;
 
 /**
+ * Inserts one or more Part files.
+ * <p>
+ * Syntax 1: insert given file.
+ * <pre>
+ * insert file:&lt;path-to-partfile&gt;
+ * </pre>
+ * Syntax 2: insert all Part files contained by given directory.
+ * The <code>${@value #OPTION_RECURSE}</code> option causes a scan of subdirectories, if any.
+ * The <code>${@value #OPTION_CREATECHAPTERS}</code> option creates chapters with the short name of
+ * originating file.
+ * <pre>
+ * insert file:&lt;path-to-partfiles&gt; [${@value #OPTION_RECURSE}] [${@value #OPTION_CREATECHAPTERS}]
+ * </pre>
+ *
  * @author Laurent Caillette
  */
 public class InsertFunction implements FunctionDefinition {
@@ -64,9 +73,18 @@ public class InsertFunction implements FunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger( InsertFunction.class ) ;
 
   private static final String OPTION_RECURSE = "recurse" ;
-  private static final Set< String > SUPPORTED_OPTIONS = Sets.immutableSet( OPTION_RECURSE ) ;
-  private static final IOFileFilter PART_FILE_FILTER =
-      new SuffixFileFilter( StructureKind.PART.getFileExtensions() ) ;
+  private static final String OPTION_CREATECHAPTERS = "createchapters" ;
+
+  private static final Set< String > SUPPORTED_OPTIONS = Sets.immutableSet(
+      OPTION_RECURSE,
+      OPTION_CREATECHAPTERS
+  ) ;
+
+  private static final Comparator< ? super File > FILE_COMPARATOR = new Comparator< File >() {
+    public int compare( File file1, File file2 ) {
+      return file1.getAbsolutePath().compareTo( file2.getAbsolutePath() ) ;
+    }
+  } ;
 
   public String getName() {
     return "insert" ;
@@ -128,54 +146,78 @@ public class InsertFunction implements FunctionDefinition {
         new File( environment.getBaseDirectory(), fileName )
     ;
     if( options.contains( OPTION_RECURSE ) ) {
-      final List< Problem > problems = Lists.newArrayList() ;
-      try {
-        final Iterable< File > partFiles = scanPartFiles( insertedFile ) ;
-        for( File partFile : partFiles ) {
-          Part part = null ;
-          try {
-            part = new Part( partFile ) ;
-          } catch( MalformedURLException e ) {
-            problems.add( Problem.createProblem( e ) ) ;
-          }
-          if( null != part ) {
-            final Tree partTree = part.getDocumentTree() ;
+      return evaluateRecursive( book, insertedFile, options.contains( OPTION_CREATECHAPTERS ) ) ;
+    } else {
+      return evaluateFlat( book, insertedFile );
+    }
+  }
 
+  private static FunctionCall.Result evaluateFlat( Treepath book, File insertedFile ) {
+    final Part part;
+    try {
+      part = new Part( insertedFile ) ;
+    } catch( MalformedURLException e ) {
+      return new FunctionCall.Result( book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
+    }
+    final Tree partTree = part.getDocumentTree() ;
+
+    for( final Tree partChild : partTree.getChildren() ) {
+      book = TreeTools.addChildAtRight( book, partChild ) ;
+    }
+
+    return new FunctionCall.Result( book, part.getProblems() ) ;
+  }
+
+  private static FunctionCall.Result evaluateRecursive(
+      Treepath book,
+      File insertedFile,
+      boolean createChapters
+  ) {
+    final List< Problem > problems = Lists.newArrayList() ;
+    try {
+      final Iterable< File > partFiles = scanPartFiles( insertedFile ) ;
+      for( File partFile : partFiles ) {
+        Part part = null ;
+        try {
+          part = new Part( partFile ) ;
+        } catch( MalformedURLException e ) {
+          problems.add( Problem.createProblem( e ) ) ;
+        }
+        if( null != part ) {
+          final Tree partTree = part.getDocumentTree() ;
+
+          if( createChapters ) {
+            final MutableTree chapterTree = new DefaultMutableTree( CHAPTER ) ;
+            final DefaultMutableTree word = new DefaultMutableTree(
+                WORD.name(), FilenameUtils.getBaseName( partFile.getName() ) ) ;
+            final DefaultMutableTree title = new DefaultMutableTree( TITLE ) ;
+            title.addChild( word ) ;
+
+            chapterTree.addChild( title ) ;
+            for( final Tree partChild : partTree.getChildren() ) {
+              chapterTree.addChild( partChild ) ;
+            }
+            final Treepath updatedBook = TreeTools.addChildAtRight( book, chapterTree ) ;
+            book = Treepath.create( updatedBook.getTop() ) ;
+
+          } else {
             for( final Tree partChild : partTree.getChildren() ) {
               final Treepath updatedBook = TreeTools.addChildAtRight( book, partChild ) ;
               book = Treepath.create( updatedBook.getTop() ) ;
             }
           }
         }
-      } catch( IllegalFunctionCallException e ) {
-        problems.add( Problem.createProblem( e ) ) ;
       }
-
-      return new FunctionCall.Result( book, problems ) ;
-
-
-    } else {
-
-      final Part part;
-      try {
-        part = new Part( insertedFile ) ;
-      } catch( MalformedURLException e ) {
-        return new FunctionCall.Result( book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
-      }
-      final Tree partTree = part.getDocumentTree() ;
-
-      for( final Tree partChild : partTree.getChildren() ) {
-        book = TreeTools.addChildAtRight( book, partChild ) ;
-      }
-
-      return new FunctionCall.Result( book, part.getProblems() ) ;
+    } catch( IllegalFunctionCallException e ) {
+      problems.add( Problem.createProblem( e ) ) ;
     }
+
+    return new FunctionCall.Result( book, problems ) ;
   }
 
   private static Iterable< File > scanPartFiles( File directory )
       throws IllegalFunctionCallException
   {
-
     if( directory.isDirectory() ) {
       final Collection fileCollection =
           FileUtils.listFiles( directory, StructureKind.PART.getFileExtensions(), true ) ;
@@ -183,7 +225,23 @@ public class InsertFunction implements FunctionDefinition {
       for( Object o : fileCollection ) {
         files.add( ( File ) o ) ;
       }
-      return files ;
+      final Iterable< File > sortedFiles = Lists.sortedCopy( files, FILE_COMPARATOR ) ;
+
+      if( LOGGER.isDebugEnabled() ) {
+        StringBuffer buffer = new StringBuffer(
+            "Scan of '" + directory.getAbsolutePath() + "' found those files:" ) ;
+        for( File file : sortedFiles ) {
+          try {
+            buffer.append( "\n  " ).append( file.getCanonicalPath() ) ;
+          } catch( IOException e ) {
+            throw new RuntimeException( e ) ;
+          }
+        }
+        LOGGER.debug( buffer.toString() ) ;
+      }
+
+      return sortedFiles ;
+
     } else {
       throw new IllegalFunctionCallException(
           "Not a directory: '" + directory.getAbsolutePath() + "'" ) ;

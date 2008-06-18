@@ -33,7 +33,7 @@ public class TestResources {
   public static final String SCANNED_BOOK = SCANNED_DIR + "/book.nlb" ;
   public static final String SCANNED_FILE1 = SCANNED_DIR + "/file1.nlp" ;
   public static final String SCANNED_FILE2 = SCANNED_DIR + "/file2.nlp" ;
-  public static final String SCANNED_SUBDIR = SCANNED_DIR + "/directory" ;
+  public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
   public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
 
   public static final String SHOWCASE = "/showcase/showcase.nlp";

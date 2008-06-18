@@ -31,7 +31,7 @@ public final class PolymorphicRequest extends AbstractRequest {
   public String toString() {
     return
         ClassUtils.getShortClassName( getClass() ) + "[" +
-        "isErrorRequest" + "=" + getDisplayProblems() +
+        "displayProblems" + "=" + getDisplayProblems() +
         ";documentMimeType" + "=" +
             ( getRenditionMimeType() == null ? "<null>" : getRenditionMimeType().getMimeName() ) +
         ";documentSourceName" + "=" + getDocumentSourceName() +
