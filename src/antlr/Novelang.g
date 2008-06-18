@@ -734,21 +734,27 @@ functionCall
        | smallBreak headerIdentifier 
        | WHITESPACE? SOFTBREAK WHITESPACE? paragraphBody
      )?
-    ( mediumBreak valuedArgument )*
+    ( mediumBreak ( ancillaryArgument | flagArgument ) )*
     ->  ^( FUNCTION_CALL 
             ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  
-            ^( VALUED_ARGUMENT_PRIMARY paragraphBody? url? headerIdentifier? )? 
-            valuedArgument* 
+            ^( VALUED_ARGUMENT_PRIMARY 
+                ^( PARAGRAPH_PLAIN paragraphBody )? 
+                url? 
+                headerIdentifier? 
+            )? 
+            ancillaryArgument*
+            flagArgument*
         )
   ; 
   
-valuedArgument
-  :	( PLUS_SIGN? blockIdentifier 
-      -> ^( VALUED_ARGUMENT_ANCILLARY ^( VALUED_ARGUMENT_MODIFIER PLUS_SIGN )? blockIdentifier )
-    )
-  | ( DOLLAR_SIGN flag = word 
-      -> ^( VALUED_ARGUMENT_FLAG { delegate.createTree( VALUED_ARGUMENT_FLAG, $flag.text ) } ) 
-    )
+ancillaryArgument
+  :	( PLUS_SIGN? blockIdentifier )
+      -> ^( VALUED_ARGUMENT_ANCILLARY ^( VALUED_ARGUMENT_MODIFIER PLUS_SIGN )? blockIdentifier )   
+  ;
+
+flagArgument    
+  : ( DOLLAR_SIGN flag = word )
+      -> ^( VALUED_ARGUMENT_FLAG { delegate.createTree( VALUED_ARGUMENT_FLAG, $flag.text ) } )     
   ;
 
 

@@ -182,16 +182,16 @@ public class AntlrTestHelper {
     return tree;
   }
 
-  static void valuedArgument( String text, Tree expectedTree )
+  static void ancillaryArgument( String text, Tree expectedTree )
       throws RecognitionException
   {
-    final Tree actualTree = valuedArgument( text ); ;
+    final Tree actualTree = ancillaryArgument( text ); ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree valuedArgument( String text ) throws RecognitionException {
+  static Tree ancillaryArgument( String text ) throws RecognitionException {
     final DelegatingBookParser parser = createBookParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().valuedArgument().getTree() ;
+    final Tree tree = ( Tree ) parser.getAntlrParser().ancillaryArgument().getTree() ;
     checkSanity( parser ) ;
     return tree;
   }

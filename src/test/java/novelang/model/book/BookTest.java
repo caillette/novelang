@@ -17,20 +17,19 @@
 package novelang.model.book;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Before;
-import org.antlr.runtime.RecognitionException;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.SystemUtils;
-import novelang.parser.antlr.AntlrTestHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.model.common.NodeKind.BOOK;
 import static novelang.model.common.NodeKind.WORD;
-import static novelang.model.common.NodeKind.PARAGRAPH_PLAIN;
 import static novelang.model.common.NodeKind.SECTION;
 import static novelang.model.common.NodeKind.TITLE;
 import novelang.model.common.Tree;
@@ -47,8 +46,10 @@ import novelang.TestResourceTools;
  */
 public class BookTest {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( BookTest.class ) ;
+
   /**
-   * Tests the {@link novelang.model.function.builtin.FunctionSection}.
+   * Tests the {@link novelang.model.function.builtin.SectionFunction}.
    */
   @Test
   public void justCreateSection() {
@@ -71,7 +72,7 @@ public class BookTest {
   }
 
   /**
-   * Test {@link novelang.model.function.builtin.FunctionInsert}.
+   * Test {@link novelang.model.function.builtin.InsertFunction}.
    */
   @Test
   public void justInsert() {
@@ -95,6 +96,19 @@ public class BookTest {
 
   }
 
+  /**
+   * Test {@link novelang.model.function.builtin.InsertFunction}.
+   */
+  @Test
+  public void insertWithFileScan() throws IOException {
+    final Book book = new Book(
+        FunctionRegistry.getStandardRegistry(),
+        scannedBook
+    ) ;
+    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+    Assert.assertFalse( book.hasProblem() ) ;
+  }
+
 
 // =======
 // Fixture
@@ -103,6 +117,10 @@ public class BookTest {
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
   private File oneWordFile ;
 
+  public static final String SCANNED_BOOK_FILENAME = TestResources.SCANNED_DIR ;
+//  private File scannedDirectory ;
+  private File scannedBook ;
+
   @Before
   public void setUp() throws Exception {
 
@@ -110,10 +128,22 @@ public class BookTest {
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     final File contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+
     oneWordFile = TestResourceTools.copyResourceToFile(
         getClass(),
         ONE_WORD_FILENAME,
         contentDirectory
     ) ;
+
+//    scannedDirectory = new File( contentDirectory, TestResources.SCANNED_DIR ) ;
+    TestResourceTools.copyResourceToFile(
+        getClass(), TestResources.SCANNED_FILE1, contentDirectory ) ;
+    TestResourceTools.copyResourceToFile(
+        getClass(), TestResources.SCANNED_FILE2, contentDirectory ) ;
+    TestResourceTools.copyResourceToFile(
+        getClass(), TestResources.SCANNED_FILE3, contentDirectory ) ;
+    scannedBook = TestResourceTools.copyResourceToFile(
+        getClass(), TestResources.SCANNED_BOOK, contentDirectory ) ;
   }
+
 }

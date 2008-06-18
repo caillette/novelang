@@ -18,46 +18,58 @@ package novelang.model.function.builtin;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Before;
-import org.apache.commons.lang.ClassUtils;
-import novelang.model.function.FunctionCall;
-import novelang.model.function.FunctionDefinition;
-import novelang.model.function.IllegalFunctionCallException;
-import novelang.model.common.Tree;
-import novelang.model.common.Treepath;
-import novelang.model.common.NodeKind;
-import novelang.model.common.Location;
-import novelang.model.implementation.DefaultMutableTree;
-import novelang.model.book.Environment;
-import novelang.parser.antlr.BookParserTest;
-import novelang.parser.Encoding;
+import org.junit.Test;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.daemon.HttpDaemon;
+import novelang.model.book.Environment;
+import novelang.model.common.Location;
+import static novelang.model.common.NodeKind.BOOK;
+import novelang.model.common.Tree;
+import novelang.model.common.Treepath;
+import novelang.model.function.FunctionCall;
+import novelang.model.function.FunctionDefinition;
+import novelang.model.function.IllegalFunctionCallException;
+import novelang.model.implementation.DefaultMutableTree;
+import novelang.parser.antlr.BookParserTest;
 
 /**
  * @author Laurent Caillette
  */
-public class FunctionInsertTest {
+public class InsertFunctionTest {
 
   @Test
-  public void testGoodUrl() throws IllegalFunctionCallException {
-    final FunctionDefinition definition = new FunctionInsert() ;
+  public void goodFileUrl() throws IllegalFunctionCallException {
+    final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ), 
-        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() ) ) ;
+        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
+    ) ;
 
-    final Tree initialTree = new DefaultMutableTree( NodeKind.BOOK ) ;
+    final Tree initialTree = new DefaultMutableTree( BOOK ) ;
     final FunctionCall.Result result =
         call.evaluate( new Environment( contentDirectory ), Treepath.create( initialTree ) ) ;
 
     Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
     Assert.assertNotNull( result.getBook() ) ;
+    Assert.assertNotNull( result.getBook() ) ;
 
   }
+
+  @Test
+  public void recurse() throws IllegalFunctionCallException {
+    final FunctionDefinition definition = new InsertFunction() ;
+    final FunctionCall call = definition.instantiate(
+        new Location( "", -1, -1 ),
+        BookParserTest.createFunctionCallWithUrlTree(
+            scannedDirectory.getAbsolutePath(), "recurse" )
+    ) ;
+
+  }
+
 
 
 // =======
@@ -65,8 +77,9 @@ public class FunctionInsertTest {
 // =======
 
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
-  private File oneWordFile ;
   private File contentDirectory ;
+  private File oneWordFile ;
+  private File scannedDirectory ;
 
   @Before
   public void setUp() throws Exception {
@@ -75,10 +88,15 @@ public class FunctionInsertTest {
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+
     oneWordFile = TestResourceTools.copyResourceToFile(
         getClass(),
         ONE_WORD_FILENAME,
         contentDirectory
     ) ;
+
+    scannedDirectory = new File( contentDirectory, TestResources.SCANNED_DIR ) ;
+    
   }
+
 }

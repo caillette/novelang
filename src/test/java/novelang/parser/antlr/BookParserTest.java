@@ -20,12 +20,14 @@ import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
 import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Tree;
+import novelang.model.common.NodeKind;
+import novelang.model.common.MutableTree;
+import novelang.model.implementation.DefaultMutableTree;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static novelang.parser.antlr.AntlrTestHelper.functionCall;
-import static novelang.parser.antlr.AntlrTestHelper.valuedArgument;
+import static novelang.parser.antlr.AntlrTestHelper.ancillaryArgument;
 import static novelang.parser.antlr.AntlrTestHelper.book;
-import novelang.TestResources;
 
 /**
  * @author Laurent Caillette
@@ -36,15 +38,23 @@ public class BookParserTest {
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
    * parser produces.
    */
-  public static final Tree createFunctionCallWithUrlTree( String fileName ) {
-    return tree(
-        FUNCTION_CALL,
-        tree( FUNCTION_NAME, "function" ),
-        tree(
-            VALUED_ARGUMENT_PRIMARY,
-            tree( URL, "file:" + fileName )
-        )
-    ) ;
+  public static final Tree createFunctionCallWithUrlTree(
+      String fileName,
+      String... flagArguments
+  ) {
+    final MutableTree functionCall = new DefaultMutableTree( FUNCTION_CALL ) ;
+    functionCall.addChild( new DefaultMutableTree( FUNCTION_NAME.name(), "function" ) ) ;
+    final Tree urlTree = new DefaultMutableTree( URL.name(), "file:" + fileName ) ;
+    final MutableTree primaryArgument = new DefaultMutableTree( VALUED_ARGUMENT_PRIMARY ) ;
+    primaryArgument.addChild( urlTree ) ;
+    functionCall.addChild( primaryArgument ) ;
+
+    if( flagArguments.length > 0 ) {
+      for( String ancillaryArgument : flagArguments ) {
+        functionCall.addChild( tree( NodeKind.VALUED_ARGUMENT_FLAG, ancillaryArgument ) ) ;
+      }
+    }
+    return functionCall ;
   }
 
   @Test
@@ -97,8 +107,10 @@ public class BookParserTest {
             tree( FUNCTION_NAME, "function" ),
             tree(
                 VALUED_ARGUMENT_PRIMARY,
-                tree( WORD, "with" ),
-                tree( WORD, "paragraphbody" )
+                tree( PARAGRAPH_PLAIN,
+                    tree( WORD, "with" ),
+                    tree( WORD, "paragraphbody" )
+                )
             )
         )
     ) ;
@@ -153,7 +165,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifier() throws RecognitionException {
-    valuedArgument(
+    ancillaryArgument(
         "\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( IDENTIFIER, "identifier" )
@@ -163,7 +175,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifierAndModifier() throws RecognitionException {
-    valuedArgument(
+    ancillaryArgument(
         "+\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( VALUED_ARGUMENT_MODIFIER, "+" ),

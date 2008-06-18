@@ -21,8 +21,8 @@ import java.util.Map;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import com.google.common.collect.Maps;
-import novelang.model.function.builtin.FunctionInsert;
-import novelang.model.function.builtin.FunctionSection;
+import novelang.model.function.builtin.InsertFunction;
+import novelang.model.function.builtin.SectionFunction;
 
 /**
  * Registry of {@link FunctionDefinition}s.
@@ -52,8 +52,8 @@ public class FunctionRegistry {
   }
 
   private static final FunctionRegistry BUILTIN_FUNCTIONS = new FunctionRegistry(
-      new FunctionInsert(),
-      new FunctionSection()
+      new InsertFunction(),
+      new SectionFunction()
   ) ;
 
   public static FunctionRegistry getStandardRegistry() {
