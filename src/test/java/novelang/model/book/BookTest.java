@@ -32,6 +32,7 @@ import static novelang.model.common.NodeKind.BOOK;
 import static novelang.model.common.NodeKind.WORD;
 import static novelang.model.common.NodeKind.SECTION;
 import static novelang.model.common.NodeKind.TITLE;
+import static novelang.model.common.NodeKind.PARAGRAPH_PLAIN;
 import novelang.model.common.Tree;
 import novelang.model.common.NodeKind;
 import novelang.model.function.FunctionRegistry;
@@ -86,7 +87,7 @@ public class BookTest {
     TreeFixture.assertEquals(
         tree( BOOK,
             tree(
-                NodeKind.PARAGRAPH_PLAIN,
+                PARAGRAPH_PLAIN,
                 tree( WORD, "oneword" )
             )
         ),
@@ -106,7 +107,40 @@ public class BookTest {
         scannedBook
     ) ;
     LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+
+    final Tree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEquals(
+        tree( BOOK,
+            tree(
+                NodeKind.CHAPTER ,
+                tree( NodeKind.TITLE, tree( WORD, "file1" ) ),
+                tree(
+                    PARAGRAPH_PLAIN,
+                    tree( WORD, "content-of-file1" )
+                )
+            ),
+            tree(
+                NodeKind.CHAPTER ,
+                tree( NodeKind.TITLE, tree( WORD, "file2" ) ),
+                tree(
+                    PARAGRAPH_PLAIN,
+                    tree( WORD, "content-of-file2" )
+                )
+            ),
+            tree(
+                NodeKind.CHAPTER ,
+                tree( NodeKind.TITLE, tree( WORD, "file3" ) ),
+                tree(
+                    PARAGRAPH_PLAIN,
+                    tree( WORD, "content-of-file3" )
+                )
+            )
+        ),
+        bookTree
+    ) ;
     Assert.assertFalse( book.hasProblem() ) ;
+
+
   }
 
 
@@ -118,7 +152,6 @@ public class BookTest {
   private File oneWordFile ;
 
   public static final String SCANNED_BOOK_FILENAME = TestResources.SCANNED_DIR ;
-//  private File scannedDirectory ;
   private File scannedBook ;
 
   @Before
@@ -135,7 +168,6 @@ public class BookTest {
         contentDirectory
     ) ;
 
-//    scannedDirectory = new File( contentDirectory, TestResources.SCANNED_DIR ) ;
     TestResourceTools.copyResourceToFile(
         getClass(), TestResources.SCANNED_FILE1, contentDirectory ) ;
     TestResourceTools.copyResourceToFile(

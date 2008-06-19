@@ -161,8 +161,10 @@ public class InsertFunction implements FunctionDefinition {
     }
     final Tree partTree = part.getDocumentTree() ;
 
-    for( final Tree partChild : partTree.getChildren() ) {
-      book = TreeTools.addChildAtRight( book, partChild ) ;
+    if( null != partTree ) {
+      for( final Tree partChild : partTree.getChildren() ) {
+        book = TreeTools.addChildAtRight( Treepath.create( book.getTop() ), partChild ) ;
+      }
     }
 
     return new FunctionCall.Result( book, part.getProblems() ) ;
