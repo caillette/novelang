@@ -16,23 +16,78 @@
  */
 package novelang.model.common.tree;
 
+import org.apache.commons.lang.NullArgumentException;
+import com.google.common.collect.ObjectArrays;
+
 /**
  * Immutable implementation of a tree.
+ * <p>
+ * Please avoid being stupid using reflection to poke into the array.
+ *
+ * 
  * @author Laurent Caillette
  */
-public class Tree {
+public abstract class Tree< T extends Tree > {
 
-  private final Tree[] children ;
+  private final T[] children ;
 
-  public Tree( Tree[] children ) {
-    this.children = children.clone() ;
+  public Tree( T[] children ) {
+    if( null == children ) {
+      this.children = null ;
+    } else {
+      this.children = children.clone() ;
+    }
   }
+
+  protected abstract T adopt( T[] newChildren ) ;
 
   public final int getChildCount() {
-    return children.length ;
+    return null == children ? 0 : children.length ;
   }
 
-  public final Tree getChildAt( int index ) {
+  public final T getChildAt( int index ) {
+    if( index >= getChildCount() ) {
+      throw new IllegalArgumentException(
+          "Unsupported index: " + index + " (child count=" + getChildCount() + ")" ) ;
+    }
     return children[ index ] ;
   }
+
+  public final T addOnLeft( T newChild ) {
+    if( null == newChild ) {
+      throw new NullArgumentException( "newChild" ) ;
+    }
+    final T[] newArray = ObjectArrays.newArray(
+        ( Class< T > ) newChild.getClass(), getChildCount() + 1 ) ;
+    newArray[ 0 ] = newChild ;
+    for( int i = 0 ; i < getChildCount() ; i++ ) {
+      newArray[ i + 1 ] = getChildAt( i ) ;
+    }
+    return adopt( newArray ) ;
+  }
+
+  public final T addOnRight( T newChild ) {
+    if( null == newChild ) {
+      throw new NullArgumentException( "newChild") ;
+    }
+    final T[] newArray = ObjectArrays.newArray(
+        ( Class< T > ) newChild.getClass(), getChildCount() + 1 ) ;
+    newArray[ getChildCount() ] = newChild ;
+    for( int i = 0 ; i < getChildCount() ; i++ ) {
+      newArray[ i ] = getChildAt( i ) ;
+    }
+    return adopt( newArray ) ;
+  }
+
+  public final void remove( int index ) {
+    if( index < 0 ) {
+      throw new IllegalArgumentException( "Negative index: " + index ) ;
+    }
+    if( getChildCount() < index ) {
+      throw new IllegalArgumentException(
+          "Cannot remove child at index " + index + " (child count=" + getChildCount() + ")" ) ;
+    }
+    final T[] newArray = ObjectArrays.newArray( children, getChildCount() + 1 ) ;
+  }
+
 }

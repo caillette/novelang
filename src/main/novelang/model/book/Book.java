@@ -36,6 +36,7 @@ import novelang.model.implementation.DefaultMutableTree;
 import novelang.reader.AbstractSourceReader;
 import novelang.parser.antlr.DefaultBookParserFactory;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Reads a Book file, processes functions and builds a Tree with inclusions and so on.
@@ -87,7 +88,7 @@ public class Book extends AbstractSourceReader {
         collect( Problem.createProblem( e ) ) ;
       }
     }
-    return Lists.immutableList( functionCalls ) ;
+    return ImmutableList.copyOf( functionCalls ) ;
   }
 
   private Tree callFunctions( Iterable< FunctionCall > functionCalls, Tree tree ) {

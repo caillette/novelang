@@ -22,6 +22,7 @@ import java.util.List;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.Tree;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
@@ -60,7 +61,7 @@ public class GrammarDelegate {
   }
 
   public Iterable< Problem > getProblems() {
-    return Lists.immutableList( problems ) ;
+    return ImmutableList.copyOf( problems ) ;
   }
 
   public LocationFactory getLocationFactory() {

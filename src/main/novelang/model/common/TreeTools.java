@@ -21,6 +21,7 @@ import java.util.Arrays;
 import novelang.model.implementation.DefaultMutableTree;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -325,7 +326,7 @@ public class TreeTools {
     }
 
     public Iterable< Tree > getChildren() {
-      return Lists.immutableList( Arrays.asList( children ) ) ;
+      return ImmutableList.copyOf( Arrays.asList( children ) ) ;
     }
 
     public String getText() {

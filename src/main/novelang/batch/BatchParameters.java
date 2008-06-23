@@ -28,6 +28,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -87,8 +88,7 @@ public class BatchParameters {
     ;
   }
 
-  private static final List<String> EMPTY_STRING_LIST =
-      Lists.immutableList( new ArrayList< String >() ) ;
+  private static final List< String > EMPTY_STRING_LIST = ImmutableList.of() ;
 
 
 // =======

@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.model.common.Location;
 import novelang.model.common.MutableTree;
 import novelang.model.common.NodeKind;
@@ -74,7 +75,7 @@ public class DefaultMutableTree implements MutableTree {
   }
 
   public Iterable< Tree > getChildren() {
-    return Lists.immutableList( children ) ;
+    return ImmutableList.copyOf( children ) ;
   }
 
   public String getText() {

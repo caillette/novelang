@@ -24,6 +24,7 @@ import novelang.model.common.TreeTools;
 import static novelang.model.common.NodeKind.SECTION;
 import static novelang.model.common.NodeKind.CHAPTER;
 import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Transforms the tree representing a Part for handling various stuff
@@ -107,7 +108,7 @@ public class Hierarchizer {
     private final Set< NodeKind > excluded ;
 
     public ExclusionFilter( NodeKind... excluded ) {
-      this.excluded = Sets.immutableSet( excluded ) ;
+      this.excluded = ImmutableSet.copyOf( Sets.newHashSet( excluded ) ) ;
     }
 
     public boolean isMoveable( NodeKind nodeKind ) {

@@ -30,6 +30,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import novelang.model.book.Environment;
 import novelang.model.common.Location;
 import static novelang.model.common.NodeKind.URL;
@@ -75,7 +76,7 @@ public class InsertFunction implements FunctionDefinition {
   private static final String OPTION_RECURSE = "recurse" ;
   private static final String OPTION_CREATECHAPTERS = "createchapters" ;
 
-  private static final Set< String > SUPPORTED_OPTIONS = Sets.immutableSet(
+  private static final Set< String > SUPPORTED_OPTIONS = ImmutableSet.of(
       OPTION_RECURSE,
       OPTION_CREATECHAPTERS
   ) ;
@@ -128,7 +129,7 @@ public class InsertFunction implements FunctionDefinition {
             environment,
             book,
             urlAsString,
-            Sets.immutableSet( otherArguments )
+            ImmutableSet.copyOf( otherArguments )
         ) ;
       }
     } ;

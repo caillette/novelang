@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import org.junit.Assert;
 import org.junit.Test;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.model.common.MetadataHelper;
 import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Nodepath;
@@ -89,7 +90,7 @@ public class GenericRendererTest {
     final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree, Encoding.DEFAULT ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
-        return Lists.immutableList() ;
+        return ImmutableList.of() ;
       }
       public Charset getEncoding() {
         return Encoding.DEFAULT ;

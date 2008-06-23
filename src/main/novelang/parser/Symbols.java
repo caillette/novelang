@@ -23,9 +23,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableMapBuilder;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Table of escaped symbols, using HTML entity names whenever defined and Unicode names otherwise.
@@ -75,7 +75,7 @@ public class Symbols {
   }
 
   public static Map< String, String > getDefinitions() {
-    return ImmutableMapBuilder.fromMap( ESCAPED_SYMBOLS ).getMap() ;
+    return new ImmutableMap.Builder().putAll( ESCAPED_SYMBOLS ).build() ;
   }
 
   public static boolean isHtmlEscape( String escaped ) {

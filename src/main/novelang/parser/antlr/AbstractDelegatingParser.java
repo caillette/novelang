@@ -25,6 +25,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.model.common.Problem;
 import novelang.model.common.Tree;
 
@@ -53,7 +54,7 @@ public abstract class AbstractDelegatingParser {
   public Iterable< Problem > getProblems() {
     final List< Problem > problems = Lists.newArrayList() ;
     Iterables.addAll( problems, delegate.getProblems() ) ;
-    return Lists.immutableList( problems ) ;
+    return ImmutableList.copyOf( problems ) ;
   }
 
   public abstract Tree parse() throws RecognitionException ;

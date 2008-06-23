@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
@@ -109,7 +110,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
 
   public Iterable< Problem > getProblems() {
-    return Lists.immutableList( problems ) ;
+    return ImmutableList.copyOf( problems ) ;
   }
 
   public boolean hasProblem() {

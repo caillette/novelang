@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 /**
  * An immutable variant of {@link java.util.List}.
@@ -48,7 +49,7 @@ public interface ClosedList< T > extends Iterable {
     
     public static< T > ClosedList< T > create( List< T > list ) {
 
-      final List< T > immutableList = Lists.immutableList( Objects.nonNull( list ) ) ;
+      final List< T > immutableList = ImmutableList.copyOf( Objects.nonNull( list ) ) ;
 
       return new ClosedList< T >() {
 

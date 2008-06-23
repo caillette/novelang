@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableList;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.RenderingConfiguration;
 import novelang.model.common.MetadataHelper;
@@ -145,9 +146,9 @@ public class SplitByChapter {
 
   private Iterable< String > getNameElements( Tree tree ) {
     if( NodeKind.WORD.isRoot( tree ) ) {
-      return Lists.immutableList( tree.getChildAt( 0 ).getText() ) ;
+      return ImmutableList.of( tree.getChildAt( 0 ).getText() ) ;
     } else if( 0 == tree.getChildCount() ) {
-      return Lists.immutableList() ;
+      return ImmutableList.of() ;
     } else {
       final List< String > strings = Lists.newArrayList() ;
       for( final Tree child : tree.getChildren() ) {
@@ -190,7 +191,7 @@ public class SplitByChapter {
     }
 
     public Iterable<Problem> getProblems() {
-      return Lists.immutableList() ;
+      return ImmutableList.of() ;
     }
 
     public Charset getEncoding() {
