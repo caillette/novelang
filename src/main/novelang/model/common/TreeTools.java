@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import novelang.model.implementation.DefaultMutableTree;
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -279,41 +278,30 @@ public class TreeTools {
 // ===============
 
   public static Tree tree( String text ) {
-    return new ImmutableTree( text ) ;
+    return new MyImmutableTree( text ) ;
   }
 
   public static Tree tree( String text, Tree... children ) {
-    return new ImmutableTree( text, children ) ;
+//    return new SimpleTree( text, children ) ;
+    return new MyImmutableTree( text, children ) ;
   }
 
   private static final Tree[] EMPTY_TREE_ARRAY = new Tree[ 0 ] ;
 
-  private static final class ImmutableTree implements Tree {
+  private static final class MyImmutableTree implements Tree {
     private final String text;
     private final Location location ;
     private final Tree[] children ;
 
-    public ImmutableTree( String text ) {
+    public MyImmutableTree( String text ) {
       this.text = text ;
       location = null ;
       this.children = EMPTY_TREE_ARRAY ;
     }
 
-    public ImmutableTree( String text, Location location ) {
-      this.text = text ;
-      this.location = location ;
-      this.children = EMPTY_TREE_ARRAY ;
-    }
-
-    public ImmutableTree( String text, Tree[] children ) {
+    public MyImmutableTree( String text, Tree[] children ) {
       this.text = text ;
       this.location = null ;
-      this.children = children;
-    }
-
-    public ImmutableTree( String text, Location location, Tree[] children ) {
-      this.text = text;
-      this.location = location ;
       this.children = children;
     }
 

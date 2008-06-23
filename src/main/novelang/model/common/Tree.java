@@ -35,7 +35,7 @@ public interface Tree {
 
   int getChildCount() ;
 
-  Iterable< Tree > getChildren() ;
+  Iterable< ? extends Tree > getChildren() ;
 
   String getText() ;
 

@@ -39,7 +39,7 @@ public class IdentifierHelper {
           "Token not of expected kind: " + tokenOwner.toStringTree() ) ;
     }
     final StringBuffer buffer = new StringBuffer() ;
-    final Iterator< Tree > children = tokenOwner.getChildren().iterator() ;
+    final Iterator< Tree > children = ( Iterator< Tree > ) tokenOwner.getChildren().iterator();
     while( children.hasNext() ) {
       final Tree child = children.next() ;
       buffer.append( extractFirstChildText( child ) ) ;
