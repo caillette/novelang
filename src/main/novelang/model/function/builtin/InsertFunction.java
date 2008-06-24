@@ -19,38 +19,32 @@ package novelang.model.function.builtin;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Set;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import novelang.model.book.Environment;
 import novelang.model.common.Location;
-import static novelang.model.common.NodeKind.URL;
-import static novelang.model.common.NodeKind.VALUED_ARGUMENT_PRIMARY;
-import static novelang.model.common.NodeKind.TITLE;
-import static novelang.model.common.NodeKind.CHAPTER;
-import static novelang.model.common.NodeKind.WORD;
-import novelang.model.common.Problem;
-import novelang.model.common.Tree;
-import novelang.model.common.Treepath;
-import novelang.model.common.TreeTools;
 import novelang.model.common.NodeKind;
+import static novelang.model.common.NodeKind.*;
+import novelang.model.common.Problem;
+import novelang.model.common.SimpleTree;
 import novelang.model.common.StructureKind;
-import novelang.model.common.MutableTree;
+import novelang.model.common.SyntacticTree;
+import novelang.model.common.tree.TreeTools;
+import novelang.model.common.tree.Treepath;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
-import novelang.model.function.IllegalFunctionCallException;
 import static novelang.model.function.FunctionTools.verify;
+import novelang.model.function.IllegalFunctionCallException;
 import novelang.model.implementation.Part;
-import novelang.model.implementation.DefaultMutableTree;
 
 /**
  * Inserts one or more Part files.
@@ -93,21 +87,21 @@ public class InsertFunction implements FunctionDefinition {
 
   public FunctionCall instantiate(
       Location location,
-      Tree functionCall
+      SyntacticTree functionCall
   ) throws IllegalFunctionCallException {
 
     verify( "No primary argument", true, functionCall.getChildCount() >= 2 ) ;
-    final Tree primaryArgument = functionCall.getChildAt( 1 ) ;
+    final SyntacticTree primaryArgument = functionCall.getChildAt( 1 ) ;
     verify( "No value for primary argument",
         VALUED_ARGUMENT_PRIMARY.name(), primaryArgument.getText() ) ;
     verify( "No value for primary argument", 1, primaryArgument.getChildCount() ) ;
-    final Tree url = primaryArgument.getChildAt( 0 ) ;
+    final SyntacticTree url = primaryArgument.getChildAt( 0 ) ;
     verify( URL.name(), url.getText() ) ;
     final String urlAsString = url.getChildAt( 0 ).getText() ;
 
     final List< String > otherArguments = Lists.newArrayList() ;
     for( int i = 2 ; i < functionCall.getChildCount() ; i++ ) {
-      final Tree otherArgumentTree = functionCall.getChildAt( i ) ;
+      final SyntacticTree otherArgumentTree = functionCall.getChildAt( i ) ;
       if( NodeKind.VALUED_ARGUMENT_FLAG.name().equals( otherArgumentTree.getText() ) ) {
         final String option = otherArgumentTree.getChildAt( 0 ).getText();
         verify( "Not a supported option: " + option, true, SUPPORTED_OPTIONS.contains( option ) ) ;
@@ -160,10 +154,10 @@ public class InsertFunction implements FunctionDefinition {
     } catch( MalformedURLException e ) {
       return new FunctionCall.Result( book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
     }
-    final Tree partTree = part.getDocumentTree() ;
+    final SyntacticTree partTree = part.getDocumentTree() ;
 
     if( null != partTree ) {
-      for( final Tree partChild : partTree.getChildren() ) {
+      for( final SyntacticTree partChild : partTree.getChildren() ) {
         book = TreeTools.addChildAtRight( Treepath.create( book.getTop() ), partChild ) ;
       }
     }
@@ -187,24 +181,25 @@ public class InsertFunction implements FunctionDefinition {
           problems.add( Problem.createProblem( e ) ) ;
         }
         if( null != part ) {
-          final Tree partTree = part.getDocumentTree() ;
+          final SyntacticTree partTree = part.getDocumentTree() ;
 
           if( createChapters ) {
-            final MutableTree chapterTree = new DefaultMutableTree( CHAPTER ) ;
-            final DefaultMutableTree word = new DefaultMutableTree(
-                WORD.name(), FilenameUtils.getBaseName( partFile.getName() ) ) ;
-            final DefaultMutableTree title = new DefaultMutableTree( TITLE ) ;
-            title.addChild( word ) ;
+            final SyntacticTree word = new SimpleTree(
+                WORD.name(),
+                new SimpleTree( FilenameUtils.getBaseName( partFile.getName() ) )
+            ) ;
+            final SyntacticTree title = new SimpleTree( TITLE.name(), word ) ;
 
-            chapterTree.addChild( title ) ;
-            for( final Tree partChild : partTree.getChildren() ) {
-              chapterTree.addChild( partChild ) ;
-            }
+            final SyntacticTree chapterTree = new SimpleTree(
+                CHAPTER.name(),
+                partTree.getChildren()
+            ) ;
+
             final Treepath updatedBook = TreeTools.addChildAtRight( book, chapterTree ) ;
             book = Treepath.create( updatedBook.getTop() ) ;
 
           } else {
-            for( final Tree partChild : partTree.getChildren() ) {
+            for( final SyntacticTree partChild : partTree.getChildren() ) {
               final Treepath updatedBook = TreeTools.addChildAtRight( book, partChild ) ;
               book = Treepath.create( updatedBook.getTop() ) ;
             }

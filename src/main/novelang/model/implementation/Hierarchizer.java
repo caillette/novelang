@@ -19,8 +19,9 @@ package novelang.model.implementation;
 import java.util.Set;
 
 import novelang.model.common.NodeKind;
-import novelang.model.common.Treepath;
-import novelang.model.common.TreeTools;
+import novelang.model.common.tree.Treepath;
+import novelang.model.common.tree.TreeTools;
+import novelang.model.common.SyntacticTree;
 import static novelang.model.common.NodeKind.SECTION;
 import static novelang.model.common.NodeKind.CHAPTER;
 import com.google.common.collect.Sets;
@@ -34,7 +35,7 @@ import com.google.common.collect.ImmutableSet;
  * <li>All stuff like paragraph under a Section becomes Section's child.
  * <li>All stuff like Section under a Chapter becomes a Chapter's child.
  * <li>TODO All contiguous Speech stuff becomes a {@link NodeKind#_SPEECH_SEQUENCE} child.
- * <li>TODO Identifiers above paragraph-like stuff becomes a paragraph's child.
+ * <li>TODO Identifier above paragraph-like stuff becomes a paragraph's child.
  * </ol>
  *
  *
@@ -42,7 +43,7 @@ import com.google.common.collect.ImmutableSet;
  */
 public class Hierarchizer {
 
-  static Treepath rehierarchize( final Treepath part ) {
+  static Treepath< SyntacticTree > rehierarchize( final Treepath< SyntacticTree > part ) {
     final Treepath rehierarchizedSections = rehierarchizeFromLeftToRight(
         part, SECTION, new ExclusionFilter( CHAPTER ) ) ;
 
@@ -60,20 +61,20 @@ public class Hierarchizer {
    * @param filter kind of nodes to handle.
    * @return the result of the changes.
    */
-  protected static Treepath rehierarchizeFromLeftToRight(
-      final Treepath part,
+  protected static Treepath< SyntacticTree > rehierarchizeFromLeftToRight(
+      final Treepath< SyntacticTree > part,
       NodeKind accumulatorKind,
       Filter filter
   ) {
-    Treepath treepath = Treepath.create( part, part.getBottom().getChildAt( 0 ) ) ;
+    Treepath< SyntacticTree > treepath = Treepath.create( part, part.getBottom().getChildAt( 0 ) ) ;
 
     while( true ) {
-      final NodeKind childKind = getKind( treepath );
+      final NodeKind childKind = getKind( treepath ) ;
       if( accumulatorKind == childKind ) {
         while( true ) {
           // Consume all siblings on the right to be reparented.
           if( TreeTools.hasNextSibling( treepath ) ) {
-            final Treepath next = TreeTools.getNextSibling( treepath ) ;
+            final Treepath< SyntacticTree > next = TreeTools.getNextSibling( treepath ) ;
             final NodeKind kindOfNext = getKind( next );
             if( accumulatorKind == kindOfNext || ! filter.isMoveable( kindOfNext ) ) {
               treepath = next ;
@@ -93,7 +94,7 @@ public class Hierarchizer {
     }
   }
 
-  private static NodeKind getKind( Treepath treepath ) {
+  private static NodeKind getKind( Treepath<SyntacticTree> treepath ) {
     return NodeKind.ofRoot( treepath.getBottom() ) ;
   }
 

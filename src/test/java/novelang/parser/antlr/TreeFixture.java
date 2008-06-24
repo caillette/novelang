@@ -20,16 +20,16 @@ package novelang.parser.antlr;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.antlr.runtime.ClassicToken;
 import org.junit.Assert;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
-import novelang.model.common.Tree;
-import novelang.model.common.Treepath;
+import novelang.model.common.SyntacticTree;
+import novelang.model.common.tree.Treepath;
+import novelang.model.common.SimpleTree;
 
 /**
- * Helps building {@link Tree}s for tests.
+ * Helps building {@link novelang.model.common.SyntacticTree}s for tests.
  * Dependency towards {@link novelang.parser.antlr.CustomTree} is just for implementation,
  * it helps tree comparison.
  *
@@ -43,68 +43,49 @@ public class TreeFixture {
     }
   } ;
 
-  public static Tree tree( NodeKind nodeKind, Tree... children ) {
-    final CustomTree tree = new CustomTree(
-        LOCATION_FACTORY,
-        new ClassicToken( 0, nodeKind.name() )
-    ) ;
-    for( final Tree child : children ) {
-      tree.addChild( child ) ;
+  public static SyntacticTree tree( NodeKind nodeKind, SyntacticTree... children ) {
+    return new SimpleTree( nodeKind.name(), children ) ;
+  }
+
+  public static SyntacticTree tree( NodeKind nodeKind, String text ) {
+    return new SimpleTree( nodeKind.name(), new SimpleTree( text ) ) ;
+  }
+
+  public static SyntacticTree tree( NodeKind nodeKind ) {
+    return new SimpleTree( nodeKind.name() ) ;
+
+  }
+
+  public static SyntacticTree tree( NodeKind nodeKind, NodeKind... children ) {
+    final SyntacticTree[] childTrees = new SyntacticTree[ children.length ] ;
+    for( int i = 0; i < children.length ; i++ ) {
+      final NodeKind child = children[ i ] ;
+      childTrees[ i ] = new SimpleTree( child.name() ) ;
     }
-    return tree ;
+    return new SimpleTree( nodeKind.name(), childTrees ) ;
   }
 
-  public static Tree tree( NodeKind nodeKind, String text ) {
-    final CustomTree tree = new CustomTree(
-        LOCATION_FACTORY,
-        new ClassicToken( 0, nodeKind.name() )
-    ) ;
-    final Tree child = tree( text ) ;
-    tree.addChild( child ) ;
-    return tree ;
-
+  public static SyntacticTree tree( String text ) {
+    return new SimpleTree( text ) ;
   }
 
-  public static Tree tree( NodeKind nodeKind ) {
-    final CustomTree tree = new CustomTree(
-        LOCATION_FACTORY,
-        new ClassicToken( 0, nodeKind.name() )
-    ) ;
-    return tree ;
-
+  public static SyntacticTree tree( String text, SyntacticTree... children ) {
+    return new SimpleTree( text, children ) ;
   }
 
-  public static Tree tree( NodeKind nodeKind, NodeKind... children ) {
-    final CustomTree tree = new CustomTree(
-        LOCATION_FACTORY,
-        new ClassicToken( 0, nodeKind.name() )
-    ) ;
-    for( final NodeKind child : children ) {
-      tree.addChild( tree( child ) ) ;
-    }
-    return tree ;
-
-  }
-
-  public static Tree tree( String text ) {
-    final CustomTree tree = new CustomTree(
-        LOCATION_FACTORY,
-        new ClassicToken( 0, text )
-    ) ;
-    return tree ;
-  }
-
-  public static Tree multiTokenTree( String text ) {
-    final CustomTree tree = new CustomTree( LOCATION_FACTORY, null ) ;
+  public static SyntacticTree multiTokenTree( String text ) {
+    final SyntacticTree[] children = new SyntacticTree[ text.length() ] ;
     for( int i = 0 ; i < text.length() ; i++ ) {
       final String s = String.valueOf( text.charAt( i ) ) ;
-      final Tree child = tree( s ) ;
-      tree.addChild( child ) ;
+      children[ i ] = tree( s ) ;
     }
-    return tree ;
+    return new SimpleTree( "", children ) ;
   }
 
-  public static void assertEquals( Treepath expected, Treepath actual ) {
+  public static void assertEquals(
+      Treepath<SyntacticTree> expected,
+      Treepath<SyntacticTree> actual
+  ) {
     Assert.assertEquals( "Treepath height", expected.getHeight(), actual.getHeight() ) ;
     for( int i = 0 ; i < expected.getHeight() ; i++ ) {
       assertEquals(
@@ -114,7 +95,7 @@ public class TreeFixture {
     }
   }
 
-  public static void assertEquals( Tree expected, Tree actual ) {
+  public static void assertEquals( SyntacticTree expected, SyntacticTree actual ) {
     try {
       assertEqualsNoMessage( expected, actual ) ;
     } catch( AssertionError e ) {
@@ -127,7 +108,7 @@ public class TreeFixture {
       throw assertionError;
     }
   }
-  private static void assertEqualsNoMessage( Tree expected, Tree actual ) {
+  private static void assertEqualsNoMessage( SyntacticTree expected, SyntacticTree actual ) {
     if( NodeKind.LITTERAL.isRoot( expected ) && NodeKind.LITTERAL.isRoot( actual ) ) {
       Assert.assertEquals(
           "Ill-formed test: expected LITTERAL node must have exactly one child",
@@ -140,8 +121,8 @@ public class TreeFixture {
       Assert.assertEquals( expected.getText(), actual.getText() ) ;
       Assert.assertEquals( expected.getChildCount(), actual.getChildCount() ) ;
       for( int index = 0 ; index < expected.getChildCount() ; index++ ) {
-        final Tree expectedChild = expected.getChildAt( index ) ;
-        final Tree actualChild = actual.getChildAt( index ) ;
+        final SyntacticTree expectedChild = expected.getChildAt( index ) ;
+        final SyntacticTree actualChild = actual.getChildAt( index ) ;
         assertEqualsNoMessage( expectedChild, actualChild ); ;
       }
     }
@@ -163,7 +144,7 @@ public class TreeFixture {
     return buffer.toString() ;
   }
 
-  public static String asString( Tree tree ) {
+  public static String asString( SyntacticTree tree ) {
     if( null == tree ) {
       return "<null>" ;
     } else {

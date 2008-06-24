@@ -21,18 +21,18 @@ import java.util.Iterator;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.commons.lang.NullArgumentException;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.NodeKind;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
  */
 public class CustomTree
     extends CommonTree
-    implements
-    novelang.model.common.MutableTree
+    implements SyntacticTree
 {
 
   private final LocationFactory locationFactory ;
@@ -61,11 +61,11 @@ public class CustomTree
     return false ;
   }
 
-  public Iterable< novelang.model.common.Tree > getChildren() {
-    return new Iterable< novelang.model.common.Tree >() {
+  public Iterable<SyntacticTree> getChildren() {
+    return new Iterable<SyntacticTree>() {
 
-      public Iterator< novelang.model.common.Tree > iterator() {
-        return new Iterator< novelang.model.common.Tree >() {
+      public Iterator<SyntacticTree> iterator() {
+        return new Iterator<SyntacticTree>() {
 
           private int position = 0 ;
 
@@ -73,8 +73,8 @@ public class CustomTree
             return position < getChildCount() ;
           }
 
-          public novelang.model.common.Tree next() {
-            final novelang.model.common.Tree next = getChildAt( position ) ;
+          public SyntacticTree next() {
+            final SyntacticTree next = getChildAt( position ) ;
             position++ ;
             return next ;
           }
@@ -87,14 +87,22 @@ public class CustomTree
     } ;
   }
 
+  public CustomTree adopt( SyntacticTree... newChildren ) throws NullArgumentException {
+    final CustomTree newCustomTree = new CustomTree( locationFactory, token ) ;
+    for( SyntacticTree child : newChildren ) {
+      newCustomTree.addChild( child ) ;
+    }
+    return newCustomTree ; 
+  }
 
-  public void addChild( Tree child ) {
+
+  public void addChild( SyntacticTree child ) {
     final CommonTree commonTree = ( CommonTree ) child ;
     addChild( commonTree ) ;
   }
 
-  public Tree getChildAt( int i ) {
-    return ( Tree ) getChild( i ) ;
+  public SyntacticTree getChildAt( int i ) {
+    return ( SyntacticTree ) getChild( i );
   }
 
 

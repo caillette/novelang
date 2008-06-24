@@ -29,7 +29,7 @@ import org.junit.Test;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.model.common.Problem;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
@@ -74,7 +74,7 @@ public abstract class AbstractParserTest< P extends GenericParser > {
       throws IOException, RecognitionException
   {
     initializeParser(  text ) ;
-    final Tree tree = parser.parse();
+    final SyntacticTree tree = parser.parse();
     checkNoParserException() ;
     Assert.assertNotNull( tree ) ;
   }

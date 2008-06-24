@@ -28,12 +28,12 @@ import novelang.TestResources;
 import novelang.model.book.Environment;
 import novelang.model.common.Location;
 import static novelang.model.common.NodeKind.BOOK;
-import novelang.model.common.Tree;
-import novelang.model.common.Treepath;
+import novelang.model.common.SimpleTree;
+import novelang.model.common.SyntacticTree;
+import novelang.model.common.tree.Treepath;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
 import novelang.model.function.IllegalFunctionCallException;
-import novelang.model.implementation.DefaultMutableTree;
 import novelang.parser.antlr.BookParserTest;
 
 /**
@@ -49,7 +49,7 @@ public class InsertFunctionTest {
         BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
     ) ;
 
-    final Tree initialTree = new DefaultMutableTree( BOOK ) ;
+    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
     final FunctionCall.Result result =
         call.evaluate( new Environment( contentDirectory ), Treepath.create( initialTree ) ) ;
 

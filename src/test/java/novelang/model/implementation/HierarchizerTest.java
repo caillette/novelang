@@ -19,9 +19,9 @@ package novelang.model.implementation;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.model.common.Tree;
 import novelang.model.common.NodeKind;
-import novelang.model.common.Treepath;
+import novelang.model.common.tree.Treepath;
+import novelang.model.common.SyntacticTree;
 import static novelang.model.common.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -88,28 +88,51 @@ public class HierarchizerTest {
 
   @Test
   public void ignoreAndAttachAtUpperLevel() {
+    final SyntacticTree expected = tree(
+        PART,
+        tree( PARAGRAPH_PLAIN ),
+        tree( CHAPTER ),
+        tree( SECTION, tree( PARAGRAPH_PLAIN ) ),
+        tree( CHAPTER ),
+        tree( SECTION, tree( IDENTIFIER ), tree( BLOCKQUOTE ) ),
+        tree( SECTION )
+    );
+    final SyntacticTree toBeRehierarchized = tree(
+        PART,
+        tree( PARAGRAPH_PLAIN ),
+        tree( CHAPTER ),
+        tree( SECTION ),
+        tree( PARAGRAPH_PLAIN ),
+        tree( CHAPTER ),
+        tree( SECTION ),
+        tree( IDENTIFIER ),
+        tree( BLOCKQUOTE ),
+        tree( SECTION )
+    );
     verify(
-        tree(
-            PART,
-            tree( PARAGRAPH_PLAIN ),
-            tree( CHAPTER ),
-            tree( SECTION, tree( PARAGRAPH_PLAIN ) ),
-            tree( CHAPTER ),
-            tree( SECTION, tree( IDENTIFIER ), tree( BLOCKQUOTE ) ),
-            tree( SECTION )
-        ),
-        tree(
-            PART,
-            tree( PARAGRAPH_PLAIN ),
-            tree( CHAPTER ),
-            tree( SECTION ),
-            tree( PARAGRAPH_PLAIN ),
-            tree( CHAPTER ),
-            tree( SECTION ),
-            tree( IDENTIFIER ),
-            tree( BLOCKQUOTE ),
-            tree( SECTION )
-        ),
+        expected,
+        toBeRehierarchized,
+        SECTION,
+        CHAPTER
+    ) ;
+  }
+
+  @Test
+  public void wasABug() {
+    final SyntacticTree expected = tree(
+        PART,
+        tree( SECTION, tree( IDENTIFIER ) ),
+        tree( SECTION, tree( "don't touch me") )
+    );
+    final SyntacticTree toBeRehierarchized = tree(
+        PART,
+        tree( SECTION ),
+        tree( IDENTIFIER ),
+        tree( SECTION, tree( "don't touch me") )
+    );
+    verify(
+        expected,
+        toBeRehierarchized,
         SECTION,
         CHAPTER
     ) ;
@@ -121,14 +144,15 @@ public class HierarchizerTest {
 // =======
 
   private static void verify(
-      Tree expectedTree,
-      Tree flatTree,
+      SyntacticTree expectedTree,
+      SyntacticTree flatTree,
       NodeKind accumulatorKind,
       NodeKind... ignored
   ) {
     LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
-    final Treepath expectedTreepath = Treepath.create( expectedTree ) ;
-    final Treepath flatTreepath = Treepath.create( flatTree ) ;
+    LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
+    final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
+    final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 
     final Treepath rehierarchized = Hierarchizer.rehierarchizeFromLeftToRight(
         flatTreepath,

@@ -19,7 +19,7 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import novelang.model.common.LocationFactory;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 import novelang.parser.PartParser;
 
 /**
@@ -33,8 +33,8 @@ class DelegatingPartParser
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 
-  public Tree parse() throws RecognitionException {
-    return ( Tree ) getAntlrParser().part().getTree() ;
+  public SyntacticTree parse() throws RecognitionException {
+    return ( SyntacticTree ) getAntlrParser().part().getTree() ;
   }
   
 }

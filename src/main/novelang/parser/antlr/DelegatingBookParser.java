@@ -19,7 +19,7 @@ package novelang.parser.antlr;
 import org.antlr.runtime.RecognitionException;
 import novelang.parser.BookParser;
 import novelang.model.common.LocationFactory;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
@@ -33,8 +33,8 @@ public class DelegatingBookParser
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 
-  public Tree parse() throws RecognitionException {
-    return ( Tree ) getAntlrParser().book().getTree() ;
+  public SyntacticTree parse() throws RecognitionException {
+    return ( SyntacticTree ) getAntlrParser().book().getTree() ;
   }
 
 }

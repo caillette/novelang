@@ -17,34 +17,22 @@
 
 package novelang.model.common;
 
+import novelang.model.common.tree.Tree;
+
 /**
  * Narrows the contract of an Abstract Syntax Tree.
- * This class doesn't mean to provide a true separation from ANTLR's logic because
- * if we use another parser (that's not planned) the AST may look quite different.
  *
  * @author Laurent Caillette
  */
-public interface Tree {
-
-  /**
-   * This can't be called {@code getChild()} because it would clash with
-   * {@link org.antlr.runtime.tree.Tree#getChild(int)} which returns a
-   * {@link org.antlr.runtime.tree.Tree}.
-   */
-  Tree getChildAt( int i ) ;
-
-  int getChildCount() ;
-
-  Iterable< ? extends Tree > getChildren() ;
+public interface SyntacticTree extends Tree< SyntacticTree > {
 
   String getText() ;
 
-  String toStringTree() ;
-
-  String toString() ;
-
   Location getLocation() ;
+
+  String toStringTree() ;
 
   boolean isOneOf( NodeKind... nodeKind ) ;
 
+  Iterable< ? extends SyntacticTree> getChildren() ;
 }

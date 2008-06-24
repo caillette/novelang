@@ -27,7 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import novelang.model.common.Problem;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
@@ -57,7 +57,7 @@ public abstract class AbstractDelegatingParser {
     return ImmutableList.copyOf( problems ) ;
   }
 
-  public abstract Tree parse() throws RecognitionException ;
+  public abstract SyntacticTree parse() throws RecognitionException ;
 
   protected NovelangParser getAntlrParser() {
     return parser ;

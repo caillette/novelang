@@ -24,15 +24,15 @@ import static novelang.model.common.NodeKind.VALUED_ARGUMENT_PRIMARY;
 import static novelang.model.common.NodeKind.TITLE;
 import static novelang.model.common.NodeKind.SECTION;
 import static novelang.model.common.NodeKind.PARAGRAPH_PLAIN;
-import novelang.model.common.Tree;
-import novelang.model.common.Treepath;
-import novelang.model.common.TreeTools;
-import novelang.model.common.NodeKind;
+import novelang.model.common.tree.Treepath;
+import novelang.model.common.tree.TreeTools;
+import novelang.model.common.SyntacticTree;
+import novelang.model.common.SimpleTree;
+import novelang.model.common.tree.ImmutableTree;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
 import novelang.model.function.IllegalFunctionCallException;
 import static novelang.model.function.FunctionTools.verify;
-import novelang.model.implementation.DefaultMutableTree;
 
 /**
  * @author Laurent Caillette
@@ -47,32 +47,34 @@ public class SectionFunction implements FunctionDefinition {
 
   public FunctionCall instantiate(
       Location location,
-      Tree functionCall
+      SyntacticTree functionCall
   ) throws IllegalFunctionCallException {
 
     verify( "No primary argument", 2, functionCall.getChildCount() ) ;
-    final Tree primaryArgument = functionCall.getChildAt( 1 ) ;
+    final SyntacticTree primaryArgument = functionCall.getChildAt( 1 ) ;
     final String primaryArgumentText = primaryArgument.getText();
     verify( "Incorrect declaration for primary argument: '" + primaryArgumentText + "'",
         VALUED_ARGUMENT_PRIMARY.name(), primaryArgumentText ) ;
     verify( "Primary argument is empty", true, primaryArgument.getChildCount() > 0 ) ;
-    final Tree paragraph = primaryArgument.getChildAt( 0 ) ;
+    final SyntacticTree paragraph = primaryArgument.getChildAt( 0 ) ;
     verify( "Primary argument should hold a paragraph, instead of: '" + paragraph.toStringTree() + "'",
         PARAGRAPH_PLAIN.name(), paragraph.getText() ) ;
 
     LOGGER.debug( "Parsed function '{}' title='{}'", getName(), primaryArgument.toStringTree() ) ;
 
-    final DefaultMutableTree titleTree = new DefaultMutableTree( TITLE.name() ) ;
-    for( Tree child : paragraph.getChildren() ) {
-      titleTree.addChild( child ) ;
-    }
+    final SyntacticTree titleTree = new SimpleTree(
+        TITLE.name(),
+        paragraph.getChildren() 
+    ) ;
 
-    final DefaultMutableTree sectionTree = new DefaultMutableTree( SECTION.name() ) ;
-    sectionTree.addChild( titleTree ) ;
+    final SyntacticTree sectionTree = ImmutableTree.addLast(
+        new SimpleTree( SECTION.name() ),
+        titleTree
+    ) ;
 
     return new FunctionCall( location ) {
-      public Result evaluate( Environment environment, Treepath book ) {
-        final Treepath newBook = TreeTools.addChildAtRight( book, sectionTree ) ;
+      public Result evaluate( Environment environment, Treepath<SyntacticTree> book ) {
+        final Treepath<SyntacticTree> newBook = TreeTools.addChildAtRight( book, sectionTree ) ;
         return new Result( newBook, null ) ;
       }
     } ;

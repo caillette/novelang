@@ -25,7 +25,7 @@ import novelang.model.common.MetadataHelper;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Nodepath;
 import novelang.model.common.Problem;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 import novelang.model.renderable.Renderable;
 
 /**
@@ -63,7 +63,7 @@ public class GenericRenderer implements Renderer {
             MetadataHelper.createMetadata( rendered.getDocumentTree(), rendered.getEncoding() ),
             rendered.getEncoding()
         ) ;
-        final Tree root = rendered.getDocumentTree() ;
+        final SyntacticTree root = rendered.getDocumentTree() ;
         renderTree( root, null, null ) ;
         fragmentWriter.finishWriting() ;
       } catch( Exception e ) {
@@ -77,7 +77,7 @@ public class GenericRenderer implements Renderer {
   }
 
   private void renderTree(
-      Tree tree,
+      SyntacticTree tree,
       Nodepath kinship,
       NodeKind previous
   ) throws Exception {
@@ -90,7 +90,7 @@ public class GenericRenderer implements Renderer {
     switch( nodeKind ) {
 
       case WORD :
-        final Tree wordTree = tree.getChildAt( 0 ) ;
+        final SyntacticTree wordTree = tree.getChildAt( 0 ) ;
         fragmentWriter.write( newPath, wordTree.getText() ) ;
         break ;
 
@@ -98,7 +98,7 @@ public class GenericRenderer implements Renderer {
       case _META_TIMESTAMP :
       case LITTERAL :
         fragmentWriter.start( newPath, false ) ;
-        final Tree litteralTree = tree.getChildAt( 0 ) ;
+        final SyntacticTree litteralTree = tree.getChildAt( 0 ) ;
         fragmentWriter.writeLitteral( newPath, litteralTree.getText() ); ;
         fragmentWriter.end( newPath ) ;
         break ;
@@ -121,7 +121,7 @@ public class GenericRenderer implements Renderer {
       default :
         fragmentWriter.start( newPath, rootElement ) ;
         previous = null ;
-        for( Tree subtree : tree.getChildren() ) {
+        for( SyntacticTree subtree : tree.getChildren() ) {
           final NodeKind subtreeNodeKind = NodeKind.ofRoot( subtree );
           maybeWriteWhitespace( newPath, previous, subtreeNodeKind ) ;
           renderTree( subtree, newPath, previous ) ;

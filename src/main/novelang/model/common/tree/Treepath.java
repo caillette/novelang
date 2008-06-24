@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.model.common;
+package novelang.model.common.tree;
 
 import com.google.common.base.Objects;
 
@@ -25,17 +25,17 @@ import com.google.common.base.Objects;
  *
  * @author Laurent Caillette
  */
-public final class Treepath {
+public final class Treepath< T extends Tree > {
 
-  private final Treepath parent ;
-  private final Tree bottom;
+  private final Treepath< T > parent ;
+  private final T bottom;
 
-  protected Treepath( Treepath parent, Tree bottom ) {
+  protected Treepath( Treepath parent, T bottom ) {
     this.parent = parent ;
     this.bottom = Objects.nonNull( bottom ) ;
   }
 
-  public Tree getTop() {
+  public T getTop() {
     if( null == parent ) {
       return bottom;
     } else {
@@ -43,7 +43,7 @@ public final class Treepath {
     }
   }
 
-  public Tree getBottom() {
+  public T getBottom() {
     return bottom;
   }
 
@@ -55,7 +55,7 @@ public final class Treepath {
     }
   }
 
-  public Treepath getParent() {
+  public Treepath< T > getParent() {
     return parent ;
   }
 
@@ -69,7 +69,7 @@ public final class Treepath {
    * @throws IllegalArgumentException if negative height or heigt greater than or
    *     or equal to {@link #getHeight()}.
    */
-  public Tree getTreeAtHeight( int height ) throws IllegalPathHeightException {
+  public T getTreeAtHeight( int height ) throws IllegalPathHeightException {
     if( -1 == height ) {
       throw new IllegalPathHeightException( height ) ;
     }
@@ -100,12 +100,12 @@ public final class Treepath {
    * @param target a non-null object.
    * @return an inverted {@code Treepath} or null if {@code target} was not found.
    */
-  protected static Treepath find( Tree inside, Tree target ) {
+  protected static< T extends Tree > Treepath< T > find( T inside, T target ) {
     if( target == inside ) {
       return create( inside ) ;
     }
     for( int i = 0 ; i < inside.getChildCount() ; i++ ) {
-      final Tree child = inside.getChildAt( i ); ; 
+      final Tree child = inside.getChildAt( i ); ;
       final Treepath found = find( child, target ) ;
       if( null != found ) {
         return create( found, inside ) ;
@@ -114,7 +114,7 @@ public final class Treepath {
     return null ;
   }
 
-  protected static Treepath invert( Treepath treepath ) {
+  protected static< T extends Tree > Treepath invert( Treepath< T > treepath ) {
     Treepath result = create( treepath.getBottom() ) ;
     for( int height = 1 ; height < treepath.getHeight() ; height++ ) {
       result = create( result, treepath.getTreeAtHeight( height ) ) ;
@@ -142,8 +142,10 @@ public final class Treepath {
    *     children.
    * @return a non-null object.
    */
-  public static Treepath create( Tree top, Tree bottom ) throws IllegalArgumentException {
-    final Treepath inverted = find( top, bottom ) ;
+  public static< T extends Tree > Treepath< T > create( T top, T bottom )
+      throws IllegalArgumentException
+  {
+    final Treepath< T > inverted = find( top, bottom ) ;
     if( null == inverted ) {
       throw new IllegalArgumentException(
           "Could not locate tree: " + top + " doesn't contain " + bottom ) ;
@@ -151,8 +153,11 @@ public final class Treepath {
     return invert( inverted ) ;
   }
 
-  public static Treepath create( Treepath treepath, Tree newEnd ) {
-    return new Treepath( treepath, newEnd ) ;
+  public static< T extends Tree > Treepath< T > create( 
+      Treepath< T > treepath,
+      T newBottom
+  ) {
+    return new Treepath< T >( treepath, newBottom ) ;
   }
 
   /**
@@ -160,8 +165,8 @@ public final class Treepath {
    * @param tree a non-null object.
    * @return a non-null object.
    */
-  public static Treepath create( Tree tree ) {
-    return new Treepath( null, tree ) ;
+  public static< T extends Tree > Treepath create( T tree ) {
+    return new Treepath< T >( null, tree ) ;
   }
 
   private class IllegalPathHeightException extends IllegalArgumentException {

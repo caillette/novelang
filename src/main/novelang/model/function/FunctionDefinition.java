@@ -16,8 +16,8 @@
  */
 package novelang.model.function;
 
-import novelang.model.common.Tree;
 import novelang.model.common.Location;
+import novelang.model.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
@@ -28,7 +28,7 @@ public interface FunctionDefinition {
 
   FunctionCall instantiate(
       Location location,
-      Tree functionCall
+      SyntacticTree functionCall
   ) throws IllegalFunctionCallException ;
 
 }

@@ -27,8 +27,8 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.ListMultimap;
 import novelang.model.common.IdentifierHelper;
 import novelang.model.common.NodeKind;
-import novelang.model.common.Tree;
-import novelang.model.common.Treepath;
+import novelang.model.common.tree.Treepath;
+import novelang.model.common.SyntacticTree;
 import static novelang.model.common.NodeKind.SECTION;
 import novelang.parser.Encoding;
 import novelang.parser.antlr.DefaultPartParserFactory;
@@ -42,8 +42,8 @@ import novelang.reader.AbstractSourceReader;
  */
 public class Part extends AbstractSourceReader {
 
-  private final Tree tree ;
-  private final Multimap< String, Tree > identifiers ;
+  private final SyntacticTree tree ;
+  private final Multimap< String, SyntacticTree> identifiers ;
 
 
   public Part( String content ) {
@@ -51,8 +51,8 @@ public class Part extends AbstractSourceReader {
     identifiers = findIdentifiers() ;
   }
 
-  private Tree createTree( String content ) {
-    final Tree rawTree = parse( new DefaultPartParserFactory(), content ) ;
+  private SyntacticTree createTree( String content ) {
+    final SyntacticTree rawTree = parse( new DefaultPartParserFactory(), content ) ;
     if( null == rawTree ) {
       return null ;
     } else {
@@ -88,7 +88,7 @@ public class Part extends AbstractSourceReader {
    * Returns result of parsing, may be null if it failed.
    * @return a possibly null object.
    */
-  public Tree getDocumentTree() {
+  public SyntacticTree getDocumentTree() {
     return tree ;
   }
 
@@ -104,17 +104,17 @@ public class Part extends AbstractSourceReader {
    * If I find how to do I should just add a Multimap member to the grammar file and
    * get it after parsing.
    */
-  private Multimap< String, Tree > findIdentifiers() {
+  private Multimap< String, SyntacticTree> findIdentifiers() {
 
-    final Multimap< String, Tree > identifiedSectionTrees = Multimaps.newHashMultimap() ;
+    final Multimap< String, SyntacticTree> identifiedSectionTrees = Multimaps.newHashMultimap() ;
 
     if( null == tree ) {
       return Multimaps.immutableMultimap() ;  
     }
 
-    for( final Tree sectionCandidate : tree.getChildren() ) {
+    for( final SyntacticTree sectionCandidate : tree.getChildren() ) {
       if( SECTION.name().equals( sectionCandidate.getText() ) ) {
-        for( final Tree identifierCandidate : sectionCandidate.getChildren() ) {
+        for( final SyntacticTree identifierCandidate : sectionCandidate.getChildren() ) {
           if( NodeKind.IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
             final String identifier = IdentifierHelper.createIdentifier( identifierCandidate ) ;
             identifiedSectionTrees.put( identifier, sectionCandidate ) ;
@@ -124,12 +124,12 @@ public class Part extends AbstractSourceReader {
       }
     }
 
-    final ListMultimap< String, Tree > identifiersFound =
+    final ListMultimap< String, SyntacticTree> identifiersFound =
         Multimaps.newArrayListMultimap( identifiedSectionTrees ) ;
     return Multimaps.unmodifiableListMultimap( identifiersFound ) ;
   }
 
-  public Multimap< String, Tree > getIdentifiers() {
+  public Multimap< String, SyntacticTree> getIdentifiers() {
     return identifiers ;
   }
 

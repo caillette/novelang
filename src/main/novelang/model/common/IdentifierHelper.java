@@ -33,15 +33,16 @@ public class IdentifierHelper {
    *
    * @param tokenOwner a {@code Tree} containing all subtokens to create the identifier from.
    */
-  public static String createIdentifier( Tree tokenOwner ) {
+  public static String createIdentifier( SyntacticTree tokenOwner ) {
     if( NodeKind.IDENTIFIER.name() != tokenOwner.getText() ) {
       throw new IllegalArgumentException(
           "Token not of expected kind: " + tokenOwner.toStringTree() ) ;
     }
     final StringBuffer buffer = new StringBuffer() ;
-    final Iterator< Tree > children = ( Iterator< Tree > ) tokenOwner.getChildren().iterator();
+    final Iterator<SyntacticTree> children = ( Iterator<SyntacticTree> )
+        tokenOwner.getChildren().iterator();
     while( children.hasNext() ) {
-      final Tree child = children.next() ;
+      final SyntacticTree child = children.next() ;
       buffer.append( extractFirstChildText( child ) ) ;
       if( children.hasNext() ) {
         buffer.append( " " ) ;
@@ -50,7 +51,7 @@ public class IdentifierHelper {
     return buffer.toString() ;
   }
 
-  public static String extractFirstChildText( Tree tree ) {
+  public static String extractFirstChildText( SyntacticTree tree ) {
     return tree.getChildAt( 0 ).getText() ;
   }
 }

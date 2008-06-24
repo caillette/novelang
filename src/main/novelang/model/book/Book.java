@@ -19,20 +19,19 @@ package novelang.model.book;
 import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
-import novelang.model.common.Tree;
 import novelang.model.common.Problem;
 import novelang.model.common.NodeKind;
-import novelang.model.common.Treepath;
+import novelang.model.common.tree.Treepath;
+import novelang.model.common.SyntacticTree;
+import novelang.model.common.SimpleTree;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionRegistry;
 import novelang.model.function.FunctionDefinition;
 import novelang.model.function.UnknownFunctionException;
 import novelang.model.function.IllegalFunctionCallException;
-import novelang.model.implementation.DefaultMutableTree;
 import novelang.reader.AbstractSourceReader;
 import novelang.parser.antlr.DefaultBookParserFactory;
 import com.google.common.collect.Lists;
@@ -46,13 +45,13 @@ import com.google.common.collect.ImmutableList;
 public class Book extends AbstractSourceReader {
 
   private final Environment environment ;
-  private final Tree documentTree ;
+  private final SyntacticTree documentTree ;
 
   public Book( FunctionRegistry functionRegistry, File baseDirectory, String content ) {
     environment =  new Environment( baseDirectory ) ;
-    final Tree rawTree = parse( new DefaultBookParserFactory(), content ) ;
+    final SyntacticTree rawTree = parse( new DefaultBookParserFactory(), content ) ;
     Iterable< FunctionCall > functionCalls = createFunctionCalls( functionRegistry, rawTree ) ;
-    documentTree = callFunctions( functionCalls, new DefaultMutableTree( NodeKind.BOOK ) ) ;
+    documentTree = callFunctions( functionCalls, new SimpleTree( NodeKind.BOOK.name() ) ) ;
   }
 
   public Book( FunctionRegistry functionRegistry, File bookFile ) throws IOException {
@@ -63,18 +62,18 @@ public class Book extends AbstractSourceReader {
     ) ;    
   }
 
-  public Tree getDocumentTree() {
+  public SyntacticTree getDocumentTree() {
     return documentTree;
   }
 
   private Iterable< FunctionCall > createFunctionCalls(
       FunctionRegistry functionRegistry,
-      Tree rawTree
+      SyntacticTree rawTree
   ) {
     final List< FunctionCall > functionCalls = Lists.newArrayList() ;
     for( int i = 0 ; i < rawTree.getChildCount() ; i++ ) {
-      final Tree functionCallTree = rawTree.getChildAt( i ) ;
-      final Tree functionNameTree = functionCallTree.getChildAt( 0 ) ;
+      final SyntacticTree functionCallTree = rawTree.getChildAt( i ) ;
+      final SyntacticTree functionNameTree = functionCallTree.getChildAt( 0 ) ;
       final String functionName = functionNameTree.getChildAt( 0 ).getText() ;
       try {
         final FunctionDefinition functionDefinition =
@@ -91,12 +90,12 @@ public class Book extends AbstractSourceReader {
     return ImmutableList.copyOf( functionCalls ) ;
   }
 
-  private Tree callFunctions( Iterable< FunctionCall > functionCalls, Tree tree ) {
-    Treepath book = Treepath.create( tree ) ;
+  private SyntacticTree callFunctions( Iterable< FunctionCall > functionCalls, SyntacticTree tree ) {
+    Treepath<SyntacticTree> book = Treepath.create( tree ) ;
     for( FunctionCall functionCall : functionCalls ) {
       FunctionCall.Result result = functionCall.evaluate( environment, book ) ;
       collect( result.getProblems() ) ;
-      final Treepath newBook = result.getBook() ;
+      final Treepath<SyntacticTree> newBook = result.getBook() ;
       if( null != newBook ) {
         book = newBook ;
       }

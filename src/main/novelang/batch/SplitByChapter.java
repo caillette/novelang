@@ -37,8 +37,8 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.model.common.MetadataHelper;
 import novelang.model.common.NodeKind;
 import novelang.model.common.Problem;
-import novelang.model.common.Tree;
 import novelang.model.common.TreeMetadata;
+import novelang.model.common.SyntacticTree;
 import novelang.model.implementation.Part;
 import novelang.model.renderable.Renderable;
 import novelang.rendering.GenericRenderer;
@@ -88,8 +88,8 @@ public class SplitByChapter {
   ;
 
   private void rewrite() throws IOException {
-    final Map< String, Tree > chaptersByIdentifier = Maps.newHashMap() ;
-    for( final Tree child : part.getDocumentTree().getChildren() ) {
+    final Map< String, SyntacticTree > chaptersByIdentifier = Maps.newHashMap() ;
+    for( final SyntacticTree child : part.getDocumentTree().getChildren() ) {
       if( NodeKind.CHAPTER.isRoot( child ) ) {
         final String identifier = generateIdentifier( chaptersByIdentifier.keySet(), child ) ;
         final File chapterFile = new File( targetDirectory, identifier  + ".nlp" ) ;
@@ -106,9 +106,9 @@ public class SplitByChapter {
     }
   }
 
-  private String generateIdentifier( Set< String > identifiers, Tree chapter ) {
+  private String generateIdentifier( Set< String > identifiers, SyntacticTree chapter ) {
     String flatName = UNNAMED;
-    Tree chapterDesignator = extractSubtree( chapter, NodeKind.IDENTIFIER ) ;
+    SyntacticTree chapterDesignator = extractSubtree( chapter, NodeKind.IDENTIFIER ) ;
     if( null == chapterDesignator ) {
       chapterDesignator = extractSubtree( chapter, NodeKind.TITLE );
     }
@@ -129,7 +129,7 @@ public class SplitByChapter {
     }
   }
 
-  private String flattenAsName( Tree tree ) {
+  private String flattenAsName( SyntacticTree tree ) {
     final Iterable< String > nameElements = getNameElements( tree ) ;
     final StringBuffer flattenedName = new StringBuffer() ;
     boolean first = true ;
@@ -144,22 +144,22 @@ public class SplitByChapter {
     return flattenedName.toString() ;
   }
 
-  private Iterable< String > getNameElements( Tree tree ) {
+  private Iterable< String > getNameElements( SyntacticTree tree ) {
     if( NodeKind.WORD.isRoot( tree ) ) {
       return ImmutableList.of( tree.getChildAt( 0 ).getText() ) ;
     } else if( 0 == tree.getChildCount() ) {
       return ImmutableList.of() ;
     } else {
       final List< String > strings = Lists.newArrayList() ;
-      for( final Tree child : tree.getChildren() ) {
+      for( final SyntacticTree child : tree.getChildren() ) {
         strings.addAll( Lists.newArrayList( getNameElements( child ) ) ) ;
       }
       return strings ;
     }
   }
 
-  private Tree extractSubtree( Tree tree, NodeKind nodeKind ) {
-    for( final Tree child : tree.getChildren() ) {
+  private SyntacticTree extractSubtree( SyntacticTree tree, NodeKind nodeKind ) {
+    for( final SyntacticTree child : tree.getChildren() ) {
       if( nodeKind.isRoot( child ) ) {
         return child ;
       }
@@ -182,10 +182,10 @@ public class SplitByChapter {
 
 
   private static class RenderableChapter implements Renderable {
-    private final Tree child ;
+    private final SyntacticTree child ;
     private final Charset encoding ;
 
-    private RenderableChapter( Tree child, Charset encoding ) {
+    private RenderableChapter( SyntacticTree child, Charset encoding ) {
       this.child = child;
       this.encoding = encoding;
     }
@@ -202,7 +202,7 @@ public class SplitByChapter {
       return false ;
     }
 
-    public Tree getDocumentTree() {
+    public SyntacticTree getDocumentTree() {
       return child;
     }
 

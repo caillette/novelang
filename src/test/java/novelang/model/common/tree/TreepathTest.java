@@ -14,17 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.model.common;
+package novelang.model.common.tree;
 
 import org.junit.Test;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.model.implementation.DefaultMutableTree;
 import junit.framework.AssertionFailedError;
 
 /**
- * Tests for {@link Treepath}.
+ * Tests for {@link novelang.model.common.Treepath}.
  *
  * @author Laurent Caillette
  */
@@ -34,8 +33,8 @@ public class TreepathTest {
 
   @Test
   public void testTreepathHeight1() {
-    final MutableTree tree = new DefaultMutableTree( "tree" ) ;
-    final Treepath treepath = Treepath.create( tree ) ;
+    final MyTree tree = MyTree.create( "tree" ) ;
+    final Treepath< MyTree > treepath = Treepath.create( tree ) ;
 
     Assert.assertEquals( 1, treepath.getHeight() ) ;
     assertSame( tree, treepath.getTop() ) ;
@@ -45,18 +44,17 @@ public class TreepathTest {
 
   @Test( expected = IllegalArgumentException.class )
   public void testTreepathHeight1Bad() {
-    final MutableTree tree = new DefaultMutableTree( "tree" ) ;
-    final Treepath treepath = Treepath.create( tree ) ;
+    final MyTree tree = MyTree.create( "tree" ) ;
+    final Treepath< MyTree > treepath = Treepath.create( tree ) ;
     assertSame( tree, treepath.getTreeAtHeight( 1 ) ) ;
   }
 
   @Test
   public void testTreepathHeight2() {
-    final MutableTree parent = new DefaultMutableTree( "parent" ) ;
-    final MutableTree child = new DefaultMutableTree( "child" ) ;
-    parent.addChild( child ) ;
+    final MyTree child = MyTree.create( "child" ) ;
+    final MyTree parent = MyTree.create( "parent", child ) ;
 
-    final Treepath treepath = Treepath.create( parent, child ) ;
+    final Treepath< MyTree > treepath = Treepath.create( parent, child ) ;
     print("Treepath: ", treepath ) ;
 
     Assert.assertEquals( 2, treepath.getHeight() ) ;
@@ -68,15 +66,13 @@ public class TreepathTest {
 
   @Test
   public void testFindHeight4() {
-    final MutableTree grandParent = new DefaultMutableTree( "grandParent" ) ;
-    final MutableTree parent = new DefaultMutableTree( "parent" ) ;
-    final MutableTree child = new DefaultMutableTree( "child" ) ;
-    final MutableTree grandChild = new DefaultMutableTree( "grandchild" ) ;
-    grandParent.addChild( parent ) ;
-    parent.addChild( child ) ;
-    child.addChild( grandChild ) ;
 
-    final Treepath findResult = Treepath.find( grandParent, child ) ;
+    final MyTree grandChild = MyTree.create( "grandChild" ) ;
+    final MyTree child = MyTree.create( "child", grandChild ) ;
+    final MyTree parent = MyTree.create( "parent", child ) ;
+    final MyTree grandParent = MyTree.create( "grandParent", parent ) ;
+
+    final Treepath< MyTree > findResult = Treepath.find( grandParent, child ) ;
     print("Found: ", findResult ) ;
 
     Assert.assertEquals( 3, findResult.getHeight() ) ;
@@ -91,13 +87,11 @@ public class TreepathTest {
 
   @Test
   public void testTreepathHeight3() {
-    final MutableTree parent = new DefaultMutableTree( "parent" ) ;
-    final MutableTree child = new DefaultMutableTree( "child" ) ;
-    final MutableTree grandChild = new DefaultMutableTree( "grandchild" ) ;
-    parent.addChild( child ) ;
-    child.addChild( grandChild ) ;
+    final MyTree grandChild = MyTree.create( "grandChild" ) ;
+    final MyTree child = MyTree.create( "child", grandChild ) ;
+    final MyTree parent = MyTree.create( "parent", child ) ;
 
-    final Treepath treepath = Treepath.create( parent, grandChild ) ;
+    final Treepath< MyTree > treepath = Treepath.create( parent, grandChild ) ;
     print("Treepath: ", treepath ) ;
 
     Assert.assertEquals( 3, treepath.getHeight() ) ;
@@ -110,14 +104,18 @@ public class TreepathTest {
 
   @Test
   public void testInvert() {
-    final MutableTree parent = new DefaultMutableTree( "parent" ) ;
-    final MutableTree child = new DefaultMutableTree( "child" ) ;
-    final MutableTree grandChild = new DefaultMutableTree( "grandchild" ) ;
-    parent.addChild( child ) ;
-    child.addChild( grandChild ) ;
-    final Treepath treepath =
-        new Treepath( new Treepath( new Treepath( null, parent ), child ), grandChild ) ;
-    final Treepath inverted = Treepath.invert( treepath ) ;
+    final MyTree grandChild = MyTree.create( "grandChild" ) ;
+    final MyTree child = MyTree.create( "child", grandChild ) ;
+    final MyTree parent = MyTree.create( "parent", child ) ;
+
+    final Treepath< MyTree > treepath =
+        new Treepath< MyTree >(
+            new Treepath< MyTree >(
+                new Treepath< MyTree >( null, parent ), child ),
+            grandChild
+        )
+    ;
+    final Treepath< MyTree > inverted = Treepath.invert( treepath ) ;
 
     print( "Treepath: ", treepath ) ;
     print( "Inverted treepath: ", inverted ) ;
@@ -134,7 +132,7 @@ public class TreepathTest {
 // Fixture
 // =======
 
-  private static void print( String message, Treepath treepath ) {
+  private static void print( String message, Treepath< MyTree > treepath ) {
     boolean first = true ;
     final StringBuffer buffer = new StringBuffer() ;
     for( int i = 0 ; i < treepath.getHeight() ; i++ ) {
@@ -143,15 +141,15 @@ public class TreepathTest {
       } else {
         buffer.append( " -> " ) ;
       }
-      buffer.append( "{" ).append( treepath.getTreeAtHeight( i ).getText() ).append( "}" ) ;
+      buffer.append( "{" ).append( treepath.getTreeAtHeight( i ).getPayload() ).append( "}" ) ;
     }
     LOGGER.debug( message + buffer.toString() ) ;
   }
 
-  private void assertSame( Tree expected, Tree actual ) {
+  private static void assertSame( MyTree expected, MyTree actual ) {
     final String message =
-        "Expected: {" + ( null == expected ? "null" : expected.getText() ) + "} " +
-        "got {" + ( null == actual ? "null" : actual.getText() ) + "}"
+        "Expected: {" + ( null == expected ? "null" : expected.getPayload() ) + "} " +
+        "got {" + ( null == actual ? "null" : actual.getPayload() ) + "}"
     ;
     if( expected != actual ) {
       throw new AssertionFailedError( message ) ;

@@ -14,14 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package novelang.model.common;
+package novelang.model.common.tree;
 
 /**
+ * This is a sample of derived class from {@link ImmutableTree}.
+ *
  * @author Laurent Caillette
  */
-public interface MutableTree extends Tree {
+public class MyTree extends ImmutableTree< MyTree > {
 
-  void addChild( Tree child ) ;
+  private final String payload ;
+
+  public MyTree( String payload, MyTree... children ) {
+    super( children ) ;
+    this.payload = payload ;
+  }
+
+  public String getPayload() {
+    return payload;
+  }
+
+  public MyTree adopt( MyTree[] newChildren ) {
+    return new MyTree( payload, newChildren ) ;
+  }
+
+  /**
+   * Syntactic sugar.
+   */
+  public static MyTree create( String payload, MyTree... children ) {
+    return new MyTree( payload, children ) ;
+  }
 
 }

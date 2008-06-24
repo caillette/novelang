@@ -16,44 +16,56 @@
  */
 package novelang.parser.antlr;
 
-import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
+import org.junit.Test;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import static novelang.model.common.NodeKind.*;
-import novelang.model.common.Tree;
-import novelang.model.common.NodeKind;
-import novelang.model.common.MutableTree;
-import novelang.model.implementation.DefaultMutableTree;
+import novelang.model.common.SimpleTree;
+import novelang.model.common.SyntacticTree;
+import novelang.model.common.tree.ImmutableTree;
+import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.TreeFixture.tree;
-import static novelang.parser.antlr.AntlrTestHelper.BREAK;
-import static novelang.parser.antlr.AntlrTestHelper.functionCall;
-import static novelang.parser.antlr.AntlrTestHelper.ancillaryArgument;
-import static novelang.parser.antlr.AntlrTestHelper.book;
 
 /**
  * @author Laurent Caillette
  */
 public class BookParserTest {
 
+  private static final Function< String, SyntacticTree> CREATE_VALUED_ARGUMENT_FLAG_FUNCTION =
+      new Function< String, SyntacticTree>() {
+        public SyntacticTree apply( String s ) {
+          return new SimpleTree( VALUED_ARGUMENT_FLAG.name(), new SimpleTree( s ) ) ;
+        }
+      }
+  ;
+
   /**
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
    * parser produces.
    */
-  public static final Tree createFunctionCallWithUrlTree(
+  public static final SyntacticTree createFunctionCallWithUrlTree(
       String fileName,
       String... flagArguments
   ) {
-    final MutableTree functionCall = new DefaultMutableTree( FUNCTION_CALL ) ;
-    functionCall.addChild( new DefaultMutableTree( FUNCTION_NAME.name(), "function" ) ) ;
-    final Tree urlTree = new DefaultMutableTree( URL.name(), "file:" + fileName ) ;
-    final MutableTree primaryArgument = new DefaultMutableTree( VALUED_ARGUMENT_PRIMARY ) ;
-    primaryArgument.addChild( urlTree ) ;
-    functionCall.addChild( primaryArgument ) ;
+    SyntacticTree functionCall = new SimpleTree(
+        FUNCTION_CALL.name(),
+        new SimpleTree( FUNCTION_NAME.name(), new SimpleTree( "function" ) ),
+        new SimpleTree(
+            VALUED_ARGUMENT_PRIMARY.name(),
+            new SimpleTree( URL.name(), new SimpleTree( "file:" + fileName ) )
+        )
+    ) ;
 
-    if( flagArguments.length > 0 ) {
-      for( String ancillaryArgument : flagArguments ) {
-        functionCall.addChild( tree( NodeKind.VALUED_ARGUMENT_FLAG, ancillaryArgument ) ) ;
-      }
-    }
+    functionCall = ImmutableTree.addLast(
+        functionCall,
+        Iterables.transform(
+            Lists.newArrayList( flagArguments ),
+            CREATE_VALUED_ARGUMENT_FLAG_FUNCTION
+        )
+    ) ;
+
     return functionCall ;
   }
 

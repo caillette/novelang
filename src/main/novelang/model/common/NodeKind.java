@@ -92,7 +92,7 @@ public enum NodeKind {
     return punctuationSign;
   }
 
-  public static NodeKind ofRoot( Tree tree ) {
+  public static NodeKind ofRoot( SyntacticTree tree ) {
     return Enum.valueOf( NodeKind.class, tree.getText() ) ;
   }
 
@@ -109,7 +109,7 @@ public enum NodeKind {
    * Returns if a given {@code Tree} is of expected kind.
    * @param tree may be null.
    */
-  public boolean isRoot( Tree tree ) {
+  public boolean isRoot( SyntacticTree tree ) {
     if( null == tree ) {
       return false ;
     }
@@ -120,7 +120,7 @@ public enum NodeKind {
     ;
   }
 
-  public static boolean rootHasNodeKindName( Tree tree ) {
+  public static boolean rootHasNodeKindName( SyntacticTree tree ) {
     if( null == tree ) {
       return false ;
     }
@@ -128,7 +128,7 @@ public enum NodeKind {
     return null != tree && NAMES.contains( text ) ;
   }
 
-  public static void ensure( Tree tree, NodeKind nodeKind ) {
+  public static void ensure( SyntacticTree tree, NodeKind nodeKind ) {
     Objects.nonNull( tree ) ;
     Objects.nonNull( nodeKind ) ;
     final String nodeText = Objects.nonNull( tree.getText() ) ;

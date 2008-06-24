@@ -20,7 +20,7 @@ package novelang.model.weaved;
 import java.util.Collection;
 
 import com.google.common.base.Objects;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
@@ -28,20 +28,20 @@ import novelang.model.common.Tree;
 public class IdentifierNotUniqueException extends Exception {
 
   private final String identifier ;
-  private final Collection< Tree > trees ;
+  private final Collection< SyntacticTree > trees ;
 
-  public IdentifierNotUniqueException( String identifier, Collection< Tree > trees ) {
+  public IdentifierNotUniqueException( String identifier, Collection< SyntacticTree > trees ) {
     super( buildMessage( identifier, trees ) ) ;
     this.trees = trees ;
     this.identifier = identifier ;
   }
 
-  private static final String buildMessage( String identifier, Collection< Tree > trees ) {
+  private static final String buildMessage( String identifier, Collection< SyntacticTree > trees ) {
     identifier = Objects.nonNull( identifier ) ;
     trees = Objects.nonNull( trees ) ;
     final StringBuffer buffer = new StringBuffer() ;
     buffer.append( "More than one usage of identifier '" ).append( identifier ).append( "':" ) ;
-    for( final Tree tree : trees ) {
+    for( final SyntacticTree tree : trees ) {
       buffer.append( "\n    ").append( tree.getLocation() ) ;
     }
     return buffer.toString() ;

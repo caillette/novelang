@@ -16,8 +16,6 @@
  */
 package novelang.reader;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -35,7 +33,7 @@ import com.google.common.collect.ImmutableList;
 import novelang.model.common.Location;
 import novelang.model.common.LocationFactory;
 import novelang.model.common.Problem;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 import novelang.model.renderable.Renderable;
 import novelang.parser.Encoding;
 import novelang.parser.GenericParser;
@@ -84,14 +82,14 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     }
   }
 
-  protected Tree parse( GenericParserFactory parserFactory, String content ) {
+  protected SyntacticTree parse( GenericParserFactory parserFactory, String content ) {
 
     if( null == content ) {
       return null ;
     }
 
     final GenericParser parser = parserFactory.createParser( this, content ) ;
-    Tree tree = null ;
+    SyntacticTree tree = null ;
     try {
 
       // Yeah we do it here!
@@ -106,7 +104,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       collect( Problem.createProblem( this, e ) ) ;
     }
 
-    return tree ;
+    return ( SyntacticTree ) tree ;
   }
 
   public Iterable< Problem > getProblems() {

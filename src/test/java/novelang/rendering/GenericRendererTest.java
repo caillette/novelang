@@ -25,14 +25,13 @@ import java.nio.charset.Charset;
 
 import org.junit.Assert;
 import org.junit.Test;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import novelang.model.common.MetadataHelper;
 import static novelang.model.common.NodeKind.*;
 import novelang.model.common.Nodepath;
 import novelang.model.common.Problem;
-import novelang.model.common.Tree;
 import novelang.model.common.TreeMetadata;
+import novelang.model.common.SyntacticTree;
 import novelang.model.renderable.Renderable;
 import novelang.parser.Encoding;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -44,7 +43,7 @@ public class GenericRendererTest {
 
   @Test
   public void whitespace1() throws Exception {
-    final Tree tree = tree( PARENTHESIS, tree( WORD, "first" ), tree( WORD, "second") ) ;
+    final SyntacticTree tree = tree( PARENTHESIS, tree( WORD, "first" ), tree( WORD, "second") ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     Assert.assertEquals( "PARENTHESIS(first^second)", getRenderedText() ) ;
@@ -52,7 +51,7 @@ public class GenericRendererTest {
 
   @Test
   public void whitespace2() throws Exception {
-    final Tree tree = tree(
+    final SyntacticTree tree = tree(
         PARAGRAPH_PLAIN,
         tree( WORD, "w0" ),
         tree(
@@ -86,7 +85,7 @@ public class GenericRendererTest {
     }
   }
 
-  private static Renderable createRenderable( final Tree tree ) {
+  private static Renderable createRenderable( final SyntacticTree tree ) {
     final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree, Encoding.DEFAULT ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
@@ -98,7 +97,7 @@ public class GenericRendererTest {
       public boolean hasProblem() {
         return false;
       }
-      public Tree getDocumentTree() {
+      public SyntacticTree getDocumentTree() {
         return tree ;
       }
       public TreeMetadata getTreeMetadata() {

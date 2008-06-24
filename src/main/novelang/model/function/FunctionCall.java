@@ -18,7 +18,8 @@ package novelang.model.function;
 
 import novelang.model.common.Problem;
 import novelang.model.common.Location;
-import novelang.model.common.Treepath;
+import novelang.model.common.SyntacticTree;
+import novelang.model.common.tree.Treepath;
 import novelang.model.book.Environment;
 import com.google.common.collect.Iterables;
 
@@ -43,17 +44,17 @@ public abstract class FunctionCall {
    * @param book
    * @return a non-null {@link Result} instance.
    */
-  public abstract Result evaluate( Environment environment, Treepath book ) ;
+  public abstract Result evaluate( Environment environment, Treepath<SyntacticTree> book ) ;
 
   public static class Result {
 
-    private final Treepath book ;
+    private final Treepath<SyntacticTree> book ;
     private final Iterable< Problem > problems ;
 
     private static final Iterable< Problem > NO_PROBLEM = Iterables.emptyIterable() ;
 
     public Result(
-        Treepath book,
+        Treepath<SyntacticTree> book,
         Iterable< Problem > problems
     ) {
       this.book = book ;
@@ -63,7 +64,7 @@ public abstract class FunctionCall {
     /**
      * May be null.
      */
-    public Treepath getBook() {
+    public Treepath<SyntacticTree> getBook() {
       return book ;
     }
 

@@ -28,7 +28,7 @@ import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import static novelang.model.common.NodeKind.*;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -41,9 +41,9 @@ public class PartTest {
   @Test
   public void loadPartOk() throws IOException {
     final Part part = new Part( justSections ) ;
-    final Tree partTree = part.getDocumentTree();
+    final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
-    final Tree expected = tree( PART,  
+    final SyntacticTree expected = tree( PART,
         tree( SECTION,
             tree( TITLE, tree( WORD, "Section1nlp" ) ),
             tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
@@ -61,9 +61,9 @@ public class PartTest {
   @Test
   public void loadSimpleStructure() throws IOException {
     final Part part = new Part( simpleStructureFile ) ;
-    final Tree partTree = part.getDocumentTree();
+    final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
-    final Tree expected = tree( PART,
+    final SyntacticTree expected = tree( PART,
         tree( CHAPTER,
             tree( TITLE, tree( WORD, "Chapter-0" ) ),
             tree( SECTION,

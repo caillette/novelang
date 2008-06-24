@@ -30,12 +30,12 @@ public class MetadataHelper {
 
   private MetadataHelper() { }
 
-  public static int countWords( Tree tree ) {
+  public static int countWords( SyntacticTree tree ) {
     if( NodeKind.WORD.isRoot( tree ) ) {
       return 1 ;
     } else if( null != tree ) {
       int childCount = 0 ;
-      for( Tree child : tree.getChildren() ) {
+      for( SyntacticTree child : tree.getChildren() ) {
         childCount += countWords( child ) ;
       }
       return childCount ;
@@ -55,7 +55,7 @@ public class MetadataHelper {
     return TIMESTAMP_FORMATTER.print( timestamp ) ;
   }
 
-  public static TreeMetadata createMetadata( Tree tree, final Charset encoding ) {
+  public static TreeMetadata createMetadata( SyntacticTree tree, final Charset encoding ) {
 
     final String timestampAsString = format( createTimestamp() ) ;
     final int wordCount = countWords( tree ) ;

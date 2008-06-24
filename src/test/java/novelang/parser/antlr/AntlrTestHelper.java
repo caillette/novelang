@@ -21,7 +21,7 @@ import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import junit.framework.AssertionFailedError;
 import novelang.model.common.Problem;
-import novelang.model.common.Tree;
+import novelang.model.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
@@ -40,38 +40,38 @@ public class AntlrTestHelper {
     return buffer.toString() ;
   }
 
-  static void title( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = title( text ) ;
+  static void title( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = title( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree title( String text ) throws RecognitionException {
+  static SyntacticTree title( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().title().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().title().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void headerIdentifier( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = headerIdentifier( text ) ;
+  static void headerIdentifier( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = headerIdentifier( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree headerIdentifier( String text ) throws RecognitionException {
+  static SyntacticTree headerIdentifier( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().headerIdentifier().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().headerIdentifier().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void word( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = word( text ) ;
+  static void word( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = word( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree word( String text ) throws RecognitionException {
+  static SyntacticTree word( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().word().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().word().getTree() ;
     checkSanity( parser );
     return tree;
   }
@@ -84,14 +84,14 @@ public class AntlrTestHelper {
     Assert.assertTrue( readableProblemList, parserHasProblem ) ;
   }
 
-  static void paragraph( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = paragraph( text ) ;
+  static void paragraph( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = paragraph( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree paragraph( String text ) throws RecognitionException {
+  static SyntacticTree paragraph( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().paragraph().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().paragraph().getTree() ;
     checkSanity( parser );
     return tree;
   }
@@ -104,108 +104,109 @@ public class AntlrTestHelper {
     Assert.assertTrue( readableProblemList, parserHasProblem ) ;
   }
 
-  static void section( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = section( text ) ;
+  static void section( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = section( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree section( String text ) throws RecognitionException {
+  static SyntacticTree section( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().section().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().section().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void litteral( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = litteral( text ) ;
+  static void litteral( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = litteral( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree litteral( String text ) throws RecognitionException {
+  static SyntacticTree litteral( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().litteral().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().litteral().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void chapter( String text, Tree expectedTree ) throws RecognitionException {
-    final Tree actualTree = chapter( text ) ;
+  static void chapter( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = chapter( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree chapter( String text ) throws RecognitionException {
+  static SyntacticTree chapter( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().chapter().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().chapter().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void part( String text, Tree expectedTree )
+  static void part( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final Tree actualTree = part( text ); ;
+    final SyntacticTree actualTree = part( text ); ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree part( String text ) throws RecognitionException {
+  static SyntacticTree part( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().part().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().part().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void url( String text, Tree expectedTree )
+  static void url( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final Tree actualTree = url( text ) ;
+    final SyntacticTree actualTree = url( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree url( String text ) throws RecognitionException {
+  static SyntacticTree url( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().url().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().url().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void functionCall( String text, Tree expectedTree )
+  static void functionCall( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final Tree actualTree = functionCall( text ) ;
+    final SyntacticTree actualTree = functionCall( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree functionCall( String text ) throws RecognitionException {
+  static SyntacticTree functionCall( String text ) throws RecognitionException {
     final DelegatingBookParser parser = createBookParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().functionCall().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().functionCall().getTree() ;
     checkSanity( parser ) ;
     return tree;
   }
 
-  static void ancillaryArgument( String text, Tree expectedTree )
+  static void ancillaryArgument( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final Tree actualTree = ancillaryArgument( text ); ;
+    final SyntacticTree actualTree = ancillaryArgument( text ); ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static Tree ancillaryArgument( String text ) throws RecognitionException {
+  static SyntacticTree ancillaryArgument( String text ) throws RecognitionException {
     final DelegatingBookParser parser = createBookParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().ancillaryArgument().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree )
+        parser.getAntlrParser().ancillaryArgument().getTree() ;
     checkSanity( parser ) ;
     return tree;
   }
 
-  public static void book( String text, Tree expectedTree )
+  public static void book( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final Tree actualTree = book( text ) ;
+    final SyntacticTree actualTree = book( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  public static Tree book( String text ) throws RecognitionException {
+  public static SyntacticTree book( String text ) throws RecognitionException {
     final DelegatingBookParser parser = createBookParser( text ) ;
-    final Tree tree = ( Tree ) parser.getAntlrParser().book().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().book().getTree() ;
     checkSanity( parser ) ;
     return tree;
   }

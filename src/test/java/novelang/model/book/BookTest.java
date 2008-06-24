@@ -19,26 +19,22 @@ package novelang.model.book;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.Before;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
-import static novelang.model.common.NodeKind.BOOK;
-import static novelang.model.common.NodeKind.WORD;
-import static novelang.model.common.NodeKind.SECTION;
-import static novelang.model.common.NodeKind.TITLE;
-import static novelang.model.common.NodeKind.PARAGRAPH_PLAIN;
-import novelang.model.common.Tree;
-import novelang.model.common.NodeKind;
-import novelang.model.function.FunctionRegistry;
-import novelang.TestResources;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
+import novelang.TestResources;
+import novelang.model.common.NodeKind;
+import static novelang.model.common.NodeKind.*;
+import novelang.model.common.SyntacticTree;
+import novelang.model.function.FunctionRegistry;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Test for {@link Book} and also built-in functions.
@@ -59,7 +55,7 @@ public class BookTest {
         SystemUtils.getUserDir(), 
         "section \n" + " My Section"
     ) ;
-    final Tree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEquals(
         tree( BOOK,
             tree(
@@ -83,7 +79,7 @@ public class BookTest {
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath()
     ) ;
-    final Tree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEquals(
         tree( BOOK,
             tree(
@@ -108,7 +104,7 @@ public class BookTest {
     ) ;
     LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
 
-    final Tree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEquals(
         tree( BOOK,
             tree(
