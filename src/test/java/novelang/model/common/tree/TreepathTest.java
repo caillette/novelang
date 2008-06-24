@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import junit.framework.AssertionFailedError;
 
 /**
- * Tests for {@link novelang.model.common.Treepath}.
+ * Tests for {@link novelang.model.common.tree.Treepath}.
  *
  * @author Laurent Caillette
  */
@@ -54,7 +54,8 @@ public class TreepathTest {
     final MyTree child = MyTree.create( "child" ) ;
     final MyTree parent = MyTree.create( "parent", child ) ;
 
-    final Treepath< MyTree > treepath = Treepath.create( parent, child ) ;
+    final Treepath< MyTree > treepath = Treepath.< MyTree >create( parent, 0 ) ;
+                                              // ^ IntelliJ IDEA 7.0.3 breaks without this.
     print("Treepath: ", treepath ) ;
 
     Assert.assertEquals( 2, treepath.getHeight() ) ;
@@ -91,7 +92,7 @@ public class TreepathTest {
     final MyTree child = MyTree.create( "child", grandChild ) ;
     final MyTree parent = MyTree.create( "parent", child ) ;
 
-    final Treepath< MyTree > treepath = Treepath.create( parent, grandChild ) ;
+    final Treepath< MyTree > treepath = Treepath.create( parent, 0, 0 ) ;
     print("Treepath: ", treepath ) ;
 
     Assert.assertEquals( 3, treepath.getHeight() ) ;
@@ -109,12 +110,13 @@ public class TreepathTest {
     final MyTree parent = MyTree.create( "parent", child ) ;
 
     final Treepath< MyTree > treepath =
-        new Treepath< MyTree >(
-            new Treepath< MyTree >(
-                new Treepath< MyTree >( null, parent ), child ),
+        Treepath.create(
+            Treepath.create(
+                Treepath.create( ( MyTree ) null, parent ),
+                child
+            ),
             grandChild
-        )
-    ;
+        ) ;
     final Treepath< MyTree > inverted = Treepath.invert( treepath ) ;
 
     print( "Treepath: ", treepath ) ;

@@ -16,10 +16,8 @@
  */
 package novelang.model.common.tree;
 
-import org.junit.Test;
 import org.junit.Assert;
-import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.model.common.SyntacticTree;
+import org.junit.Test;
 
 /**
  * @author Laurent Caillette
@@ -28,40 +26,47 @@ public class TreeToolsTest {
 
   @Test
   public void reparent() {
-    final SyntacticTree grandChild = tree( "grandChild" ) ;
-    final SyntacticTree parent = tree(
-        "parent",
-        tree( "child0", grandChild ),
-        tree( "child1" )
+
+    final MyTree grandChild = MyTree.create( "grandChild" ) ;  //     parent
+    final MyTree parent = MyTree.create(                       //    /     \
+        "parent",                                              // child0  child1
+        MyTree.create( "child0", grandChild ),                 //   |
+        MyTree.create( "child1" )                              // grandChild (becomes newGrandChild)
     ) ;
 
-    final SyntacticTree newGrandChild = tree( "newGrandChild" ) ;
-    final Treepath<SyntacticTree> original = Treepath.create( parent, grandChild ) ;
+    final MyTree newGrandChild = MyTree.create( "newGrandChild" ) ;
 
-    final Treepath<SyntacticTree> reparented = TreeTools.updateBottom( original, newGrandChild ) ;
+    // original: parent <- child0 <- grandChild
+    final Treepath< MyTree > original = Treepath.create( parent, 0, 0 ) ;
+
+    final Treepath< MyTree > reparented = TreeTools.updateBottom( original, newGrandChild ) ;
 
     Assert.assertEquals( 3, reparented.getHeight() ) ;
 
-    Assert.assertEquals( "parent", reparented.getTreeAtHeight( 2 ).getText() ) ;
+    Assert.assertEquals( "parent", reparented.getTreeAtHeight( 2 ).getPayload() ) ;
     Assert.assertEquals( 2, reparented.getTreeAtHeight( 2 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child0", reparented.getTreeAtHeight( 1 ).getText() ) ;
+    Assert.assertEquals( "child0", reparented.getTreeAtHeight( 1 ).getPayload() ) ;
     Assert.assertEquals( 1, reparented.getTreeAtHeight( 1 ).getChildCount() ) ;
 
-    Assert.assertEquals( "newGrandChild", reparented.getTreeAtHeight( 0 ).getText() ) ;
+    Assert.assertEquals( "newGrandChild", reparented.getTreeAtHeight( 0 ).getPayload() ) ;
     Assert.assertEquals( 0, reparented.getTreeAtHeight( 0 ).getChildCount() ) ;
-
 
   }
 
   @Test
-  public void addSiblingAtRight() {
-    final MyTree child0 = MyTree.create( "child0" ) ;
-    final MyTree child1 = MyTree.create( "child1" ) ;
-    final MyTree parent = MyTree.create( "parent", child0 ) ;
+  public void addSiblingLast() {
+                                                               // parent
+    final MyTree child0 = MyTree.create( "child0" ) ;          //   |
+    final MyTree parent = MyTree.create( "parent", child0 ) ;  // child0
 
-    final Treepath< MyTree > treepath = TreeTools.addSiblingAtRight(
-        Treepath.create( parent, child0 ), child1 ) ;
+
+    final MyTree child1 = MyTree.create( "child1" ) ;
+
+    final Treepath< MyTree > treepath = TreeTools.addSiblingLast(  //   parent
+        Treepath.< MyTree >create( parent, 0 ),                    //   |     \
+        child1// ^ IntelliJ IDEA 7.0.3 requires this.              // child0  child1
+    ) ;
 
     Assert.assertEquals( "parent", treepath.getTop().getPayload() ) ;
     Assert.assertEquals( 2, treepath.getTop().getChildCount() ) ;
@@ -76,15 +81,17 @@ public class TreeToolsTest {
 
   @Test
   public void removeBottom() {
-    final MyTree child0 = MyTree.create( "child0" ) ;
-    final MyTree child1 = MyTree.create( "child1" ) ;
-    final MyTree parent = MyTree.create( "parent", child0, child1 ) ;
-    final MyTree grandParent = MyTree.create( "grandParent", parent ) ;
+                                                                         //   grandParent
+    final MyTree child0 = MyTree.create( "child0" ) ;                    //        |
+    final MyTree child1 = MyTree.create( "child1" ) ;                    //     parent
+    final MyTree parent = MyTree.create( "parent", child0, child1 ) ;    //     /    \
+    final MyTree grandParent = MyTree.create( "grandParent", parent ) ;  // child0  child1
 
+    // treepath: grandParent <- parent <- child0
+    final Treepath< MyTree > treepath = Treepath.create( grandParent, 0, 0 ) ;
 
-    final Treepath< MyTree > treepath = Treepath.create( grandParent, child0 ) ;
+    // afterRemoval: grandParent <- parent
     final Treepath< MyTree > afterRemoval = TreeTools.removeBottom( treepath ) ;
-
 
     Assert.assertEquals( 2, afterRemoval.getHeight() ) ;
 
@@ -96,19 +103,23 @@ public class TreeToolsTest {
 
     Assert.assertSame( child1, afterRemoval.getTreeAtHeight( 0 ).getChildAt( 0 ) ) ;
 
-
-
   }
 
   @Test
-  public void moveLeftDown() {
-    final MyTree child = MyTree.create( "child" ) ;
-    final MyTree moving = MyTree.create( "moving" ) ;
-    final MyTree parent = MyTree.create( "parent", child, moving ) ;
+  public void moveAsLastChildOfPreviousSibling() {
+    
+    final MyTree child = MyTree.create( "child" ) ;                   //   parent
+    final MyTree moving = MyTree.create( "moving" ) ;                 //    |   \
+    final MyTree parent = MyTree.create( "parent", child, moving ) ;  // child  moving
 
-    final Treepath< MyTree > original = Treepath.create( parent, moving ) ;
+    final Treepath< MyTree > original = Treepath.< MyTree >create( parent, 1 ) ;
+                                              // ^ IntelliJ IDEA 7.0.3 requires this.
 
-    final Treepath< MyTree > moved = TreeTools.moveLeftDown( original ) ;
+                                                                  //   parent
+                                                                  //   |   \
+                                                                  // child  moving
+    final Treepath< MyTree > moved =                              //   |
+        TreeTools.moveAsLastChildOfPreviousSibling( original ) ;  // moving
 
     Assert.assertEquals( 3, moved.getHeight() ) ;
 

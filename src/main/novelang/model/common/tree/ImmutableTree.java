@@ -237,6 +237,40 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
     return ( T ) tree.adopt( newArray ) ;
   }
 
+  /**
+   * Returns a copy of this {@code Tree} minus the child of given index.
+   * @param parent non-null object.
+   * @param index a value between [0, {@link #getChildCount()}[.
+   * @return a non-null object.
+   * @throws ArrayIndexOutOfBoundsException
+   */
+  public static < T extends Tree > T replace( T parent, int index, T newChild )
+      throws ArrayIndexOutOfBoundsException
+  {
+    if( index < 0 ) {
+      throw new ArrayIndexOutOfBoundsException( "Negative index: " + index ) ;
+    }
+    if( parent.getChildCount() < index ) {
+      throw new ArrayIndexOutOfBoundsException(
+          "Cannot remove child at index " + index +
+          " (child count: " + parent.getChildCount() + ")"
+      ) ;
+    }
+    final T[] newArray = ObjectArrays.newArray(
+        ( Class < T > ) parent.getChildAt( 0 ).getClass(),
+        parent.getChildCount()
+    ) ;
+
+    for( int i = 0 ; i < parent.getChildCount() ; i++ ) {
+      if( i == index ) {
+        newArray[ i ] = newChild ;
+      } else {
+        newArray[ i ] = ( T ) parent.getChildAt( i );
+      }
+    }
+    return ( T ) parent.adopt( newArray ) ;
+  }
+
   private class ChildrenIterator implements Iterator< T > {
 
     private int current = 0 ;

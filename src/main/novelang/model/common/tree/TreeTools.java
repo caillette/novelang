@@ -100,7 +100,7 @@ public class TreeTools {
     for( int i = parent.getChildCount() - 1 ; i > 0 ; i-- ) {
       final T child = ( T ) parent.getChildAt( i );
       if( child == treeToMove ) {
-        return Treepath.create( treepath.getParent(), ( T ) parent.getChildAt( i - 1 ) ) ;
+        return Treepath.create( treepath.getParent(), i - 1 ) ;
       }
     }
     throw new IllegalArgumentException( "No previous sibling" ) ;
@@ -127,7 +127,7 @@ public class TreeTools {
     for( int i = 0 ; i < parent.getChildCount() - 1 ; i++ ) {
       final Tree child = parent.getChildAt( i ) ;
       if( child == treeToMove ) {
-        return Treepath.create( treepath.getParent(), ( T ) parent.getChildAt( i + 1 ) ) ;
+        return Treepath.create( treepath.getParent(), i + 1 ) ;
       }
     }
     throw new IllegalArgumentException( "No next sibling" ) ;
@@ -146,7 +146,7 @@ public class TreeTools {
    * @return non-null {@code Treepath} with the same end but with updated parents.
    *
    */
-  public static< T extends Tree > Treepath< T > addSiblingAtRight(
+  public static< T extends Tree > Treepath< T > addSiblingLast(
       Treepath< T > treepath,
       T tree
   ) {
@@ -158,7 +158,7 @@ public class TreeTools {
 
     return Treepath.create(
         updateBottom( treepath.getParent(), newParent ),
-        treepath.getBottom()
+        newParent.getChildCount() - 1
     ) ;
   }
 
@@ -177,7 +177,7 @@ public class TreeTools {
    * @return non-null {@code Treepath} including added tree.
    *
    */
-  public static < T extends Tree > Treepath< T > addChildAtRight(
+  public static < T extends Tree > Treepath< T > addAsLastChild(
       Treepath< T > treepath,
       T tree
   ) {
@@ -185,7 +185,7 @@ public class TreeTools {
       throw new IllegalArgumentException( "Minimum height is 1, got " + treepath.getHeight() ) ;
     }
     final T newParent = ImmutableTree.addLast( treepath.getBottom(), tree ) ;
-    return Treepath.create( updateBottom( treepath, newParent ), tree ) ;
+    return Treepath.create( updateBottom( treepath, newParent ), newParent.getChildCount() - 1 ) ;
   }
 
   /**
@@ -209,36 +209,19 @@ public class TreeTools {
     if( null == treepath.getParent() ) {
       return Treepath.create( newTree ) ;
     } else {
-      final Treepath parentTreepath = treepath.getParent() ;
-      final Tree newParent = reparent(
-          parentTreepath.getBottom(), treepath.getBottom(), newTree ) ;
-      return Treepath.create( updateBottom( parentTreepath, newParent ), newTree ) ;
+      final Treepath< T > parentTreepath = treepath.getParent() ;
+      final T newParent = ImmutableTree.replace(
+          parentTreepath.getBottom(),
+          treepath.getIndexInParent(),
+          newTree
+      ) ;
+
+      return Treepath.create(
+          updateBottom( parentTreepath, newParent ),
+          treepath.getIndexInParent()
+      ) ;
     }
   }
-
-  /**
-   * TODO fix this as a Tree supports having multiple children referencing the same object.
-   */
-  private static< T extends Tree > T reparent( T oldParent, T formerChild, T newChild ) {
-    Objects.nonNull( formerChild );
-    Objects.nonNull( newChild );
-
-    T newParent = null ;
-    for( int i = 0; i < oldParent.getChildCount() ; i++ ) {
-      final T child = ( T ) oldParent.getChildAt( i ) ;
-      if( formerChild == child ) {
-        final T newParentNoChild = ImmutableTree.remove( oldParent, i ) ;
-        newParent = ImmutableTree.addLast( newParentNoChild, newChild ) ;
-      }
-    }
-    if( null == newParent ) {
-      throw new IllegalArgumentException(
-          "Not found: '" + formerChild + "' as child of '" + oldParent + "'" );
-    }
-    return newParent;
-  }
-
-
 
   public static< T extends Tree > Treepath< T > removeBottom( Treepath< T > treepath ) {
     if( treepath.getHeight() < 2 ) {
@@ -279,32 +262,21 @@ public class TreeTools {
    * @return non-null object representing path to moved {@code Tree}.
    * @throws IllegalArgumentException if there was no previous sibling.
    */
-  public static < T extends Tree > Treepath< T > moveLeftDown( Treepath< T > targetTreepath )
+  public static < T extends Tree > Treepath< T > moveAsLastChildOfPreviousSibling(
+      Treepath< T > targetTreepath
+  )
       throws IllegalArgumentException
   {
     final T moving = targetTreepath.getBottom() ;
-    final T futureParent = getPreviousSibling( targetTreepath ).getBottom() ;
+    final Treepath< T > previousSibling = getPreviousSibling( targetTreepath ) ;
 
     final Treepath< T > afterRemoval = removeBottom( targetTreepath ) ;
-    return addChildAtRight( Treepath.create( afterRemoval, futureParent ), moving ) ;
+    return addAsLastChild(
+        Treepath.create( afterRemoval, previousSibling.getIndexInParent() ),
+        moving
+    ) ;
   }
 
-
-
-// ===============
-// Immutable Trees
-// ===============
-
-//  public static< T extends Tree > tree( String text ) {
-//    return new SimpleTree( text ) ;
-//  }
-
-//  public static Tree tree( String text, Tree... children ) {
-//    return new SimpleTree( text, children ) ;
-//    return new SimpleTree( text, children ) ;
-//  }
-
-//  private static final Tree[] EMPTY_TREE_ARRAY = new Tree[ 0 ] ;
 
 
 }

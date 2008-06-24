@@ -16,7 +16,11 @@
  */
 package novelang.model.common.tree;
 
+import java.util.List;
+import java.util.Arrays;
+
 import com.google.common.base.Objects;
+import com.google.common.collect.PrimitiveArrays;
 
 /**
  * Represents where a {@link Tree} lies inside a bigger owning {@link Tree}.
@@ -28,11 +32,26 @@ import com.google.common.base.Objects;
 public final class Treepath< T extends Tree > {
 
   private final Treepath< T > parent ;
-  private final T bottom;
+  private final int indexInParent ;
+  private final T bottom ;
 
-  protected Treepath( Treepath parent, T bottom ) {
+  @Deprecated
+  private Treepath( Treepath parent, T bottom ) {
     this.parent = parent ;
     this.bottom = Objects.nonNull( bottom ) ;
+    this.indexInParent = -1 ;
+  }
+
+  private Treepath( Treepath< T > parent, int indexInParent ) {
+    this.parent = parent ;
+    this.bottom = ( T ) parent.getBottom().getChildAt( indexInParent ) ;
+    this.indexInParent = indexInParent ;
+  }
+
+  private Treepath( T tree ) {
+    parent = null ;
+    indexInParent = -1 ;
+    bottom = tree ;
   }
 
   public T getTop() {
@@ -57,6 +76,10 @@ public final class Treepath< T extends Tree > {
 
   public Treepath< T > getParent() {
     return parent ;
+  }
+
+  public int getIndexInParent() {
+    return indexInParent ;
   }
 
   /**
@@ -141,7 +164,9 @@ public final class Treepath< T extends Tree > {
    * @param bottom a non-null object, must be {@code start} or one of its (possibly indirect)
    *     children.
    * @return a non-null object.
+   *
    */
+  @Deprecated
   public static< T extends Tree > Treepath< T > create( T top, T bottom )
       throws IllegalArgumentException
   {
@@ -153,11 +178,37 @@ public final class Treepath< T extends Tree > {
     return invert( inverted ) ;
   }
 
-  public static< T extends Tree > Treepath< T > create( 
+  @Deprecated
+  public static< T extends Tree > Treepath< T > create(
       Treepath< T > treepath,
       T newBottom
   ) {
     return new Treepath< T >( treepath, newBottom ) ;
+  }
+
+  public static< T extends Tree > Treepath< T > create(
+      Treepath< T > treepath,
+      int indexInParent
+  ) {
+    return new Treepath< T >( treepath, indexInParent ) ;
+  }
+
+  public static< T extends Tree > Treepath< T > create( T root, int... indexes ) {
+    return create( create( root ), indexes ) ;
+  }
+
+  public static< T extends Tree > Treepath< T > create(
+      Treepath< T > parent,
+      int... indexes
+  ) {
+    if( null == indexes || 0 == indexes.length ) {
+      return parent ;
+    } else {
+      final int newLength = indexes.length - 1 ;
+      final int[] newIndexes = new int[ newLength ] ;
+      System.arraycopy( indexes, 1, newIndexes, 0, newLength ) ;
+      return create( create( parent, indexes[ 0 ] ), newIndexes ) ;
+    }
   }
 
   /**
@@ -166,7 +217,7 @@ public final class Treepath< T extends Tree > {
    * @return a non-null object.
    */
   public static< T extends Tree > Treepath create( T tree ) {
-    return new Treepath< T >( null, tree ) ;
+    return new Treepath( tree ) ;
   }
 
   private class IllegalPathHeightException extends IllegalArgumentException {

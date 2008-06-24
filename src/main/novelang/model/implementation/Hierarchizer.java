@@ -66,7 +66,7 @@ public class Hierarchizer {
       NodeKind accumulatorKind,
       Filter filter
   ) {
-    Treepath< SyntacticTree > treepath = Treepath.create( part, part.getBottom().getChildAt( 0 ) ) ;
+    Treepath< SyntacticTree > treepath = Treepath.create( part, 0 ) ;
 
     while( true ) {
       final NodeKind childKind = getKind( treepath ) ;
@@ -80,7 +80,7 @@ public class Hierarchizer {
               treepath = next ;
               break ;
             } else {
-              treepath = TreeTools.moveLeftDown( next ).getParent() ;
+              treepath = TreeTools.moveAsLastChildOfPreviousSibling( next ).getParent() ;
             }
           } else {
             return treepath.getParent() ;

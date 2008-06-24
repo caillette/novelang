@@ -99,6 +99,40 @@ public class TreeTest {
   }
 
   @Test
+  public void replace() {
+    final MyTree root = MyTree.create(
+        "root",
+        MyTree.create( "0" ),
+        MyTree.create( "1" ),
+        MyTree.create( "2" )
+    ) ;
+    final MyTree new1 = MyTree.create( "new1" ) ;
+    final MyTree replace1 = ImmutableTree.replace( root, 1, new1 ) ;
+
+    assertEquals( 3, replace1.getChildCount() ) ;
+    assertEquals( "0", replace1.getChildAt( 0 ).getPayload() ) ;
+    assertEquals( "new1", replace1.getChildAt( 1 ).getPayload() ) ;
+    assertEquals( "2", replace1.getChildAt( 2 ).getPayload() ) ;
+
+    final MyTree new2 = MyTree.create( "new2" ) ;
+    final MyTree replace12 = ImmutableTree.replace( replace1, 2, new2 ) ;
+
+    assertEquals( 3, replace12.getChildCount() ) ;
+    assertEquals( "0", replace12.getChildAt( 0 ).getPayload() ) ;
+    assertEquals( "new1", replace12.getChildAt( 1 ).getPayload() ) ;
+    assertEquals( "new2", replace12.getChildAt( 2 ).getPayload() ) ;
+
+    final MyTree new0 = MyTree.create( "new0" ) ;
+    final MyTree replace120 = ImmutableTree.replace( replace12, 0, new0 ) ;
+
+    assertEquals( 3, replace120.getChildCount() ) ;
+    assertEquals( "new0", replace120.getChildAt( 0 ).getPayload() ) ;
+    assertEquals( "new1", replace120.getChildAt( 1 ).getPayload() ) ;
+    assertEquals( "new2", replace120.getChildAt( 2 ).getPayload() ) ;
+
+  }
+
+  @Test
   public void getChildren() {
     final MyTree child0 = MyTree.create( "0" ) ;
     final MyTree child1 = MyTree.create( "1" ) ;

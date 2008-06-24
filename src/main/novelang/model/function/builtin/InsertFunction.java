@@ -158,7 +158,7 @@ public class InsertFunction implements FunctionDefinition {
 
     if( null != partTree ) {
       for( final SyntacticTree partChild : partTree.getChildren() ) {
-        book = TreeTools.addChildAtRight( Treepath.create( book.getTop() ), partChild ) ;
+        book = TreeTools.addAsLastChild( Treepath.create( book.getTop() ), partChild ) ;
       }
     }
 
@@ -195,12 +195,12 @@ public class InsertFunction implements FunctionDefinition {
                 partTree.getChildren()
             ) ;
 
-            final Treepath updatedBook = TreeTools.addChildAtRight( book, chapterTree ) ;
+            final Treepath updatedBook = TreeTools.addAsLastChild( book, chapterTree ) ;
             book = Treepath.create( updatedBook.getTop() ) ;
 
           } else {
             for( final SyntacticTree partChild : partTree.getChildren() ) {
-              final Treepath updatedBook = TreeTools.addChildAtRight( book, partChild ) ;
+              final Treepath updatedBook = TreeTools.addAsLastChild( book, partChild ) ;
               book = Treepath.create( updatedBook.getTop() ) ;
             }
           }
