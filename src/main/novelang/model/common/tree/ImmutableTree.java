@@ -25,8 +25,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
 
 /**
- * Immutable base class for homogeneous n-ary trees, and utility methods for producing
- * copy-on-change {@code Tree} instances.
+ * Immutable base class for homogeneous n-ary trees.
  * <p>
  * This class is generic for strong-typing the {@link Tree#adopt(Tree[]) adopt} method.
  * Subclass {@code Tree} like this:

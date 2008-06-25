@@ -1,27 +1,53 @@
 <html>
 <body>
 Generic Tree manipulation API basing on immutable structures.
-<h2>
+<p>
+  The {@link novelang.model.common.tree.Tree} interface defines the simplest contract
+  for a tree structure.
+  It only holds an indexed list of children and has no backpointer to any parent,
+  making each {@code Tree} instance shareable by other {@code Tree}s.
+</p>
+<p>
+  The {@link novelang.model.common.tree.ImmutableTree} abstract class provides default
+  implementation of a {@code Tree}.
+</p>
+<p>
+  The {@link novelang.model.common.tree.TreeTools} utility class provides utility methods for
+  creating mutated copies of a {@code Tree}.
+</p>
+<p>
+  Because {@code Tree} instances may be children of other immutable {@code Tree}s, the parent
+  of an "updated" {@code Tree} must be "updated" itself through a similar copy-on-change
+  mechanism.
+  The {@link novelang.model.common.tree.Treepath} class represent the "parenthood" of
+  a {@code Tree} to be updated.
+</p>
+<p>
+  {@code Treepath}s are immutable structures, too.
+  The {@link novelang.model.common.tree.TreepathTools} utility class provides utility methods
+  for "updating" {@code Tree}s inside a {@code Treepath},
+  which implies "updating" the {@code Treepath}.
+</p>
+
+<h3>
   Discussion: where to define utility methods?
-</h2>
+</h3>
 <p>
   The {@link novelang.model.common.tree.ImmutableTree} and
   {@link novelang.model.common.tree.Treepath} classes implement a well-defined, minimalistic
-  behavior. As they define immutable objects, they must have no complex mutators.
-  In fact, those mutators are implemented on a copy-on-change approach.
-  Because they have very simple internals, it's very easy to produce mutated copies of
-  {@link ImmutableTree} and {@link Treepath}.
-  This happens inside {@link novelang.model.common.tree.TreeTools} and
-  {@link novelang.model.common.tree.TreepathTools} which provide lots of static methods.
+  behavior. All copy-on-change mechanisms can be made external to those classes
+  (thanks to the {@link novelang.model.common.tree.Tree#adopt(Tree[])} method).
+  So we have {@link novelang.model.common.tree.TreeTools} and
+  {@link novelang.model.common.tree.TreepathTools} holding all other useful-but-not-central
+  methods. Keeping the contracts as clear as possible is the priority.
 </p>
 <p>
-  Static methods make calls a bit longer. One has to write (when not using static imports)
-  something like <tt>TreepathTools.method(treepath)</tt> instead of more object-oriented
-  <tt>treepath.method()</tt>. If codewriters using this package want the more concise approach,
-  they <em>could</em> subclass {@link ImmutableTree} and {@link Treepath} and add instance methods
-  wrapping a call to the corresponding utility method.
-  But while {@code Treepath} is not used a lot in Novelang, it is made {@code final}
-  for now.
+  Yes, static method calls are a bit longer: without static imports, one has to write
+  something like <tt>TreepathTools.method(treepath)</tt> instead of <tt>treepath.method()</tt>
+  which looks more more object-oriented, by the way.
+  If codewriters using this package want the more concise approach,
+  they <em>could</em> subclass {@link ImmutableTree} and add instance methods wrapping a call
+  to the corresponding utility method (by the way {@code Treepath} is final by now).
 </p>
 <p>
   TODO: extend the contract of {@link novelang.model.common.SyntacticTree},
