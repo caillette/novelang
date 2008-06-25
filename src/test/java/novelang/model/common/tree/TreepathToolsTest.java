@@ -25,7 +25,7 @@ import org.junit.Test;
 public class TreepathToolsTest {
 
   @Test
-  public void updateEnd() {
+  public void replaceEnd() {
 
     final MyTree grandChild = MyTree.create( "grandChild" ) ;  //     parent
     final MyTree parent = MyTree.create(                       //    /     \
@@ -39,7 +39,7 @@ public class TreepathToolsTest {
     // original: parent <- child0 <- grandChild
     final Treepath< MyTree > original = Treepath.create( parent, 0, 0 ) ;
 
-    final Treepath< MyTree > reparented = TreepathTools.updateEnd( original, newGrandChild ) ;
+    final Treepath< MyTree > reparented = TreepathTools.replaceEnd( original, newGrandChild ) ;
 
     Assert.assertEquals( 3, reparented.getLength() ) ;
 

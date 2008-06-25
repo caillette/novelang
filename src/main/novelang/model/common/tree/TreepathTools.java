@@ -159,7 +159,7 @@ public class TreepathTools {
     final T newParent = TreeTools.addLast( oldParent, tree ) ;
 
     return Treepath.create(
-        updateEnd( treepath.getPrevious(), newParent ),
+        replaceEnd( treepath.getPrevious(), newParent ),
         newParent.getChildCount() - 1
     ) ;
   }
@@ -187,7 +187,7 @@ public class TreepathTools {
       throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
     }
     final T newParent = TreeTools.addLast( treepath.getTreeAtEnd(), tree ) ;
-    return Treepath.create( updateEnd( treepath, newParent ), newParent.getChildCount() - 1 ) ;
+    return Treepath.create( replaceEnd( treepath, newParent ), newParent.getChildCount() - 1 ) ;
   }
 
   /**
@@ -206,7 +206,7 @@ public class TreepathTools {
    * @return non-null {@code Treepath} with the same end referencing updated trees.
    *
    */
-  public static< T extends Tree > Treepath< T > updateEnd( Treepath< T > treepath, T newTree ) {
+  public static< T extends Tree > Treepath< T > replaceEnd( Treepath< T > treepath, T newTree ) {
     if( null == treepath.getPrevious() ) {
       return Treepath.create( newTree ) ;
     } else {
@@ -218,7 +218,7 @@ public class TreepathTools {
       ) ;
 
       return Treepath.create(
-          updateEnd( parentTreepath, newParent ),
+          replaceEnd( parentTreepath, newParent ),
           treepath.getIndexInPrevious()
       ) ;
     }
@@ -250,7 +250,7 @@ public class TreepathTools {
     if( null == newTree ) {
       throw new Error( "Internal error: found no end" ) ;
     }
-    return updateEnd( treepath.getPrevious(), newTree ) ;
+    return replaceEnd( treepath.getPrevious(), newTree ) ;
   }
 
 
