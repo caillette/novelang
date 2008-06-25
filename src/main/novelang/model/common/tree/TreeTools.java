@@ -46,7 +46,8 @@ public class TreeTools {
       throw new NullArgumentException( "newChild" ) ;
     }
     final T[] newArray = ObjectArrays.newArray(
-        ( Class< T > ) newChild.getClass(),
+//        ( Class< T > ) newChild.getClass(),
+        ( Class< T > ) tree.getClass(),
         tree.getChildCount() + 1
     ) ;
 
@@ -55,6 +56,10 @@ public class TreeTools {
       newArray[ i + 1 ] = ( T ) tree.getChildAt( i );
     }
     return ( T ) tree.adopt( newArray ) ;
+  }
+
+  private static < T extends Tree > Class< ? extends T > findCommonAncestor( T... objects ) {
+    throw new UnsupportedOperationException( "findCommonAncestor" ) ;
   }
 
   /**

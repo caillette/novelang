@@ -40,6 +40,7 @@ import novelang.model.common.StructureKind;
 import novelang.model.common.SyntacticTree;
 import novelang.model.common.tree.TreepathTools;
 import novelang.model.common.tree.Treepath;
+import novelang.model.common.tree.TreeTools;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
 import static novelang.model.function.FunctionTools.verify;
@@ -190,9 +191,9 @@ public class InsertFunction implements FunctionDefinition {
             ) ;
             final SyntacticTree title = new SimpleTree( TITLE.name(), word ) ;
 
-            final SyntacticTree chapterTree = new SimpleTree(
-                CHAPTER.name(),
-                partTree.getChildren()
+            final SyntacticTree chapterTree = TreeTools.addFirst(
+                ( SyntacticTree ) new SimpleTree( CHAPTER.name(), partTree.getChildren() ),
+                title
             ) ;
 
             final Treepath updatedBook = TreepathTools.addChildLast( book, chapterTree ) ;
