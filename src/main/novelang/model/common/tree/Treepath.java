@@ -60,7 +60,7 @@ import org.apache.commons.lang.NullArgumentException;
  * While the backward chaining may seem confusing, most of {@code Treepath}-related methods
  * allow to thing "from start to end".
  *
- * @see javax.swing.tree.TreePath from which this class was inspired from. 
+ * @see javax.swing.tree.TreePath Swing's {@code TreePath} from which this class was inspired from. 
  *
  * @author Laurent Caillette
  */

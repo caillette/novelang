@@ -105,5 +105,9 @@ public class CustomTree
     return ( SyntacticTree ) getChild( i );
   }
 
+  public Class< ? extends SyntacticTree > getStorageType() {
+    return SyntacticTree.class ;
+  }
+  
 
 }

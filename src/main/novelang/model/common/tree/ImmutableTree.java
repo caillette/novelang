@@ -76,10 +76,7 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
     if( 0 == childList.size() ) {
       this.children = null ;
     } else {
-      this.children = ( T[] ) ObjectArrays.newArray(
-          childList.get( 0 ).getClass(),
-          childList.size()
-      ) ;
+      this.children = ( T[] ) createArray( this, childList.get( 0 ), childList.size() ) ;
       for( int i = 0 ; i < childList.size() ; i++ ) {
         final T child = childList.get( i ) ;
         if( null == child ) {
@@ -136,4 +133,32 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
       throw new UnsupportedOperationException( "remove" ) ;
     }
   }
+
+  /**
+   * Creates an array for storing children.
+   * If the concrete instance ({@code this}) instantiates the
+   * {@link novelang.model.common.tree.StorageTypeProvider}, then returned array is of type
+   * returned by {@link StorageTypeProvider#getStorageType()}.
+   * Otherwise, it is of the type of the {@code fallback} parameter.
+   * <p>
+   * This method is used internally.
+   * It is made a member of {@code ImmutableTree} in order to avoid a cyclic depedency
+   * with {@code TreeTools} (which would be the logical place).
+   *
+   * @param fallback a non-null object.
+   * @param arraySize a non-negative number.
+   * @return a non-null array of the given size.
+   *
+   * @see novelang.model.common.tree.StorageTypeProvider
+   */
+  protected static< T extends Tree > T[] createArray( T tree, T fallback, int arraySize ) {
+    final Class< T > concreteClass ;
+    if( tree instanceof StorageTypeProvider ) {
+      concreteClass = ( ( StorageTypeProvider ) tree ).getStorageType() ;
+    } else {
+      concreteClass = ( Class< T > ) fallback.getClass() ;
+    }
+    return ObjectArrays.newArray( concreteClass, arraySize ) ;
+  }
+
 }

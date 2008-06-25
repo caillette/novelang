@@ -19,7 +19,6 @@ package novelang.model.common.tree;
 import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
-import com.google.common.collect.ObjectArrays;
 import com.google.common.collect.Lists;
 
 /**
@@ -37,7 +36,7 @@ public class TreeTools {
   /**
    * Returns a copy of a {@code Tree} with the {@code newChild} added as first child.
    *
-   * @param tree a non-null object.
+   * @param tree a non-null object that may implement {@link StorageTypeProvider}.
    * @param newChild a non-null object.
    * @return a non-null object.
    */
@@ -45,11 +44,7 @@ public class TreeTools {
     if( null == newChild ) {
       throw new NullArgumentException( "newChild" ) ;
     }
-    final T[] newArray = ObjectArrays.newArray(
-//        ( Class< T > ) newChild.getClass(),
-        ( Class< T > ) tree.getClass(),
-        tree.getChildCount() + 1
-    ) ;
+    final T[] newArray = createArray( tree, newChild, tree.getChildCount() + 1 ) ;
 
     newArray[ 0 ] = newChild ;
     for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
@@ -58,14 +53,10 @@ public class TreeTools {
     return ( T ) tree.adopt( newArray ) ;
   }
 
-  private static < T extends Tree > Class< ? extends T > findCommonAncestor( T... objects ) {
-    throw new UnsupportedOperationException( "findCommonAncestor" ) ;
-  }
-
   /**
    * Returns a copy of a {@code Tree} with the {@code newChild} added as last child.
    *
-   * @param tree a non-null object.
+   * @param tree a non-null object that may implement {@link StorageTypeProvider}.
    * @param newChild a non-null object.
    * @return a non-null object.
    */
@@ -73,10 +64,7 @@ public class TreeTools {
     if( null == newChild ) {
       throw new NullArgumentException( "newChild") ;
     }
-    final T[] newArray = ObjectArrays.newArray(
-        ( Class< T > ) newChild.getClass(),
-        tree.getChildCount() + 1
-    ) ;
+    final T[] newArray = createArray( tree, newChild, tree.getChildCount() + 1 ) ;
 
     newArray[ tree.getChildCount() ] = newChild ;
     for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
@@ -86,7 +74,9 @@ public class TreeTools {
   }
 
   /**
-   * @param tree a non-null object.
+   * Returns a copy of a {@code Tree} with the {@code newChildren} added as last children.
+   *
+   * @param tree a non-null object that may implement {@link StorageTypeProvider}.
    * @param newChildren a non-null object iterating over non-null objects.
    * @return non-null object.
    * @throws org.apache.commons.lang.NullArgumentException if at least one of {@code newChildren} is null.
@@ -106,8 +96,9 @@ public class TreeTools {
         throw new NullArgumentException( "Null child at index 0" ) ;
       }
 
-      final T[] newArray = ObjectArrays.newArray(
-          ( Class< T > ) firstChild.getClass(),
+      final T[] newArray = createArray(
+          tree,
+          firstChild,
           tree.getChildCount() + newChildrenList.size()
       ) ;
 
@@ -131,7 +122,7 @@ public class TreeTools {
 
   /**
    * Returns a copy of this {@code Tree} minus the child of given index.
-   * @param tree
+   * @param tree a non-null object that may implement {@link StorageTypeProvider}.
    * @param index a value between [0, {@link Tree#getChildCount()}[.
    * @return a non-null object.
    * @throws ArrayIndexOutOfBoundsException
@@ -148,8 +139,9 @@ public class TreeTools {
           " (child count: " + tree.getChildCount() + ")"
       ) ;
     }
-    final T[] newArray = ObjectArrays.newArray(
-        ( Class < T > ) tree.getChildAt( 0 ).getClass(),
+    final T[] newArray = ( T[] ) createArray(
+        tree,
+        tree.getChildAt( 0 ),
         tree.getChildCount() - 1
     ) ;
 
@@ -164,7 +156,7 @@ public class TreeTools {
 
   /**
    * Returns a copy of this {@code Tree} minus the child of given index.
-   * @param parent non-null object.
+   * @param parent non-null object that may implement {@link StorageTypeProvider}.
    * @param index a value between [0, {@link Tree#getChildCount()}[.
    * @return a non-null object.
    * @throws ArrayIndexOutOfBoundsException
@@ -181,8 +173,9 @@ public class TreeTools {
           " (child count: " + parent.getChildCount() + ")"
       ) ;
     }
-    final T[] newArray = ObjectArrays.newArray(
-        ( Class < T > ) parent.getChildAt( 0 ).getClass(),
+    final T[] newArray = ( T[] ) createArray(
+        parent,
+        parent.getChildAt( 0 ),
         parent.getChildCount()
     ) ;
 
@@ -194,5 +187,16 @@ public class TreeTools {
       }
     }
     return ( T ) parent.adopt( newArray ) ;
+  }
+
+
+  /**
+   * Creates an array for storing children.
+   *
+   * @see novelang.model.common.tree.StorageTypeProvider forcing child array type
+   * @see novelang.model.common.tree.ImmutableTree#createArray backing implementation
+   */
+  protected static< T extends Tree > T[] createArray( T tree, T fallback, int arraySize ) {
+    return ImmutableTree.createArray( tree, fallback, arraySize ) ;
   }
 }

@@ -85,4 +85,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     return false ;
   }
 
+  public Class< ? extends SyntacticTree > getStorageType() {
+    return SyntacticTree.class ;
+  }
 }

@@ -18,13 +18,18 @@
 package novelang.model.common;
 
 import novelang.model.common.tree.Tree;
+import novelang.model.common.tree.StorageTypeProvider;
 
 /**
  * Narrows the contract of an Abstract Syntax Tree.
  *
  * @author Laurent Caillette
  */
-public interface SyntacticTree extends Tree< SyntacticTree > {
+public interface SyntacticTree 
+    extends
+    Tree< SyntacticTree >,
+    StorageTypeProvider< SyntacticTree >
+{
 
   String getText() ;
 
