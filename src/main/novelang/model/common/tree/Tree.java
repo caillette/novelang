@@ -20,20 +20,44 @@ import org.apache.commons.lang.NullArgumentException;
 
 /**
  * This interface captures the essential behavior of an immutable tree.
+ * <p>
+ * The strange recursive definition using generics is required for strong-typing the
+ * {@link #adopt(Tree[])} method across implementors.
+ *
+ * @see TreeTools manipulation primitives
+ * @see ImmutableTree a base implementation
  *
  * @author Laurent Caillette
  */
 public interface Tree< T extends Tree > {
+
   /**
+   * Returns the the child of given index.
+   * <p>
+   * Note about Novelang implementation:
    * This can't be called {@code getChild()} because it would clash with
    * {@link org.antlr.runtime.tree.Tree#getChild(int)} which returns a
    * {@link org.antlr.runtime.tree.Tree}.
+   *
+   * @param index a value between [0, {@link #getChildCount()}[.
+   * @return a non-null object.
+   * @throws ArrayIndexOutOfBoundsException
    */
-  T getChildAt( int i ) ;
+  T getChildAt( int index ) ;
 
+  /**
+   * Returns the count of children.
+   *
+   * @return An integer equal to or greater than 0.
+   */
   int getChildCount() ;
 
-  Iterable< ? extends T > getChildren() ;
+  /**
+   * Returns an iterable over children.
+   *
+   * @return a non-null object returning a non-null iterator, even if there are no children.
+   */
+//  Iterable< ? extends T > getChildren() ;
 
   /**
    * This method clones the node-related values while new children are set

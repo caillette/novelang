@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import static novelang.model.common.NodeKind.*;
 import novelang.model.common.SimpleTree;
 import novelang.model.common.SyntacticTree;
-import novelang.model.common.tree.ImmutableTree;
+import novelang.model.common.tree.TreeTools;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -58,7 +58,7 @@ public class BookParserTest {
         )
     ) ;
 
-    functionCall = ImmutableTree.addLast(
+    functionCall = TreeTools.addLast(
         functionCall,
         Iterables.transform(
             Lists.newArrayList( flagArguments ),

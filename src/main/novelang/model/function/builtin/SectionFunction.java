@@ -25,10 +25,10 @@ import static novelang.model.common.NodeKind.TITLE;
 import static novelang.model.common.NodeKind.SECTION;
 import static novelang.model.common.NodeKind.PARAGRAPH_PLAIN;
 import novelang.model.common.tree.Treepath;
-import novelang.model.common.tree.TreeTools;
+import novelang.model.common.tree.TreepathTools;
 import novelang.model.common.SyntacticTree;
 import novelang.model.common.SimpleTree;
-import novelang.model.common.tree.ImmutableTree;
+import novelang.model.common.tree.TreeTools;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
 import novelang.model.function.IllegalFunctionCallException;
@@ -67,14 +67,14 @@ public class SectionFunction implements FunctionDefinition {
         paragraph.getChildren() 
     ) ;
 
-    final SyntacticTree sectionTree = ImmutableTree.addLast(
+    final SyntacticTree sectionTree = TreeTools.addLast(
         new SimpleTree( SECTION.name() ),
         titleTree
     ) ;
 
     return new FunctionCall( location ) {
       public Result evaluate( Environment environment, Treepath<SyntacticTree> book ) {
-        final Treepath<SyntacticTree> newBook = TreeTools.addAsLastChild( book, sectionTree ) ;
+        final Treepath<SyntacticTree> newBook = TreepathTools.addChildLast( book, sectionTree ) ;
         return new Result( newBook, null ) ;
       }
     } ;

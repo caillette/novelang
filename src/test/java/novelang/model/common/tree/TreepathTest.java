@@ -32,25 +32,25 @@ public class TreepathTest {
   private static final Logger LOGGER = LoggerFactory.getLogger( TreepathTest.class ) ;
 
   @Test
-  public void testTreepathHeight1() {
+  public void testTreepathLength1() {
     final MyTree tree = MyTree.create( "tree" ) ;
     final Treepath< MyTree > treepath = Treepath.create( tree ) ;
 
-    Assert.assertEquals( 1, treepath.getHeight() ) ;
-    assertSame( tree, treepath.getTop() ) ;
-    assertSame( tree, treepath.getBottom() ) ;
-    assertSame( tree, treepath.getTreeAtHeight( 0 ) ) ;
+    Assert.assertEquals( 1, treepath.getLength() ) ;
+    assertSame( tree, treepath.getStart() ) ;
+    assertSame( tree, treepath.getTreeAtEnd() ) ;
+    assertSame( tree, treepath.getTreeAtDistance( 0 ) ) ;
   }
 
   @Test( expected = IllegalArgumentException.class )
-  public void testTreepathHeight1Bad() {
+  public void testTreepathLength1Bad() {
     final MyTree tree = MyTree.create( "tree" ) ;
     final Treepath< MyTree > treepath = Treepath.create( tree ) ;
-    assertSame( tree, treepath.getTreeAtHeight( 1 ) ) ;
+    assertSame( tree, treepath.getTreeAtDistance( 1 ) ) ;
   }
 
   @Test
-  public void testTreepathHeight2() {
+  public void testTreepathLength2() {
     final MyTree child = MyTree.create( "child" ) ;
     final MyTree parent = MyTree.create( "parent", child ) ;
 
@@ -58,36 +58,15 @@ public class TreepathTest {
                                               // ^ IntelliJ IDEA 7.0.3 breaks without this.
     print("Treepath: ", treepath ) ;
 
-    Assert.assertEquals( 2, treepath.getHeight() ) ;
-    assertSame( parent, treepath.getTreeAtHeight( 1 ) ) ;
-    assertSame( child, treepath.getTreeAtHeight( 0 )) ;
-    assertSame( parent, treepath.getTop() ) ;
-    assertSame( child, treepath.getBottom() ) ;
+    Assert.assertEquals( 2, treepath.getLength() ) ;
+    assertSame( parent, treepath.getTreeAtDistance( 1 ) ) ;
+    assertSame( child, treepath.getTreeAtDistance( 0 )) ;
+    assertSame( parent, treepath.getStart() ) ;
+    assertSame( child, treepath.getTreeAtEnd() ) ;
   }
 
   @Test
-  public void testFindHeight4() {
-
-    final MyTree grandChild = MyTree.create( "grandChild" ) ;
-    final MyTree child = MyTree.create( "child", grandChild ) ;
-    final MyTree parent = MyTree.create( "parent", child ) ;
-    final MyTree grandParent = MyTree.create( "grandParent", parent ) ;
-
-    final Treepath< MyTree > findResult = Treepath.find( grandParent, child ) ;
-    print("Found: ", findResult ) ;
-
-    Assert.assertEquals( 3, findResult.getHeight() ) ;
-    assertSame( grandParent, findResult.getBottom() ) ;
-    assertSame( child, findResult.getTop() ) ;
-
-    // Warning: inverted path!
-    assertSame( grandParent, findResult.getTreeAtHeight( 0 ) ) ;
-    assertSame( parent, findResult.getTreeAtHeight( 1 ) ) ;
-    assertSame( child, findResult.getTreeAtHeight( 2 ) ) ;
-  }
-
-  @Test
-  public void testTreepathHeight3() {
+  public void testTreepathLength3() {
     final MyTree grandChild = MyTree.create( "grandChild" ) ;
     final MyTree child = MyTree.create( "child", grandChild ) ;
     final MyTree parent = MyTree.create( "parent", child ) ;
@@ -95,39 +74,12 @@ public class TreepathTest {
     final Treepath< MyTree > treepath = Treepath.create( parent, 0, 0 ) ;
     print("Treepath: ", treepath ) ;
 
-    Assert.assertEquals( 3, treepath.getHeight() ) ;
-    assertSame( parent, treepath.getTop() ) ;
-    assertSame( grandChild, treepath.getBottom() ) ;
-    assertSame( parent, treepath.getTreeAtHeight( 2 ) ) ;
-    assertSame( child, treepath.getTreeAtHeight( 1 ) ) ;
-    assertSame( grandChild, treepath.getTreeAtHeight( 0 ) ) ;
-  }
-
-  @Test
-  public void testInvert() {
-    final MyTree grandChild = MyTree.create( "grandChild" ) ;
-    final MyTree child = MyTree.create( "child", grandChild ) ;
-    final MyTree parent = MyTree.create( "parent", child ) ;
-
-    final Treepath< MyTree > treepath =
-        Treepath.create(
-            Treepath.create(
-                Treepath.create( ( MyTree ) null, parent ),
-                child
-            ),
-            grandChild
-        ) ;
-    final Treepath< MyTree > inverted = Treepath.invert( treepath ) ;
-
-    print( "Treepath: ", treepath ) ;
-    print( "Inverted treepath: ", inverted ) ;
-
-    Assert.assertEquals( 3, inverted.getHeight() ) ;
-    assertSame( parent, inverted.getTreeAtHeight( 0 ) ) ;
-    assertSame( child, inverted.getTreeAtHeight( 1 ) ) ;
-    assertSame( grandChild, inverted.getTreeAtHeight( 2 ) ) ;
-    assertSame( grandChild, inverted.getTop() ) ;
-    assertSame( parent, inverted.getBottom() ) ;
+    Assert.assertEquals( 3, treepath.getLength() ) ;
+    assertSame( parent, treepath.getStart() ) ;
+    assertSame( grandChild, treepath.getTreeAtEnd() ) ;
+    assertSame( parent, treepath.getTreeAtDistance( 2 ) ) ;
+    assertSame( child, treepath.getTreeAtDistance( 1 ) ) ;
+    assertSame( grandChild, treepath.getTreeAtDistance( 0 ) ) ;
   }
 
 // =======
@@ -137,13 +89,13 @@ public class TreepathTest {
   private static void print( String message, Treepath< MyTree > treepath ) {
     boolean first = true ;
     final StringBuffer buffer = new StringBuffer() ;
-    for( int i = 0 ; i < treepath.getHeight() ; i++ ) {
+    for( int i = 0 ; i < treepath.getLength() ; i++ ) {
       if( first ) {
         first = false ;
       } else {
         buffer.append( " -> " ) ;
       }
-      buffer.append( "{" ).append( treepath.getTreeAtHeight( i ).getPayload() ).append( "}" ) ;
+      buffer.append( "{" ).append( treepath.getTreeAtDistance( i ).getPayload() ).append( "}" ) ;
     }
     LOGGER.debug( message + buffer.toString() ) ;
   }

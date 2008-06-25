@@ -38,7 +38,7 @@ import novelang.model.common.Problem;
 import novelang.model.common.SimpleTree;
 import novelang.model.common.StructureKind;
 import novelang.model.common.SyntacticTree;
-import novelang.model.common.tree.TreeTools;
+import novelang.model.common.tree.TreepathTools;
 import novelang.model.common.tree.Treepath;
 import novelang.model.function.FunctionCall;
 import novelang.model.function.FunctionDefinition;
@@ -158,7 +158,7 @@ public class InsertFunction implements FunctionDefinition {
 
     if( null != partTree ) {
       for( final SyntacticTree partChild : partTree.getChildren() ) {
-        book = TreeTools.addAsLastChild( Treepath.create( book.getTop() ), partChild ) ;
+        book = TreepathTools.addChildLast( Treepath.create( book.getStart() ), partChild ) ;
       }
     }
 
@@ -195,13 +195,13 @@ public class InsertFunction implements FunctionDefinition {
                 partTree.getChildren()
             ) ;
 
-            final Treepath updatedBook = TreeTools.addAsLastChild( book, chapterTree ) ;
-            book = Treepath.create( updatedBook.getTop() ) ;
+            final Treepath updatedBook = TreepathTools.addChildLast( book, chapterTree ) ;
+            book = Treepath.create( updatedBook.getStart() ) ;
 
           } else {
             for( final SyntacticTree partChild : partTree.getChildren() ) {
-              final Treepath updatedBook = TreeTools.addAsLastChild( book, partChild ) ;
-              book = Treepath.create( updatedBook.getTop() ) ;
+              final Treepath updatedBook = TreepathTools.addChildLast( book, partChild ) ;
+              book = Treepath.create( updatedBook.getStart() ) ;
             }
           }
         }

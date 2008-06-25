@@ -20,7 +20,7 @@ import java.util.Set;
 
 import novelang.model.common.NodeKind;
 import novelang.model.common.tree.Treepath;
-import novelang.model.common.tree.TreeTools;
+import novelang.model.common.tree.TreepathTools;
 import novelang.model.common.SyntacticTree;
 import static novelang.model.common.NodeKind.SECTION;
 import static novelang.model.common.NodeKind.CHAPTER;
@@ -73,29 +73,29 @@ public class Hierarchizer {
       if( accumulatorKind == childKind ) {
         while( true ) {
           // Consume all siblings on the right to be reparented.
-          if( TreeTools.hasNextSibling( treepath ) ) {
-            final Treepath< SyntacticTree > next = TreeTools.getNextSibling( treepath ) ;
+          if( TreepathTools.hasNextSibling( treepath ) ) {
+            final Treepath< SyntacticTree > next = TreepathTools.getNextSibling( treepath ) ;
             final NodeKind kindOfNext = getKind( next );
             if( accumulatorKind == kindOfNext || ! filter.isMoveable( kindOfNext ) ) {
               treepath = next ;
               break ;
             } else {
-              treepath = TreeTools.moveAsLastChildOfPreviousSibling( next ).getParent() ;
+              treepath = TreepathTools.becomeLastChildOfPreviousSibling( next ).getPrevious() ;
             }
           } else {
-            return treepath.getParent() ;
+            return treepath.getPrevious() ;
           }
         }
-      } else if( TreeTools.hasNextSibling( treepath ) ) {
-        treepath = TreeTools.getNextSibling( treepath ) ;
+      } else if( TreepathTools.hasNextSibling( treepath ) ) {
+        treepath = TreepathTools.getNextSibling( treepath ) ;
       } else {
-        return treepath.getParent() ;
+        return treepath.getPrevious() ;
       }
     }
   }
 
   private static NodeKind getKind( Treepath<SyntacticTree> treepath ) {
-    return NodeKind.ofRoot( treepath.getBottom() ) ;
+    return NodeKind.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 
 

@@ -126,7 +126,7 @@
 
   <target name="main-compile" depends="init, target-dir" >
 
-    <javac 
+    <javac
         destdir="${target.mainclasses.dir}"
         source="${compiler.source}"
         target="${compiler.target}"
@@ -139,7 +139,7 @@
       <src path="${source.main.java.dir}" />
       <src path="${target.antlr.generated.main.dir}" />
     </javac>
-    
+
     <copy todir="${target.mainclasses.dir}" >
       <fileset dir="${source.main.java.dir}" >
         <patternset refid="resource-patterns" />
@@ -153,7 +153,19 @@
 
 
     </copy>
-    
+
+  </target>
+
+  <target name="javadoc" depends="init, target-dir" >
+
+    <javadoc  
+        sourcepath="${source.main.java.dir}"
+        destdir="${target.javadoc.dir}"
+        use="true"
+        author="true"
+    >
+    </javadoc>
+
   </target>
 
 

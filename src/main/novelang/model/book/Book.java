@@ -100,7 +100,7 @@ public class Book extends AbstractSourceReader {
         book = newBook ;
       }
     }
-    return book.getTop() ;
+    return book.getStart() ;
   }
 
   

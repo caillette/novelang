@@ -86,11 +86,11 @@ public class TreeFixture {
       Treepath<SyntacticTree> expected,
       Treepath<SyntacticTree> actual
   ) {
-    Assert.assertEquals( "Treepath height", expected.getHeight(), actual.getHeight() ) ;
-    for( int i = 0 ; i < expected.getHeight() ; i++ ) {
+    Assert.assertEquals( "Treepath height", expected.getLength(), actual.getLength() ) ;
+    for( int i = 0 ; i < expected.getLength() ; i++ ) {
       assertEquals(
-          expected.getTreeAtHeight( i ),
-          actual.getTreeAtHeight( i )
+          expected.getTreeAtDistance( i ),
+          actual.getTreeAtDistance( i )
       ) ;
     }
   }

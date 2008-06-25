@@ -16,187 +16,215 @@
  */
 package novelang.model.common.tree;
 
-import java.util.List;
-import java.util.Arrays;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.PrimitiveArrays;
+import org.apache.commons.lang.NullArgumentException;
 
 /**
- * Represents where a {@link Tree} lies inside a bigger owning {@link Tree}.
+ * An immutable structure representing where a {@link Tree} lies inside a bigger owning
+ * {@link Tree}.
  * <p>
- * The root is called the "top" and the n<sup>th</sup> child is called "bottom".
+ * A {@code Treepath} object is made of:
+ * <ul>
+ *   <li>A reference to the {@code Tree} itself.
+ *   <li>a reference to another {@code Treepath} which references the parent of our
+ *     {@code Tree} and so on.
+ * </ul>
+ * <p>
+ * Each reference to a parent tree is like a previous step on the path from the top to the bottom.
+ * The top tree is the <strong>start</strong> of the path and the lowest-level tree
+ * is the <strong>end</strong> (the terms "start" and "end" are parts of the API).
+ * <p>
+ * Each previous step includes the reference to the owning tree and the <strong>index</strong>
+ * of the child inside its parent. This is required in case one {@code Tree} having
+ * multiple references on the same child object.
+ * <p>
+ * The backward chaining makes possible to have immutable {@code Treepath} objects.
+ * <p>
+ * Given this tree below:
+ * <pre>
+ *     t0
+ *    /  \
+ *  t1   t2
+ *      /  \
+ *     t3   t7
+ *   / | \
+ * t4 t5  t6
+ * </pre>
+ * <p>
+ * The {@code Treepath} starting on {@code t0} and ending on {@code t6} can be represented
+ * like this:
+ * <pre>
+ * t0 &lt;-[1]- t2 &lt;-[0]- t3 &lt;-[2]- t6
+ * ^ start                       ^ end
+ * </pre>
+ * <p>
+ * While the backward chaining may seem confusing, most of {@code Treepath}-related methods
+ * allow to thing "from start to end".
+ *
+ * @see javax.swing.tree.TreePath from which this class was inspired from. 
  *
  * @author Laurent Caillette
  */
 public final class Treepath< T extends Tree > {
 
-  private final Treepath< T > parent ;
-  private final int indexInParent ;
-  private final T bottom ;
+  private final Treepath< T > previous;
+  private final int indexInPrevious;
+  private final T treeAtEnd;
 
-  @Deprecated
-  private Treepath( Treepath parent, T bottom ) {
-    this.parent = parent ;
-    this.bottom = Objects.nonNull( bottom ) ;
-    this.indexInParent = -1 ;
-  }
-
-  private Treepath( Treepath< T > parent, int indexInParent ) {
-    this.parent = parent ;
-    this.bottom = ( T ) parent.getBottom().getChildAt( indexInParent ) ;
-    this.indexInParent = indexInParent ;
+  private Treepath( Treepath< T > previous, int indexInPrevious ) {
+    if( null == previous ) {
+      throw new NullArgumentException( "Cannot define null previous path with this constructor" ) ;
+    }
+    this.previous = previous;
+    this.treeAtEnd = ( T ) previous.getTreeAtEnd().getChildAt( indexInPrevious ) ;
+    this.indexInPrevious = indexInPrevious;
   }
 
   private Treepath( T tree ) {
-    parent = null ;
-    indexInParent = -1 ;
-    bottom = tree ;
-  }
-
-  public T getTop() {
-    if( null == parent ) {
-      return bottom;
-    } else {
-      return parent.getTop() ;
-    }
-  }
-
-  public T getBottom() {
-    return bottom;
-  }
-
-  public int getHeight() {
-    if( null == parent ) {
-      return 1 ;
-    } else {
-      return parent.getHeight() + 1 ;
-    }
-  }
-
-  public Treepath< T > getParent() {
-    return parent ;
-  }
-
-  public int getIndexInParent() {
-    return indexInParent ;
+    previous = null ;
+    indexInPrevious = -1 ;
+    treeAtEnd = tree ;
   }
 
   /**
-   * Returns the {@code Tree} at a given height, which is the n<sup>th</sup>
-   * from the end (starting at 0).
+   * Returns the reference to the start of the path, corresponding to the root tree.
+   * @return a non-null object.
+   */
+  public T getStart() {
+    if( null == previous ) {
+      return treeAtEnd;
+    } else {
+      return previous.getStart() ;
+    }
+  }
+
+  /**
+   * Returns the {@code Tree} at the end of this path.
+   * @return a non-null object.
+   */
+  public T getTreeAtEnd() {
+    return treeAtEnd;
+  }
+
+  /**
+   * Returns the length of the path, corresponding to the number of chained parent {@code Treepath}
+   * instances plus one.
+   *
+   * @return an integer equal to or greater than 1.
+   */
+  public int getLength() {
+    if( null == previous ) {
+      return 1 ;
+    } else {
+      return previous.getLength() + 1 ;
+    }
+  }
+
+  /**
+   * Returns a reference to the {@code Treepath} object representing the whole path to the
+   * previous step.
+   * @return a possibly null object when this {@code Treepath} represents the start of the path.
+   */
+  public Treepath< T > getPrevious() {
+    return previous;
+  }
+
+  /**
+   * Returns the index inside the parent tree which corresponds to the previous step of the path.
+   *
+   * @return -1 if this {@code Treepath} represents the start of the path, the index of the tree
+   *     in its parent otherwise.
+   */
+  public int getIndexInPrevious() {
+    return indexInPrevious;
+  }
+
+  /**
+   * Returns the {@code Tree} at a given distance, which is the n<sup>th</sup>
+   * from the end.
    * Invariant: {@code getTreeAtHeight( 0 ) == getEnd()}.
    *
-   * @param height 0 or more.
+   * @param distance 0 or more.
    * @return a non-null object.
-   * @throws IllegalArgumentException if negative height or heigt greater than or
-   *     or equal to {@link #getHeight()}.
+   * @throws IllegalArgumentException if negative distance or distance greater than or
+   *     or equal to {@link #getLength()}.
    */
-  public T getTreeAtHeight( int height ) throws IllegalPathHeightException {
-    if( -1 == height ) {
-      throw new IllegalPathHeightException( height ) ;
+  public T getTreeAtDistance( int distance ) throws IllegalDistanceException {
+    if( -1 == distance ) {
+      throw new IllegalDistanceException( distance ) ;
     }
-    if( 0 == height ) {
-      return bottom;
+    if( 0 == distance ) {
+      return treeAtEnd;
     } else {
-      if( null == parent ) {
-        throw new IllegalPathHeightException( height ) ;
+      if( null == previous ) {
+        throw new IllegalDistanceException( distance ) ;
       } else {
         try {
-          return parent.getTreeAtHeight( height - 1 ) ;
-        } catch( IllegalPathHeightException e ) {
-          throw new IllegalPathHeightException( height + 1 ) ;
+          return previous.getTreeAtDistance( distance - 1 ) ;
+        } catch( IllegalDistanceException e ) {
+          throw new IllegalDistanceException( distance + 1 ) ;
         }
       }
     }
   }
 
-  /**
-   * Finds a {@code Tree} inside another one and returns the inverted {@code Treepath}.
-   * This inversion occurs because only the function call at the top of call stack
-   * "knows" it has found the {@code Tree}. It creates some immutable object with a
-   * list-like structure which already exists with the {@code Treepath} except
-   * that semantics are different. This should not bother anybody since this method
-   * is for internal use only.
-   *
-   * @param inside a non-null object.
-   * @param target a non-null object.
-   * @return an inverted {@code Treepath} or null if {@code target} was not found.
-   */
-  protected static< T extends Tree > Treepath< T > find( T inside, T target ) {
-    if( target == inside ) {
-      return create( inside ) ;
-    }
-    for( int i = 0 ; i < inside.getChildCount() ; i++ ) {
-      final Tree child = inside.getChildAt( i ); ;
-      final Treepath found = find( child, target ) ;
-      if( null != found ) {
-        return create( found, inside ) ;
-      }
-    } ;
-    return null ;
-  }
-
-  protected static< T extends Tree > Treepath invert( Treepath< T > treepath ) {
-    Treepath result = create( treepath.getBottom() ) ;
-    for( int height = 1 ; height < treepath.getHeight() ; height++ ) {
-      result = create( result, treepath.getTreeAtHeight( height ) ) ;
-    }
-    return result ;
-  }
 
 // ===============
 // Factory methods
 // ===============
 
   /**
-   * Creates a {@code Treepath} out from a start and an End.
-   * <p>
-   * Checks that given {@code start} is (possibly indirect) parent of {@code end}
-   * by performing a full tree traversal.
-   * <p>
-   * <em>
-   * This method assumes all {@code Tree}s are unique under {@code start}
-   * (there is no shared {@code Tree}) object). Expect unwanted results otherwise.
-   * </em>
+   * Creates a {@code Treepath} from a parent {@code Treepath},
+   * adding the {@code indexInParent}<sup>th</sup> child from parent's end.
    *
-   * @param top a non-null object.
-   * @param bottom a non-null object, must be {@code start} or one of its (possibly indirect)
-   *     children.
+   * @param root non-null object.
+   * @param indexInParent positive integer, must be a valid index.
    * @return a non-null object.
-   *
    */
-  @Deprecated
-  public static< T extends Tree > Treepath< T > create( T top, T bottom )
-      throws IllegalArgumentException
-  {
-    final Treepath< T > inverted = find( top, bottom ) ;
-    if( null == inverted ) {
-      throw new IllegalArgumentException(
-          "Could not locate tree: " + top + " doesn't contain " + bottom ) ;
-    }
-    return invert( inverted ) ;
-  }
-
-  @Deprecated
   public static< T extends Tree > Treepath< T > create(
-      Treepath< T > treepath,
-      T newBottom
-  ) {
-    return new Treepath< T >( treepath, newBottom ) ;
-  }
-
-  public static< T extends Tree > Treepath< T > create(
-      Treepath< T > treepath,
+      Treepath< T > root,
       int indexInParent
   ) {
-    return new Treepath< T >( treepath, indexInParent ) ;
+    return new Treepath< T >( root, indexInParent ) ;
   }
 
+  /**
+   * Creates a {@code Treepath} from a root {@code Tree}, adding a child, a
+   * grandchild and so on in order, given their respective position.
+   *
+   * @param root non-null object
+   * @param indexes must be a valid index in each of their respective tree.
+   * @return a non-null object.
+   * @see #create(Treepath, int...)
+   */
   public static< T extends Tree > Treepath< T > create( T root, int... indexes ) {
     return create( create( root ), indexes ) ;
   }
 
+  /**
+   * Creates a {@code Treepath} extending another {@code Treepath}, adding a child, a
+   * grandchild and so on in order, given their respective position.
+   * <p>
+   * Given this tree below:
+   * <pre>
+   *     *t0
+   *    /  \
+   *  t1  *t2
+   *      /  \
+   *    *t3   t7
+   *   / | \
+   * t4 t5 *t6
+   * </pre>
+   * The {@code Treepath} indicated with asterisks ({@code t0<-t2<-t3<-t6}) is formed
+   * by calling:
+   * <pre>
+   * Treepath< T >.create( t0, 1, 0, 2) ;
+   * </pre>
+   *
+   * @param parent non-null object
+   * @param indexes must be a valid index in each of their respective tree.
+   * @return a non-null object.
+   * @see #create(Treepath, int...)
+   */
   public static< T extends Tree > Treepath< T > create(
       Treepath< T > parent,
       int... indexes
@@ -220,9 +248,9 @@ public final class Treepath< T extends Tree > {
     return new Treepath( tree ) ;
   }
 
-  private class IllegalPathHeightException extends IllegalArgumentException {
-    public IllegalPathHeightException( int height ) {
-      super( "height=" + height ) ;
+  private class IllegalDistanceException extends IllegalArgumentException {
+    public IllegalDistanceException( int distance ) {
+      super( "distance=" + distance ) ;
     }
   }
 }

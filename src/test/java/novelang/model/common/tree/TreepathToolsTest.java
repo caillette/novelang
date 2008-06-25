@@ -22,10 +22,10 @@ import org.junit.Test;
 /**
  * @author Laurent Caillette
  */
-public class TreeToolsTest {
+public class TreepathToolsTest {
 
   @Test
-  public void reparent() {
+  public void updateEnd() {
 
     final MyTree grandChild = MyTree.create( "grandChild" ) ;  //     parent
     final MyTree parent = MyTree.create(                       //    /     \
@@ -39,18 +39,18 @@ public class TreeToolsTest {
     // original: parent <- child0 <- grandChild
     final Treepath< MyTree > original = Treepath.create( parent, 0, 0 ) ;
 
-    final Treepath< MyTree > reparented = TreeTools.updateBottom( original, newGrandChild ) ;
+    final Treepath< MyTree > reparented = TreepathTools.updateEnd( original, newGrandChild ) ;
 
-    Assert.assertEquals( 3, reparented.getHeight() ) ;
+    Assert.assertEquals( 3, reparented.getLength() ) ;
 
-    Assert.assertEquals( "parent", reparented.getTreeAtHeight( 2 ).getPayload() ) ;
-    Assert.assertEquals( 2, reparented.getTreeAtHeight( 2 ).getChildCount() ) ;
+    Assert.assertEquals( "parent", reparented.getTreeAtDistance( 2 ).getPayload() ) ;
+    Assert.assertEquals( 2, reparented.getTreeAtDistance( 2 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child0", reparented.getTreeAtHeight( 1 ).getPayload() ) ;
-    Assert.assertEquals( 1, reparented.getTreeAtHeight( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "child0", reparented.getTreeAtDistance( 1 ).getPayload() ) ;
+    Assert.assertEquals( 1, reparented.getTreeAtDistance( 1 ).getChildCount() ) ;
 
-    Assert.assertEquals( "newGrandChild", reparented.getTreeAtHeight( 0 ).getPayload() ) ;
-    Assert.assertEquals( 0, reparented.getTreeAtHeight( 0 ).getChildCount() ) ;
+    Assert.assertEquals( "newGrandChild", reparented.getTreeAtDistance( 0 ).getPayload() ) ;
+    Assert.assertEquals( 0, reparented.getTreeAtDistance( 0 ).getChildCount() ) ;
 
   }
 
@@ -63,24 +63,24 @@ public class TreeToolsTest {
 
     final MyTree child1 = MyTree.create( "child1" ) ;
 
-    final Treepath< MyTree > treepath = TreeTools.addSiblingLast(  //   parent
+    final Treepath< MyTree > treepath = TreepathTools.addSiblingLast(  //   parent
         Treepath.< MyTree >create( parent, 0 ),                    //   |     \
         child1// ^ IntelliJ IDEA 7.0.3 requires this.              // child0  child1
     ) ;
 
-    Assert.assertEquals( "parent", treepath.getTop().getPayload() ) ;
-    Assert.assertEquals( 2, treepath.getTop().getChildCount() ) ;
+    Assert.assertEquals( "parent", treepath.getStart().getPayload() ) ;
+    Assert.assertEquals( 2, treepath.getStart().getChildCount() ) ;
 
-    Assert.assertEquals( "child0", treepath.getTop().getChildAt( 0 ).getPayload() ) ;
-    Assert.assertEquals( 0, treepath.getTop().getChildAt( 0 ).getChildCount() ) ;
+    Assert.assertEquals( "child0", treepath.getStart().getChildAt( 0 ).getPayload() ) ;
+    Assert.assertEquals( 0, treepath.getStart().getChildAt( 0 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child1", treepath.getTop().getChildAt( 1 ).getPayload() ) ;
-    Assert.assertEquals( 0, treepath.getTop().getChildAt( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "child1", treepath.getStart().getChildAt( 1 ).getPayload() ) ;
+    Assert.assertEquals( 0, treepath.getStart().getChildAt( 1 ).getChildCount() ) ;
 
   }
 
   @Test
-  public void removeBottom() {
+  public void removeEnd() {
                                                                          //   grandParent
     final MyTree child0 = MyTree.create( "child0" ) ;                    //        |
     final MyTree child1 = MyTree.create( "child1" ) ;                    //     parent
@@ -91,22 +91,22 @@ public class TreeToolsTest {
     final Treepath< MyTree > treepath = Treepath.create( grandParent, 0, 0 ) ;
 
     // afterRemoval: grandParent <- parent
-    final Treepath< MyTree > afterRemoval = TreeTools.removeBottom( treepath ) ;
+    final Treepath< MyTree > afterRemoval = TreepathTools.removeEnd( treepath ) ;
 
-    Assert.assertEquals( 2, afterRemoval.getHeight() ) ;
+    Assert.assertEquals( 2, afterRemoval.getLength() ) ;
 
-    Assert.assertEquals( 1, afterRemoval.getTreeAtHeight( 1 ).getChildCount() ) ;
-    Assert.assertEquals( "grandParent", afterRemoval.getTreeAtHeight( 1 ).getPayload() ) ;
+    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "grandParent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
-    Assert.assertEquals( 1, afterRemoval.getTreeAtHeight( 0 ).getChildCount() ) ;
-    Assert.assertEquals( "parent", afterRemoval.getTreeAtHeight( 0 ).getPayload() ) ;
+    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
+    Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 0 ).getPayload() ) ;
 
-    Assert.assertSame( child1, afterRemoval.getTreeAtHeight( 0 ).getChildAt( 0 ) ) ;
+    Assert.assertSame( child1, afterRemoval.getTreeAtDistance( 0 ).getChildAt( 0 ) ) ;
 
   }
 
   @Test
-  public void moveAsLastChildOfPreviousSibling() {
+  public void becomeLastChildOfPreviousSibling() {
     
     final MyTree child = MyTree.create( "child" ) ;                   //   parent
     final MyTree moving = MyTree.create( "moving" ) ;                 //    |   \
@@ -119,19 +119,19 @@ public class TreeToolsTest {
                                                                   //   |   \
                                                                   // child  moving
     final Treepath< MyTree > moved =                              //   |
-        TreeTools.moveAsLastChildOfPreviousSibling( original ) ;  // moving
+        TreepathTools.becomeLastChildOfPreviousSibling( original ) ;  // moving
 
-    Assert.assertEquals( 3, moved.getHeight() ) ;
+    Assert.assertEquals( 3, moved.getLength() ) ;
 
-    Assert.assertEquals( "parent", moved.getTreeAtHeight( 2 ).getPayload() ) ;
-    Assert.assertEquals( 1, moved.getTreeAtHeight( 2 ).getChildCount() ) ;
+    Assert.assertEquals( "parent", moved.getTreeAtDistance( 2 ).getPayload() ) ;
+    Assert.assertEquals( 1, moved.getTreeAtDistance( 2 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child", moved.getTreeAtHeight( 1 ).getPayload() ) ;
-    Assert.assertEquals( 1, moved.getTreeAtHeight( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "child", moved.getTreeAtDistance( 1 ).getPayload() ) ;
+    Assert.assertEquals( 1, moved.getTreeAtDistance( 1 ).getChildCount() ) ;
 
-    Assert.assertEquals( "moving", moved.getBottom().getPayload() ) ;
-    Assert.assertEquals( "moving", moved.getTreeAtHeight( 0 ).getPayload() ) ;
-    Assert.assertEquals( 0, moved.getTreeAtHeight( 0 ).getChildCount() ) ;
+    Assert.assertEquals( "moving", moved.getTreeAtEnd().getPayload() ) ;
+    Assert.assertEquals( "moving", moved.getTreeAtDistance( 0 ).getPayload() ) ;
+    Assert.assertEquals( 0, moved.getTreeAtDistance( 0 ).getChildCount() ) ;
 
 
   }

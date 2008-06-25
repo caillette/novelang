@@ -1,5 +1,32 @@
 <html>
 <body>
-This is a place to mock up some generic Tree stuff. 
+Generic Tree manipulation API basing on immutable structures.
+<h2>
+  Discussion: where to define utility methods?
+</h2>
+<p>
+  The {@link novelang.model.common.tree.ImmutableTree} and
+  {@link novelang.model.common.tree.Treepath} classes implement a well-defined, minimalistic
+  behavior. As they define immutable objects, they must have no complex mutators.
+  In fact, those mutators are implemented on a copy-on-change approach.
+  Because they have very simple internals, it's very easy to produce mutated copies of
+  {@link ImmutableTree} and {@link Treepath}.
+  This happens inside {@link novelang.model.common.tree.TreeTools} and
+  {@link novelang.model.common.tree.TreepathTools} which provide lots of static methods.
+</p>
+<p>
+  Static methods make calls a bit longer. One has to write (when not using static imports)
+  something like <tt>TreepathTools.method(treepath)</tt> instead of more object-oriented
+  <tt>treepath.method()</tt>. If codewriters using this package want the more concise approach,
+  they <em>could</em> subclass {@link ImmutableTree} and {@link Treepath} and add instance methods
+  wrapping a call to the corresponding utility method.
+  But while {@code Treepath} is not used a lot in Novelang, it is made {@code final}
+  for now.
+</p>
+<p>
+  TODO: extend the contract of {@link novelang.model.common.SyntacticTree},
+  and add the wrapper in both
+  {@link novelang.model.common.SimpleTree} and {@link novelang.parser.antlr.CustomTree}.
+</p>
 </body>
 </html>

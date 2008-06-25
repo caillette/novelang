@@ -42,7 +42,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     return new SimpleTree( getText(), newChildren ) ;
   }
 
-  public Iterable<SyntacticTree> getChildren() {
+  public Iterable<? extends SyntacticTree> getChildren() {
     return super.getChildren();
   }
 
