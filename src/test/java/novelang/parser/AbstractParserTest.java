@@ -28,8 +28,8 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.model.common.Problem;
-import novelang.model.common.SyntacticTree;
+import novelang.common.Problem;
+import novelang.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette

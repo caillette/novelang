@@ -19,8 +19,8 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
-import novelang.model.common.Location;
-import novelang.model.common.LocationFactory;
+import novelang.common.Location;
+import novelang.common.LocationFactory;
 
 /**
  * @author Laurent Caillette

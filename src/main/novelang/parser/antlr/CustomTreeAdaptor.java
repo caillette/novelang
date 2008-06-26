@@ -19,7 +19,7 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
-import novelang.model.common.LocationFactory;
+import novelang.common.LocationFactory;
 
 /**
  * @author Laurent Caillette

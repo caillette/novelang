@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import novelang.model.common.Problem;
-import novelang.model.common.Location;
+import novelang.common.Problem;
+import novelang.common.Location;
 
 /**
  * Almost does what it claims.

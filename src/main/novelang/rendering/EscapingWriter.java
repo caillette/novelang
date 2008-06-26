@@ -18,7 +18,7 @@
 package novelang.rendering;
 
 import novelang.configuration.RenderingConfiguration;
-import novelang.model.common.Nodepath;
+import novelang.common.Nodepath;
 import novelang.parser.Symbols;
 
 /**

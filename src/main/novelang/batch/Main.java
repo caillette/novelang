@@ -31,7 +31,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ServerConfiguration;
-import novelang.model.common.Problem;
+import novelang.common.Problem;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;

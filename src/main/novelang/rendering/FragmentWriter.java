@@ -20,8 +20,8 @@ package novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import novelang.model.common.Nodepath;
-import novelang.model.common.TreeMetadata;
+import novelang.common.Nodepath;
+import novelang.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette
@@ -41,7 +41,7 @@ public interface FragmentWriter {
   void write( Nodepath kinship, String word ) throws Exception ;
 
   /**
-   * Same as {@link #write(novelang.model.common.Nodepath , String)} but without escaping.
+   * Same as {@link #write(novelang.common.Nodepath , String)} but without escaping.
    */
   void writeLitteral( Nodepath kinship, String word ) throws Exception ;
 

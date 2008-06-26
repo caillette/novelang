@@ -23,9 +23,9 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.Tree;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
-import novelang.model.common.Location;
-import novelang.model.common.LocationFactory;
-import novelang.model.common.Problem;
+import novelang.common.Location;
+import novelang.common.LocationFactory;
+import novelang.common.Problem;
 import novelang.parser.Symbols;
 import novelang.parser.UnsupportedEscapedSymbolException;
 

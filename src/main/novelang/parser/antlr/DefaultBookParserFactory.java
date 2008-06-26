@@ -19,8 +19,7 @@ package novelang.parser.antlr;
 
 import novelang.parser.BookParserFactory;
 import novelang.parser.BookParser;
-import novelang.parser.PartParser;
-import novelang.model.common.LocationFactory;
+import novelang.common.LocationFactory;
 
 /**
  * @author Laurent Caillette

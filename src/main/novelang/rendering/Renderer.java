@@ -19,7 +19,7 @@ package novelang.rendering;
 
 import java.io.OutputStream;
 
-import novelang.model.renderable.Renderable;
+import novelang.common.Renderable;
 
 /**
  * @author Laurent Caillette

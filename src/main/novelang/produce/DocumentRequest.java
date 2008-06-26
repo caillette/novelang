@@ -16,18 +16,7 @@
  */
 package novelang.produce;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import novelang.model.common.StructureKind;
-import novelang.rendering.RawResource;
-import novelang.rendering.RenditionMimeType;
 
 /**
  * Contains everything needed to build a specific requested Document

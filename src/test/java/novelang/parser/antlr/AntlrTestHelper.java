@@ -20,8 +20,8 @@ package novelang.parser.antlr;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import junit.framework.AssertionFailedError;
-import novelang.model.common.Problem;
-import novelang.model.common.SyntacticTree;
+import novelang.common.Problem;
+import novelang.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette

@@ -22,10 +22,10 @@ import java.util.Iterator;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.lang.NullArgumentException;
-import novelang.model.common.Location;
-import novelang.model.common.LocationFactory;
-import novelang.model.common.NodeKind;
-import novelang.model.common.SyntacticTree;
+import novelang.common.Location;
+import novelang.common.LocationFactory;
+import novelang.common.NodeKind;
+import novelang.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette

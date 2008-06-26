@@ -29,13 +29,12 @@ import org.mortbay.jetty.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.ServerConfiguration;
-import novelang.model.renderable.Renderable;
-import novelang.model.common.Problem;
+import novelang.common.Renderable;
+import novelang.common.Problem;
 import novelang.rendering.HtmlProblemPrinter;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
 import novelang.produce.DocumentProducer;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**

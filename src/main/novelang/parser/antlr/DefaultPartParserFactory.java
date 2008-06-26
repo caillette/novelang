@@ -17,7 +17,7 @@
 
 package novelang.parser.antlr;
 
-import novelang.model.common.LocationFactory;
+import novelang.common.LocationFactory;
 import novelang.parser.PartParser;
 import novelang.parser.PartParserFactory;
 

@@ -21,8 +21,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
-import novelang.model.common.Nodepath;
-import novelang.model.common.TreeMetadata;
+import novelang.common.Nodepath;
+import novelang.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette

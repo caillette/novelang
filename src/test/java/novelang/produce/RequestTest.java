@@ -20,7 +20,6 @@ package novelang.produce;
 import org.junit.Assert;
 import org.junit.Test;
 import org.apache.commons.lang.StringUtils;
-import novelang.model.common.StructureKind;
 import novelang.rendering.RenditionMimeType;
 
 /**

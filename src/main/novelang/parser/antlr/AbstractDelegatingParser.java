@@ -26,8 +26,8 @@ import org.antlr.runtime.RecognitionException;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
-import novelang.model.common.Problem;
-import novelang.model.common.SyntacticTree;
+import novelang.common.Problem;
+import novelang.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette

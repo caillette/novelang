@@ -21,15 +21,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
-import novelang.model.common.Location;
-import novelang.model.common.LocationFactory;
-import novelang.model.common.NodeKind;
-import novelang.model.common.SyntacticTree;
-import novelang.model.common.tree.Treepath;
-import novelang.model.common.SimpleTree;
+import novelang.common.Location;
+import novelang.common.LocationFactory;
+import novelang.common.NodeKind;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
+import novelang.common.SimpleTree;
 
 /**
- * Helps building {@link novelang.model.common.SyntacticTree}s for tests.
+ * Helps building {@link novelang.common.SyntacticTree}s for tests.
  * Dependency towards {@link novelang.parser.antlr.CustomTree} is just for implementation,
  * it helps tree comparison.
  *

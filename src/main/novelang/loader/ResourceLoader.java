@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 /**
  * The most simple contract for loading a resource.
- * An interface is useful here instead of one or several URLs because
+ * An interface is useful here instead of URLs because
  * {@link ClasspathResourceLoader} handles lots of URLs by itself in a opaque way
  * (that should stay opaque anyways).
  * 

@@ -22,7 +22,7 @@ import java.util.Map;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Ignore;
 import org.junit.Test;
-import static novelang.model.common.NodeKind.*;
+import static novelang.common.NodeKind.*;
 import novelang.parser.Symbols;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.TreeFixture.tree;

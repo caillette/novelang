@@ -18,8 +18,8 @@
 package novelang.parser;
 
 import org.antlr.runtime.RecognitionException;
-import novelang.model.common.Problem;
-import novelang.model.common.SyntacticTree;
+import novelang.common.Problem;
+import novelang.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette

@@ -27,7 +27,7 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
-import novelang.model.common.TreeMetadata;
+import novelang.common.TreeMetadata;
 
 /**
  * @author Laurent Caillette

@@ -34,13 +34,13 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableList;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.RenderingConfiguration;
-import novelang.model.common.MetadataHelper;
-import novelang.model.common.NodeKind;
-import novelang.model.common.Problem;
-import novelang.model.common.TreeMetadata;
-import novelang.model.common.SyntacticTree;
-import novelang.model.implementation.Part;
-import novelang.model.renderable.Renderable;
+import novelang.common.MetadataHelper;
+import novelang.common.NodeKind;
+import novelang.common.Problem;
+import novelang.common.TreeMetadata;
+import novelang.common.SyntacticTree;
+import novelang.common.Renderable;
+import novelang.part.Part;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.NlpWriter;
 
@@ -49,6 +49,8 @@ import novelang.rendering.NlpWriter;
  * If there is no name, the name '{@value #UNNAMED}' is assigned.
  * In case of duplicate names, a index is appended.
  * Original file is left unmodified but other existing files are overwritten.
+ *
+ * TODO: duplicate names support doesn't work. 
  *
  * @author Laurent Caillette
  */

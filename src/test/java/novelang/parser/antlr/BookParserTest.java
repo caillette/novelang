@@ -21,10 +21,10 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import static novelang.model.common.NodeKind.*;
-import novelang.model.common.SimpleTree;
-import novelang.model.common.SyntacticTree;
-import novelang.model.common.tree.TreeTools;
+import static novelang.common.NodeKind.*;
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.TreeTools;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 

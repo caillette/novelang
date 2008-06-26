@@ -17,7 +17,7 @@
 
 package novelang.rendering;
 
-import novelang.model.common.StructureKind;
+import novelang.common.StructureKind;
 
 /**
  * Describes all what's needed to serve one document.
