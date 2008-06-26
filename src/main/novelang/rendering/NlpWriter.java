@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
-import novelang.common.TreeMetadata;
+import novelang.common.metadata.TreeMetadata;
 
 /**
  * @author Laurent Caillette

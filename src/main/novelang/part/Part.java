@@ -29,10 +29,10 @@ import novelang.common.IdentifierHelper;
 import novelang.common.NodeKind;
 import novelang.common.tree.Treepath;
 import novelang.common.SyntacticTree;
+import novelang.common.AbstractSourceReader;
 import static novelang.common.NodeKind.SECTION;
 import novelang.parser.Encoding;
 import novelang.parser.antlr.DefaultPartParserFactory;
-import novelang.reader.AbstractSourceReader;
 import novelang.hierarchy.Hierarchizer;
 
 /**

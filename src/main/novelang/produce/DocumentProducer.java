@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ServerConfiguration;
-import novelang.common.FileLookupHelper;
+import novelang.loader.FileLookupHelper;
 import novelang.common.Problem;
 import novelang.common.StructureKind;
 import novelang.common.Renderable;

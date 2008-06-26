@@ -68,7 +68,7 @@ public class BatchParameters {
     return null == documents ?  EMPTY_STRING_LIST : documents ;
   }
 
-  public void setDocuments( Iterable< String > documents ) {
+  private void setDocuments( Iterable< String > documents ) {
     this.documents = documents ;
   }
 

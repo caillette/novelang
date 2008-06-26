@@ -27,7 +27,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import novelang.common.Nodepath;
-import novelang.common.TreeMetadata;
+import novelang.common.metadata.TreeMetadata;
 
 /**
  * @author Laurent Caillette

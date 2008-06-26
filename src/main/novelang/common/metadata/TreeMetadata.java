@@ -15,37 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang.rendering;
+package novelang.common.metadata;
 
-import java.io.OutputStream;
 import java.nio.charset.Charset;
-
-import novelang.common.Nodepath;
-import novelang.common.metadata.TreeMetadata;
 
 /**
  * @author Laurent Caillette
  */
-public interface FragmentWriter {
+public interface TreeMetadata {
 
-  void startWriting(
-      OutputStream outputStream,
-      TreeMetadata treeMetadata,
-      Charset encoding
-  ) throws Exception ;
-  
-  void finishWriting() throws Exception ;
-
-  void start( Nodepath kinship, boolean wholeDocument ) throws Exception ;
-  void end( Nodepath kinship ) throws Exception ;
-  void write( Nodepath kinship, String word ) throws Exception ;
-
-  /**
-   * Same as {@link #write(novelang.common.Nodepath , String)} but without escaping.
-   */
-  void writeLitteral( Nodepath kinship, String word ) throws Exception ;
-
-  RenditionMimeType getMimeType() ;
-
+  public String getCreationTimestampAsString() ;
+  public int getWordCount() ;
+  public Charset getEncoding() ;
 
 }

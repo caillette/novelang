@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import com.google.common.base.Objects;
-import novelang.common.MetadataHelper;
+import novelang.common.metadata.MetadataHelper;
 import novelang.common.NodeKind;
 import novelang.common.Nodepath;
 import novelang.common.Problem;

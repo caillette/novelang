@@ -38,7 +38,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
-import novelang.common.TreeMetadata;
+import novelang.common.metadata.TreeMetadata;
 
 /**
  * @author Laurent Caillette
