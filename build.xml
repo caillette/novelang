@@ -156,18 +156,6 @@
 
   </target>
 
-  <target name="javadoc" depends="init, target-dir" >
-
-    <javadoc  
-        sourcepath="${source.main.java.dir}"
-        destdir="${target.javadoc.dir}"
-        use="true"
-        author="true"
-    >
-    </javadoc>
-
-  </target>
-
 
   <target name="test-compile" depends="antlr-generate, main-compile" >
     
@@ -268,8 +256,29 @@
 
 
   <!--
+    =======================
     Generate documentation.
+    =======================
   -->
+
+  <target name="javadoc" depends="init, target-dir" >
+
+    <javadoc
+        sourcepath="${source.main.java.dir}"
+        destdir="${target.javadoc.dir}"
+        use="true"
+        author="true"
+    >
+    </javadoc>
+
+    <zip
+        destfile="${target.javadoc.zip}"
+        basedir="${target.javadoc.dir}"
+    />
+
+  </target>
+
+
 
   <target name="generate-documentation" depends="init" >
 
@@ -314,15 +323,57 @@
 
   </target>
 
-  <target name="publish" depends="init" >
-
+  <target name="login-on-remote-site" >
     <input message="Login on remote site" addproperty="user" />
     <input message="Password on remote site" addproperty="password" />
+  </target>
 
+  <target name="publish-documentation" depends="generate-documentation, login-on-remote-site" >
+
+  <!--
+      Strange bug: the input task for the password never executes if we
+      set a dependency to the generate-documentation target.
+      So it has to be run explicitely before this target.
+    -->
     <scp todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}">
       <fileset dir="${target.documentation.site.dir}" />
     </scp>
-    
+
   </target>
+
+
+  <target name="publish-javadoc" depends="javadoc, login-on-remote-site" >
+
+    <scp
+        todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}"
+        file="${target.javadoc.zip}"
+    />
+
+    <property
+        name="command"
+        value="unzip -o -d ${publish.remote.dir}/javadoc ${publish.remote.dir}/${target.javadoc.zipfilename}" 
+    />
+    <echo>SSH command: ${command}</echo>
+
+    <sshexec
+        host="${publish.remote.host}"
+        username="${user}"
+        password="${password}"
+        command="${command}"
+        outputproperty="sshexecoutput"
+    />
+
+    <echo>SSH output: ${sshexecoutput}</echo>
+
+  </target>
+
+  <!--
+    It's unelegant to prompt for login / password before lengthy and failure prone operations
+    like generating documentation but otherwise there is some bug blocking password input.
+  -->
+  <target
+      name="publish-everything"
+      depends="login-on-remote-site, publish-documentation, publish-javadoc"
+  />
 
 </project>
