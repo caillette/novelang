@@ -136,7 +136,7 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
 
   /**
    * Creates an array for storing children.
-   * If the concrete instance ({@code this}) instantiates the
+   * If the concrete instance ({@code this}) is an instance of 
    * {@link novelang.model.common.tree.StorageTypeProvider}, then returned array is of type
    * returned by {@link StorageTypeProvider#getStorageType()}.
    * Otherwise, it is of the type of the {@code fallback} parameter.

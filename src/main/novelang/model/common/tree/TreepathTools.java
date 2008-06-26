@@ -191,7 +191,7 @@ public class TreepathTools {
   }
 
   /**
-   * Returns a {@link Treepath} corresponding to a change of a childhood at the end of the
+   * Returns a {@link Treepath} corresponding to a replacement of the end of the
    * given {@link Treepath}.
    * <pre>
    * *t0          *t0'
