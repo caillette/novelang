@@ -404,12 +404,40 @@
 
 
     <!--
-      Copying libs required for running the .jar from target directory.
+      Copying lib just for running the .jar from target directory,
+      because of the relative classpath in the manifest.
     -->
     <delete file="${target.dir}/${lib.deploy.dir}" />
     <copy todir="${target.dir}/${lib.deploy.dir}" >
       <path refid="deploy-libs" />
     </copy>
+
+  </target>
+
+  <target name="package-distribution" depends="init" >
+
+    <zip destfile="${target.distrib.path}" >
+      <zipfileset file="${target.jar.path}" fullpath="${target.jar.name}" />
+      <fileset dir="${basedir}" >
+        <patternset>
+          <include name="build.*" />
+          <include name="${legal.dir}/*" />
+          <include name="${lib.deploy.dir}/*" />
+          <include name="${source.dir}/**" />
+          <include name="${configuration.dir}/**" />
+        </patternset>
+      </fileset>
+
+      <zipfileset dir="${target.documentation.site.dir}" prefix="documentation" />
+      <zipfileset dir="${target.javadoc.dir}" prefix="javadoc" />
+
+    </zip>
+
+  </target>
+
+  <target name="build-distribution"
+      depends="clean-run-tests, generate-documentation, javadoc, create-jar, package-distribution"
+  >
 
   </target>
 
