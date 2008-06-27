@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project basedir="." name="Novelang build file" default="clean-run-tests" >
+<project basedir="." name="Novelang build file" default="clean-compile-runtests" >
 
   <description>
     Build system for Novelang.
@@ -80,8 +80,7 @@
 
   </target>
 
-  
-  <target name="target-dir" depends="init" >
+  <target name="create-target-dir" depends="init" >
     <mkdir dir="${target.dir}" />
     <mkdir dir="${target.mainclasses.dir}" />
   </target>
@@ -98,7 +97,7 @@
     =======  
   -->
 
-  <target name="antlr-generate" depends="init, target-dir" >
+  <target name="generate-antlr" depends="init, create-target-dir" >
 
     <pathconvert
         refid="antlr-grammars"
@@ -124,7 +123,7 @@
 
 
 
-  <target name="main-compile" depends="init, target-dir" >
+  <target name="compile-main" depends="init, create-target-dir" >
 
     <javac
         destdir="${target.mainclasses.dir}"
@@ -157,7 +156,7 @@
   </target>
 
 
-  <target name="test-compile" depends="antlr-generate, main-compile" >
+  <target name="compile-tests" depends="generate-antlr, compile-main" >
     
     <mkdir dir="${target.testclasses.dir}" />    
 
@@ -193,7 +192,7 @@
     ====  
   -->  
 
-  <target name="test" depends="init, target-dir" >
+  <target name="run-tests" depends="init, create-target-dir" >
 
     <delete dir="${target.testreports.dir}" />
     <mkdir dir="${target.testreports.dir}" />    
@@ -218,8 +217,8 @@
   </target>
 
   <target
-      name="clean-run-tests"
-      depends="clean, test-compile, test"
+      name="clean-compile-runtests"
+      depends="clean, compile-tests, run-tests"
       description="Run this one to run tests from clean"
   /> 
   
@@ -256,12 +255,12 @@
 
 
   <!--
-    =======================
-    Generate documentation.
-    =======================
+    =============
+    Documentation
+    =============
   -->
 
-  <target name="javadoc" depends="init, target-dir" >
+  <target name="javadoc" depends="init, create-target-dir" >
 
     <javadoc
         sourcepath="${source.main.java.dir}"
@@ -328,7 +327,7 @@
     <input message="Password on remote site" addproperty="password" />
   </target>
 
-  <target name="publish-documentation" depends="generate-documentation, login-on-remote-site" >
+  <target name="publish-documentation" depends="login-on-remote-site" >
 
   <!--
       Strange bug: the input task for the password never executes if we
@@ -342,7 +341,7 @@
   </target>
 
 
-  <target name="publish-javadoc" depends="javadoc, login-on-remote-site" >
+  <target name="publish-javadoc" depends="login-on-remote-site" >
 
     <scp
         todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}"
@@ -377,6 +376,13 @@
   />
 
 
+
+  <!--
+    =============
+    Distribution.
+    =============
+  -->
+
   <target name="create-jar" depends="init" >
 
     <pathconvert
@@ -399,6 +405,7 @@
         <attribute name="Class-Path" value="${deploylibs}" />
         <attribute name="Implementation-Version" value="${project.version}" />
         <attribute name="Main-Class" value="${httpd.mainclass}" />
+        <attribute name="Creation-Date" value="${timestamp}" />
       </manifest>
     </jar>
 
@@ -436,9 +443,7 @@
   </target>
 
   <target name="build-distribution"
-      depends="clean-run-tests, generate-documentation, javadoc, create-jar, package-distribution"
-  >
-
-  </target>
+      depends="clean-compile-runtests, generate-documentation, javadoc, create-jar, package-distribution"
+  />
 
 </project>
