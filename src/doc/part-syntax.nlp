@@ -105,7 +105,7 @@ A litteral block is delimited by three opening &solidus; closing angled brackets
 <<<
 &lt;&lt;&lt;
 Here is litteral.
-  Please note indentation is kept.
+  Indentation will be kept.
 &gt;&gt;&gt;
 >>>
 
