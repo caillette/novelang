@@ -428,6 +428,7 @@
         <attribute name="Implementation-Version" value="${project.version}" />
         <attribute name="Main-Class" value="${httpd.mainclass}" />
         <attribute name="Creation-Date" value="${timestamp}" />
+        <attribute name="Created-By" value="${project.name} build system" />
       </manifest>
     </jar>
 

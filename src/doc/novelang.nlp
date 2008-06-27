@@ -20,15 +20,10 @@ Novelang software is free to use and redistribute, under the terms of the GNU Pu
 
 === Install
 
-Requirements : Java 5 and Apache's Ant 1&fullstop;7.
+Requirements : Java 5.
 
-First, download the latest version of Novelang, and unzip it in some directory we'll call &dollar;NOVELANG&lowline;DIR. Build the Novelang project :
+First, download the latest version of Novelang, and unzip it in some directory we'll call &dollar;NOVELANG&lowline;DIR. 
 
-<<<
-ant -buildfile $NOVELANG_HOME/build.xml clean-run-tests
->>>
-
-Right, installation has to be streamlined!
 
 === First document
 
@@ -44,10 +39,10 @@ My first paragraph //here//!
 
 === Run!
 
-Then, from the directory where the file is located, launch the Novelang dæmon (one day I'll write a nicer interface):
+Then, from the directory where the file is located, launch the Novelang dæmon:
 
 <<<
-ant -buildfile $NOVELANG_HOME/build.xml start-httpd
+java -jar $NOVELANG_DIR/novelang-VERSION.jar
 >>>
 
 Open your favorite Web browser at this address:
@@ -61,7 +56,194 @@ And you should see your text, with correct formatting!
 
 ===
 
-Currently, Novelang is a proof-of-concept. It has been used for editing documents of hundreds of kilobytes, but still needs //lots// of polish. 
+Novelang is yet stable (thanx to more than 170 tests) but its syntax is subject to change. Keep informed reading the blog. By now, Novelang has been used for editing documents of hundreds of kilobytes. 
+
+
+*** Parts
+
+Part files focus on a textual content. Part files have the "&fullstop;nlp" suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
+
+http://github.com/caillette/novelang/tree/master%2Fsrc%2Fdoc%2Fnovelang.nlp?raw=true
+
+=== Chapter
+
+A chapter begins with a special marker made of three asterisks, immediately followed by an optional title.
+
+Chapter title may include italics, quotes, brackets, parenthesis, interpolated clauses.
+
+<<<
+*** Chapter's title
+>>>
+
+
+=== Section
+
+A chapter begins with a special marker made of three equals signs, immediately followed by an optional title.
+
+Section title may include italics, quotes, brackets, parenthesis, interpolated clauses.
+
+<<<
+=== Sections's title
+>>>
+
+=== Italics
+
+An italicized block is delimited by double solidus.
+
+<<< 
+There are //italics//.
+>>>
+
+=== Quotes
+
+A quoted block is delimited by double quotes.
+
+<<<
+There are "double quotes".
+>>>
+
+=== Brackets
+
+A bracketed block is delimited by opening &solidus; closing square brackets.
+
+<<< 
+Here is a [bracketed block].
+>>>
+
+=== Parenthesis
+
+A parenthesized block is delimited by opening &solidus; closing parenthesis.
+
+<<< 
+Here is a (parenthesized block).
+>>>
+
+
+=== Interpolated clause
+
+An interpolated clauseis delimited by a pair of double minus signs, or a double minus sign for opening and a single minus sign immediately followed by a minus sign and a low line for closing.
+
+<<< 
+Here is -- as you see -- the interpolated clause.
+
+Another sample -- with silent end-_.
+>>>
+
+The second form of closing delimiter, called "silent end", means it should not be rendered but it gives a hint of where the interpolated clause ends. This is useful for rendering, because an interpolated clause is not just made of dash characters: non-breakable spaces should be inserted at the correct place.
+
+
+=== Paragraph
+
+A paragraph is made of text on multiple lines, that may be separated by a single line break.
+
+<<< 
+Here is one paragraph,
+on two lines.
+
+Here is another paragraph.
+>>>
+
+Paragraph may include italics, quotes, brackets, parenthesis, interpolated clauses.
+
+=== Blockquote
+
+A blockquote is delimited by two opening &solidus; closing angled brackets.
+
+<<<
+&lt;&lt;
+Blockquote here.
+
+May include several paragraphs.
+&gt;&gt;
+>>>
+
+
+=== Litteral
+
+A litteral block is delimited by three opening &solidus; closing angled brackets.
+
+<<<
+&lt;&lt;&lt;
+Here is litteral.
+  Please note indentation is kept.
+&gt;&gt;&gt;
+>>>
+
+Litteral blocks are useful to display text verbatim. The text inside can be almost anything, except three closing angled brackets. For displaying them (as in the example shown above), use escaped characters.
+
+
+=== URL
+
+A URL is typed as-it-is. There must be a line break before and a line break after.
+
+<<<
+Here is a paragraph before.
+
+http://novelang.blogspot.com
+
+Here is a paragraph after.
+>>>
+
+
+=== Escaped characters
+
+Novelang uses some characters for its markup. For displaying those characters in the rendered documents, they must be escaped -- special codes must be used-_.
+
+<<<
+%    &amp;percent; 
++    &amp;plus; 
+=    &amp;equals; 
+$    &amp;dollar; 
+_    &amp;lowline; 
+&amp;    &amp;amp; 
+/    &amp;solidus; 
+&lt;    &amp;lt; 
+&gt;    &amp;gt; 
+~    &amp;tilde; 
+)    &amp;rp; 
+.    &amp;fullstop; 
+&deg;    &amp;deg; 
+&oelig;    &amp;oelig; 
+&OElig;    &amp;OElig; 
+>>>
+
+*** Book files
+
+Book files aggregate part files. Book files have the "&fullstop;nlb" suffix.  (like NoveLang Book). 
+
+Here is a well-formed Book file:
+
+<<<
+insert file:path/to/myfirstpart.nlp
+
+insert file:path/to/mysecondpart.nlp
+>>>
+
+Book files are useful when there is too much text to fit inside one Part file.
+
+When Part files become too numerous, Book files can refer to multiple Part files at once:
+
+<<<
+insert file:path/to/allpartfiles
+>>>
+
+When the Parts are located in the same directory as the Book file, the single dot notation (for current directory) is supported:
+
+<<<
+insert file:. 
+>>>
+
+If there are Part files in subdirectories, there is an option to perform a deep scan:
+
+<<<
+insert file:. $recurse 
+>>>
+
+There is also an option to add the filename (trimming path and &fullstop;nlp extension) as a chapter title as a chapter title:
+
+<<<
+insert file:. $recurse $createchapters
+>>>
 
 
 *** Why we need one more word processor
