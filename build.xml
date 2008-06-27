@@ -319,7 +319,7 @@
 
   </target>
 
-  <target name="login-on-remote-site" >
+  <target name="login-on-remote-site" depends="init">
     <input message="Login on remote site" addproperty="user" />
     <input message="Password on remote site" addproperty="password" />
   </target>
