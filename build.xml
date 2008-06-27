@@ -376,4 +376,41 @@
       depends="login-on-remote-site, publish-documentation, publish-javadoc"
   />
 
+
+  <target name="create-jar" depends="init" >
+
+    <pathconvert
+        refid="deploy-libs"
+        property="deploylibs"
+        dirsep="/"
+        pathsep=" "
+    >
+      <map from="${basedir.fullpath}/" to="" />
+    </pathconvert>
+
+    <echo>deploylibs=${deploylibs}</echo>
+
+    <delete file="${target.jar.path}" />
+    <jar
+        destfile="${target.jar.path}"
+        basedir="${target.mainclasses.dir}"
+    >
+      <manifest>
+        <attribute name="Class-Path" value="${deploylibs}" />
+        <attribute name="Implementation-Version" value="${project.version}" />
+        <attribute name="Main-Class" value="${httpd.mainclass}" />
+      </manifest>
+    </jar>
+
+
+    <!--
+      Copying libs required for running the .jar from target directory.
+    -->
+    <delete file="${target.dir}/${lib.deploy.dir}" />
+    <copy todir="${target.dir}/${lib.deploy.dir}" >
+      <path refid="deploy-libs" />
+    </copy>
+
+  </target>
+
 </project>

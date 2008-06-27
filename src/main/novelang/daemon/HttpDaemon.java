@@ -23,12 +23,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ServerConfiguration;
+import novelang.Version;
+import novelang.batch.StartupTools;
 
 /**
  * 
  * @author Laurent Caillette
  */
 public class HttpDaemon {
+
+  static { StartupTools.fixLogDirectory() ; }
 
   private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
 
@@ -56,6 +60,13 @@ public class HttpDaemon {
   }
 
   public static void main( String[] args ) throws Exception {
+
+    final String starting =
+        "Starting " + HttpDaemon.class.getName() +
+        " version " + Version.name()
+    ;
+    System.out.println( starting ) ;
+    LOGGER.info( starting ) ;
     new HttpDaemon( HTTP_SERVER_PORT, ConfigurationTools.buildServerConfiguration() ).start() ;
   }
 

@@ -44,19 +44,10 @@ import novelang.rendering.HtmlProblemPrinter;
  */
 public class Main {
 
-  /**
-   * Set the {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property and use it
-   * in Logback configuration to log in another place than current directory.
-   */
-  public static final String LOG_DIR_SYSTEMPROPERTYNAME = "novelang.log.dir" ;
-
   static {
-    System.out.println( "System property " +
-        LOG_DIR_SYSTEMPROPERTYNAME + "='" +
-        System.getProperty( LOG_DIR_SYSTEMPROPERTYNAME )
-    ) ;
+    StartupTools.fixLogDirectory() ;
   }
-  
+
   private static Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
   private static final String PROBLEMS_FILENAME = "problems.html";
 
