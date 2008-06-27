@@ -115,7 +115,7 @@
         failonerror="true"
     >
       <classpath refid="build-libs" />
-      <arg line="-fo ${target.antlr.generated.main.dir} ${antlr-main-sources}" />
+      <arg line="-fo ${target.antlr.generated.dir} ${antlr-main-sources}" />
     </java>
 
   </target>
@@ -136,7 +136,7 @@
         <path refid="deploy-libs" />
       </classpath>
       <src path="${source.main.java.dir}" />
-      <src path="${target.antlr.generated.main.dir}" />
+      <src path="${target.antlr.generated.dir}" />
     </javac>
 
     <copy todir="${target.mainclasses.dir}" >
@@ -149,8 +149,6 @@
       <fileset dir="${source.style.default.dir}" >
         <patternset refid="resource-patterns" />
       </fileset>
-
-
     </copy>
 
   </target>
@@ -244,7 +242,6 @@
       </classpath>
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
       <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
-      <!--<jvmarg value="-Dnovelang.styles.dir=${novelang.style.dir}" />-->
       <jvmarg value="-Dnovelang.log.dir=${user.dir}" />
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Xmx512M" />
@@ -283,7 +280,7 @@
 
     <!--
       No need to delete / create ${target.documentation.site.dir}
-      as the batch generation does this automatically.
+      as the batch generation does it automatically.
     -->
 
     <property name="logdestination" location="${target.documentation.dir}" />
@@ -384,6 +381,31 @@
   -->
 
   <target name="create-jar" depends="init" >
+
+
+    <mkdir dir="${target.timestamped.dir}" />
+
+    <copy todir="${target.timestamped.dir}" >
+      <fileset dir="${source.main.java.dir}" >
+        <include name="**/Version.java" />
+      </fileset>
+    </copy>
+
+    <replace dir="${target.timestamped.dir}" value="${project.version}" >
+      <replacetoken>@SNAPSHOT@</replacetoken>
+    </replace>
+
+    <javac
+        destdir="${target.mainclasses.dir}"
+        source="${compiler.source}"
+        target="${compiler.target}"
+        debug="on"
+        debuglevel="lines,vars,source"
+    >
+      <src path="${target.timestamped.dir}" />
+    </javac>
+
+
 
     <pathconvert
         refid="deploy-libs"

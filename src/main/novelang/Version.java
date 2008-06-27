@@ -17,6 +17,8 @@
 package novelang;
 
 /**
+ * This class holds the version of the whole application.
+ * A copy of the source is modified and compiled during the build process.
  * @author Laurent Caillette
  */
 public class Version {
@@ -25,14 +27,18 @@ public class Version {
     throw new Error() ;
   }
 
-  private static final String VERSION = "@@SNAPSHOT@@" ;
+  /**
+   * The {@code @SNAPSHOT@} string is replaced by the official version
+   * number.
+   */
+  private static final String VERSION = "@SNAPSHOT@" ;
 
   public static boolean isSnapshot() {
     // Don't use one-piece litteral because of scripted replacement.
-    return ( "@" + "@" + "SNAPSHOT" + "@" + "@" ).equals( VERSION ) ;
+    return ( "@" + "SNAPSHOT" + "@" ).equals( VERSION ) ;
   }
 
   public static String name() {
-    return isSnapshot() ? "SNAPSHOT" : VERSION ;
+    return isSnapshot() ? "snapshot" : VERSION ;
   }
 }
