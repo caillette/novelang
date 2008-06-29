@@ -47,9 +47,11 @@ java -jar $NOVELANG_DIR/novelang-VERSION.jar
 
 Open your favorite Web browser at this address:
 
-http://localhost:8080/first.nlp
+http://localhost:8080/first.html
 
-And you should see your text, with correct formatting! 
+And you should see your text, with correct formatting! Even more: the same source text may render to a PDF document:
+
+http://localhost:8080/first.pdf
 
 
 *** Project status

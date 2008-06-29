@@ -64,7 +64,7 @@ Here is a (parenthesized block).
 An interpolated clauseis delimited by a pair of double minus signs, or a double minus sign for opening and a single minus sign immediately followed by a minus sign and a low line for closing.
 
 <<< 
-Here is -- as you see -- the interpolated clause.
+Here is -- as you can see -- the interpolated clause.
 
 Another sample -- with silent end-_.
 >>>
