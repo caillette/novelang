@@ -24,7 +24,8 @@ import org.slf4j.LoggerFactory;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ServerConfiguration;
 import novelang.Version;
-import novelang.batch.StartupTools;
+import novelang.system.StartupTools;
+import novelang.system.EnvironmentTools;
 
 /**
  * 
@@ -32,7 +33,10 @@ import novelang.batch.StartupTools;
  */
 public class HttpDaemon {
 
-  static { StartupTools.fixLogDirectory() ; }
+  static {
+    StartupTools.fixLogDirectory() ;
+    EnvironmentTools.logSystemProperties() ;
+  }
 
   private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
 

@@ -69,7 +69,11 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
 
   protected String readContent( URL partUrl, Charset encoding ) {
 
-    LOGGER.info( "Attempting to load file '{}' from {}", partUrl.toExternalForm(), this ) ;
+    LOGGER.info(
+        "Attempting to load file '{}' from {} with encoding " + encoding.name(),
+        partUrl.toExternalForm(), 
+        this
+    ) ;
 
     try {
       final InputStream inputStream = partUrl.openStream() ;

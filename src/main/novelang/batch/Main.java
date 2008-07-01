@@ -36,6 +36,8 @@ import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
 import novelang.rendering.HtmlProblemPrinter;
+import novelang.system.StartupTools;
+import novelang.system.EnvironmentTools;
 
 /**
  * The main class for running in command-line mode.
@@ -46,6 +48,7 @@ public class Main {
 
   static {
     StartupTools.fixLogDirectory() ;
+    EnvironmentTools.logSystemProperties() ;
   }
 
   private static Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;

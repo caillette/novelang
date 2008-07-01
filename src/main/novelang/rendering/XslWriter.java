@@ -79,6 +79,8 @@ public class XslWriter extends XmlWriter {
   )
       throws Exception
   {
+    LOGGER.debug( "Created ContentHandler with encoding {}", encoding.name() );
+
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
 

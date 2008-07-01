@@ -248,7 +248,7 @@ public final class Treepath< T extends Tree > {
     return new Treepath( tree ) ;
   }
 
-  private class IllegalDistanceException extends IllegalArgumentException {
+  private static class IllegalDistanceException extends IllegalArgumentException {
     public IllegalDistanceException( int distance ) {
       super( "distance=" + distance ) ;
     }
