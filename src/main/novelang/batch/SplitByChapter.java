@@ -40,6 +40,7 @@ import novelang.common.Problem;
 import novelang.common.metadata.TreeMetadata;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
+import novelang.common.StylesheetMap;
 import novelang.part.Part;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.NlpWriter;
@@ -206,6 +207,10 @@ public class SplitByChapter {
 
     public SyntacticTree getDocumentTree() {
       return child;
+    }
+
+    public StylesheetMap getCustomStylesheetMap() {
+      return StylesheetMap.EMPTY_MAP ;
     }
 
     public TreeMetadata getTreeMetadata() {

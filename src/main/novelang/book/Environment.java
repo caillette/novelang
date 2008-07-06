@@ -17,26 +17,55 @@
 package novelang.book;
 
 import java.io.File;
+import java.util.Map;
 
-import novelang.part.Part;
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
+import novelang.common.StylesheetMap;
+import novelang.part.Part;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * @author Laurent Caillette
  */
-public class Environment {
+public final class Environment {
 
   private final File baseDirectory ;
+  private final Map< RenditionMimeType, String > mappedStylesheets ;
+  private final StylesheetMap stylesheetMap ;
+
+  private Environment( Environment other ) {
+    this.baseDirectory = other.baseDirectory ;
+    this.mappedStylesheets = Maps.newHashMap( other.mappedStylesheets ) ;
+    this.stylesheetMap = new StylesheetMap() {
+      public String get( RenditionMimeType renditionMimeType ) {
+        return mappedStylesheets.get( renditionMimeType ) ;
+      }
+    } ;
+  }
 
   public Environment( File baseDirectory ) {
-    this.baseDirectory = Objects.nonNull( baseDirectory );
+    this.baseDirectory = Objects.nonNull( baseDirectory ) ;
+    this.mappedStylesheets = Maps.newHashMap() ;
+    this.stylesheetMap = StylesheetMap.EMPTY_MAP ;
   }
 
   public File getBaseDirectory() {
     return baseDirectory;
   }
 
-  public void addPart( Part part ) {
+  public Environment map( RenditionMimeType renditionMimeType, String stylesheetPath ) {
+    final Environment newEnvironment = new Environment( this ) ;
+    newEnvironment.mappedStylesheets.put(
+        Objects.nonNull( renditionMimeType ), Objects.nonNull( stylesheetPath ) ) ;
+    return newEnvironment ;
+  }
+
+  public StylesheetMap getCustomStylesheets() {
+    return stylesheetMap ;
+  }
+
+  public Environment addPart( Part part ) {
     throw new UnsupportedOperationException( "addPart" ) ;
   }
 

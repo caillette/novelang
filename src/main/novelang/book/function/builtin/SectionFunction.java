@@ -74,8 +74,8 @@ public class SectionFunction implements FunctionDefinition {
 
     return new FunctionCall( location ) {
       public Result evaluate( Environment environment, Treepath<SyntacticTree> book ) {
-        final Treepath<SyntacticTree> newBook = TreepathTools.addChildLast( book, sectionTree ) ;
-        return new Result( newBook, null ) ;
+        final Treepath< SyntacticTree > newBook = TreepathTools.addChildLast( book, sectionTree ) ;
+        return new Result( environment, newBook, null ) ;
       }
     } ;
   }

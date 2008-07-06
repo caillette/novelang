@@ -16,15 +16,22 @@
  */
 package novelang.parser.antlr;
 
+import java.util.Map;
+import java.util.List;
+
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableMap;
 import static novelang.common.NodeKind.*;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.common.NodeKind;
 import novelang.common.tree.TreeTools;
+import novelang.common.tree.Treepath;
+import novelang.common.tree.TreepathTools;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -33,7 +40,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class BookParserTest {
 
-  private static final Function< String, SyntacticTree> CREATE_VALUED_ARGUMENT_FLAG_FUNCTION =
+  private static final Function< String, SyntacticTree > CREATE_VALUED_ARGUMENT_FLAG_FUNCTION =
       new Function< String, SyntacticTree>() {
         public SyntacticTree apply( String s ) {
           return new SimpleTree( VALUED_ARGUMENT_FLAG.name(), new SimpleTree( s ) ) ;
@@ -67,6 +74,32 @@ public class BookParserTest {
     ) ;
 
     return functionCall ;
+  }
+
+  /**
+   * This is used elsewhere as we must be sure to pass a tree of the same form as the
+   * parser produces.
+   */
+  public static final SyntacticTree createFunctionCallWithValuedAssignmentTree(
+      String functionName,
+      Map< String, String > map
+  ) {
+    Treepath< SyntacticTree > functionCall = Treepath.create(
+        tree( FUNCTION_CALL.name(), tree( FUNCTION_NAME, functionName ) ) ) ;
+
+    for( String key : map.keySet() ) {
+      SyntacticTree assignment = tree( NodeKind.VALUED_ARGUMENT_ASSIGNMENT ) ;
+      assignment = TreeTools.addLast(
+          assignment,
+          tree( key )
+      ) ;
+      assignment = TreeTools.addLast(
+          assignment,
+          tree( map.get( key ) )
+      ) ;
+      functionCall = TreepathTools.addChildLast( functionCall, assignment ).getPrevious() ;
+    }
+    return functionCall.getStart() ;
   }
 
   @Test
@@ -161,6 +194,17 @@ public class BookParserTest {
   }
 
   @Test
+  public void functionCallWithTwoAssignments() throws RecognitionException {
+    functionCall(
+        "function $key1=value1 " + BREAK +
+        " $key2=value2",
+        createFunctionCallWithValuedAssignmentTree(
+            "function",
+            ImmutableMap.of( "key1", "value1", "key2", "value2" ) )
+    ) ;
+  }
+
+  @Test
   public void functionCallWithAncillaries() throws RecognitionException {
     functionCall(
         "function \\identifier1 " + BREAK +
@@ -192,6 +236,17 @@ public class BookParserTest {
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( VALUED_ARGUMENT_MODIFIER, "+" ),
             tree( IDENTIFIER, "identifier" )
+        )
+    ) ;
+  }
+
+  @Test
+  public void valuedArgumentAssignment() throws RecognitionException {
+    AntlrTestHelper.valuedArgumentAssignment(
+        "$key=value",
+        tree( VALUED_ARGUMENT_ASSIGNMENT,
+            tree( "key" ),
+            tree( "value" )
         )
     ) ;
   }

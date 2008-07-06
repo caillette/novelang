@@ -14,31 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.common;
 
-import java.nio.charset.Charset;
-
-import novelang.common.Problem;
-import novelang.common.SyntacticTree;
+import novelang.rendering.RenditionMimeType;
 
 /**
+ * Maps a {@link novelang.rendering.RenditionMimeType} to a resource name corresponding
+ * to a stylesheet.
+ *
  * @author Laurent Caillette
  */
-public interface Renderable {
-
-  Iterable< Problem > getProblems() ;
-
-  Charset getEncoding() ;
-
-  boolean hasProblem() ;
-
-  SyntacticTree getDocumentTree() ;
+public interface StylesheetMap {
 
   /**
-   * Returns the {@code StylesheetMap} defined by this {@code Renderable} to override defaults.
-   * @return a non-null object.
+   * Returns a stylesheet resource name if any was defined for given type.
+   * 
+   * @param renditionMimeType a non-null object.
+   * @return a possibly null object.
    */
-  StylesheetMap getCustomStylesheetMap() ;
+  String get( RenditionMimeType renditionMimeType ) ;
+
+  /**
+   * Returns null for every call. 
+   */
+  StylesheetMap EMPTY_MAP = new StylesheetMap() {
+    public String get( RenditionMimeType renditionMimeType ) {
+      return null ;
+    }
+  };
 
 }

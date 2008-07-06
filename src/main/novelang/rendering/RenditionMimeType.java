@@ -56,6 +56,15 @@ public enum RenditionMimeType {
     return name().toLowerCase() ;
   }
 
+  public static boolean contains( String name ) {
+    for( RenditionMimeType renditionMimeType : RenditionMimeType.values() ) {
+      if( renditionMimeType.name().toLowerCase().equals( name ) ) {
+        return true ;
+      }
+    }
+    return false ;
+  }
+
   public static Iterable< String > getFileExtensions() {
     final List< RenditionMimeType > elements = Arrays.asList( values() ) ;
     return Lists.transform( elements, FILE_EXTENSION_EXTRACTOR ) ;

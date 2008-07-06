@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import com.google.common.collect.Maps;
 import novelang.book.function.builtin.InsertFunction;
 import novelang.book.function.builtin.SectionFunction;
+import novelang.book.function.builtin.MapStylesheetFunction;
 
 /**
  * Registry of {@link FunctionDefinition}s.
@@ -53,7 +54,8 @@ public class FunctionRegistry {
 
   private static final FunctionRegistry BUILTIN_FUNCTIONS = new FunctionRegistry(
       new InsertFunction(),
-      new SectionFunction()
+      new SectionFunction(),
+      new MapStylesheetFunction()
   ) ;
 
   public static FunctionRegistry getStandardRegistry() {

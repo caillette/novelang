@@ -54,6 +54,7 @@ tokens {
   VALUED_ARGUMENT_ANCILLARY ;
   VALUED_ARGUMENT_MODIFIER ;
   VALUED_ARGUMENT_FLAG ;
+  VALUED_ARGUMENT_ASSIGNMENT ;
   
   ELLIPSIS_OPENING ;
   APOSTROPHE_WORDMATE ;
@@ -735,7 +736,7 @@ functionCall
        | smallBreak headerIdentifier 
        | WHITESPACE? SOFTBREAK WHITESPACE? paragraphBody
      )?
-    ( mediumBreak ( ancillaryArgument | flagArgument ) )*
+    ( mediumBreak ( ancillaryArgument | flagArgument | assignmentArgument ) )*
     ->  ^( FUNCTION_CALL 
             ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  
             ^( VALUED_ARGUMENT_PRIMARY 
@@ -745,6 +746,7 @@ functionCall
             )? 
             ancillaryArgument*
             flagArgument*
+            assignmentArgument*
         )
   ; 
   
@@ -756,6 +758,14 @@ ancillaryArgument
 flagArgument    
   : ( DOLLAR_SIGN flag = word )
       -> ^( VALUED_ARGUMENT_FLAG { delegate.createTree( VALUED_ARGUMENT_FLAG, $flag.text ) } )     
+  ;
+
+assignmentArgument    
+  : ( DOLLAR_SIGN key = word EQUALS_SIGN value = word )
+      -> ^( VALUED_ARGUMENT_ASSIGNMENT 
+              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $key.text ) } 
+              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $value.text ) } 
+          )     
   ;
 
 

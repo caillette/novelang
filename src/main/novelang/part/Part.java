@@ -30,6 +30,7 @@ import novelang.common.NodeKind;
 import novelang.common.tree.Treepath;
 import novelang.common.SyntacticTree;
 import novelang.common.AbstractSourceReader;
+import novelang.common.StylesheetMap;
 import static novelang.common.NodeKind.SECTION;
 import novelang.parser.Encoding;
 import novelang.parser.antlr.DefaultPartParserFactory;
@@ -80,8 +81,11 @@ public class Part extends AbstractSourceReader {
     identifiers = findIdentifiers() ;
   }
 
+  public StylesheetMap getCustomStylesheetMap() {
+    return StylesheetMap.EMPTY_MAP ;
+  }
 
-// ==============
+  // ==============
 // Content access
 // ==============
 

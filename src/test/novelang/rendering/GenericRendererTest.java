@@ -33,6 +33,7 @@ import novelang.common.Problem;
 import novelang.common.metadata.TreeMetadata;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
+import novelang.common.StylesheetMap;
 import novelang.parser.Encoding;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -102,6 +103,10 @@ public class GenericRendererTest {
       }
       public TreeMetadata getTreeMetadata() {
         return treeMetadata ;
+      }
+
+      public StylesheetMap getCustomStylesheetMap() {
+        return StylesheetMap.EMPTY_MAP ;
       }
     } ;
   }

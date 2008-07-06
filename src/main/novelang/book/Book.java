@@ -28,6 +28,7 @@ import novelang.common.tree.Treepath;
 import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;
 import novelang.common.AbstractSourceReader;
+import novelang.common.StylesheetMap;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionRegistry;
 import novelang.book.function.FunctionDefinition;
@@ -64,6 +65,10 @@ public class Book extends AbstractSourceReader {
 
   public SyntacticTree getDocumentTree() {
     return documentTree;
+  }
+
+  public StylesheetMap getCustomStylesheetMap() {
+    return StylesheetMap.EMPTY_MAP ;
   }
 
   private Iterable< FunctionCall > createFunctionCalls(

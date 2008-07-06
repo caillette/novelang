@@ -25,7 +25,7 @@
     <level value="DEBUG" />
   </logger>
 
-  <logger name="novelang.model.implementation.StyledElement" >
+  <logger name="novelang.system.EnvironmentTools" >
     <level value="INFO" />
   </logger>
 

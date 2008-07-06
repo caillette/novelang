@@ -24,6 +24,9 @@ import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 
 /**
+ * Here are tons of delightfully stupid code but at least we don't have to debug
+ * reflexion stuff.
+ *
  * @author Laurent Caillette
  */
 public class AntlrTestHelper {
@@ -193,6 +196,21 @@ public class AntlrTestHelper {
     final DelegatingBookParser parser = createBookParser( text ) ;
     final SyntacticTree tree = ( SyntacticTree )
         parser.getAntlrParser().ancillaryArgument().getTree() ;
+    checkSanity( parser ) ;
+    return tree;
+  }
+
+  static void valuedArgumentAssignment( String text, SyntacticTree expectedTree )
+      throws RecognitionException
+  {
+    final SyntacticTree actualTree = valuedArgumentAssignment( text ); ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  static SyntacticTree valuedArgumentAssignment( String text ) throws RecognitionException {
+    final DelegatingBookParser parser = createBookParser( text ) ;
+    final SyntacticTree tree = ( SyntacticTree )
+        parser.getAntlrParser().assignmentArgument().getTree() ;
     checkSanity( parser ) ;
     return tree;
   }

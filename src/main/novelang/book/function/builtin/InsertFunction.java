@@ -142,18 +142,24 @@ public class InsertFunction implements FunctionDefinition {
         new File( environment.getBaseDirectory(), fileName )
     ;
     if( options.contains( OPTION_RECURSE ) ) {
-      return evaluateRecursive( book, insertedFile, options.contains( OPTION_CREATECHAPTERS ) ) ;
+      return evaluateRecursive(
+          environment, book, insertedFile, options.contains( OPTION_CREATECHAPTERS ) ) ;
     } else {
-      return evaluateFlat( book, insertedFile );
+      return evaluateFlat( environment, book, insertedFile );
     }
   }
 
-  private static FunctionCall.Result evaluateFlat( Treepath book, File insertedFile ) {
+  private static FunctionCall.Result evaluateFlat(
+      Environment environment,
+      Treepath book,
+      File insertedFile
+  ) {
     final Part part;
     try {
       part = new Part( insertedFile ) ;
     } catch( MalformedURLException e ) {
-      return new FunctionCall.Result( book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
+      return new FunctionCall.Result(
+          environment, book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
     }
     final SyntacticTree partTree = part.getDocumentTree() ;
 
@@ -163,10 +169,11 @@ public class InsertFunction implements FunctionDefinition {
       }
     }
 
-    return new FunctionCall.Result( book, part.getProblems() ) ;
+    return new FunctionCall.Result( environment, book, part.getProblems() ) ;
   }
 
   private static FunctionCall.Result evaluateRecursive(
+      Environment environment,
       Treepath book,
       File insertedFile,
       boolean createChapters
@@ -211,7 +218,7 @@ public class InsertFunction implements FunctionDefinition {
       problems.add( Problem.createProblem( e ) ) ;
     }
 
-    return new FunctionCall.Result( book, problems ) ;
+    return new FunctionCall.Result( environment, book, problems ) ;
   }
 
   private static Iterable< File > scanPartFiles( File directory )

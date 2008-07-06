@@ -22,6 +22,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.book.Environment;
 import com.google.common.collect.Iterables;
+import com.google.common.base.Objects;
 
 /**
  * @author Laurent Caillette
@@ -44,21 +45,30 @@ public abstract class FunctionCall {
    * @param book
    * @return a non-null {@link Result} instance.
    */
-  public abstract Result evaluate( Environment environment, Treepath<SyntacticTree> book ) ;
+  public abstract Result evaluate( Environment environment, Treepath< SyntacticTree > book ) ;
+
+  public static final FunctionCall DO_NOTHING = new FunctionCall( null ) {
+    public Result evaluate( Environment environment, Treepath< SyntacticTree > book ) {
+      return new Result( environment, book, null ) ;
+    }
+  } ;
 
   public static class Result {
 
-    private final Treepath<SyntacticTree> book ;
+    private final Environment environment ;
+    private final Treepath< SyntacticTree > book ;
     private final Iterable< Problem > problems ;
 
     private static final Iterable< Problem > NO_PROBLEM = Iterables.emptyIterable() ;
 
     public Result(
-        Treepath<SyntacticTree> book,
+        Environment environment,
+        Treepath< SyntacticTree > book,
         Iterable< Problem > problems
     ) {
       this.book = book ;
       this.problems = null == problems ? NO_PROBLEM : problems ;
+      this.environment = Objects.nonNull( environment ) ;
     }
 
     /**
@@ -73,6 +83,13 @@ public abstract class FunctionCall {
      */
     public Iterable< Problem > getProblems() {
       return problems ;
+    }
+
+    /**
+     * Never null.
+     */
+    public Environment getEnvironment() {
+      return environment;
     }
   }
 
