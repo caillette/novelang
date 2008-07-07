@@ -34,6 +34,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.slf4j.Logger;
@@ -77,7 +79,7 @@ public class HttpDaemonTest {
     final byte[] generated = readAsBytes(
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_RESOURCE_NAME ) ) ;
     save( "generated.pdf", generated ) ;
-    Assert.assertTrue( generated.length > 100 ) ;
+    assertTrue( generated.length > 100 ) ;
   }
 
   @Test
@@ -86,14 +88,14 @@ public class HttpDaemonTest {
     final byte[] generated = readAsBytes(
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_HTML_RESOURCE_NAME ) ) ;
     save( "generated.html", generated ) ;
-    Assert.assertTrue( generated.length > 100 ) ;
+    assertTrue( generated.length > 100 ) ;
   }
 
   @Test
   public void htmlBrokenCausesRedirection() throws Exception {
     setUp( "htmlBrokenCausesRedirection" ) ;
     final HttpClient httpClient = new HttpClient() ;
-    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( 5000 ) ;
+    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
     final String originalUrlAsString =
         "http://localhost:" + HTTP_DAEMON_PORT + BROKEN_HTML_RESOURCE_NAME ;
     HttpMethod method = new GetMethod( originalUrlAsString ) ;
@@ -102,14 +104,14 @@ public class HttpDaemonTest {
     String responseBody = method.getResponseBodyAsString() ;
 
     save( "generated.html", responseBody ) ;
-    Assert.assertTrue( responseBody.contains( "Requested:" ) ) ;
+    assertTrue( responseBody.contains( "Requested:" ) ) ;
 
-    Assert.assertTrue(
+    assertTrue(
         "Expected link to requested page",
         responseBody.contains( BROKEN_HTML_RESOURCE_NAME )
     ) ;
 
-    Assert.assertTrue(
+    assertTrue(
         "Expected path '" + BROKEN_PATH_AFTER_REDIRECTION + "'",
         method.getPath().contains( BROKEN_PATH_AFTER_REDIRECTION )
     ) ;
@@ -119,7 +121,7 @@ public class HttpDaemonTest {
   public void htmlNotBrokenCausesRedirection() throws Exception {
     setUp( "htmlNotBroken" ) ;
     final HttpClient httpClient = new HttpClient() ;
-    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( 5000 ) ;
+    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
     final String originalUrlAsString = "http://localhost:" + HTTP_DAEMON_PORT +
         GOOD_HTML_RESOURCE_NAME + RequestTools.ERRORPAGE_SUFFIX ;
     HttpMethod method = new GetMethod( originalUrlAsString ) ;
@@ -128,13 +130,32 @@ public class HttpDaemonTest {
     String responseBody = method.getResponseBodyAsString() ;
 
     save( "generated.html", responseBody ) ;
-    Assert.assertFalse( responseBody.contains( "Requested:" ) ) ;
+    assertFalse( responseBody.contains( "Requested:" ) ) ;
 
+  }
+
+  @Test
+  public void testAlternateStylesheetInQueryParameter() throws Exception {
+    setUp( "alternateStylesheet", TestResources.SERVED_DIRECTORY_NAME ) ;
+    final byte[] generated = readAsBytes( new URL(
+        "http://localhost:" + HTTP_DAEMON_PORT +
+        GOOD_HTML_RESOURCE_NAME + ALTERNATE_STYLESHEET_QUERY
+    ) ) ;
+
+    save( "generated.html", generated ) ;
+    assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
   }
 
 // =======
 // Fixture
 // =======
+
+  private static final int TIMEOUT = 5000 ;
+
+  public static final String VOID_STYLESHEET = "void.xsl" ;
+  private static final String ALTERNATE_STYLESHEET_QUERY =
+      "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + VOID_STYLESHEET ;
+
 
   @Before
   public void before() {
@@ -200,6 +221,11 @@ public class HttpDaemonTest {
   private File contentDirectory;
   private String goodNlpSource;
 
+  private void setUp( String testHint ) throws Exception {
+    setUp( testHint, ConfigurationTools.BUNDLED_STYLE_DIR ) ;
+  }
+
+
   /**
    * We don't use standard {@code Before} annotation because crappy JUnit 4 doesn't
    * let us know about test name so we have to pass it explicitely for creating
@@ -207,7 +233,7 @@ public class HttpDaemonTest {
    * @link http://twgeeknight.googlecode.com/svn/trunk/JUnit4Playground/src/org/junit/runners/NameAwareTestClassRunner.java
    *     doesn't work with IDEA-7.0.3 (while it works with Ant-1.7.0 alone).
    */
-  private void setUp( String testHint ) throws Exception {
+  private void setUp( String testHint, String styleDirectoryName ) throws Exception {
 
     final String testName =
         ClassUtils.getShortClassName( getClass() + "-" + testHint ) ;
@@ -222,17 +248,23 @@ public class HttpDaemonTest {
     TestResourceTools.copyResourceToFile(
         getClass(), BROKEN_NLP_RESOURCE_NAME, contentDirectory ) ;
 
-    httpDaemon = new HttpDaemon( HTTP_DAEMON_PORT, createServerConfiguration( contentDirectory ) ) ;
+    httpDaemon = new HttpDaemon(
+        HTTP_DAEMON_PORT,
+        createServerConfiguration( contentDirectory, styleDirectoryName )
+    ) ;
     httpDaemon.start() ;
   }
 
-  private ServerConfiguration createServerConfiguration( final File contentDirectory ) {
+  private ServerConfiguration createServerConfiguration(
+      final File contentDirectory,
+      final String styleDirectoryName
+  ) {
     return new ServerConfiguration() {
 
       public RenderingConfiguration getRenderingConfiguration() {
         return new RenderingConfiguration() {
           public ResourceLoader getResourceLoader() {
-            return new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
+            return new ClasspathResourceLoader( styleDirectoryName ) ;
           }
         } ;
       }

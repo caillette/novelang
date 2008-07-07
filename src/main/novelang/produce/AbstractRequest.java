@@ -18,7 +18,6 @@
 package novelang.produce;
 
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,9 +43,6 @@ import novelang.loader.ResourceName;
 
   private static final String ERRORPAGE_SUFFIX_REGEX = "/error\\.html";
 
-  protected static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
-
-  
 // ================
 // documentMimeType
 // ================
@@ -163,7 +159,7 @@ import novelang.loader.ResourceName;
     }
 
     buffer.append( "(?:\\?(?:" );
-    buffer.append( ALTERNATE_STYLESHEET_PARAMETER_NAME ) ;
+    buffer.append( RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME ) ;
     buffer.append( "\\=)" ) ;
     buffer.append( "(" ) ; // Start of capturing group.
       buffer.append( ResourceName.PATTERN.pattern() ) ;

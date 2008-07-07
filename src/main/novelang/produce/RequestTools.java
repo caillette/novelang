@@ -26,6 +26,7 @@ import java.util.Map;
  */
 public class RequestTools {
   public static final String ERRORPAGE_SUFFIX = "/error.html";
+  public static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
 
   private RequestTools() { throw new Error( "Don't call this" ) ; }
 

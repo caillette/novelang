@@ -1,4 +1,5 @@
-mapstylesheet $html=doc-html.xsl
+mapstylesheet
+    $html=doc-html.xsl
 
 insert file:introduction.nlp
 

@@ -35,7 +35,7 @@ public class RequestTest {
 
   private static final String PDF_REQUEST_PATH_WITHSTYLESHEET =
       PDF_REQUEST_PATH +
-      "?" + AbstractRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME +
+      "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME +
       "=" + STYLESHEET_RESOURCENAME
   ;
 
