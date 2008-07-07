@@ -49,10 +49,16 @@ public class Book extends AbstractSourceReader {
   private final SyntacticTree documentTree ;
 
   public Book( FunctionRegistry functionRegistry, File baseDirectory, String content ) {
-    environment =  new Environment( baseDirectory ) ;
     final SyntacticTree rawTree = parse( new DefaultBookParserFactory(), content ) ;
     Iterable< FunctionCall > functionCalls = createFunctionCalls( functionRegistry, rawTree ) ;
-    documentTree = callFunctions( functionCalls, new SimpleTree( NodeKind.BOOK.name() ) ) ;
+    final Results results = callFunctions(
+        functionCalls,
+        new Environment( baseDirectory ),
+        new SimpleTree( NodeKind.BOOK.name() )
+    ) ;
+    this.environment = results.environment ;
+    this.documentTree = results.book ;
+
   }
 
   public Book( FunctionRegistry functionRegistry, File bookFile ) throws IOException {
@@ -68,7 +74,7 @@ public class Book extends AbstractSourceReader {
   }
 
   public StylesheetMap getCustomStylesheetMap() {
-    return StylesheetMap.EMPTY_MAP ;
+    return environment.getCustomStylesheets() ;
   }
 
   private Iterable< FunctionCall > createFunctionCalls(
@@ -95,17 +101,32 @@ public class Book extends AbstractSourceReader {
     return ImmutableList.copyOf( functionCalls ) ;
   }
 
-  private SyntacticTree callFunctions( Iterable< FunctionCall > functionCalls, SyntacticTree tree ) {
+  private Results callFunctions(
+      final Iterable< FunctionCall > functionCalls,
+      Environment environment,
+      final SyntacticTree tree
+  ) {
     Treepath<SyntacticTree> book = Treepath.create( tree ) ;
     for( FunctionCall functionCall : functionCalls ) {
       FunctionCall.Result result = functionCall.evaluate( environment, book ) ;
+      environment = result.getEnvironment() ;
       collect( result.getProblems() ) ;
       final Treepath<SyntacticTree> newBook = result.getBook() ;
       if( null != newBook ) {
         book = newBook ;
       }
     }
-    return book.getStart() ;
+    return new Results( environment, book.getStart() ) ;
+  }
+
+  private static class Results {
+    public final Environment environment ;
+    public SyntacticTree book ;
+
+    private Results( Environment environment, SyntacticTree book ) {
+      this.environment = environment ;
+      this.book = book ;
+    }
   }
 
   

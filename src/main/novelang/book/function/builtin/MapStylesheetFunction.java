@@ -16,24 +16,24 @@
  */
 package novelang.book.function.builtin;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.book.function.FunctionDefinition;
-import novelang.book.function.FunctionCall;
-import novelang.book.function.IllegalFunctionCallException;
-import static novelang.book.function.FunctionTools.verify;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import novelang.book.Environment;
+import novelang.book.function.FunctionCall;
+import novelang.book.function.FunctionDefinition;
+import static novelang.book.function.FunctionTools.verify;
+import novelang.book.function.IllegalFunctionCallException;
 import novelang.common.Location;
-import novelang.common.SyntacticTree;
 import novelang.common.NodeKind;
-import static novelang.common.NodeKind.VALUED_ARGUMENT_PRIMARY;
+import novelang.common.Problem;
+import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.rendering.RenditionMimeType;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Maps;
 
 /**
  * @author Laurent Caillette
@@ -58,7 +58,7 @@ public class MapStylesheetFunction implements FunctionDefinition {
         verify( "No key / value pair", true, 2 == assignmentTree.getChildCount() ) ;
         final String keyAsString = assignmentTree.getChildAt( 0 ).getText() ;
         final String value = assignmentTree.getChildAt( 1 ).getText() ;
-        verify( "Not a supported rendition MIME type: '" + keyAsString + "'", true,
+        verify( "Not a supported file type: '" + keyAsString + "'", true,
             RenditionMimeType.contains( keyAsString ) ) ;
         RenditionMimeType key = RenditionMimeType.valueOf( keyAsString.toUpperCase() ) ;
         verify( "Duplicate assignment for key '" + key + "'",
@@ -88,9 +88,16 @@ public class MapStylesheetFunction implements FunctionDefinition {
       Treepath< SyntacticTree > book,
       Map< RenditionMimeType, String > assignments
   ) {
+
+    final List< Problem > problems = Lists.newArrayList() ;
     for( RenditionMimeType renditionMimeType : assignments.keySet() ) {
-      environment = environment.map( renditionMimeType, assignments.get( renditionMimeType ) ) ;
+      if( null == environment.getCustomStylesheets().get( renditionMimeType ) ) {
+        environment = environment.map( renditionMimeType, assignments.get( renditionMimeType ) ) ;
+      } else {
+        problems.add( Problem.createProblem(
+            "Multiple stylesheet assignment for '" + renditionMimeType + "'" ) ) ;
+      }
     }
-    return new FunctionCall.Result( environment, book, null ) ;
+    return new FunctionCall.Result( environment, book, problems ) ;
   }
 }

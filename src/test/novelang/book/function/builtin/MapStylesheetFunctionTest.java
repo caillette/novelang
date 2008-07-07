@@ -34,6 +34,7 @@ import novelang.common.tree.Treepath;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.antlr.BookParserTest;
 import novelang.rendering.RenditionMimeType;
+import novelang.loader.ResourceName;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
 
@@ -66,12 +67,12 @@ public class MapStylesheetFunctionTest {
         call.evaluate( new Environment( new File( "" ) ), Treepath.create( initialTree ) ) ;
 
     Assert.assertEquals(
-        "dir/stylesheet.xsl",
+        new ResourceName( "dir/stylesheet.xsl" ),
         result.getEnvironment().getCustomStylesheets().get( RenditionMimeType.HTML )
     ) ;
 
     Assert.assertEquals(
-        "other/pdf.xsl",
+        new ResourceName( "other/pdf.xsl" ),
         result.getEnvironment().getCustomStylesheets().get( RenditionMimeType.PDF )  
     ) ;
 

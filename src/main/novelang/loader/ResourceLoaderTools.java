@@ -39,7 +39,7 @@ public class ResourceLoaderTools {
     Objects.nonNull( second ) ;
 
     return new ResourceLoader() {
-      public InputStream getInputStream( String resourceName ) {
+      public InputStream getInputStream( ResourceName resourceName ) {
         try {
           return first.getInputStream( resourceName ) ;
         } catch( ResourceNotFoundException firstException ) {

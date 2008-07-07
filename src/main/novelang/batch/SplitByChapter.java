@@ -102,7 +102,7 @@ public class SplitByChapter {
         }
         final FileOutputStream fileOutputStream = new FileOutputStream( chapterFile ) ;
         final Renderable renderable = new RenderableChapter( child, part.getEncoding() ) ;
-        new GenericRenderer( new NlpWriter( configuration ) ).
+        new GenericRenderer( new NlpWriter( configuration, null ) ).
             render( renderable, fileOutputStream ) ;
         LOGGER.info( "Wrote to file '{}'", chapterFile.getAbsolutePath() ) ;
       }

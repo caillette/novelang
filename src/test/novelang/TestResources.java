@@ -17,6 +17,8 @@
 
 package novelang;
 
+import novelang.loader.ResourceName;
+
 /**
  * @author Laurent Caillette
  */
@@ -36,7 +38,7 @@ public class TestResources {
   public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
   public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
 
-  public static final String SHOWCASE = "/showcase/showcase.nlp";
+  public static final ResourceName SHOWCASE = new ResourceName( "showcase/showcase.nlp" ) ;
 
   public static final String SERVED_GOOD_NOEXTENSION = "/served/good";
   public static final String SERVED_GOOD = SERVED_GOOD_NOEXTENSION + ".nlp" ;

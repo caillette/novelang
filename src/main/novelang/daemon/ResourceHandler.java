@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import novelang.configuration.ServerConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceNotFoundException;
+import novelang.loader.ResourceName;
 import novelang.produce.RequestTools;
 import novelang.produce.PolymorphicRequest;
 
@@ -59,30 +60,47 @@ public class ResourceHandler extends AbstractHandler {
   )
       throws IOException, ServletException
   {
-    final PolymorphicRequest documentRequest =
+    if( ( ( Request ) request ).isHandled() ) {
+      // Jetty seems to pass the request to every handler, even if a previous one
+      // did set the request as handled.
+      return ;
+    }
+
+    LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;    
+
+    final PolymorphicRequest documentRequest = 
         RequestTools.createPolymorphicRequest( request.getPathInfo() ) ;
 
     if( null != documentRequest ) {
 
       try {
-        final InputStream inputStream = resourceLoader.getInputStream(
+        final String resourceName = removeLeadingSolidus(
             documentRequest.getDocumentSourceName() + "." +
             documentRequest.getResourceExtension()
         ) ;
+        final InputStream inputStream = resourceLoader.getInputStream(
+            new ResourceName( resourceName ) ) ;
 
         IOUtils.copy( inputStream, response.getOutputStream() ) ;
 
         response.setStatus( HttpServletResponse.SC_OK ) ;
         response.setContentType( documentRequest.getResourceExtension() ) ;
+
         ( ( Request ) request ).setHandled( true ) ;
-
-
         LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
         
       } catch( ResourceNotFoundException e ) {
         // Do nothing, we just don't handle that request.
       }
 
+    }
+  }
+
+  private static String removeLeadingSolidus( String s ) {
+    if( s.startsWith( "/" ) ) {
+      return s.substring( 1 ) ;
+    } else {
+      return s ;
     }
   }
 

@@ -18,15 +18,18 @@
 package novelang.produce;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.rendering.RawResource;
 import novelang.rendering.RenditionMimeType;
+import novelang.loader.ResourceName;
 
 /**
  * The base class for requests and a do-everything factory.
@@ -40,6 +43,8 @@ import novelang.rendering.RenditionMimeType;
   private static final Logger LOGGER = LoggerFactory.getLogger( AbstractRequest.class ) ;
 
   private static final String ERRORPAGE_SUFFIX_REGEX = "/error\\.html";
+
+  protected static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
 
   
 // ================
@@ -89,6 +94,22 @@ import novelang.rendering.RenditionMimeType;
   private void setDocumentSourceName( String documentSourceName ) {
     this.documentSourceName = documentSourceName;
   }
+
+
+// ===================
+// alternateStylesheet
+// ===================
+
+  private ResourceName alternateStylesheet = null ;
+
+  public ResourceName getAlternateStylesheet() {
+    return alternateStylesheet ;
+  }
+
+  private void setAlternateStylesheet( ResourceName resourceName ) {
+    this.alternateStylesheet = resourceName ;
+  }
+
 
 // ==============
 // originalTarget
@@ -141,6 +162,14 @@ import novelang.rendering.RenditionMimeType;
       buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
     }
 
+    buffer.append( "(?:\\?(?:" );
+    buffer.append( ALTERNATE_STYLESHEET_PARAMETER_NAME ) ;
+    buffer.append( "\\=)" ) ;
+    buffer.append( "(" ) ; // Start of capturing group.
+      buffer.append( ResourceName.PATTERN.pattern() ) ;
+    buffer.append( ")" ) ; // End of capturing group.
+    buffer.append( ")?" ) ;
+
     return Pattern.compile( buffer.toString() ) ;
   }
   
@@ -162,7 +191,10 @@ import novelang.rendering.RenditionMimeType;
     return create( requestPath, new PolymorphicRequest() ) ;
   }
 
-  private static < T extends AbstractRequest > T create( String requestPath, T request )
+  private static < T extends AbstractRequest > T create(
+      String requestPath,
+      T request
+  )
       throws IllegalArgumentException
   {
     final Pattern pattern = request instanceof PolymorphicRequest ?
@@ -191,6 +223,11 @@ import novelang.rendering.RenditionMimeType;
       }
 
       request.setOriginalTarget( matcher.group( 1 ) ) ;
+
+      final String alternateStylesheet = matcher.group( 5 ) ;
+      if( ! StringUtils.isBlank( alternateStylesheet ) ) {
+        request.setAlternateStylesheet( new ResourceName( alternateStylesheet ) ) ;
+      }
 
       LOGGER.debug( "Parsed: {}", request ) ;
 

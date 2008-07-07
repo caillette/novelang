@@ -35,7 +35,9 @@ public final class PolymorphicRequest extends AbstractRequest {
         ";documentMimeType" + "=" +
             ( getRenditionMimeType() == null ? "<null>" : getRenditionMimeType().getMimeName() ) +
         ";documentSourceName" + "=" + getDocumentSourceName() +
+        ";rendered" + "=" + isRendered() +
         ";originalTarget" + "=" + getOriginalTarget() +
+        ";stylesheet" + "=" + getAlternateStylesheet() +
         "]"
     ;
   }

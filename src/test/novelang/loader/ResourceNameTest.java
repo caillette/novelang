@@ -14,27 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.loader;
 
-import java.io.InputStream;
+import org.junit.Test;
+import org.junit.Assert;
 
 /**
- * The most simple contract for loading a resource.
- * An interface is useful here instead of URLs because
- * {@link ClasspathResourceLoader} handles lots of URLs by itself in a opaque way
- * (that should stay opaque anyways).
- * 
+ * Tests for {@link ResourceName}.
+ *
  * @author Laurent Caillette
  */
-public interface ResourceLoader {
+public class ResourceNameTest {
 
-  /**
-   * Returns an {@code InputStream} for the given resource name,
-   * relative to the {@code ResourceLoader}.
-   * @param resourceName a non-null object.
-   * @return a non-null object.
-   */
-  InputStream getInputStream( ResourceName resourceName ) throws ResourceNotFoundException ;
+  @Test
+  public void wellFormed() {
+    new ResourceName( "foo.bar" ) ;
+    new ResourceName( "dir/foo.bar" ) ;
+  }
+
+  @Test( expected = IllegalArgumentException.class )
+  public void testLeadingSolidus() {
+    new ResourceName( "/foo.bar" ) ;
+  }
+
+  @Test( expected = IllegalArgumentException.class )
+  public void testDoubleFullStop() {
+    new ResourceName( "dir/../foo.bar" ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private static void check( String expected, String resourceName ) {
+    Assert.assertEquals( expected, new ResourceName( resourceName ).getName() ) ;
+  }
 
 }

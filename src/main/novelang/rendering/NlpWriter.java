@@ -23,16 +23,20 @@ import java.nio.charset.Charset;
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.TreeMetadata;
+import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette
  */
 public class NlpWriter extends EscapingWriter {
 
-  protected static final String DEFAULT_NLP_STYLESHEET =  "nlp.xsl" ;
+  protected static final ResourceName DEFAULT_NLP_STYLESHEET = new ResourceName( "nlp.xsl" ) ;
 
-  public NlpWriter( RenderingConfiguration configuration ) {
-    super( configuration, DEFAULT_NLP_STYLESHEET, RenditionMimeType.NLP ) ;
+  public NlpWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
+    super(
+        configuration,
+        null == stylesheet ? DEFAULT_NLP_STYLESHEET : stylesheet, 
+        RenditionMimeType.NLP ) ;
   }
 
   protected final ContentHandler createSinkContentHandler(

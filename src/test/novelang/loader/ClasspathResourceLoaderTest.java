@@ -49,7 +49,7 @@ public class ClasspathResourceLoaderTest {
 
   @Test( expected = ResourceNotFoundException.class )
   public void classResourceLoaderNotFound() throws IOException {
-    new ClasspathResourceLoader().getInputStream( "doesnotexist" ) ;
+    new ClasspathResourceLoader().getInputStream( new ResourceName( "doesnot.exist" ) ) ;
   }
 
 }

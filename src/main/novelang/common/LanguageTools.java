@@ -14,27 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package novelang.loader;
-
-import java.io.InputStream;
+package novelang.common;
 
 /**
- * The most simple contract for loading a resource.
- * An interface is useful here instead of URLs because
- * {@link ClasspathResourceLoader} handles lots of URLs by itself in a opaque way
- * (that should stay opaque anyways).
- * 
+ * Utility class for language constructs.
+ *
  * @author Laurent Caillette
  */
-public interface ResourceLoader {
+public class LanguageTools {
+
+  private LanguageTools() {
+    throw new Error() ;
+  }
 
   /**
-   * Returns an {@code InputStream} for the given resource name,
-   * relative to the {@code ResourceLoader}.
-   * @param resourceName a non-null object.
-   * @return a non-null object.
+   * Returns the first non-null value or null if all were null.
+   *
+   * @param values a non-null array that may contain nulls.
+   * @return a possibly null value if all {@code values} were null.
    */
-  InputStream getInputStream( ResourceName resourceName ) throws ResourceNotFoundException ;
-
+  public static< T > T firstNotNull( T... values ) {
+    for( T value : values ) {
+      if( value != null ) {
+        return value ;
+      }
+    }
+    return null ;
+  }
 }

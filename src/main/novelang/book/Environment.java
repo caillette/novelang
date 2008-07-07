@@ -24,6 +24,7 @@ import com.google.common.collect.Maps;
 import novelang.common.StylesheetMap;
 import novelang.part.Part;
 import novelang.rendering.RenditionMimeType;
+import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette
@@ -31,14 +32,14 @@ import novelang.rendering.RenditionMimeType;
 public final class Environment {
 
   private final File baseDirectory ;
-  private final Map< RenditionMimeType, String > mappedStylesheets ;
+  private final Map< RenditionMimeType, ResourceName > mappedStylesheets ;
   private final StylesheetMap stylesheetMap ;
 
   private Environment( Environment other ) {
     this.baseDirectory = other.baseDirectory ;
     this.mappedStylesheets = Maps.newHashMap( other.mappedStylesheets ) ;
     this.stylesheetMap = new StylesheetMap() {
-      public String get( RenditionMimeType renditionMimeType ) {
+      public ResourceName get( RenditionMimeType renditionMimeType ) {
         return mappedStylesheets.get( renditionMimeType ) ;
       }
     } ;
@@ -57,7 +58,7 @@ public final class Environment {
   public Environment map( RenditionMimeType renditionMimeType, String stylesheetPath ) {
     final Environment newEnvironment = new Environment( this ) ;
     newEnvironment.mappedStylesheets.put(
-        Objects.nonNull( renditionMimeType ), Objects.nonNull( stylesheetPath ) ) ;
+        Objects.nonNull( renditionMimeType ), new ResourceName( stylesheetPath ) ) ;
     return newEnvironment ;
   }
 

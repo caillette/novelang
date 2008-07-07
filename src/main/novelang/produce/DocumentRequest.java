@@ -17,6 +17,7 @@
 package novelang.produce;
 
 import org.apache.commons.lang.ClassUtils;
+import novelang.loader.ResourceName;
 
 /**
  * Contains everything needed to build a specific requested Document
@@ -30,12 +31,13 @@ public class DocumentRequest extends AbstractRequest {
   public String toString() {
     return
         ClassUtils.getShortClassName( getClass() ) + "[" +
-        ";documentSourceName" + "=" + getDocumentSourceName() +
+        "documentSourceName" + "=" + getDocumentSourceName() +
         ";originalTarget" + "=" + getOriginalTarget() +
+        ";rendered" + "=" + isRendered() +
+        ";stylesheet" + "=" + getAlternateStylesheet() +
         "]"
     ;
   }
 
-  
 }
 

@@ -26,9 +26,11 @@ import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ServerConfiguration;
 import novelang.loader.FileLookupHelper;
+import novelang.loader.ResourceName;
 import novelang.common.Problem;
 import novelang.common.StructureKind;
 import novelang.common.Renderable;
+import novelang.common.LanguageTools;
 import novelang.part.Part;
 import novelang.book.Book;
 import novelang.book.function.FunctionRegistry;
@@ -88,10 +90,15 @@ public class DocumentProducer {
 
     LOGGER.debug( "Attempting to produce '{}'", request.getOriginalTarget() ) ;
 
+    final ResourceName stylesheet = LanguageTools.firstNotNull(
+        request.getAlternateStylesheet(),
+        rendered.getCustomStylesheetMap().get( mimeType )
+    ) ;
+
     switch( mimeType ) {
 
       case PDF :
-        serve.with( new GenericRenderer( new PdfWriter( renderingConfiguration ) ) ) ;
+        serve.with( new GenericRenderer( new PdfWriter( renderingConfiguration, stylesheet ) ) ) ;
         break ;
 
       case TXT :
@@ -103,11 +110,11 @@ public class DocumentProducer {
         break ;
 
       case HTML :
-        serve.with( new GenericRenderer( new HtmlWriter( renderingConfiguration ) ) ) ;
+        serve.with( new GenericRenderer( new HtmlWriter( renderingConfiguration, stylesheet ) ) ) ;
         break ;
 
       case NLP :
-        serve.with( new GenericRenderer( new NlpWriter( renderingConfiguration ) ) ) ;
+        serve.with( new GenericRenderer( new NlpWriter( renderingConfiguration, stylesheet ) ) ) ;
         break ;
 
       default :

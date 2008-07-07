@@ -16,6 +16,8 @@
  */
 package novelang.produce;
 
+import java.util.Map;
+
 /**
  * Helper for creating concrete Requests.
  * This avoids accessing to package-protected {@link AbstractRequest}.

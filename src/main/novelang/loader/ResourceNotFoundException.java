@@ -36,6 +36,14 @@ public class ResourceNotFoundException extends RuntimeException {
     this.searchPath = searchPath ;
   }
 
+  public ResourceNotFoundException( ResourceName resourceName, String searchPath ) {
+    this( resourceName.getName(), searchPath ) ;
+  }
+
+  public ResourceNotFoundException( ResourceName resourceName, String searchPath, Exception cause ) {
+    this( resourceName.getName(), searchPath, cause ) ;
+  }
+
   public ResourceNotFoundException( URL baseUrl, String resourceName, Exception cause ) {
     super( "Not found: '" + baseUrl.toExternalForm() + "/" + resourceName + "'", cause ) ;
     this.searchPath = "\n    " + baseUrl.toExternalForm() ;

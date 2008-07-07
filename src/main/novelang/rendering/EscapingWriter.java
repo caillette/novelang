@@ -20,6 +20,7 @@ package novelang.rendering;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
 import novelang.parser.Symbols;
+import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette
@@ -28,7 +29,7 @@ public class EscapingWriter extends XslWriter {
 
   public EscapingWriter(
       RenderingConfiguration configuration,
-      String xslFileName,
+      ResourceName xslFileName,
       RenditionMimeType mimeType
   ) {
     super( configuration, xslFileName, mimeType );

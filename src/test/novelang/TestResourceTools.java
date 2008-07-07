@@ -34,6 +34,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import novelang.loader.ResourceName;
+
 /**
  * Utility class for resources.
  *
@@ -112,6 +114,19 @@ public final class TestResourceTools {
       throw new Error( e );
     }
   }
+
+  /**
+   * Copy a resource into given directory, creating subdirectories if resource name includes
+   * a directory.
+   */
+  public static File copyResourceToFile(
+      Class owningClass,
+      ResourceName resourceName,
+      File destinationDir
+  ) {
+    return copyResourceToFile( owningClass, "/" + resourceName.getName(), destinationDir ) ;
+  }
+
 
   /**
    * Copy a resource into given directory, creating subdirectories if resource name includes

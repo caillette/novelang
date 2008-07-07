@@ -243,10 +243,10 @@ public class BookParserTest {
   @Test
   public void valuedArgumentAssignment() throws RecognitionException {
     AntlrTestHelper.valuedArgumentAssignment(
-        "$key=value",
+        "$key=value/with/solidus.and-other",
         tree( VALUED_ARGUMENT_ASSIGNMENT,
             tree( "key" ),
-            tree( "value" )
+            tree( "value/with/solidus.and-other" )
         )
     ) ;
   }

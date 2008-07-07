@@ -55,6 +55,7 @@ tokens {
   VALUED_ARGUMENT_MODIFIER ;
   VALUED_ARGUMENT_FLAG ;
   VALUED_ARGUMENT_ASSIGNMENT ;
+  EXTENDED_WORD ;
   
   ELLIPSIS_OPENING ;
   APOSTROPHE_WORDMATE ;
@@ -756,18 +757,45 @@ ancillaryArgument
   ;
 
 flagArgument    
-  : ( DOLLAR_SIGN flag = word )
+  : ( DOLLAR_SIGN flag = extendedWord )
       -> ^( VALUED_ARGUMENT_FLAG { delegate.createTree( VALUED_ARGUMENT_FLAG, $flag.text ) } )     
   ;
 
 assignmentArgument    
-  : ( DOLLAR_SIGN key = word EQUALS_SIGN value = word )
+  : ( DOLLAR_SIGN key = extendedWord EQUALS_SIGN value = extendedWord )
       -> ^( VALUED_ARGUMENT_ASSIGNMENT 
               { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $key.text ) } 
               { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $value.text ) } 
           )     
   ;
 
+extendedWord
+  : w = rawExtendedWord 
+    -> ^( EXTENDED_WORD { delegate.createTree( EXTENDED_WORD, $w.text ) } )	
+  ;  
+
+/** This intermediary rule is useful as I didn't find how to
+ * concatenate Tokens from inside the rewrite rule.
+ */
+rawExtendedWord returns [ String text ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
+      | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
+      | s3 = digit { buffer.append( $s3.text ) ; }
+    )+
+    ( (   s5 = HYPHEN_MINUS { buffer.append( $s5.text ) ; }
+        | s5 = SOLIDUS { buffer.append( $s5.text ) ; }
+        | s5 = FULL_STOP { buffer.append( $s5.text ) ; }
+      )
+      (  s6 = hexLetter { buffer.append( $s6.text ) ; }
+       | s7 = nonHexLetter { buffer.append( $s7.text ) ; }
+       | s8 = digit { buffer.append( $s8.text ) ; }
+      )+ 
+    )*
+    { $text = buffer.toString() ; }
+  ;  
 
 // ==============
 // Common symbols

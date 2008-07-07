@@ -52,21 +52,18 @@ public class UrlResourceLoader implements ResourceLoader {
     this.searchPath = createSearchPath( base ) ;
   }
 
-  public InputStream getInputStream( String resourceName ) throws ResourceNotFoundException {
-    if( StringUtils.isBlank( resourceName ) ) {
-      throw new IllegalArgumentException( "resourceName=" + resourceName ) ;
-    }
-    final String normalizedResourceName =
-        resourceName.startsWith( "/" ) ?
-        resourceName.substring( 1, resourceName.length() ) :
-        resourceName
-    ;
+  public InputStream getInputStream( ResourceName resourceName ) throws ResourceNotFoundException {
+//    final String normalizedResourceName =
+//        resourceName.startsWith( "/" ) ?
+//        resourceName.substring( 1, resourceName.length() ) :
+//        resourceName
+//    ;
 
     final URL resourceUrl ;
     try {
-      resourceUrl = new URL( base, normalizedResourceName );
+      resourceUrl = new URL( base, resourceName.getName() ) ;
     } catch( MalformedURLException e ) {
-      LOGGER.debug( "Could not find resource '{}' from {}", normalizedResourceName, this ) ;
+      LOGGER.debug( "Could not find resource '{}' from {}", resourceName.getName(), this ) ;
       throw new ResourceNotFoundException( resourceName, searchPath, e );
     }
     try {

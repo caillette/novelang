@@ -25,16 +25,21 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
 import novelang.common.metadata.TreeMetadata;
 import novelang.parser.Symbols;
+import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette
  */
 public class HtmlWriter extends XslWriter {
 
-  protected static final String DEFAULT_HTML_STYLESHEET =  "html.xsl" ;
+  protected static final ResourceName DEFAULT_HTML_STYLESHEET =  new ResourceName( "html.xsl" ) ;
 
-  public HtmlWriter( RenderingConfiguration configuration ) {
-    super( configuration, DEFAULT_HTML_STYLESHEET, RenditionMimeType.HTML ) ;
+  public HtmlWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
+    super(
+        configuration,
+        null == stylesheet ? DEFAULT_HTML_STYLESHEET : stylesheet,
+        RenditionMimeType.HTML
+    ) ;
   }
 
   public void write( Nodepath kinship, String word ) throws Exception {

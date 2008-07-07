@@ -38,6 +38,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
+import novelang.loader.ResourceName;
 import novelang.common.metadata.TreeMetadata;
 
 /**
@@ -50,25 +51,26 @@ public class XslWriter extends XmlWriter {
   protected final EntityResolver entityResolver;
   protected static final RenditionMimeType DEFAULT_RENDITION_MIME_TYPE = RenditionMimeType.XML ;
 
-  protected final String xslFileName ;
+  protected final ResourceName xslFileName ;
   protected final ResourceLoader resourceLoader;
 
 
 
 
-  public XslWriter( RenderingConfiguration configuration, String xslFileName ) {
+  public XslWriter( RenderingConfiguration configuration, ResourceName xslFileName ) {
     this( configuration, xslFileName, DEFAULT_RENDITION_MIME_TYPE ) ;
   }
 
   public XslWriter(
       RenderingConfiguration configuration,
-      String xslFileName,
+      ResourceName xslFileName,
       RenditionMimeType mimeType
   ) {
     super( mimeType ) ;
     this.resourceLoader = configuration.getResourceLoader() ;
     this.xslFileName = xslFileName ;
     entityResolver = new LocalEntityResolver() ;
+    LOGGER.debug( "Created {} with stylesheet {}", getClass().getName(), xslFileName ) ;
 
   }
 
@@ -142,8 +144,7 @@ public class XslWriter extends XmlWriter {
       systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
       LOGGER.debug(
           "Resolving entity publicId='{}' systemId='{}'", publicId, systemId ) ;
-      final InputSource inputSource = new InputSource( resourceLoader.getInputStream( systemId ) ) ;
-      return inputSource ;
+      return new InputSource( resourceLoader.getInputStream( new ResourceName( systemId ) ) ) ;
     }
   }
 }

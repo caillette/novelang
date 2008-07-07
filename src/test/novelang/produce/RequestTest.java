@@ -31,6 +31,14 @@ public class RequestTest {
   private static final String PDF_REQUEST_PATH = REQUEST_BODY + ".pdf" ;
   private static final String CSS_REQUEST_PATH = REQUEST_BODY + ".css" ;
 
+  private static final String STYLESHEET_RESOURCENAME = "dir/sheet.xsl" ;
+
+  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET =
+      PDF_REQUEST_PATH +
+      "?" + AbstractRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME +
+      "=" + STYLESHEET_RESOURCENAME
+  ;
+
   private static final String REQUEST_PATH_BROKEN =
       PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;
 
@@ -43,6 +51,21 @@ public class RequestTest {
     Assert.assertTrue( request.isRendered() ) ;
     Assert.assertEquals( "pdf", request.getResourceExtension() ) ;
     Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+
+    Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+    Assert.assertNull( request.getAlternateStylesheet() ) ;
+  }
+
+  @Test
+  public void documentRequestWithStylesheet() {
+    final DocumentRequest request =
+        RequestTools.createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
+    Assert.assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    Assert.assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
+    Assert.assertTrue( request.isRendered() ) ;
+    Assert.assertEquals( "pdf", request.getResourceExtension() ) ;
+    Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    Assert.assertEquals( STYLESHEET_RESOURCENAME, request.getAlternateStylesheet().getName() ) ;
 
     Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }

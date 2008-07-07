@@ -17,6 +17,7 @@
 package novelang.common;
 
 import novelang.rendering.RenditionMimeType;
+import novelang.loader.ResourceName;
 
 /**
  * Maps a {@link novelang.rendering.RenditionMimeType} to a resource name corresponding
@@ -32,13 +33,13 @@ public interface StylesheetMap {
    * @param renditionMimeType a non-null object.
    * @return a possibly null object.
    */
-  String get( RenditionMimeType renditionMimeType ) ;
+  ResourceName get( RenditionMimeType renditionMimeType ) ;
 
   /**
    * Returns null for every call. 
    */
   StylesheetMap EMPTY_MAP = new StylesheetMap() {
-    public String get( RenditionMimeType renditionMimeType ) {
+    public ResourceName get( RenditionMimeType renditionMimeType ) {
       return null ;
     }
   };

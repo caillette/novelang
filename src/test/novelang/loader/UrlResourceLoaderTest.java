@@ -39,7 +39,7 @@ public class UrlResourceLoaderTest {
   @Test
   public void absoluteOk() throws IOException {
     final UrlResourceLoader loader = new UrlResourceLoader( loaderDirectory.toURL() ) ;
-    final InputStream inputStream = loader.getInputStream( RESOURCE_FILENAME ) ;
+    final InputStream inputStream = loader.getInputStream( RESOURCE_NAME ) ;
     final String resource = IOUtils.toString( inputStream ) ;
     Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
   }
@@ -55,7 +55,8 @@ public class UrlResourceLoaderTest {
 
   @Test( expected = ResourceNotFoundException.class )
   public void urlResourceLoaderNotFound() throws IOException {
-    new UrlResourceLoader( loaderDirectory.toURL() ).getInputStream( "doesnotexist" ) ;
+    new UrlResourceLoader( loaderDirectory.toURL() ).getInputStream(
+        new ResourceName( "doesnot.exist" ) ) ;
   }
 
 
@@ -63,8 +64,7 @@ public class UrlResourceLoaderTest {
 // Fixture
 // =======
 
-  private static final String RESOURCE_NAME = TestResources.SHOWCASE;
-  private static final String RESOURCE_FILENAME = RESOURCE_NAME;
+  private static final ResourceName RESOURCE_NAME = TestResources.SHOWCASE;
   private File loaderDirectory;
 
   @Before
@@ -73,7 +73,11 @@ public class UrlResourceLoaderTest {
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     loaderDirectory = scratchDirectoryFixture.getLoaderDirectory();
-    TestResourceTools.copyResourceToFile( getClass(), RESOURCE_FILENAME, loaderDirectory ) ;
+    TestResourceTools.copyResourceToFile(
+        getClass(),
+        RESOURCE_NAME,
+        loaderDirectory
+    ) ;
 
   }
 }

@@ -28,6 +28,7 @@ import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
 import novelang.configuration.ServerConfiguration;
 import novelang.common.Renderable;
 import novelang.common.Problem;
@@ -73,8 +74,13 @@ public class DocumentHandler extends AbstractHandler {
       int dispatch
   ) throws IOException, ServletException {
 
-    final PolymorphicRequest documentRequest =
-        RequestTools.createPolymorphicRequest( request.getPathInfo() ) ;
+    LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;    
+
+    final String rawRequest = request.getPathInfo() +
+        ( StringUtils.isBlank( request.getQueryString() ) ? "" : "?" + request.getQueryString() )
+    ;
+    
+    final PolymorphicRequest documentRequest = RequestTools.createPolymorphicRequest( rawRequest ) ;
 
     if( null == documentRequest ) {
       return ;
@@ -84,7 +90,7 @@ public class DocumentHandler extends AbstractHandler {
 
       if( documentRequest.isRendered() ) {
 
-        final Renderable rendered;
+        final Renderable rendered ;
         try {
           rendered = documentProducer.createRenderable( documentRequest );
         } catch( IOException e ) {
@@ -111,12 +117,13 @@ public class DocumentHandler extends AbstractHandler {
           response.setStatus( HttpServletResponse.SC_OK ) ;
           documentProducer.produce( documentRequest, rendered, outputStream ) ;
           response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
-          LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
 
         }
+
+        ( ( Request ) request ).setHandled( true ) ;
+        LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
       }
 
-      ( ( Request ) request ).setHandled( true ) ;
     }
   }
 

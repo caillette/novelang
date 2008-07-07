@@ -28,16 +28,17 @@ import org.apache.fop.apps.MimeConstants;
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.TreeMetadata;
+import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette
  */
 public class PdfWriter extends XslWriter {
 
-  protected static final String DEFAULT_FO_STYLESHEET =  "pdf.xsl" ; 
+  protected static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ; 
 
-  public PdfWriter( RenderingConfiguration configuration ) {
-    super( configuration, DEFAULT_FO_STYLESHEET ) ;
+  public PdfWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
+    super( configuration, null == stylesheet ? DEFAULT_FO_STYLESHEET : stylesheet ) ;
   }
 
 
