@@ -18,6 +18,8 @@
 package novelang.common;
 
 /**
+ * Represents the exact position of a character inside document sources.
+ *
  * @author Laurent Caillette
  */
 public class Location {

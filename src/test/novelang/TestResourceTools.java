@@ -37,7 +37,10 @@ import org.slf4j.LoggerFactory;
 import novelang.loader.ResourceName;
 
 /**
- * Utility class for resources.
+ * Utility class for dealing with test-dedicated resources.
+ * Some tests require files on the filesystem, while they are resources that are
+ * only accessible from a classloader. So we have boring stuff with URLs, byte arrays
+ * and so on. 
  *
  * @author Laurent Caillette
  */

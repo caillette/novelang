@@ -24,6 +24,9 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 /**
+ * Represents all nodes known by ANTLR parser, plus a few that are indicated with a leading
+ * low line ('_').
+ * 
  * @author Laurent Caillette
  */
 public enum NodeKind {

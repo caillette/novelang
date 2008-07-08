@@ -26,6 +26,8 @@ import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
 
 /**
+ * Just some "Hello world" stuff to get sure Jetty's up.
+ *
  * @author Laurent Caillette
  */
 public class HelloHandler extends AbstractHandler {

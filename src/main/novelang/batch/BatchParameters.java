@@ -20,14 +20,12 @@ package novelang.batch;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;

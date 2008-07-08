@@ -40,6 +40,8 @@ import novelang.parser.GenericParser;
 import novelang.parser.GenericParserFactory;
 
 /**
+ * Base class holding parsing and some error-handling.
+ *
  * @author Laurent Caillette
  */
 public abstract class AbstractSourceReader implements LocationFactory, Renderable {

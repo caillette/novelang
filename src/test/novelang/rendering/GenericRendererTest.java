@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 import com.google.common.collect.ImmutableList;
 import novelang.common.metadata.MetadataHelper;
 import static novelang.common.NodeKind.*;
@@ -47,7 +48,7 @@ public class GenericRendererTest {
     final SyntacticTree tree = tree( PARENTHESIS, tree( WORD, "first" ), tree( WORD, "second") ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
-    Assert.assertEquals( "PARENTHESIS(first^second)", getRenderedText() ) ;
+    assertEquals( "PARENTHESIS(first^second)", getRenderedText() ) ;
   }
 
   @Test
@@ -65,7 +66,7 @@ public class GenericRendererTest {
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
-    Assert.assertEquals(
+    assertEquals(
         "PARAGRAPH_PLAIN(w0^PARENTHESIS(w1^w2PUNCTUATION_SIGN(SIGN_FULLSTOP()))^w3)",
         getRenderedText()
     ) ;

@@ -21,7 +21,7 @@ import org.apache.commons.lang.ClassUtils;
 import com.google.common.base.Objects;
 
 /**
-   * Represents the stack of Node Kinds preceding current tree.
+  * Represents the stack of Node Kinds preceding current tree.
  */
 public class Nodepath {
 

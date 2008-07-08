@@ -17,6 +17,8 @@
 package novelang.book.function;
 
 /**
+ * Thrown when bad stuff happens.
+ * 
  * @author Laurent Caillette
  */
 public class IllegalFunctionCallException extends Exception {

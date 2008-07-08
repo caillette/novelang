@@ -20,6 +20,8 @@ package novelang.loader;
 import java.net.URL;
 
 /**
+ * Thrown by {@link ResourceLoader} when expected resource wasn't there.
+ *
  * @author Laurent Caillette
  */
 public class ResourceNotFoundException extends RuntimeException {

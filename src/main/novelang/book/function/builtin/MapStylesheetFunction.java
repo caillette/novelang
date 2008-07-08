@@ -36,6 +36,16 @@ import novelang.common.tree.Treepath;
 import novelang.rendering.RenditionMimeType;
 
 /**
+ * Define which stylesheets to use for one or more document {@link RenditionMimeType MIME type}.
+ * <p>
+ * Syntax:
+ * <pre>
+ * mapstylesheet
+ *     $&lt;mimetype1&gt;=&lt;stylesheet1&gt;
+ *     $&lt;mimetype2&gt;=&lt;stylesheet2&gt;
+ * </pre>
+ * The {@code stylesheet} parameters are relative to user-defined style directory. 
+ *
  * @author Laurent Caillette
  */
 public class MapStylesheetFunction implements FunctionDefinition {

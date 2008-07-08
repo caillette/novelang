@@ -42,7 +42,6 @@ public class ScratchDirectoryFixture {
   private final String testIdentifier ;
 
   private final Set< String > registeredTestIdentifiers = new HashSet< String >() ;
-  private static final int FILE_EXISTENCE_TIMEOUT_SECONDS = 5 ;
 
   public ScratchDirectoryFixture( String testIdentifier ) throws IOException {
     this.testIdentifier = testIdentifier ;
@@ -97,55 +96,6 @@ public class ScratchDirectoryFixture {
     return testScratchDirectory;
   }
 
-  private File createIfNotExists( File directory, String name ) throws IOException {
-    if( null == directory ) {
-      directory = new File( getTestScratchDirectory(), name ) ;
-      FileUtils.forceMkdir( directory ) ;
-      FileUtils.waitFor( directory, FILE_EXISTENCE_TIMEOUT_SECONDS ) ;
-      LOGGER.info( "Created '" + directory.getAbsolutePath() + "' directory." ) ;
-    }
-    return directory ;
-  }
-
-// ================
-// Specialized dirs
-// ================
-
-  private static final String BOOK_1 = "book-1" ;
-
-  private File book1Root;
-
-  public File getBook1Directory() throws IOException {
-    book1Root = createIfNotExists( book1Root, BOOK_1 ) ;
-    return book1Root;
-  }
-
-  private static final String BOOK_4 = "book-4" ;
-
-  private File book4Root;
-
-  public File getBook4Directory() throws IOException {
-    book4Root = createIfNotExists( book4Root, BOOK_4 ) ;
-    return book4Root;
-  }
-
-  private static final String LOADER = "loader" ;
-
-  private File loaderRoot;
-
-  public File getLoaderDirectory() throws IOException {
-    loaderRoot = createIfNotExists( loaderRoot, LOADER ) ;
-    return loaderRoot;
-  }
-
-  private static final String DAEMON = "daemon" ;
-
-  private File daemonRoot;
-
-  public File getDaemonDirectory() throws IOException {
-    daemonRoot = createIfNotExists( daemonRoot, DAEMON ) ;
-    return daemonRoot;
-  }
 
 
 }

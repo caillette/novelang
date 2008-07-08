@@ -27,7 +27,6 @@ import org.junit.Test;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.part.Part;
 import static novelang.common.NodeKind.*;
 import novelang.common.SyntacticTree;
 import novelang.parser.antlr.TreeFixture;

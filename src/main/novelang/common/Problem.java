@@ -24,6 +24,8 @@ import org.antlr.runtime.RecognitionException;
 import com.google.common.base.Objects;
 
 /**
+ * Represents something bad that happened during document generation.
+ * 
  * @author Laurent Caillette
  */
 public class Problem {

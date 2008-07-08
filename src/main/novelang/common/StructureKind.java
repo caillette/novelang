@@ -18,7 +18,7 @@
 package novelang.common;
 
 /**
- * TODO: rename this to "structure" and rename "structure" to "aggregation" or whatever.
+ * Tells about the structural kind of document source: Book or Part.
  *
  * @author Laurent Caillette
  */

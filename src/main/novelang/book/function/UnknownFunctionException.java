@@ -17,6 +17,8 @@
 package novelang.book.function;
 
 /**
+ * Thrown when the Book file contains a function name which is not in {@link FunctionRegistry}.
+ * 
  * @author Laurent Caillette
  */
 public class UnknownFunctionException extends Exception {

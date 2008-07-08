@@ -81,7 +81,7 @@ public class ConfigurationTools {
       final File styleDirAsSubdirectory = new File( USER_STYLE_DIR ) ;
       if( styleDirAsSubdirectory.exists() ) {
         try {
-          userStyleDir = styleDirAsSubdirectory.getCanonicalFile().toURL() ;
+          userStyleDir = styleDirAsSubdirectory.getCanonicalFile().toURI().toURL() ;
           LOGGER.info(
               "Styles directory set to '{}' " +
               "(found '" + USER_STYLE_DIR + "' directory under [user.dir] " +
@@ -104,7 +104,7 @@ public class ConfigurationTools {
       final File dir = new File( stylesDirNameBySystemProperty ) ;
       if( dir.exists() ) {
         try {
-          userStyleDir = dir.getCanonicalFile().toURL() ;
+          userStyleDir = dir.getCanonicalFile().toURI().toURL() ;
         } catch( IOException e ) {
           throw new RuntimeException( e ) ;
         }

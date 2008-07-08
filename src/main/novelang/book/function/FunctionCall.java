@@ -25,6 +25,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.base.Objects;
 
 /**
+ * Represents an instance of a {@link FunctionDefinition} inside a Book file,
+ * that does things with {@link Environment}, Book's {@code Treepath} and may generate
+ * problems.
+ *
  * @author Laurent Caillette
  */
 public abstract class FunctionCall {

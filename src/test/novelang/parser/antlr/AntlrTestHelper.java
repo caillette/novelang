@@ -30,6 +30,7 @@ import novelang.common.SyntacticTree;
  * @author Laurent Caillette
  */
 public class AntlrTestHelper {
+
   static final String BREAK = "\n" ;
 
   public static String createProblemList( Iterable<Problem> problems ) {

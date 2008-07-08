@@ -20,6 +20,8 @@ package novelang;
 import novelang.loader.ResourceName;
 
 /**
+ * The only place where constants referencing test-dedicated resources can be defined.
+ *
  * @author Laurent Caillette
  */
 public class TestResources {

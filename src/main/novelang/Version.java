@@ -34,7 +34,7 @@ public class Version {
   private static final String VERSION = "@SNAPSHOT@" ;
 
   public static boolean isSnapshot() {
-    // Don't use one-piece litteral because of scripted replacement.
+    // Don't use one-piece litteral because of replacement performed by build script.
     return ( "@" + "SNAPSHOT" + "@" ).equals( VERSION ) ;
   }
 

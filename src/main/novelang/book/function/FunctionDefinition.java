@@ -20,6 +20,8 @@ import novelang.common.Location;
 import novelang.common.SyntacticTree;
 
 /**
+ * Factory for {@link FunctionCall} objects.
+ * 
  * @author Laurent Caillette
  */
 public interface FunctionDefinition {

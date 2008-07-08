@@ -19,6 +19,10 @@ package novelang.produce;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import org.apache.commons.lang.StringUtils;
 import novelang.rendering.RenditionMimeType;
 
@@ -46,51 +50,51 @@ public class RequestTest {
   public void documentRequest() {
     final DocumentRequest request =
         RequestTools.createDocumentRequest( PDF_REQUEST_PATH ); ;
-    Assert.assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
-    Assert.assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
-    Assert.assertTrue( request.isRendered() ) ;
-    Assert.assertEquals( "pdf", request.getResourceExtension() ) ;
-    Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
+    assertTrue( request.isRendered() ) ;
+    assertEquals( "pdf", request.getResourceExtension() ) ;
+    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
 
-    Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
-    Assert.assertNull( request.getAlternateStylesheet() ) ;
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+    assertNull( request.getAlternateStylesheet() ) ;
   }
 
   @Test
   public void documentRequestWithStylesheet() {
     final DocumentRequest request =
         RequestTools.createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
-    Assert.assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
-    Assert.assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
-    Assert.assertTrue( request.isRendered() ) ;
-    Assert.assertEquals( "pdf", request.getResourceExtension() ) ;
-    Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
-    Assert.assertEquals( STYLESHEET_RESOURCENAME, request.getAlternateStylesheet().getName() ) ;
+    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
+    assertTrue( request.isRendered() ) ;
+    assertEquals( "pdf", request.getResourceExtension() ) ;
+    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( STYLESHEET_RESOURCENAME, request.getAlternateStylesheet().getName() ) ;
 
-    Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
 
   @Test
   public void polymorphicRequestForError() {
     final PolymorphicRequest request =
         RequestTools.createPolymorphicRequest( REQUEST_PATH_BROKEN ) ;
-    Assert.assertTrue( request.getDisplayProblems() ) ;
-    Assert.assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
-    Assert.assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
-    Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertTrue( request.getDisplayProblems() ) ;
+    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
+    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
 
-    Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
 
   @Test
   public void polymorphicRequestForRawResource() {
     final PolymorphicRequest request =
         RequestTools.createPolymorphicRequest( CSS_REQUEST_PATH ) ;
-    Assert.assertFalse( request.getDisplayProblems() ) ;
-    Assert.assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
-    Assert.assertNull( request.getRenditionMimeType() ) ;
-    Assert.assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertFalse( request.getDisplayProblems() ) ;
+    assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertNull( request.getRenditionMimeType() ) ;
+    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
 
-    Assert.assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
 }

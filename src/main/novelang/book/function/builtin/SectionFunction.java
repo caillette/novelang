@@ -35,6 +35,8 @@ import novelang.book.function.IllegalFunctionCallException;
 import static novelang.book.function.FunctionTools.verify;
 
 /**
+ * Creates a Section in a Book.
+ *
  * @author Laurent Caillette
  */
 public class SectionFunction implements FunctionDefinition {

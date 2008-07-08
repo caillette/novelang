@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableList;
  */
 public interface ClosedList< T > extends Iterable {
 
-  Iterator iterator() ;
+  Iterator< ? extends T > iterator() ;
 
   int size() ;
 
@@ -52,7 +52,7 @@ public interface ClosedList< T > extends Iterable {
 
       return new ClosedList< T >() {
 
-        public Iterator iterator() {
+        public Iterator< ? extends T > iterator() {
           return immutableList.iterator() ;
         }
 

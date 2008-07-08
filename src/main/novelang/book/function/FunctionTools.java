@@ -17,6 +17,8 @@
 package novelang.book.function;
 
 /**
+ * Utility class.
+ *
  * @author Laurent Caillette
  */
 public class FunctionTools {

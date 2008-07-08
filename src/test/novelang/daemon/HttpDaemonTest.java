@@ -158,6 +158,7 @@ public class HttpDaemonTest {
     assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
   }
 
+  
 // =======
 // Fixture
 // =======

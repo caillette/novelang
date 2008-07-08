@@ -53,11 +53,6 @@ public class UrlResourceLoader implements ResourceLoader {
   }
 
   public InputStream getInputStream( ResourceName resourceName ) throws ResourceNotFoundException {
-//    final String normalizedResourceName =
-//        resourceName.startsWith( "/" ) ?
-//        resourceName.substring( 1, resourceName.length() ) :
-//        resourceName
-//    ;
 
     final URL resourceUrl ;
     try {

@@ -22,11 +22,15 @@ import java.io.InputStream;
 import com.google.common.base.Objects;
 
 /**
+ * Utility class.
+ *
  * @author Laurent Caillette
  */
 public class ResourceLoaderTools {
 
-  private ResourceLoaderTools() { }
+  private ResourceLoaderTools() {
+    throw new Error() ;
+  }
 
   /**
    * Returns a {@code ResourceLoader} attempting to load from first {@code ResourceLoader}, then

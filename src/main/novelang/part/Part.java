@@ -64,7 +64,7 @@ public class Part extends AbstractSourceReader {
 
   public Part( final File partFile ) throws MalformedURLException {
     this(
-        partFile.toURL(), 
+        partFile.toURI().toURL(),
         Encoding.DEFAULT,
         "part[" + partFile.getName() + "]"
     ) ;

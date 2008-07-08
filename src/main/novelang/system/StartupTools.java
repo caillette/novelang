@@ -19,16 +19,19 @@ package novelang.system;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Helps logging system to initialize correctly. Call {@link #fixLogDirectory()} method before any
- * logging operation.
+ * Helps logging system to initialize correctly.
+ * <p>
+ * The {@link #fixLogDirectory()} method must be called before any logging operation in order
+ * to force definition of {@link #LOG_DIR_SYSTEMPROPERTYNAME} system property if it was not
+ * user-defined.
  *
  * @author Laurent Caillette
  */
 public class StartupTools {
 
   /**
-   * Set the {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property and use it
-   * in Logback configuration to log in another place than current directory.
+   * The {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property is required by Logback configuration
+   * file used for production deployment.
    */
   public static final String LOG_DIR_SYSTEMPROPERTYNAME = "novelang.log.dir" ;
   private static final String DEFAULT_LOG_DIR = ".";
@@ -38,11 +41,6 @@ public class StartupTools {
     final String logDir = System.getProperty( StartupTools.LOG_DIR_SYSTEMPROPERTYNAME ) ;
     if( StringUtils.isBlank( logDir ) ) {
       System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, DEFAULT_LOG_DIR ) ;
-//      System.out.println(
-//          "System property [" +
-//          StartupTools.LOG_DIR_SYSTEMPROPERTYNAME + "] not defined. " +
-//          "Log file (if any) will be created in current directory."
-//      ) ;
     } else {
       System.out.println( "System property [" +
           StartupTools.LOG_DIR_SYSTEMPROPERTYNAME + "] ='" +

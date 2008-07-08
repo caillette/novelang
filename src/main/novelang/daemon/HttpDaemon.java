@@ -28,7 +28,8 @@ import novelang.system.StartupTools;
 import novelang.system.EnvironmentTools;
 
 /**
- * 
+ * Main class for Novelang document generator daemon.
+ *
  * @author Laurent Caillette
  */
 public class HttpDaemon {

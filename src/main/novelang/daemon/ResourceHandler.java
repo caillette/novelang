@@ -36,6 +36,8 @@ import novelang.produce.RequestTools;
 import novelang.produce.PolymorphicRequest;
 
 /**
+ * Holds resources which don't require rendering.
+ *
  * @author Laurent Caillette
  */
 public class ResourceHandler extends AbstractHandler {

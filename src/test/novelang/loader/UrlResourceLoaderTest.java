@@ -38,7 +38,7 @@ public class UrlResourceLoaderTest {
 
   @Test
   public void absoluteOk() throws IOException {
-    final UrlResourceLoader loader = new UrlResourceLoader( loaderDirectory.toURL() ) ;
+    final UrlResourceLoader loader = new UrlResourceLoader( loaderDirectory.toURI().toURL() ) ;
     final InputStream inputStream = loader.getInputStream( RESOURCE_NAME ) ;
     final String resource = IOUtils.toString( inputStream ) ;
     Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
@@ -46,7 +46,7 @@ public class UrlResourceLoaderTest {
 
   @Test
   public void relativizedOk() throws IOException {
-    final UrlResourceLoader loader = new UrlResourceLoader( loaderDirectory.toURL() ) ;
+    final UrlResourceLoader loader = new UrlResourceLoader( loaderDirectory.toURI().toURL() ) ;
     final InputStream inputStream = loader.getInputStream( RESOURCE_NAME ) ;
     final String resource = IOUtils.toString( inputStream ) ;
     Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
@@ -55,7 +55,7 @@ public class UrlResourceLoaderTest {
 
   @Test( expected = ResourceNotFoundException.class )
   public void urlResourceLoaderNotFound() throws IOException {
-    new UrlResourceLoader( loaderDirectory.toURL() ).getInputStream(
+    new UrlResourceLoader( loaderDirectory.toURI().toURL() ).getInputStream(
         new ResourceName( "doesnot.exist" ) ) ;
   }
 
@@ -72,7 +72,7 @@ public class UrlResourceLoaderTest {
     final String testName = ClassUtils.getShortClassName( getClass() );
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
-    loaderDirectory = scratchDirectoryFixture.getLoaderDirectory();
+    loaderDirectory = scratchDirectoryFixture.getTestScratchDirectory();
     TestResourceTools.copyResourceToFile(
         getClass(),
         RESOURCE_NAME,

@@ -18,6 +18,9 @@
 package novelang.common;
 
 /**
+ * Captures the name of a holding file for creating {@link Location} objects with just
+ * a line and a column number. 
+ *
  * @author Laurent Caillette
  */
 public interface LocationFactory {

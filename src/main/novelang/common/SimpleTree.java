@@ -21,6 +21,8 @@ import novelang.common.tree.ImmutableTree;
 import com.google.common.collect.Lists;
 
 /**
+ * Specific immplementation of a {@link novelang.common.tree.Tree}.
+ * 
  * @author Laurent Caillette
  */
 public class SimpleTree extends ImmutableTree< SyntacticTree > implements SyntacticTree {

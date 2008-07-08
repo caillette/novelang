@@ -23,6 +23,8 @@ import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 
 /**
+ * Something to be turned into final document.
+ * 
  * @author Laurent Caillette
  */
 public interface Renderable {
