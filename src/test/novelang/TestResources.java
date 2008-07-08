@@ -41,13 +41,22 @@ public class TestResources {
   public static final ResourceName SHOWCASE = new ResourceName( "showcase/showcase.nlp" ) ;
 
   public static final String SERVED_DIRECTORY_NAME = "served" ;
-  public static final String SERVED_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/good";
-  public static final String SERVED_GOOD = SERVED_GOOD_NOEXTENSION + ".nlp" ;
-  public static final ResourceName SERVED_VOID_STYLESHEET =
+  public static final String SERVED_PART_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/good";
+  public static final String SERVED_PARTSOURCE_GOOD = SERVED_PART_GOOD_NOEXTENSION + ".nlp" ;
+
+  public static final ResourceName SERVED_VOIDSTYLESHEET =
       new ResourceName( SERVED_DIRECTORY_NAME + "void.xsl" ) ;
 
-  public static final String SERVED_BROKEN_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/broken" ;
-  public static final String SERVED_BROKEN = SERVED_BROKEN_NOEXTENSION + ".nlp" ;
+  public static final String SERVED_PART_BROKEN_NOEXTENSION =
+      "/" + SERVED_DIRECTORY_NAME + "/broken" ;
+
+  public static final String SERVED_PARTSOURCE_BROKEN = SERVED_PART_BROKEN_NOEXTENSION + ".nlp" ;
+
+  public static final String SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION =
+      "/" + SERVED_DIRECTORY_NAME + "/book-alternate" ;
+
+  public static final String SERVED_BOOK_ALTERNATESTYLESHEET =
+      SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION + ".nlb" ;
 
 
 }

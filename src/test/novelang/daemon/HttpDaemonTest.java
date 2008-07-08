@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.rendering.RenditionMimeType;
 import novelang.produce.RequestTools;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ContentConfiguration;
@@ -77,7 +78,7 @@ public class HttpDaemonTest {
   public void pdfOk() throws Exception {
     setUp( "pdfOk" ) ;
     final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_RESOURCE_NAME ) ) ;
+        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_DOCUMENT_NAME ) ) ;
     save( "generated.pdf", generated ) ;
     assertTrue( generated.length > 100 ) ;
   }
@@ -86,7 +87,7 @@ public class HttpDaemonTest {
   public void htmlOk() throws Exception {
     setUp( "htmlOk" ) ;
     final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_HTML_RESOURCE_NAME ) ) ;
+        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_HTML_DOCUMENT_NAME ) ) ;
     save( "generated.html", generated ) ;
     assertTrue( generated.length > 100 ) ;
   }
@@ -97,7 +98,7 @@ public class HttpDaemonTest {
     final HttpClient httpClient = new HttpClient() ;
     httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
     final String originalUrlAsString =
-        "http://localhost:" + HTTP_DAEMON_PORT + BROKEN_HTML_RESOURCE_NAME ;
+        "http://localhost:" + HTTP_DAEMON_PORT + BROKEN_HTML_DOCUMENT_NAME;
     HttpMethod method = new GetMethod( originalUrlAsString ) ;
     method.setFollowRedirects( true ) ;
     httpClient.executeMethod( method ) ;
@@ -108,7 +109,7 @@ public class HttpDaemonTest {
 
     assertTrue(
         "Expected link to requested page",
-        responseBody.contains( BROKEN_HTML_RESOURCE_NAME )
+        responseBody.contains( BROKEN_HTML_DOCUMENT_NAME )
     ) ;
 
     assertTrue(
@@ -123,7 +124,7 @@ public class HttpDaemonTest {
     final HttpClient httpClient = new HttpClient() ;
     httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
     final String originalUrlAsString = "http://localhost:" + HTTP_DAEMON_PORT +
-        GOOD_HTML_RESOURCE_NAME + RequestTools.ERRORPAGE_SUFFIX ;
+        GOOD_HTML_DOCUMENT_NAME + RequestTools.ERRORPAGE_SUFFIX ;
     HttpMethod method = new GetMethod( originalUrlAsString ) ;
     method.setFollowRedirects( true ) ;
     httpClient.executeMethod( method ) ;
@@ -136,10 +137,21 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInQueryParameter() throws Exception {
-    setUp( "alternateStylesheet", TestResources.SERVED_DIRECTORY_NAME ) ;
+    setUp( "alternateStylesheetInQuery", SERVED_DIRECTORYNAME ) ;
+    final byte[] generated = readAsBytes( new URL(
+        "http://localhost:" + HTTP_DAEMON_PORT + BOOK_ALTERNATESTYLESHEET_DOCUMENT_NAME
+    ) ) ;
+
+    save( "generated.html", generated ) ;
+    assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
+  }
+
+  @Test
+  public void testAlternateStylesheetInBook() throws Exception {
+    setUp( "alternateStylesheetInBook", SERVED_DIRECTORYNAME ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT +
-        GOOD_HTML_RESOURCE_NAME + ALTERNATE_STYLESHEET_QUERY
+            GOOD_HTML_DOCUMENT_NAME + ALTERNATE_STYLESHEET_QUERY
     ) ) ;
 
     save( "generated.html", generated ) ;
@@ -201,21 +213,30 @@ public class HttpDaemonTest {
 
   private static final int HTTP_DAEMON_PORT = 8081 ;
 
-  private static final String GOOD_NLP_RESOURCE_NAME = TestResources.SERVED_GOOD ;
-  private static final String BROKEN_NLP_RESOURCE_NAME = TestResources.SERVED_BROKEN ;
+  private static final String SERVED_DIRECTORYNAME = TestResources.SERVED_DIRECTORY_NAME ;
 
-  private static final String GOOD_PDF_RESOURCE_NAME =
-      TestResources.SERVED_GOOD_NOEXTENSION + ".pdf" ;
+  private static final String GOOD_NLP_RESOURCE_NAME = TestResources.SERVED_PARTSOURCE_GOOD;
+  private static final String BROKEN_NLP_RESOURCE_NAME = TestResources.SERVED_PARTSOURCE_BROKEN;
+  private static final String ALTERNATEBOOK_NLB_RESOURCE_NAME =
+      TestResources.SERVED_BOOK_ALTERNATESTYLESHEET ;
 
-  private static final String GOOD_HTML_RESOURCE_NAME =
-      TestResources.SERVED_GOOD_NOEXTENSION + ".html" ;
+  private static final String PDF = "." + RenditionMimeType.PDF.getFileExtension() ;
+  private static final String HTML = "." + RenditionMimeType.HTML.getFileExtension() ;
 
-  private static final String BROKEN_HTML_RESOURCE_NAME =
-      TestResources.SERVED_BROKEN_NOEXTENSION + ".html" ;
+  private static final String GOOD_PDF_DOCUMENT_NAME =
+      TestResources.SERVED_PART_GOOD_NOEXTENSION + PDF;
+
+  private static final String GOOD_HTML_DOCUMENT_NAME =
+      TestResources.SERVED_PART_GOOD_NOEXTENSION + HTML ;
+
+  private static final String BROKEN_HTML_DOCUMENT_NAME =
+      TestResources.SERVED_PART_BROKEN_NOEXTENSION + HTML ;
 
   private static final String BROKEN_PATH_AFTER_REDIRECTION =
-      BROKEN_HTML_RESOURCE_NAME + RequestTools.ERRORPAGE_SUFFIX ;
+      BROKEN_HTML_DOCUMENT_NAME + RequestTools.ERRORPAGE_SUFFIX ;
 
+  private static final String BOOK_ALTERNATESTYLESHEET_DOCUMENT_NAME =
+      TestResources.SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION + HTML ;
 
   private HttpDaemon httpDaemon ;
   private File contentDirectory;
@@ -247,6 +268,9 @@ public class HttpDaemonTest {
 
     TestResourceTools.copyResourceToFile(
         getClass(), BROKEN_NLP_RESOURCE_NAME, contentDirectory ) ;
+
+    TestResourceTools.copyResourceToFile(
+        getClass(), ALTERNATEBOOK_NLB_RESOURCE_NAME, contentDirectory ) ;
 
     httpDaemon = new HttpDaemon(
         HTTP_DAEMON_PORT,
