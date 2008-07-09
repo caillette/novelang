@@ -53,6 +53,7 @@
       <include name="**/*.xml" />
       <include name="**/*.xsl" />
       <include name="**/*.pen" />
+      <include name="**/*.ent" />
       <include name="**/*.png" />
       <include name="**/*.jpeg" />
       <include name="**/*.jpg" />

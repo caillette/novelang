@@ -38,7 +38,8 @@ public class HtmlWriter extends XslWriter {
     super(
         configuration,
         null == stylesheet ? DEFAULT_HTML_STYLESHEET : stylesheet,
-        RenditionMimeType.HTML
+        RenditionMimeType.HTML,
+        ESCAPE_ISO_ENTITIES
     ) ;
   }
 
@@ -68,4 +69,13 @@ public class HtmlWriter extends XslWriter {
   ) throws Exception {
     return new HtmlSink( outputStream ) ; 
   }
+
+  private static final EntityEscapeSelector ESCAPE_ISO_ENTITIES = new EntityEscapeSelector() {
+    public boolean shouldEscape( String publicId, String systemId ) {
+      return publicId.startsWith( "ISO 8879:1986" ) ;
+//          "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
+//          "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+//          "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
+    }
+  };
 }

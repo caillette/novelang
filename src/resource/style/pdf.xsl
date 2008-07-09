@@ -6,6 +6,7 @@
       "ISOnum.pen"
   >
   %ISOnum;
+    
   <!ENTITY % ISOpub PUBLIC
       "ISO 8879:1986//ENTITIES Publishing//EN//XML"
       "ISOpub.pen"
@@ -323,11 +324,14 @@
   <xsl:template match="n:locutor" />
 
 
-  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
-
   <xsl:template match="n:emphasis" >
     <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>
   </xsl:template>
+
+  <xsl:import href="general-punctuation.xsl" />
+<!--
+
+  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
 
   <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
@@ -348,6 +352,6 @@
   <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>
   <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
-
+-->
 </xsl:stylesheet>
 

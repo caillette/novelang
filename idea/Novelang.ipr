@@ -43,6 +43,7 @@
       <entry name="*.nlp" />
       <entry name="*.nlb" />
       <entry name="*.pen" />
+      <entry name="*.ent" />
       <entry name="*.xsl" />
       <entry name="*.txt" />
     </wildcardResourcePatterns>

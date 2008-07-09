@@ -34,7 +34,7 @@ public class MyTree extends ImmutableTree< MyTree > {
     return payload;
   }
 
-  public MyTree adopt( MyTree[] newChildren ) {
+  public MyTree adopt( MyTree... newChildren ) {
     return new MyTree( payload, newChildren ) ;
   }
 

@@ -1,19 +1,26 @@
 <?xml version="1.0"?>
 <!DOCTYPE foo
 [
-  <!-- Tweaked entities: we want them to appear verbatim in resulting document. -->
-  <!-- See HtmlSink class. -->
 
-  <!ENTITY mdash  "&amp;mdash;" >
-  <!ENTITY ndash  "&amp;ndash;" >
-  <!ENTITY hellip "&amp;hellip;" >
-  <!ENTITY raquo  "&amp;raquo;" >
-  <!ENTITY ldquo  "&amp;ldquo;" >
-  <!ENTITY rdquo  "&amp;rdquo;" >
-  <!ENTITY rsquo  "&amp;rsquo;" >
-  <!ENTITY nbsp   "&amp;nbsp;" >
-]
->
+    <!ENTITY % ISOnum PUBLIC
+        "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
+        "ISOnum.pen"
+    >
+    %ISOnum;
+
+    <!ENTITY % ISOpub PUBLIC
+        "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+        "ISOpub.pen"
+    >
+    %ISOpub;
+
+    <!ENTITY % ISOlat1 PUBLIC
+        "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
+        "ISOlat1.pen"
+    >
+    %ISOlat1;
+
+]>
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -186,12 +193,14 @@ blockquote > p {
 
   <xsl:template match="n:locutor" />
 
-  
-  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
-
   <xsl:template match="n:emphasis" >
     <i><xsl:apply-templates/></i>
   </xsl:template>
+
+  <xsl:import href="general-punctuation.xsl" />
+<!--
+
+  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
 
   <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
@@ -212,7 +221,6 @@ blockquote > p {
   <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>
   <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
+-->
 
-
-  
 </xsl:stylesheet>
