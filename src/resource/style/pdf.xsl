@@ -96,7 +96,7 @@
         <fo:simple-page-master
             master-name="chapter-rest-odd"
             margin-top="0mm"     margin-bottom="7mm"
-            margin-left="60mm"   margin-right="30mm"
+            margin-left="30mm"   margin-right="20mm"
         >
           <fo:region-body margin-top="20mm" margin-bottom="15mm" />
           <fo:region-before extent="2mm" />
@@ -109,7 +109,7 @@
         <fo:simple-page-master
             master-name="chapter-rest-even"
             margin-top="0mm"     margin-bottom="7mm"
-            margin-left="30mm"   margin-right="60mm"
+            margin-left="20mm"   margin-right="30mm"
         >
           <fo:region-body margin-top="20mm" margin-bottom="15mm" />
           <fo:region-before extent="2mm" />
@@ -160,23 +160,20 @@
 
 
   <xsl:template name="title-page" >
-    
+    This is the title page.
   </xsl:template>
 
 
   <xsl:template match="n:chapter" >
-    <xsl:choose>
-      <xsl:when test="n:style[text()='standalone']" >
-        <xsl:call-template name="standalone" />
-      </xsl:when>
-      <xsl:when test="n:style[text()='all-emphasized']" >
-        <xsl:call-template name="all-emphasized" />
-      </xsl:when>
-      <xsl:otherwise>
-        <!--<xsl:call-template name="standard" />-->
-        <xsl:call-template name="standalone" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <fo:block
+        break-after="odd-page"
+        padding-top="60pt"
+        font-size="12pt"
+        font-family="serif"
+        line-height="18pt"
+    >
+      <xsl:apply-templates />
+    </fo:block>
   </xsl:template>
 
   <xsl:template match="n:chapter/n:title | n:chapter/n:identifier" >
@@ -207,35 +204,6 @@
     </fo:inline>
   </xsl:template>
 
-  <xsl:template name="standard" >
-    <fo:block padding-top="40pt" >
-      <xsl:apply-templates />
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template name="standalone" >
-    <fo:block
-        break-after="odd-page"
-        padding-top="230pt"
-        font-size="12pt"
-        font-family="serif"
-        line-height="18pt"
-    >
-      <xsl:apply-templates select="*[name() != 'n:title' and name() != 'n:identifier']" />
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template name="all-emphasized" >
-    <fo:block
-        break-before="page"
-        padding-top="230pt"
-        text-align="left"
-        font-style="italic"
-    >
-      <xsl:apply-templates/>
-    </fo:block>
-  </xsl:template>
-
   <xsl:template match="n:blockquote" >
     <fo:block
         text-align="left"
@@ -248,7 +216,24 @@
         font-family="sans-serif"
         line-height="13pt"
         font-stretch="semi-condensed"
-    > 
+    >
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="n:litteral" >
+    <fo:block
+        text-align="left"
+        text-indent="0em"
+        margin-left="0pt"
+        margin-right="0pt"
+        padding-before="6pt"
+        padding-after="8pt"
+        font-size="10pt"
+        font-family="monospace"
+        line-height="13pt"
+        font-stretch="semi-condensed"
+    >
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -328,30 +313,7 @@
     <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>
   </xsl:template>
 
-  <xsl:import href="general-punctuation.xsl" />
-<!--
+  <xsl:import href="punctuation-US-EN.xsl" />
 
-  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
-
-  <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
-
-  <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
-
-  <xsl:template match="n:interpolatedclause" >&ndash;&nbsp;<xsl:apply-templates/>&nbsp;&ndash;</xsl:template>
-
-  <xsl:template match="n:interpolatedclause-silentend" >&ndash;&nbsp;<xsl:apply-templates/></xsl:template>
-
-  <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
-
-  <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
-
-  <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
-  <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>
-  <xsl:template match="n:sign-comma" >,</xsl:template>
-  <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
-  <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
-  <xsl:template match="n:sign-fullstop" >.</xsl:template>
-  <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
--->
 </xsl:stylesheet>
 

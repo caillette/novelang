@@ -42,12 +42,7 @@
 
   <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
 
-  <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
-  <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>
   <xsl:template match="n:sign-comma" >,</xsl:template>
-  <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
-  <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>
-  <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
 
 </xsl:stylesheet>

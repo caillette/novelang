@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE foo
-[
+<!DOCTYPE foo [
 
     <!ENTITY % ISOnum PUBLIC
         "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
@@ -42,7 +41,6 @@
         </xsl:element>
 
         <meta name="Generator" content="Novelang" />
-        <meta name= "Copyright" content="Laurent Caillette 2008" />
 
         <title>Standard HTML skin</title>
 
@@ -197,30 +195,6 @@ blockquote > p {
     <i><xsl:apply-templates/></i>
   </xsl:template>
 
-  <xsl:import href="general-punctuation.xsl" />
-<!--
-
-  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
-
-  <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
-
-  <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
-
-  <xsl:template match="n:interpolatedclause" >&ndash;&nbsp;<xsl:apply-templates/>&nbsp;&ndash;</xsl:template>
-
-  <xsl:template match="n:interpolatedclause-silentend" >&ndash;&nbsp;<xsl:apply-templates/></xsl:template>
-
-  <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
-
-  <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
-
-  <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
-  <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>
-  <xsl:template match="n:sign-comma" >,</xsl:template>
-  <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
-  <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
-  <xsl:template match="n:sign-fullstop" >.</xsl:template>
-  <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
--->
+  <xsl:import href="punctuation-US-EN.xsl" />
 
 </xsl:stylesheet>

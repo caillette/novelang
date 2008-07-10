@@ -28,6 +28,7 @@ import org.apache.fop.apps.MimeConstants;
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.TreeMetadata;
+import novelang.common.Nodepath;
 import novelang.loader.ResourceName;
 
 /**
@@ -67,5 +68,7 @@ public class PdfWriter extends XslWriter {
 
   }
 
-
+//  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
+//    super.write( kinship, word );
+//  }
 }

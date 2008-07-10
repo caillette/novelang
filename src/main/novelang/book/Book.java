@@ -50,14 +50,19 @@ public class Book extends AbstractSourceReader {
 
   public Book( FunctionRegistry functionRegistry, File baseDirectory, String content ) {
     final SyntacticTree rawTree = parse( new DefaultBookParserFactory(), content ) ;
-    Iterable< FunctionCall > functionCalls = createFunctionCalls( functionRegistry, rawTree ) ;
-    final Results results = callFunctions(
-        functionCalls,
-        new Environment( baseDirectory ),
-        new SimpleTree( NodeKind.BOOK.name() )
-    ) ;
-    this.environment = results.environment ;
-    this.documentTree = results.book ;
+    if( null == rawTree ) {
+      this.environment = new Environment( baseDirectory ) ;
+      this.documentTree = null ;
+    } else {
+      Iterable< FunctionCall > functionCalls = createFunctionCalls( functionRegistry, rawTree ) ;
+      final Results results = callFunctions(
+          functionCalls,
+          new Environment( baseDirectory ),
+          new SimpleTree( NodeKind.BOOK.name() )
+      ) ;
+      this.environment = results.environment ;
+      this.documentTree = results.book ;
+    }
 
   }
 

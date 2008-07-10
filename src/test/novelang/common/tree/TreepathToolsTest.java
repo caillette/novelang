@@ -64,8 +64,8 @@ public class TreepathToolsTest {
     final MyTree child1 = MyTree.create( "child1" ) ;
 
     final Treepath< MyTree > treepath = TreepathTools.addSiblingLast(  //   parent
-        Treepath.< MyTree >create( parent, 0 ),                    //   |     \
-        child1// ^ IntelliJ IDEA 7.0.3 requires this.              // child0  child1
+        Treepath.< MyTree >create( parent, 0 ),                        //   |     \
+        child1// ^ IntelliJ IDEA 7.0.3 requires this.                  // child0  child1
     ) ;
 
     Assert.assertEquals( "parent", treepath.getStart().getPayload() ) ;
@@ -115,10 +115,10 @@ public class TreepathToolsTest {
     final Treepath< MyTree > original = Treepath.< MyTree >create( parent, 1 ) ;
                                               // ^ IntelliJ IDEA 7.0.3 requires this.
 
-                                                                  //   parent
-                                                                  //   |   \
-                                                                  // child  moving
-    final Treepath< MyTree > moved =                              //   |
+                                                                      //   parent
+                                                                      //   |   \
+                                                                      // child  moving
+    final Treepath< MyTree > moved =                                  //   |
         TreepathTools.becomeLastChildOfPreviousSibling( original ) ;  // moving
 
     Assert.assertEquals( 3, moved.getLength() ) ;
