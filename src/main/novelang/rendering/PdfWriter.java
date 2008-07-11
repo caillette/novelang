@@ -19,6 +19,8 @@ package novelang.rendering;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
@@ -26,6 +28,8 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.xml.sax.ContentHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.TreeMetadata;
 import novelang.common.Nodepath;
@@ -35,6 +39,8 @@ import novelang.loader.ResourceName;
  * @author Laurent Caillette
  */
 public class PdfWriter extends XslWriter {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( PdfWriter.class ) ;
 
   protected static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ; 
 
@@ -68,7 +74,18 @@ public class PdfWriter extends XslWriter {
 
   }
 
-//  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
-//    super.write( kinship, word );
-//  }
+  private static final Pattern FIND_SPACE = Pattern.compile( "(\\ )" ) ;
+  private static final String REPLACE_SPACE = "&nbsp;" ;
+
+  private static final Pattern FIND_AMPERSAND = Pattern.compile( "(\\&)" ) ;
+  private static final String REPLACE_AMPERSAND = "&amp;" ;
+
+  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
+    LOGGER.debug( "{} word: '{}'", kinship, word ) ;
+//    final String ampersandsReplaced = FIND_AMPERSAND.matcher(
+//            FIND_SPACE.matcher( word ).replaceAll( REPLACE_SPACE )
+//        ).replaceAll( REPLACE_AMPERSAND )
+//    ;
+    super.write( kinship, word ) ;
+  }
 }

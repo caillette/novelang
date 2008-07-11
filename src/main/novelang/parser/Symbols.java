@@ -66,6 +66,7 @@ public class Symbols {
 
     symbols.put( "oelig", "\u0153" ) ;
     htmlEscaped.add( "oelig" ) ;
+
     symbols.put( "OElig", "\u0152" ) ;
     htmlEscaped.add( "OElig" ) ;
 

@@ -233,6 +233,9 @@
         font-family="monospace"
         line-height="13pt"
         font-stretch="semi-condensed"
+        white-space-treatment="preserve"
+        white-space-collapse="false"
+        linefeed-treatment="preserve"
     >
       <xsl:apply-templates/>
     </fo:block>

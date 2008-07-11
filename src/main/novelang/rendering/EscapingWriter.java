@@ -23,6 +23,8 @@ import novelang.parser.Symbols;
 import novelang.loader.ResourceName;
 
 /**
+ * An {@code XslWriter} escaping characters known as {@link Symbols}. 
+ *
  * @author Laurent Caillette
  */
 public class EscapingWriter extends XslWriter {

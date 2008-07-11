@@ -11,6 +11,8 @@
       <sourceFolder url="file://$MODULE_DIR$/../src/resource" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../src/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../.git" />
+      <excludeFolder url="file://$MODULE_DIR$/../antlrworks" />
+      <excludeFolder url="file://$MODULE_DIR$/../distrib" />
       <excludeFolder url="file://$MODULE_DIR$/javadoc" />
       <excludeFolder url="file://$MODULE_DIR$/test-files" />
       <excludeFolder url="file://$MODULE_DIR$/../lib" />
