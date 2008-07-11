@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project basedir="." name="Novelang build file" default="clean-compile-runtests" >
+<project basedir="." name="Novelang build file" default="generate-antlr-idea" >
 
   <description>
     Build system for Novelang.
@@ -121,6 +121,11 @@
 
   </target>
 
+  <target name="generate-antlr-idea" description="Generate ANTLR parser in IDEA's subdir" >
+    <antcall target="generate-antlr" >
+      <param name="target.antlr.generated.dir" value="idea/generated/antlr" />
+    </antcall>
+  </target>
 
 
 

@@ -159,20 +159,25 @@ section
     
 paragraph
 scope ParagraphScope ;
-  : 
-    ( ( blockIdentifier mediumBreak)? speechOpener 
-      ( smallBreak locutor )? smallBreak? paragraphBody )
-    -> ^( PARAGRAPH_SPEECH blockIdentifier? locutor? paragraphBody )
-  | ( ( blockIdentifier mediumBreak)? 
-      speechEscape WHITESPACE? paragraphBody )
-    -> ^( PARAGRAPH_SPEECH_ESCAPED blockIdentifier? paragraphBody ) 
-  | ( ( blockIdentifier mediumBreak)? 
-      speechContinuator WHITESPACE? paragraphBody )
+  : ( ( blockIdentifier mediumBreak )? 
+       speechOpener smallBreak? paragraphBody  
+    ) => ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody
+    -> ^( PARAGRAPH_SPEECH blockIdentifier? paragraphBody )
+  |  
+    ( ( blockIdentifier mediumBreak )? 
+       speechEscape smallBreak? paragraphBody  
+    ) => ( blockIdentifier mediumBreak )? speechEscape smallBreak? paragraphBody
+    -> ^( PARAGRAPH_SPEECH_ESCAPED blockIdentifier? paragraphBody )
+  | 
+    ( ( blockIdentifier mediumBreak )? 
+       speechContinuator smallBreak? paragraphBody  
+    ) => ( blockIdentifier mediumBreak )? speechContinuator smallBreak? paragraphBody
     -> ^( PARAGRAPH_SPEECH_CONTINUED blockIdentifier? paragraphBody )
-  | ( ( blockIdentifier mediumBreak)? 
-      paragraphBody )
+  | 
+    ( ( blockIdentifier mediumBreak)? paragraphBody )
     -> ^( PARAGRAPH_PLAIN blockIdentifier? paragraphBody )
-  | ( httpUrl ) => ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } ) )
+  |  
+    ( httpUrl ) => ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } ) )
   ;
 
 blockQuote
@@ -462,7 +467,7 @@ headerIdentifier
   ;
   
 blockIdentifier
-  :	REVERSE_SOLIDUS w = word
+  :	REVERSE_SOLIDUS w = word 
 	  -> ^( IDENTIFIER { delegate.createTree( IDENTIFIER, $w.text ) } )
   ;
   
@@ -659,6 +664,13 @@ mediumBreak
   : ( WHITESPACE
       | ( WHITESPACE? SOFTBREAK WHITESPACE? )
     ) // Parenthesis needed to make the rewrite rule apply for the whole.
+    ->
+  ;
+
+/** Use inside a paragraph, when lines are together with no blank line in the middle.
+ */
+lineBreak
+  : ( WHITESPACE? SOFTBREAK WHITESPACE? ) // Parenthesis needed to make the rewrite rule apply for the whole.
     ->
   ;
 

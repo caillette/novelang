@@ -191,7 +191,7 @@ public final class EnvironmentTools {
   }
 
   public static void logSystemProperties() {
-    LOGGER.debug( getEnvironmentInformation() ) ;
+    LOGGER.info( getEnvironmentInformation() ) ;
   }
 
 

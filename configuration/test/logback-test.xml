@@ -26,7 +26,7 @@
   </logger>
 
   <logger name="novelang.system.EnvironmentTools" >
-    <level value="INFO" />
+    <level value="WARN" />
   </logger>
 
   <root>

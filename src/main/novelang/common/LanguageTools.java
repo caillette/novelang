@@ -41,4 +41,23 @@ public class LanguageTools {
     }
     return null ;
   }
+
+  /**
+   * Rethrows a {@code Throwable} as it is if an instance of {@code Error} or
+   * {@code RuntimeException}, or wrapped in {@code RuntimeException} otherwise.
+   * This method avoids unnecessary wrapping.
+   * 
+   * @param throwable a non-null object.
+   * @throws RuntimeException
+   * @throws Error
+   */
+  public static void rethrowUnchecked( Throwable throwable ) {
+    if( throwable instanceof Error ) {
+      throw ( Error ) throwable ;
+    }
+    if( throwable instanceof RuntimeException ) {
+      throw ( RuntimeException ) throwable ;
+    }
+    throw new RuntimeException( throwable ) ;
+  }
 }

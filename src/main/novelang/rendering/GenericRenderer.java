@@ -27,6 +27,7 @@ import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
+import novelang.common.LanguageTools;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific
@@ -67,7 +68,7 @@ public class GenericRenderer implements Renderer {
         renderTree( root, null, null ) ;
         fragmentWriter.finishWriting() ;
       } catch( Exception e ) {
-        throw new RuntimeException( e );
+        LanguageTools.rethrowUnchecked( e ) ;
       }
     }
   }

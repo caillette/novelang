@@ -47,7 +47,17 @@ public class DtdTools {
   public static InputSource escapeEntities( InputSource unescapedInputSource )
       throws IOException
   {
-    final String unescapedDtd = IOUtils.toString( unescapedInputSource.getByteStream() ) ;
+    final String unescapedDtd ;
+    if( null == unescapedInputSource.getCharacterStream() ) {
+      if( null == unescapedInputSource.getByteStream() ) {
+        throw new IllegalArgumentException( "unescapedInputSource provides no valid stream" ) ;
+      } else {
+        unescapedDtd = IOUtils.toString( unescapedInputSource.getByteStream() ) ;
+      }
+    } else {
+      unescapedDtd = IOUtils.toString( unescapedInputSource.getCharacterStream() ) ;
+    }
+
     final Matcher matcher = PATTERN.matcher( unescapedDtd ) ;
     
     final String escapedDtd = matcher.replaceAll( REPLACEMENT ) ;

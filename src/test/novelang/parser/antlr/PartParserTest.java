@@ -192,16 +192,7 @@ public class PartParserTest {
     ) ;
   }
 
-  @Test
-  public void paragraphIsSpeechWithLocutor() throws RecognitionException {
-    paragraph( "--- w0 w1 :: w2", tree(
-        PARAGRAPH_SPEECH,
-        tree( LOCUTOR, tree( WORD, "w0" ), tree( WORD, "w1" ) ),
-        tree( WORD, "w2" )
-    ) ) ;
-  }
-
-
+  
   // Following tests are for paragraphBody rule. But we need to rely on a rule
   // returning a sole tree as test primitives don't assert on more than one.
   // In addition, the ParagraphScope is declared in paragraph rule so we must get through it.

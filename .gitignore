@@ -2,4 +2,6 @@
 test-files
 target
 batch-generated
+antlrworks
+distrib
 *.log

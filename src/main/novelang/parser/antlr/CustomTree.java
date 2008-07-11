@@ -61,7 +61,7 @@ public class CustomTree
     return false ;
   }
 
-  public Iterable<SyntacticTree> getChildren() {
+  public Iterable< SyntacticTree > getChildren() {
     return new Iterable<SyntacticTree>() {
 
       public Iterator<SyntacticTree> iterator() {
