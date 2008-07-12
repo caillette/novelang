@@ -54,6 +54,36 @@ public class TreeTools {
   }
 
   /**
+   * Returns a copy of a {@code Tree} with the {@code newChild} added as first child.
+   *
+   * @param tree a non-null object that may implement {@link StorageTypeProvider}.
+   * @param newChild a non-null object.
+   * @param position a value between [0, {@link Tree#getChildCount()}[.
+   * @return a non-null object.
+   */
+  public static < T extends Tree > T add( T tree, T newChild, int position ) {
+    if( null == newChild ) {
+      throw new NullArgumentException( "newChild" ) ;
+    }
+    if( position < 0 || position > tree.getChildCount()  ) {
+      throw new IllegalArgumentException(
+          "Invalid position:" + position + " as childcount=" + tree.getChildCount() ) ;
+    }
+    final T[] newArray = createArray( tree, newChild, tree.getChildCount() + 1 ) ;
+
+    int oldArrayIndex = 0 ;
+    for( int newArrayIndex = 0 ; newArrayIndex <= tree.getChildCount() ; newArrayIndex ++ ) {
+      if( position == newArrayIndex  ) {
+        newArray[ newArrayIndex ] = newChild ;
+      } else {
+        newArray[ newArrayIndex ] = ( T ) tree.getChildAt( oldArrayIndex ) ;
+        oldArrayIndex++ ;
+      }
+    }
+    return ( T ) tree.adopt( newArray ) ;
+  }
+
+  /**
    * Returns a copy of a {@code Tree} with the {@code newChild} added as last child.
    *
    * @param tree a non-null object that may implement {@link StorageTypeProvider}.

@@ -191,6 +191,34 @@ public class TreepathTools {
   }
 
   /**
+   * Adds a child at given position on the end of given {@link Treepath}.
+   * <pre>
+   *     *t0             *t0'
+   *      |               |
+   *    *t1    -->      *t1'
+   *    /  \           /  | \
+   *  t2   t3       t2 *new  t3
+   * </pre>
+   *
+   * @param treepath non-null object.
+   * @param tree non-null object.
+   * @param position position of added {@code tree}.
+   * @return non-null {@code Treepath} referencing updated trees.
+   *
+   */
+  public static < T extends Tree > Treepath< T > addChildAt(
+      Treepath< T > treepath,
+      T tree,
+      int position
+  ) {
+    if( treepath.getLength() < 1 ) {
+      throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
+    }
+    final T newParent = TreeTools.add( treepath.getTreeAtEnd(), tree, position ) ;
+    return Treepath.create( replaceEnd( treepath, newParent ), position ) ;
+  }
+
+  /**
    * Adds a last child to the end of given {@link Treepath}.
    * <pre>
    * *t0            *t0'

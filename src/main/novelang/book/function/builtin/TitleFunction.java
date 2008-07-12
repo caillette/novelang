@@ -28,6 +28,7 @@ import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;
+import novelang.common.NodeKind;
 import novelang.common.tree.TreeTools;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
@@ -71,14 +72,21 @@ public class TitleFunction implements FunctionDefinition {
         paragraph.getChildren()
     ) ;
 
-    final SyntacticTree sectionTree = TreeTools.addLast(
-        new SimpleTree( TITLE.name() ),
-        titleTree
-    ) ;
-
     return new FunctionCall( location ) {
-      public Result evaluate( Environment environment, Treepath<SyntacticTree> book ) {
-        final Treepath< SyntacticTree > newBook = TreepathTools.addChildFirst( book, sectionTree ) ;
+      public Result evaluate( Environment environment, Treepath< SyntacticTree > book ) {
+        final SyntacticTree bookTree = book.getTreeAtStart() ;
+        int first = -1 ;
+        for( int i = bookTree.getChildCount() - 1 ; i >= 0 ; i-- ) {
+          if( NodeKind.TITLE.isRoot( bookTree.getChildAt( i  ) ) ) {
+            first = i ;
+          }
+        }
+        final Treepath< SyntacticTree > newBook ;
+        if( -1 == first ) {
+          newBook = TreepathTools.addChildFirst( book.getStart(), titleTree ) ;
+        } else {
+          newBook = TreepathTools.addChildAt( book.getStart(), titleTree, first + 1 ) ;
+        }
         return new Result( environment, newBook, null ) ;
       }
     } ;

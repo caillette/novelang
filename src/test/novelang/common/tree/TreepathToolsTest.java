@@ -68,14 +68,14 @@ public class TreepathToolsTest {
         child1// ^ IntelliJ IDEA 7.0.3 requires this.                  // child0  child1
     ) ;
 
-    Assert.assertEquals( "parent", treepath.getStart().getPayload() ) ;
-    Assert.assertEquals( 2, treepath.getStart().getChildCount() ) ;
+    Assert.assertEquals( "parent", treepath.getTreeAtStart().getPayload() ) ;
+    Assert.assertEquals( 2, treepath.getTreeAtStart().getChildCount() ) ;
 
-    Assert.assertEquals( "child0", treepath.getStart().getChildAt( 0 ).getPayload() ) ;
-    Assert.assertEquals( 0, treepath.getStart().getChildAt( 0 ).getChildCount() ) ;
+    Assert.assertEquals( "child0", treepath.getTreeAtStart().getChildAt( 0 ).getPayload() ) ;
+    Assert.assertEquals( 0, treepath.getTreeAtStart().getChildAt( 0 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child1", treepath.getStart().getChildAt( 1 ).getPayload() ) ;
-    Assert.assertEquals( 0, treepath.getStart().getChildAt( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "child1", treepath.getTreeAtStart().getChildAt( 1 ).getPayload() ) ;
+    Assert.assertEquals( 0, treepath.getTreeAtStart().getChildAt( 1 ).getChildCount() ) ;
 
   }
 

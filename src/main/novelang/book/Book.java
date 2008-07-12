@@ -121,7 +121,7 @@ public class Book extends AbstractSourceReader {
         book = newBook ;
       }
     }
-    return new Results( environment, book.getStart() ) ;
+    return new Results( environment, book.getTreeAtStart() ) ;
   }
 
   private static class Results {

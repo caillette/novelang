@@ -26,12 +26,13 @@
   %Fo;
 
 
-  <!ENTITY legal "(c) your name here!">
+  <!ENTITY legal "Created with Novelang!">
 
 ] >
 
 <xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+    version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
@@ -39,93 +40,26 @@
   <xsl:param name="filename"/>
 
   <xsl:template match="/" >
-    <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" >
+    <fo:root>
 
       <fo:layout-master-set>
 
-        <!-- master set for chapter pages, first page is the title page -->
-        <fo:page-sequence-master master-name="chapter-master">
-
-          <fo:repeatable-page-master-alternatives>
-
-            <fo:conditional-page-master-reference
-                blank-or-not-blank="blank"
-                master-reference="blank-page"
-            />
-
-            <fo:conditional-page-master-reference
-                page-position="first"
-                odd-or-even="odd"
-                master-reference="title-first"
-            />
-
-            <fo:conditional-page-master-reference
-                page-position="rest"
-                odd-or-even="odd"
-                master-reference="chapter-rest-odd"
-            />
-            <fo:conditional-page-master-reference
-                page-position="rest"
-                odd-or-even="even"
-                master-reference="chapter-rest-even"
-            />
-          </fo:repeatable-page-master-alternatives>
-        </fo:page-sequence-master>
-
-
-        <!-- simple page masters -->
-
         <fo:simple-page-master
-            master-name="title-first"
+            master-name="A4"
             page-width="210mm"   page-height="297mm"
             margin-top="0mm"     margin-bottom="7mm"
-            margin-right="45mm"  margin-left="45mm"
+            margin-right="25mm"  margin-left="25mm"
         >
-          <fo:region-body/>
-        </fo:simple-page-master>
-
-        <fo:simple-page-master
-            master-name="blank-page"
-            page-width="210mm"   page-height="297mm"
-            margin-top="0mm"     margin-bottom="7mm"
-            margin-right="45mm"  margin-left="45mm"
-        >
-          <fo:region-body/>
-        </fo:simple-page-master>
-
-        <fo:simple-page-master
-            master-name="chapter-rest-odd"
-            margin-top="0mm"     margin-bottom="7mm"
-            margin-left="30mm"   margin-right="20mm"
-        >
-          <fo:region-body margin-top="20mm" margin-bottom="15mm" />
-          <fo:region-before extent="2mm" />
-          <fo:region-after
-              region-name="region-after-odd"
-              extent="10mm"
-          />
-        </fo:simple-page-master>
-
-        <fo:simple-page-master
-            master-name="chapter-rest-even"
-            margin-top="0mm"     margin-bottom="7mm"
-            margin-left="20mm"   margin-right="30mm"
-        >
-          <fo:region-body margin-top="20mm" margin-bottom="15mm" />
-          <fo:region-before extent="2mm" />
-          <fo:region-after
-              region-name="region-after-even"
-              extent="10mm"
-          />
+          <fo:region-body margin-top="1.1cm" margin-bottom="1.1cm" />
+          <fo:region-before extent="1cm" />
+          <fo:region-after extent="1cm" />
         </fo:simple-page-master>
 
       </fo:layout-master-set>
 
-
-
       <fo:page-sequence
           initial-page-number="1"
-          master-reference="chapter-master"
+          master-reference="A4"
       >
 
         <fo:static-content flow-name="xsl-region-before" >
@@ -136,20 +70,9 @@
           </fo:block>
         </fo:static-content>
 
-        <fo:static-content flow-name="region-after-odd" >
-          <fo:block text-align="right"><fo:page-number/></fo:block>
-        </fo:static-content>
-
-        <fo:static-content flow-name="region-after-even" >
-          <fo:block text-align="left"><fo:page-number/></fo:block>
-        </fo:static-content>
-
-
-
         <fo:flow
             flow-name="xsl-region-body"
         >
-          <xsl:call-template name="title-page" />
           <xsl:apply-templates />
         </fo:flow>
 
@@ -158,16 +81,41 @@
     </fo:root>
   </xsl:template>
 
+  <xsl:template match="/n:book/n:title[1]" >
+    <fo:block
+        padding-top="60pt"
+        font-size="24pt"
+        text-align="center"
+    >
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
 
-  <xsl:template name="title-page" >
-    This is the title page.
+  <xsl:template match="/n:book/n:title[position() > 1]" >
+    <fo:block
+        padding-top="16pt"
+        font-size="18pt"
+        text-align="center"
+    >
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="/n:book/n:title[position() = last()]" >
+    <fo:block
+        padding-top="16pt"
+        padding-bottom="30pt"
+        font-size="18pt"
+        text-align="center"
+    >
+      <xsl:apply-templates/>
+    </fo:block>
   </xsl:template>
 
 
   <xsl:template match="n:chapter" >
     <fo:block
-        break-after="odd-page"
-        padding-top="60pt"
+        padding-top="30pt"
         font-size="12pt"
         font-family="serif"
         line-height="18pt"
@@ -178,7 +126,7 @@
 
   <xsl:template match="n:chapter/n:title | n:chapter/n:identifier" >
     <fo:block
-        font-size="15pt"
+        font-size="18pt"
         font-weight="bold"
         line-height="20pt"
         keep-with-next.within-page="always"
@@ -194,14 +142,14 @@
   </xsl:template>
 
   <xsl:template match="n:section/n:title | n:section/n:identifier" >
-    <fo:inline
+    <fo:block
         font-size="13pt"
         font-weight="bold"
         line-height="35pt"
         keep-with-next.within-page="always"
     >
       <xsl:apply-templates />
-    </fo:inline>
+    </fo:block>
   </xsl:template>
 
   <xsl:template match="n:blockquote" >
@@ -225,18 +173,25 @@
     <fo:block
         text-align="left"
         text-indent="0em"
-        margin-left="0pt"
+        margin-left="-16pt"
         margin-right="0pt"
+        margin-top="4pt"
+        margin-bottom="5pt"
         padding-before="6pt"
         padding-after="8pt"
         font-size="10pt"
         font-family="monospace"
         line-height="13pt"
+        background-color="#EEEEEE"
         font-stretch="semi-condensed"
         white-space-treatment="preserve"
         white-space-collapse="false"
         linefeed-treatment="preserve"
         keep-together.within-page="always"
+        border-left-style="solid"
+        border-left-width="3pt"
+        border-left-color="#CCCCCC"
+        padding-left="10pt"
     >
       <xsl:apply-templates/>
     </fo:block>
@@ -295,11 +250,6 @@
         text-align="justify"
         text-indent="1em"
     >
-      <fo:inline>
-        <xsl:if test="n:locutor" >
-          <xsl:value-of select="n:locutor" />&nbsp;:
-        </xsl:if>
-      </fo:inline>
       <fo:inline
           text-align="justify"
           text-indent="1em"
@@ -309,9 +259,6 @@
       </fo:inline>
     </fo:block>
   </xsl:template>
-
-  <xsl:template match="n:locutor" />
-
 
   <xsl:template match="n:emphasis" >
     <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>

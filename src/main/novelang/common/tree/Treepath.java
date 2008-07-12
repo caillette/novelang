@@ -89,9 +89,21 @@ public final class Treepath< T extends Tree > {
    * Returns the reference to the start of the path, corresponding to the root tree.
    * @return a non-null object.
    */
-  public T getStart() {
+  public T getTreeAtStart() {
     if( null == previous ) {
       return treeAtEnd;
+    } else {
+      return previous.getTreeAtStart() ;
+    }
+  }
+
+  /**
+   * Returns the reference to the start of the path, corresponding to the root tree.
+   * @return a non-null object.
+   */
+  public Treepath< T > getStart() {
+    if( null == previous ) {
+      return this ;
     } else {
       return previous.getStart() ;
     }

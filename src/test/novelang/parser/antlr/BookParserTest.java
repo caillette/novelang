@@ -17,7 +17,6 @@
 package novelang.parser.antlr;
 
 import java.util.Map;
-import java.util.List;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
@@ -99,7 +98,7 @@ public class BookParserTest {
       ) ;
       functionCall = TreepathTools.addChildLast( functionCall, assignment ).getPrevious() ;
     }
-    return functionCall.getStart() ;
+    return functionCall.getTreeAtStart() ;
   }
 
   @Test

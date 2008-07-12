@@ -37,7 +37,7 @@ public class TreepathTest {
     final Treepath< MyTree > treepath = Treepath.create( tree ) ;
 
     Assert.assertEquals( 1, treepath.getLength() ) ;
-    assertSame( tree, treepath.getStart() ) ;
+    assertSame( tree, treepath.getTreeAtStart() ) ;
     assertSame( tree, treepath.getTreeAtEnd() ) ;
     assertSame( tree, treepath.getTreeAtDistance( 0 ) ) ;
   }
@@ -61,7 +61,7 @@ public class TreepathTest {
     Assert.assertEquals( 2, treepath.getLength() ) ;
     assertSame( parent, treepath.getTreeAtDistance( 1 ) ) ;
     assertSame( child, treepath.getTreeAtDistance( 0 )) ;
-    assertSame( parent, treepath.getStart() ) ;
+    assertSame( parent, treepath.getTreeAtStart() ) ;
     assertSame( child, treepath.getTreeAtEnd() ) ;
   }
 
@@ -75,7 +75,7 @@ public class TreepathTest {
     print("Treepath: ", treepath ) ;
 
     Assert.assertEquals( 3, treepath.getLength() ) ;
-    assertSame( parent, treepath.getStart() ) ;
+    assertSame( parent, treepath.getTreeAtStart() ) ;
     assertSame( grandChild, treepath.getTreeAtEnd() ) ;
     assertSame( parent, treepath.getTreeAtDistance( 2 ) ) ;
     assertSame( child, treepath.getTreeAtDistance( 1 ) ) ;
