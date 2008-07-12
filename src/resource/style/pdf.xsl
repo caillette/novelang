@@ -236,6 +236,7 @@
         white-space-treatment="preserve"
         white-space-collapse="false"
         linefeed-treatment="preserve"
+        keep-together.within-page="always"
     >
       <xsl:apply-templates/>
     </fo:block>
