@@ -77,7 +77,7 @@ public class GrammarDelegate {
 
   public String escapeSymbol( String unescaped, int line, int column ) {
     try {
-      return Symbols.unescape( unescaped ) ;
+      return Symbols.unescapeSymbol( unescaped ) ;
     } catch( UnsupportedEscapedSymbolException e ) {
       final Location location = locationFactory.createLocation( line, column ) ;
       problems.add( Problem.createProblem(

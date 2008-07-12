@@ -38,19 +38,9 @@ public class EscapingWriter extends XslWriter {
   }
 
   public void write( Nodepath kinship, String word ) throws Exception {
-    final StringBuffer reconstructed = new StringBuffer() ;
-    for( char c : word.toCharArray() ) {
-      final String s = "" + c ; // Let the compiler optimize this!
-      final String escaped = Symbols.escape( s ) ;
-      if( null == escaped ) {
-        reconstructed.append( c ) ;
-      } else {
-        reconstructed.append( "&" ).append( escaped ).append( ";" ) ;
-      }
-    }
-    super.write( kinship, reconstructed.toString() ) ;
+    final String escaped = Symbols.escapeText( word );
+    super.write( kinship, escaped ) ;
   }
-
 
 
 }

@@ -19,6 +19,8 @@ package novelang.parser;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +85,7 @@ public class Symbols {
     return HTML_ESCAPED.contains( escaped ) ;
   }
 
-  public static String unescape( String escaped )
+  public static String unescapeSymbol( String escaped )
       throws UnsupportedEscapedSymbolException
   {
     final String unescaped = ESCAPED_SYMBOLS.get( escaped ) ;
@@ -102,8 +104,45 @@ public class Symbols {
    * @param unescaped must not be null.
    * @return null if not found.
    */
-  public static String escape( String unescaped ) {
+  public static String escapeSymbol( String unescaped ) {
     return UNESCAPED_SYMBOLS.get( unescaped ) ;
   }
 
+  public static String escapeText( String text ) {
+    final StringBuffer buffer = new StringBuffer() ;
+    for( char c : text.toCharArray() ) {
+      final String s = "" + c ; // Let the compiler optimize this!
+      final String escaped = escapeSymbol( s ) ;
+      if( null == escaped ) {
+        buffer.append( c ) ;
+      } else {
+        buffer.append( "&" ).append( escaped ).append( ";" ) ;
+      }
+    }
+    return buffer.toString();
+  }
+
+  private static final Pattern ESCAPE_PATTERN = Pattern.compile( "(&(\\w+)\\;)" ) ;
+
+  public static String unescapeText( String text ) throws UnsupportedEscapedSymbolException {
+    final Matcher matcher = ESCAPE_PATTERN.matcher( text ) ;
+    final StringBuffer buffer = new StringBuffer() ;
+    int keepFrom = 0 ;
+    while( matcher.find() ) {
+      if( matcher.start() > 0 && keepFrom < text.length() ) {
+        final String previous = text.substring( keepFrom, matcher.start() ) ;
+        buffer.append( previous ) ;
+      }
+      final String escapeCode = matcher.group( 2 ) ;
+      final String escapedSymbol = Symbols.unescapeSymbol( escapeCode ) ;
+      buffer.append( escapedSymbol ) ;
+      keepFrom = matcher.end() ;
+    }
+    if( keepFrom < text.length() ) {
+      final String tail = text.substring( keepFrom, text.length() ) ;
+      buffer.append( tail ) ;
+    }
+    
+    return buffer.toString() ;
+  }
 }

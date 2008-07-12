@@ -34,6 +34,7 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.TreeMetadata;
 import novelang.common.Nodepath;
 import novelang.loader.ResourceName;
+import novelang.parser.Symbols;
 
 /**
  * @author Laurent Caillette
@@ -74,6 +75,10 @@ public class PdfWriter extends XslWriter {
 
   }
 
+// ========
+// Litteral
+// ========
+
   private static final Pattern FIND_SPACE = Pattern.compile( "(\\ )" ) ;
   private static final String REPLACE_SPACE = "&nbsp;" ;
 
@@ -86,6 +91,8 @@ public class PdfWriter extends XslWriter {
 //            FIND_SPACE.matcher( word ).replaceAll( REPLACE_SPACE )
 //        ).replaceAll( REPLACE_AMPERSAND )
 //    ;
-    super.write( kinship, word ) ;
+    super.write( kinship, Symbols.unescapeText( word ) ) ;
   }
+
+
 }

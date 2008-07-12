@@ -47,7 +47,7 @@ public class HtmlWriter extends XslWriter {
     final StringBuffer reconstructed = new StringBuffer() ;
     for( char c : word.toCharArray() ) {
       final String s = "" + c ; // Let the compiler optimize this!
-      final String escaped = Symbols.escape( s ) ;
+      final String escaped = Symbols.escapeSymbol( s ) ;
       if( ( null != escaped ) && ! "&".equals( s ) && Symbols.isHtmlEscape( escaped ) ) {
         reconstructed.append( "&" ).append( escaped ).append( ";" ) ;
       } else {
