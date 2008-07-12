@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.TreeMetadata;
 import novelang.common.Nodepath;
+import novelang.common.NodeKind;
 import novelang.loader.ResourceName;
 import novelang.parser.Symbols;
 
@@ -79,19 +80,11 @@ public class PdfWriter extends XslWriter {
 // Litteral
 // ========
 
-  private static final Pattern FIND_SPACE = Pattern.compile( "(\\ )" ) ;
-  private static final String REPLACE_SPACE = "&nbsp;" ;
-
-  private static final Pattern FIND_AMPERSAND = Pattern.compile( "(\\&)" ) ;
-  private static final String REPLACE_AMPERSAND = "&amp;" ;
-
   public void writeLitteral( Nodepath kinship, String word ) throws Exception {
-    LOGGER.debug( "{} word: '{}'", kinship, word ) ;
-//    final String ampersandsReplaced = FIND_AMPERSAND.matcher(
-//            FIND_SPACE.matcher( word ).replaceAll( REPLACE_SPACE )
-//        ).replaceAll( REPLACE_AMPERSAND )
-//    ;
-    super.write( kinship, Symbols.unescapeText( word ) ) ;
+    if( NodeKind.LITTERAL == kinship.getCurrent() ) {
+      word = Symbols.unescapeText( word ) ;
+    }
+    super.write( kinship, word ) ;
   }
 
 
