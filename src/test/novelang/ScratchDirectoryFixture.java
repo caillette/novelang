@@ -63,16 +63,35 @@ public class ScratchDirectoryFixture {
     ;
   }
 
+  public static final String SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME =
+      "novelang.test.scratch.dir" ;
+  public static final String DELETE_SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME =
+      "novelang.test.scratch.delete" ;
 
-  private static final String ALL_TEST_DIRECTORIES = "test-files" ;
+  private static final String SCRATCH_DIR_NAME = "test-scratch" ;
 
+  /**
+   * Static field holding the directory once defined.
+   */
   private static File allFixturesDirectory ;
 
   private File getAllFixturesDirectory() throws IOException {
     File file = allFixturesDirectory ;
     if( null == file ) {
-      file = new File( ALL_TEST_DIRECTORIES ) ;
-      if( file.exists() ) {
+
+      final String testfilesDirSystemProperty =
+          System.getProperty( SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME ) ;
+      if( null == testfilesDirSystemProperty ) {
+        file = new File( SCRATCH_DIR_NAME ) ;
+      } else {
+        file = new File( testfilesDirSystemProperty ) ;
+      }
+
+      if(
+          file.exists() &&
+          ! "no".equalsIgnoreCase(
+              System.getProperty( DELETE_SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME ) )
+          ) {
         FileUtils.deleteDirectory( file ) ;
       } else {
         file.mkdir() ;

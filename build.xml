@@ -198,10 +198,13 @@
 
   <target name="run-tests" depends="init, create-target-dir" >
 
-    <delete dir="${target.testreports.dir}" />
-    <mkdir dir="${target.testreports.dir}" />    
+    <delete dir="${target.test.reports.dir}" />
+    <delete dir="${target.test.scratchfiles.dir}" />
+    <mkdir dir="${target.test.reports.dir}" />
 
     <junit printsummary="yes" haltonfailure="no" >
+      <jvmarg value="-Dnovelang.test.scratch.dir=${target.test.scratchfiles.dir}"/>
+      <jvmarg value="-Dnovelang.test.scratch.delete=no"/>
       <classpath>
         <path refid="build-libs" />
         <path refid="deploy-libs" />
@@ -209,8 +212,8 @@
         <pathelement location="${target.testclasses.dir}" />
         <pathelement location="${source.samples.dir}" />
       </classpath>
-      <batchtest fork="yes" todir="${target.testreports.dir}" >
-        <fileset 
+      <batchtest fork="yes" todir="${target.test.reports.dir}" >
+        <fileset
             dir="${target.testclasses.dir}" 
             includes="**/*Test.class"
             excludes="**/Abstract*Test.class"
