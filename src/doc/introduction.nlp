@@ -1,6 +1,3 @@
-*** The simplest text processor
-
-===
 
 Novelang takes plain text files and transforms them into nicely-formatted documents like PDF or HTML.
 Unlike mainstream word-processors, it keeps you focused on the text you type in and what it means, instead of struggling with how it should appear. It relies on the text editor of your choice, with a very simple syntax to add some formatting hints. You can see resulting documents from your Web browser or generate them from command-line. 

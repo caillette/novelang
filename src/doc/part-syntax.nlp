@@ -130,19 +130,9 @@ Here is a paragraph after.
 Novelang uses some characters for its markup. For displaying those characters in the rendered documents, they must be escaped -- special codes must be used-_.
 
 <<<
-%    &amp;percent; 
-+    &amp;plus; 
-=    &amp;equals; 
-$    &amp;dollar; 
-_    &amp;lowline; 
-&amp;    &amp;amp; 
-/    &amp;solidus; 
-&lt;    &amp;lt; 
-&gt;    &amp;gt; 
-~    &amp;tilde; 
-)    &amp;rp; 
-.    &amp;fullstop; 
-&deg;    &amp;deg; 
-&oelig;    &amp;oelig; 
-&OElig;    &amp;OElig; 
+%    &amp;percent;          &gt;    &amp;gt;            ~    &amp;tilde;
++    &amp;plus;             &lt;    &amp;lt;            /    &amp;solidus;
+=    &amp;equals;           )    &amp;rp;            &OElig;    &amp;OElig;
+$    &amp;dollar;           .    &amp;fullstop;      &oelig;    &amp;oelig;
+_    &amp;lowline;          &deg;    &amp;deg;           &amp;    &amp;amp;
 >>>

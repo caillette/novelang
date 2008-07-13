@@ -62,18 +62,39 @@
           master-reference="A4"
       >
 
-        <fo:static-content flow-name="xsl-region-before" >
-          <fo:block text-align="right" >
-            <fo:inline font-size="80%" >
-              &legal;
-            </fo:inline>
-          </fo:block>
+        <fo:static-content flow-name="xsl-region-after" >
+          <fo:table  >
+            <fo:table-column column-width="40%" />
+            <fo:table-column column-width="20%" />
+            <fo:table-column column-width="40%" />
+
+            <fo:table-body>
+              <fo:table-row>
+                <fo:table-cell display-align="after" >
+                  <fo:block font-size="70%" text-align="left" >
+                    <xsl:value-of select="/n:book/n:title" />
+                  </fo:block>
+                </fo:table-cell>
+                <fo:table-cell>
+                  <fo:block text-align="center" >
+                    <fo:page-number/> / <fo:page-number-citation ref-id="@last-page"/>
+                  </fo:block>
+                </fo:table-cell>
+                <fo:table-cell display-align="after" >
+                  <fo:block font-size="70%" text-align="right" >
+                    <xsl:value-of select="$timestamp" />
+                  </fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+            </fo:table-body>
+          </fo:table>
         </fo:static-content>
 
         <fo:flow
             flow-name="xsl-region-body"
         >
           <xsl:apply-templates />
+          <fo:block id="@last-page"/>
         </fo:flow>
 
       </fo:page-sequence>
@@ -83,8 +104,8 @@
 
   <xsl:template match="/n:book/n:title[1]" >
     <fo:block
-        padding-top="60pt"
-        font-size="24pt"
+        padding-top="40pt"
+        font-size="28pt"
         text-align="center"
     >
       <xsl:apply-templates/>
@@ -116,9 +137,6 @@
   <xsl:template match="n:chapter" >
     <fo:block
         padding-top="30pt"
-        font-size="12pt"
-        font-family="serif"
-        line-height="18pt"
     >
       <xsl:apply-templates />
     </fo:block>
@@ -129,6 +147,7 @@
         font-size="18pt"
         font-weight="bold"
         line-height="20pt"
+        padding-bottom="8pt"
         keep-with-next.within-page="always"
     >
       <xsl:apply-templates />
@@ -136,7 +155,10 @@
   </xsl:template>
 
   <xsl:template match="n:section" >
-    <fo:block padding-top="20pt" >
+    <fo:block
+        padding-top="6pt"
+        padding-bottom="10pt"
+    >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
@@ -207,6 +229,9 @@
     <fo:block
         text-indent="1em"
         text-align="justify"
+        font-size="12pt"
+        font-family="serif"
+        line-height="18pt"
     >
       <xsl:apply-templates/>
     </fo:block>
@@ -220,11 +245,14 @@
 
   <xsl:template match="n:url" >
     <fo:block>
-      <fo:inline
-          font-style="bold"
+      <fo:basic-link
+          color="blue"
+          text-decoration="underline"
+          font-size="90%"
       >
-        <xsl:apply-templates/>
-      </fo:inline>
+        <xsl:attribute name="external-destination" ><xsl:value-of select="." /></xsl:attribute>
+        <xsl:value-of select="." />
+      </fo:basic-link>
     </fo:block>
   </xsl:template>
 
