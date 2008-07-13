@@ -48,8 +48,12 @@ public class Symbols {
     final Set< String > htmlEscaped = Sets.newHashSet() ;
 
     symbols.put( "apos", "'" ) ;
+
     symbols.put( "hellip", "\u2026" ) ;
     symbols.put( "percent", "%" ) ;
+    symbols.put( "lcub", "{" ) ;
+    symbols.put( "rcub", "}" ) ;
+
     symbols.put( "plus", "+" ) ;
     symbols.put( "equals", "=" ) ;
     symbols.put( "dollar", "$" ) ;

@@ -1,0 +1,31 @@
+*** Custom stylesheets
+
+It's easy to customize rendering of PDF, HTML and plain text because Novelang relies on FO (Formatting Objects) stylesheets. 
+
+Novelang looks for stylesheets in that order:
+
+1&rp; In the directory given by "novelang&fullstop;stylesheet&fullstop;dir" system property, if defined.
+
+2&rp; In a "style" directory right under the project directory (from where Novelang was launched)
+
+3&rp; Inside "Novelang-x&fullstop;x&fullstop;x&fullstop;jar" under the "&solidus;style" directory.
+
+By default Novelang attempts to render final document using the stylesheet with the name of corresponding format. Otherwise, it uses a default, built-in stylesheet.
+
+<<<
+MIME type extension                .pdf     .html
+Corresponding default stylesheet   pdf.xsl  html.xsl
+>>>
+
+The stylesheets are written in XSL&solidus;FO, which stands for eXtensible Stylesheet Language &solidus; Formatting Objects. Both are standards developed by the W3C (World Wide Web Consortium). There are many tutorials on the Web and reference documentation is here:
+
+http://www.w3.org/TR/xsl
+
+After launching Novelang HTTP daemon, you can use the stylesheet query parameter to override any other stylesheet name:
+
+<<<
+http://localhost:8080/chapter-1.html?stylesheet=html-beautiful.xsl
+>>>
+
+Stylesheets may be defined for a whole Book as explained later, see the "mapstylesheet" command.
+

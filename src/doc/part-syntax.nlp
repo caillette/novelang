@@ -3,7 +3,8 @@
 
 Part files focus on a textual content. Part files have the "&fullstop;nlp" suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
 
-http://github.com/caillette/novelang/tree/master/src/doc/novelang.nlp
+http://github.com/caillette/novelang/tree/master/src/doc
+
 
 === Chapter
 
@@ -136,3 +137,14 @@ Novelang uses some characters for its markup. For displaying those characters in
 $    &amp;dollar;           .    &amp;fullstop;      &oelig;    &amp;oelig;
 _    &amp;lowline;          &deg;    &amp;deg;           &amp;    &amp;amp;
 >>>
+
+
+=== Comments
+
+Sometimes it is useful to tell Novelang to ignore some lines in a Part files.
+
+Line comments begin with double percent sign "&percent;&percent;".
+
+Blocks comments are delimited by a pair of double accolades "&lcub;&lcub;" and "&rcub;&rcub;".
+
+

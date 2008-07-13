@@ -134,18 +134,10 @@
   </xsl:template>
 
 
-  <xsl:template match="n:chapter" >
-    <fo:block
-        padding-top="30pt"
-    >
-      <xsl:apply-templates />
-    </fo:block>
-  </xsl:template>
-
   <xsl:template match="n:chapter/n:title | n:chapter/n:identifier" >
     <fo:block
-        font-size="18pt"
-        font-weight="bold"
+        font-size="17pt"
+        font-weight="200"
         line-height="20pt"
         padding-bottom="8pt"
         keep-with-next.within-page="always"
@@ -154,21 +146,29 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:section" >
+  <xsl:template match="n:section/n:title | n:section/n:identifier" >
     <fo:block
-        padding-top="6pt"
-        padding-bottom="10pt"
-    >
+        font-size="11pt"
+        font-weight="bold"
+        line-height="35pt"
+        keep-with-next.within-page="always"
+        >
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:section/n:title | n:section/n:identifier" >
+  <xsl:template match="n:chapter" >
     <fo:block
-        font-size="13pt"
-        font-weight="bold"
-        line-height="35pt"
-        keep-with-next.within-page="always"
+        padding-top="30pt"
+        >
+      <xsl:apply-templates />
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="n:section" >
+    <fo:block
+        padding-top="0pt"
+        padding-bottom="10pt"
     >
       <xsl:apply-templates />
     </fo:block>
@@ -248,7 +248,7 @@
       <fo:basic-link
           color="blue"
           text-decoration="underline"
-          font-size="90%"
+          font-size="85%"
       >
         <xsl:attribute name="external-destination" ><xsl:value-of select="." /></xsl:attribute>
         <xsl:value-of select="." />

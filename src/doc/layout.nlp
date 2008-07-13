@@ -1,72 +1,17 @@
+*** Projects
 
-*** Book files
+Basically, a Novelang project is a directory containing files to be processed by Novelang. Part files are great for short documents, but what about bigger documents? That's what Book files stand for: they aggregate multiple Part files in one single document. A Novelang project may also contain custom stylesheets, for user-defined rendering of PDF or HTML documents.
 
-Book files aggregate part files. Book files have the "&fullstop;nlb" suffix.  (like NoveLang Book). 
-
-Here is a well-formed Book file:
-
-<<<
-insert file:path/to/myfirstpart.nlp
-
-insert file:path/to/mysecondpart.nlp
->>>
-
-Book files are useful when there is too much text to fit inside one Part file. It is also easier to reorganize small Parts by changing their order in a Book file than copy &solidus; pasting inside one big file.
-
-When Part files become too numerous, Book files can refer to multiple Part files at once:
-
-<<<
-insert file:path/to/allpartfiles
->>>
-
-When the Parts are located in the same directory as the Book file, the single dot notation (for current directory) is supported:
-
-<<<
-insert file:. 
->>>
-
-If there are Part files in subdirectories, there is an option to perform a deep scan:
-
-<<<
-insert file:. $recurse 
->>>
-
-There is also an option to add the filename (trimming path and &fullstop;nlp extension) as a chapter title as a chapter title:
-
-<<<
-insert file:. $recurse $createchapters
->>>
-
-
-
-*** Custom stylesheets
-
-It's easy to customize rendering of PDF, HTML and plain text because Novelang relies on FO (Formatting Objects) stylesheets. 
-When there is a directory named "style" right under current directory, Novelang attempts to render final document using the stylesheet with the name of corresponding format. Otherwise, it uses a default, built-in stylesheet.
-
-<<<
-PDF:  .pdf  pdf.xsl
-HTML: .html html.xsl
-TXT:  .txt  txt.xsl
->>>
-
-FO is a standard developed by the W3C (World Wide Web Consortium). There are many tutorials on the Web and reference documentation is here:
-
-http://www.w3.org/TR/xsl/#fo-section
-
-
-*** Project tree layout
-
-Summing up Parts and Books and custom stylesheet, here is a sample of directory layout for a Novelang project. 
+Typical layout of a Novelang project looks like this: 
 
 <<<
 /
-  book.nlb
-  style/
-    pdf.xsl
+  book.nlb            &lt;- Book file
+  style/              &lt;- Directory containing styles
+    pdf.xsl           &lt;- A stylesheet file
     html.xsl
   user-manual/
-    chapter-1.nlp
+    chapter-1.nlp     &lt;- A Part file
     chapter-2.nlp
   developer-manual/
     chapter-1.nlp

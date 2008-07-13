@@ -9,9 +9,16 @@ title
 
 insert file:introduction.nlp
 
+insert file:status.nlp
+
 insert file:rationale.nlp
 
 insert file:part-syntax.nlp
 
 insert file:layout.nlp
+
+insert file:stylesheets.nlp
+
+insert file:book-syntax.nlp
+
 
