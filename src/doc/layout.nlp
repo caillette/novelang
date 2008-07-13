@@ -1,6 +1,8 @@
 *** Projects
 
-Basically, a Novelang project is a directory containing files to be processed by Novelang. Part files are great for short documents, but what about bigger documents? That's what Book files stand for: they aggregate multiple Part files in one single document. A Novelang project may also contain custom stylesheets, for user-defined rendering of PDF or HTML documents.
+Basically, a Novelang project is a directory containing files to be processed by Novelang. It is the directory from where Novelang was launched.
+
+Projects are useful when you deal with big documents. Big documents are made of several Part files aggregated through a Book file. A Novelang project may also contain custom stylesheets, for user-defined rendering of PDF or HTML documents.
 
 Typical layout of a Novelang project looks like this: 
 

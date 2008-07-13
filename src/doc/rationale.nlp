@@ -12,11 +12,11 @@ In fact I really got bored of struggling with MS Word (but this could apply to o
 
 Those tools, like XPress and InDesign, are fine for high-end publishing with ultimate control of every aspect of how the document looks like, but they're definitely not content-oriented.
 
-=== LaTex
+=== LaTeX
 
 http://www.latex-project.org
 
-LaTex got it all right. It is based on plain text with simple markup and a powerful macro system. It exists from 20 years and is incredibly mature now.
+LaTeX got it all right. It is based on plain text with simple markup and a powerful macro system. It exists from 20 years and is incredibly mature now.
 
 Why not using LaTex? Because the markup is too verbose for my personal taste, I don't like its macro language, and it's uneasy to setup. 
 
