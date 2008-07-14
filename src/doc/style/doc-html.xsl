@@ -14,13 +14,18 @@
   <!ENTITY nbsp   "&amp;nbsp;" >
 
 
-    <!ENTITY newsFeed        "http://novelang.blogspot.com/feeds/posts/default" >
-    <!ENTITY blog            "http://novelang.blogspot.com" >
-    <!ENTITY usersGroup      "http://groups.google.com/group/novelang-users/topics" >
-    <!ENTITY developersGroup "http://groups.google.com/group/novelang-developers/topics" >
+  <!ENTITY newsFeed           "http://novelang.blogspot.com/feeds/posts/default" >
+  <!ENTITY blog               "http://novelang.blogspot.com" >
+  <!ENTITY usersGroup         "http://groups.google.com/group/novelang-users/topics" >
+  <!ENTITY developersGroup    "http://groups.google.com/group/novelang-developers/topics" >
+  <!ENTITY sourceforgeProject "http://sourceforge.net/projects/novelang" >
+  <!ENTITY sourceforgeJavadoc "http://novelang.sourceforge.net/javadoc" >
+  <!ENTITY download           "http://sourceforge.net/project/showfiles.php?group_id=227480&amp;package_id=275418" >
+  <!ENTITY github             "http://github.com/caillette/novelang/tree/master" >
+  <!ENTITY pdfDocument        "http://novelang.sf.net/Novelang.pdf" >
+  <!ENTITY license            "http://www.gnu.org/licenses/gpl-3.0.txt" >
 
-]
->
+] >
 
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -43,7 +48,7 @@
 
         <meta name="Generator" content="Novelang" />
         <meta name= "Copyright" content="Laurent Caillette 2008" />
-        <title>Novelang, the simplest word processor</title>
+        <title>Novelang, the simplest text processor</title>
 
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
         <link rel="stylesheet" type="text/css" href="screen.css" />
@@ -56,60 +61,57 @@
 
       </head>
     <body>
-    <div id="Box">
+      <div id="Box">
 
-      <div id="Title" >Novelang</div>
+        <div id="Title" ><xsl:value-of select="/n:book/n:title[1]" /></div>
 
-      <xsl:apply-templates />
+        <div class="chapter" >
+          <h1><xsl:value-of select="/n:book/n:title[2]" /></h1>
+        </div>
 
-
-      <div id="Sidebar">
-
-        <!--http://members.cox.net/timandbeth/spam/spam2.htm  -->
-        <p>By <strong>Laurent Caillette</strong></p>
-
-        <ul><!--&#9733;-->
-          <li><a href="&blog;">Blog</a></li>
-          <li><a href="&usersGroup;">Users' list</a></li>
-          <li><a href="&developersGroup;">Developers' list</a></li>
-          <li><a href="http://sourceforge.net/projects/novelang">Sourceforge</a></li>
-          <li><a href="http://github.com/caillette/novelang/tree/master">Sources</a></li>
-          <li><a href="http://novelang.sourceforge.net/javadoc">Javadoc</a></li>
-          <li><a href="http://sourceforge.net/project/showfiles.php?group_id=227480&amp;package_id=275418">Download</a></li>
-          <li><a href="http://www.gnu.org/licenses/gpl-3.0.txt">License</a></li>
-        </ul>
+        <xsl:apply-templates />
 
 
-        <div id="Sponsors" >
-          <!--https://sourceforge.net/project/admin/logo.php?group_id=227480  -->
-          <a href="http://sourceforge.net">
-            <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=2"
-                 width="125" height="37" border="0" alt="SourceForge.net Logo" />
-          </a>
+        <div id="Sidebar">
 
-        </div> <!-- Sponsors -->
+          <p>By <strong>Laurent Caillette</strong></p>
 
-      </div> <!-- Sidebar -->
-    </div> <!-- Box -->
+          <ul><!--&#9733;-->
+            <li><a href="&blog;">Blog</a></li>
+            <li><a href="&usersGroup;">Users' list</a></li>
+            <li><a href="&developersGroup;">Developers' list</a></li>
+            <li><a href="&sourceforgeProject;">Sourceforge</a></li>
+            <li><a href="&github;">Sources</a></li>
+            <li><a href="&sourceforgeJavadoc;">Javadoc</a></li>
+            <li><a href="&download;">Download</a></li>
+            <li><a href="&pdfDocument;">PDF</a></li>
+            <li><a href="&license;">License</a></li>
+          </ul>
+
+
+          <div id="Sponsors" >
+            <!--https://sourceforge.net/project/admin/logo.php?group_id=227480  -->
+            <a href="http://sourceforge.net">
+              <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=2"
+                   width="125" height="37" border="0" alt="SourceForge.net Logo" />
+            </a>
+
+          </div> <!-- Sponsors -->
+
+        </div> <!-- Sidebar -->
+      </div> <!-- Box -->
+
 
 
     </body>
     </html>
   </xsl:template>
 
+  <xsl:template match="/n:book/n:title" />
+
   <xsl:template match="n:chapter" >
     <div class="chapter" >
-    <xsl:choose>
-      <xsl:when test="n:style[text()='standalone']" >
-        <xsl:call-template name="standalone" />
-      </xsl:when>
-      <xsl:when test="n:style[text()='all-emphasized']" >
-        <xsl:call-template name="all-emphasized" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates />
-      </xsl:otherwise>
-    </xsl:choose>
+      <xsl:apply-templates />
     </div>
   </xsl:template>
 
@@ -125,16 +127,6 @@
 
   <xsl:template match="n:section/n:title | n:section/n:identifier" >
     <h2><xsl:apply-templates /></h2>
-  </xsl:template>
-
-  <xsl:template name="standalone" >
-    <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template name="all-emphasized" >
-    <i>
-      <xsl:apply-templates />
-    </i>
   </xsl:template>
 
   <xsl:template match="n:blockquote" >
@@ -186,34 +178,12 @@
     </p>
   </xsl:template>
 
-  <xsl:template match="n:locutor" />
-
-
-  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
 
   <xsl:template match="n:emphasis" >
     <i><xsl:apply-templates/></i>
   </xsl:template>
 
-  <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
-
-  <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
-
-  <xsl:template match="n:interpolatedclause" >&ndash;&nbsp;<xsl:apply-templates/>&nbsp;&ndash;</xsl:template>
-
-  <xsl:template match="n:interpolatedclause-silentend" >&ndash;&nbsp;<xsl:apply-templates/></xsl:template>
-
-  <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
-
-  <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
-
-  <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
-  <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>
-  <xsl:template match="n:sign-comma" >,</xsl:template>
-  <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
-  <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
-  <xsl:template match="n:sign-fullstop" >.</xsl:template>
-  <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
+  <xsl:import href="punctuation-US-EN.xsl" />
 
 
 

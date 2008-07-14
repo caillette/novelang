@@ -310,9 +310,10 @@
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Dnovelang.log.dir=${logdestination}" />
       <jvmarg value="-Xmx512M" />
-      <arg value="${target.documentation.document}" />
       <arg value="-targetDirectory" />
       <arg value="${absolutetarget}" />
+      <arg value="${target.documentation.htmldocument}" />
+      <arg value="${target.documentation.pdfdocument}" />
     </java>
 
     <move
