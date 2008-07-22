@@ -19,15 +19,20 @@ package novelang.parser.antlr;
 
 import java.util.Iterator;
 
+import org.antlr.runtime.ClassicToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.lang.NullArgumentException;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.NodeKind;
+import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 
 /**
+ * A {@code CommonTree} created by {@link novelang.parser.antlr.NovelangParser} implementing
+ * {@link SyntacticTree}.
+ *
  * @author Laurent Caillette
  */
 public class CustomTree
@@ -62,10 +67,10 @@ public class CustomTree
   }
 
   public Iterable< SyntacticTree > getChildren() {
-    return new Iterable<SyntacticTree>() {
+    return new Iterable< SyntacticTree >() {
 
-      public Iterator<SyntacticTree> iterator() {
-        return new Iterator<SyntacticTree>() {
+      public Iterator< SyntacticTree > iterator() {
+        return new Iterator< SyntacticTree >() {
 
           private int position = 0 ;
 
@@ -97,8 +102,27 @@ public class CustomTree
 
 
   public void addChild( SyntacticTree child ) {
-    final CommonTree commonTree = ( CommonTree ) child ;
-    addChild( commonTree ) ;
+    addChild( convert( child ) ) ;
+  }
+
+  /**
+   * Ugly method to convert {@link SimpleTree} into {@code CustomTree}, useful in some rare
+   * cases when a {@code CustomTree} must adopt a {@code SimpleTree}, like when a paragraph
+   * is created directly from a Book file (as a {@code SimpleTree}. 
+   */
+  private CommonTree convert( SyntacticTree tree ) {
+    if( tree instanceof SimpleTree ) {
+      final CommonTree customTree = new CustomTree(
+          locationFactory,
+          new ClassicToken( 0, tree.getText() ) // TODO don't swallow line + column information.
+      ) ;
+      for( SyntacticTree child : tree.getChildren() ) {
+        customTree.addChild( convert( child ) ) ;
+      }
+      return customTree ;
+    } else {
+      return ( CommonTree ) tree ;
+    }
   }
 
   public SyntacticTree getChildAt( int i ) {

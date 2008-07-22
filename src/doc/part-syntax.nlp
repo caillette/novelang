@@ -147,4 +147,9 @@ Line comments begin with double percent sign "&percent;&percent;".
 
 Blocks comments are delimited by a pair of double accolades "&lcub;&lcub;" and "&rcub;&rcub;".
 
+<<<
+&percent;&percent; Line comment (escaped percent sign)
+%% Line comment (litteral percent sign)
+>>>
+
 

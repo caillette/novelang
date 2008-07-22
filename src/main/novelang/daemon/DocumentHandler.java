@@ -19,6 +19,8 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -74,12 +76,34 @@ public class DocumentHandler extends AbstractHandler {
       int dispatch
   ) throws IOException, ServletException {
 
-    LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;    
+    LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;
 
+    try {
+      handle( request, response );
+    } catch( Exception e ) {
+      response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR ) ;
+      response.getOutputStream().print( "<html>" );
+      response.getOutputStream().print( "<body>" );
+      response.getOutputStream().print( "<pre>" );
+
+      final PrintWriter exceptionWriter = new PrintWriter( response.getOutputStream() ) ;
+      e.printStackTrace( exceptionWriter );
+      exceptionWriter.flush() ;
+
+      response.getOutputStream().print( "</pre>" );
+      response.getOutputStream().print( "</body>" );
+      response.getOutputStream().print( "</html>" );
+
+      LOGGER.warn( "Exception occured", e );
+
+    }
+  }
+
+  private void handle( HttpServletRequest request, HttpServletResponse response ) throws IOException {
     final String rawRequest = request.getPathInfo() +
         ( StringUtils.isBlank( request.getQueryString() ) ? "" : "?" + request.getQueryString() )
     ;
-    
+
     final PolymorphicRequest documentRequest = RequestTools.createPolymorphicRequest( rawRequest ) ;
 
     if( null == documentRequest ) {
