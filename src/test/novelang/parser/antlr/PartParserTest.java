@@ -521,6 +521,32 @@ public class PartParserTest {
     ) ;
   }
 
+  @Test @Ignore
+  public void someLitteralContainingCommentLikeText() throws RecognitionException {
+    part(
+      BREAK +
+      "<<<" + BREAK +
+      "%% Not to be commented" +
+      ">>>",
+      tree( PART,
+          tree( LITTERAL, "%% Not to be commented" )
+      )
+    ) ;
+  }
+
+  @Test @Ignore
+  public void someLitteralContainingLowerthanSign() throws RecognitionException {
+    part(
+      BREAK +
+      "<<<" + BREAK +
+      "<" +
+      ">>>",
+      tree( PART,
+          tree( LITTERAL, "<" )
+      )
+    ) ;
+  }
+
   @Test
   public void partHasAnonymousSectionAndHasBlockquoteWithSingleParagraph() 
       throws RecognitionException
@@ -841,30 +867,6 @@ public class PartParserTest {
     ) ;
   }
 
-  @Test @Ignore
-  public void paragraphBodyFailsOnQuoteDepthExceeding1() throws RecognitionException {
-    paragraphFails( "(w0 \"w1 (w2 \"w3\")\")" ) ;
-  }
-
-  @Test @Ignore
-  public void paragraphBodyFailsOnEmphasisDepthExceeding1() throws RecognitionException {
-    paragraphFails( "(w0 /w1 (w2 /w3/)/)" ) ;
-  }
-
-  @Test @Ignore
-  public void paragraphBodyFailsOnParenthesisDepthExceeding2() throws RecognitionException {
-    paragraphFails( "(w0 /w1 (w2 \"w3 (w4)\")/)" ) ;
-  }
-
-  @Test @Ignore
-  public void paragraphBodyFailsOnInterpolatedClauseDepthExceeding1() throws RecognitionException {
-    paragraphFails( "(w0 -- w1 (w2 -- w3 -- ) --)" ) ;
-  }
-
-  @Test @Ignore
-  public void paragraphBodyFailsOnSquareBracketsDepthExceeding1() throws RecognitionException {
-    paragraphFails( "[w0 -- w1 [w2] --]" ) ;
-  }
 
   @Test
   public void litteralWithBreaksAndOtherSeparators() throws RecognitionException {

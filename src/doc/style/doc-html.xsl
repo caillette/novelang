@@ -1,18 +1,24 @@
 <?xml version="1.0"?>
-<!DOCTYPE foo
-[
-  <!-- Tweaked entities: we want them to appear verbatim in resulting document. -->
-  <!-- See HtmlSink class. -->
+<!DOCTYPE foo [
 
-  <!ENTITY mdash  "&amp;mdash;" >
-  <!ENTITY ndash  "&amp;ndash;" >
-  <!ENTITY hellip "&amp;hellip;" >
-  <!ENTITY raquo  "&amp;raquo;" >
-  <!ENTITY ldquo  "&amp;ldquo;" >
-  <!ENTITY rdquo  "&amp;rdquo;" >
-  <!ENTITY rsquo  "&amp;rsquo;" >
-  <!ENTITY nbsp   "&amp;nbsp;" >
+  <!ENTITY % ISOnum PUBLIC
+      "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
+      "ISOnum.pen"
+  >
+  %ISOnum;
 
+  <!ENTITY % ISOpub PUBLIC
+      "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+      "ISOpub.pen"
+  >
+  %ISOpub;
+
+  <!ENTITY % ISOlat1 PUBLIC
+      "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
+      "ISOlat1.pen"
+  >
+  %ISOlat1;
+    
 
   <!ENTITY newsFeed           "http://novelang.blogspot.com/feeds/posts/default" >
   <!ENTITY blog               "http://novelang.blogspot.com" >

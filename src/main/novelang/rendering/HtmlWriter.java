@@ -72,7 +72,7 @@ public class HtmlWriter extends XslWriter {
 
   private static final EntityEscapeSelector ESCAPE_ISO_ENTITIES = new EntityEscapeSelector() {
     public boolean shouldEscape( String publicId, String systemId ) {
-      return publicId.startsWith( "ISO 8879:1986" ) ;
+      return publicId.startsWith( "ISO 8879:1986//ENTITIES" ) ;
 //          "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
 //          "ISO 8879:1986//ENTITIES Publishing//EN//XML"
 //          "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
