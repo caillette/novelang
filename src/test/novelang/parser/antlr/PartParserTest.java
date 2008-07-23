@@ -522,7 +522,7 @@ public class PartParserTest {
   }
 
   @Test @Ignore
-  public void someLitteralContainingCommentLikeText() throws RecognitionException {
+  public void someLitteralContainingLineComment() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
@@ -534,18 +534,51 @@ public class PartParserTest {
     ) ;
   }
 
-  @Test @Ignore
+  @Test
   public void someLitteralContainingLowerthanSign() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
-      "<" +
+      "<" + BREAK +
       ">>>",
       tree( PART,
           tree( LITTERAL, "<" )
       )
     ) ;
   }
+
+  @Test
+  public void someLitteralContainingGreaterthanSigns() throws RecognitionException {
+    final String verbatim =
+      " >>>" + BREAK +
+      "> " + BREAK +
+      ">> " + BREAK +
+      ">> >>>"
+    ;
+
+    part(
+      BREAK +
+      "<<<" + BREAK +
+      verbatim + BREAK +
+      ">>>",
+      tree( PART,
+          tree( LITTERAL, verbatim )
+      )
+    ) ;
+  }
+
+  
+  @Test
+  public void litteralWithBreaksAndOtherSeparators() throws RecognitionException {
+    final String verbatim = "  Here is some " + BREAK + "//litteral//. " ;
+    litteral(
+        "<<<" + BREAK +
+        verbatim + BREAK +
+        ">>>",
+        tree( LITTERAL, verbatim )
+    ) ;
+  }
+
 
   @Test
   public void partHasAnonymousSectionAndHasBlockquoteWithSingleParagraph() 
@@ -867,17 +900,6 @@ public class PartParserTest {
     ) ;
   }
 
-
-  @Test
-  public void litteralWithBreaksAndOtherSeparators() throws RecognitionException {
-    final String verbatim = "  Here is some " + BREAK + "//litteral//. " ;
-    litteral(
-        "<<<" + BREAK +
-        verbatim + BREAK +
-        ">>>",
-        tree( LITTERAL, verbatim )
-    ) ;
-  }
 
   @Test
   public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {

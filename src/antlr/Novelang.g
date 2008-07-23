@@ -181,27 +181,65 @@ scope ParagraphScope ;
   ;
 
 blockQuote
-  : ( blockIdentifier mediumBreak)? OPENING_BLOCKQUOTE 
+  : ( blockIdentifier mediumBreak)? 
+    LESS_THAN_SIGN LESS_THAN_SIGN 
     ( mediumBreak | largeBreak )?
     paragraphBody 
     ( largeBreak paragraphBody )* 
     ( mediumBreak | largeBreak )?
-    CLOSING_BLOCKQUOTE
+    GREATER_THAN_SIGN GREATER_THAN_SIGN
     -> ^( BLOCKQUOTE blockIdentifier? ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
 
 litteral
-  : OPENING_LITTERAL 
+  : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN //TRIPLE_LESSTHANSIGN 
     WHITESPACE? SOFTBREAK
-    l = rawLitteral
-    SOFTBREAK CLOSING_LITTERAL
+    l = litteralLines
+    SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN //TRIPLE_GREATERTHANSIGN
     -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.text ) } )
   ;  
 
-rawLitteral
-  : (   SOFTBREAK
-      | WHITESPACE
-      | digit
+litteralLines
+  : litteralLine ( SOFTBREAK litteralLine )*
+  ;
+    
+litteralLine0
+  : ( ( anySymbolExceptGreaterthansign | WHITESPACE )
+      ( anySymbol | WHITESPACE )* 
+    )?
+  ;
+
+/**
+ * This rule looks weird as negation doesn't work as expected.
+ * It's just about avoiding '>>>' at the start of the line.
+ * This doesn't work:
+   ~( GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN )
+   ( anySymbol | WHITESPACE )*
+ */
+litteralLine
+  : (
+        ( ( anySymbolExceptGreaterthansign | WHITESPACE )
+          ( anySymbol | WHITESPACE )*
+        )
+      |
+        ( GREATER_THAN_SIGN 
+          (   ( ( anySymbolExceptGreaterthansign | WHITESPACE ) ( anySymbol | WHITESPACE )* )
+            | ( GREATER_THAN_SIGN 
+                ( ( anySymbolExceptGreaterthansign | WHITESPACE ) ( anySymbol | WHITESPACE )* )? 
+              )
+          )?
+        )
+    )?       
+  ;
+
+
+anySymbol
+  : anySymbolExceptGreaterthansign
+  | GREATER_THAN_SIGN
+  ;
+    
+anySymbolExceptGreaterthansign
+  :     digit
       | hexLetter
       | nonHexLetter 
       | AMPERSAND 
@@ -217,9 +255,11 @@ rawLitteral
       | EXCLAMATION_MARK
       | FULL_STOP
       | GRAVE_ACCENT
+//      | GREATER_THAN_SIGN
       | HYPHEN_MINUS
       | LEFT_PARENTHESIS
       | LEFT_SQUARE_BRACKET
+      | LESS_THAN_SIGN
       | LOW_LINE
       | NUMBER_SIGN
       | PLUS_SIGN
@@ -230,16 +270,10 @@ rawLitteral
       | SEMICOLON
       | SOLIDUS 
       | TILDE 
+//      | TRIPLE_GREATERTHANSIGN
+//      | TRIPLE_LESSTHANSIGN
       | VERTICAL_LINE 
-    )*
   ;
-
-locutor
- 	: word 
- 	  ( smallBreak word )* 
- 	  smallBreak? LOCUTOR_INTRODUCER
- 	  -> ^( LOCUTOR word* ) // TODO fix this, apostrophe is swallowed.
- 	;
 
 
 // ===================================
@@ -921,9 +955,11 @@ EQUALS_SIGN : '=' ;
 EXCLAMATION_MARK : '!' ;
 FULL_STOP : '.' ;
 GRAVE_ACCENT : '`' ;
+GREATER_THAN_SIGN : '>' ;
 HYPHEN_MINUS : '-' ;
 LEFT_PARENTHESIS : '(' ;
 LEFT_SQUARE_BRACKET : '[' ;
+LESS_THAN_SIGN : '<' ;
 LOW_LINE : '_' ;
 NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
@@ -939,11 +975,8 @@ VERTICAL_LINE : '|' ;
 
 
   
-OPENING_BLOCKQUOTE : '<<' ;
-CLOSING_BLOCKQUOTE : '>>' ;
-OPENING_LITTERAL : '<<<' ;
-CLOSING_LITTERAL : '>>>' ;
-LOCUTOR_INTRODUCER : '::' ;
+//TRIPLE_LESSTHANSIGN : '<<<' ;
+//TRIPLE_GREATERTHANSIGN : '>>>' ;
 
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
