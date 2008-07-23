@@ -57,6 +57,8 @@ public class Symbols {
     symbols.put( "plus", "+" ) ;
     symbols.put( "equals", "=" ) ;
     symbols.put( "dollar", "$" ) ;
+    symbols.put( "numbersign", "#" ) ;
+    symbols.put( "colon", ":" ) ;
     symbols.put( "lowline", "_" ) ;
     symbols.put( "euro", "\u20ac" ) ;
     symbols.put( "amp", "&" ) ;
@@ -64,7 +66,6 @@ public class Symbols {
     symbols.put( "lt", "<" ) ;
     symbols.put( "gt", ">" ) ;
     symbols.put( "tilde", "~" ) ;
-//    symbols.put( "snip", "[...]" ) ; // TODO remove this and support litteral.
     symbols.put( "rp", ")" ) ;
     symbols.put( "quot", "\"" ) ;
     symbols.put( "fullstop", "." ) ;

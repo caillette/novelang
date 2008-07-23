@@ -23,6 +23,8 @@ import org.antlr.runtime.ClassicToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.lang.NullArgumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.NodeKind;
@@ -39,6 +41,7 @@ public class CustomTree
     extends CommonTree
     implements SyntacticTree
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger( CustomTree.class ) ;
 
   private final LocationFactory locationFactory ;
 
@@ -119,6 +122,7 @@ public class CustomTree
       for( SyntacticTree child : tree.getChildren() ) {
         customTree.addChild( convert( child ) ) ;
       }
+      LOGGER.debug( "Converted " + tree ) ;
       return customTree ;
     } else {
       return ( CommonTree ) tree ;
