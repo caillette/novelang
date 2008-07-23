@@ -192,23 +192,18 @@ blockQuote
   ;  
 
 litteral
-  : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN //TRIPLE_LESSTHANSIGN 
+  : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
     WHITESPACE? SOFTBREAK
     l = litteralLines
-    SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN //TRIPLE_GREATERTHANSIGN
+    SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
     -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.text ) } )
   ;  
 
 litteralLines
   : litteralLine ( SOFTBREAK litteralLine )*
   ;
-    
-litteralLine0
-  : ( ( anySymbolExceptGreaterthansign | WHITESPACE )
-      ( anySymbol | WHITESPACE )* 
-    )?
-  ;
 
+    
 /**
  * This rule looks weird as negation doesn't work as expected.
  * It's just about avoiding '>>>' at the start of the line.
@@ -217,8 +212,7 @@ litteralLine0
    ( anySymbol | WHITESPACE )*
  */
 litteralLine
-  : (
-        ( ( anySymbolExceptGreaterthansign | WHITESPACE )
+  : (   ( ( anySymbolExceptGreaterthansign | WHITESPACE )
           ( anySymbol | WHITESPACE )*
         )
       |
@@ -918,7 +912,7 @@ nonHexLetter
   ;
 
 escapedCharacter returns [ String unescaped ]
-  : AMPERSAND letters SEMICOLON
+  : TILDE letters TILDE
     { $unescaped = delegate.escapeSymbol( 
           $letters.text, 
           0, // getLine(), TODO fix this.

@@ -121,13 +121,13 @@ public class Symbols {
       if( null == escaped ) {
         buffer.append( c ) ;
       } else {
-        buffer.append( "&" ).append( escaped ).append( ";" ) ;
+        buffer.append( "~" ).append( escaped ).append( "~" ) ;
       }
     }
     return buffer.toString();
   }
 
-  private static final Pattern ESCAPE_PATTERN = Pattern.compile( "(&(\\w+)\\;)" ) ;
+  private static final Pattern ESCAPE_PATTERN = Pattern.compile( "(~(\\w+)\\~)" ) ;
 
   public static String unescapeText( String text ) throws UnsupportedEscapedSymbolException {
     final Matcher matcher = ESCAPE_PATTERN.matcher( text ) ;

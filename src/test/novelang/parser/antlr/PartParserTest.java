@@ -121,7 +121,7 @@ public class PartParserTest {
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
     final Map< String,String > map = Symbols.getDefinitions() ;
     for( String key : map.keySet() ) {
-      final String escaped = "&" + key + ";" ;
+      final String escaped = "~" + key + "~" ;
       final String unescaped = map.get( key ) ;
       word( escaped, tree( WORD, unescaped ) ) ;
     }

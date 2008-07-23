@@ -28,42 +28,42 @@ public class SymbolsTest {
 
   @Test
   public void escape0() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "&", Symbols.unescapeText( "&amp;" ) ) ;
+    Assert.assertEquals( "&", Symbols.unescapeText( "~amp~" ) ) ;
   }
 
   @Test
   public void escape1() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&", Symbols.unescapeText( "a&amp;" ) ) ;
+    Assert.assertEquals( "a&", Symbols.unescapeText( "a~amp~" ) ) ;
   }
 
   @Test
   public void escape2() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&b", Symbols.unescapeText( "a&amp;b" ) ) ;
+    Assert.assertEquals( "a&b", Symbols.unescapeText( "a~amp~b" ) ) ;
   }
 
   @Test
   public void escape3() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&<", Symbols.unescapeText( "a&amp;&lt;" ) ) ;
+    Assert.assertEquals( "a&<", Symbols.unescapeText( "a~amp~~lt~" ) ) ;
   }
 
   @Test
   public void escape5() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&b<", Symbols.unescapeText( "a&amp;b&lt;" ) ) ;
+    Assert.assertEquals( "a&b<", Symbols.unescapeText( "a~amp~b~lt~" ) ) ;
   }
 
   @Test
   public void escape6() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&b<c", Symbols.unescapeText( "a&amp;b&lt;c" ) ) ;
+    Assert.assertEquals( "a&b<c", Symbols.unescapeText( "a~amp~b~lt~c" ) ) ;
   }
 
   @Test
   public void escape7() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "abc&d<e", Symbols.unescapeText( "abc&amp;d&lt;e" ) ) ;
+    Assert.assertEquals( "abc&d<e", Symbols.unescapeText( "abc~amp~d~lt~e" ) ) ;
   }
 
   @Test
   public void escape8() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "abc&d<ef", Symbols.unescapeText( "abc&amp;d&lt;ef" ) ) ;
+    Assert.assertEquals( "abc&d<ef", Symbols.unescapeText( "abc~amp~d~lt~ef" ) ) ;
   }
 
 
