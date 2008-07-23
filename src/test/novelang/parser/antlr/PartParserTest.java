@@ -25,6 +25,7 @@ import org.junit.Test;
 import static novelang.common.NodeKind.*;
 import novelang.parser.Symbols;
 import static novelang.parser.antlr.AntlrTestHelper.*;
+import static novelang.parser.antlr.AntlrTestHelper.softInlineLitteral;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -576,6 +577,24 @@ public class PartParserTest {
         verbatim + BREAK +
         ">>>",
         tree( LITTERAL, verbatim )
+    ) ;
+  }
+
+  @Test
+  public void softInlineLitteralNothingSpecial() throws RecognitionException {
+    final String litteral = "azer()+&%?";
+    softInlineLitteral(
+        "`" + litteral +"`",
+        tree( SOFT_INLINE_LITTERAL, litteral )
+    ) ;
+  }
+
+  @Test
+  public void hardInlineLitteralNothingSpecial() throws RecognitionException {
+    final String litteral = "azer()+&%?";
+    hardInlineLitteral(
+        "`" + litteral +"`",
+        tree( HARD_INLINE_LITTERAL, litteral )
     ) ;
   }
 

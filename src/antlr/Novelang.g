@@ -44,6 +44,8 @@ tokens {
   SQUARE_BRACKETS ;
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
+  SOFT_INLINE_LITTERAL ;
+  HARD_INLINE_LITTERAL ;
   WORD ;
   URL ;
   
@@ -233,6 +235,16 @@ anySymbol
   ;
     
 anySymbolExceptGreaterthansign
+  : anySymbolExceptGreaterthansignAndGraveAccent
+  | GRAVE_ACCENT
+  ;
+  
+anySymbolExceptGraveAccent
+  : anySymbolExceptGreaterthansignAndGraveAccent
+  | GREATER_THAN_SIGN
+  ;
+  
+anySymbolExceptGreaterthansignAndGraveAccent
   :     digit
       | hexLetter
       | nonHexLetter 
@@ -248,7 +260,7 @@ anySymbolExceptGreaterthansign
       | EQUALS_SIGN
       | EXCLAMATION_MARK
       | FULL_STOP
-      | GRAVE_ACCENT
+//      | GRAVE_ACCENT
 //      | GREATER_THAN_SIGN
       | HYPHEN_MINUS
       | LEFT_PARENTHESIS
@@ -516,8 +528,7 @@ paragraphBody
         ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )* // TODO factor with previous line
+          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )+
         )*    
         ( mediumBreak?
           nestedWordSequence
@@ -539,8 +550,7 @@ paragraphBodyNoQuote
         ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
+          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )+
         )*    
         ( mediumBreak?
           nestedWordSequence
@@ -561,8 +571,7 @@ paragraphBodyNoEmphasis
         ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
+          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )+
         )*    
         ( mediumBreak?
           nestedWordSequence
@@ -583,8 +592,7 @@ paragraphBodyNoInterpolatedClause
         ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
+          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )+
         )*    
         ( mediumBreak?
           nestedWordSequence
@@ -593,11 +601,17 @@ paragraphBodyNoInterpolatedClause
   ;
 
 nestedWordSequence
-  : ( word ) 
-    (   ( mediumBreak word ) 
+  : ( nestedWordSequenceWithLitteral ) 
+    (   ( mediumBreak nestedWordSequenceWithLitteral ) 
       | ( smallBreak? punctuationSign ) 
-      | ( smallBreak? punctuationSign word ) 
+      | ( smallBreak? punctuationSign nestedWordSequenceWithLitteral ) 
     )*
+  ;
+  
+nestedWordSequenceWithLitteral
+  : word 
+//  | softInlineLitteral
+//  | hardInlineLitteral  
   ;
   
 nestedParagraph
@@ -678,6 +692,32 @@ interpolatedClause
     )
   ;	  
 
+
+softInlineLitteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+    )+ 
+    GRAVE_ACCENT
+    -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( WORD, buffer.toString() ) } )
+  ;
+  
+hardInlineLitteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+    )+ 
+    GRAVE_ACCENT
+    -> ^( HARD_INLINE_LITTERAL { delegate.createTree( WORD, buffer.toString() ) } )
+  ;
+  
+  
   
 /** Use between words, when everything is kept on the same line.
  */
