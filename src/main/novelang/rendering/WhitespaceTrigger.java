@@ -34,6 +34,7 @@ public class WhitespaceTrigger {
   static {
     add( EMPHASIS, WORD ) ;
     add( EMPHASIS, QUOTE ) ;
+    add( HARD_INLINE_LITTERAL, WORD ) ;
     add( INTERPOLATEDCLAUSE, WORD ) ;
     add( INTERPOLATEDCLAUSE_SILENTEND, WORD ) ;
     add( PARENTHESIS, WORD ) ;
@@ -46,10 +47,13 @@ public class WhitespaceTrigger {
     add( PUNCTUATION_SIGN, WORD ) ;
     add( QUOTE, WORD ) ;
     add( SQUARE_BRACKETS, WORD ) ;
+    add( SOFT_INLINE_LITTERAL, WORD ) ;
+    add( WORD, EMPHASIS ) ;
+    add( WORD, HARD_INLINE_LITTERAL ) ;
     add( WORD, INTERPOLATEDCLAUSE ) ;
     add( WORD, INTERPOLATEDCLAUSE_SILENTEND ) ;
     add( WORD, PARENTHESIS ) ;
-    add( WORD, EMPHASIS ) ;
+    add( WORD, SOFT_INLINE_LITTERAL ) ;
     add( WORD, QUOTE ) ;
     add( WORD, SQUARE_BRACKETS ) ;
     add( WORD, WORD ) ;

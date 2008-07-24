@@ -22,7 +22,10 @@ import java.util.Map;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static novelang.common.NodeKind.*;
+import novelang.common.SyntacticTree;
 import novelang.parser.Symbols;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.AntlrTestHelper.softInlineLitteral;
@@ -35,6 +38,8 @@ import static novelang.parser.antlr.TreeFixture.tree;
  * @author Laurent Caillette
  */
 public class PartParserTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( PartParserTest.class ) ;
 
   @Test
   public void titleIsTwoWords() throws RecognitionException {
@@ -256,6 +261,9 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenSemicolon() throws RecognitionException {
+    SyntacticTree tree = word( "w0" ) ;
+    LOGGER.debug( tree.toStringTree() ) ;
+
     paragraph( "w0;", tree(
         PARAGRAPH_PLAIN,
         tree( WORD, "w0" ),
@@ -462,6 +470,19 @@ public class PartParserTest {
         tree(
             SECTION,
             tree( TITLE, tree( WORD, "s00") )
+        )
+    ) ;
+  }
+
+  @Test
+  public void sectionHasQuote()
+      throws RecognitionException
+  {
+    section(
+        "=== \"q\" w" ,
+        tree(
+            SECTION,
+            tree( TITLE, tree( QUOTE, tree( WORD, "q" ) ), tree( WORD, "w") )
         )
     ) ;
   }

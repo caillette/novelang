@@ -147,6 +147,14 @@
     </pre>
   </xsl:template>
 
+  <xsl:template match="n:soft-inline-litteral" >
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="n:hard-inline-litteral" >
+    <tt><xsl:apply-templates/></tt>
+  </xsl:template>
+
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-plain | n:paragraph-speech-escaped" >

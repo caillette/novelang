@@ -1,7 +1,7 @@
 
 *** Syntax for Parts
 
-Part files focus on a textual content. Part files have the "«fullstop»nlp" suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
+Part files focus on a textual content. Part files have the ``.nlp`` suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
 
 http://github.com/caillette/novelang/tree/master/src/doc
 
@@ -53,7 +53,7 @@ Here is a [bracketed block].
 
 === Parenthesis
 
-A parenthesized block is delimited by opening «solidus» closing parenthesis.
+A parenthesized block is delimited by opening `/ closing` parenthesis.
 
 <<< 
 Here is a (parenthesized block).
@@ -62,7 +62,7 @@ Here is a (parenthesized block).
 
 === Interpolated clause
 
-An interpolated clauseis delimited by a pair of double minus signs, or a double minus sign for opening and a single minus sign immediately followed by a minus sign and a low line for closing.
+An interpolated clauseis delimited by a pair of double minus signs, or a double minus sign "``--``" for opening and a single minus sign immediately followed by a minus sign and a low line for closing "`-_`".
 
 <<< 
 Here is -- as you can see -- the interpolated clause.
@@ -88,7 +88,7 @@ Paragraph may include italics, quotes, brackets, parenthesis, interpolated claus
 
 === Blockquote
 
-A blockquote is delimited by two opening «solidus» closing angled brackets.
+A blockquote is delimited by two opening `/ closing` angled brackets.
 
 <<<
 <<
@@ -101,7 +101,7 @@ May include several paragraphs.
 
 === Litteral
 
-A litteral block is delimited by three opening «solidus» closing angled brackets.
+A litteral block is delimited by three opening `/ closing` angled brackets.
 
 <<<
  <<<
@@ -143,13 +143,7 @@ _    &amp;lowline;          &deg;    &amp;deg;           &amp;    &amp;amp;
 
 Sometimes it is useful to tell Novelang to ignore some lines in a Part files.
 
-Line comments begin with double percent sign "«percent»«percent»".
+Line comments begin with double percent sign "``%````%``".
 
-Blocks comments are delimited by a pair of double accolades "«lcub»«lcub»" and "«rcub»«rcub»".
-
-<<<
-&percent;&percent; Line comment (escaped percent sign)
-%% Line comment (litteral percent sign)
->>>
-
+Blocks comments are delimited by a pair of double accolades.
 
