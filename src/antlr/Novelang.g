@@ -513,50 +513,22 @@ blockIdentifier
  *  with sub-paragraphs which don't have symmetrical delimiters.
  *  It doesn't seem possible to factor this with using backtracking or whatever.
  */  
-paragraphBody0 
-  :   openingEllipsis
-/*
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedDelimitedParagraph embeddedPunctuationSign )
-          ( mediumBreak? nestedWordSequence )?
-        )*
-      )
-    | ( nestedDelimitedParagraph embeddedPunctuationSign?
-        ( mediumBreak? nestedDelimitedParagraph embeddedPunctuationSign? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedDelimitedParagraph embeddedPunctuationSign? )+
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
-*/
-  ;
-
 paragraphBody 
   :   openingEllipsis
     | ( // Start with plain words or inline litteral.
         ( openingEllipsis smallBreak? )?
-        ( word | softInlineLitteral | hardInlineLitteral ) 
-        ( smallBreak? punctuationSign )*
-        ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
-          ( smallBreak? punctuationSign )?
-        )*
+        nestedWordSequence
         ( ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
-          ( mediumBreak?
-            ( word | softInlineLitteral | hardInlineLitteral ) 
-            ( smallBreak? punctuationSign )*
-            ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
-              ( smallBreak? punctuationSign )*
-            )*
+          ( mediumBreak? nestedWordSequence )?
+        )*
+      )
+    | ( // Start with delimited block.
+        delimitedBlock ( smallBreak? punctuationSign )*
+        ( ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
+          ( mediumBreak? nestedWordSequence
           )?
         )*
-
       )
-
   ;
 
 flatBlock
@@ -569,94 +541,73 @@ flatBlock
   
 paragraphBodyNoQuote
   :   openingEllipsis
-/*
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        nestedWordSequence
+        ( ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )+
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
-*/      
+    | ( // Start with delimited block.
+        nestedParagraphNoQuote ( smallBreak? punctuationSign )*
+        ( ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
+          ( mediumBreak? nestedWordSequence
+          )?
+        )*
+      )
   ;
   
 paragraphBodyNoEmphasis
   :   openingEllipsis
-/*  
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        nestedWordSequence
+        ( ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )+
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
-*/      
+    | ( // Start with delimited block.
+        nestedParagraphNoQuote ( smallBreak? punctuationSign )*
+        ( ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
+          ( mediumBreak? nestedWordSequence
+          )?
+        )*
+      )
   ;
   
 paragraphBodyNoInterpolatedClause
   :   openingEllipsis
-/*  
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        nestedWordSequence
+        ( ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )+
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
-*/      
+    | ( // Start with delimited block.
+        nestedParagraphNoQuote ( smallBreak? punctuationSign )*
+        ( ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
+          ( mediumBreak? nestedWordSequence
+          )?
+        )*
+      )
   ;
 
 nestedWordSequence
-  : nestedCharacterSequenceWithLitteral 
-    (   ( mediumBreak nestedCharacterSequenceWithLitteral ) 
-      | ( smallBreak? punctuationSign )
-      | ( ( smallBreak? punctuationSign ) nestedCharacterSequenceWithLitteral ) 
+  : ( word | softInlineLitteral | hardInlineLitteral ) 
+    ( smallBreak? punctuationSign )*
+    ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
+      ( smallBreak? punctuationSign )?
     )*
   ;
   
   
-nestedCharacterSequenceWithLitteral
-  : word 
-  | softInlineLitteral
-  | hardInlineLitteral
-  ;
-  
 delimitedBlock
   : parenthesizingText  
   | bracketingText 
-//  | quotingText 
-//  | emphasizingText
-//  | interpolatedClause
+  | quotingText 
+  | emphasizingText
+  | interpolatedClause
   ;  
   
 nestedParagraphNoQuote
