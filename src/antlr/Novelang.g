@@ -513,30 +513,63 @@ blockIdentifier
  *  with sub-paragraphs which don't have symmetrical delimiters.
  *  It doesn't seem possible to factor this with using backtracking or whatever.
  */  
-paragraphBody 
+paragraphBody0 
   :   openingEllipsis
+/*
     | ( openingEllipsis?
         nestedWordSequence 
         ( mediumBreak?
-          ( nestedDelimitedParagraph ( smallBreak? punctuationSign )? )
+          ( nestedDelimitedParagraph embeddedPunctuationSign )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedDelimitedParagraph ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedDelimitedParagraph ( smallBreak? punctuationSign )? )*
+    | ( nestedDelimitedParagraph embeddedPunctuationSign?
+        ( mediumBreak? nestedDelimitedParagraph embeddedPunctuationSign? )*
         ( mediumBreak?
           nestedWordSequence
-          ( mediumBreak? nestedDelimitedParagraph ( smallBreak? punctuationSign )? )+
+          ( mediumBreak? nestedDelimitedParagraph embeddedPunctuationSign? )+
         )*    
         ( mediumBreak?
           nestedWordSequence
         )?
       )  
+*/
   ;
 
+paragraphBody 
+  :   openingEllipsis
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        ( word | softInlineLitteral | hardInlineLitteral ) 
+        ( smallBreak? punctuationSign )*
+        ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
+          ( smallBreak? punctuationSign )?
+        )*
+        ( ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
+          ( mediumBreak?
+            ( word | softInlineLitteral | hardInlineLitteral ) 
+            ( smallBreak? punctuationSign )*
+            ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
+              ( smallBreak? punctuationSign )*
+            )*
+          )?
+        )*
+
+      )
+
+  ;
+
+flatBlock
+  : ( word | softInlineLitteral | hardInlineLitteral ) 
+    ( smallBreak? punctuationSign )*
+    ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
+      ( smallBreak? punctuationSign )?
+    )*
+  ;
   
 paragraphBodyNoQuote
   :   openingEllipsis
+/*
     | ( openingEllipsis?
         nestedWordSequence 
         ( mediumBreak?
@@ -554,10 +587,12 @@ paragraphBodyNoQuote
           nestedWordSequence
         )?
       )  
+*/      
   ;
   
 paragraphBodyNoEmphasis
   :   openingEllipsis
+/*  
     | ( openingEllipsis?
         nestedWordSequence 
         ( mediumBreak?
@@ -575,10 +610,12 @@ paragraphBodyNoEmphasis
           nestedWordSequence
         )?
       )  
+*/      
   ;
   
 paragraphBodyNoInterpolatedClause
   :   openingEllipsis
+/*  
     | ( openingEllipsis?
         nestedWordSequence 
         ( mediumBreak?
@@ -596,28 +633,30 @@ paragraphBodyNoInterpolatedClause
           nestedWordSequence
         )?
       )  
+*/      
   ;
 
 nestedWordSequence
   : nestedCharacterSequenceWithLitteral 
     (   ( mediumBreak nestedCharacterSequenceWithLitteral ) 
-      | ( smallBreak? punctuationSign ) 
-      | ( smallBreak? punctuationSign nestedCharacterSequenceWithLitteral ) 
+      | ( smallBreak? punctuationSign )
+      | ( ( smallBreak? punctuationSign ) nestedCharacterSequenceWithLitteral ) 
     )*
   ;
   
+  
 nestedCharacterSequenceWithLitteral
   : word 
-//  | softInlineLitteral
-//  | hardInlineLitteral
+  | softInlineLitteral
+  | hardInlineLitteral
   ;
   
-nestedDelimitedParagraph
+delimitedBlock
   : parenthesizingText  
   | bracketingText 
-  | quotingText 
-  | emphasizingText
-  | interpolatedClause
+//  | quotingText 
+//  | emphasizingText
+//  | interpolatedClause
   ;  
   
 nestedParagraphNoQuote
@@ -640,6 +679,8 @@ nestedParagraphNoInterpolatedClause
   | quotingText 
   | emphasizingText
   ;  
+  
+  
 
 parenthesizingText
   : LEFT_PARENTHESIS 
