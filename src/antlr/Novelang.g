@@ -531,14 +531,6 @@ paragraphBody
       )
   ;
 
-flatBlock
-  : ( word | softInlineLitteral | hardInlineLitteral ) 
-    ( smallBreak? punctuationSign )*
-    ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
-      ( smallBreak? punctuationSign )?
-    )*
-  ;
-  
 paragraphBodyNoQuote
   :   openingEllipsis
     | ( // Start with plain words or inline litteral.
@@ -593,12 +585,33 @@ paragraphBodyNoInterpolatedClause
       )
   ;
 
-nestedWordSequence
-  : ( word | softInlineLitteral | hardInlineLitteral ) 
+nestedWordSequence0
+  : 
+/*  
+    ( word | softInlineLitteral | hardInlineLitteral ) 
     ( smallBreak? punctuationSign )*
-    ( ( ( mediumBreak word ) | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) ) )
+    ( mediumBreak? 
+      ( word | softInlineLitteral | hardInlineLitteral )
       ( smallBreak? punctuationSign )?
     )*
+*/    
+  ;
+  
+nestedWordSequence
+  : ( word 
+      ( (   ( mediumBreak word ) 
+          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( smallBreak? punctuationSign word? )
+        )
+      )*
+    )
+  | ( ( softInlineLitteral | hardInlineLitteral ) word?
+      ( (   ( mediumBreak word ) 
+          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( smallBreak? punctuationSign word? )
+        )
+      )*
+    )
   ;
   
   
@@ -689,8 +702,8 @@ softInlineLitteral
 }
   : GRAVE_ACCENT
     (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
-//      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
-//      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT
     -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
@@ -702,8 +715,8 @@ hardInlineLitteral
 }
   : GRAVE_ACCENT GRAVE_ACCENT
     (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
-//      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
-//      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT GRAVE_ACCENT
     -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
