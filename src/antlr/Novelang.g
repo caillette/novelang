@@ -698,7 +698,7 @@ softInlineLitteral
   : GRAVE_ACCENT
     (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
       | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
-      | s3 = escapedCharacter { buffer.append( $s3.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT
     -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
@@ -708,11 +708,12 @@ hardInlineLitteral
 @init {
   final StringBuffer buffer = new StringBuffer() ;
 }
-  : GRAVE_ACCENT
+  : GRAVE_ACCENT GRAVE_ACCENT
     (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
       | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
-    GRAVE_ACCENT
+    GRAVE_ACCENT GRAVE_ACCENT
     -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
   ;
   

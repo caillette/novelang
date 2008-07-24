@@ -601,7 +601,7 @@ public class PartParserTest {
   public void hardInlineLitteralNothingSpecial() throws RecognitionException {
     final String litteral = "azer()+&%?";
     hardInlineLitteral(
-        "`" + litteral +"`",
+        "``" + litteral +"``",
         tree( HARD_INLINE_LITTERAL, litteral )
     ) ;
   }
