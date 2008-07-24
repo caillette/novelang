@@ -1,12 +1,12 @@
 
 *** Book files
 
-Book files aggregate part files. Book files have the "~fullstop~nlb" suffix  (like NoveLang Book). 
+Book files aggregate part files. Book files have the "«fullstop»nlb" suffix  (like NoveLang Book). 
 
 
 === "insert" command
 
-Book files are useful when there is too much text to fit inside one Part file. It is also easier to reorganize small Parts by changing their order in a Book file than copy ~solidus~ pasting inside one big file.
+Book files are useful when there is too much text to fit inside one Part file. It is also easier to reorganize small Parts by changing their order in a Book file than copy «solidus» pasting inside one big file.
 
 When Part files become too numerous, Book files can refer to multiple Part files at once. Referring to project layout, here is a well-formed Book file:
 
@@ -28,7 +28,7 @@ If there are Part files in subdirectories, there is an option to perform a deep 
 insert file:. $recurse 
 >>>
 
-There is also an option to add the filename (trimming path and ~fullstop~nlp extension) as a chapter title as a chapter title:
+There is also an option to add the filename (trimming path and «fullstop»nlp extension) as a chapter title as a chapter title:
 
 <<<
 insert file:. $recurse $createchapters
@@ -36,7 +36,7 @@ insert file:. $recurse $createchapters
 
 === "mapstylesheet" command
 
-The "mapstylesheet" command defines a stylesheet for one or more MIME type. Referring to project layout above, here is the command to insert in "book~fullstop~" file in order to render HTML documents with "html-beautiful~fullstop~xsl" and PDF documents with "pdf-beautiful~fullstop~xsl".
+The "mapstylesheet" command defines a stylesheet for one or more MIME type. Referring to project layout above, here is the command to insert in "book«fullstop»" file in order to render HTML documents with "html-beautiful«fullstop»xsl" and PDF documents with "pdf-beautiful«fullstop»xsl".
 
 <<<
 mapstylesheets 

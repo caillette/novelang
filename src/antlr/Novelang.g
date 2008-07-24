@@ -275,9 +275,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | RIGHT_SQUARE_BRACKET
       | SEMICOLON
       | SOLIDUS 
-      | TILDE 
-//      | TRIPLE_GREATERTHANSIGN
-//      | TRIPLE_LESSTHANSIGN
+//      | TILDE  Removed as used for delimiting escape.
       | VERTICAL_LINE 
   ;
 
@@ -700,9 +698,10 @@ softInlineLitteral
   : GRAVE_ACCENT
     (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
       | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.text ) ; }
     )+ 
     GRAVE_ACCENT
-    -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( WORD, buffer.toString() ) } )
+    -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
   ;
   
 hardInlineLitteral
@@ -714,7 +713,7 @@ hardInlineLitteral
       | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
     )+ 
     GRAVE_ACCENT
-    -> ^( HARD_INLINE_LITTERAL { delegate.createTree( WORD, buffer.toString() ) } )
+    -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
   ;
   
   
@@ -775,6 +774,17 @@ rawWord returns [ String text ]
     )*
     { $text = buffer.toString() ; }
   ;  
+
+escapedCharacter returns [ String unescaped ]
+  : LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK letters RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK
+    { $unescaped = delegate.escapeSymbol( 
+          $letters.text, 
+          0, // getLine(), TODO fix this.
+          0 // getCharPositionInLine() 
+      ) ;
+    }    
+  ;
+
   
 openingEllipsis
   : ELLIPSIS -> ^( ELLIPSIS_OPENING )
@@ -951,16 +961,6 @@ nonHexLetter
 
   ;
 
-escapedCharacter returns [ String unescaped ]
-  : TILDE letters TILDE
-    { $unescaped = delegate.escapeSymbol( 
-          $letters.text, 
-          0, // getLine(), TODO fix this.
-          0 // getCharPositionInLine() 
-      ) ;
-    }    
-  ;
-
 chapterIntroducer : ASTERISK ASTERISK ASTERISK ;
 sectionIntroducer : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN ;
 speechOpener : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS ;
@@ -993,6 +993,7 @@ GREATER_THAN_SIGN : '>' ;
 HYPHEN_MINUS : '-' ;
 LEFT_PARENTHESIS : '(' ;
 LEFT_SQUARE_BRACKET : '[' ;
+LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00ab' ;
 LESS_THAN_SIGN : '<' ;
 LOW_LINE : '_' ;
 NUMBER_SIGN : '#' ;
@@ -1002,7 +1003,10 @@ QUESTION_MARK : '?' ;
 REVERSE_SOLIDUS : '\\' ;
 RIGHT_PARENTHESIS : ')' ;
 RIGHT_SQUARE_BRACKET : ']' ;
+RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00bb' ;
 SEMICOLON : ';' ;
+SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK : '\u2039' ;
+SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK : '\u203a' ;
 SOLIDUS : '/' ;
 TILDE : '~' ;
 VERTICAL_LINE : '|' ;

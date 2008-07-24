@@ -122,7 +122,7 @@ public class PartParserTest {
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
     final Map< String,String > map = Symbols.getDefinitions() ;
     for( String key : map.keySet() ) {
-      final String escaped = "~" + key + "~" ;
+      final String escaped = Symbols.ESCAPE_OPEN + key + Symbols.ESCAPE_CLOSE ;
       final String unescaped = map.get( key ) ;
       word( escaped, tree( WORD, unescaped ) ) ;
     }
@@ -581,11 +581,19 @@ public class PartParserTest {
   }
 
   @Test
-  public void softInlineLitteralNothingSpecial() throws RecognitionException {
+  public void softInlineLitteralNoEscape() throws RecognitionException {
     final String litteral = "azer()+&%?";
     softInlineLitteral(
         "`" + litteral +"`",
         tree( SOFT_INLINE_LITTERAL, litteral )
+    ) ;
+  }
+
+  @Test
+  public void softInlineLitteralWithEscape() throws RecognitionException {
+    softInlineLitteral(
+        "`" + Symbols.ESCAPE_OPEN + "tilde" + Symbols.ESCAPE_CLOSE +"`",
+        tree( SOFT_INLINE_LITTERAL, "~" )
     ) ;
   }
 

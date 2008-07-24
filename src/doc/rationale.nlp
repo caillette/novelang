@@ -68,11 +68,11 @@ This is about converting the AST to a human-readable format, like PDF or HTML. T
 === Reinventing the wheel
 
 Novelang's processing stages make it look a lot like Cocoon, which relies on XML instead of AST -- but it's all about trees in both cases-_. 
-Forrest is an attempt to make Cocoon simpler while some nice packaging. There are a lot of small problems with Cocoon ~solidus~ Forrest. Want some?
+Forrest is an attempt to make Cocoon simpler while some nice packaging. There are a lot of small problems with Cocoon «solidus» Forrest. Want some?
 
 Forrest's Wiki-like APT grammar is too weak. The caching pipeling cannot cache fragments of rendered documents. The bundled version of FOP is too old. XPath doesn't spit error messages when no link target was found. Startup is slow. Error messages are unclear. 
 
-By now, the grammar took 50~percent~ of Novelang development effort, and stylesheets about 25~percent~. As I aimed to produce some documents with precise requirements for my personal usage, I found quicker to redevelop Novelang's plumbing than fixing Forrest's one. 
+By now, the grammar took 50«percent» of Novelang development effort, and stylesheets about 25«percent». As I aimed to produce some documents with precise requirements for my personal usage, I found quicker to redevelop Novelang's plumbing than fixing Forrest's one. 
 
 http://forrest.apache.org 
 

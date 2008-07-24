@@ -18,6 +18,9 @@ package novelang.parser;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static novelang.parser.Symbols.ESCAPE_CLOSE;
+import static novelang.parser.Symbols.ESCAPE_OPEN;
 
 /**
  * Tests for {@link Symbols}.
@@ -28,42 +31,74 @@ public class SymbolsTest {
 
   @Test
   public void escape0() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "&", Symbols.unescapeText( "~amp~" ) ) ;
+    assertEquals( "&", Symbols.unescapeText( ESCAPE_OPEN + "amp" + ESCAPE_CLOSE ) ) ;
   }
 
   @Test
   public void escape1() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&", Symbols.unescapeText( "a~amp~" ) ) ;
+    assertEquals(
+        "a&",
+        Symbols.unescapeText( "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE )
+    ) ;
   }
 
   @Test
   public void escape2() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&b", Symbols.unescapeText( "a~amp~b" ) ) ;
+    assertEquals(
+        "a&b",
+        Symbols.unescapeText( "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "b" )
+    ) ;
   }
 
   @Test
   public void escape3() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&<", Symbols.unescapeText( "a~amp~~lt~" ) ) ;
+    assertEquals(
+        "a&<",
+        Symbols.unescapeText(
+            "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + ESCAPE_OPEN + "lt" + ESCAPE_CLOSE )
+    ) ;
   }
 
   @Test
   public void escape5() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&b<", Symbols.unescapeText( "a~amp~b~lt~" ) ) ;
+    assertEquals(
+        "a&b<",
+        Symbols.unescapeText(
+            "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "b" + ESCAPE_OPEN + "lt" + ESCAPE_CLOSE )
+    ) ;
   }
 
   @Test
   public void escape6() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "a&b<c", Symbols.unescapeText( "a~amp~b~lt~c" ) ) ;
+    assertEquals(
+        "a&b<c",
+        Symbols.unescapeText(
+            "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "b" +
+            ESCAPE_OPEN + "lt" + ESCAPE_CLOSE + "c"
+        )
+    ) ;
   }
 
   @Test
   public void escape7() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "abc&d<e", Symbols.unescapeText( "abc~amp~d~lt~e" ) ) ;
+    assertEquals(
+        "abc&d<e",
+        Symbols.unescapeText(
+            "abc" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "d" +
+                ESCAPE_OPEN + "lt" + ESCAPE_CLOSE + "e"
+        )
+    ) ;
   }
 
   @Test
   public void escape8() throws UnsupportedEscapedSymbolException {
-    Assert.assertEquals( "abc&d<ef", Symbols.unescapeText( "abc~amp~d~lt~ef" ) ) ;
+    assertEquals(
+        "abc&d<ef",
+        Symbols.unescapeText(
+            "abc" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "d" +
+                ESCAPE_OPEN + "lt" + ESCAPE_CLOSE + "ef"
+        )
+    ) ;
   }
 
 

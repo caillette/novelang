@@ -104,6 +104,10 @@ public class Symbols {
     }
   }
 
+  public static String ESCAPE_OPEN = "\u00ab" ; // «
+  public static String ESCAPE_CLOSE = "\u00bb" ; // »
+
+
   /**
    * Returns escaped symbol.
    * @param unescaped must not be null.
@@ -121,13 +125,18 @@ public class Symbols {
       if( null == escaped ) {
         buffer.append( c ) ;
       } else {
-        buffer.append( "~" ).append( escaped ).append( "~" ) ;
+        buffer.append( ESCAPE_OPEN ).append( escaped ).append( ESCAPE_CLOSE ) ;
       }
     }
     return buffer.toString();
   }
 
-  private static final Pattern ESCAPE_PATTERN = Pattern.compile( "(~(\\w+)\\~)" ) ;
+  private static final Pattern ESCAPE_PATTERN =
+      Pattern.compile( "(" + ESCAPE_OPEN + "(\\w+)" + ESCAPE_CLOSE + ")" ) ;
+
+  static {
+    LOGGER.debug( "Crafted regex {}", ESCAPE_PATTERN.pattern() ) ;
+  }
 
   public static String unescapeText( String text ) throws UnsupportedEscapedSymbolException {
     final Matcher matcher = ESCAPE_PATTERN.matcher( text ) ;

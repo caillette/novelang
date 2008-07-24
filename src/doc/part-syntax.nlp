@@ -1,7 +1,7 @@
 
 *** Syntax for Parts
 
-Part files focus on a textual content. Part files have the "~fullstop~nlp" suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
+Part files focus on a textual content. Part files have the "«fullstop»nlp" suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
 
 http://github.com/caillette/novelang/tree/master/src/doc
 
@@ -45,7 +45,7 @@ There are "double quotes".
 
 === Brackets
 
-A bracketed block is delimited by opening ~solidus~ closing square brackets.
+A bracketed block is delimited by opening «solidus» closing square brackets.
 
 <<< 
 Here is a [bracketed block].
@@ -53,7 +53,7 @@ Here is a [bracketed block].
 
 === Parenthesis
 
-A parenthesized block is delimited by opening ~solidus~ closing parenthesis.
+A parenthesized block is delimited by opening «solidus» closing parenthesis.
 
 <<< 
 Here is a (parenthesized block).
@@ -88,7 +88,7 @@ Paragraph may include italics, quotes, brackets, parenthesis, interpolated claus
 
 === Blockquote
 
-A blockquote is delimited by two opening ~solidus~ closing angled brackets.
+A blockquote is delimited by two opening «solidus» closing angled brackets.
 
 <<<
 <<
@@ -101,7 +101,7 @@ May include several paragraphs.
 
 === Litteral
 
-A litteral block is delimited by three opening ~solidus~ closing angled brackets.
+A litteral block is delimited by three opening «solidus» closing angled brackets.
 
 <<<
  <<<
@@ -131,7 +131,7 @@ Here is a paragraph after.
 Novelang uses some characters for its markup. For displaying those characters in the rendered documents, they must be escaped -- special codes must be used-_.
 
 <<<
-%    &amp;percent;          &gt;    &amp;gt;            ~    &amp;tilde;
+%    &amp;percent;          &gt;    &amp;gt;                &amp;tilde;
 +    &amp;plus;             &lt;    &amp;lt;            /    &amp;solidus;
 =    &amp;equals;           )    &amp;rp;            &OElig;    &amp;OElig;
 $    &amp;dollar;           .    &amp;fullstop;      &oelig;    &amp;oelig;
@@ -143,9 +143,9 @@ _    &amp;lowline;          &deg;    &amp;deg;           &amp;    &amp;amp;
 
 Sometimes it is useful to tell Novelang to ignore some lines in a Part files.
 
-Line comments begin with double percent sign "~percent~~percent~".
+Line comments begin with double percent sign "«percent»«percent»".
 
-Blocks comments are delimited by a pair of double accolades "~lcub~~lcub~" and "~rcub~~rcub~".
+Blocks comments are delimited by a pair of double accolades "«lcub»«lcub»" and "«rcub»«rcub»".
 
 <<<
 &percent;&percent; Line comment (escaped percent sign)
