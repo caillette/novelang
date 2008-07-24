@@ -275,7 +275,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | RIGHT_SQUARE_BRACKET
       | SEMICOLON
       | SOLIDUS 
-//      | TILDE  Removed as used for delimiting escape.
+      | TILDE  
       | VERTICAL_LINE 
   ;
 
@@ -518,15 +518,15 @@ paragraphBody
     | ( openingEllipsis?
         nestedWordSequence 
         ( mediumBreak?
-          ( nestedParagraph ( smallBreak? punctuationSign )? )
+          ( nestedDelimitedParagraph ( smallBreak? punctuationSign )? )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraph ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
+    | ( nestedDelimitedParagraph ( smallBreak? punctuationSign )? 
+        ( mediumBreak? nestedDelimitedParagraph ( smallBreak? punctuationSign )? )*
         ( mediumBreak?
           nestedWordSequence
-          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )+
+          ( mediumBreak? nestedDelimitedParagraph ( smallBreak? punctuationSign )? )+
         )*    
         ( mediumBreak?
           nestedWordSequence
@@ -599,20 +599,20 @@ paragraphBodyNoInterpolatedClause
   ;
 
 nestedWordSequence
-  : ( nestedWordSequenceWithLitteral ) 
-    (   ( mediumBreak nestedWordSequenceWithLitteral ) 
+  : nestedCharacterSequenceWithLitteral 
+    (   ( mediumBreak nestedCharacterSequenceWithLitteral ) 
       | ( smallBreak? punctuationSign ) 
-      | ( smallBreak? punctuationSign nestedWordSequenceWithLitteral ) 
+      | ( smallBreak? punctuationSign nestedCharacterSequenceWithLitteral ) 
     )*
   ;
   
-nestedWordSequenceWithLitteral
+nestedCharacterSequenceWithLitteral
   : word 
 //  | softInlineLitteral
-//  | hardInlineLitteral  
+//  | hardInlineLitteral
   ;
   
-nestedParagraph
+nestedDelimitedParagraph
   : parenthesizingText  
   | bracketingText 
   | quotingText 
@@ -697,8 +697,8 @@ softInlineLitteral
 }
   : GRAVE_ACCENT
     (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
-      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
-      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+//      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+//      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT
     -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
@@ -710,8 +710,8 @@ hardInlineLitteral
 }
   : GRAVE_ACCENT GRAVE_ACCENT
     (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
-      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
-      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+//      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+//      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT GRAVE_ACCENT
     -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
