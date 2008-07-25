@@ -522,14 +522,39 @@ paragraphBody
           ( mediumBreak? nestedWordSequence )?
         )*
       )
+
     | ( // Start with delimited block.
         delimitedBlock ( smallBreak? punctuationSign )*
-        ( ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
-          ( mediumBreak? nestedWordSequence
-          )?
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?
+          
         )*
+        
       )
+      
   ;
+  
+nestedWordSequence
+  : ( word 
+      ( (   ( mediumBreak word ) 
+          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( smallBreak? punctuationSign word? )
+        )
+      )*
+    )
+  | ( ( softInlineLitteral | hardInlineLitteral ) word?
+      ( (   ( mediumBreak word ) 
+          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( smallBreak? punctuationSign word? )
+        )
+      )*
+    )
+  ;
+  
+  
 
 paragraphBodyNoQuote
   :   openingEllipsis
@@ -584,37 +609,7 @@ paragraphBodyNoInterpolatedClause
         )*
       )
   ;
-
-nestedWordSequence0
-  : 
-/*  
-    ( word | softInlineLitteral | hardInlineLitteral ) 
-    ( smallBreak? punctuationSign )*
-    ( mediumBreak? 
-      ( word | softInlineLitteral | hardInlineLitteral )
-      ( smallBreak? punctuationSign )?
-    )*
-*/    
-  ;
-  
-nestedWordSequence
-  : ( word 
-      ( (   ( mediumBreak word ) 
-          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
-          | ( smallBreak? punctuationSign word? )
-        )
-      )*
-    )
-  | ( ( softInlineLitteral | hardInlineLitteral ) word?
-      ( (   ( mediumBreak word ) 
-          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
-          | ( smallBreak? punctuationSign word? )
-        )
-      )*
-    )
-  ;
-  
-  
+    
 delimitedBlock
   : parenthesizingText  
   | bracketingText 
