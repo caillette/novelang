@@ -1,8 +1,8 @@
 *** Status and history
 
-Novelang is yet stable (there are about 200 tests by now) and has been used for editing documents of hundreds of kilobytes. 
+Novelang is yet stable (there are about 200 tests by now) and used for editing documents of hundreds of kilobytes. 
 
-Its syntax may be subject to change until version 1&fullstop;0&fullstop;0. Keep informed reading the blog. 
+Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version 1&fullstop;0&fullstop;0. Keep informed reading the blog. 
 
 === Version 0&fullstop;6&fullstop;0
 
