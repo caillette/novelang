@@ -61,6 +61,14 @@
 
   </xsl:template>
 
+  <xsl:template match="n:litteral" >
+
+&lt;&lt;&lt;
+<xsl:apply-templates/>
+>>>
+  
+  </xsl:template>
+
   <xsl:template match="n:paragraph-plain" >
 <xsl:text> 
 
