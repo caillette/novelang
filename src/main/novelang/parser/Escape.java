@@ -137,7 +137,7 @@ public class Escape {
       if( null == escaped ) {
         buffer.append( c ) ;
       } else {
-        buffer.append( ESCAPE_END ).append( escaped ).append( ESCAPE_START ) ;
+        buffer.append( ESCAPE_START ).append( escaped ).append( ESCAPE_END ) ;
       }
     }
     return buffer.toString();

@@ -48,9 +48,7 @@ public class NlpWriter extends EscapingWriter {
   {
 
     // dom4j's XML writer does some clever entity-escaping not good for us.
-    final ContentHandler sink = new TextSink( outputStream );
-
-    return sink ;
+    return new TextSink( outputStream );
   }
 
 
