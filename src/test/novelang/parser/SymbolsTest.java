@@ -16,11 +16,10 @@
  */
 package novelang.parser;
 
-import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static novelang.parser.Symbols.ESCAPE_CLOSE;
-import static novelang.parser.Symbols.ESCAPE_OPEN;
+import static novelang.parser.Symbols.ESCAPE_START;
+import static novelang.parser.Symbols.ESCAPE_END;
 
 /**
  * Tests for {@link Symbols}.
@@ -31,14 +30,14 @@ public class SymbolsTest {
 
   @Test
   public void escape0() throws UnsupportedEscapedSymbolException {
-    assertEquals( "&", Symbols.unescapeText( ESCAPE_OPEN + "amp" + ESCAPE_CLOSE ) ) ;
+    assertEquals( "&", Symbols.unescapeText( ESCAPE_END + "amp" + ESCAPE_START ) ) ;
   }
 
   @Test
   public void escape1() throws UnsupportedEscapedSymbolException {
     assertEquals(
         "a&",
-        Symbols.unescapeText( "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE )
+        Symbols.unescapeText( "a" + ESCAPE_END + "amp" + ESCAPE_START )
     ) ;
   }
 
@@ -46,7 +45,7 @@ public class SymbolsTest {
   public void escape2() throws UnsupportedEscapedSymbolException {
     assertEquals(
         "a&b",
-        Symbols.unescapeText( "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "b" )
+        Symbols.unescapeText( "a" + ESCAPE_END + "amp" + ESCAPE_START + "b" )
     ) ;
   }
 
@@ -55,7 +54,7 @@ public class SymbolsTest {
     assertEquals(
         "a&<",
         Symbols.unescapeText(
-            "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + ESCAPE_OPEN + "lt" + ESCAPE_CLOSE )
+            "a" + ESCAPE_END + "amp" + ESCAPE_START + ESCAPE_END + "lt" + ESCAPE_START )
     ) ;
   }
 
@@ -64,7 +63,7 @@ public class SymbolsTest {
     assertEquals(
         "a&b<",
         Symbols.unescapeText(
-            "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "b" + ESCAPE_OPEN + "lt" + ESCAPE_CLOSE )
+            "a" + ESCAPE_END + "amp" + ESCAPE_START + "b" + ESCAPE_END + "lt" + ESCAPE_START )
     ) ;
   }
 
@@ -73,8 +72,8 @@ public class SymbolsTest {
     assertEquals(
         "a&b<c",
         Symbols.unescapeText(
-            "a" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "b" +
-            ESCAPE_OPEN + "lt" + ESCAPE_CLOSE + "c"
+            "a" + ESCAPE_END + "amp" + ESCAPE_START + "b" +
+                ESCAPE_END + "lt" + ESCAPE_START + "c"
         )
     ) ;
   }
@@ -84,8 +83,8 @@ public class SymbolsTest {
     assertEquals(
         "abc&d<e",
         Symbols.unescapeText(
-            "abc" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "d" +
-                ESCAPE_OPEN + "lt" + ESCAPE_CLOSE + "e"
+            "abc" + ESCAPE_END + "amp" + ESCAPE_START + "d" +
+                ESCAPE_END + "lt" + ESCAPE_START + "e"
         )
     ) ;
   }
@@ -95,8 +94,8 @@ public class SymbolsTest {
     assertEquals(
         "abc&d<ef",
         Symbols.unescapeText(
-            "abc" + ESCAPE_OPEN + "amp" + ESCAPE_CLOSE + "d" +
-                ESCAPE_OPEN + "lt" + ESCAPE_CLOSE + "ef"
+            "abc" + ESCAPE_END + "amp" + ESCAPE_START + "d" +
+                ESCAPE_END + "lt" + ESCAPE_START + "ef"
         )
     ) ;
   }

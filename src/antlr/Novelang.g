@@ -198,11 +198,18 @@ litteral
     WHITESPACE? SOFTBREAK
     l = litteralLines
     SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
-    -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.text ) } )
+    -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.unescaped ) } )
   ;  
 
-litteralLines
-  : litteralLine ( SOFTBREAK litteralLine )*
+litteralLines returns [ String unescaped ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : s1 = litteralLine { buffer.append( $s1.unescaped ) ; }
+    ( s2 = SOFTBREAK { buffer.append( $s2.text ) ; }
+      s3 = litteralLine { buffer.append( $s3.unescaped ) ; }
+    )*
+    { $unescaped = buffer.toString() ; }        
   ;
 
     
@@ -212,22 +219,77 @@ litteralLines
  * This doesn't work:
    ~( GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN )
    ( anySymbol | WHITESPACE )*
+ * In addition escaped characters must be added as unescaped.
+ * So we need to add every character "by hand". 
  */
-litteralLine
-  : (   ( ( anySymbolExceptGreaterthansign | WHITESPACE )
-          ( anySymbol | WHITESPACE )*
+litteralLine returns [ String unescaped ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   ( (   s1 = anySymbolExceptGreaterthansign { buffer.append( $s1.text ) ; } 
+            | s2 = escapedCharacter { buffer.append( $s2.unescaped ) ; } 
+            | s3 = WHITESPACE { buffer.append( $s3.text ) ; } 
+          )
+          (   s4 = anySymbol  { buffer.append( $s4.text ) ; } 
+            | s5 = escapedCharacter  { buffer.append( $s5.unescaped ) ; } 
+            | s6 = WHITESPACE  { buffer.append( $s6.text ) ; } 
+          )*
         )
       |
-        ( GREATER_THAN_SIGN 
-          (   ( ( anySymbolExceptGreaterthansign | WHITESPACE ) ( anySymbol | WHITESPACE )* )
-            | ( GREATER_THAN_SIGN 
-                ( ( anySymbolExceptGreaterthansign | WHITESPACE ) ( anySymbol | WHITESPACE )* )? 
+        ( s7 = GREATER_THAN_SIGN  { buffer.append( $s7.text ) ; } 
+          (   ( (   s8 = anySymbolExceptGreaterthansign  { buffer.append( $s8.text ) ; } 
+                  | s9 = escapedCharacter  { buffer.append( $s9.unescaped ) ; } 
+                  | s10 = WHITESPACE  { buffer.append( $s10.text ) ; } 
+                ) 
+                (   s11 = anySymbol  { buffer.append( $s11.text ) ; } 
+                  | s12 = escapedCharacter  { buffer.append( $s12.unescaped ) ; } 
+                  | s13 = WHITESPACE { buffer.append( $s13.text ) ; }
+                )* 
+              )
+            | ( s14 = GREATER_THAN_SIGN { buffer.append( $s14.text ) ; }
+                ( (   s15 = anySymbolExceptGreaterthansign { buffer.append( $s15.text ) ; }
+                    | s16 = escapedCharacter  { buffer.append( $s16.unescaped ) ; } 
+                    | s17 = WHITESPACE { buffer.append( $s17.text ) ; }
+                  ) 
+                  (   s18 = anySymbol { buffer.append( $s18.text ) ; }
+                    | s19 = escapedCharacter  { buffer.append( $s19.unescaped ) ; } 
+                  | s20 = WHITESPACE { buffer.append( $s20.text ) ; }
+                  )* 
+                )? 
               )
           )?
         )
-    )?       
+    )?   
+    { $unescaped = buffer.toString() ; }    
   ;
-
+  
+  
+softInlineLitteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+    )+ 
+    GRAVE_ACCENT
+    -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
+  ;
+  
+hardInlineLitteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+    )+ 
+    GRAVE_ACCENT GRAVE_ACCENT
+    -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
+  ;
+  
 
 anySymbol
   : anySymbolExceptGreaterthansign
@@ -263,6 +325,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
 //      | GRAVE_ACCENT
 //      | GREATER_THAN_SIGN
       | HYPHEN_MINUS
+      | LEFT_CURLY_BRACKET
       | LEFT_PARENTHESIS
       | LEFT_SQUARE_BRACKET
       | LESS_THAN_SIGN
@@ -271,6 +334,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | PLUS_SIGN
       | PERCENT_SIGN
       | QUESTION_MARK
+      | RIGHT_CURLY_BRACKET
       | RIGHT_PARENTHESIS
       | RIGHT_SQUARE_BRACKET
       | SEMICOLON
@@ -529,12 +593,9 @@ paragraphBody
         
         (          
             ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
-            ( mediumBreak? nestedWordSequence )?
-          
-        )*
-        
-      )
-      
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
   ;
   
 nestedWordSequence
@@ -565,13 +626,16 @@ paragraphBodyNoQuote
           ( mediumBreak? nestedWordSequence )?
         )*
       )
+
     | ( // Start with delimited block.
         nestedParagraphNoQuote ( smallBreak? punctuationSign )*
-        ( ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
-          ( mediumBreak? nestedWordSequence
-          )?
-        )*
-      )
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
   ;
   
 paragraphBodyNoEmphasis
@@ -583,13 +647,16 @@ paragraphBodyNoEmphasis
           ( mediumBreak? nestedWordSequence )?
         )*
       )
+
     | ( // Start with delimited block.
-        nestedParagraphNoQuote ( smallBreak? punctuationSign )*
-        ( ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
-          ( mediumBreak? nestedWordSequence
-          )?
-        )*
-      )
+        nestedParagraphNoEmphasis ( smallBreak? punctuationSign )*
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
   ;
   
 paragraphBodyNoInterpolatedClause
@@ -601,13 +668,16 @@ paragraphBodyNoInterpolatedClause
           ( mediumBreak? nestedWordSequence )?
         )*
       )
+
     | ( // Start with delimited block.
-        nestedParagraphNoQuote ( smallBreak? punctuationSign )*
-        ( ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
-          ( mediumBreak? nestedWordSequence
-          )?
-        )*
-      )
+        nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )*
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
   ;
     
 delimitedBlock
@@ -690,33 +760,6 @@ interpolatedClause
     )
   ;	  
 
-
-softInlineLitteral
-@init {
-  final StringBuffer buffer = new StringBuffer() ;
-}
-  : GRAVE_ACCENT
-    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
-      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
-      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
-    )+ 
-    GRAVE_ACCENT
-    -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
-  ;
-  
-hardInlineLitteral
-@init {
-  final StringBuffer buffer = new StringBuffer() ;
-}
-  : GRAVE_ACCENT GRAVE_ACCENT
-    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
-      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
-      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
-    )+ 
-    GRAVE_ACCENT GRAVE_ACCENT
-    -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
-  ;
-  
   
   
 /** Use between words, when everything is kept on the same line.
@@ -992,6 +1035,7 @@ FULL_STOP : '.' ;
 GRAVE_ACCENT : '`' ;
 GREATER_THAN_SIGN : '>' ;
 HYPHEN_MINUS : '-' ;
+LEFT_CURLY_BRACKET : '{' ;
 LEFT_PARENTHESIS : '(' ;
 LEFT_SQUARE_BRACKET : '[' ;
 LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00ab' ;
@@ -1002,6 +1046,7 @@ PLUS_SIGN : '+' ;
 PERCENT_SIGN : '%' ;
 QUESTION_MARK : '?' ;
 REVERSE_SOLIDUS : '\\' ;
+RIGHT_CURLY_BRACKET : '}' ;
 RIGHT_PARENTHESIS : ')' ;
 RIGHT_SQUARE_BRACKET : ']' ;
 RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00bb' ;

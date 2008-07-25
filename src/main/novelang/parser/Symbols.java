@@ -42,10 +42,31 @@ public class Symbols {
   private static final BiMap< String, String > UNESCAPED_SYMBOLS ;
   private static final Set< String > HTML_ESCAPED ;
 
+  /**
+   * Left-pointing double angle quotation mark "&#xab;".
+   */
+  public static String ESCAPE_START = "\u00ab" ; // «
+
+  /**
+   * Right-pointing double angle quotation mark "&#xbb;".
+   */
+  public static String ESCAPE_END = "\u00bb" ; // »
+
+
   static {
 
     final BiMap< String, String > symbols = Maps.newHashBiMap() ;
     final Set< String > htmlEscaped = Sets.newHashSet() ;
+
+    // Symbols to keep after character escape refactoring.
+
+    symbols.put( "startescape", ESCAPE_START ) ;
+    symbols.put( "endescape", ESCAPE_END ) ;
+    symbols.put( "greaterthan", ">" ) ;
+    symbols.put( "graveaccent", "`" ) ;
+
+
+    // Those symbols aren't needed anymore.
 
     symbols.put( "apos", "'" ) ;
 
@@ -64,7 +85,6 @@ public class Symbols {
     symbols.put( "amp", "&" ) ;
     symbols.put( "solidus", "/" ) ;
     symbols.put( "lt", "<" ) ;
-    symbols.put( "gt", ">" ) ;
     symbols.put( "tilde", "~" ) ;
     symbols.put( "rp", ")" ) ;
     symbols.put( "quot", "\"" ) ;
@@ -104,9 +124,6 @@ public class Symbols {
     }
   }
 
-  public static String ESCAPE_OPEN = "\u00ab" ; // «
-  public static String ESCAPE_CLOSE = "\u00bb" ; // »
-
 
   /**
    * Returns escaped symbol.
@@ -125,14 +142,14 @@ public class Symbols {
       if( null == escaped ) {
         buffer.append( c ) ;
       } else {
-        buffer.append( ESCAPE_OPEN ).append( escaped ).append( ESCAPE_CLOSE ) ;
+        buffer.append( ESCAPE_END ).append( escaped ).append( ESCAPE_START ) ;
       }
     }
     return buffer.toString();
   }
 
   private static final Pattern ESCAPE_PATTERN =
-      Pattern.compile( "(" + ESCAPE_OPEN + "(\\w+)" + ESCAPE_CLOSE + ")" ) ;
+      Pattern.compile( "(" + ESCAPE_END + "(\\w+)" + ESCAPE_START + ")" ) ;
 
   static {
     LOGGER.debug( "Crafted regex {}", ESCAPE_PATTERN.pattern() ) ;

@@ -189,10 +189,12 @@ blockquote > p {
     </p>
   </xsl:template>
 
-  <xsl:template match="n:locutor" />
-
   <xsl:template match="n:emphasis" >
     <i><xsl:apply-templates/></i>
+  </xsl:template>
+
+  <xsl:template match="n:hard-inline-litteral" >
+    <tt><xsl:apply-templates/></tt>
   </xsl:template>
 
   <xsl:import href="punctuation-US-EN.xsl" />
