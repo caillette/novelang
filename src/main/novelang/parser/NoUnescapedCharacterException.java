@@ -15,32 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang.rendering;
-
-import novelang.configuration.RenderingConfiguration;
-import novelang.common.Nodepath;
-import novelang.parser.Escape;
-import novelang.loader.ResourceName;
+package novelang.parser;
 
 /**
- * An {@code XslWriter} escaping characters known as {@link novelang.parser.Escape}.
+ * Thrown when there was no unescaped character corresponding to given escape code.
  *
  * @author Laurent Caillette
  */
-public class EscapingWriter extends XslWriter {
+public class NoUnescapedCharacterException extends Exception {
 
-  public EscapingWriter(
-      RenderingConfiguration configuration,
-      ResourceName xslFileName,
-      RenditionMimeType mimeType
-  ) {
-    super( configuration, xslFileName, mimeType );
+  public NoUnescapedCharacterException( String escapeCode ) {
+    super( "Unsupported escape code: '" + escapeCode + "'" ) ;
   }
-
-  public void write( Nodepath kinship, String word ) throws Exception {
-    final String escaped = Escape.escapeText( word );
-    super.write( kinship, escaped ) ;
-  }
-
-
 }

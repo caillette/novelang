@@ -4,7 +4,7 @@
 Book files aggregate part files. Book files have the ``.nlb`` suffix  (like NoveLang Book). 
 
 
-=== ``insert`` command
+=== Command : ``insert``
 
 Book files are useful when there is too much text to fit inside one Part file. It is also easier to reorganize small Parts by changing their order in a Book file than copy `/ pasting` inside one big file.
 
@@ -34,7 +34,7 @@ There is also an option to add the filename (trimming path and ``.nlp`` extensio
 insert file:. $recurse $createchapters
 >>>
 
-=== ``mapstylesheet`` command
+=== Command : ``mapstylesheet``
 
 The "mapstylesheet" command defines a stylesheet for one or more MIME type. Referring to project layout above, here is the command to insert in ``book.nlb`` file in order to render HTML documents with ``html-beautiful.xsl`` and PDF documents with ``pdf-beautiful.xsl``.
 

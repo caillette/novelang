@@ -19,8 +19,6 @@ package novelang.rendering;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
@@ -35,7 +33,7 @@ import novelang.common.metadata.TreeMetadata;
 import novelang.common.Nodepath;
 import novelang.common.NodeKind;
 import novelang.loader.ResourceName;
-import novelang.parser.Symbols;
+import novelang.parser.Escape;
 
 /**
  * @author Laurent Caillette
@@ -82,7 +80,7 @@ public class PdfWriter extends XslWriter {
 
   public void writeLitteral( Nodepath kinship, String word ) throws Exception {
     if( NodeKind.LITTERAL == kinship.getCurrent() ) {
-      word = Symbols.unescapeText( word ) ;
+      word = Escape.unescapeText( word ) ;
     }
     super.write( kinship, word ) ;
   }

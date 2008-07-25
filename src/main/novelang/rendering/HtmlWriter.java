@@ -24,7 +24,7 @@ import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
 import novelang.common.metadata.TreeMetadata;
-import novelang.parser.Symbols;
+import novelang.parser.Escape;
 import novelang.loader.ResourceName;
 
 /**
@@ -43,22 +43,8 @@ public class HtmlWriter extends XslWriter {
     ) ;
   }
 
-  public void write( Nodepath kinship, String word ) throws Exception {
-    final StringBuffer reconstructed = new StringBuffer() ;
-    for( char c : word.toCharArray() ) {
-      final String s = "" + c ; // Let the compiler optimize this!
-      final String escaped = Symbols.escapeSymbol( s ) ;
-      if( ( null != escaped ) && ! "&".equals( s ) && Symbols.isHtmlEscape( escaped ) ) {
-        reconstructed.append( "&" ).append( escaped ).append( ";" ) ;
-      } else {
-        reconstructed.append( s ) ;
-      }
-    }
-//    if( hasEscape ) {
-//      super.writeLitteral( kinship, reconstructed.toString() ) ;
-//    } else {
-      super.write( kinship, reconstructed.toString() ) ;
-//    }
+  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
+      super.write( kinship, Escape.escapeHtmlText( word ) ); ;
   }
 
 
@@ -73,9 +59,6 @@ public class HtmlWriter extends XslWriter {
   private static final EntityEscapeSelector ESCAPE_ISO_ENTITIES = new EntityEscapeSelector() {
     public boolean shouldEscape( String publicId, String systemId ) {
       return publicId.startsWith( "ISO 8879:1986//ENTITIES" ) ;
-//          "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
-//          "ISO 8879:1986//ENTITIES Publishing//EN//XML"
-//          "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
     }
   };
 }

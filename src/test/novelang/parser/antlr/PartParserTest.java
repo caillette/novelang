@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static novelang.common.NodeKind.*;
 import novelang.common.SyntacticTree;
-import novelang.parser.Symbols;
+import novelang.parser.Escape;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.AntlrTestHelper.softInlineLitteral;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -125,11 +125,11 @@ public class PartParserTest {
 
   @Test
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
-    final Map< String,String > map = Symbols.getDefinitions() ;
+    final Map< String, Character > map = Escape.getCharacterEscapes() ;
     for( String key : map.keySet() ) {
-      final String escaped = Symbols.ESCAPE_START + key + Symbols.ESCAPE_END ;
-      final String unescaped = map.get( key ) ;
-      word( escaped, tree( WORD, unescaped ) ) ;
+      final String escaped = Escape.ESCAPE_START + key + Escape.ESCAPE_END ;
+      final Character unescaped = map.get( key ) ;
+      word( escaped, tree( WORD, "" + unescaped ) ) ;
     }
   }
 
@@ -606,7 +606,7 @@ public class PartParserTest {
 
     litteral(
         "<<<" + BREAK +
-        "2" + Symbols.ESCAPE_START + "greaterthan" + Symbols.ESCAPE_END + "1" + BREAK +
+        "2" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END + "1" + BREAK +
         ">>>",
         tree( LITTERAL, "2>1" )
     ) ;
@@ -624,8 +624,8 @@ public class PartParserTest {
   @Test
   public void softInlineLitteralWithEscape() throws RecognitionException {
     softInlineLitteral(
-        "`" + Symbols.ESCAPE_START + "tilde" + Symbols.ESCAPE_END +"`",
-        tree( SOFT_INLINE_LITTERAL, "~" )
+        "`" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END +"`",
+        tree( SOFT_INLINE_LITTERAL, ">" )
     ) ;
   }
 

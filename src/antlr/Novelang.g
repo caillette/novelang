@@ -821,7 +821,7 @@ rawWord returns [ String text ]
 
 escapedCharacter returns [ String unescaped ]
   : LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK letters RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK
-    { $unescaped = delegate.escapeSymbol( 
+    { $unescaped = delegate.unescapeCharacter( 
           $letters.text, 
           0, // getLine(), TODO fix this.
           0 // getCharPositionInLine() 
