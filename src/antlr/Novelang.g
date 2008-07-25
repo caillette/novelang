@@ -44,6 +44,8 @@ tokens {
   SQUARE_BRACKETS ;
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
+  SOFT_INLINE_LITTERAL ;
+  HARD_INLINE_LITTERAL ;
   WORD ;
   URL ;
   
@@ -181,27 +183,131 @@ scope ParagraphScope ;
   ;
 
 blockQuote
-  : ( blockIdentifier mediumBreak)? OPENING_BLOCKQUOTE 
+  : ( blockIdentifier mediumBreak)? 
+    LESS_THAN_SIGN LESS_THAN_SIGN 
     ( mediumBreak | largeBreak )?
     paragraphBody 
     ( largeBreak paragraphBody )* 
     ( mediumBreak | largeBreak )?
-    CLOSING_BLOCKQUOTE
+    GREATER_THAN_SIGN GREATER_THAN_SIGN
     -> ^( BLOCKQUOTE blockIdentifier? ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
 
 litteral
-  : OPENING_LITTERAL 
+  : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
     WHITESPACE? SOFTBREAK
-    l = rawLitteral
-    SOFTBREAK CLOSING_LITTERAL
-    -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.text ) } )
+    l = litteralLines
+    SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
+    -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.unescaped ) } )
   ;  
 
-rawLitteral
-  : (   SOFTBREAK
-      | WHITESPACE
-      | digit
+litteralLines returns [ String unescaped ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : s1 = litteralLine { buffer.append( $s1.unescaped ) ; }
+    ( s2 = SOFTBREAK { buffer.append( $s2.text ) ; }
+      s3 = litteralLine { buffer.append( $s3.unescaped ) ; }
+    )*
+    { $unescaped = buffer.toString() ; }        
+  ;
+
+    
+/**
+ * This rule looks weird as negation doesn't work as expected.
+ * It's just about avoiding '>>>' at the start of the line.
+ * This doesn't work:
+   ~( GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN )
+   ( anySymbol | WHITESPACE )*
+ * In addition escaped characters must be added as unescaped.
+ * So we need to add every character "by hand". 
+ */
+litteralLine returns [ String unescaped ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   ( (   s1 = anySymbolExceptGreaterthansign { buffer.append( $s1.text ) ; } 
+            | s2 = escapedCharacter { buffer.append( $s2.unescaped ) ; } 
+            | s3 = WHITESPACE { buffer.append( $s3.text ) ; } 
+          )
+          (   s4 = anySymbol  { buffer.append( $s4.text ) ; } 
+            | s5 = escapedCharacter  { buffer.append( $s5.unescaped ) ; } 
+            | s6 = WHITESPACE  { buffer.append( $s6.text ) ; } 
+          )*
+        )
+      |
+        ( s7 = GREATER_THAN_SIGN  { buffer.append( $s7.text ) ; } 
+          (   ( (   s8 = anySymbolExceptGreaterthansign  { buffer.append( $s8.text ) ; } 
+                  | s9 = escapedCharacter  { buffer.append( $s9.unescaped ) ; } 
+                  | s10 = WHITESPACE  { buffer.append( $s10.text ) ; } 
+                ) 
+                (   s11 = anySymbol  { buffer.append( $s11.text ) ; } 
+                  | s12 = escapedCharacter  { buffer.append( $s12.unescaped ) ; } 
+                  | s13 = WHITESPACE { buffer.append( $s13.text ) ; }
+                )* 
+              )
+            | ( s14 = GREATER_THAN_SIGN { buffer.append( $s14.text ) ; }
+                ( (   s15 = anySymbolExceptGreaterthansign { buffer.append( $s15.text ) ; }
+                    | s16 = escapedCharacter  { buffer.append( $s16.unescaped ) ; } 
+                    | s17 = WHITESPACE { buffer.append( $s17.text ) ; }
+                  ) 
+                  (   s18 = anySymbol { buffer.append( $s18.text ) ; }
+                    | s19 = escapedCharacter  { buffer.append( $s19.unescaped ) ; } 
+                  | s20 = WHITESPACE { buffer.append( $s20.text ) ; }
+                  )* 
+                )? 
+              )
+          )?
+        )
+    )?   
+    { $unescaped = buffer.toString() ; }    
+  ;
+  
+  
+softInlineLitteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+    )+ 
+    GRAVE_ACCENT
+    -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
+  ;
+  
+hardInlineLitteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+    )+ 
+    GRAVE_ACCENT GRAVE_ACCENT
+    -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
+  ;
+  
+
+anySymbol
+  : anySymbolExceptGreaterthansign
+  | GREATER_THAN_SIGN
+  ;
+    
+anySymbolExceptGreaterthansign
+  : anySymbolExceptGreaterthansignAndGraveAccent
+  | GRAVE_ACCENT
+  ;
+  
+anySymbolExceptGraveAccent
+  : anySymbolExceptGreaterthansignAndGraveAccent
+  | GREATER_THAN_SIGN
+  ;
+  
+anySymbolExceptGreaterthansignAndGraveAccent
+  :     digit
       | hexLetter
       | nonHexLetter 
       | AMPERSAND 
@@ -216,30 +322,26 @@ rawLitteral
       | EQUALS_SIGN
       | EXCLAMATION_MARK
       | FULL_STOP
-      | GRAVE_ACCENT
+//      | GRAVE_ACCENT
+//      | GREATER_THAN_SIGN
       | HYPHEN_MINUS
+      | LEFT_CURLY_BRACKET
       | LEFT_PARENTHESIS
       | LEFT_SQUARE_BRACKET
+      | LESS_THAN_SIGN
       | LOW_LINE
       | NUMBER_SIGN
       | PLUS_SIGN
       | PERCENT_SIGN
       | QUESTION_MARK
+      | RIGHT_CURLY_BRACKET
       | RIGHT_PARENTHESIS
       | RIGHT_SQUARE_BRACKET
       | SEMICOLON
       | SOLIDUS 
-      | TILDE 
+      | TILDE  
       | VERTICAL_LINE 
-    )*
   ;
-
-locutor
- 	: word 
- 	  ( smallBreak word )* 
- 	  smallBreak? LOCUTOR_INTRODUCER
- 	  -> ^( LOCUTOR word* ) // TODO fix this, apostrophe is swallowed.
- 	;
 
 
 // ===================================
@@ -477,102 +579,108 @@ blockIdentifier
  */  
 paragraphBody 
   :   openingEllipsis
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedParagraph ( smallBreak? punctuationSign )? )
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        nestedWordSequence
+        ( ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraph ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraph ( smallBreak? punctuationSign )? )* // TODO factor with previous line
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
-  ;
 
+    | ( // Start with delimited block.
+        delimitedBlock ( smallBreak? punctuationSign )*
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
+  ;
   
+nestedWordSequence
+  : ( word 
+      ( (   ( mediumBreak word ) 
+          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( smallBreak? punctuationSign word? )
+        )
+      )*
+    )
+  | ( ( softInlineLitteral | hardInlineLitteral ) word?
+      ( (   ( mediumBreak word ) 
+          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( smallBreak? punctuationSign word? )
+        )
+      )*
+    )
+  ;
+  
+  
+
 paragraphBodyNoQuote
   :   openingEllipsis
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        nestedWordSequence
+        ( ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraphNoQuote ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )? )*
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
+
+    | ( // Start with delimited block.
+        nestedParagraphNoQuote ( smallBreak? punctuationSign )*
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
   ;
   
 paragraphBodyNoEmphasis
   :   openingEllipsis
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        nestedWordSequence
+        ( ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )? )*
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
+
+    | ( // Start with delimited block.
+        nestedParagraphNoEmphasis ( smallBreak? punctuationSign )*
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
   ;
   
 paragraphBodyNoInterpolatedClause
   :   openingEllipsis
-    | ( openingEllipsis?
-        nestedWordSequence 
-        ( mediumBreak?
-          ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
+    | ( // Start with plain words or inline litteral.
+        ( openingEllipsis smallBreak? )?
+        nestedWordSequence
+        ( ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
-    | ( nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? 
-        ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
-        ( mediumBreak?
-          nestedWordSequence
-          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )
-          ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )? )*
-        )*    
-        ( mediumBreak?
-          nestedWordSequence
-        )?
-      )  
-  ;
 
-nestedWordSequence
-  : ( word ) 
-    (   ( mediumBreak word ) 
-      | ( smallBreak? punctuationSign ) 
-      | ( smallBreak? punctuationSign word ) 
-    )*
+    | ( // Start with delimited block.
+        nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )*
+        ( mediumBreak? nestedWordSequence  )?
+        
+        (          
+            ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
+            ( mediumBreak? nestedWordSequence )?          
+        )*        
+      )      
   ;
-  
-nestedParagraph
+    
+delimitedBlock
   : parenthesizingText  
   | bracketingText 
   | quotingText 
@@ -600,6 +708,8 @@ nestedParagraphNoInterpolatedClause
   | quotingText 
   | emphasizingText
   ;  
+  
+  
 
 parenthesizingText
   : LEFT_PARENTHESIS 
@@ -650,6 +760,7 @@ interpolatedClause
     )
   ;	  
 
+  
   
 /** Use between words, when everything is kept on the same line.
  */
@@ -707,6 +818,17 @@ rawWord returns [ String text ]
     )*
     { $text = buffer.toString() ; }
   ;  
+
+escapedCharacter returns [ String unescaped ]
+  : LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK letters RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK
+    { $unescaped = delegate.unescapeCharacter( 
+          $letters.text, 
+          0, // getLine(), TODO fix this.
+          0 // getCharPositionInLine() 
+      ) ;
+    }    
+  ;
+
   
 openingEllipsis
   : ELLIPSIS -> ^( ELLIPSIS_OPENING )
@@ -883,16 +1005,6 @@ nonHexLetter
 
   ;
 
-escapedCharacter returns [ String unescaped ]
-  : AMPERSAND letters SEMICOLON
-    { $unescaped = delegate.escapeSymbol( 
-          $letters.text, 
-          0, // getLine(), TODO fix this.
-          0 // getCharPositionInLine() 
-      ) ;
-    }    
-  ;
-
 chapterIntroducer : ASTERISK ASTERISK ASTERISK ;
 sectionIntroducer : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN ;
 speechOpener : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS ;
@@ -921,29 +1033,34 @@ EQUALS_SIGN : '=' ;
 EXCLAMATION_MARK : '!' ;
 FULL_STOP : '.' ;
 GRAVE_ACCENT : '`' ;
+GREATER_THAN_SIGN : '>' ;
 HYPHEN_MINUS : '-' ;
+LEFT_CURLY_BRACKET : '{' ;
 LEFT_PARENTHESIS : '(' ;
 LEFT_SQUARE_BRACKET : '[' ;
+LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00ab' ;
+LESS_THAN_SIGN : '<' ;
 LOW_LINE : '_' ;
 NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
 PERCENT_SIGN : '%' ;
 QUESTION_MARK : '?' ;
 REVERSE_SOLIDUS : '\\' ;
+RIGHT_CURLY_BRACKET : '}' ;
 RIGHT_PARENTHESIS : ')' ;
 RIGHT_SQUARE_BRACKET : ']' ;
+RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00bb' ;
 SEMICOLON : ';' ;
+SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK : '\u2039' ;
+SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK : '\u203a' ;
 SOLIDUS : '/' ;
 TILDE : '~' ;
 VERTICAL_LINE : '|' ;
 
 
   
-OPENING_BLOCKQUOTE : '<<' ;
-CLOSING_BLOCKQUOTE : '>>' ;
-OPENING_LITTERAL : '<<<' ;
-CLOSING_LITTERAL : '>>>' ;
-LOCUTOR_INTRODUCER : '::' ;
+//TRIPLE_LESSTHANSIGN : '<<<' ;
+//TRIPLE_GREATERTHANSIGN : '>>>' ;
 
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g

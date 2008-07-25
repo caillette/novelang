@@ -8,12 +8,12 @@ Typical layout of a Novelang project looks like this:
 
 <<<
 /
-  book.nlb            &lt;- Book file
-  style/              &lt;- Directory containing styles
-    pdf.xsl           &lt;- A stylesheet file
+  book.nlb            <- Book file
+  style/              <- Directory containing styles
+    pdf.xsl           <- A stylesheet file
     html.xsl
   user-manual/
-    chapter-1.nlp     &lt;- A Part file
+    chapter-1.nlp     <- A Part file
     chapter-2.nlp
   developer-manual/
     chapter-1.nlp

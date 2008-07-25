@@ -15,9 +15,9 @@
       <excludeFolder url="file://$MODULE_DIR$/../distrib" />
       <excludeFolder url="file://$MODULE_DIR$/javadoc" />
       <excludeFolder url="file://$MODULE_DIR$/test-files" />
+      <excludeFolder url="file://$MODULE_DIR$/test-scratch" />
       <excludeFolder url="file://$MODULE_DIR$/../lib" />
       <excludeFolder url="file://$MODULE_DIR$/../target" />
-      <excludeFolder url="file://$MODULE_DIR$/../test-files" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

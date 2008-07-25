@@ -219,6 +219,14 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="n:hard-inline-litteral" >
+    <fo:inline
+        font-family="monospace"
+    >
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-plain" >

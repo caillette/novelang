@@ -22,9 +22,13 @@ import java.util.Map;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static novelang.common.NodeKind.*;
-import novelang.parser.Symbols;
+import novelang.common.SyntacticTree;
+import novelang.parser.Escape;
 import static novelang.parser.antlr.AntlrTestHelper.*;
+import static novelang.parser.antlr.AntlrTestHelper.softInlineLitteral;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -34,6 +38,8 @@ import static novelang.parser.antlr.TreeFixture.tree;
  * @author Laurent Caillette
  */
 public class PartParserTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( PartParserTest.class ) ;
 
   @Test
   public void titleIsTwoWords() throws RecognitionException {
@@ -119,11 +125,11 @@ public class PartParserTest {
 
   @Test
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
-    final Map< String,String > map = Symbols.getDefinitions() ;
+    final Map< String, Character > map = Escape.getCharacterEscapes() ;
     for( String key : map.keySet() ) {
-      final String escaped = "&" + key + ";" ;
-      final String unescaped = map.get( key ) ;
-      word( escaped, tree( WORD, unescaped ) ) ;
+      final String escaped = Escape.ESCAPE_START + key + Escape.ESCAPE_END ;
+      final Character unescaped = map.get( key ) ;
+      word( escaped, tree( WORD, "" + unescaped ) ) ;
     }
   }
 
@@ -255,6 +261,9 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenSemicolon() throws RecognitionException {
+    SyntacticTree tree = word( "w0" ) ;
+    LOGGER.debug( tree.toStringTree() ) ;
+
     paragraph( "w0;", tree(
         PARAGRAPH_PLAIN,
         tree( WORD, "w0" ),
@@ -466,6 +475,19 @@ public class PartParserTest {
   }
 
   @Test
+  public void sectionHasQuote()
+      throws RecognitionException
+  {
+    section(
+        "=== \"q\" w" ,
+        tree(
+            SECTION,
+            tree( TITLE, tree( QUOTE, tree( WORD, "q" ) ), tree( WORD, "w") )
+        )
+    ) ;
+  }
+
+  @Test
   public void sectionIsAnonymous() throws RecognitionException {
     section(
         "===",
@@ -522,7 +544,7 @@ public class PartParserTest {
   }
 
   @Test @Ignore
-  public void someLitteralContainingCommentLikeText() throws RecognitionException {
+  public void someLitteralContainingLineComment() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
@@ -534,18 +556,88 @@ public class PartParserTest {
     ) ;
   }
 
-  @Test @Ignore
+  @Test
   public void someLitteralContainingLowerthanSign() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
-      "<" +
+      "<" + BREAK +
       ">>>",
       tree( PART,
           tree( LITTERAL, "<" )
       )
     ) ;
   }
+
+  @Test
+  public void someLitteralContainingGreaterthanSigns() throws RecognitionException {
+    final String verbatim =
+      " >>>" + BREAK +
+      "> " + BREAK +
+      ">> " + BREAK +
+      ">> >>>"
+    ;
+
+    part(
+      BREAK +
+      "<<<" + BREAK +
+      verbatim + BREAK +
+      ">>>",
+      tree( PART,
+          tree( LITTERAL, verbatim )
+      )
+    ) ;
+  }
+
+  
+  @Test
+  public void litteralWithBreaksAndOtherSeparators() throws RecognitionException {
+    final String verbatim = "  Here is some " + BREAK + "//litteral//. " ;
+    litteral(
+        "<<<" + BREAK +
+        verbatim + BREAK +
+        ">>>",
+        tree( LITTERAL, verbatim )
+    ) ;
+  }
+
+  @Test
+  public void litteralWithEscapedCharacters() throws RecognitionException {
+
+    litteral(
+        "<<<" + BREAK +
+        "2" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END + "1" + BREAK +
+        ">>>",
+        tree( LITTERAL, "2>1" )
+    ) ;
+  }
+
+  @Test
+  public void softInlineLitteralNoEscape() throws RecognitionException {
+    final String litteral = "azer()+&%?";
+    softInlineLitteral(
+        "`" + litteral +"`",
+        tree( SOFT_INLINE_LITTERAL, litteral )
+    ) ;
+  }
+
+  @Test
+  public void softInlineLitteralWithEscape() throws RecognitionException {
+    softInlineLitteral(
+        "`" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END +"`",
+        tree( SOFT_INLINE_LITTERAL, ">" )
+    ) ;
+  }
+
+  @Test
+  public void hardInlineLitteralNothingSpecial() throws RecognitionException {
+    final String litteral = "azer()+&%?";
+    hardInlineLitteral(
+        "``" + litteral +"``",
+        tree( HARD_INLINE_LITTERAL, litteral )
+    ) ;
+  }
+
 
   @Test
   public void partHasAnonymousSectionAndHasBlockquoteWithSingleParagraph() 
@@ -867,17 +959,6 @@ public class PartParserTest {
     ) ;
   }
 
-
-  @Test
-  public void litteralWithBreaksAndOtherSeparators() throws RecognitionException {
-    final String verbatim = "  Here is some " + BREAK + "//litteral//. " ;
-    litteral(
-        "<<<" + BREAK +
-        verbatim + BREAK +
-        ">>>",
-        tree( LITTERAL, verbatim )
-    ) ;
-  }
 
   @Test
   public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {

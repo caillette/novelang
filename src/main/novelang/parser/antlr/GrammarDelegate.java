@@ -26,8 +26,9 @@ import com.google.common.collect.ImmutableList;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
-import novelang.parser.Symbols;
-import novelang.parser.UnsupportedEscapedSymbolException;
+import novelang.parser.Escape;
+import novelang.parser.NoEscapeCodeException;
+import novelang.parser.NoUnescapedCharacterException;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
@@ -75,14 +76,14 @@ public class GrammarDelegate {
     ) ;
   }
 
-  public String escapeSymbol( String unescaped, int line, int column ) {
+  public String unescapeCharacter( String escaped, int line, int column ) {
     try {
-      return Symbols.unescapeSymbol( unescaped ) ;
-    } catch( UnsupportedEscapedSymbolException e ) {
+      return "" + Escape.unescapeCharacter( escaped ) ;
+    } catch( NoUnescapedCharacterException e ) {
       final Location location = locationFactory.createLocation( line, column ) ;
       problems.add( Problem.createProblem(
-          "Cannot unescape: '" + unescaped + "'", location ) ) ;
-      return "<unescaped:" + unescaped + ">" ;
+          "Cannot unescape: '" + escaped + "'", location ) ) ;
+      return "<unescaped:" + escaped + ">" ;
     }
   }
 }

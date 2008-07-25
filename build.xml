@@ -123,7 +123,7 @@
 
   <target name="generate-antlr-idea" description="Generate ANTLR parser in IDEA's subdir" >
     <antcall target="generate-antlr" >
-      <param name="target.antlr.generated.dir" value="idea/generated/antlr" />
+      <param name="target.antlr.generated.dir" value="idea/generated/antlr/novelang/parser/antlr" />
     </antcall>
   </target>
 

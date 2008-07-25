@@ -4,17 +4,17 @@ It's easy to customize rendering of PDF, HTML and plain text because Novelang re
 
 Novelang looks for stylesheets in that order:
 
-1&rp; In the directory given by "novelang&fullstop;stylesheet&fullstop;dir" system property, if defined.
+`1)` In the directory given by ``novelang.stylesheet.dir`` system property, if defined.
 
-2&rp; In a "style" directory right under the project directory (from where Novelang was launched)
+`2)` In a ``style`` directory right under the project directory (from where Novelang was launched)
 
-3&rp; Inside "Novelang-x&fullstop;x&fullstop;x&fullstop;jar" under the "&solidus;style" directory.
+`3)` Inside ``Novelang-x.x.x.jar`` under the ``/style`` directory.
 
 By default Novelang attempts to render final document using the stylesheet with the name of corresponding format. Otherwise, it uses a default, built-in stylesheet.
 
 <<<
 MIME type extension                .pdf     .html
-Corresponding default stylesheet   pdf.xsl  html.xsl
+Corresponding default stylesheet    pdf.xsl  html.xsl
 >>>
 
 After launching Novelang HTTP daemon, you can use the stylesheet query parameter to override any other stylesheet name:
@@ -28,11 +28,20 @@ Stylesheets may be defined for a whole Book as explained later, see the "mapstyl
 
 === eXensible Stylesheet Language
 
-The stylesheets are written in XSL&solidus;FO, which stands for eXtensible Stylesheet Language &solidus; Formatting Objects. Both are standards developed by the W3C (World Wide Web Consortium). There are many tutorials on the Web and reference documentation is here:
+The stylesheets are written in XSL `/ FO`, which stands for eXtensible Stylesheet Language `/ Formatting` Objects. Both are standards developed by the W3C (World Wide Web Consortium). The reference documentation is here:
 
 http://www.w3.org/TR/xsl
 
-Novelang also supports stylesheet reuse with the "import" command. You can reuse Novelang's bundled stylesheets:
+There are many valuable tutorials on the Web. Here are some:
+
+http://zvon.org/xxl/XSLTutorial/Output/index.html
+
+http://www.learn-xsl-fo-tutorial.com
+
+
+=== XSL reuse
+
+Novelang supports stylesheet reuse with standard ``xsl:import`` command. You can reuse Novelang's bundled stylesheets:
 
 <<<
 general-punctuation.xsl
@@ -48,35 +57,35 @@ Novelang stylesheets support inclusion of character entities. This means, you ca
 Such a definition looks like this:
 
 <<<
-&lt;!ENTITY nbsp   "&#160;" &gt;
+<!ENTITY nbsp   "&#160;" >
 >>>
 
-So inside the stylesheet you just have to type "nbsp;" instead of "&numbersign;160;".
+So inside the stylesheet you just have to type "``&nbsp;``" instead of "``&#160;``".
 
 Novelang comes bundled with those files. Here is how to refer them (it's quite verbose as XML always is) :
 
 <<<
-&lt;!DOCTYPE doctype [
+<!DOCTYPE doctype [
 
-    &lt;!ENTITY % ISOnum PUBLIC
+    <!ENTITY % ISOnum PUBLIC
         "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
         "ISOnum.pen"
-    &gt;
+    >
     %ISOnum;
 
-    &lt;!ENTITY % ISOpub PUBLIC
+    <!ENTITY % ISOpub PUBLIC
         "ISO 8879:1986//ENTITIES Publishing//EN//XML"
         "ISOpub.pen"
-    &gt;
+    >
     %ISOpub;
 
-    &lt;!ENTITY % ISOlat1 PUBLIC
+    <!ENTITY % ISOlat1 PUBLIC
         "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
         "ISOlat1.pen"
-    &gt;
+    >
     %ISOlat1;
 
-]&gt;
+]>
 >>>
 
-For HTML documents, those entities are automatically HTML-escaped when their system name starts with "ISO 8879&colon;1986&solidus;&solidus;ENTITIES" as above.
+For HTML documents, those entities are automatically HTML-escaped when their system name starts with ``ISO 8879:1986//ENTITIES`` as above.

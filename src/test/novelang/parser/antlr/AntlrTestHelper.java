@@ -132,6 +132,36 @@ public class AntlrTestHelper {
     return tree;
   }
 
+  static void softInlineLitteral( String text, SyntacticTree expectedTree )
+      throws RecognitionException
+  {
+    final SyntacticTree actualTree = softInlineLitteral( text ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  static SyntacticTree softInlineLitteral( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final SyntacticTree tree = ( SyntacticTree )
+        parser.getAntlrParser().softInlineLitteral().getTree() ;
+    checkSanity( parser );
+    return tree;
+  }
+
+  static void hardInlineLitteral( String text, SyntacticTree expectedTree )
+      throws RecognitionException
+  {
+    final SyntacticTree actualTree = hardInlineLitteral( text ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  static SyntacticTree hardInlineLitteral( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final SyntacticTree tree = ( SyntacticTree )
+        parser.getAntlrParser().hardInlineLitteral().getTree() ;
+    checkSanity( parser );
+    return tree;
+  }
+
   static void chapter( String text, SyntacticTree expectedTree ) throws RecognitionException {
     final SyntacticTree actualTree = chapter( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;

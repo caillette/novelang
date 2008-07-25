@@ -1,35 +1,41 @@
 
 *** Syntax for Parts
 
-Part files focus on a textual content. Part files have the "&fullstop;nlp" suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
+Part files focus on a textual content. Part files have the ``.nlp`` suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
 
 http://github.com/caillette/novelang/tree/master/src/doc
 
 
 === Chapter
 
-A chapter begins with a special marker made of three asterisks, immediately followed by an optional title.
+A chapter begins with three asterisks "``***``", immediately followed by an optional title.
+Then an empty line separates the chapter title from its content.
 
-Chapter title may include italics, quotes, brackets, parenthesis, interpolated clauses.
+Chapter title supports the same features as a paragraph (italics, quotes...).
 
 <<<
 *** Chapter's title
+
+Chapter content starts here.
 >>>
 
 
 === Section
 
-A chapter begins with a special marker made of three equals signs, immediately followed by an optional title.
+A section begins with three equals sign "``===``", immediately followed by an optional title. 
+Then an empty line separates the section title from its content.
 
-Section title may include italics, quotes, brackets, parenthesis, interpolated clauses.
+Section title supports the same features as a paragraph (italics, quotes...).
 
 <<<
 === Sections's title
+
+Section content starts here.
 >>>
 
 === Italics
 
-An italicized block is delimited by double solidus.
+An italicized block is delimited by a pair of double solidus "``//``".
 
 <<< 
 There are //italics//.
@@ -37,7 +43,7 @@ There are //italics//.
 
 === Quotes
 
-A quoted block is delimited by double quotes.
+A quoted block is delimited by a pair of double quotes "``"``".
 
 <<<
 There are "double quotes".
@@ -45,7 +51,7 @@ There are "double quotes".
 
 === Brackets
 
-A bracketed block is delimited by opening &solidus; closing square brackets.
+A bracketed block starts with a left square bracket "``[``" and ends with a right square bracket "``]``".
 
 <<< 
 Here is a [bracketed block].
@@ -53,7 +59,7 @@ Here is a [bracketed block].
 
 === Parenthesis
 
-A parenthesized block is delimited by opening &solidus; closing parenthesis.
+A parenthesized block starts with a left parenthesis "``(``" and ends with a right parenthesis "``)``".
 
 <<< 
 Here is a (parenthesized block).
@@ -62,15 +68,15 @@ Here is a (parenthesized block).
 
 === Interpolated clause
 
-An interpolated clauseis delimited by a pair of double minus signs, or a double minus sign for opening and a single minus sign immediately followed by a minus sign and a low line for closing.
+An interpolated clause starts with a pair of double minus signs "``--``". It ends with another pair for double minus sigh, //or// a single minus sign immediately followed by a minus sign and a low line for closing "`-_`". When using the second closing form, it is called the "silent end".
 
 <<< 
-Here is -- as you can see -- the interpolated clause.
+Introducing -- as here -- the interpolated clause.
 
-Another sample -- with silent end-_.
+Silent end -- nice for ending a sentence-_.
 >>>
 
-The second form of closing delimiter, called "silent end", means it should not be rendered but it gives a hint of where the interpolated clause ends. This is useful for rendering, because an interpolated clause is not just made of dash characters: non-breakable spaces should be inserted at the correct place.
+The "silent end" means closing dash should not be rendered but it gives a hint of where the interpolated clause ends. This is useful for rendering, because an interpolated clause is not just made of dash characters: non-breakable spaces should be inserted at the correct place.
 
 
 === Paragraph
@@ -88,29 +94,53 @@ Paragraph may include italics, quotes, brackets, parenthesis, interpolated claus
 
 === Blockquote
 
-A blockquote is delimited by two opening &solidus; closing angled brackets.
+A blockquote starts with a double less-than sign "``<<``" at the beginning of a line, immediately followed by a line break. It ends with a double greater-than sign "``>>``" at the start of a line. 
 
 <<<
-&lt;&lt;
+<<
 Blockquote here.
 
 May include several paragraphs.
-&gt;&gt;
+>>
 >>>
 
 
-=== Litteral
+=== Block litteral
 
-A litteral block is delimited by three opening &solidus; closing angled brackets.
+A block litteral starts with a triple less-than sign "``<<<``" at the beginning of a line, immediately followed by a line break. It ends with a triple greater-than sign "``>>>``" at the start of a line. 
 
 <<<
-&lt;&lt;&lt;
+<<<
 Here is litteral.
   Indentation will be kept.
-&gt;&gt;&gt;
+«greaterthan»>>
 >>>
 
-Litteral blocks are useful to display text verbatim. The text inside can be almost anything, except three closing angled brackets. For displaying them (as in the example shown above), use escaped characters.
+Litteral blocks are useful to display text verbatim. The text inside can be almost anything, except three closing angled brackets at the very start of a line. For displaying them (as in the example shown above), use escaped characters.
+
+
+=== Soft inline litteral 
+
+Soft inline litteral is delimited with a grave accent "``«inlinelitteral»``".
+
+<<<
+Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
+>>>
+%%"
+
+Soft inline litteral tells Novelang to drop syntactic rules, and don't mind about characters that normally have other purpose. Soft inline litteral may contain almost any character, except of course the grave accent. In the rare case where a grave accent is required, use an escaped character.
+
+
+=== Hard inline litteral 
+
+Hard inline litteral is delimited with a double grave accent "``«inlinelitteral»«inlinelitteral»``".
+
+<<<
+Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
+>>>
+%%
+
+Hard inline litteral works as soft inline litteral, but rendering should add a special style (like monospaced fonts) to draw the attention of the reader the text is verbatim (like a programming language item). 
 
 
 === URL
@@ -118,11 +148,7 @@ Litteral blocks are useful to display text verbatim. The text inside can be almo
 A URL is typed as-it-is. There must be a line break before and a line break after.
 
 <<<
-Here is a paragraph before.
-
 http://novelang.blogspot.com
-
-Here is a paragraph after.
 >>>
 
 
@@ -131,25 +157,19 @@ Here is a paragraph after.
 Novelang uses some characters for its markup. For displaying those characters in the rendered documents, they must be escaped -- special codes must be used-_.
 
 <<<
-%    &amp;percent;          &gt;    &amp;gt;            ~    &amp;tilde;
-+    &amp;plus;             &lt;    &amp;lt;            /    &amp;solidus;
-=    &amp;equals;           )    &amp;rp;            &OElig;    &amp;OElig;
-$    &amp;dollar;           .    &amp;fullstop;      &oelig;    &amp;oelig;
-_    &amp;lowline;          &deg;    &amp;deg;           &amp;    &amp;amp;
+>   «startescape»greaterthan«endescape» 
+«startescape»   «startescape»startescape«endescape» 
+«endescape»   «startescape»endescape«endescape» 
+«inlinelitteral»   «startescape»inlinelitteral«endescape» 
 >>>
 
+Using those character is exceptional, however -- except in Novelang documentation!-_ Most of useful character are accessible as litteral.
 
 === Comments
 
 Sometimes it is useful to tell Novelang to ignore some lines in a Part files.
 
-Line comments begin with double percent sign "&percent;&percent;".
+Line comments begin with double percent sign "``%````%``".
 
-Blocks comments are delimited by a pair of double accolades "&lcub;&lcub;" and "&rcub;&rcub;".
-
-<<<
-&percent;&percent; Line comment (escaped percent sign)
-%% Line comment (litteral percent sign)
->>>
-
+Blocks comments are delimited by a pair of double accolades  "``{````{``" and  "``}````}``".
 

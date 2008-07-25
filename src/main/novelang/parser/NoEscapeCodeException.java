@@ -14,15 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.parser;
 
 /**
+ * Thrown when there is no escape code for given character.
+ *
  * @author Laurent Caillette
  */
-public class UnsupportedEscapedSymbolException extends Exception {
+public class NoEscapeCodeException extends Exception {
 
-  public UnsupportedEscapedSymbolException( String symbol ) {
-    super( "Unsupported symbol: '" + symbol + "'" ) ;
+  public NoEscapeCodeException( Character character ) {
+    super( "Unsupported character: " + character ) ;
   }
 }
