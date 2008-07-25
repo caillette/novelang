@@ -107,7 +107,7 @@ May include several paragraphs.
 
 === Block litteral
 
-A blockquote starts with a triple less-than sign "``<<<``" at the beginning of a line, immediately followed by a line break. It ends with a triple greater-than sign "``>>>``" at the start of a line. 
+A block litteral starts with a triple less-than sign "``<<<``" at the beginning of a line, immediately followed by a line break. It ends with a triple greater-than sign "``>>>``" at the start of a line. 
 
 <<<
 <<<
@@ -117,6 +117,30 @@ Here is litteral.
 >>>
 
 Litteral blocks are useful to display text verbatim. The text inside can be almost anything, except three closing angled brackets at the very start of a line. For displaying them (as in the example shown above), use escaped characters.
+
+
+=== Soft inline litteral 
+
+Soft inline litteral is delimited with a grave accent "``«inlinelitteral»``".
+
+<<<
+Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
+>>>
+%%"
+
+Soft inline litteral tells Novelang to drop syntactic rules, and don't mind about characters that normally have other purpose. Soft inline litteral may contain almost any character, except of course the grave accent. In the rare case where a grave accent is required, use an escaped character.
+
+
+=== Hard inline litteral 
+
+Hard inline litteral is delimited with a double grave accent "``«inlinelitteral»«inlinelitteral»``".
+
+<<<
+Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
+>>>
+%%
+
+Hard inline litteral works as soft inline litteral, but rendering should add a special style (like monospaced fonts) to draw the attention of the reader the text is verbatim (like a programming language item). 
 
 
 === URL
@@ -130,14 +154,13 @@ http://novelang.blogspot.com
 
 === Escaped characters
 
-Some characters
-
 Novelang uses some characters for its markup. For displaying those characters in the rendered documents, they must be escaped -- special codes must be used-_.
 
 <<<
 >   «startescape»greaterthan«endescape» 
 «startescape»   «startescape»startescape«endescape» 
 «endescape»   «startescape»endescape«endescape» 
+«inlinelitteral»   «startescape»inlinelitteral«endescape» 
 >>>
 
 Using those character is exceptional, however -- except in Novelang documentation!-_ Most of useful character are accessible as litteral.

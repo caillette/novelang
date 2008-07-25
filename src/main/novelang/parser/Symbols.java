@@ -63,7 +63,7 @@ public class Symbols {
     symbols.put( "startescape", ESCAPE_START ) ;
     symbols.put( "endescape", ESCAPE_END ) ;
     symbols.put( "greaterthan", ">" ) ;
-    symbols.put( "graveaccent", "`" ) ;
+    symbols.put( "inlinelitteral", "`" ) ;
 
 
     // Those symbols aren't needed anymore.
