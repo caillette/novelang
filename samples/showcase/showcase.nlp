@@ -48,7 +48,7 @@ Some soft inline litteral inside `aeiouè §!"&@#°) «startescape».$*^.0` a paragra
 
 === Special characters
 
-Some escaped characters: «oelig» «OElig» «greaterthan»
+Some escaped characters: «oelig» «OElig» «greaterthan» «eurosign»
 
 Some ISO-8859-1 characters: à À é è ë ê É È Ë Ê ï î Ï Î ö ô Ö Ô ù ü û Ù Ü Û æ Æ ç Ç
 

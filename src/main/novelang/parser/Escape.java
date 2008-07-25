@@ -66,6 +66,8 @@ public class Escape {
     escapedCharacters.put( "oelig", '\u0153' ) ;
     escapedCharacters.put( "OElig", '\u0152' ) ;
 
+    escapedCharacters.put( "eurosign", '\u8364' ) ;
+
     escapedHtmlCharacters.put( "oelig", '\u0153' ) ;
     escapedHtmlCharacters.put( "OElig", '\u0152' ) ;
     escapedHtmlCharacters.put( "amp", '&' ) ;
