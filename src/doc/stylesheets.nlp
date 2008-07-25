@@ -14,7 +14,7 @@ By default Novelang attempts to render final document using the stylesheet with 
 
 <<<
 MIME type extension                .pdf     .html
-Corresponding default stylesheet   pdf.xsl  html.xsl
+Corresponding default stylesheet    pdf.xsl  html.xsl
 >>>
 
 After launching Novelang HTTP daemon, you can use the stylesheet query parameter to override any other stylesheet name:
