@@ -188,7 +188,7 @@ public class InsertFunction implements FunctionDefinition {
         } catch( MalformedURLException e ) {
           problems.add( Problem.createProblem( e ) ) ;
         }
-        if( null != part ) {
+        if( null != part && null != part.getDocumentTree() ) {
           final SyntacticTree partTree = part.getDocumentTree() ;
 
           if( createChapters ) {

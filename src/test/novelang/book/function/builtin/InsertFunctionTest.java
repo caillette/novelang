@@ -50,24 +50,52 @@ public class InsertFunctionTest {
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result =
-        call.evaluate( new Environment( contentDirectory ), Treepath.create( initialTree ) ) ;
+    final FunctionCall.Result result = call.evaluate( 
+        new Environment( goodContentDirectory ),
+        Treepath.create( initialTree )
+    ) ;
 
     Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
-    Assert.assertNotNull( result.getBook() ) ;
     Assert.assertNotNull( result.getBook() ) ;
 
   }
 
   @Test
-  public void recurse() throws IllegalFunctionCallException {
+  public void recurseWithAllValidParts() throws IllegalFunctionCallException {
     final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
         BookParserTest.createFunctionCallWithUrlTree(
-            scannedDirectory.getAbsolutePath(), "recurse" )
+            goodContentDirectory.getAbsolutePath(), "recurse" )
     ) ;
 
+    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final FunctionCall.Result result = call.evaluate(
+        new Environment( goodContentDirectory ),
+        Treepath.create( initialTree )
+    ) ;
+
+    Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
+    Assert.assertNotNull( result.getBook() ) ;
+  }
+
+  @Test
+  public void recurseWithSomeBrokenPart() throws IllegalFunctionCallException {
+    final FunctionDefinition definition = new InsertFunction() ;
+    final FunctionCall call = definition.instantiate(
+        new Location( "", -1, -1 ),
+        BookParserTest.createFunctionCallWithUrlTree(
+            brokenContentDirectory.getAbsolutePath(), "recurse" )
+    ) ;
+
+    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final FunctionCall.Result result = call.evaluate(
+        new Environment( brokenContentDirectory ),
+        Treepath.create( initialTree )
+    ) ;
+
+    Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
+    Assert.assertNotNull( result.getBook() ) ;
   }
 
 
@@ -77,9 +105,15 @@ public class InsertFunctionTest {
 // =======
 
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
-  private File contentDirectory ;
+  private static final String BROKEN_FILENAME = TestResources.BROKEN ;
+
+  private static final String CONTENT_GOOD_DIRNAME = "good" ;
+  private static final String CONTENT_BROKEN_DIRNAME = "broken" ;
+
+  private File scratchDirectory;
   private File oneWordFile ;
-  private File scannedDirectory ;
+  private File goodContentDirectory;
+  private File brokenContentDirectory;
 
   @Before
   public void setUp() throws Exception {
@@ -87,16 +121,22 @@ public class InsertFunctionTest {
     final String testName = ClassUtils.getShortClassName( getClass() ) ;
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
-    contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+    scratchDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+
+    goodContentDirectory = new File( scratchDirectory, CONTENT_GOOD_DIRNAME ) ;
 
     oneWordFile = TestResourceTools.copyResourceToFile(
         getClass(),
         ONE_WORD_FILENAME,
-        contentDirectory
+        goodContentDirectory
     ) ;
 
-    scannedDirectory = new File( contentDirectory, TestResources.SCANNED_DIR ) ;
-    
+    brokenContentDirectory = new File( scratchDirectory, CONTENT_BROKEN_DIRNAME ) ;
+    TestResourceTools.copyResourceToFile(
+        getClass(),
+        BROKEN_FILENAME,
+        brokenContentDirectory
+    ) ;
   }
 
 }

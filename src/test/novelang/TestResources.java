@@ -32,6 +32,7 @@ public class TestResources {
   public static final String MESSY_IDENTIFIERS = "/messy-identifiers.nlp";
   public static final String SIMPLE_STRUCTURE = "/simple-structure.nlp";
   public static final String ONE_WORD = "/one-word.nlp";
+  public static final String BROKEN = "/broken.nlp";
 
   public static final String SCANNED_DIR = "/scanned" ;
   public static final String SCANNED_BOOK = SCANNED_DIR + "/book.nlb" ;
@@ -55,10 +56,16 @@ public class TestResources {
   public static final String SERVED_PARTSOURCE_BROKEN = SERVED_PART_BROKEN_NOEXTENSION + ".nlp" ;
 
   public static final String SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION =
-      "/" + SERVED_DIRECTORY_NAME + "/book-alternate" ;
+      "/" + SERVED_DIRECTORY_NAME + "/book-alternatexsl" ;
 
   public static final String SERVED_BOOK_ALTERNATESTYLESHEET =
       SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION + ".nlb" ;
+
+  public static final String SERVED_BOOK_BADSCANNEDPART_NOEXTENSION =
+      "/" + SERVED_DIRECTORY_NAME + "/book-bad-scanned-part" ;
+
+  public static final String SERVED_BOOK_BADSCANNEDPART =
+      SERVED_BOOK_BADSCANNEDPART_NOEXTENSION + ".nlb" ;
 
 
 }
