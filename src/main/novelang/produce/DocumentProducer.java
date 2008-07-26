@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ServerConfiguration;
-import novelang.loader.FileLookupHelper;
+import novelang.common.FileTools;
 import novelang.loader.ResourceName;
 import novelang.common.Problem;
 import novelang.common.StructureKind;
@@ -141,14 +141,14 @@ public class DocumentProducer {
   {
 
     try {
-      final File bookFile = FileLookupHelper.load(
+      final File bookFile = FileTools.load(
           basedir,
           documentRequest.getDocumentSourceName(),
           StructureKind.BOOK.getFileExtensions()
       ) ;
       return new Book( FunctionRegistry.getStandardRegistry(), bookFile ) ;
     } catch( FileNotFoundException e ) {
-      final File partFile = FileLookupHelper.load(
+      final File partFile = FileTools.load(
           basedir,
           documentRequest.getDocumentSourceName(),
           StructureKind.PART.getFileExtensions()

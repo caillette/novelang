@@ -17,6 +17,8 @@
 
 package novelang.common;
 
+import com.google.common.collect.ObjectArrays;
+
 /**
  * Tells about the structural kind of document source: Book or Part.
  *
@@ -39,6 +41,14 @@ public enum StructureKind {
 
   public String[] getFileExtensions() {
     return fileExtension.clone() ;
+  }
+
+  public static String[] getAllFileExtensions() {
+    return ObjectArrays.concat(
+        BOOK.getFileExtensions(),
+        PART.getFileExtensions(),
+        String.class
+    ) ; 
   }
 
 }

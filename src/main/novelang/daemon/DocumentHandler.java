@@ -57,7 +57,7 @@ import com.google.common.collect.Lists;
  *
  * @author Laurent Caillette
  */
-public class DocumentHandler extends AbstractHandler {
+public class DocumentHandler extends GenericHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( DocumentHandler.class ) ;
 
@@ -69,34 +69,14 @@ public class DocumentHandler extends AbstractHandler {
   }
 
 
-  public void handle(
+  protected void doHandle(
       String target,
       HttpServletRequest request,
       HttpServletResponse response,
       int dispatch
   ) throws IOException, ServletException {
 
-    LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;
-
-    try {
-      handle( request, response );
-    } catch( Exception e ) {
-      response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR ) ;
-      response.getOutputStream().print( "<html>" );
-      response.getOutputStream().print( "<body>" );
-      response.getOutputStream().print( "<pre>" );
-
-      final PrintWriter exceptionWriter = new PrintWriter( response.getOutputStream() ) ;
-      e.printStackTrace( exceptionWriter );
-      exceptionWriter.flush() ;
-
-      response.getOutputStream().print( "</pre>" );
-      response.getOutputStream().print( "</body>" );
-      response.getOutputStream().print( "</html>" );
-
-      LOGGER.warn( "Exception occured", e );
-
-    }
+    handle( request, response );
   }
 
   private void handle( HttpServletRequest request, HttpServletResponse response ) throws IOException {

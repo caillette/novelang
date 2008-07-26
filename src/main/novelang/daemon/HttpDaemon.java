@@ -49,6 +49,7 @@ public class HttpDaemon {
     final HandlerCollection handlers = new HandlerCollection() ;
     handlers.addHandler( new DocumentHandler( serverConfiguration ) ) ;
     handlers.addHandler( new ResourceHandler( serverConfiguration ) ) ;
+    handlers.addHandler( new DirectoryScanHandler( serverConfiguration.getContentConfiguration() ) ) ;
     server = new Server( httpServerPort ) ;
     server.setHandler( handlers ) ;
   }

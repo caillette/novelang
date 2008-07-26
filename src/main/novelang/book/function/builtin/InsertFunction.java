@@ -19,12 +19,9 @@ package novelang.book.function.builtin;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +35,7 @@ import novelang.common.Problem;
 import novelang.common.SimpleTree;
 import novelang.common.StructureKind;
 import novelang.common.SyntacticTree;
+import novelang.common.FileTools;
 import novelang.common.tree.TreepathTools;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreeTools;
@@ -75,12 +73,6 @@ public class InsertFunction implements FunctionDefinition {
       OPTION_RECURSE,
       OPTION_CREATECHAPTERS
   ) ;
-
-  private static final Comparator< ? super File > FILE_COMPARATOR = new Comparator< File >() {
-    public int compare( File file1, File file2 ) {
-      return file1.getAbsolutePath().compareTo( file2.getAbsolutePath() ) ;
-    }
-  } ;
 
   public String getName() {
     return "insert" ;
@@ -225,18 +217,16 @@ public class InsertFunction implements FunctionDefinition {
       throws IllegalFunctionCallException
   {
     if( directory.isDirectory() ) {
-      final Collection fileCollection =
-          FileUtils.listFiles( directory, StructureKind.PART.getFileExtensions(), true ) ;
-      final List< File > files = Lists.newArrayList() ;
-      for( Object o : fileCollection ) {
-        files.add( ( File ) o ) ;
-      }
-      final Iterable< File > sortedFiles = Lists.sortedCopy( files, FILE_COMPARATOR ) ;
+      final List< File > files = FileTools.scan(
+          directory,
+          StructureKind.PART.getFileExtensions(),
+          FileTools.ABSOLUTEPATH_COMPARATOR
+      ) ;
 
       if( LOGGER.isDebugEnabled() ) {
         StringBuffer buffer = new StringBuffer(
             "Scan of '" + directory.getAbsolutePath() + "' found those files:" ) ;
-        for( File file : sortedFiles ) {
+        for( File file : files ) {
           try {
             buffer.append( "\n  " ).append( file.getCanonicalPath() ) ;
           } catch( IOException e ) {
@@ -246,7 +236,7 @@ public class InsertFunction implements FunctionDefinition {
         LOGGER.debug( buffer.toString() ) ;
       }
 
-      return sortedFiles ;
+      return files ;
 
     } else {
       throw new IllegalFunctionCallException(

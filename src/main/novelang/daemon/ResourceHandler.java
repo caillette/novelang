@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.mortbay.jetty.Request;
-import org.mortbay.jetty.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.ServerConfiguration;
@@ -40,7 +39,7 @@ import novelang.produce.PolymorphicRequest;
  *
  * @author Laurent Caillette
  */
-public class ResourceHandler extends AbstractHandler {
+public class ResourceHandler extends GenericHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( ResourceHandler.class ) ;
 
@@ -54,7 +53,7 @@ public class ResourceHandler extends AbstractHandler {
     this.resourceLoader = resourceLoader ;
   }
 
-  public void handle(
+  protected void doHandle(
       String target,
       HttpServletRequest request,
       HttpServletResponse response,
@@ -62,12 +61,6 @@ public class ResourceHandler extends AbstractHandler {
   )
       throws IOException, ServletException
   {
-    if( ( ( Request ) request ).isHandled() ) {
-      // Jetty seems to pass the request to every handler, even if a previous one
-      // did set the request as handled.
-      return ;
-    }
-
     LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;    
 
     final PolymorphicRequest documentRequest = 
@@ -105,5 +98,4 @@ public class ResourceHandler extends AbstractHandler {
       return s ;
     }
   }
-
 }
