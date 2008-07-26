@@ -285,6 +285,9 @@
     <fo:block
         text-align="justify"
         text-indent="1em"
+        font-size="12pt"
+        font-family="serif"
+        line-height="18pt"
     >
       <fo:inline
           text-align="justify"
