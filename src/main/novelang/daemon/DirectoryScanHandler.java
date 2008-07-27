@@ -35,7 +35,17 @@ import novelang.common.StructureKind;
 import novelang.configuration.ContentConfiguration;
 
 /**
- * Holds resources which don't require rendering.
+ * Displays directory content.
+ * <p>
+ * Security concerns:
+ * <ul>
+ *   <li>All displayed paths are relative.
+ *   <li>All generated links are relative.
+ *   <li>If target directory contains two dots ("..") then access is not authorized.
+ * </ul>
+ * Because Web browsers calculate absolute links from relative links and user-typed location,
+ * there must be a trailing solidus ("/") at the end of request target. If there isn't,
+ * redirection occurs to correct location.
  *
  * @author Laurent Caillette
  */
@@ -82,19 +92,30 @@ public class DirectoryScanHandler extends GenericHandler {
     if( scanned.exists() && scanned.isDirectory() ) {
       LOGGER.debug( "Listing files from '{}'", scanned.getAbsolutePath() ) ;
 
-      final List< File > files = FileTools.scan(
-          scanned,
-          StructureKind.getAllFileExtensions(),
-          FileTools.ABSOLUTEPATH_COMPARATOR
-      ) ;
+      if( target.endsWith( "/") ) {
+        // Relative links computed on the client side will be correct.
+        final List< File > files = FileTools.scan(
+            scanned,
+            StructureKind.getAllFileExtensions(),
+            FileTools.ABSOLUTEPATH_COMPARATOR
+        ) ;
 
-      response.setStatus( HttpServletResponse.SC_OK ) ;
-      response.setContentType( "html" ) ;
+        response.setStatus( HttpServletResponse.SC_OK ) ;
+        response.setContentType( "html" ) ;
 
-      generateHtml( response.getOutputStream(), files ) ;
+        generateHtml( response.getOutputStream(), scanned, files ) ;
 
-      ( ( Request ) request ).setHandled( true ) ;
-      LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+        ( ( Request ) request ).setHandled( true ) ;
+        LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+      } else {
+        // Need to redirect to a URL ending with "/" for correct relative links.
+        final String redirectionTarget = target + "/" ;
+        response.sendRedirect( redirectionTarget ) ;
+        response.setStatus( HttpServletResponse.SC_FOUND ) ;
+        response.setContentType( "html" ) ;
+        LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+
+      }
 
     }
 
@@ -102,6 +123,7 @@ public class DirectoryScanHandler extends GenericHandler {
 
   private void generateHtml(
       OutputStream outputStream,
+      File scannedDirectory,
       Iterable< File > sortedFiles
   ) {
     final PrintWriter writer = new PrintWriter( outputStream ) ;
@@ -109,17 +131,20 @@ public class DirectoryScanHandler extends GenericHandler {
     writer.println( "<body>" ) ;
     writer.println( "<tt>" ) ;
 
-    LOGGER.debug( "Relativizing files from '{}'", contentRoot.getAbsolutePath() ) ;
+    LOGGER.debug( "Relativizing files from '{}'", scannedDirectory.getAbsolutePath() ) ;
 
     for( File file : sortedFiles ) {
-      final String relativeFileName = FileTools.relativizePath( contentRoot, file ) ;
-      final String relativeDocumentName =
-          FilenameUtils.removeExtension( relativeFileName ) +
-          ".html"
-      ;
+      final String fileNameRelativeToContentRoot = FileTools.relativizePath( contentRoot, file ) ;
+      final String documentNameRelativeToContentRoot =
+          htmlizeExtension( fileNameRelativeToContentRoot ) ;
+      final String fileNameRelativeToScannedDir =
+          FileTools.relativizePath( scannedDirectory, file ) ;
+      final String documentNameRelativeToScannedDir =
+          htmlizeExtension( fileNameRelativeToScannedDir ) ;
+
       writer.println(
-          "<a href=\"" + relativeDocumentName + "\">" +
-          relativeDocumentName + "</a>" +
+          "<a href=\"" + documentNameRelativeToScannedDir + "\">" +
+          documentNameRelativeToContentRoot + "</a>" +
           "<br/>"
       ) ;
     }
@@ -128,6 +153,11 @@ public class DirectoryScanHandler extends GenericHandler {
     writer.println( "</body>" ) ;
     writer.println( "</html>" ) ;
     writer.flush() ;
+  }
+
+  private static String htmlizeExtension( String relativeFileName ) {
+    return FilenameUtils.removeExtension( relativeFileName ) +
+    ".html";
   }
 
 

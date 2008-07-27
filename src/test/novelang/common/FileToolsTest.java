@@ -31,10 +31,17 @@ import novelang.ScratchDirectoryFixture;
  * @author Laurent Caillette
  */
 public class FileToolsTest {
+  private static final int TIMEOUT_MILLISECONDS = 1000;
 
-  @Test
-  public void testRelativizeOk() {
-    final String relativized = FileTools.relativizePath( parent, child1 ) ;
+  @Test( timeout = TIMEOUT_MILLISECONDS )
+  public void testRelativizeOkWithoutTrailingSeparatorOnParent() {
+    final String relativized = FileTools.relativizePath( parentNoTrailingSeparator, child1 ) ;
+    Assert.assertEquals( "child1", relativized ) ;
+  }
+
+  @Test( timeout = TIMEOUT_MILLISECONDS )
+  public void testRelativizeOkWithTrailingSeparatorOnParent() {
+    final String relativized = FileTools.relativizePath( parentWithTrailingSeparator, child1 ) ;
     Assert.assertEquals( "child1", relativized ) ;
   }
 
@@ -48,7 +55,8 @@ public class FileToolsTest {
 // Fixture
 // =======
 
-  private File parent ;
+  private File parentNoTrailingSeparator;
+  private File parentWithTrailingSeparator;
   private File child1 ;
   private File child2 ;
 
@@ -58,13 +66,14 @@ public class FileToolsTest {
     final ScratchDirectoryFixture fixture = new ScratchDirectoryFixture( getClass().getName() ) ;
     final File scratchDirectory = fixture.getTestScratchDirectory() ;
 
-    parent = new File( scratchDirectory, "parent" ) ;
-    parent.mkdir() ;
-    FileUtils.waitFor( parent, 1000 ) ;
+    parentNoTrailingSeparator = new File( scratchDirectory, "parent" ) ;
+    parentNoTrailingSeparator.mkdir() ;
+    FileUtils.waitFor( parentNoTrailingSeparator, TIMEOUT_MILLISECONDS ) ;
+    parentWithTrailingSeparator = new File( scratchDirectory, "parent/" ) ;
 
-    child1 = new File( parent, "child1" ) ;
+    child1 = new File( parentNoTrailingSeparator, "child1" ) ;
 
-    child2 = new File( parent, "child2" ) ;
+    child2 = new File( parentNoTrailingSeparator, "child2" ) ;
   }
 
 }

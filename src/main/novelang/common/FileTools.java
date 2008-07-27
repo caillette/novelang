@@ -129,10 +129,15 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     if( ! parent.isDirectory() ) {
       throw new IllegalArgumentException( "Not a directory: " + baseAbsolutePath ) ;
     }
+    final String baseAbsolutePathFixed = //baseAbsolutePath ;
+        baseAbsolutePath.endsWith( SystemUtils.FILE_SEPARATOR ) ?
+        baseAbsolutePath :
+        baseAbsolutePath + SystemUtils.FILE_SEPARATOR
+    ;
     final String childAbsolutePath = child.getAbsolutePath() ;
     
-    if( childAbsolutePath.startsWith( baseAbsolutePath ) ) {
-      final String relativePath = childAbsolutePath.substring( baseAbsolutePath.length() ) ;
+    if( childAbsolutePath.startsWith( baseAbsolutePathFixed ) ) {
+      final String relativePath = childAbsolutePath.substring( baseAbsolutePathFixed.length() ) ;
       if( relativePath.startsWith( SystemUtils.FILE_SEPARATOR ) ) {
         return relativePath.substring( 1 ) ;
       } else {
@@ -140,7 +145,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
       }
     } else {
       throw new IllegalArgumentException(
-          "No parent-child relationship: '" +  baseAbsolutePath + "' " +
+          "No parent-child relationship: '" +  baseAbsolutePathFixed + "' " +
           "not parent of '" + childAbsolutePath + "'"
       ) ;
     }
