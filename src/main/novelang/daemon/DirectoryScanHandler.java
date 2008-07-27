@@ -41,11 +41,17 @@ import novelang.configuration.ContentConfiguration;
  * <ul>
  *   <li>All displayed paths are relative.
  *   <li>All generated links are relative.
- *   <li>If target directory contains two dots ("..") then access is not authorized.
+ *   <li>If target directory contains two dots ("{@code ..}") then access is not authorized.
  * </ul>
  * Because Web browsers calculate absolute links from relative links and user-typed location,
- * there must be a trailing solidus ("/") at the end of request target. If there isn't,
+ * there must be a trailing solidus ("{@code /}") at the end of request target. If there isn't,
  * redirection occurs to correct location.
+ * <p>
+ * Known problem with Safari: Content-type not taken in account. Safari believes it's
+ * a file to download. The already-seen problem with Safari is, it deduces MIME type from
+ * file extension (we hit this when generating error reports).
+ * Here we should support a special "{@code /.html}" ending which doesn't conflict with other
+ * resources, and redirect to this special URI when Safari is the user agent. 
  *
  * @author Laurent Caillette
  */
