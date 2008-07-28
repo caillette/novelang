@@ -67,13 +67,25 @@ public class HttpDaemon {
 
   public static void main( String[] args ) throws Exception {
 
+    final int serverPort ;
+
+    if( args.length == 2 && "--port".equals( args[ 0 ] ) ) {
+      serverPort = Integer.parseInt( args[ 1 ] ) ;
+    } else {
+      serverPort = HTTP_SERVER_PORT ;
+    }
+
     final String starting =
         "Starting " + HttpDaemon.class.getName() +
-        " version " + Version.name()
+        " version " + Version.name() +
+        " on port " + serverPort
     ;
     System.out.println( starting ) ;
     LOGGER.info( starting ) ;
-    new HttpDaemon( HTTP_SERVER_PORT, ConfigurationTools.buildServerConfiguration() ).start() ;
+    new HttpDaemon(
+        serverPort,
+        ConfigurationTools.buildServerConfiguration() 
+    ).start() ;
   }
 
 }
