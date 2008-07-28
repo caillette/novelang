@@ -217,9 +217,8 @@ public class InsertFunction implements FunctionDefinition {
       throws IllegalFunctionCallException
   {
     if( directory.isDirectory() ) {
-      final List< File > files = FileTools.scan(
-          directory,
-          StructureKind.PART.getFileExtensions(),
+      final List< File > files = Lists.sortedCopy(
+          FileTools.scanFiles( directory, StructureKind.PART.getFileExtensions() ),
           FileTools.ABSOLUTEPATH_COMPARATOR
       ) ;
 

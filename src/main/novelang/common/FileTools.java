@@ -19,11 +19,19 @@ package novelang.common;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.DirectoryWalker;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.FalseFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.lang.SystemUtils;
 import com.google.common.collect.Lists;
 
@@ -78,13 +86,11 @@ public class FileTools {
    *
    * @param directory a non-null object.
    * @param extensions a non-null array containing no nulls.
-   * @param comparator used for sorting the result. If null, no sort is performed.
    * @return a non-null object iterating on non-null objects.
    */
-  public static List< File > scan(
+  public static List< File > scanFiles(
       File directory,
-      String[] extensions,
-      Comparator< ? super File > comparator
+      String[] extensions
   ) {
     final Collection fileCollection = FileUtils.listFiles(
         directory,
@@ -97,11 +103,18 @@ public class FileTools {
     for( Object o : fileCollection ) {
       files.add( ( File ) o ) ;
     }
-    if( null == comparator ) {
-      return files ;
-    } else {
-      return Lists.sortedCopy( files, comparator ) ;
+    return files ;
+  }
+
+
+  public static List< File > scanDirectories( File directory ) {
+    final List< File > directories = Lists.newArrayList() ;
+    try {
+      new MyDirectoryWalker().walk( directory, directories ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
     }
+    return directories ;
 
   }
 
@@ -129,12 +142,9 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     if( ! parent.isDirectory() ) {
       throw new IllegalArgumentException( "Not a directory: " + baseAbsolutePath ) ;
     }
-    final String baseAbsolutePathFixed = //baseAbsolutePath ;
-        baseAbsolutePath.endsWith( SystemUtils.FILE_SEPARATOR ) ?
-        baseAbsolutePath :
-        baseAbsolutePath + SystemUtils.FILE_SEPARATOR
-    ;
-    final String childAbsolutePath = child.getAbsolutePath() ;
+    final String baseAbsolutePathFixed = normalizePath( baseAbsolutePath ) ;
+    final String childAbsolutePath = child.isDirectory() ?
+        normalizePath( child.getAbsolutePath() ) : child.getAbsolutePath() ;
     
     if( childAbsolutePath.startsWith( baseAbsolutePathFixed ) ) {
       final String relativePath = childAbsolutePath.substring( baseAbsolutePathFixed.length() ) ;
@@ -148,6 +158,38 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
           "No parent-child relationship: '" +  baseAbsolutePathFixed + "' " +
           "not parent of '" + childAbsolutePath + "'"
       ) ;
+    }
+  }
+
+  private static String normalizePath( String path ) {
+    return path.endsWith( SystemUtils.FILE_SEPARATOR ) ?
+        path :
+        path + SystemUtils.FILE_SEPARATOR
+    ;
+  }
+
+  public static boolean isParentOf( File maybeParent, File maybeChild ) {
+    final String maybeParentPathName = normalizePath( maybeParent.getAbsolutePath() ) ;
+    final String maybeChildPathName = normalizePath( maybeChild.getAbsolutePath() ) ;
+    return
+        ( maybeParentPathName.length() < maybeChildPathName.length() ) &&
+        maybeChildPathName.startsWith( maybeParentPathName )
+    ;
+  }
+
+  private static class MyDirectoryWalker extends DirectoryWalker {
+
+    public MyDirectoryWalker() {
+      super( FileFilterUtils.trueFileFilter(), -1 );
+    }
+
+    protected boolean handleDirectory( File file, int i, Collection collection ) throws IOException {
+      collection.add( file ) ;
+      return true ;
+    }
+
+    public void walk( File root, List< File > results ) throws IOException {
+      super.walk( root, results ) ;
     }
   }
 }

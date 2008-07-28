@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import novelang.common.FileTools;
 import novelang.common.StructureKind;
 import novelang.configuration.ContentConfiguration;
+import novelang.rendering.RenditionMimeType;
+import com.google.common.collect.Lists;
 
 /**
  * Displays directory content.
@@ -47,11 +49,11 @@ import novelang.configuration.ContentConfiguration;
  * there must be a trailing solidus ("{@code /}") at the end of request target. If there isn't,
  * redirection occurs to correct location.
  * <p>
- * Known problem with Safari: Content-type not taken in account. Safari believes it's
- * a file to download. The already-seen problem with Safari is, it deduces MIME type from
- * file extension (we hit this when generating error reports).
- * Here we should support a special "{@code /.html}" ending which doesn't conflict with other
- * resources, and redirect to this special URI when Safari is the user agent. 
+ * Known problem with Safari: Content-type in response not taken in account.
+ * Yet Safari deduces MIME type from file extension (we hit this when generating error reports).
+ * In case of a target ending by "{@code /}" Safari believes it's a file to download.
+ * So for Safari we handle a fake "{@code /.html}" resource which doesn't conflict with other
+ * resources. Redirection also occurs to this fake resource is Safari browser is detected. 
  *
  * @author Laurent Caillette
  */
@@ -61,71 +63,136 @@ public class DirectoryScanHandler extends GenericHandler {
 
   private final File contentRoot ;
   private static final String ACCESS_DENIED_MESSAGE =
-      "Target may contain reference to parent directory, denying access.";
+      "Target may contain reference to parent directory, denying access ." ;
+
+  private static final String HTML_CONTENT_TYPE = RenditionMimeType.HTML.getFileExtension() ;
+  /**
+   * Fake resource name indicating that directory listing is requested for browsers
+   * which know MIME type only from resource extension, not Content-Type.
+   */
+  public static final String MIME_HINT = "-." + HTML_CONTENT_TYPE ;
 
   public DirectoryScanHandler( ContentConfiguration contentConfiguration ) {
     this.contentRoot = contentConfiguration.getContentRoot() ;
   }
 
   protected void doHandle(
-      String target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      final String target,
+      final HttpServletRequest request,
+      final HttpServletResponse response,
+      final int dispatch
   )
       throws IOException, ServletException
   {
-    LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;
+    LOGGER.debug( "Attempting to handle request for user agent {}",
+        request.getHeader( "User-Agent" ) ) ;
 
     if( target.contains( ".." ) ) {
-      LOGGER.warn( ACCESS_DENIED_MESSAGE ) ;
-      response.setStatus( HttpServletResponse.SC_UNAUTHORIZED ) ;
-      response.setContentType( "html" ) ;
 
-      final PrintWriter writer = new PrintWriter( response.getOutputStream() ) ;
-      writer.println( "<html>" ) ;
-      writer.println( "<body>" ) ;
-      writer.println( ACCESS_DENIED_MESSAGE ) ;
-      writer.println( "</body>" ) ;
-      writer.println( "</html>" ) ;
-      writer.flush() ;
+      sendUnauthorizedResponse( response ) ;
+      ( ( Request ) request ).setHandled( true ) ;
+      LOGGER.debug( "Concluded by unauthorized message for original request '{}'",
+          request.getRequestURI() ) ;
 
-      return ;
+    } else {
 
-    }
+      final boolean needsMimeHint = doesBrowserNeedMimeHint( request ) ;
+      final boolean mimeHintPresent = target.endsWith( "/" + MIME_HINT ) ;
 
-    final File scanned = new File( contentRoot, target ) ;
-    if( scanned.exists() && scanned.isDirectory() ) {
-      LOGGER.debug( "Listing files from '{}'", scanned.getAbsolutePath() ) ;
+      final String targetWithoutMimeHint ;
 
-      if( target.endsWith( "/") ) {
-        // Relative links computed on the client side will be correct.
-        final List< File > files = FileTools.scan(
-            scanned,
-            StructureKind.getAllFileExtensions(),
-            FileTools.ABSOLUTEPATH_COMPARATOR
-        ) ;
-
-        response.setStatus( HttpServletResponse.SC_OK ) ;
-        response.setContentType( "html" ) ;
-
-        generateHtml( response.getOutputStream(), scanned, files ) ;
-
-        ( ( Request ) request ).setHandled( true ) ;
-        LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+      if( mimeHintPresent ) {
+        targetWithoutMimeHint = target.substring( 0, target.length() - MIME_HINT.length() ) ;
       } else {
-        // Need to redirect to a URL ending with "/" for correct relative links.
-        final String redirectionTarget = target + "/" ;
-        response.sendRedirect( redirectionTarget ) ;
-        response.setStatus( HttpServletResponse.SC_FOUND ) ;
-        response.setContentType( "html" ) ;
-        LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+        targetWithoutMimeHint = target ;
+      }
 
+      final String normalizedTarget ;
+      final boolean needsRedirection ;
+
+      if( targetWithoutMimeHint.endsWith( "/" ) ) {
+        normalizedTarget = target + ( needsMimeHint ? MIME_HINT : "" ) ;
+        needsRedirection = needsMimeHint & ! mimeHintPresent ;
+      } else {
+        normalizedTarget = target + "/" + ( needsMimeHint ? MIME_HINT : "" ) ;
+        needsRedirection = true ;
+      }
+
+      final File scanned = new File( contentRoot, targetWithoutMimeHint ) ;
+      final boolean directoryExists = scanned.exists() && scanned.isDirectory() ;
+
+      if( directoryExists ) {
+        if( needsRedirection ) {
+          redirectTo( response, normalizedTarget ) ;
+          LOGGER.debug( "Concluded by redirection for original request '{}'",
+              request.getRequestURI() ) ;
+        } else {
+          listFilesAndDirectories( response, scanned ) ;
+          LOGGER.debug( "Concluded by directory listing for original request '{}'",
+              request.getRequestURI() ) ;
+        }
+        ( ( Request ) request ).setHandled( true ) ;
       }
 
     }
-
   }
+
+  private static void redirectTo( HttpServletResponse response, String redirectionTarget )
+      throws IOException
+  {
+    response.sendRedirect( redirectionTarget ) ;
+    response.setStatus( HttpServletResponse.SC_FOUND ) ;
+    response.setContentType( HTML_CONTENT_TYPE ) ;
+    LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+  }
+
+  private static boolean doesBrowserNeedMimeHint( HttpServletRequest request ) {
+    final String userAgent = request.getHeader( "User-Agent" ) ;
+    if( null == userAgent ) {
+      LOGGER.warn( "Got no User-Agent in {}", request ) ;
+      return false ;
+    } else {
+      return userAgent.contains( "Safari" ) ;
+//      return userAgent.contains( "Mozilla" ) ;
+    }
+  }
+
+  private static void sendUnauthorizedResponse( HttpServletResponse response ) throws IOException {
+    LOGGER.warn( ACCESS_DENIED_MESSAGE ) ;
+    response.setStatus( HttpServletResponse.SC_UNAUTHORIZED ) ;
+    response.setContentType( HTML_CONTENT_TYPE ) ;
+
+    final PrintWriter writer = new PrintWriter( response.getOutputStream() ) ;
+    writer.println( "<html>" ) ;
+    writer.println( "<body>" ) ;
+    writer.println( ACCESS_DENIED_MESSAGE ) ;
+    writer.println( "</body>" ) ;
+    writer.println( "</html>" ) ;
+    writer.flush() ;
+  }
+
+  private void listFilesAndDirectories(
+    HttpServletResponse response,
+    File scanned
+  ) throws IOException {
+
+    final List< File > filesAndDirectories = Lists.newArrayList() ;
+    filesAndDirectories.addAll(
+        FileTools.scanFiles( scanned, StructureKind.getAllFileExtensions() ) ) ;
+    filesAndDirectories.addAll( 
+        FileTools.scanDirectories( scanned ) ) ;
+
+    final List< File > files = Lists.sortedCopy(
+        filesAndDirectories,
+        FileTools.ABSOLUTEPATH_COMPARATOR
+    ) ;
+
+    response.setStatus( HttpServletResponse.SC_OK ) ;
+    generateHtml( response.getOutputStream(), scanned, files ) ;
+    // Must be set last or Safari gets confused and cannot render the document as a Web page.
+    response.setContentType( HTML_CONTENT_TYPE ) ;
+  }
+
 
   private void generateHtml(
       OutputStream outputStream,
@@ -139,16 +206,16 @@ public class DirectoryScanHandler extends GenericHandler {
 
     LOGGER.debug( "Relativizing files from '{}'", scannedDirectory.getAbsolutePath() ) ;
 
+    if( FileTools.isParentOf( contentRoot, scannedDirectory ) ) {
+      writer.println( "<a href=\"..\">..</a><br/>" ) ;
+    }
+
     for( File file : sortedFiles ) {
-      final String fileNameRelativeToContentRoot = FileTools.relativizePath( contentRoot, file ) ;
-      final String documentNameRelativeToContentRoot =
-          htmlizeExtension( fileNameRelativeToContentRoot ) ;
-      final String fileNameRelativeToScannedDir =
-          FileTools.relativizePath( scannedDirectory, file ) ;
-      final String documentNameRelativeToScannedDir =
-          htmlizeExtension( fileNameRelativeToScannedDir ) ;
+      final String documentNameRelativeToContentRoot = createLinkablePath( contentRoot, file ) ;
+      final String documentNameRelativeToScannedDir = createLinkablePath( scannedDirectory, file ) ;
 
       writer.println(
+          ( file.isDirectory() ? "" : "&nbsp;&nbsp;" ) +
           "<a href=\"" + documentNameRelativeToScannedDir + "\">" +
           documentNameRelativeToContentRoot + "</a>" +
           "<br/>"
@@ -159,6 +226,15 @@ public class DirectoryScanHandler extends GenericHandler {
     writer.println( "</body>" ) ;
     writer.println( "</html>" ) ;
     writer.flush() ;
+  }
+
+  private static String createLinkablePath( File scannedDirectory, File file ) {
+    final String fileNameRelativeToScannedDir =
+        FileTools.relativizePath( scannedDirectory, file ) ;
+    return file.isDirectory() ?
+        fileNameRelativeToScannedDir :
+        htmlizeExtension( fileNameRelativeToScannedDir )
+    ;
   }
 
   private static String htmlizeExtension( String relativeFileName ) {
