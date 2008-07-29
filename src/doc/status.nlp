@@ -9,6 +9,10 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 Directory listing.
 
+New ``--port`` option for ``HttpDaemon``. Useful when default TCP port (8080) is busy. 
+
+Fixed some bugs.
+
 
 === Version `0.7.0`
 

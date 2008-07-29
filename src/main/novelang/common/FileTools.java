@@ -106,11 +106,17 @@ public class FileTools {
     return files ;
   }
 
-
-  public static List< File > scanDirectories( File directory ) {
+  /**
+   * Returns a list of visible directories under a root directory.
+   * The root directory is included in the list.
+   *
+   * @param root a non-null object representing a directory.
+   * @return a non-null object containing no nulls.
+   */
+  public static List< File > scanDirectories( File root ) {
     final List< File > directories = Lists.newArrayList() ;
     try {
-      new MyDirectoryWalker().walk( directory, directories ) ;
+      new MyDirectoryWalker().walk( root, directories ) ;
     } catch( IOException e ) {
       throw new RuntimeException( e ) ;
     }
@@ -177,13 +183,27 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     ;
   }
 
+  private static final IOFileFilter VISIBLE_DIRECTORY_FILTER = new IOFileFilter() {
+    public boolean accept( File file ) {
+      return file.isDirectory() ;
+    }
+    public boolean accept( File dir, String name ) {
+      return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
+    }
+  };
+
   private static class MyDirectoryWalker extends DirectoryWalker {
 
     public MyDirectoryWalker() {
-      super( FileFilterUtils.trueFileFilter(), -1 );
+      super(
+          VISIBLE_DIRECTORY_FILTER,
+          -1
+      );
     }
 
-    protected boolean handleDirectory( File file, int i, Collection collection ) throws IOException {
+    protected boolean handleDirectory( File file, int i, Collection collection )
+        throws IOException
+    {
       collection.add( file ) ;
       return true ;
     }

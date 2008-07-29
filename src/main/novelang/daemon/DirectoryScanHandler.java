@@ -44,6 +44,8 @@ import com.google.common.collect.Lists;
  *   <li>All displayed paths are relative.
  *   <li>All generated links are relative.
  *   <li>If target directory contains two dots ("{@code ..}") then access is not authorized.
+ *     This should just happen in case of a deliberate attack since Web browsers
+ *     (Safari 3.1.2, Camino 1.6.1) resolve ("{@code ..}") on their side. 
  * </ul>
  * Because Web browsers calculate absolute links from relative links and user-typed location,
  * there must be a trailing solidus ("{@code /}") at the end of request target. If there isn't,
@@ -52,7 +54,7 @@ import com.google.common.collect.Lists;
  * Known problem with Safari: Content-type in response not taken in account.
  * Yet Safari deduces MIME type from file extension (we hit this when generating error reports).
  * In case of a target ending by "{@code /}" Safari believes it's a file to download.
- * So for Safari we handle a fake "{@code /.html}" resource which doesn't conflict with other
+ * So for Safari we handle a fake "{@lvalue #MIME_HINT}" resource which doesn't conflict with other
  * resources. Redirection also occurs to this fake resource is Safari browser is detected. 
  *
  * @author Laurent Caillette
@@ -66,6 +68,7 @@ public class DirectoryScanHandler extends GenericHandler {
       "Target may contain reference to parent directory, denying access ." ;
 
   private static final String HTML_CONTENT_TYPE = RenditionMimeType.HTML.getFileExtension() ;
+  
   /**
    * Fake resource name indicating that directory listing is requested for browsers
    * which know MIME type only from resource extension, not Content-Type.
@@ -146,6 +149,9 @@ public class DirectoryScanHandler extends GenericHandler {
     LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
   }
 
+  /**
+   * Currently returns true if Apple's Safari browser is detected.
+   */
   private static boolean doesBrowserNeedMimeHint( HttpServletRequest request ) {
     final String userAgent = request.getHeader( "User-Agent" ) ;
     if( null == userAgent ) {
