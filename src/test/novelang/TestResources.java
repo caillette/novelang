@@ -17,7 +17,10 @@
 
 package novelang;
 
+import java.io.File;
+
 import novelang.loader.ResourceName;
+import novelang.parser.Encoding;
 
 /**
  * The only place where constants referencing test-dedicated resources can be defined.
@@ -34,6 +37,7 @@ public class TestResources {
   public static final String ONE_WORD = "/one-word.nlp";
   public static final String BROKEN = "/broken.nlp";
 
+
   public static final String SCANNED_DIR = "/scanned" ;
   public static final String SCANNED_BOOK = SCANNED_DIR + "/book.nlb" ;
   public static final String SCANNED_FILE1 = SCANNED_DIR + "/file1.nlp" ;
@@ -41,7 +45,9 @@ public class TestResources {
   public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
   public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
 
+
   public static final ResourceName SHOWCASE = new ResourceName( "showcase/showcase.nlp" ) ;
+
 
   public static final String SERVED_DIRECTORY_NAME = "served" ;
   public static final String SERVED_PART_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/good";
@@ -68,4 +74,15 @@ public class TestResources {
       SERVED_BOOK_BADSCANNEDPART_NOEXTENSION + ".nlb" ;
 
 
+  public static void copyServedResources( File contentDirectory ) {
+    TestResourceTools.copyResourceToFile(
+        TestResources.class, SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
+
+    TestResourceTools.copyResourceToFile(
+        TestResources.class, SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
+
+    TestResourceTools.copyResourceToFile(
+        TestResources.class, SERVED_BOOK_ALTERNATESTYLESHEET, contentDirectory ) ;
+
+  }
 }

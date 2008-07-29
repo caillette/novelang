@@ -18,6 +18,7 @@ package novelang.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -35,21 +36,42 @@ public class FileToolsTest {
 
   @Test( timeout = TIMEOUT_MILLISECONDS )
   public void testRelativizeOkWithoutTrailingSeparatorOnParent() {
-    final String relativized = FileTools.relativizePath( parentNoTrailingSeparator, child1 ) ;
-    Assert.assertEquals( "child1", relativized ) ;
+    final String relativized = FileTools.relativizePath( parentNoTrailingSeparator, childFile ) ;
+    Assert.assertEquals( "childFile", relativized ) ;
+  }
+
+  @Test( timeout = TIMEOUT_MILLISECONDS )
+  public void testRelativizeOkWithDirectoryAsChild() {
+    final String relativized = FileTools.relativizePath( parentNoTrailingSeparator, childFile ) ;
+    Assert.assertEquals( "childFile", relativized ) ;
   }
 
   @Test( timeout = TIMEOUT_MILLISECONDS )
   public void testRelativizeOkWithTrailingSeparatorOnParent() {
-    final String relativized = FileTools.relativizePath( parentWithTrailingSeparator, child1 ) ;
-    Assert.assertEquals( "child1", relativized ) ;
+    final String relativized = FileTools.relativizePath( parentWithTrailingSeparator, childFile ) ;
+    Assert.assertEquals( "childFile", relativized ) ;
   }
 
-  @Test (expected = IllegalArgumentException.class )
+  @Test( timeout = TIMEOUT_MILLISECONDS )
+  public void testRelativizeOkWithSubdirectory() {
+    final String relativized = FileTools.relativizePath(
+        parentWithTrailingSeparator, childDirectory ) ;
+    Assert.assertEquals( "childDirectory/", relativized ) ;
+  }
+
+  @Test( expected = IllegalArgumentException.class )
   public void testRelativizeFails() {
-    FileTools.relativizePath( child1, child2 ) ;
+    FileTools.relativizePath( childDirectory, childFile ) ;
   }
 
+  @Test
+  public void testListDirectories() {
+    final List< File > directories = FileTools.scanDirectories( parentNoTrailingSeparator ) ;
+    Assert.assertEquals( 3, directories.size() ) ;
+    Assert.assertEquals( "parent", directories.get( 0 ).getName() ) ;
+    Assert.assertEquals( "childDirectory", directories.get( 1 ).getName() ) ;
+    Assert.assertEquals( "grandChildDirectory", directories.get( 2 ).getName() ) ;
+  }
   
 // =======
 // Fixture
@@ -57,8 +79,9 @@ public class FileToolsTest {
 
   private File parentNoTrailingSeparator;
   private File parentWithTrailingSeparator;
-  private File child1 ;
-  private File child2 ;
+  private File childDirectory;
+  private File grandChildDirectory;
+  private File childFile;
 
   @Before
   public void setUp() throws IOException {
@@ -66,14 +89,18 @@ public class FileToolsTest {
     final ScratchDirectoryFixture fixture = new ScratchDirectoryFixture( getClass().getName() ) ;
     final File scratchDirectory = fixture.getTestScratchDirectory() ;
 
-    parentNoTrailingSeparator = new File( scratchDirectory, "parent" ) ;
-    parentNoTrailingSeparator.mkdir() ;
-    FileUtils.waitFor( parentNoTrailingSeparator, TIMEOUT_MILLISECONDS ) ;
-    parentWithTrailingSeparator = new File( scratchDirectory, "parent/" ) ;
+    parentNoTrailingSeparator = createDirectory( scratchDirectory, "parent" ) ;
+    parentWithTrailingSeparator = createDirectory( scratchDirectory, "parent/" ) ;
+    childDirectory = createDirectory( parentNoTrailingSeparator, "childDirectory" ) ;
+    grandChildDirectory = createDirectory( parentNoTrailingSeparator, "grandChildDirectory" ) ;
+    childFile = new File( parentNoTrailingSeparator, "childFile" ) ;
+  }
 
-    child1 = new File( parentNoTrailingSeparator, "child1" ) ;
-
-    child2 = new File( parentNoTrailingSeparator, "child2" ) ;
+  private static File createDirectory( File parent, String name ) {
+    final File directory = new File( parent, name ) ;
+    directory.mkdir() ;
+    FileUtils.waitFor( directory, TIMEOUT_MILLISECONDS ) ;
+    return directory ;
   }
 
 }

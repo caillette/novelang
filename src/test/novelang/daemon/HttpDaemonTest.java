@@ -95,16 +95,11 @@ public class HttpDaemonTest {
   @Test
   public void htmlBrokenCausesRedirection() throws Exception {
     setUp( "htmlBrokenCausesRedirection" ) ;
-    final HttpClient httpClient = new HttpClient() ;
-    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
-    final String originalUrlAsString =
-        "http://localhost:" + HTTP_DAEMON_PORT + BROKEN_HTML_DOCUMENT_NAME;
-    HttpMethod method = new GetMethod( originalUrlAsString ) ;
-    method.setFollowRedirects( true ) ;
-    httpClient.executeMethod( method ) ;
-    String responseBody = method.getResponseBodyAsString() ;
 
-    save( "generated.html", responseBody ) ;
+    final HttpMethod method = followRedirection(
+        "http://localhost:" + HTTP_DAEMON_PORT + BROKEN_HTML_DOCUMENT_NAME ) ;
+    final String responseBody = method.getResponseBodyAsString() ;
+
     assertTrue( responseBody.contains( "Requested:" ) ) ;
 
     assertTrue(
@@ -121,17 +116,55 @@ public class HttpDaemonTest {
   @Test
   public void htmlNotBrokenCausesRedirection() throws Exception {
     setUp( "htmlNotBroken" ) ;
-    final HttpClient httpClient = new HttpClient() ;
-    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
-    final String originalUrlAsString = "http://localhost:" + HTTP_DAEMON_PORT +
-        GOOD_HTML_DOCUMENT_NAME + RequestTools.ERRORPAGE_SUFFIX ;
-    HttpMethod method = new GetMethod( originalUrlAsString ) ;
-    method.setFollowRedirects( true ) ;
-    httpClient.executeMethod( method ) ;
-    String responseBody = method.getResponseBodyAsString() ;
 
-    save( "generated.html", responseBody ) ;
+    final HttpMethod method = followRedirection(
+        "http://localhost:" + HTTP_DAEMON_PORT + GOOD_HTML_DOCUMENT_NAME +
+        RequestTools.ERRORPAGE_SUFFIX
+    ) ;
+
+    String responseBody = method.getResponseBodyAsString() ;
     assertFalse( responseBody.contains( "Requested:" ) ) ;
+
+  }
+
+  @Test
+  public void listDirectoryContentNoTrailingSolidus() throws Exception {
+    setUp( "listDirectoryContent" ) ;
+
+    final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT ) ;
+
+    checkDirectoryListing( method );
+
+  }
+
+  @Test
+  public void listDirectoryContentWithTrailingSolidus() throws Exception {
+    setUp( "listDirectoryContent" ) ;
+
+    final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT + "/" ) ;
+
+    checkDirectoryListing( method );
+
+  }
+
+  private void checkDirectoryListing( HttpMethod method ) throws IOException {
+    String responseBody = method.getResponseBodyAsString() ;
+    assertTrue( responseBody.contains( "<a href=\"served/\">served/</a>" ) ) ;
+    assertTrue( responseBody.contains( "<a href=\"served/good.html\">served/good.html</a>" ) ) ;
+  }
+
+  @Test
+  public void listDirectoryContentWithSafari() throws Exception {
+    setUp( "listDirectoryContent" ) ;
+
+    final HttpMethod method = followRedirection(
+        "http://localhost:" + HTTP_DAEMON_PORT + "/",
+        SAFARI_USER_AGENT
+    ) ;
+
+    Assert.assertTrue( method.getPath().endsWith( "/" + DirectoryScanHandler.MIME_HINT ) ) ;
+
+    checkDirectoryListing( method );
 
   }
 
@@ -144,6 +177,7 @@ public class HttpDaemonTest {
 
     save( "generated.html", generated ) ;
     assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
+
   }
 
   @Test
@@ -217,9 +251,6 @@ public class HttpDaemonTest {
   private static final String SERVED_DIRECTORYNAME = TestResources.SERVED_DIRECTORY_NAME ;
 
   private static final String GOOD_NLP_RESOURCE_NAME = TestResources.SERVED_PARTSOURCE_GOOD;
-  private static final String BROKEN_NLP_RESOURCE_NAME = TestResources.SERVED_PARTSOURCE_BROKEN;
-  private static final String ALTERNATEBOOK_NLB_RESOURCE_NAME =
-      TestResources.SERVED_BOOK_ALTERNATESTYLESHEET ;
 
   private static final String PDF = "." + RenditionMimeType.PDF.getFileExtension() ;
   private static final String HTML = "." + RenditionMimeType.HTML.getFileExtension() ;
@@ -262,16 +293,11 @@ public class HttpDaemonTest {
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
-    TestResourceTools.copyResourceToFile(
-        getClass(), GOOD_NLP_RESOURCE_NAME, contentDirectory ) ;
+
     goodNlpSource = TestResourceTools.readStringResource(
         getClass(), GOOD_NLP_RESOURCE_NAME, Encoding.DEFAULT ) ;
 
-    TestResourceTools.copyResourceToFile(
-        getClass(), BROKEN_NLP_RESOURCE_NAME, contentDirectory ) ;
-
-    TestResourceTools.copyResourceToFile(
-        getClass(), ALTERNATEBOOK_NLB_RESOURCE_NAME, contentDirectory ) ;
+    TestResources.copyServedResources( contentDirectory ) ;
 
     httpDaemon = new HttpDaemon(
         HTTP_DAEMON_PORT,
@@ -308,5 +334,41 @@ public class HttpDaemonTest {
   public void tearDown() throws Exception {
     httpDaemon.stop() ;
   }
+
+
+  private static final String CAMINO_USER_AGENT =
+      "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.14) " +
+      "Gecko/20080512 Camino/1.6.1 (like Firefox/2.0.0.14)"
+  ;
+  
+  private static final String SAFARI_USER_AGENT =
+      "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_4_11; en) " +
+      "AppleWebKit/525.18 (KHTML, like Gecko) " +
+      "Version/3.1.2 Safari/525.22"
+  ;
+
+  private static final String DEFAULT_USER_AGENT = CAMINO_USER_AGENT ;
+
+  private HttpMethod followRedirection( String originalUrlAsString ) throws IOException {
+    return followRedirection( originalUrlAsString, DEFAULT_USER_AGENT ) ;
+  }
+
+  private HttpMethod followRedirection(
+      String originalUrlAsString,
+      String userAgent
+  ) throws IOException {
+    final HttpClient httpClient = new HttpClient() ;
+    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
+    final HttpMethod method = new GetMethod( originalUrlAsString ) ;
+    method.setRequestHeader( "User-Agent", userAgent ) ;
+    method.setFollowRedirects( true ) ;
+    httpClient.executeMethod( method ) ;
+
+    final String responseBody = method.getResponseBodyAsString() ;
+    save( "generated.html", responseBody ) ;
+
+    return method;
+  }
+
 
 }
