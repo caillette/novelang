@@ -43,7 +43,7 @@ public class HtmlWriter extends XslWriter {
     ) ;
   }
 
-  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
+  public void writeLiteral( Nodepath kinship, String word ) throws Exception {
       super.write( kinship, Escape.escapeHtmlText( word ) ); ;
   }
 

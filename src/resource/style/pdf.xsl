@@ -191,7 +191,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:litteral" >
+  <xsl:template match="n:literal" >
     <fo:block
         text-align="left"
         text-indent="0em"
@@ -219,7 +219,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:hard-inline-litteral" >
+  <xsl:template match="n:hard-inline-literal" >
     <fo:inline
         font-family="monospace"
     >

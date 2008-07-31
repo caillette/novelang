@@ -61,7 +61,7 @@ public class Escape {
     escapedCharacters.put( "endescape", ESCAPE_END ) ;
     escapedCharacters.put( "lowerthan", '<' ) ;
     escapedCharacters.put( "greaterthan", '>' ) ;
-    escapedCharacters.put( "inlinelitteral", '`' ) ;
+    escapedCharacters.put( "inlineliteral", '`' ) ;
 
     escapedCharacters.put( "oelig", '\u0153' ) ;
     escapedCharacters.put( "OElig", '\u0152' ) ;

@@ -1,0 +1,46 @@
+
+Priorities are:
+# Bug fixing.
+# Documentation.
+# Error handling.
+# New features.
+
+Stability is the key feature for adoption. Novelang will grow slowly, and won't advertise a lot until all features I think necessary are present. I don't want to harass my testers with bugs or missing features I already know about.
+
+Improvements on short term:
+- Report location on every error.
+- Try to recover on unmatched delimiter (like missing closing parenthesis).
+- Document some tricks.
+
+Requirements for `1.0`:
+
+- Better URLs: inside paragraphs, alt and text properties.
+- Fix potential punctuation problems.
+- Lists, ordered and unordered.
+- Images. May turn to an infinite feature list -- be careful!-_
+- Accolades and angled brackets (used for footnotes and index entries).
+- Identifiers. These are needed for generating table of content.
+- Bold, small caps, superscript, subscript, a few levels of headers below section.
+- "Beautiful" PDF generation with a look inspired from Manning's books, table of content, index and so on.
+
+After release `1.0` there are two different paths to follow in parallel.
+- Improve content generation.
+- Open Novelang to other developers, as an embeddable `/` extensible software component.
+
+Content generation improvements include:
+- Identifier-based inclusions.
+- Multi-document output (useful for generating web sites with several pages). 
+- Resource scan for automatic copy in batch mode.
+- Some optimizations for speed `/` memory consumption.
+
+Componentizing Novelang means:
+- Remove dependency to Jetty and rely on pure Servlet API.
+- Pluggable tree manipulation functions. By now such a mechanism is used internally but it deserves to get open. Would require some Generics to support custom ``Environment`` class.
+- Extensible grammars. Thanks to ANTLR 3.1 it will be possible to write a grammar reusing parts of an existing one. So developers could writer their own additions to Novelang's standard grammar, while ANTLR performs all consistency checks. By the way, making a grammar evolve is not a quiet game.
+- Extensible grammars mean redefining token list.
+- Component weaving with Guice. Guice is the coolest way to assemble components which are, basicall, functions.
+- Configurable escape codes, and whitespace triggers. 
+
+Novelang as component can be advertised through some plugin for a tool like Maven or Eclipse.
+
+

@@ -141,17 +141,17 @@
     </blockquote>
   </xsl:template>
 
-  <xsl:template match="n:litteral" >
+  <xsl:template match="n:literal" >
     <pre>
       <xsl:apply-templates/>
     </pre>
   </xsl:template>
 
-  <xsl:template match="n:soft-inline-litteral" >
+  <xsl:template match="n:soft-inline-literal" >
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="n:hard-inline-litteral" >
+  <xsl:template match="n:hard-inline-literal" >
     <tt><xsl:apply-templates/></tt>
   </xsl:template>
 

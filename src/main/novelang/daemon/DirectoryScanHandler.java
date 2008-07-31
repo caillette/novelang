@@ -54,7 +54,7 @@ import com.google.common.collect.Lists;
  * Known problem with Safari: Content-type in response not taken in account.
  * Yet Safari deduces MIME type from file extension (we hit this when generating error reports).
  * In case of a target ending by "{@code /}" Safari believes it's a file to download.
- * So for Safari we handle a fake "{@lvalue #MIME_HINT}" resource which doesn't conflict with other
+ * So for Safari we handle a fake "{@value #MIME_HINT}" resource which doesn't conflict with other
  * resources. Redirection also occurs to this fake resource is Safari browser is detected. 
  *
  * @author Laurent Caillette
@@ -73,7 +73,7 @@ public class DirectoryScanHandler extends GenericHandler {
    * Fake resource name indicating that directory listing is requested for browsers
    * which know MIME type only from resource extension, not Content-Type.
    */
-  public static final String MIME_HINT = "-." + HTML_CONTENT_TYPE ;
+  public static final String MIME_HINT = "-.html" ;
 
   public DirectoryScanHandler( ContentConfiguration contentConfiguration ) {
     this.contentRoot = contentConfiguration.getContentRoot() ;

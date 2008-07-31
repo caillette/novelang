@@ -23,12 +23,12 @@ There can be several paragraphs inside.
 This is a paragraph //after// a "blockquote".
 
 
-=== Block litteral
+=== Block literal
 
-Litteral is for text taken as it is, including spaces and line breaks.
+Literal is for text taken as it is, including spaces and line breaks.
 
 <<<
-Litteral //here//.
+Literal //here//.
   Identation (2 spaces) to be preserved on this line.
   Two emtpy lines following:
 
@@ -37,11 +37,11 @@ Character escaping also works here:
 &gt;&gt;&gt;
 >>>
 
-=== Inline litteral
+=== Inline literal
 
-Some hard inline litteral inside ``aeiouè §!"&@#°) «startescape».$*^.0`` a paragraph.
+Some hard inline literal inside ``aeiouè §!"&@#°) «startescape».$*^.0`` a paragraph.
 
-Some soft inline litteral inside `aeiouè §!"&@#°) «startescape».$*^.0` a paragraph.
+Some soft inline literal inside `aeiouè §!"&@#°) «startescape».$*^.0` a paragraph.
 
 
 *** More stuff

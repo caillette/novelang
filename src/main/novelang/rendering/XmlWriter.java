@@ -95,7 +95,7 @@ public class XmlWriter implements FragmentWriter {
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
   }
 
-  public void writeLitteral( Nodepath kinship, String word ) throws Exception {
+  public void writeLiteral( Nodepath kinship, String word ) throws Exception {
     ( ( LexicalHandler ) contentHandler ).startCDATA() ;
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
     ( ( LexicalHandler ) contentHandler ).endCDATA() ;

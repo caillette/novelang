@@ -97,12 +97,12 @@ public class GenericRenderer implements Renderer {
 
       case URL :
       case _META_TIMESTAMP :
-      case LITTERAL :
-      case SOFT_INLINE_LITTERAL :
-      case HARD_INLINE_LITTERAL :
+      case LITERAL :
+      case SOFT_INLINE_LITERAL :
+      case HARD_INLINE_LITERAL :
         fragmentWriter.start( newPath, false ) ;
-        final SyntacticTree litteralTree = tree.getChildAt( 0 ) ;
-        fragmentWriter.writeLitteral( newPath, litteralTree.getText() ); ;
+        final SyntacticTree literalTree = tree.getChildAt( 0 ) ;
+        fragmentWriter.writeLiteral( newPath, literalTree.getText() ); ;
         fragmentWriter.end( newPath ) ;
         break ;
 

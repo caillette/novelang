@@ -20,7 +20,6 @@ package novelang;
 import java.io.File;
 
 import novelang.loader.ResourceName;
-import novelang.parser.Encoding;
 
 /**
  * The only place where constants referencing test-dedicated resources can be defined.
@@ -35,7 +34,7 @@ public class TestResources {
   public static final String MESSY_IDENTIFIERS = "/messy-identifiers.nlp";
   public static final String SIMPLE_STRUCTURE = "/simple-structure.nlp";
   public static final String ONE_WORD = "/one-word.nlp";
-  public static final String BROKEN = "/broken.nlp";
+  public static final String BROKEN_CANNOTPARSE = "/broken/broken-cannotparse.nlp";
 
 
   public static final String SCANNED_DIR = "/scanned" ;

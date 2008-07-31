@@ -28,7 +28,7 @@ import static novelang.common.NodeKind.*;
 import novelang.common.SyntacticTree;
 import novelang.parser.Escape;
 import static novelang.parser.antlr.AntlrTestHelper.*;
-import static novelang.parser.antlr.AntlrTestHelper.softInlineLitteral;
+import static novelang.parser.antlr.AntlrTestHelper.softInlineLiteral;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -530,47 +530,47 @@ public class PartParserTest {
   }
 
   @Test
-  public void someLitteral() throws RecognitionException {
+  public void someLiteral() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
       "  Here is some " + BREAK +
-      "  //Litteral// " + BREAK +
+      "  //Literal// " + BREAK +
       ">>>",
       tree( PART,
-          tree( LITTERAL, "  Here is some " + BREAK + "  //Litteral// " )
+          tree( LITERAL, "  Here is some " + BREAK + "  //Literal// " )
       )
     ) ;
   }
 
   @Test @Ignore
-  public void someLitteralContainingLineComment() throws RecognitionException {
+  public void someLiteralContainingLineComment() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
       "%% Not to be commented" +
       ">>>",
       tree( PART,
-          tree( LITTERAL, "%% Not to be commented" )
+          tree( LITERAL, "%% Not to be commented" )
       )
     ) ;
   }
 
   @Test
-  public void someLitteralContainingLowerthanSign() throws RecognitionException {
+  public void someLiteralContainingLowerthanSign() throws RecognitionException {
     part(
       BREAK +
       "<<<" + BREAK +
       "<" + BREAK +
       ">>>",
       tree( PART,
-          tree( LITTERAL, "<" )
+          tree( LITERAL, "<" )
       )
     ) ;
   }
 
   @Test
-  public void someLitteralContainingGreaterthanSigns() throws RecognitionException {
+  public void someLiteralContainingGreaterthanSigns() throws RecognitionException {
     final String verbatim =
       " >>>" + BREAK +
       "> " + BREAK +
@@ -584,57 +584,57 @@ public class PartParserTest {
       verbatim + BREAK +
       ">>>",
       tree( PART,
-          tree( LITTERAL, verbatim )
+          tree( LITERAL, verbatim )
       )
     ) ;
   }
 
   
   @Test
-  public void litteralWithBreaksAndOtherSeparators() throws RecognitionException {
-    final String verbatim = "  Here is some " + BREAK + "//litteral//. " ;
-    litteral(
+  public void literalWithBreaksAndOtherSeparators() throws RecognitionException {
+    final String verbatim = "  Here is some " + BREAK + "//literal//. " ;
+    literal(
         "<<<" + BREAK +
         verbatim + BREAK +
         ">>>",
-        tree( LITTERAL, verbatim )
+        tree( LITERAL, verbatim )
     ) ;
   }
 
   @Test
-  public void litteralWithEscapedCharacters() throws RecognitionException {
+  public void literalWithEscapedCharacters() throws RecognitionException {
 
-    litteral(
+    literal(
         "<<<" + BREAK +
         "2" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END + "1" + BREAK +
         ">>>",
-        tree( LITTERAL, "2>1" )
+        tree( LITERAL, "2>1" )
     ) ;
   }
 
   @Test
-  public void softInlineLitteralNoEscape() throws RecognitionException {
-    final String litteral = "azer()+&%?";
-    softInlineLitteral(
-        "`" + litteral +"`",
-        tree( SOFT_INLINE_LITTERAL, litteral )
+  public void softInlineLiteralNoEscape() throws RecognitionException {
+    final String literal = "azer()+&%?";
+    softInlineLiteral(
+        "`" + literal +"`",
+        tree( SOFT_INLINE_LITERAL, literal )
     ) ;
   }
 
   @Test
-  public void softInlineLitteralWithEscape() throws RecognitionException {
-    softInlineLitteral(
+  public void softInlineLiteralWithEscape() throws RecognitionException {
+    softInlineLiteral(
         "`" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END +"`",
-        tree( SOFT_INLINE_LITTERAL, ">" )
+        tree( SOFT_INLINE_LITERAL, ">" )
     ) ;
   }
 
   @Test
-  public void hardInlineLitteralNothingSpecial() throws RecognitionException {
-    final String litteral = "azer()+&%?";
-    hardInlineLitteral(
-        "``" + litteral +"``",
-        tree( HARD_INLINE_LITTERAL, litteral )
+  public void hardInlineLiteralNothingSpecial() throws RecognitionException {
+    final String literal = "azer()+&%?";
+    hardInlineLiteral(
+        "``" + literal +"``",
+        tree( HARD_INLINE_LITERAL, literal )
     ) ;
   }
 

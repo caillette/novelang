@@ -11,12 +11,14 @@ Directory listing.
 
 New ``--port`` option for ``HttpDaemon``. Useful when default TCP port (8080) is busy. 
 
-Fixed some bugs.
+Fixed mispelling of "literal".
+
+Plenty of other bug fixes.
 
 
 === Version `0.7.0`
 
-Enhanced litteral and character escaping.
+Enhanced literal and character escaping.
 
 
 === Version `0.6.0`

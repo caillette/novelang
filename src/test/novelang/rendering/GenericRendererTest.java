@@ -140,7 +140,7 @@ public class GenericRendererTest {
       writer.append( word ) ;
     }
 
-    public void writeLitteral( Nodepath kinship, String word ) throws Exception {
+    public void writeLiteral( Nodepath kinship, String word ) throws Exception {
       write( kinship, word ) ;
     }
 

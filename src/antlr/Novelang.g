@@ -37,15 +37,15 @@ tokens {
   PARAGRAPH_SPEECH_CONTINUED ;
   PARAGRAPH_SPEECH_ESCAPED ;
   BLOCKQUOTE ;
-  LITTERAL ;
+  LITERAL ;
   QUOTE ;
   EMPHASIS ;
   PARENTHESIS ;
   SQUARE_BRACKETS ;
   INTERPOLATEDCLAUSE ;
   INTERPOLATEDCLAUSE_SILENTEND ;
-  SOFT_INLINE_LITTERAL ;
-  HARD_INLINE_LITTERAL ;
+  SOFT_INLINE_LITERAL ;
+  HARD_INLINE_LITERAL ;
   WORD ;
   URL ;
   
@@ -132,14 +132,14 @@ part
       | p += section 
       | p += paragraph 
       | p += blockQuote 
-      | p += litteral
+      | p += literal
     )
     ( largeBreak (
         p += chapter 
       | p += section 
       | p += paragraph 
       | p += blockQuote 
-      | p += litteral
+      | p += literal
     ) )*      
     ( mediumBreak | largeBreak )?
     EOF 
@@ -163,7 +163,7 @@ paragraph
 scope ParagraphScope ;
   : ( ( blockIdentifier mediumBreak )? 
        speechOpener smallBreak? paragraphBody  
-    ) => ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody
+    ) //=> ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody
     -> ^( PARAGRAPH_SPEECH blockIdentifier? paragraphBody )
   |  
     ( ( blockIdentifier mediumBreak )? 
@@ -193,21 +193,21 @@ blockQuote
     -> ^( BLOCKQUOTE blockIdentifier? ^( PARAGRAPH_PLAIN paragraphBody )* )
   ;  
 
-litteral
+literal
   : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
     WHITESPACE? SOFTBREAK
-    l = litteralLines
+    l = literalLines
     SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
-    -> ^( LITTERAL { delegate.createTree( LITTERAL, $l.unescaped ) } )
+    -> ^( LITERAL { delegate.createTree( LITERAL, $l.unescaped ) } )
   ;  
 
-litteralLines returns [ String unescaped ]
+literalLines returns [ String unescaped ]
 @init {
   final StringBuffer buffer = new StringBuffer() ;
 }
-  : s1 = litteralLine { buffer.append( $s1.unescaped ) ; }
+  : s1 = literalLine { buffer.append( $s1.unescaped ) ; }
     ( s2 = SOFTBREAK { buffer.append( $s2.text ) ; }
-      s3 = litteralLine { buffer.append( $s3.unescaped ) ; }
+      s3 = literalLine { buffer.append( $s3.unescaped ) ; }
     )*
     { $unescaped = buffer.toString() ; }        
   ;
@@ -222,7 +222,7 @@ litteralLines returns [ String unescaped ]
  * In addition escaped characters must be added as unescaped.
  * So we need to add every character "by hand". 
  */
-litteralLine returns [ String unescaped ]
+literalLine returns [ String unescaped ]
 @init {
   final StringBuffer buffer = new StringBuffer() ;
 }
@@ -264,7 +264,7 @@ litteralLine returns [ String unescaped ]
   ;
   
   
-softInlineLitteral
+softInlineLiteral
 @init {
   final StringBuffer buffer = new StringBuffer() ;
 }
@@ -274,10 +274,10 @@ softInlineLitteral
       | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT
-    -> ^( SOFT_INLINE_LITTERAL { delegate.createTree( SOFT_INLINE_LITTERAL, buffer.toString() ) } )
+    -> ^( SOFT_INLINE_LITERAL { delegate.createTree( SOFT_INLINE_LITERAL, buffer.toString() ) } )
   ;
   
-hardInlineLitteral
+hardInlineLiteral
 @init {
   final StringBuffer buffer = new StringBuffer() ;
 }
@@ -287,7 +287,7 @@ hardInlineLitteral
       | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT GRAVE_ACCENT
-    -> ^( HARD_INLINE_LITTERAL { delegate.createTree( HARD_INLINE_LITTERAL, buffer.toString() ) } )
+    -> ^( HARD_INLINE_LITERAL { delegate.createTree( HARD_INLINE_LITERAL, buffer.toString() ) } )
   ;
   
 
@@ -579,7 +579,7 @@ blockIdentifier
  */  
 paragraphBody 
   :   openingEllipsis
-    | ( // Start with plain words or inline litteral.
+    | ( // Start with plain words or inline literal.
         ( openingEllipsis smallBreak? )?
         nestedWordSequence
         ( ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
@@ -601,14 +601,14 @@ paragraphBody
 nestedWordSequence
   : ( word 
       ( (   ( mediumBreak word ) 
-          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( mediumBreak? ( softInlineLiteral | hardInlineLiteral ) word? )
           | ( smallBreak? punctuationSign word? )
         )
       )*
     )
-  | ( ( softInlineLitteral | hardInlineLitteral ) word?
+  | ( ( softInlineLiteral | hardInlineLiteral ) word?
       ( (   ( mediumBreak word ) 
-          | ( mediumBreak? ( softInlineLitteral | hardInlineLitteral ) word? )
+          | ( mediumBreak? ( softInlineLiteral | hardInlineLiteral ) word? )
           | ( smallBreak? punctuationSign word? )
         )
       )*
@@ -619,7 +619,7 @@ nestedWordSequence
 
 paragraphBodyNoQuote
   :   openingEllipsis
-    | ( // Start with plain words or inline litteral.
+    | ( // Start with plain words or inline literal.
         ( openingEllipsis smallBreak? )?
         nestedWordSequence
         ( ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
@@ -640,7 +640,7 @@ paragraphBodyNoQuote
   
 paragraphBodyNoEmphasis
   :   openingEllipsis
-    | ( // Start with plain words or inline litteral.
+    | ( // Start with plain words or inline literal.
         ( openingEllipsis smallBreak? )?
         nestedWordSequence
         ( ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
@@ -661,7 +661,7 @@ paragraphBodyNoEmphasis
   
 paragraphBodyNoInterpolatedClause
   :   openingEllipsis
-    | ( // Start with plain words or inline litteral.
+    | ( // Start with plain words or inline literal.
         ( openingEllipsis smallBreak? )?
         nestedWordSequence
         ( ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )

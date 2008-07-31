@@ -120,44 +120,44 @@ public class AntlrTestHelper {
     return tree;
   }
 
-  static void litteral( String text, SyntacticTree expectedTree ) throws RecognitionException {
-    final SyntacticTree actualTree = litteral( text ) ;
+  static void literal( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = literal( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static SyntacticTree litteral( String text ) throws RecognitionException {
+  static SyntacticTree literal( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().litteral().getTree() ;
+    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().literal().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void softInlineLitteral( String text, SyntacticTree expectedTree )
+  static void softInlineLiteral( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final SyntacticTree actualTree = softInlineLitteral( text ) ;
+    final SyntacticTree actualTree = softInlineLiteral( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static SyntacticTree softInlineLitteral( String text ) throws RecognitionException {
+  static SyntacticTree softInlineLiteral( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
     final SyntacticTree tree = ( SyntacticTree )
-        parser.getAntlrParser().softInlineLitteral().getTree() ;
+        parser.getAntlrParser().softInlineLiteral().getTree() ;
     checkSanity( parser );
     return tree;
   }
 
-  static void hardInlineLitteral( String text, SyntacticTree expectedTree )
+  static void hardInlineLiteral( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final SyntacticTree actualTree = hardInlineLitteral( text ) ;
+    final SyntacticTree actualTree = hardInlineLiteral( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 
-  static SyntacticTree hardInlineLitteral( String text ) throws RecognitionException {
+  static SyntacticTree hardInlineLiteral( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
     final SyntacticTree tree = ( SyntacticTree )
-        parser.getAntlrParser().hardInlineLitteral().getTree() ;
+        parser.getAntlrParser().hardInlineLiteral().getTree() ;
     checkSanity( parser );
     return tree;
   }

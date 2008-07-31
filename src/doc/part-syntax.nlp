@@ -105,42 +105,42 @@ May include several paragraphs.
 >>>
 
 
-=== Block litteral
+=== Block literal
 
-A block litteral starts with a triple less-than sign "``<<<``" at the beginning of a line, immediately followed by a line break. It ends with a triple greater-than sign "``>>>``" at the start of a line. 
+A block literal starts with a triple less-than sign "``<<<``" at the beginning of a line, immediately followed by a line break. It ends with a triple greater-than sign "``>>>``" at the start of a line.
 
 <<<
 <<<
-Here is litteral.
+Here is literal.
   Indentation will be kept.
 «greaterthan»>>
 >>>
 
-Litteral blocks are useful to display text verbatim. The text inside can be almost anything, except three closing angled brackets at the very start of a line. For displaying them (as in the example shown above), use escaped characters.
+Literal blocks are useful to display text verbatim. The text inside can be almost anything, except three closing angled brackets at the very start of a line. For displaying them (as in the example shown above), use escaped characters.
 
 
-=== Soft inline litteral 
+=== Soft inline literal
 
-Soft inline litteral is delimited with a grave accent "``«inlinelitteral»``".
+Soft inline literal is delimited with a grave accent "``«inlineliteral»``".
 
 <<<
 Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
 >>>
 %%"
 
-Soft inline litteral tells Novelang to drop syntactic rules, and don't mind about characters that normally have other purpose. Soft inline litteral may contain almost any character, except of course the grave accent. In the rare case where a grave accent is required, use an escaped character.
+Soft inline literal tells Novelang to drop syntactic rules, and don't mind about characters that normally have other purpose. Soft inline literal may contain almost any character, except of course the grave accent. In the rare case where a grave accent is required, use an escaped character.
 
 
-=== Hard inline litteral 
+=== Hard inline literal
 
-Hard inline litteral is delimited with a double grave accent "``«inlinelitteral»«inlinelitteral»``".
+Hard inline literal is delimited with a double grave accent "``«inlineliteral»«inlineliteral»``".
 
 <<<
 Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
 >>>
 %%
 
-Hard inline litteral works as soft inline litteral, but rendering should add a special style (like monospaced fonts) to draw the attention of the reader the text is verbatim (like a programming language item). 
+Hard inline literal works as soft inline literal, but rendering should add a special style (like monospaced fonts) to draw the attention of the reader the text is verbatim (like a programming language item).
 
 
 === URL
@@ -160,10 +160,10 @@ Novelang uses some characters for its markup. For displaying those characters in
 >   «startescape»greaterthan«endescape» 
 «startescape»   «startescape»startescape«endescape» 
 «endescape»   «startescape»endescape«endescape» 
-«inlinelitteral»   «startescape»inlinelitteral«endescape» 
+«inlineliteral»   «startescape»inlineliteral«endescape»
 >>>
 
-Using those character is exceptional, however -- except in Novelang documentation!-_ Most of useful character are accessible as litteral.
+Using those character is exceptional, however -- except in Novelang documentation!-_ Most of useful character are accessible as literal.
 
 === Comments
 

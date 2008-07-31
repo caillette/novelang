@@ -105,7 +105,7 @@ public class InsertFunctionTest {
 // =======
 
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
-  private static final String BROKEN_FILENAME = TestResources.BROKEN ;
+  private static final String BROKEN_FILENAME = TestResources.BROKEN_CANNOTPARSE;
 
   private static final String CONTENT_GOOD_DIRNAME = "good" ;
   private static final String CONTENT_BROKEN_DIRNAME = "broken" ;
