@@ -185,7 +185,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
 
   private static final IOFileFilter VISIBLE_DIRECTORY_FILTER = new IOFileFilter() {
     public boolean accept( File file ) {
-      return file.isDirectory() ;
+      return file.isDirectory() && ! file.isHidden() ;
     }
     public boolean accept( File dir, String name ) {
       return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
