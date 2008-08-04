@@ -163,7 +163,7 @@ paragraph
 scope ParagraphScope ;
   : ( ( blockIdentifier mediumBreak )? 
        speechOpener smallBreak? paragraphBody  
-    ) //=> ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody
+    ) => ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody
     -> ^( PARAGRAPH_SPEECH blockIdentifier? paragraphBody )
   |  
     ( ( blockIdentifier mediumBreak )? 
