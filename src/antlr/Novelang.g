@@ -75,13 +75,6 @@ tokens {
 }
 
 
-scope ParagraphScope { 
-  boolean inQuotes ;
-  boolean inInterpolatedClause ;
-  boolean inEmphasis ;
-}
-
-
 @lexer::header { 
 package novelang.parser.antlr ;
 } 
@@ -95,7 +88,10 @@ import novelang.parser.antlr.GrammarDelegate;
 @parser::members {
 
 // Tell paragraphBody accepts everything.
-public static final int ALLOW_ALL = -1 ;
+public static final int RESTRICT_NONE = -1 ;
+public static final int RESTRICT_EMPHASIS = 1 ;
+public static final int RESTRICT_QUOTE = 2 ;
+public static final int RESTRICT_INTERPOLATEDCLAUSE = 3 ;
 
 private GrammarDelegate delegate = new GrammarDelegate() ;
 
@@ -111,12 +107,7 @@ public void emitErrorMessage( String string ) {
     delegate.report( string ) ;
   }
 }
-	
-private int parenthesisDepth = 0 ;
-private int squareBracketsDepth = 0 ;
-private int quoteDepth = 0 ;
-private int emphasisDepth = 0 ;
-private int interpolatedClauseDepth = 0 ;
+
 }
 
 
@@ -160,23 +151,22 @@ section
   ;
     
 paragraph
-scope ParagraphScope ;
   : ( ( blockIdentifier mediumBreak )? 
-       speechOpener smallBreak? paragraphBody  
-    ) //=> ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody
-    -> ^( PARAGRAPH_SPEECH blockIdentifier? paragraphBody )
+       speechOpener smallBreak? paragraphBody[ RESTRICT_NONE ]  
+    ) => ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody[ RESTRICT_NONE ]  
+    -> ^( PARAGRAPH_SPEECH blockIdentifier? paragraphBody  )
   |  
     ( ( blockIdentifier mediumBreak )? 
-       speechEscape smallBreak? paragraphBody  
-    ) => ( blockIdentifier mediumBreak )? speechEscape smallBreak? paragraphBody
+       speechEscape smallBreak? paragraphBody[ RESTRICT_NONE ]    
+    ) => ( blockIdentifier mediumBreak )? speechEscape smallBreak? paragraphBody[ RESTRICT_NONE ]
     -> ^( PARAGRAPH_SPEECH_ESCAPED blockIdentifier? paragraphBody )
   | 
     ( ( blockIdentifier mediumBreak )? 
-       speechContinuator smallBreak? paragraphBody  
-    ) => ( blockIdentifier mediumBreak )? speechContinuator smallBreak? paragraphBody
+       speechContinuator smallBreak? paragraphBody [ RESTRICT_NONE ] 
+    ) => ( blockIdentifier mediumBreak )? speechContinuator smallBreak? paragraphBody[ RESTRICT_NONE ]
     -> ^( PARAGRAPH_SPEECH_CONTINUED blockIdentifier? paragraphBody )
   | 
-    ( ( blockIdentifier mediumBreak)? paragraphBody )
+    ( ( blockIdentifier mediumBreak)? paragraphBody[ RESTRICT_NONE ] )
     -> ^( PARAGRAPH_PLAIN blockIdentifier? paragraphBody )
   |  
     ( httpUrl ) => ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } ) )
@@ -186,8 +176,8 @@ blockQuote
   : ( blockIdentifier mediumBreak)? 
     LESS_THAN_SIGN LESS_THAN_SIGN 
     ( mediumBreak | largeBreak )?
-    paragraphBody 
-    ( largeBreak paragraphBody )* 
+    paragraphBody[ RESTRICT_QUOTE ] 
+    ( largeBreak paragraphBody[ RESTRICT_QUOTE ] )* 
     ( mediumBreak | largeBreak )?
     GREATER_THAN_SIGN GREATER_THAN_SIGN
     -> ^( BLOCKQUOTE blockIdentifier? ^( PARAGRAPH_PLAIN paragraphBody )* )
@@ -559,7 +549,7 @@ urlXChar
 // =================================
 
 title
-  : paragraphBody
+  : paragraphBody[ -1 ]
 	  -> ^( TITLE paragraphBody )
   ;
 
@@ -577,22 +567,25 @@ blockIdentifier
  *  with sub-paragraphs which don't have symmetrical delimiters.
  *  It doesn't seem possible to factor this with using backtracking or whatever.
  */  
-paragraphBody 
+paragraphBody[ int restriction ]
   :   openingEllipsis
     | ( // Start with plain words or inline literal.
         ( openingEllipsis smallBreak? )?
         nestedWordSequence
-        ( ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
+        ( ( mediumBreak? 
+            delimitedBlock[ $restriction ] 
+            ( smallBreak? punctuationSign )* )
           ( mediumBreak? nestedWordSequence )?
         )*
       )
 
     | ( // Start with delimited block.
-        delimitedBlock ( smallBreak? punctuationSign )*
+        delimitedBlock[ $restriction ]
+        ( smallBreak? punctuationSign )*
         ( mediumBreak? nestedWordSequence  )?
         
         (          
-            ( mediumBreak? delimitedBlock ( smallBreak? punctuationSign )* )
+            ( mediumBreak? delimitedBlock[ $restriction ] ( smallBreak? punctuationSign )* )
             ( mediumBreak? nestedWordSequence )?          
         )*        
       )      
@@ -617,104 +610,21 @@ nestedWordSequence
   
   
 
-paragraphBodyNoQuote
-  :   openingEllipsis
-    | ( // Start with plain words or inline literal.
-        ( openingEllipsis smallBreak? )?
-        nestedWordSequence
-        ( ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
-          ( mediumBreak? nestedWordSequence )?
-        )*
-      )
-
-    | ( // Start with delimited block.
-        nestedParagraphNoQuote ( smallBreak? punctuationSign )*
-        ( mediumBreak? nestedWordSequence  )?
-        
-        (          
-            ( mediumBreak? nestedParagraphNoQuote ( smallBreak? punctuationSign )* )
-            ( mediumBreak? nestedWordSequence )?          
-        )*        
-      )      
-  ;
-  
-paragraphBodyNoEmphasis
-  :   openingEllipsis
-    | ( // Start with plain words or inline literal.
-        ( openingEllipsis smallBreak? )?
-        nestedWordSequence
-        ( ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
-          ( mediumBreak? nestedWordSequence )?
-        )*
-      )
-
-    | ( // Start with delimited block.
-        nestedParagraphNoEmphasis ( smallBreak? punctuationSign )*
-        ( mediumBreak? nestedWordSequence  )?
-        
-        (          
-            ( mediumBreak? nestedParagraphNoEmphasis ( smallBreak? punctuationSign )* )
-            ( mediumBreak? nestedWordSequence )?          
-        )*        
-      )      
-  ;
-  
-paragraphBodyNoInterpolatedClause
-  :   openingEllipsis
-    | ( // Start with plain words or inline literal.
-        ( openingEllipsis smallBreak? )?
-        nestedWordSequence
-        ( ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
-          ( mediumBreak? nestedWordSequence )?
-        )*
-      )
-
-    | ( // Start with delimited block.
-        nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )*
-        ( mediumBreak? nestedWordSequence  )?
-        
-        (          
-            ( mediumBreak? nestedParagraphNoInterpolatedClause ( smallBreak? punctuationSign )* )
-            ( mediumBreak? nestedWordSequence )?          
-        )*        
-      )      
-  ;
     
-delimitedBlock
+delimitedBlock[ int restriction ]
   : parenthesizingText  
   | bracketingText 
-  | quotingText 
-  | emphasizingText
-  | interpolatedClause
+  | { NO_QUOTE != $restriction}? => quotingText 
+/*
+  | { NO_EMPHASIS != $restriction}? => emphasizingText
+  | { NO_INTERPOLATEDCLAUSE != $restriction}? => interpolatedClause
+*/  
   ;  
   
-nestedParagraphNoQuote
-  : parenthesizingText  
-  | bracketingText 
-  | emphasizingText
-  | interpolatedClause
-  ;  
-  
-nestedParagraphNoEmphasis
-  : parenthesizingText  
-  | bracketingText 
-  | quotingText 
-  | interpolatedClause
-  ;  
-  
-nestedParagraphNoInterpolatedClause
-  : parenthesizingText  
-  | bracketingText 
-  | quotingText 
-  | emphasizingText
-  ;  
-  
-  
-
 parenthesizingText
   : LEFT_PARENTHESIS 
     mediumBreak?
-    paragraphBody 
+    paragraphBody[ RESTRICT_NONE ]
     mediumBreak?
     RIGHT_PARENTHESIS
     -> ^( PARENTHESIS paragraphBody )
@@ -723,16 +633,16 @@ parenthesizingText
 quotingText
   : ( DOUBLE_QUOTE      
       mediumBreak?
-      paragraphBodyNoQuote
+      paragraphBody[ RESTRICT_QUOTE ]
       mediumBreak?
       DOUBLE_QUOTE
     )
-    -> ^( QUOTE paragraphBodyNoQuote )
+    -> ^( QUOTE paragraphBody )
   ;  
 bracketingText
   : LEFT_SQUARE_BRACKET
     mediumBreak?
-    paragraphBody
+    paragraphBody[ RESTRICT_NONE ]
     mediumBreak?
     RIGHT_SQUARE_BRACKET
     -> ^( SQUARE_BRACKETS paragraphBody )
@@ -741,21 +651,21 @@ bracketingText
 emphasizingText
   : SOLIDUS SOLIDUS
     mediumBreak?
-    paragraphBodyNoEmphasis
+    paragraphBody[ RESTRICT_EMPHASIS ]
     mediumBreak?
     SOLIDUS SOLIDUS
-    -> ^( EMPHASIS paragraphBodyNoEmphasis )
+    -> ^( EMPHASIS paragraphBody )
   ;
   
 interpolatedClause
   :	interpolatedClauseDelimiter 
     smallBreak?
-    paragraphBodyNoInterpolatedClause 
+    paragraphBody[ RESTRICT_INTERPOLATEDCLAUSE ]
     (   ( ( smallBreak? interpolatedClauseDelimiter )
-            -> ^( INTERPOLATEDCLAUSE paragraphBodyNoInterpolatedClause )
+            -> ^( INTERPOLATEDCLAUSE paragraphBody )
         )
       | ( ( smallBreak? interpolatedClauseSilentEnd ) 
-          -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBodyNoInterpolatedClause )
+          -> ^( INTERPOLATEDCLAUSE_SILENTEND paragraphBody )
         )
     )
   ;	  
@@ -869,7 +779,7 @@ functionCall
   : name = word 
      (   smallBreak url 
        | smallBreak headerIdentifier 
-       | WHITESPACE? SOFTBREAK WHITESPACE? paragraphBody
+       | WHITESPACE? SOFTBREAK WHITESPACE? paragraphBody[ RESTRICT_NONE ]  
      )?
     ( mediumBreak ( ancillaryArgument | flagArgument | assignmentArgument ) )*
     ->  ^( FUNCTION_CALL 
