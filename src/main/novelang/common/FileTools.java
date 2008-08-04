@@ -190,7 +190,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     public boolean accept( File dir, String name ) {
       return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
     }
-  };
+  } ;
 
   private static class MyDirectoryWalker extends DirectoryWalker {
 
