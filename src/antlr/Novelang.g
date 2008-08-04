@@ -94,9 +94,6 @@ import novelang.parser.antlr.GrammarDelegate;
 
 @parser::members {
 
-// Tell paragraphBody accepts everything.
-public static final int ALLOW_ALL = -1 ;
-
 private GrammarDelegate delegate = new GrammarDelegate() ;
 
 public void setGrammarDelegate( GrammarDelegate delegate ) {
@@ -111,12 +108,7 @@ public void emitErrorMessage( String string ) {
     delegate.report( string ) ;
   }
 }
-	
-private int parenthesisDepth = 0 ;
-private int squareBracketsDepth = 0 ;
-private int quoteDepth = 0 ;
-private int emphasisDepth = 0 ;
-private int interpolatedClauseDepth = 0 ;
+
 }
 
 
@@ -160,7 +152,6 @@ section
   ;
     
 paragraph
-scope ParagraphScope ;
   : ( ( blockIdentifier mediumBreak )? 
        speechOpener smallBreak? paragraphBody  
     ) => ( blockIdentifier mediumBreak )? speechOpener smallBreak? paragraphBody
@@ -313,6 +304,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | AMPERSAND 
       | APOSTROPHE   
       | ASTERISK
+      | CIRCUMFLEX_ACCENT
       | COLON
       | COMMA 
       | COMMERCIAL_AT
@@ -1023,6 +1015,7 @@ WHITESPACE : ( ' ' | '\t' )+ ;
 AMPERSAND : '&' ;
 APOSTROPHE : '\'' ;
 ASTERISK : '*' ;
+CIRCUMFLEX_ACCENT : '^' ;
 COLON : ':' ;
 COMMA : ',' ;
 COMMERCIAL_AT : '@' ;
