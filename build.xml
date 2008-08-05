@@ -76,7 +76,7 @@
     </path>
 
     <path id="antlr-grammars" >
-      <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
+      <fileset dir="${source.main.antlr.dir}" includes="Novelang.g"/>
     </path>
 
   </target>
