@@ -8,6 +8,13 @@
     >
     %ISOpub;
 
+    <!ENTITY % ISOnum PUBLIC
+        "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
+        "ISOnum.pen"
+    >
+    %ISOnum;
+
+
 ] >
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
