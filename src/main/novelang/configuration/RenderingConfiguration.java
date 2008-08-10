@@ -39,4 +39,10 @@ public interface RenderingConfiguration {
    */
   FopFactory getFopFactory() ;
 
+  /**
+   * Returns all user-defined fonts.
+   * @return a non-null object iterating over non-null objects.
+   */
+  Iterable< FontDescriptor > getFontDescriptors() ;
+
 }

@@ -20,27 +20,23 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
-import java.net.MalformedURLException;
 
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.DefaultConfiguration;
+import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
+import org.apache.avalon.framework.configuration.MutableConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.fop.fonts.apps.TTFReader;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.MutableConfiguration;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
-import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
-import org.dom4j.io.XMLWriter;
-import org.dom4j.io.OutputFormat;
 import com.google.common.collect.Lists;
-import com.google.common.base.Objects;
 import novelang.common.FileTools;
 
 /**
@@ -81,7 +77,7 @@ public class FopFontsTools {
     LOGGER.info( "Listing '{}'", baseDirectory ) ;
     final List< File > fontFiles = FileTools.scanFiles( baseDirectory, FONT_FILE_EXTENSIONS ) ;
     for( File fontFile : fontFiles ) {
-      final FontFormat fontFormat = guessFontFormat( fontFile ) ;
+      final FontDescriptor.Format fontFormat = guessFontFormat( fontFile ) ;
       try {
         final Font font = Font.createFont( fontFormat.ordinal(), fontFile ) ;
         System.out.println(
@@ -98,11 +94,11 @@ public class FopFontsTools {
     }
   }
 
-  private static FontFormat guessFontFormat( File fontFile ) {
+  private static FontDescriptor.Format guessFontFormat( File fontFile ) {
     return guessFontFormat( FilenameUtils.getBaseName( fontFile.getName() ) ) ;
   }
 
-  private static FontFormat guessFontFormat( String fontFileName ) {
+  private static FontDescriptor.Format guessFontFormat( String fontFileName ) {
     fontFileName = fontFileName.toUpperCase() ;
     final boolean bold = fontFileName.contains( "BOLD" ) ;
     final boolean italic =
@@ -112,30 +108,30 @@ public class FopFontsTools {
     ;
     if( bold ) {
       if( italic ) {
-        return FontFormat.BOLD_ITALIC ;
+        return FontDescriptor.Format.BOLD_ITALIC ;
       } else {
-        return FontFormat.BOLD ;
+        return FontDescriptor.Format.BOLD ;
       }
     } else {
       if( italic ) {
-        return FontFormat.ITALIC ;
+        return FontDescriptor.Format.ITALIC ;
       } else {
-        return FontFormat.PLAIN ;
+        return FontDescriptor.Format.PLAIN ;
       }
     }
   }
 
-  private static FontFormat findFontFormat( String fontFileName ) {
+  private static FontDescriptor.Format findFontFormat( String fontFileName ) {
     if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD ) ) {
-      return FontFormat.BOLD ;
+      return FontDescriptor.Format.BOLD ;
     } ;
     if( fontFileName.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
-      return FontFormat.ITALIC ;
+      return FontDescriptor.Format.ITALIC ;
     }
     if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD_ITALIC ) ) {
-      return FontFormat.BOLD_ITALIC ;
+      return FontDescriptor.Format.BOLD_ITALIC ;
     }
-    return FontFormat.PLAIN ;
+    return FontDescriptor.Format.PLAIN ;
   }
 
   private static String extractFontName( String fontFileName ) {
@@ -151,7 +147,7 @@ public class FopFontsTools {
     return fontFileName ;
   }
 
-  private static String italicOrNormal( FontFormat fontFormat ) {
+  private static String italicOrNormal( FontDescriptor.Format fontFormat ) {
     switch( fontFormat ) {
       case BOLD_ITALIC :
       case ITALIC : return "italic" ;
@@ -159,19 +155,12 @@ public class FopFontsTools {
     }
   }
 
-  private static String boldOrNormal( FontFormat fontFormat ) {
+  private static String boldOrNormal( FontDescriptor.Format fontFormat ) {
     switch( fontFormat ) {
       case BOLD_ITALIC :
       case BOLD : return "bold" ;
       default : return "normal" ;
     }
-  }
-
-  public static enum FontFormat {
-    PLAIN,
-    BOLD,
-    ITALIC,
-    BOLD_ITALIC
   }
 
   /**
@@ -182,7 +171,7 @@ public class FopFontsTools {
    * @return a description of font files for which metrics were created.
    * @throws IOException
    */
-  public static Iterable< FontFileDescriptor > createFopMetrics(
+  public static Iterable<FontDescriptor> createFopMetrics(
       File fontDirectory,
       File metricsDirectory
   ) throws IOException {
@@ -190,13 +179,13 @@ public class FopFontsTools {
     fontDirectory = fontDirectory.getCanonicalFile() ;
     metricsDirectory = metricsDirectory.getCanonicalFile() ;
 
-    final List< FontFileDescriptor > fontFileDescriptors = Lists.newArrayList() ;
+    final List<FontDescriptor> fontDescriptors = Lists.newArrayList() ;
     final List< File > fontFiles = FileTools.scanFiles( fontDirectory, FONT_FILE_EXTENSIONS ) ;
 
     for( File fontFile : fontFiles ) {
 
       final String fontFileBaseName = FilenameUtils.getBaseName( fontFile.getName() );
-      final FontFormat fontFormat = findFontFormat( fontFileBaseName ) ;
+      final FontDescriptor.Format fontFormat = findFontFormat( fontFileBaseName ) ;
 
       final File fontMetricsFile = new File( metricsDirectory, fontFileBaseName + ".xml" );
       final String[] arguments = {
@@ -206,19 +195,19 @@ public class FopFontsTools {
 
       LOGGER.info( "Calling TTFReader( {} )", Arrays.toString( arguments ) ) ;
       TTFReader.main( arguments ) ;
-      fontFileDescriptors.add( new FontFileDescriptor(
+      fontDescriptors.add( new FontDescriptor(
           extractFontName( fontFileBaseName ),
           fontFile,
           fontMetricsFile,
           fontFormat
       ) ) ;
     }
-    return fontFileDescriptors ;
+    return fontDescriptors;
 
   }
 
   public static Configuration createFopConfiguration( 
-      Iterable< FontFileDescriptor > fontFileDescritors
+      Iterable<FontDescriptor> fontFileDescritors
   ) {
     final MutableConfiguration fop = new DefaultConfiguration( "fop" ) ;
     fop.setAttribute( "version", "1.0" ) ;
@@ -227,21 +216,21 @@ public class FopFontsTools {
     renderer.setAttribute( "mime", "application/pdf" ) ;
     final MutableConfiguration fonts = new DefaultConfiguration( "fonts" ) ;
 
-    for( FontFileDescriptor fontFileDescriptor : fontFileDescritors ) {
+    for( FontDescriptor fontDescriptor : fontFileDescritors ) {
       final MutableConfiguration font = new DefaultConfiguration( "font" ) ;
       try {
         font.setAttribute(
             "metrics-url",
-            fontFileDescriptor.getMetricsFile().toURI().toURL().toExternalForm()
+            fontDescriptor.getMetricsFile().toURI().toURL().toExternalForm()
         ) ;
         font.setAttribute( "kerning", "yes" ) ;
         font.setAttribute(
             "embed-url",
-            fontFileDescriptor.getFontFile().toURI().toURL().toExternalForm()
+            fontDescriptor.getFontFile().toURI().toURL().toExternalForm()
         ) ;
         final MutableConfiguration fontTriplet = new DefaultConfiguration( "font-triplet" ) ;
-        final FontFormat fontFormat = fontFileDescriptor.getFontFormat() ;
-        fontTriplet.setAttribute( "name", fontFileDescriptor.getFontName() ) ;
+        final FontDescriptor.Format fontFormat = fontDescriptor.getFontFormat() ;
+        fontTriplet.setAttribute( "name", fontDescriptor.getFontName() ) ;
         fontTriplet.setAttribute( "style", italicOrNormal( fontFormat ) ) ;
         fontTriplet.setAttribute( "weight", boldOrNormal( fontFormat ) ) ;
         font.addChild( fontTriplet ) ;
@@ -268,41 +257,6 @@ public class FopFontsTools {
     }
     return fop ;
     
-  }
-
-  public static final class FontFileDescriptor {
-    private final String fontName ;
-    private final File fontFile ;
-    private final File metricsFile ;
-    private final FontFormat fontFormat ;
-
-    public FontFileDescriptor(
-        String fontName,
-        File fontFile,
-        File metricsFile,
-        FontFormat fontFormat
-    ) {
-      this.fontName = Objects.nonNull( fontName ) ;
-      this.fontFile = Objects.nonNull( fontFile ) ;
-      this.metricsFile = Objects.nonNull( metricsFile ) ;
-      this.fontFormat = Objects.nonNull( fontFormat ) ;
-    }
-
-    public String getFontName() {
-      return fontName ;
-    }
-
-    public File getFontFile() {
-      return fontFile ;
-    }
-
-    public File getMetricsFile() {
-      return metricsFile ;
-    }
-
-    public FontFormat getFontFormat() {
-      return fontFormat ;
-    }
   }
 
 

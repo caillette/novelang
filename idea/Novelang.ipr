@@ -46,6 +46,7 @@
       <entry name="*.ent" />
       <entry name="*.xsl" />
       <entry name="*.txt" />
+      <entry name="*__.g" />
     </wildcardResourcePatterns>
   </component>
   <component name="DependenciesAnalyzeManager">

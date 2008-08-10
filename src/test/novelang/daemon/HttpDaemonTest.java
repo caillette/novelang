@@ -50,9 +50,11 @@ import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ServerConfiguration;
+import novelang.configuration.FontDescriptor;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.parser.Encoding;
+import com.google.common.collect.Iterables;
 
 /**
  * End-to-end tests with {@link HttpDaemon} and the download of some generated documents.
@@ -320,6 +322,10 @@ public class HttpDaemonTest {
           }
           public FopFactory getFopFactory() {
             return FopFactory.newInstance() ;
+          }
+
+          public Iterable<FontDescriptor> getFontDescriptors() {
+            return Iterables.emptyIterable() ;
           }
         } ;
       }

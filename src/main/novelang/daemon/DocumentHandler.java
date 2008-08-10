@@ -75,8 +75,7 @@ public class DocumentHandler extends GenericHandler {
       HttpServletResponse response,
       int dispatch
   ) throws IOException, ServletException {
-
-    handle( request, response );
+    handle( request, response ) ;
   }
 
   private void handle( HttpServletRequest request, HttpServletResponse response ) throws IOException {

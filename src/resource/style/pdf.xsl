@@ -238,7 +238,7 @@
         text-indent="1em"
         text-align="justify"
         font-size="12pt"
-        font-family="Verdana"
+        font-family="Garamond"
         line-height="18pt"
     >
       <xsl:apply-templates/>

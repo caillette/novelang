@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.FOPException;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
+import com.google.common.collect.Iterables;
 
 /**
  * Builds objects describing how to configure other components.
@@ -52,6 +54,10 @@ import novelang.loader.UrlResourceLoader;
  * {@link #buildRenderingConfiguration()} also creates a {@link FopFactory} relying on fonts
  * in {@value #FONTS_DEFAULT_DIRECTORYNAME} if such directory is declared through a mechanism
  * similar to the one defined above.
+ * <p>
+ * TODO Use some kind of bean to encapsulate command-line arguments instead of relying
+ *   on system properties.
+ *
  *
  * @author Laurent Caillette
  */
@@ -76,6 +82,9 @@ public class ConfigurationTools {
 
   protected static final String FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME = "fop-metrics" ;
   protected static final String FOP_METRICS_DIR_PROPERTYNAME = "novelang.fop.fontmetrics.dir" ;
+
+  protected static final FopFactory FOP_FACTORY ;
+  protected static final Iterable< FontDescriptor > USER_FONTS ;
 
   private static final ResourceLoader STYLE_RESOURCE_LOADER;
 
@@ -168,9 +177,6 @@ public class ConfigurationTools {
   }
 
 
-  private static final File FONTS_DIRECTORY ;
-  private static final File FOP_FONT_METRICS_DIRECTORY ;
-
   static {
 
     LOGGER.info(
@@ -178,23 +184,28 @@ public class ConfigurationTools {
         new File( System.getProperty( "user.dir" ) ).getAbsolutePath()
     ) ;
 
-    FONTS_DIRECTORY = resolveDirectory(
+    final File fontsDirectory = resolveDirectory(
         "fonts",
         FONTS_DIR_PROPERTYNAME,
         FONTS_DEFAULT_DIRECTORYNAME,
         false
-    ) ;
+    );
 
-    if( null == FONTS_DIRECTORY ) {
-      FOP_FONT_METRICS_DIRECTORY = null ;
+    final File fopFontMetricsDirectory ;
+    if( null == fontsDirectory ) {
+      fopFontMetricsDirectory = null ;
     } else {
-      FOP_FONT_METRICS_DIRECTORY = resolveDirectory(
+      fopFontMetricsDirectory = resolveDirectory(
         "font metrics",
           FOP_METRICS_DIR_PROPERTYNAME,
           FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME,
           true
       );
     }
+
+    USER_FONTS = createFontDescriptors( fontsDirectory, fopFontMetricsDirectory ) ;
+    FOP_FACTORY = createFopFactory( USER_FONTS ) ;
+    
 
     final File userStyleDirectory = resolveDirectory(
         "style",
@@ -229,20 +240,39 @@ public class ConfigurationTools {
         return STYLE_RESOURCE_LOADER;
       }
       public FopFactory getFopFactory() {
-        return createFopFactory( FONTS_DIRECTORY, FOP_FONT_METRICS_DIRECTORY ) ;
+        return FOP_FACTORY ;
+      }
+      public Iterable< FontDescriptor > getFontDescriptors() {
+        return USER_FONTS ;
       }
     } ;
   }
 
-  private static FopFactory createFopFactory( File fontsDirectory, File fopMetricsDirectory ) {
-    final FopFactory fopFactory = FopFactory.newInstance();
+  private static Iterable< FontDescriptor > createFontDescriptors(
+      File fontsDirectory,
+      File fopMetricsDirectory
+  ) {
+    Iterable< FontDescriptor > fontFileDescriptors = Iterables.emptyIterable() ;
     if( fontsDirectory != null && fopMetricsDirectory != null ) {
       try {
-        Iterable<FopFontsTools.FontFileDescriptor> fontFileDescritors =
-            FopFontsTools.createFopMetrics( fontsDirectory, fopMetricsDirectory ) ;
-        final Configuration configuration =
-            FopFontsTools.createFopConfiguration( fontFileDescritors ) ;
+        fontFileDescriptors = FopFontsTools.createFopMetrics(
+            fontsDirectory, fopMetricsDirectory ) ;
       } catch( IOException e ) {
+        fontFileDescriptors = Iterables.emptyIterable() ;
+        LOGGER.error( "Could not use custom fonts", e ) ;
+      }
+    }
+    return fontFileDescriptors ;
+  }
+
+  private static FopFactory createFopFactory( Iterable< FontDescriptor > fontDescriptors ) {
+    final FopFactory fopFactory = FopFactory.newInstance();
+    if( fontDescriptors.iterator().hasNext() ) {
+      try {
+        final Configuration configuration =
+            FopFontsTools.createFopConfiguration( fontDescriptors ) ;
+        fopFactory.setUserConfig( configuration ) ;
+      } catch( FOPException e ) {
         LOGGER.error( "Could not use custom fonts", e ) ;
       }
     }
