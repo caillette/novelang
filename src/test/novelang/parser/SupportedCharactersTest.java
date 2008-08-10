@@ -18,10 +18,8 @@ package novelang.parser;
 
 import java.util.Set;
 
+import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Assert;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +54,7 @@ public class SupportedCharactersTest {
   @Test
   public void lexerCharacters() {
     final Set< Character > characters = SupportedCharacters.getSupportedCharacters() ;
+    assertNotNull( characters ) ;
     LOGGER.debug( "Got: {}", characters ) ;
     
   }

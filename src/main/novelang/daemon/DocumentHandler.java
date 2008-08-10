@@ -78,7 +78,9 @@ public class DocumentHandler extends GenericHandler {
     handle( request, response ) ;
   }
 
-  private void handle( HttpServletRequest request, HttpServletResponse response ) throws IOException {
+  private void handle( HttpServletRequest request, HttpServletResponse response )
+      throws IOException
+  {
     final String rawRequest = request.getPathInfo() +
         ( StringUtils.isBlank( request.getQueryString() ) ? "" : "?" + request.getQueryString() )
     ;

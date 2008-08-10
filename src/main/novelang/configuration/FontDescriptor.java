@@ -61,9 +61,26 @@ public final class FontDescriptor {
   }
 
   public static enum Format {
-    PLAIN,
-    BOLD,
-    ITALIC,
-    BOLD_ITALIC
+    PLAIN( false, false ),
+    BOLD( true, false ),
+    ITALIC( false, true ),
+    BOLD_ITALIC( true, true ) ;
+
+    private final boolean bold ;
+    private final boolean italic ;
+
+
+    private Format( boolean bold, boolean italic ) {
+      this.bold = bold ;
+      this.italic = italic ;
+    }
+
+    public String getWeight() {
+      return bold ? "bold" : "normal" ;
+    }
+
+    public String getStyle() {
+      return italic ? "italic" : "normal" ;
+    }
   }
 }

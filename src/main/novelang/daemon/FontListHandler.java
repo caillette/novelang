@@ -17,14 +17,26 @@
 package novelang.daemon;
 
 import java.io.IOException;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.RenderingConfiguration;
+import org.mortbay.jetty.Request;
 import novelang.configuration.FontDescriptor;
+import novelang.configuration.ServerConfiguration;
+import novelang.common.Renderable;
+import novelang.part.Part;
+import novelang.produce.DocumentProducer;
+import novelang.produce.RequestTools;
+import novelang.produce.DocumentRequest;
+import novelang.rendering.RenditionMimeType;
+import novelang.loader.ResourceName;
+import novelang.parser.SupportedCharacters;
+import novelang.parser.Escape;
+import com.google.common.collect.Sets;
 
 /**
  * @author Laurent Caillette
@@ -34,9 +46,14 @@ public class FontListHandler extends GenericHandler{
   private static final Logger LOGGER = LoggerFactory.getLogger( FontListHandler.class ) ;
 
   private final Iterable< FontDescriptor > fontDescriptors ;
+  private final DocumentProducer documentProducer ;
+  private static final String DOCUMENT_NAME = "/~fonts.pdf" ;
+//  private static final ResourceName STYLESHEET = new ResourceName( "pdf.xsl" ) ;
+  private static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
 
-  public FontListHandler( RenderingConfiguration renderingConfiguration ) {
-    fontDescriptors = renderingConfiguration.getFontDescriptors() ;
+  public FontListHandler( ServerConfiguration serverConfiguration ) {
+    documentProducer = new DocumentProducer( serverConfiguration ) ;
+    fontDescriptors = serverConfiguration.getRenderingConfiguration().getFontDescriptors() ;
   }
 
   protected void doHandle( 
@@ -45,8 +62,64 @@ public class FontListHandler extends GenericHandler{
       HttpServletResponse response,
       int dispatch
   ) throws IOException, ServletException {
-    if( "/~fonts.pdf".equals( target ) ) {
+    if( DOCUMENT_NAME.equals( target ) ) {
       LOGGER.info( "Font listing requested" ) ;
+
+      final StringBuffer textBuffer = new StringBuffer() ;
+      final String nonWordCharacters = createNonWordCharactersString() ;
+
+      for( FontDescriptor fontDescriptor : fontDescriptors ) {
+        textBuffer
+            .append( "=== \"" ).append( fontDescriptor.getFontName() ).append( "\"")
+            .append( "[" ).append( fontDescriptor.getFontFormat().getStyle() ).append( "]" )
+            .append( "[" ).append( fontDescriptor.getFontFormat().getWeight() ).append( "]" )
+            .append( "(" ).append( fontDescriptor.getFontFormat().name().toLowerCase()).append( ")" )
+            .append( "\n\n" )
+            .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
+            .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
+            .append( "0123456789" ).append( "\n\n" )
+            .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
+        ;
+      }
+      LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
+      final Renderable rendered = new Part( textBuffer.toString() ) ;
+
+
+      final DocumentRequest documentRequest = RequestTools.forgeDocumentRequest(
+          DOCUMENT_NAME,
+          RenditionMimeType.PDF,
+          STYLESHEET
+      ) ;
+
+      response.setStatus( HttpServletResponse.SC_OK ) ;
+      documentProducer.produce( documentRequest, rendered, response.getOutputStream() ) ;
+      response.setContentType( RenditionMimeType.PDF.getMimeName() ) ;
+
+      ( ( Request ) request ).setHandled( true ) ;
+      LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+
     }
+  }
+
+  private static final Set< Character > ESCAPERS = Sets.newHashSet(
+      '`',
+      '\\',
+      '\u0152',
+      '\u0153',
+      '\u2039',
+      '\u203a',
+      Escape.ESCAPE_START,
+      Escape.ESCAPE_END
+  ) ;
+
+  private String createNonWordCharactersString() {
+    final Set< Character > nonWordCharacterSet = SupportedCharacters.getNonWordCharacters() ;
+    final StringBuffer buffer = new StringBuffer() ;
+    for( Character character : nonWordCharacterSet ) {
+      if( ! ESCAPERS.contains( character ) ) {
+        buffer.append( character ) ;
+      }
+    }   
+    return buffer.toString() ;    
   }
 }

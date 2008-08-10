@@ -183,6 +183,18 @@ import novelang.loader.ResourceName;
     return create( requestPath, new DocumentRequest() ) ;
   }
 
+  public static DocumentRequest forgeDocumentRequest(
+      String documentName,
+      RenditionMimeType renditionMimeType,
+      ResourceName stylesheet
+  ) {
+    final AbstractRequest documentRequest = new DocumentRequest() ;
+    documentRequest.setDocumentSourceName( documentName ) ;
+    documentRequest.setRenditionMimeType( renditionMimeType ) ;
+    documentRequest.setAlternateStylesheet( stylesheet ) ;
+    return ( DocumentRequest ) documentRequest ;
+  }
+
   public static PolymorphicRequest createPolymorphicRequest( String requestPath ) {
     return create( requestPath, new PolymorphicRequest() ) ;
   }

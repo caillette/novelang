@@ -16,6 +16,9 @@
  */
 package novelang.produce;
 
+import novelang.rendering.RenditionMimeType;
+import novelang.loader.ResourceName;
+
 /**
  * Helper for creating concrete Requests.
  * This avoids accessing to package-protected {@link AbstractRequest}.
@@ -34,6 +37,14 @@ public class RequestTools {
 
   public static PolymorphicRequest createPolymorphicRequest( String rawRequest ) {
     return AbstractRequest.createPolymorphicRequest( rawRequest ) ;
+  }
+
+  public static DocumentRequest forgeDocumentRequest(
+      String documentName,
+      RenditionMimeType renditionMimeType,
+      ResourceName stylesheet
+  ) {
+    return AbstractRequest.forgeDocumentRequest( documentName, renditionMimeType, stylesheet ) ;  
   }
 
 }

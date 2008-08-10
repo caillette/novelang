@@ -19,17 +19,20 @@ package novelang.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
  * Attempts to find out all characters supported by the parser.
+ * This is done by parsing the ANTLR-generated token list.
  *
  * @author Laurent Caillette
  */
@@ -38,6 +41,7 @@ public class SupportedCharacters {
   private static final Logger LOGGER = LoggerFactory.getLogger( SupportedCharacters.class ) ;
 
   private static Set< Character > SUPPORTED_CHARACTERS ;
+  private static Set< Character > NON_WORD_CHARACTERS ;
 
   private static final String ANTLR_TOKENS = "/novelang/parser/antlr/Novelang__.g";
 
@@ -72,7 +76,7 @@ public class SupportedCharacters {
     if( null == supportedCharacters ) {
       return null ;
     } else {
-      return ImmutableSet.copyOf( supportedCharacters ) ;
+      return ImmutableSet.copyOf( Sets.newTreeSet( Lists.sortedCopy( supportedCharacters ) ) ) ;
     }
   }
 
@@ -116,12 +120,8 @@ public class SupportedCharacters {
         final int groupIndex = converterIndex + 1;
         final String match = matcher.group( groupIndex ) ;
         if( match != null  ) {
-          LOGGER.debug( "Converting '{}' from group {}", match, groupIndex ) ;
-          final Character character = converters[ converterIndex ].convert( match ) ;
-//          if( new Character( ' ' ).equals( character ) ) {
-//            return null ;
-//          }
-          return character;
+//          LOGGER.debug( "Converting '{}' from group {}", match, groupIndex ) ;
+          return converters[ converterIndex ].convert( match );
         }
       }
 
@@ -151,7 +151,7 @@ public class SupportedCharacters {
       } ;
       final String hex = "#" +
           characterDeclaration.substring( 2, characterDeclaration.length() ) ;
-      LOGGER.debug( "Decoding {}", hex ) ;
+//      LOGGER.debug( "Decoding {}", hex ) ;
       Integer decoded = Integer.decode( hex ) ;
       return new Character( ( char ) decoded.intValue() ) ;
     }
@@ -178,9 +178,37 @@ public class SupportedCharacters {
    */
   public static synchronized Set< Character > getSupportedCharacters() {
     if( null == SUPPORTED_CHARACTERS ) {
-      SUPPORTED_CHARACTERS = loadSupportedCharacters() ; 
+      SUPPORTED_CHARACTERS = loadSupportedCharacters() ;
     }
     return SUPPORTED_CHARACTERS ;
+  }
+
+  /**
+   * Returns supported characters.
+   * This is done lazily because otherwise the unit test gets screwed before testing anything.
+   */
+  public static synchronized Set< Character > getNonWordCharacters() {
+    if( null == NON_WORD_CHARACTERS ) {
+      NON_WORD_CHARACTERS = removeWordCharacters( getSupportedCharacters() ) ;
+    }
+    return NON_WORD_CHARACTERS ;
+  }
+
+  private static final String WORD_CHARACTERS =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" ;
+
+  private static Set< Character > removeWordCharacters( Set< Character > supportedCharacters ) {
+    final char[] wordCharacters = WORD_CHARACTERS.toCharArray() ;
+    final Set updatedCharacterSet = Sets.newTreeSet( supportedCharacters ) ;
+    for( int i = 0; i < wordCharacters.length ; i++ ) {
+      final Character wordCharacter = wordCharacters[ i ] ;
+      updatedCharacterSet.remove( wordCharacter ) ;
+    }
+    final ImmutableSet< Character > resultingSet = ImmutableSet.copyOf( updatedCharacterSet ) ;
+    for( Character character : resultingSet ) {
+      LOGGER.debug( "Kept character 0x{}", Integer.toHexString( character.charValue() ) ) ;
+    }
+    return resultingSet;
   }
 
 }
