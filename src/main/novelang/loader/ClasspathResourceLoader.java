@@ -63,7 +63,7 @@ public class ClasspathResourceLoader implements ResourceLoader {
     final String urlAsString = url.toExternalForm();
     try {
       final InputStream inputStream = url.openStream();
-      LOGGER.debug( "Opened stream '{}'", urlAsString ) ;
+      LOGGER.info( "Opened stream '{}'", urlAsString ) ;
       return inputStream;
     } catch( IOException e ) {
       LOGGER.debug( "Could not find resource '{}' from {}", urlAsString, this ) ;

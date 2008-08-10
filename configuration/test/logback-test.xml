@@ -29,6 +29,10 @@
     <level value="WARN" />
   </logger>
 
+  <logger name="novelang.loader" >
+    <level value="INFO" />
+  </logger>
+
   <root>
     <level value="DEBUG" />
     <appender-ref ref="STDOUT" />

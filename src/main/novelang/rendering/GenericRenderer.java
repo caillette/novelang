@@ -113,7 +113,7 @@ public class GenericRenderer implements Renderer {
       case SIGN_FULLSTOP :
       case SIGN_QUESTIONMARK :
       case SIGN_SEMICOLON :
-        fragmentWriter.start( newPath, false ); ;
+        fragmentWriter.start( newPath, false ) ;
         fragmentWriter.end( newPath ) ;
         break ;
 

@@ -20,6 +20,8 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.net.MalformedURLException;
@@ -35,6 +37,8 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+import org.dom4j.io.XMLWriter;
+import org.dom4j.io.OutputFormat;
 import com.google.common.collect.Lists;
 import com.google.common.base.Objects;
 import novelang.common.FileTools;
@@ -47,6 +51,9 @@ import novelang.common.FileTools;
 public class FopFontsTools {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( FopFontsTools.class ) ;
+  private static final String FONTNAMESUFFIX_BOLD_ITALIC = "-bold-italic";
+  private static final String FONTNAMESUFFIX_ITALIC = "-italic";
+  private static final String FONTNAMESUFFIX_BOLD = "-bold";
 
   /**
    * Lists all system files to the console.
@@ -119,16 +126,45 @@ public class FopFontsTools {
   }
 
   private static FontFormat findFontFormat( String fontFileName ) {
-    if( fontFileName.endsWith( "-bold" ) ) {
+    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD ) ) {
       return FontFormat.BOLD ;
     } ;
-    if( fontFileName.endsWith( "-italic" ) ) {
+    if( fontFileName.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
       return FontFormat.ITALIC ;
     }
-    if( fontFileName.endsWith( "-bold-italic" ) ) {
+    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD_ITALIC ) ) {
       return FontFormat.BOLD_ITALIC ;
     }
     return FontFormat.PLAIN ;
+  }
+
+  private static String extractFontName( String fontFileName ) {
+    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD ) ) {
+      return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_BOLD.length() ) ;
+    } ;
+    if( fontFileName.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
+      return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_ITALIC.length() ) ;
+    }
+    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD_ITALIC ) ) {
+      return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_BOLD_ITALIC.length() ) ;
+    }
+    return fontFileName ;
+  }
+
+  private static String italicOrNormal( FontFormat fontFormat ) {
+    switch( fontFormat ) {
+      case BOLD_ITALIC :
+      case ITALIC : return "italic" ;
+      default : return "normal" ;
+    }
+  }
+
+  private static String boldOrNormal( FontFormat fontFormat ) {
+    switch( fontFormat ) {
+      case BOLD_ITALIC :
+      case BOLD : return "bold" ;
+      default : return "normal" ;
+    }
   }
 
   public static enum FontFormat {
@@ -170,7 +206,12 @@ public class FopFontsTools {
 
       LOGGER.info( "Calling TTFReader( {} )", Arrays.toString( arguments ) ) ;
       TTFReader.main( arguments ) ;
-      fontFileDescriptors.add( new FontFileDescriptor( fontFile, fontMetricsFile, fontFormat ) ) ;
+      fontFileDescriptors.add( new FontFileDescriptor(
+          extractFontName( fontFileBaseName ),
+          fontFile,
+          fontMetricsFile,
+          fontFormat
+      ) ) ;
     }
     return fontFileDescriptors ;
 
@@ -193,6 +234,17 @@ public class FopFontsTools {
             "metrics-url",
             fontFileDescriptor.getMetricsFile().toURI().toURL().toExternalForm()
         ) ;
+        font.setAttribute( "kerning", "yes" ) ;
+        font.setAttribute(
+            "embed-url",
+            fontFileDescriptor.getFontFile().toURI().toURL().toExternalForm()
+        ) ;
+        final MutableConfiguration fontTriplet = new DefaultConfiguration( "font-triplet" ) ;
+        final FontFormat fontFormat = fontFileDescriptor.getFontFormat() ;
+        fontTriplet.setAttribute( "name", fontFileDescriptor.getFontName() ) ;
+        fontTriplet.setAttribute( "style", italicOrNormal( fontFormat ) ) ;
+        fontTriplet.setAttribute( "weight", boldOrNormal( fontFormat ) ) ;
+        font.addChild( fontTriplet ) ;
         fonts.addChild( font ) ;
       } catch( MalformedURLException e ) {
         LOGGER.error( "Problem with font metrics", e ) ;
@@ -203,12 +255,14 @@ public class FopFontsTools {
     renderers.addChild( renderer ) ;
     fop.addChild( renderers ) ;
 
-
     try {
-      
+      final StringWriter stringWriter = new StringWriter() ;
+      final OutputFormat format = OutputFormat.createPrettyPrint() ;
+      final XMLWriter xmlWriter = new XMLWriter( stringWriter, format ) ;
+      new DefaultConfigurationSerializer().serialize( xmlWriter, fop ) ;
+      xmlWriter.close() ;
 
-
-      LOGGER.debug( "Created configuration: \n" + new DefaultConfigurationSerializer().serialize( fop ) ) ;
+      LOGGER.debug( "Created configuration: \n" + stringWriter.toString() ) ;
     } catch( Exception e ) {
       LOGGER.error( "Could not serialize configuration to string", e ) ;
     }
@@ -217,26 +271,37 @@ public class FopFontsTools {
   }
 
   public static final class FontFileDescriptor {
+    private final String fontName ;
     private final File fontFile ;
     private final File metricsFile ;
     private final FontFormat fontFormat ;
 
-    public FontFileDescriptor( File fontFile, File metricsFile, FontFormat fontFormat ) {
+    public FontFileDescriptor(
+        String fontName,
+        File fontFile,
+        File metricsFile,
+        FontFormat fontFormat
+    ) {
+      this.fontName = Objects.nonNull( fontName ) ;
       this.fontFile = Objects.nonNull( fontFile ) ;
       this.metricsFile = Objects.nonNull( metricsFile ) ;
       this.fontFormat = Objects.nonNull( fontFormat ) ;
     }
 
+    public String getFontName() {
+      return fontName ;
+    }
+
     public File getFontFile() {
-      return fontFile;
+      return fontFile ;
     }
 
     public File getMetricsFile() {
-      return metricsFile;
+      return metricsFile ;
     }
 
     public FontFormat getFontFormat() {
-      return fontFormat;
+      return fontFormat ;
     }
   }
 

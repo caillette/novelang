@@ -20,9 +20,12 @@ package novelang.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.MalformedURLException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.apache.fop.apps.FopFactory;
+import org.apache.avalon.framework.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.loader.ClasspathResourceLoader;
@@ -45,6 +48,11 @@ import novelang.loader.UrlResourceLoader;
  *       directory.
  * </ol>
  *
+ * <p>
+ * {@link #buildRenderingConfiguration()} also creates a {@link FopFactory} relying on fonts
+ * in {@value #FONTS_DEFAULT_DIRECTORYNAME} if such directory is declared through a mechanism
+ * similar to the one defined above.
+ *
  * @author Laurent Caillette
  */
 public class ConfigurationTools {
@@ -62,75 +70,156 @@ public class ConfigurationTools {
   private static final String USER_STYLE_DIR = "style" ;
   protected static final String NOVELANG_STYLE_DIR_PROPERTYNAME = "novelang.style.dir" ;
 
-  private static final ResourceLoader STYLE_RESOURCE_LOADER;
-  
-  static {
-    final URL userStyleDir ;
 
-    LOGGER.info(
-        "Resolving file names from '{}'.",
-        new File( System.getProperty( "user.dir" ) ).getAbsolutePath()
-    ) ;
+  protected static final String FONTS_DEFAULT_DIRECTORYNAME = "fonts" ;
+  protected static final String FONTS_DIR_PROPERTYNAME = "novelang.fonts.dir" ;
+
+  protected static final String FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME = "fop-metrics" ;
+  protected static final String FOP_METRICS_DIR_PROPERTYNAME = "novelang.fop.fontmetrics.dir" ;
+
+  private static final ResourceLoader STYLE_RESOURCE_LOADER;
+
+  private static File resolveDirectory(
+      String topicName,
+      String customDirectoryPropertyName,
+      String defaultSubdirectoryName,
+      boolean create
+  ) {
+
+    final File directory;
 
     // First use system property.
-    final String stylesDirNameBySystemProperty =
-        System.getProperty( NOVELANG_STYLE_DIR_PROPERTYNAME ) ;
+    final String dirNameBySystemProperty =
+        System.getProperty( customDirectoryPropertyName ) ;
 
-    if( StringUtils.isBlank( stylesDirNameBySystemProperty ) ) {
-      // Second use {user.dir}/style
-      final File styleDirAsSubdirectory = new File( USER_STYLE_DIR ) ;
+
+    if( StringUtils.isBlank( dirNameBySystemProperty ) ) {
+
+      final File styleDirAsSubdirectory = new File( defaultSubdirectoryName ) ;
+
+      // Second use {user.dir}/xxx
       if( styleDirAsSubdirectory.exists() ) {
         try {
-          userStyleDir = styleDirAsSubdirectory.getCanonicalFile().toURI().toURL() ;
+          directory = styleDirAsSubdirectory.getCanonicalFile() ;
           LOGGER.info(
-              "Styles directory set to '{}' " +
-              "(found '" + USER_STYLE_DIR + "' directory under [user.dir] " +
-              "and no system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
-              userStyleDir.toExternalForm() ) ;
-          
+              "Directory for " + topicName + " set to '" + directory + "' "
+            + "(found '" + defaultSubdirectoryName + "' directory under [user.dir] "
+            + "and no system property [" + customDirectoryPropertyName + "])."
+          ) ;
+
         } catch( IOException e ) {
           throw new RuntimeException( e ) ;
         }
       } else {
-        userStyleDir = null ;
         LOGGER.warn(
-            "Cannot find directory for custom styles.  " +
-            "(no '{}' directory found under [user.dir], " +
-            "nor system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
-            USER_STYLE_DIR
+            "Cannot find directory for " + topicName + " "
+          + "(no '" + defaultSubdirectoryName + "' directory found under [user.dir], "
+          + "nor system property [" + customDirectoryPropertyName + "])."
+
         ) ;
+        directory = createIfRequired( styleDirAsSubdirectory, create ) ;
       }
     } else {
-      final File dir = new File( stylesDirNameBySystemProperty ) ;
+      final File dir = new File( dirNameBySystemProperty ) ;
       if( dir.exists() ) {
         try {
-          userStyleDir = dir.getCanonicalFile().toURI().toURL() ;
+          directory = dir.getCanonicalFile() ;
         } catch( IOException e ) {
           throw new RuntimeException( e ) ;
         }
         LOGGER.info(
-            "Styles directory set to '{}' " +
-            "(from system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
-            userStyleDir.toExternalForm()
+            "Directory for " + topicName + " set to '" + directory.getAbsolutePath() + "' " +
+            "(from system property [" + customDirectoryPropertyName + "])."
         ) ;
       } else {
-        userStyleDir = null ;
         LOGGER.warn(
-            "Styles directory '{}' does not exist " +
-            "(was set as system property [" + NOVELANG_STYLE_DIR_PROPERTYNAME + "]).",
-            stylesDirNameBySystemProperty
+            "Directory '" + dirNameBySystemProperty + "' for " + topicName + " does not exist "
+          + "(was set as system property [" + customDirectoryPropertyName + "])."
         ) ;
+        directory = createIfRequired( dir, create ) ;
       }
 
     }
 
-    final ResourceLoader classpathResourceLoader = new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
-    if( null == userStyleDir ) {
+    return directory;
+  }
+
+  private static File createIfRequired(
+      File styleDirAsSubdirectory,
+      boolean create
+  ) {
+    if( create ) {
+      if( styleDirAsSubdirectory.mkdir() ) {
+        LOGGER.error(
+            "Created '{}' anyways.",
+            styleDirAsSubdirectory.getAbsolutePath()
+        ) ;
+        return styleDirAsSubdirectory ;
+      } else {
+        LOGGER.error(
+            "Creation of '{}' failed for an unknown reason.",
+            styleDirAsSubdirectory.getAbsolutePath()
+        ) ;
+        return null ;
+      }
+    } else {
+      return null ;
+    }
+  }
+
+
+  private static final File FONTS_DIRECTORY ;
+  private static final File FOP_FONT_METRICS_DIRECTORY ;
+
+  static {
+
+    LOGGER.info(
+        "Configuration resolving relative directories from '{}'.",
+        new File( System.getProperty( "user.dir" ) ).getAbsolutePath()
+    ) ;
+
+    FONTS_DIRECTORY = resolveDirectory(
+        "fonts",
+        FONTS_DIR_PROPERTYNAME,
+        FONTS_DEFAULT_DIRECTORYNAME,
+        false
+    ) ;
+
+    if( null == FONTS_DIRECTORY ) {
+      FOP_FONT_METRICS_DIRECTORY = null ;
+    } else {
+      FOP_FONT_METRICS_DIRECTORY = resolveDirectory(
+        "font metrics",
+          FOP_METRICS_DIR_PROPERTYNAME,
+          FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME,
+          true
+      );
+    }
+
+    final File userStyleDirectory = resolveDirectory(
+        "style",
+        NOVELANG_STYLE_DIR_PROPERTYNAME,
+        USER_STYLE_DIR,
+        false
+    ) ;
+    
+    final URL userStyleUrl ;
+    try {
+      userStyleUrl = userStyleDirectory.toURI().toURL();
+    } catch( MalformedURLException e ) {
+      throw new RuntimeException( e );
+    }
+
+    final ResourceLoader classpathResourceLoader =
+        new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
+    if( null == userStyleDirectory ) {
       STYLE_RESOURCE_LOADER = classpathResourceLoader ;
     } else {
       STYLE_RESOURCE_LOADER = ResourceLoaderTools.compose(
-          new UrlResourceLoader( userStyleDir ), classpathResourceLoader ) ;
+          new UrlResourceLoader( userStyleUrl ), classpathResourceLoader ) ;
     }
+
+
   }
 
 
@@ -139,7 +228,25 @@ public class ConfigurationTools {
       public ResourceLoader getResourceLoader() {
         return STYLE_RESOURCE_LOADER;
       }
+      public FopFactory getFopFactory() {
+        return createFopFactory( FONTS_DIRECTORY, FOP_FONT_METRICS_DIRECTORY ) ;
+      }
     } ;
+  }
+
+  private static FopFactory createFopFactory( File fontsDirectory, File fopMetricsDirectory ) {
+    final FopFactory fopFactory = FopFactory.newInstance();
+    if( fontsDirectory != null && fopMetricsDirectory != null ) {
+      try {
+        Iterable<FopFontsTools.FontFileDescriptor> fontFileDescritors =
+            FopFontsTools.createFopMetrics( fontsDirectory, fopMetricsDirectory ) ;
+        final Configuration configuration =
+            FopFontsTools.createFopConfiguration( fontFileDescritors ) ;
+      } catch( IOException e ) {
+        LOGGER.error( "Could not use custom fonts", e ) ;
+      }
+    }
+    return fopFactory ;
   }
 
 // =======

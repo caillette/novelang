@@ -30,6 +30,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.fop.apps.FopFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -316,6 +317,9 @@ public class HttpDaemonTest {
         return new RenderingConfiguration() {
           public ResourceLoader getResourceLoader() {
             return new ClasspathResourceLoader( styleDirectoryName ) ;
+          }
+          public FopFactory getFopFactory() {
+            return FopFactory.newInstance() ;
           }
         } ;
       }

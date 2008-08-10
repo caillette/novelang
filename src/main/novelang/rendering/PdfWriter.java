@@ -18,28 +18,22 @@
 package novelang.rendering;
 
 import java.io.OutputStream;
+import java.io.File;
 import java.nio.charset.Charset;
-import java.util.Set;
+import java.net.MalformedURLException;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.apache.avalon.framework.configuration.Configuration;
 import org.xml.sax.ContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.TreeMetadata;
-import novelang.common.Nodepath;
-import novelang.common.NodeKind;
-import static novelang.common.NodeKind.LITERAL;
-import static novelang.common.NodeKind.SOFT_INLINE_LITERAL;
-import static novelang.common.NodeKind.HARD_INLINE_LITERAL;
 import novelang.loader.ResourceName;
-import novelang.parser.Escape;
-import com.google.common.collect.Sets;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * @author Laurent Caillette
@@ -49,9 +43,11 @@ public class PdfWriter extends XslWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger( PdfWriter.class ) ;
 
   protected static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ;
+  protected final FopFactory fopFactory ;
 
   public PdfWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
     super( configuration, null == stylesheet ? DEFAULT_FO_STYLESHEET : stylesheet ) ;
+    fopFactory = configuration.getFopFactory() ;
   }
 
 // ==========
@@ -65,7 +61,6 @@ public class PdfWriter extends XslWriter {
   )
       throws FOPException
   {
-    final FopFactory fopFactory = FopFactory.newInstance() ;
     final FOUserAgent foUserAgent = fopFactory.newFOUserAgent() ;
 
     final Fop fop ;

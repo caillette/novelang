@@ -17,6 +17,9 @@
 
 package novelang.configuration;
 
+import java.io.File;
+
+import org.apache.fop.apps.FopFactory;
 import novelang.loader.ResourceLoader;
 
 /**
@@ -29,5 +32,11 @@ public interface RenderingConfiguration {
    * @return a non-null object.
    */
   ResourceLoader getResourceLoader() ;
+
+  /**
+   * Returns the directory where some renderers should find fonts.
+   * @return a possibly null object.
+   */
+  FopFactory getFopFactory() ;
 
 }
