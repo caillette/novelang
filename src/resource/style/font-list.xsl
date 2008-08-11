@@ -76,16 +76,36 @@
         padding-top="20pt"
         text-align="center"
         padding-bottom="5pt"
+        font-weight="bold"
+        keep-together="always"
     >
-      <xsl:value-of select="n:title/n:quote" />&nbsp;
-      <xsl:value-of select="n:title/n:parenthesis" />&nbsp;
+      <fo:block
+          border-style="dotted"
+          padding-top="5pt"
+          padding-bottom="2pt"
+      >
+        <xsl:value-of select="n:title/n:quote" />&nbsp;
+        <xsl:value-of select="n:title/n:parenthesis" />
+        <fo:block
+            font-family="monospace"
+            font-size="80%"
+            >
+          <xsl:value-of select="n:title/n:hard-inline-literal" />
+        </fo:block>
+      </fo:block>
     </fo:block>
     <fo:block
         text-align="center"
     >
-      <xsl:attribute name="font-family" ><xsl:value-of select="n:title/n:quotes" /></xsl:attribute>
-      <xsl:attribute name="font-style" ><xsl:value-of select="n:title/n:square-brackets[1]" /></xsl:attribute>
-      <xsl:attribute name="font-weight" ><xsl:value-of select="n:title/n:square-brackets[2]" /></xsl:attribute>
+      <xsl:attribute name="font-family" >
+        <xsl:value-of select="n:title/n:quote" />
+      </xsl:attribute>
+      <xsl:attribute name="font-style" >
+        <xsl:value-of select="n:title/n:square-brackets[1]" />
+      </xsl:attribute>
+      <xsl:attribute name="font-weight" >
+        <xsl:value-of select="n:title/n:square-brackets[2]" />
+      </xsl:attribute>
       <xsl:apply-templates select="n:paragraph-plain" mode="paragraph" />
     </fo:block>
   </xsl:template>

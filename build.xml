@@ -157,6 +157,11 @@
         <patternset refid="resource-patterns" />
       </fileset>
     </copy>
+    <copy todir="${target.mainclasses.generatedtokens.dir}" >
+      <fileset dir="${target.antlr.generated.dir}" >
+        <patternset refid="resource-patterns" />
+      </fileset>
+    </copy>
 
   </target>
 

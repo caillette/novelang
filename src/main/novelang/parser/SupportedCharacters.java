@@ -198,17 +198,21 @@ public class SupportedCharacters {
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" ;
 
   private static Set< Character > removeWordCharacters( Set< Character > supportedCharacters ) {
-    final char[] wordCharacters = WORD_CHARACTERS.toCharArray() ;
-    final Set updatedCharacterSet = Sets.newTreeSet( supportedCharacters ) ;
-    for( int i = 0; i < wordCharacters.length ; i++ ) {
-      final Character wordCharacter = wordCharacters[ i ] ;
-      updatedCharacterSet.remove( wordCharacter ) ;
+    if( null == supportedCharacters ) {
+      return null ;
+    } else {
+      final char[] wordCharacters = WORD_CHARACTERS.toCharArray() ;
+      final Set updatedCharacterSet = Sets.newTreeSet( supportedCharacters ) ;
+      for( int i = 0; i < wordCharacters.length ; i++ ) {
+        final Character wordCharacter = wordCharacters[ i ] ;
+        updatedCharacterSet.remove( wordCharacter ) ;
+      }
+      final ImmutableSet< Character > resultingSet = ImmutableSet.copyOf( updatedCharacterSet ) ;
+//      for( Character character : resultingSet ) {
+//        LOGGER.debug( "Kept character 0x{}", Integer.toHexString( character.charValue() ) ) ;
+//      }
+      return resultingSet;
     }
-    final ImmutableSet< Character > resultingSet = ImmutableSet.copyOf( updatedCharacterSet ) ;
-    for( Character character : resultingSet ) {
-      LOGGER.debug( "Kept character 0x{}", Integer.toHexString( character.charValue() ) ) ;
-    }
-    return resultingSet;
   }
 
 }

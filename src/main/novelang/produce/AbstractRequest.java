@@ -190,6 +190,7 @@ import novelang.loader.ResourceName;
   ) {
     final AbstractRequest documentRequest = new DocumentRequest() ;
     documentRequest.setDocumentSourceName( documentName ) ;
+    documentRequest.setOriginalTarget( documentName ) ;
     documentRequest.setRenditionMimeType( renditionMimeType ) ;
     documentRequest.setAlternateStylesheet( stylesheet ) ;
     return ( DocumentRequest ) documentRequest ;

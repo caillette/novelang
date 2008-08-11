@@ -48,6 +48,7 @@ public class FopFontsTools {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( FopFontsTools.class ) ;
   private static final String FONTNAMESUFFIX_BOLD_ITALIC = "-bold-italic";
+  private static final String FONTNAMESUFFIX_ITALIC_BOLD = "-bold-italic";
   private static final String FONTNAMESUFFIX_ITALIC = "-italic";
   private static final String FONTNAMESUFFIX_BOLD = "-bold";
 
@@ -122,27 +123,34 @@ public class FopFontsTools {
   }
 
   private static FontDescriptor.Format findFontFormat( String fontFileName ) {
-    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD ) ) {
+    final String fontFileNameLowerCase = fontFileName.toLowerCase() ;
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD_ITALIC )
+     || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC_BOLD )
+    ) {
+      return FontDescriptor.Format.BOLD_ITALIC ;
+    }
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD ) ) {
       return FontDescriptor.Format.BOLD ;
     } ;
-    if( fontFileName.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
       return FontDescriptor.Format.ITALIC ;
-    }
-    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD_ITALIC ) ) {
-      return FontDescriptor.Format.BOLD_ITALIC ;
     }
     return FontDescriptor.Format.PLAIN ;
   }
 
   private static String extractFontName( String fontFileName ) {
-    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD ) ) {
+    final String fontFileNameLowerCase = fontFileName.toLowerCase() ;
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD_ITALIC )
+        || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC_BOLD )
+        ) {
+      return fontFileName.substring(
+          0, fontFileName.length() - FONTNAMESUFFIX_BOLD_ITALIC.length() ) ;
+    }
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD ) ) {
       return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_BOLD.length() ) ;
     } ;
-    if( fontFileName.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
       return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_ITALIC.length() ) ;
-    }
-    if( fontFileName.endsWith( FONTNAMESUFFIX_BOLD_ITALIC ) ) {
-      return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_BOLD_ITALIC.length() ) ;
     }
     return fontFileName ;
   }
@@ -171,7 +179,7 @@ public class FopFontsTools {
    * @return a description of font files for which metrics were created.
    * @throws IOException
    */
-  public static Iterable<FontDescriptor> createFopMetrics(
+  public static Iterable< FontDescriptor > createFopMetrics(
       File fontDirectory,
       File metricsDirectory
   ) throws IOException {
