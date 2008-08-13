@@ -56,7 +56,9 @@ public class TestResources {
 
   public static final String NODESET_DIR = "/nodeset" ;
   public static final ResourceName NODESET_XSL = new ResourceName( "nodeset.xsl" ) ;
-  public static final String NODESET_VOIDDOCUMENT = NODESET_DIR + "/void-document.nlp" ;
+  public static final String NODESET_SOMECHAPTERS_DOCUMENTNAME = "some-chapters" ;
+  public static final String NODESET_SOMECHAPTERS =
+      NODESET_DIR + "/" + NODESET_SOMECHAPTERS_DOCUMENTNAME + ".nlp" ;
 
   public static final ResourceName SHOWCASE = new ResourceName( "showcase/showcase.nlp" ) ;
 

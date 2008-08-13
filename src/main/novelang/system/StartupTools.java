@@ -56,4 +56,22 @@ public class StartupTools {
   }
 
 
+  public static void installXalan() {
+    System.setProperty(
+        "javax.xml.transform.TransformerFactory",
+        org.apache.xalan.processor.TransformerFactoryImpl.class.getName()
+    ) ;
+
+    System.setProperty(
+        "javax.xml.parsers.DocumentBuilderFactory",
+        org.apache.xerces.jaxp.DocumentBuilderFactoryImpl.class.getName()
+    ) ;
+
+    System.setProperty(
+        "javax.xml.parsers.SAXParserFactory",
+        org.apache.xerces.jaxp.SAXParserFactoryImpl.class.getName()
+    ) ;
+    
+  }
+
 }

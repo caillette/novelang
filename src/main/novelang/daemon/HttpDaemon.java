@@ -36,6 +36,7 @@ public class HttpDaemon {
 
   static {
     StartupTools.fixLogDirectory() ;
+    StartupTools.installXalan() ;
     EnvironmentTools.logSystemProperties() ;
   }
 
