@@ -30,7 +30,6 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.fop.apps.FopFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,14 +46,7 @@ import novelang.TestResources;
 import novelang.rendering.RenditionMimeType;
 import novelang.produce.RequestTools;
 import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ContentConfiguration;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ServerConfiguration;
-import novelang.configuration.FontDescriptor;
-import novelang.loader.ClasspathResourceLoader;
-import novelang.loader.ResourceLoader;
 import novelang.parser.Encoding;
-import com.google.common.collect.Iterables;
 
 /**
  * End-to-end tests with {@link HttpDaemon} and the download of some generated documents.
@@ -304,40 +296,9 @@ public class HttpDaemonTest {
 
     httpDaemon = new HttpDaemon(
         HTTP_DAEMON_PORT,
-        createServerConfiguration( contentDirectory, styleDirectoryName )
+        TestResources.createServerConfiguration( contentDirectory, styleDirectoryName )
     ) ;
     httpDaemon.start() ;
-  }
-
-  private ServerConfiguration createServerConfiguration(
-      final File contentDirectory,
-      final String styleDirectoryName
-  ) {
-    return new ServerConfiguration() {
-
-      public RenderingConfiguration getRenderingConfiguration() {
-        return new RenderingConfiguration() {
-          public ResourceLoader getResourceLoader() {
-            return new ClasspathResourceLoader( styleDirectoryName ) ;
-          }
-          public FopFactory getFopFactory() {
-            return FopFactory.newInstance() ;
-          }
-
-          public Iterable<FontDescriptor> getFontDescriptors() {
-            return Iterables.emptyIterable() ;
-          }
-        } ;
-      }
-
-      public ContentConfiguration getContentConfiguration() {
-        return new ContentConfiguration() {
-          public File getContentRoot() {
-            return contentDirectory;
-          }
-        } ;
-      }
-    } ;
   }
 
   @After

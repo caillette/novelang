@@ -19,7 +19,17 @@ package novelang;
 
 import java.io.File;
 
+import org.apache.fop.apps.FopFactory;
+import com.google.common.collect.Iterables;
+import novelang.configuration.ContentConfiguration;
+import novelang.configuration.FontDescriptor;
+import novelang.configuration.RenderingConfiguration;
+import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ConfigurationTools;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
+import novelang.loader.ResourceLoaderTools;
 
 /**
  * The only place where constants referencing test-dedicated resources can be defined.
@@ -44,6 +54,9 @@ public class TestResources {
   public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
   public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
 
+  public static final String NODESET_DIR = "/nodeset" ;
+  public static final ResourceName NODESET_XSL = new ResourceName( "nodeset.xsl" ) ;
+  public static final String NODESET_VOIDDOCUMENT = NODESET_DIR + "/void-document.nlp" ;
 
   public static final ResourceName SHOWCASE = new ResourceName( "showcase/showcase.nlp" ) ;
 
@@ -83,5 +96,62 @@ public class TestResources {
     TestResourceTools.copyResourceToFile(
         TestResources.class, SERVED_BOOK_ALTERNATESTYLESHEET, contentDirectory ) ;
 
+  }
+
+  public static ServerConfiguration createServerConfiguration(
+      final File contentDirectory,
+      final String styleDirectoryName,
+      final boolean shouldAddClasspathResourceLoader
+  ) {
+    final ResourceLoader resourceLoader ;
+    final ClasspathResourceLoader customResourceLoader =
+        new ClasspathResourceLoader( styleDirectoryName ) ;
+    if( shouldAddClasspathResourceLoader ) {
+      resourceLoader = ResourceLoaderTools.compose(
+          customResourceLoader,
+          new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
+      ) ;
+    } else {
+      resourceLoader = customResourceLoader ;
+    }
+
+    return new ServerConfiguration() {
+
+      public RenderingConfiguration getRenderingConfiguration() {
+        return new RenderingConfiguration() {
+          public ResourceLoader getResourceLoader() {
+            return resourceLoader ;
+          }
+          public FopFactory getFopFactory() {
+            return FopFactory.newInstance() ;
+          }
+
+          public Iterable< FontDescriptor > getFontDescriptors() {
+            return Iterables.emptyIterable() ;
+          }
+        } ;
+      }
+
+      public ContentConfiguration getContentConfiguration() {
+        return new ContentConfiguration() {
+          public File getContentRoot() {
+            return contentDirectory;
+          }
+        } ;
+      }
+    } ;
+
+  }
+
+
+  public static ServerConfiguration createServerConfiguration(
+      final File contentDirectory,
+      final String styleDirectoryName
+  ) {
+    return createServerConfiguration(
+        contentDirectory,
+        styleDirectoryName,
+        false
+    );
   }
 }
