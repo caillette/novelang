@@ -23,8 +23,6 @@
  >
 
 
-  <xsl:import href="pdf.xsl" />
-
   <xsl:template match="/" >
     <fo:root>
 
@@ -49,85 +47,54 @@
       >
 
 
+        <!-- This prints page numbers only when they are content-related.
+             It works because the "xsl-region-body" has set a marker containing
+             current page number.
+        -->
         <fo:static-content flow-name="xsl-region-after" >
           <fo:block
               font-size="20pt"    
           >
-              <!-- Need a variable here because <fo:page-number/> not allowed inside
-                   <fo:retrieve-marker>.
-               -->
-              <xsl:variable name="page-number" ><fo:page-number/></xsl:variable>
+            <!-- <fo:page-number/> not allowed inside <fo:retrieve-marker> so use a variable. -->
+            <xsl:variable name="page-number" ><fo:page-number/></xsl:variable>
 
-              <fo:retrieve-marker
-                  retrieve-class-name="inside-content"
-                  retrieve-boundary="page"
-                  retrieve-position="first-starting-within-page"
-              >
-                <xsl:value-of select="$page-number" />
-              </fo:retrieve-marker>
+            <fo:retrieve-marker
+                retrieve-class-name="inside-content"
+                retrieve-boundary="page"
+                retrieve-position="first-starting-within-page"
+            >
+              <xsl:value-of select="$page-number" />
+            </fo:retrieve-marker>
 
           </fo:block>
         </fo:static-content>
 
         <fo:flow flow-name="xsl-region-body">
 
-          <fo:block background="#DDDDFF" >
-            <!-- Use a marker to tell if current flow is real content. -->
+          <fo:block>
+            <!-- Use a marker to inject page number as we are in a block of real content. -->
             <fo:marker marker-class-name="inside-content" ><fo:page-number/></fo:marker>
 
-            <fo:block>
-              Function "exsl:nodeSet" available=
-              <xsl:value-of select="function-available('exslt:nodeSet')" />
+            <!-- Now play with functions. -->
+
+            <fo:block >
+              First we check if our chapter-numbering function is present:
             </fo:block>
 
             <fo:block>
-              Function "exslt:node-set" available=
-              <xsl:value-of select="function-available('exslt:node-set')" />
-            </fo:block>
-
-            <fo:block>
-              Function "xsltc-extension:nodeset" available=
-              <xsl:value-of select="function-available('xsltc-extension:nodeset')" />
-            </fo:block>
-
-            <fo:block>
-              Function "xalan:nodeset" available=
-              <xsl:value-of select="function-available('xalan:nodeset')" />
-            </fo:block>
-
-            <fo:block>
-              Function "nodeset" available=
-              <xsl:value-of select="function-available('nodeset')" />
-            </fo:block>
-
-            <fo:block>
-              Function "hello" available=
-              <xsl:value-of select="function-available('nlx:hello')" />
-            </fo:block>
-
-            <fo:block>
-              Function "hello" available=
-              <xsl:value-of select="function-available('nlx:numberAsFrenchText')" />
+              Function "numberAsText" available=
+              <xsl:value-of select="function-available('nlx:numberAsText')" />
             </fo:block>
 
             <fo:block padding-before="10pt" />
 
-            <fo:block>
-              Function "hello" says=
-              <xsl:value-of select="nlx:hello()" />
-            </fo:block>
-
-            <fo:block>
-              Getting numbers:
-              <xsl:value-of select="nlx:numberAsText(10,'FR','capital')" />;
-            </fo:block>
 
             <xsl:apply-templates />
 
           </fo:block>
 
           <fo:block break-before="page" >
-            This is the end of the document.
+            This is the end of the document. This page should have no number.
           </fo:block>
         </fo:flow>
 
@@ -144,11 +111,14 @@
     <fo:block
         break-before="page"
     >
-
+      <!-- Chapter index converted to text! -->
+      <xsl:value-of select="nlx:numberAsText(position(),'EN','capital')" />:
       <xsl:apply-templates />
     </fo:block>
   </xsl:template>
 
+
+  <xsl:import href="pdf.xsl" />
 
 </xsl:stylesheet>
 
