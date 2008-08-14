@@ -93,7 +93,9 @@
         <fo:flow
             flow-name="xsl-region-body"
         >
-          <xsl:apply-templates />
+          <fo:block font-family="Bitstream-Vera-Serif" >
+            <xsl:apply-templates />
+          </fo:block>
           <fo:block id="@last-page"/>
         </fo:flow>
 
@@ -285,7 +287,6 @@
         text-align="justify"
         text-indent="1em"
         font-size="12pt"
-        font-family="serif"
         line-height="18pt"
     >
       <fo:inline

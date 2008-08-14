@@ -51,8 +51,11 @@ public class FopTools {
   private static final Logger LOGGER = LoggerFactory.getLogger( FopTools.class ) ;
 
   private static final String FONTNAMESUFFIX_BOLD_ITALIC = "-bold-italic";
-  private static final String FONTNAMESUFFIX_ITALIC_BOLD = "-bold-italic";
+  private static final String FONTNAMESUFFIX_BOLD_OBLIQUE = "-bold-oblique";
+  private static final String FONTNAMESUFFIX_ITALIC_BOLD = "-italic-bold";
+  private static final String FONTNAMESUFFIX_OBLIQUE_BOLD = "-oblique-bold";
   private static final String FONTNAMESUFFIX_ITALIC = "-italic";
+  private static final String FONTNAMESUFFIX_OBLIQUE = "-oblique";
   private static final String FONTNAMESUFFIX_BOLD = "-bold";
   private static final String CONFIGURATION_NOT_SERIALIZED = "Could not serialize configuration to string";
 
@@ -130,13 +133,17 @@ public class FopTools {
     final String fontFileNameLowerCase = fontFileName.toLowerCase() ;
     if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD_ITALIC )
      || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC_BOLD )
+     || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_OBLIQUE_BOLD )
+     || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD_OBLIQUE )
     ) {
       return FontDescriptor.Format.BOLD_ITALIC ;
     }
     if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD ) ) {
       return FontDescriptor.Format.BOLD ;
     } ;
-    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC )
+     || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_OBLIQUE )
+    ) {
       return FontDescriptor.Format.ITALIC ;
     }
     return FontDescriptor.Format.PLAIN ;
@@ -145,16 +152,25 @@ public class FopTools {
   private static String extractFontName( String fontFileName ) {
     final String fontFileNameLowerCase = fontFileName.toLowerCase() ;
     if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD_ITALIC )
-        || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC_BOLD )
-        ) {
+     || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC_BOLD )
+    ) {
       return fontFileName.substring(
           0, fontFileName.length() - FONTNAMESUFFIX_BOLD_ITALIC.length() ) ;
+    }
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD_OBLIQUE )
+     || fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_OBLIQUE_BOLD )
+    ) {
+      return fontFileName.substring(
+          0, fontFileName.length() - FONTNAMESUFFIX_BOLD_OBLIQUE.length() ) ;
     }
     if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_BOLD ) ) {
       return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_BOLD.length() ) ;
     } ;
     if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_ITALIC ) ) {
       return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_ITALIC.length() ) ;
+    }
+    if( fontFileNameLowerCase.endsWith( FONTNAMESUFFIX_OBLIQUE ) ) {
+      return fontFileName.substring( 0, fontFileName.length() - FONTNAMESUFFIX_OBLIQUE.length() ) ;
     }
     return fontFileName ;
   }

@@ -64,10 +64,23 @@
   <xsl:template match="n:paragraph-plain" >
     <fo:block
         text-align="justify"
-       language="en_GB"
+       language="fr"
        hyphenate="true"
     >
-      Lorem ipsum dolor sit amet, consectetuer adipiscingelit. Nullaaccumsandoloratrisus. Mauriseratorci, egestassed, suscipitut, ultriciesut, nulla. Donecatvelit. Proinconsequatvelitatdolor. Donecutnullainlacussodalesfringilla. Maurisnecfelisvelnisifeugiatpellentesque. Loremipsumdolorsitamet, consectetueradipiscingelit. Vivamuslobortisodiositametmimollistempor. Aliquamliberodui, consequatvel, fringillavel, hendreritquis, velit. Morbivarius, dolorquisinterdumaliquet, magnapurussodalesorci, aplacerat ligula nibh a dui. Mauris vitae elit. Praesent vehicula pharetra metus. Aenean congue, eros eu hendrerit pretium, quam lacus suscipit est, vitae vulputate turpis lectus quis pede. Fusce sed dui sed arcu suscipit scelerisque. Cras tempor, dolor vitae ullamcorper aliquet, nisl enim adipiscing tortor, in vulputate velit massa sed ipsum. Curabituregeteros. Pellentesquelobortis, liberovelconsequatfermentum, dolorvelitconsectetuermagna, nonvulputatepurusmassavitaelibero. Duisporta. Nameulacus. Suspendissedictum, augueegetcondimentumviverra, duivelitmollispurus, velvolutpatodiotellusutorci.
+      Lorem ipsum dolor sit amet, consectetuer adipiscingelit. Nullaaccumsandoloratrisus.
+      Mauriseratorci, egestassed, suscipitut, ultriciesut, nulla. Donecatvelit.
+      Proinconsequatvelitatdolor. Donecutnullainlacussodalesfringilla.
+      Maurisnecfelisvelnisifeugiatpellentesque. Loremipsumdolorsitamet, consectetueradipiscingelit.
+      Vivamuslobortisodiositametmimollistempor.
+      Aliquamliberodui, consequatvel, fringillavel, hendreritquis, velit.
+      Morbivarius, dolorquisinterdumaliquet, magnapurussodalesorci, aplaceratligulanibhadui.
+      Maurisvitaeelit. Praesentvehiculapharetrametus. Aeneancongue, eroseuhendreritpretium,
+      quamlacussuscipitest, vitaevulputateturpislectusquispede.
+      Fuscesedduisedarcususcipitscelerisque. Crastempor, dolorvitaeullamcorperaliquet,
+      nislenimadipiscingtortor, invulputatevelitmassasedipsum. Curabituregeteros.
+      Pellentesquelobortis, liberovelconsequatfermentum, dolorvelitconsectetuermagna,
+      nonvulputatepurusmassavitaelibero. Duisporta. Nameulacus. Suspendissedictum,
+      augueegetcondimentumviverra, duivelitmollispurus, velvolutpatodiotellusutorci.
     </fo:block>
 
   </xsl:template>

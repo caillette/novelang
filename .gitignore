@@ -2,7 +2,7 @@
 test-scratch
 target
 batch-generated
-.fop-fontmetrics-*
+.fop-font-metrics-*
 antlrworks
 distrib
 *.log
