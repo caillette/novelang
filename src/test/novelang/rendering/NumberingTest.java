@@ -34,14 +34,14 @@ import novelang.produce.RequestTools;
 import novelang.produce.DocumentRequest;
 
 /**
- * Test for transforming a Result Tree Fragment in a XSL to a node set.
+ * Test for displaying page numbers, including a Java function call.
  *
  * @author Laurent Caillette
  */
-public class ResultTreeFragmentToNodesetTest {
+public class NumberingTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
-      ResultTreeFragmentToNodesetTest.class ) ;
+      NumberingTest.class ) ;
 
   @Test
   public void testNodeset() throws IOException {
@@ -62,7 +62,7 @@ public class ResultTreeFragmentToNodesetTest {
     documentProducer.produce( documentRequest, outputStream ) ;
     final String result = new String( outputStream.toByteArray() ) ;
 
-    LOGGER.info( "Produced: {}", result ) ;
+//    LOGGER.info( "Produced: {}", result ) ;
   }
 
 // =======

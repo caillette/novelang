@@ -9,6 +9,8 @@
 
 ] >
 
+<!-- Used by NumberingTest, edit with care. -->    
+
 <xsl:stylesheet
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -16,7 +18,13 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
     xmlns:xalan="http://xml.apache.org/xalan"
-    xmlns:exslt="http://exslt.org/common">
+    xmlns:exslt="http://exslt.org/common"
+    xmlns:nlx="xalan://novelang.rendering.xslt.XsltFunctions"
+ >
+
+
+  <xsl:import href="pdf.xsl" />
+
   <xsl:template match="/" >
     <fo:root>
 
@@ -45,18 +53,19 @@
           <fo:block
               font-size="20pt"    
           >
-            <xsl:call-template name="display-page-number" >
-              <xsl:with-param name="inside-content" >
-                <fo:retrieve-marker
-                    retrieve-class-name="inside-content"
-                    retrieve-boundary="page"
-                    retrieve-position="first-starting-within-page"
-                />
-              </xsl:with-param>
-              <xsl:with-param name="page-number" >
-                <fo:page-number/>
-              </xsl:with-param>
-            </xsl:call-template>
+              <!-- Need a variable here because <fo:page-number/> not allowed inside
+                   <fo:retrieve-marker>.
+               -->
+              <xsl:variable name="page-number" ><fo:page-number/></xsl:variable>
+
+              <fo:retrieve-marker
+                  retrieve-class-name="inside-content"
+                  retrieve-boundary="page"
+                  retrieve-position="first-starting-within-page"
+              >
+                <xsl:value-of select="$page-number" />
+              </fo:retrieve-marker>
+
           </fo:block>
         </fo:static-content>
 
@@ -64,7 +73,7 @@
 
           <fo:block background="#DDDDFF" >
             <!-- Use a marker to tell if current flow is real content. -->
-            <fo:marker marker-class-name="inside-content" >true</fo:marker>
+            <fo:marker marker-class-name="inside-content" ><fo:page-number/></fo:marker>
 
             <fo:block>
               Function "exsl:nodeSet" available=
@@ -91,6 +100,27 @@
               <xsl:value-of select="function-available('nodeset')" />
             </fo:block>
 
+            <fo:block>
+              Function "hello" available=
+              <xsl:value-of select="function-available('nlx:hello')" />
+            </fo:block>
+
+            <fo:block>
+              Function "hello" available=
+              <xsl:value-of select="function-available('nlx:numberAsFrenchText')" />
+            </fo:block>
+
+            <fo:block padding-before="10pt" />
+
+            <fo:block>
+              Function "hello" says=
+              <xsl:value-of select="nlx:hello()" />
+            </fo:block>
+
+            <fo:block>
+              Getting numbers:
+              <xsl:value-of select="nlx:numberAsText(10,'FR','capital')" />;
+            </fo:block>
 
             <xsl:apply-templates />
 
@@ -108,23 +138,7 @@
     </fo:root>
   </xsl:template>
 
-
-  <xsl:template name="display-page-number" >
-    <xsl:param name="inside-content" />
-    <xsl:param name="page-number" />
-
-    <fo:block>
-      copy-of $inside-content=<xsl:copy-of select="$inside-content" /> ;
-    </fo:block>
-    <fo:block>
-      nodeset($inside-content)=<xsl:value-of select="xalan:nodeset($inside-content)" />;
-    </fo:block>
-    <fo:block>
-      page-number=<xsl:copy-of select="$page-number" />
-    </fo:block>
-
-  </xsl:template>
-
+  
   
   <xsl:template match="n:chapter" >
     <fo:block
@@ -135,8 +149,6 @@
     </fo:block>
   </xsl:template>
 
-
-  <xsl:import href="pdf.xsl" />
 
 </xsl:stylesheet>
 
