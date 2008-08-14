@@ -27,6 +27,8 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FOPException;
 import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.MutableConfiguration;
+import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.loader.ClasspathResourceLoader;
@@ -81,8 +83,11 @@ public class ConfigurationTools {
   protected static final String FONTS_DEFAULT_DIRECTORYNAME = "fonts" ;
   protected static final String FONTS_DIR_PROPERTYNAME = "novelang.fonts.dir" ;
 
-  protected static final String FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME = "fop-metrics" ;
-  protected static final String FOP_METRICS_DIR_PROPERTYNAME = "novelang.fop.fontmetrics.dir" ;
+  protected static final String FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME = "fop-fontmetrics" ;
+  protected static final String FOP_FONTMETRICS_DIR_PROPERTYNAME = "novelang.fop.fontmetrics.dir" ;
+
+  protected static final String FOP_HYPHENATION_DEFAULT_DIRECTORYNAME = "hyphenation" ;
+  protected static final String FOP_HYPHENATION_DIR_PROPERTYNAME = "novelang.fop.hyphenation.dir" ;
 
   protected static final FopFactory FOP_FACTORY ;
   protected static final Iterable< FontDescriptor > USER_FONTS ;
@@ -192,38 +197,31 @@ public class ConfigurationTools {
         FONTS_DIR_PROPERTYNAME,
         FONTS_DEFAULT_DIRECTORYNAME,
         false
-    );
+    ) ;
+
+    final File hyphenationDirectory = resolveDirectory(
+        "hyphenation",
+        FOP_HYPHENATION_DIR_PROPERTYNAME,
+        FOP_HYPHENATION_DEFAULT_DIRECTORYNAME,
+        false
+    ) ;
 
     final File fopFontMetricsDirectory ;
 
     if( null == fontsDirectory ) {
       fopFontMetricsDirectory = null ;
     } else {
-      File directory = resolveDirectory(
-        "font metrics",
-          FOP_METRICS_DIR_PROPERTYNAME,
+      fopFontMetricsDirectory = resolveTemporaryDirectory(
+          "FOP font metrics",
+          FOP_FONTMETRICS_DIR_PROPERTYNAME,
           FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME,
-          false
+          userDirectory,
+          ".fop-font-metrics-"
       ) ;
-      if( null == directory ) {
-        try {
-          directory = FileTools.createTemporaryDirectory(
-              ".fop-font-metrics-",
-              userDirectory,
-              true
-          ) ;
-          LOGGER.info( "Created directory for FOP font metrics: '{}'",
-              directory.getAbsolutePath() ) ;
-        } catch( IOException e ) {
-          directory = null ;
-          LOGGER.warn( "Creation of temporary directory for FOP font metrics failed", e ) ;
-        }
-      }
-      fopFontMetricsDirectory = directory ;
     }
 
     USER_FONTS = createFontDescriptors( fontsDirectory, fopFontMetricsDirectory ) ;
-    FOP_FACTORY = createFopFactory( USER_FONTS ) ;
+    FOP_FACTORY = createFopFactory( USER_FONTS, hyphenationDirectory ) ;
     
 
     final File userStyleDirectory = resolveDirectory(
@@ -253,6 +251,37 @@ public class ConfigurationTools {
           new UrlResourceLoader( userStyleUrl ), classpathResourceLoader ) ;
     }
 
+
+  }
+
+  private static File resolveTemporaryDirectory(
+      String label,
+      String customDirectoryPropertyName,
+      String defaultSubdirectoryName,
+      File parentDirectory,
+      String temporaryFilePrefix
+  ) {
+
+    File directory = resolveDirectory(
+        label,
+        customDirectoryPropertyName,
+        defaultSubdirectoryName,
+        false
+    ) ;
+    if( null == directory ) {
+      try {
+        directory = FileTools.createTemporaryDirectory(
+            temporaryFilePrefix,
+            parentDirectory,
+            true
+        ) ;
+        LOGGER.info( "Created directory for {}: '{}'", label, directory.getAbsolutePath() ) ;
+      } catch( IOException e ) {
+        directory = null ;
+        LOGGER.warn( "Creation of temporary directory for " + label + " failed", e ) ;
+      }
+    }
+    return directory ;
 
   }
 
@@ -306,7 +335,7 @@ public class ConfigurationTools {
     Iterable< FontDescriptor > fontFileDescriptors = Iterables.emptyIterable() ;
     if( fontsDirectory != null && fopMetricsDirectory != null ) {
       try {
-        fontFileDescriptors = FopFontsTools.createFopMetrics(
+        fontFileDescriptors = FopTools.createFopMetrics(
             fontsDirectory, fopMetricsDirectory ) ;
       } catch( IOException e ) {
         fontFileDescriptors = Iterables.emptyIterable() ;
@@ -316,17 +345,48 @@ public class ConfigurationTools {
     return fontFileDescriptors ;
   }
 
-  private static FopFactory createFopFactory( Iterable< FontDescriptor > fontDescriptors ) {
-    final FopFactory fopFactory = FopFactory.newInstance();
+  private static FopFactory createFopFactory(
+      Iterable< FontDescriptor > fontDescriptors,
+      File hyphenationDirectory
+  ) {
+    final FopFactory fopFactory = FopFactory.newInstance() ;
+    Configuration renderers = null ;
+    Configuration hyphenationBase = null ;
+    boolean configure = false ;
+
     if( fontDescriptors.iterator().hasNext() ) {
+      renderers = FopTools.createRenderersConfiguration( fontDescriptors ) ;
+      configure = true ;
+    }
+
+    if( null != hyphenationDirectory ) {
+      hyphenationBase = FopTools.createHyphenationConfiguration( hyphenationDirectory ) ;
+      configure = true ;
+    }
+
+    if( configure ) {
+
+      final MutableConfiguration configuration = new DefaultConfiguration( "fop" ) ;
+      configuration.setAttribute( "version", "1.0" ) ;
+
+      if( null != renderers ) {
+        configuration.addChild( renderers ) ;
+      }
+
+      if( null != hyphenationBase ) {
+        configuration.addChild( hyphenationBase ) ;
+      }
+
+      LOGGER.debug( "Created configuration: \n{}",
+          FopTools.configurationAsString( configuration ) ) ;
+
       try {
-        final Configuration configuration =
-            FopFontsTools.createFopConfiguration( fontDescriptors ) ;
         fopFactory.setUserConfig( configuration ) ;
       } catch( FOPException e ) {
         LOGGER.error( "Could not use custom fonts", e ) ;
       }
     }
+
     return fopFactory ;
   }
 

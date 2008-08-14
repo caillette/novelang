@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,19 +39,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import novelang.common.FileTools;
+import novelang.common.LanguageTools;
 
 /**
  * Utility class for generating fonts metrics as FOP needs for custom fonts.
  * 
  * @author Laurent Caillette
  */
-public class FopFontsTools {
+public class FopTools {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( FopFontsTools.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( FopTools.class ) ;
+
   private static final String FONTNAMESUFFIX_BOLD_ITALIC = "-bold-italic";
   private static final String FONTNAMESUFFIX_ITALIC_BOLD = "-bold-italic";
   private static final String FONTNAMESUFFIX_ITALIC = "-italic";
   private static final String FONTNAMESUFFIX_BOLD = "-bold";
+  private static final String CONFIGURATION_NOT_SERIALIZED = "Could not serialize configuration to string";
 
   /**
    * Lists all system files to the console.
@@ -214,11 +218,12 @@ public class FopFontsTools {
 
   }
 
-  public static Configuration createFopConfiguration( 
-      Iterable<FontDescriptor> fontFileDescritors
+  /**
+   * Creates a {@code Configuration} object with {@code <renderers>} element as root.
+   */
+  public static Configuration createRenderersConfiguration(
+      Iterable< FontDescriptor > fontFileDescritors
   ) {
-    final MutableConfiguration fop = new DefaultConfiguration( "fop" ) ;
-    fop.setAttribute( "version", "1.0" ) ;
     final MutableConfiguration renderers = new DefaultConfiguration( "renderers" ) ;
     final MutableConfiguration renderer = new DefaultConfiguration( "renderer" ) ;
     renderer.setAttribute( "mime", "application/pdf" ) ;
@@ -250,21 +255,37 @@ public class FopFontsTools {
 
     renderer.addChild( fonts ) ;
     renderers.addChild( renderer ) ;
-    fop.addChild( renderers ) ;
 
+    return renderers ;
+    
+  }
+
+  public static Configuration createHyphenationConfiguration( File hyphenationDirectory ) {
+    final URL hyphenationBaseUrl ;
+    try {
+      hyphenationBaseUrl = hyphenationDirectory.toURI().toURL() ;
+    } catch( MalformedURLException e ) {
+      throw new RuntimeException( e ) ;
+    }
+    final MutableConfiguration hyphenationBase = new DefaultConfiguration( "hyphenation-base" ) ;
+    hyphenationBase.setValue( hyphenationBaseUrl.toExternalForm() ) ;
+    return hyphenationBase ;
+  }
+
+  public static String configurationAsString( Configuration configuration ) {
     try {
       final StringWriter stringWriter = new StringWriter() ;
       final OutputFormat format = OutputFormat.createPrettyPrint() ;
       final XMLWriter xmlWriter = new XMLWriter( stringWriter, format ) ;
-      new DefaultConfigurationSerializer().serialize( xmlWriter, fop ) ;
+      new DefaultConfigurationSerializer().serialize( xmlWriter, configuration ) ;
       xmlWriter.close() ;
 
-      LOGGER.debug( "Created configuration: \n" + stringWriter.toString() ) ;
+      return stringWriter.toString() ;
     } catch( Exception e ) {
-      LOGGER.error( "Could not serialize configuration to string", e ) ;
+      LOGGER.error( CONFIGURATION_NOT_SERIALIZED, e ) ;
+      LanguageTools.rethrowUnchecked( e ) ;
+      return null ; // Should never execute, just make compiler happy.
     }
-    return fop ;
-    
   }
 
 
