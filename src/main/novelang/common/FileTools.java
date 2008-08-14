@@ -23,16 +23,15 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.io.filefilter.FileFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 
 /**
@@ -42,6 +41,10 @@ import com.google.common.collect.Lists;
  */
 public class FileTools {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( FileTools.class ) ;
+
+  private FileTools() { }
+
   public static final Comparator< ? super File >
   ABSOLUTEPATH_COMPARATOR = new Comparator< File >() {
     public int compare( File file1, File file2 ) {
@@ -49,7 +52,9 @@ public class FileTools {
     }
   } ;
 
-  private FileTools() { }
+// ============
+// File loading
+// ============
 
   /**
    * Returns the first file in given directory, with one of given extensions.
@@ -81,6 +86,46 @@ public class FileTools {
     throw new FileNotFoundException( buffer.toString() ) ;
   }
 
+
+// =============
+// File scanning
+// =============
+
+  private static final IOFileFilter VISIBLE_DIRECTORY_FILTER = new IOFileFilter() {
+    public boolean accept( File file ) {
+      return file.isDirectory() && ! file.isHidden() ;
+    }
+    public boolean accept( File dir, String name ) {
+      return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
+    }
+  } ;
+
+  private static class MyDirectoryWalker extends DirectoryWalker {
+
+    public MyDirectoryWalker() {
+      super(
+          VISIBLE_DIRECTORY_FILTER,
+          -1
+      );
+    }
+
+    protected boolean handleDirectory( File file, int i, Collection collection )
+        throws IOException
+    {
+      collection.add( file ) ;
+      return true ;
+    }
+
+    public void walk( File root, List< File > results ) throws IOException {
+      super.walk( root, results ) ;
+    }
+  }
+
+
+// ====================
+// Relative directories
+// ====================
+
   /**
    * Return files with given extensions in given directory.
    *
@@ -106,6 +151,7 @@ public class FileTools {
     return files ;
   }
 
+
   /**
    * Returns a list of visible directories under a root directory.
    * The root directory is included in the list.
@@ -123,6 +169,7 @@ public class FileTools {
     return directories ;
 
   }
+
 
   /**
    * For a {@code File} object, returns its path relative to a given directory.
@@ -151,7 +198,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     final String baseAbsolutePathFixed = normalizePath( baseAbsolutePath ) ;
     final String childAbsolutePath = child.isDirectory() ?
         normalizePath( child.getAbsolutePath() ) : child.getAbsolutePath() ;
-    
+
     if( childAbsolutePath.startsWith( baseAbsolutePathFixed ) ) {
       final String relativePath = childAbsolutePath.substring( baseAbsolutePathFixed.length() ) ;
       if( relativePath.startsWith( SystemUtils.FILE_SEPARATOR ) ) {
@@ -183,33 +230,65 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     ;
   }
 
-  private static final IOFileFilter VISIBLE_DIRECTORY_FILTER = new IOFileFilter() {
-    public boolean accept( File file ) {
-      return file.isDirectory() && ! file.isHidden() ;
-    }
-    public boolean accept( File dir, String name ) {
-      return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
-    }
-  } ;
 
-  private static class MyDirectoryWalker extends DirectoryWalker {
+// ===================
+// Temporary directory
+// ===================
 
-    public MyDirectoryWalker() {
-      super(
-          VISIBLE_DIRECTORY_FILTER,
-          -1
-      );
-    }
+  private static final List< File > DIRECTORIES_TO_CLEAN_ON_EXIT =
+      Collections.synchronizedList( new ArrayList< File >() ) ;
 
-    protected boolean handleDirectory( File file, int i, Collection collection )
-        throws IOException
-    {
-      collection.add( file ) ;
-      return true ;
-    }
+  private static final Thread DIRECTORIES_CLEANER = new Thread(
+      new Runnable() {
+        public void run() {
+          LOGGER.debug( "Cleaning up directories scheduled for deletion..." );
 
-    public void walk( File root, List< File > results ) throws IOException {
-      super.walk( root, results ) ;
-    }
+          // Defensive copy even if no directory should be added at the time this runs.
+          final List< File > files = Lists.newArrayList( DIRECTORIES_TO_CLEAN_ON_EXIT ) ;
+          for( File file : files ) {
+            try {
+              LOGGER.info( "Deleting temporary directory '{}'", file.getAbsolutePath() ) ;
+              FileUtils.deleteDirectory( file ) ;
+            } catch( IOException e ) {
+              LOGGER.error( "Failed to clean directory '{}'", e ) ;
+            }
+          }
+        }
+      },
+      "Cleaner of temporary directories"
+
+  ) ;
+
+  static {
+    Runtime.getRuntime().addShutdownHook( DIRECTORIES_CLEANER ) ;
   }
+
+  private static String TEMPORARY_DIRECTORY_SUFFIX = ".temp" ;
+  
+
+  public static File createTemporaryDirectory(
+      String prefix,
+      File parent,
+      boolean deleteOnExit
+  )
+      throws IOException
+  {
+    File temporaryDirectory = null ;
+
+    temporaryDirectory = File.createTempFile( prefix, TEMPORARY_DIRECTORY_SUFFIX, parent ) ;
+    if ( ! temporaryDirectory.delete() ) {
+      throw new IOException(
+          "Created temporary file to get a name from, its deletion failed for an unknown reason") ;
+    }
+    if ( ! temporaryDirectory.mkdir() ) {
+      throw new IOException( "Creation of temporary directory failed for an unknown reason" ) ;
+    }
+    if( deleteOnExit && null != temporaryDirectory ) {
+      DIRECTORIES_TO_CLEAN_ON_EXIT.add( temporaryDirectory ) ;
+      LOGGER.info( "Scheduled for deletion on exit: '{}'", temporaryDirectory.getAbsolutePath() ) ;
+    }
+
+    return temporaryDirectory ;
+  }
+
 }

@@ -33,6 +33,7 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
+import novelang.common.FileTools;
 import com.google.common.collect.Iterables;
 
 /**
@@ -179,9 +180,11 @@ public class ConfigurationTools {
 
   static {
 
+    final File userDirectory = new File( System.getProperty( "user.dir" ) ) ;
+
     LOGGER.info(
         "Configuration resolving relative directories from '{}'.",
-        new File( System.getProperty( "user.dir" ) ).getAbsolutePath()
+        userDirectory.getAbsolutePath()
     ) ;
 
     final File fontsDirectory = resolveDirectory(
@@ -192,15 +195,31 @@ public class ConfigurationTools {
     );
 
     final File fopFontMetricsDirectory ;
+
     if( null == fontsDirectory ) {
       fopFontMetricsDirectory = null ;
     } else {
-      fopFontMetricsDirectory = resolveDirectory(
+      File directory = resolveDirectory(
         "font metrics",
           FOP_METRICS_DIR_PROPERTYNAME,
           FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME,
-          true
-      );
+          false
+      ) ;
+      if( null == directory ) {
+        try {
+          directory = FileTools.createTemporaryDirectory(
+              ".fop-font-metrics-",
+              userDirectory,
+              true
+          ) ;
+          LOGGER.info( "Created directory for FOP font metrics: '{}'",
+              directory.getAbsolutePath() ) ;
+        } catch( IOException e ) {
+          directory = null ;
+          LOGGER.warn( "Creation of temporary directory for FOP font metrics failed", e ) ;
+        }
+      }
+      fopFontMetricsDirectory = directory ;
     }
 
     USER_FONTS = createFontDescriptors( fontsDirectory, fopFontMetricsDirectory ) ;
@@ -215,10 +234,14 @@ public class ConfigurationTools {
     ) ;
     
     final URL userStyleUrl ;
-    try {
-      userStyleUrl = userStyleDirectory.toURI().toURL();
-    } catch( MalformedURLException e ) {
-      throw new RuntimeException( e );
+    if( null == userStyleDirectory ) {
+      userStyleUrl = null ;
+    } else {
+      try {
+        userStyleUrl = userStyleDirectory.toURI().toURL();
+      } catch( MalformedURLException e ) {
+        throw new RuntimeException( e );
+      }
     }
 
     final ResourceLoader classpathResourceLoader =
@@ -231,6 +254,34 @@ public class ConfigurationTools {
     }
 
 
+  }
+
+  /**
+   * Creates a temporary directory.
+   *  
+   * @deprecated Temporary directory would work with a clean deletion strategy.
+   *     Maybe with a shutdown hook?
+   */
+  private static File createTemporaryFontMetricsDirectory( File baseDirectory ) {
+    final File fopFontMetricsDirectory ;
+    File temporaryDirectory = null ;
+    try {
+      temporaryDirectory = File.createTempFile( ".fop-fontmetrics-", ".temp", baseDirectory ) ;
+      if ( ! temporaryDirectory.delete() ) {
+        throw new IOException( "Deletion of temporary file failed") ;
+      }
+      if ( ! temporaryDirectory.mkdir() ) {
+        throw new IOException( "Creation of temporary directory failed" ) ;
+      }
+      temporaryDirectory.deleteOnExit() ;
+    } catch( IOException e ) {
+      LOGGER.error( "Coul not create temporary directory for FOP's font metrics", e ) ;
+      temporaryDirectory = null ;
+    }
+    fopFontMetricsDirectory = temporaryDirectory ;
+    LOGGER.info( "Created temporary directory for FOP's font metrics: '{}'",
+        fopFontMetricsDirectory.getAbsolutePath() ) ;
+    return temporaryDirectory ;
   }
 
 
