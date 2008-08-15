@@ -17,17 +17,20 @@
 package novelang.book.function.builtin;
 
 import java.io.File;
+import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.book.Environment;
 import novelang.common.Location;
-import static novelang.common.NodeKind.BOOK;
+import static novelang.common.NodeKind.*;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
@@ -35,6 +38,9 @@ import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
 import novelang.book.function.IllegalFunctionCallException;
 import novelang.parser.antlr.BookParserTest;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author Laurent Caillette
@@ -45,18 +51,50 @@ public class InsertFunctionTest {
   public void goodFileUrl() throws IllegalFunctionCallException {
     final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ), 
+        new Location( "", -1, -1 ),
         BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate( 
+    final FunctionCall.Result result = call.evaluate(
         new Environment( goodContentDirectory ),
         Treepath.create( initialTree )
     ) ;
 
-    Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
-    Assert.assertNotNull( result.getBook() ) ;
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertNotNull( result.getBook() ) ;
+
+    TreeFixture.assertEquals(
+        tree( BOOK, tree( PARAGRAPH_PLAIN, tree( WORD, "oneword" ) ) ),
+        result.getBook().getTreeAtStart()
+    ) ;
+
+  }
+
+  @Test
+  public void addStyle() throws IllegalFunctionCallException {
+    final FunctionDefinition definition = new InsertFunction() ;
+    final FunctionCall call = definition.instantiate(
+        new Location( "", -1, -1 ),
+        BookParserTest.createFunctionCallWithUrlTree(
+            oneWordFile.getAbsolutePath(),
+            ImmutableMap.of( "style", "mystyle" )
+        )
+    ) ;
+
+    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final FunctionCall.Result result = call.evaluate(
+        new Environment( goodContentDirectory ),
+        Treepath.create( initialTree )
+    ) ;
+
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertNotNull( result.getBook() ) ;
+
+    TreeFixture.assertEquals(
+        tree( BOOK, tree( PARAGRAPH_PLAIN, tree( _STYLE, "mystyle" ), tree( WORD, "oneword" ) ) ),
+        result.getBook().getTreeAtStart()
+    ) ;
 
   }
 
@@ -75,8 +113,8 @@ public class InsertFunctionTest {
         Treepath.create( initialTree )
     ) ;
 
-    Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
-    Assert.assertNotNull( result.getBook() ) ;
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertNotNull( result.getBook() ) ;
   }
 
   @Test
@@ -94,8 +132,8 @@ public class InsertFunctionTest {
         Treepath.create( initialTree )
     ) ;
 
-    Assert.assertFalse( result.getProblems().iterator().hasNext() ) ;
-    Assert.assertNotNull( result.getBook() ) ;
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertNotNull( result.getBook() ) ;
   }
 
 

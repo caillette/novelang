@@ -20,14 +20,11 @@ import java.util.Map;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableMap;
+import novelang.common.NodeKind;
 import static novelang.common.NodeKind.*;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
-import novelang.common.NodeKind;
 import novelang.common.tree.TreeTools;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
@@ -39,14 +36,6 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class BookParserTest {
 
-  private static final Function< String, SyntacticTree > CREATE_VALUED_ARGUMENT_FLAG_FUNCTION =
-      new Function< String, SyntacticTree>() {
-        public SyntacticTree apply( String s ) {
-          return new SimpleTree( VALUED_ARGUMENT_FLAG.name(), new SimpleTree( s ) ) ;
-        }
-      }
-  ;
-
   /**
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
    * parser produces.
@@ -55,23 +44,48 @@ public class BookParserTest {
       String fileName,
       String... flagArguments
   ) {
-    SyntacticTree functionCall = new SimpleTree(
+    Treepath< SyntacticTree > functionCall =
+        createFunctionTreeWithFilenameAsPrimaryArgument( fileName );
+    functionCall = addValuedArgumentFlags( functionCall, flagArguments );
+    return functionCall.getTreeAtStart() ;
+  }
+
+  public static final SyntacticTree createFunctionCallWithUrlTree(
+      String fileName,
+      Map< String, String > assignments,
+      String... flagArguments
+  ) {
+    Treepath< SyntacticTree > functionCall =
+        Treepath.create( createFunctionTreeWithFilenameAsPrimaryArgument( fileName ) ) ;
+    functionCall = addValuedArgumentFlags( functionCall, flagArguments );
+    functionCall = addValuedArgumentAssignments( Treepath.create( functionCall ), assignments ) ;
+    return functionCall.getTreeAtStart() ; 
+  }
+
+  private static Treepath< SyntacticTree >
+  createFunctionTreeWithFilenameAsPrimaryArgument( String fileName )
+  {
+    Treepath< SyntacticTree > functionCall = Treepath.create( new SimpleTree(
         FUNCTION_CALL.name(),
         new SimpleTree( FUNCTION_NAME.name(), new SimpleTree( "function" ) ),
         new SimpleTree(
             VALUED_ARGUMENT_PRIMARY.name(),
             new SimpleTree( URL.name(), new SimpleTree( "file:" + fileName ) )
         )
-    ) ;
+    ) ) ;
+    return functionCall;
+  }
 
-    functionCall = TreeTools.addLast(
-        functionCall,
-        Iterables.transform(
-            Lists.newArrayList( flagArguments ),
-            CREATE_VALUED_ARGUMENT_FLAG_FUNCTION
-        )
-    ) ;
-
+  private static Treepath< SyntacticTree > addValuedArgumentFlags(
+      Treepath< SyntacticTree > functionCall,
+      String... flagArguments
+  ) {
+    for( String flagArgument : flagArguments ) {
+      functionCall = TreepathTools.addChildLast(
+          functionCall,
+          new SimpleTree( VALUED_ARGUMENT_FLAG.name(), new SimpleTree( flagArgument ) )
+      ) ;
+    }
     return functionCall ;
   }
 
@@ -86,6 +100,14 @@ public class BookParserTest {
     Treepath< SyntacticTree > functionCall = Treepath.create(
         tree( FUNCTION_CALL.name(), tree( FUNCTION_NAME, functionName ) ) ) ;
 
+    functionCall = addValuedArgumentAssignments( functionCall, map ) ;
+    return functionCall.getTreeAtStart() ;
+  }
+
+  private static Treepath< SyntacticTree > addValuedArgumentAssignments(
+      Treepath< SyntacticTree > functionCall,
+      Map< String, String > map
+  ) {
     for( String key : map.keySet() ) {
       SyntacticTree assignment = tree( NodeKind.VALUED_ARGUMENT_ASSIGNMENT ) ;
       assignment = TreeTools.addLast(
@@ -98,7 +120,7 @@ public class BookParserTest {
       ) ;
       functionCall = TreepathTools.addChildLast( functionCall, assignment ).getPrevious() ;
     }
-    return functionCall.getTreeAtStart() ;
+    return functionCall;
   }
 
   @Test
