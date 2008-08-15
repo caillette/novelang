@@ -100,7 +100,7 @@ public class BookTest {
   public void insertWithFileScan() throws IOException {
     final Book book = new Book(
         FunctionRegistry.getStandardRegistry(),
-        scannedBook
+        scannedBookNoStyle
     ) ;
     LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
 
@@ -140,6 +140,56 @@ public class BookTest {
   }
 
 
+  /**
+   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   */
+  @Test
+  public void insertWithFileScanAndStyle() throws IOException {
+    final Book book = new Book(
+        FunctionRegistry.getStandardRegistry(),
+        scannedBookWithStyle
+    ) ;
+    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+
+    final SyntacticTree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEquals(
+        tree( BOOK,
+            tree(
+                NodeKind.CHAPTER ,
+                tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
+                tree( NodeKind.TITLE, tree( WORD, "file1" ) ),
+                tree(
+                    PARAGRAPH_PLAIN,
+                    tree( WORD, "content-of-file1" )
+                )
+            ),
+            tree(
+                NodeKind.CHAPTER ,
+                tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
+                tree( NodeKind.TITLE, tree( WORD, "file2" ) ),
+                tree(
+                    PARAGRAPH_PLAIN,
+                    tree( WORD, "content-of-file2" )
+                )
+            ),
+            tree(
+                NodeKind.CHAPTER ,
+                tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
+                tree( NodeKind.TITLE, tree( WORD, "file3" ) ),
+                tree(
+                    PARAGRAPH_PLAIN,
+                    tree( WORD, "content-of-file3" )
+                )
+            )
+        ),
+        bookTree
+    ) ;
+    Assert.assertFalse( book.hasProblem() ) ;
+
+
+  }
+
+
 // =======
 // Fixture
 // =======
@@ -148,7 +198,10 @@ public class BookTest {
   private File oneWordFile ;
 
   public static final String SCANNED_BOOK_FILENAME = TestResources.SCANNED_DIR ;
-  private File scannedBook ;
+  private File scannedBookNoStyle;
+  private File scannedBookWithStyle;
+
+  public static final String CUSTOM_STYLE = "mystyle" ;
 
   @Before
   public void setUp() throws Exception {
@@ -170,8 +223,10 @@ public class BookTest {
         getClass(), TestResources.SCANNED_FILE2, contentDirectory ) ;
     TestResourceTools.copyResourceToFile(
         getClass(), TestResources.SCANNED_FILE3, contentDirectory ) ;
-    scannedBook = TestResourceTools.copyResourceToFile(
-        getClass(), TestResources.SCANNED_BOOK, contentDirectory ) ;
+    scannedBookNoStyle = TestResourceTools.copyResourceToFile(
+        getClass(), TestResources.SCANNED_BOOK_NOSTYLE, contentDirectory ) ;
+    scannedBookWithStyle = TestResourceTools.copyResourceToFile(
+        getClass(), TestResources.SCANNED_BOOK_WITHSTYLE, contentDirectory ) ;
   }
 
 }

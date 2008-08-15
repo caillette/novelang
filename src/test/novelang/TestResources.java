@@ -48,7 +48,8 @@ public class TestResources {
 
 
   public static final String SCANNED_DIR = "/scanned" ;
-  public static final String SCANNED_BOOK = SCANNED_DIR + "/book.nlb" ;
+  public static final String SCANNED_BOOK_NOSTYLE = SCANNED_DIR + "/book.nlb" ;
+  public static final String SCANNED_BOOK_WITHSTYLE = SCANNED_DIR + "/book-withstyle.nlb" ;
   public static final String SCANNED_FILE1 = SCANNED_DIR + "/file1.nlp" ;
   public static final String SCANNED_FILE2 = SCANNED_DIR + "/file2.nlp" ;
   public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
