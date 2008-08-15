@@ -112,6 +112,7 @@ public class GenericRenderer implements Renderer {
 
       case URL :
       case _META_TIMESTAMP :
+      case _STYLE :
       case LITERAL :
       case SOFT_INLINE_LITERAL :
       case HARD_INLINE_LITERAL :
