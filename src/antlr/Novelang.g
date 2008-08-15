@@ -47,6 +47,7 @@ tokens {
   SOFT_INLINE_LITERAL ;
   HARD_INLINE_LITERAL ;
   WORD ;
+  SUPERSCRIPT ;
   URL ;
   
   BOOK ;
@@ -785,8 +786,13 @@ largeBreak
   ;
     
 word
-  : w = rawWord 
-    -> ^( WORD { delegate.createTree( WORD, $w.text ) } )	
+  : ( w1 = rawWord ( CIRCUMFLEX_ACCENT w2 = rawWord ) )
+    -> ^( WORD 
+            { delegate.createTree( WORD, $w1.text ) } 
+            ^( SUPERSCRIPT { delegate.createTree( WORD, $w2.text ) } )
+        )	
+  | ( w = rawWord )
+    -> ^( WORD { delegate.createTree( WORD, $w.text ) } )
   ;  
 
 /** This intermediary rule is useful as I didn't find how to

@@ -42,7 +42,7 @@ import novelang.common.FileTools;
 import novelang.common.LanguageTools;
 
 /**
- * Utility class for generating fonts metrics as FOP needs for custom fonts.
+ * Utility class for generating FOP configuration with hyphenation files and custom fonts.
  * 
  * @author Laurent Caillette
  */
@@ -57,7 +57,8 @@ public class FopTools {
   private static final String FONTNAMESUFFIX_ITALIC = "-italic";
   private static final String FONTNAMESUFFIX_OBLIQUE = "-oblique";
   private static final String FONTNAMESUFFIX_BOLD = "-bold";
-  private static final String CONFIGURATION_NOT_SERIALIZED = "Could not serialize configuration to string";
+  private static final String CONFIGURATION_NOT_SERIALIZED =
+      "Could not serialize configuration to string";
 
   /**
    * Lists all system files to the console.

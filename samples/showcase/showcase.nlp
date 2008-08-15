@@ -4,6 +4,8 @@
 
 This is a single-line paragraph.
 
+Here is super^script
+
 This is an interpolated clause:
 -- the "silent end" means there is no closing dash-_.
 

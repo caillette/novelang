@@ -28,6 +28,7 @@ import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.LanguageTools;
+import static novelang.common.NodeKind.WORD;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific
@@ -93,6 +94,20 @@ public class GenericRenderer implements Renderer {
       case WORD :
         final SyntacticTree wordTree = tree.getChildAt( 0 ) ;
         fragmentWriter.write( newPath, wordTree.getText() ) ;
+        // Handle superscript
+        if( tree.getChildCount() > 1 ) {
+          for( int childIndex = 1 ; childIndex < tree.getChildCount() ; childIndex++ ) {
+            final SyntacticTree child = tree.getChildAt( childIndex ) ;
+            renderTree( child, newPath, WORD ) ;
+          }
+        }
+        break ;
+
+      case SUPERSCRIPT :
+        final SyntacticTree superscriptTree = tree.getChildAt( 0 ) ;
+        fragmentWriter.start( newPath, rootElement ) ;
+        fragmentWriter.write( newPath, superscriptTree.getText() ) ;
+        fragmentWriter.end( newPath ) ;
         break ;
 
       case URL :

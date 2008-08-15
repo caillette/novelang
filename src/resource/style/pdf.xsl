@@ -303,6 +303,16 @@
     <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>
   </xsl:template>
 
+  <xsl:template match="n:superscript" >
+    <fo:inline
+        font-style="italic"
+        vertical-align="super"
+        font-size="8pt"
+    >
+      <xsl:apply-templates/>
+    </fo:inline>  
+  </xsl:template>
+
   <xsl:import href="punctuation-US-EN.xsl" />
 
 </xsl:stylesheet>

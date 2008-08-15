@@ -52,6 +52,17 @@ public class GenericRendererTest {
   }
 
   @Test
+  public void superscript() throws Exception {
+    final SyntacticTree tree = tree(
+        PARENTHESIS,
+        tree( WORD, tree( "super"), tree( SUPERSCRIPT, "script" ) )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals( "PARENTHESIS(superSUPERSCRIPT(script))", getRenderedText() ) ;
+  }
+
+  @Test
   public void whitespace2() throws Exception {
     final SyntacticTree tree = tree(
         PARAGRAPH_PLAIN,

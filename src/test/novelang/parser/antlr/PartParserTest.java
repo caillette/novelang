@@ -124,6 +124,11 @@ public class PartParserTest {
   }
 
   @Test
+  public void wordWithSuperscript() throws RecognitionException {
+    word( "w^e", tree( WORD, tree( "w" ), tree( SUPERSCRIPT, "e" ) ) ) ;
+  }
+
+  @Test
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
     final Map< String, Character > map = Escape.getCharacterEscapes() ;
     for( String key : map.keySet() ) {
