@@ -8,17 +8,25 @@ Typical layout of a Novelang project looks like this:
 
 <<<
 /
-  book.nlb            <- Book file
-  style/              <- Directory containing styles
-    pdf.xsl           <- A stylesheet file
+  book.nlb                    <- Book file
+  style/                      <- Directory containing styles
+    pdf.xsl                   <- A stylesheet file
     html.xsl
-  user-manual/
-    chapter-1.nlp     <- A Part file
-    chapter-2.nlp
+  fonts/                      <- Fonts directory
+    Garamond.ttf
+    Garamond.bold.ttf  
+    Garamond-bold-italic.ttf  <- a font file
+    Garamond-italic.ttf
   developer-manual/
-    chapter-1.nlp
+    chapter-1.nlp             <- A Part file
     chapter-2.nlp
     chapter-3.nlp
+  hyphenation/                <- Hyphenation directory
+    en_US.xml                 <- Hyphenation definition
+    hyphenation.dtd           <- Mandatory file
+  user-manual/
+    chapter-1.nlp     
+    chapter-2.nlp
 >>>
 
 

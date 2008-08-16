@@ -26,7 +26,7 @@ http://localhost:8080/chapter-1.html?stylesheet=html-beautiful.xsl
 Stylesheets may be defined for a whole Book as explained later, see the "mapstylesheet" command.
 
 
-=== eXensible Stylesheet Language
+=== eXtensible Stylesheet Language
 
 The stylesheets are written in XSL `/ FO`, which stands for eXtensible Stylesheet Language `/ Formatting` Objects. Both are standards developed by the W3C (World Wide Web Consortium). The reference documentation is here:
 
@@ -91,3 +91,35 @@ Novelang comes bundled with those files. Here is how to refer them (it's quite v
 >>>
 
 For HTML documents, those entities are automatically HTML-escaped when their system name starts with ``ISO 8879:1986//ENTITIES`` as above.
+
+
+=== Other functions
+
+Java developers can add functions on their own in order to augment standard set of functions available from an XSL stylesheet. By now there is one, ``numberAsText`` which transforms a number into its textual equivalent. For example, number "43" will become "forty-three".
+
+In addition to standard namespace declarations, the stylesheet must contain the ``xalan`` and ``nlx`` namespaces like below:
+
+<<<
+<xsl:stylesheet
+    version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:n="http://novelang.org/book-xml/1.0"
+    xmlns:xalan="http://xml.apache.org/xalan"
+    xmlns:nlx="xalan://novelang.rendering.xslt.XsltFunctions"
+>
+>>>
+
+Here is how to call the ``numberAsText`` function:
+
+<<<
+<xsl:value-of select="nlx:numberAsText(43,'EN','capital')" />
+>>>
+
+The first parameter is the number itself (could be a standard XSL function like ``position()`` as well). Currently the number must be included in the `0-50` range.
+
+The second parameter is the locale. Currently only ``EN`` and ``FR``.
+
+The third parameter is the case. Currently ``lower``, ``upper`` and ``capital`` are supported.
+
+Look at the complete example in ``samples/numbering/numbering.xsl`` in the Novelang distribution.

@@ -22,17 +22,36 @@ When the Parts are located in the same directory as the Book file, the single do
 insert file:. 
 >>>
 
-If there are Part files in subdirectories, there is an option to perform a deep scan:
+
+The ``$recurse`` option scans parts in subdirectories.
 
 <<<
 insert file:. $recurse 
 >>>
 
-There is also an option to add the filename (trimming path and ``.nlp`` extension) as a chapter title as a chapter title:
+The ``$createchapters`` option adds the content of the file under one chapter element. The chapter title is the filename, path and ``.nlp`` extension being trimmed. Currently ``$createchapters`` option only takes effect in conjuction with ``$recurse``.
 
 <<<
 insert file:. $recurse $createchapters
 >>>
+
+The ``$style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added part. 
+
+<<<
+insert file:. 
+  $style=mystyle
+>>>
+
+Expert users will find this is useful for customizing the output right from an XSLT stylesheet:
+
+<<<
+<!-- Process styled chapter: -->
+<xsl:apply-templates select="//n:chapter[n:style='mystyle']" />
+
+<!-- Don't process styled chapter: -->
+<xsl:apply-templates select="//n:chapter[not(n:style!='')]" /> 
+>>>
+
 
 === Command : ``mapstylesheet``
 

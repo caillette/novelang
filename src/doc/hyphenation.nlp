@@ -1,0 +1,40 @@
+*** Hyphenation
+
+Novelang PDF generation relies on Apache FOP, which supports hyphenation. Hyphenation is language-dependant and has very complex rules. Luckily those rules are already defined for many languages, unluckily they're made available under various licenses, most of all being not compabible with the GNU Public License. That's the reason why they are not shipped with Novelang. 
+
+=== Licensing
+
+First you have to check yourself if the license is compatible with intended usage. Licenses are explained here:
+
+http://offo.sourceforge.net/hyphenation/licenses.html
+
+=== Download
+
+If there is no licensing issue then download and install the file(s) with your bare hands. All hyphenation files are available in a single archive from here:
+
+http://sourceforge.net/project/showfiles.php?group_id=116740&package_id=129569
+
+Download ``offo-hyphenation.zip``, expand it, and pick the file corresponding to the language of your need in the ``hyph`` directory. Don't forget to copy the ``hyphenation.dtd`` file (otherwise it won't work).
+
+=== Hyphenation directory
+
+If there is a directory named ``hyphenation`` right under your project root, it is automatically recognized as the directory containing hyphenation rules. 
+
+You can specify an alternate font directory by setting the ``novelang.hyphenation.dir`` system property.
+
+=== Turn it on
+
+Inside a XSL-FO stylesheet you set the language of a block with the ``language`` attribute and turn hyphenation on with the ``hyphenate`` attribute. 
+You'll may have to tune hyphenation by setting ``hyphenation-push-character-count`` and ``hyphenation-remain-character-count=`` attributes.
+With the "FR" rules correctly installed you will declare something like this:
+
+<<<
+<fo:block
+    language="FR"
+    hyphenate="true"
+    hyphenation-push-character-count="4"
+    hyphenation-remain-character-count="4"
+    ...
+>
+  ...
+>>>

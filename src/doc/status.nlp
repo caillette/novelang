@@ -9,9 +9,15 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 Custom fonts.
 
+New ``$style`` parameter for the ``insert`` function.
+
+Superscript.
+
 Thanks to the latest version of the Xalan library, Novelang now offers customs functions in XSLT. Currently there is one converting numbers to plain text ("42" printing as "forty-two"). See ``numbering.xsl`` in the samples.
 
 Fixed import bug when using ``punctuation-FR.xsl``.
+
+Documentation updates.
 
 
 === Version `0.8.0`

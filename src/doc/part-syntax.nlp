@@ -143,6 +143,15 @@ Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
 Hard inline literal works as soft inline literal, but rendering should add a special style (like monospaced fonts) to draw the attention of the reader the text is verbatim (like a programming language item).
 
 
+=== Superscript
+
+Superscript appears only at the end of a word and therefore only requires a delimiter on the left, which is the circumflex character "``^``".
+
+<<<
+April, the 1^st.
+>>>
+
+
 === URL
 
 A URL is typed as-it-is. There must be a line break before and a line break after.

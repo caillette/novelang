@@ -1,0 +1,34 @@
+*** Novelang HTTP daemon miscellaneous features
+
+=== Set TCP port
+
+The ``--port`` option sets the TCP port of which the daemon listens to:
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar --port 8083
+>>>
+
+Then URL for accessing documents becomes something like:
+
+<<<
+http://localhost:8083/mydocument.html
+>>>
+
+
+=== Directory listing
+
+You can list the content of a directory by not giving any document name.
+
+This will list every file ending by document source extension (currently "``.nlp``" or "``.nlb``"), including those in subdirectories. Every subdirectory also appear, even if it contains none of those files. Document sources become hyperlinks to their HTML form.
+
+Here are samples of valid URLs for directory listings:
+
+<<<
+http://localhost:8080
+http://localhost:8080/
+http://localhost:8080/samples
+http://localhost:8080/samples/
+>>>
+
+
+Because of a known Safari bug, Safari browsers get redirected to a fake page named ``-.html`` but the feature remains the same, however.

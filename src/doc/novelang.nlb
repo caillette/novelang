@@ -21,4 +21,8 @@ insert file:stylesheets.nlp
 
 insert file:book-syntax.nlp
 
+insert file:fonts.nlp
 
+insert file:hyphenation.nlp
+
+insert file:httpdaemon.nlp

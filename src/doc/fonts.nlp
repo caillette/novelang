@@ -1,0 +1,42 @@
+*** Fonts
+
+Novelang PDF generation relies on Apache FOP, which support custom fonts. Every PDF reader basically supports 14 fonts: serif, sans-serif, monospace, and some symbol fonts. Non-symbol fonts all come in four flavor: normal, bold, italic, and bold-italic. Not that much fun! So users are encouraged to set their own fonts. 
+
+=== Font files
+
+Those fonts must be True Type fonts in ``.ttf`` files. To be recognized as fonts of the same family, all font files must have the same radix (e.g. "``Bitstream-Vera-Sans``"). File suffix indicates weight and style variations: ``-bold.ttf``, ``-italic.ttf``, ``-bold-italic.ttf``. No suffix means no variation. Note that "``oblique``" may replace "``italic``" with the same meaning.
+
+Requesting a manual setting of requested fonts may seem an unnecessary burden. On the other hand, people using publishing tools often complain about a missing font or a broken one, when importing documents created on another computer. By making fonts a part of a Novelang project (with same strategy as for content and stylesheets) we expect you to avoid those annoyances.
+
+=== Font directory
+
+If there is a directory named ``fonts`` right under your project root, it is automatically recognized as the fonts directory and Novelang attempts to load every file ending by ``.ttf`` as a font. This doesn't include subdirectories.
+
+You can specify an alternate font directory by setting the ``novelang.fonts.dir`` system property.
+
+=== Temporary directory for font metrics 
+
+For every recognized font in the fonts directory, Novelang creates a font metrics file in a temporary folder. FOP requires this font metrics file for handling custom fonts. By default the temporary folder is under Novelang project root, and starts with ``.fop-font-metrics-``.This directory deletes itself when Novelang process ends and therefore should be transparent. When such a behavior is undesirable, you can set the temporary directory with the ``novelang.fop.fontmetrics.dir`` system property. Please note that this directory is required if and only if some fonts directory was found (no matter if there were font files in it). If creation of temporary directory for font metrics failed for any reason, then custom fonts won't be available.
+
+=== Font list
+
+You can see the list of registered fonts from your browser with following URL:
+
+<<<
+http://localhost:8080/~fonts.pdf
+>>>
+
+By now, a single broken font makes all custom fonts unavailable, so it is recommanded to add fonts one by one and restart Novelang HTTP daemon each time before checking the font list.
+
+
+=== Turn it on
+
+Inside a XSL-FO stylesheet you set the font-family of a block or an inline element with the ``font-family`` attribute. With the "Bitstream-Vera-Sans" correctly installed you'll declare something like this:
+
+<<<
+<fo:block
+    font-family="Bitstream-Vera-Sans"
+    ...
+>
+  ...
+>>>
