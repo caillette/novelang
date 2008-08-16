@@ -36,6 +36,8 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
+  <xsl:import href="punctuation-US-EN.xsl" />
+  
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
 
@@ -93,7 +95,7 @@
         <fo:flow
             flow-name="xsl-region-body"
         >
-          <fo:block font-family="Bitstream-Vera-Serif" >
+          <fo:block font-family="Bitstream-Vera-Sans" >
             <xsl:apply-templates />
           </fo:block>
           <fo:block id="@last-page"/>
@@ -185,7 +187,7 @@
         padding-before="6pt"
         padding-after="8pt"
         font-size="10pt"
-        font-family="sans-serif"
+        font-family="Bitstream-Vera"
         line-height="13pt"
         font-stretch="semi-condensed"
     >
@@ -204,7 +206,7 @@
         padding-before="6pt"
         padding-after="8pt"
         font-size="10pt"
-        font-family="monospace"
+        font-family="Bitstream-Vera-Sans-Mono"
         line-height="13pt"
         background-color="#EEEEEE"
         font-stretch="semi-condensed"
@@ -313,7 +315,7 @@
     </fo:inline>  
   </xsl:template>
 
-  <xsl:import href="punctuation-US-EN.xsl" />
+
 
 </xsl:stylesheet>
 
