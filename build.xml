@@ -335,6 +335,28 @@
 
   </target>
 
+
+  <!-- target name="split" depends="init" >
+    <java
+        classname="novelang.batch.SplitByChapter"
+        failonerror="true"
+        fork="true"
+        dir="${user.dir}"
+    >
+      <classpath>
+        <path refid="deploy-libs" />
+        <pathelement location="${target.mainclasses.dir}" />
+        <pathelement location="${configuration.main.dir}" />
+      </classpath>
+      <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
+      <jvmarg value="-Djava.awt.headless=true" />
+      <jvmarg value="-Dnovelang.log.dir=${logdestination}" />
+      <jvmarg value="-Xmx512M" />
+      <arg value="${split.bookfile}" />
+      <arg value="${split.destination}" />
+    </java>
+  </target -->
+
   <target name="login-on-remote-site" depends="init">
     <input message="Login on remote site" addproperty="user" />
     <input message="Password on remote site" addproperty="password" />
