@@ -301,6 +301,9 @@
     <property name="logdestination" location="${target.documentation.dir}" />
     <property name="absolutetarget" location="${target.documentation.site.dir}" />
 
+    <!-- Need to create this one before the batch generation starts! -->    
+    <mkdir dir="${logdestination}" />
+
     <java
         classname="novelang.batch.Main"
         failonerror="true"
@@ -315,6 +318,7 @@
       <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Dnovelang.log.dir=${logdestination}" />
+      <jvmarg value="-Dnovelang.fonts.dir=${source.documentation.fonts.dir}" />
       <jvmarg value="-Xmx512M" />
       <arg value="-targetDirectory" />
       <arg value="${absolutetarget}" />
