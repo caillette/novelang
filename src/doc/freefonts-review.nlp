@@ -1,0 +1,71 @@
+
+*** General considerations
+
+There are many OSS fonts of good quality but some licenses are incompatible with GPL.
+
+Solution: package those fonts into separate OSS projects and make them available for download (maybe through a dedicated user interface or script or whatever). Would require more thinkings on the way to package fonts for Novelang.
+
+
+*** Font tools
+
+=== FontForge
+
+Useful to convert OpenType to TTF, yes it works!
+
+http://fontforge.sourceforge.net
+
+
+
+*** Fonts
+
+
+=== URW fonts
+
+Available under AFPL license, but a very complete set (`~50` fonts).
+
+http://www.artifex.com/downloads/
+
+
+=== Computer Modern Unicode fonts
+
+Look very nice and provide a very complete family. But available on X11 license which would make Novelang packaging complicated.
+
+http://canopus.iacp.dvo.ru/~panov/cm-unicode
+
+
+=== Deja Vu 
+
+A spin-off from Bitstream Vera fonts. Extended supporting other languages (like Greek and Cyrillic). Condensed form added, yet experimental.
+
+
+=== Junicode
+
+An OpenType font that looks really good and dedicated to medieval writings. Unluckily FOP doesn't support OpenType yet.
+
+http://junicode.sourceforge.net/
+
+
+=== Linux Libertine
+
+An OpenType font that looks really, really good for English. 
+
+It may seem too "round" for some texts and the italics may look too much "happy". 
+In French, there is also too much space between an apostrophe and the following letter.
+
+http://linuxlibertine.sourceforge.net
+
+
+=== OpenFont library
+
+Ooops much garbage here, and no preview facility. 
+
+http://openfontlibrary.org
+
+
+=== FreeFont
+
+A rewrite effort of Times New Roman, Helvetica and Courier New for free projects (no risk of licence trap). No eye-candy but some hints on the dangers of on font licensing.
+
+http://www.gnu.org/software/freefont
+
+
