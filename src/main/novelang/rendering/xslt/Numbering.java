@@ -24,9 +24,9 @@ import com.google.common.base.Function;
 /**
  * @author Laurent Caillette
  */
-public class XsltFunctions {
+public class Numbering {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( XsltFunctions.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Numbering.class ) ;
 
   /**
    * Just to get an easy case.
@@ -239,7 +239,7 @@ public class XsltFunctions {
       }
   } ;
 
-  private static String asString( String name, Object object ) {
+  public static String asString( String name, Object object ) {
     return
         ( null == name ? "" : name + ": " )
       + "'" + object + "' "

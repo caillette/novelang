@@ -5,6 +5,11 @@ Novelang is yet stable with more thant 200 automated tests. It generates a PDF d
 Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version `1.0.0`. Keep informed reading the blog. 
 
 
+=== Version `0.10.0`
+
+Barcode generation with Barcode4J.
+
+
 === Version `0.9.0`
 
 Custom fonts.
@@ -13,7 +18,7 @@ New ``$style`` parameter for the ``insert`` function.
 
 Superscript.
 
-Thanks to the latest version of the Xalan library, Novelang now offers customs functions in XSLT. Currently there is one converting numbers to plain text ("42" printing as "forty-two"). See ``numbering.xsl`` in the samples.
+XSLT extension: plain text numbering. See chapter on custom stylesheets.
 
 Fixed import bug when using ``punctuation-FR.xsl``.
 

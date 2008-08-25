@@ -22,7 +22,7 @@ import org.junit.Assert;
 /**
  * @author Laurent Caillette
  */
-public class XsltFunctionsTest {
+public class XsltNumberingTest {
 
   @Test
   public void testConvertToNumber() {
@@ -36,7 +36,7 @@ public class XsltFunctionsTest {
   private static void check( String expected, int number, String locale, String caseType ) {
     Assert.assertEquals(
         expected,
-        XsltFunctions.numberAsText(
+        Numbering.numberAsText(
             new Double( number ),
             locale,
             caseType

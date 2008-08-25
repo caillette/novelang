@@ -95,7 +95,7 @@
         <fo:flow
             flow-name="xsl-region-body"
         >
-          <fo:block font-family="Bitstream-Vera-Sans" >
+          <fo:block font-family="LinuxLibertine" >
             <xsl:apply-templates />
           </fo:block>
           <fo:block id="@last-page"/>
@@ -187,7 +187,7 @@
         padding-before="6pt"
         padding-after="8pt"
         font-size="10pt"
-        font-family="Bitstream-Vera"
+        font-family="LinuxLibertine"
         line-height="13pt"
         font-stretch="semi-condensed"
     >
@@ -206,7 +206,7 @@
         padding-before="6pt"
         padding-after="8pt"
         font-size="10pt"
-        font-family="Bitstream-Vera-Sans-Mono"
+        font-family="monospace"
         line-height="13pt"
         background-color="#EEEEEE"
         font-stretch="semi-condensed"
