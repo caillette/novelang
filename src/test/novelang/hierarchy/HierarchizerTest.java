@@ -162,6 +162,39 @@ public class HierarchizerTest {
     verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
   }
 
+  @Test
+  public void aggregateSpeechInsideChapter() {
+    final SyntacticTree expected = tree(
+        PART,
+        tree( CHAPTER,
+          tree( PARAGRAPH_PLAIN ),
+          tree(
+              _SPEECH_SEQUENCE,
+              tree( PARAGRAPH_SPEECH ),
+              tree( PARAGRAPH_SPEECH_CONTINUED )
+          ),
+          tree( BLOCKQUOTE )
+        ),
+        tree( CHAPTER, tree( LITERAL, "" ) )
+    ) ;
+
+    final SyntacticTree toBeRehierarchized = tree(
+        PART,
+        tree(
+            CHAPTER,
+            tree( PARAGRAPH_PLAIN ),
+            tree( PARAGRAPH_SPEECH ),
+            tree( PARAGRAPH_SPEECH_CONTINUED ),
+            tree( BLOCKQUOTE )
+        ),
+        tree(
+            CHAPTER,
+            tree( LITERAL, "" )
+        )
+    ) ;
+    verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
+  }
+
 
   @Test
   public void aggregateSeveralSpeeches() {
