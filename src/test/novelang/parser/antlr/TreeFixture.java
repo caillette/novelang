@@ -83,8 +83,8 @@ public class TreeFixture {
   }
 
   public static void assertEquals(
-      Treepath<SyntacticTree> expected,
-      Treepath<SyntacticTree> actual
+      Treepath< SyntacticTree > expected,
+      Treepath< SyntacticTree > actual
   ) {
     Assert.assertEquals( "Treepath height", expected.getLength(), actual.getLength() ) ;
     for( int i = 0 ; i < expected.getLength() ; i++ ) {
