@@ -34,7 +34,7 @@ import novelang.common.tree.TreepathTools;
  * <ol>
  * <li>All stuff like paragraph under a Section becomes Section's child.
  * <li>All stuff like Section under a Chapter becomes a Chapter's child.
- * <li>TODO All contiguous Speech stuff becomes a {@link NodeKind#_SPEECH_SEQUENCE} child.
+ * <li>All contiguous Speech stuff becomes wrapped inside a {@code _SPEECH_SEQUENCE} node.
  * <li>TODO Identifier above paragraph-like stuff becomes a paragraph's child.
  * </ol>
  *
@@ -59,7 +59,7 @@ public class Hierarchizer {
     if( parent.getTreeAtEnd().getChildCount() > 0 ) {
       Treepath< SyntacticTree > child = Treepath.create( parent, 0 ) ;
       boolean insideSpeechSequence = false ;
-      while( true ) loop : {
+      while( true ) {
         final NodeKind nodeKind = getKind( child ) ;
         switch( nodeKind ) {
           case PARAGRAPH_SPEECH :
