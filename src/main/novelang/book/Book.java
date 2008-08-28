@@ -35,6 +35,7 @@ import novelang.book.function.FunctionDefinition;
 import novelang.book.function.UnknownFunctionException;
 import novelang.book.function.IllegalFunctionCallException;
 import novelang.parser.antlr.DefaultBookParserFactory;
+import novelang.hierarchy.Hierarchizer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 
@@ -54,14 +55,16 @@ public class Book extends AbstractSourceReader {
       this.environment = new Environment( baseDirectory ) ;
       this.documentTree = null ;
     } else {
-      Iterable< FunctionCall > functionCalls = createFunctionCalls( functionRegistry, rawTree ) ;
+      final Iterable< FunctionCall > functionCalls =
+          createFunctionCalls( functionRegistry, rawTree ) ;
       final Results results = callFunctions(
           functionCalls,
           new Environment( baseDirectory ),
           new SimpleTree( NodeKind.BOOK.name() )
       ) ;
       this.environment = results.environment ;
-      this.documentTree = results.book ;
+      this.documentTree =
+          Hierarchizer.rehierarchizeSpeeches( Treepath.create( results.book ) ).getTreeAtStart() ;
     }
 
   }

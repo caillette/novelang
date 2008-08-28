@@ -20,12 +20,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.common.NodeKind;
-import novelang.common.tree.Treepath;
-import novelang.common.SyntacticTree;
 import static novelang.common.NodeKind.*;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.hierarchy.Hierarchizer;
 
 /**
  * @author Laurent Caillette
@@ -36,7 +35,7 @@ public class HierarchizerTest {
 
   @Test
   public void justMove() {
-    verify(
+    verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
             tree( CHAPTER, tree( PARAGRAPH_PLAIN ) )
@@ -52,7 +51,7 @@ public class HierarchizerTest {
 
   @Test
   public void ignoreFirst() {
-    verify(
+    verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
             tree( BLOCKQUOTE ),
@@ -70,7 +69,7 @@ public class HierarchizerTest {
 
   @Test
   public void ignoreChapter() {
-    verify(
+    verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
             tree( CHAPTER ),
@@ -110,7 +109,7 @@ public class HierarchizerTest {
         tree( BLOCKQUOTE ),
         tree( SECTION )
     );
-    verify(
+    verifyRehierarchizeFromLeftToRight(
         expected,
         toBeRehierarchized,
         SECTION,
@@ -131,7 +130,7 @@ public class HierarchizerTest {
         tree( IDENTIFIER ),
         tree( SECTION, tree( "don't touch me") )
     );
-    verify(
+    verifyRehierarchizeFromLeftToRight(
         expected,
         toBeRehierarchized,
         SECTION,
@@ -140,11 +139,70 @@ public class HierarchizerTest {
   }
 
 
+  @Test
+  public void aggregateSpeech() {
+    final SyntacticTree expected = tree(
+        PART,
+        tree( PARAGRAPH_PLAIN ),
+        tree(
+            _SPEECH_SEQUENCE,
+            tree( PARAGRAPH_SPEECH ),
+            tree( PARAGRAPH_SPEECH_CONTINUED )
+        ),
+        tree( BLOCKQUOTE )
+    ) ;
+
+    final SyntacticTree toBeRehierarchized = tree(
+        PART,
+        tree( PARAGRAPH_PLAIN ),
+        tree( PARAGRAPH_SPEECH ),
+        tree( PARAGRAPH_SPEECH_CONTINUED ),
+        tree( BLOCKQUOTE )
+    ) ;
+    verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
+  }
+
+
+  @Test
+  public void aggregateSeveralSpeeches() {
+    final SyntacticTree expected = tree(
+        PART,
+        tree( PARAGRAPH_PLAIN ),
+        tree(
+            _SPEECH_SEQUENCE,
+            tree( PARAGRAPH_SPEECH ),
+            tree( PARAGRAPH_SPEECH_CONTINUED )
+        ),
+        tree( BLOCKQUOTE ),
+        tree(
+            _SPEECH_SEQUENCE,
+            tree( PARAGRAPH_SPEECH ),
+            tree( PARAGRAPH_SPEECH_ESCAPED ),
+            tree( PARAGRAPH_SPEECH_CONTINUED )
+        ),
+        tree( LITERAL, "" )
+
+    ) ;
+    final SyntacticTree toBeRehierarchized = tree(
+        PART,
+        tree( PARAGRAPH_PLAIN ),
+        tree( PARAGRAPH_SPEECH ),
+        tree( PARAGRAPH_SPEECH_CONTINUED ),
+        tree( BLOCKQUOTE ),
+        tree( PARAGRAPH_SPEECH ),
+        tree( PARAGRAPH_SPEECH_ESCAPED ),
+        tree( PARAGRAPH_SPEECH_CONTINUED ),
+        tree( LITERAL, "" )
+    ) ;
+    verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
+  }
+
+
 // =======
 // Fixture
 // =======
 
-  private static void verify(
+  private static void verifyRehierarchizeFromLeftToRight(
       SyntacticTree expectedTree,
       SyntacticTree flatTree,
       NodeKind accumulatorKind,
@@ -168,4 +226,24 @@ public class HierarchizerTest {
 
 
   }
+
+  private static void verifyRehierarchizeSpeech(
+      SyntacticTree expectedTree,
+      SyntacticTree flatTree
+  ) {
+    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
+    LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
+    final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
+    final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
+
+    final Treepath rehierarchized = Hierarchizer.rehierarchizeSpeeches( flatTreepath ) ;
+
+    TreeFixture.assertEquals(
+        expectedTreepath,
+        rehierarchized
+    ) ;
+
+
+  }
+
 }

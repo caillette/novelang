@@ -18,14 +18,14 @@ package novelang.hierarchy;
 
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import novelang.common.NodeKind;
+import static novelang.common.NodeKind.*;
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.common.SyntacticTree;
-import static novelang.common.NodeKind.SECTION;
-import static novelang.common.NodeKind.CHAPTER;
-import com.google.common.collect.Sets;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Transforms the tree representing a Part for handling various stuff
@@ -43,13 +43,57 @@ import com.google.common.collect.ImmutableSet;
  */
 public class Hierarchizer {
 
-  public static Treepath< SyntacticTree > rehierarchize( final Treepath< SyntacticTree > part ) {
+  public static Treepath< SyntacticTree > rehierarchizeChaptersAndSections(
+      final Treepath< SyntacticTree > part
+  ) {
     final Treepath rehierarchizedSections = rehierarchizeFromLeftToRight(
         part, SECTION, new ExclusionFilter( CHAPTER ) ) ;
 
     return rehierarchizeFromLeftToRight(
         rehierarchizedSections, CHAPTER, new YesFilter() ) ;
   }
+
+  public static Treepath< SyntacticTree > rehierarchizeSpeeches(
+      Treepath< SyntacticTree > parent
+  ) {
+    if( parent.getTreeAtEnd().getChildCount() > 0 ) {
+      Treepath< SyntacticTree > child = Treepath.create( parent, 0 ) ;
+      boolean insideSpeechSequence = false ;
+      while( true ) loop : {
+        final NodeKind nodeKind = getKind( child ) ;
+        switch( nodeKind ) {
+          case PARAGRAPH_SPEECH :
+          case PARAGRAPH_SPEECH_CONTINUED :
+          case PARAGRAPH_SPEECH_ESCAPED :
+            if( insideSpeechSequence ) {
+              child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
+              break ;
+            } else {
+              final SyntacticTree speech =
+                  new SimpleTree( _SPEECH_SEQUENCE.name(), child.getTreeAtEnd() ) ;
+              child = TreepathTools.replaceEnd( child, speech ) ;
+              insideSpeechSequence = true ;
+            }
+            break ;
+          case CHAPTER :
+          case SECTION :
+            child = rehierarchizeSpeeches( child ) ;
+          default : 
+            insideSpeechSequence = false ;
+            break ;
+        }
+        if( TreepathTools.hasNextSibling( child ) ) {
+          child = TreepathTools.getNextSibling( child ) ;
+        } else {
+          break ;
+        }
+      }
+      return child.getPrevious() ;
+    } else {
+      return parent ;
+    }
+  }
+
 
   /**
    * Upgrades a degenerated {@code Tree} by making nodes of a given {@code NodeKind} adopt
@@ -94,7 +138,7 @@ public class Hierarchizer {
     }
   }
 
-  private static NodeKind getKind( Treepath<SyntacticTree> treepath ) {
+  private static NodeKind getKind( Treepath< SyntacticTree > treepath ) {
     return NodeKind.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 

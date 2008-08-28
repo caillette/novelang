@@ -58,7 +58,8 @@ public class Part extends AbstractSourceReader {
     if( null == rawTree ) {
       return null ;
     } else {
-      return Hierarchizer.rehierarchize( Treepath.create( rawTree ) ).getTreeAtEnd() ;
+      return Hierarchizer.rehierarchizeChaptersAndSections(
+          Treepath.create( rawTree ) ).getTreeAtEnd() ;
     }
   }
 
