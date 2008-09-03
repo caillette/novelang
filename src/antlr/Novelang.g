@@ -309,6 +309,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | COLON
       | COMMA 
       | COMMERCIAL_AT
+      | DEGREE_SIGN
       | DOLLAR_SIGN
       | DOUBLE_QUOTE
       | ELLIPSIS
@@ -330,8 +331,9 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | RIGHT_CURLY_BRACKET
       | RIGHT_PARENTHESIS
       | RIGHT_SQUARE_BRACKET
+      | SECTION_SIGN
       | SEMICOLON
-      | SOLIDUS 
+      | SOLIDUS
       | TILDE  
       | VERTICAL_LINE 
   ;
@@ -1025,6 +1027,7 @@ CIRCUMFLEX_ACCENT : '^' ;
 COLON : ':' ;
 COMMA : ',' ;
 COMMERCIAL_AT : '@' ;
+DEGREE_SIGN : '°' ;
 DOLLAR_SIGN : '$' ;
 DOUBLE_QUOTE : '\"' ;
 ELLIPSIS : '...' ;
@@ -1049,6 +1052,7 @@ RIGHT_CURLY_BRACKET : '}' ;
 RIGHT_PARENTHESIS : ')' ;
 RIGHT_SQUARE_BRACKET : ']' ;
 RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00bb' ;
+//SECTION_SIGN : '§' ;
 SEMICOLON : ';' ;
 SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK : '\u2039' ;
 SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK : '\u203a' ;
@@ -1056,10 +1060,6 @@ SOLIDUS : '/' ;
 TILDE : '~' ;
 VERTICAL_LINE : '|' ;
 
-
-  
-//TRIPLE_LESSTHANSIGN : '<<<' ;
-//TRIPLE_GREATERTHANSIGN : '>>>' ;
 
 
 // From Java 5 grammar http://www.antlr.org/grammar/1152141644268/Java.g
