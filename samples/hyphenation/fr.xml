@@ -71,6 +71,11 @@ zZ
 ûÛ
 &#x0153;&#x0152; <!-- oe OE ligatures -->
 </classes>
+
+<exceptions>
+proinconsequatvelitatdolor
+</exceptions>
+
 <patterns>
 <!--
 % f7hyph.tex % French hyphenation patterns (7-bit OT1 encoding)

@@ -12,7 +12,9 @@ Barcode generation with Barcode4J.
 
 === Version `0.9.0`
 
-Custom fonts.
+Custom fonts for PDFs.
+
+Hyphenation for PDFs.
 
 New ``$style`` parameter for the ``insert`` function.
 

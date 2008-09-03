@@ -464,6 +464,7 @@
       <SOURCES>
         <root url="jar://$PROJECT_DIR$/../../../JavaProducts/junit/junit-4.4/junit-4.4-src.zip!/" />
         <root url="file://$PROJECT_DIR$/../../../JavaProducts/apache/io/commons-io-1.4-src/src/java" />
+        <root url="file://$PROJECT_DIR$/../../../JavaProducts/apache/fop/fop-0.95-src/src/java" />
       </SOURCES>
     </library>
   </component>
