@@ -42,6 +42,11 @@ public class PartParserTest {
   private static final Logger LOGGER = LoggerFactory.getLogger( PartParserTest.class ) ;
 
   @Test
+  public void wordContainsOELigatured() throws RecognitionException {
+    word( "\u0153\u0152" ) ;
+  }
+
+  @Test
   public void titleIsTwoWords() throws RecognitionException {
     title( "some title", tree(
         TITLE,
