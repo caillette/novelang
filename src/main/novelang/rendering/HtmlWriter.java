@@ -47,6 +47,10 @@ public class HtmlWriter extends XslWriter {
       super.write( kinship, Escape.escapeHtmlText( word ) ); ;
   }
 
+  public void write( Nodepath kinship, String word ) throws Exception {
+      super.write( kinship, Escape.escapeHtmlText( word ) ); ;
+  }
+
 
   protected ContentHandler createSinkContentHandler(
       OutputStream outputStream,

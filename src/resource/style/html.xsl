@@ -25,9 +25,12 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
+  <xsl:import href="punctuation-US-EN.xsl" />
+
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
   <xsl:param name="encoding"/>
+
 
   <xsl:output method="xml" />
 
@@ -196,7 +199,5 @@ blockquote > p {
   <xsl:template match="n:hard-inline-literal" >
     <tt><xsl:apply-templates/></tt>
   </xsl:template>
-
-  <xsl:import href="punctuation-US-EN.xsl" />
 
 </xsl:stylesheet>
