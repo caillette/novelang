@@ -22,7 +22,7 @@
   </logger>
 
   <logger name="org.apache.fop" >
-    <level value="DEBUG" />
+    <level value="WARN" />
   </logger>
 
   <logger name="novelang" >

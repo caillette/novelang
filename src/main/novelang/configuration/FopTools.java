@@ -252,6 +252,7 @@ public class FopTools {
 
     for( File fontDirectory : fontDirectories ) {
       final MutableConfiguration directory = new DefaultConfiguration( "directory" ) ;
+      directory.setAttribute( "recurse", "true" ) ;
       directory.setValue( fontDirectory.getAbsolutePath() ) ;
       fonts.addChild( directory ) ;
     }

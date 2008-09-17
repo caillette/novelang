@@ -19,10 +19,12 @@ package novelang.configuration;
 import java.util.Map;
 import java.util.Iterator;
 import java.net.URL;
+import java.io.File;
 
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.CachedFontInfo;
 import org.apache.fop.fonts.FontTriplet;
+import org.apache.fop.fonts.EmbedFontInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.common.ReflectionTools;
@@ -37,17 +39,17 @@ public class FopFontTools {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( FopFontTools.class ) ;
 
-  public static Map< String, CachedFontInfo > extractFontMap( FopFactory fopFactory ) {
-    final Map< String, CachedFontInfo > fontMap = ( Map )
+  public static Map< String, EmbedFontInfo> extractFontMap( FopFactory fopFactory ) {
+    final Map< String, EmbedFontInfo > fontMap = ( Map )
         ReflectionTools.getFieldValue( fopFactory.getFontCache(), "fontMap" ) ;
     return fontMap ;
   }
 
-  public static void logFontMapContent( FopFactory fopFactory ) {
-    final Map< String, CachedFontInfo > fontMap = extractFontMap( fopFactory ) ;
+  public static void logFontStatus( FopFactory fopFactory ) {
+    final Map< String, EmbedFontInfo > fontMap = extractFontMap( fopFactory ) ;
     LOGGER.debug( "Font files:" );
-    for( CachedFontInfo cachedFontInfo : fontMap.values() ) {
-      LOGGER.debug( "  " + cachedFontInfo.getEmbedFile() ) ;
+    for( EmbedFontInfo fontInfo : fontMap.values() ) {
+      LOGGER.debug( "  " + fontInfo.getEmbedFile() ) ;
     }
 
   }
@@ -56,14 +58,18 @@ public class FopFontTools {
   public static void main( String[] args ) {
 //    System.out.println( EnvironmentTools.getEnvironmentInformation() ) ;
     System.out.println( "user.dir=" + System.getProperty( "user.dir" ) ) ;
+    final String fontCacheFilename = System.getProperty( "user.home" ) + "/.fop/fop-fonts.cache";
+    final File fopFontCache = new File( fontCacheFilename ) ;
+    fopFontCache.delete() ;
+
     final RenderingConfiguration renderingConfiguration =
         ConfigurationTools.buildRenderingConfiguration() ;
     final FopFactory fopFactory = renderingConfiguration.getFopFactory() ;
     fopFactory.getFontCache().getFont( "xxx" ) ;
-    final Map< String, CachedFontInfo > fontMap = extractFontMap( fopFactory ) ;
+    final Map< String, EmbedFontInfo > fontMap = extractFontMap( fopFactory ) ;
     System.out.println( "Font files:" );
-    for( CachedFontInfo cachedFontInfo : fontMap.values() ) {
-      System.out.println( "  " + cachedFontInfo.getEmbedFile() ) ;
+    for( EmbedFontInfo fontInfo : fontMap.values() ) {
+      System.out.println( "  " + fontInfo.getEmbedFile() ) ;
     }
 
 

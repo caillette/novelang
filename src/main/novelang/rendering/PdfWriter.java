@@ -18,16 +18,13 @@
 package novelang.rendering;
 
 import java.io.OutputStream;
-import java.io.File;
 import java.nio.charset.Charset;
-import java.net.MalformedURLException;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-import org.apache.avalon.framework.configuration.Configuration;
 import org.xml.sax.ContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +74,6 @@ public class PdfWriter extends XslWriter {
 
   public void finishWriting() throws Exception {
     super.finishWriting() ;
-    FopFontTools.logFontMapContent( fopFactory ) ;
+    FopFontTools.logFontStatus( fopFactory ) ;
   }
 }
