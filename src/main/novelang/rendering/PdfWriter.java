@@ -32,6 +32,7 @@ import org.xml.sax.ContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
+import novelang.configuration.FopFontTools;
 import novelang.common.metadata.TreeMetadata;
 import novelang.loader.ResourceName;
 
@@ -74,7 +75,8 @@ public class PdfWriter extends XslWriter {
 
   }
 
-
-
-
+  public void finishWriting() throws Exception {
+    super.finishWriting() ;
+    FopFontTools.logFontMapContent( fopFactory ) ;
+  }
 }

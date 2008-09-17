@@ -37,6 +37,7 @@ import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.common.FileTools;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Builds objects describing how to configure other components.
@@ -90,7 +91,7 @@ public class ConfigurationTools {
   protected static final String FOP_HYPHENATION_DIR_PROPERTYNAME = "novelang.fop.hyphenation.dir" ;
 
   protected static final FopFactory FOP_FACTORY ;
-  protected static final Iterable< FontDescriptor > USER_FONTS ;
+//  protected static final Iterable< File > USER_FONT_DIRECTORIES ;
 
   private static final ResourceLoader STYLE_RESOURCE_LOADER;
 
@@ -183,6 +184,8 @@ public class ConfigurationTools {
   }
 
 
+  private static final Iterable< File > FILES_EMPTY_ITERABLE = Iterables.emptyIterable() ;
+
   static {
 
     final File userDirectory = new File( System.getProperty( "user.dir" ) ) ;
@@ -206,22 +209,28 @@ public class ConfigurationTools {
         false
     ) ;
 
-    final File fopFontMetricsDirectory ;
+//    final File fopFontMetricsDirectory ;
 
-    if( null == fontsDirectory ) {
-      fopFontMetricsDirectory = null ;
-    } else {
-      fopFontMetricsDirectory = resolveTemporaryDirectory(
-          "FOP font metrics",
-          FOP_FONTMETRICS_DIR_PROPERTYNAME,
-          FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME,
-          userDirectory,
-          ".fop-font-metrics-"
-      ) ;
-    }
+//    if( null == fontsDirectory ) {
+//      fopFontMetricsDirectory = null ;
+//    } else {
+//      fopFontMetricsDirectory = resolveTemporaryDirectory(
+//          "FOP font metrics",
+//          FOP_FONTMETRICS_DIR_PROPERTYNAME,
+//          FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME,
+//          userDirectory,
+//          ".fop-font-metrics-"
+//      ) ;
+//    }
 
-    USER_FONTS = createFontDescriptors( fontsDirectory, fopFontMetricsDirectory ) ;
-    FOP_FACTORY = createFopFactory( USER_FONTS, hyphenationDirectory ) ;
+
+    // Just to let FOP do the job all by itself.
+//    USER_FONT_DIRECTORIES = createFontDescriptors( fontsDirectory, fopFontMetricsDirectory ) ;
+
+    FOP_FACTORY = createFopFactory(
+        null == fontsDirectory ? FILES_EMPTY_ITERABLE : Lists.newArrayList( fontsDirectory ),
+        hyphenationDirectory
+    ) ;
     
 
     final File userStyleDirectory = resolveDirectory(
@@ -323,30 +332,30 @@ public class ConfigurationTools {
         return FOP_FACTORY ;
       }
       public Iterable< FontDescriptor > getFontDescriptors() {
-        return USER_FONTS ;
+        return Iterables.emptyIterable() ;
       }
     } ;
   }
 
-  private static Iterable< FontDescriptor > createFontDescriptors(
-      File fontsDirectory,
-      File fopMetricsDirectory
-  ) {
-    Iterable< FontDescriptor > fontFileDescriptors = Iterables.emptyIterable() ;
-    if( fontsDirectory != null && fopMetricsDirectory != null ) {
-      try {
-        fontFileDescriptors = FopTools.createFopMetrics(
-            fontsDirectory, fopMetricsDirectory ) ;
-      } catch( IOException e ) {
-        fontFileDescriptors = Iterables.emptyIterable() ;
-        LOGGER.error( "Could not use custom fonts", e ) ;
-      }
-    }
-    return fontFileDescriptors ;
-  }
+//  private static Iterable< FontDescriptor > createFontDescriptors(
+//      File fontsDirectory,
+//      File fopMetricsDirectory
+//  ) {
+//    Iterable< FontDescriptor > fontFileDescriptors = Iterables.emptyIterable() ;
+//    if( fontsDirectory != null && fopMetricsDirectory != null ) {
+//      try {
+//        fontFileDescriptors = FopTools.createFopMetrics(
+//            fontsDirectory, fopMetricsDirectory ) ;
+//      } catch( IOException e ) {
+//        fontFileDescriptors = Iterables.emptyIterable() ;
+//        LOGGER.error( "Could not use custom fonts", e ) ;
+//      }
+//    }
+//    return fontFileDescriptors ;
+//  }
 
   private static FopFactory createFopFactory(
-      Iterable< FontDescriptor > fontDescriptors,
+      Iterable< File > fontsDirectories,
       File hyphenationDirectory
   ) {
     final FopFactory fopFactory = FopFactory.newInstance() ;
@@ -354,8 +363,8 @@ public class ConfigurationTools {
     Configuration hyphenationBase = null ;
     boolean configure = false ;
 
-    if( fontDescriptors.iterator().hasNext() ) {
-      renderers = FopTools.createRenderersConfiguration( fontDescriptors ) ;
+    if( null != fontsDirectories ) {
+      renderers = FopTools.createRenderersConfiguration( fontsDirectories ) ;
       configure = true ;
     }
 

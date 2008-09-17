@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Iterator;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
@@ -239,37 +240,21 @@ public class FopTools {
    * Creates a {@code Configuration} object with {@code <renderers>} element as root.
    */
   public static Configuration createRenderersConfiguration(
-      Iterable< FontDescriptor > fontFileDescritors
+      Iterable< File > fontDirectories
   ) {
     final MutableConfiguration renderers = new DefaultConfiguration( "renderers" ) ;
     final MutableConfiguration renderer = new DefaultConfiguration( "renderer" ) ;
     renderer.setAttribute( "mime", "application/pdf" ) ;
     final MutableConfiguration fonts = new DefaultConfiguration( "fonts" ) ;
 
-    for( FontDescriptor fontDescriptor : fontFileDescritors ) {
-      final MutableConfiguration font = new DefaultConfiguration( "font" ) ;
-      try {
-        font.setAttribute(
-            "metrics-url",
-            fontDescriptor.getMetricsFile().toURI().toURL().toExternalForm()
-        ) ;
-        font.setAttribute( "kerning", "yes" ) ;
-        font.setAttribute(
-            "embed-url",
-            fontDescriptor.getFontFile().toURI().toURL().toExternalForm()
-        ) ;
-        final MutableConfiguration fontTriplet = new DefaultConfiguration( "font-triplet" ) ;
-        final FontDescriptor.Format fontFormat = fontDescriptor.getFontFormat() ;
-        fontTriplet.setAttribute( "name", fontDescriptor.getFontName() ) ;
-        fontTriplet.setAttribute( "style", italicOrNormal( fontFormat ) ) ;
-        fontTriplet.setAttribute( "weight", boldOrNormal( fontFormat ) ) ;
-        font.addChild( fontTriplet ) ;
-        fonts.addChild( font ) ;
-      } catch( MalformedURLException e ) {
-        LOGGER.error( "Problem with font metrics", e ) ;
-      }
-    }
+//    final MutableConfiguration autodetect = new DefaultConfiguration( "auto-detect" ) ;
+//    fonts.addChild( autodetect ) ;
 
+    for( File fontDirectory : fontDirectories ) {
+      final MutableConfiguration directory = new DefaultConfiguration( "directory" ) ;
+      directory.setValue( fontDirectory.getAbsolutePath() ) ;
+      fonts.addChild( directory ) ;
+    }
     renderer.addChild( fonts ) ;
     renderers.addChild( renderer ) ;
 
