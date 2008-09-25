@@ -32,6 +32,11 @@ The stylesheets are written in XSL `/ FO`, which stands for eXtensible Styleshee
 
 http://www.w3.org/TR/xsl
 
+FO may look complex, because typesetting is inherently complex, and because of the lack of synthetic documentation.
+This document explains importants FO basics:
+
+http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm
+
 There are many valuable tutorials on the Web. Here are some:
 
 http://zvon.org/xxl/XSLTutorial/Output/index.html
