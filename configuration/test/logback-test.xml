@@ -25,6 +25,10 @@
     <level value="WARN" />
   </logger>
 
+  <logger name="org.apache.fop.apps" >
+    <level value="DEBUG" />
+  </logger>
+
   <logger name="novelang" >
     <level value="DEBUG" />
   </logger>

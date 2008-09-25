@@ -18,7 +18,6 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
@@ -26,18 +25,7 @@ import javax.servlet.ServletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.mortbay.jetty.Request;
-import novelang.configuration.FontDescriptor;
-import novelang.configuration.ServerConfiguration;
-import novelang.common.Renderable;
-import novelang.part.Part;
-import novelang.produce.DocumentProducer;
-import novelang.produce.RequestTools;
-import novelang.produce.DocumentRequest;
 import novelang.rendering.RenditionMimeType;
-import novelang.loader.ResourceName;
-import novelang.parser.SupportedCharacters;
-import novelang.parser.Escape;
-import com.google.common.collect.Sets;
 
 /**
  *

@@ -19,25 +19,27 @@ package novelang.configuration;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.StringTokenizer;
 
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.DefaultConfiguration;
+import org.apache.avalon.framework.configuration.MutableConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
-import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FOPException;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.MutableConfiguration;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
+import org.apache.fop.apps.FopFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
-import novelang.common.FileTools;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * Builds objects describing how to configure other components.
@@ -82,16 +84,12 @@ public class ConfigurationTools {
 
 
   protected static final String FONTS_DEFAULT_DIRECTORYNAME = "fonts" ;
-  protected static final String FONTS_DIR_PROPERTYNAME = "novelang.fonts.dir" ;
-
-  protected static final String FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME = "fop-fontmetrics" ;
-  protected static final String FOP_FONTMETRICS_DIR_PROPERTYNAME = "novelang.fop.fontmetrics.dir" ;
+  protected static final String FONTS_DIRS_PROPERTYNAME = "novelang.fonts.dir" ;
 
   protected static final String FOP_HYPHENATION_DEFAULT_DIRECTORYNAME = "hyphenation" ;
   protected static final String FOP_HYPHENATION_DIR_PROPERTYNAME = "novelang.fop.hyphenation.dir" ;
 
   protected static final FopFactory FOP_FACTORY ;
-//  protected static final Iterable< File > USER_FONT_DIRECTORIES ;
 
   private static final ResourceLoader STYLE_RESOURCE_LOADER;
 
@@ -184,7 +182,7 @@ public class ConfigurationTools {
   }
 
 
-  private static final Iterable< File > FILES_EMPTY_ITERABLE = Iterables.emptyIterable() ;
+  private static final Iterable< File > FONTS_DIRECTORIES ;
 
   static {
 
@@ -195,12 +193,35 @@ public class ConfigurationTools {
         userDirectory.getAbsolutePath()
     ) ;
 
-    final File fontsDirectory = resolveDirectory(
-        "fonts",
-        FONTS_DIR_PROPERTYNAME,
-        FONTS_DEFAULT_DIRECTORYNAME,
-        false
-    ) ;
+
+    final String declaredFontDirectories = System.getProperty( FONTS_DIRS_PROPERTYNAME ) ;
+    if( ! StringUtils.contains( declaredFontDirectories, SystemUtils.PATH_SEPARATOR ) ) {
+      FONTS_DIRECTORIES = Lists.newArrayList( resolveDirectory(
+          "fonts",
+          FONTS_DIRS_PROPERTYNAME,
+          FONTS_DEFAULT_DIRECTORYNAME,
+          false
+      ) ) ;
+    } else {
+      if( null == declaredFontDirectories ) {
+        FONTS_DIRECTORIES = Iterables.emptyIterable() ;
+      } else {
+        FONTS_DIRECTORIES = parseDirectoryList( declaredFontDirectories ) ;
+        for( File fontDirectory : FONTS_DIRECTORIES ) {
+          if( fontDirectory.exists() ) {
+            LOGGER.info(
+                "Found font directory '" + fontDirectory.getAbsolutePath() + "' " +
+                "(from system property [" + FONTS_DIRS_PROPERTYNAME + "])."
+            ) ;
+          } else {
+            LOGGER.info(
+                "Not found: font directory '" + fontDirectory.getAbsolutePath() + "' " +
+                "(from system property [" + FONTS_DIRS_PROPERTYNAME + "])."
+            ) ;
+          }
+        }
+      }
+    }
 
     final File hyphenationDirectory = resolveDirectory(
         "hyphenation",
@@ -209,28 +230,7 @@ public class ConfigurationTools {
         false
     ) ;
 
-//    final File fopFontMetricsDirectory ;
-
-//    if( null == fontsDirectory ) {
-//      fopFontMetricsDirectory = null ;
-//    } else {
-//      fopFontMetricsDirectory = resolveTemporaryDirectory(
-//          "FOP font metrics",
-//          FOP_FONTMETRICS_DIR_PROPERTYNAME,
-//          FOP_FONTMETRICS_DEFAULT_DIRECTORYNAME,
-//          userDirectory,
-//          ".fop-font-metrics-"
-//      ) ;
-//    }
-
-
-    // Just to let FOP do the job all by itself.
-//    USER_FONT_DIRECTORIES = createFontDescriptors( fontsDirectory, fopFontMetricsDirectory ) ;
-
-    FOP_FACTORY = createFopFactory(
-        null == fontsDirectory ? FILES_EMPTY_ITERABLE : Lists.newArrayList( fontsDirectory ),
-        hyphenationDirectory
-    ) ;
+    FOP_FACTORY = createFopFactory( FONTS_DIRECTORIES, hyphenationDirectory ) ;
     
 
     final File userStyleDirectory = resolveDirectory(
@@ -263,64 +263,14 @@ public class ConfigurationTools {
 
   }
 
-  private static File resolveTemporaryDirectory(
-      String label,
-      String customDirectoryPropertyName,
-      String defaultSubdirectoryName,
-      File parentDirectory,
-      String temporaryFilePrefix
-  ) {
-
-    File directory = resolveDirectory(
-        label,
-        customDirectoryPropertyName,
-        defaultSubdirectoryName,
-        false
-    ) ;
-    if( null == directory ) {
-      try {
-        directory = FileTools.createTemporaryDirectory(
-            temporaryFilePrefix,
-            parentDirectory,
-            true
-        ) ;
-        LOGGER.info( "Created directory for {}: '{}'", label, directory.getAbsolutePath() ) ;
-      } catch( IOException e ) {
-        directory = null ;
-        LOGGER.warn( "Creation of temporary directory for " + label + " failed", e ) ;
-      }
-    }
-    return directory ;
-
-  }
-
   /**
-   * Creates a temporary directory.
-   *  
-   * @deprecated Temporary directory would work with a clean deletion strategy.
-   *     Maybe with a shutdown hook?
+   * Returns directories known to contain fonts.
+   * @return a non-null object that may be empty but contains no nulls.
    */
-  private static File createTemporaryFontMetricsDirectory( File baseDirectory ) {
-    final File fopFontMetricsDirectory ;
-    File temporaryDirectory = null ;
-    try {
-      temporaryDirectory = File.createTempFile( ".fop-fontmetrics-", ".temp", baseDirectory ) ;
-      if ( ! temporaryDirectory.delete() ) {
-        throw new IOException( "Deletion of temporary file failed") ;
-      }
-      if ( ! temporaryDirectory.mkdir() ) {
-        throw new IOException( "Creation of temporary directory failed" ) ;
-      }
-      temporaryDirectory.deleteOnExit() ;
-    } catch( IOException e ) {
-      LOGGER.error( "Coul not create temporary directory for FOP's font metrics", e ) ;
-      temporaryDirectory = null ;
-    }
-    fopFontMetricsDirectory = temporaryDirectory ;
-    LOGGER.info( "Created temporary directory for FOP's font metrics: '{}'",
-        fopFontMetricsDirectory.getAbsolutePath() ) ;
-    return temporaryDirectory ;
+  public static Iterable< File > getFontsDirectories() {
+    return FONTS_DIRECTORIES ;
   }
+
 
 
   public static RenderingConfiguration buildRenderingConfiguration() {
@@ -331,28 +281,18 @@ public class ConfigurationTools {
       public FopFactory getFopFactory() {
         return FOP_FACTORY ;
       }
-      public Iterable< FontDescriptor > getFontDescriptors() {
-        return Iterables.emptyIterable() ;
-      }
     } ;
   }
 
-//  private static Iterable< FontDescriptor > createFontDescriptors(
-//      File fontsDirectory,
-//      File fopMetricsDirectory
-//  ) {
-//    Iterable< FontDescriptor > fontFileDescriptors = Iterables.emptyIterable() ;
-//    if( fontsDirectory != null && fopMetricsDirectory != null ) {
-//      try {
-//        fontFileDescriptors = FopTools.createFopMetrics(
-//            fontsDirectory, fopMetricsDirectory ) ;
-//      } catch( IOException e ) {
-//        fontFileDescriptors = Iterables.emptyIterable() ;
-//        LOGGER.error( "Could not use custom fonts", e ) ;
-//      }
-//    }
-//    return fontFileDescriptors ;
-//  }
+  private static Iterable< File > parseDirectoryList( String directories ) {
+    final StringTokenizer tokenizer =
+        new StringTokenizer( directories, SystemUtils.PATH_SEPARATOR ) ;
+    final List< File > directoryList = Lists.newLinkedList() ;
+    while( tokenizer.hasMoreTokens() ) {
+      directoryList.add( new File( tokenizer.nextToken() ) ) ;
+    }
+    return ImmutableList.copyOf( directoryList ) ;
+  }
 
   private static FopFactory createFopFactory(
       Iterable< File > fontsDirectories,
