@@ -41,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
-import com.google.common.collect.Lists;
 
 /**
  * Utility class for generating FOP configuration with hyphenation files and custom fonts.
@@ -121,18 +120,18 @@ public class FopTools {
   }
 
   public static void main( String[] args ) throws FOPException {
-    final GlobalFontStatus globalFontStatus = createGlobalFontStatus() ;
+    final FontsStatus fontsStatus = createGlobalFontStatus() ;
 
     System.out.println( "Official font list:" ) ;
-    for( EmbedFontInfo fontInfo : globalFontStatus.getFontInfos() ) {
+    for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
       System.out.println( "  " + fontInfo ) ;
     }
 
     System.out.println( "Failed font map:" ) ;
-    if( globalFontStatus.getFailedFonts().isEmpty() ) {
+    if( fontsStatus.getFailedFonts().isEmpty() ) {
         System.out.println( "  Empty." ) ;
     } else {
-      for( String fontUrl : globalFontStatus.getFailedFonts().keySet() ) {
+      for( String fontUrl : fontsStatus.getFailedFonts().keySet() ) {
           System.out.println( "  " + fontUrl ) ;
       } ;
     }
@@ -142,7 +141,7 @@ public class FopTools {
    * Returns a global status for all fonts defined through
    * {@link novelang.configuration.ConfigurationTools#FONTS_DIRS_PROPERTYNAME}.
    */
-  public static GlobalFontStatus createGlobalFontStatus() throws FOPException {
+  public static FontsStatus createGlobalFontStatus() throws FOPException {
     final Configuration pdfRendererConfiguration = createPdfRendererConfiguration(
         ConfigurationTools.getFontsDirectories() ) ;
     final FopFactory fopFactory = ConfigurationTools.buildRenderingConfiguration().getFopFactory() ;
@@ -159,15 +158,15 @@ public class FopTools {
         )
     ;
     final Map< String, EmbedFontInfo > failedFontMap = extractFailedFontMap( fontCache ) ;
-    return new GlobalFontStatus( fontList, failedFontMap ) ;
+    return new FontsStatus( fontList, failedFontMap ) ;
   }
 
 
-  public static final class GlobalFontStatus {
+  public static final class FontsStatus {
     private final Iterable<EmbedFontInfo> fontInfos ;
     private final Map< String, EmbedFontInfo > failedFonts ;
 
-    public GlobalFontStatus(
+    public FontsStatus(
         Iterable< EmbedFontInfo > fontInfos,
         Map< String, EmbedFontInfo > failedFonts
     ) {

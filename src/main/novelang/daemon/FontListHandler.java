@@ -67,10 +67,10 @@ public class FontListHandler extends GenericHandler{
 
       final StringBuffer textBuffer = new StringBuffer() ;
       final String nonWordCharacters = createNonWordCharactersString() ;
-      final FopTools.GlobalFontStatus globalFontStatus;
+      final FopTools.FontsStatus fontsStatus;
       try {
-        globalFontStatus = FopTools.createGlobalFontStatus();
-        for( EmbedFontInfo fontInfo : globalFontStatus.getFontInfos() ) {
+        fontsStatus = FopTools.createGlobalFontStatus();
+        for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
           for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
             final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject;
             textBuffer
