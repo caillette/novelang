@@ -331,7 +331,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | RIGHT_CURLY_BRACKET
       | RIGHT_PARENTHESIS
       | RIGHT_SQUARE_BRACKET
-      | SECTION_SIGN
+//      | SECTION_SIGN
       | SEMICOLON
       | SOLIDUS
       | TILDE  
