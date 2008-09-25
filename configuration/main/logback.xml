@@ -23,7 +23,7 @@
   </logger>
 
   <logger name="FOP" >
-    <level value="WARN" />
+    <level value="DEBUG" />
   </logger>
 
   <logger name="novelang" >

@@ -43,6 +43,6 @@ public interface RenderingConfiguration {
    * Returns all user-defined fonts.
    * @return a non-null object iterating over non-null objects.
    */
-  Iterable< FontDescriptor > getFontDescriptors() ;
+//  Iterable< FontDescriptor > getFontDescriptors() ;
 
 }

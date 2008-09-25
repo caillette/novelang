@@ -20,9 +20,7 @@ package novelang;
 import java.io.File;
 
 import org.apache.fop.apps.FopFactory;
-import com.google.common.collect.Iterables;
 import novelang.configuration.ContentConfiguration;
-import novelang.configuration.FontDescriptor;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ServerConfiguration;
 import novelang.configuration.ConfigurationTools;
@@ -129,9 +127,9 @@ public class TestResources {
             return FopFactory.newInstance() ;
           }
 
-          public Iterable< FontDescriptor > getFontDescriptors() {
-            return Iterables.emptyIterable() ;
-          }
+//          public Iterable< FontDescriptor > getFontDescriptors() {
+//            return Iterables.emptyIterable() ;
+//          }
         } ;
       }
 
