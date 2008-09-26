@@ -459,6 +459,7 @@
         <root url="jar://$PROJECT_DIR$/../lib/xalan-serializer-2.7.1.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/barcode4j-fop-ext-complete-2.0.jar!/" />
         <root url="jar://$PROJECT_DIR$/../lib/batik-xml-apis-ext-1.7.jar!/" />
+        <root url="jar://$PROJECT_DIR$/../lib/commons-cli-1.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>

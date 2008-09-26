@@ -22,12 +22,12 @@ import java.util.Iterator;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.io.FileUtils;
 import novelang.ScratchDirectoryFixture;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Tests for {@link GenericParameters}, {@link BatchParameters}, {@link DaemonParameters}.
@@ -38,15 +38,13 @@ import com.google.common.collect.Iterables;
  */
 public class ParametersTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ParametersTest.class ) ;
-
   @Test
   public void voidDaemonParameters() throws ArgumentsNotParsedException {
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, new String[ 0 ] ) ;
-//    assertNull( parameters.getStyleDirectory() );
-//    assertNull( parameters.getHyphenationDirectory() ) ;
-//    assertFalse( parameters.getFontDirectories().iterator().hasNext() ) ;
-//    assertEquals( 8080, parameters.getHttpDaemonPort() ) ;
+    assertEquals( DaemonParameters.DEFAULT_HTTP_DAEMON_PORT, parameters.getHttpDaemonPort() ) ;
+    assertNull( parameters.getStyleDirectory() );
+    assertNull( parameters.getHyphenationDirectory() ) ;
+    assertOnIterable( parameters.getFontDirectories() ) ;
   }
 
   @Test( expected = ArgumentsNotParsedException.class )
@@ -56,52 +54,106 @@ public class ParametersTest {
 
   @Test
   public void style() throws ArgumentsNotParsedException {
-    final String[] arguments = { "--style", DIRECTORY_NAME_AAA } ;
+    final String[] arguments = { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
-//    final Iterable< File > fontDirectories = parameters.getFontDirectories() ;
-//    assertFalse(
-//        "There should be no font directories but got: " + Iterables.toString( fontDirectories ),
-//        fontDirectories.iterator().hasNext()
-//    ) ;
+    assertEquals( directoryAaa , parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getFontDirectories() ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getHyphenationDirectory() ) ;
+  }
 
-//    assertEquals( DIRECTORY_NAME_AAA, parameters.getStyleDirectory().getName() ) ;
+  @Test
+  public void hyphenation() throws ArgumentsNotParsedException {
+    final String[] arguments = { DASHED_HYPHENATION_DIR, DIRECTORY_NAME_AAA } ;
+    final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
+
+    assertEquals( directoryAaa , parameters.getHyphenationDirectory() ) ;
+    assertOnIterable( parameters.getFontDirectories() ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getStyleDirectory() ) ;
+  }
+
+  @Test
+  public void log() throws ArgumentsNotParsedException {
+    final String[] arguments = { DASHED_LOG_DIR, DIRECTORY_NAME_AAA } ;
+    final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
+
+    assertEquals( directoryAaa , parameters.getLogDirectory() ) ;
+    assertOnIterable( parameters.getFontDirectories() ) ;
+    assertNull( parameters.getHyphenationDirectory() ) ;
+    assertNull( parameters.getStyleDirectory() ) ;
   }
 
   @Test
   public void fonts2() throws ArgumentsNotParsedException {
     final String[] arguments =
-        { "--fonts", DIRECTORY_NAME_AAA, /*SystemUtils.PATH_SEPARATOR*/ DIRECTORY_NAME_BBB } ;
+        { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
-//    final File styleDirectory = parameters.getStyleDirectory() ;
-//    assertNull(
-//        "There should be no style directory but got: " + styleDirectory,
-//        styleDirectory
-//    ) ;
+    assertNull( parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getFontDirectories(), directoryAaa, directoryBbb ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getHyphenationDirectory() ) ;
+  }
 
-//    final Iterator< File > fontsDirectories = parameters.getFontDirectories().iterator() ;
-//    assertEquals( directoryAaa, fontsDirectories.next() );
-//    assertEquals( directoryBbb, fontsDirectories.next() );
-//    assertFalse( fontsDirectories.hasNext() ) ;
+  @Test
+  public void fonts2AndStyle() throws ArgumentsNotParsedException {
+    final String[] arguments =
+        { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB, DASHED_STYLE_DIR, DIRECTORY_NAME_CCC } ;
+    final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
+
+    assertOnIterable( parameters.getFontDirectories(), directoryAaa, directoryBbb ) ;
+    assertEquals( directoryCcc , parameters.getStyleDirectory() ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getHyphenationDirectory() ) ;
+  }
+
+  @Test
+  public void styleAndFonts2() throws ArgumentsNotParsedException {
+    final String[] arguments =
+        { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA, DASHED_FONT_DIRS, DIRECTORY_NAME_BBB, DIRECTORY_NAME_CCC } ;
+    final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
+
+    assertEquals( directoryAaa , parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getFontDirectories(), directoryBbb, directoryCcc ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getHyphenationDirectory() ) ;
   }
 
 // =======
 // Fixture
 // =======
 
+  private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir";
+  private static final String DASHED_STYLE_DIR = "--style-dir";
+  private static final String DASHED_FONT_DIRS = "--font-dirs";
+  private static final String DASHED_LOG_DIR = "--log-dir";
+
+
+  private static< T > void assertOnIterable( Iterable< T > actual, T... expected ) {
+    final Iterator< T > iterator = actual.iterator() ;
+    for( T expectedElement : expected ) {
+      final T actualElement = iterator.next() ;
+      assertEquals( expectedElement, actualElement ) ;
+    }
+    assertFalse( "Too many elements: " + Lists.newArrayList( actual ), iterator.hasNext() ) ;
+  }
+
+
   private static final String DIRECTORY_NAME_DDD = "ddd";
   private static final String DIRECTORY_NAME_AAA = "aaa";
   private static final String DIRECTORY_NAME_BBB = "bbb";
   private static final String DIRECTORY_NAME_CCC = "ccc";
 
-  private final File scratchDirectory ;
-  private final File directoryAaa ;
-  private final File directoryBbb ;
-  private final File directoryCcc ;
-  private final File directoryCccDdd ;
+  private File scratchDirectory ;
+  private File directoryAaa ;
+  private File directoryBbb ;
+  private File directoryCcc ;
+  private File directoryCccDdd ;
 
-  public ParametersTest() throws IOException {
+  @Before
+  public void setUp() throws IOException {
     scratchDirectory =
         new ScratchDirectoryFixture( ParametersTest.class ).getTestScratchDirectory() ;
 

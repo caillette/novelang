@@ -18,15 +18,45 @@ package novelang.configuration.parse;
 
 import java.io.File;
 
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Laurent Caillette
  */
 public class DaemonParameters extends GenericParameters {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( DaemonParameters.class ) ;
+
   public static final int DEFAULT_HTTP_DAEMON_PORT = 8080 ;
 
-  public DaemonParameters( File baseDirectory, String[] parameters ) throws ArgumentsNotParsedException {
+  private final int port ;
+
+  public DaemonParameters( File baseDirectory, String[] parameters )
+      throws ArgumentsNotParsedException
+  {
     super( baseDirectory, parameters ) ;
+
+    if( line.hasOption( OPTION_HTTPDAEMON_PORT.getLongOpt() ) ) {
+      final String portParameter = line.getOptionValue( OPTION_HTTPDAEMON_PORT.getLongOpt() ) ;
+      LOGGER.debug( "found: {} = '{}'", OPTION_HTTPDAEMON_PORT.getLongOpt(), portParameter ) ;
+      try {
+        port = Integer.parseInt( portParameter ) ;
+      } catch( NumberFormatException e ) {
+        throw new ArgumentsNotParsedException( e );
+      }
+    } else {
+      port = DEFAULT_HTTP_DAEMON_PORT ;
+    }
+
+  }
+
+
+  protected void enrich( Options options ) {
+    options.addOption( OPTION_HTTPDAEMON_PORT ) ;
   }
 
   /**
@@ -34,7 +64,17 @@ public class DaemonParameters extends GenericParameters {
    * @return a value greater than 0.
    */
   public int getHttpDaemonPort() {
-    throw new UnsupportedOperationException( "getHttpDaemonPort" ) ;
+    return port ;
   }
+
+  private static final Option OPTION_HTTPDAEMON_PORT = OptionBuilder
+      .withLongOpt( "port" )
+      .withDescription( "TCP port for daemon" )
+      .hasArg()
+      .create()
+  ;
+
+
+
 
 }

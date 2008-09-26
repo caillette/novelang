@@ -16,10 +16,7 @@
  */
 package novelang.configuration.parse;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import org.apache.commons.cli2.util.HelpFormatter;
+import org.apache.commons.cli.ParseException;
 
 /**
  * Thrown when a parsing error occurs <em>or</em> when help was requested.
@@ -28,21 +25,11 @@ import org.apache.commons.cli2.util.HelpFormatter;
  */
 public class ArgumentsNotParsedException extends Exception {
 
-//  private final HelpFormatter helpFormatter ;
-
-  public ArgumentsNotParsedException( HelpFormatter helpFormatter ) {
-    super( "\n" + extractMessage( helpFormatter ) ) ;
-//    this.helpFormatter = helpFormatter ;
+  public ArgumentsNotParsedException( String message ) {
+    super( message ) ;
   }
 
-//  public HelpFormatter getHelpFormatter() {
-//    return helpFormatter ;
-//  }
-
-  private static final String extractMessage( HelpFormatter helpFormatter ) {
-    final StringWriter helpWriter = new StringWriter() ;
-    helpFormatter.setPrintWriter( new PrintWriter( helpWriter ) ) ;
-    helpFormatter.print() ;
-    return helpWriter.toString() ;
+  public ArgumentsNotParsedException( Exception e ) {
+    super( e.getMessage() ) ;
   }
 }
