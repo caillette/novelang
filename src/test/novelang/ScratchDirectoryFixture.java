@@ -25,6 +25,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.builder.StandardToStringStyle;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,10 @@ public class ScratchDirectoryFixture {
   private final String testIdentifier ;
 
   private final Set< String > registeredTestIdentifiers = new HashSet< String >() ;
+
+  public ScratchDirectoryFixture( Class testClass ) throws IOException {
+    this( ClassUtils.getShortClassName( testClass ) ) ;
+  }
 
   public ScratchDirectoryFixture( String testIdentifier ) throws IOException {
     this.testIdentifier = testIdentifier ;
