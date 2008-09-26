@@ -25,15 +25,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Parses command-line arguments for {@link novelang.daemon.HttpDaemon}.
+ * 
  * @author Laurent Caillette
  */
 public class DaemonParameters extends GenericParameters {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( DaemonParameters.class ) ;
 
-  public static final int DEFAULT_HTTP_DAEMON_PORT = 8080 ;
-
-  private final int port ;
+  private final Integer port ;
 
   public DaemonParameters( File baseDirectory, String[] parameters )
       throws ArgumentsNotParsedException
@@ -49,7 +49,7 @@ public class DaemonParameters extends GenericParameters {
         throw new ArgumentsNotParsedException( e );
       }
     } else {
-      port = DEFAULT_HTTP_DAEMON_PORT ;
+      port = null ;
     }
 
   }
@@ -61,9 +61,9 @@ public class DaemonParameters extends GenericParameters {
 
   /**
    * Returns the port of HTTP daemon.
-   * @return a value greater than 0.
+   * @return an integer with a value greater than 0, or null if undefined.
    */
-  public int getHttpDaemonPort() {
+  public Integer getHttpDaemonPort() {
     return port ;
   }
 

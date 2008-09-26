@@ -36,7 +36,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 /**
- * Command-line parameters parsing.
+ * Base class for command-line parameters parsing.
  *
  * @author Laurent Caillette
  */
@@ -81,8 +81,8 @@ public abstract class GenericParameters {
       if( line.hasOption( OPTION_FONT_DIRECTORIES.getLongOpt() ) ) {
         final String[] fontDirectoriesNames =
             line.getOptionValues( OPTION_FONT_DIRECTORIES.getLongOpt() ) ;
-        LOGGER.debug(
-            "found: font directories = '{}'", Lists.newArrayList( fontDirectoriesNames ) ) ;
+        LOGGER.debug( "Argument for Font directories = '{}'",
+            Lists.newArrayList( fontDirectoriesNames ) ) ;
         fontDirectories = extractDirectories( baseDirectory, fontDirectoriesNames ) ;
       } else {
         fontDirectories = Iterables.emptyIterable() ;
@@ -100,18 +100,34 @@ public abstract class GenericParameters {
 // Getters
 // =======
 
+  /**
+   * Returns the directories containing embeddable font files.
+   * @return a non-null object iterating over no nulls.
+   */
   public Iterable< File > getFontDirectories() {
     return fontDirectories;
   }
 
+  /**
+   * Returns the directory containing style files.
+   * @return a null object if undefined, a reference to an existing directory otherwise.
+   */
   public File getStyleDirectory() {
     return styleDirectory;
   }
 
+  /**
+   * Returns the directory containing hyphenation files.
+   * @return a null object if undefined, a reference to an existing directory otherwise.
+   */
   public File getHyphenationDirectory() {
     return hyphenationDirectory;
   }
 
+  /**
+   * Returns the directory to spit log files into.
+   * @return a null object if undefined, a reference to an existing directory otherwise.
+   */
   public File getLogDirectory() {
     return logDirectory;
   }
@@ -128,7 +144,8 @@ public abstract class GenericParameters {
     if( line.hasOption( option.getLongOpt() ) ) {
       final String styleDirectoryName =
           line.getOptionValue( option.getLongOpt() ) ;
-      LOGGER.debug( "found: {} = '{}'", option.getDescription(), styleDirectoryName ) ;
+      LOGGER.debug( "Argument for {} = '{}'",
+          option.getDescription(), styleDirectoryName ) ;
       directory = extractDirectory( baseDirectory, styleDirectoryName ) ;
     } else {
       directory = null ;

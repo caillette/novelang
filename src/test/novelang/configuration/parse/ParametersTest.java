@@ -41,7 +41,7 @@ public class ParametersTest {
   @Test
   public void voidDaemonParameters() throws ArgumentsNotParsedException {
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, new String[ 0 ] ) ;
-    assertEquals( DaemonParameters.DEFAULT_HTTP_DAEMON_PORT, parameters.getHttpDaemonPort() ) ;
+    assertNull( parameters.getHttpDaemonPort() ) ;
     assertNull( parameters.getStyleDirectory() );
     assertNull( parameters.getHyphenationDirectory() ) ;
     assertOnIterable( parameters.getFontDirectories() ) ;
@@ -99,8 +99,8 @@ public class ParametersTest {
 
   @Test
   public void fonts2AndStyle() throws ArgumentsNotParsedException {
-    final String[] arguments =
-        { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB, DASHED_STYLE_DIR, DIRECTORY_NAME_CCC } ;
+    final String[] arguments = { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB,
+        DASHED_STYLE_DIR, DIRECTORY_NAME_CCC } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
     assertOnIterable( parameters.getFontDirectories(), directoryAaa, directoryBbb ) ;
@@ -111,14 +111,20 @@ public class ParametersTest {
 
   @Test
   public void styleAndFonts2() throws ArgumentsNotParsedException {
-    final String[] arguments =
-        { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA, DASHED_FONT_DIRS, DIRECTORY_NAME_BBB, DIRECTORY_NAME_CCC } ;
+    final String[] arguments = { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA,
+            DASHED_FONT_DIRS, DIRECTORY_NAME_BBB, DIRECTORY_NAME_CCC } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
     assertEquals( directoryAaa , parameters.getStyleDirectory() ) ;
     assertOnIterable( parameters.getFontDirectories(), directoryBbb, directoryCcc ) ;
     assertNull( parameters.getLogDirectory() ) ;
     assertNull( parameters.getHyphenationDirectory() ) ;
+  }
+
+  @Test ( expected = ArgumentsNotParsedException.class )
+  public void badStyleDirectory() throws ArgumentsNotParsedException {
+    final String[] arguments = { DASHED_STYLE_DIR, "xxx" } ;
+    new DaemonParameters( scratchDirectory, arguments ) ;
   }
 
 // =======

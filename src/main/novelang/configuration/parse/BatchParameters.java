@@ -17,6 +17,7 @@
 package novelang.configuration.parse;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -24,25 +25,44 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.produce.DocumentRequest;
+import novelang.produce.RequestTools;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 /**
+ * Parses command-line arguments for {@link novelang.batch.Main}.
+ *
  * @author Laurent Caillette
  */
 public class BatchParameters extends GenericParameters {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( BatchParameters.class ) ;
 
+  private final Iterable< DocumentRequest > documentRequests ;
+  private final File outputDirectory ;
+
   public BatchParameters( File baseDirectory, String[] parameters ) throws ArgumentsNotParsedException {
     super( baseDirectory, parameters );
     final String[] sourceArguments = line.getArgs() ;
-    LOGGER.debug( "found: sources = {}", Lists.<Object>newArrayList( sourceArguments ) ) ;
+    LOGGER.debug( "found: sources = {}", Lists.< Object >newArrayList( sourceArguments ) ) ;
 
     if( sourceArguments.length == 0 ) {
       throw new ArgumentsNotParsedException( "No source documents" ) ;
     } else {
-      // TODO
+      final List< DocumentRequest > requestList = Lists.newArrayList() ;
+      for( String sourceArgument : sourceArguments ) {
+        try {
+          final DocumentRequest documentRequest =
+              RequestTools.createDocumentRequest( sourceArgument ) ;
+          requestList.add( documentRequest ) ;
+        } catch( IllegalArgumentException e ) {
+          throw new ArgumentsNotParsedException( e ) ;
+        }
+      }
+      documentRequests = ImmutableList.copyOf( requestList ) ;
     }
+
+    outputDirectory = extractDirectory( baseDirectory, OPTION_OUTPUT_DIRECTORY, line ) ;
   }
 
   protected void enrich( Options options ) {
@@ -51,10 +71,10 @@ public class BatchParameters extends GenericParameters {
   
   /**
    * Returns document requests.
-   * @return a non-null object iterating over no nulls.
+   * @return a non-null object iterating over no nulls, containing at least one element.
    */
   public Iterable< DocumentRequest > getDocumentRequests() {
-    throw new UnsupportedOperationException( "getDocumentRequests" ) ;
+    return documentRequests ;
   }
 
   /**
@@ -62,10 +82,8 @@ public class BatchParameters extends GenericParameters {
    * @return null if not defined, an existing directory otherwise.
    */
   public File getOutputDirectory() {
-    throw new UnsupportedOperationException( "getOutputDirectory" ) ;
+    return outputDirectory ;
   }
-
-
 
   private static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder
       .withLongOpt( "output-dir" )
