@@ -45,7 +45,7 @@ public class NumberingTest {
 
   @Test
   public void testNodeset() throws IOException {
-    final ProducerConfiguration serverConfiguration = TestResources.createServerConfiguration(
+    final ProducerConfiguration serverConfiguration = TestResources.createProducerConfiguration(
         styleDirectory,
         styleDirectory.getName(),
         true

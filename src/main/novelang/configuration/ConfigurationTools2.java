@@ -74,7 +74,12 @@ public class ConfigurationTools2 {
     };
   }
 
-  public static DaemonConfiguration createDaemonConfiguration( DaemonParameters parameters ) {
+  public static DaemonConfiguration createDaemonConfiguration( DaemonParameters parameters )
+      throws FOPException
+  {
+
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
+
     final int port ;
     final Integer customPort = parameters.getHttpDaemonPort() ;
     if( null == customPort ) {
@@ -93,10 +98,13 @@ public class ConfigurationTools2 {
         + "(from option: " + parameters.getHttpDaemonPortOptionDescription() + ")."
       ) ;
     }
+
     return new DaemonConfiguration() {
       public int getPort() {
         return port ;
-      }
+      }public ProducerConfiguration getProducerConfiguration() {
+      return producerConfiguration ;
+    }
     } ;
   }
 

@@ -25,6 +25,7 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.FopFontStatus;
+import novelang.configuration.DaemonConfiguration;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
@@ -123,7 +124,7 @@ public class TestResources {
 
   }
 
-  public static ProducerConfiguration createServerConfiguration(
+  public static ProducerConfiguration createProducerConfiguration(
       final File contentDirectory,
       final String styleDirectoryName,
       final boolean shouldAddClasspathResourceLoader
@@ -169,14 +170,25 @@ public class TestResources {
   }
 
 
-  public static ProducerConfiguration createServerConfiguration(
+  public static DaemonConfiguration createDaemonConfiguration(
+      final int httpDaemonPort,
       final File contentDirectory,
       final String styleDirectoryName
   ) {
-    return createServerConfiguration(
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
         contentDirectory,
         styleDirectoryName,
         false
-    );
+    ) ;
+
+    return new DaemonConfiguration() {
+      public int getPort() {
+        return httpDaemonPort ;
+      }
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+    } ;
+
   }
 }

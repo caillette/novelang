@@ -295,8 +295,8 @@ public class HttpDaemonTest {
     TestResources.copyServedResources( contentDirectory ) ;
 
     httpDaemon = new HttpDaemon(
-        HTTP_DAEMON_PORT,
-        TestResources.createServerConfiguration( contentDirectory, styleDirectoryName )
+
+        TestResources.createDaemonConfiguration( HTTP_DAEMON_PORT, contentDirectory, styleDirectoryName )
     ) ;
     httpDaemon.start() ;
   }

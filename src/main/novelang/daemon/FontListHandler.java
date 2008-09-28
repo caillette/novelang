@@ -53,8 +53,8 @@ public class FontListHandler extends GenericHandler{
   private static final String DOCUMENT_NAME = "/~fonts.pdf" ;
   private static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
 
-  public FontListHandler( ProducerConfiguration serverConfiguration ) {
-    documentProducer = new DocumentProducer( serverConfiguration ) ;
+  public FontListHandler( ProducerConfiguration producerConfiguration ) {
+    documentProducer = new DocumentProducer( producerConfiguration ) ;
   }
 
   protected void doHandle( 

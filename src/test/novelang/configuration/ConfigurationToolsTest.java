@@ -40,6 +40,11 @@ import com.google.common.collect.Iterables;
 /**
  * Tests for {@link ConfigurationTools2}.
  *
+ * TODO add tests for:
+ *   {@link GenericParameters#getLogDirectory()}
+ *   {@link GenericParameters#getStyleDirectory()}
+ *   {@link GenericParameters#getHyphenationDirectory()} 
+ *
  * @author Laurent Caillette
  */
 public class ConfigurationToolsTest {
@@ -50,7 +55,9 @@ public class ConfigurationToolsTest {
 
 
   @Test
-  public void createDaemonConfigurationWithCustomPort() throws ArgumentsNotParsedException {
+  public void createDaemonConfigurationWithCustomPort()
+      throws ArgumentsNotParsedException, FOPException
+  {
     final DaemonConfiguration configuration = ConfigurationTools2
         .createDaemonConfiguration( createDaemonParameters(
             OPTIONPREFIX + OPTIONNAME_HTTPDAEMON_PORT,
@@ -61,7 +68,9 @@ public class ConfigurationToolsTest {
   }
 
   @Test
-  public void createDaemonConfigurationFromDefaults() throws ArgumentsNotParsedException {
+  public void createDaemonConfigurationFromDefaults()
+      throws ArgumentsNotParsedException, FOPException
+  {
     final DaemonConfiguration configuration =
         ConfigurationTools2.createDaemonConfiguration( createDaemonParameters() ) ;
     Assert.assertEquals( ConfigurationTools2.DEFAULT_HTTP_DAEMON_PORT, configuration.getPort() ) ;

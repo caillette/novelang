@@ -23,4 +23,6 @@ public interface DaemonConfiguration {
 
   int getPort() ;
 
+  ProducerConfiguration getProducerConfiguration() ;
+
 }

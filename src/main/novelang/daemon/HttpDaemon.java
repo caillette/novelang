@@ -17,15 +17,19 @@
 
 package novelang.daemon;
 
+import java.io.File;
+
+import org.apache.commons.lang.SystemUtils;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ProducerConfiguration;
 import novelang.Version;
-import novelang.system.StartupTools;
+import novelang.configuration.ConfigurationTools2;
+import novelang.configuration.DaemonConfiguration;
+import novelang.configuration.parse.DaemonParameters;
 import novelang.system.EnvironmentTools;
+import novelang.system.StartupTools;
 
 /**
  * Main class for Novelang document generator daemon.
@@ -35,7 +39,6 @@ import novelang.system.EnvironmentTools;
 public class HttpDaemon {
 
   private static Logger LOGGER ;
-  private static final int HTTP_SERVER_PORT = 8080 ;
 
   private final Server server ;
 
@@ -46,35 +49,32 @@ public class HttpDaemon {
     LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
     EnvironmentTools.logSystemProperties() ;
 
-    final int serverPort ;
+    final DaemonParameters parameters =
+        new DaemonParameters( new File( SystemUtils.USER_DIR ), args ) ;
 
-    if( args.length == 2 && "--port".equals( args[ 0 ] ) ) {
-      serverPort = Integer.parseInt( args[ 1 ] ) ;
-    } else {
-      serverPort = HTTP_SERVER_PORT ;
-    }
+    final DaemonConfiguration daemonConfiguration =
+        ConfigurationTools2.createDaemonConfiguration( parameters );
 
     final String starting =
         "Starting " + HttpDaemon.class.getName() +
         " version " + Version.name() +
-        " on port " + serverPort
+        " on port " + daemonConfiguration.getPort()
     ;
     System.out.println( starting ) ;
+
     LOGGER.info( starting ) ;
-    new HttpDaemon(
-        serverPort,
-        ConfigurationTools.buildServerConfiguration() 
-    ).start() ;
+    new HttpDaemon( daemonConfiguration ).start() ;
   }
 
-  public HttpDaemon( int httpServerPort, ProducerConfiguration serverConfiguration ) {
+  public HttpDaemon( DaemonConfiguration daemonConfiguration ) {
     final HandlerCollection handlers = new HandlerCollection() ;
     handlers.addHandler( new ShutdownHandler() ) ;
-    handlers.addHandler( new FontListHandler( serverConfiguration ) ) ;
-    handlers.addHandler( new DirectoryScanHandler( serverConfiguration.getContentConfiguration() ) ) ;
-    handlers.addHandler( new DocumentHandler( serverConfiguration ) ) ;
-    handlers.addHandler( new ResourceHandler( serverConfiguration ) ) ;
-    server = new Server( httpServerPort ) ;
+    handlers.addHandler( new FontListHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    handlers.addHandler( new DirectoryScanHandler(
+        daemonConfiguration.getProducerConfiguration().getContentConfiguration() ) ) ;
+    handlers.addHandler( new DocumentHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    handlers.addHandler( new ResourceHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    server = new Server( daemonConfiguration.getPort() ) ;
     server.setHandler( handlers ) ;
   }
 
