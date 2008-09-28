@@ -25,16 +25,17 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ProducerConfiguration;
+import novelang.configuration.ConfigurationTools2;
+import novelang.configuration.BatchConfiguration;
+import novelang.configuration.parse.ArgumentsNotParsedException;
 import novelang.common.Problem;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
-import novelang.produce.RequestTools;
 import novelang.rendering.HtmlProblemPrinter;
 import novelang.system.StartupTools;
 import novelang.system.EnvironmentTools;
@@ -49,42 +50,49 @@ public class Main {
   private static Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
   private static final String PROBLEMS_FILENAME = "problems.html";
 
-  public static void main( String[] args ) throws Exception {
+  public static void main( String[] arguments ) throws Exception {
 
-    StartupTools.fixLogDirectory( args ) ;
+    StartupTools.fixLogDirectory( arguments ) ;
     EnvironmentTools.logSystemProperties() ;
 
     LOGGER = LoggerFactory.getLogger( Main.class ) ;
 
-    LOGGER.debug( "Starting {} with arguments {}",
-        ClassUtils.getShortClassName( Main.class ), asString( args ) ) ;
     try {
-      final BatchParameters parameters = BatchParameters.parse( args ) ;
-      final File targetDirectory = parameters.getTargetDirectory() ;
-      LOGGER.info( "Successfully parsed: " + parameters ) ;
+      final novelang.configuration.parse.BatchParameters parameters =
+          new novelang.configuration.parse.BatchParameters(
+              new File( SystemUtils.USER_DIR ),
+              arguments
+          )
+      ;
 
-      final ProducerConfiguration configuration = ConfigurationTools.buildServerConfiguration() ;
-      resetTargetDirectory( targetDirectory ) ;
-      final DocumentProducer documentProducer = new DocumentProducer( configuration ) ;
+      LOGGER.debug( "Starting {} with arguments {}",
+          ClassUtils.getShortClassName( Main.class ), asString( arguments ) ) ;
+
+      final BatchConfiguration configuration =
+          ConfigurationTools2.createBatchConfiguration( parameters ); ;
+      final File outputDirectory = configuration.getOutputDirectory();
+      resetTargetDirectory( outputDirectory ) ;
+      final DocumentProducer documentProducer =
+          new DocumentProducer( configuration.getProducerConfiguration() ) ;
       final List< Problem > allProblems = Lists.newArrayList() ;
 
-      for( final String unparsedRequest : parameters.getDocuments() ) {
+      for( final DocumentRequest documentRequest : configuration.getDocumentRequests() ) {
         Iterables.addAll(
             allProblems,
-            processUnparsedRequest(
-                unparsedRequest,
-                targetDirectory,
+            processDocumentRequest(
+                documentRequest,
+                outputDirectory,
                 documentProducer
             )
         ) ;
       }
       if( ! allProblems.isEmpty() ) {
-        reportProblems( targetDirectory, allProblems ) ;
+        reportProblems( outputDirectory, allProblems ) ;
         System.err.println(
-            "There were problems. See " + targetDirectory + "/" + PROBLEMS_FILENAME ) ;
+            "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
       }
 
-    } catch( ParametersException e ) {
+    } catch( ArgumentsNotParsedException e ) {
       LOGGER.error( "Parameters exception {}, printing help and exiting.", e.getMessage() ) ;
       System.err.println( e.getMessage() ) ;
       System.err.println( BatchParameters.HELP ) ;
@@ -125,15 +133,11 @@ public class Main {
     outputStream.close() ;
   }
 
-  private static Iterable< Problem > processUnparsedRequest(
-      String unparsedRequest,
+  private static Iterable< Problem > processDocumentRequest(
+      DocumentRequest documentRequest,
       File targetDirectory,
       DocumentProducer documentProducer
   ) throws IOException {
-    final DocumentRequest documentRequest = RequestTools.createDocumentRequest( unparsedRequest ) ;
-    if( null == documentRequest ) {
-      throw new IllegalArgumentException( "Could not parse: '" + unparsedRequest + "'" ) ;
-    }
     final File outputFile = createOutputFile(
         targetDirectory,
         documentRequest

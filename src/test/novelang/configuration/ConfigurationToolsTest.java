@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Set;
+import java.util.Iterator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,11 +29,13 @@ import org.apache.commons.lang.SystemUtils;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.ArgumentsNotParsedException;
 import novelang.configuration.parse.GenericParameters;
+import novelang.configuration.parse.BatchParameters;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResources;
 import novelang.TestResourceTools;
+import novelang.produce.DocumentRequest;
 import static novelang.TestResourceTools.copyResourceToDirectory;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Iterables;
@@ -52,7 +55,6 @@ public class ConfigurationToolsTest {
 // ===================
 // DaemonConfiguration
 // ===================
-
 
   @Test
   public void createDaemonConfigurationWithCustomPort()
@@ -77,10 +79,38 @@ public class ConfigurationToolsTest {
   }
 
 
+// ==================
+// BatchConfiguration
+// ==================
+
+  @Test( expected = ArgumentsNotParsedException.class )
+  public void createBatchConfigurationWithNoDocumentRequest()
+      throws ArgumentsNotParsedException, FOPException
+  {
+    ConfigurationTools2.createBatchConfiguration( createBatchParameters() ) ;
+
+  }
+
+  public void createBatchConfiguration() throws ArgumentsNotParsedException, FOPException {
+    final BatchConfiguration configuration = ConfigurationTools2.createBatchConfiguration(
+        createBatchParameters( "1.html", "2.html" ) ) ;
+
+    Assert.assertEquals( new File( SystemUtils.USER_DIR ), configuration.getOutputDirectory() ) ;
+
+    final Iterable< DocumentRequest > documentRequests = configuration.getDocumentRequests() ;
+    final Iterator<DocumentRequest> iterator = documentRequests.iterator() ;
+    Assert.assertTrue( iterator.hasNext() ) ;
+    Assert.assertEquals( "1.html", iterator.next().getDocumentSourceName() ) ;
+    Assert.assertEquals( "2.html", iterator.next().getDocumentSourceName() ) ;
+    Assert.assertFalse( iterator.hasNext() ) ;
+
+    Assert.assertNotNull( configuration.getProducerConfiguration() ) ;
+
+  }
+
 // ======================
 // RenderingConfiguration
 // ======================
-
 
   @Test
   public void createRenderingConfigurationFromDefaultsWithNoDefaultFontsDirectory()
@@ -151,7 +181,6 @@ public class ConfigurationToolsTest {
 // ProducerConfiguration
 // =====================
 
-  
   @Test
   public void createProducerConfiguration() throws ArgumentsNotParsedException, FOPException {
     final ProducerConfiguration producerConfiguration =
@@ -228,6 +257,18 @@ public class ConfigurationToolsTest {
       throws ArgumentsNotParsedException
   {
     return new DaemonParameters( baseDirectory, arguments ) ;
+  }
+
+  private final BatchParameters createBatchParameters( String... arguments )
+      throws ArgumentsNotParsedException
+  {
+    return createBatchParameters( scratchDirectory, arguments ) ;
+  }
+
+  private final BatchParameters createBatchParameters( File baseDirectory, String... arguments )
+      throws ArgumentsNotParsedException
+  {
+    return new BatchParameters( baseDirectory, arguments ) ;
   }
 
 

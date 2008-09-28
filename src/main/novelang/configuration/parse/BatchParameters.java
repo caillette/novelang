@@ -41,10 +41,12 @@ public class BatchParameters extends GenericParameters {
   private final Iterable< DocumentRequest > documentRequests ;
   private final File outputDirectory ;
 
-  public BatchParameters( File baseDirectory, String[] parameters ) throws ArgumentsNotParsedException {
+  public BatchParameters( File baseDirectory, String[] parameters )
+      throws ArgumentsNotParsedException
+  {
     super( baseDirectory, parameters );
     final String[] sourceArguments = line.getArgs() ;
-    LOGGER.debug( "found: sources = {}", Lists.< Object >newArrayList( sourceArguments ) ) ;
+    LOGGER.debug( "found: sources = {}", Lists.newArrayList( sourceArguments ) ) ;
 
     if( sourceArguments.length == 0 ) {
       throw new ArgumentsNotParsedException( "No source documents" ) ;

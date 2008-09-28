@@ -72,7 +72,7 @@ public abstract class GenericParameters {
     options.addOption( OPTION_HYPHENATION_DIRECTORY ) ;
     enrich( options ) ;
 
-    logHelp() ;
+//    logHelp() ;
 
     final CommandLineParser parser = new PosixParser() ;
     try {
@@ -209,7 +209,7 @@ public abstract class GenericParameters {
 // Commons-CLI stuff
 // =================
 
-  private void logHelp() {
+  public void logHelp() {
     final HelpFormatter helpFormatter = new HelpFormatter() ;
     final StringWriter helpWriter = new StringWriter() ;
     helpFormatter.printHelp(

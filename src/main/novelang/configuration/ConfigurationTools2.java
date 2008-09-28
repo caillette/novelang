@@ -28,10 +28,12 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FOPException;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.GenericParameters;
+import novelang.configuration.parse.BatchParameters;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
+import novelang.produce.DocumentRequest;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 
@@ -52,6 +54,7 @@ public class ConfigurationTools2 {
   public static final String DEFAULT_HYPHENATION_DIRECTORY_NAME = "hyphenation" ;
   public static final String BUNDLED_STYLE_DIR = "style" ;
   private static final String DEFAULT_STYLE_DIR = "style" ;
+  private static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
 
   private static final String DAEMON_CONFIGURATION_SHORTCLASSNAME =
       ClassUtils.getShortClassName( DaemonConfiguration.class );
@@ -106,6 +109,35 @@ public class ConfigurationTools2 {
       return producerConfiguration ;
     }
     } ;
+  }
+
+  public static BatchConfiguration createBatchConfiguration( final BatchParameters parameters )
+      throws FOPException, IllegalArgumentException
+  {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
+
+    final File outputDirectory ;
+    if( null == parameters.getOutputDirectory() ) {
+      outputDirectory = new File( parameters.getBaseDirectory(), DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
+      if( ! outputDirectory.exists() ) {
+        outputDirectory.mkdirs() ;
+      }
+    } else {
+      outputDirectory = parameters.getOutputDirectory() ;
+    }
+
+    return new BatchConfiguration() {
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+      public Iterable<DocumentRequest> getDocumentRequests() {
+        return parameters.getDocumentRequests() ;
+      }
+      public File getOutputDirectory() {
+        return outputDirectory ;
+      }
+    } ;
+
   }
 
   public static ContentConfiguration createContentConfiguration( GenericParameters parameters ) {

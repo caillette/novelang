@@ -40,6 +40,8 @@ public class StartupTools {
    * as it is required by Logback configuration for production deployment. It delegates to
    * {@link #extractLogDirectory(String[])} for finding the value out from startup arguments.
    *
+   * TODO something like <a href="http://logback.qos.ch/xref/chapter3/MyApp2.html">this</a>.
+   *
    * @param arguments A non-null array containing no nulls.
    */
   public static void fixLogDirectory( String[] arguments ) {
