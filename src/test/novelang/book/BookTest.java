@@ -211,21 +211,21 @@ public class BookTest {
         new ScratchDirectoryFixture( testName ) ;
     final File contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
 
-    oneWordFile = TestResourceTools.copyResourceToFile(
+    oneWordFile = TestResourceTools.copyResourceToDirectory(
         getClass(),
         ONE_WORD_FILENAME,
         contentDirectory
     ) ;
 
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_FILE1, contentDirectory ) ;
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_FILE2, contentDirectory ) ;
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_FILE3, contentDirectory ) ;
-    scannedBookNoStyle = TestResourceTools.copyResourceToFile(
+    scannedBookNoStyle = TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_BOOK_NOSTYLE, contentDirectory ) ;
-    scannedBookWithStyle = TestResourceTools.copyResourceToFile(
+    scannedBookWithStyle = TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_BOOK_WITHSTYLE, contentDirectory ) ;
   }
 

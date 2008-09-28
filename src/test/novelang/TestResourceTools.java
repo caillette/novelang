@@ -31,6 +31,7 @@ import java.util.MissingResourceException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,12 +123,12 @@ public final class TestResourceTools {
    * Copy a resource into given directory, creating subdirectories if resource name includes
    * a directory.
    */
-  public static File copyResourceToFile(
+  public static File copyResourceToDirectory(
       Class owningClass,
       ResourceName resourceName,
       File destinationDir
   ) {
-    return copyResourceToFile( owningClass, "/" + resourceName.getName(), destinationDir ) ;
+    return copyResourceToDirectory( owningClass, "/" + resourceName.getName(), destinationDir ) ;
   }
 
 
@@ -135,7 +136,7 @@ public final class TestResourceTools {
    * Copy a resource into given directory, creating subdirectories if resource name includes
    * a directory.
    */
-  public static File copyResourceToFile(
+  public static File copyResourceToDirectory(
       Class owningClass,
       String resourceName,
       File destinationDir
@@ -163,4 +164,15 @@ public final class TestResourceTools {
     return destinationFile ;
   }
 
+  public static File createDirectory( File parent, String name ) {
+    final File directory = new File( parent, name ) ;
+    if( ! directory.exists() ) {
+      directory.mkdirs() ;
+    }
+    org.junit.Assert.assertTrue(
+        "Could not create: '" + directory.getAbsolutePath() + "'",
+        FileUtils.waitFor( directory, 1 )
+    ) ;
+    return directory ;
+  }
 }

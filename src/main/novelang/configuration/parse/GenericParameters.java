@@ -34,6 +34,7 @@ import org.apache.commons.cli.ParseException;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.base.Objects;
 
 /**
  * Base class for command-line parameters parsing.
@@ -44,6 +45,7 @@ public abstract class GenericParameters {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericParameters.class ) ;
 
+  private final File baseDirectory ;
   private final Iterable< File > fontDirectories ;
   private final File styleDirectory ;
   private final File hyphenationDirectory ;
@@ -51,6 +53,7 @@ public abstract class GenericParameters {
 
   protected final Options options ;
   protected final CommandLine line ;
+  private String styleDirectoryDescription;
 
   public GenericParameters(
       File baseDirectory,
@@ -61,6 +64,7 @@ public abstract class GenericParameters {
     LOGGER.debug( "Base directory: ({}'", baseDirectory.getAbsolutePath() ) ;
     LOGGER.debug( "Parameters: '{}'", Lists.newArrayList( parameters ) ) ;
 
+    this.baseDirectory = Objects.nonNull( baseDirectory ) ;
     options = new Options() ;
     options.addOption( OPTION_FONT_DIRECTORIES ) ;
     options.addOption( OPTION_STYLE_DIRECTORY ) ;
@@ -101,11 +105,33 @@ public abstract class GenericParameters {
 // =======
 
   /**
+   * Return the directory used to evaluate all relative directories from.
+   * @return a non-null object.
+   */
+  public File getBaseDirectory() {
+    return baseDirectory ;
+  }
+
+  /**
+   * Returns a human-readable description of {@link #OPTION_FONT_DIRECTORIES}.
+   */
+  public String getFontDirectoriesOptionDescription() {
+    return createOptionDescription( OPTION_FONT_DIRECTORIES ) ;
+  }
+
+  /**
    * Returns the directories containing embeddable font files.
    * @return a non-null object iterating over no nulls.
    */
   public Iterable< File > getFontDirectories() {
     return fontDirectories;
+  }
+
+  /**
+   * Returns a human-readable description of {@link #OPTION_STYLE_DIRECTORY}.
+   */
+  public String getStyleDirectoryDescription() {
+    return createOptionDescription( OPTION_STYLE_DIRECTORY ) ;
   }
 
   /**
@@ -116,6 +142,12 @@ public abstract class GenericParameters {
     return styleDirectory;
   }
 
+  /**
+   * Returns a human-readable of {@link #OPTION_HYPHENATION_DIRECTORY}.
+   */
+  public String getHyphenationDirectoryOptionDescription() {
+    return createOptionDescription( OPTION_HYPHENATION_DIRECTORY ) ;
+  }
   /**
    * Returns the directory containing hyphenation files.
    * @return a null object if undefined, a reference to an existing directory otherwise.
@@ -209,8 +241,12 @@ public abstract class GenericParameters {
       .create()
   ;
 
+
+  public static final String OPTIONPREFIX = "--" ;
+  public static final String LOG_DIRECTORY_OPTION_NAME = "log-dir" ;
+
   private static final Option OPTION_LOG_DIRECTORY = OptionBuilder
-      .withLongOpt( "log-dir" )
+      .withLongOpt( LOG_DIRECTORY_OPTION_NAME )
       .withDescription( "Directory containing style files" )
       .withValueSeparator()
       .hasArg()
@@ -225,5 +261,9 @@ public abstract class GenericParameters {
       .create()
   ;
 
+
+  protected static String createOptionDescription( Option option ) {
+    return OPTIONPREFIX + option.getLongOpt() + ", " + option.getDescription() ;
+  }
 
 }

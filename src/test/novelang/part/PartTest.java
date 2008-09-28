@@ -123,20 +123,20 @@ public class PartTest {
     final File scratchDirectory = new ScratchDirectoryFixture( testName ).
         getTestScratchDirectory() ;
 
-    justSections = TestResourceTools.copyResourceToFile(
+    justSections = TestResourceTools.copyResourceToDirectory(
         getClass(),
         TestResources.JUST_SECTIONS,
         scratchDirectory
     ) ;
 
 
-    messyIdentifiersFile = TestResourceTools.copyResourceToFile(
+    messyIdentifiersFile = TestResourceTools.copyResourceToDirectory(
         getClass(),
         TestResources.MESSY_IDENTIFIERS,
         scratchDirectory
     ) ;
 
-    simpleStructureFile = TestResourceTools.copyResourceToFile(
+    simpleStructureFile = TestResourceTools.copyResourceToDirectory(
         getClass(),
         TestResources.SIMPLE_STRUCTURE,
         scratchDirectory

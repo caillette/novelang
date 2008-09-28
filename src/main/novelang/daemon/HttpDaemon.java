@@ -22,7 +22,7 @@ import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.Version;
 import novelang.system.StartupTools;
 import novelang.system.EnvironmentTools;
@@ -34,41 +34,17 @@ import novelang.system.EnvironmentTools;
  */
 public class HttpDaemon {
 
-  static {
-    StartupTools.fixLogDirectory() ;
-    StartupTools.installXalan() ;
-    EnvironmentTools.logSystemProperties() ;
-  }
-
-  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
-
+  private static Logger LOGGER ;
   private static final int HTTP_SERVER_PORT = 8080 ;
 
   private final Server server ;
 
-  public HttpDaemon( int httpServerPort, ServerConfiguration serverConfiguration ) {
-    final HandlerCollection handlers = new HandlerCollection() ;
-    handlers.addHandler( new ShutdownHandler() ) ;
-    handlers.addHandler( new FontListHandler( serverConfiguration ) ) ;
-    handlers.addHandler( new DirectoryScanHandler( serverConfiguration.getContentConfiguration() ) ) ;
-    handlers.addHandler( new DocumentHandler( serverConfiguration ) ) ;
-    handlers.addHandler( new ResourceHandler( serverConfiguration ) ) ;
-    server = new Server( httpServerPort ) ;
-    server.setHandler( handlers ) ;
-  }
-
-  public void start() throws Exception {
-    server.start() ;
-    LOGGER.info( "Server started on port {}", server.getConnectors()[ 0 ].getLocalPort() ) ;
-  }
-
-  public void stop() throws Exception {
-    final int port = server.getConnectors()[ 0 ].getLocalPort();
-    server.stop() ;
-    LOGGER.info( "Server stopped on port {}", port ) ;
-  }
-
   public static void main( String[] args ) throws Exception {
+
+    StartupTools.fixLogDirectory( args ) ;
+    StartupTools.installXalan() ;
+    LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
+    EnvironmentTools.logSystemProperties() ;
 
     final int serverPort ;
 
@@ -90,5 +66,35 @@ public class HttpDaemon {
         ConfigurationTools.buildServerConfiguration() 
     ).start() ;
   }
+
+  public HttpDaemon( int httpServerPort, ProducerConfiguration serverConfiguration ) {
+    final HandlerCollection handlers = new HandlerCollection() ;
+    handlers.addHandler( new ShutdownHandler() ) ;
+    handlers.addHandler( new FontListHandler( serverConfiguration ) ) ;
+    handlers.addHandler( new DirectoryScanHandler( serverConfiguration.getContentConfiguration() ) ) ;
+    handlers.addHandler( new DocumentHandler( serverConfiguration ) ) ;
+    handlers.addHandler( new ResourceHandler( serverConfiguration ) ) ;
+    server = new Server( httpServerPort ) ;
+    server.setHandler( handlers ) ;
+  }
+
+  private static synchronized Logger getLogger() {
+    if( null == LOGGER ) {
+      LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
+    }
+    return LOGGER ;
+  }
+
+  public void start() throws Exception {
+    server.start() ;
+    getLogger().info( "Server started on port {}", server.getConnectors()[ 0 ].getLocalPort() ) ;
+  }
+
+  public void stop() throws Exception {
+    final int port = server.getConnectors()[ 0 ].getLocalPort();
+    server.stop() ;
+    getLogger().info( "Server stopped on port {}", port ) ;
+  }
+
 
 }

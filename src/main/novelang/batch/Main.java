@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.common.Problem;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
@@ -46,15 +46,15 @@ import novelang.system.EnvironmentTools;
  */
 public class Main {
 
-  static {
-    StartupTools.fixLogDirectory() ;
-    EnvironmentTools.logSystemProperties() ;
-  }
-
   private static Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
   private static final String PROBLEMS_FILENAME = "problems.html";
 
   public static void main( String[] args ) throws Exception {
+
+    StartupTools.fixLogDirectory( args ) ;
+    EnvironmentTools.logSystemProperties() ;
+
+    LOGGER = LoggerFactory.getLogger( Main.class ) ;
 
     LOGGER.debug( "Starting {} with arguments {}",
         ClassUtils.getShortClassName( Main.class ), asString( args ) ) ;
@@ -63,7 +63,7 @@ public class Main {
       final File targetDirectory = parameters.getTargetDirectory() ;
       LOGGER.info( "Successfully parsed: " + parameters ) ;
 
-      final ServerConfiguration configuration = ConfigurationTools.buildServerConfiguration() ;
+      final ProducerConfiguration configuration = ConfigurationTools.buildServerConfiguration() ;
       resetTargetDirectory( targetDirectory ) ;
       final DocumentProducer documentProducer = new DocumentProducer( configuration ) ;
       final List< Problem > allProblems = Lists.newArrayList() ;

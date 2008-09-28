@@ -28,8 +28,9 @@ import org.mortbay.jetty.Request;
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.FontTriplet;
 import org.apache.fop.apps.FOPException;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.FopTools;
+import novelang.configuration.FopFontStatus;
 import novelang.common.Renderable;
 import novelang.part.Part;
 import novelang.produce.DocumentProducer;
@@ -52,7 +53,7 @@ public class FontListHandler extends GenericHandler{
   private static final String DOCUMENT_NAME = "/~fonts.pdf" ;
   private static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
 
-  public FontListHandler( ServerConfiguration serverConfiguration ) {
+  public FontListHandler( ProducerConfiguration serverConfiguration ) {
     documentProducer = new DocumentProducer( serverConfiguration ) ;
   }
 
@@ -67,7 +68,7 @@ public class FontListHandler extends GenericHandler{
 
       final StringBuffer textBuffer = new StringBuffer() ;
       final String nonWordCharacters = createNonWordCharactersString() ;
-      final FopTools.FontsStatus fontsStatus;
+      final FopFontStatus fontsStatus;
       try {
         fontsStatus = FopTools.createGlobalFontStatus();
         for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {

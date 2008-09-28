@@ -281,6 +281,10 @@ public class ConfigurationTools {
       public FopFactory getFopFactory() {
         return FOP_FACTORY ;
       }
+
+      public FopFontStatus getCurrentFopFontStatus() {
+        throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
+      }
     } ;
   }
 
@@ -363,8 +367,8 @@ public class ConfigurationTools {
   private static final ContentConfiguration CONTENT_CONFIGURATION =
       buildContentConfiguration() ;
 
-  public static ServerConfiguration buildServerConfiguration() {
-    return new ServerConfiguration() {
+  public static ProducerConfiguration buildServerConfiguration() {
+    return new ProducerConfiguration() {
       public RenderingConfiguration getRenderingConfiguration() {
         return RENDERING_CONFIGURATION ;
       }

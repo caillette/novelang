@@ -67,8 +67,14 @@ public class DaemonParameters extends GenericParameters {
     return port ;
   }
 
+  public String getHttpDaemonPortOptionDescription() {
+    return createOptionDescription( OPTION_HTTPDAEMON_PORT ) ;
+  }
+
+  public static final String OPTIONNAME_HTTPDAEMON_PORT = "port" ;
+
   private static final Option OPTION_HTTPDAEMON_PORT = OptionBuilder
-      .withLongOpt( "port" )
+      .withLongOpt( OPTIONNAME_HTTPDAEMON_PORT )
       .withDescription( "TCP port for daemon" )
       .hasArg()
       .create()

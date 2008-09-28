@@ -17,34 +17,10 @@
 
 package novelang.configuration;
 
-import java.io.File;
-
-import org.apache.fop.apps.FopFactory;
-import novelang.loader.ResourceLoader;
-
 /**
  * @author Laurent Caillette
  */
-public interface RenderingConfiguration {
-
-  /**
-   * Returns the {@code ResourceLoader} for stylesheets and companion files.
-   * @return a non-null object.
-   */
-  ResourceLoader getResourceLoader() ;
-
-  /**
-   * Returns the directory where some renderers should find fonts.
-   * @return a possibly null object.
-   */
-  FopFactory getFopFactory() ;
-
-  /**
-   * Returns a descriptor of current FOP's font status regarding initial settings like
-   * directories, but reflecting latest changes inside those directories.
-   * 
-   * @return a possibly null object.
-   */
-  FopFontStatus getCurrentFopFontStatus() ;
-
+public interface ProducerConfiguration {
+  RenderingConfiguration getRenderingConfiguration() ;
+  ContentConfiguration getContentConfiguration() ;
 }

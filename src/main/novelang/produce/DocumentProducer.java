@@ -24,7 +24,7 @@ import java.io.FileNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.common.FileTools;
 import novelang.loader.ResourceName;
 import novelang.common.Problem;
@@ -60,7 +60,7 @@ public class DocumentProducer {
     this.renderingConfiguration = renderingConfiguration;
   }
 
-  public DocumentProducer( ServerConfiguration configuration ) {
+  public DocumentProducer( ProducerConfiguration configuration ) {
     this(
         configuration.getContentConfiguration().getContentRoot(),
         configuration.getRenderingConfiguration()

@@ -23,10 +23,8 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.commons.io.FileUtils;
 import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
 import com.google.common.collect.Lists;
 
 /**
@@ -163,10 +161,10 @@ public class ParametersTest {
     scratchDirectory =
         new ScratchDirectoryFixture( ParametersTest.class ).getTestScratchDirectory() ;
 
-    directoryAaa = createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
-    directoryBbb = createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
-    directoryCcc = createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
-    directoryCccDdd = createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
+    directoryAaa = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
+    directoryBbb = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
+    directoryCcc = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
+    directoryCccDdd = TestResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
 
     assertTrue( directoryAaa.exists() ) ;
     assertTrue( directoryBbb.exists() ) ;
@@ -174,15 +172,4 @@ public class ParametersTest {
     assertTrue( directoryCccDdd.exists() ) ;
   }
 
-  private static File createDirectory( File parent, String name ) {
-    final File directory = new File( parent, name ) ;
-    if( ! directory.exists() ) {
-      directory.mkdir() ;
-    }
-    assertTrue(
-        "Could not create: '" + directory.getAbsolutePath() + "'",
-        FileUtils.waitFor( directory, 1 )
-    ) ;
-    return directory ;
-  }
 }

@@ -16,35 +16,41 @@
  */
 package novelang.system;
 
-import org.apache.commons.lang.StringUtils;
+import java.io.File;
+
+import novelang.configuration.parse.GenericParameters;
 
 /**
  * Helps logging system to initialize correctly.
  * <p>
- * The {@link #fixLogDirectory()} method must be called before any logging operation in order
- * to force definition of {@link #LOG_DIR_SYSTEMPROPERTYNAME} system property if it was not
- * user-defined.
+ * The {@link #fixLogDirectory(String[])} method must be called before any logging operation
+ * in order to force definition of {@link #LOG_DIR_SYSTEMPROPERTYNAME} system property
+ * if it was not user-defined from startup arguments.
  *
  * @author Laurent Caillette
  */
 public class StartupTools {
 
-  /**
-   * The {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property is required by Logback configuration
-   * file used for production deployment.
-   */
-  public static final String LOG_DIR_SYSTEMPROPERTYNAME = "novelang.log.dir" ;
   private static final String DEFAULT_LOG_DIR = ".";
 
-  public static void fixLogDirectory() {
+  public static final String LOG_DIR_SYSTEMPROPERTYNAME = "novelang.log.dir" ;
 
-    final String logDir = System.getProperty( StartupTools.LOG_DIR_SYSTEMPROPERTYNAME ) ;
-    if( StringUtils.isBlank( logDir ) ) {
+  /**
+   * This method sets the value of the {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property
+   * as it is required by Logback configuration for production deployment. It delegates to
+   * {@link #extractLogDirectory(String[])} for finding the value out from startup arguments.
+   *
+   * @param arguments A non-null array containing no nulls.
+   */
+  public static void fixLogDirectory( String[] arguments ) {
+
+    final File logDirectory = extractLogDirectory( arguments ) ;
+    if( null == logDirectory ) {
       System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, DEFAULT_LOG_DIR ) ;
     } else {
       System.out.println( "System property [" +
           StartupTools.LOG_DIR_SYSTEMPROPERTYNAME + "] ='" +
-          System.getProperty( StartupTools.LOG_DIR_SYSTEMPROPERTYNAME ) + "'"
+          System.getProperty( logDirectory.getAbsolutePath() ) + "'"
       ) ;
 
     }
@@ -72,6 +78,31 @@ public class StartupTools {
         org.apache.xerces.jaxp.SAXParserFactoryImpl.class.getName()
     ) ;
     
+  }
+
+  /**
+   * This extract the option value for log directory the same way {@link GenericParameters}
+   * does, with hand-written parsing. The difference is, this function doesn't perform
+   * any log operation, thus not triggering logging configuration before logging is set
+   * as it should.
+   *
+   * @param startupArguments
+   * @return null if there was no such option.
+   */
+  public static File extractLogDirectory( String[] startupArguments ) {
+    final String logDirectoryOption =
+        GenericParameters.OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ;
+    for( int i = 0 ; i < startupArguments.length - 1 ; i++ ) {
+      final String startupArgument = startupArguments[ i ] ;
+      if( logDirectoryOption.equals( startupArgument ) ) {
+        final String directoryName = startupArguments[ i + 1 ] ;
+        final File directory = new File( directoryName ) ;
+        if( directory.exists() ) {
+          return directory ;
+        }
+      }
+    }
+    return null ;
   }
 
 }

@@ -14,13 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.configuration;
 
+import java.util.Map;
+
+import org.apache.fop.fonts.EmbedFontInfo;
+
 /**
+ * Describes what default {@code FopFactory} knows about its fonts.
+ *
+ * @see FopTools#createGlobalFontStatus()
+ *
  * @author Laurent Caillette
- */
-public interface ServerConfiguration {
-  RenderingConfiguration getRenderingConfiguration() ;
-  ContentConfiguration getContentConfiguration() ;
+*/
+public final class FopFontStatus {
+
+  private final Iterable< EmbedFontInfo > fontInfos ;
+  private final Map< String, EmbedFontInfo > failedFonts ;
+
+  public FopFontStatus(
+      Iterable< EmbedFontInfo > fontInfos,
+      Map< String, EmbedFontInfo > failedFonts
+  ) {
+    this.fontInfos = fontInfos;
+    this.failedFonts = failedFonts;
+  }
+
+  public Iterable< EmbedFontInfo > getFontInfos() {
+    return fontInfos ;
+  }
+
+  public Map< String, EmbedFontInfo > getFailedFonts() {
+    return failedFonts ;
+  }
 }

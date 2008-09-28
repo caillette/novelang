@@ -47,6 +47,7 @@
       <entry name="*.xsl" />
       <entry name="*.txt" />
       <entry name="*__.g" />
+      <entry name="*.ttf" />
     </wildcardResourcePatterns>
   </component>
   <component name="DependenciesAnalyzeManager">

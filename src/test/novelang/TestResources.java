@@ -22,8 +22,9 @@ import java.io.File;
 import org.apache.fop.apps.FopFactory;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.ConfigurationTools;
+import novelang.configuration.FopFontStatus;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
@@ -52,6 +53,15 @@ public class TestResources {
   public static final String SCANNED_FILE2 = SCANNED_DIR + "/file2.nlp" ;
   public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
   public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
+
+  public static final String FONT_STRUCTURE_DIR = "/fonts-structure" ;
+  public static final String FONTS_DIR = FONT_STRUCTURE_DIR + "/fonts" ;
+  public static final String FONT_FILE_GOOD_1 = FONTS_DIR + "/Bitstream-Vera-Sans-Mono.ttf" ;
+  public static final String FONT_FILE_GOOD_2 = FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold.ttf" ;
+  public static final String FONT_FILE_PARENT_CHILD_3 =
+      FONT_STRUCTURE_DIR + "/parent/child/Bitstream-Vera-Sans-Mono-Oblique.ttf" ;
+  public static final String FONT_FILE_PARENT_CHILD_BAD =
+      FONT_STRUCTURE_DIR + "/parent/child/Bad.ttf" ;
 
   public static final String NODESET_DIR = "/numbering";
   public static final ResourceName NODESET_XSL = new ResourceName( "numbering.xsl" ) ;
@@ -88,18 +98,18 @@ public class TestResources {
 
 
   public static void copyServedResources( File contentDirectory ) {
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         TestResources.class, SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
 
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         TestResources.class, SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
 
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         TestResources.class, SERVED_BOOK_ALTERNATESTYLESHEET, contentDirectory ) ;
 
   }
 
-  public static ServerConfiguration createServerConfiguration(
+  public static ProducerConfiguration createServerConfiguration(
       final File contentDirectory,
       final String styleDirectoryName,
       final boolean shouldAddClasspathResourceLoader
@@ -116,7 +126,7 @@ public class TestResources {
       resourceLoader = customResourceLoader ;
     }
 
-    return new ServerConfiguration() {
+    return new ProducerConfiguration() {
 
       public RenderingConfiguration getRenderingConfiguration() {
         return new RenderingConfiguration() {
@@ -127,9 +137,9 @@ public class TestResources {
             return FopFactory.newInstance() ;
           }
 
-//          public Iterable< FontDescriptor > getFontDescriptors() {
-//            return Iterables.emptyIterable() ;
-//          }
+          public FopFontStatus getCurrentFopFontStatus() {
+            throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
+          }
         } ;
       }
 
@@ -145,7 +155,7 @@ public class TestResources {
   }
 
 
-  public static ServerConfiguration createServerConfiguration(
+  public static ProducerConfiguration createServerConfiguration(
       final File contentDirectory,
       final String styleDirectoryName
   ) {
