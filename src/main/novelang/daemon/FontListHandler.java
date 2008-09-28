@@ -31,6 +31,7 @@ import org.apache.fop.apps.FOPException;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.FopTools;
 import novelang.configuration.FopFontStatus;
+import novelang.configuration.RenderingConfiguration;
 import novelang.common.Renderable;
 import novelang.part.Part;
 import novelang.produce.DocumentProducer;
@@ -50,11 +51,13 @@ public class FontListHandler extends GenericHandler{
   private static final Logger LOGGER = LoggerFactory.getLogger( FontListHandler.class ) ;
 
   private final DocumentProducer documentProducer ;
+  private final RenderingConfiguration renderingConfiguration ;
   private static final String DOCUMENT_NAME = "/~fonts.pdf" ;
   private static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
 
   public FontListHandler( ProducerConfiguration producerConfiguration ) {
     documentProducer = new DocumentProducer( producerConfiguration ) ;
+    renderingConfiguration = producerConfiguration.getRenderingConfiguration() ;
   }
 
   protected void doHandle( 
@@ -69,26 +72,22 @@ public class FontListHandler extends GenericHandler{
       final StringBuffer textBuffer = new StringBuffer() ;
       final String nonWordCharacters = createNonWordCharactersString() ;
       final FopFontStatus fontsStatus;
-      try {
-        fontsStatus = FopTools.createGlobalFontStatus();
-        for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
-          for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
-            final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject;
-            textBuffer
-                .append( "=== \"" ).append( fontTriplet.getName() ).append( "\"")
-                .append( "[style:" ).append( fontTriplet.getStyle() ).append( "]" )
-                .append( "[weight:" ).append( fontTriplet.getWeight() ).append( "]" )
-                .append( "``" ).append( fontInfo.getEmbedFile() ).append( "``" )
-                .append( "\n\n" )
-                .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
-                .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
-                .append( "0123456789" ).append( "\n\n" )
-                .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
-                ;
-          }
+      fontsStatus = renderingConfiguration.getCurrentFopFontStatus() ;
+      for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
+        for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
+          final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject;
+          textBuffer
+              .append( "=== \"" ).append( fontTriplet.getName() ).append( "\"")
+              .append( "[style:" ).append( fontTriplet.getStyle() ).append( "]" )
+              .append( "[weight:" ).append( fontTriplet.getWeight() ).append( "]" )
+              .append( "``" ).append( fontInfo.getEmbedFile() ).append( "``" )
+              .append( "\n\n" )
+              .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
+              .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
+              .append( "0123456789" ).append( "\n\n" )
+              .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
+              ;
         }
-      } catch( FOPException e ) {
-        throw new ServletException( e ) ;
       }
 
       LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
