@@ -225,8 +225,10 @@ public abstract class GenericParameters {
     LOGGER.debug( "Help is:\n" + helpWriter.toString() ) ;
   }
 
+  public static final String OPTIONNAME_FONT_DIRECTORIES = "font-dirs" ;
+
   private static final Option OPTION_FONT_DIRECTORIES = OptionBuilder
-      .withLongOpt( "font-dirs" )
+      .withLongOpt( OPTIONNAME_FONT_DIRECTORIES )
       .withDescription( "Directories containing embeddable fonts" )
       .withValueSeparator()
       .hasArgs()

@@ -54,14 +54,28 @@ public class TestResources {
   public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
   public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
 
+
+  
+
   public static final String FONT_STRUCTURE_DIR = "/fonts-structure" ;
-  public static final String FONTS_DIR = FONT_STRUCTURE_DIR + "/fonts" ;
-  public static final String FONT_FILE_GOOD_1 = FONTS_DIR + "/Bitstream-Vera-Sans-Mono.ttf" ;
-  public static final String FONT_FILE_GOOD_2 = FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold.ttf" ;
-  public static final String FONT_FILE_PARENT_CHILD_3 =
+
+  public static final String DEFAULT_FONTS_DIR = FONT_STRUCTURE_DIR + "/fonts" ;
+  public static final String FONT_FILE_DEFAULT_1 = DEFAULT_FONTS_DIR + "/Bitstream-Vera-Sans-Mono.ttf" ;
+  public static final String FONT_FILE_DEFAULT_2 = DEFAULT_FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold.ttf" ;
+
+  public static final String ALTERNATE_FONTS_DIR_NAME = "alternate" ;
+  public static final String ALTERNATE_FONTS_DIR =
+      FONT_STRUCTURE_DIR + "/" + ALTERNATE_FONTS_DIR_NAME ;
+  public static final String FONT_FILE_ALTERNATE =
+      ALTERNATE_FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold-Oblique.ttf" ;
+
+  public static final String FONT_FILE_PARENT_CHILD =
       FONT_STRUCTURE_DIR + "/parent/child/Bitstream-Vera-Sans-Mono-Oblique.ttf" ;
   public static final String FONT_FILE_PARENT_CHILD_BAD =
       FONT_STRUCTURE_DIR + "/parent/child/Bad.ttf" ;
+
+
+
 
   public static final String NODESET_DIR = "/numbering";
   public static final ResourceName NODESET_XSL = new ResourceName( "numbering.xsl" ) ;

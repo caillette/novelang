@@ -35,6 +35,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.junit.Assert;
 import novelang.loader.ResourceName;
 
 /**
@@ -173,6 +174,19 @@ public final class TestResourceTools {
         "Could not create: '" + directory.getAbsolutePath() + "'",
         FileUtils.waitFor( directory, 1 )
     ) ;
+    return directory ;
+  }
+
+  public static File getDirectoryForSure( File parent, String name ) {
+    final File directory = new File( parent, name ) ;
+    Assert.assertTrue(
+        "Does not exist: '" + directory.getAbsolutePath() + "'",
+        directory.exists()
+    ) ;
+    Assert.assertTrue(
+        "Not a directory: '" + directory.getAbsolutePath() + "'",
+        directory.isDirectory() 
+    ); ;
     return directory ;
   }
 }

@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FOPException;
 import novelang.configuration.parse.DaemonParameters;
@@ -55,8 +56,22 @@ public class ConfigurationTools2 {
   private static final String DAEMON_CONFIGURATION_SHORTCLASSNAME =
       ClassUtils.getShortClassName( DaemonConfiguration.class );
 
-  public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters ) {
-    throw new UnsupportedOperationException( "createProducerConfiguration" ) ;
+  public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters )
+      throws FOPException
+  {
+    final RenderingConfiguration renderingConfiguration =
+        createRenderingConfiguration( parameters ) ;
+    final ContentConfiguration contentConfiguration =
+        createContentConfiguration( parameters ) ;
+
+    return new ProducerConfiguration() {
+      public RenderingConfiguration getRenderingConfiguration() {
+        return renderingConfiguration ;
+      }
+      public ContentConfiguration getContentConfiguration() {
+        return contentConfiguration ;
+      }
+    };
   }
 
   public static DaemonConfiguration createDaemonConfiguration( DaemonParameters parameters ) {
@@ -86,7 +101,11 @@ public class ConfigurationTools2 {
   }
 
   public static ContentConfiguration createContentConfiguration( GenericParameters parameters ) {
-    throw new UnsupportedOperationException( "createContentConfiguration" ) ;
+    return new ContentConfiguration() {
+      public File getContentRoot() {
+        return new File( SystemUtils.USER_DIR ) ;
+      }
+    } ;
   }
 
   public static RenderingConfiguration createRenderingConfiguration( GenericParameters parameters )

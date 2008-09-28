@@ -19,22 +19,21 @@ package novelang.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.apache.fop.apps.FOPException;
-import org.apache.fop.fonts.EmbedFontInfo;
+import org.apache.commons.lang.SystemUtils;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.ArgumentsNotParsedException;
+import novelang.configuration.parse.GenericParameters;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 import novelang.ScratchDirectoryFixture;
-import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.TestResourceTools;
 import static novelang.TestResourceTools.copyResourceToDirectory;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Iterables;
 
@@ -44,6 +43,11 @@ import com.google.common.collect.Iterables;
  * @author Laurent Caillette
  */
 public class ConfigurationToolsTest {
+
+// ===================
+// DaemonConfiguration
+// ===================
+
 
   @Test
   public void createDaemonConfigurationWithCustomPort() throws ArgumentsNotParsedException {
@@ -63,16 +67,22 @@ public class ConfigurationToolsTest {
     Assert.assertEquals( ConfigurationTools2.DEFAULT_HTTP_DAEMON_PORT, configuration.getPort() ) ;
   }
 
+
+// ======================
+// RenderingConfiguration
+// ======================
+
+
   @Test
   public void createRenderingConfigurationFromDefaultsWithNoDefaultFontsDirectory()
-      throws ArgumentsNotParsedException, FOPException
-  {
-    // Base directory has no 'fonts' subdirectory!
+      throws ArgumentsNotParsedException, FOPException, MalformedURLException {
+    // 'fonts' directory has no 'fonts' subdirectory!
     final RenderingConfiguration renderingConfiguration = ConfigurationTools2
         .createRenderingConfiguration( createDaemonParameters( defaultFontsDirectory ) ) ;
+
     Assert.assertNotNull( renderingConfiguration.getResourceLoader() ) ;
     Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
-    Assert.assertNotNull( renderingConfiguration.getCurrentFopFontStatus() ) ;
+    checkAllFontsAreGood( renderingConfiguration.getCurrentFopFontStatus() ) ;
   }
 
   @Test
@@ -83,17 +93,82 @@ public class ConfigurationToolsTest {
     final RenderingConfiguration renderingConfiguration = ConfigurationTools2
         .createRenderingConfiguration(
             createDaemonParameters( defaultFontsDirectory.getParentFile() ) ) ;
+
     Assert.assertNotNull( renderingConfiguration.getResourceLoader() ) ;
     Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
+    checkAllFontsAreGood(
+        renderingConfiguration.getCurrentFopFontStatus(),
+        FONT_FILE_DEFAULT_1,
+        FONT_FILE_DEFAULT_2
+    ) ;
 
-    final FopFontStatus fontStatus = renderingConfiguration.getCurrentFopFontStatus() ;
+  }
+
+  @Test
+  public void createRenderingConfigurationFromCustomFontsDirectory()
+      throws ArgumentsNotParsedException, FOPException, MalformedURLException
+  {
+    final DaemonParameters parameters = createDaemonParameters(
+        fontStructureDirectory,
+        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_FONT_DIRECTORIES,
+        ALTERNATE_FONTS_DIR_NAME
+    ) ;
+    final RenderingConfiguration renderingConfiguration = ConfigurationTools2
+        .createRenderingConfiguration( parameters ) ;
+
+    Assert.assertNotNull( renderingConfiguration.getResourceLoader() ) ;
+    Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
+    checkAllFontsAreGood(
+        renderingConfiguration.getCurrentFopFontStatus(),
+        FONT_FILE_ALTERNATE
+    ) ;
+
+  }
+
+
+// ====================
+// ContentConfiguration
+// ====================
+
+  @Test
+  public void createContentConfiguration() throws ArgumentsNotParsedException {
+    final ContentConfiguration contentConfiguration =
+        ConfigurationTools2.createContentConfiguration( createDaemonParameters() ) ;
+    Assert.assertEquals( new File( SystemUtils.USER_DIR ), contentConfiguration.getContentRoot() ) ; 
+  }
+
+
+// =====================
+// ProducerConfiguration
+// =====================
+
+  
+  @Test
+  public void createProducerConfiguration() throws ArgumentsNotParsedException, FOPException {
+    final ProducerConfiguration producerConfiguration =
+        ConfigurationTools2.createProducerConfiguration( createDaemonParameters() ) ;
+    Assert.assertNotNull( producerConfiguration ) ;
+    Assert.assertNotNull( producerConfiguration.getContentConfiguration() ) ;
+    Assert.assertNotNull( producerConfiguration.getRenderingConfiguration() ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private void checkAllFontsAreGood( FopFontStatus fontStatus, String... relativeFontNames )
+      throws MalformedURLException
+  {
     final Iterable< String > embedFilesIterable = Iterables.transform(
-        fontStatus.getFontInfos(), FopTools.EXTRACT_EMBEDFONTINFO_FUNCTION ) ;
+        fontStatus.getFontInfos(),
+        FopTools.EXTRACT_EMBEDFONTINFO_FUNCTION
+    ) ;
     final Set< String > embedFilesSet = Sets.newHashSet( embedFilesIterable ) ;
-
-    Assert.assertEquals( 2, embedFilesSet.size() ) ;
-    Assert.assertTrue( embedFilesSet.contains( createFontFileUrl( FONT_FILE_GOOD_1 ) ) ) ;
-    Assert.assertTrue( embedFilesSet.contains( createFontFileUrl( FONT_FILE_GOOD_2 ) ) ) ;
+    Assert.assertEquals( relativeFontNames.length, embedFilesSet.size() ) ;
+    for( String relativeFontName : relativeFontNames ) {
+      Assert.assertTrue( embedFilesSet.contains( createFontFileUrl( relativeFontName ) ) ) ;
+    }
 
   }
 
@@ -102,30 +177,35 @@ public class ConfigurationToolsTest {
         + fontFileName.substring( 1 );
   }
 
-// =======
-// Fixture
-// =======
-
-  private static final String FONT_FILE_GOOD_1 = TestResources.FONT_FILE_GOOD_1;
-  private static final String FONT_FILE_GOOD_2 = TestResources.FONT_FILE_GOOD_2;
-  private static final String FONT_FILE_PARENT_CHILD_3 = TestResources.FONT_FILE_PARENT_CHILD_3;
-  private static final String FONT_FILE_PARENT_CHILD_BAD = TestResources.FONT_FILE_PARENT_CHILD_BAD;
+  private static final String FONT_STRUCTURE_DIR = TestResources.FONT_STRUCTURE_DIR ;
+  private static final String DEFAULT_FONTS_DIR = TestResources.DEFAULT_FONTS_DIR ;
+  private static final String FONT_FILE_DEFAULT_1 = TestResources.FONT_FILE_DEFAULT_1 ;
+  private static final String FONT_FILE_DEFAULT_2 = TestResources.FONT_FILE_DEFAULT_2 ;
+  private static final String ALTERNATE_FONTS_DIR_NAME = TestResources.ALTERNATE_FONTS_DIR_NAME ;
+  private static final String FONT_FILE_ALTERNATE = TestResources.FONT_FILE_ALTERNATE ;
+  private static final String FONT_FILE_PARENT_CHILD = TestResources.FONT_FILE_PARENT_CHILD ;
+  private static final String FONT_FILE_PARENT_CHILD_BAD =
+      TestResources.FONT_FILE_PARENT_CHILD_BAD ;
 
   private final File scratchDirectory ;
+  private final File fontStructureDirectory ;
   private final File defaultFontsDirectory ;
 
   public ConfigurationToolsTest() throws IOException {
     scratchDirectory = new ScratchDirectoryFixture( ConfigurationToolsTest.class )
         .getTestScratchDirectory() ;
 
-
-    copyResourceToDirectory( getClass(), FONT_FILE_GOOD_1, scratchDirectory ) ;
-    copyResourceToDirectory( getClass(), FONT_FILE_GOOD_2, scratchDirectory ) ;
-    copyResourceToDirectory( getClass(), FONT_FILE_PARENT_CHILD_3, scratchDirectory ) ;
+    copyResourceToDirectory( getClass(), FONT_FILE_DEFAULT_1, scratchDirectory ) ;
+    copyResourceToDirectory( getClass(), FONT_FILE_DEFAULT_2, scratchDirectory ) ;
+    copyResourceToDirectory( getClass(), FONT_FILE_ALTERNATE, scratchDirectory ) ;
+    copyResourceToDirectory( getClass(), FONT_FILE_PARENT_CHILD, scratchDirectory ) ;
     copyResourceToDirectory( getClass(), FONT_FILE_PARENT_CHILD_BAD, scratchDirectory ) ;
 
-    defaultFontsDirectory = new File( scratchDirectory, TestResources.FONTS_DIR ) ;
-    Assert.assertTrue( defaultFontsDirectory.exists() ) ;
+    defaultFontsDirectory = TestResourceTools.getDirectoryForSure(
+        scratchDirectory, DEFAULT_FONTS_DIR ) ;
+
+    fontStructureDirectory = TestResourceTools.getDirectoryForSure(
+        scratchDirectory, FONT_STRUCTURE_DIR ) ;
 
   }
 
