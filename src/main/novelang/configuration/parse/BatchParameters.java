@@ -33,6 +33,7 @@ import com.google.common.collect.ImmutableList;
  * Parses command-line arguments for {@link novelang.batch.Main}.
  *
  * TODO support a --flatten-ouput option as rendered documents go in the same path as sources.
+ * TODO write test ensuring that absolute and relative directories are correctly handled.
  *
  * @author Laurent Caillette
  */

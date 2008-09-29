@@ -1,17 +1,44 @@
 *** Novelang HTTP daemon miscellaneous features
 
-=== Set TCP port
+=== The ``--port`` option
 
 The ``--port`` option sets the TCP port of which the daemon listens to:
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar --port 8083
+java -jar $NOVELANG_DIR/novelang-VERSION.jar --port=8083
 >>>
 
 Then URL for accessing documents becomes something like:
 
 <<<
 http://localhost:8083/mydocument.html
+>>>
+
+=== The ``--log-dir`` option
+
+The ``--log-dir`` option sets where Novelang daemon writes its log files.
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar --log-dir=logs
+>>>
+
+
+=== The ``--font-dirs`` option
+
+The ``--font-dirs`` option sets multiple directories where Novelang daemon looks for fonts. On Mac OS X and Unix, use a colon as path separator.
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar 
+  --font-dirs=my/fonts-1:/Users/Shared/Fonts
+>>>
+
+
+=== The ``--hyphenation-dir`` option
+
+The ``--hyphenation-dir`` option sets where Novelang should attempt to load hyphenation files from.
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar --hyphenation-dir=my/directory
 >>>
 
 
