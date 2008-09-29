@@ -14,232 +14,203 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.configuration;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.net.MalformedURLException;
 
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.avalon.framework.configuration.MutableConfiguration;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.SystemUtils;
-import org.apache.fop.apps.FOPException;
-import org.apache.fop.apps.FopFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableList;
-import novelang.loader.ClasspathResourceLoader;
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.SystemUtils;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.FOPException;
+import novelang.configuration.parse.DaemonParameters;
+import novelang.configuration.parse.GenericParameters;
+import novelang.configuration.parse.BatchParameters;
 import novelang.loader.ResourceLoader;
+import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
+import novelang.produce.DocumentRequest;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
 
 /**
- * Builds objects describing how to configure other components.
- *
- * <p>
- * {@link #buildRenderingConfiguration()} creates a {@link ResourceLoader} which attempts to
- * load resources by looking at, in order:
- * <ol>
- *   <li>Directory as given by System property <tt>{@value #NOVELANG_STYLE_DIR_PROPERTYNAME}</tt>
- *       (maybe absolute or relative to System property {@code user.dir}).
- *   <li>Directory named <tt>{@value #USER_STYLE_DIR}</tt> under current directory
- *       (relative to System property {@code user.dir}).
- *   <li>Application classpath, looking for a resource inside <tt>/{@value #BUNDLED_STYLE_DIR}</tt>
- *       directory.
- * </ol>
- *
- * <p>
- * {@link #buildRenderingConfiguration()} also creates a {@link FopFactory} relying on fonts
- * in {@value #FONTS_DEFAULT_DIRECTORYNAME} if such directory is declared through a mechanism
- * similar to the one defined above.
- * <p>
- * TODO Use some kind of bean to encapsulate command-line arguments instead of relying
- *   on system properties.
- *
- *
+ * Creates various Configuration objects from {@link GenericParameters}.
+ * The main contract of this class is that for each created Configuration object, all information
+ * needed is held by the Parameters object. No access to system property, no static variable, no
+ * hidden state.
+ *  
  * @author Laurent Caillette
  */
 public class ConfigurationTools {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( ConfigurationTools.class ) ;
 
-  private ConfigurationTools() { }
-
-
-// =========
-// Rendering
-// =========
-
+  public static final int DEFAULT_HTTP_DAEMON_PORT = 8080 ;
+  public static final String DEFAULT_FONTS_DIRECTORY_NAME = "fonts" ;
+  public static final String DEFAULT_HYPHENATION_DIRECTORY_NAME = "hyphenation" ;
   public static final String BUNDLED_STYLE_DIR = "style" ;
-  private static final String USER_STYLE_DIR = "style" ;
-  protected static final String NOVELANG_STYLE_DIR_PROPERTYNAME = "novelang.style.dir" ;
+  private static final String DEFAULT_STYLE_DIR = "style" ;
+  private static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
 
+  private static final String DAEMON_CONFIGURATION_SHORTCLASSNAME =
+      ClassUtils.getShortClassName( DaemonConfiguration.class );
 
-  protected static final String FONTS_DEFAULT_DIRECTORYNAME = "fonts" ;
-  protected static final String FONTS_DIRS_PROPERTYNAME = "novelang.fonts.dir" ;
+  public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters )
+      throws FOPException
+  {
+    final RenderingConfiguration renderingConfiguration =
+        createRenderingConfiguration( parameters ) ;
+    final ContentConfiguration contentConfiguration =
+        createContentConfiguration( parameters ) ;
 
-  protected static final String FOP_HYPHENATION_DEFAULT_DIRECTORYNAME = "hyphenation" ;
-  protected static final String FOP_HYPHENATION_DIR_PROPERTYNAME = "novelang.fop.hyphenation.dir" ;
-
-  protected static final FopFactory FOP_FACTORY ;
-
-  private static final ResourceLoader STYLE_RESOURCE_LOADER;
-
-  private static File resolveDirectory(
-      String topicName,
-      String customDirectoryPropertyName,
-      String defaultSubdirectoryName,
-      boolean create
-  ) {
-
-    final File directory;
-
-    // First use system property.
-    final String dirNameBySystemProperty =
-        System.getProperty( customDirectoryPropertyName ) ;
-
-
-    if( StringUtils.isBlank( dirNameBySystemProperty ) ) {
-
-      final File styleDirAsSubdirectory = new File( defaultSubdirectoryName ) ;
-
-      // Second use {user.dir}/xxx
-      if( styleDirAsSubdirectory.exists() ) {
-        try {
-          directory = styleDirAsSubdirectory.getCanonicalFile() ;
-          LOGGER.info(
-              "Directory for " + topicName + " set to '" + directory + "' "
-            + "(found '" + defaultSubdirectoryName + "' directory under [user.dir] "
-            + "and no system property [" + customDirectoryPropertyName + "])."
-          ) ;
-
-        } catch( IOException e ) {
-          throw new RuntimeException( e ) ;
-        }
-      } else {
-        LOGGER.warn(
-            "Cannot find directory for " + topicName + " "
-          + "(no '" + defaultSubdirectoryName + "' directory found under [user.dir], "
-          + "nor system property [" + customDirectoryPropertyName + "])."
-
-        ) ;
-        directory = createIfRequired( styleDirAsSubdirectory, create ) ;
+    return new ProducerConfiguration() {
+      public RenderingConfiguration getRenderingConfiguration() {
+        return renderingConfiguration ;
       }
-    } else {
-      final File dir = new File( dirNameBySystemProperty ) ;
-      if( dir.exists() ) {
-        try {
-          directory = dir.getCanonicalFile() ;
-        } catch( IOException e ) {
-          throw new RuntimeException( e ) ;
-        }
-        LOGGER.info(
-            "Directory for " + topicName + " set to '" + directory.getAbsolutePath() + "' " +
-            "(from system property [" + customDirectoryPropertyName + "])."
-        ) ;
-      } else {
-        LOGGER.warn(
-            "Directory '" + dirNameBySystemProperty + "' for " + topicName + " does not exist "
-          + "(was set as system property [" + customDirectoryPropertyName + "])."
-        ) ;
-        directory = createIfRequired( dir, create ) ;
+      public ContentConfiguration getContentConfiguration() {
+        return contentConfiguration ;
       }
-
-    }
-
-    return directory;
+    };
   }
 
-  private static File createIfRequired(
-      File styleDirAsSubdirectory,
-      boolean create
-  ) {
-    if( create ) {
-      if( styleDirAsSubdirectory.mkdir() ) {
-        LOGGER.error(
-            "Created '{}' anyways.",
-            styleDirAsSubdirectory.getAbsolutePath()
-        ) ;
-        return styleDirAsSubdirectory ;
-      } else {
-        LOGGER.error(
-            "Creation of '{}' failed for an unknown reason.",
-            styleDirAsSubdirectory.getAbsolutePath()
-        ) ;
-        return null ;
-      }
+  public static DaemonConfiguration createDaemonConfiguration( DaemonParameters parameters )
+      throws FOPException
+  {
+
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
+
+    final int port ;
+    final Integer customPort = parameters.getHttpDaemonPort() ;
+    if( null == customPort ) {
+      port = DEFAULT_HTTP_DAEMON_PORT ;
+      LOGGER.info(
+          "Creating " + DAEMON_CONFIGURATION_SHORTCLASSNAME
+        + " from default value [" + DEFAULT_HTTP_DAEMON_PORT + "] "
+        + "(option not set: " + parameters.getHttpDaemonPortOptionDescription() + ")."
+
+      ) ;
     } else {
-      return null ;
+      port = customPort ;
+      LOGGER.info(
+          "Creating " + DAEMON_CONFIGURATION_SHORTCLASSNAME + " "
+        + "with custom value '" + customPort + "' "
+        + "(from option: " + parameters.getHttpDaemonPortOptionDescription() + ")."
+      ) ;
     }
+
+    return new DaemonConfiguration() {
+      public int getPort() {
+        return port ;
+      }public ProducerConfiguration getProducerConfiguration() {
+      return producerConfiguration ;
+    }
+    } ;
   }
 
+  public static BatchConfiguration createBatchConfiguration( final BatchParameters parameters )
+      throws FOPException, IllegalArgumentException
+  {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
 
-  private static final Iterable< File > FONTS_DIRECTORIES ;
-
-  static {
-
-    final File userDirectory = new File( System.getProperty( "user.dir" ) ) ;
-
-    LOGGER.info(
-        "Configuration resolving relative directories from '{}'.",
-        userDirectory.getAbsolutePath()
-    ) ;
-
-
-    final String declaredFontDirectories = System.getProperty( FONTS_DIRS_PROPERTYNAME ) ;
-    if( ! StringUtils.contains( declaredFontDirectories, SystemUtils.PATH_SEPARATOR ) ) {
-      FONTS_DIRECTORIES = Lists.newArrayList( resolveDirectory(
-          "fonts",
-          FONTS_DIRS_PROPERTYNAME,
-          FONTS_DEFAULT_DIRECTORYNAME,
-          false
-      ) ) ;
+    final File outputDirectory ;
+    if( null == parameters.getOutputDirectory() ) {
+      outputDirectory = new File( parameters.getBaseDirectory(), DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
+      if( ! outputDirectory.exists() ) {
+        outputDirectory.mkdirs() ;
+      }
     } else {
-      if( null == declaredFontDirectories ) {
-        FONTS_DIRECTORIES = Iterables.emptyIterable() ;
+      outputDirectory = parameters.getOutputDirectory() ;
+    }
+
+    return new BatchConfiguration() {
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+      public Iterable< DocumentRequest > getDocumentRequests() {
+        return parameters.getDocumentRequests() ;
+      }
+      public File getOutputDirectory() {
+        return outputDirectory ;
+      }
+    } ;
+
+  }
+
+  public static ContentConfiguration createContentConfiguration( GenericParameters parameters ) {
+    return new ContentConfiguration() {
+      public File getContentRoot() {
+        return new File( SystemUtils.USER_DIR ) ;
+      }
+    } ;
+  }
+
+  public static RenderingConfiguration createRenderingConfiguration( GenericParameters parameters )
+      throws FOPException
+  {
+    final Iterable< File > fontDirectories ;
+    final Iterable< File > userFontDirectories = parameters.getFontDirectories() ;
+    if( userFontDirectories.iterator().hasNext() ) {
+      fontDirectories = userFontDirectories ;
+    } else {
+      final File maybeDefaultDirectory = findDefaultDirectoryIfNeeded(
+          parameters.getBaseDirectory(),
+          null,
+          parameters.getFontDirectoriesOptionDescription(),
+          DEFAULT_FONTS_DIRECTORY_NAME
+      ) ;
+
+      if( null == maybeDefaultDirectory ) {
+        fontDirectories = Iterables.emptyIterable() ;
       } else {
-        FONTS_DIRECTORIES = parseDirectoryList( declaredFontDirectories ) ;
-        for( File fontDirectory : FONTS_DIRECTORIES ) {
-          if( fontDirectory.exists() ) {
-            LOGGER.info(
-                "Found font directory '" + fontDirectory.getAbsolutePath() + "' " +
-                "(from system property [" + FONTS_DIRS_PROPERTYNAME + "])."
-            ) ;
-          } else {
-            LOGGER.info(
-                "Not found: font directory '" + fontDirectory.getAbsolutePath() + "' " +
-                "(from system property [" + FONTS_DIRS_PROPERTYNAME + "])."
-            ) ;
-          }
-        }
+        fontDirectories = Lists.newArrayList( maybeDefaultDirectory ) ;
       }
     }
 
-    final File hyphenationDirectory = resolveDirectory(
-        "hyphenation",
-        FOP_HYPHENATION_DIR_PROPERTYNAME,
-        FOP_HYPHENATION_DEFAULT_DIRECTORYNAME,
-        false
+    final File hyphenationDirectory = findDefaultDirectoryIfNeeded(
+        parameters.getBaseDirectory(),
+        parameters.getHyphenationDirectory(),
+        parameters.getHyphenationDirectoryOptionDescription(),
+        DEFAULT_HYPHENATION_DIRECTORY_NAME
     ) ;
 
-    FOP_FACTORY = createFopFactory( FONTS_DIRECTORIES, hyphenationDirectory ) ;
-    
 
-    final File userStyleDirectory = resolveDirectory(
-        "style",
-        NOVELANG_STYLE_DIR_PROPERTYNAME,
-        USER_STYLE_DIR,
-        false
+    final FopFactory fopFactory = FopTools
+        .createFopFactory( fontDirectories, hyphenationDirectory ) ;
+
+    final ResourceLoader resourceLoader = createResourceLoader( parameters ) ;
+
+    return new RenderingConfiguration() {
+      public ResourceLoader getResourceLoader() {
+        return resourceLoader ;
+      }
+      public FopFactory getFopFactory() {
+        return fopFactory ;
+      }
+
+      public FopFontStatus getCurrentFopFontStatus() {
+        try {
+          return FopTools.createGlobalFontStatus( fopFactory, fontDirectories ) ;
+        } catch( FOPException e ) {
+          throw new RuntimeException( e ) ;
+        }
+      }
+    } ;
+
+  }
+
+  private static ResourceLoader createResourceLoader( GenericParameters parameters ) {
+
+    final File userStyleDirectory = findDefaultDirectoryIfNeeded(
+        parameters.getBaseDirectory(),
+        parameters.getStyleDirectory(),
+        parameters.getStyleDirectoryDescription(),
+        DEFAULT_STYLE_DIR
     ) ;
-    
+
     final URL userStyleUrl ;
     if( null == userStyleDirectory ) {
       userStyleUrl = null ;
@@ -253,130 +224,48 @@ public class ConfigurationTools {
 
     final ResourceLoader classpathResourceLoader =
         new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
+
+    final ResourceLoader resourceLoader ;
     if( null == userStyleDirectory ) {
-      STYLE_RESOURCE_LOADER = classpathResourceLoader ;
+      resourceLoader = classpathResourceLoader ;
     } else {
-      STYLE_RESOURCE_LOADER = ResourceLoaderTools.compose(
+      resourceLoader = ResourceLoaderTools.compose(
           new UrlResourceLoader( userStyleUrl ), classpathResourceLoader ) ;
     }
 
+    return resourceLoader ;
 
   }
 
-  /**
-   * Returns directories known to contain fonts.
-   * @return a non-null object that may be empty but contains no nulls.
-   */
-  public static Iterable< File > getFontsDirectories() {
-    return FONTS_DIRECTORIES ;
-  }
-
-
-
-  public static RenderingConfiguration buildRenderingConfiguration() {
-    return new RenderingConfiguration() {
-      public ResourceLoader getResourceLoader() {
-        return STYLE_RESOURCE_LOADER;
-      }
-      public FopFactory getFopFactory() {
-        return FOP_FACTORY ;
-      }
-
-      public FopFontStatus getCurrentFopFontStatus() {
-        throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
-      }
-    } ;
-  }
-
-  private static Iterable< File > parseDirectoryList( String directories ) {
-    final StringTokenizer tokenizer =
-        new StringTokenizer( directories, SystemUtils.PATH_SEPARATOR ) ;
-    final List< File > directoryList = Lists.newLinkedList() ;
-    while( tokenizer.hasMoreTokens() ) {
-      directoryList.add( new File( tokenizer.nextToken() ) ) ;
-    }
-    return ImmutableList.copyOf( directoryList ) ;
-  }
-
-  private static FopFactory createFopFactory(
-      Iterable< File > fontsDirectories,
-      File hyphenationDirectory
+  protected static File findDefaultDirectoryIfNeeded(
+      File baseDirectory,
+      File userDefinedDirectory,
+      String directoryDescription,
+      String defaultDirectoryName
   ) {
-    final FopFactory fopFactory = FopFactory.newInstance() ;
-    Configuration renderers = null ;
-    Configuration hyphenationBase = null ;
-    boolean configure = false ;
+    if( null == userDefinedDirectory ) {
+      final File defaultDirectory = new File( baseDirectory, defaultDirectoryName ) ;
+      if( defaultDirectory.exists() ) {
+        LOGGER.info(
+            "Using default directory '" + defaultDirectory.getAbsolutePath() + "' "
+          + "(option not set: " + directoryDescription + ")."
+        ) ;
+        return defaultDirectory ;
+      } else {
+        LOGGER.info(
+            "Found no default directory '" + defaultDirectoryName + "' "
+          + "nor was set this option: " + directoryDescription + "."
+        ) ;
 
-    if( null != fontsDirectories ) {
-      renderers = FopTools.createRenderersConfiguration( fontsDirectories ) ;
-      configure = true ;
-    }
-
-    if( null != hyphenationDirectory ) {
-      hyphenationBase = FopTools.createHyphenationConfiguration( hyphenationDirectory ) ;
-      configure = true ;
-    }
-
-    if( configure ) {
-
-      final MutableConfiguration configuration = new DefaultConfiguration( "fop" ) ;
-      configuration.setAttribute( "version", "1.0" ) ;
-
-      if( null != renderers ) {
-        configuration.addChild( renderers ) ;
+        return null ;
       }
-
-      if( null != hyphenationBase ) {
-        configuration.addChild( hyphenationBase ) ;
-      }
-
-      LOGGER.debug( "Created configuration: \n{}",
-          FopTools.configurationAsString( configuration ) ) ;
-
-      try {
-        fopFactory.setUserConfig( configuration ) ;
-      } catch( FOPException e ) {
-        LOGGER.error( "Could not use custom fonts", e ) ;
-      }
+    } else {
+      LOGGER.info(
+          "Recognized user-defined directory '" + userDefinedDirectory + "' "
+       +  "(from option: " + directoryDescription + ")." ) ;
+      return userDefinedDirectory ;
     }
-
-    return fopFactory ;
   }
 
-// =======
-// Content
-// =======
-
-  private static final File CONTENT_ROOT = new File( SystemUtils.USER_DIR ) ;
-
-  public static ContentConfiguration buildContentConfiguration() {
-    return new ContentConfiguration() {
-      public File getContentRoot() {
-        return CONTENT_ROOT ;
-      }
-    } ;
-  }
-
-
-// ==========
-// HttpServer
-// ==========
-
-  private static final RenderingConfiguration RENDERING_CONFIGURATION =
-      buildRenderingConfiguration() ;
-  private static final ContentConfiguration CONTENT_CONFIGURATION =
-      buildContentConfiguration() ;
-
-  public static ProducerConfiguration buildServerConfiguration() {
-    return new ProducerConfiguration() {
-      public RenderingConfiguration getRenderingConfiguration() {
-        return RENDERING_CONFIGURATION ;
-      }
-
-      public ContentConfiguration getContentConfiguration() {
-        return CONTENT_CONFIGURATION ;
-      }
-    } ;
-  }
 
 }

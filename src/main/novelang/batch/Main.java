@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import novelang.configuration.ConfigurationTools2;
+import novelang.configuration.ConfigurationTools;
 import novelang.configuration.BatchConfiguration;
 import novelang.configuration.parse.ArgumentsNotParsedException;
 import novelang.common.Problem;
@@ -43,11 +43,13 @@ import novelang.system.EnvironmentTools;
 /**
  * The main class for running in command-line mode.
  *
+ * The {@code Logger} instance is NOT held in statically-initialized final field as it would
+ * trigger premature initialization, we want a call to {@link StartupTools} to happen first.
+ *
  * @author Laurent Caillette
  */
 public class Main {
 
-  private static Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
   private static final String PROBLEMS_FILENAME = "problems.html";
 
   public static void main( String[] arguments ) throws Exception {
@@ -55,7 +57,7 @@ public class Main {
     StartupTools.fixLogDirectory( arguments ) ;
     EnvironmentTools.logSystemProperties() ;
 
-    LOGGER = LoggerFactory.getLogger( Main.class ) ;
+    final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
 
     try {
       final novelang.configuration.parse.BatchParameters parameters =
@@ -69,9 +71,9 @@ public class Main {
           ClassUtils.getShortClassName( Main.class ), asString( arguments ) ) ;
 
       final BatchConfiguration configuration =
-          ConfigurationTools2.createBatchConfiguration( parameters ); ;
+          ConfigurationTools.createBatchConfiguration( parameters ); ;
       final File outputDirectory = configuration.getOutputDirectory();
-      resetTargetDirectory( outputDirectory ) ;
+      resetTargetDirectory( LOGGER, outputDirectory ) ;
       final DocumentProducer documentProducer =
           new DocumentProducer( configuration.getProducerConfiguration() ) ;
       final List< Problem > allProblems = Lists.newArrayList() ;
@@ -80,6 +82,7 @@ public class Main {
         Iterables.addAll(
             allProblems,
             processDocumentRequest(
+                LOGGER,
                 documentRequest,
                 outputDirectory,
                 documentProducer
@@ -93,9 +96,7 @@ public class Main {
       }
 
     } catch( ArgumentsNotParsedException e ) {
-      LOGGER.error( "Parameters exception {}, printing help and exiting.", e.getMessage() ) ;
-      System.err.println( e.getMessage() ) ;
-      System.err.println( BatchParameters.HELP ) ;
+      LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
       System.exit( -1 ) ;
     } catch( Exception e ) {
       LOGGER.error( "Fatal", e ) ;
@@ -134,15 +135,17 @@ public class Main {
   }
 
   private static Iterable< Problem > processDocumentRequest(
+      Logger logger,
       DocumentRequest documentRequest,
       File targetDirectory,
       DocumentProducer documentProducer
   ) throws IOException {
     final File outputFile = createOutputFile(
+        logger,
         targetDirectory,
         documentRequest
     ) ;
-    LOGGER.info( "Generating document file '{}'...", outputFile.getAbsolutePath() ) ;
+    logger.info( "Generating document file '{}'...", outputFile.getAbsolutePath() ) ;
     final FileOutputStream outputStream = new FileOutputStream( outputFile ) ;
     final Iterable< Problem > problems = documentProducer.produce( documentRequest, outputStream ) ;
     outputStream.flush() ;
@@ -150,22 +153,29 @@ public class Main {
     return problems ;
   }
 
-  private static void resetTargetDirectory( File targetDirectory ) throws IOException {
+  private static void resetTargetDirectory(
+      Logger logger,
+      File targetDirectory
+  ) throws IOException {
     if( targetDirectory.exists() ) {
-      LOGGER.info( "Deleting '{}'...", targetDirectory.getAbsolutePath() ) ;
+      logger.info( "Deleting '{}'...", targetDirectory.getAbsolutePath() ) ;
     }
     FileUtils.deleteDirectory( targetDirectory ) ;
     FileUtils.forceMkdir( targetDirectory ) ;
-    LOGGER.info( "Created '{}'...", targetDirectory.getAbsolutePath() ) ;
+    logger.info( "Created '{}'...", targetDirectory.getAbsolutePath() ) ;
   }
 
-  public static File createOutputFile( File targetDir, DocumentRequest documentRequest )
+  public static File createOutputFile(
+      Logger logger,
+      File targetDir,
+      DocumentRequest documentRequest
+  )
       throws IOException
   {
     final String relativeFileName = documentRequest.getDocumentSourceName() +
         "." + documentRequest.getRenditionMimeType().getFileExtension() ;
-    LOGGER.debug( "Resolved output file name '{}'", relativeFileName ) ;
     final File outputFile =  new File( targetDir, relativeFileName ) ;
+    logger.debug( "Resolved output file name '{}'", outputFile.getAbsolutePath() ) ;
     FileUtils.forceMkdir( outputFile.getParentFile() );
     return outputFile ;
   }

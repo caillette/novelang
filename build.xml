@@ -65,6 +65,7 @@
       <include name="**/*.txt" />
       <include name="**/*.bin" />
       <include name="**/*.st" />
+      <include name="**/*.ttf" />
       <include name="**/*__.g" />
     </patternset>
 
@@ -301,6 +302,8 @@
     <property name="logdestination" location="${target.documentation.dir}" />
     <property name="absolutetarget" location="${target.documentation.site.dir}" />
 
+    <echo>absolutetarget=${absolutetarget}</echo>
+
     <!-- Need to create this one before the batch generation starts! -->    
     <mkdir dir="${logdestination}" />
 
@@ -315,13 +318,12 @@
         <pathelement location="${target.mainclasses.dir}" />
         <pathelement location="${configuration.main.dir}" />
       </classpath>
-      <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
-      <jvmarg value="-Djava.awt.headless=true" />
-      <jvmarg value="-Dnovelang.log.dir=${logdestination}" />
-      <jvmarg value="-Dnovelang.fonts.dir=${source.documentation.fonts.dir}" />
       <jvmarg value="-Xmx512M" />
-      <arg value="-targetDirectory" />
-      <arg value="${absolutetarget}" />
+      <jvmarg value="-Djava.awt.headless=true" />
+      <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
+      <arg value="--log-dir=${logdestination}" />
+      <arg value="--font-dirs=${source.documentation.fonts.dir}" />
+      <arg value="--output-dir=${absolutetarget}" />
       <arg value="${target.documentation.htmldocument}" />
       <arg value="${target.documentation.pdfdocument}" />
     </java>

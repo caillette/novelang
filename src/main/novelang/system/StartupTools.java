@@ -46,13 +46,18 @@ public class StartupTools {
    */
   public static void fixLogDirectory( String[] arguments ) {
 
-    final File logDirectory = extractLogDirectory( arguments ) ;
-    if( null == logDirectory ) {
+    final String logDirectoryName = extractLogDirectory( arguments ) ;
+    if( null == logDirectoryName ) {
       System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, DEFAULT_LOG_DIR ) ;
     } else {
+      final File logDirectory = new File( logDirectoryName ) ;
+      if( ! logDirectory.exists() ) {
+        logDirectory.mkdirs() ;
+      }
+      System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, logDirectory.getAbsolutePath() ) ;
       System.out.println( "System property [" +
-          StartupTools.LOG_DIR_SYSTEMPROPERTYNAME + "] ='" +
-          System.getProperty( logDirectory.getAbsolutePath() ) + "'"
+          StartupTools.LOG_DIR_SYSTEMPROPERTYNAME + "] set to '" +
+          logDirectory.getAbsolutePath() + "'"
       ) ;
 
     }
@@ -91,17 +96,13 @@ public class StartupTools {
    * @param startupArguments
    * @return null if there was no such option.
    */
-  public static File extractLogDirectory( String[] startupArguments ) {
+  public static String extractLogDirectory( String[] startupArguments ) {
     final String logDirectoryOption =
-        GenericParameters.OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ;
-    for( int i = 0 ; i < startupArguments.length - 1 ; i++ ) {
+        GenericParameters.OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME + "=" ;
+    for( int i = 0 ; i < startupArguments.length ; i++ ) {
       final String startupArgument = startupArguments[ i ] ;
-      if( logDirectoryOption.equals( startupArgument ) ) {
-        final String directoryName = startupArguments[ i + 1 ] ;
-        final File directory = new File( directoryName ) ;
-        if( directory.exists() ) {
-          return directory ;
-        }
+      if( startupArgument.startsWith( logDirectoryOption ) ) {
+        return startupArgument.substring( logDirectoryOption.length() );
       }
     }
     return null ;

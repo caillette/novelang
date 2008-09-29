@@ -53,7 +53,6 @@ public abstract class GenericParameters {
 
   protected final Options options ;
   protected final CommandLine line ;
-  private String styleDirectoryDescription;
 
   public GenericParameters(
       File baseDirectory,
@@ -78,8 +77,9 @@ public abstract class GenericParameters {
     try {
       line = parser.parse( options, parameters ) ;
 
+      logDirectory = extractDirectory( baseDirectory, OPTION_LOG_DIRECTORY, line, false ) ;
+
       styleDirectory = extractDirectory( baseDirectory, OPTION_STYLE_DIRECTORY, line ) ;
-      logDirectory = extractDirectory( baseDirectory, OPTION_LOG_DIRECTORY, line ) ;
       hyphenationDirectory = extractDirectory( baseDirectory, OPTION_HYPHENATION_DIRECTORY, line ) ;
 
       if( line.hasOption( OPTION_FONT_DIRECTORIES.getLongOpt() ) ) {
@@ -169,16 +169,28 @@ public abstract class GenericParameters {
 // Extractors
 // ==========
 
-  protected File extractDirectory( File baseDirectory, Option option, CommandLine line )
+  protected File extractDirectory(
+      File baseDirectory,
+      Option option,
+      CommandLine line
+  ) throws ArgumentsNotParsedException {
+    return extractDirectory( baseDirectory, option, line, true ) ;
+  }
+
+  protected File extractDirectory(
+      File baseDirectory,
+      Option option,
+      CommandLine line,
+      boolean failOnNonExistingDirectory
+  )
       throws ArgumentsNotParsedException
   {
     final File directory ;
     if( line.hasOption( option.getLongOpt() ) ) {
-      final String styleDirectoryName =
+      final String directoryName =
           line.getOptionValue( option.getLongOpt() ) ;
-      LOGGER.debug( "Argument for {} = '{}'",
-          option.getDescription(), styleDirectoryName ) ;
-      directory = extractDirectory( baseDirectory, styleDirectoryName ) ;
+      LOGGER.debug( "Argument for {} = '{}'", option.getDescription(), directoryName ) ;
+      directory = extractDirectory( baseDirectory, directoryName, failOnNonExistingDirectory ) ;
     } else {
       directory = null ;
     }
@@ -190,16 +202,25 @@ public abstract class GenericParameters {
   {
     final List directories = Lists.newArrayList() ;
     for( String directoryName : directoryNames ) {
-      directories.add( extractDirectory( parent, directoryName ) ) ;
+      directories.add( extractDirectory( parent, directoryName, true ) ) ;
     }
     return ImmutableList.copyOf( directories ) ;
   }
 
-  protected static File extractDirectory( File parent, String directoryName )
+  protected static File extractDirectory(
+      File parent,
+      String directoryName,
+      boolean failOnNonExistingDirectory
+  )
       throws ArgumentsNotParsedException
   {
-    final File directory = new File( parent, directoryName ) ;
-    if( ! ( directory.exists() && directory.isDirectory() ) ) {
+    final File directory ;
+    if( directoryName.startsWith( "/" ) ) {
+      directory = new File( directoryName ) ;
+    } else {
+      directory = new File( parent, directoryName ) ;
+    }
+    if( failOnNonExistingDirectory && ! ( directory.exists() && directory.isDirectory() ) ) {
       throw new ArgumentsNotParsedException( "Not a directory: '" + directoryName + "'" ) ;
     }
     return directory ;
@@ -249,7 +270,7 @@ public abstract class GenericParameters {
 
   private static final Option OPTION_LOG_DIRECTORY = OptionBuilder
       .withLongOpt( LOG_DIRECTORY_OPTION_NAME )
-      .withDescription( "Directory containing style files" )
+      .withDescription( "Directory containing log file(s)" )
       .withValueSeparator()
       .hasArg()
       .create()

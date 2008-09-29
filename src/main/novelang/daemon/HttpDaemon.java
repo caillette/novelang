@@ -25,7 +25,7 @@ import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.Version;
-import novelang.configuration.ConfigurationTools2;
+import novelang.configuration.ConfigurationTools;
 import novelang.configuration.DaemonConfiguration;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.system.EnvironmentTools;
@@ -53,7 +53,7 @@ public class HttpDaemon {
         new DaemonParameters( new File( SystemUtils.USER_DIR ), args ) ;
 
     final DaemonConfiguration daemonConfiguration =
-        ConfigurationTools2.createDaemonConfiguration( parameters );
+        ConfigurationTools.createDaemonConfiguration( parameters );
 
     final String starting =
         "Starting " + HttpDaemon.class.getName() +

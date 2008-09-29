@@ -129,50 +129,6 @@ public class FopTools {
         ReflectionTools.getFieldValue( fontCache, "failedFontMap" ) ;
   }
 
-  public static void main( String[] args ) throws FOPException {
-    final FopFontStatus fontsStatus = createGlobalFontStatus() ;
-
-    System.out.println( "Official font list:" ) ;
-    for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
-      System.out.println( "  " + fontInfo ) ;
-    }
-
-    System.out.println( "Failed font map:" ) ;
-    if( fontsStatus.getFailedFonts().isEmpty() ) {
-        System.out.println( "  Empty." ) ;
-    } else {
-      for( String fontUrl : fontsStatus.getFailedFonts().keySet() ) {
-          System.out.println( "  " + fontUrl ) ;
-      } ;
-    }
-  }
-
-  /**
-   * Returns a global status for all fonts defined through
-   * {@link novelang.configuration.ConfigurationTools#FONTS_DIRS_PROPERTYNAME}.
-   *
-   * @deprecated as this one calls methods from {@link ConfigurationTools}.
-   */
-  public static FopFontStatus createGlobalFontStatus() throws FOPException {
-    final Configuration pdfRendererConfiguration = createPdfRendererConfiguration(
-        ConfigurationTools.getFontsDirectories() ) ;
-    final FopFactory fopFactory = ConfigurationTools.buildRenderingConfiguration().getFopFactory() ;
-    final FOUserAgent foUserAgent = fopFactory.newFOUserAgent() ;
-    final FontResolver fontResolver = new DefaultFontResolver( foUserAgent ) ;
-    final FontCache fontCache = new FontCache() ;
-    final List< EmbedFontInfo > fontList = ( List< EmbedFontInfo > )
-        PrintRendererConfigurator.buildFontListFromConfiguration(
-            pdfRendererConfiguration,
-            null,
-            fontResolver,
-            false,
-            fontCache
-        )
-    ;
-    final Map< String, EmbedFontInfo > failedFontMap = extractFailedFontMap( fontCache ) ;
-    return new FopFontStatus( fontList, failedFontMap ) ;
-  }
-
   public static FopFontStatus createGlobalFontStatus(
       FopFactory fopFactory,
       Iterable< File > fontDirectories

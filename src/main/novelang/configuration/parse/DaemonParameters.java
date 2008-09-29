@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Parses command-line arguments for {@link novelang.daemon.HttpDaemon}.
+ *
+ * TODO support --serve-shutdown and --serve-remote options.
  * 
  * @author Laurent Caillette
  */

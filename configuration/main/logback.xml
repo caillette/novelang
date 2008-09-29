@@ -6,7 +6,8 @@
   >
     <!-- System property MUST be set -->
     <File>${novelang.log.dir}/novelang.log</File>
-    
+    <!--<File>novelang.log</File>-->
+
     <Append>false</Append>
     <Encoding>UTF-8</Encoding>
     <BufferedIO>false</BufferedIO>

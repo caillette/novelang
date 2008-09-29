@@ -32,6 +32,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Parses command-line arguments for {@link novelang.batch.Main}.
  *
+ * TODO support a --flatten-ouput option as rendered documents go in the same path as sources.
+ *
  * @author Laurent Caillette
  */
 public class BatchParameters extends GenericParameters {
@@ -62,9 +64,10 @@ public class BatchParameters extends GenericParameters {
         }
       }
       documentRequests = ImmutableList.copyOf( requestList ) ;
+      LOGGER.debug( "Document requests = {}", documentRequests ) ;
     }
 
-    outputDirectory = extractDirectory( baseDirectory, OPTION_OUTPUT_DIRECTORY, line ) ;
+    outputDirectory = extractDirectory( baseDirectory, OPTION_OUTPUT_DIRECTORY, line, false ) ;
   }
 
   protected void enrich( Options options ) {
