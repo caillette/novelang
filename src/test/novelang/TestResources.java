@@ -88,8 +88,11 @@ public class TestResources {
 
 
   public static final String SERVED_DIRECTORY_NAME = "served" ;
-  public static final String SERVED_PART_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/good";
+  public static final String SERVED_GOOD_RADIX = "good";
+  public static final String
+      SERVED_PART_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/" + SERVED_GOOD_RADIX;
   public static final String SERVED_PARTSOURCE_GOOD = SERVED_PART_GOOD_NOEXTENSION + ".nlp" ;
+  public static final String SERVED_HTMLDOCUMENT_GOOD = SERVED_PART_GOOD_NOEXTENSION + ".html" ;
 
   public static final ResourceName SERVED_VOIDSTYLESHEET =
       new ResourceName( SERVED_DIRECTORY_NAME + "void.xsl" ) ;

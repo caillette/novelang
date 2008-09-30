@@ -62,7 +62,7 @@ public class ConfigurationTools {
   public static final String DEFAULT_HYPHENATION_DIRECTORY_NAME = "hyphenation" ;
   public static final String BUNDLED_STYLE_DIR = "style" ;
   private static final String DEFAULT_STYLE_DIR = "style" ;
-  private static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
+  public static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
 
   public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters )
       throws FOPException
@@ -126,10 +126,10 @@ public class ConfigurationTools {
          "Got output directory from default value [" + DEFAULT_OUTPUT_DIRECTORY_NAME + "] "
        + "(option not set: " + parameters.getOutputDirectoryOptionDescription() + ")."
      ) ;
-      if( ! outputDirectory.exists() ) {
-        outputDirectory.mkdirs() ;
-        LOGGER.info( "Created directory '" + outputDirectory.getAbsolutePath() + "'." ) ;
-      }
+//      if( ! outputDirectory.exists() ) {
+//        outputDirectory.mkdirs() ;
+//        LOGGER.info( "Created directory '" + outputDirectory.getAbsolutePath() + "'." ) ;
+//      }
     } else {
       outputDirectory = parameters.getOutputDirectory() ;
      LOGGER.info(
@@ -152,10 +152,12 @@ public class ConfigurationTools {
 
   }
 
-  public static ContentConfiguration createContentConfiguration( GenericParameters parameters ) {
+  public static ContentConfiguration createContentConfiguration(
+      final GenericParameters parameters
+  ) {
     return new ContentConfiguration() {
       public File getContentRoot() {
-        return new File( SystemUtils.USER_DIR ) ;
+        return parameters.getBaseDirectory() ;
       }
     } ;
   }

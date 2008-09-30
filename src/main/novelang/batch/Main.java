@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.BatchConfiguration;
 import novelang.configuration.parse.ArgumentsNotParsedException;
+import novelang.configuration.parse.BatchParameters;
 import novelang.common.Problem;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
@@ -53,19 +54,20 @@ public class Main {
   private static final String PROBLEMS_FILENAME = "problems.html";
 
   public static void main( String[] arguments ) throws Exception {
-
     StartupTools.fixLogDirectory( arguments ) ;
     EnvironmentTools.logSystemProperties() ;
+    final File baseDirectory = new File( SystemUtils.USER_DIR ) ;
+    main( baseDirectory, arguments ) ;
+  }
 
+  public static void main( File baseDirectory, String[] arguments ) throws Exception {
     final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
 
     try {
-      final novelang.configuration.parse.BatchParameters parameters =
-          new novelang.configuration.parse.BatchParameters(
-              new File( SystemUtils.USER_DIR ),
-              arguments
-          )
-      ;
+      final BatchParameters parameters = new BatchParameters(
+          baseDirectory,
+          arguments
+      ) ;
 
       LOGGER.debug( "Starting {} with arguments {}",
           ClassUtils.getShortClassName( Main.class ), asString( arguments ) ) ;

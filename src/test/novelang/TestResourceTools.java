@@ -165,6 +165,33 @@ public final class TestResourceTools {
     return destinationFile ;
   }
 
+  /**
+   * Copy a resource into given directory, creating no directory above target file.
+   */
+  public static File copyResourceToDirectoryFlat(
+      Class owningClass,
+      String resourceName,
+      File destinationDir
+  ) {
+    final byte[] resourceBytes = readResource( owningClass, resourceName ) ;
+    final ByteArrayInputStream inputStream =
+        new ByteArrayInputStream( resourceBytes );
+
+    final File destinationFile = new File( destinationDir, FilenameUtils.getName( resourceName ) ) ;
+    final FileOutputStream fileOutputStream ;
+    try {
+      fileOutputStream = new FileOutputStream( destinationFile ) ;
+    } catch( FileNotFoundException e ) {
+      throw new RuntimeException( e );
+    }
+    try {
+      IOUtils.copy( inputStream, fileOutputStream ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e );
+    }
+    return destinationFile ;
+  }
+
   public static File createDirectory( File parent, String name ) {
     final File directory = new File( parent, name ) ;
     if( ! directory.exists() ) {
