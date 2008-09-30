@@ -91,6 +91,10 @@ public class BatchParameters extends GenericParameters {
     return outputDirectory ;
   }
 
+  public String getOutputDirectoryOptionDescription() {
+    return createOptionDescription( OPTION_OUTPUT_DIRECTORY ) ;
+  }
+
   private static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder
       .withLongOpt( "output-dir" )
       .withDescription( "Output directory for rendered documents" )

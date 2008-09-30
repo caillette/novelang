@@ -42,7 +42,15 @@ import com.google.common.collect.Iterables;
  * The main contract of this class is that for each created Configuration object, all information
  * needed is held by the Parameters object. No access to system property, no static variable, no
  * hidden state.
- *  
+ * <p>
+ * Each configured value comes from (in order):
+ * <ol>
+ *   <li>User-defined value (through some parameter).</li>
+ *   <li>Fallback value (applies to a directory with known name).</li>
+ *   <li>Default value (null or default number).</li>
+ * </ol>
+ * Each time parameters provide a value, log this origin at INFO level.
+ *
  * @author Laurent Caillette
  */
 public class ConfigurationTools {
@@ -55,9 +63,6 @@ public class ConfigurationTools {
   public static final String BUNDLED_STYLE_DIR = "style" ;
   private static final String DEFAULT_STYLE_DIR = "style" ;
   private static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
-
-  private static final String DAEMON_CONFIGURATION_SHORTCLASSNAME =
-      ClassUtils.getShortClassName( DaemonConfiguration.class );
 
   public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters )
       throws FOPException
@@ -87,17 +92,14 @@ public class ConfigurationTools {
     final Integer customPort = parameters.getHttpDaemonPort() ;
     if( null == customPort ) {
       port = DEFAULT_HTTP_DAEMON_PORT ;
-      LOGGER.info(
-          "Creating " + DAEMON_CONFIGURATION_SHORTCLASSNAME
-        + " from default value [" + DEFAULT_HTTP_DAEMON_PORT + "] "
-        + "(option not set: " + parameters.getHttpDaemonPortOptionDescription() + ")."
-
-      ) ;
+     LOGGER.info(
+         "Got port number from default value [" + DEFAULT_HTTP_DAEMON_PORT + "] "
+       + "(option not set: " + parameters.getHttpDaemonPortOptionDescription() + ")."
+     ) ;
     } else {
       port = customPort ;
       LOGGER.info(
-          "Creating " + DAEMON_CONFIGURATION_SHORTCLASSNAME + " "
-        + "with custom value '" + customPort + "' "
+          "Got port number from custom value '" + customPort + "' "
         + "(from option: " + parameters.getHttpDaemonPortOptionDescription() + ")."
       ) ;
     }
@@ -105,9 +107,10 @@ public class ConfigurationTools {
     return new DaemonConfiguration() {
       public int getPort() {
         return port ;
-      }public ProducerConfiguration getProducerConfiguration() {
-      return producerConfiguration ;
-    }
+      }
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
     } ;
   }
 
@@ -119,11 +122,20 @@ public class ConfigurationTools {
     final File outputDirectory ;
     if( null == parameters.getOutputDirectory() ) {
       outputDirectory = new File( parameters.getBaseDirectory(), DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
+     LOGGER.info(
+         "Got output directory from default value [" + DEFAULT_OUTPUT_DIRECTORY_NAME + "] "
+       + "(option not set: " + parameters.getOutputDirectoryOptionDescription() + ")."
+     ) ;
       if( ! outputDirectory.exists() ) {
         outputDirectory.mkdirs() ;
+        LOGGER.info( "Created directory '" + outputDirectory.getAbsolutePath() + "'." ) ;
       }
     } else {
       outputDirectory = parameters.getOutputDirectory() ;
+     LOGGER.info(
+         "Got output directory from custom value '" + outputDirectory + "' "
+       + "(from option: " + parameters.getOutputDirectoryOptionDescription() + ")."
+     ) ;
     }
 
     return new BatchConfiguration() {
@@ -155,10 +167,15 @@ public class ConfigurationTools {
     final Iterable< File > userFontDirectories = parameters.getFontDirectories() ;
     if( userFontDirectories.iterator().hasNext() ) {
       fontDirectories = userFontDirectories ;
+     LOGGER.info(
+         "Got font directories from custom value '" + fontDirectories + "' "
+       + "(from option: " + parameters.getFontDirectoriesOptionDescription() + ")."
+     ) ;
     } else {
       final File maybeDefaultDirectory = findDefaultDirectoryIfNeeded(
           parameters.getBaseDirectory(),
           null,
+          "font directories",
           parameters.getFontDirectoriesOptionDescription(),
           DEFAULT_FONTS_DIRECTORY_NAME
       ) ;
@@ -173,10 +190,10 @@ public class ConfigurationTools {
     final File hyphenationDirectory = findDefaultDirectoryIfNeeded(
         parameters.getBaseDirectory(),
         parameters.getHyphenationDirectory(),
+        "hyphenation directory",
         parameters.getHyphenationDirectoryOptionDescription(),
         DEFAULT_HYPHENATION_DIRECTORY_NAME
     ) ;
-
 
     final FopFactory fopFactory = FopTools
         .createFopFactory( fontDirectories, hyphenationDirectory ) ;
@@ -207,6 +224,7 @@ public class ConfigurationTools {
     final File userStyleDirectory = findDefaultDirectoryIfNeeded(
         parameters.getBaseDirectory(),
         parameters.getStyleDirectory(),
+        "user styles",
         parameters.getStyleDirectoryDescription(),
         DEFAULT_STYLE_DIR
     ) ;
@@ -240,6 +258,7 @@ public class ConfigurationTools {
   protected static File findDefaultDirectoryIfNeeded(
       File baseDirectory,
       File userDefinedDirectory,
+      String topic,
       String directoryDescription,
       String defaultDirectoryName
   ) {
@@ -247,21 +266,21 @@ public class ConfigurationTools {
       final File defaultDirectory = new File( baseDirectory, defaultDirectoryName ) ;
       if( defaultDirectory.exists() ) {
         LOGGER.info(
-            "Using default directory '" + defaultDirectory.getAbsolutePath() + "' "
+            "Got " + topic + " from default value '" + defaultDirectory.getAbsolutePath() + "' "
           + "(option not set: " + directoryDescription + ")."
         ) ;
         return defaultDirectory ;
       } else {
         LOGGER.info(
-            "Found no default directory '" + defaultDirectoryName + "' "
-          + "nor was set this option: " + directoryDescription + "."
+            "Got no " + topic + " (no default directory '" + defaultDirectoryName + "' "
+          + "nor was set this option: " + directoryDescription + ")."
         ) ;
 
         return null ;
       }
     } else {
       LOGGER.info(
-          "Recognized user-defined directory '" + userDefinedDirectory + "' "
+          "Got " + topic + " from user value '" + userDefinedDirectory + "' "
        +  "(from option: " + directoryDescription + ")." ) ;
       return userDefinedDirectory ;
     }
