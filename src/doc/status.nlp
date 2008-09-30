@@ -7,7 +7,7 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 === Version `0.11.0`
 
-Multiple font directories.
+Multiple font directories. No longer need to give special names to font files (internal name recognized automatically).
 
 Normalized command-line arguments, no more system properties.
 
