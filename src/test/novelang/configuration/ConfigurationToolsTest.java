@@ -173,7 +173,7 @@ public class ConfigurationToolsTest {
   public void createContentConfiguration() throws ArgumentsNotParsedException {
     final ContentConfiguration contentConfiguration =
         ConfigurationTools.createContentConfiguration( createDaemonParameters() ) ;
-    Assert.assertEquals( new File( SystemUtils.USER_DIR ), contentConfiguration.getContentRoot() ) ; 
+    Assert.assertEquals( scratchDirectory, contentConfiguration.getContentRoot() ) ; 
   }
 
 
