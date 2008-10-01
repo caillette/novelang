@@ -23,7 +23,7 @@ import org.apache.fop.fonts.EmbedFontInfo;
 /**
  * Describes what default {@code FopFactory} knows about its fonts.
  *
- * @see FopTools#createGlobalFontStatus()
+ * @see FopTools#createGlobalFontStatus(org.apache.fop.apps.FopFactory, Iterable)
  *
  * @author Laurent Caillette
 */

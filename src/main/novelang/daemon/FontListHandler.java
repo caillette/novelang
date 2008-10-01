@@ -18,6 +18,7 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
@@ -27,9 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.mortbay.jetty.Request;
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.FontTriplet;
-import org.apache.fop.apps.FOPException;
 import novelang.configuration.ProducerConfiguration;
-import novelang.configuration.FopTools;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Renderable;
@@ -46,10 +45,9 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.base.Predicate;
-import com.google.common.base.Nullable;
 
 /**
  * @author Laurent Caillette
@@ -104,7 +102,7 @@ public class FontListHandler extends GenericHandler{
   }
 
 //  private void generateSourceDocument_tooMuchCrapAndIncorrectStylesApplied(
-  private void generateSourceDocument(
+  private void _generateSourceDocument(
       StringBuffer textBuffer,
       String nonWordCharacters,
       FopFontStatus fontsStatus
@@ -152,48 +150,127 @@ public class FontListHandler extends GenericHandler{
 
 
 
-  private void generateSourceDocument_(
+  private void generateSourceDocument(
       StringBuffer textBuffer,
       String nonWordCharacters,
       FopFontStatus fontsStatus
   ) {
-    final Multimap< String, FontTriplet > tripletsByEmbedFileName = Multimaps.newHashMultimap() ;
+    final List< FontQuadruplet > quadruplets = Lists.newArrayList() ;
 
-  }
-
-
-  private static final Ordering< FontTriplet > PRIORITY_ORDERING = new Ordering<FontTriplet>() {
-    public int compare( FontTriplet triplet1, FontTriplet triplet2 ) {
-      return triplet2.getPriority() - triplet1.getPriority() ;
+    for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
+      for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
+        final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject ;
+        final FontQuadruplet fontQuadruplet =
+            new FontQuadruplet( fontInfo.getEmbedFile(), fontTriplet ) ;
+        quadruplets.add( fontQuadruplet ) ;
+      }
     }
-  } ;
+    final Iterable< FontQuadruplet > quadrupletsPriorityAboveZero =
+        retainPriorityAboveZero( quadruplets ) ;
+    final Iterable< FontQuadruplet > quadrupletsPriorityZero =
+        retainPriorityZero( quadruplets ) ;
+    final Multimap< String, FontQuadruplet > quadrupletsByCleanNames =
+        Multimaps.newArrayListMultimap(
+            mapQuadrupletsByCleanNames( quadrupletsPriorityAboveZero ) ) ;
+    quadrupletsByCleanNames.putAll(
+        extractTripletsWithKnownName( quadrupletsByCleanNames.keySet(), quadrupletsPriorityZero )
+    ) ;
 
-  private static Iterable< FontTriplet > sortByPriorityDescending(
-      Iterable< FontTriplet > fontTriplets
-  ) {
-    return PRIORITY_ORDERING.sortedCopy( fontTriplets ) ;
-  }
-
-  private static final Predicate< FontTriplet > PRIORITY_ABOVE_ZERO = new Predicate<FontTriplet>() {
-    public boolean apply( FontTriplet fontTriplet ) {
-      return fontTriplet.getPriority() > 0 ;
+    for( String fontName : quadrupletsByCleanNames.keySet() ) {
+      for( FontQuadruplet quadruplet : quadrupletsByCleanNames.get( fontName ) ) {
+        final FontTriplet fontTriplet = quadruplet.getFontTriplet() ;
+        textBuffer
+            .append( "=== \"" ).append( fontTriplet.getName() ).append( "\"")
+            .append( "[" ).append( fontTriplet.getStyle() ).append( "]" )
+            .append( "[" ).append( fontTriplet.getWeight() ).append( "]" )
+            .append( "[" ).append( fontTriplet.getPriority() ).append( "]" )
+            .append( "``" ).append( quadruplet.getEmbedFileName() ).append( "``" )
+            .append( "\n\n" )
+            .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
+            .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
+            .append( "0123456789" ).append( "\n\n" )
+            .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
+        ;
+      }
     }
-  } ;
-
-  private static Iterable< FontTriplet > retainPriorityAboveZero(
-      Iterable< FontTriplet > fontTriplets
-  ) {
-    return Iterables.filter( fontTriplets, PRIORITY_ABOVE_ZERO ) ;
   }
 
-  private static Multimap< String, FontTriplet > mapTripletsByCleanNames(
-      Iterable< FontTriplet > fontTriplets
+
+  private static final Ordering< FontQuadruplet > PRIORITY_ORDERING =
+      new Ordering< FontQuadruplet >() {
+        public int compare( FontQuadruplet quadruplet1, FontQuadruplet quadruplet2 ) {
+          return quadruplet2.getFontTriplet().getPriority()
+              - quadruplet1.getFontTriplet().getPriority() ;
+        }
+      }
+  ;
+
+  private static Iterable< FontQuadruplet > sortByPriorityDescending(
+      Iterable< FontQuadruplet > quadruplets
   ) {
-    final Multimap< String, FontTriplet > map = Multimaps.newHashMultimap() ;
-    for( FontTriplet fontTriplet : fontTriplets ) {
-      map.put( fontTriplet.getName(), fontTriplet ) ;
+    return PRIORITY_ORDERING.sortedCopy( quadruplets ) ;
+  }
+
+  private static Iterable< FontQuadruplet > retainPriorityAboveZero(
+      Iterable< FontQuadruplet > quadruplets
+  ) {
+    return Iterables.filter( quadruplets, new Predicate< FontQuadruplet >() {
+      public boolean apply( FontQuadruplet quadruplet ) {
+        return quadruplet.getFontTriplet().getPriority() > 0 ;
+      }
+    } ) ;
+  }
+
+  private static Iterable< FontQuadruplet > retainPriorityZero(
+      Iterable< FontQuadruplet > quadruplets
+  ) {
+    return Iterables.filter( quadruplets, new Predicate< FontQuadruplet >() {
+      public boolean apply( FontQuadruplet quadruplet ) {
+        return quadruplet.getFontTriplet().getPriority() == 0 ;
+      }
+    } ) ;
+  }
+
+  private static Multimap< String, FontQuadruplet > mapQuadrupletsByCleanNames(
+      Iterable< FontQuadruplet > quadruplets
+  ) {
+    final Multimap< String, FontQuadruplet > map = Multimaps.newHashMultimap() ;
+    for( FontQuadruplet quadruplet : quadruplets ) {
+      map.put( quadruplet.getFontTriplet().getName(), quadruplet ) ;
     }
     return ImmutableMultimap.copyOf( map ) ;
+  }
+
+  private static Multimap< String, FontQuadruplet > extractTripletsWithKnownName(
+      Set< String > names,
+      Iterable< FontQuadruplet > quadruplets
+  ) {
+    final Multimap< String, FontQuadruplet > extracted = Multimaps.newHashMultimap() ;
+    for( FontQuadruplet quadruplet : quadruplets ) {
+      final String name = quadruplet.getFontTriplet().getName() ;
+      if( names.contains( name ) ) {
+        extracted.put( name, quadruplet ) ;
+      }
+    }
+    return extracted ;
+  }
+
+  private static class FontQuadruplet {
+    private final String embedFileName ;
+    private final FontTriplet fontTriplet ;
+
+    private FontQuadruplet( String embedFileName, FontTriplet fontTriplet ) {
+      this.embedFileName = embedFileName;
+      this.fontTriplet = fontTriplet;
+    }
+
+    public String getEmbedFileName() {
+      return embedFileName;
+    }
+
+    public FontTriplet getFontTriplet() {
+      return fontTriplet;
+    }
   }
 
 }

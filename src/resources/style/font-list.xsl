@@ -89,11 +89,19 @@
         <fo:block
             font-family="monospace"
             font-size="80%"
-            >
-          <xsl:value-of select="n:title/n:hard-inline-literal" />
+        >
+          <fo:block>
+            <xsl:value-of select="n:title/n:hard-inline-literal" />
+          </fo:block>
+          <fo:block>
+            style=<xsl:value-of select="n:title/n:square-brackets[1]" />,
+            weight=<xsl:value-of select="n:title/n:square-brackets[2]" />,
+            priority=<xsl:value-of select="n:title/n:square-brackets[3]" />
+          </fo:block>
         </fo:block>
       </fo:block>
     </fo:block>
+    
     <fo:block
         text-align="center"
     >
