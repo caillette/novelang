@@ -50,6 +50,8 @@ import com.google.common.collect.Lists;
 import com.google.common.base.Predicate;
 
 /**
+ * Generates a PDF document showing available fonts.
+ *
  * @author Laurent Caillette
  */
 public class FontListHandler extends GenericHandler{
@@ -133,6 +135,8 @@ public class FontListHandler extends GenericHandler{
   ) {
     final Multimap< String, FontQuadruplet > quadruplets = createSyntheticFontMap( fontsStatus ) ;
 
+    textBuffer.append( "*** Fonts" ).append(  "\n\n" ) ;
+
     for( String fontName : quadruplets.keySet() ) {
       for( FontQuadruplet quadruplet : quadruplets.get( fontName ) ) {
         final FontTriplet fontTriplet = quadruplet.getFontTriplet() ;
@@ -143,12 +147,25 @@ public class FontListHandler extends GenericHandler{
             .append( "[" ).append( fontTriplet.getPriority() ).append( "]" )
             .append( "``" ).append( quadruplet.getEmbedFileName() ).append( "``" )
             .append( "\n\n" )
-            .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
-            .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
-            .append( "0123456789" ).append( "\n\n" )
-            .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
         ;
       }
+    }
+    final char[] knownCharacters = (
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      + "abcdefghijklmnopqrstuvwxyz"
+      + nonWordCharacters
+    ).toCharArray() ;
+    textBuffer.append( "*** Characters" ).append(  "\n\n" ) ;
+    writeKnownCharacters( textBuffer, knownCharacters ) ;
+    textBuffer.append( "\n\n" ) ;
+  }
+
+  private void writeKnownCharacters( StringBuffer textBuffer, char[] knownCharacters ) {
+    for( char character : knownCharacters ) {
+      textBuffer
+          .append( '`' ).append( character ).append( '`' ).append( ' ' )
+          .append( "\n\n" )
+      ;
     }
   }
 
