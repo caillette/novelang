@@ -31,6 +31,7 @@ import org.apache.fop.fonts.FontTriplet;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
+import novelang.configuration.FontQuadruplet;
 import novelang.common.Renderable;
 import novelang.part.Part;
 import novelang.produce.DocumentProducer;
@@ -43,7 +44,6 @@ import novelang.parser.Escape;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.Ordering;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Lists;
@@ -101,30 +101,6 @@ public class FontListHandler extends GenericHandler{
     }
   }
 
-//  private void generateSourceDocument_tooMuchCrapAndIncorrectStylesApplied(
-  private void _generateSourceDocument(
-      StringBuffer textBuffer,
-      String nonWordCharacters,
-      FopFontStatus fontsStatus
-  ) {
-    for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
-      for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
-        final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject;
-        textBuffer
-            .append( "=== \"" ).append( fontTriplet.getName() ).append( "\"")
-            .append( "[style:" ).append( fontTriplet.getStyle() ).append( "]" )
-            .append( "[weight:" ).append( fontTriplet.getWeight() ).append( "]" )
-            .append( "[priority:" ).append( fontTriplet.getPriority() ).append( "]" )
-            .append( "``" ).append( fontInfo.getEmbedFile() ).append( "``" )
-            .append( "\n\n" )
-//            .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
-//            .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
-//            .append( "0123456789" ).append( "\n\n" )
-//            .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
-            ;
-      }
-    }
-  }
 
   private static final Set< Character > ESCAPERS = Sets.newHashSet(
       '`',
@@ -155,29 +131,10 @@ public class FontListHandler extends GenericHandler{
       String nonWordCharacters,
       FopFontStatus fontsStatus
   ) {
-    final List< FontQuadruplet > quadruplets = Lists.newArrayList() ;
+    final Multimap< String, FontQuadruplet > quadruplets = createSyntheticFontMap( fontsStatus ) ;
 
-    for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
-      for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
-        final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject ;
-        final FontQuadruplet fontQuadruplet =
-            new FontQuadruplet( fontInfo.getEmbedFile(), fontTriplet ) ;
-        quadruplets.add( fontQuadruplet ) ;
-      }
-    }
-    final Iterable< FontQuadruplet > quadrupletsPriorityAboveZero =
-        retainPriorityAboveZero( quadruplets ) ;
-    final Iterable< FontQuadruplet > quadrupletsPriorityZero =
-        retainPriorityZero( quadruplets ) ;
-    final Multimap< String, FontQuadruplet > quadrupletsByCleanNames =
-        Multimaps.newArrayListMultimap(
-            mapQuadrupletsByCleanNames( quadrupletsPriorityAboveZero ) ) ;
-    quadrupletsByCleanNames.putAll(
-        extractTripletsWithKnownName( quadrupletsByCleanNames.keySet(), quadrupletsPriorityZero )
-    ) ;
-
-    for( String fontName : quadrupletsByCleanNames.keySet() ) {
-      for( FontQuadruplet quadruplet : quadrupletsByCleanNames.get( fontName ) ) {
+    for( String fontName : quadruplets.keySet() ) {
+      for( FontQuadruplet quadruplet : quadruplets.get( fontName ) ) {
         final FontTriplet fontTriplet = quadruplet.getFontTriplet() ;
         textBuffer
             .append( "=== \"" ).append( fontTriplet.getName() ).append( "\"")
@@ -195,21 +152,6 @@ public class FontListHandler extends GenericHandler{
     }
   }
 
-
-  private static final Ordering< FontQuadruplet > PRIORITY_ORDERING =
-      new Ordering< FontQuadruplet >() {
-        public int compare( FontQuadruplet quadruplet1, FontQuadruplet quadruplet2 ) {
-          return quadruplet2.getFontTriplet().getPriority()
-              - quadruplet1.getFontTriplet().getPriority() ;
-        }
-      }
-  ;
-
-  private static Iterable< FontQuadruplet > sortByPriorityDescending(
-      Iterable< FontQuadruplet > quadruplets
-  ) {
-    return PRIORITY_ORDERING.sortedCopy( quadruplets ) ;
-  }
 
   private static Iterable< FontQuadruplet > retainPriorityAboveZero(
       Iterable< FontQuadruplet > quadruplets
@@ -255,22 +197,31 @@ public class FontListHandler extends GenericHandler{
     return extracted ;
   }
 
-  private static class FontQuadruplet {
-    private final String embedFileName ;
-    private final FontTriplet fontTriplet ;
+  public static Multimap< String, FontQuadruplet > createSyntheticFontMap(
+      FopFontStatus fontStatus
+  ) {
+    final List< FontQuadruplet > quadruplets = Lists.newArrayList() ;
 
-    private FontQuadruplet( String embedFileName, FontTriplet fontTriplet ) {
-      this.embedFileName = embedFileName;
-      this.fontTriplet = fontTriplet;
+    for( EmbedFontInfo fontInfo : fontStatus.getFontInfos() ) {
+      for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
+        final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject ;
+        final FontQuadruplet fontQuadruplet =
+            new FontQuadruplet( fontInfo.getEmbedFile(), fontTriplet ) ;
+        quadruplets.add( fontQuadruplet ) ;
+      }
     }
+    final Iterable< FontQuadruplet > quadrupletsPriorityAboveZero =
+        retainPriorityAboveZero( quadruplets ) ;
+    final Iterable< FontQuadruplet > quadrupletsPriorityZero =
+        retainPriorityZero( quadruplets ) ;
+    final Multimap< String, FontQuadruplet > quadrupletsByCleanNames =
+        Multimaps.newArrayListMultimap(
+            mapQuadrupletsByCleanNames( quadrupletsPriorityAboveZero ) ) ;
+    quadrupletsByCleanNames.putAll(
+        extractTripletsWithKnownName( quadrupletsByCleanNames.keySet(), quadrupletsPriorityZero )
+    ) ;
 
-    public String getEmbedFileName() {
-      return embedFileName;
-    }
-
-    public FontTriplet getFontTriplet() {
-      return fontTriplet;
-    }
+    return quadrupletsByCleanNames ;
   }
 
 }
