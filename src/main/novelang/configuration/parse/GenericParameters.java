@@ -35,6 +35,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Base class for command-line parameters parsing.
@@ -66,7 +67,7 @@ public abstract class GenericParameters {
     LOGGER.debug( "Base directory: ({}'", baseDirectory.getAbsolutePath() ) ;
     LOGGER.debug( "Parameters: '{}'", Lists.newArrayList( parameters ) ) ;
 
-    this.baseDirectory = Objects.nonNull( baseDirectory ) ;
+    this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     options = new Options() ;
     options.addOption( OPTION_HELP ) ;
     options.addOption( OPTION_FONT_DIRECTORIES ) ;

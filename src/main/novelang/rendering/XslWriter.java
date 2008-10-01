@@ -45,6 +45,7 @@ import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.common.metadata.TreeMetadata;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
@@ -80,7 +81,7 @@ public class XslWriter extends XmlWriter {
       EntityEscapeSelector entityEscapeSelector
   ) {
     super( mimeType ) ;
-    this.entityEscapeSelector = Objects.nonNull( entityEscapeSelector ) ;
+    this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
     this.resourceLoader = configuration.getResourceLoader() ;
     this.xslFileName = xslFileName ;
     entityResolver = new LocalEntityResolver() ;

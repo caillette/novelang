@@ -18,6 +18,7 @@ package novelang.configuration.parse;
 
 import org.apache.commons.cli.HelpFormatter;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Thrown when a parsing error occurs <em>or</em> when help was requested.
@@ -31,13 +32,13 @@ public class ArgumentException extends Exception {
 
   public ArgumentException( GenericParameters.HelpPrinter helpPrinter ) {
     helpRequested = true ;
-    this.helpPrinter = Objects.nonNull( helpPrinter ) ;
+    this.helpPrinter = Preconditions.checkNotNull( helpPrinter ) ;
   }
 
   public ArgumentException( String message, GenericParameters.HelpPrinter helpPrinter ) {
     super( message ) ;
     this.helpRequested = false ;
-    this.helpPrinter = Objects.nonNull( helpPrinter ) ;
+    this.helpPrinter = Preconditions.checkNotNull( helpPrinter ) ;
   }
 
   public ArgumentException( Exception e, GenericParameters.HelpPrinter helpPrinter ) {

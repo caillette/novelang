@@ -20,6 +20,7 @@ package novelang.loader;
 import java.io.InputStream;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Utility class.
@@ -39,8 +40,8 @@ public class ResourceLoaderTools {
    * @return a non-null object.
    */
   public static ResourceLoader compose( final ResourceLoader first, final ResourceLoader second ) {
-    Objects.nonNull( first ) ;
-    Objects.nonNull( second ) ;
+    Preconditions.checkNotNull( first ) ;
+    Preconditions.checkNotNull( second ) ;
 
     return new ResourceLoader() {
       public InputStream getInputStream( ResourceName resourceName ) {

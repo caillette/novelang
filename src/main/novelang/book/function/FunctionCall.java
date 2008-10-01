@@ -23,6 +23,7 @@ import novelang.common.tree.Treepath;
 import novelang.book.Environment;
 import com.google.common.collect.Iterables;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Represents an instance of a {@link FunctionDefinition} inside a Book file,
@@ -72,7 +73,7 @@ public abstract class FunctionCall {
     ) {
       this.book = book ;
       this.problems = null == problems ? NO_PROBLEM : problems ;
-      this.environment = Objects.nonNull( environment ) ;
+      this.environment = Preconditions.checkNotNull( environment ) ;
     }
 
     /**

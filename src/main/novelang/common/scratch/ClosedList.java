@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -43,12 +44,12 @@ public interface ClosedList< T > extends Iterable {
   class Tools {
 
     public static< T > ClosedList create( T[] array ) {
-      return create( Arrays.asList( Objects.nonNull( array ) ) ) ;
+      return create( Arrays.asList( Preconditions.checkNotNull( array ) ) ) ;
     }
     
     public static< T > ClosedList< T > create( List< T > list ) {
 
-      final List< T > immutableList = ImmutableList.copyOf( Objects.nonNull( list ) ) ;
+      final List< T > immutableList = ImmutableList.copyOf( Preconditions.checkNotNull( list ) ) ;
 
       return new ClosedList< T >() {
 

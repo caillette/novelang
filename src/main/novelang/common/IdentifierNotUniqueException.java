@@ -20,6 +20,7 @@ package novelang.common;
 import java.util.Collection;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import novelang.common.SyntacticTree;
 
 /**
@@ -37,8 +38,8 @@ public class IdentifierNotUniqueException extends Exception {
   }
 
   private static final String buildMessage( String identifier, Collection< SyntacticTree > trees ) {
-    identifier = Objects.nonNull( identifier ) ;
-    trees = Objects.nonNull( trees ) ;
+    identifier = Preconditions.checkNotNull( identifier ) ;
+    trees = Preconditions.checkNotNull( trees ) ;
     final StringBuffer buffer = new StringBuffer() ;
     buffer.append( "More than one usage of identifier '" ).append( identifier ).append( "':" ) ;
     for( final SyntacticTree tree : trees ) {

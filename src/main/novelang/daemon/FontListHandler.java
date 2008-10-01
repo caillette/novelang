@@ -42,6 +42,14 @@ import novelang.loader.ResourceName;
 import novelang.parser.SupportedCharacters;
 import novelang.parser.Escape;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.base.Predicate;
+import com.google.common.base.Nullable;
 
 /**
  * @author Laurent Caillette
@@ -73,22 +81,7 @@ public class FontListHandler extends GenericHandler{
       final String nonWordCharacters = createNonWordCharactersString() ;
       final FopFontStatus fontsStatus;
       fontsStatus = renderingConfiguration.getCurrentFopFontStatus() ;
-      for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
-        for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
-          final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject;
-          textBuffer
-              .append( "=== \"" ).append( fontTriplet.getName() ).append( "\"")
-              .append( "[style:" ).append( fontTriplet.getStyle() ).append( "]" )
-              .append( "[weight:" ).append( fontTriplet.getWeight() ).append( "]" )
-              .append( "``" ).append( fontInfo.getEmbedFile() ).append( "``" )
-              .append( "\n\n" )
-              .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
-              .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
-              .append( "0123456789" ).append( "\n\n" )
-              .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
-              ;
-        }
-      }
+      generateSourceDocument( textBuffer, nonWordCharacters, fontsStatus );
 
       LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
       final Renderable rendered = new Part( textBuffer.toString() ) ;
@@ -107,6 +100,31 @@ public class FontListHandler extends GenericHandler{
       ( ( Request ) request ).setHandled( true ) ;
       LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
 
+    }
+  }
+
+//  private void generateSourceDocument_tooMuchCrapAndIncorrectStylesApplied(
+  private void generateSourceDocument(
+      StringBuffer textBuffer,
+      String nonWordCharacters,
+      FopFontStatus fontsStatus
+  ) {
+    for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
+      for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
+        final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject;
+        textBuffer
+            .append( "=== \"" ).append( fontTriplet.getName() ).append( "\"")
+            .append( "[style:" ).append( fontTriplet.getStyle() ).append( "]" )
+            .append( "[weight:" ).append( fontTriplet.getWeight() ).append( "]" )
+            .append( "[priority:" ).append( fontTriplet.getPriority() ).append( "]" )
+            .append( "``" ).append( fontInfo.getEmbedFile() ).append( "``" )
+            .append( "\n\n" )
+//            .append( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ).append( "\n\n" )
+//            .append( "abcdefghijklmnopqrstuvwxyz" ).append( "\n\n" )
+//            .append( "0123456789" ).append( "\n\n" )
+//            .append( "`").append( nonWordCharacters ).append( "`").append( "\n\n" )
+            ;
+      }
     }
   }
 
@@ -131,4 +149,51 @@ public class FontListHandler extends GenericHandler{
     }   
     return buffer.toString() ;    
   }
+
+
+
+  private void generateSourceDocument_(
+      StringBuffer textBuffer,
+      String nonWordCharacters,
+      FopFontStatus fontsStatus
+  ) {
+    final Multimap< String, FontTriplet > tripletsByEmbedFileName = Multimaps.newHashMultimap() ;
+
+  }
+
+
+  private static final Ordering< FontTriplet > PRIORITY_ORDERING = new Ordering<FontTriplet>() {
+    public int compare( FontTriplet triplet1, FontTriplet triplet2 ) {
+      return triplet2.getPriority() - triplet1.getPriority() ;
+    }
+  } ;
+
+  private static Iterable< FontTriplet > sortByPriorityDescending(
+      Iterable< FontTriplet > fontTriplets
+  ) {
+    return PRIORITY_ORDERING.sortedCopy( fontTriplets ) ;
+  }
+
+  private static final Predicate< FontTriplet > PRIORITY_ABOVE_ZERO = new Predicate<FontTriplet>() {
+    public boolean apply( FontTriplet fontTriplet ) {
+      return fontTriplet.getPriority() > 0 ;
+    }
+  } ;
+
+  private static Iterable< FontTriplet > retainPriorityAboveZero(
+      Iterable< FontTriplet > fontTriplets
+  ) {
+    return Iterables.filter( fontTriplets, PRIORITY_ABOVE_ZERO ) ;
+  }
+
+  private static Multimap< String, FontTriplet > mapTripletsByCleanNames(
+      Iterable< FontTriplet > fontTriplets
+  ) {
+    final Multimap< String, FontTriplet > map = Multimaps.newHashMultimap() ;
+    for( FontTriplet fontTriplet : fontTriplets ) {
+      map.put( fontTriplet.getName(), fontTriplet ) ;
+    }
+    return ImmutableMultimap.copyOf( map ) ;
+  }
+
 }
