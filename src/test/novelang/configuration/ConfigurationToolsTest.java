@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.apache.fop.apps.FOPException;
 import org.apache.commons.lang.SystemUtils;
 import novelang.configuration.parse.DaemonParameters;
-import novelang.configuration.parse.ArgumentsNotParsedException;
+import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.GenericParameters;
 import novelang.configuration.parse.BatchParameters;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
@@ -58,7 +58,7 @@ public class ConfigurationToolsTest {
 
   @Test
   public void createDaemonConfigurationWithCustomPort()
-      throws ArgumentsNotParsedException, FOPException
+      throws ArgumentException, FOPException
   {
     final DaemonConfiguration configuration = ConfigurationTools
         .createDaemonConfiguration( createDaemonParameters(
@@ -71,7 +71,7 @@ public class ConfigurationToolsTest {
 
   @Test
   public void createDaemonConfigurationFromDefaults()
-      throws ArgumentsNotParsedException, FOPException
+      throws ArgumentException, FOPException
   {
     final DaemonConfiguration configuration =
         ConfigurationTools.createDaemonConfiguration( createDaemonParameters() ) ;
@@ -83,15 +83,15 @@ public class ConfigurationToolsTest {
 // BatchConfiguration
 // ==================
 
-  @Test( expected = ArgumentsNotParsedException.class )
+  @Test( expected = ArgumentException.class )
   public void createBatchConfigurationWithNoDocumentRequest()
-      throws ArgumentsNotParsedException, FOPException
+      throws ArgumentException, FOPException
   {
     ConfigurationTools.createBatchConfiguration( createBatchParameters() ) ;
 
   }
 
-  public void createBatchConfiguration() throws ArgumentsNotParsedException, FOPException {
+  public void createBatchConfiguration() throws ArgumentException, FOPException {
     final BatchConfiguration configuration = ConfigurationTools.createBatchConfiguration(
         createBatchParameters( "1.html", "2.html" ) ) ;
 
@@ -114,7 +114,7 @@ public class ConfigurationToolsTest {
 
   @Test
   public void createRenderingConfigurationFromDefaultsWithNoDefaultFontsDirectory()
-      throws ArgumentsNotParsedException, FOPException, MalformedURLException {
+      throws ArgumentException, FOPException, MalformedURLException {
     // 'fonts' directory has no 'fonts' subdirectory!
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
         .createRenderingConfiguration( createDaemonParameters( defaultFontsDirectory ) ) ;
@@ -126,7 +126,7 @@ public class ConfigurationToolsTest {
 
   @Test
   public void createRenderingConfigurationFromDefaultsWithDefaultFontsDirectory()
-      throws ArgumentsNotParsedException, FOPException, MalformedURLException
+      throws ArgumentException, FOPException, MalformedURLException
   {
     // Sure that parent of 'fonts' subdirectory has a 'fonts' subdirectory!
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
@@ -145,7 +145,7 @@ public class ConfigurationToolsTest {
 
   @Test
   public void createRenderingConfigurationFromCustomFontsDirectory()
-      throws ArgumentsNotParsedException, FOPException, MalformedURLException
+      throws ArgumentException, FOPException, MalformedURLException
   {
     final DaemonParameters parameters = createDaemonParameters(
         fontStructureDirectory,
@@ -170,7 +170,7 @@ public class ConfigurationToolsTest {
 // ====================
 
   @Test
-  public void createContentConfiguration() throws ArgumentsNotParsedException {
+  public void createContentConfiguration() throws ArgumentException {
     final ContentConfiguration contentConfiguration =
         ConfigurationTools.createContentConfiguration( createDaemonParameters() ) ;
     Assert.assertEquals( scratchDirectory, contentConfiguration.getContentRoot() ) ; 
@@ -182,7 +182,7 @@ public class ConfigurationToolsTest {
 // =====================
 
   @Test
-  public void createProducerConfiguration() throws ArgumentsNotParsedException, FOPException {
+  public void createProducerConfiguration() throws ArgumentException, FOPException {
     final ProducerConfiguration producerConfiguration =
         ConfigurationTools.createProducerConfiguration( createDaemonParameters() ) ;
     Assert.assertNotNull( producerConfiguration ) ;
@@ -248,25 +248,25 @@ public class ConfigurationToolsTest {
   }
 
   private final DaemonParameters createDaemonParameters( String... arguments )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     return createDaemonParameters( scratchDirectory, arguments ) ;
   }
 
   private final DaemonParameters createDaemonParameters( File baseDirectory, String... arguments )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     return new DaemonParameters( baseDirectory, arguments ) ;
   }
 
   private final BatchParameters createBatchParameters( String... arguments )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     return createBatchParameters( scratchDirectory, arguments ) ;
   }
 
   private final BatchParameters createBatchParameters( File baseDirectory, String... arguments )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     return new BatchParameters( baseDirectory, arguments ) ;
   }

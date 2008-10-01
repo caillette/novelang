@@ -17,8 +17,8 @@
 package novelang.configuration.parse;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -45,35 +45,45 @@ public abstract class GenericParameters {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericParameters.class ) ;
 
+  protected final Options options ;
+  protected final CommandLine line ;
+  protected final HelpPrinter helpPrinter;
+
   private final File baseDirectory ;
   private final Iterable< File > fontDirectories ;
   private final File styleDirectory ;
   private final File hyphenationDirectory ;
-  private final File logDirectory ;
 
-  protected final Options options ;
-  protected final CommandLine line ;
+
+  private final File logDirectory ;
 
   public GenericParameters(
       File baseDirectory,
       String[] parameters
   )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {    
     LOGGER.debug( "Base directory: ({}'", baseDirectory.getAbsolutePath() ) ;
     LOGGER.debug( "Parameters: '{}'", Lists.newArrayList( parameters ) ) ;
 
     this.baseDirectory = Objects.nonNull( baseDirectory ) ;
     options = new Options() ;
+    options.addOption( OPTION_HELP ) ;
     options.addOption( OPTION_FONT_DIRECTORIES ) ;
     options.addOption( OPTION_STYLE_DIRECTORY ) ;
     options.addOption( OPTION_LOG_DIRECTORY ) ;
     options.addOption( OPTION_HYPHENATION_DIRECTORY ) ;
     enrich( options ) ;
 
-//    logHelp() ;
+    helpPrinter = new HelpPrinter( options ) ;
+
+    if( containsHelpTrigger( parameters ) ) {
+      LOGGER.debug( "Help trigger detected" ) ;
+      throw new ArgumentException( helpPrinter ) ;
+    }
 
     final CommandLineParser parser = new PosixParser() ;
+
     try {
       line = parser.parse( options, parameters ) ;
 
@@ -93,12 +103,17 @@ public abstract class GenericParameters {
       }
 
     } catch( ParseException e ) {
-      throw new ArgumentsNotParsedException( e ) ;
+      throw new ArgumentException( e, helpPrinter ) ;
     }
 
   }
 
   protected abstract void enrich( Options options ) ;
+
+  private void throwArgumentException( String message ) throws ArgumentException {
+    throw new ArgumentException( message, helpPrinter ) ;
+  }
+
 
 // =======
 // Getters
@@ -173,7 +188,7 @@ public abstract class GenericParameters {
       File baseDirectory,
       Option option,
       CommandLine line
-  ) throws ArgumentsNotParsedException {
+  ) throws ArgumentException {
     return extractDirectory( baseDirectory, option, line, true ) ;
   }
 
@@ -183,7 +198,7 @@ public abstract class GenericParameters {
       CommandLine line,
       boolean failOnNonExistingDirectory
   )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     final File directory ;
     if( line.hasOption( option.getLongOpt() ) ) {
@@ -197,8 +212,8 @@ public abstract class GenericParameters {
     return directory ;
   }
 
-  protected static Iterable< File > extractDirectories( File parent, String[] directoryNames )
-      throws ArgumentsNotParsedException
+  protected final Iterable< File > extractDirectories( File parent, String[] directoryNames )
+      throws ArgumentException
   {
     final List directories = Lists.newArrayList() ;
     for( String directoryName : directoryNames ) {
@@ -207,12 +222,12 @@ public abstract class GenericParameters {
     return ImmutableList.copyOf( directories ) ;
   }
 
-  protected static File extractDirectory(
+  protected final File extractDirectory(
       File parent,
       String directoryName,
       boolean failOnNonExistingDirectory
   )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     final File directory ;
     if( directoryName.startsWith( "/" ) ) {
@@ -221,30 +236,15 @@ public abstract class GenericParameters {
       directory = new File( parent, directoryName ) ;
     }
     if( failOnNonExistingDirectory && ! ( directory.exists() && directory.isDirectory() ) ) {
-      throw new ArgumentsNotParsedException( "Not a directory: '" + directoryName + "'" ) ;
+      throwArgumentException( "Not a directory: '" + directoryName + "'" ) ;
     }
     return directory ;
   }
 
+
 // =================
 // Commons-CLI stuff
 // =================
-
-  public void logHelp() {
-    final HelpFormatter helpFormatter = new HelpFormatter() ;
-    final StringWriter helpWriter = new StringWriter() ;
-    helpFormatter.printHelp(
-        new PrintWriter( helpWriter ),
-        120,
-        "<command>",
-        "",
-        options,
-        2,
-        0,
-        ""
-    ) ;
-    LOGGER.debug( "Help is:\n" + helpWriter.toString() ) ;
-  }
 
   public static final String OPTIONNAME_FONT_DIRECTORIES = "font-dirs" ;
 
@@ -284,9 +284,62 @@ public abstract class GenericParameters {
       .create()
   ;
 
+  public static final String HELP_OPTION_NAME = "help";
+  private static final Option OPTION_HELP = OptionBuilder
+      .withLongOpt( HELP_OPTION_NAME )
+      .withDescription( "Print help" )
+      .create()
+  ;
+
 
   protected static String createOptionDescription( Option option ) {
     return OPTIONPREFIX + option.getLongOpt() + ", " + option.getDescription() ;
   }
+
+
+// ====
+// Help
+// ====
+
+  public static class HelpPrinter {
+    private final Options options ;
+
+    public HelpPrinter( Options options ) {
+      this.options = options;
+    }
+
+    public void print( PrintStream printStream, String commandName, int columns ) {
+      print( new PrintWriter( printStream ), commandName, columns ) ;
+    }
+    
+    public void print( PrintWriter printWriter, String commandName, int columns ) {
+      final HelpFormatter helpFormatter = new HelpFormatter() ;
+      helpFormatter.printHelp(
+          printWriter,
+          columns,
+          commandName,
+          "",
+          options,
+          2,
+          2,
+          ""
+      ) ;
+      printWriter.flush() ;
+    }
+  }
+
+  private static final String HELP_TRIGGER = OPTIONPREFIX + OPTION_HELP.getLongOpt() ;
+
+  private boolean containsHelpTrigger( String[] parameters ) {
+    for( int i = 0 ; i < parameters.length ; i++ ) {
+      final String parameter = parameters[ i ] ;
+      if( HELP_TRIGGER.equals( parameter ) ) {
+        return true ;
+      }
+    }
+    return false ;
+  }
+
+
 
 }

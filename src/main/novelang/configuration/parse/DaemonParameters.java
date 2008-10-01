@@ -38,7 +38,7 @@ public class DaemonParameters extends GenericParameters {
   private final Integer port ;
 
   public DaemonParameters( File baseDirectory, String[] parameters )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     super( baseDirectory, parameters ) ;
 
@@ -48,7 +48,7 @@ public class DaemonParameters extends GenericParameters {
       try {
         port = Integer.parseInt( portParameter ) ;
       } catch( NumberFormatException e ) {
-        throw new ArgumentsNotParsedException( e );
+        throw new ArgumentException( e, helpPrinter );
       }
     } else {
       port = null ;

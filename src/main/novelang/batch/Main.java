@@ -32,7 +32,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.BatchConfiguration;
-import novelang.configuration.parse.ArgumentsNotParsedException;
+import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.BatchParameters;
 import novelang.common.Problem;
 import novelang.produce.DocumentProducer;
@@ -97,13 +97,27 @@ public class Main {
             "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
       }
 
-    } catch( ArgumentsNotParsedException e ) {
-      LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
-      System.exit( -1 ) ;
+    } catch( ArgumentException e ) {
+      if( e.isHelpRequested() ) {
+        printHelpOnConsole( e ) ;
+        System.exit( -1 ) ;
+      } else {
+        LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
+        printHelpOnConsole( e ) ;
+        System.exit( -2 ) ;
+      }
     } catch( Exception e ) {
       LOGGER.error( "Fatal", e ) ;
       throw e ;
     }
+  }
+
+  private static void printHelpOnConsole( ArgumentException e ) {
+    e.getHelpPrinter().print(
+        System.out,
+        ClassUtils.getShortClassName( Main.class ) + " [OPTIONS] document1 [document2...]", 
+        80
+    ) ;
   }
 
   // TODO does ToStringBuilder save from doing this?

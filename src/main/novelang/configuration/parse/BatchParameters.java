@@ -45,14 +45,14 @@ public class BatchParameters extends GenericParameters {
   private final File outputDirectory ;
 
   public BatchParameters( File baseDirectory, String[] parameters )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     super( baseDirectory, parameters );
     final String[] sourceArguments = line.getArgs() ;
     LOGGER.debug( "found: sources = {}", Lists.newArrayList( sourceArguments ) ) ;
 
     if( sourceArguments.length == 0 ) {
-      throw new ArgumentsNotParsedException( "No source documents" ) ;
+      throw new ArgumentException( "No source documents", helpPrinter ) ;
     } else {
       final List< DocumentRequest > requestList = Lists.newArrayList() ;
       for( String sourceArgument : sourceArguments ) {
@@ -61,7 +61,7 @@ public class BatchParameters extends GenericParameters {
               RequestTools.createDocumentRequest( sourceArgument ) ;
           requestList.add( documentRequest ) ;
         } catch( IllegalArgumentException e ) {
-          throw new ArgumentsNotParsedException( e ) ;
+          throw new ArgumentException( e, helpPrinter ) ;
         }
       }
       documentRequests = ImmutableList.copyOf( requestList ) ;

@@ -16,20 +16,39 @@
  */
 package novelang.configuration.parse;
 
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.HelpFormatter;
+import com.google.common.base.Objects;
 
 /**
  * Thrown when a parsing error occurs <em>or</em> when help was requested.
  * 
  * @author Laurent Caillette
  */
-public class ArgumentsNotParsedException extends Exception {
+public class ArgumentException extends Exception {
 
-  public ArgumentsNotParsedException( String message ) {
-    super( message ) ;
+  private final GenericParameters.HelpPrinter helpPrinter;
+  private final boolean helpRequested ;
+
+  public ArgumentException( GenericParameters.HelpPrinter helpPrinter ) {
+    helpRequested = true ;
+    this.helpPrinter = Objects.nonNull( helpPrinter ) ;
   }
 
-  public ArgumentsNotParsedException( Exception e ) {
-    super( e.getMessage() ) ;
+  public ArgumentException( String message, GenericParameters.HelpPrinter helpPrinter ) {
+    super( message ) ;
+    this.helpRequested = false ;
+    this.helpPrinter = Objects.nonNull( helpPrinter ) ;
+  }
+
+  public ArgumentException( Exception e, GenericParameters.HelpPrinter helpPrinter ) {
+    this( e.getMessage(), helpPrinter ) ;
+  }
+
+  public boolean isHelpRequested() {
+    return helpRequested ;
+  }
+
+  public GenericParameters.HelpPrinter getHelpPrinter() {
+    return helpPrinter;
   }
 }

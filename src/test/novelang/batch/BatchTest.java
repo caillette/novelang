@@ -28,6 +28,7 @@ import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.configuration.ConfigurationTools;
+import novelang.configuration.parse.GenericParameters;
 import novelang.rendering.RenditionMimeType;
 
 /**
@@ -40,6 +41,12 @@ public class BatchTest {
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitWithIncorrectParameters() throws Exception {
     Main.main( new String[ 0 ] ) ;
+  }
+
+  @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
+  public void exitBecauseHelpRequeted() throws Exception {
+    Main.main(
+        new String[] { GenericParameters.OPTIONPREFIX + GenericParameters.HELP_OPTION_NAME } ) ;
   }
 
   @Test
