@@ -20,6 +20,7 @@ package novelang.daemon;
 import java.io.File;
 
 import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import novelang.Version;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.DaemonConfiguration;
 import novelang.configuration.parse.DaemonParameters;
+import novelang.configuration.parse.ArgumentException;
 import novelang.system.EnvironmentTools;
 import novelang.system.StartupTools;
 
@@ -49,8 +51,22 @@ public class HttpDaemon {
     LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
     EnvironmentTools.logSystemProperties() ;
 
-    final DaemonParameters parameters =
-        new DaemonParameters( new File( SystemUtils.USER_DIR ), args ) ;
+    final DaemonParameters parameters ;
+
+    try {
+      parameters = new DaemonParameters( new File( SystemUtils.USER_DIR ), args ) ;
+    } catch( ArgumentException e ) {
+      if( e.isHelpRequested() ) {
+        printHelpOnConsole( e ) ;
+        System.exit( -1 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      } else {
+        LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
+        printHelpOnConsole( e ) ;
+        System.exit( -2 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      }
+    }
 
     final DaemonConfiguration daemonConfiguration =
         ConfigurationTools.createDaemonConfiguration( parameters );
@@ -96,5 +112,12 @@ public class HttpDaemon {
     getLogger().info( "Server stopped on port {}", port ) ;
   }
 
+  private static void printHelpOnConsole( ArgumentException e ) {
+    e.getHelpPrinter().print(
+        System.out,
+        ClassUtils.getShortClassName( HttpDaemon.class ) + " [OPTIONS]",
+        80
+    ) ;
+  }
 
 }

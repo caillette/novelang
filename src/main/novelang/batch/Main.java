@@ -62,13 +62,27 @@ public class Main {
 
   public static void main( File baseDirectory, String[] arguments ) throws Exception {
     final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
+    final BatchParameters parameters ;
 
     try {
-      final BatchParameters parameters = new BatchParameters(
+      parameters = new BatchParameters(
           baseDirectory,
           arguments
       ) ;
+    } catch( ArgumentException e ) {
+      if( e.isHelpRequested() ) {
+        printHelpOnConsole( e ) ;
+        System.exit( -1 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      } else {
+        LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
+        printHelpOnConsole( e ) ;
+        System.exit( -2 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      }
+    }
 
+    try {
       LOGGER.debug( "Starting {} with arguments {}",
           ClassUtils.getShortClassName( Main.class ), asString( arguments ) ) ;
 
@@ -97,15 +111,6 @@ public class Main {
             "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
       }
 
-    } catch( ArgumentException e ) {
-      if( e.isHelpRequested() ) {
-        printHelpOnConsole( e ) ;
-        System.exit( -1 ) ;
-      } else {
-        LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
-        printHelpOnConsole( e ) ;
-        System.exit( -2 ) ;
-      }
     } catch( Exception e ) {
       LOGGER.error( "Fatal", e ) ;
       throw e ;
