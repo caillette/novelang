@@ -364,7 +364,7 @@
   </target -->
 
   <target name="login-on-remote-site" depends="init">
-    <input message="Login on remote site" addproperty="user" />
+    <input message="Login on remote site ('user,project')" addproperty="user" />
     <input message="Password on remote site" addproperty="password" />
   </target>
 
@@ -375,7 +375,11 @@
       set a dependency to the generate-documentation target.
       So it has to be run explicitely before this target.
     -->
-    <scp todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}">
+    <scp
+        todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}"
+        verbose="true"
+        sftp="true"
+    >
       <fileset dir="${target.documentation.site.dir}" />
     </scp>
 
@@ -386,9 +390,13 @@
 
     <scp
         todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}"
-        file="${target.javadoc.zip}"
-    />
+        verbose="true"
+        sftp="true"
+    >
+      <fileset dir="${target.javadoc.dir}" />
+    </scp>
 
+<!--
     <property
         name="command"
         value="unzip -o -d ${publish.remote.dir}/javadoc ${publish.remote.dir}/${target.javadoc.zipfilename}" 
@@ -404,6 +412,7 @@
     />
 
     <echo>SSH output: ${sshexecoutput}</echo>
+-->
 
   </target>
 
