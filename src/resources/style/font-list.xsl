@@ -92,19 +92,26 @@
           padding-top="5pt"
           padding-bottom="2pt"
       >
-        <xsl:value-of select="$font-family" />
+        <xsl:call-template name="font-synthetic-name" >
+          <xsl:with-param name="font-family" ><xsl:value-of select="$font-family" /></xsl:with-param>
+          <xsl:with-param name="font-style" ><xsl:value-of select="$font-style" /></xsl:with-param>
+          <xsl:with-param name="font-weight" ><xsl:value-of select="$font-weight" /></xsl:with-param>
+        </xsl:call-template>
+
         <fo:block
             font-family="monospace"
-            font-size="80%"
+            font-size="60%"
         >
           <fo:block>
             <xsl:value-of select="$embed-file" />
           </fo:block>
+<!--
           <fo:block>
             style=<xsl:value-of select="$font-style" />,
             weight=<xsl:value-of select="$font-weight" />,
             priority=<xsl:value-of select="$priority" />
           </fo:block>
+-->
         </fo:block>
       </fo:block>
       <xsl:call-template name="characters" >
@@ -176,7 +183,38 @@
 
   <xsl:template match="n:chapter/n:title" />
 
-  <xsl:template match="n:chapter[n:title='Characters']" />  
+  <xsl:template match="n:chapter[n:title='Characters']" />
+
+  <xsl:template name="font-synthetic-name" >
+    <xsl:param name="font-family" />
+    <xsl:param name="font-style" />
+    <xsl:param name="font-weight" />
+    <xsl:value-of select="$font-family" />
+
+    <xsl:text> </xsl:text>
+    <xsl:if test="$font-style='italic'" >italic</xsl:if>
+    <xsl:call-template name="weight-name" >
+      <xsl:with-param name="font-weight" >
+        <xsl:value-of select="$font-weight" />
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="weight-name" >
+    <xsl:param name="font-weight" />
+    <xsl:choose>
+      <xsl:when test="$font-weight=200" >
+        light
+      </xsl:when>
+      <xsl:when test="$font-weight=400" />
+      <xsl:when test="$font-weight=700" >
+        bold
+      </xsl:when>
+      <xsl:when test="$font-weight=800" >
+        extra-bold
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
 

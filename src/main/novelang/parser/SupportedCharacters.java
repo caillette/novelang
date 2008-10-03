@@ -46,7 +46,10 @@ public class SupportedCharacters {
   private static final String ANTLR_TOKENS = "/novelang/parser/antlr/Novelang__.g";
 
   private static final Pattern TOKENS_DECLARATIONS =
-      Pattern.compile( "'(\\w)|(\\\\\\W)|(\\\\u[a-f[0-9]]{4})|([\\p{Punct}&&[^\\']])'" ) ;
+      Pattern.compile( "'(\\w)|(\\\\\\W)|(\\\\u[a-f[0-9]]{4})|([\\p{Punct}&&[^']])'" ) ;
+  static {
+    LOGGER.debug( "Crafted regex: " + TOKENS_DECLARATIONS.toString() ) ;
+  }
 
   private static final CharacterExtractor CHARACTER_EXTRACTOR =
       new CharacterExtractor(

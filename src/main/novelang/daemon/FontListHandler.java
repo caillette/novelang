@@ -83,7 +83,7 @@ public class FontListHandler extends GenericHandler{
       fontsStatus = renderingConfiguration.getCurrentFopFontStatus() ;
       generateSourceDocument( textBuffer, nonWordCharacters, fontsStatus );
 
-      LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
+//      LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
       final Renderable rendered = new Part( textBuffer.toString() ) ;
 
 
@@ -153,6 +153,7 @@ public class FontListHandler extends GenericHandler{
     final char[] knownCharacters = (
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
       + "abcdefghijklmnopqrstuvwxyz"
+      + "0123456789"
       + nonWordCharacters
     ).toCharArray() ;
     textBuffer.append( "*** Characters" ).append(  "\n\n" ) ;

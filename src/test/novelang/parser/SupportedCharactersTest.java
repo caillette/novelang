@@ -34,7 +34,7 @@ public class SupportedCharactersTest {
 
   @Test
   public void extractSupportedCharacters() {
-    final String tokensDeclaration = "'x'  'X'\n'0'  '9' '\\u00e0'\n'\\\\'" ;
+    final String tokensDeclaration = "'x'  'X'\n'0'  '9' '\\u00e0'\n'\\\\'  '|'" ;
     final Set< Character > characters =
         SupportedCharacters.extractSupportedCharacters( tokensDeclaration ) ;
 
@@ -48,6 +48,7 @@ public class SupportedCharactersTest {
     assertTrue( characters.contains( '9' ) ) ;
     assertTrue( characters.contains( new Character( '\u00e0' ) ) ) ;
     assertTrue( characters.contains( '\\' ) ) ;
+//    assertTrue( characters.contains( '|' ) ) ;
 
   }
 
