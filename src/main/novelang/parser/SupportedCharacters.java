@@ -16,19 +16,18 @@
  */
 package novelang.parser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Set;
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Attempts to find out all characters supported by the parser.
@@ -46,7 +45,7 @@ public class SupportedCharacters {
   private static final String ANTLR_TOKENS = "/novelang/parser/antlr/Novelang__.g";
 
   private static final Pattern TOKENS_DECLARATIONS =
-      Pattern.compile( "'(\\w)|(\\\\\\W)|(\\\\u[a-f[0-9]]{4})|([\\p{Punct}&&[^']])'" ) ;
+      Pattern.compile( "'(.)'|'(\\\\.)'|'(\\\\u[a-f[0-9]]{4})'" ) ;
   static {
     LOGGER.debug( "Crafted regex: " + TOKENS_DECLARATIONS.toString() ) ;
   }
@@ -55,8 +54,7 @@ public class SupportedCharacters {
       new CharacterExtractor(
           new LitteralConverter(),
           new EscapedCharacterConverter(),
-          new UnicodeConverter(),
-          new LitteralConverter()
+          new UnicodeConverter()
       )
   ;
 
@@ -111,7 +109,7 @@ public class SupportedCharacters {
     }
 
     public final Character extract( Matcher matcher ) {
-      final int effectiveGroupCount = matcher.groupCount() - 1 ; // Don't use group 0
+      final int effectiveGroupCount = matcher.groupCount() ;
       if( converters.length != matcher.groupCount() ) {
         throw new IllegalArgumentException(
             "Matcher has " + matcher.groupCount() + " groups (including group 0) against "
@@ -124,7 +122,7 @@ public class SupportedCharacters {
         final String match = matcher.group( groupIndex ) ;
         if( match != null  ) {
 //          LOGGER.debug( "Converting '{}' from group {}", match, groupIndex ) ;
-          return converters[ converterIndex ].convert( match );
+          return converters[ converterIndex ].convert( match ) ;
         }
       }
 
@@ -140,7 +138,7 @@ public class SupportedCharacters {
       if( 1 != characterDeclaration.length() ) {
         throw new IllegalArgumentException(
             "Should contains one character only, was: '" + characterDeclaration + "'" ) ;
-      } ;
+      }
       return characterDeclaration.charAt( 0 ) ;
     }
   }
@@ -151,12 +149,12 @@ public class SupportedCharacters {
       if( ! characterDeclaration.startsWith( "\\u" ) ) {
         throw new IllegalArgumentException(
             "Should be unicode starting with '\\u', was: '" + characterDeclaration + "'" ) ;
-      } ;
+      }
       final String hex = "#" +
           characterDeclaration.substring( 2, characterDeclaration.length() ) ;
 //      LOGGER.debug( "Decoding {}", hex ) ;
-      Integer decoded = Integer.decode( hex ) ;
-      return new Character( ( char ) decoded.intValue() ) ;
+      final Integer decoded = Integer.decode( hex ) ;
+      return ( char ) decoded.intValue() ;
     }
   }
 
@@ -166,11 +164,11 @@ public class SupportedCharacters {
       if( ! characterDeclaration.startsWith( "\\" ) ) {
         throw new IllegalArgumentException(
             "Should be escaped starting with '\\', was: '" + characterDeclaration + "'" ) ;
-      } ;
+      }
       if( characterDeclaration.length() != 2 ) {
         throw new IllegalArgumentException(
             "Should start with '\\' then 1 character, was: '" + characterDeclaration + "'" ) ;
-      } ;
+      }
       return characterDeclaration.charAt( 1 ) ;
     }
   }
@@ -206,15 +204,10 @@ public class SupportedCharacters {
     } else {
       final char[] wordCharacters = WORD_CHARACTERS.toCharArray() ;
       final Set updatedCharacterSet = Sets.newTreeSet( supportedCharacters ) ;
-      for( int i = 0; i < wordCharacters.length ; i++ ) {
-        final Character wordCharacter = wordCharacters[ i ] ;
-        updatedCharacterSet.remove( wordCharacter ) ;
+      for( final char wordCharacter : wordCharacters ) {
+        updatedCharacterSet.remove(wordCharacter);
       }
-      final ImmutableSet< Character > resultingSet = ImmutableSet.copyOf( updatedCharacterSet ) ;
-//      for( Character character : resultingSet ) {
-//        LOGGER.debug( "Kept character 0x{}", Integer.toHexString( character.charValue() ) ) ;
-//      }
-      return resultingSet;
+      return(ImmutableSet < Character > ) ImmutableSet.copyOf( updatedCharacterSet ) ;
     }
   }
 
