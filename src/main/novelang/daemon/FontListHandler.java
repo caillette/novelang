@@ -124,13 +124,8 @@ public class FontListHandler extends GenericHandler{
       '\\',
       '\n',
       '\r',
-//      '§',
-      '\u0152',
-      '\u0153',
-      '\u2039',
-      '\u203a',
-      Escape.ESCAPE_START,
-      Escape.ESCAPE_END,
+      '\u2039', // SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK
+      '\u203a', // SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK
       ' '
       ) ;
 
@@ -169,23 +164,24 @@ public class FontListHandler extends GenericHandler{
         ;
       }
     }
-    final char[] knownCharacters = (
-//        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-//      + "abcdefghijklmnopqrstuvwxyz"
-//      + "0123456789"
-      supportedCharacters
-    ).toCharArray() ;
     textBuffer.append( "*** Characters" ).append(  "\n\n" ) ;
-    writeCharacters( textBuffer, knownCharacters ) ;
+    writeCharacters( textBuffer, supportedCharacters.toCharArray() ) ;
     textBuffer.append( "\n\n" ) ;
   }
 
-  private void writeCharacters( StringBuffer textBuffer, char[] Characters ) {
-    for( char character : Characters ) {
+  private void writeCharacters( StringBuffer textBuffer, char[] characters ) {
+    for( char character : characters ) {
+      final String characterAsString ;
+      final String escapedCharacter = Escape.escapeText( "" + character ) ;
+      if( null == escapedCharacter ) {
+        characterAsString = "" + character ;
+      } else {
+        characterAsString = escapedCharacter ;
+      }
       textBuffer
-          .append( '`' ).append( character ).append( '`' ).append( ' ' )
+          .append( '`' ).append( characterAsString ).append( '`' ).append( ' ' )
           .append( "\n\n" )
-      ;
+          ;
     }
   }
 
