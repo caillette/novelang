@@ -33,6 +33,7 @@ import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.FontQuadruplet;
 import novelang.common.Renderable;
+import novelang.common.Problem;
 import novelang.part.Part;
 import novelang.produce.DocumentProducer;
 import novelang.produce.RequestTools;
@@ -78,33 +79,47 @@ public class FontListHandler extends GenericHandler{
       LOGGER.info( "Font listing requested" ) ;
 
       final StringBuffer textBuffer = new StringBuffer() ;
-      final String nonWordCharacters = createNonWordCharactersString() ;
+      final String charactersString = createSupportedCharactersString() ;
+      LOGGER.debug( "Got those characters: " + charactersString ) ;
       final FopFontStatus fontsStatus;
       fontsStatus = renderingConfiguration.getCurrentFopFontStatus() ;
-      generateSourceDocument( textBuffer, nonWordCharacters, fontsStatus );
+      generateSourceDocument( textBuffer, charactersString, fontsStatus );
 
-//      LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
+      LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
       final Renderable rendered = new Part( textBuffer.toString() ) ;
 
+      if( rendered.hasProblem() ) {
+        response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR ) ;
+        for( final Problem problem : rendered.getProblems() ) {
+          LOGGER.error( problem.getMessage() );
+        }
+        
+      } else {
 
-      final DocumentRequest documentRequest = RequestTools.forgeDocumentRequest(
-          DOCUMENT_NAME,
-          RenditionMimeType.PDF,
-          STYLESHEET
-      ) ;
 
-      response.setStatus( HttpServletResponse.SC_OK ) ;
-      documentProducer.produce( documentRequest, rendered, response.getOutputStream() ) ;
-      response.setContentType( RenditionMimeType.PDF.getMimeName() ) ;
+        final DocumentRequest documentRequest = RequestTools.forgeDocumentRequest(
+            DOCUMENT_NAME,
+            RenditionMimeType.PDF,
+            STYLESHEET
+        ) ;
 
-      ( ( Request ) request ).setHandled( true ) ;
-      LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+        response.setStatus( HttpServletResponse.SC_OK ) ;
+        documentProducer.produce( documentRequest, rendered, response.getOutputStream() ) ;
+        response.setContentType( RenditionMimeType.PDF.getMimeName() ) ;
+
+        ( ( Request ) request ).setHandled( true ) ;
+        LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+      }
 
     }
   }
 
 
-  private static final Set< Character > ESCAPERS = Sets.newHashSet(
+  /**
+   * There are some characters to not include in generated source document as they would
+   * mess escaping or whatever.
+   */
+  private static final Set< Character > CHARACTERS_TO_NOT_DISPLAY = Sets.newHashSet(
       '`',
       '\\',
       '\u0152',
@@ -112,14 +127,15 @@ public class FontListHandler extends GenericHandler{
       '\u2039',
       '\u203a',
       Escape.ESCAPE_START,
-      Escape.ESCAPE_END
-  ) ;
+      Escape.ESCAPE_END,
+      ' '
+      ) ;
 
-  private String createNonWordCharactersString() {
-    final Set< Character > nonWordCharacterSet = SupportedCharacters.getNonWordCharacters() ;
+  private String createSupportedCharactersString() {
+    final Iterable< Character > nonWordCharacterSet = SupportedCharacters.getSupportedCharacters() ;
     final StringBuffer buffer = new StringBuffer() ;
     for( Character character : nonWordCharacterSet ) {
-      if( ! ESCAPERS.contains( character ) ) {
+      if( ! CHARACTERS_TO_NOT_DISPLAY.contains( character ) ) {
         buffer.append( character ) ;
       }
     }   
@@ -130,7 +146,7 @@ public class FontListHandler extends GenericHandler{
 
   private void generateSourceDocument(
       StringBuffer textBuffer,
-      String nonWordCharacters,
+      String supportedCharacters,
       FopFontStatus fontsStatus
   ) {
     final Multimap< String, FontQuadruplet > quadruplets = createSyntheticFontMap( fontsStatus ) ;
@@ -151,10 +167,10 @@ public class FontListHandler extends GenericHandler{
       }
     }
     final char[] knownCharacters = (
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      + "abcdefghijklmnopqrstuvwxyz"
-      + "0123456789"
-      + nonWordCharacters
+//        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//      + "abcdefghijklmnopqrstuvwxyz"
+//      + "0123456789"
+      supportedCharacters
     ).toCharArray() ;
     textBuffer.append( "*** Characters" ).append(  "\n\n" ) ;
     writeKnownCharacters( textBuffer, knownCharacters ) ;

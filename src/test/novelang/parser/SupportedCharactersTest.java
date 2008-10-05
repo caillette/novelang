@@ -78,7 +78,7 @@ public class SupportedCharactersTest {
 
   @Test
   public void lexerCharacters() {
-    final Set< Character > characters = SupportedCharacters.getSupportedCharacters() ;
+    final Iterable< Character > characters = SupportedCharacters.getSupportedCharacters() ;
     assertNotNull( characters ) ;
     LOGGER.debug( "Got: {}", characters ) ;
     
