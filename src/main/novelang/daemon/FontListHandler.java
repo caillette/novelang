@@ -124,7 +124,7 @@ public class FontListHandler extends GenericHandler{
       '\\',
       '\n',
       '\r',
-      '§',
+//      '§',
       '\u0152',
       '\u0153',
       '\u2039',
