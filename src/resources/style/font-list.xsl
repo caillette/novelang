@@ -48,7 +48,7 @@
             margin-top="0mm"     margin-bottom="7mm"
             margin-right="25mm"  margin-left="25mm"
         >
-          <fo:region-body margin-top="1.1cm" margin-bottom="1.1cm" />
+          <fo:region-body margin-top="0.5cm" margin-bottom="1.1cm" />
         </fo:simple-page-master>
 
       </fo:layout-master-set>
@@ -61,9 +61,7 @@
         <fo:flow
             flow-name="xsl-region-body"
         >
-          <fo:block>
-            <xsl:apply-templates />
-          </fo:block>
+          <xsl:apply-templates />
         </fo:flow>
 
       </fo:page-sequence>
@@ -81,16 +79,17 @@
     <xsl:variable name="priority" select="n:title/n:square-brackets[3]" />
 
     <fo:block
-        padding-top="20pt"
+        padding-top="0pt"
         text-align="center"
         padding-bottom="5pt"
-        font-weight="bold"
         keep-together="always"
-    >
+        >
       <fo:block
           border-style="dotted"
           padding-top="5pt"
-          padding-bottom="2pt"
+          padding-bottom="6pt"
+          font-weight="bold"
+          space-after="10pt"
       >
         <xsl:call-template name="font-synthetic-name" >
           <xsl:with-param name="font-family" ><xsl:value-of select="$font-family" /></xsl:with-param>
@@ -102,23 +101,46 @@
             font-family="monospace"
             font-size="60%"
         >
-          <fo:block>
-            <xsl:value-of select="$embed-file" />
-          </fo:block>
-<!--
-          <fo:block>
-            style=<xsl:value-of select="$font-style" />,
-            weight=<xsl:value-of select="$font-weight" />,
-            priority=<xsl:value-of select="$priority" />
-          </fo:block>
--->
+          <xsl:value-of select="$embed-file" />
         </fo:block>
       </fo:block>
-      <xsl:call-template name="characters" >
-        <xsl:with-param name="font-family" ><xsl:value-of select="$font-family" /></xsl:with-param>
-        <xsl:with-param name="font-style" ><xsl:value-of select="$font-style" /></xsl:with-param>
-        <xsl:with-param name="font-weight" ><xsl:value-of select="$font-weight" /></xsl:with-param>
+
+
+      <xsl:call-template name="demo-sentences">
+        <xsl:with-param name="font-family">
+          <xsl:value-of select="$font-family"/>
+        </xsl:with-param>
+        <xsl:with-param name="font-style">
+          <xsl:value-of select="$font-style"/>
+        </xsl:with-param>
+        <xsl:with-param name="font-weight">
+          <xsl:value-of select="$font-weight"/>
+        </xsl:with-param>
+        <xsl:with-param name="font-size" >12</xsl:with-param>
+        <xsl:with-param name="sentence" >The quick brown fox jumps over the lazy dog</xsl:with-param>
       </xsl:call-template>
+
+      <fo:block
+          space-before="10pt"
+          space-after="10pt"
+          margin-left="20pt"
+          margin-right="20pt"
+          text-align="center"
+      >
+        <xsl:call-template name="characters">
+          <xsl:with-param name="font-family">
+            <xsl:value-of select="$font-family"/>
+          </xsl:with-param>
+          <xsl:with-param name="font-style">
+            <xsl:value-of select="$font-style"/>
+          </xsl:with-param>
+          <xsl:with-param name="font-weight">
+            <xsl:value-of select="$font-weight"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </fo:block>
+
+
     </fo:block>
     
   </xsl:template>
@@ -129,14 +151,16 @@
     <xsl:param name="font-style" />
     <xsl:param name="font-weight" />
     <xsl:param name="font-size" >20</xsl:param>
-    <xsl:param name="column-count" >30</xsl:param>
+    <xsl:param name="column-count" >16</xsl:param>
 
     <xsl:variable
         name="characters"
         select="//n:chapter[n:title='Characters']/n:paragraph-plain"
     />
 
-    <fo:table >
+    <fo:table
+        border-collapse="collapse"    
+    >
 
       <xsl:for-each select="$characters[ position() &lt;= $column-count ]" >
         <fo:table-column/>
@@ -152,8 +176,14 @@
               <xsl:for-each
                   select="$characters[ ( position() &gt;= $low-index ) and ( position() &lt; $hi-index ) ]"
               >
-                <fo:table-cell>
-                  <fo:block>
+                <fo:table-cell
+                    border="0.3pt solid grey"
+                    padding="2pt"
+                    overflow="hidden"
+                    text-align="center"
+                >
+                  <!-- This value of text-indent fixes bad horizontal alignment. Why? -->
+                  <fo:block text-indent="-18pt" >
                     <xsl:attribute name="font-family" >
                       <xsl:value-of select="$font-family" />
                     </xsl:attribute>
@@ -215,6 +245,39 @@
       </xsl:when>
     </xsl:choose>
   </xsl:template>
+
+
+  <xsl:template name="demo-sentences" >
+
+    <xsl:param name="font-family" />
+    <xsl:param name="font-style" />
+    <xsl:param name="font-weight" />
+    <xsl:param name="sentence" />
+    <xsl:param name="font-size" >20</xsl:param>
+
+
+    <fo:block
+        text-align="left"    
+    >
+      <xsl:attribute name="font-family" >
+        <xsl:value-of select="$font-family" />
+      </xsl:attribute>
+      <xsl:attribute name="font-size" >
+        <xsl:value-of select="$font-size" />
+      </xsl:attribute>
+      <xsl:attribute name="font-weight" >
+        <xsl:value-of select="$font-weight" />
+      </xsl:attribute>
+      <xsl:attribute name="font-style" >
+        <xsl:value-of select="$font-style" />
+      </xsl:attribute>
+      <xsl:value-of select="$sentence" />
+    </fo:block>
+
+
+  </xsl:template>
+
+
 
 </xsl:stylesheet>
 

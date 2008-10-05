@@ -85,7 +85,7 @@ public class FontListHandler extends GenericHandler{
       fontsStatus = renderingConfiguration.getCurrentFopFontStatus() ;
       generateSourceDocument( textBuffer, charactersString, fontsStatus );
 
-      LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
+//      LOGGER.debug( "Rendering: \n{}", textBuffer.toString() ) ;
       final Renderable rendered = new Part( textBuffer.toString() ) ;
 
       if( rendered.hasProblem() ) {
