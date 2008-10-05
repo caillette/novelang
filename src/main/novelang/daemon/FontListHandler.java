@@ -119,9 +119,12 @@ public class FontListHandler extends GenericHandler{
    * There are some characters to not include in generated source document as they would
    * mess escaping or whatever.
    */
-  private static final Set< Character > CHARACTERS_TO_NOT_DISPLAY = Sets.newHashSet(
+  private static final Set< Character > CHARACTERS_TO_HIDE = Sets.newHashSet(
       '`',
       '\\',
+      '\n',
+      '\r',
+      '§',
       '\u0152',
       '\u0153',
       '\u2039',
@@ -132,10 +135,10 @@ public class FontListHandler extends GenericHandler{
       ) ;
 
   private String createSupportedCharactersString() {
-    final Iterable< Character > nonWordCharacterSet = SupportedCharacters.getSupportedCharacters() ;
+    final Iterable< Character > supportedCharacters = SupportedCharacters.getSupportedCharacters() ;
     final StringBuffer buffer = new StringBuffer() ;
-    for( Character character : nonWordCharacterSet ) {
-      if( ! CHARACTERS_TO_NOT_DISPLAY.contains( character ) ) {
+    for( Character character : supportedCharacters ) {
+      if( ! CHARACTERS_TO_HIDE.contains( character ) ) {
         buffer.append( character ) ;
       }
     }   
@@ -173,12 +176,12 @@ public class FontListHandler extends GenericHandler{
       supportedCharacters
     ).toCharArray() ;
     textBuffer.append( "*** Characters" ).append(  "\n\n" ) ;
-    writeKnownCharacters( textBuffer, knownCharacters ) ;
+    writeCharacters( textBuffer, knownCharacters ) ;
     textBuffer.append( "\n\n" ) ;
   }
 
-  private void writeKnownCharacters( StringBuffer textBuffer, char[] knownCharacters ) {
-    for( char character : knownCharacters ) {
+  private void writeCharacters( StringBuffer textBuffer, char[] Characters ) {
+    for( char character : Characters ) {
       textBuffer
           .append( '`' ).append( character ).append( '`' ).append( ' ' )
           .append( "\n\n" )
