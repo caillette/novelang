@@ -1000,8 +1000,8 @@ nonHexLetter
   | '\u00fc' // LATIN SMALL LETTER U WITH DIAERESIS (&uuml;)
   | '\u00dc' // LATIN CAPITAL LETTER U WITH DIAERESIS (&Uuml;)
     
-  | '\u0153' // LATIN SMALL LIGATURE OE
-  | '\u0152' // LATIN CAPITAL LIGATURE OE
+  | '\u0153' // LATIN SMALL LIGATURE OE (&oelig;)
+  | '\u0152' // LATIN CAPITAL LIGATURE OE (&OElig;)
 
   ;
 

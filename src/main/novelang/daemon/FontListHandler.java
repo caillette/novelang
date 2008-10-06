@@ -167,6 +167,11 @@ public class FontListHandler extends GenericHandler{
     textBuffer.append( "*** Characters" ).append(  "\n\n" ) ;
     writeCharacters( textBuffer, supportedCharacters.toCharArray() ) ;
     textBuffer.append( "\n\n" ) ;
+    textBuffer.append( "*** Sentences" ).append(  "\n\n" ) ;
+    textBuffer.append( "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" ).append(  "\n\n" ) ;
+    textBuffer.append( "--- The quick brown fox jumps over the lazy dog." ).append(  "\n\n" ) ;
+    textBuffer.append( "--- Voix ambig\u00fce d'un c\u0153ur qui au z\u00e9phyr " ) ;
+    textBuffer.append( "pr\u00e9f\u00e8re les jattes de kiwis." ).append( "\n\n" ) ;
   }
 
   private void writeCharacters( StringBuffer textBuffer, char[] characters ) {

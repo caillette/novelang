@@ -37,6 +37,8 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
 
+  <xsl:import href="punctuation-US-EN.xsl" />
+
   <xsl:template match="/" >
     <fo:root>
 
@@ -45,7 +47,7 @@
         <fo:simple-page-master
             master-name="A4"
             page-width="210mm"   page-height="297mm"
-            margin-top="0mm"     margin-bottom="7mm"
+            margin-top="10mm"     margin-bottom="10mm"
             margin-right="25mm"  margin-left="25mm"
         >
           <fo:region-body margin-top="0.5cm" margin-bottom="1.1cm" />
@@ -83,46 +85,62 @@
         text-align="center"
         padding-bottom="5pt"
         keep-together="always"
-        >
+    >
       <fo:block
           border-style="dotted"
-          padding-top="5pt"
-          padding-bottom="6pt"
+          padding-top="12pt"
+          padding-bottom="8pt"
           font-weight="bold"
           space-after="10pt"
       >
-        <xsl:call-template name="font-synthetic-name" >
-          <xsl:with-param name="font-family" ><xsl:value-of select="$font-family" /></xsl:with-param>
-          <xsl:with-param name="font-style" ><xsl:value-of select="$font-style" /></xsl:with-param>
-          <xsl:with-param name="font-weight" ><xsl:value-of select="$font-weight" /></xsl:with-param>
-        </xsl:call-template>
+        <fo:block
+            font-size="18pt"
+        >
+          <xsl:call-template name="font-synthetic-name">
+            <xsl:with-param name="font-family">
+              <xsl:value-of select="$font-family" />
+            </xsl:with-param>
+            <xsl:with-param name="font-style">
+              <xsl:value-of select="$font-style" />
+            </xsl:with-param>
+            <xsl:with-param name="font-weight">
+              <xsl:value-of select="$font-weight" />
+            </xsl:with-param>
+          </xsl:call-template>
+        </fo:block>
+
 
         <fo:block
+            space-before="4pt"
             font-family="monospace"
-            font-size="60%"
+            font-size="9pt"
         >
           <xsl:value-of select="$embed-file" />
         </fo:block>
       </fo:block>
 
 
-      <xsl:call-template name="demo-sentences">
-        <xsl:with-param name="font-family">
-          <xsl:value-of select="$font-family"/>
-        </xsl:with-param>
-        <xsl:with-param name="font-style">
-          <xsl:value-of select="$font-style"/>
-        </xsl:with-param>
-        <xsl:with-param name="font-weight">
-          <xsl:value-of select="$font-weight"/>
-        </xsl:with-param>
-        <xsl:with-param name="font-size" >12</xsl:with-param>
-        <xsl:with-param name="sentence" >The quick brown fox jumps over the lazy dog</xsl:with-param>
-      </xsl:call-template>
+      <fo:block
+          space-before="15pt"
+      >
+        <xsl:call-template name="demo-sentences">
+          <xsl:with-param name="font-family">
+            <xsl:value-of select="$font-family" />
+          </xsl:with-param>
+          <xsl:with-param name="font-style">
+            <xsl:value-of select="$font-style" />
+          </xsl:with-param>
+          <xsl:with-param name="font-weight">
+            <xsl:value-of select="$font-weight" />
+          </xsl:with-param>
+          <xsl:with-param name="font-size">12</xsl:with-param>
+        </xsl:call-template>
+      </fo:block>
+
 
       <fo:block
-          space-before="10pt"
-          space-after="10pt"
+          space-before="20pt"
+          space-after="40pt"
           margin-left="20pt"
           margin-right="20pt"
           text-align="center"
@@ -177,7 +195,7 @@
                   select="$characters[ ( position() &gt;= $low-index ) and ( position() &lt; $hi-index ) ]"
               >
                 <fo:table-cell
-                    border="0.3pt solid grey"
+                    border="0.5pt solid grey"
                     padding="2pt"
                     overflow="hidden"
                     text-align="center"
@@ -252,27 +270,32 @@
     <xsl:param name="font-family" />
     <xsl:param name="font-style" />
     <xsl:param name="font-weight" />
-    <xsl:param name="sentence" />
-    <xsl:param name="font-size" >20</xsl:param>
+    <xsl:param name="font-size" >12</xsl:param>
 
+    <xsl:variable
+        name="sentences"
+        select="//n:chapter[n:title='Sentences']/*"
+    />
 
-    <fo:block
-        text-align="left"    
-    >
-      <xsl:attribute name="font-family" >
-        <xsl:value-of select="$font-family" />
-      </xsl:attribute>
-      <xsl:attribute name="font-size" >
-        <xsl:value-of select="$font-size" />
-      </xsl:attribute>
-      <xsl:attribute name="font-weight" >
-        <xsl:value-of select="$font-weight" />
-      </xsl:attribute>
-      <xsl:attribute name="font-style" >
-        <xsl:value-of select="$font-style" />
-      </xsl:attribute>
-      <xsl:value-of select="$sentence" />
-    </fo:block>
+    <xsl:for-each select="$sentences" >
+      <fo:block
+          text-align="left"
+      >
+        <xsl:attribute name="font-family">
+          <xsl:value-of select="$font-family" />
+        </xsl:attribute>
+        <xsl:attribute name="font-size">
+          <xsl:value-of select="$font-size" />
+        </xsl:attribute>
+        <xsl:attribute name="font-weight">
+          <xsl:value-of select="$font-weight" />
+        </xsl:attribute>
+        <xsl:attribute name="font-style">
+          <xsl:value-of select="$font-style" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." />
+      </fo:block>
+    </xsl:for-each>
 
 
   </xsl:template>

@@ -83,6 +83,8 @@ public class SupportedCharacters {
     if( null == supportedCharacters ) {
       return null ;
     } else {
+//      supportedCharacters.add( '\u2014' ) ;
+//      supportedCharacters.add( '\u2013' ) ;
       return ImmutableSet.copyOf( Sets.newTreeSet( Lists.sortedCopy( supportedCharacters ) ) ) ;
     }
   }
