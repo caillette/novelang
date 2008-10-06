@@ -272,10 +272,7 @@
     <xsl:param name="font-weight" />
     <xsl:param name="font-size" >12</xsl:param>
 
-    <xsl:variable
-        name="sentences"
-        select="//n:chapter[n:title='Sentences']/*"
-    />
+    <xsl:variable name="sentences" select="//n:chapter[n:title='Sentences']/*" />
 
     <xsl:for-each select="$sentences" >
       <fo:block
@@ -293,6 +290,7 @@
         <xsl:attribute name="font-style">
           <xsl:value-of select="$font-style" />
         </xsl:attribute>
+        <xsl:if test="position()=1" >&mdash; &ndash; &hellip; </xsl:if>
         <xsl:apply-templates select="." />
       </fo:block>
     </xsl:for-each>
