@@ -42,6 +42,21 @@ public class PdfWriter extends XslWriter {
   protected static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ;
   protected final FopFactory fopFactory ;
 
+  public PdfWriter(
+      RenderingConfiguration configuration,
+      ResourceName stylesheet,
+      String namespaceUri,
+      String nameQualifier
+  ) {
+    super(
+        namespaceUri,
+        nameQualifier,
+        configuration,
+        null == stylesheet ? DEFAULT_FO_STYLESHEET : stylesheet
+    ) ;
+    fopFactory = configuration.getFopFactory() ;
+  }
+
   public PdfWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
     super( configuration, null == stylesheet ? DEFAULT_FO_STYLESHEET : stylesheet ) ;
     fopFactory = configuration.getFopFactory() ;

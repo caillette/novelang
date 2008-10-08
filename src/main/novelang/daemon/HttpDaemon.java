@@ -85,7 +85,7 @@ public class HttpDaemon {
   public HttpDaemon( DaemonConfiguration daemonConfiguration ) {
     final HandlerCollection handlers = new HandlerCollection() ;
     handlers.addHandler( new ShutdownHandler() ) ;
-    handlers.addHandler( new FontListHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    handlers.addHandler( new FontDiscoveryHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
     handlers.addHandler( new DirectoryScanHandler(
         daemonConfiguration.getProducerConfiguration().getContentConfiguration() ) ) ;
     handlers.addHandler( new DocumentHandler( daemonConfiguration.getProducerConfiguration() ) ) ;

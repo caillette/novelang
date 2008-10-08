@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.daemon;
+package novelang.rendering.font;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,9 +32,10 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import novelang.configuration.FontQuadruplet;
 import novelang.configuration.FopFontStatus;
+import novelang.rendering.font.SyntheticFontMap;
 
 /**
- * Tests for {@link FontListHandler#createSyntheticFontMap(novelang.configuration.FopFontStatus)}.
+ * Tests for {@link novelang.rendering.font.SyntheticFontMap#createSyntheticFontMap(novelang.configuration.FopFontStatus)}.
  *
  * @author Laurent Caillette
  */
@@ -43,57 +44,9 @@ public class SyntheticFontMapTest {
   @Test
   public void testFamily3Plus1() {
 
-    final FontTriplet tripletFontOneNormalNormal = tripletNormalNormal( FONT_ONE, 0 ) ;
-    final FontTriplet tripletFontOneNormalBold = tripletNormalBold( FONT_ONE, 5 ) ;
-    final FontTriplet tripletFontOneItalicNormal = tripletItalicNormal( FONT_ONE, 7 ) ;
-    final FontTriplet tripletFontOneItalicBold = tripletItalicBold( FONT_ONE, 8 ) ;
-
-    final FontTriplet tripletFont1NormalBold = tripletNormalBold( FONT_1, 0 ) ;
-    final FontTriplet tripletFont1ItalicNormal = tripletItalicNormal( FONT_1, 0 ) ;
-    final FontTriplet tripletFont1ItalicBold = tripletItalicBold( FONT_1, 0 ) ;
-
-    final FontTriplet tripletFontTwoNormalNormal = tripletNormalNormal( FONT_TWO, 7 ) ;
-    final FontTriplet tripletFont2NormalNormal = tripletNormalNormal( FONT_2, 0 ) ;
-
-    final EmbedFontInfo infoFontOneNormalNormal = embedFontInfo(
-        TTF_ONE_NORMAL_NORMAL,
-        tripletFontOneNormalNormal
-    ) ;
-    final EmbedFontInfo infoFontOneItalicNormal = embedFontInfo(
-        TTF_ONE_ITALIC_NORMAL,
-        tripletFontOneItalicNormal,
-        tripletFont1ItalicNormal
-    ) ;
-    final EmbedFontInfo infoFontOneNormalBold = embedFontInfo(
-        TTF_ONE_NORMAL_BOLD,
-        tripletFontOneNormalBold,
-        tripletFont1NormalBold
-    ) ;
-    final EmbedFontInfo infoFontOneItalicBold = embedFontInfo(
-        TTF_ONE_ITALIC_BOLD,
-        tripletFontOneItalicBold,
-        tripletFont1ItalicBold
-    ) ;
-
-    final EmbedFontInfo infoFontTwoNormalNormal = embedFontInfo(
-        TTF_TWO_NORMAL_NORMAL,
-        tripletFont2NormalNormal,
-        tripletFontTwoNormalNormal
-    ) ;
-
-    final Iterable< EmbedFontInfo > fontInfos = Lists.newArrayList(
-        infoFontOneNormalNormal,
-        infoFontOneItalicNormal,
-        infoFontOneNormalBold,
-        infoFontOneItalicBold,
-        infoFontTwoNormalNormal
-    ) ;
-    final Map< String, EmbedFontInfo > failedFonts = ImmutableMap.of() ;
-
-    final FopFontStatus fontStatus = new FopFontStatus( fontInfos, failedFonts ) ;
 
     final Multimap< String,FontQuadruplet > syntheticMap =
-        FontListHandler.createSyntheticFontMap( fontStatus ) ;
+        SyntheticFontMap.createSyntheticFontMap( FONT_STATUS ) ;
 
     final Set< String > fontNames = syntheticMap.keySet() ;
     Assert.assertEquals( Sets.newHashSet( FONT_ONE, FONT_TWO ), fontNames ) ;
@@ -110,10 +63,10 @@ public class SyntheticFontMapTest {
     }
     Assert.assertEquals(
         Sets.newHashSet(
-            tripletFontOneNormalNormal,
-            tripletFontOneNormalBold,
-            tripletFontOneItalicNormal,
-            tripletFontOneItalicBold
+            TRIPLET_FONT_ONE_NORMAL_NORMAL,
+            TRIPLET_FONT_ONE_NORMAL_BOLD,
+            TRIPLET_FONT_ONE_ITALIC_NORMAL,
+            TRIPLET_FONT_ONE_ITALIC_BOLD
         ),
         tripletsOne
     ) ;
@@ -121,19 +74,10 @@ public class SyntheticFontMapTest {
     final Collection< FontQuadruplet > quadrupletsTwo = syntheticMap.get( FONT_TWO ) ;
     Assert.assertEquals( 1, quadrupletsTwo.size() ) ;
     Assert.assertEquals(
-        tripletFontTwoNormalNormal,
+        TRIPLET_FONT_TWO_NORMAL_NORMAL,
         quadrupletsTwo.iterator().next().getFontTriplet()
     ) ;
 
-  }
-
-  private EmbedFontInfo embedFontInfo( String embedFontFile, FontTriplet... fontTriplets ) {
-    return new EmbedFontInfo(
-        null, // metrics file, no need for that.
-        true, // kerning, no need for that.
-        Arrays.asList( fontTriplets ),
-        embedFontFile
-    );
   }
 
 // =======
@@ -150,6 +94,74 @@ public class SyntheticFontMapTest {
   private static final String TTF_ONE_NORMAL_BOLD = "One-normal-bold.ttf" ;
   private static final String TTF_ONE_ITALIC_BOLD = "One-italic-bold.ttf" ;
   private static final String TTF_TWO_NORMAL_NORMAL = "Two-normal-normal.ttf" ;
+
+  private static final FontTriplet TRIPLET_FONT_ONE_NORMAL_NORMAL =
+      tripletNormalNormal( FONT_ONE, 0 ) ;
+  private static final FontTriplet TRIPLET_FONT_ONE_NORMAL_BOLD =
+      tripletNormalBold( FONT_ONE, 5 ) ;
+  private static final FontTriplet TRIPLET_FONT_ONE_ITALIC_NORMAL =
+      tripletItalicNormal( FONT_ONE, 7 ) ;
+  private static final FontTriplet TRIPLET_FONT_ONE_ITALIC_BOLD =
+      tripletItalicBold( FONT_ONE, 8 ) ;
+
+  private static final FontTriplet TRIPLET_FONT_NORMAL_BOLD =
+      tripletNormalBold( FONT_1, 0 ) ;
+  private static final FontTriplet TRIPLET_FONT_ITALIC_NORMAL =
+      tripletItalicNormal( FONT_1, 0 ) ;
+  private static final FontTriplet TRIPLET_FONT_ITALIC_BOLD =
+      tripletItalicBold( FONT_1, 0 ) ;
+
+  private static final FontTriplet TRIPLET_FONT_TWO_NORMAL_NORMAL =
+      tripletNormalNormal( FONT_TWO, 7 ) ;
+  private static final FontTriplet TRIPLET_FONT_2_NORMAL_NORMAL =
+      tripletNormalNormal( FONT_2, 0 ) ;
+
+  private static final EmbedFontInfo INFO_FONT_ONE_NORMAL_NORMAL = embedFontInfo(
+      TTF_ONE_NORMAL_NORMAL,
+      TRIPLET_FONT_ONE_NORMAL_NORMAL
+  ) ;
+  private static final EmbedFontInfo INFO_FONT_ONE_ITALIC_NORMAL = embedFontInfo(
+      TTF_ONE_ITALIC_NORMAL,
+      TRIPLET_FONT_ONE_ITALIC_NORMAL,
+      TRIPLET_FONT_ITALIC_NORMAL
+  ) ;
+  private static final EmbedFontInfo INFO_FONT_ONE_NORMAL_BOLD = embedFontInfo(
+      TTF_ONE_NORMAL_BOLD,
+      TRIPLET_FONT_ONE_NORMAL_BOLD,
+      TRIPLET_FONT_NORMAL_BOLD
+  ) ;
+  private static final EmbedFontInfo INFO_FONT_ONE_ITALIC_BOLD = embedFontInfo(
+      TTF_ONE_ITALIC_BOLD,
+      TRIPLET_FONT_ONE_ITALIC_BOLD,
+      TRIPLET_FONT_ITALIC_BOLD
+  ) ;
+
+  private static final EmbedFontInfo INFO_FONT_TWO_NORMAL_NORMAL = embedFontInfo(
+      TTF_TWO_NORMAL_NORMAL,
+      TRIPLET_FONT_2_NORMAL_NORMAL,
+      TRIPLET_FONT_TWO_NORMAL_NORMAL
+  ) ;
+
+  private static final Iterable< EmbedFontInfo > FONT_INFOS = Lists.newArrayList(
+      INFO_FONT_ONE_NORMAL_NORMAL,
+      INFO_FONT_ONE_ITALIC_NORMAL,
+      INFO_FONT_ONE_NORMAL_BOLD,
+      INFO_FONT_ONE_ITALIC_BOLD,
+      INFO_FONT_TWO_NORMAL_NORMAL
+  ) ;
+
+  public static final Map< String, EmbedFontInfo > FAILED_FONTS = ImmutableMap.of() ;
+
+  public static final FopFontStatus FONT_STATUS = new FopFontStatus( FONT_INFOS, FAILED_FONTS ) ;
+
+  private static EmbedFontInfo embedFontInfo( String embedFontFile, FontTriplet... fontTriplets ) {
+    return new EmbedFontInfo(
+        null, // metrics file, no need for that.
+        true, // kerning, no need for that.
+        Arrays.asList( fontTriplets ),
+        embedFontFile
+    ) ;
+  }
 
   private static FontTriplet tripletNormalNormal( String name, int priority ) {
     return new FontTriplet( name, Font.STYLE_NORMAL, Font.WEIGHT_NORMAL, priority ) ;

@@ -28,6 +28,7 @@ import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import novelang.common.Nodepath;
 import novelang.common.metadata.TreeMetadata;
+import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
@@ -36,8 +37,16 @@ public class XmlWriter implements FragmentWriter {
 
   private ContentHandler contentHandler ;
   private final RenditionMimeType mimeType ;
+  private final String namespaceUri ;
+  private final String nameQualifier ;
 
   public XmlWriter( RenditionMimeType mimeType ) {
+    this( NAMESPACE_URI, NAME_QUALIFIER, mimeType ) ;
+  }
+
+  public XmlWriter( String namespaceUri, String nameQualifier, RenditionMimeType mimeType ) {
+    this.namespaceUri = Preconditions.checkNotNull( namespaceUri ) ;
+    this.nameQualifier = Preconditions.checkNotNull( nameQualifier ) ;
     this.mimeType = mimeType;
   }
 
@@ -45,6 +54,7 @@ public class XmlWriter implements FragmentWriter {
     this( RenditionMimeType.XML ) ;
   }
 
+  
   public void startWriting(
       OutputStream outputStream,
       TreeMetadata treeMetadata,
@@ -62,37 +72,54 @@ public class XmlWriter implements FragmentWriter {
   }
 
   public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
-    final String tokenName = tokenNameAsXmlElementName( kinship.getCurrent().name() ) ;
+    start( tokenNameAsXmlElementName( kinship.getCurrent().name() ), wholeDocument ) ;
+  }
+  
+  public void start( String elementName ) throws Exception {
+    start( elementName, false ) ;
+  }
+  
+  public void start( String elementName, boolean wholeDocument ) throws Exception {
     final Attributes attributes ;
     if( wholeDocument ) { // Declare the namespace.
       final AttributesImpl mutableAttributes = new AttributesImpl() ;
       mutableAttributes.addAttribute(
-          NAMESPACE_URI,
-          NAME_QUALIFIER,
-          "xmlns:" + NAME_QUALIFIER,
+          namespaceUri,
+          nameQualifier,
+          "xmlns:" + nameQualifier,
           "CDATA",
-          NAMESPACE_URI
+          namespaceUri
       ) ;
       attributes = mutableAttributes ;
     } else {
       attributes = EMPTY_ATTRIBUTES ;
     }
     contentHandler.startElement(
-        NAMESPACE_URI,
-        tokenName,
-        NAME_QUALIFIER + ":" + tokenName,
+        namespaceUri,
+        elementName,
+        nameQualifier + ":" + elementName,
         attributes
     ) ;
 
   }
 
   public void end( Nodepath kinship ) throws Exception {
-    final String tokenName = tokenNameAsXmlElementName( kinship.getCurrent().name() ) ;
-    contentHandler.endElement( NAMESPACE_URI, tokenName, NAME_QUALIFIER + ":" + tokenName ) ;
+    end( tokenNameAsXmlElementName( kinship.getCurrent().name() ) ) ;
+  }
+  public void end( String elementName ) throws Exception {
+    contentHandler.endElement( namespaceUri, elementName, nameQualifier + ":" + elementName ) ;
+  }
+
+  public void write( String word ) throws Exception {
+    write( null, word ) ;
   }
 
   public void write( Nodepath kinship, String word ) throws Exception {
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
+  }
+
+  public void writeLiteral( String word ) throws Exception {
+    writeLiteral( word ) ;
   }
 
   public void writeLiteral( Nodepath kinship, String word ) throws Exception {
@@ -126,8 +153,8 @@ public class XmlWriter implements FragmentWriter {
     return result ;
   }
 
-  private static final String NAMESPACE_URI = "http://novelang.org/book-xml/1.0" ;
-  private static final String NAME_QUALIFIER = "n" ;
+  protected static final String NAMESPACE_URI = "http://novelang.org/book-xml/1.0" ;
+  protected static final String NAME_QUALIFIER = "n" ;
   private static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl() ;
 
 

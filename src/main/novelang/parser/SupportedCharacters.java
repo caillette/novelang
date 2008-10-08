@@ -43,7 +43,7 @@ public class SupportedCharacters {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( SupportedCharacters.class ) ;
 
-  private static Iterable< Character > SUPPORTED_CHARACTERS ;
+  private static Set< Character > SUPPORTED_CHARACTERS ;
 
   private static final String ANTLR_TOKENS = "/novelang/parser/antlr/Novelang__.g";
 
@@ -64,7 +64,7 @@ public class SupportedCharacters {
       )
   ;
 
-  private static Iterable< Character > loadSupportedCharacters() {
+  private static Set< Character > loadSupportedCharacters() {
     Set< Character > supportedCharacters = null ;
     final InputStream resourceStream =
         SupportedCharacters.class.getResourceAsStream( ANTLR_TOKENS ) ;
@@ -83,8 +83,6 @@ public class SupportedCharacters {
     if( null == supportedCharacters ) {
       return null ;
     } else {
-//      supportedCharacters.add( '\u2014' ) ;
-//      supportedCharacters.add( '\u2013' ) ;
       return ImmutableSet.copyOf( Sets.newTreeSet( Lists.sortedCopy( supportedCharacters ) ) ) ;
     }
   }
@@ -185,19 +183,14 @@ public class SupportedCharacters {
    * Returns supported characters.
    * This is done lazily because otherwise the unit test gets screwed before testing anything.
    */
-  public static synchronized Iterable< Character > getSupportedCharacters() {
+  public static synchronized Set< Character > getSupportedCharacters() {
     if( null == SUPPORTED_CHARACTERS ) {
-      final List< Character > characterList = Lists.newArrayList( loadSupportedCharacters() ) ;
-      SUPPORTED_CHARACTERS = CHARACTER_ORDERING.sortedCopy( characterList ) ;
+      final Set< Character > characterSet = Sets.newHashSet( loadSupportedCharacters() ) ;
+      SUPPORTED_CHARACTERS = ImmutableSet.copyOf( characterSet ) ;
     }
     return SUPPORTED_CHARACTERS ;
   }
 
-  private static final Ordering< Character > CHARACTER_ORDERING = new Ordering< Character >() {
-    public int compare(Character character0, Character character1) {
-      return character0.compareTo( character1 ) ;
-    }
-  };
 
 
 }

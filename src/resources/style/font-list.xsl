@@ -34,10 +34,8 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:n="http://novelang.org/book-xml/1.0"
+    xmlns:nf="http://novelang.org/font-list-xml/1.0"
 >
-
-  <xsl:import href="punctuation-US-EN.xsl" />
 
   <xsl:template match="/" >
     <fo:root>
@@ -71,14 +69,13 @@
     </fo:root>
   </xsl:template>
 
-  <xsl:template match="n:chapter[n:title='Fonts']/n:section" >
 
+  <xsl:template match="nf:family" >
     
-    <xsl:variable name="font-family" select="n:title/n:quote" />
-    <xsl:variable name="embed-file" select="n:title/n:hard-inline-literal" />
-    <xsl:variable name="font-style" select="n:title/n:square-brackets[1]" />
-    <xsl:variable name="font-weight" select="n:title/n:square-brackets[2]" />
-    <xsl:variable name="priority" select="n:title/n:square-brackets[3]" />
+    <xsl:variable name="font-family" select="nf:name" />
+    <xsl:variable name="embed-file" select="nf:embed-file" />
+    <xsl:variable name="font-style" select="nf:style" />
+    <xsl:variable name="font-weight" select="nf:weight" />
 
     <fo:block
         padding-top="0pt"
@@ -173,7 +170,7 @@
 
     <xsl:variable
         name="characters"
-        select="//n:chapter[n:title='Characters']/n:paragraph-plain"
+        select="//nf:characters/nf:character"
     />
 
     <fo:table
@@ -223,16 +220,6 @@
     </fo:table>
   </xsl:template>
 
-  <xsl:template match="n:paragraph-plain" mode="paragraph" >
-    <fo:block>
-      <xsl:apply-templates/>
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template match="n:chapter/n:title" />
-
-  <xsl:template match="n:chapter[n:title='Characters']" />
-
   <xsl:template name="font-synthetic-name" >
     <xsl:param name="font-family" />
     <xsl:param name="font-style" />
@@ -272,7 +259,7 @@
     <xsl:param name="font-weight" />
     <xsl:param name="font-size" >12</xsl:param>
 
-    <xsl:variable name="sentences" select="//n:chapter[n:title='Sentences']/*" />
+    <xsl:variable name="sentences" select="//nf:sentences/nf:sentence" />
 
     <xsl:for-each select="$sentences" >
       <fo:block
@@ -290,7 +277,6 @@
         <xsl:attribute name="font-style">
           <xsl:value-of select="$font-style" />
         </xsl:attribute>
-        <xsl:if test="position()=1" >&mdash; &ndash; &hellip; </xsl:if>
         <xsl:apply-templates select="." />
       </fo:block>
     </xsl:for-each>
