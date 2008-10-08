@@ -37,6 +37,10 @@ import novelang.rendering.XslWriter;
 /**
  * Generates a PDF in an {@code OutputStream}.
  * This class delegates to an {@link XslWriter}.
+ * Showing all characters, including those not recognized in a source document, requires
+ * direct XML communication with FOP. This is achieved through SAX events as the document
+ * is not complex enough to require a new framework and dom4j fails to handle namespaces
+ * correctly.
  *
  * @author Laurent Caillette
  */
@@ -52,6 +56,7 @@ public class FontDiscoveryStreamer {
   private static final String ELEMENT_NAME = "name" ;
   private static final String ELEMENT_EMBEDFILE = "embed-file" ;
   private static final String ELEMENT_STYLE = "style" ;
+  private static final String ELEMENT_BROKEN = "broken" ;
 
   private static final String ELEMENT_WEIGHT = "weight" ;
   private static final String ELEMENT_CHARACTERS = "characters" ;
