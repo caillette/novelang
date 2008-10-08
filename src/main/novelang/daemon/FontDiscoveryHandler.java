@@ -77,20 +77,6 @@ public class FontDiscoveryHandler extends GenericHandler{
   }
 
 
-  /**
-   * There are some characters to not include in generated source document as they would
-   * mess escaping or whatever.
-   */
-  private static final Set< Character > CHARACTERS_TO_HIDE = Sets.newHashSet(
-      '`',
-      '\\',
-      '\n',
-      '\r',
-      '\u2039', // SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK
-      '\u203a', // SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK
-      ' '
-      ) ;
-
 
 
 }

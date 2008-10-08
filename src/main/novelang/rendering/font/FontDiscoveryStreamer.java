@@ -79,9 +79,8 @@ public class FontDiscoveryStreamer {
     {
       final Set< Character > characterSet =
               Sets.newHashSet( SupportedCharacters.getSupportedCharacters() ) ;
-      characterSet.add( '\u2014' ) ;
-      characterSet.add( '\u2013' ) ;
-      characterSet.add( '\u2026' ) ;
+      characterSet.addAll( CHARACTERS_SUPPLEMENT ) ;
+      characterSet.removeAll( CHARACTERS_TO_REMOVE ) ;
       supportedCharacters = CHARACTER_ORDERING.sortedCopy( characterSet ) ;
     }
 
@@ -186,5 +185,21 @@ public class FontDiscoveryStreamer {
       return character0.compareTo( character1 ) ;
     }
   } ;
+
+  /**
+   * There are some characters to not include in generated source document as they would
+   * mess escaping or whatever.
+   */
+  private static final Set< Character > CHARACTERS_TO_REMOVE = Sets.newHashSet(
+      '\n',
+      '\r',
+      ' '
+  ) ;
+
+  public static final Set< Character > CHARACTERS_SUPPLEMENT = Sets.newHashSet(
+      '\u2014',
+      '\u2013',
+      '\u2026'
+  ) ;
 
 }
