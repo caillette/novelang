@@ -2,7 +2,7 @@
 test-scratch
 target
 batch-generated
-.fop-font-metrics-*
 antlrworks
 distrib
+idea/Novelang.ipr
 *.log
