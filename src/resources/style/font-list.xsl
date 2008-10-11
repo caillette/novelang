@@ -78,10 +78,11 @@
     <xsl:variable name="font-weight" select="nf:weight" />
 
     <fo:block
+        break-before="page"
+        keep-together="always"
         padding-top="0pt"
         text-align="center"
         padding-bottom="5pt"
-        keep-together="always"
     >
       <fo:block
           border-style="dotted"
