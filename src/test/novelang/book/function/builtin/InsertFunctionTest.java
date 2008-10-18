@@ -17,10 +17,8 @@
 package novelang.book.function.builtin;
 
 import java.io.File;
-import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
@@ -163,14 +161,14 @@ public class InsertFunctionTest {
 
     goodContentDirectory = new File( scratchDirectory, CONTENT_GOOD_DIRNAME ) ;
 
-    oneWordFile = TestResourceTools.copyResourceToFile(
+    oneWordFile = TestResourceTools.copyResourceToDirectory(
         getClass(),
         ONE_WORD_FILENAME,
         goodContentDirectory
     ) ;
 
     brokenContentDirectory = new File( scratchDirectory, CONTENT_BROKEN_DIRNAME ) ;
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         getClass(),
         BROKEN_FILENAME,
         brokenContentDirectory

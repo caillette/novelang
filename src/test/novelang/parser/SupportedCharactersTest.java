@@ -34,13 +34,13 @@ public class SupportedCharactersTest {
 
   @Test
   public void extractSupportedCharacters() {
-    final String tokensDeclaration = "'x'  'X'\n'0'  '9' '\\u00e0'\n'\\\\'" ;
+    final String tokensDeclaration = "'x'  'X'\n'0'  '9' '\u00e0'\n'\\\\'  '|'" ;
     final Set< Character > characters =
         SupportedCharacters.extractSupportedCharacters( tokensDeclaration ) ;
 
     LOGGER.debug( "Got: {}", characters ) ;
 
-    assertEquals( 6, characters.size() ) ;
+    assertEquals( 7, characters.size() ) ;
 
     assertTrue( characters.contains( 'x' ) ) ;
     assertTrue( characters.contains( 'X' ) ) ;
@@ -48,12 +48,37 @@ public class SupportedCharactersTest {
     assertTrue( characters.contains( '9' ) ) ;
     assertTrue( characters.contains( new Character( '\u00e0' ) ) ) ;
     assertTrue( characters.contains( '\\' ) ) ;
+    assertTrue( characters.contains( '|' ) ) ;
+
+  }
+
+  @Test
+  public void extractJustPunctuationSign() {
+    final String tokensDeclaration = "'|'" ;
+    final Set< Character > characters =
+        SupportedCharacters.extractSupportedCharacters( tokensDeclaration ) ;
+
+    LOGGER.debug( "Got: {}", characters ) ;
+    assertEquals( 1, characters.size() ) ;
+    assertTrue( characters.contains( '|' ) ) ;
+
+  }
+
+  @Test
+  public void extractJustUnicode() {
+    final String tokensDeclaration = "'\u00e0'" ;
+    final Set< Character > characters =
+        SupportedCharacters.extractSupportedCharacters( tokensDeclaration ) ;
+
+    LOGGER.debug( "Got: {}", characters ) ;
+    assertEquals( 1, characters.size() ) ;
+    assertTrue( characters.contains( '\u00e0' ) ) ;
 
   }
 
   @Test
   public void lexerCharacters() {
-    final Set< Character > characters = SupportedCharacters.getSupportedCharacters() ;
+    final Iterable< Character > characters = SupportedCharacters.getSupportedCharacters() ;
     assertNotNull( characters ) ;
     LOGGER.debug( "Got: {}", characters ) ;
     

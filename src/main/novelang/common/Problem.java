@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import org.antlr.runtime.RecognitionException;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Represents something bad that happened during document generation.
@@ -34,8 +35,8 @@ public class Problem {
   final String message ;
 
   private Problem( Location location, String message ) {
-    this.location = Objects.nonNull( location ) ;
-    this.message = Objects.nonNull( message ) ;
+    this.location = Preconditions.checkNotNull( location ) ;
+    this.message = Preconditions.checkNotNull( message ) ;
   }
 
   public Location getLocation() {

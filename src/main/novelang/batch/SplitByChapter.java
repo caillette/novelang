@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableList;
-import novelang.configuration.ConfigurationTools;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.NodeKind;
@@ -172,15 +171,7 @@ public class SplitByChapter {
 
 
   public static void main( String[] args ) throws IOException {
-    if( 2 != args.length ) {
-      throw new IllegalArgumentException( HELP ) ;
-    }
-    final SplitByChapter splitByChapter = new SplitByChapter(
-        ConfigurationTools.buildRenderingConfiguration(),
-        new File( args[ 0 ] ),
-        new File( args[ 1 ] )
-    ) ;
-    splitByChapter.rewrite() ;
+    throw new UnsupportedOperationException( "TODO: reimplement" ) ;
   }
 
 

@@ -17,8 +17,8 @@
 package novelang.configuration.parse;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,6 +34,8 @@ import org.apache.commons.cli.ParseException;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Base class for command-line parameters parsing.
@@ -44,38 +46,51 @@ public abstract class GenericParameters {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericParameters.class ) ;
 
+  protected final Options options ;
+  protected final CommandLine line ;
+  protected final HelpPrinter helpPrinter;
+
+  private final File baseDirectory ;
   private final Iterable< File > fontDirectories ;
   private final File styleDirectory ;
   private final File hyphenationDirectory ;
-  private final File logDirectory ;
 
-  protected final Options options ;
-  protected final CommandLine line ;
+
+  private final File logDirectory ;
 
   public GenericParameters(
       File baseDirectory,
       String[] parameters
   )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {    
     LOGGER.debug( "Base directory: ({}'", baseDirectory.getAbsolutePath() ) ;
     LOGGER.debug( "Parameters: '{}'", Lists.newArrayList( parameters ) ) ;
 
+    this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     options = new Options() ;
+    options.addOption( OPTION_HELP ) ;
     options.addOption( OPTION_FONT_DIRECTORIES ) ;
     options.addOption( OPTION_STYLE_DIRECTORY ) ;
     options.addOption( OPTION_LOG_DIRECTORY ) ;
     options.addOption( OPTION_HYPHENATION_DIRECTORY ) ;
     enrich( options ) ;
 
-    logHelp() ;
+    helpPrinter = new HelpPrinter( options ) ;
+
+    if( containsHelpTrigger( parameters ) ) {
+      LOGGER.debug( "Help trigger detected" ) ;
+      throw new ArgumentException( helpPrinter ) ;
+    }
 
     final CommandLineParser parser = new PosixParser() ;
+
     try {
       line = parser.parse( options, parameters ) ;
 
+      logDirectory = extractDirectory( baseDirectory, OPTION_LOG_DIRECTORY, line, false ) ;
+
       styleDirectory = extractDirectory( baseDirectory, OPTION_STYLE_DIRECTORY, line ) ;
-      logDirectory = extractDirectory( baseDirectory, OPTION_LOG_DIRECTORY, line ) ;
       hyphenationDirectory = extractDirectory( baseDirectory, OPTION_HYPHENATION_DIRECTORY, line ) ;
 
       if( line.hasOption( OPTION_FONT_DIRECTORIES.getLongOpt() ) ) {
@@ -89,16 +104,36 @@ public abstract class GenericParameters {
       }
 
     } catch( ParseException e ) {
-      throw new ArgumentsNotParsedException( e ) ;
+      throw new ArgumentException( e, helpPrinter ) ;
     }
 
   }
 
   protected abstract void enrich( Options options ) ;
 
+  private void throwArgumentException( String message ) throws ArgumentException {
+    throw new ArgumentException( message, helpPrinter ) ;
+  }
+
+
 // =======
 // Getters
 // =======
+
+  /**
+   * Return the directory used to evaluate all relative directories from.
+   * @return a non-null object.
+   */
+  public File getBaseDirectory() {
+    return baseDirectory ;
+  }
+
+  /**
+   * Returns a human-readable description of {@link #OPTION_FONT_DIRECTORIES}.
+   */
+  public String getFontDirectoriesOptionDescription() {
+    return createOptionDescription( OPTION_FONT_DIRECTORIES ) ;
+  }
 
   /**
    * Returns the directories containing embeddable font files.
@@ -109,6 +144,13 @@ public abstract class GenericParameters {
   }
 
   /**
+   * Returns a human-readable description of {@link #OPTION_STYLE_DIRECTORY}.
+   */
+  public String getStyleDirectoryDescription() {
+    return createOptionDescription( OPTION_STYLE_DIRECTORY ) ;
+  }
+
+  /**
    * Returns the directory containing style files.
    * @return a null object if undefined, a reference to an existing directory otherwise.
    */
@@ -116,6 +158,12 @@ public abstract class GenericParameters {
     return styleDirectory;
   }
 
+  /**
+   * Returns a human-readable of {@link #OPTION_HYPHENATION_DIRECTORY}.
+   */
+  public String getHyphenationDirectoryOptionDescription() {
+    return createOptionDescription( OPTION_HYPHENATION_DIRECTORY ) ;
+  }
   /**
    * Returns the directory containing hyphenation files.
    * @return a null object if undefined, a reference to an existing directory otherwise.
@@ -137,64 +185,72 @@ public abstract class GenericParameters {
 // Extractors
 // ==========
 
-  protected File extractDirectory( File baseDirectory, Option option, CommandLine line )
-      throws ArgumentsNotParsedException
+  protected File extractDirectory(
+      File baseDirectory,
+      Option option,
+      CommandLine line
+  ) throws ArgumentException {
+    return extractDirectory( baseDirectory, option, line, true ) ;
+  }
+
+  protected File extractDirectory(
+      File baseDirectory,
+      Option option,
+      CommandLine line,
+      boolean failOnNonExistingDirectory
+  )
+      throws ArgumentException
   {
     final File directory ;
     if( line.hasOption( option.getLongOpt() ) ) {
-      final String styleDirectoryName =
+      final String directoryName =
           line.getOptionValue( option.getLongOpt() ) ;
-      LOGGER.debug( "Argument for {} = '{}'",
-          option.getDescription(), styleDirectoryName ) ;
-      directory = extractDirectory( baseDirectory, styleDirectoryName ) ;
+      LOGGER.debug( "Argument for {} = '{}'", option.getDescription(), directoryName ) ;
+      directory = extractDirectory( baseDirectory, directoryName, failOnNonExistingDirectory ) ;
     } else {
       directory = null ;
     }
     return directory ;
   }
 
-  protected static Iterable< File > extractDirectories( File parent, String[] directoryNames )
-      throws ArgumentsNotParsedException
+  protected final Iterable< File > extractDirectories( File parent, String[] directoryNames )
+      throws ArgumentException
   {
     final List directories = Lists.newArrayList() ;
     for( String directoryName : directoryNames ) {
-      directories.add( extractDirectory( parent, directoryName ) ) ;
+      directories.add( extractDirectory( parent, directoryName, true ) ) ;
     }
     return ImmutableList.copyOf( directories ) ;
   }
 
-  protected static File extractDirectory( File parent, String directoryName )
-      throws ArgumentsNotParsedException
+  protected final File extractDirectory(
+      File parent,
+      String directoryName,
+      boolean failOnNonExistingDirectory
+  )
+      throws ArgumentException
   {
-    final File directory = new File( parent, directoryName ) ;
-    if( ! ( directory.exists() && directory.isDirectory() ) ) {
-      throw new ArgumentsNotParsedException( "Not a directory: '" + directoryName + "'" ) ;
+    final File directory ;
+    if( directoryName.startsWith( "/" ) ) {
+      directory = new File( directoryName ) ;
+    } else {
+      directory = new File( parent, directoryName ) ;
+    }
+    if( failOnNonExistingDirectory && ! ( directory.exists() && directory.isDirectory() ) ) {
+      throwArgumentException( "Not a directory: '" + directoryName + "'" ) ;
     }
     return directory ;
   }
+
 
 // =================
 // Commons-CLI stuff
 // =================
 
-  private void logHelp() {
-    final HelpFormatter helpFormatter = new HelpFormatter() ;
-    final StringWriter helpWriter = new StringWriter() ;
-    helpFormatter.printHelp(
-        new PrintWriter( helpWriter ),
-        120,
-        "<command>",
-        "",
-        options,
-        2,
-        0,
-        ""
-    ) ;
-    LOGGER.debug( "Help is:\n" + helpWriter.toString() ) ;
-  }
+  public static final String OPTIONNAME_FONT_DIRECTORIES = "font-dirs" ;
 
   private static final Option OPTION_FONT_DIRECTORIES = OptionBuilder
-      .withLongOpt( "font-dirs" )
+      .withLongOpt( OPTIONNAME_FONT_DIRECTORIES )
       .withDescription( "Directories containing embeddable fonts" )
       .withValueSeparator()
       .hasArgs()
@@ -209,9 +265,13 @@ public abstract class GenericParameters {
       .create()
   ;
 
+
+  public static final String OPTIONPREFIX = "--" ;
+  public static final String LOG_DIRECTORY_OPTION_NAME = "log-dir" ;
+
   private static final Option OPTION_LOG_DIRECTORY = OptionBuilder
-      .withLongOpt( "log-dir" )
-      .withDescription( "Directory containing style files" )
+      .withLongOpt( LOG_DIRECTORY_OPTION_NAME )
+      .withDescription( "Directory containing log file(s)" )
       .withValueSeparator()
       .hasArg()
       .create()
@@ -224,6 +284,63 @@ public abstract class GenericParameters {
       .hasArg()
       .create()
   ;
+
+  public static final String HELP_OPTION_NAME = "help";
+  private static final Option OPTION_HELP = OptionBuilder
+      .withLongOpt( HELP_OPTION_NAME )
+      .withDescription( "Print help" )
+      .create()
+  ;
+
+
+  protected static String createOptionDescription( Option option ) {
+    return OPTIONPREFIX + option.getLongOpt() + ", " + option.getDescription() ;
+  }
+
+
+// ====
+// Help
+// ====
+
+  public static class HelpPrinter {
+    private final Options options ;
+
+    public HelpPrinter( Options options ) {
+      this.options = options;
+    }
+
+    public void print( PrintStream printStream, String commandName, int columns ) {
+      print( new PrintWriter( printStream ), commandName, columns ) ;
+    }
+    
+    public void print( PrintWriter printWriter, String commandName, int columns ) {
+      final HelpFormatter helpFormatter = new HelpFormatter() ;
+      helpFormatter.printHelp(
+          printWriter,
+          columns,
+          commandName,
+          "",
+          options,
+          2,
+          2,
+          ""
+      ) ;
+      printWriter.flush() ;
+    }
+  }
+
+  private static final String HELP_TRIGGER = OPTIONPREFIX + OPTION_HELP.getLongOpt() ;
+
+  private boolean containsHelpTrigger( String[] parameters ) {
+    for( int i = 0 ; i < parameters.length ; i++ ) {
+      final String parameter = parameters[ i ] ;
+      if( HELP_TRIGGER.equals( parameter ) ) {
+        return true ;
+      }
+    }
+    return false ;
+  }
+
 
 
 }

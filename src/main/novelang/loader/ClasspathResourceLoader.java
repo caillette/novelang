@@ -26,6 +26,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Loads resources relative to the root package of some given class
@@ -40,7 +41,7 @@ public class ClasspathResourceLoader implements ResourceLoader {
   private final String path ;
 
   protected ClasspathResourceLoader( Class reference, String path ) {
-    this.reference = Objects.nonNull( reference ) ;
+    this.reference = Preconditions.checkNotNull( reference ) ;
     this.path = null == path ? "" : normalize( path ) ;
   }
 

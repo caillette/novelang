@@ -98,7 +98,7 @@ public class FileToolsTest {
 
   private static File createDirectory( File parent, String name ) {
     final File directory = new File( parent, name ) ;
-    directory.mkdir() ;
+    directory.mkdirs() ;
     FileUtils.waitFor( directory, TIMEOUT_MILLISECONDS ) ;
     return directory ;
   }

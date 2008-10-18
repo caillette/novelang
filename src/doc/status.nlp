@@ -5,6 +5,16 @@ Novelang is yet stable with more thant 200 automated tests. It generates a PDF d
 Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version `1.0.0`. Keep informed reading the blog. 
 
 
+=== Version `0.11.0`
+
+Multiple font directories. No longer need to give special names to font files (internal name recognized automatically).
+
+Normalized command-line arguments, no more system properties.
+
+No longer need for font-metric files.
+
+
+
 === Version `0.10.0`
 
 Barcode generation in PDF with Barcode4J. See:

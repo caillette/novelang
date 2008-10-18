@@ -25,16 +25,18 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.BatchConfiguration;
+import novelang.configuration.parse.ArgumentException;
+import novelang.configuration.parse.BatchParameters;
 import novelang.common.Problem;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
-import novelang.produce.RequestTools;
 import novelang.rendering.HtmlProblemPrinter;
 import novelang.system.StartupTools;
 import novelang.system.EnvironmentTools;
@@ -42,57 +44,85 @@ import novelang.system.EnvironmentTools;
 /**
  * The main class for running in command-line mode.
  *
+ * The {@code Logger} instance is NOT held in statically-initialized final field as it would
+ * trigger premature initialization, we want a call to {@link StartupTools} to happen first.
+ *
  * @author Laurent Caillette
  */
 public class Main {
 
-  static {
-    StartupTools.fixLogDirectory() ;
-    EnvironmentTools.logSystemProperties() ;
-  }
-
-  private static Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
   private static final String PROBLEMS_FILENAME = "problems.html";
 
-  public static void main( String[] args ) throws Exception {
+  public static void main( String[] arguments ) throws Exception {
+    StartupTools.fixLogDirectory( arguments ) ;
+    EnvironmentTools.logSystemProperties() ;
+    final File baseDirectory = new File( SystemUtils.USER_DIR ) ;
+    main( baseDirectory, arguments ) ;
+  }
 
-    LOGGER.debug( "Starting {} with arguments {}",
-        ClassUtils.getShortClassName( Main.class ), asString( args ) ) ;
+  public static void main( File baseDirectory, String[] arguments ) throws Exception {
+    final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
+    final BatchParameters parameters ;
+
     try {
-      final BatchParameters parameters = BatchParameters.parse( args ) ;
-      final File targetDirectory = parameters.getTargetDirectory() ;
-      LOGGER.info( "Successfully parsed: " + parameters ) ;
+      parameters = new BatchParameters(
+          baseDirectory,
+          arguments
+      ) ;
+    } catch( ArgumentException e ) {
+      if( e.isHelpRequested() ) {
+        printHelpOnConsole( e ) ;
+        System.exit( -1 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      } else {
+        LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
+        printHelpOnConsole( e ) ;
+        System.exit( -2 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      }
+    }
 
-      final ServerConfiguration configuration = ConfigurationTools.buildServerConfiguration() ;
-      resetTargetDirectory( targetDirectory ) ;
-      final DocumentProducer documentProducer = new DocumentProducer( configuration ) ;
+    try {
+      LOGGER.debug( "Starting {} with arguments {}",
+          ClassUtils.getShortClassName( Main.class ), asString( arguments ) ) ;
+
+      final BatchConfiguration configuration =
+          ConfigurationTools.createBatchConfiguration( parameters ); ;
+      final File outputDirectory = configuration.getOutputDirectory();
+      resetTargetDirectory( LOGGER, outputDirectory ) ;
+      final DocumentProducer documentProducer =
+          new DocumentProducer( configuration.getProducerConfiguration() ) ;
       final List< Problem > allProblems = Lists.newArrayList() ;
 
-      for( final String unparsedRequest : parameters.getDocuments() ) {
+      for( final DocumentRequest documentRequest : configuration.getDocumentRequests() ) {
         Iterables.addAll(
             allProblems,
-            processUnparsedRequest(
-                unparsedRequest,
-                targetDirectory,
+            processDocumentRequest(
+                LOGGER,
+                documentRequest,
+                outputDirectory,
                 documentProducer
             )
         ) ;
       }
       if( ! allProblems.isEmpty() ) {
-        reportProblems( targetDirectory, allProblems ) ;
+        reportProblems( outputDirectory, allProblems ) ;
         System.err.println(
-            "There were problems. See " + targetDirectory + "/" + PROBLEMS_FILENAME ) ;
+            "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
       }
 
-    } catch( ParametersException e ) {
-      LOGGER.error( "Parameters exception {}, printing help and exiting.", e.getMessage() ) ;
-      System.err.println( e.getMessage() ) ;
-      System.err.println( BatchParameters.HELP ) ;
-      System.exit( -1 ) ;
     } catch( Exception e ) {
       LOGGER.error( "Fatal", e ) ;
       throw e ;
     }
+  }
+
+  private static void printHelpOnConsole( ArgumentException e ) {
+    e.getHelpPrinter().print(
+        System.out,
+        ClassUtils.getShortClassName( Main.class ) + " [OPTIONS] document1 [document2...]", 
+        80
+    ) ;
   }
 
   // TODO does ToStringBuilder save from doing this?
@@ -125,20 +155,18 @@ public class Main {
     outputStream.close() ;
   }
 
-  private static Iterable< Problem > processUnparsedRequest(
-      String unparsedRequest,
+  private static Iterable< Problem > processDocumentRequest(
+      Logger logger,
+      DocumentRequest documentRequest,
       File targetDirectory,
       DocumentProducer documentProducer
   ) throws IOException {
-    final DocumentRequest documentRequest = RequestTools.createDocumentRequest( unparsedRequest ) ;
-    if( null == documentRequest ) {
-      throw new IllegalArgumentException( "Could not parse: '" + unparsedRequest + "'" ) ;
-    }
     final File outputFile = createOutputFile(
+        logger,
         targetDirectory,
         documentRequest
     ) ;
-    LOGGER.info( "Generating document file '{}'...", outputFile.getAbsolutePath() ) ;
+    logger.info( "Generating document file '{}'...", outputFile.getAbsolutePath() ) ;
     final FileOutputStream outputStream = new FileOutputStream( outputFile ) ;
     final Iterable< Problem > problems = documentProducer.produce( documentRequest, outputStream ) ;
     outputStream.flush() ;
@@ -146,22 +174,29 @@ public class Main {
     return problems ;
   }
 
-  private static void resetTargetDirectory( File targetDirectory ) throws IOException {
+  private static void resetTargetDirectory(
+      Logger logger,
+      File targetDirectory
+  ) throws IOException {
     if( targetDirectory.exists() ) {
-      LOGGER.info( "Deleting '{}'...", targetDirectory.getAbsolutePath() ) ;
+      logger.info( "Deleting '{}'...", targetDirectory.getAbsolutePath() ) ;
     }
     FileUtils.deleteDirectory( targetDirectory ) ;
     FileUtils.forceMkdir( targetDirectory ) ;
-    LOGGER.info( "Created '{}'...", targetDirectory.getAbsolutePath() ) ;
+    logger.info( "Created '{}'...", targetDirectory.getAbsolutePath() ) ;
   }
 
-  public static File createOutputFile( File targetDir, DocumentRequest documentRequest )
+  public static File createOutputFile(
+      Logger logger,
+      File targetDir,
+      DocumentRequest documentRequest
+  )
       throws IOException
   {
     final String relativeFileName = documentRequest.getDocumentSourceName() +
         "." + documentRequest.getRenditionMimeType().getFileExtension() ;
-    LOGGER.debug( "Resolved output file name '{}'", relativeFileName ) ;
     final File outputFile =  new File( targetDir, relativeFileName ) ;
+    logger.debug( "Resolved output file name '{}'", outputFile.getAbsolutePath() ) ;
     FileUtils.forceMkdir( outputFile.getParentFile() );
     return outputFile ;
   }

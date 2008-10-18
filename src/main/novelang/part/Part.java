@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import novelang.common.IdentifierHelper;
 import novelang.common.NodeKind;
 import novelang.common.tree.Treepath;
@@ -115,7 +116,7 @@ public class Part extends AbstractSourceReader {
     final Multimap< String, SyntacticTree> identifiedSectionTrees = Multimaps.newHashMultimap() ;
 
     if( null == tree ) {
-      return Multimaps.immutableMultimap() ;  
+      return ImmutableMultimap.empty() ;  
     }
 
     for( final SyntacticTree sectionCandidate : tree.getChildren() ) {

@@ -17,15 +17,21 @@
 
 package novelang.daemon;
 
+import java.io.File;
+
+import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ServerConfiguration;
 import novelang.Version;
-import novelang.system.StartupTools;
+import novelang.configuration.ConfigurationTools;
+import novelang.configuration.DaemonConfiguration;
+import novelang.configuration.parse.DaemonParameters;
+import novelang.configuration.parse.ArgumentException;
 import novelang.system.EnvironmentTools;
+import novelang.system.StartupTools;
 
 /**
  * Main class for Novelang document generator daemon.
@@ -34,61 +40,84 @@ import novelang.system.EnvironmentTools;
  */
 public class HttpDaemon {
 
-  static {
-    StartupTools.fixLogDirectory() ;
-    StartupTools.installXalan() ;
-    EnvironmentTools.logSystemProperties() ;
-  }
-
-  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
-
-  private static final int HTTP_SERVER_PORT = 8080 ;
+  private static Logger LOGGER ;
 
   private final Server server ;
 
-  public HttpDaemon( int httpServerPort, ServerConfiguration serverConfiguration ) {
+  public static void main( String[] args ) throws Exception {
+
+    StartupTools.fixLogDirectory( args ) ;
+    StartupTools.installXalan() ;
+    LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
+    EnvironmentTools.logSystemProperties() ;
+
+    final DaemonParameters parameters ;
+
+    try {
+      parameters = new DaemonParameters( new File( SystemUtils.USER_DIR ), args ) ;
+    } catch( ArgumentException e ) {
+      if( e.isHelpRequested() ) {
+        printHelpOnConsole( e ) ;
+        System.exit( -1 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      } else {
+        LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
+        printHelpOnConsole( e ) ;
+        System.exit( -2 ) ;
+        throw new Error( "Never executes but makes compiler happy" ) ;
+      }
+    }
+
+    final DaemonConfiguration daemonConfiguration =
+        ConfigurationTools.createDaemonConfiguration( parameters );
+
+    final String starting =
+        "Starting " + HttpDaemon.class.getName() +
+        " version " + Version.name() +
+        " on port " + daemonConfiguration.getPort()
+    ;
+    System.out.println( starting ) ;
+
+    LOGGER.info( starting ) ;
+    new HttpDaemon( daemonConfiguration ).start() ;
+  }
+
+  public HttpDaemon( DaemonConfiguration daemonConfiguration ) {
     final HandlerCollection handlers = new HandlerCollection() ;
     handlers.addHandler( new ShutdownHandler() ) ;
-    handlers.addHandler( new FontListHandler( serverConfiguration ) ) ;
-    handlers.addHandler( new DirectoryScanHandler( serverConfiguration.getContentConfiguration() ) ) ;
-    handlers.addHandler( new DocumentHandler( serverConfiguration ) ) ;
-    handlers.addHandler( new ResourceHandler( serverConfiguration ) ) ;
-    server = new Server( httpServerPort ) ;
+    handlers.addHandler( new FontDiscoveryHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    handlers.addHandler( new DirectoryScanHandler(
+        daemonConfiguration.getProducerConfiguration().getContentConfiguration() ) ) ;
+    handlers.addHandler( new DocumentHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    handlers.addHandler( new ResourceHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    server = new Server( daemonConfiguration.getPort() ) ;
     server.setHandler( handlers ) ;
+  }
+
+  private static synchronized Logger getLogger() {
+    if( null == LOGGER ) {
+      LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
+    }
+    return LOGGER ;
   }
 
   public void start() throws Exception {
     server.start() ;
-    LOGGER.info( "Server started on port {}", server.getConnectors()[ 0 ].getLocalPort() ) ;
+    getLogger().info( "Server started on port {}", server.getConnectors()[ 0 ].getLocalPort() ) ;
   }
 
   public void stop() throws Exception {
     final int port = server.getConnectors()[ 0 ].getLocalPort();
     server.stop() ;
-    LOGGER.info( "Server stopped on port {}", port ) ;
+    getLogger().info( "Server stopped on port {}", port ) ;
   }
 
-  public static void main( String[] args ) throws Exception {
-
-    final int serverPort ;
-
-    if( args.length == 2 && "--port".equals( args[ 0 ] ) ) {
-      serverPort = Integer.parseInt( args[ 1 ] ) ;
-    } else {
-      serverPort = HTTP_SERVER_PORT ;
-    }
-
-    final String starting =
-        "Starting " + HttpDaemon.class.getName() +
-        " version " + Version.name() +
-        " on port " + serverPort
-    ;
-    System.out.println( starting ) ;
-    LOGGER.info( starting ) ;
-    new HttpDaemon(
-        serverPort,
-        ConfigurationTools.buildServerConfiguration() 
-    ).start() ;
+  private static void printHelpOnConsole( ArgumentException e ) {
+    e.getHelpPrinter().print(
+        System.out,
+        ClassUtils.getShortClassName( HttpDaemon.class ) + " [OPTIONS]",
+        80
+    ) ;
   }
 
 }

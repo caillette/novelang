@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Map;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import novelang.common.StylesheetMap;
 import novelang.part.Part;
@@ -46,7 +47,7 @@ public final class Environment {
   }
 
   public Environment( File baseDirectory ) {
-    this.baseDirectory = Objects.nonNull( baseDirectory ) ;
+    this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     this.mappedStylesheets = Maps.newHashMap() ;
     this.stylesheetMap = StylesheetMap.EMPTY_MAP ;
   }
@@ -58,7 +59,7 @@ public final class Environment {
   public Environment map( RenditionMimeType renditionMimeType, String stylesheetPath ) {
     final Environment newEnvironment = new Environment( this ) ;
     newEnvironment.mappedStylesheets.put(
-        Objects.nonNull( renditionMimeType ), new ResourceName( stylesheetPath ) ) ;
+        Preconditions.checkNotNull( renditionMimeType ), new ResourceName( stylesheetPath ) ) ;
     return newEnvironment ;
   }
 

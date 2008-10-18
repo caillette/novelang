@@ -115,7 +115,7 @@ public class ScratchDirectoryFixture {
       if( testScratchDirectory.exists() ) {
         FileUtils.deleteDirectory( testScratchDirectory ) ;
       }
-      testScratchDirectory.mkdir() ;
+      testScratchDirectory.mkdirs() ;
     }
     return testScratchDirectory;
   }

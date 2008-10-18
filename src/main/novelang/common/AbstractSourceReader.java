@@ -28,6 +28,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import novelang.common.Location;
@@ -56,7 +57,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.thisToString = ClassUtils.getShortClassName( getClass() ) +
         "@" + System.identityHashCode( this ) ;
     this.locationName = "<String>" ;
-    this.encoding = Objects.nonNull( Encoding.DEFAULT ) ;
+    this.encoding = Preconditions.checkNotNull( Encoding.DEFAULT ) ;
   }
 
   protected AbstractSourceReader(
@@ -66,7 +67,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   ) {
     this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
     this.locationName = partUrl.toExternalForm() ;
-    this.encoding = Objects.nonNull( encoding ) ;
+    this.encoding = Preconditions.checkNotNull( encoding ) ;
   }
 
   protected String readContent( URL partUrl, Charset encoding ) {
@@ -123,7 +124,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
 
   protected final void collect( Problem problem ) {
     LOGGER.debug( "Collecting Problem: " + problem ) ;
-    problems.add( Objects.nonNull( problem ) ) ;
+    problems.add( Preconditions.checkNotNull( problem ) ) ;
   }
 
   protected final void collect( Iterable< Problem > problems ) {

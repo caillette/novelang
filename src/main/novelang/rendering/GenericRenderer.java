@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.NodeKind;
 import novelang.common.Nodepath;
@@ -48,7 +49,7 @@ public class GenericRenderer implements Renderer {
   }
 
   protected GenericRenderer( FragmentWriter fragmentWriter, String whitespace ) {
-    this.fragmentWriter = Objects.nonNull( fragmentWriter ) ;
+    this.fragmentWriter = Preconditions.checkNotNull( fragmentWriter ) ;
     this.whitespace = whitespace ;
   }
 

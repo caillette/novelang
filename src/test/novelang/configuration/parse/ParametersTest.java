@@ -23,10 +23,8 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.commons.io.FileUtils;
 import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
 import com.google.common.collect.Lists;
 
 /**
@@ -39,7 +37,7 @@ import com.google.common.collect.Lists;
 public class ParametersTest {
 
   @Test
-  public void voidDaemonParameters() throws ArgumentsNotParsedException {
+  public void voidDaemonParameters() throws ArgumentException {
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, new String[ 0 ] ) ;
     assertNull( parameters.getHttpDaemonPort() ) ;
     assertNull( parameters.getStyleDirectory() );
@@ -47,13 +45,13 @@ public class ParametersTest {
     assertOnIterable( parameters.getFontDirectories() ) ;
   }
 
-  @Test( expected = ArgumentsNotParsedException.class )
-  public void voidBatchParameters() throws ArgumentsNotParsedException {
+  @Test( expected = ArgumentException.class )
+  public void voidBatchParameters() throws ArgumentException {
     new BatchParameters( scratchDirectory, new String[ 0 ] ) ;
   }
 
   @Test
-  public void style() throws ArgumentsNotParsedException {
+  public void style() throws ArgumentException {
     final String[] arguments = { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
@@ -64,7 +62,7 @@ public class ParametersTest {
   }
 
   @Test
-  public void hyphenation() throws ArgumentsNotParsedException {
+  public void hyphenation() throws ArgumentException {
     final String[] arguments = { DASHED_HYPHENATION_DIR, DIRECTORY_NAME_AAA } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
@@ -75,7 +73,7 @@ public class ParametersTest {
   }
 
   @Test
-  public void log() throws ArgumentsNotParsedException {
+  public void log() throws ArgumentException {
     final String[] arguments = { DASHED_LOG_DIR, DIRECTORY_NAME_AAA } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
@@ -86,7 +84,7 @@ public class ParametersTest {
   }
 
   @Test
-  public void fonts2() throws ArgumentsNotParsedException {
+  public void fonts2() throws ArgumentException {
     final String[] arguments =
         { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
@@ -98,7 +96,7 @@ public class ParametersTest {
   }
 
   @Test
-  public void fonts2AndStyle() throws ArgumentsNotParsedException {
+  public void fonts2AndStyle() throws ArgumentException {
     final String[] arguments = { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB,
         DASHED_STYLE_DIR, DIRECTORY_NAME_CCC } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
@@ -110,7 +108,7 @@ public class ParametersTest {
   }
 
   @Test
-  public void styleAndFonts2() throws ArgumentsNotParsedException {
+  public void styleAndFonts2() throws ArgumentException {
     final String[] arguments = { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA,
             DASHED_FONT_DIRS, DIRECTORY_NAME_BBB, DIRECTORY_NAME_CCC } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
@@ -121,8 +119,8 @@ public class ParametersTest {
     assertNull( parameters.getHyphenationDirectory() ) ;
   }
 
-  @Test ( expected = ArgumentsNotParsedException.class )
-  public void badStyleDirectory() throws ArgumentsNotParsedException {
+  @Test ( expected = ArgumentException.class )
+  public void badStyleDirectory() throws ArgumentException {
     final String[] arguments = { DASHED_STYLE_DIR, "xxx" } ;
     new DaemonParameters( scratchDirectory, arguments ) ;
   }
@@ -163,10 +161,10 @@ public class ParametersTest {
     scratchDirectory =
         new ScratchDirectoryFixture( ParametersTest.class ).getTestScratchDirectory() ;
 
-    directoryAaa = createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
-    directoryBbb = createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
-    directoryCcc = createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
-    directoryCccDdd = createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
+    directoryAaa = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
+    directoryBbb = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
+    directoryCcc = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
+    directoryCccDdd = TestResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
 
     assertTrue( directoryAaa.exists() ) ;
     assertTrue( directoryBbb.exists() ) ;
@@ -174,15 +172,4 @@ public class ParametersTest {
     assertTrue( directoryCccDdd.exists() ) ;
   }
 
-  private static File createDirectory( File parent, String name ) {
-    final File directory = new File( parent, name ) ;
-    if( ! directory.exists() ) {
-      directory.mkdir() ;
-    }
-    assertTrue(
-        "Could not create: '" + directory.getAbsolutePath() + "'",
-        FileUtils.waitFor( directory, 1 )
-    ) ;
-    return directory ;
-  }
 }

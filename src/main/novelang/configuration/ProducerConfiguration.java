@@ -20,7 +20,7 @@ package novelang.configuration;
 /**
  * @author Laurent Caillette
  */
-public interface ServerConfiguration {
+public interface ProducerConfiguration {
   RenderingConfiguration getRenderingConfiguration() ;
   ContentConfiguration getContentConfiguration() ;
 }

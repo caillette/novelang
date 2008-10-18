@@ -19,19 +19,16 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.mortbay.jetty.Request;
-import org.mortbay.jetty.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.StringUtils;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.common.Renderable;
 import novelang.common.Problem;
 import novelang.rendering.HtmlProblemPrinter;
@@ -64,7 +61,7 @@ public class DocumentHandler extends GenericHandler {
   private final DocumentProducer documentProducer ;
 
 
-  public DocumentHandler( ServerConfiguration serverConfiguration ) {
+  public DocumentHandler( ProducerConfiguration serverConfiguration ) {
     documentProducer = new DocumentProducer( serverConfiguration ) ;
   }
 

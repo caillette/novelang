@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 /**
@@ -137,9 +138,9 @@ public enum NodeKind {
   }
 
   public static void ensure( SyntacticTree tree, NodeKind nodeKind ) {
-    Objects.nonNull( tree ) ;
-    Objects.nonNull( nodeKind ) ;
-    final String nodeText = Objects.nonNull( tree.getText() ) ;
+    Preconditions.checkNotNull( tree ) ;
+    Preconditions.checkNotNull( nodeKind ) ;
+    final String nodeText = Preconditions.checkNotNull( tree.getText() ) ;
     if( ! NAMES.contains( nodeText ) ) {
       throw new RuntimeException( "Not a known node kind: '" + nodeText + "'" ) ;
     }

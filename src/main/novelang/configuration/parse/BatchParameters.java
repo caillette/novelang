@@ -32,6 +32,9 @@ import com.google.common.collect.ImmutableList;
 /**
  * Parses command-line arguments for {@link novelang.batch.Main}.
  *
+ * TODO support a --flatten-ouput option as rendered documents go in the same path as sources.
+ * TODO write test ensuring that absolute and relative directories are correctly handled.
+ *
  * @author Laurent Caillette
  */
 public class BatchParameters extends GenericParameters {
@@ -41,13 +44,15 @@ public class BatchParameters extends GenericParameters {
   private final Iterable< DocumentRequest > documentRequests ;
   private final File outputDirectory ;
 
-  public BatchParameters( File baseDirectory, String[] parameters ) throws ArgumentsNotParsedException {
+  public BatchParameters( File baseDirectory, String[] parameters )
+      throws ArgumentException
+  {
     super( baseDirectory, parameters );
     final String[] sourceArguments = line.getArgs() ;
-    LOGGER.debug( "found: sources = {}", Lists.< Object >newArrayList( sourceArguments ) ) ;
+    LOGGER.debug( "found: sources = {}", Lists.newArrayList( sourceArguments ) ) ;
 
     if( sourceArguments.length == 0 ) {
-      throw new ArgumentsNotParsedException( "No source documents" ) ;
+      throw new ArgumentException( "No source documents", helpPrinter ) ;
     } else {
       final List< DocumentRequest > requestList = Lists.newArrayList() ;
       for( String sourceArgument : sourceArguments ) {
@@ -56,13 +61,14 @@ public class BatchParameters extends GenericParameters {
               RequestTools.createDocumentRequest( sourceArgument ) ;
           requestList.add( documentRequest ) ;
         } catch( IllegalArgumentException e ) {
-          throw new ArgumentsNotParsedException( e ) ;
+          throw new ArgumentException( e, helpPrinter ) ;
         }
       }
       documentRequests = ImmutableList.copyOf( requestList ) ;
+      LOGGER.debug( "Document requests = {}", documentRequests ) ;
     }
 
-    outputDirectory = extractDirectory( baseDirectory, OPTION_OUTPUT_DIRECTORY, line ) ;
+    outputDirectory = extractDirectory( baseDirectory, OPTION_OUTPUT_DIRECTORY, line, false ) ;
   }
 
   protected void enrich( Options options ) {
@@ -83,6 +89,10 @@ public class BatchParameters extends GenericParameters {
    */
   public File getOutputDirectory() {
     return outputDirectory ;
+  }
+
+  public String getOutputDirectoryOptionDescription() {
+    return createOptionDescription( OPTION_OUTPUT_DIRECTORY ) ;
   }
 
   private static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder

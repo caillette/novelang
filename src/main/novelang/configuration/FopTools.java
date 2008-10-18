@@ -41,6 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
+import com.google.common.base.Function;
+import com.google.common.base.Nullable;
 
 /**
  * Utility class for generating FOP configuration with hyphenation files and custom fonts.
@@ -53,6 +55,14 @@ public class FopTools {
 
   private static final String CONFIGURATION_NOT_SERIALIZED =
       "Could not serialize configuration to string" ;
+
+  public static final Function< ? super EmbedFontInfo,? extends String >
+      EXTRACT_EMBEDFONTINFO_FUNCTION = new Function< EmbedFontInfo, String >() {
+        public String apply( EmbedFontInfo embedFontInfo ) {
+          return embedFontInfo.getEmbedFile() ;
+        }
+      }
+  ;
 
   /**
    * Creates a {@code Configuration} object with {@code <renderer>} as element root,
@@ -119,32 +129,12 @@ public class FopTools {
         ReflectionTools.getFieldValue( fontCache, "failedFontMap" ) ;
   }
 
-  public static void main( String[] args ) throws FOPException {
-    final FontsStatus fontsStatus = createGlobalFontStatus() ;
-
-    System.out.println( "Official font list:" ) ;
-    for( EmbedFontInfo fontInfo : fontsStatus.getFontInfos() ) {
-      System.out.println( "  " + fontInfo ) ;
-    }
-
-    System.out.println( "Failed font map:" ) ;
-    if( fontsStatus.getFailedFonts().isEmpty() ) {
-        System.out.println( "  Empty." ) ;
-    } else {
-      for( String fontUrl : fontsStatus.getFailedFonts().keySet() ) {
-          System.out.println( "  " + fontUrl ) ;
-      } ;
-    }
-  }
-
-  /**
-   * Returns a global status for all fonts defined through
-   * {@link novelang.configuration.ConfigurationTools#FONTS_DIRS_PROPERTYNAME}.
-   */
-  public static FontsStatus createGlobalFontStatus() throws FOPException {
-    final Configuration pdfRendererConfiguration = createPdfRendererConfiguration(
-        ConfigurationTools.getFontsDirectories() ) ;
-    final FopFactory fopFactory = ConfigurationTools.buildRenderingConfiguration().getFopFactory() ;
+  public static FopFontStatus createGlobalFontStatus(
+      FopFactory fopFactory,
+      Iterable< File > fontDirectories
+  ) throws FOPException {
+    final Configuration pdfRendererConfiguration =
+        createPdfRendererConfiguration( fontDirectories ) ;
     final FOUserAgent foUserAgent = fopFactory.newFOUserAgent() ;
     final FontResolver fontResolver = new DefaultFontResolver( foUserAgent ) ;
     final FontCache fontCache = new FontCache() ;
@@ -158,28 +148,50 @@ public class FopTools {
         )
     ;
     final Map< String, EmbedFontInfo > failedFontMap = extractFailedFontMap( fontCache ) ;
-    return new FontsStatus( fontList, failedFontMap ) ;
+    return new FopFontStatus( fontList, failedFontMap ) ;
   }
 
 
-  public static final class FontsStatus {
-    private final Iterable<EmbedFontInfo> fontInfos ;
-    private final Map< String, EmbedFontInfo > failedFonts ;
+  /*package*/ static FopFactory createFopFactory(
+      Iterable< File > fontsDirectories,
+      File hyphenationDirectory
+  )
+      throws FOPException
+  {
+    final FopFactory fopFactory = FopFactory.newInstance() ;
+    Configuration renderers = null ;
+    Configuration hyphenationBase = null ;
+    boolean configure = false ;
 
-    public FontsStatus(
-        Iterable< EmbedFontInfo > fontInfos,
-        Map< String, EmbedFontInfo > failedFonts
-    ) {
-      this.fontInfos = fontInfos;
-      this.failedFonts = failedFonts;
+    if( fontsDirectories.iterator().hasNext() ) {
+      renderers = createRenderersConfiguration( fontsDirectories ) ;
+      configure = true ;
     }
 
-    public Iterable<EmbedFontInfo> getFontInfos() {
-      return fontInfos;
+    if( null != hyphenationDirectory ) {
+      hyphenationBase = createHyphenationConfiguration( hyphenationDirectory ) ;
+      configure = true ;
     }
 
-    public Map<String, EmbedFontInfo> getFailedFonts() {
-      return failedFonts;
+    if( configure ) {
+
+      final MutableConfiguration configuration = new DefaultConfiguration( "fop" ) ;
+      configuration.setAttribute( "version", "1.0" ) ;
+
+      if( null != renderers ) {
+        configuration.addChild( renderers ) ;
+      }
+
+      if( null != hyphenationBase ) {
+        configuration.addChild( hyphenationBase ) ;
+      }
+
+      LOGGER.debug( "Created configuration: \n{}",
+          configurationAsString( configuration ) ) ;
+
+      fopFactory.setUserConfig( configuration ) ;
     }
+
+    return fopFactory ;
   }
 }

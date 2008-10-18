@@ -14,17 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package novelang.configuration;
 
-package novelang.batch;
+import org.apache.fop.fonts.FontTriplet;
 
 /**
- * Thrown when something got wrong when attempting to parse / validate {@link BatchParameters}.
- *
+ * Convenient handle for both a font file name and a {@link FontTriplet}.
+ * 
  * @author Laurent Caillette
- */
-public class ParametersException extends Exception {
+*/
+public class FontQuadruplet {
+  private final String embedFileName ;
+  private final FontTriplet fontTriplet ;
 
-  public ParametersException( String message ) {
-    super( message ) ;
+  public FontQuadruplet( String embedFileName, FontTriplet fontTriplet ) {
+    this.embedFileName = embedFileName;
+    this.fontTriplet = fontTriplet;
+  }
+
+  public String getEmbedFileName() {
+    return embedFileName;
+  }
+
+  public FontTriplet getFontTriplet() {
+    return fontTriplet;
   }
 }

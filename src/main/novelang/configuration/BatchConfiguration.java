@@ -14,22 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.configuration.parse;
+package novelang.configuration;
 
-import org.apache.commons.cli.ParseException;
+import java.io.File;
+
+import novelang.produce.DocumentRequest;
 
 /**
- * Thrown when a parsing error occurs <em>or</em> when help was requested.
- * 
  * @author Laurent Caillette
  */
-public class ArgumentsNotParsedException extends Exception {
+public interface BatchConfiguration {
 
-  public ArgumentsNotParsedException( String message ) {
-    super( message ) ;
-  }
+  /**
+   * Returns a Configuration.
+   * @return a non-null object.
+   */
+  ProducerConfiguration getProducerConfiguration() ;
 
-  public ArgumentsNotParsedException( Exception e ) {
-    super( e.getMessage() ) ;
-  }
+  /**
+   * Returns documents requests.
+   * @return a non-null object iterating over no null, with at least one element.
+   */
+  Iterable< DocumentRequest > getDocumentRequests() ;
+
+  /**
+   * Return the directory where to write generated documents to.
+   * @return a non-null object referencing an existing directory.
+   */
+  File getOutputDirectory() ;
+
 }

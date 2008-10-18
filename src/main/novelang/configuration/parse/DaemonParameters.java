@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Parses command-line arguments for {@link novelang.daemon.HttpDaemon}.
+ *
+ * TODO support --serve-shutdown and --serve-remote options.
  * 
  * @author Laurent Caillette
  */
@@ -36,7 +38,7 @@ public class DaemonParameters extends GenericParameters {
   private final Integer port ;
 
   public DaemonParameters( File baseDirectory, String[] parameters )
-      throws ArgumentsNotParsedException
+      throws ArgumentException
   {
     super( baseDirectory, parameters ) ;
 
@@ -46,7 +48,7 @@ public class DaemonParameters extends GenericParameters {
       try {
         port = Integer.parseInt( portParameter ) ;
       } catch( NumberFormatException e ) {
-        throw new ArgumentsNotParsedException( e );
+        throw new ArgumentException( e, helpPrinter );
       }
     } else {
       port = null ;
@@ -67,8 +69,14 @@ public class DaemonParameters extends GenericParameters {
     return port ;
   }
 
+  public String getHttpDaemonPortOptionDescription() {
+    return createOptionDescription( OPTION_HTTPDAEMON_PORT ) ;
+  }
+
+  public static final String OPTIONNAME_HTTPDAEMON_PORT = "port" ;
+
   private static final Option OPTION_HTTPDAEMON_PORT = OptionBuilder
-      .withLongOpt( "port" )
+      .withLongOpt( OPTIONNAME_HTTPDAEMON_PORT )
       .withDescription( "TCP port for daemon" )
       .hasArg()
       .create()

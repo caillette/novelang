@@ -27,7 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.mortbay.jetty.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceNotFoundException;
 import novelang.loader.ResourceName;
@@ -45,7 +45,7 @@ public class ResourceHandler extends GenericHandler {
 
   private final ResourceLoader resourceLoader ;
 
-  public ResourceHandler( ServerConfiguration serverConfiguration ) {
+  public ResourceHandler( ProducerConfiguration serverConfiguration ) {
     this( serverConfiguration.getRenderingConfiguration().getResourceLoader() ) ;
   }
 

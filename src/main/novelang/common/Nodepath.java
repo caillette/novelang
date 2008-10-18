@@ -19,6 +19,7 @@ package novelang.common;
 
 import org.apache.commons.lang.ClassUtils;
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
   * Represents the stack of Node Kinds preceding current tree.
@@ -37,13 +38,13 @@ public class Nodepath {
 
   public Nodepath( NodeKind current ) {
     depth = 1 ;
-    this.current = Objects.nonNull( current ) ;
+    this.current = Preconditions.checkNotNull( current ) ;
     ancestor = null ;
   }
 
   public Nodepath( Nodepath ancestor, NodeKind current ) {
     depth = ancestor.getDepth() + 1 ;
-    this.current = Objects.nonNull( current ) ;
+    this.current = Preconditions.checkNotNull( current ) ;
     this.ancestor = ancestor ;
   }
 

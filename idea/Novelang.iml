@@ -14,7 +14,6 @@
       <excludeFolder url="file://$MODULE_DIR$/../antlrworks" />
       <excludeFolder url="file://$MODULE_DIR$/../distrib" />
       <excludeFolder url="file://$MODULE_DIR$/javadoc" />
-      <excludeFolder url="file://$MODULE_DIR$/test-files" />
       <excludeFolder url="file://$MODULE_DIR$/test-scratch" />
       <excludeFolder url="file://$MODULE_DIR$/../lib" />
       <excludeFolder url="file://$MODULE_DIR$/../target" />

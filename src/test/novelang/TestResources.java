@@ -22,7 +22,9 @@ import java.io.File;
 import org.apache.fop.apps.FopFactory;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
+import novelang.configuration.FopFontStatus;
+import novelang.configuration.DaemonConfiguration;
 import novelang.configuration.ConfigurationTools;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
@@ -53,6 +55,29 @@ public class TestResources {
   public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
   public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
 
+
+  
+
+  public static final String FONT_STRUCTURE_DIR = "/fonts-structure" ;
+
+  public static final String DEFAULT_FONTS_DIR = FONT_STRUCTURE_DIR + "/fonts" ;
+  public static final String FONT_FILE_DEFAULT_1 = DEFAULT_FONTS_DIR + "/Bitstream-Vera-Sans-Mono.ttf" ;
+  public static final String FONT_FILE_DEFAULT_2 = DEFAULT_FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold.ttf" ;
+
+  public static final String ALTERNATE_FONTS_DIR_NAME = "alternate" ;
+  public static final String ALTERNATE_FONTS_DIR =
+      FONT_STRUCTURE_DIR + "/" + ALTERNATE_FONTS_DIR_NAME ;
+  public static final String FONT_FILE_ALTERNATE =
+      ALTERNATE_FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold-Oblique.ttf" ;
+
+  public static final String FONT_FILE_PARENT_CHILD =
+      FONT_STRUCTURE_DIR + "/parent/child/Bitstream-Vera-Sans-Mono-Oblique.ttf" ;
+  public static final String FONT_FILE_PARENT_CHILD_BAD =
+      FONT_STRUCTURE_DIR + "/parent/child/Bad.ttf" ;
+
+
+
+
   public static final String NODESET_DIR = "/numbering";
   public static final ResourceName NODESET_XSL = new ResourceName( "numbering.xsl" ) ;
   public static final String NODESET_SOMECHAPTERS_DOCUMENTNAME = "some-chapters" ;
@@ -63,8 +88,11 @@ public class TestResources {
 
 
   public static final String SERVED_DIRECTORY_NAME = "served" ;
-  public static final String SERVED_PART_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/good";
+  public static final String SERVED_GOOD_RADIX = "good";
+  public static final String
+      SERVED_PART_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/" + SERVED_GOOD_RADIX;
   public static final String SERVED_PARTSOURCE_GOOD = SERVED_PART_GOOD_NOEXTENSION + ".nlp" ;
+  public static final String SERVED_HTMLDOCUMENT_GOOD = SERVED_PART_GOOD_NOEXTENSION + ".html" ;
 
   public static final ResourceName SERVED_VOIDSTYLESHEET =
       new ResourceName( SERVED_DIRECTORY_NAME + "void.xsl" ) ;
@@ -88,18 +116,18 @@ public class TestResources {
 
 
   public static void copyServedResources( File contentDirectory ) {
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         TestResources.class, SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
 
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         TestResources.class, SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
 
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         TestResources.class, SERVED_BOOK_ALTERNATESTYLESHEET, contentDirectory ) ;
 
   }
 
-  public static ServerConfiguration createServerConfiguration(
+  public static ProducerConfiguration createProducerConfiguration(
       final File contentDirectory,
       final String styleDirectoryName,
       final boolean shouldAddClasspathResourceLoader
@@ -116,7 +144,7 @@ public class TestResources {
       resourceLoader = customResourceLoader ;
     }
 
-    return new ServerConfiguration() {
+    return new ProducerConfiguration() {
 
       public RenderingConfiguration getRenderingConfiguration() {
         return new RenderingConfiguration() {
@@ -127,9 +155,9 @@ public class TestResources {
             return FopFactory.newInstance() ;
           }
 
-//          public Iterable< FontDescriptor > getFontDescriptors() {
-//            return Iterables.emptyIterable() ;
-//          }
+          public FopFontStatus getCurrentFopFontStatus() {
+            throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
+          }
         } ;
       }
 
@@ -145,14 +173,25 @@ public class TestResources {
   }
 
 
-  public static ServerConfiguration createServerConfiguration(
+  public static DaemonConfiguration createDaemonConfiguration(
+      final int httpDaemonPort,
       final File contentDirectory,
       final String styleDirectoryName
   ) {
-    return createServerConfiguration(
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
         contentDirectory,
         styleDirectoryName,
         false
-    );
+    ) ;
+
+    return new DaemonConfiguration() {
+      public int getPort() {
+        return httpDaemonPort ;
+      }
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+    } ;
+
   }
 }

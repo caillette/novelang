@@ -31,9 +31,11 @@ import java.util.MissingResourceException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.junit.Assert;
 import novelang.loader.ResourceName;
 
 /**
@@ -122,12 +124,12 @@ public final class TestResourceTools {
    * Copy a resource into given directory, creating subdirectories if resource name includes
    * a directory.
    */
-  public static File copyResourceToFile(
+  public static File copyResourceToDirectory(
       Class owningClass,
       ResourceName resourceName,
       File destinationDir
   ) {
-    return copyResourceToFile( owningClass, "/" + resourceName.getName(), destinationDir ) ;
+    return copyResourceToDirectory( owningClass, "/" + resourceName.getName(), destinationDir ) ;
   }
 
 
@@ -135,7 +137,7 @@ public final class TestResourceTools {
    * Copy a resource into given directory, creating subdirectories if resource name includes
    * a directory.
    */
-  public static File copyResourceToFile(
+  public static File copyResourceToDirectory(
       Class owningClass,
       String resourceName,
       File destinationDir
@@ -163,4 +165,55 @@ public final class TestResourceTools {
     return destinationFile ;
   }
 
+  /**
+   * Copy a resource into given directory, creating no directory above target file.
+   */
+  public static File copyResourceToDirectoryFlat(
+      Class owningClass,
+      String resourceName,
+      File destinationDir
+  ) {
+    final byte[] resourceBytes = readResource( owningClass, resourceName ) ;
+    final ByteArrayInputStream inputStream =
+        new ByteArrayInputStream( resourceBytes );
+
+    final File destinationFile = new File( destinationDir, FilenameUtils.getName( resourceName ) ) ;
+    final FileOutputStream fileOutputStream ;
+    try {
+      fileOutputStream = new FileOutputStream( destinationFile ) ;
+    } catch( FileNotFoundException e ) {
+      throw new RuntimeException( e );
+    }
+    try {
+      IOUtils.copy( inputStream, fileOutputStream ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e );
+    }
+    return destinationFile ;
+  }
+
+  public static File createDirectory( File parent, String name ) {
+    final File directory = new File( parent, name ) ;
+    if( ! directory.exists() ) {
+      directory.mkdirs() ;
+    }
+    org.junit.Assert.assertTrue(
+        "Could not create: '" + directory.getAbsolutePath() + "'",
+        FileUtils.waitFor( directory, 1 )
+    ) ;
+    return directory ;
+  }
+
+  public static File getDirectoryForSure( File parent, String name ) {
+    final File directory = new File( parent, name ) ;
+    Assert.assertTrue(
+        "Does not exist: '" + directory.getAbsolutePath() + "'",
+        directory.exists()
+    ) ;
+    Assert.assertTrue(
+        "Not a directory: '" + directory.getAbsolutePath() + "'",
+        directory.isDirectory() 
+    ); ;
+    return directory ;
+  }
 }

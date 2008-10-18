@@ -40,9 +40,11 @@ public interface RenderingConfiguration {
   FopFactory getFopFactory() ;
 
   /**
-   * Returns all user-defined fonts.
-   * @return a non-null object iterating over non-null objects.
+   * Returns a descriptor of current FOP's font status regarding initial settings like
+   * directories, but reflecting latest changes inside those directories.
+   * 
+   * @return a possibly null object.
    */
-//  Iterable< FontDescriptor > getFontDescriptors() ;
+  FopFontStatus getCurrentFopFontStatus() ;
 
 }

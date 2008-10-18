@@ -28,7 +28,7 @@ import novelang.ScratchDirectoryFixture;
 import novelang.TestResources;
 import novelang.TestResourceTools;
 import novelang.loader.ResourceName;
-import novelang.configuration.ServerConfiguration;
+import novelang.configuration.ProducerConfiguration;
 import novelang.produce.DocumentProducer;
 import novelang.produce.RequestTools;
 import novelang.produce.DocumentRequest;
@@ -45,7 +45,7 @@ public class NumberingTest {
 
   @Test
   public void testNodeset() throws IOException {
-    final ServerConfiguration serverConfiguration = TestResources.createServerConfiguration(
+    final ProducerConfiguration serverConfiguration = TestResources.createProducerConfiguration(
         styleDirectory,
         styleDirectory.getName(),
         true
@@ -81,13 +81,13 @@ public class NumberingTest {
   public void setUp() throws IOException {
     final File scratchDirectory = new ScratchDirectoryFixture( getClass().getName() )
         .getTestScratchDirectory() ;
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         getClass(),
         NODESET_DIR + "/" + STYLESHEET_RESOURCE.getName(),
         scratchDirectory
     ) ;
     styleDirectory = new File( scratchDirectory, NODESET_DIR ) ;
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         getClass(),
         SOME_CHAPTERS,
         scratchDirectory

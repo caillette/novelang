@@ -73,7 +73,7 @@ public class UrlResourceLoaderTest {
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     loaderDirectory = scratchDirectoryFixture.getTestScratchDirectory();
-    TestResourceTools.copyResourceToFile(
+    TestResourceTools.copyResourceToDirectory(
         getClass(),
         RESOURCE_NAME,
         loaderDirectory

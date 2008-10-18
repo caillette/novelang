@@ -20,17 +20,17 @@ package novelang.rendering;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.sax.SAXSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +40,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+import com.google.common.base.Preconditions;
+import novelang.common.metadata.TreeMetadata;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
-import novelang.common.metadata.TreeMetadata;
-import com.google.common.base.Objects;
 
 /**
  * @author Laurent Caillette
@@ -66,6 +66,31 @@ public class XslWriter extends XmlWriter {
   }
 
   public XslWriter(
+      String namespaceUri,
+      String nameQualifier,
+      RenderingConfiguration configuration,
+      ResourceName xslFileName
+  ) {
+    this(
+        namespaceUri,
+        nameQualifier,
+        configuration,
+        xslFileName,
+        DEFAULT_RENDITION_MIME_TYPE
+    ) ;
+  }
+
+  public XslWriter(
+      String namespaceUri,
+      String nameQualifier,
+      RenderingConfiguration configuration,
+      ResourceName xslFileName,
+      RenditionMimeType mimeType
+  ) {
+    this( namespaceUri, nameQualifier, configuration, xslFileName, mimeType, NO_ENTITY_ESCAPE ) ;
+  }
+
+  public XslWriter(
       RenderingConfiguration configuration,
       ResourceName xslFileName,
       RenditionMimeType mimeType
@@ -79,24 +104,43 @@ public class XslWriter extends XmlWriter {
       RenditionMimeType mimeType,
       EntityEscapeSelector entityEscapeSelector
   ) {
-    super( mimeType ) ;
-    this.entityEscapeSelector = Objects.nonNull( entityEscapeSelector ) ;
+    this(
+        NAMESPACE_URI,
+        NAME_QUALIFIER,
+        configuration,
+        xslFileName,
+        mimeType,
+        entityEscapeSelector
+    ) ;
+  }
+
+  public XslWriter(
+      String namespaceUri,
+      String nameQualifier,
+      RenderingConfiguration configuration,
+      ResourceName xslFileName,
+      RenditionMimeType mimeType,
+      EntityEscapeSelector entityEscapeSelector
+  ) {
+    super( namespaceUri, nameQualifier, mimeType ) ;
+    this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
     this.resourceLoader = configuration.getResourceLoader() ;
     this.xslFileName = xslFileName ;
     entityResolver = new LocalEntityResolver() ;
     uriResolver = new LocalUriResolver() ;
     LOGGER.debug( "Created {} with stylesheet {}", getClass().getName(), xslFileName ) ;
-
   }
 
-  protected final ContentHandler createContentHandler(
+
+
+  protected ContentHandler createContentHandler(
       OutputStream outputStream,
       TreeMetadata treeMetadata,
       Charset encoding
   )
       throws Exception
   {
-    LOGGER.debug( "Created ContentHandler with encoding {}", encoding.name() );
+    LOGGER.debug( "Creating ContentHandler with encoding {}", encoding.name() );
 
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
