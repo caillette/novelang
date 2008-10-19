@@ -137,7 +137,7 @@ public class InsertFunction implements FunctionDefinition {
     }
 
     return new FunctionCall( location ) {
-      public Result evaluate( Environment environment, Treepath book ) {
+      public Result evaluate( Environment environment, Treepath< SyntacticTree > book ) {
         return InsertFunction.evaluate(
             environment,
             book,
@@ -151,7 +151,7 @@ public class InsertFunction implements FunctionDefinition {
 
   private static FunctionCall.Result evaluate(
       Environment environment,
-      Treepath book,
+      Treepath< SyntacticTree > book,
       String urlAsString,
       Set< String > options,
       Map< String, String > assignments
@@ -176,7 +176,7 @@ public class InsertFunction implements FunctionDefinition {
 
   private static FunctionCall.Result evaluateFlat(
       Environment environment,
-      Treepath book,
+      Treepath< SyntacticTree > book,
       File insertedFile,
       String styleName
   ) {
@@ -213,7 +213,7 @@ public class InsertFunction implements FunctionDefinition {
 
   private static FunctionCall.Result evaluateRecursive(
       Environment environment,
-      Treepath book,
+      Treepath< SyntacticTree > book,
       File insertedFile,
       boolean createChapters,
       String styleName
@@ -241,22 +241,24 @@ public class InsertFunction implements FunctionDefinition {
             final SyntacticTree title = new SimpleTree( TITLE.name(), word ) ;
 
             SyntacticTree chapterTree = TreeTools.addFirst(
-                ( SyntacticTree ) new SimpleTree( CHAPTER.name(), partTree.getChildren() ),
+                new SimpleTree( CHAPTER.name(), partTree.getChildren() ),
                 title
             ) ;
 
             if( styleTree != null ) {
               chapterTree = TreeTools.addFirst( chapterTree, styleTree ) ;
             }
-            final Treepath updatedBook = TreepathTools.addChildLast( book, chapterTree ) ;
-            book = Treepath.create( updatedBook.getTreeAtStart() ) ;
+            final Treepath< SyntacticTree > updatedBook = TreepathTools.addChildLast( book, chapterTree ) ;
+            final SyntacticTree start = updatedBook.getTreeAtStart() ;
+            book = Treepath.create( start ) ;
 
           } else {
             for( SyntacticTree partChild : partTree.getChildren() ) {
               if( styleTree != null ) {
                 partChild = TreeTools.addFirst( partChild, styleTree ) ;
               }
-              final Treepath updatedBook = TreepathTools.addChildLast( book, partChild ) ;
+              final Treepath< SyntacticTree > updatedBook =
+                  TreepathTools.addChildLast( book, partChild ) ;
               book = Treepath.create( updatedBook.getTreeAtStart() ) ;
             }
           }

@@ -256,8 +256,8 @@ public final class Treepath< T extends Tree > {
    * @param tree a non-null object.
    * @return a non-null object.
    */
-  public static< T extends Tree > Treepath create( T tree ) {
-    return new Treepath( tree ) ;
+  public static< T extends Tree > Treepath< T > create( T tree ) {
+    return new Treepath< T >( tree ) ;
   }
 
   private static class IllegalDistanceException extends IllegalArgumentException {
