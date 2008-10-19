@@ -226,7 +226,7 @@ public class InsertFunction implements FunctionDefinition {
       Environment environment,
       Treepath< SyntacticTree > book,
       File insertedFile,
-      boolean createChapters,
+      boolean createChapter,
       String styleName
   ) {
     final List< Problem > problems = Lists.newArrayList() ;
@@ -244,7 +244,7 @@ public class InsertFunction implements FunctionDefinition {
         if( null != part && null != part.getDocumentTree() ) {
           final SyntacticTree partTree = part.getDocumentTree() ;
 
-          if( createChapters ) {
+          if( createChapter ) {
             book = createChapterFromPartFilename( book, partFile, partTree, styleTree );
 
           } else {
