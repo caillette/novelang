@@ -9,7 +9,9 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 Enhanced font list: looks better, displays more useful characters.
 
-Option ``createchapters`` of the ``insert`` function renamed to ``createchapter`` as it applies to single-part insert. 
+The ``timestamp`` parameter passed to stylesheet is no longer of ``java.lang.String`` type, now it is a ``org.joda.time.DateTime`` for more formatting options.  
+
+Option ``createchapters`` of the ``insert`` function renamed to ``createchapter`` as it is no longer limited to recursive addition; now it applies to single-part insert.
 
 
 === Version `0.11.0`
