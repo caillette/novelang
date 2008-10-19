@@ -41,15 +41,15 @@ public class XsltNumberingTest {
   public void formatDateTime() {
     final ReadableDateTime dateTime = new DateTime( 2008, 10, 18, 20, 37, 0, 0 ) ;
     final String humanReadableDateTime = Numbering.formatDateTime( dateTime, "yyyy-MM-dd kk:mm" ) ;
-    final String hexDateTime = Numbering.formatDateTime( dateTime, "HEX" ) ;
-    Assert.assertEquals( "2EC1383595", hexDateTime );
+    final String base36DateTime = Numbering.formatDateTime( dateTime, "BASE36" ) ;
+    Assert.assertEquals( "2k917445", base36DateTime );
     Assert.assertEquals( "2008-10-18 20:37", humanReadableDateTime );
   }
 
   @Test
   public void unformatDateTime() {
     final ReadableDateTime dateTime = new DateTime( 2008, 10, 18, 20, 37, 0, 0 ) ;
-    Assert.assertEquals( dateTime, Numbering.unformatDateTime( "2EC1383595", "HEX" ) ) ;
+    Assert.assertEquals( dateTime, Numbering.unformatDateTime( "2k917445", "BASE36" ) ) ;
 
     Assert.assertEquals( 
         dateTime,
@@ -59,12 +59,12 @@ public class XsltNumberingTest {
 
   @Test
   public void printScrambledDateTime() {
-    final String scrambled = "2EC138585F";
+    final String scrambled = "2k917b2k";
     LOGGER.info(
         "Unscrambling {}: {}",
         scrambled,
         Numbering.formatDateTime(
-            Numbering.unformatDateTime( scrambled, "HEX" ),
+            Numbering.unformatDateTime( scrambled, "BASE36" ),
             "yyyy-MM-dd kk:mm"
         )
     ) ;

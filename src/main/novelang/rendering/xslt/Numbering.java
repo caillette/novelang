@@ -271,14 +271,11 @@ public class Numbering {
         ( ReadableDateTime ) readableDateTimeObject ) ;
     final String formatDescription = Preconditions.checkNotNull(
         ( String ) formatDescriptionObject ) ;
-    if( "HEX".equals( formatDescription ) ) {
+    if( "BASE36".equals( formatDescription ) ) {
       final DateTimeFormatter format = DATE_TIME_FORMATTER_NOSEPARATOR ;
       final String formattedString = format.print( readableDateTime ) ;
       final long number = Long.parseLong( formattedString ) ;
-      final StringWriter stringWriter = new StringWriter() ;
-      final PrintWriter printWriter = new PrintWriter( stringWriter ) ;
-      printWriter.format( "%X", number ) ;
-      return stringWriter.toString() ;
+      return Long.toString( number, 36 ) ;
     } else {
       final DateTimeFormatter format = DateTimeFormat.forPattern( formatDescription ) ;
       return format.print( readableDateTime ) ;
@@ -289,8 +286,8 @@ public class Numbering {
       String formattedDateTime,
       String formatDescription
   ) {
-    if( "HEX".equals( formatDescription ) ) {
-      final Long decimalNumber = Long.parseLong( formattedDateTime, 16 ) ;
+    if( "BASE36".equals( formatDescription ) ) {
+      final Long decimalNumber = Long.parseLong( formattedDateTime, 36 ) ;
       final String decimalNumberAsString = decimalNumber.toString() ;
       return DATE_TIME_FORMATTER_NOSEPARATOR.parseDateTime( decimalNumberAsString ) ;
     } else {
