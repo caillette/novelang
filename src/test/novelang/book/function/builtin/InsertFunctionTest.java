@@ -70,6 +70,39 @@ public class InsertFunctionTest {
   }
 
   @Test
+  public void createChapterForSinglePart() throws IllegalFunctionCallException {
+    final FunctionDefinition definition = new InsertFunction() ;
+    final FunctionCall call = definition.instantiate(
+        new Location( "", -1, -1 ),
+        BookParserTest.createFunctionCallWithUrlTree(
+            noChapterFile.getAbsolutePath(), "createchapter" )
+    ) ;
+
+    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final FunctionCall.Result result = call.evaluate(
+        new Environment( goodContentDirectory ),
+        Treepath.create( initialTree )
+    ) ;
+
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertNotNull( result.getBook() ) ;
+
+    TreeFixture.assertEquals(
+        tree( BOOK,
+            tree( CHAPTER,
+                tree( TITLE, tree( WORD, "no-chapter" ) ),
+                tree( SECTION,
+                    tree( TITLE, tree( WORD, "Section" ) ),
+                    tree( PARAGRAPH_PLAIN, tree( WORD, "paragraph" ) )
+                )
+            )
+        ),
+        result.getBook().getTreeAtStart()
+    ) ;
+
+  }
+
+  @Test
   public void addStyle() throws IllegalFunctionCallException {
     final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
@@ -141,6 +174,7 @@ public class InsertFunctionTest {
 // =======
 
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
+  private static final String NOCHAPTER_FILENAME = TestResources.NO_CHAPTER ;
   private static final String BROKEN_FILENAME = TestResources.BROKEN_CANNOTPARSE;
 
   private static final String CONTENT_GOOD_DIRNAME = "good" ;
@@ -148,6 +182,7 @@ public class InsertFunctionTest {
 
   private File scratchDirectory;
   private File oneWordFile ;
+  private File noChapterFile;
   private File goodContentDirectory;
   private File brokenContentDirectory;
 
@@ -164,6 +199,12 @@ public class InsertFunctionTest {
     oneWordFile = TestResourceTools.copyResourceToDirectory(
         getClass(),
         ONE_WORD_FILENAME,
+        goodContentDirectory
+    ) ;
+
+    noChapterFile = TestResourceTools.copyResourceToDirectory(
+        getClass(),
+        NOCHAPTER_FILENAME,
         goodContentDirectory
     ) ;
 
