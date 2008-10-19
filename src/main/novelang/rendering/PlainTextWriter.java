@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 
 import novelang.common.Nodepath;
 import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.MetadataHelper;
 
 /**
  * @author Laurent Caillette
@@ -42,7 +43,8 @@ public class PlainTextWriter implements FragmentWriter {
   ) throws Exception {
     writer = new PrintWriter( outputStream ) ;
     writer.append( "Timestamp: " );
-    writer.append( treeMetadata.getCreationTimestampAsString() );
+    writer.append(
+        MetadataHelper.TIMESTAMP_FORMATTER.print( treeMetadata.getCreationTimestamp() ) ) ;
     writer.println() ;
   }
 

@@ -16,17 +16,58 @@
  */
 package novelang.rendering.xslt;
 
+import java.io.IOException;
+
 import org.junit.Test;
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.joda.time.DateTime;
+import org.joda.time.ReadableDateTime;
 
 /**
  * @author Laurent Caillette
  */
 public class XsltNumberingTest {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( XsltNumberingTest.class ) ;
+
   @Test
-  public void testConvertToNumber() {
+  public void convertToNumber() {
     check( "Vingt-deux", 22, "FR", "capital" ) ;
+  }
+
+  @Test
+  public void formatDateTime() {
+    final ReadableDateTime dateTime = new DateTime( 2008, 10, 18, 20, 37, 0, 0 ) ;
+    final String humanReadableDateTime = Numbering.formatDateTime( dateTime, "yyyy-MM-dd kk:mm" ) ;
+    final String hexDateTime = Numbering.formatDateTime( dateTime, "HEX" ) ;
+    Assert.assertEquals( "2EC1383595", hexDateTime );
+    Assert.assertEquals( "2008-10-18 20:37", humanReadableDateTime );
+  }
+
+  @Test
+  public void unformatDateTime() {
+    final ReadableDateTime dateTime = new DateTime( 2008, 10, 18, 20, 37, 0, 0 ) ;
+    Assert.assertEquals( dateTime, Numbering.unformatDateTime( "2EC1383595", "HEX" ) ) ;
+
+    Assert.assertEquals( 
+        dateTime,
+        Numbering.unformatDateTime( "2008-10-18 20:37", "yyyy-MM-dd kk:mm" )
+    ) ;
+  }
+
+  @Test
+  public void printScrambledDateTime() {
+    final String scrambled = "2EC138585F";
+    LOGGER.info(
+        "Unscrambling {}: {}",
+        scrambled,
+        Numbering.formatDateTime(
+            Numbering.unformatDateTime( scrambled, "HEX" ),
+            "yyyy-MM-dd kk:mm"
+        )
+    ) ;
   }
 
 // =======
@@ -37,7 +78,7 @@ public class XsltNumberingTest {
     Assert.assertEquals(
         expected,
         Numbering.numberAsText(
-            new Double( number ),
+            ( double ) number,
             locale,
             caseType
         )
