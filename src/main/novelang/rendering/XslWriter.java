@@ -169,7 +169,7 @@ public class XslWriter extends XmlWriter {
   private void configure( Transformer transformer, TreeMetadata treeMetadata ) {
     transformer.setParameter(
         "timestamp",
-        treeMetadata.getCreationTimestampAsString()
+        treeMetadata.getCreationTimestamp()
     ) ;
     transformer.setParameter(
         "wordcount",

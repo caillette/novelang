@@ -1,8 +1,17 @@
 *** Status and history
 
-Novelang is yet stable with more thant 200 automated tests. It generates a PDF document of 600 pages in about 10 seconds with an Intel dual-core CPU at `2.4 GHz`. 
+Novelang is yet stable with more thant 240 automated tests. It generates a PDF document of 600 pages in about 10 seconds with an Intel dual-core CPU at `2.4 GHz`.
 
 Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version `1.0.0`. Keep informed reading the blog. 
+
+
+=== Version `0.12.0`
+
+Enhanced font list: looks better, displays more useful characters.
+
+The ``timestamp`` parameter passed to stylesheet is no longer of ``java.lang.String`` type, now it is a ``org.joda.time.DateTime`` for more formatting options.  
+
+Option ``createchapters`` of the ``insert`` function renamed to ``createchapter`` as it is no longer limited to recursive addition; now it applies to single-part insert.
 
 
 === Version `0.11.0`

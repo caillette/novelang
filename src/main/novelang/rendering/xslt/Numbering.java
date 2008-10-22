@@ -17,9 +17,23 @@
 package novelang.rendering.xslt;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.joda.time.ReadableDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
+
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
+import java.io.StringReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.PrintStream;
+
+import novelang.common.LanguageTools;
 
 /**
  * @author Laurent Caillette
@@ -27,6 +41,7 @@ import com.google.common.base.Function;
 public class Numbering {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Numbering.class ) ;
+  private static final DateTimeFormatter DATE_TIME_FORMATTER_NOSEPARATOR = DateTimeFormat.forPattern( "yyyyMMddkkmm" );
 
   /**
    * Just to get an easy case.
@@ -247,4 +262,40 @@ public class Numbering {
     ;
 
   }
+
+  public static String formatDateTime(
+      Object readableDateTimeObject,
+      Object formatDescriptionObject
+  ) {
+    final ReadableDateTime readableDateTime = Preconditions.checkNotNull(
+        ( ReadableDateTime ) readableDateTimeObject ) ;
+    final String formatDescription = Preconditions.checkNotNull(
+        ( String ) formatDescriptionObject ) ;
+    if( "BASE36".equals( formatDescription ) ) {
+      final DateTimeFormatter format = DATE_TIME_FORMATTER_NOSEPARATOR ;
+      final String formattedString = format.print( readableDateTime ) ;
+      final long number = Long.parseLong( formattedString ) ;
+      return Long.toString( number, 36 ) ;
+    } else {
+      final DateTimeFormatter format = DateTimeFormat.forPattern( formatDescription ) ;
+      return format.print( readableDateTime ) ;
+    }
+  }
+
+  protected static ReadableDateTime unformatDateTime(
+      String formattedDateTime,
+      String formatDescription
+  ) {
+    if( "BASE36".equals( formatDescription ) ) {
+      final Long decimalNumber = Long.parseLong( formattedDateTime, 36 ) ;
+      final String decimalNumberAsString = decimalNumber.toString() ;
+      return DATE_TIME_FORMATTER_NOSEPARATOR.parseDateTime( decimalNumberAsString ) ;
+    } else {
+      final DateTimeFormatter formatter = DateTimeFormat.forPattern( formatDescription ) ;
+      return formatter.parseDateTime( formattedDateTime ) ;
+    }
+
+  }
+
+
 }

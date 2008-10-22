@@ -57,10 +57,10 @@ import novelang.part.Part;
  * </pre>
  * Syntax 2: insert all Part files contained by given directory.
  * The <code>${@value #OPTION_RECURSE}</code> option causes a scan of subdirectories, if any.
- * The <code>${@value #OPTION_CREATECHAPTERS}</code> option creates chapters with the short name of
+ * The <code>${@value #OPTION_CREATECHAPTER}</code> option creates chapters with the short name of
  * originating file.
  * <pre>
- * insert file:&lt;path-to-partfiles&gt; [${@value #OPTION_RECURSE}] [${@value #OPTION_CREATECHAPTERS}]
+ * insert file:&lt;path-to-partfiles&gt; [${@value #OPTION_RECURSE}] [${@value # OPTION_CREATECHAPTER}]
  * </pre>
  *
  * @author Laurent Caillette
@@ -70,10 +70,10 @@ public class InsertFunction implements FunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger( InsertFunction.class ) ;
 
   private static final String OPTION_RECURSE = "recurse" ;
-  private static final String OPTION_CREATECHAPTERS = "createchapters" ;
+  private static final String OPTION_CREATECHAPTER = "createchapter" ;
   private static final Set< String > SUPPORTED_OPTIONS = ImmutableSet.of(
       OPTION_RECURSE,
-      OPTION_CREATECHAPTERS
+      OPTION_CREATECHAPTER
   ) ;
 
   private static final String ASSIGNMENT_STYLE = "style" ;
@@ -137,7 +137,7 @@ public class InsertFunction implements FunctionDefinition {
     }
 
     return new FunctionCall( location ) {
-      public Result evaluate( Environment environment, Treepath book ) {
+      public Result evaluate( Environment environment, Treepath< SyntacticTree > book ) {
         return InsertFunction.evaluate(
             environment,
             book,
@@ -151,7 +151,7 @@ public class InsertFunction implements FunctionDefinition {
 
   private static FunctionCall.Result evaluate(
       Environment environment,
-      Treepath book,
+      Treepath< SyntacticTree > book,
       String urlAsString,
       Set< String > options,
       Map< String, String > assignments
@@ -166,18 +166,25 @@ public class InsertFunction implements FunctionDefinition {
           environment,
           book,
           insertedFile,
-          options.contains( OPTION_CREATECHAPTERS ),
+          options.contains( OPTION_CREATECHAPTER ),
           assignments.get( ASSIGNMENT_STYLE )
       ) ;
     } else {
-      return evaluateFlat( environment, book, insertedFile, assignments.get( ASSIGNMENT_STYLE ) );
+      return evaluateFlat(
+          environment,
+          book,
+          insertedFile,
+          options.contains( OPTION_CREATECHAPTER ),
+          assignments.get( ASSIGNMENT_STYLE )
+      ) ;
     }
   }
 
   private static FunctionCall.Result evaluateFlat(
       Environment environment,
-      Treepath book,
+      Treepath< SyntacticTree > book,
       File insertedFile,
+      boolean createChapter,
       String styleName
   ) {
     final Part part;
@@ -192,11 +199,15 @@ public class InsertFunction implements FunctionDefinition {
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
 
     if( null != partTree ) {
-      for( SyntacticTree partChild : partTree.getChildren() ) {
-        if( styleTree != null ) {
-          partChild = TreeTools.addFirst( partChild, styleTree ) ;
+      if( createChapter ) {
+          book = createChapterFromPartFilename( book, insertedFile, partTree, styleTree ) ;
+      } else {
+        for( SyntacticTree partChild : partTree.getChildren() ) {
+          if( styleTree != null ) {
+            partChild = TreeTools.addFirst( partChild, styleTree ) ;
+          }
+          book = TreepathTools.addChildLast( Treepath.create( book.getTreeAtStart() ), partChild ) ;
         }
-        book = TreepathTools.addChildLast( Treepath.create( book.getTreeAtStart() ), partChild ) ;
       }
     }
 
@@ -213,9 +224,9 @@ public class InsertFunction implements FunctionDefinition {
 
   private static FunctionCall.Result evaluateRecursive(
       Environment environment,
-      Treepath book,
+      Treepath< SyntacticTree > book,
       File insertedFile,
-      boolean createChapters,
+      boolean createChapter,
       String styleName
   ) {
     final List< Problem > problems = Lists.newArrayList() ;
@@ -233,30 +244,16 @@ public class InsertFunction implements FunctionDefinition {
         if( null != part && null != part.getDocumentTree() ) {
           final SyntacticTree partTree = part.getDocumentTree() ;
 
-          if( createChapters ) {
-            final SyntacticTree word = new SimpleTree(
-                WORD.name(),
-                new SimpleTree( FilenameUtils.getBaseName( partFile.getName() ) )
-            ) ;
-            final SyntacticTree title = new SimpleTree( TITLE.name(), word ) ;
-
-            SyntacticTree chapterTree = TreeTools.addFirst(
-                ( SyntacticTree ) new SimpleTree( CHAPTER.name(), partTree.getChildren() ),
-                title
-            ) ;
-
-            if( styleTree != null ) {
-              chapterTree = TreeTools.addFirst( chapterTree, styleTree ) ;
-            }
-            final Treepath updatedBook = TreepathTools.addChildLast( book, chapterTree ) ;
-            book = Treepath.create( updatedBook.getTreeAtStart() ) ;
+          if( createChapter ) {
+            book = createChapterFromPartFilename( book, partFile, partTree, styleTree );
 
           } else {
             for( SyntacticTree partChild : partTree.getChildren() ) {
               if( styleTree != null ) {
                 partChild = TreeTools.addFirst( partChild, styleTree ) ;
               }
-              final Treepath updatedBook = TreepathTools.addChildLast( book, partChild ) ;
+              final Treepath< SyntacticTree > updatedBook =
+                  TreepathTools.addChildLast( book, partChild ) ;
               book = Treepath.create( updatedBook.getTreeAtStart() ) ;
             }
           }
@@ -269,6 +266,32 @@ public class InsertFunction implements FunctionDefinition {
     }
 
     return new FunctionCall.Result( environment, book, problems ) ;
+  }
+
+  private static Treepath< SyntacticTree > createChapterFromPartFilename(
+      Treepath<SyntacticTree > book,
+      File partFile,
+      SyntacticTree partTree,
+      SyntacticTree styleTree
+  ) {
+    final SyntacticTree word = new SimpleTree(
+        WORD.name(),
+        new SimpleTree( FilenameUtils.getBaseName( partFile.getName() ) )
+    ) ;
+    final SyntacticTree title = new SimpleTree( TITLE.name(), word ) ;
+
+    SyntacticTree chapterTree = TreeTools.addFirst(
+        new SimpleTree( CHAPTER.name(), partTree.getChildren() ),
+        title
+    ) ;
+
+    if( styleTree != null ) {
+      chapterTree = TreeTools.addFirst( chapterTree, styleTree ) ;
+    }
+    final Treepath< SyntacticTree > updatedBook = TreepathTools.addChildLast( book, chapterTree ) ;
+    final SyntacticTree start = updatedBook.getTreeAtStart() ;
+    book = Treepath.create( start ) ;
+    return book;
   }
 
   private static Iterable< File > scanPartFiles( File directory )

@@ -22,6 +22,8 @@ import java.util.Set;
 
 import org.apache.fop.fonts.FontTriplet;
 import org.dom4j.Namespace;
+import org.joda.time.ReadableDateTime;
+import org.joda.time.DateTime;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -97,8 +99,8 @@ public class FontDiscoveryStreamer {
         SyntheticFontMap.createSyntheticFontMap( fopFontStatus ) ;
 
     final TreeMetadata treeMetadata = new TreeMetadata() {
-      public String getCreationTimestampAsString() {
-        return "<not set>" ;
+      public ReadableDateTime getCreationTimestamp() {
+        return new DateTime() ; // No null allowed!
       }
       public int getWordCount() {
         return -1 ;

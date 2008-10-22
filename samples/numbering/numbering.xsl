@@ -21,6 +21,10 @@
     xmlns:exslt="http://exslt.org/common"
     xmlns:nlx="xalan://novelang.rendering.xslt.Numbering"
  >
+  <xsl:import href="pdf.xsl" />
+
+  <xsl:param name="timestamp"/>
+  <xsl:param name="filename"/>
 
 
   <xsl:template match="/" >
@@ -86,6 +90,23 @@
               <xsl:value-of select="function-available('nlx:numberAsText')" />
             </fo:block>
 
+            <fo:block>
+              Function "formatDateTime" available=
+              <xsl:value-of select="function-available('nlx:formatDateTime')" />
+            </fo:block>
+
+            <fo:block padding-before="10pt" >
+              Now some dateTime formatting.
+            </fo:block>
+            <fo:block>
+              $timestamp=<xsl:value-of select="nlx:formatDateTime( $timestamp, 'yyyy-MM-dd kk:mm') " />
+            </fo:block>
+            <fo:block>
+              $timestamp as hex=<xsl:value-of select="nlx:formatDateTime( $timestamp, 'HEX')" />
+            </fo:block>
+
+
+
             <fo:block padding-before="10pt" />
 
 
@@ -118,7 +139,6 @@
   </xsl:template>
 
 
-  <xsl:import href="pdf.xsl" />
 
 </xsl:stylesheet>
 

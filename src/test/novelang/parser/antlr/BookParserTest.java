@@ -40,7 +40,7 @@ public class BookParserTest {
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
    * parser produces.
    */
-  public static final SyntacticTree createFunctionCallWithUrlTree(
+  public static SyntacticTree createFunctionCallWithUrlTree(
       String fileName,
       String... flagArguments
   ) {
@@ -50,7 +50,7 @@ public class BookParserTest {
     return functionCall.getTreeAtStart() ;
   }
 
-  public static final SyntacticTree createFunctionCallWithUrlTree(
+  public static SyntacticTree createFunctionCallWithUrlTree(
       String fileName,
       Map< String, String > assignments,
       String... flagArguments
@@ -65,7 +65,7 @@ public class BookParserTest {
   private static Treepath< SyntacticTree >
   createFunctionTreeWithFilenameAsPrimaryArgument( String fileName )
   {
-    Treepath< SyntacticTree > functionCall = Treepath.create( new SimpleTree(
+    final Treepath< SyntacticTree > functionCall = Treepath.< SyntacticTree >create( new SimpleTree(
         FUNCTION_CALL.name(),
         new SimpleTree( FUNCTION_NAME.name(), new SimpleTree( "function" ) ),
         new SimpleTree(
@@ -93,7 +93,7 @@ public class BookParserTest {
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
    * parser produces.
    */
-  public static final SyntacticTree createFunctionCallWithValuedAssignmentTree(
+  public static SyntacticTree createFunctionCallWithValuedAssignmentTree(
       String functionName,
       Map< String, String > map
   ) {
@@ -187,7 +187,7 @@ public class BookParserTest {
     functionCall(
         "function file:my/file",
         createFunctionCallWithUrlTree( "my/file" )
-    ); ;
+    ) ;
   }
 
   @Test

@@ -61,4 +61,15 @@ public class LanguageTools {
     throw new RuntimeException( throwable ) ;
   }
 
+  /**
+   * Converts a character to the two-character hexadecimal representation of its most
+   * significative one-byte representation.
+   *
+   * @param character
+   * @return a two-byte string.
+   * @author Jon A. Cruz http://www.thescripts.com/forum/thread15875.html
+   */
+  public static String to8byteHex(char character) {
+    return Integer.toHexString( 0x100 | ( 0x0ff & character ) ).substring( 1 ) ;
+  }
 }

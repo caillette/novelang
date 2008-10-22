@@ -20,6 +20,7 @@ package novelang.common.metadata;
 import java.nio.charset.Charset;
 
 import org.joda.time.DateTime;
+import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import novelang.common.SyntacticTree;
@@ -46,24 +47,21 @@ public class MetadataHelper {
     }
   }
 
-  private static final DateTimeFormatter TIMESTAMP_FORMATTER =
+  public static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormat.forPattern( "yyyy-MM-dd kk:mm" ) ;
 
   private static DateTime createTimestamp() {
     return new DateTime() ;
   }
 
-  private static String format( DateTime timestamp ) {
-    return TIMESTAMP_FORMATTER.print( timestamp ) ;
-  }
 
   public static TreeMetadata createMetadata( SyntacticTree tree, final Charset encoding ) {
 
-    final String timestampAsString = format( createTimestamp() ) ;
+    final ReadableDateTime timestampAsString = createTimestamp() ;
     final int wordCount = countWords( tree ) ;
 
     return new TreeMetadata() {
-      public String getCreationTimestampAsString() {
+      public ReadableDateTime getCreationTimestamp() {
         return timestampAsString ;
       }
 

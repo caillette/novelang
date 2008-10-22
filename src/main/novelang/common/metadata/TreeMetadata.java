@@ -19,12 +19,14 @@ package novelang.common.metadata;
 
 import java.nio.charset.Charset;
 
+import org.joda.time.ReadableDateTime;
+
 /**
  * @author Laurent Caillette
  */
 public interface TreeMetadata {
 
-  public String getCreationTimestampAsString() ;
+  public ReadableDateTime getCreationTimestamp() ;
   public int getWordCount() ;
   public Charset getEncoding() ;
 

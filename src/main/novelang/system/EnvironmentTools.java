@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Lists;
+import novelang.common.LanguageTools;
 
 /**
  * Utility class for dumping system properties.
@@ -132,12 +133,7 @@ public final class EnvironmentTools {
       for( int i = 0 ; i < separatorChars.length ; i++ ) {
         final char c = separatorChars[ i ];
         stringBuffer.append( " 0x" ) ;
-        // Thanx to  Jon A. Cruz for this:
-        // (http://www.thescripts.com/forum/thread15875.html)
-        stringBuffer.append( Integer.
-            toHexString( 0x100 | ( 0x0ff & c ) ).
-            substring( 1 ).toUpperCase()
-        ) ;
+        stringBuffer.append( LanguageTools.to8byteHex( c ).toUpperCase() ) ;
       }
       stringBuffer.append( "\n" ) ;
       return true ;
