@@ -25,6 +25,9 @@ import org.dom4j.Namespace;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+import com.google.code.xmltool.XMLDoc;
+import com.google.code.xmltool.XMLDocument;
+import com.google.code.xmltool.XMLDocBuilder;
 import novelang.common.metadata.TreeMetadata;
 import novelang.configuration.FontQuadruplet;
 import novelang.configuration.FopFontStatus;
@@ -108,7 +111,17 @@ public class FontDiscoveryStreamer {
     xslWriter.startWriting( outputStream, treeMetadata, encoding ) ;
 
     xslWriter.start( ELEMENT_ROOT, true ) ;
-    
+
+    if( ! fopFontStatus.getFailedFonts().isEmpty() ) {
+      xslWriter.start( ELEMENT_BROKEN ) ;
+      for( String embedFileName : fopFontStatus.getFailedFonts().keySet() ) {
+        xslWriter.start( ELEMENT_EMBEDFILE ) ;
+        xslWriter.write( embedFileName ) ;
+        xslWriter.end( ELEMENT_EMBEDFILE ) ;
+      }
+      xslWriter.end( ELEMENT_BROKEN ) ;
+    }
+
     for( String fontName : quadruplets.keySet() ) {
       for( FontQuadruplet quadruplet : quadruplets.get( fontName ) ) {
         final FontTriplet fontTriplet = quadruplet.getFontTriplet() ;
@@ -145,7 +158,7 @@ public class FontDiscoveryStreamer {
     xslWriter.start( ELEMENT_SENTENCES ) ; {
 
       xslWriter.start( ELEMENT_SENTENCE ) ;
-      xslWriter.write( "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" ) ;
+      xslWriter.write( "AaBbCcDdEeFf GgHhIiJjKkLl MmNnOoPpQqRr SsTtUuVvWwXx YyZz" ) ;
       xslWriter.end( ELEMENT_SENTENCE ) ;
 
       xslWriter.start( ELEMENT_SENTENCE ) ;

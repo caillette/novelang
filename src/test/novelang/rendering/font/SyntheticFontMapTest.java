@@ -89,6 +89,9 @@ public class SyntheticFontMapTest {
   private static final String FONT_TWO = "Font Two" ;
   private static final String FONT_2 = "Font 2" ;
 
+  public static final String FAILED_FONT_X = "Font X" ;
+  public static final String FAILED_FONT_Y = "Font Y" ;
+
   private static final String TTF_ONE_NORMAL_NORMAL = "One-normal-normal.ttf" ;
   private static final String TTF_ONE_ITALIC_NORMAL = "One-italic-normal.ttf" ;
   private static final String TTF_ONE_NORMAL_BOLD = "One-normal-bold.ttf" ;
@@ -150,9 +153,14 @@ public class SyntheticFontMapTest {
       INFO_FONT_TWO_NORMAL_NORMAL
   ) ;
 
-  public static final Map< String, EmbedFontInfo > FAILED_FONTS = ImmutableMap.of() ;
+  public static final Map< String, EmbedFontInfo > FAILED_FONTS = ImmutableMap.of(
+      FAILED_FONT_X, new EmbedFontInfo( "", false, null, "" ),
+      FAILED_FONT_Y, new EmbedFontInfo( "", false, null, "" )
+  ) ;
 
-  public static final FopFontStatus FONT_STATUS = new FopFontStatus( FONT_INFOS, FAILED_FONTS ) ;
+  public static final FopFontStatus FONT_STATUS = new FopFontStatus(
+      FONT_INFOS,
+      FAILED_FONTS ) ;
 
   private static EmbedFontInfo embedFontInfo( String embedFontFile, FontTriplet... fontTriplets ) {
     return new EmbedFontInfo(

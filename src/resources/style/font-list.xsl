@@ -69,6 +69,30 @@
     </fo:root>
   </xsl:template>
 
+  <xsl:template match="nf:broken" >
+    <fo:block
+        break-before="page"
+        padding-top="0pt"
+        text-align="center"
+        padding-bottom="5pt"
+    >
+      <fo:block>There are broken fonts!</fo:block>
+      <fo:block
+          text-align="left"
+          font-family="Courier"
+      >
+        <xsl:for-each select="nf:embed-file">
+          <fo:block>
+            <xsl:value-of select="." />
+          </fo:block>
+        </xsl:for-each>
+      </fo:block>
+
+    </fo:block>
+
+
+  </xsl:template>
+
 
   <xsl:template match="nf:family" >
     
