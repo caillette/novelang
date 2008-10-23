@@ -84,6 +84,16 @@ public class Problem {
 
   public static Problem createProblem(
       LocationFactory locationFactory,
+      RecognitionException exception
+  ) {
+    final Location location = locationFactory.createLocation(
+        exception.line, exception.charPositionInLine ) ;
+    final String message = exception.getMessage() == null ? "?" : exception.getMessage() ;
+    return new Problem( location, message ) ;
+  }
+
+  public static Problem createProblem(
+      LocationFactory locationFactory,
       String message
   ) {
     final Matcher matcher = MESSAGE_WITH_LOCATION.matcher( message ) ;

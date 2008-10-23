@@ -41,6 +41,7 @@ public abstract class AbstractDelegatingParser {
     this.delegate = delegate ;
     CharStream stream = new ANTLRStringStream( text );
     NovelangLexer lexer = new NovelangLexer( stream );
+    lexer.setProblemDelegate( delegate ) ;
     CommonTokenStream tokens = new CommonTokenStream( lexer );
     parser = new NovelangParser( tokens ) ;
     parser.setTreeAdaptor( new CustomTreeAdaptor( delegate.getLocationFactory() ) ) ;

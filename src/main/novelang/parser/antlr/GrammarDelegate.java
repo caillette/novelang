@@ -35,38 +35,17 @@ import novelang.parser.NoUnescapedCharacterException;
  *
  * @author Laurent Caillette
  */
-public class GrammarDelegate {
-
-  private final LocationFactory locationFactory ;
-  private final List< Problem > problems = Lists.newArrayList() ;
+public class GrammarDelegate extends ProblemDelegate {
 
   /**
    * With this constructor the {@code LocationFactory} gives only partial information.
    * Its use is reserved to ANTLR parser, which needs a default {@code GrammarDelegate}
    * for running in the debugger.
    */
-  public GrammarDelegate() {
-    this.locationFactory = new LocationFactory() {
-      public Location createLocation( int line, int column ) {
-        return new Location( "<debug>", line, column ) ;
-      }
-    } ;
-  }
+  public GrammarDelegate() { }
 
   public GrammarDelegate( LocationFactory locationFactory ) {
-    this.locationFactory = locationFactory ;
-  }
-
-  public void report( String antlrMessage ) {
-    problems.add( Problem.createProblem( locationFactory, antlrMessage ) ) ;
-  }
-
-  public Iterable< Problem > getProblems() {
-    return ImmutableList.copyOf( problems ) ;
-  }
-
-  public LocationFactory getLocationFactory() {
-    return locationFactory;
+    super( locationFactory ) ;
   }
 
   public Tree createTree( int tokenIdentifier, String tokenPayload ) {

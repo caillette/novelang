@@ -177,7 +177,7 @@ public class AntlrTestHelper {
   static void part( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
-    final SyntacticTree actualTree = part( text ); ;
+    final SyntacticTree actualTree = part( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
 

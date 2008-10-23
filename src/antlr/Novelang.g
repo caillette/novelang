@@ -85,7 +85,27 @@ scope ParagraphScope {
 
 @lexer::header { 
 package novelang.parser.antlr ;
-} 
+import novelang.parser.antlr.ProblemDelegate ;
+}
+
+@lexer::members {
+
+  private ProblemDelegate delegate = new ProblemDelegate() ;
+
+  public void setProblemDelegate( ProblemDelegate delegate ) {
+    this.delegate = delegate ;
+  }
+
+  @Override
+  public void reportError(org.antlr.runtime.RecognitionException e ) {
+    if( null == delegate ) {
+      super.reportError( e ) ;
+    } else {
+      delegate.report( e ) ;
+    }
+  }
+
+}
 
 @parser::header { 
 package novelang.parser.antlr ;
