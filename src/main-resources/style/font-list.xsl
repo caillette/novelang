@@ -69,6 +69,19 @@
     </fo:root>
   </xsl:template>
 
+
+  <xsl:template match="nf:no-font-found" >
+    <fo:block
+        break-before="page"
+        padding-top="0pt"
+        text-align="center"
+        padding-bottom="5pt"
+    >
+      No font found.
+    </fo:block>
+  </xsl:template>
+
+
   <xsl:template match="nf:broken" >
     <fo:block
         break-before="page"

@@ -59,6 +59,7 @@ public class FontDiscoveryStreamer {
   private static final String ELEMENT_EMBEDFILE = "embed-file" ;
   private static final String ELEMENT_STYLE = "style" ;
   private static final String ELEMENT_BROKEN = "broken" ;
+  private static final String ELEMENT_NOFONTFOUNT = "no-font-found" ;
 
   private static final String ELEMENT_WEIGHT = "weight" ;
   private static final String ELEMENT_CHARACTERS = "characters" ;
@@ -110,6 +111,11 @@ public class FontDiscoveryStreamer {
     xslWriter.startWriting( outputStream, treeMetadata, encoding ) ;
 
     xslWriter.start( ELEMENT_ROOT, true ) ;
+
+    if( fopFontStatus.getFailedFonts().isEmpty() && quadruplets.keySet().isEmpty() ) {
+      xslWriter.start( ELEMENT_NOFONTFOUNT ) ;
+      xslWriter.end( ELEMENT_NOFONTFOUNT ) ; 
+    }
 
     if( ! fopFontStatus.getFailedFonts().isEmpty() ) {
       xslWriter.start( ELEMENT_BROKEN ) ;
