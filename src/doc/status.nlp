@@ -9,6 +9,10 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 Better detection of text inconsistencies (lexer now reports problems).
 
+Enhanced font list: doesn't break where there are no custom font at all.
+
+Cleaned up ``samples`` directory: most of stuff here was for tests, that moved to ``src/test-resources``.
+
 
 === Version `0.12.0`
 
