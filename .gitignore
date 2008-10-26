@@ -5,6 +5,6 @@ batch-generated
 antlrworks
 distrib
 idea/Novelang.ipr
-src/resources/more-fonts-*
+src/main-resources/fonts/more-fonts-*
 *.log
 _*
