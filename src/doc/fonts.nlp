@@ -4,7 +4,7 @@ Novelang PDF generation relies on Apache FOP, which support custom fonts. Every 
 
 === Font files
 
-Those fonts must be True Type fonts in ``.ttf`` files. To be recognized as fonts of the same family, all font files must have the same radix (e.g. "``Bitstream-Vera-Sans``"). File suffix indicates weight and style variations: ``-bold.ttf``, ``-italic.ttf``, ``-bold-italic.ttf``. No suffix means no variation. Note that "``oblique``" may replace "``italic``" with the same meaning.
+Those fonts must be True Type fonts in ``.ttf`` files.
 
 Requesting a manual setting of requested fonts may seem an unnecessary burden. On the other hand, people using publishing tools often complain about a missing font or a broken one, when importing documents created on another computer. By making fonts a part of a Novelang project (with same strategy as for content and stylesheets) we expect you to avoid those annoyances.
 
@@ -12,7 +12,11 @@ Requesting a manual setting of requested fonts may seem an unnecessary burden. O
 
 If there is a directory named ``fonts`` right under your project root, it is automatically recognized as the fonts directory and Novelang attempts to load every file ending by ``.ttf`` as a font. This doesn't include subdirectories.
 
-You can specify alternate font directories by setting the ``--font-dirs`` option at startup.
+You can specify alternate font directories by setting the ``--font-dirs`` option at startup. Directory names are whitespace-separated like this:
+
+<<<
+--font-dirs=fonts/some-fonts fonts/other-fonts
+>>>
 
 === Font list
 
@@ -21,8 +25,6 @@ You can see the list of registered fonts from your browser with following URL:
 <<<
 http://localhost:8080/~fonts.pdf
 >>>
-
-By now, a single broken font makes all custom fonts unavailable, so it is recommanded to add fonts one by one and restart Novelang HTTP daemon each time before checking the font list.
 
 
 === Turn it on
@@ -36,3 +38,9 @@ Inside a XSL-FO stylesheet you set the font-family of a block or an inline eleme
 >
   ...
 >>>
+
+
+=== Font licensing
+
+All fonts shipping with Novelang are licensed under the GNU Public License.
+As a consequence, if you create an electronic document embedding those fonts (precisely what happens with a PDF) your document becomes GPL-licensed. If this is not the wished behavior, consider using other fonts.  
