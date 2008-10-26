@@ -263,7 +263,7 @@ public class HttpDaemonTest {
       BROKEN_HTML_DOCUMENT_NAME + RequestTools.ERRORPAGE_SUFFIX ;
 
   private static final String BOOK_ALTERNATESTYLESHEET_DOCUMENT_NAME =
-      TestResources.SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION + HTML ;
+      TestResources.SERVED_BOOK_WITHALTERNATESTYLESHEET_NOEXTENSION + HTML ;
 
   private HttpDaemon httpDaemon ;
   private File contentDirectory;

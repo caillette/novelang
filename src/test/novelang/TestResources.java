@@ -40,12 +40,16 @@ public class TestResources {
 
   private TestResources() { }
 
-  public static final String JUST_SECTIONS = "/just-sections.nlp";
-  public static final String MESSY_IDENTIFIERS = "/messy-identifiers.nlp";
-  public static final String NO_CHAPTER = "/no-chapter.nlp";
-  public static final String SIMPLE_STRUCTURE = "/simple-structure.nlp";
-  public static final String ONE_WORD = "/one-word.nlp";
-  public static final String BROKEN_CANNOTPARSE = "/broken/broken-cannotparse.nlp";
+  private static final String ONE_WORD_RELATIVEFILENAME = "one-word.nlp";
+  public static final String ONE_WORD_ABSOLUTEFILENAME = "/" + ONE_WORD_RELATIVEFILENAME ;
+  public static final ResourceName ONE_WORD_RESOURCENAME = new ResourceName( ONE_WORD_RELATIVEFILENAME ) ;
+
+  public static final String PARTS_DIR = "/parts" ;
+  public static final String JUST_SECTIONS = PARTS_DIR + "/just-sections.nlp";
+  public static final String MESSY_IDENTIFIERS = PARTS_DIR + "/messy-identifiers.nlp";
+  public static final String NO_CHAPTER = PARTS_DIR + "/no-chapter.nlp";
+  public static final String SIMPLE_STRUCTURE = PARTS_DIR + "/simple-structure.nlp";
+  public static final String BROKEN_CANNOTPARSE = PARTS_DIR + "/broken-cannotparse.nlp";
 
 
   public static final String SCANNED_DIR = "/scanned" ;
@@ -79,8 +83,8 @@ public class TestResources {
 
 
 
-  public static final String NODESET_DIR = "/numbering";
-  public static final ResourceName NODESET_XSL = new ResourceName( "numbering.xsl" ) ;
+  public static final String NODESET_DIR = "/format-in-xsl";
+  public static final ResourceName NODESET_XSL = new ResourceName( "format.xsl" ) ;
   public static final String NODESET_SOMECHAPTERS_DOCUMENTNAME = "some-chapters" ;
   public static final String NODESET_SOMECHAPTERS =
       NODESET_DIR + "/" + NODESET_SOMECHAPTERS_DOCUMENTNAME + ".nlp" ;
@@ -103,11 +107,11 @@ public class TestResources {
 
   public static final String SERVED_PARTSOURCE_BROKEN = SERVED_PART_BROKEN_NOEXTENSION + ".nlp" ;
 
-  public static final String SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION =
+  public static final String SERVED_BOOK_WITHALTERNATESTYLESHEET_NOEXTENSION =
       "/" + SERVED_DIRECTORY_NAME + "/book-alternatexsl" ;
 
-  public static final String SERVED_BOOK_ALTERNATESTYLESHEET =
-      SERVED_BOOK_ALTERNATESTYLESHEET_NOEXTENSION + ".nlb" ;
+  public static final String SERVED_BOOK_WITHALTERNATESTYLESHEET =
+      SERVED_BOOK_WITHALTERNATESTYLESHEET_NOEXTENSION + ".nlb" ;
 
   public static final String SERVED_BOOK_BADSCANNEDPART_NOEXTENSION =
       "/" + SERVED_DIRECTORY_NAME + "/book-bad-scanned-part" ;
@@ -124,7 +128,7 @@ public class TestResources {
         TestResources.class, SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
 
     TestResourceTools.copyResourceToDirectory(
-        TestResources.class, SERVED_BOOK_ALTERNATESTYLESHEET, contentDirectory ) ;
+        TestResources.class, SERVED_BOOK_WITHALTERNATESTYLESHEET, contentDirectory ) ;
 
   }
 

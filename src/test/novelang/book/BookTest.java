@@ -194,7 +194,7 @@ public class BookTest {
 // Fixture
 // =======
 
-  private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
+  private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD_ABSOLUTEFILENAME;
   private File oneWordFile ;
 
   public static final String SCANNED_BOOK_FILENAME = TestResources.SCANNED_DIR ;

@@ -217,7 +217,8 @@
         <path refid="deploy-libs" />
         <pathelement location="${target.mainclasses.dir}" />
         <pathelement location="${target.testclasses.dir}" />
-        <pathelement location="${source.samples.dir}" />
+        <pathelement location="${source.main.resources.dir}" />
+        <pathelement location="${source.test.resources.dir}" />
       </classpath>
       <batchtest fork="yes" todir="${target.test.reports.dir}" >
         <fileset
@@ -395,24 +396,6 @@
     >
       <fileset dir="${target.javadoc.dir}" />
     </scp>
-
-<!--
-    <property
-        name="command"
-        value="unzip -o -d ${publish.remote.dir}/javadoc ${publish.remote.dir}/${target.javadoc.zipfilename}" 
-    />
-    <echo>SSH command: ${command}</echo>
-
-    <sshexec
-        host="${publish.remote.host}"
-        username="${user}"
-        password="${password}"
-        command="${command}"
-        outputproperty="sshexecoutput"
-    />
-
-    <echo>SSH output: ${sshexecoutput}</echo>
--->
 
   </target>
 

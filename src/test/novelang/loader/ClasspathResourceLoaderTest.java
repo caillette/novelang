@@ -34,15 +34,7 @@ public class ClasspathResourceLoaderTest {
   @Test
   public void relativizedOk() throws IOException {
     final ClasspathResourceLoader loader = new ClasspathResourceLoader() ;
-    final InputStream inputStream = loader.getInputStream( TestResources.SHOWCASE ) ;
-    final String resource = IOUtils.toString( inputStream ) ;
-    Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
-  }
-
-  @Test
-  public void absoluteOk() throws IOException {
-    final ClasspathResourceLoader loader = new ClasspathResourceLoader() ;
-    final InputStream inputStream = loader.getInputStream( TestResources.SHOWCASE ) ;
+    final InputStream inputStream = loader.getInputStream( TestResources.ONE_WORD_RESOURCENAME ) ;
     final String resource = IOUtils.toString( inputStream ) ;
     Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
   }

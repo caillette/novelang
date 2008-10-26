@@ -118,6 +118,7 @@ public class Main {
   }
 
   private static void printHelpOnConsole( ArgumentException e ) {
+    System.out.println( e.getMessage() ) ;
     e.getHelpPrinter().print(
         System.out,
         ClassUtils.getShortClassName( Main.class ) + " [OPTIONS] document1 [document2...]", 

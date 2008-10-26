@@ -113,6 +113,7 @@ public class HttpDaemon {
   }
 
   private static void printHelpOnConsole( ArgumentException e ) {
+    System.out.println( e.getMessage() ) ;
     e.getHelpPrinter().print(
         System.out,
         ClassUtils.getShortClassName( HttpDaemon.class ) + " [OPTIONS]",

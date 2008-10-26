@@ -81,11 +81,6 @@ public class NumberingTest {
   public void setUp() throws IOException {
     final File scratchDirectory = new ScratchDirectoryFixture( getClass().getName() )
         .getTestScratchDirectory() ;
-    TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        NODESET_DIR + "/" + STYLESHEET_RESOURCE.getName(),
-        scratchDirectory
-    ) ;
     styleDirectory = new File( scratchDirectory, NODESET_DIR ) ;
     TestResourceTools.copyResourceToDirectory(
         getClass(),

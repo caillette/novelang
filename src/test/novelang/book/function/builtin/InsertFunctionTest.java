@@ -173,7 +173,7 @@ public class InsertFunctionTest {
 // Fixture
 // =======
 
-  private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD ;
+  private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD_ABSOLUTEFILENAME;
   private static final String NOCHAPTER_FILENAME = TestResources.NO_CHAPTER ;
   private static final String BROKEN_FILENAME = TestResources.BROKEN_CANNOTPARSE;
 

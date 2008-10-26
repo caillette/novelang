@@ -44,14 +44,6 @@ public class UrlResourceLoaderTest {
     Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
   }
 
-  @Test
-  public void relativizedOk() throws IOException {
-    final UrlResourceLoader loader = new UrlResourceLoader( loaderDirectory.toURI().toURL() ) ;
-    final InputStream inputStream = loader.getInputStream( RESOURCE_NAME ) ;
-    final String resource = IOUtils.toString( inputStream ) ;
-    Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
-  }
-
 
   @Test( expected = ResourceNotFoundException.class )
   public void urlResourceLoaderNotFound() throws IOException {
@@ -64,7 +56,7 @@ public class UrlResourceLoaderTest {
 // Fixture
 // =======
 
-  private static final ResourceName RESOURCE_NAME = TestResources.SHOWCASE;
+  private static final ResourceName RESOURCE_NAME = TestResources.ONE_WORD_RESOURCENAME ;
   private File loaderDirectory;
 
   @Before
