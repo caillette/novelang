@@ -78,7 +78,7 @@
     </path>
 
     <path id="antlr-grammars" >
-      <fileset dir="${source.main.antlr.dir}" includes="Novelang.g"/>
+      <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
     </path>
 
   </target>
@@ -108,17 +108,19 @@
         dirsep="/"
         pathsep=" "
     >
-      <map from="${basedir.fullpath}/" to="" /> <!-- Needed, really? -->
+      <map from="${basedir.fullpath}/${source.main.antlr.dir}/" to="" /> 
     </pathconvert>
 
-    <echo>antlrsources='${antlr-main-sources}'</echo>
+    <echo>ANTLR sources='${antlr-main-sources}'</echo>
 
     <java
         classname="org.antlr.Tool"
         failonerror="true"
+        fork="true"
+        dir="${source.main.antlr.dir}"
     >
       <classpath refid="build-libs" />
-      <arg line="-fo ${target.antlr.generated.dir} ${antlr-main-sources}" />
+      <arg line="-fo ${basedir.fullpath}/${target.antlr.generated.dir} ${antlr-main-sources}" />
     </java>
 
   </target>
