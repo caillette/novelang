@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2008 Laurent Caillette
  *
@@ -26,6 +25,27 @@ tokens {
 }
 
 
+@parser::members {
+
+private novelang.parser.antlr.GrammarDelegate delegate =
+    new novelang.parser.antlr.GrammarDelegate() ;
+
+public void setGrammarDelegate( novelang.parser.antlr.GrammarDelegate delegate ) {
+  this.delegate = delegate ;
+}
+
+@Override
+public void emitErrorMessage( String string ) {
+  if( null == delegate ) {
+    super.emitErrorMessage( string ) ;
+  } else {
+    delegate.report( string ) ;
+  }
+}
+
+}
+
+
 
 // ===================================
 // Part-related URL rules
@@ -33,8 +53,8 @@ tokens {
 // ===================================
 
 url
-  : ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } )	)
-  | ( file = fileUrl -> ^( URL { delegate.createTree( URL, $file.text ) } )	) 
+  : ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } ) )
+  | ( file = fileUrl -> ^( URL { delegate.createTree( URL, $file.text ) } ) ) 
   ;
   
 fileUrl                                   

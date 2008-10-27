@@ -1,7 +1,5 @@
 parser grammar AllSymbols ;
 
-import AllTokens ;
-
 
 letter : hexLetter | nonHexLetter ;
 
