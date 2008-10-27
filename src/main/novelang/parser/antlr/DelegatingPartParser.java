@@ -18,6 +18,7 @@
 package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonErrorNode;
 //import org.antlr.runtime.tree.CommonErrorNode;
 import novelang.common.LocationFactory;
 import novelang.common.SyntacticTree;
@@ -36,11 +37,11 @@ class DelegatingPartParser
 
   public SyntacticTree parse() throws RecognitionException {
     final Object tree = getAntlrParser().part().getTree();
-//    if( tree instanceof CommonErrorNode ) {
-//      throw new RuntimeException( ( ( CommonErrorNode ) tree ).trappedException ) ;
-//    } else {
+    if( tree instanceof CommonErrorNode ) {
+      throw new RuntimeException( ( ( CommonErrorNode ) tree ).trappedException ) ;
+    } else {
       return ( SyntacticTree ) tree ;
-//    }
+    }
   }
   
 }

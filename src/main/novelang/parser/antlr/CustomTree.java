@@ -18,6 +18,7 @@
 package novelang.parser.antlr;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.antlr.runtime.ClassicToken;
 import org.antlr.runtime.Token;
@@ -69,7 +70,9 @@ public class CustomTree
     return false ;
   }
 
-  public Iterable< SyntacticTree > getChildren() {
+  public List< SyntacticTree > getChildren() {
+    return super.getChildren() ;
+/*
     return new Iterable< SyntacticTree >() {
 
       public Iterator< SyntacticTree > iterator() {
@@ -93,6 +96,7 @@ public class CustomTree
         } ;
       }
     } ;
+*/
   }
 
   public CustomTree adopt( SyntacticTree... newChildren ) throws NullArgumentException {
