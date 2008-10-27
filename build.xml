@@ -70,11 +70,19 @@
     </patternset>
 
     <path id="deploy-libs" >
-      <fileset dir="${lib.deploy.dir}" includes="*.jar" />
+      <fileset dir="${lib.deploy.dir}" >
+        <include name="*.jar" />
+        <exclude name="**/antlr-3.1.1-runtime.jar" />
+      </fileset>
     </path>
 
     <path id="build-libs" >
-      <fileset dir="${lib.build.dir}" includes="*.jar" />
+      <fileset dir="${lib.build.dir}" >
+        <include name="*.jar" />
+        <exclude name="**/antlr-2.7.7.jar" />
+        <exclude name="**/antlr-3.1.1.jar" />
+        <exclude name="**/stringtemplate-3.2.jar" />
+      </fileset>
     </path>
 
     <path id="antlr-grammars" >
