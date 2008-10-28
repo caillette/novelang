@@ -51,3 +51,21 @@ part
     -> ^( PART url )
   ;
 
+
+word
+  : letter+
+  ;
+  
+mediumSpace
+  : ( WHITESPACE? SOFTBREAK WHITESPACE? ) | WHITESPACE ;  
+  
+textBlock 
+  : (   ( word ( WHITESPACE word )* WHITESPACE? )
+      | ( url WHITESPACE? )
+    )
+    ( SOFTBREAK (
+        ( word ( WHITESPACE word )* WHITESPACE? )
+      | ( url WHITESPACE? )
+      
+    ) )*
+  ;
