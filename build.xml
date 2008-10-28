@@ -111,7 +111,12 @@
       <map from="${basedir.fullpath}/${source.main.antlr.dir}/" to="" /> 
     </pathconvert>
 
-    <echo>ANTLR sources='${antlr-main-sources}'</echo>
+    <property
+        name="line"
+        value="${target.antlr.generated.debug} -fo ${basedir.fullpath}/${target.antlr.generated.dir} ${antlr-main-sources}"
+    />
+
+    <echo>Command line= ${line}</echo>
 
     <java
         classname="org.antlr.Tool"
@@ -120,7 +125,7 @@
         dir="${source.main.antlr.dir}"
     >
       <classpath refid="build-libs" />
-      <arg line="-fo ${basedir.fullpath}/${target.antlr.generated.dir} ${antlr-main-sources}" />
+      <arg line="${line}" />
     </java>
 
   </target>
@@ -132,6 +137,18 @@
   >
     <antcall target="generate-antlr" >
       <param name="target.antlr.generated.dir" value="${idea.antlr.generated}" />
+      <param name="target.antlr.generated.debug" value="" />
+    </antcall>
+  </target>
+
+  <target
+      name="generate-antlr-idea-debug"
+      depends="init"
+      description="Generate ANTLR parser in IDEA's subdir with debug features"
+  >
+    <antcall target="generate-antlr" >
+      <param name="target.antlr.generated.dir" value="${idea.antlr.generated}" />
+      <param name="target.antlr.generated.debug" value="-debug" />
     </antcall>
   </target>
 

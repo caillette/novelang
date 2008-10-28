@@ -28,6 +28,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
+//import NovelangParser;
+//import AllTokens;
 
 /**
  * @author Laurent Caillette
@@ -40,8 +42,8 @@ public abstract class AbstractDelegatingParser {
   public AbstractDelegatingParser( String text, GrammarDelegate delegate ) {
     this.delegate = delegate ;
     CharStream stream = new ANTLRStringStream( text );
-    NovelangLexer lexer = new NovelangLexer( stream );
-    lexer.setProblemDelegate( delegate ) ;
+    AllTokens lexer = new AllTokens( stream );
+//    lexer.setProblemDelegate( delegate ) ;
     CommonTokenStream tokens = new CommonTokenStream( lexer );
     parser = new NovelangParser( tokens ) ;
     parser.setTreeAdaptor( new CustomTreeAdaptor( delegate.getLocationFactory() ) ) ;

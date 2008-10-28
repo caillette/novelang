@@ -28,19 +28,29 @@ import org.antlr.runtime.TokenSource;
 public class DebuggableGrammarLauncher {
 
   public static void main( String[] args ) throws IOException {
-/*
-    TokenSource lex = ( new ANTLRFileStream( "/Users/Laurent/Novelang/antlrworks/__Test___input.txt" ) );
+/*    // ANTLRWorks 1.2.1 generates this for Novelang-ante-ANTLR-3.1.1:
+    NovelangLexer lex = new NovelangLexer(new ANTLRFileStream("/Users/Laurent/Novelang/antlrworks/__Test___input.txt"));
+    CommonTokenStream tokens = new CommonTokenStream(lex);
+
+    NovelangParser g = new NovelangParser(tokens, 49100, null);
+    try {
+        g.part();
+    } catch (RecognitionException e) {
+        e.printStackTrace();
+    }
+*/
+
+    NovelangLexer lex = new NovelangLexer( 
+        new ANTLRFileStream( "/Users/Laurent/Novelang/antlrworks/__Test___input.txt" ) );
     CommonTokenStream tokens = new CommonTokenStream( lex );
 
     NovelangParser g = new NovelangParser( tokens, 49100, null );
     try {
-      g.textBlock();
-    } catch(
-        RecognitionException e ) {
+      g.part();
+    } catch( RecognitionException e ) {
       e.printStackTrace();
     }
 
-*/
   }
 
 
