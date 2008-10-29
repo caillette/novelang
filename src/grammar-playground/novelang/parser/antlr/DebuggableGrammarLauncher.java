@@ -40,13 +40,13 @@ public class DebuggableGrammarLauncher {
     }
 */
 
-    NovelangLexer lex = new NovelangLexer( 
+    AllTokens lex = new AllTokens(
         new ANTLRFileStream( "/Users/Laurent/Novelang/antlrworks/__Test___input.txt" ) );
     CommonTokenStream tokens = new CommonTokenStream( lex );
 
     NovelangParser g = new NovelangParser( tokens, 49100, null );
     try {
-      g.part();
+      g.part() ;
     } catch( RecognitionException e ) {
       e.printStackTrace();
     }
