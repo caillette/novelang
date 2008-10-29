@@ -8,4 +8,6 @@ idea/Novelang.ipr
 src/main-resources/fonts/more-fonts-*
 src/main-resources/more-fonts-*
 *.log
+grammar-debug-classes
 _*
+*.ipr
