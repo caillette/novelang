@@ -112,8 +112,16 @@
     </pathconvert>
 
     <property
+        name="generated-dir"
+        value="${basedir.fullpath}/${target.antlr.generated.dir}"
+    />
+
+    <echo>generated-dir=${generated-dir}</echo>
+    <echo>target.antlr.generated.dir=${target.antlr.generated.dir}</echo>
+
+    <property
         name="line"
-        value="${target.antlr.generated.debug} -fo ${basedir.fullpath}/${target.antlr.generated.dir} ${antlr-main-sources}"
+        value="${target.antlr.generated.debug} -fo ${generated-dir} ${antlr-main-sources}"
     />
 
     <echo>Command line= ${line}</echo>
@@ -128,6 +136,16 @@
       <arg line="${line}" />
     </java>
 
+    <!--
+      This won't be needed once ANTLR will handle headers with imports correctly:
+      http://www.antlr.org:8080/pipermail/antlr-interest/2008-October/031241.html
+    -->
+    <replace dir="${generated-dir}"
+        value="package ${target.antlr.generated.package} ; import org.antlr.runtime.* ;"
+    >
+      <replacetoken>import org.antlr.runtime.*;</replacetoken>
+    </replace>
+
   </target>
 
   <target
@@ -136,7 +154,7 @@
       description="Generate ANTLR parser in IDEA's subdir"
   >
     <antcall target="generate-antlr" >
-      <param name="target.antlr.generated.dir" value="${idea.antlr.generated}" />
+      <param name="target.antlr.generated.dir" value="${idea.antlr.generated.dir}" />
       <param name="target.antlr.generated.debug" value="" />
     </antcall>
   </target>
@@ -147,7 +165,7 @@
       description="Generate ANTLR parser in IDEA's subdir with debug features"
   >
     <antcall target="generate-antlr" >
-      <param name="target.antlr.generated.dir" value="${idea.antlr.generated}" />
+      <param name="target.antlr.generated.dir" value="${idea.antlr.generated.dir}" />
       <param name="target.antlr.generated.debug" value="-debug" />
     </antcall>
   </target>
