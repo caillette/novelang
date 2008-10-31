@@ -70,14 +70,15 @@ delimitedSpreadblock
 parenthesizedSpreadblock
   : LEFT_PARENTHESIS WHITESPACE?
     (
+
 		    ( // Whole-line stuff is the beginning
-		      monolineStuffWithSoftbreaksAround	    
+		      monolineStuffWithSoftbreaksAround+  
 		      ( // Loop with words, then-whole-line stuff.
 			      ( WHITESPACE?
-			        ( word ( WHITESPACE word )* ) //textBlockWithSpread        
+			        ( word ( WHITESPACE word )* ) //FIXME: use textBlockWithSpread
 			        WHITESPACE?
 			      )
-			      monolineStuffWithSoftbreaksAround		    
+			      monolineStuffWithSoftbreaksAround+		    
 		      )*
 		      ( // Optional word sequence at the end, opportunity to add a SOFTBREAK
 		        WHITESPACE?
@@ -87,19 +88,24 @@ parenthesizedSpreadblock
 		      WHITESPACE? RIGHT_PARENTHESIS
 		    )
 		    
-		  | ( // Greedy block is the beginning 
+		  | 
+
+		    ( // Greedy block is the beginning 
 		      ( ( SOFTBREAK WHITESPACE? )?
-		         ( word ( WHITESPACE word )* ) //textBlockWithSpread 
-		      )
+		         textBlockWithSpread //( word ( WHITESPACE word )* )
+	 	      )
+	 	      	 	      
 		      ( monolineStuffWithSoftbreaksAround
-				    WHITESPACE? 
-				    ( word ( WHITESPACE word )* ) //textBlockWithSpread 
-				    WHITESPACE?		    
+				    ( WHITESPACE? 
+				      textBlockWithSpread 
+				      WHITESPACE?		    
+				    )?
 		      )*
-		      ( monolineStuffWithSoftbreaksAround WHITESPACE? )?
+		      
 		      RIGHT_PARENTHESIS  
 		    )
-    )
+		    
+    )    
   ;
     
 textBlockWithSpread
@@ -117,33 +123,7 @@ monolineStuffWithSoftbreaksAround
   ;      
       
       
-  
-  
-/*  
-parenthesizedSpreadblock0
-  : LEFT_PARENTHESIS WHITESPACE?
-    (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
-      | ( SOFTBREAK smallListItem WHITESPACE? SOFTBREAK )
-      | ( SOFTBREAK? ( word | delimitedSpreadblock+ ) 
-          ( WHITESPACE ( word | delimitedSpreadblock+ ) )*
-          WHITESPACE? 
-        )
-    )
-    ( WHITESPACE? 
-      (   ( url WHITESPACE? SOFTBREAK )
-        | ( smallListItem WHITESPACE? SOFTBREAK )
-        | ( SOFTBREAK WHITESPACE? ( word | delimitedSpreadblock+ ) 
-            ( WHITESPACE 
-              ( word | delimitedSpreadblock+ ) 
-            )*
-          )
-      )
-    )*    	    
-	  
-	  WHITESPACE? RIGHT_PARENTHESIS
-	  
-  ;
-*/  
+   
   
   
   
