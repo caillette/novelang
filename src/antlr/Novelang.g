@@ -70,7 +70,6 @@ delimitedSpreadblock
 parenthesizedSpreadblock
   : LEFT_PARENTHESIS WHITESPACE?
     (
-
 		    ( // Whole-line stuff is the beginning
 		      monolineSequenceWithSoftbreaksAround
 		      ( // Loop with words, then-whole-line stuff.
@@ -85,52 +84,39 @@ parenthesizedSpreadblock
 		        textBlockWithSpread
 		        SOFTBREAK?
 		      )?
-		      WHITESPACE? RIGHT_PARENTHESIS
-		    )
-		    
+		      WHITESPACE? 
+		    )		    
 		  | 
-
 		    ( // Greedy block is the beginning 
 		      ( ( SOFTBREAK WHITESPACE? )?
 		         textBlockWithSpread //( word ( WHITESPACE word )* )
-	 	      )
-	 	      	 	      
+		         WHITESPACE?
+	 	      )	 	      	 	      
 		      ( monolineSequenceWithSoftbreaksAround
 				    ( WHITESPACE? 
 				      textBlockWithSpread 
 				      WHITESPACE?		    
 				    )?
-		      )*
-		      
-		      RIGHT_PARENTHESIS  
-		    )
-		    
-    )    
+		      )*		      
+		    )		    
+    )
+    RIGHT_PARENTHESIS    
   ;
     
 textBlockWithSpread
   : ( ( word delimitedSpreadblock* ) | delimitedSpreadblock+ )
-    ( WHITESPACE ( ( word delimitedSpreadblock* ) | delimitedSpreadblock+ ) )*
+    ( ( WHITESPACE | ( WHITESPACE? SOFTBREAK WHITESPACE? ) ) 
+      ( ( word delimitedSpreadblock* ) | delimitedSpreadblock+ ) 
+    )*
   ;  
       
 monolineSequenceWithSoftbreaksAround
-  : (  ( SOFTBREAK url WHITESPACE? SOFTBREAK )
-	   | ( SOFTBREAK smallListItem WHITESPACE? SOFTBREAK )
-	  )
+  : SOFTBREAK
     (   ( url WHITESPACE? SOFTBREAK )
       | ( smallListItem WHITESPACE? SOFTBREAK )
-    )* 
+    )+
   ;      
-      
-monolineSequenceWithSoftbreaksAround0
-  : (  ( SOLIDUS url WHITESPACE? SOLIDUS )
-	   | ( SOLIDUS smallListItem WHITESPACE? SOLIDUS )
-	  )
-    (   ( url WHITESPACE? SOLIDUS )
-      | ( smallListItem WHITESPACE? SOLIDUS )
-    )* 
-  ;      
-      
+  
       
    
   
