@@ -69,34 +69,57 @@ delimitedSpreadblock
 
 parenthesizedSpreadblock
   : LEFT_PARENTHESIS WHITESPACE?
-        ( (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
-	          | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
-	          | ( ( SOFTBREAK WHITESPACE )? 
-	              ( word | delimitedSpreadblock+ ) 
-	              ( WHITESPACE ( word | delimitedSpreadblock+ ) )*
-	            )
-	        )
+    (
+		    ( // Whole-line stuff is the beginning
+		      monolineStuffWithSoftbreaksAround	    
+		      ( // Loop with words, then-whole-line stuff.
+			      ( WHITESPACE?
+			        ( word ( WHITESPACE word )* ) //textBlockWithSpread        
+			        WHITESPACE?
+			      )
+			      monolineStuffWithSoftbreaksAround		    
+		      )*
+		      ( // Optional word sequence at the end, opportunity to add a SOFTBREAK
+		        WHITESPACE?
+		        textBlockWithSpread
+		        SOFTBREAK?
+		      )?
+		      WHITESPACE? RIGHT_PARENTHESIS
 		    )
-		    (   (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
-	            | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
-	            | ( SOFTBREAK? WHITESPACE? 
-	                ( word | delimitedSpreadblock+ ) 
-	                ( WHITESPACE 
-	                  ( word | delimitedSpreadblock+ ) 
-	                )*
-	              )
-	          )
-	        | ( WHITESPACE? RIGHT_PARENTHESIS )
-	      )*
+		    
+		  | ( // Greedy block is the beginning 
+		      ( ( SOFTBREAK WHITESPACE? )?
+		         ( word ( WHITESPACE word )* ) //textBlockWithSpread 
+		      )
+		      ( monolineStuffWithSoftbreaksAround
+				    WHITESPACE? 
+				    ( word ( WHITESPACE word )* ) //textBlockWithSpread 
+				    WHITESPACE?		    
+		      )*
+		      ( monolineStuffWithSoftbreaksAround WHITESPACE? )?
+		      RIGHT_PARENTHESIS  
+		    )
+    )
   ;
+    
+textBlockWithSpread
+  : ( word | delimitedSpreadblock+ ) 
+    ( WHITESPACE ( ( word delimitedSpreadblock* ) | delimitedSpreadblock+ ) )*
+  ;  
       
-      
-      
+monolineStuffWithSoftbreaksAround
+  : (  ( SOFTBREAK url WHITESPACE? SOFTBREAK )
+	   | ( SOFTBREAK smallListItem WHITESPACE? SOFTBREAK )
+	  )
+    (   ( url WHITESPACE? SOFTBREAK )
+      | ( smallListItem WHITESPACE? SOFTBREAK )
+    )*
+  ;      
       
       
   
   
-  
+/*  
 parenthesizedSpreadblock0
   : LEFT_PARENTHESIS WHITESPACE?
     (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
@@ -120,7 +143,7 @@ parenthesizedSpreadblock0
 	  WHITESPACE? RIGHT_PARENTHESIS
 	  
   ;
-  
+*/  
   
   
   
