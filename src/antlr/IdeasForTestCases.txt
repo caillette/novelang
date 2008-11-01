@@ -4,5 +4,19 @@ Paragraph: <<<<
 w4
 - i
 - j
-))>>>>
+))
+>>>>
 
+
+Paragraph: <<<<
+(w1 w2(w3 
+w4
+- i
+- j
+)w5)
+>>>>
+
+
+delimitedSpreadBlock: <<<<
+(w1(w2)w3)
+>>>>

@@ -71,32 +71,25 @@ parenthesizedSpreadblock
   : LEFT_PARENTHESIS WHITESPACE?
     (
 		    ( // Whole-line stuff is the beginning
-		      monolineSequenceWithSoftbreaksAround
-		      ( // Loop with words, then-whole-line stuff.
+		      
+		      ( monolineSequenceWithSoftbreaksAround
 			      ( WHITESPACE?
-			        ( word ( WHITESPACE word )* ) //FIXME: use textBlockWithSpread
+			        textBlockWithSpread 
 			        WHITESPACE?
-			      )
-			      monolineSequenceWithSoftbreaksAround		    
-		      )*
-		      ( // Optional word sequence at the end, opportunity to add a SOFTBREAK
-		        WHITESPACE?
-		        textBlockWithSpread
-		        SOFTBREAK?
-		      )?
-		      WHITESPACE? 
+			      )?
+		      )+
 		    )		    
 		  | 
 		    ( // Greedy block is the beginning 
 		      ( ( SOFTBREAK WHITESPACE? )?
-		         textBlockWithSpread //( word ( WHITESPACE word )* )
+		         textBlockWithSpread 
 		         WHITESPACE?
 	 	      )	 	      	 	      
 		      ( monolineSequenceWithSoftbreaksAround
 				    ( WHITESPACE? 
 				      textBlockWithSpread 
 				      WHITESPACE?		    
-				    )?
+				    )? // TODO: support SOFTBREAK after the last text item
 		      )*		      
 		    )		    
     )
@@ -104,11 +97,16 @@ parenthesizedSpreadblock
   ;
     
 textBlockWithSpread
-  : ( ( word delimitedSpreadblock* ) | delimitedSpreadblock+ )
+  : (   ( word ( delimitedSpreadblock word? )* )
+      | ( delimitedSpreadblock ( word? delimitedSpreadblock )* )
+    )
     ( ( WHITESPACE | ( WHITESPACE? SOFTBREAK WHITESPACE? ) ) 
-      ( ( word delimitedSpreadblock* ) | delimitedSpreadblock+ ) 
-    )*
+      (   ( word ( delimitedSpreadblock word? )* )
+        | ( delimitedSpreadblock ( word? delimitedSpreadblock )* ) 
+      )
+    )*    
   ;  
+      
       
 monolineSequenceWithSoftbreaksAround
   : SOFTBREAK
