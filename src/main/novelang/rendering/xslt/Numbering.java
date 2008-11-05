@@ -157,7 +157,7 @@ public class Numbering {
           case 18  : return "dix-huit" ;
           case 19  : return "dix-neuf" ;
           case 20  : return "vingt" ;
-          case 21  : return "vingt-et-un" ;
+          case 21  : return "vingt et un" ;
           case 22  : return "vingt-deux" ;
           case 23  : return "vingt-trois" ;
           case 24  : return "vingt-quatre" ;
