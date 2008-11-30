@@ -32,8 +32,9 @@ public class WhitespaceTrigger {
 
   private static final Set< Sequence > SEQUENCES = Sets.newHashSet() ;
   static {
-    add( EMPHASIS, WORD ) ;
+    add( EMPHASIS, EMPHASIS ) ;
     add( EMPHASIS, QUOTE ) ;
+    add( EMPHASIS, WORD ) ;
     add( HARD_INLINE_LITERAL, WORD ) ;
     add( INTERPOLATEDCLAUSE, WORD ) ;
     add( INTERPOLATEDCLAUSE_SILENTEND, WORD ) ;
@@ -47,6 +48,13 @@ public class WhitespaceTrigger {
     add( PUNCTUATION_SIGN, SOFT_INLINE_LITERAL ) ;
     add( PUNCTUATION_SIGN, SQUARE_BRACKETS ) ;
     add( PUNCTUATION_SIGN, WORD ) ;
+    add( QUOTE, EMPHASIS ) ;
+    add( QUOTE, INTERPOLATEDCLAUSE ) ;
+    add( QUOTE, INTERPOLATEDCLAUSE_SILENTEND ) ;
+    add( QUOTE, SOFT_INLINE_LITERAL ) ;
+    add( QUOTE, SQUARE_BRACKETS ) ;
+    add( QUOTE, PARENTHESIS ) ;
+    add( QUOTE, QUOTE ) ;
     add( QUOTE, WORD ) ;
     add( SQUARE_BRACKETS, WORD ) ;
     add( SOFT_INLINE_LITERAL, WORD ) ;
