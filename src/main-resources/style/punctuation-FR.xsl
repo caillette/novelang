@@ -29,4 +29,6 @@
   <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
   <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
 
+  <xsl:template match="n:ellipsis-opening" >&hellip;&nbsp;</xsl:template>
+
 </xsl:stylesheet>
