@@ -42,7 +42,7 @@ public abstract class AbstractDelegatingParser {
   public AbstractDelegatingParser( String text, GrammarDelegate delegate ) {
     this.delegate = delegate ;
     CharStream stream = new ANTLRStringStream( text );
-    AllTokens lexer = new AllTokens( stream );
+    NovelangLexer lexer = new NovelangLexer( stream );
 //    lexer.setProblemDelegate( delegate ) ;
     CommonTokenStream tokens = new CommonTokenStream( lexer );
     parser = new NovelangParser( tokens ) ;

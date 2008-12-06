@@ -2,27 +2,30 @@
 <module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/..">
+    <content url="file://$MODULE_DIR$/../configuration">
       <sourceFolder url="file://$MODULE_DIR$/../configuration/test" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/generated/antlr" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../src/antlr" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/main">
       <sourceFolder url="file://$MODULE_DIR$/../src/main" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/main-resources">
       <sourceFolder url="file://$MODULE_DIR$/../src/main-resources" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/test">
       <sourceFolder url="file://$MODULE_DIR$/../src/test" isTestSource="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/test-legacy-parser">
+      <sourceFolder url="file://$MODULE_DIR$/../src/test-legacy-parser" isTestSource="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/test-resources">
       <sourceFolder url="file://$MODULE_DIR$/../src/test-resources" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/../.git" />
-      <excludeFolder url="file://$MODULE_DIR$/../_samples" />
-      <excludeFolder url="file://$MODULE_DIR$/../antlrworks" />
-      <excludeFolder url="file://$MODULE_DIR$/../distrib" />
-      <excludeFolder url="file://$MODULE_DIR$/javadoc" />
-      <excludeFolder url="file://$MODULE_DIR$/test-scratch" />
-      <excludeFolder url="file://$MODULE_DIR$/../lib" />
-      <excludeFolder url="file://$MODULE_DIR$/../target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntryProperties />
+    <orderEntry type="module" module-name="Novelang-common" />
+    <orderEntry type="module" module-name="Novelang-libraries" />
+    <orderEntry type="module" module-name="Novelang-parser" />
   </component>
 </module>
 

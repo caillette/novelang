@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/generated/antlr">
+      <sourceFolder url="file://$MODULE_DIR$/generated/antlr" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/antlr" />
+    <content url="file://$MODULE_DIR$/../src/main-parser">
+      <sourceFolder url="file://$MODULE_DIR$/../src/main-parser" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/test-parser">
+      <sourceFolder url="file://$MODULE_DIR$/../src/test-parser" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Novelang-common" />
+    <orderEntry type="module" module-name="Novelang-libraries" />
+  </component>
+</module>
+

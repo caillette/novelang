@@ -79,9 +79,9 @@
     <path id="build-libs" >
       <fileset dir="${lib.build.dir}" >
         <include name="*.jar" />
-        <exclude name="**/antlr-2.7.7.jar" />
-        <exclude name="**/antlr-3.1.1.jar" />
-        <exclude name="**/stringtemplate-3.2.jar" />
+        <!--<exclude name="**/antlr-2.7.7.jar" />-->
+        <!--<exclude name="**/antlr-3.1.1.jar" />-->
+        <!--<exclude name="**/stringtemplate-3.2.jar" />-->
       </fileset>
     </path>
 
@@ -148,11 +148,13 @@
       This won't be needed once ANTLR will handle headers with imports correctly:
       http://www.antlr.org:8080/pipermail/antlr-interest/2008-October/031241.html
     -->
+<!--
     <replace dir="${generated-dir}"
         value="package ${target.antlr.generated.package} ; import org.antlr.runtime.* ;"
     >
       <replacetoken>import org.antlr.runtime.*;</replacetoken>
     </replace>
+-->
 
   </target>
 
