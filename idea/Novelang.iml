@@ -11,7 +11,6 @@
       <sourceFolder url="file://$MODULE_DIR$/../src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../src/test-resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../.git" />
-      <excludeFolder url="file://$MODULE_DIR$/../_samples" />
       <excludeFolder url="file://$MODULE_DIR$/../antlrworks" />
       <excludeFolder url="file://$MODULE_DIR$/../distrib" />
       <excludeFolder url="file://$MODULE_DIR$/javadoc" />
@@ -22,7 +21,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntryProperties />
   </component>
 </module>
 
