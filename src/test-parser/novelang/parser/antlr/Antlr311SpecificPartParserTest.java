@@ -31,7 +31,7 @@ public class Antlr311SpecificPartParserTest {
   
   @Test
   public void paragraphIsSimplestSpeechContinued() throws RecognitionException {
-    Antlr311TestHelper.delimitedSpreadBlock( "--+ w0", TreeFixture.tree(
+    Antlr311TestHelper.delimitedSpreadBlock( "(w1(w2)w3)", TreeFixture.tree(
         NodeKind.PARAGRAPH_SPEECH_CONTINUED,
         TreeFixture.tree( NodeKind.WORD, "w0" )
     ) ) ;

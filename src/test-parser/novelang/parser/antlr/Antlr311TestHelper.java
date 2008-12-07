@@ -19,6 +19,7 @@ package novelang.parser.antlr;
 import novelang.common.SyntacticTree;
 import novelang.common.Problem;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonErrorNode;
 import junit.framework.AssertionFailedError;
 
 /**
@@ -36,7 +37,12 @@ public class Antlr311TestHelper {
  
   public static SyntacticTree delimitedSpreadBlock( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final SyntacticTree tree = ( SyntacticTree ) parser.getAntlrParser().delimitedSpreadblock().getTree() ;
+    final Object node = parser.getAntlrParser().delimitedSpreadblock().getTree() ;
+    if( node instanceof CommonErrorNode ) {
+      final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
+      throw new RuntimeException( errorNode.trappedException ) ;
+    }
+    final SyntacticTree tree = ( SyntacticTree ) node ; 
     checkSanity( parser );
     return tree;
   }

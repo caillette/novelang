@@ -148,13 +148,11 @@
       This won't be needed once ANTLR will handle headers with imports correctly:
       http://www.antlr.org:8080/pipermail/antlr-interest/2008-October/031241.html
     -->
-<!--
     <replace dir="${generated-dir}"
         value="package ${target.antlr.generated.package} ; import org.antlr.runtime.* ;"
     >
       <replacetoken>import org.antlr.runtime.*;</replacetoken>
     </replace>
--->
 
   </target>
 
