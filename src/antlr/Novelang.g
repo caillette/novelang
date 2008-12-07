@@ -25,16 +25,8 @@ tokens {
   URL ;
 }
 
-@lexer::header { 
-package novelang.parser.antlr ;
-import novelang.parser.antlr.ProblemDelegate ;
-}
 
 
-@parser::header { 
-package novelang.parser.antlr ;
-import novelang.parser.antlr.GrammarDelegate;
-} 
 
 @parser::members {
 private novelang.parser.antlr.GrammarDelegate delegate =
@@ -77,25 +69,22 @@ delimitedSpreadblock
 
 parenthesizedSpreadblock
   : LEFT_PARENTHESIS WHITESPACE?
-        ( (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
-	          | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
-	          | ( ( SOFTBREAK WHITESPACE )? 
-	              ( word | delimitedSpreadblock+ ) 
-	              ( WHITESPACE ( word | delimitedSpreadblock+ ) )*
-	            )
-	        )
-		    )
-		    (   (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
-	            | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
-	            | ( SOFTBREAK WHITESPACE? 
-	                ( word | delimitedSpreadblock+ ) 
-	                ( WHITESPACE 
-	                  ( word | delimitedSpreadblock+ ) 
-	                )*
-	              )
-	          )
-	        
-	      )*
+    (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
+      | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+      | ( ( SOFTBREAK WHITESPACE? )? 
+          ( ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) ) 
+          ( WHITESPACE ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) )*
+        )
+    )
+    (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
+      | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+      | ( SOFTBREAK WHITESPACE? 
+          ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) 
+          ( WHITESPACE 
+            ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) 
+          )*
+        )             
+    )* 
 	  WHITESPACE? RIGHT_PARENTHESIS
   ;
       
