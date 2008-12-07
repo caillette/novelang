@@ -18,7 +18,7 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
-import novelang.common.NodeKind;
+import static novelang.parser.antlr.Antlr311TestHelper.BREAK;
 
 /**
  * Test new parser features.
@@ -27,14 +27,39 @@ import novelang.common.NodeKind;
  */
 public class Antlr311SpecificPartParserTest {
   
-  
-  
   @Test
-  public void paragraphIsSimplestSpeechContinued() throws RecognitionException {
-    Antlr311TestHelper.delimitedSpreadBlock( "(w1(w2)w3)", TreeFixture.tree(
-        NodeKind.PARAGRAPH_SPEECH_CONTINUED,
-        TreeFixture.tree( NodeKind.WORD, "w0" )
-    ) ) ;
- 
-  }  
+  public void paragraphIsWordThenParenthesisThenWord()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.paragraph( "(w1(w2)w3)" ) ;
+  }
+
+  @Test
+  public void paragraphIsWordThenParenthesisThenWordWithTrailingSpace()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.paragraph( "(w1(w2)w3 )" ) ;
+  }
+
+  @Test
+  public void paragraphIsWordThenParenthesis()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.paragraph( "(w1(w2))" ) ;
+  }
+
+  @Test
+  public void paragraphHasParenthesisAndDoubleQuotedTextOnTwoLines()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.paragraph(
+        "(x y) z" + BREAK +
+        "1 2 \"3 " + BREAK +
+        "4\""
+    ) ;
+  }
+
+
+
+
 }

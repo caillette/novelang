@@ -30,14 +30,14 @@ import junit.framework.AssertionFailedError;
  */
 public class Antlr311TestHelper {
   
-  static void delimitedSpreadBlock( String text, SyntacticTree expectedTree ) throws RecognitionException {
-    final SyntacticTree actualTree = delimitedSpreadBlock( text ) ;
+  static void paragraph( String text, SyntacticTree expectedTree ) throws RecognitionException {
+    final SyntacticTree actualTree = paragraph( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
  
-  public static SyntacticTree delimitedSpreadBlock( String text ) throws RecognitionException {
+  public static SyntacticTree paragraph( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
-    final Object node = parser.getAntlrParser().delimitedSpreadblock().getTree() ;
+    final Object node = parser.getAntlrParser().paragraph().getTree() ;
     if( node instanceof CommonErrorNode ) {
       final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
       throw new RuntimeException( errorNode.trappedException ) ;
@@ -76,5 +76,5 @@ public class Antlr311TestHelper {
     }
     return buffer.toString() ;
   }
-  
+
 }

@@ -48,16 +48,19 @@ public void emitErrorMessage( String string ) {
 
 
 paragraph 
-  : (   ( word ( WHITESPACE word )* )
-      | url
+  : //( leadingPunctuationSign ( WHITESPACE? leadingPunctuationSign )* )?
+    (   ( mixedDelimitedSpreadBlock 
+          ( WHITESPACE mixedDelimitedSpreadBlock )* 
+        )
+      | ( url ) => url
       | smallListItem
-      | delimitedSpreadblock
     )
     ( WHITESPACE? SOFTBREAK 
-      (   WHITESPACE? ( word ( WHITESPACE word )* )
-        | url
+      (   ( WHITESPACE? mixedDelimitedSpreadBlock 
+            ( WHITESPACE mixedDelimitedSpreadBlock )* 
+          )
+        | ( url ) => url
         | smallListItem
-        | delimitedSpreadblock
       )
     )*
     
@@ -65,72 +68,128 @@ paragraph
   
 delimitedSpreadblock
   : parenthesizedSpreadblock
+  | doubleQuotedSpreadBlock
   ;
 
+delimitedSpreadblockNoDoubleQuotes
+  : parenthesizedSpreadblock
+  ;
+
+
+// ===================
+// Parenthesized stuff
+// ===================
+  
 parenthesizedSpreadblock
-  : LEFT_PARENTHESIS WHITESPACE?
-    (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
+  : LEFT_PARENTHESIS //WHITESPACE?
+    ( spreadBlockBody 
+//      WHITESPACE? 
+    )?
+    RIGHT_PARENTHESIS
+  ;
+
+
+spreadBlockBody
+  : (   ( SOFTBREAK url  WHITESPACE? SOFTBREAK )
       | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
       | ( ( SOFTBREAK WHITESPACE? )? 
-          ( ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) ) 
-          ( WHITESPACE ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) )*
+          mixedDelimitedSpreadBlock
+          ( WHITESPACE mixedDelimitedSpreadBlock )*
         )
     )
-    (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
+    (   ( SOFTBREAK url  WHITESPACE? SOFTBREAK )
       | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
-      | ( SOFTBREAK WHITESPACE? 
-          ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) 
+      | ( WHITESPACE? 
+          SOFTBREAK 
+          WHITESPACE? 
+          mixedDelimitedSpreadBlock
           ( WHITESPACE 
-            ( ( word ( delimitedSpreadblock+ word )? ) | ( delimitedSpreadblock+ word? ) ) 
+            mixedDelimitedSpreadBlock
           )*
         )             
     )* 
-	  WHITESPACE? RIGHT_PARENTHESIS
+    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlock
+  ;  
+
+  
+mixedDelimitedSpreadBlock  
+  : ( word ( ( punctuationSign | delimitedSpreadblock )+ word? )? ) 
+  | ( ( punctuationSign | delimitedSpreadblock )+ word? ) 
   ;
-      
-      
-      
-      
-      
-  
-  
-/*  
-parenthesizedSpreadblock0
-  : LEFT_PARENTHESIS WHITESPACE?
-    (   ( SOFTBREAK url WHITESPACE? SOFTBREAK )
-      | ( SOFTBREAK smallListItem WHITESPACE? SOFTBREAK )
-      | ( SOFTBREAK? ( word | delimitedSpreadblock+ ) 
-          ( WHITESPACE ( word | delimitedSpreadblock+ ) )*
-          WHITESPACE? 
+                
+
+
+// ===================
+// Double quotes stuff
+// ===================
+
+doubleQuotedSpreadBlock
+  : DOUBLE_QUOTE //WHITESPACE?
+    ( spreadBlockBodyNoDoubleQuotes 
+      //WHITESPACE? 
+    )?
+    DOUBLE_QUOTE
+  ;
+
+/** Don't allow URLs inside double quotes because of weird errors.
+ *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
+ */
+spreadBlockBodyNoDoubleQuotes
+  : (   ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+      | ( ( SOFTBREAK WHITESPACE? )? 
+          mixedDelimitedSpreadBlockNoDoubleQuotes
+          ( WHITESPACE mixedDelimitedSpreadBlockNoDoubleQuotes )*
         )
     )
-    ( WHITESPACE? 
-      (   ( url WHITESPACE? SOFTBREAK )
-        | ( smallListItem WHITESPACE? SOFTBREAK )
-        | ( SOFTBREAK WHITESPACE? ( word | delimitedSpreadblock+ ) 
-            ( WHITESPACE 
-              ( word | delimitedSpreadblock+ ) 
-            )*
-          )
-      )
-    )*    	    
-	  
-	  WHITESPACE? RIGHT_PARENTHESIS
-	  
+    (   ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+      | ( WHITESPACE? SOFTBREAK WHITESPACE? 
+          mixedDelimitedSpreadBlockNoDoubleQuotes
+          ( WHITESPACE 
+            mixedDelimitedSpreadBlockNoDoubleQuotes
+          )*
+        )             
+    )* 
+    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoDoubleQuotes
+  ;  
+
+mixedDelimitedSpreadBlockNoDoubleQuotes
+  : ( word ( ( punctuationSign | delimitedSpreadblockNoDoubleQuotes )+ word? )? ) 
+  | ( ( punctuationSign | delimitedSpreadblockNoDoubleQuotes )+ word? ) 
   ;
-*/  
   
-  
-  
-  
-  
-  
+
+
+
+
+
+// =====
+// Lists
+// =====
   
 smallListItem
   : HYPHEN_MINUS ( WHITESPACE word )+
   ;
   
   
+// ===========  
+// Punctuation
+// ===========  
+
+leadingPunctuationSign
+  : ELLIPSIS
+  ;
+
+punctuationSign
+  : COMMA 
+  | FULL_STOP
+  | ELLIPSIS 
+  | QUESTION_MARK 
+  | EXCLAMATION_MARK 
+  | SEMICOLON 
+  | COLON
+  | APOSTROPHE 
+  ;
+
   
   
 // ===================================
