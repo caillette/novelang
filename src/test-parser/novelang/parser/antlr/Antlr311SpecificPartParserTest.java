@@ -17,27 +17,24 @@
 package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
-import novelang.parser.BookParser;
-import novelang.common.LocationFactory;
-import novelang.common.SyntacticTree;
+import org.junit.Test;
+import novelang.common.NodeKind;
 
 /**
+ * Test new parser features.
+ * 
  * @author Laurent Caillette
  */
-public class DelegatingBookParser
-    extends AbstractDelegatingParser
-    implements BookParser
-{
-
-  public DelegatingBookParser( String text, LocationFactory locationFactory ) {
-    super( text, new GrammarDelegate( locationFactory ) ) ;
-  }
-
-  public SyntacticTree parse() throws RecognitionException {
-    throw new UnsupportedOperationException( "parse: ANTLR-3.1.1 refactoring in progress" ) ;
-/*
-    return ( SyntacticTree ) getAntlrParser().book().getTree() ;
-*/
-  }
-
+public class Antlr311SpecificPartParserTest {
+  
+  
+  
+  @Test
+  public void paragraphIsSimplestSpeechContinued() throws RecognitionException {
+    Antlr311TestHelper.delimitedSpreadBlock( "--+ w0", TreeFixture.tree(
+        NodeKind.PARAGRAPH_SPEECH_CONTINUED,
+        TreeFixture.tree( NodeKind.WORD, "w0" )
+    ) ) ;
+ 
+  }  
 }
