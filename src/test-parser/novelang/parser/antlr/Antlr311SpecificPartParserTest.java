@@ -79,7 +79,23 @@ public class Antlr311SpecificPartParserTest {
     ) ;
   }
 
-
-
+  @Test
+  public void paragraphIsJustAUrl()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.paragraph( "http://foo.com" ) ;
+  }
+  
+  @Test
+  public void paragraphIsTwoUrls()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.paragraph( 
+        "http://foo.com " + BREAK +
+        "http://bar.com"
+    ) ;
+  }
+  
+ 
 
 }

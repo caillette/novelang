@@ -48,17 +48,17 @@ public void emitErrorMessage( String string ) {
 
 
 paragraph 
-  : (   ( mixedDelimitedSpreadBlock 
+  : (   ( url ) => url
+      | smallListItemWithHyphenBullet
+      | ( mixedDelimitedSpreadBlock 
           ( WHITESPACE mixedDelimitedSpreadBlock )* 
         )
-      | ( url ) => url
-      | smallListItemWithHyphenBullet
     )
     ( WHITESPACE? SOFTBREAK 
-      (   ( WHITESPACE? mixedDelimitedSpreadBlock 
+      ( ( url ) => url
+        | ( WHITESPACE? mixedDelimitedSpreadBlock 
             ( WHITESPACE mixedDelimitedSpreadBlock )* 
-          )
-        | ( url ) => url
+          )        
         | smallListItemWithHyphenBullet
       )
     )*
@@ -174,7 +174,21 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
 // =====
 // Lists
 // =====
-  
+
+bigListItemWithTripleHyphenBullet
+  : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
+    ( WHITESPACE mixedDelimitedSpreadBlock )*
+    ( WHITESPACE? SOFTBREAK 
+      (   ( WHITESPACE? mixedDelimitedSpreadBlock 
+            ( WHITESPACE mixedDelimitedSpreadBlock )* 
+          )
+        | ( url ) => url
+        | smallListItemWithHyphenBullet
+      )
+    )*
+
+  ;
+
 smallListItemWithHyphenBullet
   : HYPHEN_MINUS ( WHITESPACE word )+
   ;
