@@ -84,21 +84,26 @@ parenthesizedSpreadblock
   : LEFT_PARENTHESIS //WHITESPACE?
     ( spreadBlockBody 
 //      WHITESPACE? 
-    )?
+    )
     RIGHT_PARENTHESIS
   ;
 
 
 spreadBlockBody
-  : (   ( SOFTBREAK url  WHITESPACE? SOFTBREAK )
-      | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+  : (   /*( SOFTBREAK url  WHITESPACE? SOFTBREAK ) 
+      | */( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
       | ( ( SOFTBREAK WHITESPACE? )? 
           mixedDelimitedSpreadBlock
           ( WHITESPACE mixedDelimitedSpreadBlock )*
         )
     )
-    (   ( SOFTBREAK url  WHITESPACE? SOFTBREAK )
-      | ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+    (   
+        ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
+              ( SOFTBREAK url SOFTBREAK ) 
+        ) 
+      | ( ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK ) => 
+                ( SOFTBREAK smallListItem SOFTBREAK ) 
+          )
       | ( WHITESPACE? 
           SOFTBREAK 
           WHITESPACE? 
@@ -167,7 +172,7 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
 // =====
   
 smallListItem
-  : HYPHEN_MINUS ( WHITESPACE word )+
+  : ASTERISK ( WHITESPACE word )+
   ;
   
   
