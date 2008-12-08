@@ -48,19 +48,18 @@ public void emitErrorMessage( String string ) {
 
 
 paragraph 
-  : //( leadingPunctuationSign ( WHITESPACE? leadingPunctuationSign )* )?
-    (   ( mixedDelimitedSpreadBlock 
+  : (   ( mixedDelimitedSpreadBlock 
           ( WHITESPACE mixedDelimitedSpreadBlock )* 
         )
       | ( url ) => url
-      | smallListItem
+      | smallListItemWithHyphenBullet
     )
     ( WHITESPACE? SOFTBREAK 
       (   ( WHITESPACE? mixedDelimitedSpreadBlock 
             ( WHITESPACE mixedDelimitedSpreadBlock )* 
           )
         | ( url ) => url
-        | smallListItem
+        | smallListItemWithHyphenBullet
       )
     )*
     
@@ -88,14 +87,16 @@ parenthesizedSpreadblock
     RIGHT_PARENTHESIS
   ;
 
-
+/** Everything in this rule implies a syntactic predicate, 
+ *  so it will foll ANTLRWorks' interpreter.
+ */
 spreadBlockBody
   : (   
         ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
               ( SOFTBREAK url SOFTBREAK ) 
         ) 
-      | ( ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK ) => 
-                ( SOFTBREAK smallListItem SOFTBREAK ) 
+      | ( ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK ) => 
+                ( SOFTBREAK smallListItemWithHyphenBullet SOFTBREAK ) 
         )
       | ( ( SOFTBREAK WHITESPACE? )? 
           mixedDelimitedSpreadBlock
@@ -106,15 +107,14 @@ spreadBlockBody
         ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
               ( SOFTBREAK url SOFTBREAK ) 
         ) 
-      | ( ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK ) => 
-                ( SOFTBREAK smallListItem SOFTBREAK ) 
+      | ( ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK ) => 
+                ( SOFTBREAK smallListItemWithHyphenBullet SOFTBREAK ) 
           )
       | ( ( WHITESPACE? SOFTBREAK WHITESPACE? mixedDelimitedSpreadBlock ) =>
                 ( SOFTBREAK mixedDelimitedSpreadBlock )
           ( WHITESPACE 
             mixedDelimitedSpreadBlock
           )*
-          
         )             
     )* 
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlock
@@ -144,13 +144,13 @@ doubleQuotedSpreadBlock
  *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
  */
 spreadBlockBodyNoDoubleQuotes
-  : (   ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+  : (   ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK )
       | ( ( SOFTBREAK WHITESPACE? )? 
           mixedDelimitedSpreadBlockNoDoubleQuotes
           ( WHITESPACE mixedDelimitedSpreadBlockNoDoubleQuotes )*
         )
     )
-    (   ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+    (   ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK )
       | ( WHITESPACE? SOFTBREAK WHITESPACE? 
           mixedDelimitedSpreadBlockNoDoubleQuotes
           ( WHITESPACE 
@@ -175,8 +175,8 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
 // Lists
 // =====
   
-smallListItem
-  : ASTERISK ( WHITESPACE word )+
+smallListItemWithHyphenBullet
+  : HYPHEN_MINUS ( WHITESPACE word )+
   ;
   
   

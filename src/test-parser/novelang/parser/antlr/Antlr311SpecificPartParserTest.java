@@ -28,6 +28,26 @@ import static novelang.parser.antlr.Antlr311TestHelper.BREAK;
 public class Antlr311SpecificPartParserTest {
   
   @Test
+  public void paragraphIsParenthesisWithBreakThenWord()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.paragraph(
+        "(" + BREAK +
+        "w)" 
+    ) ;
+  }
+
+  @Test
+  public void paragraphIsTwoSmallListItems()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.smallListItemWithHyphenBullet(
+        "- x" + BREAK +
+        "- y"
+    ) ;
+  }
+
+  @Test
   public void paragraphIsWordThenParenthesisThenWord()
       throws RecognitionException
   {

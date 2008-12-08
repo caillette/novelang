@@ -47,7 +47,26 @@ public class Antlr311TestHelper {
     return tree;
   }
 
-  
+  static void smallListItemWithHyphenBullet( String text, SyntacticTree expectedTree )
+      throws RecognitionException
+  {
+    final SyntacticTree actualTree = smallListItemWithHyphenBullet( text ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  public static SyntacticTree smallListItemWithHyphenBullet( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final Object node = parser.getAntlrParser().smallListItemWithHyphenBullet().getTree() ;
+    if( node instanceof CommonErrorNode ) {
+      final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
+      throw new RuntimeException( errorNode.trappedException ) ;
+    }
+    final SyntacticTree tree = ( SyntacticTree ) node ;
+    checkSanity( parser );
+    return tree;
+  }
+
+
 // =========  
 // Utilities  
 // =========  
