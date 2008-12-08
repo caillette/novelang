@@ -81,17 +81,22 @@ delimitedSpreadblockNoDoubleQuotes
 // ===================
   
 parenthesizedSpreadblock
-  : LEFT_PARENTHESIS //WHITESPACE?
+  : LEFT_PARENTHESIS WHITESPACE?
     ( spreadBlockBody 
-//      WHITESPACE? 
+      WHITESPACE? 
     )
     RIGHT_PARENTHESIS
   ;
 
 
 spreadBlockBody
-  : (   /*( SOFTBREAK url  WHITESPACE? SOFTBREAK ) 
-      | */( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK )
+  : (   
+        ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
+              ( SOFTBREAK url SOFTBREAK ) 
+        ) 
+      | ( ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK ) => 
+                ( SOFTBREAK smallListItem SOFTBREAK ) 
+        )
       | ( ( SOFTBREAK WHITESPACE? )? 
           mixedDelimitedSpreadBlock
           ( WHITESPACE mixedDelimitedSpreadBlock )*
@@ -104,13 +109,12 @@ spreadBlockBody
       | ( ( SOFTBREAK WHITESPACE? smallListItem WHITESPACE? SOFTBREAK ) => 
                 ( SOFTBREAK smallListItem SOFTBREAK ) 
           )
-      | ( WHITESPACE? 
-          SOFTBREAK 
-          WHITESPACE? 
-          mixedDelimitedSpreadBlock
+      | ( ( WHITESPACE? SOFTBREAK WHITESPACE? mixedDelimitedSpreadBlock ) =>
+                ( SOFTBREAK mixedDelimitedSpreadBlock )
           ( WHITESPACE 
             mixedDelimitedSpreadBlock
           )*
+          
         )             
     )* 
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlock
@@ -129,9 +133,9 @@ mixedDelimitedSpreadBlock
 // ===================
 
 doubleQuotedSpreadBlock
-  : DOUBLE_QUOTE //WHITESPACE?
+  : DOUBLE_QUOTE WHITESPACE?
     ( spreadBlockBodyNoDoubleQuotes 
-      //WHITESPACE? 
+      WHITESPACE? 
     )?
     DOUBLE_QUOTE
   ;
