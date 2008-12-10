@@ -17,8 +17,10 @@
 package novelang.common;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.apache.commons.lang.NullArgumentException;
+import com.google.common.base.Preconditions;
 
 /**
  * Utility clas for accessing private members.
@@ -65,5 +67,32 @@ public final class ReflectionTools {
       throw new RuntimeException( e ) ;
     }
     return fieldValue ;
+  }
+  
+  public static Method getMethod( 
+      Class declaringClass, 
+      String methodName, 
+      Class... parameterTypes 
+  ) {
+    Preconditions.checkArgument( null != declaringClass ) ;
+    Preconditions.checkArgument( null != methodName ) ;
+    Preconditions.checkArgument( ! "".equals( methodName ) ) ;
+    
+    final Method method ;
+
+    try {
+      method = declaringClass.getMethod( methodName, parameterTypes ) ;
+    } catch ( NoSuchMethodException e ) {
+      throw new RuntimeException( e ) ;
+    }
+
+    if( null == method ) {
+      throw new RuntimeException( 
+          "Could not get declared method " + declaringClass.getName() + "#" + methodName ) ;
+    }
+    
+    return method ;
+    
+    
   }
 }
