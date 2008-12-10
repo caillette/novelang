@@ -61,7 +61,9 @@ section
 // Paragraph and related
 // =====================
 
-
+/** Title is like a paragraph but it can't start by a URL as URL always start
+ *  on the first column so it would clash with section / chapter introducer.
+ */
 title
   : (   smallListItemWithHyphenBullet
       | ( mixedDelimitedSpreadBlock 
@@ -575,8 +577,6 @@ nonHexLetter
 
   ;
 
-chapterIntroducer : ASTERISK ASTERISK ASTERISK ;
-sectionIntroducer : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN ;
 speechOpener : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS ;
 interpolatedClauseDelimiter : HYPHEN_MINUS HYPHEN_MINUS  ;
 interpolatedClauseSilentEnd : HYPHEN_MINUS LOW_LINE ;
