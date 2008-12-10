@@ -18,9 +18,13 @@ package novelang.parser.antlr;
 
 import novelang.common.SyntacticTree;
 import novelang.common.Problem;
+import novelang.common.ReflectionTools;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonErrorNode;
 import junit.framework.AssertionFailedError;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Various utilities strongly inspired (copied) from {@code AntlrTestHelper}.
@@ -29,8 +33,36 @@ import junit.framework.AssertionFailedError;
  * @author Laurent Caillette
  */
 public class Antlr311TestHelper {
+
+  public enum ParserMethod {
+    PARAGRAPH( "paragraph" ),
+    TITLE( "title" ) ;
+
+
+    private ParserMethod( String methodName ) {
+      this.method = ReflectionTools.getMethod( NovelangParser.class, methodName ) ;
+    }
+
+    private final Method method ;
+
+    /**
+     * Returns the tree object contained by parser's result object.
+     */
+    public Object invoke( NovelangParser parser ) {
+      final Object antlrResult ;
+      try {
+        antlrResult = method.invoke( parser ) ;
+      } catch ( IllegalAccessException e ) {
+        throw new RuntimeException( e ) ;
+      } catch ( InvocationTargetException e ) {
+        throw new RuntimeException( e ) ;
+      }
+//      final Method getTreeMethod = ReflectionTools.getMethod( antlrResult.getClass() )
+      return antlrResult ;
+    }
+  }
   
-  static void paragraph( String text, SyntacticTree expectedTree ) throws RecognitionException {
+  public static void paragraph( String text, SyntacticTree expectedTree ) throws RecognitionException {
     final SyntacticTree actualTree = paragraph( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
   }
