@@ -47,6 +47,38 @@ public void emitErrorMessage( String string ) {
 }
 
 
+// =========================
+// Part, chapter and section
+// =========================
+
+section 
+  : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN 
+    WHITESPACE?
+    title?
+  ;
+
+// =====================
+// Paragraph and related
+// =====================
+
+
+title
+  : (   smallListItemWithHyphenBullet
+      | ( mixedDelimitedSpreadBlock 
+          ( WHITESPACE mixedDelimitedSpreadBlock )* 
+        )
+    )
+    ( WHITESPACE? SOFTBREAK 
+      ( ( url ) => url
+        | smallListItemWithHyphenBullet
+        | ( WHITESPACE? mixedDelimitedSpreadBlock 
+            ( WHITESPACE mixedDelimitedSpreadBlock )* 
+          )        
+      )
+    )*    
+  ;  
+
+
 paragraph 
   : (   ( url ) => url
       | smallListItemWithHyphenBullet
@@ -56,10 +88,10 @@ paragraph
     )
     ( WHITESPACE? SOFTBREAK 
       ( ( url ) => url
+        | smallListItemWithHyphenBullet
         | ( WHITESPACE? mixedDelimitedSpreadBlock 
             ( WHITESPACE mixedDelimitedSpreadBlock )* 
           )        
-        | smallListItemWithHyphenBullet
       )
     )*
     

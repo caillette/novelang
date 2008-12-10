@@ -47,7 +47,7 @@ public class Antlr311TestHelper {
     return tree;
   }
 
-  static void smallListItemWithHyphenBullet( String text, SyntacticTree expectedTree )
+  public static void smallListItemWithHyphenBullet( String text, SyntacticTree expectedTree )
       throws RecognitionException
   {
     final SyntacticTree actualTree = smallListItemWithHyphenBullet( text ) ;
@@ -57,6 +57,26 @@ public class Antlr311TestHelper {
   public static SyntacticTree smallListItemWithHyphenBullet( String text ) throws RecognitionException {
     final DelegatingPartParser parser = createPartParser( text ) ;
     final Object node = parser.getAntlrParser().smallListItemWithHyphenBullet().getTree() ;
+    if( node instanceof CommonErrorNode ) {
+      final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
+      throw new RuntimeException( errorNode.trappedException ) ;
+    }
+    final SyntacticTree tree = ( SyntacticTree ) node ;
+    checkSanity( parser );
+    return tree;
+  }
+
+
+  public static void title( String text, SyntacticTree expectedTree )
+      throws RecognitionException
+  {
+    final SyntacticTree actualTree = title( text ) ;
+    TreeFixture.assertEquals( expectedTree, actualTree ) ;
+  }
+
+  public static SyntacticTree title( String text ) throws RecognitionException {
+    final DelegatingPartParser parser = createPartParser( text ) ;
+    final Object node = parser.getAntlrParser().title().getTree() ;
     if( node instanceof CommonErrorNode ) {
       final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
       throw new RuntimeException( errorNode.trappedException ) ;

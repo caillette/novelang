@@ -17,11 +17,6 @@ w4
 >>>>
 
 
-delimitedSpreadBlock: <<<<
-(w1(w2)w3)
->>>>
-
-
 
 
 Can we do that?
@@ -30,3 +25,5 @@ May spread over several lines.
 May not contain list items (nor 
 URLs).
 "
+
+

@@ -96,6 +96,16 @@ public class Antlr311SpecificPartParserTest {
     ) ;
   }
   
+  @Test
+  public void titleHasDoubleQuotesThenUrl()
+      throws RecognitionException
+  {
+    Antlr311TestHelper.title( 
+        "a" + BREAK +
+        "http://bar.com"
+    ) ;
+  }
+  
  
 
 }
