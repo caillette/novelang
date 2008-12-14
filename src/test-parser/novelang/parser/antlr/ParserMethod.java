@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.junit.Assert;
+import org.antlr.runtime.tree.CommonErrorNode;
 
 
 /**
@@ -51,10 +52,16 @@ public class ParserMethod {
       throw new RuntimeException( e ) ;
     }
     
-    final Method getTreeMethod = ReflectionTools.getMethod( 
-        antlrResult.getClass(), 
-        "getTree" 
+    if( antlrResult instanceof CommonErrorNode ) {
+      final CommonErrorNode errorNode = ( CommonErrorNode ) antlrResult ;
+      throw new RuntimeException( errorNode.trappedException ) ;
+    }
+
+    final Method getTreeMethod = ReflectionTools.getMethod(
+        antlrResult.getClass(),
+        "getTree"
     ) ;
+
     
     final SyntacticTree tree = ReflectionTools.invoke( getTreeMethod, antlrResult ) ;    
     return tree ;
