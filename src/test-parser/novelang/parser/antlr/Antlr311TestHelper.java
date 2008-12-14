@@ -34,33 +34,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Antlr311TestHelper {
 
-  public enum ParserMethod {
-    PARAGRAPH( "paragraph" ),
-    TITLE( "title" ) ;
-
-
-    private ParserMethod( String methodName ) {
-      this.method = ReflectionTools.getMethod( NovelangParser.class, methodName ) ;
-    }
-
-    private final Method method ;
-
-    /**
-     * Returns the tree object contained by parser's result object.
-     */
-    public Object invoke( NovelangParser parser ) {
-      final Object antlrResult ;
-      try {
-        antlrResult = method.invoke( parser ) ;
-      } catch ( IllegalAccessException e ) {
-        throw new RuntimeException( e ) ;
-      } catch ( InvocationTargetException e ) {
-        throw new RuntimeException( e ) ;
-      }
-//      final Method getTreeMethod = ReflectionTools.getMethod( antlrResult.getClass() )
-      return antlrResult ;
-    }
-  }
   
   public static void paragraph( String text, SyntacticTree expectedTree ) throws RecognitionException {
     final SyntacticTree actualTree = paragraph( text ) ;
