@@ -21,8 +21,26 @@ options { output = AST ; }
 //import AllTokens, Url ;
 
 tokens {
+  EMPHASIS ;         // Should become DOUBLE_SLASH_BLOCK
   PART ;
+  PARENTHESIS ;
+  PARAGRAPH_PLAIN ;  // Should become PARAGRAPH
+  PARAGRAPH_SPEECH ; // Should become BIG_DASHED_LIST_ITEM
+  QUOTE ;            // Should become DOUBLE_QUOTES_BLOCK
+  SUPERSCRIPT ;
+  TITLE ;
   URL ;
+  WORD ;
+  
+  PUNCTUATION_SIGN ;
+  APOSTROPHE_WORDMATE ;
+  SIGN_COMMA ;
+  SIGN_FULLSTOP ;
+  SIGN_ELLIPSIS ;
+  SIGN_QUESTIONMARK ;
+  SIGN_EXCLAMATIONMARK ;
+  SIGN_SEMICOLON ;
+  SIGN_COLON ;  
 }
 
 
@@ -51,6 +69,29 @@ public void emitErrorMessage( String string ) {
 // Part, chapter and section
 // =========================
 
+part 
+  : (   p += chapter 
+      | p += section 
+      | p += paragraph 
+      | p += literal
+    )
+    ( SOFTBREAK SOFTBREAK (
+        p += chapter 
+      | p += section 
+      | p += paragraph 
+      | p += literal
+    ) )*      
+    ( SOFTBREAK )?
+    EOF 
+    -> ^( PART $p+ )
+  ;
+  
+chapter 
+  : EQUALS_SIGN EQUALS_SIGN 
+    WHITESPACE?
+    title?
+  ;
+
 section 
   : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN 
     WHITESPACE?
@@ -63,71 +104,63 @@ section
 
 /** Title is like a paragraph but it can't start by a URL as URL always start
  *  on the first column so it would clash with section / chapter introducer.
+ *  It may contain a URL, however.
  */
 title
-  : (   smallDashedListItem
-      | ( mixedDelimitedSpreadBlock 
-          ( WHITESPACE mixedDelimitedSpreadBlock )* 
-        )
-    )
-    ( WHITESPACE? SOFTBREAK 
-      ( ( url ) => url
-        | smallDashedListItem
-        | ( WHITESPACE? mixedDelimitedSpreadBlock 
-            ( WHITESPACE mixedDelimitedSpreadBlock )* 
-          )        
-      )
-    )*    
+  : (
+      (   t += smallDashedListItem
+	      | ( t += mixedDelimitedSpreadBlock 
+	          ( WHITESPACE t += mixedDelimitedSpreadBlock )* 
+	        )
+	    )
+	    ( WHITESPACE? SOFTBREAK 
+	      ( ( url ) => t += url
+	        | t += smallDashedListItem
+	        | ( WHITESPACE? t += mixedDelimitedSpreadBlock 
+	            ( WHITESPACE t += mixedDelimitedSpreadBlock )* 
+	          )        
+	      )
+	    )*    
+	  ) -> ^( TITLE $t+ )
   ;  
 
+headerIdentifier : ; // TODO
 
 paragraph 
-  : (   ( url ) => url
-      | smallDashedListItem
-      | ( mixedDelimitedSpreadBlock 
-          ( WHITESPACE mixedDelimitedSpreadBlock )* 
-        )
-    )
-    ( WHITESPACE? SOFTBREAK 
-      ( ( url ) => url
-        | smallDashedListItem
-        | ( WHITESPACE? mixedDelimitedSpreadBlock 
-            ( WHITESPACE mixedDelimitedSpreadBlock )* 
-          )        
-      )
-    )*
+	: ( (   ( url ) => p += url
+	      | p += smallDashedListItem
+	      | ( p += mixedDelimitedSpreadBlock 
+	          ( WHITESPACE p+= mixedDelimitedSpreadBlock )* 
+	        )
+	    )
+	    ( WHITESPACE? SOFTBREAK 
+	      ( ( url ) => p += url
+	        | p += smallDashedListItem
+	        | ( WHITESPACE? p += mixedDelimitedSpreadBlock 
+	            ( WHITESPACE p+= mixedDelimitedSpreadBlock )* 
+	          )        
+	      )
+	    )*
+	  ) -> ^( PARAGRAPH_PLAIN $p+ )
     
   ;  
+
+
+
+// =======================
+// Generic delimited stuff
+// =======================
   
 delimitedSpreadblock
   : parenthesizedSpreadblock
   | doubleQuotedSpreadBlock
-  ;
-
-delimitedSpreadblockNoDoubleQuotes
-  : parenthesizedSpreadblock
+  | emphasizedSpreadBlock
   ;
 
 delimitedMonoblock
   : parenthesizedMonoblock
   | doubleQuotedMonoblock
-  ;
-
-delimitedMonoblockNoDoubleQuotes
-  : parenthesizedMonoblock
-  ;
-
-
-// ===================
-// Parenthesized stuff
-// ===================
-  
-parenthesizedSpreadblock
-  : LEFT_PARENTHESIS WHITESPACE?
-    ( spreadBlockBody 
-      WHITESPACE? 
-    )
-    RIGHT_PARENTHESIS
+  | emphasizedMonoblock
   ;
 
 mixedDelimitedSpreadBlock  
@@ -135,15 +168,6 @@ mixedDelimitedSpreadBlock
   | ( ( punctuationSign | delimitedSpreadblock )+ word? ) 
   ;
                 
-parenthesizedMonoblock
-  : LEFT_PARENTHESIS WHITESPACE?
-    ( monoblockBody 
-      WHITESPACE? 
-    )
-    RIGHT_PARENTHESIS
-  ;
-
-
 /** Everything in this rule implies a syntactic predicate, 
  *  so it will fool ANTLRWorks' interpreter.
  */
@@ -189,16 +213,46 @@ mixedDelimitedMonoblock
   | ( ( punctuationSign | delimitedMonoblock )+ word? ) 
   ;
                 
+
+// ===================
+// Parenthesized stuff
+// ===================
+  
+parenthesizedSpreadblock
+  : ( LEFT_PARENTHESIS WHITESPACE?
+      ( spreadBlockBody 
+        WHITESPACE? 
+      )
+      RIGHT_PARENTHESIS
+    ) -> ^( PARENTHESIS spreadBlockBody )
+  ;
+
+parenthesizedMonoblock
+  : ( LEFT_PARENTHESIS WHITESPACE?
+      ( monoblockBody 
+        WHITESPACE? 
+      )
+      RIGHT_PARENTHESIS
+    ) -> ^( PARENTHESIS monoblockBody )
+  ;
+
+
 // ===================
 // Double quotes stuff
 // ===================
 
 doubleQuotedSpreadBlock
-  : DOUBLE_QUOTE WHITESPACE?
-    ( spreadBlockBodyNoDoubleQuotes 
-      WHITESPACE? 
-    )?
-    DOUBLE_QUOTE
+	: ( DOUBLE_QUOTE WHITESPACE?
+	    ( b += spreadBlockBodyNoDoubleQuotes 
+	      WHITESPACE? 
+	    )?
+	    DOUBLE_QUOTE
+	  ) -> ^( QUOTE $b+ ) 
+  ;
+
+delimitedSpreadblockNoDoubleQuotes
+  : parenthesizedSpreadblock
+  | emphasizedSpreadBlock
   ;
 
 /** Don't allow URLs inside double quotes because of weird errors.
@@ -229,31 +283,112 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
   
 
 doubleQuotedMonoblock
-  : DOUBLE_QUOTE WHITESPACE?
-    ( monoblockBodyNoDoubleQuotes 
-      WHITESPACE? 
-    )?
-    DOUBLE_QUOTE
+ : ( DOUBLE_QUOTE WHITESPACE?
+	    ( b += monoblockBodyNoDoubleQuotes 
+	      WHITESPACE? 
+	    )?
+	    DOUBLE_QUOTE
+	  ) -> ^( QUOTE $b+ )
+  ;
+
+delimitedMonoblockNoDoubleQuotes
+  : parenthesizedMonoblock
+  | emphasizedMonoblock
   ;
 
 monoblockBodyNoDoubleQuotes
-  : (   (  
-          mixedDelimitedMonoblockNoDoubleQuotes
-          ( WHITESPACE mixedDelimitedMonoblockNoDoubleQuotes )*
-        )
+  : ( mixedDelimitedMonoblockNoDoubleQuotes
+      ( WHITESPACE mixedDelimitedMonoblockNoDoubleQuotes )*
     )
-    (   ( WHITESPACE? SOFTBREAK WHITESPACE? 
-          mixedDelimitedMonoblockNoDoubleQuotes
-          ( WHITESPACE 
-            mixedDelimitedMonoblockNoDoubleQuotes
-          )*
-        )             
+    ( WHITESPACE? SOFTBREAK WHITESPACE? 
+      mixedDelimitedMonoblockNoDoubleQuotes
+      ( WHITESPACE 
+        mixedDelimitedMonoblockNoDoubleQuotes
+      )*                   
     )* 
   ;  
 
 mixedDelimitedMonoblockNoDoubleQuotes
   : ( word ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? )? ) 
   | ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? ) 
+  ;
+  
+
+
+// ========
+// Emphasis
+// ========
+
+emphasizedSpreadBlock
+	: ( SOLIDUS SOLIDUS WHITESPACE?
+	    ( b += spreadBlockBodyNoEmphasis 
+	      WHITESPACE? 
+	    )?
+	    SOLIDUS SOLIDUS
+	  ) -> ^( EMPHASIS $b+ )
+  ;
+
+delimitedSpreadblockNoEmphasis
+  : parenthesizedSpreadblock
+  | doubleQuotedSpreadBlock
+  ;
+
+/** Don't allow URLs inside double quotes because of weird errors.
+ *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
+ */
+spreadBlockBodyNoEmphasis
+  : (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
+      | ( ( SOFTBREAK WHITESPACE? )? 
+          mixedDelimitedSpreadBlockNoEmphasis
+          ( WHITESPACE mixedDelimitedSpreadBlockNoEmphasis )*
+        )
+    )
+    (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
+      | ( WHITESPACE? SOFTBREAK WHITESPACE? 
+          mixedDelimitedSpreadBlockNoEmphasis
+          ( WHITESPACE 
+            mixedDelimitedSpreadBlockNoEmphasis
+          )*
+        )             
+    )* 
+    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoEmphasis
+  ;  
+
+mixedDelimitedSpreadBlockNoEmphasis
+  : ( word ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? )? ) 
+  | ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? ) 
+  ;
+  
+
+emphasizedMonoblock
+	: ( SOLIDUS SOLIDUS WHITESPACE?
+	    ( b += monoblockBodyNoEmphasis 
+	      WHITESPACE? 
+	    )?
+	    SOLIDUS SOLIDUS
+	  ) -> ^( EMPHASIS $b+ )
+  ;
+
+delimitedMonoblockNoEmphasis
+  : parenthesizedMonoblock
+  | doubleQuotedMonoblock
+  ;
+
+monoblockBodyNoEmphasis
+  : ( mixedDelimitedMonoblockNoEmphasis
+      ( WHITESPACE mixedDelimitedMonoblockNoEmphasis )*
+    )
+    ( WHITESPACE? SOFTBREAK WHITESPACE? 
+      mixedDelimitedMonoblockNoEmphasis
+      ( WHITESPACE 
+        mixedDelimitedMonoblockNoEmphasis
+      )*                   
+    )* 
+  ;  
+
+mixedDelimitedMonoblockNoEmphasis
+  : ( word ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? )? ) 
+  | ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? ) 
   ;
   
 
@@ -266,15 +401,15 @@ mixedDelimitedMonoblockNoDoubleQuotes
 
 bigDashedListItem
   : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
-    ( WHITESPACE mixedDelimitedSpreadBlock )*
+    ( WHITESPACE i += mixedDelimitedSpreadBlock )*
     ( WHITESPACE? SOFTBREAK 
-      (   ( WHITESPACE? mixedDelimitedSpreadBlock 
-            ( WHITESPACE mixedDelimitedSpreadBlock )* 
+      (   ( WHITESPACE? i += mixedDelimitedSpreadBlock 
+            ( WHITESPACE i += mixedDelimitedSpreadBlock )* 
           )
-        | ( url ) => url
-        | smallDashedListItem
+        | ( url ) => i += url
+        | i += smallDashedListItem
       )
-    )*
+    )* -> ^( PARAGRAPH_SPEECH $i+ )
 
   ;
 
@@ -292,16 +427,15 @@ leadingPunctuationSign
   ;
 
 punctuationSign
-  : COMMA 
-  | FULL_STOP
-  | ELLIPSIS 
-  | QUESTION_MARK 
-  | EXCLAMATION_MARK 
-  | SEMICOLON 
-  | COLON
-  | APOSTROPHE 
+  : COMMA -> ^( PUNCTUATION_SIGN SIGN_COMMA )
+  | FULL_STOP  -> ^( PUNCTUATION_SIGN SIGN_FULLSTOP )
+  | ELLIPSIS -> ^( PUNCTUATION_SIGN SIGN_ELLIPSIS )
+  | QUESTION_MARK -> ^( PUNCTUATION_SIGN SIGN_QUESTIONMARK )
+  | EXCLAMATION_MARK -> ^( PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK )
+  | SEMICOLON -> ^( PUNCTUATION_SIGN SIGN_SEMICOLON )
+  | COLON -> ^( PUNCTUATION_SIGN SIGN_COLON )
+  | APOSTROPHE -> ^( APOSTROPHE_WORDMATE )
   ;
-
   
   
 // ===================================
@@ -310,10 +444,10 @@ punctuationSign
 // ===================================
 
 url
-  : ( http = httpUrl )//-> ^( URL { delegate.createTree( URL, $http.text ) } ) )
-  | ( file = fileUrl )//-> ^( URL { delegate.createTree( URL, $file.text ) } ) ) 
+  : ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } )	)
+  | ( file = fileUrl -> ^( URL { delegate.createTree( URL, $file.text ) } )	) 
   ;
-  
+    
 fileUrl                                   
 //  : ( 'f' 'i' 'l' 'e' COLON ) //=> 'f' 'i' 'l' 'e' COLON // Grammatical ambiguity in the spec
     // following removed from the spec!
@@ -523,11 +657,72 @@ urlXChar
   ;
 
 
+// =======
+// Literal
+// =======
 
+literal : // TODO
+  LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN
+  GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
+  ; 
 
+softInlineLiteral : // TODO
+  SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK 
+  SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK 
+  SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK 
+  SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK 
+  ; 
 
+hardInlineLiteral : // TODO
+  SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK 
+  SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK 
+  ; 
 
+// ====
+// Word
+// ====
 
+word
+  : ( w1 = rawWord ( CIRCUMFLEX_ACCENT w2 = rawWord ) )
+    -> ^( WORD 
+            { delegate.createTree( WORD, $w1.text ) } 
+            ^( SUPERSCRIPT { delegate.createTree( WORD, $w2.text ) } )
+        )	
+  | ( w = rawWord )
+    -> ^( WORD { delegate.createTree( WORD, $w.text ) } )
+  ;  
+
+/** This intermediary rule is useful as I didn't find how to
+ * concatenate Tokens from inside the rewrite rule.
+ */
+rawWord returns [ String text ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
+      | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
+      | s3 = digit { buffer.append( $s3.text ) ; }
+      | s4 = escapedCharacter  { buffer.append( $s4.unescaped ) ; }
+    )+
+    ( s5 = HYPHEN_MINUS { buffer.append( $s5.text ) ; }
+      (  s6 = hexLetter { buffer.append( $s6.text ) ; }
+       | s7 = nonHexLetter { buffer.append( $s7.text ) ; }
+       | s8 = digit { buffer.append( $s8.text ) ; }
+       | s9 = escapedCharacter  { buffer.append( $s9.unescaped ) ; } 
+      )+ 
+    )*
+    { $text = buffer.toString() ; }
+  ;  
+
+escapedCharacter returns [ String unescaped ]
+  : LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK letters RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK
+    { $unescaped = delegate.unescapeCharacter( 
+          $letters.text, 
+          0, // getLine(), TODO fix this.
+          0 // getCharPositionInLine() 
+      ) ;
+    }    
+  ;
 
 
 
@@ -536,17 +731,7 @@ urlXChar
 // Low-level constructs
 // ====================
 
-word
-  : ( letter | digit ) ( HYPHEN_MINUS? ( letter | digit ) )*
-  ;
-  
-mediumSpace
-  : ( WHITESPACE? SOFTBREAK WHITESPACE? ) | WHITESPACE ;  
-  
-
-
-// Symbols
-
+letters : letter+ ;
 
 letter : hexLetter | nonHexLetter ;
 

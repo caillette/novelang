@@ -9,6 +9,9 @@
     <content url="file://$MODULE_DIR$/../src/main-parser">
       <sourceFolder url="file://$MODULE_DIR$/../src/main-parser" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../src/test-legacy-parser">
+      <sourceFolder url="file://$MODULE_DIR$/../src/test-legacy-parser" isTestSource="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../src/test-parser">
       <sourceFolder url="file://$MODULE_DIR$/../src/test-parser" isTestSource="true" />
     </content>

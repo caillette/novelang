@@ -40,17 +40,29 @@ public class PartParserTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( PartParserTest.class ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_TITLE = 
-      new ParserMethod( "title" ) ;/*package*/ static final ParserMethod PARSERMETHOD_HEADER_IDENTIFIER = 
-          new ParserMethod( "headerIdentifier" ) ;/*package*/ static final ParserMethod PARSERMETHOD_WORD = 
-              new ParserMethod( "word" ) ;/*package*/ static final ParserMethod PARSERMETHOD_PARAGRAPH = 
-                  new ParserMethod( "paragraph" ) ;/*package*/ static final ParserMethod PARSERMETHOD_SECTION = 
-                      new ParserMethod( "section" ) ;/*package*/ static final ParserMethod PARSERMETHOD_LITERAL = 
-                          new ParserMethod( "literal" ) ;/*package*/ static final ParserMethod PARSERMETHOD_SOFT_INLINE_LITERAL = 
-                              new ParserMethod( "softInlineLiteral" ) ;/*package*/ static final ParserMethod PARSERMETHOD_HARD_INLINE_LITERAL = 
-                                  new ParserMethod( "hardInlineLiteral" ) ;/*package*/ static final ParserMethod PARSERMETHOD_CHAPTER = 
-                                      new ParserMethod( "chapter" ) ;/*package*/ static final ParserMethod PARSERMETHOD_PART = 
-                                          new ParserMethod( "part" ) ;/*package*/ static final ParserMethod PARSERMETHOD_URL = 
-                                              new ParserMethod( "url" ) ;
+      new ParserMethod( "title" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_HEADER_IDENTIFIER = 
+      new ParserMethod( "headerIdentifier" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_WORD = 
+      new ParserMethod( "word" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_PARAGRAPH = 
+      new ParserMethod( "paragraph" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_BIG_DASHED_LIST_ITEM = 
+      new ParserMethod( "bigDashedListItem" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_SECTION = 
+      new ParserMethod( "section" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_LITERAL = 
+      new ParserMethod( "literal" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_SOFT_INLINE_LITERAL = 
+      new ParserMethod( "softInlineLiteral" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_HARD_INLINE_LITERAL = 
+      new ParserMethod( "hardInlineLiteral" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_CHAPTER = 
+      new ParserMethod( "chapter" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_PART = 
+      new ParserMethod( "part" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_URL = 
+      new ParserMethod( "url" ) ;
 
   @Test
   public void wordContainsOELigatured() throws RecognitionException {
@@ -154,7 +166,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsSimplestSpeech() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "--- w0", tree(
+    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree( "--- w0", tree(
         PARAGRAPH_SPEECH,
         tree( WORD, "w0" )
     ) ) ;
@@ -170,7 +182,7 @@ public class PartParserTest {
         ) ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphIsSimplestSpeechEscape() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "--| w0", tree(
         PARAGRAPH_SPEECH_ESCAPED,
@@ -179,7 +191,7 @@ public class PartParserTest {
 
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphIsSimplestSpeechEscapeWithIdentifier() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
         "--| w0", tree(
@@ -189,7 +201,7 @@ public class PartParserTest {
         ) ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphIsSimplestSpeechContinued() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "--+ w0", tree(
         PARAGRAPH_SPEECH_CONTINUED,
@@ -198,7 +210,7 @@ public class PartParserTest {
 
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphIsSimplestSpeechContinuedWithIdentifier() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
         "--+ w0", tree(
