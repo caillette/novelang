@@ -52,19 +52,20 @@ public class ParserMethod {
       throw new RuntimeException( e ) ;
     }
     
-    if( antlrResult instanceof CommonErrorNode ) {
-      final CommonErrorNode errorNode = ( CommonErrorNode ) antlrResult ;
-      throw new RuntimeException( errorNode.trappedException ) ;
-    }
-
     final Method getTreeMethod = ReflectionTools.getMethod(
         antlrResult.getClass(),
         "getTree"
     ) ;
 
     
-    final SyntacticTree tree = ReflectionTools.invoke( getTreeMethod, antlrResult ) ;    
-    return tree ;
+    final Object node = ReflectionTools.invoke( getTreeMethod, antlrResult ) ;
+    
+    if( node instanceof CommonErrorNode ) {
+      final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
+      throw new RuntimeException( errorNode.trappedException ) ;
+    }
+    
+    return ( SyntacticTree ) node  ;
   }
   
   public SyntacticTree createTree( String text ) {
