@@ -39,6 +39,18 @@ import static novelang.parser.antlr.TreeFixture.tree;
 public class PartParserTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( PartParserTest.class ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_TITLE = 
+      new ParserMethod( "title" ) ;/*package*/ static final ParserMethod PARSERMETHOD_HEADER_IDENTIFIER = 
+          new ParserMethod( "headerIdentifier" ) ;/*package*/ static final ParserMethod PARSERMETHOD_WORD = 
+              new ParserMethod( "word" ) ;/*package*/ static final ParserMethod PARSERMETHOD_PARAGRAPH = 
+                  new ParserMethod( "paragraph" ) ;/*package*/ static final ParserMethod PARSERMETHOD_SECTION = 
+                      new ParserMethod( "section" ) ;/*package*/ static final ParserMethod PARSERMETHOD_LITERAL = 
+                          new ParserMethod( "literal" ) ;/*package*/ static final ParserMethod PARSERMETHOD_SOFT_INLINE_LITERAL = 
+                              new ParserMethod( "softInlineLiteral" ) ;/*package*/ static final ParserMethod PARSERMETHOD_HARD_INLINE_LITERAL = 
+                                  new ParserMethod( "hardInlineLiteral" ) ;/*package*/ static final ParserMethod PARSERMETHOD_CHAPTER = 
+                                      new ParserMethod( "chapter" ) ;/*package*/ static final ParserMethod PARSERMETHOD_PART = 
+                                          new ParserMethod( "part" ) ;/*package*/ static final ParserMethod PARSERMETHOD_URL = 
+                                              new ParserMethod( "url" ) ;
 
   @Test
   public void wordContainsOELigatured() throws RecognitionException {

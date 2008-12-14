@@ -30,37 +30,6 @@ public class AntlrTestHelper {
 
   static final String BREAK = "\n" ;
 
-  /*package*/ static final ParserMethod PARSERMETHOD_TITLE = 
-      new ParserMethod( "title" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_HEADER_IDENTIFIER = 
-      new ParserMethod( "headerIdentifier" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_WORD = 
-      new ParserMethod( "word" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_PARAGRAPH = 
-      new ParserMethod( "paragraph" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_SECTION = 
-      new ParserMethod( "section" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_LITERAL = 
-      new ParserMethod( "literal" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_SOFT_INLINE_LITERAL = 
-      new ParserMethod( "softInlineLiteral" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_HARD_INLINE_LITERAL = 
-      new ParserMethod( "hardInlineLiteral" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_CHAPTER = 
-      new ParserMethod( "chapter" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_PART = 
-      new ParserMethod( "part" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_URL = 
-      new ParserMethod( "url" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_FUNCTION_CALL = 
-      new ParserMethod( "functionCall" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_ANCILLARY_ARGUMENT = 
-      new ParserMethod( "ancillaryArgument" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT = 
-      new ParserMethod( "assignmentArgument" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_BOOK = 
-      new ParserMethod( "book" ) ;
-
 
   /*package*/ static void checkSanity( AbstractDelegatingParser parser ) {
     if( parser.hasProblem() ) {
