@@ -125,7 +125,7 @@ public class BookParserTest {
 
   @Test
   public void bookWithOneBareCall() throws RecognitionException {
-    book(
+    AntlrTestHelper.PARSERMETHOD_BOOK.checkTree(
         "insert file:one-word.nlp",
         tree( BOOK,
             tree( FUNCTION_CALL,
@@ -133,12 +133,12 @@ public class BookParserTest {
                 tree( VALUED_ARGUMENT_PRIMARY, tree( URL, "file:one-word.nlp" ) )
             )
         )
-    ) ;
+    ); 
   }
 
   @Test
   public void bookWithTwoBareCalls() throws RecognitionException {
-    book(
+    AntlrTestHelper.PARSERMETHOD_BOOK.checkTree(
         " function1 file:my/file1 " + BREAK + BREAK +
         "function2 file:/my/file2 " + BREAK + "  "
         ,
@@ -157,7 +157,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallBare() throws RecognitionException {
-    functionCall(
+    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" )
@@ -167,7 +167,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithParagraphBody() throws RecognitionException {
-    functionCall(
+    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function \n" + " with paragraphbody",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
@@ -184,7 +184,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithUrl() throws RecognitionException {
-    functionCall(
+    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function file:my/file",
         createFunctionCallWithUrlTree( "my/file" )
     ) ;
@@ -192,7 +192,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithFlag() throws RecognitionException {
-    functionCall(
+    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $flag",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
@@ -203,7 +203,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithMoreFlags() throws RecognitionException {
-    functionCall(
+    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $flag1 " + BREAK +
         " $flag2",
         tree( FUNCTION_CALL,
@@ -216,7 +216,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithTwoAssignments() throws RecognitionException {
-    functionCall(
+    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $key1=value1 " + BREAK +
         " $key2=value2",
         createFunctionCallWithValuedAssignmentTree(
@@ -227,7 +227,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithAncillaries() throws RecognitionException {
-    functionCall(
+    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function \\identifier1 " + BREAK +
         " \\identifier2",
         tree( FUNCTION_CALL,
@@ -242,7 +242,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifier() throws RecognitionException {
-    ancillaryArgument(
+    AntlrTestHelper.PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
         "\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( IDENTIFIER, "identifier" )
@@ -252,7 +252,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifierAndModifier() throws RecognitionException {
-    ancillaryArgument(
+    AntlrTestHelper.PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
         "+\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( VALUED_ARGUMENT_MODIFIER, "+" ),
@@ -263,7 +263,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAssignment() throws RecognitionException {
-    AntlrTestHelper.valuedArgumentAssignment(
+    AntlrTestHelper.PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT.checkTree(
         "$key=value/with/solidus.and-other",
         tree( VALUED_ARGUMENT_ASSIGNMENT,
             tree( "key" ),

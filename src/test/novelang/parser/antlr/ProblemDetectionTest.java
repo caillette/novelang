@@ -26,7 +26,7 @@ public class ProblemDetectionTest {
 
   @Test
   public void incompleteEllipsis() throws RecognitionException {
-    final DelegatingPartParser parser = GenericAntlrTestHelper.createPartParser( "..w ww" ) ;
+    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( "..w ww" ) ;
     parser.parse() ;
     Assert.assertTrue( parser.hasProblem() ) ;
   }
