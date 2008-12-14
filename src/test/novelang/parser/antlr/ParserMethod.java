@@ -22,7 +22,7 @@ import novelang.common.SyntacticTree;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import junit.framework.AssertionFailedError;
+import org.junit.Assert;
 
 
 /**
@@ -61,15 +61,25 @@ public class ParserMethod {
   }
   
   public SyntacticTree createTree( String text ) {
-    final DelegatingPartParser parser = GenericAntlrTestHelper.createPartParser( text ) ;
+    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     final SyntacticTree tree = getTree( parser.getAntlrParser() ) ;
-    GenericAntlrTestHelper.checkSanity( parser ) ;
+    AntlrTestHelper.checkSanity( parser ) ;
     return tree ;    
   }
   
   public void checkTree( String text, SyntacticTree expectedTree ) {
     final SyntacticTree actualTree = createTree( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
+    
+  }
+  
+  public void checkFails( String text ) {
+    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
+    getTree( parser.getAntlrParser() ) ;
+    final String readableProblemList = 
+        AntlrTestHelper.createProblemList( parser.getProblems() ) ;
+    final boolean parserHasProblem = parser.hasProblem() ;
+    Assert.assertTrue( readableProblemList, parserHasProblem ) ;
     
   }
 
