@@ -18,7 +18,6 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
-import static novelang.parser.antlr.Antlr311TestHelper.BREAK;
 
 /**
  * Test new parser features.
@@ -27,8 +26,12 @@ import static novelang.parser.antlr.Antlr311TestHelper.BREAK;
  */
 public class Antlr311SpecificPartParserTest {
   
-  private final ParserMethod PARSERMETHOD_SMALL_LIST_ITEM_WITH_HYPHEN_BULLET =
-      new ParserMethod( "smallListItemWithHyphenBullet" ) ;
+  public static final String BREAK = "\n" ;
+
+  private final ParserMethod PARSERMETHOD_BIG_DASHED_LIST_ITEM =
+      new ParserMethod( "bigDashedListItem" ) ;
+  private final ParserMethod PARSERMETHOD_SMALL_DASHED_LIST_ITEM =
+      new ParserMethod( "smallDashedListItem" ) ;
   private final ParserMethod PARSERMETHOD_PARAGRAPH =
       new ParserMethod( "paragraph" ) ;
   private final ParserMethod PARSERMETHOD_TITLE =
@@ -48,7 +51,7 @@ public class Antlr311SpecificPartParserTest {
   public void paragraphIsTwoSmallListItems()
       throws RecognitionException
   {
-    PARSERMETHOD_SMALL_LIST_ITEM_WITH_HYPHEN_BULLET.createTree(
+    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree(
         "- x" + BREAK +
         "- y"
     ) ;
@@ -111,6 +114,21 @@ public class Antlr311SpecificPartParserTest {
         "a" + BREAK +
         "http://bar.com"
     ) ;
+  }
+  
+  @Test
+  public void smallDashedListItemIsSingleWord() throws RecognitionException {
+    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x" ) ;
+  }
+  
+  @Test
+  public void smallDashedListItemIsSeveralWords() throws RecognitionException {
+    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x y z" ) ;
+  }
+  
+  @Test
+  public void smallDashedListItemHasParenthesisAndDoubleQuotes() throws RecognitionException {
+    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x (\"y \") z" ) ;
   }
   
  

@@ -65,14 +65,14 @@ section
  *  on the first column so it would clash with section / chapter introducer.
  */
 title
-  : (   smallListItemWithHyphenBullet
+  : (   smallDashedListItem
       | ( mixedDelimitedSpreadBlock 
           ( WHITESPACE mixedDelimitedSpreadBlock )* 
         )
     )
     ( WHITESPACE? SOFTBREAK 
       ( ( url ) => url
-        | smallListItemWithHyphenBullet
+        | smallDashedListItem
         | ( WHITESPACE? mixedDelimitedSpreadBlock 
             ( WHITESPACE mixedDelimitedSpreadBlock )* 
           )        
@@ -83,14 +83,14 @@ title
 
 paragraph 
   : (   ( url ) => url
-      | smallListItemWithHyphenBullet
+      | smallDashedListItem
       | ( mixedDelimitedSpreadBlock 
           ( WHITESPACE mixedDelimitedSpreadBlock )* 
         )
     )
     ( WHITESPACE? SOFTBREAK 
       ( ( url ) => url
-        | smallListItemWithHyphenBullet
+        | smallDashedListItem
         | ( WHITESPACE? mixedDelimitedSpreadBlock 
             ( WHITESPACE mixedDelimitedSpreadBlock )* 
           )        
@@ -108,6 +108,15 @@ delimitedSpreadblockNoDoubleQuotes
   : parenthesizedSpreadblock
   ;
 
+delimitedMonoblock
+  : parenthesizedMonoblock
+  | doubleQuotedMonoblock
+  ;
+
+delimitedMonoblockNoDoubleQuotes
+  : parenthesizedMonoblock
+  ;
+
 
 // ===================
 // Parenthesized stuff
@@ -121,16 +130,30 @@ parenthesizedSpreadblock
     RIGHT_PARENTHESIS
   ;
 
+mixedDelimitedSpreadBlock  
+  : ( word ( ( punctuationSign | delimitedSpreadblock )+ word? )? ) 
+  | ( ( punctuationSign | delimitedSpreadblock )+ word? ) 
+  ;
+                
+parenthesizedMonoblock
+  : LEFT_PARENTHESIS WHITESPACE?
+    ( monoblockBody 
+      WHITESPACE? 
+    )
+    RIGHT_PARENTHESIS
+  ;
+
+
 /** Everything in this rule implies a syntactic predicate, 
- *  so it will foll ANTLRWorks' interpreter.
+ *  so it will fool ANTLRWorks' interpreter.
  */
 spreadBlockBody
   : (   
         ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
               ( SOFTBREAK url SOFTBREAK ) 
         ) 
-      | ( ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK ) => 
-                ( SOFTBREAK smallListItemWithHyphenBullet SOFTBREAK ) 
+      | ( ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK ) => 
+                ( SOFTBREAK smallDashedListItem SOFTBREAK ) 
         )
       | ( ( SOFTBREAK WHITESPACE? )? 
           mixedDelimitedSpreadBlock
@@ -141,8 +164,8 @@ spreadBlockBody
         ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
               ( SOFTBREAK url SOFTBREAK ) 
         ) 
-      | ( ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK ) => 
-                ( SOFTBREAK smallListItemWithHyphenBullet SOFTBREAK ) 
+      | ( ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK ) => 
+                ( SOFTBREAK smallDashedListItem SOFTBREAK ) 
           )
       | ( ( WHITESPACE? SOFTBREAK WHITESPACE? mixedDelimitedSpreadBlock ) =>
                 ( SOFTBREAK mixedDelimitedSpreadBlock )
@@ -154,14 +177,18 @@ spreadBlockBody
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlock
   ;  
 
+
+monoblockBody
+  : mixedDelimitedMonoblock
+    ( WHITESPACE mixedDelimitedMonoblock )*
+  ;  
+
   
-mixedDelimitedSpreadBlock  
-  : ( word ( ( punctuationSign | delimitedSpreadblock )+ word? )? ) 
-  | ( ( punctuationSign | delimitedSpreadblock )+ word? ) 
+mixedDelimitedMonoblock  
+  : ( word ( ( punctuationSign | delimitedMonoblock )+ word? )? ) 
+  | ( ( punctuationSign | delimitedMonoblock )+ word? ) 
   ;
                 
-
-
 // ===================
 // Double quotes stuff
 // ===================
@@ -178,13 +205,13 @@ doubleQuotedSpreadBlock
  *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
  */
 spreadBlockBodyNoDoubleQuotes
-  : (   ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK )
+  : (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
       | ( ( SOFTBREAK WHITESPACE? )? 
           mixedDelimitedSpreadBlockNoDoubleQuotes
           ( WHITESPACE mixedDelimitedSpreadBlockNoDoubleQuotes )*
         )
     )
-    (   ( SOFTBREAK WHITESPACE? smallListItemWithHyphenBullet WHITESPACE? SOFTBREAK )
+    (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
       | ( WHITESPACE? SOFTBREAK WHITESPACE? 
           mixedDelimitedSpreadBlockNoDoubleQuotes
           ( WHITESPACE 
@@ -201,6 +228,34 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
   ;
   
 
+doubleQuotedMonoblock
+  : DOUBLE_QUOTE WHITESPACE?
+    ( monoblockBodyNoDoubleQuotes 
+      WHITESPACE? 
+    )?
+    DOUBLE_QUOTE
+  ;
+
+monoblockBodyNoDoubleQuotes
+  : (   (  
+          mixedDelimitedMonoblockNoDoubleQuotes
+          ( WHITESPACE mixedDelimitedMonoblockNoDoubleQuotes )*
+        )
+    )
+    (   ( WHITESPACE? SOFTBREAK WHITESPACE? 
+          mixedDelimitedMonoblockNoDoubleQuotes
+          ( WHITESPACE 
+            mixedDelimitedMonoblockNoDoubleQuotes
+          )*
+        )             
+    )* 
+  ;  
+
+mixedDelimitedMonoblockNoDoubleQuotes
+  : ( word ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? )? ) 
+  | ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? ) 
+  ;
+  
 
 
 
@@ -209,7 +264,7 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
 // Lists
 // =====
 
-bigListItemWithTripleHyphenBullet
+bigDashedListItem
   : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
     ( WHITESPACE mixedDelimitedSpreadBlock )*
     ( WHITESPACE? SOFTBREAK 
@@ -217,14 +272,14 @@ bigListItemWithTripleHyphenBullet
             ( WHITESPACE mixedDelimitedSpreadBlock )* 
           )
         | ( url ) => url
-        | smallListItemWithHyphenBullet
+        | smallDashedListItem
       )
     )*
 
   ;
 
-smallListItemWithHyphenBullet
-  : HYPHEN_MINUS ( WHITESPACE word )+
+smallDashedListItem
+  : HYPHEN_MINUS ( WHITESPACE mixedDelimitedMonoblock )+
   ;
   
   
