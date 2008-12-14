@@ -35,6 +35,11 @@ import static novelang.parser.antlr.TreeFixture.tree;
  * @author Laurent Caillette
  */
 public class BookParserTest {
+  /*package*/ static final ParserMethod PARSERMETHOD_FUNCTION_CALL = 
+      new ParserMethod( "functionCall" ) ;/*package*/ static final ParserMethod PARSERMETHOD_ANCILLARY_ARGUMENT = 
+          new ParserMethod( "ancillaryArgument" ) ;/*package*/ static final ParserMethod PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT = 
+              new ParserMethod( "assignmentArgument" ) ;/*package*/ static final ParserMethod PARSERMETHOD_BOOK = 
+                  new ParserMethod( "book" ) ;
 
   /**
    * This is used elsewhere as we must be sure to pass a tree of the same form as the
@@ -125,7 +130,7 @@ public class BookParserTest {
 
   @Test
   public void bookWithOneBareCall() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_BOOK.checkTree(
+    PARSERMETHOD_BOOK.checkTree(
         "insert file:one-word.nlp",
         tree( BOOK,
             tree( FUNCTION_CALL,
@@ -138,7 +143,7 @@ public class BookParserTest {
 
   @Test
   public void bookWithTwoBareCalls() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_BOOK.checkTree(
+    PARSERMETHOD_BOOK.checkTree(
         " function1 file:my/file1 " + BREAK + BREAK +
         "function2 file:/my/file2 " + BREAK + "  "
         ,
@@ -157,7 +162,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallBare() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" )
@@ -167,7 +172,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithParagraphBody() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function \n" + " with paragraphbody",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
@@ -184,7 +189,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithUrl() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function file:my/file",
         createFunctionCallWithUrlTree( "my/file" )
     ) ;
@@ -192,7 +197,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithFlag() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $flag",
         tree( FUNCTION_CALL,
             tree( FUNCTION_NAME, "function" ),
@@ -203,7 +208,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithMoreFlags() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $flag1 " + BREAK +
         " $flag2",
         tree( FUNCTION_CALL,
@@ -216,7 +221,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithTwoAssignments() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $key1=value1 " + BREAK +
         " $key2=value2",
         createFunctionCallWithValuedAssignmentTree(
@@ -227,7 +232,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithAncillaries() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function \\identifier1 " + BREAK +
         " \\identifier2",
         tree( FUNCTION_CALL,
@@ -242,7 +247,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifier() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
+    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
         "\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( IDENTIFIER, "identifier" )
@@ -252,7 +257,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifierAndModifier() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
+    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
         "+\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY,
             tree( VALUED_ARGUMENT_MODIFIER, "+" ),
@@ -263,7 +268,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAssignment() throws RecognitionException {
-    AntlrTestHelper.PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT.checkTree(
+    PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT.checkTree(
         "$key=value/with/solidus.and-other",
         tree( VALUED_ARGUMENT_ASSIGNMENT,
             tree( "key" ),
