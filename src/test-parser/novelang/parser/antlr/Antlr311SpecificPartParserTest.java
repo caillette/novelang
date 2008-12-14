@@ -27,11 +27,18 @@ import static novelang.parser.antlr.Antlr311TestHelper.BREAK;
  */
 public class Antlr311SpecificPartParserTest {
   
+  private final ParserMethod PARSERMETHOD_SMALL_LIST_ITEM_WITH_HYPHEN_BULLET =
+      new ParserMethod( "smallListItemWithHyphenBullet" ) ;
+  private final ParserMethod PARSERMETHOD_PARAGRAPH =
+      new ParserMethod( "paragraph" ) ;
+  private final ParserMethod PARSERMETHOD_TITLE =
+      new ParserMethod( "title" ) ;
+
   @Test
   public void paragraphIsParenthesisWithBreakThenWord()
       throws RecognitionException
   {
-    Antlr311TestHelper.paragraph(
+    PARSERMETHOD_PARAGRAPH.createTree(
         "(" + BREAK +
         "w)" 
     ) ;
@@ -41,7 +48,7 @@ public class Antlr311SpecificPartParserTest {
   public void paragraphIsTwoSmallListItems()
       throws RecognitionException
   {
-    Antlr311TestHelper.smallListItemWithHyphenBullet(
+    PARSERMETHOD_SMALL_LIST_ITEM_WITH_HYPHEN_BULLET.createTree(
         "- x" + BREAK +
         "- y"
     ) ;
@@ -51,28 +58,28 @@ public class Antlr311SpecificPartParserTest {
   public void paragraphIsWordThenParenthesisThenWord()
       throws RecognitionException
   {
-    Antlr311TestHelper.paragraph( "(w1(w2)w3)" ) ;
+    PARSERMETHOD_PARAGRAPH.createTree( "(w1(w2)w3)" ) ;
   }
 
   @Test
   public void paragraphIsWordThenParenthesisThenWordWithTrailingSpace()
       throws RecognitionException
   {
-    Antlr311TestHelper.paragraph( "(w1(w2)w3 )" ) ;
+    PARSERMETHOD_PARAGRAPH.createTree( "(w1(w2)w3 )" ) ;
   }
 
   @Test
   public void paragraphIsWordThenParenthesis()
       throws RecognitionException
   {
-    Antlr311TestHelper.paragraph( "(w1(w2))" ) ;
+    PARSERMETHOD_PARAGRAPH.createTree( "(w1(w2))" ) ;
   }
 
   @Test
   public void paragraphHasParenthesisAndDoubleQuotedTextOnTwoLines()
       throws RecognitionException
   {
-    Antlr311TestHelper.paragraph(
+    PARSERMETHOD_PARAGRAPH.createTree(
         "(x y) z" + BREAK +
         "1 2 \"3 " + BREAK +
         "4\""
@@ -83,14 +90,14 @@ public class Antlr311SpecificPartParserTest {
   public void paragraphIsJustAUrl()
       throws RecognitionException
   {
-    Antlr311TestHelper.paragraph( "http://foo.com" ) ;
+    PARSERMETHOD_PARAGRAPH.createTree( "http://foo.com" ) ;
   }
   
   @Test
   public void paragraphIsTwoUrls()
       throws RecognitionException
   {
-    Antlr311TestHelper.paragraph( 
+    PARSERMETHOD_PARAGRAPH.createTree(
         "http://foo.com " + BREAK +
         "http://bar.com"
     ) ;
@@ -100,7 +107,7 @@ public class Antlr311SpecificPartParserTest {
   public void titleHasDoubleQuotesThenUrl()
       throws RecognitionException
   {
-    Antlr311TestHelper.title( 
+    PARSERMETHOD_TITLE.createTree( 
         "a" + BREAK +
         "http://bar.com"
     ) ;
