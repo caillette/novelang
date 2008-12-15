@@ -27,6 +27,7 @@ tokens {
   PARAGRAPH_PLAIN ;  // Should become PARAGRAPH
   PARAGRAPH_SPEECH ; // Should become BIG_DASHED_LIST_ITEM
   QUOTE ;            // Should become DOUBLE_QUOTES_BLOCK
+  SQUARE_BRACKETS ;  // Should become SQUARE_BRACKETS_BLOCK
   SUPERSCRIPT ;
   TITLE ;
   URL ;
@@ -75,26 +76,26 @@ part
       | p += paragraph 
       | p += literal
     )
-    ( SOFTBREAK SOFTBREAK (
+    ( softbreak softbreak (
         p += chapter 
       | p += section 
       | p += paragraph 
       | p += literal
     ) )*      
-    ( SOFTBREAK )?
+    ( softbreak )?
     EOF 
     -> ^( PART $p+ )
   ;
   
 chapter 
   : EQUALS_SIGN EQUALS_SIGN 
-    WHITESPACE?
+    whitespace?
     title?
   ;
 
 section 
   : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN 
-    WHITESPACE?
+    whitespace?
     title?
   ;
 
@@ -110,14 +111,14 @@ title
   : (
       (   t += smallDashedListItem
 	      | ( t += mixedDelimitedSpreadBlock 
-	          ( WHITESPACE t += mixedDelimitedSpreadBlock )* 
+	          ( whitespace t += mixedDelimitedSpreadBlock )* 
 	        )
 	    )
-	    ( WHITESPACE? SOFTBREAK 
+	    ( whitespace? softbreak 
 	      ( ( url ) => t += url
 	        | t += smallDashedListItem
-	        | ( WHITESPACE? t += mixedDelimitedSpreadBlock 
-	            ( WHITESPACE t += mixedDelimitedSpreadBlock )* 
+	        | ( whitespace? t += mixedDelimitedSpreadBlock 
+	            ( whitespace t += mixedDelimitedSpreadBlock )* 
 	          )        
 	      )
 	    )*    
@@ -130,14 +131,14 @@ paragraph
 	: ( (   ( url ) => p += url
 	      | p += smallDashedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
-	          ( WHITESPACE p+= mixedDelimitedSpreadBlock )* 
+	          ( whitespace p+= mixedDelimitedSpreadBlock )* 
 	        )
 	    )
-	    ( WHITESPACE? SOFTBREAK 
+	    ( whitespace? softbreak 
 	      ( ( url ) => p += url
 	        | p += smallDashedListItem
-	        | ( WHITESPACE? p += mixedDelimitedSpreadBlock 
-	            ( WHITESPACE p+= mixedDelimitedSpreadBlock )* 
+	        | ( whitespace? p += mixedDelimitedSpreadBlock 
+	            ( whitespace p+= mixedDelimitedSpreadBlock )* 
 	          )        
 	      )
 	    )*
@@ -153,12 +154,14 @@ paragraph
   
 delimitedSpreadblock
   : parenthesizedSpreadblock
+  | squarebracketsSpreadblock
   | doubleQuotedSpreadBlock
   | emphasizedSpreadBlock
   ;
 
 delimitedMonoblock
   : parenthesizedMonoblock
+  | squarebracketsMonoblock
   | doubleQuotedMonoblock
   | emphasizedMonoblock
   ;
@@ -178,27 +181,27 @@ mixedDelimitedSpreadBlock
  */
 spreadBlockBody
   : (   
-        ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
-              ( SOFTBREAK url SOFTBREAK ) 
+        ( ( softbreak url whitespace? softbreak ) => 
+              ( softbreak url softbreak ) 
         ) 
-      | ( ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK ) => 
-                ( SOFTBREAK smallDashedListItem SOFTBREAK ) 
+      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
+                ( softbreak smallDashedListItem softbreak ) 
         )
-      | ( ( SOFTBREAK WHITESPACE? )? 
+      | ( ( softbreak whitespace? )? 
           mixedDelimitedSpreadBlock
-          ( WHITESPACE mixedDelimitedSpreadBlock )*
+          ( whitespace mixedDelimitedSpreadBlock )*
         )
     )
     (   
-        ( ( SOFTBREAK url WHITESPACE? SOFTBREAK ) => 
-              ( SOFTBREAK url SOFTBREAK ) 
+        ( ( softbreak url whitespace? softbreak ) => 
+              ( softbreak url softbreak ) 
         ) 
-      | ( ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK ) => 
-                ( SOFTBREAK smallDashedListItem SOFTBREAK ) 
+      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
+                ( softbreak smallDashedListItem softbreak ) 
           )
-      | ( ( WHITESPACE? SOFTBREAK WHITESPACE? mixedDelimitedSpreadBlock ) =>
-                ( SOFTBREAK mixedDelimitedSpreadBlock )
-          ( WHITESPACE 
+      | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlock ) =>
+                ( softbreak mixedDelimitedSpreadBlock )
+          ( whitespace 
             mixedDelimitedSpreadBlock
           )*
         )             
@@ -209,7 +212,7 @@ spreadBlockBody
 
 monoblockBody
   : mixedDelimitedMonoblock
-    ( WHITESPACE mixedDelimitedMonoblock )*
+    ( whitespace mixedDelimitedMonoblock )*
   ;  
 
   
@@ -219,26 +222,48 @@ mixedDelimitedMonoblock
   ;
                 
 
-// ===================
-// Parenthesized stuff
-// ===================
+// ===========
+// Parenthesis
+// ===========
   
 parenthesizedSpreadblock
-  : ( LEFT_PARENTHESIS WHITESPACE?
+  : ( LEFT_PARENTHESIS whitespace?
       ( spreadBlockBody 
-        WHITESPACE? 
+        whitespace? 
       )
       RIGHT_PARENTHESIS
     ) -> ^( PARENTHESIS spreadBlockBody )
   ;
 
 parenthesizedMonoblock
-  : ( LEFT_PARENTHESIS WHITESPACE?
+  : ( LEFT_PARENTHESIS whitespace?
       ( monoblockBody 
-        WHITESPACE? 
+        whitespace? 
       )
       RIGHT_PARENTHESIS
     ) -> ^( PARENTHESIS monoblockBody )
+  ;
+
+// ===============
+// Square brackets
+// ===============
+  
+squarebracketsSpreadblock
+  : ( LEFT_SQUARE_BRACKET whitespace?
+      ( spreadBlockBody 
+        whitespace? 
+      )
+      RIGHT_SQUARE_BRACKET
+    ) -> ^( SQUARE_BRACKETS spreadBlockBody )
+  ;
+
+squarebracketsMonoblock
+  : ( LEFT_SQUARE_BRACKET whitespace?
+      ( monoblockBody 
+        whitespace? 
+      )
+      RIGHT_SQUARE_BRACKET
+    ) -> ^( SQUARE_BRACKETS monoblockBody )
   ;
 
 
@@ -247,9 +272,9 @@ parenthesizedMonoblock
 // ===================
 
 doubleQuotedSpreadBlock
-	: ( DOUBLE_QUOTE WHITESPACE?
+	: ( DOUBLE_QUOTE whitespace?
 	    ( b += spreadBlockBodyNoDoubleQuotes 
-	      WHITESPACE? 
+	      whitespace? 
 	    )?
 	    DOUBLE_QUOTE
 	  ) -> ^( QUOTE $b+ ) 
@@ -257,6 +282,7 @@ doubleQuotedSpreadBlock
 
 delimitedSpreadblockNoDoubleQuotes
   : parenthesizedSpreadblock
+  | squarebracketsSpreadblock
   | emphasizedSpreadBlock
   ;
 
@@ -264,16 +290,16 @@ delimitedSpreadblockNoDoubleQuotes
  *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
  */
 spreadBlockBodyNoDoubleQuotes
-  : (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
-      | ( ( SOFTBREAK WHITESPACE? )? 
+  : (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
+      | ( ( softbreak whitespace? )? 
           mixedDelimitedSpreadBlockNoDoubleQuotes
-          ( WHITESPACE mixedDelimitedSpreadBlockNoDoubleQuotes )*
+          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
         )
     )
-    (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
-      | ( WHITESPACE? SOFTBREAK WHITESPACE? 
+    (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
+      | ( whitespace? softbreak whitespace? 
           mixedDelimitedSpreadBlockNoDoubleQuotes
-          ( WHITESPACE 
+          ( whitespace 
             mixedDelimitedSpreadBlockNoDoubleQuotes
           )*
         )             
@@ -288,9 +314,9 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
   
 
 doubleQuotedMonoblock
- : ( DOUBLE_QUOTE WHITESPACE?
+ : ( DOUBLE_QUOTE whitespace?
 	    ( b += monoblockBodyNoDoubleQuotes 
-	      WHITESPACE? 
+	      whitespace? 
 	    )?
 	    DOUBLE_QUOTE
 	  ) -> ^( QUOTE $b+ )
@@ -298,16 +324,17 @@ doubleQuotedMonoblock
 
 delimitedMonoblockNoDoubleQuotes
   : parenthesizedMonoblock
+  | squarebracketsMonoblock
   | emphasizedMonoblock
   ;
 
 monoblockBodyNoDoubleQuotes
   : ( mixedDelimitedMonoblockNoDoubleQuotes
-      ( WHITESPACE mixedDelimitedMonoblockNoDoubleQuotes )*
+      ( whitespace mixedDelimitedMonoblockNoDoubleQuotes )*
     )
-    ( WHITESPACE? SOFTBREAK WHITESPACE? 
+    ( whitespace? softbreak whitespace? 
       mixedDelimitedMonoblockNoDoubleQuotes
-      ( WHITESPACE 
+      ( whitespace 
         mixedDelimitedMonoblockNoDoubleQuotes
       )*                   
     )* 
@@ -325,9 +352,9 @@ mixedDelimitedMonoblockNoDoubleQuotes
 // ========
 
 emphasizedSpreadBlock
-	: ( SOLIDUS SOLIDUS WHITESPACE?
+	: ( SOLIDUS SOLIDUS whitespace?
 	    ( b += spreadBlockBodyNoEmphasis 
-	      WHITESPACE? 
+	      whitespace? 
 	    )?
 	    SOLIDUS SOLIDUS
 	  ) -> ^( EMPHASIS $b+ )
@@ -335,6 +362,7 @@ emphasizedSpreadBlock
 
 delimitedSpreadblockNoEmphasis
   : parenthesizedSpreadblock
+  | squarebracketsSpreadblock
   | doubleQuotedSpreadBlock
   ;
 
@@ -342,16 +370,16 @@ delimitedSpreadblockNoEmphasis
  *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
  */
 spreadBlockBodyNoEmphasis
-  : (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
-      | ( ( SOFTBREAK WHITESPACE? )? 
+  : (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
+      | ( ( softbreak whitespace? )? 
           mixedDelimitedSpreadBlockNoEmphasis
-          ( WHITESPACE mixedDelimitedSpreadBlockNoEmphasis )*
+          ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
         )
     )
-    (   ( SOFTBREAK WHITESPACE? smallDashedListItem WHITESPACE? SOFTBREAK )
-      | ( WHITESPACE? SOFTBREAK WHITESPACE? 
+    (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
+      | ( whitespace? softbreak whitespace? 
           mixedDelimitedSpreadBlockNoEmphasis
-          ( WHITESPACE 
+          ( whitespace 
             mixedDelimitedSpreadBlockNoEmphasis
           )*
         )             
@@ -366,9 +394,9 @@ mixedDelimitedSpreadBlockNoEmphasis
   
 
 emphasizedMonoblock
-	: ( SOLIDUS SOLIDUS WHITESPACE?
+	: ( SOLIDUS SOLIDUS whitespace?
 	    ( b += monoblockBodyNoEmphasis 
-	      WHITESPACE? 
+	      whitespace? 
 	    )?
 	    SOLIDUS SOLIDUS
 	  ) -> ^( EMPHASIS $b+ )
@@ -376,16 +404,17 @@ emphasizedMonoblock
 
 delimitedMonoblockNoEmphasis
   : parenthesizedMonoblock
+  | squarebracketsMonoblock
   | doubleQuotedMonoblock
   ;
 
 monoblockBodyNoEmphasis
   : ( mixedDelimitedMonoblockNoEmphasis
-      ( WHITESPACE mixedDelimitedMonoblockNoEmphasis )*
+      ( whitespace mixedDelimitedMonoblockNoEmphasis )*
     )
-    ( WHITESPACE? SOFTBREAK WHITESPACE? 
+    ( whitespace? softbreak whitespace? 
       mixedDelimitedMonoblockNoEmphasis
-      ( WHITESPACE 
+      ( whitespace 
         mixedDelimitedMonoblockNoEmphasis
       )*                   
     )* 
@@ -406,10 +435,10 @@ mixedDelimitedMonoblockNoEmphasis
 
 bigDashedListItem
   : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
-    ( WHITESPACE i += mixedDelimitedSpreadBlock )*
-    ( WHITESPACE? SOFTBREAK 
-      (   ( WHITESPACE? i += mixedDelimitedSpreadBlock 
-            ( WHITESPACE i += mixedDelimitedSpreadBlock )* 
+    ( whitespace i += mixedDelimitedSpreadBlock )*
+    ( whitespace? softbreak 
+      (   ( whitespace? i += mixedDelimitedSpreadBlock 
+            ( whitespace i += mixedDelimitedSpreadBlock )* 
           )
         | ( url ) => i += url
         | i += smallDashedListItem
@@ -419,7 +448,7 @@ bigDashedListItem
   ;
 
 smallDashedListItem
-  : HYPHEN_MINUS ( WHITESPACE mixedDelimitedMonoblock )+
+  : HYPHEN_MINUS ( whitespace mixedDelimitedMonoblock )+
   ;
   
   
@@ -735,6 +764,9 @@ escapedCharacter returns [ String unescaped ]
 // ====================
 // Low-level constructs
 // ====================
+
+softbreak : SOFTBREAK -> ; 
+whitespace : WHITESPACE -> ;
 
 letters : letter+ ;
 
