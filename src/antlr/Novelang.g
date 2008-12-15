@@ -164,8 +164,13 @@ delimitedMonoblock
   ;
 
 mixedDelimitedSpreadBlock  
-  : ( word ( ( punctuationSign | delimitedSpreadblock )+ word? )? ) 
-  | ( ( punctuationSign | delimitedSpreadblock )+ word? ) 
+  : ( word 
+      ( ( punctuationSign | delimitedSpreadblock ) word? )*
+	  ) 
+  | ( ( punctuationSign | delimitedSpreadblock )
+      ( word? ( punctuationSign | delimitedSpreadblock ) )*   
+      word?
+    ) 
   ;
                 
 /** Everything in this rule implies a syntactic predicate, 

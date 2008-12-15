@@ -98,7 +98,7 @@ public class PartParserTest {
     ) ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void identifierIsSingleWord() throws RecognitionException {
     PARSERMETHOD_HEADER_IDENTIFIER.checkTree( 
         "\\\\my-Identifier", tree( IDENTIFIER, "my-Identifier" ) ) ;
@@ -172,7 +172,7 @@ public class PartParserTest {
     ) ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphIsSimplestSpeechWithIdentifier() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
         "--- w0", tree(
@@ -234,7 +234,7 @@ public class PartParserTest {
     ) ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void paragraphSingleWordWithIdentifier() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
         "w0", tree(
@@ -494,7 +494,7 @@ public class PartParserTest {
         ) ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void sectionHasIdentifier()
       throws RecognitionException
   {
