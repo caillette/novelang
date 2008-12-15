@@ -54,7 +54,12 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
 
   public String toStringTree() {
     final StringBuffer buffer = new StringBuffer() ;
-    buffer.append( "(" ) ;
+    
+    final boolean shouldWrap = getChildCount() > 0 ;
+
+    if( shouldWrap ) {
+      buffer.append( "(" ) ;
+    }
     buffer.append( getText() ) ;
 
     if( getChildCount() > 0 ) {
@@ -68,7 +73,9 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
         first = false ;
       }
     }
-    buffer.append( ")" ) ;
+    if( shouldWrap ) {
+      buffer.append( ")" ) ;
+    }
     return buffer.toString() ;
   }
 
