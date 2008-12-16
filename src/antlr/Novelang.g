@@ -21,6 +21,7 @@ options { output = AST ; }
 //import AllTokens, Url ;
 
 tokens {
+  BLOCKQUOTE ;
   CHAPTER ;
   EMPHASIS ;                       // Should become BLOCK_INSIDE_SOLIDUS_PAIRS
   HARD_INLINE_LITERAL ;
@@ -83,18 +84,20 @@ part
     (   p += chapter 
       | p += section 
       | p += paragraph 
+      | p += blockQuote 
       | p += literal
     )
     ( largebreak (
         p += chapter 
       | p += section 
       | p += paragraph 
+      | p += blockQuote 
       | p += literal
     ) )*      
     ( softbreak )*
     EOF 
     -> ^( PART $p+ )
-  ;
+  ; 
   
 chapter 
   : ( EQUALS_SIGN EQUALS_SIGN 
@@ -557,6 +560,17 @@ smallDashedListItem
 // =======  
 // Literal
 // =======
+
+
+blockQuote
+  : LESS_THAN_SIGN LESS_THAN_SIGN 
+    ( mediumbreak | largebreak )?
+    paragraph 
+    ( largebreak paragraph )* 
+    ( mediumbreak | largebreak )?
+    GREATER_THAN_SIGN GREATER_THAN_SIGN
+    -> ^( BLOCKQUOTE paragraph* )
+  ;  
 
 literal
   : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
