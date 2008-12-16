@@ -21,13 +21,15 @@ options { output = AST ; }
 //import AllTokens, Url ;
 
 tokens {
-  EMPHASIS ;         // Should become DOUBLE_SLASH_BLOCK
+  EMPHASIS ;                       // Should become BLOCK_INSIDE_SOLIDUS_PAIRS
+  INTERPOLATED_CLAUSE ;            // Should become BLOCK_INSIDE_HYPHEN_PAIRS
+  INTERPOLATED_CLAUSE_SILENT_END ; // Should become BLOCK_INSIDE_HYPHEN_PAIR_WITH_LOWERED_END
   PART ;
   PARENTHESIS ;
   PARAGRAPH_PLAIN ;  // Should become PARAGRAPH
   PARAGRAPH_SPEECH ; // Should become BIG_DASHED_LIST_ITEM
-  QUOTE ;            // Should become DOUBLE_QUOTES_BLOCK
-  SQUARE_BRACKETS ;  // Should become SQUARE_BRACKETS_BLOCK
+  QUOTE ;            // Should become BLOCK_INSIDE_DOUBLE_QUOTES
+  SQUARE_BRACKETS ;  // Should become BLOCK_INSIDE_SQUARE_BRACKETS
   SUPERSCRIPT ;
   TITLE ;
   URL ;
@@ -115,8 +117,8 @@ title
 	        )
 	    )
 	    ( whitespace? softbreak 
-	      ( ( url ) => t += url
-	        | t += smallDashedListItem
+	      (   ( url ) => t += url
+	        | ( smallDashedListItem ) => t += smallDashedListItem
 	        | ( whitespace? t += mixedDelimitedSpreadBlock 
 	            ( whitespace t += mixedDelimitedSpreadBlock )* 
 	          )        
@@ -129,14 +131,14 @@ headerIdentifier : ; // TODO
 
 paragraph 
 	: ( (   ( url ) => p += url
-	      | p += smallDashedListItem
+	      | ( smallDashedListItem ) => p += smallDashedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
 	          ( whitespace p+= mixedDelimitedSpreadBlock )* 
 	        )
 	    )
 	    ( whitespace? softbreak 
 	      ( ( url ) => p += url
-	        | p += smallDashedListItem
+	        | ( smallDashedListItem ) => p += smallDashedListItem
 	        | ( whitespace? p += mixedDelimitedSpreadBlock 
 	            ( whitespace p+= mixedDelimitedSpreadBlock )* 
 	          )        
@@ -157,6 +159,7 @@ delimitedSpreadblock
   | squarebracketsSpreadblock
   | doubleQuotedSpreadBlock
   | emphasizedSpreadBlock
+  | hyphenPairSpreadBlock
   ;
 
 delimitedMonoblock
@@ -164,6 +167,7 @@ delimitedMonoblock
   | squarebracketsMonoblock
   | doubleQuotedMonoblock
   | emphasizedMonoblock
+  | hyphenPairMonoblock
   ;
 
 mixedDelimitedSpreadBlock  
@@ -267,9 +271,9 @@ squarebracketsMonoblock
   ;
 
 
-// ===================
-// Double quotes stuff
-// ===================
+// =============
+// Double quotes
+// =============
 
 doubleQuotedSpreadBlock
 	: ( DOUBLE_QUOTE whitespace?
@@ -284,6 +288,7 @@ delimitedSpreadblockNoDoubleQuotes
   : parenthesizedSpreadblock
   | squarebracketsSpreadblock
   | emphasizedSpreadBlock
+  | hyphenPairSpreadBlock
   ;
 
 /** Don't allow URLs inside double quotes because of weird errors.
@@ -364,6 +369,7 @@ delimitedSpreadblockNoEmphasis
   : parenthesizedSpreadblock
   | squarebracketsSpreadblock
   | doubleQuotedSpreadBlock
+  | hyphenPairSpreadBlock
   ;
 
 /** Don't allow URLs inside double quotes because of weird errors.
@@ -406,6 +412,7 @@ delimitedMonoblockNoEmphasis
   : parenthesizedMonoblock
   | squarebracketsMonoblock
   | doubleQuotedMonoblock
+  | hyphenPairMonoblock
   ;
 
 monoblockBodyNoEmphasis
@@ -426,6 +433,87 @@ mixedDelimitedMonoblockNoEmphasis
   ;
   
 
+// ===============================================
+// Block inside hyphen pairs (interpolated clause)
+// ===============================================
+
+hyphenPairSpreadBlock
+	: ( HYPHEN_MINUS HYPHEN_MINUS whitespace?
+	    ( b += spreadBlockBodyNoHyphenPair
+	      whitespace? 
+	    )
+	    HYPHEN_MINUS HYPHEN_MINUS
+	  ) -> ^( INTERPOLATED_CLAUSE $b+ ) 
+  ;
+
+delimitedSpreadblockNoHyphenPair
+  : parenthesizedSpreadblock
+  | squarebracketsSpreadblock
+  | emphasizedSpreadBlock
+  | doubleQuotedSpreadBlock
+  ;
+
+/** Don't allow URLs inside double quotes because of weird errors.
+ *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
+ */
+spreadBlockBodyNoHyphenPair
+  : (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
+      | ( ( softbreak whitespace? )? 
+          mixedDelimitedSpreadBlockNoHyphenPair
+          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
+        )
+    )
+    (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
+      | ( whitespace? softbreak whitespace? 
+          mixedDelimitedSpreadBlockNoHyphenPair
+          ( whitespace 
+            mixedDelimitedSpreadBlockNoHyphenPair
+          )*
+        )             
+    )* 
+    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoHyphenPair
+  ;  
+
+mixedDelimitedSpreadBlockNoHyphenPair
+  : ( word ( ( punctuationSign | delimitedSpreadblockNoHyphenPair )+ word? )? ) 
+  | ( ( punctuationSign | delimitedSpreadblockNoHyphenPair )+ word? ) 
+  ;
+  
+
+hyphenPairMonoblock
+ : ( HYPHEN_MINUS HYPHEN_MINUS whitespace?
+	    ( b += monoblockBodyNoHyphenPair
+	      whitespace? 
+	    )?
+	    HYPHEN_MINUS HYPHEN_MINUS
+	  ) -> ^( QUOTE $b+ )
+  ;
+
+delimitedMonoblockNoHyphenPair
+  : parenthesizedMonoblock
+  | squarebracketsMonoblock
+  | emphasizedMonoblock
+  | doubleQuotedMonoblock
+  ;
+
+monoblockBodyNoHyphenPair
+  : ( mixedDelimitedMonoblockNoHyphenPair
+      ( whitespace mixedDelimitedMonoblockNoHyphenPair )*
+    )
+    ( whitespace? softbreak whitespace? 
+      mixedDelimitedMonoblockNoHyphenPair
+      ( whitespace 
+        mixedDelimitedMonoblockNoHyphenPair
+      )*                   
+    )* 
+  ;  
+
+mixedDelimitedMonoblockNoHyphenPair
+  : ( word ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? )? ) 
+  | ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? ) 
+  ;
+  
+
 
 
 
@@ -441,7 +529,7 @@ bigDashedListItem
             ( whitespace i += mixedDelimitedSpreadBlock )* 
           )
         | ( url ) => i += url
-        | i += smallDashedListItem
+        | ( smallDashedListItem ) => i += smallDashedListItem
       )
     )* -> ^( PARAGRAPH_SPEECH $i+ )
 

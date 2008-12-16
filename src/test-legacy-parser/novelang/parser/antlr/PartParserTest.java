@@ -689,7 +689,7 @@ public class PartParserTest {
     ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void blockquoteWithIdentifier()
       throws RecognitionException
   {
@@ -1044,12 +1044,12 @@ public class PartParserTest {
   {
     PARSERMETHOD_CHAPTER.checkTree( 
         "***" + BREAK + 
-        "  \\\\identifier", 
+        "  \\\\identifier",
         tree( CHAPTER, tree( IDENTIFIER, "identifier" ) ) 
     ) ;
   }
 
-  @Test
+  @Test @Ignore
   public void chapterHasTitleAndHeaderIdentifier()
       throws RecognitionException
   {
