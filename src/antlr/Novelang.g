@@ -21,6 +21,7 @@ options { output = AST ; }
 //import AllTokens, Url ;
 
 tokens {
+  CHAPTER ;
   EMPHASIS ;                       // Should become BLOCK_INSIDE_SOLIDUS_PAIRS
   HARD_INLINE_LITERAL ;
   INTERPOLATEDCLAUSE ;            // Should become BLOCK_INSIDE_HYPHEN_PAIRS
@@ -31,6 +32,7 @@ tokens {
   PARAGRAPH_PLAIN ;  // Should become PARAGRAPH
   PARAGRAPH_SPEECH ; // Should become BIG_DASHED_LIST_ITEM
   QUOTE ;            // Should become BLOCK_INSIDE_DOUBLE_QUOTES
+  SECTION ;
   SOFT_INLINE_LITERAL ;
   SQUARE_BRACKETS ;  // Should become BLOCK_INSIDE_SQUARE_BRACKETS
   SUPERSCRIPT ;
@@ -76,32 +78,36 @@ public void emitErrorMessage( String string ) {
 // =========================
 
 part 
-  : (   p += chapter 
+  : ( mediumbreak | largebreak )? 
+  
+    (   p += chapter 
       | p += section 
       | p += paragraph 
       | p += literal
     )
-    ( softbreak softbreak (
+    ( largebreak (
         p += chapter 
       | p += section 
       | p += paragraph 
       | p += literal
     ) )*      
-    ( softbreak )?
+    ( softbreak )*
     EOF 
     -> ^( PART $p+ )
   ;
   
 chapter 
-  : EQUALS_SIGN EQUALS_SIGN 
-    whitespace?
-    title?
+  : ( EQUALS_SIGN EQUALS_SIGN 
+      ( whitespace? title )?
+    )
+    -> ^( CHAPTER title? )
   ;
 
 section 
-  : EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN 
-    whitespace?
-    title?
+  : ( EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN 
+      ( whitespace? title )?
+    )
+    -> ^( SECTION title? ) 
   ;
 
 // =====================
@@ -963,8 +969,22 @@ escapedCharacter returns [ String unescaped ]
 // ====================
 
 softbreak : SOFTBREAK -> ; 
+
 whitespace : WHITESPACE -> ;
 
+mediumbreak
+  : ( WHITESPACE
+      | ( WHITESPACE? SOFTBREAK WHITESPACE? )
+    ) 
+    ->
+  ;
+  
+/** One blank line in the middle, white spaces everywhere.
+ */
+largebreak
+  : ( ( WHITESPACE? SOFTBREAK ) ( WHITESPACE? SOFTBREAK )+ WHITESPACE? )
+    ->
+  ;  
 
 anySymbolExceptGreaterthansignAndGraveAccent
   :     digit

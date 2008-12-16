@@ -554,11 +554,12 @@ public class PartParserTest {
   @Test
   public void someLiteral() throws RecognitionException {
     PARSERMETHOD_PART.checkTree( 
-        BREAK +
       "<<<" + BREAK +
       "  Here is some " + BREAK +
       "  //Literal// " + BREAK +
-      ">>>", tree( PART,
+      ">>>",
+      tree(
+          PART,
           tree( LITERAL, "  Here is some " + BREAK + "  //Literal// " )
       ) 
     ) ;
@@ -567,18 +568,19 @@ public class PartParserTest {
   @Test @Ignore
   public void someLiteralContainingLineComment() throws RecognitionException {
     PARSERMETHOD_PART.checkTree( 
-        BREAK +
         "<<<" + BREAK +
         "%% Not to be commented" +
-        ">>>", tree( PART, tree( LITERAL, "%% Not to be commented" )
-      ) 
+        ">>>",
+        tree(
+            PART,
+            tree( LITERAL, "%% Not to be commented" )
+        ) 
     ) ;
   }
 
   @Test
   public void someLiteralContainingLowerthanSign() throws RecognitionException {
     PARSERMETHOD_PART.checkTree( 
-        BREAK +
         "<<<" + BREAK +
         "<" + BREAK +
         ">>>", tree( PART, tree( LITERAL, "<" )
@@ -596,7 +598,6 @@ public class PartParserTest {
     ;
 
     PARSERMETHOD_PART.checkTree( 
-        BREAK +
         "<<<" + BREAK +
         verbatim + BREAK +
         ">>>", tree( PART, tree( LITERAL, verbatim ) )
