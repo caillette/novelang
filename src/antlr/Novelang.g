@@ -22,13 +22,16 @@ options { output = AST ; }
 
 tokens {
   EMPHASIS ;                       // Should become BLOCK_INSIDE_SOLIDUS_PAIRS
-  INTERPOLATED_CLAUSE ;            // Should become BLOCK_INSIDE_HYPHEN_PAIRS
-  INTERPOLATED_CLAUSE_SILENT_END ; // Should become BLOCK_INSIDE_HYPHEN_PAIR_WITH_LOWERED_END
+  HARD_INLINE_LITERAL ;
+  INTERPOLATEDCLAUSE ;            // Should become BLOCK_INSIDE_HYPHEN_PAIRS
+  INTERPOLATEDCLAUSE_SILENTEND ;  // Should become BLOCK_INSIDE_HYPHEN_PAIR_WITH_LOWERED_END
+  LITERAL ;
   PART ;
   PARENTHESIS ;
   PARAGRAPH_PLAIN ;  // Should become PARAGRAPH
   PARAGRAPH_SPEECH ; // Should become BIG_DASHED_LIST_ITEM
   QUOTE ;            // Should become BLOCK_INSIDE_DOUBLE_QUOTES
+  SOFT_INLINE_LITERAL ;
   SQUARE_BRACKETS ;  // Should become BLOCK_INSIDE_SQUARE_BRACKETS
   SUPERSCRIPT ;
   TITLE ;
@@ -438,12 +441,14 @@ mixedDelimitedMonoblockNoEmphasis
 // ===============================================
 
 hyphenPairSpreadBlock
-	: ( HYPHEN_MINUS HYPHEN_MINUS whitespace?
-	    ( b += spreadBlockBodyNoHyphenPair
-	      whitespace? 
-	    )
-	    HYPHEN_MINUS HYPHEN_MINUS
-	  ) -> ^( INTERPOLATED_CLAUSE $b+ ) 
+	: HYPHEN_MINUS HYPHEN_MINUS whitespace?
+    ( b += spreadBlockBodyNoHyphenPair
+      whitespace? 
+    )?
+    HYPHEN_MINUS 
+    (   HYPHEN_MINUS -> ^( INTERPOLATEDCLAUSE $b+ ) 
+      | LOW_LINE -> ^( INTERPOLATEDCLAUSE_SILENTEND $b+ ) 
+    ) 	  
   ;
 
 delimitedSpreadblockNoHyphenPair
@@ -486,7 +491,7 @@ hyphenPairMonoblock
 	      whitespace? 
 	    )?
 	    HYPHEN_MINUS HYPHEN_MINUS
-	  ) -> ^( QUOTE $b+ )
+	  ) -> ^( INTERPOLATEDCLAUSE $b+ )
   ;
 
 delimitedMonoblockNoHyphenPair
@@ -517,6 +522,8 @@ mixedDelimitedMonoblockNoHyphenPair
 
 
 
+
+
 // =====
 // Lists
 // =====
@@ -538,6 +545,127 @@ bigDashedListItem
 smallDashedListItem
   : HYPHEN_MINUS ( whitespace mixedDelimitedMonoblock )+
   ;
+
+
+
+// =======  
+// Literal
+// =======
+
+literal
+  : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
+    WHITESPACE? SOFTBREAK
+    l = literalLines
+    SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
+    -> ^( LITERAL { delegate.createTree( LITERAL, $l.unescaped ) } )
+  ;  
+
+literalLines returns [ String unescaped ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : s1 = literalLine { buffer.append( $s1.unescaped ) ; }
+    ( s2 = SOFTBREAK { buffer.append( $s2.text ) ; }
+      s3 = literalLine { buffer.append( $s3.unescaped ) ; }
+    )*
+    { $unescaped = buffer.toString() ; }        
+  ;
+
+    
+/**
+ * This rule looks weird as negation doesn't work as expected.
+ * It's just about avoiding '>>>' at the start of the line.
+ * This doesn't work:
+   ~( GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN )
+   ( anySymbol | WHITESPACE )*
+ * In addition escaped characters must be added as unescaped.
+ * So we need to add every character "by hand". 
+ */
+literalLine returns [ String unescaped ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   ( (   s1 = anySymbolExceptGreaterthansign { buffer.append( $s1.text ) ; } 
+            | s2 = escapedCharacter { buffer.append( $s2.unescaped ) ; } 
+            | s3 = WHITESPACE { buffer.append( $s3.text ) ; } 
+          )
+          (   s4 = anySymbol  { buffer.append( $s4.text ) ; } 
+            | s5 = escapedCharacter  { buffer.append( $s5.unescaped ) ; } 
+            | s6 = WHITESPACE  { buffer.append( $s6.text ) ; } 
+          )*
+        )
+      |
+        ( s7 = GREATER_THAN_SIGN  { buffer.append( $s7.text ) ; } 
+          (   ( (   s8 = anySymbolExceptGreaterthansign  { buffer.append( $s8.text ) ; } 
+                  | s9 = escapedCharacter  { buffer.append( $s9.unescaped ) ; } 
+                  | s10 = WHITESPACE  { buffer.append( $s10.text ) ; } 
+                ) 
+                (   s11 = anySymbol  { buffer.append( $s11.text ) ; } 
+                  | s12 = escapedCharacter  { buffer.append( $s12.unescaped ) ; } 
+                  | s13 = WHITESPACE { buffer.append( $s13.text ) ; }
+                )* 
+              )
+            | ( s14 = GREATER_THAN_SIGN { buffer.append( $s14.text ) ; }
+                ( (   s15 = anySymbolExceptGreaterthansign { buffer.append( $s15.text ) ; }
+                    | s16 = escapedCharacter  { buffer.append( $s16.unescaped ) ; } 
+                    | s17 = WHITESPACE { buffer.append( $s17.text ) ; }
+                  ) 
+                  (   s18 = anySymbol { buffer.append( $s18.text ) ; }
+                    | s19 = escapedCharacter  { buffer.append( $s19.unescaped ) ; } 
+                  | s20 = WHITESPACE { buffer.append( $s20.text ) ; }
+                  )* 
+                )? 
+              )
+          )?
+        )
+    )?   
+    { $unescaped = buffer.toString() ; }    
+  ;  
+  
+  
+softInlineLiteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+    )+ 
+    GRAVE_ACCENT
+    -> ^( SOFT_INLINE_LITERAL { delegate.createTree( SOFT_INLINE_LITERAL, buffer.toString() ) } )
+  ;
+  
+hardInlineLiteral
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : GRAVE_ACCENT GRAVE_ACCENT
+    (   s1 = anySymbolExceptGraveAccent { buffer.append( $s1.text ) ; }
+      | s2 = WHITESPACE { buffer.append( $s2.text ) ; }
+      | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
+    )+ 
+    GRAVE_ACCENT GRAVE_ACCENT
+    -> ^( HARD_INLINE_LITERAL { delegate.createTree( HARD_INLINE_LITERAL, buffer.toString() ) } )
+  ;
+  
+  
+  
+anySymbol
+  : anySymbolExceptGreaterthansign
+  | GREATER_THAN_SIGN
+  ;
+    
+anySymbolExceptGreaterthansign
+  : anySymbolExceptGreaterthansignAndGraveAccent
+  | GRAVE_ACCENT
+  ;
+  
+anySymbolExceptGraveAccent
+  : anySymbolExceptGreaterthansignAndGraveAccent
+  | GREATER_THAN_SIGN
+  ;  
+  
   
   
 // ===========  
@@ -779,26 +907,7 @@ urlXChar
   ;
 
 
-// =======
-// Literal
-// =======
 
-literal : // TODO
-  LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN
-  GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
-  ; 
-
-softInlineLiteral : // TODO
-  SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK 
-  SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK 
-  SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK 
-  SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK 
-  ; 
-
-hardInlineLiteral : // TODO
-  SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK 
-  SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK 
-  ; 
 
 // ====
 // Word
@@ -855,6 +964,47 @@ escapedCharacter returns [ String unescaped ]
 
 softbreak : SOFTBREAK -> ; 
 whitespace : WHITESPACE -> ;
+
+
+anySymbolExceptGreaterthansignAndGraveAccent
+  :     digit
+      | hexLetter
+      | nonHexLetter 
+      | AMPERSAND 
+      | APOSTROPHE   
+      | ASTERISK
+      | CIRCUMFLEX_ACCENT
+      | COLON
+      | COMMA 
+      | COMMERCIAL_AT
+      | DEGREE_SIGN
+      | DOLLAR_SIGN
+      | DOUBLE_QUOTE
+      | ELLIPSIS
+      | EQUALS_SIGN
+      | EXCLAMATION_MARK
+      | FULL_STOP
+//      | GRAVE_ACCENT
+//      | GREATER_THAN_SIGN
+      | HYPHEN_MINUS
+      | LEFT_CURLY_BRACKET
+      | LEFT_PARENTHESIS
+      | LEFT_SQUARE_BRACKET
+      | LESS_THAN_SIGN
+      | LOW_LINE
+      | NUMBER_SIGN
+      | PLUS_SIGN
+      | PERCENT_SIGN
+      | QUESTION_MARK
+      | RIGHT_CURLY_BRACKET
+      | RIGHT_PARENTHESIS
+      | RIGHT_SQUARE_BRACKET
+      | SECTION_SIGN
+      | SEMICOLON
+      | SOLIDUS
+      | TILDE  
+      | VERTICAL_LINE 
+  ;
 
 letters : letter+ ;
 
