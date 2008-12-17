@@ -1039,7 +1039,7 @@ public class PartParserTest {
     );
   }
 
-  @Test
+  @Test @Ignore
   public void chapterIsAnonymousWithHeaderIdentifier()
       throws RecognitionException
   {

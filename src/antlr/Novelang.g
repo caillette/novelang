@@ -94,7 +94,7 @@ part
       | p += blockQuote 
       | p += literal
     ) )*      
-    ( softbreak )*
+    ( mediumbreak | largebreak )? 
     EOF 
     -> ^( PART $p+ )
   ; 
