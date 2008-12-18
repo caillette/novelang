@@ -18,6 +18,7 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
+import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 
 /**
  * Test new parser features.
@@ -131,6 +132,15 @@ public class Antlr311SpecificPartParserTest {
     PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x (\"y \") z" ) ;
   }
   
- 
+  @Test
+  public void
+  paragraphBodyIsNestingEmphasisAndParenthesisAndInterpolatedClauseAndQuotesOnSeveralLines()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.createTree( 
+        "(x " + BREAK +
+        "y)" 
+    );
+  } 
 
 }

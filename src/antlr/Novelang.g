@@ -213,10 +213,10 @@ spreadBlockBody
               ( softbreak url softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak smallDashedListItem softbreak ) 
+                ( softbreak whitespace? smallDashedListItem softbreak ) 
           )
       | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlock ) =>
-                ( softbreak mixedDelimitedSpreadBlock )
+                ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlock )
           ( whitespace 
             mixedDelimitedSpreadBlock
           )*
