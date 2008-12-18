@@ -65,6 +65,26 @@ tokens {
 
 
 
+@lexer::members {
+ 
+  private novelang.parser.antlr.ProblemDelegate delegate = 
+      new novelang.parser.antlr.ProblemDelegate() ;
+ 
+  public void setProblemDelegate( novelang.parser.antlr.ProblemDelegate delegate ) {
+    this.delegate = delegate ;
+  }
+ 
+  @Override
+  public void reportError(org.antlr.runtime.RecognitionException e ) {
+    if( null == delegate ) {
+      super.reportError( e ) ;
+    } else {
+      delegate.report( e ) ;
+    }
+  }
+ 
+}
+
 
 @parser::members {
 private novelang.parser.antlr.GrammarDelegate delegate =
