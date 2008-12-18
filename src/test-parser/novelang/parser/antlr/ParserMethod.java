@@ -18,6 +18,7 @@ package novelang.parser.antlr;
 
 import novelang.common.ReflectionTools;
 import novelang.common.SyntacticTree;
+import novelang.common.LanguageTools;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,6 +44,17 @@ public class ParserMethod {
    * Returns the tree object contained by parser's result object.
    */
   public SyntacticTree getTree( NovelangParser parser ) {
+    final Object node = getNode( parser ) ;
+    
+    if( node instanceof CommonErrorNode ) {
+      final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
+      LanguageTools.rethrowUnchecked( errorNode.trappedException ); 
+    }
+    
+    return ( SyntacticTree ) node  ;
+  }
+
+  private Object getNode( NovelangParser parser ) {
     final Object antlrResult ;
     try {
       antlrResult = method.invoke( parser ) ;
@@ -51,23 +63,17 @@ public class ParserMethod {
     } catch ( InvocationTargetException e ) {
       throw new RuntimeException( e ) ;
     }
-    
+
     final Method getTreeMethod = ReflectionTools.getMethod(
         antlrResult.getClass(),
         "getTree"
     ) ;
 
-    
+
     final Object node = ReflectionTools.invoke( getTreeMethod, antlrResult ) ;
-    
-    if( node instanceof CommonErrorNode ) {
-      final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
-      throw new RuntimeException( errorNode.trappedException ) ;
-    }
-    
-    return ( SyntacticTree ) node  ;
+    return node;
   }
-  
+
   public SyntacticTree createTree( String text ) {
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     final SyntacticTree tree = getTree( parser.getAntlrParser() ) ;
@@ -83,7 +89,7 @@ public class ParserMethod {
   
   public void checkFails( String text ) {
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    getTree( parser.getAntlrParser() ) ;
+    getNode( parser.getAntlrParser() ) ;
     final String readableProblemList = 
         AntlrTestHelper.createProblemList( parser.getProblems() ) ;
     final boolean parserHasProblem = parser.hasProblem() ;

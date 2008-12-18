@@ -36,15 +36,15 @@ class DelegatingPartParser
   }
 
   public SyntacticTree parse() throws RecognitionException {
-    throw new UnsupportedOperationException( "parse: ANTLR-3.1.1 refactoring in progress" ) ;
-/*
+//    throw new UnsupportedOperationException( "parse: ANTLR-3.1.1 refactoring in progress" ) ;
     final Object tree = getAntlrParser().part().getTree();
     if( tree instanceof CommonErrorNode ) {
-      throw new RuntimeException( ( ( CommonErrorNode ) tree ).trappedException ) ;
+      getDelegate().report( ( ( CommonErrorNode ) tree ).trappedException ) ;
+//      throw new RuntimeException( ( ( CommonErrorNode ) tree ).trappedException ) ;
+      return null ;
     } else {
       return ( SyntacticTree ) tree ;
     }
-*/
   }
   
 }

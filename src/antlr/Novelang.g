@@ -22,9 +22,12 @@ options { output = AST ; }
 
 tokens {
   BLOCKQUOTE ;
+  BOOK ;
   CHAPTER ;
   EMPHASIS ;                       // Should become BLOCK_INSIDE_SOLIDUS_PAIRS
+  EXTENDED_WORD ;
   HARD_INLINE_LITERAL ;
+  IDENTIFIER ;
   INTERPOLATEDCLAUSE ;            // Should become BLOCK_INSIDE_HYPHEN_PAIRS
   INTERPOLATEDCLAUSE_SILENTEND ;  // Should become BLOCK_INSIDE_HYPHEN_PAIR_WITH_LOWERED_END
   LITERAL ;
@@ -38,7 +41,7 @@ tokens {
   SQUARE_BRACKETS ;  // Should become BLOCK_INSIDE_SQUARE_BRACKETS
   SUPERSCRIPT ;
   TITLE ;
-  URL ;
+  URL ;  
   WORD ;
   
   PUNCTUATION_SIGN ;
@@ -50,6 +53,14 @@ tokens {
   SIGN_EXCLAMATIONMARK ;
   SIGN_SEMICOLON ;
   SIGN_COLON ;  
+  
+  FUNCTION_CALL ;
+  FUNCTION_NAME ;
+  VALUED_ARGUMENT_MODIFIER ;
+  VALUED_ARGUMENT_PRIMARY ;
+  VALUED_ARGUMENT_FLAG ;
+  VALUED_ARGUMENT_ANCILLARY ;
+  VALUED_ARGUMENT_ASSIGNMENT ;
 }
 
 
@@ -974,6 +985,93 @@ escapedCharacter returns [ String unescaped ]
       ) ;
     }    
   ;
+
+
+
+blockIdentifier
+  :	REVERSE_SOLIDUS w = word 
+	  -> ^( IDENTIFIER { delegate.createTree( IDENTIFIER, $w.text ) } )
+  ;
+
+  
+// ==================
+// Book-related rules
+// ==================
+
+book
+  : ( mediumbreak | largebreak )?
+    functionCall
+    ( largebreak functionCall )*      
+    ( mediumbreak | largebreak )?
+    EOF 
+    -> ^( BOOK functionCall* )
+  ;
+  
+
+functionCall
+  : name = word 
+     (   whitespace url 
+       | WHITESPACE? SOFTBREAK WHITESPACE? paragraph
+     )?
+    ( mediumbreak ( ancillaryArgument | flagArgument | assignmentArgument ) )*
+    ->  ^( FUNCTION_CALL 
+            ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  
+            ^( VALUED_ARGUMENT_PRIMARY 
+                ^( PARAGRAPH_PLAIN paragraph )? 
+                url? 
+            )? 
+            ancillaryArgument*
+            flagArgument*
+            assignmentArgument*
+        )
+  ; 
+  
+ancillaryArgument
+  :	( PLUS_SIGN? blockIdentifier )
+      -> ^( VALUED_ARGUMENT_ANCILLARY ^( VALUED_ARGUMENT_MODIFIER PLUS_SIGN )? blockIdentifier )   
+  ;
+
+flagArgument    
+  : ( DOLLAR_SIGN flag = extendedWord )
+      -> ^( VALUED_ARGUMENT_FLAG { delegate.createTree( VALUED_ARGUMENT_FLAG, $flag.text ) } )     
+  ;
+
+assignmentArgument    
+  : ( DOLLAR_SIGN key = extendedWord EQUALS_SIGN value = extendedWord )
+      -> ^( VALUED_ARGUMENT_ASSIGNMENT 
+              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $key.text ) } 
+              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $value.text ) } 
+          )     
+  ;
+
+extendedWord
+  : w = rawExtendedWord 
+    -> ^( EXTENDED_WORD { delegate.createTree( EXTENDED_WORD, $w.text ) } )	
+  ;  
+
+/** This intermediary rule is useful as I didn't find how to
+ * concatenate Tokens from inside the rewrite rule.
+ */
+rawExtendedWord returns [ String text ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
+      | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
+      | s3 = digit { buffer.append( $s3.text ) ; }
+    )+
+    ( (   s5 = HYPHEN_MINUS { buffer.append( $s5.text ) ; }
+        | s5 = SOLIDUS { buffer.append( $s5.text ) ; }
+        | s5 = FULL_STOP { buffer.append( $s5.text ) ; }
+      )
+      (  s6 = hexLetter { buffer.append( $s6.text ) ; }
+       | s7 = nonHexLetter { buffer.append( $s7.text ) ; }
+       | s8 = digit { buffer.append( $s8.text ) ; }
+      )+ 
+    )*
+    { $text = buffer.toString() ; }
+  ;  
+
 
 
 
