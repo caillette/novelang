@@ -87,35 +87,8 @@
   </xsl:template>
 
 
-
-
   <xsl:template match="n:paragraph-speech" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >---</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  
-  <xsl:template match="n:paragraph-speech-continued" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >--+</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template match="n:paragraph-speech-escaped" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >--|</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="speech" >
-    <xsl:param name="speech-symbol" />
-<xsl:text> 
-
-</xsl:text>
-<xsl:value-of select="$speech-symbol" /><xsl:text> </xsl:text><xsl:if test="n:locutor" > <xsl:value-of select="n:locutor" /> :: </xsl:if> <xsl:apply-templates/>
-
-  </xsl:template>
-
+--- <xsl:apply-templates/></xsl:template>
 
 
 

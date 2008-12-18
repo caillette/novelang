@@ -117,6 +117,7 @@ part
       | p += paragraph 
       | p += blockQuote 
       | p += literal
+      | p += bigDashedListItem
     )
     ( largebreak (
         p += chapter 
@@ -124,6 +125,7 @@ part
       | p += paragraph 
       | p += blockQuote 
       | p += literal
+      | p += bigDashedListItem
     ) )*      
     ( mediumbreak | largebreak )? 
     EOF 

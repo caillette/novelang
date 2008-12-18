@@ -29,8 +29,8 @@ public class Antlr311SpecificPartParserTest {
   
   public static final String BREAK = "\n" ;
 
-  private final ParserMethod PARSERMETHOD_BIG_DASHED_LIST_ITEM =
-      new ParserMethod( "bigDashedListItem" ) ;
+  private final ParserMethod PARSERMETHOD_PART =
+      new ParserMethod( "part" ) ;
   private final ParserMethod PARSERMETHOD_SMALL_DASHED_LIST_ITEM =
       new ParserMethod( "smallDashedListItem" ) ;
   private final ParserMethod PARSERMETHOD_PARAGRAPH =
@@ -141,6 +141,40 @@ public class Antlr311SpecificPartParserTest {
         "(x " + BREAK +
         "y)" 
     );
-  } 
+  }
+
+  @Test
+  public void partIsBigDashedListItem() throws RecognitionException {
+    PARSERMETHOD_PART.createTree( "--- w." ) ;
+  }
+
+  @Test
+  public void paragraphHasSoftInlineLiteral() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "x  `y + 1`" ) ;
+  }
+
+  @Test
+  public void paragraphIsDoubleQuotesWithEndingPeriodInside() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "\"w.\"" ) ;
+  }
+
+  @Test
+  public void paragraphIsDoubleHyphenWithCommaInside() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "-- w, x --" ) ;
+  }
+
+  @Test
+  public void paragraphIsDoubleSolidusWithPeriodInside() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "//w.//" ) ;
+  }
+
+  @Test
+  public void paragraphIsDoubleSolidusWithPeriodThenWhitespaceInside() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "//w. //" ) ;
+  }
+
+
+
+
 
 }

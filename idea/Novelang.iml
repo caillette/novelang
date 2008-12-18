@@ -5,6 +5,9 @@
     <content url="file://$MODULE_DIR$/../configuration">
       <sourceFolder url="file://$MODULE_DIR$/../configuration/test" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/generated/antlr">
+      <sourceFolder url="file://$MODULE_DIR$/generated/antlr" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../src/main">
       <sourceFolder url="file://$MODULE_DIR$/../src/main" isTestSource="false" />
     </content>
