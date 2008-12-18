@@ -34,10 +34,7 @@ public class DelegatingBookParser
   }
 
   public SyntacticTree parse() throws RecognitionException {
-    throw new UnsupportedOperationException( "parse: ANTLR-3.1.1 refactoring in progress" ) ;
-/*
     return ( SyntacticTree ) getAntlrParser().book().getTree() ;
-*/
   }
 
 }

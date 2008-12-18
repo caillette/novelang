@@ -65,7 +65,7 @@ public class SupportedCharacters {
   ;
 
   private static Set< Character > loadSupportedCharacters() {
-    Set< Character > supportedCharacters = null ;
+    Set< Character > supportedCharacters = ImmutableSet.of() ;
     final InputStream resourceStream =
         SupportedCharacters.class.getResourceAsStream( ANTLR_TOKENS ) ;
     if( null == resourceStream ) {

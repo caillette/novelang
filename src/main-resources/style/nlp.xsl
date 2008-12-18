@@ -82,9 +82,7 @@
 
 
   <xsl:template match="n:url" >
-<xsl:text> 
-
-</xsl:text>
+<xsl:text/>
 <xsl:value-of select="text()" />
   </xsl:template>
 

@@ -31,6 +31,8 @@ import novelang.common.LocationFactory;
 import novelang.common.NodeKind;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.ImmutableList;
 
 /**
  * A {@code CommonTree} created by {@link novelang.parser.antlr.NovelangParser} implementing
@@ -71,7 +73,12 @@ public class CustomTree
   }
 
   public List< SyntacticTree > getChildren() {
-    return super.getChildren() ;
+    final List children = super.getChildren();
+    if( null == children ) {
+      return ImmutableList.of() ;
+    } else {
+      return children ;
+    }
 /*
     return new Iterable< SyntacticTree >() {
 
