@@ -1017,7 +1017,7 @@ functionCall
     ->  ^( FUNCTION_CALL 
             ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  
             ^( VALUED_ARGUMENT_PRIMARY 
-                ^( PARAGRAPH_PLAIN paragraph )? 
+                paragraph? 
                 url? 
             )? 
             ancillaryArgument*
