@@ -100,7 +100,7 @@ part
   ; 
   
 chapter 
-  : ( EQUALS_SIGN EQUALS_SIGN 
+  : ( ASTERISK ASTERISK ASTERISK
       ( whitespace? title )?
     )
     -> ^( CHAPTER title? )
