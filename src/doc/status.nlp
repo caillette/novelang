@@ -5,6 +5,11 @@ Novelang is yet stable with more thant 240 automated tests. It generates a PDF d
 Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version `1.0.0`. Keep informed reading the blog. 
 
 
+=== Version `0.14.0`
+
+Refactored ANTLR grammar for supporting some planned features. Known regression: some useful characters missing from font list.
+
+
 === Version `0.13.0`
 
 Better detection of text inconsistencies (lexer now reports problems).
