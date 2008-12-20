@@ -384,10 +384,28 @@ spreadBlockBodyNoDoubleQuotes
   ;  
 
 mixedDelimitedSpreadBlockNoDoubleQuotes
-  : ( word ( ( punctuationSign | delimitedSpreadblockNoDoubleQuotes )+ word? )? ) 
-  | ( ( punctuationSign | delimitedSpreadblockNoDoubleQuotes )+ word? ) 
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedSpreadblockNoDoubleQuotes 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedSpreadblockNoDoubleQuotes 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedSpreadblockNoDoubleQuotes 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
   ;
-  
 
 doubleQuotedMonoblock
  : ( DOUBLE_QUOTE whitespace?
@@ -417,9 +435,32 @@ monoblockBodyNoDoubleQuotes
   ;  
 
 mixedDelimitedMonoblockNoDoubleQuotes
-  : ( word ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? )? ) 
-  | ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? ) 
+//  : ( word ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? ) 
+//  ;
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedMonoblockNoDoubleQuotes 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedMonoblockNoDoubleQuotes 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedMonoblockNoDoubleQuotes 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
   ;
+  
   
 
 
@@ -465,9 +506,32 @@ spreadBlockBodyNoEmphasis
   ;  
 
 mixedDelimitedSpreadBlockNoEmphasis
-  : ( word ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? )? ) 
-  | ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? ) 
+//  : ( word ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? ) 
+//  ;
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedSpreadblockNoEmphasis 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedSpreadblockNoEmphasis 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedSpreadblockNoEmphasis 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
   ;
+
   
 
 emphasizedMonoblock
@@ -499,9 +563,32 @@ monoblockBodyNoEmphasis
   ;  
 
 mixedDelimitedMonoblockNoEmphasis
-  : ( word ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? )? ) 
-  | ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? ) 
+//  : ( word ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? ) 
+//  ;
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedMonoblockNoEmphasis 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedMonoblockNoEmphasis 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedMonoblockNoEmphasis 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
   ;
+
   
 
 // ===============================================
@@ -548,8 +635,30 @@ spreadBlockBodyNoHyphenPair
   ;  
 
 mixedDelimitedSpreadBlockNoHyphenPair
-  : ( word ( ( punctuationSign | delimitedSpreadblockNoHyphenPair )+ word? )? ) 
-  | ( ( punctuationSign | delimitedSpreadblockNoHyphenPair )+ word? ) 
+//  : ( word ( ( punctuationSign | delimitedSpreadblockNoHyphenPair )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedSpreadblockNoHyphenPair )+ word? ) 
+//  ;
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedSpreadblockNoHyphenPair 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedSpreadblockNoHyphenPair 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedSpreadblockNoHyphenPair 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
   ;
   
 
@@ -582,8 +691,30 @@ monoblockBodyNoHyphenPair
   ;  
 
 mixedDelimitedMonoblockNoHyphenPair
-  : ( word ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? )? ) 
-  | ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? ) 
+//  : ( word ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? ) 
+//  ;
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedMonoblockNoHyphenPair 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedMonoblockNoHyphenPair 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedMonoblockNoHyphenPair 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
   ;
   
 
