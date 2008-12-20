@@ -174,6 +174,22 @@ public class Antlr311SpecificPartParserTest {
   }
 
 
+  @Test
+  public void paragraphIsBigListItemWithColumnAndSoftInlineLiteral() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "--- w : `y`" ) ;
+  }
+
+  @Test
+  public void paragraphIsBigListItemWithSoftInlineLiteral() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "--- `y`" ) ;
+  }
+
+  @Test
+  public void paragraphIsDoubleQuotedWordsWithApostropheAndPeriod() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( "\"x'y.\"" ) ;
+  }
+
+
 
 
 

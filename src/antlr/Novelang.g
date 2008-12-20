@@ -217,10 +217,24 @@ delimitedMonoblock
 
 mixedDelimitedSpreadBlock  
   : ( word 
-      ( ( punctuationSign | delimitedSpreadblock ) word? )*
+      ( (   punctuationSign 
+          | delimitedSpreadblock 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
 	  ) 
-  | ( ( punctuationSign | delimitedSpreadblock )
-      ( word? ( punctuationSign | delimitedSpreadblock ) )*   
+  | ( (   punctuationSign 
+        | delimitedSpreadblock 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedSpreadblock 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
       word?
     ) 
   ;
@@ -266,8 +280,20 @@ monoblockBody
 
   
 mixedDelimitedMonoblock  
-  : ( word ( ( punctuationSign | delimitedMonoblock )+ word? )? ) 
-  | ( ( punctuationSign | delimitedMonoblock )+ word? ) 
+  : ( word ( 
+      (   punctuationSign 
+        | delimitedMonoblock 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )+ word? )? 
+    ) 
+  | ( (   punctuationSign 
+        | delimitedMonoblock 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )+ 
+      word? 
+    ) 
   ;
                 
 
