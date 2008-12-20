@@ -19,6 +19,7 @@ package novelang.common;
 import org.apache.commons.lang.NullArgumentException;
 import novelang.common.tree.ImmutableTree;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
 
 /**
  * Specific immplementation of a {@link novelang.common.tree.Tree}.
@@ -44,8 +45,14 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     return new SimpleTree( getText(), newChildren ) ;
   }
 
-  public Iterable<? extends SyntacticTree> getChildren() {
-    return super.getChildren();
+  public Iterable< ? extends SyntacticTree > getChildren() {
+
+    final Iterable<? extends SyntacticTree> children = super.getChildren() ;
+    if( null == children ) {
+      return Iterables.emptyIterable() ;
+    } else {
+      return children ;
+    }
   }
 
   public String getText() {
@@ -54,7 +61,12 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
 
   public String toStringTree() {
     final StringBuffer buffer = new StringBuffer() ;
-    buffer.append( "(" ) ;
+    
+    final boolean shouldWrap = getChildCount() > 0 ;
+
+    if( shouldWrap ) {
+      buffer.append( "(" ) ;
+    }
     buffer.append( getText() ) ;
 
     if( getChildCount() > 0 ) {
@@ -68,7 +80,9 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
         first = false ;
       }
     }
-    buffer.append( ")" ) ;
+    if( shouldWrap ) {
+      buffer.append( ")" ) ;
+    }
     return buffer.toString() ;
   }
 

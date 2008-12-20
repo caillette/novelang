@@ -18,6 +18,7 @@
 package novelang.parser.antlr;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.antlr.runtime.ClassicToken;
 import org.antlr.runtime.Token;
@@ -30,6 +31,8 @@ import novelang.common.LocationFactory;
 import novelang.common.NodeKind;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.ImmutableList;
 
 /**
  * A {@code CommonTree} created by {@link novelang.parser.antlr.NovelangParser} implementing
@@ -69,7 +72,14 @@ public class CustomTree
     return false ;
   }
 
-  public Iterable< SyntacticTree > getChildren() {
+  public List< SyntacticTree > getChildren() {
+    final List children = super.getChildren();
+    if( null == children ) {
+      return ImmutableList.of() ;
+    } else {
+      return children ;
+    }
+/*
     return new Iterable< SyntacticTree >() {
 
       public Iterator< SyntacticTree > iterator() {
@@ -93,6 +103,7 @@ public class CustomTree
         } ;
       }
     } ;
+*/
   }
 
   public CustomTree adopt( SyntacticTree... newChildren ) throws NullArgumentException {

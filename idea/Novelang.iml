@@ -2,13 +2,22 @@
 <module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/..">
+    <content url="file://$MODULE_DIR$/../configuration">
       <sourceFolder url="file://$MODULE_DIR$/../configuration/test" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/generated/antlr">
       <sourceFolder url="file://$MODULE_DIR$/generated/antlr" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../src/antlr" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/main">
       <sourceFolder url="file://$MODULE_DIR$/../src/main" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/main-resources">
       <sourceFolder url="file://$MODULE_DIR$/../src/main-resources" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/test">
       <sourceFolder url="file://$MODULE_DIR$/../src/test" isTestSource="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../src/test-resources">
       <sourceFolder url="file://$MODULE_DIR$/../src/test-resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../.git" />
       <excludeFolder url="file://$MODULE_DIR$/../antlrworks" />

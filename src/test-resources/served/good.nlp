@@ -10,11 +10,12 @@ Paragraph //with// "many" features -- not all (but many) -_.
 
 << 
 
-...Blockquote (with [brackets]) !
+... Blockquote (with [brackets]) !
 
 >>
 
-   
+  
+--- Big list item. 
 
 
 === Literal
