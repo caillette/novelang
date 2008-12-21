@@ -39,18 +39,5 @@ public class GrammarGenerator {
     boolean isRoot( SyntacticTree tree ) ;
 
   }
-
-
-  private static final Pattern ALL_TOKENS_PATTERN = 
-      Pattern.compile( "tokens(?:\\s*)\\{[^\\}]*\\}" ) ;
-  private static final Pattern ONE_TOKEN_PATTERN = 
-      Pattern.compile( "(?: *([A-Z_]+) *;)" );
-
-  public static Iterable< String > findAntlrTokens( String grammar ) {
-    final Matcher allTokensMatcher = ALL_TOKENS_PATTERN.matcher( grammar ) ;
-    final String allTokens = allTokensMatcher.group( 0 ) ;
-
-    throw new UnsupportedOperationException( "findAntlrTokens" ) ;
-  }
   
 }

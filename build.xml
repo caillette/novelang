@@ -66,7 +66,7 @@
       <include name="**/*.bin" />
       <include name="**/*.st" />
       <include name="**/*.ttf" />
-      <include name="**/*__.g" />
+      <include name="**/*.stg" />
     </patternset>
 
     <path id="deploy-libs" >

@@ -1,0 +1,36 @@
+group java ;
+
+header( package ) ::= "package <package> ;"
+
+enumName( name ) ::= "public enum <name> "
+
+enumItem( item ) ::= <<
+<if(item.punctuationSign)>
+<item.name>( true )
+<else>
+<item.name>
+<endif>
+>>
+
+enum( package, name, items ) ::= <<
+<header( package )>
+
+<enumName( name )> {
+  <items : { item | <enumItem( item )>} ; separator = ", \n" > ;
+}
+
+  private final boolean punctuationSign ;
+
+  private NodeKind() {
+    punctuationSign = false ;
+  }
+
+  NodeKind( boolean punctuationSign ) {
+    this.punctuationSign = punctuationSign ;
+  }
+
+  public boolean isPunctuationSign() {
+    return punctuationSign ;
+  }
+
+>>
