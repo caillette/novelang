@@ -1,0 +1,56 @@
+/*
+ * Copyright (C) 2008 Laurent Caillette
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package novelang.build;
+
+import novelang.common.SyntacticTree;
+
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+
+/**
+ * 
+ * @author Laurent Caillette
+ */
+public class GrammarGenerator {
+
+  /**
+   * TODO: make generated code implement this.
+   */
+  public interface NodeKindable {
+
+    boolean isPunctuationSign() ;
+
+    boolean isRoot( SyntacticTree tree ) ;
+
+  }
+
+
+  private static final Pattern ALL_TOKENS_PATTERN = 
+      Pattern.compile( "tokens(?:\\s*)\\{[^\\}]*\\}" ) ;
+  private static final Pattern ONE_TOKEN_PATTERN = 
+      Pattern.compile( "(?: *([A-Z_]+) *;)" );
+
+  public static Iterable< String > findAntlrTokens( String grammar ) {
+    final Matcher allTokensMatcher = ALL_TOKENS_PATTERN.matcher( grammar ) ;
+    final String allTokens = allTokensMatcher.group( 0 ) ;
+
+    throw new UnsupportedOperationException( "findAntlrTokens" ) ;
+  }
+  
+}
