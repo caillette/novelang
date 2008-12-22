@@ -113,26 +113,26 @@ public class TokenEnumerationGenerator {
     @Override
     public boolean equals( Object o ) {
       if( this == o ) {
-        return true;
+        return true ;
       }
       if( o == null || getClass() != o.getClass() ) {
         return false;
       }
 
-      Item item = ( Item ) o;
+      final Item item = ( Item ) o ;
 
-      if( name != null ? !name.equals( item.name ) : item.name != null ) {
-        return false;
+      if( name != null ? ! name.equals( item.name ) : item.name != null ) {
+        return false ;
       }
 
-      return true;
+      return true ;
     }
 
     @Override
     public int hashCode() {
-      int result = name != null ? name.hashCode() : 0;
-      result = 31 * result + ( punctuationSign ? 1 : 0 );
-      return result;
+      int result = name != null ? name.hashCode() : 0 ;
+      result = 31 * result + ( punctuationSign ? 1 : 0 ) ;
+      return result ;
     }
   }
 
