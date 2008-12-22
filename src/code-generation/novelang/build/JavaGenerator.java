@@ -27,12 +27,31 @@ import java.io.IOException;
 
 
 /**
+ * Single entry point for the build: generates all needed Java files from ANTLR grammar.
  * 
  * @author Laurent Caillette
  */
-public class GrammarGenerator {
+public class JavaGenerator {
+  
   private static final String JAVA_ENUMERATION = "NodeKind";
-  private static final String JAVA_SUFFIX = ".java";
+  protected static final String JAVA_SUFFIX = ".java";
+
+  private final String grammar ;
+  private final String packageName ;
+  private final String className ;
+  private final File targetDirectory ;
+
+  public JavaGenerator( 
+      String grammar, 
+      String packageName, 
+      String className, 
+      File targetDirectory 
+  ) {
+    this.grammar = grammar;
+    this.packageName = packageName;
+    this.className = className;
+    this.targetDirectory = targetDirectory;
+  }
 
   public static String readGrammar( File grammarFile ) throws IOException {
     return IOUtils.toString( new FileInputStream( grammarFile ) ) ;
@@ -57,7 +76,7 @@ public class GrammarGenerator {
       
     } else {
       throw new IllegalArgumentException( 
-          "Usage: " + ClassUtils.getShortClassName( GrammarGenerator.class ) + 
+          "Usage: " + ClassUtils.getShortClassName( JavaGenerator.class ) + 
           " <grammar-file> <target-directory>"
       ) ;
     }
