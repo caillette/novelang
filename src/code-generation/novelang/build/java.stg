@@ -12,12 +12,15 @@ enumItem( item ) ::= <<
 <endif>
 >>
 
-enum( package, name, items ) ::= <<
+enum( package, name, items, generatorName, generationTimestamp ) ::= <<
 <header( package )>
 
+/**
+ * Generated on <generationTimestamp>
+ * @author <generatorName>
+ */
 <enumName( name )> {
   <items : { item | <enumItem( item )>} ; separator = ", \n" > ;
-}
 
   private final boolean punctuationSign ;
 
@@ -33,4 +36,5 @@ enum( package, name, items ) ::= <<
     return punctuationSign ;
   }
 
+}
 >>

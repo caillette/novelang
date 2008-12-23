@@ -36,21 +36,6 @@ public class TokenEnumerationGeneratorTest {
       LoggerFactory.getLogger( TokenEnumerationGeneratorTest.class ) ;
 
   @Test
-  public void testLoadTemplate() {
-    final String generated = TokenEnumerationGenerator.generateJavaEnumeration(
-        "novelang.parser",
-        "NodeKind",
-        ImmutableList.of(
-            new TokenEnumerationGenerator.Item( "FOO" ),
-            new TokenEnumerationGenerator.Item( "BAR" ),
-            new TokenEnumerationGenerator.Item( "SIGN_BAZ" )
-        )
-    ) ;
-    LOGGER.debug( "Generated: \n{}", generated ) ;
-
-  }
-
-  @Test
   public void testFindTokens() {
     final String tokensDeclaration =
         "SOME_UNUSUED_STUFF ; \n" +

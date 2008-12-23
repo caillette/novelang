@@ -20,13 +20,10 @@ package novelang.build;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.IOException;
+import java.io.File;
 
-import org.antlr.stringtemplate.CommonGroupLoader;
 import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateErrorListener;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.antlr.stringtemplate.StringTemplateGroupLoader;
-import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
@@ -39,28 +36,34 @@ import com.google.common.collect.Lists;
  *
  * @author Laurent Caillette
  */
-public class TokenEnumerationGenerator {
+public class TokenEnumerationGenerator extends JavaGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( TokenEnumerationGenerator.class ) ;
 
+
+
+  public TokenEnumerationGenerator(
+      File grammarFile,
+      String packageName,
+      String className,
+      File targetDirectory
+  ) throws IOException
+  {
+    super( grammarFile, packageName, className, targetDirectory ) ;
+  }
+
+  protected String generateCode() {
+    final Iterable< Item > enumerationItems = findAntlrTokens( getGrammar() ) ;
+    return generateJavaEnumeration( enumerationItems ) ;
+  }
+
   private static final Pattern ALL_TOKENS_PATTERN =
       Pattern.compile( "tokens(?:\\s*)\\{[^\\}]*\\}" ) ;
+
   private static final Pattern ONE_TOKEN_PATTERN =
       Pattern.compile( "(?: *([A-Z_]+) *;)" ) ;
 
-
-  private static final StringTemplateErrorListener STRING_TEMPLATE_ERROR_LISTENER =
-      new StringTemplateErrorListener() {
-        public void error( String s, Throwable throwable ) {
-          throw new RuntimeException( s, throwable ) ;
-        }
-        public void warning( String s ) {
-          throw new RuntimeException( s ) ;
-        }
-      }
-  ;
-
-  public static Iterable< Item > findAntlrTokens( String grammar ) {
+  protected static Iterable< Item > findAntlrTokens( String grammar ) {
     final Matcher allTokensMatcher = ALL_TOKENS_PATTERN.matcher( grammar ) ;
     if( ! allTokensMatcher.find() ) {
       LOGGER.warn( "No token found" ) ;
@@ -70,7 +73,7 @@ public class TokenEnumerationGenerator {
 
     final Matcher eachTokenMatcher = ONE_TOKEN_PATTERN.matcher( allTokens ) ;
     final List< Item > tokenList = Lists.newLinkedList() ;
-    
+
     while( eachTokenMatcher.find() ) {
       tokenList.add( new Item( eachTokenMatcher.group( 1 ) ) ) ;
     }
@@ -78,25 +81,11 @@ public class TokenEnumerationGenerator {
     return ImmutableList.copyOf( tokenList ) ;
   }
 
-  public static String generateJavaEnumeration(
-      String packageName,
-      String className,
+  protected String generateJavaEnumeration(
       Iterable< Item > enumerationItems
   ) {
-    final String templateDirectory = 
-        ClassUtils.getPackageName( TokenEnumerationGenerator.class ).replace( '.', '/' ) ;
-    LOGGER.info( "Loading StringTemplates from classpath directory: '{}'", templateDirectory ) ;
-
-    final StringTemplateGroupLoader loader =
-        new CommonGroupLoader( templateDirectory, STRING_TEMPLATE_ERROR_LISTENER ) ;
-    StringTemplateGroup.registerGroupLoader( loader ) ;
-    final StringTemplateGroup templates = StringTemplateGroup.loadGroup( "java" ) ;
-    final StringTemplate javaEnum = templates.getInstanceOf( "enum" ) ;
-
-    javaEnum.setAttribute( "package", packageName ) ;
-    javaEnum.setAttribute( "name", className ) ;
+    final StringTemplate javaEnum = createStringTemplate( "enum" ) ;
     javaEnum.setAttribute( "items", enumerationItems ) ;
-
     return javaEnum.toString() ;
 
   }
