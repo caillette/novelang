@@ -21,11 +21,11 @@ enum( package, name, items ) ::= <<
 
   private final boolean punctuationSign ;
 
-  private NodeKind() {
+  private <name>() {
     punctuationSign = false ;
   }
 
-  NodeKind( boolean punctuationSign ) {
+  <name>( boolean punctuationSign ) {
     this.punctuationSign = punctuationSign ;
   }
 
