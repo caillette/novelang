@@ -163,18 +163,6 @@
     </antcall>
   </target>
 
-  <target
-      name="generate-antlr-idea-debug"
-      depends="init"
-      description="Generate ANTLR parser in IDEA's subdir with debug features"
-  >
-    <antcall target="generate-antlr" >
-      <param name="target.antlr.generated.dir" value="${idea.antlr.generated.dir}" />
-      <param name="target.antlr.generated.debug" value="-debug" />
-    </antcall>
-  </target>
-
-
 
   <target name="compile-main" depends="init, create-target-dir" >
 
