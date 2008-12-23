@@ -90,6 +90,7 @@
   <target name="create-target-dir" depends="init" >
     <mkdir dir="${target.dir}" />
     <mkdir dir="${target.mainclasses.dir}" />
+    <mkdir dir="${target.buildclasses.dir}" />
   </target>
 
 
@@ -104,6 +105,53 @@
     =======  
   -->
 
+  <target
+      name="code-generator"
+      depends="init, create-target-dir"
+      description="Compile Java classes generating ancillary Java code relative to ANTLR grammar"
+  >
+    <javac
+        destdir="${target.buildclasses.dir}"
+        source="${compiler.source}"
+        target="${compiler.target}"
+        debug="on"
+        debuglevel="lines,vars,source"
+    >
+      <classpath>
+        <path refid="build-libs" />
+        <path refid="deploy-libs" />
+      </classpath>
+      <src path="${source.codegeneration.java.dir}" />
+    </javac>
+
+    <copy todir="${target.buildclasses.dir}" >
+      <fileset dir="${source.codegeneration.java.dir}" >
+        <include name="**/*.stg"  />
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target
+      name="run-code-generator"
+      depends="init, code-generator"
+      description="This should superceded generate-antlr target in a near future"
+  >
+    <java
+        classname="novelang.build.JavaGenerator"
+        failonerror="true"
+        fork="false"
+    >
+      <classpath refid="deploy-libs" />
+      <classpath refid="build-libs" />
+      <classpath path="${target.buildclasses.dir}" />
+      <arg value="${source.main.antlr.dir}/${source.main.antlr.maingrammar}" />
+      <arg value="${basedir.fullpath}/${target.antlr.generated.dir}" />
+    </java>
+  </target>
+
+
+
   <target name="generate-antlr" depends="init, create-target-dir" >
 
     <pathconvert
@@ -117,7 +165,7 @@
 
     <property
         name="generated-dir"
-        value="${basedir.fullpath}/${target.antlr.generated.dir}"
+        value="${basedir.fullpath}/${target.antlr.generated.dirwithpackage}"
     />
 
     <echo>generated-dir=${generated-dir}</echo>
@@ -159,7 +207,6 @@
   >
     <antcall target="generate-antlr" >
       <param name="target.antlr.generated.dir" value="${idea.antlr.generated.dir}" />
-      <param name="target.antlr.generated.debug" value="" />
     </antcall>
   </target>
 

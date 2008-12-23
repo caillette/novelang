@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../src/main-resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../src/test-code-generation" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../src/test-resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../.git" />
       <excludeFolder url="file://$MODULE_DIR$/../antlrworks" />
