@@ -95,6 +95,8 @@
       </classpath>     
     </available>
     
+    <echo message="target-buildclass-exists=${target-buildclass-exists}" />
+    
   </target>
 
   <target name="create-target-dir" depends="init" >
@@ -163,60 +165,12 @@
 
 
 
-  <target name="generate-antlr" depends="init, create-target-dir" >
-
-    <pathconvert
-        refid="antlr-grammars"
-        property="antlr-main-sources"
-        dirsep="/"
-        pathsep=" "
-    >
-      <map from="${basedir.fullpath}/${source.main.antlr.dir}/" to="" /> 
-    </pathconvert>
-
-    <property
-        name="generated-dir"
-        value="${basedir.fullpath}/${target.antlr.generated.dirwithpackage}"
-    />
-
-    <echo>generated-dir=${generated-dir}</echo>
-    <echo>target.antlr.generated.dir=${target.antlr.generated.dir}</echo>
-
-    <property
-        name="line"
-        value="-fo ${generated-dir} ${antlr-main-sources}"
-    />
-
-    <echo>Command line= ${line}</echo>
-
-    <java
-        classname="org.antlr.Tool"
-        failonerror="true"
-        fork="true"
-        dir="${source.main.antlr.dir}"
-    >
-      <classpath refid="build-libs" />
-      <arg line="${line}" />
-    </java>
-
-    <!--
-      This won't be needed once ANTLR will handle headers with imports correctly:
-      http://www.antlr.org:8080/pipermail/antlr-interest/2008-October/031241.html
-    -->
-    <replace dir="${generated-dir}"
-        value="package ${target.antlr.generated.package} ; import org.antlr.runtime.* ;"
-    >
-      <replacetoken>import org.antlr.runtime.*;</replacetoken>
-    </replace>
-
-  </target>
-
   <target
       name="generate-antlr-idea"
       depends="init"
       description="Generate ANTLR parser in IDEA's subdir"
   >
-    <antcall target="generate-antlr" >
+    <antcall target="run-code-generator" >
       <param name="target.antlr.generated.dir" value="${idea.antlr.generated.dir}" />
     </antcall>
   </target>
@@ -249,16 +203,11 @@
         <patternset refid="resource-patterns" />
       </fileset>
     </copy>
-    <copy todir="${target.mainclasses.generatedtokens.dir}" >
-      <fileset dir="${target.antlr.generated.dir}" >
-        <patternset refid="resource-patterns" />
-      </fileset>
-    </copy>
 
   </target>
 
 
-  <target name="compile-tests" depends="generate-antlr, compile-main" >
+  <target name="compile-tests" depends="run-code-generator, compile-main" >
     
     <mkdir dir="${target.testclasses.dir}" />    
 
