@@ -45,8 +45,9 @@ public abstract class JavaGenerator {
 
   private static final String JAVA_ENUMERATION = "NodeKind";
 
-  protected static final String JAVA_SUFFIX = ".java" ;
+  protected static final String JAVA_EXTENSION = ".java" ;
 
+  private final File grammarFile ;
   private final String grammar ;
   private final String packageName ;
   private final String className ;
@@ -61,25 +62,66 @@ public abstract class JavaGenerator {
       File targetDirectory 
   ) throws IOException
   {
+    this.grammarFile = grammarFile.getCanonicalFile() ;
     this.grammar = readGrammar( grammarFile ) ;
     this.packageName = packageName ;
     this.className = className ;
-    final String relativePath = packageName.replace( '.', '/' ) ;
-    this.targetFile = new File( targetDirectory, relativePath + "/" + className + JAVA_SUFFIX ) ;
     this.generatorName = getClass().getName() ;
     this.generationTimestamp = new Date().toString() ;
+
+    final String relativePath = packageName.replace( '.', '/' ) ;
+    this.targetFile = new File(
+        targetDirectory,
+        relativePath + "/" + className + JAVA_EXTENSION
+    ).getCanonicalFile() ;
   }
 
   public final String getGrammar() {
     return grammar;
   }
 
-  public final void generate() throws IOException {
+  public File getGrammarFile() {
+    return grammarFile ;
+  }
+
+  public final File getTargetFile() {
+    return targetFile ; 
+  }
+
+  public final String getPackageName() {
+    return packageName ;
+  }
+
+  public String getClassName() {
+    return className ;
+  }
+
+  public void generate() throws IOException {
     final String code = generateCode() ;
+    createDirectory( targetFile ) ;
     IOUtils.write(
         code,
         new FileOutputStream( targetFile )
     ) ;
+  }
+
+  /**
+   * Creates given directory, or the directory of a "leaf" file.
+   *  
+   * @param target non-null object representing a leaf file or a directory.
+   * 
+   * @throws IOException
+   */
+  protected final void createDirectory( File target ) throws IOException {
+    final File targetDirectory ;
+    if( target.isDirectory() ) {
+      targetDirectory = target ;
+    } else {
+      targetDirectory = target.getParentFile().getCanonicalFile() ;
+    }
+    if( ! targetDirectory.exists() && ! targetDirectory.mkdirs() ) {
+      throw new IOException( "Could not create: '" + targetDirectory.getAbsolutePath() + "'" ) ;
+    }
   }
 
   protected abstract String generateCode() throws IOException ;
@@ -94,12 +136,23 @@ public abstract class JavaGenerator {
     
     if( args.length == 2 ) {
       final File grammar = new File( args[ 0 ] ) ;
-      final File targetDirectory = new File( args[ 1 ] ) ;
+      final File targetDirectory = new File( args[ 1 ] ).getCanonicalFile() ;
+
+      if ( ! targetDirectory.exists() && ! targetDirectory.mkdirs() ) {
+        throw new IOException( "Could not create: '" + targetDirectory.getPath() + "'" ) ;
+      }
 
       new TokenEnumerationGenerator(
           grammar,
           "novelang.parser",
           JAVA_ENUMERATION,
+          targetDirectory
+      ).generate() ;
+      
+      new AntlrGenerator( 
+          grammar,
+          "novelang.parser",
+          "Novelang",
           targetDirectory
       ).generate() ;
 
