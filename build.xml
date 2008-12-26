@@ -85,6 +85,16 @@
       <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
     </path>
 
+    <available 
+        classname="${target.buildclasses.presencecondition}"
+        property="target-buildclass-exists"
+        value="false"
+    >
+      <classpath>
+        <pathelement path="${target.buildclasses.dir}" />
+      </classpath>     
+    </available>
+    
   </target>
 
   <target name="create-target-dir" depends="init" >
@@ -106,9 +116,10 @@
   -->
 
   <target
-      name="code-generator"
+      name="compile-code-generator"
       depends="init, create-target-dir"
       description="Compile Java classes generating ancillary Java code relative to ANTLR grammar"
+      unless="target-buildclass-exists"
   >
     <javac
         destdir="${target.buildclasses.dir}"
@@ -134,7 +145,7 @@
 
   <target
       name="run-code-generator"
-      depends="init, code-generator"
+      depends="init, compile-code-generator"
       description="This should superceded generate-antlr target in a near future"
   >
     <java
