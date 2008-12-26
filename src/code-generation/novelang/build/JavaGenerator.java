@@ -54,6 +54,9 @@ public abstract class JavaGenerator {
   private final File targetFile ;
   private final String generatorName ;
   private final String generationTimestamp ;
+  private static final String GRAMMAR_CLASSNAME = "Novelang";
+  private static final String GENERIC_PARSER_PACKAGENAME = "novelang.parser";
+  private static final String ANTLR_PARSER_PACKAGENAME = GENERIC_PARSER_PACKAGENAME + ".antlr";
 
   public JavaGenerator (
       File grammarFile,
@@ -144,15 +147,15 @@ public abstract class JavaGenerator {
 
       new TokenEnumerationGenerator(
           grammar,
-          "novelang.parser",
+          GENERIC_PARSER_PACKAGENAME,
           JAVA_ENUMERATION,
           targetDirectory
       ).generate() ;
       
       new AntlrGenerator( 
           grammar,
-          "novelang.parser",
-          "Novelang",
+          ANTLR_PARSER_PACKAGENAME,
+          GRAMMAR_CLASSNAME,
           targetDirectory
       ).generate() ;
 
