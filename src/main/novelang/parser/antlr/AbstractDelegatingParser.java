@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
-//import novelang.parser.antlr. NovelangParser;
+import novelang.parser.antlr.NovelangParser;
 //import NovelangLexer;
 //import AllTokens;
 
