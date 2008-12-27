@@ -41,10 +41,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 import novelang.common.metadata.TreeMetadata;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
+import novelang.rendering.xslt.validate.SaxMulticaster;
+import novelang.rendering.xslt.validate.ExpandedNameVerifier;
+import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 
 /**
  * @author Laurent Caillette
@@ -149,7 +153,12 @@ public class XslWriter extends XmlWriter {
     final TemplatesHandler templatesHandler = saxTransformerFactory.newTemplatesHandler() ;
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
-    reader.setContentHandler( templatesHandler ) ;
+
+    final SaxMulticaster multicaster = new SaxMulticaster() ;
+    multicaster.add( templatesHandler ) ;
+    multicaster.add( new SaxConnectorForVerifier( NAMESPACE_URI ) ) ;
+
+    reader.setContentHandler( multicaster ) ;
     reader.setEntityResolver( entityResolver ) ;
     reader.parse( new InputSource( resourceLoader.getInputStream( xslFileName ) ) ) ;
 
