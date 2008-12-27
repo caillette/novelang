@@ -17,23 +17,20 @@
 
 package novelang.build;
 
-import java.util.List;
-import java.util.Collection;
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.IOException;
-import java.io.File;
-import java.io.InputStream;
 
 import org.antlr.stringtemplate.StringTemplate;
+import org.apache.commons.lang.CharUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharUtils;
-import com.google.common.collect.*;
 import com.google.common.base.Function;
-import com.google.common.base.Nullable;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 
 /**
@@ -63,7 +60,7 @@ public class SupportedCharactersGenerator extends JavaGenerator {
     ) ;
   } 
 
-  protected String generateJavaEnumeration( Set< String > characters ) {
+  protected String generateJavaEnumeration( Set< Item > characters ) {
     final StringTemplate javaEnum = createStringTemplate( "setOfCharacters" ) ;
     javaEnum.setAttribute( "characters", characters ) ;
     return javaEnum.toString() ;
@@ -77,21 +74,48 @@ public class SupportedCharactersGenerator extends JavaGenerator {
     LOGGER.debug( "Crafted regex: " + TOKENS_DECLARATIONS.toString() ) ;
   }
 
+  public static final class Item {
+
+    public final String declaration ;
+    public final String comment ;
+
+    public Item( String declaration, String comment ) {
+      this.declaration = declaration;
+      this.comment = comment;
+    }
+  }
+
 
 // ======  
 // Escape
 // ======  
   
-  private static final Function<Character,String> CHAR_TO_UNICODE = 
-      new Function< Character, String >() {
-        public String apply( Character character ) {
-          if( Character.)
-          return CharUtils.unicodeEscaped( character ) ;
+  private static final Function< Character, Item > CHAR_TO_UNICODE =
+      new Function< Character, Item >() {
+        public Item apply( Character character ) {
+          if( '\\' == character ) {
+            // Need special treatment, or it escapes the rest of generated code!
+            return new Item( "\\\\", null ) ;
+          } else {
+            return new Item( CharUtils.unicodeEscaped( character ), comment( character ) ) ;
+          }
         }
       }
   ;
-  
-  public static Set< String > convertToEscapedUnicode( Set< Character > characters ) {
+
+  private static String comment( Character character ) {
+    if( character < 128
+     && character != '\t'
+     && character != '\b' 
+     && character != '\n'
+     && character != '\\'
+  ) {
+      return "" + character ;
+    }
+    return null ;
+  }
+
+  public static Set< Item > convertToEscapedUnicode( Set< Character > characters ) {
     // We cannot apply a function directly to a Set (because results may imply duplicates).
     return ImmutableSet.copyOf( 
         Lists.transform( Lists.newArrayList( characters ), 

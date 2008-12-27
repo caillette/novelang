@@ -107,6 +107,7 @@ public abstract class JavaGenerator {
         code,
         new FileOutputStream( targetFile )
     ) ;
+    LOGGER.info( "Wrote {}", targetFile.getAbsolutePath() ) ;
   }
 
   /**
@@ -159,15 +160,13 @@ public abstract class JavaGenerator {
           CHARACTER_SET_CLASSNAME, 
           targetDirectory
       ).generate() ;
-      
-/*
-      new AntlrGenerator( 
+
+      new AntlrGenerator(
           grammar,
           ANTLR_PARSER_PACKAGENAME,
           GRAMMAR_CLASSNAME,
           targetDirectory
       ).generate() ;
-*/
 
     } else {
       throw new IllegalArgumentException( 

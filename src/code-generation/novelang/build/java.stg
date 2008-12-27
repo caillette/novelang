@@ -99,18 +99,30 @@ import com.google.common.base.Preconditions ;
 >>  
 
 
-
+characterItem( item ) ::= <<
+  '<item.declaration>'<if( item.comment )> /* <item.comment> */<endif>
+>>
 
 setOfCharacters( package, name, characters, generatorName, generationTimestamp ) ::= <<
 <header( package )>
 
-public Set< Character > <name> {
+import java.util.Set ;
+import com.google.common.collect.ImmutableSet ;
 
-  private static final Set< Character > CHARACTERS = ImmutableSet.of(   
-    <characters : { character | '<character>'} ; separator = ", \n" > ;
+/**
+ * Don't modify this class manually nor check it in the VCS.
+ * Instead, run code generation which takes tokens from ANTLR grammar.
+ *
+ * Generated on <generationTimestamp>
+ * @author <generatorName>
+ */
+public class <name> {
+
+  private static final Set\< Character > CHARACTERS = ImmutableSet.of(
+    <characters : { character | <characterItem( character )>} ; separator = ", \n" > 
   ) ;
 
-  public static synchronized Set< Character > getSupportedCharacters() {
+  public static synchronized Set\< Character > getSupportedCharacters() {
     return CHARACTERS ;
   }
 

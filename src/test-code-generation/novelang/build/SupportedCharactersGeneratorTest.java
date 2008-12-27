@@ -22,8 +22,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.parser.SupportedCharacters;
-import novelang.parser.SupportedCharactersTest;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -82,11 +80,11 @@ public class SupportedCharactersGeneratorTest {
 
   @Test
   public void convertToEscapedUnicode() {
-    final Set< Character > characters = ImmutableSet.of( '\u00F6' ) ;
-    final Set< String > escapedCharacters = 
+    final Set< Character > characters = ImmutableSet.of( '\u00f6' ) ;
+    final Set<SupportedCharactersGenerator.Item> escapedCharacters = 
         SupportedCharactersGenerator.convertToEscapedUnicode( characters ) ;
     assertEquals( 1, escapedCharacters.size() ) ;
-    assertEquals( "\\u00f6", escapedCharacters.iterator().next() ) ;
+    assertEquals( "\\u00f6", escapedCharacters.iterator().next().declaration ) ;
     
   }
 }
