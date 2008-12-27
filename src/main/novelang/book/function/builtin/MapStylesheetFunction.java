@@ -29,7 +29,7 @@ import novelang.book.function.FunctionDefinition;
 import static novelang.book.function.FunctionTools.verify;
 import novelang.book.function.IllegalFunctionCallException;
 import novelang.common.Location;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;

@@ -25,7 +25,7 @@ import novelang.common.Renderable;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.StylesheetMap;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 import novelang.parser.antlr.TreeFixture;
 import novelang.parser.Encoding;
 

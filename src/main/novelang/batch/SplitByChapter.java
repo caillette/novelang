@@ -34,7 +34,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableList;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.MetadataHelper;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 import novelang.common.Problem;
 import novelang.common.metadata.TreeMetadata;
 import novelang.common.SyntacticTree;

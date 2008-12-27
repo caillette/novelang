@@ -47,7 +47,7 @@ public class TokenEnumerationGeneratorTest {
     final Iterable<TokenEnumerationGenerator.Item> tokens =
         TokenEnumerationGenerator.findAntlrTokens( tokensDeclaration ) ;
     final List< TokenEnumerationGenerator.Item > tokenList = ImmutableList.copyOf( tokens ) ;
-    Assert.assertEquals( 2, tokenList.size() ) ;
+    // Don't assert on token number because of synthetic tokens.
     Assert.assertTrue(
         "Got: " + tokenList,
         tokenList.contains( new TokenEnumerationGenerator.Item( "STUFF" ) ) 

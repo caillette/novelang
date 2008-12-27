@@ -28,7 +28,7 @@ import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.book.Environment;
 import novelang.common.Location;
-import static novelang.common.NodeKind.*;
+import static novelang.parser.NodeKind.*;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;

@@ -23,12 +23,11 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import com.google.common.collect.ImmutableList;
 import novelang.common.metadata.MetadataHelper;
-import static novelang.common.NodeKind.*;
+import static novelang.parser.NodeKind.*;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.metadata.TreeMetadata;

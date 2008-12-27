@@ -17,6 +17,8 @@
 
 package novelang.common;
 
+import novelang.parser.NodeKind;
+
 import java.util.Iterator;
 
 /**
@@ -27,9 +29,9 @@ public class IdentifierHelper {
   private IdentifierHelper() { }
 
   /**
-   * Concatenates subtokens of a {@link novelang.common.NodeKind#IDENTIFIER}
+   * Concatenates subtokens of a {@link novelang.parser.NodeKind#IDENTIFIER}
    * (skipping the intermediary level defining what subtokens are made of,
-   * like {@link novelang.common.NodeKind#WORD}s).
+   * like {@link novelang.parser.NodeKind#WORD}s).
    *
    * @param tokenOwner a {@code Tree} containing all subtokens to create the identifier from.
    */

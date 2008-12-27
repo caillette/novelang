@@ -20,8 +20,8 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import novelang.common.NodeKind;
-import static novelang.common.NodeKind.*;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;

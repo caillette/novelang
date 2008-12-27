@@ -24,7 +24,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static novelang.common.NodeKind.*;
+import static novelang.parser.NodeKind.*;
 import novelang.common.SyntacticTree;
 import novelang.parser.Escape;
 import static novelang.parser.antlr.AntlrTestHelper.*;

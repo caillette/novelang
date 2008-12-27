@@ -20,16 +20,15 @@ package novelang.rendering;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import novelang.common.metadata.MetadataHelper;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.LanguageTools;
-import static novelang.common.NodeKind.WORD;
+import static novelang.parser.NodeKind.WORD;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific

@@ -18,8 +18,8 @@
 package novelang.common;
 
 import org.apache.commons.lang.ClassUtils;
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import novelang.parser.NodeKind;
 
 /**
   * Represents the stack of Node Kinds preceding current tree.

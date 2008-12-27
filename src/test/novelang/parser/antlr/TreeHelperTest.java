@@ -18,8 +18,8 @@
 package novelang.parser.antlr;
 
 import org.junit.Test;
-import static novelang.common.NodeKind.TITLE;
-import static novelang.common.NodeKind.WORD;
+import static novelang.parser.NodeKind.TITLE;
+import static novelang.parser.NodeKind.WORD;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**

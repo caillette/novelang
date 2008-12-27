@@ -20,8 +20,8 @@ package novelang.rendering;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import novelang.common.NodeKind;
-import static novelang.common.NodeKind.*;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
 
 /**
  * Determines when a whitespace should be added between two Nodes of known type.

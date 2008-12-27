@@ -18,6 +18,7 @@
 package novelang.build;
 
 import java.util.List;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.IOException;
@@ -56,6 +57,14 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     final Iterable< Item > enumerationItems = findAntlrTokens( getGrammar() ) ;
     return generateJavaEnumeration( enumerationItems ) ;
   }
+  
+  private static final Collection< Item > SYNTHETIC_ITEMS = ImmutableList.of( 
+      new Item( "_STYLE" ), 
+      new Item( "_SPEECH_SEQUENCE" ), 
+      new Item( "_META_TIMESTAMP" ),
+      new Item( "PARAGRAPH_SPEECH_CONTINUED" ), 
+      new Item( "PARAGRAPH_SPEECH_ESCAPED" ) 
+  ) ;
 
   private static final Pattern ALL_TOKENS_PATTERN =
       Pattern.compile( "tokens(?:\\s*)\\{[^\\}]*\\}" ) ;
@@ -77,6 +86,8 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     while( eachTokenMatcher.find() ) {
       tokenList.add( new Item( eachTokenMatcher.group( 1 ) ) ) ;
     }
+    
+    tokenList.addAll( SYNTHETIC_ITEMS ) ;
 
     return ImmutableList.copyOf( tokenList ) ;
   }

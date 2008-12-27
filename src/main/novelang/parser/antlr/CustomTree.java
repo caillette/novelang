@@ -17,7 +17,6 @@
 
 package novelang.parser.antlr;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.antlr.runtime.ClassicToken;
@@ -28,10 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.ImmutableList;
 
 /**

@@ -27,7 +27,7 @@ import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
 import novelang.book.function.IllegalFunctionCallException;
 import novelang.common.Location;
-import static novelang.common.NodeKind.BOOK;
+import static novelang.parser.NodeKind.BOOK;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
@@ -35,7 +35,6 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.antlr.BookParserTest;
 import novelang.rendering.RenditionMimeType;
 import novelang.loader.ResourceName;
-import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
 
 /**

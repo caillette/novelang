@@ -19,6 +19,7 @@ package novelang.common;
 
 import novelang.common.tree.Tree;
 import novelang.common.tree.StorageTypeProvider;
+import novelang.parser.NodeKind;
 
 /**
  * Narrows the contract of an Abstract Syntax Tree.

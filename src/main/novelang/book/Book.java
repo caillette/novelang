@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import novelang.common.Problem;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 import novelang.common.tree.Treepath;
 import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;

@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import org.junit.Assert;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.SimpleTree;

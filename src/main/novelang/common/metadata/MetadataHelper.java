@@ -24,7 +24,7 @@ import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import novelang.common.SyntacticTree;
-import novelang.common.NodeKind;
+import novelang.parser.NodeKind;
 
 /**
  * @author Laurent Caillette
