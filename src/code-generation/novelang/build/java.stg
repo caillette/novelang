@@ -95,7 +95,24 @@ import com.google.common.base.Preconditions ;
     }
   }
 
+}
+>>  
 
+
+
+
+setOfCharacters( package, name, characters, generatorName, generationTimestamp ) ::= <<
+<header( package )>
+
+public Set< Character > <name> {
+
+  private static final Set< Character > CHARACTERS = ImmutableSet.of(   
+    <characters : { character | '<character>'} ; separator = ", \n" > ;
+  ) ;
+
+  public static synchronized Set< Character > getSupportedCharacters() {
+    return CHARACTERS ;
+  }
 
 }
 >>

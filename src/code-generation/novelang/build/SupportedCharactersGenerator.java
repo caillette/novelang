@@ -14,45 +14,95 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.parser;
 
-import com.google.common.collect.*;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package novelang.build;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Set;
 import java.util.List;
+import java.util.Collection;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.IOException;
+import java.io.File;
+import java.io.InputStream;
+
+import org.antlr.stringtemplate.StringTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.CharUtils;
+import com.google.common.collect.*;
+import com.google.common.base.Function;
+import com.google.common.base.Nullable;
+
 
 /**
- * Attempts to find out all characters supported by the parser.
- * This is done by parsing the ANTLR-generated token list.
- * Parsing uses regexes. The regex defines three different groups.
- * Each group is re-parsed again with corresponding method
- * (just a {@link SupportedCharacters.LitteralConverter character alone},
- * an {@link SupportedCharacters.EscapedCharacterConverter escaped character},
- * or an {@link SupportedCharacters.UnicodeConverter unicode character}).
+ * Generates a Java enum from tokens (in a {@code tokens} clause) declared in and ANTLR grammar.
  *
  * @author Laurent Caillette
  */
-public class SupportedCharacters {
+public class SupportedCharactersGenerator extends JavaGenerator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( SupportedCharacters.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( SupportedCharactersGenerator.class ) ;
 
-  private static Set< Character > SUPPORTED_CHARACTERS ;
+  public SupportedCharactersGenerator(
+      File grammarFile,
+      String packageName,
+      String className,
+      File targetDirectory
+  ) throws IOException
+  {
+    super( grammarFile, packageName, className, targetDirectory ) ;
+  }
 
-  private static final String ANTLR_TOKENS = "/novelang/parser/antlr/Novelang__.g";
+  protected String generateCode() {
+    return generateJavaEnumeration(
+        convertToEscapedUnicode( 
+            extractSupportedCharacters( getGrammar() ) 
+        ) 
+    ) ;
+  } 
 
+  protected String generateJavaEnumeration( Set< String > characters ) {
+    final StringTemplate javaEnum = createStringTemplate( "setOfCharacters" ) ;
+    javaEnum.setAttribute( "characters", characters ) ;
+    return javaEnum.toString() ;
+
+  }
+  
+  
   private static final Pattern TOKENS_DECLARATIONS =
       Pattern.compile( "'(.)'|'(\\\\.)'|'(\\\\u[a-f[0-9]]{4})'" ) ;
   static {
     LOGGER.debug( "Crafted regex: " + TOKENS_DECLARATIONS.toString() ) ;
   }
 
+
+// ======  
+// Escape
+// ======  
+  
+  private static final Function<Character,String> CHAR_TO_UNICODE = 
+      new Function< Character, String >() {
+        public String apply( Character character ) {
+          if( Character.)
+          return CharUtils.unicodeEscaped( character ) ;
+        }
+      }
+  ;
+  
+  public static Set< String > convertToEscapedUnicode( Set< Character > characters ) {
+    // We cannot apply a function directly to a Set (because results may imply duplicates).
+    return ImmutableSet.copyOf( 
+        Lists.transform( Lists.newArrayList( characters ), 
+        CHAR_TO_UNICODE ) 
+    ) ;
+  }
+
+// ==========  
+// Extraction
+// ==========
+  
   /**
    * Declaration order matters: it corresponds to the group index in the regex.
    */
@@ -64,30 +114,7 @@ public class SupportedCharacters {
       )
   ;
 
-  private static Set< Character > loadSupportedCharacters() {
-    Set< Character > supportedCharacters = ImmutableSet.of() ;
-    final InputStream resourceStream =
-        SupportedCharacters.class.getResourceAsStream( ANTLR_TOKENS ) ;
-    if( null == resourceStream ) {
-      LOGGER.error(
-          "Could not load resource: '{}', supported characters are unknown.", ANTLR_TOKENS ) ;
-    } else {
-      try {
-        final String tokensDeclaration = IOUtils.toString( resourceStream ) ;
-        supportedCharacters = extractSupportedCharacters( tokensDeclaration ) ;
-      } catch( IOException e ) {
-        LOGGER.error(
-            "Could not load resource: '{}', supported characters are unknown.", ANTLR_TOKENS ) ;
-      }
-    }
-    if( null == supportedCharacters ) {
-      return null ;
-    } else {
-      return ImmutableSet.copyOf( Sets.newTreeSet( Lists.sortedCopy( supportedCharacters ) ) ) ;
-    }
-  }
-
-  public static Set< Character > extractSupportedCharacters( String tokensDeclaration ) {
+  protected static Set< Character > extractSupportedCharacters( String tokensDeclaration ) {
     final Matcher matcher = TOKENS_DECLARATIONS.matcher( tokensDeclaration ) ;
     final Set< Character > characters = Sets.newHashSet() ;
     while( matcher.find() ) {
@@ -127,7 +154,6 @@ public class SupportedCharacters {
         final int groupIndex = converterIndex + 1;
         final String match = matcher.group( groupIndex ) ;
         if( match != null  ) {
-//          LOGGER.debug( "Converting '{}' from group {}", match, groupIndex ) ;
           return converters[ converterIndex ].convert( match ) ;
         }
       }
@@ -177,18 +203,6 @@ public class SupportedCharacters {
       }
       return characterDeclaration.charAt( 1 ) ;
     }
-  }
-
-  /**
-   * Returns supported characters.
-   * This is done lazily because otherwise the unit test gets screwed before testing anything.
-   */
-  public static synchronized Set< Character > getSupportedCharacters() {
-    if( null == SUPPORTED_CHARACTERS ) {
-      final Set< Character > characterSet = Sets.newHashSet( loadSupportedCharacters() ) ;
-      SUPPORTED_CHARACTERS = ImmutableSet.copyOf( characterSet ) ;
-    }
-    return SUPPORTED_CHARACTERS ;
   }
 
 
