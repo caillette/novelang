@@ -34,7 +34,7 @@ import com.google.common.collect.Sets;
 
 
 /**
- * Generates a Java enum from tokens (in a {@code tokens} clause) declared in and ANTLR grammar.
+ * Generates a Java class from lexer tokens declared in and ANTLR grammar.
  *
  * @author Laurent Caillette
  */
@@ -109,7 +109,7 @@ public class SupportedCharactersGenerator extends JavaGenerator {
      && character != '\b' 
      && character != '\n'
      && character != '\\'
-  ) {
+    ) {
       return "" + character ;
     }
     return null ;

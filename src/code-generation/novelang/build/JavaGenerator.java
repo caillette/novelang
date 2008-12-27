@@ -35,7 +35,9 @@ import java.util.Date;
 
 
 /**
- * Single entry point for the build: generates all needed Java files from ANTLR grammar.
+ * Single entry point for the build: generates all needed Java files from ANTLR grammar:
+ * tokens, supported characters, parser.
+ * Also provides the base class for specialized generators.
  * 
  * @author Laurent Caillette
  */

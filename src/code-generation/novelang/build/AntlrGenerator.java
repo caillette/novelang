@@ -43,7 +43,7 @@ import com.google.common.collect.Lists;
  * <p>
  * Because {@code org.antlr.Tool} directly writes errors on {@code System.err}, this one is
  * trapped temporarily.
-  * 
+ * 
  *
  * @author Laurent Caillette
  */
