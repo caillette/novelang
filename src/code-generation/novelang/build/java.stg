@@ -23,6 +23,10 @@ import com.google.common.base.Preconditions ;
 
 
 /**
+ * Don't modify this class manually nor check it in the VCS.
+ * Instead, run code generation which takes tokens from ANTLR grammar.
+ * Some tokens which are not present in ANTLR grammar are added by the code generator itself.
+ *
  * Generated on <generationTimestamp>
  * @author <generatorName>
  */
