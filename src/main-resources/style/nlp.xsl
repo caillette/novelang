@@ -95,8 +95,6 @@
   <xsl:template match="n:identifier" />
   <xsl:template match="n:title" />
   <xsl:template match="n:style" />
-  <xsl:template match="n:locutor" />
-
   
   <xsl:template match="n:quote" >"<xsl:apply-templates/>"</xsl:template>
 
@@ -109,8 +107,6 @@
   <xsl:template match="n:interpolatedclause" >-- <xsl:apply-templates/> --</xsl:template>
 
   <xsl:template match="n:interpolatedclause-silentend" >-- <xsl:apply-templates/> -_</xsl:template>
-
-  <xsl:template match="n:ellipsis-opening" >...</xsl:template>
 
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 

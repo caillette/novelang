@@ -184,9 +184,6 @@ blockquote > p {
   <xsl:template name="speech" >
     <xsl:param name = "speech-symbol" />
     <p>
-    <xsl:if test="n:locutor" >
-      <xsl:value-of select="n:locutor" />&nbsp;:
-    </xsl:if>
     <xsl:value-of select="$speech-symbol" />&nbsp;
     <xsl:apply-templates/>
     </p>

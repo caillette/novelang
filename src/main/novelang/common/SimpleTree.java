@@ -19,6 +19,7 @@ package novelang.common;
 import org.apache.commons.lang.NullArgumentException;
 import novelang.common.tree.ImmutableTree;
 import novelang.parser.NodeKind;
+import novelang.parser.NodeKindTools;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 
@@ -92,7 +93,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
   }
 
   public boolean isOneOf( NodeKind... kinds ) {
-    if( NodeKind.rootHasNodeKindName( this ) ) {
+    if( NodeKindTools.rootHasNodeKindName( this ) ) {
       for( NodeKind kind : kinds ) {
         if( getText().equals( kind.name() ) ) {
           return true ;

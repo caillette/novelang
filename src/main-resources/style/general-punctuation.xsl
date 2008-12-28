@@ -38,8 +38,6 @@
 
   <xsl:template match="n:interpolatedclause-silentend" >&ndash;&nbsp;<xsl:apply-templates/></xsl:template>
 
-  <xsl:template match="n:ellipsis-opening" >&hellip;</xsl:template>
-
   <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
 
   <xsl:template match="n:sign-comma" >,</xsl:template>

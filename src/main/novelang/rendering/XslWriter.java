@@ -41,15 +41,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
 import novelang.common.metadata.TreeMetadata;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
-import novelang.rendering.xslt.validate.SaxMulticaster;
-import novelang.rendering.xslt.validate.ExpandedNameVerifier;
-import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import novelang.parser.NodeKind;
+import novelang.parser.NodeKindTools;
+import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
+import novelang.rendering.xslt.validate.SaxMulticaster;
 
 /**
  * @author Laurent Caillette
@@ -155,9 +154,7 @@ public class XslWriter extends XmlWriter {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
 
-    final SaxMulticaster multicaster = new SaxMulticaster() ;
-    multicaster.add( templatesHandler ) ;
-    multicaster.add( new SaxConnectorForVerifier( NAMESPACE_URI, NodeKind.getNames() ) ) ;
+    final ContentHandler  multicaster = connectXpathVerifier( templatesHandler ) ;
 
     reader.setContentHandler( multicaster ) ;
     reader.setEntityResolver( entityResolver ) ;
@@ -208,7 +205,18 @@ public class XslWriter extends XmlWriter {
     public boolean shouldEscape( String publicId, String systemId ) {
       return false ;
     }
-  };
+  } ;
+
+  private static SaxMulticaster connectXpathVerifier( TemplatesHandler templatesHandler ) {
+    final SaxConnectorForVerifier xpathVerifier =
+        new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getNamesAsXmlElementNames() ) ;
+
+    final SaxMulticaster multicaster = new SaxMulticaster() ;
+    multicaster.add( templatesHandler ) ;
+    multicaster.add( xpathVerifier ) ;
+    return multicaster ;
+  }
+
 
   /**
    * Fetches local files in the same directory as the stylesheet.
@@ -252,7 +260,10 @@ public class XslWriter extends XmlWriter {
       } catch( SAXException e ) {
         throw new RuntimeException( e );
       }
-      reader.setContentHandler( templatesHandler ) ;
+
+      final ContentHandler multicaster = connectXpathVerifier( templatesHandler ) ;
+
+      reader.setContentHandler( multicaster ) ;
       reader.setEntityResolver( entityResolver ) ;
       return new SAXSource( 
           reader,
@@ -260,5 +271,6 @@ public class XslWriter extends XmlWriter {
       ) ;
 
     }
+
   }
 }

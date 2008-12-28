@@ -21,6 +21,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import novelang.parser.NodeKind;
+import novelang.parser.NodeKindTools;
 import static novelang.parser.NodeKind.*;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
@@ -139,7 +140,7 @@ public class Hierarchizer {
   }
 
   private static NodeKind getKind( Treepath< SyntacticTree > treepath ) {
-    return NodeKind.ofRoot( treepath.getTreeAtEnd() ) ;
+    return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 
 

@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import com.google.common.base.Preconditions;
 import novelang.common.metadata.MetadataHelper;
 import novelang.parser.NodeKind;
+import novelang.parser.NodeKindTools;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
@@ -84,7 +85,7 @@ public class GenericRenderer implements Renderer {
       NodeKind previous
   ) throws Exception {
 
-    final NodeKind nodeKind = NodeKind.ofRoot( tree ) ;
+    final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
     final Nodepath newPath = (
         null == kinship ? new Nodepath( nodeKind ) : new Nodepath( kinship, nodeKind ) ) ;
     boolean rootElement = false ;
@@ -141,7 +142,7 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.start( newPath, rootElement ) ;
         previous = null ;
         for( SyntacticTree subtree : tree.getChildren() ) {
-          final NodeKind subtreeNodeKind = NodeKind.ofRoot( subtree );
+          final NodeKind subtreeNodeKind = NodeKindTools.ofRoot( subtree );
           maybeWriteWhitespace( newPath, previous, subtreeNodeKind ) ;
           renderTree( subtree, newPath, previous ) ;
           previous = subtreeNodeKind;

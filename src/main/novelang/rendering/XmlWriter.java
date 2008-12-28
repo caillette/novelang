@@ -28,6 +28,7 @@ import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import novelang.common.Nodepath;
 import novelang.common.metadata.TreeMetadata;
+import novelang.parser.NodeKindTools;
 import com.google.common.base.Preconditions;
 
 /**
@@ -72,7 +73,7 @@ public class XmlWriter implements FragmentWriter {
   }
 
   public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
-    start( tokenNameAsXmlElementName( kinship.getCurrent().name() ), wholeDocument ) ;
+    start( NodeKindTools.tokenNameAsXmlElementName( kinship.getCurrent().name() ), wholeDocument ) ;
   }
   
   public void start( String elementName ) throws Exception {
@@ -104,7 +105,7 @@ public class XmlWriter implements FragmentWriter {
   }
 
   public void end( Nodepath kinship ) throws Exception {
-    end( tokenNameAsXmlElementName( kinship.getCurrent().name() ) ) ;
+    end( NodeKindTools.tokenNameAsXmlElementName( kinship.getCurrent().name() ) ) ;
   }
   public void end( String elementName ) throws Exception {
     contentHandler.endElement( namespaceUri, elementName, nameQualifier + ":" + elementName ) ;
@@ -143,14 +144,6 @@ public class XmlWriter implements FragmentWriter {
         outputStream,
         new OutputFormat( "  ", true, encoding.name() )
     ) ;
-  }
-
-  private String tokenNameAsXmlElementName( String tokenName ) {
-    String result = tokenName.toLowerCase().replace( "_", "-" ) ;
-    if( result.startsWith( "-" ) ) {
-      result = result.substring( 1 ) ;
-    }
-    return result ;
   }
 
   protected static final String NAMESPACE_URI = "http://novelang.org/book-xml/1.0" ;

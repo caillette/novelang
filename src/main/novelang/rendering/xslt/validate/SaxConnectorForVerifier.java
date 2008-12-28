@@ -33,7 +33,9 @@ import novelang.common.Location;
  */
 public class SaxConnectorForVerifier implements ContentHandler {
 
+/*
   private static final Logger LOGGER = LoggerFactory.getLogger( SaxConnectorForVerifier.class ) ;
+*/
 
   private final String namespaceUri ;
   private final ExpandedNameVerifier verifier ;
@@ -45,10 +47,6 @@ public class SaxConnectorForVerifier implements ContentHandler {
 
   private void verifyXpath( String xpath ) {
     verifier.verify( getLocation(), xpath ) ;
-  }
-
-  public void checkBadExpandedNames() throws BadExpandedNamesException {
-    verifier.checkNoBadExpandedNames() ;
   }
 
 // =========
@@ -71,6 +69,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
     }
   }
 
+/*
   private String attributesToString( Attributes attributes ) {
     final StringBuffer buffer = new StringBuffer() ;
     buffer.append( "[ " ) ;
@@ -86,6 +85,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
     buffer.append( " ]" ) ;
     return buffer.toString() ;
   }
+*/
 
   private static boolean isXslUri( String uri ) {
     return "http://www.w3.org/1999/XSL/Transform".equals( uri ) ;
@@ -104,6 +104,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
     if( namespaceUri.equals( uri ) ) {
       if( null == verifier.getXmlPrefix() ) {
         verifier.setXmlPrefix( prefix );
+/*
         LOGGER.debug(
             "startPrefixMapping( " +
             "prefix='" + prefix + "' " +
@@ -111,6 +112,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
             " )" +
             " at " + getLocation()
         ) ;
+*/
       } else {
         throw new IllegalStateException(
             getLocation() +
@@ -124,7 +126,9 @@ public class SaxConnectorForVerifier implements ContentHandler {
   public void endPrefixMapping( String prefix ) throws SAXException {
     if( prefix.equals( verifier.getXmlPrefix() ) ) {
       verifier.unsetXmlPrefix() ;
+/*
       LOGGER.debug( "endPrefixMapping( '" + prefix + "' )" ) ;
+*/
     }
   }
 
@@ -134,6 +138,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
       String qName,
       Attributes attributes
   ) throws SAXException {
+/*
     LOGGER.debug(
         "startElement( " +
         "uri=" + uri + " " +
@@ -142,6 +147,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
         attributesToString( attributes ) +
         ")"
     ) ;
+*/
     if( isXslUri( uri ) ) {
       for( int i = 0 ; i < attributes.getLength() ; i++ ) {
         final XpathAwareAttribute xpathAwareAttribute =
@@ -152,6 +158,10 @@ public class SaxConnectorForVerifier implements ContentHandler {
       }
     }
 
+  }
+
+  public void endDocument() throws SAXException {
+    verifier.checkNoBadExpandedNames() ;
   }
 
   public void endElement( String uri, String localName, String qName ) throws SAXException { }
@@ -165,7 +175,5 @@ public class SaxConnectorForVerifier implements ContentHandler {
   public void skippedEntity( String name ) throws SAXException { }
 
   public void startDocument() throws SAXException { }
-
-  public void endDocument() throws SAXException { }
 
 }

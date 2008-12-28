@@ -16,6 +16,7 @@
  */
 package novelang.rendering.xslt.validate;
 
+import org.xml.sax.SAXException;
 import com.google.common.base.Preconditions;
 
 /**
@@ -23,7 +24,7 @@ import com.google.common.base.Preconditions;
  * 
  * @author Laurent Caillette
  */
-public class BadExpandedNamesException extends Exception {
+public class BadExpandedNamesException extends SAXException {
 
   final Iterable< BadExpandedName > badExpandedNames ;
 

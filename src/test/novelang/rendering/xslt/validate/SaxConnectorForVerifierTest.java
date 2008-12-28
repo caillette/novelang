@@ -42,11 +42,11 @@ public class SaxConnectorForVerifierTest {
 
     finish( connectorForVerifier ) ;
 
-    connectorForVerifier.checkBadExpandedNames() ;
+    connectorForVerifier.endDocument() ;
   }
 
   @Test( expected = BadExpandedNamesException.class )
-  public void testVerifyThrowsException() throws SAXException, BadExpandedNamesException {
+  public void testVerifyThrowsException() throws SAXException {
 
     final SaxConnectorForVerifier connectorForVerifier = createConnector( "foo", "bar" ) ;
     prepare( connectorForVerifier, new CustomLocator() ) ;
@@ -57,7 +57,7 @@ public class SaxConnectorForVerifierTest {
 
     finish( connectorForVerifier ) ;
 
-    connectorForVerifier.checkBadExpandedNames() ;
+    connectorForVerifier.endDocument() ;
   }
 
 

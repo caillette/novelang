@@ -47,10 +47,6 @@ import novelang.common.SyntacticTree ;
     return punctuationSign ;
   }
 
-  public static NodeKind ofRoot( SyntacticTree tree ) {
-    return Enum.valueOf( NodeKind.class, tree.getText() ) ;
-  }
-
   private static final Set\< String > NAMES ;
   static {
     final Set\< String > names = Sets.newHashSet() ;
@@ -77,26 +73,6 @@ import novelang.common.SyntacticTree ;
         NAMES.contains( text ) &&
         name().equals( text )
     ;
-  }
-
-  public static boolean rootHasNodeKindName( SyntacticTree tree ) {
-    if( null == tree ) {
-      return false ;
-    }
-    final String text = tree.getText() ;
-    return null != tree && NAMES.contains( text ) ;
-  }
-
-  public static void ensure( SyntacticTree tree, NodeKind nodeKind ) {
-    Preconditions.checkNotNull( tree ) ;
-    Preconditions.checkNotNull( nodeKind ) ;
-    final String nodeText = Preconditions.checkNotNull( tree.getText() ) ;
-    if( ! NAMES.contains( nodeText ) ) {
-      throw new RuntimeException( "Not a known node kind: '" + nodeText + "'" ) ;
-    }
-    if( nodeKind != ofRoot( tree ) ) {
-      throw new RuntimeException( "Expected: " + nodeKind + ", got: " + nodeText ) ;
-    }
   }
 
 }
