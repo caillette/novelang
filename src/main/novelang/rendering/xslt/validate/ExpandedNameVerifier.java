@@ -81,13 +81,19 @@ public class ExpandedNameVerifier {
     while( matcher.find() && matcher.groupCount() == 1 ) {
       final String elementName = matcher.group( 1 ) ;
       if( ! nodeNames.contains( elementName ) ) {
-        badExpandedNames.add( new BadExpandedName( location, xmlPrefix, xpath ) ) ;
+        badExpandedNames.add( new BadExpandedName( location, xpath, xmlPrefix, elementName ) ) ;
       }
     }
   }
 
   public Iterable< BadExpandedName > getBadExpandedNames() {
     return ImmutableList.copyOf( badExpandedNames ) ;
+  }
+
+  public void checkNoBadExpandedNames() throws BadExpandedNamesException {
+    if( ! badExpandedNames.isEmpty() ) {
+      throw new BadExpandedNamesException( getBadExpandedNames() ) ;
+    }
   }
 
 

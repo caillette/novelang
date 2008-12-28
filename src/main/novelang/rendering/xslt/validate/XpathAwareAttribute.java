@@ -16,18 +16,30 @@
  */
 package novelang.rendering.xslt.validate;
 
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+
 /**
- * Represents the combination of an XML element name and an attribute name, that cause the
- * attribute value to be a XPath expression.
+ * Represents the combination of an XML element name and an attribute name, that causes the
+ * attribute value to be a XPath expression inside an XSL stylesheet.
  *
  * @author Laurent Caillette
 */
-/*package*/ class ElementAttributeCombination {
+/*package*/ class XpathAwareAttribute {
+
+  public static final Set<XpathAwareAttribute> XPATH_AWARE_ATTRIBUTES = ImmutableSet.of(
+    new XpathAwareAttribute( "apply-templates", "select" ),
+    new XpathAwareAttribute( "if", "test" ),
+    new XpathAwareAttribute( "template", "match" ),
+    new XpathAwareAttribute( "for-each", "select" ),
+    new XpathAwareAttribute( "value-of", "select" )
+  ) ;
 
   private final String elementName;
   private final String attributeName ;
 
-  public ElementAttributeCombination( String elementName, String attributeName ) {
+  public XpathAwareAttribute( String elementName, String attributeName ) {
     this.elementName = elementName;
     this.attributeName = attributeName;
   }
@@ -49,7 +61,7 @@ package novelang.rendering.xslt.validate;
       return false;
     }
 
-    final ElementAttributeCombination that = ( ElementAttributeCombination ) o ;
+    final XpathAwareAttribute that = ( XpathAwareAttribute ) o ;
 
     if( attributeName != null
       ? ! attributeName.equals( that.attributeName )
@@ -72,5 +84,9 @@ package novelang.rendering.xslt.validate;
     int result = elementName != null ? elementName.hashCode() : 0 ;
     result = 31 * result + ( attributeName != null ? attributeName.hashCode() : 0 ) ;
     return result ;
+  }
+
+  static boolean isXpathCombination( XpathAwareAttribute xpathAwareAttribute ) {
+    return XPATH_AWARE_ATTRIBUTES.contains( xpathAwareAttribute ) ;
   }
 }

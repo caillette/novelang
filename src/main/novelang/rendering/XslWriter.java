@@ -49,6 +49,7 @@ import novelang.loader.ResourceName;
 import novelang.rendering.xslt.validate.SaxMulticaster;
 import novelang.rendering.xslt.validate.ExpandedNameVerifier;
 import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
+import novelang.parser.NodeKind;
 
 /**
  * @author Laurent Caillette
@@ -156,7 +157,7 @@ public class XslWriter extends XmlWriter {
 
     final SaxMulticaster multicaster = new SaxMulticaster() ;
     multicaster.add( templatesHandler ) ;
-    multicaster.add( new SaxConnectorForVerifier( NAMESPACE_URI ) ) ;
+    multicaster.add( new SaxConnectorForVerifier( NAMESPACE_URI, NodeKind.getNames() ) ) ;
 
     reader.setContentHandler( multicaster ) ;
     reader.setEntityResolver( entityResolver ) ;

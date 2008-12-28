@@ -24,8 +24,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.Attributes;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import com.google.common.collect.ImmutableSet;
-import novelang.parser.NodeKind;
 import novelang.common.Location;
 
 /**
@@ -38,18 +36,19 @@ public class SaxConnectorForVerifier implements ContentHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger( SaxConnectorForVerifier.class ) ;
 
   private final String namespaceUri ;
-  private final ExpandedNameVerifier verifier = new ExpandedNameVerifier( NodeKind.getNames() ) ;
+  private final ExpandedNameVerifier verifier ;
 
-  public SaxConnectorForVerifier( String namespaceUri ) {
+  public SaxConnectorForVerifier( String namespaceUri, Set< String > nodeNames ) {
     this.namespaceUri = namespaceUri ;
+    verifier = new ExpandedNameVerifier( nodeNames ) ;
   }
 
   private void verifyXpath( String xpath ) {
     verifier.verify( getLocation(), xpath ) ;
   }
 
-  public Iterable< BadExpandedName > getBadExpandedNames() {
-    return verifier.getBadExpandedNames() ;
+  public void checkBadExpandedNames() throws BadExpandedNamesException {
+    verifier.checkNoBadExpandedNames() ;
   }
 
 // =========
@@ -90,18 +89,6 @@ public class SaxConnectorForVerifier implements ContentHandler {
 
   private static boolean isXslUri( String uri ) {
     return "http://www.w3.org/1999/XSL/Transform".equals( uri ) ;
-  }
-
-  public static final Set< ElementAttributeCombination > XPATH_COMBINATIONS = ImmutableSet.of(
-    new ElementAttributeCombination( "apply-templates", "select" ),
-    new ElementAttributeCombination( "if", "test" ),
-    new ElementAttributeCombination( "template", "match" ),
-    new ElementAttributeCombination( "for-each", "select" ),
-    new ElementAttributeCombination( "value-of", "select" )
-  ) ;
-
-  private static boolean isXpathCombination( ElementAttributeCombination elementAttributeCombination ) {
-    return XPATH_COMBINATIONS.contains( elementAttributeCombination ) ;
   }
 
 
@@ -157,9 +144,9 @@ public class SaxConnectorForVerifier implements ContentHandler {
     ) ;
     if( isXslUri( uri ) ) {
       for( int i = 0 ; i < attributes.getLength() ; i++ ) {
-        final ElementAttributeCombination elementAttributeCombination =
-            new ElementAttributeCombination( localName, attributes.getLocalName( i ) ) ;
-        if( isXpathCombination( elementAttributeCombination ) ) {
+        final XpathAwareAttribute xpathAwareAttribute =
+            new XpathAwareAttribute( localName, attributes.getLocalName( i ) ) ;
+        if( XpathAwareAttribute.isXpathCombination( xpathAwareAttribute ) ) {
           verifyXpath( attributes.getValue( i ) ); ;
         }
       }

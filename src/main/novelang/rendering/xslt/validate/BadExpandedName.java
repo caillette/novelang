@@ -27,11 +27,13 @@ public class BadExpandedName {
   final Location location ;
   final String xmlPrefix ;
   final String xpath ;
+  final String element ;
 
-  public BadExpandedName( Location location, String xmlPrefix, String xpath ) {
+  public BadExpandedName( Location location, String xpath, String xmlPrefix, String element ) {
     this.location = location ;
-    this.xmlPrefix = xmlPrefix ;
     this.xpath = xpath ;
+    this.xmlPrefix = xmlPrefix ;
+    this.element = element ;
   }
 
   public Location getLocation() {
@@ -44,5 +46,23 @@ public class BadExpandedName {
 
   public String getXmlPrefix() {
     return xmlPrefix;
+  }
+
+  public String getElement() {
+    return element;
+  }
+
+  @Override
+  public String toString() {
+    return xmlPrefix + ":" + element + " at " + location ; 
+  }
+
+  public static String toString( Iterable< BadExpandedName > badExpandedNames, String indent ) {
+    final StringBuffer buffer = new StringBuffer() ;
+    for( BadExpandedName bad : badExpandedNames ) {
+      buffer.append( indent ) ;
+      buffer.append( bad.toString() ) ;
+    }
+    return buffer.toString() ;
   }
 }
