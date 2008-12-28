@@ -32,6 +32,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
 
+import org.apache.xerces.parsers.SAXParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
@@ -45,7 +46,6 @@ import novelang.common.metadata.TreeMetadata;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
-import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
 import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import novelang.rendering.xslt.validate.SaxMulticaster;
@@ -154,10 +154,12 @@ public class XslWriter extends XmlWriter {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
 
-    final ContentHandler  multicaster = connectXpathVerifier( templatesHandler ) ;
+    final ContentHandler multicaster = connectXpathVerifier( templatesHandler ) ;
 
     reader.setContentHandler( multicaster ) ;
+
     reader.setEntityResolver( entityResolver ) ;
+
     reader.parse( new InputSource( resourceLoader.getInputStream( xslFileName ) ) ) ;
 
     final Templates templates = templatesHandler.getTemplates() ;
@@ -252,20 +254,27 @@ public class XslWriter extends XmlWriter {
           ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
       saxTransformerFactory.setURIResolver( uriResolver ) ;
 
-      final TemplatesHandler templatesHandler = saxTransformerFactory.newTemplatesHandler() ;
+      final SaxConnectorForVerifier xpathVerifier =
+          new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getNamesAsXmlElementNames() ) ;
+
 
       final XMLReader reader ;
-      try {
-        reader = XMLReaderFactory.createXMLReader() ;
-      } catch( SAXException e ) {
-        throw new RuntimeException( e );
-      }
 
-      final ContentHandler multicaster = connectXpathVerifier( templatesHandler ) ;
+      // It would be more standard to use XMLReaderFactory.createXMLReader() instead of deriving
+      // directly from a Xerces class. Then it would require some kind of wrapper.
+      reader = new SAXParser() {
+        @Override
+        public void setContentHandler( ContentHandler contentHandler ) {
+          final SaxMulticaster multicaster = new SaxMulticaster() ;
+          multicaster.add( contentHandler ) ;
+          multicaster.add( xpathVerifier ) ;
+          super.setContentHandler( multicaster ) ;
+        }
+      } ;
 
-      reader.setContentHandler( multicaster ) ;
       reader.setEntityResolver( entityResolver ) ;
-      return new SAXSource( 
+
+      return new SAXSource(
           reader,
           new InputSource( resourceLoader.getInputStream( new ResourceName( href ) ) )
       ) ;
