@@ -28,12 +28,14 @@ import com.google.common.collect.ImmutableSet;
 */
 /*package*/ class XpathAwareAttribute {
 
-  public static final Set<XpathAwareAttribute> XPATH_AWARE_ATTRIBUTES = ImmutableSet.of(
-    new XpathAwareAttribute( "apply-templates", "select" ),
-    new XpathAwareAttribute( "if", "test" ),
-    new XpathAwareAttribute( "template", "match" ),
-    new XpathAwareAttribute( "for-each", "select" ),
-    new XpathAwareAttribute( "value-of", "select" )
+  public static final Set< XpathAwareAttribute > XPATH_AWARE_ATTRIBUTES = ImmutableSet.of(
+      new XpathAwareAttribute( "apply-templates", "select" ),
+      new XpathAwareAttribute( "copy-of", "select" ),
+      new XpathAwareAttribute( "for-each", "select" ),
+      new XpathAwareAttribute( "if", "test" ),
+      new XpathAwareAttribute( "template", "match" ),
+      new XpathAwareAttribute( "value-of", "select" ),
+      new XpathAwareAttribute( "when", "test" )
   ) ;
 
   private final String elementName;
