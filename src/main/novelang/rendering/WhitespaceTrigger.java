@@ -35,6 +35,7 @@ public class WhitespaceTrigger {
     add( EMPHASIS, EMPHASIS ) ;
     add( EMPHASIS, QUOTE ) ;
     add( EMPHASIS, WORD ) ;
+    add( HARD_INLINE_LITERAL, PARENTHESIS ) ;
     add( HARD_INLINE_LITERAL, WORD ) ;
     add( INTERPOLATEDCLAUSE, WORD ) ;
     add( INTERPOLATEDCLAUSE_SILENTEND, WORD ) ;
@@ -47,6 +48,7 @@ public class WhitespaceTrigger {
     add( PUNCTUATION_SIGN, QUOTE ) ;
     add( PUNCTUATION_SIGN, SOFT_INLINE_LITERAL ) ;
     add( PUNCTUATION_SIGN, SQUARE_BRACKETS ) ;
+    add( PUNCTUATION_SIGN, URL ) ;
     add( PUNCTUATION_SIGN, WORD ) ;
     add( QUOTE, EMPHASIS ) ;
     add( QUOTE, INTERPOLATEDCLAUSE ) ;
@@ -57,6 +59,7 @@ public class WhitespaceTrigger {
     add( QUOTE, QUOTE ) ;
     add( QUOTE, WORD ) ;
     add( SQUARE_BRACKETS, WORD ) ;
+    add( SOFT_INLINE_LITERAL, PARENTHESIS ) ;
     add( SOFT_INLINE_LITERAL, WORD ) ;
     add( SUPERSCRIPT, EMPHASIS ) ;
     add( SUPERSCRIPT, HARD_INLINE_LITERAL ) ;
@@ -77,6 +80,17 @@ public class WhitespaceTrigger {
     add( WORD, QUOTE ) ;
     add( WORD, SQUARE_BRACKETS ) ;
     add( WORD, WORD ) ;
+    add( URL, EMPHASIS ) ;
+    add( URL, HARD_INLINE_LITERAL ) ;
+    add( URL, INTERPOLATEDCLAUSE ) ;
+    add( URL, INTERPOLATEDCLAUSE_SILENTEND ) ;
+    add( URL, PARENTHESIS ) ;
+    add( URL, SOFT_INLINE_LITERAL ) ;
+    add( URL, HARD_INLINE_LITERAL ) ;
+    add( URL, QUOTE ) ;
+    add( URL, SQUARE_BRACKETS ) ;
+    add( URL, URL ) ;
+    add( URL, WORD ) ;
   }
 
   private static void add( NodeKind nodeKind1, NodeKind nodeKind2 ) {
