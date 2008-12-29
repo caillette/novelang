@@ -38,6 +38,8 @@
 
     <html> 
       <head>
+        <link rel="stylesheet" type="text/css" href="/display.css" />
+
         <xsl:element name="meta" >
           <xsl:attribute name="http-equiv" >content-type</xsl:attribute>
           <xsl:attribute name="content" >text/html;charset=<xsl:value-of select="$encoding" /></xsl:attribute>
@@ -45,52 +47,11 @@
 
         <meta name="Generator" content="Novelang" />
 
-        <title>Standard HTML skin</title>
+        <title><xsl:value-of select="$filename"/></title>
 
         <style type="text/css">
 
 
-body {
-  width : 400pt ;
-  background : #dddddd ;
-#  font-family : Georgia ;
-}
-
-h1 {
-  font-size : 21pt ;
-}
-
-h2 {
-  font-size : 15pt ;
-}
-
-div.chapter {
-  margin-top : 25pt ;
-  margin-bottom : 5pt ;
-}
-
-div.section {
-  margin-top : 15pt ;
-  margin-bottom : 3pt ;
-}
-
-p {
-  font-size : 13.5pt ;
-	text-indent : 1em ;
-	text-align : justify ;
-	line-height : 1.30 ;
-	margin : 1pt 0pt 0pt 15pt;
-	padding : 0pt ;
-}
-
-blockquote > p {
-  font-size : 12.5pt ;
-	text-indent : 0em ;
-	text-align : justify ;
-	line-height : 1.25 ;
-	margin : 1pt 0pt 0pt 10pt;
-	padding : 0pt ;
-}
         </style>
 
       </head>
@@ -106,17 +67,7 @@ blockquote > p {
 
   <xsl:template match="n:chapter" >
     <div class="chapter" >
-    <xsl:choose>
-      <xsl:when test="n:style[text()='standalone']" >
-        <xsl:call-template name="standalone" />
-      </xsl:when>
-      <xsl:when test="n:style[text()='all-emphasized']" >
-        <xsl:call-template name="all-emphasized" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates />
-      </xsl:otherwise>
-    </xsl:choose>
+      <xsl:apply-templates />
     </div>
   </xsl:template>
 
@@ -132,16 +83,6 @@ blockquote > p {
 
   <xsl:template match="n:section/n:title | n:section/n:identifier" >
     <h2><xsl:apply-templates /></h2>
-  </xsl:template>
-
-  <xsl:template name="standalone" >
-    <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template name="all-emphasized" >
-    <i>
-      <xsl:apply-templates />
-    </i>
   </xsl:template>
 
   <xsl:template match="n:blockquote" >
@@ -163,38 +104,22 @@ blockquote > p {
   </xsl:template>
 
   <xsl:template match="n:url" >
-    <p>
     <a><xsl:attribute name="href"><xsl:value-of select="." /></xsl:attribute><xsl:value-of select="." /></a>
-    </p>
   </xsl:template>
 
 
   <xsl:template match="n:paragraph-speech" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >&mdash;</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  
-  <xsl:template match="n:paragraph-speech-continued" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >&raquo;</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  
-  <xsl:template name="speech" >
-    <xsl:param name = "speech-symbol" />
     <p>
-    <xsl:value-of select="$speech-symbol" />&nbsp;
-    <xsl:apply-templates/>
+    &mdash;&nbsp;<xsl:apply-templates/>
     </p>
   </xsl:template>
-
+  
   <xsl:template match="n:emphasis" >
     <i><xsl:apply-templates/></i>
   </xsl:template>
 
   <xsl:template match="n:hard-inline-literal" >
-    <tt><xsl:apply-templates/></tt>
+    <code><xsl:apply-templates/></code>
   </xsl:template>
 
 </xsl:stylesheet>

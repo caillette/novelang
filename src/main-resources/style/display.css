@@ -1,0 +1,52 @@
+body {
+  width : 400pt ;
+  background : #dddddd ;
+}
+
+h1 {
+  font-size : 21pt ;
+}
+
+h2 {
+  font-size : 15pt ;
+}
+
+p {
+  font-size : 13.5pt ;
+	text-indent : 1em ;
+	text-align : justify ;
+	line-height : 1.30 ;
+	margin : 1pt 0 0 15pt;
+	padding : 5pt ;
+}
+
+code {
+  font-size : 11pt;
+}
+
+/* Reserved to html-source.css for displaying HTML source elements. */
+tt {
+  font-size : 11pt ;
+  font-weight: bold ;
+}
+
+pre {
+  font-size : 12pt ;
+  text-indent : 0 ;
+  text-align : left ;
+  line-height : 1.1 ;
+  margin : 1pt 0 0 15pt;
+  padding :5pt 0 0 10pt ;
+  border-left-style : solid ;
+  border-left-color: yellow ;
+  border-left-width: 6px ;
+}
+
+blockquote > p {
+  font-size : 12.5pt ;
+	text-indent : 0 ;
+	text-align : justify ;
+	line-height : 1.25 ;
+	margin : 1pt 0 0 10pt;
+	padding : 0 ;
+}
