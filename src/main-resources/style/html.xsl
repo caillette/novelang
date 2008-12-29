@@ -39,6 +39,7 @@
     <html> 
       <head>
         <link rel="stylesheet" type="text/css" href="/display.css" />
+        <link rel="stylesheet" type="text/css" href="/custom.css" />
 
         <xsl:element name="meta" >
           <xsl:attribute name="http-equiv" >content-type</xsl:attribute>

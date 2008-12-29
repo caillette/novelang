@@ -20,6 +20,8 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
+  <xsl:import href="punctuation-US-EN.xsl" />
+
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
   <xsl:param name="encoding"/>
@@ -39,7 +41,7 @@
         <meta name="Generator" content="Novelang" />
         <meta name= "Copyright" content="Laurent Caillette 2008" />
 
-        <title>Standard HTML skin</title>
+        <title><xsl:value-of select="$filename" /></title>
 
         <style type="text/css">
         </style>
@@ -106,10 +108,6 @@
     <tt>&amp;lt;sup&amp;gt;</tt><xsl:apply-templates/><tt>&amp;lt;/sup&amp;gt;</tt>
   </xsl:template>
 
-  <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
-
-  <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
-
   <xsl:template match="n:interpolatedclause" ><tt>&ndash;&nbsp;</tt><xsl:apply-templates/><tt>&nbsp;&ndash;</tt></xsl:template>
 
   <xsl:template match="n:interpolatedclause-silentend" ><tt>&ndash;&nbsp;</tt><xsl:apply-templates/></xsl:template>
@@ -118,12 +116,5 @@
 
   <xsl:template match="n:apostrophe-wordmate" ><tt>&rsquo;</tt></xsl:template>
 
-  <xsl:template match="n:sign-colon" ><tt>&nbsp;</tt>:</xsl:template>
-  <xsl:template match="n:sign-semicolon" ><tt>&nbsp;</tt>;</xsl:template>
-  <xsl:template match="n:sign-comma" >,</xsl:template>
-  <xsl:template match="n:sign-ellipsis" ><tt>&hellip;</tt></xsl:template>
-  <xsl:template match="n:sign-exclamationmark" ><tt>&nbsp;</tt>!</xsl:template>
-  <xsl:template match="n:sign-fullstop" >.</xsl:template>
-  <xsl:template match="n:sign-questionmark" ><tt>&nbsp;</tt>?</xsl:template>
 
 </xsl:stylesheet>

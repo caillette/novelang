@@ -8,6 +8,12 @@
     >
     %ISOpub;
 
+    <!ENTITY % ISOnum PUBLIC
+        "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
+        "ISOnum.pen"
+    >
+    %ISOnum;
+    
 ] >
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -15,6 +21,12 @@
 >
 
   <xsl:import href="general-punctuation.xsl" />
+
+  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
+
+  <xsl:template match="n:interpolatedclause" >&ndash;&nbsp;<xsl:apply-templates/>&nbsp;&ndash;</xsl:template>
+
+  <xsl:template match="n:interpolatedclause-silentend" >&ndash;&nbsp;<xsl:apply-templates/></xsl:template>
 
   <xsl:template match="n:sign-colon" >:</xsl:template>
   <xsl:template match="n:sign-semicolon" >;</xsl:template>

@@ -23,12 +23,17 @@
 
   <xsl:import href="general-punctuation.xsl" />
 
+  <xsl:template match="n:interpolatedclause" >&mdash;&nbsp;<xsl:apply-templates/>&nbsp;&mdash;</xsl:template>
+
+  <xsl:template match="n:interpolatedclause-silentend" >&mdash;&nbsp;<xsl:apply-templates/></xsl:template>
+
+  <xsl:template match="n:quote" >&laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>
+
   <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
   <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>
   <xsl:template match="n:sign-ellipsis" >&hellip;</xsl:template>
   <xsl:template match="n:sign-exclamationmark" >&nbsp;!</xsl:template>
   <xsl:template match="n:sign-questionmark" >&nbsp;?</xsl:template>
 
-  <xsl:template match="n:ellipsis-opening" >&hellip;&nbsp;</xsl:template>
 
 </xsl:stylesheet>

@@ -27,16 +27,9 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
 
-
-  <xsl:template match="n:quote" >&ldquo;<xsl:apply-templates/>&rdquo;</xsl:template>
-
   <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
   <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
-
-  <xsl:template match="n:interpolatedclause" >&ndash;&nbsp;<xsl:apply-templates/>&nbsp;&ndash;</xsl:template>
-
-  <xsl:template match="n:interpolatedclause-silentend" >&ndash;&nbsp;<xsl:apply-templates/></xsl:template>
 
   <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
 
