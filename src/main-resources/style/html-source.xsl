@@ -2,7 +2,6 @@
 <!DOCTYPE foo
 [
   <!-- Tweaked entities: we want them to appear verbatim in resulting document. -->
-  <!-- See HtmlSink class. -->
 
   <!ENTITY mdash  "&amp;amp;mdash;" >
   <!ENTITY ndash  "&amp;amp;ndash;" >
@@ -12,7 +11,6 @@
   <!ENTITY rdquo  "&amp;amp;rdquo;" >
   <!ENTITY rsquo  "&amp;amp;rsquo;" >
   <!ENTITY nbsp   "&amp;amp;nbsp;" >
-
 ]
 >
 
@@ -39,12 +37,8 @@
         </xsl:element>
 
         <meta name="Generator" content="Novelang" />
-        <meta name= "Copyright" content="Laurent Caillette 2008" />
-
         <title><xsl:value-of select="$filename" /></title>
-
-        <style type="text/css">
-        </style>
+        <style type="text/css" />
 
       </head>
     <body>

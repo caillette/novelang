@@ -50,10 +50,7 @@
 
         <title><xsl:value-of select="$filename"/></title>
 
-        <style type="text/css">
-
-
-        </style>
+        <style type="text/css" />
 
       </head>
     <body>
