@@ -9,6 +9,9 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 Stylesheets containing XPath expressions relative to non-existing grammar token are detected and rejected.
 
+Added new stylesheet: ``html-source.xsl``. It generates HTML source in HTML with special markup highlighted.
+This is especially useful for posting raw HTML on Blogger while editing the text with Novelang!
+
 ANTLR grammar refactoring continues, now tokens and supported characters are described in Java code generated from the grammar.
 
 Font list regression fixed: now displays all characters as in `Novelang-0.13.0`.
