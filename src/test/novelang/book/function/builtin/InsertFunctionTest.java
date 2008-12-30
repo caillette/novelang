@@ -21,8 +21,10 @@ import java.io.File;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
@@ -163,7 +165,7 @@ public class InsertFunctionTest {
         Treepath.create( initialTree )
     ) ;
 
-    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertTrue( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getBook() ) ;
   }
 
