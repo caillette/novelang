@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import novelang.book.Environment;
 import novelang.common.Location;
 import novelang.parser.NodeKind;
@@ -238,6 +239,7 @@ public class InsertFunction implements FunctionDefinition {
         Part part = null ;
         try {
           part = new Part( partFile ) ;
+          Iterables.addAll( problems, part.getProblems() ) ;
         } catch( MalformedURLException e ) {
           problems.add( Problem.createProblem( e ) ) ;
         }

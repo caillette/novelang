@@ -189,6 +189,21 @@ public class BookTest {
         bookTree
     ) ;
     Assert.assertFalse( book.hasProblem() ) ;
+  }
+
+
+  /**
+   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   */
+  @Test
+  public void insertWithBadPart() throws IOException {
+    final Book book = new Book(
+        FunctionRegistry.getStandardRegistry(),
+        scannedBookWithBadPart
+    ) ;
+    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+
+    Assert.assertTrue( book.hasProblem() ); ;
 
 
   }
@@ -202,8 +217,9 @@ public class BookTest {
   private File oneWordFile ;
 
   public static final String SCANNED_BOOK_FILENAME = TestResources.SCANNED_DIR ;
-  private File scannedBookNoStyle;
-  private File scannedBookWithStyle;
+  private File scannedBookNoStyle ;
+  private File scannedBookWithStyle ;
+  private File scannedBookWithBadPart ;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
 
@@ -231,6 +247,13 @@ public class BookTest {
         getClass(), TestResources.SCANNED_BOOK_NOSTYLE, contentDirectory ) ;
     scannedBookWithStyle = TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_BOOK_WITHSTYLE, contentDirectory ) ;
+
+    scannedBookWithBadPart = TestResourceTools.copyResourceToDirectory(
+        getClass(), TestResources.SERVED_BOOK_BADSCANNEDPART, contentDirectory ) ;
+    TestResourceTools.copyResourceToDirectory(
+        getClass(), TestResources.SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
+    TestResourceTools.copyResourceToDirectory(
+        getClass(), TestResources.SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
   }
 
 }

@@ -25,6 +25,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;
+import novelang.common.tree.Tree;
 import novelang.parser.NodeKind;
 
 /**
@@ -34,13 +35,17 @@ public class MetadataHelper {
 
   private MetadataHelper() { }
 
-  public static int countWords( SyntacticTree tree ) {
-    if( NodeKind.WORD.isRoot( tree ) ) {
-      return 1 ;
-    } else if( null != tree ) {
+  public static int countWords( Tree tree ) {
+    if( tree instanceof SyntacticTree ) {
+      final SyntacticTree syntacticTree = ( SyntacticTree ) tree ;
+      if( NodeKind.WORD.isRoot( syntacticTree ) ) {
+        return 1 ;
+      }
+    }
+    if( null != tree ) {
       int childCount = 0 ;
-      for( SyntacticTree child : tree.getChildren() ) {
-        childCount += countWords( child ) ;
+      for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
+        childCount += countWords( tree.getChildAt( i ) ) ;
       }
       return childCount ;
     } else {
@@ -56,7 +61,7 @@ public class MetadataHelper {
   }
 
 
-  public static DocumentMetadata createMetadata( SyntacticTree tree, final Charset encoding ) {
+  public static DocumentMetadata createMetadata( final Charset encoding ) {
 
     final ReadableDateTime timestamp = createTimestamp() ;
 

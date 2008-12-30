@@ -98,7 +98,7 @@ public class GenericRendererTest {
   }
 
   private static Renderable createRenderable( final SyntacticTree tree ) {
-    final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( tree, Encoding.DEFAULT ) ;
+    final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( Encoding.DEFAULT ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
         return ImmutableList.of() ;
