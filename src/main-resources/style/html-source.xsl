@@ -94,7 +94,7 @@
 
 
   
-  <xsl:template match="n:block-inside-double-quotes" ><tt>&ldquo;</tt><xsl:apply-templates/><tt>&rdquo;</tt><xsl:apply-imports/></xsl:template>
+  <xsl:template match="n:block-inside-double-quotes" ><tt>&ldquo;</tt><xsl:apply-templates/><tt>&rdquo;</tt></xsl:template>
 
   <xsl:template match="n:block-inside-solidus-pairs" ><tt>&amp;lt;em&amp;gt;</tt><xsl:apply-templates/><tt>&amp;lt;/em&amp;gt;</tt></xsl:template>
 
