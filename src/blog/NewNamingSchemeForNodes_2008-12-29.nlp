@@ -1,0 +1,141 @@
+The detection of incorrect XPath expression in XSL files now works (it is in the ``master`` branch). It's based on code generation for the ``NodeKind`` class which describes every supported node names as produced by the parser, and this is expected to be of a great help during the incoming huge refactoring of the naming scheme of the nodes.
+
+While Novelang grammar contains no semantic information, it has semantic-like markup. Text like ``//hi there//`` is supposed to become italics because of the slanting evocation caused by the solidus (or "forward slash") character. But here is the lie: while the stylesheet processes an ``emphasis`` node, its output is whatever the author wished -- including something not related to emphasis at all-_. The grammar is just wrong to claim its node is about emphasis, because the choice of making it appear as emphasis (through italics) is out of grammar's scope.
+
+The new naming scheme of the nodes intends to make the intent clearer: Novelang grammar carries no semantic meaning. The meaning is given by the stylesheet. In the case of the text between the two pairs of solidus, all what the grammar surely knows is... well, it's about two pairs of solidus. Just before diving in the gory details here is a taste of the new naming scheme: ``EMPHASIS`` would become ``BLOCK_INSIDE_SOLIDUS_PAIRS`` and inside the XSL stylesheet it would be ``n:block-inside-solidus-pairs``.
+
+Finding a consistent (and extensible) naming scheme is not easy because of plenty of overlapping cases. Many terms need clarification and sometimes consistency may impact some structural aspects.
+
+Let's start with the paragraph. The paragraph is a very central object which helps finding out two families of nodes: those taking place inside a paragraph, and others (which define the paragraph itself, or define stuff that may contain a paragraph).
+
+Let's say a paragraph is a sequence of characters which does not contain two consecutive line breaks. This draws interesting questions.
+
+Should a standalone URL appear enclosed in a paragraph? If a URL appears standalone, it reflects the author's will to make it appear as a paragraph so we'll enclose it into a paragraph (and the definition of "paragraph" gets clearer!).
+
+Is a big list item a paragraph? A big list item could be renamed in order to contain the "paragraph" word. For consistency, the "small list item" would become something like "embedded item", we just lose brevity here.
+
+There is a temptation to embed the list item node inside a ``PARAGRAPH`` block, as we do for URL. The stylesheet could rely on paragraph's parenthood (the list node) to determine it's a list item. And then we have only ``PARAGRAPH`` node, not two distinct cases. But in practice, stylesheet writers will make two distinct cases everytime because the two have different indentation and so on. So we really need to flavors of the "paragraph" node.
+
+``PARAGRAPH_REGULAR`` is a good name for the regular paragraph, hinting there can be not-so-regular ones.
+
+``PARAGRAPH_ITEM`` makes sense, as starting with ``PARAGRAPH`` tells structural things about the node. On the other hand, it can be understood as if paragraphs were holding items. So let's be true and use ``PARAGRAPH_AS_LIST_ITEM``.
+
+For a source document like this:
+
+<<<
+Hello
+
+http://novelang.sf.net
+
+--- item1
+
+--- item2
+>>>
+
+We end up with such a node structure:
+
+<<<
++-- PARAGRAPH_REGULAR
+|   +-- WORD
++-- PARAGRAPH_REGULAR
+|   +-- URL
++-- LIST
+    +-- PARAGRAPH_AS_LIST_ITEM
+    |   +-- WORD
+    +-- PARAGRAPH_AS_LIST_ITEM
+        +-- WORD
+>>>
+
+Now that we are clear about paragraphs, let's consider the case of paragraphs tied together by a paired delimiter (a delimiter including a start marker and an end marker). This is what current "blockquote" does. The delimiters are a whole line starting with "``<<``" (lower than sign) and ending with "``>>``" (greater than sign). The "blockquote" may only contain paragraphs. As we reserve the word "block" for another usage to explained later, we must find a way to tell there is an enclosed sequence of paragraphs. A prefix like ``SEQUENCE_OF_PARAGRAPHS`` is not so bad because it puts the emphasis on the word "sequence". But ``PARAGRAPH_SEQUENCE`` doesn't carry a plural form so it doesn't look stupid in case of only one paragraph. On the other hand, names describing a paragraph (``PARAGRAPH_REGULAR`` and ``PARAGRAPH_AS_LIST_ITEM``) start with the word "paragraph", causing some confusion. Finally, ``PARAGRAPHS`` is best because if we drop the plural `vs.` singular thing, we avoid the lengthy "sequence" word with the same meaning.
+Now we have a radix for the node name, we just add a suffix to describe the delimiter. After all, it would make sense to have similar structures with different markup (as we have for stuff inside a paragraph). Since the delimiter is a pair of angled brackets, just tell it. We end up with ``PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS``.
+
+I had a strong debate with myself: should I use ``IN`` (shorter) or ``INSIDE`` (more explicit) ? The "inside" word is very clear about a block contained by something. Later, when creating names around the "block" word, we'll see that a construct like "block inside" is less ambiguous than "block in" that may look like a verb.
+
+In ``ANGLED_BRACKET_PAIRS`` the name of the delimiter is left in singular. The word "pair" is used because "double" is required for "double quote". "Double quote" is the Unicode name of the character, and it's a Novelang standard to always use Unicode names. So we can't use "double" to say there are many delimiters and we use "pair" instead. Telling there are several pairs (plural) is ok because we can't honestly figure how there could be more than two.
+
+Novelang's current "literal" looks a lot like "blockquote" (just three angled brackets instead of two). But literal doesn't care about any paragraph structure. It's just uninterpreted lines, including line breaks as they are. That's a thing to know when writing the stylesheet: it hints there will be no subnode to process. In this case, ``LITERAL`` should appear inside the node name. But, as we stated for paragraphs, it's important to highlight the structural implications of the node. So we end up putting the "line aspect" first and we get ``LINES_OF_LITERAL`` as a radix. Adding the suffix, we end up with ``LINES_OF_LITERAL_INSIDE_ANGLED_BRACKET_TRIPLETS``. The suffix here is questionable because I don't see any reason to offer another support to literal. So let's keep ``LINES_OF_LITERAL`` finally.
+
+There is another kind of nodes that may contain other nodes, especially paragraphs: "chapter" and "section". There is matter for a discussion because if both become sections and sections become nestable, we could do amazing things, especially if the depth of sections can be adjusted at Book level. But we don't need to solve every problem today and we leave this to another discussion.
+
+Now let's look at what happens inside a paragraph. All subelements acting like a container inside a paragraph (like parenthesis) are called blocks. "Block" is a good word because as it is short and it's not wasted here because it will appear a lot. In order to follow the emerging rule of telling about structure first, we'll use the prefix ``BLOCK``.
+
+For stuff inside parenthesis and square brackets (and curly braces in a near future), something like ``BLOCK_INSIDE_PARENTHESIS`` is clear enough.
+
+For paired delimiters like double hyphen (for ``-- interpolated clause --``) or double solidus, it's right to say there are //two// pairs of something. So ``BLOCK_INSIDE_SOLIDUS_PAIRS`` looks reasonable. 
+
+Current "interpolated clause" has a special case when it has a "silent end" (like ``--this-_.``). It's useful for making only the first dash character appear, while a dumb punctuation sign would have released the level of control provided by the parser. In this case, it's hard to claim there are two pairs of hyphens. ``BLOCK_INSIDE_2_HYPHENS_THEN_HYPHEN_LOW_LINE`` is accurate, while not very concise. ``THEN`` has the special role to tell delimiters are asymmetrical, describing the first delimiter //then// the second.
+
+For double quotes, rules stated above still apply (no chance here) and we have``BLOCK_INSIDE_DOUBLE_QUOTES``.
+
+For current "superscript", there is only one opening delimiter. The closing delimiter is implicit with the end of contained word (``super^script``) so we don't have exactly a block. But rules above still apply and we get ``WORD_AFTER_CIRCUMFLEX_ACCENT``.
+
+Punctuation signs are left unchanged: by now we have a ``PUNCTUATION_SIGN`` node enclosing a node representing the sign itself (``SIGN_COMMA``, ``SIGN_PERIOD``...).
+
+Now here is the summary of old node names `vs.` new ones:
+
+<<<
+CHAPTER                      
+  -> CHAPTER
+
+SECTION                      
+  -> SECTION
+
+PARAGRAPH_PLAIN              
+  -> PARAGRAPH_REGULAR
+
+PARAGRAPH_SPEECH             
+  -> PARAGRAPH_AS_LIST_ITEM
+
+BLOCKQUOTE                   
+  -> PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS
+
+LITERAL                      
+  -> LINES_OF_LITERAL
+
+EMPHASIS                     
+  -> BLOCK_INSIDE_SOLIDUS_PAIRS
+
+QUOTES                       
+  -> BLOCK_INSIDE_DOUBLE_QUOTES
+
+PARENTHESIS                  
+  -> BLOCK_INSIDE_PARENTHESIS
+
+SQUARE_BRACKETS              
+  -> BLOCK_INSIDE_SQUARE_BRACKETS
+
+INTERPOLATEDCLAUSE           
+  -> BLOCK_INSIDE_HYPHEN_PAIRS
+
+INTERPOLATEDCLAUSE_SILENTEND 
+  -> BLOCK_INSIDE_2_HYPHENS_THEN_HYPHEN_LOW_LINE
+
+SOFT_INLINE_LITERAL          
+  -> BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
+
+HARD_INLINE_LITERAL          
+  -> BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
+
+SUPERSCRIPT                  
+  -> WORD_AFTER_CIRCUMFLEX_ACCENT 
+>>>
+
+Now I'm having a look at some ideas I blogged down for extending the Novelang grammar. It was in:
+http://novelang.blogspot.com/2008/07/some-ideas-for-novelang-syntax.html
+. The new naming scheme seems to scale!
+
+Please note the use of ``AND`` used for describing the first delimiter. For "``++=``" we have ``2_PLUS_SIGNS_AND_EQUAL_SIGN_PAIRS`` where ``AND`` means "immediately followed by". There is no hint the delimiters are symmetrical.
+
+<<<
+^^ small caps ^^          
+  -> BLOCK_INSIDE_CIRCUMFLEX_ACCENT_PAIRS
+  
+__- single underline -__ 
+  -> BLOCK_INSIDE_2_LOW_LINES_AND_HYPHEN_PAIRS
+  
+++= double strike =++     
+  -> BLOCK_INSIDE_2_PLUS_SIGNS_AND_EQUAL_SIGN_PAIRS
+
+sub_script                
+  -> WORD_AFTER_LOW_LINE
+>>>
