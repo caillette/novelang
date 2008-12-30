@@ -121,6 +121,4 @@
     <code><xsl:apply-templates/></code>
   </xsl:template>
 
-  <xsl:template match="n:meta" />
-
 </xsl:stylesheet>

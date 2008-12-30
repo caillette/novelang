@@ -36,4 +36,7 @@
   <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>
 
+  <xsl:template match="n:meta" />
+
+  
 </xsl:stylesheet>
