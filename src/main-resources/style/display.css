@@ -43,9 +43,9 @@ pre {
 }
 
 blockquote > p {
-  font-size : 12.5pt ;
+  font-size : 13.0pt ;
 	text-indent : 0 ;
-	text-align : justify ;
+	text-align : left ;
 	line-height : 1.25 ;
 	margin : 1pt 0 0 10pt;
 	padding : 0 ;
