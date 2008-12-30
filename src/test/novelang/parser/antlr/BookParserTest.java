@@ -178,7 +178,7 @@ public class BookParserTest {
             tree( FUNCTION_NAME, "function" ),
             tree(
                 VALUED_ARGUMENT_PRIMARY,
-                tree( PARAGRAPH_PLAIN,
+                tree( NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD, "with" ),
                     tree( WORD, "paragraphbody" )
                 )

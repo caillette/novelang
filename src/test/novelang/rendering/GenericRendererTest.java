@@ -35,6 +35,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.StylesheetMap;
 import novelang.parser.Encoding;
+import novelang.parser.NodeKind;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -44,30 +45,30 @@ public class GenericRendererTest {
 
   @Test
   public void whitespace1() throws Exception {
-    final SyntacticTree tree = tree( PARENTHESIS, tree( WORD, "first" ), tree( WORD, "second") ) ;
+    final SyntacticTree tree = tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD, "first" ), tree( WORD, "second") ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
-    assertEquals( "PARENTHESIS(first^second)", getRenderedText() ) ;
+    assertEquals( "BLOCK_INSIDE_PARENTHESIS(first^second)", getRenderedText() ) ;
   }
 
   @Test
   public void superscript() throws Exception {
     final SyntacticTree tree = tree(
-        PARENTHESIS,
-        tree( WORD, tree( "super"), tree( SUPERSCRIPT, "script" ) )
+        BLOCK_INSIDE_PARENTHESIS,
+        tree( WORD, tree( "super"), tree( WORD_AFTER_CIRCUMFLEX_ACCENT, "script" ) )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
-    assertEquals( "PARENTHESIS(superSUPERSCRIPT(script))", getRenderedText() ) ;
+    assertEquals( "BLOCK_INSIDE_PARENTHESIS(superWORD_AFTER_CIRCUMFLEX_ACCENT(script))", getRenderedText() ) ;
   }
 
   @Test
   public void whitespace2() throws Exception {
     final SyntacticTree tree = tree(
-        PARAGRAPH_PLAIN,
+        NodeKind.PARAGRAPH_REGULAR,
         tree( WORD, "w0" ),
         tree(
-            PARENTHESIS,
+            BLOCK_INSIDE_PARENTHESIS,
             tree( WORD, "w1" ),
             tree( WORD, "w2"),
             tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP ) )
@@ -77,7 +78,7 @@ public class GenericRendererTest {
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     assertEquals(
-        "PARAGRAPH_PLAIN(w0^PARENTHESIS(w1^w2PUNCTUATION_SIGN(SIGN_FULLSTOP()))^w3)",
+        "PARAGRAPH_REGULAR(w0^BLOCK_INSIDE_PARENTHESIS(w1^w2PUNCTUATION_SIGN(SIGN_FULLSTOP()))^w3)",
         getRenderedText()
     ) ;
   }

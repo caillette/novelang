@@ -38,12 +38,12 @@ public class HierarchizerTest {
     verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
-            tree( CHAPTER, tree( PARAGRAPH_PLAIN ) )
+            tree( CHAPTER, tree( NodeKind.PARAGRAPH_REGULAR ) )
         ),
         tree(
             PART,
             tree( CHAPTER ),
-            tree( PARAGRAPH_PLAIN )
+            tree( NodeKind.PARAGRAPH_REGULAR )
         ),
         CHAPTER
     ) ;
@@ -54,14 +54,14 @@ public class HierarchizerTest {
     verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
-            tree( BLOCKQUOTE ),
-            tree( CHAPTER, tree( PARAGRAPH_PLAIN ) )
+            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
+            tree( CHAPTER, tree( NodeKind.PARAGRAPH_REGULAR ) )
         ),
         tree(
             PART,
-            tree( BLOCKQUOTE ),
+            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
             tree( CHAPTER ),
-            tree( PARAGRAPH_PLAIN )
+            tree( NodeKind.PARAGRAPH_REGULAR )
         ),
         CHAPTER
     ) ;
@@ -73,13 +73,13 @@ public class HierarchizerTest {
         tree(
             PART,
             tree( CHAPTER ),
-            tree( SECTION, tree( PARAGRAPH_PLAIN ) )
+            tree( SECTION, tree( NodeKind.PARAGRAPH_REGULAR ) )
         ),
         tree(
             PART,
             tree( CHAPTER ),
             tree( SECTION ),
-            tree( PARAGRAPH_PLAIN )
+            tree( NodeKind.PARAGRAPH_REGULAR )
         ),
         SECTION,
         CHAPTER
@@ -90,23 +90,23 @@ public class HierarchizerTest {
   public void ignoreAndAttachAtUpperLevel() {
     final SyntacticTree expected = tree(
         PART,
-        tree( PARAGRAPH_PLAIN ),
+        tree( NodeKind.PARAGRAPH_REGULAR ),
         tree( CHAPTER ),
-        tree( SECTION, tree( PARAGRAPH_PLAIN ) ),
+        tree( SECTION, tree( NodeKind.PARAGRAPH_REGULAR ) ),
         tree( CHAPTER ),
-        tree( SECTION, tree( IDENTIFIER ), tree( BLOCKQUOTE ) ),
+        tree( SECTION, tree( IDENTIFIER ), tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ) ),
         tree( SECTION )
     );
     final SyntacticTree toBeRehierarchized = tree(
         PART,
-        tree( PARAGRAPH_PLAIN ),
+        tree( NodeKind.PARAGRAPH_REGULAR ),
         tree( CHAPTER ),
         tree( SECTION ),
-        tree( PARAGRAPH_PLAIN ),
+        tree( NodeKind.PARAGRAPH_REGULAR ),
         tree( CHAPTER ),
         tree( SECTION ),
         tree( IDENTIFIER ),
-        tree( BLOCKQUOTE ),
+        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
         tree( SECTION )
     );
     verifyRehierarchizeFromLeftToRight(
@@ -143,21 +143,21 @@ public class HierarchizerTest {
   public void aggregateSpeech() {
     final SyntacticTree expected = tree(
         PART,
-        tree( PARAGRAPH_PLAIN ),
+        tree( NodeKind.PARAGRAPH_REGULAR ),
         tree(
-            _SPEECH_SEQUENCE,
-            tree( PARAGRAPH_SPEECH ),
-            tree( PARAGRAPH_SPEECH_CONTINUED )
+            _LIST_WITH_TRIPLE_HYPHEN,
+            tree( PARAGRAPH_AS_LIST_ITEM ),
+            tree( PARAGRAPH_AS_LIST_ITEM )
         ),
-        tree( BLOCKQUOTE )
+        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
 
     final SyntacticTree toBeRehierarchized = tree(
         PART,
-        tree( PARAGRAPH_PLAIN ),
-        tree( PARAGRAPH_SPEECH ),
-        tree( PARAGRAPH_SPEECH_CONTINUED ),
-        tree( BLOCKQUOTE )
+        tree( NodeKind.PARAGRAPH_REGULAR ),
+        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
     verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
   }
@@ -167,29 +167,29 @@ public class HierarchizerTest {
     final SyntacticTree expected = tree(
         PART,
         tree( CHAPTER,
-          tree( PARAGRAPH_PLAIN ),
+          tree( NodeKind.PARAGRAPH_REGULAR ),
           tree(
-              _SPEECH_SEQUENCE,
-              tree( PARAGRAPH_SPEECH ),
-              tree( PARAGRAPH_SPEECH_CONTINUED )
+              _LIST_WITH_TRIPLE_HYPHEN,
+              tree( PARAGRAPH_AS_LIST_ITEM ),
+              tree( PARAGRAPH_AS_LIST_ITEM )
           ),
-          tree( BLOCKQUOTE )
+          tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
-        tree( CHAPTER, tree( LITERAL, "" ) )
+        tree( CHAPTER, tree( LINES_OF_LITERAL, "" ) )
     ) ;
 
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree(
             CHAPTER,
-            tree( PARAGRAPH_PLAIN ),
-            tree( PARAGRAPH_SPEECH ),
-            tree( PARAGRAPH_SPEECH_CONTINUED ),
-            tree( BLOCKQUOTE )
+            tree( NodeKind.PARAGRAPH_REGULAR ),
+            tree( PARAGRAPH_AS_LIST_ITEM ),
+            tree( PARAGRAPH_AS_LIST_ITEM ),
+            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
         tree(
             CHAPTER,
-            tree( LITERAL, "" )
+            tree( LINES_OF_LITERAL, "" )
         )
     ) ;
     verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
@@ -200,32 +200,32 @@ public class HierarchizerTest {
   public void aggregateSeveralSpeeches() {
     final SyntacticTree expected = tree(
         PART,
-        tree( PARAGRAPH_PLAIN ),
+        tree( NodeKind.PARAGRAPH_REGULAR ),
         tree(
-            _SPEECH_SEQUENCE,
-            tree( PARAGRAPH_SPEECH ),
-            tree( PARAGRAPH_SPEECH_CONTINUED )
+            _LIST_WITH_TRIPLE_HYPHEN,
+            tree( PARAGRAPH_AS_LIST_ITEM ),
+            tree( PARAGRAPH_AS_LIST_ITEM )
         ),
-        tree( BLOCKQUOTE ),
+        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
         tree(
-            _SPEECH_SEQUENCE,
-            tree( PARAGRAPH_SPEECH ),
-            tree( PARAGRAPH_SPEECH_ESCAPED ),
-            tree( PARAGRAPH_SPEECH_CONTINUED )
+            _LIST_WITH_TRIPLE_HYPHEN,
+            tree( PARAGRAPH_AS_LIST_ITEM ),
+            tree( PARAGRAPH_AS_LIST_ITEM ),
+            tree( PARAGRAPH_AS_LIST_ITEM )
         ),
-        tree( LITERAL, "" )
+        tree( LINES_OF_LITERAL, "" )
 
     ) ;
     final SyntacticTree toBeRehierarchized = tree(
         PART,
-        tree( PARAGRAPH_PLAIN ),
-        tree( PARAGRAPH_SPEECH ),
-        tree( PARAGRAPH_SPEECH_CONTINUED ),
-        tree( BLOCKQUOTE ),
-        tree( PARAGRAPH_SPEECH ),
-        tree( PARAGRAPH_SPEECH_ESCAPED ),
-        tree( PARAGRAPH_SPEECH_CONTINUED ),
-        tree( LITERAL, "" )
+        tree( NodeKind.PARAGRAPH_REGULAR ),
+        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
+        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( LINES_OF_LITERAL, "" )
     ) ;
     verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
   }

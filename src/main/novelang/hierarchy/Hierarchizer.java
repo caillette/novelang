@@ -63,15 +63,13 @@ public class Hierarchizer {
       while( true ) {
         final NodeKind nodeKind = getKind( child ) ;
         switch( nodeKind ) {
-          case PARAGRAPH_SPEECH :
-          case PARAGRAPH_SPEECH_CONTINUED :
-          case PARAGRAPH_SPEECH_ESCAPED :
+          case PARAGRAPH_AS_LIST_ITEM:
             if( insideSpeechSequence ) {
               child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
               break ;
             } else {
               final SyntacticTree speech =
-                  new SimpleTree( _SPEECH_SEQUENCE.name(), child.getTreeAtEnd() ) ;
+                  new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN.name(), child.getTreeAtEnd() ) ;
               child = TreepathTools.replaceEnd( child, speech ) ;
               insideSpeechSequence = true ;
             }

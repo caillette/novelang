@@ -69,17 +69,17 @@
     <h2><xsl:apply-templates /></h2>
   </xsl:template>
 
-  <xsl:template match="n:blockquote" >
+  <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
 <tt>&amp;lt;blockquote&amp;gt;</tt><xsl:apply-templates/><tt>&amp;lt;/blockquote&amp;gt;</tt>
   </xsl:template>
 
-  <xsl:template match="n:literal" >
+  <xsl:template match="n:lines-of-literal" >
 <tt>&amp;lt;pre&amp;gt;</tt><pre><xsl:value-of select="."/></pre><tt>&amp;lt;/pre&amp;gt;</tt>
   </xsl:template>
 
   <xsl:template match="n:style" />
 
-  <xsl:template match="n:paragraph-plain" >
+  <xsl:template match="n:paragraph-regular" >
     <p><xsl:apply-templates/></p>
   </xsl:template>
 
@@ -87,26 +87,26 @@
     <a><xsl:attribute name="href"><xsl:value-of select="." /></xsl:attribute><tt>&amp;lt;a href="<xsl:value-of select="." />"&amp;gt;<xsl:value-of select="." />&amp;lt;/a&amp;gt;</tt></a>
   </xsl:template>
 
-  <xsl:template match="n:paragraph-speech" >
+  <xsl:template match="n:paragraph-as-list-item" >
     <p><tt>&mdash;&nbsp;</tt><xsl:apply-templates/></p>
   </xsl:template>
   
 
 
   
-  <xsl:template match="n:quote" ><tt>&ldquo;</tt><xsl:apply-templates/><tt>&rdquo;</tt><xsl:apply-imports/></xsl:template>
+  <xsl:template match="n:block-inside-double-quotes" ><tt>&ldquo;</tt><xsl:apply-templates/><tt>&rdquo;</tt><xsl:apply-imports/></xsl:template>
 
-  <xsl:template match="n:emphasis" ><tt>&amp;lt;em&amp;gt;</tt><xsl:apply-templates/><tt>&amp;lt;/em&amp;gt;</tt></xsl:template>
+  <xsl:template match="n:block-inside-solidus-pairs" ><tt>&amp;lt;em&amp;gt;</tt><xsl:apply-templates/><tt>&amp;lt;/em&amp;gt;</tt></xsl:template>
 
-  <xsl:template match="n:superscript" >
+  <xsl:template match="n:word-after-circumflex-accent" >
     <tt>&amp;lt;sup&amp;gt;</tt><xsl:apply-templates/><tt>&amp;lt;/sup&amp;gt;</tt>
   </xsl:template>
 
-  <xsl:template match="n:interpolatedclause" ><tt>&ndash;&nbsp;</tt><xsl:apply-templates/><tt>&nbsp;&ndash;</tt></xsl:template>
+  <xsl:template match="n:block-inside-hyphen-pairs" ><tt>&ndash;&nbsp;</tt><xsl:apply-templates/><tt>&nbsp;&ndash;</tt></xsl:template>
 
-  <xsl:template match="n:interpolatedclause-silentend" ><tt>&ndash;&nbsp;</tt><xsl:apply-templates/></xsl:template>
+  <xsl:template match="n:block-inside-two-hyphens-then-hyphen-low-line" ><tt>&ndash;&nbsp;</tt><xsl:apply-templates/></xsl:template>
 
-  <xsl:template match="n:hard-inline-literal" ><tt>&amp;lt;code&amp;gt;</tt><code><xsl:apply-templates/></code><tt>&amp;lt;/code&amp;gt;</tt></xsl:template>
+  <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" ><tt>&amp;lt;code&amp;gt;</tt><code><xsl:apply-templates/></code><tt>&amp;lt;/code&amp;gt;</tt></xsl:template>
 
   <xsl:template match="n:apostrophe-wordmate" ><tt>&rsquo;</tt></xsl:template>
 

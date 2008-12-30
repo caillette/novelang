@@ -21,25 +21,25 @@ options { output = AST ; }
 //import AllTokens, Url ;
 
 tokens {
-  BLOCKQUOTE ;
+  PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;     
   BOOK ;
   CHAPTER ;
-  EMPHASIS ;                       // Should become BLOCK_INSIDE_SOLIDUS_PAIRS
+  BLOCK_INSIDE_SOLIDUS_PAIRS ;                 
   EXTENDED_WORD ;
-  HARD_INLINE_LITERAL ;
+  BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ; 
   IDENTIFIER ;
-  INTERPOLATEDCLAUSE ;            // Should become BLOCK_INSIDE_HYPHEN_PAIRS
-  INTERPOLATEDCLAUSE_SILENTEND ;  // Should become BLOCK_INSIDE_HYPHEN_PAIR_WITH_LOWERED_END
-  LITERAL ;
+  BLOCK_INSIDE_HYPHEN_PAIRS ;            
+  BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE ;  
+  LINES_OF_LITERAL ;                      
   PART ;
-  PARENTHESIS ;
-  PARAGRAPH_PLAIN ;  // Should become PARAGRAPH
-  PARAGRAPH_SPEECH ; // Should become BIG_DASHED_LIST_ITEM
-  QUOTE ;            // Should become BLOCK_INSIDE_DOUBLE_QUOTES
+  BLOCK_INSIDE_PARENTHESIS ;              
+  PARAGRAPH_REGULAR ;              
+  PARAGRAPH_AS_LIST_ITEM ;         
+  BLOCK_INSIDE_DOUBLE_QUOTES ;     
   SECTION ;
-  SOFT_INLINE_LITERAL ;
-  SQUARE_BRACKETS ;  // Should become BLOCK_INSIDE_SQUARE_BRACKETS
-  SUPERSCRIPT ;
+  BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;   
+  BLOCK_INSIDE_SQUARE_BRACKETS ;            
+  WORD_AFTER_CIRCUMFLEX_ACCENT ;            
   TITLE ;
   URL ;  
   WORD ;
@@ -189,7 +189,7 @@ paragraph
 	          )        
 	      )
 	    )*
-	  ) -> ^( PARAGRAPH_PLAIN $p+ )
+	  ) -> ^( PARAGRAPH_REGULAR $p+ )
     
   ;  
 
@@ -307,7 +307,7 @@ parenthesizedSpreadblock
         whitespace? 
       )
       RIGHT_PARENTHESIS
-    ) -> ^( PARENTHESIS spreadBlockBody )
+    ) -> ^( BLOCK_INSIDE_PARENTHESIS spreadBlockBody )
   ;
 
 parenthesizedMonoblock
@@ -316,7 +316,7 @@ parenthesizedMonoblock
         whitespace? 
       )
       RIGHT_PARENTHESIS
-    ) -> ^( PARENTHESIS monoblockBody )
+    ) -> ^( BLOCK_INSIDE_PARENTHESIS monoblockBody )
   ;
 
 // ===============
@@ -329,7 +329,7 @@ squarebracketsSpreadblock
         whitespace? 
       )
       RIGHT_SQUARE_BRACKET
-    ) -> ^( SQUARE_BRACKETS spreadBlockBody )
+    ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS spreadBlockBody )
   ;
 
 squarebracketsMonoblock
@@ -338,7 +338,7 @@ squarebracketsMonoblock
         whitespace? 
       )
       RIGHT_SQUARE_BRACKET
-    ) -> ^( SQUARE_BRACKETS monoblockBody )
+    ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS monoblockBody )
   ;
 
 
@@ -352,7 +352,7 @@ doubleQuotedSpreadBlock
 	      whitespace? 
 	    )?
 	    DOUBLE_QUOTE
-	  ) -> ^( QUOTE $b+ ) 
+	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ ) 
   ;
 
 delimitedSpreadblockNoDoubleQuotes
@@ -413,7 +413,7 @@ doubleQuotedMonoblock
 	      whitespace? 
 	    )?
 	    DOUBLE_QUOTE
-	  ) -> ^( QUOTE $b+ )
+	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ )
   ;
 
 delimitedMonoblockNoDoubleQuotes
@@ -474,7 +474,7 @@ emphasizedSpreadBlock
 	      whitespace? 
 	    )?
 	    SOLIDUS SOLIDUS
-	  ) -> ^( EMPHASIS $b+ )
+	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
 
 delimitedSpreadblockNoEmphasis
@@ -540,7 +540,7 @@ emphasizedMonoblock
 	      whitespace? 
 	    )?
 	    SOLIDUS SOLIDUS
-	  ) -> ^( EMPHASIS $b+ )
+	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
 
 delimitedMonoblockNoEmphasis
@@ -601,8 +601,8 @@ hyphenPairSpreadBlock
       whitespace? 
     )?
     HYPHEN_MINUS 
-    (   HYPHEN_MINUS -> ^( INTERPOLATEDCLAUSE $b+ ) 
-      | LOW_LINE -> ^( INTERPOLATEDCLAUSE_SILENTEND $b+ ) 
+    (   HYPHEN_MINUS -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ ) 
+      | LOW_LINE -> ^( BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE $b+ ) 
     ) 	  
   ;
 
@@ -668,7 +668,7 @@ hyphenPairMonoblock
 	      whitespace? 
 	    )?
 	    HYPHEN_MINUS HYPHEN_MINUS
-	  ) -> ^( INTERPOLATEDCLAUSE $b+ )
+	  ) -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ )
   ;
 
 delimitedMonoblockNoHyphenPair
@@ -737,7 +737,7 @@ bigDashedListItem
         | ( url ) => i += url
         | ( smallDashedListItem ) => i += smallDashedListItem
       )
-    )* -> ^( PARAGRAPH_SPEECH $i+ )
+    )* -> ^( PARAGRAPH_AS_LIST_ITEM $i+ )
 
   ;
 
@@ -759,7 +759,7 @@ blockQuote
     ( largebreak paragraph )* 
     ( mediumbreak | largebreak )?
     GREATER_THAN_SIGN GREATER_THAN_SIGN
-    -> ^( BLOCKQUOTE paragraph* )
+    -> ^( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS paragraph* )
   ;  
 
 literal
@@ -767,7 +767,7 @@ literal
     WHITESPACE? SOFTBREAK
     l = literalLines
     SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
-    -> ^( LITERAL { delegate.createTree( LITERAL, $l.unescaped ) } )
+    -> ^( LINES_OF_LITERAL { delegate.createTree( LINES_OF_LITERAL, $l.unescaped ) } )
   ;  
 
 literalLines returns [ String unescaped ]
@@ -843,7 +843,8 @@ softInlineLiteral
       | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT
-    -> ^( SOFT_INLINE_LITERAL { delegate.createTree( SOFT_INLINE_LITERAL, buffer.toString() ) } )
+    -> ^( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS 
+          { delegate.createTree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, buffer.toString() ) } )
   ;
   
 hardInlineLiteral
@@ -856,7 +857,9 @@ hardInlineLiteral
       | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT GRAVE_ACCENT
-    -> ^( HARD_INLINE_LITERAL { delegate.createTree( HARD_INLINE_LITERAL, buffer.toString() ) } )
+    -> ^( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS 
+          { delegate.createTree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, buffer.toString() ) } 
+        )
   ;
   
   
@@ -1127,7 +1130,7 @@ word
   : ( w1 = rawWord ( CIRCUMFLEX_ACCENT w2 = rawWord ) )
     -> ^( WORD 
             { delegate.createTree( WORD, $w1.text ) } 
-            ^( SUPERSCRIPT { delegate.createTree( WORD, $w2.text ) } )
+            ^( WORD_AFTER_CIRCUMFLEX_ACCENT { delegate.createTree( WORD, $w2.text ) } )
         )	
   | ( w = rawWord )
     -> ^( WORD { delegate.createTree( WORD, $w.text ) } )

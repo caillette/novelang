@@ -72,15 +72,14 @@ Question mark? Exclamation mark! Comma, semicolon; colon: full stop. Ellipsis...
 
 *** Speeches
 
-=== Speeches are paragraphs
+=== Lists are paragraphs
 
 --- Just like this...
 
---+ Speeches may spread on several paragraphs with "continuation".
+--- And this.
 
---| Continuation implies escaping.
+--- And a last one.
 
---+ And then it continues again.
 
 *** Anonymous sections
 

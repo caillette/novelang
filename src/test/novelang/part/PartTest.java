@@ -31,6 +31,7 @@ import static novelang.parser.NodeKind.*;
 import novelang.common.SyntacticTree;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.parser.NodeKind;
 
 /**
  * @author Laurent Caillette
@@ -46,11 +47,11 @@ public class PartTest {
     final SyntacticTree expected = tree( PART,
         tree( SECTION,
             tree( TITLE, tree( WORD, "Section1nlp" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p00" ), tree( WORD, "w001" ) )
         ),
         tree( SECTION,
             tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
         )
     ) ;
 
@@ -69,11 +70,11 @@ public class PartTest {
         ),        
         tree( SECTION,
             tree( TITLE, tree( WORD, "Section1nlp" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p00" ), tree( WORD, "w001" ) )
         ),
         tree( SECTION,
             tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
         )
     ) ;
 
@@ -91,24 +92,24 @@ public class PartTest {
             tree( TITLE, tree( WORD, "Chapter-0" ) ),
             tree( SECTION,
                 tree( TITLE, tree( WORD, "Section-0-0" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-0" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-0-1" ) )
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-0-0-0" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-0-0-1" ) )
             ),
             tree( SECTION,
                 tree( TITLE, tree( WORD, "Section-0-1" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-0-1-0" ) )
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-0-1-0" ) )
             )
         ),
         tree( CHAPTER,
             tree( TITLE, tree( WORD, "Chapter-1" ) ),
             tree( SECTION,
                 tree( TITLE, tree( WORD, "Section-1-0" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-0-0" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-0-1" ) )
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-1-0-0" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-1-0-1" ) )
             ),
             tree( SECTION,
                 tree( TITLE, tree( WORD, "Section-1-1" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "Paragraph-1-1-0" ) )
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-1-1-0" ) )
             )
         )
     ) ;

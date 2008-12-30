@@ -85,7 +85,7 @@ public class BookTest {
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "1" ) ),
             tree(
-                PARAGRAPH_PLAIN,
+                NodeKind.PARAGRAPH_REGULAR,
                 tree( WORD, "oneword" )
             )
         ),
@@ -114,7 +114,7 @@ public class BookTest {
                 NodeKind.CHAPTER ,
                 tree( NodeKind.TITLE, tree( WORD, "file1" ) ),
                 tree(
-                    PARAGRAPH_PLAIN,
+                    NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD, "content-of-file1" )
                 )
             ),
@@ -122,7 +122,7 @@ public class BookTest {
                 NodeKind.CHAPTER ,
                 tree( NodeKind.TITLE, tree( WORD, "file2" ) ),
                 tree(
-                    PARAGRAPH_PLAIN,
+                    NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD, "content-of-file2" )
                 )
             ),
@@ -130,7 +130,7 @@ public class BookTest {
                 NodeKind.CHAPTER ,
                 tree( NodeKind.TITLE, tree( WORD, "file3" ) ),
                 tree(
-                    PARAGRAPH_PLAIN,
+                    NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD, "content-of-file3" )
                 )
             )
@@ -163,7 +163,7 @@ public class BookTest {
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
                 tree( NodeKind.TITLE, tree( WORD, "file1" ) ),
                 tree(
-                    PARAGRAPH_PLAIN,
+                    NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD, "content-of-file1" )
                 )
             ),
@@ -172,7 +172,7 @@ public class BookTest {
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
                 tree( NodeKind.TITLE, tree( WORD, "file2" ) ),
                 tree(
-                    PARAGRAPH_PLAIN,
+                    NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD, "content-of-file2" )
                 )
             ),
@@ -181,7 +181,7 @@ public class BookTest {
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
                 tree( NodeKind.TITLE, tree( WORD, "file3" ) ),
                 tree(
-                    PARAGRAPH_PLAIN,
+                    NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD, "content-of-file3" )
                 )
             )

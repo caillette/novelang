@@ -21,7 +21,6 @@ import java.io.File;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -40,6 +39,7 @@ import novelang.book.function.IllegalFunctionCallException;
 import novelang.parser.antlr.BookParserTest;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.parser.NodeKind;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -65,7 +65,7 @@ public class InsertFunctionTest {
     assertNotNull( result.getBook() ) ;
 
     TreeFixture.assertEquals(
-        tree( BOOK, tree( PARAGRAPH_PLAIN, tree( WORD, "oneword" ) ) ),
+        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "oneword" ) ) ),
         result.getBook().getTreeAtStart()
     ) ;
 
@@ -95,7 +95,7 @@ public class InsertFunctionTest {
                 tree( TITLE, tree( WORD, "no-chapter" ) ),
                 tree( SECTION,
                     tree( TITLE, tree( WORD, "Section" ) ),
-                    tree( PARAGRAPH_PLAIN, tree( WORD, "paragraph" ) )
+                    tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "paragraph" ) )
                 )
             )
         ),
@@ -125,7 +125,7 @@ public class InsertFunctionTest {
     assertNotNull( result.getBook() ) ;
 
     TreeFixture.assertEquals(
-        tree( BOOK, tree( PARAGRAPH_PLAIN, tree( _STYLE, "mystyle" ), tree( WORD, "oneword" ) ) ),
+        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( _STYLE, "mystyle" ), tree( WORD, "oneword" ) ) ),
         result.getBook().getTreeAtStart()
     ) ;
 

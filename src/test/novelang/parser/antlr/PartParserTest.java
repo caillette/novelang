@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import static novelang.parser.NodeKind.*;
 import novelang.common.SyntacticTree;
 import novelang.parser.Escape;
+import novelang.parser.NodeKind;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -93,7 +94,7 @@ public class PartParserTest {
     PARSERMETHOD_TITLE.checkTree( "some (title) !", tree(
         TITLE,
         tree( WORD, "some" ),
-        tree( PARENTHESIS, tree( WORD, "title" ) ),
+        tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD, "title" ) ),
         tree( PUNCTUATION_SIGN, SIGN_EXCLAMATIONMARK )
     ) ) ;
   }
@@ -151,7 +152,7 @@ public class PartParserTest {
 
   @Test
   public void wordWithSuperscript() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree( "w^e", tree( WORD, tree( "w" ), tree( SUPERSCRIPT, "e" ) ) ) ;
+    PARSERMETHOD_WORD.checkTree( "w^e", tree( WORD, tree( "w" ), tree( WORD_AFTER_CIRCUMFLEX_ACCENT, "e" ) ) ) ;
   }
 
   @Test
@@ -167,7 +168,7 @@ public class PartParserTest {
   @Test
   public void paragraphIsSimplestSpeech() throws RecognitionException {
     PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree( "--- w0", tree(
-        PARAGRAPH_SPEECH,
+        PARAGRAPH_AS_LIST_ITEM,
         tree( WORD, "w0" )
     ) ) ;
   }
@@ -176,49 +177,12 @@ public class PartParserTest {
   public void paragraphIsSimplestSpeechWithIdentifier() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
         "--- w0", tree(
-            PARAGRAPH_SPEECH,
+        PARAGRAPH_AS_LIST_ITEM,
             tree( IDENTIFIER, "identifier"),
             tree( WORD, "w0" )
         ) ) ;
   }
 
-  @Test @Ignore
-  public void paragraphIsSimplestSpeechEscape() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "--| w0", tree(
-        PARAGRAPH_SPEECH_ESCAPED,
-        tree( WORD, "w0" )
-    ) ) ;
-
-  }
-
-  @Test @Ignore
-  public void paragraphIsSimplestSpeechEscapeWithIdentifier() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
-        "--| w0", tree(
-            PARAGRAPH_SPEECH_ESCAPED,
-            tree( IDENTIFIER, "identifier"),
-            tree( WORD, "w0" )
-        ) ) ;
-  }
-
-  @Test @Ignore
-  public void paragraphIsSimplestSpeechContinued() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "--+ w0", tree(
-        PARAGRAPH_SPEECH_CONTINUED,
-        tree( WORD, "w0" )
-    ) ) ;
-
-  }
-
-  @Test @Ignore
-  public void paragraphIsSimplestSpeechContinuedWithIdentifier() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
-        "--+ w0", tree(
-            PARAGRAPH_SPEECH_CONTINUED,
-            tree( IDENTIFIER, "identifier"),
-            tree( WORD, "w0" )
-        ) ) ;
-  }
 
   
   // Following tests are for paragraphBody rule. But we need to rely on a rule
@@ -228,7 +192,7 @@ public class PartParserTest {
   @Test
   public void paragraphIsWordThenComma() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "w0,", tree(
-        PARAGRAPH_PLAIN,
+        NodeKind.PARAGRAPH_REGULAR,
         tree( WORD, "w0" ),
         tree( PUNCTUATION_SIGN, SIGN_COMMA )
     ) ) ;
@@ -238,7 +202,7 @@ public class PartParserTest {
   public void paragraphSingleWordWithIdentifier() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
         "w0", tree(
-            PARAGRAPH_PLAIN,
+        NodeKind.PARAGRAPH_REGULAR,
             tree( IDENTIFIER, "identifier" ),
             tree( WORD, "w0" )
         ) ) ;
@@ -250,7 +214,7 @@ public class PartParserTest {
   public void paragraphIsWordsWithCommaInTheMiddle1() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0,w1", tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( PUNCTUATION_SIGN, SIGN_COMMA ),
             tree( WORD, "w1" )
@@ -263,7 +227,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0'", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( APOSTROPHE_WORDMATE )
         ) 
@@ -276,7 +240,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0'w1", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( APOSTROPHE_WORDMATE ),
             tree( WORD, "w1" )
@@ -292,7 +256,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0;", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( PUNCTUATION_SIGN, SIGN_SEMICOLON )
         ) 
@@ -305,7 +269,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0.", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( PUNCTUATION_SIGN, SIGN_FULLSTOP )
         ) 
@@ -318,7 +282,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0?", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( PUNCTUATION_SIGN, SIGN_QUESTIONMARK )
         ) 
@@ -331,7 +295,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0!", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( PUNCTUATION_SIGN, SIGN_EXCLAMATIONMARK )
         ) 
@@ -344,7 +308,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0:", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( PUNCTUATION_SIGN, SIGN_COLON )
         ) 
@@ -357,7 +321,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0...", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( PUNCTUATION_SIGN, SIGN_ELLIPSIS )
         ) 
@@ -377,12 +341,12 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "w0 w1'w2//w3//.", 
         tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "w0" ),
             tree( WORD, "w1" ),
             tree( APOSTROPHE_WORDMATE ),
             tree( WORD, "w2" ),
-            tree( EMPHASIS, tree( WORD, "w3" ) ),
+            tree( BLOCK_INSIDE_SOLIDUS_PAIRS, tree( WORD, "w3" ) ),
             tree( PUNCTUATION_SIGN, SIGN_FULLSTOP )
         ) 
     ) ;
@@ -472,11 +436,11 @@ public class PartParserTest {
   public void paragraphIsQuoteOfOneWordThenParenthesis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "\"w0(w1)\"", tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree(
-                QUOTE,
+                BLOCK_INSIDE_DOUBLE_QUOTES,
                 tree( WORD, "w0" ),
-                tree( PARENTHESIS, tree( WORD, "w1" ) )
+                tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD, "w1" ) )
             )
         ) ) ;
   }
@@ -485,11 +449,11 @@ public class PartParserTest {
   public void paragraphIsQuoteOfOneWordThenSpaceParenthesis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "\"w0 (w1)\"", tree(
-            PARAGRAPH_PLAIN,
+            NodeKind.PARAGRAPH_REGULAR,
             tree(
-                QUOTE,
+                BLOCK_INSIDE_DOUBLE_QUOTES,
                 tree( WORD, "w0" ),
-                tree( PARENTHESIS, tree( WORD, "w1" ) )
+                tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD, "w1" ) )
             )
         ) ) ;
   }
@@ -510,7 +474,7 @@ public class PartParserTest {
   {
     PARSERMETHOD_SECTION.checkTree( "=== \"q\" w", tree(
             SECTION,
-            tree( TITLE, tree( QUOTE, tree( WORD, "q" ) ), tree( WORD, "w") )
+            tree( TITLE, tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD, "q" ) ), tree( WORD, "w") )
         ) ) ;
   }
 
@@ -529,8 +493,8 @@ public class PartParserTest {
         "p1 w11" + BREAK +
         "w12", tree(
             PART,
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ), tree( WORD, "w01" ), tree( WORD, "w02" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p0" ), tree( WORD, "w01" ), tree( WORD, "w02" ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" )
      ) ) ) ;
   }
 
@@ -545,8 +509,8 @@ public class PartParserTest {
         "p1 w11  " + BREAK +
         " w12 ", tree(
             PART,
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ), tree( WORD, "w01" ), tree( WORD, "w02" ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" ) )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p0" ), tree( WORD, "w01" ), tree( WORD, "w02" ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p1" ), tree( WORD, "w11" ), tree( WORD, "w12" ) )
         ) 
     ) ;
   }
@@ -560,7 +524,7 @@ public class PartParserTest {
       ">>>",
       tree(
           PART,
-          tree( LITERAL, "  Here is some " + BREAK + "  //Literal// " )
+          tree( LINES_OF_LITERAL, "  Here is some " + BREAK + "  //Literal// " )
       ) 
     ) ;
   }
@@ -573,7 +537,7 @@ public class PartParserTest {
         ">>>",
         tree(
             PART,
-            tree( LITERAL, "%% Not to be commented" )
+            tree( LINES_OF_LITERAL, "%% Not to be commented" )
         ) 
     ) ;
   }
@@ -583,7 +547,7 @@ public class PartParserTest {
     PARSERMETHOD_PART.checkTree( 
         "<<<" + BREAK +
         "<" + BREAK +
-        ">>>", tree( PART, tree( LITERAL, "<" )
+        ">>>", tree( PART, tree( LINES_OF_LITERAL, "<" )
       ) 
     ) ;
   }
@@ -600,7 +564,7 @@ public class PartParserTest {
     PARSERMETHOD_PART.checkTree( 
         "<<<" + BREAK +
         verbatim + BREAK +
-        ">>>", tree( PART, tree( LITERAL, verbatim ) )
+        ">>>", tree( PART, tree( LINES_OF_LITERAL, verbatim ) )
     ) ;
   }
 
@@ -611,7 +575,7 @@ public class PartParserTest {
     PARSERMETHOD_LITERAL.checkTree( 
         "<<<" + BREAK +
         verbatim + BREAK +
-        ">>>", tree( LITERAL, verbatim ) 
+        ">>>", tree( LINES_OF_LITERAL, verbatim )
     ) ;
   }
 
@@ -620,7 +584,7 @@ public class PartParserTest {
     PARSERMETHOD_LITERAL.checkTree( 
         "<<<" + BREAK +
         "2" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END + "1" + BREAK +
-        ">>>", tree( LITERAL, "2>1" ) 
+        ">>>", tree( LINES_OF_LITERAL, "2>1" )
     ) ;
   }
 
@@ -629,7 +593,7 @@ public class PartParserTest {
     final String literal = "azer()+&%?" ;
     PARSERMETHOD_SOFT_INLINE_LITERAL.checkTree( 
         "`" + literal + "`", 
-        tree( SOFT_INLINE_LITERAL, literal ) 
+        tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, literal )
     ) ;
   }
 
@@ -637,7 +601,7 @@ public class PartParserTest {
   public void softInlineLiteralWithEscape() throws RecognitionException {
     PARSERMETHOD_SOFT_INLINE_LITERAL.checkTree( 
         "`" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END +"`", 
-        tree( SOFT_INLINE_LITERAL, ">" ) 
+        tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, ">" )
     ) ;
   }
 
@@ -646,7 +610,7 @@ public class PartParserTest {
     final String literal = "azer()+&%?";
     PARSERMETHOD_HARD_INLINE_LITERAL.checkTree( 
         "``" + literal +"``", 
-        tree( HARD_INLINE_LITERAL, literal ) 
+        tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, literal )
     ) ;
   }
 
@@ -662,8 +626,8 @@ public class PartParserTest {
         ">>", tree( PART,
             tree( SECTION ),
             tree(
-                BLOCKQUOTE,
-                tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ), tree( WORD, "w1" ) )
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "w0" ), tree( WORD, "w1" ) )
             )
         ) 
     ) ;
@@ -683,9 +647,9 @@ public class PartParserTest {
         BREAK +
         "p1", tree( PART,
             tree( SECTION ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) ),
-            tree( BLOCKQUOTE, tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ) ) ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ) )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p0" ) ),
+            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "w0" ) ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p1" ) )
         ) 
     ) ;
   }
@@ -700,9 +664,9 @@ public class PartParserTest {
         ">>", tree(
             PART,
             tree(
-                BLOCKQUOTE,
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( IDENTIFIER, "identifier" ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ) )
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "w0" ) )
             )
         ) 
     ) ;
@@ -721,9 +685,9 @@ public class PartParserTest {
         ">>", tree( PART,
             tree( SECTION ),
             tree(
-                BLOCKQUOTE,
-                tree( PARAGRAPH_PLAIN, tree( WORD, "w0" ), tree( WORD, "w1" ) ),
-                tree( PARAGRAPH_PLAIN, tree( WORD, "w2" ) )
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "w0" ), tree( WORD, "w1" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "w2" ) )
             )
         ) 
     ) ;
@@ -787,8 +751,8 @@ public class PartParserTest {
   public void paragraphBodyIsJustEmphasizedWord() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "//w0//", tree(
-        PARAGRAPH_PLAIN,
-        tree( EMPHASIS, tree( WORD, "w0" ) ) ) 
+            NodeKind.PARAGRAPH_REGULAR,
+        tree( BLOCK_INSIDE_SOLIDUS_PAIRS, tree( WORD, "w0" ) ) )
     ) ;
   }
 
@@ -797,8 +761,8 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "(w0)", 
         tree(
-            PARAGRAPH_PLAIN,
-            tree( PARENTHESIS, tree( WORD, "w0" ) )
+            NodeKind.PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD, "w0" ) )
         ) 
     ) ;
   }
@@ -807,8 +771,8 @@ public class PartParserTest {
   public void paragraphBodyIsJustQuotedWord() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "\"w0\"", tree(
-            PARAGRAPH_PLAIN,
-            tree( QUOTE, tree( WORD, "w0" ) )
+            NodeKind.PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD, "w0" ) )
         ) 
     ) ;
   }
@@ -818,8 +782,8 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "-- w0 --", 
         tree(
-            PARAGRAPH_PLAIN,
-            tree( INTERPOLATEDCLAUSE, tree( WORD, "w0" ) )
+            NodeKind.PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_HYPHEN_PAIRS, tree( WORD, "w0" ) )
         ) 
     ) ;
   }
@@ -829,8 +793,8 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "-- w0 -_", 
         tree(
-            PARAGRAPH_PLAIN,
-            tree( INTERPOLATEDCLAUSE_SILENTEND, tree( WORD, "w0" ) ) 
+            NodeKind.PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE, tree( WORD, "w0" ) )
         ) 
     );
   }
@@ -840,8 +804,8 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( 
         "[w0]", 
         tree(
-            PARAGRAPH_PLAIN,
-            tree( SQUARE_BRACKETS, tree( WORD, "w0" ) )
+            NodeKind.PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_SQUARE_BRACKETS, tree( WORD, "w0" ) )
         ) 
     ) ;
   }
@@ -1000,7 +964,7 @@ public class PartParserTest {
               SECTION,
               tree( TITLE, tree( WORD, "s0" ) )
           ),
-          tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) )
+          tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p0" ) )
         ) 
     ) ;
   }
@@ -1018,9 +982,9 @@ public class PartParserTest {
         BREAK +
         "p1", tree( PART,
             tree( SECTION ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p0" ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p0" ) ),
             tree( SECTION ),
-            tree( PARAGRAPH_PLAIN, tree( WORD, "p1" ) )
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p1" ) )
         ) 
     ) ;
   }

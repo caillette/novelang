@@ -23,7 +23,7 @@ import novelang.common.Location;
 import static novelang.parser.NodeKind.VALUED_ARGUMENT_PRIMARY;
 import static novelang.parser.NodeKind.TITLE;
 import static novelang.parser.NodeKind.SECTION;
-import static novelang.parser.NodeKind.PARAGRAPH_PLAIN;
+import novelang.parser.NodeKind;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.common.SyntacticTree;
@@ -60,7 +60,7 @@ public class SectionFunction implements FunctionDefinition {
     verify( "Primary argument is empty", true, primaryArgument.getChildCount() > 0 ) ;
     final SyntacticTree paragraph = primaryArgument.getChildAt( 0 ) ;
     verify( "Primary argument should hold a paragraph, instead of: '" + paragraph.toStringTree() + "'",
-        PARAGRAPH_PLAIN.name(), paragraph.getText() ) ;
+        NodeKind.PARAGRAPH_REGULAR.name(), paragraph.getText() ) ;
 
     LOGGER.debug( "Parsed function '{}' title='{}'", getName(), primaryArgument.toStringTree() ) ;
 

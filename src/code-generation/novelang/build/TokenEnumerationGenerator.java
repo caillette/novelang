@@ -60,12 +60,10 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   
   private static final Collection< Item > SYNTHETIC_ITEMS = ImmutableList.of( 
       new Item( "_STYLE" ), 
-      new Item( "_SPEECH_SEQUENCE" ), 
+      new Item( "_LIST_WITH_TRIPLE_HYPHEN" ), 
       new Item( "_META_TIMESTAMP" ),
       new Item( "_META" ),
-      new Item( "_WORD_COUNT" ),
-      new Item( "PARAGRAPH_SPEECH_CONTINUED" ),
-      new Item( "PARAGRAPH_SPEECH_ESCAPED" ) 
+      new Item( "_WORD_COUNT" ) 
   ) ;
 
   private static final Pattern ALL_TOKENS_PATTERN =

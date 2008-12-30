@@ -178,7 +178,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:blockquote" >
+  <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
     <fo:block
         text-align="left"
         text-indent="0em"
@@ -195,7 +195,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:literal" >
+  <xsl:template match="n:lines-of-literal" >
     <fo:block
         text-align="left"
         text-indent="0em"
@@ -223,7 +223,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:hard-inline-literal" >
+  <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >
     <fo:inline
         font-family="monospace"
     >
@@ -233,7 +233,7 @@
 
   <xsl:template match="n:style" />
 
-  <xsl:template match="n:paragraph-plain" >
+  <xsl:template match="n:paragraph-regular" >
     <xsl:call-template name="paragraph-plain" />
   </xsl:template>
 
@@ -248,7 +248,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="//n:blockquote//n:paragraph-plain" >
+  <xsl:template match="//n:paragraphs-inside-angled-bracket-pairs//n:paragraph-regular" >
     <fo:block text-indent="0em" >
       <xsl:apply-templates/>
     </fo:block>
@@ -267,24 +267,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:paragraph-speech" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >&mdash;</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template match="n:paragraph-speech-escaped" >
-    <xsl:call-template name="paragraph-plain" />
-  </xsl:template>
-
-  <xsl:template match="n:paragraph-speech-continued" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >&raquo;</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="speech" >
-    <xsl:param name = "speech-symbol" />
+  <xsl:template match="n:paragraph-as-list-item" >
     <fo:block
         text-align="justify"
         text-indent="1em"
@@ -295,17 +278,17 @@
           text-align="justify"
           text-indent="1em"
       >
-        <xsl:value-of select="$speech-symbol" />&nbsp;
+        &mdash;&nbsp;
         <xsl:apply-templates/>
       </fo:inline>
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:emphasis" >
+  <xsl:template match="n:block-inside-solidus-pairs" >
     <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>
   </xsl:template>
 
-  <xsl:template match="n:superscript" >
+  <xsl:template match="n:word-after-circumflex-accent" >
     <fo:inline
         font-style="italic"
         vertical-align="super"

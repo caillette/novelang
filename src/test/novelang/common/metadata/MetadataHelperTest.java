@@ -20,6 +20,7 @@ import org.junit.Test;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.NodeKind.*;
+import novelang.parser.NodeKind;
 import novelang.common.SyntacticTree;
 
 /**
@@ -33,7 +34,7 @@ public class MetadataHelperTest {
   public void generateDocumentMetadata() {
 
     final SyntacticTree tree = tree( BOOK,
-        tree( PARAGRAPH_PLAIN,
+        tree( NodeKind.PARAGRAPH_REGULAR,
             tree( WORD, "foo" ),
             tree( WORD, "bar" )
         )

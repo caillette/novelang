@@ -109,7 +109,7 @@ public class TreeFixture {
     }
   }
   private static void assertEqualsNoMessage( SyntacticTree expected, SyntacticTree actual ) {
-    if( NodeKind.LITERAL.isRoot( expected ) && NodeKind.LITERAL.isRoot( actual ) ) {
+    if( NodeKind.LINES_OF_LITERAL.isRoot( expected ) && NodeKind.LINES_OF_LITERAL.isRoot( actual ) ) {
       Assert.assertEquals(
           "Ill-formed test: expected LITERAL node must have exactly one child",
           1,

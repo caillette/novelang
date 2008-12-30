@@ -23,11 +23,11 @@
 
   <xsl:import href="general-punctuation.xsl" />
 
-  <xsl:template match="n:interpolatedclause" >&mdash;&nbsp;<xsl:apply-templates/>&nbsp;&mdash;</xsl:template>
+  <xsl:template match="n:block-inside-hyphen-pairs" >&mdash;&nbsp;<xsl:apply-templates/>&nbsp;&mdash;</xsl:template>
 
-  <xsl:template match="n:interpolatedclause-silentend" >&mdash;&nbsp;<xsl:apply-templates/></xsl:template>
+  <xsl:template match="n:block-inside-two-hyphens-then-hyphen-low-line" >&mdash;&nbsp;<xsl:apply-templates/></xsl:template>
 
-  <xsl:template match="n:quote" >&laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>
+  <xsl:template match="n:block-inside-double-quotes" >&laquo;&nbsp;<xsl:apply-templates/>&nbsp;&raquo;</xsl:template>
 
   <xsl:template match="n:sign-colon" >&nbsp;:</xsl:template>
   <xsl:template match="n:sign-semicolon" >&nbsp;;</xsl:template>

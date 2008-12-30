@@ -104,7 +104,7 @@ public class GenericRenderer implements Renderer {
         }
         break ;
 
-      case SUPERSCRIPT :
+      case WORD_AFTER_CIRCUMFLEX_ACCENT:
         final SyntacticTree superscriptTree = tree.getChildAt( 0 ) ;
         fragmentWriter.start( newPath, rootElement ) ;
         fragmentWriter.write( newPath, superscriptTree.getText() ) ;
@@ -114,9 +114,9 @@ public class GenericRenderer implements Renderer {
       case URL :
       case _WORD_COUNT:
       case _STYLE :
-      case LITERAL :
-      case SOFT_INLINE_LITERAL :
-      case HARD_INLINE_LITERAL :
+      case LINES_OF_LITERAL:
+      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS:
+      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS:
         fragmentWriter.start( newPath, false ) ;
         final SyntacticTree literalTree = tree.getChildAt( 0 ) ;
         fragmentWriter.writeLiteral( newPath, literalTree.getText() ); ;

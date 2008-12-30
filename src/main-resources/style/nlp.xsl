@@ -53,7 +53,7 @@
   </xsl:template>
 
 
-  <xsl:template match="n:blockquote" >
+  <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
 
 &lt;&lt;<xsl:apply-templates/>
 
@@ -61,7 +61,7 @@
 
   </xsl:template>
 
-  <xsl:template match="n:literal" >
+  <xsl:template match="n:lines-of-literal" >
 
 &lt;&lt;&lt;
 <xsl:apply-templates/>
@@ -69,9 +69,9 @@
   
   </xsl:template>
 
-  <xsl:template match="n:soft-inline-literal" >`<xsl:apply-templates/>`</xsl:template>
+  <xsl:template match="n:block-of-literal-inside-grave-accents" >`<xsl:apply-templates/>`</xsl:template>
 
-  <xsl:template match="n:paragraph-plain" >
+  <xsl:template match="n:paragraph-regular" >
 <xsl:text> 
 
 </xsl:text>
@@ -87,7 +87,7 @@
   </xsl:template>
 
 
-  <xsl:template match="n:paragraph-speech" >
+  <xsl:template match="n:paragraph-as-list-item" >
 --- <xsl:apply-templates/></xsl:template>
 
 
@@ -96,17 +96,17 @@
   <xsl:template match="n:title" />
   <xsl:template match="n:style" />
   
-  <xsl:template match="n:quote" >"<xsl:apply-templates/>"</xsl:template>
+  <xsl:template match="n:block-inside-double-quotes" >"<xsl:apply-templates/>"</xsl:template>
 
-  <xsl:template match="n:emphasis" >//<xsl:apply-templates/>//</xsl:template>
+  <xsl:template match="n:block-inside-solidus-pairs" >//<xsl:apply-templates/>//</xsl:template>
 
-  <xsl:template match="n:parenthesis" >(<xsl:apply-templates/>)</xsl:template>
+  <xsl:template match="n:block-inside-parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
-  <xsl:template match="n:square-brackets" >[<xsl:apply-templates/>]</xsl:template>
+  <xsl:template match="n:block-inside-square-brackets" >[<xsl:apply-templates/>]</xsl:template>
 
-  <xsl:template match="n:interpolatedclause" >-- <xsl:apply-templates/> --</xsl:template>
+  <xsl:template match="n:block-inside-hyphen-pairs" >-- <xsl:apply-templates/> --</xsl:template>
 
-  <xsl:template match="n:interpolatedclause-silentend" >-- <xsl:apply-templates/> -_</xsl:template>
+  <xsl:template match="n:block-inside-two-hyphens-then-hyphen-low-line" >-- <xsl:apply-templates/> -_</xsl:template>
 
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 

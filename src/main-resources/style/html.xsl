@@ -84,19 +84,19 @@
     <h2><xsl:apply-templates /></h2>
   </xsl:template>
 
-  <xsl:template match="n:blockquote" >
+  <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
     <blockquote>
       <xsl:apply-templates/>
     </blockquote>
   </xsl:template>
 
-  <xsl:template match="n:literal" >
+  <xsl:template match="n:lines-of-literal" >
     <pre><xsl:apply-templates/></pre>
   </xsl:template>
 
   <xsl:template match="n:style" />
 
-  <xsl:template match="n:paragraph-plain | n:paragraph-speech-escaped" >
+  <xsl:template match="n:paragraph-regular" >
     <p>
     <xsl:apply-templates/>
     </p>
@@ -107,17 +107,17 @@
   </xsl:template>
 
 
-  <xsl:template match="n:paragraph-speech" >
+  <xsl:template match="n:paragraph-as-list-item" >
     <p>
     &mdash;&nbsp;<xsl:apply-templates/>
     </p>
   </xsl:template>
   
-  <xsl:template match="n:emphasis" >
+  <xsl:template match="n:block-inside-solidus-pairs" >
     <i><xsl:apply-templates/></i>
   </xsl:template>
 
-  <xsl:template match="n:hard-inline-literal" >
+  <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >
     <code><xsl:apply-templates/></code>
   </xsl:template>
 
