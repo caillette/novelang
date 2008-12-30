@@ -112,7 +112,7 @@ public class GenericRenderer implements Renderer {
         break ;
 
       case URL :
-      case _META_TIMESTAMP :
+      case _WORD_COUNT:
       case _STYLE :
       case LITERAL :
       case SOFT_INLINE_LITERAL :

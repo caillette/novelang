@@ -46,16 +46,17 @@
           <xsl:attribute name="content" >text/html;charset=<xsl:value-of select="$encoding" /></xsl:attribute>
         </xsl:element>
 
-        <meta name="Generator" content="Novelang" />
+        <meta name="Generator" content="Novelang" >
+          <xsl:attribute name="novelang-word-count" ><xsl:value-of select="//n:meta/n:word-count" /></xsl:attribute>          
+        </meta>
 
         <title><xsl:value-of select="$filename"/></title>
 
         <style type="text/css" />
 
+
       </head>
     <body>
-
-    <!--<p>Encoding = <xsl:value-of select="$encoding" /></p>-->
 
     <xsl:apply-templates />
 
@@ -119,5 +120,7 @@
   <xsl:template match="n:hard-inline-literal" >
     <code><xsl:apply-templates/></code>
   </xsl:template>
+
+  <xsl:template match="n:meta" />
 
 </xsl:stylesheet>

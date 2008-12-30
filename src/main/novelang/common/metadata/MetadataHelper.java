@@ -24,6 +24,7 @@ import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import novelang.common.SyntacticTree;
+import novelang.common.SimpleTree;
 import novelang.parser.NodeKind;
 
 /**
@@ -36,7 +37,7 @@ public class MetadataHelper {
   public static int countWords( SyntacticTree tree ) {
     if( NodeKind.WORD.isRoot( tree ) ) {
       return 1 ;
-    } else if( null != tree /*&& tree.getChildren() != null*/ ) {
+    } else if( null != tree ) {
       int childCount = 0 ;
       for( SyntacticTree child : tree.getChildren() ) {
         childCount += countWords( child ) ;
@@ -57,16 +58,11 @@ public class MetadataHelper {
 
   public static TreeMetadata createMetadata( SyntacticTree tree, final Charset encoding ) {
 
-    final ReadableDateTime timestampAsString = createTimestamp() ;
-    final int wordCount = countWords( tree ) ;
+    final ReadableDateTime timestamp = createTimestamp() ;
 
     return new TreeMetadata() {
       public ReadableDateTime getCreationTimestamp() {
-        return timestampAsString ;
-      }
-
-      public int getWordCount() {
-        return wordCount ;
+        return timestamp ;
       }
 
       public Charset getEncoding() {
@@ -75,4 +71,17 @@ public class MetadataHelper {
     } ;
   }
 
+  /**
+   * Decorates a tree with metadata.
+   * @return the same tree with a new first {@link NodeKind#_META}.
+   */
+  public static SyntacticTree createMetadataDecoration( SyntacticTree tree ) {
+    return new SimpleTree(  
+        NodeKind._META.name(),
+        new SimpleTree(
+            NodeKind._WORD_COUNT.name(),
+            new SimpleTree( "" + countWords( tree ) )
+        )
+    );
+  }
 }

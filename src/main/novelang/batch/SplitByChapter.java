@@ -204,8 +204,8 @@ public class SplitByChapter {
       return StylesheetMap.EMPTY_MAP ;
     }
 
-    public TreeMetadata getTreeMetadata() {
-      return MetadataHelper.createMetadata( child, encoding ) ;
-    }
+//    public TreeMetadata getTreeMetadata() {
+//      return MetadataHelper.createMetadata( child, encoding ) ;
+//    }
   }
 }

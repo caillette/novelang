@@ -100,9 +100,6 @@ public class FontDiscoveryStreamer {
       public ReadableDateTime getCreationTimestamp() {
         return new DateTime() ; // No null allowed!
       }
-      public int getWordCount() {
-        return -1 ;
-      }
       public Charset getEncoding() {
         return encoding ;
       }

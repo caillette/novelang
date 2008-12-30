@@ -126,7 +126,8 @@ public class CustomTree
     if( tree instanceof SimpleTree ) {
       final CommonTree customTree = new CustomTree(
           locationFactory,
-          new ClassicToken( 0, tree.getText() ) // TODO don't swallow line + column information.
+          new ClassicToken( // TODO don't swallow line + column information.
+              ClassicToken.MIN_TOKEN_TYPE, tree.getText() ) 
       ) ;
       for( SyntacticTree child : tree.getChildren() ) {
         customTree.addChild( convert( child ) ) ;

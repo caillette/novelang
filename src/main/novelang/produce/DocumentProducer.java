@@ -153,7 +153,7 @@ public class DocumentProducer {
           documentRequest.getDocumentSourceName(),
           StructureKind.PART.getFileExtensions()
       ) ;
-      return new Part( partFile ) ;
+      return new Part( partFile, true ) ;
     }
 
   }

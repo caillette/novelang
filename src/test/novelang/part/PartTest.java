@@ -59,6 +59,29 @@ public class PartTest {
   }
 
   @Test
+  public void loadPartWithMetadata() throws IOException {
+    final Part part = new Part( justSections, true ) ;
+    final SyntacticTree partTree = part.getDocumentTree();
+    Assert.assertNotNull( partTree ) ;
+    final SyntacticTree expected = tree( PART,
+        tree( _META,
+            tree( _WORD_COUNT, "8" )
+        ),        
+        tree( SECTION,
+            tree( TITLE, tree( WORD, "Section1nlp" ) ),
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p00" ), tree( WORD, "w001" ) )
+        ),
+        tree( SECTION,
+            tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
+            tree( PARAGRAPH_PLAIN, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
+        )
+    ) ;
+
+    TreeFixture.assertEquals( expected, partTree ) ;
+    Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+  }
+
+  @Test
   public void loadSimpleStructure() throws IOException {
     final Part part = new Part( simpleStructureFile ) ;
     final SyntacticTree partTree = part.getDocumentTree();

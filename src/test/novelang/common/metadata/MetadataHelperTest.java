@@ -14,19 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.common.metadata;
 
-import java.nio.charset.Charset;
-
-import org.joda.time.ReadableDateTime;
+import org.junit.Test;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
+import static novelang.parser.NodeKind.*;
+import novelang.common.SyntacticTree;
 
 /**
+ * Tests for {@link MetadataHelper}.
+ *
  * @author Laurent Caillette
  */
-public interface TreeMetadata {
+public class MetadataHelperTest {
 
-  public ReadableDateTime getCreationTimestamp() ;
-  public Charset getEncoding() ;
+  @Test
+  public void generateDocumentMetadata() {
 
+    final SyntacticTree tree = tree( BOOK,
+        tree( PARAGRAPH_PLAIN,
+            tree( WORD, "foo" ),
+            tree( WORD, "bar" )
+        )
+    ) ;
+
+    final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree ) ;
+
+    TreeFixture.assertEquals(
+        tree( _META,
+            tree( _WORD_COUNT, "2" )
+        ),
+        meta
+    ) ;
+
+  }
 }

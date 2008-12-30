@@ -58,6 +58,7 @@ public class BookTest {
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEquals(
         tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 SECTION,
                 tree( TITLE, tree( WORD, "My" ), tree( WORD, "Section" ) )
@@ -82,6 +83,7 @@ public class BookTest {
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEquals(
         tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "1" ) ),
             tree(
                 PARAGRAPH_PLAIN,
                 tree( WORD, "oneword" )
@@ -107,6 +109,7 @@ public class BookTest {
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEquals(
         tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 NodeKind.CHAPTER ,
                 tree( NodeKind.TITLE, tree( WORD, "file1" ) ),
@@ -154,6 +157,7 @@ public class BookTest {
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEquals(
         tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 NodeKind.CHAPTER ,
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),

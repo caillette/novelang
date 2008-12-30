@@ -36,6 +36,8 @@ import novelang.common.LocationFactory;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
+import novelang.common.tree.TreeTools;
+import novelang.common.metadata.MetadataHelper;
 import novelang.parser.Encoding;
 import novelang.parser.GenericParser;
 import novelang.parser.GenericParserFactory;
@@ -112,6 +114,11 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     }
 
     return ( SyntacticTree ) tree ;
+  }
+
+  protected static SyntacticTree addMetadata( SyntacticTree tree ) {
+    final SyntacticTree metadata = MetadataHelper.createMetadataDecoration( tree ) ;
+    return TreeTools.addFirst( tree, metadata ) ;
   }
 
   public Iterable< Problem > getProblems() {

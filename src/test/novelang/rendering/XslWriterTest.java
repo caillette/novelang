@@ -86,10 +86,6 @@ public class XslWriterTest {
       return timestamp ;
     }
 
-    public int getWordCount() {
-      return 0 ;
-    }
-
     public Charset getEncoding() {
       return Encoding.DEFAULT ;
     }

@@ -16,7 +16,7 @@
   <xsl:template match="/" >
 %% Generated on: <xsl:value-of select="$timestamp" />    
 %%         from: <xsl:value-of select="$filename" />
-%%   word count: <xsl:value-of select="$wordcount" />
+%%   word count: <xsl:value-of select="//n:meta/n:word-count" />
     <xsl:apply-templates />
   </xsl:template>
 

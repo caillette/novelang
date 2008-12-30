@@ -62,7 +62,9 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_STYLE" ), 
       new Item( "_SPEECH_SEQUENCE" ), 
       new Item( "_META_TIMESTAMP" ),
-      new Item( "PARAGRAPH_SPEECH_CONTINUED" ), 
+      new Item( "_META" ),
+      new Item( "_WORD_COUNT" ),
+      new Item( "PARAGRAPH_SPEECH_CONTINUED" ),
       new Item( "PARAGRAPH_SPEECH_ESCAPED" ) 
   ) ;
 

@@ -47,9 +47,11 @@ public class Part extends AbstractSourceReader {
 
   private final SyntacticTree tree ;
   private final Multimap< String, SyntacticTree> identifiers ;
+  private final boolean shouldAddMetadata ;
 
 
   public Part( String content ) {
+    shouldAddMetadata = false ;
     tree = createTree( content ) ;
     identifiers = findIdentifiers() ;
   }
@@ -59,26 +61,38 @@ public class Part extends AbstractSourceReader {
     if( null == rawTree ) {
       return null ;
     } else {
-      return Hierarchizer.rehierarchizeChaptersAndSections(
+      final SyntacticTree rehierarchized = Hierarchizer.rehierarchizeChaptersAndSections(
           Treepath.create( rawTree ) ).getTreeAtEnd() ;
+      if( shouldAddMetadata ) {
+        return addMetadata( rehierarchized ) ;
+      } else {
+        return rehierarchized ;
+      }
     }
   }
 
   public Part( final File partFile ) throws MalformedURLException {
+    this( partFile, false ) ;
+  }
+
+  public Part( final File partFile, boolean createMetadata ) throws MalformedURLException {
     this(
         partFile.toURI().toURL(),
         Encoding.DEFAULT,
-        "part[" + partFile.getName() + "]"
+        "part[" + partFile.getName() + "]",
+        createMetadata
     ) ;
-  }
 
+  }
 
   protected Part(
       URL partUrl,
       Charset encoding,
-      String thisToString
+      String thisToString,
+      boolean createMetadata
   ) {
     super( partUrl, encoding, thisToString ) ;
+    shouldAddMetadata = createMetadata ;
     tree = createTree( readContent( partUrl, encoding ) ) ;
     identifiers = findIdentifiers() ;
   }
