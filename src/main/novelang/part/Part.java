@@ -47,11 +47,11 @@ public class Part extends AbstractSourceReader {
 
   private final SyntacticTree tree ;
   private final Multimap< String, SyntacticTree> identifiers ;
-  private final boolean shouldAddMetadata ;
+  private final boolean standalone;
 
 
   public Part( String content ) {
-    shouldAddMetadata = false ;
+    standalone = false ; // Would be logical to make it true but would pollute the tests.
     tree = createTree( content ) ;
     identifiers = findIdentifiers() ;
   }
@@ -61,12 +61,12 @@ public class Part extends AbstractSourceReader {
     if( null == rawTree ) {
       return null ;
     } else {
-      final SyntacticTree rehierarchized = Hierarchizer.rehierarchizeChaptersAndSections(
-          Treepath.create( rawTree ) ).getTreeAtEnd() ;
-      if( shouldAddMetadata ) {
-        return addMetadata( rehierarchized ) ;
+      final Treepath< SyntacticTree > rehierarchized1 =
+          Hierarchizer.rehierarchizeChaptersAndSections( Treepath.create( rawTree ) ) ;
+      if( standalone ) {
+        return addMetadata( Hierarchizer.rehierarchizeLists( rehierarchized1 ).getTreeAtEnd() ) ;
       } else {
-        return rehierarchized ;
+        return rehierarchized1.getTreeAtEnd() ;
       }
     }
   }
@@ -89,10 +89,10 @@ public class Part extends AbstractSourceReader {
       URL partUrl,
       Charset encoding,
       String thisToString,
-      boolean createMetadata
+      boolean standalone
   ) {
     super( partUrl, encoding, thisToString ) ;
-    shouldAddMetadata = createMetadata ;
+    this.standalone = standalone ;
     tree = createTree( readContent( partUrl, encoding ) ) ;
     identifiers = findIdentifiers() ;
   }

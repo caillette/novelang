@@ -269,7 +269,7 @@ public class HierarchizerTest {
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 
-    final Treepath rehierarchized = Hierarchizer.rehierarchizeSpeeches( flatTreepath ) ;
+    final Treepath rehierarchized = Hierarchizer.rehierarchizeLists( flatTreepath ) ;
 
     TreeFixture.assertEquals(
         expectedTreepath,

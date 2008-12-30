@@ -64,7 +64,7 @@ public class Book extends AbstractSourceReader {
       ) ;
       this.environment = results.environment ;
       final SyntacticTree rehierarchizedTree =
-          Hierarchizer.rehierarchizeSpeeches( Treepath.create( results.book ) ).getTreeAtStart() ;
+          Hierarchizer.rehierarchizeLists( Treepath.create( results.book ) ).getTreeAtStart() ;
 
       if( hasProblem() ) {
         this.documentTree = rehierarchizedTree ;

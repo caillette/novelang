@@ -137,29 +137,29 @@
     <h2><xsl:apply-templates /></h2>
   </xsl:template>
 
-  <xsl:template match="n:blockquote" >
+  <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
     <blockquote>
       <xsl:apply-templates/>
     </blockquote>
   </xsl:template>
 
-  <xsl:template match="n:literal" >
+  <xsl:template match="n:lines-of-literal" >
     <pre>
       <xsl:apply-templates/>
     </pre>
   </xsl:template>
 
-  <xsl:template match="n:soft-inline-literal" >
+  <xsl:template match="n:block-of-literal-inside-grave-accents" >
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="n:hard-inline-literal" >
+  <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >
     <tt><xsl:apply-templates/></tt>
   </xsl:template>
 
   <xsl:template match="n:style" />
 
-  <xsl:template match="n:paragraph-plain | n:paragraph-speech-escaped" >
+  <xsl:template match="n:paragraph-regular" >
     <p>
     <xsl:apply-templates/>
     </p>
@@ -171,28 +171,15 @@
     </p>
   </xsl:template>
 
-  <xsl:template match="n:paragraph-speech" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >&mdash;</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template match="n:paragraph-speech-continued" >
-    <xsl:call-template name="speech" >
-      <xsl:with-param name="speech-symbol" >&raquo;</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="speech" >
-    <xsl:param name = "speech-symbol" />
+  <xsl:template match="n:paragraph-as-list-item" >
     <p>
-    <xsl:value-of select="$speech-symbol" />&nbsp;
+    &mdash;&nbsp;
     <xsl:apply-templates/>
     </p>
   </xsl:template>
 
 
-  <xsl:template match="n:emphasis" >
+  <xsl:template match="n:block-inside-solidus-pairs" >
     <i><xsl:apply-templates/></i>
   </xsl:template>
 

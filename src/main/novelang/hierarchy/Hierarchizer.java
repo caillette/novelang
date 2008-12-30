@@ -54,7 +54,7 @@ public class Hierarchizer {
         rehierarchizedSections, CHAPTER, new YesFilter() ) ;
   }
 
-  public static Treepath< SyntacticTree > rehierarchizeSpeeches(
+  public static Treepath< SyntacticTree > rehierarchizeLists(
       Treepath< SyntacticTree > parent
   ) {
     if( parent.getTreeAtEnd().getChildCount() > 0 ) {
@@ -76,7 +76,7 @@ public class Hierarchizer {
             break ;
           case CHAPTER :
           case SECTION :
-            child = rehierarchizeSpeeches( child ) ;
+            child = rehierarchizeLists( child ) ;
           default : 
             insideSpeechSequence = false ;
             break ;
