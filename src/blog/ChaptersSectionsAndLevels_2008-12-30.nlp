@@ -1,0 +1,27 @@
+To my average surprise, the renaming of all tree nodes went smoothly and all existing stylesheets were quickly put back to work, thanks to the XPath verifier. The token names are now beautifully consistent. Except a few ones, which I left out of scope until I get some insights about them. These are: ``CHAPTER``, ``SECTION``, ``TITLE``.
+
+While Novelang claims to have no semantic markup, how to ignore the fact that chapters and section have highly structural effect? With a closer look, it appears that chapters and sections are quite not the same thing, depending we take them at parsing stage, or at rendering stage.
+
+At parsing stage, chapters and sections are delimiters which may be followed by some text (becoming the title). They exist at the same level as paragraphs. It's only after the whole tree is parsed that Novelang creates the hierarchy by re-hierarchizing the tree before passing it to the rendering stage.
+
+At rendering stage, chapters and sections become containers (a source document declaring a chapter then a paragraph is not "flat" anymore, as the chapter now contains the paragraph). This all looks the same as parsing stage, except that a Book may define new chapters and sections on its own like with ``insert $createchapters``. 
+
+My guess is, with a rendering system supporting recursive processing, it would be a waste to limit ourselves to a fixed hierarchy.
+
+<<
+Figure some big documents with numerous title levels, between five and fifteen. Creating a standard template under a tool like MS-Word doesn't work well. When forcing each top-level title to appear on a blank page, this is a waste for small documents. But when allowing several top-level titles on the same page, big documents become unreadable and deep titles even smaller than the text body. It's not a solution neither, to hack title depth by starting at, let's say, the third level, because automatic numbering would cause our first chapter to be numbered "`0.0.1`". On the other hand, a programmatic templating system like FOP would support such hacks.
+>>
+
+With different names for nodes at parsing and rendering stage, we make the thing clearer. 
+
+At parsing stage, we have //delimiters//. Delimiters are the new beast. They look like a list item but may contain less things (by now the only restriction is, they cannot contain a URL immediately following the equals signs). They will be processed in a different manner. Anyways, the "delimiter" name is not supposed to appear at rendering stage.
+
+Let's use ``DELIMITER`` as a radix. Because we need to remain consistent with the rest we'll continue the names with the characters it contains, so we have ``DELIMITER_DOUBLE_EQUAL_SIGN`` and ``DELIMITER_TRIPLE_EQUAL_SIGN``. More levels is probably a bad news (you should split your text in smaller parts) but the naming scales up to "octuple".
+
+We introduce a new convention: node names that don't appear at rendering stage are suffixed by a low line ("``_``"). The low line as a prefix is already taken for node names which don't appear in the parser. Finally our delimiter nodes are ``DELIMITER_TRIPLE_EQUAL_SIGN_`` and so on. But what about the title?
+
+Even if its content is close to a paragraph's, the title is structurally different. For its name, I'd like something like "text for a delimiter" but "text" carries no structural meanin. ``DELIMITING_TEXT_`` is better but not so good as it suggests that the text itself is the delimiter. Let's keep it until better.
+
+Now there is an obvious choice for the name of the nodes containing other nodes: ``_LEVEL`` ("level" is a palindrome, by the way). The title becomes ``_LEVEL_DESCRIPTION``. Yes, this starts to look like semantic markup but it's just reflecting the reality, because the processing of the delimiter gives something of a higher meaning.
+
+A consequence of dropping the chapter `/` section difference is some loss of information. Source documents which define top-level sections are now structurally undistinguishable from source documents defining top-level chapters with no section under. This looks like a good thing, because these differences are supposed to be managed at Book level.
