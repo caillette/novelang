@@ -14,8 +14,9 @@ This is especially useful for posting raw HTML on Blogger while editing the text
 
 ANTLR grammar refactoring continues, now tokens and supported characters are described in Java code generated from the grammar.
 
-Font list regression fixed: now displays all characters as in `Novelang-0.13.0`.
+Fixed: Font list regression, now displays all characters as in `Novelang-0.13.0`.
 
+Fixed: now some broken Part causes the whole Book document generation to fail when it's a recursive include.
 
 
 === Version `0.14.0`
