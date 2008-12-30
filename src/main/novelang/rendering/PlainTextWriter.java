@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
 import novelang.common.Nodepath;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.common.metadata.MetadataHelper;
 
 /**
@@ -38,13 +38,13 @@ public class PlainTextWriter implements FragmentWriter {
 
   public void startWriting(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   ) throws Exception {
     writer = new PrintWriter( outputStream ) ;
     writer.append( "Timestamp: " );
     writer.append(
-        MetadataHelper.TIMESTAMP_FORMATTER.print( treeMetadata.getCreationTimestamp() ) ) ;
+        MetadataHelper.TIMESTAMP_FORMATTER.print( documentMetadata.getCreationTimestamp() ) ) ;
     writer.println() ;
   }
 

@@ -56,11 +56,11 @@ public class MetadataHelper {
   }
 
 
-  public static TreeMetadata createMetadata( SyntacticTree tree, final Charset encoding ) {
+  public static DocumentMetadata createMetadata( SyntacticTree tree, final Charset encoding ) {
 
     final ReadableDateTime timestamp = createTimestamp() ;
 
-    return new TreeMetadata() {
+    return new DocumentMetadata() {
       public ReadableDateTime getCreationTimestamp() {
         return timestamp ;
       }

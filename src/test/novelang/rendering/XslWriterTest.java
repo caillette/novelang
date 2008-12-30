@@ -21,17 +21,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 import org.junit.Test;
-import org.junit.Assert;
 import org.apache.fop.apps.FopFactory;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.DateTime;
-import novelang.common.Renderable;
-import novelang.common.Problem;
-import novelang.common.SyntacticTree;
-import novelang.common.StylesheetMap;
-import novelang.common.metadata.TreeMetadata;
-import novelang.parser.NodeKind;
-import novelang.parser.antlr.TreeFixture;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.parser.Encoding;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.FopFontStatus;
@@ -75,10 +68,10 @@ public class XslWriterTest {
 
   private static final void run( XslWriter xslWriter ) throws Exception {
     final OutputStream sinkOutputStream = new ByteArrayOutputStream() ;
-    xslWriter.startWriting( sinkOutputStream, new CustomTreeMetadata(), Encoding.DEFAULT ) ;
+    xslWriter.startWriting( sinkOutputStream, new CustomDocumentMetadata(), Encoding.DEFAULT ) ;
   }
 
-  private static class CustomTreeMetadata implements TreeMetadata {
+  private static class CustomDocumentMetadata implements DocumentMetadata {
 
     final ReadableDateTime timestamp = new DateTime() ;
 

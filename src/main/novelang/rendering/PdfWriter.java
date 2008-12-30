@@ -29,7 +29,7 @@ import org.xml.sax.ContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.RenderingConfiguration;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.loader.ResourceName;
 
 /**
@@ -68,7 +68,7 @@ public class PdfWriter extends XslWriter {
 
   protected final ContentHandler createSinkContentHandler(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   )
       throws FOPException

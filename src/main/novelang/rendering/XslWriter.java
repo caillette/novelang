@@ -42,7 +42,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 import com.google.common.base.Preconditions;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
@@ -139,7 +139,7 @@ public class XslWriter extends XmlWriter {
 
   protected ContentHandler createContentHandler(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   )
       throws Exception
@@ -165,34 +165,34 @@ public class XslWriter extends XmlWriter {
     final Templates templates = templatesHandler.getTemplates() ;
     final TransformerHandler transformerHandler =
         saxTransformerFactory.newTransformerHandler( templates ) ;
-    configure( transformerHandler.getTransformer(), treeMetadata ) ;
+    configure( transformerHandler.getTransformer(), documentMetadata ) ;
 
     final ContentHandler sinkContentHandler =
-        createSinkContentHandler( outputStream, treeMetadata, encoding ) ;
+        createSinkContentHandler( outputStream, documentMetadata, encoding ) ;
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
 
     return transformerHandler ;
 
   }
 
-  private void configure( Transformer transformer, TreeMetadata treeMetadata ) {
+  private void configure( Transformer transformer, DocumentMetadata documentMetadata ) {
     transformer.setParameter(
         "timestamp",
-        treeMetadata.getCreationTimestamp()
+        documentMetadata.getCreationTimestamp()
     ) ;
     transformer.setParameter(
         "encoding",
-        treeMetadata.getEncoding().name()
+        documentMetadata.getEncoding().name()
     ) ;
   }
 
   protected ContentHandler createSinkContentHandler(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   ) throws Exception
   {
-    return super.createContentHandler( outputStream, treeMetadata, encoding ) ;
+    return super.createContentHandler( outputStream, documentMetadata, encoding ) ;
   }
 
   public interface EntityEscapeSelector {

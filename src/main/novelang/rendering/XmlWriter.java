@@ -27,7 +27,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import novelang.common.Nodepath;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.parser.NodeKindTools;
 import com.google.common.base.Preconditions;
 
@@ -58,10 +58,10 @@ public class XmlWriter implements FragmentWriter {
   
   public void startWriting(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   ) throws Exception {
-    contentHandler = createContentHandler( outputStream, treeMetadata, encoding ) ;
+    contentHandler = createContentHandler( outputStream, documentMetadata, encoding ) ;
     contentHandler.startDocument() ;
   }
 
@@ -135,7 +135,7 @@ public class XmlWriter implements FragmentWriter {
 
   protected ContentHandler createContentHandler(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   )
       throws Exception

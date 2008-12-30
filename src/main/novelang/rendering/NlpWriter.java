@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.loader.ResourceName;
 
 /**
@@ -41,7 +41,7 @@ public class NlpWriter extends EscapingWriter {
 
   protected final ContentHandler createSinkContentHandler(
       final OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       final Charset encoding
   )
       throws Exception

@@ -27,7 +27,7 @@ import org.joda.time.DateTime;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.configuration.FontQuadruplet;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
@@ -96,7 +96,7 @@ public class FontDiscoveryStreamer {
     final Multimap< String, FontQuadruplet > quadruplets =
         SyntheticFontMap.createSyntheticFontMap( fopFontStatus ) ;
 
-    final TreeMetadata treeMetadata = new TreeMetadata() {
+    final DocumentMetadata documentMetadata = new DocumentMetadata() {
       public ReadableDateTime getCreationTimestamp() {
         return new DateTime() ; // No null allowed!
       }
@@ -105,7 +105,7 @@ public class FontDiscoveryStreamer {
       }
     } ;
 
-    xslWriter.startWriting( outputStream, treeMetadata, encoding ) ;
+    xslWriter.startWriting( outputStream, documentMetadata, encoding ) ;
 
     xslWriter.start( ELEMENT_ROOT, true ) ;
 

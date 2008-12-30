@@ -24,7 +24,7 @@ import org.joda.time.ReadableDateTime;
 /**
  * @author Laurent Caillette
  */
-public interface TreeMetadata {
+public interface DocumentMetadata {
 
   public ReadableDateTime getCreationTimestamp() ;
   public Charset getEncoding() ;

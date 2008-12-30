@@ -23,7 +23,7 @@ import java.nio.charset.Charset;
 import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.parser.Escape;
 import novelang.loader.ResourceName;
 
@@ -54,7 +54,7 @@ public class HtmlWriter extends XslWriter {
 
   protected ContentHandler createSinkContentHandler(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   ) throws Exception {
     return new HtmlSink( outputStream ) ; 

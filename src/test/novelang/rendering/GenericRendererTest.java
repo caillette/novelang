@@ -30,7 +30,7 @@ import novelang.common.metadata.MetadataHelper;
 import static novelang.parser.NodeKind.*;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.StylesheetMap;
@@ -98,7 +98,7 @@ public class GenericRendererTest {
   }
 
   private static Renderable createRenderable( final SyntacticTree tree ) {
-    final TreeMetadata treeMetadata = MetadataHelper.createMetadata( tree, Encoding.DEFAULT ) ;
+    final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( tree, Encoding.DEFAULT ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
         return ImmutableList.of() ;
@@ -112,8 +112,8 @@ public class GenericRendererTest {
       public SyntacticTree getDocumentTree() {
         return tree ;
       }
-      public TreeMetadata getTreeMetadata() {
-        return treeMetadata ;
+      public DocumentMetadata getTreeMetadata() {
+        return documentMetadata;
       }
 
       public StylesheetMap getCustomStylesheetMap() {
@@ -128,7 +128,7 @@ public class GenericRendererTest {
 
     public void startWriting(
         OutputStream outputStream,
-        TreeMetadata treeMetadata,
+        DocumentMetadata documentMetadata,
         Charset encoding
     ) throws Exception {
       writer = new PrintWriter( outputStream ) ;

@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import novelang.common.Nodepath;
-import novelang.common.metadata.TreeMetadata;
+import novelang.common.metadata.DocumentMetadata;
 
 /**
  * @author Laurent Caillette
@@ -30,7 +30,7 @@ public interface FragmentWriter {
 
   void startWriting(
       OutputStream outputStream,
-      TreeMetadata treeMetadata,
+      DocumentMetadata documentMetadata,
       Charset encoding
   ) throws Exception ;
   
