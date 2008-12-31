@@ -20,24 +20,24 @@ package novelang.batch;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.net.MalformedURLException;
 
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.ImmutableList;
-import novelang.configuration.RenderingConfiguration;
-import novelang.parser.NodeKind;
 import novelang.common.Problem;
-import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.StylesheetMap;
+import novelang.common.SyntacticTree;
+import novelang.configuration.RenderingConfiguration;
+import novelang.parser.NodeKind;
 import novelang.part.Part;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.NlpWriter;
@@ -90,7 +90,7 @@ public class SplitByChapter {
   private void rewrite() throws IOException {
     final Map< String, SyntacticTree > chaptersByIdentifier = Maps.newHashMap() ;
     for( final SyntacticTree child : part.getDocumentTree().getChildren() ) {
-      if( NodeKind.CHAPTER.isRoot( child ) ) {
+      if( NodeKind.DELIMITER_TWO_EQUAL_SIGNS_.isRoot( child ) ) {
         final String identifier = generateIdentifier( chaptersByIdentifier.keySet(), child ) ;
         final File chapterFile = new File( targetDirectory, identifier  + ".nlp" ) ;
         if( chapterFile.exists() ) {
@@ -110,7 +110,7 @@ public class SplitByChapter {
     String flatName = UNNAMED;
     SyntacticTree chapterDesignator = extractSubtree( chapter, NodeKind.IDENTIFIER ) ;
     if( null == chapterDesignator ) {
-      chapterDesignator = extractSubtree( chapter, NodeKind.TITLE );
+      chapterDesignator = extractSubtree( chapter, NodeKind.DELIMITING_TEXT_ );
     }
     if( null != chapterDesignator ) {
       flatName = flattenAsName( chapterDesignator ) ;
@@ -145,7 +145,7 @@ public class SplitByChapter {
   }
 
   private Iterable< String > getNameElements( SyntacticTree tree ) {
-    if( NodeKind.WORD.isRoot( tree ) ) {
+    if( NodeKind.WORD_.isRoot( tree ) ) {
       return ImmutableList.of( tree.getChildAt( 0 ).getText() ) ;
     } else if( 0 == tree.getChildCount() ) {
       return ImmutableList.of() ;

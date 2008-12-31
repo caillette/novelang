@@ -31,7 +31,7 @@ public class IdentifierHelper {
   /**
    * Concatenates subtokens of a {@link novelang.parser.NodeKind#IDENTIFIER}
    * (skipping the intermediary level defining what subtokens are made of,
-   * like {@link novelang.parser.NodeKind#WORD}s).
+   * like {@link novelang.parser.NodeKind#WORD_}s).
    *
    * @param tokenOwner a {@code Tree} containing all subtokens to create the identifier from.
    */

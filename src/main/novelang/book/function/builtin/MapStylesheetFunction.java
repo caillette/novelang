@@ -64,7 +64,7 @@ public class MapStylesheetFunction implements FunctionDefinition {
 
     for( int i = 1 ; i < functionCall.getChildCount() ; i++ ) {
       final SyntacticTree assignmentTree = functionCall.getChildAt( i ) ;
-      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT.name().equals( assignmentTree.getText() ) ) {
+      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT_.name().equals( assignmentTree.getText() ) ) {
         verify( "No key / value pair", true, 2 == assignmentTree.getChildCount() ) ;
         final String keyAsString = assignmentTree.getChildAt( 0 ).getText() ;
         final String value = assignmentTree.getChildAt( 1 ).getText() ;

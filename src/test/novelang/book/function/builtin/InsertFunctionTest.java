@@ -65,7 +65,7 @@ public class InsertFunctionTest {
     assertNotNull( result.getBook() ) ;
 
     TreeFixture.assertEquals(
-        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "oneword" ) ) ),
+        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
         result.getBook().getTreeAtStart()
     ) ;
 
@@ -91,11 +91,11 @@ public class InsertFunctionTest {
 
     TreeFixture.assertEquals(
         tree( BOOK,
-            tree( CHAPTER,
-                tree( TITLE, tree( WORD, "no-chapter" ) ),
-                tree( SECTION,
-                    tree( TITLE, tree( WORD, "Section" ) ),
-                    tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "paragraph" ) )
+            tree( DELIMITER_TWO_EQUAL_SIGNS_,
+                tree( DELIMITING_TEXT_, tree( WORD_, "no-chapter" ) ),
+                tree( DELIMITER_THREE_EQUAL_SIGNS_,
+                    tree( DELIMITING_TEXT_, tree( WORD_, "Section" ) ),
+                    tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
                 )
             )
         ),
@@ -125,7 +125,7 @@ public class InsertFunctionTest {
     assertNotNull( result.getBook() ) ;
 
     TreeFixture.assertEquals(
-        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( _STYLE, "mystyle" ), tree( WORD, "oneword" ) ) ),
+        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( _STYLE, "mystyle" ), tree( WORD_, "oneword" ) ) ),
         result.getBook().getTreeAtStart()
     ) ;
 

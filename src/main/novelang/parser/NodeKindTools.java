@@ -17,13 +17,20 @@
 package novelang.parser;
 
 import java.util.Set;
+import java.util.Collections;
+import java.util.Collection;
+import java.util.List;
+import java.util.Comparator;
 
 import novelang.common.SyntacticTree;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Function;
 import com.google.common.base.Nullable;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Collections2;
 
 /**
  * As {@link NodeKind} is generated, all its utility methods should go there.
@@ -31,6 +38,7 @@ import com.google.common.collect.Sets;
  * @author Laurent Caillette
  */
 public class NodeKindTools {
+
   private NodeKindTools() {
     throw new Error() ;
   }
@@ -75,11 +83,24 @@ public class NodeKindTools {
       }
   ;
 
-  public static Set< String > getNamesAsXmlElementNames() {
-    return Sets.newHashSet( Lists.transform(
-        Lists.newArrayList( NodeKind.getNames() ),
-        TOKEN_NAME_AS_XML_ELEMENT_NAME
-    ) ) ;
+  private static final Predicate< String > NO_TRAILING_UNDERSCORE =
+      new Predicate< String >() {
+        public boolean apply( String s ) {
+          return ! s.endsWith( "_" ) ;
+        }
+      }
+  ;
 
+  public static Set< String > getRenderingNames() {
+
+    final List< String > filteredNames = Lists.newArrayList(
+        Collections2.filter( NodeKind.getNames(), NO_TRAILING_UNDERSCORE ) ) ;
+    final List< String > sortedNames = Lists.sortedCopy( filteredNames ) ;
+    return Sets.newTreeSet(
+        Lists.transform(
+            sortedNames,
+            TOKEN_NAME_AS_XML_ELEMENT_NAME
+        )
+    ) ;
   }
 }

@@ -48,10 +48,10 @@ public class Hierarchizer {
       final Treepath< SyntacticTree > part
   ) {
     final Treepath rehierarchizedSections = rehierarchizeFromLeftToRight(
-        part, SECTION, new ExclusionFilter( CHAPTER ) ) ;
+        part, DELIMITER_THREE_EQUAL_SIGNS_, new ExclusionFilter( DELIMITER_TWO_EQUAL_SIGNS_ ) ) ;
 
     return rehierarchizeFromLeftToRight(
-        rehierarchizedSections, CHAPTER, new YesFilter() ) ;
+        rehierarchizedSections, DELIMITER_TWO_EQUAL_SIGNS_, new YesFilter() ) ;
   }
 
   public static Treepath< SyntacticTree > rehierarchizeLists(
@@ -74,8 +74,8 @@ public class Hierarchizer {
               insideSpeechSequence = true ;
             }
             break ;
-          case CHAPTER :
-          case SECTION :
+          case DELIMITER_TWO_EQUAL_SIGNS_:
+          case DELIMITER_THREE_EQUAL_SIGNS_:
             child = rehierarchizeLists( child ) ;
           default : 
             insideSpeechSequence = false ;

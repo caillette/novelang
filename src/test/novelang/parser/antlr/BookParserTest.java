@@ -71,10 +71,10 @@ public class BookParserTest {
   createFunctionTreeWithFilenameAsPrimaryArgument( String fileName )
   {
     final Treepath< SyntacticTree > functionCall = Treepath.< SyntacticTree >create( new SimpleTree(
-        FUNCTION_CALL.name(),
-        new SimpleTree( FUNCTION_NAME.name(), new SimpleTree( "function" ) ),
+        FUNCTION_CALL_.name(),
+        new SimpleTree( FUNCTION_NAME_.name(), new SimpleTree( "function" ) ),
         new SimpleTree(
-            VALUED_ARGUMENT_PRIMARY.name(),
+            VALUED_ARGUMENT_PRIMARY_.name(),
             new SimpleTree( URL.name(), new SimpleTree( "file:" + fileName ) )
         )
     ) ) ;
@@ -88,7 +88,7 @@ public class BookParserTest {
     for( String flagArgument : flagArguments ) {
       functionCall = TreepathTools.addChildLast(
           functionCall,
-          new SimpleTree( VALUED_ARGUMENT_FLAG.name(), new SimpleTree( flagArgument ) )
+          new SimpleTree( VALUED_ARGUMENT_FLAG_.name(), new SimpleTree( flagArgument ) )
       ) ;
     }
     return functionCall ;
@@ -103,7 +103,7 @@ public class BookParserTest {
       Map< String, String > map
   ) {
     Treepath< SyntacticTree > functionCall = Treepath.create(
-        tree( FUNCTION_CALL.name(), tree( FUNCTION_NAME, functionName ) ) ) ;
+        tree( FUNCTION_CALL_.name(), tree( FUNCTION_NAME_, functionName ) ) ) ;
 
     functionCall = addValuedArgumentAssignments( functionCall, map ) ;
     return functionCall.getTreeAtStart() ;
@@ -114,7 +114,7 @@ public class BookParserTest {
       Map< String, String > map
   ) {
     for( String key : map.keySet() ) {
-      SyntacticTree assignment = tree( NodeKind.VALUED_ARGUMENT_ASSIGNMENT ) ;
+      SyntacticTree assignment = tree( NodeKind.VALUED_ARGUMENT_ASSIGNMENT_ ) ;
       assignment = TreeTools.addLast(
           assignment,
           tree( key )
@@ -133,9 +133,9 @@ public class BookParserTest {
     PARSERMETHOD_BOOK.checkTree(
         "insert file:one-word.nlp",
         tree( BOOK,
-            tree( FUNCTION_CALL,
-                tree( FUNCTION_NAME, "insert" ),
-                tree( VALUED_ARGUMENT_PRIMARY, tree( URL, "file:one-word.nlp" ) )
+            tree( FUNCTION_CALL_,
+                tree( FUNCTION_NAME_, "insert" ),
+                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL, "file:one-word.nlp" ) )
             )
         )
     ); 
@@ -148,13 +148,13 @@ public class BookParserTest {
         "function2 file:/my/file2 " + BREAK + "  "
         ,
         tree( BOOK,
-            tree( FUNCTION_CALL,
-                tree( FUNCTION_NAME, "function1" ),
-                tree( VALUED_ARGUMENT_PRIMARY, tree( URL, "file:my/file1" ) )
+            tree( FUNCTION_CALL_,
+                tree( FUNCTION_NAME_, "function1" ),
+                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL, "file:my/file1" ) )
             ),
-            tree( FUNCTION_CALL,
-                tree( FUNCTION_NAME, "function2" ),
-                tree( VALUED_ARGUMENT_PRIMARY, tree( URL, "file:/my/file2" ) )
+            tree( FUNCTION_CALL_,
+                tree( FUNCTION_NAME_, "function2" ),
+                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL, "file:/my/file2" ) )
             )
         )
     ) ;
@@ -164,8 +164,8 @@ public class BookParserTest {
   public void functionCallBare() throws RecognitionException {
     PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function",
-        tree( FUNCTION_CALL,
-            tree( FUNCTION_NAME, "function" )
+        tree( FUNCTION_CALL_,
+            tree( FUNCTION_NAME_, "function" )
         )
     ) ;
   }
@@ -174,13 +174,13 @@ public class BookParserTest {
   public void functionCallWithParagraphBody() throws RecognitionException {
     PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function \n" + " with paragraphbody",
-        tree( FUNCTION_CALL,
-            tree( FUNCTION_NAME, "function" ),
+        tree( FUNCTION_CALL_,
+            tree( FUNCTION_NAME_, "function" ),
             tree(
-                VALUED_ARGUMENT_PRIMARY,
+                VALUED_ARGUMENT_PRIMARY_,
                 tree( NodeKind.PARAGRAPH_REGULAR,
-                    tree( WORD, "with" ),
-                    tree( WORD, "paragraphbody" )
+                    tree( WORD_, "with" ),
+                    tree( WORD_, "paragraphbody" )
                 )
             )
         )
@@ -199,9 +199,9 @@ public class BookParserTest {
   public void functionCallWithFlag() throws RecognitionException {
     PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $flag",
-        tree( FUNCTION_CALL,
-            tree( FUNCTION_NAME, "function" ),
-            tree( VALUED_ARGUMENT_FLAG, "flag" )
+        tree( FUNCTION_CALL_,
+            tree( FUNCTION_NAME_, "function" ),
+            tree( VALUED_ARGUMENT_FLAG_, "flag" )
         )
     ) ;
   }
@@ -211,10 +211,10 @@ public class BookParserTest {
     PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function $flag1 " + BREAK +
         " $flag2",
-        tree( FUNCTION_CALL,
-            tree( FUNCTION_NAME, "function" ),
-            tree( VALUED_ARGUMENT_FLAG, "flag1" ),
-            tree( VALUED_ARGUMENT_FLAG, "flag2" )
+        tree( FUNCTION_CALL_,
+            tree( FUNCTION_NAME_, "function" ),
+            tree( VALUED_ARGUMENT_FLAG_, "flag1" ),
+            tree( VALUED_ARGUMENT_FLAG_, "flag2" )
         )
     ) ;
   }
@@ -235,10 +235,10 @@ public class BookParserTest {
     PARSERMETHOD_FUNCTION_CALL.checkTree(
         "function \\identifier1 " + BREAK +
         " \\identifier2",
-        tree( FUNCTION_CALL,
-            tree( FUNCTION_NAME, "function" ),
-            tree( VALUED_ARGUMENT_ANCILLARY, tree( IDENTIFIER, "identifier1" ) ),
-            tree( VALUED_ARGUMENT_ANCILLARY, tree( IDENTIFIER, "identifier2" ) )
+        tree( FUNCTION_CALL_,
+            tree( FUNCTION_NAME_, "function" ),
+            tree( VALUED_ARGUMENT_ANCILLARY_, tree( IDENTIFIER, "identifier1" ) ),
+            tree( VALUED_ARGUMENT_ANCILLARY_, tree( IDENTIFIER, "identifier2" ) )
         )
     ) ;
   }
@@ -249,7 +249,7 @@ public class BookParserTest {
   public void valuedArgumentAncillaryIsBlockIdentifier() throws RecognitionException {
     PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
         "\\identifier",
-        tree( VALUED_ARGUMENT_ANCILLARY,
+        tree( VALUED_ARGUMENT_ANCILLARY_,
             tree( IDENTIFIER, "identifier" )
         )
     ) ;
@@ -259,8 +259,8 @@ public class BookParserTest {
   public void valuedArgumentAncillaryIsBlockIdentifierAndModifier() throws RecognitionException {
     PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
         "+\\identifier",
-        tree( VALUED_ARGUMENT_ANCILLARY,
-            tree( VALUED_ARGUMENT_MODIFIER, "+" ),
+        tree( VALUED_ARGUMENT_ANCILLARY_,
+            tree( VALUED_ARGUMENT_MODIFIER_, "+" ),
             tree( IDENTIFIER, "identifier" )
         )
     ) ;
@@ -270,7 +270,7 @@ public class BookParserTest {
   public void valuedArgumentAssignment() throws RecognitionException {
     PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT.checkTree(
         "$key=value/with/solidus.and-other",
-        tree( VALUED_ARGUMENT_ASSIGNMENT,
+        tree( VALUED_ARGUMENT_ASSIGNMENT_,
             tree( "key" ),
             tree( "value/with/solidus.and-other" )
         )

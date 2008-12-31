@@ -45,7 +45,7 @@ public class GenericRendererTest {
 
   @Test
   public void whitespace1() throws Exception {
-    final SyntacticTree tree = tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD, "first" ), tree( WORD, "second") ) ;
+    final SyntacticTree tree = tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "first" ), tree( WORD_, "second") ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     assertEquals( "BLOCK_INSIDE_PARENTHESIS(first^second)", getRenderedText() ) ;
@@ -55,7 +55,7 @@ public class GenericRendererTest {
   public void superscript() throws Exception {
     final SyntacticTree tree = tree(
         BLOCK_INSIDE_PARENTHESIS,
-        tree( WORD, tree( "super"), tree( WORD_AFTER_CIRCUMFLEX_ACCENT, "script" ) )
+        tree( WORD_, tree( "super"), tree( WORD_AFTER_CIRCUMFLEX_ACCENT, "script" ) )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
@@ -66,14 +66,14 @@ public class GenericRendererTest {
   public void whitespace2() throws Exception {
     final SyntacticTree tree = tree(
         NodeKind.PARAGRAPH_REGULAR,
-        tree( WORD, "w0" ),
+        tree( WORD_, "w0" ),
         tree(
             BLOCK_INSIDE_PARENTHESIS,
-            tree( WORD, "w1" ),
-            tree( WORD, "w2"),
+            tree( WORD_, "w1" ),
+            tree( WORD_, "w2"),
             tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP ) )
         ),
-        tree( WORD, "w3" )
+        tree( WORD_, "w3" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;

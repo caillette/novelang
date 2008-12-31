@@ -128,7 +128,7 @@
 
   
   
-  <xsl:template match="n:chapter" >
+  <xsl:template match="n:level" >
     <fo:block
         break-before="page"
     >

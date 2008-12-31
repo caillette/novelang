@@ -29,7 +29,9 @@ import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.LanguageTools;
-import static novelang.parser.NodeKind.WORD;
+import static novelang.parser.NodeKind.WORD_;
+import static novelang.parser.NodeKind._LEVEL;
+import static novelang.parser.NodeKind._LEVEL_DESCRIPTION;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific
@@ -86,20 +88,19 @@ public class GenericRenderer implements Renderer {
   ) throws Exception {
 
     final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
-    final Nodepath newPath = (
-        null == kinship ? new Nodepath( nodeKind ) : new Nodepath( kinship, nodeKind ) ) ;
+    final Nodepath newPath = ( createNodepath( kinship, nodeKind ) ) ;
     boolean rootElement = false ;
 
     switch( nodeKind ) {
 
-      case WORD :
+      case WORD_:
         final SyntacticTree wordTree = tree.getChildAt( 0 ) ;
         fragmentWriter.write( newPath, wordTree.getText() ) ;
         // Handle superscript
         if( tree.getChildCount() > 1 ) {
           for( int childIndex = 1 ; childIndex < tree.getChildCount() ; childIndex++ ) {
             final SyntacticTree child = tree.getChildAt( childIndex ) ;
-            renderTree( child, newPath, WORD ) ;
+            renderTree( child, newPath, WORD_ ) ;
           }
         }
         break ;
@@ -134,24 +135,42 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
+      case DELIMITER_TWO_EQUAL_SIGNS_:
+      case DELIMITER_THREE_EQUAL_SIGNS_:
+        processByDefault( tree, createNodepath( kinship, _LEVEL ), false ) ;
+        break ;
+
+      case DELIMITING_TEXT_:
+        processByDefault( tree, createNodepath( kinship, _LEVEL_DESCRIPTION ), false ) ;
+        break ;
+
       case BOOK:
       case PART :
         rootElement = true ;
 
       default :
-        fragmentWriter.start( newPath, rootElement ) ;
-        previous = null ;
-        for( SyntacticTree subtree : tree.getChildren() ) {
-          final NodeKind subtreeNodeKind = NodeKindTools.ofRoot( subtree );
-          maybeWriteWhitespace( newPath, previous, subtreeNodeKind ) ;
-          renderTree( subtree, newPath, previous ) ;
-          previous = subtreeNodeKind;
-        }
-        fragmentWriter.end( newPath ) ;
+        processByDefault( tree, newPath, rootElement );
         break ;
 
     }
 
+  }
+
+  private Nodepath createNodepath( Nodepath kinship, NodeKind kind ) {
+    return null == kinship ? new Nodepath( kind ) : new Nodepath( kinship, kind );
+  }
+
+  private void processByDefault( SyntacticTree tree, Nodepath path, boolean rootElement ) throws Exception {
+    NodeKind previous;
+    fragmentWriter.start( path, rootElement ) ;
+    previous = null ;
+    for( SyntacticTree subtree : tree.getChildren() ) {
+      final NodeKind subtreeNodeKind = NodeKindTools.ofRoot( subtree );
+      maybeWriteWhitespace( path, previous, subtreeNodeKind ) ;
+      renderTree( subtree, path, previous ) ;
+      previous = subtreeNodeKind;
+    }
+    fragmentWriter.end( path ) ;
   }
 
   private void maybeWriteWhitespace(

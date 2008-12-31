@@ -45,13 +45,13 @@ public class PartTest {
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( PART,
-        tree( SECTION,
-            tree( TITLE, tree( WORD, "Section1nlp" ) ),
-            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p00" ), tree( WORD, "w001" ) )
+        tree( DELIMITER_THREE_EQUAL_SIGNS_,
+            tree( DELIMITING_TEXT_, tree( WORD_, "Section1nlp" ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
-        tree( SECTION,
-            tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
-            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
+        tree( DELIMITER_THREE_EQUAL_SIGNS_,
+            tree( DELIMITING_TEXT_, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
         )
     ) ;
 
@@ -68,13 +68,13 @@ public class PartTest {
         tree( _META,
             tree( _WORD_COUNT, "8" )
         ),        
-        tree( SECTION,
-            tree( TITLE, tree( WORD, "Section1nlp" ) ),
-            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p00" ), tree( WORD, "w001" ) )
+        tree( DELIMITER_THREE_EQUAL_SIGNS_,
+            tree( DELIMITING_TEXT_, tree( WORD_, "Section1nlp" ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
-        tree( SECTION,
-            tree( TITLE, tree( WORD, "section1" ), tree( WORD, "w11" ) ),
-            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "p10" ), tree( WORD, "w101" ), tree( WORD, "w102" ) )
+        tree( DELIMITER_THREE_EQUAL_SIGNS_,
+            tree( DELIMITING_TEXT_, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
         )
     ) ;
 
@@ -88,28 +88,28 @@ public class PartTest {
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( PART,
-        tree( CHAPTER,
-            tree( TITLE, tree( WORD, "Chapter-0" ) ),
-            tree( SECTION,
-                tree( TITLE, tree( WORD, "Section-0-0" ) ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-0-0-0" ) ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-0-0-1" ) )
+        tree( DELIMITER_TWO_EQUAL_SIGNS_,
+            tree( DELIMITING_TEXT_, tree( WORD_, "Chapter-0" ) ),
+            tree( DELIMITER_THREE_EQUAL_SIGNS_,
+                tree( DELIMITING_TEXT_, tree( WORD_, "Section-0-0" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-0" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-1" ) )
             ),
-            tree( SECTION,
-                tree( TITLE, tree( WORD, "Section-0-1" ) ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-0-1-0" ) )
+            tree( DELIMITER_THREE_EQUAL_SIGNS_,
+                tree( DELIMITING_TEXT_, tree( WORD_, "Section-0-1" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-1-0" ) )
             )
         ),
-        tree( CHAPTER,
-            tree( TITLE, tree( WORD, "Chapter-1" ) ),
-            tree( SECTION,
-                tree( TITLE, tree( WORD, "Section-1-0" ) ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-1-0-0" ) ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-1-0-1" ) )
+        tree( DELIMITER_TWO_EQUAL_SIGNS_,
+            tree( DELIMITING_TEXT_, tree( WORD_, "Chapter-1" ) ),
+            tree( DELIMITER_THREE_EQUAL_SIGNS_,
+                tree( DELIMITING_TEXT_, tree( WORD_, "Section-1-0" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-0" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-1" ) )
             ),
-            tree( SECTION,
-                tree( TITLE, tree( WORD, "Section-1-1" ) ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD, "Paragraph-1-1-0" ) )
+            tree( DELIMITER_THREE_EQUAL_SIGNS_,
+                tree( DELIMITING_TEXT_, tree( WORD_, "Section-1-1" ) ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-1-0" ) )
             )
         )
     ) ;

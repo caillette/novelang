@@ -38,14 +38,14 @@ public class HierarchizerTest {
     verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
-            tree( CHAPTER, tree( NodeKind.PARAGRAPH_REGULAR ) )
+            tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) )
         ),
         tree(
             PART,
-            tree( CHAPTER ),
+            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
             tree( NodeKind.PARAGRAPH_REGULAR )
         ),
-        CHAPTER
+        DELIMITER_THREE_EQUAL_SIGNS_
     ) ;
   }
 
@@ -55,15 +55,15 @@ public class HierarchizerTest {
         tree(
             PART,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-            tree( CHAPTER, tree( NodeKind.PARAGRAPH_REGULAR ) )
+            tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) )
         ),
         tree(
             PART,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-            tree( CHAPTER ),
+            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
             tree( NodeKind.PARAGRAPH_REGULAR )
         ),
-        CHAPTER
+        DELIMITER_THREE_EQUAL_SIGNS_
     ) ;
   }
 
@@ -72,17 +72,17 @@ public class HierarchizerTest {
     verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
-            tree( CHAPTER ),
-            tree( SECTION, tree( NodeKind.PARAGRAPH_REGULAR ) )
+            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) )
         ),
         tree(
             PART,
-            tree( CHAPTER ),
-            tree( SECTION ),
+            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( DELIMITER_TWO_EQUAL_SIGNS_ ),
             tree( NodeKind.PARAGRAPH_REGULAR )
         ),
-        SECTION,
-        CHAPTER
+        DELIMITER_TWO_EQUAL_SIGNS_,
+        DELIMITER_THREE_EQUAL_SIGNS_
     ) ;
   }
 
@@ -91,29 +91,29 @@ public class HierarchizerTest {
     final SyntacticTree expected = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( CHAPTER ),
-        tree( SECTION, tree( NodeKind.PARAGRAPH_REGULAR ) ),
-        tree( CHAPTER ),
-        tree( SECTION, tree( IDENTIFIER ), tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ) ),
-        tree( SECTION )
+        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) ),
+        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( IDENTIFIER ), tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ) ),
+        tree( DELIMITER_TWO_EQUAL_SIGNS_ )
     );
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( CHAPTER ),
-        tree( SECTION ),
+        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( DELIMITER_TWO_EQUAL_SIGNS_ ),
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( CHAPTER ),
-        tree( SECTION ),
+        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( DELIMITER_TWO_EQUAL_SIGNS_ ),
         tree( IDENTIFIER ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-        tree( SECTION )
+        tree( DELIMITER_TWO_EQUAL_SIGNS_ )
     );
     verifyRehierarchizeFromLeftToRight(
         expected,
         toBeRehierarchized,
-        SECTION,
-        CHAPTER
+        DELIMITER_TWO_EQUAL_SIGNS_,
+        DELIMITER_THREE_EQUAL_SIGNS_
     ) ;
   }
 
@@ -121,20 +121,20 @@ public class HierarchizerTest {
   public void wasABug() {
     final SyntacticTree expected = tree(
         PART,
-        tree( SECTION, tree( IDENTIFIER ) ),
-        tree( SECTION, tree( "don't touch me") )
+        tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( IDENTIFIER ) ),
+        tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( "don't touch me") )
     );
     final SyntacticTree toBeRehierarchized = tree(
         PART,
-        tree( SECTION ),
+        tree( DELIMITER_TWO_EQUAL_SIGNS_ ),
         tree( IDENTIFIER ),
-        tree( SECTION, tree( "don't touch me") )
+        tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( "don't touch me") )
     );
     verifyRehierarchizeFromLeftToRight(
         expected,
         toBeRehierarchized,
-        SECTION,
-        CHAPTER
+        DELIMITER_TWO_EQUAL_SIGNS_,
+        DELIMITER_THREE_EQUAL_SIGNS_
     ) ;
   }
 
@@ -166,7 +166,7 @@ public class HierarchizerTest {
   public void aggregateSpeechInsideChapter() {
     final SyntacticTree expected = tree(
         PART,
-        tree( CHAPTER,
+        tree( DELIMITER_THREE_EQUAL_SIGNS_,
           tree( NodeKind.PARAGRAPH_REGULAR ),
           tree(
               _LIST_WITH_TRIPLE_HYPHEN,
@@ -175,20 +175,20 @@ public class HierarchizerTest {
           ),
           tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
-        tree( CHAPTER, tree( LINES_OF_LITERAL, "" ) )
+        tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( LINES_OF_LITERAL, "" ) )
     ) ;
 
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree(
-            CHAPTER,
+            DELIMITER_THREE_EQUAL_SIGNS_,
             tree( NodeKind.PARAGRAPH_REGULAR ),
             tree( PARAGRAPH_AS_LIST_ITEM ),
             tree( PARAGRAPH_AS_LIST_ITEM ),
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
         tree(
-            CHAPTER,
+            DELIMITER_THREE_EQUAL_SIGNS_,
             tree( LINES_OF_LITERAL, "" )
         )
     ) ;

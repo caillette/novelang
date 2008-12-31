@@ -207,7 +207,7 @@ public class XslWriter extends XmlWriter {
 
   private static SaxMulticaster connectXpathVerifier( TemplatesHandler templatesHandler ) {
     final SaxConnectorForVerifier xpathVerifier =
-        new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getNamesAsXmlElementNames() ) ;
+        new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
 
     final SaxMulticaster multicaster = new SaxMulticaster() ;
     multicaster.add( templatesHandler ) ;
@@ -251,7 +251,7 @@ public class XslWriter extends XmlWriter {
       saxTransformerFactory.setURIResolver( uriResolver ) ;
 
       final SaxConnectorForVerifier xpathVerifier =
-          new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getNamesAsXmlElementNames() ) ;
+          new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
 
 
       final XMLReader reader ;

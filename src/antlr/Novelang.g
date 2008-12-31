@@ -23,9 +23,9 @@ options { output = AST ; }
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;     
   BOOK ;
-  CHAPTER ;
+  DELIMITER_TWO_EQUAL_SIGNS_ ;
   BLOCK_INSIDE_SOLIDUS_PAIRS ;                 
-  EXTENDED_WORD ;
+  EXTENDED_WORD_ ;
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ; 
   IDENTIFIER ;
   BLOCK_INSIDE_HYPHEN_PAIRS ;            
@@ -36,13 +36,13 @@ tokens {
   PARAGRAPH_REGULAR ;              
   PARAGRAPH_AS_LIST_ITEM ;         
   BLOCK_INSIDE_DOUBLE_QUOTES ;     
-  SECTION ;
+  DELIMITER_THREE_EQUAL_SIGNS_ ;
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;   
   BLOCK_INSIDE_SQUARE_BRACKETS ;            
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
-  TITLE ;
+  DELIMITING_TEXT_ ;
   URL ;  
-  WORD ;
+  WORD_ ;
   
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
@@ -54,13 +54,13 @@ tokens {
   SIGN_SEMICOLON ;
   SIGN_COLON ;  
   
-  FUNCTION_CALL ;
-  FUNCTION_NAME ;
-  VALUED_ARGUMENT_MODIFIER ;
-  VALUED_ARGUMENT_PRIMARY ;
-  VALUED_ARGUMENT_FLAG ;
-  VALUED_ARGUMENT_ANCILLARY ;
-  VALUED_ARGUMENT_ASSIGNMENT ;
+  FUNCTION_CALL_ ;
+  FUNCTION_NAME_ ;
+  VALUED_ARGUMENT_MODIFIER_ ;
+  VALUED_ARGUMENT_PRIMARY_ ;
+  VALUED_ARGUMENT_FLAG_ ;
+  VALUED_ARGUMENT_ANCILLARY_ ;
+  VALUED_ARGUMENT_ASSIGNMENT_ ;
 }
 
 
@@ -136,14 +136,14 @@ chapter
   : ( ASTERISK ASTERISK ASTERISK
       ( whitespace? title )?
     )
-    -> ^( CHAPTER title? )
+    -> ^( DELIMITER_TWO_EQUAL_SIGNS_ title? )
   ;
 
 section 
   : ( EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN 
       ( whitespace? title )?
     )
-    -> ^( SECTION title? ) 
+    -> ^( DELIMITER_THREE_EQUAL_SIGNS_ title? ) 
   ;
 
 // =====================
@@ -169,7 +169,7 @@ title
 	          )        
 	      )
 	    )*    
-	  ) -> ^( TITLE $t+ )
+	  ) -> ^( DELIMITING_TEXT_ $t+ )
   ;  
 
 headerIdentifier : ; // TODO
@@ -1128,12 +1128,12 @@ urlXChar
 
 word
   : ( w1 = rawWord ( CIRCUMFLEX_ACCENT w2 = rawWord ) )
-    -> ^( WORD 
-            { delegate.createTree( WORD, $w1.text ) } 
-            ^( WORD_AFTER_CIRCUMFLEX_ACCENT { delegate.createTree( WORD, $w2.text ) } )
+    -> ^( WORD_ 
+            { delegate.createTree( WORD_, $w1.text ) } 
+            ^( WORD_AFTER_CIRCUMFLEX_ACCENT { delegate.createTree( WORD_, $w2.text ) } )
         )	
   | ( w = rawWord )
-    -> ^( WORD { delegate.createTree( WORD, $w.text ) } )
+    -> ^( WORD_ { delegate.createTree( WORD_, $w.text ) } )
   ;  
 
 /** This intermediary rule is useful as I didn't find how to
@@ -1196,9 +1196,9 @@ functionCall
        | WHITESPACE? SOFTBREAK WHITESPACE? paragraph
      )?
     ( mediumbreak ( ancillaryArgument | flagArgument | assignmentArgument ) )*
-    ->  ^( FUNCTION_CALL 
-            ^( FUNCTION_NAME { delegate.createTree( FUNCTION_NAME, $name.text ) } )  
-            ^( VALUED_ARGUMENT_PRIMARY 
+    ->  ^( FUNCTION_CALL_ 
+            ^( FUNCTION_NAME_ { delegate.createTree( FUNCTION_NAME_, $name.text ) } )  
+            ^( VALUED_ARGUMENT_PRIMARY_ 
                 paragraph? 
                 url? 
             )? 
@@ -1210,25 +1210,25 @@ functionCall
   
 ancillaryArgument
   :	( PLUS_SIGN? blockIdentifier )
-      -> ^( VALUED_ARGUMENT_ANCILLARY ^( VALUED_ARGUMENT_MODIFIER PLUS_SIGN )? blockIdentifier )   
+      -> ^( VALUED_ARGUMENT_ANCILLARY_ ^( VALUED_ARGUMENT_MODIFIER_ PLUS_SIGN )? blockIdentifier )   
   ;
 
 flagArgument    
   : ( DOLLAR_SIGN flag = extendedWord )
-      -> ^( VALUED_ARGUMENT_FLAG { delegate.createTree( VALUED_ARGUMENT_FLAG, $flag.text ) } )     
+      -> ^( VALUED_ARGUMENT_FLAG_ { delegate.createTree( VALUED_ARGUMENT_FLAG_, $flag.text ) } )     
   ;
 
 assignmentArgument    
   : ( DOLLAR_SIGN key = extendedWord EQUALS_SIGN value = extendedWord )
-      -> ^( VALUED_ARGUMENT_ASSIGNMENT 
-              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $key.text ) } 
-              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT, $value.text ) } 
+      -> ^( VALUED_ARGUMENT_ASSIGNMENT_ 
+              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT_, $key.text ) } 
+              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT_, $value.text ) } 
           )     
   ;
 
 extendedWord
   : w = rawExtendedWord 
-    -> ^( EXTENDED_WORD { delegate.createTree( EXTENDED_WORD, $w.text ) } )	
+    -> ^( EXTENDED_WORD_ { delegate.createTree( EXTENDED_WORD_, $w.text ) } )	
   ;  
 
 /** This intermediary rule is useful as I didn't find how to

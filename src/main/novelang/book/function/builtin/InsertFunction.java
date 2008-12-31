@@ -95,7 +95,7 @@ public class InsertFunction implements FunctionDefinition {
     verify( "No primary argument", true, functionCall.getChildCount() >= 2 ) ;
     final SyntacticTree primaryArgument = functionCall.getChildAt( 1 ) ;
     verify( "No value for primary argument",
-        VALUED_ARGUMENT_PRIMARY.name(), primaryArgument.getText() ) ;
+        VALUED_ARGUMENT_PRIMARY_.name(), primaryArgument.getText() ) ;
     verify( "No value for primary argument", 1, primaryArgument.getChildCount() ) ;
     final SyntacticTree url = primaryArgument.getChildAt( 0 ) ;
     verify( URL.name(), url.getText() ) ;
@@ -105,13 +105,13 @@ public class InsertFunction implements FunctionDefinition {
     final Map< String, String > assignments = Maps.newHashMap() ;
     for( int i = 2 ; i < functionCall.getChildCount() ; i++ ) {
       final SyntacticTree otherArgumentTree = functionCall.getChildAt( i ) ;
-      if( NodeKind.VALUED_ARGUMENT_FLAG.name().equals( otherArgumentTree.getText() ) ) {
+      if( NodeKind.VALUED_ARGUMENT_FLAG_.name().equals( otherArgumentTree.getText() ) ) {
         final String option = otherArgumentTree.getChildAt( 0 ).getText();
         verify( "Not a supported option: " + option, true, SUPPORTED_OPTIONS.contains( option ) ) ;
         otherArguments.add( option ) ;
       }
 
-      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT.name().equals( otherArgumentTree.getText() ) ) {
+      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT_.name().equals( otherArgumentTree.getText() ) ) {
         final String assignmentKey = otherArgumentTree.getChildAt( 0 ).getText();
         verify(
             "Not a supported assignment: " + assignmentKey,
@@ -277,13 +277,13 @@ public class InsertFunction implements FunctionDefinition {
       SyntacticTree styleTree
   ) {
     final SyntacticTree word = new SimpleTree(
-        WORD.name(),
+        WORD_.name(),
         new SimpleTree( FilenameUtils.getBaseName( partFile.getName() ) )
     ) ;
-    final SyntacticTree title = new SimpleTree( TITLE.name(), word ) ;
+    final SyntacticTree title = new SimpleTree( NodeKind.DELIMITING_TEXT_.name(), word ) ;
 
     SyntacticTree chapterTree = TreeTools.addFirst(
-        new SimpleTree( CHAPTER.name(), partTree.getChildren() ),
+        new SimpleTree( NodeKind.DELIMITER_TWO_EQUAL_SIGNS_.name(), partTree.getChildren() ),
         title
     ) ;
 

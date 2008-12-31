@@ -35,8 +35,8 @@ public class MetadataHelperTest {
 
     final SyntacticTree tree = tree( BOOK,
         tree( NodeKind.PARAGRAPH_REGULAR,
-            tree( WORD, "foo" ),
-            tree( WORD, "bar" )
+            tree( WORD_, "foo" ),
+            tree( WORD_, "bar" )
         )
     ) ;
 

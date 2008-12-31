@@ -32,7 +32,6 @@ import novelang.common.tree.Treepath;
 import novelang.common.SyntacticTree;
 import novelang.common.AbstractSourceReader;
 import novelang.common.StylesheetMap;
-import static novelang.parser.NodeKind.SECTION;
 import novelang.parser.Encoding;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.hierarchy.Hierarchizer;
@@ -134,7 +133,7 @@ public class Part extends AbstractSourceReader {
     }
 
     for( final SyntacticTree sectionCandidate : tree.getChildren() ) {
-      if( SECTION.name().equals( sectionCandidate.getText() ) ) {
+      if( NodeKind.DELIMITER_TWO_EQUAL_SIGNS_.name().equals( sectionCandidate.getText() ) ) {
         for( final SyntacticTree identifierCandidate : sectionCandidate.getChildren() ) {
           if( NodeKind.IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
             final String identifier = IdentifierHelper.createIdentifier( identifierCandidate ) ;

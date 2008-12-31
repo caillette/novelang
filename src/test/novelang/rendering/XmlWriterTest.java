@@ -43,7 +43,7 @@ public class XmlWriterTest {
 
 
     final Renderable rendered = new MyRenderable(
-        TreeFixture.tree( NodeKind.WORD, "w" ) ) ;
+        TreeFixture.tree( NodeKind.WORD_, "w" ) ) ;
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
 
     renderer.render( rendered, outputStream ) ;

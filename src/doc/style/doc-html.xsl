@@ -71,10 +71,10 @@
     <body>
       <div id="Box">
 
-        <div id="Title" ><xsl:value-of select="/n:book/n:title[1]" /></div>
+        <div id="Title" ><xsl:value-of select="/n:book/n:level-description[1]" /></div>
 
         <div class="chapter" >
-          <h1><xsl:value-of select="/n:book/n:title[2]" /></h1>
+          <h1><xsl:value-of select="/n:book/n:level-description[2]" /></h1>
         </div>
 
         <xsl:apply-templates />
@@ -115,25 +115,25 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="/n:book/n:title" />
+  <xsl:template match="/n:book/n:level-description" />
 
-  <xsl:template match="n:chapter" >
+  <xsl:template match="//n:level" >
     <div class="chapter" >
       <xsl:apply-templates />
     </div>
   </xsl:template>
 
-  <xsl:template match="n:chapter/n:title | n:chapter/n:identifier" >
+  <xsl:template match="//n:level/n:level-description" >
     <h1><xsl:apply-templates /></h1>
   </xsl:template>
 
-  <xsl:template match="n:section" >
+  <xsl:template match="//n:level/n:level" >
     <div class="section" >
       <xsl:apply-templates />
     </div>
   </xsl:template>
 
-  <xsl:template match="n:section/n:title | n:section/n:identifier" >
+  <xsl:template match="//n:level/n:level/n:level-description" >
     <h2><xsl:apply-templates /></h2>
   </xsl:template>
 

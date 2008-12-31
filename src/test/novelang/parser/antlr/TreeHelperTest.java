@@ -18,8 +18,8 @@
 package novelang.parser.antlr;
 
 import org.junit.Test;
-import static novelang.parser.NodeKind.TITLE;
-import static novelang.parser.NodeKind.WORD;
+import static novelang.parser.NodeKind.DELIMITING_TEXT_;
+import static novelang.parser.NodeKind.WORD_;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -30,16 +30,16 @@ public class TreeHelperTest {
   @Test
   public void testEqualityOk() {
     TreeFixture.assertEquals(
-        tree( TITLE, tree( WORD, "w0" ) ),
-        tree( TITLE, tree( WORD, "w0" ) )
+        tree( DELIMITING_TEXT_, tree( WORD_, "w0" ) ),
+        tree( DELIMITING_TEXT_, tree( WORD_, "w0" ) )
     ) ;
   }
 
   @Test( expected = AssertionError.class )
   public void testEqualityFail() {
     TreeFixture.assertEquals(
-        tree( TITLE, tree( WORD, "xx" ) ),
-        tree( TITLE, tree( WORD, "w0" ) )
+        tree( DELIMITING_TEXT_, tree( WORD_, "xx" ) ),
+        tree( DELIMITING_TEXT_, tree( WORD_, "w0" ) )
     ) ;
   }
 
