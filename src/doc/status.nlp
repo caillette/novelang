@@ -5,6 +5,18 @@ Novelang is yet stable with more thant 270 automated tests. It generates a PDF d
 Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version `1.0.0`. Keep informed reading the blog. 
 
 
+=== Version `0.16.0`
+
+Brand new naming scheme for syntactic nodes! Yes this will break existing stylesheets. 
+
+Introduced "delimiters" (inside Parts) becoming "levels" when passed to the rendering stage.
+
+Top-level delimiter (formerly "chapter") in Part now starting with two equal signs ("``==``") instead of three asterisks.
+ 
+ Updated documentation accordingly.
+
+
+
 === Version `0.15.0`
 
 Stylesheets containing XPath expressions relative to non-existing grammar token are detected and rejected.
