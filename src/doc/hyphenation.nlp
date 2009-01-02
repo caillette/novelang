@@ -1,4 +1,4 @@
-*** Hyphenation
+== Hyphenation
 
 Novelang PDF generation relies on Apache FOP, which supports hyphenation. Hyphenation is language-dependant and has very complex rules. Luckily those rules are already defined for many languages, unluckily they're made available under various licenses, most of all being not compabible with the GNU Public License. That's the reason why they are not shipped with Novelang. 
 

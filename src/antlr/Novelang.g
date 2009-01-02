@@ -133,7 +133,7 @@ part
   ; 
   
 chapter 
-  : ( ASTERISK ASTERISK ASTERISK
+  : ( EQUALS_SIGN EQUALS_SIGN 
       ( whitespace? title )?
     )
     -> ^( DELIMITER_TWO_EQUAL_SIGNS_ title? )

@@ -1,4 +1,4 @@
-*** Fonts
+== Fonts
 
 Novelang PDF generation relies on Apache FOP, which support custom fonts. Every PDF reader basically supports 14 fonts: serif, sans-serif, monospace, and some symbol fonts. Non-symbol fonts all come in four flavor: normal, bold, italic, and bold-italic. Not that much fun! So users are encouraged to set their own fonts. 
 

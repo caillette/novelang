@@ -1,4 +1,4 @@
-*** Custom stylesheets
+== Custom stylesheets
 
 It's easy to customize rendering of PDF, HTML and plain text because Novelang relies on FO (Formatting Objects) stylesheets. 
 

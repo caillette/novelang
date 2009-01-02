@@ -1,4 +1,4 @@
-*** Projects
+== Projects
 
 Basically, a Novelang project is a directory containing files to be processed by Novelang. It is the directory from where Novelang was launched.
 

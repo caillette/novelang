@@ -1,5 +1,5 @@
 
-*** Syntax for Parts
+== Syntax for Parts
 
 Part files focus on a textual content. Part files have the ``.nlp`` suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
 
@@ -8,13 +8,13 @@ http://github.com/caillette/novelang/tree/master/src/doc
 
 === Chapter
 
-A chapter begins with three asterisks "``***``", immediately followed by an optional title.
+A chapter begins with three asterisks "``==``", immediately followed by an optional title.
 Then an empty line separates the chapter title from its content.
 
 Chapter title supports the same features as a paragraph (italics, quotes...).
 
 <<<
-*** Chapter's title
+== Chapter's title
 
 Chapter content starts here.
 >>>

@@ -1,12 +1,12 @@
 
-*** General considerations
+== General considerations
 
 There are many OSS fonts of good quality but some licenses are incompatible with GPL.
 
 Solution: package those fonts into separate OSS projects and make them available for download (maybe through a dedicated user interface or script or whatever). Would require more thinkings on the way to package fonts for Novelang.
 
 
-*** Font tools
+== Font tools
 
 === FontForge
 
@@ -16,7 +16,7 @@ http://fontforge.sourceforge.net
 
 
 
-*** Fonts
+== Fonts
 
 
 === URW fonts

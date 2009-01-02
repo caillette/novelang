@@ -27,7 +27,7 @@
 <xsl:text> 
 
 </xsl:text>
-*** <xsl:choose>
+== <xsl:choose>
       <xsl:when test="n:identifier" ><xsl:text> </xsl:text>
 <xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
       <xsl:when test="n:level-description" > <xsl:apply-templates select="n:level-description" mode="header" /></xsl:when>

@@ -1,4 +1,4 @@
-*** This is a chapter with a title
+== This is a chapter with a title
 
 === This is a section with a title (and //style// inside the title!)
 
@@ -46,7 +46,7 @@ Some hard inline literal inside ``aeiouè §!"&@#°) «startescape».$*^.0`` a paragr
 Some soft inline literal inside `aeiouè §!"&@#°) «startescape».$*^.0` a paragraph.
 
 
-*** More stuff
+== More stuff
 
 === Special characters
 
@@ -70,7 +70,7 @@ Question mark? Exclamation mark! Comma, semicolon; colon: full stop. Ellipsis...
 
 (parenthesized "quoted [bracketed -- interpolated (and "here [we -- go again --]")-- ]").
 
-*** Speeches
+== Speeches
 
 === Lists are paragraphs
 
@@ -81,7 +81,7 @@ Question mark? Exclamation mark! Comma, semicolon; colon: full stop. Ellipsis...
 --- And a last one.
 
 
-*** Anonymous sections
+== Anonymous sections
 
 This is an anonymous section: a section which has no identifier nor title.
 Anonymous sections require some care for rendering : visual separator must

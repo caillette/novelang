@@ -950,7 +950,7 @@ public class PartParserTest {
   @Test
   public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {
     PARSERMETHOD_PART.checkTree( 
-        "*** c0" + BREAK +
+        "== c0" + BREAK +
         BREAK +
         "=== s0" + BREAK +
         BREAK +
@@ -1008,7 +1008,7 @@ public class PartParserTest {
       throws RecognitionException
   {
     PARSERMETHOD_CHAPTER.checkTree( 
-        "***" + BREAK + 
+        "==" + BREAK + 
         "  \\\\identifier",
         tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( IDENTIFIER, "identifier" ) )
     ) ;
@@ -1019,7 +1019,7 @@ public class PartParserTest {
       throws RecognitionException
   {
     PARSERMETHOD_CHAPTER.checkTree( 
-        "*** Chapter has" + BREAK +
+        "== Chapter has" + BREAK +
         "title " + BREAK +
         "  \\\\identifier", 
         tree(
@@ -1035,7 +1035,7 @@ public class PartParserTest {
       throws RecognitionException
   {
     PARSERMETHOD_CHAPTER.createTree( 
-        "***" + BREAK +
+        "==" + BREAK +
         BREAK +
         "===" + BREAK +
         BREAK +
@@ -1048,7 +1048,7 @@ public class PartParserTest {
       throws RecognitionException
   {
     PARSERMETHOD_CHAPTER.createTree( 
-        "***" + BREAK +
+        "==" + BREAK +
         BREAK +
         "===" + BREAK +
         BREAK +
@@ -1061,7 +1061,7 @@ public class PartParserTest {
       throws RecognitionException
   {
     PARSERMETHOD_CHAPTER.createTree( 
-        "***" + BREAK +
+        "==" + BREAK +
         BREAK +
         "===" + BREAK +
         BREAK +

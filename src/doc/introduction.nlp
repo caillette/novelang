@@ -13,7 +13,7 @@ Novelang software is free to use and redistribute, under the terms of the GNU Pu
 
 
 
-*** Quickstart
+== Quickstart
 
 === Install
 
@@ -27,7 +27,7 @@ First, download the latest version of Novelang, and unzip it in some directory w
 Just create a file with your favorite text editor and name it ``first.nlp``. Content could look like this:
 
 <<<
-*** My first chapter
+== My first chapter
 
 === My first section
 
