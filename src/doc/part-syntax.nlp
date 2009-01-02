@@ -1,96 +1,128 @@
 
-== Syntax for Parts
+== General syntax for Parts
 
-Part files focus on a textual content. Part files have the ``.nlp`` suffix. They support multiple syntactic features. A great example of Novelang syntax is the source of this page. You can find it on:
+Part files focus on a textual content. Part files have the ``.nlp`` suffix. 
+They support multiple syntactic features. 
+A great example of Novelang syntax is the source of this page. You can find it on:
 
 http://github.com/caillette/novelang/tree/master/src/doc
 
+This document explains the effect of syntactic features supported inside Part files. 
 
-=== Chapter
-
-A chapter begins with three asterisks "``==``", immediately followed by an optional title.
-Then an empty line separates the chapter title from its content.
-
-Chapter title supports the same features as a paragraph (italics, quotes...).
-
-<<<
-== Chapter's title
-
-Chapter content starts here.
->>>
+The "rendering name" is useful for stylesheet writers.
 
 
-=== Section
+=== What's a paragraph
 
-A section begins with three equals sign "``===``", immediately followed by an optional title. 
-Then an empty line separates the section title from its content.
 
-Section title supports the same features as a paragraph (italics, quotes...).
+=== What's a word
 
-<<<
-=== Sections's title
 
-Section content starts here.
->>>
+=== Punctuation signs
 
-=== Italics
 
-An italicized block is delimited by a pair of double solidus "``//``".
+=== What's a block
+ 
+
+=== What's literal
+
+
+=== What's a delimiter
+
+
+=== What's a section
+
+
+
+== Detailed syntax for Parts
+
+=== Block inside pair of solidus
+
+[``n:block-inside-solidus-pairs``]
+
+A pair of solidus "``//``" may enclose a block of text.
+
+With Novelang default stylesheet, such text is rendered as italics: 
 
 <<< 
 There are //italics//.
 >>>
 
-=== Quotes
 
-A quoted block is delimited by a pair of double quotes "``"``".
+=== Block inside double quotes
+
+[``n:block-inside-double-quotes``]
+
+A pair of double quotes "``"``" may enclose a block of text.
+
+With Novelang default stylesheet, such text is rendered inside double quotes. 
+The character may vary depending on the language.
 
 <<<
 There are "double quotes".
 >>>
 
-=== Brackets
 
-A bracketed block starts with a left square bracket "``[``" and ends with a right square bracket "``]``".
+=== Block inside square brackets
 
-<<< 
-Here is a [bracketed block].
->>>
+[``n:block-inside-square-brackets``]
 
-=== Parenthesis
+A pair of square brackets "``[``" and "``]``" may enclose a block of text.
 
-A parenthesized block starts with a left parenthesis "``(``" and ends with a right parenthesis "``)``".
+With Novelang default stylesheet, such text is rendered inside square brackets. 
 
-<<< 
-Here is a (parenthesized block).
+<<<
+There are [square brackets].
 >>>
 
 
-=== Interpolated clause
+=== Block inside parenthesis
 
-An interpolated clause starts with a pair of double minus signs "``--``". It ends with another pair for double minus sigh, //or// a single minus sign immediately followed by a minus sign and a low line for closing "`-_`". When using the second closing form, it is called the "silent end".
+[``n:block-inside-parenthesis``]
 
-<<< 
-Introducing -- as here -- the interpolated clause.
+A pair of square brackets "``(``" and "``)``" may enclose a block of text.
 
-Silent end -- nice for ending a sentence-_.
+With Novelang default stylesheet, such text is rendered inside parenthesis. 
+
+<<<
+There are (parenthesis).
 >>>
 
-The "silent end" means closing dash should not be rendered but it gives a hint of where the interpolated clause ends. This is useful for rendering, because an interpolated clause is not just made of dash characters: non-breakable spaces should be inserted at the correct place.
 
+=== Block inside double hyphen
 
-=== Paragraph
+[``n:block-inside-hyphen-pairs``]
 
-A paragraph is made of text on multiple lines, that may be separated by a single line break.
+A pair of square "``--``" may enclose a block of text.
 
-<<< 
-Here is one paragraph,
-on two lines.
+[``n:block-inside-two-hyphens-then-hyphen-low-line``]
 
-Here is another paragraph.
+There is an alternative where the ending delimiter is an hyphen then a low line ("``_``").
+
+With Novelang default stylesheet, such text is rendered inside a pair of en dash characters 
+(or em dash depending on language). This creates an interpolated clause.
+With the ending low line, there is no visible ending. 
+
+<<<
+See -- interpolated clause -- here.
+See -- no visible end -_.
 >>>
 
-Paragraph may include italics, quotes, brackets, parenthesis, interpolated clauses.
+
+=== Block of literal inside grave accents 
+
+[``n:block-of-literal-inside-grave-accents``]
+
+A pair of grave accents "``«inlineliteral»``" may enclose a block of text containing characters 
+which are not allowed otherwise (because they serve other Novelang grammar's purpose).
+
+With Novelang default stylesheet, such text is rendered as normal text.
+
+<<<
+Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
+>>>
+
+
 
 === Blockquote
 
