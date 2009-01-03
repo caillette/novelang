@@ -49,7 +49,7 @@ public class MetadataHelper {
       }
       return childCount ;
     } else {
-      return -1 ;
+      return 0 ;
     }
   }
 

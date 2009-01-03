@@ -50,14 +50,18 @@ public class Part extends AbstractSourceReader {
 
 
   public Part( String content ) {
-    standalone = false ; // Would be logical to make it true but would pollute the tests.
+    this( content, false ) ; // Would be logical to make it true but would pollute the tests.
+  }
+
+  public Part( String content, boolean standalone ) {
+    this.standalone = standalone ; 
     tree = createTree( content ) ;
     identifiers = findIdentifiers() ;
   }
 
   private SyntacticTree createTree( String content ) {
     final SyntacticTree rawTree = parse( new DefaultPartParserFactory(), content ) ;
-    if( null == rawTree ) {
+    if( null == rawTree || hasProblem() ) {
       return null ;
     } else {
       final Treepath< SyntacticTree > rehierarchized1 =

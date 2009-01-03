@@ -32,6 +32,7 @@ import novelang.common.SyntacticTree;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.NodeKind;
+import novelang.parser.Escape;
 
 /**
  * @author Laurent Caillette
@@ -117,6 +118,12 @@ public class PartTest {
     TreeFixture.assertEquals( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
 
+  }
+  
+  @Test 
+  public void partWithParsingErrorDoesNotAttemptToCountWords() {
+    final Part part = new Part( "````", true ) ;
+    Assert.assertTrue( part.hasProblem() ) ;
   }
 
   @Test
