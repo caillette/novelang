@@ -4,43 +4,125 @@
 Part files focus on a textual content. Part files have the ``.nlp`` suffix. 
 They support multiple syntactic features. 
 A great example of Novelang syntax is the source of this page. You can find it on:
-
-http://github.com/caillette/novelang/tree/master/src/doc
-
-This document explains the effect of syntactic features supported inside Part files. 
-
-The "rendering name" is useful for stylesheet writers.
-
-
-=== What's a paragraph
-
-
-=== What's a word
-
-
-=== Punctuation signs
-
-
-=== What's a block
+http://github.com/caillette/novelang/raw/master/src/doc/part-syntax.nlp
+This document explains the effect of syntactic features supported inside Part files.
  
 
-=== What's literal
+
+=== Paragraphs
+
+The central notion of Novelang's Part grammar is the paragraph.
+A paragraph is a sequence of textual items kept together because there is 
+// no more than one line break at a time//. 
+So a paragraph cannot contain two consecutive line breaks, 
+or it would be split in two paragraphs.
+
+Paragraphs mainly contain words, punctuation signs, blocks, list items and URL.
 
 
-=== What's a delimiter
+=== Blocks
+
+A block is a subset of a paragraph (for things like text in parenthesis). Blocks may contain blocks.
+Because blocks occur only inside paragraphs, they cannot contain two consecutive line breaks.
+ 
+
+=== Literal
+
+Literal is text with uninterpreted characters. 
+
+Novelang supports several kinds of literal, whether it is inside a paragraph or outside.
 
 
-=== What's a section
+=== Levels
 
+A level is a hierarchical container, that carries meaning about text structure.
+Levels represent things like chapters and sections.
 
 
 == Detailed syntax for Parts
 
-=== Block inside pair of solidus
 
-[``n:block-inside-solidus-pairs``]
+=== Regular paragraph
 
-A pair of solidus "``//``" may enclose a block of text.
+XML element: ``n:regular-paragraph``
+
+A regular paragraph is made of contiguous lines of text 
+(two consecutive line breaks cannot occur inside a paragraph).
+A paragraph may contain words, punctuation signs, URL, list items and blocks.
+
+With Novelang default stylesheet, such text is rendered as normal text: 
+
+<<<
+First
+paragraph.
+
+Second paragraph.
+>>>
+
+
+=== Levels
+
+XML element: ``n:level``
+
+Levels are delimited with a simple syntax, using a separator ``=`` telling about the depth 
+of the level.
+A Part contains up to three levels, including level 0 which is the default.
+
+Considering a Part like this:
+
+<<<
+Text at depth 0.
+
+== Depth 1
+
+Introductory text.
+
+=== Depth 2
+
+Blah blah blah...
+
+=== Depth 2
+
+Blah.
+
+== Depth 1 again
+
+=== Depth 2
+
+...
+>>>
+
+The level structure of the Part looks like this:
+
+<<<
+n:part
+ +-- n:paragraph-regular "Text at depth 0"
+ +-- n:level
+ | +-- n:title-description "Depth 1"
+ | +-- n:paragraph-regular "Introductory text."
+ | +-- n:level
+ | |    +-- n:level-description "Depth 2"
+ | |    +-- n:paragraph-regular "Blah blah blah..."
+ | +-- n:level
+ |      +-- n:title-description "Depth 2"
+ |      +-- n:paragraph-regular "Blah."
+ +-- n:level
+      +-- n:level-description "Depth 1 again"
+      +-- n:title-description "Depth 2"
+           +-- n:paragraph-regular "..."
+>>>
+
+As explained later in this document, the depth of levels may be changed (increased) at Book level. 
+This is useful for creating documents which have great depth, while keeping edited content with
+at reasonable depth. 
+
+
+
+=== Block inside pairs of solidus
+
+XML element: ``n:block-inside-solidus-pairs``
+
+Two pairs of solidus ``//`` may enclose a block of text.
 
 With Novelang default stylesheet, such text is rendered as italics: 
 
@@ -51,9 +133,9 @@ There are //italics//.
 
 === Block inside double quotes
 
-[``n:block-inside-double-quotes``]
+XML element: ``n:block-inside-double-quotes``
 
-A pair of double quotes "``"``" may enclose a block of text.
+Two double quotes ``"`` may enclose a block of text.
 
 With Novelang default stylesheet, such text is rendered inside double quotes. 
 The character may vary depending on the language.
@@ -65,9 +147,9 @@ There are "double quotes".
 
 === Block inside square brackets
 
-[``n:block-inside-square-brackets``]
+XML element: ``n:block-inside-square-brackets``
 
-A pair of square brackets "``[``" and "``]``" may enclose a block of text.
+Two pairs of square brackets ``[`` and ``]`` may enclose a block of text.
 
 With Novelang default stylesheet, such text is rendered inside square brackets. 
 
@@ -78,9 +160,9 @@ There are [square brackets].
 
 === Block inside parenthesis
 
-[``n:block-inside-parenthesis``]
+XML element: ``n:block-inside-parenthesis``
 
-A pair of square brackets "``(``" and "``)``" may enclose a block of text.
+Two pairs of square brackets ``(`` and ``)`` may enclose a block of text.
 
 With Novelang default stylesheet, such text is rendered inside parenthesis. 
 
@@ -91,13 +173,12 @@ There are (parenthesis).
 
 === Block inside double hyphen
 
-[``n:block-inside-hyphen-pairs``]
+XML element: ``n:block-inside-hyphen-pairs``, ``n:block-inside-two-hyphens-then-hyphen-low-line``
 
-A pair of square "``--``" may enclose a block of text.
+Two pairs of hyphen minus ``--`` may enclose a block of text.
 
-[``n:block-inside-two-hyphens-then-hyphen-low-line``]
 
-There is an alternative where the ending delimiter is an hyphen then a low line ("``_``").
+There is an alternative where the ending delimiter is an hyphen then a low line ``_``.
 
 With Novelang default stylesheet, such text is rendered inside a pair of en dash characters 
 (or em dash depending on language). This creates an interpolated clause.
@@ -111,9 +192,9 @@ See -- no visible end -_.
 
 === Block of literal inside grave accents 
 
-[``n:block-of-literal-inside-grave-accents``]
+XML element: ``n:block-of-literal-inside-grave-accents``
 
-A pair of grave accents "``«inlineliteral»``" may enclose a block of text containing characters 
+Two grave accents ``«grave-accent»`` may enclose a block of text containing characters 
 which are not allowed otherwise (because they serve other Novelang grammar's purpose).
 
 With Novelang default stylesheet, such text is rendered as normal text.
@@ -123,61 +204,69 @@ Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
 >>>
 
 
+=== Block of literal inside two pairs of grave accents 
 
-=== Blockquote
+XML element: ``n:block-of-literal-inside-grave-accent-pairs``
 
-A blockquote starts with a double less-than sign "``<<``" at the beginning of a line, immediately followed by a line break. It ends with a double greater-than sign "``>>``" at the start of a line. 
+Two pairs of grave accents ``«grave-accent»«grave-accent»`` may enclose a block of text 
+containing characters which are not allowed otherwise 
+(because they serve other Novelang grammar's purpose).
+
+With Novelang default stylesheet, such text is rendered as monospaced text.
+
+<<<
+Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
+>>>
+
+
+
+=== Paragraphs inside pairs of angled brackets
+
+XML element: ``paragraphs-inside-angled-bracket-pairs``
+
+Two lower-than signs ``<<`` and two greater-than signs ``>>`` may enclose one paragraph or more.
+The angled bracket delimiting the paragraphs take place on the first column of the line, 
+and there must be no other character on the same line.
+
+Whith Novelang default stylesheet, such text is rendered as quoted paragraphs.
 
 <<<
 <<
-Blockquote here.
+First paragraph.
 
-May include several paragraphs.
+Second paragraph.
 >>
 >>>
 
 
-=== Block literal
+=== Lines of literal
 
-A block literal starts with a triple less-than sign "``<<<``" at the beginning of a line, immediately followed by a line break. It ends with a triple greater-than sign "``>>>``" at the start of a line.
+XML element: ``lines-of-literal``
+
+Three lower-than signs``<<<`` and two greater-than signs ``>>>`` may enclose one line of literal
+text or more. 
+The angled brackets delimiting the paragraphs take place on the first column of the line, 
+and there must be no other character on the same line.
+
+The literal text may contain any character, including escaped characters and greater-than signs, 
+as long as they don't form an ending delimiter (if you need to display that, then use an escaped 
+character).
 
 <<<
 <<<
 Here is literal.
   Indentation will be kept.
-«greaterthan»>>
+«greater-than-sign»>>
 >>>
 
-Literal blocks are useful to display text verbatim. The text inside can be almost anything, except three closing angled brackets at the very start of a line. For displaying them (as in the example shown above), use escaped characters.
 
+=== Circumflex accent introducing a trailing word
 
-=== Soft inline literal
+XML element: ``n:word-after-circumflex-accent``
 
-Soft inline literal is delimited with a grave accent "``«inlineliteral»``".
-
-<<<
-Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
->>>
-%%"
-
-Soft inline literal tells Novelang to drop syntactic rules, and don't mind about characters that normally have other purpose. Soft inline literal may contain almost any character, except of course the grave accent. In the rare case where a grave accent is required, use an escaped character.
-
-
-=== Hard inline literal
-
-Hard inline literal is delimited with a double grave accent "``«inlineliteral»«inlineliteral»``".
-
-<<<
-Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
->>>
-%%
-
-Hard inline literal works as soft inline literal, but rendering should add a special style (like monospaced fonts) to draw the attention of the reader the text is verbatim (like a programming language item).
-
-
-=== Superscript
-
-Superscript appears only at the end of a word and therefore only requires a delimiter on the left, which is the circumflex character "``^``".
+A circumflex accent ``^`` may appear between two words. 
+ 
+With Novelang default stylesheet, the second word is is displayed as superscript.
 
 <<<
 April, the 1^st.
@@ -186,7 +275,10 @@ April, the 1^st.
 
 === URL
 
-A URL is typed as-it-is. There must be a line break before and a line break after.
+XML element: ``n:url``
+
+A URL may appear at the first column of a line. There must be nothing else after, except spaces
+or a line break.
 
 <<<
 http://novelang.blogspot.com
@@ -195,22 +287,40 @@ http://novelang.blogspot.com
 
 === Escaped characters
 
-Novelang uses some characters for its markup. For displaying those characters in the rendered documents, they must be escaped -- special codes must be used-_.
+For displaying character that have a special meaning in the rendered documents, they must be escaped.
+An escaped character is enclosed into a left-pointing double angle quotation mark ``«laquo»`` and 
+a right-pointing double angled quotation mark ``«raquo»``. The escape code is the unicode name.
+HTML entity name is supported as well.
 
 <<<
->   «startescape»greaterthan«endescape» 
-«startescape»   «startescape»startescape«endescape» 
-«endescape»   «startescape»endescape«endescape» 
-«inlineliteral»   «startescape»inlineliteral«endescape»
+«grave-accent»   «laquo»grave-accent«raquo»
+«left-curly-bracket»   «laquo»left-curly-bracket«raquo»
+«right-curly-bracket»   «laquo»right-curly-bracket«raquo»
+«percent-sign»   «laquo»percent-sign«raquo»
+«greater-than-sign»   «laquo»greater-than-sign«raquo»
+    alias: «laquo»gt«raquo»
+«laquo»   «laquo»left-pointing-double-angle-quotation-mark«raquo»
+    alias: «laquo»laquo«raquo»
+«raquo»   «laquo»right-pointing-double-angle-quotation-mark«raquo» 
+    alias: «laquo»raquo«raquo»
+
 >>>
 
-Using those character is exceptional, however -- except in Novelang documentation!-_ Most of useful character are accessible as literal.
+Using those characters is exceptional, however -- except in Novelang documentation! -- 
+as most of useful character are accessible as literal.
 
 === Comments
 
 Sometimes it is useful to tell Novelang to ignore some lines in a Part files.
 
-Line comments begin with double percent sign "``%````%``".
+Line comments begin with double percent sign ``«percent-sign»«percent-sign»``.
 
-Blocks comments are delimited by a pair of double accolades  "``{````{``" and  "``}````}``".
+Blocks comments are delimited by a pair of double accolades  
+``«left-curly-bracket»«left-curly-bracket»`` and  ``«right-curly-bracket»«right-curly-bracket»``.
 
+<<<
+«percent-sign»«percent-sign» This line is commented.
+
+«left-curly-bracket»«left-curly-bracket» These two lines are
+commented. «right-curly-bracket»«right-curly-bracket»
+>>>

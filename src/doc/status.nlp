@@ -7,13 +7,17 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 === Version `0.16.0`
 
-Brand new naming scheme for syntactic nodes! Yes this will break existing stylesheets. 
+This version introduces various changes that may break existing documents and stylesheets.
+
+Brand new naming scheme for syntactic nodes! 
 
 Introduced "delimiters" (inside Parts) becoming "levels" when passed to the rendering stage.
 
 Top-level delimiter (formerly "chapter") in Part now starting with two equal signs ("``==``") instead of three asterisks.
+
+Character escape now basing on Unicode name, plus optional HTML entity name. 
  
- Updated documentation accordingly.
+Updated documentation accordingly.
 
 
 

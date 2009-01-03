@@ -203,7 +203,12 @@ pre {
 
 code {
   font-family: Monaco, ProFont, "Bitstream Vera Sans Mono", "American Typewriter", "Andale Mono", monospace;
-  font-size: 0.91em; /* 1.09em for Courier */
+  font-size: 0.91em ; /* 1.09em for Courier */
+  border-width : thin ;
+  border-style : solid ;
+  border-color : gray ;
+  padding: 3px;
+  
 }
 
 ul {

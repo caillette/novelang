@@ -37,7 +37,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
-  <xsl:import href="punctuation-US-EN.xsl" />
+  <xsl:import href="html.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
@@ -137,53 +137,9 @@
     <h2><xsl:apply-templates /></h2>
   </xsl:template>
 
-  <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
-    <blockquote>
-      <xsl:apply-templates/>
-    </blockquote>
-  </xsl:template>
-
-  <xsl:template match="n:lines-of-literal" >
-    <pre>
-      <xsl:apply-templates/>
-    </pre>
-  </xsl:template>
-
-  <xsl:template match="n:block-of-literal-inside-grave-accents" >
-    <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >
-    <tt><xsl:apply-templates/></tt>
-  </xsl:template>
-
-  <xsl:template match="n:style" />
-
-  <xsl:template match="n:paragraph-regular" >
-    <p>
-    <xsl:apply-templates/>
-    </p>
-  </xsl:template>
-
-  <xsl:template match="n:url" >
-    <p>
-    <a><xsl:attribute name="href"><xsl:value-of select="." /></xsl:attribute><xsl:value-of select="." /></a>
-    </p>
-  </xsl:template>
-
-  <xsl:template match="n:paragraph-as-list-item" >
-    <p>
-    &mdash;&nbsp;
-    <xsl:apply-templates/>
-    </p>
-  </xsl:template>
-
-
-  <xsl:template match="n:block-inside-solidus-pairs" >
-    <i><xsl:apply-templates/></i>
-  </xsl:template>
-
-
+  <xsl:template match="//n:block-inside-square-brackets/n:block-of-literal-inside-grave-accent-pairs" >
+    <code><xsl:value-of select="." /></code>
+  </xsl:template>  
 
 
 </xsl:stylesheet>

@@ -117,6 +117,10 @@
     <i><xsl:apply-templates/></i>
   </xsl:template>
 
+  <xsl:template match="n:block-of-literal-inside-grave-accents" >
+    <xsl:apply-templates/>
+  </xsl:template>
+  
   <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >
     <code><xsl:apply-templates/></code>
   </xsl:template>
