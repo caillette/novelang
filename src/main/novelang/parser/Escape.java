@@ -72,6 +72,11 @@ public class Escape {
     escapedCharactersAlternatives.put( "gt", '>' ) ; 
     
     escapedCharacters.put( "grave-accent", '`' ) ;
+    
+    escapedCharacters.put( "percent-sign", '%' ) ;
+    
+    escapedCharacters.put( "left-curly-bracket", '{' ) ;
+    escapedCharacters.put( "right-curly-bracket", '}' ) ;
 
     escapedCharacters.put( "latin-small-ligature-oe", '\u0153' ) ;
     escapedCharactersAlternatives.put( "oelig", '\u0153' ) ;
