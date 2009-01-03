@@ -30,14 +30,14 @@ public class EscapeTest {
 
   @Test
   public void escape0() throws NoUnescapedCharacterException {
-    assertEquals( ">", Escape.unescapeText( ESCAPE_START + "greaterthan" + ESCAPE_END ) ) ;
+    assertEquals( ">", Escape.unescapeText( ESCAPE_START + "greater-than-sign" + ESCAPE_END ) ) ;
   }
 
   @Test
   public void escape1() throws NoUnescapedCharacterException {
     assertEquals(
         "a>",
-        Escape.unescapeText( "a" + ESCAPE_START + "greaterthan" + ESCAPE_END )
+        Escape.unescapeText( "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END )
     ) ;
   }
 
@@ -45,7 +45,7 @@ public class EscapeTest {
   public void escape2() throws NoUnescapedCharacterException {
     assertEquals(
         "a>b",
-        Escape.unescapeText( "a" + ESCAPE_START + "greaterthan" + ESCAPE_END + "b" )
+        Escape.unescapeText( "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" )
     ) ;
   }
 
@@ -54,8 +54,8 @@ public class EscapeTest {
     assertEquals(
         "a><",
         Escape.unescapeText(
-            "a" + ESCAPE_START + "greaterthan" + ESCAPE_END +
-            ESCAPE_START + "lowerthan" + ESCAPE_END
+            "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END +
+            ESCAPE_START + "lower-than-sign" + ESCAPE_END
         )
     ) ;
   }
@@ -65,8 +65,8 @@ public class EscapeTest {
     assertEquals(
         "a>b<",
         Escape.unescapeText(
-            "a" + ESCAPE_START + "greaterthan" + ESCAPE_END + "b" +
-            ESCAPE_START + "lowerthan" + ESCAPE_END
+            "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
+            ESCAPE_START + "lower-than-sign" + ESCAPE_END
         )
     ) ;
   }
@@ -76,8 +76,8 @@ public class EscapeTest {
     assertEquals(
         "a>b<c",
         Escape.unescapeText(
-            "a" + ESCAPE_START + "greaterthan" + ESCAPE_END + "b" +
-                ESCAPE_START + "lowerthan" + ESCAPE_END + "c"
+            "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
+                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "c"
         )
     ) ;
   }
@@ -87,8 +87,8 @@ public class EscapeTest {
     assertEquals(
         "abc>d<e",
         Escape.unescapeText(
-            "abc" + ESCAPE_START + "greaterthan" + ESCAPE_END + "d" +
-                ESCAPE_START + "lowerthan" + ESCAPE_END + "e"
+            "abc" + ESCAPE_START + "gt" + ESCAPE_END + "d" +
+                ESCAPE_START + "lt" + ESCAPE_END + "e"
         )
     ) ;
   }
@@ -96,10 +96,32 @@ public class EscapeTest {
   @Test
   public void escape8() throws NoUnescapedCharacterException {
     assertEquals(
+        "abc>d<e",
+        Escape.unescapeText(
+            "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
+                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "e"
+        )
+    ) ;
+  }
+
+  @Test
+  public void escape9() throws NoUnescapedCharacterException {
+    assertEquals(
         "abc>d<ef",
         Escape.unescapeText(
-            "abc" + ESCAPE_START + "greaterthan" + ESCAPE_END + "d" +
-                ESCAPE_START + "lowerthan" + ESCAPE_END + "ef"
+            "abc" + ESCAPE_START + "gt" + ESCAPE_END + "d" +
+                ESCAPE_START + "lt" + ESCAPE_END + "ef"
+        )
+    ) ;
+  }
+
+  @Test
+  public void escape10() throws NoUnescapedCharacterException {
+    assertEquals(
+        "abc>d<ef",
+        Escape.unescapeText(
+            "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
+                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "ef"
         )
     ) ;
   }

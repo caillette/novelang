@@ -37,6 +37,7 @@ public class Escape {
   private static final Logger LOGGER = LoggerFactory.getLogger( Escape.class ) ;
 
   private static final BiMap< String, Character > ESCAPED_CHARACTERS;
+  private static final Map< String, Character > ESCAPED_CHARACTERS_ALTERNATIVES;
   private static final BiMap< String, Character > ESCAPED_HTML_CHARACTERS ;
 
   /**
@@ -53,21 +54,35 @@ public class Escape {
   static {
 
     final BiMap< String, Character > escapedCharacters = Maps.newHashBiMap() ;
+    final Map< String, Character > escapedCharactersAlternatives = Maps.newHashMap() ;
     final BiMap< String, Character > escapedHtmlCharacters = Maps.newHashBiMap() ;
 
     // Symbols to keep after character escape refactoring.
 
-    escapedCharacters.put( "startescape", ESCAPE_START ) ;
-    escapedCharacters.put( "endescape", ESCAPE_END ) ;
-    escapedCharacters.put( "lowerthan", '<' ) ;
-    escapedCharacters.put( "greaterthan", '>' ) ;
-    escapedCharacters.put( "inlineliteral", '`' ) ;
+    escapedCharacters.put( "left-pointing-double-angle-quotation-mark", ESCAPE_START ) ; // «
+    escapedCharactersAlternatives.put( "laquo", ESCAPE_START ) ;
+    
+    escapedCharacters.put( "right-pointing-double-angle-quotation-mark", ESCAPE_END ) ; // »
+    escapedCharactersAlternatives.put( "raquo", ESCAPE_END ) ;
+    
+    escapedCharacters.put( "lower-than-sign", '<' ) ;
+    escapedCharactersAlternatives.put( "lt", '<' ) ; 
+    
+    escapedCharacters.put( "greater-than-sign", '>' ) ;
+    escapedCharactersAlternatives.put( "gt", '>' ) ; 
+    
+    escapedCharacters.put( "grave-accent", '`' ) ;
 
-    escapedCharacters.put( "oelig", '\u0153' ) ;
-    escapedCharacters.put( "OElig", '\u0152' ) ;
+    escapedCharacters.put( "latin-small-ligature-oe", '\u0153' ) ;
+    escapedCharactersAlternatives.put( "oelig", '\u0153' ) ;
+    
+    escapedCharacters.put( "latin-capital-ligature-oe", '\u0152' ) ;
+    escapedCharactersAlternatives.put( "OElig", '\u0152' ) ;
 
-    escapedCharacters.put( "eurosign", '\u8364' ) ;     // ?
-    escapedCharacters.put( "multiplysign", '\u00d7' ) ; // ×
+    escapedCharacters.put( "euro-sign", '\u8364' ) ;
+    
+    escapedCharacters.put( "multiplication-sign", '\u00d7' ) ; // ×
+    escapedCharactersAlternatives.put( "times", '\u00d7' ) ; 
 
     escapedHtmlCharacters.put( "oelig", '\u0153' ) ;
     escapedHtmlCharacters.put( "OElig", '\u0152' ) ;
@@ -75,34 +90,12 @@ public class Escape {
     escapedHtmlCharacters.put( "lt", '<' ) ;
     escapedHtmlCharacters.put( "gt", '>' ) ;
 
-    // Those escapedCharacters aren't needed anymore.
-
-//    escapedCharacters.put( "apos", "'" ) ;
-//    escapedCharacters.put( "hellip", "\u2026" ) ;
-//    escapedCharacters.put( "percent", "%" ) ;
-//    escapedCharacters.put( "lcub", "{" ) ;
-//    escapedCharacters.put( "rcub", "}" ) ;
-//    escapedCharacters.put( "plus", "+" ) ;
-//    escapedCharacters.put( "equals", "=" ) ;
-//    escapedCharacters.put( "dollar", "$" ) ;
-//    escapedCharacters.put( "numbersign", "#" ) ;
-//    escapedCharacters.put( "colon", ":" ) ;
-//    escapedCharacters.put( "lowline", "_" ) ;
-//    escapedCharacters.put( "euro", "\u20ac" ) ;
-//    escapedCharacters.put( "amp", "&" ) ;
-//    escapedCharacters.put( "solidus", "/" ) ;
-//    escapedCharacters.put( "lt", "<" ) ;
-//    escapedCharacters.put( "tilde", "~" ) ;
-//    escapedCharacters.put( "rp", ")" ) ;
-//    escapedCharacters.put( "quot", "\"" ) ;
-//    escapedCharacters.put( "fullstop", "." ) ;
-//    escapedCharacters.put( "deg", "\u00b0" ) ;
-//
     ESCAPED_CHARACTERS = Maps.unmodifiableBiMap( escapedCharacters ) ;
+    ESCAPED_CHARACTERS_ALTERNATIVES = ImmutableMap.copyOf( escapedCharactersAlternatives ) ;
     ESCAPED_HTML_CHARACTERS = Maps.unmodifiableBiMap( escapedHtmlCharacters ) ;
   }
 
-  public static Map< String, Character > getCharacterEscapes() {
+  public static Map< String, Character > getMainCharacterEscapes() {
     return new ImmutableMap.Builder().putAll( ESCAPED_CHARACTERS ).build() ;
   }
 
@@ -113,14 +106,16 @@ public class Escape {
   public static Character unescapeCharacter( String escaped )
       throws NoUnescapedCharacterException
   {
-    final Character unescaped = ESCAPED_CHARACTERS.get( escaped ) ;
+    Character unescaped = ESCAPED_CHARACTERS.get( escaped ) ;
     if( null == unescaped ) {
-      final NoUnescapedCharacterException exception = new NoUnescapedCharacterException( escaped ) ;
-      LOGGER.warn( "Unsupported symbol", exception ) ;
-      throw exception ;
-    } else {
-      return unescaped ;
+      unescaped = ESCAPED_CHARACTERS_ALTERNATIVES.get( escaped ) ;
+      if ( null == escaped ) {
+        final NoUnescapedCharacterException exception = new NoUnescapedCharacterException( escaped ) ;
+        LOGGER.warn( "Unsupported symbol", exception ) ;
+        throw exception ;
+      }
     }
+    return unescaped ;
   }
 
 
@@ -147,7 +142,7 @@ public class Escape {
   }
 
   private static final Pattern PLAIN_ESCAPE_PATTERN =
-      Pattern.compile( "(" + ESCAPE_START + "(\\w+)" + ESCAPE_END + ")" ) ;
+      Pattern.compile( "(" + ESCAPE_START + "(\\w+(?:-\\w+)*)" + ESCAPE_END + ")" ) ;
   private static final Pattern HTML_ESCAPE_PATTERN =
       Pattern.compile( "(\\&(\\w+);)" ) ;
 

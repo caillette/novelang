@@ -1135,6 +1135,11 @@ word
   | ( w = rawWord )
     -> ^( WORD_ { delegate.createTree( WORD_, $w.text ) } )
   ;  
+  
+symbolicName
+  : ( hexLetter | nonHexLetter | digit )
+    ( HYPHEN_MINUS? ( hexLetter | nonHexLetter | digit ) )*
+  ;
 
 /** This intermediary rule is useful as I didn't find how to
  * concatenate Tokens from inside the rewrite rule.
@@ -1159,9 +1164,11 @@ rawWord returns [ String text ]
   ;  
 
 escapedCharacter returns [ String unescaped ]
-  : LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK letters RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK
+  : LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK 
+    symbolicName 
+    RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK
     { $unescaped = delegate.unescapeCharacter( 
-          $letters.text, 
+          $symbolicName.text, 
           0, // getLine(), TODO fix this.
           0 // getCharPositionInLine() 
       ) ;

@@ -157,7 +157,7 @@ public class PartParserTest {
 
   @Test
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
-    final Map< String, Character > map = Escape.getCharacterEscapes() ;
+    final Map< String, Character > map = Escape.getMainCharacterEscapes() ;
     for( String key : map.keySet() ) {
       final String escaped = Escape.ESCAPE_START + key + Escape.ESCAPE_END ;
       final Character unescaped = map.get( key ) ;
@@ -583,7 +583,7 @@ public class PartParserTest {
   public void literalWithEscapedCharacters() throws RecognitionException {
     PARSERMETHOD_LITERAL.checkTree( 
         "<<<" + BREAK +
-        "2" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END + "1" + BREAK +
+        "2" + Escape.ESCAPE_START + "greater-than-sign" + Escape.ESCAPE_END + "1" + BREAK +
         ">>>", tree( LINES_OF_LITERAL, "2>1" )
     ) ;
   }
@@ -600,7 +600,7 @@ public class PartParserTest {
   @Test
   public void softInlineLiteralWithEscape() throws RecognitionException {
     PARSERMETHOD_SOFT_INLINE_LITERAL.checkTree( 
-        "`" + Escape.ESCAPE_START + "greaterthan" + Escape.ESCAPE_END +"`", 
+        "`" + Escape.ESCAPE_START + "greater-than-sign" + Escape.ESCAPE_END +"`", 
         tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, ">" )
     ) ;
   }
