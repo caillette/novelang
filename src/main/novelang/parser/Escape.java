@@ -109,12 +109,13 @@ public class Escape {
     Character unescaped = ESCAPED_CHARACTERS.get( escaped ) ;
     if( null == unescaped ) {
       unescaped = ESCAPED_CHARACTERS_ALTERNATIVES.get( escaped ) ;
-      if ( null == escaped ) {
+      if ( null == unescaped ) {  
         final NoUnescapedCharacterException exception = new NoUnescapedCharacterException( escaped ) ;
         LOGGER.warn( "Unsupported symbol", exception ) ;
         throw exception ;
       }
     }
+    LOGGER.debug( "Escaped: '{}'", escaped ) ;
     return unescaped ;
   }
 
@@ -164,6 +165,9 @@ public class Escape {
       }
       final String escapeCode = matcher.group( 2 ) ;
       final Character escapedSymbol = Escape.unescapeCharacter( escapeCode ) ;
+      if( null == escapedSymbol ) {
+        throw new NoUnescapedCharacterException( escapeCode ) ;
+      }
       buffer.append( escapedSymbol ) ;
       keepFrom = matcher.end() ;
     }

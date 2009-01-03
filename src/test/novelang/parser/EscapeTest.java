@@ -17,7 +17,11 @@
 package novelang.parser;
 
 import org.junit.Test;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static novelang.parser.Escape.ESCAPE_START;
 import static novelang.parser.Escape.ESCAPE_END;
 
@@ -27,6 +31,26 @@ import static novelang.parser.Escape.ESCAPE_END;
  * @author Laurent Caillette
  */
 public class EscapeTest {
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger( EscapeTest.class ) ; 
+
+  @Test
+  public void escapeNotFoundMessageOk() throws NoUnescapedCharacterException {
+    final String escapedCode = "does-not-exist";
+    final String escaped = ESCAPE_START + escapedCode + ESCAPE_END ;
+    final String text = "Please escape " + escaped + "!" ;
+    try {
+      Escape.unescapeText( escaped ) ;
+      Assert.fail( "Failed to catch exception" ) ;
+    } catch ( NoUnescapedCharacterException e ) {
+      assertTrue( e.getMessage().contains( escapedCode ) ) ;
+    }
+  }
+
+  @Test( expected = NoUnescapedCharacterException.class )
+  public void escapeNotFound1() throws NoUnescapedCharacterException {
+    Escape.unescapeText( ESCAPE_START + "does-not-exist" + ESCAPE_END ) ;
+  }
 
   @Test
   public void escape0() throws NoUnescapedCharacterException {

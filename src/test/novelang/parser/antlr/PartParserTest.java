@@ -166,6 +166,11 @@ public class PartParserTest {
   }
 
   @Test
+  public void failOnUnknownEscapedCharacter() throws RecognitionException {
+    PARSERMETHOD_WORD.checkFails( Escape.ESCAPE_START + "does-not-exist" + Escape.ESCAPE_END ) ;
+  }
+
+  @Test
   public void paragraphIsSimplestSpeech() throws RecognitionException {
     PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree( "--- w0", tree(
         PARAGRAPH_AS_LIST_ITEM,
