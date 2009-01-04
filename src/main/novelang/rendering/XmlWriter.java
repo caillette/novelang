@@ -40,7 +40,6 @@ public class XmlWriter implements FragmentWriter {
   private final RenditionMimeType mimeType ;
   private final String namespaceUri ;
   private final String nameQualifier ;
-  private static final String XML_STYLESHEET = "/xml.css";
 
   public XmlWriter( RenditionMimeType mimeType ) {
     this( NAMESPACE_URI, NAME_QUALIFIER, mimeType ) ;
@@ -84,10 +83,6 @@ public class XmlWriter implements FragmentWriter {
   public void start( String elementName, boolean wholeDocument ) throws Exception {
     final Attributes attributes ;
     if( wholeDocument ) { // Declare the namespace.
-      contentHandler.processingInstruction(
-          "xml-stylesheet",
-          "type=\"text/css\" href=\"" + XML_STYLESHEET + "\""
-      );
       final AttributesImpl mutableAttributes = new AttributesImpl() ;
       mutableAttributes.addAttribute(
           namespaceUri,
