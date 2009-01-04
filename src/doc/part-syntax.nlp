@@ -5,7 +5,7 @@ Novelang recognizes Part files with the ``.nlp`` suffix.
 Part files are plain text files, containing pure textual content, plus a limited amount of
 decorations to help Novelang to structure the text prior to rendering.
 
-Here is how a Part file looks like, that will look familiar to people who know wiki syntax:
+Here is a valid Part file. It should look familiar to people who know wiki syntax:
 
 <<<
 == Title of level 1
@@ -25,6 +25,7 @@ This is a quoted paragraph.
 This is a second quoted paragraph.
 >>
 >>>
+
 
 See? Decorations look "imaged" like ASCII emoticons. Equal signs figure indents for the title
 level, and angled brackets look like opening `/` closing quotes. Unlike HTML or LaTeX, it's easy
