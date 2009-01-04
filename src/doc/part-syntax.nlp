@@ -13,8 +13,8 @@ Here is how a Part file looks like, that will look familiar to people who know w
 This is a first paragraph on
 two lines.
 
-This is a `block of literal` inside a paragraph.
-//This block will show in italics//.
+This is a `block of literal#@&)` inside a paragraph.
+//This other block will show in italics//.
 
 
 === Title of level 2
@@ -72,16 +72,17 @@ Now let's see all decorations supported by a Part.
 This document gives the XML element names usable in a XSL stylesheet.
 Names may seem weird at the first glance. A block inside two pairs of solidus ``//``
 is called ``n:block-inside-solidus-pairs``. Why not calling it simply "italics"?
-First, keep in mind that those XML names only appear inside custom stylesheets.
+First, keep in mind that those XML names only appear inside custom stylesheets so
+you may not care about them at all.
 Novelang transforms the source document in an abstract tree before rendering it through a stylesheet.
 If you create your own stylesheet you can process a block inside ``//`` like a footnote in super-bold
 or whatever, then "italics" would be quite confusing. So XML element names don't try to carry
-assumptions about the usage of the element. It just describes what it is.
+assumptions about the usage of the element. It just describes the originating decoration.
 
 
-=== Regular paragraph
+=== Paragraph, regular
 
-XML element: ``n:regular-paragraph``
+XML element: ``n:paragraph-regular``
 
 A regular paragraph is made of contiguous lines of text 
 (two consecutive line breaks cannot occur inside a paragraph).
@@ -156,7 +157,7 @@ at reasonable depth.
 
 
 
-=== Block inside pairs of solidus
+=== Block inside solidus pairs
 
 XML element: ``n:block-inside-solidus-pairs``
 
@@ -209,9 +210,9 @@ There are (parenthesis).
 >>>
 
 
-=== Block inside double hyphen
+=== Block inside hyphen pairs
 
-XML element: ``n:block-inside-hyphen-pairs``, ``n:block-inside-two-hyphens-then-hyphen-low-line``
+XML elements: ``n:block-inside-hyphen-pairs``, ``n:block-inside-two-hyphens-then-hyphen-low-line``
 
 Two pairs of hyphen minus ``--`` may enclose a block of text.
 
@@ -242,7 +243,7 @@ Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
 >>>
 
 
-=== Block of literal inside two pairs of grave accents 
+=== Block of literal inside grave accent pairs
 
 XML element: ``n:block-of-literal-inside-grave-accent-pairs``
 
@@ -258,9 +259,9 @@ Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
 
 
 
-=== Paragraphs inside pairs of angled brackets
+=== Paragraphs inside angled bracket pairs
 
-XML element: ``paragraphs-inside-angled-bracket-pairs``
+XML element: ``n:paragraphs-inside-angled-bracket-pairs``
 
 Two lower-than signs ``<<`` and two greater-than signs ``>>`` may enclose one paragraph or more.
 The angled bracket delimiting the paragraphs take place on the first column of the line, 
@@ -279,7 +280,7 @@ Second paragraph.
 
 === Lines of literal
 
-XML element: ``lines-of-literal``
+XML element: ``n:lines-of-literal``
 
 Three lower-than signs``<<<`` and two greater-than signs ``>>>`` may enclose one line of literal
 text or more. 
@@ -298,11 +299,11 @@ Here is literal.
 >>>
 
 
-=== Circumflex accent introducing a trailing word
+=== Word after circumflex accent
 
 XML element: ``n:word-after-circumflex-accent``
 
-A circumflex accent ``^`` may appear between two words. 
+A circumflex accent ``^`` may introduce a word immediately following another word.
  
 With Novelang default stylesheet, the second word is is displayed as superscript.
 

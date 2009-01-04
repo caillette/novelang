@@ -11,12 +11,12 @@ This version introduces various changes that may break existing documents and st
 
 Brand new naming scheme for syntactic nodes! 
 
-Introduced "delimiters" (inside Parts) becoming "levels" when passed to the rendering stage.
+Chapters and sections don't exist anymore. All what stylesheets will see are "levels".
 
 Top-level delimiter (formerly "chapter") in Part now starting with two equal signs ("``==``") instead of three asterisks.
 
-Character escape now basing on Unicode name, plus optional HTML entity name. 
- 
+Character escape now basing on Unicode name, plus optional HTML entity name.
+
 Updated documentation accordingly.
 
 
