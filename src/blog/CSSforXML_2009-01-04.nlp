@@ -1,0 +1,22 @@
+As I was updating documentation for the incoming `Novelang-0.16.0` I suddenly got bored that 
+Safari doesn't display raw XML in a convenient manner. Camino does a far better job by assigning
+a default CSS and some JavaScript enabling element folding.
+
+"Let's have some fun", I said to myself. I quickly drafted a CSS applying directly to Novelang's
+XML elements. Including the CSS was done with one line of code inside the ``XmlWriter``. 
+XML just needs a processing instruction like this: 
+
+<<<
+«lt»?xml-stylesheet type="text/css" href="/xml.css"?«gt» 
+>>>
+
+As I quickly discovered, this was the wrong approach. CSS have no mean to add the name of the element
+itself through ``:before`` and ``:after`` pseudo-selectors, so for each XML element I should add
+the two selectors and copy-paste the name of the element. And giving the element names a special 
+appearance is not possible, so the element tag would have the same appearance than its delimited
+content. CSS for XML are fairly limited, indeed.
+
+Now I realize that raw XML is only useful for debugging stylesheets, so it's not a good place to
+put eye-candy to. 
+If folding makes sense, it would be on default HTML view, for getting an overview 
+of generated levels.
