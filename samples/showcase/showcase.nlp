@@ -41,16 +41,16 @@ Character escaping also works here:
 
 === Inline literal
 
-Some hard inline literal inside ``aeiouè §!"&@#°) «startescape».$*^.0`` a paragraph.
+Some hard inline literal inside ``aeiouè §!"&@#°) «laquo».$*^.0`` a paragraph.
 
-Some soft inline literal inside `aeiouè §!"&@#°) «startescape».$*^.0` a paragraph.
+Some soft inline literal inside `aeiouè §!"&@#°) «laquo».$*^.0` a paragraph.
 
 
 == More stuff
 
 === Special characters
 
-Some escaped characters: «oelig» «OElig» «greaterthan» «eurosign» «multiplysign»
+Some escaped characters: «oelig» «OElig» «gt» «euro-sign» «multiplication-sign»
 
 Some ISO-8859-1 characters: à À é è ë ê É È Ë Ê ï î Ï Î ö ô Ö Ô ù ü û Ù Ü Û æ Æ ç Ç
 
