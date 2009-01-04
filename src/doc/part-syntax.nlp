@@ -1,12 +1,38 @@
 
 == General syntax for Parts
 
-Part files focus on a textual content. Part files have the ``.nlp`` suffix. 
-They support multiple syntactic features. 
-A great example of Novelang syntax is the source of this page. You can find it on:
-http://github.com/caillette/novelang/raw/master/src/doc/part-syntax.nlp
-This document explains the effect of syntactic features supported inside Part files.
- 
+Novelang recognizes Part files with the ``.nlp`` suffix.
+Part files are plain text files, containing pure textual content, plus a limited amount of
+decorations to help Novelang to structure the text prior to rendering.
+
+Here is how a Part file looks like, that will look familiar to people who know wiki syntax:
+
+<<<
+== Title of level 1
+
+This is a first paragraph on
+two lines.
+
+This is a `block of literal` inside a paragraph.
+//This block will show in italics//.
+
+
+=== Title of level 2
+
+<<
+This is a quoted paragraph.
+
+This is a second quoted paragraph.
+>>
+>>>
+
+See? Decorations look "imaged" like ASCII emoticons. Equal signs figure indents for the title
+level, and angled brackets look like opening `/` closing quotes. Unlike HTML or LaTeX, it's easy
+to read a Novelang source document.
+
+Novelang makes a great effort for making its grammar consistent.
+Before a detailed presentation of all available decorations,
+here are the fundamental notions to deal with.
 
 
 === Paragraphs
@@ -41,6 +67,17 @@ Levels represent things like chapters and sections.
 
 == Detailed syntax for Parts
 
+Now let's see all decorations supported by a Part. 
+
+This document gives the XML element names usable in a XSL stylesheet.
+Names may seem weird at the first glance. A block inside two pairs of solidus ``//``
+is called ``n:block-inside-solidus-pairs``. Why not calling it simply "italics"?
+First, keep in mind that those XML names only appear inside custom stylesheets.
+Novelang transforms the source document in an abstract tree before rendering it through a stylesheet.
+If you create your own stylesheet you can process a block inside ``//`` like a footnote in super-bold
+or whatever, then "italics" would be quite confusing. So XML element names don't try to carry
+assumptions about the usage of the element. It just describes what it is.
+
 
 === Regular paragraph
 
@@ -62,7 +99,7 @@ Second paragraph.
 
 === Levels
 
-XML element: ``n:level``
+XML elements: ``n:level``, ``n:level-description``
 
 Levels are delimited with a simple syntax, using a separator ``=`` telling about the depth 
 of the level.
@@ -79,7 +116,7 @@ Introductory text.
 
 === Depth 2
 
-Blah blah blah...
+Blah blah blah.
 
 === Depth 2
 
@@ -102,13 +139,14 @@ n:part
  | +-- n:paragraph-regular "Introductory text."
  | +-- n:level
  | |    +-- n:level-description "Depth 2"
- | |    +-- n:paragraph-regular "Blah blah blah..."
+ | |    +-- n:paragraph-regular "Blah blah blah."
  | +-- n:level
- |      +-- n:title-description "Depth 2"
+ |      +-- n:level-description "Depth 2"
  |      +-- n:paragraph-regular "Blah."
  +-- n:level
       +-- n:level-description "Depth 1 again"
-      +-- n:title-description "Depth 2"
+      +-- n:level
+           +-- n:level-description "Depth 2"
            +-- n:paragraph-regular "..."
 >>>
 
