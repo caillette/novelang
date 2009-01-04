@@ -890,14 +890,21 @@ leadingPunctuationSign
   ;
 
 punctuationSign
-  : COMMA -> ^( PUNCTUATION_SIGN SIGN_COMMA )
-  | FULL_STOP  -> ^( PUNCTUATION_SIGN SIGN_FULLSTOP )
-  | ELLIPSIS -> ^( PUNCTUATION_SIGN SIGN_ELLIPSIS )
-  | QUESTION_MARK -> ^( PUNCTUATION_SIGN SIGN_QUESTIONMARK )
-  | EXCLAMATION_MARK -> ^( PUNCTUATION_SIGN SIGN_EXCLAMATIONMARK )
-  | SEMICOLON -> ^( PUNCTUATION_SIGN SIGN_SEMICOLON )
-  | COLON -> ^( PUNCTUATION_SIGN SIGN_COLON )
-  | APOSTROPHE -> ^( APOSTROPHE_WORDMATE )
+  : s1 = COMMA -> ^( PUNCTUATION_SIGN
+      ^( SIGN_COMMA { delegate.createTree( SIGN_COMMA, $s1.text ) } ) )
+  | s2 = FULL_STOP  -> ^( PUNCTUATION_SIGN
+      ^( SIGN_FULLSTOP { delegate.createTree( SIGN_FULLSTOP, $s2.text ) } ) )
+  | s3 = ELLIPSIS -> ^( PUNCTUATION_SIGN
+      ^( SIGN_ELLIPSIS { delegate.createTree( SIGN_ELLIPSIS, $s3.text ) } ) )
+  | s4 = QUESTION_MARK -> ^( PUNCTUATION_SIGN
+      ^( SIGN_QUESTIONMARK { delegate.createTree( SIGN_QUESTIONMARK, $s4.text ) } ) )
+  | s5 = EXCLAMATION_MARK -> ^( PUNCTUATION_SIGN
+      ^( SIGN_EXCLAMATIONMARK { delegate.createTree( SIGN_EXCLAMATIONMARK, $s5.text ) } ) )
+  | s6 = SEMICOLON -> ^( PUNCTUATION_SIGN
+      ^( SIGN_SEMICOLON { delegate.createTree( SIGN_SEMICOLON, $s6.text ) } ) )
+  | s7 = COLON -> ^( PUNCTUATION_SIGN
+      ^( SIGN_COLON { delegate.createTree( SIGN_COLON, $s7.text ) } ) )
+  | s8 = APOSTROPHE -> ^( APOSTROPHE_WORDMATE { delegate.createTree( APOSTROPHE_WORDMATE, $s8.text ) } ) 
   ;
   
   

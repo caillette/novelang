@@ -65,6 +65,25 @@ public class PartParserTest {
   /*package*/ static final ParserMethod PARSERMETHOD_URL = 
       new ParserMethod( "url" ) ;
 
+  private static final SyntacticTree TREE_APOSTROPHE_WORDMATE = tree( APOSTROPHE_WORDMATE, "'" ) ;
+
+  private static final SyntacticTree TREE_SIGN_EXCLAMATION_MARK =
+      tree( PUNCTUATION_SIGN, tree( SIGN_EXCLAMATIONMARK, "!" ) ) ;
+
+  private static final SyntacticTree TREE_SIGN_SEMICOLON =
+      tree( PUNCTUATION_SIGN, tree( SIGN_SEMICOLON, ";" ) );
+
+  private static final SyntacticTree TREE_SIGN_FULLSTOP =
+      tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP, "." ) ) ;
+
+  private static final SyntacticTree TREE_SIGN_QUESTIONMARK =
+      tree( PUNCTUATION_SIGN, tree( SIGN_QUESTIONMARK, "?" ) );
+  private static final SyntacticTree TREE_SIGN_COLON =
+      tree( PUNCTUATION_SIGN, tree( SIGN_COLON, ":" ) ) ;
+
+  private static final SyntacticTree TREE_SIGN_ELLIPSIS =
+      tree( PUNCTUATION_SIGN, tree( SIGN_ELLIPSIS, "..." ) );
+
   @Test
   public void wordContainsOELigatured() throws RecognitionException {
     PARSERMETHOD_WORD.createTree( "\u0153\u0152" ) ;
@@ -85,7 +104,7 @@ public class PartParserTest {
         DELIMITING_TEXT_,
         tree( WORD_, "some"),
         tree( WORD_, "title"),
-        tree( PUNCTUATION_SIGN, SIGN_EXCLAMATIONMARK )
+        TREE_SIGN_EXCLAMATION_MARK
     ) ) ;
   }
 
@@ -95,7 +114,7 @@ public class PartParserTest {
         DELIMITING_TEXT_,
         tree( WORD_, "some" ),
         tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "title" ) ),
-        tree( PUNCTUATION_SIGN, SIGN_EXCLAMATIONMARK )
+        TREE_SIGN_EXCLAMATION_MARK
     ) ) ;
   }
 
@@ -199,7 +218,7 @@ public class PartParserTest {
     PARSERMETHOD_PARAGRAPH.checkTree( "w0,", tree(
         NodeKind.PARAGRAPH_REGULAR,
         tree( WORD_, "w0" ),
-        tree( PUNCTUATION_SIGN, SIGN_COMMA )
+        tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) )
     ) ) ;
   }
 
@@ -221,7 +240,7 @@ public class PartParserTest {
         "w0,w1", tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( PUNCTUATION_SIGN, SIGN_COMMA ),
+            tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) ),
             tree( WORD_, "w1" )
         ) 
     ) ;
@@ -234,7 +253,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( APOSTROPHE_WORDMATE )
+            TREE_APOSTROPHE_WORDMATE
         ) 
     ) ;
 
@@ -247,7 +266,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( APOSTROPHE_WORDMATE ),
+            TREE_APOSTROPHE_WORDMATE,
             tree( WORD_, "w1" )
         ) 
     ) ;
@@ -263,7 +282,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( PUNCTUATION_SIGN, SIGN_SEMICOLON )
+            TREE_SIGN_SEMICOLON
         ) 
     ) ;
 
@@ -276,7 +295,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( PUNCTUATION_SIGN, SIGN_FULLSTOP )
+            TREE_SIGN_FULLSTOP
         ) 
     ) ;
 
@@ -289,7 +308,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( PUNCTUATION_SIGN, SIGN_QUESTIONMARK )
+            TREE_SIGN_QUESTIONMARK
         ) 
     ) ;
 
@@ -302,7 +321,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( PUNCTUATION_SIGN, SIGN_EXCLAMATIONMARK )
+            TREE_SIGN_EXCLAMATION_MARK
         ) 
     ) ;
 
@@ -315,7 +334,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( PUNCTUATION_SIGN, SIGN_COLON )
+            TREE_SIGN_COLON
         ) 
     ) ;
 
@@ -328,7 +347,7 @@ public class PartParserTest {
         tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
-            tree( PUNCTUATION_SIGN, SIGN_ELLIPSIS )
+            TREE_SIGN_ELLIPSIS
         ) 
     ) ;
 
@@ -349,10 +368,10 @@ public class PartParserTest {
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             tree( WORD_, "w1" ),
-            tree( APOSTROPHE_WORDMATE ),
+            TREE_APOSTROPHE_WORDMATE,
             tree( WORD_, "w2" ),
             tree( BLOCK_INSIDE_SOLIDUS_PAIRS, tree( WORD_, "w3" ) ),
-            tree( PUNCTUATION_SIGN, SIGN_FULLSTOP )
+            TREE_SIGN_FULLSTOP
         ) 
     ) ;
 

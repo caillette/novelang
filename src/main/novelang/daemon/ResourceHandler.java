@@ -85,7 +85,8 @@ public class ResourceHandler extends GenericHandler {
         LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
         
       } catch( ResourceNotFoundException e ) {
-        // Do nothing, we just don't handle that request.
+        LOGGER.debug( "Could not serve {}", request.getRequestURI() ) ;
+        // Then do nothing, we just don't handle that request.
       }
 
     }

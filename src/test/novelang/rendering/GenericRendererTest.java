@@ -71,14 +71,14 @@ public class GenericRendererTest {
             BLOCK_INSIDE_PARENTHESIS,
             tree( WORD_, "w1" ),
             tree( WORD_, "w2"),
-            tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP ) )
+            tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP, "." ) )
         ),
         tree( WORD_, "w3" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     assertEquals(
-        "PARAGRAPH_REGULAR(w0^BLOCK_INSIDE_PARENTHESIS(w1^w2PUNCTUATION_SIGN(SIGN_FULLSTOP()))^w3)",
+        "PARAGRAPH_REGULAR(w0^BLOCK_INSIDE_PARENTHESIS(w1^w2PUNCTUATION_SIGN(SIGN_FULLSTOP(.)))^w3)",
         getRenderedText()
     ) ;
   }

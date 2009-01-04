@@ -124,6 +124,7 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
+      case APOSTROPHE_WORDMATE :
       case SIGN_COLON :
       case SIGN_COMMA :
       case SIGN_ELLIPSIS :
@@ -132,6 +133,7 @@ public class GenericRenderer implements Renderer {
       case SIGN_QUESTIONMARK :
       case SIGN_SEMICOLON :
         fragmentWriter.start( newPath, false ) ;
+        fragmentWriter.write( newPath, tree.getChildAt( 0 ).getText() ) ;
         fragmentWriter.end( newPath ) ;
         break ;
 
