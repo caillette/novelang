@@ -49,23 +49,23 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="n:chapter" >
+  <xsl:template match="n:level" >
     <div class="chapter" >
       <xsl:apply-templates/>
     </div>
   </xsl:template>
 
-  <xsl:template match="n:chapter/n:title | n:chapter/n:identifier" >
+  <xsl:template match="n:level/n:level-description" >
     <h1><xsl:apply-templates /></h1>
   </xsl:template>
 
-  <xsl:template match="n:section" >
+  <xsl:template match="n:level/n:level" >
     <div class="section" >
       <xsl:apply-templates />
     </div>
   </xsl:template>
 
-  <xsl:template match="n:section/n:title | n:section/n:identifier" >
+  <xsl:template match="n:level/n:level/n:level-description" >
     <h2><xsl:apply-templates /></h2>
   </xsl:template>
 
