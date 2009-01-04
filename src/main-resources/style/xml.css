@@ -25,17 +25,40 @@ paragraph-regular{
   border-color : blue ;
 }
 
+lines-of-literal {
+  font-family : monospace ;
+  white-space : pre ;
+  margin : 2em ;
+  border-left-style : solid ;
+  border-left-width : 3px ;
+  border-left-color : black ;
+}
+
 block-inside-parenthesis:before {
-  content:'<n:block-inside-parenthesis>' ;
+  content:'(' ;
 }
 
 block-inside-parenthesis:after {
-  content:'<n:block-inside-parenthesis/>' ;
+  content:')' ;
 }
 
 block-inside-parenthesis {
   background : greenyellow ;
 }
+
+
+block-inside-solidus-pairs:before {
+  content:'//' ;
+}
+
+block-inside-solidus-pairs:after {
+  content:'//' ;
+}
+
+block-inside-solidus-pairs {
+  background : aquamarine ;
+}
+
 
 punctuation-sign {
   display : inline ;
