@@ -35,10 +35,10 @@ pre {
   text-indent : 0 ;
   text-align : left ;
   line-height : 1.1 ;
-  margin : 1pt 0 0 15pt;
-  padding :5pt 0 0 10pt ;
+  margin : 1pt 0 15pt 15pt;
+  padding :0 0 0 10pt ;
   border-left-style : solid ;
-  border-left-color: yellow ;
+  border-left-color: brown ;
   border-left-width: 6px ;
 }
 
