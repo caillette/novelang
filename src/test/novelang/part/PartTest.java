@@ -19,6 +19,7 @@ package novelang.part;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
@@ -29,10 +30,12 @@ import novelang.TestResourceTools;
 import novelang.TestResources;
 import static novelang.parser.NodeKind.*;
 import novelang.common.SyntacticTree;
+import novelang.common.Problem;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.NodeKind;
 import novelang.parser.Escape;
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 
 /**
  * @author Laurent Caillette
@@ -124,6 +127,20 @@ public class PartTest {
   public void partWithParsingErrorDoesNotAttemptToCountWords() {
     final Part part = new Part( "````", true ) ;
     Assert.assertTrue( part.hasProblem() ) ;
+  }
+  
+  @Test
+  public void problemWithBadEscapeCodeHasLocation() {
+    final Part part = new Part(
+        "\n" +
+        "..." + Escape.ESCAPE_START + "unknown-escape-code" + Escape.ESCAPE_END 
+    ) ;
+    Assert.assertTrue( part.hasProblem() ) ;
+    final Iterator<Problem> problems = part.getProblems().iterator();
+    final Problem problem = problems.next() ;
+    Assert.assertFalse( problems.hasNext() ) ;
+    Assert.assertEquals( 2, problem.getLocation().getLine() ) ;
+    Assert.assertEquals( 4, problem.getLocation().getColumn() ) ;
   }
 
   @Test

@@ -1177,8 +1177,8 @@ escapedCharacter returns [ String unescaped ]
     RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK
     { $unescaped = delegate.unescapeCharacter( 
           $symbolicName.text, 
-          0, // getLine(), TODO fix this.
-          0 // getCharPositionInLine() 
+          $symbolicName.start.getLine(),
+          $symbolicName.start.getCharPositionInLine() 
       ) ;
     }    
   ;
