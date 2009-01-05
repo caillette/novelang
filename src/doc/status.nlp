@@ -7,112 +7,120 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 === Version `0.16.0`
 
-This version introduces various changes that may break existing documents and stylesheets.
+//This version introduces various changes that may break existing documents and stylesheets.//
 
-Brand new naming scheme for syntactic nodes! 
+--- Brand new naming scheme for syntactic nodes! 
 
-Chapters and sections don't exist anymore. All what stylesheets will see are "levels".
+--- Chapters and sections don't exist anymore. All what stylesheets will see are "levels".
 
-Top-level delimiter (formerly "chapter") in Part now starting with two equal signs ("``==``") instead of three asterisks.
+--- Top-level delimiter (formerly "chapter") in Part now starting with two equal signs ``==`` 
+instead of three asterisks.
 
-Character escape now basing on Unicode name, plus optional HTML entity name.
+--- Character escape now basing on Unicode name, plus optional HTML entity name.
 
-Updated documentation accordingly.
+--- Updated documentation accordingly.
 
 
 
 === Version `0.15.0`
 
-Stylesheets containing XPath expressions relative to non-existing grammar token are detected and rejected.
+--- Stylesheets containing XPath expressions relative to non-existing grammar token are detected 
+and rejected.
 
-Added new stylesheet: ``html-source.xsl``. It generates HTML source in HTML with special markup highlighted.
+--- Added new stylesheet: ``html-source.xsl``. It generates HTML source in HTML with special markup 
+highlighted.
 This is especially useful for posting raw HTML on Blogger while editing the text with Novelang!
 
-ANTLR grammar refactoring continues, now tokens and supported characters are described in Java code generated from the grammar.
+--- ANTLR grammar refactoring continues, now tokens and supported characters are described 
+in Java code generated from the grammar.
 
-Fixed: Font list regression, now displays all characters as in `Novelang-0.13.0`.
+--- Fixed: Font list regression, now displays all characters as in `Novelang-0.13.0`.
 
-Fixed: now some broken Part causes the whole Book document generation to fail when it's a recursive include.
+--- Fixed: now some broken Part causes the whole Book document generation to fail when it's a recursive include.
 
 
 === Version `0.14.0`
 
-Refactored ANTLR grammar for supporting some planned features. Known regression: some useful characters missing from font list.
+--- Refactored ANTLR grammar for supporting some planned features. 
+Known regression: some useful characters missing from font list.
 
 
 === Version `0.13.0`
 
-Better detection of text inconsistencies (lexer now reports problems).
+--- Better detection of text inconsistencies (lexer now reports problems).
 
-Enhanced font list: doesn't break where there are no custom font at all.
+--- Enhanced font list: doesn't break where there are no custom font at all.
 
-Cleaned up ``samples`` directory: most of stuff here was for tests, that moved to ``src/test-resources``.
+--- Cleaned up ``samples`` directory: most of stuff here was for tests, that moved to 
+``src/test-resources``.
 
 
 === Version `0.12.0`
 
-Enhanced font list: looks better, displays more useful characters, reports broken fonts.
+--- Enhanced font list: looks better, displays more useful characters, reports broken fonts.
 
-The ``timestamp`` parameter passed to stylesheet is no longer of ``java.lang.String`` type, now it is a ``org.joda.time.DateTime`` for more formatting options.  
+--- The ``timestamp`` parameter passed to stylesheet is no longer of ``java.lang.String`` type, 
+now it is a ``org.joda.time.DateTime`` for more formatting options.  
 
-Option ``createchapters`` of the ``insert`` function renamed to ``createchapter`` as it is no longer limited to recursive addition; now it applies to single-part insert.
+--- Option ``createchapters`` of the ``insert`` function renamed to ``createchapter`` as it is 
+no longer limited to recursive addition; now it applies to single-part insert.
 
 
 === Version `0.11.0`
 
-Multiple font directories. No longer need to give special names to font files (internal name recognized automatically).
+--- Multiple font directories. No longer need to give special names to font files 
+(internal name recognized automatically).
 
-Normalized command-line arguments, no more system properties.
+--- Normalized command-line arguments, no more system properties.
 
-No longer need for font-metric files.
+--- No longer need for font-metric files.
 
 
 
 === Version `0.10.0`
 
-Barcode generation in PDF with Barcode4J. See:
-
+--- Barcode generation in PDF with Barcode4J. See: 
 http://barcode4j.sourceforge.net/2.0/fop-ext.html
 
-Fixed character escaping with HTML.
+--- Fixed character escaping with HTML.
 
 
 === Version `0.9.0`
 
-Custom fonts for PDFs.
+--- Custom fonts for PDFs.
 
-Hyphenation for PDFs.
+--- Hyphenation for PDFs.
 
-New ``$style`` parameter for the ``insert`` function.
+--- New ``$style`` parameter for the ``insert`` function.
 
-Superscript.
+--- Superscript.
 
-XSLT extension: plain text numbering. See chapter on custom stylesheets.
+--- XSLT extension: plain text numbering. See chapter on custom stylesheets.
 
-Fixed import bug when using ``punctuation-FR.xsl``.
+--- Fixed import bug when using ``punctuation-FR.xsl``.
 
-Documentation updates.
+--- Documentation updates.
 
 
 === Version `0.8.0`
 
-Directory listing.
+--- Directory listing.
 
-New ``--port`` option for ``HttpDaemon``. Useful when default TCP port (8080) is busy. 
+--- New ``--port`` option for ``HttpDaemon``. Useful when default TCP port (8080) is busy. 
 
-Fixed mispelling of "literal" (was "litteral").
+--- Fixed mispelling of "literal" (was "litteral").
 
-Plenty of bug fixes.
+--- Plenty of bug fixes.
 
 
 === Version `0.7.0`
 
-Enhanced literal and character escaping.
+--- Enhanced literal and character escaping.
 
 
 === Version `0.6.0`
 
-Multiple stylesheets.
+--- Multiple stylesheets.
 
 
 === Version `0.5.0`
