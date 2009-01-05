@@ -731,11 +731,12 @@ bigDashedListItem
   : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
     ( whitespace i += mixedDelimitedSpreadBlock )*
     ( whitespace? softbreak 
-      (   ( whitespace? i += mixedDelimitedSpreadBlock 
+      ( 
+          ( url ) => i += url
+        | ( smallDashedListItem ) => i += smallDashedListItem
+        | ( whitespace? i += mixedDelimitedSpreadBlock 
             ( whitespace i += mixedDelimitedSpreadBlock )* 
           )
-        | ( url ) => i += url
-        | ( smallDashedListItem ) => i += smallDashedListItem
       )
     )* -> ^( PARAGRAPH_AS_LIST_ITEM $i+ )
 

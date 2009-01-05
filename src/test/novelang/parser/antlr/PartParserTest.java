@@ -481,6 +481,20 @@ public class PartParserTest {
             )
         ) ) ;
   }
+  
+  @Test
+  public void bigListItemContainsUrl() throws RecognitionException {
+    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree(  
+        "--- w" + BREAK +
+        "http://novelang.sf.net"
+        ,
+        tree(
+            PARAGRAPH_AS_LIST_ITEM,
+            tree( WORD_, "w" ),
+            tree( URL, "http://novelang.sf.net" )
+        )
+    );
+  }
 
   @Test @Ignore
   public void sectionHasIdentifier()
