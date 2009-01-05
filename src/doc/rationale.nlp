@@ -4,47 +4,71 @@
 
 === WYSIWIG word processors
 
-The "What You See Is What You Get" paradigm hit its own limits and now those tools are full of needless features. As they got feature-bloated they lose their primary focus, which is to edit document, as they become publishing tools. But since it was not their initial purpose they don't do that well, neither.
+There was a time the "What You See Is What You Get" paradigm was great, especially for word 
+processors. 
+It was a major breakthrough since mainframes and console mode, and allowed many people to write
+their wishcards or resume with minimal knowledge about computers.
 
-In fact I really got bored of struggling with MS Word (but this could apply to others like Open Office) while all of its pricey options didn't help me to get my text right.
+On the other hand, wishcards are the best these tools can do. They're not serious about 
+automatic content handling because it would make them "too difficult" for casual users.
+But, as shown by Microsoft Word, WYSIWIG word processors get bloated by plenty of useless 
+features which do not make the tool easier to use. Instead, they try to mimic publishing tools
+but they fail at this stage, as you can't ask a car to become an airplane.
+ 
+The list of annoyances is endless. 
+Files saved in binary format, so you can't use general-purpose diff tool.
+It's uneasy to aggregate multiple documents into a single one.
+Styles are lenient, in the way you can always change the style in a way that is not 
+in the style list. 
+There is no clear separation between content and presentation.
+Word processors are standalone applications, not designed at all to fit into an application server.
+And so on...
+
 
 === WYSIWIG publishing tools
 
-Those tools, like XPress and InDesign, are fine for high-end publishing with ultimate control of every aspect of how the document looks like, but they're definitely not content-oriented.
+Those tools, like XPress and InDesign, are fine for high-end publishing with ultimate control 
+of every aspect of how the document looks like.
+But they're definitely not content-oriented. 
+
 
 === LaTeX
 
+LaTeX got it right. It is based on plain text with simple markup and a powerful macro system. 
+It exists from 20 years and is incredibly mature now.
+
+Why not using LaTex? The markup is too verbose, it accepts macro language inside the content, 
+and it's uneasy to setup. But if you have complex typography to automate 
+(like for a book about mathematics) it's definitely the right tool:
 http://www.latex-project.org
 
-LaTeX got it all right. It is based on plain text with simple markup and a powerful macro system. It exists from 20 years and is incredibly mature now.
-
-Why not using LaTex? Because the markup is too verbose for my personal taste, I don't like its macro language, and it's uneasy to setup. 
 
 === DocBook
 
+DocBook is a semantic XML-based markup for technical documentation. It has many great ideas 
+(Novelang borrows some of them) but fails to cover every case and is really too verbose.
+And it lacks a solution off-the-shelf.
+You can find Docbook at 
 http://www.docbook.org
-
-DocBook is a semantic XML-based markup for technical documentation. It has many great ideas (Novelang borrows some of them) but fails to cover every case and is really too verbose.
 
 === Wiki
 
+
+Wikis are a family Content Management Systems aiming at creating Web sites quickly. 
+They rely on a simplified markup that Novelang is inspired from. 
+But Wikis are completely different as they are collaborative tools for creating dynamic websites, 
+while Novelang focuses on document generation. 
+
+Here is an overview on various wiki systems:
 http://www.wikimatrix.org
 
-Wikis are a family Content Management Systems aiming at creating Web sites quickly. They rely on a simplified markup that Novelang is inspired from. But Wikis are completely different as they are collaborative tools for creating dynamic websites, while Novelang focuses on document generation.
-
+Here are interesting discussions about wiki syntaxes:
 http://daringfireball.net/projects/markdown/syntax
-
-
-=== Other discussions
-
 http://www.wikicreole.org/wiki/Reasoning
-
 http://www.codinghorror.com/blog/archives/001116.html
 
 
 == Technical considerations
-
-===
 
 Novelang relies on a three-stage processing : source parsing, tree mangling, rendering. 
 

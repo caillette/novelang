@@ -7,7 +7,7 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 === Version `0.16.0`
 
-//This version introduces various changes that may break existing documents and stylesheets.//
+//This version introduces changes that may break existing documents and stylesheets.//
 
 --- Brand new naming scheme for syntactic nodes! 
 
@@ -17,6 +17,8 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 instead of three asterisks.
 
 --- Character escape now basing on Unicode name, plus optional HTML entity name.
+
+--- Option ``createchapter`` of the ``insert`` command renamed to ``createlevel``.
 
 --- Updated documentation accordingly.
 
@@ -79,7 +81,7 @@ no longer limited to recursive addition; now it applies to single-part insert.
 
 === Version `0.10.0`
 
---- Barcode generation in PDF with Barcode4J. See: 
+--- Barcode generation in PDF with Barcode4J. See:
 http://barcode4j.sourceforge.net/2.0/fop-ext.html
 
 --- Fixed character escaping with HTML.
@@ -120,7 +122,7 @@ http://barcode4j.sourceforge.net/2.0/fop-ext.html
 
 === Version `0.6.0`
 
---- Multiple stylesheets.
+Multiple stylesheets.
 
 
 === Version `0.5.0`
