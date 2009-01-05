@@ -77,7 +77,7 @@ public class InsertFunctionTest {
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
         BookParserTest.createFunctionCallWithUrlTree(
-            noChapterFile.getAbsolutePath(), "createchapter" )
+            noChapterFile.getAbsolutePath(), "createlevel" )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;

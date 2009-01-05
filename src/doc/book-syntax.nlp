@@ -29,10 +29,10 @@ The ``$recurse`` option scans parts in subdirectories.
 insert file:. $recurse 
 >>>
 
-The ``$createchapter`` option adds the content of the file under one chapter element. The chapter title is the filename, path and ``.nlp`` extension being trimmed.
+The ``$createlevel`` option adds the content of the file under one chapter element. The chapter title is the filename, path and ``.nlp`` extension being trimmed.
 
 <<<
-insert file:. $recurse $createchapter
+insert file:. $recurse $createlevel
 >>>
 
 The ``$style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added part. 

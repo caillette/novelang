@@ -1,19 +1,19 @@
 insert file:lorem-1.nlp
-  $createchapter
+  $createlevel
 
 insert file:lorem-2.nlp
-  $createchapter
+  $createlevel
 
 insert file:lorem-3.nlp
-  $createchapter
+  $createlevel
 
 insert file:lorem-influences.nlp
   $style=bibliography
-  $createchapter
+  $createlevel
 
 insert file:lorem-legal-epilogue.nlp
   $style=legal-epilogue
-  $createchapter
+  $createlevel
 
 mapstylesheet
   $pdf=pdf-book-6x9.xsl

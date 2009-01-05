@@ -1,2 +1,2 @@
-insert file:. $recurse $createchapter
+insert file:. $recurse $createlevel
     $style=mystyle

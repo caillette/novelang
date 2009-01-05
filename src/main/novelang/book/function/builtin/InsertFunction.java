@@ -71,7 +71,7 @@ public class InsertFunction implements FunctionDefinition {
   private static final Logger LOGGER = LoggerFactory.getLogger( InsertFunction.class ) ;
 
   private static final String OPTION_RECURSE = "recurse" ;
-  private static final String OPTION_CREATECHAPTER = "createchapter" ;
+  private static final String OPTION_CREATECHAPTER = "createlevel" ;
   private static final Set< String > SUPPORTED_OPTIONS = ImmutableSet.of(
       OPTION_RECURSE,
       OPTION_CREATECHAPTER
