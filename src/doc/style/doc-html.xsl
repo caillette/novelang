@@ -56,7 +56,7 @@
 
         <meta name="Generator" content="Novelang" />
         <meta name= "Copyright" content="Laurent Caillette 2008" />
-        <title>Novelang, the simplest text processor</title>
+        <title>Novelang</title>
 
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
         <link rel="stylesheet" type="text/css" href="screen.css" />
