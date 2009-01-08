@@ -146,8 +146,8 @@ public class HierarchizerTest {
         tree( NodeKind.PARAGRAPH_REGULAR ),
         tree(
             _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM ),
-            tree( PARAGRAPH_AS_LIST_ITEM )
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
         ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
@@ -155,8 +155,8 @@ public class HierarchizerTest {
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( PARAGRAPH_AS_LIST_ITEM ),
-        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
     verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
@@ -170,8 +170,8 @@ public class HierarchizerTest {
           tree( NodeKind.PARAGRAPH_REGULAR ),
           tree(
               _LIST_WITH_TRIPLE_HYPHEN,
-              tree( PARAGRAPH_AS_LIST_ITEM ),
-              tree( PARAGRAPH_AS_LIST_ITEM )
+              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
           ),
           tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
@@ -183,8 +183,8 @@ public class HierarchizerTest {
         tree(
             DELIMITER_THREE_EQUAL_SIGNS_,
             tree( NodeKind.PARAGRAPH_REGULAR ),
-            tree( PARAGRAPH_AS_LIST_ITEM ),
-            tree( PARAGRAPH_AS_LIST_ITEM ),
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
         tree(
@@ -203,15 +203,15 @@ public class HierarchizerTest {
         tree( NodeKind.PARAGRAPH_REGULAR ),
         tree(
             _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM ),
-            tree( PARAGRAPH_AS_LIST_ITEM )
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
         ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
         tree(
             _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM ),
-            tree( PARAGRAPH_AS_LIST_ITEM ),
-            tree( PARAGRAPH_AS_LIST_ITEM )
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
         ),
         tree( LINES_OF_LITERAL, "" )
 
@@ -219,12 +219,12 @@ public class HierarchizerTest {
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( PARAGRAPH_AS_LIST_ITEM ),
-        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-        tree( PARAGRAPH_AS_LIST_ITEM ),
-        tree( PARAGRAPH_AS_LIST_ITEM ),
-        tree( PARAGRAPH_AS_LIST_ITEM ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( LINES_OF_LITERAL, "" )
     ) ;
     verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;

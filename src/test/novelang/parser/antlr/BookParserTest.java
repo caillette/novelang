@@ -36,10 +36,12 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class BookParserTest {
   /*package*/ static final ParserMethod PARSERMETHOD_FUNCTION_CALL = 
-      new ParserMethod( "functionCall" ) ;/*package*/ static final ParserMethod PARSERMETHOD_ANCILLARY_ARGUMENT = 
-          new ParserMethod( "ancillaryArgument" ) ;/*package*/ static final ParserMethod PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT = 
-              new ParserMethod( "assignmentArgument" ) ;/*package*/ static final ParserMethod PARSERMETHOD_BOOK = 
-                  new ParserMethod( "book" ) ;
+      new ParserMethod( "functionCall" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_ANCILLARY_ARGUMENT =
+      new ParserMethod( "ancillaryArgument" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT =
+      new ParserMethod( "assignmentArgument" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_BOOK = new ParserMethod( "book" ) ;
 
   /**
    * This is used elsewhere as we must be sure to pass a tree of the same form as the

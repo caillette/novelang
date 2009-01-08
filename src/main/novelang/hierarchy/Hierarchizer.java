@@ -63,7 +63,7 @@ public class Hierarchizer {
       while( true ) {
         final NodeKind nodeKind = getKind( child ) ;
         switch( nodeKind ) {
-          case PARAGRAPH_AS_LIST_ITEM:
+          case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_:
             if( insideSpeechSequence ) {
               child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
               break ;

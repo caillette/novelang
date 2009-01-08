@@ -34,7 +34,7 @@ tokens {
   PART ;
   BLOCK_INSIDE_PARENTHESIS ;              
   PARAGRAPH_REGULAR ;              
-  PARAGRAPH_AS_LIST_ITEM ;         
+  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;         
   BLOCK_INSIDE_DOUBLE_QUOTES ;     
   DELIMITER_THREE_EQUAL_SIGNS_ ;
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;   
@@ -738,7 +738,7 @@ bigDashedListItem
             ( whitespace i += mixedDelimitedSpreadBlock )* 
           )
       )
-    )* -> ^( PARAGRAPH_AS_LIST_ITEM $i+ )
+    )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ $i+ )
 
   ;
 
