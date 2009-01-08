@@ -19,6 +19,7 @@ package novelang.rendering;
 import java.nio.charset.Charset;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
 
 import org.junit.Test;
 import org.apache.fop.apps.FopFactory;
@@ -33,6 +34,8 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.TestResources;
 import novelang.rendering.xslt.validate.BadExpandedNamesException;
+import novelang.rendering.xslt.validate.BadExpandedName;
+import junit.framework.Assert;
 
 /**
  * Tests for {@link novelang.rendering.XslWriter}.
@@ -51,6 +54,30 @@ public class XslWriterTest {
   public void brokenXpathInStylesheetImport() throws Exception {
     final XslWriter xslWriter = createXslWriter( TestResources.XSL_BAD_XPATH_2 ) ;
     run( xslWriter ) ;
+  }
+
+  @Test
+  public void locationOfBrokenXpath() throws Exception {
+    final XslWriter xslWriter = createXslWriter( TestResources.XSL_BAD_XPATH_2 ) ;
+    try {
+      run( xslWriter ) ;
+      Assert.fail( "Did not throw expected exception" ) ;
+    } catch( BadExpandedNamesException e ) {
+      final Iterator< BadExpandedName > badExpandedNames = e.getBadExpandedNames().iterator() ;
+      Assert.assertTrue( badExpandedNames.hasNext() ) ;
+      final BadExpandedName bad = badExpandedNames.next() ;
+      Assert.assertEquals( 10, bad.getLocation().getLine() ) ;
+      Assert.assertEquals( 59, bad.getLocation().getColumn() ) ;
+      // TODO: support source name.
+      // The Locator instance owned by the ContentHandler doesn't seem to know about it.
+      // Maybe there is something to be called for setting a System Id somewhere.
+      // Or we could set the System Id as the URIResolver knows it in the #resolve method,
+      // but this is a bit tricky because of the way XslWriter shares the same URIResolver instance
+      // (therefore the same ExpandedNameVerifier) among all stylesheets through the chain
+      // of inheritance. So we can't just set the source name.
+//      Assert.assertEquals( "filename", bad.getLocation().getFileName() ) ;
+     Assert.assertFalse( badExpandedNames.hasNext() ) ;
+    }
   }
 
 // =======
