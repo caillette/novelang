@@ -35,7 +35,7 @@ public interface Renderer {
   void render(
       Renderable rendered,
       OutputStream outputStream
-  ) ;
+  ) throws Exception ;
 
   RenditionMimeType getMimeType() ;
 

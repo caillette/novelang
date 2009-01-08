@@ -70,7 +70,7 @@ public class DocumentProducer {
   public Iterable< Problem > produce(
       final AbstractRequest request,
       final OutputStream outputStream
-  ) throws IOException {
+  ) throws Exception {
     return produce( request, createRenderable( request ), outputStream ) ;
   }
 
@@ -78,13 +78,15 @@ public class DocumentProducer {
       final AbstractRequest request,
       final Renderable rendered,
       final OutputStream outputStream
-  ) throws IOException {
+  ) throws Exception {
 
     final RenditionMimeType mimeType = request.getRenditionMimeType() ;
 
     // Java-flavored curryfication, wow!
     class Serve {
-      public void with( GenericRenderer renderer ) { serve( outputStream, renderer, rendered ) ; }
+      public void with( GenericRenderer renderer ) throws Exception {
+        serve( outputStream, renderer, rendered ) ;
+      }
     }
     final Serve serve = new Serve() ;
 
@@ -132,7 +134,7 @@ public class DocumentProducer {
       OutputStream outputStream,
       GenericRenderer renderer,
       Renderable rendered
-  ) {
+  ) throws Exception {
     renderer.render( rendered, outputStream ) ;
   }
 

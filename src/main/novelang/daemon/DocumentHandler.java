@@ -76,7 +76,7 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private void handle( HttpServletRequest request, HttpServletResponse response )
-      throws IOException
+      throws IOException, ServletException
   {
     final String rawRequest = request.getPathInfo() +
         ( StringUtils.isBlank( request.getQueryString() ) ? "" : "?" + request.getQueryString() )
@@ -117,7 +117,11 @@ public class DocumentHandler extends GenericHandler {
         } else {
 
           response.setStatus( HttpServletResponse.SC_OK ) ;
-          documentProducer.produce( documentRequest, rendered, outputStream ) ;
+          try {
+            documentProducer.produce( documentRequest, rendered, outputStream ) ;
+          } catch( Exception e ) {
+            throw new ServletException( e ) ;
+          }
           response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
 
         }

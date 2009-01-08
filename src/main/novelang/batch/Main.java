@@ -161,7 +161,7 @@ public class Main {
       DocumentRequest documentRequest,
       File targetDirectory,
       DocumentProducer documentProducer
-  ) throws IOException {
+  ) throws Exception {
     final File outputFile = createOutputFile(
         logger,
         targetDirectory,

@@ -87,7 +87,7 @@ public class SplitByChapter {
       " <book file> <target directory>"
   ;
 
-  private void rewrite() throws IOException {
+  private void rewrite() throws Exception {
     final Map< String, SyntacticTree > chaptersByIdentifier = Maps.newHashMap() ;
     for( final SyntacticTree child : part.getDocumentTree().getChildren() ) {
       if( NodeKind.DELIMITER_TWO_EQUAL_SIGNS_.isRoot( child ) ) {

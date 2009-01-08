@@ -58,22 +58,18 @@ public class GenericRenderer implements Renderer {
   final public void render(
       Renderable rendered,
       OutputStream outputStream
-  ) {
+  ) throws Exception {
     if( rendered.hasProblem() ) {
       renderProblems( rendered.getProblems(), outputStream ) ;
     } else {
-      try {
-        fragmentWriter.startWriting(
-            outputStream,
-            MetadataHelper.createMetadata( rendered.getEncoding() ),
-            rendered.getEncoding()
-        ) ;
-        final SyntacticTree root = rendered.getDocumentTree() ;
-        renderTree( root, null, null ) ;
-        fragmentWriter.finishWriting() ;
-      } catch( Exception e ) {
-        LanguageTools.rethrowUnchecked( e ) ;
-      }
+      fragmentWriter.startWriting(
+          outputStream,
+          MetadataHelper.createMetadata( rendered.getEncoding() ),
+          rendered.getEncoding()
+      ) ;
+      final SyntacticTree root = rendered.getDocumentTree() ;
+      renderTree( root, null, null ) ;
+      fragmentWriter.finishWriting() ;
     }
   }
 

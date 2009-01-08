@@ -37,7 +37,7 @@ import novelang.parser.Encoding;
 public class XmlWriterTest {
 
   @Test
-  public void oeLigatured() {
+  public void oeLigatured() throws Exception {
     final FragmentWriter xmlWriter = new XmlWriter() ;
     final GenericRenderer renderer = new GenericRenderer( xmlWriter ) ;
 
