@@ -273,7 +273,7 @@
 
   <target
       name="clean-compile-runtests"
-      depends="clean, compile-tests, run-tests"
+      depends="clean, run-code-generator, compile-tests, run-tests"
       description="Run this one to run tests from clean"
   /> 
   
