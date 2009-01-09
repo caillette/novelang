@@ -42,6 +42,7 @@ tokens {
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
   DELIMITING_TEXT_ ;
   URL ;  
+  EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   WORD_ ;
   
   PUNCTUATION_SIGN ;
@@ -743,7 +744,8 @@ bigDashedListItem
   ;
 
 smallDashedListItem
-  : HYPHEN_MINUS ( whitespace mixedDelimitedMonoblock )+
+  : HYPHEN_MINUS ( whitespace b += mixedDelimitedMonoblock )+
+    -> ^( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ $b+ )
   ;
 
 

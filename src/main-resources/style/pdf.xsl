@@ -284,6 +284,30 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="n:embedded-list-with-hyphen" >
+    <fo:list-block
+        text-align="justify"
+        text-indent="1em"
+        font-size="12pt"
+        line-height="18pt"
+    >
+      <xsl:apply-templates/>
+    </fo:list-block>
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-hyphen/n:embedded-list-item" >
+    <fo:list-item>
+      <fo:list-item-label>
+        <fo:block>&ndash;</fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body>
+        <fo:block>
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+
   <xsl:template match="n:block-inside-solidus-pairs" >
     <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>
   </xsl:template>

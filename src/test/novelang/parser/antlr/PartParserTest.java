@@ -686,7 +686,10 @@ public class PartParserTest {
         "p1", tree( PART,
             tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) ),
-            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ) ) ),
+            tree(
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ) )
+            ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p1" ) )
         ) 
     ) ;
@@ -1175,6 +1178,30 @@ public class PartParserTest {
             URL,
             "http://domain.org/path/file~tilde#anchor"
         ) 
+    ) ;
+  }
+  
+  @Test
+  public void embeddedListItemMinimum() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+        "- w",
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) )
+        )
+    ) ;
+  }
+
+  @Test
+  public void severalEmbeddedListItems() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+        "- w1" + BREAK +
+        "- w2" + BREAK,
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w1" ) ),
+            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w2" ) )
+        )
     ) ;
   }
 

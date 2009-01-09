@@ -81,7 +81,18 @@ Question mark? Exclamation mark! Comma, semicolon; colon: full stop. Ellipsis...
 --- And a last one.
 
 
-== Anonymous sections
+=== Paragraphs may contain embedded lists
+
+This is a paragraph starting here...
+- First
+- Second
+- Third
+...and ending there.
+
+
+== Anonymous section
+
+===
 
 This is an anonymous section: a section which has no identifier nor title.
 Anonymous sections require some care for rendering : visual separator must

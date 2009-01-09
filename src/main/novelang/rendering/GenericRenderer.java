@@ -24,14 +24,12 @@ import com.google.common.base.Preconditions;
 import novelang.common.metadata.MetadataHelper;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
+import static novelang.parser.NodeKind.*;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.LanguageTools;
-import static novelang.parser.NodeKind.WORD_;
-import static novelang.parser.NodeKind._LEVEL;
-import static novelang.parser.NodeKind._LEVEL_DESCRIPTION;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific
@@ -139,8 +137,11 @@ public class GenericRenderer implements Renderer {
         break ;
 
       case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ :
-        processByDefault( tree,
-            createNodepath( kinship, NodeKind._PARAGRAPH_AS_LIST_ITEM ), false ) ;
+        processByDefault( tree, createNodepath( kinship, _PARAGRAPH_AS_LIST_ITEM ), false ) ;
+        break ;
+
+      case EMBEDDED_LIST_ITEM_WITH_HYPHEN_ :
+        processByDefault( tree, createNodepath( kinship, _EMBEDDED_LIST_ITEM ), false ) ;
         break ;
 
       case DELIMITING_TEXT_:
