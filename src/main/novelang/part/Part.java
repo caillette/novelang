@@ -65,7 +65,7 @@ public class Part extends AbstractSourceReader {
       return null ;
     } else {
       final Treepath< SyntacticTree > rehierarchized1 =
-          Hierarchizer.rehierarchizeChaptersAndSections( Treepath.create( rawTree ) ) ;
+          Hierarchizer.rehierarchizeDelimiters2To3( Treepath.create( rawTree ) ) ;
       if( standalone ) {
         return addMetadata( Hierarchizer.rehierarchizeLists( rehierarchized1 ).getTreeAtEnd() ) ;
       } else {

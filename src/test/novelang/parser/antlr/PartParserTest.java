@@ -190,7 +190,7 @@ public class PartParserTest {
   }
 
   @Test
-  public void paragraphIsSimplestSpeech() throws RecognitionException {
+  public void paragraphIsSimplestList() throws RecognitionException {
     PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree( "--- w0", tree(
         PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
         tree( WORD_, "w0" )
@@ -198,7 +198,7 @@ public class PartParserTest {
   }
 
   @Test @Ignore
-  public void paragraphIsSimplestSpeechWithIdentifier() throws RecognitionException {
+  public void paragraphIsSimplestListWithIdentifier() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
         "--- w0", tree(
         PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,

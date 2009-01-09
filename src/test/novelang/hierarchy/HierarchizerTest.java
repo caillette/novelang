@@ -38,7 +38,10 @@ public class HierarchizerTest {
     verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) )
+            tree(
+                DELIMITER_THREE_EQUAL_SIGNS_,
+                tree( NodeKind.PARAGRAPH_REGULAR )
+            )
         ),
         tree(
             PART,
@@ -55,7 +58,10 @@ public class HierarchizerTest {
         tree(
             PART,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-            tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) )
+            tree(
+                DELIMITER_THREE_EQUAL_SIGNS_,
+                tree( NodeKind.PARAGRAPH_REGULAR )
+            )
         ),
         tree(
             PART,
@@ -73,7 +79,10 @@ public class HierarchizerTest {
         tree(
             PART,
             tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
-            tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) )
+            tree(
+                DELIMITER_TWO_EQUAL_SIGNS_,
+                tree( NodeKind.PARAGRAPH_REGULAR )
+            )
         ),
         tree(
             PART,
@@ -92,11 +101,18 @@ public class HierarchizerTest {
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
         tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
-        tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( NodeKind.PARAGRAPH_REGULAR ) ),
+        tree(
+            DELIMITER_TWO_EQUAL_SIGNS_,
+            tree( NodeKind.PARAGRAPH_REGULAR )
+        ),
         tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
-        tree( DELIMITER_TWO_EQUAL_SIGNS_, tree( IDENTIFIER ), tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ) ),
+        tree(
+            DELIMITER_TWO_EQUAL_SIGNS_,
+            tree( IDENTIFIER ),
+            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
+        ),
         tree( DELIMITER_TWO_EQUAL_SIGNS_ )
-    );
+    ) ;
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
@@ -140,7 +156,7 @@ public class HierarchizerTest {
 
 
   @Test
-  public void aggregateSpeech() {
+  public void aggregateList() {
     final SyntacticTree expected = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
@@ -159,11 +175,11 @@ public class HierarchizerTest {
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
-    verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
+    verifyRehierarchizeList( expected, toBeRehierarchized ) ;
   }
 
   @Test
-  public void aggregateSpeechInsideChapter() {
+  public void aggregateListInsideChapter() {
     final SyntacticTree expected = tree(
         PART,
         tree( DELIMITER_THREE_EQUAL_SIGNS_,
@@ -192,12 +208,12 @@ public class HierarchizerTest {
             tree( LINES_OF_LITERAL, "" )
         )
     ) ;
-    verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
+    verifyRehierarchizeList( expected, toBeRehierarchized ) ;
   }
 
 
   @Test
-  public void aggregateSeveralSpeeches() {
+  public void aggregateSeveralLists() {
     final SyntacticTree expected = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
@@ -227,7 +243,7 @@ public class HierarchizerTest {
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( LINES_OF_LITERAL, "" )
     ) ;
-    verifyRehierarchizeSpeech( expected, toBeRehierarchized ) ;
+    verifyRehierarchizeList( expected, toBeRehierarchized ) ;
   }
 
 
@@ -249,7 +265,7 @@ public class HierarchizerTest {
     final Treepath rehierarchized = Hierarchizer.rehierarchizeFromLeftToRight(
         flatTreepath,
         accumulatorKind,
-        new Hierarchizer.ExclusionFilter( ignored )
+        new Filter.ExclusionFilter( ignored )
     ) ;
 
     TreeFixture.assertEquals(
@@ -260,7 +276,7 @@ public class HierarchizerTest {
 
   }
 
-  private static void verifyRehierarchizeSpeech(
+  private static void verifyRehierarchizeList(
       SyntacticTree expectedTree,
       SyntacticTree flatTree
   ) {

@@ -1423,12 +1423,6 @@ nonHexLetter
 
   ;
 
-speechOpener : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS ;
-interpolatedClauseDelimiter : HYPHEN_MINUS HYPHEN_MINUS  ;
-interpolatedClauseSilentEnd : HYPHEN_MINUS LOW_LINE ;
-speechContinuator : HYPHEN_MINUS HYPHEN_MINUS PLUS_SIGN ;
-speechEscape : HYPHEN_MINUS HYPHEN_MINUS VERTICAL_LINE ;
-
 
 
 

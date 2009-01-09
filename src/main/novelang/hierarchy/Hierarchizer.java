@@ -16,10 +16,6 @@
  */
 package novelang.hierarchy;
 
-import java.util.Set;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
 import static novelang.parser.NodeKind.*;
@@ -29,14 +25,14 @@ import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 
 /**
- * Transforms the tree representing a Part for handling various stuff
- * that could not be left to the parser.
+ * Transforms the tree representing a Part for handling various features
+ * that are too complicated to handle inside the parser.
  *
  * <ol>
- * <li>All stuff like paragraph under a Section becomes Section's child.
- * <li>All stuff like Section under a Chapter becomes a Chapter's child.
- * <li>All contiguous Speech stuff becomes wrapped inside a {@code _SPEECH_SEQUENCE} node.
- * <li>TODO Identifier above paragraph-like stuff becomes a paragraph's child.
+ * <li>All stuff like paragraph under a Delimiter3 becomes Delimiter3's child.
+ * <li>All stuff like Section under a Delimiter2 becomes a Delimiter2's child.
+ * <li>All contiguous List stuff becomes wrapped inside a
+ *     {@link NodeKind#_LIST_WITH_TRIPLE_HYPHEN} node.
  * </ol>
  *
  *
@@ -44,14 +40,14 @@ import novelang.common.tree.TreepathTools;
  */
 public class Hierarchizer {
 
-  public static Treepath< SyntacticTree > rehierarchizeChaptersAndSections(
+  public static Treepath< SyntacticTree > rehierarchizeDelimiters2To3(
       final Treepath< SyntacticTree > part
   ) {
     final Treepath rehierarchizedSections = rehierarchizeFromLeftToRight(
-        part, DELIMITER_THREE_EQUAL_SIGNS_, new ExclusionFilter( DELIMITER_TWO_EQUAL_SIGNS_ ) ) ;
+        part, DELIMITER_THREE_EQUAL_SIGNS_, new Filter.ExclusionFilter( DELIMITER_TWO_EQUAL_SIGNS_ ) ) ;
 
     return rehierarchizeFromLeftToRight(
-        rehierarchizedSections, DELIMITER_TWO_EQUAL_SIGNS_, new YesFilter() ) ;
+        rehierarchizedSections, DELIMITER_TWO_EQUAL_SIGNS_, new Filter.YesFilter() ) ;
   }
 
   public static Treepath< SyntacticTree > rehierarchizeLists(
@@ -59,26 +55,26 @@ public class Hierarchizer {
   ) {
     if( parent.getTreeAtEnd().getChildCount() > 0 ) {
       Treepath< SyntacticTree > child = Treepath.create( parent, 0 ) ;
-      boolean insideSpeechSequence = false ;
+      boolean insideList = false ;
       while( true ) {
         final NodeKind nodeKind = getKind( child ) ;
         switch( nodeKind ) {
           case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_:
-            if( insideSpeechSequence ) {
+            if( insideList ) {
               child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
               break ;
             } else {
-              final SyntacticTree speech =
+              final SyntacticTree list =
                   new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN.name(), child.getTreeAtEnd() ) ;
-              child = TreepathTools.replaceEnd( child, speech ) ;
-              insideSpeechSequence = true ;
+              child = TreepathTools.replaceEnd( child, list ) ;
+              insideList = true ;
             }
             break ;
           case DELIMITER_TWO_EQUAL_SIGNS_:
           case DELIMITER_THREE_EQUAL_SIGNS_:
             child = rehierarchizeLists( child ) ;
           default : 
-            insideSpeechSequence = false ;
+            insideList = false ;
             break ;
         }
         if( TreepathTools.hasNextSibling( child ) ) {
@@ -141,29 +137,5 @@ public class Hierarchizer {
     return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 
-
-  public interface Filter {
-    boolean isMoveable( NodeKind nodeKind ) ;
-  }
-
-
-  public static class ExclusionFilter implements Filter {
-
-    private final Set< NodeKind > excluded ;
-
-    public ExclusionFilter( NodeKind... excluded ) {
-      this.excluded = ImmutableSet.copyOf( Sets.newHashSet( excluded ) ) ;
-    }
-
-    public boolean isMoveable( NodeKind nodeKind ) {
-      return ! excluded.contains( nodeKind ) ;
-    }
-  }
-
-  public static class YesFilter implements Filter {
-    public boolean isMoveable( NodeKind nodeKind ) {
-      return true ;
-    }
-  }
 
 }
