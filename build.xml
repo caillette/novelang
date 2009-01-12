@@ -85,18 +85,24 @@
       <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
     </path>
 
-    <available 
+  </target>
+
+  <target
+      name="verify-buildclasses-exist"
+      description="Set a property to tell if build classes are already compiled"
+  >
+    <available
         classname="${target.buildclasses.presencecondition}"
         property="target-buildclass-exists"
         value="false"
     >
       <classpath>
         <pathelement path="${target.buildclasses.dir}" />
-      </classpath>     
+      </classpath>
     </available>
-    
+
     <echo message="target-buildclass-exists=${target-buildclass-exists}" />
-    
+
   </target>
 
   <target name="create-target-dir" depends="init" >
@@ -106,7 +112,7 @@
   </target>
 
 
-  <target name="clean" depends="init" >
+  <target name="clean" depends="init, verify-buildclasses-exist" >
     <delete dir="${target.dir}" />  
   </target>
   
@@ -273,7 +279,7 @@
 
   <target
       name="clean-compile-runtests"
-      depends="clean, run-code-generator, compile-tests, run-tests"
+      depends="clean, verify-buildclasses-exist, compile-tests, run-tests"
       description="Run this one to run tests from clean"
   /> 
   
