@@ -41,7 +41,7 @@ public class PartParserTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( PartParserTest.class ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_TITLE = 
-      new ParserMethod( "title" ) ;
+      new ParserMethod( "levelTitle" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_HEADER_IDENTIFIER = 
       new ParserMethod( "headerIdentifier" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_WORD = 
@@ -50,17 +50,19 @@ public class PartParserTest {
       new ParserMethod( "paragraph" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_BIG_DASHED_LIST_ITEM = 
       new ParserMethod( "bigDashedListItem" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_SECTION = 
-      new ParserMethod( "section" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_LITERAL = 
+  /*package*/ static final ParserMethod PARSERMETHOD_LITERAL =
       new ParserMethod( "literal" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_SOFT_INLINE_LITERAL = 
       new ParserMethod( "softInlineLiteral" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_HARD_INLINE_LITERAL = 
       new ParserMethod( "hardInlineLiteral" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_CHAPTER = 
-      new ParserMethod( "chapter" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_PART = 
+      new ParserMethod( "levelIntroducer" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_SECTION =
+      new ParserMethod( "levelIntroducer" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_LEVEL_INTRODUCER =
+      new ParserMethod( "levelIntroducer" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_PART =
       new ParserMethod( "part" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_URL = 
       new ParserMethod( "url" ) ;
@@ -92,7 +94,7 @@ public class PartParserTest {
   @Test
   public void titleIsTwoWords() throws RecognitionException {
     PARSERMETHOD_TITLE.checkTree( "some title", tree(
-        DELIMITING_TEXT_,
+        LEVEL_TITLE,
         tree( WORD_, "some" ),
         tree( WORD_, "title" )
     ) ) ;
@@ -101,7 +103,7 @@ public class PartParserTest {
   @Test
   public void titleIsTwoWordsAndExclamationMark() throws RecognitionException {
     PARSERMETHOD_TITLE.checkTree( "some title !", tree(
-        DELIMITING_TEXT_,
+        LEVEL_TITLE,
         tree( WORD_, "some"),
         tree( WORD_, "title"),
         TREE_SIGN_EXCLAMATION_MARK
@@ -111,7 +113,7 @@ public class PartParserTest {
   @Test
   public void titleIsWordsAndParenthesisAndExclamationMark() throws RecognitionException {
     PARSERMETHOD_TITLE.checkTree( "some (title) !", tree(
-        DELIMITING_TEXT_,
+        LEVEL_TITLE,
         tree( WORD_, "some" ),
         tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "title" ) ),
         TREE_SIGN_EXCLAMATION_MARK
@@ -501,8 +503,8 @@ public class PartParserTest {
       throws RecognitionException
   {
     PARSERMETHOD_SECTION.checkTree( "=== s00", tree(
-        DELIMITER_THREE_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "s00") )
+        LEVEL_INTRODUCER_,
+            tree( LEVEL_TITLE, tree( WORD_, "s00") )
         ) ) ;
   }
 
@@ -511,14 +513,14 @@ public class PartParserTest {
       throws RecognitionException
   {
     PARSERMETHOD_SECTION.checkTree( "=== \"q\" w", tree(
-        DELIMITER_THREE_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) ), tree( WORD_, "w") )
+        LEVEL_INTRODUCER_,
+            tree( LEVEL_TITLE, tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) ), tree( WORD_, "w") )
         ) ) ;
   }
 
   @Test
   public void sectionIsAnonymous() throws RecognitionException {
-    PARSERMETHOD_SECTION.checkTree( "===", tree( DELIMITER_THREE_EQUAL_SIGNS_ ) ) ;
+    PARSERMETHOD_SECTION.checkTree( "===", tree( LEVEL_INTRODUCER_ ) ) ;
   }
 
   @Test
@@ -662,7 +664,7 @@ public class PartParserTest {
         BREAK +
         "<< w0 w1" + BREAK +
         ">>", tree( PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ), tree( WORD_, "w1" ) )
@@ -684,7 +686,7 @@ public class PartParserTest {
         ">>" + BREAK +
         BREAK +
         "p1", tree( PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
@@ -724,7 +726,7 @@ public class PartParserTest {
         BREAK +
         "w2" + BREAK +
         ">>", tree( PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ), tree( WORD_, "w1" ) ),
@@ -999,11 +1001,11 @@ public class PartParserTest {
           PART,
           tree(
               DELIMITER_TWO_EQUAL_SIGNS_,
-              tree( DELIMITING_TEXT_, tree( WORD_, "c0" ) )
+              tree( LEVEL_TITLE, tree( WORD_, "c0" ) )
           ),
           tree(
-              DELIMITER_THREE_EQUAL_SIGNS_,
-              tree( DELIMITING_TEXT_, tree( WORD_, "s0" ) )
+              LEVEL_INTRODUCER_,
+              tree( LEVEL_TITLE, tree( WORD_, "s0" ) )
           ),
           tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) )
         ) 
@@ -1022,9 +1024,9 @@ public class PartParserTest {
         "===" + BREAK +
         BREAK +
         "p1", tree( PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) ),
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p1" ) )
         ) 
     ) ;
@@ -1051,7 +1053,7 @@ public class PartParserTest {
     PARSERMETHOD_CHAPTER.checkTree( 
         "==" + BREAK + 
         "  \\\\identifier",
-        tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( IDENTIFIER, "identifier" ) )
+        tree( LEVEL_INTRODUCER_, tree( IDENTIFIER, "identifier" ) )
     ) ;
   }
 
@@ -1064,8 +1066,8 @@ public class PartParserTest {
         "title " + BREAK +
         "  \\\\identifier", 
         tree(
-            DELIMITER_THREE_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "Chapter"), tree( WORD_, "has" ), tree( WORD_, "title") ),
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_TITLE, tree( WORD_, "Chapter"), tree( WORD_, "has" ), tree( WORD_, "title") ),
             tree( IDENTIFIER, "identifier" )
         ) 
     ) ;
@@ -1203,6 +1205,19 @@ public class PartParserTest {
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w2" ) )
         )
     ) ;
+  }
+
+  @Test
+  public void justLevelIntroducerIndent() throws RecognitionException {
+    PARSERMETHOD_LEVEL_INTRODUCER.checkTree(
+      "=== w",
+      tree(
+          NodeKind.LEVEL_INTRODUCER_,
+          tree( NodeKind.LEVEL_INTRODUCER_INDENT_, "===" ),
+          tree( NodeKind.LEVEL_TITLE, tree( WORD_, "w" ) )
+      )
+    ) ;
+
   }
 
 

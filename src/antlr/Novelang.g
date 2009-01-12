@@ -23,7 +23,10 @@ options { output = AST ; }
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;     
   BOOK ;
-  DELIMITER_TWO_EQUAL_SIGNS_ ;
+  DELIMITER_TWO_EQUAL_SIGNS_ ; // Obsolete, remove this once everything compiles.
+  LEVEL_INTRODUCER_ ;          // DELIMITER was too generic, let's talk about level introducer.
+  LEVEL_INTRODUCER_INDENT_ ;   // DELIMITER was too generic, let's talk about level introducer.
+  LEVEL_TITLE ;
   BLOCK_INSIDE_SOLIDUS_PAIRS ;                 
   EXTENDED_WORD_ ;
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ; 
@@ -36,11 +39,9 @@ tokens {
   PARAGRAPH_REGULAR ;              
   PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;         
   BLOCK_INSIDE_DOUBLE_QUOTES ;     
-  DELIMITER_THREE_EQUAL_SIGNS_ ;
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;   
   BLOCK_INSIDE_SQUARE_BRACKETS ;            
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
-  DELIMITING_TEXT_ ;
   URL ;  
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   WORD_ ;
@@ -113,16 +114,14 @@ public void emitErrorMessage( String string ) {
 part 
   : ( mediumbreak | largebreak )? 
   
-    (   p += chapter 
-      | p += section 
+    (   p += levelIntroducer
       | p += paragraph 
       | p += blockQuote 
       | p += literal
       | p += bigDashedListItem
     )
     ( largebreak (
-        p += chapter 
-      | p += section 
+        p += levelIntroducer 
       | p += paragraph 
       | p += blockQuote 
       | p += literal
@@ -133,19 +132,13 @@ part
     -> ^( PART $p+ )
   ; 
   
-chapter 
-  : ( EQUALS_SIGN EQUALS_SIGN 
-      ( whitespace? title )?
+levelIntroducer 
+  : ( levelIntroducerIndent
+      ( whitespace? levelTitle )?
     )
-    -> ^( DELIMITER_TWO_EQUAL_SIGNS_ title? )
+    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? )
   ;
 
-section 
-  : ( EQUALS_SIGN EQUALS_SIGN EQUALS_SIGN 
-      ( whitespace? title )?
-    )
-    -> ^( DELIMITER_THREE_EQUAL_SIGNS_ title? ) 
-  ;
 
 // =====================
 // Paragraph and related
@@ -155,7 +148,7 @@ section
  *  on the first column so it would clash with section / chapter introducer.
  *  It may contain a URL, however.
  */
-title
+levelTitle
   : (
       (   t += smallDashedListItem
 	      | ( t += mixedDelimitedSpreadBlock 
@@ -170,7 +163,7 @@ title
 	          )        
 	      )
 	    )*    
-	  ) -> ^( DELIMITING_TEXT_ $t+ )
+	  ) -> ^( LEVEL_TITLE $t+ )
   ;  
 
 headerIdentifier : ; // TODO
@@ -1282,6 +1275,13 @@ rawExtendedWord returns [ String text ]
 softbreak : SOFTBREAK -> ; 
 
 whitespace : WHITESPACE -> ;
+
+levelIntroducerIndent 
+  : EQUALS_SIGN EQUALS_SIGN+
+    -> ^( LEVEL_INTRODUCER_INDENT_ 
+          { delegate.createTree( LEVEL_INTRODUCER_INDENT_, $levelIntroducerIndent.text ) } 
+        )	
+  ;
 
 mediumbreak
   : ( WHITESPACE

@@ -110,7 +110,7 @@ public class SplitByChapter {
     String flatName = UNNAMED;
     SyntacticTree chapterDesignator = extractSubtree( chapter, NodeKind.IDENTIFIER ) ;
     if( null == chapterDesignator ) {
-      chapterDesignator = extractSubtree( chapter, NodeKind.DELIMITING_TEXT_ );
+      chapterDesignator = extractSubtree( chapter, NodeKind.LEVEL_TITLE );
     }
     if( null != chapterDesignator ) {
       flatName = flattenAsName( chapterDesignator ) ;

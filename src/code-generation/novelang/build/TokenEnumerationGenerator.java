@@ -61,7 +61,6 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   private static final Collection< Item > SYNTHETIC_ITEMS = ImmutableList.of( 
       new Item( "_STYLE" ), 
       new Item( "_LEVEL" ),
-      new Item( "_LEVEL_DESCRIPTION" ), 
       new Item( "_LIST_WITH_TRIPLE_HYPHEN" ),
       new Item( "_PARAGRAPH_AS_LIST_ITEM" ),
       new Item( "_EMBEDDED_LIST_WITH_HYPHEN" ),

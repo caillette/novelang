@@ -44,7 +44,7 @@ public class Hierarchizer {
       final Treepath< SyntacticTree > part
   ) {
     final Treepath rehierarchizedSections = rehierarchizeFromLeftToRight(
-        part, DELIMITER_THREE_EQUAL_SIGNS_, new Filter.ExclusionFilter( DELIMITER_TWO_EQUAL_SIGNS_ ) ) ;
+        part, LEVEL_INTRODUCER_, new Filter.ExclusionFilter( DELIMITER_TWO_EQUAL_SIGNS_ ) ) ;
 
     return rehierarchizeFromLeftToRight(
         rehierarchizedSections, DELIMITER_TWO_EQUAL_SIGNS_, new Filter.YesFilter() ) ;
@@ -71,7 +71,7 @@ public class Hierarchizer {
             }
             break ;
           case DELIMITER_TWO_EQUAL_SIGNS_:
-          case DELIMITER_THREE_EQUAL_SIGNS_:
+          case LEVEL_INTRODUCER_:
             child = rehierarchizeLists( child ) ;
           default : 
             insideList = false ;

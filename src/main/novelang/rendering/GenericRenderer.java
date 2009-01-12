@@ -29,7 +29,6 @@ import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
-import novelang.common.LanguageTools;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific
@@ -132,7 +131,7 @@ public class GenericRenderer implements Renderer {
         break ;
 
       case DELIMITER_TWO_EQUAL_SIGNS_:
-      case DELIMITER_THREE_EQUAL_SIGNS_:
+      case LEVEL_INTRODUCER_:
         processByDefault( tree, createNodepath( kinship, _LEVEL ), false ) ;
         break ;
 
@@ -144,8 +143,8 @@ public class GenericRenderer implements Renderer {
         processByDefault( tree, createNodepath( kinship, _EMBEDDED_LIST_ITEM ), false ) ;
         break ;
 
-      case DELIMITING_TEXT_:
-        processByDefault( tree, createNodepath( kinship, _LEVEL_DESCRIPTION ), false ) ;
+      case LEVEL_TITLE:
+        processByDefault( tree, createNodepath( kinship, LEVEL_TITLE ), false ) ;
         break ;
 
       case BOOK:

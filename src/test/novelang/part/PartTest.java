@@ -35,7 +35,6 @@ import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.NodeKind;
 import novelang.parser.Escape;
-import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 
 /**
  * @author Laurent Caillette
@@ -49,12 +48,12 @@ public class PartTest {
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( PART,
-        tree( DELIMITER_THREE_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "Section1nlp" ) ),
+        tree( LEVEL_INTRODUCER_,
+            tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
-        tree( DELIMITER_THREE_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
+        tree( LEVEL_INTRODUCER_,
+            tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
         )
     ) ;
@@ -72,12 +71,12 @@ public class PartTest {
         tree( _META,
             tree( _WORD_COUNT, "8" )
         ),        
-        tree( DELIMITER_THREE_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "Section1nlp" ) ),
+        tree( LEVEL_INTRODUCER_,
+            tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
-        tree( DELIMITER_THREE_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
+        tree( LEVEL_INTRODUCER_,
+            tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
         )
     ) ;
@@ -93,26 +92,26 @@ public class PartTest {
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( PART,
         tree( DELIMITER_TWO_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "Chapter-0" ) ),
-            tree( DELIMITER_THREE_EQUAL_SIGNS_,
-                tree( DELIMITING_TEXT_, tree( WORD_, "Section-0-0" ) ),
+            tree( LEVEL_TITLE, tree( WORD_, "Chapter-0" ) ),
+            tree( LEVEL_INTRODUCER_,
+                tree( LEVEL_TITLE, tree( WORD_, "Section-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-1" ) )
             ),
-            tree( DELIMITER_THREE_EQUAL_SIGNS_,
-                tree( DELIMITING_TEXT_, tree( WORD_, "Section-0-1" ) ),
+            tree( LEVEL_INTRODUCER_,
+                tree( LEVEL_TITLE, tree( WORD_, "Section-0-1" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-1-0" ) )
             )
         ),
         tree( DELIMITER_TWO_EQUAL_SIGNS_,
-            tree( DELIMITING_TEXT_, tree( WORD_, "Chapter-1" ) ),
-            tree( DELIMITER_THREE_EQUAL_SIGNS_,
-                tree( DELIMITING_TEXT_, tree( WORD_, "Section-1-0" ) ),
+            tree( LEVEL_TITLE, tree( WORD_, "Chapter-1" ) ),
+            tree( LEVEL_INTRODUCER_,
+                tree( LEVEL_TITLE, tree( WORD_, "Section-1-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-1" ) )
             ),
-            tree( DELIMITER_THREE_EQUAL_SIGNS_,
-                tree( DELIMITING_TEXT_, tree( WORD_, "Section-1-1" ) ),
+            tree( LEVEL_INTRODUCER_,
+                tree( LEVEL_TITLE, tree( WORD_, "Section-1-1" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-1-0" ) )
             )
         )

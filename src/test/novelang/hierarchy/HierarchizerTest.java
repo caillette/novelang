@@ -39,16 +39,16 @@ public class HierarchizerTest {
         tree(
             PART,
             tree(
-                DELIMITER_THREE_EQUAL_SIGNS_,
+                LEVEL_INTRODUCER_,
                 tree( NodeKind.PARAGRAPH_REGULAR )
             )
         ),
         tree(
             PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree( NodeKind.PARAGRAPH_REGULAR )
         ),
-        DELIMITER_THREE_EQUAL_SIGNS_
+        LEVEL_INTRODUCER_
     ) ;
   }
 
@@ -59,17 +59,17 @@ public class HierarchizerTest {
             PART,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
             tree(
-                DELIMITER_THREE_EQUAL_SIGNS_,
+                LEVEL_INTRODUCER_,
                 tree( NodeKind.PARAGRAPH_REGULAR )
             )
         ),
         tree(
             PART,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree( NodeKind.PARAGRAPH_REGULAR )
         ),
-        DELIMITER_THREE_EQUAL_SIGNS_
+        LEVEL_INTRODUCER_
     ) ;
   }
 
@@ -78,7 +78,7 @@ public class HierarchizerTest {
     verifyRehierarchizeFromLeftToRight(
         tree(
             PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree(
                 DELIMITER_TWO_EQUAL_SIGNS_,
                 tree( NodeKind.PARAGRAPH_REGULAR )
@@ -86,12 +86,12 @@ public class HierarchizerTest {
         ),
         tree(
             PART,
-            tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+            tree( LEVEL_INTRODUCER_ ),
             tree( DELIMITER_TWO_EQUAL_SIGNS_ ),
             tree( NodeKind.PARAGRAPH_REGULAR )
         ),
         DELIMITER_TWO_EQUAL_SIGNS_,
-        DELIMITER_THREE_EQUAL_SIGNS_
+        LEVEL_INTRODUCER_
     ) ;
   }
 
@@ -100,12 +100,12 @@ public class HierarchizerTest {
     final SyntacticTree expected = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( LEVEL_INTRODUCER_ ),
         tree(
             DELIMITER_TWO_EQUAL_SIGNS_,
             tree( NodeKind.PARAGRAPH_REGULAR )
         ),
-        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( LEVEL_INTRODUCER_ ),
         tree(
             DELIMITER_TWO_EQUAL_SIGNS_,
             tree( IDENTIFIER ),
@@ -116,10 +116,10 @@ public class HierarchizerTest {
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( LEVEL_INTRODUCER_ ),
         tree( DELIMITER_TWO_EQUAL_SIGNS_ ),
         tree( NodeKind.PARAGRAPH_REGULAR ),
-        tree( DELIMITER_THREE_EQUAL_SIGNS_ ),
+        tree( LEVEL_INTRODUCER_ ),
         tree( DELIMITER_TWO_EQUAL_SIGNS_ ),
         tree( IDENTIFIER ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
@@ -129,7 +129,7 @@ public class HierarchizerTest {
         expected,
         toBeRehierarchized,
         DELIMITER_TWO_EQUAL_SIGNS_,
-        DELIMITER_THREE_EQUAL_SIGNS_
+        LEVEL_INTRODUCER_
     ) ;
   }
 
@@ -150,7 +150,7 @@ public class HierarchizerTest {
         expected,
         toBeRehierarchized,
         DELIMITER_TWO_EQUAL_SIGNS_,
-        DELIMITER_THREE_EQUAL_SIGNS_
+        LEVEL_INTRODUCER_
     ) ;
   }
 
@@ -182,7 +182,7 @@ public class HierarchizerTest {
   public void aggregateListInsideChapter() {
     final SyntacticTree expected = tree(
         PART,
-        tree( DELIMITER_THREE_EQUAL_SIGNS_,
+        tree( LEVEL_INTRODUCER_,
           tree( NodeKind.PARAGRAPH_REGULAR ),
           tree(
               _LIST_WITH_TRIPLE_HYPHEN,
@@ -191,20 +191,20 @@ public class HierarchizerTest {
           ),
           tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
-        tree( DELIMITER_THREE_EQUAL_SIGNS_, tree( LINES_OF_LITERAL, "" ) )
+        tree( LEVEL_INTRODUCER_, tree( LINES_OF_LITERAL, "" ) )
     ) ;
 
     final SyntacticTree toBeRehierarchized = tree(
         PART,
         tree(
-            DELIMITER_THREE_EQUAL_SIGNS_,
+            LEVEL_INTRODUCER_,
             tree( NodeKind.PARAGRAPH_REGULAR ),
             tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
             tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
         tree(
-            DELIMITER_THREE_EQUAL_SIGNS_,
+            LEVEL_INTRODUCER_,
             tree( LINES_OF_LITERAL, "" )
         )
     ) ;

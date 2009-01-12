@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import novelang.book.Environment;
 import novelang.common.Location;
 import static novelang.parser.NodeKind.VALUED_ARGUMENT_PRIMARY_;
-import static novelang.parser.NodeKind.DELIMITING_TEXT_;
+import static novelang.parser.NodeKind.LEVEL_TITLE;
 import novelang.parser.NodeKind;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
@@ -65,7 +65,7 @@ public class TitleFunction implements FunctionDefinition {
     LOGGER.debug( "Parsed function '{}' title='{}'", getName(), primaryArgument.toStringTree() ) ;
 
     final SyntacticTree titleTree = new SimpleTree(
-        DELIMITING_TEXT_.name(),
+        LEVEL_TITLE.name(),
         paragraph.getChildren()
     ) ;
 
@@ -74,7 +74,7 @@ public class TitleFunction implements FunctionDefinition {
         final SyntacticTree bookTree = book.getTreeAtStart() ;
         int first = -1 ;
         for( int i = bookTree.getChildCount() - 1 ; i >= 0 ; i-- ) {
-          if( NodeKind.DELIMITING_TEXT_.isRoot( bookTree.getChildAt( i  ) ) ) {
+          if( NodeKind.LEVEL_TITLE.isRoot( bookTree.getChildAt( i  ) ) ) {
             first = i ;
           }
         }

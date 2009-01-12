@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import novelang.book.Environment;
 import novelang.common.Location;
 import static novelang.parser.NodeKind.VALUED_ARGUMENT_PRIMARY_;
-import static novelang.parser.NodeKind.DELIMITER_THREE_EQUAL_SIGNS_;
+import static novelang.parser.NodeKind.LEVEL_INTRODUCER_;
 import novelang.parser.NodeKind;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
@@ -64,12 +64,12 @@ public class SectionFunction implements FunctionDefinition {
     LOGGER.debug( "Parsed function '{}' title='{}'", getName(), primaryArgument.toStringTree() ) ;
 
     final SyntacticTree titleTree = new SimpleTree(
-        NodeKind.DELIMITING_TEXT_.name(),
+        NodeKind.LEVEL_TITLE.name(),
         paragraph.getChildren() 
     ) ;
 
     final SyntacticTree sectionTree = TreeTools.addLast(
-        new SimpleTree( DELIMITER_THREE_EQUAL_SIGNS_.name() ),
+        new SimpleTree( LEVEL_INTRODUCER_.name() ),
         titleTree
     ) ;
 

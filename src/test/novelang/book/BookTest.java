@@ -60,8 +60,8 @@ public class BookTest {
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
-                DELIMITER_THREE_EQUAL_SIGNS_,
-                tree( DELIMITING_TEXT_, tree( WORD_, "My" ), tree( WORD_, "Section" ) )
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_TITLE, tree( WORD_, "My" ), tree( WORD_, "Section" ) )
             )
         ),
         bookTree
@@ -112,7 +112,7 @@ public class BookTest {
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
-                tree( NodeKind.DELIMITING_TEXT_, tree( WORD_, "file1" ) ),
+                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file1" )
@@ -120,7 +120,7 @@ public class BookTest {
             ),
             tree(
                 NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
-                tree( NodeKind.DELIMITING_TEXT_, tree( WORD_, "file2" ) ),
+                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file2" )
@@ -128,7 +128,7 @@ public class BookTest {
             ),
             tree(
                 NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
-                tree( NodeKind.DELIMITING_TEXT_, tree( WORD_, "file3" ) ),
+                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file3" )
@@ -161,7 +161,7 @@ public class BookTest {
             tree(
                 NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
-                tree( NodeKind.DELIMITING_TEXT_, tree( WORD_, "file1" ) ),
+                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file1" )
@@ -170,7 +170,7 @@ public class BookTest {
             tree(
                 NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
-                tree( NodeKind.DELIMITING_TEXT_, tree( WORD_, "file2" ) ),
+                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file2" )
@@ -179,7 +179,7 @@ public class BookTest {
             tree(
                 NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
-                tree( NodeKind.DELIMITING_TEXT_, tree( WORD_, "file3" ) ),
+                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file3" )
