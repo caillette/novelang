@@ -512,15 +512,29 @@ public class PartParserTest {
   public void sectionHasQuote()
       throws RecognitionException
   {
-    PARSERMETHOD_SECTION.checkTree( "=== \"q\" w", tree(
-        LEVEL_INTRODUCER_,
-            tree( LEVEL_TITLE, tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) ), tree( WORD_, "w") )
-        ) ) ;
+    PARSERMETHOD_SECTION.checkTree( 
+        "=== \"q\" w", 
+        tree(
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+            tree( 
+                LEVEL_TITLE, 
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) ), 
+                tree( WORD_, "w") 
+            )
+        ) 
+    ) ;
   }
 
   @Test
   public void sectionIsAnonymous() throws RecognitionException {
-    PARSERMETHOD_SECTION.checkTree( "===", tree( LEVEL_INTRODUCER_ ) ) ;
+    PARSERMETHOD_SECTION.checkTree( 
+        "===", 
+        tree( 
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" )
+        ) 
+    ) ;
   }
 
   @Test
@@ -663,8 +677,10 @@ public class PartParserTest {
         "===" + BREAK +
         BREAK +
         "<< w0 w1" + BREAK +
-        ">>", tree( PART,
-            tree( LEVEL_INTRODUCER_ ),
+        ">>", 
+        tree( 
+            PART,
+            tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ), tree( WORD_, "w1" ) )
@@ -685,8 +701,9 @@ public class PartParserTest {
         "<< w0" + BREAK +
         ">>" + BREAK +
         BREAK +
-        "p1", tree( PART,
-            tree( LEVEL_INTRODUCER_ ),
+        "p1", 
+        tree( PART,
+            tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
@@ -725,8 +742,10 @@ public class PartParserTest {
         "<< w0 w1" + BREAK +
         BREAK +
         "w2" + BREAK +
-        ">>", tree( PART,
-            tree( LEVEL_INTRODUCER_ ),
+        ">>", 
+        tree( 
+            PART,
+            tree( LEVEL_INTRODUCER_ , tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ), tree( WORD_, "w1" ) ),
@@ -997,17 +1016,20 @@ public class PartParserTest {
         BREAK +
         "=== s0" + BREAK +
         BREAK +
-        "p0", tree(
-          PART,
-          tree(
-              DELIMITER_TWO_EQUAL_SIGNS_,
-              tree( LEVEL_TITLE, tree( WORD_, "c0" ) )
-          ),
-          tree(
-              LEVEL_INTRODUCER_,
-              tree( LEVEL_TITLE, tree( WORD_, "s0" ) )
-          ),
-          tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) )
+        "p0", 
+        tree(
+            PART,
+            tree(
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "=="),
+                tree( LEVEL_TITLE, tree( WORD_, "c0" ) )
+            ),
+            tree(
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+                tree( LEVEL_TITLE, tree( WORD_, "s0" ) )
+            ),
+            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) )
         ) 
     ) ;
   }
@@ -1024,9 +1046,9 @@ public class PartParserTest {
         "===" + BREAK +
         BREAK +
         "p1", tree( PART,
-            tree( LEVEL_INTRODUCER_ ),
+            tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) ),
-            tree( LEVEL_INTRODUCER_ ),
+            tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p1" ) )
         ) 
     ) ;

@@ -36,7 +36,7 @@ public class Antlr311SpecificPartParserTest {
   private final ParserMethod PARSERMETHOD_PARAGRAPH =
       new ParserMethod( "paragraph" ) ;
   private final ParserMethod PARSERMETHOD_TITLE =
-      new ParserMethod( "title" ) ;
+      new ParserMethod( "levelTitle" ) ;
 
   @Test
   public void paragraphIsParenthesisWithBreakThenWord()

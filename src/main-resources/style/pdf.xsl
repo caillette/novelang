@@ -74,7 +74,7 @@
               <fo:table-row>
                 <fo:table-cell display-align="after" >
                   <fo:block font-size="70%" text-align="left" >
-                    <xsl:value-of select="/n:book/n:level-description" />
+                    <xsl:value-of select="/n:book/n:level-title" />
                   </fo:block>
                 </fo:table-cell>
                 <fo:table-cell>
@@ -106,7 +106,7 @@
     </fo:root>
   </xsl:template>
 
-  <xsl:template match="/n:book/n:level-description[1]" >
+  <xsl:template match="/n:book/n:level-title[1]" >
     <fo:block
         padding-top="40pt"
         font-size="28pt"
@@ -116,7 +116,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="/n:book/n:level-description[position() > 1]" >
+  <xsl:template match="/n:book/n:level-title[position() > 1]" >
     <fo:block
         padding-top="16pt"
         font-size="18pt"
@@ -126,7 +126,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="/n:book/n:level-description[position() = last()]" >
+  <xsl:template match="/n:book/n:level-title[position() = last()]" >
     <fo:block
         padding-top="16pt"
         padding-bottom="30pt"
@@ -138,7 +138,7 @@
   </xsl:template>
 
 
-  <xsl:template match="n:level/n:level-description" >
+  <xsl:template match="n:level/n:level-title" >
     <fo:block
         font-size="17pt"
         font-weight="200"
@@ -150,7 +150,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:level/n:level/n:level-description" >
+  <xsl:template match="n:level/n:level/n:level-title" >
     <fo:block
         font-size="11pt"
         font-weight="bold"

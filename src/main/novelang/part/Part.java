@@ -78,12 +78,12 @@ public class Part extends AbstractSourceReader {
     this( partFile, false ) ;
   }
 
-  public Part( final File partFile, boolean createMetadata ) throws MalformedURLException {
+  public Part( final File partFile, boolean standalone ) throws MalformedURLException {
     this(
         partFile.toURI().toURL(),
         Encoding.DEFAULT,
         "part[" + partFile.getName() + "]",
-        createMetadata
+        standalone
     ) ;
 
   }

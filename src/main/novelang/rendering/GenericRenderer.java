@@ -134,6 +134,9 @@ public class GenericRenderer implements Renderer {
       case LEVEL_INTRODUCER_:
         processByDefault( tree, createNodepath( kinship, _LEVEL ), false ) ;
         break ;
+      
+      case LEVEL_INTRODUCER_INDENT_ :
+        break ;
 
       case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ :
         processByDefault( tree, createNodepath( kinship, _PARAGRAPH_AS_LIST_ITEM ), false ) ;

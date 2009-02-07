@@ -40,6 +40,6 @@ public class NodeKindToolsTest {
     Assert.assertTrue( names.contains(
         NodeKindTools.tokenNameAsXmlElementName( NodeKind.BLOCK_INSIDE_DOUBLE_QUOTES.name() ) ) ) ;
     Assert.assertFalse( names.contains(
-        NodeKindTools.tokenNameAsXmlElementName( NodeKind.LEVEL_TITLE.name() ) ) ) ;
+        NodeKindTools.tokenNameAsXmlElementName( NodeKind.WORD_.name() ) ) ) ;
   }
 }
