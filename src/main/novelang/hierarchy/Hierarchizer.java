@@ -50,6 +50,9 @@ public class Hierarchizer {
         rehierarchizedSections, DELIMITER_TWO_EQUAL_SIGNS_, new Filter.YesFilter() ) ;
   }
 
+  /**
+   * Rehierarchize paragraphs which are list items.
+   */
   public static Treepath< SyntacticTree > rehierarchizeLists(
       Treepath< SyntacticTree > parent
   ) {
