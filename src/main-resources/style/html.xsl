@@ -70,7 +70,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="//n:level/n:level-description" >
+  <xsl:template match="//n:level/n:level-title" >
     <h1><xsl:apply-templates /></h1>
   </xsl:template>
 
@@ -80,7 +80,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="//n:level/n:level/n:level-description" >
+  <xsl:template match="//n:level/n:level/n:level-title" >
     <h2><xsl:apply-templates /></h2>
   </xsl:template>
 

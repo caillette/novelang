@@ -96,7 +96,7 @@ Second paragraph.
 
 === Levels
 
-XML elements: ``n:level``, ``n:level-description``
+XML elements: ``n:level``, ``n:level-title``
 
 Levels are delimited with a simple syntax, using a separator ``=`` telling about the depth 
 of the level.
@@ -132,18 +132,18 @@ The level structure of the Part looks like this:
 n:part
  +-- n:paragraph-regular "Text at depth 0"
  +-- n:level
- | +-- n:title-description "Depth 1"
+ | +-- n:level-title "Depth 1"
  | +-- n:paragraph-regular "Introductory text."
  | +-- n:level
- | |    +-- n:level-description "Depth 2"
+ | |    +-- n:level-title "Depth 2"
  | |    +-- n:paragraph-regular "Blah blah blah."
  | +-- n:level
- |      +-- n:level-description "Depth 2"
+ |      +-- n:level-title "Depth 2"
  |      +-- n:paragraph-regular "Blah."
  +-- n:level
-      +-- n:level-description "Depth 1 again"
+      +-- n:level-title "Depth 1 again"
       +-- n:level
-           +-- n:level-description "Depth 2"
+           +-- n:level-title "Depth 2"
            +-- n:paragraph-regular "..."
 >>>
 

@@ -30,7 +30,7 @@
 == <xsl:choose>
       <xsl:when test="n:identifier" ><xsl:text> </xsl:text>
 <xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
-      <xsl:when test="n:level-description" > <xsl:apply-templates select="n:level-description" mode="header" /></xsl:when>
+      <xsl:when test="n:level-title" > <xsl:apply-templates select="n:level-title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
   </xsl:template>
@@ -43,7 +43,7 @@
 </xsl:text>
 === <xsl:choose>
     <xsl:when test="n:identifier" ><xsl:text> </xsl:text><xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
-    <xsl:when test="n:level-description" > <xsl:apply-templates select="n:level-description" mode="header" /></xsl:when>
+    <xsl:when test="n:level-title" > <xsl:apply-templates select="n:level-title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
     </xsl:template>
@@ -93,7 +93,7 @@
 
 
   <xsl:template match="n:identifier" />
-  <xsl:template match="n:level-description" />
+  <xsl:template match="n:level-title" />
   <xsl:template match="n:style" />
   
   <xsl:template match="n:block-inside-double-quotes" >"<xsl:apply-templates/>"</xsl:template>
