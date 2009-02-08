@@ -91,9 +91,9 @@ public class InsertFunctionTest {
 
     TreeFixture.assertEquals(
         tree( BOOK,
-            tree( DELIMITER_TWO_EQUAL_SIGNS_,
+            tree( _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "no-chapter" ) ),
-                tree( LEVEL_INTRODUCER_,
+                tree( _LEVEL,
                     tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
                     tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
                 )

@@ -23,6 +23,7 @@ import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
+import com.google.common.base.Preconditions;
 
 /**
  * Transforms the tree representing a Part for handling various features
@@ -43,7 +44,7 @@ public class Hierarchizer {
   public static Treepath< SyntacticTree > rehierarchizeDelimiters2To3(
       final Treepath< SyntacticTree > part
   ) {
-    final Treepath rehierarchizedSections = rehierarchizeFromLeftToRight(
+    final Treepath< SyntacticTree > rehierarchizedSections = rehierarchizeFromLeftToRight(
         part, LEVEL_INTRODUCER_, new Filter.ExclusionFilter( DELIMITER_TWO_EQUAL_SIGNS_ ) ) ;
 
     return rehierarchizeFromLeftToRight(
@@ -140,5 +141,39 @@ public class Hierarchizer {
     return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 
+  public static Treepath< SyntacticTree > rehierarchizeLevels( 
+      Treepath< SyntacticTree > treepath 
+  ) {
+    return rehierarchizeLevel( treepath, 1 ) ;    
+  }
+  
+  private static Treepath< SyntacticTree > rehierarchizeLevel( 
+      Treepath< SyntacticTree > treepath,
+      int depth
+  ) {
+    throw new UnsupportedOperationException( "rehierarchizeLevels" ) ;
+    // Scan all direct children of tree at end of the treeoath.
+    //   If one child of expected level is found:
+    //     push it in a stack and continue scanning.
+    //   If one child of deeper level is found:
+    //   
+  }
+
+  /**
+   * Returns the depth of a level given its indentation.
+   *  
+   * @param tree a tree of {@link NodeKind#LEVEL_INTRODUCER_} kind.
+   * @return a number equal to or greater than 1
+   */
+  private int getLevelIntroducerDepth( SyntacticTree tree ) {
+    Preconditions.checkArgument( tree.isOneOf( LEVEL_INTRODUCER_ ) ) ;
+    Preconditions.checkArgument( tree.getChildCount() > 0 ) ;
+    final SyntacticTree indentTree = tree.getChildAt( 0 ) ;
+    Preconditions.checkArgument( indentTree.isOneOf( LEVEL_INTRODUCER_INDENT_ ) ) ;
+    final String indent = indentTree.getText() ;
+    Preconditions.checkArgument( indent.startsWith( "=" ) ) ;
+    Preconditions.checkArgument( indent.length() > 1 ) ;
+    return indent.length() - 1 ;
+  }
 
 }

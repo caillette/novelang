@@ -48,11 +48,15 @@ public class PartTest {
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( PART,
-        tree( LEVEL_INTRODUCER_,
+        tree( 
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_,  "===" ),
             tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
-        tree( LEVEL_INTRODUCER_,
+        tree( 
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_,  "===" ),
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
         )
@@ -71,11 +75,15 @@ public class PartTest {
         tree( _META,
             tree( _WORD_COUNT, "8" )
         ),        
-        tree( LEVEL_INTRODUCER_,
+        tree( 
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
             tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
-        tree( LEVEL_INTRODUCER_,
+        tree( 
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
         )
@@ -85,32 +93,44 @@ public class PartTest {
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
 
+  /**
+   * Checks that a single Part file gets rehierarchized.
+   * @throws IOException
+   */
   @Test
   public void loadSimpleStructure() throws IOException {
-    final Part part = new Part( simpleStructureFile ) ;
+    final Part part = new Part( simpleStructureFile ) ; 
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
-    final SyntacticTree expected = tree( PART,
-        tree( DELIMITER_TWO_EQUAL_SIGNS_,
+    final SyntacticTree expected = tree( 
+        PART,
+        tree( 
+            _LEVEL,
             tree( LEVEL_TITLE, tree( WORD_, "Chapter-0" ) ),
-            tree( LEVEL_INTRODUCER_,
+            tree(
+                _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "Section-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-1" ) )
             ),
-            tree( LEVEL_INTRODUCER_,
+            tree( 
+                _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "Section-0-1" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-1-0" ) )
+                
             )
         ),
-        tree( DELIMITER_TWO_EQUAL_SIGNS_,
+        tree( 
+            _LEVEL,
             tree( LEVEL_TITLE, tree( WORD_, "Chapter-1" ) ),
-            tree( LEVEL_INTRODUCER_,
+            tree( 
+                _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "Section-1-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-0" ) ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-1" ) )
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-1" ) )           
             ),
-            tree( LEVEL_INTRODUCER_,
+            tree( 
+                _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "Section-1-1" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-1-0" ) )
             )
