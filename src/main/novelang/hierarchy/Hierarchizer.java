@@ -71,7 +71,7 @@ public class Hierarchizer {
             } else {
               final SyntacticTree list =
                   new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN.name(), child.getTreeAtEnd() ) ;
-              child = TreepathTools.replaceEnd( child, list ) ;
+              child = TreepathTools.replaceTreepathEnd( child, list ) ;
               insideList = true ;
             }
             break ;
@@ -166,51 +166,66 @@ public class Hierarchizer {
     return currentTreepath.getPrevious() ;
   }
 
+  /**
+   * Given a {@code Treepath} to a {@link NodeKind#LEVEL_INTRODUCER_}, returns
+   * another {@code Treepath} to a a {@link NodeKind#_LEVEL} node where
+   * the Level Introducer and all following nodes are collapsed into.
+   * <p>
+   * Here is how it works.
+   * The {@code levelIntroducer} "eats" following siblings that should
+   * be children of the level it represents.
+   * Because {@code Treepath} is an immutable structure, it's important to have only one
+   * instance at a time to perform changes on.
+   * Because the {@code Treepath} doesn't allow to keep references on trees, we use index
+   * when needed.
+   *
+   * @param levelIntroducer a non-null {@code Treepath} with a minimum depth of 2.
+   * @return a non-null object.
+   */
   private static Treepath< SyntacticTree > rehierarchizeThisLevel(
       Treepath< SyntacticTree > levelIntroducer
   ) {
     final int depth = getLevelIntroducerDepth( levelIntroducer.getTreeAtEnd() ) ;
+    final int introducerIndex = levelIntroducer.getIndexInPrevious() ;
     Treepath< SyntacticTree > next = levelIntroducer ;
     SyntacticTree levelTree = new SimpleTree( _LEVEL.name() ) ;
 
     while( true ) {
 
       if( TreepathTools.hasNextSibling( levelIntroducer ) ) {
-        // Jump to first sibling  because levelIntroducerTreepath refers to the introducer itself.
+        // Jump to sibling  at the start of the loop because on first iteration,
+        // levelIntroducerTreepath refers to the introducer itself.
         next = TreepathTools.getNextSibling( levelIntroducer ) ;
         final SyntacticTree nextTree = next.getTreeAtEnd() ;
 
-        switch( NodeKind.valueOf( nextTree.getText() ) ) {
+        if( LEVEL_INTRODUCER_ == NodeKindTools.ofRoot( nextTree ) ) {
 
-          case LEVEL_INTRODUCER_ :
-            final int newDepth = getLevelIntroducerDepth( nextTree ) ;
-            if( depth <= newDepth ) {
-              // An introducer of same of smaller depth means we're done with this one.
-              return TreepathTools.replaceEnd( levelIntroducer, levelTree ) ;
-            } else  {
-              // An introducer of bigger depth is processed then added.
-              levelIntroducer = TreepathTools.removeNextSibling( levelIntroducer ) ;
-              levelTree = TreeTools.addLast(
-                  levelTree,
-                  rehierarchizeThisLevel( next ).getTreeAtEnd()
-              ) ;
-              break ;
-            }
-
-          case LEVEL_INTRODUCER_INDENT_ :
-            break ; // Ignore, we don't want it to appear in resulting treepath.
-
-          default :
+          final int newDepth = getLevelIntroducerDepth( nextTree ) ;
+          if( newDepth > depth ) {    // An introducer of bigger depth is processed then added.
+            // We get a treepath to new sublevel, from which subcontent was removed.
+            final Treepath< SyntacticTree > plainLevel = rehierarchizeThisLevel( next ) ;
+            // Jump backward to our introducer, deleting the sublevel to avoid duplicates.
+            levelIntroducer = TreepathTools.getSiblingAt( plainLevel, introducerIndex ) ;
             levelIntroducer = TreepathTools.removeNextSibling( levelIntroducer ) ;
-            levelTree = TreeTools.addLast( levelTree, nextTree ) ;
+            // Anyway the sublevel wasn't lost!
+            levelTree = TreeTools.addLast(
+                levelTree,
+                plainLevel.getTreeAtEnd()
+            ) ;
+          } else  {                   // Same depth or less means we're done with this one.
+            return TreepathTools.replaceTreepathEnd( levelIntroducer, levelTree ) ;
+          }
+
+        } else {
+          // Just eat the next sibling, moving it to current level.
+          levelIntroducer = TreepathTools.removeNextSibling( levelIntroducer ) ;
+          levelTree = TreeTools.addLast( levelTree, nextTree ) ;
         }
+
       } else {
-        break ;
+        return TreepathTools.replaceTreepathEnd( levelIntroducer, levelTree ) ;
       }
     }
-
-    return TreepathTools.replaceEnd( levelIntroducer, levelTree ) ;
-
   }
 
 

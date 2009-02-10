@@ -286,31 +286,6 @@ public class HierarchizerTest {
 
   }
 
-  @Deprecated
-  private static void verifyRehierarchizeFromLeftToRight(
-      SyntacticTree expectedTree,
-      SyntacticTree flatTree,
-      NodeKind accumulatorKind,
-      NodeKind... ignored
-  ) {
-    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
-    LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
-    final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
-    final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
-
-    final Treepath rehierarchized = Hierarchizer.rehierarchizeFromLeftToRight(
-        flatTreepath,
-        accumulatorKind,
-        new Filter.ExclusionFilter( ignored )
-    ) ;
-
-    TreeFixture.assertEquals(
-        expectedTreepath,
-        rehierarchized
-    ) ;
-
-
-  }
 
   private static void verifyRehierarchizeList(
       SyntacticTree expectedTree,
