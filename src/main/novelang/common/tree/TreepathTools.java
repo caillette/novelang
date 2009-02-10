@@ -16,6 +16,8 @@
  */
 package novelang.common.tree;
 
+import novelang.common.SyntacticTree;
+
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
  * <p>
@@ -339,5 +341,37 @@ public class TreepathTools {
   }
 
 
+  /**
+   * Removes the next sibling at end of given {@code Treepath}.
+   * <pre>
+   * *t0              t0'
+   *  | \             |
+   * *t1 t2    -->   *t1'
+   * </pre>
+   *
+   * @param treepath non-null, minimum depth of 2.
+   * @return non-null object representing path to moved {@code Tree}.
+   * @throws IllegalArgumentException if there was no previous sibling.
+   */
+  public static< T extends Tree > Treepath< T > removeNextSibling(
+      final Treepath< T > treepath
+  ) {
+    if( treepath.getLength() < 2 ) {
+      throw new IllegalArgumentException( "Treepath length must be 2 or more" ) ;
+    }
+    if( ! hasNextSibling( treepath )) {
+      throw new IllegalArgumentException( "Tree at end of treepath must have a next sibling" ) ;
+    }
 
+    final int indexOfNextSibling = treepath.getIndexInPrevious() + 1 ;
+    final T parentBeforeRemoval = treepath.getTreeAtDistance( 1 ) ;
+
+    final T parentAfterRemoval = TreeTools.remove( parentBeforeRemoval, indexOfNextSibling ) ;
+
+    final Treepath treepathToParentWithRemoval =
+        replaceEnd( treepath.getPrevious(), parentAfterRemoval ) ;
+
+    return Treepath.create( treepathToParentWithRemoval, treepath.getIndexInPrevious() ) ;
+
+  }
 }
