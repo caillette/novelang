@@ -39,7 +39,7 @@ public class TreepathToolsTest {
     // original: parent <- child0 <- grandChild
     final Treepath< MyTree > original = Treepath.create( parent, 0, 0 ) ;
 
-    final Treepath< MyTree > reparented = TreepathTools.replaceEnd( original, newGrandChild ) ;
+    final Treepath< MyTree > reparented = TreepathTools.replaceTreepathEnd( original, newGrandChild ) ;
 
     Assert.assertEquals( 3, reparented.getLength() ) ;
 
@@ -127,6 +127,23 @@ public class TreepathToolsTest {
     Assert.assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
     Assert.assertSame( child0, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 0 ) ) ;
     Assert.assertSame( child2, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 1 ) ) ;
+
+  }
+
+  @Test
+  public void getSiblingAt() {
+
+    final MyTree child0 = MyTree.create( "child0" ) ;                       //         parent
+    final MyTree child1 = MyTree.create( "child1" ) ;                       //       /   |   \
+    final MyTree child2 = MyTree.create( "child2" ) ;                       // child0 child1 child2
+    final MyTree parent = MyTree.create( "parent", child0, child1, child2 ) ;
+
+    // treepath: parent <- child0
+    final Treepath< MyTree > treepath = Treepath.create( parent, 0 ) ;
+
+    final Treepath< MyTree > sibling = TreepathTools.getSiblingAt( treepath, 2 ) ;
+
+    Assert.assertEquals( "child2", sibling.getTreeAtEnd().getPayload() ) ;
 
   }
 

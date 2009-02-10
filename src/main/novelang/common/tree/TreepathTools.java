@@ -16,7 +16,7 @@
  */
 package novelang.common.tree;
 
-import novelang.common.SyntacticTree;
+import com.google.common.base.Preconditions;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -35,6 +35,44 @@ public class TreepathTools {
   }
 
   /**
+   * Returns the n<sup>th</sup> sibling starting from end's parent.
+   * {@link Treepath}.
+   * <pre>
+   * getEndChildAt( t1, 2 ):
+   *
+   *     *t0                  *t0
+   *    / |  \              /  |   \
+   * *t1  t2  t3  -->     t1   t2  *t3
+   * </pre>
+   * @param treepath non-null object with minimum depth of 2.
+   * @param index inside [ 0, child count of previous tree [
+   * @return non-null object.
+   */
+  public static< T extends Tree > Treepath< T > getSiblingAt(
+      Treepath< T > treepath,
+      int index
+  ) throws IllegalArgumentException
+  {
+    final T end = treepath.getTreeAtEnd() ;
+    Preconditions.checkArgument(
+        treepath.getLength() > 1,
+        "length of treepath [%s] should be greater than 1"
+    ) ;
+    Preconditions.checkArgument(
+        index >= 0,
+        "index [%s] should be 0 or greater", index
+    ) ;
+    Preconditions.checkArgument(
+        treepath.getPrevious().getTreeAtEnd().getChildCount() > index,
+        "child count [%s] should be greater than index [%s]", end.getChildCount(), index
+    ) ;
+    return Treepath.create( treepath.getPrevious().getTreeAtEnd(), index ) ;
+  }
+
+
+
+
+  /**
    * Returns true if given {@code Treepath} has a previous sibling, false otherwise.
    * @param treepath a non-null {@code Treepath} with a minimum length of 2.
    * @throws IllegalArgumentException
@@ -48,6 +86,7 @@ public class TreepathTools {
     }
     final Tree treeToMove = treepath.getTreeAtEnd() ;
     final Tree parent = treepath.getTreeAtDistance( 1 ) ;
+    // TODO: use getIndexInPrevious()
     for( int i = parent.getChildCount() - 1 ; i > 0 ; i-- ) {
       final Tree child = parent.getChildAt( i ) ;
       if( child == treeToMove ) {
@@ -71,6 +110,7 @@ public class TreepathTools {
     }
     final Tree treeToMove = treepath.getTreeAtEnd() ;
     final Tree parent = treepath.getTreeAtDistance( 1 ) ;
+    // TODO: use getIndexInPrevious()
     for( int i = 0 ; i < parent.getChildCount() - 1 ; i ++ ) {
       final Tree child = parent.getChildAt( i ) ;
       if( child == treeToMove ) {
@@ -101,6 +141,7 @@ public class TreepathTools {
     }
     final T treeToMove = treepath.getTreeAtEnd() ;
     final T parent = treepath.getTreeAtDistance( 1 ) ;
+    // TODO: use getIndexInPrevious()
     for( int i = parent.getChildCount() - 1 ; i > 0 ; i-- ) {
       final T child = ( T ) parent.getChildAt( i );
       if( child == treeToMove ) {
@@ -128,6 +169,7 @@ public class TreepathTools {
     }
     final Tree treeToMove = treepath.getTreeAtEnd() ;
     final Tree parent = treepath.getTreeAtDistance( 1 ) ;
+    // TODO: use getIndexInPrevious()
     for( int i = 0 ; i < parent.getChildCount() - 1 ; i++ ) {
       final Tree child = parent.getChildAt( i ) ;
       if( child == treeToMove ) {
@@ -161,7 +203,7 @@ public class TreepathTools {
     final T newParent = TreeTools.addLast( oldParent, tree ) ;
 
     return Treepath.create(
-        replaceEnd( treepath.getPrevious(), newParent ),
+        replaceTreepathEnd( treepath.getPrevious(), newParent ),
         newParent.getChildCount() - 1
     ) ;
   }
@@ -189,7 +231,10 @@ public class TreepathTools {
       throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
     }
     final T newParent = TreeTools.addFirst( treepath.getTreeAtEnd(), tree ) ;
-    return Treepath.create( replaceEnd( treepath, newParent ), newParent.getChildCount() - 1 ) ;
+    return Treepath.create(
+        replaceTreepathEnd( treepath, newParent ),
+        newParent.getChildCount() - 1
+    ) ;
   }
 
   /**
@@ -217,7 +262,7 @@ public class TreepathTools {
       throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
     }
     final T newParent = TreeTools.add( treepath.getTreeAtEnd(), tree, position ) ;
-    return Treepath.create( replaceEnd( treepath, newParent ), position ) ;
+    return Treepath.create( replaceTreepathEnd( treepath, newParent ), position ) ;
   }
 
   /**
@@ -243,7 +288,7 @@ public class TreepathTools {
       throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
     }
     final T newParent = TreeTools.addLast( treepath.getTreeAtEnd(), tree ) ;
-    return Treepath.create( replaceEnd( treepath, newParent ), newParent.getChildCount() - 1 ) ;
+    return Treepath.create( replaceTreepathEnd( treepath, newParent ), newParent.getChildCount() - 1 ) ;
   }
 
   /**
@@ -262,7 +307,10 @@ public class TreepathTools {
    * @return non-null {@code Treepath} with the same end referencing updated trees.
    *
    */
-  public static< T extends Tree > Treepath< T > replaceEnd( Treepath< T > treepath, T newTree ) {
+  public static< T extends Tree > Treepath< T > replaceTreepathEnd(
+      Treepath< T > treepath,
+      T newTree
+  ) {
     if( null == treepath.getPrevious() ) {
       return Treepath.create( newTree ) ;
     } else {
@@ -274,7 +322,7 @@ public class TreepathTools {
       ) ;
 
       return Treepath.create(
-          replaceEnd( parentTreepath, newParent ),
+          replaceTreepathEnd( parentTreepath, newParent ),
           treepath.getIndexInPrevious()
       ) ;
     }
@@ -306,7 +354,7 @@ public class TreepathTools {
     if( null == newTree ) {
       throw new Error( "Internal error: found no end" ) ;
     }
-    return replaceEnd( treepath.getPrevious(), newTree ) ;
+    return replaceTreepathEnd( treepath.getPrevious(), newTree ) ;
   }
 
 
@@ -369,7 +417,7 @@ public class TreepathTools {
     final T parentAfterRemoval = TreeTools.remove( parentBeforeRemoval, indexOfNextSibling ) ;
 
     final Treepath treepathToParentWithRemoval =
-        replaceEnd( treepath.getPrevious(), parentAfterRemoval ) ;
+        replaceTreepathEnd( treepath.getPrevious(), parentAfterRemoval ) ;
 
     return Treepath.create( treepathToParentWithRemoval, treepath.getIndexInPrevious() ) ;
 
