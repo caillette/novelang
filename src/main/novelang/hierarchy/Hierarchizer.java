@@ -23,6 +23,7 @@ import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
+import novelang.common.tree.TreeTools;
 import com.google.common.base.Preconditions;
 
 /**
@@ -137,27 +138,86 @@ public class Hierarchizer {
     }
   }
 
+  public static Treepath< SyntacticTree > rehierarchizeLevels(
+      final Treepath< SyntacticTree > treepathToRehierarchize
+  ) {
+    Treepath< SyntacticTree > currentTreepath ;
+    {
+      if( treepathToRehierarchize.getTreeAtEnd().getChildCount() > 0 ) {
+        currentTreepath = Treepath.create( treepathToRehierarchize, 0 ) ;
+      } else {
+        return treepathToRehierarchize ;
+      }
+    }
+
+    while( true ) {
+      // We scan children of treepathToRehierarchize.
+      // If there is one LEVEL_INTRODUCER_ then we do special stuff on it.
+      if( currentTreepath.getTreeAtEnd().isOneOf( LEVEL_INTRODUCER_ ) ) {
+        currentTreepath = rehierarchizeThisLevel( currentTreepath ) ;
+      }
+      if( TreepathTools.hasNextSibling( currentTreepath ) ) {
+        currentTreepath = TreepathTools.getNextSibling( currentTreepath ) ;
+      } else {
+        break ;
+      }
+    }
+
+    return currentTreepath.getPrevious() ;
+  }
+
+  private static Treepath< SyntacticTree > rehierarchizeThisLevel(
+      Treepath< SyntacticTree > levelIntroducer
+  ) {
+    final int depth = getLevelIntroducerDepth( levelIntroducer.getTreeAtEnd() ) ;
+    Treepath< SyntacticTree > next = levelIntroducer ;
+    SyntacticTree levelTree = new SimpleTree( _LEVEL.name() ) ;
+
+    while( true ) {
+
+      if( TreepathTools.hasNextSibling( levelIntroducer ) ) {
+        // Jump to first sibling  because levelIntroducerTreepath refers to the introducer itself.
+        next = TreepathTools.getNextSibling( levelIntroducer ) ;
+        final SyntacticTree nextTree = next.getTreeAtEnd() ;
+
+        switch( NodeKind.valueOf( nextTree.getText() ) ) {
+
+          case LEVEL_INTRODUCER_ :
+            final int newDepth = getLevelIntroducerDepth( nextTree ) ;
+            if( depth <= newDepth ) {
+              // An introducer of same of smaller depth means we're done with this one.
+              return TreepathTools.replaceEnd( levelIntroducer, levelTree ) ;
+            } else  {
+              // An introducer of bigger depth is processed then added.
+              levelIntroducer = TreepathTools.removeNextSibling( levelIntroducer ) ;
+              levelTree = TreeTools.addLast(
+                  levelTree,
+                  rehierarchizeThisLevel( next ).getTreeAtEnd()
+              ) ;
+              break ;
+            }
+
+          case LEVEL_INTRODUCER_INDENT_ :
+            break ; // Ignore, we don't want it to appear in resulting treepath.
+
+          default :
+            levelIntroducer = TreepathTools.removeNextSibling( levelIntroducer ) ;
+            levelTree = TreeTools.addLast( levelTree, nextTree ) ;
+        }
+      } else {
+        break ;
+      }
+    }
+
+    return TreepathTools.replaceEnd( levelIntroducer, levelTree ) ;
+
+  }
+
+
   private static NodeKind getKind( Treepath< SyntacticTree > treepath ) {
     return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 
-  public static Treepath< SyntacticTree > rehierarchizeLevels( 
-      Treepath< SyntacticTree > treepath 
-  ) {
-    return rehierarchizeLevel( treepath, 1 ) ;    
-  }
-  
-  private static Treepath< SyntacticTree > rehierarchizeLevel( 
-      Treepath< SyntacticTree > treepath,
-      int depth
-  ) {
-    throw new UnsupportedOperationException( "rehierarchizeLevels" ) ;
-    // Scan all direct children of tree at end of the treeoath.
-    //   If one child of expected level is found:
-    //     push it in a stack and continue scanning.
-    //   If one child of deeper level is found:
-    //   
-  }
 
   /**
    * Returns the depth of a level given its indentation.
@@ -165,12 +225,13 @@ public class Hierarchizer {
    * @param tree a tree of {@link NodeKind#LEVEL_INTRODUCER_} kind.
    * @return a number equal to or greater than 1
    */
-  private int getLevelIntroducerDepth( SyntacticTree tree ) {
+  private static int getLevelIntroducerDepth( SyntacticTree tree ) {
     Preconditions.checkArgument( tree.isOneOf( LEVEL_INTRODUCER_ ) ) ;
     Preconditions.checkArgument( tree.getChildCount() > 0 ) ;
     final SyntacticTree indentTree = tree.getChildAt( 0 ) ;
     Preconditions.checkArgument( indentTree.isOneOf( LEVEL_INTRODUCER_INDENT_ ) ) ;
-    final String indent = indentTree.getText() ;
+    Preconditions.checkArgument( indentTree.getChildCount() == 1 ) ;
+    final String indent = indentTree.getChildAt( 0 ).getText() ;
     Preconditions.checkArgument( indent.startsWith( "=" ) ) ;
     Preconditions.checkArgument( indent.length() > 1 ) ;
     return indent.length() - 1 ;
