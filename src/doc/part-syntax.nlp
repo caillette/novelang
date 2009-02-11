@@ -152,7 +152,7 @@ This is useful for creating documents which have great depth, while keeping edit
 at reasonable depth. 
 
 Inside a Part, it's incorrect to declare a first level with a greater depth than following one.
-In this case, the depth of the first level will be promoted to 1. 
+The case below will cause an error:
 
 <<<
 == Depth 2, incorrect
