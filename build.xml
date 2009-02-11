@@ -534,7 +534,7 @@
         <patternset>
           <include name="build.*" />
           <include name="${legal.dir}/*" />
-          <include name="${lib.deploy.dir}/*" />
+          <include name="${lib.deploy.dir}/**" />
           <include name="${source.dir}/**" />
           <include name="${configuration.dir}/**" />
         </patternset>
