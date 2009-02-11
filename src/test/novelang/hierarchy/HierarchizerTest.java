@@ -67,6 +67,29 @@ public class HierarchizerTest {
   }
 
   @Test
+  public void keepTitle() {
+    verifyRehierarchizeLevels(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( LEVEL_TITLE, tree( WORD_ ) ) ,
+                tree( PARAGRAPH_REGULAR )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "==" ),
+                tree( LEVEL_TITLE, tree( WORD_ ) )
+            ),
+            tree( PARAGRAPH_REGULAR )
+        )
+    ) ;
+  }
+
+  @Test
   public void somethingPrecedingLevel1() {
     verifyRehierarchizeLevels(
         tree(

@@ -24,9 +24,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.hierarchy.Hierarchizer;
 import novelang.book.Environment;
 import novelang.common.Location;
 import static novelang.parser.NodeKind.*;
@@ -43,9 +46,13 @@ import novelang.parser.NodeKind;
 import com.google.common.collect.ImmutableMap;
 
 /**
+ * Tests for {@link InsertFunction}.
+ *
  * @author Laurent Caillette
  */
 public class InsertFunctionTest {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( InsertFunctionTest.class ) ;
 
   @Test
   public void goodFileUrl() throws IllegalFunctionCallException {
@@ -89,6 +96,9 @@ public class InsertFunctionTest {
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getBook() ) ;
 
+
+    final SyntacticTree book = result.getBook().getTreeAtStart() ;
+
     TreeFixture.assertEquals(
         tree( BOOK,
             tree( _LEVEL,
@@ -99,7 +109,7 @@ public class InsertFunctionTest {
                 )
             )
         ),
-        result.getBook().getTreeAtStart()
+        book
     ) ;
 
   }

@@ -63,13 +63,15 @@ public class Book extends AbstractSourceReader {
           new SimpleTree( NodeKind.BOOK.name() )
       ) ;
       this.environment = results.environment ;
-      final SyntacticTree rehierarchizedTree =
-          Hierarchizer.rehierarchizeLists( Treepath.create( results.book ) ).getTreeAtStart() ;
+      final Treepath< SyntacticTree > rehierarchizedLists =
+          Hierarchizer.rehierarchizeLists( Treepath.create( results.book ) ) ;
+      final Treepath< SyntacticTree > rehierarchizedTree =
+          Hierarchizer.rehierarchizeLevels( rehierarchizedLists ) ;
 
       if( hasProblem() ) {
-        this.documentTree = rehierarchizedTree ;
+        this.documentTree = rehierarchizedTree.getTreeAtEnd() ;
       } else {
-        this.documentTree = addMetadata( rehierarchizedTree ) ;        
+        this.documentTree = addMetadata( rehierarchizedTree.getTreeAtEnd() ) ;        
       }
     }
 

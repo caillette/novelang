@@ -42,15 +42,14 @@ import com.google.common.base.Preconditions;
  */
 public class Hierarchizer {
 
-  public static Treepath< SyntacticTree > rehierarchizeDelimiters2To3(
-      final Treepath< SyntacticTree > part
+  public static Treepath< SyntacticTree > rehierarchizeAll(
+      Treepath< SyntacticTree > treepath
   ) {
-    final Treepath< SyntacticTree > rehierarchizedSections = rehierarchizeFromLeftToRight(
-        part, LEVEL_INTRODUCER_, new Filter.ExclusionFilter( DELIMITER_TWO_EQUAL_SIGNS_ ) ) ;
-
-    return rehierarchizeFromLeftToRight(
-        rehierarchizedSections, DELIMITER_TWO_EQUAL_SIGNS_, new Filter.YesFilter() ) ;
+    treepath = Hierarchizer.rehierarchizeLists( treepath ) ;
+    treepath = Hierarchizer.rehierarchizeLevels( treepath ) ;
+    return treepath ;    
   }
+
 
   /**
    * Rehierarchize paragraphs which are list items.
@@ -75,7 +74,6 @@ public class Hierarchizer {
               insideList = true ;
             }
             break ;
-          case DELIMITER_TWO_EQUAL_SIGNS_:
           case LEVEL_INTRODUCER_:
             child = rehierarchizeLists( child ) ;
           default : 
@@ -94,49 +92,6 @@ public class Hierarchizer {
     }
   }
 
-
-  /**
-   * Upgrades a degenerated {@code Tree} by making nodes of a given {@code NodeKind} adopt
-   * their rightmost siblings.
-   *
-   * @param part a {@code Treepath} with bottom {@code Tree} of {@code PART} kind.
-   * @param accumulatorKind kind of node becoming the parent of their siblings on the right,
-   *     unless they are of {@code accumulatorKind} or {@code ignored} kind.
-   * @param filter kind of nodes to handle.
-   * @return the result of the changes.
-   */
-  protected static Treepath< SyntacticTree > rehierarchizeFromLeftToRight(
-      final Treepath< SyntacticTree > part,
-      NodeKind accumulatorKind,
-      Filter filter
-  ) {
-    Treepath< SyntacticTree > treepath = Treepath.create( part, 0 ) ;
-
-    while( true ) {
-      final NodeKind childKind = getKind( treepath ) ;
-      if( accumulatorKind == childKind ) {
-        while( true ) {
-          // Consume all siblings on the right to be reparented.
-          if( TreepathTools.hasNextSibling( treepath ) ) {
-            final Treepath< SyntacticTree > next = TreepathTools.getNextSibling( treepath ) ;
-            final NodeKind kindOfNext = getKind( next );
-            if( accumulatorKind == kindOfNext || ! filter.isMoveable( kindOfNext ) ) {
-              treepath = next ;
-              break ;
-            } else {
-              treepath = TreepathTools.becomeLastChildOfPreviousSibling( next ).getPrevious() ;
-            }
-          } else {
-            return treepath.getPrevious() ;
-          }
-        }
-      } else if( TreepathTools.hasNextSibling( treepath ) ) {
-        treepath = TreepathTools.getNextSibling( treepath ) ;
-      } else {
-        return treepath.getPrevious() ;
-      }
-    }
-  }
 
   public static Treepath< SyntacticTree > rehierarchizeLevels(
       final Treepath< SyntacticTree > treepathToRehierarchize
@@ -159,11 +114,11 @@ public class Hierarchizer {
       if( TreepathTools.hasNextSibling( currentTreepath ) ) {
         currentTreepath = TreepathTools.getNextSibling( currentTreepath ) ;
       } else {
-        break ;
+        return currentTreepath.getPrevious() ;
       }
     }
 
-    return currentTreepath.getPrevious() ;
+
   }
 
   /**
@@ -172,8 +127,8 @@ public class Hierarchizer {
    * the Level Introducer and all following nodes are collapsed into.
    * <p>
    * Here is how it works.
-   * The {@code levelIntroducer} "eats" following siblings that should
-   * be children of the level it represents.
+   * The {@code levelIntroducer} "eats" following siblings that should be children of the
+   * level it represents. They get collapsed in the {@link NodeKind#_LEVEL} node.
    * Because {@code Treepath} is an immutable structure, it's important to have only one
    * instance at a time to perform changes on.
    * Because the {@code Treepath} doesn't allow to keep references on trees, we use index
@@ -187,7 +142,6 @@ public class Hierarchizer {
   ) {
     final int depth = getLevelIntroducerDepth( levelIntroducer.getTreeAtEnd() ) ;
     final int introducerIndex = levelIntroducer.getIndexInPrevious() ;
-    Treepath< SyntacticTree > next = levelIntroducer ;
     SyntacticTree levelTree = new SimpleTree( _LEVEL.name() ) ;
 
     while( true ) {
@@ -195,25 +149,23 @@ public class Hierarchizer {
       if( TreepathTools.hasNextSibling( levelIntroducer ) ) {
         // Jump to sibling  at the start of the loop because on first iteration,
         // levelIntroducerTreepath refers to the introducer itself.
-        next = TreepathTools.getNextSibling( levelIntroducer ) ;
+        final Treepath< SyntacticTree > next = TreepathTools.getNextSibling( levelIntroducer ) ;
         final SyntacticTree nextTree = next.getTreeAtEnd() ;
 
         if( LEVEL_INTRODUCER_ == NodeKindTools.ofRoot( nextTree ) ) {
 
           final int newDepth = getLevelIntroducerDepth( nextTree ) ;
           if( newDepth > depth ) {    // An introducer of bigger depth is processed then added.
-            // We get a treepath to new sublevel, from which subcontent was removed.
+            // We get a treepath to new sublevel, with collapsed subcontent.
             final Treepath< SyntacticTree > plainLevel = rehierarchizeThisLevel( next ) ;
             // Jump backward to our introducer, deleting the sublevel to avoid duplicates.
             levelIntroducer = TreepathTools.getSiblingAt( plainLevel, introducerIndex ) ;
             levelIntroducer = TreepathTools.removeNextSibling( levelIntroducer ) ;
             // Anyway the sublevel wasn't lost!
-            levelTree = TreeTools.addLast(
-                levelTree,
-                plainLevel.getTreeAtEnd()
-            ) ;
+            levelTree = TreeTools.addLast( levelTree, plainLevel.getTreeAtEnd() ) ;
+            
           } else  {                   // Same depth or less means we're done with this one.
-            return TreepathTools.replaceTreepathEnd( levelIntroducer, levelTree ) ;
+            return substitute( levelIntroducer, levelTree ) ;
           }
 
         } else {
@@ -223,9 +175,26 @@ public class Hierarchizer {
         }
 
       } else {
-        return TreepathTools.replaceTreepathEnd( levelIntroducer, levelTree ) ;
+        return substitute( levelIntroducer, levelTree ) ;
       }
     }
+  }
+
+  /**
+   * Replace the {@link NodeKind#LEVEL_INTRODUCER_} at the end of the treepath by a
+   * {@link NodeKind#_LEVEL}, while retaining all of introducer's children except
+   * {@link NodeKind#LEVEL_INTRODUCER_INDENT_}.
+   */
+  private static Treepath< SyntacticTree > substitute(
+      Treepath< SyntacticTree > levelIntroducer,
+      SyntacticTree levelTree
+  ) {
+    for( SyntacticTree child : levelIntroducer.getTreeAtEnd().getChildren() ) {
+      if( ! child.isOneOf( LEVEL_INTRODUCER_INDENT_ ) ) {
+        levelTree = TreeTools.addFirst( levelTree, child ) ;
+      }
+    }
+    return TreepathTools.replaceTreepathEnd( levelIntroducer, levelTree ) ;
   }
 
 

@@ -130,11 +130,13 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
+/*
       case DELIMITER_TWO_EQUAL_SIGNS_:
       case LEVEL_INTRODUCER_:
         processByDefault( tree, createNodepath( kinship, _LEVEL ), false ) ;
         break ;
-      
+*/
+
       case LEVEL_INTRODUCER_INDENT_ :
         break ;
 

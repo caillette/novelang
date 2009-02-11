@@ -90,7 +90,7 @@ public class SplitByChapter {
   private void rewrite() throws Exception {
     final Map< String, SyntacticTree > chaptersByIdentifier = Maps.newHashMap() ;
     for( final SyntacticTree child : part.getDocumentTree().getChildren() ) {
-      if( NodeKind.DELIMITER_TWO_EQUAL_SIGNS_.isRoot( child ) ) {
+      if( NodeKind._LEVEL.isRoot( child ) ) {
         final String identifier = generateIdentifier( chaptersByIdentifier.keySet(), child ) ;
         final File chapterFile = new File( targetDirectory, identifier  + ".nlp" ) ;
         if( chapterFile.exists() ) {

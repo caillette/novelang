@@ -23,7 +23,6 @@ options { output = AST ; }
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;     
   BOOK ;
-  DELIMITER_TWO_EQUAL_SIGNS_ ; // Obsolete, remove this once everything compiles.
   LEVEL_INTRODUCER_ ;          // DELIMITER was too generic, let's talk about level introducer.
   LEVEL_INTRODUCER_INDENT_ ;   // DELIMITER was too generic, let's talk about level introducer.
   LEVEL_TITLE ;

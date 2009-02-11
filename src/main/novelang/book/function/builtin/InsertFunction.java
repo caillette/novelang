@@ -283,7 +283,7 @@ public class InsertFunction implements FunctionDefinition {
     final SyntacticTree title = new SimpleTree( NodeKind.LEVEL_TITLE.name(), word ) ;
 
     SyntacticTree chapterTree = TreeTools.addFirst(
-        new SimpleTree( NodeKind.DELIMITER_TWO_EQUAL_SIGNS_.name(), partTree.getChildren() ),
+        new SimpleTree( NodeKind._LEVEL.name(), partTree.getChildren() ),
         title
     ) ;
 

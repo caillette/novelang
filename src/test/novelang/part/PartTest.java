@@ -47,18 +47,22 @@ public class PartTest {
     final Part part = new Part( justSections ) ;
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
-    final SyntacticTree expected = tree( PART,
+    final SyntacticTree expected = tree(
+        PART,
         tree( 
-            LEVEL_INTRODUCER_,
-            tree( LEVEL_INTRODUCER_INDENT_,  "===" ),
+            _LEVEL,
             tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 
-            LEVEL_INTRODUCER_,
-            tree( LEVEL_INTRODUCER_INDENT_,  "===" ),
+            _LEVEL,
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
-            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "p10" ),
+                tree( WORD_, "w101" ),
+                tree( WORD_, "w102" )
+            )
         )
     ) ;
 
@@ -76,16 +80,19 @@ public class PartTest {
             tree( _WORD_COUNT, "8" )
         ),        
         tree( 
-            LEVEL_INTRODUCER_,
-            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+            _LEVEL,
             tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
-            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
+            tree( PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 
-            LEVEL_INTRODUCER_,
-            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+            _LEVEL,
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
-            tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p10" ), tree( WORD_, "w101" ), tree( WORD_, "w102" ) )
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "p10" ),
+                tree( WORD_, "w101" ),
+                tree( WORD_, "w102" )
+            )
         )
     ) ;
 
@@ -160,18 +167,6 @@ public class PartTest {
     Assert.assertFalse( problems.hasNext() ) ;
     Assert.assertEquals( 2, problem.getLocation().getLine() ) ;
     Assert.assertEquals( 4, problem.getLocation().getColumn() ) ;
-  }
-
-  @Test
-  public void loadMessyIdentifiers() throws IOException {
-    final Part part = new Part( messyIdentifiersFile ) ;
-    part.getIdentifiers() ;    
-  }
-
-  @Test
-  public void findIdentifiersOk() throws IOException {
-    final Part part = new Part( justSections ) ;
-    part.getIdentifiers() ;
   }
 
 

@@ -18,23 +18,17 @@
 package novelang.part;
 
 import java.io.File;
-import java.nio.charset.Charset;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.ImmutableMultimap;
-import novelang.common.IdentifierHelper;
-import novelang.parser.NodeKind;
-import novelang.common.tree.Treepath;
-import novelang.common.SyntacticTree;
 import novelang.common.AbstractSourceReader;
 import novelang.common.StylesheetMap;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
+import novelang.hierarchy.Hierarchizer;
 import novelang.parser.Encoding;
 import novelang.parser.antlr.DefaultPartParserFactory;
-import novelang.hierarchy.Hierarchizer;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes
@@ -45,7 +39,6 @@ import novelang.hierarchy.Hierarchizer;
 public class Part extends AbstractSourceReader {
 
   private final SyntacticTree tree ;
-  private final Multimap< String, SyntacticTree> identifiers ;
   private final boolean standalone;
 
 
@@ -56,7 +49,6 @@ public class Part extends AbstractSourceReader {
   public Part( String content, boolean standalone ) {
     this.standalone = standalone ; 
     tree = createTree( content ) ;
-    identifiers = findIdentifiers() ;
   }
 
   private SyntacticTree createTree( String content ) {
@@ -65,7 +57,7 @@ public class Part extends AbstractSourceReader {
       return null ;
     } else {
       final Treepath< SyntacticTree > rehierarchized1 =
-          Hierarchizer.rehierarchizeDelimiters2To3( Treepath.create( rawTree ) ) ;
+          Hierarchizer.rehierarchizeLevels( Treepath.create( rawTree ) ) ;
       if( standalone ) {
         return addMetadata( Hierarchizer.rehierarchizeLists( rehierarchized1 ).getTreeAtEnd() ) ;
       } else {
@@ -97,7 +89,6 @@ public class Part extends AbstractSourceReader {
     super( partUrl, encoding, thisToString ) ;
     this.standalone = standalone ;
     tree = createTree( readContent( partUrl, encoding ) ) ;
-    identifiers = findIdentifiers() ;
   }
 
   public StylesheetMap getCustomStylesheetMap() {
@@ -117,45 +108,6 @@ public class Part extends AbstractSourceReader {
   }
 
 
-// ===========
-// Identifiers
-// ===========
-
-  /**
-   * Finds Section identifiers from inside the {@link #getDocumentTree() tree}.
-   * At the first glance it seems better to do it from the grammar but
-   * I'm not sure on how to concatenate tokens.
-   * If I find how to do I should just add a Multimap member to the grammar file and
-   * get it after parsing.
-   */
-  private Multimap< String, SyntacticTree> findIdentifiers() {
-
-    final Multimap< String, SyntacticTree> identifiedSectionTrees = Multimaps.newHashMultimap() ;
-
-    if( null == tree ) {
-      return ImmutableMultimap.empty() ;  
-    }
-
-    for( final SyntacticTree sectionCandidate : tree.getChildren() ) {
-      if( NodeKind.DELIMITER_TWO_EQUAL_SIGNS_.name().equals( sectionCandidate.getText() ) ) {
-        for( final SyntacticTree identifierCandidate : sectionCandidate.getChildren() ) {
-          if( NodeKind.IDENTIFIER.name().equals( identifierCandidate.getText() ) ) {
-            final String identifier = IdentifierHelper.createIdentifier( identifierCandidate ) ;
-            identifiedSectionTrees.put( identifier, sectionCandidate ) ;
-            LOGGER.debug( "Recognized Section identifier '{}' inside {}", identifier, this ) ;
-          }
-        }
-      }
-    }
-
-    final ListMultimap< String, SyntacticTree> identifiersFound =
-        Multimaps.newArrayListMultimap( identifiedSectionTrees ) ;
-    return Multimaps.unmodifiableListMultimap( identifiersFound ) ;
-  }
-
-  public Multimap< String, SyntacticTree> getIdentifiers() {
-    return identifiers ;
-  }
 
 
 }

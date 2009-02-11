@@ -111,7 +111,7 @@ public class BookTest {
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
-                NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
+                _LEVEL,
                 tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
@@ -119,7 +119,7 @@ public class BookTest {
                 )
             ),
             tree(
-                NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
+                _LEVEL,
                 tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
@@ -127,7 +127,7 @@ public class BookTest {
                 )
             ),
             tree(
-                NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
+                _LEVEL,
                 tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
                     NodeKind.PARAGRAPH_REGULAR,
@@ -159,7 +159,7 @@ public class BookTest {
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
-                NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
+                _LEVEL,
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
                 tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
@@ -168,7 +168,7 @@ public class BookTest {
                 )
             ),
             tree(
-                NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
+                _LEVEL,
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
                 tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
@@ -177,7 +177,7 @@ public class BookTest {
                 )
             ),
             tree(
-                NodeKind.DELIMITER_TWO_EQUAL_SIGNS_,
+                _LEVEL,
                 tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
                 tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
