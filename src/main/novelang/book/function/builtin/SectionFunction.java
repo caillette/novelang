@@ -63,14 +63,10 @@ public class SectionFunction implements FunctionDefinition {
 
     LOGGER.debug( "Parsed function '{}' title='{}'", getName(), primaryArgument.toStringTree() ) ;
 
-    final SyntacticTree titleTree = new SimpleTree(
-        NodeKind.LEVEL_TITLE.name(),
-        paragraph.getChildren() 
-    ) ;
-
-    final SyntacticTree sectionTree = TreeTools.addLast(
-        new SimpleTree( LEVEL_INTRODUCER_.name() ),
-        titleTree
+    final SyntacticTree sectionTree = new SimpleTree(
+        LEVEL_INTRODUCER_.name(),
+        new SimpleTree( NodeKind.LEVEL_INTRODUCER_INDENT_.name(), new SimpleTree( "===" ) ),
+        new SimpleTree( NodeKind.LEVEL_TITLE.name(), paragraph.getChildren() )
     ) ;
 
     return new FunctionCall( location ) {

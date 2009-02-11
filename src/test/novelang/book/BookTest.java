@@ -60,7 +60,7 @@ public class BookTest {
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
-                LEVEL_INTRODUCER_,
+                _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "My" ), tree( WORD_, "Section" ) )
             )
         ),
