@@ -96,6 +96,7 @@ public class Hierarchizer {
       final Treepath< SyntacticTree > treepathToRehierarchize
   ) {
     Treepath< SyntacticTree > currentTreepath ;
+    boolean first = true ;
     {
       if( treepathToRehierarchize.getTreeAtEnd().getChildCount() > 0 ) {
         currentTreepath = Treepath.create( treepathToRehierarchize, 0 ) ;
@@ -108,7 +109,14 @@ public class Hierarchizer {
       // We scan children of treepathToRehierarchize.
       // If there is one LEVEL_INTRODUCER_ then we do special stuff on it.
       if( currentTreepath.getTreeAtEnd().isOneOf( LEVEL_INTRODUCER_ ) ) {
-        currentTreepath = rehierarchizeThisLevel( currentTreepath ) ;
+        final int roof ;
+        if( first ) {
+          first = false ;
+          roof = getLevelIntroducerDepth( currentTreepath.getTreeAtEnd() ) ;
+        } else {
+          roof = 0 ;
+        }
+        currentTreepath = rehierarchizeThisLevel( currentTreepath, roof ) ;
       }
       if( TreepathTools.hasNextSibling( currentTreepath ) ) {
         currentTreepath = TreepathTools.getNextSibling( currentTreepath ) ;
@@ -134,10 +142,12 @@ public class Hierarchizer {
    * when needed.
    *
    * @param levelIntroducer a non-null {@code Treepath} with a minimum depth of 2.
+   * @param roof the minimum depth, use 0 to ignore.
    * @return a non-null object.
    */
   private static Treepath< SyntacticTree > rehierarchizeThisLevel(
-      Treepath< SyntacticTree > levelIntroducer
+      Treepath< SyntacticTree > levelIntroducer,
+      int roof
   ) {
     final int depth = getLevelIntroducerDepth( levelIntroducer.getTreeAtEnd() ) ;
     final int introducerIndex = levelIntroducer.getIndexInPrevious() ;
@@ -154,9 +164,16 @@ public class Hierarchizer {
         if( LEVEL_INTRODUCER_ == NodeKindTools.ofRoot( nextTree ) ) {
 
           final int newDepth = getLevelIntroducerDepth( nextTree ) ;
+          if( newDepth < roof ) {
+            throw new IllegalArgumentException(
+                "Incorrect depth [" + newDepth + "] " +
+                "for level declaration " + nextTree.getLocation()
+            ) ;
+          }
+
           if( newDepth > depth ) {    // An introducer of bigger depth is processed then added.
             // We get a treepath to new sublevel, with collapsed subcontent.
-            final Treepath< SyntacticTree > plainLevel = rehierarchizeThisLevel( next ) ;
+            final Treepath< SyntacticTree > plainLevel = rehierarchizeThisLevel( next, 0 ) ;
             // Jump backward to our introducer, deleting the sublevel to avoid duplicates.
             levelIntroducer = TreepathTools.getSiblingAt( plainLevel, introducerIndex ) ;
             levelIntroducer = TreepathTools.removeNextSibling( levelIntroducer ) ;

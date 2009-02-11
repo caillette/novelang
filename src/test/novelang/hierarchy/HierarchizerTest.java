@@ -133,6 +133,19 @@ public class HierarchizerTest {
     ) ;
   }
 
+  @Test(expected = IllegalArgumentException.class )
+  public void badDepthOrder() {
+    rehierarchizeLevels(
+        tree(
+            PART,
+            tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
+            tree( _PARAGRAPH_AS_LIST_ITEM ),
+            tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "==" ) ),
+            tree( PARAGRAPH_REGULAR )
+        )
+    ) ;
+  }
+
   @Test
   public void level1NestingLevel2NestingLevel3() {
     verifyRehierarchizeLevels(
@@ -295,17 +308,26 @@ public class HierarchizerTest {
       SyntacticTree expectedTree,
       SyntacticTree flatTree
   ) {
-    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
     LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
-    final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 
-    final Treepath rehierarchized = Hierarchizer.rehierarchizeLevels( flatTreepath ) ;
+    final Treepath rehierarchized = rehierarchizeLevels( flatTree ) ;
 
     TreeFixture.assertEquals(
         expectedTreepath,
         rehierarchized
     ) ;
+
+  }
+
+
+  private static Treepath< SyntacticTree > rehierarchizeLevels(
+      SyntacticTree flatTree
+  ) {
+    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
+    final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
+
+    return Hierarchizer.rehierarchizeLevels( flatTreepath ) ;
 
   }
 
