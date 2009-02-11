@@ -31,8 +31,7 @@ import com.google.common.base.Preconditions;
  * that are too complicated to handle inside the parser.
  *
  * <ol>
- * <li>All stuff like paragraph under a Delimiter3 becomes Delimiter3's child.
- * <li>All stuff like Section under a Delimiter2 becomes a Delimiter2's child.
+ * <li>{@link NodeKind#LEVEL_INTRODUCER_} become {@link novelang.parser.NodeKind#_LEVEL}.
  * <li>All contiguous List stuff becomes wrapped inside a
  *     {@link NodeKind#_LIST_WITH_TRIPLE_HYPHEN} node.
  * </ol>
