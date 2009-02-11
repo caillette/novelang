@@ -34,7 +34,9 @@ import novelang.book.function.IllegalFunctionCallException;
 import static novelang.book.function.FunctionTools.verify;
 
 /**
- * Creates a Section in a Book.
+ * Creates a level of depth 2 in a Book.
+ * 
+ * @deprecated With levels, there should be a function taking level depth as parameter.
  *
  * @author Laurent Caillette
  */
