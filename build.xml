@@ -91,6 +91,7 @@
   <target 
       name="display-properties"
       depends="init, login-on-remote-site"
+      description="Useful for debugging only."
   >
     <echo message="publish.remote.host=${publish.remote.host}" />
     <echo message="publish.remote.dir=${publish.remote.doc.dir}" />
@@ -479,11 +480,10 @@
       depends="login-on-remote-site"
       description="Copy documentation (except Javadoc) to SourceForge. Files must have been generated first!"
   >
-
-  <!--
-      Strange bug: the input task for the password never executes if we
-      set a dependency to the generate-documentation target.
-      So it has to be run explicitely before this target.
+    <!--
+      There has been a strange bug: the input task for the password never 
+      executing with a dependency to the generate-documentation target.
+      Finally, experience shows it's better to launch publishing apart.
     -->
     <scp
         todir="${publish.remote.user},${publish.remote.project}:${publish.remote.password}@${publish.remote.host}:${publish.remote.doc.dir}"
@@ -528,10 +528,6 @@
     
   </target>
 
-  <!--
-    It's unelegant to prompt for login / password before lengthy and failure prone operations
-    like generating documentation but otherwise there is some bug blocking password input.
-  -->
   <target
       name="publish-everything"
       depends="login-on-remote-site, publish-distrib, publish-javadoc, publish-documentation"
