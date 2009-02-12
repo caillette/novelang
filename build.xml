@@ -7,7 +7,7 @@
 
     Novelang is a lightweight authoring tool.
     
-    Ant-1.7.0 required. Use other version at your own risk!
+    Ant-1.7.1 required. Use other version at your own risk!
     
     ------------------------------------
 
@@ -42,7 +42,7 @@
     </tstamp>
 
     <!-- Overrides any other property. -->
-    <property file="${user.dir}/novelang.properties" />
+    <property file="${user.home}/.novelang-project.properties" />
 
     <property file="build.properties" />
 
@@ -87,23 +87,20 @@
 
   </target>
 
-  <target
-      name="verify-buildclasses-exist"
-      description="Set a property to tell if build classes are already compiled"
+  
+  <target 
+      name="display-properties"
+      depends="init, login-on-remote-site"
   >
-    <available
-        classname="${target.buildclasses.presencecondition}"
-        property="target-buildclass-exists"
-        value="false"
-    >
-      <classpath>
-        <pathelement path="${target.buildclasses.dir}" />
-      </classpath>
-    </available>
-
-    <echo message="target-buildclass-exists=${target-buildclass-exists}" />
-
+    <echo message="publish.remote.host=${publish.remote.host}" />
+    <echo message="publish.remote.dir=${publish.remote.doc.dir}" />
+    <echo message="publish.remote.javadoc.dir=${publish.remote.javadoc.dir}" />
+    <echo message="publish.remote.user=${publish.remote.user}" />
+    <echo message="publish.remote.project=${publish.remote.project}" />
+    <echo message="publish.remote.password=${publish.remote.password}" />
+    
   </target>
+  
 
   <target name="create-target-dir" depends="init" >
     <mkdir dir="${target.dir}" />
@@ -112,8 +109,8 @@
   </target>
 
 
-  <target name="clean" depends="init, verify-buildclasses-exist" >
-    <delete dir="${target.dir}" />  
+  <target name="clean" depends="init" >
+    <delete dir="${target.dir}" includeemptydirs="true" defaultexcludes="false" />  
   </target>
   
   
@@ -279,8 +276,8 @@
 
   <target
       name="clean-compile-runtests"
-      depends="clean, verify-buildclasses-exist, compile-tests, run-tests"
-      description="Run this one to run tests from clean"
+      depends="clean, compile-tests, run-tests"
+      description="Compile deployable stuff and run tests."
   /> 
   
 
@@ -410,12 +407,78 @@
     </java>
   </target -->
 
-  <target name="login-on-remote-site" depends="init">
-    <input message="Login on remote site ('user,project')" addproperty="user" />
-    <input message="Password on remote site" addproperty="password" />
+  
+  
+  
+  
+  <!--
+    =======
+    Publish
+    =======
+  -->
+
+  <target
+      name="ask-user-for-remote-site"
+      unless="publish.remote.user"
+      >
+    <input message="User on remote site" addproperty="publish.remote.user" />
   </target>
 
-  <target name="publish-documentation" depends="login-on-remote-site" >
+  <target
+      name="ask-project-for-remote-site"
+      unless="publish.remote.project"
+      >
+    <input message="Project on remote site" addproperty="publish.remote.project" />
+  </target>
+
+  <target
+      name="ask-password-for-remote-site"
+      unless="publish.remote.password"
+  >
+    <input 
+        message="Password for ${publish.remote.user} / ${publish.remote.project}" 
+        addproperty="publish.remote.password" 
+    />
+  </target>
+
+  <target 
+      name="login-on-remote-site" 
+      depends="init, ask-user-for-remote-site, ask-project-for-remote-site, ask-password-for-remote-site"
+      description="Set properties for user name, project name and password if not already done"
+  />
+
+  <target 
+      name="publish-distrib" 
+      depends="login-on-remote-site"
+      description="Copy documentation (except Javadoc) to SourceForge. Files must have been generated first!"
+  >
+
+    <scp
+        todir="${publish.remote.user}:${publish.remote.password}@${publish.remote.host}:uploads"
+        verbose="true"
+        sftp="true"
+        file="${target.distrib.path}"
+    />
+    <echo>
+      Now go to SourceForge project page, log in as "${publish.remote.user}" 
+      and choose "Admin > File releases". 
+      For the package name ${project.name}, select "Add Release" and create a release 
+      named "${project.version}".
+      In the next page, go to step 2 and select uploaded file (${target.distrib.name}).
+      Click on "Add Files and / or Refresh View".
+      Then go to the public download page and check that new release appears.
+    </echo>
+
+  </target>
+
+
+
+
+  <target 
+      name="publish-documentation" 
+      depends="login-on-remote-site"
+      description="Copy documentation (except Javadoc) to SourceForge. Files must have been generated first!"
+  >
 
   <!--
       Strange bug: the input task for the password never executes if we
@@ -423,7 +486,7 @@
       So it has to be run explicitely before this target.
     -->
     <scp
-        todir="${user}:${password}@${publish.remote.host}:${publish.remote.dir}"
+        todir="${publish.remote.user},${publish.remote.project}:${publish.remote.password}@${publish.remote.host}:${publish.remote.doc.dir}"
         verbose="true"
         sftp="true"
     >
@@ -433,16 +496,36 @@
   </target>
 
 
-  <target name="publish-javadoc" depends="login-on-remote-site" >
+  <target 
+      name="publish-javadoc" 
+      depends="login-on-remote-site"
+      description="Copy zipped javadoc to SourceForge and unzips through SSH command. Files must have been generated first!"
+  >
 
     <scp
-        todir="${user}:${password}@${publish.remote.host}:${publish.remote.javadoc.dir}"
+        todir="${publish.remote.user},${publish.remote.project}:${publish.remote.password}@${publish.remote.host}:${publish.remote.dir}"
         verbose="true"
         sftp="true"
-    >
-      <fileset dir="${target.javadoc.dir}" />
-    </scp>
+        file="${target.javadoc.zip}"
+    />
 
+    <property
+        name="command"
+        value="unzip -o -d ${publish.remote.javadoc.dir} ${publish.remote.dir}/${target.javadoc.zipfilename}" 
+    />
+    <echo>SSH command: ${command}</echo>
+ 
+    <sshexec
+        host="${publish.remote.shell}"
+        username="${publish.remote.user},${publish.remote.project}"
+        password="${publish.remote.password}"
+        command="${command}"
+        outputproperty="sshexecoutput"
+    />
+ 
+    <!--<echo>SSH output: ${sshexecoutput}</echo>-->
+    
+    
   </target>
 
   <!--
@@ -451,7 +534,7 @@
   -->
   <target
       name="publish-everything"
-      depends="login-on-remote-site, publish-documentation, publish-javadoc"
+      depends="login-on-remote-site, publish-distrib, publish-javadoc, publish-documentation"
   />
 
 
