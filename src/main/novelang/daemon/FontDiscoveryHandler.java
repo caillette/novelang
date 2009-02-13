@@ -43,7 +43,7 @@ public class FontDiscoveryHandler extends GenericHandler{
   private static final Logger LOGGER = LoggerFactory.getLogger( FontDiscoveryHandler.class ) ;
 
   private final RenderingConfiguration renderingConfiguration ;
-  private static final String DOCUMENT_NAME = "/~fonts.pdf" ;
+  public static final String DOCUMENT_NAME = "/~fonts.pdf" ;
   public static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
 
   public FontDiscoveryHandler( ProducerConfiguration producerConfiguration ) {

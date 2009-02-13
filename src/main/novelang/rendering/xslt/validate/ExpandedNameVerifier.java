@@ -77,11 +77,13 @@ public class ExpandedNameVerifier {
   private final List< BadExpandedName > badExpandedNames = Lists.newLinkedList() ;
 
   public void verify( Location location, String xpath ) {
-    final Matcher matcher = xpathPattern.matcher( xpath ) ;
-    while( matcher.find() && matcher.groupCount() == 1 ) {
-      final String elementName = matcher.group( 1 ) ;
-      if( ! nodeNames.contains( elementName ) ) {
-        badExpandedNames.add( new BadExpandedName( location, xpath, xmlPrefix, elementName ) ) ;
+    if ( null != xpathPattern ) {
+      final Matcher matcher = xpathPattern.matcher( xpath ) ;
+      while( matcher.find() && matcher.groupCount() == 1 ) {
+        final String elementName = matcher.group( 1 ) ;
+        if( ! nodeNames.contains( elementName ) ) {
+          badExpandedNames.add( new BadExpandedName( location, xpath, xmlPrefix, elementName ) ) ;
+        }
       }
     }
   }

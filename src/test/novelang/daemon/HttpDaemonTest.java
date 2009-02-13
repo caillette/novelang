@@ -79,6 +79,15 @@ public class HttpDaemonTest {
   }
 
   @Test
+  public void fontListingMakesNoSmoke() throws Exception {
+    setUp( "fontListingMakesNoSmoke" ) ;
+    final byte[] generated = readAsBytes(
+        new URL( "http://localhost:" + HTTP_DAEMON_PORT + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
+    save( "generated.pdf", generated ) ;
+    assertTrue( generated.length > 100 ) ;
+  }
+
+  @Test
   public void htmlOk() throws Exception {
     setUp( "htmlOk" ) ;
     final byte[] generated = readAsBytes(
@@ -251,7 +260,7 @@ public class HttpDaemonTest {
   private static final String HTML = "." + RenditionMimeType.HTML.getFileExtension() ;
 
   private static final String GOOD_PDF_DOCUMENT_NAME =
-      TestResources.SERVED_PART_GOOD_NOEXTENSION + PDF;
+      TestResources.SERVED_PART_GOOD_NOEXTENSION + PDF ;
 
   private static final String GOOD_HTML_DOCUMENT_NAME =
       TestResources.SERVED_PART_GOOD_NOEXTENSION + HTML ;
@@ -294,10 +303,11 @@ public class HttpDaemonTest {
 
     TestResources.copyServedResources( contentDirectory ) ;
 
-    httpDaemon = new HttpDaemon(
-
-        TestResources.createDaemonConfiguration( HTTP_DAEMON_PORT, contentDirectory, styleDirectoryName )
-    ) ;
+    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration( 
+        HTTP_DAEMON_PORT, 
+        contentDirectory, 
+        styleDirectoryName 
+    ) ) ;
     httpDaemon.start() ;
   }
 
