@@ -120,12 +120,6 @@ public class PartParserTest {
     ) ) ;
   }
 
-  @Test @Ignore
-  public void identifierIsSingleWord() throws RecognitionException {
-    PARSERMETHOD_HEADER_IDENTIFIER.checkTree( 
-        "\\\\my-Identifier", tree( IDENTIFIER, "my-Identifier" ) ) ;
-  }
-
   @Test
   public void wordCausedABug1() throws RecognitionException {
     PARSERMETHOD_WORD.checkTree( "myIdentifier", tree( WORD_, "myIdentifier" ) ) ;
@@ -199,16 +193,6 @@ public class PartParserTest {
     ) ) ;
   }
 
-  @Test @Ignore
-  public void paragraphIsSimplestListWithIdentifier() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
-        "--- w0", tree(
-        PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
-            tree( IDENTIFIER, "identifier"),
-            tree( WORD_, "w0" )
-        ) ) ;
-  }
-
 
   
   // Following tests are for paragraphBody rule. But we need to rely on a rule
@@ -222,16 +206,6 @@ public class PartParserTest {
         tree( WORD_, "w0" ),
         tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) )
     ) ) ;
-  }
-
-  @Test @Ignore
-  public void paragraphSingleWordWithIdentifier() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "\\identifier" + BREAK +
-        "w0", tree(
-        NodeKind.PARAGRAPH_REGULAR,
-            tree( IDENTIFIER, "identifier" ),
-            tree( WORD_, "w0" )
-        ) ) ;
   }
 
 
@@ -498,15 +472,6 @@ public class PartParserTest {
     );
   }
 
-  @Test @Ignore
-  public void sectionHasIdentifier()
-      throws RecognitionException
-  {
-    PARSERMETHOD_SECTION.checkTree( "=== s00", tree(
-        LEVEL_INTRODUCER_,
-            tree( LEVEL_TITLE, tree( WORD_, "s00") )
-        ) ) ;
-  }
 
   @Test
   public void sectionHasQuote()
@@ -710,24 +675,6 @@ public class PartParserTest {
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ) )
             ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p1" ) )
-        ) 
-    ) ;
-  }
-
-  @Test @Ignore
-  public void blockquoteWithIdentifier()
-      throws RecognitionException
-  {
-    PARSERMETHOD_PART.checkTree( 
-        "  \\identifier " + BREAK +
-        "<< w0" + BREAK +
-        ">>", tree(
-            PART,
-            tree(
-                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
-                tree( IDENTIFIER, "identifier" ),
-                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w0" ) )
-            )
         ) 
     ) ;
   }
@@ -1066,33 +1013,6 @@ public class PartParserTest {
         BREAK +
         " lobs " 
     );
-  }
-
-  @Test @Ignore
-  public void chapterIsAnonymousWithHeaderIdentifier()
-      throws RecognitionException
-  {
-    PARSERMETHOD_CHAPTER.checkTree( 
-        "==" + BREAK + 
-        "  \\\\identifier",
-        tree( LEVEL_INTRODUCER_, tree( IDENTIFIER, "identifier" ) )
-    ) ;
-  }
-
-  @Test @Ignore
-  public void chapterHasTitleAndHeaderIdentifier()
-      throws RecognitionException
-  {
-    PARSERMETHOD_CHAPTER.checkTree( 
-        "== Chapter has" + BREAK +
-        "title " + BREAK +
-        "  \\\\identifier", 
-        tree(
-            LEVEL_INTRODUCER_,
-            tree( LEVEL_TITLE, tree( WORD_, "Chapter"), tree( WORD_, "has" ), tree( WORD_, "title") ),
-            tree( IDENTIFIER, "identifier" )
-        ) 
-    ) ;
   }
 
   @Test
