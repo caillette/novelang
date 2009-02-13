@@ -18,8 +18,10 @@
 package novelang;
 
 import java.io.File;
+import java.util.Map;
 
 import org.apache.fop.apps.FopFactory;
+import org.apache.fop.fonts.EmbedFontInfo;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ProducerConfiguration;
@@ -30,6 +32,9 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.loader.ResourceLoaderTools;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The only place where constants referencing test-dedicated resources can be defined.
@@ -165,7 +170,13 @@ public class TestResources {
           }
 
           public FopFontStatus getCurrentFopFontStatus() {
-            throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
+            final Iterable< EmbedFontInfo > fontInfo = Iterables.emptyIterable() ;
+            final Map< String, EmbedFontInfo > failedFonts = ImmutableMap.of() ;
+            return new FopFontStatus( 
+                fontInfo, 
+                failedFonts
+            ) ;
+//            throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
           }
         } ;
       }
