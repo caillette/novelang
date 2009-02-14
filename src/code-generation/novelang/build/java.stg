@@ -1,8 +1,14 @@
 group java ;
 
-header( package ) ::= "package <package> ;"
-
-enumName( name ) ::= "public enum <name> "
+javadoc( generatorName, generationTimestamp ) ::= <<
+/**
+ * Don't modify this class manually nor check it in the VCS.
+ * Instead, run code generation which create Java source code from ANTLR grammar.
+ *
+ * Generated on <generationTimestamp>
+ * @author <generatorName>
+ */
+>>
 
 enumItem( item ) ::= <<
 <if(item.punctuationSign)>
@@ -13,7 +19,7 @@ enumItem( item ) ::= <<
 >>
 
 enum( package, name, items, generatorName, generationTimestamp ) ::= <<
-<header( package )>
+package <package> ;
 
 import java.util.Collections ;
 import java.util.Set ;
@@ -21,16 +27,8 @@ import com.google.common.base.Preconditions ;
 import com.google.common.collect.Sets ;
 import novelang.common.SyntacticTree ;
 
-
-/**
- * Don't modify this class manually nor check it in the VCS.
- * Instead, run code generation which takes tokens from ANTLR grammar.
- * Some tokens which are not present in ANTLR grammar are added by the code generator itself.
- *
- * Generated on <generationTimestamp>
- * @author <generatorName>
- */
-<enumName( name )> {
+<javadoc()>
+public enum <name> {
   <items : { item | <enumItem( item )>} ; separator = ", \n" > ;
 
   private final boolean punctuationSign ;
@@ -79,32 +77,62 @@ import novelang.common.SyntacticTree ;
 >>  
 
 
-characterItem( item ) ::= <<
-  '<item.declaration>'<if( item.comment )> /* <item.comment> */<endif>
+htmlEntityName( name ) ::= "<if( name )>, \"&<name>;\"<endif>"
+
+endOfLineComment( text ) ::= "<if( text )>// <text><endif>"
+
+lexemeAddition( lexeme ) ::= <<
+add( map, '<lexeme.asJavaCharacter>', "<lexeme.unicodeName>"<htmlEntityName( lexeme.htmlEntityName )> ) ; <endOfLineComment( lexeme.asJavaComment )>
 >>
 
-setOfCharacters( package, name, characters, generatorName, generationTimestamp ) ::= <<
-<header( package )>
+
+lexemesClass( package, name, lexemes, generatorName, generationTimestamp ) ::= <<
+package <package> ;
 
 import java.util.Set ;
-import com.google.common.collect.ImmutableSet ;
+import java.util.Map ;
+import com.google.common.collect.ImmutableMap ;
+import com.google.common.collect.Maps ;
 
-/**
- * Don't modify this class manually nor check it in the VCS.
- * Instead, run code generation which takes tokens from ANTLR grammar.
- *
- * Generated on <generationTimestamp>
- * @author <generatorName>
- */
+<javadoc()>
 public class <name> {
 
-  private static final Set\< Character > CHARACTERS = ImmutableSet.of(
-    <characters : { character | <characterItem( character )>} ; separator = ", \n" > 
-  ) ;
+  private static final Map\< Character, Lexeme > LEXEMES ;
 
-  public static synchronized Set\< Character > getSupportedCharacters() {
-    return CHARACTERS ;
+  static {
+    final Map\< Character, Lexeme > map = Maps.newHashMap() ;
+    
+    <lexemes : { lexeme | <lexemeAddition( lexeme )>} ; separator = "\n" >
+    LEXEMES = ImmutableMap.copyOf( map ) ;
   }
+
+  public static Set\< Character > getCharacters() {
+    return LEXEMES.keySet() ;
+  }
+
+  public static Map\< Character, Lexeme > getLexemes() {
+    return LEXEMES ;
+  }
+
+  private static void add(
+      Map\< Character, Lexeme > map,
+      Character character,
+      String unicodeName
+  ) {
+    add( map, character, unicodeName, null ) ;
+  }
+
+  private static void add(
+      Map\< Character, Lexeme > map,
+      Character character,
+      String unicodeName,
+      String htmlEntityName
+  ) {
+    final Lexeme lexeme = new Lexeme( unicodeName, character, htmlEntityName ) ;
+    map.put( lexeme.getCharacter(), lexeme ) ;
+  }
+
+
 
 }
 >>

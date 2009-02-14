@@ -65,7 +65,7 @@ public class Escape {
     escapedCharacters.put( "right-pointing-double-angle-quotation-mark", ESCAPE_END ) ; // »
     escapedCharactersAlternatives.put( "raquo", ESCAPE_END ) ;
     
-    escapedCharacters.put( "lower-than-sign", '<' ) ;
+    escapedCharacters.put( "less-than-sign", '<' ) ;
     escapedCharactersAlternatives.put( "lt", '<' ) ; 
     
     escapedCharacters.put( "greater-than-sign", '>' ) ;

@@ -32,13 +32,10 @@ import static novelang.parser.Escape.ESCAPE_END;
  */
 public class EscapeTest {
   
-  private static final Logger LOGGER = LoggerFactory.getLogger( EscapeTest.class ) ; 
-
   @Test
   public void escapeNotFoundMessageOk() throws NoUnescapedCharacterException {
     final String escapedCode = "does-not-exist";
     final String escaped = ESCAPE_START + escapedCode + ESCAPE_END ;
-    final String text = "Please escape " + escaped + "!" ;
     try {
       Escape.unescapeText( escaped ) ;
       Assert.fail( "Failed to catch exception" ) ;
@@ -79,7 +76,7 @@ public class EscapeTest {
         "a><",
         Escape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END +
-            ESCAPE_START + "lower-than-sign" + ESCAPE_END
+            ESCAPE_START + "less-than-sign" + ESCAPE_END
         )
     ) ;
   }
@@ -90,7 +87,7 @@ public class EscapeTest {
         "a>b<",
         Escape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
-            ESCAPE_START + "lower-than-sign" + ESCAPE_END
+            ESCAPE_START + "less-than-sign" + ESCAPE_END
         )
     ) ;
   }
@@ -101,7 +98,7 @@ public class EscapeTest {
         "a>b<c",
         Escape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
-                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "c"
+                ESCAPE_START + "less-than-sign" + ESCAPE_END + "c"
         )
     ) ;
   }
@@ -123,7 +120,7 @@ public class EscapeTest {
         "abc>d<e",
         Escape.unescapeText(
             "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
-                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "e"
+                ESCAPE_START + "less-than-sign" + ESCAPE_END + "e"
         )
     ) ;
   }
@@ -145,7 +142,7 @@ public class EscapeTest {
         "abc>d<ef",
         Escape.unescapeText(
             "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
-                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "ef"
+                ESCAPE_START + "less-than-sign" + ESCAPE_END + "ef"
         )
     ) ;
   }

@@ -32,7 +32,7 @@ import novelang.configuration.FontQuadruplet;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
-import novelang.parser.SupportedCharacters;
+import novelang.parser.GeneratedLexemes;
 import novelang.rendering.PdfWriter;
 import novelang.rendering.XslWriter;
 
@@ -85,8 +85,7 @@ public class FontDiscoveryStreamer {
 
     final Iterable< Character > supportedCharacters ;
     {
-      final Set< Character > characterSet =
-              Sets.newHashSet( SupportedCharacters.getSupportedCharacters() ) ;
+      final Set< Character > characterSet = Sets.newHashSet( GeneratedLexemes.getCharacters() ) ;
       characterSet.addAll( CHARACTERS_SUPPLEMENT ) ;
       characterSet.removeAll( CHARACTERS_TO_REMOVE ) ;
       supportedCharacters = CHARACTER_ORDERING.sortedCopy( characterSet ) ;
