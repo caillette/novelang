@@ -16,6 +16,8 @@
  */
 package novelang.parser;
 
+import java.nio.charset.Charset;
+
 import org.junit.Test;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -155,5 +157,19 @@ public class EscapeTest {
     ) ;
   }
 
+  @Test
+  public void escapeHtmlWithEncoding0() throws NoUnescapedCharacterException {
+    assertEquals(
+        "x&oelig;\u00e8",
+        Escape.escapeHtmlText( "x\u0153\u00e8", ISO_8859_1 ) 
+    ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private static final Charset ISO_8859_1 = Charset.forName( "ISO-8859-1" ) ;
 
 }
