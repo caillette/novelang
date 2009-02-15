@@ -46,7 +46,7 @@ public abstract class JavaGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger( JavaGenerator.class ) ;
 
   private static final String NODE_ENUMERATION_CLASSNAME = "NodeKind" ;
-  private static final String CHARACTER_SET_CLASSNAME = "SupportedCharacters" ;
+  private static final String LEXEMES_CLASSNAME = "GeneratedLexemes" ;
 
   protected static final String JAVA_EXTENSION = ".java" ;
 
@@ -155,11 +155,11 @@ public abstract class JavaGenerator {
           NODE_ENUMERATION_CLASSNAME,
           targetDirectory
       ).generate() ;
-      
-      new SupportedCharactersGenerator(
+
+      new LexemeGenerator(
           grammar,
           GENERIC_PARSER_PACKAGENAME,
-          CHARACTER_SET_CLASSNAME, 
+          LEXEMES_CLASSNAME,
           targetDirectory
       ).generate() ;
 

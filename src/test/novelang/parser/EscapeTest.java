@@ -16,6 +16,8 @@
  */
 package novelang.parser;
 
+import java.nio.charset.Charset;
+
 import org.junit.Test;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -32,13 +34,10 @@ import static novelang.parser.Escape.ESCAPE_END;
  */
 public class EscapeTest {
   
-  private static final Logger LOGGER = LoggerFactory.getLogger( EscapeTest.class ) ; 
-
   @Test
   public void escapeNotFoundMessageOk() throws NoUnescapedCharacterException {
     final String escapedCode = "does-not-exist";
     final String escaped = ESCAPE_START + escapedCode + ESCAPE_END ;
-    final String text = "Please escape " + escaped + "!" ;
     try {
       Escape.unescapeText( escaped ) ;
       Assert.fail( "Failed to catch exception" ) ;
@@ -79,7 +78,7 @@ public class EscapeTest {
         "a><",
         Escape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END +
-            ESCAPE_START + "lower-than-sign" + ESCAPE_END
+            ESCAPE_START + "less-than-sign" + ESCAPE_END
         )
     ) ;
   }
@@ -90,7 +89,7 @@ public class EscapeTest {
         "a>b<",
         Escape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
-            ESCAPE_START + "lower-than-sign" + ESCAPE_END
+            ESCAPE_START + "less-than-sign" + ESCAPE_END
         )
     ) ;
   }
@@ -101,7 +100,7 @@ public class EscapeTest {
         "a>b<c",
         Escape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
-                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "c"
+                ESCAPE_START + "less-than-sign" + ESCAPE_END + "c"
         )
     ) ;
   }
@@ -123,7 +122,7 @@ public class EscapeTest {
         "abc>d<e",
         Escape.unescapeText(
             "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
-                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "e"
+                ESCAPE_START + "less-than-sign" + ESCAPE_END + "e"
         )
     ) ;
   }
@@ -145,7 +144,7 @@ public class EscapeTest {
         "abc>d<ef",
         Escape.unescapeText(
             "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
-                ESCAPE_START + "lower-than-sign" + ESCAPE_END + "ef"
+                ESCAPE_START + "less-than-sign" + ESCAPE_END + "ef"
         )
     ) ;
   }
@@ -158,5 +157,19 @@ public class EscapeTest {
     ) ;
   }
 
+  @Test
+  public void escapeHtmlWithEncoding0() throws NoUnescapedCharacterException {
+    assertEquals(
+        "x&oelig;\u00e8",
+        Escape.escapeHtmlText( "x\u0153\u00e8", ISO_8859_1 ) 
+    ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private static final Charset ISO_8859_1 = Charset.forName( "ISO-8859-1" ) ;
 
 }

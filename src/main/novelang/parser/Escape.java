@@ -20,9 +20,12 @@ package novelang.parser;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.CharUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
@@ -65,7 +68,7 @@ public class Escape {
     escapedCharacters.put( "right-pointing-double-angle-quotation-mark", ESCAPE_END ) ; // »
     escapedCharactersAlternatives.put( "raquo", ESCAPE_END ) ;
     
-    escapedCharacters.put( "lower-than-sign", '<' ) ;
+    escapedCharacters.put( "less-than-sign", '<' ) ;
     escapedCharactersAlternatives.put( "lt", '<' ) ; 
     
     escapedCharacters.put( "greater-than-sign", '>' ) ;
@@ -106,6 +109,27 @@ public class Escape {
 
   public static String escapeHtml( Character unescaped ) {
     return ESCAPED_HTML_CHARACTERS.inverse().get( unescaped ) ;
+  }
+
+  /**
+   * Replaces a given character with HTML named entity if not a part of given charset,
+   * or returns the character itself.
+   * 
+   * @param unescaped a non-null object.
+   * @param charsetEncoder a non-null object, just used to see if encoding is possible.
+   * @return a non-null, non-empty String.
+   */
+  public static String maybeEscapeHtml( char unescaped, CharsetEncoder charsetEncoder ) {
+    final String htmlEscape1 = ESCAPED_HTML_CHARACTERS.inverse().get( unescaped ) ;
+    if( null ==  htmlEscape1 ) {
+      if( charsetEncoder.canEncode( unescaped ) ) {
+        return "" + unescaped ;
+      } else {
+        return "&" + CharUtils.unicodeEscaped( unescaped ) + ";" ;
+      }
+    } else {
+      return "&" + htmlEscape1 + ";" ;
+    }
   }
 
   public static Character unescapeCharacter( String escaped )
@@ -196,4 +220,15 @@ public class Escape {
     }
     return buffer.toString() ;
   }
+
+  public static String escapeHtmlText( String text, Charset charset ) {
+    final CharsetEncoder charsetEncoder = charset.newEncoder() ;
+    final StringBuffer buffer = new StringBuffer() ;
+    for( char c : text.toCharArray() ) {
+      final String escaped = maybeEscapeHtml( c, charsetEncoder ) ;
+      buffer.append( escaped ) ;
+    }
+    return buffer.toString() ;
+  }
+
 }
