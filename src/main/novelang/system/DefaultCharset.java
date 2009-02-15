@@ -19,7 +19,7 @@ package novelang.system;
 import java.nio.charset.Charset;
 
 /**
- * Default charset for parsed files.
+ * Default encoding for parsed files.
  * 
  * @author Laurent Caillette
  */

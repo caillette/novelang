@@ -36,6 +36,7 @@ import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.produce.DocumentRequest;
 import novelang.system.DefaultCharset;
+import novelang.common.LanguageTools;
 
 /**
  * Creates various Configuration objects from {@link GenericParameters}.
@@ -156,9 +157,29 @@ public class ConfigurationTools {
   public static ContentConfiguration createContentConfiguration(
       final GenericParameters parameters
   ) {
+    final Charset defaultSourceCharset ;
+    {
+      final Charset charset = parameters.getDefaultSourceCharset() ;
+      if( null == charset ) {
+        defaultSourceCharset = DefaultCharset.SOURCE ;
+        LOGGER.info(
+            "Default source charset is {} (from option {}).",
+            defaultSourceCharset.name(),
+            parameters.getDefaultSourceCharsetOptionDescription()
+        ) ;
+      } else {
+        defaultSourceCharset = charset ;
+        LOGGER.info( "Default source charset set as {}",
+            defaultSourceCharset.name() ) ;
+      }
+    }
+
     return new ContentConfiguration() {
       public File getContentRoot() {
         return parameters.getBaseDirectory() ;
+      }
+      public Charset getSourceCharset() {
+        return defaultSourceCharset ;
       }
     } ;
   }
@@ -203,6 +224,23 @@ public class ConfigurationTools {
 
     final ResourceLoader resourceLoader = createResourceLoader( parameters ) ;
 
+    final Charset defaultRenderingCharset ;
+    {
+      final Charset charset = parameters.getDefaultRenderingCharset() ;
+      if( null == charset ) {
+        defaultRenderingCharset = DefaultCharset.RENDERING ;
+        LOGGER.info(
+            "Default rendering charset is {} (from option {}).",
+            defaultRenderingCharset.name(),
+            parameters.getDefaultRenderingCharsetOptionDescription()
+        ) ;
+      } else {
+        defaultRenderingCharset = charset ;
+        LOGGER.info( "Default rendering charset set as {}",
+            defaultRenderingCharset.name() ) ;
+      }
+    }
+
     return new RenderingConfiguration() {
       public ResourceLoader getResourceLoader() {
         return resourceLoader ;
@@ -220,8 +258,7 @@ public class ConfigurationTools {
       }
 
       public Charset getDefaultCharset() {
-        // TODO
-        throw new UnsupportedOperationException( "getDefaultCharset" ) ;
+        return defaultRenderingCharset ;
       }
     } ;
 

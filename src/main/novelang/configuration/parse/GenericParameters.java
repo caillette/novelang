@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.List;
+import java.nio.charset.Charset;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -53,7 +54,8 @@ public abstract class GenericParameters {
   private final Iterable< File > fontDirectories ;
   private final File styleDirectory ;
   private final File hyphenationDirectory ;
-
+  private final Charset defaultSourceCharset ;
+  private final Charset defaultRenderingCharset ;
 
   private final File logDirectory ;
 
@@ -73,6 +75,8 @@ public abstract class GenericParameters {
     options.addOption( OPTION_STYLE_DIRECTORY ) ;
     options.addOption( OPTION_LOG_DIRECTORY ) ;
     options.addOption( OPTION_HYPHENATION_DIRECTORY ) ;
+    options.addOption( OPTION_DEFAULT_SOURCE_CHARSET ) ;
+    options.addOption( OPTION_DEFAULT_RENDERING_CHARSET ) ;
     enrich( options ) ;
 
     helpPrinter = new HelpPrinter( options ) ;
@@ -88,6 +92,20 @@ public abstract class GenericParameters {
       line = parser.parse( options, parameters ) ;
 
       logDirectory = extractDirectory( baseDirectory, OPTION_LOG_DIRECTORY, line, false ) ;
+
+      if( line.hasOption( OPTION_DEFAULT_SOURCE_CHARSET.getLongOpt() ) ) {
+        defaultSourceCharset = Charset.forName(
+            line.getOptionValue( OPTION_DEFAULT_SOURCE_CHARSET.getLongOpt() ) ) ;
+      } else {
+        defaultSourceCharset = null ;
+      }
+
+      if( line.hasOption( OPTION_DEFAULT_RENDERING_CHARSET.getLongOpt() ) ) {
+        defaultRenderingCharset = Charset.forName(
+            line.getOptionValue( OPTION_DEFAULT_RENDERING_CHARSET.getLongOpt() ) ) ;
+      } else {
+        defaultRenderingCharset = null ;
+      }
 
       styleDirectory = extractDirectory( baseDirectory, OPTION_STYLE_DIRECTORY, line ) ;
       hyphenationDirectory = extractDirectory( baseDirectory, OPTION_HYPHENATION_DIRECTORY, line ) ;
@@ -179,8 +197,35 @@ public abstract class GenericParameters {
     return logDirectory;
   }
 
+  /**
+   * Returns a human-readable of {@link #OPTION_DEFAULT_SOURCE_CHARSET}.
+   */
+  public String getDefaultSourceCharsetOptionDescription() {
+    return createOptionDescription( OPTION_DEFAULT_SOURCE_CHARSET ) ;
+  }
+  /**
+   * Returns the default charset for source documents.
+   * @return a null object if undefined, a valid {@code Charset} otherwise.
+   */
+  public Charset getDefaultSourceCharset() {
+    return defaultSourceCharset ;
+  }
 
-// ==========
+  /**
+   * Returns a human-readable of {@link #OPTION_DEFAULT_RENDERING_CHARSET}.
+   */
+  public String getDefaultRenderingCharsetOptionDescription() {
+    return createOptionDescription( OPTION_DEFAULT_RENDERING_CHARSET ) ;
+  }
+  /**
+   * Returns the default charset for rendering documents.
+   * @return a null object if undefined, a valid {@code Charset} otherwise.
+   */
+  public Charset getDefaultRenderingCharset() {
+    return defaultRenderingCharset;
+  }
+
+  // ==========
 // Extractors
 // ==========
 
@@ -259,6 +304,26 @@ public abstract class GenericParameters {
   private static final Option OPTION_STYLE_DIRECTORY = OptionBuilder
       .withLongOpt( "style-dir" )
       .withDescription( "Directory containing style files" )
+      .withValueSeparator()
+      .hasArg()
+      .create()
+  ;
+
+  public static final String OPTIONNAME_DEFAULT_SOURCE_CHARSET = "source-charset" ;
+
+  private static final Option OPTION_DEFAULT_SOURCE_CHARSET = OptionBuilder
+      .withLongOpt( OPTIONNAME_DEFAULT_SOURCE_CHARSET )
+      .withDescription( "Default charset for source documents" )
+      .withValueSeparator()
+      .hasArg()
+      .create()
+  ;
+
+  public static final String OPTIONNAME_DEFAULT_RENDERING_CHARSET = "rendering-charset" ;
+
+  private static final Option OPTION_DEFAULT_RENDERING_CHARSET = OptionBuilder
+      .withLongOpt( OPTIONNAME_DEFAULT_RENDERING_CHARSET )
+      .withDescription( "Default charset for rendered documents" )
       .withValueSeparator()
       .hasArg()
       .create()

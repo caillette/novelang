@@ -190,6 +190,9 @@ public class TestResources {
           public File getContentRoot() {
             return contentDirectory;
           }
+          public Charset getSourceCharset() {
+            return DefaultCharset.SOURCE ;
+          }
         } ;
       }
     } ;

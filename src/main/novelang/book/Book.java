@@ -20,10 +20,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
 import novelang.book.function.FunctionRegistry;
@@ -38,6 +40,7 @@ import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.DefaultBookParserFactory;
+import novelang.system.DefaultCharset;
 
 /**
  * Reads a Book file, processes functions and builds a Tree with inclusions and so on.
@@ -49,7 +52,46 @@ public class Book extends AbstractSourceReader {
   private final Environment environment ;
   private final SyntacticTree documentTree ;
 
-  public Book( FunctionRegistry functionRegistry, File baseDirectory, String content ) {
+  /**
+   * Only for tests.
+   */
+  public Book(
+      FunctionRegistry functionRegistry,
+      File baseDirectory,
+      String content
+  ) {
+    this(
+        functionRegistry,
+        baseDirectory,
+        content,
+        DefaultCharset.SOURCE,
+        DefaultCharset.RENDERING
+    ) ;
+  }
+
+  /**
+   * Only for tests.
+   */
+  public Book(
+      FunctionRegistry functionRegistry,
+      File bookFile
+  ) throws IOException {
+    this(
+        functionRegistry,
+        bookFile,
+        DefaultCharset.SOURCE, 
+        DefaultCharset.RENDERING
+    ) ;
+  }
+
+  public Book(
+      FunctionRegistry functionRegistry,
+      File baseDirectory,
+      String content,
+      Charset suggestedSourceCharset,
+      Charset defaultRenderingCharset
+  ) {
+    super( suggestedSourceCharset, defaultRenderingCharset ) ;
     final SyntacticTree rawTree = parse( new DefaultBookParserFactory(), content ) ;
     if( null == rawTree ) {
       this.environment = new Environment( baseDirectory ) ;
@@ -77,12 +119,19 @@ public class Book extends AbstractSourceReader {
 
   }
 
-  public Book( FunctionRegistry functionRegistry, File bookFile ) throws IOException {
+  public Book(
+      FunctionRegistry functionRegistry,
+      File bookFile,
+      Charset suggestedSourceCharset,
+      Charset suggestedRenderingCharset
+  ) throws IOException {
     this(
         functionRegistry,
         bookFile.getParentFile(),
-        IOUtils.toString( new FileInputStream( bookFile ) )
-    ) ;    
+        IOUtils.toString( new FileInputStream( bookFile ) ),
+        suggestedSourceCharset,
+        suggestedRenderingCharset
+    ); ;
   }
 
   public SyntacticTree getDocumentTree() {

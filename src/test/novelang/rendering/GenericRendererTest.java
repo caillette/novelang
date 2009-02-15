@@ -104,7 +104,7 @@ public class GenericRendererTest {
       public Iterable< Problem > getProblems() {
         return ImmutableList.of() ;
       }
-      public Charset getCharset() {
+      public Charset getRenderingCharset() {
         return DefaultCharset.RENDERING ;
       }
       public boolean hasProblem() {

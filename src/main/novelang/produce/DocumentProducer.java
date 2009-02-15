@@ -54,18 +54,13 @@ public class DocumentProducer {
 
   private final File basedir ;
   private final RenderingConfiguration renderingConfiguration ;
+  private final Charset defaultSourceCharset ;
 
-
-  protected DocumentProducer( File basedir, RenderingConfiguration renderingConfiguration ) {
-    this.basedir = basedir;
-    this.renderingConfiguration = renderingConfiguration;
-  }
 
   public DocumentProducer( ProducerConfiguration configuration ) {
-    this(
-        configuration.getContentConfiguration().getContentRoot(),
-        configuration.getRenderingConfiguration()
-    ) ;
+    this.basedir = configuration.getContentConfiguration().getContentRoot() ;
+    this.renderingConfiguration = configuration.getRenderingConfiguration() ;
+    this.defaultSourceCharset = configuration.getContentConfiguration().getSourceCharset() ;
   }
 
   public Iterable< Problem > produce(
@@ -98,7 +93,7 @@ public class DocumentProducer {
         rendered.getCustomStylesheetMap().get( mimeType )
     ) ;
 
-    final Charset charset = rendered.getCharset() ;
+    final Charset charset = rendered.getRenderingCharset() ;
 
     switch( mimeType ) {
 
@@ -146,6 +141,7 @@ public class DocumentProducer {
   public Renderable createRenderable( AbstractRequest documentRequest )
       throws IOException
   {
+    final Charset suggestedRenderingCharset = renderingConfiguration.getDefaultCharset() ;
 
     try {
       final File bookFile = FileTools.load(
@@ -153,14 +149,19 @@ public class DocumentProducer {
           documentRequest.getDocumentSourceName(),
           StructureKind.BOOK.getFileExtensions()
       ) ;
-      return new Book( FunctionRegistry.getStandardRegistry(), bookFile ) ;
+      return new Book(
+          FunctionRegistry.getStandardRegistry(),
+          bookFile,
+          defaultSourceCharset,
+          suggestedRenderingCharset
+      ) ;
     } catch( FileNotFoundException e ) {
       final File partFile = FileTools.load(
           basedir,
           documentRequest.getDocumentSourceName(),
           StructureKind.PART.getFileExtensions()
       ) ;
-      return new Part( partFile, true ) ;
+      return new Part( partFile, defaultSourceCharset, suggestedRenderingCharset, true ) ;
     }
 
   }

@@ -18,6 +18,7 @@
 package novelang.configuration;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
 /**
  * @author Laurent Caillette
@@ -25,4 +26,6 @@ import java.io.File;
 public interface ContentConfiguration {
 
   File getContentRoot() ;
+
+  Charset getSourceCharset() ;
 }

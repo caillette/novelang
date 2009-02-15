@@ -184,7 +184,7 @@ public class SplitByChapter {
       return ImmutableList.of() ;
     }
 
-    public Charset getCharset() {
+    public Charset getRenderingCharset() {
       return charset;
     }
 

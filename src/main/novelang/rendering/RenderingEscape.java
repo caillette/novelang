@@ -81,7 +81,7 @@ public class RenderingEscape {
    * @param capability non-null object.
    * @return a non-null, non-empty String.
    */
-  public static String maybeEscapeHtml( char unescaped, CharsetEncodingCapability capability ) {
+  public static String escapeHtmlIfNeeded( char unescaped, CharsetEncodingCapability capability ) {
     final String mandatoryEscape = HTML_MANDATORY_ESCAPES.get( unescaped ) ;
     if( null == mandatoryEscape ) {
       if( capability.canEncode( unescaped ) ) {
@@ -102,7 +102,7 @@ public class RenderingEscape {
   public static String escapeHtmlText( String text, CharsetEncodingCapability capability ) {
     final StringBuffer buffer = new StringBuffer() ;
     for( char c : text.toCharArray() ) {
-      final String escaped = maybeEscapeHtml( c, capability ) ;
+      final String escaped = escapeHtmlIfNeeded( c, capability ) ;
       buffer.append( escaped ) ;
     }
     return buffer.toString() ;

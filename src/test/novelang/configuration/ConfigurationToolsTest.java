@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.Set;
+import java.nio.charset.Charset;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
@@ -32,6 +33,7 @@ import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import static novelang.TestResourceTools.copyResourceToDirectory;
 import novelang.TestResources;
+import novelang.system.DefaultCharset;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.BatchParameters;
 import novelang.configuration.parse.DaemonParameters;
@@ -76,6 +78,10 @@ public class ConfigurationToolsTest {
     final DaemonConfiguration configuration =
         ConfigurationTools.createDaemonConfiguration( createDaemonParameters() ) ;
     Assert.assertEquals( ConfigurationTools.DEFAULT_HTTP_DAEMON_PORT, configuration.getPort() ) ;
+    Assert.assertEquals(
+        DefaultCharset.RENDERING,
+        configuration.getProducerConfiguration().getRenderingConfiguration().getDefaultCharset()
+    ) ;
   }
 
 
@@ -164,6 +170,20 @@ public class ConfigurationToolsTest {
 
   }
 
+  @Test
+  public void createRenderingConfigurationWithRenderingCharset() 
+      throws ArgumentException, FOPException
+  {
+    final DaemonParameters parameters = createDaemonParameters(
+        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_RENDERING_CHARSET,
+        ISO_8859_2.name()
+    ) ;
+    final RenderingConfiguration renderingConfiguration = ConfigurationTools
+        .createRenderingConfiguration( parameters ) ;
+    Assert.assertNotNull( renderingConfiguration.getDefaultCharset() ) ;
+    Assert.assertEquals( ISO_8859_2, renderingConfiguration.getDefaultCharset() ) ;
+  }
+
 
 // ====================
 // ContentConfiguration
@@ -174,6 +194,20 @@ public class ConfigurationToolsTest {
     final ContentConfiguration contentConfiguration =
         ConfigurationTools.createContentConfiguration( createDaemonParameters() ) ;
     Assert.assertEquals( scratchDirectory, contentConfiguration.getContentRoot() ) ; 
+  }
+
+  @Test
+  public void createContentConfigurationWithSourceCharset()
+      throws ArgumentException, FOPException
+  {
+    final DaemonParameters parameters = createDaemonParameters(
+        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET,
+        MAC_ROMAN.name()
+    ) ;
+    final ContentConfiguration contentConfiguration = ConfigurationTools
+        .createContentConfiguration( parameters ) ;
+    Assert.assertNotNull( contentConfiguration.getSourceCharset() ) ;
+    Assert.assertEquals( MAC_ROMAN, contentConfiguration.getSourceCharset() ) ;
   }
 
 
@@ -214,6 +248,9 @@ public class ConfigurationToolsTest {
     return scratchDirectory.getAbsoluteFile().toURI().toURL().toExternalForm()
         + fontFileName.substring( 1 );
   }
+
+  private static final Charset ISO_8859_2 = Charset.forName( "ISO-8859-2" );
+  private static final Charset MAC_ROMAN = Charset.forName( "MacRoman" );
 
   private static final String FONT_STRUCTURE_DIR = TestResources.FONT_STRUCTURE_DIR ;
   private static final String DEFAULT_FONTS_DIR = TestResources.DEFAULT_FONTS_DIR ;

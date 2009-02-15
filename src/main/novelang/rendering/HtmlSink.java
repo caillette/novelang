@@ -19,6 +19,8 @@ package novelang.rendering;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -37,8 +39,9 @@ public class HtmlSink implements ContentHandler {
 
   private final PrintWriter writer ;
 
-  public HtmlSink( OutputStream outputStream ) {
-    this.writer = new PrintWriter( outputStream, true ) ;
+  public HtmlSink( OutputStream outputStream, Charset charset ) {
+    final OutputStreamWriter outputStreamWriter = new OutputStreamWriter( outputStream, charset ) ;    
+    this.writer = new PrintWriter( outputStreamWriter, true ) ;
   }
 
   private static boolean isElementIWorthALineBreak( String elementName ) {

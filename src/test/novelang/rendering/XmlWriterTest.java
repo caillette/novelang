@@ -69,7 +69,7 @@ public class XmlWriterTest {
       return null;
     }
 
-    public Charset getCharset() {
+    public Charset getRenderingCharset() {
       return DefaultCharset.RENDERING;
     }
 

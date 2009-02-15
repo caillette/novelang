@@ -42,13 +42,61 @@ public class Part extends AbstractSourceReader {
   private final boolean standalone;
 
 
+  /**
+   * Only for tests.
+   */
   public Part( String content ) {
     this( content, false ) ; // Would be logical to make it true but would pollute the tests.
   }
 
+  /**
+   * Only for tests.
+   */
   public Part( String content, boolean standalone ) {
     this.standalone = standalone ; 
     tree = createTree( content ) ;
+  }
+
+  /**
+   * Only for tests.
+   */
+  public Part( final File partFile ) throws MalformedURLException {
+    this( partFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING, false ) ;
+  }
+
+  /**
+   * Only for tests.
+   */
+  public Part( final File partFile, boolean standalone ) throws MalformedURLException {
+    this( partFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING, standalone ) ;
+  }
+
+  public Part(
+      final File partFile,
+      Charset sourceCharset,
+      Charset suggestedRenderingCharset,
+      boolean standalone
+  ) throws MalformedURLException {
+    this(
+        partFile.toURI().toURL(),
+        sourceCharset,
+        suggestedRenderingCharset,
+        "part[" + partFile.getName() + "]",
+        standalone
+    ) ;
+
+  }
+
+  protected Part(
+      URL partUrl,
+      Charset sourceCharset,
+      Charset suggestedRenderingCharset,
+      String thisToString,
+      boolean standalone
+  ) {
+    super( partUrl, sourceCharset, suggestedRenderingCharset, thisToString ) ;
+    this.standalone = standalone ;
+    tree = createTree( readContent( partUrl ) ) ;
   }
 
   private SyntacticTree createTree( String content ) {
@@ -66,36 +114,11 @@ public class Part extends AbstractSourceReader {
     }
   }
 
-  public Part( final File partFile ) throws MalformedURLException {
-    this( partFile, false ) ;
-  }
-
-  public Part( final File partFile, boolean standalone ) throws MalformedURLException {
-    this(
-        partFile.toURI().toURL(),
-        DefaultCharset.SOURCE,
-        "part[" + partFile.getName() + "]",
-        standalone
-    ) ;
-
-  }
-
-  protected Part(
-      URL partUrl,
-      Charset charset,
-      String thisToString,
-      boolean standalone
-  ) {
-    super( partUrl, charset, thisToString ) ;
-    this.standalone = standalone ;
-    tree = createTree( readContent( partUrl, charset ) ) ;
-  }
-
   public StylesheetMap getCustomStylesheetMap() {
     return StylesheetMap.EMPTY_MAP ;
   }
 
-  // ==============
+// ==============
 // Content access
 // ==============
 

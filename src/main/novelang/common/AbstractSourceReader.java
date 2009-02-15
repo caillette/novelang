@@ -47,36 +47,61 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   private final String thisToString ;
   private final List< Problem > problems = Lists.newArrayList() ;
   protected final String locationName ;
-  protected final Charset charset;
+  protected final Charset sourceCharset ;
+  protected final Charset renderingCharset ;
 
   public AbstractSourceReader() {
     this.thisToString = ClassUtils.getShortClassName( getClass() ) +
         "@" + System.identityHashCode( this ) ;
     this.locationName = "<String>" ;
-    this.charset = Preconditions.checkNotNull( DefaultCharset.SOURCE ) ;
+    this.sourceCharset = DefaultCharset.SOURCE ;
+    this.renderingCharset = DefaultCharset.RENDERING ;
+  }
+
+  public AbstractSourceReader( Charset sourceCharset, Charset defaultRenderingCharset ) {
+    this.thisToString = ClassUtils.getShortClassName( getClass() ) +
+        "@" + System.identityHashCode( this ) ;
+    this.locationName = "<String>" ;
+    this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
+    this.renderingCharset = Preconditions.checkNotNull( defaultRenderingCharset ) ;
+    LOGGER.debug(
+        "Creating " + thisToString + "[" +
+        "sourceCharset=" + sourceCharset.name() + ", " +
+        "renderingCharset=" + renderingCharset.name() +
+        "]" 
+    ) ;
   }
 
   protected AbstractSourceReader(
       URL partUrl,
-      Charset charset,
+      Charset sourceCharset,
+      Charset renderingCharset,
       String thisToString
   ) {
     this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
     this.locationName = partUrl.toExternalForm() ;
-    this.charset = Preconditions.checkNotNull( charset ) ;
+    this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
+    this.renderingCharset = Preconditions.checkNotNull( renderingCharset ) ;
+    LOGGER.debug(
+        "Creating " + thisToString + "[" +
+        "locationName='" + locationName + "', " +
+        "sourceCharset=" + sourceCharset.name() + ", " +
+        "renderingCharset=" + renderingCharset.name() +
+        "]"
+    ) ;
   }
 
-  protected String readContent( URL partUrl, Charset charset ) {
+  protected String readContent( URL partUrl ) {
 
     LOGGER.info(
-        "Attempting to load file '{}' from {} with charset " + charset.name(),
+        "Attempting to load file '{}' from {} with charset " + sourceCharset.name(),
         partUrl.toExternalForm(), 
         this
     ) ;
 
     try {
       final InputStream inputStream = partUrl.openStream() ;
-      return IOUtils.toString( inputStream, charset.name() ) ;
+      return IOUtils.toString( inputStream, sourceCharset.name() ) ;
 
     } catch( IOException e ) {
       LOGGER.warn( "Could not load file", e ) ;
@@ -138,8 +163,8 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     return new Location( locationName, line, column ) ;
   }
 
-  public Charset getCharset() {
-    return charset;
+  public Charset getRenderingCharset() {
+    return renderingCharset;
   }
 
 
