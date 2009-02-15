@@ -61,7 +61,7 @@ public class MetadataHelper {
   }
 
 
-  public static DocumentMetadata createMetadata( final Charset encoding ) {
+  public static DocumentMetadata createMetadata( final Charset charset ) {
 
     final ReadableDateTime timestamp = createTimestamp() ;
 
@@ -70,8 +70,8 @@ public class MetadataHelper {
         return timestamp ;
       }
 
-      public Charset getEncoding() {
-        return encoding ;
+      public Charset getCharset() {
+        return charset ;
       }
     } ;
   }

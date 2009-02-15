@@ -27,6 +27,6 @@ import org.joda.time.ReadableDateTime;
 public interface DocumentMetadata {
 
   public ReadableDateTime getCreationTimestamp() ;
-  public Charset getEncoding() ;
+  public Charset getCharset() ;
 
 }

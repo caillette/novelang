@@ -29,7 +29,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
 import novelang.parser.NodeKindTools;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import com.google.common.base.Preconditions;
 
 /**
@@ -44,7 +44,7 @@ public class XmlWriter implements FragmentWriter {
   private final RenditionMimeType mimeType ;
 
   public XmlWriter( RenditionMimeType mimeType ) {
-    this( NAMESPACE_URI, NAME_QUALIFIER, Encoding.RENDERING, mimeType ) ;
+    this( NAMESPACE_URI, NAME_QUALIFIER, DefaultCharset.RENDERING, mimeType ) ;
   }
 
   public XmlWriter(

@@ -33,9 +33,8 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.loader.ResourceLoaderTools;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -181,7 +180,7 @@ public class TestResources {
 //            throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
           }
           public Charset getDefaultCharset() {
-            return Encoding.RENDERING ;
+            return DefaultCharset.RENDERING ;
           }
         } ;
       }

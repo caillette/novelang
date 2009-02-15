@@ -30,7 +30,7 @@ import novelang.rendering.font.SyntheticFontMapTest;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import novelang.rendering.XslWriter;
 
 /**
@@ -78,7 +78,7 @@ public class FontDiscoveryStreamerTest {
   private static final ClasspathResourceLoader RESOURCE_LOADER =
       new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
   
-  private static final Charset ENCODING = Encoding.SOURCE;
+  private static final Charset ENCODING = DefaultCharset.RENDERING;
 
   private static final RenderingConfiguration HOLLOW_RENDERING_CONFIGURATION =
       new RenderingConfiguration() {
@@ -93,7 +93,7 @@ public class FontDiscoveryStreamerTest {
         }
 
         public Charset getDefaultCharset() {
-          return Encoding.RENDERING ;
+          return DefaultCharset.RENDERING ;
         }
       }
   ;

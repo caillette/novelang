@@ -37,7 +37,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.tree.TreeTools;
 import novelang.common.metadata.MetadataHelper;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import novelang.parser.GenericParser;
 import novelang.parser.GenericParserFactory;
 
@@ -52,36 +52,36 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   private final String thisToString ;
   private final List< Problem > problems = Lists.newArrayList() ;
   protected final String locationName ;
-  protected final Charset encoding ;
+  protected final Charset charset;
 
   public AbstractSourceReader() {
     this.thisToString = ClassUtils.getShortClassName( getClass() ) +
         "@" + System.identityHashCode( this ) ;
     this.locationName = "<String>" ;
-    this.encoding = Preconditions.checkNotNull( Encoding.SOURCE ) ;
+    this.charset = Preconditions.checkNotNull( DefaultCharset.SOURCE ) ;
   }
 
   protected AbstractSourceReader(
       URL partUrl,
-      Charset encoding,
+      Charset charset,
       String thisToString
   ) {
     this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
     this.locationName = partUrl.toExternalForm() ;
-    this.encoding = Preconditions.checkNotNull( encoding ) ;
+    this.charset = Preconditions.checkNotNull( charset ) ;
   }
 
-  protected String readContent( URL partUrl, Charset encoding ) {
+  protected String readContent( URL partUrl, Charset charset ) {
 
     LOGGER.info(
-        "Attempting to load file '{}' from {} with encoding " + encoding.name(),
+        "Attempting to load file '{}' from {} with charset " + charset.name(),
         partUrl.toExternalForm(), 
         this
     ) ;
 
     try {
       final InputStream inputStream = partUrl.openStream() ;
-      return IOUtils.toString( inputStream, encoding.name() ) ;
+      return IOUtils.toString( inputStream, charset.name() ) ;
 
     } catch( IOException e ) {
       LOGGER.warn( "Could not load file", e ) ;
@@ -144,7 +144,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
 
   public Charset getCharset() {
-    return encoding ;
+    return charset;
   }
 
 

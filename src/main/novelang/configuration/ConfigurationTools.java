@@ -23,8 +23,6 @@ import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.ClassUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FOPException;
 import novelang.configuration.parse.DaemonParameters;
@@ -35,7 +33,7 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.produce.DocumentRequest;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 
@@ -65,7 +63,7 @@ public class ConfigurationTools {
   public static final String BUNDLED_STYLE_DIR = "style" ;
   private static final String DEFAULT_STYLE_DIR = "style" ;
   public static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
-  public static final Charset DEFAULT_RENDERING_CHARSET = Encoding.RENDERING ;
+  public static final Charset DEFAULT_RENDERING_CHARSET = DefaultCharset.RENDERING ;
 
   public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters )
       throws FOPException

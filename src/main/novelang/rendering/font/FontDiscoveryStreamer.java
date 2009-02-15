@@ -99,7 +99,7 @@ public class FontDiscoveryStreamer {
       public ReadableDateTime getCreationTimestamp() {
         return new DateTime() ; // No null allowed!
       }
-      public Charset getEncoding() {
+      public Charset getCharset() {
         return encoding ;
       }
     } ;

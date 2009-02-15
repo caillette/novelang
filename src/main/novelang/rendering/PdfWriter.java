@@ -69,7 +69,7 @@ public class PdfWriter extends XslWriter {
   protected final ContentHandler createSinkContentHandler(
       OutputStream outputStream,
       DocumentMetadata documentMetadata,
-      Charset encoding
+      Charset charset
   )
       throws FOPException
   {

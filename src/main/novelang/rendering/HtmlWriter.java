@@ -63,7 +63,7 @@ public class HtmlWriter extends XslWriter {
   protected ContentHandler createSinkContentHandler(
       OutputStream outputStream,
       DocumentMetadata documentMetadata,
-      Charset encoding
+      Charset charset
   ) throws Exception {
     return new HtmlSink( outputStream ) ; 
   }

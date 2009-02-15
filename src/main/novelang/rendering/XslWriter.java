@@ -47,7 +47,7 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.parser.NodeKindTools;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import novelang.rendering.xslt.validate.SaxMulticaster;
 
@@ -67,7 +67,7 @@ public class XslWriter extends XmlWriter {
   protected final EntityEscapeSelector entityEscapeSelector ;
 
   public XslWriter( RenderingConfiguration configuration, ResourceName xslFileName ) {
-    this( configuration, xslFileName, Encoding.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
+    this( configuration, xslFileName, DefaultCharset.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
   }
 
   public XslWriter(
@@ -97,7 +97,7 @@ public class XslWriter extends XmlWriter {
         nameQualifier,
         configuration,
         xslFileName,
-        Encoding.RENDERING,
+        DefaultCharset.RENDERING,
         mimeType,
         NO_ENTITY_ESCAPE
     ) ;
@@ -195,7 +195,7 @@ public class XslWriter extends XmlWriter {
     ) ;
     transformer.setParameter(
         "encoding",
-        documentMetadata.getEncoding().name()
+        documentMetadata.getCharset().name()
     ) ;
   }
 

@@ -34,7 +34,7 @@ import novelang.common.metadata.DocumentMetadata;
 import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.StylesheetMap;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import novelang.parser.NodeKind;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -92,20 +92,20 @@ public class GenericRendererTest {
 
   private String getRenderedText() {
     try {
-      return new String( outputStream.toByteArray(), Encoding.SOURCE.name() ) ;
+      return new String( outputStream.toByteArray(), DefaultCharset.RENDERING.name() ) ;
     } catch( UnsupportedEncodingException e ) {
       throw new RuntimeException( e ) ;
     }
   }
 
   private static Renderable createRenderable( final SyntacticTree tree ) {
-    final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( Encoding.SOURCE ) ;
+    final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( DefaultCharset.RENDERING ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
         return ImmutableList.of() ;
       }
       public Charset getCharset() {
-        return Encoding.SOURCE;
+        return DefaultCharset.RENDERING ;
       }
       public boolean hasProblem() {
         return false;

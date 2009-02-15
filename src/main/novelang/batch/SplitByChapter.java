@@ -39,8 +39,6 @@ import novelang.common.SyntacticTree;
 import novelang.configuration.RenderingConfiguration;
 import novelang.parser.NodeKind;
 import novelang.part.Part;
-import novelang.rendering.GenericRenderer;
-import novelang.rendering.NlpWriter;
 
 /**
  * Splits one Part file in many files with the name of its chapters (Identifier or Title).
@@ -175,11 +173,11 @@ public class SplitByChapter {
 
   private static class RenderableChapter implements Renderable {
     private final SyntacticTree child ;
-    private final Charset encoding ;
+    private final Charset charset;
 
-    private RenderableChapter( SyntacticTree child, Charset encoding ) {
+    private RenderableChapter( SyntacticTree child, Charset charset ) {
       this.child = child;
-      this.encoding = encoding;
+      this.charset = charset;
     }
 
     public Iterable<Problem> getProblems() {
@@ -187,7 +185,7 @@ public class SplitByChapter {
     }
 
     public Charset getCharset() {
-      return encoding ;
+      return charset;
     }
 
     public boolean hasProblem() {

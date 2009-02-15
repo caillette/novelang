@@ -26,7 +26,7 @@ import org.apache.fop.apps.FopFactory;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.DateTime;
 import novelang.common.metadata.DocumentMetadata;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.FopFontStatus;
 import novelang.loader.ResourceLoader;
@@ -106,8 +106,8 @@ public class XslWriterTest {
       return timestamp ;
     }
 
-    public Charset getEncoding() {
-      return Encoding.SOURCE;
+    public Charset getCharset() {
+      return DefaultCharset.RENDERING;
     }
   }
 
@@ -140,7 +140,7 @@ public class XslWriterTest {
     }
 
     public Charset getDefaultCharset() {
-      return Encoding.RENDERING ;
+      return DefaultCharset.RENDERING ;
     }
   }
 }

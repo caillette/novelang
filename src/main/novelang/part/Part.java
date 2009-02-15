@@ -27,7 +27,7 @@ import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import novelang.parser.antlr.DefaultPartParserFactory;
 
 /**
@@ -73,7 +73,7 @@ public class Part extends AbstractSourceReader {
   public Part( final File partFile, boolean standalone ) throws MalformedURLException {
     this(
         partFile.toURI().toURL(),
-        Encoding.SOURCE,
+        DefaultCharset.SOURCE,
         "part[" + partFile.getName() + "]",
         standalone
     ) ;
@@ -82,13 +82,13 @@ public class Part extends AbstractSourceReader {
 
   protected Part(
       URL partUrl,
-      Charset encoding,
+      Charset charset,
       String thisToString,
       boolean standalone
   ) {
-    super( partUrl, encoding, thisToString ) ;
+    super( partUrl, charset, thisToString ) ;
     this.standalone = standalone ;
-    tree = createTree( readContent( partUrl, encoding ) ) ;
+    tree = createTree( readContent( partUrl, charset ) ) ;
   }
 
   public StylesheetMap getCustomStylesheetMap() {

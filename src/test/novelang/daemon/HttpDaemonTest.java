@@ -46,7 +46,7 @@ import novelang.TestResources;
 import novelang.rendering.RenditionMimeType;
 import novelang.produce.RequestTools;
 import novelang.configuration.ConfigurationTools;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 
 /**
  * End-to-end tests with {@link HttpDaemon} and the download of some generated documents.
@@ -299,7 +299,7 @@ public class HttpDaemonTest {
     contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
 
     goodNlpSource = TestResourceTools.readStringResource(
-        getClass(), GOOD_NLP_RESOURCE_NAME, Encoding.SOURCE ) ;
+        getClass(), GOOD_NLP_RESOURCE_NAME, DefaultCharset.SOURCE ) ;
 
     TestResources.copyServedResources( contentDirectory ) ;
 

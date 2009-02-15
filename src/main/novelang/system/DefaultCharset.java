@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.parser;
+package novelang.system;
 
 import java.nio.charset.Charset;
 
@@ -23,9 +23,9 @@ import java.nio.charset.Charset;
  * 
  * @author Laurent Caillette
  */
-public class Encoding {
+public class DefaultCharset {
 
-  private Encoding() { }
+  private DefaultCharset() { }
 
   public static final Charset SOURCE ;
   public static final Charset RENDERING ;

@@ -302,7 +302,7 @@
         <pathelement location="${source.style.default.dir}" />
       </classpath>
       <jvmarg value="-Duser.dir=${user.dir}" /> <!-- Override Ant's basedir -->
-      <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
+      <jvmarg value="-Dfile.encoding=${novelang.sources.charset}" />
       <jvmarg value="-Dnovelang.log.dir=${user.dir}" />
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Xmx512M" />
@@ -365,7 +365,7 @@
       </classpath>
       <jvmarg value="-Xmx512M" />
       <jvmarg value="-Djava.awt.headless=true" />
-      <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
+      <jvmarg value="-Dfile.encoding=${novelang.sources.charset}" />
       <arg value="--log-dir=${logdestination}" />
       <arg value="--font-dirs=${source.documentation.fonts.dir}" />
       <arg value="--output-dir=${absolutetarget}" />
@@ -387,7 +387,8 @@
   </target>
 
 
-  <!-- target name="split" depends="init" >
+<!--
+  <target name="split" depends="init" >
     <java
         classname="novelang.batch.SplitByChapter"
         failonerror="true"
@@ -399,14 +400,15 @@
         <pathelement location="${target.mainclasses.dir}" />
         <pathelement location="${configuration.main.dir}" />
       </classpath>
-      <jvmarg value="-Dfile.encoding=${novelang.encoding}" />
+      <jvmarg value="-Dfile.encoding=${novelang.sources.charset}" />
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Dnovelang.log.dir=${logdestination}" />
       <jvmarg value="-Xmx512M" />
       <arg value="${split.bookfile}" />
       <arg value="${split.destination}" />
     </java>
-  </target -->
+  </target>
+-->
 
   
   

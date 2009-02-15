@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.font.FontDiscoveryStreamer;
 
@@ -62,7 +62,7 @@ public class FontDiscoveryHandler extends GenericHandler{
 
       response.setStatus( HttpServletResponse.SC_OK ) ;
       try {
-        fontDiscoveryStreamer.generate( response.getOutputStream(), Encoding.SOURCE ) ;
+        fontDiscoveryStreamer.generate( response.getOutputStream(), DefaultCharset.SOURCE ) ;
       } catch( Exception e ) {
         throw new RuntimeException( e );
       }

@@ -111,27 +111,6 @@ public class SourceUnescape {
     return ESCAPED_HTML_CHARACTERS.inverse().get( unescaped ) ;
   }
 
-  /**
-   * Replaces a given character with HTML named entity if not a part of given charset,
-   * or returns the character itself.
-   *
-   * @param unescaped a non-null object.
-   * @param charsetEncoder a non-null object, just used to see if encoding is possible.
-   * @return a non-null, non-empty String.
-   */
-  public static String maybeEscapeHtml( char unescaped, CharsetEncoder charsetEncoder ) {
-    final String htmlEscape1 = ESCAPED_HTML_CHARACTERS.inverse().get( unescaped ) ;
-    if( null ==  htmlEscape1 ) {
-      if( charsetEncoder.canEncode( unescaped ) ) {
-        return "" + unescaped ;
-      } else {
-        return "&" + CharUtils.unicodeEscaped( unescaped ) + ";" ;
-      }
-    } else {
-      return "&" + htmlEscape1 + ";" ;
-    }
-  }
-
   public static Character unescapeCharacter( String escaped )
       throws NoUnescapedCharacterException
   {
@@ -221,14 +200,5 @@ public class SourceUnescape {
     return buffer.toString() ;
   }
 
-  public static String escapeHtmlText( String text, Charset charset ) {
-    final CharsetEncoder charsetEncoder = charset.newEncoder() ;
-    final StringBuffer buffer = new StringBuffer() ;
-    for( char c : text.toCharArray() ) {
-      final String escaped = maybeEscapeHtml( c, charsetEncoder ) ;
-      buffer.append( escaped ) ;
-    }
-    return buffer.toString() ;
-  }
 
 }

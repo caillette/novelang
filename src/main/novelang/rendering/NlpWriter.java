@@ -48,7 +48,7 @@ public class NlpWriter extends EscapingWriter {
   protected final ContentHandler createSinkContentHandler(
       final OutputStream outputStream,
       DocumentMetadata documentMetadata,
-      final Charset encoding
+      final Charset charset
   )
       throws Exception
   {

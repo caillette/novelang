@@ -27,7 +27,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.StylesheetMap;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.TreeFixture;
-import novelang.parser.Encoding;
+import novelang.system.DefaultCharset;
 
 /**
  * Tests for {@link XmlWriter}.
@@ -51,7 +51,7 @@ public class XmlWriterTest {
     final String rendition = new String( outputStream.toByteArray() ) ;
 
     Assert.assertEquals(
-        "<?xml version=\"1.0\" encoding=\"" + Encoding.RENDERING.name() + "\"?>\n" +
+        "<?xml version=\"1.0\" encoding=\"" + DefaultCharset.RENDERING.name() + "\"?>\n" +
         "w",
         rendition
     ) ;
@@ -70,7 +70,7 @@ public class XmlWriterTest {
     }
 
     public Charset getCharset() {
-      return Encoding.SOURCE;
+      return DefaultCharset.RENDERING;
     }
 
     public boolean hasProblem() {
