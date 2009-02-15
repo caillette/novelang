@@ -42,6 +42,24 @@ java -jar $NOVELANG_DIR/novelang-VERSION.jar --hyphenation-dir=my/directory
 >>>
 
 
+=== The ``--source-charset`` option
+
+The ``--source-charset`` option sets the charset of source documents.
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar --source-charset iso-8859-1
+>>>
+
+
+=== The ``--rendering-charset`` option
+
+The ``--rendering-charset`` option sets the charset of rendered documents.
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar --rendering-charset iso-8859-2
+>>>
+
+
 === Directory listing
 
 You can list the content of a directory by not giving any document name.

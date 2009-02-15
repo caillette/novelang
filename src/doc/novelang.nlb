@@ -17,6 +17,8 @@ insert file:part-syntax.nlp
 
 insert file:layout.nlp
 
+insert file:i18n.nlp
+
 insert file:stylesheets.nlp
 
 insert file:book-syntax.nlp

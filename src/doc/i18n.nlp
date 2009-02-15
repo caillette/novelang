@@ -1,0 +1,43 @@
+== Internationalization
+
+Novelang aims to support a wide range of languages, at least those with Roman characters.
+There are three aspects to consider:
+
+--- The character set of the source `document(s)`.
+
+--- The character set of the rendered document.
+
+--- The characters recognized by Novelang grammar.
+
+Taking advantage of the underlying Java platform, Novelang supports a wide range of charsets.
+See the list:
+http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html
+
+It's a good thing to know exactly the charset of the source documents, because charset mismatch
+may cause Novelang to see incorrect characters everywhere.
+For this reason, prefer a text editor which tells about the charset in use.
+Default charset for Western European versions of Mac OS X is ``MacRoman``,
+and default charset for Western European versions of Microsoft Windows is ``Cp1250``.
+But recommended charset is ``UTF-8`` as it supports any Unicode character.
+
+The character set of the rendered document makes only sense for text-based formats
+like HTML and plain text. For HTML, Novelang will do its best to provide named HTML entities
+(making HTML source more readable).
+But, unless you need some special transcoding operation, ``UTF-8`` will always be great.
+
+The ``--source-charset`` and ``--rendering-charset`` options define the charsets
+for source and rendered documents.
+
+The characters recognized by Novelang are hardcoded in its guts.
+While Novelang reads and writes a lot of charsets, only some of the characters in this
+charset are supported.
+In order to keep the Novelang grammar meaningful, it's not possible to admit any character,
+especially symbols and punctuation signs.
+Letters, like Roman ones with diacritics, will be added on a case-by-case basis.
+
+By now, all letters of those languages are supported: 
+English (US and UK), French, Hungarian.
+
+
+
+
