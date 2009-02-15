@@ -29,6 +29,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
 import novelang.parser.NodeKindTools;
+import novelang.parser.Encoding;
 import com.google.common.base.Preconditions;
 
 /**
@@ -37,17 +38,24 @@ import com.google.common.base.Preconditions;
 public class XmlWriter implements FragmentWriter {
 
   private ContentHandler contentHandler ;
-  private final RenditionMimeType mimeType ;
   private final String namespaceUri ;
   private final String nameQualifier ;
+  private final Charset charset ;
+  private final RenditionMimeType mimeType ;
 
   public XmlWriter( RenditionMimeType mimeType ) {
-    this( NAMESPACE_URI, NAME_QUALIFIER, mimeType ) ;
+    this( NAMESPACE_URI, NAME_QUALIFIER, Encoding.RENDERING, mimeType ) ;
   }
 
-  public XmlWriter( String namespaceUri, String nameQualifier, RenditionMimeType mimeType ) {
+  public XmlWriter(
+      String namespaceUri,
+      String nameQualifier,
+      Charset charset,
+      RenditionMimeType mimeType
+  ) {
     this.namespaceUri = Preconditions.checkNotNull( namespaceUri ) ;
     this.nameQualifier = Preconditions.checkNotNull( nameQualifier ) ;
+    this.charset = Preconditions.checkNotNull( charset ) ;
     this.mimeType = mimeType;
   }
 
@@ -55,13 +63,16 @@ public class XmlWriter implements FragmentWriter {
     this( RenditionMimeType.XML ) ;
   }
 
+  protected final Charset getCharset() {
+    return charset ;
+  }
+
   
   public void startWriting(
       OutputStream outputStream,
-      DocumentMetadata documentMetadata,
-      Charset encoding
+      DocumentMetadata documentMetadata
   ) throws Exception {
-    contentHandler = createContentHandler( outputStream, documentMetadata, encoding ) ;
+    contentHandler = createContentHandler( outputStream, documentMetadata, charset ) ;
     contentHandler.startDocument() ;
   }
 

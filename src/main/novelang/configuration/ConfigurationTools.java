@@ -19,6 +19,7 @@ package novelang.configuration;
 import java.io.File;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.produce.DocumentRequest;
+import novelang.parser.Encoding;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 
@@ -63,6 +65,7 @@ public class ConfigurationTools {
   public static final String BUNDLED_STYLE_DIR = "style" ;
   private static final String DEFAULT_STYLE_DIR = "style" ;
   public static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
+  public static final Charset DEFAULT_RENDERING_CHARSET = Encoding.RENDERING ;
 
   public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters )
       throws FOPException
@@ -216,6 +219,11 @@ public class ConfigurationTools {
         } catch( FOPException e ) {
           throw new RuntimeException( e ) ;
         }
+      }
+
+      public Charset getDefaultCharset() {
+        // TODO
+        throw new UnsupportedOperationException( "getDefaultCharset" ) ;
       }
     } ;
 

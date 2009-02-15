@@ -33,11 +33,13 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Table of escaped symbols, using HTML entity names whenever defined and Unicode names otherwise.
  *
+ * @deprecated use {@link SourceUnescape} and {@link novelang.rendering.RenderingEscape}.
+ *
  * @author Laurent Caillette
  */
-public class Escape {
+public class Unescape {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( Escape.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Unescape.class ) ;
 
   private static final BiMap< String, Character > ESCAPED_CHARACTERS;
   private static final Map< String, Character > ESCAPED_CHARACTERS_ALTERNATIVES;
@@ -111,27 +113,6 @@ public class Escape {
     return ESCAPED_HTML_CHARACTERS.inverse().get( unescaped ) ;
   }
 
-  /**
-   * Replaces a given character with HTML named entity if not a part of given charset,
-   * or returns the character itself.
-   * 
-   * @param unescaped a non-null object.
-   * @param charsetEncoder a non-null object, just used to see if encoding is possible.
-   * @return a non-null, non-empty String.
-   */
-  public static String maybeEscapeHtml( char unescaped, CharsetEncoder charsetEncoder ) {
-    final String htmlEscape1 = ESCAPED_HTML_CHARACTERS.inverse().get( unescaped ) ;
-    if( null ==  htmlEscape1 ) {
-      if( charsetEncoder.canEncode( unescaped ) ) {
-        return "" + unescaped ;
-      } else {
-        return "&" + CharUtils.unicodeEscaped( unescaped ) + ";" ;
-      }
-    } else {
-      return "&" + htmlEscape1 + ";" ;
-    }
-  }
-
   public static Character unescapeCharacter( String escaped )
       throws NoUnescapedCharacterException
   {
@@ -193,7 +174,7 @@ public class Escape {
         buffer.append( previous ) ;
       }
       final String escapeCode = matcher.group( 2 ) ;
-      final Character escapedSymbol = Escape.unescapeCharacter( escapeCode ) ;
+      final Character escapedSymbol = Unescape.unescapeCharacter( escapeCode ) ;
       if( null == escapedSymbol ) {
         throw new NoUnescapedCharacterException( escapeCode ) ;
       }
@@ -208,6 +189,7 @@ public class Escape {
     return buffer.toString() ;
   }
 
+/*
   public static String escapeHtmlText( String text ) {
     final StringBuffer buffer = new StringBuffer() ;
     for( char c : text.toCharArray() ) {
@@ -220,15 +202,6 @@ public class Escape {
     }
     return buffer.toString() ;
   }
-
-  public static String escapeHtmlText( String text, Charset charset ) {
-    final CharsetEncoder charsetEncoder = charset.newEncoder() ;
-    final StringBuffer buffer = new StringBuffer() ;
-    for( char c : text.toCharArray() ) {
-      final String escaped = maybeEscapeHtml( c, charsetEncoder ) ;
-      buffer.append( escaped ) ;
-    }
-    return buffer.toString() ;
-  }
+*/
 
 }

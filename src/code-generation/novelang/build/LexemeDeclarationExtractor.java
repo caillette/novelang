@@ -57,9 +57,9 @@ import novelang.parser.Lexeme;
     this.converters = converters.clone() ;
   }
 
-  public static Set<Lexeme> extractLexemeDeclarations( String grammar ) {
+  public static Set< Lexeme > extractLexemeDeclarations( String grammar ) {
     final Matcher matcher = TOKENS_DECLARATIONS.matcher( grammar ) ;
-    final Set<Lexeme> declarations = Sets.newHashSet() ;
+    final Set< Lexeme > declarations = Sets.newHashSet() ;
     while( matcher.find() ) {
       final Lexeme declaration = extractLexemeDeclaration( matcher ) ;
       if( null != declaration ) {

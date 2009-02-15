@@ -299,7 +299,7 @@ public class HttpDaemonTest {
     contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
 
     goodNlpSource = TestResourceTools.readStringResource(
-        getClass(), GOOD_NLP_RESOURCE_NAME, Encoding.DEFAULT ) ;
+        getClass(), GOOD_NLP_RESOURCE_NAME, Encoding.SOURCE ) ;
 
     TestResources.copyServedResources( contentDirectory ) ;
 

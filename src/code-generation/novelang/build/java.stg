@@ -77,7 +77,7 @@ public enum <name> {
 >>  
 
 
-htmlEntityName( name ) ::= "<if( name )>, \"&<name>;\"<endif>"
+htmlEntityName( name ) ::= "<if( name )>, \"<name>\"<endif>"
 
 endOfLineComment( text ) ::= "<if( text )>// <text><endif>"
 

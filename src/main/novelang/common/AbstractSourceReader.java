@@ -27,7 +27,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
@@ -59,7 +58,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.thisToString = ClassUtils.getShortClassName( getClass() ) +
         "@" + System.identityHashCode( this ) ;
     this.locationName = "<String>" ;
-    this.encoding = Preconditions.checkNotNull( Encoding.DEFAULT ) ;
+    this.encoding = Preconditions.checkNotNull( Encoding.SOURCE ) ;
   }
 
   protected AbstractSourceReader(
@@ -144,7 +143,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     return new Location( locationName, line, column ) ;
   }
 
-  public Charset getEncoding() {
+  public Charset getCharset() {
     return encoding ;
   }
 
@@ -154,5 +153,5 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     return thisToString;
   }
 
-  
+
 }

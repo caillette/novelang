@@ -104,7 +104,7 @@ public class FontDiscoveryStreamer {
       }
     } ;
 
-    xslWriter.startWriting( outputStream, documentMetadata, encoding ) ;
+    xslWriter.startWriting( outputStream, documentMetadata ) ;
 
     xslWriter.start( ELEMENT_ROOT, true ) ;
 

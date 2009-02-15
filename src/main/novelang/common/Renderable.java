@@ -31,7 +31,7 @@ public interface Renderable {
 
   Iterable< Problem > getProblems() ;
 
-  Charset getEncoding() ;
+  Charset getCharset() ;
 
   boolean hasProblem() ;
 

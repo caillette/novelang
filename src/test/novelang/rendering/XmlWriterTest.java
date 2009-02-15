@@ -37,7 +37,7 @@ import novelang.parser.Encoding;
 public class XmlWriterTest {
 
   @Test
-  public void oeLigatured() throws Exception {
+  public void   oeLigatured() throws Exception {
     final FragmentWriter xmlWriter = new XmlWriter() ;
     final GenericRenderer renderer = new GenericRenderer( xmlWriter ) ;
 
@@ -51,7 +51,7 @@ public class XmlWriterTest {
     final String rendition = new String( outputStream.toByteArray() ) ;
 
     Assert.assertEquals(
-        "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" +
+        "<?xml version=\"1.0\" encoding=\"" + Encoding.RENDERING.name() + "\"?>\n" +
         "w",
         rendition
     ) ;
@@ -69,8 +69,8 @@ public class XmlWriterTest {
       return null;
     }
 
-    public Charset getEncoding() {
-      return Encoding.DEFAULT ;
+    public Charset getCharset() {
+      return Encoding.SOURCE;
     }
 
     public boolean hasProblem() {

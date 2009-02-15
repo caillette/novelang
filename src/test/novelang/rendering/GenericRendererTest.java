@@ -92,20 +92,20 @@ public class GenericRendererTest {
 
   private String getRenderedText() {
     try {
-      return new String( outputStream.toByteArray(), Encoding.DEFAULT.name() ) ;
+      return new String( outputStream.toByteArray(), Encoding.SOURCE.name() ) ;
     } catch( UnsupportedEncodingException e ) {
       throw new RuntimeException( e ) ;
     }
   }
 
   private static Renderable createRenderable( final SyntacticTree tree ) {
-    final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( Encoding.DEFAULT ) ;
+    final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( Encoding.SOURCE ) ;
     return new Renderable() {
       public Iterable< Problem > getProblems() {
         return ImmutableList.of() ;
       }
-      public Charset getEncoding() {
-        return Encoding.DEFAULT ;
+      public Charset getCharset() {
+        return Encoding.SOURCE;
       }
       public boolean hasProblem() {
         return false;
@@ -129,8 +129,7 @@ public class GenericRendererTest {
 
     public void startWriting(
         OutputStream outputStream,
-        DocumentMetadata documentMetadata,
-        Charset encoding
+        DocumentMetadata documentMetadata
     ) throws Exception {
       writer = new PrintWriter( outputStream ) ;
     }

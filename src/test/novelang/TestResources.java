@@ -19,6 +19,7 @@ package novelang;
 
 import java.io.File;
 import java.util.Map;
+import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
@@ -32,6 +33,7 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.loader.ResourceLoaderTools;
+import novelang.parser.Encoding;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
@@ -177,6 +179,9 @@ public class TestResources {
                 failedFonts
             ) ;
 //            throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
+          }
+          public Charset getDefaultCharset() {
+            return Encoding.RENDERING ;
           }
         } ;
       }

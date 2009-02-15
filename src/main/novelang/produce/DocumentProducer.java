@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +98,8 @@ public class DocumentProducer {
         rendered.getCustomStylesheetMap().get( mimeType )
     ) ;
 
+    final Charset charset = rendered.getCharset() ;
+
     switch( mimeType ) {
 
       case PDF :
@@ -112,11 +115,13 @@ public class DocumentProducer {
         break ;
 
       case HTML :
-        serve.with( new GenericRenderer( new HtmlWriter( renderingConfiguration, stylesheet ) ) ) ;
+        serve.with( new GenericRenderer(
+            new HtmlWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
         break ;
 
       case NLP :
-        serve.with( new GenericRenderer( new NlpWriter( renderingConfiguration, stylesheet ) ) ) ;
+        serve.with( new GenericRenderer(
+            new NlpWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
         break ;
 
       default :

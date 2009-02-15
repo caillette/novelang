@@ -17,18 +17,15 @@
 package novelang.rendering.font;
 
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.ContentHandler;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.ConfigurationTools;
-import novelang.daemon.FontDiscoveryHandler;
 import novelang.rendering.font.SyntheticFontMapTest;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
@@ -81,7 +78,7 @@ public class FontDiscoveryStreamerTest {
   private static final ClasspathResourceLoader RESOURCE_LOADER =
       new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
   
-  private static final Charset ENCODING = Encoding.DEFAULT;
+  private static final Charset ENCODING = Encoding.SOURCE;
 
   private static final RenderingConfiguration HOLLOW_RENDERING_CONFIGURATION =
       new RenderingConfiguration() {
@@ -93,6 +90,10 @@ public class FontDiscoveryStreamerTest {
         }
         public FopFontStatus getCurrentFopFontStatus() {
           return SyntheticFontMapTest.FONT_STATUS ;
+        }
+
+        public Charset getDefaultCharset() {
+          return Encoding.RENDERING ;
         }
       }
   ;

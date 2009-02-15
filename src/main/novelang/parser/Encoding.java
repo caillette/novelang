@@ -27,10 +27,12 @@ public class Encoding {
 
   private Encoding() { }
 
-  public static final Charset DEFAULT ;
+  public static final Charset SOURCE ;
+  public static final Charset RENDERING ;
 
   static {
-    DEFAULT = Charset.forName( "ISO-8859-1" ) ;
+    SOURCE = Charset.forName( "ISO-8859-1" ) ;
+    RENDERING = Charset.forName( "UTF-8" ) ;
   }
 
 }

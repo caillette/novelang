@@ -61,8 +61,7 @@ public class GenericRenderer implements Renderer {
     } else {
       fragmentWriter.startWriting(
           outputStream,
-          MetadataHelper.createMetadata( rendered.getEncoding() ),
-          rendered.getEncoding()
+          MetadataHelper.createMetadata( rendered.getCharset() )
       ) ;
       final SyntacticTree root = rendered.getDocumentTree() ;
       renderTree( root, null, null ) ;

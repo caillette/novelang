@@ -17,13 +17,15 @@
 
 package novelang.rendering;
 
+import java.nio.charset.Charset;
+
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
-import novelang.parser.Escape;
+import novelang.parser.Unescape;
 import novelang.loader.ResourceName;
 
 /**
- * An {@code XslWriter} escaping characters known as {@link novelang.parser.Escape}.
+ * An {@code XslWriter} escaping characters known as {@link novelang.parser.Unescape}.
  *
  * @author Laurent Caillette
  */
@@ -32,13 +34,14 @@ public class EscapingWriter extends XslWriter {
   public EscapingWriter(
       RenderingConfiguration configuration,
       ResourceName xslFileName,
+      Charset charset,
       RenditionMimeType mimeType
   ) {
-    super( configuration, xslFileName, mimeType );
+    super( configuration, xslFileName, charset, mimeType );
   }
 
   public void write( Nodepath kinship, String word ) throws Exception {
-    final String escaped = Escape.escapeText( word );
+    final String escaped = Unescape.escapeText( word );
     super.write( kinship, escaped ) ;
   }
 

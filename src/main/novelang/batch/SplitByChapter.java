@@ -98,9 +98,9 @@ public class SplitByChapter {
           LOGGER.info( "Deleted previously existing file '{}'", chapterFile.getAbsolutePath() ) ;
         }
         final FileOutputStream fileOutputStream = new FileOutputStream( chapterFile ) ;
-        final Renderable renderable = new RenderableChapter( child, part.getEncoding() ) ;
-        new GenericRenderer( new NlpWriter( configuration, null ) ).
-            render( renderable, fileOutputStream ) ;
+//        final Renderable renderable = new RenderableChapter( child, part.getEncoding() ) ;
+//        new GenericRenderer( new NlpWriter( configuration, null ) ).
+//            render( renderable, fileOutputStream ) ;
         LOGGER.info( "Wrote to file '{}'", chapterFile.getAbsolutePath() ) ;
       }
     }
@@ -186,7 +186,7 @@ public class SplitByChapter {
       return ImmutableList.of() ;
     }
 
-    public Charset getEncoding() {
+    public Charset getCharset() {
       return encoding ;
     }
 

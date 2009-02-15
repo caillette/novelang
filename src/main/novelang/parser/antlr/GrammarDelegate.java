@@ -17,17 +17,12 @@
 
 package novelang.parser.antlr;
 
-import java.util.List;
-
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.Tree;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableList;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
-import novelang.parser.Escape;
-import novelang.parser.NoEscapeCodeException;
+import novelang.parser.Unescape;
 import novelang.parser.NoUnescapedCharacterException;
 
 /**
@@ -57,7 +52,7 @@ public class GrammarDelegate extends ProblemDelegate {
 
   public String unescapeCharacter( String escaped, int line, int column ) {
     try {
-      return "" + Escape.unescapeCharacter( escaped ) ;
+      return "" + Unescape.unescapeCharacter( escaped ) ;
     } catch( NoUnescapedCharacterException e ) {
       final Location location = locationFactory.createLocation( line, column ) ;
       problems.add( Problem.createProblem(

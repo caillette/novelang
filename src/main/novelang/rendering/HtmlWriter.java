@@ -24,7 +24,7 @@ import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
-import novelang.parser.Escape;
+import novelang.parser.Unescape;
 import novelang.loader.ResourceName;
 
 /**
@@ -34,21 +34,29 @@ public class HtmlWriter extends XslWriter {
 
   protected static final ResourceName DEFAULT_HTML_STYLESHEET =  new ResourceName( "html.xsl" ) ;
 
-  public HtmlWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
+  private final RenderingEscape.CharsetEncodingCapability charsetEncodingCapability ;
+
+  public HtmlWriter(
+      RenderingConfiguration configuration,
+      ResourceName stylesheet,
+      Charset charset
+  ) {
     super(
         configuration,
         null == stylesheet ? DEFAULT_HTML_STYLESHEET : stylesheet,
+        charset,
         RenditionMimeType.HTML,
         ESCAPE_ISO_ENTITIES
     ) ;
+    charsetEncodingCapability = RenderingEscape.createCapability( charset ) ;
   }
 
   public void writeLiteral( Nodepath kinship, String word ) throws Exception {
-      super.write( kinship, Escape.escapeHtmlText( word ) ); ;
+      super.write( kinship, RenderingEscape.escapeHtmlText( word, charsetEncodingCapability ) ) ;
   }
 
   public void write( Nodepath kinship, String word ) throws Exception {
-      super.write( kinship, Escape.escapeHtmlText( word ) ); ;
+    super.write( kinship, RenderingEscape.escapeHtmlText( word, charsetEncodingCapability ) ) ;
   }
 
 

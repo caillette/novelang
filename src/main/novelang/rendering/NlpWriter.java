@@ -32,11 +32,17 @@ public class NlpWriter extends EscapingWriter {
 
   protected static final ResourceName DEFAULT_NLP_STYLESHEET = new ResourceName( "nlp.xsl" ) ;
 
-  public NlpWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
+  public NlpWriter(
+      RenderingConfiguration configuration,
+      ResourceName stylesheet,
+      Charset charset
+  ) {
     super(
         configuration,
-        null == stylesheet ? DEFAULT_NLP_STYLESHEET : stylesheet, 
-        RenditionMimeType.NLP ) ;
+        null == stylesheet ? DEFAULT_NLP_STYLESHEET : stylesheet,
+        charset,
+        RenditionMimeType.NLP 
+    ) ;
   }
 
   protected final ContentHandler createSinkContentHandler(

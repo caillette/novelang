@@ -47,6 +47,7 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.parser.NodeKindTools;
+import novelang.parser.Encoding;
 import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import novelang.rendering.xslt.validate.SaxMulticaster;
 
@@ -66,7 +67,7 @@ public class XslWriter extends XmlWriter {
   protected final EntityEscapeSelector entityEscapeSelector ;
 
   public XslWriter( RenderingConfiguration configuration, ResourceName xslFileName ) {
-    this( configuration, xslFileName, DEFAULT_RENDITION_MIME_TYPE ) ;
+    this( configuration, xslFileName, Encoding.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
   }
 
   public XslWriter(
@@ -91,20 +92,30 @@ public class XslWriter extends XmlWriter {
       ResourceName xslFileName,
       RenditionMimeType mimeType
   ) {
-    this( namespaceUri, nameQualifier, configuration, xslFileName, mimeType, NO_ENTITY_ESCAPE ) ;
+    this(
+        namespaceUri,
+        nameQualifier,
+        configuration,
+        xslFileName,
+        Encoding.RENDERING,
+        mimeType,
+        NO_ENTITY_ESCAPE
+    ) ;
   }
 
   public XslWriter(
       RenderingConfiguration configuration,
       ResourceName xslFileName,
+      Charset charset,
       RenditionMimeType mimeType
   ) {
-    this( configuration, xslFileName, mimeType, NO_ENTITY_ESCAPE ) ;
+    this( configuration, xslFileName, charset, mimeType, NO_ENTITY_ESCAPE ) ;
   }
 
   public XslWriter(
       RenderingConfiguration configuration,
       ResourceName xslFileName,
+      Charset charset,
       RenditionMimeType mimeType,
       EntityEscapeSelector entityEscapeSelector
   ) {
@@ -113,6 +124,7 @@ public class XslWriter extends XmlWriter {
         NAME_QUALIFIER,
         configuration,
         xslFileName,
+        charset,
         mimeType,
         entityEscapeSelector
     ) ;
@@ -123,10 +135,11 @@ public class XslWriter extends XmlWriter {
       String nameQualifier,
       RenderingConfiguration configuration,
       ResourceName xslFileName,
+      Charset charset,
       RenditionMimeType mimeType,
       EntityEscapeSelector entityEscapeSelector
   ) {
-    super( namespaceUri, nameQualifier, mimeType ) ;
+    super( namespaceUri, nameQualifier, charset, mimeType ) ;
     this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
     this.resourceLoader = configuration.getResourceLoader() ;
     this.xslFileName = xslFileName ;

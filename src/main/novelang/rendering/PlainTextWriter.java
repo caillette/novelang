@@ -38,9 +38,9 @@ public class PlainTextWriter implements FragmentWriter {
 
   public void startWriting(
       OutputStream outputStream,
-      DocumentMetadata documentMetadata,
-      Charset encoding
+      DocumentMetadata documentMetadata
   ) throws Exception {
+    // TODO add charset support.
     writer = new PrintWriter( outputStream ) ;
     writer.append( "Timestamp: " );
     writer.append(

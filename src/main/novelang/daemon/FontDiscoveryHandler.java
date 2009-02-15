@@ -17,7 +17,6 @@
 package novelang.daemon;
 
 import java.io.IOException;
-import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.mortbay.jetty.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Sets;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
@@ -64,7 +62,7 @@ public class FontDiscoveryHandler extends GenericHandler{
 
       response.setStatus( HttpServletResponse.SC_OK ) ;
       try {
-        fontDiscoveryStreamer.generate( response.getOutputStream(), Encoding.DEFAULT ) ;
+        fontDiscoveryStreamer.generate( response.getOutputStream(), Encoding.SOURCE ) ;
       } catch( Exception e ) {
         throw new RuntimeException( e );
       }

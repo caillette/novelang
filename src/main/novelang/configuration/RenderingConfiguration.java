@@ -18,6 +18,7 @@
 package novelang.configuration;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FopFactory;
 import novelang.loader.ResourceLoader;
@@ -46,5 +47,12 @@ public interface RenderingConfiguration {
    * @return a possibly null object.
    */
   FopFontStatus getCurrentFopFontStatus() ;
+
+  /**
+   * Returns the default charset that renderers may use, if no specific charset specified.
+   *
+   * @return a non-null object.
+   */
+  Charset getDefaultCharset() ;
 
 }

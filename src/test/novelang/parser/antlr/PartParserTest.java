@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static novelang.parser.NodeKind.*;
 import novelang.common.SyntacticTree;
-import novelang.parser.Escape;
+import novelang.parser.Unescape;
 import novelang.parser.NodeKind;
 import static novelang.parser.antlr.AntlrTestHelper.*;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -172,9 +172,9 @@ public class PartParserTest {
 
   @Test
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
-    final Map< String, Character > map = Escape.getMainCharacterEscapes() ;
+    final Map< String, Character > map = Unescape.getMainCharacterEscapes() ;
     for( String key : map.keySet() ) {
-      final String escaped = Escape.ESCAPE_START + key + Escape.ESCAPE_END ;
+      final String escaped = Unescape.ESCAPE_START + key + Unescape.ESCAPE_END ;
       final Character unescaped = map.get( key ) ;
       PARSERMETHOD_WORD.checkTree( escaped, tree( WORD_, "" + unescaped ) ) ;
     }
@@ -182,7 +182,7 @@ public class PartParserTest {
 
   @Test
   public void failOnUnknownEscapedCharacter() throws RecognitionException {
-    PARSERMETHOD_WORD.checkFails( Escape.ESCAPE_START + "does-not-exist" + Escape.ESCAPE_END ) ;
+    PARSERMETHOD_WORD.checkFails( Unescape.ESCAPE_START + "does-not-exist" + Unescape.ESCAPE_END ) ;
   }
 
   @Test
@@ -602,7 +602,7 @@ public class PartParserTest {
   public void literalWithEscapedCharacters() throws RecognitionException {
     PARSERMETHOD_LITERAL.checkTree( 
         "<<<" + BREAK +
-        "2" + Escape.ESCAPE_START + "greater-than-sign" + Escape.ESCAPE_END + "1" + BREAK +
+        "2" + Unescape.ESCAPE_START + "greater-than-sign" + Unescape.ESCAPE_END + "1" + BREAK +
         ">>>", tree( LINES_OF_LITERAL, "2>1" )
     ) ;
   }
@@ -619,7 +619,7 @@ public class PartParserTest {
   @Test
   public void softInlineLiteralWithEscape() throws RecognitionException {
     PARSERMETHOD_SOFT_INLINE_LITERAL.checkTree( 
-        "`" + Escape.ESCAPE_START + "greater-than-sign" + Escape.ESCAPE_END +"`", 
+        "`" + Unescape.ESCAPE_START + "greater-than-sign" + Unescape.ESCAPE_END +"`",
         tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, ">" )
     ) ;
   }

@@ -95,7 +95,7 @@ public class XslWriterTest {
 
   private static final void run( XslWriter xslWriter ) throws Exception {
     final OutputStream sinkOutputStream = new ByteArrayOutputStream() ;
-    xslWriter.startWriting( sinkOutputStream, new CustomDocumentMetadata(), Encoding.DEFAULT ) ;
+    xslWriter.startWriting( sinkOutputStream, new CustomDocumentMetadata() ) ;
   }
 
   private static class CustomDocumentMetadata implements DocumentMetadata {
@@ -107,7 +107,7 @@ public class XslWriterTest {
     }
 
     public Charset getEncoding() {
-      return Encoding.DEFAULT ;
+      return Encoding.SOURCE;
     }
   }
 
@@ -137,6 +137,10 @@ public class XslWriterTest {
 
     public FopFontStatus getCurrentFopFontStatus() {
       return fopFontStatus ;
+    }
+
+    public Charset getDefaultCharset() {
+      return Encoding.RENDERING ;
     }
   }
 }

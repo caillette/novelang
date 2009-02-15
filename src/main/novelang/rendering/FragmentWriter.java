@@ -30,8 +30,7 @@ public interface FragmentWriter {
 
   void startWriting(
       OutputStream outputStream,
-      DocumentMetadata documentMetadata,
-      Charset encoding
+      DocumentMetadata documentMetadata
   ) throws Exception ;
   
   void finishWriting() throws Exception ;
