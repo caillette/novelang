@@ -23,12 +23,11 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableList;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
-import novelang.parser.antlr.NovelangParser;
 //import NovelangLexer;
 //import AllTokens;
 

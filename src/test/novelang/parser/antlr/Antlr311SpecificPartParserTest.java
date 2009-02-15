@@ -18,7 +18,6 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
-import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 
 /**
  * Test new parser features.

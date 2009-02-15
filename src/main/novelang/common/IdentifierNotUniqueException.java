@@ -19,9 +19,7 @@ package novelang.common;
 
 import java.util.Collection;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
-import novelang.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette

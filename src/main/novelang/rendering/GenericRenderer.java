@@ -21,14 +21,14 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import com.google.common.base.Preconditions;
-import novelang.common.metadata.MetadataHelper;
-import novelang.parser.NodeKind;
-import novelang.parser.NodeKindTools;
-import static novelang.parser.NodeKind.*;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
-import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
+import novelang.common.SyntacticTree;
+import novelang.common.metadata.MetadataHelper;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import novelang.parser.NodeKindTools;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific

@@ -16,8 +16,8 @@
  */
 package novelang.produce;
 
-import novelang.rendering.RenditionMimeType;
 import novelang.loader.ResourceName;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * Helper for creating concrete Requests.

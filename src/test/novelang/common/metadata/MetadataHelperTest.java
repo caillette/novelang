@@ -17,11 +17,11 @@
 package novelang.common.metadata;
 
 import org.junit.Test;
+import novelang.common.SyntacticTree;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import static novelang.parser.NodeKind.*;
-import novelang.parser.NodeKind;
-import novelang.common.SyntacticTree;
 
 /**
  * Tests for {@link MetadataHelper}.

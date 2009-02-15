@@ -19,7 +19,6 @@ package novelang.loader;
 
 import java.io.InputStream;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 /**

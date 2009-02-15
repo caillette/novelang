@@ -21,14 +21,14 @@ import java.util.Map;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 import com.google.common.collect.ImmutableMap;
-import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.*;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.TreeTools;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import static novelang.parser.antlr.AntlrTestHelper.*;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**

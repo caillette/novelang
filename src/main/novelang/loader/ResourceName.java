@@ -16,12 +16,12 @@
  */
 package novelang.loader;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.ClassUtils;
 
 /**
  * Holds a resource name, guaranteeing the respect of a {@link #PATTERN}.

@@ -20,22 +20,21 @@ import java.io.File;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableMap;
 import novelang.book.Environment;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
 import novelang.book.function.IllegalFunctionCallException;
 import novelang.common.Location;
-import static novelang.parser.NodeKind.BOOK;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.loader.ResourceName;
+import static novelang.parser.NodeKind.BOOK;
 import novelang.parser.antlr.BookParserTest;
 import novelang.rendering.RenditionMimeType;
-import novelang.loader.ResourceName;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Tests for {@link MapStylesheetFunction}.

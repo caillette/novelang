@@ -47,9 +47,9 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.parser.NodeKindTools;
-import novelang.system.DefaultCharset;
 import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import novelang.rendering.xslt.validate.SaxMulticaster;
+import novelang.system.DefaultCharset;
 
 /**
  * @author Laurent Caillette

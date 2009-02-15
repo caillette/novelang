@@ -16,26 +16,26 @@
  */
 package novelang.rendering;
 
-import java.nio.charset.Charset;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 
-import org.junit.Test;
 import org.apache.fop.apps.FopFactory;
-import org.joda.time.ReadableDateTime;
 import org.joda.time.DateTime;
-import novelang.common.metadata.DocumentMetadata;
-import novelang.system.DefaultCharset;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.FopFontStatus;
-import novelang.loader.ResourceLoader;
-import novelang.loader.ClasspathResourceLoader;
-import novelang.loader.ResourceName;
-import novelang.TestResources;
-import novelang.rendering.xslt.validate.BadExpandedNamesException;
-import novelang.rendering.xslt.validate.BadExpandedName;
+import org.joda.time.ReadableDateTime;
+import org.junit.Test;
 import junit.framework.Assert;
+import novelang.TestResources;
+import novelang.common.metadata.DocumentMetadata;
+import novelang.configuration.FopFontStatus;
+import novelang.configuration.RenderingConfiguration;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceLoader;
+import novelang.loader.ResourceName;
+import novelang.rendering.xslt.validate.BadExpandedName;
+import novelang.rendering.xslt.validate.BadExpandedNamesException;
+import novelang.system.DefaultCharset;
 
 /**
  * Tests for {@link novelang.rendering.XslWriter}.

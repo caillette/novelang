@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import novelang.loader.ResourceName;
 import novelang.rendering.RawResource;
 import novelang.rendering.RenditionMimeType;
-import novelang.loader.ResourceName;
 
 /**
  * The base class for requests and a do-everything factory.

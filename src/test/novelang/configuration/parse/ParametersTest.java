@@ -21,11 +21,11 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static org.junit.Assert.*;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
+import com.google.common.collect.Lists;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
-import com.google.common.collect.Lists;
 
 /**
  * Tests for {@link GenericParameters}, {@link BatchParameters}, {@link DaemonParameters}.

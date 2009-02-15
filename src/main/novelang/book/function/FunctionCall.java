@@ -16,14 +16,13 @@
  */
 package novelang.book.function;
 
-import novelang.common.Problem;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
+import novelang.book.Environment;
 import novelang.common.Location;
+import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import novelang.book.Environment;
-import com.google.common.collect.Iterables;
-import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 
 /**
  * Represents an instance of a {@link FunctionDefinition} inside a Book file,

@@ -16,15 +16,12 @@
  */
 package novelang.parser;
 
-import java.nio.charset.Charset;
-
-import org.junit.Test;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static novelang.parser.SourceUnescape.ESCAPE_START;
+import org.junit.Test;
 import static novelang.parser.SourceUnescape.ESCAPE_END;
-import novelang.rendering.RenderingEscape;
+import static novelang.parser.SourceUnescape.ESCAPE_START;
 
 /**
  * Tests for {@link SourceUnescape}.

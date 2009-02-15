@@ -16,22 +16,22 @@
  */
 package novelang.rendering;
 
-import java.io.IOException;
-import java.io.File;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
-import novelang.TestResources;
 import novelang.TestResourceTools;
-import novelang.loader.ResourceName;
+import novelang.TestResources;
 import novelang.configuration.ProducerConfiguration;
+import novelang.loader.ResourceName;
 import novelang.produce.DocumentProducer;
-import novelang.produce.RequestTools;
 import novelang.produce.DocumentRequest;
+import novelang.produce.RequestTools;
 
 /**
  * Test for displaying page numbers, including a Java function call.

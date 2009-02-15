@@ -22,8 +22,8 @@ import java.util.Set;
 
 import org.apache.fop.fonts.FontTriplet;
 import org.dom4j.Namespace;
-import org.joda.time.ReadableDateTime;
 import org.joda.time.DateTime;
+import org.joda.time.ReadableDateTime;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;

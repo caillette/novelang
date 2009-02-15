@@ -24,18 +24,18 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.mortbay.jetty.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.StringUtils;
-import novelang.configuration.ProducerConfiguration;
-import novelang.common.Renderable;
+import com.google.common.collect.Lists;
 import novelang.common.Problem;
-import novelang.rendering.HtmlProblemPrinter;
+import novelang.common.Renderable;
+import novelang.configuration.ProducerConfiguration;
+import novelang.produce.DocumentProducer;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
-import novelang.produce.DocumentProducer;
-import com.google.common.collect.Lists;
+import novelang.rendering.HtmlProblemPrinter;
 
 /**
  * Serves rendered content.

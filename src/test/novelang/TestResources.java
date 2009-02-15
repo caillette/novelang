@@ -18,24 +18,24 @@
 package novelang;
 
 import java.io.File;
-import java.util.Map;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
-import novelang.configuration.ContentConfiguration;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ProducerConfiguration;
-import novelang.configuration.FopFontStatus;
-import novelang.configuration.DaemonConfiguration;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import novelang.configuration.ConfigurationTools;
+import novelang.configuration.ContentConfiguration;
+import novelang.configuration.DaemonConfiguration;
+import novelang.configuration.FopFontStatus;
+import novelang.configuration.ProducerConfiguration;
+import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
-import novelang.loader.ResourceName;
 import novelang.loader.ResourceLoaderTools;
+import novelang.loader.ResourceName;
 import novelang.system.DefaultCharset;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * The only place where constants referencing test-dedicated resources can be defined.

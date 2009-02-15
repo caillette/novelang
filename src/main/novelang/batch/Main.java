@@ -30,16 +30,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import novelang.configuration.ConfigurationTools;
+import novelang.common.Problem;
 import novelang.configuration.BatchConfiguration;
+import novelang.configuration.ConfigurationTools;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.BatchParameters;
-import novelang.common.Problem;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
 import novelang.rendering.HtmlProblemPrinter;
-import novelang.system.StartupTools;
 import novelang.system.EnvironmentTools;
+import novelang.system.StartupTools;
 
 /**
  * The main class for running in command-line mode.

@@ -16,19 +16,19 @@
  */
 package novelang.rendering.font;
 
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.FontTriplet;
-import novelang.configuration.FontQuadruplet;
-import novelang.configuration.FopFontStatus;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.base.Predicate;
+import novelang.configuration.FontQuadruplet;
+import novelang.configuration.FopFontStatus;
 
 /**
  * @author Laurent Caillette

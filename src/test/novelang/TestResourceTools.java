@@ -29,13 +29,13 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.MissingResourceException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.junit.Assert;
 import novelang.loader.ResourceName;
 
 /**

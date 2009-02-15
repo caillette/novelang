@@ -26,11 +26,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
+import com.google.common.base.Preconditions;
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
 import novelang.parser.NodeKindTools;
 import novelang.system.DefaultCharset;
-import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette

@@ -32,7 +32,6 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import novelang.configuration.FontQuadruplet;
 import novelang.configuration.FopFontStatus;
-import novelang.rendering.font.SyntheticFontMap;
 
 /**
  * Tests for {@link novelang.rendering.font.SyntheticFontMap#createSyntheticFontMap(novelang.configuration.FopFontStatus)}.

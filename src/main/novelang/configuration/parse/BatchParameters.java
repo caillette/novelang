@@ -24,10 +24,10 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Parses command-line arguments for {@link novelang.batch.Main}.

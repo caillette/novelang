@@ -18,17 +18,14 @@
 package novelang.parser;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.CharUtils;
 import com.google.common.collect.BiMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 /**
  * Table of escaped symbols, using HTML entity names whenever defined and Unicode names otherwise.

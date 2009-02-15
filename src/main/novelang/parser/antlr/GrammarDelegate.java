@@ -22,7 +22,6 @@ import org.antlr.runtime.tree.Tree;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
-import novelang.parser.SourceUnescape;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
 

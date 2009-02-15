@@ -19,26 +19,26 @@ package novelang.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Set;
 import java.util.Iterator;
+import java.util.Set;
 
+import org.apache.commons.lang.SystemUtils;
+import org.apache.fop.apps.FOPException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.apache.fop.apps.FOPException;
-import org.apache.commons.lang.SystemUtils;
-import novelang.configuration.parse.DaemonParameters;
-import novelang.configuration.parse.ArgumentException;
-import novelang.configuration.parse.GenericParameters;
-import novelang.configuration.parse.BatchParameters;
-import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
-import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
-import novelang.ScratchDirectoryFixture;
-import novelang.TestResources;
-import novelang.TestResourceTools;
-import novelang.produce.DocumentRequest;
-import static novelang.TestResourceTools.copyResourceToDirectory;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
+import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
+import static novelang.TestResourceTools.copyResourceToDirectory;
+import novelang.TestResources;
+import novelang.configuration.parse.ArgumentException;
+import novelang.configuration.parse.BatchParameters;
+import novelang.configuration.parse.DaemonParameters;
+import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
+import novelang.configuration.parse.GenericParameters;
+import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
+import novelang.produce.DocumentRequest;
 
 /**
  * Tests for {@link ConfigurationTools}.

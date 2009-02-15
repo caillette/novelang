@@ -17,12 +17,12 @@
 
 import java.util.List;
 
+import org.antlr.runtime.RecognitionException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import novelang.common.Problem;
-import novelang.common.LocationFactory;
 import novelang.common.Location;
-import org.antlr.runtime.RecognitionException;
+import novelang.common.LocationFactory;
+import novelang.common.Problem;
 
 /**
  * Just hooks into ANTLR's error reporting.

@@ -23,8 +23,8 @@ import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
 import novelang.common.tree.Tree;
 import novelang.parser.NodeKind;
 

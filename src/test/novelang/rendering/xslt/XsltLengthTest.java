@@ -17,8 +17,8 @@
 package novelang.rendering.xslt;
 
 import org.apache.xerces.dom.CoreDocumentImpl;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Element;
 
 /**

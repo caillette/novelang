@@ -20,29 +20,28 @@ import java.io.File;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.avalon.framework.configuration.MutableConfiguration;
+import org.apache.fop.apps.FOPException;
+import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.FontCache;
 import org.apache.fop.fonts.FontResolver;
-import org.apache.fop.apps.FOPException;
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.render.DefaultFontResolver;
 import org.apache.fop.render.PrintRendererConfigurator;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
 import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
-import com.google.common.base.Function;
-import com.google.common.base.Nullable;
 
 /**
  * Utility class for generating FOP configuration with hyphenation files and custom fonts.

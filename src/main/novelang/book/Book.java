@@ -16,28 +16,28 @@
  */
 package novelang.book;
 
-import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import novelang.common.Problem;
-import novelang.parser.NodeKind;
-import novelang.common.tree.Treepath;
-import novelang.common.SyntacticTree;
-import novelang.common.SimpleTree;
-import novelang.common.AbstractSourceReader;
-import novelang.common.StylesheetMap;
-import novelang.book.function.FunctionCall;
-import novelang.book.function.FunctionRegistry;
-import novelang.book.function.FunctionDefinition;
-import novelang.book.function.UnknownFunctionException;
-import novelang.book.function.IllegalFunctionCallException;
-import novelang.parser.antlr.DefaultBookParserFactory;
-import novelang.hierarchy.Hierarchizer;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import novelang.book.function.FunctionCall;
+import novelang.book.function.FunctionDefinition;
+import novelang.book.function.FunctionRegistry;
+import novelang.book.function.IllegalFunctionCallException;
+import novelang.book.function.UnknownFunctionException;
+import novelang.common.AbstractSourceReader;
+import novelang.common.Problem;
+import novelang.common.SimpleTree;
+import novelang.common.StylesheetMap;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
+import novelang.hierarchy.Hierarchizer;
+import novelang.parser.NodeKind;
+import novelang.parser.antlr.DefaultBookParserFactory;
 
 /**
  * Reads a Book file, processes functions and builds a Tree with inclusions and so on.

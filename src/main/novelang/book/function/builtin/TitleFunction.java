@@ -19,18 +19,18 @@ package novelang.book.function.builtin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.book.Environment;
-import novelang.common.Location;
-import static novelang.parser.NodeKind.VALUED_ARGUMENT_PRIMARY_;
-import static novelang.parser.NodeKind.LEVEL_TITLE;
-import novelang.parser.NodeKind;
-import novelang.common.tree.Treepath;
-import novelang.common.tree.TreepathTools;
-import novelang.common.SyntacticTree;
-import novelang.common.SimpleTree;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
-import novelang.book.function.IllegalFunctionCallException;
 import static novelang.book.function.FunctionTools.verify;
+import novelang.book.function.IllegalFunctionCallException;
+import novelang.common.Location;
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
+import novelang.common.tree.TreepathTools;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.LEVEL_TITLE;
+import static novelang.parser.NodeKind.VALUED_ARGUMENT_PRIMARY_;
 
 /**
  * Creates a title in a Book.

@@ -19,9 +19,6 @@ package novelang.common;
 
 import java.nio.charset.Charset;
 
-import novelang.common.Problem;
-import novelang.common.SyntacticTree;
-
 /**
  * Something to be turned into final document.
  * 

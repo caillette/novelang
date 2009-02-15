@@ -17,9 +17,9 @@
 package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
-import novelang.parser.BookParser;
 import novelang.common.LocationFactory;
 import novelang.common.SyntacticTree;
+import novelang.parser.BookParser;
 
 /**
  * @author Laurent Caillette

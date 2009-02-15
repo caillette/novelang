@@ -16,8 +16,8 @@
  */
 package novelang.common;
 
-import novelang.rendering.RenditionMimeType;
 import novelang.loader.ResourceName;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * Maps a {@link novelang.rendering.RenditionMimeType} to a resource name corresponding

@@ -17,7 +17,6 @@
 
 package novelang.configuration;
 
-import java.io.File;
 import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FopFactory;

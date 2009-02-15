@@ -19,13 +19,12 @@ package novelang.book;
 import java.io.File;
 import java.util.Map;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import novelang.common.StylesheetMap;
+import novelang.loader.ResourceName;
 import novelang.part.Part;
 import novelang.rendering.RenditionMimeType;
-import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette

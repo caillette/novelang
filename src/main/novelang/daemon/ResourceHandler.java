@@ -29,10 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.configuration.ProducerConfiguration;
 import novelang.loader.ResourceLoader;
-import novelang.loader.ResourceNotFoundException;
 import novelang.loader.ResourceName;
-import novelang.produce.RequestTools;
+import novelang.loader.ResourceNotFoundException;
 import novelang.produce.PolymorphicRequest;
+import novelang.produce.RequestTools;
 
 /**
  * Holds resources which don't require rendering.

@@ -16,8 +16,8 @@
  */
 package novelang.parser;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.CharUtils;
+import org.apache.commons.lang.StringUtils;
 import com.google.common.base.Preconditions;
 
 /**

@@ -18,9 +18,9 @@ package novelang.common;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.net.URL;
 
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
@@ -28,18 +28,13 @@ import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
-import novelang.common.Location;
-import novelang.common.LocationFactory;
-import novelang.common.Problem;
-import novelang.common.SyntacticTree;
-import novelang.common.Renderable;
-import novelang.common.tree.TreeTools;
+import com.google.common.collect.Lists;
 import novelang.common.metadata.MetadataHelper;
-import novelang.system.DefaultCharset;
+import novelang.common.tree.TreeTools;
 import novelang.parser.GenericParser;
 import novelang.parser.GenericParserFactory;
+import novelang.system.DefaultCharset;
 
 /**
  * Base class holding parsing and some error-handling.

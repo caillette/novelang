@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.antlr.runtime.RecognitionException;
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 /**

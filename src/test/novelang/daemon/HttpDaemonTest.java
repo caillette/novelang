@@ -24,18 +24,18 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.slf4j.Logger;
@@ -43,9 +43,9 @@ import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.rendering.RenditionMimeType;
-import novelang.produce.RequestTools;
 import novelang.configuration.ConfigurationTools;
+import novelang.produce.RequestTools;
+import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
 
 /**

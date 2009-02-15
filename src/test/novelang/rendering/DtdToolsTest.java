@@ -19,13 +19,13 @@ package novelang.rendering;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.junit.Test;
-import org.junit.Assert;
-import org.xml.sax.InputSource;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
-import org.slf4j.LoggerFactory;
+import org.junit.Assert;
+import org.junit.Test;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
 /**
  * Tests for {@link DtdTools}.

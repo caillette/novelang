@@ -16,11 +16,11 @@
  */
 package novelang.rendering.xslt.validate;
 
+import org.apache.commons.lang.ClassUtils;
 import org.junit.Test;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.ImmutableSet;
 
 /**

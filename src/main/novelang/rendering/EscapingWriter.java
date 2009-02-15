@@ -19,10 +19,10 @@ package novelang.rendering;
 
 import java.nio.charset.Charset;
 
-import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
-import novelang.parser.SourceUnescape;
+import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
+import novelang.parser.SourceUnescape;
 
 /**
  * An {@code XslWriter} escaping characters known as {@link novelang.parser.SourceUnescape}.

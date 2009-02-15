@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
-import novelang.system.DefaultCharset;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.font.FontDiscoveryStreamer;
+import novelang.system.DefaultCharset;
 
 /**
  * Generates a PDF document showing available fonts.

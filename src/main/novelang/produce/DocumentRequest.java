@@ -17,7 +17,6 @@
 package novelang.produce;
 
 import org.apache.commons.lang.ClassUtils;
-import novelang.loader.ResourceName;
 
 /**
  * Contains everything needed to build a specific requested Document

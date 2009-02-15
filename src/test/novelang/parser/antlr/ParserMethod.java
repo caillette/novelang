@@ -16,15 +16,14 @@
  */
 package novelang.parser.antlr;
 
-import novelang.common.ReflectionTools;
-import novelang.common.SyntacticTree;
-import novelang.common.LanguageTools;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.junit.Assert;
 import org.antlr.runtime.tree.CommonErrorNode;
+import org.junit.Assert;
+import novelang.common.LanguageTools;
+import novelang.common.ReflectionTools;
+import novelang.common.SyntacticTree;
 
 
 /**

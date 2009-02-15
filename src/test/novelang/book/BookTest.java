@@ -29,10 +29,10 @@ import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.book.function.FunctionRegistry;
+import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
-import novelang.common.SyntacticTree;
-import novelang.book.function.FunctionRegistry;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 

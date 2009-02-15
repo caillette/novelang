@@ -21,8 +21,8 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.xml.sax.ContentHandler;
-import novelang.configuration.RenderingConfiguration;
 import novelang.common.metadata.DocumentMetadata;
+import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
 
 /**

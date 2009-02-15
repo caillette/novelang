@@ -23,10 +23,10 @@ import java.util.regex.Pattern;
 import org.junit.Assert;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
-import novelang.parser.NodeKind;
+import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import novelang.common.SimpleTree;
+import novelang.parser.NodeKind;
 
 /**
  * Helps building {@link novelang.common.SyntacticTree}s for tests.

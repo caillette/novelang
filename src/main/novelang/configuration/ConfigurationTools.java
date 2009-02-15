@@ -17,25 +17,25 @@
 package novelang.configuration;
 
 import java.io.File;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 
+import org.apache.fop.apps.FOPException;
+import org.apache.fop.apps.FopFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.FOPException;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import novelang.configuration.parse.BatchParameters;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.GenericParameters;
-import novelang.configuration.parse.BatchParameters;
-import novelang.loader.ResourceLoader;
 import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.produce.DocumentRequest;
 import novelang.system.DefaultCharset;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
 
 /**
  * Creates various Configuration objects from {@link GenericParameters}.

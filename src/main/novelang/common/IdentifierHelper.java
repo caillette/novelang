@@ -17,9 +17,9 @@
 
 package novelang.common;
 
-import novelang.parser.NodeKind;
-
 import java.util.Iterator;
+
+import novelang.parser.NodeKind;
 
 /**
  * @author Laurent Caillette

@@ -16,8 +16,6 @@
  */
 package novelang.configuration.parse;
 
-import org.apache.commons.cli.HelpFormatter;
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 /**

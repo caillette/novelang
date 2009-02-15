@@ -24,11 +24,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static novelang.parser.NodeKind.*;
 import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
 import novelang.parser.SourceUnescape;
-import static novelang.parser.antlr.AntlrTestHelper.*;
+import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**

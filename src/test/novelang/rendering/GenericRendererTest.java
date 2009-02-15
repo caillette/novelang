@@ -23,20 +23,20 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 import com.google.common.collect.ImmutableList;
-import novelang.common.metadata.MetadataHelper;
-import static novelang.parser.NodeKind.*;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
-import novelang.common.metadata.DocumentMetadata;
-import novelang.common.SyntacticTree;
 import novelang.common.Renderable;
 import novelang.common.StylesheetMap;
-import novelang.system.DefaultCharset;
+import novelang.common.SyntacticTree;
+import novelang.common.metadata.DocumentMetadata;
+import novelang.common.metadata.MetadataHelper;
 import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.system.DefaultCharset;
 
 /**
  * @author Laurent Caillette

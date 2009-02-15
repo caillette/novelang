@@ -23,15 +23,14 @@ import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import novelang.configuration.ConfigurationTools;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ConfigurationTools;
-import novelang.rendering.font.SyntheticFontMapTest;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
-import novelang.system.DefaultCharset;
 import novelang.rendering.XslWriter;
+import novelang.system.DefaultCharset;
 
 /**
  * Tests for {@link FontDiscoveryStreamer}.

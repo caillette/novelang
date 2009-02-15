@@ -19,10 +19,9 @@ package novelang.hierarchy;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.*;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
+import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 

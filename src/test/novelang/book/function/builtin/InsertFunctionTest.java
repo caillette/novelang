@@ -19,31 +19,28 @@ package novelang.book.function.builtin;
 import java.io.File;
 
 import org.apache.commons.lang.ClassUtils;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableMap;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.hierarchy.Hierarchizer;
 import novelang.book.Environment;
-import novelang.common.Location;
-import static novelang.parser.NodeKind.*;
-import novelang.common.SimpleTree;
-import novelang.common.SyntacticTree;
-import novelang.common.tree.Treepath;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
 import novelang.book.function.IllegalFunctionCallException;
+import novelang.common.Location;
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.BookParserTest;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.parser.NodeKind;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Tests for {@link InsertFunction}.

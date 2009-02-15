@@ -17,22 +17,12 @@
 package novelang.rendering;
 
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
-import java.nio.CharBuffer;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.List;
 
+import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.parser.NoUnescapedCharacterException;
-import com.google.common.collect.Lists;
 
 /**
  * Tests for {@link RenderingEscape}.

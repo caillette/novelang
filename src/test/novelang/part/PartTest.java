@@ -28,13 +28,13 @@ import org.junit.Test;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import static novelang.parser.NodeKind.*;
-import novelang.common.SyntacticTree;
 import novelang.common.Problem;
+import novelang.common.SyntacticTree;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import novelang.parser.SourceUnescape;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.parser.NodeKind;
-import novelang.parser.SourceUnescape;
 
 /**
  * @author Laurent Caillette

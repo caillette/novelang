@@ -25,7 +25,6 @@ import java.net.URLClassLoader;
 import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
 /**

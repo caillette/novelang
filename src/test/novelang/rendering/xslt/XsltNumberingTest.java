@@ -16,14 +16,12 @@
  */
 package novelang.rendering.xslt;
 
-import java.io.IOException;
-
-import org.junit.Test;
-import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
+import org.junit.Assert;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Laurent Caillette

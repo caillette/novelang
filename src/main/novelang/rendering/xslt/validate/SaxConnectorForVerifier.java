@@ -18,12 +18,10 @@ package novelang.rendering.xslt.validate;
 
 import java.util.Set;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.Attributes;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import novelang.common.Location;
 
 /**

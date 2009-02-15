@@ -17,23 +17,13 @@
 package novelang.rendering.xslt;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
-
-import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
-import java.io.StringReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.PrintStream;
-
-import novelang.common.LanguageTools;
 
 /**
  * @author Laurent Caillette

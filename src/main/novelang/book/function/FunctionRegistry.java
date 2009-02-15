@@ -18,12 +18,12 @@ package novelang.book.function;
 
 import java.util.Map;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.collect.Maps;
 import novelang.book.function.builtin.InsertFunction;
-import novelang.book.function.builtin.SectionFunction;
 import novelang.book.function.builtin.MapStylesheetFunction;
+import novelang.book.function.builtin.SectionFunction;
 import novelang.book.function.builtin.TitleFunction;
 
 /**

@@ -16,15 +16,15 @@
  */
 package novelang.rendering;
 
-import java.nio.charset.Charset;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
-import org.junit.Test;
 import org.junit.Assert;
-import novelang.common.Renderable;
+import org.junit.Test;
 import novelang.common.Problem;
-import novelang.common.SyntacticTree;
+import novelang.common.Renderable;
 import novelang.common.StylesheetMap;
+import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.TreeFixture;
 import novelang.system.DefaultCharset;

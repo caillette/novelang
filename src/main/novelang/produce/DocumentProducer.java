@@ -17,24 +17,24 @@
 package novelang.produce;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.FileNotFoundException;
 import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.ProducerConfiguration;
-import novelang.common.FileTools;
-import novelang.loader.ResourceName;
-import novelang.common.Problem;
-import novelang.common.StructureKind;
-import novelang.common.Renderable;
-import novelang.common.LanguageTools;
-import novelang.part.Part;
 import novelang.book.Book;
 import novelang.book.function.FunctionRegistry;
+import novelang.common.FileTools;
+import novelang.common.LanguageTools;
+import novelang.common.Problem;
+import novelang.common.Renderable;
+import novelang.common.StructureKind;
+import novelang.configuration.ProducerConfiguration;
+import novelang.configuration.RenderingConfiguration;
+import novelang.loader.ResourceName;
+import novelang.part.Part;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.HtmlWriter;
 import novelang.rendering.NlpWriter;

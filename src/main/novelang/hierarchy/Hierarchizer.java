@@ -16,15 +16,15 @@
  */
 package novelang.hierarchy;
 
-import novelang.parser.NodeKind;
-import novelang.parser.NodeKindTools;
-import static novelang.parser.NodeKind.*;
+import com.google.common.base.Preconditions;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.common.tree.TreeTools;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.common.tree.TreeTools;
-import com.google.common.base.Preconditions;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import novelang.parser.NodeKindTools;
 
 /**
  * Transforms the tree representing a Part for handling various features

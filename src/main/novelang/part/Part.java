@@ -27,8 +27,8 @@ import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
-import novelang.system.DefaultCharset;
 import novelang.parser.antlr.DefaultPartParserFactory;
+import novelang.system.DefaultCharset;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes

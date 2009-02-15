@@ -20,17 +20,10 @@ package novelang.build;
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
-import java.util.Map;
 
 import org.antlr.stringtemplate.StringTemplate;
-import org.apache.commons.lang.CharUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import novelang.parser.Lexeme;
 
 

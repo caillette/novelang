@@ -18,12 +18,12 @@ package novelang.rendering.xslt.validate;
 
 import java.util.List;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.Attributes;
-import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * Makes a single SAX event source feed two SAX event consumers through the {@link ContentHandler}

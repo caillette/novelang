@@ -17,11 +17,11 @@
 package novelang.common;
 
 import org.apache.commons.lang.NullArgumentException;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import novelang.common.tree.ImmutableTree;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
 
 /**
  * Specific immplementation of a {@link novelang.common.tree.Tree}.

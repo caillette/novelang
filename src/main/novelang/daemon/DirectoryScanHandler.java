@@ -30,11 +30,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.mortbay.jetty.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
 import novelang.common.FileTools;
 import novelang.common.StructureKind;
 import novelang.configuration.ContentConfiguration;
 import novelang.rendering.RenditionMimeType;
-import com.google.common.collect.Lists;
 
 /**
  * Displays directory content.

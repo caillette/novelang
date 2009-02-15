@@ -16,8 +16,8 @@
  */
 package novelang.loader;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for {@link ResourceName}.

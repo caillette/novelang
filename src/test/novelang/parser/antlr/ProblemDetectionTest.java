@@ -16,8 +16,8 @@
  */package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Check that illegal forms are correctly reported.

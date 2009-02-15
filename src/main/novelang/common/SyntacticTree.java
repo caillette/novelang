@@ -17,8 +17,8 @@
 
 package novelang.common;
 
-import novelang.common.tree.Tree;
 import novelang.common.tree.StorageTypeProvider;
+import novelang.common.tree.Tree;
 import novelang.parser.NodeKind;
 
 /**

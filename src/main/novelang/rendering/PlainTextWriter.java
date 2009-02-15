@@ -19,7 +19,6 @@ package novelang.rendering;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
 
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;

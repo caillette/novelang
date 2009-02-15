@@ -25,12 +25,12 @@ import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableList;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
-import novelang.parser.NodeKind;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
-import com.google.common.collect.ImmutableList;
+import novelang.parser.NodeKind;
 
 /**
  * A {@code CommonTree} created by {@link novelang.parser.antlr.NovelangParser} implementing
