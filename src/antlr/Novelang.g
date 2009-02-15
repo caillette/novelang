@@ -1589,7 +1589,7 @@ SOFTBREAK : ( '\r' '\n' ? ) | '\n' ;
 WHITESPACE : ( ' ' | '\t' )+ ;
 
 
-AMPERSAND : '&' ;
+AMPERSAND : '&' ; // &amp;
 APOSTROPHE : '\'' ;
 ASTERISK : '*' ;
 CIRCUMFLEX_ACCENT : '^' ;
@@ -1604,13 +1604,13 @@ EQUALS_SIGN : '=' ;
 EXCLAMATION_MARK : '!' ;
 FULL_STOP : '.' ;
 GRAVE_ACCENT : '`' ;
-GREATER_THAN_SIGN : '>' ;
+GREATER_THAN_SIGN : '>' ; // &gt;
 HYPHEN_MINUS : '-' ;
 LEFT_CURLY_BRACKET : '{' ;
 LEFT_PARENTHESIS : '(' ;
 LEFT_SQUARE_BRACKET : '[' ;
 LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00ab' ;
-LESS_THAN_SIGN : '<' ;
+LESS_THAN_SIGN : '<' ;   // &lt;
 LOW_LINE : '_' ;
 NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
