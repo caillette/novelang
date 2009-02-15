@@ -24,7 +24,7 @@ code {
   font-size : 11pt;
 }
 
-/* Reserved to html-source.css for displaying HTML source elements. */
+/* Reserved to html-source.xsl for displaying HTML source elements. */
 tt {
   font-size : 11pt ;
   font-weight: bold ;
@@ -43,10 +43,10 @@ pre {
 }
 
 blockquote > p {
-  font-size : 13.0pt ;
+  font-size : 12.0pt ;
 	text-indent : 0 ;
 	text-align : left ;
 	line-height : 1.25 ;
-	margin : 1pt 0 0 10pt;
+	margin : 1pt 0 0 12pt;
 	padding : 0 ;
 }

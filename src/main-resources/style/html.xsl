@@ -64,24 +64,16 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="//n:level" >
-    <div class="chapter" >
-      <xsl:apply-templates />
-    </div>
-  </xsl:template>
-
   <xsl:template match="//n:level/n:level-title" >
     <h1><xsl:apply-templates /></h1>
   </xsl:template>
 
-  <xsl:template match="//n:level/n:level" >
-    <div class="section" >
-      <xsl:apply-templates />
-    </div>
-  </xsl:template>
-
   <xsl:template match="//n:level/n:level/n:level-title" >
     <h2><xsl:apply-templates /></h2>
+  </xsl:template>
+
+  <xsl:template match="//n:level/n:level/n:level/n:level-title" >
+    <h3><xsl:apply-templates /></h3>
   </xsl:template>
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
@@ -123,6 +115,10 @@
   
   <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >
     <code><xsl:apply-templates/></code>
+  </xsl:template>
+
+  <xsl:template match="n:word-after-circumflex-accent" >
+    <sup><xsl:apply-templates/></sup>
   </xsl:template>
 
 </xsl:stylesheet>
