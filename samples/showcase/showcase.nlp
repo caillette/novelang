@@ -31,12 +31,12 @@ Literal is for text taken as it is, including spaces and line breaks.
 
 <<<
 Literal //here//.
-  Identation (2 spaces) to be preserved on this line.
+  Identation (2 spaces) preserved here.
   Two emtpy lines following:
 
 
 Character escaping also works here:
-&gt;&gt;&gt;
+«gt»>>
 >>>
 
 === Inline literal
@@ -81,7 +81,7 @@ Question mark? Exclamation mark! Comma, semicolon; colon: full stop. Ellipsis...
 --- And a last one.
 
 
-=== Paragraphs may contain embedded lists
+=== Paragraphs and embedded lists
 
 This is a paragraph starting here...
 - First
@@ -98,5 +98,9 @@ This is an anonymous section: a section which has no identifier nor title.
 Anonymous sections require some care for rendering : visual separator must
 not be part of the title itself.
 
+== Levels
 
+=== Level 2
+
+==== Level 3
 
