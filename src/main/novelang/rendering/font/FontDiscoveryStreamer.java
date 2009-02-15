@@ -81,7 +81,7 @@ public class FontDiscoveryStreamer {
 
 
 
-  public void generate( OutputStream outputStream, final Charset encoding ) throws Exception {
+  public void generate( OutputStream outputStream, final Charset charset ) throws Exception {
 
     final Iterable< Character > supportedCharacters ;
     {
@@ -100,7 +100,7 @@ public class FontDiscoveryStreamer {
         return new DateTime() ; // No null allowed!
       }
       public Charset getCharset() {
-        return encoding ;
+        return charset ;
       }
     } ;
 

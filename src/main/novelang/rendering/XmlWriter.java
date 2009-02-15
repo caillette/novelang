@@ -142,13 +142,13 @@ public class XmlWriter implements FragmentWriter {
   protected ContentHandler createContentHandler(
       OutputStream outputStream,
       DocumentMetadata documentMetadata,
-      Charset encoding
+      Charset charset
   )
       throws Exception
   {
     return new XMLWriter(
         outputStream,
-        new OutputFormat( "  ", true, encoding.name() )
+        new OutputFormat( "  ", true, charset.name() )
     ) ;
   }
 

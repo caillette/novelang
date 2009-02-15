@@ -153,11 +153,11 @@ public class XslWriter extends XmlWriter {
   protected ContentHandler createContentHandler(
       OutputStream outputStream,
       DocumentMetadata documentMetadata,
-      Charset encoding
+      Charset charset
   )
       throws Exception
   {
-    LOGGER.debug( "Creating ContentHandler with encoding {}", encoding.name() );
+    LOGGER.debug( "Creating ContentHandler with charset {}", charset.name() );
 
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
@@ -181,7 +181,7 @@ public class XslWriter extends XmlWriter {
     configure( transformerHandler.getTransformer(), documentMetadata ) ;
 
     final ContentHandler sinkContentHandler =
-        createSinkContentHandler( outputStream, documentMetadata, encoding ) ;
+        createSinkContentHandler( outputStream, documentMetadata, charset ) ;
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
 
     return transformerHandler ;
@@ -194,7 +194,7 @@ public class XslWriter extends XmlWriter {
         documentMetadata.getCreationTimestamp()
     ) ;
     transformer.setParameter(
-        "encoding",
+        "charset",
         documentMetadata.getCharset().name()
     ) ;
   }
@@ -202,10 +202,10 @@ public class XslWriter extends XmlWriter {
   protected ContentHandler createSinkContentHandler(
       OutputStream outputStream,
       DocumentMetadata documentMetadata,
-      Charset encoding
+      Charset charset
   ) throws Exception
   {
-    return super.createContentHandler( outputStream, documentMetadata, encoding ) ;
+    return super.createContentHandler( outputStream, documentMetadata, charset ) ;
   }
 
   public interface EntityEscapeSelector {

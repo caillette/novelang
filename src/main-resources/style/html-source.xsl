@@ -22,7 +22,7 @@
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
-  <xsl:param name="encoding"/>
+  <xsl:param name="charset"/>
 
   <xsl:output method="xml" />
 
@@ -33,7 +33,7 @@
         <link rel="stylesheet" type="text/css" href="/display.css" />
         <xsl:element name="meta" >
           <xsl:attribute name="http-equiv" >content-type</xsl:attribute>
-          <xsl:attribute name="content" >text/html;charset=<xsl:value-of select="$encoding" /></xsl:attribute>
+          <xsl:attribute name="content" >text/html;charset=<xsl:value-of select="charset" /></xsl:attribute>
         </xsl:element>
 
         <meta name="Generator" content="Novelang" />

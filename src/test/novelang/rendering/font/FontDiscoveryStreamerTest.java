@@ -62,8 +62,8 @@ public class FontDiscoveryStreamerTest {
     } ;
 
     final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
-    streamer.generate( byteArrayOutputStream, ENCODING ) ;
-    final String result = new String( byteArrayOutputStream.toByteArray(), ENCODING.name() ) ;
+    streamer.generate( byteArrayOutputStream, RENDERING_CHARSET ) ;
+    final String result = new String( byteArrayOutputStream.toByteArray(), RENDERING_CHARSET.name() ) ;
 
     LOGGER.debug( "Generated: \n{}", result ) ;
 
@@ -77,7 +77,7 @@ public class FontDiscoveryStreamerTest {
   private static final ClasspathResourceLoader RESOURCE_LOADER =
       new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
   
-  private static final Charset ENCODING = DefaultCharset.RENDERING;
+  private static final Charset RENDERING_CHARSET = DefaultCharset.RENDERING;
 
   private static final RenderingConfiguration HOLLOW_RENDERING_CONFIGURATION =
       new RenderingConfiguration() {
