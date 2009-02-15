@@ -22,12 +22,12 @@ import org.junit.Test;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static novelang.parser.Unescape.ESCAPE_START;
-import static novelang.parser.Unescape.ESCAPE_END;
+import static novelang.parser.SourceUnescape.ESCAPE_START;
+import static novelang.parser.SourceUnescape.ESCAPE_END;
 import novelang.rendering.RenderingEscape;
 
 /**
- * Tests for {@link Unescape}.
+ * Tests for {@link SourceUnescape}.
  *
  * @author Laurent Caillette
  */
@@ -38,7 +38,7 @@ public class SourceUnescapeTest {
     final String escapedCode = "does-not-exist";
     final String escaped = ESCAPE_START + escapedCode + ESCAPE_END ;
     try {
-      Unescape.unescapeText( escaped ) ;
+      SourceUnescape.unescapeText( escaped ) ;
       Assert.fail( "Failed to catch exception" ) ;
     } catch ( NoUnescapedCharacterException e ) {
       assertTrue( e.getMessage().contains( escapedCode ) ) ;
@@ -47,19 +47,19 @@ public class SourceUnescapeTest {
 
   @Test( expected = NoUnescapedCharacterException.class )
   public void escapeNotFound1() throws NoUnescapedCharacterException {
-    Unescape.unescapeText( ESCAPE_START + "does-not-exist" + ESCAPE_END ) ;
+    SourceUnescape.unescapeText( ESCAPE_START + "does-not-exist" + ESCAPE_END ) ;
   }
 
   @Test
   public void escape0() throws NoUnescapedCharacterException {
-    assertEquals( ">", Unescape.unescapeText( ESCAPE_START + "greater-than-sign" + ESCAPE_END ) ) ;
+    assertEquals( ">", SourceUnescape.unescapeText( ESCAPE_START + "greater-than-sign" + ESCAPE_END ) ) ;
   }
 
   @Test
   public void escape1() throws NoUnescapedCharacterException {
     assertEquals(
         "a>",
-        Unescape.unescapeText( "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END )
+        SourceUnescape.unescapeText( "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END )
     ) ;
   }
 
@@ -67,7 +67,7 @@ public class SourceUnescapeTest {
   public void escape2() throws NoUnescapedCharacterException {
     assertEquals(
         "a>b",
-        Unescape.unescapeText( "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" )
+        SourceUnescape.unescapeText( "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" )
     ) ;
   }
 
@@ -75,7 +75,7 @@ public class SourceUnescapeTest {
   public void escape3() throws NoUnescapedCharacterException {
     assertEquals(
         "a><",
-        Unescape.unescapeText(
+        SourceUnescape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END +
             ESCAPE_START + "less-than-sign" + ESCAPE_END
         )
@@ -86,7 +86,7 @@ public class SourceUnescapeTest {
   public void escape5() throws NoUnescapedCharacterException {
     assertEquals(
         "a>b<",
-        Unescape.unescapeText(
+        SourceUnescape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
             ESCAPE_START + "less-than-sign" + ESCAPE_END
         )
@@ -97,7 +97,7 @@ public class SourceUnescapeTest {
   public void escape6() throws NoUnescapedCharacterException {
     assertEquals(
         "a>b<c",
-        Unescape.unescapeText(
+        SourceUnescape.unescapeText(
             "a" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "b" +
                 ESCAPE_START + "less-than-sign" + ESCAPE_END + "c"
         )
@@ -108,7 +108,7 @@ public class SourceUnescapeTest {
   public void escape7() throws NoUnescapedCharacterException {
     assertEquals(
         "abc>d<e",
-        Unescape.unescapeText(
+        SourceUnescape.unescapeText(
             "abc" + ESCAPE_START + "gt" + ESCAPE_END + "d" +
                 ESCAPE_START + "lt" + ESCAPE_END + "e"
         )
@@ -119,7 +119,7 @@ public class SourceUnescapeTest {
   public void escape8() throws NoUnescapedCharacterException {
     assertEquals(
         "abc>d<e",
-        Unescape.unescapeText(
+        SourceUnescape.unescapeText(
             "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
                 ESCAPE_START + "less-than-sign" + ESCAPE_END + "e"
         )
@@ -130,7 +130,7 @@ public class SourceUnescapeTest {
   public void escape9() throws NoUnescapedCharacterException {
     assertEquals(
         "abc>d<ef",
-        Unescape.unescapeText(
+        SourceUnescape.unescapeText(
             "abc" + ESCAPE_START + "gt" + ESCAPE_END + "d" +
                 ESCAPE_START + "lt" + ESCAPE_END + "ef"
         )
@@ -141,7 +141,7 @@ public class SourceUnescapeTest {
   public void escape10() throws NoUnescapedCharacterException {
     assertEquals(
         "abc>d<ef",
-        Unescape.unescapeText(
+        SourceUnescape.unescapeText(
             "abc" + ESCAPE_START + "greater-than-sign" + ESCAPE_END + "d" +
                 ESCAPE_START + "less-than-sign" + ESCAPE_END + "ef"
         )

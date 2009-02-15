@@ -24,7 +24,6 @@ import org.xml.sax.ContentHandler;
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
-import novelang.parser.Unescape;
 import novelang.loader.ResourceName;
 
 /**

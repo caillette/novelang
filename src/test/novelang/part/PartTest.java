@@ -34,7 +34,7 @@ import novelang.common.Problem;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.NodeKind;
-import novelang.parser.Unescape;
+import novelang.parser.SourceUnescape;
 
 /**
  * @author Laurent Caillette
@@ -159,7 +159,7 @@ public class PartTest {
   public void problemWithBadEscapeCodeHasLocation() {
     final Part part = new Part(
         "\n" +
-        "..." + Unescape.ESCAPE_START + "unknown-escape-code" + Unescape.ESCAPE_END
+        "..." + SourceUnescape.ESCAPE_START + "unknown-escape-code" + SourceUnescape.ESCAPE_END
     ) ;
     Assert.assertTrue( part.hasProblem() ) ;
     final Iterator<Problem> problems = part.getProblems().iterator();

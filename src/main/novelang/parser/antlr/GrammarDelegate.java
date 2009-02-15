@@ -22,8 +22,9 @@ import org.antlr.runtime.tree.Tree;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
-import novelang.parser.Unescape;
+import novelang.parser.SourceUnescape;
 import novelang.parser.NoUnescapedCharacterException;
+import novelang.parser.SourceUnescape;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
@@ -52,7 +53,7 @@ public class GrammarDelegate extends ProblemDelegate {
 
   public String unescapeCharacter( String escaped, int line, int column ) {
     try {
-      return "" + Unescape.unescapeCharacter( escaped ) ;
+      return "" + SourceUnescape.unescapeCharacter( escaped ) ;
     } catch( NoUnescapedCharacterException e ) {
       final Location location = locationFactory.createLocation( line, column ) ;
       problems.add( Problem.createProblem(

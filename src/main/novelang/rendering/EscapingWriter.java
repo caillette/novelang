@@ -21,11 +21,11 @@ import java.nio.charset.Charset;
 
 import novelang.configuration.RenderingConfiguration;
 import novelang.common.Nodepath;
-import novelang.parser.Unescape;
+import novelang.parser.SourceUnescape;
 import novelang.loader.ResourceName;
 
 /**
- * An {@code XslWriter} escaping characters known as {@link novelang.parser.Unescape}.
+ * An {@code XslWriter} escaping characters known as {@link novelang.parser.SourceUnescape}.
  *
  * @author Laurent Caillette
  */
@@ -41,7 +41,7 @@ public class EscapingWriter extends XslWriter {
   }
 
   public void write( Nodepath kinship, String word ) throws Exception {
-    final String escaped = Unescape.escapeText( word );
+    final String escaped = SourceUnescape.escapeText( word );
     super.write( kinship, escaped ) ;
   }
 
