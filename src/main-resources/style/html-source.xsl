@@ -80,7 +80,7 @@
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-regular" >
-    <p><xsl:apply-templates/></p>
+<tt>&amp;lt;p&amp;gt;</tt><p><xsl:apply-templates/></p><tt>&amp;lt;/p&amp;gt;</tt>
   </xsl:template>
 
   <xsl:template match="n:url" >
@@ -88,7 +88,7 @@
   </xsl:template>
 
   <xsl:template match="n:paragraph-as-list-item" >
-    <p><tt>&mdash;&nbsp;</tt><xsl:apply-templates/></p>
+<tt>&amp;lt;p&amp;gt;</tt><p><tt>&mdash;&nbsp;</tt><xsl:apply-templates/></p><tt>&amp;lt;/p&amp;gt;</tt>
   </xsl:template>
   
 
