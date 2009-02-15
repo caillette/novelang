@@ -64,7 +64,7 @@ public class HtmlWriter extends XslWriter {
       DocumentMetadata documentMetadata,
       Charset charset
   ) throws Exception {
-    return new HtmlSink( outputStream, charset ) ; 
+    return new HtmlSink( outputStream, charset ) ;
   }
 
   private static final EntityEscapeSelector ESCAPE_ISO_ENTITIES = new EntityEscapeSelector() {
