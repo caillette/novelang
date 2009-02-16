@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.parser;
+package novelang.parser.shared;
 
 import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;

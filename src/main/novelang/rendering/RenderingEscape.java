@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import novelang.parser.GeneratedLexemes;
-import novelang.parser.Lexeme;
+import novelang.parser.shared.Lexeme;
 
 /**
  * Escapes characters for rendering. Based on {@link GeneratedLexemes}.

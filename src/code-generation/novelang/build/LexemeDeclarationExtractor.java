@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import novelang.parser.Lexeme;
+import novelang.parser.shared.Lexeme;
 
 /**
  * @author Laurent Caillette

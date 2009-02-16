@@ -24,7 +24,7 @@ import java.util.Set;
 import org.antlr.stringtemplate.StringTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.parser.Lexeme;
+import novelang.parser.shared.Lexeme;
 
 
 /**

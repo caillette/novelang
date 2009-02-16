@@ -139,8 +139,10 @@
         <path refid="deploy-libs" />
       </classpath>
       <src path="${source.codegeneration.java.dir}" />
+      <!-- This is a perfectly dirty hack because source dependencies are not split enough. -->
+      <src path="${source.main.java.dir}/novelang/parser/shared" />
     </javac>
-
+ 
     <copy todir="${target.buildclasses.dir}" >
       <fileset dir="${source.codegeneration.java.dir}" >
         <include name="**/*.stg"  />

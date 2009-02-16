@@ -93,6 +93,7 @@ import java.util.Set ;
 import java.util.Map ;
 import com.google.common.collect.ImmutableMap ;
 import com.google.common.collect.Maps ;
+import novelang.parser.shared.Lexeme ;
 
 <javadoc()>
 public class <name> {
