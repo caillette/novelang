@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2008, 2009 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,8 +23,8 @@ options { output = AST ; }
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;     
   BOOK ;
-  LEVEL_INTRODUCER_ ;          // DELIMITER was too generic, let's talk about level introducer.
-  LEVEL_INTRODUCER_INDENT_ ;   // DELIMITER was too generic, let's talk about level introducer.
+  LEVEL_INTRODUCER_ ;
+  LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
   BLOCK_INSIDE_SOLIDUS_PAIRS ;                 
   EXTENDED_WORD_ ;
