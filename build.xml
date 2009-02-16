@@ -534,7 +534,7 @@
 
   <target
       name="publish-everything"
-      depends="login-on-remote-site, publish-distrib, publish-javadoc, publish-documentation"
+      depends="login-on-remote-site, publish-distrib, publish-documentation, publish-javadoc"
   />
 
 
