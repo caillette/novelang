@@ -18,8 +18,8 @@ grammar Novelang ;
 
 options { output = AST ; }
 
-//import AllTokens, Url ;
 
+// Those tokens are turned into a NodeKind.java by TokenEnumerationGenerator.
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;     
   BOOK ;
@@ -1447,6 +1447,9 @@ nonHexLetter
 // ======
 // Tokens
 // ======
+//
+// They become GeneratedLexemes.java with the magic of the LexemeGenerator.
+// The commented HTML named entity is used, for convenient aliasing.
 
 
 LATIN_SMALL_LETTER_A : 'a' ;
