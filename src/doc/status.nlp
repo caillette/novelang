@@ -6,7 +6,7 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 === Version `0.18.0`
 
---- Experimental support for custom encodings for both source and rendered documents.
+--- Experimental support for custom charset for both source and rendered documents.
 
 
 === Version `0.17.0`

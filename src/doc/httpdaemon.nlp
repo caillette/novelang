@@ -47,8 +47,10 @@ java -jar $NOVELANG_DIR/novelang-VERSION.jar --hyphenation-dir=my/directory
 The ``--source-charset`` option sets the charset of source documents.
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar --source-charset iso-8859-1
+java -jar $NOVELANG_DIR/novelang-VERSION.jar --source-charset MacRoman
 >>>
+
+Default value (when this option is unspecified) is ``ISO-8859-1``.
 
 
 === The ``--rendering-charset`` option
@@ -58,6 +60,8 @@ The ``--rendering-charset`` option sets the charset of rendered documents.
 <<<
 java -jar $NOVELANG_DIR/novelang-VERSION.jar --rendering-charset iso-8859-2
 >>>
+
+Default value (when this option is unspecified) is ``UTF-8``.
 
 
 === Directory listing
