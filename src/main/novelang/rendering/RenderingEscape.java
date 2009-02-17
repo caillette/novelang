@@ -124,7 +124,7 @@ public class RenderingEscape {
    * @param capability non-null object.
    * @return a non-null, non-empty String.
    */
-  public static String escapeHtmlText( String text, CharsetEncodingCapability capability ) {
+  public static String escapeToHtmlText( String text, CharsetEncodingCapability capability ) {
     final StringBuffer buffer = new StringBuffer() ;
     for( char c : text.toCharArray() ) {
       final String escaped = escapeHtmlIfNeeded( c, capability ) ;

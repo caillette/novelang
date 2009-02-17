@@ -51,11 +51,11 @@ public class HtmlWriter extends XslWriter {
   }
 
   public void writeLiteral( Nodepath kinship, String word ) throws Exception {
-      super.write( kinship, RenderingEscape.escapeHtmlText( word, charsetEncodingCapability ) ) ;
+      super.write( kinship, RenderingEscape.escapeToHtmlText( word, charsetEncodingCapability ) ) ;
   }
 
   public void write( Nodepath kinship, String word ) throws Exception {
-    super.write( kinship, RenderingEscape.escapeHtmlText( word, charsetEncodingCapability ) ) ;
+    super.write( kinship, RenderingEscape.escapeToHtmlText( word, charsetEncodingCapability ) ) ;
   }
 
 

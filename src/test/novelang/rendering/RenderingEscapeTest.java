@@ -40,7 +40,7 @@ public class RenderingEscapeTest {
   public void escapeHtml0() throws NoUnescapedCharacterException {
     assertEquals(
         "&amp;x&gt;y&lt;z",
-        RenderingEscape.escapeHtmlText( "&x>y<z", CHARSET_ENCODING_CAPABILITY )
+        RenderingEscape.escapeToHtmlText( "&x>y<z", CHARSET_ENCODING_CAPABILITY )
     ) ;
   }
 
@@ -48,7 +48,7 @@ public class RenderingEscapeTest {
   public void escapeHtmlWithEncoding0() throws NoUnescapedCharacterException {
     assertEquals(
         "x&oelig;" + EGRAVE,
-        RenderingEscape.escapeHtmlText( 
+        RenderingEscape.escapeToHtmlText( 
             "x" + OE_LIGATURED + EGRAVE, 
             CHARSET_ENCODING_CAPABILITY 
         )
