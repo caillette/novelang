@@ -28,9 +28,9 @@ Literal
   
    
 
-Some ISO-8859-1 characters : à À é è ë ê É È Ë Ê ï î Ï Î ö ô Ö Ô ù ü û Ù Ü Û æ Æ ç Ç 
+Some ISO-8859-1 characters : Ã  Ã€ Ã© Ã¨ Ã« Ãª Ã‰ Ãˆ Ã‹ ÃŠ Ã¯ Ã® Ã Ã Ã¶ Ã´ Ã– Ã” Ã¹ Ã¼ Ã» Ã™ Ãœ Ã› Ã¦ Ã† Ã§ Ã‡ 
 
-Escapes : «latin-small-ligature-oe» «latin-capital-ligature-oe» 
+Escapes : Â«latin-small-ligature-oeÂ» Â«latin-capital-ligature-oeÂ» 
 
 
 === URLs support 

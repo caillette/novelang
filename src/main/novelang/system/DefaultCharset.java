@@ -19,19 +19,26 @@ package novelang.system;
 import java.nio.charset.Charset;
 
 /**
- * Default encoding for parsed files.
+ * Default charsets.
  * 
  * @author Laurent Caillette
  */
-public class DefaultCharset {
+public final class DefaultCharset {
 
   private DefaultCharset() { }
 
+  /**
+   * Default charset for source documents, {@value}.
+   */
   public static final Charset SOURCE ;
+
+  /**
+   * Default charset for rendered documents, {@value}.
+   */
   public static final Charset RENDERING ;
 
   static {
-    SOURCE = Charset.forName( "ISO-8859-1" ) ;
+    SOURCE = Charset.forName( "UTF-8" ) ;
     RENDERING = Charset.forName( "UTF-8" ) ;
   }
 

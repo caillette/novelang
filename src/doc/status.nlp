@@ -4,6 +4,11 @@ Novelang is stable, with more thant 270 automated tests. It generates a PDF docu
 
 Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version `1.0.0`. Keep informed reading the blog. 
 
+=== Version `0.19.0`
+
+--- Default charset for source documents is now `UTF-8`.
+
+
 === Version `0.18.0`
 
 --- Experimental support for custom charset for both source and rendered documents.

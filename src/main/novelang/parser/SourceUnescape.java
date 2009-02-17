@@ -43,12 +43,12 @@ public class SourceUnescape {
   /**
    * Left-pointing double angle quotation mark "&#xab;".
    */
-  public static Character ESCAPE_START = '\u00ab' ; // «
+  public static Character ESCAPE_START = '\u00ab' ; // Â«
 
   /**
    * Right-pointing double angle quotation mark "&#xbb;".
    */
-  public static Character ESCAPE_END = '\u00bb' ; // »
+  public static Character ESCAPE_END = '\u00bb' ; // Â»
 
 
   static {
@@ -59,10 +59,10 @@ public class SourceUnescape {
 
     // Symbols to keep after character escape refactoring.
 
-    escapedCharacters.put( "left-pointing-double-angle-quotation-mark", ESCAPE_START ) ; // «
+    escapedCharacters.put( "left-pointing-double-angle-quotation-mark", ESCAPE_START ) ; // Â«
     escapedCharactersAlternatives.put( "laquo", ESCAPE_START ) ;
 
-    escapedCharacters.put( "right-pointing-double-angle-quotation-mark", ESCAPE_END ) ; // »
+    escapedCharacters.put( "right-pointing-double-angle-quotation-mark", ESCAPE_END ) ; // Â»
     escapedCharactersAlternatives.put( "raquo", ESCAPE_END ) ;
 
     escapedCharacters.put( "less-than-sign", '<' ) ;
@@ -86,7 +86,7 @@ public class SourceUnescape {
 
     escapedCharacters.put( "euro-sign", '\u8364' ) ;
 
-    escapedCharacters.put( "multiplication-sign", '\u00d7' ) ; // ×
+    escapedCharacters.put( "multiplication-sign", '\u00d7' ) ; // Ã—
     escapedCharactersAlternatives.put( "times", '\u00d7' ) ;
 
     escapedHtmlCharacters.put( "oelig", '\u0153' ) ;
@@ -184,18 +184,6 @@ public class SourceUnescape {
     return buffer.toString() ;
   }
 
-  public static String escapeHtmlText( String text ) {
-    final StringBuffer buffer = new StringBuffer() ;
-    for( char c : text.toCharArray() ) {
-      final String escaped = escapeHtml( c ) ;
-      if( null ==  escaped ) {
-        buffer.append( c ) ;
-      } else {
-        buffer.append( '&' ).append( escaped ).append( ";" ) ;
-      }
-    }
-    return buffer.toString() ;
-  }
 
 
 }
