@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.parser.NoUnescapedCharacterException;
+import novelang.parser.SourceUnescape;
 
 /**
  * Tests for {@link RenderingEscape}.
@@ -32,6 +33,8 @@ import novelang.parser.NoUnescapedCharacterException;
 public class RenderingEscapeTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( RenderingEscapeTest.class ) ;
+  protected static final char OE_LIGATURED = '\u0153' ;
+  private static final String EGRAVE = "\u00e8";
 
   @Test
   public void escapeHtml0() throws NoUnescapedCharacterException {
@@ -44,8 +47,33 @@ public class RenderingEscapeTest {
   @Test
   public void escapeHtmlWithEncoding0() throws NoUnescapedCharacterException {
     assertEquals(
-        "x&oelig;\u00e8",
-        RenderingEscape.escapeHtmlText( "x\u0153\u00e8", CHARSET_ENCODING_CAPABILITY )
+        "x&oelig;" + EGRAVE,
+        RenderingEscape.escapeHtmlText( 
+            "x" + OE_LIGATURED + EGRAVE, 
+            CHARSET_ENCODING_CAPABILITY 
+        )
+    ) ;
+  }
+  
+  @Test 
+  public void escapeToSource0() {
+    assertEquals(
+        "x" + SourceUnescape.ESCAPE_START + "oelig" + SourceUnescape.ESCAPE_END + EGRAVE,
+        RenderingEscape.escapeToSourceText( 
+            "x" + OE_LIGATURED + EGRAVE,
+            CHARSET_ENCODING_CAPABILITY        
+        )
+    ) ;
+  }
+
+  @Test 
+  public void escapeToSource1() {
+    assertEquals(
+        "&<>",
+        RenderingEscape.escapeToSourceText( 
+            "&<>",
+            CHARSET_ENCODING_CAPABILITY        
+        )
     ) ;
   }
 

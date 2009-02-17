@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import novelang.parser.GeneratedLexemes;
+import novelang.parser.SourceUnescape;
 import novelang.parser.shared.Lexeme;
 
 /**
@@ -43,28 +44,42 @@ public class RenderingEscape {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( RenderingEscape.class ) ;
 
-  private static final Map< Character, String > HTML_CONVENIENCE_ESCAPES;
-  private static final Map< Character, String > HTML_MANDATORY_ESCAPES;
+// ===============  
+// Tables creation
+// ===============  
+  
+  private static final Map< Character, String > UNICODE_NAME_ESCAPES ;
+  private static final Map< Character, String > PREFERRED_ESCAPES ;
+  private static final Map< Character, String > HTML_MANDATORY_ESCAPES ;
 
   static {
-    final Map< Character, String > htmlConvenienceEscapes = Maps.newHashMap() ;
+    final Map< Character, String > unicodeNameEscapes = Maps.newHashMap() ;
+    final Map< Character, String > preferredEscapes = Maps.newHashMap() ;
     final Map< Character, String > htmlMandatoryEscapes = Maps.newHashMap() ;
     for( Lexeme lexeme : GeneratedLexemes.getLexemes().values() ) {
+      final Character character = lexeme.getCharacter();
+      final String unicodeName = lexeme.getUnicodeName() ;
+      put( character, unicodeName, unicodeNameEscapes ) ;
       final String htmlEntityName = lexeme.getHtmlEntityName();
       if( htmlEntityName != null ) {
-        put( lexeme.getCharacter(), htmlEntityName, htmlConvenienceEscapes ) ;
+        put( character, htmlEntityName, preferredEscapes ) ;
       }
     }
-    put( '<', "lt", htmlConvenienceEscapes, htmlMandatoryEscapes ) ;
-    put( '>', "gt", htmlConvenienceEscapes, htmlMandatoryEscapes ) ;
-    put( '&', "amp", htmlConvenienceEscapes, htmlMandatoryEscapes ) ;
+    put( '<', "lt", preferredEscapes, htmlMandatoryEscapes ) ;
+    put( '>', "gt", preferredEscapes, htmlMandatoryEscapes ) ;
+    put( '&', "amp", preferredEscapes, htmlMandatoryEscapes ) ;
 
-    HTML_CONVENIENCE_ESCAPES = ImmutableMap.copyOf( htmlConvenienceEscapes ) ;
+    UNICODE_NAME_ESCAPES = ImmutableMap.copyOf( unicodeNameEscapes ) ;
+    LOGGER.debug( 
+        "Created Unicode name escape table with {} entries.", UNICODE_NAME_ESCAPES.size() ) ;
+ 
+    PREFERRED_ESCAPES = ImmutableMap.copyOf( preferredEscapes ) ;
+    LOGGER.debug(
+        "Created preferred escape table with {} entries.", PREFERRED_ESCAPES.size() ) ;
+
     HTML_MANDATORY_ESCAPES = ImmutableMap.copyOf( htmlMandatoryEscapes ) ;
-    LOGGER.debug( "Created HTML convenience escape table with {} entries.",
-        HTML_CONVENIENCE_ESCAPES.size() ) ;
-    LOGGER.debug( "Created HTML mandatory escape table with {} entries.",
-        HTML_MANDATORY_ESCAPES.size() ) ;
+    LOGGER.debug( 
+        "Created HTML mandatory escape table with {} entries.", HTML_MANDATORY_ESCAPES.size() ) ;
   }
 
   private static void put( Character character, String string, Map< Character, String >... maps ) {
@@ -73,32 +88,42 @@ public class RenderingEscape {
     }
   }
 
-  /**
-   * Replaces a given character with HTML named entity if not a part of given charset,
-   * or returns the character itself.
-   *
-   * @param unescaped a non-null object.
-   * @param capability non-null object.
-   * @return a non-null, non-empty String.
-   */
-  public static String escapeHtmlIfNeeded( char unescaped, CharsetEncodingCapability capability ) {
+  
+// ===========  
+// HTML escape  
+// ===========  
+  
+  private static String escapeHtmlIfNeeded( char unescaped, CharsetEncodingCapability capability ) {
     final String mandatoryEscape = HTML_MANDATORY_ESCAPES.get( unescaped ) ;
     if( null == mandatoryEscape ) {
       if( capability.canEncode( unescaped ) ) {
         return "" + unescaped ;
       } else {
-        final String convenienceEscape = HTML_CONVENIENCE_ESCAPES.get( unescaped ) ;
+        final String convenienceEscape = PREFERRED_ESCAPES.get( unescaped ) ;
         if( null ==  convenienceEscape ) {
-            return "&" + CharUtils.unicodeEscaped( unescaped ) + ";" ;
+            return wrapWithHtmlEntityDelimiters( CharUtils.unicodeEscaped( unescaped ) ) ;
         } else {
-          return "&" + convenienceEscape + ";" ;
+          return wrapWithHtmlEntityDelimiters( convenienceEscape ) ;
         }
       }
     } else {
-      return "&" + mandatoryEscape + ";" ;
+      return wrapWithHtmlEntityDelimiters( mandatoryEscape ) ;
     }
   }
+  
+  private static String wrapWithHtmlEntityDelimiters( String string ) {
+    return "&" + string + ";" ;
+  }
 
+
+  /**
+   * For each character, replaces a given character with HTML named entity if not a part 
+   * of given charset.
+   *
+   * @param text a non-null object.
+   * @param capability non-null object.
+   * @return a non-null, non-empty String.
+   */
   public static String escapeHtmlText( String text, CharsetEncodingCapability capability ) {
     final StringBuffer buffer = new StringBuffer() ;
     for( char c : text.toCharArray() ) {
@@ -108,6 +133,67 @@ public class RenderingEscape {
     return buffer.toString() ;
   }
 
+
+// =============  
+// Source escape  
+// =============  
+
+  private static String escapeToSourceIfNeeded( 
+      char unescaped, 
+      CharsetEncodingCapability capability 
+  ) {
+    if( capability.canEncode( unescaped ) ) {
+      return "" + unescaped ;
+    } else {
+      final String preferredEscape = PREFERRED_ESCAPES.get( unescaped ) ;
+      if( null ==  preferredEscape ) {
+        final String unicodeEscape = UNICODE_NAME_ESCAPES.get( unescaped ) ;
+        if( null == unicodeEscape ) {
+          throw new IllegalArgumentException( 
+              "No Unicode name for: " + CharUtils.unicodeEscaped( unescaped ) ) ;
+        } else {
+          return wrapWithSourceEscapeDelimiters( unicodeEscape ) ;
+        }
+      } else {        
+        return wrapWithSourceEscapeDelimiters( preferredEscape );
+      }
+    }
+  }
+
+  private static String wrapWithSourceEscapeDelimiters( String string ) {
+    return 
+        SourceUnescape.ESCAPE_START + 
+        string + 
+        SourceUnescape.ESCAPE_END
+    ;
+  }
+
+  /**
+   * For each character, replaces with source-friendly escape if not a part of given charset.
+   * Escape is based on HTML entity name if available, or Unicode name otherwise.
+   *
+   * @param text a non-null object.
+   * @param capability non-null object.
+   * @return a non-null, non-empty String.
+   */
+  public static String escapeToSourceText( String text, CharsetEncodingCapability capability ) {
+    final StringBuffer buffer = new StringBuffer() ;
+    for( char c : text.toCharArray() ) {
+      final String escaped = escapeToSourceIfNeeded( c, capability ) ;
+      buffer.append( escaped ) ;
+    }
+    return buffer.toString() ;
+  }
+  
+  
+// ===================  
+// Encoding capability  
+// ===================  
+
+  /**
+   * Avoids to expose a whole {@link CharsetEncoder} while we just want to know 
+   * if it can encode a character.
+   */
   public static CharsetEncodingCapability createCapability( final Charset charset ) {
     final CharsetEncoder encoder = charset.newEncoder() ;
     return new CharsetEncodingCapability() {
