@@ -22,15 +22,22 @@ import java.nio.charset.Charset;
 
 import org.xml.sax.ContentHandler;
 import novelang.common.metadata.DocumentMetadata;
+import novelang.common.Nodepath;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
 
 /**
+ * A {@link FragmentWriter} which rewrites Novelang source.
+ * 
  * @author Laurent Caillette
  */
-public class NlpWriter extends EscapingWriter {
+public class NlpWriter extends XslWriter {
 
   protected static final ResourceName DEFAULT_NLP_STYLESHEET = new ResourceName( "nlp.xsl" ) ;
+  
+  private final RenderingEscape.CharsetEncodingCapability charsetEncodingCapability ;
+
+  
 
   public NlpWriter(
       RenderingConfiguration configuration,
@@ -43,6 +50,7 @@ public class NlpWriter extends EscapingWriter {
         charset,
         RenditionMimeType.NLP 
     ) ;
+    this.charsetEncodingCapability = RenderingEscape.createCapability( charset ) ;
   }
 
   protected final ContentHandler createSinkContentHandler(
@@ -57,5 +65,9 @@ public class NlpWriter extends EscapingWriter {
     return new TextSink( outputStream );
   }
 
+  public void write( Nodepath kinship, String word ) throws Exception {
+    final String escaped = RenderingEscape.escapeToSourceText( word, charsetEncodingCapability ) ;
+    super.write( kinship, escaped ) ;
+  }
 
 }

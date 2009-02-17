@@ -29,6 +29,7 @@ import novelang.common.metadata.MetadataHelper;
  */
 public class PlainTextWriter implements FragmentWriter {
 
+
   private PrintWriter writer ;
 
   public RenditionMimeType getMimeType() {
