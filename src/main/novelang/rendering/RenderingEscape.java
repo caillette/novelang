@@ -59,7 +59,7 @@ public class RenderingEscape {
     for( Lexeme lexeme : GeneratedLexemes.getLexemes().values() ) {
       final Character character = lexeme.getCharacter();
       final String unicodeName = lexeme.getUnicodeName() ;
-      put( character, unicodeName, unicodeNameEscapes ) ;
+      put( character, unicodeUpperNameToEscapeName( unicodeName ), unicodeNameEscapes ) ;
       final String htmlEntityName = lexeme.getHtmlEntityName();
       if( htmlEntityName != null ) {
         put( character, htmlEntityName, preferredEscapes ) ;
@@ -82,6 +82,10 @@ public class RenderingEscape {
         "Created HTML mandatory escape table with {} entries.", HTML_MANDATORY_ESCAPES.size() ) ;
   }
 
+  private static String unicodeUpperNameToEscapeName( String upperName ) {
+    return upperName.toLowerCase().replace( '_', '-' ) ;
+  }
+  
   private static void put( Character character, String string, Map< Character, String >... maps ) {
     for( Map< Character, String > map : maps ) {
       map.put( character, string ) ;

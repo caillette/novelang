@@ -16,14 +16,12 @@
  */
 package novelang.rendering;
 
-import java.nio.charset.Charset;
-
-import static org.junit.Assert.*;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+import java.nio.charset.Charset;
 
 /**
  * Tests for {@link RenderingEscape}.
@@ -32,12 +30,23 @@ import novelang.parser.SourceUnescape;
  */
 public class RenderingEscapeTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( RenderingEscapeTest.class ) ;
+  /**
+   * Not defined in {@link #ISO_8859_1} but has HTML entity name.
+   */
   protected static final char OE_LIGATURED = '\u0153' ;
+  
+  /**
+   * Defined in {@link #ISO_8859_1} and has HTML entity name.
+   */
   private static final String EGRAVE = "\u00e8";
+  
+  /**
+   * Not defined in {@link #ISO_8859_1} nor has HTML entity name.
+   */  
+  private static final String O_DOUBLEACUTE = "\u0151";
 
   @Test
-  public void escapeHtml0() throws NoUnescapedCharacterException {
+  public void escapeToHtmlWithMandatoryEscapes() throws NoUnescapedCharacterException {
     assertEquals(
         "&amp;x&gt;y&lt;z",
         RenderingEscape.escapeToHtmlText( "&x>y<z", CHARSET_ENCODING_CAPABILITY )
@@ -45,29 +54,68 @@ public class RenderingEscapeTest {
   }
 
   @Test
-  public void escapeHtmlWithEncoding0() throws NoUnescapedCharacterException {
+  public void escapeHtmlWithHtmlEntityName() throws NoUnescapedCharacterException {
     assertEquals(
-        "x&oelig;" + EGRAVE,
+        "x&oelig;",
         RenderingEscape.escapeToHtmlText( 
-            "x" + OE_LIGATURED + EGRAVE, 
+            "x" + OE_LIGATURED, 
+            CHARSET_ENCODING_CAPABILITY 
+        )
+    ) ;
+  }  
+  
+  @Test
+  public void escapeToHtmlWithNoEscapeNeeded() throws NoUnescapedCharacterException {
+    assertEquals(
+        "x" + EGRAVE,
+        RenderingEscape.escapeToHtmlText( 
+            "x" + EGRAVE, 
             CHARSET_ENCODING_CAPABILITY 
         )
     ) ;
   }
+
+  
   
   @Test 
-  public void escapeToSource0() {
+  public void escapeToSourceWithNoEscapeNeeded() {
     assertEquals(
-        "x" + SourceUnescape.ESCAPE_START + "oelig" + SourceUnescape.ESCAPE_END + EGRAVE,
+        "x" + EGRAVE,
         RenderingEscape.escapeToSourceText( 
-            "x" + OE_LIGATURED + EGRAVE,
+            "x" + EGRAVE,
             CHARSET_ENCODING_CAPABILITY        
         )
     ) ;
   }
 
   @Test 
-  public void escapeToSource1() {
+  public void escapeToSourceWithHtmlEntityName() {
+    assertEquals(
+        "x" + SourceUnescape.ESCAPE_START + "oelig" + SourceUnescape.ESCAPE_END ,
+        RenderingEscape.escapeToSourceText( 
+            "x" + OE_LIGATURED,
+            CHARSET_ENCODING_CAPABILITY        
+        )
+    ) ;
+  }
+
+  @Test 
+  public void escapeToSourceWithUnicodeName() {
+    assertEquals(
+        "x" + 
+            SourceUnescape.ESCAPE_START + 
+            "latin-small-letter-o-with-double-acute" + 
+            SourceUnescape.ESCAPE_END
+        ,
+        RenderingEscape.escapeToSourceText( 
+            "x" + O_DOUBLEACUTE,
+            CHARSET_ENCODING_CAPABILITY        
+        )
+    ) ;
+  }
+
+  @Test 
+  public void escapeToSourceNotMessedWithHtml() {
     assertEquals(
         "&<>",
         RenderingEscape.escapeToSourceText( 

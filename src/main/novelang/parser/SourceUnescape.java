@@ -104,10 +104,6 @@ public class SourceUnescape {
     return new ImmutableMap.Builder().putAll( ESCAPED_CHARACTERS ).build() ;
   }
 
-  public static String escapeHtml( Character unescaped ) {
-    return ESCAPED_HTML_CHARACTERS.inverse().get( unescaped ) ;
-  }
-
   public static Character unescapeCharacter( String escaped )
       throws NoUnescapedCharacterException
   {
@@ -125,27 +121,7 @@ public class SourceUnescape {
   }
 
 
-  /**
-   * Returns escaped symbol.
-   * @param unescaped must not be null.
-   * @return null if not found.
-   */
-  private static String escapeCharacter( Character unescaped ) {
-    return ESCAPED_CHARACTERS.inverse().get( unescaped ) ;
-  }
 
-  public static String escapeText( String text ) {
-    final StringBuffer buffer = new StringBuffer() ;
-    for( char c : text.toCharArray() ) {
-      final String escaped = escapeCharacter( c ) ;
-      if( null == escaped ) {
-        buffer.append( c ) ;
-      } else {
-        buffer.append( ESCAPE_START ).append( escaped ).append( ESCAPE_END ) ;
-      }
-    }
-    return buffer.toString();
-  }
 
   private static final Pattern PLAIN_ESCAPE_PATTERN =
       Pattern.compile( "(" + ESCAPE_START + "(\\w+(?:-\\w+)*)" + ESCAPE_END + ")" ) ;
