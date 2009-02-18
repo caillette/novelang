@@ -19,6 +19,8 @@ package novelang.rendering;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
@@ -29,6 +31,11 @@ import novelang.common.metadata.MetadataHelper;
  */
 public class PlainTextWriter implements FragmentWriter {
 
+  private final Charset charset ;
+
+  public PlainTextWriter( Charset charset ) {
+    this.charset = charset;
+  }
 
   private PrintWriter writer ;
 
@@ -40,8 +47,8 @@ public class PlainTextWriter implements FragmentWriter {
       OutputStream outputStream,
       DocumentMetadata documentMetadata
   ) throws Exception {
-    // TODO add charset support.
-    writer = new PrintWriter( outputStream ) ;
+    final OutputStreamWriter outputStreamWriter = new OutputStreamWriter( outputStream, charset ) ;        
+    writer = new PrintWriter( outputStreamWriter ) ;
     writer.append( "Timestamp: " );
     writer.append(
         MetadataHelper.TIMESTAMP_FORMATTER.print( documentMetadata.getCreationTimestamp() ) ) ;

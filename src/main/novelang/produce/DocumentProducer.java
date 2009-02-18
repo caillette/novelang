@@ -102,7 +102,7 @@ public class DocumentProducer {
         break ;
 
       case TXT :
-        serve.with( new GenericRenderer( new PlainTextWriter() ) ) ;
+        serve.with( new GenericRenderer( new PlainTextWriter( charset ) ) ) ;
         break ;
 
       case XML :
