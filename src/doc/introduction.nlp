@@ -41,7 +41,7 @@ Hello, world!
 
 === Run!
 
-Then, from the directory where the file is located, launch the Novelang dæmon:
+Then, from the directory where the file is located, launch the Novelang dÃ¦mon:
 
 <<<
 java -jar $NOVELANG_DIR/novelang-VERSION.jar
