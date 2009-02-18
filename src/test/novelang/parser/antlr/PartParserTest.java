@@ -66,6 +66,8 @@ public class PartParserTest {
       new ParserMethod( "part" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_URL = 
       new ParserMethod( "url" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_CELL_ROW_SEQUENCE = 
+      new ParserMethod( "cellRowSequence" ) ;
 
   private static final SyntacticTree TREE_APOSTROPHE_WORDMATE = tree( APOSTROPHE_WORDMATE, "'" ) ;
 
@@ -1158,16 +1160,50 @@ public class PartParserTest {
   @Test
   public void justLevelIntroducerIndent() throws RecognitionException {
     PARSERMETHOD_LEVEL_INTRODUCER.checkTree(
-      "=== w",
-      tree(
-          NodeKind.LEVEL_INTRODUCER_,
-          tree( NodeKind.LEVEL_INTRODUCER_INDENT_, "===" ),
-          tree( NodeKind.LEVEL_TITLE, tree( WORD_, "w" ) )
-      )
+        "=== w",
+        tree(
+            NodeKind.LEVEL_INTRODUCER_,
+            tree( NodeKind.LEVEL_INTRODUCER_INDENT_, "===" ),
+            tree( NodeKind.LEVEL_TITLE, tree( WORD_, "w" ) )
+        )
     ) ;
 
   }
 
+  @Test
+  public void cellRowSequence1x1() throws RecognitionException {
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
+        "| x |",
+        tree( 
+            CELL_ROW_SEQUENCE, 
+            tree( 
+                CELL_ROW, 
+                tree( CELL, tree( WORD_, "x" ) ) 
+            ) 
+        )
+    ) ;
+  }
+
+  @Test
+  public void cellRowSequence2x2() throws RecognitionException {
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
+        "| a | b |" + BREAK +
+        "|c  |  d|",
+        tree( 
+            CELL_ROW_SEQUENCE, 
+            tree( 
+                CELL_ROW, 
+                tree( CELL, tree( WORD_, "a" ) ), 
+                tree( CELL, tree( WORD_, "b" ) ) 
+            ),
+            tree( 
+                CELL_ROW, 
+                tree( CELL, tree( WORD_, "c" ) ),
+                tree( CELL, tree( WORD_, "d" ) ) 
+            ) 
+        )
+    ) ;
+  }
 
 
 }

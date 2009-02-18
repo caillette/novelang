@@ -43,6 +43,9 @@ tokens {
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
   URL ;  
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
+  CELL ;
+  CELL_ROW ;
+  CELL_ROW_SEQUENCE ;
   WORD_ ;
   
   PUNCTUATION_SIGN ;
@@ -118,6 +121,7 @@ part
       | p += blockQuote 
       | p += literal
       | p += bigDashedListItem
+      | p += cellRowSequence
     )
     ( largebreak (
         p += levelIntroducer 
@@ -125,6 +129,7 @@ part
       | p += blockQuote 
       | p += literal
       | p += bigDashedListItem
+      | p += cellRowSequence
     ) )*      
     ( mediumbreak | largebreak )? 
     EOF 
@@ -741,6 +746,25 @@ smallDashedListItem
   ;
 
 
+// =====
+// Cells
+// =====
+
+cellRowSequence
+  : cellRow 
+    ( ( WHITESPACE? SOFTBREAK WHITESPACE? ) cellRow )*
+    -> ^( CELL_ROW_SEQUENCE cellRow+ )
+  ;
+
+cellRow
+  : VERTICAL_LINE ( whitespace? cell )+ 
+    -> ^( CELL_ROW cell+ )
+  ;
+  
+cell
+  : ( mixedDelimitedMonoblock whitespace? )? VERTICAL_LINE
+    -> ^( CELL mixedDelimitedMonoblock? )
+  ;  
 
 // =======  
 // Literal
