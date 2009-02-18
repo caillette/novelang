@@ -145,7 +145,8 @@ public class TestResources {
   public static ProducerConfiguration createProducerConfiguration(
       final File contentDirectory,
       final String styleDirectoryName,
-      final boolean shouldAddClasspathResourceLoader
+      final boolean shouldAddClasspathResourceLoader,
+      final Charset renderingCharset
   ) {
     final ResourceLoader resourceLoader ;
     final ClasspathResourceLoader customResourceLoader =
@@ -177,10 +178,9 @@ public class TestResources {
                 fontInfo, 
                 failedFonts
             ) ;
-//            throw new UnsupportedOperationException( "getCurrentFopFontStatus" ) ;
           }
           public Charset getDefaultCharset() {
-            return DefaultCharset.RENDERING ;
+            return renderingCharset ;
           }
         } ;
       }
@@ -203,12 +203,14 @@ public class TestResources {
   public static DaemonConfiguration createDaemonConfiguration(
       final int httpDaemonPort,
       final File contentDirectory,
-      final String styleDirectoryName
+      final String styleDirectoryName,
+      final Charset renderingCharset
   ) {
     final ProducerConfiguration producerConfiguration = createProducerConfiguration(
         contentDirectory,
         styleDirectoryName,
-        false
+        false,
+        renderingCharset
     ) ;
 
     return new DaemonConfiguration() {
@@ -221,4 +223,5 @@ public class TestResources {
     } ;
 
   }
+
 }

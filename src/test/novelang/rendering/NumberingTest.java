@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.system.DefaultCharset;
 import novelang.configuration.ProducerConfiguration;
 import novelang.loader.ResourceName;
 import novelang.produce.DocumentProducer;
@@ -48,7 +49,8 @@ public class NumberingTest {
     final ProducerConfiguration serverConfiguration = TestResources.createProducerConfiguration(
         styleDirectory,
         styleDirectory.getName(),
-        true
+        true,
+        DefaultCharset.RENDERING
     ) ;
     final DocumentProducer documentProducer = new DocumentProducer( serverConfiguration ) ;
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;

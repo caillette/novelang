@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,11 +57,9 @@ import novelang.system.DefaultCharset;
 @RunWith( value = NameAwareTestClassRunner.class )
 public class HttpDaemonTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemonTest.class ) ;
-
   @Test
   public void nlpOk() throws Exception {
-    setUp( "nlpOk" ) ;
+    setUp( "nlpOk", ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
     final String generated = readAsString(
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_NLP_RESOURCE_NAME ) ) ;
     final String shaved = shaveComments( generated ) ;
@@ -174,7 +173,7 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInQueryParameter() throws Exception {
-    setUp( "alternateStylesheetInQuery", SERVED_DIRECTORYNAME ) ;
+    setUp( "alternateStylesheetInQuery", SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + BOOK_ALTERNATESTYLESHEET_DOCUMENT_NAME
     ) ) ;
@@ -186,7 +185,7 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInBook() throws Exception {
-    setUp( "alternateStylesheetInBook", SERVED_DIRECTORYNAME ) ;
+    setUp( "alternateStylesheetInBook", SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT +
             GOOD_HTML_DOCUMENT_NAME + ALTERNATE_STYLESHEET_QUERY
@@ -200,6 +199,10 @@ public class HttpDaemonTest {
 // =======
 // Fixture
 // =======
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemonTest.class ) ;
+  private static final Charset ISO_8859_1 = Charset.forName( "ISO_8859_1" );
+
 
   private static final int TIMEOUT = 5000 ;
 
@@ -279,7 +282,7 @@ public class HttpDaemonTest {
   private String goodNlpSource;
 
   private void setUp( String testHint ) throws Exception {
-    setUp( testHint, ConfigurationTools.BUNDLED_STYLE_DIR ) ;
+    setUp( testHint, ConfigurationTools.BUNDLED_STYLE_DIR, DefaultCharset.RENDERING ) ;
   }
 
 
@@ -290,7 +293,11 @@ public class HttpDaemonTest {
    * @link http://twgeeknight.googlecode.com/svn/trunk/JUnit4Playground/src/org/junit/runners/NameAwareTestClassRunner.java
    *     doesn't work with IDEA-7.0.3 (while it works with Ant-1.7.0 alone).
    */
-  private void setUp( String testHint, String styleDirectoryName ) throws Exception {
+  private void setUp(
+      String testHint,
+      String styleDirectoryName,
+      Charset renderingCharset
+  ) throws Exception {
 
     final String testName =
         ClassUtils.getShortClassName( getClass() + "-" + testHint ) ;
@@ -306,7 +313,8 @@ public class HttpDaemonTest {
     httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration( 
         HTTP_DAEMON_PORT, 
         contentDirectory, 
-        styleDirectoryName 
+        styleDirectoryName,
+        renderingCharset
     ) ) ;
     httpDaemon.start() ;
   }
