@@ -33,7 +33,7 @@
         <link rel="stylesheet" type="text/css" href="/display.css" />
         <xsl:element name="meta" >
           <xsl:attribute name="http-equiv" >content-type</xsl:attribute>
-          <xsl:attribute name="content" >text/html;charset=<xsl:value-of select="charset" /></xsl:attribute>
+          <xsl:attribute name="content" >text/html;charset=<xsl:value-of select="$charset" /></xsl:attribute>
         </xsl:element>
 
         <meta name="Generator" content="Novelang" />
