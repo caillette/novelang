@@ -65,7 +65,7 @@ public abstract class GenericParameters {
   )
       throws ArgumentException
   {    
-    LOGGER.debug( "Base directory: ({}'", baseDirectory.getAbsolutePath() ) ;
+    LOGGER.debug( "Base directory: '{}'", baseDirectory.getAbsolutePath() ) ;
     LOGGER.debug( "Parameters: '{}'", Lists.newArrayList( parameters ) ) ;
 
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;

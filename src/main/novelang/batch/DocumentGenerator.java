@@ -49,19 +49,23 @@ import novelang.system.StartupTools;
  *
  * @author Laurent Caillette
  */
-public class Main {
+public class DocumentGenerator {
 
-  private static final String PROBLEMS_FILENAME = "problems.html";
 
-  public static void main( String[] arguments ) throws Exception {
-    StartupTools.fixLogDirectory( arguments ) ;
-    EnvironmentTools.logSystemProperties() ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentGenerator.class ) ;
+
+  private static final String PROBLEMS_FILENAME = "problems.html" ;
+
+  public static void main( String commandName, String[] arguments ) throws Exception {
     final File baseDirectory = new File( SystemUtils.USER_DIR ) ;
-    main( baseDirectory, arguments ) ;
+    main( commandName, arguments, baseDirectory ) ;
   }
 
-  public static void main( File baseDirectory, String[] arguments ) throws Exception {
-    final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
+  public static void main(
+      String commandName,
+      String[] arguments,
+      File baseDirectory
+  ) throws Exception {
     final BatchParameters parameters ;
 
     try {
@@ -71,12 +75,12 @@ public class Main {
       ) ;
     } catch( ArgumentException e ) {
       if( e.isHelpRequested() ) {
-        printHelpOnConsole( e ) ;
+        printHelpOnConsole( commandName, e ) ;
         System.exit( -1 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
       } else {
         LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
-        printHelpOnConsole( e ) ;
+        printHelpOnConsole( commandName, e ) ;
         System.exit( -2 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
       }
@@ -84,7 +88,7 @@ public class Main {
 
     try {
       LOGGER.debug( "Starting {} with arguments {}",
-          ClassUtils.getShortClassName( Main.class ), asString( arguments ) ) ;
+          ClassUtils.getShortClassName( DocumentGenerator.class ), asString( arguments ) ) ;
 
       final BatchConfiguration configuration =
           ConfigurationTools.createBatchConfiguration( parameters ); ;
@@ -117,11 +121,13 @@ public class Main {
     }
   }
 
-  private static void printHelpOnConsole( ArgumentException e ) {
-    System.out.println( e.getMessage() ) ;
+  private static void printHelpOnConsole( String commandName, ArgumentException e ) {
+    if( null != e.getMessage() ) {
+      System.out.println( e.getMessage() ) ;
+    }
     e.getHelpPrinter().print(
         System.out,
-        ClassUtils.getShortClassName( Main.class ) + " [OPTIONS] document1 [document2...]", 
+        commandName + " [OPTIONS] document1 [document2...]",
         80
     ) ;
   }

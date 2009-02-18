@@ -40,16 +40,11 @@ import novelang.system.StartupTools;
  */
 public class HttpDaemon {
 
-  private static Logger LOGGER ;
+  private static Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
 
   private final Server server ;
 
-  public static void main( String[] args ) throws Exception {
-
-    StartupTools.fixLogDirectory( args ) ;
-    StartupTools.installXalan() ;
-    LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
-    EnvironmentTools.logSystemProperties() ;
+  public static void main( String commandName, String[] args ) throws Exception {
 
     final DaemonParameters parameters ;
 
@@ -57,12 +52,12 @@ public class HttpDaemon {
       parameters = new DaemonParameters( new File( SystemUtils.USER_DIR ), args ) ;
     } catch( ArgumentException e ) {
       if( e.isHelpRequested() ) {
-        printHelpOnConsole( e ) ;
+        printHelpOnConsole( commandName, e ) ;
         System.exit( -1 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
       } else {
         LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
-        printHelpOnConsole( e ) ;
+        printHelpOnConsole( commandName, e ) ;
         System.exit( -2 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
       }
@@ -94,29 +89,24 @@ public class HttpDaemon {
     server.setHandler( handlers ) ;
   }
 
-  private static synchronized Logger getLogger() {
-    if( null == LOGGER ) {
-      LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
-    }
-    return LOGGER ;
-  }
-
   public void start() throws Exception {
     server.start() ;
-    getLogger().info( "Server started on port {}", server.getConnectors()[ 0 ].getLocalPort() ) ;
+    LOGGER.info( "Server started on port {}", server.getConnectors()[ 0 ].getLocalPort() ) ;
   }
 
   public void stop() throws Exception {
     final int port = server.getConnectors()[ 0 ].getLocalPort();
     server.stop() ;
-    getLogger().info( "Server stopped on port {}", port ) ;
+    LOGGER.info( "Server stopped on port {}", port ) ;
   }
 
-  private static void printHelpOnConsole( ArgumentException e ) {
-    System.out.println( e.getMessage() ) ;
+  private static void printHelpOnConsole( String commandName, ArgumentException e ) {
+    if( null != e.getMessage() ) {
+      System.out.println( e.getMessage() ) ;
+    }
     e.getHelpPrinter().print(
         System.out,
-        ClassUtils.getShortClassName( HttpDaemon.class ) + " [OPTIONS]",
+        commandName + " [OPTIONS]",
         80
     ) ;
   }

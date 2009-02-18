@@ -30,7 +30,7 @@ import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
 
 /**
- * Parses command-line arguments for {@link novelang.batch.Main}.
+ * Parses command-line arguments for {@link novelang.batch.DocumentGenerator}.
  *
  * TODO support a --flatten-ouput option as rendered documents go in the same path as sources.
  * TODO write test ensuring that absolute and relative directories are correctly handled.
@@ -57,8 +57,15 @@ public class BatchParameters extends GenericParameters {
       final List< DocumentRequest > requestList = Lists.newArrayList() ;
       for( String sourceArgument : sourceArguments ) {
         try {
+          if( ! sourceArgument.startsWith( "/" ) ) {
+            sourceArgument = "/" + sourceArgument ;
+          }
           final DocumentRequest documentRequest =
               RequestTools.createDocumentRequest( sourceArgument ) ;
+          if( null == documentRequest ) {
+            throw new IllegalArgumentException(
+                "Malformed document request: '" + sourceArgument + "'" ) ;
+          }
           requestList.add( documentRequest ) ;
         } catch( IllegalArgumentException e ) {
           throw new ArgumentException( e, helpPrinter ) ;

@@ -32,7 +32,7 @@ import novelang.configuration.parse.GenericParameters;
 import novelang.rendering.RenditionMimeType;
 
 /**
- * Tests for {@link Main}.
+ * Tests for {@link DocumentGenerator}.
  *
  * @author Laurent Caillette
  */
@@ -40,18 +40,23 @@ public class BatchTest {
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitWithIncorrectParameters() throws Exception {
-    Main.main( new String[ 0 ] ) ;
+    DocumentGenerator.main( "tesing", new String[ 0 ] ) ;
   }
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitBecauseHelpRequeted() throws Exception {
-    Main.main(
+    DocumentGenerator.main(
+        "tesing", 
         new String[] { GenericParameters.OPTIONPREFIX + GenericParameters.HELP_OPTION_NAME } ) ;
   }
 
   @Test
   public void generateOneDocumentOk() throws Exception {
-    Main.main( contentDirectory, new String[] { "/" + RENDERED_DOCUMENT_NAME } ) ;
+    DocumentGenerator.main(
+        "testing",
+        new String[] { "/" + RENDERED_DOCUMENT_NAME },
+        contentDirectory
+    ) ;
 
     final File renderedDocument = new File( outputDirectory, RENDERED_DOCUMENT_NAME ) ;
     Assert.assertTrue( renderedDocument.exists() ) ;

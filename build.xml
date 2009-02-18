@@ -355,7 +355,7 @@
     <mkdir dir="${logdestination}" />
 
     <java
-        classname="novelang.batch.Main"
+        classname="${launcher.mainclass}"
         failonerror="true"
         fork="true"
         dir="${source.documentation.dir}"
@@ -368,6 +368,7 @@
       <jvmarg value="-Xmx512M" />
       <jvmarg value="-Djava.awt.headless=true" />
       <jvmarg value="-Dfile.encoding=${novelang.sources.charset}" />
+      <arg value="${launcher.batch.command}" />
       <arg value="--log-dir=${logdestination}" />
       <arg value="--font-dirs=${source.documentation.fonts.dir}" />
       <arg value="--output-dir=${absolutetarget}" />
@@ -591,7 +592,7 @@
       <manifest>
         <attribute name="Class-Path" value="${deploylibs}" />
         <attribute name="Implementation-Version" value="${project.version}" />
-        <attribute name="Main-Class" value="${httpd.mainclass}" />
+        <attribute name="Main-Class" value="${launcher.mainclass}" />
         <attribute name="Creation-Date" value="${timestamp}" />
         <attribute name="Created-By" value="${project.name} build system" />
       </manifest>
@@ -608,6 +609,13 @@
     </copy>
 
   </target>
+
+  <target
+      name="recreate-jar"
+      depends="init, compile-main, create-jar"
+      description="Recompiles production classes and recreates the .jar"
+  />
+
 
   <target name="package-distribution" depends="init" >
 
