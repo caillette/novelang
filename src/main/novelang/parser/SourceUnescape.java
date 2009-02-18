@@ -23,9 +23,9 @@ import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import novelang.parser.shared.Lexeme;
 
 /**
  * Table of escaped symbols, using HTML entity names whenever defined and Unicode names otherwise.
@@ -36,80 +36,50 @@ public class SourceUnescape {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( SourceUnescape.class ) ;
 
-  private static final BiMap< String, Character > ESCAPED_CHARACTERS;
-  private static final Map< String, Character > ESCAPED_CHARACTERS_ALTERNATIVES;
-  private static final BiMap< String, Character > ESCAPED_HTML_CHARACTERS ;
+  private static final Map< String, Character > UNICODE_ESCAPES;
+  private static final Map< String, Character > HTML_ENTITY_NAMES_ESCAPES;
 
   /**
    * Left-pointing double angle quotation mark "&#xab;".
+   * Must be the same as declared in the grammar!
    */
   public static Character ESCAPE_START = '\u00ab' ; // «
 
   /**
    * Right-pointing double angle quotation mark "&#xbb;".
+   * Must be the same as declared in the grammar!
    */
   public static Character ESCAPE_END = '\u00bb' ; // »
 
 
   static {
 
-    final BiMap< String, Character > escapedCharacters = Maps.newHashBiMap() ;
+    final Map< String, Character > escapedCharacters = Maps.newHashMap() ;
     final Map< String, Character > escapedCharactersAlternatives = Maps.newHashMap() ;
-    final BiMap< String, Character > escapedHtmlCharacters = Maps.newHashBiMap() ;
 
-    // Symbols to keep after character escape refactoring.
+    for( Lexeme lexeme : GeneratedLexemes.getLexemes().values() ) {
+      final String htmlEntityName = lexeme.getHtmlEntityName() ;
+      final Character character = lexeme.getCharacter() ;
+      escapedCharacters.put( unicodeUpperNameToEscapeName( lexeme.getUnicodeName() ), character ) ;
+      if( null != htmlEntityName ) {
+        escapedCharactersAlternatives.put( htmlEntityName, character ) ;
+      }
+    }
 
-    escapedCharacters.put( "left-pointing-double-angle-quotation-mark", ESCAPE_START ) ; // «
-    escapedCharactersAlternatives.put( "laquo", ESCAPE_START ) ;
-
-    escapedCharacters.put( "right-pointing-double-angle-quotation-mark", ESCAPE_END ) ; // »
-    escapedCharactersAlternatives.put( "raquo", ESCAPE_END ) ;
-
-    escapedCharacters.put( "less-than-sign", '<' ) ;
-    escapedCharactersAlternatives.put( "lt", '<' ) ;
-
-    escapedCharacters.put( "greater-than-sign", '>' ) ;
-    escapedCharactersAlternatives.put( "gt", '>' ) ;
-
-    escapedCharacters.put( "grave-accent", '`' ) ;
-
-    escapedCharacters.put( "percent-sign", '%' ) ;
-
-    escapedCharacters.put( "left-curly-bracket", '{' ) ;
-    escapedCharacters.put( "right-curly-bracket", '}' ) ;
-
-    escapedCharacters.put( "latin-small-ligature-oe", '\u0153' ) ;
-    escapedCharactersAlternatives.put( "oelig", '\u0153' ) ;
-
-    escapedCharacters.put( "latin-capital-ligature-oe", '\u0152' ) ;
-    escapedCharactersAlternatives.put( "OElig", '\u0152' ) ;
-
-    escapedCharacters.put( "euro-sign", '\u8364' ) ;
-
-    escapedCharacters.put( "multiplication-sign", '\u00d7' ) ; // ×
-    escapedCharactersAlternatives.put( "times", '\u00d7' ) ;
-
-    escapedHtmlCharacters.put( "oelig", '\u0153' ) ;
-    escapedHtmlCharacters.put( "OElig", '\u0152' ) ;
-    escapedHtmlCharacters.put( "amp", '&' ) ;
-    escapedHtmlCharacters.put( "lt", '<' ) ;
-    escapedHtmlCharacters.put( "gt", '>' ) ;
-
-    ESCAPED_CHARACTERS = Maps.unmodifiableBiMap( escapedCharacters ) ;
-    ESCAPED_CHARACTERS_ALTERNATIVES = ImmutableMap.copyOf( escapedCharactersAlternatives ) ;
-    ESCAPED_HTML_CHARACTERS = Maps.unmodifiableBiMap( escapedHtmlCharacters ) ;
+    UNICODE_ESCAPES = ImmutableMap.copyOf( escapedCharacters ) ;
+    HTML_ENTITY_NAMES_ESCAPES = ImmutableMap.copyOf( escapedCharactersAlternatives ) ;
   }
 
   public static Map< String, Character > getMainCharacterEscapes() {
-    return new ImmutableMap.Builder().putAll( ESCAPED_CHARACTERS ).build() ;
+    return new ImmutableMap.Builder().putAll( UNICODE_ESCAPES ).build() ;
   }
 
   public static Character unescapeCharacter( String escaped )
       throws NoUnescapedCharacterException
   {
-    Character unescaped = ESCAPED_CHARACTERS.get( escaped ) ;
+    Character unescaped = UNICODE_ESCAPES.get( escaped ) ;
     if( null == unescaped ) {
-      unescaped = ESCAPED_CHARACTERS_ALTERNATIVES.get( escaped ) ;
+      unescaped = HTML_ENTITY_NAMES_ESCAPES.get( escaped ) ;
       if ( null == unescaped ) {
         final NoUnescapedCharacterException exception = new NoUnescapedCharacterException( escaped ) ;
         LOGGER.warn( "Unsupported symbol", exception ) ;
@@ -161,5 +131,7 @@ public class SourceUnescape {
   }
 
 
-
+  public static String unicodeUpperNameToEscapeName( String upperName ) {
+    return upperName.toLowerCase().replace( '_', '-' ) ;
+  }
 }

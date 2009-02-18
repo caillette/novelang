@@ -43,7 +43,7 @@ public class SourceUnescapeTest {
   }
 
   @Test( expected = NoUnescapedCharacterException.class )
-  public void escapeNotFound1() throws NoUnescapedCharacterException {
+  public void escapeNotFound() throws NoUnescapedCharacterException {
     SourceUnescape.unescapeText( ESCAPE_START + "does-not-exist" + ESCAPE_END ) ;
   }
 
