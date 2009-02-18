@@ -1311,6 +1311,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | DOLLAR_SIGN
       | DOUBLE_QUOTE
       | ELLIPSIS
+      | EURO_SIGN
       | EQUALS_SIGN
       | EXCLAMATION_MARK
       | FULL_STOP
@@ -1322,6 +1323,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | LEFT_SQUARE_BRACKET
       | LESS_THAN_SIGN
       | LOW_LINE
+      | MULTIPLICATION_SIGN
       | NUMBER_SIGN
       | PLUS_SIGN
       | PERCENT_SIGN
@@ -1603,6 +1605,7 @@ DEGREE_SIGN : '\u00b0' ;
 DOLLAR_SIGN : '$' ;
 DOUBLE_QUOTE : '\"' ;
 ELLIPSIS : '...' ;
+EURO_SIGN : '\u20ac' ; // &euro;
 EQUALS_SIGN : '=' ;
 EXCLAMATION_MARK : '!' ;
 FULL_STOP : '.' ;
@@ -1615,6 +1618,7 @@ LEFT_SQUARE_BRACKET : '[' ;
 LEFT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00ab' ; // &laquo;
 LESS_THAN_SIGN : '<' ;   // &lt;
 LOW_LINE : '_' ;
+MULTIPLICATION_SIGN : '\u00d7' ; // &times;
 NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
 PERCENT_SIGN : '%' ;
