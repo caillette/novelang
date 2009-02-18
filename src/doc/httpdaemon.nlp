@@ -5,7 +5,7 @@
 The ``--port`` option sets the TCP port of which the daemon listens to:
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar --port=8083
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar --port=8083
 >>>
 
 Then URL for accessing documents becomes something like:
@@ -19,7 +19,7 @@ http://localhost:8083/mydocument.html
 The ``--log-dir`` option sets where Novelang daemon writes its log files.
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar --log-dir=logs
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar --log-dir=logs
 >>>
 
 
@@ -28,7 +28,7 @@ java -jar $NOVELANG_DIR/novelang-VERSION.jar --log-dir=logs
 The ``--font-dirs`` option sets multiple directories where Novelang daemon looks for fonts. On Mac OS X and Unix, use a colon as path separator.
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar 
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
   --font-dirs=my/fonts-1:/Users/Shared/Fonts
 >>>
 
@@ -38,7 +38,7 @@ java -jar $NOVELANG_DIR/novelang-VERSION.jar
 The ``--hyphenation-dir`` option sets where Novelang should attempt to load hyphenation files from.
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar --hyphenation-dir=my/directory
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar --hyphenation-dir=my/directory
 >>>
 
 
@@ -47,7 +47,7 @@ java -jar $NOVELANG_DIR/novelang-VERSION.jar --hyphenation-dir=my/directory
 The ``--source-charset`` option sets the charset of source documents.
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar --source-charset MacRoman
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar --source-charset MacRoman
 >>>
 
 Default value is ``UTF-8``.
@@ -58,7 +58,7 @@ Default value is ``UTF-8``.
 The ``--rendering-charset`` option sets the charset of rendered documents.
 
 <<<
-java -jar $NOVELANG_DIR/novelang-VERSION.jar --rendering-charset iso-8859-2
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar --rendering-charset iso-8859-2
 >>>
 
 Default value is ``UTF-8``.

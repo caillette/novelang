@@ -28,3 +28,5 @@ insert file:fonts.nlp
 insert file:hyphenation.nlp
 
 insert file:httpdaemon.nlp
+
+insert file:generator.nlp

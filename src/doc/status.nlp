@@ -10,6 +10,15 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 
 --- Every character may be escaped using its Unicode name.
 
+--- Batch document generator.
+
+--- HTTP dæmon now started with additional ``httpdaemon`` command name.
+
+<<<
+java -jar ...novelang-VERSION.jar httpdaemon <options>
+java -jar ...novelang-VERSION.jar generate <options>
+>>>
+
 
 === Version `0.18.0`
 

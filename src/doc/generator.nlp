@@ -1,0 +1,35 @@
+== Batch document generator
+
+The batch document generator is a batch tool generating one or more documents at once.
+A typical usage is from a shell script.
+Documents are requested with a path relative to the directory the batch generator was launched from.
+
+If current directory contains a ``hello.nlp`` file then following invocation will generate an
+HTML file named ``output/hello.html``:
+
+<<<
+java -jar generate $NOVELANG_DIR/novelang-VERSION.jar /hello.html
+>>>
+
+The batch document genrator has the same options as the HTTP dæemon with following restrictions:
+
+--- No ``--port`` option.
+
+--- Directory listing not supported.
+
+--- Font listing not supported.
+
+
+The batch document generator supports those additional options:
+
+=== The ``--output-dir`` option
+
+The ``--output-dir`` option sets the output directory, where rendered documents are generated to.
+
+<<<
+java -jar generate $NOVELANG_DIR/novelang-VERSION.jar --output-dir generated/html /hello.html
+>>>
+
+Default value is ``output``.
+
+
