@@ -1,0 +1,36 @@
+== Tables
+
+Other wikis make tables a daunting subject, often because they try to embed crazy formatting instructions. See:
+http://www.wikicreole.org/wiki/ListOfTableMarkups
+. First I decided that tables wouldn't be a concern before a long, long time.
+An external request made me ask myself: what is the simplest, smallest, least controversial feature set to let people define tables?
+
+Obivously this would be using the well-adopted vertical bar separator. To keep things clear, no line break is allowed inside table definition. And it looks like:
+
+<<<
+| row1, col1 | row1, col2 | row1, col3 | 
+| row2, col1 |  row2, col2   | row2, col3 | 
+>>>
+
+Then the XSL stylesheet would get something like a HTML table. No headers, no justification, no span, no calculated fields, no neverending list of conflicting features. All complicated stuff must be done in the stylesheet or never. So it's easy to support tables in Novelang grammar.
+
+There is still one potential conflict, however, with URL (or images, which will use the same grammatical approach). In a Novelang source document, the URL must appear at the start of a line. But how to make it appear inside a list of row cells while keeping the grammar readable? The answser is: no URL-like syntax yet. A URL is a lengthy thing which doesn't fit in a table cell, so there is another syntax to find. Meanwhile, users may handle particular cases with a context-specific hack in their stylesheet.
+
+Because users are encouraged to write stylesheets on their own, the XML structure given in input has to be very consistent. By avoiding semantic notations (`e.g.` drop ``n:emphasis`` and prefer ``n:block-inside-solidus-pairs``)  the XML tells more about the structure and lets the stylesheet give its own meaning.
+
+There is the temptation to call a table a "table" but it would be lying. As defined above, the notation using vertical lines is no more than a list, and maybe a list of lists. See this: 
+
+<<<
+| item1 | item2 | item3 |
+>>>
+
+The first vertical bar indicates the start of the first item, the last vertical bar indicates the end of the list, and items are separated by vertical bars. The table row is just a picture in your mind. The whole table is a list of lists. The default stylesheet will show it as a table but its just one possible use.
+
+So which name could tell it's a list of list, while not completely hiding the fact it's a table?
+
+The word "cell" is a good start. Table have cells, but we're living in a universe where cells exist outside of tables. So our items get wrapped in a ``n:cell`` element. 
+
+A ``n:cell-list`` is an obvious choice but it doesn't tell about the "horizontality". So we'll prefer ``n:cell-row`` which is compatible with the table vocabulary, while staying close to the representation in the source document. But other XML elements tell about their delimiting character, like ``n:list-with-triple-hyphen``. A name like ``n:cell-row-with-vertical-bars-between-cells`` is much too long to make stylesheet writing comfortable, and it lies when there is only one cell in a row. 
+
+The solution is to tell about the delimiter only in the element enclosing all the rows. (This is what embedded lists intend to do, with a ``n:paragraph-as-list-item-with-triple-hyphen`` wrapping items with a more generic name.) 
+
