@@ -35,6 +35,8 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:n="http://novelang.org/book-xml/1.0"
+    xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
+    xmlns:nlx="xalan://novelang.rendering.xslt"
 >
   <xsl:import href="punctuation-US-EN.xsl" />
   
@@ -63,19 +65,16 @@
           initial-page-number="1"
           master-reference="A4"
       >
-
         <fo:static-content flow-name="xsl-region-after" >
-          <fo:table  >
-            <fo:table-column column-width="40%" />
-            <fo:table-column column-width="20%" />
-            <fo:table-column column-width="40%" />
+          <fo:table >
+            <fo:table-column column-width="proportional-column-width(1)" />
+            <fo:table-column column-width="proportional-column-width(1)" />
+            <fo:table-column column-width="proportional-column-width(1)" />
 
             <fo:table-body>
               <fo:table-row>
                 <fo:table-cell display-align="after" >
-                  <fo:block font-size="70%" text-align="left" >
-                    <xsl:value-of select="/n:book/n:level-title" />
-                  </fo:block>
+                  <fo:block font-size="70%" text-align="left" />
                 </fo:table-cell>
                 <fo:table-cell>
                   <fo:block text-align="center" >
@@ -84,7 +83,9 @@
                 </fo:table-cell>
                 <fo:table-cell display-align="after" >
                   <fo:block font-size="70%" text-align="right" >
-                    <xsl:value-of select="$timestamp" />
+                    <xsl:value-of
+                        select="nlx:Numbering.formatDateTime( $timestamp, 'YYYY-MM-dd HH:mm:ss' )"
+                    />
                   </fo:block>
                 </fo:table-cell>
               </fo:table-row>
@@ -284,6 +285,7 @@
     </fo:block>
   </xsl:template>
 
+
   <xsl:template match="n:embedded-list-with-hyphen" >
     <fo:list-block
         text-align="justify"
@@ -321,6 +323,7 @@
       <xsl:apply-templates/>
     </fo:inline>  
   </xsl:template>
+
 
 
 
