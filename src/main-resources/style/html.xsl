@@ -121,4 +121,24 @@
     <sup><xsl:apply-templates/></sup>
   </xsl:template>
 
+
+
+  <xsl:template match="n:cell-rows-with-vertical-line" >
+    <table>
+      <xsl:apply-templates/>
+    </table>
+  </xsl:template>
+
+  <xsl:template match="n:cell-row" >
+    <tr>
+      <xsl:apply-templates/>
+    </tr>
+  </xsl:template>
+
+  <xsl:template match="n:cell" >
+    <td>
+      <xsl:apply-templates/>
+    </td>
+  </xsl:template>
+
 </xsl:stylesheet>

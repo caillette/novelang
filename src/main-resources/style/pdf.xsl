@@ -325,6 +325,35 @@
   </xsl:template>
 
 
+  <xsl:template match="n:cell-rows-with-vertical-line" >
+
+    <fo:table>
+      <xsl:for-each select="n:cell-row[1]/n:cell">
+        <fo:table-column column-width="proportional-column-width(1)" />
+
+        column-width="proportional-column-width(1)"/>
+      </xsl:for-each>
+
+      <fo:table-body>
+        <xsl:apply-templates />
+      </fo:table-body>
+
+    </fo:table>
+  </xsl:template>
+
+  <xsl:template match="n:cell-row" >
+    <fo:table-row>
+      <xsl:apply-templates/>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="n:cell" >
+    <fo:table-cell padding="2pt" border="1pt solid black">
+      <fo:block>
+        <xsl:apply-templates />
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
 
 
 </xsl:stylesheet>
