@@ -27,6 +27,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import novelang.common.LanguageTools;
 
@@ -80,7 +81,7 @@ public final class EnvironmentTools {
     }
 
     final String pathIndent = indent + "  " ;
-    for( String name : Lists.sortedCopy( propertyNameList ) ) {
+    for( String name : Ordering.natural().sortedCopy( propertyNameList ) ) {
       stringBuffer.append( indent ) ;
       final String propertyValue = systemProperties.getProperty( name ) ;
       if( ! appendIfPath( stringBuffer, name, propertyValue, pathIndent ) &&

@@ -31,6 +31,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 import novelang.book.Environment;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
@@ -300,10 +301,9 @@ public class InsertFunction implements FunctionDefinition {
       throws IllegalFunctionCallException
   {
     if( directory.isDirectory() ) {
-      final List< File > files = Lists.sortedCopy(
-          FileTools.scanFiles( directory, StructureKind.PART.getFileExtensions() ),
-          FileTools.ABSOLUTEPATH_COMPARATOR
-      ) ;
+      final List< File > files = Ordering.from( FileTools.ABSOLUTEPATH_COMPARATOR ).sortedCopy(
+          FileTools.scanFiles( directory, StructureKind.PART.getFileExtensions() )
+      );
 
       if( LOGGER.isDebugEnabled() ) {
         StringBuffer buffer = new StringBuffer(

@@ -31,6 +31,7 @@ import org.mortbay.jetty.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import novelang.common.FileTools;
 import novelang.common.StructureKind;
 import novelang.configuration.ContentConfiguration;
@@ -188,10 +189,9 @@ public class DirectoryScanHandler extends GenericHandler {
     filesAndDirectories.addAll( 
         FileTools.scanDirectories( scanned ) ) ;
 
-    final List< File > files = Lists.sortedCopy(
-        filesAndDirectories,
-        FileTools.ABSOLUTEPATH_COMPARATOR
-    ) ;
+    final List< File > files = Ordering.from( FileTools.ABSOLUTEPATH_COMPARATOR ).sortedCopy(
+        filesAndDirectories
+    ) ; 
 
     response.setStatus( HttpServletResponse.SC_OK ) ;
     generateHtml( response.getOutputStream(), scanned, files ) ;
