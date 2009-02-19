@@ -45,7 +45,7 @@ tokens {
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   CELL ;
   CELL_ROW ;
-  CELL_ROW_SEQUENCE ;
+  CELL_ROWS_WITH_VERTICAL_LINE ;
   WORD_ ;
   
   PUNCTUATION_SIGN ;
@@ -753,7 +753,7 @@ smallDashedListItem
 cellRowSequence
   : cellRow 
     ( ( WHITESPACE? SOFTBREAK WHITESPACE? ) cellRow )*
-    -> ^( CELL_ROW_SEQUENCE cellRow+ )
+    -> ^( CELL_ROWS_WITH_VERTICAL_LINE cellRow+ )
   ;
 
 cellRow
