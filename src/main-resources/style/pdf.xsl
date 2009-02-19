@@ -330,8 +330,6 @@
     <fo:table>
       <xsl:for-each select="n:cell-row[1]/n:cell">
         <fo:table-column column-width="proportional-column-width(1)" />
-
-        column-width="proportional-column-width(1)"/>
       </xsl:for-each>
 
       <fo:table-body>
