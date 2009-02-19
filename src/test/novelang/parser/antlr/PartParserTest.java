@@ -1187,8 +1187,8 @@ public class PartParserTest {
   @Test
   public void cellRowSequence2x2() throws RecognitionException {
     PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
-        "| a | b |" + BREAK +
-        "|c  |  d|",
+        "| a | b   |" + BREAK +
+        "|c  | d e |",
         tree(
             CELL_ROWS_WITH_VERTICAL_LINE,
             tree( 
@@ -1199,7 +1199,7 @@ public class PartParserTest {
             tree( 
                 CELL_ROW, 
                 tree( CELL, tree( WORD_, "c" ) ),
-                tree( CELL, tree( WORD_, "d" ) ) 
+                tree( CELL, tree( WORD_, "d" ), tree( WORD_, "e" ) )
             ) 
         )
     ) ;

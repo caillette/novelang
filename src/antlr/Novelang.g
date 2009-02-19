@@ -762,8 +762,9 @@ cellRow
   ;
   
 cell
-  : ( mixedDelimitedMonoblock whitespace? )? VERTICAL_LINE
-    -> ^( CELL mixedDelimitedMonoblock? )
+  : ( mixedDelimitedMonoblock ( whitespace mixedDelimitedMonoblock )* whitespace? )? 
+    VERTICAL_LINE
+    -> ^( CELL mixedDelimitedMonoblock* )
   ;  
 
 // =======  
