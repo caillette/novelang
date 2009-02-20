@@ -30,3 +30,6 @@ insert file:hyphenation.nlp
 insert file:httpdaemon.nlp
 
 insert file:generator.nlp
+
+insert file:source-characters.nlp
+  $style=character-escapes
