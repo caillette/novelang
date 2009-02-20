@@ -356,19 +356,8 @@ An escaped character is enclosed into a left-pointing double angle quotation mar
 a right-pointing double angled quotation mark ``«raquo»``. The escape code is the unicode name.
 HTML entity name is supported as well.
 
-<<<
-«grave-accent»   «laquo»grave-accent«raquo»
-«left-curly-bracket»   «laquo»left-curly-bracket«raquo»
-«right-curly-bracket»   «laquo»right-curly-bracket«raquo»
-«percent-sign»   «laquo»percent-sign«raquo»
-«greater-than-sign»   «laquo»greater-than-sign«raquo»
-    alias: «laquo»gt«raquo»
-«laquo»   «laquo»left-pointing-double-angle-quotation-mark«raquo»
-    alias: «laquo»laquo«raquo»
-«raquo»   «laquo»right-pointing-double-angle-quotation-mark«raquo»
-    alias: «laquo»raquo«raquo»
-
->>>
+All characters that may appear in a source document are listed in an appendix, along with their
+escape codes.
 
 Using those characters is exceptional, however -- except in Novelang documentation! --
 as most of useful character are accessible as literal.
