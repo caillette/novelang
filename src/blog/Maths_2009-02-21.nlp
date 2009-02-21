@@ -1,0 +1,76 @@
+== Math display
+
+Musing on the Web I discovered those little gems: 
+JEuclid, Open Office Math and ASCIIMathML.
+
+JEuclid is a renderer for MathML. MathML is an XML-based representation
+of mathematical formulæ. 
+It has a FOP plugin, which transforms an embedded MathML expression into
+a nice formula in the resulting PDF.
+
+http://jeuclid.sourceforge.net
+
+JEuclid claims it supports the ``.mml`` files exported by Open Office Math.
+
+MathML is horribly verbose and not intended to be used by humans, but rather
+to help programs to interoperate. 
+
+OpenOffice Math is a math formula editor, bundled with Open Office.
+It's partially WYSIWYG as it lets you type a formula in plain text
+and produces a preview in (quasi) real time. 
+Open Office Math favors its ``.odf`` format but is able to save and load formulæ in MathML. 
+Its text-based editor supports formulæ like this:
+
+<<<
+f(x)=sum from{n=0} to{infinity} 
+  { { f^{(n)}(a) } over {n!} (x-a)^n }
+>>>
+
+You can see OpenOffice Math in action here:
+http://en.wikipedia.org/wiki/OpenOffice.org_Math
+
+Used together, JEuclid and OpenOffice Math could make Novelang more attractive
+to TeX users, who always have been unbeatable when it comes to craft
+beautiful graphics from text-based formulæ. 
+
+Novelang could learn to recognize a reference to a MathML file to be edited with Open Office:
+
+<<<
+When ``a > b`` we always have
+math:my-formula.mml
+bla bla blah.
+>>>
+
+In a perfect world, Novelang would support formulæ inside the source document (with a tweak to make a ``n:lines-of-literal`` appear inside a paragraph). 
+
+<<<
+When ``a > b`` we always have
+<<<math
+f(x)= ...
+«gt»>>
+blah blah blah.
+>>>
+
+This requires a translator from text-based formula to MathML.
+Such a translator is hard to find, especially with the OSS constraint.
+
+Maybe I've found this rare beast, with ASCIIMathML. 
+It's a Javascript-based translator designed to run inside a Web browser. The interactive demo is stunning! 
+
+http://mathcs.chapman.edu/~jipsen/mathml/asciimath.html
+
+It recognizes TeX (same formula as above): 
+
+<<<
+$f(x)=«reverse-solidus»sum_{n=0}^«reverse-solidus»infty«reverse-solidus»frac{f^{(n)}(a)}{n!}(x-a)^n$
+>>>
+
+...or its custom ASCII-based format. Here again, the same formula:
+
+<<<
+`f(x)=sum_(n=0)^oo(f^((n))(a))/(n!)(x-a)^n`	
+>>>
+
+ASCIIMathML is released under the LGPL. Great.
+I just wonder if it works inside a Java-powered Javascript interpreter.
+
