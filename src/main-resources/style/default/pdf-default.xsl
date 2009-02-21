@@ -96,7 +96,7 @@
         <fo:flow
             flow-name="xsl-region-body"
         >
-          <fo:block font-family="Junicode" >
+          <fo:block font-family="Linux Libertine" >
             <xsl:apply-templates />
           </fo:block>
           <fo:block id="@last-page"/>
@@ -188,7 +188,7 @@
         padding-before="6pt"
         padding-after="8pt"
         font-size="10pt"
-        font-family="Junicode"
+        font-family="Linux Libertine"
         line-height="13pt"
         font-stretch="semi-condensed"
     >
