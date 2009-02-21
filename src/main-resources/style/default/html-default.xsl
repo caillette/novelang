@@ -140,5 +140,11 @@
       <xsl:apply-templates/>
     </td>
   </xsl:template>
+  
+  <xsl:template match="n:image" >
+    <img>
+      <xsl:attribute name="src" ><xsl:value-of select="." /></xsl:attribute>
+    </img>
+  </xsl:template>  
 
 </xsl:stylesheet>
