@@ -1,4 +1,4 @@
-<configuration>
+<configuration debug="true" >
 
   <appender
       name="STDOUT"
@@ -18,14 +18,14 @@
   </logger>
 
   <logger name="FOP" >
-    <level value="DEBUG" />
+    <level value="WARN" />
   </logger>
 
   <logger name="org.apache.fop" >
     <level value="WARN" />
   </logger>
 
-  <logger name="org.apache.fop.apps" >
+  <logger name="org.apache.fop.fonts" >
     <level value="DEBUG" />
   </logger>
 
@@ -42,8 +42,8 @@
   </logger>
 
   <root>
-    <level value="DEBUG" />
     <appender-ref ref="STDOUT" />
+    <level value="DEBUG" />
   </root>
 
 </configuration>
