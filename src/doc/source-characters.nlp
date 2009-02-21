@@ -1,0 +1,12 @@
+== Characters supported in source documents
+
+This file is here just as a placeholder and for playing with stylesheet.
+Build script generates one containing real values defined in the grammar.
+
+| Escape name | Alias | Hex | Preview |
+| «laquo»exclamation-mark«raquo» |   | u0021 | «exclamation-mark» |
+| «laquo»double-quote«raquo» |   | u0022 | «double-quote» |
+| «laquo»number-sign«raquo» |   | u0023 | «number-sign» |
+| «laquo»dollar-sign«raquo» |   | u0024 | «dollar-sign» |
+| «laquo»latin-capital-letter-o-with-acute«raquo» | «laquo»Ocute«raquo» | u00d3 | «latin-capital-letter-o-with-acute» |
+

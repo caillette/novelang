@@ -145,20 +145,25 @@ public class RenderingEscape {
     if( capability.canEncode( unescaped ) ) {
       return "" + unescaped ;
     } else {
-      final String preferredEscape = PREFERRED_ESCAPES.get( unescaped ) ;
-      if( null ==  preferredEscape ) {
-        final String unicodeEscape = UNICODE_NAME_ESCAPES.get( unescaped ) ;
-        if( null == unicodeEscape ) {
-          throw new IllegalArgumentException( 
-              "No Unicode name for: " + CharUtils.unicodeEscaped( unescaped ) ) ;
-        } else {
-          return wrapWithSourceEscapeDelimiters( unicodeEscape ) ;
-        }
-      } else {        
-        return wrapWithSourceEscapeDelimiters( preferredEscape );
-      }
+      return unconditionalEscapeToSource( unescaped );
     }
   }
+
+  public static String unconditionalEscapeToSource( char unescaped ) {
+    final String preferredEscape = PREFERRED_ESCAPES.get( unescaped ) ;
+    if( null ==  preferredEscape ) {
+      final String unicodeEscape = UNICODE_NAME_ESCAPES.get( unescaped );
+      if( null == unicodeEscape ) {
+        throw new IllegalArgumentException(
+            "No Unicode name for: " + CharUtils.unicodeEscaped( unescaped ) ) ;
+      } else {
+        return wrapWithSourceEscapeDelimiters( unicodeEscape ) ;
+      }
+    } else {
+      return wrapWithSourceEscapeDelimiters( preferredEscape ) ;
+    }
+  }
+
 
   private static String wrapWithSourceEscapeDelimiters( String string ) {
     return 

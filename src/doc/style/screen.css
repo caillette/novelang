@@ -233,6 +233,28 @@ hr {
   border-style: dotted;
 }
 
+
+table, td
+{
+    border-color: maroon;
+    border-style: solid;
+}
+
+table
+{
+    border-width: 0 0 1pt 1pt;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td
+{
+    margin: 0;
+    padding: 4pt;
+    border-width: 1pt 1pt 0 0;
+    background-color: gainsboro;
+}
+
 /**** IDs *************************************************************/
 
 #Box {

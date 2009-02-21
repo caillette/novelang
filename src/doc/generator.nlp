@@ -8,7 +8,8 @@ If current directory contains a ``hello.nlp`` file then following invocation wil
 HTML file named ``output/hello.html``:
 
 <<<
-java -jar generate $NOVELANG_DIR/novelang-VERSION.jar /hello.html
+java -jar generate $NOVELANG_DIR/novelang-VERSION.jar
+  /hello.html
 >>>
 
 The batch document genrator has the same options as the HTTP dæemon with following restrictions:
@@ -27,7 +28,8 @@ The batch document generator supports those additional options:
 The ``--output-dir`` option sets the output directory, where rendered documents are generated to.
 
 <<<
-java -jar generate $NOVELANG_DIR/novelang-VERSION.jar --output-dir generated/html /hello.html
+java -jar generate $NOVELANG_DIR/novelang-VERSION.jar
+  --output-dir generated/html /hello.html
 >>>
 
 Default value is ``output``.

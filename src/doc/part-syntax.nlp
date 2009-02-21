@@ -348,6 +348,29 @@ or a line break.
 http://novelang.blogspot.com
 >>>
 
+=== Tables
+
+XML elements: ``n:cell-rows-with-vertical-line``, ``n:cell-row``, ``n:cell``
+
+A pair of vertical lines delimits a "cell", which contains words, punctuation signs and various
+blocks, but no line break. The first vertical line must appear on the first column.
+
+Several cells can be chained on the same line, using one additional vertical bar each time,
+thus forming a cell row.
+
+One cell row, or a sequence of cell rows separated by line breaks, appear wrapped in a
+``n:cell-rows-with-vertical-line`` element. 
+
+<<<
+| row1, col1 | row1, col2  | row1, col3 |
+| row2, col1 |  row2, col2 | row2, col3 |
+>>>
+
+Tables behave like paragraphs in the sense they must be separated of other paragraph-like stuff
+by a pair of line breaks. 
+
+With Novelang default stylesheet, such a sequence of cell rows is arranged as a table.
+
 
 === Escaped characters
 
@@ -356,19 +379,8 @@ An escaped character is enclosed into a left-pointing double angle quotation mar
 a right-pointing double angled quotation mark ``«raquo»``. The escape code is the unicode name.
 HTML entity name is supported as well.
 
-<<<
-«grave-accent»   «laquo»grave-accent«raquo»
-«left-curly-bracket»   «laquo»left-curly-bracket«raquo»
-«right-curly-bracket»   «laquo»right-curly-bracket«raquo»
-«percent-sign»   «laquo»percent-sign«raquo»
-«greater-than-sign»   «laquo»greater-than-sign«raquo»
-    alias: «laquo»gt«raquo»
-«laquo»   «laquo»left-pointing-double-angle-quotation-mark«raquo»
-    alias: «laquo»laquo«raquo»
-«raquo»   «laquo»right-pointing-double-angle-quotation-mark«raquo»
-    alias: «laquo»raquo«raquo»
-
->>>
+All characters that may appear in a source document are listed in an appendix, along with their
+escape codes.
 
 Using those characters is exceptional, however -- except in Novelang documentation! --
 as most of useful character are accessible as literal.

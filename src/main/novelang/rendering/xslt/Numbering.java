@@ -126,7 +126,7 @@ public class Numbering {
       new Function< Number, String >(){
         public String apply( Number number ) {
           switch( number.intValue() ) {
-          case 0  : return "zéro" ;
+          case 0  : return "z\u00e9ro" ;
           case 1  : return "un" ;
           case 2  : return "deux" ;
           case 3  : return "trois" ;

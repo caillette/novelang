@@ -4,13 +4,13 @@
 
     <!ENTITY % ISOpub PUBLIC
         "ISO 8879:1986//ENTITIES Publishing//EN//XML"
-        "ISOpub.pen"
+        "../ISOpub.pen"
     >
     %ISOpub;
 
     <!ENTITY % ISOnum PUBLIC
         "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
-        "ISOnum.pen"
+        "../ISOnum.pen"
     >
     %ISOnum;
 
@@ -21,7 +21,7 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
 
-  <xsl:import href="general-punctuation.xsl" />
+  <xsl:import href="default/general-punctuation.xsl" />
 
   <xsl:template match="n:block-inside-hyphen-pairs" >&mdash;&nbsp;<xsl:apply-templates/>&nbsp;&mdash;</xsl:template>
 

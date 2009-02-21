@@ -24,6 +24,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import novelang.common.SyntacticTree;
 
@@ -90,7 +91,7 @@ public class NodeKindTools {
 
     final List< String > filteredNames = Lists.newArrayList(
         Collections2.filter( NodeKind.getNames(), NO_TRAILING_UNDERSCORE ) ) ;
-    final List< String > sortedNames = Lists.sortedCopy( filteredNames ) ;
+    final List< String > sortedNames = Ordering.natural().sortedCopy( filteredNames ) ;
     return Sets.newTreeSet(
         Lists.transform(
             sortedNames,
