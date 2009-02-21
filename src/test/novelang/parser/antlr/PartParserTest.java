@@ -68,6 +68,8 @@ public class PartParserTest {
       new ParserMethod( "url" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_CELL_ROW_SEQUENCE = 
       new ParserMethod( "cellRowSequence" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_IMAGE = 
+      new ParserMethod( "image" ) ;
 
   private static final SyntacticTree TREE_APOSTROPHE_WORDMATE = tree( APOSTROPHE_WORDMATE, "'" ) ;
 
@@ -463,6 +465,59 @@ public class PartParserTest {
             )
         ) ) ;
   }
+  
+  @Test
+  public void paragraphIsJustImage() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+      "image:foo",
+        tree(
+          PARAGRAPH_REGULAR, 
+          tree( IMAGE, tree( "foo" ) )
+        )        
+    ) ;
+  }
+  
+  @Test
+  public void paragraphIsTextThenImage() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+      "blah" + BREAK +
+      "image:foo",
+        tree(
+          PARAGRAPH_REGULAR,
+          tree( WORD_, "blah"),
+          tree( IMAGE, tree( "foo" ) )
+        )        
+    ) ;
+  }
+  
+  @Test
+  public void paragraphIsTextThenImageThenText() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+      "w" + BREAK +
+      "image:foo" + BREAK +
+      "x" + BREAK,      
+        tree(
+          PARAGRAPH_REGULAR,
+          tree( WORD_, "w"),
+          tree( IMAGE, tree( "foo" ) ),
+          tree( WORD_, "x")
+        )        
+    ) ;
+  }
+  
+  @Test
+  public void paragraphIsImageThenText() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+      "image:foo" + BREAK +
+      "x" + BREAK,      
+        tree(
+          PARAGRAPH_REGULAR,
+          tree( IMAGE, tree( "foo" ) ),
+          tree( WORD_, "x")
+        )        
+    ) ;
+  }
+  
   
   @Test
   public void bigListItemContainsUrl() throws RecognitionException {
@@ -1183,14 +1238,14 @@ public class PartParserTest {
         )
     ) ;
   }
-
+  
   @Test
   public void cellRowSequence2x2() throws RecognitionException {
     PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
-        "| a | b |" + BREAK +
-        "|c  |  d|",
-        tree( 
-            CELL_ROW_SEQUENCE, 
+        "| a | b   |" + BREAK +
+        "|c  | d e |",
+        tree(
+            CELL_ROW_SEQUENCE,
             tree( 
                 CELL_ROW, 
                 tree( CELL, tree( WORD_, "a" ) ), 
@@ -1199,8 +1254,31 @@ public class PartParserTest {
             tree( 
                 CELL_ROW, 
                 tree( CELL, tree( WORD_, "c" ) ),
-                tree( CELL, tree( WORD_, "d" ) ) 
+                tree( CELL, tree( WORD_, "d" ), tree( WORD_, "e" ) )
             ) 
+        )
+    ) ;
+  }
+   
+
+  @Test
+  public void imageJustFile() throws RecognitionException {
+    PARSERMETHOD_IMAGE.checkTree(
+        "image:foo.jpg",
+        tree( 
+            IMAGE, 
+            tree( "foo.jpg" ) 
+        )
+    ) ;
+  }
+
+  @Test
+  public void imageWithDirectories() throws RecognitionException {
+    PARSERMETHOD_IMAGE.checkTree(
+        "image:foo/bar.jpg",
+        tree( 
+            IMAGE, 
+            tree( "foo/bar.jpg" ) 
         )
     ) ;
   }

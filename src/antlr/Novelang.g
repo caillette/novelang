@@ -42,9 +42,10 @@ tokens {
   BLOCK_INSIDE_SQUARE_BRACKETS ;            
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
   URL ;  
+  IMAGE ;
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   CELL ;
-  CELL_ROW ;
+  CELL_ROW ;         
   CELL_ROW_SEQUENCE ;
   WORD_ ;
   
@@ -174,13 +175,15 @@ headerIdentifier : ; // TODO
 
 paragraph 
 	: ( (   ( url ) => p += url
+	      | ( image ) => p += image
 	      | ( smallDashedListItem ) => p += smallDashedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
 	          ( whitespace p+= mixedDelimitedSpreadBlock )* 
 	        )
 	    )
 	    ( whitespace? softbreak 
-	      ( ( url ) => p += url
+	      (   ( url ) => p += url
+	        | ( image ) => p += image
 	        | ( smallDashedListItem ) => p += smallDashedListItem
 	        | ( whitespace? p += mixedDelimitedSpreadBlock 
 	            ( whitespace p+= mixedDelimitedSpreadBlock )* 
@@ -245,6 +248,9 @@ spreadBlockBody
         ( ( softbreak url whitespace? softbreak ) => 
               ( softbreak url softbreak ) 
         ) 
+      | ( ( softbreak image whitespace? softbreak ) => 
+              ( softbreak image softbreak ) 
+        ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
                 ( softbreak smallDashedListItem softbreak ) 
         )
@@ -256,6 +262,9 @@ spreadBlockBody
     (   
         ( ( softbreak url whitespace? softbreak ) => 
               ( softbreak url softbreak ) 
+        ) 
+      | ( ( softbreak image whitespace? softbreak ) => 
+              ( softbreak image softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
                 ( softbreak whitespace? smallDashedListItem softbreak ) 
@@ -731,6 +740,7 @@ bigDashedListItem
     ( whitespace? softbreak 
       ( 
           ( url ) => i += url
+        | ( image ) => i += image
         | ( smallDashedListItem ) => i += smallDashedListItem
         | ( whitespace? i += mixedDelimitedSpreadBlock 
             ( whitespace i += mixedDelimitedSpreadBlock )* 
@@ -1146,6 +1156,44 @@ urlXChar
   ;
 
 
+// =====
+// Image
+// =====
+
+image
+  : (
+	    ( LATIN_SMALL_LETTER_I
+	      LATIN_SMALL_LETTER_M 
+	      LATIN_SMALL_LETTER_A 
+	      LATIN_SMALL_LETTER_G 
+	      LATIN_SMALL_LETTER_E
+	      COLON 
+	    ) => 
+	      LATIN_SMALL_LETTER_I
+	      LATIN_SMALL_LETTER_M 
+	      LATIN_SMALL_LETTER_A 
+	      LATIN_SMALL_LETTER_G 
+	      LATIN_SMALL_LETTER_E
+	      COLON 
+	      imageFilePath	    
+    ) 
+    -> ^( IMAGE { delegate.createTree( IMAGE, $imageFilePath.text ) } )
+  ;
+
+imageFilePath
+  : imageFileSegment ( SOLIDUS imageFileSegment )*
+  ;
+  
+imageFileSegment
+  : (   urlUChar     
+      | SEMICOLON
+      | COMMERCIAL_AT
+      | AMPERSAND
+      | EQUALS_SIGN
+      | TILDE         
+      | NUMBER_SIGN   
+    )+                
+  ;
 
 
 // ====
