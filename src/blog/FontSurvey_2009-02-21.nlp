@@ -1,0 +1,45 @@
+== Font survey
+
+=== Gentium
+
+According tho its website,
+//Gentium is a typeface family designed to enable the diverse ethnic groups 
+around the world who use the Latin and Greek scripts to produce readable, 
+high-quality publications.//
+
+http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&item_id=Gentium
+
+The license is quite liberal. It avoids the "viral" effect of GPL: 
+embedding the Gentium font in the PDF you redistribute on a numerical form
+won't turn on the GPL for the PDF.
+
+http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+
+Bad news: the OFL license doesn't seem compatible with the GPL v3 (documentation
+is unclear). So you can use Gentium fonts but you'll have to download it
+with your bare hands, as it cannot fit in a Novelang distribution, which is 
+released under GPL v3.
+
+
+=== Junicode
+
+Good news: the beautiful Junicode font will become part of Novelang. 
+//Junicode (short for Junius-Unicode) is a Unicode font for medievalists. //
+It embeds various amazing characters like old English and runes. 
+But as a great classical serif font, it's a nice replacement for boring 
+Times New Roman.
+
+http://junicode.sourceforge.net
+
+But the Junicode license, which is GPL v2, has no exception about embedding
+so if you embed it in a PDF (what Novelang always does) your PDF will be
+redistributable under the GPL license.
+
+=== Linux Libertine
+
+Better news: the Linux Libertine font, bundled in Novelang for a long time, 
+is dual-licensed, under both GPL and OFL, so you can use at no legal risk.
+
+http://linuxlibertine.sourceforge.net/Libertine-EN.html
+
+
