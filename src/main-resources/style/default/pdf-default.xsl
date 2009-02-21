@@ -96,7 +96,7 @@
         <fo:flow
             flow-name="xsl-region-body"
         >
-          <fo:block font-family="Linux Libertine" >
+          <fo:block font-family="Junicode" >
             <xsl:apply-templates />
           </fo:block>
           <fo:block id="@last-page"/>
@@ -188,7 +188,7 @@
         padding-before="6pt"
         padding-after="8pt"
         font-size="10pt"
-        font-family="Linux Libertine"
+        font-family="Junicode"
         line-height="13pt"
         font-stretch="semi-condensed"
     >
@@ -227,6 +227,7 @@
   <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >
     <fo:inline
         font-family="monospace"
+        font-size="10pt"
     >
       <xsl:apply-templates/>
     </fo:inline>
@@ -260,7 +261,6 @@
       <fo:basic-link
           color="blue"
           text-decoration="underline"
-          font-size="85%"
       >
         <xsl:attribute name="external-destination" ><xsl:value-of select="." /></xsl:attribute>
         <xsl:value-of select="." />
