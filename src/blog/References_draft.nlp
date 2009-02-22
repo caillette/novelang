@@ -1,0 +1,101 @@
+== Images and references
+
+I just checked a first working version of images into github. It's far from complete, but with such source document:
+
+<<<
+image:foo/bar.jpg
+>>>
+
+...the stylesheet receives a ``n:image`` element containing ``foo/bar.jpg``.
+
+Images work like URL: they can appear inside a paragraph as long as it is on the first column, with nothing else on the same line. This is supported:
+
+<<<
+This paragraph contains
+image:foo/bar.jpg
+a picture.
+>>>
+
+There are plenty of options (see
+http://www.wikimatrix.org/syntax.php?i=116
+) but the aim is to provide the same syntactic behavior as URL. So it's planned to support naming:
+
+<<<
+  "My image"
+image:foo/bar.jpg
+
+  "My website"
+http://foo.org
+>>>
+
+Yes, it's mixing a protocol (HTTP) and a semantic indicator (``image:``). But it seems more important to keep a consistent convention to tell there is something outside of the text content. 
+
+The preceding block inside double quotes is magically attached to the URL `/` image, if it is indented with at least one space character, and if there is nothing else on the same line. This is consistent with identifiers, which precede what they decorate.
+
+The name is the most common decoration. But looking at HTML spec, there are plenty of others. 
+
+HTML 4's ``IMG`` element supports ``alt``, ``title``, ``longdesc``, ``usemap``, ``ismap``, ``lang``. For Novelang, an optional link to something (internal reference or hyperlink) would make sense. The list may turn to infinite with processing instructions (scaling, fading and so on). Same story with hyperlinks. Such a mess should not appear inside a content-focused pure text document!
+
+There is another case where we want to keep all the mess outside of the text content-oriented: tables (well, cell rows). This is where identifiers come to action. Identifiers are just a name to make the stuff reusable. I already blogged about identifiers and decorations in
+http://novelang.blogspot.com/2008/08/decorations-revisited.html
+so we just need a reminder:
+
+<<<
+  «reverse-solidus»my_image
+  "my beautiful image"
+  [Photo taken during my holidays]
+  «percent-sign»% Much more stuff here...
+image:foo/bar.jpg
+>>>
+
+This works the same way for URL. Now how to get my image just using its identifier ``my_image``? Because we want it to appear inside a table or a paragraph, this should be kept short. The syntactic artefact should have a sufficient visible footprint. Here are several options:
+
+<<<
+image#my_image     image##my_image 
+image->my_image    image:>my_image 
+image-->my_image   image=>my_image 
+image==>my_image   image@my_image
+image::my_image    image>>my_image
+>>>
+
+First, eliminate ``image#`` and ``image##``. The number sign is cluttering and while it is used in hyperlinks, it's more to tell about a subset of requested document. That's clearly not the case here.
+
+The ``image@`` makes bad usage of commercial at. We don't have an image at an identifier.
+
+The ``image::`` carries the idea of a supplementary level of indirection, which is great. But it has too small footprint and users may not be able to count colons inside a bunch of text at a glance.
+
+The ``>`` ending looks great because it tells "go forward" (at least when reading from left to right).
+
+The ``image>>`` has a very good visual footprint and visual meaning, but this would tend to overuse the ``>>`` which are used by paragraphs inside angled bracket pairs.
+
+The ``image->``, ``image-->``, ``image=>``, and ``image==>`` look sophisticated and call a math formula to mind, while they are not.
+
+The ``image:>`` is the winner, with correct visual footprint, and the nice meaning of an additional level of indirection. 
+
+Now let's try it in some sample source document.
+
+<<<
+-----------------------------------------------------------
+This is a sample of text around a reference to an image. 
+The reference appears in the middle of the text image:>«reverse-solidus»«reverse-solidus»absolute«reverse-solidus»identifier 
+therefore there must be a visual mean to differenciate it. There can be even more text. The recommended approach could be to use line breaks (like for URL) to make the reference visually outstanding.
+image:>relative«reverse-solidus»path
+Accepting both relative and absolute path makes the thing more complicated, because they don't have the same visual footprint. Now, this is an image:>identifier-for-image .
+
+Pure images may appear in the middle of the text like URL. They may have an optional text right before under the form of a block inside double quotes.
+  "Image name"
+image:the/image/file.svg
+Please note that images inside text (and URL as well) may not have identifiers. Identifiers exist only for paragraphs and bigger constructs.
+
+  «reverse-solidus»identifier-for-image
+  "This image has an identifier"
+image:my/image.jpg
+
+  «reverse-solidus»mywebsite
+  "my site on the Web"
+http://go.to/the/website
+
+Because URL have identifiers you can tell to go to weblink:>mywebsite. The true killer feature of references is that they are inlined, so you may have URL and images inside tables.
+
+
+>>>
