@@ -353,6 +353,17 @@
     </fo:table-cell>
   </xsl:template>
 
+  <xsl:template match="n:image" >
+    <fo:block>
+      <fo:external-graphic>
+        <xsl:attribute name="src">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </fo:external-graphic>
+    </fo:block>
+
+  </xsl:template>  
+  
 
 </xsl:stylesheet>
 

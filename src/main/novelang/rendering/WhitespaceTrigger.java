@@ -84,6 +84,7 @@ public class WhitespaceTrigger {
     add( WORD_, BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ) ;
     add( WORD_, BLOCK_INSIDE_DOUBLE_QUOTES ) ;
     add( WORD_, BLOCK_INSIDE_SQUARE_BRACKETS ) ;
+    add( WORD_, URL ) ;
     add( WORD_, WORD_ ) ;
     add( URL, BLOCK_INSIDE_SOLIDUS_PAIRS ) ;
     add( URL, BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ) ;
