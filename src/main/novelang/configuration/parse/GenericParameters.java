@@ -19,6 +19,7 @@ package novelang.configuration.parse;
 import java.io.File;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.nio.charset.Charset;
 
@@ -72,6 +73,7 @@ public abstract class GenericParameters {
     options = new Options() ;
     options.addOption( OPTION_HELP ) ;
     options.addOption( OPTION_FONT_DIRECTORIES ) ;
+    options.addOption( OPTION_EMPTY ) ;
     options.addOption( OPTION_STYLE_DIRECTORY ) ;
     options.addOption( OPTION_LOG_DIRECTORY ) ;
     options.addOption( OPTION_HYPHENATION_DIRECTORY ) ;
@@ -301,6 +303,12 @@ public abstract class GenericParameters {
       .create()
   ;
 
+  private static final Option OPTION_EMPTY = OptionBuilder
+      .withLongOpt( "" )
+      .withDescription( "Empty option to end directory list" )
+      .create()
+  ;
+
   private static final Option OPTION_STYLE_DIRECTORY = OptionBuilder
       .withLongOpt( "style-dir" )
       .withDescription( "Directory containing style files" )
@@ -390,6 +398,12 @@ public abstract class GenericParameters {
           ""
       ) ;
       printWriter.flush() ;
+    }
+
+    public String asString( String commandName, int columns ) {
+      final StringWriter stringWriter = new StringWriter() ;
+      print( new PrintWriter( stringWriter ), commandName, columns ) ;
+      return stringWriter.toString() ;
     }
   }
 

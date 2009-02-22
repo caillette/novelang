@@ -248,4 +248,47 @@ import novelang.rendering.RenditionMimeType;
 
   }
 
+// ===================
+// Equals and hashCode
+// ===================
+
+  @Override
+  public boolean equals( Object o ) {
+    if( this == o ) {
+      return true;
+    }
+    if( o == null || getClass() != o.getClass() ) {
+      return false;
+    }
+
+    AbstractRequest that = ( AbstractRequest ) o;
+
+    if( alternateStylesheet != null ? !alternateStylesheet.equals( that.alternateStylesheet ) : that.alternateStylesheet != null ) {
+      return false;
+    }
+    if( documentSourceName != null ? !documentSourceName.equals( that.documentSourceName ) : that.documentSourceName != null ) {
+      return false;
+    }
+    if( originalTarget != null ? !originalTarget.equals( that.originalTarget ) : that.originalTarget != null ) {
+      return false;
+    }
+    if( renditionMimeType != that.renditionMimeType ) {
+      return false;
+    }
+    if( resourceExtension != null ? !resourceExtension.equals( that.resourceExtension ) : that.resourceExtension != null ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = renditionMimeType != null ? renditionMimeType.hashCode() : 0;
+    result = 31 * result + ( resourceExtension != null ? resourceExtension.hashCode() : 0 );
+    result = 31 * result + ( documentSourceName != null ? documentSourceName.hashCode() : 0 );
+    result = 31 * result + ( alternateStylesheet != null ? alternateStylesheet.hashCode() : 0 );
+    result = 31 * result + ( originalTarget != null ? originalTarget.hashCode() : 0 );
+    return result;
+  }
 }

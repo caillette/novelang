@@ -42,7 +42,35 @@ public final class PolymorphicRequest extends AbstractRequest {
     ;
   }
 
-// ============
+  @Override
+  public boolean equals( Object o ) {
+    if( this == o ) {
+      return true ;
+    }
+    if( o == null || getClass() != o.getClass() ) {
+      return false;
+    }
+    if( !super.equals( o ) ) {
+      return false;
+    }
+
+    final PolymorphicRequest that = ( PolymorphicRequest ) o ;
+
+    if( displayProblems != that.displayProblems ) {
+      return false ;
+    }
+
+    return true ;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + ( displayProblems ? 1 : 0 );
+    return result;
+  }
+
+  // ============
 // errorRequest
 // ============
 

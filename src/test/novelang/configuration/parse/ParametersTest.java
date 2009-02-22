@@ -23,9 +23,14 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.Lists;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
+import novelang.produce.DocumentRequest;
+import novelang.produce.RequestTools;
 
 /**
  * Tests for {@link GenericParameters}, {@link BatchParameters}, {@link DaemonParameters}.
@@ -125,9 +130,38 @@ public class ParametersTest {
     new DaemonParameters( scratchDirectory, arguments ) ;
   }
 
+  @Test
+  public void bugWithDocumentsConfusedWithFontDirectories() throws ArgumentException {
+    final String[] arguments = {
+        DASHED_FONT_DIRS,
+        DIRECTORY_NAME_AAA,
+        "--",
+        OUTPUT_FILE_NAME
+    } ;
+    final BatchParameters batchParameters = new BatchParameters( scratchDirectory, arguments ) ;
+    assertOnIterable( batchParameters.getFontDirectories(), directoryAaa ) ;
+    assertOnIterable(
+        batchParameters.getDocumentRequests(),
+        DOCUMENT_REQUEST
+    ) ;
+  }
+
+  @Test
+  public void batchParametersWantDocumentRequests() {
+    final String[] arguments = new String[] {} ;
+    try {
+      new BatchParameters( scratchDirectory, arguments ) ;
+      fail( "Exception should have been thrown" ) ;
+    } catch( ArgumentException e ) {
+      LOGGER.info( e.getHelpPrinter().asString( ClassUtils.getShortClassName( getClass() ), 80 ) );
+    }
+  }
+
 // =======
 // Fixture
 // =======
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( ParametersTest.class ) ;
 
   private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir";
   private static final String DASHED_STYLE_DIR = "--style-dir";
@@ -155,6 +189,11 @@ public class ParametersTest {
   private File directoryBbb ;
   private File directoryCcc ;
   private File directoryCccDdd ;
+
+  private static final String OUTPUT_FILE_NAME = "/this-is-not-a-directory-but-output-file.html" ;
+
+  private static final DocumentRequest DOCUMENT_REQUEST =
+      RequestTools.createDocumentRequest( OUTPUT_FILE_NAME ) ;
 
   @Before
   public void setUp() throws IOException {
