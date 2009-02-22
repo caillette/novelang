@@ -1,21 +1,46 @@
 == References
 
-We've seen that URL and images may lead to lengthy declarations. URL may have name  type, and title (which is different from name). Images may have processing instructions, like format transcoding or visual effects. Moreover, there are places like cells (e.g. for tables) where images and URL are useful, but declaring them here would mess the whole text layout.
+In the last post, we've seen that URL and images may lead to lengthy declarations. URL may have name  type, and title (which is different from name). Images may have processing instructions, like format transcoding or visual effects. Moreover, there are places like cells (`e.g.` for tables) where images and URL are useful, but declaring them here would mess the whole text layout.
 
+Obviously, the answer is to separate usage from declaration. Along with declaration comes an identifier that appears in the usage, and voilà.
 
-
-
-There is another case where we want to keep all the mess outside of the text content-oriented: tables (well, cell rows). This is where identifiers come to action. Identifiers are just a name to make the stuff reusable. I already blogged about identifiers and decorations in
+I already blogged about identifiers and decorations in
 http://novelang.blogspot.com/2008/08/decorations-revisited.html
-so we just need a reminder:
+. Here is a decorated image declaration:
 
 <<<
   «reverse-solidus»my_image
   "my beautiful image"
-  [Photo taken during my holidays]
+  [I like this image]
   «percent-sign»% Much more stuff here...
 image:foo/bar.jpg
 >>>
+
+And this would be the same for URL. Identifiers also make possible to declare a link to another part of the rendered document, or to insert a subset of a Part in a Book.
+
+Declaring identifiers is the easy part. But how to use them inside a document that should keep plain text legibility?
+
+Here are the use cases.
+
+--- Use a URL as it was declared.
+
+--- Use an image as it was declared.
+
+--- Show the name of the image (and possibly link to it). 
+
+--- Link to another part of the document.
+
+
+
+
+
+
+
+
+
+
+
+
 
 This works the same way for URL. Now how to get my image just using its identifier ``my_image``? Because we want it to appear inside a table or a paragraph, this should be kept short. The syntactic artefact should have a sufficient visible footprint. Here are several options:
 
