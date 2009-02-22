@@ -1,40 +1,9 @@
-== Images and references
+== References
 
-I just checked a first working version of images into github. It's far from complete, but with such source document:
+We've seen that URL and images may lead to lengthy declarations. URL may have name  type, and title (which is different from name). Images may have processing instructions, like format transcoding or visual effects. Moreover, there are places like cells (e.g. for tables) where images and URL are useful, but declaring them here would mess the whole text layout.
 
-<<<
-image:foo/bar.jpg
->>>
 
-...the stylesheet receives a ``n:image`` element containing ``foo/bar.jpg``.
 
-Images work like URL: they can appear inside a paragraph as long as it is on the first column, with nothing else on the same line. This is supported:
-
-<<<
-This paragraph contains
-image:foo/bar.jpg
-a picture.
->>>
-
-There are plenty of options (see
-http://www.wikimatrix.org/syntax.php?i=116
-) but the aim is to provide the same syntactic behavior as URL. So it's planned to support naming:
-
-<<<
-  "My image"
-image:foo/bar.jpg
-
-  "My website"
-http://foo.org
->>>
-
-Yes, it's mixing a protocol (HTTP) and a semantic indicator (``image:``). But it seems more important to keep a consistent convention to tell there is something outside of the text content. 
-
-The preceding block inside double quotes is magically attached to the URL `/` image, if it is indented with at least one space character, and if there is nothing else on the same line. This is consistent with identifiers, which precede what they decorate.
-
-The name is the most common decoration. But looking at HTML spec, there are plenty of others. 
-
-HTML 4's ``IMG`` element supports ``alt``, ``title``, ``longdesc``, ``usemap``, ``ismap``, ``lang``. For Novelang, an optional link to something (internal reference or hyperlink) would make sense. The list may turn to infinite with processing instructions (scaling, fading and so on). Same story with hyperlinks. Such a mess should not appear inside a content-focused pure text document!
 
 There is another case where we want to keep all the mess outside of the text content-oriented: tables (well, cell rows). This is where identifiers come to action. Identifiers are just a name to make the stuff reusable. I already blogged about identifiers and decorations in
 http://novelang.blogspot.com/2008/08/decorations-revisited.html
