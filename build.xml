@@ -341,7 +341,9 @@
 
   <target name="generate-documentation" depends="init" >
 
-    <copydir src="${source.documentation.dir}" dest="${target.documentation.tweaked.dir}" />
+    <copy todir="${target.documentation.tweaked.dir}" >
+      <fileset dir="${source.documentation.dir}" />
+    </copy>
 
     <!--
       No need to delete / create ${target.documentation.site.dir}
@@ -387,8 +389,10 @@
       <jvmarg value="-Djava.awt.headless=true" />
       <arg value="${launcher.batch.command}" />
       <arg value="--log-dir=${logdestination}" />
-      <arg value="--font-dirs=${documentation.fonts.dir}" />
-      <arg value="--output-dir=${absolutetarget}" />
+      <arg value="--font-dirs" />
+      <arg value="${documentation.fonts.dir}" />
+      <arg value="--output-dir" />
+      <arg value="${absolutetarget}" />
       <arg value="${target.documentation.htmldocument}" />
       <arg value="${target.documentation.pdfdocument}" />
     </java>
@@ -407,30 +411,6 @@
   </target>
 
 
-<!--
-  <target name="split" depends="init" >
-    <java
-        classname="novelang.batch.SplitByChapter"
-        failonerror="true"
-        fork="true"
-        dir="${user.dir}"
-    >
-      <classpath>
-        <path refid="deploy-libs" />
-        <pathelement location="${target.mainclasses.dir}" />
-        <pathelement location="${configuration.main.dir}" />
-      </classpath>
-      <jvmarg value="-Dfile.encoding=${novelang.sources.charset}" />
-      <jvmarg value="-Djava.awt.headless=true" />
-      <jvmarg value="-Dnovelang.log.dir=${logdestination}" />
-      <jvmarg value="-Xmx512M" />
-      <arg value="${split.bookfile}" />
-      <arg value="${split.destination}" />
-    </java>
-  </target>
--->
-
-  
   
   
   

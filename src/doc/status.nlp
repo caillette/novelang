@@ -16,6 +16,11 @@ specified remains ``[pdf,html,nlp].xsl``. This makes possible to override defaul
 specifying a new stylesheet name.
 
 
+=== Version `0.20.0`
+
+--- Fixed argument parsing of batch argument generator (reported by Lmre).
+
+
 === Version `0.19.0`
 
 --- Default charset for source documents is now `UTF-8`.
@@ -25,6 +30,8 @@ specifying a new stylesheet name.
 --- Batch document generator.
 
 --- HTTP dæmon now started with additional ``httpdaemon`` command name.
+
+The new command-line syntax now is:
 
 <<<
 java -jar ...novelang-VERSION.jar httpdaemon <options>

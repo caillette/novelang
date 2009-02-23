@@ -28,7 +28,7 @@
   <!ENTITY sourceforgeJavadoc "http://novelang.sourceforge.net/javadoc" >
   <!ENTITY download           "http://sourceforge.net/project/showfiles.php?group_id=227480&amp;package_id=275418" >
   <!ENTITY github             "http://github.com/caillette/novelang/tree/master" >
-  <!ENTITY pdfDocument        "http://novelang.sf.net/Novelang.pdf" >
+  <!ENTITY pdfDocument        "http://novelang.sf.net/novelang.pdf" >
   <!ENTITY license            "http://www.gnu.org/licenses/gpl-3.0.txt" >
 
 ] >
