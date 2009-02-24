@@ -1,12 +1,17 @@
 == References
 
-In the last post, we've seen that URL and images may lead to lengthy declarations. URL may have name  type, and title (which is different from name). Images may have processing instructions, like format transcoding or visual effects. Moreover, there are places like cells (`e.g.` for tables) where images and URL are useful, but declaring them here would mess the whole text layout.
+In the last post, we've seen that URL and images may lead to lengthy declarations.
+URL may have name  type, and title (which is different from name).
+Images may have processing instructions, like format transcoding or visual effects.
+Moreover, there are places like cells (`e.g.` for tables) where images and URL are useful,
+but declaring them here would mess the whole text layout.
 
-Obviously, the answer is to separate usage from declaration. Along with declaration comes an identifier that appears in the usage, and voilà.
+Obviously, the answer is to separate usage from declaration. Along with declaration comes an
+identifier that appears in the usage, and voilà.
 
 I already blogged about identifiers and decorations in
 http://novelang.blogspot.com/2008/08/decorations-revisited.html
-. Here is a decorated image declaration:
+. Here is a decorated image declaration (not supported yet):
 
 <<<
   «reverse-solidus»my_image
@@ -16,9 +21,11 @@ http://novelang.blogspot.com/2008/08/decorations-revisited.html
 image:foo/bar.jpg
 >>>
 
-And this would be the same for URL. Identifiers also make possible to declare a link to another part of the rendered document, or to insert a subset of a Part in a Book.
+And this would be the same for URL. Identifiers also make possible to declare a link to another
+part of the rendered document, or to insert a subset of a Part in a Book.
 
-Declaring identifiers is the easy part. But how to use them inside a document that should keep plain text legibility?
+Declaring identifiers is the easy part. But how to use them inside a plain text document without
+hurting its legibility?
 
 Here are the use cases.
 
@@ -28,68 +35,34 @@ Here are the use cases.
 
 --- Show the name of the image (and possibly link to it). 
 
---- Link to another part of the document.
+--- Link to somewhere in the document.
 
+To be clear, I want an alias which, considering the image definition above, would look like
+``image->«reverse-solidus»my_image``.
 
+Except for using an image as it was declared, it's all about linking to somewhere else.
 
+What about just: 
 
-
-
-
-
-
-
-
-
-
-This works the same way for URL. Now how to get my image just using its identifier ``my_image``? Because we want it to appear inside a table or a paragraph, this should be kept short. The syntactic artefact should have a sufficient visible footprint. Here are several options:
 
 <<<
-image#my_image     image##my_image 
-image->my_image    image:>my_image 
-image-->my_image   image=>my_image 
-image==>my_image   image@my_image
-image::my_image    image>>my_image
->>>
+                                                    |
+Below, an image appearing between two paragraphs.
+This image has an identifier. You cannot define an
+image with an identifier and `/` or a title inside a
+paragraph.
 
-First, eliminate ``image#`` and ``image##``. The number sign is cluttering and while it is used in hyperlinks, it's more to tell about a subset of requested document. That's clearly not the case here.
+  «reverse-solidus»preferences
+  "Preferences pane in action"
+image:screenshots/preferences-2.jpg
 
-The ``image@`` makes bad usage of commercial at. We don't have an image at an identifier.
+Images may be defined in other Parts, and referenced
+with an absolute identifier. The hyphen minus means
+to embed the image instead of producing a link so you
+can expect to see a logo -«reverse-solidus»«reverse-solidus»all-images«reverse-solidus»logo here.
 
-The ``image::`` carries the idea of a supplementary level of indirection, which is great. But it has too small footprint and users may not be able to count colons inside a bunch of text at a glance.
-
-The ``>`` ending looks great because it tells "go forward" (at least when reading from left to right).
-
-The ``image>>`` has a very good visual footprint and visual meaning, but this would tend to overuse the ``>>`` which are used by paragraphs inside angled bracket pairs.
-
-The ``image->``, ``image-->``, ``image=>``, and ``image==>`` look sophisticated and call a math formula to mind, while they are not.
-
-The ``image:>`` is the winner, with correct visual footprint, and the nice meaning of an additional level of indirection. 
-
-Now let's try it in some sample source document.
-
-<<<
------------------------------------------------------------
-This is a sample of text around a reference to an image. 
-The reference appears in the middle of the text image:>«reverse-solidus»«reverse-solidus»absolute«reverse-solidus»identifier 
-therefore there must be a visual mean to differenciate it. There can be even more text. The recommended approach could be to use line breaks (like for URL) to make the reference visually outstanding.
-image:>relative«reverse-solidus»path
-Accepting both relative and absolute path makes the thing more complicated, because they don't have the same visual footprint. Now, this is an image:>identifier-for-image .
-
-Pure images may appear in the middle of the text like URL. They may have an optional text right before under the form of a block inside double quotes.
-  "Image name"
-image:the/image/file.svg
-Please note that images inside text (and URL as well) may not have identifiers. Identifiers exist only for paragraphs and bigger constructs.
-
-  «reverse-solidus»identifier-for-image
-  "This image has an identifier"
-image:my/image.jpg
-
-  «reverse-solidus»mywebsite
-  "my site on the Web"
-http://go.to/the/website
-
-Because URL have identifiers you can tell to go to weblink:>mywebsite. The true killer feature of references is that they are inlined, so you may have URL and images inside tables.
-
-
+From inside the same Part, an identifier may be
+relative so here is a link to «reverse-solidus»preferences
+that should render as a hyperlink showing the title
+set in the declaration.
 >>>
