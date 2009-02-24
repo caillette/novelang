@@ -6,11 +6,36 @@ I just checked a first working version of images into github. It's far from comp
 image:foo/bar.jpg
 >>>
 
-...the stylesheet receives a ``n:image`` element containing ``foo/bar.jpg``.
+...the stylesheet receives a ``n:image`` element containing ``foo/bar.jpg``. How beautiful. It is supposed to work the way URL do and offer a uniform syntax. It addition, it's more or less used elsewhere, see
+http://www.wikicreole.org/wiki/ImagesReasoning
+. 
 
-By now, the path of the image is relative to the root of the project directory. This is counter-intuitive, the path should be relative to the declaring document.
+But it's crap. It's wrong, it's inconsistent, it will not be comfortable.
 
-Images work like URL: they can appear inside a paragraph as long as it is on the first column, with nothing else on the same line. This is supported:
+URL exist on their own line because this makes copy-paste easy. There is no operating system supporting ``image:`` as a protocol. And URL are links to another resource, while ``image:...`` represents the resource itself.
+
+Other wikis need the ``image:`` prefix because they accept a ``/`` in the middle of the content. Novelang requires the solidus to appear as literal. Therefore something like ``screenshots/preferences.png`` cannot be confused with three words with punctuation signs or symbols inbetween. 
+
+Current image support takes paths relative to the project root, but a path relative to current Part file is comfortable in some cases. If the image is in the same directory, we need to make the solidus character appear so we'll have  ``./preferences.png`` (instead of ``preferences.png`` which could be two dot-separated words).
+
+But how to tell the difference with other resources? First, it's good to note `99%` of embedded resources are images. How many times do you embed a sound or a video? By the way, WikiCreole has dedicated syntax for images and URL, but no other external content. So it makes sense to make images the easiest case, and add syntactic sugar for the rest if it comes. 
+
+{{
+
+
+
+
+
+
+
+
+
+
+By now, the path of the image is relative to the root of the project directory.
+This is counter-intuitive, the path should be relative to the declaring document.
+
+Images work like URL: they can appear inside a paragraph as long as it is on the first column,
+with nothing else on the same line. This is supported:
 
 <<<
 This paragraph contains
@@ -18,20 +43,27 @@ image:foo/bar.jpg
 a picture.
 >>>
 
-This is the same syntactic mechanism as for hyperlink. While ``image:`` is not a protocol, in both case it tells "here is something which is not intended to humans". 
+This is the same syntactic mechanism as for hyperlink. While ``image:`` is not a protocol, in both
+case it tells "here is something which is not intended to humans".
 
-As for URL, a syntactic extension is planned, for adding names. In this case, the given name will be attached to the ``n:image`` passed to the stylesheet:
+As for URL, a syntactic extension is planned, for adding names. In this case, the given name will
+be attached to the ``n:image`` passed to the stylesheet:
 
 <<<
   "My image"
 image:foo/bar.jpg
 >>>
 
-The block inside double quotes containing the name must be indented, so it remains possible to put a displayable block right before an image `/` a URL.
+The block inside double quotes containing the name must be indented, so it remains possible to put
+a displayable block right before an image `/` a URL.
 
 Images make tempting to add many more options. 
-HTML 4's ``IMG`` element supports ``alt``, ``title``, ``longdesc``, ``usemap``, ``ismap``, ``lang`` to name a few. 
-But there could even be an optional link to something (internal reference or hyperlink) or processing instructions (scaling, fading and so on). 
-If such extensions get supported, this will be with a separation of the image `/` URL declaration, and its usage inside text content.
+HTML 4's ``IMG`` element supports ``alt``, ``title``, ``longdesc``, ``usemap``, ``ismap``, ``lang``
+to name a few.
+But there could even be an optional link to something (internal reference or hyperlink) or
+processing instructions (scaling, fading and so on).
+If such extensions get supported, this will be with a separation of the image `/` URL declaration,
+and its usage inside text content.
 
 
+}}
