@@ -42,7 +42,7 @@ tokens {
   BLOCK_INSIDE_SQUARE_BRACKETS ;            
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
   URL ;  
-  IMAGE ;
+  RASTER_IMAGE ;
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   CELL ;
   CELL_ROW ;
@@ -119,6 +119,7 @@ part
   
     (   p += levelIntroducer
       | p += paragraph 
+      | p += embeddableResource
       | p += blockQuote 
       | p += literal
       | p += bigDashedListItem
@@ -127,6 +128,7 @@ part
     ( largebreak (
         p += levelIntroducer 
       | p += paragraph 
+      | p += embeddableResource
       | p += blockQuote 
       | p += literal
       | p += bigDashedListItem
@@ -293,6 +295,7 @@ mixedDelimitedMonoblock
       )+ 
       word? 
     ) 
+  | embeddableResource
   ;
                 
 
@@ -913,8 +916,11 @@ leadingPunctuationSign
 punctuationSign
   : s1 = COMMA -> ^( PUNCTUATION_SIGN
       ^( SIGN_COMMA { delegate.createTree( SIGN_COMMA, $s1.text ) } ) )
-  | ( FULL_STOP FULL_STOP FULL_STOP ) => s2 = FULL_STOP FULL_STOP FULL_STOP -> ^( PUNCTUATION_SIGN
-      ^( SIGN_ELLIPSIS { delegate.createTree( SIGN_ELLIPSIS, $s2.text ) } ) )
+      
+  | ( FULL_STOP FULL_STOP FULL_STOP ) => FULL_STOP FULL_STOP FULL_STOP 
+      -> ^( PUNCTUATION_SIGN
+              ^( SIGN_ELLIPSIS { delegate.createTree( SIGN_ELLIPSIS, "..." ) } ) )
+              
   | s3 = FULL_STOP  -> ^( PUNCTUATION_SIGN
       ^( SIGN_FULLSTOP { delegate.createTree( SIGN_FULLSTOP, $s3.text ) } ) )
   | s4 = QUESTION_MARK -> ^( PUNCTUATION_SIGN
@@ -1152,24 +1158,47 @@ urlXChar
 // Image
 // =====
 
-externalResource
-  : externalResourcePath	    
-    -> ^( IMAGE { delegate.createTree( IMAGE, $externalResourcePath.text ) } )
+embeddableResource
+  : externalResourcePath rasterImageExtension
+    -> ^( RASTER_IMAGE  { delegate.createTree( 
+            RASTER_IMAGE, $externalResourcePath.text + $rasterImageExtension.text ) } 
+        )
   ;
 
 externalResourcePath
-  : ( FULL_STOP SOLIDUS )? externalResourceSegment ( SOLIDUS externalResourceSegment )*
+  : FULL_STOP? 
+    SOLIDUS 
+    externalResourceSegment 
+    ( SOLIDUS externalResourceSegment )*
+  ;
+  
+rasterImageExtension
+  : FULL_STOP ( 
+        ( LATIN_SMALL_LETTER_P LATIN_SMALL_LETTER_N LATIN_SMALL_LETTER_G )
+      | ( LATIN_SMALL_LETTER_J LATIN_SMALL_LETTER_P LATIN_SMALL_LETTER_G )
+      | ( LATIN_SMALL_LETTER_G LATIN_SMALL_LETTER_I LATIN_SMALL_LETTER_F )
+      
+    )
   ;
   
 externalResourceSegment
   : (   externalResourceCharacter
         FULL_STOP?
-    )+                
+    )*
+    externalResourceCharacter               
   ;
   
 externalResourceCharacter 
   : letter
   | digit
+  | HYPHEN_MINUS
+  | EQUALS_SIGN
+  | PLUS_SIGN
+  | PERCENT_SIGN
+  | COMMA
+  | COMMERCIAL_AT
+  | LOW_LINE
+  | DOLLAR_SIGN
   ;
 
 

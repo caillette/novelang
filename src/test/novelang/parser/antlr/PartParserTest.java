@@ -68,8 +68,8 @@ public class PartParserTest {
       new ParserMethod( "url" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_CELL_ROW_SEQUENCE = 
       new ParserMethod( "cellRowSequence" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_IMAGE = 
-      new ParserMethod( "image" ) ;
+  /*package*/ static final ParserMethod PARSERMETHOD_EMBEDDABLE_RESOURCE =
+      new ParserMethod( "embeddableResource" ) ;
 
   private static final SyntacticTree TREE_APOSTROPHE_WORDMATE = tree( APOSTROPHE_WORDMATE, "'" ) ;
 
@@ -467,52 +467,52 @@ public class PartParserTest {
   }
   
   @Test
-  public void paragraphIsJustImage() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree(
-      "image:foo",
+  public void partIsJustImage() throws RecognitionException {
+    PARSERMETHOD_PART.checkTree(
+      "./foo.jpg",
         tree(
-          PARAGRAPH_REGULAR, 
-          tree( IMAGE, tree( "foo" ) )
+          PART,
+          tree( RASTER_IMAGE, tree( "./foo.jpg" ) )
         )        
     ) ;
   }
   
-  @Test
+  @Test @Ignore
   public void paragraphIsTextThenImage() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
       "blah" + BREAK +
-      "image:foo",
+      "./foo.jpg",
         tree(
           PARAGRAPH_REGULAR,
           tree( WORD_, "blah"),
-          tree( IMAGE, tree( "foo" ) )
+          tree( RASTER_IMAGE, tree( "./foo.jpg" ) )
         )        
     ) ;
   }
   
-  @Test
+  @Test @Ignore
   public void paragraphIsTextThenImageThenText() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
       "w" + BREAK +
-      "image:foo" + BREAK +
+      "./foo.jpg" + BREAK +
       "x" + BREAK,      
         tree(
           PARAGRAPH_REGULAR,
           tree( WORD_, "w"),
-          tree( IMAGE, tree( "foo" ) ),
+          tree( RASTER_IMAGE, tree( "./foo.jpg" ) ),
           tree( WORD_, "x")
         )        
     ) ;
   }
   
-  @Test
+  @Test @Ignore
   public void paragraphIsImageThenText() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
-      "image:foo" + BREAK +
+      "./foo.jpg" + BREAK +
       "x" + BREAK,      
         tree(
           PARAGRAPH_REGULAR,
-          tree( IMAGE, tree( "foo" ) ),
+          tree( RASTER_IMAGE, tree( "./foo.jpg" ) ),
           tree( WORD_, "x")
         )        
     ) ;
@@ -1240,6 +1240,20 @@ public class PartParserTest {
   }
   
   @Test
+  public void cellRowSequence1x1ContainsImage() throws RecognitionException {
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
+        "| /foo.jpg |",
+        tree(
+            CELL_ROWS_WITH_VERTICAL_LINE,
+            tree(
+                CELL_ROW,
+                tree( CELL, tree( RASTER_IMAGE, "/foo.jpg" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
   public void cellRowSequence2x2() throws RecognitionException {
     PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
         "| a | b   |" + BREAK +
@@ -1262,24 +1276,67 @@ public class PartParserTest {
    
 
   @Test
-  public void imageJustFile() throws RecognitionException {
-    PARSERMETHOD_IMAGE.checkTree(
-        "image:foo.jpg",
-        tree( 
-            IMAGE, 
-            tree( "foo.jpg" ) 
+  public void rasterImageIsAbsoluteFile() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "/foo.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( "/foo.jpg" )
         )
     ) ;
   }
 
   @Test
-  public void imageWithDirectories() throws RecognitionException {
-    PARSERMETHOD_IMAGE.checkTree(
-        "image:foo/bar.jpg",
-        tree( 
-            IMAGE, 
-            tree( "foo/bar.jpg" ) 
+  public void rasterImageInAbsoluteSubdirectory() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "/foo/bar.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( "/foo/bar.jpg" ) 
         )
+    ) ;
+  }
+
+  @Test
+  public void rasterImageIsRelativeFile() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "./bar.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( "./bar.jpg" ) 
+        )
+    ) ;
+  }
+
+  @Test
+  public void rasterImageHasVariousCharactersInItsPath() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "/f.o-o/b=a_r.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( "/f.o-o/b=a_r.jpg" )
+        )
+    ) ;
+  }
+
+  @Test
+  public void badlyFormedRasterImage1() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkFails(
+        "../foo.jpg"
+    ) ;
+  }
+
+  @Test
+  public void badlyFormedRasterImage2() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkFails(
+        "/.foo.jpg"
+    ) ;
+  }
+
+  @Test
+  public void badlyFormedRasterImage3() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkFails(
+        "/.foo.unknown"
     ) ;
   }
 
