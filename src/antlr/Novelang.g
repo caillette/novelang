@@ -175,7 +175,6 @@ headerIdentifier : ; // TODO
 
 paragraph 
 	: ( (   ( url ) => p += url
-	      | ( image ) => p += image
 	      | ( smallDashedListItem ) => p += smallDashedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
 	          ( whitespace p+= mixedDelimitedSpreadBlock )* 
@@ -183,7 +182,6 @@ paragraph
 	    )
 	    ( whitespace? softbreak 
 	      (   ( url ) => p += url
-	        | ( image ) => p += image
 	        | ( smallDashedListItem ) => p += smallDashedListItem
 	        | ( whitespace? p += mixedDelimitedSpreadBlock 
 	            ( whitespace p+= mixedDelimitedSpreadBlock )* 
@@ -248,9 +246,6 @@ spreadBlockBody
         ( ( softbreak url whitespace? softbreak ) => 
               ( softbreak url softbreak ) 
         ) 
-      | ( ( softbreak image whitespace? softbreak ) => 
-              ( softbreak image softbreak ) 
-        ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
                 ( softbreak smallDashedListItem softbreak ) 
         )
@@ -262,9 +257,6 @@ spreadBlockBody
     (   
         ( ( softbreak url whitespace? softbreak ) => 
               ( softbreak url softbreak ) 
-        ) 
-      | ( ( softbreak image whitespace? softbreak ) => 
-              ( softbreak image softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
                 ( softbreak whitespace? smallDashedListItem softbreak ) 
@@ -740,7 +732,6 @@ bigDashedListItem
     ( whitespace? softbreak 
       ( 
           ( url ) => i += url
-        | ( image ) => i += image
         | ( smallDashedListItem ) => i += smallDashedListItem
         | ( whitespace? i += mixedDelimitedSpreadBlock 
             ( whitespace i += mixedDelimitedSpreadBlock )* 
@@ -916,16 +907,16 @@ anySymbolExceptGraveAccent
 // ===========  
 
 leadingPunctuationSign
-  : ELLIPSIS
+  : FULL_STOP FULL_STOP FULL_STOP
   ;
 
 punctuationSign
   : s1 = COMMA -> ^( PUNCTUATION_SIGN
       ^( SIGN_COMMA { delegate.createTree( SIGN_COMMA, $s1.text ) } ) )
-  | s2 = FULL_STOP  -> ^( PUNCTUATION_SIGN
-      ^( SIGN_FULLSTOP { delegate.createTree( SIGN_FULLSTOP, $s2.text ) } ) )
-  | s3 = ELLIPSIS -> ^( PUNCTUATION_SIGN
-      ^( SIGN_ELLIPSIS { delegate.createTree( SIGN_ELLIPSIS, $s3.text ) } ) )
+  | ( FULL_STOP FULL_STOP FULL_STOP ) => s2 = FULL_STOP FULL_STOP FULL_STOP -> ^( PUNCTUATION_SIGN
+      ^( SIGN_ELLIPSIS { delegate.createTree( SIGN_ELLIPSIS, $s2.text ) } ) )
+  | s3 = FULL_STOP  -> ^( PUNCTUATION_SIGN
+      ^( SIGN_FULLSTOP { delegate.createTree( SIGN_FULLSTOP, $s3.text ) } ) )
   | s4 = QUESTION_MARK -> ^( PUNCTUATION_SIGN
       ^( SIGN_QUESTIONMARK { delegate.createTree( SIGN_QUESTIONMARK, $s4.text ) } ) )
   | s5 = EXCLAMATION_MARK -> ^( PUNCTUATION_SIGN
@@ -1161,39 +1152,24 @@ urlXChar
 // Image
 // =====
 
-image
-  : (
-	    ( LATIN_SMALL_LETTER_I
-	      LATIN_SMALL_LETTER_M 
-	      LATIN_SMALL_LETTER_A 
-	      LATIN_SMALL_LETTER_G 
-	      LATIN_SMALL_LETTER_E
-	      COLON 
-	    ) => 
-	      LATIN_SMALL_LETTER_I
-	      LATIN_SMALL_LETTER_M 
-	      LATIN_SMALL_LETTER_A 
-	      LATIN_SMALL_LETTER_G 
-	      LATIN_SMALL_LETTER_E
-	      COLON 
-	      imageFilePath	    
-    ) 
-    -> ^( IMAGE { delegate.createTree( IMAGE, $imageFilePath.text ) } )
+externalResource
+  : externalResourcePath	    
+    -> ^( IMAGE { delegate.createTree( IMAGE, $externalResourcePath.text ) } )
   ;
 
-imageFilePath
-  : imageFileSegment ( SOLIDUS imageFileSegment )*
+externalResourcePath
+  : ( FULL_STOP SOLIDUS )? externalResourceSegment ( SOLIDUS externalResourceSegment )*
   ;
   
-imageFileSegment
-  : (   urlUChar     
-      | SEMICOLON
-      | COMMERCIAL_AT
-      | AMPERSAND
-      | EQUALS_SIGN
-      | TILDE         
-      | NUMBER_SIGN   
+externalResourceSegment
+  : (   externalResourceCharacter
+        FULL_STOP?
     )+                
+  ;
+  
+externalResourceCharacter 
+  : letter
+  | digit
   ;
 
 
@@ -1383,7 +1359,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | DEGREE_SIGN
       | DOLLAR_SIGN
       | DOUBLE_QUOTE
-      | ELLIPSIS
+//      | ELLIPSIS
       | EURO_SIGN
       | EQUALS_SIGN
       | EXCLAMATION_MARK
@@ -1677,7 +1653,7 @@ COMMERCIAL_AT : '@' ;
 DEGREE_SIGN : '\u00b0' ; // &deg;
 DOLLAR_SIGN : '$' ;
 DOUBLE_QUOTE : '\"' ;
-ELLIPSIS : '...' ;
+//ELLIPSIS : '...' ;
 EURO_SIGN : '\u20ac' ; // &euro;
 EQUALS_SIGN : '=' ;
 EXCLAMATION_MARK : '!' ;
