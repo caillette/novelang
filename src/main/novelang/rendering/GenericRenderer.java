@@ -116,7 +116,7 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
-      case RASTER_IMAGE:
+      case RESOURCE_LOCATION:
       case APOSTROPHE_WORDMATE :
       case SIGN_COLON :
       case SIGN_COMMA :

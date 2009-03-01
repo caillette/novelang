@@ -141,7 +141,7 @@
     </td>
   </xsl:template>
   
-  <xsl:template match="n:raster-image" >
+  <xsl:template match="n:raster-image/n:resource-location" >
     <img>
       <xsl:attribute name="src" ><xsl:value-of select="." /></xsl:attribute>
     </img>

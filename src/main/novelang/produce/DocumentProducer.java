@@ -161,7 +161,12 @@ public class DocumentProducer {
           documentRequest.getDocumentSourceName(),
           StructureKind.PART.getFileExtensions()
       ) ;
-      return new Part( partFile, defaultSourceCharset, suggestedRenderingCharset, true ) ;
+      return new Part( 
+          partFile, 
+          defaultSourceCharset, 
+          suggestedRenderingCharset, 
+          true 
+      ) ;//.adaptResourceNames( basedir ) ;
     }
 
   }

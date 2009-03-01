@@ -477,6 +477,7 @@ public class PartParserTest {
     ) ;
   }
   
+  
   @Test @Ignore
   public void paragraphIsTextThenImage() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(

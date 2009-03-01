@@ -353,7 +353,7 @@
     </fo:table-cell>
   </xsl:template>
 
-  <xsl:template match="n:raster-image" >
+  <xsl:template match="n:raster-image/n:resource-location" >
     <fo:block>
       <fo:external-graphic>
         <xsl:attribute name="src">

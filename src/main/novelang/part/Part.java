@@ -21,14 +21,16 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 
-import novelang.common.AbstractSourceReader;
-import novelang.common.StylesheetMap;
-import novelang.common.SyntacticTree;
+import novelang.common.*;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.system.DefaultCharset;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.ImmutableList;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes
@@ -130,7 +132,47 @@ public class Part extends AbstractSourceReader {
     return tree ;
   }
 
+/*
+  public Renderable adaptResourceNames( File contentRoot ) {
+    
+    final List< Problem > problems = Lists.newArrayList() ;
+    final ProblemCollector problemCollector = new ProblemCollector() {
+      public void collect( Problem problem ) {
+        problems.add( problem ) ;
+      }
+    } ;   
+    
+    final SyntacticTree fixedTree ;
+    if( null == getDocumentTree() ) {
+      fixedTree = null ;
+    } else {
+      fixedTree = new ResourceAbsolutizer( contentRoot, problemCollector ).
+          absolutizeResources( getDocumentTree() ) ;
+    }
+    Iterators.addAll( problems, Part.this.getProblems().iterator() ) ;
+    
+    return new Renderable() {
+      
+      public Iterable< Problem > getProblems() {
+        return ImmutableList.copyOf( problems ) ;
+      }
 
+      public Charset getRenderingCharset() {
+        return Part.this.getRenderingCharset() ;
+      }
 
+      public boolean hasProblem() {
+        return problems.size() > 0 ;
+      }
 
+      public SyntacticTree getDocumentTree() {
+        return fixedTree ;
+      }
+
+      public StylesheetMap getCustomStylesheetMap() {
+        return Part.this.getCustomStylesheetMap() ;
+      }
+    };
+  }
+*/
 }

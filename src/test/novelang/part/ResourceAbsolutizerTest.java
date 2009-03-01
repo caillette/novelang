@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2009 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,9 +25,8 @@ import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEquals;
 import static novelang.parser.antlr.TreeFixture.tree;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
-import org.junit.Assert;
 import static org.junit.Assert.assertSame;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,12 +38,11 @@ import java.util.List;
  * @author Laurent Caillette
  */
 public class ResourceAbsolutizerTest {
-  private static final String RESOURCE_UNDER_PARENT_NAME = "resource1" ;
-  private static final String RESOURCE_UNDER_CHILD_NAME = "resource2" ;
 
   @Test
   public void noChange() {
-    final ResourceAbsolutizer absolutizer = new ResourceAbsolutizer( parentDirectory, null ) ;
+    final ResourceAbsolutizer absolutizer = 
+        new ResourceAbsolutizer( parentDirectory, parentDirectory, null ) ;
     final SyntacticTree tree = tree( 
         PART, 
         tree( PARAGRAPH_REGULAR ) 
@@ -57,7 +55,9 @@ public class ResourceAbsolutizerTest {
   
   @Test
   public void replace() {
-    final ResourceAbsolutizer absolutizer = new ResourceAbsolutizer( parentDirectory, null ) ;
+    final ResourceAbsolutizer absolutizer = 
+        new ResourceAbsolutizer( parentDirectory, parentDirectory, null ) ;
+    
     final SyntacticTree treeToAbsolutize = tree( 
         PART, 
         tree( 
@@ -91,7 +91,7 @@ public class ResourceAbsolutizerTest {
   public void reportProblem() {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
     final ResourceAbsolutizer absolutizer = 
-        new ResourceAbsolutizer( parentDirectory, problemCollector ) ;
+        new ResourceAbsolutizer( parentDirectory, parentDirectory, problemCollector ) ;
     
     final SyntacticTree treeToAbsolutize = tree( 
         PART, 
@@ -108,23 +108,57 @@ public class ResourceAbsolutizerTest {
   }
   
   @Test( expected = AbsolutizerException.class )  
-  public void detectUpperDirectory() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( childDirectory, "../" + RESOURCE_UNDER_PARENT_NAME ) ;
+  public void detectUnauthorizedAccessToUpperDirectory() throws AbsolutizerException {
+    ResourceAbsolutizer.absolutizeFile( 
+        childDirectory, 
+        childDirectory, 
+        "../" + RESOURCE_UNDER_PARENT_NAME 
+    ) ;
   }
   
   @Test( expected = AbsolutizerException.class )  
   public void detectNonExistingResource() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( parentDirectory, "doesnotexist" ) ;
+    ResourceAbsolutizer.absolutizeFile( 
+        parentDirectory,
+        parentDirectory,
+        "doesnotexist" 
+    ) ;
   }
   
   @Test
-  public void absolutizeFromCurrentDirectoryOk() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( parentDirectory, "./" + RESOURCE_UNDER_PARENT_NAME ) ;
+  public void parentParentCurrent() throws AbsolutizerException {
+    ResourceAbsolutizer.absolutizeFile( 
+        parentDirectory,
+        parentDirectory,
+        "./" + RESOURCE_UNDER_PARENT_NAME 
+    ) ;
   }
 
   @Test
-  public void absolutizeFromDirectoryBelowOk() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( parentDirectory, "/child/" + RESOURCE_UNDER_CHILD_NAME ) ;
+  public void parentChildCurrent() throws AbsolutizerException {
+    ResourceAbsolutizer.absolutizeFile( 
+        parentDirectory, 
+        childDirectory, 
+        "./" + RESOURCE_UNDER_CHILD_NAME 
+    ) ;
+  }
+
+  @Test
+  public void parentChildDown() throws AbsolutizerException {
+    ResourceAbsolutizer.absolutizeFile( 
+        parentDirectory, 
+        childDirectory, 
+        "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME 
+    ) ;
+  }
+
+  @Test
+  public void parentChildUp() throws AbsolutizerException {
+    ResourceAbsolutizer.absolutizeFile( 
+        parentDirectory, 
+        childDirectory, 
+        "../" + RESOURCE_UNDER_PARENT_NAME 
+    ) ;
   }
 
 
@@ -133,9 +167,16 @@ public class ResourceAbsolutizerTest {
 // Fixture
 // =======
   
+  private static final String CHILD_NAME = "child" ;
+  private static final String GRANDCHILD_NAME = "grandchild" ;
+
+  private static final String RESOURCE_UNDER_PARENT_NAME = "resourceInParent" ;
+  private static final String RESOURCE_UNDER_CHILD_NAME = "resourceInChild" ;
+  private static final String RESOURCE_UNDER_GRANDCHILD_NAME = "resourceInGrandChild" ;
   
   private final File parentDirectory ;
   private final File childDirectory ;
+  private final File grandChildDirectory ;
 
   public ResourceAbsolutizerTest() throws IOException {
     final ScratchDirectoryFixture fixture = new ScratchDirectoryFixture( getClass() ) ;
@@ -143,9 +184,14 @@ public class ResourceAbsolutizerTest {
     final File resourceUnderParent = new File( parentDirectory, RESOURCE_UNDER_PARENT_NAME ) ;
     FileUtils.writeStringToFile( resourceUnderParent, RESOURCE_UNDER_PARENT_NAME ) ;
     
-    childDirectory = new File( parentDirectory, "child" ) ;
+    childDirectory = new File( parentDirectory, CHILD_NAME ) ;
     final File resourceUnderChild = new File( childDirectory, RESOURCE_UNDER_CHILD_NAME ) ;
     FileUtils.writeStringToFile( resourceUnderChild, RESOURCE_UNDER_CHILD_NAME ) ;
+
+    grandChildDirectory = new File( childDirectory, GRANDCHILD_NAME ) ;
+    final File resourceUnderGrandChild = 
+        new File( grandChildDirectory, RESOURCE_UNDER_GRANDCHILD_NAME ) ;
+    FileUtils.writeStringToFile( resourceUnderGrandChild, RESOURCE_UNDER_GRANDCHILD_NAME ) ;
   }
   
   private class ListProblemCollector implements ProblemCollector {

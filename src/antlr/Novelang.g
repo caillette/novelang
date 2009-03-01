@@ -188,7 +188,7 @@ paragraph
 	        | ( smallDashedListItem ) => p += smallDashedListItem
 	        | ( whitespace? p += mixedDelimitedSpreadBlock 
 	            ( whitespace p+= mixedDelimitedSpreadBlock )* 
-	          )        
+	          )
 	      )
 	    )*
 	  ) -> ^( PARAGRAPH_REGULAR $p+ )

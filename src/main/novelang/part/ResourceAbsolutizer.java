@@ -31,8 +31,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Transforms the relative path of embeddable resources (like {@link NodeKind#RASTER_IMAGE})
- * into absolute ones, changing the text content of the {@link NodeKind#RESOURCE_LOCATION} node. 
+ * Transforms the path of embeddable resources (like {@link NodeKind#RASTER_IMAGE})
+ * that are initially relative to the Part they are referenced from, into a path
+ * relative to the base directory of the content.
+ * This is done by changing the text of the {@link NodeKind#RESOURCE_LOCATION} node. 
  * 
  * @author Laurent Caillette
  */
@@ -40,15 +42,22 @@ public class ResourceAbsolutizer {
   
   private static final Logger LOGGER = LoggerFactory.getLogger( ResourceAbsolutizer.class ) ;
   
-  private final File base ;
+  private final File contentRoot ;
+  private final File referrerDirectory ;
   private final ProblemCollector problemCollector ;
 
-  public ResourceAbsolutizer( File base, ProblemCollector problemCollector ) {
-    this.base = base ;
+  public ResourceAbsolutizer( 
+      File contentRoot, 
+      File referrerDirectory, 
+      ProblemCollector problemCollector 
+  ) {
+    this.contentRoot = contentRoot ;
+    this.referrerDirectory = referrerDirectory ;
     this.problemCollector = problemCollector ;
     LOGGER.debug( 
-        "Created " + ClassUtils.getShortClassName( getClass() ) + 
-        " with base directory '" + base.getAbsolutePath() + "'" 
+        "Created " + ClassUtils.getShortClassName( getClass() ) + " " + 
+        "contentRoot: '" + contentRoot.getAbsolutePath() + "', " +
+        "referrerDirectory: '" + referrerDirectory.getAbsolutePath() + "'"        
     ) ;
   }
   
@@ -79,7 +88,7 @@ public class ResourceAbsolutizer {
         final String oldLocation = child.getChildAt( 0 ).getText() ;
         final File newLocationAsFile ;
         try {
-          newLocationAsFile = absolutizeFile( base, oldLocation ) ;
+          newLocationAsFile = absolutizeFile( contentRoot, referrerDirectory, oldLocation ) ;
         } catch ( AbsolutizerException e ) {
           problemCollector.collect( Problem.createProblem( e ) ) ;          
           return treepathToRasterImage ; // Leave unchanged.
@@ -101,7 +110,7 @@ public class ResourceAbsolutizer {
   /**
    * Returns an absolute file, given a directory and a relative name.
    * 
-   * @param directory a non-null object which must represent a directory.
+   * @param referrerDirectory a non-null object which must represent a directory.
    * @param relativeName a non-null, non-empty String which may start by a {@code ./}.
    *     File separator is a solidus.
    * @return a non-null object representing an existing resource file.
@@ -110,25 +119,25 @@ public class ResourceAbsolutizer {
    * @throws AbsolutizerException if the resource does not exist, or if the resulting file 
    *     is not located under given {@code directory}. 
    */
-  protected static File absolutizeFile( File directory, String relativeName ) 
+  protected static File absolutizeFile( File base, File referrerDirectory, String relativeName ) 
       throws AbsolutizerException 
   {
-    Preconditions.checkNotNull( directory ) ;
-    Preconditions.checkArgument( directory.exists() ) ;
-    Preconditions.checkArgument( directory.isDirectory() ) ;
+    Preconditions.checkNotNull( referrerDirectory ) ;
+    Preconditions.checkArgument( referrerDirectory.exists() ) ;
+    Preconditions.checkArgument( referrerDirectory.isDirectory() ) ;
     Preconditions.checkArgument( 
         ! StringUtils.isBlank( relativeName ), "Not expecting: '%s'", relativeName ) ;
     
     final File absoluteResourceFile;
     try {
-      absoluteResourceFile = new File( directory, relativeName ).getCanonicalFile() ;
+      absoluteResourceFile = new File( referrerDirectory, relativeName ).getCanonicalFile() ;
     } catch ( IOException e ) {
       throw new RuntimeException( "Should not happen: " + e.getMessage(), e ) ;
     }
 
-    if( ! FileTools.isParentOf( directory, absoluteResourceFile ) ) {
+    if( ! FileTools.isParentOf( referrerDirectory, absoluteResourceFile ) ) {
       throw new AbsolutizerException( 
-          "Given resource '" + relativeName + "' resolved outside of '" + directory + "'"  ) ;
+          "Given resource '" + relativeName + "' resolved outside of '" + referrerDirectory + "'"  ) ;
     }
     if( ! absoluteResourceFile.exists() ) {
       throw new AbsolutizerException( 
