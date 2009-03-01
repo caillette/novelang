@@ -230,6 +230,15 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     ;
   }
 
+  public static boolean isParentOfOrSameAs( File maybeParent, File maybeChild ) {
+    final String maybeParentPathName = normalizePath( maybeParent.getAbsolutePath() ) ;
+    final String maybeChildPathName = normalizePath( maybeChild.getAbsolutePath() ) ;
+    return
+        ( maybeParentPathName.length() <= maybeChildPathName.length() ) &&
+        maybeChildPathName.startsWith( maybeParentPathName )
+    ;
+  }
+
 
 // ===================
 // Temporary directory

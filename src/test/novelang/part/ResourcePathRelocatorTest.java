@@ -27,36 +27,37 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import org.apache.commons.io.FileUtils;
 import static org.junit.Assert.assertSame;
 import org.junit.Test;
+import org.junit.Assert;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Tests for {@link novelang.part.ResourceAbsolutizer} 
+ * Tests for {@link ResourcePathRelocator} 
  * 
  * @author Laurent Caillette
  */
-public class ResourceAbsolutizerTest {
+public class ResourcePathRelocatorTest {
 
   @Test
   public void noChange() {
-    final ResourceAbsolutizer absolutizer = 
-        new ResourceAbsolutizer( parentDirectory, parentDirectory, null ) ;
+    final ResourcePathRelocator pathRelocator = 
+        new ResourcePathRelocator( parentDirectory, parentDirectory, null ) ;
     final SyntacticTree tree = tree( 
         PART, 
         tree( PARAGRAPH_REGULAR ) 
     ) ;
     assertEquals(  
       tree, 
-        absolutizer.absolutizeResources( tree )
+        pathRelocator.relocateResources( tree )
     ) ;
   }
   
   @Test
-  public void replace() {
-    final ResourceAbsolutizer absolutizer = 
-        new ResourceAbsolutizer( parentDirectory, parentDirectory, null ) ;
+  public void replaceInTree() {
+    final ResourcePathRelocator pathRelocator = 
+        new ResourcePathRelocator( parentDirectory, parentDirectory, null ) ;
     
     final SyntacticTree treeToAbsolutize = tree( 
         PART, 
@@ -67,8 +68,7 @@ public class ResourceAbsolutizerTest {
         ) 
     ) ;
     
-    final String expectedAbsoluteResourceLocation = 
-        parentDirectory.getAbsolutePath() + "/" + RESOURCE_UNDER_PARENT_NAME ;
+    final String expectedAbsoluteResourceLocation = "/" + RESOURCE_UNDER_PARENT_NAME ;
     
     final SyntacticTree expectedTree = tree( 
         PART, 
@@ -77,21 +77,20 @@ public class ResourceAbsolutizerTest {
             tree( 
                 RASTER_IMAGE, 
                 tree( RESOURCE_LOCATION, expectedAbsoluteResourceLocation ) 
-            )
-        
+            )        
         ) 
     ) ;
     assertEquals(  
         expectedTree, 
-        absolutizer.absolutizeResources( treeToAbsolutize )
+        pathRelocator.relocateResources( treeToAbsolutize )
     ) ;
   }
   
   @Test
   public void reportProblem() {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
-    final ResourceAbsolutizer absolutizer = 
-        new ResourceAbsolutizer( parentDirectory, parentDirectory, problemCollector ) ;
+    final ResourcePathRelocator pathRelocator = 
+        new ResourcePathRelocator( parentDirectory, parentDirectory, problemCollector ) ;
     
     final SyntacticTree treeToAbsolutize = tree( 
         PART, 
@@ -101,24 +100,24 @@ public class ResourceAbsolutizerTest {
         
         ) 
     ) ;
-    absolutizer.absolutizeResources( treeToAbsolutize ) ;
+    pathRelocator.relocateResources( treeToAbsolutize ) ;
     
     assertSame( 1, problemCollector.getProblems().length ) ;
     
   }
   
-  @Test( expected = AbsolutizerException.class )  
-  public void detectUnauthorizedAccessToUpperDirectory() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( 
+  @Test( expected = ResourcePathRelocatorException.class )  
+  public void detectUnauthorizedAccessToUpperDirectory() throws ResourcePathRelocatorException {
+    justRelocate(
         childDirectory, 
-        childDirectory, 
-        "../" + RESOURCE_UNDER_PARENT_NAME 
+        childDirectory,
+        ( "../" + RESOURCE_UNDER_PARENT_NAME ) // This one exists above, but should be forbidden! 
     ) ;
   }
   
-  @Test( expected = AbsolutizerException.class )  
-  public void detectNonExistingResource() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( 
+  @Test( expected = ResourcePathRelocatorException.class )
+  public void detectNonExistingResource() throws ResourcePathRelocatorException {
+    justRelocate( 
         parentDirectory,
         parentDirectory,
         "doesnotexist" 
@@ -126,8 +125,19 @@ public class ResourceAbsolutizerTest {
   }
   
   @Test
-  public void parentParentCurrent() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( 
+  public void absoluteFromBaseToBase() throws ResourcePathRelocatorException {
+    check(
+        "/" + RESOURCE_UNDER_PARENT_NAME,
+        parentDirectory,
+        parentDirectory,
+        "/" + RESOURCE_UNDER_PARENT_NAME 
+    ) ;
+  }
+
+  @Test
+  public void relativeFromBaseToBase() throws ResourcePathRelocatorException {
+    check(
+        "/" + RESOURCE_UNDER_PARENT_NAME,
         parentDirectory,
         parentDirectory,
         "./" + RESOURCE_UNDER_PARENT_NAME 
@@ -135,8 +145,19 @@ public class ResourceAbsolutizerTest {
   }
 
   @Test
-  public void parentChildCurrent() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( 
+  public void absoluteFromChildToChild() throws ResourcePathRelocatorException {
+    check(
+        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME,
+        parentDirectory, 
+        childDirectory, 
+        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME 
+    ) ;
+  }
+
+  @Test
+  public void relativeFromChildToChild() throws ResourcePathRelocatorException {
+    check(
+        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME,
         parentDirectory, 
         childDirectory, 
         "./" + RESOURCE_UNDER_CHILD_NAME 
@@ -144,20 +165,42 @@ public class ResourceAbsolutizerTest {
   }
 
   @Test
-  public void parentChildDown() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( 
+  public void absoluteFromChildToGrandchild() throws ResourcePathRelocatorException {
+    check(
+        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME,
         parentDirectory, 
         childDirectory, 
-        "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME 
+        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME 
     ) ;
   }
 
   @Test
-  public void parentChildUp() throws AbsolutizerException {
-    ResourceAbsolutizer.absolutizeFile( 
+  public void relativeFromChildToGrandchild() throws ResourcePathRelocatorException {
+    check(
+        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME,
+        parentDirectory, 
+        childDirectory, 
+        "./" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME 
+    ) ;
+  }
+
+  @Test
+  public void relativeFromChildToParent() throws ResourcePathRelocatorException {
+    check(
+        "/" + RESOURCE_UNDER_PARENT_NAME,
         parentDirectory, 
         childDirectory, 
         "../" + RESOURCE_UNDER_PARENT_NAME 
+    ) ;
+  }
+
+  @Test
+  public void absoluteFromChildToParent() throws ResourcePathRelocatorException {
+    check(
+        "/" + RESOURCE_UNDER_PARENT_NAME,
+        parentDirectory, 
+        childDirectory, 
+        "/" + RESOURCE_UNDER_PARENT_NAME 
     ) ;
   }
 
@@ -178,7 +221,7 @@ public class ResourceAbsolutizerTest {
   private final File childDirectory ;
   private final File grandChildDirectory ;
 
-  public ResourceAbsolutizerTest() throws IOException {
+  public ResourcePathRelocatorTest() throws IOException {
     final ScratchDirectoryFixture fixture = new ScratchDirectoryFixture( getClass() ) ;
     parentDirectory = fixture.getTestScratchDirectory() ;
     final File resourceUnderParent = new File( parentDirectory, RESOURCE_UNDER_PARENT_NAME ) ;
@@ -193,7 +236,7 @@ public class ResourceAbsolutizerTest {
         new File( grandChildDirectory, RESOURCE_UNDER_GRANDCHILD_NAME ) ;
     FileUtils.writeStringToFile( resourceUnderGrandChild, RESOURCE_UNDER_GRANDCHILD_NAME ) ;
   }
-  
+
   private class ListProblemCollector implements ProblemCollector {
     
     private final List< Problem > problems = Lists.newArrayList() ;
@@ -205,5 +248,31 @@ public class ResourceAbsolutizerTest {
     public Problem[] getProblems() {
       return problems.toArray( new Problem[ problems.size() ] ) ;
     }
+  }
+  
+  private void check( 
+      final String expectedRelativeResourceName,
+      final File baseDirectory,
+      final File referrerDirectory,
+      final String resourceNameRelativeToReferrer
+  ) throws ResourcePathRelocatorException {
+    final ListProblemCollector problemCollector = new ListProblemCollector() ;
+    final ResourcePathRelocator pathRelocator = new ResourcePathRelocator( 
+        baseDirectory, referrerDirectory, problemCollector ) ;
+    final String actualRelativeResourceName = 
+        pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
+    Assert.assertEquals( expectedRelativeResourceName, actualRelativeResourceName ) ;
+    Assert.assertEquals( 0, problemCollector.getProblems().length ) ;    
+  }
+
+  private void justRelocate( 
+      final File baseDirectory,
+      final File referrerDirectory,
+      final String resourceNameRelativeToReferrer
+  ) throws ResourcePathRelocatorException {
+    final ListProblemCollector problemCollector = new ListProblemCollector() ;
+    final ResourcePathRelocator pathRelocator = new ResourcePathRelocator( 
+        baseDirectory, referrerDirectory, problemCollector ) ;
+    pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
   }
 }

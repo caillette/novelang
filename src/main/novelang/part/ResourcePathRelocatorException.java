@@ -17,17 +17,17 @@
 package novelang.part ;
 
 /**
- * Thrown when {@link novelang.part.ResourceAbsolutizer} encounters some problem. 
+ * Thrown when {@link ResourcePathRelocator} encounters some problem. 
  * 
  * @author Laurent Caillette
  */
-public class AbsolutizerException extends Exception {
+public class ResourcePathRelocatorException extends Exception {
 
-  public AbsolutizerException( String s ) {
+  public ResourcePathRelocatorException( String s ) {
     super( s ) ;
   }
 
-  public AbsolutizerException( String s, Throwable throwable ) {
+  public ResourcePathRelocatorException( String s, Throwable throwable ) {
     super( s, throwable ) ;
   }
 }

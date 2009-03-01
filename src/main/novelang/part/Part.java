@@ -21,16 +21,12 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.List;
 
 import novelang.common.*;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.system.DefaultCharset;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.ImmutableList;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes
@@ -146,8 +142,8 @@ public class Part extends AbstractSourceReader {
     if( null == getDocumentTree() ) {
       fixedTree = null ;
     } else {
-      fixedTree = new ResourceAbsolutizer( contentRoot, problemCollector ).
-          absolutizeResources( getDocumentTree() ) ;
+      fixedTree = new ResourcePathRelocator( contentRoot, problemCollector ).
+          relocateResources( getDocumentTree() ) ;
     }
     Iterators.addAll( problems, Part.this.getProblems().iterator() ) ;
     
