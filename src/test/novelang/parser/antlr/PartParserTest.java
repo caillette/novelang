@@ -472,7 +472,7 @@ public class PartParserTest {
       "./foo.jpg",
         tree(
           PART,
-          tree( RASTER_IMAGE, tree( "./foo.jpg" ) )
+          tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, tree( "./foo.jpg" ) ) )
         )        
     ) ;
   }
@@ -1247,7 +1247,7 @@ public class PartParserTest {
             CELL_ROWS_WITH_VERTICAL_LINE,
             tree(
                 CELL_ROW,
-                tree( CELL, tree( RASTER_IMAGE, "/foo.jpg" ) )
+                tree( CELL, tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, "/foo.jpg" ) ) )
             )
         )
     ) ;
@@ -1281,7 +1281,7 @@ public class PartParserTest {
         "/foo.jpg",
         tree(
             RASTER_IMAGE,
-            tree( "/foo.jpg" )
+            tree( RESOURCE_LOCATION, tree( "/foo.jpg" ) )
         )
     ) ;
   }
@@ -1292,7 +1292,7 @@ public class PartParserTest {
         "/foo/bar.jpg",
         tree(
             RASTER_IMAGE,
-            tree( "/foo/bar.jpg" ) 
+            tree( RESOURCE_LOCATION, tree( "/foo/bar.jpg" ) ) 
         )
     ) ;
   }
@@ -1303,7 +1303,7 @@ public class PartParserTest {
         "./bar.jpg",
         tree(
             RASTER_IMAGE,
-            tree( "./bar.jpg" ) 
+            tree( RESOURCE_LOCATION, tree( "./bar.jpg" ) ) 
         )
     ) ;
   }
@@ -1314,7 +1314,7 @@ public class PartParserTest {
         "/f.o-o/b=a_r.jpg",
         tree(
             RASTER_IMAGE,
-            tree( "/f.o-o/b=a_r.jpg" )
+            tree( RESOURCE_LOCATION, tree( "/f.o-o/b=a_r.jpg" ) )
         )
     ) ;
   }

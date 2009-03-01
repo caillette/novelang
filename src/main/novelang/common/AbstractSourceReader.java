@@ -140,6 +140,20 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     return TreeTools.addFirst( tree, metadata ) ;
   }
 
+
+  public Location createLocation( int line, int column ) {
+    return new Location( locationName, line, column ) ;
+  }
+
+  public Charset getRenderingCharset() {
+    return renderingCharset;
+  }
+
+
+// ========  
+// Problems
+// ========  
+  
   public Iterable< Problem > getProblems() {
     return ImmutableList.copyOf( problems ) ;
   }
@@ -152,6 +166,16 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     LOGGER.debug( "Collecting Problem: " + problem ) ;
     problems.add( Preconditions.checkNotNull( problem ) ) ;
   }
+  
+  private final ProblemCollector problemCollector = new ProblemCollector() {
+    public void collect( Problem problem ) {
+      AbstractSourceReader.this.collect( problem ) ;
+    }
+  } ;
+
+  protected final ProblemCollector getProblemCollector() {
+    return problemCollector ;
+  }
 
   protected final void collect( Iterable< Problem > problems ) {
     for( Problem problem : problems ) {
@@ -159,15 +183,11 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     }
   }
 
-  public Location createLocation( int line, int column ) {
-    return new Location( locationName, line, column ) ;
-  }
 
-  public Charset getRenderingCharset() {
-    return renderingCharset;
-  }
-
-
+// =============  
+// Miscellaneous
+// =============  
+  
   @Override
   public String toString() {
     return thisToString;

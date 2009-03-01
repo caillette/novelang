@@ -43,6 +43,7 @@ tokens {
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
   URL ;  
   RASTER_IMAGE ;
+  RESOURCE_LOCATION ;
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   CELL ;
   CELL_ROW ;
@@ -1160,9 +1161,9 @@ urlXChar
 
 embeddableResource
   : externalResourcePath rasterImageExtension
-    -> ^( RASTER_IMAGE  { delegate.createTree( 
+    -> ^( RASTER_IMAGE ^( RESOURCE_LOCATION { delegate.createTree( 
             RASTER_IMAGE, $externalResourcePath.text + $rasterImageExtension.text ) } 
-        )
+        ) )
   ;
 
 externalResourcePath

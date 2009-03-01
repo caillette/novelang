@@ -64,6 +64,19 @@ public class FileToolsTest {
     FileTools.relativizePath( childDirectory, childFile ) ;
   }
 
+  /**
+   * This doesn't test {@link FileTools} really but it's about verifying JDK behavior.
+   */
+  @Test
+  public void fileInstantiationWithLeadingDot() throws IOException {
+    final File childFileDotted = new File( parentNoTrailingSeparator, "./childFile" ) ;
+    Assert.assertEquals( 
+        childFile.getAbsolutePath(), 
+        childFileDotted.getCanonicalFile().getAbsolutePath() 
+    ) ;
+    
+  }
+
   @Test
   public void testListDirectories() {
     final List< File > directories = FileTools.scanDirectories( parentNoTrailingSeparator ) ;
