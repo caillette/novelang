@@ -105,11 +105,13 @@ public class GenericRenderer implements Renderer {
         break ;
 
       case URL :
-      case _WORD_COUNT:
+      case _WORD_COUNT :
       case _STYLE :
-      case LINES_OF_LITERAL:
-      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS:
-      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS:
+      case LINES_OF_LITERAL :
+      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS :
+      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS :
+      case _PIXEL_WIDTH:
+      case _PIXEL_HEIGHT: 
         fragmentWriter.start( newPath, false ) ;
         final SyntacticTree literalTree = tree.getChildAt( 0 ) ;
         fragmentWriter.writeLiteral( newPath, literalTree.getText() ); ;

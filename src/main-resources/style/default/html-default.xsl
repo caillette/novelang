@@ -144,12 +144,14 @@
   <xsl:template match="n:raster-image/n:resource-location" >
     <img>
       <xsl:attribute name="src" ><xsl:value-of select="." /></xsl:attribute>
+      <xsl:attribute name="title" ><xsl:value-of select="." /> [<xsl:value-of select="../n:pixel-height"/>x<xsl:value-of select="../n:pixel-height"/>]</xsl:attribute>
     </img>
   </xsl:template>  
 
   <xsl:template match="n:vector-image/n:resource-location" >
     <object type="image/svg+xml" >
       <xsl:attribute name="data" ><xsl:value-of select="." /></xsl:attribute>
+      <xsl:attribute name="title" ><xsl:value-of select="." /></xsl:attribute>
     </object>
   </xsl:template>
 

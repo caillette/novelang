@@ -1332,6 +1332,28 @@ public class PartParserTest {
   }
 
   @Test
+  public void rasterImageIsInSuperdirectory2() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "../../bar.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( RESOURCE_LOCATION, tree( "../../bar.jpg" ) )
+        )
+    ) ;
+  }
+
+  @Test
+  public void rasterImageIsInSuperdirectory3() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "../../../bar.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( RESOURCE_LOCATION, tree( "../../../bar.jpg" ) ) 
+        )
+    ) ;
+  }
+
+  @Test
   public void rasterImageHasVariousCharactersInItsPath() throws RecognitionException {
     PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
         "/f.o-o/b=a_r.jpg",

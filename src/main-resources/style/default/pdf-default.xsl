@@ -357,6 +357,8 @@
     <fo:block>
       <fo:external-graphic>
         <xsl:attribute name="src">.<xsl:value-of select="."/></xsl:attribute>
+        <xsl:attribute name="content-width"><xsl:value-of select="../n:pixel-width"/></xsl:attribute>
+        <xsl:attribute name="content-height"><xsl:value-of select="../n:pixel-height"/></xsl:attribute>
       </fo:external-graphic>
     </fo:block>
   </xsl:template>  

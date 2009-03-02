@@ -19,7 +19,6 @@ package novelang.part;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -147,7 +146,7 @@ public class Part extends AbstractSourceReader {
     if( null == getDocumentTree() ) {
       fixedTree = null ;
     } else {
-      fixedTree = new ResourcePathRelocator( 
+      fixedTree = new ImageFixer(
           contentRoot, 
           partFileDirectory, 
           problemCollector 

@@ -4,6 +4,13 @@ Novelang is stable, with more thant 270 automated tests. It generates a PDF docu
 
 Bug fixing and documentation are first priority. Then come syntax enhancements. Defining a good syntax fitting for most use cases while allowing exceptions is a process on the long run. For this reason, syntax may change with no warning until version `1.0.0`. Keep informed reading the blog. 
 
+=== Version `0.21.0`
+
+--- Experimental support for raster and vector images.
+
+--- Fixed argument parsing of batch argument generator (reported by Lmre).
+
+
 === Version `0.20.0`
 
 --- Tables! See part syntax for details.
@@ -14,11 +21,6 @@ Bug fixing and documentation are first priority. Then come syntax enhancements. 
 bundled ``[pdf,html,nlp]-default.xsl`` while the stylesheet taken where no stylesheet name is
 specified remains ``[pdf,html,nlp].xsl``. This makes possible to override defaults without
 specifying a new stylesheet name.
-
-
-=== Version `0.20.0`
-
---- Fixed argument parsing of batch argument generator (reported by Lmre).
 
 
 === Version `0.19.0`
@@ -67,9 +69,6 @@ instead of three asterisks.
 --- Character escape now basing on Unicode name, plus optional HTML entity name.
 
 --- Option ``createchapter`` of the ``insert`` command renamed to ``createlevel``.
-
---- Updated documentation accordingly.
-
 
 
 === Version `0.15.0`

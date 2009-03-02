@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Tests for {@link ResourcePathRelocator} 
+ * Tests for {@link ImageFixer}
  * 
  * @author Laurent Caillette
  */
@@ -42,8 +42,8 @@ public class ResourcePathRelocatorTest {
 
   @Test
   public void noChange() {
-    final ResourcePathRelocator pathRelocator = 
-        new ResourcePathRelocator( parentDirectory, parentDirectory, null ) ;
+    final ImageFixer pathRelocator =
+        new ImageFixer( parentDirectory, parentDirectory, null ) ;
     final SyntacticTree tree = tree( 
         PART, 
         tree( PARAGRAPH_REGULAR ) 
@@ -56,8 +56,8 @@ public class ResourcePathRelocatorTest {
   
   @Test
   public void replaceInTree() {
-    final ResourcePathRelocator pathRelocator = 
-        new ResourcePathRelocator( parentDirectory, parentDirectory, null ) ;
+    final ImageFixer pathRelocator =
+        new ImageFixer( parentDirectory, parentDirectory, null ) ;
     
     final SyntacticTree treeToAbsolutize = tree( 
         PART, 
@@ -89,8 +89,8 @@ public class ResourcePathRelocatorTest {
   @Test
   public void reportProblem() {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
-    final ResourcePathRelocator pathRelocator = 
-        new ResourcePathRelocator( parentDirectory, parentDirectory, problemCollector ) ;
+    final ImageFixer pathRelocator =
+        new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
     
     final SyntacticTree treeToAbsolutize = tree( 
         PART, 
@@ -257,7 +257,7 @@ public class ResourcePathRelocatorTest {
       final String resourceNameRelativeToReferrer
   ) throws ResourcePathRelocatorException {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
-    final ResourcePathRelocator pathRelocator = new ResourcePathRelocator( 
+    final ImageFixer pathRelocator = new ImageFixer(
         baseDirectory, referrerDirectory, problemCollector ) ;
     final String actualRelativeResourceName = 
         pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
@@ -271,7 +271,7 @@ public class ResourcePathRelocatorTest {
       final String resourceNameRelativeToReferrer
   ) throws ResourcePathRelocatorException {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
-    final ResourcePathRelocator pathRelocator = new ResourcePathRelocator( 
+    final ImageFixer pathRelocator = new ImageFixer(
         baseDirectory, referrerDirectory, problemCollector ) ;
     pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
   }

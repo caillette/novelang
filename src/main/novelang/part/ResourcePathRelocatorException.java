@@ -17,7 +17,7 @@
 package novelang.part ;
 
 /**
- * Thrown when {@link ResourcePathRelocator} encounters some problem. 
+ * Thrown when {@link ImageFixer} encounters some problem.
  * 
  * @author Laurent Caillette
  */

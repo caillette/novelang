@@ -28,24 +28,27 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 /**
- * Transforms the path of embeddable resources (like {@link NodeKind#RASTER_IMAGE})
- * that are initially relative to the Part they are referenced from, into a path
- * relative to the base directory of the content.
- * This is done by changing the text of the {@link NodeKind#RESOURCE_LOCATION} node. 
- * 
+ * Transforms the path of embeddable resources (like {@link NodeKind#RASTER_IMAGE} or
+ * {@link NodeKind#VECTOR_IMAGE}) that are initially relative to the Part they are referenced from,
+ * into a path relative to the base directory of the content.
+ * This is done by changing the text of the {@link NodeKind#RESOURCE_LOCATION} node.
+ * Also reads resolution of bitmap images and adds corresponding nodes.
+ *
  * @author Laurent Caillette
  */
-public class ResourcePathRelocator {
+public class ImageFixer {
   
-  private static final Logger LOGGER = LoggerFactory.getLogger( ResourcePathRelocator.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ImageFixer.class ) ;
   
   private final File baseDirectory;
   private final File referrerDirectory ;
   private final ProblemCollector problemCollector ;
 
-  public ResourcePathRelocator( 
+  public ImageFixer(
       File baseDirectory, 
       File referrerDirectory, 
       ProblemCollector problemCollector 
@@ -80,7 +83,7 @@ public class ResourcePathRelocator {
   private Treepath< SyntacticTree > relocateAllResources( Treepath< SyntacticTree > treepath ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
     if( tree.isOneOf( NodeKind.RASTER_IMAGE, NodeKind.VECTOR_IMAGE ) ) {
-      treepath = relocateResource( treepath ) ;
+      treepath = fixImage( treepath ) ;
     } else {
       final int childCount = tree.getChildCount() ;
       for( int i = 0 ; i < childCount ; i++ ) {
@@ -90,12 +93,12 @@ public class ResourcePathRelocator {
     return treepath ;
   }
 
-  private Treepath< SyntacticTree > relocateResource( 
-      Treepath< SyntacticTree > treepathToRasterImage 
+  private Treepath< SyntacticTree > fixImage(
+      Treepath< SyntacticTree > treepathToImage
   ) {
-    final SyntacticTree rasterImageTree = treepathToRasterImage.getTreeAtEnd() ;
-    for( int i = 0 ; i < rasterImageTree.getChildCount() ; i++ ) {
-      final SyntacticTree child = rasterImageTree.getChildAt( i ) ;
+    final SyntacticTree imageTree = treepathToImage.getTreeAtEnd() ;
+    for( int i = 0 ; i < imageTree.getChildCount() ; i++ ) {
+      final SyntacticTree child = imageTree.getChildAt( i ) ;
       if( child.isOneOf( NodeKind.RESOURCE_LOCATION ) ) {
         final String oldLocation = child.getChildAt( 0 ).getText() ;
         final String newLocation ;
@@ -103,20 +106,52 @@ public class ResourcePathRelocator {
           newLocation = relocate( oldLocation ) ;
         } catch ( ResourcePathRelocatorException e ) {
           problemCollector.collect( Problem.createProblem( e ) ) ;          
-          return treepathToRasterImage ; // Leave unchanged.
+          return treepathToImage ; // Leave unchanged.
         }
         LOGGER.debug( "Replacing '" + oldLocation + "' by '" + newLocation + "'" ) ;
         final Treepath< SyntacticTree > treepathToResourceLocation = 
-            Treepath.create( treepathToRasterImage, i, 0 ) ;
-        return TreepathTools.replaceTreepathEnd( 
+            Treepath.create( treepathToImage, i, 0 ) ;
+        treepathToImage = TreepathTools.replaceTreepathEnd(
             treepathToResourceLocation, 
             new SimpleTree( newLocation ) 
         ).getPrevious().getPrevious() ;
+        treepathToImage = addImageMetadata( treepathToImage, newLocation ) ;
+        return treepathToImage ;
       }
     }    
     throw new IllegalArgumentException( 
-        "Missing child " + NodeKind.RESOURCE_LOCATION + " in " + rasterImageTree.toStringTree() ) ;
+        "Missing child " + NodeKind.RESOURCE_LOCATION + " in " + imageTree.toStringTree() ) ;
   }
+
+  private Treepath< SyntacticTree > addImageMetadata(
+      Treepath< SyntacticTree > treepathToImage,
+      String imageLocation
+  ) {
+    if( treepathToImage.getTreeAtEnd().isOneOf( NodeKind.RASTER_IMAGE ) ) {
+      LOGGER.debug( "Extracting metadata from '{}'...", imageLocation ) ;
+      final File imageFile = new File( baseDirectory, imageLocation ) ;
+      try {
+        final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
+
+        final int width = bufferedImage.getWidth() ;
+        final SyntacticTree withTree = new SimpleTree(
+            NodeKind._PIXEL_WIDTH.name(), new SimpleTree( "" + width ) ) ;
+        treepathToImage = TreepathTools.addChildLast( treepathToImage, withTree ).getPrevious() ;
+
+        final int height= bufferedImage.getHeight() ;
+        final SyntacticTree heightTree = new SimpleTree(
+            NodeKind._PIXEL_HEIGHT.name(), new SimpleTree( "" + height ) ) ;
+        treepathToImage = TreepathTools.addChildLast( treepathToImage, heightTree ).getPrevious() ;
+
+      } catch( IOException e ) {
+        final String message = "Could not read '" + imageLocation + "'";
+        problemCollector.collect( Problem.createProblem( message ) ) ;
+        LOGGER.warn( message, e ) ;
+      }
+    }
+    return treepathToImage ;
+  }
+
 
   /**
    * Returns an absolute file, given a directory and a relative name.

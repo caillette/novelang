@@ -109,3 +109,21 @@ not be part of the title itself.
 
 | This is a table | item1 | (item2) |
 | ``item3``       | item4 | item 5  |
+
+
+== Images
+
+=== Absolute path
+
+/samples/images/orchid/orchid-closeup.jpg
+
+=== Inside a table
+
+|   ../images/bromedia-1.jpg   |   ./other-images/bromedia-2.jpg   |
+
+=== Vector graphics
+
+This may not show in a Web browser which doesn't support SVG.
+
+./stars.svg
+
