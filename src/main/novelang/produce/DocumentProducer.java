@@ -166,7 +166,7 @@ public class DocumentProducer {
           defaultSourceCharset, 
           suggestedRenderingCharset, 
           true 
-      ) ;//.adaptResourceNames( basedir ) ;
+      ).relocateResourcePaths( basedir ) ;
     }
 
   }

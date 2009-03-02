@@ -356,9 +356,7 @@
   <xsl:template match="n:raster-image/n:resource-location" >
     <fo:block>
       <fo:external-graphic>
-        <xsl:attribute name="src">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
+        <xsl:attribute name="src">.<xsl:value-of select="."/></xsl:attribute>
       </fo:external-graphic>
     </fo:block>
 

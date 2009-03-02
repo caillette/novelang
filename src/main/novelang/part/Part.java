@@ -21,12 +21,16 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import novelang.common.*;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.system.DefaultCharset;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes
@@ -37,7 +41,8 @@ import novelang.system.DefaultCharset;
 public class Part extends AbstractSourceReader {
 
   private final SyntacticTree tree ;
-  private final boolean standalone;
+  private final boolean standalone ;
+  private final File partFileDirectory ;
 
 
   /**
@@ -53,6 +58,7 @@ public class Part extends AbstractSourceReader {
   public Part( String content, boolean standalone ) {
     this.standalone = standalone ; 
     tree = createTree( content ) ;
+    partFileDirectory = null ;
   }
 
   /**
@@ -75,26 +81,15 @@ public class Part extends AbstractSourceReader {
       Charset suggestedRenderingCharset,
       boolean standalone
   ) throws MalformedURLException {
-    this(
+    super(
         partFile.toURI().toURL(),
         sourceCharset,
         suggestedRenderingCharset,
-        "part[" + partFile.getName() + "]",
-        standalone
+        "part[" + partFile.getName() + "]"
     ) ;
-
-  }
-
-  protected Part(
-      URL partUrl,
-      Charset sourceCharset,
-      Charset suggestedRenderingCharset,
-      String thisToString,
-      boolean standalone
-  ) {
-    super( partUrl, sourceCharset, suggestedRenderingCharset, thisToString ) ;
     this.standalone = standalone ;
-    tree = createTree( readContent( partUrl ) ) ;
+    this.partFileDirectory = partFile.getParentFile() ;
+    tree = createTree( readContent( partFile.toURI().toURL() ) ) ;
   }
 
   private SyntacticTree createTree( String content ) {
@@ -128,8 +123,18 @@ public class Part extends AbstractSourceReader {
     return tree ;
   }
 
-/*
-  public Renderable adaptResourceNames( File contentRoot ) {
+
+  /**
+   * This is just for 
+   * @param contentRoot
+   * @return
+   */
+  public Renderable relocateResourcePaths( File contentRoot ) {
+    
+    if( null == getDocumentTree() || null == partFileDirectory ) {
+      LOGGER.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
+      return this ;
+    }    
     
     final List< Problem > problems = Lists.newArrayList() ;
     final ProblemCollector problemCollector = new ProblemCollector() {
@@ -142,8 +147,11 @@ public class Part extends AbstractSourceReader {
     if( null == getDocumentTree() ) {
       fixedTree = null ;
     } else {
-      fixedTree = new ResourcePathRelocator( contentRoot, problemCollector ).
-          relocateResources( getDocumentTree() ) ;
+      fixedTree = new ResourcePathRelocator( 
+          contentRoot, 
+          partFileDirectory, 
+          problemCollector 
+      ).relocateResources( getDocumentTree() ) ;
     }
     Iterators.addAll( problems, Part.this.getProblems().iterator() ) ;
     
@@ -170,5 +178,5 @@ public class Part extends AbstractSourceReader {
       }
     };
   }
-*/
+
 }
