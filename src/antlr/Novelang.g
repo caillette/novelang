@@ -43,6 +43,7 @@ tokens {
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
   URL ;  
   RASTER_IMAGE ;
+  VECTOR_IMAGE ;
   RESOURCE_LOCATION ;
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   CELL ;
@@ -1160,31 +1161,28 @@ urlXChar
 // =====
 
 embeddableResource
-  : externalResourcePath rasterImageExtension
-    -> ^( RASTER_IMAGE ^( RESOURCE_LOCATION { delegate.createTree( 
-            RASTER_IMAGE, $externalResourcePath.text + $rasterImageExtension.text ) } 
-        ) )
+  : externalResourcePath 
+    (    ( rasterImageExtension
+          -> ^( RASTER_IMAGE ^( RESOURCE_LOCATION { delegate.createTree( 
+                  RASTER_IMAGE, $externalResourcePath.text + $rasterImageExtension.text ) } 
+              ) ) 
+         )
+       | ( vectorImageExtension
+          -> ^( VECTOR_IMAGE ^( RESOURCE_LOCATION { delegate.createTree( 
+                  RASTER_IMAGE, $externalResourcePath.text + $vectorImageExtension.text ) } 
+              ) )
+         )
+    )
   ;
 
 externalResourcePath
-  : FULL_STOP? 
-    SOLIDUS 
-    externalResourceSegment 
-    ( SOLIDUS externalResourceSegment )*
-  ;
-  
-rasterImageExtension
-  : FULL_STOP ( 
-        ( LATIN_SMALL_LETTER_P LATIN_SMALL_LETTER_N LATIN_SMALL_LETTER_G )
-      | ( LATIN_SMALL_LETTER_J LATIN_SMALL_LETTER_P LATIN_SMALL_LETTER_G )
-      | ( LATIN_SMALL_LETTER_G LATIN_SMALL_LETTER_I LATIN_SMALL_LETTER_F )
-      
-    )
+  : ( FULL_STOP FULL_STOP? )? SOLIDUS 
+    externalResourceSegment ( SOLIDUS externalResourceSegment )*
   ;
   
 externalResourceSegment
   : (   externalResourceCharacter
-        FULL_STOP?
+        ( FULL_STOP FULL_STOP? )?
     )*
     externalResourceCharacter               
   ;
@@ -1202,6 +1200,21 @@ externalResourceCharacter
   | DOLLAR_SIGN
   ;
 
+rasterImageExtension
+  : FULL_STOP ( 
+        ( LATIN_SMALL_LETTER_P LATIN_SMALL_LETTER_N LATIN_SMALL_LETTER_G )
+      | ( LATIN_SMALL_LETTER_J LATIN_SMALL_LETTER_P LATIN_SMALL_LETTER_G )
+      | ( LATIN_SMALL_LETTER_G LATIN_SMALL_LETTER_I LATIN_SMALL_LETTER_F )
+      
+    )
+  ;
+  
+vectorImageExtension
+  : FULL_STOP ( 
+        ( LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_V LATIN_SMALL_LETTER_G )      
+    )
+  ;
+  
 
 // ====
 // Word

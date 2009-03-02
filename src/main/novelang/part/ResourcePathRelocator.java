@@ -79,7 +79,7 @@ public class ResourcePathRelocator {
   
   private Treepath< SyntacticTree > relocateAllResources( Treepath< SyntacticTree > treepath ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
-    if( tree.isOneOf( NodeKind.RASTER_IMAGE ) ) {
+    if( tree.isOneOf( NodeKind.RASTER_IMAGE, NodeKind.VECTOR_IMAGE ) ) {
       treepath = relocateResource( treepath ) ;
     } else {
       final int childCount = tree.getChildCount() ;

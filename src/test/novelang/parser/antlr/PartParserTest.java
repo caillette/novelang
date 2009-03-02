@@ -1310,6 +1310,28 @@ public class PartParserTest {
   }
 
   @Test
+  public void rasterImageIsRelativeFileInSubdirectory() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "./foo/bar.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( RESOURCE_LOCATION, tree( "./foo/bar.jpg" ) )
+        )
+    ) ;
+  }
+
+  @Test
+  public void rasterImageIsInSuperdirectory() throws RecognitionException {
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+        "../bar.jpg",
+        tree(
+            RASTER_IMAGE,
+            tree( RESOURCE_LOCATION, tree( "../bar.jpg" ) ) 
+        )
+    ) ;
+  }
+
+  @Test
   public void rasterImageHasVariousCharactersInItsPath() throws RecognitionException {
     PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
         "/f.o-o/b=a_r.jpg",
@@ -1323,7 +1345,7 @@ public class PartParserTest {
   @Test
   public void badlyFormedRasterImage1() throws RecognitionException {
     PARSERMETHOD_EMBEDDABLE_RESOURCE.checkFails(
-        "../foo.jpg"
+        "/.foo.unknown"
     ) ;
   }
 
@@ -1331,13 +1353,6 @@ public class PartParserTest {
   public void badlyFormedRasterImage2() throws RecognitionException {
     PARSERMETHOD_EMBEDDABLE_RESOURCE.checkFails(
         "/.foo.jpg"
-    ) ;
-  }
-
-  @Test
-  public void badlyFormedRasterImage3() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkFails(
-        "/.foo.unknown"
     ) ;
   }
 

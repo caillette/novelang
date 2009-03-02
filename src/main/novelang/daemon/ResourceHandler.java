@@ -19,6 +19,9 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
+import java.net.URL;
+import java.net.MalformedURLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +34,8 @@ import novelang.configuration.ProducerConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.loader.ResourceNotFoundException;
+import novelang.loader.ResourceLoaderTools;
+import novelang.loader.UrlResourceLoader;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
 
@@ -46,11 +51,29 @@ public class ResourceHandler extends GenericHandler {
   private final ResourceLoader resourceLoader ;
 
   public ResourceHandler( ProducerConfiguration serverConfiguration ) {
-    this( serverConfiguration.getRenderingConfiguration().getResourceLoader() ) ;
+    this(
+        ResourceLoaderTools.compose(
+            serverConfiguration.getRenderingConfiguration().getResourceLoader(),
+            new UrlResourceLoader( createUrlQuiet(
+                serverConfiguration.getContentConfiguration().getContentRoot() ) )
+        )
+    ) ;
+  }
+
+  /**
+   * Dirty hack.
+   */
+  private static URL createUrlQuiet( File file ) {
+    try {
+      return file.toURL() ;
+    } catch( MalformedURLException e ) {
+      throw new RuntimeException( e ) ;
+    }
   }
 
   protected ResourceHandler( ResourceLoader resourceLoader ) {
     this.resourceLoader = resourceLoader ;
+    LOGGER.debug( "Using resourceLoader {}", resourceLoader ) ;
   }
 
   protected void doHandle(

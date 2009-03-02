@@ -359,9 +359,16 @@
         <xsl:attribute name="src">.<xsl:value-of select="."/></xsl:attribute>
       </fo:external-graphic>
     </fo:block>
-
   </xsl:template>  
   
+  <xsl:template match="n:vector-image/n:resource-location" >
+    <fo:block>
+      <fo:external-graphic>
+        <xsl:attribute name="src">.<xsl:value-of select="."/></xsl:attribute>
+      </fo:external-graphic>
+    </fo:block>
+  </xsl:template>
+
 
 </xsl:stylesheet>
 

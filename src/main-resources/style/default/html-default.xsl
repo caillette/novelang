@@ -147,4 +147,10 @@
     </img>
   </xsl:template>  
 
+  <xsl:template match="n:vector-image/n:resource-location" >
+    <object type="image/svg+xml" >
+      <xsl:attribute name="data" ><xsl:value-of select="." /></xsl:attribute>
+    </object>
+  </xsl:template>
+
 </xsl:stylesheet>
