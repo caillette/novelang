@@ -38,6 +38,7 @@ import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * Holds resources which don't require rendering.
@@ -102,7 +103,12 @@ public class ResourceHandler extends GenericHandler {
         IOUtils.copy( inputStream, response.getOutputStream() ) ;
 
         response.setStatus( HttpServletResponse.SC_OK ) ;
-        response.setContentType( documentRequest.getResourceExtension() ) ;
+
+        final String contentType =
+            ResourceMimeTypes.getMimeType( documentRequest.getResourceExtension() ) ;
+        if( null != contentType ) {
+          response.setContentType( contentType ) ;
+        }
 
         ( ( Request ) request ).setHandled( true ) ;
         LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
