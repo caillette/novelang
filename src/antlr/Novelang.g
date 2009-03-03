@@ -1176,7 +1176,8 @@ embeddableResource
   ;
 
 externalResourcePath
-  : ( FULL_STOP FULL_STOP? )? SOLIDUS 
+  : //( FULL_STOP FULL_STOP? )? SOLIDUS ( FULL_STOP FULL_STOP SOLIDUS )*
+    ( FULL_STOP ( FULL_STOP ( SOLIDUS FULL_STOP FULL_STOP )* )? )? SOLIDUS
     externalResourceSegment ( SOLIDUS externalResourceSegment )*
   ;
   
