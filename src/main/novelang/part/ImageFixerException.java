@@ -21,13 +21,13 @@ package novelang.part ;
  * 
  * @author Laurent Caillette
  */
-public class ResourcePathRelocatorException extends Exception {
+public class ImageFixerException extends Exception {
 
-  public ResourcePathRelocatorException( String s ) {
+  public ImageFixerException( String s ) {
     super( s ) ;
   }
 
-  public ResourcePathRelocatorException( String s, Throwable throwable ) {
+  public ImageFixerException( String s, Throwable throwable ) {
     super( s, throwable ) ;
   }
 }

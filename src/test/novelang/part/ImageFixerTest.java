@@ -38,7 +38,7 @@ import java.util.List;
  * 
  * @author Laurent Caillette
  */
-public class ResourcePathRelocatorTest {
+public class ImageFixerTest {
 
   @Test
   public void noChange() {
@@ -106,8 +106,8 @@ public class ResourcePathRelocatorTest {
     
   }
   
-  @Test( expected = ResourcePathRelocatorException.class )  
-  public void detectUnauthorizedAccessToUpperDirectory() throws ResourcePathRelocatorException {
+  @Test( expected = ImageFixerException.class )
+  public void detectUnauthorizedAccessToUpperDirectory() throws ImageFixerException {
     justRelocate(
         childDirectory, 
         childDirectory,
@@ -115,8 +115,8 @@ public class ResourcePathRelocatorTest {
     ) ;
   }
   
-  @Test( expected = ResourcePathRelocatorException.class )
-  public void detectNonExistingResource() throws ResourcePathRelocatorException {
+  @Test( expected = ImageFixerException.class )
+  public void detectNonExistingResource() throws ImageFixerException {
     justRelocate( 
         parentDirectory,
         parentDirectory,
@@ -125,7 +125,7 @@ public class ResourcePathRelocatorTest {
   }
   
   @Test
-  public void absoluteFromBaseToBase() throws ResourcePathRelocatorException {
+  public void absoluteFromBaseToBase() throws ImageFixerException {
     check(
         "/" + RESOURCE_UNDER_PARENT_NAME,
         parentDirectory,
@@ -135,7 +135,7 @@ public class ResourcePathRelocatorTest {
   }
 
   @Test
-  public void relativeFromBaseToBase() throws ResourcePathRelocatorException {
+  public void relativeFromBaseToBase() throws ImageFixerException {
     check(
         "/" + RESOURCE_UNDER_PARENT_NAME,
         parentDirectory,
@@ -145,7 +145,7 @@ public class ResourcePathRelocatorTest {
   }
 
   @Test
-  public void absoluteFromChildToChild() throws ResourcePathRelocatorException {
+  public void absoluteFromChildToChild() throws ImageFixerException {
     check(
         "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME,
         parentDirectory, 
@@ -155,7 +155,7 @@ public class ResourcePathRelocatorTest {
   }
 
   @Test
-  public void relativeFromChildToChild() throws ResourcePathRelocatorException {
+  public void relativeFromChildToChild() throws ImageFixerException {
     check(
         "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME,
         parentDirectory, 
@@ -165,7 +165,7 @@ public class ResourcePathRelocatorTest {
   }
 
   @Test
-  public void absoluteFromChildToGrandchild() throws ResourcePathRelocatorException {
+  public void absoluteFromChildToGrandchild() throws ImageFixerException {
     check(
         "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME,
         parentDirectory, 
@@ -175,7 +175,7 @@ public class ResourcePathRelocatorTest {
   }
 
   @Test
-  public void relativeFromChildToGrandchild() throws ResourcePathRelocatorException {
+  public void relativeFromChildToGrandchild() throws ImageFixerException {
     check(
         "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME,
         parentDirectory, 
@@ -185,7 +185,7 @@ public class ResourcePathRelocatorTest {
   }
 
   @Test
-  public void relativeFromChildToParent() throws ResourcePathRelocatorException {
+  public void relativeFromChildToParent() throws ImageFixerException {
     check(
         "/" + RESOURCE_UNDER_PARENT_NAME,
         parentDirectory, 
@@ -195,7 +195,7 @@ public class ResourcePathRelocatorTest {
   }
 
   @Test
-  public void absoluteFromChildToParent() throws ResourcePathRelocatorException {
+  public void absoluteFromChildToParent() throws ImageFixerException {
     check(
         "/" + RESOURCE_UNDER_PARENT_NAME,
         parentDirectory, 
@@ -221,7 +221,7 @@ public class ResourcePathRelocatorTest {
   private final File childDirectory ;
   private final File grandChildDirectory ;
 
-  public ResourcePathRelocatorTest() throws IOException {
+  public ImageFixerTest() throws IOException {
     final ScratchDirectoryFixture fixture = new ScratchDirectoryFixture( getClass() ) ;
     parentDirectory = fixture.getTestScratchDirectory() ;
     final File resourceUnderParent = new File( parentDirectory, RESOURCE_UNDER_PARENT_NAME ) ;
@@ -255,7 +255,7 @@ public class ResourcePathRelocatorTest {
       final File baseDirectory,
       final File referrerDirectory,
       final String resourceNameRelativeToReferrer
-  ) throws ResourcePathRelocatorException {
+  ) throws ImageFixerException {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
     final ImageFixer pathRelocator = new ImageFixer(
         baseDirectory, referrerDirectory, problemCollector ) ;
@@ -269,7 +269,7 @@ public class ResourcePathRelocatorTest {
       final File baseDirectory,
       final File referrerDirectory,
       final String resourceNameRelativeToReferrer
-  ) throws ResourcePathRelocatorException {
+  ) throws ImageFixerException {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
     final ImageFixer pathRelocator = new ImageFixer(
         baseDirectory, referrerDirectory, problemCollector ) ;

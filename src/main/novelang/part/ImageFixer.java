@@ -104,7 +104,7 @@ public class ImageFixer {
         final String newLocation ;
         try {
           newLocation = relocate( oldLocation ) ;
-        } catch ( ResourcePathRelocatorException e ) {
+        } catch ( ImageFixerException e ) {
           problemCollector.collect( Problem.createProblem( e ) ) ;          
           return treepathToImage ; // Leave unchanged.
         }
@@ -133,15 +133,17 @@ public class ImageFixer {
       try {
         final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
 
-        final int width = bufferedImage.getWidth() ;
-        final SyntacticTree withTree = new SimpleTree(
-            NodeKind._PIXEL_WIDTH.name(), new SimpleTree( "" + width ) ) ;
-        treepathToImage = TreepathTools.addChildLast( treepathToImage, withTree ).getPrevious() ;
+        treepathToImage = addImageMetadata(
+            treepathToImage,
+            NodeKind._PIXEL_WIDTH,
+            "" + bufferedImage.getWidth()
+        ) ;
 
-        final int height= bufferedImage.getHeight() ;
-        final SyntacticTree heightTree = new SimpleTree(
-            NodeKind._PIXEL_HEIGHT.name(), new SimpleTree( "" + height ) ) ;
-        treepathToImage = TreepathTools.addChildLast( treepathToImage, heightTree ).getPrevious() ;
+        treepathToImage = addImageMetadata(
+            treepathToImage,
+            NodeKind._PIXEL_HEIGHT,
+            "" + bufferedImage.getHeight()
+        ) ;
 
       } catch( IOException e ) {
         final String message = "Could not read '" + imageLocation + "'";
@@ -150,6 +152,16 @@ public class ImageFixer {
       }
     }
     return treepathToImage ;
+  }
+
+  private static Treepath<SyntacticTree> addImageMetadata(
+      Treepath< SyntacticTree > treepathToImage,
+      NodeKind sizeNodeKind,
+      String value
+  ) {
+    final SyntacticTree withTree = new SimpleTree( sizeNodeKind.name(), new SimpleTree( value ) ) ;
+    treepathToImage = TreepathTools.addChildLast( treepathToImage, withTree ).getPrevious() ;
+    return treepathToImage;
   }
 
 
@@ -161,11 +173,11 @@ public class ImageFixer {
    * @return a non-null object representing an existing resource file.
    * 
    * @throws IllegalArgumentException if one of the preconditions on arguments is violated.
-   * @throws ResourcePathRelocatorException if the resource does not exist, or if the resulting file 
+   * @throws ImageFixerException if the resource does not exist, or if the resulting file
    *     is not located under given {@code directory}. 
    */
   protected String relocate( String nameRelativeToReferrer ) 
-      throws ResourcePathRelocatorException 
+      throws ImageFixerException
   {  
     Preconditions.checkArgument( 
         ! StringUtils.isBlank( nameRelativeToReferrer ), 
@@ -188,13 +200,13 @@ public class ImageFixer {
     }
 
     if( ! FileTools.isParentOf( baseDirectory, absoluteResourceFile ) ) {
-      throw new ResourcePathRelocatorException( 
+      throw new ImageFixerException(
           "Given resource '" + nameRelativeToReferrer + "' " + 
           "resolved outside of '" + baseDirectory + "'"  
       ) ;
     }
     if( ! absoluteResourceFile.exists() ) {
-      throw new ResourcePathRelocatorException( 
+      throw new ImageFixerException(
           "Does not exist: '" + absoluteResourceFile.getAbsolutePath() + "'" ) ;
     }
     
