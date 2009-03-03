@@ -33,7 +33,7 @@ public final class ResourceMimeTypes {
 
   private static final ImmutableMap< String, String > EXTENSIONS_FOR_MIMETYPES =
       new ImmutableMap.Builder()
-      .put( "svg", "text/xml" )
+      .put( "svg", "image/svg+xml" )
       .build()
   ;
 

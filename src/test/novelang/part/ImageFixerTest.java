@@ -26,7 +26,6 @@ import novelang.common.SyntacticTree;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEquals;
 import static novelang.parser.antlr.TreeFixture.tree;
-import org.apache.commons.io.FileUtils;
 import static org.junit.Assert.assertSame;
 import org.junit.Test;
 import org.junit.Assert;
@@ -56,7 +55,7 @@ public class ImageFixerTest {
   }
   
   @Test
-  public void replaceInTree() {
+  public void replaceRasterImageInTree() {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
     final ImageFixer pathRelocator =
         new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
@@ -65,12 +64,12 @@ public class ImageFixerTest {
         PART, 
         tree( 
             PARAGRAPH_REGULAR,
-            tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE_UNDER_PARENT_NAME ) )
+            tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE1_UNDER_PARENT_NAME ) )
         
         ) 
     ) ;
     
-    final String expectedAbsoluteResourceLocation = "/" + RESOURCE_UNDER_PARENT_NAME ;
+    final String expectedAbsoluteResourceLocation = "/" + RESOURCE1_UNDER_PARENT_NAME;
     
     final SyntacticTree expectedTree = tree( 
         PART, 
@@ -79,8 +78,8 @@ public class ImageFixerTest {
             tree( 
                 RASTER_IMAGE, 
                 tree( RESOURCE_LOCATION, expectedAbsoluteResourceLocation ),
-                tree( _PIXEL_WIDTH, IMAGE_WIDTH ),
-                tree( _PIXEL_HEIGHT, IMAGE_HEIGHT )
+                tree( _IMAGE_WIDTH, IMAGE_WIDTH + "px" ),
+                tree( _IMAGE_HEIGHT, IMAGE_HEIGHT + "px" )
             )
         ) 
     ) ;
@@ -92,6 +91,43 @@ public class ImageFixerTest {
     ) ;
   }
   
+  @Test
+  public void replaceVectorImageInTree() {
+    final ListProblemCollector problemCollector = new ListProblemCollector() ;
+    final ImageFixer pathRelocator =
+        new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
+
+    final SyntacticTree treeToAbsolutize = tree(
+        PART,
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( VECTOR_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE2_UNDER_PARENT_NAME ) )
+
+        )
+    ) ;
+
+    final String expectedAbsoluteResourceLocation = "/" + RESOURCE2_UNDER_PARENT_NAME;
+
+    final SyntacticTree expectedTree = tree(
+        PART,
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                VECTOR_IMAGE,
+                tree( RESOURCE_LOCATION, expectedAbsoluteResourceLocation ),
+                tree( _IMAGE_WIDTH, IMAGE_WIDTH + "mm" ),
+                tree( _IMAGE_HEIGHT, IMAGE_HEIGHT + "mm" )
+            )
+        )
+    ) ;
+    final SyntacticTree resultTree = pathRelocator.relocateResources( treeToAbsolutize );
+    Assert.assertFalse( problemCollector.hasProblem() ) ;
+    assertEquals(
+        expectedTree,
+        resultTree
+    ) ;
+  }
+
   @Test
   public void reportProblem() {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
@@ -117,7 +153,7 @@ public class ImageFixerTest {
     justRelocate(
         childDirectory, 
         childDirectory,
-        ( "../" + RESOURCE_UNDER_PARENT_NAME ) // This one exists above, but should be forbidden! 
+        ( "../" + RESOURCE1_UNDER_PARENT_NAME ) // This one exists above, but should be forbidden!
     ) ;
   }
   
@@ -133,20 +169,20 @@ public class ImageFixerTest {
   @Test
   public void absoluteFromBaseToBase() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT_NAME,
+        "/" + RESOURCE1_UNDER_PARENT_NAME,
         parentDirectory,
         parentDirectory,
-        "/" + RESOURCE_UNDER_PARENT_NAME 
+        "/" + RESOURCE1_UNDER_PARENT_NAME
     ) ;
   }
 
   @Test
   public void relativeFromBaseToBase() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT_NAME,
+        "/" + RESOURCE1_UNDER_PARENT_NAME,
         parentDirectory,
         parentDirectory,
-        "./" + RESOURCE_UNDER_PARENT_NAME 
+        "./" + RESOURCE1_UNDER_PARENT_NAME
     ) ;
   }
 
@@ -193,20 +229,20 @@ public class ImageFixerTest {
   @Test
   public void relativeFromChildToParent() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT_NAME,
+        "/" + RESOURCE1_UNDER_PARENT_NAME,
         parentDirectory, 
         childDirectory, 
-        "../" + RESOURCE_UNDER_PARENT_NAME 
+        "../" + RESOURCE1_UNDER_PARENT_NAME
     ) ;
   }
 
   @Test
   public void absoluteFromChildToParent() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT_NAME,
+        "/" + RESOURCE1_UNDER_PARENT_NAME,
         parentDirectory, 
         childDirectory, 
-        "/" + RESOURCE_UNDER_PARENT_NAME 
+        "/" + RESOURCE1_UNDER_PARENT_NAME
     ) ;
   }
 
@@ -222,7 +258,8 @@ public class ImageFixerTest {
   private static final String CHILD_NAME = "child" ;
   private static final String GRANDCHILD_NAME = "grandchild" ;
 
-  private static final String RESOURCE_UNDER_PARENT_NAME = TestResources.RED_128x64_PNG_NAME ;
+  private static final String RESOURCE1_UNDER_PARENT_NAME = TestResources.RED_128x64_PNG_NAME ;
+  private static final String RESOURCE2_UNDER_PARENT_NAME = TestResources.YELLOW_128x64_SVG_NAME ;
   private static final String RESOURCE_UNDER_CHILD_NAME = TestResources.GREEN_128x64_JPG_NAME ;
   private static final String RESOURCE_UNDER_GRANDCHILD_NAME = TestResources.BLUE_128x64_GIF_NAME ;
   
@@ -235,6 +272,8 @@ public class ImageFixerTest {
     parentDirectory = fixture.getTestScratchDirectory() ;
     TestResourceTools.copyResourceToDirectoryFlat(
         getClass(), TestResources.IMAGE_RED_128x64_PNG, parentDirectory ) ;
+    TestResourceTools.copyResourceToDirectoryFlat(
+        getClass(), TestResources.IMAGE_YELLOW_128x64_SVG, parentDirectory ) ;
 
     childDirectory = new File( parentDirectory, CHILD_NAME ) ;
     childDirectory.mkdir() ;

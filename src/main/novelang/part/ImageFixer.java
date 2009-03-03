@@ -25,6 +25,10 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.dom4j.io.SAXReader;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Node;
 
 import java.io.File;
 import java.io.IOException;
@@ -129,31 +133,82 @@ public class ImageFixer {
       Treepath< SyntacticTree > treepathToImage,
       String imageLocation
   ) {
-    if( treepathToImage.getTreeAtEnd().isOneOf( NodeKind.RASTER_IMAGE ) ) {
-      LOGGER.debug( "Extracting metadata from '{}'...", imageLocation ) ;
       final File imageFile = new File( baseDirectory, imageLocation ) ;
+      final NodeKind nodeKind = NodeKind.valueOf( treepathToImage.getTreeAtEnd().getText() ) ;
       try {
-        final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
-
-        treepathToImage = addImageMetadata(
-            treepathToImage,
-            NodeKind._PIXEL_WIDTH,
-            "" + bufferedImage.getWidth()
-        ) ;
-
-        treepathToImage = addImageMetadata(
-            treepathToImage,
-            NodeKind._PIXEL_HEIGHT,
-            "" + bufferedImage.getHeight()
-        ) ;
-
-      } catch( IOException e ) {
+        switch( nodeKind ) {
+          case RASTER_IMAGE :
+            treepathToImage = addRasterImageMetadata( treepathToImage, imageFile ) ;
+            break ;
+          case VECTOR_IMAGE :
+            treepathToImage = addVectorImageMetadata( treepathToImage, imageFile ) ;
+            break ;
+          default :
+            break ;
+        }
+      } catch( Exception e ) {
         final String message = "Could not read '" + imageLocation + "'";
         problemCollector.collect( Problem.createProblem( message ) ) ;
         LOGGER.warn( message, e ) ;
       }
-    }
     return treepathToImage ;
+  }
+
+  private static Treepath< SyntacticTree > addRasterImageMetadata(
+      Treepath< SyntacticTree > treepathToImage,
+      File imageFile
+  ) throws IOException {
+    LOGGER.debug( "Extracting raster image metadata from '{}'...", imageFile.getAbsolutePath() ) ;
+    final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
+
+    treepathToImage = addImageMetadata(
+        treepathToImage,
+        NodeKind._IMAGE_WIDTH,
+        bufferedImage.getWidth() + "px"
+    ) ;
+
+    treepathToImage = addImageMetadata(
+        treepathToImage,
+        NodeKind._IMAGE_HEIGHT,
+        bufferedImage.getHeight() + "px"
+    ) ;
+    return treepathToImage;
+  }
+
+  /**
+   * Extracts {@code /svg/@width} and {@code /svg/@height} from SVG file and puts them
+   * verbatim.
+   */
+  private static Treepath< SyntacticTree > addVectorImageMetadata(
+      Treepath< SyntacticTree > treepathToImage,
+      File imageFile
+  ) throws IOException, DocumentException {
+    LOGGER.debug( "Extracting vector image metadata from '{}'...", imageFile.getAbsolutePath() ) ;
+
+    final SAXReader reader = new SAXReader() ;
+    final Document document = reader.read(imageFile.toURI().toURL() ) ;
+    final Node svgNode = document.selectSingleNode( "/svg" ) ;
+
+    if( null != svgNode ) {
+      final String width = svgNode.valueOf( "@width" ) ;
+      final String height = svgNode.valueOf( "@height" ) ;
+
+      LOGGER.debug( "Found: width:'{}', height:'{}'", width, height ) ;
+
+      if( ! StringUtils.isBlank( width ) && ! StringUtils.isBlank( height ) ) {
+        treepathToImage = addImageMetadata(
+            treepathToImage,
+            NodeKind._IMAGE_WIDTH,
+            width
+        ) ;  
+        treepathToImage = addImageMetadata(
+            treepathToImage,
+            NodeKind._IMAGE_HEIGHT,
+            height
+        ) ;
+      }
+    }
+    return treepathToImage;
   }
 
   private static Treepath<SyntacticTree> addImageMetadata(
@@ -216,5 +271,24 @@ public class ImageFixer {
         FileTools.relativizePath( baseDirectory, absoluteResourceFile ) ;
     
     return resourceNameRelativeToBase ;
+  }
+
+
+  protected final static class ImageDimension {
+    private final String width ;
+    private final String height ;
+
+    public ImageDimension( String width, String height ) {
+      this.width = width ;
+      this.height = height ;
+    }
+
+    public String getWidth() {
+      return width ;
+    }
+
+    public String getHeight() {
+      return height ;
+    }
   }
 }

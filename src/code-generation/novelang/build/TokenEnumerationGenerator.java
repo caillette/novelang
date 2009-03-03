@@ -68,8 +68,8 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_META_TIMESTAMP" ),
       new Item( "_META" ),
       new Item( "_WORD_COUNT" ),
-      new Item( "_PIXEL_WIDTH" ),
-      new Item( "_PIXEL_HEIGHT" )
+      new Item( "_IMAGE_WIDTH" ),
+      new Item( "_IMAGE_HEIGHT" )
   ) ;
 
   private static final Pattern ALL_TOKENS_PATTERN =

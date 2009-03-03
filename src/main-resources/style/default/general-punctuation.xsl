@@ -37,8 +37,8 @@
   <xsl:template match="n:sign-fullstop" >.</xsl:template>
 
   <xsl:template match="n:meta" />
-  <xsl:template match="n:pixel-width" />
-  <xsl:template match="n:pixel-height" />
+  <xsl:template match="n:image-width" />
+  <xsl:template match="n:image-height" />
 
   
 </xsl:stylesheet>

@@ -374,7 +374,7 @@ With Novelang default stylesheet, such a sequence of cell rows is arranged as a 
 
 === Raster images
 
-XML elements : ``n:raster-image``, ``n:resource-location``, ``n:pixel-width``, ``n:pixel-height``
+XML elements : ``n:raster-image``, ``n:resource-location``, ``n:image-width``, ``n:image-height``
 
 Raster images are also known as "bitmap" images, which are made of a grid of pixels.
 
@@ -392,7 +392,7 @@ The image must be in JPEG, PNG or GIF format, with the extension being one of
 
 ../animals/guinea-pig.jpg
 
-| /images/logo.gif | Inside a cell, too! |
+| /images/logo.gif |
 >>>
 
 The path must start with zero, one, or two full stops, immediately followed by a solidus.
@@ -410,8 +410,8 @@ above the project directory will produce an error. A path relative to the projec
 With Novelang default stylesheet, the image appears inside the document.
 
 Under the ``n:raster-image`` element, the ``n:resource-location`` gives the image path relative
-to the project root. The ``n:pixel-width`` and ``n:pixel-height`` elements give the with and the
-height of the image, respectively.
+to the project root. The ``n:image-width`` and ``n:image-height`` elements give the with and the
+height of the image, respectively, in pixel units.
 
 
 === Vector images
@@ -425,7 +425,9 @@ as extension.
 ./stars.svg
 >>>
 
-There is no XML element giving the with or the height of the vector image.
+The with or the height of the vector image is copied from the SVG file, including units.
+Coordinates and lengths in SVG are explained here:
+http://www.w3.org/TR/SVG/coords.html#UnitIdentifiers
 
 
 === Escaped characters
