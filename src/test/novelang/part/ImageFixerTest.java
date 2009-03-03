@@ -18,6 +18,8 @@ package novelang.part ;
 
 import com.google.common.collect.Lists;
 import novelang.ScratchDirectoryFixture;
+import novelang.TestResources;
+import novelang.TestResourceTools;
 import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;
@@ -39,7 +41,6 @@ import java.util.List;
  * @author Laurent Caillette
  */
 public class ImageFixerTest {
-
   @Test
   public void noChange() {
     final ImageFixer pathRelocator =
@@ -56,8 +57,9 @@ public class ImageFixerTest {
   
   @Test
   public void replaceInTree() {
+    final ListProblemCollector problemCollector = new ListProblemCollector() ;
     final ImageFixer pathRelocator =
-        new ImageFixer( parentDirectory, parentDirectory, null ) ;
+        new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
     
     final SyntacticTree treeToAbsolutize = tree( 
         PART, 
@@ -76,13 +78,17 @@ public class ImageFixerTest {
             PARAGRAPH_REGULAR,
             tree( 
                 RASTER_IMAGE, 
-                tree( RESOURCE_LOCATION, expectedAbsoluteResourceLocation ) 
-            )        
+                tree( RESOURCE_LOCATION, expectedAbsoluteResourceLocation ),
+                tree( _PIXEL_WIDTH, IMAGE_WIDTH ),
+                tree( _PIXEL_HEIGHT, IMAGE_HEIGHT )
+            )
         ) 
     ) ;
-    assertEquals(  
-        expectedTree, 
-        pathRelocator.relocateResources( treeToAbsolutize )
+    final SyntacticTree resultTree = pathRelocator.relocateResources( treeToAbsolutize );
+    Assert.assertFalse( problemCollector.hasProblem() ) ;
+    assertEquals(
+        expectedTree,
+        resultTree
     ) ;
   }
   
@@ -210,12 +216,15 @@ public class ImageFixerTest {
 // Fixture
 // =======
   
+  private static final String IMAGE_WIDTH = "128";
+  private static final String IMAGE_HEIGHT = "64";
+
   private static final String CHILD_NAME = "child" ;
   private static final String GRANDCHILD_NAME = "grandchild" ;
 
-  private static final String RESOURCE_UNDER_PARENT_NAME = "resourceInParent" ;
-  private static final String RESOURCE_UNDER_CHILD_NAME = "resourceInChild" ;
-  private static final String RESOURCE_UNDER_GRANDCHILD_NAME = "resourceInGrandChild" ;
+  private static final String RESOURCE_UNDER_PARENT_NAME = TestResources.RED_128x64_PNG_NAME ;
+  private static final String RESOURCE_UNDER_CHILD_NAME = TestResources.GREEN_128x64_JPG_NAME ;
+  private static final String RESOURCE_UNDER_GRANDCHILD_NAME = TestResources.BLUE_128x64_GIF_NAME ;
   
   private final File parentDirectory ;
   private final File childDirectory ;
@@ -224,17 +233,19 @@ public class ImageFixerTest {
   public ImageFixerTest() throws IOException {
     final ScratchDirectoryFixture fixture = new ScratchDirectoryFixture( getClass() ) ;
     parentDirectory = fixture.getTestScratchDirectory() ;
-    final File resourceUnderParent = new File( parentDirectory, RESOURCE_UNDER_PARENT_NAME ) ;
-    FileUtils.writeStringToFile( resourceUnderParent, RESOURCE_UNDER_PARENT_NAME ) ;
-    
+    TestResourceTools.copyResourceToDirectoryFlat(
+        getClass(), TestResources.IMAGE_RED_128x64_PNG, parentDirectory ) ;
+
     childDirectory = new File( parentDirectory, CHILD_NAME ) ;
-    final File resourceUnderChild = new File( childDirectory, RESOURCE_UNDER_CHILD_NAME ) ;
-    FileUtils.writeStringToFile( resourceUnderChild, RESOURCE_UNDER_CHILD_NAME ) ;
+    childDirectory.mkdir() ;
+    TestResourceTools.copyResourceToDirectoryFlat(
+        getClass(), TestResources.IMAGE_GREEN_128x64_JPG, childDirectory ) ;
 
     grandChildDirectory = new File( childDirectory, GRANDCHILD_NAME ) ;
-    final File resourceUnderGrandChild = 
-        new File( grandChildDirectory, RESOURCE_UNDER_GRANDCHILD_NAME ) ;
-    FileUtils.writeStringToFile( resourceUnderGrandChild, RESOURCE_UNDER_GRANDCHILD_NAME ) ;
+    grandChildDirectory.mkdir() ;
+    TestResourceTools.copyResourceToDirectoryFlat( 
+        getClass(), TestResources.IMAGE_BLUE_128x64_GIF, grandChildDirectory ) ;
+
   }
 
   private class ListProblemCollector implements ProblemCollector {
@@ -247,6 +258,10 @@ public class ImageFixerTest {
     
     public Problem[] getProblems() {
       return problems.toArray( new Problem[ problems.size() ] ) ;
+    }
+
+    public boolean hasProblem() {
+      return ! problems.isEmpty() ;
     }
   }
   

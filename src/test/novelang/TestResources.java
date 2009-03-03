@@ -130,6 +130,20 @@ public class TestResources {
       SERVED_BOOK_BADSCANNEDPART_NOEXTENSION + ".nlb" ;
 
 
+  public static final String IMAGES_DIRECTORY_NAME = "images" ;
+
+  public static final String BLUE_128x64_GIF_NAME = "Blue-128x64.gif" ;
+  public static final String GREEN_128x64_JPG_NAME = "Green-128x64.jpg" ;
+  public static final String RED_128x64_PNG_NAME = "Red-128x64.png" ;
+
+  public static final ResourceName IMAGE_BLUE_128x64_GIF =
+      new ResourceName( "images/" + BLUE_128x64_GIF_NAME ) ;
+  public static final ResourceName IMAGE_GREEN_128x64_JPG =
+      new ResourceName( "images/" + GREEN_128x64_JPG_NAME ) ;
+  public static final ResourceName IMAGE_RED_128x64_PNG =
+      new ResourceName( "images/" + RED_128x64_PNG_NAME ) ;
+
+
   public static void copyServedResources( File contentDirectory ) {
     TestResourceTools.copyResourceToDirectory(
         TestResources.class, SERVED_PARTSOURCE_GOOD, contentDirectory ) ;

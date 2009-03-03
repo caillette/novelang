@@ -170,6 +170,17 @@ public final class TestResourceTools {
    */
   public static File copyResourceToDirectoryFlat(
       Class owningClass,
+      ResourceName resourceName,
+      File destinationDir
+  ) {
+    return copyResourceToDirectoryFlat( owningClass, "/" + resourceName.getName(), destinationDir ) ;
+  }
+
+  /**
+   * Copy a resource into given directory, creating no directory above target file.
+   */
+  public static File copyResourceToDirectoryFlat(
+      Class owningClass,
       String resourceName,
       File destinationDir
   ) {

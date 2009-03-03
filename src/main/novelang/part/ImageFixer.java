@@ -105,6 +105,8 @@ public class ImageFixer {
         try {
           newLocation = relocate( oldLocation ) ;
         } catch ( ImageFixerException e ) {
+          LOGGER.debug( "{} got exception: {}", // Just debug level, exception will raise later.
+              ClassUtils.getShortClassName( getClass() ), e.getMessage() ) ;
           problemCollector.collect( Problem.createProblem( e ) ) ;          
           return treepathToImage ; // Leave unchanged.
         }
