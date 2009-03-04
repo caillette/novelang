@@ -40,6 +40,7 @@ import java.util.List;
  * @author Laurent Caillette
  */
 public class ImageFixerTest {
+
   @Test
   public void noChange() {
     final ImageFixer pathRelocator =
@@ -90,11 +91,15 @@ public class ImageFixerTest {
         resultTree
     ) ;
   }
-  
+
+  /**
+   * In addition to tree content, this test verifies that SAX parser doesn't attempt
+   * to connect to a remote site when reading DTD at the start of SVG document.
+   */
   @Test
   public void replaceVectorImageInTree() {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
-    final ImageFixer pathRelocator =
+    final ImageFixer imageFixer =
         new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
 
     final SyntacticTree treeToAbsolutize = tree(
@@ -120,7 +125,9 @@ public class ImageFixerTest {
             )
         )
     ) ;
-    final SyntacticTree resultTree = pathRelocator.relocateResources( treeToAbsolutize );
+
+    final SyntacticTree resultTree = imageFixer.relocateResources( treeToAbsolutize );
+    
     Assert.assertFalse( problemCollector.hasProblem() ) ;
     assertEquals(
         expectedTree,
