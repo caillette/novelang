@@ -131,6 +131,7 @@ public class TestResources {
 
 
   public static final String IMAGES_DIRECTORY_NAME = "images" ;
+  public static final String IMAGES_SVG_DIRECTORY_NAME = IMAGES_DIRECTORY_NAME + "/svg" ;
 
   public static final String BLUE_128x64_GIF_NAME = "Blue-128x64.gif" ;
   public static final String GREEN_128x64_JPG_NAME = "Green-128x64.jpg" ;
@@ -138,13 +139,13 @@ public class TestResources {
   public static final String YELLOW_128x64_SVG_NAME = "Yellow-128x64.svg" ;
 
   public static final ResourceName IMAGE_BLUE_128x64_GIF =
-      new ResourceName( "images/" + BLUE_128x64_GIF_NAME ) ;
+      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + BLUE_128x64_GIF_NAME ) ;
   public static final ResourceName IMAGE_GREEN_128x64_JPG =
-      new ResourceName( "images/" + GREEN_128x64_JPG_NAME ) ;
+      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + GREEN_128x64_JPG_NAME ) ;
   public static final ResourceName IMAGE_RED_128x64_PNG =
-      new ResourceName( "images/" + RED_128x64_PNG_NAME ) ;
+      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + RED_128x64_PNG_NAME ) ;
   public static final ResourceName IMAGE_YELLOW_128x64_SVG =
-      new ResourceName( "images/" + YELLOW_128x64_SVG_NAME ) ;
+      new ResourceName( IMAGES_SVG_DIRECTORY_NAME + "/" + YELLOW_128x64_SVG_NAME ) ;
 
 
   public static void copyServedResources( File contentDirectory ) {

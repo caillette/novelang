@@ -149,7 +149,7 @@
   </xsl:template>  
 
   <xsl:template match="n:vector-image/n:resource-location" >
-    <object type="image/svg+xml" >
+    <object type="text/xml" > <!--type="image/svg+xml"-->
       <xsl:attribute name="data" ><xsl:value-of select="." /></xsl:attribute>
       <xsl:attribute name="width"><xsl:value-of select="../n:image-width"/></xsl:attribute>
       <xsl:attribute name="height"><xsl:value-of select="../n:image-height"/></xsl:attribute>
