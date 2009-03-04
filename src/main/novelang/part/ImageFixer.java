@@ -183,8 +183,12 @@ public class ImageFixer {
   }
 
   /**
-   * Extracts {@code /svg/@width} and {@code /svg/@height} from SVG file and puts them
-   * verbatim.
+   * Extracts {@code /svg/@width} and {@code /svg/@height} from SVG file and puts them verbatim.
+   * This implementation is highly unefficient. It parsers the whole SVG document and requires
+   * bundled SVG-related DTD (meaning a <em>lot</em> of files). 
+   * A <a href="http://www.extreme.indiana.edu/xgws/xsoap/xpp/" >pull</a> parser would do a 
+   * much better job.
+   * TODO use a pull parser.
    */
   private static Treepath< SyntacticTree > addVectorImageMetadata(
       Treepath< SyntacticTree > treepathToImage,
