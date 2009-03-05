@@ -25,12 +25,13 @@ import novelang.common.filefixture.Directory;
 import novelang.common.filefixture.Resource;
 
 /**
- * This class is used for testing {@link novelang.common.filefixture.FileFixture}.
+ * This interface is used for testing {@link novelang.common.filefixture.FileFixture}.
  * It doesn't register itself as we want let the tests chose the target directory.
  *
  * @author Laurent Caillette
  */
-public final class ResourceTree {
+public interface ResourceTree {
+  Directory dir = directory( "tree" ) ;
 
   interface D0 {
     Directory dir = directory( "d0" ) ;

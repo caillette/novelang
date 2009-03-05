@@ -17,6 +17,10 @@
 package novelang.common.filefixture;
 
 import java.io.File;
+import java.util.Map;
+
+import com.google.common.collect.Maps;
+import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
@@ -25,16 +29,42 @@ public class FileFixture {
 
   private FileFixture() { }
 
-  public static void register( File directory, Class structure ) {
+  private static Map< Class, RegisteredStructure > STRUCTURES  = Maps.newLinkedHashMap() ;
 
+  public static void register( File directory, Class declaration ) {
+    Preconditions.checkNotNull( declaration ) ;
+    Preconditions.checkNotNull( directory ) ;
+
+    synchronized( STRUCTURES ) {
+      if( STRUCTURES.get( declaration ) == null ) {
+        try {
+          final RegisteredStructure structure = new RegisteredStructure( declaration, directory ) ;
+          STRUCTURES.put( declaration, structure ) ;
+        } catch( DeclarationException e ) {
+          throw new RuntimeException( e ) ;
+        } catch( IllegalAccessException e ) {
+          throw new RuntimeException( e ) ;
+        }
+      } else {
+        throw new IllegalArgumentException( "Already registered: " + declaration ) ;
+      }
+    }
   }
 
   /**
    * Returns a {@link Directory} object representing all directories and resources inside
    * a registered class representing a hierarchical structure.
    */
-  public static Directory getAsDirectory( Class structure ) {
-    throw new UnsupportedOperationException( "getAsDirectory" ) ;
+  public static Directory getAsDirectory( Class declaration ) {
+    Preconditions.checkNotNull( declaration ) ;
+    final RegisteredStructure structure ;
+    synchronized( STRUCTURES ) {
+      structure = STRUCTURES.get( declaration ) ;
+    }
+    if( null == structure ) {
+      throw new IllegalArgumentException( "Not registered: " + declaration ) ;
+    }
+    return structure.getRootDirectory() ;
   }
 
   public static Directory directory( String name ) {

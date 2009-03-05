@@ -16,35 +16,23 @@
  */
 package novelang.common.filefixture;
 
-import java.lang.reflect.Field;
-
 /**
  * @author Laurent Caillette
  */
-public final class Resource implements Comparable< Resource > {
+public class DeclarationException extends Exception {
 
-  private final String name ;
-
-  protected Resource( String name ) {
-    this.name = name;
+  public DeclarationException() {
   }
 
-  public String getName() {
-    return name ;
+  public DeclarationException( String message ) {
+    super( message );
   }
 
-  public int compareTo( Resource other ) {
-    return name.compareTo( other.getName() ) ;
+  public DeclarationException( String message, Throwable cause ) {
+    super( message, cause );
   }
 
-  
-// ===============================================
-// Fields set when interpreting class declarations
-// ===============================================
-
-  private Field field ;
-
-  public void setField( Field field ) {
-    this.field = field ;
+  public DeclarationException( Throwable cause ) {
+    super( cause );
   }
 }

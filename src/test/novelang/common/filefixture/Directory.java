@@ -18,27 +18,59 @@ package novelang.common.filefixture;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * @author Laurent Caillette
  */
-public final class Directory {
+public final class Directory implements Comparable< Directory > {
   
   private final String name ;
+  private Class declaringClass ;
+  private List< Resource > resources = null ;
+  private List< Directory > directories = null ;
 
   protected Directory( String name ) {
     this.name = name;
   }
 
   public List< Directory > getSubdirectories() {
-    throw new UnsupportedOperationException( "getSubdirectories" ) ;
+    if( null == directories ) {
+      throw new IllegalStateException( "Not set: directories" ) ;
+    }
+    return directories ;
   }
 
   public List< Resource > getResources() {
-    throw new UnsupportedOperationException( "getResources" ) ;
+    if( null == resources ) {
+      throw new IllegalStateException( "No set: resources" ) ;
+    }
+    return resources ;
   }
-
 
   public String getName() {
-    throw new UnsupportedOperationException( "getName" ) ;
+    return name ;
   }
+
+  public int compareTo( Directory other ) {
+    return name.compareTo( other.getName() ) ;
+  }
+  
+// ===============================================
+// Fields set when interpreting class declarations
+// ===============================================
+
+  /*package*/ void setDirectories( List< Directory > directories ) {
+    this.directories = ImmutableList.copyOf( directories ) ;
+  }
+
+  /*package*/ void setResources( List< Resource > resources ) {
+    this.resources = ImmutableList.copyOf( resources )  ;
+  }
+
+  /*package*/ void setDeclaringClass( Class declaringClass ) {
+    this.declaringClass = declaringClass ;
+  }
+
+
 }

@@ -32,6 +32,7 @@ import novelang.common.filefixture.Resource;
 
 /**
  * Tests for {@link FileFixture}.
+ *
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
@@ -53,8 +54,8 @@ public class FileFixtureTest {
     final Directory d0 = tree.getSubdirectories().get( 0 ) ;
     final List< Resource > d0Resources = d0.getResources() ;
     assertEquals( 2, d0Resources.size() ) ;
-    assertEquals( "r.0.0.txt", d0Resources.get( 0 ).getName() ) ;
-    assertEquals( "r.0.1.txt", d0Resources.get( 0 ).getName() ) ;
+    assertEquals( "r0.0.txt", d0Resources.get( 0 ).getName() ) ;
+    assertEquals( "r0.1.txt", d0Resources.get( 1 ).getName() ) ;
     final List< Directory > d0Directories = d0.getSubdirectories() ;
     assertEquals( 2, d0Directories.size() ) ;
 
