@@ -18,7 +18,9 @@ package novelang.common.filefixture;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.ImmutableList;
+import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
@@ -29,9 +31,15 @@ public final class Directory implements Comparable< Directory > {
   private Class declaringClass ;
   private List< Resource > resources = null ;
   private List< Directory > directories = null ;
+  private String underlyingResourcePath = null ;
 
   protected Directory( String name ) {
+    Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
     this.name = name;
+  }
+
+  public boolean isInitialized() {
+    return null != declaringClass ;
   }
 
   public List< Directory > getSubdirectories() {
@@ -61,16 +69,30 @@ public final class Directory implements Comparable< Directory > {
 // ===============================================
 
   /*package*/ void setDirectories( List< Directory > directories ) {
+    if( null != this.directories ) {
+      throw new IllegalStateException( "Already set: directories" ) ;
+    }
     this.directories = ImmutableList.copyOf( directories ) ;
   }
 
   /*package*/ void setResources( List< Resource > resources ) {
+    if( null != this.resources ) {
+      throw new IllegalStateException( "Already set: resources" ) ;
+    }
     this.resources = ImmutableList.copyOf( resources )  ;
   }
 
   /*package*/ void setDeclaringClass( Class declaringClass ) {
+    if( null != this.declaringClass ) {
+      throw new IllegalStateException( "Already set: declaringClass" ) ;
+    }
     this.declaringClass = declaringClass ;
   }
 
-
+  /*package*/ void setUnderlyingResourcePath( String underlyingResourcePath ) {
+    if( null != this.underlyingResourcePath ) {
+      throw new IllegalStateException( "Already set: underlyingResourcePath" ) ;
+    }
+    this.underlyingResourcePath = underlyingResourcePath;
+  }
 }

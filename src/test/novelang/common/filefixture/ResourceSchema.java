@@ -16,44 +16,91 @@
  */
 package novelang.common.filefixture;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.MissingResourceException;
 import java.util.List;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import com.google.common.base.Preconditions;
 
 /**
- * Represents a hierarchical structure made out of a class or interface declaring
- * {@link Resource} and {@link Directory}.
+ * Transforms the hierarchical representation of resources into real files.
  *
  * @author Laurent Caillette
  */
-/*package*/ class RegisteredStructure {
+public final class ResourceSchema {
 
-  private final Directory rootDirectory;
-  private final File physicalDirectory ;
+  /**
+   * Factory method.
+   */
+  public static Directory directory( String name ) {
+    return new Directory( name ) ;
+  }
 
-  RegisteredStructure( Class declaringClass, File physicalDirectory )
-      throws DeclarationException, IllegalAccessException
+  /**
+   * Factory method.
+   */
+  public static Resource resource( String name ) {
+    return new Resource( name ) ;
+  }
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceSchema.class ) ;
+
+  private ResourceSchema() { }
+
+
+// ==============
+// Initialization
+// ==============
+
+  public static void initialize( Class declaration ) {
+    initialize( "", declaration ) ;
+  }
+
+  public static void initialize( String resourcePrefix, Class declaration ) {
+    Preconditions.checkNotNull( declaration ) ;
+    Preconditions.checkNotNull( resourcePrefix ) ;
+
+    try {
+      final Directory rootDirectory = makeDirectoryOfClass( declaration ) ;
+      checkUnderlyingResources( resourcePrefix, rootDirectory ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    } catch( DeclarationException e ) {
+      throw new RuntimeException( e );
+    } catch( IllegalAccessException e ) {
+      throw new RuntimeException( e );
+    }
+
+  }
+
+  private static void checkUnderlyingResources( String resourcePrefix, Directory directory )
+      throws MissingResourceException, IOException
   {
-    Preconditions.checkNotNull( declaringClass ) ;
-    Preconditions.checkNotNull( physicalDirectory ) ;
-    rootDirectory = makeDirectoryOfClass( declaringClass ) ;
-    this.physicalDirectory = physicalDirectory;
+    final String directoryPath = resourcePrefix + "/" + directory.getName() ;
+    directory.setUnderlyingResourcePath( directoryPath ) ;
+    for( Resource resource : directory.getResources() ) {
+      final String resourcePath = directoryPath + "/" + resource.getName() ;
+      final InputStream inputStream = ResourceSchema.class.getResourceAsStream( resourcePath ) ;
+      if( null == inputStream ) {
+        throw new MissingResourceException( resourcePath, ResourceSchema.class.getName(), "" ) ;
+      }
+      inputStream.close() ;
+      resource.setUnderlyingResourcePath( resourcePath ) ;
+      LOGGER.debug( "Verified: {}", resource.getUnderlyingResourcePath() ) ;
+    }
+    for( Directory subDirectory : directory.getSubdirectories() ) {
+      checkUnderlyingResources( directoryPath, subDirectory ) ;
+    }
   }
 
-  public Directory getRootDirectory() {
-    return rootDirectory;
-  }
-
-  public File getPhysicalDirectory() {
-    return physicalDirectory;
-  }
-
-  private Directory makeDirectoryOfClass( Class declaringClass )
+  private static Directory makeDirectoryOfClass( Class declaringClass )
       throws DeclarationException, IllegalAccessException
   {
     final Directory directory = findDirectoryObject( declaringClass ) ;
@@ -63,7 +110,7 @@ import com.google.common.base.Preconditions;
     return directory ;
   }
 
-  private List< Resource > findResources( Class declaringClass )
+  private static List< Resource > findResources( Class declaringClass )
       throws IllegalAccessException, DeclarationException
   {
     final List< Resource > resources = Lists.newArrayList() ;
@@ -72,14 +119,13 @@ import com.google.common.base.Preconditions;
       checkAllowed( field ) ;
       if( Resource.class.equals( field.getType() ) ) {
         final Resource resource = ( Resource ) field.get( null ) ;
-        resource.setField( field ) ;
         resources.add( resource ) ;
       }
     }
     return Ordering.natural().sortedCopy( resources ) ;
   }
 
-  private List< Directory > findDirectories( Class declaringClass )
+  private static List< Directory > findDirectories( Class declaringClass )
       throws IllegalAccessException, DeclarationException
   {
     final List< Directory > directories = Lists.newArrayList() ;
@@ -92,13 +138,13 @@ import com.google.common.base.Preconditions;
     return Ordering.natural().sortedCopy( directories ) ;
   }
 
-  private void checkAllowed( Class ynterface ) throws DeclarationException {
+  private static void checkAllowed( Class ynterface ) throws DeclarationException {
     if( ynterface.isAnonymousClass() ) {
       throw new DeclarationException( "Misses requirements: " + ynterface ) ;
     }
   }
 
-  private Directory findDirectoryObject( Class ynterface )
+  private static Directory findDirectoryObject( Class ynterface )
       throws DeclarationException, IllegalAccessException
   {
     final Field[] fields = ynterface.getDeclaredFields() ;
@@ -111,7 +157,8 @@ import com.google.common.base.Preconditions;
               Directory.class.getSimpleName() + " in " + ynterface.getName() ) ;
         } else {
           field.setAccessible( true ) ;
-          directory = ( Directory ) field.get( new novelang.common.filefixture.test.ResourceTree() {} ) ;
+          directory = ( Directory )
+              field.get( new novelang.common.filefixture.test.ResourceTree() {} ) ;
           found = true ;
         }
       }
@@ -123,13 +170,13 @@ import com.google.common.base.Preconditions;
     }
   }
 
-  private void checkAllowed( Field field ) throws DeclarationException {
+  private static void checkAllowed( Field field ) throws DeclarationException {
     final int modifiers = field.getModifiers() ;
     if( Modifier.isAbstract( modifiers )
      || Modifier.isNative( modifiers )
      || Modifier.isPrivate( modifiers )
      || Modifier.isProtected( modifiers )
-     || Modifier.isProtected( modifiers ) 
+     || Modifier.isProtected( modifiers )
     ) {
       throw new DeclarationException( "Field " + field + " has unsupported modifier" ) ;
     }

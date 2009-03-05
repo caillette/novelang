@@ -16,7 +16,11 @@
  */
 package novelang.common.filefixture;
 
+import java.io.InputStream;
 import java.lang.reflect.Field;
+
+import org.apache.commons.lang.StringUtils;
+import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
@@ -26,11 +30,19 @@ public final class Resource implements Comparable< Resource > {
   private final String name ;
 
   protected Resource( String name ) {
+    Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
     this.name = name;
   }
 
   public String getName() {
     return name ;
+  }
+
+  public String getUnderlyingResourcePath() {
+    if( null == underlyingResourcePath ) {
+      throw new IllegalStateException( "not set: underlyingResource" ) ;
+    }
+    return underlyingResourcePath;
   }
 
   public int compareTo( Resource other ) {
@@ -42,9 +54,16 @@ public final class Resource implements Comparable< Resource > {
 // Fields set when interpreting class declarations
 // ===============================================
 
-  private Field field ;
+  private String underlyingResourcePath = null ;
 
-  public void setField( Field field ) {
-    this.field = field ;
+  public void setUnderlyingResourcePath( String resourcePath ) {
+    if( null != this.underlyingResourcePath ) {
+      throw new IllegalStateException( "Already set: underlyingResourcePath" ) ;
+    }
+    this.underlyingResourcePath = resourcePath ;
+  }
+
+  public InputStream getInputStream() {
+    return getClass().getResourceAsStream( getUnderlyingResourcePath() );
   }
 }

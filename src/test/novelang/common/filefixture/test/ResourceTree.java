@@ -16,16 +16,13 @@
  */
 package novelang.common.filefixture.test;
 
-import java.io.File;
-
-import static novelang.common.filefixture.FileFixture.resource;
-import static novelang.common.filefixture.FileFixture.directory;
-import static novelang.common.filefixture.FileFixture.register;
 import novelang.common.filefixture.Directory;
 import novelang.common.filefixture.Resource;
+import static novelang.common.filefixture.ResourceSchema.directory;
+import static novelang.common.filefixture.ResourceSchema.resource;
 
 /**
- * This interface is used for testing {@link novelang.common.filefixture.FileFixture}.
+ * This interface is used for testing {@link novelang.common.filefixture.ResourceSchema}.
  * It doesn't register itself as we want let the tests chose the target directory.
  *
  * @author Laurent Caillette

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,22 +28,21 @@ import org.junit.runners.NameAwareTestClassRunner;
 import static junit.framework.Assert.assertEquals;
 import novelang.ScratchDirectoryFixture;
 import novelang.common.filefixture.Directory;
-import novelang.common.filefixture.FileFixture;
+import novelang.common.filefixture.Filer;
 import novelang.common.filefixture.Resource;
+import novelang.common.filefixture.ResourceSchema;
 
 /**
- * Tests for {@link FileFixture}.
+ * Tests for {@link novelang.common.filefixture.ResourceSchema}.
  *
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
-public class FileFixtureTest {
+public class ResourceSchemaTest {
 
   @Test
-  public void testCreateObjects() {
-    FileFixture.register( testDirectory, ResourceTree.class ) ;
-
-    final Directory tree = FileFixture.getAsDirectory( ResourceTree.class ) ;
+  public void objectCreation() {
+    final Directory tree = ResourceTree.dir ;
 
     final List< Resource > treeResources = tree.getResources() ;
     assertEquals( 0, treeResources.size() ) ;
@@ -61,6 +61,46 @@ public class FileFixtureTest {
 
   }
 
+  @Test
+  public void copyContentOk() throws IOException {
+
+    final Filer filer = new Filer( testDirectory ) ;
+    filer.copyContent( ResourceTree.dir ) ;
+
+    final File treeFile = testDirectory ;
+    assertTrue( "treeFile=" + treeFile.getAbsolutePath(), treeFile.exists() ) ;
+    assertTrue( treeFile.isDirectory() ) ;
+
+    final File d0File = new File( treeFile, "d0" ) ;
+    assertTrue( d0File.isDirectory() ) ;
+    assertTrue( d0File.exists() ) ;
+
+    final File r0_0File = new File( d0File, "r0.0.txt" ) ;
+    assertTrue( r0_0File.isFile() ) ;
+    assertTrue( r0_0File.exists() ) ;
+
+  }
+
+  @Test
+  public void copyOk() throws IOException {
+
+    final Filer filer = new Filer( testDirectory ) ;
+    filer.copy( ResourceTree.dir ) ;
+
+    final File treeFile = new File( testDirectory, ResourceTree.dir.getName() ) ;
+    assertTrue( "treeFile=" + treeFile.getAbsolutePath(), treeFile.exists() ) ;
+    assertTrue( treeFile.isDirectory() ) ;
+
+    final File d0File = new File( treeFile, "d0" ) ;
+    assertTrue( d0File.isDirectory() ) ;
+    assertTrue( d0File.exists() ) ;
+
+    final File r0_0File = new File( d0File, "r0.0.txt" ) ;
+    assertTrue( r0_0File.isFile() ) ;
+    assertTrue( r0_0File.exists() ) ;
+
+  }
+
 // =======
 // Fixture
 // =======
@@ -69,9 +109,15 @@ public class FileFixtureTest {
 
   @Before
   public void before() throws IOException {
-    final String testName = NameAwareTestClassRunner.getTestName() ;
+    final String testName = NameAwareTestClassRunner.getTestName();
     testDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory() ;
+
+    if( ! ResourceTree.dir.isInitialized() ) {
+      ResourceSchema.initialize( ResourceTree.class ) ;
+    }
+
   }
+
 
 
 }
