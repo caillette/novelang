@@ -123,7 +123,7 @@ not be part of the title itself.
 
 === Vector graphics
 
-This may not show in a Web browser which doesn't support SVG.
+Warning: some Web browsers miss SVG support.
 
 ./stars.svg
 
