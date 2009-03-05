@@ -25,7 +25,6 @@
   <!ENTITY usersGroup         "http://groups.google.com/group/novelang-users/topics" >
   <!ENTITY developersGroup    "http://groups.google.com/group/novelang-developers/topics" >
   <!ENTITY sourceforgeProject "http://sourceforge.net/projects/novelang" >
-  <!ENTITY sourceforgeJavadoc "http://novelang.sourceforge.net/javadoc" >
   <!ENTITY download           "http://sourceforge.net/project/showfiles.php?group_id=227480&amp;package_id=275418" >
   <!ENTITY github             "http://github.com/caillette/novelang/tree/master" >
   <!ENTITY pdfDocument        "http://novelang.sf.net/novelang.pdf" >
@@ -90,7 +89,6 @@
             <li><a href="&developersGroup;">Developers' list</a></li>
             <li><a href="&sourceforgeProject;">Sourceforge</a></li>
             <li><a href="&github;">Sources</a></li>
-            <li><a href="&sourceforgeJavadoc;">Javadoc</a></li>
             <li><a href="&download;">Download</a></li>
             <li><a href="&pdfDocument;">PDF</a></li>
             <li><a href="&license;">License</a></li>
