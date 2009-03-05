@@ -12,13 +12,14 @@ Keep informed reading the blog.
 
 === Version `0.21.0`
 
+--- Fixed: Book now display images correctly.
+
 --- Fixed: Safari 4 did not render SVG resources when referenced from HTML document.
 
 --- Fixed: HTML document now aware of SVG image dimension.
 
 --- Slight change: ``n:pixel-width`` and ``n:pixel-height`` become ``n:image-width`` and
 ``n:image-height``, with measure unit if available. For raster images, it is always ``px`` unit.
-
 
 
 === Version `0.21.0`
