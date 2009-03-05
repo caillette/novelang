@@ -111,7 +111,11 @@ public class ResourceHandler extends GenericHandler {
         }
 
         ( ( Request ) request ).setHandled( true ) ;
-        LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+        LOGGER.debug( 
+            "Handled request '{}' with content-type '{}'", 
+            request.getRequestURI(), 
+            contentType 
+        ) ;
         
       } catch( ResourceNotFoundException e ) {
         LOGGER.debug( "Could not serve {}", request.getRequestURI() ) ;

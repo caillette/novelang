@@ -21,6 +21,10 @@ import novelang.common.*;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
+import novelang.loader.ResourceLoader;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceName;
+import novelang.configuration.ConfigurationTools;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -29,6 +33,9 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
@@ -176,8 +183,12 @@ public class ImageFixer {
   }
 
   /**
-   * Extracts {@code /svg/@width} and {@code /svg/@height} from SVG file and puts them
-   * verbatim.
+   * Extracts {@code /svg/@width} and {@code /svg/@height} from SVG file and puts them verbatim.
+   * This implementation is highly unefficient. It parsers the whole SVG document and requires
+   * bundled SVG-related DTD (meaning a <em>lot</em> of files). 
+   * A <a href="http://www.extreme.indiana.edu/xgws/xsoap/xpp/" >pull</a> parser would do a 
+   * much better job.
+   * TODO use a pull parser.
    */
   private static Treepath< SyntacticTree > addVectorImageMetadata(
       Treepath< SyntacticTree > treepathToImage,
@@ -186,7 +197,8 @@ public class ImageFixer {
     LOGGER.debug( "Extracting vector image metadata from '{}'...", imageFile.getAbsolutePath() ) ;
 
     final SAXReader reader = new SAXReader() ;
-    final Document document = reader.read(imageFile.toURI().toURL() ) ;
+    reader.setEntityResolver( ENTITY_RESOLVER ) ;
+    final Document document = reader.read( imageFile.toURI().toURL() ) ;
     final Node svgNode = document.selectSingleNode( "/svg" ) ;
 
     if( null != svgNode ) {
@@ -291,4 +303,48 @@ public class ImageFixer {
       return height ;
     }
   }
+
+  /**
+   * This global variable is dirty.
+   * TODO propagate the {@code ResourceLoader} up to here.
+   */
+  private static final ResourceLoader ENTITY_RESOURCE_LOADER = 
+      new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
+
+  private static final String SVG11_PUBLICID_PREFIX_1 = "-//W3C//ENTITIES SVG 1.1" ;
+  private static final String SVG11_PUBLICID_PREFIX_2 = "-//W3C//DTD SVG 1.1" ;
+  private static final String SVG11_PUBLICID_PREFIX_3 = "-//W3C//ELEMENTS SVG 1.1" ;
+
+  /**
+   * This is the path under default {@value ConfigurationTools#BUNDLED_STYLE_DIR}.
+   */
+  private static final String SVG_1_1_DTD_RESOURCE_PREFIX = "svg11-dtd";
+
+  /**
+   * Dirty implementation only supporting DTD for SVG 1.1 in bundled style directory.
+   */
+  private static final EntityResolver ENTITY_RESOLVER = new EntityResolver() {
+    public InputSource resolveEntity( String publicId, String systemId ) 
+        throws SAXException, IOException 
+    {
+      if( publicId.startsWith( SVG11_PUBLICID_PREFIX_1 ) 
+       || publicId.startsWith( SVG11_PUBLICID_PREFIX_2 )  
+       || publicId.startsWith( SVG11_PUBLICID_PREFIX_3 )  
+      ) {
+        final String dtdResourceName = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
+        LOGGER.debug( 
+            "Attempting to load definition for publicIdentifier='" + publicId + "', " + 
+            "systemIdentifier='" + systemId + "', " +
+            "resourceName='" + dtdResourceName + "'"
+        ) ;
+        return new InputSource( 
+            ENTITY_RESOURCE_LOADER.getInputStream( 
+                new ResourceName( SVG_1_1_DTD_RESOURCE_PREFIX + "/" + dtdResourceName ) ) ) ;
+      } else {
+        throw new IllegalArgumentException( 
+            "Unsupported yet: public identifier='" + publicId + "', systemId='" + systemId + "'" ) ;
+      }
+    }
+  } ;
+  
 }
