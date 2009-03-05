@@ -124,9 +124,7 @@ public class Part extends AbstractSourceReader {
 
 
   /**
-   * This is just for 
-   * @param contentRoot
-   * @return
+   * This is just for not messing the constructor up with some marginal argument.
    */
   public Renderable relocateResourcePaths( File contentRoot ) {
     

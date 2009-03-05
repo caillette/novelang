@@ -151,6 +151,7 @@ public class DocumentProducer {
       ) ;
       return new Book(
           FunctionRegistry.getStandardRegistry(),
+          basedir,
           bookFile,
           defaultSourceCharset,
           suggestedRenderingCharset

@@ -43,6 +43,7 @@ import novelang.common.Problem;
 import novelang.common.SimpleTree;
 import novelang.common.StructureKind;
 import novelang.common.SyntacticTree;
+import novelang.common.Renderable;
 import novelang.common.tree.TreeTools;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
@@ -161,7 +162,7 @@ public class InsertFunction implements FunctionDefinition {
     final String fileName = urlAsString.substring( "file:".length() ) ; 
     final File insertedFile = fileName.startsWith( "/" ) ?
         new File( fileName ) :
-        new File( environment.getBaseDirectory(), fileName )
+        new File( environment.getBookDirectory(), fileName )
     ;
     if( options.contains( OPTION_RECURSE ) ) {
       return evaluateRecursive(
@@ -189,14 +190,17 @@ public class InsertFunction implements FunctionDefinition {
       boolean createChapter,
       String styleName
   ) {
-    final Part part;
+    final Part rawPart;
     try {
-      part = new Part( insertedFile ) ;
+      rawPart = new Part( insertedFile ) ;
     } catch( MalformedURLException e ) {
       return new FunctionCall.Result(
           environment, book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
     }
-    final SyntacticTree partTree = part.getDocumentTree() ;
+    final Renderable partWithRelocation =
+        rawPart.relocateResourcePaths( environment.getBaseDirectory() ) ;
+
+    final SyntacticTree partTree = partWithRelocation.getDocumentTree() ;
 
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
 
@@ -213,7 +217,7 @@ public class InsertFunction implements FunctionDefinition {
       }
     }
 
-    return new FunctionCall.Result( environment, book, part.getProblems() ) ;
+    return new FunctionCall.Result( environment, book, rawPart.getProblems() ) ;
   }
 
   private static SyntacticTree createStyleTree( String styleName ) {
@@ -245,7 +249,8 @@ public class InsertFunction implements FunctionDefinition {
           problems.add( Problem.createProblem( e ) ) ;
         }
         if( null != part && null != part.getDocumentTree() ) {
-          final SyntacticTree partTree = part.getDocumentTree() ;
+          final SyntacticTree partTree =
+              part.relocateResourcePaths( environment.getBaseDirectory() ).getDocumentTree() ;
 
           if( createChapter ) {
             book = createChapterFromPartFilename( book, partFile, partTree, styleTree );

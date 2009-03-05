@@ -29,8 +29,10 @@ import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.loader.ResourceName;
 import novelang.book.function.FunctionRegistry;
 import novelang.common.SyntacticTree;
+import novelang.common.scratch.filefixture.Resource;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
@@ -192,6 +194,7 @@ public class BookTest {
   }
 
 
+
   /**
    * Test {@link novelang.book.function.builtin.InsertFunction}.
    */
@@ -254,6 +257,7 @@ public class BookTest {
         getClass(), TestResources.SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
     TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
+
   }
 
 }

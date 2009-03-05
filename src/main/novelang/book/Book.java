@@ -36,6 +36,7 @@ import novelang.common.Problem;
 import novelang.common.SimpleTree;
 import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
+import novelang.common.FileTools;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.parser.NodeKind;
@@ -63,6 +64,7 @@ public class Book extends AbstractSourceReader {
     this(
         functionRegistry,
         baseDirectory,
+        baseDirectory,
         content,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING
@@ -78,8 +80,9 @@ public class Book extends AbstractSourceReader {
   ) throws IOException {
     this(
         functionRegistry,
+        bookFile.getParentFile(),
         bookFile,
-        DefaultCharset.SOURCE, 
+        DefaultCharset.SOURCE,
         DefaultCharset.RENDERING
     ) ;
   }
@@ -87,21 +90,35 @@ public class Book extends AbstractSourceReader {
   public Book(
       FunctionRegistry functionRegistry,
       File baseDirectory,
+      File bookDirectory,
       String content,
       Charset suggestedSourceCharset,
       Charset defaultRenderingCharset
   ) {
     super( suggestedSourceCharset, defaultRenderingCharset ) ;
+
+    Preconditions.checkArgument(
+        bookDirectory.isDirectory(),
+        "Should be a directory: '%s'",
+        bookDirectory
+    ) ;
+    Preconditions.checkArgument(
+        FileTools.isParentOfOrSameAs( baseDirectory, bookDirectory ),
+        "Base directory '%s' shoud be parent of book directory '%s'",
+        baseDirectory,
+        bookDirectory
+    ) ;
+
     final SyntacticTree rawTree = parse( new DefaultBookParserFactory(), content ) ;
     if( null == rawTree ) {
-      this.environment = new Environment( baseDirectory ) ;
+      this.environment = new Environment( baseDirectory, bookDirectory ) ;
       this.documentTree = null ;
     } else {
       final Iterable< FunctionCall > functionCalls =
           createFunctionCalls( functionRegistry, rawTree ) ;
       final Results results = callFunctions(
           functionCalls,
-          new Environment( baseDirectory ),
+          new Environment( baseDirectory, bookDirectory ),
           new SimpleTree( NodeKind.BOOK.name() )
       ) ;
       this.environment = results.environment ;
@@ -121,12 +138,14 @@ public class Book extends AbstractSourceReader {
 
   public Book(
       FunctionRegistry functionRegistry,
+      File baseDirectory,
       File bookFile,
       Charset suggestedSourceCharset,
       Charset suggestedRenderingCharset
   ) throws IOException {
     this(
         functionRegistry,
+        baseDirectory,
         bookFile.getParentFile(),
         IOUtils.toString( new FileInputStream( bookFile ) ),
         suggestedSourceCharset,

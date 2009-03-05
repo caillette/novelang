@@ -32,11 +32,13 @@ import novelang.rendering.RenditionMimeType;
 public final class Environment {
 
   private final File baseDirectory ;
+  private final File bookDirectory ;
   private final Map< RenditionMimeType, ResourceName > mappedStylesheets ;
   private final StylesheetMap stylesheetMap ;
 
   private Environment( Environment other ) {
     this.baseDirectory = other.baseDirectory ;
+    this.bookDirectory = other.bookDirectory ;
     this.mappedStylesheets = Maps.newHashMap( other.mappedStylesheets ) ;
     this.stylesheetMap = new StylesheetMap() {
       public ResourceName get( RenditionMimeType renditionMimeType ) {
@@ -47,12 +49,24 @@ public final class Environment {
 
   public Environment( File baseDirectory ) {
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
+    this.bookDirectory = baseDirectory ;
+    this.mappedStylesheets = Maps.newHashMap() ;
+    this.stylesheetMap = StylesheetMap.EMPTY_MAP ;
+  }
+
+  public Environment( File baseDirectory, File bookDirectory ) {
+    this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
+    this.bookDirectory = Preconditions.checkNotNull( bookDirectory ) ;
     this.mappedStylesheets = Maps.newHashMap() ;
     this.stylesheetMap = StylesheetMap.EMPTY_MAP ;
   }
 
   public File getBaseDirectory() {
     return baseDirectory;
+  }
+
+  public File getBookDirectory() {
+    return bookDirectory;
   }
 
   public Environment map( RenditionMimeType renditionMimeType, String stylesheetPath ) {
@@ -64,14 +78,6 @@ public final class Environment {
 
   public StylesheetMap getCustomStylesheets() {
     return stylesheetMap ;
-  }
-
-  public Environment addPart( Part part ) {
-    throw new UnsupportedOperationException( "addPart" ) ;
-  }
-
-  public Iterable< Part > getParts() {
-    throw new UnsupportedOperationException( "getPart" ) ;
   }
 
 }

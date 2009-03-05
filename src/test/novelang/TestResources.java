@@ -138,6 +138,11 @@ public class TestResources {
   public static final String RED_128x64_PNG_NAME = "Red-128x64.png" ;
   public static final String YELLOW_128x64_SVG_NAME = "Yellow-128x64.svg" ;
 
+  public static final String PART_WITH_IMAGE1_NAME = "images1.nlp" ;
+  public static final String PART_WITH_IMAGE2_NAME = "images2.nlp" ;
+  public static final String BOOK_WITH_IMAGES_EXPLICIT_NAME = "images-book-explicit.nlb" ;
+  public static final String BOOK_WITH_IMAGES_RECURSE_NAME = "images-book-recursive.nlb" ;
+
   public static final ResourceName IMAGE_BLUE_128x64_GIF =
       new ResourceName( IMAGES_DIRECTORY_NAME + "/" + BLUE_128x64_GIF_NAME ) ;
   public static final ResourceName IMAGE_GREEN_128x64_JPG =
@@ -147,8 +152,15 @@ public class TestResources {
   public static final ResourceName IMAGE_YELLOW_128x64_SVG =
       new ResourceName( IMAGES_OTHERS_DIRECTORY_NAME + "/" + YELLOW_128x64_SVG_NAME ) ;
 
-//  public static final String IMAGES_BOOK = 
-  
+  public static final ResourceName PART_WITH_IMAGE1 =
+      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + PART_WITH_IMAGE1_NAME ) ;
+  public static final ResourceName PART_WITH_IMAGE2 =
+      new ResourceName( IMAGES_OTHERS_DIRECTORY_NAME + "/" + PART_WITH_IMAGE2_NAME ) ;
+  public static final ResourceName BOOK_WITH_IMAGES_EXPLICIT =
+      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + BOOK_WITH_IMAGES_EXPLICIT_NAME ) ;
+  public static final ResourceName BOOK_WITH_IMAGES_RECURSE =
+      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + BOOK_WITH_IMAGES_RECURSE_NAME ) ;
+
 
   public static void copyServedResources( File contentDirectory ) {
     TestResourceTools.copyResourceToDirectory(
