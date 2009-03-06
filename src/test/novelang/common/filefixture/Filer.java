@@ -19,14 +19,20 @@ package novelang.common.filefixture;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Iterables;
 
 /**
+ * Performs filesystem-oriented operations on {@link Resource} and {@link Directory}.
+ *
  * @author Laurent Caillette
  */
 public class Filer {
@@ -50,7 +56,11 @@ public class Filer {
    */
   public void copy( Directory directory ) {
     final File target = createPhysicalDirectory( physicalTargetDirectory, directory.getName() ) ;
-    copyTo( directory, target ) ;
+    try {
+      copyTo( directory, target ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
   }
 
   /**
@@ -58,7 +68,11 @@ public class Filer {
    * @param directory a non-null object.
    */
   public void copyContent( Directory directory ) {
-    copyTo( directory, physicalTargetDirectory ) ;
+    try {
+      copyTo( directory, physicalTargetDirectory ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
   }
 
   /**
@@ -66,25 +80,29 @@ public class Filer {
    * @param directory a non-null object.
    * @param physicalTargetDirectory a non-null object representing an existing directory.
    */
-  private static void copyTo( Directory directory, File physicalTargetDirectory ) {
-
+  private static void copyTo( Directory directory, File physicalTargetDirectory )
+      throws IOException
+  {
     for( Directory subdirectory : directory.getSubdirectories() ) {
       final File physicalDirectory =
           createPhysicalDirectory( physicalTargetDirectory, subdirectory.getName() ) ;
       copyTo( subdirectory, physicalDirectory ) ;
     }
     for( Resource resource : directory.getResources() ) {
-      final File physicalFile = new File( physicalTargetDirectory, resource.getName() ) ;
-      try {
-        final FileOutputStream fileOutputStream = new FileOutputStream( physicalFile ) ;
-        IOUtils.copy( resource.getInputStream(), fileOutputStream ) ;
-        fileOutputStream.flush() ;
-        fileOutputStream.close() ;
-      } catch( IOException e ) {
-        throw new RuntimeException( "Should not happen", e ) ;
-      }
+      copyTo( resource, physicalTargetDirectory ) ;
     }
   }
+
+  private static void copyTo( Resource resource, File physicalTargetDirectory )
+      throws IOException
+  {
+    final File physicalFile = new File( physicalTargetDirectory, resource.getName() ) ;
+    final FileOutputStream fileOutputStream = new FileOutputStream( physicalFile ) ;
+    IOUtils.copy( resource.getInputStream(), fileOutputStream ) ;
+    fileOutputStream.flush() ;
+    fileOutputStream.close() ;
+  }
+
 
   private static File createPhysicalDirectory( File physicalParentDirectory, String name ) {
     final File physicalDirectory = new File( physicalParentDirectory, name ) ;
@@ -101,25 +119,58 @@ public class Filer {
    * Copies given node to some target directory, retaining directory hierarchy above, up to the
    * {@param scope} directory (included).
    * <pre>
-copyScoped( ResourceTree.D0_1, ResourceTree.D0_1_0_0 )
+copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
 
-tree                                 somewhere
- +-- d0                               +-- d0.1
-      +-- d0.0                             +-- d0.1.0
-           +-- r0.0.0.txt                       +-- r0.1.0.0.txt
-scope >    +-- d0.1              -->
-                +-- r0.1.0.txt
-target >        +-- d0.1.0
-                     +-- r0.1.0.0.txt
++ tree                     -->     + somewhere
+  + d0                                 + d0.1
+    + d0.0               result >        + d0.1.0
+        r0.0.0.txt                           r0.1.0.0.txt
+    + d0.1             < scope
+        r0.1.0.txt
+      + d0.1.0         < target
+          r0.1.0.0.txt
      </pre>
-   * @param scope
-   * @param node
-   * @return
+   * @param scope a non-null object.
+   * @param origin a non-null object.
+   * @return a {@code File} object referencing the node to copy.
    */
-  public File copyScoped( Directory scope, SchemaNode node ) {
+  public File copyScoped( Directory scope, Directory origin ) {
+    
+    Preconditions.checkArgument( ResourceSchema.isParentOf( scope, origin ) ) ;
+    final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
 
+    reverseParentHierarchy.add( ( Directory ) origin ) ;
 
-    throw new UnsupportedOperationException( "copyScoped" ) ;
+    Directory parent = origin.getParent() ;
+    while( true ) {
+      if( scope == parent ) {
+        break ;
+      } else {
+        reverseParentHierarchy.add( parent ) ;
+        parent = parent.getParent() ;
+      }
+    }
+
+    final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
+
+    File result = null ;
+    File target = physicalTargetDirectory ;
+    for( Directory directory : parentHierarchy ) {
+      target = createPhysicalDirectory( target, directory.getName() ) ;
+      if( origin == directory ) {
+        result = target ;
+      }
+    }
+    try {
+      copyTo( origin, target ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+
+    if( null == result ) {
+      throw new IllegalStateException( "Ooops!" ) ;
+    }
+    return result ;
   }
 
 

@@ -99,7 +99,20 @@ public class ResourceSchemaTest {
 
   @Test
   public void copyScoped() throws IOException {
-    new Filer( testDirectory ).copyScoped( ResourceTree.D0.dir, ResourceTree.D0.D0_1.dir ) ;
+    final File scoped = new Filer( testDirectory ).
+        copyScoped( ResourceTree.D0.dir, ResourceTree.D0.D0_1.D0_1_0.dir ) ;
+    assertTrue( scoped.exists() ) ;
+    assertEquals( testDirectory.getAbsolutePath() + "/d0.1/d0.1.0", scoped.getAbsolutePath() ) ;
+
+    final File d0_1 = new File( testDirectory, "d0.1" ) ;
+    final File d0_1_0 = new File( d0_1, "d0.1.0" ) ;
+    final File r0_1_0_0 = new File( d0_1_0, "r0.1.0.0.txt" ) ;
+
+    assertTrue( d0_1.exists() ) ;
+    assertEquals( 1, d0_1.listFiles().length ) ;
+    assertTrue( d0_1_0.exists() ) ;
+    assertEquals( 1, d0_1_0.listFiles().length ) ;
+    assertTrue( r0_1_0_0.exists() ) ;
   }
 
 // =======

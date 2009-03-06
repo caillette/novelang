@@ -204,7 +204,7 @@ public final class ResourceSchema {
    * @param maybeParent a non-null object.
    * @param maybeChild a non-null object.
    */
-  public static boolean isParentOf( Directory maybeParent, Directory maybeChild ) {
+  public static boolean isParentOf( Directory maybeParent, SchemaNode maybeChild ) {
     Preconditions.checkNotNull( maybeParent ) ;
     Preconditions.checkNotNull( maybeChild ) ;
     return maybeParentOfOrSameAs( maybeParent, maybeChild.getParent() ) ;
