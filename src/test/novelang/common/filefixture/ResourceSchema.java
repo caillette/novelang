@@ -18,10 +18,10 @@ package novelang.common.filefixture;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.MissingResourceException;
-import java.util.List;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.MissingResourceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +86,7 @@ public final class ResourceSchema {
     final String directoryPath = resourcePrefix + "/" + directory.getName() ;
     directory.setUnderlyingResourcePath( directoryPath ) ;
     for( Resource resource : directory.getResources() ) {
+      resource.setParent( directory ) ;
       final String resourcePath = directoryPath + "/" + resource.getName() ;
       final InputStream inputStream = ResourceSchema.class.getResourceAsStream( resourcePath ) ;
       if( null == inputStream ) {
@@ -96,6 +97,7 @@ public final class ResourceSchema {
       LOGGER.debug( "Verified: {}", resource.getUnderlyingResourcePath() ) ;
     }
     for( Directory subDirectory : directory.getSubdirectories() ) {
+      subDirectory.setParent( directory ) ;
       checkUnderlyingResources( directoryPath, subDirectory ) ;
     }
   }
@@ -119,6 +121,7 @@ public final class ResourceSchema {
       checkAllowed( field ) ;
       if( Resource.class.equals( field.getType() ) ) {
         final Resource resource = ( Resource ) field.get( null ) ;
+        resource.setDeclaringClass( declaringClass ) ;
         resources.add( resource ) ;
       }
     }
@@ -187,6 +190,46 @@ public final class ResourceSchema {
       return ;
     } else {
       throw new DeclarationException( "Field " + field + " misses one modifier or more" ) ;
+    }
+  }
+
+// =================
+// Various utilities
+// =================
+
+  /**
+   * Returns true if {@code maybeParent} is one of the parents of {@code maybeChild}, false
+   * otherwise.
+   *
+   * @param maybeParent a non-null object.
+   * @param maybeChild a non-null object.
+   */
+  public static boolean isParentOf( Directory maybeParent, Directory maybeChild ) {
+    Preconditions.checkNotNull( maybeParent ) ;
+    Preconditions.checkNotNull( maybeChild ) ;
+    return maybeParentOfOrSameAs( maybeParent, maybeChild.getParent() ) ;
+  }
+
+  /**
+   * Returns true if {@code maybeParent} is one of the parent of {@code maybeChild},
+   * or if it is the same object as  {@code maybeChild}.
+   *
+   * @param maybeParent a non-null object.
+   * @param maybeChild a non-null object.
+   */
+  public static boolean isParentOfOrSameAs( Directory maybeParent, SchemaNode maybeChild ) {
+    Preconditions.checkNotNull( maybeParent ) ;
+    Preconditions.checkNotNull( maybeChild ) ;
+    return maybeParentOfOrSameAs( maybeParent, maybeChild ) ;
+  }
+
+  private static boolean maybeParentOfOrSameAs( Directory maybeParent, SchemaNode maybeChild ) {
+    if( null == maybeChild ) {
+      return false ;
+    } else if( maybeChild == maybeParent ) {
+      return true ;
+    } else {
+      return maybeParentOfOrSameAs( maybeParent, maybeChild.getParent() ) ;
     }
   }
 }

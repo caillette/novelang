@@ -18,28 +18,19 @@ package novelang.common.filefixture;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.ImmutableList;
-import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
  */
-public final class Directory implements Comparable< Directory > {
-  
-  private final String name ;
-  private Class declaringClass ;
+public final class Directory extends SchemaNode implements Comparable< Directory > {
+
   private List< Resource > resources = null ;
   private List< Directory > directories = null ;
   private String underlyingResourcePath = null ;
 
   protected Directory( String name ) {
-    Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
-    this.name = name;
-  }
-
-  public boolean isInitialized() {
-    return null != declaringClass ;
+    super( name );
   }
 
   public List< Directory > getSubdirectories() {
@@ -56,12 +47,11 @@ public final class Directory implements Comparable< Directory > {
     return resources ;
   }
 
-  public String getName() {
-    return name ;
-  }
-
+  /**
+   * Comparison occurs on {@link #getName()} as corresponding member is set at instantiation.
+   */
   public int compareTo( Directory other ) {
-    return name.compareTo( other.getName() ) ;
+    return getName().compareTo( other.getName() ) ;
   }
   
 // ===============================================
@@ -82,17 +72,12 @@ public final class Directory implements Comparable< Directory > {
     this.resources = ImmutableList.copyOf( resources )  ;
   }
 
-  /*package*/ void setDeclaringClass( Class declaringClass ) {
-    if( null != this.declaringClass ) {
-      throw new IllegalStateException( "Already set: declaringClass" ) ;
-    }
-    this.declaringClass = declaringClass ;
-  }
-
   /*package*/ void setUnderlyingResourcePath( String underlyingResourcePath ) {
     if( null != this.underlyingResourcePath ) {
       throw new IllegalStateException( "Already set: underlyingResourcePath" ) ;
     }
     this.underlyingResourcePath = underlyingResourcePath;
   }
+
+
 }

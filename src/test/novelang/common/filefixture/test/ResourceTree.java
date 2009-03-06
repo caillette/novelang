@@ -43,6 +43,11 @@ public interface ResourceTree {
     interface D0_1 {
       Directory dir = directory( "d0.1" ) ;
       Resource R0_1_0 = resource( "r0.1.0.txt" ) ;
+
+      interface D0_1_0 {
+        Directory dir = directory( "d0.1.0" ) ;
+        Resource R0_1_0_0 = resource( "r0.1.0.0.txt" ) ;
+      }
     }
 
   }

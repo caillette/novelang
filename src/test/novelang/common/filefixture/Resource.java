@@ -17,25 +17,14 @@
 package novelang.common.filefixture;
 
 import java.io.InputStream;
-import java.lang.reflect.Field;
-
-import org.apache.commons.lang.StringUtils;
-import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
  */
-public final class Resource implements Comparable< Resource > {
-
-  private final String name ;
+public final class Resource extends SchemaNode implements Comparable< Resource > {
 
   protected Resource( String name ) {
-    Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
-    this.name = name;
-  }
-
-  public String getName() {
-    return name ;
+    super( name ) ;
   }
 
   public String getUnderlyingResourcePath() {
@@ -45,8 +34,11 @@ public final class Resource implements Comparable< Resource > {
     return underlyingResourcePath;
   }
 
+  /**
+   * Comparison occurs on {@link #getName()} as corresponding member is set at instantiation.
+   */
   public int compareTo( Resource other ) {
-    return name.compareTo( other.getName() ) ;
+    return getName().compareTo( other.getName() ) ;
   }
 
   

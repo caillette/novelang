@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,60 +45,61 @@ public class ResourceSchemaTest {
     final Directory tree = ResourceTree.dir ;
 
     final List< Resource > treeResources = tree.getResources() ;
+    assertTrue( tree.isInitialized() ) ;
+    assertNull( tree.getParent() ) ;
     assertEquals( 0, treeResources.size() ) ;
     final List< Directory > treeDirectories = tree.getSubdirectories() ;
     assertEquals( 2, treeDirectories.size() ) ;
-    assertEquals( "d0", treeDirectories.get( 0 ).getName() ) ;
-    assertEquals( "d1", treeDirectories.get( 1 ).getName() ) ;
 
     final Directory d0 = tree.getSubdirectories().get( 0 ) ;
+    assertTrue( d0.isInitialized() ) ;
+    assertSame( tree, d0.getParent() ) ;
+    assertEquals( "d0", d0.getName() ) ;
     final List< Resource > d0Resources = d0.getResources() ;
     assertEquals( 2, d0Resources.size() ) ;
-    assertEquals( "r0.0.txt", d0Resources.get( 0 ).getName() ) ;
-    assertEquals( "r0.1.txt", d0Resources.get( 1 ).getName() ) ;
+
+    final Resource r0_0 = d0Resources.get( 0 );
+    assertTrue( r0_0.isInitialized() ) ;
+    assertSame( d0, r0_0.getParent() ) ;
+    assertEquals( "r0.0.txt", r0_0.getName() ) ;
+
+    final Resource r0_1 = d0Resources.get( 1 );
+    assertTrue( r0_0.isInitialized() ) ;
+    assertSame( d0, r0_1.getParent() ) ;
+    assertEquals( "r0.1.txt", r0_1.getName() ) ;
     final List< Directory > d0Directories = d0.getSubdirectories() ;
     assertEquals( 2, d0Directories.size() ) ;
 
   }
 
   @Test
+  public void parenthood() {
+    assertTrue( ResourceSchema.isParentOf( ResourceTree.dir, ResourceTree.D0.dir ) ) ;
+    assertTrue( ResourceSchema.isParentOf( ResourceTree.dir, ResourceTree.D0.D0_1.dir ) ) ;
+    assertTrue( ResourceSchema.isParentOfOrSameAs( ResourceTree.dir, ResourceTree.dir ) ) ;
+    assertTrue( ResourceSchema.isParentOfOrSameAs( ResourceTree.dir, ResourceTree.D0.dir ) ) ;
+    assertFalse( ResourceSchema.isParentOfOrSameAs( ResourceTree.D0.dir, ResourceTree.dir ) ) ;
+    assertFalse( ResourceSchema.isParentOfOrSameAs( ResourceTree.D0.dir, ResourceTree.D1.dir ) ) ;
+    assertTrue( ResourceSchema.isParentOfOrSameAs( ResourceTree.dir, ResourceTree.D0.R0_0 ) ) ;
+  }
+
+  @Test
   public void copyContentOk() throws IOException {
-
-    final Filer filer = new Filer( testDirectory ) ;
-    filer.copyContent( ResourceTree.dir ) ;
-
+    new Filer( testDirectory ).copyContent( ResourceTree.dir ) ;
     final File treeFile = testDirectory ;
-    assertTrue( "treeFile=" + treeFile.getAbsolutePath(), treeFile.exists() ) ;
-    assertTrue( treeFile.isDirectory() ) ;
-
-    final File d0File = new File( treeFile, "d0" ) ;
-    assertTrue( d0File.isDirectory() ) ;
-    assertTrue( d0File.exists() ) ;
-
-    final File r0_0File = new File( d0File, "r0.0.txt" ) ;
-    assertTrue( r0_0File.isFile() ) ;
-    assertTrue( r0_0File.exists() ) ;
-
+    verifyContent( treeFile ) ;
   }
 
   @Test
   public void copyOk() throws IOException {
-
-    final Filer filer = new Filer( testDirectory ) ;
-    filer.copy( ResourceTree.dir ) ;
-
+    new Filer( testDirectory ).copy( ResourceTree.dir ) ;
     final File treeFile = new File( testDirectory, ResourceTree.dir.getName() ) ;
-    assertTrue( "treeFile=" + treeFile.getAbsolutePath(), treeFile.exists() ) ;
-    assertTrue( treeFile.isDirectory() ) ;
+    verifyContent( treeFile ) ;
+  }
 
-    final File d0File = new File( treeFile, "d0" ) ;
-    assertTrue( d0File.isDirectory() ) ;
-    assertTrue( d0File.exists() ) ;
-
-    final File r0_0File = new File( d0File, "r0.0.txt" ) ;
-    assertTrue( r0_0File.isFile() ) ;
-    assertTrue( r0_0File.exists() ) ;
-
+  @Test
+  public void copyScoped() throws IOException {
+    new Filer( testDirectory ).copyScoped( ResourceTree.D0.dir, ResourceTree.D0.D0_1.dir ) ;
   }
 
 // =======
@@ -116,6 +117,19 @@ public class ResourceSchemaTest {
       ResourceSchema.initialize( ResourceTree.class ) ;
     }
 
+  }
+
+  private void verifyContent( File treeFile ) {
+    assertTrue( "treeFile=" + treeFile.getAbsolutePath(), treeFile.exists() ) ;
+    assertTrue( treeFile.isDirectory() ) ;
+
+    final File d0File = new File( treeFile, "d0" ) ;
+    assertTrue( d0File.isDirectory() ) ;
+    assertTrue( d0File.exists() ) ;
+
+    final File r0_0File = new File( d0File, "r0.0.txt" ) ;
+    assertTrue( r0_0File.isFile() ) ;
+    assertTrue( r0_0File.exists() ) ;
   }
 
 

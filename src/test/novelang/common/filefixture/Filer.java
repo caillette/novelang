@@ -53,6 +53,10 @@ public class Filer {
     copyTo( directory, target ) ;
   }
 
+  /**
+   * Copies the content of the given {@code directory} into the {@code physicalTargetDirectory}.
+   * @param directory a non-null object.
+   */
   public void copyContent( Directory directory ) {
     copyTo( directory, physicalTargetDirectory ) ;
   }
@@ -93,7 +97,30 @@ public class Filer {
     return physicalDirectory ;
   }
 
-  public void copyScoped( Directory scope, Resource resource ) {
+  /**
+   * Copies given node to some target directory, retaining directory hierarchy above, up to the
+   * {@param scope} directory (included).
+   * <pre>
+copyScoped( ResourceTree.D0_1, ResourceTree.D0_1_0_0 )
+
+tree                                 somewhere
+ +-- d0                               +-- d0.1
+      +-- d0.0                             +-- d0.1.0
+           +-- r0.0.0.txt                       +-- r0.1.0.0.txt
+scope >    +-- d0.1              -->
+                +-- r0.1.0.txt
+target >        +-- d0.1.0
+                     +-- r0.1.0.0.txt
+     </pre>
+   * @param scope
+   * @param node
+   * @return
+   */
+  public File copyScoped( Directory scope, SchemaNode node ) {
+
+
     throw new UnsupportedOperationException( "copyScoped" ) ;
   }
+
+
 }
