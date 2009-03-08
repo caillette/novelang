@@ -24,6 +24,8 @@ import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.Filer;
+import novelang.common.filefixture.ResourceSchema;
+import novelang.common.filefixture.Relativizer;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEquals;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -70,12 +72,12 @@ public class ImageFixerTest {
         PART, 
         tree( 
             PARAGRAPH_REGULAR,
-            tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE_UNDER_PARENT ) )
+            tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, RESOURCE_UNDER_PARENT ) )
         
         ) 
     ) ;
     
-    final String expectedAbsoluteResourceLocation = "/" + RESOURCE_UNDER_PARENT;
+    final String expectedAbsoluteResourceLocation = RESOURCE_UNDER_PARENT;
     
     final SyntacticTree expectedTree = tree( 
         PART, 
@@ -111,12 +113,19 @@ public class ImageFixerTest {
         PART,
         tree(
             PARAGRAPH_REGULAR,
-            tree( VECTOR_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE_UNDER_GRANDCHILD ) )
+            tree( 
+                VECTOR_IMAGE, 
+                tree( 
+                    RESOURCE_LOCATION, 
+                    RESOURCE_UNDER_GRANDCHILD_RELATIVE_TO_ITSELF 
+                ) 
+            )
 
         )
     ) ;
 
-    final String expectedAbsoluteResourceLocation = "/" + RESOURCE_UNDER_GRANDCHILD;
+    final String expectedAbsoluteResourceLocation = 
+        RESOURCE_UNDER_GRANDCHILD_ABSOLUTE_TO_ITSELF ; 
 
     final SyntacticTree expectedTree = tree(
         PART,
@@ -165,7 +174,7 @@ public class ImageFixerTest {
     justRelocate(
         childDirectory, 
         childDirectory,
-        ( "../" + RESOURCE_UNDER_PARENT ) // This one exists above, but should be forbidden!
+        ( ".." + RESOURCE_UNDER_PARENT ) // This one exists above, but should be forbidden!
     ) ;
   }
   
@@ -181,80 +190,80 @@ public class ImageFixerTest {
   @Test
   public void absoluteFromBaseToBase() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT,
+        RESOURCE_UNDER_PARENT,
         parentDirectory,
         parentDirectory,
-        "/" + RESOURCE_UNDER_PARENT
+        RESOURCE_UNDER_PARENT
     ) ;
   }
 
   @Test
   public void relativeFromBaseToBase() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT,
+        RESOURCE_UNDER_PARENT,
         parentDirectory,
         parentDirectory,
-        "./" + RESOURCE_UNDER_PARENT
+        "." + RESOURCE_UNDER_PARENT
     ) ;
   }
 
   @Test
   public void absoluteFromChildToChild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD,
+        RESOURCE_UNDER_CHILD,
         parentDirectory, 
         childDirectory, 
-        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD 
+        RESOURCE_UNDER_CHILD 
     ) ;
   }
 
   @Test
   public void relativeFromChildToChild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD,
+        RESOURCE_UNDER_CHILD,
         parentDirectory, 
         childDirectory, 
-        "./" + RESOURCE_UNDER_CHILD
+        RESOURCE_UNDER_CHILD_RELATIVE_TO_ITSELF
     ) ;
   }
 
   @Test
   public void absoluteFromChildToGrandchild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD,
+        RESOURCE_UNDER_GRANDCHILD,
         parentDirectory, 
         childDirectory, 
-        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD 
+        RESOURCE_UNDER_GRANDCHILD 
     ) ;
   }
 
   @Test
   public void relativeFromChildToGrandchild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD,
+        RESOURCE_UNDER_GRANDCHILD,
         parentDirectory, 
         childDirectory, 
-        "./" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD
+        RESOURCE_UNDER_GRANDCHILD
     ) ;
   }
 
   @Test
   public void relativeFromChildToParent() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT,
+        RESOURCE_UNDER_PARENT,
         parentDirectory, 
         childDirectory, 
-        "../" + RESOURCE_UNDER_PARENT
+        ".." + RESOURCE_UNDER_PARENT
     ) ;
   }
 
   @Test
   public void absoluteFromChildToParent() throws ImageFixerException {
     check(
-        "/" + RESOURCE_UNDER_PARENT,
+        RESOURCE_UNDER_PARENT,
         parentDirectory, 
         childDirectory, 
-        "/" + RESOURCE_UNDER_PARENT
+        RESOURCE_UNDER_PARENT
     ) ;
   }
 
@@ -268,14 +277,26 @@ public class ImageFixerTest {
     initialize() ;    
   }
 
-  private static final String RESOURCE_UNDER_PARENT = Images.RED_PNG.getName();
-  private static final String RESOURCE_UNDER_CHILD = Images.Child.BLUE_GIF.getName();
-  private static final String RESOURCE_UNDER_GRANDCHILD = 
-      Images.Child.Grandchild.YELLOW_SVG.getName();
-  
-  private static final String CHILD_NAME = Images.Child.dir.getName() ;
-  private static final String GRANDCHILD_NAME = Images.Child.Grandchild.dir.getName() ;
+  private static final String RESOURCE_UNDER_PARENT ;
 
+  private static final String RESOURCE_UNDER_CHILD ;
+
+  private static final String RESOURCE_UNDER_GRANDCHILD ;
+
+  static {
+    final Relativizer relativizer = ResourceSchema.relativizer( Images.dir ) ;
+    RESOURCE_UNDER_PARENT = relativizer.apply( Images.RED_PNG ) ;
+    RESOURCE_UNDER_CHILD = relativizer.apply( Images.Child.BLUE_GIF ) ;
+    RESOURCE_UNDER_GRANDCHILD = relativizer.apply( Images.Child.Grandchild.YELLOW_SVG ) ;
+  }
+
+  private static final String RESOURCE_UNDER_CHILD_RELATIVE_TO_ITSELF = 
+      "./" + Images.Child.BLUE_GIF.getName() ;
+  private static final String RESOURCE_UNDER_GRANDCHILD_RELATIVE_TO_ITSELF =
+      "./" + Images.Child.Grandchild.YELLOW_SVG.getName() ;
+  private static final String RESOURCE_UNDER_GRANDCHILD_ABSOLUTE_TO_ITSELF =
+      "/" + Images.Child.Grandchild.YELLOW_SVG.getName() ;
+  
   private static final String RASTER_IMAGE_WIDTH = Images.RASTER_IMAGE_WIDTH ;
   private static final String RASTER_IMAGE_HEIGHT = Images.RASTER_IMAGE_HEIGHT ;
   private static final String VECTOR_IMAGE_WIDTH = Images.VECTOR_IMAGE_WIDTH ;

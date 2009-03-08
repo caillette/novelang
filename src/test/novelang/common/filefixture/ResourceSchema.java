@@ -234,6 +234,25 @@ public final class ResourceSchema {
     Preconditions.checkNotNull( maybeChild ) ;
     return maybeParentOfOrSameAs( maybeParent, maybeChild ) ;
   }
+  
+  public static Relativizer relativizer( Directory newParent ) {
+    return new Relativizer( newParent ) ;
+  }
+
+  @Deprecated
+  public static String relativizeResourcePath( Directory parent, SchemaNode child ) {
+    Preconditions.checkNotNull( parent ) ;
+    Preconditions.checkNotNull( child ) ;
+    final String parentPath = parent.getUnderlyingResourcePath();
+    final String childPath = child.getUnderlyingResourcePath();
+    Preconditions.checkArgument( 
+        childPath.startsWith( parentPath ),
+        "Parent path '%s' does not contain '%s'",
+        parentPath,
+        childPath
+    ) ;
+    return childPath.substring( parentPath.length() ) ;
+  }
 
   private static boolean maybeParentOfOrSameAs( Directory maybeParent, SchemaNode maybeChild ) {
     if( null == maybeChild ) {

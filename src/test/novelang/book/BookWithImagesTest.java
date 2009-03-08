@@ -17,12 +17,12 @@
 package novelang.book;
 
 import novelang.ScratchDirectoryFixture;
-import novelang.TestResourceTree;
-import static novelang.TestResourceTree.initialize;
 import static novelang.TestResourceTree.Images;
+import static novelang.TestResourceTree.initialize;
 import novelang.book.function.FunctionRegistry;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.Filer;
+import static novelang.common.filefixture.ResourceSchema.relativizeResourcePath;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -121,32 +121,46 @@ public class BookWithImagesTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( BookWithImagesTest.class ) ;
 
+  private static final String VECTOR_IMAGE_WIDTH = Images.VECTOR_IMAGE_WIDTH ;
+  private static final String VECTOR_IMAGE_HEIGHT = Images.VECTOR_IMAGE_HEIGHT ;
+  private static final String RASTER_IMAGE_WIDTH = Images.RASTER_IMAGE_WIDTH ;
+  private static final String RASTER_IMAGE_HEIGHT = Images.RASTER_IMAGE_HEIGHT ;
+
+  private static final String RESOURCE_PATH_YELLOW = 
+      relativizeResourcePath( Images.dir, Images.Child.Grandchild.YELLOW_SVG ) ;
+  private static final String RESOURCE_PATH_GREEN = 
+      relativizeResourcePath( Images.dir, Images.GREEN_JPG ) ;
+  private static final String RESOURCE_PATH_BLUE = 
+      relativizeResourcePath( Images.dir, Images.Child.BLUE_GIF ) ;
+  private static final String RESOURCE_PATH_RED = 
+      relativizeResourcePath( Images.dir, Images.RED_PNG ) ;
+  
   private static final SyntacticTree EXPECTED_BOOK_TREE = tree(
       BOOK,
       tree( _META, tree( _WORD_COUNT, "0" ) ),
       tree(
           VECTOR_IMAGE,
-          tree( RESOURCE_LOCATION, "/child/grandchild/Yellow-128x64.svg" ),
-          tree( _IMAGE_WIDTH, "128mm" ),
-          tree( _IMAGE_HEIGHT, "64mm" )
+          tree( RESOURCE_LOCATION, RESOURCE_PATH_YELLOW ),
+          tree( _IMAGE_WIDTH, VECTOR_IMAGE_WIDTH ),
+          tree( _IMAGE_HEIGHT, VECTOR_IMAGE_HEIGHT )
       ),
       tree(
           RASTER_IMAGE,
-          tree( RESOURCE_LOCATION, "/Green-128x64.jpg" ),
-          tree( _IMAGE_WIDTH, "128px" ),
-          tree( _IMAGE_HEIGHT, "64px" )
+          tree( RESOURCE_LOCATION, RESOURCE_PATH_GREEN ),
+          tree( _IMAGE_WIDTH, RASTER_IMAGE_WIDTH ),
+          tree( _IMAGE_HEIGHT, RASTER_IMAGE_HEIGHT )
       ),
       tree(
           RASTER_IMAGE,
-          tree( RESOURCE_LOCATION, "/child/Blue-128x64.gif" ),
-          tree( _IMAGE_WIDTH, "128px" ),
-          tree( _IMAGE_HEIGHT, "64px" )
+          tree( RESOURCE_LOCATION, RESOURCE_PATH_BLUE ),
+          tree( _IMAGE_WIDTH, RASTER_IMAGE_WIDTH ),
+          tree( _IMAGE_HEIGHT, RASTER_IMAGE_HEIGHT )
       ),
       tree(
           RASTER_IMAGE,
-          tree( RESOURCE_LOCATION, "/Red-128x64.png" ),
-          tree( _IMAGE_WIDTH, "128px" ),
-          tree( _IMAGE_HEIGHT, "64px" )
+          tree( RESOURCE_LOCATION, RESOURCE_PATH_RED ),
+          tree( _IMAGE_WIDTH, RASTER_IMAGE_WIDTH ),
+          tree( _IMAGE_HEIGHT, RASTER_IMAGE_HEIGHT )
       )
   ) ;
 
