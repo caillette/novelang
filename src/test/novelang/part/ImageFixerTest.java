@@ -35,6 +35,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -272,18 +274,15 @@ public class ImageFixerTest {
 // =======  
 // Fixture
 // =======
-  
-  static {
-    initialize() ;    
-  }
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( ImageFixerTest.class ) ;
 
   private static final String RESOURCE_UNDER_PARENT ;
-
   private static final String RESOURCE_UNDER_CHILD ;
-
   private static final String RESOURCE_UNDER_GRANDCHILD ;
 
   static {
+    initialize() ;
     final Relativizer relativizer = ResourceSchema.relativizer( Images.dir ) ;
     RESOURCE_UNDER_PARENT = relativizer.apply( Images.RED_PNG ) ;
     RESOURCE_UNDER_CHILD = relativizer.apply( Images.Child.BLUE_GIF ) ;
@@ -320,43 +319,27 @@ public class ImageFixerTest {
 
   
 
-  public ImageFixerTest() throws IOException {
-
-  }
-
-  private class ListProblemCollector implements ProblemCollector {
-    
-    private final List< Problem > problems = Lists.newArrayList() ;
-
-    public void collect( Problem problem ) {
-      problems.add( problem ) ;
-    }
-    
-    public Problem[] getProblems() {
-      return problems.toArray( new Problem[ problems.size() ] ) ;
-    }
-
-    public boolean hasProblem() {
-      return ! problems.isEmpty() ;
-    }
-
-    @Override
-    public String toString() {
-      return problems.toString() ;
-    }
-  }
-  
-  private void check( 
+  private void check(
       final String expectedRelativeResourceName,
       final File baseDirectory,
       final File referrerDirectory,
       final String resourceNameRelativeToReferrer
   ) throws ImageFixerException {
+    
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
     final ImageFixer pathRelocator = new ImageFixer(
         baseDirectory, referrerDirectory, problemCollector ) ;
     final String actualRelativeResourceName = 
         pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
+
+    LOGGER.info(
+        "Checking...\n" +
+        "  baseDirectory='" + baseDirectory + "'\n" +
+        "  referrerDirectory='" + referrerDirectory + "'\n" +
+        "  resourceNameRelativeToReferrer='" + resourceNameRelativeToReferrer+ "'\n" +
+        "  expectedRelativeResourceName='" + expectedRelativeResourceName + "'"
+    ) ;
+
     Assert.assertEquals( expectedRelativeResourceName, actualRelativeResourceName ) ;
     Assert.assertEquals( 0, problemCollector.getProblems().length ) ;    
   }
@@ -371,4 +354,28 @@ public class ImageFixerTest {
         baseDirectory, referrerDirectory, problemCollector ) ;
     pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
   }
+
+  private class ListProblemCollector implements ProblemCollector {
+
+    private final List< Problem > problems = Lists.newArrayList() ;
+
+    public void collect( Problem problem ) {
+      problems.add( problem ) ;
+    }
+
+    public Problem[] getProblems() {
+      return problems.toArray( new Problem[ problems.size() ] ) ;
+    }
+
+    public boolean hasProblem() {
+      return ! problems.isEmpty() ;
+    }
+
+    @Override
+    public String toString() {
+      return problems.toString() ;
+    }
+  }
+
+
 }

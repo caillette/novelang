@@ -22,6 +22,8 @@ import static novelang.TestResourceTree.initialize;
 import novelang.book.function.FunctionRegistry;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.Filer;
+import novelang.common.filefixture.Relativizer;
+import novelang.common.filefixture.ResourceSchema;
 import static novelang.common.filefixture.ResourceSchema.relativizeResourcePath;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
@@ -95,8 +97,19 @@ public class BookWithImagesTest {
 // Fixture
 // =======
 
+  private static final String RESOURCE_PATH_YELLOW ;
+  private static final String RESOURCE_PATH_GREEN ;
+  private static final String RESOURCE_PATH_BLUE ;
+  private static final String RESOURCE_PATH_RED ;
+
   static {
-    initialize() ;    
+    initialize() ;
+    final Relativizer relativizer = ResourceSchema.relativizer( Images.dir ) ;
+    RESOURCE_PATH_YELLOW = relativizer.apply( Images.Child.Grandchild.YELLOW_SVG ) ;
+    RESOURCE_PATH_GREEN = relativizer.apply( Images.GREEN_JPG ) ;
+    RESOURCE_PATH_BLUE = relativizer.apply( Images.Child.BLUE_GIF ) ;
+    RESOURCE_PATH_RED = relativizer.apply( Images.RED_PNG ) ;
+
   }
 
   
@@ -126,15 +139,6 @@ public class BookWithImagesTest {
   private static final String RASTER_IMAGE_WIDTH = Images.RASTER_IMAGE_WIDTH ;
   private static final String RASTER_IMAGE_HEIGHT = Images.RASTER_IMAGE_HEIGHT ;
 
-  private static final String RESOURCE_PATH_YELLOW = 
-      relativizeResourcePath( Images.dir, Images.Child.Grandchild.YELLOW_SVG ) ;
-  private static final String RESOURCE_PATH_GREEN = 
-      relativizeResourcePath( Images.dir, Images.GREEN_JPG ) ;
-  private static final String RESOURCE_PATH_BLUE = 
-      relativizeResourcePath( Images.dir, Images.Child.BLUE_GIF ) ;
-  private static final String RESOURCE_PATH_RED = 
-      relativizeResourcePath( Images.dir, Images.RED_PNG ) ;
-  
   private static final SyntacticTree EXPECTED_BOOK_TREE = tree(
       BOOK,
       tree( _META, tree( _WORD_COUNT, "0" ) ),

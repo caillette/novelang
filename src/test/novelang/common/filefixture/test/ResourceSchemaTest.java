@@ -160,10 +160,7 @@ public class ResourceSchemaTest {
   public void relativizeResourcePath() {
     assertEquals( 
         "/d0.1/d0.1.0",
-        ResourceSchema.relativizeResourcePath( 
-            ResourceTree.D0.dir, 
-            ResourceTree.D0.D0_1.D0_1_0.dir 
-        ) 
+        ResourceSchema.relativizer(  ResourceTree.D0.dir ).apply( ResourceTree.D0.D0_1.D0_1_0.dir )
     ) ; 
   }
 
