@@ -27,6 +27,7 @@ import com.google.common.base.Preconditions;
   private Directory parent ;
   private final String name ;
   private Class declaringClass ;
+  private String underlyingResourcePath = null ;
 
   protected SchemaNode( String name ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
@@ -54,5 +55,19 @@ import com.google.common.base.Preconditions;
       throw new IllegalStateException( "Already set: declaringClass" ) ;
     }
     this.declaringClass = declaringClass ;
+  }
+
+  public String getUnderlyingResourcePath() {
+    if( null == underlyingResourcePath ) {
+      throw new IllegalStateException( "not set: underlyingResource" ) ;
+    }
+    return underlyingResourcePath;
+  }
+
+  public void setUnderlyingResourcePath( String resourcePath ) {
+    if( null != this.underlyingResourcePath ) {
+      throw new IllegalStateException( "Already set: underlyingResourcePath" ) ;
+    }
+    this.underlyingResourcePath = resourcePath ;
   }
 }

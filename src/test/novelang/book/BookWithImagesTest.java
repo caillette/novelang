@@ -16,26 +16,27 @@
  */
 package novelang.book;
 
-import java.io.IOException;
-import java.io.File;
-
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.runners.NameAwareTestClassRunner;
-import org.junit.runner.RunWith;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTree;
+import static novelang.TestResourceTree.initialize;
+import static novelang.TestResourceTree.Images;
 import novelang.book.function.FunctionRegistry;
 import novelang.common.SyntacticTree;
+import novelang.common.filefixture.Filer;
+import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import static novelang.parser.NodeKind.*;
-import novelang.loader.ResourceName;
-import novelang.TestResources;
-import novelang.TestResourceTools;
-import novelang.ScratchDirectoryFixture;
 import novelang.system.DefaultCharset;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Tests for {@link Book} with embedded images.
@@ -94,15 +95,11 @@ public class BookWithImagesTest {
 // Fixture
 // =======
 
-  private static final ResourceName IMAGE_RED = TestResources.IMAGE_RED_128x64_PNG ;
-  private static ResourceName IMAGE_GREEN = TestResources.IMAGE_GREEN_128x64_JPG ;
-  private static ResourceName IMAGE_BLUE = TestResources.IMAGE_BLUE_128x64_GIF ;
-  private static ResourceName IMAGE_YELLOW = TestResources.IMAGE_YELLOW_128x64_SVG ;
-  private static ResourceName PART_1 = TestResources.PART_WITH_IMAGE1 ;
-  private static ResourceName PART_2 = TestResources.PART_WITH_IMAGE2 ;
-  private static ResourceName BOOK_WITH_IMAGES_EXPLICIT = TestResources.BOOK_WITH_IMAGES_EXPLICIT;
-  private static ResourceName BOOK_WITH_IMAGES_RECURSE = TestResources.BOOK_WITH_IMAGES_RECURSE ;
+  static {
+    initialize() ;    
+  }
 
+  
   private File testDirectory ;
   private File bookWithImagesExplicit;
   private File bookWithImagesRecurse ;
@@ -110,20 +107,16 @@ public class BookWithImagesTest {
   @Before
   public void before() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    LOGGER.info( "Test name doesn't work inside IDEA-7.0.3: {}", testName ) ;
     testDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory() ;
 
-    TestResourceTools.copyResourceToDirectory( getClass(), PART_1, testDirectory ) ;
-    TestResourceTools.copyResourceToDirectory( getClass(), PART_2, testDirectory ) ;
-    TestResourceTools.copyResourceToDirectory( getClass(), IMAGE_BLUE, testDirectory ) ;
-    TestResourceTools.copyResourceToDirectory( getClass(), IMAGE_GREEN, testDirectory ) ;
-    TestResourceTools.copyResourceToDirectory( getClass(), IMAGE_RED, testDirectory ) ;
-    TestResourceTools.copyResourceToDirectory( getClass(), IMAGE_YELLOW, testDirectory ) ;
-    TestResourceTools.copyResourceToDirectory( getClass(), BOOK_WITH_IMAGES_EXPLICIT, testDirectory ) ;
-    TestResourceTools.copyResourceToDirectory( getClass(), BOOK_WITH_IMAGES_RECURSE, testDirectory ) ;
-
-    bookWithImagesExplicit = new File( testDirectory, BOOK_WITH_IMAGES_EXPLICIT.getName() ) ;
-    bookWithImagesRecurse = new File( testDirectory, BOOK_WITH_IMAGES_RECURSE.getName() ) ;
+    final Filer filer = new Filer( testDirectory ) ;
+    filer.copyContent( Images.dir ) ;
+        
+    bookWithImagesExplicit = filer.createFileObject( Images.dir, Images.BOOK_EXPLICIT ) ;
+    bookWithImagesRecurse = filer.createFileObject( Images.dir, Images.BOOK_RECURSIVE ) ;
+    
+    LOGGER.info( "bookWithImagesExplicit: {}", bookWithImagesExplicit );
+    LOGGER.info( "bookWithImagesRecurse: {}", bookWithImagesRecurse );
   }
 
   private static final Logger LOGGER = LoggerFactory.getLogger( BookWithImagesTest.class ) ;
@@ -132,31 +125,30 @@ public class BookWithImagesTest {
       BOOK,
       tree( _META, tree( _WORD_COUNT, "0" ) ),
       tree(
-          RASTER_IMAGE,
-          tree( RESOURCE_LOCATION, "/images/others/Red-128x64.png" ),
-          tree( _IMAGE_WIDTH, "128px" ),
-          tree( _IMAGE_HEIGHT, "64px" )
-      ),
-      tree(
-          RASTER_IMAGE,
-          tree( RESOURCE_LOCATION, "/images/Green-128x64.jpg" ),
-          tree( _IMAGE_WIDTH, "128px" ),
-          tree( _IMAGE_HEIGHT, "64px" )
-      ),
-      tree(
           VECTOR_IMAGE,
-          tree( RESOURCE_LOCATION, "/images/others/Yellow-128x64.svg" ),
+          tree( RESOURCE_LOCATION, "/child/grandchild/Yellow-128x64.svg" ),
           tree( _IMAGE_WIDTH, "128mm" ),
           tree( _IMAGE_HEIGHT, "64mm" )
       ),
       tree(
           RASTER_IMAGE,
-          tree( RESOURCE_LOCATION, "/images/Blue-128x64.gif" ),
+          tree( RESOURCE_LOCATION, "/Green-128x64.jpg" ),
+          tree( _IMAGE_WIDTH, "128px" ),
+          tree( _IMAGE_HEIGHT, "64px" )
+      ),
+      tree(
+          RASTER_IMAGE,
+          tree( RESOURCE_LOCATION, "/child/Blue-128x64.gif" ),
+          tree( _IMAGE_WIDTH, "128px" ),
+          tree( _IMAGE_HEIGHT, "64px" )
+      ),
+      tree(
+          RASTER_IMAGE,
+          tree( RESOURCE_LOCATION, "/Red-128x64.png" ),
           tree( _IMAGE_WIDTH, "128px" ),
           tree( _IMAGE_HEIGHT, "64px" )
       )
-  )
-      ;
+  ) ;
 
 
 }

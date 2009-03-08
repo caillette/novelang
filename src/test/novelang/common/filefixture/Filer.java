@@ -37,9 +37,6 @@ import com.google.common.collect.Iterables;
  */
 public class Filer {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( Filer.class ) ;
-
-
   public static final int TIMEOUT_SECONDS = 5 ;
 
   private final File physicalTargetDirectory ;
@@ -93,7 +90,7 @@ public class Filer {
     }
   }
 
-  private static void copyTo( Resource resource, File physicalTargetDirectory )
+  private static File copyTo( Resource resource, File physicalTargetDirectory )
       throws IOException
   {
     final File physicalFile = new File( physicalTargetDirectory, resource.getName() ) ;
@@ -101,6 +98,7 @@ public class Filer {
     IOUtils.copy( resource.getInputStream(), fileOutputStream ) ;
     fileOutputStream.flush() ;
     fileOutputStream.close() ;
+    return physicalFile ;
   }
 
 
@@ -114,18 +112,133 @@ public class Filer {
     }
     return physicalDirectory ;
   }
+  
+  public File createFileObject( Directory scope, SchemaNode node ) {
+    Preconditions.checkArgument( 
+        ResourceSchema.isParentOfOrSameAs( scope, node ),
+        "Directory '%s' expected to be parent of '%s'",
+        scope.getUnderlyingResourcePath(),
+        node.getUnderlyingResourcePath()
+    ) ;
+    final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
+
+    if ( node != scope ) {
+      Directory parent = node.getParent() ;
+      while( true ) {
+        if( null == parent ) {
+          break ;
+        } else {
+          if( scope == parent ) {
+//            reverseParentHierarchy.add( parent ) ;
+            break ;
+          } else {
+            reverseParentHierarchy.add( parent ) ;
+            parent = parent.getParent() ;
+          }
+        }
+      }
+    }
+
+    File result = physicalTargetDirectory ;
+    final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
+    for( Directory directory : parentHierarchy ) {
+      result = new File( result, directory.getName() ) ;
+    }
+    result = new File( result, node.getName() ) ;
+    return result ;
+    
+  }
+  
+  public File createFileObject( SchemaNode node ) {
+    
+    final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
+
+    Directory parent = node.getParent() ;
+    
+    while( true ) {
+      if( null == parent ) {
+        break ;
+      } else {
+        reverseParentHierarchy.add( parent ) ;
+        parent = parent.getParent() ;
+      }
+    }
+
+    File result = physicalTargetDirectory ;
+    final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
+    for( Directory directory : parentHierarchy ) {
+      result = new File( result, directory.getName() ) ;
+    }
+    result = new File( result, node.getName() ) ;
+    return result ;
+  }
+  
+  
+  /**
+   * Copies given resource to some target directory, retaining directory hierarchy above, up to the
+   * {@param scope} directory (included).
+   * <pre>
+copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
+
++ tree                     -->     + somewhere
+  + d0                 < scope         + d0.1
+    + d0.0                               + d0.1.0
+        r0.0.0.txt       result >            r0.1.0.0.txt
+    + d0.1             
+        r0.1.0.txt
+      + d0.1.0         
+          r0.1.0.0.txt < target
+     </pre>
+   * @param scope a non-null object.
+   * @param resource a non-null resource under {@code scope}.
+   * @return a {@code File} object referencing the node to copy.
+   */
+  public File copyScoped( Directory scope, Resource resource ) {
+    Preconditions.checkArgument( ResourceSchema.isParentOf( scope, resource ) ) ;
+    final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
+
+    Directory parent = resource.getParent() ;
+    
+    while( true ) {
+      if( scope == parent ) {
+        break ;
+      } else {
+        reverseParentHierarchy.add( parent ) ;
+        parent = parent.getParent() ;
+      }
+    }
+
+    final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
+
+    File result = null ;
+    File target = physicalTargetDirectory ;
+    for( Directory directory : parentHierarchy ) {
+      target = createPhysicalDirectory( target, directory.getName() ) ;
+    }
+
+    try {
+      result = copyTo( resource, target ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+
+    return result ;
+    
+  }
+  
+  
 
   /**
-   * Copies given node to some target directory, retaining directory hierarchy above, up to the
+   * Copies given directory to some target directory, retaining directory hierarchy above, up to the
    * {@param scope} directory (included).
    * <pre>
 copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
 
 + tree                     -->     + somewhere
   + d0                                 + d0.1
-    + d0.0               result >        + d0.1.0
+    + d0.0         < scope   result >     + d0.1.0
         r0.0.0.txt                           r0.1.0.0.txt
-    + d0.1             < scope
+    + d0.1            
         r0.1.0.txt
       + d0.1.0         < target
           r0.1.0.0.txt
@@ -139,7 +252,7 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
     Preconditions.checkArgument( ResourceSchema.isParentOf( scope, origin ) ) ;
     final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
 
-    reverseParentHierarchy.add( ( Directory ) origin ) ;
+    reverseParentHierarchy.add( origin ) ;
 
     Directory parent = origin.getParent() ;
     while( true ) {

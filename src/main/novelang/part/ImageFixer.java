@@ -65,7 +65,7 @@ public class ImageFixer {
       ProblemCollector problemCollector 
   ) {
     Preconditions.checkNotNull( baseDirectory ) ;
-    Preconditions.checkArgument( baseDirectory.exists() ) ;
+    Preconditions.checkArgument( baseDirectory.exists(), "Does not exist: '%s'", baseDirectory ) ;
     Preconditions.checkArgument( baseDirectory.isDirectory() ) ;
     Preconditions.checkNotNull( referrerDirectory ) ;
     Preconditions.checkArgument( referrerDirectory.exists() ) ;

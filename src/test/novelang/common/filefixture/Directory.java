@@ -27,7 +27,6 @@ public final class Directory extends SchemaNode implements Comparable< Directory
 
   private List< Resource > resources = null ;
   private List< Directory > directories = null ;
-  private String underlyingResourcePath = null ;
 
   protected Directory( String name ) {
     super( name );
@@ -70,13 +69,6 @@ public final class Directory extends SchemaNode implements Comparable< Directory
       throw new IllegalStateException( "Already set: resources" ) ;
     }
     this.resources = ImmutableList.copyOf( resources )  ;
-  }
-
-  /*package*/ void setUnderlyingResourcePath( String underlyingResourcePath ) {
-    if( null != this.underlyingResourcePath ) {
-      throw new IllegalStateException( "Already set: underlyingResourcePath" ) ;
-    }
-    this.underlyingResourcePath = underlyingResourcePath;
   }
 
 

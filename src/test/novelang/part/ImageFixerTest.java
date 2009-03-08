@@ -18,17 +18,21 @@ package novelang.part ;
 
 import com.google.common.collect.Lists;
 import novelang.ScratchDirectoryFixture;
-import novelang.TestResources;
-import novelang.TestResourceTools;
+import static novelang.TestResourceTree.Images;
+import static novelang.TestResourceTree.initialize;
 import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;
+import novelang.common.filefixture.Filer;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEquals;
 import static novelang.parser.antlr.TreeFixture.tree;
-import static org.junit.Assert.assertSame;
-import org.junit.Test;
 import org.junit.Assert;
+import static org.junit.Assert.assertSame;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +43,7 @@ import java.util.List;
  * 
  * @author Laurent Caillette
  */
+@RunWith( value = NameAwareTestClassRunner.class )
 public class ImageFixerTest {
 
   @Test
@@ -65,12 +70,12 @@ public class ImageFixerTest {
         PART, 
         tree( 
             PARAGRAPH_REGULAR,
-            tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE1_UNDER_PARENT_NAME ) )
+            tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE_UNDER_PARENT ) )
         
         ) 
     ) ;
     
-    final String expectedAbsoluteResourceLocation = "/" + RESOURCE1_UNDER_PARENT_NAME;
+    final String expectedAbsoluteResourceLocation = "/" + RESOURCE_UNDER_PARENT;
     
     final SyntacticTree expectedTree = tree( 
         PART, 
@@ -79,13 +84,13 @@ public class ImageFixerTest {
             tree( 
                 RASTER_IMAGE, 
                 tree( RESOURCE_LOCATION, expectedAbsoluteResourceLocation ),
-                tree( _IMAGE_WIDTH, IMAGE_WIDTH + "px" ),
-                tree( _IMAGE_HEIGHT, IMAGE_HEIGHT + "px" )
+                tree( _IMAGE_WIDTH, RASTER_IMAGE_WIDTH ),
+                tree( _IMAGE_HEIGHT, RASTER_IMAGE_HEIGHT )
             )
         ) 
     ) ;
     final SyntacticTree resultTree = pathRelocator.relocateResources( treeToAbsolutize );
-    Assert.assertFalse( problemCollector.hasProblem() ) ;
+    Assert.assertFalse( "" + problemCollector, problemCollector.hasProblem() ) ;
     assertEquals(
         expectedTree,
         resultTree
@@ -93,25 +98,25 @@ public class ImageFixerTest {
   }
 
   /**
-   * In addition to tree content, this test verifies that SAX parser doesn't attempt
-   * to connect to a remote site when reading DTD at the start of SVG document.
+   * In addition to tree content, this test verifies that SVG document is parsed
+   * (which includes some entity loading).
    */
   @Test
   public void replaceVectorImageInTree() {
     final ListProblemCollector problemCollector = new ListProblemCollector() ;
     final ImageFixer imageFixer =
-        new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
+        new ImageFixer( grandChildDirectory, grandChildDirectory, problemCollector ) ;
 
     final SyntacticTree treeToAbsolutize = tree(
         PART,
         tree(
             PARAGRAPH_REGULAR,
-            tree( VECTOR_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE2_UNDER_PARENT_NAME ) )
+            tree( VECTOR_IMAGE, tree( RESOURCE_LOCATION, "./" + RESOURCE_UNDER_GRANDCHILD ) )
 
         )
     ) ;
 
-    final String expectedAbsoluteResourceLocation = "/" + RESOURCE2_UNDER_PARENT_NAME;
+    final String expectedAbsoluteResourceLocation = "/" + RESOURCE_UNDER_GRANDCHILD;
 
     final SyntacticTree expectedTree = tree(
         PART,
@@ -120,15 +125,15 @@ public class ImageFixerTest {
             tree(
                 VECTOR_IMAGE,
                 tree( RESOURCE_LOCATION, expectedAbsoluteResourceLocation ),
-                tree( _IMAGE_WIDTH, IMAGE_WIDTH + "mm" ),
-                tree( _IMAGE_HEIGHT, IMAGE_HEIGHT + "mm" )
+                tree( _IMAGE_WIDTH, VECTOR_IMAGE_WIDTH ),
+                tree( _IMAGE_HEIGHT, VECTOR_IMAGE_HEIGHT )
             )
         )
     ) ;
 
     final SyntacticTree resultTree = imageFixer.relocateResources( treeToAbsolutize );
     
-    Assert.assertFalse( problemCollector.hasProblem() ) ;
+    Assert.assertFalse( "" + problemCollector, problemCollector.hasProblem() ) ;
     assertEquals(
         expectedTree,
         resultTree
@@ -160,7 +165,7 @@ public class ImageFixerTest {
     justRelocate(
         childDirectory, 
         childDirectory,
-        ( "../" + RESOURCE1_UNDER_PARENT_NAME ) // This one exists above, but should be forbidden!
+        ( "../" + RESOURCE_UNDER_PARENT ) // This one exists above, but should be forbidden!
     ) ;
   }
   
@@ -176,80 +181,80 @@ public class ImageFixerTest {
   @Test
   public void absoluteFromBaseToBase() throws ImageFixerException {
     check(
-        "/" + RESOURCE1_UNDER_PARENT_NAME,
+        "/" + RESOURCE_UNDER_PARENT,
         parentDirectory,
         parentDirectory,
-        "/" + RESOURCE1_UNDER_PARENT_NAME
+        "/" + RESOURCE_UNDER_PARENT
     ) ;
   }
 
   @Test
   public void relativeFromBaseToBase() throws ImageFixerException {
     check(
-        "/" + RESOURCE1_UNDER_PARENT_NAME,
+        "/" + RESOURCE_UNDER_PARENT,
         parentDirectory,
         parentDirectory,
-        "./" + RESOURCE1_UNDER_PARENT_NAME
+        "./" + RESOURCE_UNDER_PARENT
     ) ;
   }
 
   @Test
   public void absoluteFromChildToChild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME,
+        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD,
         parentDirectory, 
         childDirectory, 
-        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME 
+        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD 
     ) ;
   }
 
   @Test
   public void relativeFromChildToChild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD_NAME,
+        "/" + CHILD_NAME + "/" + RESOURCE_UNDER_CHILD,
         parentDirectory, 
         childDirectory, 
-        "./" + RESOURCE_UNDER_CHILD_NAME 
+        "./" + RESOURCE_UNDER_CHILD
     ) ;
   }
 
   @Test
   public void absoluteFromChildToGrandchild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME,
+        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD,
         parentDirectory, 
         childDirectory, 
-        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME 
+        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD 
     ) ;
   }
 
   @Test
   public void relativeFromChildToGrandchild() throws ImageFixerException {
     check(
-        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME,
+        "/" + CHILD_NAME + "/" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD,
         parentDirectory, 
         childDirectory, 
-        "./" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD_NAME 
+        "./" + GRANDCHILD_NAME + "/" + RESOURCE_UNDER_GRANDCHILD
     ) ;
   }
 
   @Test
   public void relativeFromChildToParent() throws ImageFixerException {
     check(
-        "/" + RESOURCE1_UNDER_PARENT_NAME,
+        "/" + RESOURCE_UNDER_PARENT,
         parentDirectory, 
         childDirectory, 
-        "../" + RESOURCE1_UNDER_PARENT_NAME
+        "../" + RESOURCE_UNDER_PARENT
     ) ;
   }
 
   @Test
   public void absoluteFromChildToParent() throws ImageFixerException {
     check(
-        "/" + RESOURCE1_UNDER_PARENT_NAME,
+        "/" + RESOURCE_UNDER_PARENT,
         parentDirectory, 
         childDirectory, 
-        "/" + RESOURCE1_UNDER_PARENT_NAME
+        "/" + RESOURCE_UNDER_PARENT
     ) ;
   }
 
@@ -259,38 +264,42 @@ public class ImageFixerTest {
 // Fixture
 // =======
   
-  private static final String IMAGE_WIDTH = "128";
-  private static final String IMAGE_HEIGHT = "64";
+  static {
+    initialize() ;    
+  }
 
-  private static final String CHILD_NAME = "child" ;
-  private static final String GRANDCHILD_NAME = "grandchild" ;
-
-  private static final String RESOURCE1_UNDER_PARENT_NAME = TestResources.RED_128x64_PNG_NAME ;
-  private static final String RESOURCE2_UNDER_PARENT_NAME = TestResources.YELLOW_128x64_SVG_NAME ;
-  private static final String RESOURCE_UNDER_CHILD_NAME = TestResources.GREEN_128x64_JPG_NAME ;
-  private static final String RESOURCE_UNDER_GRANDCHILD_NAME = TestResources.BLUE_128x64_GIF_NAME ;
+  private static final String RESOURCE_UNDER_PARENT = Images.RED_PNG.getName();
+  private static final String RESOURCE_UNDER_CHILD = Images.Child.BLUE_GIF.getName();
+  private static final String RESOURCE_UNDER_GRANDCHILD = 
+      Images.Child.Grandchild.YELLOW_SVG.getName();
   
-  private final File parentDirectory ;
-  private final File childDirectory ;
-  private final File grandChildDirectory ;
+  private static final String CHILD_NAME = Images.Child.dir.getName() ;
+  private static final String GRANDCHILD_NAME = Images.Child.Grandchild.dir.getName() ;
+
+  private static final String RASTER_IMAGE_WIDTH = Images.RASTER_IMAGE_WIDTH ;
+  private static final String RASTER_IMAGE_HEIGHT = Images.RASTER_IMAGE_HEIGHT ;
+  private static final String VECTOR_IMAGE_WIDTH = Images.VECTOR_IMAGE_WIDTH ;
+  private static final String VECTOR_IMAGE_HEIGHT = Images.VECTOR_IMAGE_HEIGHT ;
+  
+  private File parentDirectory ;
+  private File childDirectory ;
+  private File grandChildDirectory ;
+  
+  @Before
+  public void before() throws IOException {
+    final String testName = NameAwareTestClassRunner.getTestName();
+    parentDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory() ;
+
+    final Filer filer = new Filer( parentDirectory ) ;
+    filer.copyContent( Images.dir ) ;
+    
+    childDirectory = filer.createFileObject( Images.dir, Images.Child.dir );
+    grandChildDirectory = filer.createFileObject( Images.dir, Images.Child.Grandchild.dir ) ;
+  }
+
+  
 
   public ImageFixerTest() throws IOException {
-    final ScratchDirectoryFixture fixture = new ScratchDirectoryFixture( getClass() ) ;
-    parentDirectory = fixture.getTestScratchDirectory() ;
-    TestResourceTools.copyResourceToDirectoryFlat(
-        getClass(), TestResources.IMAGE_RED_128x64_PNG, parentDirectory ) ;
-    TestResourceTools.copyResourceToDirectoryFlat(
-        getClass(), TestResources.IMAGE_YELLOW_128x64_SVG, parentDirectory ) ;
-
-    childDirectory = new File( parentDirectory, CHILD_NAME ) ;
-    childDirectory.mkdir() ;
-    TestResourceTools.copyResourceToDirectoryFlat(
-        getClass(), TestResources.IMAGE_GREEN_128x64_JPG, childDirectory ) ;
-
-    grandChildDirectory = new File( childDirectory, GRANDCHILD_NAME ) ;
-    grandChildDirectory.mkdir() ;
-    TestResourceTools.copyResourceToDirectoryFlat( 
-        getClass(), TestResources.IMAGE_BLUE_128x64_GIF, grandChildDirectory ) ;
 
   }
 
@@ -308,6 +317,11 @@ public class ImageFixerTest {
 
     public boolean hasProblem() {
       return ! problems.isEmpty() ;
+    }
+
+    @Override
+    public String toString() {
+      return problems.toString() ;
     }
   }
   

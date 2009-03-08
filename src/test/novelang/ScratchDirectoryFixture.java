@@ -73,7 +73,7 @@ public class ScratchDirectoryFixture {
   public static final String DELETE_SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME =
       "novelang.test.scratch.delete" ;
 
-  private static final String SCRATCH_DIR_NAME = "test-scratch" ;
+  public static final String DEFAULT_SCRATCH_DIR_NAME = "test-scratch" ;
 
   /**
    * Static field holding the directory once defined.
@@ -87,7 +87,7 @@ public class ScratchDirectoryFixture {
       final String testfilesDirSystemProperty =
           System.getProperty( SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME ) ;
       if( null == testfilesDirSystemProperty ) {
-        file = new File( SCRATCH_DIR_NAME ) ;
+        file = new File( DEFAULT_SCRATCH_DIR_NAME ) ;
       } else {
         file = new File( testfilesDirSystemProperty ) ;
       }

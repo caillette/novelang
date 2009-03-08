@@ -18,8 +18,7 @@ package novelang.common.filefixture;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.List;
 import java.util.MissingResourceException;
 
@@ -35,6 +34,11 @@ import com.google.common.collect.Ordering;
  * @author Laurent Caillette
  */
 public final class ResourceSchema {
+  private static final InvocationHandler NULL_INVOCATION_HANDLER = new InvocationHandler() {
+    public Object invoke( Object o, Method method, Object[] objects ) throws Throwable {
+      throw new UnsupportedOperationException( "invoke" );
+    }
+  };
 
   /**
    * Factory method.
@@ -68,15 +72,18 @@ public final class ResourceSchema {
     Preconditions.checkNotNull( resourcePrefix ) ;
 
     try {
-      final Directory rootDirectory = makeDirectoryOfClass( declaration ) ;
-      checkUnderlyingResources( resourcePrefix, rootDirectory ) ;
-    } catch( IOException e ) {
-      throw new RuntimeException( e ) ;
-    } catch( DeclarationException e ) {
+      if( ! findDirectoryObject( declaration ).isInitialized() ) {
+        final Directory rootDirectory = makeDirectoryOfClass( declaration ) ;
+        checkUnderlyingResources( resourcePrefix, rootDirectory ) ;        
+      }
+    } catch ( DeclarationException e ) {
       throw new RuntimeException( e );
-    } catch( IllegalAccessException e ) {
+    } catch ( IllegalAccessException e ) {
+      throw new RuntimeException( e );
+    } catch ( IOException e ) {
       throw new RuntimeException( e );
     }
+
 
   }
 
@@ -160,8 +167,13 @@ public final class ResourceSchema {
               Directory.class.getSimpleName() + " in " + ynterface.getName() ) ;
         } else {
           field.setAccessible( true ) ;
+          final Object ynterfaceProxy = Proxy.newProxyInstance( 
+              ynterface.getClassLoader(), 
+              new Class< ? >[] { ynterface }, 
+              NULL_INVOCATION_HANDLER 
+          ) ;
           directory = ( Directory )
-              field.get( new novelang.common.filefixture.test.ResourceTree() {} ) ;
+              field.get( ynterfaceProxy ) ;
           found = true ;
         }
       }

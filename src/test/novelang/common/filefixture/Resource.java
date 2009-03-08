@@ -27,13 +27,6 @@ public final class Resource extends SchemaNode implements Comparable< Resource >
     super( name ) ;
   }
 
-  public String getUnderlyingResourcePath() {
-    if( null == underlyingResourcePath ) {
-      throw new IllegalStateException( "not set: underlyingResource" ) ;
-    }
-    return underlyingResourcePath;
-  }
-
   /**
    * Comparison occurs on {@link #getName()} as corresponding member is set at instantiation.
    */
@@ -45,15 +38,6 @@ public final class Resource extends SchemaNode implements Comparable< Resource >
 // ===============================================
 // Fields set when interpreting class declarations
 // ===============================================
-
-  private String underlyingResourcePath = null ;
-
-  public void setUnderlyingResourcePath( String resourcePath ) {
-    if( null != this.underlyingResourcePath ) {
-      throw new IllegalStateException( "Already set: underlyingResourcePath" ) ;
-    }
-    this.underlyingResourcePath = resourcePath ;
-  }
 
   public InputStream getInputStream() {
     return getClass().getResourceAsStream( getUnderlyingResourcePath() );
