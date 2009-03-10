@@ -16,6 +16,16 @@
  */
 package novelang.book;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.ScratchDirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
@@ -24,21 +34,10 @@ import novelang.common.SyntacticTree;
 import novelang.common.filefixture.Filer;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
-import static novelang.common.filefixture.ResourceSchema.relativizeResourcePath;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.DefaultCharset;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Tests for {@link Book} with embedded images.
