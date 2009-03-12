@@ -19,9 +19,9 @@ package novelang.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
-import java.nio.charset.Charset;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
@@ -30,10 +30,11 @@ import org.junit.Test;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import novelang.ScratchDirectoryFixture;
-import novelang.TestResourceTools;
-import static novelang.TestResourceTools.copyResourceToDirectory;
-import novelang.TestResources;
-import novelang.system.DefaultCharset;
+import novelang.TestResourceTree;
+import static novelang.TestResourceTree.FontStructure;
+import novelang.common.filefixture.Filer;
+import novelang.common.filefixture.Relativizer;
+import novelang.common.filefixture.ResourceSchema;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.BatchParameters;
 import novelang.configuration.parse.DaemonParameters;
@@ -41,6 +42,7 @@ import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMO
 import novelang.configuration.parse.GenericParameters;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 import novelang.produce.DocumentRequest;
+import novelang.system.DefaultCharset;
 
 /**
  * Tests for {@link ConfigurationTools}.
@@ -143,8 +145,8 @@ public class ConfigurationToolsTest {
     Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
     checkAllFontsAreGood(
         renderingConfiguration.getCurrentFopFontStatus(),
-        FONT_FILE_DEFAULT_1,
-        FONT_FILE_DEFAULT_2
+        fontFileNameDefault1,
+        fontFileNameDefault2
     ) ;
 
   }
@@ -156,7 +158,7 @@ public class ConfigurationToolsTest {
     final DaemonParameters parameters = createDaemonParameters(
         fontStructureDirectory,
         GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_FONT_DIRECTORIES,
-        ALTERNATE_FONTS_DIR_NAME
+        fontDirNameAlternate
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
         .createRenderingConfiguration( parameters ) ;
@@ -165,7 +167,7 @@ public class ConfigurationToolsTest {
     Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
     checkAllFontsAreGood(
         renderingConfiguration.getCurrentFopFontStatus(),
-        FONT_FILE_ALTERNATE
+        fontFileNameAlternate
     ) ;
 
   }
@@ -239,7 +241,8 @@ public class ConfigurationToolsTest {
     final Set< String > embedFilesSet = Sets.newHashSet( embedFilesIterable ) ;
     Assert.assertEquals( relativeFontNames.length, embedFilesSet.size() ) ;
     for( String relativeFontName : relativeFontNames ) {
-      Assert.assertTrue( embedFilesSet.contains( createFontFileUrl( relativeFontName ) ) ) ;
+      final String fontFileUrl = createFontFileUrl( relativeFontName );
+      Assert.assertTrue( fontFileUrl, embedFilesSet.contains( fontFileUrl ) ) ;
     }
 
   }
@@ -252,36 +255,37 @@ public class ConfigurationToolsTest {
   private static final Charset ISO_8859_2 = Charset.forName( "ISO-8859-2" );
   private static final Charset MAC_ROMAN = Charset.forName( "MacRoman" );
 
-  private static final String FONT_STRUCTURE_DIR = TestResources.FONT_STRUCTURE_DIR ;
-  private static final String DEFAULT_FONTS_DIR = TestResources.DEFAULT_FONTS_DIR ;
-  private static final String FONT_FILE_DEFAULT_1 = TestResources.FONT_FILE_DEFAULT_1 ;
-  private static final String FONT_FILE_DEFAULT_2 = TestResources.FONT_FILE_DEFAULT_2 ;
-  private static final String ALTERNATE_FONTS_DIR_NAME = TestResources.ALTERNATE_FONTS_DIR_NAME ;
-  private static final String FONT_FILE_ALTERNATE = TestResources.FONT_FILE_ALTERNATE ;
-  private static final String FONT_FILE_PARENT_CHILD = TestResources.FONT_FILE_PARENT_CHILD ;
-  private static final String FONT_FILE_PARENT_CHILD_BAD =
-      TestResources.FONT_FILE_PARENT_CHILD_BAD ;
-
   private final File scratchDirectory ;
   private final File fontStructureDirectory ;
   private final File defaultFontsDirectory ;
+  private final String fontFileNameDefault1 ;
+  private final String fontFileNameDefault2 ;
+  private final String fontFileNameAlternate ;
+  private final String fontDirNameAlternate ;
 
+  static {
+    TestResourceTree.initialize() ;
+  }
+
+  /**
+   * Tested methods don't modify files so we can have the same scratch directory name for all.
+   */
   public ConfigurationToolsTest() throws IOException {
-    scratchDirectory = new ScratchDirectoryFixture( ConfigurationToolsTest.class )
-        .getTestScratchDirectory() ;
+    scratchDirectory = new ScratchDirectoryFixture(
+        ConfigurationToolsTest.class ).getTestScratchDirectory() ;
+    final Filer filer = new Filer( scratchDirectory ) ;
+    filer.copyContent( FontStructure.dir ) ;
+    defaultFontsDirectory = filer.createFileObject(
+        FontStructure.dir,
+        FontStructure.Fonts.dir
+    ) ;
+    fontStructureDirectory = scratchDirectory ;
 
-    copyResourceToDirectory( getClass(), FONT_FILE_DEFAULT_1, scratchDirectory ) ;
-    copyResourceToDirectory( getClass(), FONT_FILE_DEFAULT_2, scratchDirectory ) ;
-    copyResourceToDirectory( getClass(), FONT_FILE_ALTERNATE, scratchDirectory ) ;
-    copyResourceToDirectory( getClass(), FONT_FILE_PARENT_CHILD, scratchDirectory ) ;
-    copyResourceToDirectory( getClass(), FONT_FILE_PARENT_CHILD_BAD, scratchDirectory ) ;
-
-    defaultFontsDirectory = TestResourceTools.getDirectoryForSure(
-        scratchDirectory, DEFAULT_FONTS_DIR ) ;
-
-    fontStructureDirectory = TestResourceTools.getDirectoryForSure(
-        scratchDirectory, FONT_STRUCTURE_DIR ) ;
-
+    final Relativizer relativizer = ResourceSchema.relativizer( FontStructure.dir ) ;
+    fontFileNameDefault1 = relativizer.apply( FontStructure.Fonts.MONO ) ;
+    fontFileNameDefault2 = relativizer.apply( FontStructure.Fonts.MONO_BOLD ) ;
+    fontDirNameAlternate = FontStructure.Alternate.dir.getName() ;
+    fontFileNameAlternate = relativizer.apply( FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
   }
 
   private final DaemonParameters createDaemonParameters( String... arguments )

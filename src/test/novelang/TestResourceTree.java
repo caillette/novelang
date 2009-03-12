@@ -31,6 +31,7 @@ public final class TestResourceTree {
   
   public static void initialize() {
     ResourceSchema.initialize( Images.class ) ;
+    ResourceSchema.initialize( FontStructure.class ) ;
   }
     
   public interface Images {
@@ -61,6 +62,35 @@ public final class TestResourceTree {
       }
     }
     
+  }
+
+  public interface FontStructure {
+    Directory dir = directory( "fonts-structure" ) ;
+
+    public interface Alternate {
+      Directory dir = directory( "alternate" ) ;
+
+      Resource MONO_BOLD_OBLIQUE = resource( "Bitstream-Vera-Sans-Mono-Bold-Oblique.ttf" ) ;
+    }
+
+    public interface Fonts {
+      Directory dir = directory( "fonts" ) ;
+
+      Resource MONO_BOLD = resource( "Bitstream-Vera-Sans-Mono-Bold.ttf" ) ;
+      Resource MONO = resource( "Bitstream-Vera-Sans-Mono.ttf" ) ;
+    }
+
+    public interface Parent {
+      Directory dir = directory( "parent" ) ;
+
+      public interface Child {
+        Directory dir = directory( "child" ) ;
+
+        Resource BAD = resource( "Bad.ttf" ) ;
+        Resource MONO_OBLIQUE = resource( "Bitstream-Vera-Sans-Mono-Oblique.ttf" ) ;
+      }
+
+    }
   }
   
 }
