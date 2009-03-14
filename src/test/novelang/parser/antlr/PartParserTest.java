@@ -97,7 +97,7 @@ public class PartParserTest {
 
   @Test
   public void titleIsTwoWords() throws RecognitionException {
-    PARSERMETHOD_TITLE.checkTree( "some title", tree(
+    PARSERMETHOD_TITLE.checkTreeAfterSeparatorRemoval( "some title", tree(
         LEVEL_TITLE,
         tree( WORD_, "some" ),
         tree( WORD_, "title" )
@@ -106,7 +106,7 @@ public class PartParserTest {
 
   @Test
   public void titleIsTwoWordsAndExclamationMark() throws RecognitionException {
-    PARSERMETHOD_TITLE.checkTree( "some title !", tree(
+    PARSERMETHOD_TITLE.checkTreeAfterSeparatorRemoval( "some title !", tree(
         LEVEL_TITLE,
         tree( WORD_, "some"),
         tree( WORD_, "title"),
@@ -116,7 +116,7 @@ public class PartParserTest {
 
   @Test
   public void titleIsWordsAndParenthesisAndExclamationMark() throws RecognitionException {
-    PARSERMETHOD_TITLE.checkTree( "some (title) !", tree(
+    PARSERMETHOD_TITLE.checkTreeAfterSeparatorRemoval( "some (title) !", tree(
         LEVEL_TITLE,
         tree( WORD_, "some" ),
         tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "title" ) ),
@@ -126,7 +126,7 @@ public class PartParserTest {
 
   @Test
   public void wordCausedABug1() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree( "myIdentifier", tree( WORD_, "myIdentifier" ) ) ;
+    PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( "myIdentifier", tree( WORD_, "myIdentifier" ) ) ;
   }
 
   @Test
@@ -136,27 +136,27 @@ public class PartParserTest {
    * {@code line 1:10 mismatched character 'e' expecting 'l'}.
    */
   public void wordCausedABug2() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree( "fi", tree( WORD_, "fi" ) ) ;
+    PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( "fi", tree( WORD_, "fi" ) ) ;
   }
 
   @Test
   public void wordIsSingleLetter() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree( "w", tree( WORD_, "w" ) ) ;
+    PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( "w", tree( WORD_, "w" ) ) ;
   }
 
   @Test
   public void wordIsTwoLetters() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree( "Www", tree( WORD_, "Www" ) ) ;
+    PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( "Www", tree( WORD_, "Www" ) ) ;
   }
 
   @Test
   public void wordIsThreeDigits() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree( "123", tree( WORD_, "123" ) ) ;
+    PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( "123", tree( WORD_, "123" ) ) ;
   }
 
   @Test
   public void wordIsDigitsWithHyphenMinusInTheMiddle() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree( "123-456", tree( WORD_, "123-456" ) ) ;
+    PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( "123-456", tree( WORD_, "123-456" ) ) ;
   }
 
   @Test
@@ -171,7 +171,7 @@ public class PartParserTest {
 
   @Test
   public void wordWithSuperscript() throws RecognitionException {
-    PARSERMETHOD_WORD.checkTree(
+    PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval(
         "w^e",
         tree( WORD_, tree( "w" ), tree( WORD_AFTER_CIRCUMFLEX_ACCENT, "e" ) )
     ) ;
@@ -183,7 +183,7 @@ public class PartParserTest {
     for( String key : map.keySet() ) {
       final String escaped = SourceUnescape.ESCAPE_START + key + SourceUnescape.ESCAPE_END ;
       final Character unescaped = map.get( key ) ;
-      PARSERMETHOD_WORD.checkTree( escaped, tree( WORD_, "" + unescaped ) ) ;
+      PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( escaped, tree( WORD_, "" + unescaped ) ) ;
     }
   }
 
@@ -195,7 +195,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsSimplestList() throws RecognitionException {
-    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree( "--- w0", tree(
+    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTreeAfterSeparatorRemoval( "--- w0", tree(
         PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
         tree( WORD_, "w0" )
     ) ) ;
@@ -209,7 +209,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenComma() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( "w0,", tree(
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( "w0,", tree(
         NodeKind.PARAGRAPH_REGULAR,
         tree( WORD_, "w0" ),
         tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) )
@@ -220,7 +220,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordsWithCommaInTheMiddle1() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0,w1", tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
@@ -232,7 +232,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenApostrophe() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0'", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -245,7 +245,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordsWithApostropheInTheMiddle() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0'w1", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -261,7 +261,7 @@ public class PartParserTest {
     SyntacticTree tree = PARSERMETHOD_WORD.createTree( "w0" ) ;
     LOGGER.debug( tree.toStringTree() ) ;
 
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0;", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -274,7 +274,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenFullStop() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0.", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -287,7 +287,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenQuestionMark() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0?", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -300,7 +300,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenExclamationMark() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0!", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -313,7 +313,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenColon() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0:", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -326,7 +326,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordThenEllipsis() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0...", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -346,7 +346,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsWordsWithApostropheThenEmphasis() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0 w1'w2//w3//.", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -442,7 +442,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsQuoteOfOneWordThenParenthesis() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "\"w0(w1)\"", tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree(
@@ -455,7 +455,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphIsQuoteOfOneWordThenSpaceParenthesis() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "\"w0 (w1)\"", tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree(
@@ -468,7 +468,7 @@ public class PartParserTest {
   
   @Test
   public void partIsJustImage() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree(
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
       "./foo.jpg",
         tree(
           PART,
@@ -480,7 +480,7 @@ public class PartParserTest {
   
   @Test @Ignore
   public void paragraphIsTextThenImage() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree(
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
       "blah" + BREAK +
       "./foo.jpg",
         tree(
@@ -493,7 +493,7 @@ public class PartParserTest {
   
   @Test @Ignore
   public void paragraphIsTextThenImageThenText() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree(
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
       "w" + BREAK +
       "./foo.jpg" + BREAK +
       "x" + BREAK,      
@@ -508,7 +508,7 @@ public class PartParserTest {
   
   @Test @Ignore
   public void paragraphIsImageThenText() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree(
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
       "./foo.jpg" + BREAK +
       "x" + BREAK,      
         tree(
@@ -522,7 +522,7 @@ public class PartParserTest {
   
   @Test
   public void bigListItemContainsUrl() throws RecognitionException {
-    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree(  
+    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTreeAfterSeparatorRemoval(  
         "--- w" + BREAK +
         "http://novelang.sf.net"
         ,
@@ -539,7 +539,7 @@ public class PartParserTest {
   public void sectionHasQuote()
       throws RecognitionException
   {
-    PARSERMETHOD_SECTION.checkTree( 
+    PARSERMETHOD_SECTION.checkTreeAfterSeparatorRemoval( 
         "=== \"q\" w", 
         tree(
             LEVEL_INTRODUCER_,
@@ -555,7 +555,7 @@ public class PartParserTest {
 
   @Test
   public void sectionIsAnonymous() throws RecognitionException {
-    PARSERMETHOD_SECTION.checkTree( 
+    PARSERMETHOD_SECTION.checkTreeAfterSeparatorRemoval( 
         "===", 
         tree( 
             LEVEL_INTRODUCER_,
@@ -566,7 +566,7 @@ public class PartParserTest {
 
   @Test
   public void partWithSeveralMultilineParagraphs() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         BREAK +
         "p0 w01" + BREAK +
         "w02" + BREAK +
@@ -581,7 +581,7 @@ public class PartParserTest {
 
   @Test
   public void partHasTrailingSpacesEverywhere() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         BREAK +
         "  " + BREAK +
         " p0 w01  " + BREAK +
@@ -598,7 +598,7 @@ public class PartParserTest {
 
   @Test
   public void someLiteral() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
       "<<<" + BREAK +
       "  Here is some " + BREAK +
       "  //Literal// " + BREAK +
@@ -612,7 +612,7 @@ public class PartParserTest {
 
   @Test @Ignore
   public void someLiteralContainingLineComment() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         "<<<" + BREAK +
         "%% Not to be commented" +
         ">>>",
@@ -625,7 +625,7 @@ public class PartParserTest {
 
   @Test
   public void someLiteralContainingLowerthanSign() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         "<<<" + BREAK +
         "<" + BREAK +
         ">>>", tree( PART, tree( LINES_OF_LITERAL, "<" )
@@ -642,7 +642,7 @@ public class PartParserTest {
         ">> >>>"
     ;
 
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         "<<<" + BREAK +
         verbatim + BREAK +
         ">>>", tree( PART, tree( LINES_OF_LITERAL, verbatim ) )
@@ -653,7 +653,7 @@ public class PartParserTest {
   @Test
   public void literalWithBreaksAndOtherSeparators() throws RecognitionException {
     final String verbatim = "  Here is some " + BREAK + "//literal//. " ;
-    PARSERMETHOD_LITERAL.checkTree( 
+    PARSERMETHOD_LITERAL.checkTreeAfterSeparatorRemoval( 
         "<<<" + BREAK +
         verbatim + BREAK +
         ">>>", tree( LINES_OF_LITERAL, verbatim )
@@ -662,7 +662,7 @@ public class PartParserTest {
 
   @Test
   public void literalWithEscapedCharacters() throws RecognitionException {
-    PARSERMETHOD_LITERAL.checkTree( 
+    PARSERMETHOD_LITERAL.checkTreeAfterSeparatorRemoval( 
         "<<<" + BREAK +
         "2" +
             SourceUnescape.ESCAPE_START + "greater-than-sign" + SourceUnescape.ESCAPE_END +
@@ -674,7 +674,7 @@ public class PartParserTest {
   @Test
   public void softInlineLiteralNoEscape() throws RecognitionException {
     final String literal = "azer()+&%?" ;
-    PARSERMETHOD_SOFT_INLINE_LITERAL.checkTree( 
+    PARSERMETHOD_SOFT_INLINE_LITERAL.checkTreeAfterSeparatorRemoval( 
         "`" + literal + "`", 
         tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, literal )
     ) ;
@@ -682,7 +682,7 @@ public class PartParserTest {
 
   @Test
   public void softInlineLiteralWithEscape() throws RecognitionException {
-    PARSERMETHOD_SOFT_INLINE_LITERAL.checkTree( 
+    PARSERMETHOD_SOFT_INLINE_LITERAL.checkTreeAfterSeparatorRemoval( 
         "`" + SourceUnescape.ESCAPE_START + "greater-than-sign" + SourceUnescape.ESCAPE_END +"`",
         tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, ">" )
     ) ;
@@ -691,7 +691,7 @@ public class PartParserTest {
   @Test
   public void hardInlineLiteralNothingSpecial() throws RecognitionException {
     final String literal = "azer()+&%?";
-    PARSERMETHOD_HARD_INLINE_LITERAL.checkTree( 
+    PARSERMETHOD_HARD_INLINE_LITERAL.checkTreeAfterSeparatorRemoval( 
         "``" + literal +"``", 
         tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, literal )
     ) ;
@@ -702,7 +702,7 @@ public class PartParserTest {
   public void partHasAnonymousSectionAndHasBlockquoteWithSingleParagraph() 
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         "===" + BREAK +
         BREAK +
         "<< w0 w1" + BREAK +
@@ -722,7 +722,7 @@ public class PartParserTest {
   public void partIsSectionThenParagraphThenBlockquoteThenParagraph()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         "===" + BREAK +
         BREAK +
         "p0" + BREAK +
@@ -747,7 +747,7 @@ public class PartParserTest {
   public void sectionIsAnonymousAndHasBlockquoteWithTwoParagraphs() 
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         "===" + BREAK +
         BREAK +
         "<< w0 w1" + BREAK +
@@ -822,7 +822,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustEmphasizedWord() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "//w0//", tree(
             NodeKind.PARAGRAPH_REGULAR,
         tree( BLOCK_INSIDE_SOLIDUS_PAIRS, tree( WORD_, "w0" ) ) )
@@ -831,7 +831,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustParenthesizedWord() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "(w0)", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -842,7 +842,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustQuotedWord() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "\"w0\"", tree(
             NodeKind.PARAGRAPH_REGULAR,
             tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "w0" ) )
@@ -852,7 +852,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustInterpolatedWord() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "-- w0 --", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -863,7 +863,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustInterpolatedWordWithSilentEnd() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "-- w0 -_", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -874,7 +874,7 @@ public class PartParserTest {
 
   @Test
   public void paragraphBodyIsJustBracketedWord() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree( 
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "[w0]", 
         tree(
             NodeKind.PARAGRAPH_REGULAR,
@@ -1022,7 +1022,7 @@ public class PartParserTest {
 
   @Test
   public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         "== c0" + BREAK +
         BREAK +
         "=== s0" + BREAK +
@@ -1047,7 +1047,7 @@ public class PartParserTest {
 
   @Test
   public void partIsAnonymousSectionsWithLeadingBreaks() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree( 
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval( 
         BREAK +
         BREAK +
         "===" + BREAK +
@@ -1120,7 +1120,7 @@ public class PartParserTest {
 
   @Test
   public void urlHttpGoogleDotCom() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://google.com", 
         tree( URL, "http://google.com" ) 
     ) ;
@@ -1128,7 +1128,7 @@ public class PartParserTest {
 
   @Test
   public void urlHttpLocalhost() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://localhost", 
         tree( URL, "http://localhost" ) 
     ) ;
@@ -1136,7 +1136,7 @@ public class PartParserTest {
 
   @Test
   public void urlHttpLocalhost8080() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://localhost:8080", 
         tree( URL, "http://localhost:8080" ) 
     ) ;
@@ -1144,7 +1144,7 @@ public class PartParserTest {
 
   @Test
   public void urlFileWithHyphenMinus() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "file:/path/to-file.ext", 
         tree( URL, "file:/path/to-file.ext" ) 
     ) ;
@@ -1152,7 +1152,7 @@ public class PartParserTest {
 
   @Test
   public void urlFileWithHyphenMinusNoPath() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "file:my-file.ext", 
         tree( URL, "file:my-file.ext" ) 
     ) ;
@@ -1160,7 +1160,7 @@ public class PartParserTest {
 
   @Test
   public void urlHttpGoogleQuery() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://www.google.com/search?q=url%20specification&sourceid=mozilla2&ie=utf-8&oe=utf-8", 
         tree(
             URL,
@@ -1171,7 +1171,7 @@ public class PartParserTest {
 
   @Test
   public void urlFilePathFileDotNlp() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "file:/path/file.ppp", 
         tree( URL, "file:/path/file.ppp" ) 
     ) ;
@@ -1180,7 +1180,7 @@ public class PartParserTest {
 
   @Test
   public void urlWithTilde() throws RecognitionException {
-    PARSERMETHOD_URL.checkTree( 
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://domain.org/path/file~tilde#anchor", 
         tree(
             URL,
@@ -1191,7 +1191,7 @@ public class PartParserTest {
   
   @Test
   public void embeddedListItemMinimum() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree(
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
         "- w",
         tree(
             PARAGRAPH_REGULAR,
@@ -1202,7 +1202,7 @@ public class PartParserTest {
 
   @Test
   public void severalEmbeddedListItems() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTree(
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
         "- w1" + BREAK +
         "- w2" + BREAK,
         tree(
@@ -1215,7 +1215,7 @@ public class PartParserTest {
 
   @Test
   public void justLevelIntroducerIndent() throws RecognitionException {
-    PARSERMETHOD_LEVEL_INTRODUCER.checkTree(
+    PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
         "=== w",
         tree(
             NodeKind.LEVEL_INTRODUCER_,
@@ -1228,7 +1228,7 @@ public class PartParserTest {
 
   @Test
   public void cellRowSequence1x1() throws RecognitionException {
-    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTreeAfterSeparatorRemoval(
         "| x |",
         tree(
             CELL_ROWS_WITH_VERTICAL_LINE,
@@ -1242,7 +1242,7 @@ public class PartParserTest {
   
   @Test
   public void cellRowSequence1x1ContainsImage() throws RecognitionException {
-    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTreeAfterSeparatorRemoval(
         "| /foo.jpg |",
         tree(
             CELL_ROWS_WITH_VERTICAL_LINE,
@@ -1256,7 +1256,7 @@ public class PartParserTest {
 
   @Test
   public void cellRowSequence2x2() throws RecognitionException {
-    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTree(
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTreeAfterSeparatorRemoval(
         "| a | b   |" + BREAK +
         "|c  | d e |",
         tree(
@@ -1278,7 +1278,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageIsAbsoluteFile() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "/foo.jpg",
         tree(
             RASTER_IMAGE,
@@ -1289,7 +1289,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageInAbsoluteSubdirectory() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "/foo/bar.jpg",
         tree(
             RASTER_IMAGE,
@@ -1300,7 +1300,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageIsRelativeFile() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "./bar.jpg",
         tree(
             RASTER_IMAGE,
@@ -1311,7 +1311,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageIsRelativeFileInSubdirectory() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "./foo/bar.jpg",
         tree(
             RASTER_IMAGE,
@@ -1322,7 +1322,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageIsInSuperdirectory() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "../bar.jpg",
         tree(
             RASTER_IMAGE,
@@ -1333,7 +1333,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageIsInSuperdirectory2() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "../../bar.jpg",
         tree(
             RASTER_IMAGE,
@@ -1344,7 +1344,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageIsInSuperdirectory3() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "../../../bar.jpg",
         tree(
             RASTER_IMAGE,
@@ -1355,7 +1355,7 @@ public class PartParserTest {
 
   @Test
   public void rasterImageHasVariousCharactersInItsPath() throws RecognitionException {
-    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTree(
+    PARSERMETHOD_EMBEDDABLE_RESOURCE.checkTreeAfterSeparatorRemoval(
         "/f.o-o/b=a_r.jpg",
         tree(
             RASTER_IMAGE,

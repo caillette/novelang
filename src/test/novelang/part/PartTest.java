@@ -66,7 +66,7 @@ public class PartTest {
         )
     ) ;
 
-    TreeFixture.assertEquals( expected, partTree ) ;
+    TreeFixture.assertEqualsNoSeparators( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
 
@@ -96,7 +96,7 @@ public class PartTest {
         )
     ) ;
 
-    TreeFixture.assertEquals( expected, partTree ) ;
+    TreeFixture.assertEqualsNoSeparators( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
   }
 
@@ -144,7 +144,7 @@ public class PartTest {
         )
     ) ;
 
-    TreeFixture.assertEquals( expected, partTree ) ;
+    TreeFixture.assertEqualsNoSeparators( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
 
   }

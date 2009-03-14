@@ -80,6 +80,13 @@ public class ParserMethod {
     return tree ;    
   }
   
+  public void checkTreeAfterSeparatorRemoval( String text, SyntacticTree expectedTree ) {
+//    final SyntacticTree actualTree = createTree( text ) ;
+    final SyntacticTree actualTree = TreeFixture.removeSeparators( createTree( text ) ) ;
+    TreeFixture.assertEqualsNoSeparators( expectedTree, actualTree ) ;
+    
+  }
+  
   public void checkTree( String text, SyntacticTree expectedTree ) {
     final SyntacticTree actualTree = createTree( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;

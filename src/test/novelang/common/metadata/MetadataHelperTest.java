@@ -42,7 +42,7 @@ public class MetadataHelperTest {
 
     final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree ) ;
 
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( _META,
             tree( _WORD_COUNT, "2" )
         ),

@@ -68,7 +68,7 @@ public class InsertFunctionTest {
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getBook() ) ;
 
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
         result.getBook().getTreeAtStart()
     ) ;
@@ -96,7 +96,7 @@ public class InsertFunctionTest {
 
     final SyntacticTree book = result.getBook().getTreeAtStart() ;
 
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
             tree( _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "no-chapter" ) ),
@@ -131,7 +131,7 @@ public class InsertFunctionTest {
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getBook() ) ;
 
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( _STYLE, "mystyle" ), tree( WORD_, "oneword" ) ) ),
         result.getBook().getTreeAtStart()
     ) ;
