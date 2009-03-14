@@ -62,7 +62,7 @@ public class BookWithImagesTest {
     LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         EXPECTED_BOOK_TREE,
         bookTree
     ) ;
@@ -84,7 +84,7 @@ public class BookWithImagesTest {
     LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         EXPECTED_BOOK_TREE,
         bookTree
     ) ;
