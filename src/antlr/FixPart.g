@@ -18,6 +18,16 @@ tree grammar FixPart ;
 
 options { 
   tokenVocab=Novelang ; 
+  ASTLabelType=Tree ;
 }
 
-foo : ;
+namedUrl 
+  : 
+        ^(  PARAGRAPH_REGULAR 
+            BLOCK_INSIDE_DOUBLE_QUOTES
+            LINE_BREAK_
+            URL
+        )
+     
+
+  ;
