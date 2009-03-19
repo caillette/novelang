@@ -39,7 +39,7 @@ public class NamedUrlTest {
 
   @Test
   public void namedUrl() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree(
+    PARSERMETHOD_PART.checkBareTree(
         "  \"name\"" + BREAK +
         "http://foo.com"
         ,

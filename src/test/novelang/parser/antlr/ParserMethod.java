@@ -87,7 +87,7 @@ public class ParserMethod {
     
   }
   
-  public void checkTree( String text, SyntacticTree expectedTree ) {
+  public void checkBareTree( String text, SyntacticTree expectedTree ) {
     final SyntacticTree actualTree = createTree( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
     
