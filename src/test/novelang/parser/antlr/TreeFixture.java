@@ -83,16 +83,16 @@ public class TreeFixture {
     return new SimpleTree( "", children ) ;
   }
 
-  public static void assertEquals(
+  public static void assertEqualsWithSeparators(
       Treepath< SyntacticTree > expected,
       Treepath< SyntacticTree > actual
   ) {
     Assert.assertEquals( "Treepath height", expected.getLength(), actual.getLength() ) ;
     for( int i = 0 ; i < expected.getLength() ; i++ ) {
-      assertEqualsNoSeparators(
+      assertEquals(
           expected.getTreeAtDistance( i ),
           actual.getTreeAtDistance( i )
-      ) ;
+      ); ;
     }
   }
 
