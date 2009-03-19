@@ -1188,6 +1188,31 @@ public class PartParserTest {
         ) 
     ) ;
   }
+
+  /**
+   * It makes sense to make this test appear here because it depends on the parser,
+   * but it could  appear in URL name fixing tests as well.
+   */
+  @Test
+  public void namedUrlWithSeparators() throws RecognitionException {
+    PARSERMETHOD_PART.checkBareTree(
+        "  \"name\"" + BREAK +
+        "http://foo.com"
+        ,
+        tree( 
+            PART,
+            tree( WHITESPACE_ ),
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( LINE_BREAK_ ),
+                tree( URL, "http://foo.com" )
+            
+            )
+        )
+    ) ;
+  }
+  
   
   @Test
   public void embeddedListItemMinimum() throws RecognitionException {
