@@ -179,4 +179,57 @@ public class TreepathToolsTest {
   }
 
 
+  @Test ( expected = IllegalArgumentException.class )
+  public void removeSubtreeDetectsUnrelatedTreepaths() {
+    final Treepath< MyTree > treepath1 = Treepath.create( MyTree.create( "1" ) ) ;
+    final Treepath< MyTree > treepath2 = Treepath.create( MyTree.create( "2" ) ) ;
+    TreepathTools.removeSubtree( treepath1, treepath2 ) ;
+  }
+
+  @Test (expected = IllegalArgumentException.class )
+  public void removeSubtreeDetectsSubtreeContainingContainer() {
+                                                                         //   grandParent
+                                                                         //        |
+    final MyTree child = MyTree.create( "child" ) ;                      //     parent
+    final MyTree parent = MyTree.create( "parent", child ) ;             //        |
+    final MyTree grandParent = MyTree.create( "grandParent", parent ) ;  //     child
+
+    // treepath: grandParent <- parent
+    final Treepath< MyTree > sub = Treepath.create( grandParent, 0, 0 ) ;
+
+    // treepath: grandParent <- parent <- child
+    final Treepath< MyTree > container = Treepath.create( grandParent, 0, 0 ) ;
+
+    TreepathTools.removeSubtree( container, sub ) ;
+  }
+
+  @Test
+  public void removeSubtreeWithSiblings() {
+                                                                         //   grandParent
+    final MyTree child0 = MyTree.create( "child0" ) ;                    //        |
+    final MyTree child1 = MyTree.create( "child1" ) ;                    //     parent
+    final MyTree parent = MyTree.create( "parent", child0, child1 ) ;    //     /    \
+    final MyTree grandParent = MyTree.create( "grandParent", parent ) ;  // child0  child1
+
+    // treepath: grandParent <- parent <- child1
+    final Treepath< MyTree > container = Treepath.create( grandParent, 0, 1 ) ;
+
+    // treepath: grandParent <- parent <- child0
+    final Treepath< MyTree > subtree = Treepath.create( grandParent, 0, 0 ) ;
+
+    final Treepath< MyTree > afterRemoval = TreepathTools.removeSubtree( container, subtree ) ;
+
+
+    Assert.assertEquals( 3, afterRemoval.getLength() ) ;
+
+    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 2 ).getChildCount() ) ;
+    Assert.assertEquals( "grandParent", afterRemoval.getTreeAtDistance( 2 ).getPayload() ) ;
+
+    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
+
+    Assert.assertSame( child1, afterRemoval.getTreeAtDistance( 0 ) ) ;
+
+
+  }
 }
