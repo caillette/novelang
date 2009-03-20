@@ -48,7 +48,7 @@ public class NamedUrlFixTest {
   }
 
   @Test
-  public void fixNamedUrl() {
+  public void fixNamedUrlAtStartOfAPart() {
     verifyFixNamedUrls( 
         tree(
             PART,
@@ -76,6 +76,54 @@ public class NamedUrlFixTest {
             )
         )
         
+    ) ;
+
+  }
+
+  @Test
+  public void fixNamedUrlInsideAParagraph() {
+    verifyFixNamedUrls( 
+        tree( 
+            PARAGRAPH_REGULAR,
+            tree( WORD_, "w" ),
+            tree( 
+                _EXTERNAL_LINK,
+                tree( 
+                    _LINK_NAME,
+                    tree( WORD_, "name" ) 
+                ),
+                tree( URL, "http://foo.com" )
+            )                            
+        ),            
+        tree( 
+            PARAGRAPH_REGULAR,
+            tree( WORD_, "w"),
+            tree( LINE_BREAK_ ),
+            tree( WHITESPACE_ ),
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+            tree( LINE_BREAK_ ),
+            tree( URL, "http://foo.com" )
+                        
+        )        
+    ) ;
+
+  }
+
+  @Test
+  public void fixUrlWithoutName() {
+    verifyFixNamedUrls( 
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( 
+                _EXTERNAL_LINK,
+                tree( URL, "http://foo.com" )
+            )            
+        ),
+        tree( 
+            PARAGRAPH_REGULAR,
+            tree( URL, "http://foo.com" )
+                        
+        )        
     ) ;
 
   }
