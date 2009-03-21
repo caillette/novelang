@@ -24,6 +24,14 @@ import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 
 /**
+ * Replaces {@link NodeKind#URL} nodes by {@link NodeKind#_EXTERNAL_LINK}, adding
+ * preceding {@link NodeKind#BLOCK_INSIDE_DOUBLE_QUOTES} if there is one alone on a line.
+ * 
+ * <pre>
+ *    "external link name"
+ * http://url.towards.somewhe.re
+ * </pre>
+ *  
  * @author Laurent Caillette
  */
 public class UrlMangler {
@@ -216,14 +224,6 @@ public class UrlMangler {
       State positive
   ) {
     return evaluate( tree, kinds( nodeKind ), positive, State.INSIDE_PARAGRAPH ) ;
-  }
-
-  private static State evaluate(
-      SyntacticTree tree,
-      NodeKind[] nodeKinds,
-      State positive
-  ) {
-    return evaluate( tree, nodeKinds, positive, State.INSIDE_PARAGRAPH ) ;
   }
 
   private static State evaluate(
