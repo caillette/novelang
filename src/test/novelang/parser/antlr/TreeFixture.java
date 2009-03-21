@@ -26,8 +26,8 @@ import novelang.common.LocationFactory;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
+import novelang.hierarchy.SeparatorsMangler;
 
 /**
  * Helps building {@link novelang.common.SyntacticTree}s for tests.
@@ -102,7 +102,7 @@ public class TreeFixture {
       SyntacticTree expected, 
       SyntacticTree actual 
   ) {
-    assertEquals( expected, TreeFixture.removeSeparators( actual ) ) ;
+    assertEquals( expected, SeparatorsMangler.removeSeparators( actual ) ) ;
   }
   
   public static void assertEquals( SyntacticTree expected, SyntacticTree actual ) {
@@ -163,28 +163,5 @@ public class TreeFixture {
 
   }
 
-
-  /**
-   * Removes {@link NodeKind#WHITESPACE_} and {@link NodeKind#LINE_BREAK_}
-   * tokens in order to ease comparison.
-   */
-  public static SyntacticTree removeSeparators( SyntacticTree tree ) {
-    return removeSeparators( Treepath.create( tree ) ).getTreeAtEnd() ;
-  }
-  
-  public static Treepath< SyntacticTree > removeSeparators( Treepath< SyntacticTree > treepath ) {
-    int index = 0 ;
-    while( index < treepath.getTreeAtEnd().getChildCount() ) {
-      final SyntacticTree child = treepath.getTreeAtEnd().getChildAt( index ) ;
-      final Treepath< SyntacticTree > childTreepath = Treepath.create( treepath, index ) ;
-      if( child.isOneOf( NodeKind.WHITESPACE_, NodeKind.LINE_BREAK_ ) ) {
-        treepath = TreepathTools.removeEnd( childTreepath ) ;
-      } else {
-        treepath = removeSeparators( childTreepath ).getPrevious() ;
-        index++ ;
-      }
-    }
-    return treepath ;
-  }
 
 }

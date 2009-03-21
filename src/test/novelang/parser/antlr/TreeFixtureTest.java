@@ -19,6 +19,7 @@ package novelang.parser.antlr;
 import org.junit.Test;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.hierarchy.SeparatorsMangler;
 
 /**
  * Tests for {@link TreeFixtureTest}.
@@ -37,7 +38,7 @@ public class TreeFixtureTest {
                 tree( WORD_, "w" )
             )
         ),
-        TreeFixture.removeSeparators( tree(
+        SeparatorsMangler.removeSeparators( tree(
             PART,
             tree( WHITESPACE_ ),
             tree( LINE_BREAK_ ),

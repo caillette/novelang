@@ -135,28 +135,31 @@ public class NamedUrlFixTest {
 
   private static void verifyFixNamedUrls(
       SyntacticTree expectedTree,
-      SyntacticTree flatTree
+      SyntacticTree rawTree
   ) {
     LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
-    final Treepath< SyntacticTree > rehierarchized = fixNamedUrls( flatTree ) ;
+    final Treepath< SyntacticTree > rehierarchized = fixNamedUrls( rawTree ) ;
 
-    TreeFixture.assertEqualsWithSeparators(
-        expectedTreepath,
-        rehierarchized
-    ) ;
+    TreeFixture.assertEqualsNoSeparators(
+        expectedTreepath.getTreeAtEnd(),
+        rehierarchized.getTreeAtEnd()
+    ); ;
 
   }
 
 
-  private static Treepath< SyntacticTree > fixNamedUrls(
-      SyntacticTree flatTree
-  ) {
-    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
-    final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
+  private static Treepath< SyntacticTree > fixNamedUrls( final SyntacticTree rawTree ) {
+    LOGGER.info( "Raw tree: " + TreeFixture.asString( rawTree ) ) ;
+    Treepath< SyntacticTree > mangledTreepath =
+        NamedUrlFix.fixNamedUrls( Treepath.create( rawTree ) ) ;
+    SyntacticTree mangledTree = mangledTreepath.getTreeAtEnd() ;
+    LOGGER.info( "Mangled tree: " + TreeFixture.asString( mangledTree ) ) ;
+    mangledTree = SeparatorsMangler.removeSeparators( mangledTree ) ;
+    LOGGER.info( "  No separators: " + TreeFixture.asString( mangledTree ) ) ;
 
-    return NamedUrlFix.fixNamedUrls( flatTreepath ) ;
+    return mangledTreepath ;
 
   }
 

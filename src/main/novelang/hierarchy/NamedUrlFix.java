@@ -31,8 +31,9 @@ public class NamedUrlFix {
   public static Treepath< SyntacticTree > fixNamedUrls(
       final Treepath< SyntacticTree > treepath
   ) {
-    State state = State.UNRELATED ;
+    State state = State.OUTSIDE_PARAGRAPH;
     Treepath< SyntacticTree > treepathToName = null ;
+    int paragraphDepth = -1 ;
 
     Treepath< SyntacticTree > current = treepath ;
     Treepath< SyntacticTree > result = current ;
@@ -42,56 +43,120 @@ public class NamedUrlFix {
       
       switch ( state ) {
         
-        case UNRELATED :
-          state = evaluate( tree, PART, State.FRESH_START ) ;
+        case OUTSIDE_PARAGRAPH:
+          state = evaluate(
+              tree,
+              WHITESPACE_,
+              State.WHITESPACE_OUTSIDE_PARAGRAPH,
+              evaluate( tree, PARAGRAPH_REGULAR, State.INSIDE_PARAGRAPH, State.OUTSIDE_PARAGRAPH )
+          ) ;
+          if( State.INSIDE_PARAGRAPH == state ) {
+            paragraphDepth = current.getLength() ;
+          }
           break ;
         
-        case FRESH_START :
-          state = evaluate( tree, WHITESPACE_, State.INDENTATION ) ;
-          treepathToName = null ;
+        case WHITESPACE_OUTSIDE_PARAGRAPH :
+          state = evaluate(
+              tree,
+              PARAGRAPH_REGULAR,
+              State.INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE,
+              State.OUTSIDE_PARAGRAPH
+          ) ;
+          if( State.INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE == state ) {
+            paragraphDepth = current.getLength() ;
+          }
           break ;
         
-        case INDENTATION :
-          state = evaluate( 
+        case INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE :
+          state = evaluate(
               tree,
               BLOCK_INSIDE_DOUBLE_QUOTES,
-              State.DOUBLE_QUOTES,
-              evaluate( tree, PARAGRAPH_REGULAR, State.INDENTATION ) // Ignoring
+              State.DOUBLE_QUOTES
+          ) ;
+          treepathToName = null ;
+          break ;
+
+        case INSIDE_PARAGRAPH :
+          state = evaluate( 
+              tree,
+              LINE_BREAK_,
+              State.LINEBREAK_INSIDE_PARAGRAPH
+          ) ;
+          break ;
+        
+        case LINEBREAK_INSIDE_PARAGRAPH :
+          state = evaluate(
+              tree,
+              WHITESPACE_,
+              State.INDENTATION_INSIDE_PARAGRAPH
+          ) ;
+          break ;
+
+        case INDENTATION_INSIDE_PARAGRAPH :
+          state = evaluate(
+              tree,
+              BLOCK_INSIDE_DOUBLE_QUOTES,
+              State.DOUBLE_QUOTES
           ) ;
           if( state == State.DOUBLE_QUOTES ) {
             treepathToName = current ;
           }
           break ;
-        
-        case DOUBLE_QUOTES :          
+
+        case DOUBLE_QUOTES :
           state = evaluate( 
-              tree, WHITESPACE_, State.TRAILING_SPACE,
-              evaluate( tree, NodeKind.LINE_BREAK_, State.LINE_BREAK )
+              tree, WHITESPACE_, State.WHITESPACE_AFTER_DOUBLE_QUOTES,
+              evaluate( tree, LINE_BREAK_, State.LINE_BREAK_AFTER_DOUBLE_QUOTES )
           ) ;
           break ;
         
-        case TRAILING_SPACE :
-          state = evaluate( tree, NodeKind.LINE_BREAK_, State.LINE_BREAK ) ;
+        case WHITESPACE_AFTER_DOUBLE_QUOTES :
+          state = evaluate(
+              tree,
+              LINE_BREAK_,
+              State.LINE_BREAK_AFTER_DOUBLE_QUOTES
+          ) ;
           break ;
-        
-        case LINE_BREAK :
+
+        case LINE_BREAK_AFTER_DOUBLE_QUOTES :
           if( tree.isOneOf( NodeKind.URL ) ) {
             current = TreepathTools.removeSubtree( current, treepathToName ) ;
             current = replaceByExternalLink( current, treepathToName ) ;
+            treepathToName = null ;
           } else {
-            state = State.UNRELATED ;      
+            state = State.INSIDE_PARAGRAPH ;
           }
           break ;
-        
-        default : 
+
+        default :
           throw new IllegalStateException( "Unsupported: " + state ) ;
       }
 
       result = current ;
-      current = TreepathTools.getNextInPreorder( current ) ;
+      if( State.DOUBLE_QUOTES == state /*|| tree.isOneOf( SKIPPED_NODEKINDS )*/ ) {
+        current = TreepathTools.getNextUpInPreorder( current ) ;
+      } else {
+        current = TreepathTools.getNextInPreorder( current ) ;
+      }
+
+      if( current != null && current.getLength() < paragraphDepth ) {
+        state = State.OUTSIDE_PARAGRAPH ;
+      }
+
     }
     return result.getStart() ;
   }
+
+  private static final NodeKind[] SKIPPED_NODEKINDS = new NodeKind[] {
+      WORD_,
+      CELL_ROWS_WITH_VERTICAL_LINE,
+      RASTER_IMAGE,
+      VECTOR_IMAGE,
+      BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+      LEVEL_INTRODUCER_INDENT_,
+      LINES_OF_LITERAL,
+      RESOURCE_LOCATION
+  } ;
 
   /**
    * Replaces the {@link NodeKind#URL} node at the end of the treepath by a 
@@ -118,30 +183,54 @@ public class NamedUrlFix {
     return TreepathTools.replaceTreepathEnd( treepathToUrl, externalLinkTree ) ;
   }
 
+  private static NodeKind[] kinds( NodeKind... nodeKinds ) {
+    return nodeKinds ;
+  }
+
   private static State evaluate(
       SyntacticTree tree,
       NodeKind nodeKind,
       State positive
   ) {
-    return evaluate( tree, nodeKind, positive, State.UNRELATED ) ;
+    return evaluate( tree, kinds( nodeKind ), positive, State.INSIDE_PARAGRAPH ) ;
   }
-  
+
+  private static State evaluate(
+      SyntacticTree tree,
+      NodeKind[] nodeKinds,
+      State positive
+  ) {
+    return evaluate( tree, nodeKinds, positive, State.INSIDE_PARAGRAPH ) ;
+  }
+
   private static State evaluate(
       SyntacticTree tree,
       NodeKind nodeKind,
       State positive,
       State negative
   ) {
-    return tree.isOneOf( nodeKind ) ? positive : negative ;
+    return evaluate( tree, kinds( nodeKind ), positive, negative ) ;
+  }
+
+  private static State evaluate(
+      SyntacticTree tree,
+      NodeKind[] nodeKinds,
+      State positive,
+      State negative
+  ) {
+    return tree.isOneOf( nodeKinds ) ? positive : negative ;
   }
 
   private enum State {
-    UNRELATED,
-    FRESH_START, // May represent a line break or the start of some kind of paragraph.
-    INDENTATION,
+    OUTSIDE_PARAGRAPH,
+    WHITESPACE_OUTSIDE_PARAGRAPH,
+    INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE,
+    INSIDE_PARAGRAPH,
+    LINEBREAK_INSIDE_PARAGRAPH,
+    INDENTATION_INSIDE_PARAGRAPH,
     DOUBLE_QUOTES,
-    TRAILING_SPACE,
-    LINE_BREAK,
+    WHITESPACE_AFTER_DOUBLE_QUOTES,
+    LINE_BREAK_AFTER_DOUBLE_QUOTES
   }
   
 }

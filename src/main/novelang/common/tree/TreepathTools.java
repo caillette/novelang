@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.NoSuchElementException;
 
 import com.google.common.base.Preconditions;
+import novelang.common.SyntacticTree;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -515,6 +516,7 @@ public class TreepathTools {
   }
 
 
+
   private enum RemovalProgress {
     UNSPLIT,
     REMOVAL_ON_LEFT,
@@ -557,18 +559,27 @@ public class TreepathTools {
     final T tree = treepath.getTreeAtEnd();
     if( tree.getChildCount() > 0 ) {
       return Treepath.create( treepath, 0 ) ;
-    } else if( hasNextSibling( treepath ) ) {
+    }
+    return getNextUpInPreorder( treepath ) ;
+  }
+
+  private static < T extends Tree > Treepath< T > getUpNextInPreorder( Treepath< T > treepath ) {
+    Treepath< T > previousTreepath = treepath.getPrevious() ;
+    while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
+      if( hasNextSibling( previousTreepath ) ) {
+        return getNextSibling( previousTreepath ) ;
+      } else {
+        previousTreepath = previousTreepath.getPrevious() ;
+      }
+    }
+    return null ;
+  }
+
+  public static < T extends Tree > Treepath< T > getNextUpInPreorder( Treepath< T > treepath ) {
+    if( hasNextSibling( treepath ) ) {
       return getNextSibling( treepath ) ;
     } else {
-      Treepath< T > previousTreepath = treepath.getPrevious() ;
-      while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
-        if( hasNextSibling( previousTreepath ) ) {
-          return getNextSibling( previousTreepath ) ;
-        } else {
-          previousTreepath = previousTreepath.getPrevious() ;
-        }
-      }
-      return null ;      
+      return getUpNextInPreorder( treepath ) ;
     }
   }
 
