@@ -17,9 +17,9 @@
 package novelang.hierarchy;
 
 import novelang.common.SyntacticTree;
+import novelang.common.SimpleTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.common.tree.TreepathPreorderIterator;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 
@@ -27,117 +27,57 @@ import static novelang.parser.NodeKind.*;
  * @author Laurent Caillette
  */
 public class NamedUrlFix {
-  
-  public static Treepath< SyntacticTree > fixNamedUrls( Treepath< SyntacticTree > treepath ) {
-    State state = State.UNRELATED ;
-    int doubleQuotesIndex = -1 ;
-    int childIndex = 0 ;
-    
-    while( childIndex < treepath.getTreeAtEnd().getChildCount() ) {
-      final SyntacticTree tree = treepath.getTreeAtEnd().getChildAt( childIndex ) ;
-      
-      switch ( state ) {
-        
-        case UNRELATED :
-          state = evaluate( tree, State.FRESH_START, PART ) ;
-          if( State.UNRELATED == state ) {
-            if( tree.getChildCount() > 0 ) {
-              treepath = fixNamedUrls( Treepath.create( treepath, childIndex ) ) ;
-            }
-          }
-          break ;
-        
-        case FRESH_START :
-          state = evaluate( tree, State.INDENTATION, WHITESPACE_ ) ;
-          doubleQuotesIndex = -1 ;
-          break ;
-        
-        case INDENTATION :
-          state = evaluate( tree, State.DOUBLE_QUOTES, BLOCK_INSIDE_DOUBLE_QUOTES ) ;
-          if( state == State.DOUBLE_QUOTES ) {
-            doubleQuotesIndex = childIndex ;
-          }
-          break ;
-        
-        case DOUBLE_QUOTES :          
-          state = evaluate( tree, State.TRAILING_SPACE, evaluate( tree, State.LINE_BREAK, NodeKind.LINE_BREAK_ ), WHITESPACE_
-          ) ;
-          break ;
-        
-        case TRAILING_SPACE :
-          state = evaluate( tree, State.LINE_BREAK, NodeKind.LINE_BREAK_ ) ;
-          break ;
-        
-        case LINE_BREAK :
-          if( tree.isOneOf( NodeKind.URL ) ) {
-            treepath = replaceByExternalLink( treepath, doubleQuotesIndex ) ;
-          } else {
-            state = State.UNRELATED ;      
-          }
-          break ;
-        
-        default : 
-          throw new IllegalStateException( "Unsupported: " + state ) ;
-      }
-      childIndex++ ;
-    }
-    return treepath ;
-  }
 
-  public static Treepath< SyntacticTree > fixNamedUrlsUsingIterator( 
-      Treepath< SyntacticTree > treepath 
+  public static Treepath< SyntacticTree > fixNamedUrls(
+      final Treepath< SyntacticTree > treepath
   ) {
     State state = State.UNRELATED ;
     Treepath< SyntacticTree > treepathToName = null ;
-    final TreepathPreorderIterator< SyntacticTree > iterator = 
-        new TreepathPreorderIterator< SyntacticTree >( treepath ) ; 
-    
-    while( iterator.hasNextTree() ) {
-      final SyntacticTree tree = iterator.getNextTree() ;
+
+    Treepath< SyntacticTree > current = treepath ;
+    Treepath< SyntacticTree > result = current ;
+
+    while( current != null ) {
+      final SyntacticTree tree = current.getTreeAtEnd() ;
       
       switch ( state ) {
         
         case UNRELATED :
-          state = evaluate( tree, State.FRESH_START, PART ) ;
-          if( State.UNRELATED == state ) {
-            if( tree.getChildCount() > 0 ) {
-              // TODO implement
-            }
-          }
+          state = evaluate( tree, PART, State.FRESH_START ) ;
           break ;
         
         case FRESH_START :
-          state = evaluate( tree, State.INDENTATION, WHITESPACE_ ) ;
+          state = evaluate( tree, WHITESPACE_, State.INDENTATION ) ;
           treepathToName = null ;
           break ;
         
         case INDENTATION :
           state = evaluate( 
-              tree, 
-              State.DOUBLE_QUOTES, 
-              evaluate( tree, State.INDENTATION, PARAGRAPH_REGULAR ), // Ignoring
-              BLOCK_INSIDE_DOUBLE_QUOTES 
+              tree,
+              BLOCK_INSIDE_DOUBLE_QUOTES,
+              State.DOUBLE_QUOTES,
+              evaluate( tree, PARAGRAPH_REGULAR, State.INDENTATION ) // Ignoring
           ) ;
           if( state == State.DOUBLE_QUOTES ) {
-            treepathToName = iterator.getTreepath() ;
+            treepathToName = current ;
           }
           break ;
         
         case DOUBLE_QUOTES :          
           state = evaluate( 
-              tree, State.TRAILING_SPACE, 
-              evaluate( tree, State.LINE_BREAK, NodeKind.LINE_BREAK_ ), 
-              WHITESPACE_
+              tree, WHITESPACE_, State.TRAILING_SPACE,
+              evaluate( tree, NodeKind.LINE_BREAK_, State.LINE_BREAK )
           ) ;
           break ;
         
         case TRAILING_SPACE :
-          state = evaluate( tree, State.LINE_BREAK, NodeKind.LINE_BREAK_ ) ;
+          state = evaluate( tree, NodeKind.LINE_BREAK_, State.LINE_BREAK ) ;
           break ;
         
         case LINE_BREAK :
           if( tree.isOneOf( NodeKind.URL ) ) {
-//            treepath = TreepathTools.removeEndFrom( treepath, treepathToName ) ;
+            current = TreepathTools.removeSubtree( current, treepathToName ) ;
+            current = replaceByExternalLink( current, treepathToName ) ;
           } else {
             state = State.UNRELATED ;      
           }
@@ -146,9 +86,11 @@ public class NamedUrlFix {
         default : 
           throw new IllegalStateException( "Unsupported: " + state ) ;
       }
-      
+
+      result = current ;
+      current = TreepathTools.getNextInPreorder( current ) ;
     }
-    return treepath ;
+    return result.getStart() ;
   }
 
   /**
@@ -156,32 +98,39 @@ public class NamedUrlFix {
    * {@link NodeKind#_EXTERNAL_LINK} node.
    *  
    * @param treepathToUrl treepath to the URL node.
-   * @param doubleQuotesIndex the index of the name of the URL, which must be a sibling node
+   * @param treepathToUrl treepath to the name node, which must be
    *     of {@link NodeKind#BLOCK_INSIDE_DOUBLE_QUOTES} type. 
    * @return the new treepath.
    */
   private static Treepath< SyntacticTree > replaceByExternalLink( 
       Treepath< SyntacticTree > treepathToUrl, 
-      int doubleQuotesIndex
+      Treepath< SyntacticTree > treepathToName
   ) {
-    final SyntacticTree nameTree = 
-        TreepathTools.getSiblingAt( treepathToUrl, doubleQuotesIndex ).getTreeAtEnd() ;
-    throw new UnsupportedOperationException( "replaceByExternalLink" );
+    final SyntacticTree nameTree = new SimpleTree(
+        NodeKind._LINK_NAME.name(),
+        treepathToName.getTreeAtEnd().getChildren()
+    ) ;
+    final SyntacticTree externalLinkTree = new SimpleTree(
+        NodeKind._EXTERNAL_LINK.name(),
+        nameTree,
+        treepathToUrl.getTreeAtEnd()
+    ) ;
+    return TreepathTools.replaceTreepathEnd( treepathToUrl, externalLinkTree ) ;
   }
 
   private static State evaluate(
       SyntacticTree tree,
-      State positive, 
-      NodeKind... nodeKind
+      NodeKind nodeKind,
+      State positive
   ) {
-    return evaluate( tree, positive, State.UNRELATED, nodeKind ) ;
+    return evaluate( tree, nodeKind, positive, State.UNRELATED ) ;
   }
   
   private static State evaluate(
       SyntacticTree tree,
-      State positive, 
-      State negative, 
-      NodeKind... nodeKind
+      NodeKind nodeKind,
+      State positive,
+      State negative
   ) {
     return tree.isOneOf( nodeKind ) ? positive : negative ;
   }
