@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 
 import com.google.common.base.Preconditions;
 
@@ -104,6 +105,7 @@ public class TreepathTools {
   /**
    * Returns true if given {@code Treepath} has a next sibling, false otherwise.
    * @param treepath a non-null {@code Treepath} with a minimum length of 2.
+   *     This may seem an excessive constraint but helps to detect many logical problems.
    * @throws IllegalArgumentException
    * @see #getNextSibling(Treepath)
    */
@@ -535,6 +537,39 @@ public class TreepathTools {
     }
     Collections.reverse( treepaths ) ;
     return treepaths.iterator() ; 
+  }
+
+  /**
+   * Returns a {@code Treepath} object to the next tree in a
+   * <a href="http://en.wikipedia.org/wiki/Tree_traversal">preorder</a> traversal.
+   * <pre>
+   *  *t0            *t0            *t0            *t0
+   *   |      next    |      next    |     next     |      next
+   *   t1     -->    *t1     -->    *t1     -->    *t1     -->    null
+   *  /  \           /  \           /  \           /  \           
+   * t2   t3        t2   t3       *t2   t3       t2   *t3
+   * </pre>
+   *
+   * @param treepath a non-null object.
+   * @return the treepath to the next tree, or null.
+   */
+  public static< T extends Tree > Treepath< T > getNextInPreorder( Treepath< T > treepath ) {
+    final T tree = treepath.getTreeAtEnd();
+    if( tree.getChildCount() > 0 ) {
+      return Treepath.create( treepath, 0 ) ;
+    } else if( hasNextSibling( treepath ) ) {
+      return getNextSibling( treepath ) ;
+    } else {
+      Treepath< T > previousTreepath = treepath.getPrevious() ;
+      while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
+        if( hasNextSibling( previousTreepath ) ) {
+          return getNextSibling( previousTreepath ) ;
+        } else {
+          previousTreepath = previousTreepath.getPrevious() ;
+        }
+      }
+      return null ;      
+    }
   }
 
 }

@@ -18,6 +18,8 @@ package novelang.common.tree;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Laurent Caillette
@@ -101,7 +103,7 @@ public class TreepathToolsTest {
     Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
     Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 0 ).getPayload() ) ;
 
-    Assert.assertSame( child1, afterRemoval.getTreeAtDistance( 0 ).getChildAt( 0 ) ) ;
+    assertSame( child1, afterRemoval.getTreeAtDistance( 0 ).getChildAt( 0 ) ) ;
 
   }
 
@@ -125,8 +127,8 @@ public class TreepathToolsTest {
     Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
     Assert.assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
-    Assert.assertSame( child0, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 0 ) ) ;
-    Assert.assertSame( child2, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 1 ) ) ;
+    assertSame( child0, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 0 ) ) ;
+    assertSame( child2, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 1 ) ) ;
 
   }
 
@@ -228,7 +230,43 @@ public class TreepathToolsTest {
     Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
     Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
-    Assert.assertSame( child1, afterRemoval.getTreeAtDistance( 0 ) ) ;
+    assertSame( child1, afterRemoval.getTreeAtDistance( 0 ) ) ;
+
+
+  }
+  @Test
+  public void nextInPreorder() {
+
+    final MyTree t3 = MyTree.create( "3" ) ;           //      t0
+    final MyTree t4 = MyTree.create( "4" ) ;           //      |
+    final MyTree t6 = MyTree.create( "6" ) ;           //      t1
+    final MyTree t2 = MyTree.create( "2", t3, t4 ) ;   //     /  \
+    final MyTree t5 = MyTree.create( "5", t6 ) ;       //   t2    t5
+    final MyTree t1 = MyTree.create( "1", t2, t5 ) ;   //  /  \   |
+    final MyTree t0 = MyTree.create( "0", t1 ) ;       // t3  t4  t6
+
+    final Treepath< MyTree > treepathTo0 = Treepath.create( t0 ) ;
+
+    final Treepath< MyTree > treepathTo1 = TreepathTools.getNextInPreorder( treepathTo0 ) ;
+    assertSame( t1, treepathTo1.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo2 = TreepathTools.getNextInPreorder( treepathTo1 ) ;
+    assertSame( t2, treepathTo2.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo3 = TreepathTools.getNextInPreorder( treepathTo2 ) ;
+    assertSame( t3, treepathTo3.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo4 = TreepathTools.getNextInPreorder( treepathTo3 ) ;
+    assertSame( t4, treepathTo4.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo5 = TreepathTools.getNextInPreorder( treepathTo4 ) ;
+    assertSame( t5, treepathTo5.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo6 = TreepathTools.getNextInPreorder( treepathTo5 ) ;
+    assertSame( t6, treepathTo6.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > nextTo6 = TreepathTools.getNextInPreorder( treepathTo6 );
+    assertNull( nextTo6 ) ;
 
 
   }
