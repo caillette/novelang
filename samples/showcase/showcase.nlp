@@ -57,7 +57,13 @@ Some ISO-8859-1 characters: à À é è ë ê É È Ë Ê ï î Ï Î ö ô Ö �
 
 === URLs support
 
+No link name:
 http://www.google.com/search?q=novelang
+
+With link name:
+  "click me"
+http://novelang.sourceforge.net
+.
 
 === Punctuation signs
 

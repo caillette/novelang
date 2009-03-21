@@ -77,7 +77,32 @@ public class UrlManglerTest {
         )
         
     ) ;
+  }
 
+  @Test
+  public void fixUnnamedUrlAtStartOfAPart() {
+    verifyFixNamedUrls( 
+        tree(
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( 
+                    _EXTERNAL_LINK,
+                    tree( URL, "http://foo.com" )
+                )                            
+            )            
+        ),
+        tree( 
+            PART,
+            tree( WHITESPACE_ ),
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( URL, "http://foo.com" )
+                            
+            )
+        )
+        
+    ) ;
   }
 
   @Test
@@ -110,7 +135,7 @@ public class UrlManglerTest {
   }
 
   @Test
-  public void fixUrlWithoutName() {
+  public void fixUrlWithoutNameAtStartOfAParagraph() {
     verifyFixNamedUrls( 
         tree(
             PARAGRAPH_REGULAR,
@@ -125,7 +150,27 @@ public class UrlManglerTest {
                         
         )        
     ) ;
+  }
 
+  @Test
+  public void fixUrlWithoutNameInsideAParagraph() {
+    verifyFixNamedUrls( 
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( WORD_, "w" ),
+            tree( 
+                _EXTERNAL_LINK,
+                tree( URL, "http://foo.com" )
+            )            
+        ),
+        tree( 
+            PARAGRAPH_REGULAR,
+            tree( WORD_, "w" ),
+            tree( LINE_BREAK_ ),
+            tree( URL, "http://foo.com" )
+                        
+        )        
+    ) ;
   }
 
 

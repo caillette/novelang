@@ -82,7 +82,9 @@ public class UrlMangler {
               State.DOUBLE_QUOTES,
               evaluate( tree, URL, State.URL )
           ) ;
-          treepathToName = current ;
+          if ( State.DOUBLE_QUOTES == state ) {
+            treepathToName = current ;
+          }
           break ;
 
         case INSIDE_PARAGRAPH :
@@ -98,7 +100,8 @@ public class UrlMangler {
           state = evaluate(
               tree,
               WHITESPACE_,
-              State.INDENTATION_INSIDE_PARAGRAPH
+              State.INDENTATION_INSIDE_PARAGRAPH,
+              evaluate( tree, URL, State.URL )              
           ) ;
           break ;
 

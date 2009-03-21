@@ -256,16 +256,23 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:url" >
-    <fo:block>
+  <xsl:template match="n:external-link" >
+    <!--<fo:block>-->
       <fo:basic-link
           color="blue"
           text-decoration="underline"
       >
-        <xsl:attribute name="external-destination" ><xsl:value-of select="." /></xsl:attribute>
-        <xsl:value-of select="." />
+        <xsl:attribute name="external-destination" ><xsl:value-of select="n:url" /></xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="n:link-name" >
+            <xsl:value-of select="n:link-name" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="n:url" />
+          </xsl:otherwise>
+        </xsl:choose>
       </fo:basic-link>
-    </fo:block>
+    <!--</fo:block>-->
   </xsl:template>
 
   <xsl:template match="n:paragraph-as-list-item" >
