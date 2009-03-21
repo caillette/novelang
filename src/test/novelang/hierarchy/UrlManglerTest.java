@@ -30,9 +30,9 @@ import static novelang.parser.antlr.TreeFixture.tree;
  * 
  * @author Laurent Caillette
  */
-public class NamedUrlFixTest {
+public class UrlManglerTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( NamedUrlFixTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UrlManglerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -153,7 +153,7 @@ public class NamedUrlFixTest {
   private static Treepath< SyntacticTree > fixNamedUrls( final SyntacticTree rawTree ) {
     LOGGER.info( "Raw tree: " + TreeFixture.asString( rawTree ) ) ;
     Treepath< SyntacticTree > mangledTreepath =
-        NamedUrlFix.fixNamedUrls( Treepath.create( rawTree ) ) ;
+        UrlMangler.fixNamedUrls( Treepath.create( rawTree ) ) ;
     SyntacticTree mangledTree = mangledTreepath.getTreeAtEnd() ;
     LOGGER.info( "Mangled tree: " + TreeFixture.asString( mangledTree ) ) ;
     mangledTree = SeparatorsMangler.removeSeparators( mangledTree ) ;

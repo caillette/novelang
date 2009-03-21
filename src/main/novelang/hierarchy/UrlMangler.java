@@ -26,7 +26,7 @@ import static novelang.parser.NodeKind.*;
 /**
  * @author Laurent Caillette
  */
-public class NamedUrlFix {
+public class UrlMangler {
 
   public static Treepath< SyntacticTree > fixNamedUrls(
       final Treepath< SyntacticTree > treepath
@@ -71,16 +71,18 @@ public class NamedUrlFix {
           state = evaluate(
               tree,
               BLOCK_INSIDE_DOUBLE_QUOTES,
-              State.DOUBLE_QUOTES
+              State.DOUBLE_QUOTES,
+              evaluate( tree, URL, State.URL )
           ) ;
-          treepathToName = null ;
+          treepathToName = current ;
           break ;
 
         case INSIDE_PARAGRAPH :
           state = evaluate( 
               tree,
               LINE_BREAK_,
-              State.LINEBREAK_INSIDE_PARAGRAPH
+              State.LINEBREAK_INSIDE_PARAGRAPH,
+              evaluate( tree, URL, State.URL )
           ) ;
           break ;
         
@@ -119,21 +121,34 @@ public class NamedUrlFix {
           break ;
 
         case LINE_BREAK_AFTER_DOUBLE_QUOTES :
-          if( tree.isOneOf( NodeKind.URL ) ) {
-            current = TreepathTools.removeSubtree( current, treepathToName ) ;
-            current = replaceByExternalLink( current, treepathToName ) ;
-            treepathToName = null ;
-          } else {
-            state = State.INSIDE_PARAGRAPH ;
-          }
+          state = evaluate(
+              tree,
+              URL,
+              State.URL
+          ) ;
+          break ;
+
+        case URL :
           break ;
 
         default :
           throw new IllegalStateException( "Unsupported: " + state ) ;
       }
 
+      if( State.URL == state ) {
+        if( null != treepathToName ) {
+          current = TreepathTools.removeSubtree( current, treepathToName ) ;
+        }
+        current = replaceByExternalLink( current, treepathToName ) ;
+        treepathToName = null ;
+        state = State.INSIDE_PARAGRAPH ;
+      }
+
       result = current ;
-      if( State.DOUBLE_QUOTES == state /*|| tree.isOneOf( SKIPPED_NODEKINDS )*/ ) {
+      if( State.DOUBLE_QUOTES == state
+       || current.getTreeAtEnd().isOneOf( _EXTERNAL_LINK ) 
+       || tree.isOneOf( SKIPPED_NODEKINDS )
+      ) {
         current = TreepathTools.getNextUpInPreorder( current ) ;
       } else {
         current = TreepathTools.getNextInPreorder( current ) ;
@@ -171,14 +186,22 @@ public class NamedUrlFix {
       Treepath< SyntacticTree > treepathToUrl, 
       Treepath< SyntacticTree > treepathToName
   ) {
-    final SyntacticTree nameTree = new SimpleTree(
-        NodeKind._LINK_NAME.name(),
-        treepathToName.getTreeAtEnd().getChildren()
-    ) ;
+    final SyntacticTree nameTree;
+    final SyntacticTree[] children ;
+    if( null == treepathToName ) {
+      children = new SyntacticTree[] { treepathToUrl.getTreeAtEnd() } ;
+
+    } else {
+      nameTree = new SimpleTree(
+          NodeKind._LINK_NAME.name(),
+          treepathToName.getTreeAtEnd().getChildren()
+      );
+      children = new SyntacticTree[] { nameTree, treepathToUrl.getTreeAtEnd() } ;
+    }
+
     final SyntacticTree externalLinkTree = new SimpleTree(
         NodeKind._EXTERNAL_LINK.name(),
-        nameTree,
-        treepathToUrl.getTreeAtEnd()
+        children
     ) ;
     return TreepathTools.replaceTreepathEnd( treepathToUrl, externalLinkTree ) ;
   }
@@ -230,7 +253,8 @@ public class NamedUrlFix {
     INDENTATION_INSIDE_PARAGRAPH,
     DOUBLE_QUOTES,
     WHITESPACE_AFTER_DOUBLE_QUOTES,
-    LINE_BREAK_AFTER_DOUBLE_QUOTES
+    LINE_BREAK_AFTER_DOUBLE_QUOTES,
+    URL
   }
   
 }
