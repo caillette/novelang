@@ -130,21 +130,21 @@ The level structure of the Part looks like this:
 
 <<<
 n:part
- +-- n:paragraph-regular "Text at depth 0"
- +-- n:level
- | +-- n:level-title "Depth 1"
- | +-- n:paragraph-regular "Introductory text."
- | +-- n:level
- | |    +-- n:level-title "Depth 2"
- | |    +-- n:paragraph-regular "Blah blah blah."
- | +-- n:level
- |      +-- n:level-title "Depth 2"
- |      +-- n:paragraph-regular "Blah."
- +-- n:level
-      +-- n:level-title "Depth 1 again"
-      +-- n:level
-           +-- n:level-title "Depth 2"
-           +-- n:paragraph-regular "..."
+ + n:paragraph-regular "Text at depth 0"
+ + n:level
+ | + n:level-title "Depth 1"
+ | + n:paragraph-regular "Introductory text."
+ | + n:level
+ | |  + n:level-title "Depth 2"
+ | |  + n:paragraph-regular "Blah blah blah."
+ | + n:level
+ |    + n:level-title "Depth 2"
+ |    + n:paragraph-regular "Blah."
+ + n:level
+    + n:level-title "Depth 1 again"
+    + n:level
+       + n:level-title "Depth 2"
+       + n:paragraph-regular "..."
 >>>
 
 As explained later in this document, the depth of levels may be changed (increased) at Book level.
