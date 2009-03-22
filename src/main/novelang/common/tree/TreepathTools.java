@@ -91,16 +91,7 @@ public class TreepathTools {
     if( treepath.getLength() < 2 ) {
       throw new IllegalArgumentException( "Treepath must have minimum length of 2" ) ;
     }
-    final Tree treeToMove = treepath.getTreeAtEnd() ;
-    final Tree parent = treepath.getTreeAtDistance( 1 ) ;
-    // TODO: use getIndexInPrevious()
-    for( int i = parent.getChildCount() - 1 ; i > 0 ; i-- ) {
-      final Tree child = parent.getChildAt( i ) ;
-      if( child == treeToMove ) {
-        return true ;
-      }
-    }
-    return false ;
+    return treepath.getIndexInPrevious() > 0 ;
   }
 
   /**
@@ -116,16 +107,8 @@ public class TreepathTools {
     if( treepath.getLength() < 2 ) {
       throw new IllegalArgumentException( "Treepath must have minimum length of 2" ) ;
     }
-    final Tree treeToMove = treepath.getTreeAtEnd() ;
-    final Tree parent = treepath.getTreeAtDistance( 1 ) ;
-    // TODO: use getIndexInPrevious()
-    for( int i = 0 ; i < parent.getChildCount() - 1 ; i ++ ) {
-      final Tree child = parent.getChildAt( i ) ;
-      if( child == treeToMove ) {
-        return true ;
-      }
-    }
-    return false ;
+    return treepath.getIndexInPrevious() < 
+        treepath.getPrevious().getTreeAtEnd().getChildCount() - 1 ;
   }
 
   /**
@@ -144,19 +127,9 @@ public class TreepathTools {
       Treepath< T > treepath
   ) throws IllegalArgumentException
   {
-    if( treepath.getLength() < 2 ) {
-      throw new IllegalArgumentException( "Treepath must have minimum length of 2" ) ;
-    }
-    final T treeToMove = treepath.getTreeAtEnd() ;
-    final T parent = treepath.getTreeAtDistance( 1 ) ;
-    // TODO: use getIndexInPrevious()
-    for( int i = parent.getChildCount() - 1 ; i > 0 ; i-- ) {
-      final T child = ( T ) parent.getChildAt( i );
-      if( child == treeToMove ) {
-        return Treepath.create( treepath.getPrevious(), i - 1 ) ;
-      }
-    }
-    throw new IllegalArgumentException( "No previous sibling" ) ;
+    Preconditions.checkArgument( hasPreviousSibling( treepath ) ) ;
+    final Treepath< T > previousTreepath = treepath.getPrevious() ;
+    return Treepath.create( previousTreepath, treepath.getIndexInPrevious() - 1 ) ;
   }
 
 
@@ -172,19 +145,9 @@ public class TreepathTools {
    * @see #hasNextSibling(Treepath)
    */
   public static< T extends Tree > Treepath< T > getNextSibling( Treepath< T > treepath ) {
-    if( treepath.getLength() < 2 ) {
-      throw new IllegalArgumentException( "Treepath must have minimum length of 2" ) ;
-    }
-    final Tree treeToMove = treepath.getTreeAtEnd() ;
-    final Tree parent = treepath.getTreeAtDistance( 1 ) ;
-    // TODO: use getIndexInPrevious()
-    for( int i = 0 ; i < parent.getChildCount() - 1 ; i++ ) {
-      final Tree child = parent.getChildAt( i ) ;
-      if( child == treeToMove ) {
-        return Treepath.create( treepath.getPrevious(), i + 1 ) ;
-      }
-    }
-    throw new IllegalArgumentException( "No next sibling" ) ;
+    Preconditions.checkArgument( hasNextSibling( treepath ) ) ;
+    final Treepath< T > previousTreepath = treepath.getPrevious() ;
+    return Treepath.create( previousTreepath, treepath.getIndexInPrevious() + 1 ) ;
   }
 
   /**
@@ -204,9 +167,11 @@ public class TreepathTools {
       Treepath< T > treepath,
       T tree
   ) {
-    if( treepath.getLength() < 2 ) {
-      throw new IllegalArgumentException( "Minimum length is 2, got " + treepath.getLength() ) ;
-    }
+    Preconditions.checkArgument( 
+        treepath.getLength() > 1, 
+        "Minimum length is 2, got %s", treepath.getLength() 
+    ) ;
+    
     final T oldParent = treepath.getTreeAtDistance( 1 ) ;
     final T newParent = TreeTools.addLast( oldParent, tree ) ;
 
@@ -235,9 +200,11 @@ public class TreepathTools {
       Treepath< T > treepath,
       T tree
   ) {
-    if( treepath.getLength() < 1 ) {
-      throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
-    }
+    Preconditions.checkArgument( 
+        treepath.getLength() < 1,
+        "Minimum length is 1, got %s",
+        treepath.getLength() 
+    ) ;
     final T newParent = TreeTools.addFirst( treepath.getTreeAtEnd(), tree ) ;
     return Treepath.create(
         replaceTreepathEnd( treepath, newParent ),
@@ -266,9 +233,11 @@ public class TreepathTools {
       T tree,
       int position
   ) {
-    if( treepath.getLength() < 1 ) {
-      throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
-    }
+    Preconditions.checkArgument( 
+        treepath.getLength() < 1,
+        "Minimum length is 1, got ",
+        treepath.getLength() 
+    ) ;
     final T newParent = TreeTools.add( treepath.getTreeAtEnd(), tree, position ) ;
     return Treepath.create( replaceTreepathEnd( treepath, newParent ), position ) ;
   }
@@ -292,11 +261,14 @@ public class TreepathTools {
       Treepath< T > treepath,
       T tree
   ) {
-    if( treepath.getLength() < 1 ) {
-      throw new IllegalArgumentException( "Minimum length is 1, got " + treepath.getLength() ) ;
-    }
+    Preconditions.checkArgument( 
+        treepath.getLength() > 0,
+        "Minimum length is 1, got %s",
+        treepath.getLength() 
+    ) ;
     final T newParent = TreeTools.addLast( treepath.getTreeAtEnd(), tree ) ;
-    return Treepath.create( replaceTreepathEnd( treepath, newParent ), newParent.getChildCount() - 1 ) ;
+    return Treepath.create( 
+        replaceTreepathEnd( treepath, newParent ), newParent.getChildCount() - 1 ) ;
   }
 
   /**
@@ -343,9 +315,11 @@ public class TreepathTools {
    * @return a {@code Treepath} referencing updated trees.
    */
   public static< T extends Tree > Treepath< T > removeEnd( Treepath< T > treepath ) {
-    if( treepath.getLength() < 2 ) {
-      throw new IllegalArgumentException( "Treepath length must be 2 or more" ) ;
-    }
+    Preconditions.checkArgument( 
+        treepath.getLength() > 1,
+        "Treepath length must be 2 or more" 
+    ) ;
+    
 
     final T removed = treepath.getTreeAtEnd() ;
     final T parentOfRemoved = treepath.getTreeAtDistance( 1 ) ;
