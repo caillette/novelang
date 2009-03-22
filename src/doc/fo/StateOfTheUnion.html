@@ -1,0 +1,777 @@
+<html><head>
+
+<!-- base href="http://www.idealliance.org.way_back_stub/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm" --><title>XSL-FO: state of the union, state of the art</title>
+
+<style><!-- 
+  a {color: #6c5cc4; font-size: 10pt; font-weight: bold; font-family: Arial, Helvetica; text-decoration: none}
+  a:hover { color: #d21430 }
+ a.topic {text-decoration:none; background:white; color:#6c5cc4; font-size: 10pt; font-weight:normal; font-family: Arial, Helvetica}
+  a.topic:hover { color: red}
+a.bigtopic {text-decoration:none; background:white; color:#6c5cc4; font-size: 12pt; font-weight:bold; font-family: Arial, Helvetica}
+  a.bigtopic:hover { color: red}
+ a.topicInText {text-decoration:none; background:black; color:orange; font-size: 8pt; font-weight:bold; font-family: Arial, Helvetica; }
+  a.topicInText:hover { color:blue}
+a.navigbar {text-decoration:none:background:black;color:orange; font-size:8pt;font-weight:bold;font-family:Arial, Helvetica}
+a.navigbar:hover {color:yellow}
+h1,h2,h3,h4,h5 {font-family:Arial, Helvetica, Geneva; margin-left:30px; margin-right:20px}
+p, li, table, title, pre, dl, dt, dd {margin-left:30px; margin-right:20px}
+--></style></head><body>
+<table style="background: black none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;" width="700">
+<tbody><tr width="600">
+<td align="left"><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-01-04/syntactic-web.htm"><img src="StateOfTheUnion%20Files/larrow.gif" align="middle" border="0"> </a></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/orlantoc.htm">Table of contents</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx0.htm" class="navigbar">Author</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx1.htm" class="navigbar">City</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx2.htm" class="navigbar">Company</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx3.htm" class="navigbar">Country</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx4.htm" class="navigbar">State/Province</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx5.htm" class="navigbar">Term</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/xtmdoc.htm" class="navigbar">Interchange</a></b></td>
+<td align="right"><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/04-01-03/data_binding_silver_bullet_subbu_bea.htm"> <img src="StateOfTheUnion%20Files/rarrow.gif" align="middle" border="0"></a></td>
+</tr>
+</tbody></table>
+
+     <a name="N1"></a>     <h1>XSL-FO: state of the union, state of the art</h1>
+     <p><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp131.htm" class="bigtopic">Lease, Karen</a>
+
+<a name="N2"></a>     
+
+          , Senior Software Developer     ,        <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-03-03/03-03-03.htm#N3" class="topic"><img src="StateOfTheUnion%20Files/larrow.gif" align="middle" border="0"> </a><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp132.htm" class="topic">SPX Valley Forge</a><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-03-03/03-03-03.htm#N3" class="topic"> <img src="StateOfTheUnion%20Files/rarrow.gif" align="middle" border="0"></a><a name="N3"></a>,         <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp133.htm" class="topic">Rueil-Malmaison</a><a name="N4"></a>        <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/04-04-02/xml2001orlandopaper.htm#N5" class="topic"><img src="StateOfTheUnion%20Files/larrow.gif" align="middle" border="0"> </a><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp134.htm" class="topic">France</a><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/05-05-01/05-05-01.htm#N5" class="topic"> <img src="StateOfTheUnion%20Files/rarrow.gif" align="middle" border="0"></a><a name="N5"></a>          </p><h4>Biography</h4><a name="N6"></a>       <p><a name="N7"></a>Karen
+Lease has been developing software for SGML and XML applications since
+1983. She has always been particularly interested in formatting
+aspects, starting with Texet's WYSIWYG structured editor and continuing
+on with DSSSL and XSL. She is currently one of the principal developers
+on the Apache Fop project. </p>
+       <p><a name="N8"></a>Ms. Lease has previously spoken at SGML/XML Europe in 1998 and      2000, Documation Paris 2001 and AUGI 2001.</p>
+          <p></p>
+     <h3>Abstract</h3>
+<div>
+     <p><a name="N9"></a>One of the main ideas of structured
+languages (SGML and XML) is to separate structure and content from
+presentation. XSL is the latest in a long sequence of both standardized
+and proprietary solutions to this problem. Like DSSSL, and unlike FOSI
+and CSS, XSL is a two step process model: transformation of the
+original document and formatting of the transformed document. Unlike
+DSSSL, the transformation aspect (separately approved as XSLT in a W3C
+Recommendation stage in November 1999) has given rise to a significant
+number of implementations. The much longer gestation of the formatting
+object (FO) aspect of XSL has often led to questions of whether it was
+even necessary. Now with the XSL-FO specification having attained PR
+status, and with several public and commercial FO processors being
+developed, it seems that FO will at least see the light of day. This
+talk will first give a brief overview of the essential aspects of the
+standard, and then discuss how XSL-FO tools will fit into the XML
+landscape.</p>
+     </div>
+          <br><br>     <div class="section">
+<a name="N10"></a>     <h2>Introduction</h2>
+     <p><a name="N11"></a>In
+this section, I'll describe XSL-FO and situate it with respect to the
+more widely known XSLT specification. I'll give a very brief historical
+overview of the development of the specification.</p>
+     <div class="subsec1"><a name="N12"></a>       <h3>XSL, XSL-FO, XSL-T</h3>       <p><a name="N13"></a>       <b>
+XSL</b>
+       <a name="xsl"></a>
+is the official name of the W3C specification (in the Proposed
+Recommendation state at the time of writing) which describes a way of
+attaching formatting information to XML documents  <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#bib.xsl"><img src="StateOfTheUnion%20Files/document.gif" border="0" width="30"></a>.      As described in its abstract, the specification consists of two distinct parts:      </p>
+       <blockquote>       <p><a name="N14"></a>1. a language for transforming XML documents, and</p>
+       <p><a name="N15"></a>2. an XML vocabulary for specifying formatting      semantics.</p>
+       </blockquote>       <p><a name="N16"></a>Part 1, the <i>language for transforming XML documents</i>
+ was      broken out of the XSL specification and was approved under the name of <i>XSL      Transformations</i>
+ or <i>XSLT</i>
+ in November 1999  <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#bib.xslt"><img src="StateOfTheUnion%20Files/document.gif" border="0" width="30"></a>.
+XSLT is very widely used in applications which transform an XML
+document into text, a different XML document, or perhaps most commonly
+into an HTML document for delivery to a client browser.</p>
+       <p><a name="N17"></a>To
+avoid confusion with XSLT, the actual XSL specification which describes
+formatting semantics is thus frequently referred to as <i>XSL-FO</i>
+,      where <i>FO</i>
+ is shorthand for <i>Formatting Objects</i>
+.This specification      covers the following aspects of formatting:</p>
+       <ul>
+       <li>       <p><a name="N18"></a>the general formatting model</p>
+       </li>
+       <li>       <p><a name="N19"></a>the elements of the formatting language and their        relations</p>
+       </li>
+       <li>       <p><a name="N20"></a>the formatting properties which are applicable to each        element</p>
+       </li>
+       <li>       <p><a name="N21"></a>the expression language which may be used in specifying        property values</p>
+       </li>
+       </ul>
+       <p><a name="N22"></a>In
+this paper, I will use the term XSL to refer to the W3C specification
+and the terms XSL or XSL-FO to refer to the vocabulary for formatting
+semantics described by the specification. I will use the abbreviation <i>FO</i>
+ to mean <i>formatting object</i>
+.</p>
+     </div>     <div class="subsec1"><a name="N23"></a>       <h3>A short history of stylesheet languages</h3>              <p><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp136.htm" class="topicInText">formatting language</a>  <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp135.htm" class="topicInText">stylesheet</a>  <a name="N24"></a>One
+of the main ideas of using a structured language such as SGML or XML is
+to separate structure and content from presentation. In the 15 years
+since SGML was first approved as an ISO standard, there have been
+several major attempts to create a companion standard which would allow
+users to associate formatting information with structured documents.
+One of the first standardization efforts resulted in the <b>
+FOSI</b>
+       <a name="N25"></a>
+, developed by the U.S. Department of Defense, and adopted by Arbortext
+and Datalogics to define stylesheets for SGML documents. The FOSI
+defines an SGML vocabulary for attaching formatting characteristics to <i>elements in context</i>
+. This fundamental concept is also the basic idea behind all other
+formatting languages, although as we will see, it functions in a
+slightly different way in XSL.</p>
+       <p><a name="N26"></a>The next major attempt to resolve the problem was the ISO      standard       <b>
+DSSSL</b>
+<a name="dsssl"></a>  <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#bib.dsssl"><img src="StateOfTheUnion%20Files/document.gif" border="0" width="30"></a>.       <b>
+DSSSL</b>
+includes both a transformation and a formatting part. However, by the
+time DSSSL was approved, the Web was becoming very important, and the
+SGML community reacted by developing XML as a response to HTML. HTML
+has built-in formatting semantics. Since XML, like SGML, doesn't imply
+any formatting semantics, it can't be used for presentation without a
+way of attaching formatting semantics to the elements. This quickly led
+to the birth of the <b>
+XSL</b>
+ working group at the W3C.</p>
+       <p><a name="N27"></a>Initially,
+the XSL working group was composed of many of the same people who had
+created DSSSL, and initial versions of the specification were heavily
+influenced by DSSSL ideas, but using an XML syntax instead of Scheme
+syntax. Like DSSSL, and unlike FOSI and <b>
+CSS</b>
+<a name="css"></a>, the XSL proposal was based on a two step process
+model: transformation of the original document and formatting of the
+transformed document. This is a crucial point for the history of XSL.
+It led rather quickly to the split-off of the transformation
+aspectâ&#8364;&#8220;more easily defined and agreed uponâ&#8364;&#8220;into the XSLT
+specification. A number of critics considered at the time (and probably
+still do) that this was an adequate answer to the problem. However work
+on the main XSL specification continued, and the formatting property
+set was brought closer to the CSS vocabulary  <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#bib.css"><img src="StateOfTheUnion%20Files/document.gif" border="0" width="30"></a>.</p>
+     </div>     </div>
+     <div class="section">
+<a name="N28"></a>     <h2>State of the union</h2>
+     <p><a name="N29"></a>By <i>State of the union</i>
+ I mean the actual content of Version      1.0 of the XSL specification. This will help to answer the question: <i>What      can I do with XSL?</i>
+</p>
+     <div class="subsec1"><a name="N30"></a>       <h3>Fundamental XSL concepts</h3>       <p><a name="N31"></a>If
+you have experience with other formatting systems, XML-based or not,
+various aspects of XSL may surprise you. This section describes some of
+the main concepts underlying the specification.</p>
+       <div class="subsec2">
+<a name="N32"></a>       <h4>Formatting objects</h4>       <p><a name="N33"></a>The first fundamental idea is that XSL does <b>not</b>
+provide a way of directly attaching formatting properties to elements
+in an XML document. Instead it attaches formatting properties to <i>formatting      objects</i>
+. These objects are defined by the XSL specification. For example,      instead of specifying typographic properties for a <code>title</code> element in a <code>subsec2</code> in the GCA XML2001 paper namespace, one transforms that into a <code>block</code> element in the FO namespace with particular typographic      properties.</p>
+       <p><a name="N34"></a>Formatting
+object processors therefore do not deal directly with elements of
+various XML vocabularies, but only with elements of the formatting
+object vocabulary. The principal elements in this vocabulary will be
+described in <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fovocab">fovocab</a>.</p>
+       </div>
+       <div class="subsec2">
+<a name="N35"></a>       <h4>Transformation</h4>       <p><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp137.htm" class="topicInText">transformation</a><a name="N36"></a>This notion follows from the previous one: the formatting      object structure is (at least conceptually) the result of <b>transforming</b>
+an XML document in a domain-specific vocabulary into the formatting
+object vocabulary. This extremely powerful idea is a heritage from
+DSSSL, although there are some subtle differences between the way DSSSL
+and XSL are designed to function. The transformation may be quite
+straightforward, in which case it is similar to simply attaching
+formatting properties to elements in the original document, or it may
+involve extensive generation of content, rearrangement or suppression
+of existing content.</p>
+       <h3>Note</h3>       <p><a name="N37"></a>It
+isn't necessary to use the XSLT part of XSL to create an XML document
+using the formatting vocabulary. Any other tool, including a standard
+text editor, may be used to create such a document. However, in many
+cases, the process will involve the use of XSLT. When it does so, the
+formatting object document usually does not exist as a persistent
+representation (for example, a file), but only as an in-memory
+representation such as a <b>
+DOM</b>
+<a name="N38"></a> tree or a stream of         <b>
+SAX</b>
+<a name="N39"></a> events.</p>
+              </div>
+       <div class="subsec2">
+<a name="N40"></a>       <h4>Areas</h4>       <p><a name="N41"></a>Formatting
+objects are not themselves what one sees on a printed page or a browser
+screen. Rather they are processed (by an FO processor) to create <i>areas</i>
+. Areas are boxes which actually contain      laid-out content. A formatting object is said to <i>generate</i>
+one or more areas. The size and position of the generated areas depends
+on the constraints imposed by the formatting properties and the page
+masters. For example, a block FO will generate more than one area if it
+contains too much content to fit on a single page.</p>
+       </div>
+       <div class="subsec2">
+<a name="N42"></a>       <h4>Writing-mode independence</h4>              <p><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp138.htm" class="topicInText">writing-mode</a><a name="N43"></a>Another
+fundamental XSL concept is the notion of writing-mode independence,
+which allows style sheets to be developed for non-Western writing
+systems such as Hebrew, Arabic or Japanese. Again this idea comes from <b>
+DSSSL</b>
+. However XSL also retains the "absolute" model (top, bottom, left,
+right) of specifying formatting properties, mainly to maintain
+compatibility with the <b>
+CSS</b>
+ vocabulary.</p>
+       <p><a name="N44"></a>Writing modes are specified using terms such as <code>lr-tb</code> or <code>tb-rl</code>. These codes specify the <code>inline-progression-direction</code> and the <code>block-progression-direction</code>. For example, lr-tb is interpreted as "lines of text are written from      left to right, and stacked from top to bottom". See <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.wrtmode">fig.wrtmode</a> for an illustration of these terms.</p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.wrtmode"></a>       <blockquote><i>
+Writing mode</i></blockquote>
+<p><i>       <p><a name="N45"></a>The figure on the left shows a Western writing mode; the        figure on the right shows the writing mode for Chinese.</p>
+</i></p>       <blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig02.png"></blockquote>
+
+       </td></tr></tbody></table>
+       <p><a name="N46"></a>Writing-mode
+independence gives rise to a vocabulary for describing formatting
+properties which uses different terms from those to which we (in
+Western typography) are accustomed. For example, instead of specifying <code>left-indent</code> and <code>right-indent</code>, XSL has properties called <code>start-indent</code> and <code>end-indent</code>, where the terms <code>start</code> and <code>end</code>
+are interpreted with respect to the writing direction for a line of
+text. When writing a line of English text for example, we <i>start</i>
+ at the      left and <i>end</i>
+ at the right.</p>
+       <p><a name="N47"></a>Similarly XSL uses the terms <code>space-before</code> and <code>space-after </code>rather than <code>space-above</code> and <code>space-below</code> when referring to space around blocks of text. Here, <code>before</code> and <code>after</code>
+are interpreted with respect to the direction in which lines of text
+(blocks) are stacked. When writing English, we proceed from top to
+bottom, so <i>before</i>
+ is above and <i>after</i>
+ is below.</p>
+       </div>
+       <div class="subsec2">
+<a name="inheritance"></a>       <h4>Inheritance</h4>              <p><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/ts0/tp139.htm" class="topicInText">inheritance</a><a name="N48"></a>The XSL formatting model, like previous stylesheet languages,      makes extensive use of the notion of <i>inheritance</i>
+. A formatting property which can be inherited may have its value set
+on a high-level formatting object and the same value will apply to all
+objects contained within that object. For example, font-related
+properties such as family, size, weight and so on, are all inherited.</p>
+       <h3>Note</h3>       <p><a name="N49"></a>The
+containment relationships are defined by the hierarchy of the
+formatting object "document" resulting from the transformation process,
+which are <i>not</i>
+ necessarily the same as those of the original XML        document.</p>
+              </div>
+     </div>     <div class="subsec1"><a name="fovocab"></a>       <h3>The formatting vocabulary</h3>       <p><a name="N50"></a>Bearing these concepts in mind, let's look at <i>Hello, world</i>
+in XSL. The following example creates a single A4 page containing the
+greeting, "Hello, world". Note that since no typographical formatting
+properties are specified the default values will be used.</p>
+       <table border="1"><tbody><tr><td>
+<a name="N51"></a>       <blockquote><i>
+The FO Hello World example</i></blockquote>
+       <pre>&lt;root xmlns="http://www.w3.org/1999/XSL/Format"&gt;
+  &lt;layout-master-set&gt;
+    &lt;simple-page-master master-name="simple" page-height="29.7cm"
+        page-width="21.0cm" margin-bottom="3cm" margin-left="2cm"
+        margin-right="2cm" margin-top="3cm" &gt;
+      &lt;region-body/&gt;
+    &lt;/simple-page-master&gt;
+  &lt;/layout-master-set&gt;
+  &lt;page-sequence master-reference="simple"&gt;
+    &lt;flow flow-name="xsl-region-body"&gt;
+      &lt;block&gt;Hello, world&lt;/block&gt;
+    &lt;/flow&gt;
+  &lt;/page-sequence&gt;
+&lt;/root&gt;</pre>       </td></tr></tbody></table>
+       <p><a name="N52"></a>This example illustrates the basic structure of an FO document.      It consists of a <code>root</code> element which contains a single <code>layout-master-set</code> and one or more <code>page-sequence</code> elements. The <code>layout-master-set</code> defines all page masters and sequences of page masters. It must contain      at least one <code>simple-page-master</code> element. A <code>page-sequence</code> contains the actual content of the document which will be placed on      pages, enclosed in a <code>flow</code>. The flow contains one or more block-level elements, of which the most      common is simply <code>block</code>.</p>
+       <p><a name="N53"></a>In the rest of this section, I'll look at this structure in more      detail, expanding on the example as I go along.</p>
+       <div class="subsec2">
+<a name="N54"></a>       <h4>Page and page-sequence masters</h4>       <p><a name="N55"></a>The
+formatting vocabulary allows the user to define a number of page
+masters, each of which defines the size, orientation, margins, and body
+and side region placement. In the example above, the master named <i>simple</i>
+defines an A4 page with 2 cm. side margins and 3 cm. top and bottom
+margins and a single column of body text. Different masters may define
+pages of different sizes, with different margins and different numbers
+of columns.</p>
+       <p><a name="N56"></a>Each <code>page-sequence</code> object references either a single <code>simple-page-master</code> object or a <code>page-sequence-master</code> object, using the <code>master-reference</code> attribute.       </p><p><a name="fn.master"><i>Note</i></a>: </p><a name="fn.master"></a>         <p><a name="N57"></a>The name of this property was changed from <code>master-name</code> to <code>master-reference</code> between the Candidate and Proposed Recommendation versions.</p>
+        The <code>page-sequence-master</code>
+object serves to group together references to different
+simple-page-master objects and to define the order and rules governing
+their use. This allows typical recto/verso pagination styles as well as
+more complex sequences to be designed. If a page-sequence directly
+references a simple-page-master, that master is used to generate as
+many pages as necessary to hold all of the content of the flow. If the
+page-sequence references a page-sequence-master, page masters from that
+sequence are used to generate the pages which hold the content.<p></p>
+       <p><a name="N58"></a>Each simple-page-master defines a <code>region-body</code>
+and up to four optional regions which are placed on each side of the
+region-body. The region-body is generally used to hold the content of
+the flow object while the side regions are used to hold the content of
+any <code>static-content</code> objects present in the page-sequence.
+This static content is repeated on each page generated by a master
+containing the corresponding region. For example, if we want to extend
+the Hello world example to include a running head with the text "FO
+examples" and a footer with the page number, we would use the following
+document.</p>
+       <table border="1"><tbody><tr><td>
+<a name="N59"></a>       <blockquote><i>
+The FO Hello World example - 2</i></blockquote>
+       <pre>&lt;root xmlns="http://www.w3.org/1999/XSL/Format"&gt;
+  &lt;layout-master-set&gt;
+    &lt;simple-page-master master-name="simple" page-height="29.7cm"
+        page-width="21.0cm" margin-bottom="2cm" margin-left="2cm"
+        margin-right="2cm" margin-top="2cm" &gt;
+      &lt;region-body margin-top="1cm" margin-bottom="1cm"/&gt;
+      &lt;region-before extent="1cm"/&gt;
+      &lt;region-after extent="1cm"/&gt;
+    &lt;/simple-page-master&gt;
+  &lt;/layout-master-set&gt;
+  &lt;page-sequence master-reference="simple"&gt;
+    &lt;static-content flow-name="xsl-region-before"&gt;
+      &lt;block&gt;FO examples&lt;/block&gt;
+    &lt;/static-content&gt;
+    &lt;static-content flow-name="xsl-region-after"&gt;
+      &lt;block&gt;&lt;page-number/&gt;&lt;/block&gt;
+    &lt;/static-content&gt;
+    &lt;flow flow-name="xsl-region-body"&gt;
+      &lt;block&gt;Hello, world&lt;/block&gt;
+    &lt;/flow&gt;
+  &lt;/page-sequence&gt;
+&lt;/root&gt;</pre>       </td></tr></tbody></table>
+       <p><a name="N60"></a>There are several points to observe in this example:       </p><ul>
+         <li>         <p><a name="N61"></a>The region-before and region-after zones are        <i>inside</i>
+the area defined by the page margins. To keep them from overlapping the
+region-body, I have reduced the top and bottom page margins by 1 cm.
+each and added a 1 cm. top and bottom margin to the region-body itself.
+This corresponds exactly to the <code>extent</code> property on the region-before and region-after.        <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.pageareas">fig.pageareas</a> shows this graphically.</p>
+         </li>
+         <li>         <p><a name="N62"></a>Each <code>static-content</code> element contains one or more block-level formatting objects, just as        does the <code>flow</code>.</p>
+         </li>
+         <li>         <p><a name="N63"></a>The number of the current page is obtained by using the a        special inline-type FO called <code>page-number</code>. The formatting object processor will replace it with the page number        during the layout process.</p>
+         </li>
+       </ul>
+<p></p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.pageareas"></a>       <blockquote><i>
+Page areas</i></blockquote>
+       <blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig08.png"></blockquote>
+
+       </td></tr></tbody></table>
+       </div>
+       <div class="subsec2">
+<a name="N64"></a>       <h4>Flow content</h4>       <p><a name="N65"></a>Let's look in more detail at the content of a <code>flow</code>. I've used the term <i>block-level FO</i>
+several times without precisely defining it. A block-level FO is one
+which generates areas which are stacked in the same way as lines of
+text; this is called the <i>block-progression-direction</i>
+. For Western languages it is top to bottom. So far, our examples have
+shown only one kind of block-level FO, which is called <code>block</code>. It is by far the most common FO; it can be used to format titles,      paragraphs or long quotes. </p>
+       <p><a name="N66"></a>The
+other block-level formatting objects are essentially containers which
+arrange their child block-level FOs in particular ways. The following
+list briefly describes each of these FOs; table and list-block will be
+examined in more detail. </p><dl>         <dd>         </dd><dt>list-block</dt>         <p>Definition:</p>         <p><a name="N67"></a>groups one or more list-item FO</p>
+                           <dd>         </dd><dt>table</dt>         <p>Definition:</p>         <p><a name="N68"></a>the root of the table FO hierarchy</p>
+                           <dd>         </dd><dt>table-and-caption</dt>         <p>Definition:</p>         <p><a name="N69"></a>groups together a table FO and its caption; the caption          may be on any side of the table</p>
+                           <dd>         </dd><dt>block-container</dt>         <p>Definition:</p>         <p><a name="N70"></a>generates
+a reference area which may be absolutely positioned on the page and may
+change the writing-mode; contains one or more block-level FO</p>
+                         </dl><p></p>
+       </div>
+       <div class="subsec2">
+<a name="N71"></a>       <h4>Inline-level formatting objects</h4>       <p><a name="N72"></a>As you've noticed, the <code>block</code> FO can directly contain text. In fact, it is the <i>only</i>
+      block-level FO which can contain text. We can think of the <code>block</code>
+as the boundary between block-level and inline-level formatting
+objects. Each character in a string of text is implicitly a kind of
+inline formatting object which generates an area containing the <i>glyph</i>
+: the visual representation corresponding to that character code. The
+size of this inline area is determined by the current font-related
+characteristics. <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.textarea">fig.textarea</a> shows inline areas generated by text.</p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.textarea"></a>       <blockquote><i>
+Inline areas generated by text</i></blockquote>
+       <blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig05.png"></blockquote>
+
+       </td></tr></tbody></table>
+       <p><a name="N73"></a>In
+addition to characters, the block FO can also contain any other kind of
+inline-level FO. The most common of these are: </p><dl>         <dd>         </dd><dt>character</dt>         <p>Definition:</p>         <p><a name="N74"></a>a single character which has specific          characteristics</p>
+                           <dd>         </dd><dt>external-graphic</dt>         <p>Definition:</p>         <p><a name="N75"></a>generates an area containing the referenced graphic          (acceptable formats are determined by the FO processing engine)</p>
+                           <dd>         </dd><dt>instream-foreign-object</dt>         <p>Definition:</p>         <p><a name="N76"></a>generates an area containing the rendered content of          the element, for example           <b>
+SVG</b>
+           <a name="svg"></a></p>
+                           <dd>         </dd><dt>inline</dt>         <p>Definition:</p>         <p><a name="N77"></a>may
+be used to change a non-inherited property such as background or border
+for some inline content; may contain other inline FO</p>
+                           <dd>         </dd><dt>inline-container</dt>         <p>Definition:</p>         <p><a name="N78"></a>can include block-level objects which are composed          inline; also allows changing writing-mode for contained objects</p>
+                           <dd>         </dd><dt>leader</dt>         <p>Definition:</p>         <p><a name="N79"></a>creates a fixed or expandable leader or rule</p>
+                           <dd>         </dd><dt>page-number</dt>         <p>Definition:</p>         <p><a name="N80"></a>contains the formatting-processor generated page          number</p>
+                           <dd>         </dd><dt>page-number-citation</dt>         <p>Definition:</p>         <p><a name="N81"></a>contains the page number of the referenced FO</p>
+                         </dl><p></p>
+       <p><a name="N82"></a><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.inlinearea">fig.inlinearea</a> shows a mixture of text and an      inline area generated by the <code>external-graphic</code> FO. Note that the size of the of the line area is adjusted to account      for the size of the graphic. </p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.inlinearea"></a>       <blockquote><i>
+Text and an inline graphic</i></blockquote>
+       <blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig06.png"></blockquote>
+
+       </td></tr></tbody></table>
+       </div>
+       <div class="subsec2">
+<a name="N83"></a>       <h4>Tables and lists</h4>       <p><a name="N84"></a>As mentioned previously, there are specific block-level FO for      formatting tables and lists. The top level <code>table</code>
+FO contains substructure which closely follows typical SGML and XML
+table content models. It contains provisions for defining columns using
+fixed, proportional or automatically calculated widths, defining header
+and footer rows and specifying one or more table bodies. Row and column
+spanning cells and complete control over border attributes are also
+provided. <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.table">fig.table</a> illustrates the areas generated by the      table-specific formatting objects.</p>
+       <p><a name="N85"></a>One
+extremely important point to make concerning tables is that using the
+transformation language, table-style formatting may easily be applied
+to an input XML document which is not modeled as a table. This can be a
+liberating experience for DTD and Schema designers!</p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.table"></a>       <blockquote><i>
+Table FO structure</i></blockquote>
+       <blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig03.png"></blockquote>
+
+       </td></tr></tbody></table>
+       <p><a name="N86"></a>The list model consists of the <code>list-block</code> which simply acts as a container for <code>list-item</code> FO. Each list-item has <code>list-item-label</code> and <code>list-item-body</code> children, as shown in Figure <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.list">fig.list</a>. The content of      both the <code>list-item-label</code> and the <code>list-item-body</code>
+is one or more block-level formatting objects. This means that even if
+your list-item-label contains only a number or a bullet, you must
+enclose it in a <code>block</code> FO. The relative positioning of the
+label and the body areas is controlled by the indent values specified
+on each one. Like all indents, these are interpreted with respect to
+the reference area and not to the areas created by the list-item or
+list-block formatting objects.</p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.list"></a>       <blockquote><i>
+List FO structure</i></blockquote>
+       <blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig04.png"></blockquote>
+
+       </td></tr></tbody></table>
+       </div>
+       <div class="subsec2">
+<a name="N87"></a>       <h4>Out-of-line formatting objects</h4>       <p><a name="N88"></a>The XSL formatting vocabulary also contains two distinct      formatting objects, <code>footnote</code> and <code>float</code>, with <i>out-of-line</i>
+ or <i>floating</i>
+ behavior. The float FO can      be used to produce both <i>before</i>
+ and <i>side</i>
+ floats, depending on the      value of its <code>float</code> attribute. If the value is <code>before</code>,
+the float is placed in the "before side" (corresponding to the top in
+Western writing-mode) of the region-body containing the anchor. If the
+value is <code>start</code>, <code>end</code>, <code>left</code>, or <code>right</code>,
+the float is called a side-float and is placed on either the start or
+end side of the region-body, depending on the value specified.
+Depending on the values specified for indents on the float and normal
+flow content, side floats may intrude on normal content in the
+region-body, forcing it to "run around" the floating area or be
+positioned in the margin like a sidenote.</p>
+       </div>
+       <div class="subsec2">
+<a name="N89"></a>       <h4>Formatting properties</h4>       <p><a name="N90"></a>The XSL formatting vocabulary includes a large number of      <i>properties</i>
+. Some properties are specific to certain formatting objects while
+others are applicable to a large number of objects. In addition to
+standard typographical and pagination-related properties, XSL includes
+many properties related to audio presentation, and some properties
+useful for electronic media.</p>
+       <p><a name="N91"></a>Print-oriented formatting properties can be broken into several      main groups:       </p><ul>
+         <li>         <p><a name="N92"></a>font and character related, including hyphenation        properties,</p>
+         </li>
+         <li>         <p><a name="N93"></a>indents and vertical spacing,</p>
+         </li>
+         <li>         <p><a name="N94"></a>borders, padding and background,</p>
+         </li>
+         <li>         <p><a name="N95"></a>area size, position and alignment,</p>
+         </li>
+         <li>         <p><a name="N96"></a>table and list related,</p>
+         </li>
+         <li>         <p><a name="N97"></a>keeps and breaks.</p>
+         </li>
+       </ul>
+<p></p>
+       <p><a name="N98"></a>Properties determine the size and
+placement of the areas which are generated by formatting objects. They
+also determine how they will be rendered. In order to use XSL
+effectively, you need to understand how the FO processor uses
+properties. It is particularly important to see how <code>start-indent</code> and <code>end-indent</code> determine the placement of the text in a block FO.      <a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.blockprops">fig.blockprops</a>
+shows the relation of the indent properties to border and padding
+properties. Note that indents are measured with respect to the
+containing <i>reference area</i>
+. In a normal flow, each column of text in the region-body is a
+reference area, but table-cells, block-containers and inline-containers
+also define reference areas. A reference area allows the writing-mode
+to be changed, so that it is possible to mix different writing modes on
+the same page. </p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.blockprops"></a>       <blockquote><i>
+Diagram of major layout properties</i></blockquote>
+       <blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig01.png"></blockquote>
+
+       </td></tr></tbody></table>
+       <p><a name="N99"></a>As mentioned earlier (<a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#inheritance">inheritance</a>),
+some formatting properties are inherited while others are not. The
+value of an inheritable property for a given formatting object is found
+by looking at that object and each of its ancestors in turn until a
+value is found. The value of a non-inheritable property must be
+specified directly on the formatting object where it is needed; if no
+value is specified, a default value is used. All properties have
+reasonable defaults defined in the specification.</p>
+       <p><a name="N100"></a>Common
+inheritable properties are: font-family, font-size, font-weight,
+start-indent and end-indent, text-align, line-height, and color (text
+color). Common non-inheritable properties are space related
+(space-before, space-after), keeps, breaks, borders, padding and
+background, and positioning properties.</p>
+       <p><a name="N101"></a>The following example (<a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm#fig.propex">fig.propex</a>) shows the      use of some common properties.</p>
+       <table border="1"><tbody><tr><td>
+<a name="fig.propex"></a>       <blockquote><i>
+Example showing use of common properties</i></blockquote>
+       <pre>&lt;flow flow-name="xsl-region-body" font-family="sans-serif"&gt;
+  &lt;block&gt;
+    Hello, world
+  &lt;/block&gt;
+  &lt;block font-size="14pt" font-weight="bold"
+         text-align="center" space-after="12pt" color="blue"&gt;
+    This centered blue block in 14pt bold is the title
+  &lt;/block&gt;
+  &lt;block font-size="10pt" start-indent="1cm" background-color="yellow"
+         padding="6pt" border="1pt" border-style="solid"&gt;
+    This is a block of body text showing the use of indent, borders,
+    padding and background color. There is a 1pt black (the default
+    color) border separated from the text area by a padding of 6pt on
+    all sides on a yellow background. The text of the paragraph is
+    indented by 1cm on the start-side (left here) from the nearest
+    reference area, which is the column in this case.
+  &lt;/block&gt;
+&lt;/flow&gt;</pre><blockquote><img src="StateOfTheUnion%20Files/03-05-06-fig07.png"></blockquote>
+
+       </td></tr></tbody></table>
+       </div>
+     </div>     </div>
+     <div class="section">
+<a name="N102"></a>     <h2>State of the art</h2>
+     <p><a name="N103"></a>Assuming
+that your appetite has been whetted by this glimpse at the
+possibilities XSL offers, this section will provide a brief overview of
+some of the tools available.</p>
+     <div class="subsec1"><a name="N104"></a>       <h3>XSL-FO and print</h3>       <p><a name="N105"></a>The
+major interest in XSL-FO is using it to generate printed output. This
+is frequently desirable in on-line applications as well as in more
+traditional print-oriented applications. In fact, one of the major uses
+of FO processors is in servlets which generate PDF and return it to
+browsers for printing with the Acrobat plug-in.</p>
+       <p><a name="N106"></a>There
+are both commercial and open-source XSL-FO processors available. Given
+that the specification has only recently been finalized, it is
+understandable that none of the available tools offer complete
+implementations. Short descriptions of the available tools follow (in
+alphabetical order).</p>
+       <div class="subsec2">
+<a name="N107"></a>       <h4>Antenna House XSL Formatter</h4>       <p><a name="N108"></a>This
+is a commercial product with both standalone and server-based pricing
+models. The current version is 1.1E, released on April 9, 2001. Antenna
+House is based in Japan, and their formatter is the only tool which
+supports the tb-rl writing mode for CJK text. The product runs only on
+Windows and requires version 3 of the Microsoft MSXML processor. It can
+be used both from the command line and via a COM interface. See the
+website at <a href="http://web.archive.org/web/20071211215415/http://www.antennahouse.com/xslformatter.html"></a>
+ for more      information.</p>
+       </div>
+       <div class="subsec2">
+<a name="N109"></a>       <h4>Apache FOP</h4>       <p><a name="N110"></a>FOP
+is an Apache open source project, based on original code by James
+Tauber. It is written in Java and implements a complete formatting
+processor. The version as of October 2001 is 0.20.2. FOP has fairly
+complete support for the expression language and partially supports
+most of the major formatting objects, but is rather weak in overall
+page layout logic involving keep conditions and floats. It supports
+PDF, PostScript, PCL, MIF and plain text rendering, as well as a Java
+AWT preview function. However, the renderers offer varying degrees of
+functionality, with PDF and PCL being the most complete. FOP uses
+Apache Batik for its SVG processor. FOP can be used either directly
+with XML files in the FO namespace or with input XML and XSL files. It
+uses the <code>javax.xml.transform</code> pluggable interface so that
+it may be used both with any compatible XSLT processor when doing
+transformations. It may be used either as a command line application or
+embedded in an application or a servlet. FOP is integrated into several
+other projects, such as Cocoon and X-Smiles. For more information,
+visit the website at <a href="http://web.archive.org/web/20071211215415/http://xml.apache.org/fop"></a>
+.</p>
+       </div>
+       <div class="subsec2">
+<a name="N111"></a>       <h4>PassiveTeX</h4>       <p><a name="N112"></a>PassiveTeX
+is a library of TeX macros developed and maintained by Sebastian Rahtz.
+The input to the macro package is an XML document in the XSL-FO
+namespace, which can be generated by any other tool. Rahtz describes
+PassiveTeX as <i>a rapid development environment for experimenting with XSL      FO, using a reliable pre-existing formatter</i>. In addition to a modern TeX      installation, PassiveTeX depends on the <i>xmltex</i>
+package written by David Carlisle. PassiveTeX includes native support
+for the MathML vocabulary. For complete information on what parts of
+the XSL specification are supported, visit the website at <a href="http://web.archive.org/web/20071211215415/http://users.ox.ac.uk/%7Erahtz/passivetex/"></a>
+.</p>
+       </div>
+       <div class="subsec2">
+<a name="N113"></a>       <h4>RenderX XEP</h4>       <p><a name="N114"></a>XEP
+is a commercial formatting object processor available from RenderX,
+Inc. The version as of October 2001 is 2.5. It is written in Java and
+implements a complete formatting processor which can produce PDF and
+PostScript output. It offers support for most of the print-oriented
+formatting objects defined in the XSL Proposed Recommendation, with
+limitations in certain cases. It has limited support for the XSL
+expression language and very limited support for SVG when used in the <code>instream-foreign-object</code> FO. See <a href="http://web.archive.org/web/20071211215415/http://www.renderx.com/"></a>
+ for complete information      concerning the capabilities, evaluation version and commercial version of      XEP.</p>
+       </div>
+     </div>     <div class="subsec1"><a name="N115"></a>       <h3>XSL-FO and browsers</h3>       <p><a name="N116"></a>There
+seems so far to be little interest in using XSL-FO directly in
+browsers, despite the fact that certain aspects of the specification
+are aimed at creating style sheets for online use. One might evoke a
+number of reasons for this: processing power, browser politics, and the
+pervasive use of XSLT to transform XML into HTML on either the server
+or client side. This section briefly imagines why one would want to
+have an XSL-capable browser and what would be involved in building one.</p>
+       <div class="subsec2">
+<a name="N117"></a>       <h4>Motivation</h4>       <p><a name="N118"></a>One
+motivation is to be able to get original XML data closer to the
+destination and thus to be able to process it in intelligent ways
+without going back to the server to retransform it into new HTML. In
+some cases, simply applying CSS formatting directly to the XML may
+offer sufficient functionality. In other cases, the transformation
+capability of XSL is necessary to achieve the desired result,
+particularly if one wants to produce a tabular representation of data.</p>
+       <p><a name="N119"></a>An
+XSL-enabled browser would also make it possible to achieve correct
+printed results on the client side based on the original XML and a
+print-oriented stylesheet. The current alternative is to produce PDF on
+the server using an XSL-FO engine and then send that PDF to the client.
+The PDF file is almost always larger than the input XML and XSL files,
+which is problematic on slow networks.</p>
+       </div>
+       <div class="subsec2">
+<a name="N120"></a>       <h4>Some technical issues</h4>       <p><a name="N121"></a>XSL-based
+layout is currently quite an expensive operation, involving parsing of
+the original XML document, transformation and then formatting of the
+resulting document structure. When using a streaming architecture the
+memory requirements can be quite large. When using XSL in the browser
+view, it would have to be possible to dynamically recompose the entire
+formatting object hierarchy whenever the window size changed. On the
+plus side, it is considerably easier to lay out a single conceptually
+infinite column (or <i>galley</i>
+) of text rather than dealing with page and column-breaking issues,
+floats and so on. For example, in a browser view, out-of-line objects
+could be shown in pop-up windows.</p>
+       <p><a name="N122"></a>In
+order to enable dynamic scripting access to the DOM of the original
+document, the areas creating by the formatting process must maintain
+references to nodes in that tree. Although the transformation process
+clearly makes this more complicated than, for example, simply applying <b>
+CSS</b>
+formatting to XML objects, it does not make it technically impossible.
+This depends on coordination between the various XML processing tools
+involved; current public interfaces do not provide sufficient
+information to implement such coordination.</p>
+       </div>
+       <div class="subsec2">
+<a name="N123"></a>       <h4>A first attempt: X-Smiles</h4>       <p><a name="N124"></a>The open source project X-Smiles      <a href="http://web.archive.org/web/20071211215415/http://www.x-smiles.org/"></a>
+is creating an XML browser in Java. The X-Smiles project has ambitious
+goals. It aims to support XSLT and XSL-FO processing as well as SVG and
+<b>
+SMIL</b>
+<a name="N125"></a>, while continuing to maintain Java 1.1
+compatibility and a small footprint! This project currently (version
+0.3) uses a slightly modified version of the Fop AWT rendering backend
+to support the XSL formatting specification in its browser. X-Smiles
+also provides EcmaScript capabilities in its browser, but the current
+architecture makes that impossible for the moment for the XSL-FO part.</p>
+       </div>
+     </div>     </div>
+     <div class="section">
+<a name="N126"></a>     <h2>Looking forwards</h2>
+     <p><a name="N127"></a>As
+we've seen, XSL-FO is still largely uncharted territory. Assuming that
+the specification will be blessed as a W3C Recommendation in the near
+future, final barriers to the development and use of XSL processors for
+print media should fall. There is already high interest in the user
+community as evidenced by the number of "newbie" questions in fora such
+as the Fop mailing list. The fact that users are willing to struggle
+with incomplete products and changing specifications for months at a
+time would seem to indicate a pressing need for producing high-quality
+print output from XML.</p>
+     <p><a name="N128"></a>A final thought:
+those users are located all over the world. Even in today's "globalized
+economy", the printed word is still a primary vector of communication.
+The XSL specification gives users everywhere the tools to write
+stylesheets for their XML documents. But in order to realize XSL's
+promise of writing-mode neutral formatting, XSL processors need to
+address those features of the specification more fully than they do
+today. And tomorrow, perhaps the browsers will follow suit!</p>
+     </div>
+          <br>     <h2>Bibliography</h2>
+<div class="bibliography">
+     <blockquote><a name="bib.css"></a>[CSS] Cascading Style Sheets, level 2.      W3C Recommendation, 12 May 1998.     </blockquote>     <blockquote><a name="bib.dsssl"></a>[DSSSL] Document
+Style Semantics and Specification Language (DSSSL). International
+Organization for Standardization, International Electrotechnical
+Commission. ISO/IEC 10179:1996. </blockquote>     <blockquote><a name="bib.xsl"></a>[XSL] Extensible Stylesheet Language      (XSL), Version 1.0. W3C Proposed Recommendation, 28 August 2001.     </blockquote>     <blockquote><a name="bib.xslt"></a>[XSLT] XSL Transformations (XSLT),      Version 1.0. W3C Recommendation, 16 November 1999.     </blockquote>     </div>
+        
+<table style="background: black none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;" width="700">
+<tbody><tr width="600">
+<td align="left"><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-01-04/syntactic-web.htm"><img src="StateOfTheUnion%20Files/larrow.gif" align="middle" border="0"> </a></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/orlantoc.htm">Table of contents</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx0.htm" class="navigbar">Author</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx1.htm" class="navigbar">City</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx2.htm" class="navigbar">Company</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx3.htm" class="navigbar">Country</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx4.htm" class="navigbar">State/Province</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/nidx5.htm" class="navigbar">Term</a></b></td>
+<td align="center"><b><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/xtmdoc.htm" class="navigbar">Interchange</a></b></td>
+<td align="right"><a href="http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/04-01-03/data_binding_silver_bullet_subbu_bea.htm" class="topicInText"> <img src="StateOfTheUnion%20Files/rarrow.gif" align="middle" border="0"></a></td>
+</tr>
+</tbody></table>
+<script language="Javascript">
+<!--
+
+// FILE ARCHIVED ON 20071211215415 AND RETRIEVED FROM THE
+// INTERNET ARCHIVE ON 20090322071234.
+// JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+// ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+// SECTION 108(a)(3)).
+
+   var sWayBackCGI = "http://web.archive.org/web/20071211215415/";
+
+   function xResolveUrl(url) {
+      var image = new Image();
+      image.src = url;
+      return image.src;
+   }
+   function xLateUrl(aCollection, sProp) {
+      var i = 0;
+      for(i = 0; i < aCollection.length; i++) {
+         var url = aCollection[i][sProp];         if (typeof(url) == "string") { 
+          if (url.indexOf("mailto:") == -1 &&
+             url.indexOf("javascript:") == -1
+             && url.length > 0) {
+            if(url.indexOf("http") != 0) {
+                url = xResolveUrl(url);
+            }
+            url = url.replace('.way_back_stub','');
+            aCollection[i][sProp] = sWayBackCGI + url;
+         }
+         }
+      }
+   }
+
+   xLateUrl(document.getElementsByTagName("IMG"),"src");
+   xLateUrl(document.getElementsByTagName("A"),"href");
+   xLateUrl(document.getElementsByTagName("AREA"),"href");
+   xLateUrl(document.getElementsByTagName("OBJECT"),"codebase");
+   xLateUrl(document.getElementsByTagName("OBJECT"),"data");
+   xLateUrl(document.getElementsByTagName("APPLET"),"codebase");
+   xLateUrl(document.getElementsByTagName("APPLET"),"archive");
+   xLateUrl(document.getElementsByTagName("EMBED"),"src");
+   xLateUrl(document.getElementsByTagName("BODY"),"background");
+   xLateUrl(document.getElementsByTagName("TD"),"background");
+   xLateUrl(document.getElementsByTagName("INPUT"),"src");
+   var forms = document.getElementsByTagName("FORM");
+   if (forms) {
+       var j = 0;
+       for (j = 0; j < forms.length; j++) {
+              f = forms[j];
+              if (typeof(f.action)  == "string") {
+                 if(typeof(f.method)  == "string") {
+                     if(typeof(f.method) != "post") {
+                        f.action = sWayBackCGI + f.action;
+                     }
+                  }
+              }
+        }
+    }
+
+
+//-->
+</script>
+
+</body></html>
