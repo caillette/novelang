@@ -74,8 +74,63 @@ public class UrlManglerTest {
                 tree( URL, "http://foo.com" )
                             
             )
-        )
-        
+        )        
+    ) ;
+  }
+
+  @Test
+  public void fixNamedUrlAtStartOfParagraphAfterLevelIntroducer() {
+    verifyFixNamedUrls( 
+        tree(
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "p" )
+            ),
+            tree( 
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "==" ),
+                tree( LEVEL_TITLE, tree( WORD_, "t" ) )            
+            ),
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( 
+                    _EXTERNAL_LINK,
+                    tree( 
+                        _LINK_NAME,
+                        tree( WORD_, "name" ) 
+                    ),
+                    tree( URL, "http://foo.com" )
+                )                            
+            )            
+        ),
+        tree( 
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "p" )
+            ),
+            tree( LINE_BREAK_ ),
+            tree( LINE_BREAK_ ),
+            tree( 
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "==" ),
+                tree( LEVEL_TITLE, tree( WORD_, "t" ) )            
+            ),
+            tree( LINE_BREAK_ ),
+            tree( LINE_BREAK_ ),
+            tree( WHITESPACE_ ),
+            tree( 
+                PARAGRAPH_REGULAR, 
+                tree( 
+                    BLOCK_INSIDE_DOUBLE_QUOTES,
+                    tree( WORD_, "name" )                
+                ),
+                tree( WHITESPACE_ ),
+                tree( LINE_BREAK_ ),
+                tree( URL, "http://foo.com")
+            )
+        )    
     ) ;
   }
 

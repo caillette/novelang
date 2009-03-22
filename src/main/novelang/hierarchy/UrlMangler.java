@@ -56,7 +56,7 @@ public class UrlMangler {
               tree,
               WHITESPACE_,
               State.WHITESPACE_OUTSIDE_PARAGRAPH,
-              evaluate( tree, PARAGRAPH_REGULAR, State.INSIDE_PARAGRAPH, State.OUTSIDE_PARAGRAPH )
+              evaluate( tree, PARAGRAPH_NODEKINDS, State.INSIDE_PARAGRAPH, State.OUTSIDE_PARAGRAPH )
           ) ;
           if( State.INSIDE_PARAGRAPH == state ) {
             paragraphDepth = current.getLength() ;
@@ -66,7 +66,7 @@ public class UrlMangler {
         case WHITESPACE_OUTSIDE_PARAGRAPH :
           state = evaluate(
               tree,
-              PARAGRAPH_REGULAR,
+              PARAGRAPH_NODEKINDS,
               State.INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE,
               State.OUTSIDE_PARAGRAPH
           ) ;
@@ -173,6 +173,11 @@ public class UrlMangler {
     return result.getStart() ;
   }
 
+  private static final NodeKind[] PARAGRAPH_NODEKINDS = new NodeKind[] {
+      PARAGRAPH_REGULAR, 
+      PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_
+  } ;
+  
   private static final NodeKind[] SKIPPED_NODEKINDS = new NodeKind[] {
       WORD_,
       CELL_ROWS_WITH_VERTICAL_LINE,
@@ -183,6 +188,8 @@ public class UrlMangler {
       LINES_OF_LITERAL,
       RESOURCE_LOCATION
   } ;
+  
+  
 
   /**
    * Replaces the {@link NodeKind#URL} node at the end of the treepath by a 
