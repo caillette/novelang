@@ -435,8 +435,10 @@ with ``.svg`` as extension.
 >>>
 
 The with or the height of the vector image is copied from the SVG file, including units.
-Coordinates and lengths in SVG are explained here:
+Coordinates and lengths in SVG are explained 
+  "here"
 http://www.w3.org/TR/SVG/coords.html#UnitIdentifiers
+.
 
 SVG documents may reference an external entity with a public identifier like 
 ``-//W3C//DTD SVG 1.1"`` or ``-//W3C//ENTITIES SVG 1.1`` or ``-//W3C//ELEMENTS SVG 1.1``.

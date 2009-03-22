@@ -28,22 +28,29 @@ Stylesheets may be defined for a whole Book as explained later, see the "mapstyl
 
 === eXtensible Stylesheet Language
 
-The stylesheets are written in XSL `/ FO`, which stands for eXtensible Stylesheet Language `/ Formatting` Objects. Both are standards developed by the W3C (World Wide Web Consortium). The reference documentation is here:
-
+The stylesheets are written in XSL `/ FO`, which stands for eXtensible Stylesheet Language 
+`/ Formatting` Objects. Both are standards developed by the W3C (World Wide Web Consortium). 
+The reference documentation is 
+  "here"
 http://www.w3.org/TR/xsl
+.
 
-FO may look complex, because typesetting is inherently complex, and because of the lack of synthetic documentation.
-This document explains importants FO basics:
+FO may look complex, because typesetting is inherently complex, and because of the lack of synthetic 
+documentation. So you may be interested by 
+  "this document" 
+http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm
+explaining importants FO basics.
 
-http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm
-
-There are many valuable tutorials on the Web. Here are some:
-
+You'll find valuable tutorials on 
+  "ZVon"
 http://zvon.org/xxl/XSLTutorial/Output/index.html
-
+, 
+  "Webutcator"
 http://www.learn-xsl-fo-tutorial.com
-
+and
+  "Dave Pawson"
 http://www.dpawson.co.uk/xsl/sect3
+'s site.
 
 
 === XSL reuse

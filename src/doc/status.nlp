@@ -19,6 +19,8 @@ Keep informed reading the blog.
 
 === Version `0.22.0`
 
+//This version introduces changes that may break existing documents and stylesheets.//
+
 --- Fixed: Book now display images correctly.
 
 --- Fixed: Safari 4 did not render SVG resources when referenced from HTML document.
@@ -153,8 +155,10 @@ no longer limited to recursive addition; now it applies to single-part insert.
 
 === Version `0.10.0`
 
---- Barcode generation in PDF with Barcode4J. See:
+--- Barcode generation in PDF with 
+  "Barcode4J"
 http://barcode4j.sourceforge.net/2.0/fop-ext.html
+.
 
 --- Fixed character escaping with HTML.
 
