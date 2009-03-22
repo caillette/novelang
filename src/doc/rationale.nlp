@@ -34,22 +34,23 @@ But they're definitely not content-oriented.
 
 === LaTeX
 
-LaTeX got it right. It is based on plain text with simple markup and a powerful macro system. 
+  "LaTeX" 
+http://www.latex-project.org  
+got it right. It is based on plain text with simple markup and a powerful macro system. 
 It exists from 20 years and is incredibly mature now.
 
 Why not using LaTex? The markup is too verbose, it accepts macro language inside the content, 
 and it's uneasy to setup. But if you have complex typography to automate 
 (like for a book about mathematics) it's definitely the right tool:
-http://www.latex-project.org
 
 
 === DocBook
 
-DocBook is a semantic XML-based markup for technical documentation. It has many great ideas 
+  "DocBook"
+http://www.docbook.org
+is a semantic XML-based markup for technical documentation. It has many great ideas 
 (Novelang borrows some of them) but fails to cover every case and is really too verbose.
 And it lacks a solution off-the-shelf.
-You can find Docbook at 
-http://www.docbook.org
 
 === Wiki
 
@@ -59,14 +60,20 @@ They rely on a simplified markup that Novelang is inspired from.
 But Wikis are completely different as they are collaborative tools for creating dynamic websites, 
 while Novelang focuses on document generation. 
 
-Here is an overview on various wiki systems:
+See an 
+  "overview" 
 http://www.wikimatrix.org
-
-Here are interesting discussions about wiki syntaxes:
+of various wiki systems.
+See some interesting discussion about wiki syntaxes on
+  "Markdown"
 http://daringfireball.net/projects/markdown/syntax
+and
+  "Wiki Creole"
 http://www.wikicreole.org/wiki/Reasoning
+and 
+  "Coding Horror"
 http://www.codinghorror.com/blog/archives/001116.html
-
+.
 
 == Technical considerations
 
@@ -91,14 +98,20 @@ This is about converting the AST to a human-readable format, like PDF or HTML. T
 
 === Reinventing the wheel
 
-Novelang's processing stages make it look a lot like Cocoon, which relies on XML instead of AST -- but it's all about trees in both cases-_. 
+Novelang's processing stages make it look a lot like 
+  "Cocoon"
+http://cocoon.apache.org
+, which relies on XML instead of AST -- but it's all about trees in both cases-_. 
 Forrest is an attempt to make Cocoon simpler while some nice packaging. There are a lot of small problems with Cocoon `/ Forrest`. Want some?
 
 Forrest's Wiki-like APT grammar is too weak. The caching pipeling cannot cache fragments of rendered documents. The bundled version of FOP is too old. XPath doesn't spit error messages when no link target was found. Startup is slow. Error messages are unclear. 
 
-By now, the grammar took `50%` of Novelang development effort, and stylesheets about `25%`. As I aimed to produce some documents with precise requirements for my personal usage, I found quicker to redevelop Novelang's plumbing than fixing Forrest's one. 
-
-http://forrest.apache.org 
+By now, the grammar took `50%` of Novelang development effort, and stylesheets about `25%`. 
+As I aimed to produce some documents with precise requirements for my personal usage, I found 
+quicker to redevelop Novelang's plumbing than fixing 
+  "Forrest"
+http://forrest.apache.org
+'s one.
 
 
 

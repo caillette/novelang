@@ -312,10 +312,10 @@ public class HierarchizerTest {
 
     final Treepath rehierarchized = rehierarchizeLevels( flatTree ) ;
 
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsWithSeparators(
         expectedTreepath,
         rehierarchized
-    ) ;
+    ); ;
 
   }
 
@@ -342,10 +342,10 @@ public class HierarchizerTest {
 
     final Treepath rehierarchized = Hierarchizer.rehierarchizeLists( flatTreepath ) ;
 
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsWithSeparators(
         expectedTreepath,
         rehierarchized
-    ) ;
+    ); ;
 
 
   }

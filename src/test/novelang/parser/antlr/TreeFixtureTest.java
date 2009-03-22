@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2009 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,33 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.parser.antlr;
 
 import org.junit.Test;
-import static novelang.parser.NodeKind.LEVEL_TITLE;
-import static novelang.parser.NodeKind.WORD_;
+import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.hierarchy.SeparatorsMangler;
 
 /**
+ * Tests for {@link TreeFixtureTest}.
+ * 
  * @author Laurent Caillette
  */
-public class TreeHelperTest {
-
+public class TreeFixtureTest {
+  
   @Test
-  public void testEqualityOk() {
-    TreeFixture.assertEqualsNoSeparators(
-        tree( LEVEL_TITLE, tree( WORD_, "w0" ) ),
-        tree( LEVEL_TITLE, tree( WORD_, "w0" ) )
+  public void testRemoveSeparators() {
+    TreeFixture.assertEqualsNoSeparators(  
+        tree( 
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "w" )
+            )
+        ),
+        SeparatorsMangler.removeSeparators( tree(
+            PART,
+            tree( WHITESPACE_ ),
+            tree( LINE_BREAK_ ),
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( WHITESPACE_ ),
+                tree( WORD_, "w" )
+            )
+        ) )
     ) ;
   }
-
-  @Test( expected = AssertionError.class )
-  public void testEqualityFail() {
-    TreeFixture.assertEqualsNoSeparators(
-        tree( LEVEL_TITLE, tree( WORD_, "xx" ) ),
-        tree( LEVEL_TITLE, tree( WORD_, "w0" ) )
-    ) ;
-  }
-
 }

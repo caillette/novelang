@@ -16,7 +16,14 @@
  */
 package novelang.common.tree;
 
+import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.NoSuchElementException;
+
 import com.google.common.base.Preconditions;
+import novelang.common.SyntacticTree;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -99,6 +106,7 @@ public class TreepathTools {
   /**
    * Returns true if given {@code Treepath} has a next sibling, false otherwise.
    * @param treepath a non-null {@code Treepath} with a minimum length of 2.
+   *     This may seem an excessive constraint but helps to detect many logical problems.
    * @throws IllegalArgumentException
    * @see #getNextSibling(Treepath)
    */
@@ -422,4 +430,198 @@ public class TreepathTools {
     return Treepath.create( treepathToParentWithRemoval, treepath.getIndexInPrevious() ) ;
 
   }
+
+  /**
+   * Removes a subtree of a container tree, while retaining consistency of a {@code Treepath}
+   * to somewhere in the container tree.
+   * Both {@code Treepath} are supposed to have the same root (tested by reference equality).
+   * <pre>
+ -*t0       *t0'             -*t0       *t0'
+   |         |                 |         |
+ -*t1  -->  *t1'             -*t1  -->  *t1'
+  /  \       |                /  \       |
+-t2  *t3    *t3             *t2  -t3    *t2
+
+
+ -*t0       *t0'            -*t0
+   |         |                |
+ -*t1  -->  *t1'            -*t1  -->  IllegalArgumentException
+   |                          |
+  -t2                        *t2
+
+   * : treepath to some element
+   - : treepath representing subtree
+   * </pre>
+   *
+   * @param containerTreepath a {@code Treepath} where the tree at start is the tree to remove from.
+   * @param subTreepath a {@code Treepath} where the tree at end is the subtree to remove.
+   * @return a {@code Treepath} with the same start and end tree, but with subtree removed.
+   * @throws IllegalArgumentException if the subtree is containing the tree it is supposed to be
+   *     removed from, or if both treepaths don't have the same tree at start.
+   */
+  public static< T extends Tree > Treepath< T > removeSubtree(
+      final Treepath< T > containerTreepath,
+      final Treepath< T > subTreepath
+
+  ) {
+    Preconditions.checkArgument(
+        containerTreepath.getTreeAtStart() == subTreepath.getTreeAtStart() ) ;
+    Preconditions.checkArgument( subTreepath.getLength() > 1 ) ;
+
+    final Iterator< Treepath< T > > invertedPathForContainer = invert( containerTreepath ) ;
+    final Iterator< Treepath< T > > invertedPathForSub = invert( subTreepath ) ;
+    invertedPathForContainer.next() ;
+    invertedPathForSub.next() ;
+
+    RemovalProgress progress = RemovalProgress.UNSPLIT ;
+    Treepath< T > result = TreepathTools.removeEnd( subTreepath ).getStart() ;
+
+    while( invertedPathForContainer.hasNext() ) {
+      final Treepath< T > currentTreepathInContainer = invertedPathForContainer.next() ;
+      final Treepath< T > currentTreepathInSub = invertedPathForSub.next() ;
+
+      if( currentTreepathInContainer.getTreeAtEnd() == currentTreepathInSub.getTreeAtEnd() ) {
+        if( ! invertedPathForSub.hasNext() ) {
+          throw new IllegalArgumentException(
+              "The subtree entierely contains the containing treepath" ) ;
+        }
+        result = Treepath.create( result, currentTreepathInContainer.getIndexInPrevious() ) ;
+      } else {
+        if( RemovalProgress.UNSPLIT == progress ) {
+          if( currentTreepathInContainer.getIndexInPrevious() >
+              currentTreepathInSub.getIndexInPrevious()
+          ) {
+            progress = RemovalProgress.REMOVAL_ON_LEFT ;
+          } else {
+            progress = RemovalProgress.REMOVAL_ON_RIGHT ;
+          }
+        }
+        switch( progress ) {
+          case REMOVAL_ON_LEFT :
+            result = Treepath.create(
+                result, currentTreepathInContainer.getIndexInPrevious() - 1 ) ;
+            break ;
+          case REMOVAL_ON_RIGHT :
+          case SPLIT :
+            result = Treepath.create( result, currentTreepathInContainer.getIndexInPrevious() ) ;
+          case UNSPLIT:
+            break ;
+        }
+        progress = RemovalProgress.SPLIT ;
+
+      }
+    }
+
+    return result ;
+  }
+
+
+
+  private enum RemovalProgress {
+    UNSPLIT,
+    REMOVAL_ON_LEFT,
+    REMOVAL_ON_RIGHT,
+    SPLIT
+  }
+
+
+
+  private static< T extends Tree > Iterator< Treepath< T > > invert( Treepath< T > treepath ) {
+    final List< Treepath< T > > treepaths = new ArrayList< Treepath< T > >( treepath.getLength() ) ;
+    while( true ) {
+      treepaths.add( treepath ) ;
+      final Treepath< T > previous = treepath.getPrevious();
+      if( null == previous ) {
+        break ;
+      } else {
+        treepath = previous ;
+      }
+    }
+    Collections.reverse( treepaths ) ;
+    return treepaths.iterator() ; 
+  }
+
+  /**
+   * Returns a {@code Treepath} object to the next tree in a
+   * <a href="http://en.wikipedia.org/wiki/Tree_traversal">preorder</a> traversal.
+   * <pre>
+   *  *t0            *t0            *t0            *t0
+   *   |      next    |      next    |     next     |      next
+   *   t1     -->    *t1     -->    *t1     -->    *t1     -->    null
+   *  /  \           /  \           /  \           /  \           
+   * t2   t3        t2   t3       *t2   t3       t2   *t3
+   * </pre>
+   *
+   * @param treepath a non-null object.
+   * @return the treepath to the next tree, or null.
+   */
+  public static< T extends Tree > Treepath< T > getNextInPreorder( Treepath< T > treepath ) {
+    final T tree = treepath.getTreeAtEnd();
+    if( tree.getChildCount() > 0 ) {
+      return Treepath.create( treepath, 0 ) ;
+    }
+    return getNextUpInPreorder( treepath ) ;
+  }
+
+  private static < T extends Tree > Treepath< T > getUpNextInPreorder( Treepath< T > treepath ) {
+    Treepath< T > previousTreepath = treepath.getPrevious() ;
+    while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
+      if( hasNextSibling( previousTreepath ) ) {
+        return getNextSibling( previousTreepath ) ;
+      } else {
+        previousTreepath = previousTreepath.getPrevious() ;
+      }
+    }
+    return null ;
+  }
+
+  public static < T extends Tree > Treepath< T > getNextUpInPreorder( Treepath< T > treepath ) {
+    if( hasNextSibling( treepath ) ) {
+      return getNextSibling( treepath ) ;
+    } else {
+      return getUpNextInPreorder( treepath ) ;
+    }
+  }
+
+  /**
+   * Returns if a {@code Treepath} has the same indices in its parenthood as another
+   * {@code Treepath}, for the length they have in common.
+   * 
+   * @param maybeParent a non-null object.
+   * @param maybeChild a non-null object with {@link Treepath#getLength()} greater than the
+   *     one of {@code maybeparent}. 
+   * @return true if index in each parent tree is the same.
+   */
+  public static < T extends Tree > boolean hasSameStartingIndicesAs( 
+      Treepath< T > maybeParent,  
+      Treepath< T > maybeChild  
+  ) {
+    Preconditions.checkNotNull( maybeParent ) ;
+    Preconditions.checkNotNull( maybeChild ) ;
+    Preconditions.checkArgument( maybeParent.getLength() <= maybeChild.getLength() ) ;
+    
+    while( maybeChild.getLength() > maybeParent.getLength() ) {
+      maybeChild = maybeChild.getPrevious() ;
+    }    
+    return hasSameStartingIndicesAsWithoutCheck( maybeParent, maybeChild ) ;
+  }
+  
+  private static < T extends Tree > boolean hasSameStartingIndicesAsWithoutCheck( 
+      Treepath< T > maybeParent,  
+      Treepath< T > maybeChild  
+  ) {
+    if( maybeParent.getPrevious() == null ) {
+      return true ; // No check needed as both arguments are supposed to have the same length.
+    } else {
+      if( maybeParent.getIndexInPrevious() == maybeChild.getIndexInPrevious() ) {
+        return hasSameStartingIndicesAsWithoutCheck( 
+            maybeParent.getPrevious(), 
+            maybeChild.getPrevious() 
+        ) ;
+      } else {
+        return false ;
+      }
+    }
+  }
+
 }

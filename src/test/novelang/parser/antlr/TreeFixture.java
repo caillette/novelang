@@ -27,6 +27,7 @@ import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
+import novelang.hierarchy.SeparatorsMangler;
 
 /**
  * Helps building {@link novelang.common.SyntacticTree}s for tests.
@@ -82,11 +83,13 @@ public class TreeFixture {
     return new SimpleTree( "", children ) ;
   }
 
-  public static void assertEquals(
+  public static void assertEqualsWithSeparators(
       Treepath< SyntacticTree > expected,
       Treepath< SyntacticTree > actual
   ) {
-    Assert.assertEquals( "Treepath height", expected.getLength(), actual.getLength() ) ;
+    int expectedLength = expected.getLength();
+    final int actualLength = actual.getLength();
+    Assert.assertEquals( "Treepath height", expectedLength, actualLength ) ;
     for( int i = 0 ; i < expected.getLength() ; i++ ) {
       assertEquals(
           expected.getTreeAtDistance( i ),
@@ -95,6 +98,13 @@ public class TreeFixture {
     }
   }
 
+  public static void assertEqualsNoSeparators( 
+      SyntacticTree expected, 
+      SyntacticTree actual 
+  ) {
+    assertEquals( expected, SeparatorsMangler.removeSeparators( actual ) ) ;
+  }
+  
   public static void assertEquals( SyntacticTree expected, SyntacticTree actual ) {
     try {
       assertEqualsNoMessage( expected, actual ) ;
@@ -123,7 +133,7 @@ public class TreeFixture {
       for( int index = 0 ; index < expected.getChildCount() ; index++ ) {
         final SyntacticTree expectedChild = expected.getChildAt( index ) ;
         final SyntacticTree actualChild = actual.getChildAt( index ) ;
-        assertEqualsNoMessage( expectedChild, actualChild ); ;
+        assertEqualsNoMessage( expectedChild, actualChild ) ;
       }
     }
   }

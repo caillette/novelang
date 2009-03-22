@@ -81,9 +81,13 @@
 
 
 
-  <xsl:template match="n:url" >
-<xsl:text/>
-<xsl:value-of select="text()" />
+  <xsl:template match="n:external-link" >
+<xsl:text>
+</xsl:text>
+<xsl:if test="n:link-name" >  "<xsl:value-of select="n:link-name" />"<xsl:text>  
+</xsl:text>
+</xsl:if><xsl:value-of select="n:url" /><xsl:text>
+</xsl:text>
   </xsl:template>
 
 

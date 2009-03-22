@@ -27,8 +27,8 @@ import novelang.common.filefixture.Filer;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.common.filefixture.Relativizer;
 import static novelang.parser.NodeKind.*;
-import static novelang.parser.antlr.TreeFixture.assertEquals;
 import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.parser.antlr.TreeFixture;
 import org.junit.Assert;
 import static org.junit.Assert.assertSame;
 import org.junit.Before;
@@ -58,7 +58,7 @@ public class ImageFixerTest {
         PART, 
         tree( PARAGRAPH_REGULAR ) 
     ) ;
-    assertEquals(  
+    TreeFixture.assertEqualsNoSeparators(  
       tree, 
         pathRelocator.relocateResources( tree )
     ) ;
@@ -95,7 +95,7 @@ public class ImageFixerTest {
     ) ;
     final SyntacticTree resultTree = pathRelocator.relocateResources( treeToAbsolutize );
     Assert.assertFalse( "" + problemCollector, problemCollector.hasProblem() ) ;
-    assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         expectedTree,
         resultTree
     ) ;
@@ -145,7 +145,7 @@ public class ImageFixerTest {
     final SyntacticTree resultTree = imageFixer.relocateResources( treeToAbsolutize );
     
     Assert.assertFalse( "" + problemCollector, problemCollector.hasProblem() ) ;
-    assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         expectedTree,
         resultTree
     ) ;

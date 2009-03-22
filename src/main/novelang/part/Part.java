@@ -25,6 +25,8 @@ import java.util.List;
 import novelang.common.*;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
+import novelang.hierarchy.UrlMangler;
+import novelang.hierarchy.SeparatorsMangler;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.system.DefaultCharset;
 import com.google.common.collect.ImmutableList;
@@ -96,12 +98,16 @@ public class Part extends AbstractSourceReader {
     if( null == rawTree || hasProblem() ) {
       return null ;
     } else {
+      final Treepath< SyntacticTree > rehierarchized0 =
+          UrlMangler.fixNamedUrls( Treepath.create( rawTree ) ) ;
       final Treepath< SyntacticTree > rehierarchized1 =
-          Hierarchizer.rehierarchizeLevels( Treepath.create( rawTree ) ) ;
+          SeparatorsMangler.removeSeparators( rehierarchized0 ) ;      
+      final Treepath< SyntacticTree > rehierarchized2 =
+          Hierarchizer.rehierarchizeLevels( rehierarchized1 ) ;
       if( standalone ) {
-        return addMetadata( Hierarchizer.rehierarchizeLists( rehierarchized1 ).getTreeAtEnd() ) ;
+        return addMetadata( Hierarchizer.rehierarchizeLists( rehierarchized2 ).getTreeAtEnd() ) ;
       } else {
-        return rehierarchized1.getTreeAtEnd() ;
+        return rehierarchized2.getTreeAtEnd() ;
       }
     }
   }

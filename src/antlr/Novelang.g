@@ -50,6 +50,8 @@ tokens {
   CELL_ROW ;
   CELL_ROWS_WITH_VERTICAL_LINE ;
   WORD_ ;
+  WHITESPACE_ ;
+  LINE_BREAK_ ;
   
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
@@ -117,7 +119,7 @@ public void emitErrorMessage( String string ) {
 // =========================
 
 part 
-  : ( mediumbreak | largebreak )? 
+  : ( p += mediumbreak | p += largebreak )? 
   
     (   p += levelIntroducer
       | p += paragraph 
@@ -127,7 +129,7 @@ part
       | p += bigDashedListItem
       | p += cellRowSequence
     )
-    ( largebreak (
+    ( p += largebreak (
         p += levelIntroducer 
       | p += paragraph 
       | p += embeddableResource
@@ -164,11 +166,11 @@ levelTitle
 	          ( whitespace t += mixedDelimitedSpreadBlock )* 
 	        )
 	    )
-	    ( whitespace? softbreak 
+	    ( t += whitespace? t += softbreak 
 	      (   ( url ) => t += url
 	        | ( smallDashedListItem ) => t += smallDashedListItem
-	        | ( whitespace? t += mixedDelimitedSpreadBlock 
-	            ( whitespace t += mixedDelimitedSpreadBlock )* 
+	        | ( t += whitespace? t += mixedDelimitedSpreadBlock 
+	            ( t += whitespace t += mixedDelimitedSpreadBlock )* 
 	          )        
 	      )
 	    )*    
@@ -181,14 +183,14 @@ paragraph
 	: ( (   ( url ) => p += url
 	      | ( smallDashedListItem ) => p += smallDashedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
-	          ( whitespace p+= mixedDelimitedSpreadBlock )* 
+	          ( p += whitespace p+= mixedDelimitedSpreadBlock )* 
 	        )
 	    )
-	    ( whitespace? softbreak 
+	    ( p += whitespace? p += softbreak 
 	      (   ( url ) => p += url
 	        | ( smallDashedListItem ) => p += smallDashedListItem
-	        | ( whitespace? p += mixedDelimitedSpreadBlock 
-	            ( whitespace p+= mixedDelimitedSpreadBlock )* 
+	        | ( p += whitespace? p += mixedDelimitedSpreadBlock 
+	            ( p += whitespace p+= mixedDelimitedSpreadBlock )* 
 	          )
 	      )
 	    )*
@@ -733,13 +735,13 @@ mixedDelimitedMonoblockNoHyphenPair
 
 bigDashedListItem
   : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
-    ( whitespace i += mixedDelimitedSpreadBlock )*
-    ( whitespace? softbreak 
+    ( i += whitespace i += mixedDelimitedSpreadBlock )*
+    ( i += whitespace? i += softbreak 
       ( 
           ( url ) => i += url
         | ( smallDashedListItem ) => i += smallDashedListItem
-        | ( whitespace? i += mixedDelimitedSpreadBlock 
-            ( whitespace i += mixedDelimitedSpreadBlock )* 
+        | ( i += whitespace? i += mixedDelimitedSpreadBlock 
+            ( i += whitespace i += mixedDelimitedSpreadBlock )* 
           )
       )
     )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ $i+ )
@@ -1364,9 +1366,9 @@ rawExtendedWord returns [ String text ]
 // Low-level constructs
 // ====================
 
-softbreak : SOFTBREAK -> ; 
+softbreak : SOFTBREAK -> ^( LINE_BREAK_ ) ; 
 
-whitespace : WHITESPACE -> ;
+whitespace : WHITESPACE -> ^( WHITESPACE_ ) ;
 
 levelIntroducerIndent 
   : EQUALS_SIGN EQUALS_SIGN+
@@ -1376,17 +1378,15 @@ levelIntroducerIndent
   ;
 
 mediumbreak
-  : ( WHITESPACE
-      | ( WHITESPACE? SOFTBREAK WHITESPACE? )
+  : ( whitespace
+      | ( whitespace? softbreak whitespace? )
     ) 
-    ->
   ;
   
 /** One blank line in the middle, white spaces everywhere.
  */
 largebreak
-  : ( ( WHITESPACE? SOFTBREAK ) ( WHITESPACE? SOFTBREAK )+ WHITESPACE? )
-    ->
+  : ( ( whitespace? softbreak ) ( whitespace? softbreak )+ whitespace? )
   ;  
 
 anySymbolExceptGreaterthansignAndGraveAccent

@@ -35,7 +35,18 @@ Escapes : «oelig» «OElig»
 
 === URLs support 
 
-http://www.google.com/search?q=novelang 
+Some text 
+  "link name"  
+http://novelang.sourceforge.net
+. 
+
+No name 
+http://novelang.sourceforge.net
+ 
+
+
+http://novelang.sourceforge.net
+ 
 
 
 === Duplicate section 

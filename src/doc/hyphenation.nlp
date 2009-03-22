@@ -10,9 +10,10 @@ http://offo.sourceforge.net/hyphenation/licenses.html
 
 === Download
 
-If there is no licensing issue then download and install the file(s) with your bare hands. All hyphenation files are available in a single archive from here:
-
+If there is no licensing issue then download and install the file(s) with your bare hands. All hyphenation files are available in a single archive 
+  "here"
 http://sourceforge.net/project/showfiles.php?group_id=116740&package_id=129569
+.
 
 Download ``offo-hyphenation.zip``, expand it, and pick the file corresponding to the language of your need in the ``hyph`` directory. Don't forget to copy the ``hyphenation.dtd`` file (otherwise it won't work).
 

@@ -24,6 +24,7 @@ import org.junit.Assert;
 import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
 import novelang.common.SyntacticTree;
+import novelang.hierarchy.SeparatorsMangler;
 
 
 /**
@@ -78,6 +79,13 @@ public class ParserMethod {
     final SyntacticTree tree = getTree( parser.getAntlrParser() ) ;
     AntlrTestHelper.checkSanity( parser ) ;
     return tree ;    
+  }
+  
+  public void checkTreeAfterSeparatorRemoval( String text, SyntacticTree expectedTree ) {
+//    final SyntacticTree actualTree = createTree( text ) ;
+    final SyntacticTree actualTree = SeparatorsMangler.removeSeparators( createTree( text ) ) ;
+    TreeFixture.assertEqualsNoSeparators( expectedTree, actualTree ) ;
+    
   }
   
   public void checkTree( String text, SyntacticTree expectedTree ) {

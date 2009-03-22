@@ -45,4 +45,8 @@ public class MyTree extends ImmutableTree< MyTree > {
     return new MyTree( payload, children ) ;
   }
 
+  @Override
+  public String toString() {
+    return getPayload() ;
+  }
 }

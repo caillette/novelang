@@ -132,7 +132,7 @@ public class BookParserTest {
 
   @Test
   public void bookWithOneBareCall() throws RecognitionException {
-    PARSERMETHOD_BOOK.checkTree(
+    PARSERMETHOD_BOOK.checkTreeAfterSeparatorRemoval(
         "insert file:one-word.nlp",
         tree( BOOK,
             tree( FUNCTION_CALL_,
@@ -145,7 +145,7 @@ public class BookParserTest {
 
   @Test
   public void bookWithTwoBareCalls() throws RecognitionException {
-    PARSERMETHOD_BOOK.checkTree(
+    PARSERMETHOD_BOOK.checkTreeAfterSeparatorRemoval(
         " function1 file:my/file1 " + BREAK + BREAK +
         "function2 file:/my/file2 " + BREAK + "  "
         ,
@@ -164,7 +164,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallBare() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
         "function",
         tree( FUNCTION_CALL_,
             tree( FUNCTION_NAME_, "function" )
@@ -174,7 +174,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithParagraphBody() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
         "function \n" + " with paragraphbody",
         tree( FUNCTION_CALL_,
             tree( FUNCTION_NAME_, "function" ),
@@ -191,7 +191,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithUrl() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
         "function file:my/file",
         createFunctionCallWithUrlTree( "my/file" )
     ) ;
@@ -199,7 +199,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithFlag() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
         "function $flag",
         tree( FUNCTION_CALL_,
             tree( FUNCTION_NAME_, "function" ),
@@ -210,7 +210,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithMoreFlags() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
         "function $flag1 " + BREAK +
         " $flag2",
         tree( FUNCTION_CALL_,
@@ -223,7 +223,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithTwoAssignments() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
         "function $key1=value1 " + BREAK +
         " $key2=value2",
         createFunctionCallWithValuedAssignmentTree(
@@ -234,7 +234,7 @@ public class BookParserTest {
 
   @Test
   public void functionCallWithAncillaries() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTree(
+    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
         "function \\identifier1 " + BREAK +
         " \\identifier2",
         tree( FUNCTION_CALL_,
@@ -249,7 +249,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifier() throws RecognitionException {
-    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
+    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTreeAfterSeparatorRemoval(
         "\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY_,
             tree( IDENTIFIER, "identifier" )
@@ -259,7 +259,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAncillaryIsBlockIdentifierAndModifier() throws RecognitionException {
-    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTree(
+    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTreeAfterSeparatorRemoval(
         "+\\identifier",
         tree( VALUED_ARGUMENT_ANCILLARY_,
             tree( VALUED_ARGUMENT_MODIFIER_, "+" ),
@@ -270,7 +270,7 @@ public class BookParserTest {
 
   @Test
   public void valuedArgumentAssignment() throws RecognitionException {
-    PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT.checkTree(
+    PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT.checkTreeAfterSeparatorRemoval(
         "$key=value/with/solidus.and-other",
         tree( VALUED_ARGUMENT_ASSIGNMENT_,
             tree( "key" ),

@@ -56,7 +56,7 @@ public class BookTest {
         "section \n" + " My Section"
     ) ;
     final SyntacticTree bookTree = book.getDocumentTree() ;
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
@@ -81,7 +81,7 @@ public class BookTest {
         "insert file:" + oneWordFile.getAbsolutePath()
     ) ;
     final SyntacticTree bookTree = book.getDocumentTree() ;
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "1" ) ),
             tree(
@@ -107,7 +107,7 @@ public class BookTest {
     LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
@@ -155,7 +155,7 @@ public class BookTest {
     LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
-    TreeFixture.assertEquals(
+    TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(

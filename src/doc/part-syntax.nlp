@@ -43,7 +43,7 @@ A paragraph is a sequence of textual items kept together because there is
 So a paragraph cannot contain two consecutive line breaks,
 or it would be split in two paragraphs.
 
-Paragraphs mainly contain words, punctuation signs, blocks, list items and URL.
+Paragraphs mainly contain words, punctuation signs, blocks, list items and external links.
 
 
 --- Blocks.
@@ -82,7 +82,7 @@ XML element: ``n:paragraph-regular``
 
 A regular paragraph is made of contiguous lines of text
 (two consecutive line breaks cannot occur inside a paragraph).
-A paragraph may contain words, punctuation signs, URL, list items and blocks.
+A paragraph may contain words, punctuation signs, external links, list items and blocks.
 
 With Novelang default stylesheet, such text is rendered as normal text:
 
@@ -337,16 +337,25 @@ April, the 1^st.
 >>>
 
 
-=== URL
+=== External link
 
-XML element: ``n:url``
+XML elements: ``n:external-link``,  ``n:url``, ``n:link-name``
 
-A URL may appear at the first column of a line. There must be nothing else after, except spaces
-or a line break.
+An external link is made of a URL, which starts at the first column of a line, with nothing else on 
+the same line (except trailing whitespaces).
+
+When the URL is preceded by a block inside double quotes which appears alone on a line, with some
+indentation, it becomes part of the ``n:external-link`` as a ``n:link-name`` element. 
 
 <<<
-http://novelang.blogspot.com
+So you can click 
+  "here"
+http://novelang.sourceforge.net
+.
 >>>
+
+With Novelang default stylesheet, the external link will show as a hyperlink.
+
 
 === Tables
 
@@ -426,8 +435,10 @@ with ``.svg`` as extension.
 >>>
 
 The with or the height of the vector image is copied from the SVG file, including units.
-Coordinates and lengths in SVG are explained here:
+Coordinates and lengths in SVG are explained 
+  "here"
 http://www.w3.org/TR/SVG/coords.html#UnitIdentifiers
+.
 
 SVG documents may reference an external entity with a public identifier like 
 ``-//W3C//DTD SVG 1.1"`` or ``-//W3C//ENTITIES SVG 1.1`` or ``-//W3C//ELEMENTS SVG 1.1``.
