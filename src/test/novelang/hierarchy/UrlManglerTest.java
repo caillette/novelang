@@ -78,6 +78,9 @@ public class UrlManglerTest {
     ) ;
   }
 
+  /**
+   * This test reproduces a bug. It stresses detection of paragraph exit.
+   */
   @Test
   public void fixNamedUrlAtStartOfParagraphAfterLevelIntroducer() {
     verifyFixNamedUrls( 

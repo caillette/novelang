@@ -165,7 +165,13 @@ public class UrlMangler {
         current = TreepathTools.getNextInPreorder( current ) ;
       }
 
-      if( current != null && current.getLength() < paragraphDepth ) {
+      if( current != null 
+       && (    current.getLength() < paragraphDepth
+//            || (    paragraphDepth > -1
+//                 && ! current.getTreeAtDistance( paragraphDepth - 1 ).isOneOf( PARAGRAPH_NODEKINDS )
+//               )
+       )
+      ) {
         state = State.OUTSIDE_PARAGRAPH ;
       }
 
