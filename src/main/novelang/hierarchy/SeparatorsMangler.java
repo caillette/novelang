@@ -20,6 +20,8 @@ import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
+import com.google.common.base.Function;
+import com.google.common.base.Nullable;
 
 /**
  * @author Laurent Caillette
@@ -47,4 +49,12 @@ public final class SeparatorsMangler {
     }
     return treepath ;
   }
+  
+  public static Function< ? super SyntacticTree, ? extends SyntacticTree > FUNCTION = 
+      new Function< SyntacticTree, SyntacticTree >() {
+        public SyntacticTree apply( SyntacticTree syntacticTree ) {
+          return removeSeparators( syntacticTree ) ;
+        }
+      }
+  ;
 }

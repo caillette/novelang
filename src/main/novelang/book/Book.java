@@ -39,6 +39,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.FileTools;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
+import novelang.hierarchy.SeparatorsMangler;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.DefaultBookParserFactory;
 import novelang.system.DefaultCharset;
@@ -109,7 +110,8 @@ public class Book extends AbstractSourceReader {
         bookDirectory
     ) ;
 
-    final SyntacticTree rawTree = parse( new DefaultBookParserFactory(), content ) ;
+    final SyntacticTree rawTree = SeparatorsMangler.removeSeparators( 
+        parse( new DefaultBookParserFactory(), content ) ) ;
     if( null == rawTree ) {
       this.environment = new Environment( baseDirectory, bookDirectory ) ;
       this.documentTree = null ;
