@@ -131,7 +131,7 @@ public class TreeTest {
 
   }
 
-  @Test @Ignore
+  @Test 
   public void getChildren() {
     final MyTree child0 = MyTree.create( "0" ) ;
     final MyTree child1 = MyTree.create( "1" ) ;
