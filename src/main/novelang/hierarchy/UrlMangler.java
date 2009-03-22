@@ -41,7 +41,7 @@ public class UrlMangler {
   ) {
     State state = State.OUTSIDE_PARAGRAPH;
     Treepath< SyntacticTree > treepathToName = null ;
-    int paragraphDepth = -1 ;
+    Treepath< SyntacticTree >  paragraph = null ;
 
     Treepath< SyntacticTree > current = treepath ;
     Treepath< SyntacticTree > result = current ;
@@ -59,7 +59,7 @@ public class UrlMangler {
               evaluate( tree, PARAGRAPH_NODEKINDS, State.INSIDE_PARAGRAPH, State.OUTSIDE_PARAGRAPH )
           ) ;
           if( State.INSIDE_PARAGRAPH == state ) {
-            paragraphDepth = current.getLength() ;
+            paragraph = current ;
           }
           break ;
         
@@ -71,7 +71,7 @@ public class UrlMangler {
               State.OUTSIDE_PARAGRAPH
           ) ;
           if( State.INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE == state ) {
-            paragraphDepth = current.getLength() ;
+            paragraph = current ;
           }
           break ;
         
@@ -165,14 +165,13 @@ public class UrlMangler {
         current = TreepathTools.getNextInPreorder( current ) ;
       }
 
-      if( current != null 
-       && (    current.getLength() < paragraphDepth
-//            || (    paragraphDepth > -1
-//                 && ! current.getTreeAtDistance( paragraphDepth - 1 ).isOneOf( PARAGRAPH_NODEKINDS )
-//               )
-       )
+      if( current != null
+       && paragraph != null
+       && paragraph.getLength() <= current.getLength() 
+       && ! TreepathTools.hasSameStartingIndicesAs( paragraph, current )       
       ) {
         state = State.OUTSIDE_PARAGRAPH ;
+        paragraph = null ;
       }
 
     }

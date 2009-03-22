@@ -583,4 +583,45 @@ public class TreepathTools {
     }
   }
 
+  /**
+   * Returns if a {@code Treepath} has the same indices in its parenthood as another
+   * {@code Treepath}, for the length they have in common.
+   * 
+   * @param maybeParent a non-null object.
+   * @param maybeChild a non-null object with {@link Treepath#getLength()} greater than the
+   *     one of {@code maybeparent}. 
+   * @return true if index in each parent tree is the same.
+   */
+  public static < T extends Tree > boolean hasSameStartingIndicesAs( 
+      Treepath< T > maybeParent,  
+      Treepath< T > maybeChild  
+  ) {
+    Preconditions.checkNotNull( maybeParent ) ;
+    Preconditions.checkNotNull( maybeChild ) ;
+    Preconditions.checkArgument( maybeParent.getLength() <= maybeChild.getLength() ) ;
+    
+    while( maybeChild.getLength() > maybeParent.getLength() ) {
+      maybeChild = maybeChild.getPrevious() ;
+    }    
+    return hasSameStartingIndicesAsWithoutCheck( maybeParent, maybeChild ) ;
+  }
+  
+  private static < T extends Tree > boolean hasSameStartingIndicesAsWithoutCheck( 
+      Treepath< T > maybeParent,  
+      Treepath< T > maybeChild  
+  ) {
+    if( maybeParent.getPrevious() == null ) {
+      return true ; // No check needed as both arguments are supposed to have the same length.
+    } else {
+      if( maybeParent.getIndexInPrevious() == maybeChild.getIndexInPrevious() ) {
+        return hasSameStartingIndicesAsWithoutCheck( 
+            maybeParent.getPrevious(), 
+            maybeChild.getPrevious() 
+        ) ;
+      } else {
+        return false ;
+      }
+    }
+  }
+
 }
