@@ -439,6 +439,22 @@ public class PartParserTest {
   public void paragraphIsInterpolatedWordsWithCommaInTheMiddle() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.createTree( "--w0,w1--" );
   }
+  
+  @Test @Ignore
+  public void paragraphHasLineBreaksInsideParenthensis() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(  
+        "(" + BREAK +
+        "x" + BREAK +
+        ")",
+        tree( 
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_INSIDE_PARENTHESIS,
+                tree( WORD_, "x")
+            )
+        )
+    ) ;
+  }
 
   @Test
   public void paragraphIsQuoteOfOneWordThenParenthesis() throws RecognitionException {
