@@ -201,7 +201,7 @@ public class TreepathTools {
       T tree
   ) {
     Preconditions.checkArgument( 
-        treepath.getLength() < 1,
+        treepath.getLength() > 0,
         "Minimum length is 1, got %s",
         treepath.getLength() 
     ) ;
@@ -234,7 +234,7 @@ public class TreepathTools {
       int position
   ) {
     Preconditions.checkArgument( 
-        treepath.getLength() < 1,
+        treepath.getLength() > 0,
         "Minimum length is 1, got ",
         treepath.getLength() 
     ) ;
