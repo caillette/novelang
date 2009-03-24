@@ -1287,26 +1287,28 @@ public class PartParserTest {
   
   @Test
   public void embeddedListItemMinimum() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_PARAGRAPH.checkTree(
         "- w",
         tree(
             PARAGRAPH_REGULAR,
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) )
         )
-    ) ;
+    ); ;
   }
 
   @Test
   public void severalEmbeddedListItems() throws RecognitionException {
-    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_PARAGRAPH.checkTree(
         "- w1" + BREAK +
-        "- w2" + BREAK,
+        "  - w2" + BREAK,
         tree(
             PARAGRAPH_REGULAR,
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w1" ) ),
+            tree( LINE_BREAK_ ),
+            tree( WHITESPACE_ ),
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w2" ) )
         )
-    ) ;
+    ); ;
   }
 
   @Test

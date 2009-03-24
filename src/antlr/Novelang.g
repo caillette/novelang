@@ -188,7 +188,7 @@ paragraph
 	    )
 	    ( p += whitespace? p += softbreak 
 	      (   ( url ) => p += url
-	        | ( smallDashedListItem ) => p += smallDashedListItem
+	        | ( whitespace? smallDashedListItem ) => p += whitespace? p += smallDashedListItem
 	        | ( p += whitespace? p += mixedDelimitedSpreadBlock 
 	            ( p += whitespace p+= mixedDelimitedSpreadBlock )* 
 	          )
