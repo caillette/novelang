@@ -52,16 +52,17 @@ public class EmbeddedListManglerTest {
         tree(
             PART,
             tree(
-                _EMBEDDED_LIST_WITH_HYPHEN,
-                tree( PARAGRAPH_REGULAR )
-            )
+                _EMBEDDED_LIST_ITEM,
+                tree( WORD_, "w" )
+            ),
+            tree( WORD_, "x" )
         ),
         tree(
             PART,
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
             tree( LINE_BREAK_ ),
             tree( WHITESPACE_ ),
-            tree( PARAGRAPH_REGULAR )
+            tree( WORD_, "x" )
         )
     ) ;
   }
@@ -104,6 +105,7 @@ public class EmbeddedListManglerTest {
                 PART,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
                 tree( LINE_BREAK_ ),
+                tree( WHITESPACE_ ),
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
         )
     ) ;
@@ -156,11 +158,11 @@ public class EmbeddedListManglerTest {
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized = 
-        Hierarchizer.rehierarchizeLists( flatTreepath ) ;
+        EmbeddedListMangler.rehierarchizeEmbeddedLists( flatTreepath ) ;
 
-    TreeFixture.assertEqualsWithSeparators(
-        expectedTreepath,
-        rehierarchized
+    TreeFixture.assertEqualsNoSeparators(
+        expectedTreepath.getTreeAtEnd(), 
+        rehierarchized.getTreeAtEnd()
     ) ;
   }
   
