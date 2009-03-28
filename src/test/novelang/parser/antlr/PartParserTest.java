@@ -1296,6 +1296,25 @@ public class PartParserTest {
     ); ;
   }
 
+  @Test @Ignore
+  public void embeddedListItemInsideParenthesis() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+        "(" + BREAK +
+        "- w" + BREAK +
+        "- x" + BREAK +
+        ")"
+        ,
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_INSIDE_PARENTHESIS,
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
+            )
+        )
+    ); ;
+  }
+
   @Test
   public void severalEmbeddedListItems() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
