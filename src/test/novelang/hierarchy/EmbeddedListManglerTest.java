@@ -22,6 +22,7 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +53,11 @@ public class EmbeddedListManglerTest {
         tree(
             PART,
             tree(
-                _EMBEDDED_LIST_ITEM,
-                tree( WORD_, "w" )
+                _EMBEDDED_LIST_WITH_HYPHEN,
+                tree(
+                    _EMBEDDED_LIST_ITEM,
+                    tree( WORD_, "w" )
+                )
             ),
             tree( WORD_, "x" )
         ),
