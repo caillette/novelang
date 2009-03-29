@@ -133,6 +133,31 @@ public class TreepathToolsTest {
   }
 
   @Test
+  public void removePreviousSibling() {
+
+    final MyTree child0 = MyTree.create( "child0" ) ;                       //         parent
+    final MyTree child1 = MyTree.create( "child1" ) ;                       //       /   |   \
+    final MyTree child2 = MyTree.create( "child2" ) ;                       // child0 child1 child2
+    final MyTree parent = MyTree.create( "parent", child0, child1, child2 ) ;
+
+    // treepath: parent <- child1
+    final Treepath< MyTree > treepath = Treepath.create( parent, 1 ) ;
+
+    // afterRemoval: parent <- child1
+    final Treepath< MyTree > afterRemoval = TreepathTools.removePreviousSibling( treepath ) ;
+
+    Assert.assertEquals( 2, afterRemoval.getLength() ) ;
+
+    Assert.assertEquals( 2, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
+
+    Assert.assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
+    assertSame( child1, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 0 ) ) ;
+    assertSame( child2, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 1 ) ) ;
+
+  }
+
+  @Test
   public void getSiblingAt() {
 
     final MyTree child0 = MyTree.create( "child0" ) ;                       //         parent
