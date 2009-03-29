@@ -188,7 +188,7 @@ public class TreepathTools {
    *  |                 |
    * *t1    -->        *t1'
    *  |               / |
-   *  t2         *new   t2 
+   *  t2          *new  t2 
    * </pre>
    *
    * @param treepath non-null object.
@@ -218,8 +218,8 @@ public class TreepathTools {
    *     *t0             *t0'
    *      |               |
    *    *t1    -->      *t1'
-   *    /  \           /  | \
-   *  t2   t3       t2 *new  t3
+   *    /  \           /  |  \
+   *  t2    t3       t2 *new  t3
    * </pre>
    *
    * @param treepath non-null object.
@@ -442,21 +442,14 @@ public class TreepathTools {
    * to somewhere in the container tree.
    * Both {@code Treepath} are supposed to have the same root (tested by reference equality).
    * <pre>
- -*t0       *t0'             -*t0       *t0'
-   |         |                 |         |
- -*t1  -->  *t1'             -*t1  -->  *t1'
-  /  \       |                /  \       |
--t2  *t3    *t3             *t2  -t3    *t2
-
-
- -*t0       *t0'            -*t0
-   |         |                |
- -*t1  -->  *t1'            -*t1  -->  IllegalArgumentException
-   |                          |
-  -t2                        *t2
-
-   * : treepath to some element
-   - : treepath representing subtree
+   *  -*t0       *t0'          -*t0       *t0'            -*t0
+   *    |         |              |         |                |
+   *  -*t1  -->  *t1'          -*t1  -->  *t1'            -*t1  -->  exception
+   *   /  \       |              |                          |
+   * -t2  *t3    *t3            -t2                        *t2
+   *
+   * * : treepath to some element
+   * - : treepath representing subtree
    * </pre>
    *
    * @param containerTreepath a {@code Treepath} where the tree at start is the tree to remove from.
@@ -581,6 +574,11 @@ public class TreepathTools {
     return null ;
   }
 
+  /**
+   * Navigates towards the next sibling or the next sibling of a parent tree.
+   * @param treepath a non-null object.
+   * @return the next tree, or null if there is no other tree to navigate to.
+   */
   public static < T extends Tree > Treepath< T > getNextUpInPreorder( Treepath< T > treepath ) {
     if( hasNextSibling( treepath ) ) {
       return getNextSibling( treepath ) ;
