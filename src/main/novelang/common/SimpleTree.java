@@ -37,6 +37,10 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     this( text, Lists.newArrayList( children ) ) ;
   }
 
+  public SimpleTree( NodeKind nodeKind, SyntacticTree... children ) {
+    this( nodeKind.name(), Lists.newArrayList( children ) ) ;
+  }
+
   public SimpleTree( String text, Iterable< ? extends SyntacticTree> children ) {
     super( children ) ;
     this.text = text ;

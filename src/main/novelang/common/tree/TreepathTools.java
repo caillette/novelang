@@ -474,8 +474,8 @@ public class TreepathTools {
         containerTreepath.getTreeAtStart() == subTreepath.getTreeAtStart() ) ;
     Preconditions.checkArgument( subTreepath.getLength() > 1 ) ;
 
-    final Iterator< Treepath< T > > invertedPathForContainer = invert( containerTreepath ) ;
-    final Iterator< Treepath< T > > invertedPathForSub = invert( subTreepath ) ;
+    final Iterator< Treepath< T > > invertedPathForContainer = invert( containerTreepath ).iterator() ;
+    final Iterator< Treepath< T > > invertedPathForSub = invert( subTreepath ).iterator() ;
     invertedPathForContainer.next() ;
     invertedPathForSub.next() ;
 
@@ -532,7 +532,7 @@ public class TreepathTools {
 
 
 
-  private static< T extends Tree > Iterator< Treepath< T > > invert( Treepath< T > treepath ) {
+  private static< T extends Tree > Iterable< Treepath< T > > invert( Treepath< T > treepath ) {
     final List< Treepath< T > > treepaths = new ArrayList< Treepath< T > >( treepath.getLength() ) ;
     while( true ) {
       treepaths.add( treepath ) ;
@@ -544,7 +544,7 @@ public class TreepathTools {
       }
     }
     Collections.reverse( treepaths ) ;
-    return treepaths.iterator() ; 
+    return treepaths ;
   }
 
   /**

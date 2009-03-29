@@ -54,9 +54,9 @@ public class TreepathTest {
     final MyTree child = MyTree.create( "child" ) ;
     final MyTree parent = MyTree.create( "parent", child ) ;
 
-    final Treepath< MyTree > treepath = Treepath.< MyTree >create( parent, 0 ) ;
-                                              // ^ IntelliJ IDEA 7.0.3 breaks without this.
-    print("Treepath: ", treepath ) ;
+    final Treepath< MyTree > treepath = Treepath.create( parent, 0 ) ;
+
+    print( "Treepath: ", treepath ) ;
 
     Assert.assertEquals( 2, treepath.getLength() ) ;
     assertSame( parent, treepath.getTreeAtDistance( 1 ) ) ;

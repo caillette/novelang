@@ -161,17 +161,31 @@ public final class Treepath< T extends Tree > {
    *     or equal to {@link #getLength()}.
    */
   public T getTreeAtDistance( int distance ) throws IllegalDistanceException {
-    if( -1 == distance ) {
+    return getTreepathAtDistance( distance ).getTreeAtEnd() ;
+  }
+
+  /**
+   * Returns the {@code Tree} at a given distance, which is the n<sup>th</sup>
+   * from the end.
+   * Invariant: {@code getTreeAtHeight( 0 ) == getEnd()}.
+   *
+   * @param distance 0 or more.
+   * @return a non-null object.
+   * @throws IllegalArgumentException if negative distance or distance greater than or
+   *     or equal to {@link #getLength()}.
+   */
+  public Treepath< T > getTreepathAtDistance( int distance ) throws IllegalDistanceException {
+    if( 0 > distance ) {
       throw new IllegalDistanceException( distance ) ;
     }
     if( 0 == distance ) {
-      return treeAtEnd;
+      return this ;
     } else {
       if( null == previous ) {
         throw new IllegalDistanceException( distance ) ;
       } else {
         try {
-          return previous.getTreeAtDistance( distance - 1 ) ;
+          return getPrevious().getTreepathAtDistance( distance - 1 ) ;
         } catch( IllegalDistanceException e ) {
           throw new IllegalDistanceException( distance + 1 ) ;
         }
