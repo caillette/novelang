@@ -72,9 +72,17 @@ public class EmbeddedListMangler {
       Treepath< SyntacticTree > treepathTemplate,
       SyntacticTree tree
   ) {
+    return TreepathTools.addChildLast( replacementTarget,  tree ) ; 
+
+/*
+    if( replacementTarget.getLength() == treepathTemplate.getLength() - 1 ) {
+      treepathTemplate = treepathTemplate.getPrevious() ;
+    }
+
+
     Preconditions.checkArgument(
         replacementTarget.getLength() >= treepathTemplate.getLength(),
-        "replacementTarget.getLength()[%s] >= treepathTemplate.getLength()[%s]",
+        "replacementTarget.getLength()[%s] < treepathTemplate.getLength()[%s]",
         replacementTarget.getLength(),
         treepathTemplate.getLength()
 
@@ -98,7 +106,7 @@ public class EmbeddedListMangler {
       }
     }
     return TreepathTools.replaceTreepathEnd( replacementTarget, tree ) ;
-
+*/
   }
 
 
@@ -124,7 +132,14 @@ public class EmbeddedListMangler {
         return new GobbleResult( gobbler, gobbleStart, false ) ;
       } else {
         if( indentation == gobbling.indentation ) {        // Gobble at same indentation
-          gobbler = TreepathTools.addChildLast( gobbler, gobbling.gobbledTree ) ;
+          if( gobbler.getPrevious() != null
+           && gobbler.getPrevious().getTreeAtEnd().isOneOf( _EMBEDDED_LIST_WITH_HYPHEN )
+           && gobbler.getTreeAtEnd().getChildCount() == 0
+          ) {
+            gobbler = TreepathTools.addChildLast( gobbler, gobbling.gobbledTree ) ;
+          } else {
+            gobbler = TreepathTools.addSiblingLast( gobbler, gobbling.gobbledTree ) ;
+          }
           gobbleStart = gobbling.treepathMinusGobbled ;
         } else if( indentation < gobbling.indentation ) {  // Gobble at greater indentation
           gobbler = TreepathTools.addChildLast(

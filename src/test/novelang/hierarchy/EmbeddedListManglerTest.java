@@ -135,10 +135,10 @@ public class EmbeddedListManglerTest {
                 PART,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
                 tree( LINE_BREAK_ ),
-                tree( WHITESPACE_ ),
+                tree( WHITESPACE_, "  " ),
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
                 tree( LINE_BREAK_ ),
-                tree( WHITESPACE_ ),
+                tree( WHITESPACE_, "  " ),
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
