@@ -17,6 +17,7 @@
 package novelang.common;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.common.tree.ImmutableTree;
@@ -109,5 +110,10 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
 
   public Class< ? extends SyntacticTree > getStorageType() {
     return SyntacticTree.class ;
+  }
+
+  @Override
+  public String toString() {
+    return ClassUtils.getShortClassName( getClass() ) + "[" + text + "]" ;
   }
 }

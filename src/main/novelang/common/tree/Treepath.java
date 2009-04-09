@@ -193,8 +193,22 @@ public final class Treepath< T extends Tree > {
     }
   }
 
+  @Override
+  public String toString() {
+    boolean first = true ;
+    final StringBuffer buffer = new StringBuffer() ;
+    for( int i = 0 ; i < this.getLength() ; i++ ) {
+      if( first ) {
+        first = false ;
+      } else {
+        buffer.append( " -> " ) ;
+      }
+      buffer.append( "{" ).append( this.getTreeAtDistance( i ) ).append( "}" ) ;
+    }
+    return buffer.toString() ;
+  }
 
-// ===============
+  // ===============
 // Factory methods
 // ===============
 

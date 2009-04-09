@@ -87,17 +87,7 @@ public class TreepathTest {
 // =======
 
   private static void print( String message, Treepath< MyTree > treepath ) {
-    boolean first = true ;
-    final StringBuffer buffer = new StringBuffer() ;
-    for( int i = 0 ; i < treepath.getLength() ; i++ ) {
-      if( first ) {
-        first = false ;
-      } else {
-        buffer.append( " -> " ) ;
-      }
-      buffer.append( "{" ).append( treepath.getTreeAtDistance( i ).getPayload() ).append( "}" ) ;
-    }
-    LOGGER.debug( message + buffer.toString() ) ;
+    LOGGER.debug( message + treepath.toString() ) ;
   }
 
   private static void assertSame( MyTree expected, MyTree actual ) {

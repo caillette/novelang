@@ -16,12 +16,9 @@
  */
 package novelang.hierarchy ;
 
-import java.util.Iterator;
-
 import com.google.common.base.Preconditions;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
-import novelang.common.tree.TreeTools;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import static novelang.parser.NodeKind.*;
@@ -43,13 +40,20 @@ public class EmbeddedListMangler {
 //    if( true ) { throw new UnsupportedOperationException( "rehierarchizeEmbeddedLists" ) ; }
     Treepath< SyntacticTree > current = treepathToRehierarchize ;
     while( true ) {
-      final SyntacticTree currentTree = current.getTreeAtEnd() ;
-      if( currentTree.isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ) ) {
+      if( isRawItem( current ) ) {
+        
+        current = insertPlaceholder( current ) ;
         final Treepath< SyntacticTree > treepathBeforeGobbling = current ;
-        final SyntacticTree gobblerTree = new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) ;
-        final Treepath< SyntacticTree > gobbler = Treepath.create( gobblerTree ) ;
-        final int indentation = getIndentSize( current ) ;
+        // Now currents refers to a new _PLACEHOLDER_ child right before first raw item.
+        
+        final Treepath< SyntacticTree > gobbler = createGobbler() ;
+        // The gobbler is a treepath because it may be used as a stack.
+        
+        final int indentation = getIndentSize( current ) ; // Hitting placeholder, but no problem.
+        
         final GobbleResult result = gobbleThisIndentOrGreater( gobbler, current, indentation ) ;
+        // So we have gobbled every items in sequence, just leaving the placeholder.
+        
         current = result.gobbled ;
         current = replaceAt(
             current,
@@ -67,6 +71,22 @@ public class EmbeddedListMangler {
 
   }
 
+  private static Treepath<SyntacticTree> createGobbler() {
+    return Treepath.create( ( SyntacticTree ) new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) );
+  }
+
+  private static boolean isRawItem( Treepath< SyntacticTree > current ) {
+    return current.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ );
+  }
+
+  private static Treepath< SyntacticTree > insertPlaceholder( Treepath<SyntacticTree> current ) {
+    return TreepathTools.addChildAt( 
+        current, 
+        new SimpleTree( _PLACEHOLDER_ ), 
+        current.getIndexInPrevious() 
+    ) ;
+  }
+
   private static Treepath< SyntacticTree > replaceAt(
       Treepath< SyntacticTree > replacementTarget,
       Treepath< SyntacticTree > treepathTemplate,
@@ -74,39 +94,6 @@ public class EmbeddedListMangler {
   ) {
     return TreepathTools.addChildLast( replacementTarget,  tree ) ; 
 
-/*
-    if( replacementTarget.getLength() == treepathTemplate.getLength() - 1 ) {
-      treepathTemplate = treepathTemplate.getPrevious() ;
-    }
-
-
-    Preconditions.checkArgument(
-        replacementTarget.getLength() >= treepathTemplate.getLength(),
-        "replacementTarget.getLength()[%s] < treepathTemplate.getLength()[%s]",
-        replacementTarget.getLength(),
-        treepathTemplate.getLength()
-
-    ) ;
-    while( replacementTarget.getLength() > treepathTemplate.getLength() ) {
-      // First equalize lengths
-      replacementTarget = replacementTarget.getPrevious() ;
-    }
-    { // Then do some boring checks, it's the price of defensive programming.
-      Treepath< SyntacticTree > templateLooktop = treepathTemplate ;
-      for( Treepath< SyntacticTree > replacementLooktop = replacementTarget ;
-          replacementLooktop != null ;
-          replacementLooktop = replacementLooktop.getPrevious()
-      ) {
-        Preconditions.checkArgument(
-            replacementLooktop.getLength() == templateLooktop.getLength() ) ;
-//        Preconditions.checkArgument(
-//            replacementLooktop.getIndexInPrevious() == templateLooktop.getIndexInPrevious() ) ;
-
-        templateLooktop = templateLooktop.getPrevious() ;
-      }
-    }
-    return TreepathTools.replaceTreepathEnd( replacementTarget, tree ) ;
-*/
   }
 
 
@@ -114,7 +101,7 @@ public class EmbeddedListMangler {
    * Gobbles all consecutive {@link novelang.parser.NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_} nodes
    * of the same indent or with a greater indent.
    *
-   * @param gobbler a tree which solely holes the new embedded list structure.
+   * @param gobbler a tree which solely holds the new embedded list structure.
    * @param gobbleStart where the gobbling starts in the document. Nodes of interest are removed.
    * @param indentation expected indentation, must be 0 or more.
    * @return a non-null {@code GobbleResult} with a {@code gobbler} value never null, but with
@@ -125,6 +112,8 @@ public class EmbeddedListMangler {
       Treepath< SyntacticTree > gobbleStart,
       int indentation
   ) {
+    Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
+    
     do {
       final Gobbling gobbling = gobble( gobbleStart ) ;
 
@@ -132,9 +121,9 @@ public class EmbeddedListMangler {
         return new GobbleResult( gobbler, gobbleStart, false ) ;
       } else {
         if( indentation == gobbling.indentation ) {        // Gobble at same indentation
-          if( gobbler.getPrevious() != null
-           && gobbler.getPrevious().getTreeAtEnd().isOneOf( _EMBEDDED_LIST_WITH_HYPHEN )
-           && gobbler.getTreeAtEnd().getChildCount() == 0
+          if( gobbler.getPrevious() == null
+           || gobbler.getPrevious().getTreeAtEnd().isOneOf( _EMBEDDED_LIST_WITH_HYPHEN )
+           || gobbler.getTreeAtEnd().getChildCount() == 0
           ) {
             gobbler = TreepathTools.addChildLast( gobbler, gobbling.gobbledTree ) ;
           } else {
@@ -174,12 +163,27 @@ public class EmbeddedListMangler {
     
   }
 
+  /**
+   * Gobble one item node if possible.
+   * 
+   * @param gobbleStart a treepath to the {@code _PLACEHOLDER} node which precedes the sequence
+   * of raw items.
+   * 
+   * @return null if {@code gobbleStart} was null, or a {@code Gobbling} object containing 
+   *     the result of the gobble. 
+   *     {@code Gobbling#treepathMinusGobbled} still refers to 
+   *     the _PLACEHOLDER_ but some separators and one raw item have been removed.
+   *     {@code Gobbling#gobbledTree} is the result of the gobbling
+   */
   private static Gobbling gobble( Treepath< SyntacticTree > gobbleStart ) {
     if( null == gobbleStart ) {
       return null ;
     }
+    Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
+    gobbleStart = TreepathTools.getNextSibling( gobbleStart ) ;
+    
     do {
-      if( gobbleStart.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ) ) {
+      if( isRawItem( gobbleStart ) ) {
         if( TreepathTools.hasNextSibling( gobbleStart ) ) {
           final Treepath< SyntacticTree > nextStart = TreepathTools.getNextSibling( gobbleStart ) ;
           final Treepath< SyntacticTree > nextStartMinusPrevious =
@@ -199,8 +203,8 @@ public class EmbeddedListMangler {
     } while( true ) ;
   }
 
-  private static final SyntacticTree makeEmbeddedListItem( Treepath< SyntacticTree > treepath ) {
-    final Iterable<? extends SyntacticTree> iterable = treepath.getTreeAtEnd().getChildren() ;
+  private static SyntacticTree makeEmbeddedListItem( Treepath< SyntacticTree > treepath ) {
+    final Iterable< ? extends SyntacticTree > iterable = treepath.getTreeAtEnd().getChildren() ;
     return new SimpleTree( _EMBEDDED_LIST_ITEM.name(), iterable ) ;
   }
 
@@ -259,8 +263,7 @@ public class EmbeddedListMangler {
    * @return a number equal to or greater than 0
    */
   private static int getItemDepth( Treepath< SyntacticTree > treepath ) {
-    Preconditions.checkArgument( 
-        treepath.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ) ) ;
+    Preconditions.checkArgument( isRawItem( treepath ) ) ;
     return getIndentSize( treepath ) ;
   }
 
