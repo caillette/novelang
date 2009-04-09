@@ -1,0 +1,129 @@
+== Named URL: try again!
+
+With `Novelang-0.23.0` comes a new feature: named URL. The purpose is to associate some text 
+to a URL, in order to let the stylesheet display something nicer than the URL itself. 
+With source document like this:
+
+<<<
+This is a 
+  "url"
+http://url.net/my-very-long-path
+.
+>>>
+
+...we get: 
+
+<<
+This is a 
+  "url"
+http://url.net/my-very-long-path
+.
+>>
+
+The rationale of 
+  "this syntax"
+http://novelang.blogspot.com/2008/08/url-syntax.html
+is the consistency with 
+  "decorations"
+http://novelang.blogspot.com/2008/06/more-on-identifiers.html
+. Decorations are source metadata that is conveniently //before// decorated source, appearing
+on its own single line and with some indentation for the visual comfort. 
+It seemed a good idea to follow the same scheme.
+ 
+But the syntax described above has many drawbacks. 
+ 
+First, it's very space-consuming. The scarce resource is the vertical space inside the text editor,
+because you cannot stretch the display device in height (and long horizontal lines are hard to 
+read). So text like this seems to waste space:
+
+
+<<<
+This is
+  "url one"
+http://url.net/1
+and here is 
+  "url two"
+http://url.net/2
+.  
+>>>
+
+URL must appear on their very own line, for already discussed reasons, so the full stop character
+at the end must stay as it is. The problem is with the blocks inside double quotes: it's supposed
+to remain short, so reserving a whole line for it is obviously a waste. 
+Finally I'd like to write text like this:
+
+<<<
+This is "url one"
+http://url.net/1
+and here is "url two"
+http://url.net/2
+.  
+>>>
+
+One question then arises: how to distinguish a block associated to a URL from one which is not?
+After all you //may// need to display some text in double quotes right before some URL.
+First I thought about a new "attach" operator which would tell explicitely that some block inside 
+double quotes is related to the following URL :
+
+<<<
+Stupid: "url" ~
+http://url.net
+>>>
+
+This is not a good idea because experience shows that, `99 %` of times, the block 
+is related to the following URL.
+So it makes no sense to make the most common case a special thing which breaks the consistency
+of the grammar. And what if the text of the URL should
+appear inside double quotes? Is there some new clever escape mechanism to invent?
+
+Corresponding Abstract Syntax Tree is also broken, in the sense where ``n:external-link`` and 
+``n:link-title`` nodes do carry semantic meaning, while I claim everywhere that such meaning is
+confusing when stylesheet defines alternate meaning. The ``n:external-link`` was a clever idea
+to wrap the URL and the title in one single element, but I should find something else.
+
+=== The solution
+
+When a block inside double quotes, or a block inside square brackets, are located right before
+a URL, they become URL children. Considering such source document: 
+
+<<<
+This is a ["url"]
+http://url.net
+.
+>>>
+
+...we get something like this (consistent with stylesheet's rendering of block inside double quotes): 
+
+<<
+This is a 
+  "«laquo» url «raquo»"
+http://url.net
+.
+>>
+
+In the rare case where a block inside double quotes must appear verbatim, we "break" the proximity
+with some "invisible" character which is an empty block of literal inside grave accents.
+That's a little weird but it's not a problem as it should remain the exception:
+
+<<<
+That's a "url" ``
+http://url.net
+>>>
+
+... so it renders like this:
+
+<<
+That's a "url" 
+http://url.net
+.
+>>
+
+Finally, the ``n:external-link`` disappears in favor of ``n:url``. The ``n:link-title`` becomes
+a ``n:block-inside-double-quotes`` or ``n:block-inside-square-brackets``. 
+The text of the URL gets wrapped inside a ``n:url-literal`` and that's all.
+  
+<<<
+n:url
+  + n:url-literal
+  + n:block-inside-double-quotes
+>>>
