@@ -65,7 +65,6 @@ public class EmbeddedListManglerTest {
             PART,
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
             tree( LINE_BREAK_ ),
-            tree( WHITESPACE_ ),
             tree( WORD_, "x" )
         )
     ) ;
@@ -98,21 +97,18 @@ public class EmbeddedListManglerTest {
             PART,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
-                tree( 
-                    _EMBEDDED_LIST_ITEM, 
-                    tree( WORD_, "w" ),
-                    tree(
-                        _EMBEDDED_LIST_WITH_HYPHEN,
-                        tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) )
-                    )
-                )
+                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "w" ) ),
+                tree(
+                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) )
+                )                
             )
         ),
         tree(
                 PART,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
                 tree( LINE_BREAK_ ),
-                tree( WHITESPACE_ ),
+                tree( WHITESPACE_, "  " ),
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
         )
     ) ;
@@ -125,14 +121,11 @@ public class EmbeddedListManglerTest {
             PART,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
-                tree( 
-                    _EMBEDDED_LIST_ITEM, 
-                    tree( WORD_, "w" ),
-                    tree(
-                        _EMBEDDED_LIST_WITH_HYPHEN,
-                        tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) ),
-                        tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) )
-                    )
+                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "w" ) ),
+                tree(
+                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) ),
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) )
                 ),
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
             )

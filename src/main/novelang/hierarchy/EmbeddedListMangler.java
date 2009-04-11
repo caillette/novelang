@@ -24,8 +24,8 @@ import novelang.common.tree.TreepathTools;
 import static novelang.parser.NodeKind.*;
 
 /**
- * Rehiererachizes embedded lists and wraps them into 
- * {@link novelang.parser.NodeKind#_EMBEDDED_LIST_WITH_HYPHEN} elements.
+ * Rehiererachizes embedded lists, with {@link novelang.parser.NodeKind#_EMBEDDED_LIST_WITH_HYPHEN} 
+ * elements wrapping {@link novelang.parser.NodeKind#_EMBEDDED_LIST_ITEM}.
  *  
  * @author Laurent Caillette
  */
@@ -37,13 +37,12 @@ public class EmbeddedListMangler {
   public static Treepath< SyntacticTree > rehierarchizeEmbeddedLists(
       final Treepath< SyntacticTree > treepathToRehierarchize
   ) {
-//    if( true ) { throw new UnsupportedOperationException( "rehierarchizeEmbeddedLists" ) ; }
     Treepath< SyntacticTree > current = treepathToRehierarchize ;
     while( true ) {
+      Treepath< SyntacticTree > next ;
       if( isRawItem( current ) ) {
         
         current = insertPlaceholder( current ) ;
-        final Treepath< SyntacticTree > treepathBeforeGobbling = current ;
         // Now currents refers to a new _PLACEHOLDER_ child right before first raw item.
         
         final Treepath< SyntacticTree > gobbler = createGobbler() ;
@@ -55,13 +54,11 @@ public class EmbeddedListMangler {
         // So we have gobbled every items in sequence, just leaving the placeholder.
         
         current = result.gobbled ;
-        current = replaceAt(
-            current,
-            treepathBeforeGobbling, 
-            result.gobbler.getTreeAtStart()
-        ) ;
+        current = TreepathTools.replaceTreepathEnd( current, result.gobbler.getTreeAtStart() ) ;
+        next = TreepathTools.getNextUpInPreorder( current ) ;
+      } else {
+        next = TreepathTools.getNextInPreorder( current ) ;
       }
-      final Treepath< SyntacticTree > next = TreepathTools.getNextInPreorder( current ) ;
       if( null == next ) {
         return current.getStart() ;
       } else {
@@ -81,19 +78,17 @@ public class EmbeddedListMangler {
 
   private static Treepath< SyntacticTree > insertPlaceholder( Treepath<SyntacticTree> current ) {
     return TreepathTools.addChildAt( 
-        current, 
+        current.getPrevious(), 
         new SimpleTree( _PLACEHOLDER_ ), 
         current.getIndexInPrevious() 
     ) ;
   }
 
-  private static Treepath< SyntacticTree > replaceAt(
+  private static Treepath< SyntacticTree > replacePlaceholder(
       Treepath< SyntacticTree > replacementTarget,
-      Treepath< SyntacticTree > treepathTemplate,
       SyntacticTree tree
   ) {
-    return TreepathTools.addChildLast( replacementTarget,  tree ) ; 
-
+    return TreepathTools.replaceTreepathEnd( replacementTarget,  tree ) ; 
   }
 
 
@@ -103,34 +98,26 @@ public class EmbeddedListMangler {
    *
    * @param gobbler a tree which solely holds the new embedded list structure.
    * @param gobbleStart where the gobbling starts in the document. Nodes of interest are removed.
-   * @param indentation expected indentation, must be 0 or more.
+   * @param firstIndent expected indentation, must be 0 or more.
    * @return a non-null {@code GobbleResult} with a {@code gobbler} value never null, but with
    *     a {@code gobbled} value that can be null when nodes of interest have all been gobbled.
    */
   private static GobbleResult gobbleThisIndentOrGreater(
       Treepath< SyntacticTree > gobbler,
       Treepath< SyntacticTree > gobbleStart,
-      int indentation
+      int firstIndent
   ) {
     Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
+    Preconditions.checkArgument( firstIndent >= 0  ) ;
     
     do {
-      final Gobbling gobbling = gobble( gobbleStart ) ;
+      final Gobbling gobbling = gobble( gobbleStart, firstIndent ) ;
 
-      if( null == gobbling ) {
-        return new GobbleResult( gobbler, gobbleStart, false ) ;
-      } else {
-        if( indentation == gobbling.indentation ) {        // Gobble at same indentation
-          if( gobbler.getPrevious() == null
-           || gobbler.getPrevious().getTreeAtEnd().isOneOf( _EMBEDDED_LIST_WITH_HYPHEN )
-           || gobbler.getTreeAtEnd().getChildCount() == 0
-          ) {
-            gobbler = TreepathTools.addChildLast( gobbler, gobbling.gobbledTree ) ;
-          } else {
-            gobbler = TreepathTools.addSiblingLast( gobbler, gobbling.gobbledTree ) ;
-          }
+      if( gobbling.success ) {
+        if( firstIndent == gobbling.indentation ) {        // Gobble at same indentation
+          gobbler = TreepathTools.addChildLast( gobbler, gobbling.gobbledTree ).getPrevious() ;
           gobbleStart = gobbling.treepathMinusGobbled ;
-        } else if( indentation < gobbling.indentation ) {  // Gobble at greater indentation
+        } else if( firstIndent < gobbling.indentation ) {  // Gobble at greater indentation
           gobbler = TreepathTools.addChildLast(
               gobbler,
               new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN )
@@ -141,8 +128,8 @@ public class EmbeddedListMangler {
               gobbling.indentation
           ) ;
           if( result.mayContinue ) {
-            final Gobbling gobblingLookahead = gobble( result.gobbled ) ;
-            if( gobblingLookahead != null && gobblingLookahead.indentation > indentation ) {
+            final Gobbling gobblingLookahead = gobble( result.gobbled, -1 ) ;
+            if( gobblingLookahead.indentation > firstIndent ) {
               // If the indentation is greater than current after gobbling all nodes of same
               // indent or greater, this means there is some "inbetween" indent.
               throw new IllegalArgumentException( "Inconsistent indentation" ) ;
@@ -154,58 +141,80 @@ public class EmbeddedListMangler {
           }
 
         } else {                                           // Let caller handle smaller indentation
-          // next indentation is smaller, so we let the caller handle it.
           return new GobbleResult( gobbler, gobbleStart, true ) ;
         }
 
+      } else {
+        return new GobbleResult( gobbler, gobbleStart, false ) ;
       }
+      
     } while( true ) ;
     
   }
 
   /**
-   * Gobble one item node if possible.
+   * Gobbles one item node if possible.
+   * <p>
+   * Given parameter {@code gobbleStart} is the path to a node of {@code _PLACEHOLDER} kind.
+   * The {@code _PLACEHOLDER} avoids to make the parent become childless when all children
+   * have been gobbled (this would discard useful information about where to insert the new
+   * rehierarchized list). 
+   * <p> 
+   * Gobbling removes following siblings of the {@code _PLACEHOLDER}. If one interesting 
+   * item (evaluated by {@link #isRawItem(Treepath)}) is found, or if there is no following sibling, 
+   * then the method returns. 
+   * <p>
+   * If, when looking for next siblings of {@code _PLACEHOLDER_} node, a 
+   * {@link novelang.parser.NodeKind#WHITESPACE_} is encountered, it sets the value of 
+   * {@link Gobbling#indentation}. Otherwise, this value copies {@code knownIndentation} parameter. 
+   * <p> 
+   * Each call returns a {@code Gobbling} object containing the result of the gobble.
+   * <p>
+   * {@link Gobbling#success} is set to false if there was no following sibling 
+   * of interest (no raw item, all separators skipped).
+   * <p>
+   * {@link Gobbling#gobbledTree} is the treepath to the {@code _PLACEHOLDER} node, but whith
+   * following siblings of interest removed.
+   * <p>
+   * {@link Gobbling#gobbledTree} is the gobbled item. 
+   *  
    * 
    * @param gobbleStart a treepath to the {@code _PLACEHOLDER} node which precedes the sequence
    * of raw items.
    * 
-   * @return null if {@code gobbleStart} was null, or a {@code Gobbling} object containing 
+   * @return a {@code Gobbling} object containing 
    *     the result of the gobble. 
-   *     {@code Gobbling#treepathMinusGobbled} still refers to 
-   *     the _PLACEHOLDER_ but some separators and one raw item have been removed.
-   *     {@code Gobbling#gobbledTree} is the result of the gobbling
    */
-  private static Gobbling gobble( Treepath< SyntacticTree > gobbleStart ) {
-    if( null == gobbleStart ) {
-      return null ;
-    }
+  private static Gobbling gobble( Treepath< SyntacticTree > gobbleStart, int indentation ) {
     Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
-    gobbleStart = TreepathTools.getNextSibling( gobbleStart ) ;
+    Treepath< SyntacticTree > start = gobbleStart ;
     
     do {
-      if( isRawItem( gobbleStart ) ) {
-        if( TreepathTools.hasNextSibling( gobbleStart ) ) {
-          final Treepath< SyntacticTree > nextStart = TreepathTools.getNextSibling( gobbleStart ) ;
-          final Treepath< SyntacticTree > nextStartMinusPrevious =
-              TreepathTools.removePreviousSibling( nextStart ) ;
-          return new Gobbling( nextStartMinusPrevious, makeEmbeddedListItem( gobbleStart ), true ) ;
+      if( TreepathTools.hasNextSibling( start ) ) {
+        final Treepath< SyntacticTree > next = TreepathTools.getNextSibling( start ) ;
+        if( isRawItem( next ) ) {
+          final Treepath< SyntacticTree > minusNext =
+              TreepathTools.removeNextSibling( start ) ;
+          return new Gobbling( minusNext, makeEmbeddedListItem( next ), indentation ) ;
         } else {
-          final Treepath< SyntacticTree > minusPrevious = TreepathTools.removeEnd( gobbleStart ) ;
-          return new Gobbling( minusPrevious, makeEmbeddedListItem( gobbleStart ), false ) ;
+          final SyntacticTree nextTree = next.getTreeAtEnd() ;
+          if( nextTree.isOneOf( WHITESPACE_, LINE_BREAK_ ) ) {
+            start = TreepathTools.removeNextSibling( start ) ;
+            if( nextTree.isOneOf( WHITESPACE_ ) ) {
+              indentation = getWhitespaceLength( next ) ;
+            }
+            continue ;
+          }
         }
-      } else if( gobbleStart.getTreeAtEnd().isOneOf( WHITESPACE_, LINE_BREAK_ ) ) {
-        if( TreepathTools.hasNextSibling( gobbleStart ) ) {
-          gobbleStart = TreepathTools.getNextSibling( gobbleStart ) ;
-        }
-      } else {
-        return null ;
-      }
+      } 
+      // If no next sibling at all, or no useful next sibling, then return.
+      return new Gobbling( start ) ;      
     } while( true ) ;
   }
 
   private static SyntacticTree makeEmbeddedListItem( Treepath< SyntacticTree > treepath ) {
-    final Iterable< ? extends SyntacticTree > iterable = treepath.getTreeAtEnd().getChildren() ;
-    return new SimpleTree( _EMBEDDED_LIST_ITEM.name(), iterable ) ;
+    final Iterable< ? extends SyntacticTree > children = treepath.getTreeAtEnd().getChildren() ;
+    return new SimpleTree( _EMBEDDED_LIST_ITEM.name(), children ) ;
   }
 
 
@@ -215,18 +224,26 @@ public class EmbeddedListMangler {
   private static class Gobbling {
     private final Treepath< SyntacticTree > treepathMinusGobbled ;
     private final SyntacticTree gobbledTree ;
-    private final boolean mayGobblingContinue ;
+    private final boolean success ;
     private final int indentation ;
 
     private Gobbling(
         Treepath< SyntacticTree > treepathMinusGobbled,
         SyntacticTree gobbledTree,
-        boolean mayGobblingContinue
+        int indentation
     ) {
+      this.treepathMinusGobbled = Preconditions.checkNotNull( treepathMinusGobbled ) ;
+      this.gobbledTree = Preconditions.checkNotNull( gobbledTree ) ;
+      this.success = true ;
+      Preconditions.checkArgument( indentation >= 0 ) ;
+      this.indentation = indentation ;
+    }
+
+    private Gobbling( Treepath<SyntacticTree> treepathMinusGobbled ) {
       this.treepathMinusGobbled = treepathMinusGobbled ;
-      this.gobbledTree = gobbledTree ;
-      this.mayGobblingContinue = mayGobblingContinue ;
-      this.indentation = treepathMinusGobbled == null ? -1 : getIndentSize( treepathMinusGobbled ) ;
+      this.gobbledTree = null ;
+      this.indentation = Integer.MIN_VALUE ;
+      this.success = false ;
     }
   }
 
@@ -253,14 +270,18 @@ public class EmbeddedListMangler {
    * Returns the depth of a list item given its indentation.
    * It is based on the length of immediate left sibling, or length of immediate left sibling of
    * one ancestor.
-   * Handling indentation this way avoids to mess the grammar up, tweaking the 
-   * {@link novelang.parser.NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_} trees with whitespace 
-   * injection. This wouldn't work, when the whitespace is before the
-   * {@link novelang.parser.NodeKind#PARAGRAPH_REGULAR}.
+   * <p>
+   * Handling indentation this way avoids to mess the grammar up.
+   * There has been an attempt to inject the whitespace into its following  
+   * {@link novelang.parser.NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_} node.
+   * This couldn't work when the whitespace appeared before the
+   * {@link novelang.parser.NodeKind#PARAGRAPH_REGULAR} node (when the list item was first in
+   * the paragraph, though indented).
    * 
    * @param treepath a treepath of {@link novelang.parser.NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_} 
    * kind.
    * @return a number equal to or greater than 0
+   * @Deprecated
    */
   private static int getItemDepth( Treepath< SyntacticTree > treepath ) {
     Preconditions.checkArgument( isRawItem( treepath ) ) ;
@@ -270,6 +291,7 @@ public class EmbeddedListMangler {
   /**
    * Returns the length of immediate left sibling, or length of immediate left sibling of
    * one ancestor.
+   * @Deprecated
    */
   private static int getIndentSize( Treepath< SyntacticTree > treepath ) {
     final Treepath< SyntacticTree > previous = treepath.getPrevious();
@@ -281,13 +303,22 @@ public class EmbeddedListMangler {
       final SyntacticTree leftSiblingInHierarchy = 
           previous.getTreeAtEnd().getChildAt( indexInPrevious - 1 ) ;
       if( leftSiblingInHierarchy.isOneOf( WHITESPACE_ ) ) {
-        return leftSiblingInHierarchy.getText().length() ;
+        return getWhitespaceLength( leftSiblingInHierarchy ) ;
       } else {
         return 0 ;
       }
     } else {
       return getIndentSize( previous ) ;
     }
+  }
+  
+  private static int getWhitespaceLength( Treepath< SyntacticTree > treepath ) {
+    return getWhitespaceLength( treepath.getTreeAtEnd() ) ;
+  }
+
+  private static int getWhitespaceLength( SyntacticTree tree ) {
+    Preconditions.checkArgument( tree.isOneOf( WHITESPACE_ ) ) ;
+    return tree.getChildAt( 0 ).getText().length() ;
   }
 
 }
