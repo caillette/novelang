@@ -1116,14 +1116,14 @@ public class PartParserTest {
             ),
             tree( LINE_BREAK_ ),
             tree( LINE_BREAK_ ),
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR, 
                 tree( 
                     BLOCK_INSIDE_DOUBLE_QUOTES,
                     tree( WORD_, "name" )                
                 ),
-                tree( WHITESPACE_ ),
+                tree( WHITESPACE_, " " ),
                 tree( LINE_BREAK_ ),
                 tree( URL, "http://foo.com")
             )
@@ -1160,14 +1160,14 @@ public class PartParserTest {
             ),
             tree( LINE_BREAK_ ),
             tree( LINE_BREAK_ ),
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR, 
                 tree( 
                     BLOCK_INSIDE_DOUBLE_QUOTES,
                     tree( WORD_, "name" )                
                 ),
-                tree( WHITESPACE_ ),
+                tree( WHITESPACE_, " " ),
                 tree( LINE_BREAK_ ),
                 tree( URL, "http://foo.com")
             )
@@ -1293,7 +1293,7 @@ public class PartParserTest {
             PARAGRAPH_REGULAR,
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) )
         )
-    ); ;
+    ) ;
   }
 
   @Test @Ignore
@@ -1324,10 +1324,10 @@ public class PartParserTest {
             PARAGRAPH_REGULAR,
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w1" ) ),
             tree( LINE_BREAK_ ),
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w2" ) )
         )
-    ); ;
+    ) ;
   }
 
   @Test

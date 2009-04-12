@@ -1368,7 +1368,12 @@ rawExtendedWord returns [ String text ]
 
 softbreak : SOFTBREAK -> ^( LINE_BREAK_ ) ; 
 
-whitespace : WHITESPACE -> ^( WHITESPACE_ ) ;
+whitespace : 
+  WHITESPACE 
+  -> ^( WHITESPACE_ 
+        { delegate.createTree( WHITESPACE_, $whitespace.text ) } 
+      ) 
+;
 
 levelIntroducerIndent 
   : EQUALS_SIGN EQUALS_SIGN+

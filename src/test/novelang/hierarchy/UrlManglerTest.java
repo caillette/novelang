@@ -66,7 +66,7 @@ public class UrlManglerTest {
         ),
         tree( 
             PART,
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR,
                 tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
@@ -122,14 +122,14 @@ public class UrlManglerTest {
             ),
             tree( LINE_BREAK_ ),
             tree( LINE_BREAK_ ),
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR, 
                 tree( 
                     BLOCK_INSIDE_DOUBLE_QUOTES,
                     tree( WORD_, "name" )                
                 ),
-                tree( WHITESPACE_ ),
+                tree( WHITESPACE_, "  " ),
                 tree( LINE_BREAK_ ),
                 tree( URL, "http://foo.com")
             )
@@ -152,7 +152,7 @@ public class UrlManglerTest {
         ),
         tree( 
             PART,
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR,
                 tree( URL, "http://foo.com" )
@@ -182,7 +182,7 @@ public class UrlManglerTest {
             PARAGRAPH_REGULAR,
             tree( WORD_, "w"),
             tree( LINE_BREAK_ ),
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
             tree( LINE_BREAK_ ),
             tree( URL, "http://foo.com" )

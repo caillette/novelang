@@ -38,16 +38,39 @@ public class NamedUrlTest {
       new ParserMethod( "paragraph" ) ;
 
   @Test
-  public void namedUrl() throws RecognitionException {
+  public void namedUrlWithIndentOutsideParagraph() throws RecognitionException {
     PARSERMETHOD_PART.checkTree(
         "  \"name\"" + BREAK +
         "http://foo.com"
         ,
         tree( 
             PART,
-            tree( WHITESPACE_ ),
+            tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( LINE_BREAK_ ),
+                tree( URL, "http://foo.com" )
+            
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void indentInsideParagraph() throws RecognitionException {
+    PARSERMETHOD_PART.checkTree(
+        "nothing" + BREAK +
+        "  \"name\"" + BREAK +
+        "http://foo.com"
+        ,
+        tree( 
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "nothing" ),
+                tree( LINE_BREAK_ ),
+                tree( WHITESPACE_, "  " ),
                 tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
                 tree( LINE_BREAK_ ),
                 tree( URL, "http://foo.com" )

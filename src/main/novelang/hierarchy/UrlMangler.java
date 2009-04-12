@@ -184,6 +184,7 @@ public class UrlMangler {
   } ;
   
   private static final NodeKind[] SKIPPED_NODEKINDS = new NodeKind[] {
+      WHITESPACE_,  // Avoid trapping inside "  " it contains
       WORD_,
       CELL_ROWS_WITH_VERTICAL_LINE,
       RASTER_IMAGE,
