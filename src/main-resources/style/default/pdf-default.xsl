@@ -379,7 +379,98 @@
       </fo:external-graphic>
     </fo:block>
   </xsl:template>
+  
+  
 
+  <xsl:template match="n:embedded-list-with-hyphen" >
+    <fo:list-block 
+        provisional-distance-between-starts="3pt"
+        provisional-label-separation="1pt">
+      <xsl:apply-templates/>
+    </fo:list-block>
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-hyphen//n:embedded-list-with-hyphen">
+    <!--<fo:list-block -->
+        <!--space-before="8pt"-->
+        <!--provisional-distance-between-starts="3pc"-->
+        <!--provisional-label-separation="1pc"-->
+        <!--start-indent="3pc"-->
+    <!-->-->
+      <xsl:apply-templates/>
+    <!--</fo:list-block>-->
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-hyphen/n:embedded-list-item">
+    <fo:list-item space-before="0pt">
+      <fo:list-item-label>
+        <fo:block text-indent="1pt" >
+          <!--<xsl:number count="n:embedded-list-item" format="1."/>-->
+          -
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body>
+        <fo:block>
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+
+  <xsl:template 
+      match="n:embedded-list-with-hyphen//n:embedded-list-with-hyphen/n:embedded-list-item" 
+      priority="1"
+  >
+    <fo:list-item text-indent="20pt" >
+      <fo:list-item-label>
+        <fo:block text-indent="10pt" >
+          <!--<xsl:number count="n:embedded-list-item" format="a."/>-->
+          -
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body>
+        <fo:block>
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  
+  <xsl:template 
+      match="n:embedded-list-with-hyphen//n:embedded-list-with-hyphen//n:embedded-list-with-hyphen/n:embedded-list-item" 
+      priority="2"
+  >
+    <fo:list-item text-indent="30pt" >
+      <fo:list-item-label>
+        <fo:block text-indent="20pt" >
+          <!--<xsl:number count="n:embedded-list-item" format="i."/>-->
+          -
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body>
+        <fo:block>
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  
+  
+  
+  
+<!--
+  <xsl:template match="n:embedded-list-item" >
+     <fo:list-item-label>
+       <fo:block>*</fo:block>
+     </fo:list-item-label>
+     <fo:list-item-body>
+       <fo:block>
+         <xsl:apply-templates/>
+       </fo:block>
+     </fo:list-item-body>
+  </xsl:template> 
+-->
+  
 
 </xsl:stylesheet>
 

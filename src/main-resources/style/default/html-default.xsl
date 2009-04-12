@@ -165,5 +165,17 @@
       <xsl:attribute name="height"><xsl:value-of select="../n:image-height"/></xsl:attribute>
     </object>
   </xsl:template>
+  
+  <xsl:template match="n:embedded-list-with-hyphen" >
+    <ul>
+      <xsl:apply-templates/>
+    </ul>
+  </xsl:template> 
+
+  <xsl:template match="n:embedded-list-item" >
+    <li>
+      <xsl:apply-templates/>
+    </li>
+  </xsl:template> 
 
 </xsl:stylesheet>

@@ -99,10 +99,18 @@ Question mark? Exclamation mark! Comma, semicolon; colon: full stop. Ellipsis...
 === Paragraphs and embedded lists
 
 This is a paragraph starting here...
-- First
-- Second
-- Third
+  - One
+  - Two
+  - Three
+    - Three dot one
+    - Three dot two
+      - Three dot two dot one
+      - Three dot two dot two
+    - Three dot three
+  - Four
+  - Five    
 ...and ending there.
+   
 
 
 == Anonymous section

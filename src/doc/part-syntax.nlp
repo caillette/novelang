@@ -303,6 +303,32 @@ As XML element, the paragraph itself is a ``n:paragraph-as-list-item``, while th
 gets wrapped into a ``n:list-with-triple-hyphen`` element.
 
 
+=== Embedded list
+
+XML elements: ``n:embedded-list-with-hyphen``, ``n:embedded-list-item``
+
+Inside a paragraph, a single hyphen ``-`` declares a list item.
+A list item is made of one single line (a line break would be interpreted as the end of item).
+An embedded list may declare subitems, with a greater indentation than containing item. 
+
+With Novelang default stylesheet, the embedded list is rendered as a list, supporting nested 
+elements (up to 3 levels with PDF, unlimited levels with HTML).
+
+<<<
+Start of the paragraph.
+- Item one.
+- Item two.
+  - Item two one.
+  - Item two two.
+- Item three.
+End of paragraph.
+>>>
+
+As XML elements, the list is wrapped in a ``n:embedded-list-with-hyphen``, while each item gets
+wrapped into a ``n:embedded-list-item`` element. Sublists are also wrappend in 
+``n:embedded-list-with-hyphen`` elements.
+
+
 === Lines of literal
 
 XML element: ``n:lines-of-literal``

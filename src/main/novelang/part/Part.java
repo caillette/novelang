@@ -27,6 +27,7 @@ import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.hierarchy.UrlMangler;
 import novelang.hierarchy.SeparatorsMangler;
+import novelang.hierarchy.EmbeddedListMangler;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.system.DefaultCharset;
 import com.google.common.collect.ImmutableList;
@@ -98,16 +99,16 @@ public class Part extends AbstractSourceReader {
     if( null == rawTree || hasProblem() ) {
       return null ;
     } else {
-      final Treepath< SyntacticTree > rehierarchized0 =
-          UrlMangler.fixNamedUrls( Treepath.create( rawTree ) ) ;
-      final Treepath< SyntacticTree > rehierarchized1 =
-          SeparatorsMangler.removeSeparators( rehierarchized0 ) ;      
-      final Treepath< SyntacticTree > rehierarchized2 =
-          Hierarchizer.rehierarchizeLevels( rehierarchized1 ) ;
+      Treepath< SyntacticTree > rehierarchized = Treepath.create( rawTree ) ;
+      rehierarchized = UrlMangler.fixNamedUrls( rehierarchized ) ;
+      rehierarchized = EmbeddedListMangler.rehierarchizeEmbeddedLists( rehierarchized ) ;
+      rehierarchized = SeparatorsMangler.removeSeparators( rehierarchized ) ;      
+      rehierarchized = Hierarchizer.rehierarchizeLevels( rehierarchized ) ;
       if( standalone ) {
-        return addMetadata( Hierarchizer.rehierarchizeLists( rehierarchized2 ).getTreeAtEnd() ) ;
+        rehierarchized = Hierarchizer.rehierarchizeLists( rehierarchized ) ;
+        return addMetadata( rehierarchized.getTreeAtEnd() ) ;
       } else {
-        return rehierarchized2.getTreeAtEnd() ;
+        return rehierarchized.getTreeAtEnd() ;
       }
     }
   }

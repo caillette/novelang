@@ -313,7 +313,7 @@ public class EmbeddedListMangler {
 
   private static int getWhitespaceLength( SyntacticTree tree ) {
     Preconditions.checkArgument( tree.isOneOf( WHITESPACE_ ) ) ;
-    return tree.getChildAt( 0 ).getText().length() ;
+    return tree.getChildCount() > 0 ? tree.getChildAt( 0 ).getText().length() : 0 ;
   }
 
 }

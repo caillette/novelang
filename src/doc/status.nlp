@@ -10,6 +10,11 @@ on the long run.
 For this reason, syntax may change with no warning until version `1.0.0`. 
 Keep informed reading the blog. 
 
+=== Version `0.24.0`
+
+--- Embedded lists: hierarchical lists inside paragraphs.
+
+
 === Version `0.23.0`
 
 --- URL now may receive a name.
