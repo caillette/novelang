@@ -44,9 +44,9 @@ public class EmbeddedListMangler {
         
         current = insertPlaceholder( current ) ;
         // Now currents refers to a new _PLACEHOLDER_ child right before first raw item.
-        
-        final Treepath< SyntacticTree > gobbler = createGobbler() ;
+
         // The gobbler is a treepath because it may be used as a stack.
+        final Treepath< SyntacticTree > gobbler = createGobbler() ;
         
         final int indentation = getIndentSize( current ) ; // Hitting placeholder, but no problem.
         
@@ -68,7 +68,7 @@ public class EmbeddedListMangler {
 
   }
 
-  private static Treepath<SyntacticTree> createGobbler() {
+  private static Treepath< SyntacticTree > createGobbler() {
     return Treepath.create( ( SyntacticTree ) new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) );
   }
 
@@ -76,19 +76,12 @@ public class EmbeddedListMangler {
     return current.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ );
   }
 
-  private static Treepath< SyntacticTree > insertPlaceholder( Treepath<SyntacticTree> current ) {
+  private static Treepath< SyntacticTree > insertPlaceholder( Treepath< SyntacticTree > current ) {
     return TreepathTools.addChildAt( 
         current.getPrevious(), 
         new SimpleTree( _PLACEHOLDER_ ), 
         current.getIndexInPrevious() 
     ) ;
-  }
-
-  private static Treepath< SyntacticTree > replacePlaceholder(
-      Treepath< SyntacticTree > replacementTarget,
-      SyntacticTree tree
-  ) {
-    return TreepathTools.replaceTreepathEnd( replacementTarget,  tree ) ; 
   }
 
 
@@ -98,7 +91,7 @@ public class EmbeddedListMangler {
    *
    * @param gobbler a tree which solely holds the new embedded list structure.
    * @param gobbleStart where the gobbling starts in the document. Nodes of interest are removed.
-   * @param firstIndent expected indentation, must be 0 or more.
+   * @param firstIndent indent found by the caller, must be 0 or more.
    * @return a non-null {@code GobbleResult} with a {@code gobbler} value never null, but with
    *     a {@code gobbled} value that can be null when nodes of interest have all been gobbled.
    */
@@ -134,7 +127,7 @@ public class EmbeddedListMangler {
               // indent or greater, this means there is some "inbetween" indent.
               throw new IllegalArgumentException( "Inconsistent indentation" ) ;
             }
-            gobbler = result.gobbler ;
+            gobbler = result.gobbler.getPrevious() ;
             gobbleStart = result.gobbled ;
           } else {
             return new GobbleResult( result.gobbler.getPrevious(), result.gobbled, false ) ;
@@ -201,7 +194,9 @@ public class EmbeddedListMangler {
           if( nextTree.isOneOf( WHITESPACE_, LINE_BREAK_ ) ) {
             start = TreepathTools.removeNextSibling( start ) ;
             if( nextTree.isOneOf( WHITESPACE_ ) ) {
-              indentation = getWhitespaceLength( next ) ;
+              indentation = getWhitespaceLength( nextTree ) ;
+            } else {
+              indentation = 0 ;
             }
             continue ;
           }

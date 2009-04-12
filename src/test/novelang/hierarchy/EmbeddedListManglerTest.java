@@ -56,16 +56,56 @@ public class EmbeddedListManglerTest {
                 _EMBEDDED_LIST_WITH_HYPHEN,
                 tree(
                     _EMBEDDED_LIST_ITEM,
-                    tree( WORD_, "w" )
+                    tree( WORD_, "y" )
                 )
             ),
-            tree( WORD_, "x" )
+            tree( WORD_, "z" )
         ),
         tree(
             PART,
-            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
+            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
             tree( LINE_BREAK_ ),
-            tree( WORD_, "x" )
+            tree( WORD_, "z" )
+        )
+    ) ;
+  }
+
+  @Test
+  public void twoListsOfOneItemEach() {
+    verifyRehierarchizeList(
+        tree(
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree(
+                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) )
+                )
+            ),
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree(
+                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) )
+                )
+            ),
+            tree( PARAGRAPH_REGULAR, tree( WORD_, "z" ) )
+        ),
+        tree(
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR,  
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
+             ),
+            tree( LINE_BREAK_ ),
+            tree( 
+                PARAGRAPH_REGULAR,  
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) )
+             ),
+            tree( 
+                PARAGRAPH_REGULAR,  
+                tree( WORD_, "z" )
+            )
         )
     ) ;
   }
@@ -77,15 +117,42 @@ public class EmbeddedListManglerTest {
             PART,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
-                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "w" ) ),
-                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) )
+                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
+                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
             )
         ),
         tree(
                 PART,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+        )
+    ) ;
+  }
+
+  @Test
+  public void twoItemsOfSameLevelWithIndent() {
+    verifyRehierarchizeList(
+        tree(
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR, 
+                tree(
+                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree( WHITESPACE_, "  " ),
+            tree( PARAGRAPH_REGULAR, 
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( LINE_BREAK_ ),
+                tree( WHITESPACE_, "  " ),
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+            )
         )
     ) ;
   }
@@ -97,19 +164,46 @@ public class EmbeddedListManglerTest {
             PART,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
-                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "w" ) ),
+                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
                 tree(
                     _EMBEDDED_LIST_WITH_HYPHEN,
-                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) )
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
                 )                
             )
         ),
         tree(
                 PART,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+        )
+    ) ;
+  }
+
+  @Test
+  public void depth1Then2Then1() {
+    verifyRehierarchizeList(
+        tree(
+            PART,
+            tree(
+                _EMBEDDED_LIST_WITH_HYPHEN,
+                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) ),
+                tree(
+                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) )
+                ),
+                tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
+            )
+        ),
+        tree(
+                PART,
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
+                tree( LINE_BREAK_ ),
+                tree( WHITESPACE_, "  " ),
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( LINE_BREAK_ ),
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
         )
     ) ;
   }
@@ -144,6 +238,26 @@ public class EmbeddedListManglerTest {
         )
     ) ;
   }
+  
+  
+
+  @Test ( expected = IllegalArgumentException.class )
+  public void detectInconsistentIndent() {
+    EmbeddedListMangler.rehierarchizeEmbeddedLists( Treepath.create( 
+        tree(
+                PART,
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
+                tree( LINE_BREAK_ ),
+                tree( WHITESPACE_, "  " ),  // indent = 2
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( LINE_BREAK_ ),
+                tree( WHITESPACE_, " " ),   // indent = 1
+                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+        )
+    ) ) ;
+  }
+  
+  
 
 // =======  
 // Fixture
