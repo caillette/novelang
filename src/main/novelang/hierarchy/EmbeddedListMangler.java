@@ -69,11 +69,11 @@ public class EmbeddedListMangler {
   }
 
   private static Treepath< SyntacticTree > createGobbler() {
-    return Treepath.create( ( SyntacticTree ) new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) );
+    return Treepath.create( ( SyntacticTree ) new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) ) ;
   }
 
   private static boolean isRawItem( Treepath< SyntacticTree > current ) {
-    return current.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ );
+    return current.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ) ;
   }
 
   private static Treepath< SyntacticTree > insertPlaceholder( Treepath< SyntacticTree > current ) {
@@ -261,27 +261,6 @@ public class EmbeddedListMangler {
   }
 
 
-  /**
-   * Returns the depth of a list item given its indentation.
-   * It is based on the length of immediate left sibling, or length of immediate left sibling of
-   * one ancestor.
-   * <p>
-   * Handling indentation this way avoids to mess the grammar up.
-   * There has been an attempt to inject the whitespace into its following  
-   * {@link novelang.parser.NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_} node.
-   * This couldn't work when the whitespace appeared before the
-   * {@link novelang.parser.NodeKind#PARAGRAPH_REGULAR} node (when the list item was first in
-   * the paragraph, though indented).
-   * 
-   * @param treepath a treepath of {@link novelang.parser.NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_} 
-   * kind.
-   * @return a number equal to or greater than 0
-   * @Deprecated
-   */
-  private static int getItemDepth( Treepath< SyntacticTree > treepath ) {
-    Preconditions.checkArgument( isRawItem( treepath ) ) ;
-    return getIndentSize( treepath ) ;
-  }
 
   /**
    * Returns the length of immediate left sibling, or length of immediate left sibling of
@@ -307,10 +286,6 @@ public class EmbeddedListMangler {
     }
   }
   
-  private static int getWhitespaceLength( Treepath< SyntacticTree > treepath ) {
-    return getWhitespaceLength( treepath.getTreeAtEnd() ) ;
-  }
-
   private static int getWhitespaceLength( SyntacticTree tree ) {
     Preconditions.checkArgument( tree.isOneOf( WHITESPACE_ ) ) ;
     return tree.getChildCount() > 0 ? tree.getChildAt( 0 ).getText().length() : 0 ;
