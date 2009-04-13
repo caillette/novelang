@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2009 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -292,6 +292,42 @@ public class UrlManglerTest {
         )        
     ) ;
   }
+
+  @Test
+  public void dontGetFooledByPreviousParagraphsInsideAngledBracketPairs() {
+    verifyFixNamedUrls(
+        tree(
+            PART,
+            tree(
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "w" ) )
+            ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    _URL,
+                    tree( BLOCK_INSIDE_SQUARE_BRACKETS, tree( WORD_, "name" ) ),
+                    tree( URL_LITERAL, "http://foo.com" )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "w" ) )
+            ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( BLOCK_INSIDE_SQUARE_BRACKETS, tree( WORD_, "name" ) ),
+                tree( LINE_BREAK_ ),
+                tree( URL_LITERAL, "http://foo.com" )
+
+            )
+        )
+    ) ;
+  }
+
 
 
 // =======

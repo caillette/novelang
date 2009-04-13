@@ -113,10 +113,19 @@ public class UrlMangler {
         current = TreepathTools.getNextInPreorder( current ) ;
       }
 
+      if( paragraph == null && state == State.INSIDE_PARAGRAPH ) {
+        throw new Error( "Code inconsistency" ) ;
+      }
+
       if( current != null
        && paragraph != null
-       && paragraph.getLength() <= current.getLength() 
-       && ! TreepathTools.hasSameStartingIndicesAs( paragraph, current )       
+       && ( ( paragraph.getLength() <= current.getLength()
+                && ! TreepathTools.hasSameStartingIndicesAs( paragraph, current ) )
+         || ( // We test in both ways because paragraphs inside angled brackets
+              // have a greater path length due to nesting.
+              paragraph.getLength() > current.getLength()
+                && ! TreepathTools.hasSameStartingIndicesAs( current, paragraph ) )
+          )
       ) {
         state = State.OUTSIDE_PARAGRAPH ;
         paragraph = null ;
