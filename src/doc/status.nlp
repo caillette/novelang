@@ -1,6 +1,6 @@
 == Status and history
 
-Novelang is stable, with more thant 320 automated tests. 
+Novelang is stable, with more thant 350 automated tests. 
 It generates a PDF document of 730 pages (330,000 words) in 15 seconds with an Intel dual-core CPU 
 at `2.66 GHz`. No optimization was performed yet.
 
@@ -12,7 +12,7 @@ Keep informed reading the blog.
 
 === Version `0.24.0`
 
---- Embedded lists: hierarchical lists inside paragraphs.
+--- Experimental support for embedded lists: hierarchical lists inside paragraphs.
 
 
 === Version `0.23.0`
