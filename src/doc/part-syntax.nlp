@@ -442,12 +442,9 @@ The image must be in JPEG, PNG or GIF format, with the extension being one of
 The path must start with zero, one, or two full stops, immediately followed by a solidus.
 Then follow optional directories, and the file name itself with its extension.
 
---- If the image file is in the same directory as source document,
-then its name must start with a full stop and a solidus ``./``
-
---- Parent directories are referenced through double full stops then solidus ``../``
-
---- The project directory is considered as the root directory. Attempting to reference a directory
+- If the image file is in the same directory as source document, then its name must start with a full stop and a solidus ``./``
+- Parent directories are referenced through double full stops then solidus ``../``
+- The project directory is considered as the root directory. Attempting to reference a directory
 above the project directory will produce an error. A path relative to the project directory
 (instead of being relative to the source document) starts with a solidus.
 
