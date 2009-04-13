@@ -545,7 +545,7 @@ public class PartParserTest {
         tree(
             PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
             tree( WORD_, "w" ),
-            tree( URL, "http://novelang.sf.net" )
+            tree( URL_LITERAL, "http://novelang.sf.net" )
         )
     );
   }
@@ -1125,7 +1125,7 @@ public class PartParserTest {
                 ),
                 tree( WHITESPACE_, " " ),
                 tree( LINE_BREAK_ ),
-                tree( URL, "http://foo.com")
+                tree( URL_LITERAL, "http://foo.com")
             )
         )    
     ) ;
@@ -1169,7 +1169,7 @@ public class PartParserTest {
                 ),
                 tree( WHITESPACE_, " " ),
                 tree( LINE_BREAK_ ),
-                tree( URL, "http://foo.com")
+                tree( URL_LITERAL, "http://foo.com")
             )
         )    
     ) ;
@@ -1218,7 +1218,7 @@ public class PartParserTest {
   public void urlHttpGoogleDotCom() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://google.com", 
-        tree( URL, "http://google.com" ) 
+        tree( URL_LITERAL, "http://google.com" ) 
     ) ;
   }
 
@@ -1226,7 +1226,7 @@ public class PartParserTest {
   public void urlHttpLocalhost() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://localhost", 
-        tree( URL, "http://localhost" ) 
+        tree( URL_LITERAL, "http://localhost" ) 
     ) ;
   }
 
@@ -1234,7 +1234,7 @@ public class PartParserTest {
   public void urlHttpLocalhost8080() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://localhost:8080", 
-        tree( URL, "http://localhost:8080" ) 
+        tree( URL_LITERAL, "http://localhost:8080" ) 
     ) ;
   }
 
@@ -1242,7 +1242,7 @@ public class PartParserTest {
   public void urlFileWithHyphenMinus() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "file:/path/to-file.ext", 
-        tree( URL, "file:/path/to-file.ext" ) 
+        tree( URL_LITERAL, "file:/path/to-file.ext" ) 
     ) ;
   }
 
@@ -1250,7 +1250,7 @@ public class PartParserTest {
   public void urlFileWithHyphenMinusNoPath() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "file:my-file.ext", 
-        tree( URL, "file:my-file.ext" ) 
+        tree( URL_LITERAL, "file:my-file.ext" ) 
     ) ;
   }
 
@@ -1259,7 +1259,7 @@ public class PartParserTest {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://www.google.com/search?q=url%20specification&sourceid=mozilla2&ie=utf-8&oe=utf-8", 
         tree(
-            URL,
+            URL_LITERAL,
             "http://www.google.com/search?q=url%20specification&sourceid=mozilla2&ie=utf-8&oe=utf-8"
         ) 
     ) ;
@@ -1269,7 +1269,7 @@ public class PartParserTest {
   public void urlFilePathFileDotNlp() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "file:/path/file.ppp", 
-        tree( URL, "file:/path/file.ppp" ) 
+        tree( URL_LITERAL, "file:/path/file.ppp" ) 
     ) ;
   }
 
@@ -1279,7 +1279,7 @@ public class PartParserTest {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval( 
         "http://domain.org/path/file~tilde#anchor", 
         tree(
-            URL,
+            URL_LITERAL,
             "http://domain.org/path/file~tilde#anchor"
         ) 
     ) ;

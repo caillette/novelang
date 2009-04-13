@@ -24,7 +24,7 @@ import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 
 /**
- * Replaces {@link NodeKind#URL} nodes by {@link NodeKind#_EXTERNAL_LINK}, adding
+ * Replaces {@link NodeKind#URL_LITERAL} nodes by {@link NodeKind#_URL}, adding
  * preceding {@link NodeKind#BLOCK_INSIDE_DOUBLE_QUOTES} if there is one alone on a line.
  * 
  * <pre>
@@ -80,7 +80,7 @@ public class UrlMangler {
               tree,
               BLOCK_INSIDE_DOUBLE_QUOTES,
               State.DOUBLE_QUOTES,
-              evaluate( tree, URL, State.URL )
+              evaluate( tree, URL_LITERAL, State.URL )
           ) ;
           if ( State.DOUBLE_QUOTES == state ) {
             treepathToName = current ;
@@ -92,7 +92,7 @@ public class UrlMangler {
               tree,
               LINE_BREAK_,
               State.LINEBREAK_INSIDE_PARAGRAPH,
-              evaluate( tree, URL, State.URL )
+              evaluate( tree, URL_LITERAL, State.URL )
           ) ;
           break ;
         
@@ -101,7 +101,7 @@ public class UrlMangler {
               tree,
               WHITESPACE_,
               State.INDENTATION_INSIDE_PARAGRAPH,
-              evaluate( tree, URL, State.URL )              
+              evaluate( tree, URL_LITERAL, State.URL )              
           ) ;
           break ;
 
@@ -134,7 +134,7 @@ public class UrlMangler {
         case LINE_BREAK_AFTER_DOUBLE_QUOTES :
           state = evaluate(
               tree,
-              URL,
+              URL_LITERAL,
               State.URL
           ) ;
           break ;
@@ -157,7 +157,7 @@ public class UrlMangler {
 
       result = current ;
       if( State.DOUBLE_QUOTES == state
-       || current.getTreeAtEnd().isOneOf( _EXTERNAL_LINK ) 
+       || current.getTreeAtEnd().isOneOf( _URL ) 
        || tree.isOneOf( SKIPPED_NODEKINDS )
       ) {
         current = TreepathTools.getNextUpInPreorder( current ) ;
@@ -198,8 +198,8 @@ public class UrlMangler {
   
 
   /**
-   * Replaces the {@link NodeKind#URL} node at the end of the treepath by a 
-   * {@link NodeKind#_EXTERNAL_LINK} node.
+   * Replaces the {@link NodeKind#URL_LITERAL} node at the end of the treepath by a 
+   * {@link NodeKind#_URL} node.
    *  
    * @param treepathToUrl treepath to the URL node.
    * @param treepathToUrl treepath to the name node, which must be
@@ -224,7 +224,7 @@ public class UrlMangler {
     }
 
     final SyntacticTree externalLinkTree = new SimpleTree(
-        NodeKind._EXTERNAL_LINK.name(),
+        NodeKind._URL.name(),
         children
     ) ;
     return TreepathTools.replaceTreepathEnd( treepathToUrl, externalLinkTree ) ;

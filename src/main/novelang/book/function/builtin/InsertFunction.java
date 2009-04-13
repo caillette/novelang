@@ -100,7 +100,7 @@ public class InsertFunction implements FunctionDefinition {
         VALUED_ARGUMENT_PRIMARY_.name(), primaryArgument.getText() ) ;
     verify( "No value for primary argument", 1, primaryArgument.getChildCount() ) ;
     final SyntacticTree url = primaryArgument.getChildAt( 0 ) ;
-    verify( URL.name(), url.getText() ) ;
+    verify( URL_LITERAL.name(), url.getText() ) ;
     final String urlAsString = url.getChildAt( 0 ).getText() ;
 
     final List< String > otherArguments = Lists.newArrayList() ;

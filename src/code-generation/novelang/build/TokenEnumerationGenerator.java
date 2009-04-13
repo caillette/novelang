@@ -70,7 +70,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_WORD_COUNT" ),
       new Item( "_IMAGE_WIDTH" ),
       new Item( "_IMAGE_HEIGHT" ),
-      new Item( "_EXTERNAL_LINK" ),
+      new Item( "_URL" ),
       new Item( "_LINK_NAME" ),
       new Item( "_PLACEHOLDER_" )
   ) ;

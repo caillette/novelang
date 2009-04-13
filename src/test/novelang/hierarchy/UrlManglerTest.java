@@ -48,19 +48,19 @@ public class UrlManglerTest {
   }
 
   @Test
-  public void fixNamedUrlAtStartOfAPart() {
+  public void NamedUrlAtStartOfAPartWithLineBreak() {
     verifyFixNamedUrls( 
         tree(
             PART,
             tree( 
                 PARAGRAPH_REGULAR,
-                tree( 
-                    _EXTERNAL_LINK,
+                tree(
+                    _URL,
                     tree( 
                         _LINK_NAME,
                         tree( WORD_, "name" ) 
                     ),
-                    tree( URL, "http://foo.com" )
+                    tree( URL_LITERAL, "http://foo.com" )
                 )                            
             )            
         ),
@@ -71,7 +71,38 @@ public class UrlManglerTest {
                 PARAGRAPH_REGULAR,
                 tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
                 tree( LINE_BREAK_ ),
-                tree( URL, "http://foo.com" )
+                tree( URL_LITERAL, "http://foo.com" )
+                            
+            )
+        )        
+    ) ;
+  }
+
+  @Test
+  public void NamedUrlAtStartOfAPartNoLineBreak() {
+    verifyFixNamedUrls( 
+        tree(
+            PART,
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree(
+                    _URL,
+                    tree( 
+                        _LINK_NAME,
+                        tree( WORD_, "name" ) 
+                    ),
+                    tree( URL_LITERAL, "http://foo.com" )
+                )                            
+            )            
+        ),
+        tree( 
+            PART,
+            tree( WHITESPACE_, "  " ),
+            tree( 
+                PARAGRAPH_REGULAR,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( LINE_BREAK_ ),
+                tree( URL_LITERAL, "http://foo.com" )
                             
             )
         )        
@@ -97,13 +128,13 @@ public class UrlManglerTest {
             ),
             tree( 
                 PARAGRAPH_REGULAR,
-                tree( 
-                    _EXTERNAL_LINK,
+                tree(
+                    _URL,
                     tree( 
                         _LINK_NAME,
                         tree( WORD_, "name" ) 
                     ),
-                    tree( URL, "http://foo.com" )
+                    tree( URL_LITERAL, "http://foo.com" )
                 )                            
             )            
         ),
@@ -131,7 +162,7 @@ public class UrlManglerTest {
                 ),
                 tree( WHITESPACE_, "  " ),
                 tree( LINE_BREAK_ ),
-                tree( URL, "http://foo.com")
+                tree( URL_LITERAL, "http://foo.com")
             )
         )    
     ) ;
@@ -144,9 +175,9 @@ public class UrlManglerTest {
             PART,
             tree( 
                 PARAGRAPH_REGULAR,
-                tree( 
-                    _EXTERNAL_LINK,
-                    tree( URL, "http://foo.com" )
+                tree(
+                    _URL,
+                    tree( URL_LITERAL, "http://foo.com" )
                 )                            
             )            
         ),
@@ -155,7 +186,7 @@ public class UrlManglerTest {
             tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR,
-                tree( URL, "http://foo.com" )
+                tree( URL_LITERAL, "http://foo.com" )
                             
             )
         )
@@ -169,13 +200,13 @@ public class UrlManglerTest {
         tree( 
             PARAGRAPH_REGULAR,
             tree( WORD_, "w" ),
-            tree( 
-                _EXTERNAL_LINK,
+            tree(
+                _URL,
                 tree( 
                     _LINK_NAME,
                     tree( WORD_, "name" ) 
                 ),
-                tree( URL, "http://foo.com" )
+                tree( URL_LITERAL, "http://foo.com" )
             )                            
         ),            
         tree( 
@@ -185,7 +216,7 @@ public class UrlManglerTest {
             tree( WHITESPACE_, "  " ),
             tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
             tree( LINE_BREAK_ ),
-            tree( URL, "http://foo.com" )
+            tree( URL_LITERAL, "http://foo.com" )
                         
         )        
     ) ;
@@ -197,14 +228,14 @@ public class UrlManglerTest {
     verifyFixNamedUrls( 
         tree(
             PARAGRAPH_REGULAR,
-            tree( 
-                _EXTERNAL_LINK,
-                tree( URL, "http://foo.com" )
+            tree(
+                _URL,
+                tree( URL_LITERAL, "http://foo.com" )
             )            
         ),
         tree( 
             PARAGRAPH_REGULAR,
-            tree( URL, "http://foo.com" )
+            tree( URL_LITERAL, "http://foo.com" )
                         
         )        
     ) ;
@@ -216,16 +247,16 @@ public class UrlManglerTest {
         tree(
             PARAGRAPH_REGULAR,
             tree( WORD_, "w" ),
-            tree( 
-                _EXTERNAL_LINK,
-                tree( URL, "http://foo.com" )
+            tree(
+                _URL,
+                tree( URL_LITERAL, "http://foo.com" )
             )            
         ),
         tree( 
             PARAGRAPH_REGULAR,
             tree( WORD_, "w" ),
             tree( LINE_BREAK_ ),
-            tree( URL, "http://foo.com" )
+            tree( URL_LITERAL, "http://foo.com" )
                         
         )        
     ) ;

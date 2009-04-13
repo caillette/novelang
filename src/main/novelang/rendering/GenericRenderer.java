@@ -104,7 +104,7 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
-      case URL :
+      case URL_LITERAL:
       case _WORD_COUNT :
       case _STYLE :
       case LINES_OF_LITERAL :

@@ -41,7 +41,7 @@ tokens {
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;   
   BLOCK_INSIDE_SQUARE_BRACKETS ;            
   WORD_AFTER_CIRCUMFLEX_ACCENT ;            
-  URL ;  
+  URL_LITERAL ;  
   RASTER_IMAGE ;
   VECTOR_IMAGE ;
   RESOURCE_LOCATION ;
@@ -945,8 +945,8 @@ punctuationSign
 // ===================================
 
 url
-  : ( http = httpUrl -> ^( URL { delegate.createTree( URL, $http.text ) } )	)
-  | ( file = fileUrl -> ^( URL { delegate.createTree( URL, $file.text ) } )	) 
+  : ( http = httpUrl -> ^( URL_LITERAL { delegate.createTree( URL_LITERAL, $http.text ) } )	)
+  | ( file = fileUrl -> ^( URL_LITERAL { delegate.createTree( URL_LITERAL, $file.text ) } )	) 
   ;
     
 fileUrl                                   

@@ -46,7 +46,7 @@ public class NamedUrlTest {
                 PARAGRAPH_REGULAR,
                 tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
                 tree( LINE_BREAK_ ),
-                tree( URL, "http://foo.com" )
+                tree( URL_LITERAL, "http://foo.com" )
             
             )
         )
@@ -69,7 +69,7 @@ public class NamedUrlTest {
                 tree( WHITESPACE_, "  " ),
                 tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
                 tree( LINE_BREAK_ ),
-                tree( URL, "http://foo.com" )
+                tree( URL_LITERAL, "http://foo.com" )
             
             )
         )

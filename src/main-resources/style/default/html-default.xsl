@@ -94,14 +94,14 @@
     </p>
   </xsl:template>
 
-  <xsl:template match="n:external-link" >
+  <xsl:template match="n:url" >
     <a><xsl:attribute name="href"><xsl:value-of select="n:url" /></xsl:attribute>
       <xsl:choose>
         <xsl:when test="n:link-name" >
           <xsl:value-of select="n:link-name" />
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="n:url" />
+          <xsl:value-of select="n:url-literal" />
         </xsl:otherwise>
       </xsl:choose>
       

@@ -77,7 +77,7 @@ public class BookParserTest {
         new SimpleTree( FUNCTION_NAME_.name(), new SimpleTree( "function" ) ),
         new SimpleTree(
             VALUED_ARGUMENT_PRIMARY_.name(),
-            new SimpleTree( URL.name(), new SimpleTree( "file:" + fileName ) )
+            new SimpleTree( URL_LITERAL.name(), new SimpleTree( "file:" + fileName ) )
         )
     ) ) ;
     return functionCall;
@@ -137,7 +137,7 @@ public class BookParserTest {
         tree( BOOK,
             tree( FUNCTION_CALL_,
                 tree( FUNCTION_NAME_, "insert" ),
-                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL, "file:one-word.nlp" ) )
+                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL_LITERAL, "file:one-word.nlp" ) )
             )
         )
     ); 
@@ -152,11 +152,11 @@ public class BookParserTest {
         tree( BOOK,
             tree( FUNCTION_CALL_,
                 tree( FUNCTION_NAME_, "function1" ),
-                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL, "file:my/file1" ) )
+                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL_LITERAL, "file:my/file1" ) )
             ),
             tree( FUNCTION_CALL_,
                 tree( FUNCTION_NAME_, "function2" ),
-                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL, "file:/my/file2" ) )
+                tree( VALUED_ARGUMENT_PRIMARY_, tree( URL_LITERAL, "file:/my/file2" ) )
             )
         )
     ) ;
