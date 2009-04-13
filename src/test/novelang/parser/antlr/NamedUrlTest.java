@@ -32,10 +32,6 @@ public class NamedUrlTest {
 
   private final ParserMethod PARSERMETHOD_PART =
       new ParserMethod( "part" ) ;
-  private final ParserMethod PARSERMETHOD_SMALL_DASHED_LIST_ITEM =
-      new ParserMethod( "smallDashedListItem" ) ;
-  private final ParserMethod PARSERMETHOD_PARAGRAPH =
-      new ParserMethod( "paragraph" ) ;
 
   @Test
   public void namedUrlWithIndentOutsideParagraph() throws RecognitionException {
