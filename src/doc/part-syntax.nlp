@@ -42,7 +42,6 @@ A paragraph is a sequence of textual items kept together because there is
 // no more than one line break at a time//.
 So a paragraph cannot contain two consecutive line breaks,
 or it would be split in two paragraphs.
-
 Paragraphs mainly contain words, punctuation signs, blocks, list items and external links.
 
 
