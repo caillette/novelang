@@ -8,7 +8,10 @@ Bug fixing and documentation are first priority. Then come syntax enhancements.
 Defining a good syntax fitting for most use cases while allowing exceptions is a process 
 on the long run. 
 For this reason, syntax may change with no warning until version `1.0.0`. 
-Keep informed reading the blog. 
+Keep informed reading the 
+  "blog"
+http://novelang.blogspot.com
+. 
 
 === Version `0.24.0`
 
@@ -17,7 +20,7 @@ Keep informed reading the blog.
 
 === Version `0.23.0`
 
---- URL now may receive a name.
+--- Named URL.
 
 --- ``n:url`` element gets wrapped into ``n:external-link``.
 
