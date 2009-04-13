@@ -329,6 +329,44 @@ public class UrlManglerTest {
   }
 
 
+  /**
+   * Was a bug, breaking an ArrayIndexOutOfBoundsException.
+   */
+  @Test
+  public void detectNotSameParagraph() {
+    verifyFixNamedUrls(
+        tree(
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) )
+
+            ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    _URL,
+                    tree( URL_LITERAL, "http://foo.net" )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) )
+            ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( LINE_BREAK_ ),
+                tree( LINE_BREAK_ ),
+                tree( URL_LITERAL, "http://foo.net" )
+            )
+        )
+    ) ;
+  }
+
+
 
 // =======
 // Fixture

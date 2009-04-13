@@ -129,6 +129,7 @@ public class UrlMangler {
       ) {
         state = State.OUTSIDE_PARAGRAPH ;
         paragraph = null ;
+        treepathToName = null ;
       }
 
     }
