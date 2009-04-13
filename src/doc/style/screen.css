@@ -223,7 +223,7 @@ code {
   border-color : gray ;
   padding: 3px;
   text-transform: none ;
-  
+  white-space:pre;
 }
 
 ul {
