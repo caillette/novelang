@@ -147,5 +147,12 @@ pageTracker._trackPageview();
     <code><xsl:value-of select="." /></code>
   </xsl:template>  
 
+  <xsl:template match="n:paragraph-as-list-item" >
+    <ul class="paragraph-as-list" >
+      <li>
+        <xsl:apply-templates/>
+      </li>
+    </ul>
+  </xsl:template>
 
 </xsl:stylesheet>

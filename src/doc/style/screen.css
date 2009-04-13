@@ -75,6 +75,20 @@ p {
   padding: 0;
 }
 
+
+ul.paragraph-as-list {
+  list-style: none;
+	margin-left: 0;
+	text-indent: -1em;  
+  margin: 0 0 0 0;
+  padding: 1em 0 0 0 ;
+}
+
+ul.paragraph-as-list li:before {
+  content: "\2023\20"
+}
+
+
 h1 {
   color: #700;
   font-family: "Gill Sans", Georgia, serif;
