@@ -60,16 +60,13 @@ Some ISO-8859-1 characters: à À é è ë ê É È Ë Ê ï î Ï Î ö ô Ö �
 No link name:
 http://www.google.com/search?q=novelang
 
-With link name:
-  "click me"
+With link name: "click me"
 http://novelang.sourceforge.net
-. Text after also works. And we've got 
-  "unlimited"
+. Text after also works. And we've got "unlimited"
 http://novelang.blogspot.com
 number of external links in the same paragraph!
 
---- They also
-  "work"
+--- They also "work"
 http://groups.google.com/group/novelang-users
 inside lists.
   

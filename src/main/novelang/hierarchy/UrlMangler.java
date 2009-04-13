@@ -24,8 +24,8 @@ import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 
 /**
- * Replaces {@link NodeKind#URL_LITERAL} nodes by {@link NodeKind#_URL}, adding
- * preceding {@link NodeKind#BLOCK_INSIDE_DOUBLE_QUOTES} if there is one alone on a line.
+ * Wraps {@link NodeKind#URL_LITERAL} nodes into {@link NodeKind#_URL} ones, adding
+ * preceding {@link NodeKind#BLOCK_INSIDE_DOUBLE_QUOTES}.
  * 
  * <pre>
  *    "external link name"
@@ -54,91 +54,39 @@ public class UrlMangler {
         case OUTSIDE_PARAGRAPH:
           state = evaluate(
               tree,
-              WHITESPACE_,
-              State.WHITESPACE_OUTSIDE_PARAGRAPH,
-              evaluate( tree, PARAGRAPH_NODEKINDS, State.INSIDE_PARAGRAPH, State.OUTSIDE_PARAGRAPH )
+              PARAGRAPH_NODEKINDS,
+              State.INSIDE_PARAGRAPH,
+              State.OUTSIDE_PARAGRAPH
           ) ;
           if( State.INSIDE_PARAGRAPH == state ) {
             paragraph = current ;
-          }
-          break ;
-        
-        case WHITESPACE_OUTSIDE_PARAGRAPH :
-          state = evaluate(
-              tree,
-              PARAGRAPH_NODEKINDS,
-              State.INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE,
-              State.OUTSIDE_PARAGRAPH
-          ) ;
-          if( State.INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE == state ) {
-            paragraph = current ;
-          }
-          break ;
-        
-        case INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE :
-          state = evaluate(
-              tree,
-              BLOCK_INSIDE_DOUBLE_QUOTES,
-              State.DOUBLE_QUOTES,
-              evaluate( tree, URL_LITERAL, State.URL )
-          ) ;
-          if ( State.DOUBLE_QUOTES == state ) {
-            treepathToName = current ;
           }
           break ;
 
         case INSIDE_PARAGRAPH :
           state = evaluate( 
               tree,
-              LINE_BREAK_,
-              State.LINEBREAK_INSIDE_PARAGRAPH,
+              CANDIDATE_NAME_NODEKINDS,
+              State.CANDIDATE_URL_NAME,
               evaluate( tree, URL_LITERAL, State.URL )
           ) ;
-          break ;
-        
-        case LINEBREAK_INSIDE_PARAGRAPH :
-          state = evaluate(
-              tree,
-              WHITESPACE_,
-              State.INDENTATION_INSIDE_PARAGRAPH,
-              evaluate( tree, URL_LITERAL, State.URL )              
-          ) ;
-          break ;
-
-        case INDENTATION_INSIDE_PARAGRAPH :
-          state = evaluate(
-              tree,
-              BLOCK_INSIDE_DOUBLE_QUOTES,
-              State.DOUBLE_QUOTES
-          ) ;
-          if( state == State.DOUBLE_QUOTES ) {
+          if( state == State.CANDIDATE_URL_NAME ) {
             treepathToName = current ;
           }
           break ;
 
-        case DOUBLE_QUOTES :
-          state = evaluate( 
-              tree, WHITESPACE_, State.WHITESPACE_AFTER_DOUBLE_QUOTES,
-              evaluate( tree, LINE_BREAK_, State.LINE_BREAK_AFTER_DOUBLE_QUOTES )
-          ) ;
+        case CANDIDATE_URL_NAME :
+          state = evaluate(
+              tree,
+              SEPARATOR_NODEKINDS,       // Loop on this state
+              State.CANDIDATE_URL_NAME,  // if separators.
+              evaluate( tree, URL_LITERAL, State.URL )
+          ) ;              
+          if( state != State.CANDIDATE_URL_NAME && state != State.URL ) {
+            treepathToName = null ;
+          }
           break ;
         
-        case WHITESPACE_AFTER_DOUBLE_QUOTES :
-          state = evaluate(
-              tree,
-              LINE_BREAK_,
-              State.LINE_BREAK_AFTER_DOUBLE_QUOTES
-          ) ;
-          break ;
-
-        case LINE_BREAK_AFTER_DOUBLE_QUOTES :
-          state = evaluate(
-              tree,
-              URL_LITERAL,
-              State.URL
-          ) ;
-          break ;
-
         case URL :
           break ;
 
@@ -156,7 +104,7 @@ public class UrlMangler {
       }
 
       result = current ;
-      if( State.DOUBLE_QUOTES == state
+      if( State.CANDIDATE_URL_NAME == state
        || current.getTreeAtEnd().isOneOf( _URL ) 
        || tree.isOneOf( SKIPPED_NODEKINDS )
       ) {
@@ -183,6 +131,16 @@ public class UrlMangler {
       PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_
   } ;
   
+  private static final NodeKind[] CANDIDATE_NAME_NODEKINDS = new NodeKind[] {
+      BLOCK_INSIDE_DOUBLE_QUOTES,
+      BLOCK_INSIDE_SQUARE_BRACKETS
+  } ;
+
+  private static final NodeKind[] SEPARATOR_NODEKINDS = new NodeKind[] {
+      WHITESPACE_,
+      LINE_BREAK_
+  } ;
+
   private static final NodeKind[] SKIPPED_NODEKINDS = new NodeKind[] {
       WHITESPACE_,  // Avoid trapping inside "  " it contains
       WORD_,
@@ -201,33 +159,30 @@ public class UrlMangler {
    * Replaces the {@link NodeKind#URL_LITERAL} node at the end of the treepath by a 
    * {@link NodeKind#_URL} node.
    *  
-   * @param treepathToUrl treepath to the URL node.
-   * @param treepathToUrl treepath to the name node, which must be
+   * @param treepathToUrlLiteral treepath to the URL node.
+   * @param treepathToUrlLiteral treepath to the name node, which must be
    *     of {@link NodeKind#BLOCK_INSIDE_DOUBLE_QUOTES} type. 
    * @return the new treepath.
    */
   private static Treepath< SyntacticTree > replaceByExternalLink( 
-      Treepath< SyntacticTree > treepathToUrl, 
+      Treepath< SyntacticTree > treepathToUrlLiteral,
       Treepath< SyntacticTree > treepathToName
   ) {
     final SyntacticTree nameTree;
     final SyntacticTree[] children ;
     if( null == treepathToName ) {
-      children = new SyntacticTree[] { treepathToUrl.getTreeAtEnd() } ;
+      children = new SyntacticTree[] { treepathToUrlLiteral.getTreeAtEnd() } ;
 
     } else {
-      nameTree = new SimpleTree(
-          NodeKind._LINK_NAME.name(),
-          treepathToName.getTreeAtEnd().getChildren()
-      );
-      children = new SyntacticTree[] { nameTree, treepathToUrl.getTreeAtEnd() } ;
+      nameTree = treepathToName.getTreeAtEnd() ;
+      children = new SyntacticTree[] { nameTree, treepathToUrlLiteral.getTreeAtEnd() } ;
     }
 
-    final SyntacticTree externalLinkTree = new SimpleTree(
+    final SyntacticTree urlTree = new SimpleTree(
         NodeKind._URL.name(),
         children
     ) ;
-    return TreepathTools.replaceTreepathEnd( treepathToUrl, externalLinkTree ) ;
+    return TreepathTools.replaceTreepathEnd( treepathToUrlLiteral, urlTree ) ;
   }
 
   private static NodeKind[] kinds( NodeKind... nodeKinds ) {
@@ -262,14 +217,9 @@ public class UrlMangler {
 
   private enum State {
     OUTSIDE_PARAGRAPH,
-    WHITESPACE_OUTSIDE_PARAGRAPH,
-    INSIDE_PARAGRAPH_PRECEDED_BY_WHITESPACE,
     INSIDE_PARAGRAPH,
-    LINEBREAK_INSIDE_PARAGRAPH,
-    INDENTATION_INSIDE_PARAGRAPH,
-    DOUBLE_QUOTES,
-    WHITESPACE_AFTER_DOUBLE_QUOTES,
-    LINE_BREAK_AFTER_DOUBLE_QUOTES,
+    CANDIDATE_URL_NAME,
+    SEPARATOR_AFTER_DOUBLE_QUOTES,
     URL
   }
   

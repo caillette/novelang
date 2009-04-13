@@ -364,23 +364,30 @@ April, the 1^st.
 >>>
 
 
-=== External link
+=== URL
 
-XML elements: ``n:external-link``,  ``n:url``, ``n:link-name``
+XML elements: ``n:url``, ``n:url-literal``
 
-An external link is made of a URL, which starts at the first column of a line, with nothing else on 
+A URL is primarily made of URL literal, which starts at the first column of a line, with nothing else on
 the same line (except trailing whitespaces).
 
-When the URL is preceded by a block inside double quotes which appears alone on a line, with some
-indentation, it becomes part of the ``n:external-link`` as a ``n:link-name`` element. 
+When the URL literal is preceded by a block inside double quotes, or a block inside square brackets,
+it becomes a child of the ``n:url`` element.
 
 With Novelang default stylesheet, the external link will show as a hyperlink named "here":
 
 <<<
-So you can click 
-  "here"
+So you can click "here"
 http://novelang.sourceforge.net
 .
+>>>
+
+If the block inside double quotes, or the block inside square brackets must appear verbatim,
+then break the relationship by inserting some text element which won't affect rendering.
+
+<<<
+No "name" ` `
+http://novelang.sourceforge.net
 >>>
 
 

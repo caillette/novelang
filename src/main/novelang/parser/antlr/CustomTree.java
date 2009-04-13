@@ -77,31 +77,6 @@ public class CustomTree
     } else {
       return children ;
     }
-/*
-    return new Iterable< SyntacticTree >() {
-
-      public Iterator< SyntacticTree > iterator() {
-        return new Iterator< SyntacticTree >() {
-
-          private int position = 0 ;
-
-          public boolean hasNext() {
-            return position < getChildCount() ;
-          }
-
-          public SyntacticTree next() {
-            final SyntacticTree next = getChildAt( position ) ;
-            position++ ;
-            return next ;
-          }
-
-          public void remove() {
-            throw new UnsupportedOperationException( "remove()" ) ;
-          }
-        } ;
-      }
-    } ;
-*/
   }
 
   public CustomTree adopt( SyntacticTree... newChildren ) throws NullArgumentException {
@@ -132,7 +107,6 @@ public class CustomTree
       for( SyntacticTree child : tree.getChildren() ) {
         customTree.addChild( convert( child ) ) ;
       }
-      LOGGER.debug( "Converted " + tree ) ;
       return customTree ;
     } else {
       return ( CommonTree ) tree ;

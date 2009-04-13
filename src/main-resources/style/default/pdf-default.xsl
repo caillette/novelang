@@ -264,8 +264,11 @@
       >
         <xsl:attribute name="external-destination" ><xsl:value-of select="n:url-literal" /></xsl:attribute>
         <xsl:choose>
-          <xsl:when test="n:link-name" >
-            <xsl:value-of select="n:link-name" />
+          <xsl:when test="n:block-inside-double-quotes" >
+            <xsl:apply-templates select="n:block-inside-double-quotes/node()" />
+          </xsl:when>
+          <xsl:when test="n:block-inside-square-brackets" >
+            <xsl:apply-templates select="n:block-inside-square-brackets/node()" />
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="n:url-literal" />

@@ -48,7 +48,7 @@ public class UrlManglerTest {
   }
 
   @Test
-  public void NamedUrlAtStartOfAPartWithLineBreak() {
+  public void namedUrlAtStartOfAPart() {
     verifyFixNamedUrls( 
         tree(
             PART,
@@ -56,10 +56,7 @@ public class UrlManglerTest {
                 PARAGRAPH_REGULAR,
                 tree(
                     _URL,
-                    tree( 
-                        _LINK_NAME,
-                        tree( WORD_, "name" ) 
-                    ),
+                    tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
                     tree( URL_LITERAL, "http://foo.com" )
                 )                            
             )            
@@ -79,33 +76,48 @@ public class UrlManglerTest {
   }
 
   @Test
-  public void NamedUrlAtStartOfAPartNoLineBreak() {
-    verifyFixNamedUrls( 
+  public void detectNoNamingWanted() {
+    verifyFixNamedUrls(
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+            tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, " " ),
+            tree( _URL, tree( URL_LITERAL, "http://foo.com" ) )
+        ),
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+            tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, " " ),
+            tree( LINE_BREAK_ ),
+            tree( URL_LITERAL, "http://foo.com" )
+        )
+    ) ;
+  }
+
+  @Test
+  public void namedUrlWithSquareBrackets() {
+    verifyFixNamedUrls(
         tree(
             PART,
-            tree( 
+            tree(
                 PARAGRAPH_REGULAR,
                 tree(
                     _URL,
-                    tree( 
-                        _LINK_NAME,
-                        tree( WORD_, "name" ) 
-                    ),
+                    tree( BLOCK_INSIDE_SQUARE_BRACKETS, tree( WORD_, "name" ) ),
                     tree( URL_LITERAL, "http://foo.com" )
-                )                            
-            )            
+                )
+            )
         ),
-        tree( 
+        tree(
             PART,
-            tree( WHITESPACE_, "  " ),
-            tree( 
+            tree(
                 PARAGRAPH_REGULAR,
-                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( BLOCK_INSIDE_SQUARE_BRACKETS, tree( WORD_, "name" ) ),
                 tree( LINE_BREAK_ ),
                 tree( URL_LITERAL, "http://foo.com" )
-                            
+
             )
-        )        
+        )
     ) ;
   }
 
@@ -130,10 +142,7 @@ public class UrlManglerTest {
                 PARAGRAPH_REGULAR,
                 tree(
                     _URL,
-                    tree( 
-                        _LINK_NAME,
-                        tree( WORD_, "name" ) 
-                    ),
+                    tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
                     tree( URL_LITERAL, "http://foo.com" )
                 )                            
             )            
@@ -195,17 +204,14 @@ public class UrlManglerTest {
   }
 
   @Test
-  public void fixNamedUrlInsideAParagraph() {
+  public void fixNamedUrlInsideAParagraphWithLineBreakBeforeQuotes() {
     verifyFixNamedUrls( 
         tree( 
             PARAGRAPH_REGULAR,
             tree( WORD_, "w" ),
             tree(
                 _URL,
-                tree( 
-                    _LINK_NAME,
-                    tree( WORD_, "name" ) 
-                ),
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
                 tree( URL_LITERAL, "http://foo.com" )
             )                            
         ),            
@@ -219,6 +225,31 @@ public class UrlManglerTest {
             tree( URL_LITERAL, "http://foo.com" )
                         
         )        
+    ) ;
+
+  }
+
+  @Test
+  public void fixNamedUrlInsideAParagraphNoLineBreakBeforeQuotes() {
+    verifyFixNamedUrls(
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( WORD_, "w" ),
+            tree(
+                _URL,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( URL_LITERAL, "http://foo.com" )
+            )
+        ),
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( WORD_, "w"),
+            tree( WHITESPACE_, " " ),
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+            tree( LINE_BREAK_ ),
+            tree( URL_LITERAL, "http://foo.com" )
+
+        )
     ) ;
 
   }

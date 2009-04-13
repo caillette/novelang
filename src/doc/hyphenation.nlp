@@ -4,14 +4,15 @@ Novelang PDF generation relies on Apache FOP, which supports hyphenation. Hyphen
 
 === Licensing
 
-First you have to check yourself if the license is compatible with intended usage. Licenses are explained here:
-
+First you have to check yourself if the license is compatible with intended usage.
+Licenses are explained "here"
 http://offo.sourceforge.net/hyphenation/licenses.html
+.
 
 === Download
 
-If there is no licensing issue then download and install the file(s) with your bare hands. All hyphenation files are available in a single archive 
-  "here"
+If there is no licensing issue then download and install the file(s) with your bare hands.
+All hyphenation files are available in a single archive "here"
 http://sourceforge.net/project/showfiles.php?group_id=116740&package_id=129569
 .
 

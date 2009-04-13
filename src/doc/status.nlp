@@ -17,10 +17,11 @@ http://novelang.blogspot.com
 
 //This version introduces changes that may break existing stylesheets.//
 
---- ``n:external-link`` becomes ``n:url``; ``n:url`` becomes ``n:url-literal`; 
+--- Simpler URL naming: no longer requires a line break preceding the block containing URL name.
+
+--- As a consequence, ``n:external-link`` becomes ``n:url``; ``n:url`` becomes ``n:url-literal``;
 ``n:link-name`` becomes ``n:block-inside-double-quotes`` or ``n:block-inside-square-brackets``.
  
---- No longer need to have a line break preceding the block containing URL name.
 
 
 === Version `0.24.0`
