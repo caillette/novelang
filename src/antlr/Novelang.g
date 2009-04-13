@@ -1085,6 +1085,7 @@ httpUrlSearch
       | COMMERCIAL_AT
       | AMPERSAND
       | EQUALS_SIGN
+      | SOLIDUS
     )*
   ;  
                

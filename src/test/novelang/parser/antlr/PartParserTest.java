@@ -1286,6 +1286,17 @@ public class PartParserTest {
   }
   
   @Test
+  public void urlWithSolidusInParameters() throws RecognitionException {
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval(
+        "http://foo.net/resources?x/y",
+        tree(
+            URL_LITERAL,
+            "http://foo.net/resources?x/y"
+        )
+    ) ;
+  }
+
+  @Test
   public void embeddedListItemMinimum() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
         "- w",
