@@ -18,6 +18,7 @@ package novelang.parser.antlr;
 
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
+import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 
@@ -28,10 +29,6 @@ import org.junit.Test;
  */
 public class NamedUrlTest {
   
-  public static final String BREAK = "\n" ;
-
-  private final ParserMethod PARSERMETHOD_PART =
-      new ParserMethod( "part" ) ;
 
   @Test
   public void namedUrlWithIndentOutsideParagraph() throws RecognitionException {
@@ -77,6 +74,92 @@ public class NamedUrlTest {
   }
 
 
+  /**
+   * Get sure of what we get because {@link novelang.hierarchy.UrlMangler} relies on this.
+   */
+  @Test
+  public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph1()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PART.checkTree(
+        "== t" + BREAK +
+        BREAK +
+        "  \"name\" " + BREAK +
+        "http://foo.com",
+        tree(
+            PART,
+            tree(
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "==" ),
+                tree( LEVEL_TITLE, tree( WORD_, "t" ) )
+            ),
+            tree( LINE_BREAK_ ),
+            tree( LINE_BREAK_ ),
+            tree( WHITESPACE_, "  " ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    BLOCK_INSIDE_DOUBLE_QUOTES,
+                    tree( WORD_, "name" )
+                ),
+                tree( WHITESPACE_, " " ),
+                tree( LINE_BREAK_ ),
+                tree( URL_LITERAL, "http://foo.com")
+            )
+        )
+    ) ;
+  }
+
+  /**
+   * Get sure of what we get because {@link novelang.hierarchy.UrlMangler} relies on this.
+   */
+  @Test
+  public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph2()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PART.checkTree(
+        "p" + BREAK +
+        BREAK +
+        "== t" + BREAK +
+        BREAK +
+        "  \"name\" " + BREAK +
+        "http://foo.com",
+        tree(
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "p" )
+            ),
+            tree( LINE_BREAK_ ),
+            tree( LINE_BREAK_ ),
+            tree(
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "==" ),
+                tree( LEVEL_TITLE, tree( WORD_, "t" ) )
+            ),
+            tree( LINE_BREAK_ ),
+            tree( LINE_BREAK_ ),
+            tree( WHITESPACE_, "  " ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    BLOCK_INSIDE_DOUBLE_QUOTES,
+                    tree( WORD_, "name" )
+                ),
+                tree( WHITESPACE_, " " ),
+                tree( LINE_BREAK_ ),
+                tree( URL_LITERAL, "http://foo.com")
+            )
+        )
+    ) ;
+  }
+
+// =======
+// Fixture
+// =======
+
+  private final ParserMethod PARSERMETHOD_PART =
+      new ParserMethod( "part" ) ;
 
 
 
