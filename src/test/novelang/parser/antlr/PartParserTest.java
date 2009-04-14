@@ -1307,6 +1307,28 @@ public class PartParserTest {
     ) ;
   }
 
+  /**
+   * Was a bug.
+   */
+  @Test
+  public void embeddedListItemApostropheAndDot() throws RecognitionException {
+    PARSERMETHOD_PART.checkTree(
+        "- y'z.",
+        tree(
+            PART,
+            tree( PARAGRAPH_REGULAR,
+                tree(
+                    EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                    tree( WORD_, "y" ),
+                    tree( APOSTROPHE_WORDMATE, "'" ),
+                    tree( WORD_, "z" ),
+                    tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP, "." ) )
+                )
+            )
+        )
+    ) ;
+  }
+
   @Test @Ignore
   public void embeddedListItemInsideParenthesis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(

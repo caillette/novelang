@@ -285,20 +285,30 @@ monoblockBody
 
   
 mixedDelimitedMonoblock  
-  : ( word ( 
-      (   punctuationSign 
-        | delimitedMonoblock 
+  : 
+    ( word 
+      ( (   punctuationSign 
+          | delimitedMonoblock 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | 
+  
+    ( (   punctuationSign 
+        | delimitedSpreadblock 
         | softInlineLiteral 
         | hardInlineLiteral 
-      )+ word? )? 
-    ) 
-  | ( (   punctuationSign 
-        | delimitedMonoblock 
-        | softInlineLiteral 
-        | hardInlineLiteral 
-      )+ 
-      word? 
-    ) 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedSpreadblock 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    )  
   | embeddableResource
   ;
                 
