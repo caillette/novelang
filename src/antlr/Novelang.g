@@ -500,16 +500,27 @@ delimitedSpreadblockNoEmphasis
   | hyphenPairSpreadBlock
   ;
 
-/** Don't allow URLs inside double quotes because of weird errors.
- *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
- */
 spreadBlockBodyNoEmphasis
-  : (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
+  : 
+/*
+    (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
       | ( ( softbreak whitespace? )? 
           mixedDelimitedSpreadBlockNoEmphasis
           ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
         )
     )
+*/
+        ( ( softbreak url whitespace? softbreak ) => 
+              ( softbreak url softbreak ) 
+        ) 
+      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
+                ( softbreak smallDashedListItem softbreak ) 
+        )
+      | ( ( softbreak whitespace? )? 
+          mixedDelimitedSpreadBlockNoEmphasis
+          ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
+        )
+/*
     (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
       | ( whitespace? softbreak whitespace? 
           mixedDelimitedSpreadBlockNoEmphasis
@@ -518,6 +529,22 @@ spreadBlockBodyNoEmphasis
           )*
         )             
     )* 
+*/
+    (   
+        ( ( softbreak url whitespace? softbreak ) => 
+              ( softbreak url softbreak ) 
+        ) 
+      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
+                ( softbreak whitespace? smallDashedListItem softbreak ) 
+          )
+      | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlock ) =>
+                ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis )
+          ( whitespace 
+            mixedDelimitedSpreadBlockNoEmphasis
+          )*
+        )             
+    )* 
+    
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoEmphasis
   ;  
 

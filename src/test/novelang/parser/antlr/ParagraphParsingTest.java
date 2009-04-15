@@ -668,6 +668,18 @@ public class ParagraphParsingTest {
 
 
   @Test
+  public void paragraphIsUrlsInsideBlockOfSolidusPairs()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.createTree(
+        "//w" + BREAK +
+        "http://bar.com" + BREAK +
+        "//"
+    ) ;
+  }
+
+
+  @Test
   public void paragraphHasSoftInlineLiteral() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.createTree( "x  `y + 1`" ) ;
   }
