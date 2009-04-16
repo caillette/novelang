@@ -400,10 +400,10 @@ spreadBlockBodyNoDoubleQuotes
 */
   : 
         ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
+              ( softbreak url whitespace? softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak smallDashedListItem softbreak ) 
+                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
         )
       | ( ( softbreak whitespace? )? 
           mixedDelimitedSpreadBlockNoDoubleQuotes
@@ -411,10 +411,10 @@ spreadBlockBodyNoDoubleQuotes
         )
     (   
         ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
+              ( softbreak url whitespace? softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem softbreak ) 
+                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
           )
       | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes ) =>
                 ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes )
@@ -530,10 +530,10 @@ delimitedSpreadblockNoEmphasis
 spreadBlockBodyNoEmphasis
   : 
         ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
+              ( softbreak url whitespace? softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak smallDashedListItem softbreak ) 
+                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
         )
       | ( ( softbreak whitespace? )? 
           mixedDelimitedSpreadBlockNoEmphasis
@@ -541,10 +541,10 @@ spreadBlockBodyNoEmphasis
         )
     (   
         ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
+              ( softbreak url whitespace? softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem softbreak ) 
+                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
           )
       | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis ) =>
                 ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis )
@@ -687,10 +687,10 @@ spreadBlockBodyNoHyphenPair
 */
   : 
         ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
+              ( softbreak url whitespace? softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak smallDashedListItem softbreak ) 
+                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
         )
       | ( ( softbreak whitespace? )? 
           mixedDelimitedSpreadBlockNoHyphenPair
@@ -698,10 +698,10 @@ spreadBlockBodyNoHyphenPair
         )
     (   
         ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
+              ( softbreak url whitespace? softbreak ) 
         ) 
       | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem softbreak ) 
+                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
           )
       | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair ) =>
                 ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair )
