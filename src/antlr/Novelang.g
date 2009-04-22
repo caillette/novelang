@@ -380,54 +380,73 @@ delimitedSpreadblockNoDoubleQuotes
 
 
 spreadBlockBodyNoDoubleQuotes
+@init {
+  boolean requireSoftbreakAtEnd = false ;
+}
   : 
     (
         (
           (
-			        ( ( softbreak url whitespace? ) => 
-			              ( softbreak url whitespace? ) 
+			        ( ( softbreak url ) => 
+			              ( softbreak url ) 
+                { requireSoftbreakAtEnd = true ; }
 			        ) 
-			      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
-			                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+			      | ( ( softbreak whitespace? smallDashedListItem ) => 
+			                ( softbreak whitespace? smallDashedListItem ) 
+			           { requireSoftbreakAtEnd = true ; }
 			        )
 				  )+
-		      softbreak
 		      
-	        ( ( mixedDelimitedSpreadBlockNoDoubleQuotes )
-	          ( 
-	            ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
-	            => ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
-	          )*
-	        )?
-		      
-        )+
-      | ( 
-          ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoDoubleQuotes )
-            => ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoDoubleQuotes )
-	          ( 
-	            ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
-	            => ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
-	          )*
+	        ( 
+            whitespace? softbreak whitespace?
+	          mixedDelimitedSpreadBlockNoDoubleQuotes  
+	          { requireSoftbreakAtEnd = false ; }
+	          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
 
-          (          
 	          (
-				        ( ( softbreak url whitespace? ) => 
-				              ( softbreak url whitespace? ) 
+				        ( ( softbreak url ) => ( softbreak url ) 
+				           { requireSoftbreakAtEnd = true ; }
 				        ) 
-				      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
-				                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+				      | ( ( softbreak whitespace? smallDashedListItem ) => 
+				                ( softbreak whitespace? smallDashedListItem ) 
+				           { requireSoftbreakAtEnd = true ; }
 				        )
-					  )+
-			      softbreak
-			      
-		        ( ( mixedDelimitedSpreadBlockNoDoubleQuotes )
-		          ( 
-		            ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
-		            => ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
-		          )*
-		        )?
-		      )*
+					  )*
+	        )*
+          {requireSoftbreakAtEnd}? softbreak
+        )
+      | ( 
+          mixedDelimitedSpreadBlockNoDoubleQuotes 
+           { requireSoftbreakAtEnd = false ; }
+          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
           
+          (
+			        ( ( softbreak url ) => 
+			              ( softbreak url ) 
+			           { requireSoftbreakAtEnd = true ; }
+			        ) 
+			      | ( ( softbreak whitespace? smallDashedListItem ) => 
+			                ( softbreak whitespace? smallDashedListItem ) 
+			           { requireSoftbreakAtEnd = true ; }
+			        )
+				  )*
+	        ( 
+            whitespace? softbreak whitespace?
+	          mixedDelimitedSpreadBlockNoDoubleQuotes
+	           { requireSoftbreakAtEnd = false ; }
+	          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
+
+	          (
+				        ( ( softbreak url ) => ( softbreak url ) 
+				           { requireSoftbreakAtEnd = true ; }
+				        ) 
+				      | ( ( softbreak whitespace? smallDashedListItem ) => 
+				                ( softbreak whitespace? smallDashedListItem ) 
+                  { requireSoftbreakAtEnd = true ; }
+				        )
+					  )*
+	        )*
+          {requireSoftbreakAtEnd}? softbreak
         )
     )   
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoDoubleQuotes
@@ -535,56 +554,70 @@ delimitedSpreadblockNoEmphasis
   ;
 
 spreadBlockBodyNoEmphasis
+@init {
+  boolean requireSoftbreakAtEnd = false ;
+}
   : 
     (
+      (
+          ( ( softbreak url ) => 
+                ( softbreak url ) 
+            { requireSoftbreakAtEnd = true ; }
+          ) 
+        | ( ( softbreak whitespace? smallDashedListItem ) => 
+                  ( softbreak whitespace? smallDashedListItem ) 
+             { requireSoftbreakAtEnd = true ; }
+          )
+	    )+
+     
+      ( 
+        whitespace? softbreak whitespace?
+        mixedDelimitedSpreadBlockNoEmphasis  
+        { requireSoftbreakAtEnd = false ; }
+        ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
         (
-          (
-			        ( ( softbreak url whitespace? ) => 
-			              ( softbreak url whitespace? ) 
-			        ) 
-			      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
-			                ( softbreak whitespace? smallDashedListItem whitespace? ) 
-			        )
-				  )+
-		      softbreak
-		      
-	        ( ( mixedDelimitedSpreadBlockNoEmphasis )
-	          ( 
-	            ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
-	            => ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
-	          )*
-	        )?
-		      
-        )+
-      | ( 
-          ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoEmphasis )
-            => ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoEmphasis )
-	          ( 
-	            ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
-	            => ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
-	          )*
-
-          (          
-	          (
-				        ( ( softbreak url whitespace? ) => 
-				              ( softbreak url whitespace? ) 
-				        ) 
-				      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
-				                ( softbreak whitespace? smallDashedListItem whitespace? ) 
-				        )
-					  )+
-			      softbreak
-			      
-		        ( ( mixedDelimitedSpreadBlockNoEmphasis )
-		          ( 
-		            ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
-		            => ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
-		          )*
-		        )?
-		      )*
-          
-        )
-    )   
+            ( ( softbreak url ) => ( softbreak url ) 
+              { requireSoftbreakAtEnd = true ; }
+            ) 
+          | ( ( softbreak whitespace? smallDashedListItem ) => 
+                  ( softbreak whitespace? smallDashedListItem ) 
+              { requireSoftbreakAtEnd = true ; }
+            )
+		    )*
+      )*
+      {requireSoftbreakAtEnd}? softbreak
+    )
+  | (  
+      mixedDelimitedSpreadBlockNoEmphasis 
+      { requireSoftbreakAtEnd = false ; }
+      ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
+       
+      (
+          ( ( softbreak url ) => ( softbreak url ) 
+            { requireSoftbreakAtEnd = true ; }
+          ) 
+        | ( ( softbreak whitespace? smallDashedListItem ) => 
+                ( softbreak whitespace? smallDashedListItem ) 
+             { requireSoftbreakAtEnd = true ; }
+          )
+      )*
+      ( 
+        whitespace? softbreak whitespace?
+        mixedDelimitedSpreadBlockNoEmphasis
+        { requireSoftbreakAtEnd = false ; }
+        ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
+        (
+            ( ( softbreak url ) => ( softbreak url ) 
+	            { requireSoftbreakAtEnd = true ; }
+	          ) 
+	        | ( ( softbreak whitespace? smallDashedListItem ) => 
+	                ( softbreak whitespace? smallDashedListItem ) 
+              { requireSoftbreakAtEnd = true ; }
+	          )
+		    )*
+      )*
+       {requireSoftbreakAtEnd}? softbreak
+    )
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoEmphasis
   ;  
 
@@ -696,58 +729,74 @@ delimitedSpreadblockNoHyphenPair
   | doubleQuotedSpreadBlock
   ;
 
-/** Don't allow URLs inside double quotes because of weird errors.
- *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
- */
 spreadBlockBodyNoHyphenPair
+@init {
+  boolean requireSoftbreakAtEnd = false ;
+}
   : 
     (
         (
           (
-			        ( ( softbreak url whitespace? ) => 
-			              ( softbreak url whitespace? ) 
+			        ( ( softbreak url ) => 
+			              ( softbreak url ) 
+                { requireSoftbreakAtEnd = true ; }
 			        ) 
-			      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
-			                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+			      | ( ( softbreak whitespace? smallDashedListItem ) => 
+			                ( softbreak whitespace? smallDashedListItem ) 
+			           { requireSoftbreakAtEnd = true ; }
 			        )
 				  )+
-		      softbreak
 		      
-	        ( ( mixedDelimitedSpreadBlockNoHyphenPair )
-	          ( 
-	            ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
-	            => ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
-	          )*
-	        )?
-		      
-        )+
-      | ( 
-          ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoHyphenPair )
-            => ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoHyphenPair )
-	          ( 
-	            ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
-	            => ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
-	          )*
+	        ( 
+            whitespace? softbreak whitespace?
+	          mixedDelimitedSpreadBlockNoHyphenPair  
+	          { requireSoftbreakAtEnd = false ; }
+	          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
 
-          (          
 	          (
-				        ( ( softbreak url whitespace? ) => 
-				              ( softbreak url whitespace? ) 
+				        ( ( softbreak url ) => ( softbreak url ) 
+				           { requireSoftbreakAtEnd = true ; }
 				        ) 
-				      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
-				                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+				      | ( ( softbreak whitespace? smallDashedListItem ) => 
+				                ( softbreak whitespace? smallDashedListItem ) 
+				           { requireSoftbreakAtEnd = true ; }
 				        )
-					  )+
-			      softbreak
-			      
-		        ( ( mixedDelimitedSpreadBlockNoHyphenPair )
-		          ( 
-		            ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
-		            => ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
-		          )*
-		        )?
-		      )*
+					  )*
+	        )*
+          {requireSoftbreakAtEnd}? softbreak
+        )
+      | ( 
+          mixedDelimitedSpreadBlockNoHyphenPair 
+           { requireSoftbreakAtEnd = false ; }
+          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
           
+          (
+			        ( ( softbreak url ) => 
+			              ( softbreak url ) 
+			           { requireSoftbreakAtEnd = true ; }
+			        ) 
+			      | ( ( softbreak whitespace? smallDashedListItem ) => 
+			                ( softbreak whitespace? smallDashedListItem ) 
+			           { requireSoftbreakAtEnd = true ; }
+			        )
+				  )*
+	        ( 
+            whitespace? softbreak whitespace?
+	          mixedDelimitedSpreadBlockNoHyphenPair
+	           { requireSoftbreakAtEnd = false ; }
+	          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
+
+	          (
+				        ( ( softbreak url ) => ( softbreak url ) 
+				           { requireSoftbreakAtEnd = true ; }
+				        ) 
+				      | ( ( softbreak whitespace? smallDashedListItem ) => 
+				                ( softbreak whitespace? smallDashedListItem ) 
+                  { requireSoftbreakAtEnd = true ; }
+				        )
+					  )*
+	        )*
+          {requireSoftbreakAtEnd}? softbreak
         )
     )   
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoHyphenPair
