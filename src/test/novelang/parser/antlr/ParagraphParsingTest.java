@@ -215,6 +215,14 @@ public class ParagraphParsingTest {
   }
 
   @Test
+  public void paragraphIsMultilineQuote() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.createTree( 
+        "\"w1" + BREAK +
+        "w2\"" 
+    );
+  }
+
+  @Test
   public void paragraphIsMultilineQuoteWithPunctuationSigns1() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.createTree( 
         "\"w1 w2. w3 w4." + BREAK +
@@ -613,7 +621,7 @@ public class ParagraphParsingTest {
   {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
         "//y" + BREAK +
-        "http:foo.net " + BREAK +
+        "http://foo.net " + BREAK +
         "z//",
         tree(
             PARAGRAPH_REGULAR,

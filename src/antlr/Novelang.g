@@ -378,51 +378,58 @@ delimitedSpreadblockNoDoubleQuotes
   | hyphenPairSpreadBlock
   ;
 
-/** Don't allow URLs inside double quotes because of weird errors.
- *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
- */
+
 spreadBlockBodyNoDoubleQuotes
-/*
-  : (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
-      | ( ( softbreak whitespace? )? 
-          mixedDelimitedSpreadBlockNoDoubleQuotes
-          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
-        )
-    )
-    (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
-      | ( whitespace? softbreak whitespace? 
-          mixedDelimitedSpreadBlockNoDoubleQuotes
-          ( whitespace 
-            mixedDelimitedSpreadBlockNoDoubleQuotes
-          )*
-        )             
-    )* 
-*/
   : 
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url whitespace? softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
+    (
+        (
+          (
+			        ( ( softbreak url whitespace? ) => 
+			              ( softbreak url whitespace? ) 
+			        ) 
+			      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
+			                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+			        )
+				  )+
+		      softbreak
+		      
+	        ( ( mixedDelimitedSpreadBlockNoDoubleQuotes )
+	          ( 
+	            ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
+	            => ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
+	          )*
+	        )?
+		      
+        )+
+      | ( 
+          ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoDoubleQuotes )
+            => ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoDoubleQuotes )
+	          ( 
+	            ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
+	            => ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
+	          )*
+
+          (          
+	          (
+				        ( ( softbreak url whitespace? ) => 
+				              ( softbreak url whitespace? ) 
+				        ) 
+				      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
+				                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+				        )
+					  )+
+			      softbreak
+			      
+		        ( ( mixedDelimitedSpreadBlockNoDoubleQuotes )
+		          ( 
+		            ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
+		            => ( mediumbreak mixedDelimitedSpreadBlockNoDoubleQuotes )
+		          )*
+		        )?
+		      )*
+          
         )
-      | ( ( softbreak whitespace? )? 
-          mixedDelimitedSpreadBlockNoDoubleQuotes
-          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
-        )
-    (   
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url whitespace? softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
-          )
-      | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes ) =>
-                ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes )
-          ( whitespace 
-            mixedDelimitedSpreadBlockNoDoubleQuotes
-          )*
-        )             
-    )* 
+    )   
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoDoubleQuotes
   ;  
 
@@ -529,31 +536,55 @@ delimitedSpreadblockNoEmphasis
 
 spreadBlockBodyNoEmphasis
   : 
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url whitespace? softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
+    (
+        (
+          (
+			        ( ( softbreak url whitespace? ) => 
+			              ( softbreak url whitespace? ) 
+			        ) 
+			      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
+			                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+			        )
+				  )+
+		      softbreak
+		      
+	        ( ( mixedDelimitedSpreadBlockNoEmphasis )
+	          ( 
+	            ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
+	            => ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
+	          )*
+	        )?
+		      
+        )+
+      | ( 
+          ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoEmphasis )
+            => ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoEmphasis )
+	          ( 
+	            ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
+	            => ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
+	          )*
+
+          (          
+	          (
+				        ( ( softbreak url whitespace? ) => 
+				              ( softbreak url whitespace? ) 
+				        ) 
+				      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
+				                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+				        )
+					  )+
+			      softbreak
+			      
+		        ( ( mixedDelimitedSpreadBlockNoEmphasis )
+		          ( 
+		            ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
+		            => ( mediumbreak mixedDelimitedSpreadBlockNoEmphasis )
+		          )*
+		        )?
+		      )*
+          
         )
-      | ( ( softbreak whitespace? )? 
-          mixedDelimitedSpreadBlockNoEmphasis
-          ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
-        )
-    (   
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url whitespace? softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
-          )
-      | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis ) =>
-                ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis )
-          ( whitespace 
-            mixedDelimitedSpreadBlockNoEmphasis
-          )*
-        )             
-    )* 
-    
+    )   
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoEmphasis
   ;  
 
@@ -669,48 +700,56 @@ delimitedSpreadblockNoHyphenPair
  *  Not wishable anyways because in a near future URLs may be preceded by double-quoted title.
  */
 spreadBlockBodyNoHyphenPair
-/*
-  : (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
-      | ( ( softbreak whitespace? )? 
-          mixedDelimitedSpreadBlockNoHyphenPair
-          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
-        )
-    )
-    (   ( softbreak whitespace? smallDashedListItem whitespace? softbreak )
-      | ( whitespace? softbreak whitespace? 
-          mixedDelimitedSpreadBlockNoHyphenPair
-          ( whitespace 
-            mixedDelimitedSpreadBlockNoHyphenPair
-          )*
-        )             
-    )* 
-*/
   : 
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url whitespace? softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
+    (
+        (
+          (
+			        ( ( softbreak url whitespace? ) => 
+			              ( softbreak url whitespace? ) 
+			        ) 
+			      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
+			                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+			        )
+				  )+
+		      softbreak
+		      
+	        ( ( mixedDelimitedSpreadBlockNoHyphenPair )
+	          ( 
+	            ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
+	            => ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
+	          )*
+	        )?
+		      
+        )+
+      | ( 
+          ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoHyphenPair )
+            => ( ( softbreak whitespace? )? mixedDelimitedSpreadBlockNoHyphenPair )
+	          ( 
+	            ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
+	            => ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
+	          )*
+
+          (          
+	          (
+				        ( ( softbreak url whitespace? ) => 
+				              ( softbreak url whitespace? ) 
+				        ) 
+				      | ( ( softbreak whitespace? smallDashedListItem whitespace? ) => 
+				                ( softbreak whitespace? smallDashedListItem whitespace? ) 
+				        )
+					  )+
+			      softbreak
+			      
+		        ( ( mixedDelimitedSpreadBlockNoHyphenPair )
+		          ( 
+		            ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
+		            => ( mediumbreak mixedDelimitedSpreadBlockNoHyphenPair )
+		          )*
+		        )?
+		      )*
+          
         )
-      | ( ( softbreak whitespace? )? 
-          mixedDelimitedSpreadBlockNoHyphenPair
-          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
-        )
-    (   
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url whitespace? softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) 
-          )
-      | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair ) =>
-                ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair )
-          ( whitespace 
-            mixedDelimitedSpreadBlockNoHyphenPair
-          )*
-        )             
-    )*     
-    
+    )   
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoHyphenPair
   ;  
 
@@ -1821,6 +1860,6 @@ BLOCK_COMMENT
  * As we don't support '/*' we avoid confusion in user's brain by not supporting
  * usually-associated '//', also used for italics.
  */
-LINE_COMMENT
+ LINE_COMMENT
   : '%%' ~('\n'|'\r')* '\r'? '\n' { $channel=HIDDEN ; }
   ;
