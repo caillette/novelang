@@ -413,7 +413,7 @@ spreadBlockBodyNoDoubleQuotes
 				        )
 					  )*
 	        )*
-          {requireSoftbreakAtEnd}? softbreak
+          {requireSoftbreakAtEnd}? => softbreak
         )
       | ( 
           mixedDelimitedSpreadBlockNoDoubleQuotes 
@@ -446,7 +446,7 @@ spreadBlockBodyNoDoubleQuotes
 				        )
 					  )*
 	        )*
-          {requireSoftbreakAtEnd}? softbreak
+          {requireSoftbreakAtEnd}? => softbreak
         )
     )   
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoDoubleQuotes
@@ -560,8 +560,7 @@ spreadBlockBodyNoEmphasis
   : 
     (
       (
-          ( ( softbreak url ) => 
-                ( softbreak url ) 
+          ( ( softbreak url ) => ( softbreak url ) 
             { requireSoftbreakAtEnd = true ; }
           ) 
         | ( ( softbreak whitespace? smallDashedListItem ) => 
@@ -585,38 +584,56 @@ spreadBlockBodyNoEmphasis
             )
 		    )*
       )*
-      {requireSoftbreakAtEnd}? softbreak
+      {requireSoftbreakAtEnd}? => softbreak
     )
-  | (  
+  | ( // Other kind of beginning: just text 
       mixedDelimitedSpreadBlockNoEmphasis 
-      { requireSoftbreakAtEnd = false ; }
       ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
-       
-      (
-          ( ( softbreak url ) => ( softbreak url ) 
-            { requireSoftbreakAtEnd = true ; }
-          ) 
-        | ( ( softbreak whitespace? smallDashedListItem ) => 
-                ( softbreak whitespace? smallDashedListItem ) 
-             { requireSoftbreakAtEnd = true ; }
+
+
+      (     
+		      ( 		        
+            ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis )
+             => ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis )
+            ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
           )
+		    | 
+		      ( (
+			          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+			          ) 
+			        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+			             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+			          )
+		        )+
+		        softbreak
+		      )
+ 	      
+	    )?    
+          
+/*          
+        | ( whitespace? softbreak whitespace?
+            mixedDelimitedSpreadBlockNoEmphasis
+          ) 
+          =>  ( whitespace? softbreak whitespace?
+		            mixedDelimitedSpreadBlockNoEmphasis
+		          )            
       )*
+*/
+/*
       ( 
         whitespace? softbreak whitespace?
         mixedDelimitedSpreadBlockNoEmphasis
-        { requireSoftbreakAtEnd = false ; }
         ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
         (
             ( ( softbreak url ) => ( softbreak url ) 
-	            { requireSoftbreakAtEnd = true ; }
 	          ) 
 	        | ( ( softbreak whitespace? smallDashedListItem ) => 
 	                ( softbreak whitespace? smallDashedListItem ) 
-              { requireSoftbreakAtEnd = true ; }
 	          )
 		    )*
       )*
-       {requireSoftbreakAtEnd}? softbreak
+      softbreak
+*/      
     )
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoEmphasis
   ;  
@@ -763,7 +780,7 @@ spreadBlockBodyNoHyphenPair
 				        )
 					  )*
 	        )*
-          {requireSoftbreakAtEnd}? softbreak
+          {requireSoftbreakAtEnd}? => softbreak
         )
       | ( 
           mixedDelimitedSpreadBlockNoHyphenPair 
@@ -796,7 +813,7 @@ spreadBlockBodyNoHyphenPair
 				        )
 					  )*
 	        )*
-          {requireSoftbreakAtEnd}? softbreak
+          {requireSoftbreakAtEnd}? => softbreak
         )
     )   
     // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoHyphenPair
