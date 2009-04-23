@@ -34,10 +34,10 @@ import com.google.common.collect.Maps;
  */
 public class WebColors {
 
-  private static final Iterable< NamedColor > COLORS ;
+  private static final Iterable< WebColor > COLORS ;
 
   static {
-    COLORS = new NamedColorMapBuilder()
+    COLORS = new WebColorMapBuilder()
     .put( "aliceblue",      new Color( 240, 248, 255 ) )
     .put( "antiquewhite",   new Color( 250, 235, 215 ) )
     .put( "aqua",           new Color(   0, 255, 255 ) )
@@ -189,26 +189,27 @@ public class WebColors {
   }
 
 
-  private static class NamedColorMapBuilder {
-    final List< NamedColor > namedColors = Lists.newArrayList() ;
-    public NamedColorMapBuilder put( String name, Color color ) {
-      final NamedColor namedColor = new NamedColor( name, color ) ;
-      if( containsSame( namedColors, namedColor ) ) {
-        namedColors.add( namedColor ) ;
+  private static class WebColorMapBuilder {
+    final List<WebColor> webColors = Lists.newArrayList() ;
+
+    public WebColorMapBuilder put( String name, Color color ) {
+      final WebColor webColor = new WebColor( name, color ) ;
+      if( containsSame( webColors, webColor ) ) {
+        webColors.add( webColor ) ;
       }
       return this ;
     }
-    public final Iterable< NamedColor > build() {
-      return ImmutableList.copyOf( namedColors ) ;
+    public final Iterable<WebColor> build() {
+      return ImmutableList.copyOf( webColors ) ;
     }
   }
 
   private static boolean containsSame(
-      Iterable< NamedColor > namedColors,
-      NamedColor namedColor
+      Iterable<WebColor> namedColors,
+      WebColor webColor
   ) {
-    for( NamedColor some : namedColors ) {
-      if( some.color.equals( namedColor.color ) ) {
+    for( WebColor some : namedColors ) {
+      if( some.color.equals( webColor.color ) ) {
         return true ;
       }
     }
@@ -216,13 +217,13 @@ public class WebColors {
   }
 
   public static interface ColorCycler {
-    NamedColor getNext() ;
+    WebColor getNext() ;
   }
 
   public static ColorCycler createColorCycler() {
     return new ColorCycler() {
-      Iterator< NamedColor > namedColorIterator = null ;
-      public NamedColor getNext() {
+      Iterator<WebColor> namedColorIterator = null ;
+      public WebColor getNext() {
         if( namedColorIterator == null || ! namedColorIterator.hasNext() ) {
           namedColorIterator = COLORS.iterator() ;
         }
@@ -230,21 +231,6 @@ public class WebColors {
       }
     } ;
   }
-
-/*  
-  public static Color getColorByName( String name ) {
-    throw new UnsupportedOperationException( "getColor" ) ;
-  }
-
-  public static Color getInverseColor( String name ) {
-    final Color color = getColorByName( name ) ;
-    if( null == color ) {
-      return Color.gray ;
-    } else {
-      return getInverseColor( color ) ;
-    }
-  }
-*/
 
   public static Color getInverseColor( Color original ) {
     return new Color(
@@ -254,34 +240,57 @@ public class WebColors {
     ) ;
   }
 
-  public static class NamedColor {
+  public static String getRgbDeclaration( Color color ) {
+    return "rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")" ;
+  }
+
+  public static class WebColor {
     public final String name ;
     public final Color color ;
-    public final Color inverse ;
 
-    public NamedColor( String name, Color color ) {
+    public WebColor( String name, Color color ) {
       Preconditions.checkArgument( StringUtils.isBlank( name ) ) ;
       this.name = name ;
       this.color = Preconditions.checkNotNull( color ) ;
-      this.inverse = getInverseColor( color ) ;
     }
+
+    public String getName() {
+      return name;
+    }
+
+    public Color getColor() {
+      return color;
+    }
+
+    public Color getInverseColor() {
+      return WebColors.getInverseColor( color ) ;
+    }
+
+    public String getRgbDeclaration() {
+      return WebColors.getRgbDeclaration( color ) ;
+    }
+
+    public String getInverseRgbDeclaration() {
+      return WebColors.getRgbDeclaration( getInverseColor() ) ;
+    }
+
   }
 
   public interface ColorMapper {
-    NamedColor getColor( String identifier ) ;
+    WebColor getColor( String identifier ) ;
   }
 
   public static ColorMapper createColorMapper() {
     return new ColorMapper() {
       final ColorCycler colorCycler = createColorCycler() ;
-      final Map< String, NamedColor > map = Maps.newHashMap() ;
-      public NamedColor getColor( String identifier ) {
+      final Map< String, WebColor> map = Maps.newHashMap() ;
+      public WebColor getColor( String identifier ) {
         if( map.containsKey( identifier ) ) {
           return map.get( identifier ) ;
         } else {
-          final NamedColor newNamedColor = colorCycler.getNext() ;
-          map.put( identifier, newNamedColor ) ;
-          return newNamedColor ;
+          final WebColor newWebColor = colorCycler.getNext() ;
+          map.put( identifier, newWebColor ) ;
+          return newWebColor;
         }
       }
     } ;
