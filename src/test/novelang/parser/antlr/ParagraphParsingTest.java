@@ -635,6 +635,28 @@ public class ParagraphParsingTest {
     ) ;
   }
 
+  @Test
+  public void
+  paragraphIsEmphasisWithWordThenUrlThenWordOnSeveralLinesAndLineBreakAtEnd()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
+        "//y" + BREAK +
+        "http://foo.net " + BREAK +
+        "z " + BREAK +
+        "//",
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_INSIDE_SOLIDUS_PAIRS,
+                tree( WORD_, "y" ),
+                tree( URL_LITERAL, "http://foo.net" ),
+                tree( WORD_, "z" )
+            )
+        )
+    ) ;
+  }
+
 
   @Test
   public void paragraphIsParenthesisWithBreakThenWord()
