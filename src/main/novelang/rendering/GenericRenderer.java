@@ -104,7 +104,8 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
-      case URL_LITERAL:
+      case URL_LITERAL :
+      case TAG :
       case _WORD_COUNT :
       case _STYLE :
       case LINES_OF_LITERAL :
@@ -131,13 +132,6 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.write( newPath, tree.getChildAt( 0 ).getText() ) ;
         fragmentWriter.end( newPath ) ;
         break ;
-
-/*
-      case DELIMITER_TWO_EQUAL_SIGNS_:
-      case LEVEL_INTRODUCER_:
-        processByDefault( tree, createNodepath( kinship, _LEVEL ), false ) ;
-        break ;
-*/
 
       case LEVEL_INTRODUCER_INDENT_ :
         break ;

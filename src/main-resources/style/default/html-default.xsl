@@ -64,6 +64,19 @@
     </html>
   </xsl:template>
 
+  <xsl:template match="n:level" >
+    <xsl:if test="n:tag" >
+      <ul class="tags" >
+        <xsl:for-each select="n:tag" >
+          <li class="tag-level" >
+            <xsl:value-of select="." />
+          </li>
+        </xsl:for-each>
+      </ul>
+    </xsl:if>
+    <xsl:apply-templates/>    
+  </xsl:template>
+
   <xsl:template match="//n:level/n:level-title" >
     <h1><xsl:apply-templates /></h1>
   </xsl:template>
@@ -90,6 +103,15 @@
 
   <xsl:template match="n:paragraph-regular" >
     <p>
+      <xsl:if test="n:tag" >
+        <ul class="tags" >
+          <xsl:for-each select="n:tag" >
+            <li class="tag-paragraph" >
+              <xsl:value-of select="." />
+            </li>
+          </xsl:for-each>
+        </ul>
+      </xsl:if>
     <xsl:apply-templates/>
     </p>
   </xsl:template>

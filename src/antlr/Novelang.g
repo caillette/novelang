@@ -52,6 +52,7 @@ tokens {
   WORD_ ;
   WHITESPACE_ ;
   LINE_BREAK_ ;
+  TAG ;
   
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
@@ -144,12 +145,49 @@ part
   ; 
   
 levelIntroducer 
-  : ( levelIntroducerIndent
+  : ( ( tags mediumbreak )?
+      levelIntroducerIndent
       ( whitespace? levelTitle )?
     )
-    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? )
+    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? tags? )
   ;
 
+
+// ====
+// Tags
+// ====
+
+tag
+  :
+  ( COMMERCIAL_AT s = symbolicName )
+  -> ^( TAG { delegate.createTree( TAG, $s.text ) }  )
+  ;
+  
+/** This intermediary rule is useful as I didn't find how to
+ * concatenate Tokens from inside the rewrite rule.
+ */
+rawTag returns [ String text ]
+@init {
+  final StringBuffer buffer = new StringBuffer() ;
+}
+  : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
+      | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
+      | s3 = digit { buffer.append( $s3.text ) ; }
+    )+
+    ( s5 = HYPHEN_MINUS { buffer.append( $s5.text ) ; }
+      (  s6 = hexLetter { buffer.append( $s6.text ) ; }
+       | s7 = nonHexLetter { buffer.append( $s7.text ) ; }
+       | s8 = digit { buffer.append( $s8.text ) ; }
+      )+ 
+    )*
+    { $text = buffer.toString() ; }
+  ;  
+  
+  
+tags
+  :
+  tag ( mediumbreak tag )*
+  ;
 
 // =====================
 // Paragraph and related
@@ -180,7 +218,8 @@ levelTitle
 headerIdentifier : ; // TODO
 
 paragraph 
-	: ( (   ( url ) => p += url
+	: ( ( p += tags mediumbreak )?	
+	    (   ( url ) => p += url
 	      | ( smallDashedListItem ) => p += smallDashedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
 	          ( p += whitespace p+= mixedDelimitedSpreadBlock )* 
@@ -945,13 +984,14 @@ cell
 
 
 blockQuote
-  : LESS_THAN_SIGN LESS_THAN_SIGN 
+  : ( p += tags mediumbreak )?	
+    LESS_THAN_SIGN LESS_THAN_SIGN 
     ( mediumbreak | largebreak )?
-    paragraph 
-    ( largebreak paragraph )* 
+    p += paragraph 
+    ( largebreak p += paragraph )* 
     ( mediumbreak | largebreak )?
     GREATER_THAN_SIGN GREATER_THAN_SIGN
-    -> ^( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS paragraph* )
+    -> ^( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS $p+ )
   ;  
 
 literal

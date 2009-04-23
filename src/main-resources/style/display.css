@@ -71,3 +71,31 @@ td
     border-width: 1pt 1pt 0 0;
     background-color: #dfdfdf;
 }
+
+
+
+
+ul.tags > li
+{
+  list-style-type:none ;
+  float: right ;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 9pt ;
+  margin-left: 2px ;
+}
+
+
+
+li.tag-paragraph
+{
+  /*background-color: mediumpurple ;*/
+  padding: 2px 2px 2px 2px ;
+}
+
+li.tag-level
+{
+  /*background-color: greenyellow;*/
+  padding: 2px 2px 2px 2px ;
+}
+
