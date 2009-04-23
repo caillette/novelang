@@ -379,77 +379,77 @@ delimitedSpreadblockNoDoubleQuotes
   ;
 
 
-spreadBlockBodyNoDoubleQuotes
-@init {
-  boolean requireSoftbreakAtEnd = false ;
-}
+spreadBlockBodyNoDoubleQuotes  // Relies on: mixedDelimitedSpreadBlockNoDoubleQuotes
   : 
-    (
-        (
-          (
-			        ( ( softbreak url ) => 
-			              ( softbreak url ) 
-                { requireSoftbreakAtEnd = true ; }
-			        ) 
-			      | ( ( softbreak whitespace? smallDashedListItem ) => 
-			                ( softbreak whitespace? smallDashedListItem ) 
-			           { requireSoftbreakAtEnd = true ; }
-			        )
-				  )+
-		      
-	        ( 
-            whitespace? softbreak whitespace?
-	          mixedDelimitedSpreadBlockNoDoubleQuotes  
-	          { requireSoftbreakAtEnd = false ; }
-	          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
+    (  // Beginning by URL or smallDashedListItem
+      (
+          ( ( softbreak url ) => ( softbreak url ) 
+          ) 
+        | ( ( softbreak whitespace? smallDashedListItem ) => 
+                  ( softbreak whitespace? smallDashedListItem ) 
+          )
+	    )
+	    
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes 
+		              ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes 
+				              ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes 
+				  ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
+				)?   	    
+  	  )   	  
+    )
+    
+  | ( // Other kind of beginning: just text 
 
-	          (
-				        ( ( softbreak url ) => ( softbreak url ) 
-				           { requireSoftbreakAtEnd = true ; }
-				        ) 
-				      | ( ( softbreak whitespace? smallDashedListItem ) => 
-				                ( softbreak whitespace? smallDashedListItem ) 
-				           { requireSoftbreakAtEnd = true ; }
-				        )
-					  )*
-	        )*
-          {requireSoftbreakAtEnd}? => softbreak
-        )
-      | ( 
-          mixedDelimitedSpreadBlockNoDoubleQuotes 
-           { requireSoftbreakAtEnd = false ; }
-          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
-          
-          (
-			        ( ( softbreak url ) => 
-			              ( softbreak url ) 
-			           { requireSoftbreakAtEnd = true ; }
-			        ) 
-			      | ( ( softbreak whitespace? smallDashedListItem ) => 
-			                ( softbreak whitespace? smallDashedListItem ) 
-			           { requireSoftbreakAtEnd = true ; }
-			        )
-				  )*
-	        ( 
-            whitespace? softbreak whitespace?
-	          mixedDelimitedSpreadBlockNoDoubleQuotes
-	           { requireSoftbreakAtEnd = false ; }
-	          ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
+      mixedDelimitedSpreadBlockNoDoubleQuotes 
+      ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
+      
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes 
+		              ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes 
+				              ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoDoubleQuotes 
+				  ( whitespace mixedDelimitedSpreadBlockNoDoubleQuotes )*
+				)?
+   	    
+   	  )?
 
-	          (
-				        ( ( softbreak url ) => ( softbreak url ) 
-				           { requireSoftbreakAtEnd = true ; }
-				        ) 
-				      | ( ( softbreak whitespace? smallDashedListItem ) => 
-				                ( softbreak whitespace? smallDashedListItem ) 
-                  { requireSoftbreakAtEnd = true ; }
-				        )
-					  )*
-	        )*
-          {requireSoftbreakAtEnd}? => softbreak
-        )
-    )   
-    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoDoubleQuotes
+    )
   ;  
 
 mixedDelimitedSpreadBlockNoDoubleQuotes
@@ -553,89 +553,77 @@ delimitedSpreadblockNoEmphasis
   | hyphenPairSpreadBlock
   ;
 
-spreadBlockBodyNoEmphasis
-@init {
-  boolean requireSoftbreakAtEnd = false ;
-}
+spreadBlockBodyNoEmphasis      // Relies on: mixedDelimitedSpreadBlockNoEmphasis
   : 
-    (
+    (  // Beginning by URL or smallDashedListItem
       (
           ( ( softbreak url ) => ( softbreak url ) 
-            { requireSoftbreakAtEnd = true ; }
           ) 
         | ( ( softbreak whitespace? smallDashedListItem ) => 
                   ( softbreak whitespace? smallDashedListItem ) 
-             { requireSoftbreakAtEnd = true ; }
           )
-	    )+
-     
-      ( 
-        whitespace? softbreak whitespace?
-        mixedDelimitedSpreadBlockNoEmphasis  
-        { requireSoftbreakAtEnd = false ; }
-        ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
-        (
-            ( ( softbreak url ) => ( softbreak url ) 
-              { requireSoftbreakAtEnd = true ; }
-            ) 
-          | ( ( softbreak whitespace? smallDashedListItem ) => 
-                  ( softbreak whitespace? smallDashedListItem ) 
-              { requireSoftbreakAtEnd = true ; }
-            )
-		    )*
-      )*
-      {requireSoftbreakAtEnd}? => softbreak
+	    )
+	    
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis 
+		              ( whitespace mixedDelimitedSpreadBlockNoEmphasis )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis 
+				              ( whitespace mixedDelimitedSpreadBlockNoEmphasis )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoEmphasis 
+				  ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
+				)?   	    
+  	  )   	  
     )
+    
   | ( // Other kind of beginning: just text 
+
       mixedDelimitedSpreadBlockNoEmphasis 
       ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
+      
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis 
+		              ( whitespace mixedDelimitedSpreadBlockNoEmphasis )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis 
+				              ( whitespace mixedDelimitedSpreadBlockNoEmphasis )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoEmphasis 
+				  ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
+				)?
+   	    
+   	  )?
 
-
-      (     
-		      ( 		        
-            ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis )
-             => ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoEmphasis )
-            ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
-          )
-		    | 
-		      ( (
-			          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
-			          ) 
-			        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
-			             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
-			          )
-		        )+
-		        softbreak
-		      )
- 	      
-	    )?    
-          
-/*          
-        | ( whitespace? softbreak whitespace?
-            mixedDelimitedSpreadBlockNoEmphasis
-          ) 
-          =>  ( whitespace? softbreak whitespace?
-		            mixedDelimitedSpreadBlockNoEmphasis
-		          )            
-      )*
-*/
-/*
-      ( 
-        whitespace? softbreak whitespace?
-        mixedDelimitedSpreadBlockNoEmphasis
-        ( whitespace mixedDelimitedSpreadBlockNoEmphasis )*
-        (
-            ( ( softbreak url ) => ( softbreak url ) 
-	          ) 
-	        | ( ( softbreak whitespace? smallDashedListItem ) => 
-	                ( softbreak whitespace? smallDashedListItem ) 
-	          )
-		    )*
-      )*
-      softbreak
-*/      
     )
-    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoEmphasis
   ;  
 
 mixedDelimitedSpreadBlockNoEmphasis
@@ -746,77 +734,77 @@ delimitedSpreadblockNoHyphenPair
   | doubleQuotedSpreadBlock
   ;
 
-spreadBlockBodyNoHyphenPair
-@init {
-  boolean requireSoftbreakAtEnd = false ;
-}
+spreadBlockBodyNoHyphenPair  // Relies on: mixedDelimitedSpreadBlockNoHyphenPair
   : 
-    (
-        (
-          (
-			        ( ( softbreak url ) => 
-			              ( softbreak url ) 
-                { requireSoftbreakAtEnd = true ; }
-			        ) 
-			      | ( ( softbreak whitespace? smallDashedListItem ) => 
-			                ( softbreak whitespace? smallDashedListItem ) 
-			           { requireSoftbreakAtEnd = true ; }
-			        )
-				  )+
-		      
-	        ( 
-            whitespace? softbreak whitespace?
-	          mixedDelimitedSpreadBlockNoHyphenPair  
-	          { requireSoftbreakAtEnd = false ; }
-	          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
+    (  // Beginning by URL or smallDashedListItem
+      (
+          ( ( softbreak url ) => ( softbreak url ) 
+          ) 
+        | ( ( softbreak whitespace? smallDashedListItem ) => 
+                  ( softbreak whitespace? smallDashedListItem ) 
+          )
+	    )
+	    
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair 
+		              ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair 
+				              ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoHyphenPair 
+				  ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
+				)?   	    
+  	  )   	  
+    )
+    
+  | ( // Other kind of beginning: just text 
 
-	          (
-				        ( ( softbreak url ) => ( softbreak url ) 
-				           { requireSoftbreakAtEnd = true ; }
-				        ) 
-				      | ( ( softbreak whitespace? smallDashedListItem ) => 
-				                ( softbreak whitespace? smallDashedListItem ) 
-				           { requireSoftbreakAtEnd = true ; }
-				        )
-					  )*
-	        )*
-          {requireSoftbreakAtEnd}? => softbreak
-        )
-      | ( 
-          mixedDelimitedSpreadBlockNoHyphenPair 
-           { requireSoftbreakAtEnd = false ; }
-          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
-          
-          (
-			        ( ( softbreak url ) => 
-			              ( softbreak url ) 
-			           { requireSoftbreakAtEnd = true ; }
-			        ) 
-			      | ( ( softbreak whitespace? smallDashedListItem ) => 
-			                ( softbreak whitespace? smallDashedListItem ) 
-			           { requireSoftbreakAtEnd = true ; }
-			        )
-				  )*
-	        ( 
-            whitespace? softbreak whitespace?
-	          mixedDelimitedSpreadBlockNoHyphenPair
-	           { requireSoftbreakAtEnd = false ; }
-	          ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
+      mixedDelimitedSpreadBlockNoHyphenPair 
+      ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
+      
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair 
+		              ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoHyphenPair 
+				              ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoHyphenPair 
+				  ( whitespace mixedDelimitedSpreadBlockNoHyphenPair )*
+				)?
+   	    
+   	  )?
 
-	          (
-				        ( ( softbreak url ) => ( softbreak url ) 
-				           { requireSoftbreakAtEnd = true ; }
-				        ) 
-				      | ( ( softbreak whitespace? smallDashedListItem ) => 
-				                ( softbreak whitespace? smallDashedListItem ) 
-                  { requireSoftbreakAtEnd = true ; }
-				        )
-					  )*
-	        )*
-          {requireSoftbreakAtEnd}? => softbreak
-        )
-    )   
-    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlockNoHyphenPair
+    )
   ;  
 
 mixedDelimitedSpreadBlockNoHyphenPair
