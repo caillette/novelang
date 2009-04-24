@@ -123,24 +123,27 @@ This is good layout. I'm wordless. Yes, really.
   @my-tag @foo
 --- Paragraph as list item.
 
-  @a @z @e @r @t @y @u @i @o @p @q @s @d @f @g @h @j @k @l @m @w @x @c @v @b @n
-  @a-1 @z-1 @e-1 @r-1 @t-1 @y-1 @u-1 @i-1 @o-1 @p-1 @q-1 @s-1 @d-1 @f-1 @g-1 @h-1
-  @j-1 @k-1 @l-1 @m-1 @w-1 @x-1 @c-1 @v-1 @b-1 @n-1   @my-tag @foo
-Many tags are supported.
+@Hlf-kh @sqdsf  @dfh2-k-JH-ds @21hdf @Ghdfd-jhd  @222kd  @098-HDJD-kjhdkfhsdkj
+@lsdfdsf-313hkjhf-d @KJHKdf-fdfd @dsf @1 @08098083-O08 @09809FD-DFFDFD @aerer-fdfsd
+@0980DF-FDF @sdfdsf @my-tag @foo
+Many tags are supported. It's nice to see it doesn't collapse with the text, even if the result
+is rather strange.
 
-  @my-tag @foo
-<< Paragraphs inside angled bracket pairs have tags.
+  @paragraphs
+<<
+@paragraph-alone
+Paragraphs inside angled bracket may have tags.
 
-The whole group is tagged.
+This can occur for the whole group.
+So a whole citation or whatever distinguishes from the rest in this way.
 
-  @some-tag
-Some paragraph inside may have its own tag
+  @some-tag @Hlf-kh @sqdsf  @my-tag
+This paragraph has several own tags.
 >>
 
 
 @yo
 | Cell row sequence | is also taggable |
-
 
 
 == Anonymous section

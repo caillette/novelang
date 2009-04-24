@@ -78,9 +78,7 @@
   </xsl:template>
 
   <xsl:template match="n:level" >
-    <xsl:call-template name="tags" >
-      <xsl:with-param name="li-class" >tag-level</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="tags" />
     <xsl:apply-templates/>
   </xsl:template>
 
@@ -97,10 +95,8 @@
   </xsl:template>
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
+    <xsl:call-template name="tags" />
     <blockquote>
-      <xsl:call-template name="tags" >
-        <xsl:with-param name="li-class" >tag-paragraph</xsl:with-param>
-      </xsl:call-template>
       <xsl:apply-templates/>
     </blockquote>
   </xsl:template>
@@ -112,11 +108,9 @@
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-regular" >
+    <xsl:call-template name="tags" />
     <p>
-      <xsl:call-template name="tags" >
-        <xsl:with-param name="li-class" >tag-paragraph</xsl:with-param>
-      </xsl:call-template>
-    <xsl:apply-templates/>
+      <xsl:apply-templates/>
     </p>
   </xsl:template>
 
@@ -139,9 +133,7 @@
 
   <xsl:template match="n:paragraph-as-list-item" >
     <p>
-      <xsl:call-template name="tags" >
-        <xsl:with-param name="li-class" >tag-paragraph</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="tags" />
       &mdash;&nbsp;<xsl:apply-templates/>
     </p>
   </xsl:template>
@@ -165,9 +157,7 @@
 
 
   <xsl:template match="n:cell-rows-with-vertical-line" >
-    <xsl:call-template name="tags" >
-      <xsl:with-param name="li-class" >tag-cell-rows</xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="tags" />
     <table>
       <xsl:apply-templates/>
     </table>
@@ -214,13 +204,11 @@
 
 
   <xsl:template name="tags" >
-    <xsl:param name="li-class" />
     <xsl:if test="n:tag" >
       <ul class="tags" >
         <xsl:for-each select="n:tag" >
           <xsl:variable name="inverse" select="colormapper:getInverseRgbDeclaration( . )" />
           <li>
-            <xsl:attribute name="class" ><xsl:value-of select="$li-class" /></xsl:attribute>
             <xsl:attribute name="style" >
               background-color:<xsl:value-of select="colormapper:getColorName( . )" /> ;
               color:<xsl:value-of select="$inverse" /> ;
@@ -230,6 +218,7 @@
           </li>
         </xsl:for-each>
       </ul>
+      <br/>
     </xsl:if>
   </xsl:template>
 

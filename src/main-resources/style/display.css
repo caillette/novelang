@@ -73,18 +73,31 @@ td
 }
 
 
+ul.tags {
+  margin-right: -100px ;
+  margin-bottom : -2px ;
+  list-style-type:none ;
+}
 
+/*
+ ul.tags + blockquote{
+  margin-right: -120px ;
+}
+
+ul.paragraph-inside-angled-brackets-pairs {
+  margin-right: -100px ;
+}
+*/
 
 ul.tags > li
 {
-  list-style-type:none ;
   float: right ;
   border: 1px solid;
   font-size: 9pt ;
-  margin-left: 2px ;
-  padding: 2px 2px 2px 2px ;
-  
+  margin: 2px 0 0 1px ;
+  padding: 1px 2px 1px 2px ;
 }
+
 
 
 
