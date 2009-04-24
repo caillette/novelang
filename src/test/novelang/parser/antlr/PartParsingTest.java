@@ -77,6 +77,25 @@ public class PartParsingTest {
 
 
   @Test
+  public void paragraphsInsideAngledBracketPairsHaveTag()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+        "@t" + BREAK +
+        "<<w" + BREAK +
+        ">>",
+        tree(
+            PART,
+            tree(
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( TAG, "t" ),
+                tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "w" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
   public void partHasAnonymousSectionAndHasBlockquoteWithSingleParagraph()
       throws RecognitionException
   {

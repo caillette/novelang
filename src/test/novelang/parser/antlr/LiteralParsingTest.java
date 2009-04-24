@@ -133,6 +133,24 @@ public class LiteralParsingTest {
     ) ;
   }
 
+
+  @Test @Ignore
+  public void taggedLiteral() throws RecognitionException {
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+        "@t" + BREAK +
+        "<<<" + BREAK +
+        "L" +
+        ">>>",
+        tree(
+            PART,
+            tree( TAG, "t" ),
+            tree( LINES_OF_LITERAL, "L" )
+        )
+    ) ;
+  }
+
+
+
 // =======
 // Fixture
 // =======

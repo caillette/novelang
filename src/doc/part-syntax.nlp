@@ -491,6 +491,8 @@ By now, following Novelang constructs support tags:
 - Level.
 - Paragraph.
 - Paragraph as list item.
+- Paragraphs inside angled bracket pairs.
+- Cell rows with vertical line.
 
 A tag is not meant to be content by itself, but it may help to categorize the content, or provide
 additional information to the stylesheet.

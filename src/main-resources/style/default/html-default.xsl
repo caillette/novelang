@@ -98,6 +98,9 @@
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
     <blockquote>
+      <xsl:call-template name="tags" >
+        <xsl:with-param name="li-class" >tag-paragraph</xsl:with-param>
+      </xsl:call-template>
       <xsl:apply-templates/>
     </blockquote>
   </xsl:template>
@@ -162,6 +165,9 @@
 
 
   <xsl:template match="n:cell-rows-with-vertical-line" >
+    <xsl:call-template name="tags" >
+      <xsl:with-param name="li-class" >tag-cell-rows</xsl:with-param>
+    </xsl:call-template>
     <table>
       <xsl:apply-templates/>
     </table>

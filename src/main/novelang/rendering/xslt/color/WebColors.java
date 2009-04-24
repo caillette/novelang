@@ -196,7 +196,7 @@ public class WebColors {
 
 
   private static class WebColorMapBuilder {
-    final List<WebColor> webColors = Lists.newArrayList() ;
+    final List< WebColor > webColors = Lists.newArrayList() ;
 
     public WebColorMapBuilder put( String name, Color color ) {
       final WebColor webColor = new WebColor( name, color ) ;

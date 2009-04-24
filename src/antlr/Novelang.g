@@ -963,9 +963,10 @@ smallDashedListItem
 // =====
 
 cellRowSequence
-  : cellRow 
-    ( ( WHITESPACE? SOFTBREAK WHITESPACE? ) cellRow )*
-    -> ^( CELL_ROWS_WITH_VERTICAL_LINE cellRow+ )
+  : ( c += tags mediumbreak )?	
+    c += cellRow 
+    ( ( WHITESPACE? SOFTBREAK WHITESPACE? ) c += cellRow )*
+    -> ^( CELL_ROWS_WITH_VERTICAL_LINE $c+ )
   ;
 
 cellRow
@@ -996,7 +997,8 @@ blockQuote
   ;  
 
 literal
-  : LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
+  : ( tags mediumbreak )?
+    LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
     WHITESPACE? SOFTBREAK
     l = literalLines
     SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 

@@ -51,6 +51,22 @@ public class CellParsingTest {
   }
 
   @Test
+  public void cellRowSequence1x1Tagged() throws RecognitionException {
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTreeAfterSeparatorRemoval(
+        "@t" + BREAK +
+        "| x |",
+        tree(
+            CELL_ROWS_WITH_VERTICAL_LINE,
+            tree( TAG, "t" ),
+            tree(
+                CELL_ROW,
+                tree( CELL, tree( WORD_, "x" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
   public void cellRowSequence1x1ContainsImage() throws RecognitionException {
     PARSERMETHOD_CELL_ROW_SEQUENCE.checkTreeAfterSeparatorRemoval(
         "| /foo.jpg |",
