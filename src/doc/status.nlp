@@ -15,10 +15,16 @@ http://novelang.blogspot.com
 
 === Version `0.26.0`
 
---- Introducing tags.
+//This version introduces changes that may break existing stylesheets.//
+
+--- Introducing tags: content annotations.
 
 --- Fixed some grammar bugs with URL, embedded lists and various line break configurations inside
 non-symmetrical delimiters (pairs of solidus, double quotes, hyphen pairs).
+
+--- Default stylesheets moved to top level (no more ``style/default`` directory).
+The ``default`` word becomes the prefix (it was formerly the suffix) so ``html-default.xsl``
+is now ``default-html.xsl``.
 
 
 

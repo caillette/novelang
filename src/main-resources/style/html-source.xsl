@@ -18,7 +18,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
-  <xsl:import href="default/punctuation-US-EN.xsl" />
+  <xsl:import href="punctuation-US-EN.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>

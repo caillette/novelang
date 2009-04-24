@@ -21,7 +21,7 @@
     xmlns:exslt="http://exslt.org/common"
     xmlns:nlx="xalan://novelang.rendering.xslt.Numbering"
  >
-  <xsl:import href="default/pdf-default.xsl" />
+  <xsl:import href="default-pdf.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>

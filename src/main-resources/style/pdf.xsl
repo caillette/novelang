@@ -5,7 +5,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
 >
-  <xsl:import href="default/pdf-default.xsl" />
+  <xsl:import href="default-pdf.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>

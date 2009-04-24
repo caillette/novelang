@@ -3,25 +3,25 @@
 
   <!ENTITY % ISOnum PUBLIC
       "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
-      "../ISOnum.pen"
+      "ISOnum.pen"
   >
   %ISOnum;
 
   <!ENTITY % ISOpub PUBLIC
       "ISO 8879:1986//ENTITIES Publishing//EN//XML"
-      "../ISOpub.pen"
+      "ISOpub.pen"
   >
 
   %ISOpub;
   <!ENTITY % ISOlat1 PUBLIC
       "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
-      "../ISOlat1.pen"
+      "ISOlat1.pen"
   >
   %ISOlat1;
 
   <!ENTITY % Fo PUBLIC
       "http://www.w3.org/1999/XSL/Format"
-      "../fo.dtd"
+      "fo.dtd"
   >
   %Fo;
 
@@ -38,7 +38,7 @@
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
     xmlns:nlx="xalan://novelang.rendering.xslt"
 >
-  <xsl:import href="default/punctuation-US-EN.xsl" />
+  <xsl:import href="punctuation-US-EN.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>

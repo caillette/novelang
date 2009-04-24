@@ -3,19 +3,19 @@
 
     <!ENTITY % ISOnum PUBLIC
         "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
-        "../ISOnum.pen"
+        "ISOnum.pen"
     >
     %ISOnum;
 
     <!ENTITY % ISOpub PUBLIC
         "ISO 8879:1986//ENTITIES Publishing//EN//XML"
-        "../ISOpub.pen"
+        "ISOpub.pen"
     >
     %ISOpub;
 
     <!ENTITY % ISOlat1 PUBLIC
         "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
-        "../ISOlat1.pen"
+        "ISOlat1.pen"
     >
     %ISOlat1;
 
@@ -31,7 +31,7 @@
     extension-element-prefixes="colormapper"
     exclude-result-prefixes="nlx"
 >
-  <xsl:import href="default/punctuation-US-EN.xsl" />
+  <xsl:import href="punctuation-US-EN.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
