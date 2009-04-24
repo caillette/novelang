@@ -21,17 +21,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * Convenient access to <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" >CSS colors</a>.
+ * Factory for getting {@link WebColor}s.
  *
  * @author Laurent Caillette
  */
@@ -210,22 +208,22 @@ public class WebColors {
   }
 
   private static boolean containsSame(
-      Iterable<WebColor> namedColors,
+      Iterable< WebColor> namedColors,
       WebColor webColor
   ) {
     for( WebColor some : namedColors ) {
-      if( some.color.equals( webColor.color ) ) {
+      if( some.getColor().equals( webColor.getColor() ) ) {
         return true ;
       }
     }
     return false ;
   }
 
-  public static interface ColorCycler {
+  private static interface ColorCycler {
     WebColor getNext() ;
   }
 
-  public static ColorCycler createColorCycler() {
+  private static ColorCycler createColorCycler() {
     return new ColorCycler() {
 
       Iterator< WebColor > namedColorIterator = null ;
@@ -246,7 +244,7 @@ public class WebColors {
     } ;
   }
 
-  public static Color getInverseColor( Color original ) {
+  protected static Color getInverseColor( Color original ) {
     return new Color(
         ( original.getRed() + 128 ) % 256,
         ( original.getGreen() + 128 ) % 256,
@@ -254,48 +252,8 @@ public class WebColors {
     ) ;
   }
 
-  public static String getRgbDeclaration( Color color ) {
+  protected static String getRgbDeclaration( Color color ) {
     return "rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")" ;
-  }
-
-  public static class WebColor {
-    public final String name ;
-    public final Color color ;
-
-    public WebColor( String name, Color color ) {
-      Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
-      this.name = name ;
-      this.color = Preconditions.checkNotNull( color ) ;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public Color getColor() {
-      return color;
-    }
-
-    public Color getInverseColor() {
-      return WebColors.getInverseColor( color ) ;
-    }
-
-    public String getRgbDeclaration() {
-      return WebColors.getRgbDeclaration( color ) ;
-    }
-
-    public String getInverseRgbDeclaration() {
-      return WebColors.getRgbDeclaration( getInverseColor() ) ;
-    }
-
-    @Override
-    public String toString() {
-      return ClassUtils.getShortClassName( getClass() ) + "['" + name + "', " + color + "]" ;
-    }
-  }
-
-  public interface ColorMapper {
-    WebColor getColor( String identifier ) ;
   }
 
   public static ColorMapper createColorMapper() {

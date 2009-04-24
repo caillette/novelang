@@ -16,23 +16,12 @@
  */
 package novelang.rendering.xslt.color;
 
-import org.junit.Test;
-import org.junit.Assert;
-
 /**
- * Tests for {@link WebColors}.
+ * Given a name, returns always the same {@link WebColor}, with different names giving
+ * different colors cycled from internal predefined list.
  *
  * @author Laurent Caillette
  */
-public class WebColorsTest {
-
-  @Test
-  public void cycleOverTwoColors() {
-    final ColorMapper colorMapper = WebColors.createColorMapper() ;
-    final WebColor color1 = colorMapper.getColor( "1" ) ;
-    final WebColor color2 = colorMapper.getColor( "2" ) ;
-    final WebColor color1_1 = colorMapper.getColor( "1" ) ;
-    Assert.assertSame( color1, color1_1 ) ;
-    Assert.assertNotSame( color1, color2 ) ;
-  }
+public interface ColorMapper {
+  WebColor getColor( String identifier ) ;
 }
