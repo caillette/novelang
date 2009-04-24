@@ -937,7 +937,8 @@ mixedDelimitedMonoblockNoHyphenPair
 // =====
 
 bigDashedListItem
-  : HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
+  : ( i += tags mediumbreak )?	
+    HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
     ( i += whitespace i += mixedDelimitedSpreadBlock )*
     ( i += whitespace? i += softbreak 
       ( 

@@ -401,6 +401,19 @@ public class ParagraphParsingTest {
     );
   }
 
+  @Test
+  public void bigListItemHasTag() throws RecognitionException {
+    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTreeAfterSeparatorRemoval(
+        "@foo" + BREAK +
+        "--- w",
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+            tree( TAG, "foo" ),
+            tree( WORD_, "w" )
+            )
+    );
+  }
+
 
 
 
