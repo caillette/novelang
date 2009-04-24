@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.ClassUtils;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -33,6 +36,8 @@ import com.google.common.collect.Maps;
  * @author Laurent Caillette
  */
 public class WebColors {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( WebColors.class ) ;
 
   private static final Iterable< WebColor > COLORS ;
 
@@ -194,12 +199,12 @@ public class WebColors {
 
     public WebColorMapBuilder put( String name, Color color ) {
       final WebColor webColor = new WebColor( name, color ) ;
-      if( containsSame( webColors, webColor ) ) {
+      if( ! containsSame( webColors, webColor ) ) {
         webColors.add( webColor ) ;
       }
       return this ;
     }
-    public final Iterable<WebColor> build() {
+    public final Iterable< WebColor > build() {
       return ImmutableList.copyOf( webColors ) ;
     }
   }
@@ -222,12 +227,21 @@ public class WebColors {
 
   public static ColorCycler createColorCycler() {
     return new ColorCycler() {
-      Iterator<WebColor> namedColorIterator = null ;
+
+      Iterator< WebColor > namedColorIterator = null ;
+
       public WebColor getNext() {
         if( namedColorIterator == null || ! namedColorIterator.hasNext() ) {
           namedColorIterator = COLORS.iterator() ;
         }
-        return namedColorIterator.next() ;
+        final WebColor webColor = namedColorIterator.next() ;
+        LOGGER.debug( "{} returned {}", this, webColor ) ;
+        return webColor;
+      }
+
+      @Override
+      public String toString() {
+        return ClassUtils.getShortClassName( getClass() ) + System.identityHashCode( this ) ;
       }
     } ;
   }
@@ -249,7 +263,7 @@ public class WebColors {
     public final Color color ;
 
     public WebColor( String name, Color color ) {
-      Preconditions.checkArgument( StringUtils.isBlank( name ) ) ;
+      Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
       this.name = name ;
       this.color = Preconditions.checkNotNull( color ) ;
     }
@@ -274,6 +288,10 @@ public class WebColors {
       return WebColors.getRgbDeclaration( getInverseColor() ) ;
     }
 
+    @Override
+    public String toString() {
+      return ClassUtils.getShortClassName( getClass() ) + "['" + name + "', " + color + "]" ;
+    }
   }
 
   public interface ColorMapper {
