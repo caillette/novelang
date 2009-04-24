@@ -1,6 +1,6 @@
 == Status and history
 
-Novelang is stable, with more thant 350 automated tests. 
+Novelang is stable, with more thant 370 automated tests. 
 It generates a PDF document of 730 pages (330,000 words) in 15 seconds with an Intel dual-core CPU 
 at `2.66 GHz`. No optimization was performed yet.
 
@@ -12,6 +12,15 @@ Keep informed reading the
   "blog"
 http://novelang.blogspot.com
 . 
+
+=== Version `0.26.0`
+
+--- Introducing tags.
+
+--- Fixed some grammar bugs with URL, embedded lists and various line break configurations inside
+non-symmetrical delimiters (pairs of solidus, double quotes, hyphen pairs).
+
+
 
 === Version `0.25.0`
 

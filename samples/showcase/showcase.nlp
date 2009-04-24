@@ -109,11 +109,24 @@ This is a paragraph starting here...
    
 == Tags
 
-  @my-tag
-=== Level with one tag
+  @some-tag
+=== Tagged level
 
   @my-tag @some-tag
-Paragraph with two tags.
+This is a tagged paragraph.
+
+  @a-very-long-tag-taking-so-much-space
+  @and-yet-another-very-long-tag-taking-so-much-space
+Paragraph with many space-consuming tags. Let's see the content floating elegantly. This is awesome.
+This is good layout. I'm wordless. Yes, really.
+
+  @my-tag @foo
+--- Paragraph as list item.
+
+  @a @z @e @r @t @y @u @i @o @p @q @s @d @f @g @h @j @k @l @m @w @x @c @v @b @n
+  @a-1 @z-1 @e-1 @r-1 @t-1 @y-1 @u-1 @i-1 @o-1 @p-1 @q-1 @s-1 @d-1 @f-1 @g-1 @h-1
+  @j-1 @k-1 @l-1 @m-1 @w-1 @x-1 @c-1 @v-1 @b-1 @n-1   @my-tag @foo
+--- Many tags are supported.
 
 
 

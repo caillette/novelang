@@ -24,12 +24,25 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
+    xmlns:xalan="http://xml.apache.org/xalan"
+    xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
+    xmlns:nlx="xalan://novelang.rendering.xslt"
+    xmlns:colormapper="novelang.rendering.xslt.color.ColorMapper"
+    extension-element-prefixes="colormapper"
+    exclude-result-prefixes="nlx"
 >
   <xsl:import href="default/punctuation-US-EN.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
   <xsl:param name="charset"/>
+
+  <xalan:component
+      prefix="colormapper"
+      functions="getColorName getInverseRgbDeclaration"
+  >
+      <xalan:script lang="javaclass" src="xalan://novelang.rendering.xslt.color.ColorMapper" />
+  </xalan:component>
 
 
   <xsl:output method="xml" />
@@ -65,16 +78,10 @@
   </xsl:template>
 
   <xsl:template match="n:level" >
-    <xsl:if test="n:tag" >
-      <ul class="tags" >
-        <xsl:for-each select="n:tag" >
-          <li class="tag-level" >
-            <xsl:value-of select="." />
-          </li>
-        </xsl:for-each>
-      </ul>
-    </xsl:if>
-    <xsl:apply-templates/>    
+    <xsl:call-template name="tags" >
+      <xsl:with-param name="li-class" >tag-level</xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="//n:level/n:level-title" >
@@ -103,15 +110,9 @@
 
   <xsl:template match="n:paragraph-regular" >
     <p>
-      <xsl:if test="n:tag" >
-        <ul class="tags" >
-          <xsl:for-each select="n:tag" >
-            <li class="tag-paragraph" >
-              <xsl:value-of select="." />
-            </li>
-          </xsl:for-each>
-        </ul>
-      </xsl:if>
+      <xsl:call-template name="tags" >
+        <xsl:with-param name="li-class" >tag-paragraph</xsl:with-param>
+      </xsl:call-template>
     <xsl:apply-templates/>
     </p>
   </xsl:template>
@@ -135,7 +136,10 @@
 
   <xsl:template match="n:paragraph-as-list-item" >
     <p>
-    &mdash;&nbsp;<xsl:apply-templates/>
+      <xsl:call-template name="tags" >
+        <xsl:with-param name="li-class" >tag-paragraph</xsl:with-param>
+      </xsl:call-template>
+      &mdash;&nbsp;<xsl:apply-templates/>
     </p>
   </xsl:template>
   
@@ -201,5 +205,27 @@
       <xsl:apply-templates/>
     </li>
   </xsl:template> 
+
+
+  <xsl:template name="tags" >
+    <xsl:param name="li-class" />
+    <xsl:if test="n:tag" >
+      <ul class="tags" >
+        <xsl:for-each select="n:tag" >
+          <xsl:variable name="inverse" select="colormapper:getInverseRgbDeclaration( . )" />
+          <li>
+            <xsl:attribute name="class" ><xsl:value-of select="$li-class" /></xsl:attribute>
+            <xsl:attribute name="style" >
+              background-color:<xsl:value-of select="colormapper:getColorName( . )" /> ;
+              color:<xsl:value-of select="$inverse" /> ;
+              border-color:<xsl:value-of select="$inverse" />
+            </xsl:attribute>
+            <xsl:value-of select="." />
+          </li>
+        </xsl:for-each>
+      </ul>
+    </xsl:if>
+  </xsl:template>
+
 
 </xsl:stylesheet>

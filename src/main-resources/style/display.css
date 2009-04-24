@@ -79,23 +79,12 @@ ul.tags > li
 {
   list-style-type:none ;
   float: right ;
-  border-style: solid;
-  border-width: 1px;
+  border: 1px solid;
   font-size: 9pt ;
   margin-left: 2px ;
-}
-
-
-
-li.tag-paragraph
-{
-  /*background-color: mediumpurple ;*/
   padding: 2px 2px 2px 2px ;
+  
 }
 
-li.tag-level
-{
-  /*background-color: greenyellow;*/
-  padding: 2px 2px 2px 2px ;
-}
+
 

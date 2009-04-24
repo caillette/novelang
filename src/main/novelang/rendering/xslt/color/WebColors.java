@@ -22,11 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.base.Preconditions;
 
 /**
  * Factory for getting {@link WebColor}s.
@@ -41,16 +44,16 @@ public class WebColors {
 
   static {
     COLORS = new WebColorMapBuilder()
-    .put( "aliceblue",      new Color( 240, 248, 255 ) )
-    .put( "antiquewhite",   new Color( 250, 235, 215 ) )
-    .put( "aqua",           new Color(   0, 255, 255 ) )
-    .put( "aquamarine",     new Color( 127, 255, 212 ) )
-    .put( "azure",          new Color( 240, 255, 255 ) )
-    .put( "beige",          new Color( 245, 245, 220 ) )
-    .put( "bisque",         new Color( 255, 228, 196 ) )
-    .put( "black",          new Color(   0,   0,   0 ) )
-    .put( "blanchedalmond", new Color( 255, 235, 205 ) )
-    .put( "blue", new Color( 0, 0, 255 ) )
+        .put( "aliceblue",      new Color( 240, 248, 255 ) )
+        .put( "antiquewhite",   new Color( 250, 235, 215 ) )
+        .put( "aquamarine",     new Color( 127, 255, 212 ) )
+        .put( "aqua",           new Color(   0, 255, 255 ) )
+        .put( "azure",          new Color( 240, 255, 255 ) )
+        .put( "beige",          new Color( 245, 245, 220 ) )
+        .put( "bisque",         new Color( 255, 228, 196 ) )
+        .put( "black",          new Color(   0,   0,   0 ) )
+        .put( "blanchedalmond", new Color( 255, 235, 205 ) )
+        .put( "blue", new Color( 0, 0, 255 ) )
     .put( "blueviolet", new Color( 138, 43, 226 ) )
     .put( "brown", new Color( 165, 42, 42 ) )
     .put( "burlywood", new Color( 222, 184, 135 ) )
@@ -239,7 +242,10 @@ public class WebColors {
 
       @Override
       public String toString() {
-        return ClassUtils.getShortClassName( getClass() ) + System.identityHashCode( this ) ;
+        return
+            ClassUtils.getShortClassName( getClass() ) +
+            "@" + System.identityHashCode( this )
+        ;
       }
     } ;
   }
@@ -256,8 +262,8 @@ public class WebColors {
     return "rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")" ;
   }
 
-  public static ColorMapper createColorMapper() {
-    return new ColorMapper() {
+  public static InternalColorMapper createColorMapper() {
+    return new InternalColorMapper() {
       final ColorCycler colorCycler = createColorCycler() ;
       final Map< String, WebColor> map = Maps.newHashMap() ;
       public WebColor getColor( String identifier ) {
@@ -269,7 +275,85 @@ public class WebColors {
           return newWebColor;
         }
       }
+      @Override
+      public String toString() {
+        return
+            ClassUtils.getShortClassName( getClass() ) +
+            "@" + System.identityHashCode( this )
+        ;
+      }
     } ;
   }
 
+  /**
+   * Workaround method because Xalan doesn't seem to handle instance method calls properly.
+   */
+  public static String getMappedColorName(
+      Object colorMapperObject,
+      Object colorIdentifierObject
+  ) {
+    LOGGER.debug( "colorMapper: {}", ObjectUtils.toString( colorMapperObject ) ) ;
+    LOGGER.debug(
+        "colorIdentifier: {} {}",
+        ObjectUtils.toString( colorIdentifierObject ),
+        colorIdentifierObject == null ? "null" : colorIdentifierObject.getClass().getName()
+    ) ;
+    final InternalColorMapper colorMapper = ( InternalColorMapper ) colorMapperObject ;
+    final String colorIdentifier = ( String ) colorIdentifierObject ;
+    final String colorName = colorMapper.getColor( colorIdentifier ).getName() ;
+    LOGGER.debug( "colorName: {}", colorName ) ;
+    return colorName ;
+  }
+
+  /**
+   * Given a name, returns always the same {@link novelang.rendering.xslt.color.WebColors.WebColor}, with different names giving
+   * different colors cycled from internal predefined list.
+   *
+   * @author Laurent Caillette
+   */
+  protected static interface InternalColorMapper {
+    WebColor getColor( String identifier ) ;
+  }
+
+  /**
+   * A color with a
+   * <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" >CSS-friendly name</a>
+   *
+   * @author Laurent Caillette
+  */
+  protected static class WebColor {
+    private final String name ;
+    private final Color color ;
+
+    public WebColor( String name, Color color ) {
+      Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
+      this.name = name ;
+      this.color = Preconditions.checkNotNull( color ) ;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public Color getColor() {
+      return color;
+    }
+
+    public Color getInverseColor() {
+      return WebColors.getInverseColor( color ) ;
+    }
+
+    public String getRgbDeclaration() {
+      return WebColors.getRgbDeclaration( color ) ;
+    }
+
+    public String getInverseRgbDeclaration() {
+      return WebColors.getRgbDeclaration( getInverseColor() ) ;
+    }
+
+    @Override
+    public String toString() {
+      return ClassUtils.getShortClassName( getClass() ) + "['" + name + "', " + color + "]" ;
+    }
+  }
 }

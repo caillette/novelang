@@ -477,6 +477,51 @@ SVG documents may reference an external entity with a public identifier like
 Other external entities are not supported yet.
 
 
+=== Tags
+
+XML:element: ``n:tag``
+
+A tag is a textual hint attached to some piece of a source document.
+It is made of a commercial at ``@``, immediately followed by letters, digts, and hyphen minus
+(hyphen minus may only appear between letters and digits and there cannot be two consecutive ones).
+The tag appears immediately before tagged content (no more than one line break separating them).
+ 
+
+By now, following Novelang constructs support tags:
+- Level.
+- Paragraph.
+- Paragraph as list item.
+
+A tag is not meant to be content by itself, but it may help to categorize the content, or provide
+additional information to the stylesheet.
+
+With Novelang default stylesheet for HTML, the tags are rendered as tiny colorful floating
+rectangles in the margin. Default stylesheet for PDF doesn't render tags at all.
+
+Tag usage sample: 
+
+<<<
+  @my-tag
+== Tagged level
+
+  @my-tag @some-other-tag
+My tagged paragraph.
+>>>
+
+The XML structure of source document above looks like this:
+
+<<<
+n:part
+ + n:level
+    + n:tag "my-tag"
+    + n:level-title "Tagged level"
+    + n:regular-paragraph
+       + n:tag "my-tag"
+       + n:tag "some-other-tag"
+       + "My tagged paragraph."
+>>>
+
+
 === Escaped characters
 
 For displaying character that have a special meaning in the rendered documents, they must be escaped.

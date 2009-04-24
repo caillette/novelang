@@ -16,12 +16,42 @@
  */
 package novelang.rendering.xslt.color;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * Given a name, returns always the same {@link WebColor}, with different names giving
- * different colors cycled from internal predefined list.
+ * Xalan extension for attributing colors from names.
+ *
+ * @see novelang.rendering.xslt.color.WebColors.WebColor
  *
  * @author Laurent Caillette
  */
-public interface ColorMapper {
-  WebColor getColor( String identifier ) ;
+public class ColorMapper {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( ColorMapper.class ) ;
+
+  private final WebColors.InternalColorMapper colorMapper = WebColors.createColorMapper() ;
+
+  public ColorMapper() {
+    LOGGER.debug( "Initialized." ) ;    
+  }
+
+  public String getColorName( String colorIdentifier ) {
+    final String colorName = colorMapper.getColor( colorIdentifier ).getName() ;
+    LOGGER.debug( "getColorName( {} ) -> {}", colorIdentifier, colorName ) ;
+    return colorName;
+  }
+
+  public String getInverseRgbDeclaration( String colorIdentifier ) {
+    final WebColors.WebColor originalColor = colorMapper.getColor( colorIdentifier ) ;
+    final String inverseColorDeclaration = originalColor.getInverseRgbDeclaration() ;
+    LOGGER.debug(
+        "getRgbDeclarationForInverseColor( {} ) -> {}",
+        colorIdentifier,
+        inverseColorDeclaration
+    ) ;
+    return inverseColorDeclaration ;
+  }
+
+
 }

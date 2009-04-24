@@ -28,10 +28,10 @@ public class WebColorsTest {
 
   @Test
   public void cycleOverTwoColors() {
-    final ColorMapper colorMapper = WebColors.createColorMapper() ;
-    final WebColor color1 = colorMapper.getColor( "1" ) ;
-    final WebColor color2 = colorMapper.getColor( "2" ) ;
-    final WebColor color1_1 = colorMapper.getColor( "1" ) ;
+    final WebColors.InternalColorMapper colorMapper = WebColors.createColorMapper() ;
+    final WebColors.WebColor color1 = colorMapper.getColor( "1" ) ;
+    final WebColors.WebColor color2 = colorMapper.getColor( "2" ) ;
+    final WebColors.WebColor color1_1 = colorMapper.getColor( "1" ) ;
     Assert.assertSame( color1, color1_1 ) ;
     Assert.assertNotSame( color1, color2 ) ;
   }
