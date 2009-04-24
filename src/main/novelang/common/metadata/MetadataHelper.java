@@ -111,21 +111,25 @@ public class MetadataHelper {
    */
   public static SyntacticTree createMetadataDecoration( SyntacticTree tree ) {
 
-    final Set< String > tagset = findTags( tree ) ;
-    final Iterable< SyntacticTree > tagsAsTrees =
-        Iterables.transform( Ordering.natural().sortedCopy( tagset ), STRING_TO_TAG ) ;
-
-    return new SimpleTree(
-        NodeKind._META.name(),
+    final List< SyntacticTree > children = Lists.newArrayList() ;
+    children.add(
         new SimpleTree(
             NodeKind._WORD_COUNT.name(),
             new SimpleTree( "" + countWords( tree ) )
-        ),
-        new SimpleTree(
-            NodeKind._TAGS.name(),
-            tagsAsTrees
         )
-    );
+    ) ;
+
+    final Set< String > tagset = findTags( tree ) ;
+    if( tagset.size() > 0 ) {
+      final Iterable< SyntacticTree > tagsAsTrees ;
+      tagsAsTrees = Iterables.transform( Ordering.natural().sortedCopy( tagset ), STRING_TO_TAG ) ;
+      Iterables.addAll( children, tagsAsTrees ) ;
+    }
+
+    return new SimpleTree(
+        NodeKind._META.name(),
+        children
+    ) ;
   }
 
   private static final Function< String, SyntacticTree > STRING_TO_TAG =
