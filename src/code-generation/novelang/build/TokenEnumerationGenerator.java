@@ -68,10 +68,10 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_META_TIMESTAMP" ),
       new Item( "_META" ),
       new Item( "_WORD_COUNT" ),
+      new Item( "_TAGS" ),
       new Item( "_IMAGE_WIDTH" ),
       new Item( "_IMAGE_HEIGHT" ),
       new Item( "_URL" ),
-      new Item( "_LINK_NAME" ),
       new Item( "_PLACEHOLDER_" )
   ) ;
 
