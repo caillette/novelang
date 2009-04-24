@@ -112,6 +112,7 @@ public class MetadataHelper {
   public static SyntacticTree createMetadataDecoration( SyntacticTree tree ) {
 
     final List< SyntacticTree > children = Lists.newArrayList() ;
+
     children.add(
         new SimpleTree(
             NodeKind._WORD_COUNT.name(),
@@ -123,7 +124,8 @@ public class MetadataHelper {
     if( tagset.size() > 0 ) {
       final Iterable< SyntacticTree > tagsAsTrees ;
       tagsAsTrees = Iterables.transform( Ordering.natural().sortedCopy( tagset ), STRING_TO_TAG ) ;
-      Iterables.addAll( children, tagsAsTrees ) ;
+      final SyntacticTree tagsTree = new SimpleTree( _TAGS.name(), tagsAsTrees ) ;
+      children.add( tagsTree ) ;
     }
 
     return new SimpleTree(

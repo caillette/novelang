@@ -34,7 +34,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
 public class MetadataHelperTest {
 
   @Test
-  public void generateDocumentMetadata() {
+  public void generateDocumentMetadataNoTags() {
 
     final SyntacticTree tree = tree( BOOK,
         tree( NodeKind.PARAGRAPH_REGULAR,
@@ -48,6 +48,32 @@ public class MetadataHelperTest {
     TreeFixture.assertEqualsNoSeparators(
         tree( _META,
             tree( _WORD_COUNT, "2" )
+        ),
+        meta
+    ) ;
+
+  }
+
+  @Test
+  public void generateDocumentMetadataIncludingTags() {
+
+    final SyntacticTree tree = tree( BOOK,
+        tree( NodeKind.PARAGRAPH_REGULAR,
+            tree( TAG, "t" ),
+            tree( WORD_, "foo" ),
+            tree( WORD_, "bar" )
+        )
+    ) ;
+
+    final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree ) ;
+
+    TreeFixture.assertEqualsNoSeparators(
+        tree( _META,
+            tree( _WORD_COUNT, "2" ),
+            tree(
+                _TAGS,
+                tree( TAG, "t" )
+            )
         ),
         meta
     ) ;
