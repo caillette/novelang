@@ -71,7 +71,16 @@
       </head>
     <body>
 
-    <xsl:apply-templates />
+      <xsl:apply-templates />
+
+      <xsl:if test="//n:meta/n:tags" >
+        <hr/>
+        <p class="tag-summary" >
+          <xsl:for-each select="//n:meta/n:tags">
+            <xsl:call-template name="tags" />
+          </xsl:for-each>
+        </p>
+      </xsl:if>
 
     </body>
     </html>

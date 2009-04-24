@@ -16,7 +16,10 @@
  */
 package novelang.common.metadata;
 
+import java.util.Set;
+
 import org.junit.Test;
+import org.junit.Assert;
 import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
@@ -48,6 +51,31 @@ public class MetadataHelperTest {
         ),
         meta
     ) ;
+
+  }
+
+  @Test
+  public void findTags() {
+    final SyntacticTree tree = tree(
+        BOOK,
+
+        tree(
+            _LEVEL,
+            tree( TAG, "t1" ),
+            tree( PARAGRAPH_REGULAR,
+                tree( TAG, "t2" ),
+                tree( TAG, "t3" ),
+                tree( WORD_, "foo" ),
+                tree( WORD_, "bar" )
+            )
+        )
+    ) ;
+
+    final Set< String > tags = MetadataHelper.findTags( tree ) ;
+    Assert.assertEquals( 3, tags.size() ) ;
+    Assert.assertTrue( tags.contains( "t1" ) ) ;
+    Assert.assertTrue( tags.contains( "t2" ) ) ;
+    Assert.assertTrue( tags.contains( "t3" ) ) ;
 
   }
 }

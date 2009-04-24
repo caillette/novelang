@@ -18,6 +18,8 @@
 package novelang.common.metadata;
 
 import java.nio.charset.Charset;
+import java.util.Set;
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
@@ -27,6 +29,14 @@ import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Tree;
 import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.base.Function;
+import com.google.common.base.Nullable;
 
 /**
  * @author Laurent Caillette
@@ -38,7 +48,7 @@ public class MetadataHelper {
   public static int countWords( Tree tree ) {
     if( tree instanceof SyntacticTree ) {
       final SyntacticTree syntacticTree = ( SyntacticTree ) tree ;
-      if( NodeKind.WORD_.isRoot( syntacticTree ) ) {
+      if( WORD_.isRoot( syntacticTree ) ) {
         return 1 ;
       }
     }
@@ -51,6 +61,25 @@ public class MetadataHelper {
     } else {
       return 0 ;
     }
+  }
+
+  /**
+   * Returns the set of values for {@link NodeKind#TAG}s.
+   *
+   * @return a non-null, possibly empty set.
+   */
+  public static Set< String > findTags( SyntacticTree tree ) {
+    if( tree.isOneOf( WORD_, WORD_AFTER_CIRCUMFLEX_ACCENT, _STYLE ) ) { 
+      return ImmutableSet.of() ;
+    }
+    if( tree.isOneOf( TAG ) ) {
+      return ImmutableSet.of( tree.getChildAt( 0 ).getText() ) ;
+    }
+    final Set tagset = Sets.newLinkedHashSet() ;
+    for( SyntacticTree child : tree.getChildren() ) {
+        tagset.addAll( findTags( child ) ) ;
+    }
+    return tagset ;
   }
 
   public static final DateTimeFormatter TIMESTAMP_FORMATTER =
@@ -81,12 +110,29 @@ public class MetadataHelper {
    * @return the same tree with a new first {@link NodeKind#_META}.
    */
   public static SyntacticTree createMetadataDecoration( SyntacticTree tree ) {
-    return new SimpleTree(  
+
+    final Set< String > tagset = findTags( tree ) ;
+    final Iterable< SyntacticTree > tagsAsTrees =
+        Iterables.transform( Ordering.natural().sortedCopy( tagset ), STRING_TO_TAG ) ;
+
+    return new SimpleTree(
         NodeKind._META.name(),
         new SimpleTree(
             NodeKind._WORD_COUNT.name(),
             new SimpleTree( "" + countWords( tree ) )
+        ),
+        new SimpleTree(
+            NodeKind._TAGS.name(),
+            tagsAsTrees
         )
     );
   }
+
+  private static final Function< String, SyntacticTree > STRING_TO_TAG =
+      new Function< String, SyntacticTree >() {
+        public SyntacticTree apply( String tagname ) {
+          return new SimpleTree( TAG, new SimpleTree( tagname ) ) ;
+        }
+      }
+  ;
 }

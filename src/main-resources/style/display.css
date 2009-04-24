@@ -79,16 +79,6 @@ ul.tags {
   list-style-type:none ;
 }
 
-/*
- ul.tags + blockquote{
-  margin-right: -120px ;
-}
-
-ul.paragraph-inside-angled-brackets-pairs {
-  margin-right: -100px ;
-}
-*/
-
 ul.tags > li
 {
   float: right ;
@@ -96,6 +86,18 @@ ul.tags > li
   font-size: 9pt ;
   margin: 2px 0 0 1px ;
   padding: 1px 2px 1px 2px ;
+}
+
+p.tag-summary + ul.tags {
+  text-indent : 0 ;
+  margin-right: 0 ;
+  margin-left: 0 ;
+}
+
+p.tag-summary + ul.tags > li {
+  float: left ;
+  font-size: 10pt ;
+  margin: 4px 4px 4px 4px ;
 }
 
 
