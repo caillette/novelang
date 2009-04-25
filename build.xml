@@ -631,14 +631,14 @@
       </fileset>
 
       <zipfileset dir="${target.documentation.site.dir}" prefix="documentation" />
-      <zipfileset dir="${target.javadoc.dir}" prefix="javadoc" />
+      <!--<zipfileset dir="${target.javadoc.dir}" prefix="javadoc" />-->
 
     </zip>
 
   </target>
 
   <target name="build-distribution"
-      depends="clean-compile-runtests, generate-documentation, javadoc, create-jar, package-distribution"
+      depends="clean-compile-runtests, generate-documentation, create-jar, package-distribution"
   />
 
 </project>
