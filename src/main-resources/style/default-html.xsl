@@ -65,7 +65,14 @@
 
         <title><xsl:value-of select="$filename"/></title>
 
-        <style type="text/css" />
+        <script type="text/javascript" src="/javascript/tags.js" />
+        <script type="text/javascript"> //<![CDATA[
+
+          $( document ).ready( function() {
+            initialize() ;
+            showMessage( "Initialization complete." ) ;
+          } ) ;
+        //]]></script>
 
 
       </head>

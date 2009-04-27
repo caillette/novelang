@@ -1,0 +1,276 @@
+<!-- Demo / playground for tags.js: hide tags dynamically.-->
+
+<html>
+<head>
+
+  <style type="text/css" >
+
+body {
+  width : 400pt ;
+  background : #dddddd ;
+  font-size : 12pt ;
+}
+
+div .tag-scope {
+  border : 1px solid ;
+  margin : 2px 2px 2px 10px ;
+  padding : 0 0 0 4px ;
+}
+
+h1 {
+  font-size : 15pt ;
+}
+
+h2 {
+  font-size : 13pt ;
+}
+
+ul.tags > li
+{
+  float: right ;
+  border: 1px solid;
+  font-size: 9pt ;
+  margin: 2px 4px 0 1px ;
+  padding: 1px 2px 1px 2px ;
+}
+
+table {
+  width : 800pt ;
+  vertical-align : text-top ;
+}
+
+
+  </style>
+
+
+  <script type="text/javascript" src="tags.js"></script>
+  <script type="text/javascript"> //<![CDATA[
+
+    $( document ).ready( function() {
+      initialize() ;
+      showMessage( "Initialization complete." ) ;
+//      runDemos() ;
+    } ) ;
+
+  function runDemos() {
+    var domElement = $(
+        "<div class='tag-scope' >" +
+          "<ul class='tags' >" +
+            "<li>t1</li>" +
+            "<li>t2</li>" +
+          "</ul>" +
+          "<p>demo element</p>" +
+        "</div>"
+    ).get() ;
+    var wrappedDomElement = $( domElement ).wrap( "<div class='tag-scope' ></div>" ) ;
+    var tags1 = [ "t1" ] ;
+    var tags23 = [ "t2", "t3" ] ;
+    var tags3 = [ "t3" ] ;
+
+    $( "#demo-containsSomeOf" )
+        .append( domElement )
+        .append( "Contains [" + tags1.toString() + "]: " + isElementTagged( domElement, tags1, "" ) )
+        .append( "<br/>" )
+        .append( "Contains [" + tags23.toString() + "]: " + isElementTagged( domElement, tags23, "" ) )
+        .append( "<br/>" )
+        .append( "Contains [" + tags3.toString() + "]: " + isElementTagged( domElement, tags3, "" ) )
+        .append( "<br/>" )
+        .append( "Contains [" + tags1.toString() + "]: " + isElementTagged( wrappedDomElement, tags1, "" ) )
+        .append( "<br/>" )
+        ;
+
+    $( "#demo-isTagscopeContainer" )
+      .append( "isTagscopeContainer( div .tag-scope ) = " + isPossibleTagscopeContainer( domElement ) )
+      .append( "<br/>" )
+      .append( "isTagscopeContainer( ul ) = " + isPossibleTagscopeContainer( $( "<ul/>").get() ) )
+      .append( "<br/>" )
+      .append( "isTagscopeContainer( p ) = " + isPossibleTagscopeContainer( $( "<p/>").get() ) )
+      .append( "<br/>" )
+      .append( "isTagscopeContainer( #messages ) = " + isPossibleTagscopeContainer( $( "#messages").get() ) )
+    ;
+
+  }
+
+
+
+  //]]</script>
+</head>
+
+<body>
+
+  <div class="demo">
+    <p id="demo-containsSomeOf" />
+    <p id="demo-isTagscopeContainer" />
+  </div>
+
+  <p id="tag-list" >
+    Activate / deactivate tags here:<br/>
+  </p>
+
+<!--<div class="tag-scope" >-->
+<table>
+  <tr>
+    <td>
+      <div class="tag-scope" >
+        <ul class="tags" >
+          <li>tag-1</li>
+        </ul>
+        <h1>1. Has: tag-1</h1>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+          </ul>
+          <h2>2. Has: tag-1</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-2</li>
+          </ul>
+          <h2>3. Has: tag-2</h2>
+        </div>
+        <div class="tag-scope" >
+          <h2>4. Has no tag</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+            <li>tag-2</li>
+          </ul>
+          <h2>5. Has: tag-1 tag-2</h2>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div class="tag-scope" >
+        <ul class="tags" >
+          <li>tag-2</li>
+        </ul>
+        <h1>6. Has: tag-2</h1>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+          </ul>
+          <h2>7. Has: tag-1</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-2</li>
+          </ul>
+          <h2>8. Has: tag-2</h2>
+        </div>
+        <div class="tag-scope" >
+          <h2>9. Has no tag</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+            <li>tag-2</li>
+          </ul>
+          <h2>10. Has: tag-1 tag-2</h2>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div class="tag-scope" >
+        <h1>11. Has no tag</h1>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+          </ul>
+          <h2>12. Has: tag-1</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-2</li>
+          </ul>
+          <h2>13. Has: tag-2</h2>
+        </div>
+        <div class="tag-scope" >
+          <h2>14. Has no tag</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+            <li>tag-2</li>
+          </ul>
+          <h2>15. Has: tag-1 tag-2</h2>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div class="tag-scope" >
+        <ul class="tags" >
+          <li>tag-1</li>
+          <li>tag-2</li>
+        </ul>
+        <h1>16. Has: tag-1 tag-2</h1>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+          </ul>
+          <h2>17. Has: tag-1</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-2</li>
+          </ul>
+          <h2>18. Has: tag-2</h2>
+        </div>
+        <div class="tag-scope" >
+          <h2>19. Has no tag</h2>
+        </div>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+            <li>tag-2</li>
+          </ul>
+          <h2>20. Has: tag-1 tag-2</h2>
+        </div>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <div class="tag-scope" >
+        <h1>21. Has no tag</h1>
+        <div class="tag-scope" >
+          <h2>22. Has no tag</h2>
+        </div>
+      </div>
+    </td>
+
+    <td>
+      <div class="tag-scope" >
+        <ul class="tags" >
+          <li>tag-1</li>
+        </ul>
+        <h1>23. Has: tag-1</h1>
+        <div class="tag-scope" >
+          <ul class="tags" >
+            <li>tag-1</li>
+          </ul>
+          <h2>24. Has: tag-1</h2>
+        </div>
+      </div>
+    </td>
+
+  </tr>
+</table>
+<!--</div>-->
+
+
+<hr/>
+  <dl id="tag-definitions" >
+    All tags:<br/>
+    <dt>tag-1</dt>
+    <dt>tag-2</dt>
+    <dt>tag-3</dt>
+  </dl>
+
+  <p id="messages" />
+</body>
+</html>
