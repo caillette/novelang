@@ -79,6 +79,10 @@ ul.tags {
   list-style-type:none ;
 }
 
+#tag-definitions {
+  display: none ;
+}
+
 ul.tags > li
 {
   float: right ;

@@ -62,6 +62,7 @@
       <include name="**/*.gif" />
       <include name="**/*.svg" />
       <include name="**/*.css" />      
+      <include name="**/*.js" />      
       <include name="**/*.html" />
       <include name="**/*.xhtml" />
       <include name="**/*.txt" />

@@ -31,6 +31,7 @@ import com.google.common.collect.Lists;
  */
 public enum RawResource {
 
+  js,
   css,
   svg,
   gif,

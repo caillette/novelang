@@ -69,7 +69,7 @@
         <script type="text/javascript"> //<![CDATA[
 
           $( document ).ready( function() {
-            initialize() ;
+            initializeTagSystem() ;
             showMessage( "Initialization complete." ) ;
           } ) ;
         //]]></script>
@@ -82,20 +82,28 @@
 
       <xsl:if test="//n:meta/n:tags" >
         <hr/>
-        <p class="tag-summary" >
-          <xsl:for-each select="//n:meta/n:tags">
-            <xsl:call-template name="tags" />
+        <dl id="tag-definitions" >
+          <xsl:for-each select="//n:meta/n:tags/*">
+            <dt><xsl:value-of select="." /></dt>
           </xsl:for-each>
-        </p>
+        </dl>
       </xsl:if>
+
+      <p id="tag-list" >
+        Activate / deactivate tags here:<br/>
+      </p>
+
 
     </body>
     </html>
   </xsl:template>
 
   <xsl:template match="n:level" >
-    <xsl:call-template name="tags" />
-    <xsl:apply-templates/>
+    <div class="tag-scope" >
+      <xsl:call-template name="tags" />
+      <xsl:apply-templates />
+    </div>
+
   </xsl:template>
 
   <xsl:template match="//n:level/n:level-title" >
@@ -111,10 +119,13 @@
   </xsl:template>
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
-    <xsl:call-template name="tags" />
-    <blockquote>
-      <xsl:apply-templates/>
-    </blockquote>
+    <div class="tag-scope" >
+      <xsl:call-template name="tags" />
+      <blockquote>
+        <xsl:apply-templates />
+      </blockquote>
+    </div>
+
   </xsl:template>
 
   <xsl:template match="n:lines-of-literal" >
@@ -124,10 +135,13 @@
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-regular" >
-    <xsl:call-template name="tags" />
-    <p>
-      <xsl:apply-templates/>
-    </p>
+    <div class="tag-scope" >
+      <xsl:call-template name="tags" />
+      <p>
+        <xsl:apply-templates />
+      </p>
+    </div>
+
   </xsl:template>
 
   <xsl:template match="n:url" >
@@ -148,10 +162,14 @@
 
 
   <xsl:template match="n:paragraph-as-list-item" >
-    <p>
+    <div class="tag-scope" >
       <xsl:call-template name="tags" />
-      &mdash;&nbsp;<xsl:apply-templates/>
-    </p>
+      <p>
+        &mdash;&nbsp;
+        <xsl:apply-templates />
+      </p>
+    </div>
+
   </xsl:template>
   
   <xsl:template match="n:block-inside-solidus-pairs" >
@@ -173,10 +191,13 @@
 
 
   <xsl:template match="n:cell-rows-with-vertical-line" >
-    <xsl:call-template name="tags" />
-    <table>
-      <xsl:apply-templates/>
-    </table>
+    <div class="tag-scope">
+      <xsl:call-template name="tags" />
+      <table>
+        <xsl:apply-templates />
+      </table>
+    </div>
+
   </xsl:template>
 
   <xsl:template match="n:cell-row" >

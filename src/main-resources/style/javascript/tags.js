@@ -40,7 +40,7 @@
 
 var tags = [] ; // All declared tags.
 
-function initialize() {
+function initializeTagSystem() {
   // Gather all declared tags.
   $( "#tag-definitions > dt" ).each( function() {
     tags.push( $( this ).text() ) ;
