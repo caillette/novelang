@@ -104,6 +104,18 @@ p.tag-summary + ul.tags > li {
   margin: 4px 4px 4px 4px ;
 }
 
+#tag-list {
+  display: block;
+  border: solid blue 1px ;
+  position: fixed ;
+  margin-left: 700px;
+  z-index: 99000 ;
+  /*width: 400px ;*/
+  top: 8px ;
+  -moz-border-radius:5px ;
+  -webkit-border-radius: 5px ;
+}
+
 
 
 
