@@ -1,0 +1,98 @@
+<html>
+
+<head>
+
+  <script type="text/javascript" src="jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="jquery-ui-1.7.1.custom.min.js"></script>
+
+  <style type="text/css">
+    #sortable {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    #sortable dt {
+      margin: 3px 3px 3px 0;
+      padding: 1px;
+      float: left;
+      width: 100px;
+      height: 90px;
+      font-size: 1em;
+      text-align: center;
+    }
+
+    html>body #sortable dt {
+      height: 1.5em;
+      line-height: 1.2em;
+    }
+
+    .ui-state-highlight {
+      height: 1.5em;
+      line-height: 1.2em;
+      border : red ;
+    }
+
+  </style>
+
+  <script type="text/javascript">
+    
+    $( document ).ready( function() {
+
+      showMessage( "Initializing..." ) ;
+
+      $( function() {
+        $( "#sortable" ).sortable( {
+//          placeholder: 'ui-state-highlight'
+        } ) ;
+      } ) ;
+
+      $( "#sortable > dt" ).each( function() {
+        $( this ).css( "background-color", $( "strong", this ).text() ) ;
+          $( this ).css( "color", $( "em", this ).text() ) ;
+      } ) ;
+
+      $( "#sortable > dt > em" ).each( function() {
+        $( this ).hide() ;
+      } ) ;
+
+
+      showMessage( "Initialization complete." ) ;
+    } ) ;
+
+
+    function showMessage( message ) {
+      $( "p#messages" ).append( "<pre>" + message.toString() + "</pre>" ) ;
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+<div class="demo" >
+
+  <dl id="sortable" >
+    <dt><strong>darkblue</strong> <em>cyan</em></dt>
+    <dt><strong>green</strong>    <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>red</strong>      <em>yellow</em></dt>
+  </dl>
+
+</div>
+
+<!--<p id="messages" />-->
+
+</body>
+</html>
