@@ -1,3 +1,7 @@
+<!--
+  This is a configuration file containing a color list where order matters.
+  All the script is for interactive edition and save overwriting the original file with changes.
+-->
 <html>
 
 <head>
@@ -305,12 +309,9 @@ function updateOriginal( original, localPath ) {
     alert( "Could not locate store area for " + localPath ) ;
     return null ;
   }
-  var revised = original.substr( 0, posDiv[ 0 ] + START_SAVE_AREA.length ) + "\n" ;
-  $( "#sortable" ).each( function() {
-    showMessage( "Extracted " + $( this ).text() ) ;
-    revised += $( this ).html() ;
-  } ) ;  
-  revised +=  original.substr( posDiv[ 1 ] ) ;
+  var revised = original.substr( 0, posDiv[ 0 ] ) + "\n" ;
+  revised += START_SAVE_AREA + "\n" + extractColors() + "\n" + END_SAVE_AREA + "\n" ;
+  revised +=  original.substr( posDiv[ 1 ] + END_SAVE_AREA.length ) ;
   return revised ;
 }
 
@@ -357,7 +358,6 @@ function saveChanges() {
 
 }
 
-
 /* End of code copied from TiddlyWiki */
     
     $( document ).ready( function() {
@@ -383,6 +383,18 @@ function saveChanges() {
       showMessage( "Initialization complete." ) ;
     } ) ;
 
+    // Extract colors from the DOM.
+    function extractColors() {
+      var colors = "" ;
+      $( "#sortable > dt" ).each( function() {
+        var clone = $( this ).clone().removeAttr( "style" ) ;
+        $( "em", clone ).removeAttr( "style" ) ;
+        var colorHtml = "<dt>" + $( clone ).html() + "</dt>\n" ;
+        colors += colorHtml ;
+      } ) ;  
+      return colors ;
+    }
+
     function clickSave() {
       showMessage( "Started saving..." ) ;
       saveChanges() ;
@@ -398,20 +410,22 @@ function saveChanges() {
 
 <body>
 
-<div class="demo" >
 
+  <!-- The really useful stuff is here -->
   <dl id="sortable" >
 <!-- BEGIN-MODIFIABLE-ZONE -->
     <dt><strong>darkblue</strong> <em>cyan</em></dt>
     <dt><strong>green</strong>    <em>yellow</em></dt>
     <dt><strong>red</strong>      <em>yellow</em></dt>
+    <dt><strong>yellow</strong>   <em>black</em></dt>
+    <dt><strong>brown</strong>   <em>white</em></dt>
+    <dt><strong>pink</strong>   <em>black</em></dt>
 <!-- END-MODIFIABLE-ZONE -->
   </dl>
 
-</div>
 
 <hr style="clear: both; " />
-<button name="save" onclick="clickSave() ;" >Save</button>
+<button name="save" onclick="clickSave() ;" >Save</button> (Only tested with Firefox.)
 
 <p id="messages" />
 
