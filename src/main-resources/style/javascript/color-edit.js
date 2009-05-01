@@ -33,13 +33,13 @@ function initializeColorEdit() {
 
 // Extract colors from the DOM.
 function extractColors() {
-var colors = "" ;
-$( "#editableColorDefinitions > dt" ).each( function() {
-  var clone = $( this ).clone().removeAttr( "style" ) ;
-  $( "em", clone ).removeAttr( "style" ) ;
-  colors += "<dt>" + $( clone ).html() + "</dt>\n" ;
-} ) ;
-return colors ;
+  var colors = "" ;
+  $( "#editableColorDefinitions > dt" ).each( function() {
+    var clone = $( this ).clone().removeAttr( "style" ) ;
+    $( "em", clone ).removeAttr( "style" ) ;
+    colors += "<dt>" + $( clone ).html() + "</dt>\n" ;
+  } ) ;
+  return colors ;
 }
 
 

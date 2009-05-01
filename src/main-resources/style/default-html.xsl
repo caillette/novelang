@@ -65,12 +65,14 @@
 
         <title><xsl:value-of select="$filename"/></title>
 
+        <script type="text/javascript" src="/javascript/jquery-1.3.2.min.js" />
+        <script type="text/javascript" src="/javascript/jquery.rule-1.0.1-min.js" />
+        <script type="text/javascript" src="/javascript/color-palette.js" />
         <script type="text/javascript" src="/javascript/tags.js" />
         <script type="text/javascript"> //<![CDATA[
 
           $( document ).ready( function() {
             initializeTagSystem() ;
-            showMessage( "Initialization complete." ) ;
           } ) ;
         //]]></script>
 
@@ -93,6 +95,7 @@
         Activate / deactivate tags here:<br/>
       </p>
 
+      <div id="externalColorDefinitionsPlaceholder" style="visibility:hidden;" />
 
     </body>
     </html>
@@ -244,13 +247,13 @@
     <xsl:if test="n:tag" >
       <ul class="tags" >
         <xsl:for-each select="n:tag" >
-          <xsl:variable name="inverse" select="colormapper:getInverseRgbDeclaration( . )" />
+          <!--<xsl:variable name="inverse" select="colormapper:getInverseRgbDeclaration( . )" />-->
           <li>
-            <xsl:attribute name="style" >
-              background-color:<xsl:value-of select="colormapper:getColorName( . )" /> ;
-              color:<xsl:value-of select="$inverse" /> ;
-              border-color:<xsl:value-of select="$inverse" />
-            </xsl:attribute>
+            <!--<xsl:attribute name="style" >-->
+              <!--background-color:<xsl:value-of select="colormapper:getColorName( . )" /> ;-->
+              <!--color:<xsl:value-of select="$inverse" /> ;-->
+              <!--border-color:<xsl:value-of select="$inverse" />-->
+            <!--</xsl:attribute>-->
             <xsl:value-of select="." />
           </li>
         </xsl:for-each>

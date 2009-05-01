@@ -19,24 +19,34 @@
 
 
 
-var tags = [] ; // All declared tags.
+var TAGS = [] ; // All declared tags.
 
 function initializeTagSystem() {
   // Gather all declared tags.
   $( "#tag-definitions > dt" ).each( function() {
-    tags.push( $( this ).text() ) ;
+    TAGS.push( $( this ).text() ) ;
+  } ) ;
+
+  $( "ul.tags > li " ).each( function() {
+    $( this ).addClass( "Tag-" + $( this ).text() ) ;
+//    showMessage( "Added class " + $( this ).text() ) ;
   } ) ;
 
   // Create the combo boxes.
-  for( var tagIndex in tags ) {
+  for( var tagIndex in TAGS ) {
+    var tag = TAGS[ tagIndex ] ;
     $( "#tag-list" ).append(
         "<input " +
             "type='checkbox' " +
-            "name='" + tags[ tagIndex ] + "' " +
+            "name='" + tag + "' " +
             "onclick=\"check() ; \"" +
-        ">" + tags[ tagIndex ] + "<br/>"
+        ">" +
+        "<span class='Tag-" + tag + "' >" + tag + "</span>" +
+        "<br/>"
     ) ;
   }
+
+  setupColors( TAGS ) ;
 }
 
 function showMessage( message ) {

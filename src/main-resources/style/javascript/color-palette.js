@@ -21,9 +21,10 @@ var BACKGROUND_COLORS = [] ;
 var FOREGROUND_COLORS = [] ;
 
 
-// Loads the content of colors.html into the two color arrays. Uses a temporary div.
+// Loads the content of colors.html into the two color arrays and create CSS classes.
+// Uses a temporary div.
 // This function is supposed to be called only once.
-function loadColors() {
+function setupColors( tags ) {
   $( "#externalColorDefinitionsPlaceholder" ).load(
       "colors.html #editableColorDefinitions > *",
       {},
@@ -34,20 +35,22 @@ function loadColors() {
         $( "#externalColorDefinitionsPlaceholder > dt > em" ).each( function() {
           FOREGROUND_COLORS.push( $( this ).text() ) ;
         } ) ;
-        showMessage(
-            "Loaded " + BACKGROUND_COLORS.length + " colors " +
-            "(starting with " + BACKGROUND_COLORS[ 0 ] + ")."
-        ) ;
+//        showMessage(
+//            "Loaded " + BACKGROUND_COLORS.length + " colors " +
+//            "(starting with " + BACKGROUND_COLORS[ 0 ] + ")."
+//        ) ;
         $( "#externalColorDefinitionsPlaceholder" ).remove() ;
+
+        for( var tagIndex = 0 ; tagIndex < tags.length ; tagIndex++ ) {
+          $.rule(
+              "." + "Tag-" + tags[ tagIndex ] + "{ " +
+              "border: solid 1px " + " " + FOREGROUND_COLORS[ tagIndex ] + " ; " +
+              "color: " + FOREGROUND_COLORS[ tagIndex ] + " ; " +
+              "background-color: " + BACKGROUND_COLORS[ tagIndex ] + " ; " +
+              "}"
+          ).appendTo( "style" ) ;
+        }
       }
   ) ;
 }
 
-// Create one CSS class per tag in the array with colors picked in the arrays.
-// This function is supposed to be called only once.
-function createTagClasses( tags ) {
-  if( BACKGROUND_COLORS != null && FOREGROUND_COLORS != null ) {
-    for( var tagIndex = 0 ; tagIndex < tags.length ; tagIndex++ ) {
-    }
-  }
-}

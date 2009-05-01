@@ -25,6 +25,10 @@ h2 {
   font-size : 13pt ;
 }
 
+ul.tags {
+  list-style: none ;
+}
+
 ul.tags > li
 {
   float: right ;
@@ -44,14 +48,15 @@ table {
 
 
   <script type="text/javascript" src="jquery-1.3.2.min.js"></script>
+  <script type="text/javascript" src="jquery.rule-1.0.1-min.js"></script>
   <script type="text/javascript" src="tags.js"></script>
   <script type="text/javascript" src="color-palette.js"></script>
   <script type="text/javascript"> //<![CDATA[
 
     $( document ).ready( function() {
       initializeTagSystem() ;
-      showMessage( "Initialization complete." ) ;
-      loadColors() ;
+//      showMessage( "Initialization complete." ) ;
+//      setupColors( TAGS ) ;
 //      runDemos() ;
     } ) ;
 
@@ -275,6 +280,12 @@ table {
   </dl>
 
   <p id="messages" />
+
+<!--
+  <p class="Tag-Whatever" >
+    Just testing automatic tag class.
+  </p>
+-->
 
   <div id="externalColorDefinitionsPlaceholder" style="visibility:hidden;" />
 
