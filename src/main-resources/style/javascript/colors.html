@@ -20,7 +20,7 @@
       margin: 3px 3px 3px 0;
       padding: 1px;
       float: left;
-      width: 100px;
+      width: 140px;
       height: 90px;
       font-size: 1em;
       text-align: center;
@@ -303,7 +303,6 @@ function loadOriginal( localPath ) {
 
 
 function updateOriginal( original, localPath ) {
-  showMessage( "Updating original..." ) ;
   var posDiv = locateStoreArea( original ) ;
   if( !posDiv ) {
     alert( "Could not locate store area for " + localPath ) ;
@@ -317,7 +316,6 @@ function updateOriginal( original, localPath ) {
 
 
 function saveMain( localPath, original ) {
-  showMessage( "Attempting to save to [" + localPath + "]") ;
   var save ;
   try {
     var revised = updateOriginal( original, localPath ) ;
@@ -335,15 +333,12 @@ function saveMain( localPath, original ) {
 
 function saveChanges() {
   var originalPath = document.location.toString() ;
-  showMessage( "Evaluated originalPath to '" + originalPath + "'" ) ;
   if( originalPath.substr( 0, 5 ) != "file:" ) {
     alert( "Cannot save page if it is not a file" ) ;
     return ;
   }
   var localPath = getLocalPath( originalPath ) ;
-  showMessage( "Evaluated localPath to '" + localPath + "'" ) ;
   var original = loadOriginal( localPath ) ;
-  showMessage( "Loaded original file " + ( original == null ? "(but it is null)" : "(ok)" ) + "." ) ;
   if( original == null ) {
     alert(
         "It's not possible to save changes. Possible reasons include:" +
@@ -354,15 +349,13 @@ function saveChanges() {
     ) ;
     return ;
   }
-  saveMain( localPath + "_save.html", original ) ;
+  saveMain( localPath, original ) ;
 
 }
 
 /* End of code copied from TiddlyWiki */
     
     $( document ).ready( function() {
-
-      showMessage( "Initializing..." ) ;
 
       $( function() {
         $( "#sortable" ).sortable( {
@@ -372,7 +365,7 @@ function saveChanges() {
 
       $( "#sortable > dt" ).each( function() {
         $( this ).css( "background-color", $( "strong", this ).text() ) ;
-          $( this ).css( "color", $( "em", this ).text() ) ;
+        $( this ).css( "color", $( "em", this ).text() ) ;
       } ) ;
 
       $( "#sortable > dt > em" ).each( function() {
@@ -380,7 +373,6 @@ function saveChanges() {
       } ) ;
 
 
-      showMessage( "Initialization complete." ) ;
     } ) ;
 
     // Extract colors from the DOM.
@@ -396,7 +388,6 @@ function saveChanges() {
     }
 
     function clickSave() {
-      showMessage( "Started saving..." ) ;
       saveChanges() ;
     }
 
@@ -413,14 +404,165 @@ function saveChanges() {
 
   <!-- The really useful stuff is here -->
   <dl id="sortable" >
+
+
+
+
 <!-- BEGIN-MODIFIABLE-ZONE -->
-    <dt><strong>darkblue</strong> <em>cyan</em></dt>
-    <dt><strong>green</strong>    <em>yellow</em></dt>
-    <dt><strong>red</strong>      <em>yellow</em></dt>
-    <dt><strong>yellow</strong>   <em>black</em></dt>
-    <dt><strong>brown</strong>   <em>white</em></dt>
-    <dt><strong>pink</strong>   <em>black</em></dt>
+<dt><strong>aliceblue</strong><em>black</em></dt>
+<dt><strong>antiquewhite</strong><em>black</em></dt>
+<dt><strong>aquamarine</strong><em>black</em></dt>
+<dt><strong>aqua</strong><em>black</em></dt>
+<dt><strong>azure</strong><em>black</em></dt>
+<dt><strong>beige</strong><em>black</em></dt>
+<dt><strong>bisque</strong><em>black</em></dt>
+<dt><strong>black</strong><em>white</em></dt>
+<dt><strong>blanchedalmond</strong><em>black</em></dt>
+<dt><strong>blue</strong><em>white</em></dt>
+<dt><strong>blueviolet</strong><em>white</em></dt>
+<dt><strong>brown</strong><em>black</em></dt>
+<dt><strong>burlywood</strong><em>black</em></dt>
+<dt><strong>cadetblue</strong><em>black</em></dt>
+<dt><strong>chartreuse</strong><em>black</em></dt>
+<dt><strong>chocolate</strong><em>black</em></dt>
+<dt><strong>coral</strong><em>black</em></dt>
+<dt><strong>cornflowerblue</strong><em>black</em></dt>
+<dt><strong>cornsilk</strong><em>black</em></dt>
+<dt><strong>crimson</strong><em>black</em></dt>
+<dt><strong>cyan</strong><em>black</em></dt>
+<dt><strong>darkblue</strong><em>white</em></dt>
+<dt><strong>darkcyan</strong><em>black</em></dt>
+<dt><strong>darkgoldenrod</strong><em>black</em></dt>
+<dt><strong>darkgray</strong><em>black</em></dt>
+<dt><strong>darkgreen</strong><em>white</em></dt>
+<dt><strong>darkgrey</strong><em>black</em></dt>
+<dt><strong>darkkhaki</strong><em>black</em></dt>
+<dt><strong>darkmagenta</strong><em>white</em></dt>
+<dt><strong>darkolivegreen</strong><em>black</em></dt>
+<dt><strong>darkorange</strong><em>black</em></dt>
+<dt><strong>darkorchid</strong><em>black</em></dt>
+<dt><strong>darkred</strong><em>white</em></dt>
+<dt><strong>darksalmon</strong><em>black</em></dt>
+<dt><strong>darkseagreen</strong><em>black</em></dt>
+<dt><strong>darkslateblue</strong><em>white</em></dt>
+<dt><strong>darkslategray</strong><em>white</em></dt>
+<dt><strong>darkslategrey</strong><em>white</em></dt>
+<dt><strong>darkturquoise</strong><em>black</em></dt>
+<dt><strong>darkviolet</strong><em>white</em></dt>
+<dt><strong>deeppink</strong><em>black</em></dt>
+<dt><strong>deepskyblue</strong><em>black</em></dt>
+<dt><strong>dimgray</strong><em>white</em></dt>
+<!--<dt><strong>dimgrey</strong><em>black</em></dt>-->
+<dt><strong>dodgerblue</strong><em>black</em></dt>
+<dt><strong>firebrick</strong><em>black</em></dt>
+<dt><strong>floralwhite</strong><em>black</em></dt>
+<dt><strong>forestgreen</strong><em>black</em></dt>
+<dt><strong>fuchsia</strong><em>black</em></dt>
+<dt><strong>gainsboro</strong><em>black</em></dt>
+<dt><strong>ghostwhite</strong><em>black</em></dt>
+<dt><strong>gold</strong><em>black</em></dt>
+<dt><strong>goldenrod</strong><em>black</em></dt>
+<dt><strong>gray</strong><em>black</em></dt>
+<!--<dt><strong>grey</strong><em>black</em></dt>-->
+<dt><strong>green</strong><em>black</em></dt>
+<dt><strong>greenyellow</strong><em>black</em></dt>
+<dt><strong>honeydew</strong><em>black</em></dt>
+<dt><strong>hotpink</strong><em>black</em></dt>
+<dt><strong>indianred</strong><em>black</em></dt>
+<dt><strong>indigo</strong><em>white</em></dt>
+<dt><strong>ivory</strong><em>black</em></dt>
+<dt><strong>khaki</strong><em>black</em></dt>
+<dt><strong>lavender</strong><em>black</em></dt>
+<dt><strong>lavenderblush</strong><em>black</em></dt>
+<dt><strong>lawngreen</strong><em>black</em></dt>
+<dt><strong>lemonchiffon</strong><em>black</em></dt>
+<dt><strong>lightblue</strong><em>black</em></dt>
+<dt><strong>lightcoral</strong><em>black</em></dt>
+<dt><strong>lightcyan</strong><em>black</em></dt>
+<dt><strong>lightgoldenrodyellow</strong><em>black</em></dt>
+<dt><strong>lightgray</strong><em>black</em></dt>
+<dt><strong>lightgreen</strong><em>black</em></dt>
+<!--<dt><strong>lightgrey</strong><em>black</em></dt>-->
+<dt><strong>lightpink</strong><em>black</em></dt>
+<dt><strong>lightsalmon</strong><em>black</em></dt>
+<dt><strong>lightseagreen</strong><em>black</em></dt>
+<dt><strong>lightskyblue</strong><em>black</em></dt>
+<dt><strong>lightslategray</strong><em>black</em></dt>
+<!--<dt><strong>lightslategrey</strong><em>black</em></dt>-->
+<dt><strong>lightsteelblue</strong><em>black</em></dt>
+<dt><strong>lightyellow</strong><em>black</em></dt>
+<dt><strong>lime</strong><em>black</em></dt>
+<dt><strong>limegreen</strong><em>black</em></dt>
+<dt><strong>linen</strong><em>black</em></dt>
+<dt><strong>magenta</strong><em>black</em></dt>
+<dt><strong>maroon</strong><em>white</em></dt>
+<dt><strong>mediumaquamarine</strong><em>black</em></dt>
+<dt><strong>mediumblue</strong><em>white</em></dt>
+<dt><strong>mediumorchid</strong><em>black</em></dt>
+<dt><strong>mediumpurple</strong><em>black</em></dt>
+<dt><strong>mediumseagreen</strong><em>black</em></dt>
+<dt><strong>mediumslateblue</strong><em>black</em></dt>
+<dt><strong>mediumspringgreen</strong><em>black</em></dt>
+<dt><strong>mediumturquoise</strong><em>black</em></dt>
+<dt><strong>mediumvioletred</strong><em>black</em></dt>
+<dt><strong>midnightblue</strong><em>white</em></dt>
+<dt><strong>mintcream</strong><em>black</em></dt>
+<dt><strong>mistyrose</strong><em>black</em></dt>
+<dt><strong>moccasin</strong><em>black</em></dt>
+<dt><strong>navajowhite</strong><em>black</em></dt>
+<dt><strong>navy</strong><em>white</em></dt>
+<dt><strong>oldlace</strong><em>black</em></dt>
+<dt><strong>olive</strong><em>black</em></dt>
+<dt><strong>olivedrab</strong><em>black</em></dt>
+<dt><strong>orange</strong><em>black</em></dt>
+<dt><strong>orangered</strong><em>black</em></dt>
+<dt><strong>orchid</strong><em>black</em></dt>
+<dt><strong>palegoldenrod</strong><em>black</em></dt>
+<dt><strong>palegreen</strong><em>black</em></dt>
+<dt><strong>paleturquoise</strong><em>black</em></dt>
+<dt><strong>palevioletred</strong><em>black</em></dt>
+<dt><strong>papayawhip</strong><em>black</em></dt>
+<dt><strong>peachpuff</strong><em>black</em></dt>
+<dt><strong>peru</strong><em>black</em></dt>
+<dt><strong>pink</strong><em>black</em></dt>
+<dt><strong>plum</strong><em>black</em></dt>
+<dt><strong>powderblue</strong><em>black</em></dt>
+<dt><strong>purple</strong><em>black</em></dt>
+<dt><strong>red</strong><em>black</em></dt>
+<dt><strong>rosybrown</strong><em>black</em></dt>
+<dt><strong>royalblue</strong><em>black</em></dt>
+<dt><strong>saddlebrown</strong><em>black</em></dt>
+<dt><strong>salmon</strong><em>black</em></dt>
+<dt><strong>sandybrown</strong><em>black</em></dt>
+<dt><strong>seagreen</strong><em>black</em></dt>
+<dt><strong>seashell</strong><em>black</em></dt>
+<dt><strong>sienna</strong><em>black</em></dt>
+<dt><strong>silver</strong><em>black</em></dt>
+<dt><strong>skyblue</strong><em>black</em></dt>
+<dt><strong>slateblue</strong><em>black</em></dt>
+<dt><strong>slategray</strong><em>black</em></dt>
+<!--<dt><strong>slategrey</strong><em>black</em></dt>-->
+<dt><strong>snow</strong><em>black</em></dt>
+<dt><strong>springgreen</strong><em>black</em></dt>
+<dt><strong>steelblue</strong><em>black</em></dt>
+<dt><strong>tan</strong><em>black</em></dt>
+<dt><strong>teal</strong><em>black</em></dt>
+<dt><strong>thistle</strong><em>black</em></dt>
+<dt><strong>tomato</strong><em>black</em></dt>
+<dt><strong>turquoise</strong><em>black</em></dt>
+<dt><strong>violet</strong><em>black</em></dt>
+<dt><strong>wheat</strong><em>black</em></dt>
+<dt><strong>white</strong><em>black</em></dt>
+<dt><strong>whitesmoke</strong><em>black</em></dt>
+<dt><strong>yellow</strong><em>black</em></dt>
+<dt><strong>yellowgreen</strong><em>black</em></dt>
+    
+
 <!-- END-MODIFIABLE-ZONE -->
+
+
+
+
   </dl>
 
 
