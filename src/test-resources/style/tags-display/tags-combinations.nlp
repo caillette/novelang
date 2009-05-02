@@ -1,0 +1,74 @@
+  @T1
+== 1. Has T1
+
+  @T1
+2. Has T1
+
+  @T2
+3. Has T2
+
+4. Has no tag
+
+  @T1 @T2
+5. Has T1 T2
+
+
+
+  @T2
+== 6. Has T2
+
+  @T1
+7. Has T1
+
+  @T2
+8. Has T2
+
+9. Has no tag
+
+  @T1 @T2
+10. Has T1 T2
+
+
+
+== 11. Has no tag
+
+  @T1
+12. Has T1
+
+  @T2
+13. Has T2
+
+14. Has no tag
+
+  @T1 @T2
+15. Has T1 T2
+
+
+  @T1 @T2
+== 16. Has T1 T2
+
+  @T1
+17. Has T1
+
+  @T2
+18. Has T2
+
+19. Has no tag
+
+  @T1 @T2
+20. Has T1 T2
+
+
+== 21. Has no tag
+
+22. Has no tag
+
+
+  @T1
+== 23. Has T1
+
+  @T1
+24. Has T1
+
+
+
