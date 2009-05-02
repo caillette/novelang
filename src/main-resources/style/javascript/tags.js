@@ -21,7 +21,7 @@
 
 var TAGS = [] ; // All declared tags.
 
-function initializeTagSystem() {
+function initializeTagSystem( colorDefinitions ) {
   // Gather all declared tags.
   $( "#tag-definitions > dt" ).each( function() {
     TAGS.push( $( this ).text() ) ;
@@ -46,7 +46,7 @@ function initializeTagSystem() {
     ) ;
   }
 
-  setupColors( TAGS ) ;
+  setupColors( TAGS, colorDefinitions ) ;
 }
 
 function showMessage( message ) {

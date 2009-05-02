@@ -53,6 +53,7 @@
       <head>
         <link rel="stylesheet" type="text/css" href="/display.css" />
         <link rel="stylesheet" type="text/css" href="/custom.css" />
+        <style type="text/css" /> <!-- Placeholder for dynamically-created tag classes. -->
 
         <xsl:element name="meta" >
           <xsl:attribute name="http-equiv" >content-type</xsl:attribute>
@@ -65,14 +66,14 @@
 
         <title><xsl:value-of select="$filename"/></title>
 
-        <script type="text/javascript" src="/javascript/jquery-1.3.2.min.js" />
-        <script type="text/javascript" src="/javascript/jquery.rule-1.0.1-min.js" />
+        <script type="text/javascript" src="/javascript/jquery-1_3_2_min.js" />
+        <script type="text/javascript" src="/javascript/jquery-rule-1_0_1_min.js" />
         <script type="text/javascript" src="/javascript/color-palette.js" />
         <script type="text/javascript" src="/javascript/tags.js" />
         <script type="text/javascript"> //<![CDATA[
 
           $( document ).ready( function() {
-            initializeTagSystem() ;
+            initializeTagSystem( "/javascript/colors.xhtml" ) ;
           } ) ;
         //]]></script>
 
@@ -95,6 +96,7 @@
         Activate / deactivate tags here:<br/>
       </p>
 
+      <p id="messages" />
       <div id="externalColorDefinitionsPlaceholder" style="visibility:hidden;" />
 
     </body>

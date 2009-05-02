@@ -83,7 +83,7 @@ ul.tags {
   display: none ;
 }
 
-ul.tags > li
+ul.tags > li, #tag-list
 {
   float: right ;
   border: 1px solid;
