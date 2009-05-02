@@ -73,7 +73,7 @@
         <script type="text/javascript"> //<![CDATA[
 
           $( document ).ready( function() {
-            initializeTagSystem( "/javascript/colors.xhtml" ) ;
+            initializeTagSystem( "/javascript/colors.htm" ) ;
           } ) ;
         //]]></script>
 

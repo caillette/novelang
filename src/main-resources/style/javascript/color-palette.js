@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Those arrays contain color names, as sorted in colors.xhtml .
+// Those arrays contain color names, as sorted in colors.htm .
 var BACKGROUND_COLORS = [] ;
 var FOREGROUND_COLORS = [] ;
 
 
-// Loads the content of colors.xhtml into the two color arrays and create CSS classes.
+// Loads the content of colors.htm into the two color arrays and create CSS classes.
 // Uses a temporary div.
 // This function is supposed to be called only once.
 function setupColors( tags, colorDefinitions ) {
