@@ -26,7 +26,7 @@ var FOREGROUND_COLORS = [] ;
 // This function is supposed to be called only once.
 function setupColors( tags, colorDefinitions ) {
   if( colorDefinitions == undefined ) {
-    colorDefinitions = "colors.xhtml" ;
+    colorDefinitions = "colors.htm" ;
   }
   $( "#externalColorDefinitionsPlaceholder" ).load(
       colorDefinitions + " #editableColorDefinitions > *",

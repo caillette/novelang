@@ -249,13 +249,7 @@
     <xsl:if test="n:tag" >
       <ul class="tags" >
         <xsl:for-each select="n:tag" >
-          <!--<xsl:variable name="inverse" select="colormapper:getInverseRgbDeclaration( . )" />-->
           <li>
-            <!--<xsl:attribute name="style" >-->
-              <!--background-color:<xsl:value-of select="colormapper:getColorName( . )" /> ;-->
-              <!--color:<xsl:value-of select="$inverse" /> ;-->
-              <!--border-color:<xsl:value-of select="$inverse" />-->
-            <!--</xsl:attribute>-->
             <xsl:value-of select="." />
           </li>
         </xsl:for-each>
