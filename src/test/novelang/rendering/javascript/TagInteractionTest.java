@@ -1,47 +1,47 @@
 package novelang.rendering.javascript;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.After;
-import org.junit.Ignore;
-import org.junit.Assert;
-import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.apache.commons.io.FilenameUtils;
-
-import java.io.IOException;
 import java.io.File;
-import java.util.List;
-import java.util.Collections;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
-import novelang.TestResourceTree;
-import novelang.ScratchDirectoryFixture;
-import novelang.TestResources;
-import static novelang.TestResourceTree.TaggedPart;
-import novelang.rendering.RenditionMimeType;
-import novelang.configuration.ConfigurationTools;
-import novelang.loader.ResourceLoader;
-import novelang.loader.ClasspathResourceLoader;
-import novelang.daemon.HttpDaemon;
-import novelang.common.filefixture.Filer;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.StyledElement;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.Page;
+import org.apache.commons.io.FilenameUtils;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.UnexpectedPage;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.javascript.host.CSSStyleDeclaration;
+import com.gargoylesoftware.htmlunit.javascript.host.HTMLElement;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.common.collect.ImmutableSet;
+import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
+import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTree;
+import static novelang.TestResourceTree.TaggedPart;
+import novelang.TestResources;
+import novelang.common.filefixture.Filer;
+import novelang.configuration.ConfigurationTools;
+import novelang.daemon.HttpDaemon;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceLoader;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * Tests for Javascript-based interactive behavior. 
@@ -144,7 +144,7 @@ public class TagInteractionTest {
     return allHeaders ;
   }
 
-  private static final void verifyHidden(
+  private static void verifyHidden(
       Iterable< HtmlElement > htmlElements,
       Set< String > headerTextStarts
   ) {
@@ -165,7 +165,7 @@ public class TagInteractionTest {
 
   }
 
-  private static final HtmlElement findByTextStart(
+  private static HtmlElement findByTextStart(
       Iterable< HtmlElement > htmlElements,
       String textStart
   ) {
@@ -178,9 +178,23 @@ public class TagInteractionTest {
     throw new Error( "Should never happen" ) ;
   }
 
-  private static final String cleanTextContent( HtmlElement htmlElement ) {
+  private static String cleanTextContent( HtmlElement htmlElement ) {
     final String textContent = htmlElement.getTextContent() ;
     return textContent.replace( "\n", "" ) ;
+  }
+
+
+  /**
+   * Returns if an element is displayed.
+   * According to Firebug, here is how jQuery's $(...).hide() works: turns 'display: block;'
+   * to 'display: none;'.
+   * So there is the{@code DomNode}'s
+   * <a href="http://htmlunit.svn.sourceforge.net/viewvc/htmlunit/tags/HtmlUnit-2.5/src/main/java/com/gargoylesoftware/htmlunit/html/DomNode.java?revision=4422&view=markup" >isDisplayed()</a>
+   * which seems to do it right but it doesn't work.
+   */
+  private static boolean isDisplayed( HtmlElement element ) {
+
+    throw new UnsupportedOperationException( "isDisplayed" ) ;
   }
 
 
