@@ -92,6 +92,7 @@
         </dl>
       </xsl:if>
 
+      <!-- HtmlUnit needs a form element to find checkboxes inside. -->
       <form id="tag-list" name="tag-list" >
         Activate / deactivate tags here:<br/>
       </form>
