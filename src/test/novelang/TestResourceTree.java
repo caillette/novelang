@@ -32,6 +32,7 @@ public final class TestResourceTree {
   public static void initialize() {
     ResourceSchema.initialize( Images.class ) ;
     ResourceSchema.initialize( FontStructure.class ) ;
+    ResourceSchema.initialize( TaggedPart.class ) ;
   }
     
   public interface Images {
@@ -91,6 +92,13 @@ public final class TestResourceTree {
       }
 
     }
+  }
+  
+  public interface TaggedPart {
+    String TAG1 = "T1" ;
+    String TAG2 = "T2" ;
+    Directory dir = directory( "tagged" ) ;
+    Resource TAGGED = resource( "tagged.nlp" ) ;
   }
   
 }
