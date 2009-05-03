@@ -38,13 +38,15 @@ function initializeTagSystem( colorDefinitions ) {
     $( "#tag-list" ).append(
         "<input " +
             "type='checkbox' " +
+//            "id='checkbox-" + tag + "' " +
             "name='" + tag + "' " +
             "onclick=\"check() ; \"" +
         ">" +
         "<span class='Tag-" + tag + "' >" + tag + "</span>" +
         "<br/>"
-    ) ;
+    )
   }
+//  $( "#tag-list" ).wrap( "<form id='tags-form'></form>" ) ;
 
   setupColors( TAGS, colorDefinitions ) ;
 }

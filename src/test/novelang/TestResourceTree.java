@@ -97,6 +97,7 @@ public final class TestResourceTree {
   public interface TaggedPart {
     String TAG1 = "T1" ;
     String TAG2 = "T2" ;
+    String TAGS_FORM_NAME = "tag-list" ;
     Directory dir = directory( "tagged" ) ;
     Resource TAGGED = resource( "tags-combinations.nlp" ) ;
   }

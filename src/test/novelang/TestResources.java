@@ -178,26 +178,9 @@ public class TestResources {
 
   public static ProducerConfiguration createProducerConfiguration(
       final File contentDirectory,
-      final String styleDirectoryName,
-      final boolean shouldAddClasspathResourceLoader,
+      final ResourceLoader resourceLoader,
       final Charset renderingCharset
   ) {
-    final ResourceLoader resourceLoader ;
-    if ( null == styleDirectoryName ) {
-      resourceLoader = new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
-    } else {
-      final ClasspathResourceLoader customResourceLoader =
-          new ClasspathResourceLoader( styleDirectoryName ) ;
-      if( shouldAddClasspathResourceLoader ) {
-        resourceLoader = ResourceLoaderTools.compose(
-            customResourceLoader,
-            new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
-        ) ;
-      } else {
-        resourceLoader = customResourceLoader ;
-      }
-    }
-
     return new ProducerConfiguration() {
 
       public RenderingConfiguration getRenderingConfiguration() {
@@ -212,8 +195,8 @@ public class TestResources {
           public FopFontStatus getCurrentFopFontStatus() {
             final Iterable< EmbedFontInfo > fontInfo = Iterables.emptyIterable() ;
             final Map< String, EmbedFontInfo > failedFonts = ImmutableMap.of() ;
-            return new FopFontStatus( 
-                fontInfo, 
+            return new FopFontStatus(
+                fontInfo,
                 failedFonts
             ) ;
           }
@@ -234,6 +217,27 @@ public class TestResources {
         } ;
       }
     } ;
+
+  }
+
+  public static ProducerConfiguration createProducerConfiguration(
+      final File contentDirectory,
+      final String styleDirectoryName,
+      final boolean shouldAddClasspathResourceLoader,
+      final Charset renderingCharset
+  ) {
+    final ResourceLoader resourceLoader ;
+    final ClasspathResourceLoader customResourceLoader =
+        new ClasspathResourceLoader( styleDirectoryName ) ;
+    if( shouldAddClasspathResourceLoader ) {
+      resourceLoader = ResourceLoaderTools.compose(
+          customResourceLoader,
+          new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
+      ) ;
+    } else {
+      resourceLoader = customResourceLoader ;
+    }
+    return createProducerConfiguration( contentDirectory, resourceLoader, renderingCharset ) ;
 
   }
 
@@ -264,12 +268,12 @@ public class TestResources {
 
   public static DaemonConfiguration createDaemonConfiguration(
       final int httpDaemonPort,
-      final File contentDirectory
+      final File contentDirectory,
+      final ResourceLoader resourceLoader
   ) {
     final ProducerConfiguration producerConfiguration = createProducerConfiguration(
         contentDirectory,
-        null,
-        true,
+        resourceLoader,
         DefaultCharset.RENDERING
     ) ;
 
@@ -283,5 +287,6 @@ public class TestResources {
     } ;
 
   }
+
 
 }

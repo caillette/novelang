@@ -92,9 +92,9 @@
         </dl>
       </xsl:if>
 
-      <p id="tag-list" >
+      <form id="tag-list" name="tag-list" >
         Activate / deactivate tags here:<br/>
-      </p>
+      </form>
 
       <p id="messages" />
       <div id="externalColorDefinitionsPlaceholder" style="visibility:hidden;" />

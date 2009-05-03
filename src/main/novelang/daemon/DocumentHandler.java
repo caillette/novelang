@@ -19,6 +19,7 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ import novelang.produce.DocumentProducer;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
 import novelang.rendering.HtmlProblemPrinter;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * Serves rendered content.
@@ -59,10 +61,12 @@ public class DocumentHandler extends GenericHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger( DocumentHandler.class ) ;
 
   private final DocumentProducer documentProducer ;
+  private final Charset renderingCharset ;
 
 
   public DocumentHandler( ProducerConfiguration serverConfiguration ) {
     documentProducer = new DocumentProducer( serverConfiguration ) ;
+    renderingCharset = serverConfiguration.getRenderingConfiguration().getDefaultCharset() ;
   }
 
 
@@ -116,13 +120,19 @@ public class DocumentHandler extends GenericHandler {
           redirectToProblemPage( documentRequest, response ) ;
         } else {
 
+          // Correct methods don't seem to work.
+          // response.setCharacterEncoding( renderingCharset.name() ) ;
+          // response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
+          response.addHeader( "Content-type", RenditionMimeType.HTML.getMimeName() ) ;
+          response.addHeader( "Charset", renderingCharset.name() ) ;
+
           response.setStatus( HttpServletResponse.SC_OK ) ;
           try {
             documentProducer.produce( documentRequest, rendered, outputStream ) ;
           } catch( Exception e ) {
             throw new ServletException( e ) ;
           }
-          response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
+//          response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
 
         }
 

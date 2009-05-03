@@ -54,6 +54,7 @@ public class ClasspathResourceLoader implements ResourceLoader {
 
   public InputStream getInputStream( ResourceName resourceName ) {
     final String absoluteName = path + "/" + resourceName.getName() ; // normalize( resourceName ) ;
+    LOGGER.debug( "Attempting to load '" + absoluteName + "'" ) ;
 
     final URL url = reference.getResource( absoluteName ) ;
     if( null == url ) {
