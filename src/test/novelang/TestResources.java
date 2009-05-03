@@ -183,15 +183,19 @@ public class TestResources {
       final Charset renderingCharset
   ) {
     final ResourceLoader resourceLoader ;
-    final ClasspathResourceLoader customResourceLoader =
-        new ClasspathResourceLoader( styleDirectoryName ) ;
-    if( shouldAddClasspathResourceLoader ) {
-      resourceLoader = ResourceLoaderTools.compose(
-          customResourceLoader,
-          new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
-      ) ;
+    if ( null == styleDirectoryName ) {
+      resourceLoader = new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
     } else {
-      resourceLoader = customResourceLoader ;
+      final ClasspathResourceLoader customResourceLoader =
+          new ClasspathResourceLoader( styleDirectoryName ) ;
+      if( shouldAddClasspathResourceLoader ) {
+        resourceLoader = ResourceLoaderTools.compose(
+            customResourceLoader,
+            new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
+        ) ;
+      } else {
+        resourceLoader = customResourceLoader ;
+      }
     }
 
     return new ProducerConfiguration() {
@@ -245,6 +249,28 @@ public class TestResources {
         styleDirectoryName,
         false,
         renderingCharset
+    ) ;
+
+    return new DaemonConfiguration() {
+      public int getPort() {
+        return httpDaemonPort ;
+      }
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+    } ;
+
+  }
+
+  public static DaemonConfiguration createDaemonConfiguration(
+      final int httpDaemonPort,
+      final File contentDirectory
+  ) {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        contentDirectory,
+        null,
+        true,
+        DefaultCharset.RENDERING
     ) ;
 
     return new DaemonConfiguration() {
