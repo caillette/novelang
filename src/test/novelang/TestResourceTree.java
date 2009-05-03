@@ -98,7 +98,7 @@ public final class TestResourceTree {
     String TAG1 = "T1" ;
     String TAG2 = "T2" ;
     Directory dir = directory( "tagged" ) ;
-    Resource TAGGED = resource( "tagged.nlp" ) ;
+    Resource TAGGED = resource( "tags-combinations.nlp" ) ;
   }
   
 }

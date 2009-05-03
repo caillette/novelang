@@ -65,6 +65,7 @@
       <include name="**/*.js" />      
       <include name="**/*.html" />
       <include name="**/*.xhtml" />
+      <include name="**/*.htm" />
       <include name="**/*.txt" />
       <include name="**/*.bin" />
       <include name="**/*.st" />
