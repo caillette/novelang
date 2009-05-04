@@ -40,7 +40,7 @@ function initializeTagSystem( colorDefinitions ) {
             "type='checkbox' " +
 //            "id='checkbox-" + tag + "' " +
             "name='" + tag + "' " +
-            "onclick=\"check() ; \"" +
+            "onclick=\"checkTag() ; \"" +
         ">" +
         "<span class='Tag-" + tag + "' >" + tag + "</span>" +
         "<br/>"
@@ -150,7 +150,7 @@ function isDirectTagscopeContainer( domElement/*, indent*/ ) {
   return direct ;
 }
 
-function check() {
+function checkTag() {
 //  alert( "Updating tag visibility..." ) ;
   window.status = "Updating tag visibility..." ;
   var checked = [] ;

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -32,6 +33,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Ordering;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.TaggedPart;
@@ -69,7 +71,6 @@ public class TagInteractionTest {
       }
     } );
     webClient.setAjaxController( new NicelyResynchronizingAjaxController() ) ;
-//    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
     final Page page = webClient.getPage(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" +
         FilenameUtils.getBaseName( TaggedPart.TAGGED.getName() ) +
@@ -88,25 +89,37 @@ public class TagInteractionTest {
 
     LOGGER.info( "Now the whole page should have finished loading and initializing." ) ;
 
-    final List< HtmlElement > allHeaders = extractAllHeaders( htmlPage ) ;
-    logHeaderVisibility( allHeaders ) ;
+    final List< HtmlElement > allHeaders = Ordering.from( HTMLELEMENT_COMPARATOR ).
+        sortedCopy( extractAllHeaders( htmlPage ) ) ;
+//    logHeaderVisibility( allHeaders ) ;
     assertEquals( 24, allHeaders.size() )  ;
 
     verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
 
-
     final HtmlForm tagList = htmlPage.getFormByName( TaggedPart.TAGS_FORM_NAME ) ;
     final HtmlCheckBoxInput tag1Checkbox = tagList.getInputByName( TaggedPart.TAG1 ) ;
-    tag1Checkbox.setChecked( true ) ;
-    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
-    LOGGER.info( "Now scripts are done after checking " + TaggedPart.TAG1 ) ;
+    final HtmlCheckBoxInput tag2Checkbox = tagList.getInputByName( TaggedPart.TAG2 ) ;
 
-//    assertTrue( collectedAlerts.contains( TaggedPart.UPDATING_TAG_VISIBILITY_ALERT_MESSAGE ) ) ;
-    assertTrue( collectedStatusMessages.contains( TaggedPart.UPDATING_TAG_VISIBILITY_STATUS_MESSAGE ) ) ;
+    // Real things start from here.
+
+    tag2Checkbox.click() ;
+    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+
+    assertTrue( collectedStatusMessages.contains(
+        TaggedPart.UPDATING_TAG_VISIBILITY_STATUS_MESSAGE ) ) ;
     collectedStatusMessages.clear() ;
 
-    logHeaderVisibility( allHeaders ) ;
-    verifyHidden( allHeaders, ImmutableSet.< String >of( "H4." ) ) ;
+//    logHeaderVisibility( allHeaders ) ;
+    verifyHidden( allHeaders, ImmutableSet.< String >of(
+        "H0.0.",
+        "H0.1.",
+        "H1.0.",
+        "H1.1.",
+        "H4.",
+        "H4.0",
+        "H5.",
+        "H5.1"
+    ) ) ;
   }
 
 
@@ -178,7 +191,10 @@ public class TagInteractionTest {
     }
     for( HtmlElement htmlElement : elementsToBeVerified ) {
       LOGGER.debug( "Verifying visible for element '{}'", cleanTextContent( htmlElement ) ) ;
-      assertTrue( htmlElement.isDisplayed() ) ;
+      assertTrue(
+          "Expected to be displayed, but is not: " + cleanTextContent( htmlElement ),
+          htmlElement.isDisplayed()
+      ) ;
     }
 
   }
@@ -218,6 +234,13 @@ public class TagInteractionTest {
     }
   }
 
+  private static final Comparator< HtmlElement > HTMLELEMENT_COMPARATOR =
+      new Comparator<HtmlElement>() {
+        public int compare( HtmlElement e1, HtmlElement e2 ) {
+          return cleanTextContent( e1 ).compareTo( cleanTextContent( e2 ) ) ;
+        }
+      }
+  ;
 
   /**
    * Returns if an element is displayed.
