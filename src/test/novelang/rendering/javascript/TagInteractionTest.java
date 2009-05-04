@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.Collections;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
@@ -16,22 +19,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Node;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.UnexpectedPage;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.StatusHandler;
+import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.javascript.host.CSSStyleDeclaration;
-import com.gargoylesoftware.htmlunit.javascript.host.HTMLElement;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.TaggedPart;
@@ -55,11 +55,21 @@ public class TagInteractionTest {
   public void justLetTheDaemonStartThenStop() throws IOException { }
 
   @Test
-  public void justLoadPage() throws IOException {
+  public void justLoadPage() throws IOException, InterruptedException {
+    final List< String > collectedStatusMessages =
+        Collections.synchronizedList( Lists.< String >newArrayList() ) ;
+    final List< String > collectedAlerts =
+        Collections.synchronizedList( Lists.< String >newArrayList() ) ;
     final WebClient webClient = new WebClient() ;
     webClient.setThrowExceptionOnScriptError( true ) ;
+    webClient.setAlertHandler( new CollectingAlertHandler( collectedAlerts ) ) ;
+    webClient.setStatusHandler( new StatusHandler() {
+      public void statusMessageChanged( Page page, String s ) {
+        collectedStatusMessages.add( s ) ;
+      }
+    } );
     webClient.setAjaxController( new NicelyResynchronizingAjaxController() ) ;
-    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+//    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
     final Page page = webClient.getPage(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" +
         FilenameUtils.getBaseName( TaggedPart.TAGGED.getName() ) +
@@ -76,24 +86,32 @@ public class TagInteractionTest {
     LOGGER.debug( "Got page of type " + page.getClass().getName() );
     final HtmlPage htmlPage = ( HtmlPage ) page ;
 
+    LOGGER.info( "Now the whole page should have finished loading and initializing." ) ;
+
     final List< HtmlElement > allHeaders = extractAllHeaders( htmlPage ) ;
-//    for( DomNode header : allHeaders ) {
-//      LOGGER.debug( "Header: " + header.getTextContent() ) ;
-//    }
-    assertEquals( 24, allHeaders.size() ) ;
+    logHeaderVisibility( allHeaders ) ;
+    assertEquals( 24, allHeaders.size() )  ;
 
     verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
 
 
     final HtmlForm tagList = htmlPage.getFormByName( TaggedPart.TAGS_FORM_NAME ) ;
-    HtmlCheckBoxInput tag1Checkbox = tagList.getInputByName( TaggedPart.TAG1 ) ;
+    final HtmlCheckBoxInput tag1Checkbox = tagList.getInputByName( TaggedPart.TAG1 ) ;
     tag1Checkbox.setChecked( true ) ;
+    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+    LOGGER.info( "Now scripts are done after checking " + TaggedPart.TAG1 ) ;
 
+//    assertTrue( collectedAlerts.contains( TaggedPart.UPDATING_TAG_VISIBILITY_ALERT_MESSAGE ) ) ;
+    assertTrue( collectedStatusMessages.contains( TaggedPart.UPDATING_TAG_VISIBILITY_STATUS_MESSAGE ) ) ;
+    collectedStatusMessages.clear() ;
+
+    logHeaderVisibility( allHeaders ) ;
     verifyHidden( allHeaders, ImmutableSet.< String >of( "H4." ) ) ;
   }
 
 
-// =======  
+
+// =======
 // Fixture
 // =======
 
@@ -178,9 +196,26 @@ public class TagInteractionTest {
     throw new Error( "Should never happen" ) ;
   }
 
+  private static final Pattern MEANINGFUL_HEADER_TEXT = Pattern.compile( "(H\\d\\.(?:\\d\\.)?)" ) ;
+
   private static String cleanTextContent( HtmlElement htmlElement ) {
     final String textContent = htmlElement.getTextContent() ;
-    return textContent.replace( "\n", "" ) ;
+    final Matcher matcher = MEANINGFUL_HEADER_TEXT.matcher( textContent ) ;
+    if( matcher.find() ) {
+      return matcher.group( 1 ) ;
+    } else {
+      throw new IllegalArgumentException(
+          "Could not find meaningful text in '" + textContent + "'" ) ;
+    }
+  }
+
+
+  private void logHeaderVisibility( List<HtmlElement> allHeaders ) {
+    for( HtmlElement header : allHeaders ) {
+      LOGGER.debug(
+          "Header: " + cleanTextContent( header ) + " displayed: " + header.isDisplayed()
+      ) ;
+    }
   }
 
 

@@ -98,6 +98,8 @@ public final class TestResourceTree {
     String TAG1 = "T1" ;
     String TAG2 = "T2" ;
     String TAGS_FORM_NAME = "tag-list" ;
+    String UPDATING_TAG_VISIBILITY_STATUS_MESSAGE = "Updating tag visibility..." ;
+    String UPDATING_TAG_VISIBILITY_ALERT_MESSAGE = "Done updating tag visibility" ;
     Directory dir = directory( "tagged" ) ;
     Resource TAGGED = resource( "tags-combinations.nlp" ) ;
   }

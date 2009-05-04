@@ -151,7 +151,8 @@ function isDirectTagscopeContainer( domElement/*, indent*/ ) {
 }
 
 function check() {
-
+//  alert( "Updating tag visibility..." ) ;
+  window.status = "Updating tag visibility..." ;
   var checked = [] ;
   ( $( "#tag-list :checked" ).each( function() {
     checked.push( $( this ).attr( "name" ) ) ;
@@ -163,6 +164,8 @@ function check() {
 //        showMessage( "Some tags were selected: " + checked.toString() ) ;
     updateVisibility( $( "body" ).get(), checked, "" ) ;
   }
+  window.status = "" ;
+//  alert( "Done updating tag visibility" ) ;
 
 
 }
