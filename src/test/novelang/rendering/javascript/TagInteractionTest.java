@@ -3,12 +3,12 @@ package novelang.rendering.javascript;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
@@ -22,18 +22,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.StatusHandler;
 import com.gargoylesoftware.htmlunit.UnexpectedPage;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.StatusHandler;
-import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.TaggedPart;
@@ -53,63 +52,16 @@ import novelang.rendering.RenditionMimeType;
 @RunWith( value = NameAwareTestClassRunner.class )
 public class TagInteractionTest {
 
-  @Test @Ignore
-  public void justLetTheDaemonStartThenStop() throws IOException { }
-
   @Test
   public void justLoadPage() throws IOException, InterruptedException {
-    final List< String > collectedStatusMessages =
-        Collections.synchronizedList( Lists.< String >newArrayList() ) ;
-    final List< String > collectedAlerts =
-        Collections.synchronizedList( Lists.< String >newArrayList() ) ;
-    final WebClient webClient = new WebClient() ;
-    webClient.setThrowExceptionOnScriptError( true ) ;
-    webClient.setAlertHandler( new CollectingAlertHandler( collectedAlerts ) ) ;
-    webClient.setStatusHandler( new StatusHandler() {
-      public void statusMessageChanged( Page page, String s ) {
-        collectedStatusMessages.add( s ) ;
-      }
-    } );
-    webClient.setAjaxController( new NicelyResynchronizingAjaxController() ) ;
-    final Page page = webClient.getPage(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
-        FilenameUtils.getBaseName( TaggedPart.TAGGED.getName() ) +
-        "." + RenditionMimeType.HTML.getFileExtension()
-    ) ;
-    if( page instanceof UnexpectedPage ) {
-      final UnexpectedPage unexpectedPage = ( UnexpectedPage ) page ;
-      LOGGER.error( "Unexpected page!" ) ;
-      LOGGER.error( "  Staus message:" + unexpectedPage.getWebResponse().getStatusMessage() ) ;
-      LOGGER.error( "  Response headers:" + unexpectedPage.getWebResponse().getResponseHeaders() ) ;
-      LOGGER.error( "Page content:\n" + unexpectedPage.getWebResponse().getContentAsString() ) ;
-      fail( "Could not load the page." ) ;
-    }
-    LOGGER.debug( "Got page of type " + page.getClass().getName() );
-    final HtmlPage htmlPage = ( HtmlPage ) page ;
-
-    LOGGER.info( "Now the whole page should have finished loading and initializing." ) ;
-
-    final List< HtmlElement > allHeaders = Ordering.from( HTMLELEMENT_COMPARATOR ).
-        sortedCopy( extractAllHeaders( htmlPage ) ) ;
-//    logHeaderVisibility( allHeaders ) ;
     assertEquals( 24, allHeaders.size() )  ;
-
     verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
+  }
 
-    final HtmlForm tagList = htmlPage.getFormByName( TaggedPart.TAGS_FORM_NAME ) ;
-    final HtmlCheckBoxInput tag1Checkbox = tagList.getInputByName( TaggedPart.TAG1 ) ;
-    final HtmlCheckBoxInput tag2Checkbox = tagList.getInputByName( TaggedPart.TAG2 ) ;
-
-    // Real things start from here.
-
+  @Test
+  public void restrictToTag2() throws IOException, InterruptedException {
     tag2Checkbox.click() ;
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
-
-    assertTrue( collectedStatusMessages.contains(
-        TaggedPart.UPDATING_TAG_VISIBILITY_STATUS_MESSAGE ) ) ;
-    collectedStatusMessages.clear() ;
-
-//    logHeaderVisibility( allHeaders ) ;
     verifyHidden( allHeaders, ImmutableSet.< String >of(
         "H0.0.",
         "H0.1.",
@@ -138,13 +90,17 @@ public class TagInteractionTest {
   private static final int AJAX_TIMEOUT_MILLISECONDS = 10000;
 
 
-  private File testDirectory ;
   private HttpDaemon httpDaemon ;
-  
+  private WebClient webClient ;
+  private List< HtmlElement > allHeaders;
+  private HtmlCheckBoxInput tag1Checkbox;
+  private HtmlCheckBoxInput tag2Checkbox;
+
+
   @Before
   public void before() throws Exception {
     final String testName = NameAwareTestClassRunner.getTestName() ;
-    testDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory() ;
+    File testDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory();
 
     final Filer filer = new Filer( testDirectory ) ;
     filer.copyContent( TaggedPart.dir ) ;
@@ -158,6 +114,46 @@ public class TagInteractionTest {
         resourceLoader
     ) ) ;
     httpDaemon.start() ;
+
+    setupWebClient() ;
+  }
+
+  private void setupWebClient() throws IOException {
+    final List< String > collectedStatusMessages =
+        Collections.synchronizedList( Lists.< String >newArrayList() ) ;
+    webClient = new WebClient();
+    webClient.setThrowExceptionOnScriptError( true ) ;
+    webClient.setStatusHandler( new StatusHandler() {
+      public void statusMessageChanged( Page page, String s ) {
+        collectedStatusMessages.add( s ) ;
+      }
+    } );
+    webClient.setAjaxController( new NicelyResynchronizingAjaxController() ) ;
+    final Page page = webClient.getPage(
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        FilenameUtils.getBaseName( TaggedPart.TAGGED.getName() ) +
+        "." + RenditionMimeType.HTML.getFileExtension()
+    ) ;
+    if( page instanceof UnexpectedPage ) {
+      final UnexpectedPage unexpectedPage = ( UnexpectedPage ) page ;
+      LOGGER.error( "Unexpected page!" ) ;
+      LOGGER.error( "  Staus message:" + unexpectedPage.getWebResponse().getStatusMessage() ) ;
+      LOGGER.error( "  Response headers:" + unexpectedPage.getWebResponse().getResponseHeaders() ) ;
+      LOGGER.error( "Page content:\n" + unexpectedPage.getWebResponse().getContentAsString() ) ;
+      fail( "Could not load the page." ) ;
+    }
+    LOGGER.debug( "Got page of type " + page.getClass().getName() );
+    final HtmlPage htmlPage = ( HtmlPage ) page ;
+
+    LOGGER.info( "Now the whole page should have finished loading and initializing." ) ;
+
+    allHeaders = Ordering.from( HTMLELEMENT_COMPARATOR ).
+        sortedCopy( extractAllHeaders( htmlPage ) );
+//    logHeaderVisibility( allHeaders ) ;
+
+    final HtmlForm tagList = htmlPage.getFormByName( TaggedPart.TAGS_FORM_NAME ) ;
+    tag1Checkbox = tagList.getInputByName( TaggedPart.TAG1 );
+    tag2Checkbox = tagList.getInputByName( TaggedPart.TAG2 );
   }
 
   @After
@@ -242,18 +238,6 @@ public class TagInteractionTest {
       }
   ;
 
-  /**
-   * Returns if an element is displayed.
-   * According to Firebug, here is how jQuery's $(...).hide() works: turns 'display: block;'
-   * to 'display: none;'.
-   * So there is the{@code DomNode}'s
-   * <a href="http://htmlunit.svn.sourceforge.net/viewvc/htmlunit/tags/HtmlUnit-2.5/src/main/java/com/gargoylesoftware/htmlunit/html/DomNode.java?revision=4422&view=markup" >isDisplayed()</a>
-   * which seems to do it right but it doesn't work.
-   */
-  private static boolean isDisplayed( HtmlElement element ) {
-
-    throw new UnsupportedOperationException( "isDisplayed" ) ;
-  }
 
 
 }
