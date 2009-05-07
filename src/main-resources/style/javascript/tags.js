@@ -38,13 +38,12 @@ function initializeTagSystem( colorDefinitions ) {
     $( "#tag-list" ).append(
         "<input " +
             "type='checkbox' " +
-//            "id='checkbox-" + tag + "' " +
             "name='" + tag + "' " +
             "onclick=\"checkTag() ; \"" +
         ">" +
         "<span class='Tag-" + tag + "' >" + tag + "</span>" +
         "<br/>"
-    )
+    ) ;
   }
 //  $( "#tag-list" ).wrap( "<form id='tags-form'></form>" ) ;
 
@@ -58,24 +57,27 @@ function showMessage( message ) {
 // Traverses the DOM (except elements which may not contain a tag scope) and hides tag scopes
 // divs which have no tag in the tagset, or which contain no tag scope satisfying the same
 // condition.
-// Returns VisibilityAction.SHOW if at least one children-contained tag scope has
-//   some wanted tag(s).
-// Returns VisibilityAction.HIDE if some children-contained tag scope was hidden.
-// Returns VisibilityAction.NOTHING when there were no tag scopes in children.
-function updateVisibility( domElement, tagset/*, indent*/ ) {
+// Returns true if at least one children-contained tag scope has some wanted tag(s).
+// Returns false if some children-contained tag scope was hidden, or when there were no tag
+//   scopes in children.
+function updateVisibility( domElement, tagset, indent ) {
   var resultingAction = false ;
   var containsTagsOfInterest = false ;
+
+//  showMessage( indent + "updateVisibility: entering " + tagscopeAsString( domElement ) ) ;
 
   if( isDirectTagscopeContainer( domElement/*, indent*/ ) ) {
     containsTagsOfInterest = isElementTagged( domElement, tagset/*, indent*/ ) ;
     if( containsTagsOfInterest ) {
+//      showMessage( indent + "updateVisibility: found tags of interest for " +
+//           tagscopeAsString( domElement ) ) ;
       return true ;
     }
   }
 
   $( domElement ).children().each( function() {
     if ( isPossibleTagscopeContainer( this ) ) {
-      resultingAction |= updateVisibility( this, tagset, /*indent +*/ "  " ) ;
+      resultingAction |= updateVisibility( this, tagset, indent + "  " ) ;
     }
   } ) ;
 
@@ -85,15 +87,33 @@ function updateVisibility( domElement, tagset/*, indent*/ ) {
     }
   }
 
+//  showMessage( indent + "updateVisibility: returning " + resultingAction ) ;
   return resultingAction ;
 
 }
 
+function getClassName( obj ) {
+  if( obj === null ) return undefined ;
+  var s = obj.toString() ;
+  var arr = s.match( /\[object\ (\w+)\]/ ) ;
+  return arr && arr.length == 2 ? arr[ 1 ] : undefined ;
+
+
+}
+
 function tagscopeAsString( domElement ) {
-  return (
-      domElement + " " +
-      "(" + $( ":header", domElement ).text() + ")"
-  ) ;
+  var s = "" ;
+
+  s += getClassName( domElement ) ;
+
+  var headerName = $( ":header:first", domElement ).text() ;
+  s += headerName == "" ? "" : " \"" + headerName + "\"" ;
+
+  if( isDirectTagscopeContainer( domElement ) ) {
+    s += " directTagscopeContainer" ;
+  }
+
+  return s ;
 }
 
 // Returns if the element has at least one tag in the tagset (which is an array).
@@ -112,7 +132,11 @@ function isElementTagged( domElement, tagset/*, indent*/ ) {
 //    ) ;
 //  }
   // Take all li from first ul with .tags class.
-  var tagElements = $( "li", $( "ul.tags", domElement ).eq( 0 ) ).get( ) ;
+  var list = $( "ul.tags", domElement ) ;
+  if( list === null ||  $( list ).size() == 0 ) {
+    return false ;
+  }
+  var tagElements = $( "li", $( list ).eq( 0 ) ).get() ;
   for( var i = 0 ; i < tagElements.length ; i++ ) {
     if( isTag( $( tagElements[ i ] ).text(), tagset ) ) {
       return true ;

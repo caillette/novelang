@@ -74,6 +74,38 @@ public class TagInteractionTest {
     ) ) ;
   }
 
+  @Test
+  public void restrictToTag1() throws IOException, InterruptedException {
+    tag1Checkbox.click() ;
+    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+    verifyHidden( allHeaders, ImmutableSet.< String >of(
+        "H0.0.",
+        "H0.2.",
+        "H2.0.",
+        "H2.2.",
+        "H4.",
+        "H4.0"
+    ) ) ;
+  }
+
+  @Test
+  public void revert1() throws IOException, InterruptedException {
+    tag1Checkbox.click() ;
+    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+    tag1Checkbox.click() ;
+    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+    verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
+  }
+
+  @Test
+  public void revert2() throws IOException, InterruptedException {
+    tag2Checkbox.click() ;
+    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+    tag2Checkbox.click() ;
+    webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
+    verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
+  }
+
 
 
 // =======
@@ -176,21 +208,24 @@ public class TagInteractionTest {
       Set< String > headerTextStarts
   ) {
     final Set< HtmlElement > elementsToBeVerified = Sets.newHashSet( htmlElements ) ;
+    final Set< String > errors = Sets.newTreeSet() ;
     for( String headerTextStart : headerTextStarts ) {
       final HtmlElement htmlElement = findByTextStart( htmlElements, headerTextStart ) ;
       LOGGER.debug( "Verifying hidden for header '{}'", headerTextStart ) ;
       if( htmlElement.isDisplayed() ) {
-        fail( "Expected to be hidden: " + headerTextStart ) ;
+        errors.add( headerTextStart + " should be hidden") ;
       } else {
         elementsToBeVerified.remove( htmlElement ) ;
       }
     }
     for( HtmlElement htmlElement : elementsToBeVerified ) {
       LOGGER.debug( "Verifying visible for element '{}'", cleanTextContent( htmlElement ) ) ;
-      assertTrue(
-          "Expected to be displayed, but is not: " + cleanTextContent( htmlElement ),
-          htmlElement.isDisplayed()
-      ) ;
+      if( ! htmlElement.isDisplayed() ) {
+        errors.add( cleanTextContent( htmlElement ) + " should be displayed" ) ;
+      }
+    }
+    if( errors.size() > 0 ) {
+      fail( errors.toString() ) ;
     }
 
   }
