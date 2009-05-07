@@ -106,12 +106,13 @@ p.tag-summary + ul.tags > li {
 
 #tag-list {
   display: block;
-  border: solid blue 1px ;
+  border: solid darkslategray 2px ;
   position: fixed ;
   margin-left: 700px;
   z-index: 99000 ;
-  /*width: 400px ;*/
   top: 8px ;
+  padding 60px ;
+
   -moz-border-radius:5px ;
   -webkit-border-radius: 5px ;
 }
