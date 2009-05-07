@@ -45,7 +45,13 @@ function initializeTagSystem( colorDefinitions ) {
         "<br/>"
     ) ;
   }
-//  $( "#tag-list" ).wrap( "<form id='tags-form'></form>" ) ;
+  $( "#tag-list" ).wrapInner( "<div id='tag-list-content' ></div>" ) ;
+  $( "#tag-list" ).prepend( "<p id='tag-list-disclosure' >+</p>" ) ;
+  $( "#tag-list-disclosure" ).click( function() {
+    $( "#tag-list-content" ).slideToggle( 100 ) ;
+  } ) ;
+  $( "#tag-list-content" ).hide() ;
+
 
   setupColors( TAGS, colorDefinitions ) ;
 }

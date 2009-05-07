@@ -116,6 +116,12 @@ p.tag-summary + ul.tags > li {
   -webkit-border-radius: 5px ;
 }
 
-
+#tag-list-disclosure {
+  font-size: 16pt ;
+  font-weight:bold;
+  text-indent: 0 ;
+  margin-left: 1pt ;
+  cursor: s-resize ;
+}
 
 

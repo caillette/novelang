@@ -84,7 +84,6 @@
       <xsl:apply-templates />
 
       <xsl:if test="//n:meta/n:tags" >
-        <hr/>
         <dl id="tag-definitions" >
           <xsl:for-each select="//n:meta/n:tags/*">
             <dt><xsl:value-of select="." /></dt>
@@ -93,9 +92,7 @@
       </xsl:if>
 
       <!-- HtmlUnit needs a form element to find checkboxes inside. -->
-      <form id="tag-list" name="tag-list" >
-        Activate / deactivate tags here:<br/>
-      </form>
+      <form id="tag-list" name="tag-list" />
 
       <p id="messages" />
       <div id="externalColorDefinitionsPlaceholder" style="visibility:hidden;" />
@@ -247,16 +244,14 @@
 
 
   <xsl:template name="tags" >
-    <!--<xsl:if test="n:tag" >-->
-      <ul class="tags" >
-        <xsl:for-each select="n:tag" >
-          <li>
-            <xsl:value-of select="." />
-          </li>
-        </xsl:for-each>
-      </ul>
-      <br/>
-    <!--</xsl:if>-->
+    <ul class="tags" >
+      <xsl:for-each select="n:tag" >
+        <li>
+          <xsl:value-of select="." />
+        </li>
+      </xsl:for-each>
+    </ul>
+    <br/>
   </xsl:template>
 
 
