@@ -122,6 +122,17 @@ public class UrlParsingTest {
     ) ;
   }
 
+  @Test
+  public void urlWithSolidusInParametersAndNumberSignAndEqualsSign() throws RecognitionException {
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval(
+        "http://novelang.sf.net/?p=1#x=y",
+        tree(
+            URL_LITERAL,
+            "http://novelang.sf.net/?p=1#x=y"
+        )
+    ) ;
+  }
+
 // =======
 // Fixture
 // =======

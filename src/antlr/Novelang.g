@@ -1228,7 +1228,7 @@ httpUrl                                       // Grammatical ambiguity in the sp
     ( SOLIDUS httpUrlPath 
       ( QUESTION_MARK httpUrlSearch )? 
     )?
-    ( NUMBER_SIGN urlUChar+ )? // Not in the spec
+    ( NUMBER_SIGN ( urlUChar | EQUALS_SIGN )+ )? // Not in the spec
   ;
 
 
