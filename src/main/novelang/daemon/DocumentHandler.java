@@ -123,7 +123,8 @@ public class DocumentHandler extends GenericHandler {
           // Correct methods don't seem to work.
           // response.setCharacterEncoding( renderingCharset.name() ) ;
           // response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
-          response.addHeader( "Content-type", RenditionMimeType.HTML.getMimeName() ) ;
+          response.addHeader( "Content-type", 
+              documentRequest.getRenditionMimeType().getMimeName() ) ;
           response.addHeader( "Charset", renderingCharset.name() ) ;
 
           response.setStatus( HttpServletResponse.SC_OK ) ;

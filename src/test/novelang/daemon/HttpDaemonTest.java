@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -75,6 +76,18 @@ public class HttpDaemonTest {
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_DOCUMENT_NAME ) ) ;
     save( "generated.pdf", generated ) ;
     assertTrue( generated.length > 100 ) ;
+  }
+
+  @Test
+  public void correctMimeTypeForPdf() throws Exception {
+    setUp( "correctMimeTypeForPdf" ) ;
+    HttpClient httpClient = new HttpClient() ;
+    final GetMethod getMethod = new GetMethod(
+        "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_DOCUMENT_NAME ) ;
+    httpClient.executeMethod( getMethod ) ;
+    final Header[] headers = getMethod.getResponseHeaders( "Content-type" ) ;
+    LOGGER.debug( "Got headers: {}", headers ) ;
+    Assert.assertEquals( "application/pdf", headers[ 0 ].getValue() ) ;
   }
 
   @Test

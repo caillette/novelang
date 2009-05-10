@@ -13,6 +13,12 @@ Keep informed reading the
 http://novelang.blogspot.com
 . 
 
+=== Version `0.27.1`
+
+--- Fixed MIME type of documents served by HTTP dæmon.
+
+
+
 === Version `0.27.0`
 
 --- Experimental support for tag-based document filtering with default HTML stylesheet. 
@@ -20,6 +26,8 @@ This is purely Javascript-based (runs all in the browser) and performance are di
 documents.
 
 --- Fixed minor parsing bugs around URL.
+
+
 
 
 
