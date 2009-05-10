@@ -286,34 +286,77 @@ mixedDelimitedSpreadBlock
 /** Everything in this rule implies a syntactic predicate, 
  *  so it will fool ANTLRWorks' interpreter.
  */
-spreadBlockBody
-  : (   
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak smallDashedListItem softbreak ) 
-        )
-      | ( ( softbreak whitespace? )? 
-          mixedDelimitedSpreadBlock
-          ( whitespace mixedDelimitedSpreadBlock )*
-        )
-    )
-    (   
-        ( ( softbreak url whitespace? softbreak ) => 
-              ( softbreak url softbreak ) 
-        ) 
-      | ( ( softbreak whitespace? smallDashedListItem whitespace? softbreak ) => 
-                ( softbreak whitespace? smallDashedListItem softbreak ) 
+spreadBlockBody  // Relies on mixedDelimitedSpreadBlock
+  : 
+    (  // Beginning by URL or smallDashedListItem
+      (
+          ( ( softbreak url ) => ( softbreak url ) 
+          ) 
+        | ( ( softbreak whitespace? smallDashedListItem ) => 
+                  ( softbreak whitespace? smallDashedListItem ) 
           )
-      | ( ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlock ) =>
-                ( whitespace? softbreak whitespace? mixedDelimitedSpreadBlock )
-          ( whitespace 
-            mixedDelimitedSpreadBlock
-          )*
-        )             
-    )* 
-    // Missing: SOFTBREAK after last mixedDelimitedSpreadBlock
+	    )
+	    
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlock 
+		              ( whitespace mixedDelimitedSpreadBlock )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlock 
+				              ( whitespace mixedDelimitedSpreadBlock )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlock 
+				  ( whitespace mixedDelimitedSpreadBlock )*
+				)?   	    
+  	  )   	  
+    )
+    
+  | ( // Other kind of beginning: just text 
+
+      mixedDelimitedSpreadBlock 
+      ( whitespace mixedDelimitedSpreadBlock )*
+      
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlock 
+		              ( whitespace mixedDelimitedSpreadBlock )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlock 
+				              ( whitespace mixedDelimitedSpreadBlock )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlock 
+				  ( whitespace mixedDelimitedSpreadBlock )*
+				)?
+   	    
+   	  )?
+
+    )
   ;  
 
 
@@ -1264,7 +1307,6 @@ urlFileSegment
       | AMPERSAND
       | EQUALS_SIGN
       | TILDE         // Not in the spec.
-//      | NUMBER_SIGN   // Not in the spec.
     )+                // + added from the spec.
   ;
 

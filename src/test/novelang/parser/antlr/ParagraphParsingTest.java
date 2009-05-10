@@ -670,8 +670,32 @@ public class ParagraphParsingTest {
     ) ;
   }
 
-
   @Test
+  public void
+  parenthesizedUrlWithNameThenWord()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
+        "(\"y\"" + BREAK +
+        "http://novelang.sf.net " + BREAK +
+        "z)",
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_INSIDE_PARENTHESIS,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "y" ) ),
+                tree( URL_LITERAL, "http://novelang.sf.net" ),
+                tree( WORD_, "z" )
+            )
+        )
+    ) ;
+  }
+
+
+  /**
+   * Do we need to support this one?
+   */
+  @Test @Ignore 
   public void paragraphIsParenthesisWithBreakThenWord()
       throws RecognitionException
   {
