@@ -498,7 +498,10 @@ A tag is not meant to be content by itself, but it may help to categorize the co
 additional information to the stylesheet.
 
 With Novelang default stylesheet for HTML, the tags are rendered as tiny colorful floating
-rectangles in the margin. Default stylesheet for PDF doesn't render tags at all.
+rectangles in the right margin. A list of available tags appears in the topright corner in a 
+disclosure blox. Checking tags causes the document to display only tagged text. 
+
+Default stylesheet for PDF doesn't render tags at all.
 
 Tag usage sample: 
 
