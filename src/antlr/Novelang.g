@@ -1185,6 +1185,7 @@ httpUrl                                       // Grammatical ambiguity in the sp
     ( SOLIDUS httpUrlPath 
       ( QUESTION_MARK httpUrlSearch )? 
     )?
+    ( NUMBER_SIGN urlUChar+ )? // Not in the spec
   ;
 
 
@@ -1263,7 +1264,7 @@ urlFileSegment
       | AMPERSAND
       | EQUALS_SIGN
       | TILDE         // Not in the spec.
-      | NUMBER_SIGN   // Not in the spec.
+//      | NUMBER_SIGN   // Not in the spec.
     )+                // + added from the spec.
   ;
 
@@ -1281,7 +1282,6 @@ httpUrlSegment
       | AMPERSAND
       | EQUALS_SIGN
       | TILDE          // Not in the spec.
-      | NUMBER_SIGN    // Not in the spec.
     )*
   ;  
   
