@@ -20,9 +20,10 @@ options { output = AST ; }
 
 
 // Those tokens are turned into a NodeKind.java by TokenEnumerationGenerator.
+// Beware of line comments, which are processed.
 tokens {
-  PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;     
-  BOOK ;
+  PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;        // tagbehavior=SCOPE
+  BOOK ;                                          // tagbehavior=SCOPE
   LEVEL_INTRODUCER_ ;
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
@@ -32,11 +33,11 @@ tokens {
   IDENTIFIER ;
   BLOCK_INSIDE_HYPHEN_PAIRS ;            
   BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE ;  
-  LINES_OF_LITERAL ;                      
-  PART ;
+  LINES_OF_LITERAL ;                             // tagbehavior=TERMINAL
+  PART ;                                         // tagbehavior=SCOPE
   BLOCK_INSIDE_PARENTHESIS ;              
-  PARAGRAPH_REGULAR ;              
-  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;         
+  PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL
+  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ; 
   BLOCK_INSIDE_DOUBLE_QUOTES ;     
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;   
   BLOCK_INSIDE_SQUARE_BRACKETS ;            
@@ -48,7 +49,7 @@ tokens {
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
   CELL ;
   CELL_ROW ;
-  CELL_ROWS_WITH_VERTICAL_LINE ;
+  CELL_ROWS_WITH_VERTICAL_LINE ;                 // tagbehavior=TERMINAL
   WORD_ ;
   WHITESPACE_ ;
   LINE_BREAK_ ;
@@ -56,13 +57,13 @@ tokens {
   
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
-  SIGN_COMMA ;
-  SIGN_FULLSTOP ;
-  SIGN_ELLIPSIS ;
-  SIGN_QUESTIONMARK ;
-  SIGN_EXCLAMATIONMARK ;
-  SIGN_SEMICOLON ;
-  SIGN_COLON ;  
+  SIGN_COMMA ;           // punctuationsign=true
+  SIGN_FULLSTOP ;        // punctuationsign=true
+  SIGN_ELLIPSIS ;        // punctuationsign=true
+  SIGN_QUESTIONMARK ;    // punctuationsign=true
+  SIGN_EXCLAMATIONMARK ; // punctuationsign=true
+  SIGN_SEMICOLON ;       // punctuationsign=true
+  SIGN_COLON ;           // punctuationsign=true
   
   FUNCTION_CALL_ ;
   FUNCTION_NAME_ ;

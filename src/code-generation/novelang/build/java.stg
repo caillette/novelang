@@ -11,11 +11,7 @@ javadoc( generatorName, generationTimestamp ) ::= <<
 >>
 
 enumItem( item ) ::= <<
-<if(item.punctuationSign)>
-<item.name>( true )
-<else>
-<item.name>
-<endif>
+<item.name>( <item.punctuationSign>, <item.tagBehavior> )
 >>
 
 enum( package, name, items, generatorName, generationTimestamp ) ::= <<
@@ -23,26 +19,29 @@ package <package> ;
 
 import java.util.Collections ;
 import java.util.Set ;
-import com.google.common.base.Preconditions ;
 import com.google.common.collect.Sets ;
 import novelang.common.SyntacticTree ;
+import novelang.common.TagBehavior;
+import static novelang.common.TagBehavior.* ;
 
 <javadoc()>
 public enum <name> {
   <items : { item | <enumItem( item )>} ; separator = ", \n" > ;
 
   private final boolean punctuationSign ;
+  private final TagBehavior tagBehavior ;
 
-  private <name>() {
-    punctuationSign = false ;
-  }
-
-  <name>( boolean punctuationSign ) {
+  <name>( boolean punctuationSign, TagBehavior tagBehavior ) {
     this.punctuationSign = punctuationSign ;
+    this.tagBehavior = tagBehavior ;
   }
 
   public boolean isPunctuationSign() {
     return punctuationSign ;
+  }
+
+  public TagBehavior getTagBehavior() {
+    return tagBehavior ;
   }
 
   private static final Set\< String > NAMES ;

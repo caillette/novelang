@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableMap;
 
 
 /**
@@ -57,12 +60,15 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     final Iterable< Item > enumerationItems = findAntlrTokens( getGrammar() ) ;
     return generateJavaEnumeration( enumerationItems ) ;
   }
-  
+
+  private static final Map< TokenProperty, String > TAG_SCOPE =
+      ImmutableMap.of( TokenProperty.TAG_BEHAVIOR, TagBehavior.SCOPE.name() ) ;
+
   private static final Collection< Item > SYNTHETIC_ITEMS = ImmutableList.of( 
-      new Item( "_STYLE" ), 
-      new Item( "_LEVEL" ),
+      new Item( "_STYLE" ),
+      new Item( "_LEVEL", TAG_SCOPE ),
       new Item( "_LIST_WITH_TRIPLE_HYPHEN" ),
-      new Item( "_PARAGRAPH_AS_LIST_ITEM" ),
+      new Item( "_PARAGRAPH_AS_LIST_ITEM", TAG_SCOPE ),
       new Item( "_EMBEDDED_LIST_WITH_HYPHEN" ),
       new Item( "_EMBEDDED_LIST_ITEM" ),
       new Item( "_META_TIMESTAMP" ),
@@ -78,8 +84,21 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   private static final Pattern ALL_TOKENS_PATTERN =
       Pattern.compile( "tokens(?:\\s*)\\{[^\\}]*\\}" ) ;
 
-  private static final Pattern ONE_TOKEN_PATTERN =
-      Pattern.compile( "(?: *([A-Z_]+) *;)" ) ;
+  private static final Pattern ONE_TOKEN_PATTERN ;
+  static {
+    final StringBuffer regexBuilder = new StringBuffer() ;
+    regexBuilder.append( "(?: *([A-Z_]+) *;)(?: *//" ) ;
+    for( TokenProperty tokenProperty : TokenProperty.values() ) {
+      regexBuilder
+          .append( "(?:\\s+" )
+          .append( tokenProperty.getPublicName() )
+          .append( "=(\\w+))?" )
+      ;
+    }
+    regexBuilder.append( ")? *" ) ;
+    ONE_TOKEN_PATTERN = Pattern.compile( regexBuilder.toString() ) ;
+    LOGGER.debug( "Crafted regex " + ONE_TOKEN_PATTERN.pattern() ) ;
+  }
 
   protected static Iterable< Item > findAntlrTokens( String grammar ) {
     final Matcher allTokensMatcher = ALL_TOKENS_PATTERN.matcher( grammar ) ;
@@ -93,9 +112,21 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     final List< Item > tokenList = Lists.newLinkedList() ;
 
     while( eachTokenMatcher.find() ) {
-      tokenList.add( new Item( eachTokenMatcher.group( 1 ) ) ) ;
+      final Map< TokenProperty, String > properties = Maps.newHashMap() ;
+      for( TokenProperty tokenProperty : TokenProperty.values() ) {
+        final String propertyValue = eachTokenMatcher.group( tokenProperty.ordinal() + 2 ) ;
+        if( null != propertyValue ) {
+          properties.put( tokenProperty, propertyValue ) ;
+        }
+      }
+      final Item item = new Item( eachTokenMatcher.group( 1 ), properties ) ;
+      tokenList.add( item ) ;
     }
-    
+    if( tokenList.size() < 1 ) {
+      LOGGER.warn( "No token found" ) ;
+    }
+
+
     tokenList.addAll( SYNTHETIC_ITEMS ) ;
 
     return ImmutableList.copyOf( tokenList ) ;
@@ -113,10 +144,22 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   public static final class Item {
     public final String name ;
     public final boolean punctuationSign ;
+    public final TagBehavior tagBehavior ;
 
     public Item( String name ) {
-      this.name = name;
-      this.punctuationSign = name.startsWith( "SIGN_" );
+      this( name, ImmutableMap.< TokenProperty, String >of() ) ;
+    }
+
+    public Item( String name, Map< TokenProperty, String > properties ) {
+      this.name = name ;
+      this.punctuationSign =
+          "true".equalsIgnoreCase( properties.get( TokenProperty.PUNCTUATION_SIGN ) ) ;
+      final String tagBehaviorAsString = properties.get( TokenProperty.TAG_BEHAVIOR ) ;
+      if( null == tagBehaviorAsString ) {
+        tagBehavior = TagBehavior.NONE ;
+      } else {
+        tagBehavior = TagBehavior.valueOf( tagBehaviorAsString ) ;
+      }      
     }
 
     @Override
@@ -143,6 +186,36 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       result = 31 * result + ( punctuationSign ? 1 : 0 ) ;
       return result ;
     }
+
+    @Override
+    public String toString() {
+      return "Item[ name: " + name + ( punctuationSign ? " ; punctuationsign" : "" ) + " ]" ;
+    }
+  }
+
+  private static enum TokenProperty {
+    PUNCTUATION_SIGN,
+    TAG_BEHAVIOR ;
+
+    private final String publicName ;
+    
+    private TokenProperty() {
+      publicName = name().toLowerCase().replace( "_", "" ) ;
+    }
+
+    public String getPublicName() {
+      return publicName ;
+    }
+  }
+
+  /**
+   * This class mirrors the one in {@code novelang.common} which cannot be referenced because
+   * of source directories layout.
+   */
+  public enum TagBehavior {
+    NONE,
+    SCOPE,
+    TERMINAL;
   }
 
 }

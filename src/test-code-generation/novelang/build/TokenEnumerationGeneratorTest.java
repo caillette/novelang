@@ -23,7 +23,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 import junit.framework.Assert;
+import novelang.common.TagBehavior;
 
 
 /**
@@ -40,22 +43,52 @@ public class TokenEnumerationGeneratorTest {
     final String tokensDeclaration =
         "SOME_UNUSUED_STUFF ; \n" +
         "tokens { \n" +
-        " STUFF ; // comment \n" +
+        " STUFF ; // punctuationsign=true tagbehavior=SCOPE \n" +
         " OTHER_STUFF;\n" +
         "}"
     ;
-    final Iterable<TokenEnumerationGenerator.Item> tokens =
+    final Iterable< TokenEnumerationGenerator.Item > tokens =
         TokenEnumerationGenerator.findAntlrTokens( tokensDeclaration ) ;
     final List< TokenEnumerationGenerator.Item > tokenList = ImmutableList.copyOf( tokens ) ;
     // Don't assert on token number because of synthetic tokens.
-    Assert.assertTrue(
-        "Got: " + tokenList,
-        tokenList.contains( new TokenEnumerationGenerator.Item( "STUFF" ) ) 
-    ) ;
-    Assert.assertTrue(
-        "Got: " + tokenList,
-        tokenList.contains( new TokenEnumerationGenerator.Item( "OTHER_STUFF" ) )
-    ) ;
+
+    final TokenEnumerationGenerator.Item stuff = getItemWithName( tokenList, "STUFF" ) ;
+    Assert.assertNotNull( stuff ) ;
+    Assert.assertTrue( stuff.punctuationSign ) ;
+    Assert.assertEquals( TagBehavior.SCOPE.name(), stuff.tagBehavior.name() ) ;
+
+    final TokenEnumerationGenerator.Item otherStuff = getItemWithName( tokenList, "OTHER_STUFF" ) ;
+    Assert.assertNotNull( otherStuff ) ;
+    Assert.assertFalse( otherStuff.punctuationSign ); ;
+    Assert.assertEquals( TagBehavior.NONE.name(), otherStuff.tagBehavior.name() ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private static TokenEnumerationGenerator.Item getItemWithName(
+      final List< TokenEnumerationGenerator.Item > items,
+      final String name
+  ) {
+    final Predicate< TokenEnumerationGenerator.Item > predicate =
+        new Predicate< TokenEnumerationGenerator.Item >() {
+          public boolean apply( TokenEnumerationGenerator.Item item ) {
+            return name.equals( item.name ) ;
+          }
+        }
+    ;
+    final Iterable< TokenEnumerationGenerator.Item > itemsWithName =
+        Iterables.filter( items, predicate ) ;
+    final int elementCount = Iterables.size( itemsWithName );
+    switch( elementCount ) {
+      case 0 : return null ;
+      case 1 : return itemsWithName.iterator().next() ;
+      default : throw new IllegalArgumentException(
+          "More than one element with name '" + name + "' inside " + itemsWithName ) ;
+    }
+
   }
 
 }
