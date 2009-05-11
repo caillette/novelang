@@ -119,7 +119,7 @@ public abstract class GenericParameters {
             Lists.newArrayList( fontDirectoriesNames ) ) ;
         fontDirectories = extractDirectories( baseDirectory, fontDirectoriesNames ) ;
       } else {
-        fontDirectories = Iterables.emptyIterable() ;
+        fontDirectories = ImmutableList.of() ;
       }
 
     } catch( ParseException e ) {

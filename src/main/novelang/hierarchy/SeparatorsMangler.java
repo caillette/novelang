@@ -21,7 +21,6 @@ import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import com.google.common.base.Function;
-import com.google.common.base.Nullable;
 
 /**
  * @author Laurent Caillette

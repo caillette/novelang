@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.configuration.parse.BatchParameters;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.GenericParameters;
@@ -205,7 +206,7 @@ public class ConfigurationTools {
       ) ;
 
       if( null == maybeDefaultDirectory ) {
-        fontDirectories = Iterables.emptyIterable() ;
+        fontDirectories = ImmutableList.of() ;
       } else {
         fontDirectories = Lists.newArrayList( maybeDefaultDirectory ) ;
       }

@@ -27,6 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.HashMultimap;
 import novelang.configuration.FontQuadruplet;
 import novelang.configuration.FopFontStatus;
 
@@ -57,7 +58,7 @@ public class SyntheticFontMap {
   public static Multimap< String, FontQuadruplet > mapQuadrupletsByCleanNames(
       Iterable< FontQuadruplet > quadruplets
   ) {
-    final Multimap< String, FontQuadruplet > map = Multimaps.newHashMultimap() ;
+    final Multimap< String, FontQuadruplet > map = HashMultimap.create() ;
     for( FontQuadruplet quadruplet : quadruplets ) {
       map.put( quadruplet.getFontTriplet().getName(), quadruplet ) ;
     }
@@ -68,7 +69,7 @@ public class SyntheticFontMap {
       Set< String > names,
       Iterable< FontQuadruplet > quadruplets
   ) {
-    final Multimap< String, FontQuadruplet > extracted = Multimaps.newHashMultimap() ;
+    final Multimap< String, FontQuadruplet > extracted = HashMultimap.create() ;
     for( FontQuadruplet quadruplet : quadruplets ) {
       final String name = quadruplet.getFontTriplet().getName() ;
       if( names.contains( name ) ) {
@@ -96,7 +97,7 @@ public class SyntheticFontMap {
     final Iterable< FontQuadruplet > quadrupletsPriorityZero =
         retainPriorityZero( quadruplets ) ;
     final Multimap< String, FontQuadruplet > quadrupletsByCleanNames =
-        Multimaps.newArrayListMultimap(
+        HashMultimap.create(
             mapQuadrupletsByCleanNames( quadrupletsPriorityAboveZero ) ) ;
     quadrupletsByCleanNames.putAll(
         extractTripletsWithKnownName( quadrupletsByCleanNames.keySet(), quadrupletsPriorityZero )

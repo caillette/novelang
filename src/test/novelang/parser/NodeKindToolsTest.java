@@ -22,7 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.base.Join;
+import com.google.common.base.Joiner;
 
 /**
  * Tests for {@link NodeKindTools}.
@@ -36,7 +36,7 @@ public class NodeKindToolsTest {
   @Test
   public void renderingNames() {
     final Set< String > names = NodeKindTools.getRenderingNames() ;
-    LOGGER.info( "Rendering names:\n  {}\n", Join.join( ",\n  ", names ) ) ;
+    LOGGER.info( "Rendering names:\n  {}\n", Joiner.on( ",\n  " ).join( names ) ) ;
     Assert.assertTrue( names.contains(
         NodeKindTools.tokenNameAsXmlElementName( NodeKind.BLOCK_INSIDE_DOUBLE_QUOTES.name() ) ) ) ;
     Assert.assertFalse( names.contains(

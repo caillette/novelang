@@ -18,6 +18,7 @@ package novelang.book.function;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.ImmutableList;
 import novelang.book.Environment;
 import novelang.common.Location;
 import novelang.common.Problem;
@@ -63,7 +64,7 @@ public abstract class FunctionCall {
     private final Treepath< SyntacticTree > book ;
     private final Iterable< Problem > problems ;
 
-    private static final Iterable< Problem > NO_PROBLEM = Iterables.emptyIterable() ;
+    private static final Iterable< Problem > NO_PROBLEM = ImmutableList.of() ;
 
     public Result(
         Environment environment,

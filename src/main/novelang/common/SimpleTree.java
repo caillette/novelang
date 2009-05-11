@@ -20,6 +20,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import novelang.common.tree.ImmutableTree;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
@@ -56,7 +57,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
 
     final Iterable<? extends SyntacticTree> children = super.getChildren() ;
     if( null == children ) {
-      return Iterables.emptyIterable() ;
+      return ImmutableList.of() ;
     } else {
       return children ;
     }

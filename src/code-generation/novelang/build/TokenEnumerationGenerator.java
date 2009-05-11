@@ -104,7 +104,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     final Matcher allTokensMatcher = ALL_TOKENS_PATTERN.matcher( grammar ) ;
     if( ! allTokensMatcher.find() ) {
       LOGGER.warn( "No token found" ) ;
-      return Iterables.emptyIterable() ;
+      return ImmutableList.of() ;
     }
     final String allTokens = allTokensMatcher.group( 0 ) ;
 

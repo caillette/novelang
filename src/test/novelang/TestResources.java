@@ -25,6 +25,7 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.ImmutableList;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.DaemonConfiguration;
@@ -193,7 +194,7 @@ public class TestResources {
           }
 
           public FopFontStatus getCurrentFopFontStatus() {
-            final Iterable< EmbedFontInfo > fontInfo = Iterables.emptyIterable() ;
+            final Iterable< EmbedFontInfo > fontInfo = ImmutableList.of() ;
             final Map< String, EmbedFontInfo > failedFonts = ImmutableMap.of() ;
             return new FopFontStatus(
                 fontInfo,

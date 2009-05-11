@@ -18,6 +18,7 @@ package novelang.rendering.xslt.validate;
 
 import org.xml.sax.SAXException;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Thrown when incorrect names were found in XPath expression(s).
@@ -34,8 +35,7 @@ public class BadExpandedNamesException extends SAXException {
         BadExpandedName.toString( badExpandedNames, "\n  " )
     ) ;
     Preconditions.checkState( badExpandedNames.iterator().hasNext() ) ;
-    Preconditions.checkContentsNotNull( badExpandedNames ) ;
-    this.badExpandedNames = badExpandedNames ;
+    this.badExpandedNames = ImmutableList.copyOf( badExpandedNames ) ;
   }
 
   public Iterable< BadExpandedName > getBadExpandedNames() {

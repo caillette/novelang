@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableSet;
 import novelang.common.Location;
 
 /**
@@ -47,8 +48,7 @@ public class ExpandedNameVerifier {
   private final Set< String > nodeNames ;
 
   public ExpandedNameVerifier( Set< String > nodeNames ) {
-    Preconditions.checkContentsNotNull( nodeNames ) ;
-    this.nodeNames = nodeNames ;
+    this.nodeNames = ImmutableSet.copyOf( nodeNames ) ;
   }
 
   private static final String XPATH_PATTERN_FRAGMENT = ":([0-9a-zA-Z\\-_]+)" ;
