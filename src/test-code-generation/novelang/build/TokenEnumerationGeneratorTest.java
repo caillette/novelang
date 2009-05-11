@@ -40,7 +40,7 @@ public class TokenEnumerationGeneratorTest {
     final String tokensDeclaration =
         "SOME_UNUSUED_STUFF ; \n" +
         "tokens { \n" +
-        " STUFF ; \n" +
+        " STUFF ; // comment \n" +
         " OTHER_STUFF;\n" +
         "}"
     ;
