@@ -81,6 +81,8 @@ public class ProblemDelegate {
   }
 
   private final List< DelimitedText > delimiterStack = Lists.newLinkedList() ;
+  private DelimitedText innermostMismatch = null ;
+  private int innermostMismatchDepth = -1 ;
   private boolean handlingEndDelimiter = false ;
 
   public void startDelimitedText( Token startToken ) {
@@ -96,19 +98,35 @@ public class ProblemDelegate {
     Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
     handlingEndDelimiter = false ;
     delimiterStack.remove( delimiterStack.size() - 1 ) ;
+    
+    if( delimiterStack.isEmpty() && innermostMismatch != null ) {
+      report(
+          "No ending delimiter matching with " + innermostMismatch.startToken.getText(),
+          innermostMismatch.startToken.getLine(),
+          innermostMismatch.startToken.getCharPositionInLine()
+      ) ;
+
+    }
   }
 
   public void reportMissingDelimiter( MismatchedTokenException mismatchedTokenException )
       throws MismatchedTokenException 
   {
     if( handlingEndDelimiter ){
+/*
       Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
-      final DelimitedText delimitedText = delimiterStack.get( delimiterStack.size() - 1 );
+      final DelimitedText delimitedText = delimiterStack.get( delimiterStack.size() - 1 ) ;
       report(
         "No ending delimiter matching with " + delimitedText.startToken.getText(),
           delimitedText.startToken.getLine(),
           delimitedText.startToken.getCharPositionInLine()
       ) ;
+*/
+      final int depth = delimiterStack.size() - 1;
+      if( depth > innermostMismatchDepth ){
+        innermostMismatch = delimiterStack.get( depth ) ;
+        innermostMismatchDepth = depth ;
+      }
     } else {
       handlingEndDelimiter = false ; // Should be done in finally clause in the grammar, right?
       throw mismatchedTokenException ;
