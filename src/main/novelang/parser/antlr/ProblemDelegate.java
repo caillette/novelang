@@ -105,11 +105,12 @@ public class ProblemDelegate {
       Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
       final DelimitedText delimitedText = delimiterStack.get( delimiterStack.size() - 1 );
       report(
-        "Missing delimiter",
+        "No ending delimiter matching with " + delimitedText.startToken.getText(),
           delimitedText.startToken.getLine(),
           delimitedText.startToken.getCharPositionInLine()
       ) ;
     } else {
+      handlingEndDelimiter = false ; // Should be done in finally clause in the grammar, right?
       throw mismatchedTokenException ;
     }
   }
