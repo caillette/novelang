@@ -19,9 +19,11 @@ import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Ignore;
+import novelang.common.Problem;
+import com.google.common.collect.Iterables;
 
 /**
- * Check that illegal forms are correctly reported.
+ * Check that problems are correctly reported.
  */
 public class ProblemDetectionTest {
 
@@ -40,6 +42,19 @@ public class ProblemDetectionTest {
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( "\u0001" ) ;
     parser.parse() ;
     Assert.assertTrue( parser.hasProblem() ) ;
+  }
+
+  @Test
+  public void lineNumberForMissingClosingHyphenPair() throws RecognitionException {
+    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( "\n\n\n-- w" ) ;
+    parser.parse() ;
+    Assert.assertTrue( parser.hasProblem() ) ;
+    final Problem problem = Iterables.getOnlyElement( parser.getProblems() ) ;
+    Assert.assertEquals(
+        "Problem reported as '" + problem.getMessage() + "'",
+        4,
+        problem.getLocation().getLine()
+    ) ;
   }
 
 

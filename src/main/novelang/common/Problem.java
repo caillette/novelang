@@ -113,4 +113,13 @@ public class Problem {
   public static Problem createProblem( String message, Location location ) {
     return new Problem( location, message ) ;
   }
+
+  public static Problem createProblem(
+      String message,
+      LocationFactory locationFactory,
+      int line,
+      int column
+  ) {
+    return new Problem( locationFactory.createLocation( line, column ), message ) ;
+  }
 }
