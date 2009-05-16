@@ -400,61 +400,65 @@ mixedDelimitedMonoblock
 // Parenthesis
 // ===========
   
-parenthesizedSpreadblock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
-  : ( LEFT_PARENTHESIS whitespace?
+parenthesizedSpreadblock	  
+  : ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }  
+      LEFT_PARENTHESIS whitespace?
       ( spreadBlockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_PARENTHESIS
+      { delegate.endDelimitedText() ; }
     ) -> ^( BLOCK_INSIDE_PARENTHESIS spreadBlockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
 
 parenthesizedMonoblock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
-  : ( LEFT_PARENTHESIS whitespace?
+  : ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      LEFT_PARENTHESIS whitespace?
       ( monoblockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_PARENTHESIS
+      { delegate.endDelimitedText() ; }
     ) -> ^( BLOCK_INSIDE_PARENTHESIS monoblockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
 
 // ===============
 // Square brackets
 // ===============
   
 squarebracketsSpreadblock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
-  : ( LEFT_SQUARE_BRACKET whitespace?
+  : ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      LEFT_SQUARE_BRACKET whitespace?
       ( spreadBlockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_SQUARE_BRACKET
+      { delegate.endDelimitedText() ; }
     ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS spreadBlockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
 
 squarebracketsMonoblock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
-  : ( LEFT_SQUARE_BRACKET whitespace?
+  : ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }        
+      LEFT_SQUARE_BRACKET whitespace?
       ( monoblockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_SQUARE_BRACKET
+      { delegate.endDelimitedText() ; }
     ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS monoblockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
 
 
 // =============
@@ -462,17 +466,18 @@ squarebracketsMonoblock
 // =============
 
 doubleQuotedSpreadBlock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
-	: ( DOUBLE_QUOTE whitespace?
+	: ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      DOUBLE_QUOTE whitespace?
 	    ( b += spreadBlockBodyNoDoubleQuotes 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    DOUBLE_QUOTE
+      { delegate.endDelimitedText() ; }
 	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ ) 
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
 
 delimitedSpreadblockNoDoubleQuotes
   : parenthesizedSpreadblock
@@ -580,17 +585,18 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
   ;
 
 doubleQuotedMonoblock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
- : ( DOUBLE_QUOTE whitespace?
+ : ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }      
+      DOUBLE_QUOTE whitespace?
 	    ( b += monoblockBodyNoDoubleQuotes 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    DOUBLE_QUOTE
+      { delegate.endDelimitedText() ; }
 	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
   
 
 delimitedMonoblockNoDoubleQuotes
@@ -646,17 +652,18 @@ mixedDelimitedMonoblockNoDoubleQuotes
 // ========
 
 emphasizedSpreadBlock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
-	: ( SOLIDUS SOLIDUS whitespace?
+	: ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+	    SOLIDUS SOLIDUS whitespace?
 	    ( b += spreadBlockBodyNoEmphasis 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    SOLIDUS SOLIDUS
+      { delegate.endDelimitedText() ; }
 	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
 
 delimitedSpreadblockNoEmphasis
   : parenthesizedSpreadblock
@@ -768,17 +775,18 @@ mixedDelimitedSpreadBlockNoEmphasis
   
 
 emphasizedMonoblock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
-	: ( SOLIDUS SOLIDUS whitespace?
+	: ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+	    SOLIDUS SOLIDUS whitespace?
 	    ( b += monoblockBodyNoEmphasis 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    SOLIDUS SOLIDUS
+      { delegate.endDelimitedText() ; }
 	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
   
 
 delimitedMonoblockNoEmphasis
@@ -834,8 +842,8 @@ mixedDelimitedMonoblockNoEmphasis
 // ===============================================
 
 hyphenPairSpreadBlock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
 	: 
+    { delegate.startDelimitedText( input.LT( 1 ) ) ; }
 	  HYPHEN_MINUS HYPHEN_MINUS whitespace?
     ( b += spreadBlockBodyNoHyphenPair
       whitespace? 
@@ -845,9 +853,9 @@ hyphenPairSpreadBlock
     (   HYPHEN_MINUS -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ ) 
       | LOW_LINE -> ^( BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE $b+ ) 
     ) 	  
+    { delegate.endDelimitedText() ; }
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
 
 delimitedSpreadblockNoHyphenPair
   : parenthesizedSpreadblock
@@ -955,17 +963,18 @@ mixedDelimitedSpreadBlockNoHyphenPair
   
 
 hyphenPairMonoblock
-	  @init{ delegate.startDelimitedText( input.LT( 1 ) ) ; }
- : ( HYPHEN_MINUS HYPHEN_MINUS whitespace?
+ : ( 
+      { delegate.startDelimitedText( input.LT( 1 ) ) ; } 
+      HYPHEN_MINUS HYPHEN_MINUS whitespace?
 	    ( b += monoblockBodyNoHyphenPair
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    HYPHEN_MINUS HYPHEN_MINUS
+      { delegate.endDelimitedText() ; }
 	  ) -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
-  finally{ delegate.endDelimitedText() ; }
   
 
 delimitedMonoblockNoHyphenPair

@@ -20,6 +20,8 @@ import java.util.List;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.MismatchedTokenException;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
@@ -31,6 +33,9 @@ import novelang.common.Problem;
  * Just hooks into ANTLR's error reporting.
  */
 public class ProblemDelegate {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( ProblemDelegate.class ) ;
+
   protected final LocationFactory locationFactory ;
   protected final List< Problem > problems = Lists.newArrayList() ;
 
@@ -86,15 +91,18 @@ public class ProblemDelegate {
   private boolean handlingEndDelimiter = false ;
 
   public void startDelimitedText( Token startToken ) {
+    LOGGER.debug( "startDelimiter [startToken={}]", startToken ) ;
     Preconditions.checkNotNull( startToken ) ;
     delimiterStack.add( new DelimitedText( startToken ) ) ;
   }
 
   public void handleEndDelimiter() {
+    LOGGER.debug( "handleEndDelimiter" ) ;
     handlingEndDelimiter = true ;
   }
 
   public void endDelimitedText() {
+    LOGGER.debug( "endDelimitedText" ) ;
     Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
     handlingEndDelimiter = false ;
     delimiterStack.remove( delimiterStack.size() - 1 ) ;
@@ -112,6 +120,7 @@ public class ProblemDelegate {
   public void reportMissingDelimiter( MismatchedTokenException mismatchedTokenException )
       throws MismatchedTokenException 
   {
+    LOGGER.debug( "reportMissingDelimiter [handingEndDelimiter={}]", handlingEndDelimiter ) ;
     if( handlingEndDelimiter ){
 /*
       Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
@@ -127,8 +136,9 @@ public class ProblemDelegate {
         innermostMismatch = delimiterStack.get( depth ) ;
         innermostMismatchDepth = depth ;
       }
+      handlingEndDelimiter = false ;
     } else {
-      handlingEndDelimiter = false ; // Should be done in finally clause in the grammar, right?
+      handlingEndDelimiter = false ; 
       throw mismatchedTokenException ;
     }
   }

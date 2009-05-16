@@ -14,7 +14,7 @@
   </logger>
 
   <logger name="httpclient" >
-    <level value="INFO" />
+    <level value="WARN" />
   </logger>
 
   <logger name="FOP" >
@@ -26,11 +26,11 @@
   </logger>
 
   <logger name="org.apache.fop.fonts" >
-    <level value="DEBUG" />
+    <level value="WARN" />
   </logger>
 
   <logger name="novelang" >
-    <level value="DEBUG" />
+    <level value="WARN" />
   </logger>
 
   <logger name="novelang.system.EnvironmentTools" >
@@ -39,6 +39,10 @@
 
   <logger name="novelang.loader" >
     <level value="INFO" />
+  </logger>
+
+  <logger name="novelang.parser.antlr" >
+    <level value="DEBUG" />
   </logger>
 
   <root>
