@@ -49,6 +49,7 @@ public class StartupTools {
     final String logDirectoryName = extractLogDirectory( arguments ) ;
     if( null == logDirectoryName ) {
       System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, DEFAULT_LOG_DIR ) ;
+      System.out.println( "Log directory set to '" + DEFAULT_LOG_DIR + "'" ) ;
     } else {
       final File logDirectory = new File( logDirectoryName ) ;
       if( ! logDirectory.exists() ) {
@@ -98,11 +99,11 @@ public class StartupTools {
    */
   public static String extractLogDirectory( String[] startupArguments ) {
     final String logDirectoryOption =
-        GenericParameters.OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME + "=" ;
+        GenericParameters.OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ;
     for( int i = 0 ; i < startupArguments.length ; i++ ) {
       final String startupArgument = startupArguments[ i ] ;
-      if( startupArgument.startsWith( logDirectoryOption ) ) {
-        return startupArgument.substring( logDirectoryOption.length() );
+      if( startupArgument.equals( logDirectoryOption ) && i < startupArgument.length() - 1 ) {
+        return startupArguments[ i + 1 ] ;
       }
     }
     return null ;
