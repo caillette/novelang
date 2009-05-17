@@ -16,13 +16,13 @@ running inside the Web browser.
 HTML generated using default stylesheet renders tags like this, with a nice color set making tags 
 distinguishable at a glance: 
 
-./Tags_2009-05-10/tags-decorating-text.png
+./images/Tags_2009-05-10/tags-decorating-text.png
 
 It is now possible to hide all the text which is not tagged, selecting tags in a list which appear 
 on topright corner of HTML document, with a fixed position that keeps it always visible and a 
 disclosure box which hides the list by default:
 
-./Tags_2009-05-10/tag-list.png
+./images/Tags_2009-05-10/tag-list.png
 
 
 
