@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.parser.antlr;
+package novelang.parser.antlr.delimited;
 
 import java.util.Map;
 import java.util.List;
@@ -23,13 +23,12 @@ import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.common.BlockDelimiter;
+import novelang.parser.antlr.delimited.BlockDelimiter;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Lists;
-import com.google.common.base.Joiner;
 
 /**
- * Receives notifications from {@link GrammarDelegate} from what's going on with delimiters.
+ * Receives notifications from {@link novelang.parser.antlr.GrammarDelegate} from what's going on with delimiters.
  *
  * @author Laurent Caillette
  */
@@ -102,96 +101,5 @@ public class ScopedBlockDelimiterWatcher {
 
   }
 
-
-  /*package*/ static final class DelimitedBlockStatus {
-    private final BlockDelimiter blockDelimiter ;
-    private int line = -1 ;
-    private int column = -1 ;
-    private int startCount = 0 ;
-    private int reachEndCount = 0 ;
-    private int endPassedCount = 0 ;
-    private int missingDelimiterCount = 0 ;
-
-    private DelimitedBlockStatus( BlockDelimiter blockDelimiter ) {
-      this.blockDelimiter = blockDelimiter ;
-    }
-
-    private DelimitedBlockStatus updatePosition( int line, int column ) {
-      if( line >= this.line && column > this.column ) {
-        this.line = line ;
-        this.column = column ;
-      }
-      return this ;
-    }
-
-    private DelimitedBlockStatus increaseStartCount() {
-      startCount++ ;
-      return this ;
-    }
-
-    private DelimitedBlockStatus increaseReachEndCount() {
-      reachEndCount++ ;
-      return this ;
-    }
-
-    private DelimitedBlockStatus increaseEndPassedCount() {
-      endPassedCount++ ;
-      return this ;
-    }
-
-    private DelimitedBlockStatus increaseMissingDelimiterCount() {
-      missingDelimiterCount++ ;
-      return this ;
-    }
-
-    public BlockDelimiter getBlockDelimiter() {
-      return blockDelimiter ;
-    }
-
-    public int getLine() {
-      return line;
-    }
-
-    public int getColumn() {
-      return column;
-    }
-
-    public boolean hasLocation() {
-      return line >= 0 && column >= 0 ;
-    }
-
-    public String getInternalStatusAsString() {
-      return "[ " + Joiner.on( " ; " ).join(
-          "line=" + String.format( "%1$2d", line ),
-          "column=" + String.format( "%1$2d", column ),
-          "start=" + startCount,
-          "reachEnd=" + reachEndCount,
-          "endPassed=" + endPassedCount,
-          "missingDelimiter=" + missingDelimiterCount,
-          "isConsistent()=" + isConsistent()
-      ) + " ]" ;
-    }
-
-    /**
-     * Returns if counters reflect consistency.
-     * Inconsistency may be caused by another problem elsewhere.
-     */
-    private boolean isConsistent() {
-      return
-          missingDelimiterCount == 0
-       && startCount == reachEndCount
-       && reachEndCount == endPassedCount
-      ;
-    }
-
-    @Override
-    public String toString() {
-      return
-          "Status[ " + blockDelimiter + " ; " +
-          "line=" + ( line >= 0 ? line : "x" ) + " ; " +
-          "column=" + ( column >= 0 ? column : "x" ) + " ]"
-      ;
-    }
-  }
 
 }

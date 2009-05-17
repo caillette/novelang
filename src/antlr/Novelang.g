@@ -77,7 +77,7 @@ tokens {
 @header {
 import novelang.parser.antlr.ProblemDelegate ; // Keep first, used as a marker by code generator.
 import novelang.parser.antlr.GrammarDelegate ;
-import novelang.common.BlockDelimiter ;
+import novelang.parser.antlr.delimited.BlockDelimiter ;
 }
 
 @lexer::header {

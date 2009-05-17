@@ -24,6 +24,7 @@ import org.junit.runners.NameAwareTestClassRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
+import novelang.parser.antlr.delimited.BlockDelimiterTools;
 import novelang.common.LocationFactory;
 import novelang.common.Location;
 import novelang.common.Problem;
@@ -119,7 +120,7 @@ public class DelimiterProblemTest {
             return new Location( "<test>", line, column );
           }
         },
-        parser.getDelegate().getFaultyDelimitedBlocks()
+        parser.getDelegate().getScopedBlockDelimiterWatcher()
     );
     LOGGER.debug( "Faulty blocks: {}",
         problems.iterator().hasNext() ?

@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.parser.antlr;
+package novelang.parser.antlr.delimited;
 
 import java.util.List;
 
 import novelang.common.Problem;
 import novelang.common.LocationFactory;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
@@ -36,10 +35,21 @@ public class BlockDelimiterTools {
 
   public static Iterable< Problem > createProblems(
       LocationFactory locationFactory,
-      Iterable< ScopedBlockDelimiterWatcher.DelimitedBlockStatus > statuses
+      ScopedBlockDelimiterWatcher scopedBlockDelimiterWatcher
+  ) {
+    return createProblems(
+        locationFactory,
+        scopedBlockDelimiterWatcher.getFaultyDelimitedBlocks()
+    ) ;
+  }
+
+
+  public static Iterable< Problem > createProblems(
+      LocationFactory locationFactory,
+      Iterable< DelimitedBlockStatus > statuses
   ) {
     final List< Problem > problems = Lists.newArrayList() ;
-    for( ScopedBlockDelimiterWatcher.DelimitedBlockStatus status : statuses ) {
+    for( DelimitedBlockStatus status : statuses ) {
       final Problem problem = Problem.createProblem(
           "Missing delimiter. " +
               "For '" + status.getBlockDelimiter().getStart() + "' there should be a matching " +

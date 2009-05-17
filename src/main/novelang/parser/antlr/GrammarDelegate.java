@@ -26,9 +26,10 @@ import org.slf4j.LoggerFactory;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
-import novelang.common.BlockDelimiter;
+import novelang.parser.antlr.delimited.BlockDelimiter;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
+import novelang.parser.antlr.delimited.ScopedBlockDelimiterWatcher;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
@@ -74,7 +75,8 @@ public class GrammarDelegate extends ProblemDelegate {
 // ==========
 
 
-  private final ScopedBlockDelimiterWatcher scopedBlockDelimiterWatcher = new ScopedBlockDelimiterWatcher() ;
+  private final ScopedBlockDelimiterWatcher scopedBlockDelimiterWatcher =
+      new ScopedBlockDelimiterWatcher() ;
 
   public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
     scopedBlockDelimiterWatcher.startDelimitedText( blockDelimiter, startToken ) ;
@@ -97,13 +99,13 @@ public class GrammarDelegate extends ProblemDelegate {
     scopedBlockDelimiterWatcher.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
   }
 
+
   /**
    * TODO remove this method.
    */
-  public Iterable< ScopedBlockDelimiterWatcher.DelimitedBlockStatus > getFaultyDelimitedBlocks() {
-    return scopedBlockDelimiterWatcher.getFaultyDelimitedBlocks() ;
+  public ScopedBlockDelimiterWatcher getScopedBlockDelimiterWatcher() {
+    return scopedBlockDelimiterWatcher ;
   }
-
   /**
    * TODO remove this method.
    */

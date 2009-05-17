@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.common;
+package novelang.parser.antlr.delimited;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -32,7 +32,7 @@ import com.google.common.collect.ImmutableList;
  * Definition : <em>only delimiters</em> are delimiters which are the same for the beginning
  * and the end of the block.
  *
- * @see novelang.parser.antlr.ScopedBlockDelimiterWatcher
+ * @see novelang.parser.antlr.delimited.ScopedBlockDelimiterWatcher
  *
  * @author Laurent Caillette
  */
