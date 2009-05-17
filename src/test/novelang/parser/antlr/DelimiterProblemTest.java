@@ -19,6 +19,7 @@ package novelang.parser.antlr;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.slf4j.Logger;
@@ -50,13 +51,13 @@ public class DelimiterProblemTest {
   @Test
   public void nonSymmetricalUnclosedAlone() throws RecognitionException {
     final String text = "y -- z" ;
-    process( text ) ;
+    process( text, problem( 1, 2, "'--'" ) ) ;
   }
 
   @Test
   public void symmetricalUnclosedAlone() throws RecognitionException {
     final String text = "( z" ;
-    process( text ) ;
+    process( text, problem( 1, 0, "'('" ) ) ;
   }
 
   @Test
@@ -66,7 +67,7 @@ public class DelimiterProblemTest {
         "x -- y" + BREAK +
         "z )"
     ;
-    process( text ) ;
+    process( text, problem( 2, 2, "'--'" ) ) ;
   }
 
   @Test
@@ -76,7 +77,7 @@ public class DelimiterProblemTest {
         "x ( y" + BREAK +
         "z --"
     ;
-    process( text ) ;
+    process( text, problem( 2, 2, "'('" ) ) ;
   }
 
 
@@ -88,7 +89,7 @@ public class DelimiterProblemTest {
         "x [ y" + BREAK +
         "z --"
     ;
-    process( text ) ;
+    process( text, problem( 2, 2, "'('" ), problem( 3, 2, "[" ) ) ;
   }
 
   @Test
@@ -102,7 +103,7 @@ public class DelimiterProblemTest {
         "x [ y" + BREAK +
         "z //" + BREAK
     ;
-    process( text ) ;
+    process( text, problem( 2, 2, "'--'" ), problem( 6, 2, "'['" ) ) ;
   }
 
 
@@ -119,7 +120,8 @@ public class DelimiterProblemTest {
     LOGGER.info( "\n\nRunning {}", testName ) ;
   }
 
-  private void process( String text ) throws RecognitionException {
+
+  private void process( String text, ProblemSignature... signatures ) throws RecognitionException {
     LOGGER.info( BREAK + text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
@@ -130,7 +132,46 @@ public class DelimiterProblemTest {
         "\n    " + Joiner.on( "\n    " ).join( problems ) :
         "none."
     ) ;
+    if( signatures.length == 0 ) {
+      Assert.assertFalse( problems.iterator().hasNext() );
+    } else {
+      for( ProblemSignature signature : signatures ) {
+        Assert.assertTrue( signature.in( problems ) ) ;
+      }
+    }
   }
 
+  private static final ProblemSignature problem( int line, int column, String messageFragment ) {
+    return new ProblemSignature( line, column, messageFragment ) ;
+  }
+
+  private static class ProblemSignature {
+    private final int line ;
+    private final int column ;
+    private final String messageElement ;
+
+    private ProblemSignature( int line, int column, String messageElement ) {
+      this.line = line;
+      this.column = column;
+      this.messageElement = messageElement;
+    }
+
+    private boolean in( Problem problem ) {
+      return
+          problem.getLocation().getLine() == line
+       && problem.getLocation().getColumn() == column
+       && problem.getMessage().contains( messageElement )
+      ;
+    }
+
+    private boolean in( Iterable< Problem > problems ) {
+      for( Problem problem : problems ) {
+        if( in( problem ) ) {
+          return true ;
+        }
+      }
+      return false ;
+    }
+  }
 
 }
