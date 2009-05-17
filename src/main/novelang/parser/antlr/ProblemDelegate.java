@@ -28,6 +28,7 @@ import com.google.common.base.Preconditions;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
+import novelang.common.BlockDelimiter;
 
 /**
  * Just hooks into ANTLR's error reporting.
@@ -78,10 +79,26 @@ public class ProblemDelegate {
 // ==========
 
   private static class DelimitedText {
-    private final Token startToken ;
+    private final String startDelimiter ;
+    private final int line ;
+    private final int column ;
 
-    private DelimitedText( Token startToken ) {
-      this.startToken = startToken;
+    private DelimitedText( String startDelimiter, int line, int column ) {
+      this.startDelimiter = startDelimiter;
+      this.line = line;
+      this.column = column;
+    }
+
+    public String getStartDelimiter() {
+      return startDelimiter ;
+    }
+
+    public int getLine() {
+      return line ;
+    }
+
+    public int getColumn() {
+      return column ;
     }
   }
 
@@ -90,11 +107,40 @@ public class ProblemDelegate {
   private int innermostMismatchDepth = -1 ;
   private boolean handlingEndDelimiter = false ;
 
+  public void startDelimitedText( Token startToken1, Token startToken2 ) {
+    LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
+        startToken1.getText() + startToken2.getText(),
+        startToken1.getLine()
+    ) ;
+    delimiterStack.add( new DelimitedText(
+        startToken1.getText() + startToken2.getText(),
+        startToken1.getLine(),
+        startToken1.getCharPositionInLine()
+    ) ) ;
+  }
+
   public void startDelimitedText( Token startToken ) {
     LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
-        startToken.getText(), startToken.getLine() ) ;
-    Preconditions.checkNotNull( startToken ) ;
-    delimiterStack.add( new DelimitedText( startToken ) ) ;
+        startToken.getText(),
+        startToken.getLine()
+    ) ;
+    delimiterStack.add( new DelimitedText(
+        startToken.getText(),
+        startToken.getLine(),
+        startToken.getCharPositionInLine()
+    ) ) ;
+  }
+
+  public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
+    LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
+        startToken.getText(),
+        startToken.getLine()
+    ) ;
+    delimiterStack.add( new DelimitedText(
+        startToken.getText(),
+        startToken.getLine(),
+        startToken.getCharPositionInLine()
+    ) ) ;
   }
 
   public void handleEndDelimiter() {
@@ -102,7 +148,7 @@ public class ProblemDelegate {
     handlingEndDelimiter = true ;
   }
 
-  public void endDelimitedText() {
+  public void endDelimitedText( BlockDelimiter blockDelimiter ) {
     LOGGER.debug( "endDelimitedText" ) ;
     Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
     handlingEndDelimiter = false ;
@@ -110,9 +156,9 @@ public class ProblemDelegate {
     
     if( delimiterStack.isEmpty() && innermostMismatch != null ) {
       report(
-          "No ending delimiter matching with " + innermostMismatch.startToken.getText(),
-          innermostMismatch.startToken.getLine(),
-          innermostMismatch.startToken.getCharPositionInLine()
+          "No ending delimiter matching with " + innermostMismatch.getStartDelimiter(),
+          innermostMismatch.getLine(),
+          innermostMismatch.getColumn()
       ) ;
 
     }

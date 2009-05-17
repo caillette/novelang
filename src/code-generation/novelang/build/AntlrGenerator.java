@@ -55,7 +55,7 @@ import com.google.common.collect.Lists;
 public class AntlrGenerator extends JavaGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( AntlrGenerator.class ) ;
-  private static final String FIRST_IMPORT = "import org.antlr.runtime.*;" ;
+  private static final String FIRST_IMPORT = "import novelang.parser.antlr.ProblemDelegate ;" ;
   private static final String ANTLR_OUTPUT_INTRODUCTION = "ANTLR Parser Generator  Version 3.1.1";
 
   public AntlrGenerator(

@@ -27,21 +27,21 @@ tokens {
   LEVEL_INTRODUCER_ ;
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
-  BLOCK_INSIDE_SOLIDUS_PAIRS ;                 
   EXTENDED_WORD_ ;
-  BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ; 
   IDENTIFIER ;
-  BLOCK_INSIDE_HYPHEN_PAIRS ;            
+  BLOCK_INSIDE_PARENTHESIS ;
+  BLOCK_INSIDE_SQUARE_BRACKETS ;
+  BLOCK_INSIDE_DOUBLE_QUOTES ;
+  BLOCK_INSIDE_SOLIDUS_PAIRS ;
+  BLOCK_INSIDE_HYPHEN_PAIRS ;
   BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE ;  
+  BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;
+  BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ;
   LINES_OF_LITERAL ;                             // tagbehavior=TERMINAL
   PART ;                                         // tagbehavior=SCOPE
-  BLOCK_INSIDE_PARENTHESIS ;              
   PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL
-  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ; 
-  BLOCK_INSIDE_DOUBLE_QUOTES ;     
-  BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;   
-  BLOCK_INSIDE_SQUARE_BRACKETS ;            
-  WORD_AFTER_CIRCUMFLEX_ACCENT ;            
+  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;
+  WORD_AFTER_CIRCUMFLEX_ACCENT ;
   URL_LITERAL ;  
   RASTER_IMAGE ;
   VECTOR_IMAGE ;
@@ -74,14 +74,21 @@ tokens {
   VALUED_ARGUMENT_ASSIGNMENT_ ;
 }
 
+@header {
+import novelang.parser.antlr.ProblemDelegate ; // Keep first, used as a marker by code generator.
+import novelang.parser.antlr.GrammarDelegate ;
+import novelang.common.BlockDelimiter ;
+}
 
+@lexer::header {
+import novelang.parser.antlr.ProblemDelegate ; 
+}
 
 @lexer::members {
  
-  private novelang.parser.antlr.ProblemDelegate delegate = 
-      new novelang.parser.antlr.ProblemDelegate() ;
+  private ProblemDelegate delegate = new ProblemDelegate() ;
  
-  public void setProblemDelegate( novelang.parser.antlr.ProblemDelegate delegate ) {
+  public void setProblemDelegate( ProblemDelegate delegate ) {
     this.delegate = delegate ;
   }
  
@@ -98,10 +105,9 @@ tokens {
 
 
 @parser::members {
-private novelang.parser.antlr.GrammarDelegate delegate =
-    new novelang.parser.antlr.GrammarDelegate() ;
+private GrammarDelegate delegate = new GrammarDelegate() ;
 
-public void setGrammarDelegate( novelang.parser.antlr.GrammarDelegate delegate ) {
+public void setGrammarDelegate( GrammarDelegate delegate ) {
   this.delegate = delegate ;
 }
 
@@ -402,28 +408,28 @@ mixedDelimitedMonoblock
   
 parenthesizedSpreadblock	  
   : ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }  
+      { delegate.startDelimitedText( BlockDelimiter.PARENTHESIS, input.LT( 1 ) ) ; }
       LEFT_PARENTHESIS whitespace?
       ( spreadBlockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_PARENTHESIS
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.PARENTHESIS ) ; }
     ) -> ^( BLOCK_INSIDE_PARENTHESIS spreadBlockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
 
 parenthesizedMonoblock
   : ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      { delegate.startDelimitedText( BlockDelimiter.PARENTHESIS, input.LT( 1 ) ) ; }
       LEFT_PARENTHESIS whitespace?
       ( monoblockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_PARENTHESIS
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.PARENTHESIS ) ; }
     ) -> ^( BLOCK_INSIDE_PARENTHESIS monoblockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
@@ -434,28 +440,28 @@ parenthesizedMonoblock
   
 squarebracketsSpreadblock
   : ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      { delegate.startDelimitedText( BlockDelimiter.SQUARE_BRACKETS, input.LT( 1 ) ) ; }
       LEFT_SQUARE_BRACKET whitespace?
       ( spreadBlockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_SQUARE_BRACKET
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.SQUARE_BRACKETS ) ; }
     ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS spreadBlockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
 
 squarebracketsMonoblock
   : ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }        
+      { delegate.startDelimitedText( BlockDelimiter.SQUARE_BRACKETS, input.LT( 1 ) ) ; }
       LEFT_SQUARE_BRACKET whitespace?
       ( monoblockBody 
         whitespace? 
       )
       { delegate.handleEndDelimiter() ; }
       RIGHT_SQUARE_BRACKET
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.SQUARE_BRACKETS ) ; }
     ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS monoblockBody )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
@@ -467,14 +473,14 @@ squarebracketsMonoblock
 
 doubleQuotedSpreadBlock
 	: ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      { delegate.startDelimitedText( BlockDelimiter.DOUBLE_QUOTES, input.LT( 1 ) ) ; }
       DOUBLE_QUOTE whitespace?
 	    ( b += spreadBlockBodyNoDoubleQuotes 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    DOUBLE_QUOTE
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.DOUBLE_QUOTES ) ; }
 	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ ) 
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
@@ -586,14 +592,14 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
 
 doubleQuotedMonoblock
  : ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }      
+      { delegate.startDelimitedText( BlockDelimiter.DOUBLE_QUOTES, input.LT( 1 ) ) ; }
       DOUBLE_QUOTE whitespace?
 	    ( b += monoblockBodyNoDoubleQuotes 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    DOUBLE_QUOTE
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.DOUBLE_QUOTES ) ; }
 	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
@@ -653,14 +659,14 @@ mixedDelimitedMonoblockNoDoubleQuotes
 
 emphasizedSpreadBlock
 	: ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      { delegate.startDelimitedText( BlockDelimiter.SOLIDUS_PAIRS, input.LT( 1 ) ) ; }
 	    SOLIDUS SOLIDUS whitespace?
 	    ( b += spreadBlockBodyNoEmphasis 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    SOLIDUS SOLIDUS
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.SOLIDUS_PAIRS ) ; }
 	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
@@ -776,14 +782,14 @@ mixedDelimitedSpreadBlockNoEmphasis
 
 emphasizedMonoblock
 	: ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+      { delegate.startDelimitedText( BlockDelimiter.SOLIDUS_PAIRS, input.LT( 1 ) ) ; }
 	    SOLIDUS SOLIDUS whitespace?
 	    ( b += monoblockBodyNoEmphasis 
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    SOLIDUS SOLIDUS
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.SOLIDUS_PAIRS ) ; }
 	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
@@ -843,7 +849,7 @@ mixedDelimitedMonoblockNoEmphasis
 
 hyphenPairSpreadBlock
 	: 
-    { delegate.startDelimitedText( input.LT( 1 ) ) ; }
+    { delegate.startDelimitedText( BlockDelimiter.TWO_HYPHENS, input.LT( 1 ) ) ; }
 	  HYPHEN_MINUS HYPHEN_MINUS whitespace?
     ( b += spreadBlockBodyNoHyphenPair
       whitespace? 
@@ -853,7 +859,7 @@ hyphenPairSpreadBlock
     (   HYPHEN_MINUS -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ ) 
       | LOW_LINE -> ^( BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE $b+ ) 
     ) 	  
-    { delegate.endDelimitedText() ; }
+    { delegate.endDelimitedText( BlockDelimiter.TWO_HYPHENS ) ; }
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
 
@@ -964,14 +970,14 @@ mixedDelimitedSpreadBlockNoHyphenPair
 
 hyphenPairMonoblock
  : ( 
-      { delegate.startDelimitedText( input.LT( 1 ) ) ; } 
+      { delegate.startDelimitedText( BlockDelimiter.TWO_HYPHENS, input.LT( 1 ) ) ; }
       HYPHEN_MINUS HYPHEN_MINUS whitespace?
 	    ( b += monoblockBodyNoHyphenPair
 	      whitespace? 
 	    )?
 	    { delegate.handleEndDelimiter() ; }
 	    HYPHEN_MINUS HYPHEN_MINUS
-      { delegate.endDelimitedText() ; }
+      { delegate.endDelimitedText( BlockDelimiter.TWO_HYPHENS ) ; }
 	  ) -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ )
   ;
   catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }

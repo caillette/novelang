@@ -104,7 +104,7 @@ public class DelimiterProblemTest {
   @Before
   public void before() {
     final String testName = NameAwareTestClassRunner.getTestName() ;
-    LOGGER.info( "Running {}\n", testName ) ;
+    LOGGER.info( "\n\nRunning {}", testName ) ;
   }
 
 }
