@@ -24,6 +24,10 @@ import org.junit.runners.NameAwareTestClassRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
+import novelang.common.LocationFactory;
+import novelang.common.Location;
+import novelang.common.Problem;
+import com.google.common.base.Joiner;
 
 /**
  * Get sure that delimiters problems are correctly reported.
@@ -36,37 +40,26 @@ public class DelimiterProblemTest {
   @Test
   public void symmetricalOk() throws RecognitionException {
     final String text = "( z )" ;
-    logText( text );
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    process( text );
+
   }
 
   @Test
   public void nonSymmetricalOk() throws RecognitionException {
     final String text = "-- z --" ;
-    logText( text );
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    process( text ) ;
   }
 
   @Test
   public void nonSymmetricalUnclosedAlone() throws RecognitionException {
     final String text = "y -- z" ;
-    logText( text );
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    process( text ) ;
   }
 
   @Test
   public void symmetricalUnclosedAlone() throws RecognitionException {
     final String text = "( z" ;
-    logText( text );
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    process( text ) ;
   }
 
   @Test
@@ -76,10 +69,7 @@ public class DelimiterProblemTest {
         "x -- y" + BREAK +
         "z )"
     ;
-    logText( text );
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    process( text ) ;
   }
 
   @Test
@@ -89,10 +79,7 @@ public class DelimiterProblemTest {
         "x ( y" + BREAK +
         "z --"
     ;
-    logText( text ) ;
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    process( text ) ;
   }
 
 
@@ -104,10 +91,7 @@ public class DelimiterProblemTest {
         "x [ y" + BREAK +
         "z --"
     ;
-    logText( text );
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    process( text ) ;
   }
 
 
@@ -124,8 +108,25 @@ public class DelimiterProblemTest {
     LOGGER.info( "\n\nRunning {}", testName ) ;
   }
 
-  private void logText( String text ) {
+  private void process( String text ) throws RecognitionException {
     LOGGER.info( BREAK + text ) ;
+    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
+    parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
+    final Iterable<Problem> problems = BlockDelimiterTools.createProblems(
+        new LocationFactory() {
+          public Location createLocation( int line, int column ) {
+            return new Location( "<test>", line, column );
+          }
+        },
+        parser.getDelegate().getFaultyDelimitedBlocks()
+    );
+    LOGGER.debug( "Faulty blocks: {}",
+        problems.iterator().hasNext() ?
+        "\n    " + Joiner.on( "\n    " ).join( problems ) :
+        "none."
+    ) ;
   }
+
 
 }

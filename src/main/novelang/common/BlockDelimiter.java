@@ -16,6 +16,11 @@
  */
 package novelang.common;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.ImmutableList;
+
 /**
  * This enum represents blocks (subset of a paragraph-like piece of source document) which
  * have a start and end delimiter and which must be paired.
@@ -27,7 +32,7 @@ package novelang.common;
  * Definition : <em>only delimiters</em> are delimiters which are the same for the beginning
  * and the end of the block.
  *
- * @see novelang.parser.antlr.BlockDelimiterVerifier
+ * @see novelang.parser.antlr.ScopedBlockDelimiterWatcher
  *
  * @author Laurent Caillette
  */
@@ -60,5 +65,20 @@ public enum BlockDelimiter {
 
   public boolean isTwin() {
     return twin ;
+  }
+
+  private static final Predicate< BlockDelimiter > IS_TWIN = new Predicate<BlockDelimiter>() {
+    public boolean apply( BlockDelimiter blockDelimiter ) {
+      return blockDelimiter.isTwin() ;
+    }
+  } ;
+  private static final Predicate< BlockDelimiter > IS_ONLY = Predicates.not( IS_TWIN ) ;
+
+  public static Iterable< BlockDelimiter > getTwinDelimiters() {
+    return Iterables.filter( ImmutableList.of( values() ), IS_TWIN ) ;
+  }
+
+  public static Iterable< BlockDelimiter > getOnlyDelimiters() {
+    return Iterables.filter( ImmutableList.of( values() ), IS_ONLY ) ;
   }
 }

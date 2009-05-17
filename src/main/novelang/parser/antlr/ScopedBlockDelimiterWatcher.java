@@ -17,6 +17,7 @@
 package novelang.parser.antlr;
 
 import java.util.Map;
+import java.util.List;
 
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.Token;
@@ -24,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import novelang.common.BlockDelimiter;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 import com.google.common.base.Joiner;
 
 /**
@@ -31,23 +33,19 @@ import com.google.common.base.Joiner;
  *
  * @author Laurent Caillette
  */
-public class BlockDelimiterVerifier {
+public class ScopedBlockDelimiterWatcher {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( BlockDelimiterVerifier.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ScopedBlockDelimiterWatcher.class ) ;
 
   private final Map< BlockDelimiter, DelimitedBlockStatus > primes = Maps.newHashMap() ;
 
-  public BlockDelimiterVerifier() {
+  public ScopedBlockDelimiterWatcher() {
     for( BlockDelimiter blockDelimiter : BlockDelimiter.values() ) {
       primes.put( blockDelimiter, new DelimitedBlockStatus( blockDelimiter ) ) ;
     }
   }
 
   public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
-    LOGGER.debug( "startDelimiter[ blockDelimiter={} ; line={} ]",
-        blockDelimiter,
-        startToken.getLine()
-    ) ;
     primes.get( blockDelimiter )
         .updatePosition( startToken.getLine(), startToken.getCharPositionInLine() )
         .increaseStartCount()
@@ -56,12 +54,10 @@ public class BlockDelimiterVerifier {
   }
 
   public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
-    LOGGER.debug( "reachEndDelimiter[ {} ]", blockDelimiter ) ;
     primes.get( blockDelimiter ).increaseReachEndCount() ;
   }
 
   public void endDelimitedText( BlockDelimiter blockDelimiter ) {
-    LOGGER.debug( "endDelimitedText[ {} ]", blockDelimiter ) ;
     primes.get( blockDelimiter ).increaseEndPassedCount() ;
   }
 
@@ -71,9 +67,26 @@ public class BlockDelimiterVerifier {
   )
       throws MismatchedTokenException
   {
-    LOGGER.debug( "reportMissingDelimiter[ blockDelimiter={} ; line={} ]",
-        blockDelimiter, mismatchedTokenException.line ) ;
     primes.get( blockDelimiter ).increaseMissingDelimiterCount() ;
+  }
+
+  public Iterable< DelimitedBlockStatus > getFaultyDelimitedBlocks() {
+    final List< DelimitedBlockStatus > faultyDelimitedBlockStatuses = Lists.newArrayList() ;
+    for( BlockDelimiter blockDelimiter : BlockDelimiter.getTwinDelimiters() ) {
+      final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
+      if( ! status.isConsistent() ) {
+        faultyDelimitedBlockStatuses.add( status ) ;
+      }
+    }
+    if( faultyDelimitedBlockStatuses.isEmpty() ) {
+      for( BlockDelimiter blockDelimiter : BlockDelimiter.getOnlyDelimiters() ) {
+        final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
+        if( ! status.isConsistent() ) {
+          faultyDelimitedBlockStatuses.add( status ) ;
+        }
+      }
+    }
+    return faultyDelimitedBlockStatuses ;
   }
 
   public void dumpStatus() {
@@ -83,14 +96,14 @@ public class BlockDelimiterVerifier {
       buffer.append( "\n" ) ;
       buffer.append( String.format( "%1$16s", blockDelimiter.name() ) ) ;
       buffer.append( " " ) ;
-      buffer.append( status.getStatusAsString() ) ;
+      buffer.append( status.getInternalStatusAsString() ) ;
     }
     LOGGER.debug( buffer.toString() ) ;
 
   }
 
 
-  private static final class DelimitedBlockStatus {
+  /*package*/ static final class DelimitedBlockStatus {
     private final BlockDelimiter blockDelimiter ;
     private int line = -1 ;
     private int column = -1 ;
@@ -103,7 +116,7 @@ public class BlockDelimiterVerifier {
       this.blockDelimiter = blockDelimiter ;
     }
 
-    public DelimitedBlockStatus updatePosition( int line, int column ) {
+    private DelimitedBlockStatus updatePosition( int line, int column ) {
       if( line >= this.line && column > this.column ) {
         this.line = line ;
         this.column = column ;
@@ -111,24 +124,28 @@ public class BlockDelimiterVerifier {
       return this ;
     }
 
-    public DelimitedBlockStatus increaseStartCount() {
+    private DelimitedBlockStatus increaseStartCount() {
       startCount++ ;
       return this ;
     }
 
-    public DelimitedBlockStatus increaseReachEndCount() {
+    private DelimitedBlockStatus increaseReachEndCount() {
       reachEndCount++ ;
       return this ;
     }
 
-    public DelimitedBlockStatus increaseEndPassedCount() {
+    private DelimitedBlockStatus increaseEndPassedCount() {
       endPassedCount++ ;
       return this ;
     }
 
-    public DelimitedBlockStatus increaseMissingDelimiterCount() {
+    private DelimitedBlockStatus increaseMissingDelimiterCount() {
       missingDelimiterCount++ ;
       return this ;
+    }
+
+    public BlockDelimiter getBlockDelimiter() {
+      return blockDelimiter ;
     }
 
     public int getLine() {
@@ -139,30 +156,18 @@ public class BlockDelimiterVerifier {
       return column;
     }
 
-    public int getStartCount() {
-      return startCount;
+    public boolean hasLocation() {
+      return line >= 0 && column >= 0 ;
     }
 
-    public int getReachEndCount() {
-      return reachEndCount;
-    }
-
-    public int getEndPassedCount() {
-      return endPassedCount;
-    }
-
-    public int getMissingDelimiterCount() {
-      return missingDelimiterCount;
-    }
-
-    public String getStatusAsString() {
+    public String getInternalStatusAsString() {
       return "[ " + Joiner.on( " ; " ).join(
           "line=" + String.format( "%1$2d", line ),
           "column=" + String.format( "%1$2d", column ),
-          "startCount=" + startCount,
-          "reachEndCount=" + reachEndCount,
-          "endPassedCount=" + endPassedCount,
-          "missingDelimiterCount=" + missingDelimiterCount,
+          "start=" + startCount,
+          "reachEnd=" + reachEndCount,
+          "endPassed=" + endPassedCount,
+          "missingDelimiter=" + missingDelimiterCount,
           "isConsistent()=" + isConsistent()
       ) + " ]" ;
     }
@@ -171,16 +176,21 @@ public class BlockDelimiterVerifier {
      * Returns if counters reflect consistency.
      * Inconsistency may be caused by another problem elsewhere.
      */
-    public boolean isConsistent() {
-      if( blockDelimiter.isTwin() ) {
-        return
-            missingDelimiterCount == 0
-         && startCount == reachEndCount
-         && reachEndCount == endPassedCount
-        ;
-      } else {
-        return false ;
-      }
+    private boolean isConsistent() {
+      return
+          missingDelimiterCount == 0
+       && startCount == reachEndCount
+       && reachEndCount == endPassedCount
+      ;
+    }
+
+    @Override
+    public String toString() {
+      return
+          "Status[ " + blockDelimiter + " ; " +
+          "line=" + ( line >= 0 ? line : "x" ) + " ; " +
+          "column=" + ( column >= 0 ? column : "x" ) + " ]"
+      ;
     }
   }
 

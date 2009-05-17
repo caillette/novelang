@@ -17,8 +17,6 @@
 
 package novelang.parser.antlr;
 
-import java.util.List;
-
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.MismatchedTokenException;
@@ -31,8 +29,6 @@ import novelang.common.Problem;
 import novelang.common.BlockDelimiter;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
-import com.google.common.collect.Lists;
-import com.google.common.base.Preconditions;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
@@ -78,18 +74,18 @@ public class GrammarDelegate extends ProblemDelegate {
 // ==========
 
 
-  private final BlockDelimiterVerifier blockDelimiterVerifier = new BlockDelimiterVerifier() ;
+  private final ScopedBlockDelimiterWatcher scopedBlockDelimiterWatcher = new ScopedBlockDelimiterWatcher() ;
 
   public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
-    blockDelimiterVerifier.startDelimitedText( blockDelimiter, startToken ) ;
+    scopedBlockDelimiterWatcher.startDelimitedText( blockDelimiter, startToken ) ;
   }
 
   public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
-    blockDelimiterVerifier.reachEndDelimiter( blockDelimiter ) ;
+    scopedBlockDelimiterWatcher.reachEndDelimiter( blockDelimiter ) ;
   }
 
   public void endDelimitedText( BlockDelimiter blockDelimiter ) {
-    blockDelimiterVerifier.endDelimitedText( blockDelimiter ) ;
+    scopedBlockDelimiterWatcher.endDelimitedText( blockDelimiter ) ;
   }
 
   public void reportMissingDelimiter(
@@ -98,14 +94,21 @@ public class GrammarDelegate extends ProblemDelegate {
   )
       throws MismatchedTokenException
   {
-    blockDelimiterVerifier.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
+    scopedBlockDelimiterWatcher.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
+  }
+
+  /**
+   * TODO remove this method.
+   */
+  public Iterable< ScopedBlockDelimiterWatcher.DelimitedBlockStatus > getFaultyDelimitedBlocks() {
+    return scopedBlockDelimiterWatcher.getFaultyDelimitedBlocks() ;
   }
 
   /**
    * TODO remove this method.
    */
   public void dumpBlockDelimiterVerifier() {
-    blockDelimiterVerifier.dumpStatus() ;
+    scopedBlockDelimiterWatcher.dumpStatus() ;
   }
 
 }
