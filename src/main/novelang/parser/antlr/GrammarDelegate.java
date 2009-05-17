@@ -105,8 +105,11 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
     blockDelimiterSupervisor.enterBlockDelimiterBoundary( location ) ;
   }
 
-  public void leaveBlockDelimiterBoundary() {
-    blockDelimiterSupervisor.leaveBlockDelimiterBoundary() ;
+  public Iterable< Problem > leaveBlockDelimiterBoundary() {
+    final Iterable< Problem > boundaryProblems =
+        blockDelimiterSupervisor.leaveBlockDelimiterBoundary() ;
+    report( boundaryProblems ) ;
+    return boundaryProblems;
   }
 
   /**

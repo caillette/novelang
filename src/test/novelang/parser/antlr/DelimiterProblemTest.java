@@ -125,8 +125,8 @@ public class DelimiterProblemTest {
     LOGGER.info( BREAK + text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
-    final Iterable< Problem > problems =
-        parser.getDelegate().getBlockDelimiterSupervisor().getProblems() ;
+    final Iterable< Problem > problems = parser.getProblems() ;
+        // parser.getDelegate().getBlockDelimiterSupervisor().getProblems() ;
     LOGGER.debug( "Faulty blocks: {}",
         problems.iterator().hasNext() ?
         "\n    " + Joiner.on( "\n    " ).join( problems ) :

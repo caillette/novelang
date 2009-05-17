@@ -51,10 +51,12 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     stack.grow() ;
   }
 
-  public void leaveBlockDelimiterBoundary() {
-    Iterables.addAll( problems, stack.getTop().getProblems() ) ;
+  public Iterable< Problem > leaveBlockDelimiterBoundary() {
+    Iterable< Problem > boundaryProblems = stack.getTop().getProblems() ;
     ( ( DefaultBlockDelimitersBoundary ) stack.getTop() ).dumpStatus() ;
     stack.shrink() ;
+    Iterables.addAll( problems, boundaryProblems ) ;
+    return boundaryProblems ;
   }
 
   public Iterable< Problem > getProblems() {

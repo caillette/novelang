@@ -20,6 +20,7 @@ import java.util.List;
 import org.antlr.runtime.RecognitionException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
@@ -55,6 +56,10 @@ public class ProblemDelegate {
 
   public void report( String message, int line, int column ) {
     problems.add( Problem.createProblem( message, locationFactory, line, column ) ) ;
+  }
+
+  protected void report( Iterable< Problem > problems ) {
+    Iterables.addAll( this.problems, problems ) ;
   }
 
   public Iterable< Problem > getProblems() {

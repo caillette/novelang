@@ -28,7 +28,6 @@ public interface BlockDelimiterSupervisor extends BlockDelimitersBoundary {
 
   void enterBlockDelimiterBoundary( Token location ) ;
 
-  void leaveBlockDelimiterBoundary() ;
-
+  Iterable< Problem > leaveBlockDelimiterBoundary() ;
 
 }

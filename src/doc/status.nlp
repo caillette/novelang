@@ -13,6 +13,12 @@ Keep informed reading the
 http://novelang.blogspot.com
 . 
 
+=== Version `0.28.0`
+
+--- Report line number in case of unclosed block delimiter.
+
+
+
 === Version `0.27.1`
 
 --- Fixed MIME type of documents served by HTTP dæmon.
