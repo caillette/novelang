@@ -17,13 +17,22 @@
 
 package novelang.parser.antlr;
 
+import java.util.List;
+
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.tree.Tree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
+import novelang.common.BlockDelimiter;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
+import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
@@ -31,6 +40,8 @@ import novelang.parser.SourceUnescape;
  * @author Laurent Caillette
  */
 public class GrammarDelegate extends ProblemDelegate {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( ProblemDelegate.class ) ;
 
   /**
    * With this constructor the {@code LocationFactory} gives only partial information.
@@ -60,4 +71,115 @@ public class GrammarDelegate extends ProblemDelegate {
       return "<unescaped:" + escaped + ">" ;
     }
   }
+
+
+// ==========
+// Delimiters
+// ==========
+
+  private static class DelimitedText {
+    private final String startDelimiter ;
+    private final int line ;
+    private final int column ;
+
+    private DelimitedText( String startDelimiter, int line, int column ) {
+      this.startDelimiter = startDelimiter;
+      this.line = line;
+      this.column = column;
+    }
+
+    public String getStartDelimiter() {
+      return startDelimiter ;
+    }
+
+    public int getLine() {
+      return line ;
+    }
+
+    public int getColumn() {
+      return column ;
+    }
+  }
+
+  private final List< DelimitedText > delimiterStack = Lists.newLinkedList() ;
+  private DelimitedText innermostMismatch = null ;
+  private int innermostMismatchDepth = -1 ;
+  private boolean handlingEndDelimiter = false ;
+
+  public void startDelimitedText( Token startToken1, Token startToken2 ) {
+    LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
+        startToken1.getText() + startToken2.getText(),
+        startToken1.getLine()
+    ) ;
+    delimiterStack.add( new DelimitedText(
+        startToken1.getText() + startToken2.getText(),
+        startToken1.getLine(),
+        startToken1.getCharPositionInLine()
+    ) ) ;
+  }
+
+  public void startDelimitedText( Token startToken ) {
+    LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
+        startToken.getText(),
+        startToken.getLine()
+    ) ;
+    delimiterStack.add( new DelimitedText(
+        startToken.getText(),
+        startToken.getLine(),
+        startToken.getCharPositionInLine()
+    ) ) ;
+  }
+
+  public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
+    LOGGER.debug( "startDelimiter[ blockDelimiter={} ; line={} ]",
+        blockDelimiter,
+        startToken.getLine()
+    ) ;
+    delimiterStack.add( new DelimitedText(
+        startToken.getText(),
+        startToken.getLine(),
+        startToken.getCharPositionInLine()
+    ) ) ;
+  }
+
+  public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
+    LOGGER.debug( "reachEndDelimiter[ {} ]", blockDelimiter ) ;
+    handlingEndDelimiter = true ;
+  }
+
+  public void endDelimitedText( BlockDelimiter blockDelimiter ) {
+    LOGGER.debug( "endDelimitedText[ {} ]", blockDelimiter ) ;
+    Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
+    handlingEndDelimiter = false ;
+    delimiterStack.remove( delimiterStack.size() - 1 ) ;
+
+    if( delimiterStack.isEmpty() && innermostMismatch != null ) {
+      report(
+          "No ending delimiter matching with " + innermostMismatch.getStartDelimiter(),
+          innermostMismatch.getLine(),
+          innermostMismatch.getColumn()
+      ) ;
+
+    }
+  }
+
+  public void reportMissingDelimiter(
+      BlockDelimiter blockDelimiter,
+      MismatchedTokenException mismatchedTokenException
+  )
+      throws MismatchedTokenException
+  {
+    LOGGER.debug( "reportMissingDelimiter[ blockDelimiter={} ; line={} ]",
+        blockDelimiter, mismatchedTokenException.line ) ;
+    if( handlingEndDelimiter ){
+      final int depth = delimiterStack.size() - 1;
+      if( depth > innermostMismatchDepth ){
+        innermostMismatch = delimiterStack.get( depth ) ;
+        innermostMismatchDepth = depth ;
+      }
+      handlingEndDelimiter = false ;
+    }
+  }
+
+
 }

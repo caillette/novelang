@@ -28,9 +28,12 @@ import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 /**
  * Get sure that delimiters problems are correctly reported.
  * <p>
- * Definition : <em>symmetrical block delimiters</em> are delimiters where the tokens marking the
+ * Definition : <em>twin delimiters</em> are delimiters where the tokens marking the
  * opening of the block have no other purpose and where the tokens marking the closing of the
  * block have no other purpose.
+ * <p>
+ * Definition : <em>only delimiters</em> are delimiters which are the same for the beginning
+ * and the end of the block.
  *
  * @author Laurent Caillette
  */
@@ -40,7 +43,7 @@ public class DelimiterProblemTest {
   @Test
   public void symmetricalOk() throws RecognitionException {
     final String text = "( z )" ;
-    LOGGER.info( BREAK + text ) ;
+    logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
   }
@@ -48,7 +51,7 @@ public class DelimiterProblemTest {
   @Test
   public void nonSymmetricalOk() throws RecognitionException {
     final String text = "-- z --" ;
-    LOGGER.info( BREAK + text ) ;
+    logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
   }
@@ -56,7 +59,7 @@ public class DelimiterProblemTest {
   @Test
   public void nonSymmetricalUnclosedAlone() throws RecognitionException {
     final String text = "y -- z" ;
-    LOGGER.info( BREAK + text ) ;
+    logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
   }
@@ -64,7 +67,7 @@ public class DelimiterProblemTest {
   @Test
   public void symmetricalUnclosedAlone() throws RecognitionException {
     final String text = "( z" ;
-    LOGGER.info( BREAK + text ) ;
+    logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
   }
@@ -76,7 +79,7 @@ public class DelimiterProblemTest {
         "x -- y" + BREAK +
         "z )"
     ;
-    LOGGER.info( BREAK + text ) ;
+    logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
   }
@@ -88,7 +91,21 @@ public class DelimiterProblemTest {
         "x ( y" + BREAK +
         "z --"
     ;
-    LOGGER.info( BREAK + text ) ;
+    logText( text ) ;
+    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
+    parser.parse() ;
+  }
+
+
+  @Test
+  public void twoSymmetricalUnclosedInsideNonSymmetrical() throws RecognitionException {
+    final String text =
+        "-- u " + BREAK +
+        "v ( w" + BREAK +
+        "x [ y" + BREAK +
+        "z --"
+    ;
+    logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
   }
@@ -105,6 +122,10 @@ public class DelimiterProblemTest {
   public void before() {
     final String testName = NameAwareTestClassRunner.getTestName() ;
     LOGGER.info( "\n\nRunning {}", testName ) ;
+  }
+
+  private void logText( String text ) {
+    LOGGER.info( BREAK + text ) ;
   }
 
 }

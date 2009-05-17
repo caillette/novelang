@@ -413,12 +413,13 @@ parenthesizedSpreadblock
       ( spreadBlockBody 
         whitespace? 
       )
-      { delegate.handleEndDelimiter() ; }
+      { delegate.reachEndDelimiter( BlockDelimiter.PARENTHESIS ) ; }
       RIGHT_PARENTHESIS
       { delegate.endDelimitedText( BlockDelimiter.PARENTHESIS ) ; }
     ) -> ^( BLOCK_INSIDE_PARENTHESIS spreadBlockBody )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.PARENTHESIS, mte ) ; }
 
 parenthesizedMonoblock
   : ( 
@@ -427,12 +428,13 @@ parenthesizedMonoblock
       ( monoblockBody 
         whitespace? 
       )
-      { delegate.handleEndDelimiter() ; }
+      { delegate.reachEndDelimiter( BlockDelimiter.PARENTHESIS ) ; }
       RIGHT_PARENTHESIS
       { delegate.endDelimitedText( BlockDelimiter.PARENTHESIS ) ; }
     ) -> ^( BLOCK_INSIDE_PARENTHESIS monoblockBody )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.PARENTHESIS, mte ) ; }
 
 // ===============
 // Square brackets
@@ -445,12 +447,13 @@ squarebracketsSpreadblock
       ( spreadBlockBody 
         whitespace? 
       )
-      { delegate.handleEndDelimiter() ; }
+      { delegate.reachEndDelimiter( BlockDelimiter.SQUARE_BRACKETS ) ; }
       RIGHT_SQUARE_BRACKET
       { delegate.endDelimitedText( BlockDelimiter.SQUARE_BRACKETS ) ; }
     ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS spreadBlockBody )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.SQUARE_BRACKETS, mte ) ; }
 
 squarebracketsMonoblock
   : ( 
@@ -459,12 +462,13 @@ squarebracketsMonoblock
       ( monoblockBody 
         whitespace? 
       )
-      { delegate.handleEndDelimiter() ; }
+      { delegate.reachEndDelimiter( BlockDelimiter.SQUARE_BRACKETS ) ; }
       RIGHT_SQUARE_BRACKET
       { delegate.endDelimitedText( BlockDelimiter.SQUARE_BRACKETS ) ; }
     ) -> ^( BLOCK_INSIDE_SQUARE_BRACKETS monoblockBody )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.SQUARE_BRACKETS, mte ) ; }
 
 
 // =============
@@ -478,12 +482,13 @@ doubleQuotedSpreadBlock
 	    ( b += spreadBlockBodyNoDoubleQuotes 
 	      whitespace? 
 	    )?
-	    { delegate.handleEndDelimiter() ; }
+	    { delegate.reachEndDelimiter( BlockDelimiter.DOUBLE_QUOTES ) ; }
 	    DOUBLE_QUOTE
       { delegate.endDelimitedText( BlockDelimiter.DOUBLE_QUOTES ) ; }
 	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ ) 
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.DOUBLE_QUOTES, mte ) ; }
 
 delimitedSpreadblockNoDoubleQuotes
   : parenthesizedSpreadblock
@@ -597,12 +602,13 @@ doubleQuotedMonoblock
 	    ( b += monoblockBodyNoDoubleQuotes 
 	      whitespace? 
 	    )?
-	    { delegate.handleEndDelimiter() ; }
+	    { delegate.reachEndDelimiter( BlockDelimiter.DOUBLE_QUOTES ) ; }
 	    DOUBLE_QUOTE
       { delegate.endDelimitedText( BlockDelimiter.DOUBLE_QUOTES ) ; }
 	  ) -> ^( BLOCK_INSIDE_DOUBLE_QUOTES $b+ )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.DOUBLE_QUOTES, mte ) ; }
   
 
 delimitedMonoblockNoDoubleQuotes
@@ -664,12 +670,13 @@ emphasizedSpreadBlock
 	    ( b += spreadBlockBodyNoEmphasis 
 	      whitespace? 
 	    )?
-	    { delegate.handleEndDelimiter() ; }
+	    { delegate.reachEndDelimiter( BlockDelimiter.SOLIDUS_PAIRS ) ; }
 	    SOLIDUS SOLIDUS
       { delegate.endDelimitedText( BlockDelimiter.SOLIDUS_PAIRS ) ; }
 	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.SOLIDUS_PAIRS, mte ) ; }
 
 delimitedSpreadblockNoEmphasis
   : parenthesizedSpreadblock
@@ -787,12 +794,13 @@ emphasizedMonoblock
 	    ( b += monoblockBodyNoEmphasis 
 	      whitespace? 
 	    )?
-	    { delegate.handleEndDelimiter() ; }
+	    { delegate.reachEndDelimiter( BlockDelimiter.SOLIDUS_PAIRS ) ; }
 	    SOLIDUS SOLIDUS
       { delegate.endDelimitedText( BlockDelimiter.SOLIDUS_PAIRS ) ; }
 	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.SOLIDUS_PAIRS, mte ) ; }
   
 
 delimitedMonoblockNoEmphasis
@@ -854,14 +862,15 @@ hyphenPairSpreadBlock
     ( b += spreadBlockBodyNoHyphenPair
       whitespace? 
     )?
-    { delegate.handleEndDelimiter() ; }
+    { delegate.reachEndDelimiter( BlockDelimiter.TWO_HYPHENS ) ; }
     HYPHEN_MINUS 
     (   HYPHEN_MINUS -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ ) 
       | LOW_LINE -> ^( BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE $b+ ) 
     ) 	  
     { delegate.endDelimitedText( BlockDelimiter.TWO_HYPHENS ) ; }
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.TWO_HYPHENS, mte ) ; }
 
 delimitedSpreadblockNoHyphenPair
   : parenthesizedSpreadblock
@@ -975,12 +984,13 @@ hyphenPairMonoblock
 	    ( b += monoblockBodyNoHyphenPair
 	      whitespace? 
 	    )?
-	    { delegate.handleEndDelimiter() ; }
+	    { delegate.reachEndDelimiter( BlockDelimiter.TWO_HYPHENS ) ; }
 	    HYPHEN_MINUS HYPHEN_MINUS
       { delegate.endDelimitedText( BlockDelimiter.TWO_HYPHENS ) ; }
 	  ) -> ^( BLOCK_INSIDE_HYPHEN_PAIRS $b+ )
   ;
-  catch[ MismatchedTokenException mte ] { delegate.reportMissingDelimiter( mte ) ; }
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.TWO_HYPHENS, mte ) ; }
   
 
 delimitedMonoblockNoHyphenPair
