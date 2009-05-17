@@ -91,7 +91,8 @@ public class ProblemDelegate {
   private boolean handlingEndDelimiter = false ;
 
   public void startDelimitedText( Token startToken ) {
-    LOGGER.debug( "startDelimiter [startToken={}]", startToken ) ;
+    LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
+        startToken.getText(), startToken.getLine() ) ;
     Preconditions.checkNotNull( startToken ) ;
     delimiterStack.add( new DelimitedText( startToken ) ) ;
   }
@@ -120,26 +121,14 @@ public class ProblemDelegate {
   public void reportMissingDelimiter( MismatchedTokenException mismatchedTokenException )
       throws MismatchedTokenException 
   {
-    LOGGER.debug( "reportMissingDelimiter [handingEndDelimiter={}]", handlingEndDelimiter ) ;
+    LOGGER.debug( "reportMissingDelimiter[ line={} ]", mismatchedTokenException.line ) ;
     if( handlingEndDelimiter ){
-/*
-      Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
-      final DelimitedText delimitedText = delimiterStack.get( delimiterStack.size() - 1 ) ;
-      report(
-        "No ending delimiter matching with " + delimitedText.startToken.getText(),
-          delimitedText.startToken.getLine(),
-          delimitedText.startToken.getCharPositionInLine()
-      ) ;
-*/
       final int depth = delimiterStack.size() - 1;
       if( depth > innermostMismatchDepth ){
         innermostMismatch = delimiterStack.get( depth ) ;
         innermostMismatchDepth = depth ;
       }
       handlingEndDelimiter = false ;
-    } else {
-      handlingEndDelimiter = false ; 
-      throw mismatchedTokenException ;
     }
   }
 
