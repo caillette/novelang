@@ -41,10 +41,6 @@
     <level value="INFO" />
   </logger>
 
-  <logger name="novelang.parser.antlr" >
-    <level value="DEBUG" />
-  </logger>
-
   <root>
     <appender-ref ref="STDOUT" />
     <level value="DEBUG" />
