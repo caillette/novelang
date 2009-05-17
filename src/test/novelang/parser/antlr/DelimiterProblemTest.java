@@ -27,13 +27,6 @@ import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 
 /**
  * Get sure that delimiters problems are correctly reported.
- * <p>
- * Definition : <em>twin delimiters</em> are delimiters where the tokens marking the
- * opening of the block have no other purpose and where the tokens marking the closing of the
- * block have no other purpose.
- * <p>
- * Definition : <em>only delimiters</em> are delimiters which are the same for the beginning
- * and the end of the block.
  *
  * @author Laurent Caillette
  */
@@ -46,6 +39,7 @@ public class DelimiterProblemTest {
     logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
   }
 
   @Test
@@ -54,6 +48,7 @@ public class DelimiterProblemTest {
     logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
   }
 
   @Test
@@ -62,6 +57,7 @@ public class DelimiterProblemTest {
     logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
   }
 
   @Test
@@ -70,6 +66,7 @@ public class DelimiterProblemTest {
     logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
   }
 
   @Test
@@ -82,6 +79,7 @@ public class DelimiterProblemTest {
     logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
   }
 
   @Test
@@ -94,6 +92,7 @@ public class DelimiterProblemTest {
     logText( text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
   }
 
 
@@ -108,6 +107,7 @@ public class DelimiterProblemTest {
     logText( text );
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
+    parser.getDelegate().dumpBlockDelimiterVerifier() ;
   }
 
 

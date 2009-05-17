@@ -41,7 +41,7 @@ import com.google.common.base.Preconditions;
  */
 public class GrammarDelegate extends ProblemDelegate {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ProblemDelegate.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( GrammarDelegate.class ) ;
 
   /**
    * With this constructor the {@code LocationFactory} gives only partial information.
@@ -77,90 +77,19 @@ public class GrammarDelegate extends ProblemDelegate {
 // Delimiters
 // ==========
 
-  private static class DelimitedText {
-    private final String startDelimiter ;
-    private final int line ;
-    private final int column ;
 
-    private DelimitedText( String startDelimiter, int line, int column ) {
-      this.startDelimiter = startDelimiter;
-      this.line = line;
-      this.column = column;
-    }
-
-    public String getStartDelimiter() {
-      return startDelimiter ;
-    }
-
-    public int getLine() {
-      return line ;
-    }
-
-    public int getColumn() {
-      return column ;
-    }
-  }
-
-  private final List< DelimitedText > delimiterStack = Lists.newLinkedList() ;
-  private DelimitedText innermostMismatch = null ;
-  private int innermostMismatchDepth = -1 ;
-  private boolean handlingEndDelimiter = false ;
-
-  public void startDelimitedText( Token startToken1, Token startToken2 ) {
-    LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
-        startToken1.getText() + startToken2.getText(),
-        startToken1.getLine()
-    ) ;
-    delimiterStack.add( new DelimitedText(
-        startToken1.getText() + startToken2.getText(),
-        startToken1.getLine(),
-        startToken1.getCharPositionInLine()
-    ) ) ;
-  }
-
-  public void startDelimitedText( Token startToken ) {
-    LOGGER.debug( "startDelimiter[ startToken='{}' ; line={} ]",
-        startToken.getText(),
-        startToken.getLine()
-    ) ;
-    delimiterStack.add( new DelimitedText(
-        startToken.getText(),
-        startToken.getLine(),
-        startToken.getCharPositionInLine()
-    ) ) ;
-  }
+  private final BlockDelimiterVerifier blockDelimiterVerifier = new BlockDelimiterVerifier() ;
 
   public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
-    LOGGER.debug( "startDelimiter[ blockDelimiter={} ; line={} ]",
-        blockDelimiter,
-        startToken.getLine()
-    ) ;
-    delimiterStack.add( new DelimitedText(
-        startToken.getText(),
-        startToken.getLine(),
-        startToken.getCharPositionInLine()
-    ) ) ;
+    blockDelimiterVerifier.startDelimitedText( blockDelimiter, startToken ) ;
   }
 
   public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
-    LOGGER.debug( "reachEndDelimiter[ {} ]", blockDelimiter ) ;
-    handlingEndDelimiter = true ;
+    blockDelimiterVerifier.reachEndDelimiter( blockDelimiter ) ;
   }
 
   public void endDelimitedText( BlockDelimiter blockDelimiter ) {
-    LOGGER.debug( "endDelimitedText[ {} ]", blockDelimiter ) ;
-    Preconditions.checkArgument( ! delimiterStack.isEmpty() ) ;
-    handlingEndDelimiter = false ;
-    delimiterStack.remove( delimiterStack.size() - 1 ) ;
-
-    if( delimiterStack.isEmpty() && innermostMismatch != null ) {
-      report(
-          "No ending delimiter matching with " + innermostMismatch.getStartDelimiter(),
-          innermostMismatch.getLine(),
-          innermostMismatch.getColumn()
-      ) ;
-
-    }
+    blockDelimiterVerifier.endDelimitedText( blockDelimiter ) ;
   }
 
   public void reportMissingDelimiter(
@@ -169,17 +98,14 @@ public class GrammarDelegate extends ProblemDelegate {
   )
       throws MismatchedTokenException
   {
-    LOGGER.debug( "reportMissingDelimiter[ blockDelimiter={} ; line={} ]",
-        blockDelimiter, mismatchedTokenException.line ) ;
-    if( handlingEndDelimiter ){
-      final int depth = delimiterStack.size() - 1;
-      if( depth > innermostMismatchDepth ){
-        innermostMismatch = delimiterStack.get( depth ) ;
-        innermostMismatchDepth = depth ;
-      }
-      handlingEndDelimiter = false ;
-    }
+    blockDelimiterVerifier.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
   }
 
+  /**
+   * TODO remove this method.
+   */
+  public void dumpBlockDelimiterVerifier() {
+    blockDelimiterVerifier.dumpStatus() ;
+  }
 
 }

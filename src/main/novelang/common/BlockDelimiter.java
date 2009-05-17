@@ -17,28 +17,48 @@
 package novelang.common;
 
 /**
+ * This enum represents blocks (subset of a paragraph-like piece of source document) which
+ * have a start and end delimiter and which must be paired.
+ * <p>
+ * Definition : <em>twin delimiters</em> are delimiters where the tokens marking the
+ * opening of the block have no other purpose and where the tokens marking the closing of the
+ * block have no other purpose, so blocks delimited by twin delimiters can be directly nested.
+ * <p>
+ * Definition : <em>only delimiters</em> are delimiters which are the same for the beginning
+ * and the end of the block.
  *
- * This enum is some kind of hack which duplicates some declarations in the grammar.
- * But it's quite uneasy to extract the delimiters from the grammar, as they are buried the code.
- * So we take the easy way here, hoping that a mismatch will be detected by unit tests.
+ * @see novelang.parser.antlr.BlockDelimiterVerifier
  *
  * @author Laurent Caillette
  */
 public enum BlockDelimiter {
 
-  PARENTHESIS( "(", ")" ),
-  SQUARE_BRACKETS( "[", "]" ),
-  DOUBLE_QUOTES( "\"", "\"" ),
-  SOLIDUS_PAIRS( "//", "//" ),
-  TWO_HYPHENS( "--", "--", "-_" ),
+  PARENTHESIS( true, "(", ")" ),
+  SQUARE_BRACKETS( true, "[", "]" ),
+  DOUBLE_QUOTES( false, "\"", "\"" ),
+  SOLIDUS_PAIRS( false, "//", "//" ),
+  TWO_HYPHENS( false, "--", "--", "-_" ),
   ;
 
+  private final boolean twin ;
   private final String start ;
   private final String[] end ;
 
-  private BlockDelimiter( String start, String... end ) {
-    this.start = start;
+  private BlockDelimiter( boolean twin, String start, String... end ) {
+    this.twin = twin ;
+    this.start = start ;
     this.end = end.clone() ;
   }
 
+  public String getStart() {
+    return start ;
+  }
+
+  public String[] getEnd() {
+    return end.clone() ;
+  }
+
+  public boolean isTwin() {
+    return twin ;
+  }
 }
