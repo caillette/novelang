@@ -29,14 +29,16 @@ import novelang.common.Problem;
 import novelang.parser.antlr.delimited.BlockDelimiter;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
-import novelang.parser.antlr.delimited.ScopedBlockDelimiterWatcher;
+import novelang.parser.antlr.delimited.DefaultBlockDelimitersBoundary;
+import novelang.parser.antlr.delimited.BlockDelimiterSupervisor;
+import novelang.parser.antlr.delimited.DefaultBlockDelimiterSupervisor;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
  *
  * @author Laurent Caillette
  */
-public class GrammarDelegate extends ProblemDelegate {
+public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSupervisor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GrammarDelegate.class ) ;
 
@@ -75,19 +77,19 @@ public class GrammarDelegate extends ProblemDelegate {
 // ==========
 
 
-  private final ScopedBlockDelimiterWatcher scopedBlockDelimiterWatcher =
-      new ScopedBlockDelimiterWatcher() ;
+  private final BlockDelimiterSupervisor blockDelimiterSupervisor =
+      new DefaultBlockDelimiterSupervisor( locationFactory ) ;
 
   public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
-    scopedBlockDelimiterWatcher.startDelimitedText( blockDelimiter, startToken ) ;
+    blockDelimiterSupervisor.startDelimitedText( blockDelimiter, startToken ) ;
   }
 
   public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
-    scopedBlockDelimiterWatcher.reachEndDelimiter( blockDelimiter ) ;
+    blockDelimiterSupervisor.reachEndDelimiter( blockDelimiter ) ;
   }
 
   public void endDelimitedText( BlockDelimiter blockDelimiter ) {
-    scopedBlockDelimiterWatcher.endDelimitedText( blockDelimiter ) ;
+    blockDelimiterSupervisor.endDelimitedText( blockDelimiter ) ;
   }
 
   public void reportMissingDelimiter(
@@ -96,21 +98,22 @@ public class GrammarDelegate extends ProblemDelegate {
   )
       throws MismatchedTokenException
   {
-    scopedBlockDelimiterWatcher.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
+    blockDelimiterSupervisor.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
   }
 
+  public void enterBlockDelimiterBoundary( Token location ) {
+    blockDelimiterSupervisor.enterBlockDelimiterBoundary( location ) ;
+  }
+
+  public void leaveBlockDelimiterBoundary() {
+    blockDelimiterSupervisor.leaveBlockDelimiterBoundary() ;
+  }
 
   /**
    * TODO remove this method.
    */
-  public ScopedBlockDelimiterWatcher getScopedBlockDelimiterWatcher() {
-    return scopedBlockDelimiterWatcher ;
-  }
-  /**
-   * TODO remove this method.
-   */
-  public void dumpBlockDelimiterVerifier() {
-    scopedBlockDelimiterWatcher.dumpStatus() ;
+  public BlockDelimiterSupervisor getBlockDelimiterSupervisor() {
+    return blockDelimiterSupervisor;
   }
 
 }

@@ -24,15 +24,18 @@ import com.google.common.collect.ImmutableList;
 /**
  * This enum represents blocks (subset of a paragraph-like piece of source document) which
  * have a start and end delimiter and which must be paired.
+ * This is more or less a duplicate of what's defined in ANTLR grammar but there is no (simple?)
+ * mean to extract literal corresponding to start and end tokens, so we hope that all unit tests
+ * will detect any desynchronization.
+ *
  * <p>
- * Definition : <em>twin delimiters</em> are delimiters where the tokens marking the
- * opening of the block have no other purpose and where the tokens marking the closing of the
- * block have no other purpose, so blocks delimited by twin delimiters can be directly nested.
+ * Definition : <em>twin delimiters</em> are start and end delimiters for a kind of block, and
+ * those two delimiters cannot be confused.
  * <p>
  * Definition : <em>only delimiters</em> are delimiters which are the same for the beginning
  * and the end of the block.
  *
- * @see novelang.parser.antlr.delimited.ScopedBlockDelimiterWatcher
+ * @see DefaultBlockDelimitersBoundary
  *
  * @author Laurent Caillette
  */

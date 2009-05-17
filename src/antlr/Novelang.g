@@ -206,6 +206,7 @@ tags
  */
 levelTitle
   : (
+      { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
       (   t += smallDashedListItem
 	      | ( t += mixedDelimitedSpreadBlock 
 	          ( whitespace t += mixedDelimitedSpreadBlock )* 
@@ -219,6 +220,7 @@ levelTitle
 	          )        
 	      )
 	    )*    
+	    { delegate.leaveBlockDelimiterBoundary() ; }
 	  ) -> ^( LEVEL_TITLE $t+ )
   ;  
 
@@ -226,6 +228,7 @@ headerIdentifier : ; // TODO
 
 paragraph 
 	: ( ( p += tags mediumbreak )?	
+      { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
 	    (   ( url ) => p += url
 	      | ( smallDashedListItem ) => p += smallDashedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
@@ -240,6 +243,7 @@ paragraph
 	          )
 	      )
 	    )*
+	    { delegate.leaveBlockDelimiterBoundary() ; }
 	  ) -> ^( PARAGRAPH_REGULAR $p+ )
     
   ;  
@@ -1050,23 +1054,29 @@ mixedDelimitedMonoblockNoHyphenPair
 // =====
 
 bigDashedListItem
-  : ( i += tags mediumbreak )?	
+  : 
+    ( i += tags mediumbreak )?	
     HYPHEN_MINUS HYPHEN_MINUS HYPHEN_MINUS 
+    { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
     ( i += whitespace i += mixedDelimitedSpreadBlock )*
-    ( i += whitespace? i += softbreak 
-      ( 
-          ( url ) => i += url
-        | ( smallDashedListItem ) => i += smallDashedListItem
-        | ( i += whitespace? i += mixedDelimitedSpreadBlock 
-            ( i += whitespace i += mixedDelimitedSpreadBlock )* 
-          )
-      )
-    )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ $i+ )
-
+    ( ( i += whitespace? i += softbreak 
+        ( 
+            ( url ) => i += url
+          | ( smallDashedListItem ) => i += smallDashedListItem
+          | ( i += whitespace? i += mixedDelimitedSpreadBlock 
+              ( i += whitespace i += mixedDelimitedSpreadBlock )* 
+            )
+        )
+      )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ $i+ )
+    )
+    { delegate.leaveBlockDelimiterBoundary() ; }
   ;
 
 smallDashedListItem
-  : HYPHEN_MINUS ( whitespace b += mixedDelimitedMonoblock )+
+  : HYPHEN_MINUS 
+    { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
+    ( whitespace b += mixedDelimitedMonoblock )+
+    { delegate.leaveBlockDelimiterBoundary() ; }
     -> ^( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ $b+ )
   ;
 
@@ -1088,7 +1098,9 @@ cellRow
   ;
   
 cell
-  : ( mixedDelimitedMonoblock ( whitespace mixedDelimitedMonoblock )* whitespace? )? 
+  : { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
+    ( mixedDelimitedMonoblock ( whitespace mixedDelimitedMonoblock )* whitespace? )? 
+    { delegate.leaveBlockDelimiterBoundary() ; }
     VERTICAL_LINE
     -> ^( CELL mixedDelimitedMonoblock* )
   ;  

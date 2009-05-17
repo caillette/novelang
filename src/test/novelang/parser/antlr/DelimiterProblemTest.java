@@ -24,9 +24,6 @@ import org.junit.runners.NameAwareTestClassRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
-import novelang.parser.antlr.delimited.BlockDelimiterTools;
-import novelang.common.LocationFactory;
-import novelang.common.Location;
 import novelang.common.Problem;
 import com.google.common.base.Joiner;
 
@@ -42,7 +39,6 @@ public class DelimiterProblemTest {
   public void symmetricalOk() throws RecognitionException {
     final String text = "( z )" ;
     process( text );
-
   }
 
   @Test
@@ -95,6 +91,20 @@ public class DelimiterProblemTest {
     process( text ) ;
   }
 
+  @Test
+  public void boundarySwitch() throws RecognitionException {
+    final String text =
+        "( s " + BREAK +
+        "t -- u" + BREAK +
+        "v )" + BREAK +
+        BREAK +
+        "// w " + BREAK +
+        "x [ y" + BREAK +
+        "z //" + BREAK
+    ;
+    process( text ) ;
+  }
+
 
 
 // =======
@@ -113,15 +123,8 @@ public class DelimiterProblemTest {
     LOGGER.info( BREAK + text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
-    parser.getDelegate().dumpBlockDelimiterVerifier() ;
-    final Iterable<Problem> problems = BlockDelimiterTools.createProblems(
-        new LocationFactory() {
-          public Location createLocation( int line, int column ) {
-            return new Location( "<test>", line, column );
-          }
-        },
-        parser.getDelegate().getScopedBlockDelimiterWatcher()
-    );
+    final Iterable< Problem > problems =
+        parser.getDelegate().getBlockDelimiterSupervisor().getProblems() ;
     LOGGER.debug( "Faulty blocks: {}",
         problems.iterator().hasNext() ?
         "\n    " + Joiner.on( "\n    " ).join( problems ) :

@@ -35,11 +35,11 @@ public class BlockDelimiterTools {
 
   public static Iterable< Problem > createProblems(
       LocationFactory locationFactory,
-      ScopedBlockDelimiterWatcher scopedBlockDelimiterWatcher
+      DefaultBlockDelimitersBoundary blockDelimitersBoundary
   ) {
     return createProblems(
         locationFactory,
-        scopedBlockDelimiterWatcher.getFaultyDelimitedBlocks()
+        blockDelimitersBoundary.getFaultyDelimitedBlocks()
     ) ;
   }
 

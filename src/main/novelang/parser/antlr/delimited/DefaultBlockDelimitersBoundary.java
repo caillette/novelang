@@ -16,29 +16,34 @@
  */
 package novelang.parser.antlr.delimited;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import novelang.parser.antlr.delimited.BlockDelimiter;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import novelang.common.Problem;
+import novelang.common.LocationFactory;
 
 /**
  * Receives notifications from {@link novelang.parser.antlr.GrammarDelegate} from what's going on with delimiters.
  *
  * @author Laurent Caillette
  */
-public class ScopedBlockDelimiterWatcher {
+public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ScopedBlockDelimiterWatcher.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      DefaultBlockDelimitersBoundary.class ) ;
 
+  private final LocationFactory locationFactory ;
   private final Map< BlockDelimiter, DelimitedBlockStatus > primes = Maps.newHashMap() ;
 
-  public ScopedBlockDelimiterWatcher() {
+
+  public DefaultBlockDelimitersBoundary( LocationFactory locationFactory ) {
+    this.locationFactory = locationFactory ;
     for( BlockDelimiter blockDelimiter : BlockDelimiter.values() ) {
       primes.put( blockDelimiter, new DelimitedBlockStatus( blockDelimiter ) ) ;
     }
@@ -86,6 +91,10 @@ public class ScopedBlockDelimiterWatcher {
       }
     }
     return faultyDelimitedBlockStatuses ;
+  }
+
+  public Iterable<Problem> getProblems() {
+    return BlockDelimiterTools.createProblems( locationFactory, getFaultyDelimitedBlocks() ) ;
   }
 
   public void dumpStatus() {

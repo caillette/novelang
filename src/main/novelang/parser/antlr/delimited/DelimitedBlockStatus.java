@@ -19,6 +19,9 @@ package novelang.parser.antlr.delimited;
 import com.google.common.base.Joiner;
 
 /**
+ * Keeps track of notifications received for a kind of {@link BlockDelimiter} inside a
+ * {@link BlockDelimitersBoundary}.
+ * 
  * @author Laurent Caillette
 */
 /*package*/  final class DelimitedBlockStatus {
