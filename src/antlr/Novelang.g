@@ -1067,7 +1067,7 @@ bigDashedListItem
               ( i += whitespace i += mixedDelimitedSpreadBlock )* 
             )
         )
-      )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ $i+ )
+      )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ $i* )
     )
     { delegate.leaveBlockDelimiterBoundary() ; }
   ;

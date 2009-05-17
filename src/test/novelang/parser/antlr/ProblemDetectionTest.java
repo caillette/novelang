@@ -45,17 +45,12 @@ public class ProblemDetectionTest {
   }
 
   @Test
-  public void lineNumberForMissingClosingHyphenPair() throws RecognitionException {
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( "\n\n\n-- w" ) ;
+  public void tripleHyphenAloneDoesntThrowRewriteEarlyExitException()
+      throws RecognitionException
+  {
+    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( "---" ) ;
     parser.parse() ;
-    Assert.assertTrue( parser.hasProblem() ) ;
-    final Problem problem = Iterables.getOnlyElement( parser.getProblems() ) ;
-    Assert.assertEquals(
-        "Problem reported as '" + problem.getMessage() + "'",
-        4,
-        problem.getLocation().getLine()
-    ) ;
+    Assert.assertFalse( parser.hasProblem() ) ;
   }
-
 
 }
