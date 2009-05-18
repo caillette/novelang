@@ -42,7 +42,7 @@
   </logger>
 
   <logger name="novelang.parser.antlr" >
-    <level value="DEBUG" />
+    <level value="WARN" />
   </logger>
 
   <root>
