@@ -444,9 +444,7 @@ Then follow optional directories, and the file name itself with its extension.
 
 - If the image file is in the same directory as source document, then its name must start with a full stop and a solidus ``./``
 - Parent directories are referenced through double full stops then solidus ``../``
-- The project directory is considered as the root directory. Attempting to reference a directory
-above the project directory will produce an error. A path relative to the project directory
-(instead of being relative to the source document) starts with a solidus.
+- The project directory is considered as the root directory. Attempting to reference a directory above the project directory will produce an error. A path relative to the project directory (instead of being relative to the source document) starts with a solidus.
 
 With Novelang default stylesheet, the image appears inside the document.
 
