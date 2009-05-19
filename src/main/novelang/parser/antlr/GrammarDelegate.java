@@ -72,6 +72,29 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
   }
 
 
+// ====================
+// Parser rules logging
+// ====================
+
+  private static final Logger parserLogger = LoggerFactory.getLogger( NovelangParser.class ) ;
+  private int loggingRuleDepth = 0 ;
+
+  public void traceIn( String s, int ruleIndex ) {
+    if( parserLogger.isDebugEnabled() ) {
+      String indent = "" ;
+      for( int i = 0 ; i < loggingRuleDepth ; i++ ) {
+        indent += ". " ;
+      }
+      parserLogger.debug( indent + s ) ;
+    }
+    loggingRuleDepth ++ ;
+  }
+
+  public void traceOut( String s, int ruleIndex ) {
+    loggingRuleDepth -- ;
+  }
+
+
 // ==========
 // Delimiters
 // ==========

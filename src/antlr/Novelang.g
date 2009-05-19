@@ -78,10 +78,14 @@ tokens {
 import novelang.parser.antlr.ProblemDelegate ; // Keep first, used as a marker by code generator.
 import novelang.parser.antlr.GrammarDelegate ;
 import novelang.parser.antlr.delimited.BlockDelimiter ;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 }
 
 @lexer::header {
 import novelang.parser.antlr.ProblemDelegate ; 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 }
 
 @lexer::members {
@@ -101,24 +105,45 @@ import novelang.parser.antlr.ProblemDelegate ;
     }
   }
  
+  private static final Logger LOGGER = LoggerFactory.getLogger( NovelangLexer.class ) ;
+
+  @Override
+  public void traceIn( String s, int i ) {
+    // Do nothing, parser's logging is enough.
+  }
+
+  @Override
+  public void traceOut( String s, int i ) {
+    // Do nothing, parser's logging is enough.
+  }
 }
 
 
 @parser::members {
-private GrammarDelegate delegate = new GrammarDelegate() ;
+  private GrammarDelegate delegate = new GrammarDelegate() ;
 
-public void setGrammarDelegate( GrammarDelegate delegate ) {
-  this.delegate = delegate ;
-}
-
-@Override
-public void emitErrorMessage( String string ) {
-  if( null == delegate ) {
-    super.emitErrorMessage( string ) ;
-  } else {
-    delegate.report( string ) ;
+  public void setGrammarDelegate( GrammarDelegate delegate ) {
+    this.delegate = delegate ;
   }
-}
+
+  @Override
+  public void traceIn( String s, int ruleIndex ) {
+    delegate.traceIn( s, ruleIndex ) ;
+  }
+
+  @Override
+  public void traceOut( String s, int ruleIndex ) {
+    delegate.traceOut( s, ruleIndex ) ;
+  }
+
+  @Override
+  public void emitErrorMessage( String string ) {
+    if( null == delegate ) {
+      super.emitErrorMessage( string ) ;
+    } else {
+      delegate.report( string ) ;
+    }
+  }
 }
 
 

@@ -75,7 +75,8 @@ public class AntlrGenerator extends JavaGenerator {
 
     createDirectory( getGrammarFile() ) ;
     
-    final String[] arguments = { 
+    final String[] arguments = {
+        "-trace",
         "-fo",
         targetDirectory.getCanonicalPath(), 
         getGrammarFile().getAbsolutePath() 
