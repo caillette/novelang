@@ -26,8 +26,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.common.Problem;
@@ -38,8 +37,8 @@ import novelang.configuration.parse.BatchParameters;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
 import novelang.rendering.HtmlProblemPrinter;
-import novelang.system.EnvironmentTools;
 import novelang.system.StartupTools;
+import novelang.system.Log;
 
 /**
  * The main class for running in command-line mode.
@@ -52,7 +51,7 @@ import novelang.system.StartupTools;
 public class DocumentGenerator {
 
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentGenerator.class ) ;
+  private static final Log LOG = LogFactory.getLog( DocumentGenerator.class ) ;
 
   private static final String PROBLEMS_FILENAME = "problems.html" ;
 
@@ -79,7 +78,7 @@ public class DocumentGenerator {
         System.exit( -1 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
       } else {
-        LOGGER.error( "Parameters exception, printing help and exiting.", e ) ;
+        LOG.error( "Parameters exception, printing help and exiting.", e ) ;
         printHelpOnConsole( commandName, e ) ;
         System.exit( -2 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
@@ -87,13 +86,15 @@ public class DocumentGenerator {
     }
 
     try {
-      LOGGER.debug( "Starting {} with arguments {}",
-          ClassUtils.getShortClassName( DocumentGenerator.class ), asString( arguments ) ) ;
+      LOG.debug( "Starting %s with arguments %s",
+          ClassUtils.getShortClassName( DocumentGenerator.class ),
+          asString( arguments )
+      ) ;
 
       final BatchConfiguration configuration =
           ConfigurationTools.createBatchConfiguration( parameters ); ;
       final File outputDirectory = configuration.getOutputDirectory();
-      resetTargetDirectory( LOGGER, outputDirectory ) ;
+      resetTargetDirectory( LOG, outputDirectory ) ;
       final DocumentProducer documentProducer =
           new DocumentProducer( configuration.getProducerConfiguration() ) ;
       final List< Problem > allProblems = Lists.newArrayList() ;
@@ -102,7 +103,7 @@ public class DocumentGenerator {
         Iterables.addAll(
             allProblems,
             processDocumentRequest(
-                LOGGER,
+                LOG,
                 documentRequest,
                 outputDirectory,
                 documentProducer
@@ -116,7 +117,7 @@ public class DocumentGenerator {
       }
 
     } catch( Exception e ) {
-      LOGGER.error( "Fatal", e ) ;
+      LOG.error( "Fatal", e ) ;
       throw e ;
     }
   }
@@ -163,17 +164,17 @@ public class DocumentGenerator {
   }
 
   private static Iterable< Problem > processDocumentRequest(
-      Logger logger,
+      Log log,
       DocumentRequest documentRequest,
       File targetDirectory,
       DocumentProducer documentProducer
   ) throws Exception {
     final File outputFile = createOutputFile(
-        logger,
+        log,
         targetDirectory,
         documentRequest
     ) ;
-    logger.info( "Generating document file '{}'...", outputFile.getAbsolutePath() ) ;
+    log.info( "Generating document file '%s'...", outputFile.getAbsolutePath() ) ;
     final FileOutputStream outputStream = new FileOutputStream( outputFile ) ;
     final Iterable< Problem > problems = documentProducer.produce( documentRequest, outputStream ) ;
     outputStream.flush() ;
@@ -182,19 +183,19 @@ public class DocumentGenerator {
   }
 
   private static void resetTargetDirectory(
-      Logger logger,
+      Log log,
       File targetDirectory
   ) throws IOException {
     if( targetDirectory.exists() ) {
-      logger.info( "Deleting '{}'...", targetDirectory.getAbsolutePath() ) ;
+      log.info( "Deleting '%s'...", targetDirectory.getAbsolutePath() ) ;
     }
     FileUtils.deleteDirectory( targetDirectory ) ;
     FileUtils.forceMkdir( targetDirectory ) ;
-    logger.info( "Created '{}'...", targetDirectory.getAbsolutePath() ) ;
+    log.info( "Created '%s'...", targetDirectory.getAbsolutePath() ) ;
   }
 
   public static File createOutputFile(
-      Logger logger,
+      Log log,
       File targetDir,
       DocumentRequest documentRequest
   )
@@ -203,7 +204,7 @@ public class DocumentGenerator {
     final String relativeFileName = documentRequest.getDocumentSourceName() +
         "." + documentRequest.getRenditionMimeType().getFileExtension() ;
     final File outputFile =  new File( targetDir, relativeFileName ) ;
-    logger.debug( "Resolved output file name '{}'", outputFile.getAbsolutePath() ) ;
+    log.debug( "Resolved output file name '%s'", outputFile.getAbsolutePath() ) ;
     FileUtils.forceMkdir( outputFile.getParentFile() );
     return outputFile ;
   }

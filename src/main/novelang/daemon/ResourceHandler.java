@@ -28,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.mortbay.jetty.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.configuration.ProducerConfiguration;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
@@ -38,7 +38,6 @@ import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
-import novelang.rendering.RenditionMimeType;
 
 /**
  * Holds resources which don't require rendering.
@@ -47,7 +46,7 @@ import novelang.rendering.RenditionMimeType;
  */
 public class ResourceHandler extends GenericHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceHandler.class ) ;
+  private static final Log LOG = LogFactory.getLog( ResourceHandler.class ) ;
 
   private final ResourceLoader resourceLoader ;
 
@@ -74,7 +73,7 @@ public class ResourceHandler extends GenericHandler {
 
   protected ResourceHandler( ResourceLoader resourceLoader ) {
     this.resourceLoader = resourceLoader ;
-    LOGGER.debug( "Using resourceLoader {}", resourceLoader ) ;
+    LOG.debug( "Using resourceLoader %s", resourceLoader ) ;
   }
 
   protected void doHandle(
@@ -85,7 +84,7 @@ public class ResourceHandler extends GenericHandler {
   )
       throws IOException, ServletException
   {
-    LOGGER.debug( "Attempting to handle {}", request.getRequestURI() ) ;    
+    LOG.debug( "Attempting to handle %s", request.getRequestURI() ) ;
 
     final PolymorphicRequest documentRequest = 
         RequestTools.createPolymorphicRequest( request.getPathInfo() ) ;
@@ -111,14 +110,14 @@ public class ResourceHandler extends GenericHandler {
         }
 
         ( ( Request ) request ).setHandled( true ) ;
-        LOGGER.debug( 
-            "Handled request '{}' with content-type '{}'", 
+        LOG.debug(
+            "Handled request '%s' with content-type '%s'",
             request.getRequestURI(), 
             contentType 
         ) ;
         
       } catch( ResourceNotFoundException e ) {
-        LOGGER.debug( "Could not serve {}", request.getRequestURI() ) ;
+        LOG.debug( "Could not serve %s", request.getRequestURI() ) ;
         // Then do nothing, we just don't handle that request.
       }
 

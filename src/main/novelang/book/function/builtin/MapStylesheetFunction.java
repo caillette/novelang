@@ -19,8 +19,8 @@ package novelang.book.function.builtin;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import novelang.book.Environment;
@@ -50,7 +50,7 @@ import novelang.rendering.RenditionMimeType;
  */
 public class MapStylesheetFunction implements FunctionDefinition {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( MapStylesheetFunction.class ) ;
+  private static final Log LOG = LogFactory.getLog( MapStylesheetFunction.class ) ;
 
   public String getName() {
     return "mapstylesheet" ;
@@ -77,13 +77,13 @@ public class MapStylesheetFunction implements FunctionDefinition {
       }
     }
 
-    if( LOGGER.isDebugEnabled() ) {
+    if( LOG.isDebugEnabled() ) {
       final StringBuffer buffer = new StringBuffer() ;
       for( RenditionMimeType key : assignments.keySet() ) {
         buffer.append( "\n  $" ).append( key.getFileExtension() ).append( "=" ) ;
         buffer.append( assignments.get( key ) ) ;
       }
-      LOGGER.debug( "Parsed function '{}'{}", getName(), buffer.toString() ) ;
+      LOG.debug( "Parsed function '%s' %s", getName(), buffer.toString() ) ;
     }
 
     return new FunctionCall( location ) {

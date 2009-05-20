@@ -20,8 +20,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import novelang.parser.shared.Lexeme;
@@ -31,7 +31,7 @@ import novelang.parser.shared.Lexeme;
 */
 /*static*/ class LexemeDeclarationExtractor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( LexemeDeclarationExtractor.class ) ;
+  private static final Log LOG = LogFactory.getLog( LexemeDeclarationExtractor.class ) ;
 
   /**
    * Groups:
@@ -48,7 +48,7 @@ import novelang.parser.shared.Lexeme;
   ) ;
 
   static {
-    LOGGER.debug( "Crafted regex: " + TOKENS_DECLARATIONS.toString() ) ;
+    LOG.debug( "Crafted regex %s", TOKENS_DECLARATIONS.toString() ) ;
   }
   
   private final CharacterConverter[] converters ;
@@ -139,7 +139,6 @@ import novelang.parser.shared.Lexeme;
       }
       final String hex = "#" +
           characterDeclaration.substring( 2, characterDeclaration.length() ) ;
-//      LOGGER.debug( "Decoding {}", hex ) ;
       final Integer decoded = Integer.decode( hex ) ;
       return ( char ) decoded.intValue() ;
     }

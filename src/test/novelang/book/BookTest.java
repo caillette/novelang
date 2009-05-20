@@ -24,8 +24,8 @@ import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
@@ -43,7 +43,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class BookTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( BookTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
 
   /**
    * Tests the {@link novelang.book.function.builtin.SectionFunction}.
@@ -104,7 +104,7 @@ public class BookTest {
         FunctionRegistry.getStandardRegistry(),
         scannedBookNoStyle
     ) ;
-    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -152,7 +152,7 @@ public class BookTest {
         FunctionRegistry.getStandardRegistry(),
         scannedBookWithStyle
     ) ;
-    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -202,7 +202,7 @@ public class BookTest {
         FunctionRegistry.getStandardRegistry(),
         scannedBookWithBadPart
     ) ;
-    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     Assert.assertTrue( book.hasProblem() ); ;
 

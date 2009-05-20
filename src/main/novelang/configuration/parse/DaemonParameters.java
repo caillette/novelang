@@ -21,8 +21,8 @@ import java.io.File;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Parses command-line arguments for {@link novelang.daemon.HttpDaemon}.
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DaemonParameters extends GenericParameters {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DaemonParameters.class ) ;
+  private static final Log LOG = LogFactory.getLog( DaemonParameters.class ) ;
 
   private final Integer port ;
 
@@ -44,7 +44,7 @@ public class DaemonParameters extends GenericParameters {
 
     if( line.hasOption( OPTION_HTTPDAEMON_PORT.getLongOpt() ) ) {
       final String portParameter = line.getOptionValue( OPTION_HTTPDAEMON_PORT.getLongOpt() ) ;
-      LOGGER.debug( "found: {} = '{}'", OPTION_HTTPDAEMON_PORT.getLongOpt(), portParameter ) ;
+      LOG.debug( "found: %s = '%s'", OPTION_HTTPDAEMON_PORT.getLongOpt(), portParameter ) ;
       try {
         port = Integer.parseInt( portParameter ) ;
       } catch( NumberFormatException e ) {

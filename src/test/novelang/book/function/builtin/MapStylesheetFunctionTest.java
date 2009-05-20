@@ -20,8 +20,8 @@ import java.io.File;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableMap;
 import novelang.book.Environment;
 import novelang.book.function.FunctionCall;
@@ -43,7 +43,7 @@ import novelang.rendering.RenditionMimeType;
  */
 public class MapStylesheetFunctionTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( MapStylesheetFunctionTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( MapStylesheetFunctionTest.class ) ;
 
   @Test
   public void correctMapping() throws IllegalFunctionCallException {
@@ -52,7 +52,7 @@ public class MapStylesheetFunctionTest {
         "stylesheet",
         ImmutableMap.of( "html", "dir/stylesheet.xsl", "pdf", "other/pdf.xsl" )
     ) ;
-    LOGGER.debug( "Function call tree: \n" + callTree.toStringTree() ) ;
+    LOG.debug( "Function call tree: \n%s", callTree.toStringTree() ) ;
 
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),

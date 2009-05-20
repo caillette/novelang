@@ -24,8 +24,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -38,7 +37,7 @@ import novelang.common.LanguageTools;
  */
 public final class EnvironmentTools {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( EnvironmentTools.class ) ;
+  private static final Log LOGGER = LogFactory.getLog( EnvironmentTools.class ) ;
 
   private EnvironmentTools() { }
 

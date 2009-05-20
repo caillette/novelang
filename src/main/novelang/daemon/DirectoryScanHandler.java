@@ -28,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.mortbay.jetty.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import novelang.common.FileTools;
@@ -62,7 +62,7 @@ import novelang.rendering.RenditionMimeType;
  */
 public class DirectoryScanHandler extends GenericHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DirectoryScanHandler.class ) ;
+  private static final Log LOG = LogFactory.getLog( DirectoryScanHandler.class ) ;
 
   private final File contentRoot ;
   private static final String ACCESS_DENIED_MESSAGE =
@@ -88,14 +88,14 @@ public class DirectoryScanHandler extends GenericHandler {
   )
       throws IOException, ServletException
   {
-    LOGGER.debug( "Attempting to handle request for user agent {}",
+    LOG.debug( "Attempting to handle request for user agent %s",
         request.getHeader( "User-Agent" ) ) ;
 
     if( target.contains( ".." ) ) {
 
       sendUnauthorizedResponse( response ) ;
       ( ( Request ) request ).setHandled( true ) ;
-      LOGGER.debug( "Concluded by unauthorized message for original request '{}'",
+      LOG.debug( "Concluded by unauthorized message for original request '%s'",
           request.getRequestURI() ) ;
 
     } else {
@@ -128,11 +128,11 @@ public class DirectoryScanHandler extends GenericHandler {
       if( directoryExists ) {
         if( needsRedirection ) {
           redirectTo( response, normalizedTarget ) ;
-          LOGGER.debug( "Concluded by redirection for original request '{}'",
+          LOG.debug( "Concluded by redirection for original request '%s'",
               request.getRequestURI() ) ;
         } else {
           listFilesAndDirectories( response, scanned ) ;
-          LOGGER.debug( "Concluded by directory listing for original request '{}'",
+          LOG.debug( "Concluded by directory listing for original request '%s'",
               request.getRequestURI() ) ;
         }
         ( ( Request ) request ).setHandled( true ) ;
@@ -147,7 +147,7 @@ public class DirectoryScanHandler extends GenericHandler {
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
     response.setContentType( HTML_CONTENT_TYPE ) ;
-    LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+    LOG.debug( "Redirected to '%s'", redirectionTarget ) ;
   }
 
   /**
@@ -156,7 +156,7 @@ public class DirectoryScanHandler extends GenericHandler {
   private static boolean doesBrowserNeedMimeHint( HttpServletRequest request ) {
     final String userAgent = request.getHeader( "User-Agent" ) ;
     if( null == userAgent ) {
-      LOGGER.warn( "Got no User-Agent in {}", request ) ;
+      LOG.warn( "Got no User-Agent in %s", request ) ;
       return false ;
     } else {
       return userAgent.contains( "Safari" ) ;
@@ -165,7 +165,7 @@ public class DirectoryScanHandler extends GenericHandler {
   }
 
   private static void sendUnauthorizedResponse( HttpServletResponse response ) throws IOException {
-    LOGGER.warn( ACCESS_DENIED_MESSAGE ) ;
+    LOG.warn( ACCESS_DENIED_MESSAGE ) ;
     response.setStatus( HttpServletResponse.SC_UNAUTHORIZED ) ;
     response.setContentType( HTML_CONTENT_TYPE ) ;
 
@@ -210,7 +210,7 @@ public class DirectoryScanHandler extends GenericHandler {
     writer.println( "<body>" ) ;
     writer.println( "<tt>" ) ;
 
-    LOGGER.debug( "Relativizing files from '{}'", scannedDirectory.getAbsolutePath() ) ;
+    LOG.debug( "Relativizing files from '%s'", scannedDirectory.getAbsolutePath() ) ;
 
     if( FileTools.isParentOf( contentRoot, scannedDirectory ) ) {
       writer.println( "<a href=\"..\">..</a><br/>" ) ;

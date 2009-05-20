@@ -23,9 +23,7 @@ import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.google.common.collect.Iterables;
+import novelang.system.LogFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import novelang.configuration.parse.BatchParameters;
@@ -37,7 +35,7 @@ import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
 import novelang.produce.DocumentRequest;
 import novelang.system.DefaultCharset;
-import novelang.common.LanguageTools;
+import novelang.system.Log;
 
 /**
  * Creates various Configuration objects from {@link GenericParameters}.
@@ -57,7 +55,7 @@ import novelang.common.LanguageTools;
  */
 public class ConfigurationTools {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ConfigurationTools.class ) ;
+  private static final Log LOG = LogFactory.getLog( ConfigurationTools.class ) ;
 
   public static final int DEFAULT_HTTP_DAEMON_PORT = 8080 ;
   public static final String DEFAULT_FONTS_DIRECTORY_NAME = "fonts" ;
@@ -95,15 +93,17 @@ public class ConfigurationTools {
     final Integer customPort = parameters.getHttpDaemonPort() ;
     if( null == customPort ) {
       port = DEFAULT_HTTP_DAEMON_PORT ;
-     LOGGER.info(
-         "Got port number from default value [" + DEFAULT_HTTP_DAEMON_PORT + "] "
-       + "(option not set: " + parameters.getHttpDaemonPortOptionDescription() + ")."
+     LOG.info(
+         "Got port number from default value [%s] (option not set: %s).",
+         DEFAULT_HTTP_DAEMON_PORT,
+         parameters.getHttpDaemonPortOptionDescription()
      ) ;
     } else {
       port = customPort ;
-      LOGGER.info(
-          "Got port number from custom value '" + customPort + "' "
-        + "(from option: " + parameters.getHttpDaemonPortOptionDescription() + ")."
+      LOG.info(
+          "Got port number from custom value '%s' (from option: %s"  + ").",
+          customPort,
+          parameters.getHttpDaemonPortOptionDescription()
       ) ;
     }
 
@@ -125,19 +125,17 @@ public class ConfigurationTools {
     final File outputDirectory ;
     if( null == parameters.getOutputDirectory() ) {
       outputDirectory = new File( parameters.getBaseDirectory(), DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
-     LOGGER.info(
-         "Got output directory from default value [" + DEFAULT_OUTPUT_DIRECTORY_NAME + "] "
-       + "(option not set: " + parameters.getOutputDirectoryOptionDescription() + ")."
+     LOG.info(
+         "Got output directory from default value '%s' (option not set: %s).",
+         DEFAULT_OUTPUT_DIRECTORY_NAME,
+         parameters.getOutputDirectoryOptionDescription()
      ) ;
-//      if( ! outputDirectory.exists() ) {
-//        outputDirectory.mkdirs() ;
-//        LOGGER.info( "Created directory '" + outputDirectory.getAbsolutePath() + "'." ) ;
-//      }
     } else {
       outputDirectory = parameters.getOutputDirectory() ;
-     LOGGER.info(
-         "Got output directory from custom value '" + outputDirectory + "' "
-       + "(from option: " + parameters.getOutputDirectoryOptionDescription() + ")."
+     LOG.info(
+         "Got output directory from custom value '%s' (from option: %s).",
+         outputDirectory,
+         parameters.getOutputDirectoryOptionDescription()
      ) ;
     }
 
@@ -163,14 +161,14 @@ public class ConfigurationTools {
       final Charset charset = parameters.getDefaultSourceCharset() ;
       if( null == charset ) {
         defaultSourceCharset = DefaultCharset.SOURCE ;
-        LOGGER.info(
-            "Default source charset is {} (from option {}).",
+        LOG.info(
+            "Default source charset is %s (from option %s).",
             defaultSourceCharset.name(),
             parameters.getDefaultSourceCharsetOptionDescription()
         ) ;
       } else {
         defaultSourceCharset = charset ;
-        LOGGER.info( "Default source charset set as {}",
+        LOG.info( "Default source charset set as %s",
             defaultSourceCharset.name() ) ;
       }
     }
@@ -192,9 +190,10 @@ public class ConfigurationTools {
     final Iterable< File > userFontDirectories = parameters.getFontDirectories() ;
     if( userFontDirectories.iterator().hasNext() ) {
       fontDirectories = userFontDirectories ;
-     LOGGER.info(
-         "Got font directories from custom value '" + fontDirectories + "' "
-       + "(from option: " + parameters.getFontDirectoriesOptionDescription() + ")."
+     LOG.info(
+         "Got font directories from custom value '%s" + "' (from option: %s).",
+         fontDirectories,
+         parameters.getFontDirectoriesOptionDescription()
      ) ;
     } else {
       final File maybeDefaultDirectory = findDefaultDirectoryIfNeeded(
@@ -230,14 +229,14 @@ public class ConfigurationTools {
       final Charset charset = parameters.getDefaultRenderingCharset() ;
       if( null == charset ) {
         defaultRenderingCharset = DefaultCharset.RENDERING ;
-        LOGGER.info(
-            "Default rendering charset is {} (from option {}).",
+        LOG.info(
+            "Default rendering charset is %s (from option %s).",
             defaultRenderingCharset.name(),
             parameters.getDefaultRenderingCharsetOptionDescription()
         ) ;
       } else {
         defaultRenderingCharset = charset ;
-        LOGGER.info( "Default rendering charset set as {}",
+        LOG.info( "Default rendering charset set as %s",
             defaultRenderingCharset.name() ) ;
       }
     }
@@ -311,23 +310,30 @@ public class ConfigurationTools {
     if( null == userDefinedDirectory ) {
       final File defaultDirectory = new File( baseDirectory, defaultDirectoryName ) ;
       if( defaultDirectory.exists() ) {
-        LOGGER.info(
-            "Got " + topic + " from default value '" + defaultDirectory.getAbsolutePath() + "' "
-          + "(option not set: " + directoryDescription + ")."
+        LOG.info(
+            "Got %s from default value '%s' (option not set: %s).",
+            topic,
+            defaultDirectory.getAbsolutePath(),
+            directoryDescription
         ) ;
         return defaultDirectory ;
       } else {
-        LOGGER.info(
-            "Got no " + topic + " (no default directory '" + defaultDirectoryName + "' "
-          + "nor was set this option: " + directoryDescription + ")."
+        LOG.info(
+            "Got no %s (no default directory '%s' nor was set this option: %s).",
+            topic,
+            defaultDirectoryName,
+            directoryDescription
         ) ;
 
         return null ;
       }
     } else {
-      LOGGER.info(
-          "Got " + topic + " from user value '" + userDefinedDirectory + "' "
-       +  "(from option: " + directoryDescription + ")." ) ;
+      LOG.info(
+          "Got %s from user value '%s' (from option: %s).",
+          topic,
+          userDefinedDirectory,
+          directoryDescription
+      ) ;
       return userDefinedDirectory ;
     }
   }

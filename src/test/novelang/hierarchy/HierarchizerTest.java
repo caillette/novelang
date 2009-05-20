@@ -17,8 +17,8 @@
 package novelang.hierarchy;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
@@ -32,7 +32,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class HierarchizerTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( HierarchizerTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( HierarchizerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -332,7 +332,7 @@ public class HierarchizerTest {
       SyntacticTree expectedTree,
       SyntacticTree flatTree
   ) {
-    LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
+    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
     final Treepath rehierarchized = rehierarchizeLevels( flatTree ) ;
@@ -348,7 +348,7 @@ public class HierarchizerTest {
   private static Treepath< SyntacticTree > rehierarchizeLevels(
       SyntacticTree flatTree
   ) {
-    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
+    LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 
     return Hierarchizer.rehierarchizeLevels( flatTreepath ) ;
@@ -360,8 +360,8 @@ public class HierarchizerTest {
       SyntacticTree expectedTree,
       SyntacticTree flatTree
   ) {
-    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
-    LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
+    LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
+    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 

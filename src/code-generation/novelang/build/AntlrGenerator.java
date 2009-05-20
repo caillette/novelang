@@ -27,8 +27,8 @@ import java.security.Permission;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Lists;
 
 
@@ -54,7 +54,7 @@ import com.google.common.collect.Lists;
  */
 public class AntlrGenerator extends JavaGenerator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( AntlrGenerator.class ) ;
+  private static final Log LOG = LogFactory.getLog( AntlrGenerator.class ) ;
   private static final String FIRST_IMPORT = "import novelang.parser.antlr.ProblemDelegate ;" ;
   private static final String ANTLR_OUTPUT_INTRODUCTION = "ANTLR Parser Generator  Version 3.1.1";
 
@@ -82,7 +82,7 @@ public class AntlrGenerator extends JavaGenerator {
         getGrammarFile().getAbsolutePath() 
     } ;
     
-    LOGGER.info( "Command line: " + Lists.newArrayList( arguments ) ) ;
+    LOG.info( "Command line: %s", Lists.newArrayList( arguments ) ) ;
 
     final SystemErrorStreamTrapper systemErrorStreamTrapper = new SystemErrorStreamTrapper() ;
     systemErrorStreamTrapper.install() ;
@@ -114,7 +114,7 @@ public class AntlrGenerator extends JavaGenerator {
   ) throws IOException {
     
     final File javaFile = new File( directory, radix + suffix + JAVA_EXTENSION ) ;
-    LOGGER.info( "Fixing package declaration for file: '{}'", javaFile.getAbsolutePath() ) ;
+    LOG.info( "Fixing package declaration for file: '%s'", javaFile.getAbsolutePath() ) ;
         
     final String javaWithoutImports = IOUtils.toString( new FileInputStream( javaFile) ) ;
     

@@ -22,8 +22,8 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import novelang.common.Problem;
 import com.google.common.base.Joiner;
@@ -112,22 +112,22 @@ public class DelimiterProblemTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DelimiterProblemTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( DelimiterProblemTest.class ) ;
 
   @Before
   public void before() {
     final String testName = NameAwareTestClassRunner.getTestName() ;
-    LOGGER.info( "\n\nRunning {}", testName ) ;
+    LOG.info( "\n\nRunning %s", testName ) ;
   }
 
 
   private void process( String text, ProblemSignature... signatures ) throws RecognitionException {
-    LOGGER.info( BREAK + text ) ;
+    LOG.info( BREAK + text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
     final Iterable< Problem > problems = parser.getProblems() ;
         // parser.getDelegate().getBlockDelimiterSupervisor().getProblems() ;
-    LOGGER.debug( "Faulty blocks: {}",
+    LOG.debug( "Faulty blocks: %s",
         problems.iterator().hasNext() ?
         "\n    " + Joiner.on( "\n    " ).join( problems ) :
         "none."

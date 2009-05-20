@@ -20,8 +20,8 @@ package novelang.parser.antlr;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
@@ -112,7 +112,7 @@ public class ParagraphParsingTest {
   @Test
   public void paragraphIsWordThenSemicolon() throws RecognitionException {
     SyntacticTree tree = PARSERMETHOD_WORD.createTree( "w0" ) ;
-    LOGGER.debug( tree.toStringTree() ) ;
+    LOG.debug( tree.toStringTree() ) ;
 
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0;", 
@@ -797,7 +797,7 @@ public class ParagraphParsingTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ParagraphParsingTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( ParagraphParsingTest.class ) ;
   private static final ParserMethod PARSERMETHOD_WORD =
       new ParserMethod( "word" ) ;
   private static final ParserMethod PARSERMETHOD_PARAGRAPH =

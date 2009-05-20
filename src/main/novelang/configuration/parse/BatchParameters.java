@@ -22,8 +22,8 @@ import java.util.List;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import novelang.produce.DocumentRequest;
@@ -39,7 +39,7 @@ import novelang.produce.RequestTools;
  */
 public class BatchParameters extends GenericParameters {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( BatchParameters.class ) ;
+  private static final Log LOG = LogFactory.getLog( BatchParameters.class ) ;
 
   private final Iterable< DocumentRequest > documentRequests ;
   private final File outputDirectory ;
@@ -49,7 +49,7 @@ public class BatchParameters extends GenericParameters {
   {
     super( baseDirectory, parameters );
     final String[] sourceArguments = line.getArgs() ;
-    LOGGER.debug( "found: sources = {}", Lists.newArrayList( sourceArguments ) ) ;
+    LOG.debug( "found: sources = %s", Lists.newArrayList( sourceArguments ) ) ;
 
     if( sourceArguments.length == 0 ) {
       throw new ArgumentException( "No source documents", helpPrinter ) ;
@@ -72,7 +72,7 @@ public class BatchParameters extends GenericParameters {
         }
       }
       documentRequests = ImmutableList.copyOf( requestList ) ;
-      LOGGER.debug( "Document requests = {}", documentRequests ) ;
+      LOG.debug( "Document requests = %s", documentRequests ) ;
     }
 
     outputDirectory = extractDirectory( baseDirectory, OPTION_OUTPUT_DIRECTORY, line, false ) ;

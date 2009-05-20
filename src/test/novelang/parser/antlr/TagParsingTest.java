@@ -16,8 +16,8 @@
  */
 package novelang.parser.antlr;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import org.junit.Test;
 import antlr.RecognitionException;
 import static novelang.parser.NodeKind.*;
@@ -63,7 +63,7 @@ public class TagParsingTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( TagParsingTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( TagParsingTest.class ) ;
   private static final ParserMethod PARSERMETHOD_TAG = new ParserMethod( "tag" ) ;
   private static final ParserMethod PARSERMETHOD_PART = new ParserMethod( "part" ) ;
 

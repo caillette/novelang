@@ -21,15 +21,14 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.tree.Tree;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
 import novelang.parser.antlr.delimited.BlockDelimiter;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
-import novelang.parser.antlr.delimited.DefaultBlockDelimitersBoundary;
 import novelang.parser.antlr.delimited.BlockDelimiterSupervisor;
 import novelang.parser.antlr.delimited.DefaultBlockDelimiterSupervisor;
 
@@ -40,7 +39,7 @@ import novelang.parser.antlr.delimited.DefaultBlockDelimiterSupervisor;
  */
 public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSupervisor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( GrammarDelegate.class ) ;
+  private static final Log LOGGER = LogFactory.getLog( GrammarDelegate.class ) ;
 
   /**
    * With this constructor the {@code LocationFactory} gives only partial information.
@@ -76,7 +75,7 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
 // Parser rules logging
 // ====================
 
-  private static final Logger parserLogger = LoggerFactory.getLogger( NovelangParser.class ) ;
+  private static final Log parserLogger = LogFactory.getLog( NovelangParser.class ) ;
   private int loggingRuleDepth = 0 ;
 
   public void traceIn( String s, int ruleIndex ) {

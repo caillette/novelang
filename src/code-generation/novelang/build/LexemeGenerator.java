@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.antlr.stringtemplate.StringTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.parser.shared.Lexeme;
 
 
@@ -33,8 +33,6 @@ import novelang.parser.shared.Lexeme;
  * @author Laurent Caillette
  */
 public class LexemeGenerator extends JavaGenerator {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger( LexemeGenerator.class ) ;
 
   public LexemeGenerator(
       File grammarFile,

@@ -22,8 +22,8 @@ import java.lang.reflect.*;
 import java.util.List;
 import java.util.MissingResourceException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -54,7 +54,7 @@ public final class ResourceSchema {
     return new Resource( name ) ;
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceSchema.class ) ;
+  private static final Log LOG = LogFactory.getLog( ResourceSchema.class ) ;
 
   private ResourceSchema() { }
 
@@ -101,7 +101,7 @@ public final class ResourceSchema {
       }
       inputStream.close() ;
       resource.setUnderlyingResourcePath( resourcePath ) ;
-      LOGGER.debug( "Verified: {}", resource.getUnderlyingResourcePath() ) ;
+      LOG.debug( "Verified: %s", resource.getUnderlyingResourcePath() ) ;
     }
     for( Directory subDirectory : directory.getSubdirectories() ) {
       subDirectory.setParent( directory ) ;

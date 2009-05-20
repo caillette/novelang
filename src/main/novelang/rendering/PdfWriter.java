@@ -25,8 +25,8 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import org.xml.sax.ContentHandler;
 import novelang.common.metadata.DocumentMetadata;
 import novelang.configuration.RenderingConfiguration;
@@ -37,7 +37,7 @@ import novelang.loader.ResourceName;
  */
 public class PdfWriter extends XslWriter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( PdfWriter.class ) ;
+  private static final Log LOG = LogFactory.getLog( PdfWriter.class ) ;
 
   protected static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ;
   protected final FopFactory fopFactory ;

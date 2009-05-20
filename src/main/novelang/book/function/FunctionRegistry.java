@@ -18,8 +18,8 @@ package novelang.book.function;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Maps;
 import novelang.book.function.builtin.InsertFunction;
 import novelang.book.function.builtin.MapStylesheetFunction;
@@ -33,21 +33,21 @@ import novelang.book.function.builtin.TitleFunction;
  */
 public class FunctionRegistry {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( FunctionRegistry.class ) ;
+  private static final Log LOG = LogFactory.getLog( FunctionRegistry.class ) ;
 
   private final Map< String, FunctionDefinition > definitions = Maps.newHashMap() ;
 
   public FunctionRegistry( FunctionDefinition... definitions ) {
     for( FunctionDefinition definition : definitions ) {
       this.definitions.put( definition.getName(), definition ) ;
-      LOGGER.debug( "Added function definition: {}", definition.getName() ) ;
+      LOG.debug( "Added function definition: '%s'", definition.getName() ) ;
     }
   }
 
   public FunctionDefinition getFunctionDeclaration( String name ) throws UnknownFunctionException {
     final FunctionDefinition definition = definitions.get( name ) ;
     if( null == definition ) {
-      LOGGER.warn( "Could not find funtion '{}'", name ) ;
+      LOG.warn( "Could not find funtion '%s'", name ) ;
       throw new UnknownFunctionException( name ) ;
     }
     return definition ;

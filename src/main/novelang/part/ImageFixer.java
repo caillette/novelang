@@ -27,8 +27,8 @@ import novelang.loader.ResourceName;
 import novelang.configuration.ConfigurationTools;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import org.dom4j.io.SAXReader;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -53,7 +53,7 @@ import javax.imageio.ImageIO;
  */
 public class ImageFixer {
   
-  private static final Logger LOGGER = LoggerFactory.getLogger( ImageFixer.class ) ;
+  private static final Log LOG = LogFactory.getLog( ImageFixer.class ) ;
   
   private final File baseDirectory;
   private final File referrerDirectory ;
@@ -80,10 +80,12 @@ public class ImageFixer {
     this.baseDirectory = baseDirectory;
     this.referrerDirectory = referrerDirectory ;
     this.problemCollector = problemCollector ;
-    LOGGER.debug( 
-        "Created " + ClassUtils.getShortClassName( getClass() ) + " " + 
-        "contentRoot: '" + baseDirectory.getAbsolutePath() + "', " +
-        "referrerDirectory: '" + referrerDirectory.getAbsolutePath() + "'"        
+    LOG.debug(
+        "Created %s contentRoot: '%s', referrerDirectory: '%s'",
+        ClassUtils.getShortClassName( getClass() ),
+        baseDirectory.getAbsolutePath(),
+        referrerDirectory.getAbsolutePath()
+
     ) ;
   }
 
@@ -116,12 +118,12 @@ public class ImageFixer {
         try {
           newLocation = relocate( oldLocation ) ;
         } catch ( ImageFixerException e ) {
-          LOGGER.debug( "{} got exception: {}", // Just debug level, exception will raise later.
+          LOG.debug( "%s got exception: %s", // Just debug level, exception will raise later.
               ClassUtils.getShortClassName( getClass() ), e.getMessage() ) ;
           problemCollector.collect( Problem.createProblem( e ) ) ;          
           return treepathToImage ; // Leave unchanged.
         }
-        LOGGER.debug( "Replacing '" + oldLocation + "' by '" + newLocation + "'" ) ;
+        LOG.debug( "Replacing '%s' by '%s'", oldLocation, newLocation ) ;
         final Treepath< SyntacticTree > treepathToResourceLocation = 
             Treepath.create( treepathToImage, i, 0 ) ;
         treepathToImage = TreepathTools.replaceTreepathEnd(
@@ -156,7 +158,7 @@ public class ImageFixer {
       } catch( Exception e ) {
         final String message = "Could not read '" + imageLocation + "'";
         problemCollector.collect( Problem.createProblem( message ) ) ;
-        LOGGER.warn( message, e ) ;
+        LOG.warn( message, e ) ;
       }
     return treepathToImage ;
   }
@@ -165,7 +167,7 @@ public class ImageFixer {
       Treepath< SyntacticTree > treepathToImage,
       File imageFile
   ) throws IOException {
-    LOGGER.debug( "Extracting raster image metadata from '{}'...", imageFile.getAbsolutePath() ) ;
+    LOG.debug( "Extracting raster image metadata from '%s'...", imageFile.getAbsolutePath() ) ;
     final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
 
     treepathToImage = addImageMetadata(
@@ -194,7 +196,7 @@ public class ImageFixer {
       Treepath< SyntacticTree > treepathToImage,
       File imageFile
   ) throws IOException, DocumentException {
-    LOGGER.debug( "Extracting vector image metadata from '{}'...", imageFile.getAbsolutePath() ) ;
+    LOG.debug( "Extracting vector image metadata from '%s'...", imageFile.getAbsolutePath() ) ;
 
     final SAXReader reader = new SAXReader() ;
     reader.setEntityResolver( ENTITY_RESOLVER ) ;
@@ -205,7 +207,7 @@ public class ImageFixer {
       final String width = svgNode.valueOf( "@width" ) ;
       final String height = svgNode.valueOf( "@height" ) ;
 
-      LOGGER.debug( "Found: width:'{}', height:'{}'", width, height ) ;
+      LOG.debug( "Found: width:'%s', height:'%s'", width, height ) ;
 
       if( ! StringUtils.isBlank( width ) && ! StringUtils.isBlank( height ) ) {
         treepathToImage = addImageMetadata(
@@ -332,10 +334,12 @@ public class ImageFixer {
        || publicId.startsWith( SVG11_PUBLICID_PREFIX_3 )  
       ) {
         final String dtdResourceName = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
-        LOGGER.debug( 
-            "Attempting to load definition for publicIdentifier='" + publicId + "', " + 
-            "systemIdentifier='" + systemId + "', " +
-            "resourceName='" + dtdResourceName + "'"
+        LOG.debug(
+            "Attempting to load definition for publicIdentifier='%s', systemIdentifier='%s"  +
+            "', resourceName='%s'",
+            publicId,
+            systemId,
+            dtdResourceName
         ) ;
         return new InputSource( 
             ENTITY_RESOURCE_LOADER.getInputStream( 

@@ -25,8 +25,7 @@ import java.util.List;
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -35,6 +34,7 @@ import novelang.common.tree.TreeTools;
 import novelang.parser.GenericParser;
 import novelang.parser.GenericParserFactory;
 import novelang.system.DefaultCharset;
+import novelang.system.Log;
 
 /**
  * Base class holding parsing and some error-handling.
@@ -43,7 +43,7 @@ import novelang.system.DefaultCharset;
  */
 public abstract class AbstractSourceReader implements LocationFactory, Renderable {
 
-  protected static final Logger LOGGER = LoggerFactory.getLogger( AbstractSourceReader.class ) ;
+  protected static final Log LOG = LogFactory.getLog( AbstractSourceReader.class ) ;
   private final String thisToString ;
   private final List< Problem > problems = Lists.newArrayList() ;
   protected final String locationName ;
@@ -64,11 +64,11 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.locationName = "<String>" ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
     this.renderingCharset = Preconditions.checkNotNull( defaultRenderingCharset ) ;
-    LOGGER.debug(
-        "Creating " + thisToString + "[" +
-        "sourceCharset=" + sourceCharset.name() + ", " +
-        "renderingCharset=" + renderingCharset.name() +
-        "]" 
+    LOG.debug(
+        "Creating %s[ sourceCharset=%s, renderingCharset=%s ]",
+        thisToString,
+        sourceCharset.name(),
+        renderingCharset.name()
     ) ;
   }
 
@@ -82,21 +82,23 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.locationName = partUrl.toExternalForm() ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
     this.renderingCharset = Preconditions.checkNotNull( renderingCharset ) ;
-    LOGGER.debug(
-        "Creating " + thisToString + "[" +
-        "locationName='" + locationName + "', " +
-        "sourceCharset=" + sourceCharset.name() + ", " +
-        "renderingCharset=" + renderingCharset.name() +
-        "]"
+    LOG.debug(
+        "Creating %s[locationName='%s', sourceCharset=%s, renderingCharset=%s ]",
+        thisToString,
+        locationName,
+        sourceCharset.name(),
+        renderingCharset.name()
+
     ) ;
   }
 
   protected String readContent( URL partUrl ) {
 
-    LOGGER.info(
-        "Attempting to load file '{}' from {} with charset " + sourceCharset.name(),
+    LOG.info(
+        "Attempting to load file '%s' from %s with charset %s",
         partUrl.toExternalForm(), 
-        this
+        this,
+        sourceCharset.name()
     ) ;
 
     try {
@@ -104,7 +106,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       return IOUtils.toString( inputStream, sourceCharset.name() ) ;
 
     } catch( IOException e ) {
-      LOGGER.warn( "Could not load file", e ) ;
+      LOG.warn( "Could not load file", e ) ;
       collect( Problem.createProblem( this, e ) ) ;
       return null ;
     }
@@ -128,7 +130,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       }
 
     } catch( RecognitionException e ) {
-      LOGGER.warn( "Could not parse file", e ) ;
+      LOG.warn( "Could not parse file", e ) ;
       collect( Problem.createProblem( this, e ) ) ;
     }
 
@@ -163,7 +165,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
 
   protected final void collect( Problem problem ) {
-    LOGGER.debug( "Collecting Problem: " + problem ) ;
+    LOG.debug( "Collecting Problem: %s", problem ) ;
     problems.add( Preconditions.checkNotNull( problem ) ) ;
   }
   

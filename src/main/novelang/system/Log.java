@@ -17,7 +17,7 @@
 package novelang.system;
 
 /**
- * A wrapper around {@link org.slf4j.Logger} with varargs support and less clutter.
+ * A wrapper around {@link LogFactory} with varargs support and less clutter.
  *
  * @author Laurent Caillette
  */

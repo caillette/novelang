@@ -21,8 +21,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -43,7 +43,7 @@ import novelang.common.Location;
  */
 public class ExpandedNameVerifier {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ExpandedNameVerifier.class ) ;
+  private static final Log LOG = LogFactory.getLog( ExpandedNameVerifier.class ) ;
 
   private final Set< String > nodeNames ;
 
@@ -61,7 +61,7 @@ public class ExpandedNameVerifier {
     Preconditions.checkState( xpathPattern == null ) ;
     xmlPrefix = prefix ;
     xpathPattern = Pattern.compile( prefix + XPATH_PATTERN_FRAGMENT ) ;
-    LOGGER.debug( "Crafted regex: " + xpathPattern.toString() ) ;
+    LOG.debug( "Crafted regex: %s", xpathPattern.toString() ) ;
   }
 
   public void unsetXmlPrefix() {

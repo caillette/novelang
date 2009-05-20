@@ -18,8 +18,8 @@ package novelang.common.tree;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Tests for {@link TreeTools}.
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TreeToolsTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( TreeToolsTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( TreeToolsTest.class ) ;
 
   @Test
   public void testAddChildAtPosition0() {

@@ -14,12 +14,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
@@ -112,7 +111,7 @@ public class TagInteractionTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( TagInteractionTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( TagInteractionTest.class ) ;
 
   static {
     TestResourceTree.initialize() ;
@@ -168,16 +167,16 @@ public class TagInteractionTest {
     ) ;
     if( page instanceof UnexpectedPage ) {
       final UnexpectedPage unexpectedPage = ( UnexpectedPage ) page ;
-      LOGGER.error( "Unexpected page!" ) ;
-      LOGGER.error( "  Staus message:" + unexpectedPage.getWebResponse().getStatusMessage() ) ;
-      LOGGER.error( "  Response headers:" + unexpectedPage.getWebResponse().getResponseHeaders() ) ;
-      LOGGER.error( "Page content:\n" + unexpectedPage.getWebResponse().getContentAsString() ) ;
+      LOG.error( "Unexpected page!" ) ;
+      LOG.error( "  Staus message: %s", unexpectedPage.getWebResponse().getStatusMessage() ) ;
+      LOG.error( "  Response headers: %s", unexpectedPage.getWebResponse().getResponseHeaders() ) ;
+      LOG.error( "Page content:\n%s", unexpectedPage.getWebResponse().getContentAsString() ) ;
       fail( "Could not load the page." ) ;
     }
-    LOGGER.debug( "Got page of type " + page.getClass().getName() );
+    LOG.debug( "Got page of type %s", page.getClass().getName() );
     final HtmlPage htmlPage = ( HtmlPage ) page ;
 
-    LOGGER.info( "Now the whole page should have finished loading and initializing." ) ;
+    LOG.info( "Now the whole page should have finished loading and initializing." ) ;
 
     allHeaders = Ordering.from( HTMLELEMENT_COMPARATOR ).
         sortedCopy( extractAllHeaders( htmlPage ) );
@@ -211,7 +210,7 @@ public class TagInteractionTest {
     final Set< String > errors = Sets.newTreeSet() ;
     for( String headerTextStart : headerTextStarts ) {
       final HtmlElement htmlElement = findByTextStart( htmlElements, headerTextStart ) ;
-      LOGGER.debug( "Verifying hidden for header '{}'", headerTextStart ) ;
+      LOG.debug( "Verifying hidden for header '%s'", headerTextStart ) ;
       if( htmlElement.isDisplayed() ) {
         errors.add( headerTextStart + " should be hidden") ;
       } else {
@@ -219,7 +218,7 @@ public class TagInteractionTest {
       }
     }
     for( HtmlElement htmlElement : elementsToBeVerified ) {
-      LOGGER.debug( "Verifying visible for element '{}'", cleanTextContent( htmlElement ) ) ;
+      LOG.debug( "Verifying visible for element '%s'", cleanTextContent( htmlElement ) ) ;
       if( ! htmlElement.isDisplayed() ) {
         errors.add( cleanTextContent( htmlElement ) + " should be displayed" ) ;
       }
@@ -259,9 +258,7 @@ public class TagInteractionTest {
 
   private void logHeaderVisibility( List<HtmlElement> allHeaders ) {
     for( HtmlElement header : allHeaders ) {
-      LOGGER.debug(
-          "Header: " + cleanTextContent( header ) + " displayed: " + header.isDisplayed()
-      ) ;
+      LOG.debug( "Header: %s displayed: %s", cleanTextContent( header ), header.isDisplayed() ) ;
     }
   }
 

@@ -20,15 +20,15 @@ import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * @author Laurent Caillette
  */
 public class XsltNumberingTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( XsltNumberingTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( XsltNumberingTest.class ) ;
 
   @Test
   public void convertToNumber() {
@@ -58,8 +58,8 @@ public class XsltNumberingTest {
   @Test
   public void printScrambledDateTime() {
     final String scrambled = "2k917b2k";
-    LOGGER.info(
-        "Unscrambling {}: {}",
+    LOG.info(
+        "Unscrambling %s: %s",
         scrambled,
         Numbering.formatDateTime(
             Numbering.unformatDateTime( scrambled, "BASE36" ),

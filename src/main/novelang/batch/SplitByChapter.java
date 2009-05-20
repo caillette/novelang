@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -52,7 +52,7 @@ import novelang.part.Part;
  */
 public class SplitByChapter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( SplitByChapter.class ) ;
+  private static final Log LOG = LogFactory.getLog( SplitByChapter.class ) ;
 
   private final Part part ;
   private final File targetDirectory ;
@@ -70,12 +70,12 @@ public class SplitByChapter {
 
     if( ! targetDirectory.exists() ) {
       final String message = "Does not exist: " + targetDirectory.getAbsolutePath();
-      LOGGER.error( message ) ;
+      LOG.error( message ) ;
       throw new IllegalArgumentException( message ) ;
     }
     if( ! targetDirectory.isDirectory() ) {
       final String message = "Not a directory: " + targetDirectory.getAbsolutePath();
-      LOGGER.error( message ) ;
+      LOG.error( message ) ;
       throw new IllegalArgumentException( message ) ;
     }
   }
@@ -93,13 +93,13 @@ public class SplitByChapter {
         final File chapterFile = new File( targetDirectory, identifier  + ".nlp" ) ;
         if( chapterFile.exists() ) {
           chapterFile.delete() ;
-          LOGGER.info( "Deleted previously existing file '{}'", chapterFile.getAbsolutePath() ) ;
+          LOG.info( "Deleted previously existing file '%s'", chapterFile.getAbsolutePath() ) ;
         }
         final FileOutputStream fileOutputStream = new FileOutputStream( chapterFile ) ;
 //        final Renderable renderable = new RenderableChapter( child, part.getEncoding() ) ;
 //        new GenericRenderer( new NlpWriter( configuration, null ) ).
 //            render( renderable, fileOutputStream ) ;
-        LOGGER.info( "Wrote to file '{}'", chapterFile.getAbsolutePath() ) ;
+        LOG.info( "Wrote to file '%s'", chapterFile.getAbsolutePath() ) ;
       }
     }
   }

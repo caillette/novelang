@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -70,7 +70,7 @@ import novelang.part.Part;
  */
 public class InsertFunction implements FunctionDefinition {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( InsertFunction.class ) ;
+  private static final Log LOG = LogFactory.getLog( InsertFunction.class ) ;
 
   private static final String OPTION_RECURSE = "recurse" ;
   private static final String OPTION_CREATECHAPTER = "createlevel" ;
@@ -126,16 +126,18 @@ public class InsertFunction implements FunctionDefinition {
       }
     }
 
-    LOGGER.debug( "Parsed function '{}' url='{}'", getName(), urlAsString ) ;
+    LOG.debug( "Parsed function '%s' url='%s'", getName(), urlAsString ) ;
     if( otherArguments.size() > 0 ) {
       for( String ancillaryArgument : otherArguments ) {
-        LOGGER.debug( "  Ancillary argument='{}'", ancillaryArgument ) ;
+        LOG.debug( "  Ancillary argument='%s'", ancillaryArgument ) ;
       }
     }
     if( assignments.size() > 0 ) {
       for( String ancillaryArgumentKey : assignments.keySet() ) {
-        LOGGER.debug( "  Assignment:'{}'<-'{}'",
-            ancillaryArgumentKey, assignments.get( ancillaryArgumentKey ) ) ;
+        LOG.debug( "  Assignment:'%s'<-'%s'",
+            ancillaryArgumentKey,
+            assignments.get( ancillaryArgumentKey )
+        ) ;
       }
     }
 
@@ -310,7 +312,7 @@ public class InsertFunction implements FunctionDefinition {
           FileTools.scanFiles( directory, StructureKind.PART.getFileExtensions() )
       );
 
-      if( LOGGER.isDebugEnabled() ) {
+      if( LOG.isDebugEnabled() ) {
         StringBuffer buffer = new StringBuffer(
             "Scan of '" + directory.getAbsolutePath() + "' found those files:" ) ;
         for( File file : files ) {
@@ -320,7 +322,7 @@ public class InsertFunction implements FunctionDefinition {
             throw new RuntimeException( e ) ;
           }
         }
-        LOGGER.debug( buffer.toString() ) ;
+        LOG.debug( buffer.toString() ) ;
       }
 
       return files ;

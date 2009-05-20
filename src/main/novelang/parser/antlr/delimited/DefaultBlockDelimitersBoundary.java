@@ -21,8 +21,8 @@ import java.util.Map;
 
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.Token;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import novelang.common.Problem;
@@ -35,7 +35,7 @@ import novelang.common.LocationFactory;
  */
 public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(
+  private static final Log LOG = LogFactory.getLog(
       DefaultBlockDelimitersBoundary.class ) ;
 
   private final LocationFactory locationFactory ;
@@ -106,7 +106,7 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
       buffer.append( " " ) ;
       buffer.append( status.getInternalStatusAsString() ) ;
     }
-    LOGGER.debug( buffer.toString() ) ;
+    LOG.debug( buffer.toString() ) ;
 
   }
 

@@ -23,8 +23,8 @@ import org.antlr.runtime.ClassicToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.lang.NullArgumentException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
@@ -42,7 +42,7 @@ public class CustomTree
     extends CommonTree
     implements SyntacticTree
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger( CustomTree.class ) ;
+  private static final Log LOG = LogFactory.getLog( CustomTree.class ) ;
 
   private final LocationFactory locationFactory ;
 

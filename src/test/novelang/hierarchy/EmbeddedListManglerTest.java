@@ -22,9 +22,8 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import org.junit.Test;
-import org.junit.Ignore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Tests for {@link EmbeddedListMangler}.
@@ -32,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @author Laurent Caillette
  */
 public class EmbeddedListManglerTest {
-  
+
   @Test
   public void doNothingWhenNothingToDo() {
     final SyntacticTree tree = tree(
@@ -263,14 +262,14 @@ public class EmbeddedListManglerTest {
 // Fixture
 // =======  
   
-  private static Logger LOGGER = LoggerFactory.getLogger( EmbeddedListMangler.class ) ; 
+  private static Log LOG = LogFactory.getLog( EmbeddedListMangler.class ) ;
   
   private static void verifyRehierarchizeList(
       SyntacticTree expectedTree,
       SyntacticTree flatTree
   ) {
-    LOGGER.info( "Flat tree: " + TreeFixture.asString( flatTree ) ) ;
-    LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
+    LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
+    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 

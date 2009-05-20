@@ -20,8 +20,8 @@ package novelang.build;
 import java.util.List;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.base.Predicate;
@@ -35,8 +35,8 @@ import novelang.common.TagBehavior;
  */
 public class TokenEnumerationGeneratorTest {
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger( TokenEnumerationGeneratorTest.class ) ;
+  private static final Log LOG =
+      LogFactory.getLog( TokenEnumerationGeneratorTest.class ) ;
 
   @Test
   public void testFindTokens() {

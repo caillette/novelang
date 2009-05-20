@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.book.Book;
 import novelang.book.function.FunctionRegistry;
 import novelang.common.FileTools;
@@ -50,7 +50,7 @@ import novelang.rendering.XmlWriter;
  */
 public class DocumentProducer {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentProducer.class ) ;
+  private static final Log LOG = LogFactory.getLog( DocumentProducer.class ) ;
 
   private final File basedir ;
   private final RenderingConfiguration renderingConfiguration ;
@@ -86,7 +86,7 @@ public class DocumentProducer {
     }
     final Serve serve = new Serve() ;
 
-    LOGGER.debug( "Attempting to produce '{}'", request.getOriginalTarget() ) ;
+    LOG.debug( "Attempting to produce '%s'", request.getOriginalTarget() ) ;
 
     final ResourceName stylesheet = LanguageTools.firstNotNull(
         request.getAlternateStylesheet(),
@@ -123,7 +123,7 @@ public class DocumentProducer {
         throw new IllegalArgumentException( "Unsupported: " + mimeType ) ;
     }
 
-    LOGGER.debug( "Done with '{}'", request.getOriginalTarget() ) ;
+    LOG.debug( "Done with '%s'", request.getOriginalTarget() ) ;
 
 
     return rendered.getProblems() ;

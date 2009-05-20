@@ -23,8 +23,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import org.xml.sax.InputSource;
 
 /**
@@ -37,7 +37,7 @@ public class DtdToolsTest {
   @Test
   public void smokeTest() throws IOException {
     final String escapedDtd = escapeEntities( HYPHEN_ENTITY ) ;
-    LOGGER.info( "Escaped DTD:\n" + escapedDtd ) ;
+    LOG.info( "Escaped DTD:\n%s", escapedDtd ) ;
   }
 
   @Test
@@ -49,7 +49,7 @@ public class DtdToolsTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DtdToolsTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( DtdToolsTest.class ) ;
 
   private static final String HYPHEN_ENTITY =
       " <!ENTITY  hyphen  \"&#x2010;\"  > <!--=hyphen-->" ;

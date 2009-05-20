@@ -21,8 +21,7 @@ import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
@@ -31,6 +30,7 @@ import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.rendering.XslWriter;
 import novelang.system.DefaultCharset;
+import novelang.system.Log;
 
 /**
  * Tests for {@link FontDiscoveryStreamer}.
@@ -39,7 +39,7 @@ import novelang.system.DefaultCharset;
  */
 public class FontDiscoveryStreamerTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( FontDiscoveryStreamerTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( FontDiscoveryStreamerTest.class ) ;
 
   @Test
   public void noSmoke() throws Exception {
@@ -65,7 +65,7 @@ public class FontDiscoveryStreamerTest {
     streamer.generate( byteArrayOutputStream, RENDERING_CHARSET ) ;
     final String result = new String( byteArrayOutputStream.toByteArray(), RENDERING_CHARSET.name() ) ;
 
-    LOGGER.debug( "Generated: \n{}", result ) ;
+    LOG.debug( "Generated: \n%s", result ) ;
 
   }
 

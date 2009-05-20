@@ -26,10 +26,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.antlr.stringtemplate.StringTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
@@ -42,8 +41,7 @@ import com.google.common.collect.ImmutableMap;
  */
 public class TokenEnumerationGenerator extends JavaGenerator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( TokenEnumerationGenerator.class ) ;
-
+  private static final Log LOG = LogFactory.getLog( TokenEnumerationGenerator.class ) ;
 
 
   public TokenEnumerationGenerator(
@@ -97,13 +95,13 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     }
     regexBuilder.append( ")? *" ) ;
     ONE_TOKEN_PATTERN = Pattern.compile( regexBuilder.toString() ) ;
-    LOGGER.debug( "Crafted regex " + ONE_TOKEN_PATTERN.pattern() ) ;
+    LOG.debug( "Crafted regex %s", ONE_TOKEN_PATTERN.pattern() ) ;
   }
 
   protected static Iterable< Item > findAntlrTokens( String grammar ) {
     final Matcher allTokensMatcher = ALL_TOKENS_PATTERN.matcher( grammar ) ;
     if( ! allTokensMatcher.find() ) {
-      LOGGER.warn( "No token found" ) ;
+      LOG.warn( "No token found" ) ;
       return ImmutableList.of() ;
     }
     final String allTokens = allTokensMatcher.group( 0 ) ;
@@ -123,7 +121,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       tokenList.add( item ) ;
     }
     if( tokenList.size() < 1 ) {
-      LOGGER.warn( "No token found" ) ;
+      LOG.warn( "No token found" ) ;
     }
 
 

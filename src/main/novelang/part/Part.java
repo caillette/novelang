@@ -136,7 +136,7 @@ public class Part extends AbstractSourceReader {
   public Renderable relocateResourcePaths( File contentRoot ) {
     
     if( null == getDocumentTree() || null == partFileDirectory ) {
-      LOGGER.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
+      LOG.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
       return this ;
     }    
     

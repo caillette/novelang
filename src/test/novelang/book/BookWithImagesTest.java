@@ -24,8 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
 import novelang.ScratchDirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
@@ -38,6 +37,7 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.DefaultCharset;
+import novelang.system.Log;
 
 /**
  * Tests for {@link Book} with embedded images.
@@ -59,7 +59,7 @@ public class BookWithImagesTest {
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING
     ) ;
-    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -81,7 +81,7 @@ public class BookWithImagesTest {
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING
     ) ;
-    LOGGER.debug( "Book's document tree:" + book.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -127,11 +127,11 @@ public class BookWithImagesTest {
     bookWithImagesExplicit = filer.createFileObject( Images.dir, Images.BOOK_EXPLICIT ) ;
     bookWithImagesRecurse = filer.createFileObject( Images.dir, Images.BOOK_RECURSIVE ) ;
     
-    LOGGER.info( "bookWithImagesExplicit: {}", bookWithImagesExplicit );
-    LOGGER.info( "bookWithImagesRecurse: {}", bookWithImagesRecurse );
+    LOG.info( "bookWithImagesExplicit: '%s'", bookWithImagesExplicit );
+    LOG.info( "bookWithImagesRecurse: '%s'", bookWithImagesRecurse );
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( BookWithImagesTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( BookWithImagesTest.class ) ;
 
   private static final String VECTOR_IMAGE_WIDTH = Images.VECTOR_IMAGE_WIDTH ;
   private static final String VECTOR_IMAGE_HEIGHT = Images.VECTOR_IMAGE_HEIGHT ;

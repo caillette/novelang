@@ -21,8 +21,8 @@ import java.nio.charset.CharsetEncoder;
 import java.util.Map;
 
 import org.apache.commons.lang.CharUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import novelang.parser.GeneratedLexemes;
@@ -42,7 +42,7 @@ import novelang.parser.shared.Lexeme;
  */
 public class RenderingEscape {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( RenderingEscape.class ) ;
+  private static final Log LOG = LogFactory.getLog( RenderingEscape.class ) ;
 
 // ===============  
 // Tables creation
@@ -70,16 +70,16 @@ public class RenderingEscape {
     put( '&', "amp", preferredEscapes, htmlMandatoryEscapes ) ;
 
     UNICODE_NAME_ESCAPES = ImmutableMap.copyOf( unicodeNameEscapes ) ;
-    LOGGER.debug( 
-        "Created Unicode name escape table with {} entries.", UNICODE_NAME_ESCAPES.size() ) ;
+    LOG.debug(
+        "Created Unicode name escape table with %s entries.", UNICODE_NAME_ESCAPES.size() ) ;
  
     PREFERRED_ESCAPES = ImmutableMap.copyOf( preferredEscapes ) ;
-    LOGGER.debug(
-        "Created preferred escape table with {} entries.", PREFERRED_ESCAPES.size() ) ;
+    LOG.debug(
+        "Created preferred escape table with %s entries.", PREFERRED_ESCAPES.size() ) ;
 
     HTML_MANDATORY_ESCAPES = ImmutableMap.copyOf( htmlMandatoryEscapes ) ;
-    LOGGER.debug( 
-        "Created HTML mandatory escape table with {} entries.", HTML_MANDATORY_ESCAPES.size() ) ;
+    LOG.debug(
+        "Created HTML mandatory escape table with %s entries.", HTML_MANDATORY_ESCAPES.size() ) ;
   }
 
   private static void put( Character character, String string, Map< Character, String >... maps ) {

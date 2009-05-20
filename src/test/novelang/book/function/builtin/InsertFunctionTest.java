@@ -22,8 +22,8 @@ import org.apache.commons.lang.ClassUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableMap;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
@@ -49,7 +49,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class InsertFunctionTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( InsertFunctionTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( InsertFunctionTest.class ) ;
 
   @Test
   public void goodFileUrl() throws IllegalFunctionCallException {

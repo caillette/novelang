@@ -23,8 +23,8 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.Lists;
 import novelang.ScratchDirectoryFixture;
@@ -148,12 +148,12 @@ public class ParametersTest {
 
   @Test
   public void batchParametersWantDocumentRequests() {
-    final String[] arguments = new String[] {} ;
+    final String[] arguments = new String[ 0 ] ;
     try {
       new BatchParameters( scratchDirectory, arguments ) ;
       fail( "Exception should have been thrown" ) ;
     } catch( ArgumentException e ) {
-      LOGGER.info( e.getHelpPrinter().asString( ClassUtils.getShortClassName( getClass() ), 80 ) );
+      LOG.info( e.getHelpPrinter().asString( ClassUtils.getShortClassName( getClass() ), 80 ) );
     }
   }
 
@@ -161,7 +161,7 @@ public class ParametersTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ParametersTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( ParametersTest.class ) ;
 
   private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir";
   private static final String DASHED_STYLE_DIR = "--style-dir";

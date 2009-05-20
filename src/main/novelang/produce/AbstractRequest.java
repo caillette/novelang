@@ -22,8 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.loader.ResourceName;
@@ -39,7 +39,7 @@ import novelang.rendering.RenditionMimeType;
  */
 /*package*/ abstract class AbstractRequest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( AbstractRequest.class ) ;
+  private static final Log LOG = LogFactory.getLog( AbstractRequest.class ) ;
 
   private static final String ERRORPAGE_SUFFIX_REGEX = "/error\\.html";
 
@@ -173,8 +173,8 @@ import novelang.rendering.RenditionMimeType;
   private static Pattern POLYMORPHIC_PATTERN = createPattern( true ) ;
 
   static {
-    LOGGER.debug( "Crafted regex for Document only: {}", DOCUMENT_ONLY_PATTERN.pattern() ) ;
-    LOGGER.debug( "Crafted regex for Polymorphic requests: {}", POLYMORPHIC_PATTERN.pattern() ) ;
+    LOG.debug( "Crafted regex for Document only: %s", DOCUMENT_ONLY_PATTERN.pattern() ) ;
+    LOG.debug( "Crafted regex for Polymorphic requests: %s", POLYMORPHIC_PATTERN.pattern() ) ;
   }
 
 
@@ -238,7 +238,7 @@ import novelang.rendering.RenditionMimeType;
         request.setAlternateStylesheet( new ResourceName( alternateStylesheet ) ) ;
       }
 
-      LOGGER.debug( "Parsed: {}", request ) ;
+      LOG.debug( "Parsed: %s", request ) ;
 
       return request ;
 

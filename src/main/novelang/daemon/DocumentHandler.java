@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.mortbay.jetty.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Lists;
 import novelang.common.Problem;
 import novelang.common.Renderable;
@@ -37,7 +37,6 @@ import novelang.produce.DocumentProducer;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
 import novelang.rendering.HtmlProblemPrinter;
-import novelang.rendering.RenditionMimeType;
 
 /**
  * Serves rendered content.
@@ -58,7 +57,7 @@ import novelang.rendering.RenditionMimeType;
  */
 public class DocumentHandler extends GenericHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentHandler.class ) ;
+  private static final Log LOG = LogFactory.getLog( DocumentHandler.class ) ;
 
   private final DocumentProducer documentProducer ;
   private final Charset renderingCharset ;
@@ -138,7 +137,7 @@ public class DocumentHandler extends GenericHandler {
         }
 
         ( ( Request ) request ).setHandled( true ) ;
-        LOGGER.debug( "Handled request {}", request.getRequestURI() ) ;
+        LOG.debug( "Handled request %s", request.getRequestURI() ) ;
       }
 
     }
@@ -152,7 +151,7 @@ public class DocumentHandler extends GenericHandler {
         documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX ;
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
-    LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+    LOG.debug( "Redirected to '%s'", redirectionTarget ) ;
   }
 
   private void redirectToOriginalTarget(
@@ -163,7 +162,7 @@ public class DocumentHandler extends GenericHandler {
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
     response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
-    LOGGER.debug( "Redirected to '{}'", redirectionTarget ) ;
+    LOG.debug( "Redirected to '%s'", redirectionTarget ) ;
   }
 
   private void renderProblemsAsRequested(
@@ -185,7 +184,7 @@ public class DocumentHandler extends GenericHandler {
         problems,
         originalTarget
     ) ;
-    LOGGER.debug( "Served error request '{}'", originalTarget ) ;
+    LOG.debug( "Served error request '%s'", originalTarget ) ;
 
   }
 

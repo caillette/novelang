@@ -34,8 +34,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.loader.ResourceName;
 
 /**
@@ -48,7 +48,7 @@ import novelang.loader.ResourceName;
  */
 public final class TestResourceTools {
 
-  private static final Logger LOG = LoggerFactory.getLogger( TestResourceTools.class ) ;
+  private static final Log LOG = LogFactory.getLog( TestResourceTools.class ) ;
 
   private TestResourceTools() { }
 
@@ -79,8 +79,7 @@ public final class TestResourceTools {
       ) ;
     }
 
-    LOG.info( "Loading resource '" + url.toExternalForm() + "' " +
-        "from " + owningClass ) ;
+    LOG.info( "Loading resource '%s' from %s", url.toExternalForm(), owningClass ) ;
     final InputStream inputStream;
     try {
       inputStream = url.openStream();

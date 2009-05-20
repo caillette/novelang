@@ -31,11 +31,10 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -45,7 +44,7 @@ import com.google.common.collect.Lists;
  */
 public abstract class GenericParameters {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( GenericParameters.class ) ;
+  private static final Log LOG = LogFactory.getLog( GenericParameters.class ) ;
 
   protected final Options options ;
   protected final CommandLine line ;
@@ -66,8 +65,8 @@ public abstract class GenericParameters {
   )
       throws ArgumentException
   {    
-    LOGGER.debug( "Base directory: '{}'", baseDirectory.getAbsolutePath() ) ;
-    LOGGER.debug( "Parameters: '{}'", Lists.newArrayList( parameters ) ) ;
+    LOG.debug( "Base directory: '%s'", baseDirectory.getAbsolutePath() ) ;
+    LOG.debug( "Parameters: '%s'", Lists.newArrayList( parameters ) ) ;
 
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     options = new Options() ;
@@ -84,7 +83,7 @@ public abstract class GenericParameters {
     helpPrinter = new HelpPrinter( options ) ;
 
     if( containsHelpTrigger( parameters ) ) {
-      LOGGER.debug( "Help trigger detected" ) ;
+      LOG.debug( "Help trigger detected" ) ;
       throw new ArgumentException( helpPrinter ) ;
     }
 
@@ -115,7 +114,7 @@ public abstract class GenericParameters {
       if( line.hasOption( OPTION_FONT_DIRECTORIES.getLongOpt() ) ) {
         final String[] fontDirectoriesNames =
             line.getOptionValues( OPTION_FONT_DIRECTORIES.getLongOpt() ) ;
-        LOGGER.debug( "Argument for Font directories = '{}'",
+        LOG.debug( "Argument for Font directories = '%s'",
             Lists.newArrayList( fontDirectoriesNames ) ) ;
         fontDirectories = extractDirectories( baseDirectory, fontDirectoriesNames ) ;
       } else {
@@ -251,7 +250,7 @@ public abstract class GenericParameters {
     if( line.hasOption( option.getLongOpt() ) ) {
       final String directoryName =
           line.getOptionValue( option.getLongOpt() ) ;
-      LOGGER.debug( "Argument for {} = '{}'", option.getDescription(), directoryName ) ;
+      LOG.debug( "Argument for %s = '%s'", option.getDescription(), directoryName ) ;
       directory = extractDirectory( baseDirectory, directoryName, failOnNonExistingDirectory ) ;
     } else {
       directory = null ;

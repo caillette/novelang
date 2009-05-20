@@ -21,8 +21,8 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.parser.shared.Lexeme;
 
 /**
@@ -43,12 +43,12 @@ public class LexemeDeclarationExtractorTest {
         createAntlrDeclaration( VBAR, "|" )
     ;
 
-    LOGGER.info( "Created grammar: \n{}", grammar );
+    LOG.info( "Created grammar: \n%s", grammar );
 
-    final Set<Lexeme> declarations =
+    final Set< Lexeme > declarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
-    LOGGER.debug( "Got: {}", declarations ) ;
+    LOG.debug( "Got: %s", declarations ) ;
 
     assertEquals( 6, declarations.size() ) ;
 
@@ -67,7 +67,7 @@ public class LexemeDeclarationExtractorTest {
     final Set<Lexeme> declarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
-    LOGGER.debug( "Got: {}", declarations ) ;
+    LOG.debug( "Got: %s", declarations ) ;
     assertEquals( 1, declarations.size() ) ;
     assertTrue( declarations.contains( VBAR ) ) ;
 
@@ -79,7 +79,7 @@ public class LexemeDeclarationExtractorTest {
     final Set<Lexeme> lexemeDeclarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
-    LOGGER.debug( "Got: {}", lexemeDeclarations ) ;
+    LOG.debug( "Got: %s", lexemeDeclarations ) ;
     assertEquals( 1, lexemeDeclarations.size() ) ;
     assertTrue( lexemeDeclarations.contains( AGRAVE ) ) ;
 
@@ -101,8 +101,7 @@ public class LexemeDeclarationExtractorTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger( LexemeDeclarationExtractorTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( LexemeDeclarationExtractorTest.class ) ;
 
   private static final Lexeme SMALL_X = new Lexeme( "SMALL_X", 'x', null ) ;
   private static final Lexeme BIG_X = new Lexeme( "BIG_X", 'X', null ) ;

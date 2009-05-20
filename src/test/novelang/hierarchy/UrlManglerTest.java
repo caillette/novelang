@@ -17,8 +17,8 @@
 package novelang.hierarchy;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
@@ -32,7 +32,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class UrlManglerTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( UrlManglerTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( UrlManglerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -376,7 +376,7 @@ public class UrlManglerTest {
       SyntacticTree expectedTree,
       SyntacticTree rawTree
   ) {
-    LOGGER.info( "Expected tree: " + TreeFixture.asString( expectedTree ) ) ;
+    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized = fixNamedUrls( rawTree ) ;
@@ -390,13 +390,13 @@ public class UrlManglerTest {
 
 
   private static Treepath< SyntacticTree > fixNamedUrls( final SyntacticTree rawTree ) {
-    LOGGER.info( "Raw tree: " + TreeFixture.asString( rawTree ) ) ;
+    LOG.info( "Raw tree: %s", TreeFixture.asString( rawTree ) ) ;
     Treepath< SyntacticTree > mangledTreepath =
         UrlMangler.fixNamedUrls( Treepath.create( rawTree ) ) ;
     SyntacticTree mangledTree = mangledTreepath.getTreeAtEnd() ;
-    LOGGER.info( "Mangled tree: " + TreeFixture.asString( mangledTree ) ) ;
+    LOG.info( "Mangled tree: %s", TreeFixture.asString( mangledTree ) ) ;
     mangledTree = SeparatorsMangler.removeSeparators( mangledTree ) ;
-    LOGGER.info( "  No separators: " + TreeFixture.asString( mangledTree ) ) ;
+    LOG.info( "  No separators: %s", TreeFixture.asString( mangledTree ) ) ;
 
     return mangledTreepath ;
 

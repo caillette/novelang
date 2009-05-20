@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.mortbay.jetty.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.rendering.RenditionMimeType;
 
 /**
@@ -33,7 +33,7 @@ import novelang.rendering.RenditionMimeType;
  */
 public class ShutdownHandler extends GenericHandler{
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ShutdownHandler.class ) ;
+  private static final Log LOG = LogFactory.getLog( ShutdownHandler.class ) ;
   private static final String SHUTDOWN_TARGET = "/~shutdown.html";
 
   private static final String HTML_CONTENT_TYPE = RenditionMimeType.HTML.getFileExtension() ;
@@ -47,7 +47,7 @@ public class ShutdownHandler extends GenericHandler{
       int dispatch
   ) throws IOException, ServletException {
     if( SHUTDOWN_TARGET.equals( target ) ) {
-      LOGGER.info( "Shutdown requested!" ) ;
+      LOG.info( "Shutdown requested!" ) ;
       response.setStatus( HttpServletResponse.SC_UNAUTHORIZED ) ;
 
       final PrintWriter writer = new PrintWriter( response.getOutputStream() ) ;

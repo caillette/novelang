@@ -20,8 +20,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Holds a resource name, guaranteeing the respect of a {@link #PATTERN}.
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ResourceName {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceName.class ) ;
+  private static final Log LOG = LogFactory.getLog( ResourceName.class ) ;
 
   private final String name ;
 
@@ -56,7 +56,7 @@ public class ResourceName {
   ) ;
 
   static {
-    LOGGER.debug( "Crafter regex {}", PATTERN.pattern() ) ;
+    LOG.debug( "Crafter regex %s", PATTERN.pattern() ) ;
   }
   /**
    * Constructor.

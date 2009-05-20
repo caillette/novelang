@@ -16,8 +16,8 @@
  */
 package novelang.book.function.builtin;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.book.Environment;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
@@ -41,7 +41,7 @@ import static novelang.parser.NodeKind.VALUED_ARGUMENT_PRIMARY_;
  */
 public class SectionFunction implements FunctionDefinition {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( SectionFunction.class ) ;
+  private static final Log LOG = LogFactory.getLog( SectionFunction.class ) ;
 
   public String getName() {
     return "section" ;
@@ -62,7 +62,7 @@ public class SectionFunction implements FunctionDefinition {
     verify( "Primary argument should hold a paragraph, instead of: '" + paragraph.toStringTree() + "'",
         NodeKind.PARAGRAPH_REGULAR.name(), paragraph.getText() ) ;
 
-    LOGGER.debug( "Parsed function '{}' title='{}'", getName(), primaryArgument.toStringTree() ) ;
+    LOG.debug( "Parsed function '%s' title='%s'", getName(), primaryArgument.toStringTree() ) ;
 
     final SyntacticTree sectionTree = new SimpleTree(
         LEVEL_INTRODUCER_.name(),

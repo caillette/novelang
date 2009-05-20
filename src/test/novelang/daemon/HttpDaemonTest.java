@@ -40,8 +40,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
@@ -49,6 +48,7 @@ import novelang.configuration.ConfigurationTools;
 import novelang.produce.RequestTools;
 import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
+import novelang.system.Log;
 
 /**
  * End-to-end tests with {@link HttpDaemon} and the download of some generated documents.
@@ -86,7 +86,7 @@ public class HttpDaemonTest {
         "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_DOCUMENT_NAME ) ;
     httpClient.executeMethod( getMethod ) ;
     final Header[] headers = getMethod.getResponseHeaders( "Content-type" ) ;
-    LOGGER.debug( "Got headers: {}", headers ) ;
+    LOG.debug( "Got headers: %s", headers ) ;
     Assert.assertEquals( "application/pdf", headers[ 0 ].getValue() ) ;
   }
 
@@ -213,7 +213,7 @@ public class HttpDaemonTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemonTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( HttpDaemonTest.class ) ;
   private static final Charset ISO_8859_1 = Charset.forName( "ISO_8859_1" );
 
 
@@ -223,12 +223,6 @@ public class HttpDaemonTest {
   private static final String ALTERNATE_STYLESHEET_QUERY =
       "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + VOID_STYLESHEET ;
 
-
-  @Before
-  public void before() {
-    LOGGER.info( "Test name doesn't work inside IDEA-7.0.3: {}",
-        NameAwareTestClassRunner.getTestName() ) ;
-  }
 
   private static final Pattern STRIP_COMMENTS_PATTERN = Pattern.compile( "%.*\\n" ) ;
 
@@ -257,13 +251,13 @@ public class HttpDaemonTest {
   private void save( String name, String document ) throws IOException {
     final File file = new File( contentDirectory, name ) ;
     FileUtils.writeStringToFile( file, document ) ;
-    LOGGER.info( "Wrote file '{}'", file.getAbsolutePath() ) ;
+    LOG.info( "Wrote file '%s'", file.getAbsolutePath() ) ;
   }
 
   private void save( String name, byte[] document ) throws IOException {
     final File file = new File( contentDirectory, name ) ;
     FileUtils.writeByteArrayToFile( new File( contentDirectory, name ), document ) ;
-    LOGGER.info( "Wrote file '{}'", file.getAbsolutePath() ) ;
+    LOG.info( "Wrote file '%s'", file.getAbsolutePath() ) ;
   }
 
   private static final int HTTP_DAEMON_PORT = 8081 ;

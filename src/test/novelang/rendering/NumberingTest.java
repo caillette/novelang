@@ -22,12 +22,12 @@ import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.system.DefaultCharset;
+import novelang.system.Log;
 import novelang.configuration.ProducerConfiguration;
 import novelang.loader.ResourceName;
 import novelang.produce.DocumentProducer;
@@ -41,8 +41,7 @@ import novelang.produce.RequestTools;
  */
 public class NumberingTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      NumberingTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( NumberingTest.class ) ;
 
   @Test
   public void testNodeset() throws Exception {
@@ -64,7 +63,7 @@ public class NumberingTest {
     documentProducer.produce( documentRequest, outputStream ) ;
     final String result = new String( outputStream.toByteArray() ) ;
 
-//    LOGGER.info( "Produced: {}", result ) ;
+//    LOGGER.info( "Produced: %s", result ) ;
   }
 
 // =======

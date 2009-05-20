@@ -35,8 +35,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -275,7 +275,7 @@ public class ImageFixerTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ImageFixerTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( ImageFixerTest.class ) ;
 
   private static final String RESOURCE_UNDER_PARENT ;
   private static final String RESOURCE_UNDER_CHILD ;
@@ -332,12 +332,13 @@ public class ImageFixerTest {
     final String actualRelativeResourceName = 
         pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
 
-    LOGGER.info(
-        "Checking...\n" +
-        "  baseDirectory='" + baseDirectory + "'\n" +
-        "  referrerDirectory='" + referrerDirectory + "'\n" +
-        "  resourceNameRelativeToReferrer='" + resourceNameRelativeToReferrer+ "'\n" +
-        "  expectedRelativeResourceName='" + expectedRelativeResourceName + "'"
+    LOG.info(
+        "Checking...\n  baseDirectory='%s'\n  referrerDirectory='%s'\n" +
+        "  resourceNameRelativeToReferrer='%s'\n  expectedRelativeResourceName='%s'",
+        baseDirectory,
+        referrerDirectory,
+        resourceNameRelativeToReferrer,
+        expectedRelativeResourceName
     ) ;
 
     Assert.assertEquals( expectedRelativeResourceName, actualRelativeResourceName ) ;

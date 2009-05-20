@@ -18,8 +18,8 @@ package novelang.common.tree;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import junit.framework.AssertionFailedError;
 
 /**
@@ -29,7 +29,7 @@ import junit.framework.AssertionFailedError;
  */
 public class TreepathTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( TreepathTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( TreepathTest.class ) ;
 
   @Test
   public void testTreepathLength1() {
@@ -87,7 +87,7 @@ public class TreepathTest {
 // =======
 
   private static void print( String message, Treepath< MyTree > treepath ) {
-    LOGGER.debug( message + treepath.toString() ) ;
+    LOG.debug( message + treepath.toString() ) ;
   }
 
   private static void assertSame( MyTree expected, MyTree actual ) {

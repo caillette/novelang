@@ -30,8 +30,8 @@ import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.Lists;
 
 /**
@@ -41,7 +41,7 @@ import com.google.common.collect.Lists;
  */
 public class FileTools {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( FileTools.class ) ;
+  private static final Log LOG = LogFactory.getLog( FileTools.class ) ;
 
   private FileTools() { }
 
@@ -250,16 +250,16 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
   private static final Thread DIRECTORIES_CLEANER = new Thread(
       new Runnable() {
         public void run() {
-          LOGGER.debug( "Cleaning up directories scheduled for deletion..." );
+          LOG.debug( "Cleaning up directories scheduled for deletion..." );
 
           // Defensive copy even if no directory should be added at the time this runs.
           final List< File > files = Lists.newArrayList( DIRECTORIES_TO_CLEAN_ON_EXIT ) ;
           for( File file : files ) {
             try {
-              LOGGER.info( "Deleting temporary directory '{}'", file.getAbsolutePath() ) ;
+              LOG.info( "Deleting temporary directory '%s'", file.getAbsolutePath() ) ;
               FileUtils.deleteDirectory( file ) ;
             } catch( IOException e ) {
-              LOGGER.error( "Failed to clean directory '{}'", e ) ;
+              LOG.error( "Failed to clean directory", e ) ;
             }
           }
         }
@@ -294,7 +294,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     }
     if( deleteOnExit && null != temporaryDirectory ) {
       DIRECTORIES_TO_CLEAN_ON_EXIT.add( temporaryDirectory ) ;
-      LOGGER.info( "Scheduled for deletion on exit: '{}'", temporaryDirectory.getAbsolutePath() ) ;
+      LOG.info( "Scheduled for deletion on exit: '%s'", temporaryDirectory.getAbsolutePath() ) ;
     }
 
     return temporaryDirectory ;

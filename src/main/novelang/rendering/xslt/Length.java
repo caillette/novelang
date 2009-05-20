@@ -16,8 +16,8 @@
  */
 package novelang.rendering.xslt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -26,15 +26,15 @@ import org.w3c.dom.NodeList;
  */
 public class Length {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( Length.class ) ;
+  private static final Log LOG = LogFactory.getLog( Length.class ) ;
 
 
   public static Number positionUnderCharacterRemainderThreshold(
       NodeList nodeList,
       int characterCountThreshold
   ) {
-    LOGGER.debug(
-        "Finding position of node with less than {} characters in list of {} nodes",
+    LOG.debug(
+        "Finding position of node with less than %s characters in list of %s nodes",
         characterCountThreshold,
         nodeList.getLength()
     ) ;
@@ -42,7 +42,7 @@ public class Length {
     int lastMatchingNodeIndex = -1 ;
     for( int i = nodeList.getLength() - 1 ; i >= 0 ; i-- ) {
       final Node node = nodeList.item( i ) ;
-      LOGGER.debug( "  Node[ {} ] = {}", i, node.getNodeName() ) ;
+      LOG.debug( "  Node[ %s ] = %s", i, node.getNodeName() ) ;
       final int count = countCharacters( node ) ;
       if( characterCountThreshold < total + count ) {
         break ;
@@ -51,7 +51,7 @@ public class Length {
         lastMatchingNodeIndex = i ;
       }
     }
-    LOGGER.debug( "  Returning position {}", lastMatchingNodeIndex ) ;
+    LOG.debug( "  Returning position %s", lastMatchingNodeIndex ) ;
     return lastMatchingNodeIndex ;
   }
 
@@ -61,7 +61,7 @@ public class Length {
    * @return -1 if something got wrong, a zero-or-positive integer otherwise.
    */
   public static Number countCharactersOfSelfAndFollowingSiblings( Node node ) {
-//    LOGGER.debug( "Counting characters until end for {}", node.getNodeName() ) ;
+//    LOGGER.debug( "Counting characters until end for %s", node.getNodeName() ) ;
     final Node parent = node.getParentNode() ;
     int characters ;
     if( null == parent ) {
@@ -73,14 +73,14 @@ public class Length {
         node = node.getNextSibling() ;
       } while( node != null ) ;
     }
-//    LOGGER.debug( "Returning characterCount: {}", characters ) ;
+//    LOGGER.debug( "Returning characterCount: %s", characters ) ;
     return characters ;
   }
 
   private static int countCharacters( Node node ) {
     int count = 0 ;
     final String textContent = node.getTextContent() ;
-//    LOGGER.debug( "Node[ {} ].textContent = '{}'", node.getNodeName(), textContent ) ;
+//    LOGGER.debug( "Node[ %s ].textContent = '%s'", node.getNodeName(), textContent ) ;
     if( null !=  textContent ) {
       count += textContent.length() ;
     }

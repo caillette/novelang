@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Base class for serving requests, with catch-all error handling.
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class GenericHandler extends AbstractHandler {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( GenericHandler.class ) ;
+  private static final Log LOG = LogFactory.getLog( GenericHandler.class ) ;
 
   public final void handle(
       String target,
@@ -65,7 +65,7 @@ public abstract class GenericHandler extends AbstractHandler {
       response.getOutputStream().print( "</body>" );
       response.getOutputStream().print( "</html>" );
 
-      LOGGER.warn( "Exception occured", e );
+      LOG.warn( "Exception occured", e );
 
     }
 

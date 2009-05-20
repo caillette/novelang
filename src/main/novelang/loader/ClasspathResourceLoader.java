@@ -23,8 +23,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.apache.commons.lang.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.base.Preconditions;
 
 /**
@@ -35,7 +35,7 @@ import com.google.common.base.Preconditions;
  */
 public class ClasspathResourceLoader implements ResourceLoader {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ClasspathResourceLoader.class ) ;
+  private static final Log LOG = LogFactory.getLog( ClasspathResourceLoader.class ) ;
   private final Class reference ;
   private final String path ;
 
@@ -54,20 +54,20 @@ public class ClasspathResourceLoader implements ResourceLoader {
 
   public InputStream getInputStream( ResourceName resourceName ) {
     final String absoluteName = path + "/" + resourceName.getName() ; // normalize( resourceName ) ;
-    LOGGER.debug( "Attempting to load '" + absoluteName + "'" ) ;
+    LOG.debug( "Attempting to load '%s'", absoluteName ) ;
 
     final URL url = reference.getResource( absoluteName ) ;
     if( null == url ) {
-      LOGGER.debug( "Could not find resource '{}' from {}", absoluteName, this ) ;
+      LOG.debug( "Could not find resource '%s' from %s", absoluteName, this ) ;
       throw new ResourceNotFoundException( absoluteName, getBestDescriptorForClassloader() ) ;
     }
     final String urlAsString = url.toExternalForm();
     try {
       final InputStream inputStream = url.openStream();
-      LOGGER.info( "Opened stream '{}'", urlAsString ) ;
+      LOG.info( "Opened stream '%s'", urlAsString ) ;
       return inputStream;
     } catch( IOException e ) {
-      LOGGER.debug( "Could not find resource '{}' from {}", urlAsString, this ) ;
+      LOG.debug( "Could not find resource '%s' from %s", urlAsString, this ) ;
       throw new ResourceNotFoundException( absoluteName, getBestDescriptorForClassloader(), e ) ;
     }
   }

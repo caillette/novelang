@@ -26,8 +26,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.builder.StandardToStringStyle;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Creates directories on-demand for test purposes.
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ScratchDirectoryFixture {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ScratchDirectoryFixture.class ) ;
+  private static final Log LOG = LogFactory.getLog( ScratchDirectoryFixture.class ) ;
 
   private final String testIdentifier ;
 
@@ -54,7 +54,7 @@ public class ScratchDirectoryFixture {
       throw new IllegalArgumentException( "Already created for: " + testIdentifier ) ;
     }
     registeredTestIdentifiers.add( testIdentifier ) ;
-    LOGGER.debug( "Created " + this ) ;
+    LOG.debug( "Created %s", this ) ;
 
   }
 
@@ -101,7 +101,7 @@ public class ScratchDirectoryFixture {
       } else {
         file.mkdir() ;
       }
-      LOGGER.info( "Created '" + file.getAbsolutePath() + "' as clean directory for all fixtures." ) ;
+      LOG.info( "Created '%s' as clean directory for all fixtures.", file.getAbsolutePath() ) ;
     }
     allFixturesDirectory = file;
     return allFixturesDirectory ;

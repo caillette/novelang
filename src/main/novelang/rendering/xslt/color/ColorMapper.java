@@ -16,8 +16,8 @@
  */
 package novelang.rendering.xslt.color;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Xalan extension for attributing colors from names.
@@ -28,25 +28,25 @@ import org.slf4j.LoggerFactory;
  */
 public class ColorMapper {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ColorMapper.class ) ;
+  private static final Log LOG = LogFactory.getLog( ColorMapper.class ) ;
 
   private final WebColors.InternalColorMapper colorMapper = WebColors.createColorMapper() ;
 
   public ColorMapper() {
-    LOGGER.debug( "Initialized." ) ;    
+    LOG.debug( "Initialized." ) ;
   }
 
   public String getColorName( String colorIdentifier ) {
     final String colorName = colorMapper.getColor( colorIdentifier ).getName() ;
-    LOGGER.debug( "getColorName( {} ) -> {}", colorIdentifier, colorName ) ;
+    LOG.debug( "getColorName( %s ) -> %s", colorIdentifier, colorName ) ;
     return colorName;
   }
 
   public String getInverseRgbDeclaration( String colorIdentifier ) {
     final WebColors.WebColor originalColor = colorMapper.getColor( colorIdentifier ) ;
     final String inverseColorDeclaration = originalColor.getInverseRgbDeclaration() ;
-    LOGGER.debug(
-        "getRgbDeclarationForInverseColor( {} ) -> {}",
+    LOG.debug(
+        "getRgbDeclarationForInverseColor( %s ) -> %s",
         colorIdentifier,
         inverseColorDeclaration
     ) ;

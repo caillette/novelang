@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import com.google.common.collect.MapMaker;
 
 /**
- * Thin wrapper around {@link LoggerFactory}.
+ * Thin wrapper around {@link LogFactory}.
  * {@code Logger} instances are kept in a weak hashmap and access is synchronized.
  * This should cause no performance problem, as most of {@code Log} instances are static members
  * so lookup happens only at initialization time.

@@ -24,8 +24,8 @@ import java.util.Map;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -38,7 +38,7 @@ import com.google.common.base.Preconditions;
  */
 public class WebColors {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( WebColors.class ) ;
+  private static final Log LOG = LogFactory.getLog( WebColors.class ) ;
 
   private static final Iterable< WebColor > COLORS ;
 
@@ -236,7 +236,7 @@ public class WebColors {
           namedColorIterator = COLORS.iterator() ;
         }
         final WebColor webColor = namedColorIterator.next() ;
-        LOGGER.debug( "{} returned {}", this, webColor ) ;
+        LOG.debug( "%s returned %s", this, webColor ) ;
         return webColor;
       }
 
@@ -292,16 +292,16 @@ public class WebColors {
       Object colorMapperObject,
       Object colorIdentifierObject
   ) {
-    LOGGER.debug( "colorMapper: {}", ObjectUtils.toString( colorMapperObject ) ) ;
-    LOGGER.debug(
-        "colorIdentifier: {} {}",
+    LOG.debug( "colorMapper: %s", ObjectUtils.toString( colorMapperObject ) ) ;
+    LOG.debug(
+        "colorIdentifier: %s %s",
         ObjectUtils.toString( colorIdentifierObject ),
         colorIdentifierObject == null ? "null" : colorIdentifierObject.getClass().getName()
     ) ;
     final InternalColorMapper colorMapper = ( InternalColorMapper ) colorMapperObject ;
     final String colorIdentifier = ( String ) colorIdentifierObject ;
     final String colorName = colorMapper.getColor( colorIdentifier ).getName() ;
-    LOGGER.debug( "colorName: {}", colorName ) ;
+    LOG.debug( "colorName: %s", colorName ) ;
     return colorName ;
   }
 
