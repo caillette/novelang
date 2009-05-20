@@ -158,39 +158,40 @@ import novelang.rendering.RenditionMimeType;
 
     buffer.append( "(" ) ;
 
-    // The path without extension. No dots for security reasons (forbid '..').
-    buffer.append( "((?:\\/(?:\\w|-|_)+)+)" ) ;
+      // The path without extension. No dots for security reasons (forbid '..').
+      buffer.append( "((?:\\/(?:\\w|-|_)+)+)" ) ;
 
-    // The extension defining the MIME type.
-    buffer.append( "(?:\\.(" ) ;
+      // The extension defining the MIME type.
+      buffer.append( "(?:\\.(" ) ;
 
-    final List< String > allExtensions = Lists.newArrayList() ;
-    Iterables.addAll( allExtensions, RenditionMimeType.getFileExtensions() ) ;
-    if( polymorphic ) {
-      Iterables.addAll( allExtensions, RawResource.getFileExtensions() ) ;
-    }
+        final List< String > allExtensions = Lists.newArrayList() ;
+        Iterables.addAll( allExtensions, RenditionMimeType.getFileExtensions() ) ;
+        if( polymorphic ) {
+          Iterables.addAll( allExtensions, RawResource.getFileExtensions() ) ;
+        }
 
-    boolean first = true ;
-    for( final String fileExtension : allExtensions ) {
-      if( first ) {
-        first = false ;
-      } else {
-        buffer.append( "|" ) ;
-      }
-      buffer.append( fileExtension ) ;
-    }
+        boolean first = true ;
+        for( final String fileExtension : allExtensions ) {
+          if( first ) {
+            first = false ;
+          } else {
+            buffer.append( "|" ) ;
+          }
+          buffer.append( fileExtension ) ;
+        }
     buffer.append( ")))" ) ;
 
     if( polymorphic ) {
       buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
     }
 
-    buffer.append( "(?:\\?(?:" );
-    buffer.append( RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME ) ;
-    buffer.append( "\\=)" ) ;
-    buffer.append( "(" ) ; // Start of capturing group.
-      buffer.append( ResourceName.PATTERN.pattern() ) ;
-    buffer.append( ")" ) ; // End of capturing group.
+    final String parameter = "([a-zA-Z\\-\\=_]+)" ;
+
+    buffer.append( "(?:\\?" ) ;
+      buffer.append( parameter ) ;
+      buffer.append( "(?:\\&" ) ;
+        buffer.append( parameter ) ;
+      buffer.append( ")*" ) ;
     buffer.append( ")?" ) ;
 
     return Pattern.compile( buffer.toString() ) ;
