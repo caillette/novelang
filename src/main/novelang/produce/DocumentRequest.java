@@ -34,6 +34,7 @@ public class DocumentRequest extends AbstractRequest {
         ";originalTarget" + "=" + getOriginalTarget() +
         ";rendered" + "=" + isRendered() +
         ";stylesheet" + "=" + getAlternateStylesheet() +
+        ";tags" + "=" + getTags() +
         "]"
     ;
   }

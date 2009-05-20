@@ -17,30 +17,21 @@
 
 package novelang.produce;
 
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import novelang.rendering.RenditionMimeType;
+import novelang.system.LogFactory;
+import novelang.system.Log;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.base.Joiner;
 
 /**
  * @author Laurent Caillette
  */
 public class RequestTest {
-  private static final String REQUEST_BODY = "/path/to/file" ;
-
-  private static final String PDF_REQUEST_PATH = REQUEST_BODY + ".pdf" ;
-  private static final String CSS_REQUEST_PATH = REQUEST_BODY + ".css" ;
-
-  private static final String STYLESHEET_RESOURCENAME = "dir/sheet.xsl" ;
-
-  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET =
-      PDF_REQUEST_PATH +
-      "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME +
-      "=" + STYLESHEET_RESOURCENAME
-  ;
-
-  private static final String REQUEST_PATH_BROKEN =
-      PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;
 
   @Test
   public void documentRequest() {
@@ -51,6 +42,7 @@ public class RequestTest {
     assertTrue( request.isRendered() ) ;
     assertEquals( "pdf", request.getResourceExtension() ) ;
     assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertTrue( "Got: " + request.getTags(), request.getTags().isEmpty() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
     assertNull( request.getAlternateStylesheet() ) ;
@@ -93,4 +85,61 @@ public class RequestTest {
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
+
+  @Test
+  public void polymorphicRequestWitTags() {
+    final PolymorphicRequest request =
+        RequestTools.createPolymorphicRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
+    assertFalse( request.getDisplayProblems() ) ;
+    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
+    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( TAGSET, request.getTags() ) ;
+
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+  }
+
+
+
+// =======
+// Fixture
+// =======
+
+  private static final String REQUEST_BODY = "/path/to/file" ;
+
+  private static final String PDF_REQUEST_PATH = REQUEST_BODY + ".pdf" ;
+  private static final String CSS_REQUEST_PATH = REQUEST_BODY + ".css" ;
+
+  private static final String STYLESHEET_RESOURCENAME = "dir/sheet.xsl" ;
+
+  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET =
+      PDF_REQUEST_PATH +
+      "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME +
+      "=" + STYLESHEET_RESOURCENAME
+  ;
+
+  private static Set< String > TAGSET = ImmutableSet.of( "tag-1", "Tag2" ) ;
+
+  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
+      PDF_REQUEST_PATH +
+      "?" +
+      RequestTools.TAGSET_PARAMETER_NAME + "=" +
+          Joiner.on( RequestTools.LIST_SEPARATOR ).join( TAGSET ) +
+      "&" +
+      RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
+  ;
+
+  private static final String REQUEST_PATH_BROKEN =
+      PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;
+
+  private static final Log LOG = LogFactory.getLog( RequestTest.class ) ;
+  static {
+    LOG.info( PDF_REQUEST_PATH ) ;
+    LOG.info( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
+    LOG.info( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
+    LOG.info( REQUEST_PATH_BROKEN ) ;
+  }
+
+
+
 }

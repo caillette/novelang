@@ -38,6 +38,7 @@ public final class PolymorphicRequest extends AbstractRequest {
         ";rendered" + "=" + isRendered() +
         ";originalTarget" + "=" + getOriginalTarget() +
         ";stylesheet" + "=" + getAlternateStylesheet() +
+        ";tags" + "=" + getTags() +
         "]"
     ;
   }
@@ -70,7 +71,7 @@ public final class PolymorphicRequest extends AbstractRequest {
     return result;
   }
 
-  // ============
+// ============
 // errorRequest
 // ============
 

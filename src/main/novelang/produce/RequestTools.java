@@ -28,6 +28,12 @@ import novelang.rendering.RenditionMimeType;
 public class RequestTools {
   public static final String ERRORPAGE_SUFFIX = "/error.html";
   public static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
+  public static final String TAGSET_PARAMETER_NAME= "tags" ;
+
+  /**
+   * <a href="http://www.ietf.org/rfc/rfc2396.txt" >RFC</a> p. 26-27.
+   */
+  public static final String LIST_SEPARATOR = ";" ;
 
   private RequestTools() { throw new Error( "Don't call this" ) ; }
 

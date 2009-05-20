@@ -30,7 +30,7 @@
   </logger>
 
   <logger name="novelang" >
-    <level value="WARN" />
+    <level value="DEBUG" />
   </logger>
 
   <logger name="novelang.system.EnvironmentTools" >
@@ -51,7 +51,7 @@
 
   <root>
     <appender-ref ref="STDOUT" />
-    <level value="DEBUG" />
+    <level value="INFO" />
   </root>
 
 </configuration>

@@ -18,6 +18,7 @@
 package novelang.produce;
 
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +27,9 @@ import novelang.system.LogFactory;
 import novelang.system.Log;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.base.Predicate;
+import com.google.common.base.Preconditions;
 import novelang.loader.ResourceName;
 import novelang.rendering.RawResource;
 import novelang.rendering.RenditionMimeType;
@@ -105,6 +109,29 @@ import novelang.rendering.RenditionMimeType;
   private void setAlternateStylesheet( ResourceName resourceName ) {
     this.alternateStylesheet = resourceName ;
   }
+
+// ====
+// tags
+// ====
+
+  private Set< String > tags = ImmutableSet.of() ;
+
+  public Set< String > getTags() {
+    return tags ;
+  }
+
+  private final Predicate< String > BLANK = new Predicate< String >() {
+    public boolean apply( String s ) {
+      return StringUtils.isBlank( s ) ;
+    }
+  } ;
+
+  public void setTags( Set< String > tags ) {
+    Preconditions.checkNotNull( tags ) ;
+    Preconditions.checkArgument( ! Iterables.any( tags, BLANK ), "Has blanks: %s", tags ) ;
+    this.tags = ImmutableSet.copyOf( tags ) ;
+  }
+
 
 
 // ==============
