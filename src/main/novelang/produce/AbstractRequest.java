@@ -126,7 +126,7 @@ import novelang.rendering.RenditionMimeType;
     return tags ;
   }
 
-  private final Predicate< String > BLANK = new Predicate< String >() {
+  private static final Predicate< String > BLANK = new Predicate< String >() {
     public boolean apply( String s ) {
       return StringUtils.isBlank( s ) ;
     }
@@ -365,9 +365,6 @@ import novelang.rendering.RenditionMimeType;
 
     AbstractRequest that = ( AbstractRequest ) o;
 
-    if( BLANK != null ? !BLANK.equals( that.BLANK ) : that.BLANK != null ) {
-      return false;
-    }
     if( alternateStylesheet != null ? !alternateStylesheet.equals( that.alternateStylesheet ) : that.alternateStylesheet != null ) {
       return false;
     }
@@ -397,7 +394,6 @@ import novelang.rendering.RenditionMimeType;
     result = 31 * result + ( documentSourceName != null ? documentSourceName.hashCode() : 0 );
     result = 31 * result + ( alternateStylesheet != null ? alternateStylesheet.hashCode() : 0 );
     result = 31 * result + ( tags != null ? tags.hashCode() : 0 );
-    result = 31 * result + ( BLANK != null ? BLANK.hashCode() : 0 );
     result = 31 * result + ( originalTarget != null ? originalTarget.hashCode() : 0 );
     return result;
   }
