@@ -19,6 +19,7 @@ package novelang.produce;
 
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,9 @@ import novelang.system.Log;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.base.Predicate;
 import com.google.common.base.Preconditions;
 import novelang.loader.ResourceName;
@@ -185,13 +189,10 @@ import novelang.rendering.RenditionMimeType;
       buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
     }
 
-    final String parameter = "([a-zA-Z\\-\\=_]+)" ;
+    final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
 
     buffer.append( "(?:\\?" ) ;
       buffer.append( parameter ) ;
-      buffer.append( "(?:\\&" ) ;
-        buffer.append( parameter ) ;
-      buffer.append( ")*" ) ;
     buffer.append( ")?" ) ;
 
     return Pattern.compile( buffer.toString() ) ;
@@ -254,17 +255,24 @@ import novelang.rendering.RenditionMimeType;
         request.setRenditionMimeType( null ) ;
       }
 
+      final int parametersGroupIndex ;
       if( request instanceof PolymorphicRequest ) {
         ( ( PolymorphicRequest ) request ).setDisplayProblems(
             RequestTools.ERRORPAGE_SUFFIX.equals( matcher.group( 4 ) ) ) ;
+        parametersGroupIndex = 5 ;
+      } else {
+        parametersGroupIndex = 4 ;
+      }
+
+
+      if( matcher.groupCount() >= parametersGroupIndex ) {
+        final String parameters = matcher.group( parametersGroupIndex ) ;
+        processParameters( request, parameters ) ;
       }
 
       request.setOriginalTarget( matcher.group( 1 ) ) ;
 
-      final String alternateStylesheet = matcher.group( 5 ) ;
-      if( ! StringUtils.isBlank( alternateStylesheet ) ) {
-        request.setAlternateStylesheet( new ResourceName( alternateStylesheet ) ) ;
-      }
+
 
       LOG.debug( "Parsed: %s", request ) ;
 
@@ -274,6 +282,68 @@ import novelang.rendering.RenditionMimeType;
       return null ;
     }
 
+  }
+
+  private static < T extends AbstractRequest > void processParameters(
+      T request,
+      String parameters
+  ) {
+    final Map< String, String > map = getQueryMap( parameters ) ;
+    final Set< String > keys = map.keySet() ;
+    for( String key : keys ) {
+      final String value = map.get( key ) ;
+      if( RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME.equals( key ) ) {
+        if( StringUtils.isBlank( value ) ) {
+          throw new IllegalArgumentException( "No value for parameter " + key ) ;
+        } else {
+          request.setAlternateStylesheet( new ResourceName( value ) ) ;
+        }
+      }
+      if( RequestTools.TAG_NAME_PARAMETER.equals( key ) ) {
+        if( StringUtils.isBlank( value ) ) {
+          throw new IllegalArgumentException( "No value for parameter " + key ) ;
+        } else {
+          request.setTags( parseTags( value ) ) ;
+        }
+      }
+    }
+  }
+
+  private static Set< String > parseTags( String value ) {
+    final String[] tagArray = value.split( RequestTools.LIST_SEPARATOR ) ;
+    for( String tag : tagArray ) {
+      if( StringUtils.isBlank( tag ) ) {
+        throw new IllegalArgumentException( "Emty tag in tag list" ) ;
+      }
+    }
+    return Sets.newHashSet( tagArray ) ;
+  }
+
+  private static Map< String, String > getQueryMap( String query ) {
+    if( StringUtils.isBlank( query ) ) {
+      return ImmutableMap.of() ;
+    } else {
+      final String[] params = query.split( "&" ) ;
+      final Map< String, String > map = Maps.newHashMap() ;
+      for( String param : params ) {
+        final String[] strings = param.split( "=" ) ;
+        final String name = strings[ 0 ] ;
+        if( strings.length > 2 ) {
+          throw new IllegalArgumentException( "Multiple '=' for parameter " + name ) ;
+        }
+        final String value ;
+        if( strings.length > 0 ) {
+          value = strings[ 1 ] ;
+        } else {
+          value = null ;
+        }
+        if( map.keySet().contains( name ) ) {
+          throw new IllegalArgumentException( "Duplicate value for parameter " + name ) ;
+        }
+        map.put( name, value ) ;
+      }
+      return map ;
+    }
   }
 
 // ===================
@@ -291,6 +361,9 @@ import novelang.rendering.RenditionMimeType;
 
     AbstractRequest that = ( AbstractRequest ) o;
 
+    if( BLANK != null ? !BLANK.equals( that.BLANK ) : that.BLANK != null ) {
+      return false;
+    }
     if( alternateStylesheet != null ? !alternateStylesheet.equals( that.alternateStylesheet ) : that.alternateStylesheet != null ) {
       return false;
     }
@@ -306,6 +379,9 @@ import novelang.rendering.RenditionMimeType;
     if( resourceExtension != null ? !resourceExtension.equals( that.resourceExtension ) : that.resourceExtension != null ) {
       return false;
     }
+    if( tags != null ? !tags.equals( that.tags ) : that.tags != null ) {
+      return false;
+    }
 
     return true;
   }
@@ -316,6 +392,8 @@ import novelang.rendering.RenditionMimeType;
     result = 31 * result + ( resourceExtension != null ? resourceExtension.hashCode() : 0 );
     result = 31 * result + ( documentSourceName != null ? documentSourceName.hashCode() : 0 );
     result = 31 * result + ( alternateStylesheet != null ? alternateStylesheet.hashCode() : 0 );
+    result = 31 * result + ( tags != null ? tags.hashCode() : 0 );
+    result = 31 * result + ( BLANK != null ? BLANK.hashCode() : 0 );
     result = 31 * result + ( originalTarget != null ? originalTarget.hashCode() : 0 );
     return result;
   }

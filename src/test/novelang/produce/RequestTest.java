@@ -35,8 +35,7 @@ public class RequestTest {
 
   @Test
   public void documentRequest() {
-    final DocumentRequest request =
-        RequestTools.createDocumentRequest( PDF_REQUEST_PATH ); ;
+    final DocumentRequest request = createDocumentRequest( PDF_REQUEST_PATH ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
@@ -50,13 +49,13 @@ public class RequestTest {
 
   @Test
   public void documentRequestWithStylesheet() {
-    final DocumentRequest request =
-        RequestTools.createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
+    final DocumentRequest request = createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
     assertEquals( "pdf", request.getResourceExtension() ) ;
     assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertNotNull( request.getAlternateStylesheet() ) ;
     assertEquals( STYLESHEET_RESOURCENAME, request.getAlternateStylesheet().getName() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
@@ -64,8 +63,7 @@ public class RequestTest {
 
   @Test
   public void polymorphicRequestForError() {
-    final PolymorphicRequest request =
-        RequestTools.createPolymorphicRequest( REQUEST_PATH_BROKEN ) ;
+    final PolymorphicRequest request = createPolymorphicRequest( REQUEST_PATH_BROKEN ) ;
     assertTrue( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
@@ -76,8 +74,7 @@ public class RequestTest {
 
   @Test
   public void polymorphicRequestForRawResource() {
-    final PolymorphicRequest request =
-        RequestTools.createPolymorphicRequest( CSS_REQUEST_PATH ) ;
+    final PolymorphicRequest request = createPolymorphicRequest( CSS_REQUEST_PATH ) ;
     assertFalse( request.getDisplayProblems() ) ;
     assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertNull( request.getRenditionMimeType() ) ;
@@ -89,7 +86,7 @@ public class RequestTest {
   @Test
   public void polymorphicRequestWitTags() {
     final PolymorphicRequest request =
-        RequestTools.createPolymorphicRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
+        createPolymorphicRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
     assertFalse( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
@@ -133,11 +130,15 @@ public class RequestTest {
       PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;
 
   private static final Log LOG = LogFactory.getLog( RequestTest.class ) ;
-  static {
-    LOG.info( PDF_REQUEST_PATH ) ;
-    LOG.info( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
-    LOG.info( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
-    LOG.info( REQUEST_PATH_BROKEN ) ;
+
+  private static DocumentRequest createDocumentRequest( String requestString ) {
+    LOG.info( "Using %s", requestString ) ;
+    return RequestTools.createDocumentRequest( requestString ) ;
+  }
+
+  private static PolymorphicRequest createPolymorphicRequest( String requestString ) {
+    LOG.info( "Using %s", requestString ) ;
+    return RequestTools.createPolymorphicRequest( requestString ) ;
   }
 
 
