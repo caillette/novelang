@@ -40,6 +40,8 @@ import novelang.rendering.RenditionMimeType;
 
 /**
  * The base class for requests and a do-everything factory.
+ * It parses the URL "manually" as we cannot rely on Web server's standard methods because
+ * this should work in a batch context, too. 
  *
  * @see RequestTools for getting instances.
  *
@@ -183,12 +185,14 @@ import novelang.rendering.RenditionMimeType;
           }
           buffer.append( fileExtension ) ;
         }
-    buffer.append( ")))" ) ;
+      buffer.append( "))" ) ;
+    buffer.append( ")" ) ;
 
     if( polymorphic ) {
       buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
     }
 
+    // This duplicates the 'tag' rule in ANTLR grammar. Shame.
     final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
 
     buffer.append( "(?:\\?" ) ;
