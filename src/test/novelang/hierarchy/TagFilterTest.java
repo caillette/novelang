@@ -25,8 +25,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.NodeKind.PART;
-import static novelang.parser.NodeKind.PARAGRAPH_REGULAR;
+import static novelang.parser.NodeKind.*;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -52,9 +51,79 @@ public class TagFilterTest {
     ) ;
   }
 
+  @Test
+  public void filterJustOneParagraphOnTwo() {
+    verifyFilterTags(
+        tree(
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( _TAGS, TAG1_TREE ),
+                tree( WORD_, "w" )
+            ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "x" )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( _TAGS, TAG1_TREE ),
+                tree( WORD_, "w" )
+            )
+        ),
+        tags( TAG_1 )
+    ) ;
+  }
+
+  @Test
+  public void retainParentLevel() {
+    verifyFilterTags(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( _TAGS, TAG1_TREE ),
+                    tree( WORD_, "w" )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( _TAGS, TAG1_TREE ),
+                    tree( WORD_, "w" )
+                )
+            ),
+            tree(
+                _LEVEL,
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "x" )
+                )
+            )
+        ),
+        tags( TAG_1 )
+    ) ;
+  }
+
 // =======
 // Fixture
 // =======
+
+  private static final String TAG_1 = "tag-1";
+  private static final String TAG_2 = "tag-2";
+  private static final String TAG_3 = "tag-3";
+  private static final SyntacticTree TAG1_TREE = tree( TAG, TAG_1 ) ;
+  private static final SyntacticTree TAG2_TREE = tree( TAG, TAG_2 ) ;
+  private static final SyntacticTree TAG3_TREE = tree( TAG, TAG_3 ) ;
 
   private static Set< String > tags( String... tags ) {
     return ImmutableSet.of( tags ) ;
@@ -62,13 +131,13 @@ public class TagFilterTest {
 
   private static void verifyFilterTags(
       SyntacticTree expectedTree,
-      SyntacticTree flatTree,
+      SyntacticTree actualTree,
       Set< String > tags
   ) {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
-    final Treepath rehierarchized = TagFilter.filter( Treepath.create( flatTree ), tags ) ;
+    final Treepath rehierarchized = TagFilter.filter( Treepath.create( actualTree ), tags ) ;
 
     TreeFixture.assertEqualsWithSeparators(
         expectedTreepath,
