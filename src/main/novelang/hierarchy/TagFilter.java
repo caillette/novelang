@@ -43,28 +43,32 @@ public class TagFilter {
     if( tags.isEmpty() ) {
       return treepath ;
     } else {
-      return doFilter( treepath, tags ) ;
+      final SyntacticTree tree = treepath.getTreeAtEnd() ;
+      final SyntacticTree filteredTree = doFilter( tree, tags ) ;
+      if( tree == filteredTree ) {
+        return treepath ;
+      } else {
+        return TreepathTools.replaceTreepathEnd( treepath, filteredTree ) ;
+      }
     }
   }
 
-  private static Treepath< SyntacticTree > doFilter(
-      Treepath< SyntacticTree > treepath,
-      Set< String > tags
-  ) {
-    final SyntacticTree tree = treepath.getTreeAtEnd();
+  private static SyntacticTree doFilter( SyntacticTree tree, Set<String > tags ) {
+    
     final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
+    
     switch( nodeKind.getTagBehavior() ) {
 
       case TERMINAL :
         if( hasTag( tree, tags ) ) {
-          return treepath ;
+          return tree ;
         } else {
           return null ;
         }
 
       case SCOPE :
         if( hasTag( tree, tags ) ) {
-          return treepath ;
+          return tree ;
         } // else do the following:
       
       case TRAVERSABLE :
@@ -72,20 +76,22 @@ public class TagFilter {
             new ArrayList< SyntacticTree >( tree.getChildCount() ) ;
         
         // Build a new list of children for which filtering doesn't return null. 
-        for( int childIndex = 0 ; childIndex < tree.getChildCount() ; childIndex++ ) {
-          final Treepath< SyntacticTree > childTreepath = Treepath.create( treepath, childIndex ) ;
-          final Treepath< SyntacticTree > newChildTreepath = doFilter( childTreepath, tags ) ;
-          if( null != newChildTreepath ) {
-            childIndex ++ ;
-            newChildList.add( newChildTreepath.getTreeAtEnd() ) ;
+        for( SyntacticTree child : tree.getChildren() ) {
+          final SyntacticTree newChild = doFilter( child, tags ) ;
+          if( null != newChild ) {
+            newChildList.add( newChild ) ;
           }
         }
-        if( tree.getChildCount() > newChildList.size() ) {
+        
+        if( newChildList.size() == 0 ) {
+          return null ;
+        } else if( tree.getChildCount() > newChildList.size() ) {
           final SyntacticTree[] newChildArray = 
-              newChildList.toArray( new SyntacticTree[newChildList.size()] ) ;
-          treepath = TreepathTools.replaceTreepathEnd( treepath, tree.adopt( newChildArray ) ) ;
+              newChildList.toArray( new SyntacticTree[ newChildList.size() ] ) ;
+          return tree.adopt( newChildArray ) ;
+        } else {
+          return tree ;
         }
-        return treepath ;
         
       default :
         return null ;
