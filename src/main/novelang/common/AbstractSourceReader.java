@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Set;
 
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
@@ -45,20 +46,30 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
 
   protected static final Log LOG = LogFactory.getLog( AbstractSourceReader.class ) ;
   private final String thisToString ;
-  private final List< Problem > problems = Lists.newArrayList() ;
+  private final List< Problem > problems ;
   protected final String locationName ;
   protected final Charset sourceCharset ;
   protected final Charset renderingCharset ;
 
   public AbstractSourceReader() {
+    this.problems = Lists.newArrayList() ;
     this.thisToString = ClassUtils.getShortClassName( getClass() ) +
         "@" + System.identityHashCode( this ) ;
     this.locationName = "<String>" ;
     this.sourceCharset = DefaultCharset.SOURCE ;
     this.renderingCharset = DefaultCharset.RENDERING ;
   }
+  
+  public AbstractSourceReader( AbstractSourceReader original ) {
+    this.problems = Lists.newArrayList( original.problems ) ;
+    this.thisToString = original.thisToString ;
+    this.locationName = original.locationName ;
+    this.sourceCharset = original.sourceCharset ;
+    this.renderingCharset = original.renderingCharset ;
+  }
 
   public AbstractSourceReader( Charset sourceCharset, Charset defaultRenderingCharset ) {
+    this.problems = Lists.newArrayList() ;
     this.thisToString = ClassUtils.getShortClassName( getClass() ) +
         "@" + System.identityHashCode( this ) ;
     this.locationName = "<String>" ;
@@ -78,6 +89,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       Charset renderingCharset,
       String thisToString
   ) {
+    this.problems = Lists.newArrayList() ;
     this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
     this.locationName = partUrl.toExternalForm() ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
@@ -134,11 +146,11 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       collect( Problem.createProblem( this, e ) ) ;
     }
 
-    return ( SyntacticTree ) tree ;
+    return tree ;
   }
 
-  protected static SyntacticTree addMetadata( SyntacticTree tree ) {
-    final SyntacticTree metadata = MetadataHelper.createMetadataDecoration( tree ) ;
+  protected static SyntacticTree addMetadata( SyntacticTree tree, Set< String > tagset ) {
+    final SyntacticTree metadata = MetadataHelper.createMetadataDecoration( tree, tagset ) ;
     return TreeTools.addFirst( tree, metadata ) ;
   }
 

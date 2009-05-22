@@ -39,6 +39,8 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * Tests for {@link Book} with embedded images.
  *
@@ -57,7 +59,8 @@ public class BookWithImagesTest {
         testDirectory,
         bookWithImagesExplicit,
         DefaultCharset.SOURCE,
-        DefaultCharset.RENDERING
+        DefaultCharset.RENDERING,
+        ImmutableSet.< String >of()
     ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
@@ -79,7 +82,8 @@ public class BookWithImagesTest {
         testDirectory,
         bookWithImagesRecurse,
         DefaultCharset.SOURCE,
-        DefaultCharset.RENDERING
+        DefaultCharset.RENDERING,
+        ImmutableSet.< String >of()
     ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 

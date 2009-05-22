@@ -72,7 +72,7 @@ public class PartTest {
 
   @Test
   public void loadPartWithMetadata() throws IOException {
-    final Part part = new Part( justSections, true ) ;
+    final Part part = PartFixture.createPart( justSections ).makeStandalone();
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( PART,
@@ -151,7 +151,7 @@ public class PartTest {
   
   @Test 
   public void partWithParsingErrorDoesNotAttemptToCountWords() {
-    final Part part = new Part( "````", true ) ;
+    final Part part = PartFixture.createStandalonePart( "````" ) ;
     Assert.assertTrue( part.hasProblem() ) ;
   }
   

@@ -174,9 +174,11 @@ public class TagInteractionTest {
       fail( "Could not load the page." ) ;
     }
     LOG.debug( "Got page of type %s", page.getClass().getName() );
-    final HtmlPage htmlPage = ( HtmlPage ) page ;
+    final HtmlPage htmlPage = HtmlPage.class.cast( page ) ;
 
     LOG.info( "Now the whole page should have finished loading and initializing." ) ;
+    
+    LOG.debug( "This is the HTML we got:\n\n%s\n", htmlPage.asXml() ) ;
 
     allHeaders = Ordering.from( HTMLELEMENT_COMPARATOR ).
         sortedCopy( extractAllHeaders( htmlPage ) );

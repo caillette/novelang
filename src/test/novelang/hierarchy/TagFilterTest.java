@@ -79,6 +79,32 @@ public class TagFilterTest {
   }
 
   @Test
+  public void keepUntaggedContentWhenNoMatchingTag() {
+    verifyFilterTags(
+        tree(
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "x" )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( _TAGS, TAG1_TREE ),
+                tree( WORD_, "w" )
+            ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "x" )
+            )
+        ),
+        tags( TAG_2 )
+    ) ;
+  }
+
+  @Test
   public void retainParentLevel() {
     verifyFilterTags(
         tree(

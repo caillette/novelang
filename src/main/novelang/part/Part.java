@@ -21,18 +21,24 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Set;
 
 import novelang.common.*;
+import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.hierarchy.UrlMangler;
 import novelang.hierarchy.SeparatorsMangler;
 import novelang.hierarchy.EmbeddedListMangler;
+import novelang.hierarchy.TagFilter;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.system.DefaultCharset;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.base.Preconditions;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes
@@ -43,22 +49,18 @@ import com.google.common.collect.Lists;
 public class Part extends AbstractSourceReader {
 
   private final SyntacticTree tree ;
-  private final boolean standalone ;
   private final File partFileDirectory ;
 
-
-  /**
-   * Only for tests.
-   */
-  public Part( String content ) {
-    this( content, false ) ; // Would be logical to make it true but would pollute the tests.
+  private Part( Part other, SyntacticTree newTree ) {
+    super( other ) ;
+    this.partFileDirectory = other.partFileDirectory ;
+    this.tree = newTree ;
   }
 
   /**
    * Only for tests.
    */
-  public Part( String content, boolean standalone ) {
-    this.standalone = standalone ; 
+  /*package*/ Part( String content ) {
     tree = createTree( content ) ;
     partFileDirectory = null ;
   }
@@ -66,22 +68,14 @@ public class Part extends AbstractSourceReader {
   /**
    * Only for tests.
    */
-  public Part( final File partFile ) throws MalformedURLException {
-    this( partFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING, false ) ;
-  }
-
-  /**
-   * Only for tests.
-   */
-  public Part( final File partFile, boolean standalone ) throws MalformedURLException {
-    this( partFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING, standalone ) ;
+  /*package*/ Part( final File partFile ) throws MalformedURLException {
+    this( partFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING ) ;
   }
 
   public Part(
       final File partFile,
       Charset sourceCharset,
-      Charset suggestedRenderingCharset,
-      boolean standalone
+      Charset suggestedRenderingCharset
   ) throws MalformedURLException {
     super(
         partFile.toURI().toURL(),
@@ -89,7 +83,6 @@ public class Part extends AbstractSourceReader {
         suggestedRenderingCharset,
         "part[" + partFile.getName() + "]"
     ) ;
-    this.standalone = standalone ;
     this.partFileDirectory = partFile.getParentFile() ;
     tree = createTree( readContent( partFile.toURI().toURL() ) ) ;
   }
@@ -104,12 +97,8 @@ public class Part extends AbstractSourceReader {
       rehierarchized = EmbeddedListMangler.rehierarchizeEmbeddedLists( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.removeSeparators( rehierarchized ) ;      
       rehierarchized = Hierarchizer.rehierarchizeLevels( rehierarchized ) ;
-      if( standalone ) {
-        rehierarchized = Hierarchizer.rehierarchizeLists( rehierarchized ) ;
-        return addMetadata( rehierarchized.getTreeAtEnd() ) ;
-      } else {
-        return rehierarchized.getTreeAtEnd() ;
-      }
+
+      return rehierarchized.getTreeAtEnd() ;
     }
   }
 
@@ -130,10 +119,14 @@ public class Part extends AbstractSourceReader {
   }
 
 
+// ===============  
+// Pseudo-mutators
+// ===============  
+  
   /**
    * This is just for not messing the constructor up with some marginal argument.
    */
-  public Renderable relocateResourcePaths( File contentRoot ) {
+  public Part relocateResourcePaths( File contentRoot ) {
     
     if( null == getDocumentTree() || null == partFileDirectory ) {
       LOG.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
@@ -159,28 +152,24 @@ public class Part extends AbstractSourceReader {
     }
     Iterators.addAll( problems, Part.this.getProblems().iterator() ) ;
     
-    return new Renderable() {
-      
-      public Iterable< Problem > getProblems() {
-        return ImmutableList.copyOf( problems ) ;
-      }
+    return new Part( this, fixedTree ) ;
 
-      public Charset getRenderingCharset() {
-        return Part.this.getRenderingCharset() ;
-      }
-
-      public boolean hasProblem() {
-        return problems.size() > 0 ;
-      }
-
-      public SyntacticTree getDocumentTree() {
-        return fixedTree ;
-      }
-
-      public StylesheetMap getCustomStylesheetMap() {
-        return Part.this.getCustomStylesheetMap() ;
-      }
-    };
   }
 
+  public Part makeStandalone( Set< String > restrictingTags ) {
+    Preconditions.checkNotNull( restrictingTags ) ;
+    if ( null == getDocumentTree() ) {
+      return this ;
+    } else {
+      Treepath< SyntacticTree > rehierarchized = Treepath.create( tree ) ;
+      rehierarchized = Hierarchizer.rehierarchizeLists( rehierarchized ) ;
+      final Set< String > tagset = MetadataHelper.findTags( tree ) ;
+      rehierarchized = TagFilter.filter( rehierarchized, restrictingTags ) ;
+      rehierarchized = Treepath.create( addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ) ;
+      return new Part( this, rehierarchized.getTreeAtEnd() ) ;
+    }
+  }
+  public Part makeStandalone() {
+    return makeStandalone( ImmutableSet.< String >of() ) ;
+  }
 }

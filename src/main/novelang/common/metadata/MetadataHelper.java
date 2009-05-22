@@ -74,7 +74,7 @@ public class MetadataHelper {
     if( tree.isOneOf( TAG ) ) {
       return ImmutableSet.of( tree.getChildAt( 0 ).getText() ) ;
     }
-    final Set tagset = Sets.newLinkedHashSet() ;
+    final Set< String > tagset = Sets.newLinkedHashSet() ;
     for( SyntacticTree child : tree.getChildren() ) {
         tagset.addAll( findTags( child ) ) ;
     }
@@ -108,7 +108,7 @@ public class MetadataHelper {
    * Decorates a tree with metadata.
    * @return the same tree with a new first {@link NodeKind#_META}.
    */
-  public static SyntacticTree createMetadataDecoration( SyntacticTree tree ) {
+  public static SyntacticTree createMetadataDecoration( SyntacticTree tree, Set< String > tagset ) {
 
     final List< SyntacticTree > children = Lists.newArrayList() ;
 
@@ -119,7 +119,6 @@ public class MetadataHelper {
         )
     ) ;
 
-    final Set< String > tagset = findTags( tree ) ;
     if( tagset.size() > 0 ) {
       final Iterable< SyntacticTree > tagsAsTrees ;
       tagsAsTrees = Iterables.transform( Ordering.natural().sortedCopy( tagset ), STRING_TO_TAG ) ;

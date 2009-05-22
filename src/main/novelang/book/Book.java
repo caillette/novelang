@@ -20,11 +20,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
 import novelang.book.function.FunctionCall;
 import novelang.book.function.FunctionDefinition;
@@ -37,6 +39,7 @@ import novelang.common.SimpleTree;
 import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
 import novelang.common.FileTools;
+import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
 import novelang.hierarchy.Hierarchizer;
 import novelang.hierarchy.SeparatorsMangler;
@@ -68,7 +71,8 @@ public class Book extends AbstractSourceReader {
         baseDirectory,
         content,
         DefaultCharset.SOURCE,
-        DefaultCharset.RENDERING
+        DefaultCharset.RENDERING,
+        ImmutableSet.< String >of()
     ) ;
   }
 
@@ -84,7 +88,8 @@ public class Book extends AbstractSourceReader {
         bookFile.getParentFile(),
         bookFile,
         DefaultCharset.SOURCE,
-        DefaultCharset.RENDERING
+        DefaultCharset.RENDERING,
+        ImmutableSet.< String >of()
     ) ;
   }
 
@@ -94,7 +99,8 @@ public class Book extends AbstractSourceReader {
       File bookDirectory,
       String content,
       Charset suggestedSourceCharset,
-      Charset defaultRenderingCharset
+      Charset defaultRenderingCharset,
+      Set< String > tagRestrictions
   ) {
     super( suggestedSourceCharset, defaultRenderingCharset ) ;
 
@@ -132,7 +138,8 @@ public class Book extends AbstractSourceReader {
       if( hasProblem() ) {
         this.documentTree = rehierarchizedTree.getTreeAtEnd() ;
       } else {
-        this.documentTree = addMetadata( rehierarchizedTree.getTreeAtEnd() ) ;        
+        final Set< String > tagset = MetadataHelper.findTags( rehierarchizedTree.getTreeAtEnd() ) ;
+        this.documentTree = addMetadata( rehierarchizedTree.getTreeAtEnd(), tagset ) ;        
       }
     }
 
@@ -143,7 +150,8 @@ public class Book extends AbstractSourceReader {
       File baseDirectory,
       File bookFile,
       Charset suggestedSourceCharset,
-      Charset suggestedRenderingCharset
+      Charset suggestedRenderingCharset,
+      Set< String > restrictingTags
   ) throws IOException {
     this(
         functionRegistry,
@@ -151,8 +159,9 @@ public class Book extends AbstractSourceReader {
         bookFile.getParentFile(),
         IOUtils.toString( new FileInputStream( bookFile ) ),
         suggestedSourceCharset,
-        suggestedRenderingCharset
-    ); ;
+        suggestedRenderingCharset,
+        restrictingTags
+    ) ;
   }
 
   public SyntacticTree getDocumentTree() {

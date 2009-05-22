@@ -26,6 +26,8 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * Tests for {@link MetadataHelper}.
  *
@@ -43,7 +45,8 @@ public class MetadataHelperTest {
         )
     ) ;
 
-    final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree ) ;
+    final SyntacticTree meta = MetadataHelper.createMetadataDecoration( 
+        tree, ImmutableSet.<String>of() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( _META,
@@ -65,7 +68,8 @@ public class MetadataHelperTest {
         )
     ) ;
 
-    final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree ) ;
+    final Set< String > tagset = MetadataHelper.findTags( tree ) ;
+    final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree, tagset ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( _META,

@@ -194,7 +194,11 @@ public class InsertFunction implements FunctionDefinition {
   ) {
     final Part rawPart;
     try {
-      rawPart = new Part( insertedFile ) ;
+      rawPart = new Part( 
+          insertedFile,
+          environment.getSourceCharset(),
+          environment.getRenderingCharset()
+      ) ;
     } catch( MalformedURLException e ) {
       return new FunctionCall.Result(
           environment, book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
@@ -245,7 +249,11 @@ public class InsertFunction implements FunctionDefinition {
       for( File partFile : partFiles ) {
         Part part = null ;
         try {
-          part = new Part( partFile ) ;
+          part = new Part( 
+              partFile, 
+              environment.getSourceCharset(), 
+              environment.getRenderingCharset() 
+          ) ;
           Iterables.addAll( problems, part.getProblems() ) ;
         } catch( MalformedURLException e ) {
           problems.add( Problem.createProblem( e ) ) ;

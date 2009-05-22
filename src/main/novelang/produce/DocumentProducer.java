@@ -154,7 +154,8 @@ public class DocumentProducer {
           basedir,
           bookFile,
           defaultSourceCharset,
-          suggestedRenderingCharset
+          suggestedRenderingCharset,
+          documentRequest.getTags()
       ) ;
     } catch( FileNotFoundException e ) {
       final File partFile = FileTools.load(
@@ -165,9 +166,8 @@ public class DocumentProducer {
       return new Part( 
           partFile, 
           defaultSourceCharset, 
-          suggestedRenderingCharset, 
-          true 
-      ).relocateResourcePaths( basedir ) ;
+          suggestedRenderingCharset
+      ).relocateResourcePaths( basedir ).makeStandalone( documentRequest.getTags() ) ;
     }
 
   }
