@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.antlr.stringtemplate.StringTemplate;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.parser.shared.Lexeme;
 
 

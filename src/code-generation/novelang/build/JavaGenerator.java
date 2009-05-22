@@ -30,8 +30,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.StringTemplateGroupLoader;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 
 /**
@@ -43,7 +43,7 @@ import novelang.system.Log;
  */
 public abstract class JavaGenerator {
 
-  private static final Log LOG = LogFactory.getLog( JavaGenerator.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( JavaGenerator.class ) ;
 
   private static final String NODE_ENUMERATION_CLASSNAME = "NodeKind" ;
   private static final String LEXEMES_CLASSNAME = "GeneratedLexemes" ;
@@ -109,7 +109,7 @@ public abstract class JavaGenerator {
         code,
         new FileOutputStream( targetFile )
     ) ;
-    LOG.info( "Wrote '%s'", targetFile.getAbsolutePath() ) ;
+    LOGGER.info( "Wrote '{}'", targetFile.getAbsolutePath() ) ;
   }
 
   /**
@@ -195,7 +195,7 @@ public abstract class JavaGenerator {
   private static StringTemplateGroup loadStringTemplateGroup() {
     final String templateDirectory =
         ClassUtils.getPackageName( TokenEnumerationGenerator.class ).replace( '.', '/' ) ;
-    LOG.info( "Loading StringTemplates from classpath directory: '%s'", templateDirectory ) ;
+    LOGGER.info( "Loading StringTemplates from classpath directory: '{}'", templateDirectory ) ;
 
     final StringTemplateGroupLoader loader =
         new CommonGroupLoader( templateDirectory, STRING_TEMPLATE_ERROR_LISTENER ) ;

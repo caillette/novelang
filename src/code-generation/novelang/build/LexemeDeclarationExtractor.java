@@ -20,18 +20,19 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import novelang.parser.shared.Lexeme;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Laurent Caillette
 */
 /*static*/ class LexemeDeclarationExtractor {
 
-  private static final Log LOG = LogFactory.getLog( LexemeDeclarationExtractor.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( LexemeDeclarationExtractor.class ) ;
 
   /**
    * Groups:
@@ -48,7 +49,7 @@ import novelang.parser.shared.Lexeme;
   ) ;
 
   static {
-    LOG.debug( "Crafted regex %s", TOKENS_DECLARATIONS.toString() ) ;
+    LOGGER.debug( "Crafted regex {}", TOKENS_DECLARATIONS.toString() ) ;
   }
   
   private final CharacterConverter[] converters ;
