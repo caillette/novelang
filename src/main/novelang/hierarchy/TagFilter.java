@@ -51,7 +51,7 @@ public class TagFilter {
       return treepath ;
     } else {
       final SyntacticTree tree = treepath.getTreeAtEnd() ;
-      final SyntacticTree filteredTree = doFilterWithLogging( tree, tags, "" ).tree ;
+      final SyntacticTree filteredTree = doFilter( tree, tags ).tree ;
       if( tree == filteredTree ) {
         return treepath ;
       } else {
@@ -60,29 +60,9 @@ public class TagFilter {
     }
   }
   
-  private static Result doFilterWithLogging( 
-      final SyntacticTree tree, 
-      final Set< String > tags, 
-      final String indent
-  ) {
-    LOG.debug( "%sdoFilter( %s )", indent, tree.toStringTree() ) ;
-    final Result result = doFilter( tree, tags, indent ) ;
-    if( null == result ) {
-      LOG.debug( "%s-> null", indent ) ;
-    } else {
-      LOG.debug( "%s-> %b", indent, result.hasTag ) ;
-    }
-    return result ;
-  }
-  
-  
-  private static Result doFilter( 
-      final SyntacticTree tree, 
-      final Set< String > tags, 
-      final String indent
-  ) {    
+  private static Result doFilter( final SyntacticTree tree, final Set< String > tags ) {    
     final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
-    final TagBehavior behavior = nodeKind.getTagBehavior();
+    final TagBehavior behavior = nodeKind.getTagBehavior() ;
     switch( behavior ) {
 
       case TERMINAL :
@@ -102,40 +82,33 @@ public class TagFilter {
             new ArrayList< SyntacticTree >( tree.getChildCount() ) ;
         
         // Gets true if one child (TERMINAL or SCOPE) has one of the wanted tags.
-        boolean taggedChildren = false ; 
+        boolean taggedChild = false ; 
          
         for( SyntacticTree child : tree.getChildren() ) {
-          final NodeKind childNodeKind = NodeKindTools.ofRoot( child ) ;
-          final TagBehavior childTagBehavior = childNodeKind.getTagBehavior() ;
-          switch( childTagBehavior ) {
-            
-            case SCOPE :
-            case TERMINAL :
-            case TRAVERSABLE :
-              final Result result = doFilterWithLogging( child, tags, indent + "  " ) ;
-              if( result != null ) {
-                final SyntacticTree newChild = result.tree ;
-                newChildList.add( newChild ) ;
-                taggedChildren = taggedChildren || result.hasTag ;
-              }
-              break ;
-            default :
-              newChildList.add( child ) ;
+          final TagBehavior childTagBehavior = NodeKindTools.ofRoot( child ).getTagBehavior() ;
+          if( childTagBehavior == TagBehavior.NON_TRAVERSABLE ) {
+            newChildList.add( child ) ;
+          } else {
+            final Result result = doFilter( child, tags ) ;
+            if( result != null ) {
+              final SyntacticTree newChild = result.tree ;
+              newChildList.add( newChild ) ;
+              taggedChild = taggedChild || result.hasTag ;
+            }
           }
         }
         
-        if( behavior == TagBehavior.SCOPE || behavior == TagBehavior.TERMINAL ) {
-          if( ! taggedChildren ) {
-            return null ;
-          }
+        if( ( behavior == TagBehavior.SCOPE || behavior == TagBehavior.TERMINAL ) 
+         && ! taggedChild ) {
+          return null ;
         }
         
         if( newChildList.size() == tree.getChildCount() ) {
-          return new Result( taggedChildren, tree ) ; 
+          return new Result( taggedChild, tree ) ; 
         } else {
           final SyntacticTree[] newChildArray = 
               newChildList.toArray( new SyntacticTree[ newChildList.size() ] ) ;
-          return new Result( taggedChildren, tree.adopt( newChildArray ) ) ;          
+          return new Result( taggedChild, tree.adopt( newChildArray ) ) ;          
         }
         
       default :
@@ -151,10 +124,8 @@ public class TagFilter {
   ) {
     for( SyntacticTree child : tree.getChildren() ) {
       if( child.isOneOf( NodeKind.TAG ) ) {
-//        for ( SyntacticTree tagChild : child.getChildren() ) {
-          if( tags.contains( child.getChildAt( 0 ).getText() ) ) {
-            return true ;
-//          }
+        if( tags.contains( child.getChildAt( 0 ).getText() ) ) {
+          return true ;
         }
       }
     }
