@@ -60,7 +60,7 @@ public class TokenEnumerationGeneratorTest {
     final TokenEnumerationGenerator.Item otherStuff = getItemWithName( tokenList, "OTHER_STUFF" ) ;
     Assert.assertNotNull( otherStuff ) ;
     Assert.assertFalse( otherStuff.punctuationSign ); ;
-    Assert.assertEquals( TagBehavior.NONE.name(), otherStuff.tagBehavior.name() ) ;
+    Assert.assertEquals( TagBehavior.NON_TRAVERSABLE.name(), otherStuff.tagBehavior.name() ) ;
   }
 
 

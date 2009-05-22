@@ -21,10 +21,18 @@ package novelang.common;
  * @author Laurent Caillette
 */
 public enum TagBehavior {
+
   /**
-   * No tag support (could have been modelled by a null).
+   * Don't traverse nor look for a tag inside (default).
    */
-  NONE,
+  NON_TRAVERSABLE,
+
+
+  /**
+   * Traverse but don't look for a tag inside. Useful for top-level nodes like 
+   * {@link novelang.parser.NodeKind#PART} or {@link novelang.parser.NodeKind#BOOK}. 
+   */
+  TRAVERSABLE,
 
   /**
    * May have a tag and subnodes may have a tag, too.

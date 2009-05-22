@@ -23,7 +23,7 @@ options { output = AST ; }
 // Beware of line comments, which are processed.
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;        // tagbehavior=SCOPE
-  BOOK ;                                          // tagbehavior=SCOPE
+  BOOK ;                                          // tagbehavior=TRAVERSABLE 
   LEVEL_INTRODUCER_ ;
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
@@ -38,7 +38,7 @@ tokens {
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ;
   LINES_OF_LITERAL ;                             // tagbehavior=TERMINAL
-  PART ;                                         // tagbehavior=SCOPE
+  PART ;                                         // tagbehavior=TRAVERSABLE
   PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL
   PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;
   WORD_AFTER_CIRCUMFLEX_ACCENT ;

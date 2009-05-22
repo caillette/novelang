@@ -154,7 +154,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
           "true".equalsIgnoreCase( properties.get( TokenProperty.PUNCTUATION_SIGN ) ) ;
       final String tagBehaviorAsString = properties.get( TokenProperty.TAG_BEHAVIOR ) ;
       if( null == tagBehaviorAsString ) {
-        tagBehavior = TagBehavior.NONE ;
+        tagBehavior = TagBehavior.NON_TRAVERSABLE ;
       } else {
         tagBehavior = TagBehavior.valueOf( tagBehaviorAsString ) ;
       }      
@@ -171,11 +171,8 @@ public class TokenEnumerationGenerator extends JavaGenerator {
 
       final Item item = ( Item ) o ;
 
-      if( name != null ? ! name.equals( item.name ) : item.name != null ) {
-        return false ;
-      }
+      return !( name != null ? !name.equals( item.name ) : item.name != null );
 
-      return true ;
     }
 
     @Override
@@ -211,9 +208,10 @@ public class TokenEnumerationGenerator extends JavaGenerator {
    * of source directories layout.
    */
   public enum TagBehavior {
-    NONE,
+    NON_TRAVERSABLE,
+    TRAVERSABLE,
     SCOPE,
-    TERMINAL;
+    TERMINAL
   }
 
 }

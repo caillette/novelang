@@ -17,12 +17,16 @@
 package novelang.hierarchy;
 
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
+
+import com.google.common.collect.Lists;
 
 /**
  * Retains nodes which have at least one of given tags, or a child with at least one of the
@@ -47,35 +51,44 @@ public class TagFilter {
       Treepath< SyntacticTree > treepath,
       Set< String > tags
   ) {
-    final SyntacticTree syntacticTree = treepath.getTreeAtEnd() ;
-    final NodeKind nodeKind = NodeKindTools.ofRoot( syntacticTree ) ;
+    final SyntacticTree tree = treepath.getTreeAtEnd();
+    final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
     switch( nodeKind.getTagBehavior() ) {
 
       case TERMINAL :
-        if( hasTag( treepath.getTreeAtEnd(), tags ) ) {
+        if( hasTag( tree, tags ) ) {
           return treepath ;
         } else {
           return null ;
         }
 
       case SCOPE :
-        if( hasTag( treepath.getTreeAtEnd(), tags ) ) {
+        if( hasTag( tree, tags ) ) {
           return treepath ;
-        } // else treat as default.
-
-      default :
-        int childIndex = 0 ;
-        while( childIndex < treepath.getTreeAtEnd().getChildCount() ) {
-          final Treepath< SyntacticTree > childTreepath =
-              Treepath.create( treepath, childIndex ) ;
+        } // else do the following:
+      
+      case TRAVERSABLE :
+        final List< SyntacticTree > newChildList = 
+            new ArrayList< SyntacticTree >( tree.getChildCount() ) ;
+        
+        // Build a new list of children for which filtering doesn't return null. 
+        for( int childIndex = 0 ; childIndex < tree.getChildCount() ; childIndex++ ) {
+          final Treepath< SyntacticTree > childTreepath = Treepath.create( treepath, childIndex ) ;
           final Treepath< SyntacticTree > newChildTreepath = doFilter( childTreepath, tags ) ;
-          if( null == newChildTreepath ) {
-            treepath = TreepathTools.removeEnd( childTreepath ) ;
-          } else {
+          if( null != newChildTreepath ) {
             childIndex ++ ;
+            newChildList.add( newChildTreepath.getTreeAtEnd() ) ;
           }
         }
+        if( tree.getChildCount() > newChildList.size() ) {
+          final SyntacticTree[] newChildArray = 
+              newChildList.toArray( new SyntacticTree[newChildList.size()] ) ;
+          treepath = TreepathTools.replaceTreepathEnd( treepath, tree.adopt( newChildArray ) ) ;
+        }
         return treepath ;
+        
+      default :
+        return null ;
 
     }
 
@@ -86,9 +99,11 @@ public class TagFilter {
       Set< String > tags
   ) {
     for( SyntacticTree child : tree.getChildren() ) {
-      if( child.isOneOf( NodeKind.TAG ) ) {
-        if( tags.contains( child.getChildAt( 0 ).getText() ) ) {
-          return true ;
+      if( child.isOneOf( NodeKind._TAGS ) ) {
+        for ( SyntacticTree tagChild : child.getChildren() ) {
+          if( tags.contains( tagChild.getChildAt( 0 ).getText() ) ) {
+            return true ;
+          }
         }
       }
     }

@@ -60,10 +60,6 @@ public class TagFilterTest {
                 PARAGRAPH_REGULAR,
                 tree( _TAGS, TAG1_TREE ),
                 tree( WORD_, "w" )
-            ),
-            tree(
-                PARAGRAPH_REGULAR,
-                tree( WORD_, "x" )
             )
         ),
         tree(
@@ -72,6 +68,10 @@ public class TagFilterTest {
                 PARAGRAPH_REGULAR,
                 tree( _TAGS, TAG1_TREE ),
                 tree( WORD_, "w" )
+            ),
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( WORD_, "x" )
             )
         ),
         tags( TAG_1 )
@@ -137,7 +137,8 @@ public class TagFilterTest {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
-    final Treepath rehierarchized = TagFilter.filter( Treepath.create( actualTree ), tags ) ;
+    final Treepath< SyntacticTree > rehierarchized = 
+        TagFilter.filter( Treepath.create( actualTree ), tags ) ;
 
     TreeFixture.assertEqualsWithSeparators(
         expectedTreepath,
