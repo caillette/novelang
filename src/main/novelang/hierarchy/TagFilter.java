@@ -21,12 +21,15 @@ import java.util.List;
 import java.util.ArrayList;
 
 import novelang.common.SyntacticTree;
+import novelang.common.TagBehavior;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 
 /**
  * Retains nodes which have at least one of given tags, or a child with at least one of the
@@ -35,16 +38,20 @@ import com.google.common.collect.Lists;
  * @author Laurent Caillette
  */
 public class TagFilter {
+  
+  private static final Log LOG = LogFactory.getLog( TagFilter.class ) ;
 
   public static Treepath< SyntacticTree > filter(
       Treepath< SyntacticTree > treepath,
       Set< String > tags
   ) {
+    LOG.debug( "Filtering on %s", tags ) ;
+    
     if( tags.isEmpty() ) {
       return treepath ;
     } else {
       final SyntacticTree tree = treepath.getTreeAtEnd() ;
-      final SyntacticTree filteredTree = doFilter( tree, tags ) ;
+      final SyntacticTree filteredTree = doFilterWithLogging( tree, tags, "" ).tree ;
       if( tree == filteredTree ) {
         return treepath ;
       } else {
@@ -52,49 +59,87 @@ public class TagFilter {
       }
     }
   }
-
-  private static SyntacticTree doFilter( SyntacticTree tree, Set<String > tags ) {
-    
+  
+  private static Result doFilterWithLogging( 
+      final SyntacticTree tree, 
+      final Set< String > tags, 
+      final String indent
+  ) {
+    LOG.debug( "%sdoFilter( %s )", indent, tree.toStringTree() ) ;
+    final Result result = doFilter( tree, tags, indent ) ;
+    if( null == result ) {
+      LOG.debug( "%s-> null", indent ) ;
+    } else {
+      LOG.debug( "%s-> %b", indent, result.hasTag ) ;
+    }
+    return result ;
+  }
+  
+  
+  private static Result doFilter( 
+      final SyntacticTree tree, 
+      final Set< String > tags, 
+      final String indent
+  ) {    
     final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
-    
-    switch( nodeKind.getTagBehavior() ) {
+    final TagBehavior behavior = nodeKind.getTagBehavior();
+    switch( behavior ) {
 
       case TERMINAL :
         if( hasTag( tree, tags ) ) {
-          return tree ;
+          return new Result( true, tree ) ;
         } else {
           return null ;
         }
 
       case SCOPE :
         if( hasTag( tree, tags ) ) {
-          return tree ;
-        } // else do the following:
+          return new Result( true, tree ) ;
+        } // 'else' clause handled below:
       
       case TRAVERSABLE :
         final List< SyntacticTree > newChildList = 
             new ArrayList< SyntacticTree >( tree.getChildCount() ) ;
         
-        // Build a new list of children for which filtering doesn't return null. 
+        // Gets true if one child (TERMINAL or SCOPE) has one of the wanted tags.
+        boolean taggedChildren = false ; 
+         
         for( SyntacticTree child : tree.getChildren() ) {
-          final SyntacticTree newChild = doFilter( child, tags ) ;
-          if( null != newChild ) {
-            newChildList.add( newChild ) ;
+          final NodeKind childNodeKind = NodeKindTools.ofRoot( child ) ;
+          final TagBehavior childTagBehavior = childNodeKind.getTagBehavior() ;
+          switch( childTagBehavior ) {
+            
+            case SCOPE :
+            case TERMINAL :
+            case TRAVERSABLE :
+              final Result result = doFilterWithLogging( child, tags, indent + "  " ) ;
+              if( result != null ) {
+                final SyntacticTree newChild = result.tree ;
+                newChildList.add( newChild ) ;
+                taggedChildren = taggedChildren || result.hasTag ;
+              }
+              break ;
+            default :
+              newChildList.add( child ) ;
           }
         }
         
-        if( newChildList.size() == 0 ) {
-          return null ;
-        } else if( tree.getChildCount() > newChildList.size() ) {
+        if( behavior == TagBehavior.SCOPE || behavior == TagBehavior.TERMINAL ) {
+          if( ! taggedChildren ) {
+            return null ;
+          }
+        }
+        
+        if( newChildList.size() == tree.getChildCount() ) {
+          return new Result( taggedChildren, tree ) ; 
+        } else {
           final SyntacticTree[] newChildArray = 
               newChildList.toArray( new SyntacticTree[ newChildList.size() ] ) ;
-          return tree.adopt( newChildArray ) ;
-        } else {
-          return tree ;
+          return new Result( taggedChildren, tree.adopt( newChildArray ) ) ;          
         }
         
       default :
-        return null ;
+        return new Result( false, tree ) ;
 
     }
 
@@ -105,15 +150,25 @@ public class TagFilter {
       Set< String > tags
   ) {
     for( SyntacticTree child : tree.getChildren() ) {
-      if( child.isOneOf( NodeKind._TAGS ) ) {
-        for ( SyntacticTree tagChild : child.getChildren() ) {
-          if( tags.contains( tagChild.getChildAt( 0 ).getText() ) ) {
+      if( child.isOneOf( NodeKind.TAG ) ) {
+//        for ( SyntacticTree tagChild : child.getChildren() ) {
+          if( tags.contains( child.getChildAt( 0 ).getText() ) ) {
             return true ;
-          }
+//          }
         }
       }
     }
     return false ;
+  }
+  
+  private static class Result {
+    public final boolean hasTag ;
+    public final SyntacticTree tree ;
+
+    private Result( boolean hasTag, SyntacticTree tree ) {
+      this.hasTag = hasTag;
+      this.tree = Preconditions.checkNotNull( tree ) ;
+    }
   }
 
 }

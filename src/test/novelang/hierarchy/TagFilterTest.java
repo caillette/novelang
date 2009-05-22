@@ -58,7 +58,7 @@ public class TagFilterTest {
             PART,
             tree(
                 PARAGRAPH_REGULAR,
-                tree( _TAGS, TAG1_TREE ),
+                TAG1_TREE ,
                 tree( WORD_, "w" )
             )
         ),
@@ -66,7 +66,7 @@ public class TagFilterTest {
             PART,
             tree(
                 PARAGRAPH_REGULAR,
-                tree( _TAGS, TAG1_TREE ),
+                TAG1_TREE,
                 tree( WORD_, "w" )
             ),
             tree(
@@ -83,21 +83,15 @@ public class TagFilterTest {
     verifyFilterTags(
         tree(
             PART,
-            tree(
-                PARAGRAPH_REGULAR,
-                tree( WORD_, "x" )
-            )
+            tree( _URL )
         ),
         tree(
             PART,
+            tree( _URL ), // Must be NON_TRAVERSABLE!
             tree(
                 PARAGRAPH_REGULAR,
-                tree( _TAGS, TAG1_TREE ),
+                TAG1_TREE,
                 tree( WORD_, "w" )
-            ),
-            tree(
-                PARAGRAPH_REGULAR,
-                tree( WORD_, "x" )
             )
         ),
         tags( TAG_2 )
@@ -113,7 +107,7 @@ public class TagFilterTest {
                 _LEVEL,
                 tree(
                     PARAGRAPH_REGULAR,
-                    tree( _TAGS, TAG1_TREE ),
+                    TAG1_TREE,
                     tree( WORD_, "w" )
                 )
             )
@@ -124,15 +118,15 @@ public class TagFilterTest {
                 _LEVEL,
                 tree(
                     PARAGRAPH_REGULAR,
-                    tree( _TAGS, TAG1_TREE ),
-                    tree( WORD_, "w" )
+                    tree( WORD_, "x" )
                 )
             ),
             tree(
                 _LEVEL,
                 tree(
                     PARAGRAPH_REGULAR,
-                    tree( WORD_, "x" )
+                    TAG1_TREE,
+                    tree( WORD_, "w" )
                 )
             )
         ),
@@ -148,8 +142,6 @@ public class TagFilterTest {
   private static final String TAG_2 = "tag-2";
   private static final String TAG_3 = "tag-3";
   private static final SyntacticTree TAG1_TREE = tree( TAG, TAG_1 ) ;
-  private static final SyntacticTree TAG2_TREE = tree( TAG, TAG_2 ) ;
-  private static final SyntacticTree TAG3_TREE = tree( TAG, TAG_3 ) ;
 
   private static Set< String > tags( String... tags ) {
     return ImmutableSet.of( tags ) ;
