@@ -41,8 +41,10 @@ import novelang.common.SyntacticTree;
 import novelang.common.FileTools;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
-import novelang.hierarchy.Hierarchizer;
+import novelang.hierarchy.LevelMangler;
 import novelang.hierarchy.SeparatorsMangler;
+import novelang.hierarchy.TagFilter;
+import novelang.hierarchy.ListMangler;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.DefaultBookParserFactory;
 import novelang.system.DefaultCharset;
@@ -130,16 +132,17 @@ public class Book extends AbstractSourceReader {
           new SimpleTree( NodeKind.BOOK.name() )
       ) ;
       this.environment = results.environment ;
-      final Treepath< SyntacticTree > rehierarchizedLists =
-          Hierarchizer.rehierarchizeLists( Treepath.create( results.book ) ) ;
-      final Treepath< SyntacticTree > rehierarchizedTree =
-          Hierarchizer.rehierarchizeLevels( rehierarchizedLists ) ;
+      Treepath< SyntacticTree > rehierarchized = Treepath.create( results.book ) ;
+      final Set< String > tagset = MetadataHelper.findTags( rehierarchized.getTreeAtEnd() ) ;
+      rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
+      rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
+      rehierarchized = TagFilter.filter( rehierarchized, tagRestrictions ) ;
+
 
       if( hasProblem() ) {
-        this.documentTree = rehierarchizedTree.getTreeAtEnd() ;
+        this.documentTree = rehierarchized.getTreeAtEnd() ;
       } else {
-        final Set< String > tagset = MetadataHelper.findTags( rehierarchizedTree.getTreeAtEnd() ) ;
-        this.documentTree = addMetadata( rehierarchizedTree.getTreeAtEnd(), tagset ) ;        
+        this.documentTree = addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ;
       }
     }
 

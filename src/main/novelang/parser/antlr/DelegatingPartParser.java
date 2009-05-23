@@ -22,6 +22,8 @@ import org.antlr.runtime.tree.CommonErrorNode;
 import novelang.common.LocationFactory;
 import novelang.common.SyntacticTree;
 import novelang.parser.PartParser;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * @author Laurent Caillette
@@ -30,20 +32,21 @@ class DelegatingPartParser
     extends AbstractDelegatingParser
     implements PartParser
 {
+
   public DelegatingPartParser( String text, LocationFactory locationFactory ) {
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 
   public SyntacticTree parse() throws RecognitionException {
-//    throw new UnsupportedOperationException( "parse: ANTLR-3.1.1 refactoring in progress" ) ;
     final Object tree = getAntlrParser().part().getTree();
+    final SyntacticTree result ;
     if( tree instanceof CommonErrorNode ) {
       getDelegate().report( ( ( CommonErrorNode ) tree ).trappedException ) ;
-//      throw new RuntimeException( ( ( CommonErrorNode ) tree ).trappedException ) ;
-      return null ;
+      result = null ;
     } else {
-      return ( SyntacticTree ) tree ;
+      result = ( SyntacticTree ) tree ;
     }
+    return result ;
   }
   
 }

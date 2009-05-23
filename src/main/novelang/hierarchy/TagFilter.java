@@ -47,17 +47,17 @@ public class TagFilter {
   ) {
     LOG.debug( "Filtering on %s", tags ) ;
     
-    if( tags.isEmpty() ) {
-      return treepath ;
-    } else {
+    if( ! tags.isEmpty() ) {
       final SyntacticTree tree = treepath.getTreeAtEnd() ;
       final SyntacticTree filteredTree = doFilter( tree, tags ).tree ;
-      if( tree == filteredTree ) {
-        return treepath ;
-      } else {
-        return TreepathTools.replaceTreepathEnd( treepath, filteredTree ) ;
+      if( tree != filteredTree ) {
+        treepath = TreepathTools.replaceTreepathEnd( treepath, filteredTree ) ;
       }
     }
+
+    LOG.debug( "Done filtering on %s", tags ) ;
+
+    return treepath ;
   }
   
   private static Result doFilter( final SyntacticTree tree, final Set< String > tags ) {    

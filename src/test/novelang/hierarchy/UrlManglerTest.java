@@ -26,7 +26,7 @@ import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
- * Tests for {@link novelang.hierarchy.Hierarchizer}.
+ * Tests for {@link LevelMangler}.
  * 
  * @author Laurent Caillette
  */

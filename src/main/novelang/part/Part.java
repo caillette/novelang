@@ -26,17 +26,16 @@ import java.util.Set;
 import novelang.common.*;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
-import novelang.hierarchy.Hierarchizer;
+import novelang.hierarchy.LevelMangler;
 import novelang.hierarchy.UrlMangler;
 import novelang.hierarchy.SeparatorsMangler;
 import novelang.hierarchy.EmbeddedListMangler;
 import novelang.hierarchy.TagFilter;
+import novelang.hierarchy.ListMangler;
 import novelang.parser.antlr.DefaultPartParserFactory;
 import novelang.system.DefaultCharset;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
 
@@ -96,7 +95,7 @@ public class Part extends AbstractSourceReader {
       rehierarchized = UrlMangler.fixNamedUrls( rehierarchized ) ;
       rehierarchized = EmbeddedListMangler.rehierarchizeEmbeddedLists( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.removeSeparators( rehierarchized ) ;      
-      rehierarchized = Hierarchizer.rehierarchizeLevels( rehierarchized ) ;
+      rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
 
       return rehierarchized.getTreeAtEnd() ;
     }
@@ -162,7 +161,7 @@ public class Part extends AbstractSourceReader {
       return this ;
     } else {
       Treepath< SyntacticTree > rehierarchized = Treepath.create( tree ) ;
-      rehierarchized = Hierarchizer.rehierarchizeLists( rehierarchized ) ;
+      rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       final Set< String > tagset = MetadataHelper.findTags( tree ) ;
       rehierarchized = TagFilter.filter( rehierarchized, restrictingTags ) ;
       rehierarchized = Treepath.create( addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ) ;

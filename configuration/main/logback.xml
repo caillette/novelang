@@ -19,20 +19,12 @@
 
   </appender>
 
-  <logger name="org" >
-    <level value="WARN" />
-  </logger>
-
-  <logger name="FOP" >
-    <level value="DEBUG" />
-  </logger>
-
   <logger name="novelang" >
-    <level value="DEBUG" />
+    <level value="INFO" />
   </logger>
 
   <root>
-    <level value="DEBUG" />
+    <level value="WARN" />
     <appender-ref ref="FILE" />
   </root>
 

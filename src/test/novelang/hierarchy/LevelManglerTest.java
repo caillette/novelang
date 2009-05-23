@@ -26,13 +26,13 @@ import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
- * Tests for {@link Hierarchizer}.
+ * Tests for {@link LevelMangler}.
  * 
  * @author Laurent Caillette
  */
-public class HierarchizerTest {
+public class LevelManglerTest {
 
-  private static final Log LOG = LogFactory.getLog( HierarchizerTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( LevelManglerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -231,99 +231,6 @@ public class HierarchizerTest {
   }
 
 
-
-  @Test
-  public void aggregateList() {
-    final SyntacticTree expected = tree(
-        PART,
-        tree( PARAGRAPH_REGULAR ),
-        tree(
-            _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
-        ),
-        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
-    ) ;
-
-    final SyntacticTree toBeRehierarchized = tree(
-        PART,
-        tree( PARAGRAPH_REGULAR ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
-    ) ;
-    verifyRehierarchizeList( expected, toBeRehierarchized ) ;
-  }
-
-  @Test
-  public void aggregateListInsideChapter() {
-    final SyntacticTree expected = tree(
-        PART,
-        tree( LEVEL_INTRODUCER_,
-          tree( PARAGRAPH_REGULAR ),
-          tree(
-              _LIST_WITH_TRIPLE_HYPHEN,
-              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
-          ),
-          tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
-        ),
-        tree( LEVEL_INTRODUCER_, tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, "" ) )
-    ) ;
-
-    final SyntacticTree toBeRehierarchized = tree(
-        PART,
-        tree(
-            LEVEL_INTRODUCER_,
-            tree( PARAGRAPH_REGULAR ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
-        ),
-        tree(
-            LEVEL_INTRODUCER_,
-            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, "" )
-        )
-    ) ;
-    verifyRehierarchizeList( expected, toBeRehierarchized ) ;
-  }
-
-
-  @Test
-  public void aggregateSeveralLists() {
-    final SyntacticTree expected = tree(
-        PART,
-        tree( PARAGRAPH_REGULAR ),
-        tree(
-            _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
-        ),
-        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-        tree(
-            _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
-        ),
-        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, "" )
-
-    ) ;
-    final SyntacticTree toBeRehierarchized = tree(
-        PART,
-        tree( PARAGRAPH_REGULAR ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, "" )
-    ) ;
-    verifyRehierarchizeList( expected, toBeRehierarchized ) ;
-  }
-
-
 // =======
 // Fixture
 // =======
@@ -351,28 +258,10 @@ public class HierarchizerTest {
     LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 
-    return Hierarchizer.rehierarchizeLevels( flatTreepath ) ;
+    return LevelMangler.rehierarchizeLevels( flatTreepath ) ;
 
   }
 
 
-  private static void verifyRehierarchizeList(
-      SyntacticTree expectedTree,
-      SyntacticTree flatTree
-  ) {
-    LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
-    final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
-    final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
-
-    final Treepath rehierarchized = Hierarchizer.rehierarchizeLists( flatTreepath ) ;
-
-    TreeFixture.assertEqualsWithSeparators(
-        expectedTreepath,
-        rehierarchized
-    ); ;
-
-
-  }
 
 }

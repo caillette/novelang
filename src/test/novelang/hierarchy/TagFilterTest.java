@@ -35,7 +35,7 @@ import com.google.common.collect.ImmutableSet;
  */
 public class TagFilterTest {
 
-  private static final Log LOG = LogFactory.getLog( HierarchizerTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( LevelManglerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {

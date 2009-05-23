@@ -27,70 +27,12 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.NodeKindTools;
 
 /**
- * Transforms the tree representing a Part for handling various features
- * that are too complicated to handle inside the parser.
- *
- * <ol>
- * <li>{@link NodeKind#LEVEL_INTRODUCER_} become {@link novelang.parser.NodeKind#_LEVEL}.
- * <li>All contiguous List stuff becomes wrapped inside a
- *     {@link NodeKind#_LIST_WITH_TRIPLE_HYPHEN} node.
- * </ol>
+ * {@link NodeKind#LEVEL_INTRODUCER_} become {@link novelang.parser.NodeKind#_LEVEL}.
  *
  *
  * @author Laurent Caillette
  */
-public class Hierarchizer {
-
-  public static Treepath< SyntacticTree > rehierarchizeAll(
-      Treepath< SyntacticTree > treepath
-  ) {
-    treepath = Hierarchizer.rehierarchizeLists( treepath ) ;
-    treepath = Hierarchizer.rehierarchizeLevels( treepath ) ;
-    return treepath ;    
-  }
-
-
-  /**
-   * Rehierarchize paragraphs which are list items.
-   */
-  public static Treepath< SyntacticTree > rehierarchizeLists(
-      Treepath< SyntacticTree > parent
-  ) {
-    if( parent.getTreeAtEnd().getChildCount() > 0 ) {
-      Treepath< SyntacticTree > child = Treepath.create( parent, 0 ) ;
-      boolean insideList = false ;
-      while( true ) {
-        final NodeKind nodeKind = getKind( child ) ;
-        switch( nodeKind ) {
-          case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_:
-            if( insideList ) {
-              child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
-              break ;
-            } else {
-              final SyntacticTree list =
-                  new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN.name(), child.getTreeAtEnd() ) ;
-              child = TreepathTools.replaceTreepathEnd( child, list ) ;
-              insideList = true ;
-            }
-            break ;
-          case LEVEL_INTRODUCER_:
-            child = rehierarchizeLists( child ) ;
-          default : 
-            insideList = false ;
-            break ;
-        }
-        if( TreepathTools.hasNextSibling( child ) ) {
-          child = TreepathTools.getNextSibling( child ) ;
-        } else {
-          break ;
-        }
-      }
-      return child.getPrevious() ;
-    } else {
-      return parent ;
-    }
-  }
-
+public class LevelMangler {
 
   public static Treepath< SyntacticTree > rehierarchizeLevels(
       final Treepath< SyntacticTree > treepathToRehierarchize
