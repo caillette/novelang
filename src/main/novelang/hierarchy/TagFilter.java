@@ -82,7 +82,7 @@ public class TagFilter {
             new ArrayList< SyntacticTree >( tree.getChildCount() ) ;
         
         // Gets true if one child (TERMINAL or SCOPE) has one of the wanted tags.
-        boolean taggedChild = false ; 
+        boolean hasTaggedChild = false ;
          
         for( SyntacticTree child : tree.getChildren() ) {
           final TagBehavior childTagBehavior = NodeKindTools.ofRoot( child ).getTagBehavior() ;
@@ -91,26 +91,23 @@ public class TagFilter {
           } else {
             final Result result = doFilter( child, tags ) ;
             if( result != null ) {
-              final SyntacticTree newChild = result.tree ;
-              newChildList.add( newChild ) ;
-              taggedChild = taggedChild || result.hasTag ;
+              if( result.hasTag ) {
+                newChildList.add( result.tree ) ;
+              }
+              hasTaggedChild = hasTaggedChild || result.hasTag ;
             }
           }
         }
         
         if( ( behavior == TagBehavior.SCOPE || behavior == TagBehavior.TERMINAL ) 
-         && ! taggedChild ) {
+         && ! hasTaggedChild ) {
           return null ;
         }
         
-        if( newChildList.size() == tree.getChildCount() ) {
-          return new Result( taggedChild, tree ) ; 
-        } else {
-          final SyntacticTree[] newChildArray = 
-              newChildList.toArray( new SyntacticTree[ newChildList.size() ] ) ;
-          return new Result( taggedChild, tree.adopt( newChildArray ) ) ;          
-        }
-        
+        final SyntacticTree[] newChildArray =
+            newChildList.toArray( new SyntacticTree[ newChildList.size() ] ) ;
+        return new Result( hasTaggedChild, tree.adopt( newChildArray ) ) ;
+
       default :
         return new Result( false, tree ) ;
 

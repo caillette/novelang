@@ -62,11 +62,17 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   private static final Map< TokenProperty, String > TAG_SCOPE =
       ImmutableMap.of( TokenProperty.TAG_BEHAVIOR, TagBehavior.SCOPE.name() ) ;
 
-  private static final Collection< Item > SYNTHETIC_ITEMS = ImmutableList.of( 
+  private static final Map< TokenProperty, String > TAG_TERMINAL =
+      ImmutableMap.of( TokenProperty.TAG_BEHAVIOR, TagBehavior.TERMINAL.name() ) ;
+
+  private static final Map< TokenProperty, String > TAG_TRAVERSABLE =
+      ImmutableMap.of( TokenProperty.TAG_BEHAVIOR, TagBehavior.TRAVERSABLE.name() ) ;
+
+  private static final Collection< Item > SYNTHETIC_ITEMS = ImmutableList.of(
       new Item( "_STYLE" ),
       new Item( "_LEVEL", TAG_SCOPE ),
-      new Item( "_LIST_WITH_TRIPLE_HYPHEN" ),
-      new Item( "_PARAGRAPH_AS_LIST_ITEM", TAG_SCOPE ),
+      new Item( "_LIST_WITH_TRIPLE_HYPHEN", TAG_TRAVERSABLE ),
+      new Item( "_PARAGRAPH_AS_LIST_ITEM", TAG_TERMINAL ),
       new Item( "_EMBEDDED_LIST_WITH_HYPHEN" ),
       new Item( "_EMBEDDED_LIST_ITEM" ),
       new Item( "_META_TIMESTAMP" ),

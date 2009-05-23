@@ -99,6 +99,30 @@ public class TagFilterTest {
   }
 
   @Test
+  public void dontRetainUntaggedPrecedingSiblingWhenInsideAScope() {
+    verifyFilterTags(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( LEVEL_TITLE, "level" ),
+                tree( PARAGRAPH_REGULAR, TAG1_TREE ,tree( WORD_, "1" ) )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( LEVEL_TITLE, "level" ),
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "0" ) ),
+                tree( PARAGRAPH_REGULAR, TAG1_TREE ,tree( WORD_, "1" ) )
+            )
+        ),
+        tags( TAG_1 )
+    ) ;
+  }
+
+  @Test
   public void retainParentLevel() {
     verifyFilterTags(
         tree(
