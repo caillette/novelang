@@ -17,6 +17,7 @@
 
 
 var TAGS = [] ; // All declared tags.
+var TAGS_REGEX = /(?:\?|&)tags=([0-9a-zA-Z\-_;]+)/ ;
 
 function initializeTagSystem( colorDefinitions ) {
   // Gather all declared tags.
@@ -30,21 +31,21 @@ function initializeTagSystem( colorDefinitions ) {
   } ) ;
 
   var uri = document.baseURI ;
-  var activeTagsMatcher = uri.match( /(?:\?|&)tags=([0-9a-zA-Z\-_;]+)/ ) ;
-  var activeTags = activeTagsMatcher && activeTagsMatcher.length == 2 ?
+  var activeTagsMatcher = uri.match( TAGS_REGEX ) ;
+  var activeTags =
+      activeTagsMatcher && activeTagsMatcher.length == 2 ?
       activeTagsMatcher[ 1 ].split( ";" ) :
       []
   ;
-  showMessage( "Got " + activeTags.length + " tags: " + activeTags ) ;
 
   // Create the combo boxes.
-  for( var tagIndex in TAGS ) {
-    var tag = TAGS[ tagIndex ] ;
+  for( var i in TAGS ) {
+    var tag = TAGS[ i ] ;
     $( "#tag-list" ).append(
         "<input " +
             "type='checkbox' " +
             "name='" + tag + "' " +
-            "onclick=\"checkTag() ; \"" +
+            "onclick='checkTag() ; ' " +
         ">" +
         "<span class='Tag-" + tag + "' >" + tag + "</span>" +
         "<br/>"
@@ -60,8 +61,8 @@ function initializeTagSystem( colorDefinitions ) {
     $( "#tag-list-content" ).hide() ;
   } else {
     // Check the combo boxes.
-    for( var tagIndex in activeTags ) {
-      $( "input[name='" + activeTags[ tagIndex ] + "']" ).attr( "checked", true ) ;
+    for( var j in activeTags ) {
+      $( "input[name='" + activeTags[ j ] + "']" ).attr( "checked", true ) ;
     }
 
   }
@@ -75,44 +76,6 @@ function showMessage( message ) {
   $( "p#messages" ).append( "<pre>" + message.toString() + "</pre>" ) ;
 }
 
-// Traverses the DOM (except elements which may not contain a tag scope) and hides tag scopes
-// divs which have no tag in the tagset, or which contain no tag scope satisfying the same
-// condition.
-// Returns true if at least one children-contained tag scope has some wanted tag(s).
-// Returns false if some children-contained tag scope was hidden, or when there were no tag
-//   scopes in children.
-function updateVisibility( domElement, tagset, indent ) {
-  var resultingAction = false ;
-  var containsTagsOfInterest = false ;
-
-//  showMessage( indent + "updateVisibility: entering " + tagscopeAsString( domElement ) ) ;
-
-  if( isDirectTagscopeContainer( domElement/*, indent*/ ) ) {
-    containsTagsOfInterest = isElementTagged( domElement, tagset/*, indent*/ ) ;
-    if( containsTagsOfInterest ) {
-//      showMessage( indent + "updateVisibility: found tags of interest for " +
-//           tagscopeAsString( domElement ) ) ;
-      return true ;
-    }
-  }
-
-  $( domElement ).children().each( function() {
-    if ( isPossibleTagscopeContainer( this ) ) {
-      resultingAction |= updateVisibility( this, tagset, indent + "  " ) ;
-    }
-  } ) ;
-
-  if( isDirectTagscopeContainer( domElement/*, indent*/ ) ) {
-    if ( ! resultingAction ) {
-      $( domElement ).hide() ;
-    }
-  }
-
-//  showMessage( indent + "updateVisibility: returning " + resultingAction ) ;
-  return resultingAction ;
-
-}
-
 function getClassName( obj ) {
   if( obj === null ) return undefined ;
   var s = obj.toString() ;
@@ -122,95 +85,33 @@ function getClassName( obj ) {
 
 }
 
-function tagscopeAsString( domElement ) {
-  var s = "" ;
-
-  s += getClassName( domElement ) ;
-
-  var headerName = $( ":header:first", domElement ).text() ;
-  s += headerName == "" ? "" : " \"" + headerName + "\"" ;
-
-  if( isDirectTagscopeContainer( domElement ) ) {
-    s += " directTagscopeContainer" ;
-  }
-
-  return s ;
-}
-
-// Returns if the element has at least one tag in the tagset (which is an array).
-function isElementTagged( domElement, tagset/*, indent*/ ) {
-  function isTag( tag, tagset ) {
-    for( var tagIndex in tagset ) {
-      if( tagset[ tagIndex ] == tag ) return true ;
-    }
-    return false ;
-  }
-//  function showElement( element, returnValue ) {
-//    showMessage(
-//        indent + "Evaluating " + tagscopeAsString( element ) +
-//        "against tagset " + tagset.toString() + " " +
-//        "-> " + returnValue
-//    ) ;
-//  }
-  // Take all li from first ul with .tags class.
-  var list = $( "ul.tags", domElement ) ;
-  if( list === null ||  $( list ).size() == 0 ) {
-    return false ;
-  }
-  var tagElements = $( "li", $( list ).eq( 0 ) ).get() ;
-  for( var i = 0 ; i < tagElements.length ; i++ ) {
-    if( isTag( $( tagElements[ i ] ).text(), tagset ) ) {
-      return true ;
-    }
-  }
-  return false ;
-}
-
-// Useful for limiting traversal.
-function isPossibleTagscopeContainer( domElement ) {
-  return ! (
-      $( domElement ).is( "ul" )
-   || $( domElement ).is( "ol" )
-   || $( domElement ).is( "p" )
-   || $( domElement ).is( "pre" )
-   || $( domElement ).is( "b" )
-   || $( domElement ).is( "i" )
-   || $( domElement ).is( "em" )
-   || $( domElement ).is( "strong" )
-   || $( domElement ).is( "code" )
-   || $( domElement ).is( "tt" )
-   || $( domElement ).is( "span" )
-   || $( domElement ).is( "#messages" )
-   || $( domElement ).is( "#demo" )
-  ) ;
-}
-
-// Returns if the element is a div with the tag-scope class.
-function isDirectTagscopeContainer( domElement/*, indent*/ ) {
-  direct = $( domElement ).is( ".tag-scope" ) ;
-//      showMessage(
-//          indent + "isDirectTagscopeContainer( " + tagscopeAsString( domElement ) + " ) " +
-//          "-> " + direct
-//      ) ;
-  return direct ;
-}
 
 function checkTag() {
 //  alert( "Updating tag visibility..." ) ;
   window.status = "Updating tag visibility..." ;
   var checked = [] ;
+  var newUri = location.href.replace( TAGS_REGEX, "" ) ;
   ( $( "#tag-list :checked" ).each( function() {
     checked.push( $( this ).attr( "name" ) ) ;
   } ) ) ;
-  $( ".tag-scope" ).show() ;
-  if( checked.length == 0 ) {
-//        showMessage( "No tag selected; displaying everything." ) ;
-  } else {
-//        showMessage( "Some tags were selected: " + checked.toString() ) ;
-    updateVisibility( $( "body" ).get(), checked, "" ) ;
+  if( checked.length > 0 ) {
+    if( newUri.indexOf( "?" ) > -1 ) {
+      newUri += "&" ;
+    } else {
+      newUri += "?" ;
+    }
+    newUri += "tags=" ;
+    var first = true ;
+    for( var i = 0 ; i < checked.length ; i++ ) {
+      if( first ) {
+        first = false ;
+      } else {
+        newUri += ";" ;
+      }
+      newUri += checked[ i ] ;
+    }
   }
-  window.status = "" ;
-//  alert( "Done updating tag visibility" ) ;
+  location.href = newUri ;
 
 
 }
