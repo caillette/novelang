@@ -29,6 +29,14 @@ function initializeTagSystem( colorDefinitions ) {
 //    showMessage( "Added class " + $( this ).text() ) ;
   } ) ;
 
+  var uri = document.baseURI ;
+  var activeTagsMatcher = uri.match( /(?:\?|&)tags=([0-9a-zA-Z\-_;]+)/ ) ;
+  var activeTags = activeTagsMatcher && activeTagsMatcher.length == 2 ?
+      activeTagsMatcher[ 1 ].split( ";" ) :
+      []
+  ;
+  showMessage( "Got " + activeTags.length + " tags: " + activeTags ) ;
+
   // Create the combo boxes.
   for( var tagIndex in TAGS ) {
     var tag = TAGS[ tagIndex ] ;
@@ -47,7 +55,17 @@ function initializeTagSystem( colorDefinitions ) {
   $( "#tag-list-disclosure" ).click( function() {
     $( "#tag-list-content" ).slideToggle( 100 ) ;
   } ) ;
-  $( "#tag-list-content" ).hide() ;
+
+  if( activeTags.length == 0 ) {
+    $( "#tag-list-content" ).hide() ;
+  } else {
+    // Check the combo boxes.
+    for( var tagIndex in activeTags ) {
+      $( "input[name='" + activeTags[ tagIndex ] + "']" ).attr( "checked", true ) ;
+    }
+
+  }
+
 
 
   setupColors( TAGS, colorDefinitions ) ;
