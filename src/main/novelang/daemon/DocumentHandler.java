@@ -30,6 +30,7 @@ import org.mortbay.jetty.Request;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import com.google.common.collect.Lists;
+import com.google.common.base.Joiner;
 import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.configuration.ProducerConfiguration;
@@ -81,6 +82,8 @@ public class DocumentHandler extends GenericHandler {
   private void handle( HttpServletRequest request, HttpServletResponse response )
       throws IOException, ServletException
   {
+    LOG.info( "Handling request %s", request.getRequestURI() ) ;
+    
     final String rawRequest = request.getPathInfo() +
         ( StringUtils.isBlank( request.getQueryString() ) ? "" : "?" + request.getQueryString() )
     ;
@@ -104,6 +107,7 @@ public class DocumentHandler extends GenericHandler {
               documentRequest.getOriginalTarget(),
               outputStream
           ) ;
+          LOG.error( "Unexpected exception", e ) ;
           throw e ;
         }
 
@@ -116,6 +120,10 @@ public class DocumentHandler extends GenericHandler {
           }
 
         } else if( rendered.hasProblem() ) {
+          LOG.warn(
+              "Document had following problems: \n  %s",
+              Joiner.on( "\n  " ).join( rendered.getProblems() )  
+          ) ;
           redirectToProblemPage( documentRequest, response ) ;
         } else {
 
@@ -137,7 +145,7 @@ public class DocumentHandler extends GenericHandler {
         }
 
         ( ( Request ) request ).setHandled( true ) ;
-        LOG.debug( "Handled request %s", request.getRequestURI() ) ;
+        LOG.info( "Handled request %s", request.getRequestURI() ) ;
       }
 
     }
@@ -151,7 +159,7 @@ public class DocumentHandler extends GenericHandler {
         documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX ;
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
-    LOG.debug( "Redirected to '%s'", redirectionTarget ) ;
+    LOG.info( "Redirected to '%s'", redirectionTarget ) ;
   }
 
   private void redirectToOriginalTarget(
@@ -162,7 +170,7 @@ public class DocumentHandler extends GenericHandler {
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
     response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
-    LOG.debug( "Redirected to '%s'", redirectionTarget ) ;
+    LOG.info( "Redirected to '%s'", redirectionTarget ) ;
   }
 
   private void renderProblemsAsRequested(
@@ -184,7 +192,7 @@ public class DocumentHandler extends GenericHandler {
         problems,
         originalTarget
     ) ;
-    LOG.debug( "Served error request '%s'", originalTarget ) ;
+    LOG.info( "Served error request '%s'", originalTarget ) ;
 
   }
 
