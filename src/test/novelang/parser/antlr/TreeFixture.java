@@ -27,7 +27,7 @@ import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
-import novelang.hierarchy.SeparatorsMangler;
+import novelang.treemangling.SeparatorsMangler;
 
 /**
  * Helps building {@link novelang.common.SyntacticTree}s for tests.

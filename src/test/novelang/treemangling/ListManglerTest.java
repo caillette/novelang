@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.hierarchy;
+package novelang.treemangling;
 
 import org.junit.Test;
 import novelang.system.LogFactory;
@@ -26,7 +26,7 @@ import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
- * Tests for {@link novelang.hierarchy.ListMangler}.
+ * Tests for {@link novelang.treemangling.ListMangler}.
  *
  * @author Laurent Caillette
  */

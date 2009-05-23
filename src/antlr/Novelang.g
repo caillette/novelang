@@ -40,7 +40,7 @@ tokens {
   LINES_OF_LITERAL ;                             // tagbehavior=TERMINAL
   PART ;                                         // tagbehavior=TRAVERSABLE
   PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL
-  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;
+  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;   // tagbehavior=TERMINAL
   WORD_AFTER_CIRCUMFLEX_ACCENT ;
   URL_LITERAL ;  
   RASTER_IMAGE ;

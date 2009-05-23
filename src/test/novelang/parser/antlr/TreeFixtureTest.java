@@ -19,7 +19,7 @@ package novelang.parser.antlr;
 import org.junit.Test;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.hierarchy.SeparatorsMangler;
+import novelang.treemangling.SeparatorsMangler;
 
 /**
  * Tests for {@link TreeFixtureTest}.

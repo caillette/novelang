@@ -24,7 +24,7 @@ import org.junit.Assert;
 import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
 import novelang.common.SyntacticTree;
-import novelang.hierarchy.SeparatorsMangler;
+import novelang.treemangling.SeparatorsMangler;
 
 
 /**

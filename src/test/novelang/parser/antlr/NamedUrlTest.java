@@ -75,7 +75,7 @@ public class NamedUrlTest {
 
 
   /**
-   * Get sure of what we get because {@link novelang.hierarchy.UrlMangler} relies on this.
+   * Get sure of what we get because {@link novelang.treemangling.UrlMangler} relies on this.
    */
   @Test
   public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph1()
@@ -111,7 +111,7 @@ public class NamedUrlTest {
   }
 
   /**
-   * Get sure of what we get because {@link novelang.hierarchy.UrlMangler} relies on this.
+   * Get sure of what we get because {@link novelang.treemangling.UrlMangler} relies on this.
    */
   @Test
   public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph2()

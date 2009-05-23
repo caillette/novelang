@@ -72,7 +72,11 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_STYLE" ),
       new Item( "_LEVEL", TAG_SCOPE ),
       new Item( "_LIST_WITH_TRIPLE_HYPHEN", TAG_TRAVERSABLE ),
-      new Item( "_PARAGRAPH_AS_LIST_ITEM", TAG_TERMINAL ),
+
+      /*  Crafted out of PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ by GenericRenderer,
+          no tag scope then. */
+      new Item( "_PARAGRAPH_AS_LIST_ITEM" ),
+
       new Item( "_EMBEDDED_LIST_WITH_HYPHEN" ),
       new Item( "_EMBEDDED_LIST_ITEM" ),
       new Item( "_META_TIMESTAMP" ),

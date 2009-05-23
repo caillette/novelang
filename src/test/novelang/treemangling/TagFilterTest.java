@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.hierarchy;
+package novelang.treemangling;
 
 import java.util.Set;
 
@@ -158,14 +158,62 @@ public class TagFilterTest {
     ) ;
   }
 
+  /**
+   * Verify that {@link novelang.parser.NodeKind#PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_}
+   * is correctly handled because it is the one to be processed by the {@code ListMangler}.
+   * The {@link novelang.parser.NodeKind#_PARAGRAPH_AS_LIST_ITEM} appears later, upon
+   * {@link novelang.rendering.GenericRenderer} transformation. 
+   */
+  @Test
+  public void retainParagraphsInsideListWithTripleHyphen() {
+    verifyFilterTags(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( LEVEL_INTRODUCER_, tree( WORD_, "x" ) ),
+                tree( 
+                    _LIST_WITH_TRIPLE_HYPHEN,
+                    tree(
+                        PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+                        TAG2_TREE,
+                        tree( WORD_, "z" )
+                    )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( LEVEL_INTRODUCER_, tree( WORD_, "x" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    TAG1_TREE,
+                    tree( WORD_, "y" )
+                ),
+                tree(
+                    _LIST_WITH_TRIPLE_HYPHEN,
+                    tree(
+                        PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+                        TAG2_TREE,
+                        tree( WORD_, "z" )
+                    )
+                )
+            )
+        ),
+        tags( TAG_2 )
+    ) ;
+  }
+
 // =======
 // Fixture
 // =======
 
   private static final String TAG_1 = "tag-1";
   private static final String TAG_2 = "tag-2";
-  private static final String TAG_3 = "tag-3";
   private static final SyntacticTree TAG1_TREE = tree( TAG, TAG_1 ) ;
+  private static final SyntacticTree TAG2_TREE = tree( TAG, TAG_2 ) ;
 
   private static Set< String > tags( String... tags ) {
     return ImmutableSet.of( tags ) ;
