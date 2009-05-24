@@ -495,11 +495,21 @@ By now, following Novelang constructs support tags:
 A tag is not meant to be content by itself, but it may help to categorize the content, or provide
 additional information to the stylesheet.
 
+Tags are passed as parameters to the HTTP dæmon or the batch generator, with the ``tags`` argument
+name, and with a semicolon as delimiter:
+
+<<<
+my-document.html?tags=TAG-1;TAG-2
+>>>
+
 With Novelang default stylesheet for HTML, the tags are rendered as tiny colorful floating
 rectangles in the right margin. A list of available tags appears in the topright corner in a 
-disclosure blox. Checking tags causes the document to display only tagged text. 
+disclosure blox. Checking `/` unchecking tags causes the document to display only tagged text,
+by requesting a document with the new URL.
 
-Default stylesheet for PDF doesn't render tags at all.
+Default stylesheet for PDF doesn't render tags in a particular manner.
+But, as expected, if some text is excluded because it has none of requested tags, it will be
+excluded from rendition.
 
 Tag usage sample: 
 
@@ -523,6 +533,7 @@ n:part
        + n:tag "some-other-tag"
        + "My tagged paragraph."
 >>>
+
 
 
 === Escaped characters
