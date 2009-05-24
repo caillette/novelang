@@ -86,7 +86,7 @@ public class DocumentProducer {
     }
     final Serve serve = new Serve() ;
 
-    LOG.debug( "Attempting to produce '%s'", request.getOriginalTarget() ) ;
+    LOG.debug( "Attempting to produce '%s' %s", request.getOriginalTarget(), request.toString() ) ;
 
     final ResourceName stylesheet = LanguageTools.firstNotNull(
         request.getAlternateStylesheet(),
