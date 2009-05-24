@@ -468,7 +468,7 @@
     />
     <echo>
       Now go to SourceForge project page, log in as "${publish.remote.user}" 
-      and choose "Admin > File releases". 
+      and choose "Project admin > Downloads". 
       For the package name ${project.name}, select "Add Release" and create a release 
       named "${project.version}".
       In the next page, go to step 2 and select uploaded file (${target.distrib.name}).
