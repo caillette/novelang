@@ -30,7 +30,7 @@ function initializeTagSystem( colorDefinitions ) {
 //    showMessage( "Added class " + $( this ).text() ) ;
   } ) ;
 
-  var uri = document.baseURI ;
+  var uri = location.href ;
   var activeTagsMatcher = uri.match( TAGS_REGEX ) ;
   var activeTags =
       activeTagsMatcher && activeTagsMatcher.length == 2 ?

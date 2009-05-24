@@ -49,16 +49,16 @@
   @T1 @T2
 == `H3.` Has T1 T2
 
-=== `H3.1.` Has no tag
+=== `H3.0.` Has no tag
 
   @T1
-=== `H3.2.` Has T1
+=== `H3.1.` Has T1
 
   @T2
-=== `H3.3.` Has T2
+=== `H3.2.` Has T2
 
   @T1 @T2
-=== `H3.4.` Has T1 T2
+=== `H3.3.` Has T1 T2
 
 
 

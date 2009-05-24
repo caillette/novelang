@@ -244,14 +244,18 @@
 
 
   <xsl:template name="tags" >
-    <ul class="tags" >
-      <xsl:for-each select="n:tag" >
-        <li>
-          <xsl:value-of select="." />
-        </li>
-      </xsl:for-each>
-    </ul>
-    <br/>
+
+    <xsl:if test="n:tag" >
+      <ul class="tags">
+        <xsl:for-each select="n:tag">
+          <li>
+            <xsl:value-of select="." />
+          </li>
+        </xsl:for-each>
+      </ul>
+      <br/>
+    </xsl:if>
+
   </xsl:template>
 
 

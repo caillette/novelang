@@ -24,6 +24,7 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
 import com.gargoylesoftware.htmlunit.UnexpectedPage;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
@@ -44,46 +45,54 @@ import novelang.loader.ResourceLoader;
 import novelang.rendering.RenditionMimeType;
 
 /**
- * Tests for Javascript-based interactive behavior. 
+ * Tests for Javascript-based interactive behavior.
+ * <p>
+ * Don't get impressed by this warning:
+ * <pre>
+  WARN  com.gargoylesoftware.htmlunit.html.HtmlPage - Obsolete content type encountered: 'text/javascript'.
+ </pre>
+ * The <code>text/javascript</code> type <em>is</em> to be
+ * <a href="http://en.wikipedia.org/wiki/Client-side_JavaScript#Environment" >preferred</a>.
  * 
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
 public class TagInteractionTest {
-
   @Test
   public void justLoadPage() throws IOException, InterruptedException {
-    assertEquals( 24, allHeaders.size() )  ;
-    verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
+    final List< HtmlElement > headers = getCurrentHeaders() ;
+    assertEquals( 24, headers.size() )  ;
+    verifyHidden( headers, ImmutableSet.< String >of() ) ;
   }
 
   @Test
   public void restrictToTag2() throws IOException, InterruptedException {
     tag2Checkbox.click() ;
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
-    verifyHidden( allHeaders, ImmutableSet.< String >of(
-        "H0.0.",
-        "H0.1.",
-        "H1.0.",
-        "H1.1.",
-        "H4.",
-        "H4.0",
-        "H5.",
-        "H5.1"
+    verifyHidden( getCurrentHeaders(), ImmutableSet.< String >of(
+        H0_0,
+        H0_1,
+        H1_0,
+        H1_1,
+        H4,
+        H4_0,
+        H5,
+        H5_1
     ) ) ;
   }
 
   @Test
   public void restrictToTag1() throws IOException, InterruptedException {
     tag1Checkbox.click() ;
+    LOG.info( "Just clicked on the checkbox. Let's see what happens" ) ;
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
-    verifyHidden( allHeaders, ImmutableSet.< String >of(
-        "H0.0.",
-        "H0.2.",
-        "H2.0.",
-        "H2.2.",
-        "H4.",
-        "H4.0"
+    verifyHidden( getCurrentHeaders(), ImmutableSet.< String >of(
+        H0_0,
+        H0_2,
+        H2_0,
+        H2_2,
+        H4,
+        H4_0
     ) ) ;
   }
 
@@ -93,7 +102,7 @@ public class TagInteractionTest {
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
     tag1Checkbox.click() ;
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
-    verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
+    verifyHidden( getCurrentHeaders(), ImmutableSet.< String >of() ) ;
   }
 
   @Test
@@ -102,7 +111,7 @@ public class TagInteractionTest {
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
     tag2Checkbox.click() ;
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
-    verifyHidden( allHeaders, ImmutableSet.< String >of() ) ;
+    verifyHidden( getCurrentHeaders(), ImmutableSet.< String >of() ) ;
   }
 
 
@@ -118,18 +127,19 @@ public class TagInteractionTest {
   }
 
   private static final int HTTP_DAEMON_PORT = 8081 ;
-  private static final int AJAX_TIMEOUT_MILLISECONDS = 10000;
+  private static final int AJAX_TIMEOUT_MILLISECONDS = 10000 ;
 
 
   private HttpDaemon httpDaemon ;
   private WebClient webClient ;
-  private List< HtmlElement > allHeaders;
   private HtmlCheckBoxInput tag1Checkbox;
   private HtmlCheckBoxInput tag2Checkbox;
 
 
   @Before
   public void before() throws Exception {
+    assertEquals( 24, ALL_HEADERS.size() ) ; 
+
     final String testName = NameAwareTestClassRunner.getTestName() ;
     File testDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory();
 
@@ -158,14 +168,16 @@ public class TagInteractionTest {
       public void statusMessageChanged( Page page, String s ) {
         collectedStatusMessages.add( s ) ;
       }
-    } );
+    } ) ;
     webClient.setAjaxController( new NicelyResynchronizingAjaxController() ) ;
+    webClient.setRedirectEnabled( true ) ;
     final Page page = webClient.getPage(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" +
         FilenameUtils.getBaseName( TaggedPart.TAGGED.getName() ) +
         "." + RenditionMimeType.HTML.getFileExtension()
     ) ;
-    if( page instanceof UnexpectedPage ) {
+    if( ! ( page instanceof HtmlPage ) ) {
+      LOG.error( "Got page of type %s", page.getClass().getName() ) ;
       final UnexpectedPage unexpectedPage = ( UnexpectedPage ) page ;
       LOG.error( "Unexpected page!" ) ;
       LOG.error( "  Staus message: %s", unexpectedPage.getWebResponse().getStatusMessage() ) ;
@@ -173,16 +185,11 @@ public class TagInteractionTest {
       LOG.error( "Page content:\n%s", unexpectedPage.getWebResponse().getContentAsString() ) ;
       fail( "Could not load the page." ) ;
     }
-    LOG.debug( "Got page of type %s", page.getClass().getName() );
     final HtmlPage htmlPage = HtmlPage.class.cast( page ) ;
 
     LOG.info( "Now the whole page should have finished loading and initializing." ) ;
     
     LOG.debug( "This is the HTML we got:\n\n%s\n", htmlPage.asXml() ) ;
-
-    allHeaders = Ordering.from( HTMLELEMENT_COMPARATOR ).
-        sortedCopy( extractAllHeaders( htmlPage ) );
-//    logHeaderVisibility( allHeaders ) ;
 
     final HtmlForm tagList = htmlPage.getFormByName( TaggedPart.TAGS_FORM_NAME ) ;
     tag1Checkbox = tagList.getInputByName( TaggedPart.TAG1 );
@@ -205,26 +212,38 @@ public class TagInteractionTest {
   }
 
   private static void verifyHidden(
-      Iterable< HtmlElement > htmlElements,
-      Set< String > headerTextStarts
+      Iterable< HtmlElement > documentElements,
+      Set< String > hiddenHeaders
   ) {
-    final Set< HtmlElement > elementsToBeVerified = Sets.newHashSet( htmlElements ) ;
     final Set< String > errors = Sets.newTreeSet() ;
-    for( String headerTextStart : headerTextStarts ) {
-      final HtmlElement htmlElement = findByTextStart( htmlElements, headerTextStart ) ;
-      LOG.debug( "Verifying hidden for header '%s'", headerTextStart ) ;
-      if( htmlElement.isDisplayed() ) {
-        errors.add( headerTextStart + " should be hidden") ;
+
+    final StringBuffer messageBuffer = new StringBuffer( "\n  | header | present | should be |" ) ;
+
+    for( String header : ALL_HEADERS ) {
+      final boolean shouldBePresent = ! hiddenHeaders.contains( header ) ;
+      final boolean isPresent = findByTextStart( documentElements, header ) != null ;
+
+      messageBuffer.append( "\n  | " ) ;
+      messageBuffer.append( String.format( "%-6s", header ) ) ;
+      messageBuffer.append( " | " ) ;
+      messageBuffer.append( String.format( "%-7b", isPresent ) ) ;
+      messageBuffer.append( " | " ) ;
+      messageBuffer.append( String.format( "%-9b", shouldBePresent ) ) ;
+      messageBuffer.append( " |" ) ;
+
+      if( isPresent ) {
+        if( ! shouldBePresent ) {
+          errors.add( String.format( "Header %s should be present", header ) ) ;
+        }
       } else {
-        elementsToBeVerified.remove( htmlElement ) ;
+        if( shouldBePresent ) {
+          errors.add( String.format( "Header %s should not be present", header ) ) ;
+        }
       }
     }
-    for( HtmlElement htmlElement : elementsToBeVerified ) {
-      LOG.debug( "Verifying visible for element '%s'", cleanTextContent( htmlElement ) ) ;
-      if( ! htmlElement.isDisplayed() ) {
-        errors.add( cleanTextContent( htmlElement ) + " should be displayed" ) ;
-      }
-    }
+
+    LOG.info( messageBuffer.toString() ) ;
+
     if( errors.size() > 0 ) {
       fail( errors.toString() ) ;
     }
@@ -240,8 +259,7 @@ public class TagInteractionTest {
         return htmlElement ;
       }
     }
-    fail( "Could not find element with text content starting with '" + textStart + "'" ) ;
-    throw new Error( "Should never happen" ) ;
+    return null ;
   }
 
   private static final Pattern MEANINGFUL_HEADER_TEXT = Pattern.compile( "(H\\d\\.(?:\\d\\.)?)" ) ;
@@ -257,21 +275,57 @@ public class TagInteractionTest {
     }
   }
 
-
-  private void logHeaderVisibility( List<HtmlElement> allHeaders ) {
-    for( HtmlElement header : allHeaders ) {
-      LOG.debug( "Header: %s displayed: %s", cleanTextContent( header ), header.isDisplayed() ) ;
-    }
+  private List< HtmlElement > getCurrentHeaders() {
+    final WebWindow webWindow = webClient.getCurrentWindow() ;
+    final HtmlPage htmlPage = ( HtmlPage ) webWindow.getEnclosedPage() ;
+    return Ordering.from( HTMLELEMENT_COMPARATOR ).sortedCopy( extractAllHeaders( htmlPage ) ) ;
   }
 
   private static final Comparator< HtmlElement > HTMLELEMENT_COMPARATOR =
-      new Comparator<HtmlElement>() {
+      new Comparator< HtmlElement >() {
         public int compare( HtmlElement e1, HtmlElement e2 ) {
           return cleanTextContent( e1 ).compareTo( cleanTextContent( e2 ) ) ;
         }
       }
   ;
 
+  private static final String H0   = "H0." ;
+  private static final String H0_0 = "H0.0." ;
+  private static final String H0_1 = "H0.1." ;
+  private static final String H0_2 = "H0.2." ;
+  private static final String H0_3 = "H0.3." ;
+  
+  private static final String H1   = "H1." ;
+  private static final String H1_0 = "H1.0." ;
+  private static final String H1_1 = "H1.1." ;
+  private static final String H1_2 = "H1.2." ;
+  private static final String H1_3 = "H1.3." ;
+  
+  private static final String H2   = "H2." ;
+  private static final String H2_0 = "H2.0." ;
+  private static final String H2_1 = "H2.1." ;
+  private static final String H2_2 = "H2.2." ;
+  private static final String H2_3 = "H2.3." ;
+  
+  private static final String H3   = "H3." ;
+  private static final String H3_0 = "H3.0." ;
+  private static final String H3_1 = "H3.1." ;
+  private static final String H3_2 = "H3.2." ;
+  private static final String H3_3 = "H3.3." ;
+  
+  private static final String H4 = "H4." ;
+  private static final String H4_0 = "H4.0." ;
+  
+  private static final String H5 = "H5." ;
+  private static final String H5_1 = "H5.1." ;
 
+  private static final Set< String > ALL_HEADERS = ImmutableSet.of(
+      H0, H0_0, H0_1, H0_2, H0_3,
+      H1, H1_0, H1_1, H1_2, H1_3,
+      H2, H2_0, H2_1, H2_2, H2_3,
+      H3, H3_0, H3_1, H3_2, H3_3,
+      H4, H4_0,
+      H5, H5_1
+  ) ;  
 
 }
