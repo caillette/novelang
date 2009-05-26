@@ -27,6 +27,7 @@
   <!ENTITY sourceforgeProject "http://sourceforge.net/projects/novelang" >
   <!ENTITY download           "http://sourceforge.net/project/showfiles.php?group_id=227480&amp;package_id=275418" >
   <!ENTITY github             "http://github.com/caillette/novelang/tree/master" >
+  <!ENTITY issues             "http://github.com/caillette/novelang/issues" >
   <!ENTITY pdfDocument        "http://novelang.sf.net/novelang.pdf" >
   <!ENTITY license            "http://www.gnu.org/licenses/gpl-3.0.txt" >
 
@@ -89,6 +90,7 @@
             <li><a href="&developersGroup;">Developers' list</a></li>
             <li><a href="&sourceforgeProject;">Sourceforge</a></li>
             <li><a href="&github;">Sources</a></li>
+            <li><a href="&issues;">Issue tracker</a></li>
             <li><a href="&download;">Download</a></li>
             <li><a href="&pdfDocument;">PDF</a></li>
             <li><a href="&license;">License</a></li>
