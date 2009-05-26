@@ -16,17 +16,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var lastColorClicked ;
+
 function initializeColorEdit() {
   $( "#editableColorDefinitions > dt" ).each( function() {
-    $( this ).css( "background-color", $( "strong", this ).text() ) ;
-    $( this ).css( "color", $( "em", this).text() ) ;
+    var backgroundColorName = getBackground( this ) ;
+    var foregroundColorName = getForeground( this ) ;
+    var color = this ;
+    setForeground( this, foregroundColorName ) ;
+    $( this ).css( "background-color", backgroundColorName ) ;
     $( this ).css( "border", "solid 1px " + $( "em", this ).text() ) ;
     $( this ).css( "padding", "4px 2px 1px 2px" ) ;
+
+    $( this ).click( function( event ) {
+      if( event.altKey ) {
+//        showMessage( "alt-clicked on " + backgroundColorName +
+//            " ; last clicked : " + getBackground( lastColorClicked ) ) ;
+        if( lastColorClicked ) {
+          setForeground( lastColorClicked, getBackground( color ) ) ;
+        }
+      } else {
+//        showMessage( "clicked on " + backgroundColorName ) ;
+        lastColorClicked = color ;
+      }
+    } ) ;
+
   } ) ;
 
   $( "#editableColorDefinitions > dt > em" ).each( function() {
     $( this ).hide() ;
   } ) ;
+}
+
+function getBackground( colorElement ) {
+  return $( "strong", colorElement ).text() ;
+}
+
+function getForeground( colorElement ) {
+  return $( "em", colorElement ).text() ;
+}
+
+function setForeground( colorElement, colorName ) {
+  $( colorElement ).css( "color", colorName ) ;
+  $( "em", colorElement ).text( colorName ) ;
 }
 
 

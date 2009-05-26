@@ -6,10 +6,10 @@
 
 <head>
 
-  <script type="text/javascript" src="jquery-1_3_2_min.js"></script>
-  <script type="text/javascript" src="jquery-ui-1_7_1_custom_min.js"></script>
-  <script type="text/javascript" src="save-page.js"></script>
-  <script type="text/javascript" src="color-edit.js"></script>
+  <script type="text/javascript" src="jquery-1_3_2_min.js" ></script>
+  <script type="text/javascript" src="jquery-ui-1_7_1_custom_min.js" ></script>
+  <script type="text/javascript" src="save-page.js" ></script>
+  <script type="text/javascript" src="color-edit.js" ></script>
 
   <style type="text/css">
     #editableColorDefinitions {
@@ -40,6 +40,10 @@
     $( document ).ready( function() {
         $( "#editableColorDefinitions" ).sortable( { } ) ;
       initializeColorEdit() ;
+
+
+      
+//      showMessage( "Initialization complete." ) ;
     } ) ;
 
     function showMessage( message ) {
@@ -53,12 +57,16 @@
 <body>
 
   <p>
-    Drag colors and create a list where first colors have strongest difference.
+    Drag colors and create a list where first colors have strongest difference.<br/>
+    To change a foreground, left-click on a color, then alt-click on another color.<br/>
     Then click on "save" to persist the list.    
   </p>
 
   <!-- The really useful stuff is here -->
   <dl id="editableColorDefinitions" >
+
+
+
 
 
 
@@ -155,7 +163,7 @@
 <dt><strong>mediumseagreen</strong><em>black</em></dt>
 <dt><strong>mediumturquoise</strong><em>black</em></dt>
 <dt><strong>mediumvioletred</strong><em>yellow</em></dt>
-<dt><strong>midnightblue</strong><em>white</em></dt>
+<dt><strong>midnightblue</strong><em>yellow</em></dt>
 <dt><strong>mintcream</strong><em>black</em></dt>
 <dt><strong>mistyrose</strong><em>black</em></dt>
 <dt><strong>moccasin</strong><em>black</em></dt>
@@ -207,6 +215,9 @@
 <dt><strong>steelblue</strong><em>black</em></dt>
 
 <!-- END-MODIFIABLE-ZONE -->
+
+
+
 
 
 
