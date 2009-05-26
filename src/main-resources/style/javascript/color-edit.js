@@ -30,13 +30,10 @@ function initializeColorEdit() {
 
     $( this ).click( function( event ) {
       if( event.altKey ) {
-//        showMessage( "alt-clicked on " + backgroundColorName +
-//            " ; last clicked : " + getBackground( lastColorClicked ) ) ;
         if( lastColorClicked ) {
           setForeground( lastColorClicked, getBackground( color ) ) ;
         }
       } else {
-//        showMessage( "clicked on " + backgroundColorName ) ;
         lastColorClicked = color ;
       }
     } ) ;
