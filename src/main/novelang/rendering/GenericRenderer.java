@@ -104,19 +104,25 @@ public class GenericRenderer implements Renderer {
         fragmentWriter.end( newPath ) ;
         break ;
 
+
+      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS :
+      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS :
+        writeLiteral(
+            fragmentWriter,
+            newPath,
+            Spaces.normalizeHardLiteral( tree.getChildAt( 0 ).getText() )
+        ) ;
+        break ;
+
       case URL_LITERAL :
       case TAG :
       case _WORD_COUNT :
       case _STYLE :
       case LINES_OF_LITERAL :
-      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS :
-      case BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS :
       case _IMAGE_WIDTH:
       case _IMAGE_HEIGHT:
-        fragmentWriter.start( newPath, false ) ;
         final SyntacticTree literalTree = tree.getChildAt( 0 ) ;
-        fragmentWriter.writeLiteral( newPath, literalTree.getText() ); ;
-        fragmentWriter.end( newPath ) ;
+        writeLiteral( fragmentWriter, newPath, literalTree.getText() ) ;
         break ;
 
       case RESOURCE_LOCATION:
@@ -160,6 +166,16 @@ public class GenericRenderer implements Renderer {
 
   }
 
+  private static void writeLiteral(
+      FragmentWriter fragmentWriter,
+      Nodepath newPath,
+      String literal
+  ) throws Exception {
+    fragmentWriter.start( newPath, false ) ;
+    fragmentWriter.writeLiteral( newPath, literal ) ;
+    fragmentWriter.end( newPath ) ;
+  }
+
   private Nodepath createNodepath( Nodepath kinship, NodeKind kind ) {
     return null == kinship ? new Nodepath( kind ) : new Nodepath( kinship, kind );
   }
@@ -182,7 +198,7 @@ public class GenericRenderer implements Renderer {
       NodeKind previous,
       NodeKind nodeKind
   ) throws Exception {
-    if( WhitespaceTrigger.isTrigger( previous, nodeKind ) ) {
+    if( Spaces.isTrigger( previous, nodeKind ) ) {
       fragmentWriter.write( path, whitespace ) ;
     }
   }

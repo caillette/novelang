@@ -22,13 +22,14 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
+import novelang.common.SyntacticTree;
 
 /**
- * Determines when a whitespace should be added between two Nodes of known type.
+ * Handles tricky rules about inserting spaces at the right place.
  * 
  * @author Laurent Caillette
  */
-public class WhitespaceTrigger {
+public class Spaces {
 
   private static final Set< Sequence > SEQUENCES = Sets.newHashSet() ;
   static {
@@ -101,6 +102,28 @@ public class WhitespaceTrigger {
     add( _URL, WORD_ ) ;
   }
 
+
+// =====================
+// Literal normalization
+// =====================
+
+  public static final char ZERO_WIDTH_SPACE = '\u200b' ;
+  public static final char NO_BREAK_SPACE = '\u00a0' ;
+
+  public static String normalizeSoftLiteral( String rawLiteral ) {
+    return rawLiteral.trim() ;
+  }
+  public static String normalizeHardLiteral( String rawLiteral ) {
+    String s = normalizeSoftLiteral( rawLiteral ) ;
+    s = s.replaceAll( " +", "" + ZERO_WIDTH_SPACE ) ;
+    return s ;
+  }
+
+
+// ============
+// Boring stuff
+// ============
+
   private static void add( NodeKind nodeKind1, NodeKind nodeKind2 ) {
     SEQUENCES.add( new Sequence( nodeKind1, nodeKind2 ) ) ;
   }
@@ -133,27 +156,32 @@ public class WhitespaceTrigger {
     }
 
 
-    public boolean equals( Object other ) {
-      if( this == other ) {
+    @Override
+    public boolean equals( Object o ) {
+      if( this == o ) {
         return true;
       }
-
-      if( null == other ) {
-        return false ;
+      if( o == null || getClass() != o.getClass() ) {
+        return false;
       }
 
-      final Sequence sequence = ( Sequence ) other ;
-      return
-          first == sequence.first &&
-          second == sequence.second
-      ;
+      Sequence sequence = ( Sequence ) o;
+
+      if( first != sequence.first ) {
+        return false;
+      }
+      if( second != sequence.second ) {
+        return false;
+      }
+
+      return true;
     }
 
+    @Override
     public int hashCode() {
-      return
-          ( null == first ? 0 : first.hashCode() * 31 ) +
-          ( null == second ? 0 : second.hashCode() )
-      ;
+      int result = first != null ? first.hashCode() : 0;
+      result = 31 * result + ( second != null ? second.hashCode() : 0 );
+      return result;
     }
   }
 
