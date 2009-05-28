@@ -1775,6 +1775,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | HYPHEN_MINUS
       | LEFT_CURLY_BRACKET
       | LEFT_PARENTHESIS
+      | LEFT_SINGLE_QUOTATION_MARK
       | LEFT_SQUARE_BRACKET
       | LESS_THAN_SIGN
       | LOW_LINE
@@ -1783,8 +1784,10 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | PLUS_SIGN
       | PERCENT_SIGN
       | QUESTION_MARK
+      | REVERSE_SOLIDUS
       | RIGHT_CURLY_BRACKET
       | RIGHT_PARENTHESIS
+      | RIGHT_SINGLE_QUOTATION_MARK
       | RIGHT_SQUARE_BRACKET
       | SECTION_SIGN
       | SEMICOLON
@@ -2086,6 +2089,8 @@ RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00bb' ; // &raquo;
 SECTION_SIGN : '\u00a7' ; // &sect;
 SEMICOLON : ';' ;
 SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK : '\u2039' ;  // &lsaquo;
+LEFT_SINGLE_QUOTATION_MARK : '\u2019' ;                 // &rsquo;
+RIGHT_SINGLE_QUOTATION_MARK : '\u2018' ;                // &lsquo;
 SINGLE_RIGHT_POINTING_ANGLE_QUOTATION_MARK : '\u203a' ; // &rsaquo;
 SOLIDUS : '/' ;
 TILDE : '~' ;
