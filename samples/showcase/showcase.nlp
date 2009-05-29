@@ -47,7 +47,7 @@ Some soft inline literal inside `aeiouè §!"&@#°) «laquo».$*^.0` a paragraph
 Inline literal has leading and trailing whitespaces trimmed. Whitespaces inside are "collapsed"
 (several consecutive ones become one) and remaining spaces become no-break spaces.
 ``  This  is  a  sample  of  a  very  long  literal   block.  ``
-``  Let's   see  if   no-break  spaces   avoid  line  break. ``
+``  Let's   see  if   no break  spaces   avoid  line  break. ``
 
 
 == More stuff
