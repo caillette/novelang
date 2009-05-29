@@ -17,11 +17,15 @@
 
 package novelang.rendering;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.Assert;
 import org.apache.commons.lang.StringEscapeUtils;
 import novelang.system.LogFactory;
 import novelang.system.Log;
+import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Tests for {@link Spaces}.
@@ -40,8 +44,9 @@ public class SpacesTest {
     verifyHard( "x", " x  " ) ;
   }
 
+  @Test
   public void replaceByNoBreakSpaces() {
-    verifyHard( "x" + Spaces.NO_BREAK_SPACE + "y" + Spaces.NO_BREAK_SPACE, "x  y  z" ) ;
+    verifyHard( "x" + Spaces.NO_BREAK_SPACE + "y" + Spaces.NO_BREAK_SPACE + "z", "x  y  z" ) ;
   }
 
 
@@ -49,13 +54,10 @@ public class SpacesTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( SpacesTest.class ) ;
-
   private static void verifyHard( String expected, String toBeNormalized ) {
-    LOG.debug( "Expected: '" + StringEscapeUtils.escapeJava( expected ) ) ;
-    final String normalized = Spaces.normalizeHardLiteral( toBeNormalized ) ;
-    LOG.debug( "Normalized: '" + StringEscapeUtils.escapeJava( normalized ) ) ;
+    final String normalized = Spaces.normalizeLiteral( toBeNormalized ) ;
     Assert.assertEquals( expected, normalized ) ;
   }
+
 
 }

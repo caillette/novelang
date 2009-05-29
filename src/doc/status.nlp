@@ -15,6 +15,11 @@ http://novelang.blogspot.com
 
 === Version `0.29.0`
 
+//This version introduces changes that may break existing documents.//
+
+--- Better handling of spaces inside blocks of literal (trimming, collapsing, replacing by
+no-break spaces).
+
 --- Added the "color palette editor"
 http://novelang.blogspot.com/2009/05/pretty-color-palette-for-tags.html
 

@@ -245,6 +245,18 @@ With Novelang default stylesheet, such text is rendered as normal text:
 Almost `4ny- ch@rac7er 0.0.0 "'&#^> / *`
 >>>
 
+Spaces are handled in a special manner:
+- Leading and trailing spaces are trimmed.
+- Consecutive spaces between two characters are collapsed into one single space.
+- Spaces are replaced by no-break spaces.
+
+With the low line character ``_`` figuring a no-break space, here is an example of the replacement
+which occurs:
+
+<<<
+`  foo   bar ` becomes `foo_bar`
+>>>
+
 
 === Block of literal inside grave accent pairs
 
@@ -260,6 +272,7 @@ With Novelang default stylesheet, such text is rendered as monospaced text:
 Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
 >>>
 
+Spaces are handled the same way as with block of literal inside grave accents.
 
 
 === Paragraphs inside angled bracket pairs

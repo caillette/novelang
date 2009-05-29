@@ -22,7 +22,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
-import novelang.common.SyntacticTree;
 
 /**
  * Handles tricky rules about inserting spaces at the right place.
@@ -110,12 +109,9 @@ public class Spaces {
   public static final char ZERO_WIDTH_SPACE = '\u200b' ;
   public static final char NO_BREAK_SPACE = '\u00a0' ;
 
-  public static String normalizeSoftLiteral( String rawLiteral ) {
-    return rawLiteral.trim() ;
-  }
-  public static String normalizeHardLiteral( String rawLiteral ) {
-    String s = normalizeSoftLiteral( rawLiteral ) ;
-    s = s.replaceAll( " +", "" + ZERO_WIDTH_SPACE ) ;
+  public static String normalizeLiteral( String rawLiteral ) {
+    String s = rawLiteral.trim();
+    s = s.replaceAll( " +", "" + NO_BREAK_SPACE ) ;
     return s ;
   }
 

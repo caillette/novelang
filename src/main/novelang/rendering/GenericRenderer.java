@@ -110,7 +110,7 @@ public class GenericRenderer implements Renderer {
         writeLiteral(
             fragmentWriter,
             newPath,
-            Spaces.normalizeHardLiteral( tree.getChildAt( 0 ).getText() )
+            Spaces.normalizeLiteral( tree.getChildAt( 0 ).getText() )
         ) ;
         break ;
 

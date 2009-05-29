@@ -68,6 +68,7 @@ public class RenderingEscape {
     put( '<', "lt", preferredEscapes, htmlMandatoryEscapes ) ;
     put( '>', "gt", preferredEscapes, htmlMandatoryEscapes ) ;
     put( '&', "amp", preferredEscapes, htmlMandatoryEscapes ) ;
+    put( Spaces.NO_BREAK_SPACE, "nbsp", preferredEscapes, htmlMandatoryEscapes ) ;
 
     UNICODE_NAME_ESCAPES = ImmutableMap.copyOf( unicodeNameEscapes ) ;
     LOG.debug(
