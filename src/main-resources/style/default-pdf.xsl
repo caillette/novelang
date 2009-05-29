@@ -228,6 +228,19 @@
     <fo:inline
         font-family="monospace"
         font-size="10pt"
+        white-space-treatment="preserve"
+        white-space-collapse="false"
+        linefeed-treatment="preserve"
+    >
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+
+  <xsl:template match="n:block-of-literal-inside-grave-accents" >
+    <fo:inline
+        white-space-treatment="preserve"
+        white-space-collapse="false"
+        linefeed-treatment="preserve"
     >
       <xsl:apply-templates/>
     </fo:inline>
