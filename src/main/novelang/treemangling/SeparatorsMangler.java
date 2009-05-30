@@ -20,7 +20,6 @@ import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
-import com.google.common.base.Function;
 
 /**
  * @author Laurent Caillette
@@ -33,6 +32,17 @@ public final class SeparatorsMangler {
   public static SyntacticTree removeSeparators( SyntacticTree tree ) {
     return removeSeparators( Treepath.create( tree ) ).getTreeAtEnd() ;
   }
+
+  /**
+   * Transforms {@link NodeKind#WHITESPACE_} and {@link NodeKind#LINE_BREAK_} nodes between
+   * two blocks of literal into a {@link NodeKind#_ZERO_WIDTH_SPACE}.
+   */
+  public static Treepath< SyntacticTree > addMandatoryWhitespace(
+      Treepath< SyntacticTree > treepath
+  ) {
+    throw new UnsupportedOperationException( "addMandatoryWhitespace" ) ;
+  }
+
 
   public static Treepath< SyntacticTree > removeSeparators( Treepath< SyntacticTree > treepath ) {
     int index = 0 ;
@@ -48,12 +58,13 @@ public final class SeparatorsMangler {
     }
     return treepath ;
   }
-  
-  public static Function< ? super SyntacticTree, ? extends SyntacticTree > FUNCTION = 
-      new Function< SyntacticTree, SyntacticTree >() {
-        public SyntacticTree apply( SyntacticTree syntacticTree ) {
-          return removeSeparators( syntacticTree ) ;
-        }
-      }
-  ;
+
+
+  private enum LITERAL_STATE {
+    GRAVE_ACCENTS_1,
+    GRAVE_ACCENT_PAIRS_1,
+    SEPARATOR,
+    GRAVE_ACCENTS_2,
+    GRAVE_ACCENT_PAIRS_2
+  }
 }

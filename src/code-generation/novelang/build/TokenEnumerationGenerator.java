@@ -62,9 +62,6 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   private static final Map< TokenProperty, String > TAG_SCOPE =
       ImmutableMap.of( TokenProperty.TAG_BEHAVIOR, TagBehavior.SCOPE.name() ) ;
 
-  private static final Map< TokenProperty, String > TAG_TERMINAL =
-      ImmutableMap.of( TokenProperty.TAG_BEHAVIOR, TagBehavior.TERMINAL.name() ) ;
-
   private static final Map< TokenProperty, String > TAG_TRAVERSABLE =
       ImmutableMap.of( TokenProperty.TAG_BEHAVIOR, TagBehavior.TRAVERSABLE.name() ) ;
 
@@ -86,7 +83,8 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_IMAGE_WIDTH" ),
       new Item( "_IMAGE_HEIGHT" ),
       new Item( "_URL" ),
-      new Item( "_PLACEHOLDER_" )
+      new Item( "_PLACEHOLDER_" ),
+      new Item( "_ZERO_WIDTH_SPACE" )
   ) ;
 
   private static final Pattern ALL_TOKENS_PATTERN =

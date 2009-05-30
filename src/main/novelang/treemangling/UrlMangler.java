@@ -209,15 +209,6 @@ public class UrlMangler {
 
   private static State evaluate(
       SyntacticTree tree,
-      NodeKind nodeKind,
-      State positive,
-      State negative
-  ) {
-    return evaluate( tree, kinds( nodeKind ), positive, negative ) ;
-  }
-
-  private static State evaluate(
-      SyntacticTree tree,
       NodeKind[] nodeKinds,
       State positive,
       State negative
