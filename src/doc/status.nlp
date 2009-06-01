@@ -20,6 +20,8 @@ http://novelang.blogspot.com
 --- Better handling of spaces inside blocks of literal (trimming, collapsing, replacing by
 no-break spaces).
 
+--- Consecutive blocks of literal get a zero-width space automatically inserted inbetween.
+
 --- Added the "color palette editor"
 http://novelang.blogspot.com/2009/05/pretty-color-palette-for-tags.html
 

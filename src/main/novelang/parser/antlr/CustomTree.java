@@ -18,6 +18,7 @@
 package novelang.parser.antlr;
 
 import java.util.List;
+import java.util.Set;
 
 import org.antlr.runtime.ClassicToken;
 import org.antlr.runtime.Token;
@@ -62,6 +63,15 @@ public class CustomTree
   }
 
   public boolean isOneOf( NodeKind... kinds ) {
+    for( NodeKind kind : kinds ) {
+      if( kind.isRoot( this ) ) {
+        return true ;
+      }
+    }
+    return false ;
+  }
+
+  public boolean isOneOf( Set< NodeKind > kinds ) {
     for( NodeKind kind : kinds ) {
       if( kind.isRoot( this ) ) {
         return true ;

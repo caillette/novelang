@@ -84,6 +84,13 @@ public class TreeFixture {
   }
 
   public static void assertEqualsWithSeparators(
+      SyntacticTree expected,
+      SyntacticTree actual
+  ) {
+    assertEqualsWithSeparators( Treepath.create( expected ), Treepath.create( actual ) ) ;
+  }
+  
+  public static void assertEqualsWithSeparators(
       Treepath< SyntacticTree > expected,
       Treepath< SyntacticTree > actual
   ) {

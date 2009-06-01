@@ -25,6 +25,8 @@ import novelang.common.tree.ImmutableTree;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
 
+import java.util.Set;
+
 /**
  * Specific immplementation of a {@link novelang.common.tree.Tree}.
  * 
@@ -99,6 +101,22 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
   }
 
   public boolean isOneOf( NodeKind... kinds ) {
+    if( NodeKindTools.rootHasNodeKindName( this ) ) {
+      for( NodeKind kind : kinds ) {
+        if( getText().equals( kind.name() ) ) {
+          return true ;
+        }
+      }
+    }
+    return false ;
+  }
+
+  /**
+   * Is is possible to remove this kind of duplicate code?
+   * 
+   * @see #isOneOf(novelang.parser.NodeKind[]) 
+   */
+  public boolean isOneOf( Set< NodeKind > kinds ) {
     if( NodeKindTools.rootHasNodeKindName( this ) ) {
       for( NodeKind kind : kinds ) {
         if( getText().equals( kind.name() ) ) {

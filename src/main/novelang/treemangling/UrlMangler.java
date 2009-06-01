@@ -23,6 +23,8 @@ import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 
+import java.util.Set;
+
 /**
  * Wraps {@link NodeKind#URL_LITERAL} nodes into {@link NodeKind#_URL} ones, adding
  * preceding {@link NodeKind#BLOCK_INSIDE_DOUBLE_QUOTES}.
@@ -54,7 +56,7 @@ public class UrlMangler {
         case OUTSIDE_PARAGRAPH:
           state = evaluate(
               tree,
-              PARAGRAPH_NODEKINDS,
+              TreeManglingConstants.PARAGRAPH_NODEKINDS.toArray(  ),
               State.INSIDE_PARAGRAPH,
               State.OUTSIDE_PARAGRAPH
           ) ;
@@ -66,7 +68,7 @@ public class UrlMangler {
         case INSIDE_PARAGRAPH :
           state = evaluate( 
               tree,
-              CANDIDATE_NAME_NODEKINDS,
+              TreeManglingConstants.CANDIDATE_URL_NAME_NODEKINDS,
               State.CANDIDATE_URL_NAME,
               evaluate( tree, URL_LITERAL, State.URL )
           ) ;
@@ -78,7 +80,7 @@ public class UrlMangler {
         case CANDIDATE_URL_NAME :
           state = evaluate(
               tree,
-              SEPARATOR_NODEKINDS,       // Loop on this state
+              TreeManglingConstants.SEPARATOR_NODEKINDS,       // Loop on this state
               State.CANDIDATE_URL_NAME,  // if separators.
               evaluate( tree, URL_LITERAL, State.URL )
           ) ;              
@@ -106,7 +108,7 @@ public class UrlMangler {
       result = current ;
       if( State.CANDIDATE_URL_NAME == state
        || current.getTreeAtEnd().isOneOf( _URL ) 
-       || tree.isOneOf( SKIPPED_NODEKINDS )
+       || tree.isOneOf( TreeManglingConstants.SKIPPED_NODEKINDS_FOR_URLMANGLER )
       ) {
         current = TreepathTools.getNextUpInPreorder( current ) ;
       } else {
@@ -136,34 +138,6 @@ public class UrlMangler {
     return result.getStart() ;
   }
 
-  private static final NodeKind[] PARAGRAPH_NODEKINDS = new NodeKind[] {
-      PARAGRAPH_REGULAR, 
-      PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_
-  } ;
-  
-  private static final NodeKind[] CANDIDATE_NAME_NODEKINDS = new NodeKind[] {
-      BLOCK_INSIDE_DOUBLE_QUOTES,
-      BLOCK_INSIDE_SQUARE_BRACKETS
-  } ;
-
-  private static final NodeKind[] SEPARATOR_NODEKINDS = new NodeKind[] {
-      WHITESPACE_,
-      LINE_BREAK_
-  } ;
-
-  private static final NodeKind[] SKIPPED_NODEKINDS = new NodeKind[] {
-      WHITESPACE_,  // Avoid trapping inside "  " it contains
-      WORD_,
-      CELL_ROWS_WITH_VERTICAL_LINE,
-      RASTER_IMAGE,
-      VECTOR_IMAGE,
-      BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-      LEVEL_INTRODUCER_INDENT_,
-      LINES_OF_LITERAL,
-      RESOURCE_LOCATION
-  } ;
-  
-  
 
   /**
    * Replaces the {@link NodeKind#URL_LITERAL} node at the end of the treepath by a 
@@ -210,6 +184,15 @@ public class UrlMangler {
   private static State evaluate(
       SyntacticTree tree,
       NodeKind[] nodeKinds,
+      State positive,
+      State negative
+  ) {
+    return tree.isOneOf( nodeKinds ) ? positive : negative ;
+  }
+
+  private static State evaluate(
+      SyntacticTree tree,
+      Set< NodeKind > nodeKinds,
       State positive,
       State negative
   ) {

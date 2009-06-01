@@ -21,6 +21,8 @@ import novelang.common.tree.StorageTypeProvider;
 import novelang.common.tree.Tree;
 import novelang.parser.NodeKind;
 
+import java.util.Set;
+
 /**
  * Narrows the contract of an Abstract Syntax Tree.
  *
@@ -39,6 +41,8 @@ public interface SyntacticTree
   String toStringTree() ;
 
   boolean isOneOf( NodeKind... nodeKind ) ;
+  
+  boolean isOneOf( Set< NodeKind > nodeKinds ) ;
 
   Iterable< ? extends SyntacticTree> getChildren() ;
 }

@@ -49,6 +49,10 @@ Inline literal has leading and trailing whitespaces trimmed. Whitespaces inside 
 ``  This  is  a  sample  of  a  very  long  literal   block.  ``
 ``  Let's   see  if   no break  spaces   avoid  line  break. ``
 
+Two consecutive blocks of literal (with no whitespace nor line break between) are rendered with
+ a zero-width space inbetween.
+``Aaaaaaa````Bbbbbb````Ccccccc````Ddddddd````Eeeeee````Fffffff````Ggggggg````Hhhhhh````Iiiiii````Jjjjjj````Kkkkkkk````Lllllllll````Mmmmmm````Nnnnnn````Oooooo````Ppppppp``
+
 
 == More stuff
 

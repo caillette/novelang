@@ -39,9 +39,10 @@ public final class SeparatorsManglerTest {
         PARAGRAPH_REGULAR,
         WHITESPACE_,
         BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
-        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
+        PARAGRAPH_REGULAR,
+        WHITESPACE_,
         BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
-    ) ;
+        ) ;
     verifyMandatoryWhitespaceAddition(
         tree,
         tree
@@ -60,7 +61,6 @@ public final class SeparatorsManglerTest {
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
-            WHITESPACE_,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
         )
     ) ;
@@ -78,7 +78,6 @@ public final class SeparatorsManglerTest {
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-            WHITESPACE_,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
         )
     ) ;
@@ -93,14 +92,15 @@ public final class SeparatorsManglerTest {
             _ZERO_WIDTH_SPACE,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
             _ZERO_WIDTH_SPACE,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+            _ZERO_WIDTH_SPACE,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
         ),
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-            WHITESPACE_,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-            LINE_BREAK_,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
         )
     ) ;
@@ -115,14 +115,15 @@ public final class SeparatorsManglerTest {
             _ZERO_WIDTH_SPACE,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
             _ZERO_WIDTH_SPACE,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
+            _ZERO_WIDTH_SPACE,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
         ),
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
-            WHITESPACE_,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
-            LINE_BREAK_,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
         )
     ) ;
@@ -141,11 +142,8 @@ public final class SeparatorsManglerTest {
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-            WHITESPACE_,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
-            WHITESPACE_,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-            WHITESPACE_,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
         )
     ) ;
@@ -163,13 +161,12 @@ public final class SeparatorsManglerTest {
       SyntacticTree actualTree
   ) {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
-    final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
-    final Treepath< SyntacticTree > rehierarchized =
-        SeparatorsMangler.addMandatoryWhitespace( Treepath.create( actualTree ) ) ;
+    final SyntacticTree rehierarchized =
+        SeparatorsMangler.addZeroWidthSpaceBetweenBlocksOfLiteral( Treepath.create( actualTree ) ).getTreeAtEnd() ;
 
     TreeFixture.assertEqualsWithSeparators(
-        expectedTreepath,
+        expectedTree,
         rehierarchized
     ) ;
 

@@ -32,6 +32,8 @@
   <xsl:template match="n:block-inside-square-brackets" >[<xsl:apply-templates/>]</xsl:template>
 
   <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
+  
+  <xsl:template match="n:zero-width-space" >&#x200b;</xsl:template>
 
   <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>

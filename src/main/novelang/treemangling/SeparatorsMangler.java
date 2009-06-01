@@ -17,14 +17,22 @@
 package novelang.treemangling;
 
 import novelang.common.SyntacticTree;
+import novelang.common.SimpleTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
+import novelang.parser.NodeKindTools;
+import static novelang.parser.NodeKind.*;
 
 /**
  * @author Laurent Caillette
  */
 public final class SeparatorsMangler {
+
+// ==================  
+// Whitespace removal
+// ==================  
+  
   /**
    * Removes {@link novelang.parser.NodeKind#WHITESPACE_} and {@link novelang.parser.NodeKind#LINE_BREAK_}
    * tokens in order to ease comparison.
@@ -32,18 +40,7 @@ public final class SeparatorsMangler {
   public static SyntacticTree removeSeparators( SyntacticTree tree ) {
     return removeSeparators( Treepath.create( tree ) ).getTreeAtEnd() ;
   }
-
-  /**
-   * Transforms {@link NodeKind#WHITESPACE_} and {@link NodeKind#LINE_BREAK_} nodes between
-   * two blocks of literal into a {@link NodeKind#_ZERO_WIDTH_SPACE}.
-   */
-  public static Treepath< SyntacticTree > addMandatoryWhitespace(
-      Treepath< SyntacticTree > treepath
-  ) {
-    throw new UnsupportedOperationException( "addMandatoryWhitespace" ) ;
-  }
-
-
+  
   public static Treepath< SyntacticTree > removeSeparators( Treepath< SyntacticTree > treepath ) {
     int index = 0 ;
     while( index < treepath.getTreeAtEnd().getChildCount() ) {
@@ -59,12 +56,56 @@ public final class SeparatorsMangler {
     return treepath ;
   }
 
+  
+// =========================
+// Zero-width space addition  
+// =========================
+  
+  private static final SimpleTree ZERO_WIDTH_SPACE_TREE = new SimpleTree( _ZERO_WIDTH_SPACE );
 
-  private enum LITERAL_STATE {
-    GRAVE_ACCENTS_1,
-    GRAVE_ACCENT_PAIRS_1,
-    SEPARATOR,
-    GRAVE_ACCENTS_2,
-    GRAVE_ACCENT_PAIRS_2
+  /**
+   * Inserts a {@link NodeKind#_ZERO_WIDTH_SPACE} between two consecutive blocks of literal.
+   */
+  public static Treepath< SyntacticTree > addZeroWidthSpaceBetweenBlocksOfLiteral(
+      Treepath< SyntacticTree > treepath
+  ) {
+    final SyntacticTree tree = treepath.getTreeAtEnd() ;
+    if( tree.isOneOf( 
+        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, 
+        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS 
+    ) ) {
+      treepath = insertIfNextIsExactSibling( treepath, ZERO_WIDTH_SPACE_TREE ) ;
+    } else if( ! tree.isOneOf( TreeManglingConstants.NON_TRAVERSABLE_NODEKINDS ) ){
+      int childIndex = 0 ;
+      while( true ) {
+        if( childIndex < treepath.getTreeAtEnd().getChildCount() ) {
+          treepath = addZeroWidthSpaceBetweenBlocksOfLiteral( 
+              Treepath.create( treepath, childIndex ) ).getPrevious() ;
+          childIndex++ ;
+        } else {
+          break ;
+        }        
+      }      
+    }
+    return treepath ;
   }
+  
+  private static Treepath< SyntacticTree > insertIfNextIsExactSibling( 
+      Treepath< SyntacticTree > treepath,
+      SyntacticTree insert
+  ) {
+    final NodeKind siblingNodeKind = NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
+    if( TreepathTools.hasNextSibling( treepath ) ) {
+      final Treepath< SyntacticTree > nextSibling = TreepathTools.getNextSibling( treepath ) ;
+      if( NodeKindTools.ofRoot( nextSibling.getTreeAtEnd() ) == siblingNodeKind ) {
+        final Treepath< SyntacticTree > afterInsert = TreepathTools.addChildAt( 
+            treepath.getPrevious(), insert, nextSibling.getIndexInPrevious() ) ;
+        return afterInsert ;
+//        return TreepathTools.getNextSibling( afterInsert ) ;
+      }
+    } 
+    return treepath ;
+  }
+
+
 }

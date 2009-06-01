@@ -249,12 +249,15 @@ Spaces are handled in a special manner:
 - Leading and trailing spaces are trimmed.
 - Consecutive spaces between two characters are collapsed into one single space.
 - Spaces are replaced by no-break spaces.
+- For two consecutive blocks of literal (with no line break nor whitespace), a zero-width space
+gets inserted.
 
-With the low line character ``_`` figuring a no-break space, here is an example of the replacement
-which occurs:
+With the low line character ``_`` figuring a no-break space and the vertical bar character ``|``
+figuring a zero-width space, here are some examples of space handling:
 
 <<<
 `  foo   bar ` becomes `foo_bar`
+`Xxxx``Yyyy`   becomes `Xxxx`|`Yyyy`
 >>>
 
 
