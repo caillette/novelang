@@ -57,6 +57,7 @@ public class TestResources {
   public static final String NO_CHAPTER = PARTS_DIR + "/no-chapter.nlp";
   public static final String SIMPLE_STRUCTURE = PARTS_DIR + "/simple-structure.nlp";
   public static final String BROKEN_CANNOTPARSE = PARTS_DIR + "/broken-cannotparse.nlp";
+  public static final String MISSING_IMAGES = PARTS_DIR + "/missing-images.nlp";
 
 
   public static final String SCANNED_DIR = "/scanned" ;

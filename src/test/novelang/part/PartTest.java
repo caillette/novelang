@@ -20,6 +20,7 @@ package novelang.part;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
@@ -28,6 +29,8 @@ import org.junit.Test;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
@@ -35,6 +38,7 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.SourceUnescape;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
+import com.google.common.collect.Lists;
 
 /**
  * @author Laurent Caillette
@@ -68,6 +72,17 @@ public class PartTest {
 
     TreeFixture.assertEqualsNoSeparators( expected, partTree ) ;
     Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+  }
+
+  @Test
+  public void partWithMissingImagesHasProblem() throws IOException {
+    final Part part = new Part( missingImagesFile ) ;
+    part.relocateResourcePaths( missingImagesFile.getParentFile() ) ;
+    Assert.assertTrue( part.hasProblem() ) ;
+    final List< Problem > problems = Lists.newArrayList( part.getProblems() ) ;
+    LOG.debug( "Got problems: %s", problems ) ;
+    Assert.assertEquals( 2, problems.size() ) ;
+
   }
 
   @Test
@@ -175,9 +190,13 @@ public class PartTest {
 // Fixture
 // =======
 
+  private static final Log LOG = LogFactory.getLog( PartTest.class ) ;
+
   private File justSections;
   private File messyIdentifiersFile ;
   private File simpleStructureFile ;
+  private File missingImagesFile ;
+
 
   @Before
   public void setUp() throws IOException {
@@ -188,6 +207,12 @@ public class PartTest {
     justSections = TestResourceTools.copyResourceToDirectory(
         getClass(),
         TestResources.JUST_SECTIONS,
+        scratchDirectory
+    ) ;
+
+    missingImagesFile = TestResourceTools.copyResourceToDirectory(
+        getClass(),
+        TestResources.MISSING_IMAGES,
         scratchDirectory
     ) ;
 

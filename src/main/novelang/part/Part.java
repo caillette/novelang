@@ -134,10 +134,10 @@ public class Part extends AbstractSourceReader {
       return this ;
     }    
     
-    final List< Problem > problems = Lists.newArrayList() ;
+    final List< Problem > relocationProblems = Lists.newArrayList() ;
     final ProblemCollector problemCollector = new ProblemCollector() {
       public void collect( Problem problem ) {
-        problems.add( problem ) ;
+        relocationProblems.add( problem ) ;
       }
     } ;   
     
@@ -151,8 +151,9 @@ public class Part extends AbstractSourceReader {
           problemCollector 
       ).relocateResources( getDocumentTree() ) ;
     }
-    Iterators.addAll( problems, Part.this.getProblems().iterator() ) ;
-    
+    Part.this.collect( relocationProblems ); ;
+//    Iterators.addAll( relocationProblems, Part.this.getProblems().iterator() ) ;
+
     return new Part( this, fixedTree ) ;
 
   }
