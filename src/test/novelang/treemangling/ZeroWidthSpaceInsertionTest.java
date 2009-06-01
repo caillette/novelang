@@ -22,15 +22,13 @@ import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
 /**
  * Tests for {@link SeparatorsMangler}.
  *
  * @author Laurent Caillette
  */
-public final class SeparatorsManglerTest {
+public final class ZeroWidthSpaceInsertionTest {
 
 
 // ========================== 
@@ -38,7 +36,7 @@ public final class SeparatorsManglerTest {
 // ==========================  
 
   @Test
-  public void doNothing() {
+  public void doNothingWithZeroSpaceInsertion() {
     final SyntacticTree tree = tree(
         PARAGRAPH_REGULAR,
         WHITESPACE_,
@@ -54,7 +52,7 @@ public final class SeparatorsManglerTest {
   }
 
   @Test
-  public void addOneMandatorySpaceForGraveAccents() {
+  public void addOneZeroWidthSpaceForGraveAccents() {
     verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
@@ -71,7 +69,7 @@ public final class SeparatorsManglerTest {
   }
 
   @Test
-  public void addOneMandatorySpaceForGraveAccentPairs() {
+  public void addOneZeroWidthSpaceForGraveAccentPairs() {
     verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
@@ -88,7 +86,7 @@ public final class SeparatorsManglerTest {
   }
 
   @Test
-  public void addTwoMandatorySpacesForGraveAccents() {
+  public void addTwoZeroWidthSpacesForGraveAccents() {
     verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
@@ -111,7 +109,7 @@ public final class SeparatorsManglerTest {
   }
 
   @Test
-  public void addTwoMandatorySpacesForGraveAccentPairs() {
+  public void addTwoZeroWidthSpacesForGraveAccentPairs() {
     verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
@@ -159,22 +157,6 @@ public final class SeparatorsManglerTest {
 // =======
 
   private static void verifyZeroWidthSpaceInsertion(
-      SyntacticTree expectedTree,
-      SyntacticTree actualTree
-  ) {
-
-    final Treepath< SyntacticTree > tree = Treepath.create( actualTree );
-    final SyntacticTree rehierarchized = 
-        SeparatorsMangler.insertZeroWidthSpaceBetweenBlocksOfLiteral( tree ).getTreeAtEnd() ;
-
-    TreeFixture.assertEqualsWithSeparators(
-        expectedTree,
-        rehierarchized
-    ) ;
-
-  }
-
-  private static void verifyMandatoryWhitepaceInsertion(
       SyntacticTree expectedTree,
       SyntacticTree actualTree
   ) {

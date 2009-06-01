@@ -34,6 +34,7 @@
   <xsl:template match="n:apostrophe-wordmate" >&rsquo;</xsl:template>
   
   <xsl:template match="n:zero-width-space" >&#x200b;</xsl:template>
+  <xsl:template match="n:preserved-whitespace" xml:space="preserve" > </xsl:template>
 
   <xsl:template match="n:sign-comma" >,</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>

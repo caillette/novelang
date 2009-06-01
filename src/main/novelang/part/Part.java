@@ -94,6 +94,7 @@ public class Part extends AbstractSourceReader {
       Treepath< SyntacticTree > rehierarchized = Treepath.create( rawTree ) ;
       rehierarchized = UrlMangler.fixNamedUrls( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.insertZeroWidthSpaceBetweenBlocksOfLiteral( rehierarchized ) ;
+      rehierarchized = SeparatorsMangler.insertMandatoryWhitespaceNearApostrophe( rehierarchized ) ;
       rehierarchized = EmbeddedListMangler.rehierarchizeEmbeddedLists( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.removeSeparators( rehierarchized ) ;      
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
