@@ -84,7 +84,8 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_IMAGE_HEIGHT" ),
       new Item( "_URL" ),
       new Item( "_PLACEHOLDER_" ),
-      new Item( "_ZERO_WIDTH_SPACE" )
+      new Item( "_ZERO_WIDTH_SPACE" ),
+      new Item( "_MANDATORY_WHITESPACE" )
   ) ;
 
   private static final Pattern ALL_TOKENS_PATTERN =

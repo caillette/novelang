@@ -33,6 +33,10 @@ import novelang.system.Log;
 public final class SeparatorsManglerTest {
 
 
+// ========================== 
+// Zero-width space insertion
+// ==========================  
+
   @Test
   public void doNothing() {
     final SyntacticTree tree = tree(
@@ -43,7 +47,7 @@ public final class SeparatorsManglerTest {
         WHITESPACE_,
         BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
         ) ;
-    verifyMandatoryWhitespaceAddition(
+    verifyZeroWidthSpaceInsertion(
         tree,
         tree
     ) ;
@@ -51,7 +55,7 @@ public final class SeparatorsManglerTest {
 
   @Test
   public void addOneMandatorySpaceForGraveAccents() {
-    verifyMandatoryWhitespaceAddition(
+    verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
@@ -68,7 +72,7 @@ public final class SeparatorsManglerTest {
 
   @Test
   public void addOneMandatorySpaceForGraveAccentPairs() {
-    verifyMandatoryWhitespaceAddition(
+    verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
@@ -85,7 +89,7 @@ public final class SeparatorsManglerTest {
 
   @Test
   public void addTwoMandatorySpacesForGraveAccents() {
-    verifyMandatoryWhitespaceAddition(
+    verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
@@ -108,7 +112,7 @@ public final class SeparatorsManglerTest {
 
   @Test
   public void addTwoMandatorySpacesForGraveAccentPairs() {
-    verifyMandatoryWhitespaceAddition(
+    verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
@@ -131,7 +135,7 @@ public final class SeparatorsManglerTest {
 
   @Test
   public void dontMessGraveAccentsWithGraveAccentPairs() {
-    verifyMandatoryWhitespaceAddition(
+    verifyZeroWidthSpaceInsertion(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
@@ -154,16 +158,30 @@ public final class SeparatorsManglerTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( SeparatorsManglerTest.class ) ;
-
-  private static void verifyMandatoryWhitespaceAddition(
+  private static void verifyZeroWidthSpaceInsertion(
       SyntacticTree expectedTree,
       SyntacticTree actualTree
   ) {
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
 
-    final SyntacticTree rehierarchized =
-        SeparatorsMangler.addZeroWidthSpaceBetweenBlocksOfLiteral( Treepath.create( actualTree ) ).getTreeAtEnd() ;
+    final Treepath< SyntacticTree > tree = Treepath.create( actualTree );
+    final SyntacticTree rehierarchized = 
+        SeparatorsMangler.insertZeroWidthSpaceBetweenBlocksOfLiteral( tree ).getTreeAtEnd() ;
+
+    TreeFixture.assertEqualsWithSeparators(
+        expectedTree,
+        rehierarchized
+    ) ;
+
+  }
+
+  private static void verifyMandatoryWhitepaceInsertion(
+      SyntacticTree expectedTree,
+      SyntacticTree actualTree
+  ) {
+
+    final Treepath< SyntacticTree > tree = Treepath.create( actualTree );
+    final SyntacticTree rehierarchized = 
+        SeparatorsMangler.insertZeroWidthSpaceBetweenBlocksOfLiteral( tree ).getTreeAtEnd() ;
 
     TreeFixture.assertEqualsWithSeparators(
         expectedTree,

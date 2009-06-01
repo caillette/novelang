@@ -56,17 +56,45 @@ public final class SeparatorsMangler {
     return treepath ;
   }
 
+
+
+// ==============================  
+// Mandatory whitespace insertion
+// ==============================  
+
+  private static final SimpleTree MANDATORY_WHITESPACE_TREE = 
+      new SimpleTree( _MANDATORY_WHITESPACE ) ;
   
-// =========================
-// Zero-width space addition  
-// =========================
+  /**
+   * Inserts a {@link NodeKind#_MANDATORY_WHITESPACE} before a whitespace-preceded apostrophe.
+   */
+  public static Treepath< SyntacticTree > insertMandatoryWhitespaceBeforeApostrophe(
+      Treepath< SyntacticTree > treepath
+  ) {
+    throw new UnsupportedOperationException( "insertMandatoryWhitespaceBeforeApostrophe" ) ;
+  }
   
+  
+  /**
+   * Inserts a {@link NodeKind#_MANDATORY_WHITESPACE} before a whitespace-followed apostrophe.
+   */
+  public static Treepath< SyntacticTree > insertMandatoryWhitespaceAfterApostrophe(
+      Treepath< SyntacticTree > treepath
+  ) {
+    throw new UnsupportedOperationException( "insertMandatoryWhitespaceAfterApostrophe" ) ;
+  }
+  
+  
+// ==========================
+// Zero-width space insertion
+// ==========================
+
   private static final SimpleTree ZERO_WIDTH_SPACE_TREE = new SimpleTree( _ZERO_WIDTH_SPACE );
 
   /**
    * Inserts a {@link NodeKind#_ZERO_WIDTH_SPACE} between two consecutive blocks of literal.
    */
-  public static Treepath< SyntacticTree > addZeroWidthSpaceBetweenBlocksOfLiteral(
+  public static Treepath< SyntacticTree > insertZeroWidthSpaceBetweenBlocksOfLiteral(
       Treepath< SyntacticTree > treepath
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
@@ -79,7 +107,7 @@ public final class SeparatorsMangler {
       int childIndex = 0 ;
       while( true ) {
         if( childIndex < treepath.getTreeAtEnd().getChildCount() ) {
-          treepath = addZeroWidthSpaceBetweenBlocksOfLiteral( 
+          treepath = insertZeroWidthSpaceBetweenBlocksOfLiteral( 
               Treepath.create( treepath, childIndex ) ).getPrevious() ;
           childIndex++ ;
         } else {
@@ -101,7 +129,6 @@ public final class SeparatorsMangler {
         final Treepath< SyntacticTree > afterInsert = TreepathTools.addChildAt( 
             treepath.getPrevious(), insert, nextSibling.getIndexInPrevious() ) ;
         return afterInsert ;
-//        return TreepathTools.getNextSibling( afterInsert ) ;
       }
     } 
     return treepath ;

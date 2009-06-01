@@ -51,7 +51,7 @@ Inline literal has leading and trailing whitespaces trimmed. Whitespaces inside 
 
 Two consecutive blocks of literal (with no whitespace nor line break between) are rendered with
  a zero-width space inbetween.
-``Aaaaaaa````Bbbbbb````Ccccccc````Ddddddd````Eeeeee````Fffffff````Ggggggg````Hhhhhh````Iiiiii````Jjjjjj````Kkkkkkk````Lllllllll````Mmmmmm````Nnnnnn````Oooooo````Ppppppp``
+``Aaaaaaa````Bbbbbb````Ccccccc````Ddddddd````Eeeeee````Fffffff````Ggggggg````Hhhhhh````Iiiiii``
 
 
 == More stuff
