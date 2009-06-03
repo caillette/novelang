@@ -260,7 +260,7 @@ figuring a zero-width space, here are some examples of space handling:
 <<<
 `  foo   bar ` becomes `foo_bar`
 `Xxxx``Yyyy`   becomes `Xxxx`|`Yyyy`
-Xxxx`/`Yyyy          becomes Xxxx|`/`|Yyuy
+Xxxx`/`Yyyy    becomes Xxxx|`/`|Yyuy
 >>>
 
 
