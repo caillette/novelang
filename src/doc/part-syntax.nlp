@@ -251,6 +251,8 @@ Spaces are handled in a special manner:
 - Spaces are replaced by no-break spaces.
 - For two consecutive blocks of literal (with no line break nor whitespace), a zero-width space
 gets inserted.
+- When a block of literal inside grave accents is immediately preceded`/`followed by a word,
+a zero-width space gets automatically inserted inbetween.
 
 With the low line character ``_`` figuring a no-break space and the vertical bar character ``|``
 figuring a zero-width space, here are some examples of space handling:
@@ -258,6 +260,7 @@ figuring a zero-width space, here are some examples of space handling:
 <<<
 `  foo   bar ` becomes `foo_bar`
 `Xxxx``Yyyy`   becomes `Xxxx`|`Yyyy`
+Xxxx`/`Yyyy          becomes Xxxx|`/`|Yyuy
 >>>
 
 

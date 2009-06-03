@@ -53,6 +53,9 @@ Two consecutive blocks of literal (with no whitespace nor line break between) ar
  a zero-width space inbetween.
 ``Aaaaaaa````Bbbbbb````Ccccccc````Ddddddd````Eeeeee````Fffffff````Ggggggg````Hhhhhh````Iiiiii``
 
+When there is no separation between block of literal inside accent pairs and a word (in any order),
+they are rendered with just a zero-width space in`be`tween. 
+
 
 == More stuff
 

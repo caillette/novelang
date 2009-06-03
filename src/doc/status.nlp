@@ -22,6 +22,9 @@ no-break spaces).
 
 --- Consecutive blocks of literal get a zero-width space automatically inserted inbetween.
 
+--- When a block of literal inside grave accents is immediately preceded`/`followed by a word,
+a zero-width space gets automatically inserted inbetween.
+
 --- In case of a word starting`/`ending with an apostrophe, the rendering adds a whitespace to
 separate from the preceding`/`following word.
 

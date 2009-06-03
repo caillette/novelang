@@ -31,9 +31,9 @@ import static novelang.parser.antlr.TreeFixture.tree;
 public final class ZeroWidthSpaceInsertionTest {
 
 
-// ========================== 
-// Zero-width space insertion
-// ==========================  
+// =================
+// Blocks of literal
+// =================  
 
   @Test
   public void doNothingWithZeroSpaceInsertion() {
@@ -45,7 +45,7 @@ public final class ZeroWidthSpaceInsertionTest {
         WHITESPACE_,
         BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
         ) ;
-    verifyZeroWidthSpaceInsertion(
+    verifyZeroWidthSpaceInsertionBetweenBlocksOfLiteral(
         tree,
         tree
     ) ;
@@ -53,7 +53,7 @@ public final class ZeroWidthSpaceInsertionTest {
 
   @Test
   public void addOneZeroWidthSpaceForGraveAccents() {
-    verifyZeroWidthSpaceInsertion(
+    verifyZeroWidthSpaceInsertionBetweenBlocksOfLiteral(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
@@ -70,7 +70,7 @@ public final class ZeroWidthSpaceInsertionTest {
 
   @Test
   public void addOneZeroWidthSpaceForGraveAccentPairs() {
-    verifyZeroWidthSpaceInsertion(
+    verifyZeroWidthSpaceInsertionBetweenBlocksOfLiteral(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
@@ -87,7 +87,7 @@ public final class ZeroWidthSpaceInsertionTest {
 
   @Test
   public void addTwoZeroWidthSpacesForGraveAccents() {
-    verifyZeroWidthSpaceInsertion(
+    verifyZeroWidthSpaceInsertionBetweenBlocksOfLiteral(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
@@ -110,7 +110,7 @@ public final class ZeroWidthSpaceInsertionTest {
 
   @Test
   public void addTwoZeroWidthSpacesForGraveAccentPairs() {
-    verifyZeroWidthSpaceInsertion(
+    verifyZeroWidthSpaceInsertionBetweenBlocksOfLiteral(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
@@ -133,7 +133,7 @@ public final class ZeroWidthSpaceInsertionTest {
 
   @Test
   public void dontMessGraveAccentsWithGraveAccentPairs() {
-    verifyZeroWidthSpaceInsertion(
+    verifyZeroWidthSpaceInsertionBetweenBlocksOfLiteral(
         tree(
             PARAGRAPH_REGULAR,
             BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
@@ -151,12 +151,93 @@ public final class ZeroWidthSpaceInsertionTest {
     ) ;
   }
 
-  
+
+// ==========================
+// Blocks of literal and word
+// ==========================
+
+  @Test
+  public void doNothingWithWords() {
+    final SyntacticTree tree = tree(
+        PARAGRAPH_REGULAR,
+        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+        WHITESPACE_,
+        WORD_,
+        WHITESPACE_,
+        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+        WHITESPACE_,
+        WORD_
+    );
+    verifyZeroWidthSpaceInsertionBetweenWordAndBlockOfLiteral(
+        tree,
+        tree
+    ); ;
+  }
+
+  @Test
+  public void wordPreviousToGraveAccents() {
+    verifyZeroWidthSpaceInsertionBetweenWordAndBlockOfLiteral(
+        tree(
+            PARAGRAPH_REGULAR,
+            WORD_,
+            _ZERO_WIDTH_SPACE,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
+        ),
+        tree(
+            PARAGRAPH_REGULAR,
+            WORD_,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
+        )
+    ) ;
+  }
+
+  @Test
+  public void wordNextToGraveAccents() {
+    verifyZeroWidthSpaceInsertionBetweenWordAndBlockOfLiteral(
+        tree(
+            PARAGRAPH_REGULAR,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+            _ZERO_WIDTH_SPACE,
+            WORD_
+            ),
+        tree(
+            PARAGRAPH_REGULAR,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+            WORD_
+        )
+    ) ;
+  }
+
+  @Test
+  public void intertwinedWordsAndGraveAccents() {
+    verifyZeroWidthSpaceInsertionBetweenWordAndBlockOfLiteral(
+        tree(
+            PARAGRAPH_REGULAR,
+            WORD_,
+            _ZERO_WIDTH_SPACE,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+            _ZERO_WIDTH_SPACE,
+            WORD_,
+            _ZERO_WIDTH_SPACE,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
+        ),
+        tree(
+            PARAGRAPH_REGULAR,
+            WORD_,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+            WORD_,
+            BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS
+        )
+    ) ;
+  }
+
+
+
 // =======
 // Fixture
 // =======
 
-  private static void verifyZeroWidthSpaceInsertion(
+  private static void verifyZeroWidthSpaceInsertionBetweenBlocksOfLiteral(
       SyntacticTree expectedTree,
       SyntacticTree actualTree
   ) {
@@ -164,6 +245,23 @@ public final class ZeroWidthSpaceInsertionTest {
     final Treepath< SyntacticTree > tree = Treepath.create( actualTree );
     final SyntacticTree rehierarchized = 
         SeparatorsMangler.insertZeroWidthSpaceBetweenBlocksOfLiteral( tree ).getTreeAtEnd() ;
+
+    TreeFixture.assertEqualsWithSeparators(
+        expectedTree,
+        rehierarchized
+    ) ;
+
+  }
+
+
+  private static void verifyZeroWidthSpaceInsertionBetweenWordAndBlockOfLiteral(
+      SyntacticTree expectedTree,
+      SyntacticTree actualTree
+  ) {
+
+    final Treepath< SyntacticTree > tree = Treepath.create( actualTree );
+    final SyntacticTree rehierarchized =
+        SeparatorsMangler.insertZeroWidthSpaceBetweenWordAndLiteral( tree ).getTreeAtEnd() ;
 
     TreeFixture.assertEqualsWithSeparators(
         expectedTree,

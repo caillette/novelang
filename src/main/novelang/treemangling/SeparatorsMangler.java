@@ -23,20 +23,27 @@ import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
 import static novelang.parser.NodeKind.*;
-import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
 
 /**
+ * Adds or removes various kinds of separators under various conditions.
+ *
  * @author Laurent Caillette
  */
 public final class SeparatorsMangler {
+
+  private static final ImmutableSet< NodeKind > BLOCKS_OF_LITERAL = ImmutableSet.of(
+      BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
+      BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
+  ) ;
 
 // ==================  
 // Whitespace removal
 // ==================  
   
   /**
-   * Removes {@link novelang.parser.NodeKind#WHITESPACE_} and {@link novelang.parser.NodeKind#LINE_BREAK_}
-   * tokens in order to ease comparison.
+   * Removes {@link novelang.parser.NodeKind#WHITESPACE_} and
+   * {@link novelang.parser.NodeKind#LINE_BREAK_} tokens in order to ease comparison.
    */
   public static SyntacticTree removeSeparators( SyntacticTree tree ) {
     return removeSeparators( Treepath.create( tree ) ).getTreeAtEnd() ;
@@ -74,8 +81,8 @@ public final class SeparatorsMangler {
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
     if( tree.isOneOf( APOSTROPHE_WORDMATE ) ) {
-      treepath = insertMandatoryWhitespaceIfNeeded( treepath, FORWARD_WALKER ) ;
-      treepath = insertMandatoryWhitespaceIfNeeded( treepath, BACKWARD_WALKER ) ;
+      treepath = insertMandatoryWhitespaceIfNeeded( treepath, SiblingTraverser.FORWARD ) ;
+      treepath = insertMandatoryWhitespaceIfNeeded( treepath, SiblingTraverser.BACKWARD ) ;
     } else if( ! tree.isOneOf( TreeManglingConstants.NON_TRAVERSABLE_NODEKINDS ) ){
       int childIndex = 0 ;
       while( true ) {
@@ -93,7 +100,7 @@ public final class SeparatorsMangler {
 
   private static Treepath< SyntacticTree > insertMandatoryWhitespaceIfNeeded(
       final Treepath< SyntacticTree > treepath,
-      HorizontalWalker walker
+      SiblingTraverser walker
   ) {
     Treepath< SyntacticTree > preceding = treepath ;
     boolean foundWhitespace = false ;
@@ -121,39 +128,54 @@ public final class SeparatorsMangler {
     }
   }
 
-  private interface HorizontalWalker
-      extends Function< Treepath< SyntacticTree >, Treepath< SyntacticTree > >
-  {
-      int getOffset() ;
-  } ;
 
-  private static final HorizontalWalker FORWARD_WALKER = new HorizontalWalker() {
-    public Treepath< SyntacticTree > apply( Treepath< SyntacticTree > treepath ) {
-      if( TreepathTools.hasNextSibling( treepath ) ) {
-        return TreepathTools.getNextSibling( treepath ) ;
-      } else {
-        return null ;
+// ==========================================
+// Zero-width space between words and literal
+// ==========================================
+
+  /**
+   * Inserts a {@link NodeKind#_ZERO_WIDTH_SPACE} between a
+   * {@link NodeKind#BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS} and a {@link NodeKind#WORD_}
+   * where there is no whitespace inbetweeen.
+   */
+  public static Treepath< SyntacticTree > insertZeroWidthSpaceBetweenWordAndLiteral(
+      Treepath< SyntacticTree > treepath
+  ) {
+    final SyntacticTree tree = treepath.getTreeAtEnd() ;
+    if( tree.isOneOf( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ) ) {
+      treepath = insertZeroWidthWhitespaceIfNeeded( treepath, SiblingTraverser.BACKWARD ) ;
+      treepath = insertZeroWidthWhitespaceIfNeeded( treepath, SiblingTraverser.FORWARD ) ;
+    } else if( ! tree.isOneOf( TreeManglingConstants.NON_TRAVERSABLE_NODEKINDS ) ){
+      int childIndex = 0 ;
+      while( true ) {
+        if( childIndex < treepath.getTreeAtEnd().getChildCount() ) {
+          treepath = insertZeroWidthSpaceBetweenWordAndLiteral(
+              Treepath.create( treepath, childIndex ) ).getPrevious() ;
+          childIndex++ ;
+        } else {
+          break ;
+        }
       }
     }
+    return treepath ;
+  }
 
-    public int getOffset() {
-      return 1 ;
+  private static Treepath< SyntacticTree > insertZeroWidthWhitespaceIfNeeded(
+      final Treepath< SyntacticTree > treepath,
+      SiblingTraverser traverser
+  ) {
+    Treepath< SyntacticTree > sibling = traverser.apply( treepath ) ;
+    if( null != sibling && sibling.getTreeAtEnd().isOneOf( WORD_ ) ) {
+      return TreepathTools.addChildAt(
+          treepath.getPrevious(),
+          ZERO_WIDTH_SPACE_TREE,
+          treepath.getIndexInPrevious() + traverser.getOffset()
+      ) ;
     }
-  } ;
+    return treepath ;
+  }
 
-  private static final HorizontalWalker BACKWARD_WALKER = new HorizontalWalker() {
-    public Treepath< SyntacticTree > apply( Treepath< SyntacticTree > treepath ) {
-      if( TreepathTools.hasPreviousSibling( treepath ) ) {
-        return TreepathTools.getPreviousSibling( treepath ) ;
-      } else {
-        return null ;
-      }
-    }
 
-    public int getOffset() {
-      return 0 ;
-    }
-  } ;
 
 
 // ==========================
@@ -169,10 +191,7 @@ public final class SeparatorsMangler {
       Treepath< SyntacticTree > treepath
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
-    if( tree.isOneOf(
-        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
-    ) ) {
+    if( tree.isOneOf( BLOCKS_OF_LITERAL ) ) {
       treepath = insertIfNextIsExactSibling( treepath, ZERO_WIDTH_SPACE_TREE ) ;
     } else if( ! tree.isOneOf( TreeManglingConstants.NON_TRAVERSABLE_NODEKINDS ) ){
       int childIndex = 0 ;

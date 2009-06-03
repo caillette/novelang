@@ -95,6 +95,7 @@ public class Part extends AbstractSourceReader {
       rehierarchized = UrlMangler.fixNamedUrls( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.insertZeroWidthSpaceBetweenBlocksOfLiteral( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.insertMandatoryWhitespaceNearApostrophe( rehierarchized ) ;
+      rehierarchized = SeparatorsMangler.insertZeroWidthSpaceBetweenWordAndLiteral( rehierarchized ) ;
       rehierarchized = EmbeddedListMangler.rehierarchizeEmbeddedLists( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.removeSeparators( rehierarchized ) ;      
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
