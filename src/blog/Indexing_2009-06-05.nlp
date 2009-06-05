@@ -1,0 +1,140 @@
+
+Start small, think big: while I don't even provide a decent default stylesheet, I'm not afraid
+to blog about a tough subject: book index.
+
+An index is a table at the end of a book, referencing pages or chapters containing a pertinent
+usage of a key word.
+
+A very simple kind of index could look like this:
+
+<<<
+icons, 21, 136, 138
+>>>
+
+You can have ranges:
+
+<<<
+gender in language, 4-6
+>>>
+
+References avoid duplicates:
+
+<<<
+GUIs, see graphical user interfaces (GUIs)
+>>>
+
+Words can group on several levels (3 being the maximum):
+
+<<<
+indexes, 149-178
+  level of entries, 151
+    primary, 151, 159, 159,
+        165-166, 168, 174
+    secondary, 151, 159, 165,
+        167-168, 169, 170, 171,
+        172, 172-174, 175
+    tertiary, 151
+>>>
+
+
+
+How could Novelang help to represent this?
+
+The simplest thing to do is to use some kind of delimiter to tell that a word is an index entry.
+
+<<<
+The <icon> is displayed on the corner.
+>>>
+
+Obviously, this doesn't work, because we want the index entry to show a plural.
+So we invent some new kind of syntactic form representing a tuple (which symbol is used doesn't
+matter at this stage).
+
+<<<
+The <icon | icons > is displayed in the corner.
+>>>
+
+Great, but how to model several levels of entries? First we'll switch to a simpler example where
+the word "index" doesn't appear:
+
+<<<
+keys
+  capitalizing name of, 68
+  typographic conventions for, 144, 147n
+  writing about, 142
+>>>
+
+How about the source document looking like this:
+
+<<<
+In this case we must
+< capitalize | ( keys | capitalizing name of ) >
+the name of a key.
+>>>
+
+This is becoming unreadable, and brings two new Novelang syntactic constructs!
+The trick: split index entry declaration from its complete definition, using several files.
+Example above becomes:
+
+<<<
+%«percent-sign» source document:
+In this case we must
+< capitalize | capitalizing-name-of-key >
+the name of a key.
+
+%«percent-sign» index definition file:
+capitalizing-name-of-key
+- capitalizing name of
+  - keys
+>>>
+
+This deserves a few explainations. The first ``capitalize`` in the source document is still
+what's displayed. The ``capitalize-name-of-key`` is an identifier -- could be 123456 as well-_.
+The ``capitalizing name of`` in the index definition file is what to display in the index.
+The ``keys`` subitem is the parent item.
+
+Because the index entry identifier has no semantic meaning, we can let Novelang generate it
+using simple replacement rules (spaces becoming hyphen minus...). While explicit identifiers
+are useful for special cases (like homonyms) we expect to be able to write:
+
+<<<
+%«percent-sign» source document:
+In this case we must <capitalize> the name
+of a key.
+
+%«percent-sign» index definition file:
+capitalize
+- capitalizing name of
+  - keys
+>>>
+
+Because for the same index entry we may have another pertinent words which are not exactly
+"capitalize" we let the index entry support several identifiers.
+
+<<<
+%«percent-sign» source document place 1:
+In this case we must <capitalize> the name
+of a key.
+
+%«percent-sign» source document place 2:
+Sometime the name of a key should not be
+<in capitals>.
+
+%«percent-sign» index definition file:
+in-capitals
+capitalize
+- capitalizing name of
+  - keys
+>>>
+
+The index definition file could support lots of features.
+- Some styling. There are rare cases (like latin names) where italics are required.
+- A kind of markup to tell which words to take in account in alphabetical sort.
+- Multiple posting: the same keyword in the source document has several index entries. This can happen using several embedded list items.
+- "See" and "See Also" references.
+
+A probable limitation of FOP (used to generate PDF) is, as page numbers are unknown until the
+end of the processing, it's overly complicated to generate page ranges.
+
+
+// All examples from A Style Guide for the Computer Industry, Sun Technical Publications, 1996. //
