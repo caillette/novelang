@@ -26,6 +26,14 @@ GUIs, see graphical user interfaces (GUIs)
 Words can group on several levels (3 being the maximum):
 
 <<<
+keys
+  capitalizing name of, 68
+  typographic conventions for, 144, 147
+  writing about, 142
+>>>
+
+{{
+<<<
 indexes, 149-178
   level of entries, 151
     primary, 151, 159, 159,
@@ -35,8 +43,7 @@ indexes, 149-178
         172, 172-174, 175
     tertiary, 151
 >>>
-
-
+}}
 
 How could Novelang help to represent this?
 
@@ -47,24 +54,14 @@ The <icon> is displayed on the corner.
 >>>
 
 Obviously, this doesn't work, because we want the index entry to show a plural.
-So we invent some new kind of syntactic form representing a tuple (which symbol is used doesn't
+So we invent some new kind of syntactic form representing a tuple (which symbols are used doesn't
 matter at this stage).
 
 <<<
-The <icon | icons > is displayed in the corner.
+The < icon | icons > is displayed in the corner.
 >>>
 
-Great, but how to model several levels of entries? First we'll switch to a simpler example where
-the word "index" doesn't appear:
-
-<<<
-keys
-  capitalizing name of, 68
-  typographic conventions for, 144, 147n
-  writing about, 142
->>>
-
-How about the source document looking like this:
+Great, but how to model several levels of entries? We could make the source document look like this:
 
 <<<
 In this case we must
@@ -78,63 +75,166 @@ Example above becomes:
 
 <<<
 %«percent-sign» source document:
+
 In this case we must
 < capitalize | capitalizing-name-of-key >
 the name of a key.
 
+
 %«percent-sign» index definition file:
+
 capitalizing-name-of-key
 - capitalizing name of
   - keys
 >>>
 
 This deserves a few explainations. The first ``capitalize`` in the source document is still
-what's displayed. The ``capitalize-name-of-key`` is an identifier -- could be 123456 as well-_.
+what's displayed. The ``capitalize-name-of-key`` is the entry name that is not supposed to be
+read by anybody else than the document writer -- could be 123456 as well-_.
 The ``capitalizing name of`` in the index definition file is what to display in the index.
 The ``keys`` subitem is the parent item.
 
-Because the index entry identifier has no semantic meaning, we can let Novelang generate it
-using simple replacement rules (spaces becoming hyphen minus...). While explicit identifiers
-are useful for special cases (like homonyms) we expect to be able to write:
+Because name of the index entry has no semantic meaning, we can let Novelang generate it
+using simple replacement rules (spaces becoming hyphen minus...). Explicit names
+are useful for special cases (like homonyms) but now we expect to be able to write:
 
 <<<
 %«percent-sign» source document:
+
 In this case we must <capitalize> the name
 of a key.
 
+
 %«percent-sign» index definition file:
+
 capitalize
 - capitalizing name of
   - keys
 >>>
 
 Because for the same index entry we may have another pertinent words which are not exactly
-"capitalize" we let the index entry support several identifiers.
+"capitalize" we let the index entry support several names.
 
 <<<
 %«percent-sign» source document place 1:
+
 In this case we must <capitalize> the name
 of a key.
 
+
 %«percent-sign» source document place 2:
+
 Sometime the name of a key should not be
 <in capitals>.
 
+
 %«percent-sign» index definition file:
+
 in-capitals
 capitalize
 - capitalizing name of
   - keys
 >>>
 
+
+Now, entry names may give some feeling of déjà vu. We already have machine-processed names
+with tags (implemented) and identifiers (not implemented yet). Are entry names just redundant?
+As tags and identifier apply on a whole paragraph or level, they don't have the same level of
+precision when it comes to refer to the exact location of a word. And it turns out that referencing
+a range of paragraphs (or even chapters) is what we need for supporting page ranges.
+
+The obvious way of handling page range would be to add a new "end of index entry range"
+here polluting the source document and making it look like LaTeX.
+This is a convention of the Novelang grammar: avoid end delimiters whenever possible.
+Tags and identifiers provide a nice extension.
+
+Here is how we use a tag in the index definition file. Instead of tagging, it refers
+to the tagged text as index entry name:
+
+<<<
+%«percent-sign» source document:
+
+@gender
+=== Stylistic principles
+
+=== Avoid jargon
+
+ ...
+
+=== Avoid sexist language
+
+ ...
+
+=== Common gender
+
+ ...
+
+
+%«percent-sign» index definition file:
+
+@gender
+- gender in language
+>>>
+
+This is not yet perfect because page ranges are bound to the scope of a tag`/`identifier.
+But it seems possible to
+Some tree-mangling could detect that several tagged nodes appear consecutively:
+
+<<<
+%«percent-sign» source document:
+
+== Stylistic principles
+
+=== Avoid jargon
+
+ ...
+
+@gender
+=== Avoid sexist language
+
+ ...
+
+
+@gender
+=== Common gender
+
+ ...
+>>>
+
+Tree-mangling could add a special marker as the last child of the last node of the consecutive
+tagged ones. Our tree would look like:
+
+<<<
+level
+  + level-title     "Stylistic principles"
+  + level
+  |   + level-title "Avoid jargon"
+  + level
+  |   + level-title "Avoid sexist language"
+  |   + tag         "gender"
+  |   + paragraph
+  |   |   + start-of-range "gender"
+  |   |   + ...
+  |   + paragraph
+  + level
+      + level-title "Common gender"
+      + tag         "gender"
+      + paragraph
+      + paragraph
+         + ...
+         + end-of-range    "gender"
+
+>>>
+
+
+This is still unperfect because page ranges are bound to the scope of tags`/`identifiers but
+this looks like a pretty good approximation.
+
 The index definition file could support lots of features.
 - Some styling. There are rare cases (like latin names) where italics are required.
 - A kind of markup to tell which words to take in account in alphabetical sort.
 - Multiple posting: the same keyword in the source document has several index entries. This can happen using several embedded list items.
 - "See" and "See Also" references.
-
-A probable limitation of FOP (used to generate PDF) is, as page numbers are unknown until the
-end of the processing, it's overly complicated to generate page ranges.
 
 
 // All examples from A Style Guide for the Computer Industry, Sun Technical Publications, 1996. //
