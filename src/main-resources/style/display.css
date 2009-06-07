@@ -22,6 +22,7 @@ p {
 
 code {
   font-size : 11pt;
+  white-space:pre;
 }
 
 /* Reserved to html-source.xsl for displaying HTML source elements. */

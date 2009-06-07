@@ -49,14 +49,9 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="n:level" >
-    <div class="chapter" >
-      <xsl:apply-templates/>
-    </div>
-  </xsl:template>
 
   <xsl:template match="n:level/n:level-title" >
-    <h1><xsl:apply-templates /></h1>
+    <h1>&amp;lt;h1&amp;gt;<xsl:apply-templates />&amp;lt;/h1&amp;gt;</h1>
   </xsl:template>
 
   <xsl:template match="n:level/n:level" >
@@ -66,7 +61,7 @@
   </xsl:template>
 
   <xsl:template match="n:level/n:level/n:level-title" >
-    <h2><xsl:apply-templates /></h2>
+    <h2>&amp;lt;p&amp;gt;&amp;lt;b&amp;gt;<xsl:apply-templates />&amp;lt;/b&amp;gt;&amp;lt;/p&amp;gt;</h2>
   </xsl:template>
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
@@ -84,7 +79,22 @@
   </xsl:template>
 
   <xsl:template match="n:url" >
-    <a><xsl:attribute name="href"><xsl:value-of select="." /></xsl:attribute><tt>&amp;lt;a href="<xsl:value-of select="." />"&amp;gt;<xsl:value-of select="." />&amp;lt;/a&amp;gt;</tt></a>
+    <!--<a><xsl:attribute name="href"><xsl:value-of select="." /></xsl:attribute><tt>&amp;lt;a href="<xsl:value-of select="." />"&amp;gt;<xsl:value-of select="." />&amp;lt;/a&amp;gt;</tt></a>-->
+    <a><xsl:attribute name="href"><xsl:value-of select="n:url-literal" /></xsl:attribute>
+      <tt>&amp;lt;a href="<xsl:value-of select="n:url-literal" />"&amp;gt;
+      <xsl:choose>
+        <xsl:when test="n:block-inside-double-quotes" >
+          <xsl:apply-templates select="n:block-inside-double-quotes/node()" />
+        </xsl:when>
+        <xsl:when test="n:block-inside-square-brackets" >
+          <xsl:apply-templates select="n:block-inside-square-brackets/node()" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="n:url-literal" />
+        </xsl:otherwise>
+      </xsl:choose>
+      &amp;lt;/a&amp;gt;</tt>
+    </a>
   </xsl:template>
 
   <xsl:template match="n:paragraph-as-list-item" >
