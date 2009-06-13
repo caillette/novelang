@@ -60,3 +60,17 @@ be:
 I like it because the hyphen minus is mimicking the line of text of a legend (seen from a
 long distance) and the asterisk some kind of flower which is ok for a picture. 
 
+How to handle dangling references when rendering a single part?
+The fail-fast approach of Novelang tells us that spitting an error should be the default.
+So it's left to user to add a query parameter telling that unresolved identifiers should be stubbed:
+
+<<<
+/my-document.html?stub-identifiers
+>>>
+
+(As for tags, choosing this option may be helped by a bit of JavaScript.)
+
+The stylesheet would render stubbed identifers with a special style, like a gray hatched rectangle
+for images.
+
+To be done: tell about relative identifiers inside a Part.
