@@ -112,7 +112,6 @@ p.tag-summary + ul.tags > li {
   margin-left: 700px;
   z-index: 99000 ;
   top: 8px ;
-  padding 60px ;
 
   -moz-border-radius:5px ;
   -webkit-border-radius: 5px ;
