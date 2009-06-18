@@ -81,6 +81,17 @@ public class UrlParsingTest {
   }
 
   @Test
+  public void urlHttpGoogleQuery2() throws RecognitionException {
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval(
+        "http://code.google.com/docreader/#p=google-guice&s=google-guice&t=Motivation",
+        tree(
+            URL_LITERAL,
+            "http://code.google.com/docreader/#p=google-guice&s=google-guice&t=Motivation"
+        )
+    ) ;
+  }
+
+  @Test
   public void urlFilePathFileDotNlp() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval(
         "file:/path/file.ppp",
