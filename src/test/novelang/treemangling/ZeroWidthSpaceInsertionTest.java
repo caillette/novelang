@@ -17,6 +17,8 @@
 package novelang.treemangling;
 
 import org.junit.Test;
+import org.junit.Ignore;
+
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
@@ -174,7 +176,7 @@ public final class ZeroWidthSpaceInsertionTest {
     ); ;
   }
 
-  @Test
+  @Test( timeout = 5000 )
   public void wordPreviousToGraveAccents() {
     verifyZeroWidthSpaceInsertionBetweenWordAndBlockOfLiteral(
         tree(
@@ -208,7 +210,7 @@ public final class ZeroWidthSpaceInsertionTest {
     ) ;
   }
 
-  @Test
+  @Test( timeout = 5000 )
   public void intertwinedWordsAndGraveAccents() {
     verifyZeroWidthSpaceInsertionBetweenWordAndBlockOfLiteral(
         tree(
