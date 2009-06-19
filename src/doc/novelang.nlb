@@ -31,5 +31,8 @@ insert file:httpdaemon.nlp
 
 insert file:generator.nlp
 
+insert file:tips.nlp
+
+
 insert file:source-characters.nlp
   $style=character-escapes
