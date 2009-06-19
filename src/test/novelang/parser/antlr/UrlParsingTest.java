@@ -81,6 +81,17 @@ public class UrlParsingTest {
   }
 
   @Test
+  public void urlHttps() throws RecognitionException {
+    PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval(
+        "https://mail.google.com",
+        tree(
+            URL_LITERAL,
+            "https://mail.google.com"
+        )
+    ) ;
+  }
+
+  @Test
   public void urlHttpGoogleQuery2() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval(
         "http://code.google.com/docreader/#p=google-guice&s=google-guice&t=Motivation",

@@ -1320,6 +1320,7 @@ httpUrl                                       // Grammatical ambiguity in the sp
       LATIN_SMALL_LETTER_T 
       LATIN_SMALL_LETTER_T 
       LATIN_SMALL_LETTER_P 
+      LATIN_SMALL_LETTER_S?
       COLON 
       SOLIDUS 
       SOLIDUS 
@@ -1328,6 +1329,7 @@ httpUrl                                       // Grammatical ambiguity in the sp
         LATIN_SMALL_LETTER_T 
         LATIN_SMALL_LETTER_T 
         LATIN_SMALL_LETTER_P 
+        LATIN_SMALL_LETTER_S?
         COLON 
         SOLIDUS 
         SOLIDUS 
