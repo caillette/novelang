@@ -13,6 +13,20 @@ Keep informed reading the
 http://novelang.blogspot.com
 . 
 
+=== Version `0.30.0`
+
+--- Bug fixes:
+- Handle more URL: HTTPS, non-standard query parameters.
+- Fixed disappearing whitespace between word and block inside grave accents, when inside level title or embedded list.
+
+--- Minor enhancements:
+- Better sizing of embedded lists with default CSS.
+- Documented some Windows tips.
+- Added registration sign and copyright sign as supported characters in source documents.
+
+
+
+
 === Version `0.29.0`
 
 //This version introduces changes that may break existing documents.//
