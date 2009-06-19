@@ -36,7 +36,11 @@ public class EmbeddedListParsingTest {
         "- w",
         tree(
             PARAGRAPH_REGULAR,
-            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) )
+            tree(
+                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                tree( WHITESPACE_, " " ),
+                tree( WORD_, "w" )
+            )
         )
     ) ;
   }
@@ -63,6 +67,7 @@ public class EmbeddedListParsingTest {
             tree( PARAGRAPH_REGULAR,
                 tree(
                     EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                    tree( WHITESPACE_, " " ),
                     tree( WORD_, "y" ),
                     tree( APOSTROPHE_WORDMATE, "'" ),
                     tree( WORD_, "z" ),
@@ -99,10 +104,18 @@ public class EmbeddedListParsingTest {
         "  - w2" + BREAK,
         tree(
             PARAGRAPH_REGULAR,
-            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w1" ) ),
+            tree(
+                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                tree( WHITESPACE_, " " ),
+                tree( WORD_, "w1" )
+            ),
             tree( LINE_BREAK_ ),
             tree( WHITESPACE_, "  " ),
-            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w2" ) )
+            tree(
+                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                tree( WHITESPACE_, " " ),
+                tree( WORD_, "w2" )
+            )
         )
     ) ;
   }
@@ -115,7 +128,19 @@ public class EmbeddedListParsingTest {
 
   @Test
   public void smallDashedListItemIsSeveralWords() throws RecognitionException {
-    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x y z" ) ;
+    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.checkTree(
+        "- x y z",
+        tree(
+            EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+            tree( WHITESPACE_, " " ),
+            tree( WORD_, "x" ),
+            tree( WHITESPACE_, " " ),
+            tree( WORD_, "y" ),
+            tree( WHITESPACE_, " " ),
+            tree( WORD_, "z" )
+        )
+
+    ) ;
   }
 
   @Test

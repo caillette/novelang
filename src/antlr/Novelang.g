@@ -234,7 +234,7 @@ levelTitle
       { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
       (   t += smallDashedListItem
 	      | ( t += mixedDelimitedSpreadBlock 
-	          ( whitespace t += mixedDelimitedSpreadBlock )* 
+	          ( t += whitespace t += mixedDelimitedSpreadBlock )* 
 	        )
 	    )
 	    ( t += whitespace? t += softbreak 
@@ -1100,7 +1100,7 @@ bigDashedListItem
 smallDashedListItem
   : HYPHEN_MINUS 
     { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
-    ( whitespace b += mixedDelimitedMonoblock )+
+    ( b += whitespace b += mixedDelimitedMonoblock )+
     { delegate.leaveBlockDelimiterBoundary() ; }
     -> ^( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ $b+ )
   ;

@@ -185,7 +185,7 @@ public class PartTest {
   }
 
 
-  @Test( timeout = 2000 ) 
+  @Test( timeout = 2000 )
   public void problemWithSeparatorsAndEmbeddedLists() {
     final Part part = new Part( "- y `z`" ) ;
     final SyntacticTree expected = tree(
@@ -193,21 +193,36 @@ public class PartTest {
         tree(
             PARAGRAPH_REGULAR,
             tree(
-                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                _EMBEDDED_LIST_WITH_HYPHEN,
                 tree(
                     _EMBEDDED_LIST_ITEM,
                     tree( WORD_, "y" ),
-                    tree(
-                        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-                        tree( WORD_, "z" )
-                    )
+                    tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "z" )
                 )
             )
         )
     ) ;
     final SyntacticTree partTree = part.getDocumentTree() ;
     TreeFixture.assertEqualsWithSeparators( expected, partTree ) ;
+  }
 
+
+  @Test( timeout = 2000 )
+  public void problemWithSeparatorsAndTitle() {
+    final Part part = new Part( "== y `z`" ) ;
+    final SyntacticTree expected = tree(
+        PART,
+        tree(
+            _LEVEL,
+            tree(
+                LEVEL_TITLE,
+                tree( WORD_, "y" ),
+                tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "z" )
+            )
+        )
+    ) ;
+    final SyntacticTree partTree = part.getDocumentTree() ;
+    TreeFixture.assertEqualsWithSeparators( expected, partTree ) ;
   }
 
 
