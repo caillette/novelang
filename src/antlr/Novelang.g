@@ -1760,6 +1760,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | ASTERISK
       | CIRCUMFLEX_ACCENT
       | COLON
+      | COPYRIGHT_SIGN
       | COMMA 
       | COMMERCIAL_AT
       | DEGREE_SIGN
@@ -1784,6 +1785,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | PLUS_SIGN
       | PERCENT_SIGN
       | QUESTION_MARK
+      | REGISTERED_SIGN
       | REVERSE_SOLIDUS
       | RIGHT_CURLY_BRACKET
       | RIGHT_PARENTHESIS
@@ -2057,6 +2059,7 @@ APOSTROPHE : '\'' ;
 ASTERISK : '*' ;
 CIRCUMFLEX_ACCENT : '^' ;
 COLON : ':' ;
+COPYRIGHT_SIGN : '\u00a9' ; // &copy;
 COMMA : ',' ;
 COMMERCIAL_AT : '@' ;
 DEGREE_SIGN : '\u00b0' ; // &deg;
@@ -2081,12 +2084,13 @@ NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
 PERCENT_SIGN : '%' ;
 QUESTION_MARK : '?' ;
+REGISTERED_SIGN : '\u00ae' ;                            // &reg; 
 REVERSE_SOLIDUS : '\\' ;
 RIGHT_CURLY_BRACKET : '}' ;
 RIGHT_PARENTHESIS : ')' ;
 RIGHT_SQUARE_BRACKET : ']' ;
 RIGHT_POINTING_DOUBLE_ANGLE_QUOTATION_MARK : '\u00bb' ; // &raquo;
-SECTION_SIGN : '\u00a7' ; // &sect;
+SECTION_SIGN : '\u00a7' ;                               // &sect;
 SEMICOLON : ';' ;
 SINGLE_LEFT_POINTING_ANGLE_QUOTATION_MARK : '\u2039' ;  // &lsaquo;
 LEFT_SINGLE_QUOTATION_MARK : '\u2019' ;                 // &rsquo;
