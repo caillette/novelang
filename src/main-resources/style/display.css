@@ -100,7 +100,7 @@ ul {
 ul.tags {
   margin-right: -100px ;
   margin-bottom : -2px ;
-  list-style-type:none ;
+  list-style:none ;
 }
 
 #tag-definitions {
@@ -113,7 +113,8 @@ ul.tags > li, #tag-list
   border: 1px solid;
   font-size: 9pt ;
   margin: 2px 0 0 1px ;
-  padding: 1px 2px 1px 2px ;
+  padding: 2px 2px 1px 2px ;
+  text-indent: 0;
 }
 
 p.tag-summary + ul.tags {
