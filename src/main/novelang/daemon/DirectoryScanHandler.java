@@ -236,7 +236,7 @@ public class DirectoryScanHandler extends GenericHandler {
 
   private static String createLinkablePath( File scannedDirectory, File file ) {
     final String fileNameRelativeToScannedDir =
-        FileTools.relativizePath( scannedDirectory, file ) ;
+        FileTools.urlifyPath( FileTools.relativizePath( scannedDirectory, file ) ) ;
     return file.isDirectory() ?
         fileNameRelativeToScannedDir :
         htmlizeExtension( fileNameRelativeToScannedDir )

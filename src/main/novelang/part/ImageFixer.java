@@ -282,7 +282,7 @@ public class ImageFixer {
     }
     
     final String resourceNameRelativeToBase = "/" +
-        FileTools.relativizePath( baseDirectory, absoluteResourceFile ) ;
+        FileTools.urlifyPath( FileTools.relativizePath( baseDirectory, absoluteResourceFile ) ) ;
     
     return resourceNameRelativeToBase ;
   }

@@ -85,6 +85,11 @@ public class FileToolsTest {
     Assert.assertEquals( "childDirectory", directories.get( 1 ).getName() ) ;
     Assert.assertEquals( "grandChildDirectory", directories.get( 2 ).getName() ) ;
   }
+
+  @Test
+  public void urlifyPath() {
+    Assert.assertEquals( "foo/bar/baz/", FileTools.urlifyPath( "foo/bar\\baz\\" ) ) ;
+  }
   
 // =======
 // Fixture

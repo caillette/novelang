@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
@@ -168,6 +169,14 @@ public class FileTools {
     }
     return directories ;
 
+  }
+
+  /**
+   * Returns a URL-friendly path where file separator is a solidus, not a reverse solidus.
+   * Useful on Windows.
+   */
+  public static String urlifyPath( String path ) {
+    return path.replaceAll( "\\\\", "/" ) ;
   }
 
 
