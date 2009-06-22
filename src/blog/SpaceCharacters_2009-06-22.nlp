@@ -1,0 +1,62 @@
+== The tilde block
+
+This is about some kind of brand new operator: it groups all words an blocks and punctuation signs which are not separated by space. 
+
+A great feature of Novelang is to apply standard typographic rules, especially when there is punctuation. The problem is, sometimes you can't apply those rules in a blunt manner.
+
+Consider these cases: on the left, what's in the source document, and on the right default rendering.
+
+| Source document     | Default rendering | Hack                          |
+| ``imprimé(e)s``     | imprimé(e)s       | ``«grave-accent»imprimé(e)s«grave-accent»`` | 
+| ``F.B.I.``          | F.B.I.            | ``«grave-accent»F.B.I«grave-accent»``       |
+| ``computer//ing//`` | computer//ing//   | No hack available             |
+
+Default space insertion makes it all wrong. I tried to "fix" 
+http://novelang.blogspot.com/2009/05/space-character-and-related-stuff.html
+it by detecting proximity (lack of spaces) between casual words and blocks inside grave accents. But, if adding other cases like full stops, blocks inside solidus pairs and blocks inside parenthesis, we end up with many complex tranformations which just break existing whitespace addition for the common case.
+
+The solution is something more generic. I'm thinking about a special character which gruops everything that follows until there is a space, a line break or the end of the document. This character would be the tilde ``~`` because it looks like some rope figuring a link.
+
+So, with source document like this:
+
+<<<
+~computer//ing//
+>>>
+
+We get an AST (Abstract Syntax Tree) like this:
+
+<<<
++ block-tight-after-tilde
+  + word "computer"
+  + block-inside-pair-of-solidus "ing"
+>>>
+
+Inside such a block, there can be sub-blocks. By default nested block should be separated of the enclosing one by a zero-width space.
+
+This:
+
+<<<
+~ALL~OF~'E.M.
+>>>
+
+...becomes:
+
+<<<
++ block-tight-after-tilde
+  + word "A"
+  + punctuation-sign full-stop
+  + word "L"
+  + punctuation-sign full-stop
+  + word "L"
+  + punctuation-sign full-stop
+  + block-tight-after-tilde
+    + word "A"
+    + punctuation-sign full-stop
+    + word "L"
+    + punctuation-sign full-stop
+    + block-tight-after-tilde
+      + apostrophe-wordmate
+      + word "E"
+      + punctuation-sign full-stop
+      + word "M"
+>>>
