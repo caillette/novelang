@@ -198,9 +198,20 @@ public class GenericRenderer implements Renderer {
       NodeKind previous,
       NodeKind nodeKind
   ) throws Exception {
-    if( Spaces.isTrigger( previous, nodeKind ) ) {
+    if( ! hasBlockAfterTilde( path ) && Spaces.isTrigger( previous, nodeKind ) ) {
       fragmentWriter.write( path, whitespace ) ;
     }
+  }
+
+  private static boolean hasBlockAfterTilde( Nodepath path ) {
+    if( path == null ) {
+      return false ;
+    }
+    if( path.getCurrent() == BLOCK_AFTER_TILDE ) {
+      return true ;
+    }
+    return hasBlockAfterTilde( path.getAncestor() ) ;
+
   }
 
   protected RenditionMimeType renderProblems(

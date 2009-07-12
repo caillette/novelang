@@ -249,18 +249,11 @@ Spaces are handled in a special manner:
 - Leading and trailing spaces are trimmed.
 - Consecutive spaces between two characters are collapsed into one single space.
 - Spaces are replaced by no-break spaces.
-- For two consecutive blocks of literal (with no line break nor whitespace), a zero-width space
-gets inserted.
-- When a block of literal inside grave accents is immediately preceded`/`followed by a word,
-a zero-width space gets automatically inserted inbetween.
 
-With the low line character ``_`` figuring a no-break space and the vertical bar character ``|``
-figuring a zero-width space, here are some examples of space handling:
+With the low line character ``_`` figuring a no-break space, here is a sample of space replacement:
 
 <<<
 `  foo   bar ` becomes `foo_bar`
-`Xxxx``Yyyy`   becomes `Xxxx`|`Yyyy`
-Xxxx`/`Yyyy    becomes Xxxx|`/`|Yyuy
 >>>
 
 
@@ -279,6 +272,44 @@ Almost ``4ny- ch@rac7er 0.0.0 "'&#^> / *``
 >>>
 
 Spaces are handled the same way as with block of literal inside grave accents.
+
+=== Block after tilde
+
+XML elements: ``n:block-after-tilde``, ``n:subblock``
+
+A tilde character `~` may prefix a block of text containing no space nor line break.
+Inside the same block there can be other tilde characters.
+
+Considering this source document:
+
+<<<
+~one(single)~block!
+>>>
+
+The internal structure looks like this:
+
+<<<
++ n:block-after-tilde
+  + n:subblock
+    + "one"
+    + n:block-inside-parenthesis
+      + "single"
+  + n:subblock
+    + "block"
+    + n:punctuation-sign "!"
+>>>
+
+
+Subblock may contain:
+- Plain words.
+- Punctuation signs.
+- Block inside grave accents.
+- Block inside grave accent pairs.
+- Block inside parenthesis.
+
+With Novelang default stylesheet, the subblocks are separated with a zero-width space.
+This is fine for overriding whitespace addition for typographic ~effect(s).
+
 
 
 === Paragraphs inside angled bracket pairs

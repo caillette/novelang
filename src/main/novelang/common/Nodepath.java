@@ -52,6 +52,10 @@ public class Nodepath {
     return depth ;
   }
 
+  public Nodepath getAncestor() {
+    return ancestor ;
+  }
+
   public NodeKind getCurrent() {
     return current;
   }

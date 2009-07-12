@@ -347,6 +347,7 @@
     </fo:inline>
   </xsl:template>
 
+  <xsl:template match="n:block-after-tilde/n:subblock[position() > 1]" >&#x200b;<xsl:apply-templates/></xsl:template>
 
   <xsl:template match="n:cell-rows-with-vertical-line" >
 

@@ -45,7 +45,11 @@ public class GenericRendererTest {
 
   @Test
   public void whitespace1() throws Exception {
-    final SyntacticTree tree = tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "first" ), tree( WORD_, "second") ) ;
+    final SyntacticTree tree = tree(
+        BLOCK_INSIDE_PARENTHESIS,
+        tree( WORD_, "first" ),
+        tree( WORD_, "second")
+    ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     assertEquals( "BLOCK_INSIDE_PARENTHESIS(first^second)", getRenderedText() ) ;
@@ -60,6 +64,25 @@ public class GenericRendererTest {
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     assertEquals( "BLOCK_INSIDE_PARENTHESIS(superWORD_AFTER_CIRCUMFLEX_ACCENT(script))", getRenderedText() ) ;
+  }
+
+  @Test
+  public void noSpaceInsideBlockAfterTilde() throws Exception {
+    final SyntacticTree tree = tree(
+        BLOCK_AFTER_TILDE,
+        tree(
+            SUBBLOCK,
+            tree( WORD_, "x" ),
+            tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "y" ) ),
+            tree( WORD_, "z" )
+        )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals(
+        "BLOCK_AFTER_TILDE(SUBBLOCK(xBLOCK_INSIDE_PARENTHESIS(y)z))",
+        getRenderedText()
+    ) ;
   }
 
   @Test

@@ -46,12 +46,13 @@ Inline literal has leading and trailing whitespaces trimmed. Whitespaces inside 
 ``  This  is  a  sample  of  a  very  long  literal   block.  ``
 ``  Let's   see  if   no break  spaces   avoid  line  break. ``
 
-Two consecutive blocks of literal (with no whitespace nor line break between) are rendered with
- a zero-width space inbetween.
-``Aaaaaaa````Bbbbbb````Ccccccc````Ddddddd````Eeeeee````Fffffff````Ggggggg````Hhhhhh````Iiiiii``
 
-When there is no separation between block of literal inside accent pairs and a word (in any order),
-they are rendered with just a zero-width space in`be`tween. 
+=== Block after tilde
+
+A block after tilde contains no space nor line break. All what's in is rendered with no space.
+Zero-width spaces are inserted using some additional tilde.
+~``Aaaaaaa``(no?space;here!)~``Bbbbbb``~`Ccccccc`Ddddd'dd~`Eeeeee`~``Fffffff``~Gggggggg~``Hhhhhh``~I//talics//!
+
 
 
 == More stuff

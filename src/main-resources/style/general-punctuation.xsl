@@ -36,8 +36,12 @@
   <xsl:template match="n:zero-width-space" >&#x200b;</xsl:template>
   <xsl:template match="n:preserved-whitespace" xml:space="preserve" > </xsl:template>
 
-  <xsl:template match="n:sign-comma" >,</xsl:template>
-  <xsl:template match="n:sign-fullstop" >.</xsl:template>
+  <xsl:template match="n:block-after-tilde/n:subblock/n:sign-colon" >:</xsl:template>
+  <xsl:template match="n:block-after-tilde/n:subblock/n:sign-semicolon" >;</xsl:template>
+  <xsl:template match="n:block-after-tilde/n:subblock/n:sign-ellipsis" >&hellip;</xsl:template>
+  <xsl:template match="n:block-after-tilde/n:subblock/n:sign-exclamationmark" >!</xsl:template>
+  <xsl:template match="n:block-after-tilde/n:subblock/n:sign-questionmark" >?</xsl:template>
+
 
   <xsl:template match="n:meta" />
   <xsl:template match="n:image-width" />

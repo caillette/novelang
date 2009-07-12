@@ -37,6 +37,8 @@ tokens {
   BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE ;  
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS ;
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ;
+  BLOCK_AFTER_TILDE ;
+  SUBBLOCK ;
   LINES_OF_LITERAL ;                             // tagbehavior=TERMINAL
   PART ;                                         // tagbehavior=TRAVERSABLE
   PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL
@@ -295,6 +297,11 @@ delimitedMonoblock
   | hyphenPairMonoblock
   ;
 
+delimitedMonoblockNoSeparator
+  : parenthesizedMonoblockNoSeparator
+  | emphasizedMonoblockNoSeparator
+  ;
+
 mixedDelimitedSpreadBlock  
   : ( word 
       ( (   punctuationSign 
@@ -317,6 +324,7 @@ mixedDelimitedSpreadBlock
       )*   
       word?
     ) 
+  | blockAfterTilde
   ;
                 
 /** Everything in this rule implies a syntactic predicate, 
@@ -401,6 +409,33 @@ monoblockBody
     ( whitespace mixedDelimitedMonoblock )*
   ;  
 
+monoblockBodyNoSeparator
+  : 
+    ( word 
+      ( (   punctuationSign 
+          | delimitedMonoblockNoSeparator 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | 
+  
+    ( (   punctuationSign 
+        | delimitedMonoblockNoSeparator
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedMonoblockNoSeparator
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    )  
+  ;  
+
   
 mixedDelimitedMonoblock  
   : 
@@ -461,6 +496,18 @@ parenthesizedMonoblock
       RIGHT_PARENTHESIS
       { delegate.endDelimitedText( BlockDelimiter.PARENTHESIS ) ; }
     ) -> ^( BLOCK_INSIDE_PARENTHESIS monoblockBody )
+  ;
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.PARENTHESIS, mte ) ; }
+
+parenthesizedMonoblockNoSeparator
+  : ( 
+      { delegate.startDelimitedText( BlockDelimiter.PARENTHESIS, input.LT( 1 ) ) ; }
+      LEFT_PARENTHESIS monoblockBodyNoSeparator
+      { delegate.reachEndDelimiter( BlockDelimiter.PARENTHESIS ) ; }
+      RIGHT_PARENTHESIS
+      { delegate.endDelimitedText( BlockDelimiter.PARENTHESIS ) ; }
+    ) -> ^( BLOCK_INSIDE_PARENTHESIS monoblockBodyNoSeparator )
   ;
   catch[ MismatchedTokenException mte ] {
       delegate.reportMissingDelimiter( BlockDelimiter.PARENTHESIS, mte ) ; }
@@ -832,11 +879,29 @@ emphasizedMonoblock
       delegate.reportMissingDelimiter( BlockDelimiter.SOLIDUS_PAIRS, mte ) ; }
   
 
+emphasizedMonoblockNoSeparator
+	: ( 
+      { delegate.startDelimitedText( BlockDelimiter.SOLIDUS_PAIRS, input.LT( 1 ) ) ; }
+	    SOLIDUS SOLIDUS 
+	    ( b += monoblockBodyNoEmphasisNoSeparator )?
+	    { delegate.reachEndDelimiter( BlockDelimiter.SOLIDUS_PAIRS ) ; }
+	    SOLIDUS SOLIDUS
+      { delegate.endDelimitedText( BlockDelimiter.SOLIDUS_PAIRS ) ; }
+	  ) -> ^( BLOCK_INSIDE_SOLIDUS_PAIRS $b+ )
+  ;
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.SOLIDUS_PAIRS, mte ) ; }
+  
+
 delimitedMonoblockNoEmphasis
   : parenthesizedMonoblock
   | squarebracketsMonoblock
   | doubleQuotedMonoblock
   | hyphenPairMonoblock
+  ;
+
+delimitedMonoblockNoEmphasisNoSeparator
+  : parenthesizedMonoblockNoSeparator
   ;
 
 monoblockBodyNoEmphasis
@@ -849,6 +914,10 @@ monoblockBodyNoEmphasis
         mixedDelimitedMonoblockNoEmphasis
       )*                   
     )* 
+  ;  
+
+monoblockBodyNoEmphasisNoSeparator
+  : mixedDelimitedMonoblockNoEmphasisNoSeparator
   ;  
 
 mixedDelimitedMonoblockNoEmphasis
@@ -877,6 +946,32 @@ mixedDelimitedMonoblockNoEmphasis
       word?
     ) 
   ;
+
+
+mixedDelimitedMonoblockNoEmphasisNoSeparator
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedMonoblockNoEmphasisNoSeparator  
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedMonoblockNoEmphasisNoSeparator
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedMonoblockNoEmphasisNoSeparator 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
+  ;
+
 
   
 
@@ -1581,6 +1676,42 @@ vectorImageExtension
 // ====
 // Word
 // ====
+
+
+blockAfterTilde
+  : ( 
+      TILDE 
+      b += subblockAfterTilde
+	  )+ -> ^( BLOCK_AFTER_TILDE $b+ ) 
+  ;
+  
+subblockAfterTilde
+  : (  
+	    (  s += word 
+	      ( (   s += punctuationSign 
+	          | s += delimitedMonoblockNoSeparator
+	          | s += softInlineLiteral 
+	          | s += hardInlineLiteral 
+	      ) s += word? )*
+		  ) 
+	  | ( 
+	      (   s += punctuationSign 
+	        | s += delimitedMonoblockNoSeparator
+	        | s += softInlineLiteral 
+	        | s += hardInlineLiteral 
+	      )
+	      ( s += word? 
+	        (   s += punctuationSign 
+	          | s += delimitedMonoblockNoSeparator
+	          | s += softInlineLiteral 
+	          | s += hardInlineLiteral           
+	        ) 
+	      )*   
+	      s += word?
+	    ) 
+    ) -> ^( SUBBLOCK $s+ ) 
+  ;
+
 
 word
   : ( w1 = rawWord ( CIRCUMFLEX_ACCENT w2 = rawWord ) )
