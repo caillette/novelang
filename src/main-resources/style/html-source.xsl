@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE foo
+<!DOCTYPE stylesheet
 [
   <!-- Tweaked entities: we want them to appear verbatim in resulting document. -->
 
@@ -101,6 +101,24 @@
 <tt>&amp;lt;p&amp;gt;</tt><p><tt>&mdash;&nbsp;</tt><xsl:apply-templates/></p><tt>&amp;lt;/p&amp;gt;</tt>
   </xsl:template>
   
+
+  <xsl:template match="n:cell-rows-with-vertical-line" >
+    &amp;lt;table&amp;gt;
+      <xsl:apply-templates />
+    &amp;lt;/table&amp;gt;
+  </xsl:template>
+
+  <xsl:template match="n:cell-row" >
+    &amp;lt;tr&amp;gt;
+      <xsl:apply-templates/>
+    &amp;lt;/tr&amp;gt;
+  </xsl:template>
+
+  <xsl:template match="n:cell" >
+    &amp;lt;td&amp;gt;
+      <xsl:apply-templates/>
+    &amp;lt;/td&amp;gt;
+  </xsl:template>
 
 
   
