@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE foo [
+<!DOCTYPE stylesheet [
 
     <!ENTITY % ISOnum PUBLIC
         "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
