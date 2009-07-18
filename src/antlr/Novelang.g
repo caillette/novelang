@@ -463,6 +463,7 @@ mixedDelimitedMonoblock
       word?
     )  
   | embeddableResource
+  | blockAfterTilde
   ;
                 
 

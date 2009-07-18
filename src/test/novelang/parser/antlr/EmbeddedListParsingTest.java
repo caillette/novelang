@@ -148,6 +148,11 @@ public class EmbeddedListParsingTest {
     PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x (\"y \") z" ) ;
   }
 
+  @Test
+  public void smallDashedListItemHasBlockAfterTilde() throws RecognitionException {
+    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- ~x" ) ;
+  }
+
 // =======
 // Fixture
 // =======
