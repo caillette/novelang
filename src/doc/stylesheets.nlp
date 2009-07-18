@@ -1,23 +1,23 @@
 == Custom stylesheets
 
-It's easy to customize rendering of PDF, HTML and plain text because Novelang relies on FO (Formatting Objects) stylesheets. 
+It's easy to customize rendering of PDF, HTML and plain text because Novelang relies on FO
+(Formatting Objects) stylesheets.
 
 Novelang looks for stylesheets in that order:
+- In the directory set by ``--style-dir`` option at startup.
+- In a ``style`` directory right under the project directory (from where Novelang was launched)
+- Inside ``Novelang-x.x.x.jar`` under the ``/style`` directory.
 
-`1)` In the directory set by ``--style-dir`` option at startup.
-
-`2)` In a ``style`` directory right under the project directory (from where Novelang was launched)
-
-`3)` Inside ``Novelang-x.x.x.jar`` under the ``/style`` directory.
-
-By default Novelang attempts to render final document using the stylesheet with the name of corresponding format. Otherwise, it uses a default, built-in stylesheet.
+By default Novelang attempts to render final document using the stylesheet with the name of
+corresponding format. Otherwise, it uses a default, built-in stylesheet.
 
 <<<
 MIME type extension                .pdf     .html
 Corresponding default stylesheet    pdf.xsl  html.xsl
 >>>
 
-After launching Novelang HTTP daemon, you can use the stylesheet query parameter to override any other stylesheet name:
+After launching Novelang HTTP daemon, you can use the stylesheet query parameter to override
+any other stylesheet name:
 
 <<<
 http://localhost:8080/chapter-1.html?stylesheet=html-beautiful.xsl
@@ -28,16 +28,15 @@ Stylesheets may be defined for a whole Book as explained later, see the "mapstyl
 
 === eXtensible Stylesheet Language
 
-The stylesheets are written in XSL `/ FO`, which stands for eXtensible Stylesheet Language 
-`/ Formatting` Objects. Both are standards developed by the W3C (World Wide Web Consortium). 
-The reference documentation is 
-  "here"
+The stylesheets are written in ~XSL`/`~FO, which stands for
+eXtensible Stylesheet ~Language~`/`~Formatting Objects.
+Both are standards developed by the W3C (World Wide Web Consortium).
+The reference documentation is "here"
 http://www.w3.org/TR/xsl
 .
 
 FO may look complex, because typesetting is inherently complex, and because of the lack of synthetic 
-documentation. So you may be interested by 
-  "this document" 
+documentation. So you may be interested by "this document"
 http://web.archive.org/web/20071211215415/http://www.idealliance.org/papers/xml2001papers/tm/WEB/03-05-06/03-05-06.htm
 explaining importants FO basics.
 
@@ -52,7 +51,8 @@ http://www.dpawson.co.uk/xsl/sect3
 
 === XSL reuse
 
-Novelang supports stylesheet reuse with standard ``xsl:import`` command. You can reuse Novelang's bundled stylesheets:
+Novelang supports stylesheet reuse with standard ``xsl:import`` command.
+You can reuse Novelang's bundled stylesheets:
 
 <<<
 general-punctuation.xsl
@@ -63,7 +63,9 @@ punctuation-US-EN.xsl
 
 === Character entities
 
-Novelang stylesheets support inclusion of character entities. This means, you can include definition of characters which can no be typed verbatim in the stylesheet, like the non-breaking space.
+Novelang stylesheets support inclusion of character entities.
+This means, you can include definition of characters which can no be typed verbatim in the
+stylesheet, like the non-breaking space.
 
 Such a definition looks like this:
 
@@ -73,7 +75,8 @@ Such a definition looks like this:
 
 So inside the stylesheet you just have to type "``&nbsp;``" instead of "``&#160;``".
 
-Novelang comes bundled with those files. Here is how to refer them (it's quite verbose as XML always is) :
+Novelang comes bundled with those files. Here is how to refer them (it's quite verbose as XML
+always is) :
 
 <<<
 <!DOCTYPE doctype [
@@ -99,14 +102,19 @@ Novelang comes bundled with those files. Here is how to refer them (it's quite v
 ]>
 >>>
 
-For HTML documents, those entities are automatically HTML-escaped when their system name starts with ``ISO 8879:1986//ENTITIES`` as above.
+For HTML documents, those entities are automatically HTML-escaped when their system name starts
+with ``ISO 8879:1986//ENTITIES`` as above.
 
 
 === Other functions
 
-Java developers can add functions on their own in order to augment standard set of functions available from an XSL stylesheet. By now there is one, ``numberAsText`` which transforms a number into its textual equivalent. For example, number "43" will become "forty-three".
+Java developers can add functions on their own in order to augment standard set of functions
+available from an XSL stylesheet.
+By now there is one, ``numberAsText`` which transforms a number into its textual equivalent.
+For example, number "43" will become "forty-three".
 
-In addition to standard namespace declarations, the stylesheet must contain the ``xalan`` and ``nlx`` namespaces like below:
+In addition to standard namespace declarations, the stylesheet must contain the ``xalan`` and
+``nlx`` namespaces like below:
 
 <<<
 <xsl:stylesheet
@@ -125,7 +133,8 @@ Here is how to call the ``numberAsText`` function:
 <xsl:value-of select="nlx:numberAsText(43,'EN','capital')" />
 >>>
 
-The first parameter is the number itself (could be a standard XSL function like ``position()`` as well). Currently the number must be included in the `0-50` range.
+The first parameter is the number itself (could be a standard XSL function like ``position()``
+as well). Currently the number must be included in the `0-50` range.
 
 The second parameter is the locale. Currently only ``EN`` and ``FR``.
 

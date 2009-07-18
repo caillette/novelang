@@ -89,4 +89,5 @@ http://localhost:8080/samples/
 >>>
 
 
-Because of a known Safari bug, Safari browsers get redirected to a fake page named ``-.html`` but the feature remains the same, however.
+Because of a known Safari bug, Safari browsers get redirected to a fake page named ``-.html``
+but the feature remains the same, however.

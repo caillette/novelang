@@ -6,9 +6,12 @@ Book files aggregate part files. Book files have the ``.nlb`` suffix  (like Nove
 
 === Command : ``insert``
 
-Book files are useful when there is too much text to fit inside one Part file. It is also easier to reorganize small Parts by changing their order in a Book file than copy `/ pasting` inside one big file.
+Book files are useful when there is too much text to fit inside one Part file.
+It is also easier to reorganize small Parts by changing their order in a Book file than
+copy-pasting inside one big file.
 
-When Part files become too numerous, Book files can refer to multiple Part files at once. Referring to project layout, here is a well-formed Book file:
+When Part files become too numerous, Book files can refer to multiple Part files at once.
+Referring to project layout, here is a well-formed Book file:
 
 <<<
 insert file:path/to/myfirstpart.nlp
@@ -16,7 +19,8 @@ insert file:path/to/myfirstpart.nlp
 insert file:path/to/mysecondpart.nlp
 >>>
 
-When the Parts are located in the same directory as the Book file, the single dot notation (for current directory) is supported:
+When the Parts are located in the same directory as the Book file, the single dot notation
+(for current directory) is supported:
 
 <<<
 insert file:. 
@@ -29,7 +33,8 @@ The ``$recurse`` option scans parts in subdirectories.
 insert file:. $recurse 
 >>>
 
-The ``$createlevel`` option adds the content of the file under one chapter element. The chapter title is the filename, path and ``.nlp`` extension being trimmed.
+The ``$createlevel`` option adds the content of the file under one chapter element.
+The chapter title is the filename, path and ``.nlp`` extension being trimmed.
 
 <<<
 insert file:. $recurse $createlevel
@@ -55,7 +60,9 @@ Expert users will find this is useful for customizing the output right from an X
 
 === Command : ``mapstylesheet``
 
-The "mapstylesheet" command defines a stylesheet for one or more MIME type. Referring to project layout above, here is the command to insert in ``book.nlb`` file in order to render HTML documents with ``html-beautiful.xsl`` and PDF documents with ``pdf-beautiful.xsl``.
+The "mapstylesheet" command defines a stylesheet for one or more MIME type.
+Referring to project layout above, here is the command to insert in ``book.nlb`` file in order
+to render HTML documents with ``html-beautiful.xsl`` and PDF documents with ``pdf-beautiful.xsl``.
 
 <<<
 mapstylesheets 

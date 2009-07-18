@@ -2,7 +2,7 @@
 
 Novelang aims to support a wide range of languages, at least those with Roman characters.
 There are three aspects to consider:
-- The character set of the source `document(s)`.
+- The character set of the source ~document(s) .
 - The character set of the rendered document.
 - The characters recognized by Novelang grammar.
 

@@ -28,7 +28,7 @@ This is a second quoted paragraph.
 
 
 See? Decorations look "imaged" like ASCII emoticons. Equal signs figure indents for the title
-level, and angled brackets look like opening `/` closing quotes.
+level, and angled brackets look like ~opening`/`~closing quotes.
 Unlike with HTML or LaTeX, it's easy to read a Novelang source document.
 
 Novelang makes a great effort for making its grammar consistent.
@@ -70,9 +70,10 @@ is called ``n:block-inside-solidus-pairs``. Why not calling it simply "italics"?
 First, keep in mind that those XML names only appear inside custom stylesheets so
 you may not care about them at all.
 Novelang transforms the source document in an abstract tree before rendering it through a stylesheet.
-If you create your own stylesheet you can process a block inside ``//`` like a footnote in super-bold
-or whatever, then "italics" would be quite confusing. So XML element names don't try to carry
-assumptions about the usage of the element. It just describes the originating decoration.
+If you create your own stylesheet you can process a block inside ``//`` like a footnote
+in super-bold or whatever, then "italics" would be quite confusing.
+So XML element names don't try to carry assumptions about the usage of the element.
+It just describes the originating decoration.
 
 
 === Paragraph, regular
@@ -128,22 +129,22 @@ Blah.
 The level structure of the Part looks like this:
 
 <<<
-n:part
- + n:paragraph-regular "Text at depth 0"
- + n:level
- | + n:level-title "Depth 1"
- | + n:paragraph-regular "Introductory text."
- | + n:level
- | |  + n:level-title "Depth 2"
- | |  + n:paragraph-regular "Blah blah blah."
- | + n:level
- |    + n:level-title "Depth 2"
- |    + n:paragraph-regular "Blah."
- + n:level
++ n:part
+  + n:paragraph-regular "Text at depth 0"
+  + n:level
+  | + n:level-title "Depth 1"
+  | + n:paragraph-regular "Introductory text."
+  | + n:level
+  | | + n:level-title "Depth 2"
+  | | + n:paragraph-regular "Blah blah blah."
+  | + n:level
+  |   + n:level-title "Depth 2"
+  |   + n:paragraph-regular "Blah."
+  + n:level
     + n:level-title "Depth 1 again"
     + n:level
-       + n:level-title "Depth 2"
-       + n:paragraph-regular "..."
+      + n:level-title "Depth 2"
+      + n:paragraph-regular "..."
 >>>
 
 As explained later in this document, the depth of levels may be changed (increased) at Book level.
@@ -291,9 +292,9 @@ The internal structure looks like this:
 <<<
 + n:block-after-tilde
   + n:subblock
-    + "one"
-    + n:block-inside-parenthesis
-      + "single"
+  | + "one"
+  | + n:block-inside-parenthesis
+  |   + "single"
   + n:subblock
     + "block"
     + n:punctuation-sign "!"
@@ -309,7 +310,7 @@ Subblock may contain:
 - Block inside solidus pairs.
 
 With Novelang default stylesheet, the subblocks are separated with a zero-width space.
-This is fine for overriding whitespace addition for typographic ~effect(s).
+This is fine for overriding whitespace addition for typographic ~effect(s) .
 
 
 
@@ -419,8 +420,8 @@ April, the 1^st.
 
 XML elements: ``n:url``, ``n:url-literal``
 
-A URL is primarily made of URL literal, which starts at the first column of a line, with nothing else on
-the same line (except trailing whitespaces).
+A URL is primarily made of URL literal, which starts at the first column of a line,
+with nothing else on the same line (except trailing whitespaces).
 
 When the URL literal is preceded by a block inside double quotes, or a block inside square brackets,
 it becomes a child of the ``n:url`` element.
@@ -575,14 +576,14 @@ My tagged paragraph.
 The XML structure of source document above looks like this:
 
 <<<
-n:part
- + n:level
++ n:part
+  + n:level
     + n:tag "my-tag"
     + n:level-title "Tagged level"
     + n:regular-paragraph
-       + n:tag "my-tag"
-       + n:tag "some-other-tag"
-       + "My tagged paragraph."
+      + n:tag "my-tag"
+      + n:tag "some-other-tag"
+      + "My tagged paragraph."
 >>>
 
 
