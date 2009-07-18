@@ -30,8 +30,9 @@
     <fo:table
         border-collapse="collapse"    
     >
-      <fo:table-column column-width="90mm" />
+      <fo:table-column column-width="70mm" />
       <fo:table-column column-width="30mm" />
+      <fo:table-column column-width="20mm" />
       <fo:table-column column-width="20mm" />
       <fo:table-column column-width="20mm" />
 

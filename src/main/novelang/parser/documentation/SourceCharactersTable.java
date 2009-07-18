@@ -61,11 +61,13 @@ public class SourceCharactersTable {
 
     writer.println( "== Characters supported in source documents" ) ;
     writer.println() ;
-    writer.println( "| Escape name | Alias | Hex | Preview |" ) ;
+    writer.println( "| Escape name | Alias | Hex | Dec | Preview |" ) ;
 
     final List< Lexeme > lexemes = Ordering.from( COMPARATOR ).sortedCopy(
         GeneratedLexemes.getLexemes().values() ) ;
     for( Lexeme lexeme : lexemes ) {
+      final String unicode = CharUtils.unicodeEscaped( lexeme.getCharacter() ).substring( 1 ) ;
+      final String decimal = String.format( "%04d", ( int ) lexeme.getCharacter().charValue() ) ;
       final String longEscapeName =
           SourceUnescape.unicodeUpperNameToEscapeName( lexeme.getUnicodeName() );
       writer.append( "| " ) ;
@@ -73,7 +75,9 @@ public class SourceCharactersTable {
       writer.append( " | " ) ;
       writer.append( doubleEscape( lexeme.getHtmlEntityName() ) ) ;
       writer.append( " | " ) ;
-      writer.append( CharUtils.unicodeEscaped( lexeme.getCharacter() ).substring( 1 ) ) ;
+      writer.append( unicode ) ;
+      writer.append( " | " ) ;
+      writer.append( decimal ) ;
       writer.append( " | " ) ;
       writer.append( simpleEscape( longEscapeName ) ) ;
       writer.append( " |" ) ;

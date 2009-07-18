@@ -269,6 +269,12 @@ td
     background-color: gainsboro;
 }
 
+/*Last column for character table*/
+td+td+td+td+td
+{
+text-align: center;
+}
+
 /**** IDs *************************************************************/
 
 #Box {
