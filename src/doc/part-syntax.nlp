@@ -306,6 +306,7 @@ Subblock may contain:
 - Block inside grave accents.
 - Block inside grave accent pairs.
 - Block inside parenthesis.
+- Block inside solidus pairs.
 
 With Novelang default stylesheet, the subblocks are separated with a zero-width space.
 This is fine for overriding whitespace addition for typographic ~effect(s).
