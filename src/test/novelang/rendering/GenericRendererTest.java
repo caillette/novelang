@@ -67,7 +67,7 @@ public class GenericRendererTest {
   }
 
   @Test
-  public void noSpaceInsideBlockAfterTilde() throws Exception {
+  public void noSpaceInsideBlockAfterTilde1() throws Exception {
     final SyntacticTree tree = tree(
         BLOCK_AFTER_TILDE,
         tree(
@@ -81,6 +81,29 @@ public class GenericRendererTest {
     renderer.render( createRenderable( tree ), outputStream ) ;
     assertEquals(
         "BLOCK_AFTER_TILDE(SUBBLOCK(xBLOCK_INSIDE_PARENTHESIS(y)z))",
+        getRenderedText()
+    ) ;
+  }
+
+  @Test
+  public void noSpaceInsideBlockAfterTilde2() throws Exception {
+    final SyntacticTree tree = tree(
+        PARAGRAPH_REGULAR,
+        tree(
+            BLOCK_AFTER_TILDE,
+            tree(
+                SUBBLOCK,
+                tree( WORD_, "x" ),
+                tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "/" ),
+                tree( WORD_, "y" )
+            )
+        ),
+        tree( WORD_, "z" )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals(
+        "PARAGRAPH_REGULAR(BLOCK_AFTER_TILDE(SUBBLOCK(xBLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS(/)y))^z)",
         getRenderedText()
     ) ;
   }

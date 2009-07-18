@@ -55,7 +55,7 @@ public class BlockAfterTildeParsingTest {
   }
 
   @Test
-  public void compositeBlock2() {
+  public void compositeBlockWithParenthesis() {
     PARSERMETHOD_BLOCK_AFTER_TILDE.checkTree(
         "~w(x)!?",
         tree(
@@ -66,6 +66,22 @@ public class BlockAfterTildeParsingTest {
                 tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "x" ) ),
                 tree( PUNCTUATION_SIGN, tree( SIGN_EXCLAMATIONMARK, "!" ) ),
                 tree( PUNCTUATION_SIGN, tree( SIGN_QUESTIONMARK, "?" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void compositeBlockWithBlockInsideGraveAccents() {
+    PARSERMETHOD_BLOCK_AFTER_TILDE.checkTree(
+        "~w`/`x",
+        tree(
+            BLOCK_AFTER_TILDE,
+            tree(
+                SUBBLOCK,
+                tree( WORD_, "w" ),
+                tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "/" ),
+                tree( WORD_, "x" )
             )
         )
     ) ;
@@ -94,11 +110,14 @@ public class BlockAfterTildeParsingTest {
     ) ;
   }
 
-  @Test @Ignore
+  @Test 
   public void simplestSubblock() {
     PARSERMETHOD_BLOCK_AFTER_TILDE.checkTree(
-        "word",
-        tree( SUBBLOCK, tree( WORD_, "word" ) )
+        "~word",
+        tree(
+            BLOCK_AFTER_TILDE,
+            tree( SUBBLOCK, tree( WORD_, "word" ) ) 
+        )
     ) ;
   }
 
@@ -110,7 +129,5 @@ public class BlockAfterTildeParsingTest {
 
   private static final ParserMethod PARSERMETHOD_BLOCK_AFTER_TILDE =
       new ParserMethod( "blockAfterTilde" ) ;
-  private static final ParserMethod PARSERMETHOD_SUBBLOCK_AFTER_TILDE =
-      new ParserMethod( "subblockAfterTilde" ) ;
 
 }

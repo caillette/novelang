@@ -792,6 +792,29 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.createTree( "//w. //" ) ;
   }
 
+  @Test
+  public void paragraphHasBlockAfterTildeThatShouldNotBeGreedy() {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+        "~w`/`x y",
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_AFTER_TILDE,
+                tree(
+                    SUBBLOCK,
+                    tree( WORD_, "w" ),
+                    tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "/" ),
+                    tree( WORD_, "x" )
+                )
+            ),
+            tree( WHITESPACE_, " " ),
+            tree( WORD_, "y" )
+        )
+    ) ;
+  }
+
+
+
 
 // =======
 // Fixture
@@ -824,6 +847,8 @@ public class ParagraphParsingTest {
   private static final SyntacticTree TREE_SIGN_ELLIPSIS =
       tree( PUNCTUATION_SIGN, tree( SIGN_ELLIPSIS, "..." ) );
 
+  private static final ParserMethod PARSERMETHOD_BLOCK_AFTER_TILDE =
+      new ParserMethod( "blockAfterTilde" ) ;
 
 
 }
