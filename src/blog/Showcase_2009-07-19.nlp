@@ -2,18 +2,18 @@
 
 Last week I gave an introduction to Novelang at a software publisher's who's looking at a
 collaborative tool for writing it's product's documentation.
-The attenders were the internal IT manager, two technical writers and [TBD].
+The attenders were the internal IT manager, two technical writers and and an IT intern.
 Technical writers were enthusiastic, since Novelang is a huge leap from FrameMaker and Robohelp
 -- that's what they're working with for now-_. They had a look at "Scenari"
 http://scenari-platform.org/projects/scenari/en/pres/co/desc.html
-and "TBD"
-http://TBD
+and "Nuxeo"
+http://www.nuxeo.com
 .
 While both are open-source product, the setup fees seemed hugely overpriced.
 
 (In my own humble opinion, Scenari is overengineered crap with excessively complex
 graphical editor. But it has nice slides to explain the "What You See Is What You Mean"
-concept.)
+concept. I spent no time looking at Nuxeo for now.)
 
 The technical writers really liked that Novelang never asks for more information
 that the very minimum required (I guess FrameMaker doesn't do that).
