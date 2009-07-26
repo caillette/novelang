@@ -56,10 +56,10 @@ I've used it already and I know it works. The "inheritable" nature of CSS means 
 the output a bit (reducing margins and page width) while reusing the default CSS stylesheet.
 
 
-Ok, ok, this all sounds complicated. But I got it. It got it.
-Could FOP generate images directly? "Yes!"
+Finally, all this product review turns to be nonsense, because FOP is supposed to "generate
+images directly"
 http://xmlgraphics.apache.org/fop/0.95/output.html#bitmap
-So obvious!
+! Insanely great!
 
 
 
