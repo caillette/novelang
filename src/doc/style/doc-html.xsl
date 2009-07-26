@@ -25,7 +25,7 @@
   <!ENTITY usersGroup         "http://groups.google.com/group/novelang-users/topics" >
   <!ENTITY developersGroup    "http://groups.google.com/group/novelang-developers/topics" >
   <!ENTITY sourceforgeProject "http://sourceforge.net/projects/novelang" >
-  <!ENTITY download           "http://sourceforge.net/project/showfiles.php?group_id=227480&amp;package_id=275418" >
+  <!ENTITY download           "http://sourceforge.net/projects/novelang/files" >
   <!ENTITY github             "http://github.com/caillette/novelang/tree/master" >
   <!ENTITY issues             "http://github.com/caillette/novelang/issues" >
   <!ENTITY pdfDocument        "http://novelang.sf.net/novelang.pdf" >
