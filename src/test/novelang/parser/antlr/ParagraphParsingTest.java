@@ -626,6 +626,11 @@ public class ParagraphParsingTest {
         "w5\"--)//." 
     );
   }
+  
+  @Test
+  public void paragraphIsBlockAfterTildeInsideBlockInsideDoubleQuotes() {
+    PARSERMETHOD_PARAGRAPH.createTree( "\"~x\"" ) ;
+  }
 
   @Test
   public void

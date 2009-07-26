@@ -670,6 +670,7 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
       )*   
       word?
     ) 
+  | blockAfterTilde    
   ;
 
 doubleQuotedMonoblock
