@@ -14,6 +14,16 @@ http://novelang.blogspot.com
 . 
 
 
+=== Version `0.31.1`
+
+--- Minor fixes around block after tilde. They may appear inside embedded lists and block inside
+solidus pairs. 
+
+--- Better handling of automatic space addition. 
+
+--- Now character table contains decimal values.
+
+
 === Version `0.31.0`
 
 //This version introduces changes that may break the rendering of existing documents.//
