@@ -109,6 +109,21 @@ public class GenericRendererTest {
   }
 
   @Test
+  public void spaceInsideTwoBlocksInsideGraveAccent() throws Exception {
+    final SyntacticTree tree = tree(
+        PARAGRAPH_REGULAR,
+        tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "y" ),
+        tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "z" )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals(
+        "PARAGRAPH_REGULAR(BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS(y)^BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS(z))",
+        getRenderedText()
+    ) ;
+  }
+
+  @Test
   public void whitespace2() throws Exception {
     final SyntacticTree tree = tree(
         NodeKind.PARAGRAPH_REGULAR,

@@ -4,6 +4,10 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
+  <!-- Don't import default punctuation because it would add special space characters
+       that are hard to distinguate from inside a text editor.
+  -->
+  
   <xsl:output method="text" omit-xml-declaration="yes" indent="no" />
 
   <xsl:param name="timestamp"/>
@@ -111,6 +115,13 @@
   <xsl:template match="n:block-inside-hyphen-pairs" >-- <xsl:apply-templates/> --</xsl:template>
 
   <xsl:template match="n:block-inside-two-hyphens-then-hyphen-low-line" >-- <xsl:apply-templates/> -_</xsl:template>
+  
+  <xsl:template match="n:block-of-literal-inside-grave-accents" >`<xsl:apply-templates/>`</xsl:template>
+  
+  <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" >``<xsl:apply-templates/>``</xsl:template>
+  
+  <xsl:template match="n:block-after-tilde/n:subblock" >~<xsl:apply-templates mode="nospace" /></xsl:template>
+  
 
   <xsl:template match="n:apostrophe-wordmate" >'</xsl:template>
 
@@ -121,6 +132,17 @@
   <xsl:template match="n:sign-exclamationmark" > !</xsl:template>
   <xsl:template match="n:sign-fullstop" >.</xsl:template>
   <xsl:template match="n:sign-questionmark" > ?</xsl:template>
+
+  <xsl:template match="n:sign-colon" mode="nospace" >:</xsl:template>
+  <xsl:template match="n:sign-semicolon" mode="nospace" >;</xsl:template>
+  <xsl:template match="n:sign-exclamationmark" mode="nospace" >!</xsl:template>
+  <xsl:template match="n:sign-questionmark" mode="nospace" >?</xsl:template>
+  <xsl:template match="n:block-of-literal-inside-grave-accents" mode="nospace" >`<xsl:apply-templates/>`</xsl:template>
+  <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" mode="nospace" >``<xsl:apply-templates/>``</xsl:template>
+  <xsl:template match="n:block-inside-parenthesis" mode="nospace" >(<xsl:apply-templates/>)</xsl:template>
+
+  
+  
 
   <xsl:template match="text()" >
     <xsl:value-of select="." />
