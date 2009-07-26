@@ -309,6 +309,12 @@ Subblock may contain:
 - Block inside parenthesis.
 - Block inside solidus pairs.
 
+When inside block inside solidus pairs, a whitespace //must// follow the block after tilde: 
+
+<<<
+//~(un)ambiguous //
+>>>
+
 With Novelang default stylesheet, the subblocks are separated with a zero-width space.
 This is fine for overriding whitespace addition for typographic ~effect(s) .
 

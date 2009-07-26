@@ -633,6 +633,11 @@ public class ParagraphParsingTest {
   }
 
   @Test
+  public void paragraphIsBlockAfterTildeInsideBlockInsideSolidusPairs() {
+    PARSERMETHOD_PARAGRAPH.createTree( "//~x //" ) ;
+  }
+
+  @Test
   public void
   paragraphIsEmphasisWithWordThenUrlThenWordOnSeveralLines()
       throws RecognitionException

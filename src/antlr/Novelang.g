@@ -860,7 +860,8 @@ mixedDelimitedSpreadBlockNoEmphasis
         ) 
       )*   
       word?
-    ) 
+    )
+  | blockAfterTilde  whitespace
   ;
 
   
