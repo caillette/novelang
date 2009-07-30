@@ -97,13 +97,13 @@
       depends="init, login-on-remote-site"
       description="Useful for debugging only."
   >
+    <echo message="target.distrib.path=${target.distrib.path}" />
     <echo message="publish.remote.host=${publish.remote.host}" />
     <echo message="publish.remote.dir=${publish.remote.doc.dir}" />
-    <echo message="publish.remote.javadoc.dir=${publish.remote.javadoc.dir}" />
     <echo message="publish.remote.user=${publish.remote.user}" />
     <echo message="publish.remote.project=${publish.remote.project}" />
     <echo message="publish.remote.password=${publish.remote.password}" />
-    
+
   </target>
   
 
@@ -111,6 +111,7 @@
     <mkdir dir="${target.dir}" />
     <mkdir dir="${target.mainclasses.dir}" />
     <mkdir dir="${target.buildclasses.dir}" />
+    <mkdir dir="${target.distrib.dir}" />
   </target>
 
 
@@ -459,21 +460,36 @@
       depends="login-on-remote-site"
       description="Copy documentation (except Javadoc) to SourceForge. Files must have been generated first!"
   >
+    <!--
+        See documentation on
+        https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download
+    -->
+
+    <property
+        name="scp-destination"
+        value="${publish.remote.user},${publish.remote.project.name}:${publish.remote.password}@${publish.remote.host}:${publish.remote.release.dir}"
+    />
+    <property
+        name="scp-file"
+        value="${target.distrib.root}"
+    />
+
+    <echo >
+      scp-destination=${scp-destination}
+      scp-file=${scp-file}
+    </echo>
 
     <scp
-        todir="${publish.remote.user}:${publish.remote.password}@${publish.remote.host}:uploads"
+        remotetodir="${scp-destination}"
         verbose="true"
         sftp="true"
-        file="${target.distrib.path}"
-    />
+
+    >
+      <fileset dir="${scp-file}" />
+    </scp>
     <echo>
-      Now go to SourceForge project page, log in as "${publish.remote.user}" 
-      and choose "Project admin > Downloads". 
-      For the package name ${project.name}, select "Add Release" and create a release 
-      named "${project.version}".
-      In the next page, go to step 2 and select uploaded file (${target.distrib.name}).
-      Click on "Add Files and / or Refresh View".
-      Then go to the public download page and check that new release appears.
+      Now go to SourceForge project page and check that uploaded release
+      appears as expected.
     </echo>
 
   </target>
