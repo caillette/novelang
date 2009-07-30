@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 
 <project basedir="." name="Novelang build file" default="generate-antlr-idea" >
 
@@ -449,13 +449,36 @@
     />
   </target>
 
-  <target 
-      name="login-on-remote-site" 
+  <target
+      name="login-on-remote-site"
       depends="init, ask-user-for-remote-site, ask-project-for-remote-site, ask-password-for-remote-site"
       description="Set properties for user name, project name and password if not already done"
   />
 
-  <target 
+  <target
+      name="ask-user-for-announcer"
+      unless="announcement.user.name"
+      >
+    <input message="Announcer SMTP password" addproperty="announcement.user.name" />
+  </target>
+
+  <target
+      name="ask-password-for-announcer"
+      unless="announcer.user.password"
+  >
+    <input
+        message="Password for ${announcement.user.name} posting on ${announcement.blog.address}"
+        addproperty="announcer.user.password"
+    />
+  </target>
+
+  <target
+      name="login-on-announcement-blog"
+      depends="init, ask-user-for-announcer, ask-password-for-announcer"
+      description="Set properties for announcer name, blog name and password if not already done"
+  />
+
+  <target
       name="publish-distrib" 
       depends="login-on-remote-site"
       description="Copy documentation (except Javadoc) to SourceForge. Files must have been generated first!"
@@ -626,5 +649,29 @@
   <target name="build-distribution"
       depends="clean-compile-runtests, generate-documentation, create-jar, package-distribution"
   />
+
+  <target name="post-release-announcement"
+      depends="login-on-announcement-blog"
+  >
+    <!--
+        Doesn't work yet, see
+        http://forums.sun.com/thread.jspa?threadID=779286
+    -->
+    <mail
+        from="${announcement.user.email}"
+        tolist="${announcement.blog.secretpostingaddress}"
+        mailhost="${announcement.mailhost}"
+        user="${announcement.user.email}"
+        password="${announcement.user.password}"
+        messagemimetype="plain/text"
+        ssl="yes"
+        subject="${project.versionedname} release! ${timestamp}"
+        charset="utf-8"
+    >
+      <message>
+        New release available!
+      </message>
+    </mail>
+  </target>
 
 </project>
