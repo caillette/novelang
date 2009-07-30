@@ -502,38 +502,6 @@
   </target>
 
 
-  <target 
-      name="publish-javadoc" 
-      depends="login-on-remote-site"
-      description="Copy zipped javadoc to SourceForge and unzips through SSH command. Files must have been generated first!"
-  >
-
-    <scp
-        todir="${publish.remote.user},${publish.remote.project}:${publish.remote.password}@${publish.remote.host}:${publish.remote.dir}"
-        verbose="true"
-        sftp="true"
-        file="${target.javadoc.zip}"
-    />
-
-    <property
-        name="command"
-        value="unzip -o -d ${publish.remote.javadoc.dir} ${publish.remote.dir}/${target.javadoc.zipfilename}" 
-    />
-    <echo>SSH command: ${command}</echo>
- 
-    <sshexec
-        host="${publish.remote.shell}"
-        username="${publish.remote.user},${publish.remote.project}"
-        password="${publish.remote.password}"
-        command="${command}"
-        outputproperty="sshexecoutput"
-    />
- 
-    <!--<echo>SSH output: ${sshexecoutput}</echo>-->
-    
-    
-  </target>
-
   <target
       name="publish-everything"
       depends="login-on-remote-site, publish-distrib, publish-documentation"
