@@ -654,18 +654,6 @@
       depends="login-on-announcement-blog"
   >
 
-    <echo>
-      from="${announcement.user.email}"
-      tolist="${announcement.blog.secretpostingaddress}"
-      mailhost="${announcement.mailhost}"
-      mailport="465"
-      user="${announcement.user.email}"
-      password="${announcement.user.password}"    
-    </echo>
-    <!--
-        Doesn't work yet, see
-        http://forums.sun.com/thread.jspa?threadID=779286
-    -->
     <mail
         from="${announcement.user.email}"
         tolist="${announcement.blog.secretpostingaddress}"
