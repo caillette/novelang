@@ -145,10 +145,10 @@ public class AntlrGenerator extends JavaGenerator {
    * ANTLR as expected.
    */
   private void checkAntlrToolOutput( String output ) {
-    final String antlrIntroductoryLine = ANTLR_OUTPUT_INTRODUCTION + "\n\n" ;
+    final String antlrIntroductoryLine = ANTLR_OUTPUT_INTRODUCTION ;
     if( output.startsWith( antlrIntroductoryLine ) ) {
       final int introductoryLineLength = antlrIntroductoryLine.length();
-      if( output.length() > introductoryLineLength ) {
+      if( output.length() > introductoryLineLength + 2 ) {
         throw new RuntimeException( "\n" + output.substring( introductoryLineLength ) ) ;
       }
     } else {
