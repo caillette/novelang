@@ -464,11 +464,11 @@
 
   <target
       name="ask-password-for-announcer"
-      unless="announcer.user.password"
+      unless="announcement.user.password"
   >
     <input
         message="Password for ${announcement.user.name} posting on ${announcement.blog.address}"
-        addproperty="announcer.user.password"
+        addproperty="announcement.user.password"
     />
   </target>
 
@@ -653,6 +653,15 @@
   <target name="post-release-announcement"
       depends="login-on-announcement-blog"
   >
+
+    <echo>
+      from="${announcement.user.email}"
+      tolist="${announcement.blog.secretpostingaddress}"
+      mailhost="${announcement.mailhost}"
+      mailport="465"
+      user="${announcement.user.email}"
+      password="${announcement.user.password}"    
+    </echo>
     <!--
         Doesn't work yet, see
         http://forums.sun.com/thread.jspa?threadID=779286
@@ -661,6 +670,7 @@
         from="${announcement.user.email}"
         tolist="${announcement.blog.secretpostingaddress}"
         mailhost="${announcement.mailhost}"
+        mailport="465"
         user="${announcement.user.email}"
         password="${announcement.user.password}"
         messagemimetype="plain/text"
