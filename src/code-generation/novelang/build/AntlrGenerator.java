@@ -60,7 +60,6 @@ public class AntlrGenerator extends JavaGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger( AntlrGenerator.class ) ;
   
   private static final String FIRST_IMPORT = "import novelang.parser.antlr.ProblemDelegate ;" ;
-  private static final String ANTLR_OUTPUT_INTRODUCTION = "ANTLR Parser Generator  Version 3.1.1";
 
   public AntlrGenerator(
       File grammarFile,
@@ -95,7 +94,9 @@ public class AntlrGenerator extends JavaGenerator {
 
     try {
       try {
+        LOGGER.info( "Running ANTLR..." ) ;
         org.antlr.Tool.main( arguments ) ;
+        LOGGER.info( "ANTLR ran successfully." ) ;
       } catch( ExitTrappedException e ) {
         // Do nothing, just prevents org.antlr.Tool from stopping the VM.
       } finally {
@@ -137,7 +138,29 @@ public class AntlrGenerator extends JavaGenerator {
     throw new UnsupportedOperationException( "Don't call this method" ) ; 
   }
 
+  private static final String ANTLR_OUTPUT_INTRODUCTION = "ANTLR Parser Generator  Version 3.1.1";
 
+  /**
+   * Checks ANTLR output on the console. This is an easy way to ensure we've been running 
+   * ANTLR as expected.
+   */
+  private void checkAntlrToolOutput( String output ) {
+    final String antlrIntroductoryLine = ANTLR_OUTPUT_INTRODUCTION + "\n\n" ;
+    if( output.startsWith( antlrIntroductoryLine ) ) {
+      final int introductoryLineLength = antlrIntroductoryLine.length();
+      if( output.length() > introductoryLineLength ) {
+        throw new RuntimeException( "\n" + output.substring( introductoryLineLength ) ) ;
+      }
+    } else {
+      throw new IllegalStateException( 
+          "ANTLR output doesn't start with expected string: \n" + antlrIntroductoryLine + 
+          "\nInstead got:\n" + output
+      ) ;
+    }
+  }
+
+  
+  
 // =======================  
 // Forbid System.exit call
 // =======================  
@@ -147,7 +170,9 @@ public class AntlrGenerator extends JavaGenerator {
   private static void forbidSystemExitCall() {
     final SecurityManager securityManager = new SecurityManager() {
       public void checkPermission( Permission permission ) {
-        if( "exitVM".equals( permission.getName() ) ) {
+	    final String permissionName = permission.getName() ;
+        if( permissionName.startsWith( "exitVM" ) ) {
+          LOGGER.debug( "Checking permission " + permissionName ) ;
           throw new ExitTrappedException() ;
         }
       }
@@ -191,20 +216,5 @@ public class AntlrGenerator extends JavaGenerator {
       return new String( byteArrayOutputStream.toByteArray() ) ;
     }
   }
-  
-  private void checkAntlrToolOutput( String output ) {
-    final String antlrIntroductoryLine = ANTLR_OUTPUT_INTRODUCTION + "\n" ;
-    if( output.startsWith( antlrIntroductoryLine ) ) {
-      final int introductoryLineLength = antlrIntroductoryLine.length();
-      if( output.length() > introductoryLineLength ) {
-        throw new RuntimeException( "\n" + output.substring( introductoryLineLength ) ) ;
-      }
-    } else {
-      throw new IllegalStateException( 
-          "ANTLR output doesn't start with expected '" + ANTLR_OUTPUT_INTRODUCTION + "'" ) ;
-    }
-  }
-
-  
   
 }
