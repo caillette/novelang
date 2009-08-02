@@ -1101,6 +1101,7 @@ mixedDelimitedSpreadBlockNoHyphenPair
       )*   
       word?
     ) 
+    | blockAfterTilde
   ;
   
 

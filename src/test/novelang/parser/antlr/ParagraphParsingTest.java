@@ -638,6 +638,16 @@ public class ParagraphParsingTest {
   }
 
   @Test
+  public void paragraphIsBlockAfterTildeInsideBlockInsideHyphenPairs() {
+    PARSERMETHOD_PARAGRAPH.createTree( "--~x--" ) ;
+  }
+
+  @Test
+  public void paragraphIsBlockAfterTildeInsideBlockInsideHyphenPairsThenLowLine() {
+    PARSERMETHOD_PARAGRAPH.createTree( "--~x-_" ) ;
+  }
+
+  @Test
   public void
   paragraphIsEmphasisWithWordThenUrlThenWordOnSeveralLines()
       throws RecognitionException
