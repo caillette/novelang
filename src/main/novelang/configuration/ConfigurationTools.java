@@ -58,6 +58,7 @@ public class ConfigurationTools {
   private static final Log LOG = LogFactory.getLog( ConfigurationTools.class ) ;
 
   public static final int DEFAULT_HTTP_DAEMON_PORT = 8080 ;
+  public static final boolean DEFAULT_HTTP_DAEMON_SERVE_ONLY_LOCALHOST = true ;
   public static final String DEFAULT_FONTS_DIRECTORY_NAME = "fonts" ;
   public static final String DEFAULT_HYPHENATION_DIRECTORY_NAME = "hyphenation" ;
   public static final String BUNDLED_STYLE_DIR = "style" ;
@@ -107,13 +108,31 @@ public class ConfigurationTools {
       ) ;
     }
 
+    final boolean serveLocalhostOnly ;
+    final Boolean customServeLocalhostOnly = parameters.getServeOnlyLocalhost() ;
+    if( null == customServeLocalhostOnly ) {
+      serveLocalhostOnly = DEFAULT_HTTP_DAEMON_SERVE_ONLY_LOCALHOST ;
+     LOG.info(
+         "Got restriction to localhost from default value [%s] (option not set: %s).",
+         DEFAULT_HTTP_DAEMON_SERVE_ONLY_LOCALHOST,
+         parameters.getHttpDaemonServeLocalhostonlyOptionDescription()
+     ) ;
+    } else {
+      serveLocalhostOnly = customServeLocalhostOnly ;
+      LOG.info(
+          "Got restriction to localhost from custom value '%s' (from option: %s"  + ").",
+          customPort,
+          parameters.getHttpDaemonServeLocalhostonlyOptionDescription()
+      ) ;
+    }
+
     return new DaemonConfiguration() {
       public int getPort() {
         return port ;
       }
 
       public boolean getServeLocalhostOnly() {
-        return true ;
+        return serveLocalhostOnly ;
       }
 
       public ProducerConfiguration getProducerConfiguration() {
