@@ -58,6 +58,19 @@ java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
 Default value is ``UTF-8``.
 
 
+=== The ``--serve-localhost-only`` option
+
+The ``--serve-localhost-only`` option prevents from serving document for other computers
+(computer with an IP address which is not `127.0.0.*`).
+
+<<<
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
+  --serve-localhost-only false
+>>>
+
+Default value is ``true``.
+
+
 === The ``--rendering-charset`` option
 
 The ``--rendering-charset`` option sets the charset of rendered documents.
