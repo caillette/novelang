@@ -548,7 +548,7 @@
 
   <target
       name="publish-everything"
-      depends="login-on-remote-site, publish-distrib, publish-documentation"
+      depends="login-on-remote-site, login-on-announcement-blog, publish-distrib, publish-documentation, publish-release-announcement"
   />
 
 
