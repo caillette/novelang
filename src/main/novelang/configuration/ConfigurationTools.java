@@ -111,6 +111,11 @@ public class ConfigurationTools {
       public int getPort() {
         return port ;
       }
+
+      public boolean getServeLocalhostOnly() {
+        return true ;
+      }
+
       public ProducerConfiguration getProducerConfiguration() {
         return producerConfiguration ;
       }

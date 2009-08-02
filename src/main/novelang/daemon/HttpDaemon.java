@@ -76,6 +76,9 @@ public class HttpDaemon {
 
   public HttpDaemon( DaemonConfiguration daemonConfiguration ) {
     final HandlerCollection handlers = new HandlerCollection() ;
+    if( daemonConfiguration.getServeLocalhostOnly() ) {
+      handlers.addHandler( new LocalhostOnlyHandler() ) ;
+    }
     handlers.addHandler( new ShutdownHandler() ) ;
     handlers.addHandler( new FontDiscoveryHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
     handlers.addHandler( new DirectoryScanHandler(

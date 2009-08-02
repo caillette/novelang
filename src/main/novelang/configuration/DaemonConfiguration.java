@@ -22,6 +22,8 @@ package novelang.configuration;
 public interface DaemonConfiguration {
 
   int getPort() ;
+  
+  boolean getServeLocalhostOnly() ;
 
   ProducerConfiguration getProducerConfiguration() ;
 

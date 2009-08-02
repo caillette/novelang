@@ -264,6 +264,10 @@ public class TestResources {
       public ProducerConfiguration getProducerConfiguration() {
         return producerConfiguration ;
       }
+
+      public boolean getServeLocalhostOnly() {
+        return true ;
+      }
     } ;
 
   }
@@ -285,6 +289,10 @@ public class TestResources {
       }
       public ProducerConfiguration getProducerConfiguration() {
         return producerConfiguration ;
+      }
+
+      public boolean getServeLocalhostOnly() {
+        return true ;
       }
     } ;
 

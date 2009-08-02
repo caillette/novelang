@@ -36,6 +36,7 @@ public class DaemonParameters extends GenericParameters {
   private static final Log LOG = LogFactory.getLog( DaemonParameters.class ) ;
 
   private final Integer port ;
+  private final Boolean serveLocalhostOnly ;
 
   public DaemonParameters( File baseDirectory, String[] parameters )
       throws ArgumentException
@@ -54,11 +55,29 @@ public class DaemonParameters extends GenericParameters {
       port = null ;
     }
 
+    if( line.hasOption( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY.getLongOpt() ) ) {
+      final String localhostOnly = 
+          line.getOptionValue( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY.getLongOpt() ) ;
+      LOG.debug( 
+          "found: %s = '%s'", 
+          OPTION_HTTPDAEMON_SERVELOCALHOSTONLY.getLongOpt(), 
+          localhostOnly
+      ) ;
+      try {
+        serveLocalhostOnly  = Boolean.parseBoolean( localhostOnly ) ;
+      } catch( NumberFormatException e ) {
+        throw new ArgumentException( e, helpPrinter );
+      }
+    } else {
+      serveLocalhostOnly = null ;
+    }
+
   }
 
 
   protected void enrich( Options options ) {
     options.addOption( OPTION_HTTPDAEMON_PORT ) ;
+    options.addOption( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY ) ;
   }
 
   /**
@@ -67,6 +86,13 @@ public class DaemonParameters extends GenericParameters {
    */
   public Integer getHttpDaemonPort() {
     return port ;
+  }
+
+  /**
+   * Returns if should serve only HTTP requests originating from localhost.
+   */
+  public Boolean getServeOnlyLocalhost() {
+    return serveLocalhostOnly ;
   }
 
   public String getHttpDaemonPortOptionDescription() {
@@ -82,7 +108,18 @@ public class DaemonParameters extends GenericParameters {
       .create()
   ;
 
+  public static final String OPTIONNAME_HTTPDAEMON_SERVELOCALHOSTONLY = "serve-localhost-only" ;
 
+  public String getHttpDaemonServeLocalhostonlyOptionDescription() {
+    return createOptionDescription( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY ) ;
+  }
+
+  private static final Option OPTION_HTTPDAEMON_SERVELOCALHOSTONLY = OptionBuilder
+      .withLongOpt( OPTIONNAME_HTTPDAEMON_SERVELOCALHOSTONLY )
+      .withDescription( "Serve only requests from localhost (127.0.0.*)" )
+      .hasArg()
+      .create()
+  ;
 
 
 }
