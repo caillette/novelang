@@ -655,7 +655,7 @@
       depends="clean-compile-runtests, generate-documentation, create-jar, package-distribution"
   />
 
-  <target name="post-release-announcement"
+  <target name="publish-release-announcement"
       depends="login-on-announcement-blog"
   >
 
@@ -666,13 +666,15 @@
         mailport="465"
         user="${announcement.user.email}"
         password="${announcement.user.password}"
-        messagemimetype="plain/text"
+        messagemimetype="text/html"
         ssl="yes"
-        subject="${project.versionedname} release! ${timestamp}"
+        subject="${project.versionedname} released!"
         charset="utf-8"
     >
       <message>
-        New release available!
+        A new release of ${project.name} is available!
+        Download it &lt;a href="${announcement.download.url}">here&lt;/a> and see
+        documentation for details.
       </message>
     </mail>
   </target>
