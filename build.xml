@@ -111,7 +111,6 @@
     <mkdir dir="${target.dir}" />
     <mkdir dir="${target.mainclasses.dir}" />
     <mkdir dir="${target.buildclasses.dir}" />
-    <mkdir dir="${target.distrib.dir}" />
   </target>
 
 
@@ -499,7 +498,7 @@
     />
     <property
         name="scp-file"
-        value="${target.distrib.root}"
+        value="${target.distrib.path}"
     />
 
     <echo >
@@ -507,6 +506,7 @@
       scp-file=${scp-file}
     </echo>
 
+<!--
     <scp
         remotetodir="${scp-destination}"
         verbose="true"
@@ -515,9 +515,10 @@
     >
       <fileset dir="${scp-file}" />
     </scp>
+-->
     <echo>
-      Now go to SourceForge project page and check that uploaded release
-      appears as expected.
+      Now wait a few minutes and go to SourceForge project page
+      to check that uploaded release appears as expected.
     </echo>
 
   </target>
@@ -658,7 +659,6 @@
   <target name="publish-release-announcement"
       depends="login-on-announcement-blog"
   >
-
     <mail
         from="${announcement.user.email}"
         tolist="${announcement.blog.secretpostingaddress}"
