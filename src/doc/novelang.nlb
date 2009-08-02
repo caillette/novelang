@@ -2,7 +2,7 @@ mapstylesheet
     $html=doc-html.xsl
 
 title
-    Novelang
+    `Novelang-@SNAPSHOT@`
 
 title
     Press-ready PDF from a wiki syntax

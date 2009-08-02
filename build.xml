@@ -349,6 +349,11 @@
     <copy todir="${target.documentation.tweaked.dir}" >
       <fileset dir="${source.documentation.dir}" />
     </copy>
+    
+    <replace dir="${target.documentation.tweaked.dir}" value="${project.version}" >
+      <replacetoken>@SNAPSHOT@</replacetoken>
+    </replace>
+    
 
     <!--
       No need to delete / create ${target.documentation.site.dir}
