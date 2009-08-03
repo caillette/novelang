@@ -276,8 +276,9 @@ public abstract class GenericParameters {
       throws ArgumentException
   {
     final File directory ;
-    if( directoryName.startsWith( "/" ) ) {
-      directory = new File( directoryName ) ;
+    final File maybeAbsoluteDirectory = new File( directoryName ) ;
+    if( maybeAbsoluteDirectory.isAbsolute() ) {
+      directory = maybeAbsoluteDirectory ;
     } else {
       directory = new File( parent, directoryName ) ;
     }
