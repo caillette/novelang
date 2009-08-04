@@ -507,7 +507,6 @@
       scp-file=${scp-file}
     </echo>
 
-<!--
     <scp
         remotetodir="${scp-destination}"
         verbose="true"
@@ -516,7 +515,6 @@
     >
       <fileset dir="${scp-file}" />
     </scp>
--->
     <echo>
       Now wait a few minutes and go to SourceForge project page
       to check that uploaded release appears as expected.
@@ -546,6 +544,34 @@
     </scp>
 
   </target>
+
+  <target name="publish-release-announcement"
+      depends="login-on-announcement-blog"
+  >
+    <mail
+        from="${announcement.user.email}"
+        tolist="${announcement.blog.secretpostingaddress}"
+        mailhost="${publish.mailhost}"
+        mailport="${publish.mailport}"
+        user="${announcement.user.email}"
+        password="${announcement.user.password}"
+        messagemimetype="text/html"
+        ssl="yes"
+        subject="${project.versionedname} released!"
+        charset="utf-8"
+    >
+      <message>
+        A new release of ${project.name} is available!
+        Download it &lt;a href="${announcement.download.url}">here&lt;/a> and see
+        documentation for details.
+      </message>
+    </mail>
+  </target>
+
+
+
+
+
 
 
   <target
@@ -656,28 +682,5 @@
   <target name="build-distribution"
       depends="clean-compile-runtests, generate-documentation, create-jar, package-distribution"
   />
-
-  <target name="publish-release-announcement"
-      depends="login-on-announcement-blog"
-  >
-    <mail
-        from="${announcement.user.email}"
-        tolist="${announcement.blog.secretpostingaddress}"
-        mailhost="${announcement.mailhost}"
-        mailport="465"
-        user="${announcement.user.email}"
-        password="${announcement.user.password}"
-        messagemimetype="text/html"
-        ssl="yes"
-        subject="${project.versionedname} released!"
-        charset="utf-8"
-    >
-      <message>
-        A new release of ${project.name} is available!
-        Download it &lt;a href="${announcement.download.url}">here&lt;/a> and see
-        documentation for details.
-      </message>
-    </mail>
-  </target>
 
 </project>
