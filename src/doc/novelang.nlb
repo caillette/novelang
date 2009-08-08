@@ -1,11 +1,10 @@
 mapstylesheet
     $html=doc-html.xsl
+    $pdf=doc-pdf.xsl
 
-title
-    `Novelang-@SNAPSHOT@`
+insert file:doc-parameters.nlp 
+  $style=parameters
 
-title
-    Press-ready PDF from a wiki syntax
 
 insert file:introduction.nlp
 

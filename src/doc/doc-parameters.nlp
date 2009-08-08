@@ -1,0 +1,36 @@
+
+| VERSION  | `@SNAPSHOT@`                                         |                       
+| AUTHOR   | `Laurent Caillette`                                  |                       
+| TITLE    | Novelang                                             |
+| SUBTITLE | Press-ready PDF from a Wiki syntax                   | 
+| NEWSFEED | ``http://novelang.blogspot.com/feeds/posts/default`` | 
+
+
+== LINKS
+
+"Blog"
+http://novelang.blogspot.com/feeds/posts/default
+
+"Users group"
+http://groups.google.com/group/novelang-users/topics
+
+"Developers group"
+http://groups.google.com/group/novelang-developers/topics
+
+"On SourceForge"
+http://sourceforge.net/projects/novelang
+
+"Download"
+http://sourceforge.net/projects/novelang/files
+
+"Sources on Github"
+http://github.com/caillette/novelang/tree/master
+
+"Issues"
+http://github.com/caillette/novelang/issues
+
+"PDF"
+http://novelang.sf.net/novelang.pdf
+
+"GPL License"
+http://www.gnu.org/licenses/gpl-3.0.txt

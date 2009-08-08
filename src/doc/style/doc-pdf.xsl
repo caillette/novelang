@@ -16,12 +16,47 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
   <xsl:import href="default-pdf.xsl" />
+  <xsl:import href="shared.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
 
   <xsl:template match="/" >
-    <xsl:apply-imports/>
+    <xsl:apply-imports />
+  </xsl:template>
+  
+  <!--Overriding the one in default-pdf.xsl-->
+  <xsl:template name="custom-document-start" >
+    <fo:block 
+        text-align="center"
+        padding-top="40pt"
+        padding-bottom="30pt"
+    >
+      <fo:block
+          font-size="28pt"
+          padding-bottom="6pt"
+      >
+        <xsl:value-of select="$title"/>
+      </fo:block>
+      <fo:block
+          font-size="16pt"
+          padding-bottom="5pt"
+      >
+        <xsl:value-of select="$subtitle"/>
+      </fo:block>
+      <fo:block
+          font-size="11pt"
+          >
+        Written by
+        <xsl:value-of select="$author"/>
+      </fo:block>
+      <fo:block
+          font-size="13pt"
+      >
+        Version <xsl:value-of select="$version"/>
+      </fo:block>
+    </fo:block>
+
   </xsl:template>
 
 
