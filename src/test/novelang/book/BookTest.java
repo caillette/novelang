@@ -45,29 +45,7 @@ public class BookTest {
 
   private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
 
-  /**
-   * Tests the {@link novelang.book.function.builtin.SectionFunction}.
-   */
-  @Test
-  public void justCreateSection() {
-    final Book book = new Book(
-        FunctionRegistry.getStandardRegistry(),
-        SystemUtils.getUserDir(), 
-        "section \n" + " My Section"
-    ) ;
-    final SyntacticTree bookTree = book.getDocumentTree() ;
-    TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
-            tree( _META, tree( _WORD_COUNT, "2" ) ),
-            tree(
-                _LEVEL,
-                tree( LEVEL_TITLE, tree( WORD_, "My" ), tree( WORD_, "Section" ) )
-            )
-        ),
-        bookTree
-    ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
-  }
+  
 
   /**
    * Test {@link novelang.book.function.builtin.InsertFunction}.

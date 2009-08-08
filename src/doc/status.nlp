@@ -14,6 +14,18 @@ http://novelang.blogspot.com
 . 
 
 
+
+=== Version `0.33.0`
+
+//This version introduces changes that may break existing documents.//
+
+--- Removed ``section`` command from Book syntax. No remplacement planned in the short term.
+
+--- Removed ``title`` command from Book syntax. Use document parametrization instead (see how
+Novelang documentation works).
+
+
+
 === Version `0.32.1`
 
 --- Fixed ``--serve-localhost-only`` command-line option: now works with IPv6.  
