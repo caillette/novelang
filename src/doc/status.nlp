@@ -14,6 +14,11 @@ http://novelang.blogspot.com
 . 
 
 
+=== Version `0.32.1`
+
+--- Fixed ``--serve-localhost-only`` command-line option: now works with IPv6.  
+
+
 === Version `0.32.0`
 
 --- New ``--serve-localhost-only`` command-line option for HTTP dæmon.
