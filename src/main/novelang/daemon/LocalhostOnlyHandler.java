@@ -55,7 +55,12 @@ public class LocalhostOnlyHandler extends GenericHandler{
       final PrintWriter writer = new PrintWriter( response.getOutputStream() ) ;
       writer.println( "<html>" ) ;
       writer.println( "<body>" ) ;
+      writer.println( "<p>" ) ;
       writer.println( "Not authorized to connect: " + remoteAddress ) ;
+      writer.println( "</p>" ) ;
+      writer.println( "<p>" ) ;
+      writer.println( "This server only allows HTTP requests from localhost" ) ;
+      writer.println( "</p>" ) ;
       writer.println( "</body>" ) ;
       writer.println( "</html>" ) ;
       writer.flush() ;
