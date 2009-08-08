@@ -37,8 +37,6 @@ import static novelang.parser.antlr.TreeFixture.tree;
 public class BookParserTest {
   /*package*/ static final ParserMethod PARSERMETHOD_FUNCTION_CALL = 
       new ParserMethod( "functionCall" ) ;
-  /*package*/ static final ParserMethod PARSERMETHOD_ANCILLARY_ARGUMENT =
-      new ParserMethod( "ancillaryArgument" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_VALUED_ARGUMENT_ASSIGNMENT =
       new ParserMethod( "assignmentArgument" ) ;
   /*package*/ static final ParserMethod PARSERMETHOD_BOOK = new ParserMethod( "book" ) ;
@@ -232,41 +230,7 @@ public class BookParserTest {
     ) ;
   }
 
-  @Test
-  public void functionCallWithAncillaries() throws RecognitionException {
-    PARSERMETHOD_FUNCTION_CALL.checkTreeAfterSeparatorRemoval(
-        "function \\identifier1 " + BREAK +
-        " \\identifier2",
-        tree( FUNCTION_CALL_,
-            tree( FUNCTION_NAME_, "function" ),
-            tree( VALUED_ARGUMENT_ANCILLARY_, tree( IDENTIFIER, "identifier1" ) ),
-            tree( VALUED_ARGUMENT_ANCILLARY_, tree( IDENTIFIER, "identifier2" ) )
-        )
-    ) ;
-  }
 
-
-
-  @Test
-  public void valuedArgumentAncillaryIsBlockIdentifier() throws RecognitionException {
-    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTreeAfterSeparatorRemoval(
-        "\\identifier",
-        tree( VALUED_ARGUMENT_ANCILLARY_,
-            tree( IDENTIFIER, "identifier" )
-        )
-    ) ;
-  }
-
-  @Test
-  public void valuedArgumentAncillaryIsBlockIdentifierAndModifier() throws RecognitionException {
-    PARSERMETHOD_ANCILLARY_ARGUMENT.checkTreeAfterSeparatorRemoval(
-        "+\\identifier",
-        tree( VALUED_ARGUMENT_ANCILLARY_,
-            tree( VALUED_ARGUMENT_MODIFIER_, "+" ),
-            tree( IDENTIFIER, "identifier" )
-        )
-    ) ;
-  }
 
   @Test
   public void valuedArgumentAssignment() throws RecognitionException {

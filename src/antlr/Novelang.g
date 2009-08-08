@@ -72,7 +72,6 @@ tokens {
   VALUED_ARGUMENT_MODIFIER_ ;
   VALUED_ARGUMENT_PRIMARY_ ;
   VALUED_ARGUMENT_FLAG_ ;
-  VALUED_ARGUMENT_ANCILLARY_ ;
   VALUED_ARGUMENT_ASSIGNMENT_ ;
 }
 
@@ -1793,23 +1792,18 @@ functionCall
      (   whitespace url 
        | WHITESPACE? SOFTBREAK WHITESPACE? paragraph
      )?
-    ( mediumbreak ( ancillaryArgument | flagArgument | assignmentArgument ) )*
+    ( mediumbreak ( flagArgument | assignmentArgument ) )*
     ->  ^( FUNCTION_CALL_ 
             ^( FUNCTION_NAME_ { delegate.createTree( FUNCTION_NAME_, $name.text ) } )  
             ^( VALUED_ARGUMENT_PRIMARY_ 
                 paragraph? 
                 url? 
             )? 
-            ancillaryArgument*
             flagArgument*
             assignmentArgument*
         )
   ; 
   
-ancillaryArgument
-  :	( PLUS_SIGN? blockIdentifier )
-      -> ^( VALUED_ARGUMENT_ANCILLARY_ ^( VALUED_ARGUMENT_MODIFIER_ PLUS_SIGN )? blockIdentifier )   
-  ;
 
 flagArgument    
   : ( DOLLAR_SIGN flag = extendedWord )
