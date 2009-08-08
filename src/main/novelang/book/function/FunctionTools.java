@@ -22,7 +22,7 @@ package novelang.book.function;
  * @author Laurent Caillette
  */
 public class FunctionTools {
-  public static final< T > void verify( String message, T expected, T actual )
+  public static < T > void verify( String message, T expected, T actual )
       throws IllegalFunctionCallException
   {
     try {
@@ -32,7 +32,7 @@ public class FunctionTools {
     }
   }
 
-  public static final< T > void verify( T expected, T actual )
+  public static < T > void verify( T expected, T actual )
       throws IllegalFunctionCallException
   {
     if( null == expected ) {
@@ -48,7 +48,7 @@ public class FunctionTools {
     }
   }
 
-  public static final String buildErrorMessage( Object expected, Object actual ) {
+  public static String buildErrorMessage( Object expected, Object actual ) {
     return
         "\nExpected:\n  " + expected +
         "\nActual:\n  " + actual

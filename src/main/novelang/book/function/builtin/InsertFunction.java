@@ -63,7 +63,7 @@ import novelang.part.Part;
  * The <code>${@value #OPTION_CREATECHAPTER}</code> option creates chapters with the short name of
  * originating file.
  * <pre>
- * insert file:&lt;path-to-partfiles&gt; [${@value #OPTION_RECURSE}] [${@value # OPTION_CREATECHAPTER}]
+ * insert file:&lt;path-to-partfiles&gt; [${@value #OPTION_RECURSE}] [${@value #OPTION_CREATECHAPTER}]
  * </pre>
  *
  * @author Laurent Caillette
