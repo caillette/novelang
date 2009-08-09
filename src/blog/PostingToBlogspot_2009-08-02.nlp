@@ -1,0 +1,11 @@
+== Automated posting to Blogspot
+
+Now, Novelang build script automatically posts announcements of a new release to this blog.
+This is a "Blogspot feature"
+http://www.google.com/support/blogger/bin/answer.py?hl=en&answer=41452
+: when mailing to some secret address (like
+``novelang.announcer.reallysecret123456@blogger.com``) the mail becomes a blog post (or a draft).
+HTML works, and even picture embedding.
+
+Since I use Novelang to draft all my postings (and emails), it's a logical step to create such
+a task for easy posting.
