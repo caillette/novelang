@@ -28,10 +28,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
-import novelang.book.function.FunctionCall;
+import novelang.book.function.AbstractFunctionCall;
 import novelang.book.function.FunctionDefinition;
 import novelang.book.function.FunctionRegistry;
-import novelang.book.function.IllegalFunctionCallException;
+import novelang.book.function.CommandParameterException;
 import novelang.book.function.UnknownFunctionException;
 import novelang.common.AbstractSourceReader;
 import novelang.common.Problem;
@@ -56,7 +56,7 @@ import novelang.system.DefaultCharset;
  */
 public class Book extends AbstractSourceReader {
 
-  private final Environment environment ;
+  private final CommandExecutionContext environment ;
   private final SyntacticTree documentTree ;
 
   /**
@@ -121,14 +121,14 @@ public class Book extends AbstractSourceReader {
     final SyntacticTree rawTree = SeparatorsMangler.removeSeparators( 
         parse( new DefaultBookParserFactory(), content ) ) ;
     if( null == rawTree ) {
-      this.environment = new Environment( baseDirectory, bookDirectory ) ;
+      this.environment = new CommandExecutionContext( baseDirectory, bookDirectory ) ;
       this.documentTree = null ;
     } else {
-      final Iterable< FunctionCall > functionCalls =
+      final Iterable<AbstractFunctionCall> functionCalls =
           createFunctionCalls( functionRegistry, rawTree ) ;
       final Results results = callFunctions(
           functionCalls,
-          new Environment( baseDirectory, bookDirectory ),
+          new CommandExecutionContext( baseDirectory, bookDirectory ),
           new SimpleTree( NodeKind.BOOK.name() )
       ) ;
       this.environment = results.environment ;
@@ -175,11 +175,11 @@ public class Book extends AbstractSourceReader {
     return environment.getCustomStylesheets() ;
   }
 
-  private Iterable< FunctionCall > createFunctionCalls(
+  private Iterable<AbstractFunctionCall> createFunctionCalls(
       FunctionRegistry functionRegistry,
       SyntacticTree rawTree
   ) {
-    final List< FunctionCall > functionCalls = Lists.newArrayList() ;
+    final List<AbstractFunctionCall> functionCalls = Lists.newArrayList() ;
     for( int i = 0 ; i < rawTree.getChildCount() ; i++ ) {
       final SyntacticTree functionCallTree = rawTree.getChildAt( i ) ;
       final SyntacticTree functionNameTree = functionCallTree.getChildAt( 0 ) ;
@@ -187,12 +187,12 @@ public class Book extends AbstractSourceReader {
       try {
         final FunctionDefinition functionDefinition =
             functionRegistry.getFunctionDeclaration( functionName ) ;
-        final FunctionCall functionCall =
+        final AbstractFunctionCall functionCall =
             functionDefinition.instantiate( functionCallTree.getLocation(), functionCallTree ) ;
         functionCalls.add( functionCall ) ;
       } catch( UnknownFunctionException e ) {
         collect( Problem.createProblem( e ) ) ;
-      } catch( IllegalFunctionCallException e ) {
+      } catch( CommandParameterException e ) {
         collect( Problem.createProblem( e ) ) ;
       }
     }
@@ -200,13 +200,13 @@ public class Book extends AbstractSourceReader {
   }
 
   private Results callFunctions(
-      final Iterable< FunctionCall > functionCalls,
-      Environment environment,
+      final Iterable<AbstractFunctionCall> functionCalls,
+      CommandExecutionContext environment,
       final SyntacticTree tree
   ) {
     Treepath<SyntacticTree> book = Treepath.create( tree ) ;
-    for( FunctionCall functionCall : functionCalls ) {
-      FunctionCall.Result result = functionCall.evaluate( environment, book ) ;
+    for( AbstractFunctionCall functionCall : functionCalls ) {
+      AbstractFunctionCall.Result result = functionCall.evaluate( environment, book ) ;
       environment = result.getEnvironment() ;
       collect( result.getProblems() ) ;
       final Treepath<SyntacticTree> newBook = result.getBook() ;
@@ -218,10 +218,10 @@ public class Book extends AbstractSourceReader {
   }
 
   private static class Results {
-    public final Environment environment ;
+    public final CommandExecutionContext environment ;
     public SyntacticTree book ;
 
-    private Results( Environment environment, SyntacticTree book ) {
+    private Results( CommandExecutionContext environment, SyntacticTree book ) {
       this.environment = environment ;
       this.book = book ;
     }

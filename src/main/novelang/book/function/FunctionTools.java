@@ -19,32 +19,33 @@ package novelang.book.function;
 /**
  * Utility class.
  *
+ * @deprecated
  * @author Laurent Caillette
  */
 public class FunctionTools {
   public static < T > void verify( String message, T expected, T actual )
-      throws IllegalFunctionCallException
+      throws CommandParameterException
   {
     try {
       verify( expected, actual ) ;
-    } catch( IllegalFunctionCallException e ) {
-      throw new IllegalFunctionCallException( message + "\n" + e.getMessage() ) ;
+    } catch( CommandParameterException e ) {
+      throw new CommandParameterException( message + "\n" + e.getMessage() ) ;
     }
   }
 
   public static < T > void verify( T expected, T actual )
-      throws IllegalFunctionCallException
+      throws CommandParameterException
   {
     if( null == expected ) {
       if( null == actual ) {
         return ;
       } else {
-        throw new IllegalFunctionCallException( buildErrorMessage( expected, actual ) ) ;
+        throw new CommandParameterException( buildErrorMessage( expected, actual ) ) ;
       }
     } else if( expected.equals( actual ) ) {
       return ;
     } else {
-      throw new IllegalFunctionCallException( buildErrorMessage( expected, actual ) ) ;
+      throw new CommandParameterException( buildErrorMessage( expected, actual ) ) ;
     }
   }
 

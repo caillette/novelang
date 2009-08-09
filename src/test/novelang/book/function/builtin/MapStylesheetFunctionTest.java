@@ -22,18 +22,16 @@ import org.junit.Assert;
 import org.junit.Test;
 import novelang.system.LogFactory;
 import novelang.system.Log;
-import com.google.common.collect.ImmutableMap;
-import novelang.book.Environment;
-import novelang.book.function.FunctionCall;
+import novelang.book.CommandExecutionContext;
+import novelang.book.function.AbstractFunctionCall;
 import novelang.book.function.FunctionDefinition;
-import novelang.book.function.IllegalFunctionCallException;
+import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.loader.ResourceName;
 import static novelang.parser.NodeKind.BOOK;
-import novelang.parser.antlr.BookParserTest;
 import novelang.rendering.RenditionMimeType;
 
 /**
@@ -46,7 +44,7 @@ public class MapStylesheetFunctionTest {
   private static final Log LOG = LogFactory.getLog( MapStylesheetFunctionTest.class ) ;
 
   @Test
-  public void correctMapping() throws IllegalFunctionCallException {
+  public void correctMapping() throws CommandParameterException {
     final FunctionDefinition definition = new MapStylesheetFunction() ;
     final SyntacticTree callTree = null ;// BookParserTest.createFunctionCallWithValuedAssignmentTree(
 //        "stylesheet",
@@ -54,15 +52,15 @@ public class MapStylesheetFunctionTest {
 //    ) ;
     LOG.debug( "Function call tree: \n%s", callTree.toStringTree() ) ;
 
-    final FunctionCall call = definition.instantiate(
+    final AbstractFunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
         callTree
     ) ;
 
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result =
-        call.evaluate( new Environment( new File( "" ) ), Treepath.create( initialTree ) ) ;
+    final AbstractFunctionCall.Result result =
+        call.evaluate( new CommandExecutionContext( new File( "" ) ), Treepath.create( initialTree ) ) ;
 
     Assert.assertEquals(
         new ResourceName( "dir/stylesheet.xsl" ),

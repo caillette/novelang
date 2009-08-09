@@ -18,20 +18,30 @@ package novelang.book;
 
 import java.io.File;
 import java.util.Map;
+import java.util.ArrayList;
 import java.nio.charset.Charset;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+
 import novelang.common.StylesheetMap;
+import novelang.common.SyntacticTree;
+import novelang.common.Problem;
 import novelang.loader.ResourceName;
-import novelang.part.Part;
 import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
 
 /**
+ * Contains all input and output for {@link novelang.book.function.AbstractFunctionCall} evaluation.
+ * If some functions need to communicate by changing some shared value (like the map of 
+ * the stylesheets, or Book's tree) this happen through this class and this class only.
+ * 
+ *  
  * @author Laurent Caillette
  */
-public final class Environment {
+public final class CommandExecutionContext {
 
   private final File baseDirectory ;
   private final File bookDirectory ;
@@ -39,8 +49,21 @@ public final class Environment {
   private final Charset renderingCharset ;
   private final Map< RenditionMimeType, ResourceName > mappedStylesheets ;
   private final StylesheetMap stylesheetMap ;
+  private final SyntacticTree bookTree ;
+  private final Iterable< Problem > problems ;
+  
+  private static final Iterable< Problem > NO_PROBLEM = ImmutableList.of() ;
+  
 
-  private Environment( Environment other ) {
+  private CommandExecutionContext( CommandExecutionContext other ) {
+    this( other, other.bookTree, other.problems ) ;
+  }
+  
+  private CommandExecutionContext( 
+      final CommandExecutionContext other, 
+      final SyntacticTree alternateBookTree,
+      final Iterable< Problem > moreProblems
+  ) {
     this.baseDirectory = other.baseDirectory ;
     this.bookDirectory = other.bookDirectory ;
     this.sourceCharset = other.sourceCharset ;
@@ -51,24 +74,28 @@ public final class Environment {
         return mappedStylesheets.get( renditionMimeType ) ;
       }
     } ;
+    this.bookTree = alternateBookTree ;
+    if ( moreProblems == other.getProblems() ) {
+      // Sure it's unmodifiable.
+      this.problems = other.getProblems() ;
+    } else {
+      this.problems = Iterables.concat( getProblems(), moreProblems ) ;
+    }
   }
 
-  public Environment( File baseDirectory ) {
-    this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
-    this.bookDirectory = baseDirectory ;
-    this.sourceCharset = DefaultCharset.SOURCE ;
-    this.renderingCharset = DefaultCharset.RENDERING ;
-    this.mappedStylesheets = Maps.newHashMap() ;
-    this.stylesheetMap = StylesheetMap.EMPTY_MAP ;
+  public CommandExecutionContext( final File baseDirectory ) {
+    this( baseDirectory, baseDirectory ) ;
   }
 
-  public Environment( File baseDirectory, File bookDirectory ) {
+  public CommandExecutionContext( File baseDirectory, File bookDirectory ) {
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     this.bookDirectory = Preconditions.checkNotNull( bookDirectory ) ;
     this.sourceCharset = DefaultCharset.SOURCE ;
     this.renderingCharset = DefaultCharset.RENDERING ;
     this.mappedStylesheets = Maps.newHashMap() ;
     this.stylesheetMap = StylesheetMap.EMPTY_MAP ;
+    this.bookTree = null ;
+    this.problems = NO_PROBLEM ;
   }
 
   public File getBaseDirectory() {
@@ -87,15 +114,33 @@ public final class Environment {
     return renderingCharset ;
   }
 
-  public Environment map( RenditionMimeType renditionMimeType, String stylesheetPath ) {
-    final Environment newEnvironment = new Environment( this ) ;
+  public SyntacticTree getBookTree() {
+    return bookTree;
+  }
+
+  public Iterable< Problem > getProblems() {
+    return problems ;
+  }
+
+  public CommandExecutionContext map( 
+      final RenditionMimeType renditionMimeType, 
+      final String stylesheetPath 
+  ) {
+    final CommandExecutionContext newEnvironment = new CommandExecutionContext( this ) ;
     newEnvironment.mappedStylesheets.put(
         Preconditions.checkNotNull( renditionMimeType ), new ResourceName( stylesheetPath ) ) ;
     return newEnvironment ;
   }
-
+  
   public StylesheetMap getCustomStylesheets() {
     return stylesheetMap ;
   }
 
+  public CommandExecutionContext update( final SyntacticTree bookTree ) {
+    return new CommandExecutionContext( this, bookTree, getProblems() ) ;
+  }
+
+  public CommandExecutionContext update( final Iterable< Problem > problems ) {
+    return new CommandExecutionContext( this, getBookTree(), problems ) ;
+  }
 }

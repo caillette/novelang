@@ -23,16 +23,15 @@ import novelang.system.LogFactory;
 import novelang.system.Log;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import novelang.book.Environment;
-import novelang.book.function.FunctionCall;
+import novelang.book.CommandExecutionContext;
+import novelang.book.function.AbstractFunctionCall;
 import novelang.book.function.FunctionDefinition;
 import static novelang.book.function.FunctionTools.verify;
-import novelang.book.function.IllegalFunctionCallException;
+import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import novelang.parser.NodeKind;
 import novelang.rendering.RenditionMimeType;
 
 /**
@@ -46,6 +45,7 @@ import novelang.rendering.RenditionMimeType;
  * </pre>
  * The {@code stylesheet} parameters are relative to user-defined style directory. 
  *
+ * @deprecated
  * @author Laurent Caillette
  */
 public class MapStylesheetFunction implements FunctionDefinition {
@@ -56,8 +56,8 @@ public class MapStylesheetFunction implements FunctionDefinition {
     return "mapstylesheet" ;
   }
 
-  public FunctionCall instantiate( Location location, SyntacticTree functionCall )
-      throws IllegalFunctionCallException
+  public AbstractFunctionCall instantiate( Location location, SyntacticTree functionCall )
+      throws CommandParameterException
   {
     verify( "No valued argument assignment", true, functionCall.getChildCount() >= 2 ) ;
     final Map< RenditionMimeType, String > assignments = Maps.newHashMap() ;
@@ -86,15 +86,19 @@ public class MapStylesheetFunction implements FunctionDefinition {
       LOG.debug( "Parsed function '%s' %s", getName(), buffer.toString() ) ;
     }
 
-    return new FunctionCall( location ) {
-      public Result evaluate( Environment environment, Treepath< SyntacticTree > book ) {
+    return new AbstractFunctionCall( location ) {
+      public Result evaluate( CommandExecutionContext environment, Treepath< SyntacticTree > book ) {
         return MapStylesheetFunction.evaluate( environment, book, assignments ) ;
+      }
+
+      public CommandExecutionContext evaluate( CommandExecutionContext context ) {
+        throw new UnsupportedOperationException( "evaluate" ) ;
       }
     } ;
   }
 
-  private static FunctionCall.Result evaluate(
-      Environment environment,
+  private static AbstractFunctionCall.Result evaluate(
+      CommandExecutionContext environment,
       Treepath< SyntacticTree > book,
       Map< RenditionMimeType, String > assignments
   ) {
@@ -108,6 +112,6 @@ public class MapStylesheetFunction implements FunctionDefinition {
             "Multiple stylesheet assignment for '" + renditionMimeType + "'" ) ) ;
       }
     }
-    return new FunctionCall.Result( environment, book, problems ) ;
+    return new AbstractFunctionCall.Result( environment, book, problems ) ;
   }
 }

@@ -69,13 +69,13 @@ tokens {
 
   // Book stuff
   
-  FUNCTIONCALL_INSERT_ ;
-  FUNCTIONCALL_INSERT_CREATELEVEL_ ;
-  FUNCTIONCALL_INSERT_RECURSE_ ;
-  FUNCTIONCALL_INSERT_STYLE_ ;
+  COMMAND_INSERT_ ;
+  COMMAND_INSERT_CREATELEVEL_ ;
+  COMMAND_INSERT_RECURSE_ ;
+  COMMAND_INSERT_STYLE_ ;
   
-  FUNCTIONCALL_MAPSTYLESHEET_ ;
-  FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_ ;
+  COMMAND_MAPSTYLESHEET_ ;
+  COMMAND_MAPSTYLESHEET_ASSIGNMENT_ ;
 
 }
 
@@ -1803,7 +1803,7 @@ functionCallInsert
       ( mediumbreak p += keywordCreateLevel )?
       ( mediumbreak p += functionCallInsertStyle ) ?        
     )
-    -> ^( FUNCTIONCALL_INSERT_ $p+ )
+    -> ^( COMMAND_INSERT_ $p+ )
   ;
   
 keywordInsert
@@ -1815,7 +1815,7 @@ keywordRecurse
   : ( DOLLAR_SIGN LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_C 
       LATIN_SMALL_LETTER_U LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_E 
     )
-    -> ^( FUNCTIONCALL_INSERT_RECURSE_ )    
+    -> ^( COMMAND_INSERT_RECURSE_ )    
   ;
   
 keywordCreateLevel
@@ -1823,7 +1823,7 @@ keywordCreateLevel
       LATIN_SMALL_LETTER_A LATIN_SMALL_LETTER_T LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_L 
       LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_V LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_L 
     )
-    -> ^( FUNCTIONCALL_INSERT_CREATELEVEL_ )
+    -> ^( COMMAND_INSERT_CREATELEVEL_ )
   ;
   
 functionCallInsertStyle
@@ -1831,15 +1831,15 @@ functionCallInsertStyle
       LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_E EQUALS_SIGN
       s = rawExtendedWord
     )
-    -> ^( FUNCTIONCALL_INSERT_STYLE_ 
-          { delegate.createTree( FUNCTIONCALL_INSERT_STYLE_, $s.text ) } 
+    -> ^( COMMAND_INSERT_STYLE_ 
+          { delegate.createTree( COMMAND_INSERT_STYLE_, $s.text ) } 
         )
   ;
 
   
 functionCallMapstylesheet  
   : ( keywordMapstylesheet ( mediumbreak assignmentArgument )+ )
-    -> ^( FUNCTIONCALL_MAPSTYLESHEET_ assignmentArgument+ )
+    -> ^( COMMAND_MAPSTYLESHEET_ assignmentArgument+ )
   ;
   
 keywordMapstylesheet
@@ -1853,9 +1853,9 @@ keywordMapstylesheet
 
 assignmentArgument    
   : ( DOLLAR_SIGN key = rawExtendedWord EQUALS_SIGN value = rawExtendedWord )
-      -> ^( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_ 
-              { delegate.createTree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, $key.text ) } 
-              { delegate.createTree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, $value.text ) } 
+      -> ^( COMMAND_MAPSTYLESHEET_ASSIGNMENT_ 
+              { delegate.createTree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, $key.text ) } 
+              { delegate.createTree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, $value.text ) } 
           )     
   ;
 

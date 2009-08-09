@@ -17,9 +17,8 @@
 package novelang.book.function;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableList;
-import novelang.book.Environment;
+import novelang.book.CommandExecutionContext;
 import novelang.common.Location;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
@@ -27,16 +26,16 @@ import novelang.common.tree.Treepath;
 
 /**
  * Represents an instance of a {@link FunctionDefinition} inside a Book file,
- * that does things with {@link Environment}, Book's {@code Treepath} and may generate
- * problems.
+ * that does things with {@link novelang.book.CommandExecutionContext}, 
+ * Book's {@code Treepath} and may generate problems.
  *
  * @author Laurent Caillette
  */
-public abstract class FunctionCall {
+public abstract class AbstractFunctionCall implements Command {
 
   private final Location location ;
 
-  public FunctionCall( Location location ) {
+  public AbstractFunctionCall( Location location ) {
     this.location = location ;
   }
 
@@ -44,30 +43,36 @@ public abstract class FunctionCall {
     return location ;
   }
 
-  /**
-   *
-   * @param environment
-   * @param book
-   * @return a non-null {@link Result} instance.
-   */
-  public abstract Result evaluate( Environment environment, Treepath< SyntacticTree > book ) ;
 
-  public static final FunctionCall DO_NOTHING = new FunctionCall( null ) {
-    public Result evaluate( Environment environment, Treepath< SyntacticTree > book ) {
+  /**
+   * @deprecated
+   */
+  public abstract Result evaluate( CommandExecutionContext environment, Treepath< SyntacticTree > book ) ;
+
+  public static final AbstractFunctionCall DO_NOTHING = new AbstractFunctionCall( null ) {
+    public Result evaluate( CommandExecutionContext environment, Treepath< SyntacticTree > book ) {
       return new Result( environment, book, null ) ;
+    }
+
+    public CommandExecutionContext evaluate( CommandExecutionContext context ) {
+      return context ;
     }
   } ;
 
+  
+  /**
+   * @deprecated
+   */
   public static class Result {
 
-    private final Environment environment ;
+    private final CommandExecutionContext environment ;
     private final Treepath< SyntacticTree > book ;
     private final Iterable< Problem > problems ;
 
     private static final Iterable< Problem > NO_PROBLEM = ImmutableList.of() ;
 
     public Result(
-        Environment environment,
+        CommandExecutionContext environment,
         Treepath< SyntacticTree > book,
         Iterable< Problem > problems
     ) {
@@ -93,7 +98,7 @@ public abstract class FunctionCall {
     /**
      * Never null.
      */
-    public Environment getEnvironment() {
+    public CommandExecutionContext getEnvironment() {
       return environment;
     }
   }

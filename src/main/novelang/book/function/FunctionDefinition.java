@@ -20,7 +20,7 @@ import novelang.common.Location;
 import novelang.common.SyntacticTree;
 
 /**
- * Factory for {@link FunctionCall} objects.
+ * Factory for {@link AbstractFunctionCall} objects.
  * 
  * @author Laurent Caillette
  */
@@ -28,9 +28,9 @@ public interface FunctionDefinition {
 
   String getName() ;
 
-  FunctionCall instantiate(
+  AbstractFunctionCall instantiate(
       Location location,
       SyntacticTree functionCall
-  ) throws IllegalFunctionCallException ;
+  ) throws CommandParameterException;
 
 }

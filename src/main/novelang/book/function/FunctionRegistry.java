@@ -28,6 +28,8 @@ import java.util.Map;
 /**
  * Registry of {@link FunctionDefinition}s.
  *
+ * @deprecated
+ * 
  * @author Laurent Caillette
  */
 public class FunctionRegistry {

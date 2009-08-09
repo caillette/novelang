@@ -17,13 +17,13 @@
 package novelang.book.function;
 
 /**
- * Thrown when bad stuff happens.
+ * Thrown when there is something wrong in the parameters of a {@link Command}.
  * 
  * @author Laurent Caillette
  */
-public class IllegalFunctionCallException extends Exception {
+public class CommandParameterException extends Exception {
 
-  public IllegalFunctionCallException( String message ) {
+  public CommandParameterException( String message ) {
     super( message );
   }
 }

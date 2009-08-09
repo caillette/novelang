@@ -24,21 +24,19 @@ import org.junit.Before;
 import org.junit.Test;
 import novelang.system.LogFactory;
 import novelang.system.Log;
-import com.google.common.collect.ImmutableMap;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
-import novelang.book.Environment;
-import novelang.book.function.FunctionCall;
+import novelang.book.CommandExecutionContext;
+import novelang.book.function.AbstractFunctionCall;
 import novelang.book.function.FunctionDefinition;
-import novelang.book.function.IllegalFunctionCallException;
+import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
-import novelang.parser.antlr.BookParserTest;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -52,16 +50,16 @@ public class InsertFunctionTest {
   private static final Log LOG = LogFactory.getLog( InsertFunctionTest.class ) ;
 
   @Test
-  public void goodFileUrl() throws IllegalFunctionCallException {
+  public void goodFileUrl() throws CommandParameterException {
     final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = null ; //definition.instantiate(
+    final AbstractFunctionCall call = null ; //definition.instantiate(
 //        new Location( "", -1, -1 ),
 //        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
 //    ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
+    final AbstractFunctionCall.Result result = call.evaluate(
+        new CommandExecutionContext( goodContentDirectory ),
         Treepath.create( initialTree )
     ) ;
 
@@ -76,17 +74,17 @@ public class InsertFunctionTest {
   }
 
   @Test
-  public void createChapterForSinglePart() throws IllegalFunctionCallException {
+  public void createChapterForSinglePart() throws CommandParameterException {
     final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
+    final AbstractFunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
         null //BookParserTest.createFunctionCallWithUrlTree(
 //            noChapterFile.getAbsolutePath(), "createlevel" )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
+    final AbstractFunctionCall.Result result = call.evaluate(
+        new CommandExecutionContext( goodContentDirectory ),
         Treepath.create( initialTree )
     ) ;
 
@@ -112,9 +110,9 @@ public class InsertFunctionTest {
   }
 
   @Test
-  public void addStyle() throws IllegalFunctionCallException {
+  public void addStyle() throws CommandParameterException {
     final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
+    final AbstractFunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
         null //BookParserTest.createFunctionCallWithUrlTree(
 //            oneWordFile.getAbsolutePath(),
@@ -123,8 +121,8 @@ public class InsertFunctionTest {
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
+    final AbstractFunctionCall.Result result = call.evaluate(
+        new CommandExecutionContext( goodContentDirectory ),
         Treepath.create( initialTree )
     ) ;
 
@@ -139,17 +137,17 @@ public class InsertFunctionTest {
   }
 
   @Test
-  public void recurseWithAllValidParts() throws IllegalFunctionCallException {
+  public void recurseWithAllValidParts() throws CommandParameterException {
     final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
+    final AbstractFunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
         null //BookParserTest.createFunctionCallWithUrlTree(
 //            goodContentDirectory.getAbsolutePath(), "recurse" )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
+    final AbstractFunctionCall.Result result = call.evaluate(
+        new CommandExecutionContext( goodContentDirectory ),
         Treepath.create( initialTree )
     ) ;
 
@@ -158,17 +156,17 @@ public class InsertFunctionTest {
   }
 
   @Test
-  public void recurseWithSomeBrokenPart() throws IllegalFunctionCallException {
+  public void recurseWithSomeBrokenPart() throws CommandParameterException {
     final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
+    final AbstractFunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
         null // BookParserTest.createFunctionCallWithUrlTree(
 //            brokenContentDirectory.getAbsolutePath(), "recurse" )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( brokenContentDirectory ),
+    final AbstractFunctionCall.Result result = call.evaluate(
+        new CommandExecutionContext( brokenContentDirectory ),
         Treepath.create( initialTree )
     ) ;
 

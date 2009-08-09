@@ -43,20 +43,20 @@ public class BookParserTest {
         ,
         tree(
             BOOK,
-            tree( 
-                FUNCTIONCALL_INSERT_,
+            tree(
+                COMMAND_INSERT_,
                 tree( URL_LITERAL, "file:x/y/z" ),
-                tree( FUNCTIONCALL_INSERT_CREATELEVEL_ ),
-                tree( FUNCTIONCALL_INSERT_STYLE_, "whatever" )
+                tree( COMMAND_INSERT_CREATELEVEL_ ),
+                tree( COMMAND_INSERT_STYLE_, "whatever" )
             ),
-            tree( 
-                FUNCTIONCALL_MAPSTYLESHEET_,
-                tree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, tree( "a" ), tree( "b" ) ),
-                tree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, tree( "c" ), tree( "d" ) ),
-                tree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, tree( "e" ), tree( "f" ) )
+            tree(
+                COMMAND_MAPSTYLESHEET_,
+                tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "a" ), tree( "b" ) ),
+                tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "c" ), tree( "d" ) ),
+                tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "e" ), tree( "f" ) )
             ),
-            tree( 
-                FUNCTIONCALL_INSERT_,
+            tree(
+                COMMAND_INSERT_,
                 tree( URL_LITERAL, "file:uvw.nlp" )
             )
             
@@ -73,8 +73,8 @@ public class BookParserTest {
   public void insertFunctionCall() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
         "insert file:.",
-        tree( 
-            FUNCTIONCALL_INSERT_,
+        tree(
+            COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." )
         )    
     ) ;
@@ -84,10 +84,10 @@ public class BookParserTest {
   public void insertFunctionCallWithRecurse() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
         "insert file:. $recurse",
-        tree( 
-            FUNCTIONCALL_INSERT_,
+        tree(
+            COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
-            tree( FUNCTIONCALL_INSERT_RECURSE_ )
+            tree( COMMAND_INSERT_RECURSE_ )
         )    
     ) ;
   }
@@ -96,10 +96,10 @@ public class BookParserTest {
   public void insertFunctionCallWithCreateLevel() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
         "insert file:. $createlevel",
-        tree( 
-            FUNCTIONCALL_INSERT_,
+        tree(
+            COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
-            tree( FUNCTIONCALL_INSERT_CREATELEVEL_ )
+            tree( COMMAND_INSERT_CREATELEVEL_ )
         )    
     ) ;
   }
@@ -108,10 +108,10 @@ public class BookParserTest {
   public void insertFunctionCallWithStyle() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
         "insert file:. $style=whatever",
-        tree( 
-            FUNCTIONCALL_INSERT_,
+        tree(
+            COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
-            tree( FUNCTIONCALL_INSERT_STYLE_, "whatever" )
+            tree( COMMAND_INSERT_STYLE_, "whatever" )
         )    
     ) ;
   }
@@ -120,12 +120,12 @@ public class BookParserTest {
   public void insertFunctionCallWithEverything() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
         "insert file:x/y/z.nlp $recurse $createlevel $style=whatever",
-        tree( 
-            FUNCTIONCALL_INSERT_,
+        tree(
+            COMMAND_INSERT_,
             tree( URL_LITERAL, "file:x/y/z.nlp" ),
-            tree( FUNCTIONCALL_INSERT_RECURSE_ ),
-            tree( FUNCTIONCALL_INSERT_CREATELEVEL_ ),
-            tree( FUNCTIONCALL_INSERT_STYLE_, "whatever" )
+            tree( COMMAND_INSERT_RECURSE_ ),
+            tree( COMMAND_INSERT_CREATELEVEL_ ),
+            tree( COMMAND_INSERT_STYLE_, "whatever" )
         )    
     ) ;
   }
@@ -146,9 +146,9 @@ public class BookParserTest {
   public void mapstylesheetFunctionCallOneStylesheet() {
     PARSERMETHOD_FUNCTIONCALL_MAPSTYLESHEET.checkTreeAfterSeparatorRemoval(  
         "mapstylesheet $abc=w.xyz",
-        tree( 
-            FUNCTIONCALL_MAPSTYLESHEET_,
-            tree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, tree( "abc" ), tree( "w.xyz" ) )
+        tree(
+            COMMAND_MAPSTYLESHEET_,
+            tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "abc" ), tree( "w.xyz" ) )
         )    
     ) ;
   }
@@ -157,10 +157,10 @@ public class BookParserTest {
   public void mapstylesheetFunctionCallTwoStylesheets() {
     PARSERMETHOD_FUNCTIONCALL_MAPSTYLESHEET.checkTreeAfterSeparatorRemoval(  
         "mapstylesheet $abc=w.xyz  $123=456",
-        tree( 
-            FUNCTIONCALL_MAPSTYLESHEET_,
-            tree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, tree( "abc" ), tree( "w.xyz" ) ),
-            tree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, tree( "123" ), tree( "456" ) )
+        tree(
+            COMMAND_MAPSTYLESHEET_,
+            tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "abc" ), tree( "w.xyz" ) ),
+            tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "123" ), tree( "456" ) )
         )    
     ) ;
   }

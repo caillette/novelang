@@ -32,11 +32,11 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
-import novelang.book.Environment;
-import novelang.book.function.FunctionCall;
+import novelang.book.CommandExecutionContext;
+import novelang.book.function.AbstractFunctionCall;
 import novelang.book.function.FunctionDefinition;
 import static novelang.book.function.FunctionTools.verify;
-import novelang.book.function.IllegalFunctionCallException;
+import novelang.book.function.CommandParameterException;
 import novelang.common.FileTools;
 import novelang.common.Location;
 import novelang.common.Problem;
@@ -66,6 +66,7 @@ import novelang.part.Part;
  * insert file:&lt;path-to-partfiles&gt; [${@value #OPTION_RECURSE}] [${@value #OPTION_CREATECHAPTER}]
  * </pre>
  *
+ * @deprecated
  * @author Laurent Caillette
  */
 public class InsertFunction implements FunctionDefinition {
@@ -89,10 +90,10 @@ public class InsertFunction implements FunctionDefinition {
     return "insert" ;
   }
 
-  public FunctionCall instantiate(
+  public AbstractFunctionCall instantiate(
       Location location,
       SyntacticTree functionCall
-  ) throws IllegalFunctionCallException {
+  ) throws CommandParameterException {
 
     verify( "No primary argument", true, functionCall.getChildCount() >= 2 ) ;
     final SyntacticTree primaryArgument = functionCall.getChildAt( 1 ) ;
@@ -141,8 +142,8 @@ public class InsertFunction implements FunctionDefinition {
       }
     }
 
-    return new FunctionCall( location ) {
-      public Result evaluate( Environment environment, Treepath< SyntacticTree > book ) {
+    return new AbstractFunctionCall( location ) {
+      public Result evaluate( CommandExecutionContext environment, Treepath< SyntacticTree > book ) {
         return InsertFunction.evaluate(
             environment,
             book,
@@ -151,11 +152,15 @@ public class InsertFunction implements FunctionDefinition {
             ImmutableMap.copyOf( assignments )
         ) ;
       }
+
+      public CommandExecutionContext evaluate( CommandExecutionContext context ) {
+        throw new UnsupportedOperationException( "evaluate" ) ;
+      }
     } ;
   }
 
-  private static FunctionCall.Result evaluate(
-      Environment environment,
+  private static AbstractFunctionCall.Result evaluate(
+      CommandExecutionContext environment,
       Treepath< SyntacticTree > book,
       String urlAsString,
       Set< String > options,
@@ -185,8 +190,9 @@ public class InsertFunction implements FunctionDefinition {
     }
   }
 
-  private static FunctionCall.Result evaluateFlat(
-      Environment environment,
+  @Deprecated
+  private static AbstractFunctionCall.Result evaluateFlat(
+      CommandExecutionContext environment,
       Treepath< SyntacticTree > book,
       File insertedFile,
       boolean createChapter,
@@ -200,7 +206,7 @@ public class InsertFunction implements FunctionDefinition {
           environment.getRenderingCharset()
       ) ;
     } catch( MalformedURLException e ) {
-      return new FunctionCall.Result(
+      return new AbstractFunctionCall.Result(
           environment, book, Lists.newArrayList( Problem.createProblem( e ) ) ) ;
     }
     final Renderable partWithRelocation =
@@ -223,7 +229,7 @@ public class InsertFunction implements FunctionDefinition {
       }
     }
 
-    return new FunctionCall.Result( environment, book, rawPart.getProblems() ) ;
+    return new AbstractFunctionCall.Result( environment, book, rawPart.getProblems() ) ;
   }
 
   private static SyntacticTree createStyleTree( String styleName ) {
@@ -234,8 +240,8 @@ public class InsertFunction implements FunctionDefinition {
     }
   }
 
-  private static FunctionCall.Result evaluateRecursive(
-      Environment environment,
+  private static AbstractFunctionCall.Result evaluateRecursive(
+      CommandExecutionContext environment,
       Treepath< SyntacticTree > book,
       File insertedFile,
       boolean createChapter,
@@ -279,11 +285,11 @@ public class InsertFunction implements FunctionDefinition {
 
         }
       }
-    } catch( IllegalFunctionCallException e ) {
+    } catch( CommandParameterException e ) {
       problems.add( Problem.createProblem( e ) ) ;
     }
 
-    return new FunctionCall.Result( environment, book, problems ) ;
+    return new AbstractFunctionCall.Result( environment, book, problems ) ;
   }
 
   private static Treepath< SyntacticTree > createChapterFromPartFilename(
@@ -313,7 +319,7 @@ public class InsertFunction implements FunctionDefinition {
   }
 
   private static Iterable< File > scanPartFiles( File directory )
-      throws IllegalFunctionCallException
+      throws CommandParameterException
   {
     if( directory.isDirectory() ) {
       final List< File > files = Ordering.from( FileTools.ABSOLUTEPATH_COMPARATOR ).sortedCopy(
@@ -336,7 +342,7 @@ public class InsertFunction implements FunctionDefinition {
       return files ;
 
     } else {
-      throw new IllegalFunctionCallException(
+      throw new CommandParameterException(
           "Not a directory: '" + directory.getAbsolutePath() + "'" ) ;
     }
   }
