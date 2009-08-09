@@ -4,8 +4,32 @@ Now, Novelang build script automatically posts announcements of a new release to
 This is a "Blogspot feature"
 http://www.google.com/support/blogger/bin/answer.py?hl=en&answer=41452
 : when mailing to some secret address (like
-``novelang.announcer.reallysecret123456@blogger.com``) the mail becomes a blog post (or a draft).
+``novelang.announcer.reallysecret123456@blogger.com``) the mail becomes a blog post.
 HTML works, and even picture embedding.
 
-Since I use Novelang to draft all my postings (and emails), it's a logical step to create such
-a task for easy posting.
+Since I use Novelang to draft all my postings (and emails), it's a logical step to write an "Ant"
+http://ant.apache.org
+task for automating the mandatory steps. Ant is a widespread scripting language. It comes with
+a large set of handy features like loading a property file or sending an email.
+
+How easy would it be? For text-only mails or blog posts, the task takes the URI of the Novelang
+document to render. It returns two values in HTML or plain text: the title, and the body.
+Ant supports multiple return values from a task, given the names of the properties to set
+(a rudimentary concept of pointers).
+
+For avoiding multiple web accounts it makes sense to use Google's Picasa. Picasa is the image
+hosting service in which Blogspot saves attached images when posting by email.
+But linking to images requires knowledge of their URL once Web-hosted.
+With Picasa, an image URL is an unguessable thing like this:
+
+<<<
+http://lh4.ggpht.com/_c-k7nfw_Y8o/ShxnekzxHQI/AAAAAAAAAMI/pOtHg37OtsE/s800/Moving-color.png
+>>>
+
+The "Picasa Web Uploader API"
+http://code.google.com/apis/picasa/docs/web_uploader.html
+is quite confusing, because it describes the behavior of the PWU (Picasa Web Uploader) which
+is a local dæamon, and leaves the "real" Picasa online somewhat in the dark.
+So it's unclear how the HTTP response looks like, and how. 
+
+
