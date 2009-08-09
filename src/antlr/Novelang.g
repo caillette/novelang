@@ -66,13 +66,17 @@ tokens {
   SIGN_EXCLAMATIONMARK ; // punctuationsign=true
   SIGN_SEMICOLON ;       // punctuationsign=true
   SIGN_COLON ;           // punctuationsign=true
+
+  // Book stuff
   
-  FUNCTION_CALL_ ;
-  FUNCTION_NAME_ ;
-  VALUED_ARGUMENT_MODIFIER_ ;
-  VALUED_ARGUMENT_PRIMARY_ ;
-  VALUED_ARGUMENT_FLAG_ ;
-  VALUED_ARGUMENT_ASSIGNMENT_ ;
+  FUNCTIONCALL_INSERT_ ;
+  FUNCTIONCALL_INSERT_CREATELEVEL_ ;
+  FUNCTIONCALL_INSERT_RECURSE_ ;
+  FUNCTIONCALL_INSERT_STYLE_ ;
+  
+  FUNCTIONCALL_MAPSTYLESHEET_ ;
+  FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_ ;
+
 }
 
 @header {
@@ -1788,33 +1792,70 @@ book
   
 
 functionCall
-  : name = word 
-     (   whitespace url 
-       | WHITESPACE? SOFTBREAK WHITESPACE? paragraph
-     )?
-    ( mediumbreak ( flagArgument | assignmentArgument ) )*
-    ->  ^( FUNCTION_CALL_ 
-            ^( FUNCTION_NAME_ { delegate.createTree( FUNCTION_NAME_, $name.text ) } )  
-            ^( VALUED_ARGUMENT_PRIMARY_ 
-                paragraph? 
-                url? 
-            )? 
-            flagArgument*
-            assignmentArgument*
-        )
+  : functionCallInsert 
+  | functionCallMapstylesheet        
   ; 
   
-
-flagArgument    
-  : ( DOLLAR_SIGN flag = extendedWord )
-      -> ^( VALUED_ARGUMENT_FLAG_ { delegate.createTree( VALUED_ARGUMENT_FLAG_, $flag.text ) } )     
+functionCallInsert 
+  : ( keywordInsert
+      whitespace p += url 
+      ( mediumbreak p += keywordRecurse )?
+      ( mediumbreak p += keywordCreateLevel )?
+      ( mediumbreak p += functionCallInsertStyle ) ?        
+    )
+    -> ^( FUNCTIONCALL_INSERT_ $p+ )
+  ;
+  
+keywordInsert
+  : LATIN_SMALL_LETTER_I LATIN_SMALL_LETTER_N LATIN_SMALL_LETTER_S 
+    LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_T  
+  ;
+  
+keywordRecurse
+  : ( DOLLAR_SIGN LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_C 
+      LATIN_SMALL_LETTER_U LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_E 
+    )
+    -> ^( FUNCTIONCALL_INSERT_RECURSE_ )    
+  ;
+  
+keywordCreateLevel
+  : ( DOLLAR_SIGN LATIN_SMALL_LETTER_C LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_E 
+      LATIN_SMALL_LETTER_A LATIN_SMALL_LETTER_T LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_L 
+      LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_V LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_L 
+    )
+    -> ^( FUNCTIONCALL_INSERT_CREATELEVEL_ )
+  ;
+  
+functionCallInsertStyle
+  : ( DOLLAR_SIGN LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_T LATIN_SMALL_LETTER_Y 
+      LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_E EQUALS_SIGN
+      s = rawExtendedWord
+    )
+    -> ^( FUNCTIONCALL_INSERT_STYLE_ 
+          { delegate.createTree( FUNCTIONCALL_INSERT_STYLE_, $s.text ) } 
+        )
   ;
 
+  
+functionCallMapstylesheet  
+  : ( keywordMapstylesheet ( mediumbreak assignmentArgument )+ )
+    -> ^( FUNCTIONCALL_MAPSTYLESHEET_ assignmentArgument+ )
+  ;
+  
+keywordMapstylesheet
+  : LATIN_SMALL_LETTER_M  LATIN_SMALL_LETTER_A LATIN_SMALL_LETTER_P
+    LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_T LATIN_SMALL_LETTER_Y 
+    LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_S
+    LATIN_SMALL_LETTER_H LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_E
+    LATIN_SMALL_LETTER_T 
+  ;
+  
+
 assignmentArgument    
-  : ( DOLLAR_SIGN key = extendedWord EQUALS_SIGN value = extendedWord )
-      -> ^( VALUED_ARGUMENT_ASSIGNMENT_ 
-              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT_, $key.text ) } 
-              { delegate.createTree( VALUED_ARGUMENT_ASSIGNMENT_, $value.text ) } 
+  : ( DOLLAR_SIGN key = rawExtendedWord EQUALS_SIGN value = rawExtendedWord )
+      -> ^( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_ 
+              { delegate.createTree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, $key.text ) } 
+              { delegate.createTree( FUNCTIONCALL_MAPSTYLESHEET_ASSIGNMENT_, $value.text ) } 
           )     
   ;
 

@@ -48,10 +48,10 @@ public class MapStylesheetFunctionTest {
   @Test
   public void correctMapping() throws IllegalFunctionCallException {
     final FunctionDefinition definition = new MapStylesheetFunction() ;
-    final SyntacticTree callTree = BookParserTest.createFunctionCallWithValuedAssignmentTree(
-        "stylesheet",
-        ImmutableMap.of( "html", "dir/stylesheet.xsl", "pdf", "other/pdf.xsl" )
-    ) ;
+    final SyntacticTree callTree = null ;// BookParserTest.createFunctionCallWithValuedAssignmentTree(
+//        "stylesheet",
+//        ImmutableMap.of( "html", "dir/stylesheet.xsl", "pdf", "other/pdf.xsl" )
+//    ) ;
     LOG.debug( "Function call tree: \n%s", callTree.toStringTree() ) ;
 
     final FunctionCall call = definition.instantiate(

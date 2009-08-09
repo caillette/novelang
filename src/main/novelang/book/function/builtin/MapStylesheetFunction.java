@@ -64,17 +64,17 @@ public class MapStylesheetFunction implements FunctionDefinition {
 
     for( int i = 1 ; i < functionCall.getChildCount() ; i++ ) {
       final SyntacticTree assignmentTree = functionCall.getChildAt( i ) ;
-      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT_.name().equals( assignmentTree.getText() ) ) {
-        verify( "No key / value pair", true, 2 == assignmentTree.getChildCount() ) ;
-        final String keyAsString = assignmentTree.getChildAt( 0 ).getText() ;
-        final String value = assignmentTree.getChildAt( 1 ).getText() ;
-        verify( "Not a supported file type: '" + keyAsString + "'", true,
-            RenditionMimeType.contains( keyAsString ) ) ;
-        RenditionMimeType key = RenditionMimeType.valueOf( keyAsString.toUpperCase() ) ;
-        verify( "Duplicate assignment for key '" + key + "'",
-            false, assignments.containsKey( key ) ) ;
-        assignments.put( key, value ) ;
-      }
+//      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT_.name().equals( assignmentTree.getText() ) ) {
+//        verify( "No key / value pair", true, 2 == assignmentTree.getChildCount() ) ;
+//        final String keyAsString = assignmentTree.getChildAt( 0 ).getText() ;
+//        final String value = assignmentTree.getChildAt( 1 ).getText() ;
+//        verify( "Not a supported file type: '" + keyAsString + "'", true,
+//            RenditionMimeType.contains( keyAsString ) ) ;
+//        RenditionMimeType key = RenditionMimeType.valueOf( keyAsString.toUpperCase() ) ;
+//        verify( "Duplicate assignment for key '" + key + "'",
+//            false, assignments.containsKey( key ) ) ;
+//        assignments.put( key, value ) ;
+//      }
     }
 
     if( LOG.isDebugEnabled() ) {

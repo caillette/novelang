@@ -54,10 +54,10 @@ public class InsertFunctionTest {
   @Test
   public void goodFileUrl() throws IllegalFunctionCallException {
     final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
-    ) ;
+    final FunctionCall call = null ; //definition.instantiate(
+//        new Location( "", -1, -1 ),
+//        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
+//    ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
     final FunctionCall.Result result = call.evaluate(
@@ -80,8 +80,8 @@ public class InsertFunctionTest {
     final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            noChapterFile.getAbsolutePath(), "createlevel" )
+        null //BookParserTest.createFunctionCallWithUrlTree(
+//            noChapterFile.getAbsolutePath(), "createlevel" )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -116,10 +116,10 @@ public class InsertFunctionTest {
     final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            oneWordFile.getAbsolutePath(),
-            ImmutableMap.of( "style", "mystyle" )
-        )
+        null //BookParserTest.createFunctionCallWithUrlTree(
+//            oneWordFile.getAbsolutePath(),
+//            ImmutableMap.of( "style", "mystyle" )
+//        )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -143,8 +143,8 @@ public class InsertFunctionTest {
     final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            goodContentDirectory.getAbsolutePath(), "recurse" )
+        null //BookParserTest.createFunctionCallWithUrlTree(
+//            goodContentDirectory.getAbsolutePath(), "recurse" )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -162,8 +162,8 @@ public class InsertFunctionTest {
     final FunctionDefinition definition = new InsertFunction() ;
     final FunctionCall call = definition.instantiate(
         new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            brokenContentDirectory.getAbsolutePath(), "recurse" )
+        null // BookParserTest.createFunctionCallWithUrlTree(
+//            brokenContentDirectory.getAbsolutePath(), "recurse" )
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;

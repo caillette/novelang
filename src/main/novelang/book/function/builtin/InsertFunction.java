@@ -96,8 +96,8 @@ public class InsertFunction implements FunctionDefinition {
 
     verify( "No primary argument", true, functionCall.getChildCount() >= 2 ) ;
     final SyntacticTree primaryArgument = functionCall.getChildAt( 1 ) ;
-    verify( "No value for primary argument",
-        VALUED_ARGUMENT_PRIMARY_.name(), primaryArgument.getText() ) ;
+//    verify( "No value for primary argument",
+//        VALUED_ARGUMENT_PRIMARY_.name(), primaryArgument.getText() ) ;
     verify( "No value for primary argument", 1, primaryArgument.getChildCount() ) ;
     final SyntacticTree url = primaryArgument.getChildAt( 0 ) ;
     verify( URL_LITERAL.name(), url.getText() ) ;
@@ -107,23 +107,23 @@ public class InsertFunction implements FunctionDefinition {
     final Map< String, String > assignments = Maps.newHashMap() ;
     for( int i = 2 ; i < functionCall.getChildCount() ; i++ ) {
       final SyntacticTree otherArgumentTree = functionCall.getChildAt( i ) ;
-      if( NodeKind.VALUED_ARGUMENT_FLAG_.name().equals( otherArgumentTree.getText() ) ) {
-        final String option = otherArgumentTree.getChildAt( 0 ).getText();
-        verify( "Not a supported option: " + option, true, SUPPORTED_OPTIONS.contains( option ) ) ;
-        otherArguments.add( option ) ;
-      }
+//      if( NodeKind.VALUED_ARGUMENT_FLAG_.name().equals( otherArgumentTree.getText() ) ) {
+//        final String option = otherArgumentTree.getChildAt( 0 ).getText();
+//        verify( "Not a supported option: " + option, true, SUPPORTED_OPTIONS.contains( option ) ) ;
+//        otherArguments.add( option ) ;
+//      }
 
-      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT_.name().equals( otherArgumentTree.getText() ) ) {
-        final String assignmentKey = otherArgumentTree.getChildAt( 0 ).getText();
-        verify(
-            "Not a supported assignment: " + assignmentKey,
-            true,
-            SUPPORTED_ASSIGNMENTS.contains( assignmentKey )
-        ) ;
-        // No check as it was done by the parser.
-        final String assignmentValue = otherArgumentTree.getChildAt( 1 ).getText();
-        assignments.put( assignmentKey, assignmentValue ) ;
-      }
+//      if( NodeKind.VALUED_ARGUMENT_ASSIGNMENT_.name().equals( otherArgumentTree.getText() ) ) {
+//        final String assignmentKey = otherArgumentTree.getChildAt( 0 ).getText();
+//        verify(
+//            "Not a supported assignment: " + assignmentKey,
+//            true,
+//            SUPPORTED_ASSIGNMENTS.contains( assignmentKey )
+//        ) ;
+// //        No check as it was done by the parser.
+//        final String assignmentValue = otherArgumentTree.getChildAt( 1 ).getText();
+//        assignments.put( assignmentKey, assignmentValue ) ;
+//      }
     }
 
     LOG.debug( "Parsed function '%s' url='%s'", getName(), urlAsString ) ;
