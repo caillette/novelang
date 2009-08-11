@@ -106,7 +106,7 @@ public class MapStylesheetFunction implements FunctionDefinition {
     final List< Problem > problems = Lists.newArrayList() ;
     for( RenditionMimeType renditionMimeType : assignments.keySet() ) {
       if( null == environment.getCustomStylesheets().get( renditionMimeType ) ) {
-        environment = environment.map( renditionMimeType, assignments.get( renditionMimeType ) ) ;
+//        environment = environment.map( renditionMimeType, assignments.get( renditionMimeType ) ) ;
       } else {
         problems.add( Problem.createProblem(
             "Multiple stylesheet assignment for '" + renditionMimeType + "'" ) ) ;

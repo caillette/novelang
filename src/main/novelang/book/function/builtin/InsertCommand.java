@@ -1,7 +1,5 @@
 package novelang.book.function.builtin;
 
-import novelang.book.function.Command;
-import novelang.book.function.AbstractFunctionCall;
 import novelang.book.function.CommandParameterException;
 import novelang.book.CommandExecutionContext;
 import novelang.common.SyntacticTree;
@@ -10,6 +8,7 @@ import novelang.common.Renderable;
 import novelang.common.SimpleTree;
 import novelang.common.FileTools;
 import novelang.common.StructureKind;
+import novelang.common.Location;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreeTools;
 import novelang.common.tree.TreepathTools;
@@ -26,8 +25,6 @@ import com.google.common.collect.Ordering;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Set;
-import java.util.Map;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -35,7 +32,7 @@ import org.apache.commons.io.FilenameUtils;
 /**
  * @author Laurent Caillette
  */
-public class InsertCommand implements Command {
+public class InsertCommand extends AbstractCommand {
   
   private static final Log LOG = LogFactory.getLog( InsertCommand.class ) ;  
   
@@ -44,12 +41,14 @@ public class InsertCommand implements Command {
   private final boolean createLevel ;
   private final String styleName ;
 
-  public InsertCommand( 
+  public InsertCommand(
+      final Location location,
       final String fileUrl, 
       final boolean recurse, 
       final boolean createLevel, 
       final String styleName 
   ) {
+    super( location ) ;
     this.fileName = fileUrl.substring( "file:".length() ) ; 
     this.recurse = recurse ;
     this.createLevel = createLevel ;
@@ -91,7 +90,7 @@ public class InsertCommand implements Command {
           environment.getRenderingCharset()
       ) ;
     } catch( MalformedURLException e ) {
-      return environment.update( Lists.newArrayList( Problem.createProblem( e ) ) ) ;
+      return environment.addProblems( Lists.newArrayList( Problem.createProblem( e ) ) ) ;
     }
 
     final Renderable partWithRelocation =
@@ -100,12 +99,16 @@ public class InsertCommand implements Command {
     final SyntacticTree partTree = partWithRelocation.getDocumentTree() ;
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
     
-    Treepath< SyntacticTree > book = Treepath.create( environment.getBookTree() ) ;
+    Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
 
     if( null != partTree ) {
       if( createLevel ) {
           book = createChapterFromPartFilename( 
-              book, insertedFile, partTree, styleTree ) ;
+              book,
+              insertedFile,
+              partTree,
+              styleTree
+          ) ;
       } else {
         for( SyntacticTree partChild : partTree.getChildren() ) {
           if( styleTree != null ) {
@@ -116,7 +119,7 @@ public class InsertCommand implements Command {
       }
     }
 
-    return environment.update( book.getTreeAtStart() ).update( rawPart.getProblems() ) ;
+    return environment.update( book.getTreeAtStart() ).addProblems( rawPart.getProblems() ) ;
   }
 
   private static SyntacticTree createStyleTree( String styleName ) {
@@ -136,7 +139,7 @@ public class InsertCommand implements Command {
     
     final List< Problem > problems = Lists.newArrayList() ;
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
-    Treepath< SyntacticTree > book = Treepath.create( environment.getBookTree() ) ;
+    Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
 
     try {
       final Iterable< File > partFiles = scanPartFiles( insertedFile ) ;
@@ -177,7 +180,7 @@ public class InsertCommand implements Command {
       problems.add( Problem.createProblem( e ) ) ;
     }
 
-    return environment.update( book.getTreeAtStart() ).update( problems ) ;
+    return environment.update( book.getTreeAtStart() ).addProblems( problems ) ;
   }
 
   private static Treepath< SyntacticTree > createChapterFromPartFilename(

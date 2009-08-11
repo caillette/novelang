@@ -2,26 +2,70 @@ package novelang.book.function.builtin;
 
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.Command;
+import novelang.rendering.RenditionMimeType;
+import novelang.loader.ResourceName;
+import novelang.common.Problem;
+import novelang.common.Location;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 
 import java.util.Map;
+import java.util.List;
 
 /**
  * @author Laurent Caillette
  */
-public class MapstylesheetCommand implements Command {
+public class MapstylesheetCommand extends  AbstractCommand {
   
   private final Map< String, String > stylesheetMaps ;
 
-  public MapstylesheetCommand( Map< String, String > stylesheetMaps ) {
+  public MapstylesheetCommand(
+      final Location location,
+      final Map< String, String > stylesheetMaps
+  ) {
+    super( location ) ;
     Preconditions.checkNotNull( stylesheetMaps ) ;    
     this.stylesheetMaps = ImmutableMap.copyOf( stylesheetMaps ) ;
   }
 
   public CommandExecutionContext evaluate( CommandExecutionContext context ) {
-    throw new UnsupportedOperationException( "evaluate" ) ;
+
+    final Map< RenditionMimeType, ResourceName > moreStylesheetMappings = Maps.newHashMap() ;
+    final List< Problem > problems = Lists.newArrayList() ;
+    
+    for( final String key : stylesheetMaps.keySet() ) {
+      if( RenditionMimeType.contains( key ) ) {
+        final RenditionMimeType renditionMimeType = RenditionMimeType.valueOf( key ) ;
+        oneStylesheet:
+        {
+          final ResourceName stylesheet ;
+          final String stylesheetName = stylesheetMaps.get( key );
+          try {
+            stylesheet = new ResourceName( stylesheetName ) ;
+          } catch( IllegalArgumentException e ) {
+            problems.add( Problem.createProblem(
+                "Incorrect stylesheet name: '" + stylesheetName + "'" ) ) ;
+            break oneStylesheet ;
+          }
+          moreStylesheetMappings.put( renditionMimeType, stylesheet ) ;
+        }
+      } else {
+        problems.add( Problem.createProblem( "Unknown MIME type: '" + key + "'" ) ) ;
+      }
+    }
+    
+    if( problems.isEmpty() ) {
+      try {
+        return context.addMappings( moreStylesheetMappings ) ;
+      } catch( CommandExecutionContext.DuplicateStylesheetMappingException e ) {
+        problems.add( Problem.createProblem( e ) ) ;
+      }
+    }
+    return context.addProblems( problems ) ;
+
   }
   
 }

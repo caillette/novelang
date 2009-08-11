@@ -36,14 +36,20 @@ public class CommandFactory {
         final boolean recurse = hasChild( treeOfCommand, COMMAND_INSERT_RECURSE_ ) ;
         final boolean createLevel = hasChild( treeOfCommand, COMMAND_INSERT_CREATELEVEL_ ) ;
         final String styleName = getTextOfChild( treeOfCommand, COMMAND_INSERT_STYLE_, false ) ;
-        return new InsertCommand( fileName, recurse, createLevel, styleName ) ;
+        return new InsertCommand(
+            treeOfCommand.getLocation(),
+            fileName,
+            recurse,
+            createLevel,
+            styleName
+        ) ;
       
       case COMMAND_MAPSTYLESHEET_ :
         final Map< String, String > styleMap = Maps.newHashMap() ;
         for( final SyntacticTree child : treeOfCommand.getChildren() ) {
           styleMap.put( child.getChildAt( 0 ).getText(), child.getChildAt( 1 ).getText() ) ;
         }
-        return new MapstylesheetCommand( styleMap ) ;
+        return new MapstylesheetCommand( treeOfCommand.getLocation(), styleMap ) ;
       
       default : throw new IllegalArgumentException( "Unsupported: " + nodeKind ) ;
     }

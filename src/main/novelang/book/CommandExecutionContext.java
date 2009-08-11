@@ -17,18 +17,17 @@
 package novelang.book;
 
 import java.io.File;
-import java.util.Map;
-import java.util.ArrayList;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-
+import com.google.common.collect.Maps;
+import novelang.common.Problem;
 import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
-import novelang.common.Problem;
 import novelang.loader.ResourceName;
 import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
@@ -48,46 +47,55 @@ public final class CommandExecutionContext {
   private final Charset sourceCharset ;
   private final Charset renderingCharset ;
   private final Map< RenditionMimeType, ResourceName > mappedStylesheets ;
+
+  /**
+   * Kind of shortcut on {@link #mappedStylesheets}.
+   */
   private final StylesheetMap stylesheetMap ;
+
   private final SyntacticTree bookTree ;
   private final Iterable< Problem > problems ;
   
   private static final Iterable< Problem > NO_PROBLEM = ImmutableList.of() ;
   
 
-  private CommandExecutionContext( CommandExecutionContext other ) {
-    this( other, other.bookTree, other.problems ) ;
-  }
-  
   private CommandExecutionContext( 
       final CommandExecutionContext other, 
       final SyntacticTree alternateBookTree,
-      final Iterable< Problem > moreProblems
+      final Iterable< Problem > moreProblems,
+      final Map< RenditionMimeType, ResourceName > moreStylesheetMappings
   ) {
     this.baseDirectory = other.baseDirectory ;
     this.bookDirectory = other.bookDirectory ;
     this.sourceCharset = other.sourceCharset ;
     this.renderingCharset = other.renderingCharset ;
-    this.mappedStylesheets = Maps.newHashMap( other.mappedStylesheets ) ;
+
+    final Map< RenditionMimeType, ResourceName > newMap = Maps.newHashMap() ;
+    newMap.putAll( other.mappedStylesheets ) ;
+    newMap.putAll( moreStylesheetMappings ) ;
+    this.mappedStylesheets = ImmutableMap.copyOf( newMap ) ;
     this.stylesheetMap = new StylesheetMap() {
       public ResourceName get( RenditionMimeType renditionMimeType ) {
         return mappedStylesheets.get( renditionMimeType ) ;
       }
     } ;
+
     this.bookTree = alternateBookTree ;
     if ( moreProblems == other.getProblems() ) {
-      // Sure it's unmodifiable.
+      // We can do that because we know it's unmodifiable.
       this.problems = other.getProblems() ;
     } else {
       this.problems = Iterables.concat( getProblems(), moreProblems ) ;
     }
   }
 
+
   public CommandExecutionContext( final File baseDirectory ) {
     this( baseDirectory, baseDirectory ) ;
   }
 
-  public CommandExecutionContext( File baseDirectory, File bookDirectory ) {
+
+  public CommandExecutionContext( final File baseDirectory, final File bookDirectory ) {
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     this.bookDirectory = Preconditions.checkNotNull( bookDirectory ) ;
     this.sourceCharset = DefaultCharset.SOURCE ;
@@ -98,49 +106,96 @@ public final class CommandExecutionContext {
     this.problems = NO_PROBLEM ;
   }
 
+
   public File getBaseDirectory() {
     return baseDirectory;
   }
+
 
   public File getBookDirectory() {
     return bookDirectory;
   }
 
+
   public Charset getSourceCharset() {
     return sourceCharset ;
   }
+
 
   public Charset getRenderingCharset() {
     return renderingCharset ;
   }
 
-  public SyntacticTree getBookTree() {
+
+  public SyntacticTree getDocumentTree() {
     return bookTree;
   }
+
 
   public Iterable< Problem > getProblems() {
     return problems ;
   }
 
-  public CommandExecutionContext map( 
-      final RenditionMimeType renditionMimeType, 
-      final String stylesheetPath 
-  ) {
-    final CommandExecutionContext newEnvironment = new CommandExecutionContext( this ) ;
-    newEnvironment.mappedStylesheets.put(
-        Preconditions.checkNotNull( renditionMimeType ), new ResourceName( stylesheetPath ) ) ;
-    return newEnvironment ;
+
+  public CommandExecutionContext addMappings(
+      final Map< RenditionMimeType, ResourceName > moreStylesheetMappings
+  ) throws DuplicateStylesheetMappingException {
+
+    for( final RenditionMimeType key : moreStylesheetMappings.keySet() ) {
+      final ResourceName resourceName = moreStylesheetMappings.get( key );
+      if( mappedStylesheets.containsKey( key ) ) {
+        throw new DuplicateStylesheetMappingException(
+            key,
+            mappedStylesheets.get( key ),
+            resourceName
+        ) ;
+      }
+    }
+
+    return new CommandExecutionContext(
+        this,
+        this.getDocumentTree(),
+        this.getProblems(),
+        moreStylesheetMappings
+    ) ;
   }
+
   
   public StylesheetMap getCustomStylesheets() {
     return stylesheetMap ;
   }
 
+
   public CommandExecutionContext update( final SyntacticTree bookTree ) {
-    return new CommandExecutionContext( this, bookTree, getProblems() ) ;
+    return new CommandExecutionContext( this, bookTree, getProblems(), mappedStylesheets ) ;
   }
 
-  public CommandExecutionContext update( final Iterable< Problem > problems ) {
-    return new CommandExecutionContext( this, getBookTree(), problems ) ;
+
+  public CommandExecutionContext addProblems( final Iterable< Problem > problems ) {
+    return new CommandExecutionContext( this, getDocumentTree(), problems, mappedStylesheets ) ;
+  }
+
+
+  public CommandExecutionContext addProblem( final Problem problem ) {
+    return new CommandExecutionContext(
+        this,
+        getDocumentTree(),
+        ImmutableList.of( problem ),
+        mappedStylesheets
+    ) ;
+  }
+
+
+  public static class DuplicateStylesheetMappingException extends Exception {
+    public DuplicateStylesheetMappingException(
+        final RenditionMimeType renditionMimeType,
+        final ResourceName previousStylesheetpath,
+        final ResourceName newStylesheetpath
+    ) {
+      super(
+          "Already mapping " + renditionMimeType + " to " + previousStylesheetpath +
+          "; won't replace by " + newStylesheetpath
+      ) ;
+    }
   }
 }
