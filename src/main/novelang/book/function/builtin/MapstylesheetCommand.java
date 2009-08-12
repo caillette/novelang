@@ -39,18 +39,14 @@ public class MapstylesheetCommand extends  AbstractCommand {
     for( final String key : stylesheetMaps.keySet() ) {
       if( RenditionMimeType.contains( key ) ) {
         final RenditionMimeType renditionMimeType = RenditionMimeType.valueOf( key ) ;
-        oneStylesheet:
-        {
-          final ResourceName stylesheet ;
-          final String stylesheetName = stylesheetMaps.get( key );
-          try {
-            stylesheet = new ResourceName( stylesheetName ) ;
-          } catch( IllegalArgumentException e ) {
-            problems.add( Problem.createProblem(
-                "Incorrect stylesheet name: '" + stylesheetName + "'" ) ) ;
-            break oneStylesheet ;
-          }
+        final ResourceName stylesheet ;
+        final String stylesheetName = stylesheetMaps.get( key ) ;
+        try {
+          stylesheet = new ResourceName( stylesheetName ) ;
           moreStylesheetMappings.put( renditionMimeType, stylesheet ) ;
+        } catch( IllegalArgumentException e ) {
+          problems.add( Problem.createProblem(
+              "Incorrect stylesheet name: '" + stylesheetName + "'" ) ) ;
         }
       } else {
         problems.add( Problem.createProblem( "Unknown MIME type: '" + key + "'" ) ) ;
