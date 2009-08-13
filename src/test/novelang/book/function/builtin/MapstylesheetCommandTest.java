@@ -23,53 +23,45 @@ import org.junit.Test;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.book.CommandExecutionContext;
-import novelang.book.function.AbstractFunctionCall;
-import novelang.book.function.FunctionDefinition;
 import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
-import novelang.common.SimpleTree;
-import novelang.common.SyntacticTree;
-import novelang.common.tree.Treepath;
 import novelang.loader.ResourceName;
-import static novelang.parser.NodeKind.BOOK;
 import novelang.rendering.RenditionMimeType;
+import com.google.common.collect.ImmutableMap;
 
 /**
- * Tests for {@link MapStylesheetFunction}.
+ * Tests for {@link novelang.book.function.builtin.MapstylesheetCommand}.
  *
  * @author Laurent Caillette
  */
-public class MapStylesheetFunctionTest {
+public class MapstylesheetCommandTest {
 
-  private static final Log LOG = LogFactory.getLog( MapStylesheetFunctionTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( MapstylesheetCommandTest.class ) ;
 
   @Test
   public void correctMapping() throws CommandParameterException {
-    final FunctionDefinition definition = new MapStylesheetFunction() ;
-    final SyntacticTree callTree = null ;// BookParserTest.createFunctionCallWithValuedAssignmentTree(
-//        "stylesheet",
-//        ImmutableMap.of( "html", "dir/stylesheet.xsl", "pdf", "other/pdf.xsl" )
-//    ) ;
-    LOG.debug( "Function call tree: \n%s", callTree.toStringTree() ) ;
-
-    final AbstractFunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        callTree
+    final ImmutableMap< String, String > map = ImmutableMap.of(
+        "html", "dir/stylesheet.xsl",
+        "pdf", "other/pdf.xsl"
     ) ;
+    final MapstylesheetCommand definition = new MapstylesheetCommand(
+        new Location( "", -1, -1 ),
+        map
+    ) ;
+    LOG.debug( "Stylesheet map: \n%s", map ) ;
 
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final AbstractFunctionCall.Result result =
-        call.evaluate( new CommandExecutionContext( new File( "" ) ), Treepath.create( initialTree ) ) ;
+    final CommandExecutionContext result = definition.evaluate(
+        new CommandExecutionContext( new File( "" ) ) );
 
     Assert.assertEquals(
         new ResourceName( "dir/stylesheet.xsl" ),
-        result.getEnvironment().getCustomStylesheets().get( RenditionMimeType.HTML )
+        result.getCustomStylesheets().get( RenditionMimeType.HTML )
     ) ;
 
     Assert.assertEquals(
         new ResourceName( "other/pdf.xsl" ),
-        result.getEnvironment().getCustomStylesheets().get( RenditionMimeType.PDF )  
+        result.getCustomStylesheets().get( RenditionMimeType.PDF )
     ) ;
 
   }

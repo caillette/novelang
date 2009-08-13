@@ -17,6 +17,7 @@
 package novelang.book.function.builtin;
 
 import java.io.File;
+import java.net.MalformedURLException;
 
 import org.apache.commons.lang.ClassUtils;
 import static org.junit.Assert.*;
@@ -45,54 +46,61 @@ import static novelang.parser.antlr.TreeFixture.tree;
  *
  * @author Laurent Caillette
  */
-public class InsertFunctionTest {
+public class InsertCommandTest {
 
-  private static final Log LOG = LogFactory.getLog( InsertFunctionTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( InsertCommandTest.class ) ;
 
   @Test
-  public void goodFileUrl() throws CommandParameterException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final AbstractFunctionCall call = null ; //definition.instantiate(
-//        new Location( "", -1, -1 ),
-//        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
-//    ) ;
+  public void goodFileUrl() throws CommandParameterException, MalformedURLException {
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final AbstractFunctionCall.Result result = call.evaluate(
-        new CommandExecutionContext( goodContentDirectory ),
-        Treepath.create( initialTree )
+    final InsertCommand command = new InsertCommand(
+        new Location( "", -1, -1 ),
+        oneWordFile.toURL().toExternalForm(),
+        false,
+        false,
+        null
+    ) ;
+
+    final CommandExecutionContext initialContext =
+        new CommandExecutionContext( goodContentDirectory ).
+        update( new SimpleTree( BOOK.name() ) )
+    ;
+
+    final CommandExecutionContext result = command.evaluate(
+        initialContext
     ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
-        result.getBook().getTreeAtStart()
+        result.getDocumentTree()
     ) ;
 
   }
 
   @Test
-  public void createChapterForSinglePart() throws CommandParameterException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final AbstractFunctionCall call = definition.instantiate(
+  public void createChapterForSinglePart() 
+      throws CommandParameterException, MalformedURLException
+  {
+    final InsertCommand definition = new InsertCommand(
         new Location( "", -1, -1 ),
-        null //BookParserTest.createFunctionCallWithUrlTree(
-//            noChapterFile.getAbsolutePath(), "createlevel" )
+        noChapterFile.toURL().toExternalForm(),
+        false,
+        true,
+        null
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final AbstractFunctionCall.Result result = call.evaluate(
-        new CommandExecutionContext( goodContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext initialContext =
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ;
+    final CommandExecutionContext result = definition.evaluate( initialContext ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
 
-
-    final SyntacticTree book = result.getBook().getTreeAtStart() ;
+    final SyntacticTree documentTree = result.getDocumentTree();
+    assertNotNull( documentTree ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
@@ -104,7 +112,7 @@ public class InsertFunctionTest {
                 )
             )
         ),
-        book
+        documentTree
     ) ;
 
   }
@@ -130,7 +138,14 @@ public class InsertFunctionTest {
     assertNotNull( result.getBook() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( _STYLE, "mystyle" ), tree( WORD_, "oneword" ) ) ),
+        tree(
+            BOOK,
+            tree(
+                NodeKind.PARAGRAPH_REGULAR,
+                tree( _STYLE, "mystyle" ),
+                tree( WORD_, "oneword" )
+            )
+        ),
         result.getBook().getTreeAtStart()
     ) ;
 

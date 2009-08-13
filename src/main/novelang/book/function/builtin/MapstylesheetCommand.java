@@ -38,7 +38,7 @@ public class MapstylesheetCommand extends  AbstractCommand {
     
     for( final String key : stylesheetMaps.keySet() ) {
       if( RenditionMimeType.contains( key ) ) {
-        final RenditionMimeType renditionMimeType = RenditionMimeType.valueOf( key ) ;
+        final RenditionMimeType renditionMimeType = RenditionMimeType.valueOf( key.toUpperCase() ) ;
         final ResourceName stylesheet ;
         final String stylesheetName = stylesheetMaps.get( key ) ;
         try {
@@ -62,6 +62,11 @@ public class MapstylesheetCommand extends  AbstractCommand {
     }
     return context.addProblems( problems ) ;
 
+  }
+
+  static {
+
+    
   }
   
 }
