@@ -136,12 +136,13 @@ public class FileTools {
    */
   public static List< File > scanFiles(
       File directory,
-      String[] extensions
+      String[] extensions,
+      boolean recurse
   ) {
     final Collection fileCollection = FileUtils.listFiles(
         directory,
         extensions,
-        true
+        recurse
     ) ;
 
     // Workaround: Commons Collection doesn't know about Generics.

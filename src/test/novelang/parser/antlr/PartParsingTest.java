@@ -42,6 +42,32 @@ public class PartParsingTest {
     ) ;
   }
 
+
+  /**
+   * An attempt to reproduce bad behavior occuring with 
+   * {@link novelang.book.BookWithImagesTest#imagesInPartsWithExplicitNames}.
+   */
+  @Test
+  public void partIsTwoImages() {
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(  
+        "./y.svg" + BREAK +
+        BREAK +
+        "../z.jpg"
+        ,
+        tree(
+            PART,
+            tree(
+                VECTOR_IMAGE,
+                tree( RESOURCE_LOCATION, "./y.svg" )
+            ),
+            tree(
+                RASTER_IMAGE,
+                tree( RESOURCE_LOCATION, "../z.jpg" )
+            )
+        )
+    ) ;
+  }
+
   @Test
   public void partWithSeveralMultilineParagraphs() throws RecognitionException {
     PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
