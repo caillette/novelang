@@ -42,19 +42,17 @@ import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
- * Tests for {@link InsertFunction}.
+ * Tests for {@link InsertCommand}.
  *
  * @author Laurent Caillette
  */
 public class InsertCommandTest {
 
-  private static final Log LOG = LogFactory.getLog( InsertCommandTest.class ) ;
-
   @Test
   public void goodFileUrl() throws CommandParameterException, MalformedURLException {
 
-    final InsertCommand command = new InsertCommand(
-        new Location( "", -1, -1 ),
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
         oneWordFile.toURL().toExternalForm(),
         false,
         false,
@@ -66,7 +64,7 @@ public class InsertCommandTest {
         update( new SimpleTree( BOOK.name() ) )
     ;
 
-    final CommandExecutionContext result = command.evaluate(
+    final CommandExecutionContext result = insertCommand.evaluate(
         initialContext
     ) ;
 
@@ -84,8 +82,8 @@ public class InsertCommandTest {
   public void createChapterForSinglePart() 
       throws CommandParameterException, MalformedURLException
   {
-    final InsertCommand definition = new InsertCommand(
-        new Location( "", -1, -1 ),
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
         noChapterFile.toURL().toExternalForm(),
         false,
         true,
@@ -95,7 +93,7 @@ public class InsertCommandTest {
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
     final CommandExecutionContext initialContext =
         new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ;
-    final CommandExecutionContext result = definition.evaluate( initialContext ) ;
+    final CommandExecutionContext result = insertCommand.evaluate( initialContext ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
 
@@ -118,75 +116,70 @@ public class InsertCommandTest {
   }
 
   @Test
-  public void addStyle() throws CommandParameterException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final AbstractFunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        null //BookParserTest.createFunctionCallWithUrlTree(
-//            oneWordFile.getAbsolutePath(),
-//            ImmutableMap.of( "style", "mystyle" )
-//        )
+  public void addStyle() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        oneWordFile.toURL().toExternalForm(), 
+        false,
+        false,
+        "myStyle"
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final AbstractFunctionCall.Result result = call.evaluate(
-        new CommandExecutionContext( goodContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree(
             BOOK,
             tree(
                 NodeKind.PARAGRAPH_REGULAR,
-                tree( _STYLE, "mystyle" ),
+                tree( _STYLE, "myStyle" ),
                 tree( WORD_, "oneword" )
             )
         ),
-        result.getBook().getTreeAtStart()
+        result.getDocumentTree() 
     ) ;
 
   }
 
   @Test
-  public void recurseWithAllValidParts() throws CommandParameterException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final AbstractFunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        null //BookParserTest.createFunctionCallWithUrlTree(
-//            goodContentDirectory.getAbsolutePath(), "recurse" )
+  public void recurseWithAllValidParts() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        goodContentDirectory.toURL().toExternalForm(),
+        true,
+        false,
+        null
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final AbstractFunctionCall.Result result = call.evaluate(
-        new CommandExecutionContext( goodContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
   }
 
   @Test
-  public void recurseWithSomeBrokenPart() throws CommandParameterException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final AbstractFunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        null // BookParserTest.createFunctionCallWithUrlTree(
-//            brokenContentDirectory.getAbsolutePath(), "recurse" )
+  public void recurseWithSomeBrokenPart() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,        
+        brokenContentDirectory.toURL().toExternalForm(),
+        true,
+        false,
+        null
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final AbstractFunctionCall.Result result = call.evaluate(
-        new CommandExecutionContext( brokenContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( brokenContentDirectory ).update( initialTree ) ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
   }
 
 
@@ -195,6 +188,8 @@ public class InsertCommandTest {
 // Fixture
 // =======
 
+  private static final Location NULL_LOCATION = new Location( "", -1, -1 );
+
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD_ABSOLUTEFILENAME;
   private static final String NOCHAPTER_FILENAME = TestResources.NO_CHAPTER ;
   private static final String BROKEN_FILENAME = TestResources.BROKEN_CANNOTPARSE;
@@ -202,7 +197,6 @@ public class InsertCommandTest {
   private static final String CONTENT_GOOD_DIRNAME = "good" ;
   private static final String CONTENT_BROKEN_DIRNAME = "broken" ;
 
-  private File scratchDirectory;
   private File oneWordFile ;
   private File noChapterFile;
   private File goodContentDirectory;
@@ -214,7 +208,7 @@ public class InsertCommandTest {
     final String testName = ClassUtils.getShortClassName( getClass() ) ;
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
-    scratchDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+    File scratchDirectory = scratchDirectoryFixture.getTestScratchDirectory();
 
     goodContentDirectory = new File( scratchDirectory, CONTENT_GOOD_DIRNAME ) ;
 

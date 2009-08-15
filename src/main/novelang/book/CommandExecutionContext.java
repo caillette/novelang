@@ -85,7 +85,7 @@ public final class CommandExecutionContext {
       // We can do that because we know it's unmodifiable.
       this.problems = other.getProblems() ;
     } else {
-      this.problems = Iterables.concat( getProblems(), moreProblems ) ;
+      this.problems = Iterables.concat( other.getProblems(), moreProblems ) ;
     }
   }
 
