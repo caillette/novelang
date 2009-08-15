@@ -117,7 +117,7 @@ public class Book extends AbstractSourceReader {
         parse( new DefaultBookParserFactory(), content ) ) ;
     
     if( null != rawTree ) {
-      final Iterable< Command > commands = createFunctionCalls( new CommandFactory(), rawTree ) ;
+      final Iterable< Command > commands = createCommands( new CommandFactory(), rawTree ) ;
       currentEnvironment = callCommands(
           currentEnvironment.update( new SimpleTree( NodeKind.BOOK ) ),
           commands
@@ -169,7 +169,7 @@ public class Book extends AbstractSourceReader {
     return environment.getCustomStylesheets() ;
   }
 
-  private Iterable< Command > createFunctionCalls(
+  private Iterable< Command > createCommands(
       final CommandFactory commandFactory,
       final SyntacticTree rawTree
   ) {
@@ -194,7 +194,6 @@ public class Book extends AbstractSourceReader {
     }
     return context ;
   }
-
 
 
 }

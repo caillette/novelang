@@ -114,7 +114,7 @@ public class InsertCommand extends AbstractCommand {
           if( styleTree != null ) {
             partChild = TreeTools.addFirst( partChild, styleTree ) ;
           }
-          book = TreepathTools.addChildLast( book, partChild ) ;
+          book = TreepathTools.addChildLast( book, partChild ).getStart() ;
         }
       }
     }
