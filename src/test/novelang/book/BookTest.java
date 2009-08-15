@@ -76,7 +76,7 @@ public class BookTest {
    * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
-  public void insertWithFileScan() throws IOException {
+  public void insertWithRecursiveFileScan() throws IOException {
     final Book book = new Book( scannedBookNoStyle ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
@@ -107,6 +107,35 @@ public class BookTest {
                     NodeKind.PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file3" )
                 )
+            )
+        ),
+        bookTree
+    ) ;
+    Assert.assertFalse( book.hasProblem() ) ;
+
+
+  }
+
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
+  public void insertWithFlatFileScan() throws IOException {
+    final Book book = new Book( scannedBookNoStyleNoRecurse ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+
+    final SyntacticTree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEqualsNoSeparators(
+        tree( 
+            BOOK,
+            tree( _META, tree( _WORD_COUNT, "2" ) ),
+            tree(
+                NodeKind.PARAGRAPH_REGULAR,
+                tree( WORD_, "content-of-file1" )
+            ),
+            tree(
+                NodeKind.PARAGRAPH_REGULAR,
+                tree( WORD_, "content-of-file2" )
             )
         ),
         bookTree
@@ -187,6 +216,7 @@ public class BookTest {
 
   public static final String SCANNED_BOOK_FILENAME = TestResources.SCANNED_DIR ;
   private File scannedBookNoStyle ;
+  private File scannedBookNoStyleNoRecurse ;
   private File scannedBookWithStyle ;
   private File scannedBookWithBadPart ;
 
@@ -214,6 +244,8 @@ public class BookTest {
         getClass(), TestResources.SCANNED_FILE3, contentDirectory ) ;
     scannedBookNoStyle = TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_BOOK_NOSTYLE, contentDirectory ) ;
+    scannedBookNoStyleNoRecurse = TestResourceTools.copyResourceToDirectory(
+        getClass(), TestResources.SCANNED_BOOK_NOSTYLE_NORECURSE, contentDirectory ) ;
     scannedBookWithStyle = TestResourceTools.copyResourceToDirectory(
         getClass(), TestResources.SCANNED_BOOK_WITHSTYLE, contentDirectory ) ;
 

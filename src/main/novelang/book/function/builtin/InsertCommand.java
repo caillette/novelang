@@ -69,14 +69,14 @@ public class InsertCommand extends AbstractCommand {
       }
     }
 
-    if( recurse ) {
-      return evaluateRecursive( environment, insertedFile ) ;
+    if( insertedFile.isDirectory() ) {
+      return evaluateMultiple( environment, insertedFile, recurse ) ;
     } else {
-      return evaluateFlat( environment, insertedFile ) ;
+      return evaluateSingle( environment, insertedFile ) ;
     }
   }
 
-  private CommandExecutionContext evaluateFlat( 
+  private CommandExecutionContext evaluateSingle( 
       final CommandExecutionContext environment,
       final File insertedFile
   ) {
@@ -130,9 +130,10 @@ public class InsertCommand extends AbstractCommand {
     }
   }
 
-  private CommandExecutionContext evaluateRecursive(
+  private CommandExecutionContext evaluateMultiple(
       final CommandExecutionContext environment,
-      final File insertedFile
+      final File insertedFile,
+      final boolean recurse
   ) {
     LOG.debug( "Command %s evaluating recursively on %s", this, insertedFile  ) ;
    
@@ -142,7 +143,7 @@ public class InsertCommand extends AbstractCommand {
     Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
 
     try {
-      final Iterable< File > partFiles = scanPartFiles( insertedFile ) ;
+      final Iterable< File > partFiles = scanPartFiles( insertedFile, recurse ) ;
       for( File partFile : partFiles ) {
         Part part = null ;
         try {
@@ -209,13 +210,13 @@ public class InsertCommand extends AbstractCommand {
     return book ;
   }
 
-  private static Iterable< File > scanPartFiles( File directory )
+  private static Iterable< File > scanPartFiles( File directory, boolean recurse )
       throws CommandParameterException
   {
     if( directory.isDirectory() ) {
       final List< File > files = Ordering.from( FileTools.ABSOLUTEPATH_COMPARATOR ).sortedCopy(
-          FileTools.scanFiles( directory, StructureKind.PART.getFileExtensions() )
-      );
+          FileTools.scanFiles( directory, StructureKind.PART.getFileExtensions(), recurse )
+      ) ;
 
       if( LOG.isDebugEnabled() ) {
         StringBuffer buffer = new StringBuffer(

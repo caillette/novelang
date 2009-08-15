@@ -185,7 +185,7 @@ public class DirectoryScanHandler extends GenericHandler {
 
     final List< File > filesAndDirectories = Lists.newArrayList() ;
     filesAndDirectories.addAll(
-        FileTools.scanFiles( scanned, StructureKind.getAllFileExtensions() ) ) ;
+        FileTools.scanFiles( scanned, StructureKind.getAllFileExtensions(), true ) ) ;
     filesAndDirectories.addAll( 
         FileTools.scanDirectories( scanned ) ) ;
 
