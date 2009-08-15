@@ -16,25 +16,25 @@
  */
 package novelang.book;
 
-import java.io.File;
-import java.io.IOException;
+import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
+import novelang.TestResources;
+import novelang.common.SyntacticTree;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.system.Log;
+import novelang.system.LogFactory;
 
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.ScratchDirectoryFixture;
-import novelang.TestResourceTools;
-import novelang.TestResources;
-import novelang.book.function.FunctionRegistry;
-import novelang.common.SyntacticTree;
-import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.*;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Test for {@link Book} and also built-in functions.
@@ -48,13 +48,12 @@ public class BookTest {
   
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
   public void justInsert() {
 
     final Book book = new Book(
-        FunctionRegistry.getStandardRegistry(),
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath()
     ) ;
@@ -74,14 +73,11 @@ public class BookTest {
   }
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithFileScan() throws IOException {
-    final Book book = new Book(
-        FunctionRegistry.getStandardRegistry(),
-        scannedBookNoStyle
-    ) ;
+    final Book book = new Book( scannedBookNoStyle ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
@@ -122,14 +118,11 @@ public class BookTest {
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithFileScanAndStyle() throws IOException {
-    final Book book = new Book(
-        FunctionRegistry.getStandardRegistry(),
-        scannedBookWithStyle
-    ) ;
+    final Book book = new Book( scannedBookWithStyle );
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
@@ -172,17 +165,14 @@ public class BookTest {
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithBadPart() throws IOException {
-    final Book book = new Book(
-        FunctionRegistry.getStandardRegistry(),
-        scannedBookWithBadPart
-    ) ;
+    final Book book = new Book( scannedBookWithBadPart ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
-    Assert.assertTrue( book.hasProblem() ); ;
+    Assert.assertTrue( book.hasProblem() ) ;
 
 
   }

@@ -16,19 +16,9 @@
  */
 package novelang.book;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
-import novelang.system.LogFactory;
 import novelang.ScratchDirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
-import novelang.book.function.FunctionRegistry;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.Filer;
 import novelang.common.filefixture.Relativizer;
@@ -38,8 +28,17 @@ import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
+import novelang.system.LogFactory;
 
 import com.google.common.collect.ImmutableSet;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Tests for {@link Book} with embedded images.
@@ -50,12 +49,11 @@ import com.google.common.collect.ImmutableSet;
 public class BookWithImagesTest {
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
   public void imagesInPartsWithExplicitNames() throws IOException {
     final Book book = new Book(
-        FunctionRegistry.getStandardRegistry(),
         testDirectory,
         bookWithImagesExplicit,
         DefaultCharset.SOURCE,
@@ -73,12 +71,11 @@ public class BookWithImagesTest {
   }
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertFunction}.
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
   public void imagesInPartsWithRecurse() throws IOException {
     final Book book = new Book(
-        FunctionRegistry.getStandardRegistry(),
         testDirectory,
         bookWithImagesRecurse,
         DefaultCharset.SOURCE,

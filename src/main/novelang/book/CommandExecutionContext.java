@@ -33,7 +33,7 @@ import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
 
 /**
- * Contains all input and output for {@link novelang.book.function.AbstractFunctionCall} evaluation.
+ * Contains all input and output for {@link novelang.book.function.Command} evaluation.
  * If some functions need to communicate by changing some shared value (like the map of 
  * the stylesheets, or Book's tree) this happen through this class and this class only.
  * 
@@ -85,7 +85,9 @@ public final class CommandExecutionContext {
       // We can do that because we know it's unmodifiable.
       this.problems = other.getProblems() ;
     } else {
-      this.problems = Iterables.concat( other.getProblems(), moreProblems ) ;
+      // The concat method itself proxies the iterators, making debugging hard.
+      this.problems = ImmutableList.copyOf( 
+          Iterables.concat( other.getProblems(), moreProblems ) ) ;
     }
   }
 

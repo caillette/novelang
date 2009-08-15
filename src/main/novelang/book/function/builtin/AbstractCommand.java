@@ -13,7 +13,7 @@ public abstract class AbstractCommand implements Command {
   private final Location location ;
 
   protected AbstractCommand( Location location ) {
-    this.location = Preconditions.checkNotNull( location ) ;
+    this.location = location ; //Preconditions.checkNotNull( location ) ;
   }
 
   public Location getLocation() {

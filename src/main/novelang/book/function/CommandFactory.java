@@ -12,14 +12,14 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 
 /**
- * Creates instances of {@link AbstractFunctionCall}.
+ * Creates instances of {@link Command}.
  * 
  * @author Laurent Caillette
  */
 public class CommandFactory {
 
   /**
-   * Creates the {@link AbstractFunctionCall} instance from given {@code SyntacticTree}'s root.
+   * Creates the {@link Command} instance from given {@code SyntacticTree}'s root.
    * 
    * @param treeOfCommand A {@code SyntacticTree} instance of appropriate node type
    * @return

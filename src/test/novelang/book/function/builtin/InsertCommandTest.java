@@ -16,30 +16,26 @@
  */
 package novelang.book.function.builtin;
 
-import java.io.File;
-import java.net.MalformedURLException;
+import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
+import novelang.TestResources;
+import novelang.book.CommandExecutionContext;
+import novelang.book.function.CommandParameterException;
+import novelang.common.Location;
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 import org.apache.commons.lang.ClassUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.ScratchDirectoryFixture;
-import novelang.TestResourceTools;
-import novelang.TestResources;
-import novelang.book.CommandExecutionContext;
-import novelang.book.function.AbstractFunctionCall;
-import novelang.book.function.FunctionDefinition;
-import novelang.book.function.CommandParameterException;
-import novelang.common.Location;
-import novelang.common.SimpleTree;
-import novelang.common.SyntacticTree;
-import novelang.common.tree.Treepath;
-import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.*;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
+
+import java.io.File;
+import java.net.MalformedURLException;
 
 /**
  * Tests for {@link InsertCommand}.
@@ -188,7 +184,7 @@ public class InsertCommandTest {
 // Fixture
 // =======
 
-  private static final Location NULL_LOCATION = new Location( "", -1, -1 );
+  private static final Location NULL_LOCATION = new Location( "", -1, -1 ) ;
 
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD_ABSOLUTEFILENAME;
   private static final String NOCHAPTER_FILENAME = TestResources.NO_CHAPTER ;

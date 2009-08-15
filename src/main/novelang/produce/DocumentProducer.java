@@ -25,7 +25,6 @@ import java.nio.charset.Charset;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.book.Book;
-import novelang.book.function.FunctionRegistry;
 import novelang.common.FileTools;
 import novelang.common.LanguageTools;
 import novelang.common.Problem;
@@ -150,7 +149,6 @@ public class DocumentProducer {
           StructureKind.BOOK.getFileExtensions()
       ) ;
       return new Book(
-          FunctionRegistry.getStandardRegistry(),
           basedir,
           bookFile,
           defaultSourceCharset,

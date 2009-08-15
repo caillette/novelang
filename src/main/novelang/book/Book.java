@@ -28,7 +28,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
-import novelang.book.function.FunctionRegistry;
+
 import novelang.book.function.CommandParameterException;
 import novelang.book.function.Command;
 import novelang.book.function.CommandFactory;
@@ -61,12 +61,10 @@ public class Book extends AbstractSourceReader {
    * Only for tests.
    */
   public Book(
-      FunctionRegistry functionRegistry,
       File baseDirectory,
       String content
   ) {
     this(
-        functionRegistry,
         baseDirectory,
         baseDirectory,
         content,
@@ -80,11 +78,9 @@ public class Book extends AbstractSourceReader {
    * Only for tests.
    */
   public Book(
-      FunctionRegistry functionRegistry,
       File bookFile
   ) throws IOException {
     this(
-        functionRegistry,
         bookFile.getParentFile(),
         bookFile,
         DefaultCharset.SOURCE,
@@ -94,7 +90,6 @@ public class Book extends AbstractSourceReader {
   }
 
   public Book(
-      FunctionRegistry functionRegistry,
       File baseDirectory,
       File bookDirectory,
       String content,
@@ -137,17 +132,19 @@ public class Book extends AbstractSourceReader {
       currentEnvironment = currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
 
       if( hasProblem() ) {
-        currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
+        currentEnvironment = 
+            currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
       } else {
-        currentEnvironment.update( addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ) ;
+        currentEnvironment = 
+            currentEnvironment.update( addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ) ;
       }
     }
     this.environment = currentEnvironment ;
+    collect( environment.getProblems() ) ;
 
   }
 
   public Book(
-      FunctionRegistry functionRegistry,
       File baseDirectory,
       File bookFile,
       Charset suggestedSourceCharset,
@@ -155,7 +152,6 @@ public class Book extends AbstractSourceReader {
       Set< String > restrictingTags
   ) throws IOException {
     this(
-        functionRegistry,
         baseDirectory,
         bookFile.getParentFile(),
         IOUtils.toString( new FileInputStream( bookFile ) ),
