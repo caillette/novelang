@@ -79,7 +79,7 @@ public class HttpDaemon {
     if( ! daemonConfiguration.getServeRemotes() ) {
       handlers.addHandler( new LocalhostOnlyHandler() ) ;
     }
-    handlers.addHandler( new ShutdownHandler() ) ;
+//    handlers.addHandler( new ShutdownHandler() ) ;
     handlers.addHandler( new FontDiscoveryHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
     handlers.addHandler( new DirectoryScanHandler(
         daemonConfiguration.getProducerConfiguration().getContentConfiguration() ) ) ;
