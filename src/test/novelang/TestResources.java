@@ -266,7 +266,7 @@ public class TestResources {
         return producerConfiguration ;
       }
 
-      public boolean getServeLocalhostOnly() {
+      public boolean getServeRemotes() {
         return true ;
       }
     } ;
@@ -292,7 +292,7 @@ public class TestResources {
         return producerConfiguration ;
       }
 
-      public boolean getServeLocalhostOnly() {
+      public boolean getServeRemotes() {
         return true ;
       }
     } ;

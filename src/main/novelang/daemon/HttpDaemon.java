@@ -76,7 +76,7 @@ public class HttpDaemon {
 
   public HttpDaemon( DaemonConfiguration daemonConfiguration ) {
     final HandlerCollection handlers = new HandlerCollection() ;
-    if( daemonConfiguration.getServeLocalhostOnly() ) {
+    if( ! daemonConfiguration.getServeRemotes() ) {
       handlers.addHandler( new LocalhostOnlyHandler() ) ;
     }
     handlers.addHandler( new ShutdownHandler() ) ;
