@@ -1,11 +1,11 @@
-<configuration>
+<configuration scanPeriod="1 seconds" >
 
   <appender
       name="STDOUT"
       class="ch.qos.logback.core.ConsoleAppender"
   >
     <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+      <Pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</Pattern>
     </layout>
   </appender>
 
@@ -18,14 +18,6 @@
   </logger>
 
   <logger name="FOP" >
-    <level value="WARN" />
-  </logger>
-
-  <logger name="org.apache.fop" >
-    <level value="WARN" />
-  </logger>
-
-  <logger name="org.apache.fop.fonts" >
     <level value="WARN" />
   </logger>
 
@@ -42,10 +34,6 @@
   </logger>
 
   <logger name="novelang.parser.antlr" >
-    <level value="WARN" />
-  </logger>
-
-  <logger name="novelang.parser.antlr.NovelangParser" >
     <level value="WARN" />
   </logger>
 
