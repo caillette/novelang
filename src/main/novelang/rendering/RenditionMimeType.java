@@ -31,6 +31,7 @@ public enum RenditionMimeType {
   TXT( "text/plain" ),
   NLP( "text/plain" ),
   XML( "text/xml" ),
+  FO( "text/xml" ),
   PDF( "application/pdf" ),
   HTML( "text/html" ) ;
 

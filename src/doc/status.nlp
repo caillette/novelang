@@ -19,6 +19,8 @@ http://novelang.blogspot.com
 
 //This version introduces changes that may break existing documents and startup scripts.//
 
+--- New document extension ``.fo``, for debugging FO stylesheets.
+
 --- Removed ``section`` command from Book syntax. No remplacement planned in the short term.
 
 --- Removed ``title`` command from Book syntax. Use document parametrization instead (see how
