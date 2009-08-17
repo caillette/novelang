@@ -33,11 +33,11 @@ public class BookParserTest {
   public void book() {
     PARSERMETHOD_BOOK.checkTreeAfterSeparatorRemoval(
         BREAK + BREAK +
-        " insert file:x/y/z $createlevel " + BREAK + 
-        "   $style=whatever" + BREAK +
+        " insert file:x/y/z createlevel " + BREAK +
+        "   style=whatever" + BREAK +
         BREAK +
-        " mapstylesheet $a=b $c=d " + BREAK +
-        "   $e=f  " + BREAK +
+        " mapstylesheet a=b c=d " + BREAK +
+        "   e=f  " + BREAK +
         BREAK +
         " insert file:uvw.nlp " + BREAK         
         ,
@@ -83,7 +83,7 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithRecurse() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:. $recurse",
+        "insert file:. recurse",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
@@ -95,7 +95,7 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithCreateLevel() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:. $createlevel",
+        "insert file:. createlevel",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
@@ -107,7 +107,7 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithStyle() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:. $style=whatever",
+        "insert file:. style=whatever",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
@@ -119,7 +119,7 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithEverything() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:x/y/z.nlp $recurse $createlevel $style=whatever",
+        "insert file:x/y/z.nlp recurse createlevel style=whatever",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:x/y/z.nlp" ),
@@ -145,7 +145,7 @@ public class BookParserTest {
   @Test
   public void mapstylesheetFunctionCallOneStylesheet() {
     PARSERMETHOD_FUNCTIONCALL_MAPSTYLESHEET.checkTreeAfterSeparatorRemoval(  
-        "mapstylesheet $abc=w.xyz",
+        "mapstylesheet abc=w.xyz",
         tree(
             COMMAND_MAPSTYLESHEET_,
             tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "abc" ), tree( "w.xyz" ) )
@@ -156,7 +156,7 @@ public class BookParserTest {
   @Test
   public void mapstylesheetFunctionCallTwoStylesheets() {
     PARSERMETHOD_FUNCTIONCALL_MAPSTYLESHEET.checkTreeAfterSeparatorRemoval(  
-        "mapstylesheet $abc=w.xyz  $123=456",
+        "mapstylesheet abc=w.xyz  123=456",
         tree(
             COMMAND_MAPSTYLESHEET_,
             tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "abc" ), tree( "w.xyz" ) ),
