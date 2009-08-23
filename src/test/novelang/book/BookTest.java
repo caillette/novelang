@@ -45,7 +45,19 @@ public class BookTest {
 
   private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
 
-  
+
+  /**
+   * Test that some parsing error produces a Problem.
+   */
+  @Test
+  public void badCommandGeneratesProblem() {
+    final Book book = new Book(
+        SystemUtils.getUserDir(),
+        "insert file:" + oneWordFile.getAbsolutePath() + " $recurse"
+    ) ;
+    Assert.assertTrue( book.hasProblem() ) ;
+
+  }
 
   /**
    * Test {@link novelang.book.function.builtin.InsertCommand}.
