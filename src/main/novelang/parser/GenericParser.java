@@ -22,6 +22,8 @@ import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 
 /**
+ * Thin wrapper around ANTLR-generated parser.
+ *
  * @author Laurent Caillette
  */
 public interface GenericParser {
@@ -30,5 +32,9 @@ public interface GenericParser {
   
   Iterable< Problem > getProblems() ;
 
+  /**
+   * Since this method calls the ANTLR-generated one it makes sense to allow it to throw
+   * a {@code RecognitionException} and let implementation reinject it as a {@code Problem}.
+   */
   SyntacticTree parse() throws RecognitionException;
 }

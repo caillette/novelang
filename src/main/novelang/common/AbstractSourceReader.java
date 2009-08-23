@@ -33,7 +33,6 @@ import com.google.common.collect.Lists;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.TreeTools;
 import novelang.parser.GenericParser;
-import novelang.parser.GenericParserFactory;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 
@@ -124,29 +123,30 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     }
   }
 
-  protected SyntacticTree parse( GenericParserFactory parserFactory, String content ) {
+
+  protected abstract GenericParser createParser( String content ) ;
+
+  protected final SyntacticTree parse( final String content ) {
 
     if( null == content ) {
       return null ;
     }
 
-    final GenericParser parser = parserFactory.createParser( this, content ) ;
-    SyntacticTree tree = null ;
+    final GenericParser parser = createParser( content ) ;    
     try {
-
       // Yeah we do it here!
-      tree = parser.parse() ;
-
-      for( final Problem problem : parser.getProblems() ) {
-        collect( problem ) ;
+      final SyntacticTree syntacticTree = parser.parse() ;
+      if( parser.hasProblem() ) {
+        collect( parser.getProblems() ) ;
+        return null ;
       }
+      return syntacticTree ;
 
     } catch( RecognitionException e ) {
       LOG.warn( "Could not parse file", e ) ;
       collect( Problem.createProblem( this, e ) ) ;
+      return null ;
     }
-
-    return tree ;
   }
 
   protected static SyntacticTree addMetadata( SyntacticTree tree, Set< String > tagset ) {

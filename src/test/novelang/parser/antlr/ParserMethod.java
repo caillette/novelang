@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.antlr.runtime.tree.CommonErrorNode;
+import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
@@ -43,40 +44,27 @@ public class ParserMethod {
   /**
    * Returns the tree object contained by parser's result object.
    */
-  public SyntacticTree getTree( NovelangParser parser ) {
-    final Object node = getNode( parser ) ;
-    
+  public SyntacticTree getTree( final CustomDelegatingParser parser ) {
+    final Object node;
+    try {
+      node = parser.callParserMethod();
+    } catch( RecognitionException e ) {
+      parser.getDelegate().report( e ) ;
+      return null ;
+    }
     if( node instanceof CommonErrorNode ) {
       final CommonErrorNode errorNode = ( CommonErrorNode ) node ;
-      LanguageTools.rethrowUnchecked( errorNode.trappedException ); 
+      parser.getDelegate().report( errorNode.trappedException ) ;
+      return null ;
     }
     
     return ( SyntacticTree ) node  ;
   }
 
-  private Object getNode( NovelangParser parser ) {
-    final Object antlrResult ;
-    try {
-      antlrResult = method.invoke( parser ) ;
-    } catch ( IllegalAccessException e ) {
-      throw new RuntimeException( e ) ;
-    } catch ( InvocationTargetException e ) {
-      throw new RuntimeException( e ) ;
-    }
-
-    final Method getTreeMethod = ReflectionTools.getMethod(
-        antlrResult.getClass(),
-        "getTree"
-    ) ;
-
-
-    final Object node = ReflectionTools.invoke( getTreeMethod, antlrResult ) ;
-    return node;
-  }
 
   public SyntacticTree createTree( String text ) {
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    final SyntacticTree tree = getTree( parser.getAntlrParser() ) ;
+    final CustomDelegatingParser parser = new CustomDelegatingParser( method, text ) ;
+    final SyntacticTree tree = getTree( parser ) ;
     AntlrTestHelper.checkSanity( parser ) ;
     return tree ;    
   }
@@ -95,8 +83,8 @@ public class ParserMethod {
   }
   
   public void checkFails( String text ) {
-    final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
-    getNode( parser.getAntlrParser() ) ;
+    final CustomDelegatingParser parser = new CustomDelegatingParser( method, text ) ;
+    getTree( parser ) ;
     final String readableProblemList = 
         AntlrTestHelper.createProblemList( parser.getProblems() ) ;
     final boolean parserHasProblem = parser.hasProblem() ;

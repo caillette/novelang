@@ -17,8 +17,11 @@
 package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonErrorNode;
+
 import novelang.common.LocationFactory;
 import novelang.common.SyntacticTree;
+import novelang.common.LanguageTools;
 import novelang.parser.BookParser;
 
 /**
@@ -33,8 +36,8 @@ public class DelegatingBookParser
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 
-  public SyntacticTree parse() throws RecognitionException {
-    return ( SyntacticTree ) getAntlrParser().book().getTree() ;
-  }
 
+  protected Object callParserMethod() throws RecognitionException {
+    return antlrParser.book().getTree() ;
+  }
 }

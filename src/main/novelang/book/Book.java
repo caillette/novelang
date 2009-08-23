@@ -45,7 +45,8 @@ import novelang.treemangling.SeparatorsMangler;
 import novelang.treemangling.TagFilter;
 import novelang.treemangling.ListMangler;
 import novelang.parser.NodeKind;
-import novelang.parser.antlr.DefaultBookParserFactory;
+import novelang.parser.GenericParser;
+import novelang.parser.antlr.DelegatingBookParser;
 import novelang.system.DefaultCharset;
 
 /**
@@ -113,9 +114,26 @@ public class Book extends AbstractSourceReader {
 
     CommandExecutionContext currentEnvironment =
         new CommandExecutionContext( baseDirectory, bookDirectory ) ;
-    final SyntacticTree rawTree = SeparatorsMangler.removeSeparators(
-        parse( new DefaultBookParserFactory(), content ) ) ;
-    
+
+    final SyntacticTree rawTree ;
+
+    parse : {
+      final SyntacticTree tree ;
+      try {
+        tree = parse( content ) ;
+      } catch( Exception e ) {
+        LOG.warn( "Could not parse file", e ) ;
+        collect( Problem.createProblem( this, e ) ) ;
+        rawTree = null ;
+        break parse ;
+      }
+      if( tree != null ) {
+        rawTree = SeparatorsMangler.removeSeparators( tree ) ;
+      } else {
+        rawTree = null ;
+      }
+    }
+
     if( null != rawTree ) {
       final Iterable< Command > commands = createCommands( new CommandFactory(), rawTree ) ;
       currentEnvironment = callCommands(
@@ -159,6 +177,10 @@ public class Book extends AbstractSourceReader {
         suggestedRenderingCharset,
         restrictingTags
     ) ;
+  }
+
+  protected GenericParser createParser( String content ) {
+    return new DelegatingBookParser( content, this ) ;
   }
 
   public SyntacticTree getDocumentTree() {
