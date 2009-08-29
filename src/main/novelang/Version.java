@@ -16,29 +16,151 @@
  */
 package novelang;
 
+import com.google.common.base.Preconditions;
+
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.Comparator;
+
 /**
  * This class holds the version of the whole application.
  * A copy of the source is modified and compiled during the build process.
  * @author Laurent Caillette
  */
-public class Version {
+public final class Version {
 
-  private Version() {
-    throw new Error() ;
+  private final boolean snapshot ;
+  private final int major ;
+  private final int minor ;
+  private final int fix ;
+
+  public Version() {
+    snapshot = true ;
+    this.major = -999 ;
+    this.minor = -999 ;
+    this.fix = -999 ;    
+  }
+
+  public Version( final int major, final int minor, final int fix ) {
+    Preconditions.checkArgument( major >= 0 ) ;
+    Preconditions.checkArgument( minor >= 0 ) ;
+    Preconditions.checkArgument( fix >= 0 ) ;
+    snapshot = false ;
+    this.major =  major ;
+    this.minor = minor ;
+    this.fix = fix ;
+  }
+
+  public int getMajor() {
+    verifyNotSnapshot() ;
+    return major ;
+  }
+
+  public int getMinor() {
+    verifyNotSnapshot() ;
+    return minor ;
+  }
+
+  public int getFix() {
+    verifyNotSnapshot() ;
+    return fix ;
+  }
+  
+  private void verifyNotSnapshot() {
+    if( isSnapshot() ) {
+      throw new IllegalStateException( "snapshot version" ) ;
+    }
   }
 
   /**
-   * The {@code @SNAPSHOT@} string is replaced by the official version
-   * number.
+   * This very {@code @SNAPSHOT@} string is replaced by the official version number
+   * by the build script.
    */
-  private static final String VERSION = "@SNAPSHOT@" ;
+  private static final String PRODUCT_VERSION_AS_STRING = "@SNAPSHOT@" ;
 
-  public static boolean isSnapshot() {
-    // Don't use one-piece literal because of replacement performed by build script.
-    return ( "@" + "SNAPSHOT" + "@" ).equals( VERSION ) ;
+  /**
+   * Current version, reflects changes performed by build script.
+   */
+  public static final Version CURRENT_PRODUCT_VERSION ;
+
+  static {
+    try {
+      CURRENT_PRODUCT_VERSION = parse( PRODUCT_VERSION_AS_STRING ) ;
+    } catch ( VersionFormatException e ) {
+      throw new RuntimeException( e ) ;
+    }
   }
 
-  public static String name() {
-    return isSnapshot() ? "snapshot" : VERSION ;
+  private static final String SNAPSHOT = "SNAPSHOT" ;
+
+  public boolean isSnapshot() {
+    return snapshot ;
   }
+
+  public String getName() {
+    return isSnapshot() ? SNAPSHOT : major + "." + minor + "." + fix ;
+  }
+  
+  private static final Pattern PATTERN = Pattern.compile( "(\\d+)\\.(\\d+)\\.(\\d+)" ) ;
+  
+  public static Version parse( final String s ) throws VersionFormatException {
+    if( ( "@" + SNAPSHOT + "@" ).equals( s ) || SNAPSHOT.equals( s ) ) {
+      return new Version() ;
+    } else {
+      final Matcher matcher = PATTERN.matcher( s ) ;
+      if( matcher.find() ) {
+        final int major = Integer.parseInt( matcher.group( 1 ) ) ;
+        final int minor = Integer.parseInt( matcher.group( 2 ) ) ;
+        final int fix = Integer.parseInt( matcher.group( 3 ) ) ;
+        return new Version( major, minor, fix ) ;
+      } else {
+        throw new VersionFormatException( s ) ;
+      }
+    }
+  }
+
+  /**
+   * Compares two {@code Version} objects on their numbers; a SNAPSHOT is considered as the
+   * greater (most recent). 
+   */
+  public static final Comparator< Version > COMPARATOR = new Comparator< Version >() {
+    
+    /**
+     * Compares its two arguments for order. Returns a negative integer, zero, or a positive 
+     * integer as the first argument is less than, equal to, or greater than the second.
+     */
+    public int compare( final Version version1, final Version version2 ) {
+      if( version1 == version2 ) {
+        return 0 ;
+      }
+      if( version1 == null ) {
+        return -1 ;
+      }
+      if( version2 == null ) {
+        return 1 ;
+      }
+
+
+      if( version1.isSnapshot() ) {
+        if( version2.isSnapshot() ) {
+          return 0 ;
+        } else {
+          return 1 ;
+        }
+      } else if( version2.isSnapshot() ) {
+        return -1 ;
+      }
+      final int majorDifference = version1.getMajor() - version2.getMajor() ;
+      if( majorDifference == 0 ) {
+        final int minorDifference = version1.getMinor() - version2.getMinor() ;
+        if( minorDifference == 0 ) {
+          return version1.getFix() - version2.getFix() ;          
+        } else {
+          return minorDifference ;
+        } 
+      } else {
+        return majorDifference ;
+      }
+    }
+  };
 }

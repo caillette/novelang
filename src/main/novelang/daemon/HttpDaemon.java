@@ -65,7 +65,7 @@ public class HttpDaemon {
 
     final String starting =
         "Starting " + HttpDaemon.class.getName() +
-        " version " + Version.name() +
+        " version " + Version.CURRENT_PRODUCT_VERSION.getName() +
         " on port " + daemonConfiguration.getPort()
     ;
     System.out.println( starting ) ;

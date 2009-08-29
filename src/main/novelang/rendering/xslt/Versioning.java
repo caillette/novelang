@@ -16,16 +16,9 @@
  */
 package novelang.rendering.xslt;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.joda.time.ReadableDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.Version;
-
-import com.google.common.base.Function;
-import com.google.common.base.Preconditions;
 
 /**
  * Contains functions to be called from XSLT.
@@ -38,7 +31,7 @@ public class Versioning {
 
   public static String versionName() {
     LOG.debug( "Called versionName()" ) ;
-    return Version.name() ;
+    return Version.CURRENT_PRODUCT_VERSION.getName() ;
   }
 
 
