@@ -23,6 +23,8 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonErrorNode;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -36,7 +38,7 @@ import novelang.common.SyntacticTree;
  */
 public abstract class AbstractDelegatingParser {
 
-  private final NovelangParser parser ;
+  protected final NovelangParser antlrParser;
   private final GrammarDelegate delegate;
 
   public AbstractDelegatingParser( String text, GrammarDelegate delegate ) {
@@ -45,9 +47,9 @@ public abstract class AbstractDelegatingParser {
     NovelangLexer lexer = new NovelangLexer( stream );
     lexer.setProblemDelegate( delegate ) ;
     CommonTokenStream tokens = new CommonTokenStream( lexer );
-    parser = new NovelangParser( tokens ) ;
-    parser.setTreeAdaptor( new CustomTreeAdaptor( delegate.getLocationFactory() ) ) ;
-    parser.setGrammarDelegate( delegate ) ;
+    antlrParser = new NovelangParser( tokens ) ;
+    antlrParser.setTreeAdaptor( new CustomTreeAdaptor( delegate.getLocationFactory() ) ) ;
+    antlrParser.setGrammarDelegate( delegate ) ;
   }
 
   public boolean hasProblem() {
@@ -60,11 +62,35 @@ public abstract class AbstractDelegatingParser {
     return ImmutableList.copyOf( problems ) ;
   }
 
-  public abstract SyntacticTree parse() throws RecognitionException ;
+  /**
+   * Calls specific parsing method and returns the raw result.
+   *
+   * @return a non-null instance of the parsing result object (the one containing the
+   *     {@link org.antlr.runtime.tree.Tree} object that is a {@link CommonErrorNode}
+   *     or a {@link SyntacticTree}.
+   */
+  protected abstract Object callParserMethod() throws RecognitionException ;
 
-  protected NovelangParser getAntlrParser() {
-    return parser ;
+  public final SyntacticTree parse() {
+    final Object tree;
+    try {
+      tree = callParserMethod();
+    } catch( RecognitionException e ) {
+      getDelegate().report( e ) ;
+      return null ;
+    }
+    
+
+    final SyntacticTree result ;
+    if( tree instanceof CommonErrorNode ) {
+      getDelegate().report( ( ( CommonErrorNode ) tree ).trappedException ) ;
+      result = null ;
+    } else {
+      result = ( SyntacticTree ) tree ;
+    }
+    return result ;
   }
+
 
   public GrammarDelegate getDelegate() {
     return delegate ;

@@ -17,6 +17,8 @@
 
 package novelang.parser.antlr;
 
+import java.lang.reflect.Method;
+
 import junit.framework.AssertionFailedError;
 import novelang.common.Problem;
 
@@ -36,15 +38,15 @@ public class AntlrTestHelper {
       throw new AssertionFailedError(
           "Parser has problems. " + createProblemList( parser.getProblems() ) ) ;
     }
-  }/*package*/ static DelegatingPartParser createPartParser( String text ) {
-    return ( DelegatingPartParser )
-        new DefaultPartParserFactory().createParser( TreeFixture.LOCATION_FACTORY, text ) ;
-  }/*package*/ static DelegatingBookParser createBookParser( String text ) {
-    return ( DelegatingBookParser )
-        new DefaultBookParserFactory().createParser( TreeFixture.LOCATION_FACTORY, text ) ;
   }
 
-  public static String createProblemList( Iterable<Problem> problems ) {
+
+  /*package*/ static DelegatingPartParser createPartParser( String text ) {
+    return new DelegatingPartParser( text, TreeFixture.LOCATION_FACTORY ) ;
+  }
+
+
+  public static String createProblemList( Iterable< Problem > problems ) {
     final StringBuffer buffer = new StringBuffer( "Problems:" ) ;
     for( final Problem problem : problems ) {
       buffer.append( "\n    " ) ;
@@ -54,4 +56,5 @@ public class AntlrTestHelper {
     }
     return buffer.toString() ;
   }
+
 }

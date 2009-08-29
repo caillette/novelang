@@ -15,15 +15,31 @@ http://novelang.blogspot.com
 
 
 
+=== Version `0.33.1`
+
+--- Enhanced error reporting when parsing an ill-formed Book file.
+
+--- Added automatic whitespace between punctuation sign or various blocks, and leading apostrophe.
+
+
+
 === Version `0.33.0`
 
-//This version introduces changes that may break existing documents.//
+//This version introduces changes that may break existing documents and startup scripts.//
+
+--- New document extension ``.fo``, for debugging FO stylesheets.
+
+--- Removed the dollar sign ``$`` from Book syntax. 
 
 --- Removed ``section`` command from Book syntax. No remplacement planned in the short term.
 
 --- Removed ``title`` command from Book syntax. Use document parametrization instead (see how
 Novelang documentation works).
 
+--- Renamed ``--serve-localhost-only`` to ``--serve-remotes`` and removed the boolean argument.
+
+--- Fixed some bugs.
+- Books now scan a directory correctly when ``recurse`` option is not set.
 
 
 === Version `0.32.1`

@@ -45,7 +45,8 @@ import novelang.treemangling.SeparatorsMangler;
 import novelang.treemangling.TagFilter;
 import novelang.treemangling.ListMangler;
 import novelang.parser.NodeKind;
-import novelang.parser.antlr.DefaultBookParserFactory;
+import novelang.parser.GenericParser;
+import novelang.parser.antlr.DelegatingBookParser;
 import novelang.system.DefaultCharset;
 
 /**
@@ -57,37 +58,24 @@ public class Book extends AbstractSourceReader {
 
   private final CommandExecutionContext environment ;
 
-  /**
-   * Only for tests.
-   */
+
   public Book(
       File baseDirectory,
-      String content
-  ) {
+      File bookFile,
+      Charset suggestedSourceCharset,
+      Charset suggestedRenderingCharset,
+      Set< String > restrictingTags
+  ) throws IOException {
     this(
         baseDirectory,
-        baseDirectory,
-        content,
-        DefaultCharset.SOURCE,
-        DefaultCharset.RENDERING,
-        ImmutableSet.< String >of()
+        bookFile.getParentFile(),
+        IOUtils.toString( new FileInputStream( bookFile ) ),
+        suggestedSourceCharset,
+        suggestedRenderingCharset,
+        restrictingTags
     ) ;
   }
 
-  /**
-   * Only for tests.
-   */
-  public Book(
-      File bookFile
-  ) throws IOException {
-    this(
-        bookFile.getParentFile(),
-        bookFile,
-        DefaultCharset.SOURCE,
-        DefaultCharset.RENDERING,
-        ImmutableSet.< String >of()
-    ) ;
-  }
 
   public Book(
       File baseDirectory,
@@ -113,10 +101,12 @@ public class Book extends AbstractSourceReader {
 
     CommandExecutionContext currentEnvironment =
         new CommandExecutionContext( baseDirectory, bookDirectory ) ;
-    final SyntacticTree rawTree = SeparatorsMangler.removeSeparators(
-        parse( new DefaultBookParserFactory(), content ) ) ;
-    
-    if( null != rawTree ) {
+
+
+    final SyntacticTree tree = parse( content ) ;
+    if( tree != null ) {
+      final SyntacticTree rawTree = SeparatorsMangler.removeSeparators( tree ) ;
+
       final Iterable< Command > commands = createCommands( new CommandFactory(), rawTree ) ;
       currentEnvironment = callCommands(
           currentEnvironment.update( new SimpleTree( NodeKind.BOOK ) ),
@@ -132,33 +122,20 @@ public class Book extends AbstractSourceReader {
       currentEnvironment = currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
 
       if( hasProblem() ) {
-        currentEnvironment = 
+        currentEnvironment =
             currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
       } else {
-        currentEnvironment = 
+        currentEnvironment =
             currentEnvironment.update( addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ) ;
       }
+
     }
     this.environment = currentEnvironment ;
     collect( environment.getProblems() ) ;
-
   }
 
-  public Book(
-      File baseDirectory,
-      File bookFile,
-      Charset suggestedSourceCharset,
-      Charset suggestedRenderingCharset,
-      Set< String > restrictingTags
-  ) throws IOException {
-    this(
-        baseDirectory,
-        bookFile.getParentFile(),
-        IOUtils.toString( new FileInputStream( bookFile ) ),
-        suggestedSourceCharset,
-        suggestedRenderingCharset,
-        restrictingTags
-    ) ;
+  protected GenericParser createParser( String content ) {
+    return new DelegatingBookParser( content, this ) ;
   }
 
   public SyntacticTree getDocumentTree() {

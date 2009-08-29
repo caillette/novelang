@@ -1,2 +1,1 @@
-insert file:. $recurse $createlevel
-    $style=mystyle
+insert file:. recurse createlevel style=mystyle

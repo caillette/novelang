@@ -39,7 +39,7 @@ public class PdfWriter extends XslWriter {
 
   private static final Log LOG = LogFactory.getLog( PdfWriter.class ) ;
 
-  protected static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ;
+  public static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ;
   protected final FopFactory fopFactory ;
 
   public PdfWriter(

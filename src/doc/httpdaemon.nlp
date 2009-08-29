@@ -58,17 +58,19 @@ java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
 Default value is ``UTF-8``.
 
 
-=== The ``--serve-localhost-only`` option
+=== The ``--serve-remotes`` option
 
-The ``--serve-localhost-only`` option prevents from serving document for other computers
+The ``--serve-remotes`` option enable serving document for other computers
 (computer with an IP address which is not `127.0.0.*`).
+It is not recommended to activate this option because Novelang is not architectured yet to
+run as a Web server serving many concurrent requests.
 
 <<<
 java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --serve-localhost-only false
+  --serve-remotes
 >>>
 
-Default value is ``true``.
+Default value is ``false``.
 
 
 === The ``--rendering-charset`` option

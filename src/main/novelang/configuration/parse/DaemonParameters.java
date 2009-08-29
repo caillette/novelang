@@ -27,7 +27,7 @@ import novelang.system.Log;
 /**
  * Parses command-line arguments for {@link novelang.daemon.HttpDaemon}.
  *
- * TODO support --serve-shutdown and --serve-remote options.
+ * TODO support --serve-shutdown 
  * 
  * @author Laurent Caillette
  */
@@ -36,7 +36,7 @@ public class DaemonParameters extends GenericParameters {
   private static final Log LOG = LogFactory.getLog( DaemonParameters.class ) ;
 
   private final Integer port ;
-  private final Boolean serveLocalhostOnly ;
+  private final Boolean serveRemotes;
 
   public DaemonParameters( File baseDirectory, String[] parameters )
       throws ArgumentException
@@ -55,21 +55,14 @@ public class DaemonParameters extends GenericParameters {
       port = null ;
     }
 
-    if( line.hasOption( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY.getLongOpt() ) ) {
-      final String localhostOnly = 
-          line.getOptionValue( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY.getLongOpt() ) ;
-      LOG.debug( 
-          "found: %s = '%s'", 
-          OPTION_HTTPDAEMON_SERVELOCALHOSTONLY.getLongOpt(), 
-          localhostOnly
+    if( line.hasOption( OPTION_HTTPDAEMON_SERVEREMOTES.getLongOpt() ) ) {
+      this.serveRemotes = true ;
+      LOG.debug(
+          "found: %s",
+          OPTION_HTTPDAEMON_SERVEREMOTES.getLongOpt()
       ) ;
-      try {
-        serveLocalhostOnly  = Boolean.parseBoolean( localhostOnly ) ;
-      } catch( NumberFormatException e ) {
-        throw new ArgumentException( e, helpPrinter );
-      }
     } else {
-      serveLocalhostOnly = null ;
+      serveRemotes = null ;
     }
 
   }
@@ -77,7 +70,7 @@ public class DaemonParameters extends GenericParameters {
 
   protected void enrich( Options options ) {
     options.addOption( OPTION_HTTPDAEMON_PORT ) ;
-    options.addOption( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY ) ;
+    options.addOption( OPTION_HTTPDAEMON_SERVEREMOTES ) ;
   }
 
   /**
@@ -89,10 +82,10 @@ public class DaemonParameters extends GenericParameters {
   }
 
   /**
-   * Returns if should serve only HTTP requests originating from localhost.
+   * Returns if should serve other HTTP requests than those originating from localhost.
    */
-  public Boolean getServeOnlyLocalhost() {
-    return serveLocalhostOnly ;
+  public Boolean getServeRemotes() {
+    return serveRemotes;
   }
 
   public String getHttpDaemonPortOptionDescription() {
@@ -108,16 +101,16 @@ public class DaemonParameters extends GenericParameters {
       .create()
   ;
 
-  public static final String OPTIONNAME_HTTPDAEMON_SERVELOCALHOSTONLY = "serve-localhost-only" ;
+  public static final String OPTIONNAME_HTTPDAEMON_SERVEREMOTES = "serve-remotes" ;
 
-  public String getHttpDaemonServeLocalhostonlyOptionDescription() {
-    return createOptionDescription( OPTION_HTTPDAEMON_SERVELOCALHOSTONLY ) ;
+  public String getHttpDaemonServeRemotesOptionDescription() {
+    return createOptionDescription( OPTION_HTTPDAEMON_SERVEREMOTES ) ;
   }
 
-  private static final Option OPTION_HTTPDAEMON_SERVELOCALHOSTONLY = OptionBuilder
-      .withLongOpt( OPTIONNAME_HTTPDAEMON_SERVELOCALHOSTONLY )
-      .withDescription( "Serve only requests from localhost (127.0.0.*)" )
-      .hasArg()
+  private static final Option OPTION_HTTPDAEMON_SERVEREMOTES = OptionBuilder
+      .withLongOpt( OPTIONNAME_HTTPDAEMON_SERVEREMOTES )
+      .withDescription( "Serve other requests than from localhost (127.0.0.*)" )
+//      .hasArg()
       .create()
   ;
 

@@ -27,24 +27,24 @@ insert file:.
 >>>
 
 
-The ``$recurse`` option scans parts in subdirectories.
+The ``recurse`` option scans parts in subdirectories.
 
 <<<
-insert file:. $recurse 
+insert file:. recurse
 >>>
 
-The ``$createlevel`` option adds the content of the file under one chapter element.
+The ``createlevel`` option adds the content of the file under one chapter element.
 The chapter title is the filename, path and ``.nlp`` extension being trimmed.
 
 <<<
-insert file:. $recurse $createlevel
+insert file:. recurse createlevel
 >>>
 
-The ``$style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added part. 
+The ``style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added part.
 
 <<<
 insert file:. 
-  $style=mystyle
+  style=mystyle
 >>>
 
 Expert users will find this is useful for customizing the output right from an XSLT stylesheet:
@@ -66,6 +66,6 @@ to render HTML documents with ``html-beautiful.xsl`` and PDF documents with ``pd
 
 <<<
 mapstylesheets 
-    $html=html-beautiful.xsl
-    $pdf=pdf-beautiful.xsl
+    html=html-beautiful.xsl
+    pdf=pdf-beautiful.xsl
 >>>

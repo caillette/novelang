@@ -65,6 +65,7 @@ public class XslWriter extends XmlWriter {
   protected final ResourceName xslFileName ;
   protected final ResourceLoader resourceLoader ;
   protected final EntityEscapeSelector entityEscapeSelector ;
+  private static final ResourceName IDENTITY_XSL_FILE_NAME = new ResourceName( "identity.xsl" ) ;
 
   public XslWriter( RenderingConfiguration configuration, ResourceName xslFileName ) {
     this( configuration, xslFileName, DefaultCharset.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
@@ -142,6 +143,10 @@ public class XslWriter extends XmlWriter {
     super( namespaceUri, nameQualifier, charset, mimeType ) ;
     this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
     this.resourceLoader = configuration.getResourceLoader() ;
+
+    if( null == xslFileName ) {
+      xslFileName = IDENTITY_XSL_FILE_NAME ;
+    }
     this.xslFileName = xslFileName ;
     entityResolver = new LocalEntityResolver() ;
     uriResolver = new LocalUriResolver() ;

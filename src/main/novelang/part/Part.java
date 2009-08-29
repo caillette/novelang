@@ -32,9 +32,9 @@ import novelang.treemangling.SeparatorsMangler;
 import novelang.treemangling.EmbeddedListMangler;
 import novelang.treemangling.TagFilter;
 import novelang.treemangling.ListMangler;
-import novelang.parser.antlr.DefaultPartParserFactory;
+import novelang.parser.antlr.DelegatingPartParser;
+import novelang.parser.GenericParser;
 import novelang.system.DefaultCharset;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
@@ -90,8 +90,13 @@ public class Part extends AbstractSourceReader {
     tree = createTree( readContent( partFile.toURI().toURL() ) ) ;
   }
 
+  protected GenericParser createParser( String content ) {
+    return new DelegatingPartParser( content, this ) ;
+
+  }
+
   private SyntacticTree createTree( String content ) {
-    final SyntacticTree rawTree = parse( new DefaultPartParserFactory(), content ) ;
+    final SyntacticTree rawTree = parse( content ) ;
     if( null == rawTree || hasProblem() ) {
       return null ;
     } else {

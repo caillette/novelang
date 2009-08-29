@@ -28,7 +28,7 @@ import novelang.system.Log;
 /**
  * @author Laurent Caillette
 */
-class DelegatingPartParser
+public class DelegatingPartParser
     extends AbstractDelegatingParser
     implements PartParser
 {
@@ -37,16 +37,8 @@ class DelegatingPartParser
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 
-  public SyntacticTree parse() throws RecognitionException {
-    final Object tree = getAntlrParser().part().getTree();
-    final SyntacticTree result ;
-    if( tree instanceof CommonErrorNode ) {
-      getDelegate().report( ( ( CommonErrorNode ) tree ).trappedException ) ;
-      result = null ;
-    } else {
-      result = ( SyntacticTree ) tree ;
-    }
-    return result ;
+  protected Object callParserMethod() throws RecognitionException {
+    return antlrParser.part().getTree() ;
   }
-  
+
 }

@@ -38,7 +38,7 @@ public class Spaces {
   
   static {
 
-    final Set< NodeKind > canonicalStuff = ImmutableSet.of(
+    final Set< NodeKind > blocks = ImmutableSet.of(
         BLOCK_AFTER_TILDE,
         BLOCK_INSIDE_DOUBLE_QUOTES,
         BLOCK_INSIDE_HYPHEN_PAIRS,
@@ -47,11 +47,16 @@ public class Spaces {
         BLOCK_INSIDE_SOLIDUS_PAIRS,
         BLOCK_INSIDE_SQUARE_BRACKETS,
         BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS,
-        _URL,
-        WORD_
-      
+        BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
     ) ;
+
+    final Set< NodeKind > canonicalStuff = ImmutableSet.< NodeKind >builder().
+        addAll( blocks ).
+        add(
+            _URL,
+            WORD_
+        ).build()
+    ;
 
 
     for( NodeKind first : canonicalStuff ) {
@@ -63,6 +68,14 @@ public class Spaces {
     for( NodeKind second : canonicalStuff ) {
       add( PUNCTUATION_SIGN, second ) ;
     }
+
+    add( PUNCTUATION_SIGN, APOSTROPHE_WORDMATE ) ;
+
+    for( NodeKind first : blocks ) {
+      add( first, APOSTROPHE_WORDMATE ) ;
+    }
+
+
     
   }
 
@@ -119,29 +132,29 @@ public class Spaces {
     @Override
     public boolean equals( Object o ) {
       if( this == o ) {
-        return true;
+        return true ;
       }
       if( o == null || getClass() != o.getClass() ) {
-        return false;
+        return false ;
       }
 
-      Sequence sequence = ( Sequence ) o;
+      Sequence sequence = ( Sequence ) o ;
 
       if( first != sequence.first ) {
         return false;
       }
       if( second != sequence.second ) {
-        return false;
+        return false ;
       }
 
-      return true;
+      return true ;
     }
 
     @Override
     public int hashCode() {
-      int result = first != null ? first.hashCode() : 0;
-      result = 31 * result + ( second != null ? second.hashCode() : 0 );
-      return result;
+      int result = first != null ? first.hashCode() : 0 ;
+      result = 31 * result + ( second != null ? second.hashCode() : 0 ) ;
+      return result ;
     }
   }
 

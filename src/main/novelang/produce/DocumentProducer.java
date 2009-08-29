@@ -41,6 +41,7 @@ import novelang.rendering.PdfWriter;
 import novelang.rendering.PlainTextWriter;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
+import novelang.rendering.XslWriter;
 
 /**
  * Produces a document into passed-in {@link DocumentRequest}s.
@@ -116,6 +117,12 @@ public class DocumentProducer {
       case NLP :
         serve.with( new GenericRenderer(
             new NlpWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
+        break ;
+
+      case FO :
+        final ResourceName foStylesheet =
+            stylesheet == null ? PdfWriter.DEFAULT_FO_STYLESHEET : stylesheet ;
+        serve.with( new GenericRenderer( new XslWriter( renderingConfiguration, foStylesheet ) ) ) ;
         break ;
 
       default :

@@ -45,7 +45,19 @@ public class BookTest {
 
   private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
 
-  
+
+  /**
+   * Test that some parsing error produces a Problem.
+   */
+  @Test
+  public void badCommandGeneratesProblem() {
+    final Book book = BookTestTools.createBook(
+        SystemUtils.getUserDir(),
+        "insert file:" + oneWordFile.getAbsolutePath() + " $recurse"
+    ) ;
+    Assert.assertTrue( book.hasProblem() ) ;
+
+  }
 
   /**
    * Test {@link novelang.book.function.builtin.InsertCommand}.
@@ -53,7 +65,7 @@ public class BookTest {
   @Test
   public void justInsert() {
 
-    final Book book = new Book(
+    final Book book = BookTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath()
     ) ;
@@ -77,7 +89,7 @@ public class BookTest {
    */
   @Test
   public void insertWithRecursiveFileScan() throws IOException {
-    final Book book = new Book( scannedBookNoStyle ) ;
+    final Book book = BookTestTools.createBook( scannedBookNoStyle ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
@@ -121,7 +133,7 @@ public class BookTest {
    */
   @Test
   public void insertWithFlatFileScan() throws IOException {
-    final Book book = new Book( scannedBookNoStyleNoRecurse ) ;
+    final Book book = BookTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
@@ -151,7 +163,7 @@ public class BookTest {
    */
   @Test
   public void insertWithFileScanAndStyle() throws IOException {
-    final Book book = new Book( scannedBookWithStyle );
+    final Book book = BookTestTools.createBook( scannedBookWithStyle );
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = book.getDocumentTree() ;
@@ -198,7 +210,7 @@ public class BookTest {
    */
   @Test
   public void insertWithBadPart() throws IOException {
-    final Book book = new Book( scannedBookWithBadPart ) ;
+    final Book book = BookTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     Assert.assertTrue( book.hasProblem() ) ;

@@ -1,1 +1,1 @@
-insert file:. $recurse $createlevel
+insert file:. recurse createlevel
