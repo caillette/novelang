@@ -1189,7 +1189,8 @@ bigDashedListItem
     ( ( i += whitespace? i += softbreak 
         ( 
             ( url ) => i += url
-          | ( smallDashedListItem ) => i += smallDashedListItem
+//          | ( smallDashedListItem ) => i += smallDashedListItem
+          | ( whitespace? smallDashedListItem ) => i += whitespace? i += smallDashedListItem
           | ( i += whitespace? i += mixedDelimitedSpreadBlock 
               ( i += whitespace i += mixedDelimitedSpreadBlock )* 
             )

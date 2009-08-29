@@ -59,6 +59,58 @@ public class ParagraphParsingTest {
 
 
   
+  @Test
+  public void paragraphAsListWithIndentedEmbeddedList() throws RecognitionException {
+    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree( 
+        "--- y" + BREAK +
+        "  - z" 
+        ,
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+            tree( WHITESPACE_, " " ),
+            tree( WORD_, "y" ),
+            tree( LINE_BREAK_ ),
+            tree( WHITESPACE_, "  " ),
+            tree(
+                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                tree( WHITESPACE_, " " ),
+                tree( WORD_, "z" )
+            )            
+        ) 
+    ); ;
+  }
+
+
+  @Test
+  public void paragraphAsListWithEmbeddedListOnTwoLevels() throws RecognitionException {
+    PARSERMETHOD_BIG_DASHED_LIST_ITEM.checkTree( 
+        "--- x" + BREAK +
+        "- y" + BREAK +
+        "  - z"
+        ,
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+            tree( WHITESPACE_, " " ),
+            tree( WORD_, "x" ),
+            tree( LINE_BREAK_ ),
+            tree(
+                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                tree( WHITESPACE_, " " ),
+                tree( WORD_, "y" )
+            ),
+            tree( LINE_BREAK_ ),
+            tree( WHITESPACE_, "  " ),
+            tree(
+                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                tree( WHITESPACE_, " " ),
+                tree( WORD_, "z" )
+            )            
+        ) 
+    ); ;
+  }
+
+
+  
 
   @Test
   public void paragraphIsWordThenComma() throws RecognitionException {
