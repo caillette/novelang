@@ -23,8 +23,11 @@ import java.util.regex.Matcher;
 import java.util.Comparator;
 
 /**
- * This class holds the version of the whole application.
- * A copy of the source is modified and compiled during the build process.
+ * Represents a version number with the "major + minor + fix" scheme, and also the version
+ * of the whole application. 
+ * By default the version is "SNAPSHOT" and the build process replaces a magic string by the
+ * version number of the release.
+ * 
  * @author Laurent Caillette
  */
 public final class Version {
@@ -130,6 +133,7 @@ public final class Version {
      * integer as the first argument is less than, equal to, or greater than the second.
      */
     public int compare( final Version version1, final Version version2 ) {
+      
       if( version1 == version2 ) {
         return 0 ;
       }
@@ -140,7 +144,6 @@ public final class Version {
         return 1 ;
       }
 
-
       if( version1.isSnapshot() ) {
         if( version2.isSnapshot() ) {
           return 0 ;
@@ -150,6 +153,7 @@ public final class Version {
       } else if( version2.isSnapshot() ) {
         return -1 ;
       }
+      
       final int majorDifference = version1.getMajor() - version2.getMajor() ;
       if( majorDifference == 0 ) {
         final int minorDifference = version1.getMinor() - version2.getMinor() ;
@@ -162,5 +166,5 @@ public final class Version {
         return majorDifference ;
       }
     }
-  };
+  } ;
 }
