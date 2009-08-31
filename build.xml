@@ -89,6 +89,7 @@
       <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
     </path>
 
+    <echoproperties />
   </target>
 
   
