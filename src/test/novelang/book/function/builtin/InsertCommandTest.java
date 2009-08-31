@@ -16,85 +16,85 @@
  */
 package novelang.book.function.builtin;
 
-import java.io.File;
+import novelang.ScratchDirectoryFixture;
+import novelang.TestResourceTools;
+import novelang.TestResources;
+import novelang.book.CommandExecutionContext;
+import novelang.book.function.CommandParameterException;
+import novelang.common.Location;
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
+import novelang.parser.NodeKind;
+import static novelang.parser.NodeKind.*;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 import org.apache.commons.lang.ClassUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.collect.ImmutableMap;
-import novelang.ScratchDirectoryFixture;
-import novelang.TestResourceTools;
-import novelang.TestResources;
-import novelang.book.Environment;
-import novelang.book.function.FunctionCall;
-import novelang.book.function.FunctionDefinition;
-import novelang.book.function.IllegalFunctionCallException;
-import novelang.common.Location;
-import novelang.common.SimpleTree;
-import novelang.common.SyntacticTree;
-import novelang.common.tree.Treepath;
-import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.*;
-import novelang.parser.antlr.BookParserTest;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
+
+import java.io.File;
+import java.net.MalformedURLException;
 
 /**
- * Tests for {@link InsertFunction}.
+ * Tests for {@link InsertCommand}.
  *
  * @author Laurent Caillette
  */
-public class InsertFunctionTest {
-
-  private static final Log LOG = LogFactory.getLog( InsertFunctionTest.class ) ;
+public class InsertCommandTest {
 
   @Test
-  public void goodFileUrl() throws IllegalFunctionCallException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree( oneWordFile.getAbsolutePath() )
+  public void goodFileUrl() throws CommandParameterException, MalformedURLException {
+
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        oneWordFile.toURL().toExternalForm(),
+        false,
+        false,
+        null
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
-        Treepath.create( initialTree )
+    final CommandExecutionContext initialContext =
+        new CommandExecutionContext( goodContentDirectory ).
+        update( new SimpleTree( BOOK.name() ) )
+    ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        initialContext
     ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
-        result.getBook().getTreeAtStart()
+        result.getDocumentTree()
     ) ;
 
   }
 
   @Test
-  public void createChapterForSinglePart() throws IllegalFunctionCallException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            noChapterFile.getAbsolutePath(), "createlevel" )
+  public void createChapterForSinglePart() 
+      throws CommandParameterException, MalformedURLException
+  {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        noChapterFile.toURL().toExternalForm(),
+        false,
+        true,
+        null
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext initialContext =
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ;
+    final CommandExecutionContext result = insertCommand.evaluate( initialContext ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
 
-
-    final SyntacticTree book = result.getBook().getTreeAtStart() ;
+    final SyntacticTree documentTree = result.getDocumentTree();
+    assertNotNull( documentTree ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
@@ -106,74 +106,76 @@ public class InsertFunctionTest {
                 )
             )
         ),
-        book
+        documentTree
     ) ;
 
   }
 
   @Test
-  public void addStyle() throws IllegalFunctionCallException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            oneWordFile.getAbsolutePath(),
-            ImmutableMap.of( "style", "mystyle" )
-        )
+  public void addStyle() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        oneWordFile.toURL().toExternalForm(), 
+        false,
+        false,
+        "myStyle"
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( _STYLE, "mystyle" ), tree( WORD_, "oneword" ) ) ),
-        result.getBook().getTreeAtStart()
+        tree(
+            BOOK,
+            tree(
+                NodeKind.PARAGRAPH_REGULAR,
+                tree( _STYLE, "myStyle" ),
+                tree( WORD_, "oneword" )
+            )
+        ),
+        result.getDocumentTree() 
     ) ;
 
   }
 
   @Test
-  public void recurseWithAllValidParts() throws IllegalFunctionCallException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            goodContentDirectory.getAbsolutePath(), "recurse" )
+  public void recurseWithAllValidParts() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        goodContentDirectory.toURL().toExternalForm(),
+        true,
+        false,
+        null
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( goodContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
   }
 
   @Test
-  public void recurseWithSomeBrokenPart() throws IllegalFunctionCallException {
-    final FunctionDefinition definition = new InsertFunction() ;
-    final FunctionCall call = definition.instantiate(
-        new Location( "", -1, -1 ),
-        BookParserTest.createFunctionCallWithUrlTree(
-            brokenContentDirectory.getAbsolutePath(), "recurse" )
+  public void recurseWithSomeBrokenPart() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,        
+        brokenContentDirectory.toURL().toExternalForm(),
+        true,
+        false,
+        null
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
-    final FunctionCall.Result result = call.evaluate(
-        new Environment( brokenContentDirectory ),
-        Treepath.create( initialTree )
-    ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( brokenContentDirectory ).update( initialTree ) ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;
-    assertNotNull( result.getBook() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
   }
 
 
@@ -182,6 +184,8 @@ public class InsertFunctionTest {
 // Fixture
 // =======
 
+  private static final Location NULL_LOCATION = new Location( "", -1, -1 ) ;
+
   private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD_ABSOLUTEFILENAME;
   private static final String NOCHAPTER_FILENAME = TestResources.NO_CHAPTER ;
   private static final String BROKEN_FILENAME = TestResources.BROKEN_CANNOTPARSE;
@@ -189,7 +193,6 @@ public class InsertFunctionTest {
   private static final String CONTENT_GOOD_DIRNAME = "good" ;
   private static final String CONTENT_BROKEN_DIRNAME = "broken" ;
 
-  private File scratchDirectory;
   private File oneWordFile ;
   private File noChapterFile;
   private File goodContentDirectory;
@@ -201,7 +204,7 @@ public class InsertFunctionTest {
     final String testName = ClassUtils.getShortClassName( getClass() ) ;
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
-    scratchDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+    File scratchDirectory = scratchDirectoryFixture.getTestScratchDirectory();
 
     goodContentDirectory = new File( scratchDirectory, CONTENT_GOOD_DIRNAME ) ;
 

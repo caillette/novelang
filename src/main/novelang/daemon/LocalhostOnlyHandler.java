@@ -18,6 +18,8 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,7 +55,12 @@ public class LocalhostOnlyHandler extends GenericHandler{
       final PrintWriter writer = new PrintWriter( response.getOutputStream() ) ;
       writer.println( "<html>" ) ;
       writer.println( "<body>" ) ;
+      writer.println( "<p>" ) ;
       writer.println( "Not authorized to connect: " + remoteAddress ) ;
+      writer.println( "</p>" ) ;
+      writer.println( "<p>" ) ;
+      writer.println( "This server only allows HTTP requests from localhost" ) ;
+      writer.println( "</p>" ) ;
       writer.println( "</body>" ) ;
       writer.println( "</html>" ) ;
       writer.flush() ;
@@ -66,7 +73,12 @@ public class LocalhostOnlyHandler extends GenericHandler{
 
   }
 
-  private boolean isLocalhost( String remoteAddress ) {
-    return remoteAddress.startsWith( "127.0.0" ) ;
+  private static boolean isLocalhost( String address ) {
+    try {
+      return InetAddress.getByName( address ).isLoopbackAddress() ;
+    } catch ( UnknownHostException e ) {
+      LOG.warn( "Could not resolve: '" + address + "'" ) ;
+      return false ;
+    }
   }
 }

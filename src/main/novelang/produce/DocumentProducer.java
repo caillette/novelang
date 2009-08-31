@@ -25,7 +25,6 @@ import java.nio.charset.Charset;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.book.Book;
-import novelang.book.function.FunctionRegistry;
 import novelang.common.FileTools;
 import novelang.common.LanguageTools;
 import novelang.common.Problem;
@@ -42,6 +41,7 @@ import novelang.rendering.PdfWriter;
 import novelang.rendering.PlainTextWriter;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
+import novelang.rendering.XslWriter;
 
 /**
  * Produces a document into passed-in {@link DocumentRequest}s.
@@ -119,6 +119,12 @@ public class DocumentProducer {
             new NlpWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
         break ;
 
+      case FO :
+        final ResourceName foStylesheet =
+            stylesheet == null ? PdfWriter.DEFAULT_FO_STYLESHEET : stylesheet ;
+        serve.with( new GenericRenderer( new XslWriter( renderingConfiguration, foStylesheet ) ) ) ;
+        break ;
+
       default :
         throw new IllegalArgumentException( "Unsupported: " + mimeType ) ;
     }
@@ -150,7 +156,6 @@ public class DocumentProducer {
           StructureKind.BOOK.getFileExtensions()
       ) ;
       return new Book(
-          FunctionRegistry.getStandardRegistry(),
           basedir,
           bookFile,
           defaultSourceCharset,

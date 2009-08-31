@@ -23,7 +23,7 @@ public interface DaemonConfiguration {
 
   int getPort() ;
   
-  boolean getServeLocalhostOnly() ;
+  boolean getServeRemotes() ;
 
   ProducerConfiguration getProducerConfiguration() ;
 

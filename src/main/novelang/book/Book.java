@@ -28,11 +28,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
-import novelang.book.function.FunctionCall;
-import novelang.book.function.FunctionDefinition;
-import novelang.book.function.FunctionRegistry;
-import novelang.book.function.IllegalFunctionCallException;
-import novelang.book.function.UnknownFunctionException;
+
+import novelang.book.function.CommandParameterException;
+import novelang.book.function.Command;
+import novelang.book.function.CommandFactory;
 import novelang.common.AbstractSourceReader;
 import novelang.common.Problem;
 import novelang.common.SimpleTree;
@@ -56,19 +55,16 @@ import novelang.system.DefaultCharset;
  */
 public class Book extends AbstractSourceReader {
 
-  private final Environment environment ;
-  private final SyntacticTree documentTree ;
+  private final CommandExecutionContext environment ;
 
   /**
    * Only for tests.
    */
   public Book(
-      FunctionRegistry functionRegistry,
       File baseDirectory,
       String content
   ) {
     this(
-        functionRegistry,
         baseDirectory,
         baseDirectory,
         content,
@@ -82,11 +78,9 @@ public class Book extends AbstractSourceReader {
    * Only for tests.
    */
   public Book(
-      FunctionRegistry functionRegistry,
       File bookFile
   ) throws IOException {
     this(
-        functionRegistry,
         bookFile.getParentFile(),
         bookFile,
         DefaultCharset.SOURCE,
@@ -96,7 +90,6 @@ public class Book extends AbstractSourceReader {
   }
 
   public Book(
-      FunctionRegistry functionRegistry,
       File baseDirectory,
       File bookDirectory,
       String content,
@@ -118,38 +111,40 @@ public class Book extends AbstractSourceReader {
         bookDirectory
     ) ;
 
-    final SyntacticTree rawTree = SeparatorsMangler.removeSeparators( 
+    CommandExecutionContext currentEnvironment =
+        new CommandExecutionContext( baseDirectory, bookDirectory ) ;
+    final SyntacticTree rawTree = SeparatorsMangler.removeSeparators(
         parse( new DefaultBookParserFactory(), content ) ) ;
-    if( null == rawTree ) {
-      this.environment = new Environment( baseDirectory, bookDirectory ) ;
-      this.documentTree = null ;
-    } else {
-      final Iterable< FunctionCall > functionCalls =
-          createFunctionCalls( functionRegistry, rawTree ) ;
-      final Results results = callFunctions(
-          functionCalls,
-          new Environment( baseDirectory, bookDirectory ),
-          new SimpleTree( NodeKind.BOOK.name() )
+    
+    if( null != rawTree ) {
+      final Iterable< Command > commands = createCommands( new CommandFactory(), rawTree ) ;
+      currentEnvironment = callCommands(
+          currentEnvironment.update( new SimpleTree( NodeKind.BOOK ) ),
+          commands
       ) ;
-      this.environment = results.environment ;
-      Treepath< SyntacticTree > rehierarchized = Treepath.create( results.book ) ;
+      Treepath< SyntacticTree > rehierarchized =
+          Treepath.create( currentEnvironment.getDocumentTree() ) ;
       final Set< String > tagset = MetadataHelper.findTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
       rehierarchized = TagFilter.filter( rehierarchized, tagRestrictions ) ;
 
+      currentEnvironment = currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
 
       if( hasProblem() ) {
-        this.documentTree = rehierarchized.getTreeAtEnd() ;
+        currentEnvironment = 
+            currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
       } else {
-        this.documentTree = addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ;
+        currentEnvironment = 
+            currentEnvironment.update( addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ) ;
       }
     }
+    this.environment = currentEnvironment ;
+    collect( environment.getProblems() ) ;
 
   }
 
   public Book(
-      FunctionRegistry functionRegistry,
       File baseDirectory,
       File bookFile,
       Charset suggestedSourceCharset,
@@ -157,7 +152,6 @@ public class Book extends AbstractSourceReader {
       Set< String > restrictingTags
   ) throws IOException {
     this(
-        functionRegistry,
         baseDirectory,
         bookFile.getParentFile(),
         IOUtils.toString( new FileInputStream( bookFile ) ),
@@ -168,66 +162,38 @@ public class Book extends AbstractSourceReader {
   }
 
   public SyntacticTree getDocumentTree() {
-    return documentTree;
+    return environment.getDocumentTree() ;
   }
 
   public StylesheetMap getCustomStylesheetMap() {
     return environment.getCustomStylesheets() ;
   }
 
-  private Iterable< FunctionCall > createFunctionCalls(
-      FunctionRegistry functionRegistry,
-      SyntacticTree rawTree
+  private Iterable< Command > createCommands(
+      final CommandFactory commandFactory,
+      final SyntacticTree rawTree
   ) {
-    final List< FunctionCall > functionCalls = Lists.newArrayList() ;
-    for( int i = 0 ; i < rawTree.getChildCount() ; i++ ) {
-      final SyntacticTree functionCallTree = rawTree.getChildAt( i ) ;
-      final SyntacticTree functionNameTree = functionCallTree.getChildAt( 0 ) ;
-      final String functionName = functionNameTree.getChildAt( 0 ).getText() ;
+    final List< Command > commands = Lists.newArrayList() ;
+    for( final SyntacticTree syntacticTree : rawTree.getChildren() ) {
       try {
-        final FunctionDefinition functionDefinition =
-            functionRegistry.getFunctionDeclaration( functionName ) ;
-        final FunctionCall functionCall =
-            functionDefinition.instantiate( functionCallTree.getLocation(), functionCallTree ) ;
-        functionCalls.add( functionCall ) ;
-      } catch( UnknownFunctionException e ) {
-        collect( Problem.createProblem( e ) ) ;
-      } catch( IllegalFunctionCallException e ) {
+        final Command command = commandFactory.createFunctionCall( syntacticTree ) ;
+        commands.add( command ) ;
+      } catch( CommandParameterException e ) {
         collect( Problem.createProblem( e ) ) ;
       }
     }
-    return ImmutableList.copyOf( functionCalls ) ;
+    return ImmutableList.copyOf( commands ) ;
   }
 
-  private Results callFunctions(
-      final Iterable< FunctionCall > functionCalls,
-      Environment environment,
-      final SyntacticTree tree
+  private CommandExecutionContext callCommands(
+      CommandExecutionContext context,
+      final Iterable< Command > commands
   ) {
-    Treepath<SyntacticTree> book = Treepath.create( tree ) ;
-    for( FunctionCall functionCall : functionCalls ) {
-      FunctionCall.Result result = functionCall.evaluate( environment, book ) ;
-      environment = result.getEnvironment() ;
-      collect( result.getProblems() ) ;
-      final Treepath<SyntacticTree> newBook = result.getBook() ;
-      if( null != newBook ) {
-        book = newBook ;
-      }
+    for( Command command : commands ) {
+      context = command.evaluate( context ) ;
     }
-    return new Results( environment, book.getTreeAtStart() ) ;
+    return context ;
   }
-
-  private static class Results {
-    public final Environment environment ;
-    public SyntacticTree book ;
-
-    private Results( Environment environment, SyntacticTree book ) {
-      this.environment = environment ;
-      this.book = book ;
-    }
-  }
-
-  
 
 
 }

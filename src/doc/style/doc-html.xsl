@@ -19,18 +19,6 @@
   >
   %ISOlat1;
     
-
-  <!ENTITY newsFeed           "http://novelang.blogspot.com/feeds/posts/default" >
-  <!ENTITY blog               "http://novelang.blogspot.com" >
-  <!ENTITY usersGroup         "http://groups.google.com/group/novelang-users/topics" >
-  <!ENTITY developersGroup    "http://groups.google.com/group/novelang-developers/topics" >
-  <!ENTITY sourceforgeProject "http://sourceforge.net/projects/novelang" >
-  <!ENTITY download           "http://sourceforge.net/projects/novelang/files" >
-  <!ENTITY github             "http://github.com/caillette/novelang/tree/master" >
-  <!ENTITY issues             "http://github.com/caillette/novelang/issues" >
-  <!ENTITY pdfDocument        "http://novelang.sf.net/novelang.pdf" >
-  <!ENTITY license            "http://www.gnu.org/licenses/gpl-3.0.txt" >
-
 ] >
 
 <xsl:stylesheet
@@ -38,10 +26,12 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
   <xsl:import href="default-html.xsl" />
-
+  <xsl:import href="shared.xsl" />
+  
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
   <xsl:param name="charset"/>
+  
 
   <xsl:output method="xml" />
 
@@ -61,44 +51,43 @@
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
         <link rel="stylesheet" type="text/css" href="screen.css" />
 
-        <link
-            rel="alternate" type="application/atom+xml" title="News feed (Atom)"
-            href="&newsFeed;"
-        />
+        <link rel="alternate" type="application/atom+xml" title="News feed (Atom)" >
+        <xsl:attribute name="href" ><xsl:value-of select="$newsFeed" /></xsl:attribute>
+        </link>
 
 
       </head>
     <body>
       <div id="Box">
 
-        <div id="Title" ><xsl:value-of select="/n:book/n:level-title[1]" /></div>
-
-        <div class="chapter" >
-          <h1><xsl:value-of select="/n:book/n:level-title[2]" /></h1>
-        </div>
+        <div id="Title" ><xsl:value-of select="$title" /></div>
+        
+        <div class="chapter" > <h1> <xsl:value-of select="$subtitle" /></h1> </div>
 
         <xsl:apply-templates />
 
 
         <div id="Sidebar">
 
-          <p>By <strong>Laurent Caillette</strong></p>
 
-          <ul><!--&#9733;-->
-            <li><a href="&blog;">Blog</a></li>
-            <li><a href="&usersGroup;">Users' list</a></li>
-            <li><a href="&developersGroup;">Developers' list</a></li>
-            <li><a href="&sourceforgeProject;">Sourceforge</a></li>
-            <li><a href="&github;">Sources</a></li>
-            <li><a href="&issues;">Issue tracker</a></li>
-            <li><a href="&download;">Download</a></li>
-            <li><a href="&pdfDocument;">PDF</a></li>
-            <li><a href="&license;">License</a></li>
-          </ul>
+          <div id="Author" >Written by <xsl:apply-templates select="$author" /></div>
+          <div id="Version" >version <xsl:value-of select="$version" /></div>
+
+          <div id="Links" >
+            <ul>
+              <xsl:for-each
+                  select="/n:book/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
+              >
+                <li>
+                  <xsl:apply-templates/>
+                </li>
+                
+              </xsl:for-each>
+            </ul>
+          </div>
 
 
           <div id="Sponsors" >
-            <!--https://sourceforge.net/project/admin/logo.php?group_id=227480  -->
             <a href="http://sourceforge.net">
               <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=2"
                    width="125" height="37" border="0" alt="SourceForge.net Logo" />
@@ -156,5 +145,8 @@ pageTracker._trackPageview();
       </li>
     </ul>
   </xsl:template>
-
+  
+  
+  <!--This doesn't work when put in shared.xsl .-->
+  <xsl:template match="*[n:style='parameters']" />
 </xsl:stylesheet>

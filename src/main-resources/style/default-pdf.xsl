@@ -97,6 +97,7 @@
             flow-name="xsl-region-body"
         >
           <fo:block font-family="Linux Libertine" >
+            <xsl:call-template name="custom-document-start" />
             <xsl:apply-templates />
           </fo:block>
           <fo:block id="@last-page"/>
@@ -106,6 +107,9 @@
 
     </fo:root>
   </xsl:template>
+  
+  <!--Override this template in stylesheet importing this one-->
+  <xsl:template name="custom-document-start" />
 
   <xsl:template match="/n:book/n:level-title[1]" >
     <fo:block

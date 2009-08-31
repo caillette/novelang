@@ -39,7 +39,7 @@ import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.BatchParameters;
 import novelang.configuration.parse.DaemonParameters;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
-import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVELOCALHOSTONLY;
+import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
 import novelang.configuration.parse.GenericParameters;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 import novelang.produce.DocumentRequest;
@@ -80,11 +80,10 @@ public class ConfigurationToolsTest {
   {
     final DaemonConfiguration configuration = ConfigurationTools
         .createDaemonConfiguration( createDaemonParameters(
-            OPTIONPREFIX + OPTIONNAME_HTTPDAEMON_SERVELOCALHOSTONLY,
-            "false"
+            OPTIONPREFIX + OPTIONNAME_HTTPDAEMON_SERVEREMOTES
         )
     ) ;
-    Assert.assertEquals( false, configuration.getServeLocalhostOnly() ) ;
+    Assert.assertEquals( true, configuration.getServeRemotes() ) ;
   }
 
   @Test
@@ -98,7 +97,7 @@ public class ConfigurationToolsTest {
         DefaultCharset.RENDERING,
         configuration.getProducerConfiguration().getRenderingConfiguration().getDefaultCharset()
     ) ;
-    Assert.assertTrue( configuration.getServeLocalhostOnly() ) ;
+    Assert.assertFalse( configuration.getServeRemotes() ) ;
   }
 
 

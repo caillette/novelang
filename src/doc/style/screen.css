@@ -297,7 +297,7 @@ text-align: center;
 
 #Sidebar {
   position: absolute;
-  top: 191px;
+  top: 19px;
   margin: 0 0 0 -222px; /* IE/Win 6 Workaround Hack */
   /*
     -- Used this instead of the above for Sidebar positioning from Oct 2003 - Feb 2006
@@ -307,7 +307,7 @@ text-align: center;
   */
   width: 160px;
   height: 100%;
-  border: 0px dotted gray;
+  border: 0 dotted gray;
   padding: 5px 0 0 0;
   background-color: transparent;
   color: #a00;
@@ -317,6 +317,25 @@ text-align: center;
   */
   line-height: 1em;
   font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
+}
+
+
+#Author {
+  font-size: 1.3em;
+  line-height: 1.3em;
+  font-weight: normal;
+  letter-spacing: 2px;
+  margin-top: 100px;
+}
+
+#Version {
+  font-size: 1.1em ;
+  color: dimgray ;
+  margin-top: 40px;
+}
+
+#Links {
+  margin-top: 40px;
 }
 
 #Sidebar ul {
@@ -331,6 +350,7 @@ text-align: center;
   padding: 0;
 }
 
+/*
 #Sidebar p {
   padding: 0;
   letter-spacing: 2px;
@@ -345,13 +365,7 @@ text-align: center;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
-
-#Sidebar strong {
-  font-size: 1em;
-  font-weight: normal;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
+*/
 
 #Sidebar a {
   color: #a00;

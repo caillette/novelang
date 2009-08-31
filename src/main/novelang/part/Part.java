@@ -82,6 +82,10 @@ public class Part extends AbstractSourceReader {
         suggestedRenderingCharset,
         "part[" + partFile.getName() + "]"
     ) ;
+    Preconditions.checkArgument( 
+        ! partFile.isDirectory(), 
+        "Part file cannot be a directory: %s", partFile
+    ) ;
     this.partFileDirectory = partFile.getParentFile() ;
     tree = createTree( readContent( partFile.toURI().toURL() ) ) ;
   }

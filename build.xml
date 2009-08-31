@@ -512,9 +512,8 @@
         remotetodir="${scp-destination}"
         verbose="true"
         sftp="true"
-
+        file="${scp-file}" 
     >
-      <fileset dir="${scp-file}" />
     </scp>
     <echo>
       Now wait a few minutes and go to SourceForge project page
