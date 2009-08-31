@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +57,7 @@ public class FileToolsTest {
   public void testRelativizeOkWithSubdirectory() {
     final String relativized = FileTools.relativizePath(
         parentWithTrailingSeparator, childDirectory ) ;
-    Assert.assertEquals( "childDirectory/", relativized ) ;
+    Assert.assertEquals( "childDirectory" + SystemUtils.FILE_SEPARATOR, relativized ) ;
   }
 
   @Test( expected = IllegalArgumentException.class )

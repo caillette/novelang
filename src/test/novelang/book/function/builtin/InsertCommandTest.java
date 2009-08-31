@@ -33,6 +33,8 @@ import org.apache.commons.lang.ClassUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runners.NameAwareTestClassRunner;
+import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -42,6 +44,7 @@ import java.net.MalformedURLException;
  *
  * @author Laurent Caillette
  */
+@RunWith( value = NameAwareTestClassRunner.class )
 public class InsertCommandTest {
 
   @Test
@@ -201,7 +204,7 @@ public class InsertCommandTest {
   @Before
   public void setUp() throws Exception {
 
-    final String testName = ClassUtils.getShortClassName( getClass() ) ;
+    final String testName = NameAwareTestClassRunner.getTestName();    
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     File scratchDirectory = scratchDirectoryFixture.getTestScratchDirectory();

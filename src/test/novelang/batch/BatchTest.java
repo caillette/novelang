@@ -24,6 +24,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
@@ -36,6 +38,7 @@ import novelang.rendering.RenditionMimeType;
  *
  * @author Laurent Caillette
  */
+@RunWith( value = NameAwareTestClassRunner.class )
 public class BatchTest {
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
@@ -76,8 +79,10 @@ public class BatchTest {
 
   @Before
   public void setUp() throws IOException {
+    final String testName = NameAwareTestClassRunner.getTestName();
+
     final ScratchDirectoryFixture scratchDirectoryFixture =
-        new ScratchDirectoryFixture( getClass() ) ;
+        new ScratchDirectoryFixture( testName ) ;
     contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
 
     TestResourceTools.copyResourceToDirectoryFlat(

@@ -19,6 +19,7 @@ package novelang.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
@@ -114,8 +115,9 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
 
     try {
       final InputStream inputStream = partUrl.openStream() ;
-      return IOUtils.toString( inputStream, sourceCharset.name() ) ;
-
+      final String stringContent = IOUtils.toString( inputStream, sourceCharset.name() );
+      inputStream.close() ;
+      return stringContent ;
     } catch( IOException e ) {
       LOG.warn( "Could not load file", e ) ;
       collect( Problem.createProblem( this, e ) ) ;

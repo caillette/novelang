@@ -89,6 +89,7 @@
       <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
     </path>
 
+    <echoproperties />
   </target>
 
   
@@ -363,6 +364,7 @@
     <property name="absolutetarget" location="${target.documentation.site.dir}" />
 
     <echo>absolutetarget=${absolutetarget}</echo>
+    <echo>target.documentation.tweaked.dir=${target.documentation.tweaked.dir}</echo>
 
     <!-- Need to create this one before the batch generation starts! -->    
     <mkdir dir="${logdestination}" />

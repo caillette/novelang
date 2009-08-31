@@ -86,7 +86,7 @@ public class DocumentGenerator {
     }
 
     try {
-      LOG.debug( "Starting %s with arguments %s",
+      LOG.info( "Starting %s with arguments %s",
           ClassUtils.getShortClassName( DocumentGenerator.class ),
           asString( arguments )
       ) ;
