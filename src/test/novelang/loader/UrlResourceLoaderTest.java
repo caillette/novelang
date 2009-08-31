@@ -27,6 +27,8 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runners.NameAwareTestClassRunner;
+import org.junit.runner.RunWith;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
@@ -34,6 +36,7 @@ import novelang.TestResources;
 /**
  * @author Laurent Caillette
  */
+@RunWith( value = NameAwareTestClassRunner.class )
 public class UrlResourceLoaderTest {
 
   @Test
@@ -61,7 +64,8 @@ public class UrlResourceLoaderTest {
 
   @Before
   public void setUp() throws IOException {
-    final String testName = ClassUtils.getShortClassName( getClass() );
+    final String testName = NameAwareTestClassRunner.getTestName();
+
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     loaderDirectory = scratchDirectoryFixture.getTestScratchDirectory();

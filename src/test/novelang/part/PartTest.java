@@ -26,6 +26,8 @@ import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runners.NameAwareTestClassRunner;
+import org.junit.runner.RunWith;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
@@ -43,6 +45,7 @@ import com.google.common.collect.Lists;
 /**
  * @author Laurent Caillette
  */
+@RunWith( value = NameAwareTestClassRunner.class )
 public class PartTest {
 
 
@@ -241,7 +244,7 @@ public class PartTest {
 
   @Before
   public void setUp() throws IOException {
-    final String testName = ClassUtils.getShortClassName( getClass() );
+    final String testName = NameAwareTestClassRunner.getTestName();
     final File scratchDirectory = new ScratchDirectoryFixture( testName ).
         getTestScratchDirectory() ;
 

@@ -32,6 +32,8 @@ import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +43,7 @@ import java.io.IOException;
  * 
  * @author Laurent Caillette
  */
+@RunWith( value = NameAwareTestClassRunner.class )
 public class BookTest {
 
   private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
@@ -224,8 +227,7 @@ public class BookTest {
 
   @Before
   public void setUp() throws Exception {
-
-    final String testName = ClassUtils.getShortClassName( getClass() ) ;
+    final String testName = NameAwareTestClassRunner.getTestName();
     final ScratchDirectoryFixture scratchDirectoryFixture =
         new ScratchDirectoryFixture( testName ) ;
     final File contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
