@@ -25,6 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
+import org.apache.commons.lang.SystemUtils;
+import static org.apache.commons.lang.SystemUtils.FILE_SEPARATOR;
 import novelang.ScratchDirectoryFixture;
 import novelang.common.filefixture.Directory;
 import novelang.common.filefixture.Filer;
@@ -101,7 +103,11 @@ public class ResourceSchemaTest {
     final File scoped = new Filer( testDirectory ).
         copyScoped( ResourceTree.D0.dir, ResourceTree.D0.D0_1.D0_1_0.dir ) ;
     assertTrue( scoped.exists() ) ;
-    assertEquals( testDirectory.getAbsolutePath() + "/d0.1/d0.1.0", scoped.getAbsolutePath() ) ;
+    assertEquals(
+        testDirectory.getAbsolutePath() +
+            FILE_SEPARATOR + "d0.1" + FILE_SEPARATOR + "d0.1.0",
+        scoped.getAbsolutePath()
+    ) ;
 
     verifyScopedCopyResult();
   }
@@ -112,7 +118,9 @@ public class ResourceSchemaTest {
         copyScoped( ResourceTree.D0.dir, ResourceTree.D0.D0_1.D0_1_0.R0_1_0_0 ) ;
     assertTrue( scoped.exists() ) ;
     assertEquals( 
-        testDirectory.getAbsolutePath() + "/d0.1/d0.1.0/r0.1.0.0.txt", 
+        testDirectory.getAbsolutePath() +
+            FILE_SEPARATOR + "d0.1" + FILE_SEPARATOR +  "d0.1.0" +
+            FILE_SEPARATOR + "r0.1.0.0.txt",
         scoped.getAbsolutePath() 
     ) ;
 
@@ -124,7 +132,9 @@ public class ResourceSchemaTest {
     final Filer filer = new Filer( testDirectory ) ;
     final File file = filer.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
     assertEquals( 
-        testDirectory.getAbsolutePath() + "/tree/d0/d0.0/r0.0.0.txt", 
+        testDirectory.getAbsolutePath() +
+            FILE_SEPARATOR + "tree" + FILE_SEPARATOR + "d0" +
+            FILE_SEPARATOR + "d0.0" + FILE_SEPARATOR + "r0.0.0.txt",
         file.getAbsolutePath() 
     ) ;
     
@@ -138,7 +148,9 @@ public class ResourceSchemaTest {
         ResourceTree.D0.D0_1.D0_1_0.R0_1_0_0 
     ) ;
     assertEquals( 
-        testDirectory.getAbsolutePath() + "/d0.1/d0.1.0/r0.1.0.0.txt", 
+        testDirectory.getAbsolutePath() +
+            FILE_SEPARATOR + "d0.1" + FILE_SEPARATOR + "d0.1.0" +
+            FILE_SEPARATOR + "r0.1.0.0.txt",
         file.getAbsolutePath() 
     ) ;
   }
@@ -151,7 +163,7 @@ public class ResourceSchemaTest {
         ResourceTree.D0.D0_1.dir 
     ) ;
     assertEquals( 
-        testDirectory.getAbsolutePath() + "/d0.1", 
+        testDirectory.getAbsolutePath() + FILE_SEPARATOR + "d0.1",
         file.getAbsolutePath() 
     ) ;
   }
