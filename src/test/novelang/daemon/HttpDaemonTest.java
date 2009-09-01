@@ -44,6 +44,7 @@ import novelang.system.LogFactory;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.common.LanguageTools;
 import novelang.configuration.ConfigurationTools;
 import novelang.produce.RequestTools;
 import novelang.rendering.RenditionMimeType;
@@ -65,7 +66,10 @@ public class HttpDaemonTest {
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_NLP_RESOURCE_NAME ) ) ;
     final String shaved = shaveComments( generated ) ;
     save( "generated.nlp", generated ) ;
-    Assert.assertEquals( goodNlpSource, shaved ) ;
+    Assert.assertEquals(
+        LanguageTools.normaliseLineBreaks( goodNlpSource ),
+        LanguageTools.normaliseLineBreaks( shaved ) 
+    ) ;
 
   }
 

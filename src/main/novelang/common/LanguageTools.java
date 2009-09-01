@@ -16,6 +16,8 @@
  */
 package novelang.common;
 
+import java.util.regex.Pattern;
+
 /**
  * Utility class for language constructs.
  *
@@ -71,5 +73,25 @@ public class LanguageTools {
    */
   public static String to8byteHex(char character) {
     return Integer.toHexString( 0x100 | ( 0x0ff & character ) ).substring( 1 ) ;
+  }
+
+
+  private static final String UNIX_LINE_BREAK = "\u0010" ;
+
+  private static final String NON_UNIX_LINE_BREAK_PATTERN =
+      Pattern.quote( "\u0013" ) + Pattern.quote( UNIX_LINE_BREAK ) + "?"
+  ;
+
+  /**
+   * Replaces CR (Carriage Return, u000D) and CR + LF sequences by a single LF (Line Feed, u000A)
+   * in the Unix style.
+   *
+   * <a href="http://en.wikipedia.org/wiki/Newline">See Wikipedia article on New Line</a>.
+   *
+   * @param text a non-null String.
+   * @return a non-null String with normalized line breaks.
+   */
+  public static String normaliseLineBreaks( final String text ) {
+    return text.replaceAll( NON_UNIX_LINE_BREAK_PATTERN, UNIX_LINE_BREAK ) ;
   }
 }

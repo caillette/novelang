@@ -68,9 +68,10 @@ public class BookTest {
   @Test
   public void justInsert() {
 
+    final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
     final Book book = BookTestTools.createBook(
         SystemUtils.getUserDir(),
-        "insert file:" + oneWordFile.getAbsolutePath()
+        "insert file:" + absoluteFilePath
     ) ;
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
