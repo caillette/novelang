@@ -71,6 +71,7 @@ tokens {
   
   COMMAND_INSERT_ ;
   COMMAND_INSERT_CREATELEVEL_ ;
+  COMMAND_INSERT_LEVELABOVE_ ;
   COMMAND_INSERT_RECURSE_ ;
   COMMAND_INSERT_STYLE_ ;
   
@@ -1802,7 +1803,8 @@ functionCallInsert
       whitespace p += url 
       ( mediumbreak p += keywordRecurse )?
       ( mediumbreak p += keywordCreateLevel )?
-      ( mediumbreak p += functionCallInsertStyle ) ?        
+      ( mediumbreak p += parameterLevelAbove )?
+      ( mediumbreak p += parameterInsertStyle ) ?        
     )
     -> ^( COMMAND_INSERT_ $p+ )
   ;
@@ -1827,7 +1829,17 @@ keywordCreateLevel
     -> ^( COMMAND_INSERT_CREATELEVEL_ )
   ;
   
-functionCallInsertStyle
+parameterLevelAbove
+  : ( LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_V LATIN_SMALL_LETTER_E 
+      LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_A LATIN_SMALL_LETTER_B LATIN_SMALL_LETTER_O 
+      LATIN_SMALL_LETTER_V LATIN_SMALL_LETTER_E EQUALS_SIGN s = digit+
+    )
+    -> ^( COMMAND_INSERT_LEVELABOVE_ 
+          { delegate.createTree( COMMAND_INSERT_STYLE_, $s.text ) }         
+        )
+  ;
+  
+parameterInsertStyle
   : ( LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_T LATIN_SMALL_LETTER_Y 
       LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_E EQUALS_SIGN
       s = rawExtendedWord

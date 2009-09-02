@@ -21,6 +21,7 @@ import novelang.system.Log;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
+import com.google.common.base.Preconditions;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,13 +40,15 @@ public class InsertCommand extends AbstractCommand {
   private final String fileName ;
   private final boolean recurse ;
   private final boolean createLevel ;
+  private final int levelAbove ;
   private final String styleName ;
 
   public InsertCommand(
       final Location location,
       final String fileUrl, 
       final boolean recurse, 
-      final boolean createLevel, 
+      final boolean createLevel,
+      final int levelAbove,
       final String styleName 
   ) {
     super( location ) ;
@@ -53,6 +56,13 @@ public class InsertCommand extends AbstractCommand {
     this.recurse = recurse ;
     this.createLevel = createLevel ;
     this.styleName = styleName ;
+
+    Preconditions.checkArgument(
+        levelAbove >= 0,
+        "'levelabove' must be 0 or greater, is %d",
+        levelAbove
+    ) ;
+    this.levelAbove = levelAbove ;
   }
 
 

@@ -55,6 +55,7 @@ public class InsertCommandTest {
         oneWordFile.toURL().toExternalForm(),
         false,
         false,
+        0,
         null
     ) ;
 
@@ -86,6 +87,7 @@ public class InsertCommandTest {
         noChapterFile.toURL().toExternalForm(),
         false,
         true,
+        0,
         null
     ) ;
 
@@ -121,6 +123,7 @@ public class InsertCommandTest {
         oneWordFile.toURL().toExternalForm(), 
         false,
         false,
+        0,
         "myStyle"
     ) ;
 
@@ -152,6 +155,7 @@ public class InsertCommandTest {
         goodContentDirectory.toURL().toExternalForm(),
         true,
         false,
+        0,
         null
     ) ;
 
@@ -170,6 +174,7 @@ public class InsertCommandTest {
         brokenContentDirectory.toURL().toExternalForm(),
         true,
         false,
+        0,
         null
     ) ;
 

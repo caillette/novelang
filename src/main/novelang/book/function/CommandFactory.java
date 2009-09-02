@@ -35,12 +35,15 @@ public class CommandFactory {
         final String fileName = getTextOfChild( treeOfCommand, URL_LITERAL, true ) ;
         final boolean recurse = hasChild( treeOfCommand, COMMAND_INSERT_RECURSE_ ) ;
         final boolean createLevel = hasChild( treeOfCommand, COMMAND_INSERT_CREATELEVEL_ ) ;
+        final String levelAboveAsString =
+            getTextOfChild( treeOfCommand, COMMAND_INSERT_LEVELABOVE_, false ) ;
         final String styleName = getTextOfChild( treeOfCommand, COMMAND_INSERT_STYLE_, false ) ;
         return new InsertCommand(
             treeOfCommand.getLocation(),
             fileName,
             recurse,
             createLevel,
+            levelAboveAsString == null ? 0 : Integer.parseInt( levelAboveAsString ),
             styleName
         ) ;
       
