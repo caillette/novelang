@@ -110,6 +110,7 @@ public class InsertCommand extends AbstractCommand {
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
     
     Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
+    book = findLastLevel( book, levelAbove ) ;
 
     if( null != partTree ) {
       if( createLevel ) {
@@ -193,6 +194,27 @@ public class InsertCommand extends AbstractCommand {
 
     return environment.update( book.getTreeAtStart() ).addProblems( problems ) ;
   }
+
+  private static Treepath< SyntacticTree > findLastLevel(
+      Treepath< SyntacticTree > document,
+      final int depth
+  ) {
+    if( depth == 0 ) {
+      return document ;
+    }
+    final SyntacticTree tree = document.getTreeAtStart() ;
+    final int lastChildIndex = tree.getChildCount() - 1 ;
+    if( lastChildIndex < 0 ) {
+      throw new IllegalArgumentException( "Found no child tree while seeking level " + depth ) ;
+    }
+    final SyntacticTree lastChild = tree.getChildAt( lastChildIndex ) ;
+    if( lastChild.isOneOf( NodeKind._LEVEL ) ) {
+      return findLastLevel( Treepath.create( document, lastChildIndex ), depth - 1 ) ;
+    } else {
+      throw new IllegalArgumentException( "Found no LEVEL as child tree" ) ;
+    }
+  }
+
 
   private static Treepath< SyntacticTree > createChapterFromPartFilename(
       Treepath< SyntacticTree > book,

@@ -187,6 +187,48 @@ public class InsertCommandTest {
   }
 
 
+  @Test
+  public void levelAboveIs1() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        oneWordFile.toURL().toExternalForm(),
+        false,
+        false,
+        1,
+        null
+    ) ;
+
+    final SyntacticTree initialTree = tree(
+        BOOK,
+        tree(
+            _LEVEL,
+            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
+        )
+    ) ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
+
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
+
+    TreeFixture.assertEqualsNoSeparators(
+        tree(
+            BOOK,
+            tree(
+                _LEVEL,
+                tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
+                tree(
+                    NodeKind.PARAGRAPH_REGULAR,
+                    tree( WORD_, "oneword" )
+                )
+            )
+        ),
+        result.getDocumentTree()
+    ) ;
+
+  }
+
 
 // =======
 // Fixture

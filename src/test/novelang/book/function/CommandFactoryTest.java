@@ -31,6 +31,7 @@ public class CommandFactoryTest {
     assertEquals( "/wxy", extractFileName( command ) ) ;
     assertFalse( extractRecurse( command ) ) ;
     assertFalse( extractCreateLevel( command ) ) ;
+    assertEquals( 0, extractLevelAbove( command ) );
     assertNull( extractStyleName( command ) ) ;
   }
   
@@ -42,6 +43,7 @@ public class CommandFactoryTest {
             tree( URL_LITERAL, "file:x/y/z.nlp" ),
             tree( COMMAND_INSERT_RECURSE_ ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
+            tree( COMMAND_INSERT_LEVELABOVE_, "3" ),
             tree( COMMAND_INSERT_STYLE_, "whatever" )
         )    
     ) ;
@@ -49,6 +51,7 @@ public class CommandFactoryTest {
     assertEquals( "x/y/z.nlp", extractFileName( command ) ) ;
     assertTrue( extractRecurse( command ) ) ;
     assertTrue( extractCreateLevel( command ) ) ;
+    assertEquals( 3, extractLevelAbove( command ) ) ;
     assertEquals( "whatever", extractStyleName( command ) ) ;
   }
   
@@ -88,6 +91,10 @@ public class CommandFactoryTest {
   
   private static boolean extractCreateLevel( final Command insertCommand ) {
     return Reflection.field( "createLevel" ).ofType( Boolean.TYPE ).in( insertCommand ).get() ;
+  }
+
+  private static int extractLevelAbove( final Command insertCommand ) {
+    return Reflection.field( "levelAbove" ).ofType( Integer.TYPE ).in( insertCommand ).get() ;
   }
 
   private static Map< String, String > extractStylesheetMaps( final Command mapstylesheetCommand ) {
