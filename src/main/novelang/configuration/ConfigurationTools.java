@@ -26,9 +26,11 @@ import org.apache.fop.apps.FopFactory;
 import novelang.system.LogFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
-import novelang.configuration.parse.BatchParameters;
+import novelang.configuration.parse.DocumentGeneratorParameters;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.GenericParameters;
+import novelang.configuration.parse.SplitByChapterParameters;
+import novelang.configuration.parse.BatchParameters;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceLoaderTools;
@@ -141,12 +143,54 @@ public class ConfigurationTools {
     } ;
   }
 
-  public static BatchConfiguration createBatchConfiguration( final BatchParameters parameters )
+  public static SplitByChapterConfiguration createDocumentGeneratorConfiguration(
+      final SplitByChapterParameters parameters
+  ) throws FOPException {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
+
+    final File outputDirectory ;
+    outputDirectory = extractOutputDirectory( parameters ) ;
+
+    return new SplitByChapterConfiguration() {
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+      public DocumentRequest getDocumentRequest() {
+        return parameters.getDocumentRequest() ;
+      }
+      public File getOutputDirectory() {
+        return outputDirectory ;
+      }
+    } ;
+
+  }
+
+  public static DocumentGeneratorConfiguration createDocumentGeneratorConfiguration(
+      final DocumentGeneratorParameters parameters
+  )
       throws FOPException, IllegalArgumentException
   {
     final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
 
     final File outputDirectory ;
+    outputDirectory = extractOutputDirectory( parameters ) ;
+
+    return new DocumentGeneratorConfiguration() {
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+      public Iterable< DocumentRequest > getDocumentRequests() {
+        return parameters.getDocumentRequests() ;
+      }
+      public File getOutputDirectory() {
+        return outputDirectory ;
+      }
+    } ;
+
+  }
+
+  private static File extractOutputDirectory( BatchParameters parameters ) {
+    File outputDirectory;
     if( null == parameters.getOutputDirectory() ) {
       outputDirectory = new File( parameters.getBaseDirectory(), DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
      LOG.info(
@@ -162,19 +206,7 @@ public class ConfigurationTools {
          parameters.getOutputDirectoryOptionDescription()
      ) ;
     }
-
-    return new BatchConfiguration() {
-      public ProducerConfiguration getProducerConfiguration() {
-        return producerConfiguration ;
-      }
-      public Iterable< DocumentRequest > getDocumentRequests() {
-        return parameters.getDocumentRequests() ;
-      }
-      public File getOutputDirectory() {
-        return outputDirectory ;
-      }
-    } ;
-
+    return outputDirectory;
   }
 
   public static ContentConfiguration createContentConfiguration(

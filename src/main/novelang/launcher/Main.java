@@ -33,8 +33,8 @@ import novelang.system.EnvironmentTools;
 public class Main {
 
   public static void main( String[] originalArguments ) throws Exception {
-    // This must happen first. The originalArguments parameter prevents from putting
-    // those initialization to appear in a static block.
+    // This must happen first. The need for originalArguments parameter prevents from
+    // putting this initialization in a static block.
     StartupTools.fixLogDirectory( originalArguments ) ;
     StartupTools.installXalan() ;
     EnvironmentTools.logSystemProperties() ;
@@ -107,7 +107,7 @@ public class Main {
       "generate",
        new MainCaller() {
          public void main( String commandName, String[] arguments ) throws Exception {
-           DocumentGenerator.main( commandName, arguments ) ;
+           new DocumentGenerator().main( commandName, arguments ) ;
          }
        }
   ) ;

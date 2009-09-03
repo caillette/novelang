@@ -16,23 +16,13 @@
  */
 package novelang.configuration;
 
-import java.io.File;
+import novelang.produce.DocumentRequest;
 
 /**
  * @author Laurent Caillette
  */
-public interface BatchConfiguration {
+public interface SplitByChapterConfiguration extends BatchConfiguration {
 
-  /**
-   * Returns a Configuration.
-   * @return a non-null object.
-   */
-  ProducerConfiguration getProducerConfiguration() ;
-
-  /**
-   * Return the directory where to write generated documents to.
-   * @return a non-null object referencing an existing directory.
-   */
-  File getOutputDirectory() ;
+  DocumentRequest getDocumentRequest() ;
 
 }

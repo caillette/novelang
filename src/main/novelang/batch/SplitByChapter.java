@@ -14,45 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package novelang.batch;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
 
-import novelang.system.LogFactory;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.common.Problem;
-import novelang.configuration.DocumentGeneratorConfiguration;
 import novelang.configuration.ConfigurationTools;
+import novelang.configuration.SplitByChapterConfiguration;
 import novelang.configuration.parse.ArgumentException;
-import novelang.configuration.parse.DocumentGeneratorParameters;
+import novelang.configuration.parse.SplitByChapterParameters;
 import novelang.produce.DocumentProducer;
-import novelang.produce.DocumentRequest;
-import novelang.system.StartupTools;
 import novelang.system.Log;
+import novelang.system.LogFactory;
 
 /**
- * The main class for running document generation in command-line mode.
- *
- * The {@code Logger} instance is NOT held in statically-initialized final field as it would
- * trigger premature initialization, we want a call to {@link StartupTools} to happen first.
- *
  * @author Laurent Caillette
  */
-public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGeneratorParameters > {
+public class SplitByChapter extends AbstractDocumentGenerator< SplitByChapterParameters > {
 
-  private static final Log LOG = LogFactory.getLog( DocumentGenerator.class ) ;
+  private static final Log LOG = LogFactory.getLog( SplitByChapter.class ) ;
 
   public void main(
       String commandName,
       String[] arguments,
       File baseDirectory
   ) throws Exception {
-    
-    final DocumentGeneratorParameters parameters ;
+
+    final SplitByChapterParameters parameters ;
 
     parameters = createParametersOrExit( commandName, arguments, baseDirectory ) ;
 
@@ -63,7 +53,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
           asString( arguments )
       ) ;
 
-      final DocumentGeneratorConfiguration configuration =
+      final SplitByChapterConfiguration configuration =
           ConfigurationTools.createDocumentGeneratorConfiguration( parameters ); ;
       final File outputDirectory = configuration.getOutputDirectory();
       resetTargetDirectory( outputDirectory ) ;
@@ -71,7 +61,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
           new DocumentProducer( configuration.getProducerConfiguration() ) ;
       final List< Problem > allProblems = Lists.newArrayList() ;
 
-      processDocumentRequests( configuration, outputDirectory, documentProducer, allProblems ) ;
+      processDocumentRequest( configuration, outputDirectory, documentProducer, allProblems ) ;
 
       if( ! allProblems.isEmpty() ) {
         reportProblems( outputDirectory, allProblems ) ;
@@ -85,55 +75,27 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
     }
   }
 
-  protected DocumentGeneratorParameters createParameters(
+  private void processDocumentRequest(
+      final SplitByChapterConfiguration configuration,
+      final File outputDirectory,
+      final DocumentProducer documentProducer,
+      final List< Problem > allProblems
+  ) {
+    throw new UnsupportedOperationException( "processDocumentRequest" ) ;
+  }
+
+  protected SplitByChapterParameters createParameters(
       final String[] arguments,
       final File baseDirectory
   ) throws ArgumentException {
-    return new DocumentGeneratorParameters(
+    return new SplitByChapterParameters(
         baseDirectory,
         arguments
     );
   }
 
-  protected void processDocumentRequests(
-      final DocumentGeneratorConfiguration configuration,
-      final File outputDirectory,
-      final DocumentProducer documentProducer,
-      final List< Problem > allProblems 
-  ) throws Exception {
-    for( final DocumentRequest documentRequest : configuration.getDocumentRequests() ) {
-      Iterables.addAll(
-          allProblems,
-          processDocumentRequest(
-              documentRequest,
-              outputDirectory,
-              documentProducer
-          )
-      ) ;
-    }
-  }
-
   protected String getSpecificCommandLineParametersDescriptor() {
-    return " [OPTIONS] document1 [document2...]";
+    return " [OPTIONS] document-to-split.nlp";
   }
-
-
-  private static Iterable< Problem > processDocumentRequest(
-      DocumentRequest documentRequest,
-      File targetDirectory,
-      DocumentProducer documentProducer
-  ) throws Exception {
-    final File outputFile = createOutputFile(
-        targetDirectory,
-        documentRequest
-    ) ;
-    LOG.info( "Generating document file '%s'...", outputFile.getAbsolutePath() ) ;
-    final FileOutputStream outputStream = new FileOutputStream( outputFile ) ;
-    final Iterable< Problem > problems = documentProducer.produce( documentRequest, outputStream ) ;
-    outputStream.flush() ;
-    outputStream.close() ;
-    return problems ;
-  }
-
 
 }

@@ -14,25 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.configuration;
+package novelang.configuration.parse;
 
-import java.io.File;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 
 /**
+ * Common {@link Option} constants for parameters.
+ *
  * @author Laurent Caillette
  */
-public interface BatchConfiguration {
-
-  /**
-   * Returns a Configuration.
-   * @return a non-null object.
-   */
-  ProducerConfiguration getProducerConfiguration() ;
-
-  /**
-   * Return the directory where to write generated documents to.
-   * @return a non-null object referencing an existing directory.
-   */
-  File getOutputDirectory() ;
-
+/*package*/ class CommonOptions {
+  static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder
+      .withLongOpt( "output-dir" )
+      .withDescription( "Output directory for rendered documents" )
+      .hasArg()
+      .create()
+  ;
 }

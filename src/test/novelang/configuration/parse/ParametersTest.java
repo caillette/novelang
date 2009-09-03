@@ -33,7 +33,7 @@ import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
 
 /**
- * Tests for {@link GenericParameters}, {@link BatchParameters}, {@link DaemonParameters}.
+ * Tests for {@link GenericParameters}, {@link DocumentGeneratorParameters}, {@link DaemonParameters}.
  * Option names are hardcoded here in sort that we get warned if there is a change in
  * implementation.
  *
@@ -52,7 +52,7 @@ public class ParametersTest {
 
   @Test( expected = ArgumentException.class )
   public void voidBatchParameters() throws ArgumentException {
-    new BatchParameters( scratchDirectory, new String[ 0 ] ) ;
+    new DocumentGeneratorParameters( scratchDirectory, new String[ 0 ] ) ;
   }
 
   @Test
@@ -138,7 +138,7 @@ public class ParametersTest {
         "--",
         OUTPUT_FILE_NAME
     } ;
-    final BatchParameters batchParameters = new BatchParameters( scratchDirectory, arguments ) ;
+    final DocumentGeneratorParameters batchParameters = new DocumentGeneratorParameters( scratchDirectory, arguments ) ;
     assertOnIterable( batchParameters.getFontDirectories(), directoryAaa ) ;
     assertOnIterable(
         batchParameters.getDocumentRequests(),
@@ -150,7 +150,7 @@ public class ParametersTest {
   public void batchParametersWantDocumentRequests() {
     final String[] arguments = new String[ 0 ] ;
     try {
-      new BatchParameters( scratchDirectory, arguments ) ;
+      new DocumentGeneratorParameters( scratchDirectory, arguments ) ;
       fail( "Exception should have been thrown" ) ;
     } catch( ArgumentException e ) {
       LOG.info( e.getHelpPrinter().asString( ClassUtils.getShortClassName( getClass() ), 80 ) );

@@ -43,19 +43,19 @@ public class BatchTest {
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitWithIncorrectParameters() throws Exception {
-    DocumentGenerator.main( "tesing", new String[ 0 ] ) ;
+    new DocumentGenerator().main( "tesing", new String[ 0 ] ) ;
   }
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitBecauseHelpRequeted() throws Exception {
-    DocumentGenerator.main(
+    new DocumentGenerator().main(
         "tesing", 
         new String[] { GenericParameters.OPTIONPREFIX + GenericParameters.HELP_OPTION_NAME } ) ;
   }
 
   @Test
   public void generateOneDocumentOk() throws Exception {
-    DocumentGenerator.main(
+    new DocumentGenerator().main(
         "testing",
         new String[] { "/" + RENDERED_DOCUMENT_NAME },
         contentDirectory

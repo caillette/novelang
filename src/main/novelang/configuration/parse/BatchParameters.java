@@ -17,77 +17,26 @@
 package novelang.configuration.parse;
 
 import java.io.File;
-import java.util.List;
-
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import novelang.produce.DocumentRequest;
-import novelang.produce.RequestTools;
 
 /**
- * Parses command-line arguments for {@link novelang.batch.DocumentGenerator}.
- *
- * TODO support a --flatten-ouput option as rendered documents go in the same path as sources.
- * TODO write test ensuring that absolute and relative directories are correctly handled.
- *
  * @author Laurent Caillette
  */
-public class BatchParameters extends GenericParameters {
+public abstract class BatchParameters extends GenericParameters {
 
-  private static final Log LOG = LogFactory.getLog( BatchParameters.class ) ;
-
-  private final Iterable< DocumentRequest > documentRequests ;
   private final File outputDirectory ;
 
-  public BatchParameters( File baseDirectory, String[] parameters )
-      throws ArgumentException
-  {
-    super( baseDirectory, parameters );
-    final String[] sourceArguments = line.getArgs() ;
-    LOG.debug( "found: sources = %s", Lists.newArrayList( sourceArguments ) ) ;
 
-    if( sourceArguments.length == 0 ) {
-      throw new ArgumentException( "No source documents", helpPrinter ) ;
-    } else {
-      final List< DocumentRequest > requestList = Lists.newArrayList() ;
-      for( String sourceArgument : sourceArguments ) {
-        try {
-          if( ! sourceArgument.startsWith( "/" ) ) {
-            sourceArgument = "/" + sourceArgument ;
-          }
-          final DocumentRequest documentRequest =
-              RequestTools.createDocumentRequest( sourceArgument ) ;
-          if( null == documentRequest ) {
-            throw new IllegalArgumentException(
-                "Malformed document request: '" + sourceArgument + "'" ) ;
-          }
-          requestList.add( documentRequest ) ;
-        } catch( IllegalArgumentException e ) {
-          throw new ArgumentException( e, helpPrinter ) ;
-        }
-      }
-      documentRequests = ImmutableList.copyOf( requestList ) ;
-      LOG.debug( "Document requests = %s", documentRequests ) ;
-    }
-
-    outputDirectory = extractDirectory( baseDirectory, OPTION_OUTPUT_DIRECTORY, line, false ) ;
-  }
-
-  protected void enrich( Options options ) {
-    options.addOption( OPTION_OUTPUT_DIRECTORY ) ;
-  }
-  
-  /**
-   * Returns document requests.
-   * @return a non-null object iterating over no nulls, containing at least one element.
-   */
-  public Iterable< DocumentRequest > getDocumentRequests() {
-    return documentRequests ;
+  public BatchParameters(
+      File baseDirectory,
+      String[] parameters
+  ) throws ArgumentException {
+    super( baseDirectory, parameters ) ;
+    outputDirectory = extractDirectory(
+        baseDirectory,
+        CommonOptions.OPTION_OUTPUT_DIRECTORY,
+        line,
+        false
+    ) ;
   }
 
   /**
@@ -98,17 +47,9 @@ public class BatchParameters extends GenericParameters {
     return outputDirectory ;
   }
 
+
   public String getOutputDirectoryOptionDescription() {
-    return createOptionDescription( OPTION_OUTPUT_DIRECTORY ) ;
+    return createOptionDescription( CommonOptions.OPTION_OUTPUT_DIRECTORY ) ;
   }
-
-  private static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder
-      .withLongOpt( "output-dir" )
-      .withDescription( "Output directory for rendered documents" )
-      .hasArg()
-      .create()
-  ;
-
-
-
+  
 }

@@ -16,23 +16,18 @@
  */
 package novelang.configuration;
 
-import java.io.File;
+import novelang.produce.DocumentRequest;
 
 /**
  * @author Laurent Caillette
  */
-public interface BatchConfiguration {
+public interface DocumentGeneratorConfiguration extends BatchConfiguration {
 
   /**
-   * Returns a Configuration.
-   * @return a non-null object.
+   * Returns documents requests.
+   * @return a non-null object iterating over no null, with at least one element.
    */
-  ProducerConfiguration getProducerConfiguration() ;
+  Iterable< DocumentRequest > getDocumentRequests() ;
 
-  /**
-   * Return the directory where to write generated documents to.
-   * @return a non-null object referencing an existing directory.
-   */
-  File getOutputDirectory() ;
 
 }

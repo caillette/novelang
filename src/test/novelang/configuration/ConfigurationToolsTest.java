@@ -36,7 +36,7 @@ import novelang.common.filefixture.Filer;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.configuration.parse.ArgumentException;
-import novelang.configuration.parse.BatchParameters;
+import novelang.configuration.parse.DocumentGeneratorParameters;
 import novelang.configuration.parse.DaemonParameters;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
@@ -109,12 +109,12 @@ public class ConfigurationToolsTest {
   public void createBatchConfigurationWithNoDocumentRequest()
       throws ArgumentException, FOPException
   {
-    ConfigurationTools.createBatchConfiguration( createBatchParameters() ) ;
+    ConfigurationTools.createDocumentGeneratorConfiguration( createBatchParameters() ) ;
 
   }
 
   public void createBatchConfiguration() throws ArgumentException, FOPException {
-    final BatchConfiguration configuration = ConfigurationTools.createBatchConfiguration(
+    final DocumentGeneratorConfiguration configuration = ConfigurationTools.createDocumentGeneratorConfiguration(
         createBatchParameters( "1.html", "2.html" ) ) ;
 
     Assert.assertEquals( new File( SystemUtils.USER_DIR ), configuration.getOutputDirectory() ) ;
@@ -314,16 +314,16 @@ public class ConfigurationToolsTest {
     return new DaemonParameters( baseDirectory, arguments ) ;
   }
 
-  private final BatchParameters createBatchParameters( String... arguments )
+  private final DocumentGeneratorParameters createBatchParameters( String... arguments )
       throws ArgumentException
   {
     return createBatchParameters( scratchDirectory, arguments ) ;
   }
 
-  private final BatchParameters createBatchParameters( File baseDirectory, String... arguments )
+  private final DocumentGeneratorParameters createBatchParameters( File baseDirectory, String... arguments )
       throws ArgumentException
   {
-    return new BatchParameters( baseDirectory, arguments ) ;
+    return new DocumentGeneratorParameters( baseDirectory, arguments ) ;
   }
 
 
