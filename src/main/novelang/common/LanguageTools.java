@@ -17,6 +17,7 @@
 package novelang.common;
 
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Utility class for language constructs.
@@ -76,14 +77,16 @@ public class LanguageTools {
   }
 
 
-  private static final String UNIX_LINE_BREAK = "\u0010" ;
+  public static final String LINE_FEED = "" + ( ( char ) 10 ) ;
+  public static final String CARRIAGE_RETURN = "" + ( ( char ) 13 ) ;
 
-  private static final String NON_UNIX_LINE_BREAK_PATTERN =
-      Pattern.quote( "\u0013" ) + Pattern.quote( UNIX_LINE_BREAK ) + "?"
-  ;
+  private static final String UNIX_LINE_BREAK = LINE_FEED ;
+
+  private static final Pattern NON_UNIX_LINE_BREAK_PATTERN =
+      Pattern.compile( CARRIAGE_RETURN + LINE_FEED + "?" ) ;
 
   /**
-   * Replaces CR (Carriage Return, u000D) and CR + LF sequences by a single LF (Line Feed, u000A)
+   * Replaces CR (Carriage Return, u000D) and CR + LF sequences by a single LF (Line Feed, u000A),
    * in the Unix style.
    *
    * <a href="http://en.wikipedia.org/wiki/Newline">See Wikipedia article on New Line</a>.
@@ -91,7 +94,13 @@ public class LanguageTools {
    * @param text a non-null String.
    * @return a non-null String with normalized line breaks.
    */
-  public static String normaliseLineBreaks( final String text ) {
-    return text.replaceAll( NON_UNIX_LINE_BREAK_PATTERN, UNIX_LINE_BREAK ) ;
+  public static String unixifyLineBreaks( final String text ) {
+      final StringBuffer buffer = new StringBuffer() ; // Matcher doesn't like StringBuilder.
+      final Matcher matcher = NON_UNIX_LINE_BREAK_PATTERN.matcher( text ) ;
+      while( matcher.find() ) {
+        matcher.appendReplacement( buffer, /*"#"*/UNIX_LINE_BREAK ) ;
+      }
+      matcher.appendTail( buffer ) ;
+      return buffer.toString() ;
   }
 }
