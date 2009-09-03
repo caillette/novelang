@@ -1,4 +1,4 @@
-== Status and history
+%%== Status and history
 
 Novelang is stable, with more thant 400 automated tests. 
 It generates a PDF document of 730 pages (`330,000` words) in 15 seconds with an Intel dual-core CPU

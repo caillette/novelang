@@ -18,12 +18,21 @@ package novelang.configuration.parse;
 
 import java.io.File;
 
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+
 /**
  * @author Laurent Caillette
  */
 public abstract class BatchParameters extends GenericParameters {
 
   private final File outputDirectory ;
+  static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder
+      .withLongOpt( "output-dir" )
+      .withDescription( "Output directory for rendered documents" )
+      .hasArg()
+      .create()
+  ;
 
 
   public BatchParameters(
@@ -33,7 +42,7 @@ public abstract class BatchParameters extends GenericParameters {
     super( baseDirectory, parameters ) ;
     outputDirectory = extractDirectory(
         baseDirectory,
-        CommonOptions.OPTION_OUTPUT_DIRECTORY,
+        OPTION_OUTPUT_DIRECTORY,
         line,
         false
     ) ;
@@ -49,7 +58,7 @@ public abstract class BatchParameters extends GenericParameters {
 
 
   public String getOutputDirectoryOptionDescription() {
-    return createOptionDescription( CommonOptions.OPTION_OUTPUT_DIRECTORY ) ;
+    return createOptionDescription( OPTION_OUTPUT_DIRECTORY ) ;
   }
   
 }

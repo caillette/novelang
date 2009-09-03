@@ -18,8 +18,9 @@ package novelang.batch;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.nio.charset.Charset;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
@@ -27,6 +28,7 @@ import com.google.common.collect.ImmutableList;
 import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
+import novelang.common.StylesheetMap;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ExplodeLevelsConfiguration;
 import novelang.configuration.ProducerConfiguration;
@@ -38,6 +40,9 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.parser.NodeKind;
 import novelang.rendering.RenditionMimeType;
+import novelang.rendering.GenericRenderer;
+import novelang.rendering.PlainTextWriter;
+import novelang.rendering.NlpWriter;
 
 /**
  * Writes top levels into separate files.
@@ -103,7 +108,6 @@ public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParam
         if( child.isOneOf( NodeKind._LEVEL ) ) {
           processLevel(
               configuration.getProducerConfiguration(),
-              configuration.getDocumentRequest(),
               child,
               outputDirectory
           ) ;
@@ -117,35 +121,59 @@ public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParam
 
   private void processLevel(
       final ProducerConfiguration producerConfiguration,
-      final DocumentRequest documentRequest,
       final SyntacticTree level,
       final File outputDirectory
   ) throws Exception {
-    final String title = getLevelTitle( level ) ;
+    final Charset charset = producerConfiguration.getRenderingConfiguration().getDefaultCharset() ;
+    final String title = createLevelTitle(
+        level,
+        charset
+    ) ;
     final File destinationFile = new File(
         outputDirectory,
-        title + RenditionMimeType.NLP.getFileExtension()
+        title + "." + RenditionMimeType.NLP.getFileExtension()
     ) ;
     LOG.debug( "Outputting to file '" + destinationFile.getAbsolutePath() + "'" ) ;
     final FileOutputStream fileOutputStream = new FileOutputStream( destinationFile ) ;
-    new DocumentProducer( producerConfiguration ).produce( documentRequest, fileOutputStream ) ;
+    new GenericRenderer( new NlpWriter(
+        producerConfiguration.getRenderingConfiguration(),
+        null,
+        charset
+    ) ).render( new MyRenderable( level, charset ), fileOutputStream ) ;
     fileOutputStream.flush() ;
     fileOutputStream.close() ;
   }
 
   private int titleGenerator = 0 ;
 
-  private String getLevelTitle( final SyntacticTree level ) {
+  private String createLevelTitle(
+      final SyntacticTree level,
+      final Charset charset
+  ) throws Exception {
     for( final SyntacticTree child : level.getChildren() ) {
       if( child.isOneOf( NodeKind.LEVEL_TITLE ) ) {
-        final String title = child.getChildAt( 0 ).getText();
+        final String title = textualize( child.getChildAt( 0 ), charset ) ;
         LOG.debug( "Found title: '" + title + "'" ) ;
-        return title.replace( ' ', '_' ) ; // TODO support more cases.
+        return title.replace( ' ', '_' ) ; // TODO replace more filename-wrecking chars.
       }
     }
     final String generatedTitle = String.format( "_%d3", titleGenerator++ );
     LOG.debug( "Generated title: '" + generatedTitle + "'" ) ;
     return generatedTitle ;
+  }
+
+  /**
+   * TODO: move this into some shared library, we need this elsewhere.
+   */
+  private String textualize( final SyntacticTree tree, final Charset charset ) throws Exception {
+
+    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
+    new GenericRenderer( new PlainTextWriter( charset ) ).render(
+        new MyRenderable( tree, charset ),
+        byteArrayOutputStream
+    ) ;
+
+    return new String( byteArrayOutputStream.toByteArray(), charset.name() ) ;
   }
 
   protected ExplodeLevelsParameters createParameters(
@@ -162,4 +190,33 @@ public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParam
     return " [OPTIONS] document-to-split.nlp";
   }
 
+  private static class MyRenderable implements Renderable {
+    private final SyntacticTree tree;
+    private final Charset charset;
+
+    public MyRenderable( SyntacticTree tree, Charset charset ) {
+      this.tree = tree;
+      this.charset = charset;
+    }
+
+    public Iterable<Problem> getProblems() {
+      return ImmutableList.of() ;
+    }
+
+    public Charset getRenderingCharset() {
+      return charset;
+    }
+
+    public boolean hasProblem() {
+      return false ;
+    }
+
+    public SyntacticTree getDocumentTree() {
+      return tree;
+    }
+
+    public StylesheetMap getCustomStylesheetMap() {
+      return null ;
+    }
+  }
 }

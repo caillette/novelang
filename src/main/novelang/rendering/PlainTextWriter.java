@@ -49,26 +49,15 @@ public class PlainTextWriter implements FragmentWriter {
   ) throws Exception {
     final OutputStreamWriter outputStreamWriter = new OutputStreamWriter( outputStream, charset ) ;        
     writer = new PrintWriter( outputStreamWriter ) ;
-    writer.append( "Timestamp: " );
-    writer.append(
-        MetadataHelper.TIMESTAMP_FORMATTER.print( documentMetadata.getCreationTimestamp() ) ) ;
-    writer.println() ;
   }
 
   public void finishWriting() throws Exception {
     writer.flush() ;
   }
 
-  public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
-    final String indentPlus = spaces( kinship.getDepth() + 1 ) ;
-    writer.append( kinship.getCurrent().name() ).append( " { \n" ).append( indentPlus ) ;
-  }
+  public void start( Nodepath kinship, boolean wholeDocument ) throws Exception { }
 
-  public void end( Nodepath path ) throws Exception {
-    final String indent = spaces( path.getDepth() ) ;
-    final String indentMinus = spaces( path.getDepth() - 1 ) ;
-    writer.append( "\n" ).append( indent ).append( "}\n" ).append( indentMinus ) ;
-  }
+  public void end( Nodepath path ) throws Exception { }
 
   public void write( Nodepath path, String word ) throws Exception {
     writer.append( word ) ;

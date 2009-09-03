@@ -75,7 +75,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
   }
 
   protected void enrich( Options options ) {
-    options.addOption( CommonOptions.OPTION_OUTPUT_DIRECTORY ) ;
+    options.addOption( OPTION_OUTPUT_DIRECTORY ) ;
   }
   
   /**
