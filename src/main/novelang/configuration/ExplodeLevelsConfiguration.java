@@ -19,9 +19,11 @@ package novelang.configuration;
 import novelang.produce.DocumentRequest;
 
 /**
+ * Configuration used by {@link novelang.batch.ExplodeLevels}.
+ *
  * @author Laurent Caillette
  */
-public interface SplitByChapterConfiguration extends BatchConfiguration {
+public interface ExplodeLevelsConfiguration extends BatchConfiguration {
 
   DocumentRequest getDocumentRequest() ;
 
