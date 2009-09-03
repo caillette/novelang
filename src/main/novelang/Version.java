@@ -16,8 +16,6 @@
  */
 package novelang;
 
-import com.google.common.base.Preconditions;
-
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Comparator;
@@ -45,13 +43,24 @@ public final class Version {
   }
 
   public Version( final int major, final int minor, final int fix ) {
-    Preconditions.checkArgument( major >= 0 ) ;
-    Preconditions.checkArgument( minor >= 0 ) ;
-    Preconditions.checkArgument( fix >= 0 ) ;
+    checkArgument( "major number should be >= 0, it is " + major, major >= 0 ) ;
+    checkArgument( "minor number should be >= 0, it is " + minor, minor >= 0 ) ;
+    checkArgument( "fix number should be >= 0, it is " + fix, fix >= 0 ) ;
     snapshot = false ;
     this.major =  major ;
     this.minor = minor ;
     this.fix = fix ;
+  }
+
+  /**
+   * Replaces {@link com.google.common.base.Preconditions} because when rebuilding the class
+   * with modified {@link #PRODUCT_VERSION_AS_STRING} we don't want to carry additional
+   * dependencies. 
+   */
+  private void checkArgument( final String message, final boolean condition ) {
+    if( ! condition ) {
+      throw new IllegalArgumentException( message ) ;
+    }
   }
 
   public int getMajor() {
