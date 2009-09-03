@@ -15,7 +15,7 @@ http://novelang.blogspot.com
 
 
 
-=== Version `0.33.1`
+=== `0.33.1`
 
 --- Enhanced error reporting when parsing an ill-formed Book file.
 
@@ -23,7 +23,7 @@ http://novelang.blogspot.com
 
 
 
-=== Version `0.33.0`
+=== `0.33.0`
 
 //This version introduces changes that may break existing documents and startup scripts.//
 
@@ -42,12 +42,12 @@ Novelang documentation works).
 - Books now scan a directory correctly when ``recurse`` option is not set.
 
 
-=== Version `0.32.1`
+=== `0.32.1`
 
 --- Fixed ``--serve-localhost-only`` command-line option: now works with IPv6.  
 
 
-=== Version `0.32.0`
+=== `0.32.0`
 
 --- New ``--serve-localhost-only`` command-line option for HTTP dæmon.
 
@@ -58,7 +58,7 @@ Novelang documentation works).
 - Display version number in documentation.
 
 
-=== Version `0.31.1`
+=== `0.31.1`
 
 --- Minor fixes around block after tilde. They may appear inside embedded lists and block inside
 solidus pairs. 
@@ -68,7 +68,7 @@ solidus pairs.
 --- Now character table contains decimal values.
 
 
-=== Version `0.31.0`
+=== `0.31.0`
 
 //This version introduces changes that may break the rendering of existing documents.//
 
@@ -78,7 +78,7 @@ solidus pairs.
 --- Fixed some minor bugs occuring under Windows^«registered-sign».
 
 
-=== Version `0.30.0`
+=== `0.30.0`
 
 --- Bug fixes:
 - Handle more URL: HTTPS, non-standard query parameters.
@@ -92,7 +92,7 @@ solidus pairs.
 
 
 
-=== Version `0.29.0`
+=== `0.29.0`
 
 //This version introduces changes that may break existing documents.//
 
@@ -111,7 +111,7 @@ separate from the ~preceding`/`~following word.
 http://novelang.blogspot.com/2009/05/pretty-color-palette-for-tags.html
 
 
-=== Version `0.28.0`
+=== `0.28.0`
 
 
 --- Tag-based document filtering supported in URL parameters (``tags=tag-1;tag-2``).
@@ -123,13 +123,13 @@ This is faster than JavaScript-based one, and makes the feature available to PDF
 
 
 
-=== Version `0.27.1`
+=== `0.27.1`
 
 --- Fixed MIME type of documents served by HTTP dæmon.
 
 
 
-=== Version `0.27.0`
+=== `0.27.0`
 
 --- Experimental support for tag-based document filtering with default HTML stylesheet. 
 This is purely Javascript-based (runs all in the browser) and performance are disastrous on big 
@@ -141,7 +141,7 @@ documents.
 
 
 
-=== Version `0.26.0`
+=== `0.26.0`
 
 //This version introduces changes that may break existing stylesheets.//
 
@@ -156,7 +156,7 @@ is now ``default-html.xsl``.
 
 
 
-=== Version `0.25.0`
+=== `0.25.0`
 
 //This version introduces changes that may break existing stylesheets.//
 
@@ -167,19 +167,19 @@ is now ``default-html.xsl``.
  
 
 
-=== Version `0.24.0`
+=== `0.24.0`
 
 --- Experimental support for embedded lists: hierarchical lists inside paragraphs.
 
 
-=== Version `0.23.0`
+=== `0.23.0`
 
 --- Named URL.
 
 --- ``n:url`` element gets wrapped into ``n:external-link``.
 
 
-=== Version `0.22.0`
+=== `0.22.0`
 
 //This version introduces changes that may break existing documents and stylesheets.//
 
@@ -193,14 +193,14 @@ is now ``default-html.xsl``.
 ``n:image-height``, with measure unit if available. For raster images, it is always ``px`` unit.
 
 
-=== Version `0.21.0`
+=== `0.21.0`
 
 --- Experimental support for raster and vector images. Known limitation: only works for Parts.
 
 --- Fixed argument parsing of batch argument generator (reported by Lmre).
 
 
-=== Version `0.20.0`
+=== `0.20.0`
 
 --- Tables! See part syntax for details.
 
@@ -212,7 +212,7 @@ specified remains ``[pdf,html,nlp].xsl``. This makes possible to override defaul
 specifying a new stylesheet name.
 
 
-=== Version `0.19.0`
+=== `0.19.0`
 
 --- Default charset for source documents is now `UTF-8`.
 
@@ -230,12 +230,12 @@ java -jar ...novelang-VERSION.jar generate <options>
 >>>
 
 
-=== Version `0.18.0`
+=== `0.18.0`
 
 --- Experimental support for custom charset for both source and rendered documents.
 
 
-=== Version `0.17.0`
+=== `0.17.0`
 
 //This version introduces changes that may break existing documents and stylesheets.//
 
@@ -244,7 +244,7 @@ java -jar ...novelang-VERSION.jar generate <options>
 --- Unlimited level nesting. 
 
 
-=== Version `0.16.0`
+=== `0.16.0`
 
 //This version introduces changes that may break existing documents and stylesheets.//
 
@@ -260,7 +260,7 @@ instead of three asterisks.
 --- Option ``createchapter`` of the ``insert`` command renamed to ``createlevel``.
 
 
-=== Version `0.15.0`
+=== `0.15.0`
 
 --- Stylesheets containing XPath expressions relative to non-existing grammar token are detected 
 and rejected.
@@ -277,13 +277,13 @@ in Java code generated from the grammar.
 --- Fixed: now some broken Part causes the whole Book document generation to fail when it's a recursive include.
 
 
-=== Version `0.14.0`
+=== `0.14.0`
 
 --- Refactored ANTLR grammar for supporting some planned features. 
 Known regression: some useful characters missing from font list.
 
 
-=== Version `0.13.0`
+=== `0.13.0`
 
 --- Better detection of text inconsistencies (lexer now reports problems).
 
@@ -293,7 +293,7 @@ Known regression: some useful characters missing from font list.
 ``src/test-resources``.
 
 
-=== Version `0.12.0`
+=== `0.12.0`
 
 --- Enhanced font list: looks better, displays more useful characters, reports broken fonts.
 
@@ -304,7 +304,7 @@ now it is a ``org.joda.time.DateTime`` for more formatting options.
 no longer limited to recursive addition; now it applies to single-part insert.
 
 
-=== Version `0.11.0`
+=== `0.11.0`
 
 --- Multiple font directories. No longer need to give special names to font files 
 (internal name recognized automatically).
@@ -315,7 +315,7 @@ no longer limited to recursive addition; now it applies to single-part insert.
 
 
 
-=== Version `0.10.0`
+=== `0.10.0`
 
 --- Barcode generation in PDF with 
   "Barcode4J"
@@ -325,7 +325,7 @@ http://barcode4j.sourceforge.net/2.0/fop-ext.html
 --- Fixed character escaping with HTML.
 
 
-=== Version `0.9.0`
+=== `0.9.0`
 
 --- Custom fonts for PDFs.
 
@@ -342,7 +342,7 @@ http://barcode4j.sourceforge.net/2.0/fop-ext.html
 --- Documentation updates.
 
 
-=== Version `0.8.0`
+=== `0.8.0`
 
 --- Directory listing.
 
@@ -353,17 +353,17 @@ http://barcode4j.sourceforge.net/2.0/fop-ext.html
 --- Plenty of bug fixes.
 
 
-=== Version `0.7.0`
+=== `0.7.0`
 
 --- Enhanced literal and character escaping.
 
 
-=== Version `0.6.0`
+=== `0.6.0`
 
 --- Multiple stylesheets.
 
 
-=== Version `0.5.0`
+=== `0.5.0`
 
 --- First public release.
 

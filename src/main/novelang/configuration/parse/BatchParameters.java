@@ -17,9 +17,19 @@
 package novelang.configuration.parse;
 
 import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
+
+import novelang.common.Renderable;
+import novelang.common.SyntacticTree;
+import novelang.common.Problem;
+import novelang.common.StylesheetMap;
+import novelang.rendering.GenericRenderer;
+import novelang.rendering.PlainTextWriter;
+import com.google.common.collect.ImmutableList;
 
 /**
  * @author Laurent Caillette
@@ -60,5 +70,5 @@ public abstract class BatchParameters extends GenericParameters {
   public String getOutputDirectoryOptionDescription() {
     return createOptionDescription( OPTION_OUTPUT_DIRECTORY ) ;
   }
-  
+
 }
