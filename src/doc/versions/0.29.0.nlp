@@ -1,0 +1,15 @@
+ 
+
+//This version introduces changes that may break existing documents.//
+
+--- Better handling of spaces inside blocks of literal (trimming, collapsing, replacing by no-break spaces).
+
+--- Consecutive blocks of literal get a zero-width space automatically inserted inbetween.
+
+--- When a block of literal inside grave accents is immediately ~preceded`/`~followed by a word, a zero-width space gets automatically inserted inbetween.
+
+--- In case of a word ~starting`/`~ending with an apostrophe, the rendering adds a whitespace to separate from the ~preceding`/`~following word.
+
+--- Added the 
+  "color palette editor"  
+http://novelang.blogspot.com/2009/05/pretty-color-palette-for-tags.html

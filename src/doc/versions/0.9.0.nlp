@@ -1,0 +1,15 @@
+
+
+--- Custom fonts for PDFs.
+
+--- Hyphenation for PDFs.
+
+--- New ``$style`` parameter for the ``insert`` function.
+
+--- Superscript.
+
+--- XSLT extension : plain text numbering. See chapter on custom stylesheets.
+
+--- Fixed import bug when using ``punctuation-FR.xsl``.
+
+--- Documentation updates.

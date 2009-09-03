@@ -1,0 +1,7 @@
+
+
+--- Tag-based document filtering supported in URL parameters (``tags=tag-1;tag-2``). This is faster than JavaScript-based one, and makes the feature available to PDF and other formats.
+
+--- Report line number in case of unclosed block delimiter.
+
+--- Better logging : more concise messages, added some missing stuff.

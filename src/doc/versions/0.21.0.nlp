@@ -1,0 +1,5 @@
+
+
+--- Experimental support for raster and vector images. Known limitation : only works for Parts.
+
+--- Fixed argument parsing of batch argument generator (reported by Lmre).

@@ -1,0 +1,13 @@
+ 
+
+//This version introduces changes that may break existing documents and stylesheets.//
+
+--- Brand new naming scheme for syntactic nodes !
+
+--- Chapters and sections don't exist anymore. All what stylesheets will see are "levels".
+
+--- Top-level delimiter (formerly "chapter") in Part now starting with two equal signs ``==`` instead of three asterisks.
+
+--- Character escape now basing on Unicode name, plus optional HTML entity name.
+
+--- Option ``createchapter`` of the ``insert`` command renamed to ``createlevel``.

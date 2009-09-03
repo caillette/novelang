@@ -1,0 +1,7 @@
+
+
+--- New ``--serve-localhost-only`` command-line option for HTTP dæmon.
+
+--- Minor fixes around block after tilde. They may appear in blocks inside hyphen pairs.
+
+--- Minor enhancements to build script :Automated blog posting for a new release.Display version number in documentation.

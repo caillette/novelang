@@ -1,0 +1,7 @@
+
+
+--- Multiple font directories. No longer need to give special names to font files (internal name recognized automatically).
+
+--- Normalized command-line arguments, no more system properties.
+
+--- No longer need for font-metric files.

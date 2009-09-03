@@ -9,6 +9,8 @@ insert file:introduction.nlp
 
 insert file:status.nlp
 
+insert file:versions/. createlevel levelabove=2
+
 insert file:rationale.nlp
 
 insert file:part-syntax.nlp

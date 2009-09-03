@@ -1,0 +1,18 @@
+
+
+--- Default charset for source documents is now `UTF-8`.
+
+--- Every character may be escaped using its Unicode name.
+
+--- Batch document generator.
+
+--- HTTP dæmon now started with additional ``httpdaemon`` command name. 
+
+The new command-line syntax now is :
+
+<<<
+java -jar ...novelang-VERSION.jar httpdaemon <options>
+java -jar ...novelang-VERSION.jar generate <options>
+>>>
+  
+  

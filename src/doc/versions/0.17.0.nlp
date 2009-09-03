@@ -1,0 +1,7 @@
+ 
+
+//This version introduces changes that may break existing documents and stylesheets.//
+
+--- Renamed ``n:level-description`` to ``n:level-title``.
+
+--- Unlimited level nesting.

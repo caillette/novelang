@@ -1,0 +1,3 @@
+
+
+--- Fixed ``--serve-localhost-only`` command-line option : now works with IPv6.

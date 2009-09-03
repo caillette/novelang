@@ -1,0 +1,7 @@
+
+
+--- Tables ! See part syntax for details.
+
+--- Documentation now lists all characters allowed in a source document (see at the end).
+
+--- Default stylesheet are now modular : all logic is contained by bundled ``[pdf,html,nlp]-default.xsl`` while the stylesheet taken where no stylesheet name is specified remains ``[pdf,html,nlp].xsl``. This makes possible to override defaults without specifying a new stylesheet name.

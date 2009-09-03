@@ -1,0 +1,8 @@
+
+
+--- Barcode generation in PDF with 
+  "Barcode4J"  
+http://barcode4j.sourceforge.net/2.0/fop-ext.html
+.
+
+--- Fixed character escaping with HTML.

@@ -1,0 +1,9 @@
+
+
+--- Directory listing.
+
+--- New ``--port`` option for ``HttpDaemon``. Useful when default TCP port (8080) is busy.
+
+--- Fixed mispelling of "literal" (was "litteral").
+
+--- Plenty of bug fixes.

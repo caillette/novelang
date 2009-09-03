@@ -1,0 +1,5 @@
+
+
+--- Enhanced error reporting when parsing an ill-formed Book file.
+
+--- Added automatic whitespace between punctuation sign or various blocks, and leading apostrophe.

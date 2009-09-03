@@ -1,0 +1,7 @@
+
+
+--- Minor fixes around block after tilde. They may appear inside embedded lists and block inside solidus pairs.
+
+--- Better handling of automatic space addition.
+
+--- Now character table contains decimal values.

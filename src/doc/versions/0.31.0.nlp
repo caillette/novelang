@@ -1,0 +1,7 @@
+ 
+
+//This version introduces changes that may break the rendering of existing documents.//
+
+--- New feature : Block after tilde. This supercedes proximity rules for blocks inside grave accents and blocks inside grave accent pairs.
+
+--- Fixed some minor bugs occuring under Windows«registered-sign».

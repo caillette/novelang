@@ -1,0 +1,15 @@
+ 
+
+//This version introduces changes that may break existing documents and startup scripts.//
+
+--- New document extension ``.fo``, for debugging FO stylesheets.
+
+--- Removed the dollar sign ``$`` from Book syntax.
+
+--- Removed ``section`` command from Book syntax. No remplacement planned in the short term.
+
+--- Removed ``title`` command from Book syntax. Use document parametrization instead (see how Novelang documentation works).
+
+--- Renamed ``--serve-localhost-only`` to ``--serve-remotes`` and removed the boolean argument.
+
+--- Fixed some bugs.Books now scan a directory correctly when ``recurse`` option is not set.
