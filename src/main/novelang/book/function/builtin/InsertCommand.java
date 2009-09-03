@@ -202,7 +202,7 @@ public class InsertCommand extends AbstractCommand {
     if( depth == 0 ) {
       return document ;
     }
-    final SyntacticTree tree = document.getTreeAtStart() ;
+    final SyntacticTree tree = document.getTreeAtEnd() ;
     final int lastChildIndex = tree.getChildCount() - 1 ;
     if( lastChildIndex < 0 ) {
       throw new IllegalArgumentException( "Found no child tree while seeking level " + depth ) ;

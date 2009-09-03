@@ -24,6 +24,7 @@ import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
@@ -35,6 +36,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
+import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -229,6 +232,44 @@ public class InsertCommandTest {
 
   }
 
+  @Test
+  public void findLastLevel1() {
+
+    final SyntacticTree level = tree(
+        _LEVEL,
+        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
+    ) ;
+    final SyntacticTree book = tree(
+        BOOK,
+        tree( PARAGRAPH_REGULAR ),
+        level
+    ) ;
+    final Treepath< SyntacticTree > bookTreepath = Treepath.create( book ) ;
+
+    final Treepath< SyntacticTree > gotLevel = callFindLastLevel( bookTreepath, 1 ) ;
+    TreeFixture.assertEqualsNoSeparators( level, gotLevel.getTreeAtEnd() ) ;
+  }
+
+
+  @Test
+  public void findLastLevel2() {
+
+    final SyntacticTree level = tree(
+        _LEVEL,
+        tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
+    ) ;
+    final SyntacticTree book = tree(
+        BOOK,
+        tree( PARAGRAPH_REGULAR ),
+        tree( _LEVEL, level )
+    ) ;
+    final Treepath< SyntacticTree > bookTreepath = Treepath.create( book ) ;
+
+    final Treepath< SyntacticTree > gotLevel = callFindLastLevel( bookTreepath, 2 ) ;
+    TreeFixture.assertEqualsNoSeparators( level, gotLevel.getTreeAtEnd() ) ;
+  }
+
+
 
 // =======
 // Fixture
@@ -276,6 +317,18 @@ public class InsertCommandTest {
         BROKEN_FILENAME,
         brokenContentDirectory
     ) ;
+  }
+
+
+  private static Treepath< SyntacticTree > callFindLastLevel(
+      final Treepath<SyntacticTree> bookTreepath,
+      final int levelAbove
+  ) {
+    return Reflection.staticMethod( "findLastLevel" ).
+        withReturnType( new TypeRef< Treepath< SyntacticTree > >() {} ).
+        withParameterTypes( Treepath.class, Integer.TYPE ).
+        in( InsertCommand.class ).
+        invoke( bookTreepath, levelAbove );
   }
 
 }
