@@ -36,7 +36,6 @@ import org.junit.After;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -66,10 +65,9 @@ public class HttpDaemonTest {
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_NLP_RESOURCE_NAME ) ) ;
     final String shaved = shaveComments( generated ) ;
     save( "generated.nlp", generated ) ;
-    Assert.assertEquals(
-        LanguageTools.normaliseLineBreaks( goodNlpSource ),
-        LanguageTools.normaliseLineBreaks( shaved ) 
-    ) ;
+      final String normalizedNlpSource = LanguageTools.unixifyLineBreaks( goodNlpSource ) ;
+      final String normalizedShaved = LanguageTools.unixifyLineBreaks( shaved ) ;
+      Assert.assertEquals( normalizedNlpSource, normalizedShaved ) ;
 
   }
 
@@ -159,7 +157,7 @@ public class HttpDaemonTest {
 
   @Test
   public void listDirectoryContentWithTrailingSolidus() throws Exception {
-    setUp( "listDirectoryContent" ) ;
+    setUp( "listDirectoryContentWithTrailingSolidus" ) ;
 
     final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT + "/" ) ;
 
@@ -175,7 +173,7 @@ public class HttpDaemonTest {
 
   @Test
   public void listDirectoryContentWithSafari() throws Exception {
-    setUp( "listDirectoryContent" ) ;
+    setUp( "listDirectoryContentWithSafari" ) ;
 
     final HttpMethod method = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/",

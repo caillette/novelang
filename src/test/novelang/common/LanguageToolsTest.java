@@ -19,6 +19,9 @@ package novelang.common;
 import org.junit.Test;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static novelang.common.LanguageTools.LINE_FEED;
+import static novelang.common.LanguageTools.CARRIAGE_RETURN;
+import static novelang.common.LanguageTools.unixifyLineBreaks;
 
 /**
  * Tests for {@link LanguageTools}.
@@ -30,26 +33,47 @@ public class LanguageToolsTest {
   @Test
   public void lineBreakNormalizationDoingNothing() {
     final String s = "azer\tyuiop123" ;
-    assertEquals( s, LanguageTools.normaliseLineBreaks( s ) ) ;
+    assertEquals( s, unixifyLineBreaks( s ) ) ;
   }
 
   @Test
   public void simplestCrLfNormalization() {
-    assertEquals("\u0010", LanguageTools.normaliseLineBreaks( "\u0013\u0010" ) ) ; 
+    assertEquals( LINE_FEED, unixifyLineBreaks( CARRIAGE_RETURN + LINE_FEED ) ) ;
+  }
+
+  @Test
+  public void twoCrLfNormalizations() {
+    assertEquals(
+        LINE_FEED + LINE_FEED,
+        unixifyLineBreaks( CARRIAGE_RETURN + LINE_FEED + CARRIAGE_RETURN + LINE_FEED )
+    ) ;
   }
 
   @Test
   public void simplestCrNormalization() {
-    assertEquals("\u0010", LanguageTools.normaliseLineBreaks( "\u0013" ) ) ;
+    assertEquals( LINE_FEED, unixifyLineBreaks( CARRIAGE_RETURN ) ) ;
   }
 
   @Test
   public void complexLineBreakNormalization() {
     assertEquals(
-        "\u0010a\u0010b\u0010c",
-        LanguageTools.normaliseLineBreaks( "\u0013a\u0010b\u0013\u0010c" )
+        LINE_FEED + "a" + LINE_FEED + "b" + LINE_FEED + "c",
+        unixifyLineBreaks(
+                CARRIAGE_RETURN + "a" + LINE_FEED + "b" + CARRIAGE_RETURN + LINE_FEED + "c" )
     ) ;
   }
+
+  @Test
+  public void getSureThatWeDoEscapeRightCharacters() {
+      final String stringOfRawChars = "" + ( ( char ) 13 ) + ( ( char ) 10 );
+      final String stringOfUnicode = "\u0013\u0010";
+      Assert.assertFalse( stringOfUnicode.equals( stringOfRawChars ) ) ; 
+  }
+
+
+// =======
+// Fixture
+// =======
 
 
 }
