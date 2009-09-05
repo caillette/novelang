@@ -28,10 +28,10 @@ import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
 import novelang.configuration.ConfigurationTools;
-import novelang.configuration.ExplodeLevelsConfiguration;
+import novelang.configuration.LevelExploderConfiguration;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.parse.ArgumentException;
-import novelang.configuration.parse.ExplodeLevelsParameters;
+import novelang.configuration.parse.LevelExploderParameters;
 import novelang.produce.DocumentProducer;
 import novelang.system.Log;
 import novelang.system.LogFactory;
@@ -46,9 +46,9 @@ import novelang.rendering.RenderingTools;
  *
  * @author Laurent Caillette
  */
-public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParameters > {
+public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParameters> {
 
-  private static final Log LOG = LogFactory.getLog( ExplodeLevels.class ) ;
+  private static final Log LOG = LogFactory.getLog( LevelExploder.class ) ;
 
   public void main(
       String commandName,
@@ -56,7 +56,7 @@ public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParam
       File baseDirectory
   ) throws Exception {
 
-    final ExplodeLevelsParameters parameters ;
+    final LevelExploderParameters parameters ;
 
     parameters = createParametersOrExit( commandName, arguments, baseDirectory ) ;
 
@@ -67,7 +67,7 @@ public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParam
           asString( arguments )
       ) ;
 
-      final ExplodeLevelsConfiguration configuration =
+      final LevelExploderConfiguration configuration =
           ConfigurationTools.createExplodeLevelsConfiguration( parameters ); ;
       final File outputDirectory = configuration.getOutputDirectory();
       resetTargetDirectory( outputDirectory ) ;
@@ -93,7 +93,7 @@ public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParam
   }
 
   private Iterable< Problem > processDocumentRequest(
-      final ExplodeLevelsConfiguration configuration,
+      final LevelExploderConfiguration configuration,
       final File outputDirectory,
       final DocumentProducer documentProducer
   ) {
@@ -159,11 +159,11 @@ public class ExplodeLevels extends AbstractDocumentGenerator< ExplodeLevelsParam
     return generatedTitle ;
   }
 
-  protected ExplodeLevelsParameters createParameters(
+  protected LevelExploderParameters createParameters(
       final String[] arguments,
       final File baseDirectory
   ) throws ArgumentException {
-    return new ExplodeLevelsParameters(
+    return new LevelExploderParameters(
         baseDirectory,
         arguments
     );

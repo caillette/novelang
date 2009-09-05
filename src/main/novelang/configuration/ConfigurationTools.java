@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableList;
 import novelang.configuration.parse.DocumentGeneratorParameters;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.GenericParameters;
-import novelang.configuration.parse.ExplodeLevelsParameters;
+import novelang.configuration.parse.LevelExploderParameters;
 import novelang.configuration.parse.BatchParameters;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
@@ -143,15 +143,15 @@ public class ConfigurationTools {
     } ;
   }
 
-  public static ExplodeLevelsConfiguration createExplodeLevelsConfiguration(
-      final ExplodeLevelsParameters parameters
+  public static LevelExploderConfiguration createExplodeLevelsConfiguration(
+      final LevelExploderParameters parameters
   ) throws FOPException {
     final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
 
     final File outputDirectory ;
     outputDirectory = extractOutputDirectory( parameters ) ;
 
-    return new ExplodeLevelsConfiguration() {
+    return new LevelExploderConfiguration() {
       public ProducerConfiguration getProducerConfiguration() {
         return producerConfiguration ;
       }

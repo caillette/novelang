@@ -1,4 +1,7 @@
-== Batch document generator
+
+== Batch commands
+
+=== Batch document generator
 
 The batch document generator is a batch tool generating one or more documents at once.
 A typical usage is from a shell script.
@@ -20,9 +23,7 @@ The batch document genrator has the same options as the HTTP dæemon with follow
 hyphen minus: ``generate --font-dirs dir1 dir2 -- /document.html``
 
 
-The batch document generator supports those additional options:
-
-=== The ``--output-dir`` option
+The batch document generator supports one additional option: ``--output-dir``
 
 The ``--output-dir`` option sets the output directory, where rendered documents are generated to.
 
@@ -34,3 +35,29 @@ java -jar $NOVELANG_DIR/novelang-VERSION.jar generate
 Default value is ``output``.
 
 
+=== Level exploder
+
+The level exploder is a batch tools for generating multiple documents from the levels of one 
+existing document. A typical usage is for slimming down a document that has become too big. 
+
+Document is requested with a path relative to the directory the level exploder was launched from.
+
+If current directory contains a ``big.nlp`` file with three levels named "one", "two" and "three"
+then following invocation will generate three files named ``output/one.nlp``, ``output/two.nlp``
+and ``output/three.nlp``:
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar explodelevels
+  /big.nlp
+>>>
+
+The level exploder supports one additional option: ``--output-dir``
+
+The ``--output-dir`` option sets the output directory, where rendered documents are generated to.
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar explodelevels
+  --output-dir exploded /big.nlp
+>>>
+
+Default value is ``output``.

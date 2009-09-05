@@ -1,0 +1,7 @@
+--- New ``levelabove`` option for ``insert`` book command.
+
+--- New ``explodelevel`` command for splitting one document's levels into several parts.
+
+--- Fixed: paragraph as list did not support indented embedded list items .
+
+--- Fixed build under Windows XP.

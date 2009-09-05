@@ -33,11 +33,18 @@ The ``recurse`` option scans parts in subdirectories.
 insert file:. recurse
 >>>
 
-The ``createlevel`` option adds the content of the file under one chapter element.
-The chapter title is the filename, path and ``.nlp`` extension being trimmed.
+The ``createlevel`` option adds the content of the file under one new level.
+The level title is the filename, path and ``.nlp`` extension being trimmed.
 
 <<<
 insert file:. recurse createlevel
+>>>
+
+The ``levelabove`` option adds the content of the ~file(s) under the last previously created
+level.
+
+<<<
+insert file:some-part.nlp levelabove=2
 >>>
 
 The ``style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added part.

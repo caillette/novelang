@@ -21,7 +21,7 @@ import java.io.PrintStream;
 
 import com.google.common.collect.ImmutableMap;
 import novelang.batch.DocumentGenerator;
-import novelang.batch.ExplodeLevels;
+import novelang.batch.LevelExploder;
 import novelang.daemon.HttpDaemon;
 import novelang.system.StartupTools;
 import novelang.system.EnvironmentTools;
@@ -115,7 +115,7 @@ public class Main {
       "explodelevels",
        new MainCaller() {
          public void main( String commandName, String[] arguments ) throws Exception {
-           new ExplodeLevels().main( commandName, arguments ) ;
+           new LevelExploder().main( commandName, arguments ) ;
          }
        }
   ) ;

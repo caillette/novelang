@@ -31,12 +31,12 @@ import com.google.common.collect.Lists;
  * Same as {@link DocumentGeneratorParameters} but allows only one single document request
  * @author Laurent Caillette
  */
-public class ExplodeLevelsParameters extends BatchParameters {
+public class LevelExploderParameters extends BatchParameters {
 
-  private static final Log LOG = LogFactory.getLog( ExplodeLevelsParameters.class ) ;
+  private static final Log LOG = LogFactory.getLog( LevelExploderParameters.class ) ;
   private final DocumentRequest documentRequest ;
 
-  public ExplodeLevelsParameters(
+  public LevelExploderParameters(
       final File baseDirectory,
       final String[] parameters
   ) throws ArgumentException {
