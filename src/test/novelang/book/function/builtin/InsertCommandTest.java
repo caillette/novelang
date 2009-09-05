@@ -29,6 +29,7 @@ import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
+import static novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
 
 import org.apache.commons.lang.ClassUtils;
 import static org.junit.Assert.*;
@@ -74,7 +75,7 @@ public class InsertCommandTest {
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
 
-    TreeFixture.assertEqualsNoSeparators(
+    assertEqualsNoSeparators(
         tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
         result.getDocumentTree()
     ) ;
@@ -104,7 +105,7 @@ public class InsertCommandTest {
     final SyntacticTree documentTree = result.getDocumentTree();
     assertNotNull( documentTree ) ;
 
-    TreeFixture.assertEqualsNoSeparators(
+    assertEqualsNoSeparators(
         tree( BOOK,
             tree( _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "no-chapter" ) ),
@@ -137,7 +138,7 @@ public class InsertCommandTest {
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
 
-    TreeFixture.assertEqualsNoSeparators(
+    assertEqualsNoSeparators(
         tree(
             BOOK,
             tree(
@@ -215,7 +216,7 @@ public class InsertCommandTest {
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
 
-    TreeFixture.assertEqualsNoSeparators(
+    assertEqualsNoSeparators(
         tree(
             BOOK,
             tree(
@@ -247,7 +248,7 @@ public class InsertCommandTest {
     final Treepath< SyntacticTree > bookTreepath = Treepath.create( book ) ;
 
     final Treepath< SyntacticTree > gotLevel = callFindLastLevel( bookTreepath, 1 ) ;
-    TreeFixture.assertEqualsNoSeparators( level, gotLevel.getTreeAtEnd() ) ;
+    assertEqualsNoSeparators( level, gotLevel.getTreeAtEnd() ) ;
   }
 
 
@@ -266,10 +267,67 @@ public class InsertCommandTest {
     final Treepath< SyntacticTree > bookTreepath = Treepath.create( book ) ;
 
     final Treepath< SyntacticTree > gotLevel = callFindLastLevel( bookTreepath, 2 ) ;
-    TreeFixture.assertEqualsNoSeparators( level, gotLevel.getTreeAtEnd() ) ;
+    assertEqualsNoSeparators( level, gotLevel.getTreeAtEnd() ) ;
   }
 
 
+  @Test
+  public void noLevelaboveCausesProblem() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,        
+        oneWordFile.toURL().toExternalForm(),
+        true,
+        false,
+        1,
+        null
+    ) ;
+
+    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
+
+    assertTrue( result.getProblems().iterator().hasNext() ) ;
+    assertNotNull( result.getDocumentTree() ) ;
+  }
+
+  @Test
+  public void recurseWithLevelabove1() throws CommandParameterException, MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        goodContentDirectory.toURL().toExternalForm(),
+        true,
+        false,
+        1,
+        null
+    ) ;
+
+    final SyntacticTree initialTree = tree(
+        BOOK,
+        tree( _LEVEL )
+    ) ;
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
+
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+    assertEqualsNoSeparators( 
+        tree( 
+            BOOK, 
+            tree( 
+                _LEVEL,
+                tree(
+                    NodeKind.PARAGRAPH_REGULAR,
+                    tree( WORD_, "oneword" )
+                ),
+                tree( 
+                    _LEVEL,
+                    tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
+                    tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
+                )
+            )
+        ),
+        result.getDocumentTree()
+    );
+  }
 
 // =======
 // Fixture

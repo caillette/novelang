@@ -110,7 +110,11 @@ public class InsertCommand extends AbstractCommand {
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
     
     Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
-    book = findLastLevel( book, levelAbove ) ;
+    try {
+      book = findLastLevel( book, levelAbove ) ;
+    } catch ( CommandParameterException e ) {
+      return environment.addProblems( Lists.newArrayList( Problem.createProblem( e ) ) ) ;
+    }
 
     if( null != partTree ) {
       if( createLevel ) {
@@ -154,6 +158,7 @@ public class InsertCommand extends AbstractCommand {
     Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
 
     try {
+      book = findLastLevel( book, levelAbove ) ;
       final Iterable< File > partFiles = scanPartFiles( insertedFile, recurse ) ;
       for( File partFile : partFiles ) {
         Part part = null ;
@@ -173,6 +178,7 @@ public class InsertCommand extends AbstractCommand {
 
           if( createLevel ) {
             book = createChapterFromPartFilename( book, partFile, partTree, styleTree );
+            book = findLastLevel( book, levelAbove ) ;
 
           } else {
             for( SyntacticTree partChild : partTree.getChildren() ) {
@@ -182,6 +188,7 @@ public class InsertCommand extends AbstractCommand {
               final Treepath< SyntacticTree > updatedBook =
                   TreepathTools.addChildLast( book, partChild ) ;
               book = Treepath.create( updatedBook.getTreeAtStart() ) ;
+              book = findLastLevel( book, levelAbove ) ;
             }
           }
 
@@ -198,20 +205,20 @@ public class InsertCommand extends AbstractCommand {
   private static Treepath< SyntacticTree > findLastLevel(
       Treepath< SyntacticTree > document,
       final int depth
-  ) {
+  ) throws CommandParameterException {
     if( depth == 0 ) {
       return document ;
     }
     final SyntacticTree tree = document.getTreeAtEnd() ;
     final int lastChildIndex = tree.getChildCount() - 1 ;
     if( lastChildIndex < 0 ) {
-      throw new IllegalArgumentException( "Found no child tree while seeking level " + depth ) ;
+      throw new CommandParameterException( "Found no child tree while seeking level " + depth ) ;
     }
     final SyntacticTree lastChild = tree.getChildAt( lastChildIndex ) ;
     if( lastChild.isOneOf( NodeKind._LEVEL ) ) {
       return findLastLevel( Treepath.create( document, lastChildIndex ), depth - 1 ) ;
     } else {
-      throw new IllegalArgumentException( "Found no LEVEL as child tree" ) ;
+      throw new CommandParameterException( "Found no LEVEL as child tree" ) ;
     }
   }
 

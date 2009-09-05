@@ -56,7 +56,7 @@ public class BookTest {
   public void badCommandGeneratesProblem() {
     final Book book = BookTestTools.createBook(
         SystemUtils.getUserDir(),
-        "insert file:" + oneWordFile.getAbsolutePath() + " $recurse"
+        "insert file:" + oneWordFile.getAbsolutePath() + " $recurse" // old syntax
     ) ;
     Assert.assertTrue( book.hasProblem() ) ;
 
