@@ -1,5 +1,15 @@
 == Novelang HTTP daemon miscellaneous features
 
+=== The ``--content-dir`` option
+
+The ``--content-dir`` option sets the base directory to another value than current directory:
+
+<<<
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
+  --content-dir=../my-source/documents
+>>>
+
+
 === The ``--port`` option
 
 The ``--port`` option sets the TCP port of which the daemon listens to:

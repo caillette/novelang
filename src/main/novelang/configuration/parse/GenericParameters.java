@@ -51,6 +51,7 @@ public abstract class GenericParameters {
   protected final HelpPrinter helpPrinter;
 
   private final File baseDirectory ;
+  private final File contentRoot ;
   private final Iterable< File > fontDirectories ;
   private final File styleDirectory ;
   private final File hyphenationDirectory ;
@@ -71,6 +72,7 @@ public abstract class GenericParameters {
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     options = new Options() ;
     options.addOption( OPTION_HELP ) ;
+    options.addOption( OPTION_CONTENT_ROOT ) ;
     options.addOption( OPTION_FONT_DIRECTORIES ) ;
     options.addOption( OPTION_EMPTY ) ;
     options.addOption( OPTION_STYLE_DIRECTORY ) ;
@@ -93,6 +95,12 @@ public abstract class GenericParameters {
       line = parser.parse( options, parameters ) ;
 
       logDirectory = extractDirectory( baseDirectory, OPTION_LOG_DIRECTORY, line, false ) ;
+
+      if( line.hasOption( OPTION_CONTENT_ROOT.getLongOpt() ) ) {
+        contentRoot = extractDirectory( baseDirectory, OPTION_CONTENT_ROOT, line ) ;
+      } else {
+        contentRoot = null ;
+      }
 
       if( line.hasOption( OPTION_DEFAULT_SOURCE_CHARSET.getLongOpt() ) ) {
         defaultSourceCharset = Charset.forName(
@@ -144,6 +152,21 @@ public abstract class GenericParameters {
    */
   public File getBaseDirectory() {
     return baseDirectory ;
+  }
+
+  /**
+   * Returns the content root directory to get content from.
+   * @return a possibly-null object.
+   */
+  public File getContentRoot() {
+    return contentRoot ;
+  }
+
+  /**
+   * Returns a human-readable description of {@link #OPTION_CONTENT_ROOT}.
+   */
+  public String getContentRootOptionDescription() {
+    return createOptionDescription( OPTION_CONTENT_ROOT ) ;
   }
 
   /**
@@ -226,7 +249,7 @@ public abstract class GenericParameters {
     return defaultRenderingCharset;
   }
 
-  // ==========
+// ==========
 // Extractors
 // ==========
 
@@ -306,6 +329,16 @@ public abstract class GenericParameters {
   private static final Option OPTION_EMPTY = OptionBuilder
       .withLongOpt( "" )
       .withDescription( "Empty option to end directory list" )
+      .create()
+  ;
+
+  public static final String OPTIONNAME_CONTENT_ROOT = "content-root" ;
+  
+  private static final Option OPTION_CONTENT_ROOT = OptionBuilder
+      .withLongOpt( OPTIONNAME_CONTENT_ROOT )
+      .withDescription( "Root directory for content files" )
+      .withValueSeparator()
+      .hasArg()
       .create()
   ;
 

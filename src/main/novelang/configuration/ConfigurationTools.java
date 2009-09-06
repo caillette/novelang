@@ -228,10 +228,25 @@ public class ConfigurationTools {
             defaultSourceCharset.name() ) ;
       }
     }
+    
+    final File contentRoot ;
+    {
+      if( null == parameters.getContentRoot() ) {
+        contentRoot = parameters.getBaseDirectory() ;
+        LOG.info( "Content root set as %s", contentRoot ) ;
+      } else {
+        contentRoot = parameters.getContentRoot() ;
+        LOG.info( 
+            "Content root is '%s' (from option '%s')", 
+            contentRoot,
+            parameters.getContentRootOptionDescription()
+        ) ;
+      }
+    }
 
     return new ContentConfiguration() {
       public File getContentRoot() {
-        return parameters.getBaseDirectory() ;
+        return contentRoot ;
       }
       public Charset getSourceCharset() {
         return defaultSourceCharset ;

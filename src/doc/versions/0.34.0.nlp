@@ -2,4 +2,7 @@
 
 --- New ``explodelevel`` batch command for splitting one document's levels into several parts.
 
+--- New ``--content-root`` command line argument for setting the directory where content files 
+reside.
+
 --- Fixed: paragraph as list did not support indented embedded list items .

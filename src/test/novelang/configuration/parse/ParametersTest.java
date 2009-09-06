@@ -44,6 +44,7 @@ public class ParametersTest {
   @Test
   public void voidDaemonParameters() throws ArgumentException {
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, new String[ 0 ] ) ;
+    assertNull( parameters.getContentRoot() ) ;
     assertNull( parameters.getHttpDaemonPort() ) ;
     assertNull( parameters.getStyleDirectory() );
     assertNull( parameters.getHyphenationDirectory() ) ;
@@ -64,6 +65,17 @@ public class ParametersTest {
     assertOnIterable( parameters.getFontDirectories() ) ;
     assertNull( parameters.getLogDirectory() ) ;
     assertNull( parameters.getHyphenationDirectory() ) ;
+  }
+
+  @Test
+  public void contentRoot() throws ArgumentException {
+    final String[] arguments = { DASHED_CONTENTROOT, DIRECTORY_NAME_AAA } ;
+    final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
+
+    assertEquals( directoryAaa , parameters.getContentRoot() ) ;
+    assertOnIterable( parameters.getFontDirectories() ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getStyleDirectory() ) ;
   }
 
   @Test
@@ -163,6 +175,7 @@ public class ParametersTest {
 
   private static final Log LOG = LogFactory.getLog( ParametersTest.class ) ;
 
+  private static final String DASHED_CONTENTROOT = "--content-root";
   private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir";
   private static final String DASHED_STYLE_DIR = "--style-dir";
   private static final String DASHED_FONT_DIRS = "--font-dirs";

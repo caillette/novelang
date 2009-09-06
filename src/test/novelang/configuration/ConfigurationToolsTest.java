@@ -42,6 +42,7 @@ import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMO
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
 import novelang.configuration.parse.GenericParameters;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
+import static novelang.configuration.parse.GenericParameters.OPTIONNAME_CONTENT_ROOT;
 import novelang.produce.DocumentRequest;
 import novelang.system.DefaultCharset;
 
@@ -213,6 +214,17 @@ public class ConfigurationToolsTest {
   }
 
   @Test
+  public void createContentConfigurationWithContentRoot() throws ArgumentException {
+    final ContentConfiguration contentConfiguration =
+        ConfigurationTools.createContentConfiguration( createDaemonParameters(
+            OPTIONPREFIX + OPTIONNAME_CONTENT_ROOT,
+            someEmptyContentDirectory.getName()             
+        ) 
+    ) ;
+    Assert.assertEquals( someEmptyContentDirectory, contentConfiguration.getContentRoot() ) ; 
+  }
+
+  @Test
   public void createContentConfigurationWithSourceCharset()
       throws ArgumentException, FOPException
   {
@@ -270,6 +282,7 @@ public class ConfigurationToolsTest {
   private static final Charset MAC_ROMAN = Charset.forName( "MacRoman" );
 
   private final File scratchDirectory ;
+  private final File someEmptyContentDirectory ;
   private final File fontStructureDirectory ;
   private final File defaultFontsDirectory ;
   private final String fontFileNameDefault1 ;
@@ -287,6 +300,9 @@ public class ConfigurationToolsTest {
   public ConfigurationToolsTest() throws IOException {
     scratchDirectory = new ScratchDirectoryFixture(
         ConfigurationToolsTest.class ).getTestScratchDirectory() ;
+    someEmptyContentDirectory = new File( scratchDirectory, "some-empty-content-root"  ) ;
+    someEmptyContentDirectory.mkdirs() ;
+    
     final Filer filer = new Filer( scratchDirectory ) ;
     filer.copyContent( FontStructure.dir ) ;
     defaultFontsDirectory = filer.createFileObject(
@@ -302,25 +318,25 @@ public class ConfigurationToolsTest {
     fontFileNameAlternate = relativizer.apply( FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
   }
 
-  private final DaemonParameters createDaemonParameters( String... arguments )
+  private DaemonParameters createDaemonParameters( String... arguments )
       throws ArgumentException
   {
     return createDaemonParameters( scratchDirectory, arguments ) ;
   }
 
-  private final DaemonParameters createDaemonParameters( File baseDirectory, String... arguments )
+  private DaemonParameters createDaemonParameters( File baseDirectory, String... arguments )
       throws ArgumentException
   {
     return new DaemonParameters( baseDirectory, arguments ) ;
   }
 
-  private final DocumentGeneratorParameters createBatchParameters( String... arguments )
+  private DocumentGeneratorParameters createBatchParameters( String... arguments )
       throws ArgumentException
   {
     return createBatchParameters( scratchDirectory, arguments ) ;
   }
 
-  private final DocumentGeneratorParameters createBatchParameters( File baseDirectory, String... arguments )
+  private DocumentGeneratorParameters createBatchParameters( File baseDirectory, String... arguments )
       throws ArgumentException
   {
     return new DocumentGeneratorParameters( baseDirectory, arguments ) ;
