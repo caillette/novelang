@@ -342,8 +342,10 @@ public abstract class GenericParameters {
       .create()
   ;
 
+  public static final String OPTIONNAME_STYLE_DIRECTORY = "style-dir" ;
+
   private static final Option OPTION_STYLE_DIRECTORY = OptionBuilder
-      .withLongOpt( "style-dir" )
+      .withLongOpt( OPTIONNAME_STYLE_DIRECTORY )
       .withDescription( "Directory containing style files" )
       .withValueSeparator()
       .hasArg()

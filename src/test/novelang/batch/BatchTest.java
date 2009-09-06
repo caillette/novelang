@@ -57,7 +57,7 @@ public class BatchTest {
   public void generateOneDocumentOk() throws Exception {
     new DocumentGenerator().main(
         "testing",
-        new String[] { "/" + RENDERED_DOCUMENT_NAME },
+        true, new String[] { "/" + RENDERED_DOCUMENT_NAME },
         contentDirectory
     ) ;
 

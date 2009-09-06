@@ -4,6 +4,10 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.BuildException;
 
 import java.io.File;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+import novelang.configuration.parse.BatchParameters;
 
 /**
  * Transforms a given Novelang document into a String.
@@ -35,6 +39,7 @@ public class NovelangTask extends Task {
 // ===============  
   
   private File contentRoot ;
+  private File styleDirectory ;
   private String documentRequest ;
   private String contentProperty ;
   
@@ -44,6 +49,14 @@ public class NovelangTask extends Task {
 
   public void setContentRoot( File contentRoot ) {
     this.contentRoot = contentRoot ;
+  }
+
+  public File getStyleDirectory() {
+    return styleDirectory;
+  }
+
+  public void setStyleDirectory( File styleDirectory ) {
+    this.styleDirectory = styleDirectory;
   }
 
   public String getDocumentRequest() {
@@ -71,7 +84,34 @@ public class NovelangTask extends Task {
   
   @Override
   public void execute() throws BuildException {
-    super.execute() ;
+    final List< String > arguments = Lists.newArrayList() ;
+    if( contentRoot != null ) {
+      arguments.add( BatchParameters.OPTIONPREFIX + BatchParameters.OPTIONNAME_CONTENT_ROOT ) ;
+      arguments.add( contentRoot.getAbsolutePath() ) ;
+    }
+    if( styleDirectory != null ) {
+      arguments.add( BatchParameters.OPTIONPREFIX + BatchParameters.OPTIONNAME_STYLE_DIRECTORY ) ;
+      arguments.add( styleDirectory.getAbsolutePath() ) ;
+    }
+    if( documentRequest == null ) {
+      throw new BuildException( "documentRequest cannot be null" ) ;
+    } else {
+      arguments.add( documentRequest ) ;
+    }
+
+
+    final DocumentGenerator generator = new DocumentGenerator() ;
+    try {
+      generator.main(
+          DocumentGenerator.COMMAND_NAME,
+          false,
+          arguments.toArray( new String[ arguments.size() ] ), getProject().getBaseDir()
+      ) ;
+    } catch( Exception e ) {
+      throw new BuildException( e ) ;
+    }
+
+    getProject().setProperty( contentProperty, "Done it!" ) ;
   }
 
 

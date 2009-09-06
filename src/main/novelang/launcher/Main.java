@@ -105,7 +105,7 @@ public class Main {
         }
       }
       ,
-      "generate",
+      DocumentGenerator.COMMAND_NAME,
        new MainCaller() {
          public void main( String commandName, String[] arguments ) throws Exception {
            new DocumentGenerator().main( commandName, arguments ) ;

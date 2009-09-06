@@ -683,4 +683,32 @@
       depends="clean-compile-runtests, generate-documentation, create-jar, package-distribution"
   />
 
+
+
+
+
+  <!--
+    ======================
+    Play with NovelangTask
+    ======================
+  -->
+
+  <target  name="ant-task-demo" depends="init, compile-main" >
+    <taskdef name="novelang" classname="novelang.batch.NovelangTask" >
+      <classpath>
+        <path refid="deploy-libs" />
+        <pathelement location="${target.mainclasses.dir}" />
+        <pathelement location="${configuration.main.dir}" />
+      </classpath>
+    </taskdef>
+    <novelang
+        contentRoot="src/doc"
+        styleDirectory="src/doc/style"
+        documentRequest="novelang.txt"
+        contentProperty="html"
+    />
+    <echo>html=${html}</echo>
+  </target>
+
+
 </project>

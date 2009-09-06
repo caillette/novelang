@@ -45,16 +45,17 @@ import novelang.system.Log;
 public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGeneratorParameters > {
 
   private static final Log LOG = LogFactory.getLog( DocumentGenerator.class ) ;
+  public static final String COMMAND_NAME = "generate";
 
   public void main(
       String commandName,
+      boolean mayTerminateJvm,
       String[] arguments,
       File baseDirectory
   ) throws Exception {
-    
-    final DocumentGeneratorParameters parameters ;
 
-    parameters = createParametersOrExit( commandName, arguments, baseDirectory ) ;
+    final DocumentGeneratorParameters parameters =
+        createParametersOrExit( commandName, mayTerminateJvm, arguments, baseDirectory ) ;
 
     try {
       LOG.info(

@@ -49,22 +49,27 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
 
   protected P createParametersOrExit(
       final String commandName,
+      final boolean mayTerminateJvm, 
       final String[] arguments,
       final File baseDirectory
-  ) {
+  ) throws CannotStartException {
     final P parameters ;
     try {
       parameters = createParameters( arguments, baseDirectory ) ;
     } catch( ArgumentException e ) {
       if( e.isHelpRequested() ) {
         printHelpOnConsole( commandName, e ) ;
-        System.exit( -1 ) ;
-        throw new Error( "Never executes but makes compiler happy" ) ;
+        if( mayTerminateJvm ) {
+          System.exit( -1 ) ;
+        }
+        throw new CannotStartException( e ) ;
       } else {
         LOG.error( "Parameters exception, printing help and exiting.", e ) ;
         printHelpOnConsole( commandName, e ) ;
-        System.exit( -2 ) ;
-        throw new Error( "Never executes but makes compiler happy" ) ;
+        if( mayTerminateJvm ) {
+          System.exit( -2 ) ;
+        }
+        throw new CannotStartException( e ) ;
       }
     }
     return parameters;
@@ -72,11 +77,12 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
 
   public void main( String commandName, String[] arguments ) throws Exception {
     final File baseDirectory = new File( SystemUtils.USER_DIR ) ;
-    main( commandName, arguments, baseDirectory ) ;
+    main( commandName, true, arguments, baseDirectory ) ;
   }
 
   public abstract void main(
       String commandName,
+      boolean mayTerminateJvm,
       String[] arguments,
       File baseDirectory
   ) throws Exception ;

@@ -52,13 +52,13 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
 
   public void main(
       String commandName,
-      String[] arguments,
+      boolean mayTerminateJvm, String[] arguments,
       File baseDirectory
   ) throws Exception {
 
     final LevelExploderParameters parameters ;
 
-    parameters = createParametersOrExit( commandName, arguments, baseDirectory ) ;
+    parameters = createParametersOrExit( commandName, true, arguments, baseDirectory ) ;
 
     try {
       LOG.info(
