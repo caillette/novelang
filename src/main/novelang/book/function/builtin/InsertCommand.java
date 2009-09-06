@@ -1,34 +1,32 @@
 package novelang.book.function.builtin;
 
-import novelang.book.function.CommandParameterException;
 import novelang.book.CommandExecutionContext;
-import novelang.common.SyntacticTree;
+import novelang.book.function.CommandParameterException;
+import novelang.common.FileTools;
+import novelang.common.Location;
 import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.common.SimpleTree;
-import novelang.common.FileTools;
 import novelang.common.StructureKind;
-import novelang.common.Location;
-import novelang.common.tree.Treepath;
+import novelang.common.SyntacticTree;
 import novelang.common.tree.TreeTools;
+import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.part.Part;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.WORD_;
-import novelang.system.LogFactory;
+import novelang.part.Part;
 import novelang.system.Log;
+import novelang.system.LogFactory;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Ordering;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
-
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * @author Laurent Caillette
@@ -39,14 +37,16 @@ public class InsertCommand extends AbstractCommand {
   
   private final String fileName ;
   private final boolean recurse ;
+  private final FileOrdering fileOrdering ;
   private final boolean createLevel ;
   private final int levelAbove ;
   private final String styleName ;
-
+  
   public InsertCommand(
       final Location location,
       final String fileUrl, 
       final boolean recurse, 
+      final FileOrdering fileOrdering,
       final boolean createLevel,
       final int levelAbove,
       final String styleName 
@@ -56,6 +56,13 @@ public class InsertCommand extends AbstractCommand {
     this.recurse = recurse ;
     this.createLevel = createLevel ;
     this.styleName = styleName ;
+    
+    if( fileOrdering == null ) {
+      LOG.debug( "No file ordering set, using default" ) ;
+      this.fileOrdering = FileOrdering.DEFAULT ;      
+    } else {
+      this.fileOrdering = fileOrdering ;  
+    }
 
     Preconditions.checkArgument(
         levelAbove >= 0,
@@ -66,6 +73,7 @@ public class InsertCommand extends AbstractCommand {
   }
 
 
+  
 
   public CommandExecutionContext evaluate( CommandExecutionContext environment ) {
 
@@ -249,13 +257,19 @@ public class InsertCommand extends AbstractCommand {
     return book ;
   }
 
-  private static Iterable< File > scanPartFiles( File directory, boolean recurse )
+  private Iterable< File > scanPartFiles( File directory, boolean recurse )
       throws CommandParameterException
   {
     if( directory.isDirectory() ) {
-      final List< File > files = Ordering.from( FileTools.ABSOLUTEPATH_COMPARATOR ).sortedCopy(
-          FileTools.scanFiles( directory, StructureKind.PART.getFileExtensions(), recurse )
-      ) ;
+      final Iterable< File > files ;
+      try {
+        final List< File > scannedFiles = FileTools.scanFiles( 
+            directory, StructureKind.PART.getFileExtensions(), recurse );
+        files = fileOrdering.sort( scannedFiles ) ;
+      } catch ( FileOrdering.CriteriaException e ) {
+        LOG.info( "Could not sort files from '" + directory.getAbsolutePath() + "'", e ) ;
+        throw new CommandParameterException( "Could not sort files: " + e.getMessage() ) ;
+      }
 
       if( LOG.isDebugEnabled() ) {
         StringBuffer buffer = new StringBuffer(

@@ -9,7 +9,7 @@ insert file:introduction.nlp
 
 insert file:status.nlp
 
-insert file:versions/. createlevel levelabove=1
+insert file:versions/. sort=version- createlevel levelabove=1
 
 insert file:rationale.nlp
 

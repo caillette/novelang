@@ -73,6 +73,7 @@ tokens {
   COMMAND_INSERT_CREATELEVEL_ ;
   COMMAND_INSERT_LEVELABOVE_ ;
   COMMAND_INSERT_RECURSE_ ;
+  COMMAND_INSERT_SORT_ ;
   COMMAND_INSERT_STYLE_ ;
   
   COMMAND_MAPSTYLESHEET_ ;
@@ -1802,6 +1803,7 @@ functionCallInsert
   : ( keywordInsert
       whitespace p += url 
       ( mediumbreak p += keywordRecurse )?
+      ( mediumbreak p += keywordSort )?
       ( mediumbreak p += keywordCreateLevel )?
       ( mediumbreak p += parameterLevelAbove )?
       ( mediumbreak p += parameterInsertStyle ) ?        
@@ -1819,6 +1821,19 @@ keywordRecurse
       LATIN_SMALL_LETTER_U LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_E 
     )
     -> ^( COMMAND_INSERT_RECURSE_ )    
+  ;
+  
+keywordSort
+  : ( LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_O LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_T 
+      EQUALS_SIGN s = sortOrder 
+    )
+    -> ^( COMMAND_INSERT_SORT_ 
+          { delegate.createTree( COMMAND_INSERT_SORT_, $s.text ) }
+        )    
+  ;
+  
+sortOrder
+  : ( letter | digit )+ ( PLUS_SIGN | HYPHEN_MINUS ) 
   ;
   
 keywordCreateLevel

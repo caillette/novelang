@@ -4,6 +4,7 @@ import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.book.function.builtin.InsertCommand;
 import novelang.book.function.builtin.MapstylesheetCommand;
+import novelang.book.function.builtin.FileOrdering;
 
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
@@ -30,6 +31,7 @@ public class CommandFactoryTest {
     assertTrue( "Got: " + command, command instanceof InsertCommand ) ;
     assertEquals( "/wxy", extractFileName( command ) ) ;
     assertFalse( extractRecurse( command ) ) ;
+    assertSame( FileOrdering.DEFAULT, extractFileOrdering( command ) ) ;
     assertFalse( extractCreateLevel( command ) ) ;
     assertEquals( 0, extractLevelAbove( command ) );
     assertNull( extractStyleName( command ) ) ;
@@ -42,6 +44,7 @@ public class CommandFactoryTest {
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:x/y/z.nlp" ),
             tree( COMMAND_INSERT_RECURSE_ ),
+            tree( COMMAND_INSERT_SORT_, "path+" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
             tree( COMMAND_INSERT_LEVELABOVE_, "3" ),
             tree( COMMAND_INSERT_STYLE_, "whatever" )
@@ -50,6 +53,7 @@ public class CommandFactoryTest {
     assertTrue( "Got: " + command, command instanceof InsertCommand ) ;
     assertEquals( "x/y/z.nlp", extractFileName( command ) ) ;
     assertTrue( extractRecurse( command ) ) ;
+    assertTrue( extractFileOrdering( command ) instanceof FileOrdering.ByAbsolutePath ) ;
     assertTrue( extractCreateLevel( command ) ) ;
     assertEquals( 3, extractLevelAbove( command ) ) ;
     assertEquals( "whatever", extractStyleName( command ) ) ;
@@ -95,6 +99,11 @@ public class CommandFactoryTest {
 
   private static int extractLevelAbove( final Command insertCommand ) {
     return Reflection.field( "levelAbove" ).ofType( Integer.TYPE ).in( insertCommand ).get() ;
+  }
+
+  private static FileOrdering extractFileOrdering( final Command insertCommand ) {
+    return Reflection.field( "fileOrdering" ).ofType( FileOrdering.class ).
+        in( insertCommand ).get() ;
   }
 
   private static Map< String, String > extractStylesheetMaps( final Command mapstylesheetCommand ) {

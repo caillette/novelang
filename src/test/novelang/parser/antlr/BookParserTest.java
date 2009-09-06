@@ -93,6 +93,18 @@ public class BookParserTest {
   }
   
   @Test
+  public void insertFunctionCallWithSort() {
+    PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
+        "insert file:. sort=path-",
+        tree(
+            COMMAND_INSERT_,
+            tree( URL_LITERAL, "file:." ),
+            tree( COMMAND_INSERT_SORT_, "path-" )
+        )    
+    ) ;
+  }
+  
+  @Test
   public void insertFunctionCallWithCreateLevel() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
         "insert file:. createlevel",
@@ -119,11 +131,12 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithEverything() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:x/y/z.nlp recurse createlevel style=whatever",
+        "insert file:x/y/z.nlp recurse sort=version- createlevel style=whatever",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:x/y/z.nlp" ),
             tree( COMMAND_INSERT_RECURSE_ ),
+            tree( COMMAND_INSERT_SORT_, "version-" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
             tree( COMMAND_INSERT_STYLE_, "whatever" )
         )    

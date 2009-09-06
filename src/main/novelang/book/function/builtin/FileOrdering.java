@@ -19,19 +19,15 @@ import org.apache.commons.io.FilenameUtils;
  * 
  * @author Laurent Caillette
  */
-/*package*/ abstract class FileOrdering< T > {
-  
-  private final Iterable< Wrapper > wrappers ;
-  private final Comparator< T > comparator ;
+public abstract class FileOrdering< T > {
 
-  public FileOrdering( 
-      final Iterable< File > files, 
-      final Comparator< T > comparator 
-  ) 
-      throws CriteriaException
-  {
+
+  public Iterable< File > sort( final Iterable< File > files ) throws CriteriaException {
+    
     final List< CriterionCreationException > exceptions = Lists.newArrayList() ;
     final List< Wrapper > wrappers = Lists.newArrayList() ;
+    final Comparator< T > comparator = createComparator() ;
+
     for( final File file : files ) {
       try {
         wrappers.add( new Wrapper( file, createCriterion( file ) ) ) ;
@@ -42,13 +38,7 @@ import org.apache.commons.io.FilenameUtils;
     if( exceptions.size() > 0 ) {
       throw new CriteriaException( exceptions ) ;
     }
-    this.wrappers = ImmutableList.copyOf( wrappers ) ;
-    this.comparator = comparator ;
-  }
-  
-  public abstract T createCriterion( final File file ) throws CriterionCreationException ;
 
-  public final Iterable< File > sort() {
     final List< Wrapper > wrapperList = 
         Ordering.from( createWrapperComparator( comparator ) ).sortedCopy( wrappers ) ;
     final List< File > sortedFiles = Lists.newArrayList() ;
@@ -58,6 +48,11 @@ import org.apache.commons.io.FilenameUtils;
     return ImmutableList.copyOf( sortedFiles ) ;
   }
   
+  protected abstract Comparator< T > createComparator() ;
+
+  protected abstract T createCriterion( final File file ) throws CriterionCreationException ;
+
+
   private Comparator< Wrapper > createWrapperComparator( final Comparator< T > comparator ) {
     return new Comparator< Wrapper >() {
       public int compare( final Wrapper fileWrapper1, final Wrapper fileWrapper2 ) {
@@ -115,29 +110,61 @@ import org.apache.commons.io.FilenameUtils;
     }
     return stringBuilder.toString() ;
   }
+
+  public FileOrdering< T > inverse() {
+    return new FileOrdering< T >() {
+
+      protected Comparator< T > createComparator() {
+        final Comparator< T > originalComparator = FileOrdering.this.createComparator() ;
+        return new Comparator< T >() {
+          public int compare( final T o1, final T o2 ) {
+            return originalComparator.compare( o2, o1 ) ;
+          }
+        } ;
+      }
+
+      protected T createCriterion( final File file ) throws CriterionCreationException {
+        return FileOrdering.this.createCriterion( file ) ;
+      }
+    } ;
+  }
+
+
+
+
+// ================  
+// Concrete classes
+// ================  
   
+  
+  /**
+   * Performs <a href="http://java.sun.com/docs/books/tutorial/collections/interfaces/order.html" >lexicographic</a>
+   * sort on absolute path.
+   */
   public static class ByAbsolutePath extends FileOrdering< String > {
     
-    public ByAbsolutePath( final Iterable< File > files ) throws CriteriaException {
-      super( files, new Comparator< String >() {
+    protected Comparator< String > createComparator() {
+      return new Comparator< String >() {
         public int compare( final String s1, final String s2 ) {
           return s1.compareTo( s2 ) ; // Nulls not handled but should be OK.
         }
-      } ) ;
+      } ;
     }
 
-    public String createCriterion( final File file ) {
+    protected String createCriterion( final File file ) {
       return file.getAbsolutePath() ;
     }
   }
   
+  public static final FileOrdering BY_ABSOLUTE_PATH = new ByAbsolutePath() ; 
+  
   public static class ByVersionNumber extends FileOrdering< Version > {
     
-    public ByVersionNumber( final Iterable< File > files ) throws CriteriaException {
-      super( files, Version.COMPARATOR ) ;
+    protected Comparator< Version > createComparator() {
+      return Version.COMPARATOR ;
     }
 
-    public Version createCriterion( final File file ) throws CriterionCreationException {
+    protected Version createCriterion( final File file ) throws CriterionCreationException {
       final String fileRadix = FilenameUtils.getBaseName( file.getName() ) ;
       try {
         return Version.parse( fileRadix ) ;
@@ -146,5 +173,9 @@ import org.apache.commons.io.FilenameUtils;
       }
     }
   }
+  
+  public static final FileOrdering BY_VERSION_NUMBER = new ByVersionNumber() ; 
+  
+  public static final FileOrdering DEFAULT = BY_ABSOLUTE_PATH ;
   
 }

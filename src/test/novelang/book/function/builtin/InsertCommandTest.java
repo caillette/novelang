@@ -27,18 +27,16 @@ import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
+import static novelang.parser.antlr.TreeFixture.tree;
 
-import org.apache.commons.lang.ClassUtils;
+import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import org.fest.reflect.core.Reflection;
-import org.fest.reflect.reference.TypeRef;
+import org.junit.runners.NameAwareTestClassRunner;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -58,6 +56,7 @@ public class InsertCommandTest {
         NULL_LOCATION,
         oneWordFile.toURL().toExternalForm(),
         false,
+        null,
         false,
         0,
         null
@@ -90,6 +89,7 @@ public class InsertCommandTest {
         NULL_LOCATION,
         noChapterFile.toURL().toExternalForm(),
         false,
+        null,
         true,
         0,
         null
@@ -126,6 +126,7 @@ public class InsertCommandTest {
         NULL_LOCATION,
         oneWordFile.toURL().toExternalForm(), 
         false,
+        null,
         false,
         0,
         "myStyle"
@@ -158,6 +159,7 @@ public class InsertCommandTest {
         NULL_LOCATION,
         goodContentDirectory.toURL().toExternalForm(),
         true,
+        null,
         false,
         0,
         null
@@ -177,6 +179,7 @@ public class InsertCommandTest {
         NULL_LOCATION,        
         brokenContentDirectory.toURL().toExternalForm(),
         true,
+        null,
         false,
         0,
         null
@@ -197,6 +200,7 @@ public class InsertCommandTest {
         NULL_LOCATION,
         oneWordFile.toURL().toExternalForm(),
         false,
+        null,
         false,
         1,
         null
@@ -277,6 +281,7 @@ public class InsertCommandTest {
         NULL_LOCATION,        
         oneWordFile.toURL().toExternalForm(),
         true,
+        null,
         false,
         1,
         null
@@ -296,6 +301,7 @@ public class InsertCommandTest {
         NULL_LOCATION,
         goodContentDirectory.toURL().toExternalForm(),
         true,
+        null,
         false,
         1,
         null
