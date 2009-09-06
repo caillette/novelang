@@ -1,13 +1,29 @@
 package novelang.batch;
 
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.BuildException;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 
+import org.apache.fop.apps.FopFactory;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+
 import com.google.common.collect.Lists;
+import novelang.common.Problem;
+import novelang.configuration.ContentConfiguration;
+import novelang.configuration.FopFontStatus;
+import novelang.configuration.ProducerConfiguration;
+import novelang.configuration.RenderingConfiguration;
 import novelang.configuration.parse.BatchParameters;
+import novelang.loader.ResourceLoader;
+import novelang.produce.DocumentProducer;
+import novelang.produce.DocumentRequest;
+import novelang.produce.RequestTools;
+import novelang.system.DefaultCharset;
+import novelang.system.Log;
+import novelang.system.LogFactory;
 
 /**
  * Transforms a given Novelang document into a String.
@@ -34,6 +50,9 @@ import novelang.configuration.parse.BatchParameters;
  */
 public class NovelangTask extends Task {
 
+  private static final Log LOG = LogFactory.getLog( NovelangTask.class ) ;
+
+
 // ===============  
 // Task properties
 // ===============  
@@ -42,6 +61,7 @@ public class NovelangTask extends Task {
   private File styleDirectory ;
   private String documentRequest ;
   private String contentProperty ;
+  private String renderingCharsetName ;
   
   public File getContentRoot() {
     return contentRoot ;
@@ -75,8 +95,14 @@ public class NovelangTask extends Task {
     this.contentProperty = contentProperty;
   }
 
-  
-  
+  public String getRenderingCharsetName() {
+    return renderingCharsetName ;
+  }
+
+  public void setRenderingCharsetName( String renderingCharsetName ) {
+    this.renderingCharsetName = renderingCharsetName;
+  }
+
 // =========
 // Execution
 // =========
@@ -84,34 +110,88 @@ public class NovelangTask extends Task {
   
   @Override
   public void execute() throws BuildException {
-    final List< String > arguments = Lists.newArrayList() ;
-    if( contentRoot != null ) {
-      arguments.add( BatchParameters.OPTIONPREFIX + BatchParameters.OPTIONNAME_CONTENT_ROOT ) ;
-      arguments.add( contentRoot.getAbsolutePath() ) ;
-    }
-    if( styleDirectory != null ) {
-      arguments.add( BatchParameters.OPTIONPREFIX + BatchParameters.OPTIONNAME_STYLE_DIRECTORY ) ;
-      arguments.add( styleDirectory.getAbsolutePath() ) ;
+    if( contentRoot == null ) {
+      contentRoot = getProject().getBaseDir() ;
     }
     if( documentRequest == null ) {
       throw new BuildException( "documentRequest cannot be null" ) ;
+    }
+
+    final Charset renderingCharset ;
+    if( renderingCharsetName == null ) {
+      renderingCharset = DefaultCharset.RENDERING ;
     } else {
-      arguments.add( documentRequest ) ;
+      renderingCharset = Charset.forName( renderingCharsetName ) ;
     }
 
 
-    final DocumentGenerator generator = new DocumentGenerator() ;
+    final RenderingConfiguration renderingConfiguration = new RenderingConfiguration() {
+      public ResourceLoader getResourceLoader() {
+        return null ;
+      }
+
+      public FopFactory getFopFactory() {
+        throw new UnsupportedOperationException( "No FOP usage expected" ) ;
+      }
+
+      public FopFontStatus getCurrentFopFontStatus() {
+        throw new UnsupportedOperationException( "No FOP usage expected" ) ;
+      }
+
+      public Charset getDefaultCharset() {
+        return renderingCharset ;
+      }
+    } ;
+
+    final ContentConfiguration contentConfiguration = new ContentConfiguration() {
+      public File getContentRoot() {
+        return contentRoot ;
+      }
+
+      public Charset getSourceCharset() {
+        return DefaultCharset.SOURCE ;
+      }
+    };
+
+    final ProducerConfiguration producerConfiguration = new ProducerConfiguration() {
+      public RenderingConfiguration getRenderingConfiguration() {
+        return renderingConfiguration ;
+      }
+
+      public ContentConfiguration getContentConfiguration() {
+        return contentConfiguration ;
+      }
+    } ;
+
+    final DocumentRequest request = RequestTools.createDocumentRequest( documentRequest ) ;
+
+    final DocumentProducer documentProducer = new DocumentProducer( producerConfiguration ) ;
+
+    final Iterable< Problem > problems ;
+    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
+    
     try {
-      generator.main(
-          DocumentGenerator.COMMAND_NAME,
-          false,
-          arguments.toArray( new String[ arguments.size() ] ), getProject().getBaseDir()
-      ) ;
+      problems = produce( request, documentProducer, outputStream );
+      outputStream.flush() ;
+      outputStream.close() ;
     } catch( Exception e ) {
-      throw new BuildException( e ) ;
+      throw new BuildException( e );
     }
 
-    getProject().setProperty( contentProperty, "Done it!" ) ;
+    if( problems.iterator().hasNext() ) {
+      throw new BuildException( problems.toString() ) ;
+    }
+
+    final String documentString = new String( outputStream.toByteArray(), renderingCharset ) ;
+    getProject().setProperty( contentProperty, documentString ) ;
+  }
+
+  private static Iterable< Problem > produce(
+      final DocumentRequest request,
+      final DocumentProducer documentProducer,
+      final OutputStream outputStream
+  ) throws Exception {
+    return documentProducer.produce( request, outputStream ) ;
   }
 
 

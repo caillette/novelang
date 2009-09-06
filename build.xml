@@ -704,7 +704,7 @@
     <novelang
         contentRoot="src/doc"
         styleDirectory="src/doc/style"
-        documentRequest="novelang.txt"
+        documentRequest="novelang.html?stylesheet=annoucement-html.xsl"
         contentProperty="html"
     />
     <echo>html=${html}</echo>

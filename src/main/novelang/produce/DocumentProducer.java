@@ -42,6 +42,7 @@ import novelang.rendering.PlainTextWriter;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
 import novelang.rendering.XslWriter;
+import com.google.common.base.Preconditions;
 
 /**
  * Produces a document into passed-in {@link DocumentRequest}s.
@@ -58,9 +59,12 @@ public class DocumentProducer {
 
 
   public DocumentProducer( ProducerConfiguration configuration ) {
-    this.basedir = configuration.getContentConfiguration().getContentRoot() ;
-    this.renderingConfiguration = configuration.getRenderingConfiguration() ;
-    this.defaultSourceCharset = configuration.getContentConfiguration().getSourceCharset() ;
+    this.basedir = Preconditions.checkNotNull(
+        configuration.getContentConfiguration().getContentRoot() ) ;
+    this.renderingConfiguration = Preconditions.checkNotNull(
+        configuration.getRenderingConfiguration() ) ;
+    this.defaultSourceCharset = Preconditions.checkNotNull(
+        configuration.getContentConfiguration().getSourceCharset() ) ;
   }
 
   public Iterable< Problem > produce(
