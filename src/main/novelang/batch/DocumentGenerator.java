@@ -64,7 +64,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
       ) ;
 
       final DocumentGeneratorConfiguration configuration =
-          ConfigurationTools.createDocumentGeneratorConfiguration( parameters ); ;
+          ConfigurationTools.createDocumentGeneratorConfiguration( parameters ) ;
       final File outputDirectory = configuration.getOutputDirectory();
       resetTargetDirectory( outputDirectory ) ;
       final DocumentProducer documentProducer =
