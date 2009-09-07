@@ -142,7 +142,7 @@ public class XslWriter extends XmlWriter {
   ) {
     super( namespaceUri, nameQualifier, charset, mimeType ) ;
     this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
-    this.resourceLoader = configuration.getResourceLoader() ;
+    this.resourceLoader = Preconditions.checkNotNull( configuration.getResourceLoader() ) ;
 
     if( null == xslFileName ) {
       xslFileName = IDENTITY_XSL_FILE_NAME ;

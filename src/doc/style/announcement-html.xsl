@@ -40,6 +40,11 @@
     <xsl:apply-templates />
   </xsl:template>
 
+  <xsl:template match="n:level" >
+    <p>
+      <strong><xsl:apply-templates/></strong>
+    </p>
+  </xsl:template>
 
   <xsl:template match="//n:block-inside-square-brackets/n:block-of-literal-inside-grave-accent-pairs" >
     <code><xsl:value-of select="." /></code>

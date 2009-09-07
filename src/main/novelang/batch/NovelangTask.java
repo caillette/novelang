@@ -4,19 +4,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.List;
 
 import org.apache.fop.apps.FopFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import com.google.common.collect.Lists;
 import novelang.common.Problem;
+import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.parse.BatchParameters;
 import novelang.loader.ResourceLoader;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
@@ -124,10 +122,13 @@ public class NovelangTask extends Task {
       renderingCharset = Charset.forName( renderingCharsetName ) ;
     }
 
+    final ResourceLoader resourceLoader = ConfigurationTools.createResourceLoader(
+        contentRoot, styleDirectory, "Directory for custom styles" ) ;
+
 
     final RenderingConfiguration renderingConfiguration = new RenderingConfiguration() {
       public ResourceLoader getResourceLoader() {
-        return null ;
+        return resourceLoader ;
       }
 
       public FopFactory getFopFactory() {
@@ -164,6 +165,9 @@ public class NovelangTask extends Task {
     } ;
 
     final DocumentRequest request = RequestTools.createDocumentRequest( documentRequest ) ;
+    if( request == null ) {
+      throw new BuildException( "Could not parse request '" + documentRequest + "'" ) ;
+    }
 
     final DocumentProducer documentProducer = new DocumentProducer( producerConfiguration ) ;
 

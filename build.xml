@@ -699,12 +699,13 @@
         <path refid="deploy-libs" />
         <pathelement location="${target.mainclasses.dir}" />
         <pathelement location="${configuration.main.dir}" />
+        <pathelement location="${configuration.test.dir}" />
       </classpath>
     </taskdef>
     <novelang
         contentRoot="src/doc"
         styleDirectory="src/doc/style"
-        documentRequest="novelang.html?stylesheet=annoucement-html.xsl"
+        documentRequest="/versions/0.34.0.html?stylesheet=announcement-html.xsl"
         contentProperty="html"
     />
     <echo>html=${html}</echo>

@@ -152,6 +152,8 @@ public class DocumentProducer {
       throws IOException
   {
     final Charset suggestedRenderingCharset = renderingConfiguration.getDefaultCharset() ;
+    LOG.debug( "About to create renderable with document source name '%s'...",
+        documentRequest.getDocumentSourceName() ) ;
 
     try {
       final File bookFile = FileTools.load(

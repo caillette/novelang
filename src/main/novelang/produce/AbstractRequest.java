@@ -283,6 +283,7 @@ import novelang.rendering.RenditionMimeType;
       return request ;
 
     } else {
+      LOG.warn( "Could not parse: '%s'", requestPath ) ;
       return null ;
     }
 

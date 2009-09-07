@@ -337,11 +337,22 @@ public class ConfigurationTools {
 
   private static ResourceLoader createResourceLoader( GenericParameters parameters ) {
 
+    final File baseDirectory = parameters.getBaseDirectory() ;
+    final File userDefinedDirectory = parameters.getStyleDirectory() ;
+    final String styleDirectoryDescription = parameters.getStyleDirectoryDescription() ;
+    return createResourceLoader( baseDirectory, userDefinedDirectory, styleDirectoryDescription ) ;
+  }
+
+  public static ResourceLoader createResourceLoader( 
+      final File baseDirectory,
+      final File userDefinedDirectory,
+      final String styleDirectoryDescription
+  ) {
     final File userStyleDirectory = findDefaultDirectoryIfNeeded(
-        parameters.getBaseDirectory(),
-        parameters.getStyleDirectory(),
+        baseDirectory,
+        userDefinedDirectory,
         "user styles",
-        parameters.getStyleDirectoryDescription(),
+        styleDirectoryDescription,
         DEFAULT_STYLE_DIR
     ) ;
 
@@ -368,7 +379,6 @@ public class ConfigurationTools {
     }
 
     return resourceLoader ;
-
   }
 
   protected static File findDefaultDirectoryIfNeeded(
