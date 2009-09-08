@@ -164,8 +164,8 @@ import novelang.rendering.RenditionMimeType;
 
     buffer.append( "(" ) ;
 
-      // The path without extension. No dots for security reasons (forbid '..').
-      buffer.append( "((?:\\/(?:\\w|-|_)+)+)" ) ;
+      // The path without extension. No double dots for security reasons (forbid '..').
+      buffer.append( "((?:\\/(?:\\w|-|_)+(?:\\.(?:\\w|-|_)+)*)+)" ) ;
 
       // The extension defining the MIME type.
       buffer.append( "(?:\\.(" ) ;
@@ -188,9 +188,9 @@ import novelang.rendering.RenditionMimeType;
       buffer.append( "))" ) ;
     buffer.append( ")" ) ;
 
-    if( polymorphic ) {
-      buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
-    }
+//    if( polymorphic ) {
+//      buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
+//    }
 
     // This duplicates the 'tag' rule in ANTLR grammar. Shame.
     final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
@@ -247,7 +247,26 @@ import novelang.rendering.RenditionMimeType;
     final Matcher matcher = pattern.matcher( requestPath ) ;
     if( matcher.find() && matcher.groupCount() >= 2 ) {
 
+      final String fullTarget = matcher.group( 1 );
+      final boolean containsError ;
+      if( request instanceof PolymorphicRequest ) {
+        containsError = fullTarget.endsWith( RequestTools.ERRORPAGE_SUFFIX );
+        ( ( PolymorphicRequest ) request ).setDisplayProblems( containsError ) ;
+      } else {
+        containsError = false ;
+      }
+
+      final String targetMinusError ;
+      if( containsError ) {
+        targetMinusError = fullTarget.substring(
+            0, fullTarget.length() - RequestTools.ERRORPAGE_SUFFIX.length() ) ;
+      } else {
+        targetMinusError = fullTarget ;
+      }
+      request.setOriginalTarget( targetMinusError ) ;
+
       final String rawDocumentSourceName = matcher.group( 2 ) ;
+
       request.setDocumentSourceName( rawDocumentSourceName ) ;
 
       final String rawDocumentMimeType = matcher.group( 3 ) ;
@@ -259,23 +278,17 @@ import novelang.rendering.RenditionMimeType;
         request.setRenditionMimeType( null ) ;
       }
 
-      final int parametersGroupIndex ;
-      if( request instanceof PolymorphicRequest ) {
-        ( ( PolymorphicRequest ) request ).setDisplayProblems(
-            RequestTools.ERRORPAGE_SUFFIX.equals( matcher.group( 4 ) ) ) ;
-        parametersGroupIndex = 5 ;
-      } else {
-        parametersGroupIndex = 4 ;
-      }
 
-
-      if( matcher.groupCount() >= parametersGroupIndex ) {
-        final String parameters = matcher.group( parametersGroupIndex ) ;
+      if( matcher.groupCount() >= 4 ) {
+        final String parameters = matcher.group( 4 ) ;
         processParameters( request, parameters ) ;
       }
 
-      request.setOriginalTarget( matcher.group( 1 ) ) ;
-
+      if( containsError ) {
+        request.setOriginalTarget( targetMinusError ) ;
+      } else {
+        request.setOriginalTarget( matcher.group( 1 ) ) ;
+      }
 
 
       LOG.debug( "Parsed: %s", request ) ;

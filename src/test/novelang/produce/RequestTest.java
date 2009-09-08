@@ -40,7 +40,7 @@ public class RequestTest {
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
     assertEquals( "pdf", request.getResourceExtension() ) ;
-    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
     assertTrue( "Got: " + request.getTags(), request.getTags().isEmpty() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
@@ -54,7 +54,7 @@ public class RequestTest {
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
     assertEquals( "pdf", request.getResourceExtension() ) ;
-    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
     assertNotNull( request.getAlternateStylesheet() ) ;
     assertEquals( STYLESHEET_RESOURCENAME, request.getAlternateStylesheet().getName() ) ;
 
@@ -62,12 +62,29 @@ public class RequestTest {
   }
 
   @Test
+  public void documentRequestWithDots() {
+    final DocumentRequest request = createDocumentRequest( DOTTEDHTML_REQUEST_PATH ) ;
+    assertEquals( DOTTEDHTML_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( RenditionMimeType.HTML, request.getRenditionMimeType() ) ;
+    assertTrue( request.isRendered() ) ;
+    assertEquals( DOTTED_REQUEST_BODY, request.getDocumentSourceName() ) ;
+
+    assertTrue( "Got: " + request.getTags(), request.getTags().isEmpty() ) ;
+
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+    assertNull( request.getAlternateStylesheet() ) ;
+    
+  }
+
+
+
+  @Test
   public void polymorphicRequestForError() {
     final PolymorphicRequest request = createPolymorphicRequest( REQUEST_PATH_BROKEN ) ;
     assertTrue( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
-    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
@@ -78,7 +95,7 @@ public class RequestTest {
     assertFalse( request.getDisplayProblems() ) ;
     assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertNull( request.getRenditionMimeType() ) ;
-    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
@@ -90,7 +107,7 @@ public class RequestTest {
     assertFalse( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
-    assertEquals( REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
     assertEquals( TAGSET, request.getTags() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
@@ -102,10 +119,12 @@ public class RequestTest {
 // Fixture
 // =======
 
-  private static final String REQUEST_BODY = "/path/to/file" ;
+  private static final String SIMPLE_REQUEST_BODY = "/path/to/file" ;
+  private static final String DOTTED_REQUEST_BODY = "/path/to/0.1.2" ;
 
-  private static final String PDF_REQUEST_PATH = REQUEST_BODY + ".pdf" ;
-  private static final String CSS_REQUEST_PATH = REQUEST_BODY + ".css" ;
+  private static final String PDF_REQUEST_PATH = SIMPLE_REQUEST_BODY + ".pdf" ;
+  private static final String CSS_REQUEST_PATH = SIMPLE_REQUEST_BODY + ".css" ;
+  private static final String DOTTEDHTML_REQUEST_PATH = DOTTED_REQUEST_BODY + ".html" ;
 
   private static final String STYLESHEET_RESOURCENAME = "dir/sheet.xsl" ;
 
