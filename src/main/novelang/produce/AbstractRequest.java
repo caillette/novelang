@@ -20,6 +20,7 @@ package novelang.produce;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
+import java.util.EnumSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,7 +60,7 @@ import novelang.rendering.RenditionMimeType;
 
   private RenditionMimeType renditionMimeType = RenditionMimeType.PDF ;
 
-  public RenditionMimeType getRenditionMimeType() {
+    public RenditionMimeType getRenditionMimeType() {
     return renditionMimeType;
   }
 
@@ -155,11 +156,16 @@ import novelang.rendering.RenditionMimeType;
   }
 
 
-// =======
-// Factory
-// =======
 
-  private static Pattern createPattern( boolean polymorphic ) {
+// =====
+// Regex
+// =====
+
+  private enum PatternKind {
+    DOCUMENT_WITH_PARAMETERS, POLYMORPHIC, DOCUMENT_NO_PARAMETERS
+  }
+
+  private static Pattern createPattern( final PatternKind patternKind ) {
     final StringBuffer buffer = new StringBuffer() ;
 
     buffer.append( "(" ) ;
@@ -172,7 +178,9 @@ import novelang.rendering.RenditionMimeType;
 
         final List< String > allExtensions = Lists.newArrayList() ;
         Iterables.addAll( allExtensions, RenditionMimeType.getFileExtensions() ) ;
-        if( polymorphic ) {
+        if( EnumSet.of(PatternKind.DOCUMENT_NO_PARAMETERS, PatternKind.POLYMORPHIC ).
+            contains( patternKind ) 
+        ) {
           Iterables.addAll( allExtensions, RawResource.getFileExtensions() ) ;
         }
 
@@ -188,31 +196,39 @@ import novelang.rendering.RenditionMimeType;
       buffer.append( "))" ) ;
     buffer.append( ")" ) ;
 
-//    if( polymorphic ) {
-//      buffer.append( "(" + ERRORPAGE_SUFFIX_REGEX + ")?" ) ;
-//    }
+    if( EnumSet.of(PatternKind.DOCUMENT_WITH_PARAMETERS, PatternKind.POLYMORPHIC ).
+        contains( patternKind )
+    ) {
+      // This duplicates the 'tag' rule in ANTLR grammar. Shame.
+      final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
 
-    // This duplicates the 'tag' rule in ANTLR grammar. Shame.
-    final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
-
-    buffer.append( "(?:\\?" ) ;
+      buffer.append( "(?:\\?" ) ;
       buffer.append( parameter ) ;
-    buffer.append( ")?" ) ;
+      buffer.append( ")?" ) ;
+    }
 
     return Pattern.compile( buffer.toString() ) ;
   }
   
-  private static Pattern DOCUMENT_ONLY_PATTERN = createPattern( false ) ;
-  private static Pattern POLYMORPHIC_PATTERN = createPattern( true ) ;
+  private static final Pattern PATTERN_DOCUMENT_REQUEST =
+          createPattern( PatternKind.DOCUMENT_WITH_PARAMETERS ) ;
+  private static final Pattern PATTERN_DOCUMENT_REQUEST_NOPARAMETERS =
+          createPattern( PatternKind.DOCUMENT_NO_PARAMETERS ) ;
+  private static final Pattern PATTERN_POLYMORPHIC_REQUEST =
+          createPattern( PatternKind.POLYMORPHIC ) ;
 
   static {
-    LOG.debug( "Crafted regex for Document only: %s", DOCUMENT_ONLY_PATTERN.pattern() ) ;
-    LOG.debug( "Crafted regex for Polymorphic requests: %s", POLYMORPHIC_PATTERN.pattern() ) ;
+    LOG.debug( "Crafted regex for Document only: %s",
+            PATTERN_DOCUMENT_REQUEST.pattern() ) ;
+    LOG.debug( "Crafted regex for Polymorphic requests: %s",
+            PATTERN_POLYMORPHIC_REQUEST.pattern() ) ;
+    LOG.debug( "Crafted regex for Document without parameters: %s",
+            PATTERN_DOCUMENT_REQUEST_NOPARAMETERS.pattern() ) ;
   }
 
 
 
-  public static DocumentRequest createDocumentRequest( String requestPath ) {
+  public static DocumentRequest createDocumentRequest( final String requestPath ) {
     return create( requestPath, new DocumentRequest() ) ;
   }
 
@@ -233,6 +249,15 @@ import novelang.rendering.RenditionMimeType;
     return create( requestPath, new PolymorphicRequest() ) ;
   }
 
+  private static String extractExtension( final String path ) {
+    final Matcher matcher = PATTERN_DOCUMENT_REQUEST_NOPARAMETERS.matcher( path ) ;
+    if( matcher.find() && matcher.groupCount() >= 3 ) {
+      return matcher.group( 3 ) ;
+    } else {
+      throw new IllegalArgumentException( "Doesn't contain an extension: '" + path + "'" ) ;
+    }
+  }
+
   private static < T extends AbstractRequest > T create(
       String requestPath,
       T request
@@ -240,20 +265,18 @@ import novelang.rendering.RenditionMimeType;
       throws IllegalArgumentException
   {
     final Pattern pattern = request instanceof PolymorphicRequest ?
-        POLYMORPHIC_PATTERN :
-        DOCUMENT_ONLY_PATTERN
+            PATTERN_POLYMORPHIC_REQUEST :
+            PATTERN_DOCUMENT_REQUEST
     ;
 
     final Matcher matcher = pattern.matcher( requestPath ) ;
     if( matcher.find() && matcher.groupCount() >= 2 ) {
 
-      final String fullTarget = matcher.group( 1 );
-      final boolean containsError ;
+      final String fullTarget = matcher.group( 1 ) ; // With extension, without params.
+
+      final boolean containsError = fullTarget.endsWith( RequestTools.ERRORPAGE_SUFFIX ) ;
       if( request instanceof PolymorphicRequest ) {
-        containsError = fullTarget.endsWith( RequestTools.ERRORPAGE_SUFFIX );
         ( ( PolymorphicRequest ) request ).setDisplayProblems( containsError ) ;
-      } else {
-        containsError = false ;
       }
 
       final String targetMinusError ;
@@ -265,22 +288,22 @@ import novelang.rendering.RenditionMimeType;
       }
       request.setOriginalTarget( targetMinusError ) ;
 
-      final String rawDocumentSourceName = matcher.group( 2 ) ;
-
+      final String rawDocumentMimeType = extractExtension( targetMinusError ) ;
+      request.setResourceExtension( rawDocumentMimeType ) ;
+      final String rawDocumentSourceName = targetMinusError.substring(
+            0, targetMinusError.length() - rawDocumentMimeType.length() - 1 ) ;
       request.setDocumentSourceName( rawDocumentSourceName ) ;
 
-      final String rawDocumentMimeType = matcher.group( 3 ) ;
-      request.setResourceExtension( rawDocumentMimeType ) ;
       try {
         request.setRenditionMimeType(
-          RenditionMimeType.valueOf( rawDocumentMimeType.toUpperCase() ) ) ;
+            RenditionMimeType.valueOf( rawDocumentMimeType.toUpperCase() ) ) ;
       } catch( IllegalArgumentException e ) {
         request.setRenditionMimeType( null ) ;
       }
 
 
       if( matcher.groupCount() >= 4 ) {
-        final String parameters = matcher.group( 4 ) ;
+        final String parameters = matcher.group( 4 ) ; // Query parameters.
         processParameters( request, parameters ) ;
       }
 

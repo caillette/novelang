@@ -81,6 +81,7 @@ public class RequestTest {
   @Test
   public void polymorphicRequestForError() {
     final PolymorphicRequest request = createPolymorphicRequest( REQUEST_PATH_BROKEN ) ;
+
     assertTrue( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
