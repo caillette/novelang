@@ -95,6 +95,12 @@ public final class Version {
    */
   public static final Version CURRENT_PRODUCT_VERSION ;
 
+  /**
+   * This initialization must happen before parsing the version, otherwise we hit
+   * a {@code NullPointerException}.
+   */
+  private static final Pattern PATTERN = Pattern.compile( "(\\d+)\\.(\\d+)\\.(\\d+)" ) ;
+
   static {
     try {
       CURRENT_PRODUCT_VERSION = parse( PRODUCT_VERSION_AS_STRING ) ;
@@ -112,8 +118,6 @@ public final class Version {
   public String getName() {
     return isSnapshot() ? SNAPSHOT : major + "." + minor + "." + fix ;
   }
-  
-  private static final Pattern PATTERN = Pattern.compile( "(\\d+)\\.(\\d+)\\.(\\d+)" ) ;
   
   public static Version parse( final String s ) throws VersionFormatException {
     if( ( "@" + SNAPSHOT + "@" ).equals( s ) || SNAPSHOT.equals( s ) ) {
