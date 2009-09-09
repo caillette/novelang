@@ -1,5 +1,7 @@
 --- New ``levelabove`` option for ``insert`` book command.
 
+--- New ``sort`` option for ``insert`` book command.
+
 --- New ``explodelevel`` batch command for splitting one document's levels into several parts.
 
 --- New ``--content-root`` command line argument for setting the directory where content files 

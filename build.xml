@@ -89,6 +89,10 @@
       <fileset dir="${source.main.antlr.dir}" includes="*.g"/>
     </path>
 
+    <condition property="project.version.isdocumented" >
+      <available file="${source.documentation.version.dir}/${project.version}.nlp" />
+    </condition>
+
     <echoproperties />
   </target>
 
@@ -119,7 +123,11 @@
     <delete dir="${target.dir}" includeemptydirs="true" defaultexcludes="false" />  
   </target>
   
-  
+  <target name="verify-release-notes-exist" unless="${project.version.isdocumented}" >
+    <fail message="Missing release notes in ${source.documentation.version.dir} for ${project.version}" />
+  </target>
+
+
   <!--
     =======
     Compile
@@ -247,6 +255,18 @@
   </target>
   
   
+  <target name="define-novelang-task" depends="compile-main" >
+    <taskdef name="novelang" classname="${build.novelangtask.name}" >
+      <classpath>
+        <path refid="deploy-libs" />
+        <pathelement location="${target.mainclasses.dir}" />
+        <pathelement location="${configuration.main.dir}" />
+        <pathelement location="${configuration.test.dir}" /> <!-- for logback-test.xml -->
+      </classpath>
+    </taskdef>
+  </target>
+
+
   
   <!--
     ====
@@ -546,8 +566,19 @@
   </target>
 
   <target name="publish-release-announcement"
-      depends="login-on-announcement-blog"
+      depends="login-on-announcement-blog, verify-release-notes-exist"
   >
+
+    <novelang
+        contentRoot="src/doc"
+        styleDirectory="src/doc/style"
+        documentRequest="/versions/${project.version}.html?stylesheet=announcement-html.xsl"
+        contentProperty="html"
+        />
+    <echo>About to send:
+${html}
+    </echo>
+
     <mail
         from="${announcement.user.email}"
         tolist="${announcement.blog.secretpostingaddress}"
@@ -561,9 +592,11 @@
         charset="utf-8"
     >
       <message>
-        A new release of ${project.name} is available!
+        ${html}
+        &lt;p>
         Download it &lt;a href="${announcement.download.url}">here&lt;/a> and see
         documentation for details.
+        &lt;/p>
       </message>
     </mail>
   </target>
@@ -693,21 +726,13 @@
     ======================
   -->
 
-  <target  name="ant-task-demo" depends="init, compile-main" >
-    <taskdef name="novelang" classname="novelang.batch.NovelangTask" >
-      <classpath>
-        <path refid="deploy-libs" />
-        <pathelement location="${target.mainclasses.dir}" />
-        <pathelement location="${configuration.main.dir}" />
-        <pathelement location="${configuration.test.dir}" />
-      </classpath>
-    </taskdef>
+  <target  name="ant-task-demo" depends="init, define-novelang-task" >
     <novelang
         contentRoot="src/doc"
         styleDirectory="src/doc/style"
-        documentRequest="/versions/0.34.0.html?stylesheet=announcement-html.xsl"
+        documentRequest="/versions/${project.version}.html?stylesheet=announcement-html.xsl"
         contentProperty="html"
-    />
+        />
     <echo>html=${html}</echo>
   </target>
 

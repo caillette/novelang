@@ -36,9 +36,26 @@ insert file:. recurse
 The ``createlevel`` option adds the content of the file under one new level.
 The level title is the filename, path and ``.nlp`` extension being trimmed.
 
+
+
+The ``sort`` option provides a sorting method when inserting several files.
+
 <<<
-insert file:. recurse createlevel
+insert file:. sort=path+
 >>>
+
+The ``sort`` option determines the ordering of Parts when there are many. Currently supported
+values are:
+- ``path+`` for ascending sort on path name.
+- ``path-`` for descending sort on file name.
+- ``version+`` for ascending sort on version number.
+- ``version-`` for descending sort on version number.
+
+Version number if for files names of ``major.minor.fix.nlp`` format, where ``major``, ``minor``
+and ``fix`` are positive numbers (this is Novelang's format for version numbers by the way).
+
+
+
 
 The ``levelabove`` option adds the content of the ~file(s) under the last previously created
 level.
