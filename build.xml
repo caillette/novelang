@@ -92,6 +92,7 @@
     <condition property="project.version.isdocumented" >
       <available file="${source.documentation.version.dir}/${project.version}.nlp" />
     </condition>
+    <echo>project.version.isdocumented = ${project.version.isdocumented}</echo>
 
     <echoproperties />
   </target>
@@ -123,7 +124,7 @@
     <delete dir="${target.dir}" includeemptydirs="true" defaultexcludes="false" />  
   </target>
   
-  <target name="verify-release-notes-exist" unless="${project.version.isdocumented}" >
+  <target name="verify-release-notes-exist" unless="project.version.isdocumented" >
     <fail message="Missing release notes in ${source.documentation.version.dir} for ${project.version}" />
   </target>
 
@@ -566,7 +567,7 @@
   </target>
 
   <target name="publish-release-announcement"
-      depends="login-on-announcement-blog, verify-release-notes-exist"
+      depends="init, define-novelang-task, login-on-announcement-blog, verify-release-notes-exist"
   >
 
     <novelang
@@ -592,11 +593,9 @@ ${html}
         charset="utf-8"
     >
       <message>
+        Download ${project.versionedname} &lt;a href="${announcement.download.url}">here&lt;/a> !
         ${html}
         &lt;p>
-        Download it &lt;a href="${announcement.download.url}">here&lt;/a> and see
-        documentation for details.
-        &lt;/p>
       </message>
     </mail>
   </target>
