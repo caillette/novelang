@@ -56,6 +56,8 @@ tokens {
   WHITESPACE_ ;
   LINE_BREAK_ ;
   TAG ;
+  ABSOLUTE_IDENTIFIER ;
+  RELATIVE_IDENTIFIER ;
   
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
@@ -185,10 +187,13 @@ part
   
 levelIntroducer 
   : ( ( tags mediumbreak )?
+      ( ( relativeIdentifier | absoluteIdentifier ) mediumbreak )?
       levelIntroducerIndent
       ( whitespace? levelTitle )?
     )
-    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? tags? )
+    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? 
+          tags? relativeIdentifier? absoluteIdentifier? 
+        )
   ;
 
 
@@ -197,35 +202,34 @@ levelIntroducer
 // ====
 
 tag
-  :
-  ( COMMERCIAL_AT s = symbolicName )
-  -> ^( TAG { delegate.createTree( TAG, $s.text ) }  )
+  : ( COMMERCIAL_AT s = symbolicName )
+    -> ^( TAG { delegate.createTree( TAG, $s.text ) }  )
   ;
-  
-/** This intermediary rule is useful as I didn't find how to
- * concatenate Tokens from inside the rewrite rule.
- */
-rawTag returns [ String text ]
-@init {
-  final StringBuffer buffer = new StringBuffer() ;
-}
-  : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
-      | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
-      | s3 = digit { buffer.append( $s3.text ) ; }
-    )+
-    ( s5 = HYPHEN_MINUS { buffer.append( $s5.text ) ; }
-      (  s6 = hexLetter { buffer.append( $s6.text ) ; }
-       | s7 = nonHexLetter { buffer.append( $s7.text ) ; }
-       | s8 = digit { buffer.append( $s8.text ) ; }
-      )+ 
-    )*
-    { $text = buffer.toString() ; }
-  ;  
   
   
 tags
-  :
-  tag ( mediumbreak tag )*
+  : tag ( mediumbreak tag )*
+  ;
+
+
+// ===========
+// Identifiers
+// ===========
+
+
+relativeIdentifier
+  : ( REVERSE_SOLIDUS identifierSegment )+
+    -> ^( RELATIVE_IDENTIFIER  identifierSegment+  )
+  ;
+
+absoluteIdentifier
+  : REVERSE_SOLIDUS ( REVERSE_SOLIDUS identifierSegment )+
+    -> ^( ABSOLUTE_IDENTIFIER  identifierSegment+  )
+  ;
+  
+identifierSegment
+  : symbolicName
+    -> ^( { delegate.createTree( TAG, $symbolicName.text ) }  )
   ;
 
 // =====================
@@ -1807,6 +1811,7 @@ functionCallInsert
       ( mediumbreak p += keywordCreateLevel )?
       ( mediumbreak p += parameterLevelAbove )?
       ( mediumbreak p += parameterInsertStyle ) ?        
+      ( mediumbreak p += absoluteIdentifier )*        
     )
     -> ^( COMMAND_INSERT_ $p+ )
   ;

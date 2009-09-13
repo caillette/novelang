@@ -129,16 +129,44 @@ public class BookParserTest {
   }
   
   @Test
+  public void insertFunctionCallWithOneFragmentIdentifier() {
+    PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
+        "insert file:. \\\\y\\z",
+        tree(
+            COMMAND_INSERT_,
+            tree( URL_LITERAL, "file:." ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "y" ), tree( "z" ) )
+        )    
+    ) ;
+  }
+  
+  @Test
+  public void insertFunctionCallWithTwoFragmentIdentifiers() {
+    PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
+        "insert file:. \\\\w\\x \\\\y\\z",
+        tree(
+            COMMAND_INSERT_,
+            tree( URL_LITERAL, "file:." ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "w" ), tree( "x" ) ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "y" ), tree( "z" ) )
+        )    
+    ) ;
+  }
+  
+  @Test
   public void insertFunctionCallWithEverything() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:x/y/z.nlp recurse sort=version- createlevel style=whatever",
+        "insert file:x/y/z.nlp recurse sort=version- createlevel style=whatever " +
+        "\\\\w\\x \\\\y\\z",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:x/y/z.nlp" ),
             tree( COMMAND_INSERT_RECURSE_ ),
             tree( COMMAND_INSERT_SORT_, "version-" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
-            tree( COMMAND_INSERT_STYLE_, "whatever" )
+            tree( COMMAND_INSERT_STYLE_, "whatever" ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "w" ), tree( "x" ) ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "y" ), tree( "z" ) )
         )    
     ) ;
   }
