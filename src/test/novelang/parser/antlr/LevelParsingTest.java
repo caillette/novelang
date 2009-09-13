@@ -32,7 +32,7 @@ import novelang.common.SyntacticTree;
 public class LevelParsingTest {
 
   @Test
-  public void sectionHasQuote()
+  public void levelHasQuote()
       throws RecognitionException
   {
     PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
@@ -50,7 +50,7 @@ public class LevelParsingTest {
   }
 
   @Test
-  public void sectionIsAnonymous() throws RecognitionException {
+  public void levelIsAnonymous() throws RecognitionException {
     PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
         "===",
         tree(
@@ -60,8 +60,49 @@ public class LevelParsingTest {
     ) ;
   }
 
+  
   @Test
-  public void sectionHasOneParagraphWithEmphasisThenWordOnTwoLines() throws RecognitionException {
+  public void levelHasTag() throws RecognitionException {
+    PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
+        "@tag" + BREAK +
+        "===",
+        tree(
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+            tree( TAG, "tag" )
+        )
+    ) ;
+  }
+
+  @Test
+  public void levelHasAbsoluteIdentifier() throws RecognitionException {
+    PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
+        "\\\\foo" + BREAK +
+        "===",
+        tree(
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+            tree( ABSOLUTE_IDENTIFIER, "foo" )
+        )
+    ) ;
+  }
+
+
+  @Test
+  public void levelHasRelativeIdentifier() throws RecognitionException {
+    PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
+        "\\foo" + BREAK +
+        "===",
+        tree(
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+            tree( RELATIVE_IDENTIFIER, "foo" )
+        )
+    ) ;
+  }
+
+  @Test
+  public void levelHasOneParagraphWithEmphasisThenWordOnTwoLines() throws RecognitionException {
     PARSERMETHOD_LEVEL_INTRODUCER.createTree(
         "===" + BREAK +
         BREAK +
@@ -71,7 +112,7 @@ public class LevelParsingTest {
   }
 
   @Test
-  public void sectionHasOneParagraphWithParenthesisThenWordOnTwoLines()
+  public void levelHasOneParagraphWithParenthesisThenWordOnTwoLines()
       throws RecognitionException
   {
     PARSERMETHOD_LEVEL_INTRODUCER.createTree(
@@ -83,7 +124,7 @@ public class LevelParsingTest {
   }
 
   @Test
-  public void sectionHasOneParagraphWithQuoteThenWordOnTwoLines() throws RecognitionException {
+  public void levelHasOneParagraphWithQuoteThenWordOnTwoLines() throws RecognitionException {
     PARSERMETHOD_LEVEL_INTRODUCER.createTree(
         "===" + BREAK +
         BREAK +
@@ -93,7 +134,7 @@ public class LevelParsingTest {
   }
 
   @Test
-  public void chapterIsAnonymousWithSimpleSectionContainingWordsWithPunctuationSigns1()
+  public void levelIsAnonymousWithSublevelContainingWordsWithPunctuationSigns1()
       throws RecognitionException
   {
     PARSERMETHOD_LEVEL_INTRODUCER.createTree(
@@ -106,7 +147,7 @@ public class LevelParsingTest {
   }
 
   @Test
-  public void chapterIsAnonymousWithSimpleSectionContainingWordsWithPunctuationSigns2()
+  public void levelIsAnonymousWithSublevelContainingWordsWithPunctuationSigns2()
       throws RecognitionException
   {
     PARSERMETHOD_LEVEL_INTRODUCER.createTree(
@@ -119,7 +160,7 @@ public class LevelParsingTest {
   }
 
   @Test
-  public void chapterContainsUrl()
+  public void levelTitleContainsUrl()
       throws RecognitionException
   {
     PARSERMETHOD_LEVEL_INTRODUCER.createTree(
@@ -177,7 +218,7 @@ public class LevelParsingTest {
 
 
   @Test
-  public void sectionIsAnonymousAndHasBlockquoteWithTwoParagraphs()
+  public void levelIsAnonymousAndHasBlockquoteWithTwoParagraphs()
       throws RecognitionException
   {
     PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
@@ -200,7 +241,7 @@ public class LevelParsingTest {
   }
 
   @Test
-  public void sectionIsAnonymousAndHasBlockquoteWithBreakInside() throws RecognitionException {
+  public void levelIsAnonymousAndHasBlockquoteWithBreakInside() throws RecognitionException {
     PARSERMETHOD_PART.createTree(
         "===" + BREAK +
         BREAK +

@@ -187,10 +187,11 @@ part
   
 levelIntroducer 
   : ( ( tags mediumbreak )?
+      ( ( relativeIdentifier | absoluteIdentifier ) mediumbreak )?
       levelIntroducerIndent
       ( whitespace? levelTitle )?
     )
-    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? tags? )
+    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? tags? relativeIdentifier? absoluteIdentifier? )
   ;
 
 
