@@ -5,6 +5,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.book.function.builtin.InsertCommand;
 import novelang.book.function.builtin.MapstylesheetCommand;
 import novelang.book.function.builtin.FileOrdering;
+import novelang.part.FragmentIdentifier;
 
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
@@ -12,6 +13,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.Map;
+import java.util.Iterator;
 
 /**
  * Tests for{@link CommandFactory}.
@@ -35,6 +37,7 @@ public class CommandFactoryTest {
     assertFalse( extractCreateLevel( command ) ) ;
     assertEquals( 0, extractLevelAbove( command ) );
     assertNull( extractStyleName( command ) ) ;
+    assertFalse( extractFragmentIdentifiers( command ).iterator().hasNext() ) ;
   }
   
   @Test
@@ -47,7 +50,9 @@ public class CommandFactoryTest {
             tree( COMMAND_INSERT_SORT_, "path+" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
             tree( COMMAND_INSERT_LEVELABOVE_, "3" ),
-            tree( COMMAND_INSERT_STYLE_, "whatever" )
+            tree( COMMAND_INSERT_STYLE_, "whatever" ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "w" ), tree( "x" ) ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "y" ), tree( "z" ) )
         )    
     ) ;
     assertTrue( "Got: " + command, command instanceof InsertCommand ) ;
@@ -57,6 +62,11 @@ public class CommandFactoryTest {
     assertTrue( extractCreateLevel( command ) ) ;
     assertEquals( 3, extractLevelAbove( command ) ) ;
     assertEquals( "whatever", extractStyleName( command ) ) ;
+    final Iterator< FragmentIdentifier > absoluteIdentifiers = 
+        extractFragmentIdentifiers( command ).iterator() ;
+    assertEquals( new FragmentIdentifier( "w", "x" ), absoluteIdentifiers.next() ) ;
+    assertEquals( new FragmentIdentifier( "y", "z" ), absoluteIdentifiers.next() ) ;
+    assertFalse( absoluteIdentifiers.hasNext() ) ;
   }
   
   @Test
@@ -110,6 +120,16 @@ public class CommandFactoryTest {
     return Reflection.field( "stylesheetMaps" ).
         ofType( new TypeRef < Map< String, String > >() {} ).
         in( mapstylesheetCommand ).
+        get() 
+    ;
+  }
+  
+  private static Iterable< FragmentIdentifier > extractFragmentIdentifiers( 
+      final Command insertCommand 
+  ) {
+    return Reflection.field( "fragmentIdentifiers" ).
+        ofType( new TypeRef < Iterable< FragmentIdentifier > >() {} ).
+        in( insertCommand ).
         get() 
     ;
   }

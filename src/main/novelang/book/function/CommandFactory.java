@@ -9,12 +9,17 @@ import novelang.book.function.builtin.MapstylesheetCommand;
 import novelang.book.function.builtin.FileOrdering;
 import novelang.system.LogFactory;
 import novelang.system.Log;
+import novelang.part.FragmentIdentifier;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 
 import java.util.Map;
+import java.util.List;
 
 /**
  * Creates instances of {@link Command}.
@@ -47,6 +52,9 @@ public class CommandFactory {
         final String levelAboveAsString =
             getTextOfChild( treeOfCommand, COMMAND_INSERT_LEVELABOVE_, false ) ;
         final String styleName = getTextOfChild( treeOfCommand, COMMAND_INSERT_STYLE_, false ) ;
+        final Iterable< FragmentIdentifier > fragmentIdentifiers = 
+            getFragmentIdentifiers( treeOfCommand ) ;
+
         return new InsertCommand(
             treeOfCommand.getLocation(),
             fileName,
@@ -54,7 +62,8 @@ public class CommandFactory {
             fileOrdering, 
             createLevel,
             levelAboveAsString == null ? 0 : Integer.parseInt( levelAboveAsString ),
-            styleName
+            styleName,
+            fragmentIdentifiers
         ) ;
       
       case COMMAND_MAPSTYLESHEET_ :
@@ -68,6 +77,42 @@ public class CommandFactory {
     }
     
   }
+  
+  private static Iterable< SyntacticTree > getChildren( 
+      final SyntacticTree tree, 
+      final NodeKind childNodeKind 
+  ) {
+    final List< SyntacticTree > filtered = Lists.newArrayList() ;
+    for( final SyntacticTree child : tree.getChildren() ) {
+      if( child.isOneOf( childNodeKind ) ) {
+        filtered.add( child ) ;
+      }
+    }
+    return filtered ;
+  }
+
+  
+  private static Iterable< FragmentIdentifier > getFragmentIdentifiers( final SyntacticTree tree ) {
+    final ImmutableList.Builder< FragmentIdentifier > fragmentIdentifiersBuilder = 
+        ImmutableList.builder() ;
+    final Iterable< SyntacticTree > childrenWithAbsoluteIdentifier = 
+        getChildren( tree, ABSOLUTE_IDENTIFIER ) ;
+    for( final SyntacticTree child : childrenWithAbsoluteIdentifier ) {
+      fragmentIdentifiersBuilder.add( getFragmentIdentifier( child ) ) ;
+    }
+    return fragmentIdentifiersBuilder.build() ;
+  }
+  
+  
+  private static FragmentIdentifier getFragmentIdentifier( final SyntacticTree tree ) {
+    Preconditions.checkArgument( tree.isOneOf( ABSOLUTE_IDENTIFIER ) ) ;
+    final List< String > segments = Lists.newArrayList() ;
+    for( final SyntacticTree child : tree.getChildren() ) {
+      segments.add( child.getText() ) ;
+    }
+    return new FragmentIdentifier( segments ) ; 
+  }
+  
   
   private static String getTextOfChild( 
       final SyntacticTree tree, 

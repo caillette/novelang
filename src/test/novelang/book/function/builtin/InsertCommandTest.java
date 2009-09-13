@@ -19,6 +19,7 @@ package novelang.book.function.builtin;
 import novelang.ScratchDirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.part.FragmentIdentifier;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
@@ -41,6 +42,8 @@ import org.junit.runners.NameAwareTestClassRunner;
 import java.io.File;
 import java.net.MalformedURLException;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * Tests for {@link InsertCommand}.
  *
@@ -59,7 +62,8 @@ public class InsertCommandTest {
         null,
         false,
         0,
-        null
+        null,
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final CommandExecutionContext initialContext =
@@ -92,7 +96,8 @@ public class InsertCommandTest {
         null,
         true,
         0,
-        null
+        null,
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -129,7 +134,8 @@ public class InsertCommandTest {
         null,
         false,
         0,
-        "myStyle"
+        "myStyle",
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -162,7 +168,8 @@ public class InsertCommandTest {
         null,
         false,
         0,
-        null
+        null,
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -182,7 +189,8 @@ public class InsertCommandTest {
         null,
         false,
         0,
-        null
+        null,
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -203,7 +211,8 @@ public class InsertCommandTest {
         null,
         false,
         1,
-        null
+        null,
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final SyntacticTree initialTree = tree(
@@ -284,7 +293,8 @@ public class InsertCommandTest {
         null,
         false,
         1,
-        null
+        null,
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
@@ -304,7 +314,8 @@ public class InsertCommandTest {
         null,
         false,
         1,
-        null
+        null,
+        ImmutableList.< FragmentIdentifier >of()
     ) ;
 
     final SyntacticTree initialTree = tree(

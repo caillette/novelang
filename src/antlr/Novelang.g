@@ -191,7 +191,9 @@ levelIntroducer
       levelIntroducerIndent
       ( whitespace? levelTitle )?
     )
-    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? tags? relativeIdentifier? absoluteIdentifier? )
+    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? 
+          tags? relativeIdentifier? absoluteIdentifier? 
+        )
   ;
 
 
@@ -1809,6 +1811,7 @@ functionCallInsert
       ( mediumbreak p += keywordCreateLevel )?
       ( mediumbreak p += parameterLevelAbove )?
       ( mediumbreak p += parameterInsertStyle ) ?        
+      ( mediumbreak p += absoluteIdentifier )*        
     )
     -> ^( COMMAND_INSERT_ $p+ )
   ;
