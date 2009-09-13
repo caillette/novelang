@@ -3,6 +3,7 @@ package novelang.batch;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FopFactory;
@@ -186,7 +187,12 @@ public class NovelangTask extends Task {
       throw new BuildException( problems.toString() ) ;
     }
 
-    final String documentString = new String( outputStream.toByteArray(), renderingCharset ) ;
+    final String documentString;
+    try {
+      documentString = new String( outputStream.toByteArray(), renderingCharset.name() ) ;
+    } catch ( UnsupportedEncodingException e ) {
+      throw new BuildException( e ) ;
+    }
     getProject().setProperty( contentProperty, documentString ) ;
   }
 
