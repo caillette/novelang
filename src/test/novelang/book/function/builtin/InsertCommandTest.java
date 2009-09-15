@@ -37,6 +37,7 @@ import org.fest.reflect.reference.TypeRef;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 
@@ -58,7 +59,7 @@ public class InsertCommandTest {
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        oneWordFile.toURL().toExternalForm(),
+        oneWordFile.toURI().toURL().toExternalForm(),
         false,
         null,
         false,
@@ -80,7 +81,7 @@ public class InsertCommandTest {
     assertNotNull( result.getDocumentTree() ) ;
 
     assertEqualsNoSeparators(
-        tree( BOOK, tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
+        tree( BOOK, tree( PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
         result.getDocumentTree()
     ) ;
 
@@ -92,7 +93,7 @@ public class InsertCommandTest {
   {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        noChapterFile.toURL().toExternalForm(),
+        noChapterFile.toURI().toURL().toExternalForm(),
         false,
         null,
         true,
@@ -117,7 +118,7 @@ public class InsertCommandTest {
                 tree( LEVEL_TITLE, tree( WORD_, "no-chapter" ) ),
                 tree( _LEVEL,
                     tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
-                    tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
+                    tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
                 )
             )
         ),
@@ -130,7 +131,7 @@ public class InsertCommandTest {
   public void addStyle() throws CommandParameterException, MalformedURLException {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        oneWordFile.toURL().toExternalForm(), 
+        oneWordFile.toURI().toURL().toExternalForm(),
         false,
         null,
         false,
@@ -150,7 +151,7 @@ public class InsertCommandTest {
         tree(
             BOOK,
             tree(
-                NodeKind.PARAGRAPH_REGULAR,
+                PARAGRAPH_REGULAR,
                 tree( _STYLE, "myStyle" ),
                 tree( WORD_, "oneword" )
             )
@@ -164,7 +165,7 @@ public class InsertCommandTest {
   public void recurseWithAllValidParts() throws CommandParameterException, MalformedURLException {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        goodContentDirectory.toURL().toExternalForm(),
+        goodContentDirectory.toURI().toURL().toExternalForm(),
         true,
         null,
         false,
@@ -185,7 +186,7 @@ public class InsertCommandTest {
   public void recurseWithSomeBrokenPart() throws CommandParameterException, MalformedURLException {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
-        brokenContentDirectory.toURL().toExternalForm(),
+        brokenContentDirectory.toURI().toURL().toExternalForm(),
         true,
         null,
         false,
@@ -207,7 +208,7 @@ public class InsertCommandTest {
   public void levelAboveIs1() throws CommandParameterException, MalformedURLException {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        oneWordFile.toURL().toExternalForm(),
+        oneWordFile.toURI().toURL().toExternalForm(),
         false,
         null,
         false,
@@ -237,7 +238,7 @@ public class InsertCommandTest {
                 _LEVEL,
                 tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "oneword" )
                 )
             )
@@ -289,7 +290,7 @@ public class InsertCommandTest {
   public void noLevelaboveCausesProblem() throws CommandParameterException, MalformedURLException {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
-        oneWordFile.toURL().toExternalForm(),
+        oneWordFile.toURI().toURL().toExternalForm(),
         true,
         null,
         false,
@@ -310,7 +311,7 @@ public class InsertCommandTest {
   public void recurseWithLevelabove1() throws CommandParameterException, MalformedURLException {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        goodContentDirectory.toURL().toExternalForm(),
+        goodContentDirectory.toURI().toURL().toExternalForm(),
         true,
         null,
         false,
@@ -333,18 +334,51 @@ public class InsertCommandTest {
             tree( 
                 _LEVEL,
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "oneword" )
                 ),
                 tree( 
                     _LEVEL,
                     tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
-                    tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
+                    tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
                 )
             )
         ),
         result.getDocumentTree()
-    );
+    ) ;
+  }
+
+  @Test  @Ignore // TODO create the part with the identifier.
+  public void useSimpleFragmentIdentifier() throws MalformedURLException {
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        goodContentDirectory.toURI().toURL().toExternalForm(),
+        true,
+        null,
+        false,
+        0,
+        null,
+        ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "x" ) )
+    ) ;
+
+    final SyntacticTree initialTree = tree( BOOK ) ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( goodContentDirectory ).update( initialTree ) ) ;
+
+
+    assertEqualsNoSeparators(
+        tree(
+            BOOK,
+            tree(
+                _LEVEL,
+                tree( ABSOLUTE_IDENTIFIER, tree( "x" ) ),
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
+            )
+        ),
+        result.getDocumentTree()
+      ) ;
+
   }
 
 
@@ -382,7 +416,7 @@ public class InsertCommandTest {
     ) ;
 
     brokenContentDirectory = scratch.getDirectory( "broken" ) ;
-    assertTrue( brokenContentDirectory.mkdirs() ) ;
+
     final Relocator toBrokenContent = new Relocator( brokenContentDirectory ) ;
     toBrokenContent.copy( TestResourceTree.Parts.BROKEN_CANNOTPARSE ) ;
   }
