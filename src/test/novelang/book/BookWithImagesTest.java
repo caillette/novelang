@@ -16,11 +16,11 @@
  */
 package novelang.book;
 
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.Filer;
+import novelang.common.filefixture.Relocator;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
 import static novelang.parser.NodeKind.*;
@@ -120,13 +120,13 @@ public class BookWithImagesTest {
   @Before
   public void before() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    testDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory() ;
+    testDirectory = new ScratchDirectory( testName ).getDirectory() ;
 
-    final Filer filer = new Filer( testDirectory ) ;
-    filer.copyContent( Images.dir ) ;
+    final Relocator relocator = new Relocator( testDirectory ) ;
+    relocator.copyContent( Images.dir ) ;
         
-    bookWithImagesExplicit = filer.createFileObject( Images.dir, Images.BOOK_EXPLICIT ) ;
-    bookWithImagesRecurse = filer.createFileObject( Images.dir, Images.BOOK_RECURSIVE ) ;
+    bookWithImagesExplicit = relocator.createFileObject( Images.dir, Images.BOOK_EXPLICIT ) ;
+    bookWithImagesRecurse = relocator.createFileObject( Images.dir, Images.BOOK_RECURSIVE ) ;
     
     LOG.info( "bookWithImagesExplicit: '%s'", bookWithImagesExplicit );
     LOG.info( "bookWithImagesRecurse: '%s'", bookWithImagesRecurse );

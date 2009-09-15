@@ -24,10 +24,13 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.StandardToStringStyle;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import static org.junit.Assert.assertTrue;
 import novelang.system.LogFactory;
 import novelang.system.Log;
+import com.google.common.base.Preconditions;
 
 /**
  * Creates directories on-demand for test purposes.
@@ -36,19 +39,19 @@ import novelang.system.Log;
  *
  * @author Laurent Caillette
  */
-public class ScratchDirectoryFixture {
+public class ScratchDirectory {
 
-  private static final Log LOG = LogFactory.getLog( ScratchDirectoryFixture.class ) ;
+  private static final Log LOG = LogFactory.getLog( ScratchDirectory.class ) ;
 
   private final String testIdentifier ;
 
   private final Set< String > registeredTestIdentifiers = new HashSet< String >() ;
 
-  public ScratchDirectoryFixture( Class testClass ) throws IOException {
+    public ScratchDirectory( Class testClass ) throws IOException {
     this( ClassUtils.getShortClassName( testClass ) ) ;
   }
 
-  public ScratchDirectoryFixture( String testIdentifier ) throws IOException {
+  public ScratchDirectory( String testIdentifier ) throws IOException {
     this.testIdentifier = testIdentifier ;
     if( registeredTestIdentifiers.contains( testIdentifier ) ) {
       throw new IllegalArgumentException( "Already created for: " + testIdentifier ) ;
@@ -58,7 +61,7 @@ public class ScratchDirectoryFixture {
 
   }
 
-  public String toString() {
+    public String toString() {
     final StandardToStringStyle style = new StandardToStringStyle() ;
     style.setUseShortClassName( true ) ;
 
@@ -99,7 +102,9 @@ public class ScratchDirectoryFixture {
           ) {
         FileUtils.deleteDirectory( file ) ;
       } else {
-        file.mkdir() ;
+        if( file.mkdir() ) {
+          LOG.debug( "Created '%s'", file.getAbsolutePath() ) ;
+        }
       }
       LOG.info( "Created '%s' as clean directory for all fixtures.", file.getAbsolutePath() ) ;
     }
@@ -107,19 +112,29 @@ public class ScratchDirectoryFixture {
     return allFixturesDirectory ;
   }
 
-  private File testScratchDirectory;
+  private File scratchDirectory;
 
-  public File getTestScratchDirectory() throws IOException {
-    if( null == testScratchDirectory ) {
-      testScratchDirectory = new File( getAllFixturesDirectory(), testIdentifier ) ;
-      if( testScratchDirectory.exists() ) {
-        FileUtils.deleteDirectory( testScratchDirectory ) ;
+  public File getDirectory() throws IOException {
+    if( null == scratchDirectory) {
+      scratchDirectory = new File( getAllFixturesDirectory(), testIdentifier ) ;
+      if( scratchDirectory.exists() ) {
+        FileUtils.deleteDirectory( scratchDirectory ) ;
       }
-      testScratchDirectory.mkdirs() ;
+      if( scratchDirectory.mkdirs() ) {
+        LOG.debug( "Created '%s'", scratchDirectory.getAbsolutePath() ) ;
+      }
     }
-    return testScratchDirectory;
+    return scratchDirectory;
   }
 
+  public File getDirectory( final String directoryName ) throws IOException {
+    Preconditions.checkArgument( ! StringUtils.isBlank( directoryName ) ) ;
+    final File directory = new File( scratchDirectory, directoryName ) ;
+    if( directory.mkdirs() ) {
+      LOG.debug( "Created '%s'", directory.getAbsolutePath() ) ;
+    }
+    return directory ;
+  }
 
 
 }

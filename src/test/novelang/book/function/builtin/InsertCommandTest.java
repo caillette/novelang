@@ -16,15 +16,16 @@
  */
 package novelang.book.function.builtin;
 
-import novelang.ScratchDirectoryFixture;
-import novelang.TestResourceTools;
-import novelang.TestResources;
+import novelang.ScratchDirectory;
+import novelang.TestResourceTree;
+import static novelang.TestResourceTree.initialize;
 import novelang.part.FragmentIdentifier;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.common.filefixture.Relocator;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
@@ -346,52 +347,44 @@ public class InsertCommandTest {
     );
   }
 
+
 // =======
 // Fixture
 // =======
 
   private static final Location NULL_LOCATION = new Location( "", -1, -1 ) ;
 
-  private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD_ABSOLUTEFILENAME;
-  private static final String NOCHAPTER_FILENAME = TestResources.NO_CHAPTER ;
-  private static final String BROKEN_FILENAME = TestResources.BROKEN_CANNOTPARSE;
-
-  private static final String CONTENT_GOOD_DIRNAME = "good" ;
-  private static final String CONTENT_BROKEN_DIRNAME = "broken" ;
-
   private File oneWordFile ;
   private File noChapterFile;
   private File goodContentDirectory;
   private File brokenContentDirectory;
 
+
+  static {
+    initialize() ;
+  }
+
+
   @Before
   public void setUp() throws Exception {
 
     final String testName = NameAwareTestClassRunner.getTestName();    
-    final ScratchDirectoryFixture scratchDirectoryFixture =
-        new ScratchDirectoryFixture( testName ) ;
-    File scratchDirectory = scratchDirectoryFixture.getTestScratchDirectory();
+    final ScratchDirectory scratch = new ScratchDirectory( testName ) ;
 
-    goodContentDirectory = new File( scratchDirectory, CONTENT_GOOD_DIRNAME ) ;
+    goodContentDirectory = scratch.getDirectory( "good" ) ;
+    final Relocator toGoodContent = new Relocator( goodContentDirectory ) ;
 
-    oneWordFile = TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        ONE_WORD_FILENAME,
-        goodContentDirectory
+    oneWordFile = toGoodContent.copy( TestResourceTree.Parts.ONE_WORD ) ;
+
+    noChapterFile = toGoodContent.copyWithPath(
+            TestResourceTree.Parts.dir,
+            TestResourceTree.Parts.NO_CHAPTER
     ) ;
 
-    noChapterFile = TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        NOCHAPTER_FILENAME,
-        goodContentDirectory
-    ) ;
-
-    brokenContentDirectory = new File( scratchDirectory, CONTENT_BROKEN_DIRNAME ) ;
-    TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        BROKEN_FILENAME,
-        brokenContentDirectory
-    ) ;
+    brokenContentDirectory = scratch.getDirectory( "broken" ) ;
+    assertTrue( brokenContentDirectory.mkdirs() ) ;
+    final Relocator toBrokenContent = new Relocator( brokenContentDirectory ) ;
+    toBrokenContent.copy( TestResourceTree.Parts.BROKEN_CANNOTPARSE ) ;
   }
 
 

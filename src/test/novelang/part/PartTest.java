@@ -22,13 +22,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.system.LogFactory;
@@ -245,8 +244,8 @@ public class PartTest {
   @Before
   public void setUp() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    final File scratchDirectory = new ScratchDirectoryFixture( testName ).
-        getTestScratchDirectory() ;
+    final File scratchDirectory = new ScratchDirectory( testName ).
+            getDirectory() ;
 
     justSections = TestResourceTools.copyResourceToDirectory(
         getClass(),

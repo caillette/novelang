@@ -17,13 +17,13 @@
 package novelang.part ;
 
 import com.google.common.collect.Lists;
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.Filer;
+import novelang.common.filefixture.Relocator;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.common.filefixture.Relativizer;
 import static novelang.parser.NodeKind.*;
@@ -308,9 +308,9 @@ public class ImageFixerTest {
   @Before
   public void before() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    parentDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory() ;
+    parentDirectory = new ScratchDirectory( testName ).getDirectory() ;
 
-    final Filer filer = new Filer( parentDirectory ) ;
+    final Relocator filer = new Relocator( parentDirectory ) ;
     filer.copyContent( Images.dir ) ;
     
     childDirectory = filer.createFileObject( Images.dir, Images.Child.dir );

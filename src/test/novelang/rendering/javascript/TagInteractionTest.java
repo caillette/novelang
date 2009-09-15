@@ -33,11 +33,11 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.TaggedPart;
 import novelang.TestResources;
-import novelang.common.filefixture.Filer;
+import novelang.common.filefixture.Relocator;
 import novelang.configuration.ConfigurationTools;
 import novelang.daemon.HttpDaemon;
 import novelang.loader.ClasspathResourceLoader;
@@ -141,9 +141,9 @@ public class TagInteractionTest {
     assertEquals( 24, ALL_HEADERS.size() ) ; 
 
     final String testName = NameAwareTestClassRunner.getTestName() ;
-    File testDirectory = new ScratchDirectoryFixture( testName ).getTestScratchDirectory();
+    File testDirectory = new ScratchDirectory( testName ).getDirectory();
 
-    final Filer filer = new Filer( testDirectory ) ;
+    final Relocator filer = new Relocator( testDirectory ) ;
     filer.copyContent( TaggedPart.dir ) ;
 
     final ResourceLoader resourceLoader =

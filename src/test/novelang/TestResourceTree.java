@@ -28,11 +28,16 @@ import static novelang.common.filefixture.ResourceSchema.resource;
  * @author Laurent Caillette
  */
 public final class TestResourceTree {
-  
-  public static void initialize() {
+
+    private TestResourceTree() { }
+
+    public static void initialize() {
     ResourceSchema.initialize( Images.class ) ;
     ResourceSchema.initialize( FontStructure.class ) ;
     ResourceSchema.initialize( TaggedPart.class ) ;
+    ResourceSchema.initialize( Scanned.class ) ;
+    ResourceSchema.initialize( Served.class ) ;
+    ResourceSchema.initialize( Parts.class ) ;
   }
     
   public interface Images {
@@ -103,5 +108,49 @@ public final class TestResourceTree {
     Directory dir = directory( "tagged" ) ;
     Resource TAGGED = resource( "tags-combinations.nlp" ) ;
   }
+
+  public interface Scanned {
+    Directory dir = directory( "scanned" ) ;
+
+
+    Resource FILE_1 = resource( "file1.nlp" ) ;
+    Resource FILE_2 = resource( "file2.nlp" ) ;
+
+    Resource BOOK = resource( "book.nlb" ) ;
+    Resource BOOK_NORECURSE = resource( "book-norecurse.nlb" ) ;
+    Resource BOOK_WITHSTYLE = resource( "book-withstyle.nlb" ) ;
+
+    public interface Subdirectory {
+      Directory dir = directory( "sub" ) ;
+      Resource FILE_3 = resource( "file3.nlp" ) ;
+    }
+
+  }
+
+
+  public interface Served {
+    Directory dir = directory( "served" ) ;
+
+    Resource GOOD = resource( "good.nlp" ) ;
+    Resource BROKEN = resource( "broken.nlp" ) ;
+    Resource VOID_XSL = resource( "void.xsl" ) ;
+    Resource BOOK_BROKEN_1 = resource( "book-broken-1.nlb" ) ;
+    Resource BOOK_BAD_SCANNED_PART = resource( "book-bad-scanned-part.nlb" ) ;
+    Resource BOOK_ALTERNATE_XSL = resource( "book-alternatexsl.nlb" ) ;  
+
+  }
   
+  public interface Parts {
+    Directory dir = directory( "parts" ) ;
+
+    Resource BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
+    Resource JUST_SECTIONS = resource( "just-sections.nlp" ) ;
+    Resource MESSY_IDENTIFIERS = resource( "messy-identifiers.nlp" ) ;
+    Resource MISSING_IMAGES = resource( "missing-images.nlp" ) ;
+    Resource NO_CHAPTER = resource( "no-chapter.nlp" ) ;
+    Resource ONE_WORD = resource( "one-word.nlp" ) ;
+    Resource SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
+
+  }
+
 }

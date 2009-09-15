@@ -32,13 +32,20 @@ import com.google.common.collect.Iterables;
  *
  * @author Laurent Caillette
  */
-public class Filer {
+public class Relocator
+{
 
   public static final int TIMEOUT_SECONDS = 5 ;
 
   private final File physicalTargetDirectory ;
 
-  public Filer( File physicalTargetDirectory ) {
+  /**
+   * Constructor. Creates a {@code Relocator} object with a parent directory used as reference
+   * for all other operations.
+   *
+   * @param physicalTargetDirectory a non-null object representing an existing directory.
+   */
+  public Relocator( File physicalTargetDirectory ) {
     Preconditions.checkArgument( physicalTargetDirectory.exists() ) ;
     Preconditions.checkArgument( physicalTargetDirectory.isDirectory() ) ;
     this.physicalTargetDirectory = physicalTargetDirectory ;
@@ -46,12 +53,30 @@ public class Filer {
 
   /**
    * Copies the given {@code directory} into the {@code physicalTargetDirectory}.
+   *
    * @param directory a non-null object.
+   * @return created directory.
+   * @see #copyTo(Directory, java.io.File)
    */
-  public void copy( Directory directory ) {
+  public File copy( Directory directory ) {
     final File target = createPhysicalDirectory( physicalTargetDirectory, directory.getName() ) ;
     try {
       copyTo( directory, target ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+    return target ;
+  }
+
+  /**
+   * Copies the given {@code singleResource} into the {@code physicalTargetDirectory}.
+   *
+   * @param singleResource a non-null object.
+   * @return created file referencing {@code singleResource}.
+   */
+  public File copy( final Resource singleResource ) {
+    try {
+      return copyTo( singleResource, physicalTargetDirectory ) ;
     } catch( IOException e ) {
       throw new RuntimeException( e ) ;
     }
@@ -59,7 +84,9 @@ public class Filer {
 
   /**
    * Copies the content of the given {@code directory} into the {@code physicalTargetDirectory}.
+   *
    * @param directory a non-null object.
+   * @see #copy(Directory)
    */
   public void copyContent( Directory directory ) {
     try {
@@ -87,29 +114,6 @@ public class Filer {
     }
   }
 
-  private static File copyTo( Resource resource, File physicalTargetDirectory )
-      throws IOException
-  {
-    final File physicalFile = new File( physicalTargetDirectory, resource.getName() ) ;
-    final FileOutputStream fileOutputStream = new FileOutputStream( physicalFile ) ;
-    IOUtils.copy( resource.getInputStream(), fileOutputStream ) ;
-    fileOutputStream.flush() ;
-    fileOutputStream.close() ;
-    return physicalFile ;
-  }
-
-
-  private static File createPhysicalDirectory( File physicalParentDirectory, String name ) {
-    final File physicalDirectory = new File( physicalParentDirectory, name ) ;
-    if( ! physicalDirectory.mkdir() ) {
-      if( ! FileUtils.waitFor( physicalDirectory, TIMEOUT_SECONDS ) ) {
-        throw new RuntimeException(
-            "Failed to create file " + physicalDirectory.getAbsolutePath() ) ;
-      }
-    }
-    return physicalDirectory ;
-  }
-  
   public File createFileObject( Directory scope, SchemaNode node ) {
     Preconditions.checkArgument( 
         ResourceSchema.isParentOfOrSameAs( scope, node ),
@@ -173,9 +177,9 @@ public class Filer {
   
   /**
    * Copies given resource to some target directory, retaining directory hierarchy above, up to the
-   * {@param scope} directory (included).
+   * {@param scope} directory (not included).
    * <pre>
-copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
+copyScoped( ResourceTree.D0.dir, ResourceTree.D0_1_0.dir )
 
 + tree                     -->     + somewhere
   + d0                 < scope         + d0.1
@@ -223,7 +227,62 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
     
   }
   
-  
+
+  /**
+   * Copies given resource to some target directory, retaining directory hierarchy above, up to the
+   * {@param scope} directory (not included).
+   * <pre>
+copyScoped( ResourceTree.D0.dir, ResourceTree.D0_1_0.dir )
+
++ tree                     -->     + somewhere
+  + d0                 < scope         + d0
+    + d0.0                               + d0.1
+        r0.0.0.txt                         + d0.1.0
+    + d0.1               result >              r0.1.0.0.txt
+        r0.1.0.txt
+      + d0.1.0
+          r0.1.0.0.txt < target
+     </pre>
+   * @param scope a non-null object.
+   * @param resource a non-null resource under {@code scope}.
+   * @return a {@code File} object referencing the node to copy.
+   */
+  public File copyWithPath( final Directory scope, final Resource resource ) {
+    Preconditions.checkArgument( ResourceSchema.isParentOf( scope, resource ) ) ;
+    final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
+
+    Directory parent = resource.getParent() ;
+    Directory oldParent = null ;
+
+    while( true ) {
+      if( scope == oldParent ) {
+          break ;
+      }
+      oldParent = parent ;
+      reverseParentHierarchy.add( parent ) ;
+      parent = parent.getParent() ;
+    }
+
+    final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
+
+    File result = null ;
+    File target = physicalTargetDirectory ;
+    for( final Directory directory : parentHierarchy ) {
+      target = createPhysicalDirectory( target, directory.getName() ) ;
+    }
+
+    try {
+      result = copyTo( resource, target ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+
+    return result ;
+
+  }
+
+
+
 
   /**
    * Copies given directory to some target directory, retaining directory hierarchy above, up to the
@@ -281,6 +340,34 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
       throw new IllegalStateException( "Ooops!" ) ;
     }
     return result ;
+  }
+
+// ================
+// Internal cooking
+// ================
+
+
+  private static File copyTo( Resource resource, File physicalTargetDirectory )
+      throws IOException
+  {
+    final File physicalFile = new File( physicalTargetDirectory, resource.getName() ) ;
+    final FileOutputStream fileOutputStream = new FileOutputStream( physicalFile ) ;
+    IOUtils.copy( resource.getInputStream(), fileOutputStream ) ;
+    fileOutputStream.flush() ;
+    fileOutputStream.close() ;
+    return physicalFile ;
+  }
+
+
+  private static File createPhysicalDirectory( File physicalParentDirectory, String name ) {
+    final File physicalDirectory = new File( physicalParentDirectory, name ) ;
+    if( ! physicalDirectory.mkdir() ) {
+      if( ! FileUtils.waitFor( physicalDirectory, TIMEOUT_SECONDS ) ) {
+        throw new RuntimeException(
+            "Failed to create file " + physicalDirectory.getAbsolutePath() ) ;
+      }
+    }
+    return physicalDirectory ;
   }
 
 

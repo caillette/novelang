@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 import novelang.system.LogFactory;
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.system.DefaultCharset;
@@ -80,8 +80,8 @@ public class NumberingTest {
 
   @Before
   public void setUp() throws IOException {
-    final File scratchDirectory = new ScratchDirectoryFixture( getClass().getName() )
-        .getTestScratchDirectory() ;
+    final File scratchDirectory = new ScratchDirectory( getClass().getName() )
+        .getDirectory() ;
     styleDirectory = new File( scratchDirectory, NODESET_DIR ) ;
     TestResourceTools.copyResourceToDirectory(
         getClass(),

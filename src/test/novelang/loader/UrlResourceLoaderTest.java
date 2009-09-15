@@ -22,14 +22,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 
@@ -66,9 +65,9 @@ public class UrlResourceLoaderTest {
   public void setUp() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
 
-    final ScratchDirectoryFixture scratchDirectoryFixture =
-        new ScratchDirectoryFixture( testName ) ;
-    loaderDirectory = scratchDirectoryFixture.getTestScratchDirectory();
+    final ScratchDirectory scratchDirectoryFixture =
+        new ScratchDirectory( testName ) ;
+    loaderDirectory = scratchDirectoryFixture.getDirectory();
     TestResourceTools.copyResourceToDirectory(
         getClass(),
         RESOURCE_NAME,

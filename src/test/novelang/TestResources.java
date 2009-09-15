@@ -141,7 +141,6 @@ public class TestResources {
   public static final String BLUE_128x64_GIF_NAME = "Blue-128x64.gif" ;
   public static final String GREEN_128x64_JPG_NAME = "Green-128x64.jpg" ;
   public static final String RED_128x64_PNG_NAME = "Red-128x64.png" ;
-  public static final String YELLOW_128x64_SVG_NAME = "Yellow-128x64.svg" ;
 
   public static final String PART_WITH_IMAGE1_NAME = "images1.nlp" ;
   public static final String PART_WITH_IMAGE2_NAME = "images2.nlp" ;
@@ -154,8 +153,6 @@ public class TestResources {
       new ResourceName( IMAGES_DIRECTORY_NAME + "/" + GREEN_128x64_JPG_NAME ) ;
   public static final ResourceName IMAGE_BLUE_128x64_GIF =
       new ResourceName( IMAGES_CHILD_DIRECTORY_NAME + "/" + BLUE_128x64_GIF_NAME ) ;
-  public static final ResourceName IMAGE_YELLOW_128x64_SVG =
-      new ResourceName( IMAGES_GRANDCHILD_DIRECTORY_NAME + "/" + YELLOW_128x64_SVG_NAME ) ;
 
   public static final ResourceName PART_WITH_IMAGE1 =
       new ResourceName( IMAGES_DIRECTORY_NAME + "/" + PART_WITH_IMAGE1_NAME ) ;

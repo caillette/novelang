@@ -29,10 +29,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.FontStructure;
-import novelang.common.filefixture.Filer;
+import novelang.common.filefixture.Relocator;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.configuration.parse.ArgumentException;
@@ -298,12 +298,12 @@ public class ConfigurationToolsTest {
    * Tested methods don't modify files so we can have the same scratch directory name for all.
    */
   public ConfigurationToolsTest() throws IOException {
-    scratchDirectory = new ScratchDirectoryFixture(
-        ConfigurationToolsTest.class ).getTestScratchDirectory() ;
+    scratchDirectory = new ScratchDirectory(
+        ConfigurationToolsTest.class ).getDirectory() ;
     someEmptyContentDirectory = new File( scratchDirectory, "some-empty-content-root"  ) ;
     someEmptyContentDirectory.mkdirs() ;
     
-    final Filer filer = new Filer( scratchDirectory ) ;
+    final Relocator filer = new Relocator( scratchDirectory ) ;
     filer.copyContent( FontStructure.dir ) ;
     defaultFontsDirectory = filer.createFileObject(
         FontStructure.dir,

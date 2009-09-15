@@ -16,7 +16,7 @@
  */
 package novelang.book;
 
-import novelang.ScratchDirectoryFixture;
+import novelang.ScratchDirectory;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.common.SyntacticTree;
@@ -27,7 +27,6 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
-import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -241,9 +240,9 @@ public class BookTest {
   @Before
   public void setUp() throws Exception {
     final String testName = NameAwareTestClassRunner.getTestName();
-    final ScratchDirectoryFixture scratchDirectoryFixture =
-        new ScratchDirectoryFixture( testName ) ;
-    final File contentDirectory = scratchDirectoryFixture.getTestScratchDirectory() ;
+    final ScratchDirectory scratchDirectoryFixture =
+        new ScratchDirectory( testName ) ;
+    final File contentDirectory = scratchDirectoryFixture.getDirectory() ;
 
     oneWordFile = TestResourceTools.copyResourceToDirectory(
         getClass(),
