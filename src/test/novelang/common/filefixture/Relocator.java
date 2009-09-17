@@ -347,6 +347,55 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
 // ================
 
 
+  private static File copyWithPath(
+      final File physicalTargetDirectory,
+      final Directory scope,
+      final Resource resource,
+      final boolean includeReference
+  ) {
+      Preconditions.checkArgument( ResourceSchema.isParentOf( scope, resource ) ) ;
+      final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
+
+      Directory parent = resource.getParent() ;
+      Directory oldParent = null ;
+
+      while( true ) {
+        if( scope == parent ) {
+          break ;
+        } else {
+          reverseParentHierarchy.add( parent ) ;
+          parent = parent.getParent() ;
+        }
+      }
+
+      while( true ) {
+        if( scope == oldParent ) {
+            break ;
+        }
+        oldParent = parent ;
+        reverseParentHierarchy.add( parent ) ;
+        parent = parent.getParent() ;
+      }
+
+      final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
+
+      File result = null ;
+      File target = physicalTargetDirectory ;
+      for( final Directory directory : parentHierarchy ) {
+        target = createPhysicalDirectory( target, directory.getName() ) ;
+      }
+
+      try {
+        result = copyTo( resource, target ) ;
+      } catch( IOException e ) {
+        throw new RuntimeException( e ) ;
+      }
+
+      return result ;
+
+  }
+
+
   private static File copyTo( Resource resource, File physicalTargetDirectory )
       throws IOException
   {
