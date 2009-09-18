@@ -102,6 +102,19 @@ public class LevelParsingTest {
   }
 
   @Test
+  public void levelHasMultipartIdentifier() throws RecognitionException {
+    PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
+        "\\wx\\yz" + BREAK +
+        "===",
+        tree(
+            LEVEL_INTRODUCER_,
+            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
+            tree( RELATIVE_IDENTIFIER, tree( "wx" ), tree( "yz" ) )
+        )
+    ) ;
+  }
+
+  @Test
   public void levelHasOneParagraphWithEmphasisThenWordOnTwoLines() throws RecognitionException {
     PARSERMETHOD_LEVEL_INTRODUCER.createTree(
         "===" + BREAK +
