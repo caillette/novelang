@@ -85,8 +85,7 @@ public final class Version {
   }
 
   /**
-   * This very {@code @SNAPSHOT@} string is replaced by the official version number
-   * by the build script.
+   * This very string is replaced by the official version number by the build script.
    */
   private static final String PRODUCT_VERSION_AS_STRING = "@SNAPSHOT@" ;
 

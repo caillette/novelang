@@ -28,6 +28,8 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 
 /**
+ * Tests for {@link FragmentExtractor}.
+ *
  * @author Laurent Caillette
  */
 public class FragmentExtractorTest {

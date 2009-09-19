@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.List;
 
 import novelang.common.SyntacticTree;
+import novelang.common.TagBehavior;
 import novelang.common.tree.Treepath;
 import novelang.part.FragmentIdentifier;
 import novelang.parser.NodeKind;
@@ -13,6 +14,8 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
+
 import org.antlr.misc.MultiMap;
 
 /**
@@ -29,43 +32,64 @@ public class FragmentExtractor
       final Treepath< SyntacticTree > treepath,
       final FragmentIdentifier fragmentIdentifer
   ) {
-      throw new UnsupportedOperationException( "extractFragment" ) ;
-  }
-
-  private static final EnumSet< NodeKind > LEVEL_ENABLED_NODEKINDS = EnumSet.of( NodeKind._LEVEL ) ;
-  private static final EnumSet< NodeKind > IDENTIFIER_NODEKINDS =
-          EnumSet.of( NodeKind.ABSOLUTE_IDENTIFIER, NodeKind.RELATIVE_IDENTIFIER ) ;
-
-
-  private Multimap< FragmentIdentifier, SyntacticTree > createIdentifierMap(
-      final Treepath< SyntacticTree > treepath
-  ) {
-    final Multimap< FragmentIdentifier, SyntacticTree > wholeMap = createIdentifierMap(
-        HashMultimap.< FragmentIdentifier, SyntacticTree >create(), null, treepath ) ;
-
-    throw new UnsupportedOperationException( "createIdentifierMap" ) ;
+      return find( fragmentIdentifer, treepath, null ) ;
   }
 
 
-  private Multimap< FragmentIdentifier, SyntacticTree > createIdentifierMap(
-      final Multimap< FragmentIdentifier, SyntacticTree > ancestorMap,
-      final FragmentIdentifier identifierForScope,
-      final Treepath< SyntacticTree > treepath
-  ) {
-    final Multimap< FragmentIdentifier, SyntacticTree > localMap = HashMultimap.create() ;
-    final SyntacticTree tree = treepath.getTreeAtEnd() ;
-    if( NodeKind._LEVEL.isRoot( tree ) ) {
-
+  private static final EnumSet< NodeKind > TRAVERSABLE_NODEKINDS ;
+  static {
+    final EnumSet< TagBehavior > BEHAVIORS =
+        EnumSet.complementOf( EnumSet.of( TagBehavior.NON_TRAVERSABLE ) ) ;
+    final List< NodeKind > nodeKinds = Lists.newArrayList() ;
+    for( final NodeKind nodeKind : NodeKind.values() ) {
+      if( BEHAVIORS.contains( nodeKind.getTagBehavior() ) ) {
+        nodeKinds.add( nodeKind ) ;
+      }
     }
-
-    throw new UnsupportedOperationException( "createIdentifierMap" ) ;
+    TRAVERSABLE_NODEKINDS = EnumSet.copyOf( nodeKinds ) ;
   }
 
+  private static final NodeKind[] TRAVERSABLE_NODEKINDS_ARRAY =
+      TRAVERSABLE_NODEKINDS.toArray( new NodeKind[ TRAVERSABLE_NODEKINDS.size() ] ) ;
+
+  private static Treepath< SyntacticTree > find(
+      final FragmentIdentifier identifierLookedFor,
+      final Treepath< SyntacticTree > treepath,
+      final FragmentIdentifier parentIdentifier
+  ) {
+    final SyntacticTree tree = treepath.getTreeAtEnd() ;
+    if( tree.isOneOf( TRAVERSABLE_NODEKINDS_ARRAY ) ) {
+      final FragmentIdentifier currentIdentifier = extract( parentIdentifier, tree ) ;
+      if( identifierLookedFor.equals( currentIdentifier ) ) {
+        return treepath ;
+      } else {
+        for( int i = 0 ; i < tree.getChildCount() ; i ++ ) {
+          final Treepath< SyntacticTree > resultForChild = find(
+              identifierLookedFor,
+              Treepath.create( treepath, i ),
+              currentIdentifier == null ? parentIdentifier : currentIdentifier
+          ) ;
+          if( resultForChild != null ) {
+            return resultForChild ;
+          }
+        }
+      }
+    }
+    return null ;
+  }
+
+// ============
+// Boring stuff
+// ============
+
+
+  /**
+   * Extracts an identifier if there is one as a direct child.
+   */
   private static FragmentIdentifier extract(
       final FragmentIdentifier parentIdentifier,
       final SyntacticTree levelTree
   ) {
-
     for( final SyntacticTree child : levelTree.getChildren() ) {
       if( NodeKind.ABSOLUTE_IDENTIFIER.isRoot( child ) ) {
         return new FragmentIdentifier( extractSegments( child ) ) ;
@@ -74,15 +98,18 @@ public class FragmentExtractor
           throw new IllegalArgumentException( // TODO accumulate errors insted.
               "Missing absolute identifier above relative identifier " + child ) ;
         } else {
-//          return new FragmentIdentifier( parentIdentifier, extractSegments( child ) ) ;
-        }            
+          final FragmentIdentifier childIdentifier =
+              new FragmentIdentifier( extractSegments( child ) ) ;
+          return new FragmentIdentifier( parentIdentifier, childIdentifier ) ;
+        }
       }
     }
-
-    throw new UnsupportedOperationException( "extract" ) ;
+    return null ;
   }
 
-  private static List< String > extractSegments( final SyntacticTree identifierTree ) {
+  private static Iterable< String > extractSegments( final SyntacticTree identifierTree ) {
+    Preconditions.checkArgument( identifierTree.isOneOf(
+        NodeKind.ABSOLUTE_IDENTIFIER, NodeKind.RELATIVE_IDENTIFIER ) ) ;
     final List< String > segments = Lists.newArrayList() ;
     for( final SyntacticTree child : identifierTree.getChildren() ) {
       segments.add( child.getText() ) ;

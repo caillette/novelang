@@ -93,6 +93,22 @@ public class FragmentIdentifierTest {
   
   
   @Test
+  public void fromTwoIdentifiers() {
+    final FragmentIdentifier fragmentIdentifier = new FragmentIdentifier(
+        new FragmentIdentifier( "0", "1" ),
+        new FragmentIdentifier( "2", "3" ) 
+    ) ;
+    assertEquals( 4, fragmentIdentifier.size() ) ;
+    assertEquals( "0", fragmentIdentifier.get( 0 ) ) ;
+    assertEquals( "1", fragmentIdentifier.get( 1 ) ) ;
+    assertEquals( "2", fragmentIdentifier.get( 2 ) ) ;
+    assertEquals( "3", fragmentIdentifier.get( 3 ) ) ;
+    assertEquals( "FragmentIdentifier[\\0\\1\\2\\3]", fragmentIdentifier.toString() ) ;
+    assertEquals( new FragmentIdentifier( "0", "1", "2", "3" ), fragmentIdentifier ) ;
+  }
+
+
+  @Test
   public void fromParentPlusOneString() {
     final FragmentIdentifier parent = new FragmentIdentifier( "0", "1" ) ;
     final FragmentIdentifier fragmentIdentifier = new FragmentIdentifier( parent, "2" ) ;

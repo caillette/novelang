@@ -3,6 +3,8 @@ package novelang.part;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
+
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -46,11 +48,18 @@ public class FragmentIdentifier {
     ) ;
   }
 
-  private FragmentIdentifier( 
+  public FragmentIdentifier(
       final FragmentIdentifier parent, 
-      final List< String > otherSegments 
+      final FragmentIdentifier added
   ) {
-    Preconditions.checkArgument( ! otherSegments.isEmpty() ) ;
+    this( parent, added.segments ) ;
+  }
+
+  private FragmentIdentifier(
+      final FragmentIdentifier parent,
+      final Iterable< String > otherSegments
+  ) {
+    Preconditions.checkArgument( otherSegments.iterator().hasNext() ) ;
     final ImmutableList.Builder< String > listBuilder = ImmutableList.builder() ;
     final StringBuilder stringBuilder ;
     if ( parent == null ) {
@@ -68,7 +77,7 @@ public class FragmentIdentifier {
     stringRepresentation = stringBuilder.toString() ;
   }
 
-  public FragmentIdentifier( final List< String > segments ) {
+  public FragmentIdentifier( final Iterable< String > segments ) {
     this( null, segments ) ;    
   }
 

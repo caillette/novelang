@@ -17,7 +17,8 @@
 package novelang.common;
 
 /**
- * Defines how an AST nodes behaves regarding tags.
+ * Defines how an AST nodes behaves regarding tags and identifiers.
+ *
  * @author Laurent Caillette
 */
 public enum TagBehavior {
