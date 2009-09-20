@@ -19,7 +19,7 @@ package novelang.common.filefixture;
 import com.google.common.base.Preconditions;
 
 /**
- * Transforms a resource path.
+ * Transforms a resource path into an other, given a reference path.
  * 
  * @author Laurent Caillette
  */

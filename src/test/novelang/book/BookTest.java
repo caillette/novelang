@@ -19,7 +19,10 @@ package novelang.book;
 import novelang.ScratchDirectory;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.TestResourceTree;
+import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
+import novelang.common.filefixture.Relocator;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
@@ -226,10 +229,11 @@ public class BookTest {
 // Fixture
 // =======
 
-  private static final String ONE_WORD_FILENAME = TestResources.ONE_WORD_ABSOLUTEFILENAME;
-  private File oneWordFile ;
+  static {
+    initialize() ;
+  }
 
-  public static final String SCANNED_BOOK_FILENAME = TestResources.SCANNED_DIR ;
+  private File oneWordFile ;
   private File scannedBookNoStyle ;
   private File scannedBookNoStyleNoRecurse ;
   private File scannedBookWithStyle ;
@@ -240,35 +244,48 @@ public class BookTest {
   @Before
   public void setUp() throws Exception {
     final String testName = NameAwareTestClassRunner.getTestName();
-    final ScratchDirectory scratchDirectoryFixture =
-        new ScratchDirectory( testName ) ;
-    final File contentDirectory = scratchDirectoryFixture.getDirectory() ;
+    final File contentDirectory = new ScratchDirectory( testName ).getDirectory() ;
 
-    oneWordFile = TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        ONE_WORD_FILENAME,
-        contentDirectory
-    ) ;
+    final Relocator toGoodContent = new Relocator( contentDirectory ) ;
+    toGoodContent.copy( TestResourceTree.Scanned.dir ) ;
 
-    TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SCANNED_FILE1, contentDirectory ) ;
-    TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SCANNED_FILE2, contentDirectory ) ;
-    TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SCANNED_FILE3, contentDirectory ) ;
-    scannedBookNoStyle = TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SCANNED_BOOK_NOSTYLE, contentDirectory ) ;
-    scannedBookNoStyleNoRecurse = TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SCANNED_BOOK_NOSTYLE_NORECURSE, contentDirectory ) ;
-    scannedBookWithStyle = TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SCANNED_BOOK_WITHSTYLE, contentDirectory ) ;
+    oneWordFile = toGoodContent.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    scannedBookNoStyle = toGoodContent.createFileObject( TestResourceTree.Scanned.BOOK ) ;
+    scannedBookNoStyleNoRecurse = toGoodContent.createFileObject(
+        TestResourceTree.Scanned.BOOK_NORECURSE ) ;
+    scannedBookWithStyle = toGoodContent.createFileObject(
+        TestResourceTree.Scanned.BOOK_WITHSTYLE ) ;
 
-    scannedBookWithBadPart = TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SERVED_BOOK_BADSCANNEDPART, contentDirectory ) ;
-    TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
-    TestResourceTools.copyResourceToDirectory(
-        getClass(), TestResources.SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
+    toGoodContent.copy( TestResourceTree.Served.dir ) ;
+    scannedBookWithBadPart = toGoodContent.createFileObject(
+        TestResourceTree.Served.BOOK_BAD_SCANNED_PART ) ;
+
+
+//    oneWordFile = TestResourceTools.copyResourceToDirectory(
+//        getClass(),
+//        ONE_WORD_FILENAME,
+//        contentDirectory
+//    ) ;
+//
+//    TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SCANNED_FILE1, contentDirectory ) ;
+//    TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SCANNED_FILE2, contentDirectory ) ;
+//    TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SCANNED_FILE3, contentDirectory ) ;
+//    scannedBookNoStyle = TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SCANNED_BOOK_NOSTYLE, contentDirectory ) ;
+//    scannedBookNoStyleNoRecurse = TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SCANNED_BOOK_NOSTYLE_NORECURSE, contentDirectory ) ;
+//    scannedBookWithStyle = TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SCANNED_BOOK_WITHSTYLE, contentDirectory ) ;
+//
+//    scannedBookWithBadPart = TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SERVED_BOOK_BADSCANNEDPART, contentDirectory ) ;
+//    TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
+//    TestResourceTools.copyResourceToDirectory(
+//        getClass(), TestResources.SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
 
   }
 
