@@ -40,15 +40,15 @@ public class FragmentExtractorTest {
     verifyExtractIdentifiers(
         tree(
             _LEVEL,
-            tree( ABSOLUTE_IDENTIFIER, tree( "wx" ), tree( "yz" ) ),
+            tree( COMPOSITE_IDENTIFIER, tree( "yz" ) ),
             tree( PARAGRAPH_REGULAR )
         ),
         tree(
             _LEVEL,
-            tree( ABSOLUTE_IDENTIFIER, tree( "wx" ), tree( "yz" ) ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "yz" ) ),
             tree( PARAGRAPH_REGULAR )
         ),
-        new FragmentIdentifier( "wx", "yz" )
+        new FragmentIdentifier( "yz" )
     ) ;
   }
 
@@ -58,7 +58,7 @@ public class FragmentExtractorTest {
     verifyExtractIdentifiers(
         tree(
             _LEVEL,
-            tree( ABSOLUTE_IDENTIFIER, tree( "wx" ), tree( "yz" ) ),
+            tree( COMPOSITE_IDENTIFIER, tree( "yz" ) ),
             tree( PARAGRAPH_REGULAR )
         ),
         tree(
@@ -67,23 +67,23 @@ public class FragmentExtractorTest {
             tree( _LEVEL, tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ) ), // noise
             tree(
                 _LEVEL,
-                tree( ABSOLUTE_IDENTIFIER, tree( "wx" ), tree( "yz" ) ),
+                tree( ABSOLUTE_IDENTIFIER, tree( "yz" ) ),
                 tree( PARAGRAPH_REGULAR )
             ),
             tree( _LEVEL, tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ) )  // noise
         ),
-        new FragmentIdentifier( "wx", "yz" )
+        new FragmentIdentifier( "yz" )
     ) ;
   }
 
 
 
   @Test
-  public void simpleRelative() {
+  public void relative() {
     verifyExtractIdentifiers(
         tree(
             _LEVEL,
-            tree( ABSOLUTE_IDENTIFIER, tree( "wx" ), tree( "yz" ) ), // Resolved identifier
+            tree( COMPOSITE_IDENTIFIER, tree( "wx" ), tree( "yz" ) ), // Resolved identifier
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
         tree(

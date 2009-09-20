@@ -3,7 +3,6 @@ package novelang.part;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -86,19 +85,21 @@ public class FragmentIdentifier {
    * 
    * @return a value strictly greater than 0.
    */
-  public int size() {
+  public int getSegmentCount() {
     return segments.size() ;
   }
 
   /**
    * Returns the segment at given index.
    * 
-   * @param index a value of 0 or more but strictly smaller than {@link #size()}. 
+   * @param index a value of 0 or more but strictly smaller than {@link #getSegmentCount()}.
    * @return a non-null, not blank String.
    */
-  public String get( final int index ) {
+  public String getSegmentAt( final int index ) {
     return segments.get( index ) ;
   }
+
+  
 
   @Override
   public int hashCode() {

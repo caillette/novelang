@@ -18,6 +18,7 @@ import novelang.part.Part;
 import novelang.part.FragmentIdentifier;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import novelang.treemangling.FragmentExtractor;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
@@ -127,6 +128,20 @@ public class InsertCommand extends AbstractCommand {
       book = findLastLevel( book, levelAbove ) ;
     } catch ( CommandParameterException e ) {
       return environment.addProblems( Lists.newArrayList( Problem.createProblem( e ) ) ) ;
+    }
+
+    // TODO handle following cases altogether: fragments, createLevel.
+    
+    for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
+      final Treepath< SyntacticTree > fragmentTreepath =
+          FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
+      if( fragmentTreepath == null ) {
+        return environment.addProblem(
+            Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
+      } else {
+        final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
+        book = TreepathTools.addSiblingLast( book, fragment ) ;
+      }
     }
 
     if( null != partTree ) {

@@ -18,6 +18,7 @@ package novelang.parser.antlr;
 
 import static novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
 import static novelang.parser.NodeKind.RELATIVE_IDENTIFIER;
+import static novelang.parser.NodeKind.COMPOSITE_IDENTIFIER;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 import antlr.RecognitionException;
@@ -29,7 +30,7 @@ import org.junit.Test;
 public class IdentifierParsingTest {
 
   @Test
-  public void parseAbsoluteIdentifier1() throws RecognitionException {
+  public void parseAbsoluteIdentifier() throws RecognitionException {
     PARSERMETHOD_ABSOLUTEIDENTIFIER.checkTreeAfterSeparatorRemoval(
         "\\\\absolute",
         tree( ABSOLUTE_IDENTIFIER, "absolute" )
@@ -39,17 +40,17 @@ public class IdentifierParsingTest {
 
 
   @Test
-  public void parseAbsoluteIdentifier2() throws RecognitionException {
-    PARSERMETHOD_ABSOLUTEIDENTIFIER.checkTreeAfterSeparatorRemoval(
+  public void compositeIdentifier() throws RecognitionException {
+    PARSERMETHOD_COMPOSITEIDENTIFIER.checkTreeAfterSeparatorRemoval(
         "\\\\ab\\solute",
-        tree( ABSOLUTE_IDENTIFIER, tree( "ab" ), tree( "solute" ) )
+        tree( COMPOSITE_IDENTIFIER, tree( "ab" ), tree( "solute" ) )
 
     ) ;
   }
 
 
   @Test
-  public void parseRelativeIdentifier1() throws RecognitionException {
+  public void parseRelativeIdentifier() throws RecognitionException {
     PARSERMETHOD_RELATIVEIDENTIFIER.checkTreeAfterSeparatorRemoval(
         "\\relative",
         tree( RELATIVE_IDENTIFIER, "relative" )
@@ -58,14 +59,6 @@ public class IdentifierParsingTest {
   }
 
 
-  @Test
-  public void parseRelativeIdentifier2() throws RecognitionException {
-    PARSERMETHOD_RELATIVEIDENTIFIER.checkTreeAfterSeparatorRemoval(
-        "\\rel\\ative",
-        tree( RELATIVE_IDENTIFIER, tree( "rel" ), tree( "ative" ) )
-
-    ) ;
-  }
 
 
 // =======
@@ -76,5 +69,7 @@ public class IdentifierParsingTest {
       new ParserMethod( "absoluteIdentifier" ) ;
   private static final ParserMethod PARSERMETHOD_RELATIVEIDENTIFIER = 
       new ParserMethod( "relativeIdentifier" ) ;
+  private static final ParserMethod PARSERMETHOD_COMPOSITEIDENTIFIER =
+      new ParserMethod( "compositeIdentifier" ) ;
 
 }

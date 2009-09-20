@@ -116,6 +116,8 @@ public class GenericRenderer implements Renderer {
 
       case URL_LITERAL :
       case TAG :
+      case ABSOLUTE_IDENTIFIER :
+      case RELATIVE_IDENTIFIER :
       case _WORD_COUNT :
       case _STYLE :
       case LINES_OF_LITERAL :

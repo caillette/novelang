@@ -62,8 +62,8 @@ public class FragmentIdentifierTest {
   @Test
   public void fromOneString() {
     final FragmentIdentifier fragmentIdentifier = new FragmentIdentifier( "0" ) ;
-    assertEquals( 1, fragmentIdentifier.size() ) ;
-    assertEquals( "0", fragmentIdentifier.get( 0 ) ) ;
+    assertEquals( 1, fragmentIdentifier.getSegmentCount() ) ;
+    assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
     assertEquals( "FragmentIdentifier[\\0]", fragmentIdentifier.toString() ) ;
     assertEquals( new FragmentIdentifier( "0" ), fragmentIdentifier ) ;
   }
@@ -72,9 +72,9 @@ public class FragmentIdentifierTest {
   @Test
   public void fromTwoStrings() {
     final FragmentIdentifier fragmentIdentifier = new FragmentIdentifier( "0", "1" ) ;
-    assertEquals( 2, fragmentIdentifier.size() ) ;
-    assertEquals( "0", fragmentIdentifier.get( 0 ) ) ;
-    assertEquals( "1", fragmentIdentifier.get( 1 ) ) ;
+    assertEquals( 2, fragmentIdentifier.getSegmentCount() ) ;
+    assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
+    assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1]", fragmentIdentifier.toString() ) ;
     assertEquals( new FragmentIdentifier( "0", "1" ), fragmentIdentifier ) ;
   }
@@ -83,10 +83,10 @@ public class FragmentIdentifierTest {
   @Test
   public void fromThreeStrings() {
     final FragmentIdentifier fragmentIdentifier = new FragmentIdentifier( "0", "1", "2" ) ;
-    assertEquals( 3, fragmentIdentifier.size() ) ;
-    assertEquals( "0", fragmentIdentifier.get( 0 ) ) ;
-    assertEquals( "1", fragmentIdentifier.get( 1 ) ) ;
-    assertEquals( "2", fragmentIdentifier.get( 2 ) ) ;
+    assertEquals( 3, fragmentIdentifier.getSegmentCount() ) ;
+    assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
+    assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
+    assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1\\2]", fragmentIdentifier.toString() ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2" ), fragmentIdentifier ) ;
   }
@@ -98,11 +98,11 @@ public class FragmentIdentifierTest {
         new FragmentIdentifier( "0", "1" ),
         new FragmentIdentifier( "2", "3" ) 
     ) ;
-    assertEquals( 4, fragmentIdentifier.size() ) ;
-    assertEquals( "0", fragmentIdentifier.get( 0 ) ) ;
-    assertEquals( "1", fragmentIdentifier.get( 1 ) ) ;
-    assertEquals( "2", fragmentIdentifier.get( 2 ) ) ;
-    assertEquals( "3", fragmentIdentifier.get( 3 ) ) ;
+    assertEquals( 4, fragmentIdentifier.getSegmentCount() ) ;
+    assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
+    assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
+    assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
+    assertEquals( "3", fragmentIdentifier.getSegmentAt( 3 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1\\2\\3]", fragmentIdentifier.toString() ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2", "3" ), fragmentIdentifier ) ;
   }
@@ -112,10 +112,10 @@ public class FragmentIdentifierTest {
   public void fromParentPlusOneString() {
     final FragmentIdentifier parent = new FragmentIdentifier( "0", "1" ) ;
     final FragmentIdentifier fragmentIdentifier = new FragmentIdentifier( parent, "2" ) ;
-    assertEquals( 3, fragmentIdentifier.size() ) ;
-    assertEquals( "0", fragmentIdentifier.get( 0 ) ) ;
-    assertEquals( "1", fragmentIdentifier.get( 1 ) ) ;
-    assertEquals( "2", fragmentIdentifier.get( 2 ) ) ;
+    assertEquals( 3, fragmentIdentifier.getSegmentCount() ) ;
+    assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
+    assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
+    assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2" ), fragmentIdentifier ) ;
   }
   
@@ -124,11 +124,11 @@ public class FragmentIdentifierTest {
   public void fromParentPlusTwoStrings() {
     final FragmentIdentifier parent = new FragmentIdentifier( "0", "1" ) ;
     final FragmentIdentifier fragmentIdentifier = new FragmentIdentifier( parent, "2", "3" ) ;
-    assertEquals( 4, fragmentIdentifier.size() ) ;
-    assertEquals( "0", fragmentIdentifier.get( 0 ) ) ;
-    assertEquals( "1", fragmentIdentifier.get( 1 ) ) ;
-    assertEquals( "2", fragmentIdentifier.get( 2 ) ) ;
-    assertEquals( "3", fragmentIdentifier.get( 3 ) ) ;
+    assertEquals( 4, fragmentIdentifier.getSegmentCount() ) ;
+    assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
+    assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
+    assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
+    assertEquals( "3", fragmentIdentifier.getSegmentAt( 3 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1\\2\\3]", fragmentIdentifier.toString() ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2", "3" ), fragmentIdentifier ) ;
   }

@@ -58,6 +58,7 @@ tokens {
   TAG ;
   ABSOLUTE_IDENTIFIER ;
   RELATIVE_IDENTIFIER ;
+  COMPOSITE_IDENTIFIER ;
   
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
@@ -217,14 +218,19 @@ tags
 // ===========
 
 
+compositeIdentifier
+  : REVERSE_SOLIDUS ( REVERSE_SOLIDUS identifierSegment )+
+    -> ^( COMPOSITE_IDENTIFIER  identifierSegment+ )
+  ;
+  
 relativeIdentifier
-  : ( REVERSE_SOLIDUS identifierSegment )+
-    -> ^( RELATIVE_IDENTIFIER  identifierSegment+  )
+  : ( REVERSE_SOLIDUS identifierSegment )
+    -> ^( RELATIVE_IDENTIFIER  identifierSegment  )
   ;
 
 absoluteIdentifier
-  : REVERSE_SOLIDUS ( REVERSE_SOLIDUS identifierSegment )+
-    -> ^( ABSOLUTE_IDENTIFIER  identifierSegment+  )
+  : REVERSE_SOLIDUS ( REVERSE_SOLIDUS identifierSegment )
+    -> ^( ABSOLUTE_IDENTIFIER  identifierSegment )
   ;
   
 identifierSegment
@@ -1811,7 +1817,7 @@ functionCallInsert
       ( mediumbreak p += keywordCreateLevel )?
       ( mediumbreak p += parameterLevelAbove )?
       ( mediumbreak p += parameterInsertStyle ) ?        
-      ( mediumbreak p += absoluteIdentifier )*        
+      ( mediumbreak p += compositeIdentifier )*        
     )
     -> ^( COMMAND_INSERT_ $p+ )
   ;

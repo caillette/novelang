@@ -1,22 +1,17 @@
 package novelang.treemangling;
 
 import java.util.EnumSet;
-import java.util.Map;
 import java.util.List;
 
 import novelang.common.SyntacticTree;
 import novelang.common.TagBehavior;
+import novelang.common.SimpleTree;
 import novelang.common.tree.Treepath;
+import novelang.common.tree.TreepathTools;
 import novelang.part.FragmentIdentifier;
 import novelang.parser.NodeKind;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
-
-import org.antlr.misc.MultiMap;
 
 /**
  * @author Laurent Caillette
@@ -36,7 +31,7 @@ public class FragmentExtractor
   }
 
 
-  private static final EnumSet< NodeKind > TRAVERSABLE_NODEKINDS ;
+  private static final EnumSet< NodeKind > IDENTIFIER_BEARING_NODEKINDS;
   static {
     final EnumSet< TagBehavior > BEHAVIORS =
         EnumSet.complementOf( EnumSet.of( TagBehavior.NON_TRAVERSABLE ) ) ;
@@ -46,11 +41,11 @@ public class FragmentExtractor
         nodeKinds.add( nodeKind ) ;
       }
     }
-    TRAVERSABLE_NODEKINDS = EnumSet.copyOf( nodeKinds ) ;
+    IDENTIFIER_BEARING_NODEKINDS = EnumSet.copyOf( nodeKinds ) ;
   }
 
-  private static final NodeKind[] TRAVERSABLE_NODEKINDS_ARRAY =
-      TRAVERSABLE_NODEKINDS.toArray( new NodeKind[ TRAVERSABLE_NODEKINDS.size() ] ) ;
+  private static final NodeKind[] IDENTIFIER_BEARING_NODEKINDS_ARRAY =
+      IDENTIFIER_BEARING_NODEKINDS.toArray( new NodeKind[ IDENTIFIER_BEARING_NODEKINDS.size() ] ) ;
 
   private static Treepath< SyntacticTree > find(
       final FragmentIdentifier identifierLookedFor,
@@ -58,11 +53,18 @@ public class FragmentExtractor
       final FragmentIdentifier parentIdentifier
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
-    if( tree.isOneOf( TRAVERSABLE_NODEKINDS_ARRAY ) ) {
-      final FragmentIdentifier currentIdentifier = extract( parentIdentifier, tree ) ;
-      if( identifierLookedFor.equals( currentIdentifier ) ) {
-        return treepath ;
+    if( tree.isOneOf( IDENTIFIER_BEARING_NODEKINDS_ARRAY ) ) {
+      final Treepath< SyntacticTree > pathToIdentifier = findPathToIdentifier( treepath ) ;
+      final FragmentIdentifier currentIdentifier ;
+      if( pathToIdentifier == null ) {
+        currentIdentifier = parentIdentifier ;
       } else {
+        currentIdentifier = extract( parentIdentifier, pathToIdentifier ) ;
+      }
+      if( identifierLookedFor.equals( currentIdentifier ) ) {
+        return upgradeToCompositeIdentifier( pathToIdentifier, currentIdentifier ).getPrevious() ;
+      } else {
+
         for( int i = 0 ; i < tree.getChildCount() ; i ++ ) {
           final Treepath< SyntacticTree > resultForChild = find(
               identifierLookedFor,
@@ -82,39 +84,70 @@ public class FragmentExtractor
 // Boring stuff
 // ============
 
+  /**
+   * Replaces child node of {@link NodeKind#ABSOLUTE_IDENTIFIER} or
+   * {@link NodeKind#RELATIVE_IDENTIFIER} at the end of the treepath by a
+   * {@link NodeKind#COMPOSITE_IDENTIFIER} with given identifier.
+   */
+  private static Treepath< SyntacticTree > upgradeToCompositeIdentifier(
+      final Treepath< SyntacticTree > pathToIdentifier,
+      final FragmentIdentifier compositeIdentifier
+  ) {
+    Preconditions.checkArgument( pathToIdentifier.getTreeAtEnd().isOneOf(
+        NodeKind.ABSOLUTE_IDENTIFIER, NodeKind.RELATIVE_IDENTIFIER ) ) ;
+    final List< SyntacticTree > segmentTrees = Lists.newArrayList() ;
+    for( int i = 0 ; i < compositeIdentifier.getSegmentCount() ; i ++ ) {
+      segmentTrees.add( new SimpleTree( compositeIdentifier.getSegmentAt( i ) ) ) ;
+    }
+    final SyntacticTree newIdentifierNode = new SimpleTree(
+        NodeKind.COMPOSITE_IDENTIFIER.name(), segmentTrees ) ;
+    return TreepathTools.replaceTreepathEnd( pathToIdentifier, newIdentifierNode ) ;
+  }
+
 
   /**
    * Extracts an identifier if there is one as a direct child.
    */
   private static FragmentIdentifier extract(
       final FragmentIdentifier parentIdentifier,
-      final SyntacticTree levelTree
+      final Treepath< SyntacticTree > pathToIdentifier
   ) {
-    for( final SyntacticTree child : levelTree.getChildren() ) {
-      if( NodeKind.ABSOLUTE_IDENTIFIER.isRoot( child ) ) {
-        return new FragmentIdentifier( extractSegments( child ) ) ;
-      } else if( NodeKind.RELATIVE_IDENTIFIER.isRoot( child ) ) {
-        if( parentIdentifier == null ) {
-          throw new IllegalArgumentException( // TODO accumulate errors insted.
-              "Missing absolute identifier above relative identifier " + child ) ;
-        } else {
-          final FragmentIdentifier childIdentifier =
-              new FragmentIdentifier( extractSegments( child ) ) ;
-          return new FragmentIdentifier( parentIdentifier, childIdentifier ) ;
-        }
+    final SyntacticTree identifierTree = pathToIdentifier.getTreeAtEnd() ;
+    if( NodeKind.ABSOLUTE_IDENTIFIER.isRoot( identifierTree ) ) {
+      return new FragmentIdentifier( extractSegment( identifierTree ) ) ;
+    } else if( NodeKind.RELATIVE_IDENTIFIER.isRoot( identifierTree ) ) {
+      if( parentIdentifier == null ) {
+        throw new IllegalArgumentException( // TODO accumulate errors insted.
+            "Missing absolute identifier above relative identifier " + identifierTree ) ;
+      } else {
+        return new FragmentIdentifier(
+            parentIdentifier,
+            new FragmentIdentifier( extractSegment( identifierTree ) )
+        ) ;
       }
     }
     return null ;
   }
 
-  private static Iterable< String > extractSegments( final SyntacticTree identifierTree ) {
-    Preconditions.checkArgument( identifierTree.isOneOf(
-        NodeKind.ABSOLUTE_IDENTIFIER, NodeKind.RELATIVE_IDENTIFIER ) ) ;
-    final List< String > segments = Lists.newArrayList() ;
-    for( final SyntacticTree child : identifierTree.getChildren() ) {
-      segments.add( child.getText() ) ;
+  /**
+   * Extracts an identifier if there is one as immediate child.
+   */
+  private static Treepath< SyntacticTree > findPathToIdentifier(
+      final Treepath< SyntacticTree > parentOfIdentifier
+  ) {
+    final SyntacticTree parentTree = parentOfIdentifier.getTreeAtEnd() ;
+    for( int i = 0 ; i < parentTree.getChildCount() ; i ++ ) {
+      final SyntacticTree child = parentTree.getChildAt( i ) ;
+      if( child.isOneOf( NodeKind.ABSOLUTE_IDENTIFIER, NodeKind.RELATIVE_IDENTIFIER ) ) {
+        return Treepath.create( parentOfIdentifier, i ) ;
+      }
     }
-    return segments ;
+    return null ;
+  }
+
+
+  private static String extractSegment( final SyntacticTree identifierTree ) {
+    return identifierTree.getChildAt( 0 ).getText() ;
   }
 
 
