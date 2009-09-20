@@ -129,7 +129,7 @@ public class ScratchDirectory {
 
   public File getDirectory( final String directoryName ) throws IOException {
     Preconditions.checkArgument( ! StringUtils.isBlank( directoryName ) ) ;
-    final File directory = new File( scratchDirectory, directoryName ) ;
+    final File directory = new File( getDirectory(), directoryName ) ;
     if( directory.mkdirs() ) {
       LOG.debug( "Created '%s'", directory.getAbsolutePath() ) ;
     }
