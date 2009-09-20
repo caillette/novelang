@@ -23,7 +23,7 @@ import static novelang.TestResourceTree.initialize;
 import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.Relocator;
+import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.common.filefixture.Relativizer;
 import static novelang.parser.NodeKind.*;
@@ -310,7 +310,7 @@ public class ImageFixerTest {
     final String testName = NameAwareTestClassRunner.getTestName();
     parentDirectory = new DirectoryFixture( testName ).getDirectory() ;
 
-    final Relocator filer = new Relocator( parentDirectory ) ;
+    final ResourceInstaller filer = new ResourceInstaller( parentDirectory ) ;
     filer.copyContent( Images.dir ) ;
     
     childDirectory = filer.createFileObject( Images.dir, Images.Child.dir );

@@ -20,9 +20,10 @@ import novelang.DirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.Relocator;
+import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -54,7 +55,7 @@ public class BookWithImagesTest {
   @Test
   public void imagesInPartsWithExplicitNames() throws IOException {
     final Book book = new Book(
-        testDirectory,
+        resourceInstaller.getTargetDirectory(),
         bookWithImagesExplicit,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
@@ -76,7 +77,7 @@ public class BookWithImagesTest {
   @Test
   public void imagesInPartsWithRecurse() throws IOException {
     final Book book = new Book(
-        testDirectory,
+        resourceInstaller.getTargetDirectory(),
         bookWithImagesRecurse,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
@@ -111,22 +112,19 @@ public class BookWithImagesTest {
     RESOURCE_PATH_RED = relativizer.apply( Images.RED_PNG ) ;
 
   }
+  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
-  
-  private File testDirectory ;
+
   private File bookWithImagesExplicit;
   private File bookWithImagesRecurse ;
 
   @Before
   public void before() throws IOException {
-    final String testName = NameAwareTestClassRunner.getTestName();
-    testDirectory = new DirectoryFixture( testName ).getDirectory() ;
 
-    final Relocator relocator = new Relocator( testDirectory ) ;
-    relocator.copyContent( Images.dir ) ;
+    resourceInstaller.copyContent( Images.dir ) ;
         
-    bookWithImagesExplicit = relocator.createFileObject( Images.dir, Images.BOOK_EXPLICIT ) ;
-    bookWithImagesRecurse = relocator.createFileObject( Images.dir, Images.BOOK_RECURSIVE ) ;
+    bookWithImagesExplicit = resourceInstaller.createFileObject( Images.dir, Images.BOOK_EXPLICIT ) ;
+    bookWithImagesRecurse = resourceInstaller.createFileObject( Images.dir, Images.BOOK_RECURSIVE ) ;
     
     LOG.info( "bookWithImagesExplicit: '%s'", bookWithImagesExplicit );
     LOG.info( "bookWithImagesRecurse: '%s'", bookWithImagesRecurse );

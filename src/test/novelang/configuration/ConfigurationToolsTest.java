@@ -27,22 +27,23 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
 import org.junit.Assert;
 import org.junit.Test;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import novelang.DirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.FontStructure;
-import novelang.common.filefixture.Relocator;
 import novelang.common.filefixture.Relativizer;
+import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.configuration.parse.ArgumentException;
-import novelang.configuration.parse.DocumentGeneratorParameters;
 import novelang.configuration.parse.DaemonParameters;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
 import static novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
+import novelang.configuration.parse.DocumentGeneratorParameters;
 import novelang.configuration.parse.GenericParameters;
-import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 import static novelang.configuration.parse.GenericParameters.OPTIONNAME_CONTENT_ROOT;
+import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 import novelang.produce.DocumentRequest;
 import novelang.system.DefaultCharset;
 
@@ -303,7 +304,7 @@ public class ConfigurationToolsTest {
     someEmptyContentDirectory = new File( scratchDirectory, "some-empty-content-root"  ) ;
     someEmptyContentDirectory.mkdirs() ;
     
-    final Relocator filer = new Relocator( scratchDirectory ) ;
+    final ResourceInstaller filer = new ResourceInstaller( scratchDirectory ) ;
     filer.copyContent( FontStructure.dir ) ;
     defaultFontsDirectory = filer.createFileObject(
         FontStructure.dir,

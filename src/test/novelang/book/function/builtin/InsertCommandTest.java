@@ -16,34 +16,31 @@
  */
 package novelang.book.function.builtin;
 
-import novelang.DirectoryFixture;
+import java.io.File;
+import java.net.MalformedURLException;
+
+import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
+import static org.junit.Assert.*;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+
+import com.google.common.collect.ImmutableList;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.initialize;
-import novelang.part.FragmentIdentifier;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.Relocator;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
 import static novelang.parser.antlr.TreeFixture.tree;
-
-import org.fest.reflect.core.Reflection;
-import org.fest.reflect.reference.TypeRef;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
-
-import java.io.File;
-import java.net.MalformedURLException;
-
-import com.google.common.collect.ImmutableList;
+import novelang.part.FragmentIdentifier;
 
 /**
  * Tests for {@link InsertCommand}.
@@ -56,7 +53,7 @@ public class InsertCommandTest {
   @Test
   public void goodFileUrl() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -70,7 +67,7 @@ public class InsertCommandTest {
     ) ;
 
     final CommandExecutionContext initialContext =
-        new CommandExecutionContext( relocator.getTargetDirectory() ).
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
         update( new SimpleTree( BOOK.name() ) )
     ;
 
@@ -92,7 +89,7 @@ public class InsertCommandTest {
   public void createChapterForSinglePart() 
       throws CommandParameterException, MalformedURLException
   {
-    final File noChapterFile = relocator.copy( TestResourceTree.Parts.NO_CHAPTER ) ;
+    final File noChapterFile = resourceInstaller.copy( TestResourceTree.Parts.NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -107,7 +104,7 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
     final CommandExecutionContext initialContext =
-        new CommandExecutionContext( relocator.getTargetDirectory() ).update( initialTree ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ;
     final CommandExecutionContext result = insertCommand.evaluate( initialContext ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -133,7 +130,7 @@ public class InsertCommandTest {
   @Test
   public void addStyle() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -148,7 +145,7 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( relocator.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -172,7 +169,7 @@ public class InsertCommandTest {
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        relocator.getTargetDirectory().toURI().toURL().toExternalForm(),
+        resourceInstaller.getTargetDirectory().toURI().toURL().toExternalForm(),
         true,
         null,
         false,
@@ -183,7 +180,7 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( relocator.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -192,7 +189,7 @@ public class InsertCommandTest {
   @Test
   public void recurseWithSomeBrokenPart() throws CommandParameterException, MalformedURLException {
     final File brokenContentDirectory =
-        relocator.copy( TestResourceTree.Parts.BROKEN_CANNOTPARSE ).getParentFile() ;
+        resourceInstaller.copy( TestResourceTree.Parts.BROKEN_CANNOTPARSE ).getParentFile() ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -217,7 +214,7 @@ public class InsertCommandTest {
   @Test
   public void levelAboveIs1() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -239,7 +236,7 @@ public class InsertCommandTest {
     ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( relocator.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -302,7 +299,7 @@ public class InsertCommandTest {
   @Test
   public void noLevelaboveCausesProblem() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -317,7 +314,7 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( relocator.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -326,12 +323,12 @@ public class InsertCommandTest {
   @Test
   public void recurseWithLevelabove1() throws CommandParameterException, MalformedURLException {
 
-    relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
-    relocator.copyWithPath( TestResourceTree.Parts.dir, TestResourceTree.Parts.NO_CHAPTER ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Parts.dir, TestResourceTree.Parts.NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        relocator.getTargetDirectory().toURI().toURL().toExternalForm(),
+        resourceInstaller.getTargetDirectory().toURI().toURL().toExternalForm(),
         true,
         null,
         false,
@@ -345,7 +342,7 @@ public class InsertCommandTest {
         tree( _LEVEL )
     ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( relocator.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertEqualsNoSeparators( 
@@ -372,7 +369,7 @@ public class InsertCommandTest {
   public void useSimpleFragmentIdentifier() throws MalformedURLException {
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        relocator.getTargetDirectory().toURI().toURL().toExternalForm(),
+        resourceInstaller.getTargetDirectory().toURI().toURL().toExternalForm(),
         true,
         null,
         false,
@@ -384,7 +381,7 @@ public class InsertCommandTest {
     final SyntacticTree initialTree = tree( BOOK ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( relocator.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
 
     assertEqualsNoSeparators(
@@ -408,20 +405,11 @@ public class InsertCommandTest {
 
   private static final Location NULL_LOCATION = new Location( "", -1, -1 ) ;
 
-  private Relocator relocator ;
+  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
 
   static {
     initialize() ;
-  }
-
-
-  @Before
-  public void setUp() throws Exception {
-    final String testName = NameAwareTestClassRunner.getTestName();
-    final DirectoryFixture directoryFixture = new DirectoryFixture( testName ) ;
-    final File scratchDirectory = directoryFixture.getDirectory() ;
-    relocator = new Relocator( scratchDirectory ) ;
   }
 
 

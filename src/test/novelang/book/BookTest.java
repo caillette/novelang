@@ -20,7 +20,8 @@ import novelang.DirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.Relocator;
+import novelang.common.filefixture.ResourceInstaller;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -50,7 +51,7 @@ public class BookTest {
    */
   @Test
   public void badCommandGeneratesProblem() {
-    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
 
     final Book book = BookTestTools.createBook(
         SystemUtils.getUserDir(),
@@ -65,7 +66,7 @@ public class BookTest {
    */
   @Test
   public void justInsert() {
-    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
     final Book book = BookTestTools.createBook(
@@ -92,8 +93,8 @@ public class BookTest {
    */
   @Test
   public void insertWithRecursiveFileScan() throws IOException {
-    relocator.copy( TestResourceTree.Scanned.dir ) ;
-    final File scannedBookNoStyle = relocator.createFileObject( TestResourceTree.Scanned.BOOK ) ;
+    resourceInstaller.copy( TestResourceTree.Scanned.dir ) ;
+    final File scannedBookNoStyle = resourceInstaller.createFileObject( TestResourceTree.Scanned.BOOK ) ;
 
     final Book book = BookTestTools.createBook( scannedBookNoStyle ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -139,8 +140,8 @@ public class BookTest {
    */
   @Test
   public void insertWithFlatFileScan() throws IOException {
-    relocator.copy( TestResourceTree.Scanned.dir ) ;
-    final File scannedBookNoStyleNoRecurse = relocator.createFileObject(
+    resourceInstaller.copy( TestResourceTree.Scanned.dir ) ;
+    final File scannedBookNoStyleNoRecurse = resourceInstaller.createFileObject(
         TestResourceTree.Scanned.BOOK_NORECURSE ) ;
 
     final Book book = BookTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
@@ -173,8 +174,8 @@ public class BookTest {
    */
   @Test
   public void insertWithFileScanAndStyle() throws IOException {
-    relocator.copy( TestResourceTree.Scanned.dir ) ;
-    final File scannedBookWithStyle = relocator.createFileObject(
+    resourceInstaller.copy( TestResourceTree.Scanned.dir ) ;
+    final File scannedBookWithStyle = resourceInstaller.createFileObject(
         TestResourceTree.Scanned.BOOK_WITHSTYLE ) ;
 
     final Book book = BookTestTools.createBook( scannedBookWithStyle );
@@ -224,9 +225,9 @@ public class BookTest {
    */
   @Test
   public void insertWithBadPart() throws IOException {
-    relocator.copy( TestResourceTree.Served.BROKEN ) ;
+    resourceInstaller.copy( TestResourceTree.Served.BROKEN ) ;
     final File scannedBookWithBadPart =
-        relocator.copy( TestResourceTree.Served.BOOK_BAD_SCANNED_PART ) ;
+        resourceInstaller.copy( TestResourceTree.Served.BOOK_BAD_SCANNED_PART ) ;
 
     final Book book = BookTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -241,9 +242,9 @@ public class BookTest {
    */
   @Test
   public void insertWithIdentifiers() throws IOException {
-    relocator.copy( TestResourceTree.Identifiers.dir ) ;
+    resourceInstaller.copy( TestResourceTree.Identifiers.dir ) ;
     final File bookWithIdentifier =
-        relocator.createFileObject( TestResourceTree.Identifiers.BOOK ) ;
+        resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK ) ;
 
     final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -277,17 +278,8 @@ public class BookTest {
   }
 
   private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
-  private Relocator relocator;
+  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
-
-  @Before
-  public void setUp() throws Exception {
-    final String testName = NameAwareTestClassRunner.getTestName();
-    final File contentDirectory = new DirectoryFixture( testName ).getDirectory() ;
-    relocator = new Relocator( contentDirectory );
-
-
-  }
 
 }

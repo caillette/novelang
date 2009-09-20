@@ -37,7 +37,7 @@ import novelang.DirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.TaggedPart;
 import novelang.TestResources;
-import novelang.common.filefixture.Relocator;
+import novelang.common.filefixture.ResourceInstaller;
 import novelang.configuration.ConfigurationTools;
 import novelang.daemon.HttpDaemon;
 import novelang.loader.ClasspathResourceLoader;
@@ -143,8 +143,8 @@ public class TagInteractionTest {
     final String testName = NameAwareTestClassRunner.getTestName() ;
     File testDirectory = new DirectoryFixture( testName ).getDirectory();
 
-    final Relocator filer = new Relocator( testDirectory ) ;
-    filer.copyContent( TaggedPart.dir ) ;
+    final ResourceInstaller resourceInstaller = new ResourceInstaller( testDirectory ) ;
+    resourceInstaller.copyContent( TaggedPart.dir ) ;
 
     final ResourceLoader resourceLoader =
         new ClasspathResourceLoader( "/" + ConfigurationTools.BUNDLED_STYLE_DIR ) ;

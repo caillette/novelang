@@ -112,6 +112,8 @@ public class DirectoryFixture {
     return allFixturesDirectory ;
   }
 
+  public static int TIMEOUT_SECONDS = 5 ;
+
   private File scratchDirectory;
 
   public File getDirectory() throws IOException {

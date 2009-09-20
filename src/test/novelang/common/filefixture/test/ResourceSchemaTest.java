@@ -28,7 +28,7 @@ import org.junit.runners.NameAwareTestClassRunner;
 import static org.apache.commons.lang.SystemUtils.FILE_SEPARATOR;
 import novelang.DirectoryFixture;
 import novelang.common.filefixture.Directory;
-import novelang.common.filefixture.Relocator;
+import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.Resource;
 import novelang.common.filefixture.ResourceSchema;
 
@@ -85,7 +85,7 @@ public class ResourceSchemaTest {
 
   @Test
   public void copyContentOk() throws IOException {
-    new Relocator( testDirectory ).copyContent( ResourceTree.dir ) ;
+    new ResourceInstaller( testDirectory ).copyContent( ResourceTree.dir ) ;
     final File treeFile = testDirectory ;
     verifyContent( treeFile ) ;
   }
@@ -93,7 +93,7 @@ public class ResourceSchemaTest {
 
   @Test
   public void copySingleResourceOk() throws IOException {
-    final File resourceFile = new Relocator( testDirectory ).copy( ResourceTree.D0.R0_0 ) ;
+    final File resourceFile = new ResourceInstaller( testDirectory ).copy( ResourceTree.D0.R0_0 ) ;
     assertTrue( resourceFile.exists() ) ;
     assertFalse( resourceFile.isDirectory() ) ;
     assertEquals( resourceFile.getName(), ResourceTree.D0.R0_0.getName() ) ;
@@ -103,7 +103,7 @@ public class ResourceSchemaTest {
 
   @Test
   public void copyOk() throws IOException {
-    final File createdDirectory = new Relocator( testDirectory ).copy( ResourceTree.dir ) ;
+    final File createdDirectory = new ResourceInstaller( testDirectory ).copy( ResourceTree.dir ) ;
     final File treeFile = new File( testDirectory, ResourceTree.dir.getName() ) ;
     verifyContent( treeFile ) ;
     assertEquals( ResourceTree.dir.getName(), createdDirectory.getName() ) ;
@@ -113,7 +113,7 @@ public class ResourceSchemaTest {
 
   @Test
   public void copyScopedDirectory() throws IOException {
-    final File scoped = new Relocator( testDirectory ).
+    final File scoped = new ResourceInstaller( testDirectory ).
         copyScoped( ResourceTree.D0.dir, ResourceTree.D0.D0_1.D0_1_0.dir ) ;
     assertTrue( scoped.exists() ) ;
     assertEquals(
@@ -128,7 +128,7 @@ public class ResourceSchemaTest {
 
   @Test
   public void copyScopedResource() throws IOException {
-    final File scoped = new Relocator( testDirectory ).
+    final File scoped = new ResourceInstaller( testDirectory ).
         copyScoped( ResourceTree.D0.dir, ResourceTree.D0.D0_1.D0_1_0.R0_1_0_0 ) ;
     assertTrue( scoped.exists() ) ;
     assertEquals( 
@@ -143,7 +143,7 @@ public class ResourceSchemaTest {
 
   @Test
   public void copyResourceWithPath() throws IOException {
-    final File scoped = new Relocator( testDirectory ).
+    final File scoped = new ResourceInstaller( testDirectory ).
         copyWithPath( ResourceTree.D0.dir, ResourceTree.D0.D0_1.D0_1_0.R0_1_0_0 ) ;
     assertTrue( scoped.exists() ) ;
     assertEquals(
@@ -159,9 +159,9 @@ public class ResourceSchemaTest {
 
   @Test
   public void createFileObjectNoScope() {
-    final Relocator relocator = new Relocator( testDirectory ) ;
-    relocator.copyWithPath( ResourceTree.D0.D0_0.R0_0_0 ) ;
-    final File file = relocator.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
+    final ResourceInstaller resourceInstaller = new ResourceInstaller( testDirectory ) ;
+    resourceInstaller.copyWithPath( ResourceTree.D0.D0_0.R0_0_0 ) ;
+    final File file = resourceInstaller.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
     assertEquals(
         testDirectory.getAbsolutePath() +
             FILE_SEPARATOR + "tree" + FILE_SEPARATOR + "d0" +
@@ -173,15 +173,15 @@ public class ResourceSchemaTest {
 
   @Test( expected = AssertionError.class )
   public void createFileObjectOnNonExistingResourceFails() {
-    final Relocator relocator = new Relocator( testDirectory ) ;
-    relocator.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
+    final ResourceInstaller resourceInstaller = new ResourceInstaller( testDirectory ) ;
+    resourceInstaller.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
   }
 
 
   @Test
   public void createFileObjectInScopeWithResource() {
-    final Relocator relocator = new Relocator( testDirectory ) ;
-    final File file = relocator.createFileObject(
+    final ResourceInstaller resourceInstaller = new ResourceInstaller( testDirectory ) ;
+    final File file = resourceInstaller.createFileObject(
         ResourceTree.D0.dir, 
         ResourceTree.D0.D0_1.D0_1_0.R0_1_0_0 
     ) ;
@@ -196,8 +196,8 @@ public class ResourceSchemaTest {
 
   @Test
   public void createFileObjectInScopeWithDirectory() {
-    final Relocator relocator = new Relocator( testDirectory ) ;
-    final File file = relocator.createFileObject(
+    final ResourceInstaller resourceInstaller = new ResourceInstaller( testDirectory ) ;
+    final File file = resourceInstaller.createFileObject(
         ResourceTree.D0.dir, 
         ResourceTree.D0.D0_1.dir 
     ) ;

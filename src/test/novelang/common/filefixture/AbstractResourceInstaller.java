@@ -29,39 +29,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 import novelang.system.LogFactory;
 import novelang.system.Log;
+import novelang.DirectoryFixture;
 
 /**
  * Performs filesystem-oriented operations on {@link Resource} and {@link Directory}.
  *
  * @author Laurent Caillette
  */
-public class Relocator {
+/*package*/ abstract class AbstractResourceInstaller {
 
-  private static final Log LOG = LogFactory.getLog( Relocator.class ) ;
+  private static final Log LOG = LogFactory.getLog( AbstractResourceInstaller.class ) ;
 
-  public static final int TIMEOUT_SECONDS = 5 ;
 
-  private final File targetDirectory;
-
-  /**
-   * Constructor. Creates a {@code Relocator} object with a parent directory used as reference
-   * for all other operations.
-   *
-   * @param targetDirectory a non-null object representing an existing directory.
-   */
-  public Relocator( File targetDirectory ) {
-    Preconditions.checkArgument( targetDirectory.exists() ) ;
-    Preconditions.checkArgument( targetDirectory.isDirectory() ) ;
-    this.targetDirectory = targetDirectory;
-    LOG.debug(
-        "Created " + getClass().getSimpleName() +
-        " on directory '" + targetDirectory.getAbsolutePath() + "'"
-    ) ;
-  }
-
-  public File getTargetDirectory() {
-    return targetDirectory ;
-  }
+  public abstract File getTargetDirectory() ;
 
   /**
    * Copies the given {@code directory} into the {@code physicalTargetDirectory}.
@@ -71,7 +51,7 @@ public class Relocator {
    * @see #copyTo(Directory, java.io.File)
    */
   public File copy( Directory directory ) {
-    final File target = createPhysicalDirectory( targetDirectory, directory.getName() ) ;
+    final File target = createPhysicalDirectory( getTargetDirectory(), directory.getName() ) ;
     try {
       copyTo( directory, target ) ;
     } catch( IOException e ) {
@@ -88,7 +68,7 @@ public class Relocator {
    */
   public File copy( final Resource singleResource ) {
     try {
-      return copyTo( singleResource, targetDirectory ) ;
+      return copyTo( singleResource, getTargetDirectory() ) ;
     } catch( IOException e ) {
       throw new RuntimeException( e ) ;
     }
@@ -102,7 +82,7 @@ public class Relocator {
    */
   public void copyContent( Directory directory ) {
     try {
-      copyTo( directory, targetDirectory ) ;
+      copyTo( directory, getTargetDirectory() ) ;
     } catch( IOException e ) {
       throw new RuntimeException( e ) ;
     }
@@ -152,7 +132,7 @@ public class Relocator {
       }
     }
 
-    File result = targetDirectory;
+    File result = getTargetDirectory();
     final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
     for( Directory directory : parentHierarchy ) {
       result = new File( result, directory.getName() ) ;
@@ -183,7 +163,7 @@ public class Relocator {
       }
     }
 
-    File result = targetDirectory;
+    File result = getTargetDirectory();
     final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
     for( Directory directory : parentHierarchy ) {
       result = new File( result, directory.getName() ) ;
@@ -233,7 +213,7 @@ copyScoped( ResourceTree.D0.dir, ResourceTree.D0_1_0.dir )
     final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
 
     File result = null ;
-    File target = targetDirectory;
+    File target = getTargetDirectory();
     for( Directory directory : parentHierarchy ) {
       target = createPhysicalDirectory( target, directory.getName() ) ;
     }
@@ -300,7 +280,7 @@ copyScoped( ResourceTree.D0.dir, ResourceTree.D0_1_0.dir )
     final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
 
     File result = null ;
-    File target = targetDirectory;
+    File target = getTargetDirectory();
     for( final Directory directory : parentHierarchy ) {
       target = createPhysicalDirectory( target, directory.getName() ) ;
     }
@@ -357,7 +337,7 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
     final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
 
     File result = null ;
-    File target = targetDirectory;
+    File target = getTargetDirectory() ;
     for( Directory directory : parentHierarchy ) {
       target = createPhysicalDirectory( target, directory.getName() ) ;
       if( origin == directory ) {
@@ -398,8 +378,8 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
   private static File createPhysicalDirectory( File physicalParentDirectory, String name ) {
     final File physicalDirectory = new File( physicalParentDirectory, name ) ;
     if( ! physicalDirectory.mkdir() ) {
-      if( ! FileUtils.waitFor( physicalDirectory, TIMEOUT_SECONDS ) ) {
-        throw new RuntimeException(
+      if( ! FileUtils.waitFor( physicalDirectory, DirectoryFixture.TIMEOUT_SECONDS ) ) {
+        throw new AssertionError(
             "Failed to create file " + physicalDirectory.getAbsolutePath() ) ;
       }
     }
