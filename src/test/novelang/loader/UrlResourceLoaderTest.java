@@ -28,7 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 
@@ -65,9 +65,9 @@ public class UrlResourceLoaderTest {
   public void setUp() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
 
-    final ScratchDirectory scratchDirectoryFixture =
-        new ScratchDirectory( testName ) ;
-    loaderDirectory = scratchDirectoryFixture.getDirectory();
+    final DirectoryFixture directoryFixture =
+        new DirectoryFixture( testName ) ;
+    loaderDirectory = directoryFixture.getDirectory();
     TestResourceTools.copyResourceToDirectory(
         getClass(),
         RESOURCE_NAME,

@@ -27,7 +27,7 @@ import novelang.system.LogFactory;
 import novelang.system.Log;
 import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.Lists;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
@@ -211,7 +211,7 @@ public class ParametersTest {
   @Before
   public void setUp() throws IOException {
     scratchDirectory =
-        new ScratchDirectory( ParametersTest.class ).getDirectory() ;
+        new DirectoryFixture( ParametersTest.class ).getDirectory() ;
 
     directoryAaa = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
     directoryBbb = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;

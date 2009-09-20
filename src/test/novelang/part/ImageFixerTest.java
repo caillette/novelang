@@ -17,7 +17,7 @@
 package novelang.part ;
 
 import com.google.common.collect.Lists;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.Problem;
@@ -308,7 +308,7 @@ public class ImageFixerTest {
   @Before
   public void before() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    parentDirectory = new ScratchDirectory( testName ).getDirectory() ;
+    parentDirectory = new DirectoryFixture( testName ).getDirectory() ;
 
     final Relocator filer = new Relocator( parentDirectory ) ;
     filer.copyContent( Images.dir ) ;

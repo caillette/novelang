@@ -16,9 +16,7 @@
  */
 package novelang.book;
 
-import novelang.ScratchDirectory;
-import novelang.TestResourceTools;
-import novelang.TestResources;
+import novelang.DirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
@@ -286,7 +284,7 @@ public class BookTest {
   @Before
   public void setUp() throws Exception {
     final String testName = NameAwareTestClassRunner.getTestName();
-    final File contentDirectory = new ScratchDirectory( testName ).getDirectory() ;
+    final File contentDirectory = new DirectoryFixture( testName ).getDirectory() ;
     relocator = new Relocator( contentDirectory );
 
 

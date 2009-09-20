@@ -16,8 +16,8 @@ import com.google.common.base.Preconditions;
 /**
  * @author Laurent Caillette
  */
-public class FragmentExtractor
-{
+public class FragmentExtractor {
+  
   private FragmentExtractor() { }
 
   /**

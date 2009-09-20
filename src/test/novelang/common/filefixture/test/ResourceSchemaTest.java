@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 import static org.apache.commons.lang.SystemUtils.FILE_SEPARATOR;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import novelang.common.filefixture.Directory;
 import novelang.common.filefixture.Relocator;
 import novelang.common.filefixture.Resource;
@@ -224,7 +224,7 @@ public class ResourceSchemaTest {
   @Before
   public void before() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    testDirectory = new ScratchDirectory( testName ).getDirectory() ;
+    testDirectory = new DirectoryFixture( testName ).getDirectory() ;
 
     if( ! ResourceTree.dir.isInitialized() ) {
       ResourceSchema.initialize( ResourceTree.class ) ;

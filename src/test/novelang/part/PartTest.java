@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.system.LogFactory;
@@ -244,7 +244,7 @@ public class PartTest {
   @Before
   public void setUp() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    final File scratchDirectory = new ScratchDirectory( testName ).
+    final File scratchDirectory = new DirectoryFixture( testName ).
             getDirectory() ;
 
     justSections = TestResourceTools.copyResourceToDirectory(

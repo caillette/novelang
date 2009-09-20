@@ -25,7 +25,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 
 /**
  * Tests for {@link FileTools}.
@@ -105,7 +105,7 @@ public class FileToolsTest {
   @Before
   public void setUp() throws IOException {
     
-    final ScratchDirectory fixture = new ScratchDirectory( getClass().getName() ) ;
+    final DirectoryFixture fixture = new DirectoryFixture( getClass().getName() ) ;
     final File scratchDirectory = fixture.getDirectory() ;
 
     parentNoTrailingSeparator = createDirectory( scratchDirectory, "parent" ) ;

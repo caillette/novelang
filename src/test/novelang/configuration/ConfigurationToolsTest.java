@@ -29,7 +29,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.FontStructure;
 import novelang.common.filefixture.Relocator;
@@ -298,7 +298,7 @@ public class ConfigurationToolsTest {
    * Tested methods don't modify files so we can have the same scratch directory name for all.
    */
   public ConfigurationToolsTest() throws IOException {
-    scratchDirectory = new ScratchDirectory(
+    scratchDirectory = new DirectoryFixture(
         ConfigurationToolsTest.class ).getDirectory() ;
     someEmptyContentDirectory = new File( scratchDirectory, "some-empty-content-root"  ) ;
     someEmptyContentDirectory.mkdirs() ;

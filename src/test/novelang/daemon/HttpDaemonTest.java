@@ -40,7 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 import novelang.system.LogFactory;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.common.LanguageTools;
@@ -310,9 +310,9 @@ public class HttpDaemonTest {
 
     final String testName =
         ClassUtils.getShortClassName( getClass() + "-" + testHint ) ;
-    final ScratchDirectory scratchDirectoryFixture =
-        new ScratchDirectory( testName ) ;
-    contentDirectory = scratchDirectoryFixture.getDirectory() ;
+    final DirectoryFixture directoryFixture =
+        new DirectoryFixture( testName ) ;
+    contentDirectory = directoryFixture.getDirectory() ;
 
     goodNlpSource = TestResourceTools.readStringResource(
         getClass(), GOOD_NLP_RESOURCE_NAME, DefaultCharset.SOURCE ) ;

@@ -39,19 +39,19 @@ import com.google.common.base.Preconditions;
  *
  * @author Laurent Caillette
  */
-public class ScratchDirectory {
+public class DirectoryFixture {
 
-  private static final Log LOG = LogFactory.getLog( ScratchDirectory.class ) ;
+  private static final Log LOG = LogFactory.getLog( DirectoryFixture.class ) ;
 
   private final String testIdentifier ;
 
   private final Set< String > registeredTestIdentifiers = new HashSet< String >() ;
 
-    public ScratchDirectory( Class testClass ) throws IOException {
+    public DirectoryFixture( Class testClass ) throws IOException {
     this( ClassUtils.getShortClassName( testClass ) ) ;
   }
 
-  public ScratchDirectory( String testIdentifier ) throws IOException {
+  public DirectoryFixture( String testIdentifier ) throws IOException {
     this.testIdentifier = testIdentifier ;
     if( registeredTestIdentifiers.contains( testIdentifier ) ) {
       throw new IllegalArgumentException( "Already created for: " + testIdentifier ) ;
@@ -61,7 +61,7 @@ public class ScratchDirectory {
 
   }
 
-    public String toString() {
+  public String toString() {
     final StandardToStringStyle style = new StandardToStringStyle() ;
     style.setUseShortClassName( true ) ;
 

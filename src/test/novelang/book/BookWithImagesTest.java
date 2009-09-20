@@ -16,7 +16,7 @@
  */
 package novelang.book;
 
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
@@ -120,7 +120,7 @@ public class BookWithImagesTest {
   @Before
   public void before() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
-    testDirectory = new ScratchDirectory( testName ).getDirectory() ;
+    testDirectory = new DirectoryFixture( testName ).getDirectory() ;
 
     final Relocator relocator = new Relocator( testDirectory ) ;
     relocator.copyContent( Images.dir ) ;

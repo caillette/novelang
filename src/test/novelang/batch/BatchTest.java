@@ -26,7 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import novelang.ScratchDirectory;
+import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
 import novelang.configuration.ConfigurationTools;
@@ -81,9 +81,9 @@ public class BatchTest {
   public void setUp() throws IOException {
     final String testName = NameAwareTestClassRunner.getTestName();
 
-    final ScratchDirectory scratchDirectoryFixture =
-        new ScratchDirectory( testName ) ;
-    contentDirectory = scratchDirectoryFixture.getDirectory() ;
+    final DirectoryFixture directoryFixture =
+        new DirectoryFixture( testName ) ;
+    contentDirectory = directoryFixture.getDirectory() ;
 
     TestResourceTools.copyResourceToDirectoryFlat(
         getClass(),
