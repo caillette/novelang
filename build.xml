@@ -582,7 +582,7 @@ ${html}
 
     <mail
         from="${announcement.user.email}"
-        tolist="${announcement.blog.secretpostingaddress}"
+        tolist="${announcement.blog.secretpostingaddress}, ${announcement.mailinglist.1} ${announcement.mailinglist.2}"
         mailhost="${publish.mailhost}"
         mailport="${publish.mailport}"
         user="${announcement.user.email}"
