@@ -592,13 +592,59 @@ ${html}
     >
       <from address="${announcement.user.email}" />
       <to address="${announcement.blog.secretpostingaddress}" />
-      <to address="${announcement.mailinglist.1}" />
-      <to address="${announcement.mailinglist.2}" />
-      
+
       <message>
         Download ${project.versionedname} &lt;a href="${announcement.download.url}">here&lt;/a> !
         ${html}
         &lt;p>
+      </message>
+    </mail>
+
+
+    <novelang
+        contentRoot="src/doc"
+        styleDirectory="src/doc/style"
+        documentRequest="/versions/${project.version}.nlp?stylesheet=announcement-plaintext.xsl"
+        contentProperty="plaintext"
+        />
+    <echo>About to send:
+${html}
+    </echo>
+
+    <mail
+        mailhost="${publish.mailhost}"
+        mailport="${publish.mailport}"
+        subject="${project.versionedname} released!"
+        user="${announcement.user.email}"
+        password="${announcement.user.password}"
+        messagemimetype="text/plain"
+        ssl="yes"
+        charset="utf-8"
+    >
+      <from address="${announcement.user.email}" />
+      <to address="${announcement.mailinglist.1}" />
+      <to address="${announcement.mailinglist.2}" />
+
+      <message>
+Dear Novelang user,
+
+A new release of Novelang is available from download. Get it "here"
+${announcement.download.url}
+now!
+
+These are the outstanding changes in `${project.versionedname}`:
+${plaintext}
+
+
+Enjoy!
+
+
+The Novelang team
+
+${announcement.project.homepage}
+${announcement.project.blog}
+
+This mail is written in Novelang.
       </message>
     </mail>
   </target>

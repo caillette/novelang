@@ -18,13 +18,14 @@
 
 
   <xsl:template match="/" >
-%% Generated on: <xsl:value-of select="$timestamp" />    
-%%         from: <xsl:value-of select="$filename" />
-%%   word count: <xsl:value-of select="//n:meta/n:word-count" />
     <xsl:apply-templates />
   </xsl:template>
 
-
+  <xsl:template name="metadata-header" >
+  %% Generated on: <xsl:value-of select="$timestamp" />
+  %%         from: <xsl:value-of select="$filename" />
+  %%   word count: <xsl:value-of select="//n:meta/n:word-count" />
+  </xsl:template>    
 
 
   <xsl:template match="n:level" >
@@ -102,6 +103,7 @@
 
 
   <xsl:template match="n:identifier" />
+  <xsl:template match="//n:meta/n:word-count" />    
   <xsl:template match="n:level-title" />
   <xsl:template match="n:style" />
   
@@ -142,8 +144,6 @@
   <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" mode="nospace" >``<xsl:apply-templates/>``</xsl:template>
   <xsl:template match="n:block-inside-parenthesis" mode="nospace" >(<xsl:apply-templates/>)</xsl:template>
 
-  
-  
 
   <xsl:template match="text()" >
     <xsl:value-of select="." />

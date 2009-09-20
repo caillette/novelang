@@ -9,6 +9,7 @@
   <xsl:param name="filename"/>
 
   <xsl:template match="/" >
+    <xsl:call-template name="metadata-header" />
     <xsl:apply-imports/>    
   </xsl:template>
 
