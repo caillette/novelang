@@ -96,7 +96,7 @@ public class CommandFactory {
     final ImmutableList.Builder< FragmentIdentifier > fragmentIdentifiersBuilder = 
         ImmutableList.builder() ;
     final Iterable< SyntacticTree > childrenWithAbsoluteIdentifier = 
-        getChildren( tree, ABSOLUTE_IDENTIFIER ) ;
+        getChildren( tree, COMPOSITE_IDENTIFIER ) ;
     for( final SyntacticTree child : childrenWithAbsoluteIdentifier ) {
       fragmentIdentifiersBuilder.add( getFragmentIdentifier( child ) ) ;
     }
@@ -105,7 +105,7 @@ public class CommandFactory {
   
   
   private static FragmentIdentifier getFragmentIdentifier( final SyntacticTree tree ) {
-    Preconditions.checkArgument( tree.isOneOf( ABSOLUTE_IDENTIFIER ) ) ;
+    Preconditions.checkArgument( tree.isOneOf( COMPOSITE_IDENTIFIER ) ) ;
     final List< String > segments = Lists.newArrayList() ;
     for( final SyntacticTree child : tree.getChildren() ) {
       segments.add( child.getText() ) ;

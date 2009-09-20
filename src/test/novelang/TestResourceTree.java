@@ -38,6 +38,7 @@ public final class TestResourceTree {
     ResourceSchema.initialize( Scanned.class ) ;
     ResourceSchema.initialize( Served.class ) ;
     ResourceSchema.initialize( Parts.class ) ;
+    ResourceSchema.initialize( Identifiers.class ) ;
   }
     
   public interface Images {
@@ -151,6 +152,13 @@ public final class TestResourceTree {
     Resource ONE_WORD = resource( "one-word.nlp" ) ;
     Resource SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
 
+  }
+
+  public interface Identifiers {
+    Directory dir = directory( "identifiers" ) ;
+
+    Resource BOOK = resource( "identifiers.nlb" ) ;
+    Resource PART = resource( "identifiers.nlp" ) ;
   }
 
 }

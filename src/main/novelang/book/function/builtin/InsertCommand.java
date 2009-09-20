@@ -130,30 +130,39 @@ public class InsertCommand extends AbstractCommand {
       return environment.addProblems( Lists.newArrayList( Problem.createProblem( e ) ) ) ;
     }
 
+    final List< SyntacticTree > partTrees = Lists.newArrayList() ;
+
     // TODO handle following cases altogether: fragments, createLevel.
-    
-    for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
-      final Treepath< SyntacticTree > fragmentTreepath =
-          FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
-      if( fragmentTreepath == null ) {
-        return environment.addProblem(
-            Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
-      } else {
-        final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
-        book = TreepathTools.addSiblingLast( book, fragment ) ;
+
+    final boolean hasIdentifiers = fragmentIdentifiers.iterator().hasNext() ;
+
+    if( hasIdentifiers ) {
+      for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
+        final Treepath< SyntacticTree > fragmentTreepath =
+            FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
+        if( fragmentTreepath == null ) {
+          return environment.addProblem(
+              Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
+        } else {
+          final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
+          partTrees.add( fragment ) ;
+        }
       }
+    } else {
+      Iterables.addAll( partTrees, partTree.getChildren() ) ;
     }
+
 
     if( null != partTree ) {
       if( createLevel ) {
           book = createChapterFromPartFilename( 
               book,
               insertedFile,
-              partTree,
+              partTrees,
               styleTree
           ) ;
       } else {
-        for( SyntacticTree partChild : partTree.getChildren() ) {
+        for( SyntacticTree partChild : partTrees ) {
           if( styleTree != null ) {
             partChild = TreeTools.addFirst( partChild, styleTree ) ;
           }
@@ -205,7 +214,12 @@ public class InsertCommand extends AbstractCommand {
               part.relocateResourcePaths( environment.getBaseDirectory() ).getDocumentTree() ;
 
           if( createLevel ) {
-            book = createChapterFromPartFilename( book, partFile, partTree, styleTree );
+            book = createChapterFromPartFilename(
+                book,
+                partFile,
+                partTree.getChildren(),
+                styleTree
+            ) ;
             book = findLastLevel( book, levelAbove ) ;
 
           } else {
@@ -254,7 +268,7 @@ public class InsertCommand extends AbstractCommand {
   private static Treepath< SyntacticTree > createChapterFromPartFilename(
       Treepath< SyntacticTree > book,
       final File partFile,
-      final SyntacticTree partTree,
+      final Iterable< ? extends SyntacticTree > partTrees,
       final SyntacticTree styleTree
   ) {
     final SyntacticTree word = new SimpleTree(
@@ -264,7 +278,7 @@ public class InsertCommand extends AbstractCommand {
     final SyntacticTree title = new SimpleTree( NodeKind.LEVEL_TITLE.name(), word ) ;
 
     SyntacticTree chapterTree = TreeTools.addFirst(
-        new SimpleTree( NodeKind._LEVEL.name(), partTree.getChildren() ),
+        new SimpleTree( NodeKind._LEVEL.name(), partTrees ),
         title
     ) ;
 

@@ -23,7 +23,6 @@ import novelang.TestResourceTree;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.Relocator;
-import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -80,7 +79,7 @@ public class BookTest {
         tree( BOOK,
             tree( _META, tree( _WORD_COUNT, "1" ) ),
             tree(
-                NodeKind.PARAGRAPH_REGULAR,
+                PARAGRAPH_REGULAR,
                 tree( WORD_, "oneword" )
             )
         ),
@@ -107,25 +106,25 @@ public class BookTest {
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
-                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file1" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file1" )
                 )
             ),
             tree(
                 _LEVEL,
-                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file2" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file2" )
                 )
             ),
             tree(
                 _LEVEL,
-                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file3" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file3" )
                 )
             )
@@ -155,11 +154,11 @@ public class BookTest {
             BOOK,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
-                NodeKind.PARAGRAPH_REGULAR,
+                PARAGRAPH_REGULAR,
                 tree( WORD_, "content-of-file1" )
             ),
             tree(
-                NodeKind.PARAGRAPH_REGULAR,
+                PARAGRAPH_REGULAR,
                 tree( WORD_, "content-of-file2" )
             )
         ),
@@ -189,28 +188,28 @@ public class BookTest {
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
-                tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
-                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file1" ) ),
+                tree( _STYLE, tree( CUSTOM_STYLE ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file1" )
                 )
             ),
             tree(
                 _LEVEL,
-                tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
-                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file2" ) ),
+                tree( _STYLE, tree( CUSTOM_STYLE ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file2" )
                 )
             ),
             tree(
                 _LEVEL,
-                tree( NodeKind._STYLE, tree( CUSTOM_STYLE ) ),
-                tree( NodeKind.LEVEL_TITLE, tree( WORD_, "file3" ) ),
+                tree( _STYLE, tree( CUSTOM_STYLE ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
-                    NodeKind.PARAGRAPH_REGULAR,
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "content-of-file3" )
                 )
             )
@@ -239,6 +238,38 @@ public class BookTest {
   }
 
 
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
+  public void insertWithIdentifiers() throws IOException {
+    relocator.copy( TestResourceTree.Identifiers.dir ) ;
+    final File bookWithIdentifier =
+        relocator.createFileObject( TestResourceTree.Identifiers.BOOK ) ;
+
+    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+
+    final SyntacticTree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEqualsNoSeparators(
+        tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "2" ) ),
+            tree(
+                _LEVEL,
+                tree( COMPOSITE_IDENTIFIER, tree( "IdentifierOne" ), tree( "IdentifierTwo" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "LevelTwo" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "Paragraph" )
+                )
+            )
+        ),
+        bookTree
+    ) ;
+    Assert.assertFalse( book.hasProblem() ) ;
+  }
+
+
 // =======
 // Fixture
 // =======
@@ -258,8 +289,6 @@ public class BookTest {
     final File contentDirectory = new ScratchDirectory( testName ).getDirectory() ;
     relocator = new Relocator( contentDirectory );
 
-//    relocator.copy( TestResourceTree.Scanned.dir ) ;
-//    relocator.copy( TestResourceTree.Served.dir ) ;
 
   }
 

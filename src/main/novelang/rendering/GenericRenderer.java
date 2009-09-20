@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Joiner;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.Renderable;
@@ -81,7 +82,7 @@ public class GenericRenderer implements Renderer {
 
     final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
     final Nodepath newPath = ( createNodepath( kinship, nodeKind ) ) ;
-    boolean rootElement = false ;
+    boolean isRootElement = false ;
 
     switch( nodeKind ) {
 
@@ -99,7 +100,7 @@ public class GenericRenderer implements Renderer {
 
       case WORD_AFTER_CIRCUMFLEX_ACCENT:
         final SyntacticTree superscriptTree = tree.getChildAt( 0 ) ;
-        fragmentWriter.start( newPath, rootElement ) ;
+        fragmentWriter.start( newPath, isRootElement ) ;
         fragmentWriter.write( newPath, superscriptTree.getText() ) ;
         fragmentWriter.end( newPath ) ;
         break ;
@@ -114,10 +115,21 @@ public class GenericRenderer implements Renderer {
         ) ;
         break ;
 
-      case URL_LITERAL :
-      case TAG :
       case ABSOLUTE_IDENTIFIER :
       case RELATIVE_IDENTIFIER :
+      case COMPOSITE_IDENTIFIER :
+        fragmentWriter.start( newPath, isRootElement ) ;
+        final StringBuilder builder = new StringBuilder( "\\" ) ;
+        for( final SyntacticTree child : tree.getChildren() ) {
+          builder.append( "\\" ) ;
+          builder.append( child.toString() ) ;
+        }
+        fragmentWriter.write( newPath, builder.toString() ) ;
+        fragmentWriter.end( newPath ) ;
+        break ;
+
+      case URL_LITERAL :
+      case TAG :
       case _WORD_COUNT :
       case _STYLE :
       case LINES_OF_LITERAL :
@@ -158,10 +170,10 @@ public class GenericRenderer implements Renderer {
 
       case BOOK:
       case PART :
-        rootElement = true ;
+        isRootElement = true ;
 
       default :
-        processByDefault( tree, newPath, rootElement );
+        processByDefault( tree, newPath, isRootElement );
         break ;
 
     }
