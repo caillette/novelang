@@ -82,6 +82,16 @@ Expert users will find this is useful for customizing the output right from an X
 >>>
 
 
+A sequence of composite identifiers (as defined in "Part syntax" chapter) limits the insertion
+of reference Part to some fragments.
+
+<<<
+insert file:my-part \\Some\Identifier \\Some\Other\One
+>>>
+
+
+
+
 === Command : ``mapstylesheet``
 
 The "mapstylesheet" command defines a stylesheet for one or more MIME type.
