@@ -90,6 +90,7 @@ public class ResourceSchemaTest {
     verifyContent( treeFile ) ;
   }
 
+
   @Test
   public void copySingleResourceOk() throws IOException {
     final File resourceFile = new Relocator( testDirectory ).copy( ResourceTree.D0.R0_0 ) ;
@@ -99,6 +100,7 @@ public class ResourceSchemaTest {
     assertEquals( testDirectory, resourceFile.getParentFile() ) ;
   }
 
+
   @Test
   public void copyOk() throws IOException {
     final File createdDirectory = new Relocator( testDirectory ).copy( ResourceTree.dir ) ;
@@ -107,6 +109,7 @@ public class ResourceSchemaTest {
     assertEquals( ResourceTree.dir.getName(), createdDirectory.getName() ) ;
     assertEquals( testDirectory, createdDirectory.getParentFile() ) ;
   }
+
 
   @Test
   public void copyScopedDirectory() throws IOException {
@@ -121,6 +124,7 @@ public class ResourceSchemaTest {
 
     verifyScopedCopyResult();
   }
+
 
   @Test
   public void copyScopedResource() throws IOException {
@@ -154,22 +158,30 @@ public class ResourceSchemaTest {
   }
 
   @Test
-  public void createFileObject() {
-    final Relocator filer = new Relocator( testDirectory ) ;
-    final File file = filer.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
-    assertEquals( 
+  public void createFileObjectNoScope() {
+    final Relocator relocator = new Relocator( testDirectory ) ;
+    relocator.copyWithPath( ResourceTree.D0.D0_0.R0_0_0 ) ;
+    final File file = relocator.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
+    assertEquals(
         testDirectory.getAbsolutePath() +
             FILE_SEPARATOR + "tree" + FILE_SEPARATOR + "d0" +
             FILE_SEPARATOR + "d0.0" + FILE_SEPARATOR + "r0.0.0.txt",
         file.getAbsolutePath() 
     ) ;
-    
   }
+
+
+  @Test( expected = AssertionError.class )
+  public void createFileObjectOnNonExistingResourceFails() {
+    final Relocator relocator = new Relocator( testDirectory ) ;
+    relocator.createFileObject( ResourceTree.D0.D0_0.R0_0_0 ) ;
+  }
+
 
   @Test
   public void createFileObjectInScopeWithResource() {
-    final Relocator filer = new Relocator( testDirectory ) ;
-    final File file = filer.createFileObject( 
+    final Relocator relocator = new Relocator( testDirectory ) ;
+    final File file = relocator.createFileObject(
         ResourceTree.D0.dir, 
         ResourceTree.D0.D0_1.D0_1_0.R0_1_0_0 
     ) ;
@@ -181,10 +193,11 @@ public class ResourceSchemaTest {
     ) ;
   }
 
+
   @Test
   public void createFileObjectInScopeWithDirectory() {
-    final Relocator filer = new Relocator( testDirectory ) ;
-    final File file = filer.createFileObject( 
+    final Relocator relocator = new Relocator( testDirectory ) ;
+    final File file = relocator.createFileObject(
         ResourceTree.D0.dir, 
         ResourceTree.D0.D0_1.dir 
     ) ;

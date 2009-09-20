@@ -39,12 +39,21 @@ public final class Directory extends SchemaNode implements Comparable< Directory
     return directories ;
   }
 
+  public Directory getRoot() {
+    if( getParent() == null ) {
+      return this ;
+    } else {
+      return getParent().getRoot() ;
+    }
+  }
+
   public List< Resource > getResources() {
     if( null == resources ) {
       throw new IllegalStateException( "No set: resources" ) ;
     }
     return resources ;
   }
+
 
   /**
    * Comparison occurs on {@link #getName()} as corresponding member is set at instantiation.

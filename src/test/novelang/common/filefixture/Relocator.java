@@ -23,17 +23,22 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Performs filesystem-oriented operations on {@link Resource} and {@link Directory}.
  *
  * @author Laurent Caillette
  */
-public class Relocator
-{
+public class Relocator {
+
+  private static final Log LOG = LogFactory.getLog( Relocator.class ) ;
 
   public static final int TIMEOUT_SECONDS = 5 ;
 
@@ -49,6 +54,10 @@ public class Relocator
     Preconditions.checkArgument( physicalTargetDirectory.exists() ) ;
     Preconditions.checkArgument( physicalTargetDirectory.isDirectory() ) ;
     this.physicalTargetDirectory = physicalTargetDirectory ;
+    LOG.debug(
+        "Created " + getClass().getSimpleName() +
+        " on directory '" + physicalTargetDirectory.getAbsolutePath() + "'"
+    ) ;
   }
 
   /**
@@ -149,7 +158,13 @@ public class Relocator
     return result ;
     
   }
-  
+
+  /**
+   * Creates a {@code File} object corresponding to a resource with a relocated path.
+   *
+   * @param node a non-null object.
+   * @return a non-null object.
+   */
   public File createFileObject( SchemaNode node ) {
     
     final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
@@ -171,6 +186,9 @@ public class Relocator
       result = new File( result, directory.getName() ) ;
     }
     result = new File( result, node.getName() ) ;
+    if( ! result.exists() ) {
+      throw new AssertionError( "Should exist: '" + result.getPath() + "'"  ) ;
+    }
     return result ;
   }
   
@@ -226,7 +244,20 @@ copyScoped( ResourceTree.D0.dir, ResourceTree.D0_1_0.dir )
     return result ;
     
   }
-  
+
+  /**
+   * Does the same as {@link #copyWithPath(Directory, Resource)} with a path being
+   * the parent's {@code Directory} of the resource.
+   */
+  public File copyWithPath( final Resource resource ) {
+    final Directory root = resource.getRoot() ;
+    if( root == null ) {
+      return copy( resource ) ;     
+    } else {
+      return copyWithPath( root, resource ) ;
+    }
+  }
+
 
   /**
    * Copies given resource to some target directory, retaining directory hierarchy above, up to the

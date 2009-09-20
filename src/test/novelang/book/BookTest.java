@@ -48,14 +48,13 @@ import java.io.IOException;
 @RunWith( value = NameAwareTestClassRunner.class )
 public class BookTest {
 
-  private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
-
-
   /**
    * Test that some parsing error produces a Problem.
    */
   @Test
   public void badCommandGeneratesProblem() {
+    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
+
     final Book book = BookTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath() + " $recurse" // old syntax
@@ -69,6 +68,7 @@ public class BookTest {
    */
   @Test
   public void justInsert() {
+    final File oneWordFile = relocator.copy( TestResourceTree.Parts.ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
     final Book book = BookTestTools.createBook(
@@ -95,6 +95,9 @@ public class BookTest {
    */
   @Test
   public void insertWithRecursiveFileScan() throws IOException {
+    relocator.copy( TestResourceTree.Scanned.dir ) ;
+    final File scannedBookNoStyle = relocator.createFileObject( TestResourceTree.Scanned.BOOK ) ;
+
     final Book book = BookTestTools.createBook( scannedBookNoStyle ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
@@ -139,6 +142,10 @@ public class BookTest {
    */
   @Test
   public void insertWithFlatFileScan() throws IOException {
+    relocator.copy( TestResourceTree.Scanned.dir ) ;
+    final File scannedBookNoStyleNoRecurse = relocator.createFileObject(
+        TestResourceTree.Scanned.BOOK_NORECURSE ) ;
+
     final Book book = BookTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
@@ -169,6 +176,10 @@ public class BookTest {
    */
   @Test
   public void insertWithFileScanAndStyle() throws IOException {
+    relocator.copy( TestResourceTree.Scanned.dir ) ;
+    final File scannedBookWithStyle = relocator.createFileObject(
+        TestResourceTree.Scanned.BOOK_WITHSTYLE ) ;
+
     final Book book = BookTestTools.createBook( scannedBookWithStyle );
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
@@ -216,11 +227,14 @@ public class BookTest {
    */
   @Test
   public void insertWithBadPart() throws IOException {
+    relocator.copy( TestResourceTree.Served.BROKEN ) ;
+    final File scannedBookWithBadPart =
+        relocator.copy( TestResourceTree.Served.BOOK_BAD_SCANNED_PART ) ;
+
     final Book book = BookTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
     Assert.assertTrue( book.hasProblem() ) ;
-
 
   }
 
@@ -233,11 +247,8 @@ public class BookTest {
     initialize() ;
   }
 
-  private File oneWordFile ;
-  private File scannedBookNoStyle ;
-  private File scannedBookNoStyleNoRecurse ;
-  private File scannedBookWithStyle ;
-  private File scannedBookWithBadPart ;
+  private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
+  private Relocator relocator;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
 
@@ -245,47 +256,10 @@ public class BookTest {
   public void setUp() throws Exception {
     final String testName = NameAwareTestClassRunner.getTestName();
     final File contentDirectory = new ScratchDirectory( testName ).getDirectory() ;
+    relocator = new Relocator( contentDirectory );
 
-    final Relocator toGoodContent = new Relocator( contentDirectory ) ;
-    toGoodContent.copy( TestResourceTree.Scanned.dir ) ;
-
-    oneWordFile = toGoodContent.copy( TestResourceTree.Parts.ONE_WORD ) ;
-    scannedBookNoStyle = toGoodContent.createFileObject( TestResourceTree.Scanned.BOOK ) ;
-    scannedBookNoStyleNoRecurse = toGoodContent.createFileObject(
-        TestResourceTree.Scanned.BOOK_NORECURSE ) ;
-    scannedBookWithStyle = toGoodContent.createFileObject(
-        TestResourceTree.Scanned.BOOK_WITHSTYLE ) ;
-
-    toGoodContent.copy( TestResourceTree.Served.dir ) ;
-    scannedBookWithBadPart = toGoodContent.createFileObject(
-        TestResourceTree.Served.BOOK_BAD_SCANNED_PART ) ;
-
-
-//    oneWordFile = TestResourceTools.copyResourceToDirectory(
-//        getClass(),
-//        ONE_WORD_FILENAME,
-//        contentDirectory
-//    ) ;
-//
-//    TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SCANNED_FILE1, contentDirectory ) ;
-//    TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SCANNED_FILE2, contentDirectory ) ;
-//    TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SCANNED_FILE3, contentDirectory ) ;
-//    scannedBookNoStyle = TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SCANNED_BOOK_NOSTYLE, contentDirectory ) ;
-//    scannedBookNoStyleNoRecurse = TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SCANNED_BOOK_NOSTYLE_NORECURSE, contentDirectory ) ;
-//    scannedBookWithStyle = TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SCANNED_BOOK_WITHSTYLE, contentDirectory ) ;
-//
-//    scannedBookWithBadPart = TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SERVED_BOOK_BADSCANNEDPART, contentDirectory ) ;
-//    TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
-//    TestResourceTools.copyResourceToDirectory(
-//        getClass(), TestResources.SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
+//    relocator.copy( TestResourceTree.Scanned.dir ) ;
+//    relocator.copy( TestResourceTree.Served.dir ) ;
 
   }
 

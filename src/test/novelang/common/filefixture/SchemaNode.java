@@ -38,9 +38,12 @@ import com.google.common.base.Preconditions;
     return parent ;
   }
 
+
   /*package*/ final void setParent( Directory parent ) {
     this.parent = parent ;
   }
+
+  public abstract Directory getRoot() ;
 
   public final String getName() {
     return name ;
