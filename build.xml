@@ -581,17 +581,20 @@ ${html}
     </echo>
 
     <mail
-        from="${announcement.user.email}"
-        tolist="${announcement.blog.secretpostingaddress}, ${announcement.mailinglist.1} ${announcement.mailinglist.2}"
         mailhost="${publish.mailhost}"
         mailport="${publish.mailport}"
+        subject="${project.versionedname} released!"
         user="${announcement.user.email}"
         password="${announcement.user.password}"
         messagemimetype="text/html"
         ssl="yes"
-        subject="${project.versionedname} released!"
         charset="utf-8"
     >
+      <from address="${announcement.user.email}" />
+      <to address="${announcement.blog.secretpostingaddress}" />
+      <to address="${announcement.mailinglist.1}" />
+      <to address="${announcement.mailinglist.2}" />
+      
       <message>
         Download ${project.versionedname} &lt;a href="${announcement.download.url}">here&lt;/a> !
         ${html}
