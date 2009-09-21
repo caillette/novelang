@@ -31,7 +31,6 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ClassUtils;
 import org.junit.After;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
@@ -40,10 +39,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 import novelang.system.LogFactory;
-import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.TestResourceTree;
 import novelang.common.LanguageTools;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
 import novelang.configuration.ConfigurationTools;
 import novelang.produce.RequestTools;
 import novelang.rendering.RenditionMimeType;
@@ -60,22 +61,30 @@ public class HttpDaemonTest {
 
   @Test
   public void nlpOk() throws Exception {
-    setUp( "nlpOk", ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
-    final String generated = readAsString(
-        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_NLP_RESOURCE_NAME ) ) ;
+
+    final Resource resource = TestResourceTree.Served.GOOD;
+    final String nlpSource = alternateSetup( resource ) ;
+    final String generated = readAsString( new URL(
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        resource.getName()
+    ) ) ;
     final String shaved = shaveComments( generated ) ;
     save( "generated.nlp", generated ) ;
-      final String normalizedNlpSource = LanguageTools.unixifyLineBreaks( goodNlpSource ) ;
-      final String normalizedShaved = LanguageTools.unixifyLineBreaks( shaved ) ;
-      Assert.assertEquals( normalizedNlpSource, normalizedShaved ) ;
+    final String normalizedNlpSource = LanguageTools.unixifyLineBreaks( nlpSource ) ;
+    final String normalizedShaved = LanguageTools.unixifyLineBreaks( shaved ) ;
+    Assert.assertEquals( normalizedNlpSource, normalizedShaved ) ;
 
   }
 
   @Test
   public void pdfOk() throws Exception {
-    setUp( "pdfOk" ) ;
-    final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_DOCUMENT_NAME ) ) ;
+    final Resource resource = TestResourceTree.Served.GOOD ;
+    final String nlpSource = alternateSetup(
+        resource, ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
+    final byte[] generated = readAsBytes( new URL(
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        resource.getBaseName() + "." + RenditionMimeType.PDF.getFileExtension()
+    ) ) ;
     save( "generated.pdf", generated ) ;
     assertTrue( generated.length > 100 ) ;
   }
@@ -188,7 +197,7 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInQueryParameter() throws Exception {
-    setUp( "alternateStylesheetInQuery", SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
+    setUp( SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + BOOK_ALTERNATESTYLESHEET_DOCUMENT_NAME
     ) ) ;
@@ -200,7 +209,7 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInBook() throws Exception {
-    setUp( "alternateStylesheetInBook", SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
+    setUp( SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT +
             GOOD_HTML_DOCUMENT_NAME + ALTERNATE_STYLESHEET_QUERY
@@ -216,6 +225,11 @@ public class HttpDaemonTest {
 // =======
 
   private static final Log LOG = LogFactory.getLog( HttpDaemonTest.class ) ;
+
+  static {
+    TestResourceTree.initialize() ;  
+  }
+
   private static final Charset ISO_8859_1 = Charset.forName( "ISO_8859_1" );
 
 
@@ -290,10 +304,40 @@ public class HttpDaemonTest {
   private File contentDirectory;
   private String goodNlpSource;
 
+  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+
   private void setUp( String testHint ) throws Exception {
-    setUp( testHint, ConfigurationTools.BUNDLED_STYLE_DIR, DefaultCharset.RENDERING ) ;
+    setUp( ConfigurationTools.BUNDLED_STYLE_DIR, DefaultCharset.RENDERING ) ;
   }
 
+
+  /**
+   * Intended to supercede {@link #setUp(String, java.nio.charset.Charset)}.
+   */
+  private String alternateSetup(
+      final Resource resource
+  ) throws Exception {
+    return alternateSetup( resource, ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
+  }
+  /**
+   * Intended to supercede {@link #setUp(String, java.nio.charset.Charset)}.
+   */
+  private String alternateSetup(
+      final Resource resource,
+      final String styleDirectoryName,
+      final Charset renderingCharset
+  ) throws Exception {
+    resourceInstaller.copy( resource ) ;
+    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
+        HTTP_DAEMON_PORT,
+        resourceInstaller.getTargetDirectory(),
+        styleDirectoryName,
+        renderingCharset
+    ) ) ;
+    httpDaemon.start() ;
+    final String nlpSource = resource.getAsString( DefaultCharset.SOURCE ) ;
+    return nlpSource ;
+  }
 
   /**
    * We don't use standard {@code Before} annotation because crappy JUnit 4 doesn't
@@ -303,16 +347,11 @@ public class HttpDaemonTest {
    *     doesn't work with IDEA-7.0.3 (while it works with Ant-1.7.0 alone).
    */
   private void setUp(
-      String testHint,
-      String styleDirectoryName,
-      Charset renderingCharset
+      final String styleDirectoryName,
+      final Charset renderingCharset
   ) throws Exception {
 
-    final String testName =
-        ClassUtils.getShortClassName( getClass() + "-" + testHint ) ;
-    final DirectoryFixture directoryFixture =
-        new DirectoryFixture( testName ) ;
-    contentDirectory = directoryFixture.getDirectory() ;
+    contentDirectory = resourceInstaller.getTargetDirectory() ;
 
     goodNlpSource = TestResourceTools.readStringResource(
         getClass(), GOOD_NLP_RESOURCE_NAME, DefaultCharset.SOURCE ) ;
@@ -326,6 +365,7 @@ public class HttpDaemonTest {
         renderingCharset
     ) ) ;
     httpDaemon.start() ;
+
   }
 
   @After

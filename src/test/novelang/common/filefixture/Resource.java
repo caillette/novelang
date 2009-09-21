@@ -17,6 +17,15 @@
 package novelang.common.filefixture;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FilenameUtils;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * @author Laurent Caillette
@@ -44,12 +53,39 @@ public final class Resource extends SchemaNode implements Comparable< Resource >
     return getName().compareTo( other.getName() ) ;
   }
 
-  
 // ===============================================
 // Fields set when interpreting class declarations
 // ===============================================
 
+  public String getBaseName() {
+    return FilenameUtils.getBaseName( getUnderlyingResourcePath() ) ;
+  }
+
+  public String getExtension() {
+    return FilenameUtils.getExtension( getUnderlyingResourcePath() ) ;
+  }
+
   public InputStream getInputStream() {
     return getClass().getResourceAsStream( getUnderlyingResourcePath() );
+  }
+    
+  public byte[] getAsByteArray() {
+    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
+    try {
+      IOUtils.copy( getInputStream(), outputStream ) ;
+    } catch( IOException e ) {
+      throw new Error( "Could not read stream for resource " + this, e ) ;
+    }
+    return outputStream.toByteArray() ;
+
+  }
+  public String getAsString( final Charset charset ) {
+      final byte[] bytes = getAsByteArray() ;
+      try {
+        return new String( bytes, charset.name() ) ;
+      } catch( UnsupportedEncodingException e ) {
+        throw new Error( "Could not create string with charset " + charset, e ) ;
+      }
+
   }
 }
