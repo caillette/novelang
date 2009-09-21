@@ -23,6 +23,7 @@ import novelang.system.LogFactory;
 import novelang.system.Log;
 
 /**
+ * A concrete class that holds an immutable reference to the target directory.
  * @author Laurent Caillette
  */
 public class ResourceInstaller extends AbstractResourceInstaller {
@@ -36,7 +37,7 @@ public class ResourceInstaller extends AbstractResourceInstaller {
    *
    * @param targetDirectory a non-null object representing an existing directory.
    */
-  public ResourceInstaller( File targetDirectory ) {
+  public ResourceInstaller( final File targetDirectory ) {
     Preconditions.checkArgument( targetDirectory.exists() ) ;
     Preconditions.checkArgument( targetDirectory.isDirectory() ) ;
     this.targetDirectory = targetDirectory;

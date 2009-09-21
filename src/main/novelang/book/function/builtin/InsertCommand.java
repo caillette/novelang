@@ -136,26 +136,25 @@ public class InsertCommand extends AbstractCommand {
 
     final boolean hasIdentifiers = fragmentIdentifiers.iterator().hasNext() ;
 
-    if( hasIdentifiers ) {
-      for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
-        final Treepath< SyntacticTree > fragmentTreepath =
-            FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
-        if( fragmentTreepath == null ) {
-          return environment.addProblem(
-              Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
-        } else {
-          final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
-          partTrees.add( fragment ) ;
+    if( partTree != null ) {
+      if( hasIdentifiers ) {
+        for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
+          final Treepath< SyntacticTree > fragmentTreepath =
+              FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
+          if( fragmentTreepath == null ) {
+            return environment.addProblem(
+                Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
+          } else {
+            final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
+            partTrees.add( fragment ) ;
+          }
         }
+      } else {
+        Iterables.addAll( partTrees, partTree.getChildren() ) ;
       }
-    } else {
-      Iterables.addAll( partTrees, partTree.getChildren() ) ;
-    }
 
-
-    if( null != partTree ) {
       if( createLevel ) {
-          book = createChapterFromPartFilename( 
+        book = createChapterFromPartFilename(
               book,
               insertedFile,
               partTrees,
@@ -169,6 +168,7 @@ public class InsertCommand extends AbstractCommand {
           book = TreepathTools.addChildLast( book, partChild ).getStart() ;
         }
       }
+
     }
 
     return environment.update( book.getTreeAtStart() ).addProblems( rawPart.getProblems() ) ;

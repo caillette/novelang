@@ -84,6 +84,34 @@ public class InsertCommandTest {
     ) ;
 
   }
+  @Test
+  public void missingPartFile() throws CommandParameterException, MalformedURLException {
+
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        new File( resourceInstaller.getTargetDirectory(), "doesNotExist" ).
+            toURI().toURL().toExternalForm(),
+        false,
+        null,
+        false,
+        0,
+        null,
+        ImmutableList.< FragmentIdentifier >of()
+    ) ;
+
+    final CommandExecutionContext initialContext =
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
+        update( new SimpleTree( BOOK.name() ) )
+    ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        initialContext
+    ) ;
+
+    assertTrue( result.getProblems().iterator().hasNext() ) ;
+
+
+  }
 
   @Test
   public void createChapterForSinglePart() 
