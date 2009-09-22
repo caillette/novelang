@@ -79,7 +79,7 @@ public class HttpDaemonTest {
   @Test
   public void pdfOk() throws Exception {
     final Resource resource = TestResourceTree.Served.GOOD ;
-    final String nlpSource = alternateSetup(
+    alternateSetup(
         resource, ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" +
@@ -91,11 +91,13 @@ public class HttpDaemonTest {
 
   @Test
   public void correctMimeTypeForPdf() throws Exception {
-    setUp( "correctMimeTypeForPdf" ) ;
-    HttpClient httpClient = new HttpClient() ;
+    final Resource resource = TestResourceTree.Served.GOOD ;
+    alternateSetup( resource, ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
     final GetMethod getMethod = new GetMethod(
-        "http://localhost:" + HTTP_DAEMON_PORT + GOOD_PDF_DOCUMENT_NAME ) ;
-    httpClient.executeMethod( getMethod ) ;
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        resource.getBaseName() + "." + RenditionMimeType.PDF.getFileExtension()
+    ) ;
+    new HttpClient().executeMethod( getMethod ) ;
     final Header[] headers = getMethod.getResponseHeaders( "Content-type" ) ;
     LOG.debug( "Got headers: %s", headers ) ;
     Assert.assertEquals( "application/pdf", headers[ 0 ].getValue() ) ;
@@ -103,7 +105,7 @@ public class HttpDaemonTest {
 
   @Test
   public void fontListingMakesNoSmoke() throws Exception {
-    setUp( "fontListingMakesNoSmoke" ) ;
+    alternateSetup() ;
     final byte[] generated = readAsBytes(
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
     save( "generated.pdf", generated ) ;
@@ -111,45 +113,52 @@ public class HttpDaemonTest {
   }
 
   @Test
-  public void htmlOk() throws Exception {
-    setUp( "htmlOk" ) ;
-    final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + HTTP_DAEMON_PORT + GOOD_HTML_DOCUMENT_NAME ) ) ;
-    save( "generated.html", generated ) ;
+  public void htmlNoSmoke() throws Exception {
+    final Resource resource = TestResourceTree.Served.GOOD ;
+    alternateSetup( resource ) ;
+    final byte[] generated = readAsBytes( new URL(
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        resource.getBaseName() + "." + RenditionMimeType.HTML.getFileExtension()
+    ) ) ;
     assertTrue( generated.length > 100 ) ;
   }
 
   @Test
   public void htmlBrokenCausesRedirection() throws Exception {
-    setUp( "htmlBrokenCausesRedirection" ) ;
+    final Resource resource = TestResourceTree.Served.BROKEN ;
+    alternateSetup( resource ) ;
 
+    final String brokentDocumentName = resource.getBaseName() + "." +
+        RenditionMimeType.HTML.getFileExtension() ;
     final HttpMethod method = followRedirection(
-        "http://localhost:" + HTTP_DAEMON_PORT + BROKEN_HTML_DOCUMENT_NAME ) ;
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + brokentDocumentName ) ;
     final String responseBody = method.getResponseBodyAsString() ;
 
     assertTrue( responseBody.contains( "Requested:" ) ) ;
 
     assertTrue(
         "Expected link to requested page",
-        responseBody.contains( BROKEN_HTML_DOCUMENT_NAME )
+        responseBody.contains( brokentDocumentName )
     ) ;
 
     assertTrue(
-        "Expected path '" + BROKEN_PATH_AFTER_REDIRECTION + "'",
-        method.getPath().contains( BROKEN_PATH_AFTER_REDIRECTION )
+        "Expected path '" + brokentDocumentName + RequestTools.ERRORPAGE_SUFFIX + "'",
+        method.getPath().contains( brokentDocumentName + RequestTools.ERRORPAGE_SUFFIX )
     ) ;
   }
 
   @Test
-  public void htmlNotBrokenCausesRedirection() throws Exception {
-    setUp( "htmlNotBroken" ) ;
+  public void errorPageForUnbrokenHtmlNotBrokenCausesRedirection() throws Exception {
+    final Resource resource = TestResourceTree.Served.GOOD ;
+    alternateSetup( resource ) ;
 
     final HttpMethod method = followRedirection(
-        "http://localhost:" + HTTP_DAEMON_PORT + GOOD_HTML_DOCUMENT_NAME +
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        resource.getBaseName() + "." + RenditionMimeType.HTML.getFileExtension() +
         RequestTools.ERRORPAGE_SUFFIX
     ) ;
 
-    String responseBody = method.getResponseBodyAsString() ;
+    final String responseBody = method.getResponseBodyAsString() ;
     assertFalse( responseBody.contains( "Requested:" ) ) ;
 
   }
@@ -314,6 +323,13 @@ public class HttpDaemonTest {
   /**
    * Intended to supercede {@link #setUp(String, java.nio.charset.Charset)}.
    */
+  private void alternateSetup() throws Exception {
+    daemonSetup( ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
+  }
+
+  /**
+   * Intended to supercede {@link #setUp(String, java.nio.charset.Charset)}.
+   */
   private String alternateSetup(
       final Resource resource
   ) throws Exception {
@@ -328,18 +344,24 @@ public class HttpDaemonTest {
       final Charset renderingCharset
   ) throws Exception {
     resourceInstaller.copy( resource ) ;
-    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
-        HTTP_DAEMON_PORT,
-        resourceInstaller.getTargetDirectory(),
-        styleDirectoryName,
-        renderingCharset
-    ) ) ;
-    httpDaemon.start() ;
+    daemonSetup( styleDirectoryName, renderingCharset ) ;
     final String nlpSource = resource.getAsString( DefaultCharset.SOURCE ) ;
     return nlpSource ;
   }
 
-  /**
+    private void daemonSetup( String styleDirectoryName, Charset renderingCharset )
+            throws Exception
+    {
+        httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
+            HTTP_DAEMON_PORT,
+            resourceInstaller.getTargetDirectory(),
+            styleDirectoryName,
+            renderingCharset
+        ) ) ;
+        httpDaemon.start() ;
+    }
+
+    /**
    * We don't use standard {@code Before} annotation because crappy JUnit 4 doesn't
    * let us know about test name so we have to pass it explicitely for creating
    * different directories (avoiding one erasing the other).
