@@ -24,10 +24,12 @@ import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.FilenameUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
 /**
+ * Represents a node which has a content addressable as a stream of bytes.
+ * <p>
+ * Design note: all methods for manipulating path names copy names from {@link FilenameUtils}.
+ *
  * @author Laurent Caillette
  */
 public final class Resource extends SchemaNode implements Comparable< Resource > {
@@ -58,15 +60,23 @@ public final class Resource extends SchemaNode implements Comparable< Resource >
 // ===============================================
 
   public String getBaseName() {
-    return FilenameUtils.getBaseName( getUnderlyingResourcePath() ) ;
+    return FilenameUtils.getBaseName( getAbsoluteResourceName() ) ;
   }
 
   public String getExtension() {
-    return FilenameUtils.getExtension( getUnderlyingResourcePath() ) ;
+    return FilenameUtils.getExtension( getAbsoluteResourceName() ) ;
+  }
+
+  public String getPathNoEndSeparator() {
+    return FilenameUtils.getPathNoEndSeparator( getAbsoluteResourceName() ) ;
+  }
+
+  public String getFullPath() {
+    return FilenameUtils.getFullPath( getAbsoluteResourceName() ) ;
   }
 
   public InputStream getInputStream() {
-    return getClass().getResourceAsStream( getUnderlyingResourcePath() );
+    return getClass().getResourceAsStream( getAbsoluteResourceName() );
   }
     
   public byte[] getAsByteArray() {

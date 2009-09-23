@@ -60,17 +60,17 @@ import com.google.common.base.Preconditions;
     this.declaringClass = declaringClass ;
   }
 
-  public String getUnderlyingResourcePath() {
+  public String getAbsoluteResourceName() {
     if( null == underlyingResourcePath ) {
       throw new IllegalStateException( "not set: underlyingResource" ) ;
     }
     return underlyingResourcePath;
   }
 
-  public void setUnderlyingResourcePath( String resourcePath ) {
+  public void setAbsoluteResourceName( final String absoluteResourceName ) {
     if( null != this.underlyingResourcePath ) {
       throw new IllegalStateException( "Already set: underlyingResourcePath" ) ;
     }
-    this.underlyingResourcePath = resourcePath ;
+    this.underlyingResourcePath = absoluteResourceName ;
   }
 }

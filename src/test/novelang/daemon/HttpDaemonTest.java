@@ -25,9 +25,19 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import novelang.TestResourceTree;
+import novelang.TestResources;
+import novelang.common.LanguageTools;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
+import novelang.produce.RequestTools;
+import novelang.rendering.RenditionMimeType;
+import novelang.system.DefaultCharset;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -38,18 +48,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import novelang.system.LogFactory;
-import novelang.TestResourceTools;
-import novelang.TestResources;
-import novelang.TestResourceTree;
-import novelang.common.LanguageTools;
-import novelang.common.filefixture.JUnitAwareResourceInstaller;
-import novelang.common.filefixture.Resource;
-import novelang.configuration.ConfigurationTools;
-import novelang.produce.RequestTools;
-import novelang.rendering.RenditionMimeType;
-import novelang.system.DefaultCharset;
-import novelang.system.Log;
 
 /**
  * End-to-end tests with {@link HttpDaemon} and the download of some generated documents.
@@ -62,8 +60,8 @@ public class HttpDaemonTest {
   @Test
   public void nlpOk() throws Exception {
 
-    final Resource resource = TestResourceTree.Served.GOOD;
-    final String nlpSource = alternateSetup( resource ) ;
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final String nlpSource = alternateSetup( resource, ISO_8859_1 ) ;
     final String generated = readAsString( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" +
         resource.getName()
@@ -78,25 +76,20 @@ public class HttpDaemonTest {
 
   @Test
   public void pdfOk() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD ;
-    alternateSetup(
-        resource, ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    alternateSetup( resource, ISO_8859_1 ) ;
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
-        resource.getBaseName() + "." + RenditionMimeType.PDF.getFileExtension()
-    ) ) ;
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ) ;
     save( "generated.pdf", generated ) ;
     assertTrue( generated.length > 100 ) ;
   }
 
   @Test
   public void correctMimeTypeForPdf() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD ;
-    alternateSetup( resource, ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    setup( resource ) ;
     final GetMethod getMethod = new GetMethod(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
-        resource.getBaseName() + "." + RenditionMimeType.PDF.getFileExtension()
-    ) ;
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ;
     new HttpClient().executeMethod( getMethod ) ;
     final Header[] headers = getMethod.getResponseHeaders( "Content-type" ) ;
     LOG.debug( "Got headers: %s", headers ) ;
@@ -105,7 +98,7 @@ public class HttpDaemonTest {
 
   @Test
   public void fontListingMakesNoSmoke() throws Exception {
-    alternateSetup() ;
+    setup() ;
     final byte[] generated = readAsBytes(
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
     save( "generated.pdf", generated ) ;
@@ -114,22 +107,19 @@ public class HttpDaemonTest {
 
   @Test
   public void htmlNoSmoke() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD ;
-    alternateSetup( resource ) ;
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    setup( resource ) ;
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
-        resource.getBaseName() + "." + RenditionMimeType.HTML.getFileExtension()
-    ) ) ;
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML ) ) ;
     assertTrue( generated.length > 100 ) ;
   }
 
   @Test
   public void htmlBrokenCausesRedirection() throws Exception {
-    final Resource resource = TestResourceTree.Served.BROKEN ;
-    alternateSetup( resource ) ;
+    final Resource resource = TestResourceTree.Served.BROKEN_PART;
+    setup( resource ) ;
 
-    final String brokentDocumentName = resource.getBaseName() + "." +
-        RenditionMimeType.HTML.getFileExtension() ;
+    final String brokentDocumentName = resource.getBaseName() + HTML ;
     final HttpMethod method = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + brokentDocumentName ) ;
     final String responseBody = method.getResponseBodyAsString() ;
@@ -149,12 +139,11 @@ public class HttpDaemonTest {
 
   @Test
   public void errorPageForUnbrokenHtmlNotBrokenCausesRedirection() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD ;
-    alternateSetup( resource ) ;
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    setup( resource ) ;
 
     final HttpMethod method = followRedirection(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
-        resource.getBaseName() + "." + RenditionMimeType.HTML.getFileExtension() +
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
         RequestTools.ERRORPAGE_SUFFIX
     ) ;
 
@@ -165,33 +154,27 @@ public class HttpDaemonTest {
 
   @Test
   public void listDirectoryContentNoTrailingSolidus() throws Exception {
-    setUp( "listDirectoryContent" ) ;
-
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    resourceInstaller.copyWithPath( resource ) ;
+    setup() ;
     final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT ) ;
-
-    checkDirectoryListing( method );
-
+    checkDirectoryListing( method, resource ) ;
   }
 
   @Test
   public void listDirectoryContentWithTrailingSolidus() throws Exception {
-    setUp( "listDirectoryContentWithTrailingSolidus" ) ;
-
-    final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT + "/" ) ;
-
-    checkDirectoryListing( method );
-
-  }
-
-  private void checkDirectoryListing( HttpMethod method ) throws IOException {
-    String responseBody = method.getResponseBodyAsString() ;
-    assertTrue( responseBody.contains( "<a href=\"served/\">served/</a>" ) ) ;
-    assertTrue( responseBody.contains( "<a href=\"served/good.html\">served/good.html</a>" ) ) ;
+      final Resource resource = TestResourceTree.Served.GOOD_PART;
+      resourceInstaller.copyWithPath( resource ) ;
+      setup() ;
+      final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT + "/" ) ;
+      checkDirectoryListing( method, resource ) ;
   }
 
   @Test
   public void listDirectoryContentWithSafari() throws Exception {
-    setUp( "listDirectoryContentWithSafari" ) ;
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    resourceInstaller.copyWithPath( resource ) ;
+    setup() ;
 
     final HttpMethod method = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/",
@@ -200,15 +183,22 @@ public class HttpDaemonTest {
 
     Assert.assertTrue( method.getPath().endsWith( "/" + DirectoryScanHandler.MIME_HINT ) ) ;
 
-    checkDirectoryListing( method );
+    checkDirectoryListing( method, resource ) ;
 
   }
 
   @Test
   public void testAlternateStylesheetInQueryParameter() throws Exception {
-    setUp( SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
+    final Resource resource = TestResourceTree.Served.GOOD_BOOK ;
+    resourceInstaller.copy( resource ) ;
+    resourceInstaller.copy( TestResourceTree.Served.GOOD_PART ) ;
+    final File stylesheetFile = resourceInstaller.copyScoped(
+        TestResourceTree.Served.dir, TestResourceTree.Served.Style.VOID_XSL ) ;
+    setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
+
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT + BOOK_ALTERNATESTYLESHEET_DOCUMENT_NAME
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
+                "?stylesheet=" + TestResourceTree.Served.Style.VOID_XSL.getName()
     ) ) ;
 
     save( "generated.html", generated ) ;
@@ -218,14 +208,19 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInBook() throws Exception {
-    setUp( SERVED_DIRECTORYNAME, DefaultCharset.RENDERING ) ;
-    final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT +
-            GOOD_HTML_DOCUMENT_NAME + ALTERNATE_STYLESHEET_QUERY
-    ) ) ;
+      final Resource resource = TestResourceTree.Served.BOOK_ALTERNATE_XSL ;
+      resourceInstaller.copy( resource ) ;
+      resourceInstaller.copy( TestResourceTree.Served.GOOD_PART ) ;
+      final File stylesheetFile = resourceInstaller.copyScoped(
+          TestResourceTree.Served.dir, TestResourceTree.Served.Style.VOID_XSL ) ;
+      setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
-    save( "generated.html", generated ) ;
-    assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
+      final byte[] generated = readAsBytes( new URL(
+          "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML ) ) ;
+
+      save( "generated.html", generated ) ;
+      assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
+
   }
 
   
@@ -244,14 +239,11 @@ public class HttpDaemonTest {
 
   private static final int TIMEOUT = 5000 ;
 
-  public static final String VOID_STYLESHEET = "void.xsl" ;
-  private static final String ALTERNATE_STYLESHEET_QUERY =
-      "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + VOID_STYLESHEET ;
 
 
   private static final Pattern STRIP_COMMENTS_PATTERN = Pattern.compile( "%.*\\n" ) ;
 
-  private static String shaveComments( String s ) {
+  private static String shaveComments( final String s ) {
     final Matcher matcher = STRIP_COMMENTS_PATTERN.matcher( s ) ;
     final StringBuffer buffer = new StringBuffer() ;
     while( matcher.find() ) {
@@ -261,134 +253,99 @@ public class HttpDaemonTest {
     return buffer.toString() ;
   }
 
-  private static String readAsString( URL url ) throws IOException {
+  private static String readAsString( final URL url ) throws IOException {
     final StringWriter stringWriter = new StringWriter() ;
     IOUtils.copy( url.openStream(), stringWriter ) ;
     return stringWriter.toString() ;
   }
 
-  private static byte[] readAsBytes( URL url ) throws IOException {
+  private static byte[] readAsBytes( final URL url ) throws IOException {
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
     IOUtils.copy( url.openStream(), outputStream ) ;
     return outputStream.toByteArray() ;
   }
 
-  private void save( String name, String document ) throws IOException {
-    final File file = new File( contentDirectory, name ) ;
+  private void save( final String name, final String document ) throws IOException {
+    final File file = new File( resourceInstaller.getTargetDirectory(), name ) ;
     FileUtils.writeStringToFile( file, document ) ;
     LOG.info( "Wrote file '%s'", file.getAbsolutePath() ) ;
   }
 
-  private void save( String name, byte[] document ) throws IOException {
-    final File file = new File( contentDirectory, name ) ;
-    FileUtils.writeByteArrayToFile( new File( contentDirectory, name ), document ) ;
+  private void save( final String name, final byte[] document ) throws IOException {
+    final File file = new File( resourceInstaller.getTargetDirectory(), name ) ;
+    FileUtils.writeByteArrayToFile(
+        new File( resourceInstaller.getTargetDirectory(), name ), document ) ;
     LOG.info( "Wrote file '%s'", file.getAbsolutePath() ) ;
   }
 
   private static final int HTTP_DAEMON_PORT = 8081 ;
 
-  private static final String SERVED_DIRECTORYNAME = TestResources.SERVED_DIRECTORY_NAME ;
 
-  private static final String GOOD_NLP_RESOURCE_NAME = TestResources.SERVED_PARTSOURCE_GOOD;
 
   private static final String PDF = "." + RenditionMimeType.PDF.getFileExtension() ;
   private static final String HTML = "." + RenditionMimeType.HTML.getFileExtension() ;
 
-  private static final String GOOD_PDF_DOCUMENT_NAME =
-      TestResources.SERVED_PART_GOOD_NOEXTENSION + PDF ;
 
-  private static final String GOOD_HTML_DOCUMENT_NAME =
-      TestResources.SERVED_PART_GOOD_NOEXTENSION + HTML ;
-
-  private static final String BROKEN_HTML_DOCUMENT_NAME =
-      TestResources.SERVED_PART_BROKEN_NOEXTENSION + HTML ;
-
-  private static final String BROKEN_PATH_AFTER_REDIRECTION =
-      BROKEN_HTML_DOCUMENT_NAME + RequestTools.ERRORPAGE_SUFFIX ;
-
-  private static final String BOOK_ALTERNATESTYLESHEET_DOCUMENT_NAME =
-      TestResources.SERVED_BOOK_WITHALTERNATESTYLESHEET_NOEXTENSION + HTML ;
 
   private HttpDaemon httpDaemon ;
-  private File contentDirectory;
-  private String goodNlpSource;
 
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
-  private void setUp( String testHint ) throws Exception {
-    setUp( ConfigurationTools.BUNDLED_STYLE_DIR, DefaultCharset.RENDERING ) ;
+
+
+  private void setup() throws Exception {
+    daemonSetup( ISO_8859_1 ) ;
   }
 
 
-  /**
-   * Intended to supercede {@link #setUp(String, java.nio.charset.Charset)}.
-   */
-  private void alternateSetup() throws Exception {
-    daemonSetup( ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
-  }
-
-  /**
-   * Intended to supercede {@link #setUp(String, java.nio.charset.Charset)}.
-   */
-  private String alternateSetup(
-      final Resource resource
-  ) throws Exception {
-    return alternateSetup( resource, ConfigurationTools.BUNDLED_STYLE_DIR, ISO_8859_1 ) ;
-  }
-  /**
-   * Intended to supercede {@link #setUp(String, java.nio.charset.Charset)}.
-   */
-  private String alternateSetup(
-      final Resource resource,
-      final String styleDirectoryName,
-      final Charset renderingCharset
-  ) throws Exception {
+  private String setup( final Resource resource ) throws Exception {
     resourceInstaller.copy( resource ) ;
-    daemonSetup( styleDirectoryName, renderingCharset ) ;
+    daemonSetup( DefaultCharset.RENDERING ) ;
     final String nlpSource = resource.getAsString( DefaultCharset.SOURCE ) ;
     return nlpSource ;
   }
 
-    private void daemonSetup( String styleDirectoryName, Charset renderingCharset )
-            throws Exception
-    {
-        httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
-            HTTP_DAEMON_PORT,
-            resourceInstaller.getTargetDirectory(),
-            styleDirectoryName,
-            renderingCharset
-        ) ) ;
-        httpDaemon.start() ;
-    }
-
-    /**
-   * We don't use standard {@code Before} annotation because crappy JUnit 4 doesn't
-   * let us know about test name so we have to pass it explicitely for creating
-   * different directories (avoiding one erasing the other).
-   * @link http://twgeeknight.googlecode.com/svn/trunk/JUnit4Playground/src/org/junit/runners/NameAwareTestClassRunner.java
-   *     doesn't work with IDEA-7.0.3 (while it works with Ant-1.7.0 alone).
-   */
-  private void setUp(
-      final String styleDirectoryName,
+  private void setup(
+      final File styleDirectory,
       final Charset renderingCharset
   ) throws Exception {
+    daemonSetup( styleDirectory, renderingCharset ) ;
+  }
 
-    contentDirectory = resourceInstaller.getTargetDirectory() ;
+  private String alternateSetup(
+      final Resource resource,
+      final Charset renderingCharset
+  ) throws Exception {
+    resourceInstaller.copy( resource ) ;
+    daemonSetup( renderingCharset ) ;
+    final String nlpSource = resource.getAsString( DefaultCharset.SOURCE ) ;
+    return nlpSource ;
+  }
 
-    goodNlpSource = TestResourceTools.readStringResource(
-        getClass(), GOOD_NLP_RESOURCE_NAME, DefaultCharset.SOURCE ) ;
 
-    TestResources.copyServedResources( contentDirectory ) ;
-
-    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration( 
-        HTTP_DAEMON_PORT, 
-        contentDirectory, 
-        styleDirectoryName,
+  private void daemonSetup( final File styleDirectory, final Charset renderingCharset )
+      throws Exception
+  {
+    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
+        HTTP_DAEMON_PORT,
+        resourceInstaller.getTargetDirectory(),
+        styleDirectory,
         renderingCharset
     ) ) ;
     httpDaemon.start() ;
-
   }
+
+  private void daemonSetup( final Charset renderingCharset )
+      throws Exception
+  {
+    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
+        HTTP_DAEMON_PORT,
+        resourceInstaller.getTargetDirectory(),
+        renderingCharset
+    ) ) ;
+    httpDaemon.start() ;
+  }
+
 
   @After
   public void tearDown() throws Exception {
@@ -409,13 +366,13 @@ public class HttpDaemonTest {
 
   private static final String DEFAULT_USER_AGENT = CAMINO_USER_AGENT ;
 
-  private HttpMethod followRedirection( String originalUrlAsString ) throws IOException {
+  private HttpMethod followRedirection( final String originalUrlAsString ) throws IOException {
     return followRedirection( originalUrlAsString, DEFAULT_USER_AGENT ) ;
   }
 
   private HttpMethod followRedirection(
-      String originalUrlAsString,
-      String userAgent
+      final String originalUrlAsString,
+      final String userAgent
   ) throws IOException {
     final HttpClient httpClient = new HttpClient() ;
     httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
@@ -428,6 +385,25 @@ public class HttpDaemonTest {
     save( "generated.html", responseBody ) ;
 
     return method;
+  }
+
+  private void checkDirectoryListing(
+      final HttpMethod method,
+      final Resource resource
+  ) throws IOException {
+    final String responseBody = method.getResponseBodyAsString() ;
+    final String fullPath = resource.getFullPath().substring( 1 ) ; // Remove leading solidus.
+    final String filePath = fullPath + resource.getBaseName() + ".html" ;
+
+    LOG.debug( "fullpath='%s'", fullPath ) ;
+    LOG.debug( "filepath='%s'", filePath ) ;
+    LOG.debug( "Checking response body: \n%s", responseBody ) ;
+
+    final String expectedFullPath = "<a href=\"" + fullPath + "\">" + fullPath + "</a>" ;
+    LOG.debug( "Expected fullPath='%s'", expectedFullPath ) ;
+
+    assertTrue( responseBody.contains( expectedFullPath ) ) ;
+    assertTrue( responseBody.contains( "<a href=\"" + filePath + "\">" + filePath + "</a>" ) ) ;
   }
 
 

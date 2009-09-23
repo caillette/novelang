@@ -47,7 +47,7 @@ public class NumberingTest {
   public void testNodeset() throws Exception {
     final ProducerConfiguration serverConfiguration = TestResources.createProducerConfiguration(
         styleDirectory,
-        styleDirectory.getName(),
+        styleDirectory,
         true,
         DefaultCharset.RENDERING
     ) ;

@@ -34,8 +34,8 @@ public final class Relativizer {
   
   public String apply( SchemaNode node ) {
     Preconditions.checkNotNull( node ) ;
-    final String parentPath = root.getUnderlyingResourcePath();
-    final String childPath = node.getUnderlyingResourcePath();
+    final String parentPath = root.getAbsoluteResourceName();
+    final String childPath = node.getAbsoluteResourceName();
     Preconditions.checkArgument( 
         childPath.startsWith( parentPath ),
         "Parent path '%s' does not contain '%s'",

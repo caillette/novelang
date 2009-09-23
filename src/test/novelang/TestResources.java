@@ -20,12 +20,13 @@ package novelang;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.net.MalformedURLException;
 
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableList;
+import com.google.common.base.Preconditions;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.DaemonConfiguration;
@@ -36,6 +37,7 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceLoaderTools;
 import novelang.loader.ResourceName;
+import novelang.loader.UrlResourceLoader;
 import novelang.system.DefaultCharset;
 
 /**
@@ -222,20 +224,57 @@ public class TestResources {
 
   public static ProducerConfiguration createProducerConfiguration(
       final File contentDirectory,
-      final String styleDirectoryName,
+      final File styleDirectory,
+      final boolean shouldAddClasspathResourceLoader,
+      final Charset renderingCharset
+  ) {
+    Preconditions.checkNotNull( styleDirectory ) ;
+    return doCreateProducerConfiguration(
+        contentDirectory,
+        styleDirectory,
+        shouldAddClasspathResourceLoader,
+        renderingCharset
+    ) ;
+  }
+
+
+  public static ProducerConfiguration createProducerConfiguration(
+      final File contentDirectory,
+      final Charset renderingCharset
+  ) {
+    return doCreateProducerConfiguration(
+        contentDirectory,
+        null,
+        true,
+        renderingCharset
+    ) ;
+  }
+
+
+  private static ProducerConfiguration doCreateProducerConfiguration(
+      final File contentDirectory,
+      final File styleDirectory,
       final boolean shouldAddClasspathResourceLoader,
       final Charset renderingCharset
   ) {
     final ResourceLoader resourceLoader ;
-    final ClasspathResourceLoader customResourceLoader =
-        new ClasspathResourceLoader( styleDirectoryName ) ;
-    if( shouldAddClasspathResourceLoader ) {
-      resourceLoader = ResourceLoaderTools.compose(
-          customResourceLoader,
-          new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
-      ) ;
+    final ResourceLoader customResourceLoader ;
+    if( styleDirectory == null ) {
+      resourceLoader = new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
     } else {
-      resourceLoader = customResourceLoader ;
+      try {
+        customResourceLoader = new UrlResourceLoader( styleDirectory.toURI().toURL() ) ;
+      } catch( MalformedURLException e ) {
+        throw new Error( e ) ;
+      }
+      if( shouldAddClasspathResourceLoader ) {
+        resourceLoader = ResourceLoaderTools.compose(
+            customResourceLoader,
+            new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
+        ) ;
+      } else {
+        resourceLoader = customResourceLoader ;
+      }
     }
     return createProducerConfiguration( contentDirectory, resourceLoader, renderingCharset ) ;
 
@@ -245,13 +284,38 @@ public class TestResources {
   public static DaemonConfiguration createDaemonConfiguration(
       final int httpDaemonPort,
       final File contentDirectory,
-      final String styleDirectoryName,
+      final File styleDirectory,
       final Charset renderingCharset
   ) {
     final ProducerConfiguration producerConfiguration = createProducerConfiguration(
         contentDirectory,
-        styleDirectoryName,
+        styleDirectory,
         false,
+        renderingCharset
+    ) ;
+
+    return new DaemonConfiguration() {
+      public int getPort() {
+        return httpDaemonPort ;
+      }
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
+
+      public boolean getServeRemotes() {
+        return true ;
+      }
+    } ;
+
+  }
+
+  public static DaemonConfiguration createDaemonConfiguration(
+      final int httpDaemonPort,
+      final File contentDirectory,
+      final Charset renderingCharset
+  ) {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        contentDirectory,
         renderingCharset
     ) ;
 

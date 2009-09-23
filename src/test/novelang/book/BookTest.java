@@ -16,11 +16,9 @@
  */
 package novelang.book;
 
-import novelang.DirectoryFixture;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
@@ -30,7 +28,6 @@ import novelang.system.LogFactory;
 
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -225,9 +222,9 @@ public class BookTest {
    */
   @Test
   public void insertWithBadPart() throws IOException {
-    resourceInstaller.copy( TestResourceTree.Served.BROKEN ) ;
+    resourceInstaller.copy( TestResourceTree.Served.BROKEN_PART ) ;
     final File scannedBookWithBadPart =
-        resourceInstaller.copy( TestResourceTree.Served.BOOK_BAD_SCANNED_PART ) ;
+        resourceInstaller.copy( TestResourceTree.Served.BROKEN_BOOK_BAD_SCANNED_PART ) ;
 
     final Book book = BookTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;

@@ -91,7 +91,7 @@ public final class ResourceSchema {
       throws MissingResourceException, IOException
   {
     final String directoryPath = resourcePrefix + "/" + directory.getName() ;
-    directory.setUnderlyingResourcePath( directoryPath ) ;
+    directory.setAbsoluteResourceName( directoryPath ) ;
     for( Resource resource : directory.getResources() ) {
       resource.setParent( directory ) ;
       final String resourcePath = directoryPath + "/" + resource.getName() ;
@@ -100,8 +100,8 @@ public final class ResourceSchema {
         throw new MissingResourceException( resourcePath, ResourceSchema.class.getName(), "" ) ;
       }
       inputStream.close() ;
-      resource.setUnderlyingResourcePath( resourcePath ) ;
-      LOG.debug( "Verified: %s", resource.getUnderlyingResourcePath() ) ;
+      resource.setAbsoluteResourceName( resourcePath ) ;
+      LOG.debug( "Verified: %s", resource.getAbsoluteResourceName() ) ;
     }
     for( Directory subDirectory : directory.getSubdirectories() ) {
       subDirectory.setParent( directory ) ;
@@ -243,8 +243,8 @@ public final class ResourceSchema {
   public static String relativizeResourcePath( Directory parent, SchemaNode child ) {
     Preconditions.checkNotNull( parent ) ;
     Preconditions.checkNotNull( child ) ;
-    final String parentPath = parent.getUnderlyingResourcePath();
-    final String childPath = child.getUnderlyingResourcePath();
+    final String parentPath = parent.getAbsoluteResourceName();
+    final String childPath = child.getAbsoluteResourceName();
     Preconditions.checkArgument( 
         childPath.startsWith( parentPath ),
         "Parent path '%s' does not contain '%s'",

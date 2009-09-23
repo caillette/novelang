@@ -110,8 +110,8 @@ import novelang.DirectoryFixture;
     Preconditions.checkArgument( 
         ResourceSchema.isParentOfOrSameAs( scope, node ),
         "Directory '%s' expected to be parent of '%s'",
-        scope.getUnderlyingResourcePath(),
-        node.getUnderlyingResourcePath()
+        scope.getAbsoluteResourceName(),
+        node.getAbsoluteResourceName()
     ) ;
     final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
 

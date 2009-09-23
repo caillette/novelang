@@ -132,12 +132,18 @@ public final class TestResourceTree {
   public interface Served {
     Directory dir = directory( "served" ) ;
 
-    Resource GOOD = resource( "good.nlp" ) ;
-    Resource BROKEN = resource( "broken.nlp" ) ;
-    Resource VOID_XSL = resource( "void.xsl" ) ;
-    Resource BOOK_BROKEN_1 = resource( "book-broken-1.nlb" ) ;
-    Resource BOOK_BAD_SCANNED_PART = resource( "book-bad-scanned-part.nlb" ) ;
-    Resource BOOK_ALTERNATE_XSL = resource( "book-alternatexsl.nlb" ) ;  
+    Resource GOOD_PART = resource( "good.nlp" ) ;
+    Resource GOOD_BOOK = resource( "good.nlb" ) ;
+    Resource BROKEN_PART = resource( "broken.nlp" ) ;
+    Resource BROKEN_BOOK_BAD_REFERENCED_PART = resource( "book-broken-1.nlb" ) ;
+    Resource BROKEN_BOOK_BAD_SCANNED_PART = resource( "book-bad-scanned-part.nlb" ) ;
+    Resource BOOK_ALTERNATE_XSL = resource( "book-alternatexsl.nlb" ) ;
+
+      public interface Style {
+      Directory dir = directory( "style" ) ;
+
+      Resource VOID_XSL = resource( "void.xsl" ) ;
+    }
 
   }
   
