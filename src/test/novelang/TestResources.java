@@ -50,47 +50,13 @@ public class TestResources {
   private TestResources() { }
 
   private static final String ONE_WORD_RELATIVEFILENAME = "one-word.nlp";
-  public static final String ONE_WORD_ABSOLUTEFILENAME = "/" + ONE_WORD_RELATIVEFILENAME ;
   public static final ResourceName ONE_WORD_RESOURCENAME = new ResourceName( ONE_WORD_RELATIVEFILENAME ) ;
 
   public static final String PARTS_DIR = "/parts" ;
   public static final String JUST_SECTIONS = PARTS_DIR + "/just-sections.nlp";
   public static final String MESSY_IDENTIFIERS = PARTS_DIR + "/messy-identifiers.nlp";
-  public static final String NO_CHAPTER = PARTS_DIR + "/no-chapter.nlp";
   public static final String SIMPLE_STRUCTURE = PARTS_DIR + "/simple-structure.nlp";
-  public static final String BROKEN_CANNOTPARSE = PARTS_DIR + "/broken-cannotparse.nlp";
   public static final String MISSING_IMAGES = PARTS_DIR + "/missing-images.nlp";
-
-
-  public static final String SCANNED_DIR = "/scanned" ;
-  public static final String SCANNED_BOOK_NOSTYLE = SCANNED_DIR + "/book.nlb" ;
-  public static final String SCANNED_BOOK_NOSTYLE_NORECURSE = SCANNED_DIR + "/book-norecurse.nlb" ;
-  public static final String SCANNED_BOOK_WITHSTYLE = SCANNED_DIR + "/book-withstyle.nlb" ;
-  public static final String SCANNED_FILE1 = SCANNED_DIR + "/file1.nlp" ;
-  public static final String SCANNED_FILE2 = SCANNED_DIR + "/file2.nlp" ;
-  public static final String SCANNED_SUBDIR = SCANNED_DIR + "/sub" ;
-  public static final String SCANNED_FILE3 = SCANNED_SUBDIR + "/file3.nlp" ;
-
-
-  
-
-  public static final String FONT_STRUCTURE_DIR = "/fonts-structure" ;
-
-  public static final String DEFAULT_FONTS_DIR = FONT_STRUCTURE_DIR + "/fonts" ;
-  public static final String FONT_FILE_DEFAULT_1 = DEFAULT_FONTS_DIR + "/Bitstream-Vera-Sans-Mono.ttf" ;
-  public static final String FONT_FILE_DEFAULT_2 = DEFAULT_FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold.ttf" ;
-
-  public static final String ALTERNATE_FONTS_DIR_NAME = "alternate" ;
-  public static final String ALTERNATE_FONTS_DIR =
-      FONT_STRUCTURE_DIR + "/" + ALTERNATE_FONTS_DIR_NAME ;
-  public static final String FONT_FILE_ALTERNATE =
-      ALTERNATE_FONTS_DIR + "/Bitstream-Vera-Sans-Mono-Bold-Oblique.ttf" ;
-
-  public static final String FONT_FILE_PARENT_CHILD =
-      FONT_STRUCTURE_DIR + "/parent/child/Bitstream-Vera-Sans-Mono-Oblique.ttf" ;
-  public static final String FONT_FILE_PARENT_CHILD_BAD =
-      FONT_STRUCTURE_DIR + "/parent/child/Bad.ttf" ;
-
 
 
   public static final String STYLE_RESOURCE_DIR = "/style" ;
@@ -104,79 +70,8 @@ public class TestResources {
   public static final String NODESET_SOMECHAPTERS =
       NODESET_DIR + "/" + NODESET_SOMECHAPTERS_DOCUMENTNAME + ".nlp" ;
 
-  public static final ResourceName SHOWCASE = new ResourceName( "showcase/showcase.nlp" ) ;
 
 
-  public static final String SERVED_DIRECTORY_NAME = "served" ;
-  public static final String SERVED_GOOD_RADIX = "good";
-  public static final String
-      SERVED_PART_GOOD_NOEXTENSION = "/" + SERVED_DIRECTORY_NAME + "/" + SERVED_GOOD_RADIX;
-  public static final String SERVED_PARTSOURCE_GOOD = SERVED_PART_GOOD_NOEXTENSION + ".nlp" ;
-  public static final String SERVED_HTMLDOCUMENT_GOOD = SERVED_PART_GOOD_NOEXTENSION + ".html" ;
-
-  public static final ResourceName SERVED_VOIDSTYLESHEET =
-      new ResourceName( SERVED_DIRECTORY_NAME + "void.xsl" ) ;
-
-  public static final String SERVED_PART_BROKEN_NOEXTENSION =
-      "/" + SERVED_DIRECTORY_NAME + "/broken" ;
-
-  public static final String SERVED_PARTSOURCE_BROKEN = SERVED_PART_BROKEN_NOEXTENSION + ".nlp" ;
-
-  public static final String SERVED_BOOK_WITHALTERNATESTYLESHEET_NOEXTENSION =
-      "/" + SERVED_DIRECTORY_NAME + "/book-alternatexsl" ;
-
-  public static final String SERVED_BOOK_WITHALTERNATESTYLESHEET =
-      SERVED_BOOK_WITHALTERNATESTYLESHEET_NOEXTENSION + ".nlb" ;
-
-  public static final String SERVED_BOOK_BADSCANNEDPART_NOEXTENSION =
-      "/" + SERVED_DIRECTORY_NAME + "/book-bad-scanned-part" ;
-
-  public static final String SERVED_BOOK_BADSCANNEDPART =
-      SERVED_BOOK_BADSCANNEDPART_NOEXTENSION + ".nlb" ;
-
-
-  public static final String IMAGES_DIRECTORY_NAME = "images" ;
-  public static final String IMAGES_CHILD_DIRECTORY_NAME = IMAGES_DIRECTORY_NAME + "/child" ;
-  public static final String IMAGES_GRANDCHILD_DIRECTORY_NAME = 
-      IMAGES_CHILD_DIRECTORY_NAME + "/grandchild" ;
-
-  public static final String BLUE_128x64_GIF_NAME = "Blue-128x64.gif" ;
-  public static final String GREEN_128x64_JPG_NAME = "Green-128x64.jpg" ;
-  public static final String RED_128x64_PNG_NAME = "Red-128x64.png" ;
-
-  public static final String PART_WITH_IMAGE1_NAME = "images1.nlp" ;
-  public static final String PART_WITH_IMAGE2_NAME = "images2.nlp" ;
-  public static final String BOOK_WITH_IMAGES_EXPLICIT_NAME = "images-book-explicit.nlb" ;
-  public static final String BOOK_WITH_IMAGES_RECURSE_NAME = "images-book-recursive.nlb" ;
-
-  public static final ResourceName IMAGE_RED_128x64_PNG =
-      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + RED_128x64_PNG_NAME ) ;
-  public static final ResourceName IMAGE_GREEN_128x64_JPG =
-      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + GREEN_128x64_JPG_NAME ) ;
-  public static final ResourceName IMAGE_BLUE_128x64_GIF =
-      new ResourceName( IMAGES_CHILD_DIRECTORY_NAME + "/" + BLUE_128x64_GIF_NAME ) ;
-
-  public static final ResourceName PART_WITH_IMAGE1 =
-      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + PART_WITH_IMAGE1_NAME ) ;
-  public static final ResourceName PART_WITH_IMAGE2 =
-      new ResourceName( IMAGES_CHILD_DIRECTORY_NAME + "/" + PART_WITH_IMAGE2_NAME ) ;
-  public static final ResourceName BOOK_WITH_IMAGES_EXPLICIT =
-      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + BOOK_WITH_IMAGES_EXPLICIT_NAME ) ;
-  public static final ResourceName BOOK_WITH_IMAGES_RECURSE =
-      new ResourceName( IMAGES_DIRECTORY_NAME + "/" + BOOK_WITH_IMAGES_RECURSE_NAME ) ;
-
-
-  public static void copyServedResources( File contentDirectory ) {
-    TestResourceTools.copyResourceToDirectory(
-        TestResources.class, SERVED_PARTSOURCE_GOOD, contentDirectory ) ;
-
-    TestResourceTools.copyResourceToDirectory(
-        TestResources.class, SERVED_PARTSOURCE_BROKEN, contentDirectory ) ;
-
-    TestResourceTools.copyResourceToDirectory(
-        TestResources.class, SERVED_BOOK_WITHALTERNATESTYLESHEET, contentDirectory ) ;
-
-  }
 
   public static ProducerConfiguration createProducerConfiguration(
       final File contentDirectory,

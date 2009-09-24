@@ -96,28 +96,6 @@ public final class TestResourceTools {
 
   }
 
-  /**
-   * Reads a resource known to fit in a <code>String</code>.
-   * @param owningClass the class accessing to the resource.
-   * @param resourceName the resource name as defined from owningClass.
-   * @param charset  a non-null charset, no default should be used but the known
-   *     encoding on the development platform the resource was created with.
-   * @return a non-null, possibly empty <code>String</code>.
-   * @throws Error in case of encoding problem which should not happen because of {@code charset}
-   *     parameter which should represent a supported encoding.
-   */
-  public static String readStringResource(
-      Class owningClass,
-      String resourceName,
-      Charset charset
-  ) {
-    final byte[] bytes = readResource( owningClass, resourceName ) ;
-    try {
-      return new String( bytes, charset.name() ) ;
-    } catch( UnsupportedEncodingException e ) {
-      throw new Error( e );
-    }
-  }
 
   /**
    * Copy a resource into given directory, creating subdirectories if resource name includes
@@ -214,16 +192,4 @@ public final class TestResourceTools {
     return directory ;
   }
 
-  public static File getDirectoryForSure( File parent, String name ) {
-    final File directory = new File( parent, name ) ;
-    Assert.assertTrue(
-        "Does not exist: '" + directory.getAbsolutePath() + "'",
-        directory.exists()
-    ) ;
-    Assert.assertTrue(
-        "Not a directory: '" + directory.getAbsolutePath() + "'",
-        directory.isDirectory() 
-    ); ;
-    return directory ;
-  }
 }
