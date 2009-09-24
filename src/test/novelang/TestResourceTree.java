@@ -39,6 +39,7 @@ public final class TestResourceTree {
     ResourceSchema.initialize( Served.class ) ;
     ResourceSchema.initialize( Parts.class ) ;
     ResourceSchema.initialize( Identifiers.class ) ;
+    ResourceSchema.initialize( XslFormatting.class ) ;
   }
     
   public interface Images {
@@ -165,6 +166,13 @@ public final class TestResourceTree {
 
     Resource BOOK = resource( "identifiers.nlb" ) ;
     Resource PART = resource( "identifiers.nlp" ) ;
+  }
+
+  public interface XslFormatting {
+    Directory dir = directory( "format-in-xsl" ) ;
+
+    Resource PART_SOMECHAPTERS = resource( "some-chapters.nlp" ) ;
+    Resource XSL_NUMBERING = resource( "format.xsl" ) ;
   }
 
 }

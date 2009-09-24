@@ -22,10 +22,14 @@ import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runners.NameAwareTestClassRunner;
+import org.junit.runner.RunWith;
 import novelang.system.LogFactory;
 import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.TestResourceTree;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.configuration.ProducerConfiguration;
@@ -39,27 +43,37 @@ import novelang.produce.RequestTools;
  *
  * @author Laurent Caillette
  */
+@RunWith( NameAwareTestClassRunner.class)
 public class NumberingTest {
 
-  private static final Log LOG = LogFactory.getLog( NumberingTest.class ) ;
 
   @Test
   public void testNodeset() throws Exception {
+    final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+    resourceInstaller.copy( TestResourceTree.XslFormatting.dir ) ;
+
+
     final ProducerConfiguration serverConfiguration = TestResources.createProducerConfiguration(
-        styleDirectory,
-        styleDirectory,
+        resourceInstaller.getTargetDirectory(),
+        resourceInstaller.getTargetDirectory(),
         true,
         DefaultCharset.RENDERING
     ) ;
     final DocumentProducer documentProducer = new DocumentProducer( serverConfiguration ) ;
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
-    final DocumentRequest documentRequest =
-        RequestTools.forgeDocumentRequest(
-            SOME_CHAPTERS_FILENAME,
-            RenditionMimeType.PDF,
-            STYLESHEET_RESOURCE
-        )
+
+    final String documentName =
+        TestResourceTree.XslFormatting.PART_SOMECHAPTERS.getPathNoEndSeparator() + "/" +
+        TestResourceTree.XslFormatting.PART_SOMECHAPTERS.getBaseName()
     ;
+    LOG.debug( "Document name = '%s'", documentName ) ;
+
+    final DocumentRequest documentRequest = RequestTools.forgeDocumentRequest(
+        documentName,
+        RenditionMimeType.PDF,
+        TestResourceTree.XslFormatting.XSL_NUMBERING.getResourceName()
+    ) ;
+
     documentProducer.produce( documentRequest, outputStream ) ;
     final String result = new String( outputStream.toByteArray() ) ;
 
@@ -70,24 +84,11 @@ public class NumberingTest {
 // Fixture
 // =======
 
-  private static final ResourceName STYLESHEET_RESOURCE = TestResources.NODESET_XSL ;
-  public static final String NODESET_DIR = TestResources.NODESET_DIR ;
-  public static final String SOME_CHAPTERS_FILENAME = TestResources.NODESET_SOMECHAPTERS_DOCUMENTNAME;
-  public static final String SOME_CHAPTERS = TestResources.NODESET_SOMECHAPTERS;
-
-  private File styleDirectory ;
+  private static final Log LOG = LogFactory.getLog( NumberingTest.class ) ;
 
 
-  @Before
-  public void setUp() throws IOException {
-    final File scratchDirectory = new DirectoryFixture( getClass().getName() )
-        .getDirectory() ;
-    styleDirectory = new File( scratchDirectory, NODESET_DIR ) ;
-    TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        SOME_CHAPTERS,
-        scratchDirectory
-    ) ;
+  static {
+    TestResourceTree.initialize() ;
   }
 
 }

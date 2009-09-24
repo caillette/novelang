@@ -18,6 +18,7 @@ package novelang.common.filefixture;
 
 import org.apache.commons.lang.StringUtils;
 import com.google.common.base.Preconditions;
+import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette
@@ -47,6 +48,10 @@ import com.google.common.base.Preconditions;
 
   public final String getName() {
     return name ;
+  }
+
+  public final ResourceName getResourceName() {
+    return new ResourceName( name ) ;
   }
 
   public boolean isInitialized() {

@@ -34,7 +34,8 @@ public final class Directory extends SchemaNode implements Comparable< Directory
 
   public List< Directory > getSubdirectories() {
     if( null == directories ) {
-      throw new IllegalStateException( "Not set: directories" ) ;
+      throw new IllegalStateException(
+              "Not set: directories (did you initialize your test resources properly?)" ) ;
     }
     return directories ;
   }
