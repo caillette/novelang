@@ -29,6 +29,12 @@ import org.junit.runners.NameAwareTestClassRunner;
 import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
 import novelang.TestResources;
+import novelang.TestResourceTree;
+import novelang.system.LogFactory;
+import novelang.system.Log;
+import novelang.common.filefixture.ResourceInstaller;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.parse.GenericParameters;
 import novelang.rendering.RenditionMimeType;
@@ -50,18 +56,32 @@ public class BatchTest {
   public void exitBecauseHelpRequeted() throws Exception {
     new DocumentGenerator().main(
         "tesing", 
-        new String[] { GenericParameters.OPTIONPREFIX + GenericParameters.HELP_OPTION_NAME } ) ;
+        new String[] { GenericParameters.OPTIONPREFIX + GenericParameters.HELP_OPTION_NAME }
+    ) ;
   }
 
   @Test
   public void generateOneDocumentOk() throws Exception {
+    final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    resourceInstaller.copy( resource ) ;
+    final String renderedDocumentName = resource.getBaseName() + "." + HTML_EXTENSION;
+
     new DocumentGenerator().main(
         "testing",
-        true, new String[] { "/" + RENDERED_DOCUMENT_NAME },
-        contentDirectory
+        true,
+        new String[] { "/" + renderedDocumentName },
+        resourceInstaller.getTargetDirectory()
     ) ;
 
-    final File renderedDocument = new File( outputDirectory, RENDERED_DOCUMENT_NAME ) ;
+    final File renderedDocument = new File(
+        new File(
+            resourceInstaller.getTargetDirectory(),
+            ConfigurationTools.DEFAULT_OUTPUT_DIRECTORY_NAME
+        ), 
+        renderedDocumentName
+    ) ;
+    LOG.debug( "Rendered document = '%s'", renderedDocument.getAbsolutePath() ) ;
     Assert.assertTrue( renderedDocument.exists() ) ;
   }
 
@@ -69,31 +89,20 @@ public class BatchTest {
 // Fixture
 // =======
 
-  private File contentDirectory ;
-  private File outputDirectory ;
-  private static final String GOOD_NLP_RESOURCE_NAME = TestResources.SERVED_PARTSOURCE_GOOD ;
-  private static final String RENDERED_DOCUMENT_NAME =
-      TestResources.SERVED_GOOD_RADIX + "." + RenditionMimeType.HTML.getFileExtension() ;
+  private static final Log LOG = LogFactory.getLog( BatchTest.class ) ;
+
+  static {
+    TestResourceTree.initialize() ;
+  }
+
+  private static final String HTML_EXTENSION = RenditionMimeType.HTML.getFileExtension() ;
+
+
   private SecurityManager savedSecurityManager ;
 
 
   @Before
   public void setUp() throws IOException {
-    final String testName = NameAwareTestClassRunner.getTestName();
-
-    final DirectoryFixture directoryFixture =
-        new DirectoryFixture( testName ) ;
-    contentDirectory = directoryFixture.getDirectory() ;
-
-    TestResourceTools.copyResourceToDirectoryFlat(
-        getClass(),
-        GOOD_NLP_RESOURCE_NAME,
-        contentDirectory
-    ) ;
-
-    outputDirectory = new File(
-        contentDirectory, ConfigurationTools.DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
-
     savedSecurityManager = System.getSecurityManager() ;
     System.setSecurityManager( new NoExitSecurityManager() ) ;
   }
@@ -104,11 +113,11 @@ public class BatchTest {
   }
 
   private static class NoExitSecurityManager extends SecurityManager {
-    public void checkExit( int status ) {
+    public void checkExit( final int status ) {
       throw new CannotExitVirtualMachineWhileTestingException() ;
     }
 
-    public void checkPermission( Permission perm ) { }
+    public void checkPermission( final Permission perm ) { }
   }
 
   private static class CannotExitVirtualMachineWhileTestingException extends RuntimeException { }
