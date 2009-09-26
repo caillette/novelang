@@ -55,7 +55,7 @@ public class NumberingTest {
 
     final ProducerConfiguration serverConfiguration = TestResources.createProducerConfiguration(
         resourceInstaller.getTargetDirectory(),
-        resourceInstaller.getTargetDirectory(),
+        resourceInstaller.createFileObject( TestResourceTree.XslFormatting.dir ),
         true,
         DefaultCharset.RENDERING
     ) ;

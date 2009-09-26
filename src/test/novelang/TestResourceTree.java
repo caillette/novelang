@@ -168,11 +168,12 @@ public final class TestResourceTree {
     Resource PART = resource( "identifiers.nlp" ) ;
   }
 
+  
   public interface XslFormatting {
     Directory dir = directory( "format-in-xsl" ) ;
 
     Resource PART_SOMECHAPTERS = resource( "some-chapters.nlp" ) ;
-    Resource XSL_NUMBERING = resource( "format.xsl" ) ;
+    Resource XSL_NUMBERING = resource( "format-numbering.xsl" ) ;
   }
 
 }

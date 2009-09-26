@@ -1,13 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE foo [
 
-  <!ENTITY % Fo PUBLIC
-      "http://www.w3.org/1999/XSL/Format"
-      "/fo.dtd"
-  >
-  %Fo;
-
-] >
 
 <!-- Used by XsltNumberingTest, edit with care. -->
 
@@ -18,7 +10,6 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
     xmlns:xalan="http://xml.apache.org/xalan"
-    xmlns:exslt="http://exslt.org/common"
     xmlns:nlx="xalan://novelang.rendering.xslt.Numbering"
  >
   <xsl:import href="default-pdf.xsl" />
