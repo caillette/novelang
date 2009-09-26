@@ -346,7 +346,7 @@ public class ConfigurationTools {
     return fontDirectories;
   }
 
-  private static ResourceLoader createResourceLoader( GenericParameters parameters ) {
+  public static ResourceLoader createResourceLoader( GenericParameters parameters ) {
     final Iterable< File > userDefinedDirectories = findMultipleDirectoriesWithDefault(
         parameters.getBaseDirectory(),
         parameters.getStyleDirectories(),
@@ -362,6 +362,7 @@ public class ConfigurationTools {
       final File userDefinedStyleDirectory,
       final String description
   ) {
+    // Let's wreck the Ant task for a moment!
     throw new UnsupportedOperationException( "createResourceLoader" ) ;
   }
   

@@ -19,8 +19,7 @@ package novelang;
 import novelang.common.filefixture.Directory;
 import novelang.common.filefixture.Resource;
 import novelang.common.filefixture.ResourceSchema;
-import static novelang.common.filefixture.ResourceSchema.directory;
-import static novelang.common.filefixture.ResourceSchema.resource;
+import static novelang.common.filefixture.ResourceSchema.*;
 
 /**
  * Schema of all resources used by tests.
@@ -40,6 +39,7 @@ public final class TestResourceTree {
     ResourceSchema.initialize( Parts.class ) ;
     ResourceSchema.initialize( Identifiers.class ) ;
     ResourceSchema.initialize( XslFormatting.class ) ;
+    ResourceSchema.initialize( MainResources.Style.class ) ;
   }
     
   public interface Images {
@@ -102,18 +102,17 @@ public final class TestResourceTree {
   }
   
   public interface TaggedPart {
+    Directory dir = directory( "tagged" ) ;
     String TAG1 = "T1" ;
     String TAG2 = "T2" ;
     String TAGS_FORM_NAME = "tag-list" ;
     String UPDATING_TAG_VISIBILITY_STATUS_MESSAGE = "Updating tag visibility..." ;
     String UPDATING_TAG_VISIBILITY_ALERT_MESSAGE = "Done updating tag visibility" ;
-    Directory dir = directory( "tagged" ) ;
     Resource TAGGED = resource( "tags-combinations.nlp" ) ;
   }
 
   public interface Scanned {
     Directory dir = directory( "scanned" ) ;
-
 
     Resource FILE_1 = resource( "file1.nlp" ) ;
     Resource FILE_2 = resource( "file2.nlp" ) ;
@@ -170,10 +169,21 @@ public final class TestResourceTree {
 
   
   public interface XslFormatting {
-    Directory dir = directory( "format-in-xsl" ) ;
+    Directory dir = directory( "styles" ) ;
 
     Resource PART_SOMECHAPTERS = resource( "some-chapters.nlp" ) ;
     Resource XSL_NUMBERING = resource( "format-numbering.xsl" ) ;
   }
 
+  /**
+   * Placeholder for deployable resources referenced by tests.
+   */
+  public interface MainResources {
+    
+    public interface Style {
+      Directory dir = directory( "style" ) ;
+      
+      Resource DEFAULT_PDF_XSL = resource( "default-pdf.xsl" ) ;
+    }
+  }
 }

@@ -1,0 +1,76 @@
+package novelang.configuration;
+
+import novelang.TestResourceTree;
+import novelang.loader.ResourceLoader;
+import novelang.loader.ResourceName;
+import novelang.configuration.parse.DaemonParameters;
+import novelang.configuration.parse.ArgumentException;
+import novelang.configuration.parse.GenericParameters;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+
+import org.junit.Test;
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+
+import java.io.File;
+
+/**
+ * Test for {@link ConfigurationTools} dedicated to style directories, which comes with some
+ * subtle resource loading mechanism.
+ * 
+ * @author Laurent Caillette
+ */
+@RunWith( NameAwareTestClassRunner.class )
+public class StyleDirectoriesTest {
+  
+  @Test
+  public void findDefaultStyleDirectory() throws ArgumentException {
+    resourceInstaller.copyWithPath( TestResourceTree.Served.Style.VOID_XSL ) ;
+    final File baseDirectory = resourceInstaller.createFileObject( TestResourceTree.Served.dir ) ;
+    final DaemonParameters parameters = new DaemonParameters( baseDirectory ) ;
+    final ResourceLoader resourceLoader = ConfigurationTools.createResourceLoader( parameters ) ;
+    Assert.assertNotNull( resourceLoader.getInputStream( 
+        TestResourceTree.Served.Style.VOID_XSL.getResourceName() ) ) ;
+  }
+
+  @Test
+  public void findResourceFromClassloader() throws ArgumentException {
+    final DaemonParameters parameters = 
+        new DaemonParameters( resourceInstaller.getTargetDirectory() ) ;
+    final ResourceLoader resourceLoader = ConfigurationTools.createResourceLoader( parameters ) ;
+    Assert.assertNotNull( resourceLoader.getInputStream( new ResourceName(
+        TestResourceTree.MainResources.Style.DEFAULT_PDF_XSL.getName() ) ) ) ;
+  }
+
+  @Test
+  public void findResourceAmongMultipleDeclaredDirectories() throws ArgumentException {
+    // Any two different directories containing resources would make it.
+    final File resource1 = resourceInstaller.copyWithPath( 
+        TestResourceTree.FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
+    final File resource2 = resourceInstaller.copyWithPath( 
+        TestResourceTree.FontStructure.Fonts.MONO ) ;
+    
+    final DaemonParameters parameters = new DaemonParameters( 
+        resourceInstaller.getTargetDirectory(),
+        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_STYLE_DIRECTORIES,
+        resource1.getParentFile().getAbsolutePath(), 
+        resource2.getParentFile().getAbsolutePath() 
+    ) ;
+    final ResourceLoader resourceLoader = ConfigurationTools.createResourceLoader( parameters ) ;
+    Assert.assertNotNull( resourceLoader.getInputStream( new ResourceName(
+        resource2.getName() ) ) ) ;
+  }
+
+// =======  
+// Fixture
+// =======  
+  
+  static {
+    TestResourceTree.initialize() ;
+  }
+  
+  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ; 
+  
+  
+}

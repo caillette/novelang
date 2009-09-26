@@ -38,11 +38,22 @@ java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
 === The ``--font-dirs`` option
 
 The ``--font-dirs`` option sets multiple directories where Novelang daemon looks for fonts.
-On Mac OS X and Unix, use a colon as path separator.
 
 <<<
 java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --font-dirs=my/fonts-1:/Users/Shared/Fonts
+  --font-dirs my/fonts-1 /Users/Shared/Fonts
+>>>
+
+
+=== The ``--style-dirs`` option
+
+The ``--style-dirs`` option sets multiple directories where Novelang daemon looks for stylesheets 
+and related resources. See chapter about stylesheet for details.
+
+
+<<<
+java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
+  --style-dirs my/styles-1 /Users/Shared/Fonts
 >>>
 
 

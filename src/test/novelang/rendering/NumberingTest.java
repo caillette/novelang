@@ -39,7 +39,7 @@ import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
 
 /**
- * Test for displaying page numbers, including a Java function call.
+ * Test for displaying page and chapter numbers, including a Java function call.
  *
  * @author Laurent Caillette
  */

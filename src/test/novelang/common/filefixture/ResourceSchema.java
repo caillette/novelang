@@ -24,6 +24,9 @@ import java.util.MissingResourceException;
 
 import novelang.system.LogFactory;
 import novelang.system.Log;
+import novelang.loader.ResourceName;
+import novelang.loader.ClasspathResourceLoader;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -53,6 +56,9 @@ public final class ResourceSchema {
   public static Resource resource( String name ) {
     return new Resource( name ) ;
   }
+  
+  private static final ClasspathResourceLoader CLASSPATH_RESOURCE_LOADER = 
+      new ClasspathResourceLoader() ;
 
   private static final Log LOG = LogFactory.getLog( ResourceSchema.class ) ;
 

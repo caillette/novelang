@@ -64,7 +64,7 @@ public class TestResources {
   public static final ResourceName XSL_BAD_XPATH_1 = new ResourceName( "bad-xpath-1.xsl" ) ;
   public static final ResourceName XSL_BAD_XPATH_2 = new ResourceName( "bad-xpath-2.xsl" ) ;
 
-  public static final String NODESET_DIR = "/format-in-xsl" ;
+  public static final String NODESET_DIR = "/styles";
   public static final ResourceName NODESET_XSL = new ResourceName( "format.xsl" ) ;
   public static final String NODESET_SOMECHAPTERS_DOCUMENTNAME = "some-chapters" ;
   public static final String NODESET_SOMECHAPTERS =
