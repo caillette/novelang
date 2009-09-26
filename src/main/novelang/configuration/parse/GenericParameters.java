@@ -53,7 +53,7 @@ public abstract class GenericParameters {
   private final File baseDirectory ;
   private final File contentRoot ;
   private final Iterable< File > fontDirectories ;
-  private final File styleDirectory ;
+  private final Iterable< File > styleDirectories ;
   private final File hyphenationDirectory ;
   private final Charset defaultSourceCharset ;
   private final Charset defaultRenderingCharset ;
@@ -75,7 +75,7 @@ public abstract class GenericParameters {
     options.addOption( OPTION_CONTENT_ROOT ) ;
     options.addOption( OPTION_FONT_DIRECTORIES ) ;
     options.addOption( OPTION_EMPTY ) ;
-    options.addOption( OPTION_STYLE_DIRECTORY ) ;
+    options.addOption( OPTION_STYLE_DIRECTORIES ) ;
     options.addOption( OPTION_LOG_DIRECTORY ) ;
     options.addOption( OPTION_HYPHENATION_DIRECTORY ) ;
     options.addOption( OPTION_DEFAULT_SOURCE_CHARSET ) ;
@@ -116,7 +116,16 @@ public abstract class GenericParameters {
         defaultRenderingCharset = null ;
       }
 
-      styleDirectory = extractDirectory( baseDirectory, OPTION_STYLE_DIRECTORY, line ) ;
+      if( line.hasOption( OPTION_STYLE_DIRECTORIES.getLongOpt() ) ) {
+        final String[] styleDirectoriesNames =
+            line.getOptionValues( OPTION_STYLE_DIRECTORIES.getLongOpt() ) ;
+        LOG.debug( "Argument for Style directories = '%s'",
+            Lists.newArrayList( styleDirectoriesNames ) ) ;
+        styleDirectories = extractDirectories( baseDirectory, styleDirectoriesNames ) ;
+      } else {
+        styleDirectories = ImmutableList.of() ;
+      }
+
       hyphenationDirectory = extractDirectory( baseDirectory, OPTION_HYPHENATION_DIRECTORY, line ) ;
 
       if( line.hasOption( OPTION_FONT_DIRECTORIES.getLongOpt() ) ) {
@@ -185,18 +194,18 @@ public abstract class GenericParameters {
   }
 
   /**
-   * Returns a human-readable description of {@link #OPTION_STYLE_DIRECTORY}.
+   * Returns a human-readable description of {@link #OPTION_STYLE_DIRECTORIES}.
    */
-  public String getStyleDirectoryDescription() {
-    return createOptionDescription( OPTION_STYLE_DIRECTORY ) ;
+  public String getStyleDirectoriesDescription() {
+    return createOptionDescription( OPTION_STYLE_DIRECTORIES ) ;
   }
 
   /**
    * Returns the directory containing style files.
-   * @return a null object if undefined, a reference to an existing directory otherwise.
+   * @return a non-null object iterating over no nulls.
    */
-  public File getStyleDirectory() {
-    return styleDirectory;
+  public Iterable< File > getStyleDirectories() {
+    return styleDirectories;
   }
 
   /**
@@ -342,13 +351,13 @@ public abstract class GenericParameters {
       .create()
   ;
 
-  public static final String OPTIONNAME_STYLE_DIRECTORY = "style-dir" ;
+  public static final String OPTIONNAME_STYLE_DIRECTORIES = "style-dirs" ;
 
-  private static final Option OPTION_STYLE_DIRECTORY = OptionBuilder
-      .withLongOpt( OPTIONNAME_STYLE_DIRECTORY )
-      .withDescription( "Directory containing style files" )
+  private static final Option OPTION_STYLE_DIRECTORIES = OptionBuilder
+      .withLongOpt( OPTIONNAME_STYLE_DIRECTORIES )
+      .withDescription( "Directories containing style files" )
       .withValueSeparator()
-      .hasArg()
+      .hasArgs()
       .create()
   ;
 

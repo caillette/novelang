@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
@@ -257,30 +258,13 @@ public class ConfigurationTools {
   public static RenderingConfiguration createRenderingConfiguration( GenericParameters parameters )
       throws FOPException
   {
-    final Iterable< File > fontDirectories ;
-    final Iterable< File > userFontDirectories = parameters.getFontDirectories() ;
-    if( userFontDirectories.iterator().hasNext() ) {
-      fontDirectories = userFontDirectories ;
-     LOG.info(
-         "Got font directories from custom value '%s" + "' (from option: %s).",
-         fontDirectories,
-         parameters.getFontDirectoriesOptionDescription()
-     ) ;
-    } else {
-      final File maybeDefaultDirectory = findDefaultDirectoryIfNeeded(
-          parameters.getBaseDirectory(),
-          null,
-          "font directories",
-          parameters.getFontDirectoriesOptionDescription(),
-          DEFAULT_FONTS_DIRECTORY_NAME
-      ) ;
-
-      if( null == maybeDefaultDirectory ) {
-        fontDirectories = ImmutableList.of() ;
-      } else {
-        fontDirectories = Lists.newArrayList( maybeDefaultDirectory ) ;
-      }
-    }
+    final Iterable< File > fontDirectories = findMultipleDirectoriesWithDefault(
+        parameters.getBaseDirectory(),
+        parameters.getFontDirectories(),
+        "font directories",
+        DEFAULT_FONTS_DIRECTORY_NAME,
+        parameters.getFontDirectoriesOptionDescription() 
+    ) ;
 
     final File hyphenationDirectory = findDefaultDirectoryIfNeeded(
         parameters.getBaseDirectory(),
@@ -335,50 +319,83 @@ public class ConfigurationTools {
 
   }
 
-  private static ResourceLoader createResourceLoader( GenericParameters parameters ) {
-
-    final File baseDirectory = parameters.getBaseDirectory() ;
-    final File userDefinedDirectory = parameters.getStyleDirectory() ;
-    final String styleDirectoryDescription = parameters.getStyleDirectoryDescription() ;
-    return createResourceLoader( baseDirectory, userDefinedDirectory, styleDirectoryDescription ) ;
-  }
-
-  public static ResourceLoader createResourceLoader( 
-      final File baseDirectory,
-      final File userDefinedDirectory,
-      final String styleDirectoryDescription
-  ) {
-    final File userStyleDirectory = findDefaultDirectoryIfNeeded(
-        baseDirectory,
-        userDefinedDirectory,
-        "user styles",
-        styleDirectoryDescription,
-        DEFAULT_STYLE_DIR
-    ) ;
-
-    final URL userStyleUrl ;
-    if( null == userStyleDirectory ) {
-      userStyleUrl = null ;
+  private static Iterable<File> findMultipleDirectoriesWithDefault( File baseDirectory, Iterable<File> userFontDirectories, String directoriesName, String defaultSingleDirectoryName, String directoriesOptionDescription ) {
+    Iterable<File> fontDirectories;
+    if( userFontDirectories.iterator().hasNext() ) {
+      fontDirectories = userFontDirectories ;
+      LOG.info(
+          "Got font directories from custom value '%s" + "' (from option: %s).",
+          fontDirectories,
+          directoriesOptionDescription
+      ) ;
     } else {
-      try {
-        userStyleUrl = userStyleDirectory.toURI().toURL();
-      } catch( MalformedURLException e ) {
-        throw new RuntimeException( e );
+      final File maybeDefaultDirectory = findDefaultDirectoryIfNeeded(
+          baseDirectory,
+          null,
+          directoriesName,
+          directoriesOptionDescription,
+          defaultSingleDirectoryName
+      ) ;
+
+      if( null == maybeDefaultDirectory ) {
+        fontDirectories = ImmutableList.of() ;
+      } else {
+        fontDirectories = Lists.newArrayList( maybeDefaultDirectory ) ;
       }
     }
+    return fontDirectories;
+  }
 
-    final ResourceLoader classpathResourceLoader =
+  private static ResourceLoader createResourceLoader( GenericParameters parameters ) {
+    final Iterable< File > userDefinedDirectories = findMultipleDirectoriesWithDefault(
+        parameters.getBaseDirectory(),
+        parameters.getStyleDirectories(),
+        "style directories",
+        DEFAULT_STYLE_DIR,
+        parameters.getStyleDirectoriesDescription() 
+    ) ;
+    return createResourceLoader( userDefinedDirectories ) ;
+  }
+
+  public static ResourceLoader createResourceLoader(
+      final File contentDirectory,
+      final File userDefinedStyleDirectory,
+      final String description
+  ) {
+    throw new UnsupportedOperationException( "createResourceLoader" ) ;
+  }
+  
+  public static ResourceLoader createResourceLoader( 
+      final Iterable< File > userDefinedDirectories
+  ) {
+    final ResourceLoader classpathResourceLoader = 
         new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
+    final Iterator< File > userDefinedDirectoryIterator = userDefinedDirectories.iterator() ;
+    
+    if( userDefinedDirectoryIterator.hasNext() ) {
+      ResourceLoader resultingResourceLoader = classpathResourceLoader ;
+      
+      while ( userDefinedDirectoryIterator.hasNext() ) {
+        final File userStyleDirectory = userDefinedDirectoryIterator.next() ;
+        final URL userStyleUrl ;
+        try {
+          userStyleUrl = userStyleDirectory.toURI().toURL();
+        } catch( MalformedURLException e ) {
+          throw new RuntimeException( e );
+        }
+        resultingResourceLoader = ResourceLoaderTools.compose( 
+            new UrlResourceLoader( userStyleUrl ), 
+            resultingResourceLoader 
+        ) ;
+      }
 
-    final ResourceLoader resourceLoader ;
-    if( null == userStyleDirectory ) {
-      resourceLoader = classpathResourceLoader ;
+      return resultingResourceLoader ;
+      
     } else {
-      resourceLoader = ResourceLoaderTools.compose(
-          new UrlResourceLoader( userStyleUrl ), classpathResourceLoader ) ;
+      return classpathResourceLoader ;
     }
-
-    return resourceLoader ;
+    
+    
   }
 
   protected static File findDefaultDirectoryIfNeeded(

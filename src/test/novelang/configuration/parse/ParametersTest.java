@@ -46,7 +46,7 @@ public class ParametersTest {
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, new String[ 0 ] ) ;
     assertNull( parameters.getContentRoot() ) ;
     assertNull( parameters.getHttpDaemonPort() ) ;
-    assertNull( parameters.getStyleDirectory() );
+    assertFalse( parameters.getStyleDirectories().iterator().hasNext() );
     assertNull( parameters.getHyphenationDirectory() ) ;
     assertOnIterable( parameters.getFontDirectories() ) ;
   }
@@ -57,11 +57,11 @@ public class ParametersTest {
   }
 
   @Test
-  public void style() throws ArgumentException {
-    final String[] arguments = { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA } ;
+  public void style1() throws ArgumentException {
+    final String[] arguments = { DASHED_STYLE_DIRS, DIRECTORY_NAME_AAA } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
-    assertEquals( directoryAaa , parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getStyleDirectories(), directoryAaa ) ;
     assertOnIterable( parameters.getFontDirectories() ) ;
     assertNull( parameters.getLogDirectory() ) ;
     assertNull( parameters.getHyphenationDirectory() ) ;
@@ -75,7 +75,7 @@ public class ParametersTest {
     assertEquals( directoryAaa , parameters.getContentRoot() ) ;
     assertOnIterable( parameters.getFontDirectories() ) ;
     assertNull( parameters.getLogDirectory() ) ;
-    assertNull( parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getStyleDirectories() ) ;
   }
 
   @Test
@@ -86,7 +86,7 @@ public class ParametersTest {
     assertEquals( directoryAaa , parameters.getHyphenationDirectory() ) ;
     assertOnIterable( parameters.getFontDirectories() ) ;
     assertNull( parameters.getLogDirectory() ) ;
-    assertNull( parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getStyleDirectories() ) ;
   }
 
   @Test
@@ -97,7 +97,19 @@ public class ParametersTest {
     assertEquals( directoryAaa , parameters.getLogDirectory() ) ;
     assertOnIterable( parameters.getFontDirectories() ) ;
     assertNull( parameters.getHyphenationDirectory() ) ;
-    assertNull( parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getStyleDirectories() ) ;
+  }
+
+  @Test
+  public void style2() throws ArgumentException {
+    final String[] arguments =
+        { DASHED_STYLE_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB } ;
+    final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
+
+    assertOnIterable( parameters.getFontDirectories() ) ;
+    assertOnIterable( parameters.getStyleDirectories(), directoryAaa, directoryBbb ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getHyphenationDirectory() ) ;
   }
 
   @Test
@@ -106,31 +118,31 @@ public class ParametersTest {
         { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
-    assertNull( parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getStyleDirectories() ) ;
     assertOnIterable( parameters.getFontDirectories(), directoryAaa, directoryBbb ) ;
     assertNull( parameters.getLogDirectory() ) ;
     assertNull( parameters.getHyphenationDirectory() ) ;
   }
 
   @Test
-  public void fonts2AndStyle() throws ArgumentException {
+  public void fonts2AndStyle1() throws ArgumentException {
     final String[] arguments = { DASHED_FONT_DIRS, DIRECTORY_NAME_AAA, DIRECTORY_NAME_BBB,
-        DASHED_STYLE_DIR, DIRECTORY_NAME_CCC } ;
+        DASHED_STYLE_DIRS, DIRECTORY_NAME_CCC } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
     assertOnIterable( parameters.getFontDirectories(), directoryAaa, directoryBbb ) ;
-    assertEquals( directoryCcc , parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getStyleDirectories(), directoryCcc ) ;
     assertNull( parameters.getLogDirectory() ) ;
     assertNull( parameters.getHyphenationDirectory() ) ;
   }
 
   @Test
-  public void styleAndFonts2() throws ArgumentException {
-    final String[] arguments = { DASHED_STYLE_DIR, DIRECTORY_NAME_AAA,
+  public void style1AndFonts2() throws ArgumentException {
+    final String[] arguments = { DASHED_STYLE_DIRS, DIRECTORY_NAME_AAA,
             DASHED_FONT_DIRS, DIRECTORY_NAME_BBB, DIRECTORY_NAME_CCC } ;
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory, arguments ) ;
 
-    assertEquals( directoryAaa , parameters.getStyleDirectory() ) ;
+    assertOnIterable( parameters.getStyleDirectories(), directoryAaa ) ;
     assertOnIterable( parameters.getFontDirectories(), directoryBbb, directoryCcc ) ;
     assertNull( parameters.getLogDirectory() ) ;
     assertNull( parameters.getHyphenationDirectory() ) ;
@@ -138,7 +150,7 @@ public class ParametersTest {
 
   @Test ( expected = ArgumentException.class )
   public void badStyleDirectory() throws ArgumentException {
-    final String[] arguments = { DASHED_STYLE_DIR, "xxx" } ;
+    final String[] arguments = { DASHED_STYLE_DIRS, "xxx" } ;
     new DaemonParameters( scratchDirectory, arguments ) ;
   }
 
@@ -177,7 +189,7 @@ public class ParametersTest {
 
   private static final String DASHED_CONTENTROOT = "--content-root";
   private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir";
-  private static final String DASHED_STYLE_DIR = "--style-dir";
+  private static final String DASHED_STYLE_DIRS = "--style-dirs";
   private static final String DASHED_FONT_DIRS = "--font-dirs";
   private static final String DASHED_LOG_DIR = "--log-dir";
 

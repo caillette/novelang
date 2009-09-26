@@ -24,6 +24,8 @@ import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * Transforms a given Novelang document into a String.
  * <p>

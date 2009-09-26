@@ -52,7 +52,7 @@ import novelang.system.DefaultCharset;
  *
  * TODO add tests for:
  *   {@link GenericParameters#getLogDirectory()}
- *   {@link GenericParameters#getStyleDirectory()}
+ *   {@link GenericParameters#getStyleDirectories()}
  *   {@link GenericParameters#getHyphenationDirectory()} 
  *
  * @author Laurent Caillette
