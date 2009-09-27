@@ -24,6 +24,8 @@ import com.google.common.collect.ImmutableSet;
 
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
+import novelang.system.LogFactory;
+import novelang.system.Log;
 
 /**
  * Handles tricky rules about inserting spaces at the right place.
@@ -32,7 +34,7 @@ import static novelang.parser.NodeKind.*;
  */
 public class Spaces {
 
-  
+  private static final Log LOG = LogFactory.getLog( Spaces.class ) ;
   private static final Set< Sequence > SEQUENCES = Sets.newHashSet() ;
   
   
@@ -76,6 +78,8 @@ public class Spaces {
     }
 
 
+    logSequences() ;
+
     
   }
 
@@ -93,6 +97,32 @@ public class Spaces {
   }
 
 
+// =======  
+// Logging
+// =======
+  
+  private static void logSequences() {
+    int maximumNodeKindLength = 0 ;
+    for( final NodeKind nodeKind : NodeKind.values() ) {
+      maximumNodeKindLength = Math.max( maximumNodeKindLength, nodeKind.name().length() ) ;
+    }
+    final String format =
+        "  " + 
+        "%-" + maximumNodeKindLength + "s" + 
+        " -> " + 
+        "%-" + maximumNodeKindLength + "s" + 
+        "\n" 
+    ;
+    final StringBuilder stringBuilder = new StringBuilder() ;
+    for( final Sequence sequence : SEQUENCES ) {
+      stringBuilder.append( 
+          String.format( format, sequence.first.toString(), sequence.second.toString() ) ) ;
+    }
+    LOG.debug( "Added following sequences:\n%s", stringBuilder.toString() ) ;
+  }
+
+  
+  
 // ============
 // Boring stuff
 // ============

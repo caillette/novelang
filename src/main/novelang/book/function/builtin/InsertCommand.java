@@ -15,7 +15,7 @@ import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.WORD_;
 import novelang.part.Part;
-import novelang.part.FragmentIdentifier;
+import novelang.marker.FragmentIdentifier;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.treemangling.FragmentExtractor;
@@ -53,7 +53,7 @@ public class InsertCommand extends AbstractCommand {
       final boolean createLevel,
       final int levelAbove,
       final String styleName,
-      final Iterable< FragmentIdentifier > fragmentIdentifiers
+      final Iterable<FragmentIdentifier> fragmentIdentifiers
   ) {
     super( location ) ;
     this.fileName = fileUrl.substring( "file:".length() ) ; 

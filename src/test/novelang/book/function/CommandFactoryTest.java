@@ -5,7 +5,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.book.function.builtin.InsertCommand;
 import novelang.book.function.builtin.MapstylesheetCommand;
 import novelang.book.function.builtin.FileOrdering;
-import novelang.part.FragmentIdentifier;
+import novelang.marker.FragmentIdentifier;
 
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
@@ -124,7 +124,7 @@ public class CommandFactoryTest {
     ;
   }
   
-  private static Iterable< FragmentIdentifier > extractFragmentIdentifiers( 
+  private static Iterable<FragmentIdentifier> extractFragmentIdentifiers( 
       final Command insertCommand 
   ) {
     return Reflection.field( "fragmentIdentifiers" ).

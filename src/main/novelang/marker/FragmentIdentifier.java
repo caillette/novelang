@@ -1,4 +1,4 @@
-package novelang.part;
+package novelang.marker;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

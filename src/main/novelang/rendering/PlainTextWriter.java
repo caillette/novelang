@@ -67,11 +67,5 @@ public class PlainTextWriter implements FragmentWriter {
     write( kinship, word ) ;
   }
 
-  static final String spaces( int size ) {
-    final StringBuffer buffer = new StringBuffer() ;
-    for( int i = 0 ; i < size ; i++ ) {
-      buffer.append( "  " ) ;
-    }
-    return buffer.toString() ;
-  }
+  
 }

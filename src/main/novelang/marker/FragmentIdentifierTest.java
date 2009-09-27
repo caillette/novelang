@@ -1,4 +1,6 @@
-package novelang.part;
+package novelang.marker;
+
+import novelang.marker.FragmentIdentifier;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

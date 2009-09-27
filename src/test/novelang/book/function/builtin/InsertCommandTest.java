@@ -29,6 +29,7 @@ import org.junit.runners.NameAwareTestClassRunner;
 
 import com.google.common.collect.ImmutableList;
 import novelang.TestResourceTree;
+import novelang.marker.FragmentIdentifier;
 import static novelang.TestResourceTree.initialize;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;
@@ -40,7 +41,6 @@ import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.part.FragmentIdentifier;
 
 /**
  * Tests for {@link InsertCommand}.
@@ -252,7 +252,7 @@ public class InsertCommandTest {
         false,
         1,
         null,
-        ImmutableList.< FragmentIdentifier >of()
+        ImmutableList.<FragmentIdentifier>of()
     ) ;
 
     final SyntacticTree initialTree = tree(

@@ -25,11 +25,12 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.DefaultCharset;
 
 /**
- * Tests for {@link RenderingTools}.
+ * Tests for 
+ * {@link RenderingTools#textualize(novelang.common.SyntacticTree, java.nio.charset.Charset)}.
  *
  * @author Laurent Caillette
  */
-public class RenderingToolsTest {
+public class RenderingToolsTextualizeTest {
 
   @Test
   public void renderJustAWord() throws Exception {

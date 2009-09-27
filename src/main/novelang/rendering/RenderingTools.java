@@ -18,12 +18,14 @@ package novelang.rendering;
 
 import java.nio.charset.Charset;
 import java.io.ByteArrayOutputStream;
+import java.util.regex.Pattern;
 
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
 import novelang.common.Problem;
 import novelang.common.StylesheetMap;
 import com.google.common.collect.ImmutableList;
+import sun.text.Normalizer;
 
 /**
  * @author Laurent Caillette
@@ -45,6 +47,27 @@ public class RenderingTools {
 
     return new String( byteArrayOutputStream.toByteArray(), charset.name() ) ;
   }
+
+  /**
+   * Produces a marker name from some {@code SyntacticTree}.
+   * TODO: add <a href="http://stackoverflow.com/questions/1453171/remove-diacritical-marks-from-unicode-chars" >support of diacritics</a>
+   */
+  public static String markerize( final SyntacticTree tree, final Charset charset )
+      throws Exception
+  {
+    String s = textualize( tree, charset ) ;
+    s = s.replaceAll( "([,.;?!:]+)", "_" ) ;
+    s = s.replaceAll( "(-+)", "-" ) ;
+    s = s.replaceAll( "(_+)", "_" ) ;
+    s = s.replaceAll( "(-+\\z)", "" ) ;
+    s = s.replaceAll( "(_+\\z)", "" ) ;
+    s = s.replaceAll( "(\\A-+)", "" ) ;
+    s = s.replaceAll( "(\\A_+)", "" ) ;
+    s = s.replaceAll( "([^0-9a-zA-Z\\-\\_]+)", "" ) ;
+    return s ;
+  }
+  
+  
 
   public static class RenderableTree implements Renderable {
     private final SyntacticTree tree ;
