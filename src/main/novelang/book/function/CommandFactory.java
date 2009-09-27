@@ -9,11 +9,10 @@ import novelang.book.function.builtin.MapstylesheetCommand;
 import novelang.book.function.builtin.FileOrdering;
 import novelang.system.LogFactory;
 import novelang.system.Log;
-import novelang.part.FragmentIdentifier;
+import novelang.marker.FragmentIdentifier;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Ordering;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
@@ -92,7 +91,7 @@ public class CommandFactory {
   }
 
   
-  private static Iterable< FragmentIdentifier > getFragmentIdentifiers( final SyntacticTree tree ) {
+  private static Iterable<FragmentIdentifier> getFragmentIdentifiers( final SyntacticTree tree ) {
     final ImmutableList.Builder< FragmentIdentifier > fragmentIdentifiersBuilder = 
         ImmutableList.builder() ;
     final Iterable< SyntacticTree > childrenWithAbsoluteIdentifier = 

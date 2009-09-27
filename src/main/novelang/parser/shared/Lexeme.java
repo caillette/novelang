@@ -26,16 +26,23 @@ import com.google.common.base.Preconditions;
  * @author Laurent Caillette
  */
 public class Lexeme {
-  private final String unicodeName;
+  private final String unicodeName ;
   private final Character character ;
-  private final String htmlEntityName;
+  private final String htmlEntityName ;
+  private final String diacriticless;
 
-  public Lexeme( String unicodeName, Character character, String htmlEntityName ) {
+  public Lexeme( 
+      String unicodeName, 
+      Character character, 
+      String htmlEntityName,
+      String diacriticless
+  ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( unicodeName ) ) ;
     Preconditions.checkNotNull( character ) ;
     this.unicodeName = unicodeName;
     this.character = character ;
-    this.htmlEntityName = htmlEntityName;
+    this.htmlEntityName = htmlEntityName ;
+    this.diacriticless = diacriticless;
   }
 
   /**
@@ -64,6 +71,18 @@ public class Lexeme {
 
   public boolean hasHtmlEntityName() {
     return ! StringUtils.isBlank( htmlEntityName ) ;
+  }
+
+  /**
+   * Returns the diacriticless representation if it was declared in ANTLR grammar as comment.
+   * @return a possibly null String.
+   */
+  public String getDiacriticless() {
+    return diacriticless;
+  }
+  
+  public boolean hasDiacriticlessRepresentation() {
+    return ! StringUtils.isBlank( diacriticless ) ;
   }
 
   /**
@@ -146,7 +165,8 @@ public class Lexeme {
     return "LexemeDeclaration[" +
         "tokenName='" + unicodeName + '\'' +
         ", character=" + character +
-        ", antlrComment='" + htmlEntityName + '\'' +
+        ", htmlEntityName='" + htmlEntityName + '\'' +
+        ", diacriticless='" + diacriticless + '\'' +
         ']';
   }
 }

@@ -23,7 +23,7 @@ import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.part.FragmentIdentifier;
+import novelang.marker.FragmentIdentifier;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 

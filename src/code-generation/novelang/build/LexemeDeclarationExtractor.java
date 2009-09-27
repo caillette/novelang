@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
    * </ol>
    */
   private static final Pattern TOKENS_DECLARATIONS = Pattern.compile(
-      "([A-Z0-9_]+)\\ *\\:\\ *(?:'(.)'|'(\\\\.)'|'(\\\\u[a-f[0-9]]{4})')\\ *;(?:\\ *//\\ *\\&([A-Za-z0-9]+);)?+"
+      "([A-Z0-9_]+) *: *(?:'(.)'|'(\\\\.)'|'(\\\\u[a-f[0-9]]{4})') *;(?: *//(?: *&([A-Za-z0-9]+);)?+(?: *\"([a-zA-Z0-9])\")?+)?"      
   ) ;
 
   static {
@@ -71,8 +71,8 @@ import org.slf4j.LoggerFactory;
 
   }
 
-  private final Lexeme extract( Matcher matcher ) {
-    final int expectedGroupCount = converters.length + 2 ;
+  private Lexeme extract( Matcher matcher ) {
+    final int expectedGroupCount = converters.length + 3 ;
     Preconditions.checkArgument(
         matcher.groupCount() == expectedGroupCount,
         "Matcher has %i groups (including lexeme name and comment) against %i converters",
@@ -81,14 +81,15 @@ import org.slf4j.LoggerFactory;
     ) ;
 
     final String tokenName = matcher.group( 1 ) ;
-    final String htmlEntityName = matcher.group( matcher.groupCount() ) ;
+    final String htmlEntityName = matcher.group( matcher.groupCount() - 1 ) ;
+    final String diacriticless = matcher.group( matcher.groupCount() ) ;
 
     for( int converterIndex = 0 ; converterIndex < converters.length ; converterIndex++ ) {
       final int groupIndex = converterIndex + 2 ;
       final String match = matcher.group( groupIndex ) ;
       if( match != null  ) {
         final Character character = converters[ converterIndex ].convert( match ) ;
-        return new Lexeme( tokenName, character, htmlEntityName ) ;
+        return new Lexeme( tokenName, character, htmlEntityName, diacriticless ) ;
       }
     }
 

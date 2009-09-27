@@ -103,20 +103,39 @@ public class LexemeDeclarationExtractorTest {
 
   private static final Log LOG = LogFactory.getLog( LexemeDeclarationExtractorTest.class ) ;
 
-  private static final Lexeme SMALL_X = new Lexeme( "SMALL_X", 'x', null ) ;
-  private static final Lexeme BIG_X = new Lexeme( "BIG_X", 'X', null ) ;
-  private static final Lexeme ZERO = new Lexeme( "ZERO", '0', null ) ;
-  private static final Lexeme AGRAVE = new Lexeme( "AGRAVE", '\u00e0', "agrave" ) ;
-  private static final Lexeme RSOLIDUS = new Lexeme( "RSOLIDUS", '\\', null ) ;
-  private static final Lexeme VBAR = new Lexeme( "VBAR", '|', null ) ;
+  private static final Lexeme SMALL_X = new Lexeme( "SMALL_X", 'x', null, null ) ;
+  private static final Lexeme BIG_X = new Lexeme( "BIG_X", 'X', null, "X" ) ;
+  private static final Lexeme ZERO = new Lexeme( "ZERO", '0', null, "0" ) ;
+  private static final Lexeme AGRAVE = new Lexeme( "AGRAVE", '\u00e0', "agrave", "a" ) ;
+  private static final Lexeme RSOLIDUS = new Lexeme( "RSOLIDUS", '\\', null, null ) ;
+  private static final Lexeme VBAR = new Lexeme( "VBAR", '|', null, null ) ;
 
-  private String createAntlrDeclaration( Lexeme declaration, String symbol ) {
-    return
-        declaration.getUnicodeName() + " : " + "'" + symbol + "' ; " +
-        ( declaration.hasHtmlEntityName() ? "// &" + declaration.getHtmlEntityName() + ";" : "" ) +
-        "\n"
-    ;
+  private String createAntlrDeclaration( 
+      final Lexeme declaration, 
+      final String symbol
+  ) {
+    final StringBuilder declarationBuilder = new StringBuilder() ;
+    declarationBuilder.append( declaration.getUnicodeName() ) ;
+    declarationBuilder.append( " : '" ) ;
+    declarationBuilder.append( symbol ) ;
+    declarationBuilder.append( "' ; " ) ;
+    if( declaration.hasHtmlEntityName() || declaration.hasDiacriticlessRepresentation() ) {
+      declarationBuilder.append( "// " ) ;
+      if( declaration.hasHtmlEntityName() ) {
+        declarationBuilder.append( "&" ) ;
+        declarationBuilder.append( declaration.getHtmlEntityName() ) ;
+        declarationBuilder.append( "; " ) ;
+      }
+      if( declaration.hasDiacriticlessRepresentation() ) {
+        declarationBuilder.append( "\"" ) ;
+        declarationBuilder.append( declaration.getDiacriticless() ) ;
+        declarationBuilder.append( "\"" ) ;
+      }
+    }
+    declarationBuilder.append( "\n" ) ;
+    return declarationBuilder.toString() ;
   }
+  
 
 
 }

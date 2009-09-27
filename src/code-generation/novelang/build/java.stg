@@ -76,12 +76,12 @@ public enum <name> {
 >>  
 
 
-htmlEntityName( name ) ::= "<if( name )>, \"<name>\"<endif>"
+quote( name ) ::= "<if( name )>\"<name>\"<else>null<endif>"
 
 endOfLineComment( text ) ::= "<if( text )>// <text><endif>"
 
 lexemeAddition( lexeme ) ::= <<
-add( map, '<lexeme.asJavaCharacter>', "<lexeme.unicodeName>"<htmlEntityName( lexeme.htmlEntityName )> ) ; <endOfLineComment( lexeme.asJavaComment )>
+add( map, '<lexeme.asJavaCharacter>', "<lexeme.unicodeName>", <quote( lexeme.htmlEntityName )>, <quote( lexeme.diacriticless )> ) ; <endOfLineComment( lexeme.asJavaComment )>
 >>
 
 
@@ -115,20 +115,13 @@ public class <name> {
   }
 
   private static void add(
-      Map\< Character, Lexeme > map,
-      Character character,
-      String unicodeName
+      final Map\< Character, Lexeme > map,
+      final Character character,
+      final String unicodeName,
+      final String htmlEntityName,
+      final String diacriticless
   ) {
-    add( map, character, unicodeName, null ) ;
-  }
-
-  private static void add(
-      Map\< Character, Lexeme > map,
-      Character character,
-      String unicodeName,
-      String htmlEntityName
-  ) {
-    final Lexeme lexeme = new Lexeme( unicodeName, character, htmlEntityName ) ;
+    final Lexeme lexeme = new Lexeme( unicodeName, character, htmlEntityName, diacriticless ) ;
     map.put( lexeme.getCharacter(), lexeme ) ;
   }
 

@@ -8,8 +8,9 @@ import novelang.common.TagBehavior;
 import novelang.common.SimpleTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.part.FragmentIdentifier;
+import novelang.marker.FragmentIdentifier;
 import novelang.parser.NodeKind;
+
 import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
 
