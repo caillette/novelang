@@ -25,6 +25,7 @@ import novelang.system.Log;
 import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
+import static novelang.parser.NodeKind.PARAGRAPH_REGULAR;
 import novelang.parser.SourceUnescape;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -115,7 +116,7 @@ public class ParagraphParsingTest {
   @Test
   public void paragraphIsWordThenComma() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( "w0,", tree(
-        NodeKind.PARAGRAPH_REGULAR,
+        PARAGRAPH_REGULAR,
         tree( WORD_, "w0" ),
         tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) )
     ) ) ;
@@ -127,7 +128,7 @@ public class ParagraphParsingTest {
   public void paragraphIsWordsWithCommaInTheMiddle1() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0,w1", tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) ),
             tree( WORD_, "w1" )
@@ -140,7 +141,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0'", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_APOSTROPHE_WORDMATE
         ) 
@@ -153,7 +154,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0'w1", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_APOSTROPHE_WORDMATE,
             tree( WORD_, "w1" )
@@ -169,7 +170,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0;", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_SIGN_SEMICOLON
         ) 
@@ -182,7 +183,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0.", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_SIGN_FULLSTOP
         ) 
@@ -195,7 +196,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0?", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_SIGN_QUESTIONMARK
         ) 
@@ -208,7 +209,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0!", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_SIGN_EXCLAMATION_MARK
         ) 
@@ -221,7 +222,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0:", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_SIGN_COLON
         ) 
@@ -234,7 +235,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0...", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             TREE_SIGN_ELLIPSIS
         ) 
@@ -254,7 +255,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0 w1'w2//w3//.", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( WORD_, "w0" ),
             tree( WORD_, "w1" ),
             TREE_APOSTROPHE_WORDMATE,
@@ -373,7 +374,7 @@ public class ParagraphParsingTest {
   public void paragraphIsQuoteOfOneWordThenParenthesis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "\"w0(w1)\"", tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree(
                 BLOCK_INSIDE_DOUBLE_QUOTES,
                 tree( WORD_, "w0" ),
@@ -386,13 +387,51 @@ public class ParagraphParsingTest {
   public void paragraphIsQuoteOfOneWordThenSpaceParenthesis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "\"w0 (w1)\"", tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree(
                 BLOCK_INSIDE_DOUBLE_QUOTES,
                 tree( WORD_, "w0" ),
                 tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "w1" ) )
             )
         ) ) ;
+  }
+  
+
+  @Test
+  public void paragraphIsBlockInsideParenthesisContainingUrl() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
+        "( \"x\"" + BREAK +
+        "http://y.z" + BREAK +
+        ")"
+        , 
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_INSIDE_PARENTHESIS,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "x" ) ),
+                tree( URL_LITERAL, tree( "http://y.z" ) )
+            )
+        ) 
+    ) ;
+  }
+  
+
+  @Test
+  public void paragraphIsBlockInsideSquareBracketsContainingUrl() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
+        "[ \"x\"" + BREAK +
+        "http://y.z" + BREAK +
+        "]"
+        , 
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_INSIDE_SQUARE_BRACKETS,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "x" ) ),
+                tree( URL_LITERAL, tree( "http://y.z" ) )
+            )
+        ) 
+    ) ;
   }
   
 
@@ -484,7 +523,7 @@ public class ParagraphParsingTest {
   public void paragraphBodyIsJustEmphasizedWord() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "//w0//", tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
         tree( BLOCK_INSIDE_SOLIDUS_PAIRS, tree( WORD_, "w0" ) ) )
     ) ;
   }
@@ -494,7 +533,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "(w0)", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( BLOCK_INSIDE_PARENTHESIS, tree( WORD_, "w0" ) )
         ) 
     ) ;
@@ -504,7 +543,7 @@ public class ParagraphParsingTest {
   public void paragraphBodyIsJustQuotedWord() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "\"w0\"", tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "w0" ) )
         ) 
     ) ;
@@ -515,7 +554,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "-- w0 --", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( BLOCK_INSIDE_HYPHEN_PAIRS, tree( WORD_, "w0" ) )
         ) 
     ) ;
@@ -526,7 +565,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "-- w0 -_", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE, tree( WORD_, "w0" ) )
         ) 
     );
@@ -537,7 +576,7 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "[w0]", 
         tree(
-            NodeKind.PARAGRAPH_REGULAR,
+            PARAGRAPH_REGULAR,
             tree( BLOCK_INSIDE_SQUARE_BRACKETS, tree( WORD_, "w0" ) )
         ) 
     ) ;
