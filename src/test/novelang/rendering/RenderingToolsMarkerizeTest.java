@@ -42,6 +42,15 @@ public class RenderingToolsMarkerizeTest {
   }
 
   @Test
+  public void replaceDiacriticsAndOthers() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "aéœ" )
+    ) ;
+    verify( "aeoe", tree );
+  }
+
+  @Test
   public void renderWordsAndPunctuationSigns() throws Exception {
     final SyntacticTree tree = tree(
         LEVEL_TITLE,

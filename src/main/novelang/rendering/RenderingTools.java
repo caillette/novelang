@@ -18,14 +18,16 @@ package novelang.rendering;
 
 import java.nio.charset.Charset;
 import java.io.ByteArrayOutputStream;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
 import novelang.common.Problem;
 import novelang.common.StylesheetMap;
+import novelang.parser.shared.Lexeme;
+import novelang.parser.GeneratedLexemes;
+
 import com.google.common.collect.ImmutableList;
-import sun.text.Normalizer;
 
 /**
  * @author Laurent Caillette
@@ -50,13 +52,15 @@ public class RenderingTools {
 
   /**
    * Produces a marker name from some {@code SyntacticTree}.
-   * TODO: add <a href="http://stackoverflow.com/questions/1453171/remove-diacritical-marks-from-unicode-chars" >support of diacritics</a>
    */
   public static String markerize( final SyntacticTree tree, final Charset charset )
       throws Exception
   {
     String s = textualize( tree, charset ) ;
+    s = replaceAll( GeneratedLexemes.getLexemes(), s ) ;    
+    
     s = s.replaceAll( "([,.;?!:]+)", "_" ) ;
+    s = s.replaceAll( "( +)", "-" ) ;
     s = s.replaceAll( "(-+)", "-" ) ;
     s = s.replaceAll( "(_+)", "_" ) ;
     s = s.replaceAll( "(-+\\z)", "" ) ;
@@ -65,6 +69,19 @@ public class RenderingTools {
     s = s.replaceAll( "(\\A_+)", "" ) ;
     s = s.replaceAll( "([^0-9a-zA-Z\\-\\_]+)", "" ) ;
     return s ;
+  }
+  
+  private static String replaceAll( Map< Character, Lexeme > characterMap, String s ) {
+    final StringBuilder stringBuilder = new StringBuilder() ;
+    for( final char c : s.toCharArray() ) {
+      final Lexeme lexeme = characterMap.get( c ) ;
+      if( lexeme != null && lexeme.hasDiacriticlessRepresentation() ) {
+        stringBuilder.append( lexeme.getAscii62() ) ;
+      } else {
+        stringBuilder.append( c ) ;
+      }
+    }
+    return stringBuilder.toString() ;
   }
   
   
