@@ -81,7 +81,7 @@ quote( name ) ::= "<if( name )>\"<name>\"<else>null<endif>"
 endOfLineComment( text ) ::= "<if( text )>// <text><endif>"
 
 lexemeAddition( lexeme ) ::= <<
-add( map, '<lexeme.asJavaCharacter>', "<lexeme.unicodeName>", <quote( lexeme.htmlEntityName )>, <quote( lexeme.diacriticless )> ) ; <endOfLineComment( lexeme.asJavaComment )>
+add( map, '<lexeme.asJavaCharacter>', "<lexeme.unicodeName>", <quote( lexeme.htmlEntityName )>, <quote( lexeme.ascii62 )> ) ; <endOfLineComment( lexeme.asJavaComment )>
 >>
 
 
@@ -119,9 +119,9 @@ public class <name> {
       final Character character,
       final String unicodeName,
       final String htmlEntityName,
-      final String diacriticless
+      final String ascii62
   ) {
-    final Lexeme lexeme = new Lexeme( unicodeName, character, htmlEntityName, diacriticless ) ;
+    final Lexeme lexeme = new Lexeme( unicodeName, character, htmlEntityName, ascii62 ) ;
     map.put( lexeme.getCharacter(), lexeme ) ;
   }
 

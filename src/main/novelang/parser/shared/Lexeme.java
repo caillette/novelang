@@ -29,20 +29,20 @@ public class Lexeme {
   private final String unicodeName ;
   private final Character character ;
   private final String htmlEntityName ;
-  private final String diacriticless;
+  private final String ascii62;
 
   public Lexeme( 
       String unicodeName, 
       Character character, 
       String htmlEntityName,
-      String diacriticless
+      String ascii62
   ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( unicodeName ) ) ;
     Preconditions.checkNotNull( character ) ;
     this.unicodeName = unicodeName;
     this.character = character ;
     this.htmlEntityName = htmlEntityName ;
-    this.diacriticless = diacriticless;
+    this.ascii62 = ascii62;
   }
 
   /**
@@ -74,15 +74,16 @@ public class Lexeme {
   }
 
   /**
-   * Returns the diacriticless representation if it was declared in ANTLR grammar as comment.
+   * Returns the ASCII representation limited to a set of 62 (a-z, A-Z, 0-9) characters
+   * if it was declared in ANTLR grammar as comment.
    * @return a possibly null String.
    */
-  public String getDiacriticless() {
-    return diacriticless;
+  public String getAscii62() {
+    return ascii62;
   }
   
   public boolean hasDiacriticlessRepresentation() {
-    return ! StringUtils.isBlank( diacriticless ) ;
+    return ! StringUtils.isBlank( ascii62 ) ;
   }
 
   /**
@@ -166,7 +167,7 @@ public class Lexeme {
         "tokenName='" + unicodeName + '\'' +
         ", character=" + character +
         ", htmlEntityName='" + htmlEntityName + '\'' +
-        ", diacriticless='" + diacriticless + '\'' +
+        ", ascii62='" + ascii62 + '\'' +
         ']';
   }
 }

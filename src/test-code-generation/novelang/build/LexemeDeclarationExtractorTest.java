@@ -105,7 +105,7 @@ public class LexemeDeclarationExtractorTest {
 
   private static final Lexeme SMALL_X = new Lexeme( "SMALL_X", 'x', null, null ) ;
   private static final Lexeme BIG_X = new Lexeme( "BIG_X", 'X', null, "X" ) ;
-  private static final Lexeme ZERO = new Lexeme( "ZERO", '0', null, "0" ) ;
+  private static final Lexeme ZERO = new Lexeme( "ZERO", '0', null, "000" ) ;
   private static final Lexeme AGRAVE = new Lexeme( "AGRAVE", '\u00e0', "agrave", "a" ) ;
   private static final Lexeme RSOLIDUS = new Lexeme( "RSOLIDUS", '\\', null, null ) ;
   private static final Lexeme VBAR = new Lexeme( "VBAR", '|', null, null ) ;
@@ -128,7 +128,7 @@ public class LexemeDeclarationExtractorTest {
       }
       if( declaration.hasDiacriticlessRepresentation() ) {
         declarationBuilder.append( "\"" ) ;
-        declarationBuilder.append( declaration.getDiacriticless() ) ;
+        declarationBuilder.append( declaration.getAscii62() ) ;
         declarationBuilder.append( "\"" ) ;
       }
     }
