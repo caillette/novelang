@@ -59,15 +59,17 @@ public class RenderingTools {
     String s = textualize( tree, charset ) ;
     s = replaceAll( GeneratedLexemes.getLexemes(), s ) ;    
     
-    s = s.replaceAll( "([,.;?!:]+)", "_" ) ;
-    s = s.replaceAll( "( +)", "-" ) ;
-    s = s.replaceAll( "(-+)", "-" ) ;
-    s = s.replaceAll( "(_+)", "_" ) ;
-    s = s.replaceAll( "(-+\\z)", "" ) ;
-    s = s.replaceAll( "(_+\\z)", "" ) ;
-    s = s.replaceAll( "(\\A-+)", "" ) ;
-    s = s.replaceAll( "(\\A_+)", "" ) ;
-    s = s.replaceAll( "([^0-9a-zA-Z\\-\\_]+)", "" ) ;
+    s = s.replaceAll( "[,.;?!:]+", "_" ) ;
+    s = s.replaceAll( " +", "-" ) ;
+    s = s.replaceAll( "-+", "-" ) ;
+    s = s.replaceAll( "_+", "_" ) ;
+    s = s.replaceAll( "-+\\z", "" ) ;
+    s = s.replaceAll( "_+\\z", "" ) ;
+    s = s.replaceAll( "\\A-+", "" ) ;
+    s = s.replaceAll( "\\A_+", "" ) ;
+    s = s.replaceAll( "-_", "_" ) ;
+    s = s.replaceAll( "_-", "_" ) ;
+    s = s.replaceAll( "[^0-9a-zA-Z\\-\\_]+", "" ) ;
     return s ;
   }
   
