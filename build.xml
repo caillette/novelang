@@ -275,7 +275,7 @@
     ====  
   -->  
 
-  <target name="run-tests" depends="init, create-target-dir" >
+  <target name="run-tests" depends="init, create-target-dir" unless="project.test.skip" >
 
     <delete dir="${target.test.reports.dir}" />
     <delete dir="${target.test.scratchfiles.dir}" />
@@ -500,9 +500,9 @@
   </target>
 
   <target
-      name="login-on-announcement-blog"
+      name="login-as-announcer"
       depends="init, ask-user-for-announcer, ask-password-for-announcer"
-      description="Set properties for announcer name, blog name and password if not already done"
+      description="Set properties for announcer name, mail server password and blog address if not already done"
   />
 
   <target
@@ -567,7 +567,7 @@
   </target>
 
   <target name="publish-release-announcement"
-      depends="init, define-novelang-task, login-on-announcement-blog, verify-release-notes-exist"
+      depends="init, define-novelang-task, login-as-announcer, verify-release-notes-exist"
   >
 
     <novelang
@@ -606,9 +606,9 @@ ${html}
         styleDirectory="src/doc/style"
         documentRequest="/versions/${project.version}.nlp?stylesheet=announcement-plaintext.xsl"
         contentProperty="plaintext"
-        />
+    />
     <echo>About to send:
-${html}
+${plaintext}
     </echo>
 
     <mail
@@ -624,7 +624,6 @@ ${html}
       <from address="${announcement.user.email}" />
       <to address="${announcement.mailinglist.1}" />
       <to address="${announcement.mailinglist.2}" />
-
       <message>
 Dear Novelang user,
 
@@ -657,7 +656,7 @@ This mail is written in Novelang.
 
   <target
       name="publish-everything"
-      depends="login-on-remote-site, login-on-announcement-blog, publish-distrib, publish-documentation, publish-release-announcement"
+      depends="login-on-remote-site, login-as-announcer, publish-distrib, publish-documentation, publish-release-announcement"
   />
 
 

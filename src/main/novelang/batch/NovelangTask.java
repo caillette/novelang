@@ -125,8 +125,10 @@ public class NovelangTask extends Task {
       renderingCharset = Charset.forName( renderingCharsetName ) ;
     }
 
+    // TODO make style directory relative to content directory once this becomes the 
+    // standard elsewhere.
     final ResourceLoader resourceLoader = ConfigurationTools.createResourceLoader(
-        contentRoot, styleDirectory, "Directory for custom styles" ) ;
+        ImmutableList.of( styleDirectory.getAbsoluteFile() ) ) ;
 
 
     final RenderingConfiguration renderingConfiguration = new RenderingConfiguration() {

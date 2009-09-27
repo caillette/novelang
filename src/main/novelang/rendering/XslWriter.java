@@ -169,7 +169,7 @@ public class XslWriter extends XmlWriter {
     saxTransformerFactory.setURIResolver( uriResolver ) ;
 
     final TemplatesHandler templatesHandler = saxTransformerFactory.newTemplatesHandler() ;
-
+    
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
 
     final ContentHandler multicaster = connectXpathVerifier( templatesHandler ) ;

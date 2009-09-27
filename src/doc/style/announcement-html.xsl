@@ -22,9 +22,16 @@
 ] >
 
 <!--
-    Because of some obscure Xalan bug, match="//something" doesn't work and therefore should
-    be avoided.
+    This stylesheet is designed to work along with some Xalan restrictions when ran as 
+    an Ant task.
+    
+    Because of some obscure Xalan bug, match="//something" doesn't always work and therefore 
+    should be avoided.
     http://forums.sun.com/thread.jspa?threadID=5134880
+    
+    Other strange thing may happen with imports and so on.
+    http://www.mail-archive.com/cocoon-dev@xml.apache.org/msg14438.html
+    
 -->
 
 <xsl:stylesheet
