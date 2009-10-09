@@ -32,7 +32,7 @@ public class FragmentExtractor {
   }
 
 
-  private static final EnumSet< NodeKind > IDENTIFIER_BEARING_NODEKINDS;
+  /*package*/ static final EnumSet< NodeKind > IDENTIFIER_BEARING_NODEKINDS;
   static {
     final EnumSet< TagBehavior > BEHAVIORS =
         EnumSet.complementOf( EnumSet.of( TagBehavior.NON_TRAVERSABLE ) ) ;
@@ -45,7 +45,7 @@ public class FragmentExtractor {
     IDENTIFIER_BEARING_NODEKINDS = EnumSet.copyOf( nodeKinds ) ;
   }
 
-  private static final NodeKind[] IDENTIFIER_BEARING_NODEKINDS_ARRAY =
+  /*package*/ static final NodeKind[] IDENTIFIER_BEARING_NODEKINDS_ARRAY =
       IDENTIFIER_BEARING_NODEKINDS.toArray( new NodeKind[ IDENTIFIER_BEARING_NODEKINDS.size() ] ) ;
 
   private static Treepath< SyntacticTree > find(
@@ -109,7 +109,7 @@ public class FragmentExtractor {
   /**
    * Extracts an identifier if there is one as a direct child.
    */
-  private static FragmentIdentifier extract(
+  /*package*/ static FragmentIdentifier extract(
       final FragmentIdentifier parentIdentifier,
       final Treepath< SyntacticTree > pathToIdentifier
   ) {
@@ -133,7 +133,7 @@ public class FragmentExtractor {
   /**
    * Extracts an identifier if there is one as immediate child.
    */
-  private static Treepath< SyntacticTree > findPathToIdentifier(
+  /*package*/ static Treepath< SyntacticTree > findPathToIdentifier(
       final Treepath< SyntacticTree > parentOfIdentifier
   ) {
     final SyntacticTree parentTree = parentOfIdentifier.getTreeAtEnd() ;

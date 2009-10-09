@@ -43,5 +43,5 @@ public enum TagBehavior {
   /**
    * May have a tag but subnodes may not.
    */
-  TERMINAL;
+  TERMINAL
 }
