@@ -17,20 +17,20 @@
 
 package novelang.loader;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import novelang.DirectoryFixture;
-import novelang.TestResourceTools;
-import novelang.TestResources;
+import novelang.TestResourceTree;
+import novelang.system.LogFactory;
+import novelang.system.Log;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
 
 /**
  * @author Laurent Caillette
@@ -40,16 +40,21 @@ public class UrlResourceLoaderTest {
 
   @Test
   public void absoluteOk() throws IOException {
-    final UrlResourceLoader loader = new UrlResourceLoader( loaderDirectory.toURI().toURL() ) ;
-    final InputStream inputStream = loader.getInputStream( RESOURCE_NAME ) ;
-    final String resource = IOUtils.toString( inputStream ) ;
-    Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
+    final Resource resource = TestResourceTree.Parts.PART_ONE_WORD ;
+    resourceInstaller.copy( resource ) ;
+    final UrlResourceLoader loader = new UrlResourceLoader(
+        resourceInstaller.getTargetDirectory().toURI().toURL() ) ;
+    final ResourceName resourceName = resource.getResourceName() ;
+    LOG.debug( "Attempting to get resource '%s'", resourceName ) ;
+    final InputStream inputStream = loader.getInputStream( resourceName ) ;
+    final String resourceAsString = IOUtils.toString( inputStream ) ;
+    Assert.assertFalse( StringUtils.isBlank( resourceAsString ) ) ;
   }
 
 
   @Test( expected = ResourceNotFoundException.class )
   public void urlResourceLoaderNotFound() throws IOException {
-    new UrlResourceLoader( loaderDirectory.toURI().toURL() ).getInputStream(
+    new UrlResourceLoader( resourceInstaller.getTargetDirectory().toURI().toURL() ).getInputStream(
         new ResourceName( "doesnot.exist" ) ) ;
   }
 
@@ -58,21 +63,12 @@ public class UrlResourceLoaderTest {
 // Fixture
 // =======
 
-  private static final ResourceName RESOURCE_NAME = TestResources.ONE_WORD_RESOURCENAME ;
-  private File loaderDirectory;
+  private static final Log LOG = LogFactory.getLog( UrlResourceLoaderTest.class ) ;
 
-  @Before
-  public void setUp() throws IOException {
-    final String testName = NameAwareTestClassRunner.getTestName();
-
-    final DirectoryFixture directoryFixture =
-        new DirectoryFixture( testName ) ;
-    loaderDirectory = directoryFixture.getDirectory();
-    TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        RESOURCE_NAME,
-        loaderDirectory
-    ) ;
-
+  static {
+      TestResourceTree.initialize() ;
   }
+
+  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+
 }

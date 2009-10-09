@@ -150,13 +150,13 @@ public final class TestResourceTree {
   public interface Parts {
     Directory dir = directory( "parts" ) ;
 
-    Resource BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
-    Resource JUST_SECTIONS = resource( "just-sections.nlp" ) ;
-    Resource MESSY_IDENTIFIERS = resource( "messy-identifiers.nlp" ) ;
-    Resource MISSING_IMAGES = resource( "missing-images.nlp" ) ;
-    Resource NO_CHAPTER = resource( "no-chapter.nlp" ) ;
-    Resource ONE_WORD = resource( "one-word.nlp" ) ;
-    Resource SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
+    Resource PART_BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
+    Resource PART_JUST_SECTIONS = resource( "just-sections.nlp" ) ;
+    Resource PART_MESSY_IDENTIFIERS = resource( "messy-identifiers.nlp" ) ;
+    Resource PART_MISSING_IMAGES = resource( "missing-images.nlp" ) ;
+    Resource PART_NO_CHAPTER = resource( "no-chapter.nlp" ) ;
+    Resource PART_ONE_WORD = resource( "one-word.nlp" ) ;
+    Resource PART_SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
 
   }
 
@@ -173,6 +173,8 @@ public final class TestResourceTree {
 
     Resource PART_SOMECHAPTERS = resource( "some-chapters.nlp" ) ;
     Resource XSL_NUMBERING = resource( "format-numbering.xsl" ) ;
+    Resource XSL_BADXPATH_1 = resource( "bad-xpath-1.xsl" ) ;
+    Resource XSL_BADXPATH_2 = resource( "bad-xpath-2.xsl" ) ;
   }
 
   /**

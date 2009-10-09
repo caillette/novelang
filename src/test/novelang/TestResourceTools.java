@@ -26,17 +26,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.MissingResourceException;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.fonts.EmbedFontInfo;
 import org.junit.Assert;
 import novelang.system.LogFactory;
 import novelang.system.Log;
+import novelang.system.DefaultCharset;
 import novelang.loader.ResourceName;
+import novelang.loader.ResourceLoader;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.UrlResourceLoader;
+import novelang.loader.ResourceLoaderTools;
+import novelang.configuration.ProducerConfiguration;
+import novelang.configuration.RenderingConfiguration;
+import novelang.configuration.FopFontStatus;
+import novelang.configuration.ContentConfiguration;
+import novelang.configuration.ConfigurationTools;
+import novelang.configuration.DaemonConfiguration;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Preconditions;
 
 /**
  * Utility class for dealing with test-dedicated resources.
@@ -192,4 +210,182 @@ public final class TestResourceTools {
     return directory ;
   }
 
+    public static ProducerConfiguration createProducerConfiguration(
+        final File contentDirectory,
+        final ResourceLoader resourceLoader,
+        final Charset renderingCharset
+    ) {
+      return new ProducerConfiguration() {
+
+        public RenderingConfiguration getRenderingConfiguration() {
+          return new RenderingConfiguration() {
+            public ResourceLoader getResourceLoader() {
+              return resourceLoader ;
+            }
+            public FopFactory getFopFactory() {
+              return FopFactory.newInstance() ;
+            }
+
+            public FopFontStatus getCurrentFopFontStatus() {
+              final Iterable<EmbedFontInfo> fontInfo = ImmutableList.of() ;
+              final Map< String, EmbedFontInfo > failedFonts = ImmutableMap.of() ;
+              return new FopFontStatus(
+                  fontInfo,
+                  failedFonts
+              ) ;
+            }
+            public Charset getDefaultCharset() {
+              return renderingCharset ;
+            }
+          } ;
+        }
+
+        public ContentConfiguration getContentConfiguration() {
+          return new ContentConfiguration() {
+            public File getContentRoot() {
+              return contentDirectory;
+            }
+            public Charset getSourceCharset() {
+              return DefaultCharset.SOURCE ;
+            }
+          } ;
+        }
+      } ;
+
+    }
+
+    public static ProducerConfiguration createProducerConfiguration(
+        final File contentDirectory,
+        final File styleDirectory,
+        final boolean shouldAddClasspathResourceLoader,
+        final Charset renderingCharset
+    ) {
+      Preconditions.checkNotNull( styleDirectory ) ;
+      return doCreateProducerConfiguration(
+          contentDirectory,
+          styleDirectory,
+          shouldAddClasspathResourceLoader,
+          renderingCharset
+      ) ;
+    }
+
+    public static ProducerConfiguration createProducerConfiguration(
+        final File contentDirectory,
+        final Charset renderingCharset
+    ) {
+      return doCreateProducerConfiguration(
+          contentDirectory,
+          null,
+          true,
+          renderingCharset
+      ) ;
+    }
+
+    public static ProducerConfiguration doCreateProducerConfiguration(
+        final File contentDirectory,
+        final File styleDirectory,
+        final boolean shouldAddClasspathResourceLoader,
+        final Charset renderingCharset
+    ) {
+      final ResourceLoader resourceLoader ;
+      final ResourceLoader customResourceLoader ;
+      if( styleDirectory == null ) {
+        resourceLoader = new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
+      } else {
+        try {
+          customResourceLoader = new UrlResourceLoader( styleDirectory.toURI().toURL() ) ;
+        } catch( MalformedURLException e ) {
+          throw new Error( e ) ;
+        }
+        if( shouldAddClasspathResourceLoader ) {
+          resourceLoader = ResourceLoaderTools.compose(
+              customResourceLoader,
+              new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
+          ) ;
+        } else {
+          resourceLoader = customResourceLoader ;
+        }
+      }
+      return createProducerConfiguration( contentDirectory, resourceLoader, renderingCharset ) ;
+
+    }
+
+    public static DaemonConfiguration createDaemonConfiguration(
+        final int httpDaemonPort,
+        final File contentDirectory,
+        final File styleDirectory,
+        final Charset renderingCharset
+    ) {
+      final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+          contentDirectory,
+          styleDirectory,
+          false,
+          renderingCharset
+      ) ;
+
+      return new DaemonConfiguration() {
+        public int getPort() {
+          return httpDaemonPort ;
+        }
+        public ProducerConfiguration getProducerConfiguration() {
+          return producerConfiguration ;
+        }
+
+        public boolean getServeRemotes() {
+          return true ;
+        }
+      } ;
+
+    }
+
+    public static DaemonConfiguration createDaemonConfiguration(
+        final int httpDaemonPort,
+        final File contentDirectory,
+        final Charset renderingCharset
+    ) {
+      final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+          contentDirectory,
+          renderingCharset
+      ) ;
+
+      return new DaemonConfiguration() {
+        public int getPort() {
+          return httpDaemonPort ;
+        }
+        public ProducerConfiguration getProducerConfiguration() {
+          return producerConfiguration ;
+        }
+
+        public boolean getServeRemotes() {
+          return true ;
+        }
+      } ;
+
+    }
+
+    public static DaemonConfiguration createDaemonConfiguration(
+        final int httpDaemonPort,
+        final File contentDirectory,
+        final ResourceLoader resourceLoader
+    ) {
+      final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+          contentDirectory,
+          resourceLoader,
+          DefaultCharset.RENDERING
+      ) ;
+
+      return new DaemonConfiguration() {
+        public int getPort() {
+          return httpDaemonPort ;
+        }
+        public ProducerConfiguration getProducerConfiguration() {
+          return producerConfiguration ;
+        }
+
+        public boolean getServeRemotes() {
+          return true ;
+        }
+      } ;
+
+    }
 }

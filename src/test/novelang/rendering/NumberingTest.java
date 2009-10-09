@@ -17,23 +17,17 @@
 package novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
 import novelang.system.LogFactory;
-import novelang.DirectoryFixture;
 import novelang.TestResourceTools;
-import novelang.TestResources;
 import novelang.TestResourceTree;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.configuration.ProducerConfiguration;
-import novelang.loader.ResourceName;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
@@ -53,7 +47,7 @@ public class NumberingTest {
     resourceInstaller.copy( TestResourceTree.XslFormatting.dir ) ;
 
 
-    final ProducerConfiguration serverConfiguration = TestResources.createProducerConfiguration(
+    final ProducerConfiguration serverConfiguration = TestResourceTools.createProducerConfiguration(
         resourceInstaller.getTargetDirectory(),
         resourceInstaller.createFileObject( TestResourceTree.XslFormatting.dir ),
         true,

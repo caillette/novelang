@@ -53,7 +53,7 @@ public class InsertCommandTest {
   @Test
   public void goodFileUrl() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -117,7 +117,7 @@ public class InsertCommandTest {
   public void createChapterForSinglePart() 
       throws CommandParameterException, MalformedURLException
   {
-    final File noChapterFile = resourceInstaller.copy( TestResourceTree.Parts.NO_CHAPTER ) ;
+    final File noChapterFile = resourceInstaller.copy( TestResourceTree.Parts.PART_NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -158,7 +158,7 @@ public class InsertCommandTest {
   @Test
   public void addStyle() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -217,7 +217,7 @@ public class InsertCommandTest {
   @Test
   public void recurseWithSomeBrokenPart() throws CommandParameterException, MalformedURLException {
     final File brokenContentDirectory =
-        resourceInstaller.copy( TestResourceTree.Parts.BROKEN_CANNOTPARSE ).getParentFile() ;
+        resourceInstaller.copy( TestResourceTree.Parts.PART_BROKEN_CANNOTPARSE ).getParentFile() ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -242,7 +242,7 @@ public class InsertCommandTest {
   @Test
   public void levelAboveIs1() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -327,7 +327,7 @@ public class InsertCommandTest {
   @Test
   public void noLevelaboveCausesProblem() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -351,8 +351,8 @@ public class InsertCommandTest {
   @Test
   public void recurseWithLevelabove1() throws CommandParameterException, MalformedURLException {
 
-    resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Parts.dir, TestResourceTree.Parts.NO_CHAPTER ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Parts.dir, TestResourceTree.Parts.PART_NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,

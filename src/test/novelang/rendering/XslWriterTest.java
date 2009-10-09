@@ -26,13 +26,13 @@ import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.junit.Test;
 import junit.framework.Assert;
-import novelang.TestResources;
+import novelang.TestResourceTree;
 import novelang.common.metadata.DocumentMetadata;
+import novelang.common.filefixture.Resource;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
-import novelang.loader.ResourceName;
 import novelang.rendering.xslt.validate.BadExpandedName;
 import novelang.rendering.xslt.validate.BadExpandedNamesException;
 import novelang.system.DefaultCharset;
@@ -46,19 +46,19 @@ public class XslWriterTest {
 
   @Test( expected = BadExpandedNamesException.class )
   public void brokenXpathInStylesheet() throws Exception {
-    final XslWriter xslWriter = createXslWriter( TestResources.XSL_BAD_XPATH_1 ) ;
+    final XslWriter xslWriter = createXslWriter( TestResourceTree.XslFormatting.XSL_BADXPATH_1 ) ;
     run( xslWriter ) ;
   }
 
   @Test( expected = BadExpandedNamesException.class )
   public void brokenXpathInStylesheetImport() throws Exception {
-    final XslWriter xslWriter = createXslWriter( TestResources.XSL_BAD_XPATH_2 ) ;
+    final XslWriter xslWriter = createXslWriter( TestResourceTree.XslFormatting.XSL_BADXPATH_2 ) ;
     run( xslWriter ) ;
   }
 
   @Test
   public void locationOfBrokenXpath() throws Exception {
-    final XslWriter xslWriter = createXslWriter( TestResources.XSL_BAD_XPATH_2 ) ;
+    final XslWriter xslWriter = createXslWriter( TestResourceTree.XslFormatting.XSL_BADXPATH_2 ) ;
     try {
       run( xslWriter ) ;
       Assert.fail( "Did not throw expected exception" ) ;
@@ -84,16 +84,20 @@ public class XslWriterTest {
 // Fixture
 // =======
 
-  private static final XslWriter createXslWriter( ResourceName stylesheet ) {
+  static {
+      TestResourceTree.initialize() ;
+  }
+
+  private static XslWriter createXslWriter( final Resource stylesheet ) {
     final RenderingConfiguration renderingConfiguration = new CustomRenderingConfiguration(
-        new ClasspathResourceLoader( TestResources.STYLE_RESOURCE_DIR ),
+        new ClasspathResourceLoader( stylesheet.getParent().getAbsoluteResourceName() ),
         null,
         null
     ) ;
-    return new XslWriter( renderingConfiguration, stylesheet ) ;
+    return new XslWriter( renderingConfiguration, stylesheet.getResourceName() ) ;
   }
 
-  private static final void run( XslWriter xslWriter ) throws Exception {
+  private static void run( XslWriter xslWriter ) throws Exception {
     final OutputStream sinkOutputStream = new ByteArrayOutputStream() ;
     xslWriter.startWriting( sinkOutputStream, new CustomDocumentMetadata() ) ;
   }

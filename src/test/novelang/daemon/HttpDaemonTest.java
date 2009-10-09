@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import novelang.TestResourceTree;
-import novelang.TestResources;
+import novelang.TestResourceTools;
 import novelang.common.LanguageTools;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.filefixture.Resource;
@@ -326,7 +326,7 @@ public class HttpDaemonTest {
   private void daemonSetup( final File styleDirectory, final Charset renderingCharset )
       throws Exception
   {
-    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
+    httpDaemon = new HttpDaemon( TestResourceTools.createDaemonConfiguration(
         HTTP_DAEMON_PORT,
         resourceInstaller.getTargetDirectory(),
         styleDirectory,
@@ -338,7 +338,7 @@ public class HttpDaemonTest {
   private void daemonSetup( final Charset renderingCharset )
       throws Exception
   {
-    httpDaemon = new HttpDaemon( TestResources.createDaemonConfiguration(
+    httpDaemon = new HttpDaemon( TestResourceTools.createDaemonConfiguration(
         HTTP_DAEMON_PORT,
         resourceInstaller.getTargetDirectory(),
         renderingCharset

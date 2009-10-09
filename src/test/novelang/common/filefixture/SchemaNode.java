@@ -67,7 +67,7 @@ import novelang.loader.ResourceName;
 
   public String getAbsoluteResourceName() {
     if( null == underlyingResourcePath ) {
-      throw new IllegalStateException( "not set: underlyingResource" ) ;
+      throw new IllegalStateException( "not set: underlyingResource (did you initialize the resources?)" ) ;
     }
     return underlyingResourcePath;
   }

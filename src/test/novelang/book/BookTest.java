@@ -48,7 +48,7 @@ public class BookTest {
    */
   @Test
   public void badCommandGeneratesProblem() {
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
 
     final Book book = BookTestTools.createBook(
         SystemUtils.getUserDir(),
@@ -63,7 +63,7 @@ public class BookTest {
    */
   @Test
   public void justInsert() {
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
     final Book book = BookTestTools.createBook(

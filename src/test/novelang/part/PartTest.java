@@ -22,24 +22,23 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runners.NameAwareTestClassRunner;
-import org.junit.runner.RunWith;
-import novelang.DirectoryFixture;
-import novelang.TestResourceTools;
-import novelang.TestResources;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import com.google.common.collect.Lists;
+import novelang.TestResourceTree;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.SourceUnescape;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import com.google.common.collect.Lists;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
 
 /**
  * @author Laurent Caillette
@@ -50,7 +49,8 @@ public class PartTest {
 
   @Test
   public void loadPartOk() throws IOException {
-    final Part part = new Part( justSections ) ;
+    final Part part = new Part( resourceInstaller.copy(
+            TestResourceTree.Parts.PART_JUST_SECTIONS ) ) ;
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree(
@@ -78,8 +78,9 @@ public class PartTest {
 
   @Test
   public void partWithMissingImagesHasProblem() throws IOException {
-    final Part part = new Part( missingImagesFile ) ;
-    part.relocateResourcePaths( missingImagesFile.getParentFile() ) ;
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_MISSING_IMAGES ) ;
+    final Part part = new Part( partFile ) ;
+    part.relocateResourcePaths( partFile.getParentFile() ) ;
     Assert.assertTrue( part.hasProblem() ) ;
     final List< Problem > problems = Lists.newArrayList( part.getProblems() ) ;
     LOG.debug( "Got problems: %s", problems ) ;
@@ -89,7 +90,8 @@ public class PartTest {
 
   @Test
   public void loadPartWithMetadata() throws IOException {
-    final Part part = PartFixture.createPart( justSections ).makeStandalone();
+    final Part part = new Part( resourceInstaller.copy(
+        TestResourceTree.Parts.PART_JUST_SECTIONS ) ).makeStandalone() ;
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( PART,
@@ -123,7 +125,8 @@ public class PartTest {
    */
   @Test
   public void loadSimpleStructure() throws IOException {
-    final Part part = new Part( simpleStructureFile ) ; 
+    final Part part = new Part( resourceInstaller.copy(
+        TestResourceTree.Parts.PART_SIMPLE_STRUCTURE ) ) ; 
     final SyntacticTree partTree = part.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( 
@@ -235,42 +238,19 @@ public class PartTest {
 
   private static final Log LOG = LogFactory.getLog( PartTest.class ) ;
 
-  private File justSections;
-  private File messyIdentifiersFile ;
-  private File simpleStructureFile ;
-  private File missingImagesFile ;
+  static {
+      TestResourceTree.initialize() ;
+  }
+
+  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+
 
 
   @Before
   public void setUp() throws IOException {
-    final String testName = NameAwareTestClassRunner.getTestName();
-    final File scratchDirectory = new DirectoryFixture( testName ).
-            getDirectory() ;
-
-    justSections = TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        TestResources.JUST_SECTIONS,
-        scratchDirectory
-    ) ;
-
-    missingImagesFile = TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        TestResources.MISSING_IMAGES,
-        scratchDirectory
-    ) ;
 
 
-    messyIdentifiersFile = TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        TestResources.MESSY_IDENTIFIERS,
-        scratchDirectory
-    ) ;
 
-    simpleStructureFile = TestResourceTools.copyResourceToDirectory(
-        getClass(),
-        TestResources.SIMPLE_STRUCTURE,
-        scratchDirectory
-    ) ;
 
   }
 
