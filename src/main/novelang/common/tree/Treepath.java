@@ -151,6 +151,28 @@ public final class Treepath< T extends Tree > {
   }
 
   /**
+   * Returns the indices in parent tree, from the second treepath to the end.
+   *
+   * @return null if this {@code Treepath} has a {@link #getLength() length} of 1, or an array
+   *     of {@code int}s of {@link #getLength() length - 1} elements, corresponding to the
+   *     index in parent tree of each referenced tree.
+   *
+   * @see Treepath#getIndexInPrevious()
+   * @see Treepath#create(Tree, int...)
+   * @see Treepath#create(Treepath, int...)
+   */
+  public int[] getIndicesInParent() {
+    if( getLength() == 1 ) {
+      return null ;
+    }
+    final int[] indices = new int[ getLength() - 1 ] ;
+    for( int distance = indices.length - 1 ; distance >= 0 ; distance -- ) {
+      indices[ indices.length - distance - 1 ] = getTreepathAtDistance( distance ).getIndexInPrevious() ; 
+    }
+    return indices ;
+  }
+
+  /**
    * Returns the {@code Tree} at a given distance, which is the n<sup>th</sup>
    * from the end.
    * Invariant: {@code getTreeAtHeight( 0 ) == getEnd()}.
@@ -208,7 +230,7 @@ public final class Treepath< T extends Tree > {
     return buffer.toString() ;
   }
 
-  // ===============
+// ===============
 // Factory methods
 // ===============
 
@@ -288,7 +310,7 @@ public final class Treepath< T extends Tree > {
     return new Treepath< T >( tree ) ;
   }
 
-  private static class IllegalDistanceException extends IllegalArgumentException {
+    private static class IllegalDistanceException extends IllegalArgumentException {
     public IllegalDistanceException( int distance ) {
       super( "distance=" + distance ) ;
     }

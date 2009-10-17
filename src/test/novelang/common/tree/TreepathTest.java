@@ -16,11 +16,17 @@
  */
 package novelang.common.tree;
 
-import org.junit.Assert;
+import java.util.Arrays;
+
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import junit.framework.AssertionFailedError;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.base.Joiner;
 
 /**
  * Tests for {@link novelang.common.tree.Treepath}.
@@ -36,7 +42,7 @@ public class TreepathTest {
     final MyTree tree = MyTree.create( "tree" ) ;
     final Treepath< MyTree > treepath = Treepath.create( tree ) ;
 
-    Assert.assertEquals( 1, treepath.getLength() ) ;
+    assertEquals( 1, treepath.getLength() ) ;
     assertSame( tree, treepath.getTreeAtStart() ) ;
     assertSame( tree, treepath.getTreeAtEnd() ) ;
     assertSame( tree, treepath.getTreeAtDistance( 0 ) ) ;
@@ -58,7 +64,7 @@ public class TreepathTest {
 
     print( "Treepath: ", treepath ) ;
 
-    Assert.assertEquals( 2, treepath.getLength() ) ;
+    assertEquals( 2, treepath.getLength() ) ;
     assertSame( parent, treepath.getTreeAtDistance( 1 ) ) ;
     assertSame( child, treepath.getTreeAtDistance( 0 )) ;
     assertSame( parent, treepath.getTreeAtStart() ) ;
@@ -74,12 +80,77 @@ public class TreepathTest {
     final Treepath< MyTree > treepath = Treepath.create( parent, 0, 0 ) ;
     print("Treepath: ", treepath ) ;
 
-    Assert.assertEquals( 3, treepath.getLength() ) ;
+    assertEquals( 3, treepath.getLength() ) ;
     assertSame( parent, treepath.getTreeAtStart() ) ;
     assertSame( grandChild, treepath.getTreeAtEnd() ) ;
     assertSame( parent, treepath.getTreeAtDistance( 2 ) ) ;
     assertSame( child, treepath.getTreeAtDistance( 1 ) ) ;
     assertSame( grandChild, treepath.getTreeAtDistance( 0 ) ) ;
+  }
+
+  @Test
+  public void indicesForLengthOf1() {
+    final MyTree tree = MyTree.create( "tree" ) ;
+    final Treepath< MyTree > treepath = Treepath.create( tree ) ;
+    assertNull( treepath.getIndicesInParent() ) ;
+  }
+
+  @Test
+  public void indicesForLengthOf3() {
+    final MyTree grandChild = MyTree.create( "grandChild" ) ;
+    final MyTree child = MyTree.create( "child", grandChild ) ;
+    final MyTree parent = MyTree.create( "parent", child ) ;
+
+    final Treepath< MyTree > origin = Treepath.create( parent, 0, 0 ) ;
+
+    assertEquals( 3, origin.getLength() ) ; // Verify test's own health.
+    final int[] indices = origin.getIndicesInParent() ;
+    assertEquals( 2, indices.length ) ;
+    assertEquals( 0, indices[ 0 ] ) ;
+    assertEquals( 0, indices[ 1 ] ) ;
+
+    final Treepath< MyTree > recreated = Treepath.create( parent, indices ) ;
+    assertSame( grandChild, recreated.getTreeAtDistance( 0 ) ) ;
+    assertSame( child, recreated.getTreeAtDistance( 1 ) ) ;
+    assertSame( parent, recreated.getTreeAtDistance( 2 ) ) ;
+
+  }
+
+  /**
+   * <pre>
+   *           grandParent
+   *                |
+   *             parent
+   *           /    |   \
+   *     child0  child1  child2
+   *                   /       \
+   *          grandChild10    grandChild11
+   * </pre>
+   */
+  @Test
+  public void indicesForLengthOf3AndIndicesWhichAreNotAlwaysZero() {
+    final MyTree grandChild20 = MyTree.create( "grandChild20" ) ;
+    final MyTree grandChild21 = MyTree.create( "grandChild21" ) ;
+    final MyTree child0 = MyTree.create( "child0" ) ;
+    final MyTree child1 = MyTree.create( "child1" ) ;
+    final MyTree child2 = MyTree.create( "child2", grandChild20, grandChild21 ) ;
+    final MyTree parent = MyTree.create( "parent", child0, child1, child2 ) ;
+    final MyTree grandParent = MyTree.create( "grandParent", parent ) ;
+
+    final Treepath< MyTree > origin = Treepath.create( grandParent, 0, 2, 1 ) ;
+
+    assertEquals( 4, origin.getLength() ) ; // Verify test's own health.
+    final int[] indices = origin.getIndicesInParent() ;
+    assertEquals( "Indices: " + Arrays.toString( indices ), 3, indices.length ) ;
+    assertEquals( "Indices: " + Arrays.toString( indices ), 0, indices[ 0 ] ) ;
+    assertEquals( "Indices: " + Arrays.toString( indices ), 2, indices[ 1 ] ) ;
+    assertEquals( "Indices: " + Arrays.toString( indices ), 1, indices[ 2 ] ) ;
+
+    final Treepath< MyTree > recreated = Treepath.create( grandParent, indices ) ;
+    assertSame( parent, recreated.getTreeAtDistance( 2 ) ) ;
+    assertSame( child2, recreated.getTreeAtDistance( 1 ) ) ;
+    assertSame( grandChild21, recreated.getTreeAtDistance( 0 ) ) ;
+
   }
 
 // =======

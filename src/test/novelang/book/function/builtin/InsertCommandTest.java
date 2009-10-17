@@ -393,17 +393,19 @@ public class InsertCommandTest {
     ) ;
   }
 
-  @Test  @Ignore // TODO create the part with the identifier.
+  @Test
   public void useSimpleFragmentIdentifier() throws MalformedURLException {
-    final InsertCommand insertCommand = new InsertCommand(
+
+      final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_IDENTIFIERS ) ;
+      final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
-        resourceInstaller.getTargetDirectory().toURI().toURL().toExternalForm(),
+        partFile.toURI().toURL().toExternalForm(),
         true,
         null,
         false,
         0,
         null,
-        ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "x" ) )
+        ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
     ) ;
 
     final SyntacticTree initialTree = tree( BOOK ) ;
@@ -417,8 +419,9 @@ public class InsertCommandTest {
             BOOK,
             tree(
                 _LEVEL,
-                tree( ABSOLUTE_IDENTIFIER, tree( "x" ) ),
-                tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
+                tree( ABSOLUTE_IDENTIFIER, tree( "level-2-4" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "L2-4" ) ),
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-2-4" ) )
             )
         ),
         result.getDocumentTree()
