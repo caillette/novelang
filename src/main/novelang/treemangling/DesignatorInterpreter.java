@@ -66,12 +66,12 @@ public class DesignatorInterpreter {
   private final Iterable< Problem > problems  ;
 
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
-    final BabyInterpreter babyMapper = new BabyInterpreter( treepath ) ;
-    final Treepath< SyntacticTree > enrichedTreepath = enrich( treepath, babyMapper ) ;
+    final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
+    final Treepath< SyntacticTree > enrichedTreepath = enrich( treepath, babyInterpreter ) ;
 
-    pureIdentifiers = remap( babyMapper.getPureIdentifierMap(), enrichedTreepath ) ;
-    derivedIdentifiers = remap( babyMapper.getDerivedIdentifierMap(), enrichedTreepath ) ;
-    problems = babyMapper.getProblems() ;
+    pureIdentifiers = remap( babyInterpreter.getPureIdentifierMap(), enrichedTreepath ) ;
+    derivedIdentifiers = remap( babyInterpreter.getDerivedIdentifierMap(), enrichedTreepath ) ;
+    problems = babyInterpreter.getProblems() ;
 
     final StringBuilder stringBuilder = new StringBuilder() ;
     stringBuilder.append( "\n  Pure identifiers:" ) ;
@@ -82,28 +82,7 @@ public class DesignatorInterpreter {
     LOG.debug( "Created %s%s", this, stringBuilder ) ;
 
   }
-
-  /**
-   * Returns the map of pure identifiers (those made out only from
-   * {@link NodeKind#ABSOLUTE_IDENTIFIER} and {@link NodeKind#RELATIVE_IDENTIFIER} nodes).
-   *
-   * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
-   *     referencing the same tree as passed to the constructor.
-   */
-  /*package*/ Map< FragmentIdentifier, Treepath< SyntacticTree > > getPureIdentifierMap() {
-    return pureIdentifiers ;
-  }
-
-
-  /**
-   * Returns the map of derived identifiers (those which are not pure).
-   *
-   * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
-   *     referencing the same tree as passed to the constructor.
-   */
-  /*package*/ Map< FragmentIdentifier, Treepath< SyntacticTree > > getDerivedIdentifierMap() {
-    return derivedIdentifiers ;
-  }
+  
   
   public Treepath< SyntacticTree > get( final FragmentIdentifier fragmentIdentifier ) {
     Treepath< SyntacticTree > treepath = pureIdentifiers.get( fragmentIdentifier ) ;

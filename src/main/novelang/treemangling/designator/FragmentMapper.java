@@ -5,6 +5,8 @@ import java.util.Map;
 import novelang.marker.FragmentIdentifier;
 
 /**
+ * Needed by tests.
+ * 
  * @author Laurent Caillette
  */
 public interface FragmentMapper< T > {

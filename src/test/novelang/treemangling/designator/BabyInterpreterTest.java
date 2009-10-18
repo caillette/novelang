@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertNull;
 import novelang.common.SyntacticTree;
-import novelang.common.Problem;
 import novelang.common.tree.Treepath;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.NodeKind._LEVEL;
@@ -18,28 +17,19 @@ import static novelang.parser.NodeKind.RELATIVE_IDENTIFIER;
 import static novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
 import static novelang.parser.NodeKind.PART;
 import novelang.marker.FragmentIdentifier;
-import novelang.treemangling.designator.FragmentMapper;
 
 /**
- * Tests for both {@link novelang.treemangling.DesignatorInterpreter} and 
- * {@link BabyInterpreter}.
- *
- * @param < M > Type of the {@link Mapper} which bears type parametrization as we don't want
- *     to make tested classes generic.
+ * Tests for {@link BabyInterpreter}.
  *
  * @author Laurent Caillette
  */
-public abstract class AbstractMapperTest< M > {
+public class BabyInterpreterTest {
 
   @Test
   public void nothing() {
-    final Mapper< M > mapper = createMapper( tree( PART ) ) ;
-    assertEquals( 0, mapper.getPureIdentifierMap().keySet().size() );
-    assertFalse( "", mapper.getProblems().iterator().hasNext() ) ;
-    if( mapper instanceof SyntheticMapper ) {
-      final SyntheticMapper< M > syntheticMapper = ( SyntheticMapper< M > ) mapper ;
-      assertNull( syntheticMapper.get( new FragmentIdentifier( "whatever" ) ) ) ;
-    }
+    final BabyInterpreter interpreter = createInterpreter( tree( PART ) ) ;
+    assertEquals( 0, interpreter.getPureIdentifierMap().keySet().size() );
+    assertFalse( "", interpreter.getProblems().iterator().hasNext() ) ;
   }
 
 
@@ -70,31 +60,26 @@ public abstract class AbstractMapperTest< M > {
         PART,
         yLevel
     ) ;
-    final Mapper< M > mapper = createMapper( part ) ;
+    final BabyInterpreter interpreter = createInterpreter( part ) ;
 
-    assertFalse( mapper.hasProblem() ) ;
+    assertFalse( interpreter.hasProblem() ) ;
 
-    assertEquals( 0, mapper.getDerivedIdentifierMap().keySet().size() );
-    final Map< FragmentIdentifier, M > pureIdentifiers =
-        mapper.getPureIdentifierMap() ;
+    assertEquals( 0, interpreter.getDerivedIdentifierMap().keySet().size() );
+    final Map< FragmentIdentifier, int[] > pureIdentifiers =
+        interpreter.getPureIdentifierMap() ;
     assertEquals( 2, pureIdentifiers.keySet().size() ) ;
 
     assertSame(
         yLevel,
-        makeTree( mapper.getPureIdentifierMap().get( yIdentifier ), part )
+        makeTree( interpreter.getPureIdentifierMap().get( yIdentifier ), part )
     ) ;
 
-      final M actualZLevel = mapper.getPureIdentifierMap().get( zIdentifier );
+      final int[] actualZLevel = interpreter.getPureIdentifierMap().get( zIdentifier );
       assertSame(
         zLevel,
         makeTree( actualZLevel, part )
     ) ;
 
-    if( mapper instanceof SyntheticMapper ) {
-      final SyntheticMapper< M > syntheticMapper = ( SyntheticMapper< M > ) mapper ;
-      assertSame( yLevel, makeTree( syntheticMapper.get( yIdentifier ), part ) ) ;
-      assertSame( zLevel, makeTree( syntheticMapper.get( zIdentifier ), part ) ) ;
-    }
 
 
   }
@@ -127,15 +112,16 @@ public abstract class AbstractMapperTest< M > {
         PART,
         yLevel
     ) ;
-    final Mapper< M > mapper = createMapper( part ) ;
+    final BabyInterpreter interpreter = createInterpreter( part ) ;
 
-    final Map< FragmentIdentifier, M > pureIdentifiers = mapper.getPureIdentifierMap() ;
+    final Map< FragmentIdentifier, int[] > pureIdentifiers = interpreter.getPureIdentifierMap() ;
     assertEquals( 1, pureIdentifiers.keySet().size() ) ;
 
-    final Map< FragmentIdentifier, M> derivedIdentifiers = mapper.getDerivedIdentifierMap() ;
+    final Map< FragmentIdentifier, int[] > derivedIdentifiers = 
+        interpreter.getDerivedIdentifierMap() ;
 
 
-    assertFalse( mapper.hasProblem() ) ;
+    assertFalse( interpreter.hasProblem() ) ;
 
     assertEquals( 2, derivedIdentifiers.keySet().size() ) ;
 
@@ -154,11 +140,6 @@ public abstract class AbstractMapperTest< M > {
         makeTree( derivedIdentifiers.get( zLikeAbsoluteIdentifier ), part )
     ) ;
 
-    if( mapper instanceof SyntheticMapper ) {
-      final SyntheticMapper< M > syntheticMapper = ( SyntheticMapper< M > ) mapper ;
-      assertSame( zLevel, makeTree( syntheticMapper.get( zLikeRelativeIdentifier ), part ) ) ;
-      assertSame( zLevel, makeTree( syntheticMapper.get( zLikeAbsoluteIdentifier ), part ) ) ;
-    }
 
   }
 
@@ -171,11 +152,11 @@ public abstract class AbstractMapperTest< M > {
         tree( _LEVEL, tree( LEVEL_TITLE, tree( WORD_, "z" ) ) )
     ) ;
 
-    final Mapper< M > mapper = createMapper( tree ) ;
+    final BabyInterpreter interpreter = createInterpreter( tree ) ;
 
-    assertFalse( mapper.hasProblem() ) ;
-    assertEquals( 0, mapper.getDerivedIdentifierMap().keySet().size() );
-    assertEquals( 0, mapper.getPureIdentifierMap().keySet().size() ) ;
+    assertFalse( interpreter.hasProblem() ) ;
+    assertEquals( 0, interpreter.getDerivedIdentifierMap().keySet().size() );
+    assertEquals( 0, interpreter.getPureIdentifierMap().keySet().size() ) ;
   }
 
   /**
@@ -214,12 +195,12 @@ public abstract class AbstractMapperTest< M > {
         xLevel
     ) ;
 
-    final Mapper< M > mapper = createMapper( part ) ;
+    final BabyInterpreter interpreter = createInterpreter( part ) ;
 
-    assertFalse( mapper.hasProblem() ) ;
-    assertEquals( 2, mapper.getPureIdentifierMap().keySet().size() ) ;
-    assertEquals( 1, mapper.getDerivedIdentifierMap().keySet().size() ) ;
-    assertFalse( mapper.hasProblem() ) ;
+    assertFalse( interpreter.hasProblem() ) ;
+    assertEquals( 2, interpreter.getPureIdentifierMap().keySet().size() ) ;
+    assertEquals( 1, interpreter.getDerivedIdentifierMap().keySet().size() ) ;
+    assertFalse( interpreter.hasProblem() ) ;
   }
 
   /**
@@ -260,12 +241,13 @@ public abstract class AbstractMapperTest< M > {
     final FragmentIdentifier zIdentifier = new FragmentIdentifier( "z" ) ;
     final FragmentIdentifier yzIdentifier = new FragmentIdentifier( yIdentifier, "z" ) ;
 
-    final Mapper< M > mapper = createMapper( wLevel ) ;
-    final Map< FragmentIdentifier, M > derivedIdentifiers = mapper.getDerivedIdentifierMap() ;
-    final Map< FragmentIdentifier, M > pureIdentifierTreepathMap =
-        mapper.getPureIdentifierMap() ;
+    final BabyInterpreter interpreter = createInterpreter( wLevel ) ;
+    final Map< FragmentIdentifier, int[] > derivedIdentifiers = 
+        interpreter.getDerivedIdentifierMap() ;
+    final Map< FragmentIdentifier, int[] > pureIdentifierTreepathMap =
+        interpreter.getPureIdentifierMap() ;
 
-    assertFalse( mapper.hasProblem() ) ;
+    assertFalse( interpreter.hasProblem() ) ;
 
     assertEquals( 1, pureIdentifierTreepathMap.keySet().size() ) ;
     assertEquals( 2, derivedIdentifiers.keySet().size() ) ;
@@ -288,13 +270,6 @@ public abstract class AbstractMapperTest< M > {
 
     assertNull( pureIdentifierTreepathMap.get( zIdentifier ) ) ;
 
-    if( mapper instanceof SyntheticMapper ) {
-      final SyntheticMapper< M > syntheticMapper = ( SyntheticMapper< M > ) mapper ;
-      assertSame( xLevel, makeTree( syntheticMapper.get( xIdentifier ), wLevel ) ) ;
-      assertSame( yLevel, makeTree( syntheticMapper.get( yIdentifier ), wLevel ) ) ;
-      assertSame( zLevel, makeTree( syntheticMapper.get( yzIdentifier ), wLevel ) ) ;
-      assertNull( syntheticMapper.get( zIdentifier ) ) ;
-    }
 
   }
     
@@ -304,22 +279,17 @@ public abstract class AbstractMapperTest< M > {
 // =======    
     
     
-  interface Mapper< T > extends FragmentMapper< T > {
-    boolean hasProblem() ;
-    Iterable< Problem > getProblems() ;
+  private BabyInterpreter createInterpreter( final Treepath< SyntacticTree > treepath ) {
+    return new BabyInterpreter( treepath ) ;
   }
     
-  interface SyntheticMapper< T > extends Mapper< T > {
-    T get( FragmentIdentifier fragmentIdentifier ) ;
+  private final BabyInterpreter createInterpreter( final SyntacticTree tree ) {
+    return createInterpreter( Treepath.create( tree ) ) ;
   }
     
-  protected abstract Mapper< M > createMapper( final Treepath< SyntacticTree > treepath ) ;
-    
-  protected final Mapper< M > createMapper( final SyntacticTree tree ) {
-    return createMapper( Treepath.create( tree ) ) ;
+  private SyntacticTree makeTree( final int[] mapped, final SyntacticTree root ) {
+    return Treepath.create( root, mapped ).getTreeAtEnd() ;    
   }
-    
-  protected abstract SyntacticTree makeTree( final M mapped, final SyntacticTree root ) ;  
 
 
 }
