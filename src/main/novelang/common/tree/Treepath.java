@@ -16,7 +16,10 @@
  */
 package novelang.common.tree;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.NullArgumentException;
+
+import java.util.Comparator;
 
 /**
  * An immutable structure representing where a {@link Tree} lies inside a bigger owning
@@ -64,7 +67,7 @@ import org.apache.commons.lang.NullArgumentException;
  *
  * @author Laurent Caillette
  */
-public final class Treepath< T extends Tree > {
+public final class Treepath< T extends Tree > implements Comparable< Treepath< T > > {
 
   private final Treepath< T > previous;
   private final int indexInPrevious;
@@ -214,6 +217,23 @@ public final class Treepath< T extends Tree > {
       }
     }
   }
+  
+  /**
+   * Returns the {@code Tree} at a given distance, which is the n<sup>th</sup>
+   * from the start.
+   * Invariant: {@code getTreeAtHeight( 0 ) == getStart()}.
+   *
+   * @param distance 0 or more.
+   * @return a non-null object.
+   * @throws IllegalArgumentException if negative distance or distance greater than or
+   *     or equal to {@link #getLength()}.
+   */
+  public Treepath< T > getTreepathAtDistanceFromStart( int distance ) 
+      throws IllegalDistanceException 
+  {
+    return getTreepathAtDistance( getLength() - distance - 1 ) ; 
+  }
+  
 
   @Override
   public String toString() {
@@ -310,9 +330,61 @@ public final class Treepath< T extends Tree > {
     return new Treepath< T >( tree ) ;
   }
 
-    private static class IllegalDistanceException extends IllegalArgumentException {
+
+  private static class IllegalDistanceException extends IllegalArgumentException {
     public IllegalDistanceException( int distance ) {
       super( "distance=" + distance ) ;
     }
   }
+  
+// ==========  
+// Comparable  
+// ==========
+
+
+  /**
+   * Compares with another {@code Treepath}.
+   * For a whole tree, sorting the {@code Treepath} objects with one for each node gives the
+   * same node order as for pre-order traversal.
+   * <p>
+   * Implementation note: comparison occurs on indexes; node equality is not good because
+   * a tree may reference the same child object more than once.
+   * 
+   * @param other a non-null object with the same {@link #getTreeAtStart()} reference.
+   * @return 0 if both {@code Treepath} objects have the same length and same indices in 
+   *     parent {@code Treepath}s;  
+   *     &lt;1 if this  {@code Treepath} is "on the left" of the other; 
+   *     >1 if this  {@code Treepath} is "on the right" of the other.
+   * 
+   * @throws NullPointerException if {@code other} is null. 
+   * @throws IllegalArgumentException if {@code other} doesn't refer to the same 
+   *     {@link #getTreeAtStart() start tree} . 
+   */
+  public int compareTo( final Treepath< T > other ) {
+    Preconditions.checkNotNull( other ) ;
+    Preconditions.checkArgument( other.getTreeAtStart() == this.getTreeAtStart() ) ;
+    final int shortestLength = Math.min( this.getLength(), other.getLength() ) ;
+    for( int distance = 1 ; distance < shortestLength ; distance ++ ) {
+      final Treepath< T > thisIntermediateTreepath = 
+          this.getTreepathAtDistanceFromStart( distance ) ;
+      final Treepath< T > otherIntermediateTreepath = 
+          other.getTreepathAtDistanceFromStart( distance ) ;
+      final int localDifference = 
+          thisIntermediateTreepath.getIndexInPrevious() -
+          otherIntermediateTreepath.getIndexInPrevious() ; 
+      if( localDifference != 0 ) {
+        return localDifference ;
+      }
+    }
+    if( this.getLength() == other.getLength() ) {
+      // Same length at this point with every indexes equal means we're on the same node.
+      if( this.getTreeAtEnd() != other.getTreeAtEnd() ) {
+        throw new Error( "Implementation problem!" ) ;
+      }
+      return 0 ;
+    } else {
+      return this.getLength() - other.getLength() ;      
+    }
+  }
+  
 }

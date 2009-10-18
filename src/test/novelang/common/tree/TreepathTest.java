@@ -46,6 +46,7 @@ public class TreepathTest {
     assertSame( tree, treepath.getTreeAtStart() ) ;
     assertSame( tree, treepath.getTreeAtEnd() ) ;
     assertSame( tree, treepath.getTreeAtDistance( 0 ) ) ;
+    assertSame( treepath, treepath.getTreepathAtDistanceFromStart( 0 ) ) ;
   }
 
   @Test( expected = IllegalArgumentException.class )
@@ -60,15 +61,18 @@ public class TreepathTest {
     final MyTree child = MyTree.create( "child" ) ;
     final MyTree parent = MyTree.create( "parent", child ) ;
 
-    final Treepath< MyTree > treepath = Treepath.create( parent, 0 ) ;
+    final Treepath< MyTree > pathToParent = Treepath.create( parent ) ;
+    final Treepath< MyTree > pathToChild = Treepath.create( pathToParent, 0 ) ;
 
-    print( "Treepath: ", treepath ) ;
+    print( "Treepath: ", pathToChild ) ;
 
-    assertEquals( 2, treepath.getLength() ) ;
-    assertSame( parent, treepath.getTreeAtDistance( 1 ) ) ;
-    assertSame( child, treepath.getTreeAtDistance( 0 )) ;
-    assertSame( parent, treepath.getTreeAtStart() ) ;
-    assertSame( child, treepath.getTreeAtEnd() ) ;
+    assertEquals( 2, pathToChild.getLength() ) ;
+    assertSame( parent, pathToChild.getTreeAtDistance( 1 ) ) ;
+    assertSame( child, pathToChild.getTreeAtDistance( 0 )) ;
+    assertSame( parent, pathToChild.getTreeAtStart() ) ;
+    assertSame( child, pathToChild.getTreeAtEnd() ) ;
+    assertSame( pathToChild, pathToChild.getTreepathAtDistanceFromStart( 1 ) ) ;
+    assertSame( pathToParent, pathToChild.getTreepathAtDistanceFromStart( 0 ) ) ;
   }
 
   @Test
@@ -77,15 +81,22 @@ public class TreepathTest {
     final MyTree child = MyTree.create( "child", grandChild ) ;
     final MyTree parent = MyTree.create( "parent", child ) ;
 
-    final Treepath< MyTree > treepath = Treepath.create( parent, 0, 0 ) ;
-    print("Treepath: ", treepath ) ;
+    final Treepath< MyTree > pathToParent = Treepath.create( parent ) ;
+    final Treepath< MyTree > pathToChild = Treepath.create( pathToParent, 0 ) ;
+    final Treepath< MyTree > pathToGrandChild = Treepath.create( pathToChild, 0 ) ;
+    print("Treepath: ", pathToGrandChild ) ;
 
-    assertEquals( 3, treepath.getLength() ) ;
-    assertSame( parent, treepath.getTreeAtStart() ) ;
-    assertSame( grandChild, treepath.getTreeAtEnd() ) ;
-    assertSame( parent, treepath.getTreeAtDistance( 2 ) ) ;
-    assertSame( child, treepath.getTreeAtDistance( 1 ) ) ;
-    assertSame( grandChild, treepath.getTreeAtDistance( 0 ) ) ;
+    assertEquals( 3, pathToGrandChild.getLength() ) ;
+    assertSame( parent, pathToGrandChild.getTreeAtStart() ) ;
+    assertSame( grandChild, pathToGrandChild.getTreeAtEnd() ) ;
+    assertSame( parent, pathToGrandChild.getTreeAtDistance( 2 ) ) ;
+    assertSame( child, pathToGrandChild.getTreeAtDistance( 1 ) ) ;
+    assertSame( grandChild, pathToGrandChild.getTreeAtDistance( 0 ) ) ;
+
+    assertSame( pathToParent, pathToGrandChild.getTreepathAtDistanceFromStart( 0 ) ) ;
+    assertSame( pathToChild, pathToGrandChild.getTreepathAtDistanceFromStart( 1 ) ) ;
+    assertSame( pathToGrandChild, pathToGrandChild.getTreepathAtDistanceFromStart( 2 ) ) ;
+
   }
 
   @Test
@@ -165,6 +176,16 @@ public class TreepathTest {
     final String message =
         "Expected: {" + ( null == expected ? "null" : expected.getPayload() ) + "} " +
         "got {" + ( null == actual ? "null" : actual.getPayload() ) + "}"
+    ;
+    if( expected != actual ) {
+      throw new AssertionFailedError( message ) ;
+    }
+  }
+
+  private static void assertSame( Treepath< MyTree > expected, Treepath< MyTree > actual ) {
+    final String message =
+        "Expected: {" + ( null == expected ? "null" : expected ) + "} " +
+        "got {" + ( null == actual ? "null" : actual ) + "}"
     ;
     if( expected != actual ) {
       throw new AssertionFailedError( message ) ;
