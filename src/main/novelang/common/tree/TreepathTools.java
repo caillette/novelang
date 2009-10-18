@@ -20,10 +20,8 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.NoSuchElementException;
 
 import com.google.common.base.Preconditions;
-import novelang.common.SyntacticTree;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -38,7 +36,7 @@ import novelang.common.SyntacticTree;
 public class TreepathTools {
 
   private TreepathTools() {
-    throw new Error( "TreeTools" ) ;
+    throw new Error( "Don't call" ) ;
   }
 
   /**
@@ -396,7 +394,7 @@ public class TreepathTools {
 
     final T parentAfterRemoval = TreeTools.remove( parentBeforeRemoval, indexOfPreviousSibling ) ;
 
-    final Treepath treepathToParentWithRemoval =
+    final Treepath< T > treepathToParentWithRemoval =
         replaceTreepathEnd( treepath.getPrevious(), parentAfterRemoval ) ;
 
     return Treepath.create( treepathToParentWithRemoval, treepath.getIndexInPrevious() ) ;
@@ -430,7 +428,7 @@ public class TreepathTools {
 
     final T parentAfterRemoval = TreeTools.remove( parentBeforeRemoval, indexOfNextSibling ) ;
 
-    final Treepath treepathToParentWithRemoval =
+    final Treepath< T > treepathToParentWithRemoval =
         replaceTreepathEnd( treepath.getPrevious(), parentAfterRemoval ) ;
 
     return Treepath.create( treepathToParentWithRemoval, treepath.getIndexInPrevious() ) ;
@@ -515,7 +513,6 @@ public class TreepathTools {
   }
 
 
-
   private enum RemovalProgress {
     UNSPLIT,
     REMOVAL_ON_LEFT,
@@ -539,6 +536,53 @@ public class TreepathTools {
     Collections.reverse( treepaths ) ;
     return treepaths ;
   }
+
+  /**
+   * Returns if a {@code Treepath} has the same indices in its parenthood as another
+   * {@code Treepath}, for the length they have in common.
+   * 
+   * @param maybeParent a non-null object.
+   * @param maybeChild a non-null object with {@link Treepath#getLength()} greater than the
+   *     one of {@code maybeparent}. 
+   * @return true if index in each parent tree is the same.
+   */
+  public static < T extends Tree > boolean hasSameStartingIndicesAs( 
+      Treepath< T > maybeParent,  
+      Treepath< T > maybeChild  
+  ) {
+    Preconditions.checkNotNull( maybeParent ) ;
+    Preconditions.checkNotNull( maybeChild ) ;
+    Preconditions.checkArgument( maybeParent.getLength() <= maybeChild.getLength() ) ;
+    
+    while( maybeChild.getLength() > maybeParent.getLength() ) {
+      maybeChild = maybeChild.getPrevious() ;
+    }    
+    return hasSameStartingIndicesAsWithoutCheck( maybeParent, maybeChild ) ;
+  }
+  
+  private static < T extends Tree > boolean hasSameStartingIndicesAsWithoutCheck( 
+      Treepath< T > maybeParent,  
+      Treepath< T > maybeChild  
+  ) {
+    if( maybeParent.getPrevious() == null ) {
+      return true ; // No check needed as both arguments are supposed to have the same length.
+    } else {
+      if( maybeParent.getIndexInPrevious() == maybeChild.getIndexInPrevious() ) {
+        return hasSameStartingIndicesAsWithoutCheck( 
+            maybeParent.getPrevious(), 
+            maybeChild.getPrevious() 
+        ) ;
+      } else {
+        return false ;
+      }
+    }
+  }
+  
+// ==================  
+// Preorder traversal
+// ==================  
+  
+  
 
   /**
    * Returns a {@code Treepath} object to the next tree in a
@@ -586,46 +630,74 @@ public class TreepathTools {
       return getUpNextInPreorder( treepath ) ;
     }
   }
+  
+  
+// ==========================  
+// Reverse preorder traversal
+// ==========================  
 
   /**
-   * Returns if a {@code Treepath} has the same indices in its parenthood as another
-   * {@code Treepath}, for the length they have in common.
-   * 
-   * @param maybeParent a non-null object.
-   * @param maybeChild a non-null object with {@link Treepath#getLength()} greater than the
-   *     one of {@code maybeparent}. 
-   * @return true if index in each parent tree is the same.
+     * Returns a {@code Treepath} corresponding to the last tree in a 
+   * {@link #getNextInPreorder(Treepath) preorder traversal}; which also initiates a
+   * {@link #getPreviousInPostorder(Treepath) reverese postorder traversal}.
    */
-  public static < T extends Tree > boolean hasSameStartingIndicesAs( 
-      Treepath< T > maybeParent,  
-      Treepath< T > maybeChild  
+  public static< T extends Tree > Treepath< T > getLastInPreorder( 
+      final Treepath< T > treepath 
   ) {
-    Preconditions.checkNotNull( maybeParent ) ;
-    Preconditions.checkNotNull( maybeChild ) ;
-    Preconditions.checkArgument( maybeParent.getLength() <= maybeChild.getLength() ) ;
-    
-    while( maybeChild.getLength() > maybeParent.getLength() ) {
-      maybeChild = maybeChild.getPrevious() ;
-    }    
-    return hasSameStartingIndicesAsWithoutCheck( maybeParent, maybeChild ) ;
-  }
-  
-  private static < T extends Tree > boolean hasSameStartingIndicesAsWithoutCheck( 
-      Treepath< T > maybeParent,  
-      Treepath< T > maybeChild  
-  ) {
-    if( maybeParent.getPrevious() == null ) {
-      return true ; // No check needed as both arguments are supposed to have the same length.
-    } else {
-      if( maybeParent.getIndexInPrevious() == maybeChild.getIndexInPrevious() ) {
-        return hasSameStartingIndicesAsWithoutCheck( 
-            maybeParent.getPrevious(), 
-            maybeChild.getPrevious() 
-        ) ;
-      } else {
-        return false ;
-      }
-    }
+    throw new UnsupportedOperationException( "getLastInPreorder" ) ;
   }
 
+  /**
+   * Returns a {@code Treepath} object to the previous tree in a
+   * <a href="http://en.wikipedia.org/wiki/Tree_traversal">postorder</a> traversal.
+   * <pre>
+   *  *t0            *t0            *t0            *t0
+   *   |      next    |      next    |     next     |      next
+   *  *t1     -->    *t1     -->    *t1     -->     t1     -->    null
+   *  /  \           /  \           /  \           /  \           
+   * t2  *t3       *t2   t3        t2   t3       t2   *t3
+   * </pre>
+   *
+   * @param treepath a non-null object.
+   * @return the treepath to the next tree, or null.
+   */
+  public static< T extends Tree > Treepath< T > getPreviousInPostorder( 
+      final Treepath< T > treepath 
+  ) {
+    final T tree = treepath.getTreeAtEnd();
+    if( tree.getChildCount() > 0 ) {
+      return Treepath.create( treepath, 0 ) ;
+    }
+    return getPreviousUpInPostorder( treepath ) ;
+  }
+
+  private static < T extends Tree > Treepath< T > getUpPreviousInPostorder( 
+      final Treepath< T > treepath 
+  ) {
+    Treepath< T > previousTreepath = treepath.getPrevious() ;
+    while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
+      if( hasPreviousSibling( previousTreepath ) ) {
+        return getPreviousSibling( previousTreepath ) ;
+      } else {
+        previousTreepath = previousTreepath.getPrevious() ;
+      }
+    }
+    return null ;
+  }
+
+  /**
+   * Navigates towards the previous sibling or the next sibling of a parent tree.
+   * @param treepath a non-null object.
+   * @return the previous tree, or null if there is no other tree to navigate to.
+   */
+  public static < T extends Tree > Treepath< T > getPreviousUpInPostorder( 
+      final Treepath< T > treepath 
+  ) {
+    if( hasPreviousSibling( treepath ) ) {
+      return getPreviousSibling( treepath ) ;
+    } else {
+      return getUpPreviousInPostorder( treepath ) ;
+    }
+  }
+  
 }
