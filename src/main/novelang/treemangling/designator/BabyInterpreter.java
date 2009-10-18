@@ -1,71 +1,51 @@
 package novelang.treemangling.designator;
 
-import java.util.Map;
-import java.util.List;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Iterator;
-
-import novelang.common.SyntacticTree;
 import novelang.common.Problem;
+import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.marker.FragmentIdentifier;
-import novelang.parser.NodeKind;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.treemangling.designator.IdentifierDefinition;
-import novelang.treemangling.designator.SegmentExtractor;
-import novelang.treemangling.designator.DesignatorTools;
-import novelang.treemangling.DesignatorMapper;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.collect.ImmutableSet;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Creates a Map of every valid designator (identifier or, in a near future, tag).
  * This class creates maps from {@link FragmentIdentifier} to {@link Treepath} objects.
- * Its maps are mutable and it doesn't attempt to derive the {@link SyntacticTree} referenced
- * by the {@link Treepath} objects.
  *
- * @see DesignatorMapper
+ * @see novelang.treemangling.DesignatorInterpreter
  *
  * @author Laurent Caillette
  */
-public class BabyMapper
-{
+public class BabyInterpreter implements FragmentMapper< int[] > {
 
   /**
    * Contain only pure identifiers (defined explicitely).
    */
-  private Map< FragmentIdentifier, Treepath< SyntacticTree > > pureIdentifiers =
-      Maps.newHashMap() ;
+  private final Map< FragmentIdentifier, int[] > pureIdentifiers ;
 
   /**
    * Contain implicit identifiers, or implicit identifiers mixed with explicit identifiers.
    */
-  private Map< FragmentIdentifier, Treepath< SyntacticTree > > derivedIdentifiers =
-      Maps.newHashMap() ;
+  private final Map< FragmentIdentifier, int[] > derivedIdentifiers ;
 
 
-  private Set< FragmentIdentifier > duplicateDerivedIdentifiers = Sets.newHashSet() ;
+  private final List< Problem > problems ;
 
-  private List< Problem > problems = Lists.newArrayList() ;
-
-  public BabyMapper( final Treepath< SyntacticTree > treepath ) {
-    process( treepath, null ) ;
-    pureIdentifiers = Collections.unmodifiableMap( pureIdentifiers ) ;
-    for( final FragmentIdentifier duplicate : duplicateDerivedIdentifiers ) {
-      derivedIdentifiers.remove( duplicate );
-
-      final Iterator<FragmentIdentifier> derivedIdentifiersIterator =
-          derivedIdentifiers.keySet().iterator();
+  public BabyInterpreter( final Treepath< SyntacticTree > treepath ) {
+    final Collector collector = new Collector() ;
+    process( collector, treepath, null ) ;
+    pureIdentifiers = Collections.unmodifiableMap( collector.pureIdentifiers ) ;
+    for( final FragmentIdentifier duplicate : collector.duplicateDerivedIdentifiers ) {
+      collector.derivedIdentifiers.remove( duplicate ) ;
     }
-    duplicateDerivedIdentifiers = null ;
 
-    derivedIdentifiers = Collections.unmodifiableMap( derivedIdentifiers ) ;
-    problems = Collections.unmodifiableList( problems ) ;
+    derivedIdentifiers = Collections.unmodifiableMap( collector.derivedIdentifiers ) ;
+    problems = Collections.unmodifiableList( collector.problems ) ;
 
   }
 
@@ -77,7 +57,7 @@ public class BabyMapper
    * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
    *     referencing the same tree as passed to the constructor.
    */
-  public Map< FragmentIdentifier, Treepath< SyntacticTree > > getPureIdentifierMap() {
+  public Map< FragmentIdentifier, int[] > getPureIdentifierMap() {
     return pureIdentifiers ;
   }
 
@@ -88,7 +68,7 @@ public class BabyMapper
    * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
    *     referencing the same tree as passed to the constructor.
    */
-  public Map< FragmentIdentifier, Treepath< SyntacticTree > > getDerivedIdentifierMap() {
+  public Map< FragmentIdentifier, int[] > getDerivedIdentifierMap() {
     return derivedIdentifiers ;
   }
 
@@ -106,13 +86,15 @@ public class BabyMapper
 
 
   private void process(
+      final Collector collector,
       final Treepath< SyntacticTree > treepath,
       final FragmentIdentifier parentIdentifier
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
     if( tree.isOneOf( DesignatorTools.IDENTIFIER_BEARING_NODEKINDS ) ) {
       final FragmentIdentifier explicitIdentifier ;
-      final SegmentExtractor segmentExtractor = new SegmentExtractor( treepath, problems ) ;
+      final SegmentExtractor segmentExtractor = 
+          new SegmentExtractor( treepath, collector.problems ) ;
       final IdentifierDefinition definition = segmentExtractor.getIdentifierDefinition() ;
       final String segment = segmentExtractor.getSegment() ;
 
@@ -124,22 +106,25 @@ public class BabyMapper
 
         case ABSOLUTE :
           explicitIdentifier = new FragmentIdentifier( segment ) ;
-          if( verifyFreshness( tree, explicitIdentifier, pureIdentifiers ) ) {
-            pureIdentifiers.put( explicitIdentifier, treepath ) ;
+          if( verifyFreshness( collector, tree, explicitIdentifier, collector.pureIdentifiers ) ) {
+            collector.pureIdentifiers.put( explicitIdentifier, treepath.getIndicesInParent() ) ;
           }
           break ;
 
         case RELATIVE :
           if ( parentIdentifier == null ) {
             addProblem(
+                collector,
                 tree,
                 "Missing absolute parent identifier for relative identifier '" + segment + "'"
             ) ;
             explicitIdentifier = null ;
           } else {
             explicitIdentifier = new FragmentIdentifier( parentIdentifier, segment ) ;
-            if( verifyFreshness( tree, explicitIdentifier, pureIdentifiers ) ) {
-              pureIdentifiers.put( explicitIdentifier, treepath ) ;
+            if( verifyFreshness( 
+                collector, tree, explicitIdentifier, collector.pureIdentifiers ) 
+            ) {
+              collector.pureIdentifiers.put( explicitIdentifier, treepath.getIndicesInParent() ) ;
             }
           }
           break ;
@@ -147,19 +132,21 @@ public class BabyMapper
         case IMPLICIT :
           explicitIdentifier = null ;
           final FragmentIdentifier implicitAbsoluteIdentifier = new FragmentIdentifier( segment ) ;
-          if( derivedIdentifiers.containsKey( implicitAbsoluteIdentifier ) ) {
-            duplicateDerivedIdentifiers.add( implicitAbsoluteIdentifier ) ;
+          if( collector.derivedIdentifiers.containsKey( implicitAbsoluteIdentifier ) ) {
+            collector.duplicateDerivedIdentifiers.add( implicitAbsoluteIdentifier ) ;
           } else {
-            derivedIdentifiers.put( implicitAbsoluteIdentifier, treepath ) ;
+            collector.derivedIdentifiers.put( 
+                implicitAbsoluteIdentifier, treepath.getIndicesInParent() ) ;
           }
 
           if( parentIdentifier != null ) {
             final FragmentIdentifier implicitRelativeIdentifier =
                 new FragmentIdentifier( parentIdentifier, segment ) ;
-            if( derivedIdentifiers.containsKey( implicitRelativeIdentifier ) ) {
-              duplicateDerivedIdentifiers.add( implicitRelativeIdentifier ) ;
+            if( collector.derivedIdentifiers.containsKey( implicitRelativeIdentifier ) ) {
+              collector.duplicateDerivedIdentifiers.add( implicitRelativeIdentifier ) ;
             } else {
-              derivedIdentifiers.put( implicitRelativeIdentifier, treepath ) ;
+              collector.derivedIdentifiers.put( 
+                  implicitRelativeIdentifier, treepath.getIndicesInParent() ) ;
             }
           }
           break ;
@@ -170,6 +157,7 @@ public class BabyMapper
 
       for( int i = 0 ; i < tree.getChildCount() ; i ++ ) {
         process(
+            collector,
             Treepath.create( treepath, i ),
             explicitIdentifier
         ) ;
@@ -179,29 +167,51 @@ public class BabyMapper
   }
 
   private boolean verifyFreshness(
+      final Collector collector,
       final SyntacticTree tree,
       final FragmentIdentifier fragmentIdentifier,
-      final Map< FragmentIdentifier, Treepath< SyntacticTree > > map
+      final Map< FragmentIdentifier, int[] > map
   ) {
     if( map.containsKey( fragmentIdentifier ) ) {
       final String message = "Already defined: '" + fragmentIdentifier + "'" ;
-      addProblem( tree, message ) ;
+      addProblem( collector, tree, message ) ;
       return false ;
     }
     return true ;
   }
 
-  private void addProblem( final SyntacticTree tree, final String message ) {
+  private void addProblem( 
+      final Collector collector, 
+      final SyntacticTree tree, 
+      final String message 
+  ) {
     if( tree.getLocation()  == null ) {
       // Only for tests.
-      problems.add( Problem.createProblem( message ) ) ;
+      collector.problems.add( Problem.createProblem( message ) ) ;
     } else {
-      problems.add( Problem.createProblem(
+      collector.problems.add( Problem.createProblem(
           message,
           tree.getLocation() )
       ) ;
     }
   }
 
+  
+  private static class Collector {
+    
+  /**
+   * Contain only pure identifiers (defined explicitely).
+   */
+  public final Map< FragmentIdentifier, int[] > pureIdentifiers = Maps.newHashMap() ;
 
+  /**
+   * Contain implicit identifiers, or implicit identifiers mixed with explicit identifiers.
+   */
+  public final Map< FragmentIdentifier, int[] > derivedIdentifiers = Maps.newHashMap() ;
+
+
+  public Set< FragmentIdentifier > duplicateDerivedIdentifiers = Sets.newHashSet() ;
+
+  public List< Problem > problems = Lists.newArrayList() ;
+  }
 }

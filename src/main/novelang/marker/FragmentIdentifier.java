@@ -135,7 +135,11 @@ public class FragmentIdentifier {
   }
 
   
+  public String getAbsoluteRepresentation() {
+    return "\\" + stringRepresentation ;
+  }
 
+  
   @Override
   public int hashCode() {
     return stringRepresentation.hashCode() ;

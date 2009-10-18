@@ -68,6 +68,7 @@ public class FragmentIdentifierTest {
     assertEquals( 1, fragmentIdentifier.getSegmentCount() ) ;
     assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
     assertEquals( "FragmentIdentifier[\\0]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0" ), fragmentIdentifier ) ;
   }
   
@@ -79,6 +80,7 @@ public class FragmentIdentifierTest {
     assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
     assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0\\1", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0", "1" ), fragmentIdentifier ) ;
   }
   
@@ -91,6 +93,7 @@ public class FragmentIdentifierTest {
     assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
     assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1\\2]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0\\1\\2", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2" ), fragmentIdentifier ) ;
   }
   
@@ -107,6 +110,7 @@ public class FragmentIdentifierTest {
     assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
     assertEquals( "3", fragmentIdentifier.getSegmentAt( 3 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1\\2\\3]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0\\1\\2\\3", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2", "3" ), fragmentIdentifier ) ;
   }
 

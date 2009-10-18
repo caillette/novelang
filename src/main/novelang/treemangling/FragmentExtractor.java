@@ -1,10 +1,8 @@
 package novelang.treemangling;
 
-import java.util.EnumSet;
 import java.util.List;
 
 import novelang.common.SyntacticTree;
-import novelang.common.TagBehavior;
 import novelang.common.SimpleTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
@@ -16,7 +14,7 @@ import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
 
 /**
- * @deprecated Use {@link DesignatorMapper}.
+ * @deprecated Use {@link DesignatorInterpreter}.
  *
  * @author Laurent Caillette
  */

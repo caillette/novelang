@@ -1,22 +1,23 @@
-package novelang.treemangling;
+package novelang.treemangling.designator;
 
 import java.util.Map;
 
-import novelang.treemangling.designator.BabyMapper2;
+import novelang.treemangling.designator.AbstractMapperTest;
+import novelang.treemangling.designator.BabyInterpreter;
 import novelang.common.SyntacticTree;
 import novelang.common.Problem;
 import novelang.common.tree.Treepath;
 import novelang.marker.FragmentIdentifier;
 
 /**
- * Tests for {@link BabyMapper2}.
+ * Tests for {@link BabyInterpreter}.
  *
  * @author Laurent Caillette
  */
 public class BabyMapper2Test extends AbstractMapperTest< int[] > {
 
   protected Mapper< int[] > createMapper( final Treepath< SyntacticTree > treepath ) {
-     return new MyMapper( new BabyMapper2( treepath ) ) ;
+     return new MyMapper( new BabyInterpreter( treepath ) ) ;
   }
 
   protected SyntacticTree makeTree( final int[] mapped, final SyntacticTree root ) {
@@ -25,9 +26,9 @@ public class BabyMapper2Test extends AbstractMapperTest< int[] > {
 
   private class MyMapper implements Mapper< int[] > {
 
-    private final BabyMapper2 babyMapper2 ;
+    private final BabyInterpreter babyMapper2 ;
 
-    private MyMapper( final BabyMapper2 babyMapper2 ) {
+    private MyMapper( final BabyInterpreter babyMapper2 ) {
       this.babyMapper2 = babyMapper2;
     }
 

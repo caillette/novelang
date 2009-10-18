@@ -419,7 +419,7 @@ public class InsertCommandTest {
             BOOK,
             tree(
                 _LEVEL,
-                tree( ABSOLUTE_IDENTIFIER, tree( "level-2-4" ) ),
+                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "L2-4" ) ),
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-2-4" ) )
             )

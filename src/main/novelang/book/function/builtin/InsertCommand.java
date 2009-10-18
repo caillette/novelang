@@ -18,7 +18,7 @@ import novelang.part.Part;
 import novelang.marker.FragmentIdentifier;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-import novelang.treemangling.DesignatorMapper;
+import novelang.treemangling.DesignatorInterpreter;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
@@ -138,8 +138,8 @@ public class InsertCommand extends AbstractCommand {
 
     if( partTree != null ) {
       if( hasIdentifiers ) {
-        final DesignatorMapper designatorMapper = 
-            new DesignatorMapper( Treepath.create( partTree ) ) ;
+        final DesignatorInterpreter designatorMapper = 
+            new DesignatorInterpreter( Treepath.create( partTree ) ) ;
         final List< Problem > designatorProblems = Lists.newArrayList() ;
         for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
           final Treepath< SyntacticTree > fragmentTreepath =

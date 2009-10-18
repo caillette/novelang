@@ -252,7 +252,7 @@ public class BookTest {
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 _LEVEL,
-                tree( COMPOSITE_IDENTIFIER, tree( "IdentifierOne" ), tree( "IdentifierTwo" ) ),
+                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\IdentifierOne\\IdentifierTwo" ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "LevelTwo" ) ),
                 tree(
                     PARAGRAPH_REGULAR,

@@ -1,4 +1,4 @@
-package novelang.treemangling;
+package novelang.treemangling.designator;
 
 import java.util.Map;
 
@@ -21,7 +21,8 @@ import novelang.marker.FragmentIdentifier;
 import novelang.treemangling.designator.FragmentMapper;
 
 /**
- * Tests for both {@link DesignatorMapper} and {@link novelang.treemangling.designator.BabyMapper}.
+ * Tests for both {@link novelang.treemangling.DesignatorInterpreter} and 
+ * {@link BabyInterpreter}.
  *
  * @param < M > Type of the {@link Mapper} which bears type parametrization as we don't want
  *     to make tested classes generic.
