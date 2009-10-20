@@ -59,7 +59,7 @@ tokens {
   ABSOLUTE_IDENTIFIER ;
   RELATIVE_IDENTIFIER ;
   COMPOSITE_IDENTIFIER ;
-  
+
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
   SIGN_COMMA ;           // punctuationsign=true

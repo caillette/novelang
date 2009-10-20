@@ -256,9 +256,47 @@ public class TreepathToolsTest {
     Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
     assertSame( child1, afterRemoval.getTreeAtDistance( 0 ) ) ;
+  }
+  
+  
+  @Test
+  public void previousInPostorder() {
+
+    final MyTree t3 = MyTree.create( "3" ) ;           //      t0
+    final MyTree t4 = MyTree.create( "4" ) ;           //      |
+    final MyTree t6 = MyTree.create( "6" ) ;           //      t1
+    final MyTree t2 = MyTree.create( "2", t3, t4 ) ;   //     /  \
+    final MyTree t5 = MyTree.create( "5", t6 ) ;       //   t2    t5
+    final MyTree t1 = MyTree.create( "1", t2, t5 ) ;   //  /  \   |
+    final MyTree t0 = MyTree.create( "0", t1 ) ;       // t3  t4  t6
+
+    final Treepath< MyTree > treepathTo6 = Treepath.create( t0, 0, 1, 0 ) ;
+
+    final Treepath< MyTree > treepathTo5 = TreepathTools.getPreviousInPostorder( treepathTo6 ) ;
+    assertSame( t5, treepathTo5.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo4 = TreepathTools.getPreviousInPostorder( treepathTo5 ) ;
+    assertSame( t4, treepathTo4.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo3 = TreepathTools.getPreviousInPostorder( treepathTo4 ) ;
+    assertSame( t3, treepathTo3.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo2 = TreepathTools.getPreviousInPostorder( treepathTo3 ) ;
+    assertSame( t2, treepathTo2.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo1 = TreepathTools.getPreviousInPostorder( treepathTo2 ) ;
+    assertSame( t1, treepathTo1.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > treepathTo0 = TreepathTools.getPreviousInPostorder( treepathTo1 ) ;
+    assertSame( t0, treepathTo0.getTreeAtEnd() ) ;
+
+    final Treepath< MyTree > nextTo0 = TreepathTools.getPreviousInPostorder( treepathTo0 ) ;
+    assertNull( nextTo0 ) ;
 
 
   }
+  
+  
   @Test
   public void nextInPreorder() {
 

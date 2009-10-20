@@ -34,6 +34,9 @@ import com.google.common.collect.ImmutableList;
  */
 public class RenderingTools {
 
+  private RenderingTools() {
+  }
+
   /**
    * Produces a text-only version of some {@code SyntacticTree}.
    */
@@ -92,7 +95,7 @@ public class RenderingTools {
     private final SyntacticTree tree ;
     private final Charset charset ;
 
-    public RenderableTree( SyntacticTree tree, Charset charset ) {
+    public RenderableTree( final SyntacticTree tree, final Charset charset ) {
       this.tree = tree ;
       this.charset = charset ;
     }

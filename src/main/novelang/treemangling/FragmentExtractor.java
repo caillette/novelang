@@ -1,20 +1,21 @@
 package novelang.treemangling;
 
-import java.util.EnumSet;
 import java.util.List;
 
 import novelang.common.SyntacticTree;
-import novelang.common.TagBehavior;
 import novelang.common.SimpleTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.marker.FragmentIdentifier;
 import novelang.parser.NodeKind;
+import novelang.treemangling.designator.DesignatorTools;
 
 import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
 
 /**
+ * @deprecated Use {@link DesignatorInterpreter}.
+ *
  * @author Laurent Caillette
  */
 public class FragmentExtractor {
@@ -32,30 +33,14 @@ public class FragmentExtractor {
   }
 
 
-  /*package*/ static final EnumSet< NodeKind > IDENTIFIER_BEARING_NODEKINDS;
-  static {
-    final EnumSet< TagBehavior > BEHAVIORS =
-        EnumSet.complementOf( EnumSet.of( TagBehavior.NON_TRAVERSABLE ) ) ;
-    final List< NodeKind > nodeKinds = Lists.newArrayList() ;
-    for( final NodeKind nodeKind : NodeKind.values() ) {
-      if( BEHAVIORS.contains( nodeKind.getTagBehavior() ) ) {
-        nodeKinds.add( nodeKind ) ;
-      }
-    }
-    IDENTIFIER_BEARING_NODEKINDS = EnumSet.copyOf( nodeKinds ) ;
-  }
-
-  /*package*/ static final NodeKind[] IDENTIFIER_BEARING_NODEKINDS_ARRAY =
-      IDENTIFIER_BEARING_NODEKINDS.toArray( new NodeKind[ IDENTIFIER_BEARING_NODEKINDS.size() ] ) ;
-
   private static Treepath< SyntacticTree > find(
       final FragmentIdentifier identifierLookedFor,
       final Treepath< SyntacticTree > treepath,
       final FragmentIdentifier parentIdentifier
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
-    if( tree.isOneOf( IDENTIFIER_BEARING_NODEKINDS_ARRAY ) ) {
-      final Treepath< SyntacticTree > pathToIdentifier = findPathToIdentifier( treepath ) ;
+    if( tree.isOneOf( DesignatorTools.IDENTIFIER_BEARING_NODEKINDS_ARRAY ) ) {
+      final Treepath< SyntacticTree > pathToIdentifier = DesignatorTools.findPathToExplicitIdentifier( treepath ) ;
       final FragmentIdentifier currentIdentifier ;
       if( pathToIdentifier == null ) {
         currentIdentifier = parentIdentifier ;
@@ -108,6 +93,8 @@ public class FragmentExtractor {
 
   /**
    * Extracts an identifier if there is one as a direct child.
+   *
+   * @see novelang.treemangling.designator.SegmentExtractor that almost replaces the feature.
    */
   /*package*/ static FragmentIdentifier extract(
       final FragmentIdentifier parentIdentifier,
@@ -130,24 +117,7 @@ public class FragmentExtractor {
     return null ;
   }
 
-  /**
-   * Extracts an identifier if there is one as immediate child.
-   */
-  /*package*/ static Treepath< SyntacticTree > findPathToIdentifier(
-      final Treepath< SyntacticTree > parentOfIdentifier
-  ) {
-    final SyntacticTree parentTree = parentOfIdentifier.getTreeAtEnd() ;
-    for( int i = 0 ; i < parentTree.getChildCount() ; i ++ ) {
-      final SyntacticTree child = parentTree.getChildAt( i ) ;
-      if( child.isOneOf( NodeKind.ABSOLUTE_IDENTIFIER, NodeKind.RELATIVE_IDENTIFIER ) ) {
-        return Treepath.create( parentOfIdentifier, i ) ;
-      }
-    }
-    return null ;
-  }
-
-
-  private static String extractSegment( final SyntacticTree identifierTree ) {
+    private static String extractSegment( final SyntacticTree identifierTree ) {
     return identifierTree.getChildAt( 0 ).getText() ;
   }
 

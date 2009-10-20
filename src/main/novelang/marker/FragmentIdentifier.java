@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
+import java.util.Collections;
 
 
 /**
@@ -99,8 +100,46 @@ public class FragmentIdentifier {
     return segments.get( index ) ;
   }
 
-  
+  /**
+   * Returns true if first segments of another identifier are the same as for {@code this}.
+   */
+  public boolean isParentOf( final FragmentIdentifier other ) {
+    if( other.getSegmentCount() < getSegmentCount() ) {
+      return false ;
+    } else {
+      for( int i = 0 ; i < getSegmentCount() ; i ++ ) {
+        if( ! getSegmentAt( i ).equals( other.getSegmentAt( i ) ) ) {
+          return false ;
+        }
+      }
+    }
+    return true ;
+  }
 
+  /**
+   * Returns a new {@code FragmentIdentifier} instance with the same segments minus the last
+   * one.
+   * 
+   * @return a possibly null object.
+   */
+  public FragmentIdentifier getParent() {
+    if( getSegmentCount() > 1 ) {
+      final List< String > segmentsOfParent = Lists.newArrayList() ;
+      for( int i = 0 ; i < getSegmentCount() - 1 ; i ++ ) {
+        segmentsOfParent.add( getSegmentAt( i ) ) ;
+      }
+      return new FragmentIdentifier( null, segmentsOfParent ) ;
+    } else {
+      return null ;
+    }
+  }
+
+  
+  public String getAbsoluteRepresentation() {
+    return "\\" + stringRepresentation ;
+  }
+
+  
   @Override
   public int hashCode() {
     return stringRepresentation.hashCode() ;

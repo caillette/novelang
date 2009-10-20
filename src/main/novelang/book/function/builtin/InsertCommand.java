@@ -18,7 +18,7 @@ import novelang.part.Part;
 import novelang.marker.FragmentIdentifier;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-import novelang.treemangling.FragmentExtractor;
+import novelang.treemangling.DesignatorInterpreter;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
@@ -127,7 +127,7 @@ public class InsertCommand extends AbstractCommand {
     try {
       book = findLastLevel( book, levelAbove ) ;
     } catch ( CommandParameterException e ) {
-      return environment.addProblems( Lists.newArrayList( Problem.createProblem( e ) ) ) ;
+      return environment.addProblem( Problem.createProblem( e ) ) ;
     }
 
     final List< SyntacticTree > partTrees = Lists.newArrayList() ;
@@ -138,16 +138,27 @@ public class InsertCommand extends AbstractCommand {
 
     if( partTree != null ) {
       if( hasIdentifiers ) {
+        final DesignatorInterpreter designatorMapper = 
+            new DesignatorInterpreter( Treepath.create( partTree ) ) ;
+        final List< Problem > designatorProblems = Lists.newArrayList() ;
         for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
           final Treepath< SyntacticTree > fragmentTreepath =
-              FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
+              designatorMapper.get( fragmentIdentifier ) ;
+//              FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
           if( fragmentTreepath == null ) {
-            return environment.addProblem(
-                Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
+            designatorProblems.add( 
+                Problem.createProblem( 
+                    "Cannot find: '" + fragmentIdentifier + "'", getLocation() ) ) ;
+//            return environment.addProblem(
+//                Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
           } else {
             final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
             partTrees.add( fragment ) ;
           }
+        }
+        Iterables.addAll( designatorProblems, designatorMapper.getProblems() ) ;
+        if( designatorProblems.iterator().hasNext() ) {
+          return environment.addProblems( designatorProblems ) ;
         }
       } else {
         Iterables.addAll( partTrees, partTree.getChildren() ) ;

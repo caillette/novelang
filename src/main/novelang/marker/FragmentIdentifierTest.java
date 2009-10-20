@@ -2,8 +2,9 @@ package novelang.marker;
 
 import novelang.marker.FragmentIdentifier;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.junit.Assert;
+import static org.junit.Assert.*;
 import com.google.common.collect.Lists;
 
 /**
@@ -67,6 +68,7 @@ public class FragmentIdentifierTest {
     assertEquals( 1, fragmentIdentifier.getSegmentCount() ) ;
     assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
     assertEquals( "FragmentIdentifier[\\0]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0" ), fragmentIdentifier ) ;
   }
   
@@ -78,6 +80,7 @@ public class FragmentIdentifierTest {
     assertEquals( "0", fragmentIdentifier.getSegmentAt( 0 ) ) ;
     assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0\\1", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0", "1" ), fragmentIdentifier ) ;
   }
   
@@ -90,6 +93,7 @@ public class FragmentIdentifierTest {
     assertEquals( "1", fragmentIdentifier.getSegmentAt( 1 ) ) ;
     assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1\\2]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0\\1\\2", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2" ), fragmentIdentifier ) ;
   }
   
@@ -106,6 +110,7 @@ public class FragmentIdentifierTest {
     assertEquals( "2", fragmentIdentifier.getSegmentAt( 2 ) ) ;
     assertEquals( "3", fragmentIdentifier.getSegmentAt( 3 ) ) ;
     assertEquals( "FragmentIdentifier[\\0\\1\\2\\3]", fragmentIdentifier.toString() ) ;
+    assertEquals( "\\\\0\\1\\2\\3", fragmentIdentifier.getAbsoluteRepresentation() ) ;
     assertEquals( new FragmentIdentifier( "0", "1", "2", "3" ), fragmentIdentifier ) ;
   }
 
@@ -135,6 +140,37 @@ public class FragmentIdentifierTest {
     assertEquals( new FragmentIdentifier( "0", "1", "2", "3" ), fragmentIdentifier ) ;
   }
   
+  @Test
+  public void isParent() {
+    final FragmentIdentifier fragment0 = new FragmentIdentifier( "0" ) ;
+    final FragmentIdentifier fragment01 = new FragmentIdentifier( "0", "1" ) ;
+    final FragmentIdentifier fragment012 = new FragmentIdentifier( "0", "1", "2" ) ;
+    
+    assertTrue( fragment0.isParentOf( fragment0 ) ) ;
+    assertTrue( fragment0.isParentOf( fragment01 ) ) ;
+    assertTrue( fragment0.isParentOf( fragment012 ) ) ;
+    
+    assertFalse( fragment01.isParentOf( fragment0 ) ) ;
+    assertTrue( fragment01.isParentOf( fragment01 ) ) ;
+    assertTrue( fragment01.isParentOf( fragment012 ) ) ;
+    
+    assertFalse( fragment012.isParentOf( fragment0 ) ) ;
+    assertFalse( fragment012.isParentOf( fragment01 ) ) ;
+    assertTrue( fragment012.isParentOf( fragment012 ) ) ;
+    
+  }
+  
+  
+  @Test
+  public void getParent() {
+    final FragmentIdentifier fragment0 = new FragmentIdentifier( "0" ) ;
+    final FragmentIdentifier fragment01 = new FragmentIdentifier( "0", "1" ) ;
+    final FragmentIdentifier fragment012 = new FragmentIdentifier( "0", "1", "2" ) ;
+    
+    assertNull( fragment0.getParent() ) ;
+    assertEquals( fragment0, fragment01.getParent() ) ;
+    assertEquals( fragment01, fragment012.getParent() ) ;    
+  }
   
   
   
