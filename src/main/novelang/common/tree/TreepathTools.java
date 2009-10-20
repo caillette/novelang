@@ -637,18 +637,29 @@ public class TreepathTools {
 // ==========================  
 
   /**
-     * Returns a {@code Treepath} corresponding to the last tree in a 
-   * {@link #getNextInPreorder(Treepath) preorder traversal}; which also initiates a
-   * {@link #getPreviousInPostorder(Treepath) reverese postorder traversal}.
+   * Returns a {@code Treepath} corresponding to the last tree in a
+   * {@link #getNextInMirrorPostorder(Treepath) postorder traversal}
+   * in the {@link Treepath#getTreeAtStart()} end} tree.
+   *
+   * @see #getNextInMirrorPostorder (Treepath)
    */
-  public static< T extends Tree > Treepath< T > getLastInPreorder( 
+  public static< T extends Tree > Treepath< T > getLastInPostorder(
       final Treepath< T > treepath 
   ) {
-    throw new UnsupportedOperationException( "getLastInPreorder" ) ;
+    Treepath< T > result = treepath ;
+    while( true ) {
+      final T tree = result.getTreeAtEnd() ;
+      final int childCount = tree.getChildCount() ;
+      if( childCount == 0 ) {
+        return result ;
+      } else {
+        result = Treepath.create( result, childCount - 1 ) ;
+      }
+    }
   }
 
   /**
-   * Returns a {@code Treepath} object to the previous tree in a
+   * Returns a {@code Treepath} object corresponding to the previous tree in a
    * <a href="http://en.wikipedia.org/wiki/Tree_traversal">postorder</a> traversal.
    * <pre>
    *  *t0            *t0            *t0            *t0
@@ -658,46 +669,29 @@ public class TreepathTools {
    * t2  *t3       *t2   t3        t2   t3       t2   *t3
    * </pre>
    *
+   * This is a valuable traversal algorithm that preserves indexes of unmodified treepaths.
+   *
    * @param treepath a non-null object.
    * @return the treepath to the next tree, or null.
    */
-  public static< T extends Tree > Treepath< T > getPreviousInPostorder( 
+  public static< T extends Tree > Treepath< T > getNextInMirrorPostorder(
       final Treepath< T > treepath 
   ) {
-    final T tree = treepath.getTreeAtEnd();
-    if( tree.getChildCount() > 0 ) {
-      return Treepath.create( treepath, 0 ) ;
-    }
-    return getPreviousUpInPostorder( treepath ) ;
-  }
-
-  private static < T extends Tree > Treepath< T > getUpPreviousInPostorder( 
-      final Treepath< T > treepath 
-  ) {
-    Treepath< T > previousTreepath = treepath.getPrevious() ;
-    while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
-      if( hasPreviousSibling( previousTreepath ) ) {
-        return getPreviousSibling( previousTreepath ) ;
+    if( treepath.getLength() > 1 ) {
+      if( hasPreviousSibling( treepath ) ) {
+        final Treepath< T > previousSibling = getPreviousSibling( treepath ) ;
+        if( previousSibling.getTreeAtEnd().getChildCount() == 0 ) {
+          return previousSibling ;
+        } else {
+          return getLastInPostorder(previousSibling) ;
+        }
       } else {
-        previousTreepath = previousTreepath.getPrevious() ;
+        return treepath.getPrevious() ;
       }
+    } else {
+      return null ;
     }
-    return null ;
+
   }
 
-  /**
-   * Navigates towards the previous sibling or the next sibling of a parent tree.
-   * @param treepath a non-null object.
-   * @return the previous tree, or null if there is no other tree to navigate to.
-   */
-  public static < T extends Tree > Treepath< T > getPreviousUpInPostorder( 
-      final Treepath< T > treepath 
-  ) {
-    if( hasPreviousSibling( treepath ) ) {
-      return getPreviousSibling( treepath ) ;
-    } else {
-      return getUpPreviousInPostorder( treepath ) ;
-    }
-  }
-  
 }
