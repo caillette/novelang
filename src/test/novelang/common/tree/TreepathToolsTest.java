@@ -292,25 +292,28 @@ public class TreepathToolsTest {
 
     final Treepath< MyTree > treepathTo6 = Treepath.create( t0, 0, 1, 0 ) ;
 
-    final Treepath< MyTree > treepathTo5 = TreepathTools.getNextInMirrorPostorder( treepathTo6 ) ;
+    final Traversal.MirroredPostorder< MyTree > mirroredPostorder =
+        Traversal.MirroredPostorder.create() ;
+
+    final Treepath< MyTree > treepathTo5 = mirroredPostorder.getNext( treepathTo6 ) ;
     assertSame( t5, treepathTo5.getTreeAtEnd() ) ;
 
-    final Treepath< MyTree > treepathTo4 = TreepathTools.getNextInMirrorPostorder( treepathTo5 ) ;
+    final Treepath< MyTree > treepathTo4 = mirroredPostorder.getNext( treepathTo5 ) ;
     assertSame( t4, treepathTo4.getTreeAtEnd() ) ;
 
-    final Treepath< MyTree > treepathTo3 = TreepathTools.getNextInMirrorPostorder( treepathTo4 ) ;
+    final Treepath< MyTree > treepathTo3 = mirroredPostorder.getNext( treepathTo4 ) ;
     assertSame( t3, treepathTo3.getTreeAtEnd() ) ;
 
-    final Treepath< MyTree > treepathTo2 = TreepathTools.getNextInMirrorPostorder( treepathTo3 ) ;
+    final Treepath< MyTree > treepathTo2 = mirroredPostorder.getNext( treepathTo3 ) ;
     assertSame( t2, treepathTo2.getTreeAtEnd() ) ;
 
-    final Treepath< MyTree > treepathTo1 = TreepathTools.getNextInMirrorPostorder( treepathTo2 ) ;
+    final Treepath< MyTree > treepathTo1 = mirroredPostorder.getNext( treepathTo2 ) ;
     assertSame( t1, treepathTo1.getTreeAtEnd() ) ;
 
-    final Treepath< MyTree > treepathTo0 = TreepathTools.getNextInMirrorPostorder( treepathTo1 ) ;
+    final Treepath< MyTree > treepathTo0 = mirroredPostorder.getNext( treepathTo1 ) ;
     assertSame( t0, treepathTo0.getTreeAtEnd() ) ;
 
-    final Treepath< MyTree > nextTo0 = TreepathTools.getNextInMirrorPostorder( treepathTo0 ) ;
+    final Treepath< MyTree > nextTo0 = mirroredPostorder.getNext( treepathTo0 ) ;
     assertNull( nextTo0 ) ;
 
   }
@@ -327,19 +330,23 @@ public class TreepathToolsTest {
     final MyTree t0 = MyTree.create( "0", t1 ) ;       // t3  t4  t6
 
     final Treepath< MyTree > treepathTo0 = Treepath.create( t0 ) ;
-    final Treepath< MyTree > last6 = TreepathTools.getLastInPostorder( treepathTo0 ) ;
+
+    final Traversal.MirroredPostorder< MyTree > mirroredPostorder =
+        Traversal.MirroredPostorder.create() ;
+
+    final Treepath< MyTree > last6 = mirroredPostorder.getFirst( treepathTo0 ) ;
     assertSame( t6, last6.getTreeAtEnd() ) ;
 
     final Treepath< MyTree > treepathFrom5To5 = Treepath.create( t5 ) ;
-    final Treepath< MyTree > lastFrom5To5 = TreepathTools.getLastInPostorder( treepathFrom5To5 ) ;
+    final Treepath< MyTree > lastFrom5To5 = mirroredPostorder.getFirst( treepathFrom5To5 ) ;
     assertSame( t6, lastFrom5To5.getTreeAtEnd() ) ;
 
     final Treepath< MyTree > treepathFrom6To6 = Treepath.create( t6 ) ;
-    final Treepath< MyTree > lastFrom6To6 = TreepathTools.getLastInPostorder( treepathFrom6To6 ) ;
+    final Treepath< MyTree > lastFrom6To6 = mirroredPostorder.getFirst( treepathFrom6To6 ) ;
     assertSame( t6, lastFrom6To6.getTreeAtEnd() ) ;
 
     final Treepath< MyTree > treepathFrom0To2 = Treepath.create( t0, 0, 0 ) ;
-    final Treepath< MyTree > lastFrom0To2 = TreepathTools.getLastInPostorder( treepathFrom0To2 ) ;
+    final Treepath< MyTree > lastFrom0To2 = mirroredPostorder.getFirst( treepathFrom0To2 ) ;
     assertSame( t4, lastFrom0To2.getTreeAtEnd() ) ;
 
 

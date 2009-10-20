@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -632,66 +634,9 @@ public class TreepathTools {
   }
   
   
-// ==========================  
-// Reverse preorder traversal
-// ==========================  
+// ===================
+// Postorder traversal
+// ===================  
 
-  /**
-   * Returns a {@code Treepath} corresponding to the last tree in a
-   * {@link #getNextInMirrorPostorder(Treepath) postorder traversal}
-   * in the {@link Treepath#getTreeAtStart()} end} tree.
-   *
-   * @see #getNextInMirrorPostorder (Treepath)
-   */
-  public static< T extends Tree > Treepath< T > getLastInPostorder(
-      final Treepath< T > treepath 
-  ) {
-    Treepath< T > result = treepath ;
-    while( true ) {
-      final T tree = result.getTreeAtEnd() ;
-      final int childCount = tree.getChildCount() ;
-      if( childCount == 0 ) {
-        return result ;
-      } else {
-        result = Treepath.create( result, childCount - 1 ) ;
-      }
-    }
-  }
-
-  /**
-   * Returns a {@code Treepath} object corresponding to the previous tree in a
-   * <a href="http://en.wikipedia.org/wiki/Tree_traversal">postorder</a> traversal.
-   * <pre>
-   *  *t0            *t0            *t0            *t0
-   *   |      next    |      next    |     next     |      next
-   *  *t1     -->    *t1     -->    *t1     -->     t1     -->    null
-   *  /  \           /  \           /  \           /  \           
-   * t2  *t3       *t2   t3        t2   t3       t2   *t3
-   * </pre>
-   *
-   * This is a valuable traversal algorithm that preserves indexes of unmodified treepaths.
-   *
-   * @param treepath a non-null object.
-   * @return the treepath to the next tree, or null.
-   */
-  public static< T extends Tree > Treepath< T > getNextInMirrorPostorder(
-      final Treepath< T > treepath 
-  ) {
-    if( treepath.getLength() > 1 ) {
-      if( hasPreviousSibling( treepath ) ) {
-        final Treepath< T > previousSibling = getPreviousSibling( treepath ) ;
-        if( previousSibling.getTreeAtEnd().getChildCount() == 0 ) {
-          return previousSibling ;
-        } else {
-          return getLastInPostorder(previousSibling) ;
-        }
-      } else {
-        return treepath.getPrevious() ;
-      }
-    } else {
-      return null ;
-    }
-
-  }
 
 }

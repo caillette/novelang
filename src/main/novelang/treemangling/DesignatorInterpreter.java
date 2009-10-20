@@ -17,9 +17,11 @@
 
 package novelang.treemangling;
 
+import com.google.common.base.Predicate;
 import novelang.common.Problem;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.marker.FragmentIdentifier;
@@ -44,8 +46,9 @@ import java.util.Map;
  * in several passes. 
  * <ol>
  *   <li>
- *     The {@link novelang.treemangling.designator.BabyInterpreter} (used internally) gathers references on the nodes containing 
- *     identifiers, resolving implicit references and finding problems.
+ *     The {@link novelang.treemangling.designator.BabyInterpreter} (used internally) gathers
+ *     references on the nodes containing identifiers, resolving implicit references and
+ *     finding problems.
  *   </li>
  *   <li>
  *     The {@link #enrich(Treepath, FragmentMapper)} method (used internally) enhances the 
@@ -59,7 +62,8 @@ import java.util.Map;
  *     nodes which don't improve readabilit.
  *   </li>
  *   <li>
- *     Identifiers from {@link novelang.treemangling.designator.BabyInterpreter} are re-mapped on the new {@code Treepath}. 
+ *     Identifiers from {@link novelang.treemangling.designator.BabyInterpreter} are re-mapped
+ *     on the new {@code Treepath}.
  *   </li>
  * </ol> 
  * 
@@ -82,9 +86,29 @@ public class DesignatorInterpreter {
 
   private final Iterable< Problem > problems  ;
 
+  private static final Predicate< SyntacticTree > IDENTIFIER_TREE_FILTER =
+      new Predicate< SyntacticTree >() {
+        public boolean apply( final SyntacticTree tree ) {
+          return tree.isOneOf( DesignatorTools.IDENTIFIER_BEARING_NODEKINDS ) ;
+        }
+      }
+  ;
+
+  /**
+   * Made package-protected for tests.
+   */
+  /*package*/ static final Traversal.MirroredPostorder< SyntacticTree > MIRRORED_POSTORDER =
+      Traversal.MirroredPostorder.create( IDENTIFIER_TREE_FILTER )
+  ;
+
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
     final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
-    final Treepath< SyntacticTree > enrichedTreepath = enrich( treepath, babyInterpreter ) ;
+    final Treepath< SyntacticTree > first =
+        MIRRORED_POSTORDER.getFirst( treepath.getStart() ) ;
+    final Treepath< SyntacticTree > enrichedTreepath = enrich(
+        first,
+        babyInterpreter
+    ) ;
 
     pureIdentifiers = remap( babyInterpreter.getPureIdentifierMap(), enrichedTreepath ) ;
     derivedIdentifiers = remap( babyInterpreter.getDerivedIdentifierMap(), enrichedTreepath ) ;
@@ -149,8 +173,8 @@ public class DesignatorInterpreter {
       final FragmentMapper< int[] > mapper
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
-    if( tree.isOneOf( DesignatorTools.IDENTIFIER_BEARING_NODEKINDS ) ) {
-      treepath = removeChildren( 
+//    if( IDENTIFIER_TREE_FILTER.apply( tree ) ) {
+      treepath = removeChildren(
           treepath, 
           NodeKind.ABSOLUTE_IDENTIFIER, 
           NodeKind.RELATIVE_IDENTIFIER 
@@ -165,15 +189,20 @@ public class DesignatorInterpreter {
       if( derivedIdentifier != null ) {
         treepath = add( treepath, derivedIdentifier, NodeKind._IMPLICIT_IDENTIFIER ) ;
       }
-                
-      for( int i = 0 ; i < tree.getChildCount() ; i ++ ) {
-        treepath = enrich( Treepath.create( treepath, i ), mapper ).getPrevious() ;
+
+      final Treepath< SyntacticTree > next = MIRRORED_POSTORDER.getNext( treepath ) ;
+
+      if( next != null ) {
+        treepath = enrich(
+            next,
+            mapper
+        ) ; //.getPrevious() ;
       }
-    }    
+//    }
     return treepath ;
   }
 
-  public static Treepath< SyntacticTree > removeChildren( 
+  private static Treepath< SyntacticTree > removeChildren(
       final Treepath< SyntacticTree > treepath, 
       final NodeKind... nodeKindsToRemove
   ) {
@@ -187,7 +216,7 @@ public class DesignatorInterpreter {
     return treepath ;    
   }
 
-  public static Treepath< SyntacticTree > add( 
+  private static Treepath< SyntacticTree > add( 
       final Treepath< SyntacticTree > treepath, 
       final FragmentIdentifier fragmentIdentifier, 
       final NodeKind explicitIdentifier 
@@ -199,7 +228,7 @@ public class DesignatorInterpreter {
     return TreepathTools.addChildFirst( treepath, identifierTree ).getPrevious() ;
   }
 
-  public static FragmentIdentifier findIdentifier( 
+  private static FragmentIdentifier findIdentifier( 
       final Treepath< SyntacticTree > treepath, 
       Map< FragmentIdentifier, int[] > map 
   ) {
