@@ -1,0 +1,49 @@
+
+== Internal References
+
+An //Internal Reference// is a reference from one place in a document, to another one. It differs from URL because URLs are somewhat opaque to Novelang. Novelang has no idea about what's in a URL; but Novelang checks the consistency of an Internal Reference.
+
+There has been some "posts" 
+http://novelang.blogspot.com/search?q=identifier
+about Internal References on this blog but things have changed since and it's time to think back about the whole. Novelang implements Identifiers since version `0.35.0`. //Explicit Identifiers// are declared "by hand". Explicit Identifiers can be absolute and relative ones (prefixed by ``\\`` and ``\`` respectively).
+
+By now (`0.35.0`) their declaration is restricted to levels and look more or less like this:
+
+<<<
+  \\top
+== Section 1
+
+  \subsection
+=== Section 1-1
+
+...
+>>>
+
+The ``insert`` command pulls only the corresponding subset of a given Part:
+
+<<<
+insert file:some-part.nlp \\top\subsection
+>>>
+
+//Implicit Identifiers// are under development. Implicit Identifiers rely on the leve title itself, and an optional overhanging Absolute Identifier. Only unique Implicit Identifiers are recognized. Considering this snippet appended to the source example above:
+
+<<<
+=== Section 1-2
+>>>
+
+This declaration creates two Implicit Identifiers ``\\Section_1-2`` and ``\\top\Section_1-2``. Since the first form may not be unique in the whole Part, the second form appears if there is some Absolute Identifier in an overhanging level. An Implicit Identifier always resolves as absolute.
+
+While Identifiers are good for including only a subset of a given Part, they provide a foundation for even more impressive features :
+- Reusing a document fragment (like an image).
+- Define hyperlinks in the generated document, along with a description (like "`section four` `p. 138`").
+
+Identifiers are exactly like defining a graph by adding references throughout the document tree. The Part comes with its "referenceable nodes" which are just human-friendly names. Parts are easy -- yes they are the easy part -- but linking raises many more issues. 
+
+
+As they come:
+- Internal Links, from within the same Part.
+- Internal Links, from one Part to the other (with both Parts aggregated in the same document).
+- Cross-booklet Links, for Books spreading over several HTML documents.
+
+There are also more exotic cases with pieces of Parts linking together (because they were partially added using Tags), or the same Part (or subbpart) appearing more than once.
+
