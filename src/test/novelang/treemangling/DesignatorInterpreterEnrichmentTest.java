@@ -1,29 +1,25 @@
 package novelang.treemangling;
 
-import novelang.common.SyntacticTree;
-import novelang.common.tree.Treepath;
-import novelang.marker.FragmentIdentifier;
-import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-import novelang.treemangling.DesignatorInterpreter;
-import novelang.treemangling.EmbeddedListMangler;
-
-import com.google.common.collect.ImmutableMap;
-import novelang.treemangling.designator.FragmentMapper;
+import java.util.Arrays;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
+import novelang.marker.FragmentIdentifier;
+import static novelang.parser.NodeKind.*;
+import novelang.parser.antlr.TreeFixture;
+import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import novelang.treemangling.designator.FragmentMapper;
 
 /**
  * Tests for
- * {@link novelang.treemangling.DesignatorInterpreter#enrich(Treepath, novelang.treemangling.designator.FragmentMapper)}
+ * {@link DesignatorInterpreter#enrich(Treepath, FragmentMapper)}
  * which modifies identifier stuff in a {@code Treepath}. 
  *
  * @author Laurent Caillette
@@ -33,8 +29,8 @@ public class DesignatorInterpreterEnrichmentTest {
   @Test
   public void enrichNothing() {
     verifyEnrich(
-        tree( NodeKind.PART ),
-        tree( NodeKind.PART ),
+        tree( PART ),
+        tree( PART ),
         new FragmentMapperBuilder().build()
     ) ;
   }
@@ -43,21 +39,20 @@ public class DesignatorInterpreterEnrichmentTest {
   @Test
   public void enrichWithSimpleAbsoluteIdentifier() {
     final SyntacticTree levelTree = tree(
-        NodeKind._LEVEL,
+        _LEVEL,
         tree( ABSOLUTE_IDENTIFIER, tree( "L0" ) )
     ) ;
 
-    final SyntacticTree partTree = tree( NodeKind.PART, levelTree ) ;
+    final SyntacticTree partTree = tree( PART, levelTree ) ;
 
     final Treepath< SyntacticTree > levelTreepath = Treepath.create( partTree, 0 ) ;
 
     verifyEnrich(
         tree(
-            NodeKind.PART,
+            PART,
             tree(
-                NodeKind._LEVEL,
-//                tree( NodeKind._IMPLICIT_IDENTIFIER, "\\\\L0" ),
-                tree( NodeKind._EXPLICIT_IDENTIFIER, "\\\\L0" )
+                _LEVEL,
+                tree( _EXPLICIT_IDENTIFIER, "\\\\L0" )
             )                
         ),
         partTree,
@@ -68,27 +63,61 @@ public class DesignatorInterpreterEnrichmentTest {
   }
 
   @Test
+  public void enrichTwoTimeToCheckResistanceToIndexShift() {
+    final SyntacticTree levelTree0 = tree(
+        _LEVEL,
+        tree( ABSOLUTE_IDENTIFIER, tree( "L0" ) )
+    ) ;
+
+    final SyntacticTree levelTree1 = tree(
+        _LEVEL,
+        tree( ABSOLUTE_IDENTIFIER, tree( "L1" ) )
+    ) ;
+
+    final SyntacticTree partTree = tree( PART, levelTree0, levelTree1 ) ;
+
+    final Treepath< SyntacticTree > levelTreepath0 = Treepath.create( partTree, 0 ) ;
+    final Treepath< SyntacticTree > levelTreepath1 = Treepath.create( partTree, 1 ) ;
+
+    verifyEnrich(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( _EXPLICIT_IDENTIFIER, "\\\\L0" ),
+                tree( _EXPLICIT_IDENTIFIER, "\\\\L1" )
+            )
+        ),
+        partTree,
+        new FragmentMapperBuilder().
+            addPure( new FragmentIdentifier( "L0" ), levelTreepath0.getIndicesInParent() ).
+            addPure( new FragmentIdentifier( "L1" ), levelTreepath1.getIndicesInParent() ).
+            build()
+    ) ;
+  }
+
+  @Test
   public void enrichWithSimpleImplicitIdentifier() {
     
     final SyntacticTree levelTree = tree(
-        NodeKind._LEVEL
+        _LEVEL
     ) ;
 
-    final SyntacticTree partTree = tree( NodeKind.PART, levelTree ) ;
+    final SyntacticTree partTree = tree( PART, levelTree ) ;
 
     final Treepath< SyntacticTree > levelTreepath = Treepath.create( partTree, 0 ) ;
 
-    final FragmentMapper<int[]> mapper = new FragmentMapperBuilder().
+    final FragmentMapper< int[] > mapper = new FragmentMapperBuilder().
         addDerived( new FragmentIdentifier( "L0" ), levelTreepath.getIndicesInParent() ).
         build()
     ;
     
     verifyEnrich(
         tree(
-            NodeKind.PART,
+            PART,
             tree(
-                NodeKind._LEVEL,
-                tree( NodeKind._IMPLICIT_IDENTIFIER, "\\\\L0" )
+                _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, "\\\\L0" )
             )                
         ),
         partTree,

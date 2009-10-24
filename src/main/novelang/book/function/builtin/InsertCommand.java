@@ -53,7 +53,7 @@ public class InsertCommand extends AbstractCommand {
       final boolean createLevel,
       final int levelAbove,
       final String styleName,
-      final Iterable<FragmentIdentifier> fragmentIdentifiers
+      final Iterable< FragmentIdentifier > fragmentIdentifiers
   ) {
     super( location ) ;
     this.fileName = fileUrl.substring( "file:".length() ) ; 
