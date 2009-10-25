@@ -18,12 +18,10 @@ package novelang.book.function.builtin;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.nio.charset.Charset;
 
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -401,7 +399,7 @@ public class InsertCommandTest {
   @Test
   public void useSimpleFragmentIdentifier() throws MalformedURLException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_IDENTIFIERS ) ;
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS ) ;
     LOG.info( 
         "Loaded Part \n%s", 
         new Part( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).

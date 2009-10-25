@@ -84,7 +84,10 @@ public class DesignatorInterpreterEnrichmentTest {
             PART,
             tree(
                 _LEVEL,
-                tree( _EXPLICIT_IDENTIFIER, "\\\\L0" ),
+                tree( _EXPLICIT_IDENTIFIER, "\\\\L0" )
+            ),
+            tree(
+                _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, "\\\\L1" )
             )
         ),

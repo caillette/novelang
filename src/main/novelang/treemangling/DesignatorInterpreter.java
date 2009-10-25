@@ -172,13 +172,11 @@ public class DesignatorInterpreter {
       Treepath< SyntacticTree > treepath,
       final FragmentMapper< int[] > mapper
   ) {
-    final SyntacticTree tree = treepath.getTreeAtEnd() ;
-//    if( IDENTIFIER_TREE_FILTER.apply( tree ) ) {
       treepath = removeChildren(
           treepath, 
           NodeKind.ABSOLUTE_IDENTIFIER, 
           NodeKind.RELATIVE_IDENTIFIER 
-      ) ;
+      ).getStart() ;
       final FragmentIdentifier pureIdentifier = 
           findIdentifier( treepath, mapper.getPureIdentifierMap() ) ;
       if( pureIdentifier != null ) {
@@ -196,9 +194,8 @@ public class DesignatorInterpreter {
         treepath = enrich(
             next,
             mapper
-        ) ; //.getPrevious() ;
+        ) ; 
       }
-//    }
     return treepath ;
   }
 

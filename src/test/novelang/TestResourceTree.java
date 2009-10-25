@@ -152,7 +152,8 @@ public final class TestResourceTree {
 
     Resource PART_BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
     Resource PART_JUST_SECTIONS = resource( "just-sections.nlp" ) ;
-    Resource PART_IDENTIFIERS = resource( "identifiers.nlp" ) ;
+    Resource PART_MANY_IDENTIFIERS = resource( "many-identifiers.nlp" ) ;
+    Resource PART_SOME_IDENTIFIERS = resource( "some-identifiers.nlp" ) ;
     Resource PART_MISSING_IMAGES = resource( "missing-images.nlp" ) ;
     Resource PART_NO_CHAPTER = resource( "no-chapter.nlp" ) ;
     Resource PART_ONE_WORD = resource( "one-word.nlp" ) ;
