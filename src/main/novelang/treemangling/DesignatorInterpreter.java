@@ -46,7 +46,7 @@ import java.util.Map;
  * in several passes. 
  * <ol>
  *   <li>
- *     The {@link novelang.treemangling.designator.BabyInterpreter} (used internally) gathers
+ *     The {@link BabyInterpreter} (used internally) gathers
  *     references on the nodes containing identifiers, resolving implicit references and
  *     finding problems.
  *   </li>
@@ -62,7 +62,7 @@ import java.util.Map;
  *     nodes which don't improve readabilit.
  *   </li>
  *   <li>
- *     Identifiers from {@link novelang.treemangling.designator.BabyInterpreter} are re-mapped
+ *     Identifiers from {@link BabyInterpreter} are re-mapped
  *     on the new {@code Treepath}.
  *   </li>
  * </ol> 
@@ -114,13 +114,14 @@ public class DesignatorInterpreter {
     derivedIdentifiers = remap( babyInterpreter.getDerivedIdentifierMap(), enrichedTreepath ) ;
     problems = babyInterpreter.getProblems() ;
 
-    final StringBuilder stringBuilder = new StringBuilder() ;
-    stringBuilder.append( "\n  Pure identifiers:" ) ;
-    DesignatorTools.dumpIdentifierMap( stringBuilder, pureIdentifiers, "\n    " ) ;
-    stringBuilder.append( "\n  Derived identifiers:" ) ;
-    DesignatorTools.dumpIdentifierMap( stringBuilder, derivedIdentifiers, "\n    " ) ;
-    
-    LOG.debug( "Created %s%s", this, stringBuilder ) ;
+    if ( LOG.isDebugEnabled() ) {
+      final StringBuilder stringBuilder = new StringBuilder() ;
+      stringBuilder.append( "\n  Pure identifiers:" ) ;
+      DesignatorTools.dumpIdentifierMap( stringBuilder, pureIdentifiers, "\n    " ) ;
+      stringBuilder.append( "\n  Derived identifiers:" ) ;
+      DesignatorTools.dumpIdentifierMap( stringBuilder, derivedIdentifiers, "\n    " ) ;
+      LOG.debug( "Created %s%s", this, stringBuilder ) ;
+    }
 
   }
   
@@ -167,16 +168,20 @@ public class DesignatorInterpreter {
 
   /**
    * Made protected for tests only.
+   * Transform a whole tree adding new "synthetic" identifiers that were calculated by 
+   * {@link BabyInterpreter} and removing original ones. 
+   * The tree transformation uses mirrored postorder traversal. This kind of traversal guarantees
+   * that addind/removing trees doesn't affect indexes of unprocessed trees.
+   * 
+   * @param treepath The 
+   *         {@link Traversal.MirroredPostorder#getFirst(Treepath) first} tree in a mirrored postorder 
+   *         traversal.
    */
   protected static Treepath< SyntacticTree > enrich(
       Treepath< SyntacticTree > treepath,
       final FragmentMapper< int[] > mapper
   ) {
-      treepath = removeChildren(
-          treepath, 
-          NodeKind.ABSOLUTE_IDENTIFIER, 
-          NodeKind.RELATIVE_IDENTIFIER 
-      ).getStart() ;
+    while ( true ) {
       final FragmentIdentifier pureIdentifier = 
           findIdentifier( treepath, mapper.getPureIdentifierMap() ) ;
       if( pureIdentifier != null ) {
@@ -187,19 +192,23 @@ public class DesignatorInterpreter {
       if( derivedIdentifier != null ) {
         treepath = add( treepath, derivedIdentifier, NodeKind._IMPLICIT_IDENTIFIER ) ;
       }
+      treepath = removeDirectChildren(
+          treepath,
+          NodeKind.ABSOLUTE_IDENTIFIER,
+          NodeKind.RELATIVE_IDENTIFIER
+      ) ;
 
       final Treepath< SyntacticTree > next = MIRRORED_POSTORDER.getNext( treepath ) ;
 
-      if( next != null ) {
-        treepath = enrich(
-            next,
-            mapper
-        ) ; 
+      if( next == null ) {
+        return treepath ;
+      } else {
+        treepath = next ; 
       }
-    return treepath ;
+    }
   }
 
-  private static Treepath< SyntacticTree > removeChildren(
+  private static Treepath< SyntacticTree > removeDirectChildren(
       final Treepath< SyntacticTree > treepath, 
       final NodeKind... nodeKindsToRemove
   ) {

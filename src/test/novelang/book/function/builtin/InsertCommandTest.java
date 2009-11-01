@@ -420,7 +420,9 @@ public class InsertCommandTest {
     final SyntacticTree initialTree = tree( BOOK ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
+        update( initialTree ) 
+    ) ;
 
 
     assertEqualsNoSeparators(

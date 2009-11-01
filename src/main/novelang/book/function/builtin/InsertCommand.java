@@ -144,13 +144,10 @@ public class InsertCommand extends AbstractCommand {
         for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
           final Treepath< SyntacticTree > fragmentTreepath =
               designatorMapper.get( fragmentIdentifier ) ;
-//              FragmentExtractor.extractFragment( Treepath.create( partTree ), fragmentIdentifier ) ;
           if( fragmentTreepath == null ) {
             designatorProblems.add( 
                 Problem.createProblem( 
                     "Cannot find: '" + fragmentIdentifier + "'", getLocation() ) ) ;
-//            return environment.addProblem(
-//                Problem.createProblem( "Cannot find: '" + fragmentIdentifier + "'" ) ) ;
           } else {
             final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
             partTrees.add( fragment ) ;
