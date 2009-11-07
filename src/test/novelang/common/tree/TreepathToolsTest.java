@@ -16,12 +16,13 @@
  */
 package novelang.common.tree;
 
-import org.junit.Assert;
 import org.junit.Test;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertNull;
+
+import static org.junit.Assert.*;
 
 /**
+ * Tests for {@link TreepathTools}.
+ * 
  * @author Laurent Caillette
  */
 public class TreepathToolsTest {
@@ -43,16 +44,16 @@ public class TreepathToolsTest {
 
     final Treepath< MyTree > reparented = TreepathTools.replaceTreepathEnd( original, newGrandChild ) ;
 
-    Assert.assertEquals( 3, reparented.getLength() ) ;
+    assertEquals( 3, reparented.getLength() ) ;
 
-    Assert.assertEquals( "parent", reparented.getTreeAtDistance( 2 ).getPayload() ) ;
-    Assert.assertEquals( 2, reparented.getTreeAtDistance( 2 ).getChildCount() ) ;
+    assertEquals( "parent", reparented.getTreeAtDistance( 2 ).getPayload() ) ;
+    assertEquals( 2, reparented.getTreeAtDistance( 2 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child0", reparented.getTreeAtDistance( 1 ).getPayload() ) ;
-    Assert.assertEquals( 1, reparented.getTreeAtDistance( 1 ).getChildCount() ) ;
+    assertEquals( "child0", reparented.getTreeAtDistance( 1 ).getPayload() ) ;
+    assertEquals( 1, reparented.getTreeAtDistance( 1 ).getChildCount() ) ;
 
-    Assert.assertEquals( "newGrandChild", reparented.getTreeAtDistance( 0 ).getPayload() ) ;
-    Assert.assertEquals( 0, reparented.getTreeAtDistance( 0 ).getChildCount() ) ;
+    assertEquals( "newGrandChild", reparented.getTreeAtDistance( 0 ).getPayload() ) ;
+    assertEquals( 0, reparented.getTreeAtDistance( 0 ).getChildCount() ) ;
 
   }
 
@@ -70,14 +71,14 @@ public class TreepathToolsTest {
         child1// ^ IntelliJ IDEA 7.0.3 requires this.                  // child0  child1
     ) ;
 
-    Assert.assertEquals( "parent", treepath.getTreeAtStart().getPayload() ) ;
-    Assert.assertEquals( 2, treepath.getTreeAtStart().getChildCount() ) ;
+    assertEquals( "parent", treepath.getTreeAtStart().getPayload() ) ;
+    assertEquals( 2, treepath.getTreeAtStart().getChildCount() ) ;
 
-    Assert.assertEquals( "child0", treepath.getTreeAtStart().getChildAt( 0 ).getPayload() ) ;
-    Assert.assertEquals( 0, treepath.getTreeAtStart().getChildAt( 0 ).getChildCount() ) ;
+    assertEquals( "child0", treepath.getTreeAtStart().getChildAt( 0 ).getPayload() ) ;
+    assertEquals( 0, treepath.getTreeAtStart().getChildAt( 0 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child1", treepath.getTreeAtStart().getChildAt( 1 ).getPayload() ) ;
-    Assert.assertEquals( 0, treepath.getTreeAtStart().getChildAt( 1 ).getChildCount() ) ;
+    assertEquals( "child1", treepath.getTreeAtStart().getChildAt( 1 ).getPayload() ) ;
+    assertEquals( 0, treepath.getTreeAtStart().getChildAt( 1 ).getChildCount() ) ;
 
   }
 
@@ -95,13 +96,13 @@ public class TreepathToolsTest {
     // afterRemoval: grandParent <- parent
     final Treepath< MyTree > afterRemoval = TreepathTools.removeEnd( treepath ) ;
 
-    Assert.assertEquals( 2, afterRemoval.getLength() ) ;
+    assertEquals( 2, afterRemoval.getLength() ) ;
 
-    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
-    Assert.assertEquals( "grandParent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
+    assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    assertEquals( "grandParent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
-    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
-    Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 0 ).getPayload() ) ;
+    assertEquals( 1, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
+    assertEquals( "parent", afterRemoval.getTreeAtDistance( 0 ).getPayload() ) ;
 
     assertSame( child1, afterRemoval.getTreeAtDistance( 0 ).getChildAt( 0 ) ) ;
 
@@ -121,19 +122,19 @@ public class TreepathToolsTest {
     // afterRemoval: parent <- child0
     final Treepath< MyTree > afterRemoval = TreepathTools.removeNextSibling( treepath ) ;
 
-    Assert.assertEquals( 2, afterRemoval.getLength() ) ;
+    assertEquals( 2, afterRemoval.getLength() ) ;
 
-    Assert.assertEquals( 2, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
-    Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
+    assertEquals( 2, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
-    Assert.assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
+    assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
     assertSame( child0, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 0 ) ) ;
     assertSame( child2, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 1 ) ) ;
 
   }
 
   @Test
-  public void removePreviousSibling() {
+  public void removePreviousSibling3() {
 
     final MyTree child0 = MyTree.create( "child0" ) ;                       //         parent
     final MyTree child1 = MyTree.create( "child1" ) ;                       //       /   |   \
@@ -146,14 +147,37 @@ public class TreepathToolsTest {
     // afterRemoval: parent <- child1
     final Treepath< MyTree > afterRemoval = TreepathTools.removePreviousSibling( treepath ) ;
 
-    Assert.assertEquals( 2, afterRemoval.getLength() ) ;
+    assertEquals( 2, afterRemoval.getLength() ) ;
 
-    Assert.assertEquals( 2, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
-    Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
+    assertEquals( 2, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
-    Assert.assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
+    assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
     assertSame( child1, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 0 ) ) ;
     assertSame( child2, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 1 ) ) ;
+
+  }
+
+  @Test
+  public void removePreviousSibling2() {
+
+    final MyTree child0 = MyTree.create( "child0" ) ;                  //      parent
+    final MyTree child1 = MyTree.create( "child1" ) ;                  //     /      \
+    final MyTree parent = MyTree.create( "parent", child0, child1 ) ;  // child0   child1
+
+    // treepath: child1 -> parent
+    final Treepath< MyTree > treepath = Treepath.create( parent, 1 ) ;
+
+    // afterRemoval: child1 -> parent
+    final Treepath< MyTree > afterRemoval = TreepathTools.removePreviousSibling( treepath ) ;
+
+    assertEquals( 2, afterRemoval.getLength() ) ;
+
+    assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
+
+    assertEquals( 0, afterRemoval.getTreeAtDistance( 0 ).getChildCount() ) ;
+    assertSame( child1, afterRemoval.getTreeAtDistance( 1 ).getChildAt( 0 ) ) ;
 
   }
 
@@ -170,7 +194,7 @@ public class TreepathToolsTest {
 
     final Treepath< MyTree > sibling = TreepathTools.getSiblingAt( treepath, 2 ) ;
 
-    Assert.assertEquals( "child2", sibling.getTreeAtEnd().getPayload() ) ;
+    assertEquals( "child2", sibling.getTreeAtEnd().getPayload() ) ;
 
   }
 
@@ -181,8 +205,7 @@ public class TreepathToolsTest {
     final MyTree moving = MyTree.create( "moving" ) ;                 //    |   \
     final MyTree parent = MyTree.create( "parent", child, moving ) ;  // child  moving
 
-    final Treepath< MyTree > original = Treepath.< MyTree >create( parent, 1 ) ;
-                                              // ^ IntelliJ IDEA 7.0.3 requires this.
+    final Treepath< MyTree > original = Treepath.create( parent, 1 ) ;
 
                                                                       //   parent
                                                                       //   |   \
@@ -190,17 +213,17 @@ public class TreepathToolsTest {
     final Treepath< MyTree > moved =                                  //   |
         TreepathTools.becomeLastChildOfPreviousSibling( original ) ;  // moving
 
-    Assert.assertEquals( 3, moved.getLength() ) ;
+    assertEquals( 3, moved.getLength() ) ;
 
-    Assert.assertEquals( "parent", moved.getTreeAtDistance( 2 ).getPayload() ) ;
-    Assert.assertEquals( 1, moved.getTreeAtDistance( 2 ).getChildCount() ) ;
+    assertEquals( "parent", moved.getTreeAtDistance( 2 ).getPayload() ) ;
+    assertEquals( 1, moved.getTreeAtDistance( 2 ).getChildCount() ) ;
 
-    Assert.assertEquals( "child", moved.getTreeAtDistance( 1 ).getPayload() ) ;
-    Assert.assertEquals( 1, moved.getTreeAtDistance( 1 ).getChildCount() ) ;
+    assertEquals( "child", moved.getTreeAtDistance( 1 ).getPayload() ) ;
+    assertEquals( 1, moved.getTreeAtDistance( 1 ).getChildCount() ) ;
 
-    Assert.assertEquals( "moving", moved.getTreeAtEnd().getPayload() ) ;
-    Assert.assertEquals( "moving", moved.getTreeAtDistance( 0 ).getPayload() ) ;
-    Assert.assertEquals( 0, moved.getTreeAtDistance( 0 ).getChildCount() ) ;
+    assertEquals( "moving", moved.getTreeAtEnd().getPayload() ) ;
+    assertEquals( "moving", moved.getTreeAtDistance( 0 ).getPayload() ) ;
+    assertEquals( 0, moved.getTreeAtDistance( 0 ).getChildCount() ) ;
 
 
   }
@@ -247,13 +270,13 @@ public class TreepathToolsTest {
     final Treepath< MyTree > afterRemoval = TreepathTools.removeSubtree( container, subtree ) ;
 
 
-    Assert.assertEquals( 3, afterRemoval.getLength() ) ;
+    assertEquals( 3, afterRemoval.getLength() ) ;
 
-    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 2 ).getChildCount() ) ;
-    Assert.assertEquals( "grandParent", afterRemoval.getTreeAtDistance( 2 ).getPayload() ) ;
+    assertEquals( 1, afterRemoval.getTreeAtDistance( 2 ).getChildCount() ) ;
+    assertEquals( "grandParent", afterRemoval.getTreeAtDistance( 2 ).getPayload() ) ;
 
-    Assert.assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
-    Assert.assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
+    assertEquals( 1, afterRemoval.getTreeAtDistance( 1 ).getChildCount() ) ;
+    assertEquals( "parent", afterRemoval.getTreeAtDistance( 1 ).getPayload() ) ;
 
     assertSame( child1, afterRemoval.getTreeAtDistance( 0 ) ) ;
   }

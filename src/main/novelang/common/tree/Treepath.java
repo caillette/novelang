@@ -170,7 +170,8 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
     }
     final int[] indices = new int[ getLength() - 1 ] ;
     for( int distance = indices.length - 1 ; distance >= 0 ; distance -- ) {
-      indices[ indices.length - distance - 1 ] = getTreepathAtDistance( distance ).getIndexInPrevious() ; 
+      indices[ indices.length - distance - 1 ] = 
+          getTreepathAtDistance( distance ).getIndexInPrevious() ; 
     }
     return indices ;
   }

@@ -399,7 +399,7 @@ public class TreepathTools {
     final Treepath< T > treepathToParentWithRemoval =
         replaceTreepathEnd( treepath.getPrevious(), parentAfterRemoval ) ;
 
-    return Treepath.create( treepathToParentWithRemoval, treepath.getIndexInPrevious() ) ;
+    return Treepath.create( treepathToParentWithRemoval, treepath.getIndexInPrevious() - 1 ) ;
 
   }
 
