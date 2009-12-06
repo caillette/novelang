@@ -118,11 +118,13 @@ public class GenericRenderer implements Renderer {
       case ABSOLUTE_IDENTIFIER :
       case RELATIVE_IDENTIFIER :
       case COMPOSITE_IDENTIFIER :
+      case _EXPLICIT_IDENTIFIER :
+      case _IMPLICIT_IDENTIFIER :
         fragmentWriter.start( newPath, isRootElement ) ;
         final StringBuilder builder = new StringBuilder( "\\" ) ;
         for( final SyntacticTree child : tree.getChildren() ) {
           builder.append( "\\" ) ;
-          builder.append( child.toString() ) ;
+          builder.append( child.getText() ) ;
         }
         fragmentWriter.write( newPath, builder.toString() ) ;
         fragmentWriter.end( newPath ) ;

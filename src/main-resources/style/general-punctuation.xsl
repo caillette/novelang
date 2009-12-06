@@ -50,6 +50,8 @@
   <xsl:template match="n:composite-identifier" />
   <xsl:template match="n:relative-identifier" />
   <xsl:template match="n:absolute-identifier" />
+  <xsl:template match="n:implicit-identifier" />
+  <xsl:template match="n:explicit-identifier" />
 
   
 </xsl:stylesheet>

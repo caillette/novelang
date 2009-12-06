@@ -145,6 +145,22 @@ public class GenericRendererTest {
   }
 
 
+  @Test
+  public void identifiers() throws Exception {
+    final SyntacticTree tree = tree(
+        NodeKind._LEVEL,
+        tree( _IMPLICIT_IDENTIFIER, "Implicit" ),
+        tree( _EXPLICIT_IDENTIFIER, "Explicit" )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals(
+        "_LEVEL(_IMPLICIT_IDENTIFIER(\\\\Implicit)_EXPLICIT_IDENTIFIER(\\\\Explicit))",
+        getRenderedText()
+    ) ;
+  }
+
+
 // =======
 // Fixture
 // =======
