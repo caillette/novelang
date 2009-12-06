@@ -155,7 +155,7 @@ public class GenericRendererTest {
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
     renderer.render( createRenderable( tree ), outputStream ) ;
     assertEquals(
-        "_LEVEL(_IMPLICIT_IDENTIFIER(\\\\Implicit)_EXPLICIT_IDENTIFIER(\\\\Explicit))",
+        "_LEVEL(_IMPLICIT_IDENTIFIER(Implicit)_EXPLICIT_IDENTIFIER(Explicit))",
         getRenderedText()
     ) ;
   }

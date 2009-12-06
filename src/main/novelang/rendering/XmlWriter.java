@@ -63,10 +63,6 @@ public class XmlWriter implements FragmentWriter {
     this( RenditionMimeType.XML ) ;
   }
 
-  protected final Charset getCharset() {
-    return charset ;
-  }
-
   
   public void startWriting(
       OutputStream outputStream,
