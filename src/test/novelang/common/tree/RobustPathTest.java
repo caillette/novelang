@@ -18,6 +18,8 @@ package novelang.common.tree;
 
 import com.google.common.base.Predicate;
 import static org.junit.Assert.assertEquals;
+
+import com.google.common.base.Predicates;
 import org.junit.Test;
 
 /**
@@ -126,6 +128,30 @@ public class RobustPathTest {
 
 
 
+
+  @Test( expected = FilterException.class )
+  public void detectExcessiveFilteringAtCreation() {
+    final MyTree child = new MyTree( "child" ) ;
+    final MyTree parent = new MyTree( "parent", child ) ;
+    final Treepath< MyTree > treepath = Treepath.create( parent, 0 ) ;
+    RobustPath.create( treepath, Predicates.< MyTree >alwaysFalse() ) ;
+    
+  }
+
+  @Test( expected = FilterException.class )
+  public void detectExcessiveFilteringWhenApplying() {
+    final MyTree firstChild = new MyTree( "child" ) ;
+    final MyTree firstParent = new MyTree( "parent", firstChild ) ;
+    final Treepath< MyTree > firstTreepath = Treepath.create( firstParent, 0 ) ;
+    final RobustPath< MyTree > robustPath = 
+        RobustPath.create( firstTreepath, PAYLOD_STARTS_BY_LETTER ) ;
+    
+    final MyTree secondChild = new MyTree( "-child" ) ;
+    final MyTree secondParent = new MyTree( "parent", secondChild ) ;
+    robustPath.apply( secondParent ) ;
+    
+    
+  }
 // =======
 // Fixture
 // =======
@@ -133,8 +159,8 @@ public class RobustPathTest {
 
   private static final Predicate< MyTree > PAYLOD_STARTS_BY_LETTER =
       new Predicate< MyTree >() {
-          public boolean apply( final MyTree syntacticTree ) {
-            return Character.isLetter( syntacticTree.getPayload().charAt( 0 ) ) ;
+          public boolean apply( final MyTree MyTree ) {
+            return Character.isLetter( MyTree.getPayload().charAt( 0 ) ) ;
           }
       }
   ;

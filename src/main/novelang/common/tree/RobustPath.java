@@ -46,7 +46,7 @@ public class RobustPath< T extends Tree > {
     }
 
     Treepath< T > result = Treepath.create( root ) ;
-    treepathLoop: for( int treepathIndex = 0 ; treepathIndex < indexes.length ; treepathIndex ++ ) {
+    loop: for( int treepathIndex = 0 ; treepathIndex < indexes.length ; treepathIndex ++ ) {
       final T tree = result.getTreeAtEnd() ;
       int translatedIndex = -1 ;
       for( int childIndex = 0 ; childIndex < tree.getChildCount() ; childIndex ++ ) {
@@ -54,12 +54,11 @@ public class RobustPath< T extends Tree > {
           translatedIndex ++ ;
         }
         if( translatedIndex == indexes[ treepathIndex ] ) {
-          result = Treepath.< T >create( result, childIndex ) ;
-          continue treepathLoop ;
+          result = Treepath.create( result, childIndex ) ;
+          continue loop ;
         }
       }
-      throw new IllegalArgumentException(
-          "Filtering with " + treeFilter + "doesn't let pass any child on " + result ) ;
+      throw new FilterException( result, treeFilter ) ;
     }
     return result ;
   }
@@ -88,8 +87,7 @@ public class RobustPath< T extends Tree > {
           }
         }
         if( filteredIndexInPrevious < 0 ) {
-          throw new IllegalArgumentException(
-              "Filtering with " + filter + "doesn't let pass any child on " + intermediate ) ;
+          throw new FilterException( intermediate, filter ) ;
         }
         indexes[ treepathIndex - 1 ] = filteredIndexInPrevious ;
       }
