@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableMap;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
+import novelang.common.tree.RobustPath;
 import novelang.marker.FragmentIdentifier;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
@@ -16,6 +17,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.treemangling.designator.FragmentMapper;
+import novelang.treemangling.designator.DesignatorTools;
 
 /**
  * Tests for
@@ -57,13 +59,21 @@ public class DesignatorInterpreterEnrichmentTest {
         ),
         partTree,
         new FragmentMapperBuilder().
-            addPure( new FragmentIdentifier( "L0" ), levelTreepath.getIndicesInParent() ).
-            build()
+            addPure(
+                new FragmentIdentifier( "L0" ),
+                RobustPath.create( levelTreepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
+            ).build()
     ) ;
   }
 
+
+  /**
+   * The {@link DesignatorInterpreter#enrich(Treepath, FragmentMapper)} method adds and removes
+   * trees so it introduces an index shift.
+   * By calling this method two times we check proper handling of index shift. 
+   */
   @Test
-  public void enrichTwoTimeToCheckResistanceToIndexShift() {
+  public void enrichTwoTimesToCheckResistanceToIndexShift() {
     final SyntacticTree levelTree0 = tree(
         _LEVEL,
         tree( ABSOLUTE_IDENTIFIER, tree( "L0" ) )
@@ -76,8 +86,14 @@ public class DesignatorInterpreterEnrichmentTest {
 
     final SyntacticTree partTree = tree( PART, levelTree0, levelTree1 ) ;
 
-    final Treepath< SyntacticTree > levelTreepath0 = Treepath.create( partTree, 0 ) ;
-    final Treepath< SyntacticTree > levelTreepath1 = Treepath.create( partTree, 1 ) ;
+    final RobustPath< SyntacticTree > path0 = RobustPath.create(
+        Treepath.create( partTree, 0 ),
+        DesignatorTools.IDENTIFIER_TREE_FILTER
+    ) ;
+    final RobustPath< SyntacticTree > path1 = RobustPath.create(
+        Treepath.create( partTree, 1 ),
+        DesignatorTools.IDENTIFIER_TREE_FILTER
+    ) ;
 
     verifyEnrich(
         tree(
@@ -93,8 +109,8 @@ public class DesignatorInterpreterEnrichmentTest {
         ),
         partTree,
         new FragmentMapperBuilder().
-            addPure( new FragmentIdentifier( "L0" ), levelTreepath0.getIndicesInParent() ).
-            addPure( new FragmentIdentifier( "L1" ), levelTreepath1.getIndicesInParent() ).
+            addPure(new FragmentIdentifier( "L0" ), path0).
+            addPure(new FragmentIdentifier( "L1" ), path1).
             build()
     ) ;
   }
@@ -110,9 +126,11 @@ public class DesignatorInterpreterEnrichmentTest {
 
     final Treepath< SyntacticTree > levelTreepath = Treepath.create( partTree, 0 ) ;
 
-    final FragmentMapper< int[] > mapper = new FragmentMapperBuilder().
-        addDerived( new FragmentIdentifier( "L0" ), levelTreepath.getIndicesInParent() ).
-        build()
+    final FragmentMapper< RobustPath< SyntacticTree > > mapper = new FragmentMapperBuilder().
+        addDerived(
+            new FragmentIdentifier( "L0" ),
+            RobustPath.create( levelTreepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
+        ).build()
     ;
     
     verifyEnrich(
@@ -144,16 +162,16 @@ public class DesignatorInterpreterEnrichmentTest {
   private static final Log LOG = LogFactory.getLog( EmbeddedListMangler.class ) ;
 
   private static class FragmentMapperBuilder {
-    private final ImmutableMap.Builder< FragmentIdentifier, int[] >
+    private final ImmutableMap.Builder< FragmentIdentifier, RobustPath< SyntacticTree > >
         pureIdentifierMapBuilder =
-            new ImmutableMap.Builder< FragmentIdentifier, int[] >() ;
-    private final ImmutableMap.Builder< FragmentIdentifier, int[] >
+            new ImmutableMap.Builder< FragmentIdentifier, RobustPath< SyntacticTree > >() ;
+    private final ImmutableMap.Builder< FragmentIdentifier, RobustPath< SyntacticTree > >
         derivedIdentifierMapBuilder =
-              new ImmutableMap.Builder< FragmentIdentifier, int[] >() ;
+              new ImmutableMap.Builder< FragmentIdentifier, RobustPath< SyntacticTree > >() ;
 
     public FragmentMapperBuilder addPure(
         final FragmentIdentifier key,
-        final int[] value
+        final RobustPath< SyntacticTree > value
     ) {
       pureIdentifierMapBuilder.put( key, value ) ;
       return this ;
@@ -161,23 +179,23 @@ public class DesignatorInterpreterEnrichmentTest {
 
     public FragmentMapperBuilder addDerived(
         final FragmentIdentifier key,
-        final int[] value
+        final RobustPath< SyntacticTree > value
     ) {
       derivedIdentifierMapBuilder.put( key, value ) ;
       return this ;
     }
 
-    public FragmentMapper< int[] > build() {
-      final Map< FragmentIdentifier, int[] > pure =
+    public FragmentMapper< RobustPath< SyntacticTree > > build() {
+      final Map< FragmentIdentifier, RobustPath< SyntacticTree > > pure =
               pureIdentifierMapBuilder.build() ;
-      final Map< FragmentIdentifier, int[] > derived =
+      final Map< FragmentIdentifier, RobustPath< SyntacticTree > > derived =
               derivedIdentifierMapBuilder.build() ;
-      return new FragmentMapper< int[] >() {
-        public Map< FragmentIdentifier, int[] > getPureIdentifierMap() {
+      return new FragmentMapper< RobustPath< SyntacticTree > >() {
+        public Map< FragmentIdentifier, RobustPath< SyntacticTree > > getPureIdentifierMap() {
           return pure ;
         }
 
-        public Map< FragmentIdentifier, int[] > getDerivedIdentifierMap() {
+        public Map< FragmentIdentifier, RobustPath< SyntacticTree > > getDerivedIdentifierMap() {
           return derived ;
         }
       } ;
@@ -188,7 +206,7 @@ public class DesignatorInterpreterEnrichmentTest {
   private static void verifyEnrich(
       final SyntacticTree expectedTree,
       final SyntacticTree originalTree,
-      final FragmentMapper< int[] > fragmentMapper
+      final FragmentMapper< RobustPath< SyntacticTree > > fragmentMapper
   ) {
     LOG.info( "Flat tree: %s", TreeFixture.asString( originalTree ) ) ;
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
@@ -196,7 +214,8 @@ public class DesignatorInterpreterEnrichmentTest {
     final Treepath< SyntacticTree > originalTreepath = Treepath.create( originalTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized = DesignatorInterpreterAccessor.enrich(
-        DesignatorInterpreter.MIRRORED_POSTORDER.getFirst( originalTreepath ),
+        DesignatorInterpreter.TRAVERSAL.getFirst( originalTreepath ),
+//        originalTreepath,
         fragmentMapper
     ) ;
 
@@ -216,8 +235,8 @@ public class DesignatorInterpreterEnrichmentTest {
     }
     
     public static Treepath< SyntacticTree > enrich(
-      Treepath< SyntacticTree > treepath,
-      final FragmentMapper< int[] > mapper
+      final Treepath< SyntacticTree > treepath,
+      final FragmentMapper< RobustPath< SyntacticTree > > mapper
     ) {
         return DesignatorInterpreter.enrich( treepath, mapper ) ;
       }

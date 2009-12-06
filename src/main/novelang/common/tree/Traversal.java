@@ -24,20 +24,37 @@ import com.google.common.base.Predicates;
  *
  * @author Laurent Caillette
  */
-public class Traversal {
+public abstract class Traversal< T extends Tree > {
 
-  private Traversal() { }
+  protected final Predicate< T > treeFilter ;
 
+  private Traversal( final Predicate< T > treeFilter ) {
+    this.treeFilter = treeFilter ;
+  }
+
+  /**
+   * Returns the {@link Treepath} to the next {@link Tree} object for this traversal
+   * algorithm, or null if there is none.
+   *
+   * @param treepath a non-null object.
+   * @return a possibly null object.
+   */
+  public abstract Treepath< T > getNext( final Treepath< T > treepath ) ;
+
+
+
+
+// =================
+// MirroredPostorder
+// =================
 
   /**
    * Function object capturing a tree filter.
    */
-  public static final class MirroredPostorder< T extends Tree > {
-
-    private final Predicate< T > treeFilter ;
+  public static final class MirroredPostorder< T extends Tree > extends Traversal< T > {
 
     private MirroredPostorder( final Predicate< T > treeFilter ) {
-      this.treeFilter = treeFilter ;
+      super( treeFilter ) ;
     }
 
     private MirroredPostorder() {
@@ -117,4 +134,10 @@ public class Traversal {
     }
 
   }
+
+
+
+
+
+
 }

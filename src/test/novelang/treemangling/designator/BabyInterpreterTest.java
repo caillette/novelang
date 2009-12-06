@@ -9,6 +9,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertNull;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
+import novelang.common.tree.RobustPath;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.NodeKind._LEVEL;
 import static novelang.parser.NodeKind.LEVEL_TITLE;
@@ -65,7 +66,7 @@ public class BabyInterpreterTest {
     assertFalse( interpreter.hasProblem() ) ;
 
     assertEquals( 0, interpreter.getDerivedIdentifierMap().keySet().size() );
-    final Map< FragmentIdentifier, int[] > pureIdentifiers =
+    final Map< FragmentIdentifier, RobustPath< SyntacticTree > > pureIdentifiers =
         interpreter.getPureIdentifierMap() ;
     assertEquals( 2, pureIdentifiers.keySet().size() ) ;
 
@@ -74,10 +75,9 @@ public class BabyInterpreterTest {
         makeTree( interpreter.getPureIdentifierMap().get( yIdentifier ), part )
     ) ;
 
-      final int[] actualZLevel = interpreter.getPureIdentifierMap().get( zIdentifier );
-      assertSame(
+    assertSame(
         zLevel,
-        makeTree( actualZLevel, part )
+        makeTree( interpreter.getPureIdentifierMap().get( zIdentifier ), part )
     ) ;
 
 
@@ -114,10 +114,11 @@ public class BabyInterpreterTest {
     ) ;
     final BabyInterpreter interpreter = createInterpreter( part ) ;
 
-    final Map< FragmentIdentifier, int[] > pureIdentifiers = interpreter.getPureIdentifierMap() ;
+    final Map< FragmentIdentifier, RobustPath< SyntacticTree > > pureIdentifiers =
+        interpreter.getPureIdentifierMap() ;
     assertEquals( 1, pureIdentifiers.keySet().size() ) ;
 
-    final Map< FragmentIdentifier, int[] > derivedIdentifiers = 
+    final Map< FragmentIdentifier, RobustPath< SyntacticTree > > derivedIdentifiers =
         interpreter.getDerivedIdentifierMap() ;
 
 
@@ -242,9 +243,9 @@ public class BabyInterpreterTest {
     final FragmentIdentifier yzIdentifier = new FragmentIdentifier( yIdentifier, "z" ) ;
 
     final BabyInterpreter interpreter = createInterpreter( wLevel ) ;
-    final Map< FragmentIdentifier, int[] > derivedIdentifiers = 
+    final Map< FragmentIdentifier, RobustPath< SyntacticTree > > derivedIdentifiers =
         interpreter.getDerivedIdentifierMap() ;
-    final Map< FragmentIdentifier, int[] > pureIdentifierTreepathMap =
+    final Map< FragmentIdentifier, RobustPath< SyntacticTree > > pureIdentifierTreepathMap =
         interpreter.getPureIdentifierMap() ;
 
     assertFalse( interpreter.hasProblem() ) ;
@@ -283,12 +284,15 @@ public class BabyInterpreterTest {
     return new BabyInterpreter( treepath ) ;
   }
     
-  private final BabyInterpreter createInterpreter( final SyntacticTree tree ) {
+  private BabyInterpreter createInterpreter( final SyntacticTree tree ) {
     return createInterpreter( Treepath.create( tree ) ) ;
   }
     
-  private SyntacticTree makeTree( final int[] mapped, final SyntacticTree root ) {
-    return Treepath.create( root, mapped ).getTreeAtEnd() ;    
+  private SyntacticTree makeTree(
+      final RobustPath< SyntacticTree > mapped,
+      final SyntacticTree root
+  ) {
+    return mapped.apply( root ).getTreeAtEnd() ;
   }
 
 

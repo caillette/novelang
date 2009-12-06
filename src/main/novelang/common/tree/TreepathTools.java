@@ -599,6 +599,7 @@ public class TreepathTools {
    *
    * @param treepath a non-null object.
    * @return the treepath to the next tree, or null.
+   * @Deprecated
    */
   public static< T extends Tree > Treepath< T > getNextInPreorder( Treepath< T > treepath ) {
     final T tree = treepath.getTreeAtEnd();
@@ -624,6 +625,8 @@ public class TreepathTools {
    * Navigates towards the next sibling or the next sibling of a parent tree.
    * @param treepath a non-null object.
    * @return the next tree, or null if there is no other tree to navigate to.
+   *
+   * @Deprecated
    */
   public static < T extends Tree > Treepath< T > getNextUpInPreorder( Treepath< T > treepath ) {
     if( hasNextSibling( treepath ) ) {

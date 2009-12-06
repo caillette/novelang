@@ -9,7 +9,9 @@ import novelang.parser.NodeKind;
 import novelang.marker.FragmentIdentifier;
 
 /**
- *
+ * Given a {@link Treepath} to some identifier-bearing tree, extracts a single identifier
+ * segment. The segment may be self-defining if the tree has a {@link NodeKind#ABSOLUTE_IDENTIFIER}
+ * as immediate child, or may rely on other segments in the parents.
  *
  * @author Laurent Caillette
 */
@@ -21,7 +23,7 @@ public class SegmentExtractor
   /**
    *
    * @param treepath Path to the node that may carry some (implicit or explicit) identifier.
-   * @param problems a list of problems to add to if there is one.
+   * @param problems a list of problems to add to one occurs.
    */
   public SegmentExtractor(
       final Treepath< SyntacticTree > treepath,
@@ -89,7 +91,7 @@ public class SegmentExtractor
       return new FragmentIdentifier( extractSegment( identifierTree ) ) ;
     } else if( NodeKind.RELATIVE_IDENTIFIER.isRoot( identifierTree ) ) {
       if( parentIdentifier == null ) {
-        throw new IllegalArgumentException( // TODO accumulate errors insted.
+        throw new IllegalArgumentException( // TODO accumulate errors instead.
             "Missing absolute identifier above relative identifier " + identifierTree ) ;
       } else {
         return new FragmentIdentifier(

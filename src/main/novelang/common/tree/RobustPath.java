@@ -19,6 +19,7 @@ package novelang.common.tree;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.base.Preconditions;
 
 /**
  * Index-based reference in a {@link Tree} that only takes care of trees satisfying a given
@@ -34,12 +35,33 @@ public class RobustPath< T extends Tree > {
   
   private RobustPath( final int[] indexes, final Predicate< T > treeFilter ) {
     this.indexes = indexes ;
-    this.treeFilter = treeFilter ;
+    this.treeFilter = Preconditions.checkNotNull( treeFilter ) ;
 
   }
-  
-  public final Treepath< T > apply( final Treepath< T > treepath ) {
-    throw new UnsupportedOperationException( "apply" ) ;
+
+
+  public final Treepath< T > apply( final T root ) {
+    if( indexes == null) {
+      return Treepath.create( root ) ;
+    }
+
+    Treepath< T > result = Treepath.create( root ) ;
+    treepathLoop: for( int treepathIndex = 0 ; treepathIndex < indexes.length ; treepathIndex ++ ) {
+      final T tree = result.getTreeAtEnd() ;
+      int translatedIndex = -1 ;
+      for( int childIndex = 0 ; childIndex < tree.getChildCount() ; childIndex ++ ) {
+        if( treeFilter.apply( ( T ) tree.getChildAt( childIndex ) ) ) {
+          translatedIndex ++ ;
+        }
+        if( translatedIndex == indexes[ treepathIndex ] ) {
+          result = Treepath.< T >create( result, childIndex ) ;
+          continue treepathLoop ;
+        }
+      }
+      throw new IllegalArgumentException(
+          "Filtering with " + treeFilter + "doesn't let pass any child on " + result ) ;
+    }
+    return result ;
   }
   
   
@@ -51,11 +73,28 @@ public class RobustPath< T extends Tree > {
       final Treepath< T > treepath, 
       final Predicate< T > filter 
   ) {
-    for( int i = 0 ; i < treepath.getLength() ; i ++ ) {
-      final Treepath intermediate = treepath.getTreepathAtDistanceFromStart( i ) ;
-      final Tree tree = intermediate.getTreeAtEnd() ;
+    if( treepath.getLength() == 1 ) {
+      return new RobustPath< T >( null, filter ) ;
+    } else {
+      final int[] indexes = new int[ treepath.getLength() - 1 ] ;
+      for( int treepathIndex = 1 ; treepathIndex <= treepath.getLength() - 1 ; treepathIndex ++ ) {
+        final Treepath intermediate = treepath.getTreepathAtDistanceFromStart( treepathIndex ) ;
+        final int naturalIndexInPrevious = intermediate.getIndexInPrevious() ;
+        int filteredIndexInPrevious = -1 ;
+        final T parentTree = ( T ) intermediate.getPrevious().getTreeAtEnd() ;
+        for( int childIndex = 0 ; childIndex <= naturalIndexInPrevious ; childIndex ++ ) {
+          if( filter.apply( (T) parentTree.getChildAt( childIndex ) ) ) {
+            filteredIndexInPrevious ++ ;
+          }
+        }
+        if( filteredIndexInPrevious < 0 ) {
+          throw new IllegalArgumentException(
+              "Filtering with " + filter + "doesn't let pass any child on " + intermediate ) ;
+        }
+        indexes[ treepathIndex - 1 ] = filteredIndexInPrevious ;
+      }
+      return new RobustPath< T >( indexes, filter ) ;
     }
-
-    return new RobustPath< T >( treepath.getIndicesInParent(), filter ) ;
   }
+
 }

@@ -17,13 +17,13 @@
 
 package novelang.treemangling;
 
-import com.google.common.base.Predicate;
 import novelang.common.Problem;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
+import novelang.common.tree.RobustPath;
 import novelang.marker.FragmentIdentifier;
 import novelang.parser.NodeKind;
 import novelang.system.Log;
@@ -59,7 +59,7 @@ import java.util.Map;
  *     Those nodes enhance document readability as they show resolved identifiers.
  *     The same method removes 
  *     {@link NodeKind#ABSOLUTE_IDENTIFIER} {@link NodeKind#RELATIVE_IDENTIFIER} 
- *     nodes which don't improve readabilit.
+ *     nodes which don't improve readability.
  *   </li>
  *   <li>
  *     Identifiers from {@link BabyInterpreter} are re-mapped
@@ -86,25 +86,18 @@ public class DesignatorInterpreter {
 
   private final Iterable< Problem > problems  ;
 
-  private static final Predicate< SyntacticTree > IDENTIFIER_TREE_FILTER =
-      new Predicate< SyntacticTree >() {
-        public boolean apply( final SyntacticTree tree ) {
-          return tree.isOneOf( DesignatorTools.IDENTIFIER_BEARING_NODEKINDS ) ;
-        }
-      }
-  ;
-
   /**
    * Made package-protected for tests.
    */
-  /*package*/ static final Traversal.MirroredPostorder< SyntacticTree > MIRRORED_POSTORDER =
-      Traversal.MirroredPostorder.create( IDENTIFIER_TREE_FILTER )
+  /*package*/ static final Traversal.MirroredPostorder< SyntacticTree > TRAVERSAL =
+      Traversal.MirroredPostorder.create( DesignatorTools.IDENTIFIER_TREE_FILTER )
+//      Traversal.Preorder.create( DesignatorTools.IDENTIFIER_TREE_FILTER )
   ;
 
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
     final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
-    final Treepath< SyntacticTree > first =
-        MIRRORED_POSTORDER.getFirst( treepath.getStart() ) ;
+    final Treepath< SyntacticTree > first = TRAVERSAL.getFirst( treepath.getStart() ) ;
+//    final Treepath< SyntacticTree > first = treepath.getStart() ;
     final Treepath< SyntacticTree > enrichedTreepath = enrich(
         first,
         babyInterpreter
@@ -124,8 +117,10 @@ public class DesignatorInterpreter {
     }
 
   }
-  
-  
+
+  /**
+   * Given a {@link FragmentIdentifier}, returns corresponding {@link SyntacticTree}.
+   */
   public Treepath< SyntacticTree > get( final FragmentIdentifier fragmentIdentifier ) {
     Treepath< SyntacticTree > treepath = pureIdentifiers.get( fragmentIdentifier ) ;
     if( treepath == null ) {
@@ -152,12 +147,17 @@ public class DesignatorInterpreter {
 // ===============
   
   private static Map< FragmentIdentifier, Treepath< SyntacticTree > >
-  remap( final Map< FragmentIdentifier, int[] > map, final Treepath< SyntacticTree > treepath ) {
+  remap(
+      final Map< FragmentIdentifier, RobustPath< SyntacticTree > > map,
+      final Treepath< SyntacticTree > treepath
+  ) {
     final Map< FragmentIdentifier, Treepath< SyntacticTree > > result = Maps.newHashMap() ;
-    for( final Map.Entry< FragmentIdentifier, int[] > entry : map.entrySet() ) {
+    for( final Map.Entry< FragmentIdentifier, RobustPath< SyntacticTree > > entry :
+        map.entrySet()
+    ) {
       result.put( 
           entry.getKey(), 
-          Treepath.create( treepath.getTreeAtStart(), entry.getValue() ) 
+          entry.getValue().apply( treepath.getTreeAtStart() )  
       ) ;
     }
     return result ;
@@ -167,7 +167,7 @@ public class DesignatorInterpreter {
   
 
   /**
-   * Made protected for tests only.
+   * (Made protected for tests only.)
    * Transform a whole tree adding new "synthetic" identifiers that were calculated by 
    * {@link BabyInterpreter} and removing original ones. 
    * The tree transformation uses mirrored postorder traversal. This kind of traversal guarantees
@@ -179,9 +179,9 @@ public class DesignatorInterpreter {
    */
   protected static Treepath< SyntacticTree > enrich(
       Treepath< SyntacticTree > treepath,
-      final FragmentMapper< int[] > mapper
+      final FragmentMapper< RobustPath< SyntacticTree > > mapper
   ) {
-    while ( true ) {
+    while( true ) {
       final FragmentIdentifier pureIdentifier = 
           findIdentifier( treepath, mapper.getPureIdentifierMap() ) ;
       if( pureIdentifier != null ) {
@@ -198,7 +198,7 @@ public class DesignatorInterpreter {
           NodeKind.RELATIVE_IDENTIFIER
       ) ;
 
-      final Treepath< SyntacticTree > next = MIRRORED_POSTORDER.getNext( treepath ) ;
+      final Treepath< SyntacticTree > next = TRAVERSAL.getNext( treepath ) ;
 
       if( next == null ) {
         return treepath ;
@@ -236,11 +236,13 @@ public class DesignatorInterpreter {
 
   private static FragmentIdentifier findIdentifier( 
       final Treepath< SyntacticTree > treepath, 
-      Map< FragmentIdentifier, int[] > map 
+      final Map< FragmentIdentifier, RobustPath< SyntacticTree > > map
   ) {
     final int[] indexesInParent = treepath.getIndicesInParent() ;
-    for( final Map.Entry< FragmentIdentifier, int[] > entry : map.entrySet() ) {
-      if( Arrays.equals( indexesInParent, entry.getValue() ) ) {
+    for( final Map.Entry< FragmentIdentifier, RobustPath< SyntacticTree > > entry : map.entrySet()
+    ) {
+      final Treepath< SyntacticTree > found = entry.getValue().apply( treepath.getTreeAtStart() ) ;
+      if( Arrays.equals( indexesInParent, found.getIndicesInParent() ) ) {
         return entry.getKey() ;
       }
     }

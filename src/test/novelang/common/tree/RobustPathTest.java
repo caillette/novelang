@@ -16,13 +16,9 @@
  */
 package novelang.common.tree;
 
+import com.google.common.base.Predicate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-
-import com.google.common.base.Predicate;
-
-import novelang.common.SyntacticTree;
-import novelang.parser.antlr.TreeFixture;
 
 /**
  * Tests for {@link RobustPath}.
@@ -33,23 +29,30 @@ public class RobustPathTest {
 
   @Test
   public void singleton() {
-    final SyntacticTree tree = TreeFixture.tree( "foo" ) ;
-    final Treepath< SyntacticTree > treepath = Treepath.create( tree ) ;
-    final RobustPath< SyntacticTree > robustPath = RobustPath.create( treepath ) ;
+    final MyTree tree = new MyTree( "root" ) ;
+    final Treepath< MyTree > treepath = Treepath.create( tree ) ;
+    final RobustPath< MyTree > robustPath = RobustPath.create( treepath ) ;
     assertEquals(
         tree,
-        robustPath.apply( treepath.getStart() ).getTreeAtEnd()
+        robustPath.apply( tree ).getTreeAtEnd()
     ) ;
   }
 
 
+  /**
+   * <pre>
+   * parent
+   *   |
+   * child
+   * </pre>
+   */
   @Test
   public void parentChild() {
-    final SyntacticTree child = TreeFixture.tree( "child" ) ;
-    final SyntacticTree parent = TreeFixture.tree( "parent", child ) ;
-    final Treepath< SyntacticTree > treepath = Treepath.create( parent, 0 ) ;
-    final RobustPath< SyntacticTree > robustPath = RobustPath.create( treepath ) ;
-    final Treepath< SyntacticTree > treepathRebuilt = robustPath.apply( treepath.getStart() ) ;
+    final MyTree child =new MyTree( "child" ) ;
+    final MyTree parent = new MyTree( "parent", child ) ;
+    final Treepath< MyTree > treepath = Treepath.create( parent, 0 ) ;
+    final RobustPath< MyTree > robustPath = RobustPath.create( treepath ) ;
+    final Treepath< MyTree > treepathRebuilt = robustPath.apply( parent ) ;
     assertEquals(
         parent,
         treepathRebuilt.getTreeAtStart()  
@@ -60,30 +63,80 @@ public class RobustPathTest {
     ) ;
   }
 
-
+  /**
+   * <pre>
+   *       parent
+   *     /       \
+   * [-x]         child
+   * </pre>
+   */
   @Test
   public void parentWithOneIgnoredChild() {
-    final SyntacticTree child = TreeFixture.tree( "child" ) ;
-    final SyntacticTree ignored = TreeFixture.tree( "-1" ) ;
-    final SyntacticTree parent = TreeFixture.tree( "parent", ignored, child ) ;
-    final Treepath< SyntacticTree > treepath = Treepath.create( parent, 1 ) ;
-    final RobustPath< SyntacticTree > robustPath = RobustPath.create(
+    final MyTree child = new MyTree( "child" ) ;
+    final MyTree ignored = new MyTree( "-x" ) ;
+    final MyTree parent = new MyTree( "parent", ignored, child ) ;
+    final Treepath< MyTree > treepath = Treepath.create( parent, 1 ) ;
+    final RobustPath< MyTree > robustPath = RobustPath.create(
         treepath,
-        new Predicate< SyntacticTree >() {
-          public boolean apply( final SyntacticTree syntacticTree ) {
-            return ! syntacticTree.getText().startsWith("-" ) ;
-          }
-        }
+        PAYLOD_STARTS_BY_LETTER
     ) ;
-    final Treepath< SyntacticTree > treepathMinusIgnored =
+    final Treepath< MyTree > treepathMinusIgnored =
         TreepathTools.removePreviousSibling( treepath ) ;
-    final Treepath< SyntacticTree > treepathRebuilt =
-        robustPath.apply( treepathMinusIgnored.getStart() ) ;
+    final Treepath< MyTree > treepathRebuilt =
+        robustPath.apply( treepathMinusIgnored.getTreeAtStart() ) ;
     assertEquals(
         child,
         treepathRebuilt.getTreeAtEnd()
     ) ;
   }
 
+  /**
+   * <pre>
+   *       a
+   *     /   \
+   * [-b]     c
+   *       /  |  \
+   *     d  [-e]  f
+   *              ^
+   * </pre>
+   */
+  @Test
+  public void depth3() {
+    final MyTree dTree = new MyTree( "d" ) ;
+    final MyTree eTree = new MyTree( "-e" ) ;
+    final MyTree fTree = new MyTree( "f" ) ;
+    final MyTree cTree = new MyTree( "c", dTree, eTree, fTree ) ;
+    final MyTree bTree = new MyTree( "-b" ) ;
+    final MyTree aTree = new MyTree( "a", bTree, cTree ) ;
+    final Treepath< MyTree > treepath = Treepath.create( aTree, 1, 2 ) ;
+    final RobustPath< MyTree > robustPath = RobustPath.create(
+        treepath,
+        PAYLOD_STARTS_BY_LETTER
+    ) ;
+    final Treepath< MyTree > treepathMinusIgnored =
+        TreepathTools.removePreviousSibling( treepath ) ;
+    final Treepath< MyTree > treepathRebuilt =
+        robustPath.apply( treepathMinusIgnored.getTreeAtStart() ) ;
+    assertEquals(
+        fTree,
+        treepathRebuilt.getTreeAtEnd()
+    ) ;
+  }
+
+
+
+
+// =======
+// Fixture
+// =======
+
+
+  private static final Predicate< MyTree > PAYLOD_STARTS_BY_LETTER =
+      new Predicate< MyTree >() {
+          public boolean apply( final MyTree syntacticTree ) {
+            return Character.isLetter( syntacticTree.getPayload().charAt( 0 ) ) ;
+          }
+      }
+  ;
 
 }

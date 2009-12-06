@@ -12,6 +12,7 @@ import novelang.system.DefaultCharset;
 import novelang.parser.NodeKind;
 import novelang.marker.FragmentIdentifier;
 import com.google.common.collect.Lists;
+import com.google.common.base.Predicate;
 
 /**
  * 
@@ -19,13 +20,20 @@ import com.google.common.collect.Lists;
  * @author Laurent Caillette
  */
 public class DesignatorTools {
+  public static final Predicate< SyntacticTree > IDENTIFIER_TREE_FILTER =
+    new Predicate< SyntacticTree >() {
+      public boolean apply( final SyntacticTree tree ) {
+        return tree.isOneOf( NodeKind._LEVEL, NodeKind.PART ) ;
+      }
+    }
+;
 
   private DesignatorTools() { }
 
   public static final EnumSet< NodeKind > IDENTIFIER_BEARING_NODEKINDS ;
 
   static {
-    final EnumSet<TagBehavior> BEHAVIORS =
+    final EnumSet< TagBehavior > BEHAVIORS =
         EnumSet.complementOf( EnumSet.of( TagBehavior.NON_TRAVERSABLE ) ) ;
     final List< NodeKind > nodeKinds = Lists.newArrayList() ;
     for( final NodeKind nodeKind : NodeKind.values() ) {

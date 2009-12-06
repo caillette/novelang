@@ -3,6 +3,7 @@ package novelang.treemangling.designator;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
+import novelang.common.tree.RobustPath;
 import novelang.marker.FragmentIdentifier;
 
 import com.google.common.collect.Lists;
@@ -15,23 +16,24 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class creates maps from {@link FragmentIdentifier} to {@link Treepath} objects.
+ * This class creates maps from {@link FragmentIdentifier} to {@link Treepath} objects
+ * through {@link RobustPath}.
  *
  * @see novelang.treemangling.DesignatorInterpreter
  *
  * @author Laurent Caillette
  */
-public class BabyInterpreter implements FragmentMapper< int[] > {
+public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTree > > {
 
   /**
    * Contain only pure identifiers (defined explicitely).
    */
-  private final Map< FragmentIdentifier, int[] > pureIdentifiers ;
+  private final Map< FragmentIdentifier, RobustPath< SyntacticTree > > pureIdentifiers ;
 
   /**
    * Contain implicit identifiers, or implicit identifiers mixed with explicit identifiers.
    */
-  private final Map< FragmentIdentifier, int[] > derivedIdentifiers ;
+  private final Map< FragmentIdentifier, RobustPath< SyntacticTree > > derivedIdentifiers ;
 
 
   private final List< Problem > problems ;
@@ -57,7 +59,7 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
    * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
    *     referencing the same tree as passed to the constructor.
    */
-  public Map< FragmentIdentifier, int[] > getPureIdentifierMap() {
+  public Map< FragmentIdentifier, RobustPath< SyntacticTree > > getPureIdentifierMap() {
     return pureIdentifiers ;
   }
 
@@ -68,7 +70,7 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
    * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
    *     referencing the same tree as passed to the constructor.
    */
-  public Map< FragmentIdentifier, int[] > getDerivedIdentifierMap() {
+  public Map< FragmentIdentifier, RobustPath< SyntacticTree > > getDerivedIdentifierMap() {
     return derivedIdentifiers ;
   }
 
@@ -98,7 +100,7 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
       final IdentifierDefinition definition = segmentExtractor.getIdentifierDefinition() ;
       final String segment = segmentExtractor.getSegment() ;
 
-      switch ( definition ) {
+      switch( definition ) {
 
         case NONE :
           explicitIdentifier = null ;
@@ -107,7 +109,10 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
         case ABSOLUTE :
           explicitIdentifier = new FragmentIdentifier( segment ) ;
           if( verifyFreshness( collector, tree, explicitIdentifier, collector.pureIdentifiers ) ) {
-            collector.pureIdentifiers.put( explicitIdentifier, treepath.getIndicesInParent() ) ;
+            collector.pureIdentifiers.put(
+                explicitIdentifier,
+                RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
+            ) ;
           }
           break ;
 
@@ -124,7 +129,10 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
             if( verifyFreshness( 
                 collector, tree, explicitIdentifier, collector.pureIdentifiers ) 
             ) {
-              collector.pureIdentifiers.put( explicitIdentifier, treepath.getIndicesInParent() ) ;
+              collector.pureIdentifiers.put(
+                  explicitIdentifier,
+                  RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
+              ) ;
             }
           }
           break ;
@@ -136,7 +144,9 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
             collector.duplicateDerivedIdentifiers.add( implicitAbsoluteIdentifier ) ;
           } else {
             collector.derivedIdentifiers.put( 
-                implicitAbsoluteIdentifier, treepath.getIndicesInParent() ) ;
+                implicitAbsoluteIdentifier,
+                RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
+            ) ;
           }
 
           if( parentIdentifier != null ) {
@@ -146,7 +156,9 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
               collector.duplicateDerivedIdentifiers.add( implicitRelativeIdentifier ) ;
             } else {
               collector.derivedIdentifiers.put( 
-                  implicitRelativeIdentifier, treepath.getIndicesInParent() ) ;
+                  implicitRelativeIdentifier,
+                  RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
+              ) ;
             }
           }
           break ;
@@ -170,7 +182,7 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
       final Collector collector,
       final SyntacticTree tree,
       final FragmentIdentifier fragmentIdentifier,
-      final Map< FragmentIdentifier, int[] > map
+      final Map< FragmentIdentifier, RobustPath< SyntacticTree > > map
   ) {
     if( map.containsKey( fragmentIdentifier ) ) {
       final String message = "Already defined: '" + fragmentIdentifier + "'" ;
@@ -199,19 +211,21 @@ public class BabyInterpreter implements FragmentMapper< int[] > {
   
   private static class Collector {
     
-  /**
-   * Contain only pure identifiers (defined explicitely).
-   */
-  public final Map< FragmentIdentifier, int[] > pureIdentifiers = Maps.newHashMap() ;
+    /**
+     * Contain only pure identifiers (defined explicitely).
+     */
+    public final Map< FragmentIdentifier, RobustPath< SyntacticTree > >
+    pureIdentifiers = Maps.newHashMap() ;
 
-  /**
-   * Contain implicit identifiers, or implicit identifiers mixed with explicit identifiers.
-   */
-  public final Map< FragmentIdentifier, int[] > derivedIdentifiers = Maps.newHashMap() ;
+    /**
+     * Contain implicit identifiers, or implicit identifiers mixed with explicit identifiers.
+     */
+    public final Map< FragmentIdentifier, RobustPath< SyntacticTree > >
+    derivedIdentifiers = Maps.newHashMap() ;
 
 
-  public Set< FragmentIdentifier > duplicateDerivedIdentifiers = Sets.newHashSet() ;
+    public Set< FragmentIdentifier > duplicateDerivedIdentifiers = Sets.newHashSet() ;
 
-  public List< Problem > problems = Lists.newArrayList() ;
+    public List< Problem > problems = Lists.newArrayList() ;
   }
 }
