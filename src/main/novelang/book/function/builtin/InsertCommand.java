@@ -39,7 +39,7 @@ public class InsertCommand extends AbstractCommand {
   
   private final String fileName ;
   private final boolean recurse ;
-  private final FileOrdering fileOrdering ;
+  private final FileOrdering< ? > fileOrdering ;
   private final boolean createLevel ;
   private final int levelAbove ;
   private final String styleName ;
