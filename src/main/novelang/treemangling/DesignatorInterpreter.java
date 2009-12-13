@@ -91,15 +91,12 @@ public class DesignatorInterpreter {
    */
   /*package*/ static final Traversal.MirroredPostorder< SyntacticTree > TRAVERSAL =
       Traversal.MirroredPostorder.create( DesignatorTools.IDENTIFIER_TREE_FILTER )
-//      Traversal.Preorder.create( DesignatorTools.IDENTIFIER_TREE_FILTER )
   ;
 
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
     final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
-    final Treepath< SyntacticTree > first = TRAVERSAL.getFirst( treepath.getStart() ) ;
-//    final Treepath< SyntacticTree > first = treepath.getStart() ;
     final Treepath< SyntacticTree > enrichedTreepath = enrich(
-        first,
+        TRAVERSAL.getFirst( treepath.getStart() ),
         babyInterpreter
     ) ;
 

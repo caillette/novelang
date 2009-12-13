@@ -29,6 +29,10 @@ public class Location {
   private final int column ;
 
 
+  public Location( String fileName ) {
+    this( fileName, -1, -1 ) ;
+  }
+
   public Location( String fileName, int line, int column ) {
     this.fileName = fileName ;
     this.line = line ;

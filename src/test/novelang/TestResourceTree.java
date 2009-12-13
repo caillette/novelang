@@ -153,7 +153,8 @@ public final class TestResourceTree {
     Resource PART_BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
     Resource PART_JUST_SECTIONS = resource( "just-sections.nlp" ) ;
     Resource PART_MANY_IDENTIFIERS = resource( "many-identifiers.nlp" ) ;
-    Resource PART_SOME_IDENTIFIERS = resource( "some-identifiers.nlp" ) ;
+    Resource PART_SOME_IDENTIFIERS_1 = resource( "some-identifiers-1.nlp" ) ;
+    Resource PART_SOME_IDENTIFIERS_2 = resource( "some-identifiers-2.nlp" ) ;
     Resource PART_MISSING_IMAGES = resource( "missing-images.nlp" ) ;
     Resource PART_NO_CHAPTER = resource( "no-chapter.nlp" ) ;
     Resource PART_ONE_WORD = resource( "one-word.nlp" ) ;
@@ -164,8 +165,10 @@ public final class TestResourceTree {
   public interface Identifiers {
     Directory dir = directory( "identifiers" ) ;
 
-    Resource BOOK = resource( "identifiers.nlb" ) ;
-    Resource PART = resource( "identifiers.nlp" ) ;
+    Resource BOOK_1 = resource( "identifiers-book1.nlb" ) ;
+    Resource PART_1 = resource( "identifiers-1.nlp" ) ;
+    Resource BOOK_2 = resource( "identifiers-book2.nlb" ) ;
+    Resource PART_2 = resource( "identifiers-2.nlp" ) ;
   }
 
   

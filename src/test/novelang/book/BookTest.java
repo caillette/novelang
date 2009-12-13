@@ -238,10 +238,11 @@ public class BookTest {
    * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
-  public void insertWithIdentifiers() throws IOException {
-    resourceInstaller.copy( TestResourceTree.Identifiers.dir ) ;
+  public void insertWithExplicitIdentifiers() throws IOException {
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_1 ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.PART_1 ) ;
     final File bookWithIdentifier =
-        resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK ) ;
+        resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK_1 ) ;
 
     final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -257,6 +258,58 @@ public class BookTest {
                 tree(
                     PARAGRAPH_REGULAR,
                     tree( WORD_, "Paragraph" )
+                )
+            )
+        ),
+        bookTree
+    ) ;
+    Assert.assertFalse( book.hasProblem() ) ;
+  }
+
+
+
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
+  public void insertWithImplicitIdentifiers() throws IOException {
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_2 ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.PART_2 ) ;
+    final File bookWithIdentifier =
+        resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK_2 ) ;
+
+    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+
+    final SyntacticTree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEqualsNoSeparators(
+        tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "6" ) ),
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0\\L0-1" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p0-1" )
+                )
+            ),
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L1" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "L1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p1" )
+                )
+            ),
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0\\L0-1" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p0-1" )
                 )
             )
         ),

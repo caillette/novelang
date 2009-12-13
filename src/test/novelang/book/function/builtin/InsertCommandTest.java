@@ -399,7 +399,7 @@ public class InsertCommandTest {
   @Test
   public void useSimpleFragmentIdentifier() throws MalformedURLException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS ) ;
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
     LOG.info( 
         "Loaded Part \n%s", 
         new Part( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
@@ -438,6 +438,135 @@ public class InsertCommandTest {
         result.getDocumentTree()
       ) ;
 
+  }
+
+
+  @Test
+  public void identifierWithSingleFileTreatedAsMultiple() 
+      throws MalformedURLException 
+  {
+
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
+    LOG.info(
+        "Loaded Part \n%s",
+        new Part( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
+            getDocumentTree().toStringTree()
+    ) ;
+
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        "file:.", 
+        true,
+        null,
+        false,
+        0,
+        null,
+        ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
+    ) ;
+
+    final SyntacticTree initialTree = tree( BOOK ) ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
+        update( initialTree )
+    ) ;
+
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+
+    assertEqualsNoSeparators(
+        tree(
+            BOOK,
+            tree(
+                _LEVEL,
+                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "L2-4" ) ),
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-2-4" ) )
+            )
+        ),
+        result.getDocumentTree()
+    ) ;
+
+  }
+
+
+  @Test
+  public void useIdentifiersAcrossMultipleParts() 
+      throws MalformedURLException 
+  {
+    resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_1 ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
+
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        "file:.", 
+        true,
+        null,
+        false,
+        0,
+        null,
+        ImmutableList.< FragmentIdentifier >of(
+            new FragmentIdentifier( "level-1-0" ),
+            new FragmentIdentifier( "level-2-4" )
+        )
+    ) ;
+
+    final SyntacticTree initialTree = tree( BOOK ) ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
+        update( initialTree )
+    ) ;
+
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+
+    assertEqualsNoSeparators(
+        tree(
+            BOOK,
+            tree(
+                _LEVEL,
+                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-1-0" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "L1-0" ) ),
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0" ) )
+            ),
+            tree(
+                _LEVEL,
+                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
+                tree( LEVEL_TITLE, tree( WORD_, "L2-4" ) ),
+                tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-2-4" ) )
+            )
+        ),
+        result.getDocumentTree()
+    ) ;
+
+  }
+
+  @Test
+  public void detectIdentifierCollisionThroughMultipleParts() 
+      throws MalformedURLException 
+  {
+    resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.PART_MANY_IDENTIFIERS ) ;
+
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        "file:.", 
+        true,
+        null,
+        false,
+        0,
+        null,
+        ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
+    ) ;
+
+    final SyntacticTree initialTree = tree( BOOK ) ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
+        update( initialTree )
+    ) ;
+
+    assertTrue( result.getProblems().iterator().hasNext() ) ;
+    
   }
 
 

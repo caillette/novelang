@@ -161,6 +161,10 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     return new Location( locationName, line, column ) ;
   }
 
+  public Location createLocation() {
+    return new Location( locationName ) ;
+  }
+
   public Charset getRenderingCharset() {
     return renderingCharset;
   }

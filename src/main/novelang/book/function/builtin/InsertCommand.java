@@ -20,15 +20,24 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.treemangling.DesignatorInterpreter;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Laurent Caillette
@@ -130,7 +139,7 @@ public class InsertCommand extends AbstractCommand {
       return environment.addProblem( Problem.createProblem( e ) ) ;
     }
 
-    final List< SyntacticTree > partTrees = Lists.newArrayList() ;
+    final Iterable< ? extends SyntacticTree > partTrees ;
 
     // TODO handle following cases altogether: fragments, createLevel.
 
@@ -138,27 +147,18 @@ public class InsertCommand extends AbstractCommand {
 
     if( partTree != null ) {
       if( hasIdentifiers ) {
-        final DesignatorInterpreter designatorMapper = 
-            new DesignatorInterpreter( Treepath.create( partTree ) ) ;
-        final List< Problem > designatorProblems = Lists.newArrayList() ;
-        for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
-          final Treepath< SyntacticTree > fragmentTreepath =
-              designatorMapper.get( fragmentIdentifier ) ;
-          if( fragmentTreepath == null ) {
-            designatorProblems.add( 
-                Problem.createProblem( 
-                    "Cannot find: '" + fragmentIdentifier + "'", getLocation() ) ) ;
-          } else {
-            final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
-            partTrees.add( fragment ) ;
-          }
+        final AddIdentifiers addIdentifiers = new AddIdentifiers(
+            new DesignatorInterpreter( Treepath.create( partTree ) ), 
+            fragmentIdentifiers, 
+            getLocation(),
+            true
+        ) ;
+        if( addIdentifiers.hasDesignatorProblem() ) {
+          return environment.addProblems( addIdentifiers.getDesignatorProblems() ) ;
         }
-        Iterables.addAll( designatorProblems, designatorMapper.getProblems() ) ;
-        if( designatorProblems.iterator().hasNext() ) {
-          return environment.addProblems( designatorProblems ) ;
-        }
+        partTrees = addIdentifiers.getPartTrees() ;
       } else {
-        Iterables.addAll( partTrees, partTree.getChildren() ) ;
+        partTrees = partTree.getChildren() ;
       }
 
       if( createLevel ) {
@@ -190,17 +190,46 @@ public class InsertCommand extends AbstractCommand {
     }
   }
 
+  /**
+   * When inserting from several files, Identifiers make things more complex.
+   * Identifier resolution must occur on all scanned Parts as a whole for preserving uniqueness 
+   * of the Identifiers. 
+   * (If the user doesn't want unique Identifiers he/she should insert from each Part
+   * explicitely, or use Tags.)
+   * <p>
+   * With {@link DesignatorInterpreter} alone, processing all scanned Parts at once drops
+   * information about the originating Part (and therefore the originating File) of each 
+   * inserted Fragment. This prevents level creation from working properly, and from 
+   * reporting Part files in which collisions occur.
+   * <p>
+   * An approach for keeping originating Part would be to decorate every Identifier-enabled 
+   * node with its origin before processing the whole with {@link DesignatorInterpreter}. 
+   * This will happen in the future, but not as a particular case here.
+   * <p>
+   * The approach of choice relies on after-the-fact conflict detection. 
+   * If requested Identifiers appear once and once only in the set of inserted Parts, 
+   * then processing each Part individually gives the same result. Identifier unicity check
+   * occurs by ensuring that requested Identifier appears once and once only in every
+   * {@link DesignatorInterpreter}.
+   */
   private CommandExecutionContext evaluateMultiple(
       final CommandExecutionContext environment,
       final File insertedFile,
       final boolean recurse
   ) {
     LOG.debug( "Command %s evaluating recursively on %s", this, insertedFile  ) ;
-   
     
     final List< Problem > problems = Lists.newArrayList() ;
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
     Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
+    final boolean hasIdentifiers = fragmentIdentifiers.iterator().hasNext() ;
+    final Multimap< FragmentIdentifier, Part > identifiedFragments ;
+    if( hasIdentifiers ) {
+      identifiedFragments = HashMultimap.create();
+    } else {
+      identifiedFragments = null ;
+    }
+    
 
     try {
       book = findLastLevel( book, levelAbove ) ;
@@ -220,18 +249,38 @@ public class InsertCommand extends AbstractCommand {
         if( null != part && null != part.getDocumentTree() ) {
           final SyntacticTree partTree =
               part.relocateResourcePaths( environment.getBaseDirectory() ).getDocumentTree() ;
+          final List< SyntacticTree > partChildren = Lists.newArrayList() ;
+
+          if( hasIdentifiers ) {
+            final DesignatorInterpreter designatorInterpreter =
+                new DesignatorInterpreter( Treepath.create( partTree ) ) ;
+            if( designatorInterpreter.hasProblem() ) {
+              Iterables.addAll( problems, designatorInterpreter.getProblems() ) ;
+            } else {
+              for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
+                final Treepath< SyntacticTree > fragment =
+                    designatorInterpreter.get( fragmentIdentifier ) ;
+                if( fragment != null ) {
+                  identifiedFragments.put( fragmentIdentifier, part ) ;
+                  partChildren.add( fragment.getTreeAtEnd() ) ;
+                }
+              }
+            }
+
+          } else {
+            Iterables.addAll( partChildren, partTree.getChildren() ) ;
+          }
 
           if( createLevel ) {
             book = createChapterFromPartFilename(
                 book,
                 partFile,
-                partTree.getChildren(),
+                partChildren,
                 styleTree
             ) ;
             book = findLastLevel( book, levelAbove ) ;
-
           } else {
-            for( SyntacticTree partChild : partTree.getChildren() ) {
+            for( SyntacticTree partChild : partChildren ) {
               if( styleTree != null ) {
                 partChild = TreeTools.addFirst( partChild, styleTree ) ;
               }
@@ -242,9 +291,13 @@ public class InsertCommand extends AbstractCommand {
             }
           }
 
-
         }
       }
+
+      if( hasIdentifiers ) {
+        Iterables.addAll( problems, createProblems( identifiedFragments, getLocation() ) ) ;
+      }
+
     } catch( CommandParameterException e ) {
       problems.add( Problem.createProblem( e ) ) ;
     }
@@ -333,6 +386,72 @@ public class InsertCommand extends AbstractCommand {
           "Not a directory: '" + directory.getAbsolutePath() + "'" ) ;
     }
   }
+
+
+  private static Iterable< Problem > createProblems(
+      final Multimap< FragmentIdentifier, Part > identifiedFragments,
+      final Location location
+  ) {
+    final List< Problem > problems = Lists.newArrayList() ;
+    for( final FragmentIdentifier fragmentIdentifier : identifiedFragments.keySet() ) {
+      final Collection< Part > parts = identifiedFragments.get( fragmentIdentifier ) ;
+      if( parts == null ) {
+        problems.add( Problem.createProblem(
+            "Could not find " + fragmentIdentifier + " in any given Part",
+            location
+        ) ) ;
+      } else if( parts.size() > 1 ) {
+        problems.add( Problem.createProblem(
+            "Identifier " + fragmentIdentifier + " found multiple times in:" +
+            Joiner.on( "\n" ).join( parts )
+            ,
+            location
+        ) ) ;
+      }
+    }
+    return problems ;
+  }
+  
+  private static class AddIdentifiers {
+    
+    private final List< Problem > designatorProblems = Lists.newArrayList() ;
+    private final List< SyntacticTree > partTrees = Lists.newArrayList();
+
+    public AddIdentifiers( 
+        final DesignatorInterpreter designatorMapper,
+        final Iterable< FragmentIdentifier > fragmentIdentifiers,
+        final Location location,
+        final boolean createProblemForUnmappedIdentifier
+    ) {
+
+      for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
+        final Treepath< SyntacticTree > fragmentTreepath =
+            designatorMapper.get( fragmentIdentifier ) ;
+        if( createProblemForUnmappedIdentifier && fragmentTreepath == null ) {
+          designatorProblems.add( 
+              Problem.createProblem( 
+                  "Cannot find: '" + fragmentIdentifier + "'", location ) ) ;
+        } else {
+          final SyntacticTree fragment = fragmentTreepath.getTreeAtEnd() ;
+          partTrees.add( fragment ) ;
+        }
+      }
+      Iterables.addAll( designatorProblems, designatorMapper.getProblems() ) ;
+    }
+    
+    public boolean hasDesignatorProblem() {
+      return designatorProblems.size() > 0 ;
+    }
+    
+    public Iterable< Problem > getDesignatorProblems() {
+      return designatorProblems ;
+    }
+
+    public Iterable< SyntacticTree > getPartTrees() {
+      return partTrees ;
+    }
+  }
+  
   
 // ==============  
 // Generated code
