@@ -596,26 +596,31 @@ The XML structure of source document above looks like this:
 
 === Identifiers
 
-XML element: ``n:composite-identifier``
+XML element: ``n:explicit-identifier``, ``n:implicit-identifier``
 
 An identifier is a textual marker identifying a level inside a Part.
 The ``insert`` command (explained in "Book syntax" chapter) recognizes identifiers to insert
 only given levels.
 
-An identifier may be either absolute or relative. An absolute identifier starts with a double
+As defined in a Part, an identifier may be either absolute or relative. 
+
+--- An absolute identifier starts with a double
 reverse solidus ``\\``. A relative identifier starts with a single reverse solidus ``\``.
 The rest of the identifier is made of letters, digts, and hyphen minus
 (hyphen minus may only appear between letters and digits and there cannot be two consecutive ones).
 
-A relative identifier refers to another relative identifier, or to an absolute identifer,
+--- A relative identifier refers to another relative identifier, or to an absolute identifer,
 along the hierarchy of the level they are attached to.
 Going upwards in a hierarchy of relative identifiers, there must be an absolute one at the top.
 Considering hierachical order, an identifier may not have several immediate subordinates
 with the same name.
 
-A composite identifier is an absolute identifier, //or// the concatenation of a relative identifier
-and every relative identifiers at upper levels until an absolute one.
-Higher hierarchical levels appear first.
+As Novelang reads a Part file, it resolves relative identifiers as absolute ones.
+
+Because often, titles are good candidates for identifiers, they resolve implicitely as identifiers
+as long as they are unique. As a result of Part processing, an identifier may be either explicit
+or implicit. All implicit identifiers resolve as absolute ones.
+
 
 Given following Part file:
 
@@ -625,66 +630,46 @@ Paragraph 0
   \\One
 == Level 1
 
+
 === Level 1.1
 
 Paragraph 1.1
 
-  \\Two
+
+=== Other
+
+Other level (2)
+
+
+  \Two
 === Level 1.2
 
 Paragraph 1.2
 
-  \\Three
+  \Three
 ==== Level 1.2.1
 
 Paragraph 1.2.1
+
+==== Other
+
+Other level (2)
+
 >>>
 
-... There are three valid composite identifiers.
+It has:
+- 3 explicit identifiers:
+  - ``\\One``
+  - ``\\One\Two``
+  - ``\\One\Three``
+- 3 implicit identifers:
+  - ``\\Level-1.1``
+  - ``\\One\Level-1.1``
+  - ``\\One\Other``
+  - ``\\One\Two\Other``
 
-Composite identifier ``\\One`` is taken from absolute identifier and references the whole document
-except the first paragraph:
-
-<<<
-+ n:level
-  + n:composite-identifier "\\One"
-  + n:level-title "Level 1"
-  + n:level
-    + n:level-title "Level 1.1"
-    + n:paragraph "Paragraph 1.1"
-  + n:level
-    + n:composite-identifier "\\One\Two"
-    + n:level-title "Level 1.2"
-    + n:paragraph "Paragraph 1.2"
-    + n:level
-      + n:composite-identifier "\\One\Two\Three"
-      + n:level-title "Level 1.2.1"
-      + n:paragraph "Paragraph 1.2.1"
->>>
-
-Composite identifier ``\\One\Two`` is a concatenation of absolute identifier and a relative
-identifer:
-
-<<<
-+ n:level
-  + n:composite-identifier "\\One\Two"
-  + n:level-title "Level 1.2"
-  + n:paragraph "Paragraph 1.2"
-  + n:level
-    + n:composite-identifier "\\One\Two\Three"
-    + n:level-title "Level 1.2.1"
-    + n:paragraph "Paragraph 1.2.1"
->>>
-
-Composite identifier ``\\One\Two\Three`` shows that a relative identifier may be relative to
-another relative identifer:
-
-<<<
-+ n:level
-  + n:composite-identifier "\\One\Two\Three"
-  + n:level-title "Level 1.2.1"
-  + n:paragraph "Paragraph 1.2.1"
->>>
+Implicit identifiers resolve in both absolute and relative identifiers, as long as they don't
+collide with another identifier. That's why ``Other`` cannot resolve as absolute identifier.
 
 
 
