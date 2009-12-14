@@ -1,0 +1,82 @@
+== Generating human-friendly designators
+
+A //Designator// helps to locate text fragments. This is a generic term for Tags and Identifiers.
+With `Novelang-0.37.0` come Implicit Identifiers, that make a level title behave as an Identifier.
+With explicit Identifiers, to reference a level from an ``insert`` command you decorate the
+level with an Identifier like this:
+
+<<<
+  \\Preamble
+== Preamble
+
+This is a preamble, blah blah blah...
+>>>
+
+And this is how to insert only the Part with "Preamble" title in some Novelang book:
+
+<<<
+insert file:my-document.nlp \\Preamble
+>>>
+
+But why duplicating the "Preamble" word? As long it doesn't collide with another Identifier
+we should be able to write:
+
+<<<
+== Preamble
+
+This is a preamble, blah blah blah...
+>>>
+
+...And use the ``insert`` command the same way.
+
+
+Now with this feature available, it makes sense to support implicit Tags, too.
+When requesting a document containing only fragments tagged with ``@Preamble`` one could expect
+to see our level with "Preamble" title. The need for Implicit Tags and Identifier came out
+from documents looking like this:
+
+<<<
+  \\Preamble
+  @Preamble
+== Preamble
+
+...
+>>>
+
+Quite not good, for a typing-savvy tool, is it? So now we need a common rule to create Implicit Tags and Implicit Identifiers out from legal Novelang level titles. 
+
+There are some differences between Implicit Tags and Implicit Identifiers. 
+
+--- Implicit Tags don't appear in the list of explicitely-defined Tags (in the ``n:meta/n:tags`` element).
+
+--- One given level title generates only one Implicit Identifier, but it may generate several Implicit Tags. This makes sense for long titles; the longer they are the less likely they are to appear several times in the rendered document. With a simple rule -- like breaking on punctuation signs -- a long title may generate several meaningful Tags.
+
+Here are some generic rules for crafting Implicit Designators:
+
+--- Generate something as close as possible of what a human could write.
+
+--- Resolve to a limited set of characters that comply with the specification of a "URL"
+http://www.ietf.org/rfc/rfc1738.txt
+. By now, Tags appear in the URL-like document request as parameters. There is a chance to support Identifiers as document request parameters, too. 
+
+To make a long story short, the RFC lists diacriticless letters, digits and ``"$-_.+!*'(),"`` characters as legal part of a URL. We can note there is non-uniform support of punctuation signs (``!`` supported but not ``?`` and ``:``). For this reason, we exclude punctuation signs. Same for paired delimiters. The asterisk, plus sign, and dollar sign don't appear as document construct (they may only appear under some escaped form), so we exclude them too. Only remain low line ``_`` and hyphen minus ``-``.
+
+Implicit Tags split on punctuation signs, while Implicit Identifiers must keep them by some mean. By disallowing the low line in Tag syntax, we save it for punctuation sign replacement for Implicit Identifiers.
+
+The hyphen minus may replace space character. But forcing character case to "camel case"
+http://en.wikipedia.org/wiki/CamelCase
+makes shorter Designators, while keeping them quite readable. Camel case only happens for whitespace stripping between two adjacent words.
+
+Samples:
+
+<<<
+Document source   Implicit Designator
+aéœ               aeoe
+x, yz             x_yz      -> 2 Tags: @x  @yz 
+X, yz             X_yz      -> 2 Tags: @X  @yz 
+v `0.1.2`         v0-1-2
+Foo bar           FooBar
+foo bar           fooBar
+foO BAR           foOBAR
+w (x yz)          w_xYz     -> 3 Tags: @w  @x  @yz )
+>>>
