@@ -28,7 +28,6 @@ tokens {
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
   EXTENDED_WORD_ ;
-  IDENTIFIER ;
   BLOCK_INSIDE_PARENTHESIS ;
   BLOCK_INSIDE_SQUARE_BRACKETS ;
   BLOCK_INSIDE_DOUBLE_QUOTES ;
@@ -1783,13 +1782,6 @@ escapedCharacter returns [ String unescaped ]
   ;
 
 
-
-blockIdentifier
-  :	REVERSE_SOLIDUS w = word 
-	  -> ^( IDENTIFIER { delegate.createTree( IDENTIFIER, $w.text ) } )
-  ;
-
-  
 // ==================
 // Book-related rules
 // ==================
