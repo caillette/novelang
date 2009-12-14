@@ -5,7 +5,7 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
   <!-- Don't import default punctuation because it would add special space characters
-       that are hard to distinguate from inside a text editor.
+       that are hard to distinguish from inside a text editor.
   -->
   
   <xsl:output method="text" omit-xml-declaration="yes" indent="no" />
@@ -33,8 +33,6 @@
 
 </xsl:text>
 == <xsl:choose>
-      <xsl:when test="n:identifier" ><xsl:text> </xsl:text>
-<xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
       <xsl:when test="n:level-title" > <xsl:apply-templates select="n:level-title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
@@ -47,7 +45,6 @@
 
 </xsl:text>
 === <xsl:choose>
-    <xsl:when test="n:identifier" ><xsl:text> </xsl:text><xsl:apply-templates select="n:identifier" mode="header" /></xsl:when>
     <xsl:when test="n:level-title" > <xsl:apply-templates select="n:level-title" mode="header" /></xsl:when>
     </xsl:choose>
 <xsl:apply-templates />
@@ -102,8 +99,9 @@
 
 
 
-  <xsl:template match="n:identifier" />
-  <xsl:template match="//n:meta/n:word-count" />    
+  <xsl:template match="n:implicit-identifier" />
+  <xsl:template match="n:explicit-identifier" />
+  <xsl:template match="//n:meta/n:word-count" />
   <xsl:template match="n:level-title" />
   <xsl:template match="n:style" />
   

@@ -100,11 +100,13 @@ public class PartTest {
         ),        
         tree( 
             _LEVEL,
+            tree( _IMPLICIT_IDENTIFIER, "\\\\Section1nlp" ),
             tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 
             _LEVEL,
+            tree( _IMPLICIT_IDENTIFIER, "\\\\section1-w11" ),
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree(
                 PARAGRAPH_REGULAR,

@@ -92,13 +92,14 @@ public class DesignatorInterpreter {
   /*package*/ static final Traversal.MirroredPostorder< SyntacticTree > TRAVERSAL =
       Traversal.MirroredPostorder.create( DesignatorTools.IDENTIFIER_TREE_FILTER )
   ;
+  private final Treepath< SyntacticTree > enrichedTreepath;
 
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
     final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
-    final Treepath< SyntacticTree > enrichedTreepath = enrich(
+    enrichedTreepath = enrich(
         TRAVERSAL.getFirst( treepath.getStart() ),
         babyInterpreter
-    ) ;
+    );
 
     pureIdentifiers = remap( babyInterpreter.getPureIdentifierMap(), enrichedTreepath ) ;
     derivedIdentifiers = remap( babyInterpreter.getDerivedIdentifierMap(), enrichedTreepath ) ;
@@ -113,6 +114,15 @@ public class DesignatorInterpreter {
       LOG.debug( "Created %s%s", this, stringBuilder ) ;
     }
 
+  }
+
+  /**
+   * Returns the {@code Treepath} with enriched Designators.
+   * @return an object with the same content as the one passed to the constructor, except
+   *    for Identifiers.
+   */
+  public Treepath< SyntacticTree > getEnrichedTreepath() {
+    return enrichedTreepath ;
   }
 
   /**

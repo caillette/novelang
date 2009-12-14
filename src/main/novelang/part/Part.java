@@ -26,6 +26,7 @@ import java.util.Set;
 import novelang.common.*;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
+import novelang.treemangling.DesignatorInterpreter;
 import novelang.treemangling.LevelMangler;
 import novelang.treemangling.UrlMangler;
 import novelang.treemangling.SeparatorsMangler;
@@ -171,14 +172,20 @@ public class Part extends AbstractSourceReader {
     if ( null == getDocumentTree() ) {
       return this ;
     } else {
-      Treepath< SyntacticTree > rehierarchized = Treepath.create( tree ) ;
-      rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
+      final Treepath< SyntacticTree > unhierarchized = Treepath.create( tree ) ;
+      final Treepath< SyntacticTree > rehierarchized =
+          ListMangler.rehierarchizeLists( unhierarchized ) ;
+      final Treepath< SyntacticTree > enrichedWithDesignators =
+          new DesignatorInterpreter( rehierarchized ).getEnrichedTreepath() ;
       final Set< String > tagset = MetadataHelper.findTags( tree ) ;
-      rehierarchized = TagFilter.filter( rehierarchized, restrictingTags ) ;
-      rehierarchized = Treepath.create( addMetadata( rehierarchized.getTreeAtEnd(), tagset ) ) ;
-      return new Part( this, rehierarchized.getTreeAtEnd() ) ;
+      final Treepath< SyntacticTree > tagsFiltered = 
+          TagFilter.filter( enrichedWithDesignators, restrictingTags ) ;
+      final Treepath< SyntacticTree > withMetadata = Treepath.create(
+          addMetadata( tagsFiltered.getTreeAtEnd(), tagset ) ) ;
+      return new Part( this, withMetadata.getTreeAtStart() ) ;
     }
   }
+
   public Part makeStandalone() {
     return makeStandalone( ImmutableSet.< String >of() ) ;
   }
