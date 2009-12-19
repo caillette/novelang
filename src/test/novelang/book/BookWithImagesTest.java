@@ -25,6 +25,8 @@ import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import static novelang.parser.NodeKind.*;
+
+import novelang.designator.Tag;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.DefaultCharset;
@@ -59,7 +61,7 @@ public class BookWithImagesTest {
         bookWithImagesExplicit,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
-        ImmutableSet.< String >of()
+        ImmutableSet.< Tag >of()
     ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
@@ -81,7 +83,7 @@ public class BookWithImagesTest {
         bookWithImagesRecurse,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
-        ImmutableSet.< String >of()
+        ImmutableSet.< Tag >of()
     ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 

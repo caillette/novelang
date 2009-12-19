@@ -19,6 +19,8 @@ package novelang.treemangling;
 import java.util.Set;
 
 import org.junit.Test;
+
+import novelang.designator.Tag;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.common.SyntacticTree;
@@ -210,19 +212,19 @@ public class TagFilterTest {
 // Fixture
 // =======
 
-  private static final String TAG_1 = "tag-1";
-  private static final String TAG_2 = "tag-2";
-  private static final SyntacticTree TAG1_TREE = tree( TAG, TAG_1 ) ;
-  private static final SyntacticTree TAG2_TREE = tree( TAG, TAG_2 ) ;
+  private static final Tag TAG_1 = new Tag( "tag-1" ) ;
+  private static final Tag TAG_2 = new Tag( "tag-2" ) ;
+  private static final SyntacticTree TAG1_TREE = TAG_1.asSyntacticTree() ;
+  private static final SyntacticTree TAG2_TREE = TAG_2.asSyntacticTree() ;
 
-  private static Set< String > tags( String... tags ) {
+  private static Set< Tag > tags( Tag... tags ) {
     return ImmutableSet.of( tags ) ;
   }
 
   private static void verifyFilterTags(
       SyntacticTree expectedTree,
       SyntacticTree actualTree,
-      Set< String > tags
+      Set< Tag > tags
   ) {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;

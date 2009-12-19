@@ -19,6 +19,7 @@ package novelang.book;
 import java.io.File;
 import java.io.IOException;
 
+import novelang.designator.Tag;
 import novelang.system.DefaultCharset;
 import com.google.common.collect.ImmutableSet;
 
@@ -39,7 +40,7 @@ public class BookTestTools {
         content,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
-        ImmutableSet.< String >of()
+        ImmutableSet.< Tag >of()
     ) ;
   }
 
@@ -51,7 +52,7 @@ public class BookTestTools {
         bookFile,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
-        ImmutableSet.< String >of()
+        ImmutableSet.< Tag >of()
     ) ;
   }
 

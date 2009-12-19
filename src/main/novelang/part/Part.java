@@ -26,6 +26,7 @@ import java.util.Set;
 import novelang.common.*;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
+import novelang.designator.Tag;
 import novelang.treemangling.DesignatorInterpreter;
 import novelang.treemangling.LevelMangler;
 import novelang.treemangling.UrlMangler;
@@ -167,7 +168,7 @@ public class Part extends AbstractSourceReader {
 
   }
 
-  public Part makeStandalone( Set< String > restrictingTags ) {
+  public Part makeStandalone( Set< Tag > restrictingTags ) {
     Preconditions.checkNotNull( restrictingTags ) ;
     if ( null == getDocumentTree() ) {
       return this ;
@@ -187,6 +188,6 @@ public class Part extends AbstractSourceReader {
   }
 
   public Part makeStandalone() {
-    return makeStandalone( ImmutableSet.< String >of() ) ;
+    return makeStandalone( ImmutableSet.< Tag >of() ) ;
   }
 }

@@ -25,6 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+
+import novelang.designator.Tag;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import com.google.common.collect.Iterables;
@@ -60,7 +62,7 @@ import novelang.rendering.RenditionMimeType;
 
   private RenditionMimeType renditionMimeType = RenditionMimeType.PDF ;
 
-    public RenditionMimeType getRenditionMimeType() {
+  public RenditionMimeType getRenditionMimeType() {
     return renditionMimeType;
   }
 
@@ -121,21 +123,21 @@ import novelang.rendering.RenditionMimeType;
 // tags
 // ====
 
-  private Set< String > tags = ImmutableSet.of() ;
+  private Set< Tag > tags = ImmutableSet.of() ;
 
-  public Set< String > getTags() {
+  public Set< Tag > getTags() {
     return tags ;
   }
 
-  private static final Predicate< String > BLANK = new Predicate< String >() {
-    public boolean apply( String s ) {
-      return StringUtils.isBlank( s ) ;
+  private static final Predicate< Tag > NULL_TAG = new Predicate< Tag >() {
+    public boolean apply( Tag s ) {
+      return s == null ;
     }
   } ;
 
-  public void setTags( Set< String > tags ) {
+  public void setTags( Set< Tag > tags ) {
     Preconditions.checkNotNull( tags ) ;
-    Preconditions.checkArgument( ! Iterables.any( tags, BLANK ), "Has blanks: %s", tags ) ;
+    Preconditions.checkArgument( ! Iterables.any( tags, NULL_TAG ), "Has nulls: %s", tags ) ;
     this.tags = ImmutableSet.copyOf( tags ) ;
   }
 
@@ -350,14 +352,13 @@ import novelang.rendering.RenditionMimeType;
     }
   }
 
-  private static Set< String > parseTags( String value ) {
-    final String[] tagArray = value.split( RequestTools.LIST_SEPARATOR ) ;
-    for( String tag : tagArray ) {
-      if( StringUtils.isBlank( tag ) ) {
-        throw new IllegalArgumentException( "Emty tag in tag list" ) ;
-      }
+  private static Set< Tag > parseTags( final String value ) {
+    final String[] stringArray = value.split( RequestTools.LIST_SEPARATOR ) ;
+    final Set< Tag > tagSet = Sets.newHashSet() ;
+    for( String tagAsString : stringArray ) {
+      tagSet.add( new Tag( tagAsString ) ) ;
     }
-    return Sets.newHashSet( tagArray ) ;
+    return ImmutableSet.copyOf( tagSet ) ;
   }
 
   private static Map< String, String > getQueryMap( String query ) {

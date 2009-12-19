@@ -1,6 +1,13 @@
 package novelang.designator;
 
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
+
 import com.google.common.base.Preconditions;
+
+import java.util.Set;
+
+import static novelang.parser.NodeKind.TAG;
 
 /**
  * Strong-types a Tag which is just a non-null String.
@@ -12,11 +19,17 @@ public final class Tag {
   private final String name ;
 
   public Tag( String name ) {
-    this.name = Preconditions.checkNotNull( name ) ;
+    Preconditions.checkNotNull( name ) ;
+    Preconditions.checkArgument( ! "".equals( name ) ) ;
+    this.name = name ;
   }
 
   public String getName() {
     return name ;
+  }
+  
+  public SyntacticTree asSyntacticTree() {
+    return new SimpleTree( TAG, new SimpleTree( name ) ) ;
   }
 
   @Override
@@ -42,5 +55,16 @@ public final class Tag {
   @Override
   public String toString() {
     return getClass().getSimpleName() + "[" + name + "]" ;
+  
+  }
+  
+  public static boolean contains( final Set< Tag > tagset, final String tagAsString )
+  {
+    for( final Tag tag : tagset ) {
+      if( tag.getName().equals( tagAsString ) ) {
+        return true ;
+      }
+    }
+    return false ;
   }
 }

@@ -24,6 +24,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.TagBehavior;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
+import novelang.designator.Tag;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
 import novelang.system.LogFactory;
@@ -43,7 +44,7 @@ public class TagFilter {
 
   public static Treepath< SyntacticTree > filter(
       Treepath< SyntacticTree > treepath,
-      Set< String > tags
+      Set< Tag > tags
   ) {
     LOG.debug( "Filtering on %s", tags ) ;
     
@@ -60,7 +61,7 @@ public class TagFilter {
     return treepath ;
   }
   
-  private static Result doFilter( final SyntacticTree tree, final Set< String > tags ) {    
+  private static Result doFilter( final SyntacticTree tree, final Set< Tag > tags ) {    
     final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
     final TagBehavior behavior = nodeKind.getTagBehavior() ;
     switch( behavior ) {
@@ -117,11 +118,11 @@ public class TagFilter {
 
   private static boolean hasTag(
       SyntacticTree tree,
-      Set< String > tags
+      Set< Tag > tags
   ) {
     for( SyntacticTree child : tree.getChildren() ) {
       if( child.isOneOf( NodeKind.TAG ) ) {
-        if( tags.contains( child.getChildAt( 0 ).getText() ) ) {
+        if( Tag.contains( tags, child.getChildAt( 0 ).getText() ) ) {
           return true ;
         }
       }

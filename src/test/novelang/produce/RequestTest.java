@@ -19,9 +19,12 @@ package novelang.produce;
 
 import java.util.Set;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import novelang.designator.Tag;
 import novelang.rendering.RenditionMimeType;
 import novelang.system.LogFactory;
 import novelang.system.Log;
@@ -135,16 +138,24 @@ public class RequestTest {
       "=" + STYLESHEET_RESOURCENAME
   ;
 
-  private static Set< String > TAGSET = ImmutableSet.of( "tag-1", "Tag2" ) ;
+  private static Set< Tag > TAGSET = ImmutableSet.of( new Tag( "tag-1" ), new Tag( "Tag2" ) ) ;
 
-  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
-      PDF_REQUEST_PATH +
-      "?" +
-      RequestTools.TAGSET_PARAMETER_NAME + "=" +
-          Joiner.on( RequestTools.LIST_SEPARATOR ).join( TAGSET ) +
-      "&" +
-      RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
-  ;
+  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ;
+  static {
+    final Set< String > tagsAsString= Sets.newHashSet() ;
+    for( final Tag tag : TAGSET ) {
+      tagsAsString.add( tag.getName() ) ;
+    }
+    
+    PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
+        PDF_REQUEST_PATH +
+        "?" +
+        RequestTools.TAGSET_PARAMETER_NAME + "=" +
+            Joiner.on( RequestTools.LIST_SEPARATOR ).join( tagsAsString ) +
+        "&" +
+        RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
+    ;
+  }
 
   private static final String REQUEST_PATH_BROKEN =
       PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;

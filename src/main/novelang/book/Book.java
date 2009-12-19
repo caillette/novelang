@@ -40,6 +40,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.FileTools;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
+import novelang.designator.Tag;
 import novelang.treemangling.LevelMangler;
 import novelang.treemangling.SeparatorsMangler;
 import novelang.treemangling.TagFilter;
@@ -64,7 +65,7 @@ public class Book extends AbstractSourceReader {
       File bookFile,
       Charset suggestedSourceCharset,
       Charset suggestedRenderingCharset,
-      Set< String > restrictingTags
+      Set< Tag > restrictingTags
   ) throws IOException {
     this(
         baseDirectory,
@@ -83,7 +84,7 @@ public class Book extends AbstractSourceReader {
       String content,
       Charset suggestedSourceCharset,
       Charset defaultRenderingCharset,
-      Set< String > tagRestrictions
+      Set< Tag > tagRestrictions
   ) {
     super( suggestedSourceCharset, defaultRenderingCharset ) ;
 
