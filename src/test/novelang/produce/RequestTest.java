@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import novelang.designator.Tag;
+import novelang.designator.TagTestTools;
 import novelang.rendering.RenditionMimeType;
 import novelang.system.LogFactory;
 import novelang.system.Log;
@@ -144,7 +145,7 @@ public class RequestTest {
   static {
     final Set< String > tagsAsString= Sets.newHashSet() ;
     for( final Tag tag : TAGSET ) {
-      tagsAsString.add( tag.getName() ) ;
+      tagsAsString.add( TagTestTools.getTagAsString( tag ) ) ;
     }
     
     PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =

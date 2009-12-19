@@ -10,7 +10,7 @@ import java.util.Set;
 import static novelang.parser.NodeKind.TAG;
 
 /**
- * Strong-types a Tag which is just a non-null String.
+ * Strong-types a Tag which is just a non-null, non-empty String.
  * 
  * @author Laurent Caillette
  */
@@ -24,10 +24,6 @@ public final class Tag {
     this.name = name ;
   }
 
-  public String getName() {
-    return name ;
-  }
-  
   public SyntacticTree asSyntacticTree() {
     return new SimpleTree( TAG, new SimpleTree( name ) ) ;
   }
@@ -61,7 +57,7 @@ public final class Tag {
   public static boolean contains( final Set< Tag > tagset, final String tagAsString )
   {
     for( final Tag tag : tagset ) {
-      if( tag.getName().equals( tagAsString ) ) {
+      if( tag.name.equals( tagAsString ) ) {
         return true ;
       }
     }
