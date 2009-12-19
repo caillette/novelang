@@ -19,15 +19,16 @@ package novelang.rendering;
 import java.nio.charset.Charset;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import novelang.common.Renderable;
-import novelang.common.SyntacticTree;
-import novelang.common.Problem;
-import novelang.common.StylesheetMap;
+import novelang.common.*;
 import novelang.parser.shared.Lexeme;
 import novelang.parser.GeneratedLexemes;
+import novelang.parser.NodeKind;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author Laurent Caillette
@@ -43,9 +44,18 @@ public class RenderingTools {
   public static String textualize( final SyntacticTree tree, final Charset charset )
       throws Exception
   {
+    return textualize( tree, charset, new PlainTextWriter( charset ) ) ;
+  }
 
+  private static String textualize(
+      final SyntacticTree tree,
+      final Charset charset,
+      final FragmentWriter fragmentWriter
+  )
+      throws Exception
+  {
     final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
-    new GenericRenderer( new PlainTextWriter( charset ) ).render(
+    new GenericRenderer( fragmentWriter ).render(
         new RenderableTree( tree, charset ),
         byteArrayOutputStream
     ) ;
@@ -59,24 +69,79 @@ public class RenderingTools {
   public static String markerize( final SyntacticTree tree, final Charset charset )
       throws Exception
   {
-    String s = textualize( tree, charset ) ;
-    s = replaceAll( GeneratedLexemes.getLexemes(), s ) ;    
-    
+    // Produce a String replacing delimiters like ()[]"" and punctuation signs by '_'.
+    String s = textualize( 
+        tree,
+        charset,
+        new PlainTextWriter( charset, DELIMITERS ) {
+          @Override
+          public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
+            write( kinship, asLiteral( word ) ) ;
+          }
+        }
+    ) ;
     s = s.replaceAll( "[,.;?!:]+", "_" ) ;
-    s = s.replaceAll( " +", "-" ) ;
+
+    // Replace diacritics by their "naked" version.
+    s = replaceAll( GeneratedLexemes.getLexemes(), s ) ;
+
+    // Collapse ' ', '-', '_'.
+    s = s.replaceAll( " +", " " ) ;
     s = s.replaceAll( "-+", "-" ) ;
     s = s.replaceAll( "_+", "_" ) ;
-    s = s.replaceAll( "-+\\z", "" ) ;
-    s = s.replaceAll( "_+\\z", "" ) ;
+
+    // Collapse sequences that would fool camel-casing.
+    s = s.replaceAll( " _", "_" ) ;
+    s = s.replaceAll( "_ ", "_" ) ;
+    
+    
+    // Camel-casing: for every word preceded by a ' ' force the 1st letter to upper case.
+    final StringBuffer buffer = new StringBuffer() ;
+    final Matcher matcher = WORD_BUT_FIRST.matcher( s ) ;
+    while( matcher.find() ) {
+      final String word = matcher.group( 1 ) ;
+        matcher.appendReplacement( buffer, firstCharacterToUpperCase( word ) ) ;
+    }
+    matcher.appendTail( buffer ) ;
+    s = buffer.toString() ;
+
+    // Trim '-' and '_' at the beginning.
     s = s.replaceAll( "\\A-+", "" ) ;
     s = s.replaceAll( "\\A_+", "" ) ;
+
+    // Trim '-' and '_' at the end.
+    s = s.replaceAll( "-+\\z", "" ) ;
+    s = s.replaceAll( "_+\\z", "" ) ;
+
+
+    // Collapse ' ', '-', '_' again, could have created some again.
+    s = s.replaceAll( " +", " " ) ;
+    s = s.replaceAll( "-+", "-" ) ;
+    s = s.replaceAll( "_+", "_" ) ;
+
+    // Collapse remaining sequences.
     s = s.replaceAll( "-_", "_" ) ;
     s = s.replaceAll( "_-", "_" ) ;
+
+    // Discard every character which is not a letter, a digit, a '_' or a '-'.
     s = s.replaceAll( "[^0-9a-zA-Z\\-\\_]+", "" ) ;
     return s ;
   }
+
+  private static String asLiteral( final String s )
+  {
+    return s.replaceAll( "[^0-9a-zA-Z]+", "-" ) ;
+  }
+
+  private static String firstCharacterToUpperCase(final String s ) {
+    return Character.toUpperCase( s.charAt( 0 ) ) + s.substring( 1 ) ;
+  }
+
+  private static final Pattern WORD_BUT_FIRST = Pattern.compile(
+  //   v beware of the leading space.
+      " ([0-9a-zA-Z]+(?:-[0-9a-zA-Z]+)*)" ) ;
   
-  private static String replaceAll( Map< Character, Lexeme > characterMap, String s ) {
+  private static String replaceAll( final Map< Character, Lexeme > characterMap, final String s ) {
     final StringBuilder stringBuilder = new StringBuilder() ;
     for( final char c : s.toCharArray() ) {
       final Lexeme lexeme = characterMap.get( c ) ;
@@ -88,7 +153,22 @@ public class RenderingTools {
     }
     return stringBuilder.toString() ;
   }
-  
+
+  private static final String DELIMITER_REPLACEMENT = "_" ;
+
+  private static final PlainTextWriter.DelimiterPair TAGGING_PAIR =
+      PlainTextWriter.pair(DELIMITER_REPLACEMENT, DELIMITER_REPLACEMENT) ;
+
+  private static final Map< NodeKind, PlainTextWriter.DelimiterPair > DELIMITERS =
+      new ImmutableMap.Builder< NodeKind, PlainTextWriter.DelimiterPair>().
+      put( NodeKind.BLOCK_INSIDE_DOUBLE_QUOTES, TAGGING_PAIR ).
+      put( NodeKind.BLOCK_INSIDE_PARENTHESIS, TAGGING_PAIR ).
+      put( NodeKind.BLOCK_INSIDE_HYPHEN_PAIRS, TAGGING_PAIR ).
+      put( NodeKind.BLOCK_INSIDE_SQUARE_BRACKETS, TAGGING_PAIR ).
+      put( NodeKind.BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, TAGGING_PAIR ).
+      build()
+  ;
+
   
 
   public static class RenderableTree implements Renderable {

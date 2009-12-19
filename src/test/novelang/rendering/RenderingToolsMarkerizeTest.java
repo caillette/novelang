@@ -18,11 +18,21 @@ package novelang.rendering;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import org.fest.reflect.core.Reflection;
 
 import novelang.common.SyntacticTree;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
+
+import novelang.part.Part;
+import novelang.part.PartTestingTools;
 import novelang.system.DefaultCharset;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+
+import java.util.regex.Pattern;
 
 /**
  * Tests for 
@@ -45,7 +55,7 @@ public class RenderingToolsMarkerizeTest {
   public void useAscii62() throws Exception {
     final SyntacticTree tree = tree(
         LEVEL_TITLE,
-        tree( WORD_, "aéœ" )
+        tree( WORD_, "a\u00e8\u0153" ) // "aéœ"
     ) ;
     verify( "aeoe", tree );
   }
@@ -54,37 +64,158 @@ public class RenderingToolsMarkerizeTest {
   public void renderWordsAndPunctuationSigns() throws Exception {
     final SyntacticTree tree = tree(
         LEVEL_TITLE,
-        tree( WORD_, "y" ),
+        tree( WORD_, "wx" ),
         tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, tree( "," ) ) ),
-        tree( WORD_, "z" ),
+        tree( WORD_, "yz" ),
         tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP, tree( "." ) ) )
 
     ) ;
-    verify( "y_z", tree );
+    verify( "wx_yz", tree );
+  }
+
+  @Test
+  public void renderWordsAndPunctuationSignsWithFirstWordHavingCap() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "Wx" ),
+        tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, tree( "," ) ) ),
+        tree( WORD_, "yz" ),
+        tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP, tree( "." ) ) )
+
+    ) ;
+    verify( "Wx_yz", tree );
   }
 
   @Test
   public void renderWordThenBlockInsideGraveAccents() throws Exception {
     final SyntacticTree tree = tree(
         LEVEL_TITLE,
-        tree( WORD_, "z" ),
+        tree( WORD_, "v" ),
         tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, tree( "0.1.2" ) )
 
     ) ;
-    verify( "z-0_1_2", tree );
+    verify( "v0-1-2", tree );
   }
+
+
+  @Test
+  public void twoAdjacentWords() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "wx" ),
+        tree( WORD_, "yz" )
+
+    ) ;
+    verify( "wxYz", tree );
+  }
+
+  @Test
+  public void hyphenInTheMiddleOfAWord() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "xy-z" )
+
+    ) ;
+    verify( "xy-z", tree );
+  }
+
+
+  @Test
+  public void twoAdjacentWordsFirstWithCap() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "Wx" ),
+        tree( WORD_, "yz" )
+
+    ) ;
+    verify( "WxYz", tree );
+  }
+
+
+  @Test
+  public void twoAdjacentWordsSecondWithCap() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "wx" ),
+        tree( WORD_, "Yz" )
+
+    ) ;
+    verify( "wxYz", tree );
+  }
+
+
+  @Test
+  public void punctuationSignThenBlock() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "wx" ),
+        tree( 
+            PUNCTUATION_SIGN, 
+            tree( SIGN_COMMA, "," ) 
+        ),
+        tree( 
+            BLOCK_INSIDE_PARENTHESIS, 
+            tree( WORD_, "Yz" )        
+        )
+
+    ) ;
+    verify( "wx_Yz", tree );
+  }
+
+
+  @Test
+  public void parenthesis() throws Exception {
+    final SyntacticTree tree = tree(
+        LEVEL_TITLE,
+        tree( WORD_, "uv" ),
+        tree(
+            BLOCK_INSIDE_PARENTHESIS,
+            tree( WORD_, "wx" ),
+            tree( WORD_, "Yz" )
+        )
+    ) ;
+    verify( "uv_wxYz", tree );
+  }
+
+  @Test
+  public void regexForWordReplacement() {
+    final Pattern pattern = Reflection.staticField( "WORD_BUT_FIRST" ).
+        ofType( Pattern.class ).in( RenderingTools.class ).get() ;
+    assertNotNull( pattern ) ;
+    assertEquals( "uv§_yz", "uv wx_yz".replaceAll( pattern.pattern(), "§" ) ) ;
+
+  }
+  
+  @Test
+  public void demo() throws Exception {
+    logRendered( "This is some text. Be cool." ) ;
+    logRendered( "This is a title... (So what?)" ) ;
+    logRendered( "Version `0.1.2.3`" ) ;
+    logRendered( "Some ``@#!garbage)<--.§``here!" ) ;
+  }
+
 
 
 // =======
 // Fixture
 // =======
+  
+  private static final Log LOG = LogFactory.getLog( RenderingToolsMarkerizeTest.class ) ;
 
-  private static void verify( String expected, SyntacticTree tree ) throws Exception {
+  private static void verify( final String expected, final SyntacticTree tree ) throws Exception {
     final String rendered = RenderingTools.markerize(
         tree
         ,
         DefaultCharset.RENDERING
     ) ;
-    Assert.assertEquals( expected, rendered ) ;
+    assertEquals( expected, rendered ) ;
   }
+  
+  private void logRendered( String text ) throws Exception {
+    final Part part = PartTestingTools.create( text ) ;
+    final String markerized = RenderingTools.markerize( 
+        part.getDocumentTree(), DefaultCharset.RENDERING ) ;
+    LOG.info( markerized ) ;
+  }
+  
 }

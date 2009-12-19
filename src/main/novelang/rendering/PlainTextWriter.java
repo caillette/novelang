@@ -21,10 +21,12 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
-import novelang.common.metadata.MetadataHelper;
+import novelang.parser.NodeKind;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author Laurent Caillette
@@ -32,9 +34,18 @@ import novelang.common.metadata.MetadataHelper;
 public class PlainTextWriter implements FragmentWriter {
 
   private final Charset charset ;
+  private final Map< NodeKind, DelimiterPair > delimiters ;
 
-  public PlainTextWriter( Charset charset ) {
-    this.charset = charset;
+  public PlainTextWriter( final Charset charset ) {
+    this( charset, VOID_DELIMITERS) ;
+  }
+
+  public PlainTextWriter(
+      final Charset charset,
+      final Map< NodeKind, DelimiterPair > delimiterPairs
+  ) {
+    this.charset = charset ;
+    this.delimiters = ImmutableMap.copyOf( delimiterPairs ) ;
   }
 
   private PrintWriter writer ;
@@ -44,8 +55,8 @@ public class PlainTextWriter implements FragmentWriter {
   }
 
   public void startWriting(
-      OutputStream outputStream,
-      DocumentMetadata documentMetadata
+      final OutputStream outputStream,
+      final DocumentMetadata documentMetadata
   ) throws Exception {
     final OutputStreamWriter outputStreamWriter = new OutputStreamWriter( outputStream, charset ) ;        
     writer = new PrintWriter( outputStreamWriter ) ;
@@ -55,17 +66,47 @@ public class PlainTextWriter implements FragmentWriter {
     writer.flush() ;
   }
 
-  public void start( Nodepath kinship, boolean wholeDocument ) throws Exception { }
+  public void start( final Nodepath kinship, final boolean wholeDocument ) throws Exception {
+    final DelimiterPair delimiterPair = getDelimiterPair( kinship ) ;
+    if( delimiterPair != null ) {
+      write( kinship, delimiterPair.left ) ;
+    }
+  }
 
-  public void end( Nodepath path ) throws Exception { }
+  public void end( final Nodepath kinship ) throws Exception {
+    final DelimiterPair delimiterPair = getDelimiterPair( kinship ) ;
+    if( delimiterPair != null ) {
+      write( kinship, delimiterPair.left ) ;
+    }
+  }
 
-  public void write( Nodepath path, String word ) throws Exception {
+  public void write( final Nodepath path, final String word ) throws Exception {
     writer.append( word ) ;
   }
 
-  public void writeLiteral( Nodepath kinship, String word ) throws Exception {
+  public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
     write( kinship, word ) ;
   }
 
-  
+  private DelimiterPair getDelimiterPair( final Nodepath kinship ) {
+    return delimiters.get( kinship.getCurrent() ) ;
+  }
+
+  public static class DelimiterPair
+  {
+
+    public final String left ;
+    public final String right ;
+
+    private DelimiterPair( final String left, final String right ) {
+      this.left = left ;
+      this.right = right ;
+    }
+  }
+
+  public static DelimiterPair pair( final String left, final String right ) {
+    return new DelimiterPair( left, right ) ;
+  }
+
+  private static final Map< NodeKind, DelimiterPair > VOID_DELIMITERS = ImmutableMap.of() ;
 }

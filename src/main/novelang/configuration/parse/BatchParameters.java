@@ -16,20 +16,10 @@
  */
 package novelang.configuration.parse;
 
-import java.io.File;
-import java.io.ByteArrayOutputStream;
-import java.nio.charset.Charset;
-
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 
-import novelang.common.Renderable;
-import novelang.common.SyntacticTree;
-import novelang.common.Problem;
-import novelang.common.StylesheetMap;
-import novelang.rendering.GenericRenderer;
-import novelang.rendering.PlainTextWriter;
-import com.google.common.collect.ImmutableList;
+import java.io.File;
 
 /**
  * @author Laurent Caillette
@@ -37,6 +27,7 @@ import com.google.common.collect.ImmutableList;
 public abstract class BatchParameters extends GenericParameters {
 
   private final File outputDirectory ;
+  @SuppressWarnings({"AccessStaticViaInstance"})
   static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder
       .withLongOpt( "output-dir" )
       .withDescription( "Output directory for rendered documents" )

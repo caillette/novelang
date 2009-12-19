@@ -61,7 +61,9 @@ public class Nodepath {
   }
 
   private String getPathAsString() {
-    return null == ancestor ? "" : ancestor.getPathAsString() + "->" + current.name() ;
+    return
+        current.name() +
+        ( null == ancestor ? "" : "->" + ancestor.getPathAsString() ) ;
   }
 
   @Override
