@@ -15,19 +15,17 @@ import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.WORD_;
 import novelang.part.Part;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.treemangling.DesignatorInterpreter;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -36,8 +34,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Laurent Caillette

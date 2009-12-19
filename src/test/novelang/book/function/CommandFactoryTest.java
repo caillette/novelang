@@ -5,7 +5,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.book.function.builtin.InsertCommand;
 import novelang.book.function.builtin.MapstylesheetCommand;
 import novelang.book.function.builtin.FileOrdering;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;

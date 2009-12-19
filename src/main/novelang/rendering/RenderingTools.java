@@ -64,7 +64,7 @@ public class RenderingTools {
   }
 
   /**
-   * Produces a marker name from some {@code SyntacticTree}.
+   * Produces a designator name from some {@code SyntacticTree}.
    */
   public static String markerize( final SyntacticTree tree, final Charset charset )
       throws Exception

@@ -24,7 +24,7 @@ import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.common.tree.RobustPath;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 import novelang.parser.NodeKind;
 import novelang.system.Log;
 import novelang.system.LogFactory;

@@ -1,4 +1,4 @@
-package novelang.marker;
+package novelang.designator;
 
 import com.google.common.base.Preconditions;
 

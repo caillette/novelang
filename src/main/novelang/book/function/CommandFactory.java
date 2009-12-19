@@ -9,7 +9,7 @@ import novelang.book.function.builtin.MapstylesheetCommand;
 import novelang.book.function.builtin.FileOrdering;
 import novelang.system.LogFactory;
 import novelang.system.Log;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap;

@@ -17,7 +17,7 @@ import static novelang.parser.NodeKind.WORD_;
 import static novelang.parser.NodeKind.RELATIVE_IDENTIFIER;
 import static novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
 import static novelang.parser.NodeKind.PART;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 
 /**
  * Tests for {@link BabyInterpreter}.

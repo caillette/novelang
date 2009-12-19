@@ -1,4 +1,4 @@
-package novelang.marker;
+package novelang.designator;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
-import java.util.Collections;
 
 
 /**

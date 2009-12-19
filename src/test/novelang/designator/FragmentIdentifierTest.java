@@ -1,9 +1,9 @@
-package novelang.marker;
+package novelang.designator;
 
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 
 import org.junit.Test;
-import org.junit.Assert;
+
 import static org.junit.Assert.*;
 import com.google.common.collect.Lists;
 

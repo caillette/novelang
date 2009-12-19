@@ -28,7 +28,7 @@ import org.junit.runners.NameAwareTestClassRunner;
 
 import com.google.common.collect.ImmutableList;
 import novelang.TestResourceTree;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 import static novelang.TestResourceTree.initialize;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;

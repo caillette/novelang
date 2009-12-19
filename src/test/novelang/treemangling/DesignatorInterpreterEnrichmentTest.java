@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableMap;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.RobustPath;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;

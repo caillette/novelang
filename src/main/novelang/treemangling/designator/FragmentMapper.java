@@ -2,7 +2,7 @@ package novelang.treemangling.designator;
 
 import java.util.Map;
 
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 
 /**
  * Needed by tests.

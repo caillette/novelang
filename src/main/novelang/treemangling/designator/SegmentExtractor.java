@@ -6,7 +6,7 @@ import novelang.common.SyntacticTree;
 import novelang.common.Problem;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 
 /**
  * Given a {@link Treepath} to some identifier-bearing tree, extracts a single identifier

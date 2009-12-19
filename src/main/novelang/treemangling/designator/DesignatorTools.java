@@ -10,7 +10,7 @@ import novelang.common.tree.Treepath;
 import novelang.rendering.RenderingTools;
 import novelang.system.DefaultCharset;
 import novelang.parser.NodeKind;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 import com.google.common.collect.Lists;
 import com.google.common.base.Predicate;
 

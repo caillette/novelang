@@ -4,7 +4,7 @@ import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.RobustPath;
-import novelang.marker.FragmentIdentifier;
+import novelang.designator.FragmentIdentifier;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
