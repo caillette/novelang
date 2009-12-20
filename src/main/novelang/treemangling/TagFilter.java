@@ -27,10 +27,12 @@ import novelang.common.tree.TreepathTools;
 import novelang.designator.Tag;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
+import novelang.rendering.RenderingTools;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 
 /**
  * Retains nodes which have at least one of given tags, or a child with at least one of the
@@ -124,6 +126,14 @@ public class TagFilter {
       if( child.isOneOf( NodeKind.TAG ) ) {
         if( Tag.contains( tags, child.getChildAt( 0 ).getText() ) ) {
           return true ;
+        }
+      }
+    }
+    if( NodeKind._LEVEL.isRoot( tree ) ) {
+      for( final SyntacticTree child : tree.getChildren() ) {
+        if( child.isOneOf( NodeKind.LEVEL_TITLE ) ) {
+          final Set< Tag > implicitTags = RenderingTools.toImplicitTagSet( child ) ;
+          return ! Sets.intersection( tags, implicitTags ).isEmpty() ;
         }
       }
     }

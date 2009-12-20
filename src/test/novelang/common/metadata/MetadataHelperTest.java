@@ -21,6 +21,7 @@ import java.util.Set;
 import org.junit.Test;
 import org.junit.Assert;
 import novelang.common.SyntacticTree;
+import novelang.designator.Tag;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
@@ -46,7 +47,7 @@ public class MetadataHelperTest {
     ) ;
 
     final SyntacticTree meta = MetadataHelper.createMetadataDecoration( 
-        tree, ImmutableSet.<String>of() ) ;
+        tree, ImmutableSet.< Tag >of() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( _META,
@@ -68,7 +69,7 @@ public class MetadataHelperTest {
         )
     ) ;
 
-    final Set< String > tagset = MetadataHelper.findTags( tree ) ;
+    final Set< Tag > tagset = MetadataHelper.findTags( tree ) ;
     final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree, tagset ) ;
 
     TreeFixture.assertEqualsNoSeparators(
@@ -101,11 +102,11 @@ public class MetadataHelperTest {
         )
     ) ;
 
-    final Set< String > tags = MetadataHelper.findTags( tree ) ;
+    final Set< Tag > tags = MetadataHelper.findTags( tree ) ;
     Assert.assertEquals( 3, tags.size() ) ;
-    Assert.assertTrue( tags.contains( "t1" ) ) ;
-    Assert.assertTrue( tags.contains( "t2" ) ) ;
-    Assert.assertTrue( tags.contains( "t3" ) ) ;
+    Assert.assertTrue( tags.contains( new Tag( "t1" ) ) ) ;
+    Assert.assertTrue( tags.contains( new Tag( "t2" ) ) ) ;
+    Assert.assertTrue( tags.contains( new Tag( "t3" ) ) ) ;
 
   }
 }

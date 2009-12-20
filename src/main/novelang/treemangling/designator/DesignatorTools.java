@@ -8,7 +8,6 @@ import novelang.common.SyntacticTree;
 import novelang.common.TagBehavior;
 import novelang.common.tree.Treepath;
 import novelang.rendering.RenderingTools;
-import novelang.system.DefaultCharset;
 import novelang.parser.NodeKind;
 import novelang.designator.FragmentIdentifier;
 import com.google.common.collect.Lists;
@@ -49,7 +48,7 @@ public class DesignatorTools {
 
 
   public static String getMarkerText( final SyntacticTree tree ) throws Exception {
-    return RenderingTools.markerize( tree, DefaultCharset.RENDERING ) ;
+    return RenderingTools.toImplicitIdentifier( tree ) ;
   }
 
 

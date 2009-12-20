@@ -27,6 +27,8 @@ import java.util.Set;
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
+
+import novelang.designator.Tag;
 import novelang.system.LogFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -156,7 +158,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
 
   protected static SyntacticTree addMetadata( 
       final SyntacticTree tree, 
-      final Set< String > tagset 
+      final Set< Tag > tagset 
   ) {
     final SyntacticTree metadata = MetadataHelper.createMetadataDecoration( tree, tagset ) ;
     return TreeTools.addFirst( tree, metadata ) ;

@@ -592,8 +592,24 @@ The XML structure of source document above looks like this:
       + "My tagged paragraph."
 >>>
 
+Level titles may also convert to Implicit Tags. Implicit Tags don't appear in the Tag list,
+but filtering on a given Tag retains document fragments tagged with Implicit Tags. 
+Implicit Tags come out from level title from a few simple transformation rules.
+- Convert every letter to its form without diacritics.
+- Whitespaces disappear.
+- Punctuation signs and delimiters disappear. They become Tag boundaries.
+- The first letter of a word that was preceded by another words gets uppercased.
+Here are a few transformation samples:
+
+| Original Novelang source          | Implicit Tags |
+| `This is some text. Be cool.`   | ``@BeCool`` ``@ThisIsSomeText``|
+| `This is a title... (So what?)` | ``@ThisIsATitle`` ``@SoWhat`` |
+| `version «grave-accent»0.1.2.3«grave-accent»` | ``@version0-1-2-3`` |
+| `Some «grave-accent»«grave-accent»@#!garbage)<--.§«grave-accent»«grave-accent»here!` | ``@Some-garbage-Here`` | 
 
 
+
+  
 === Identifiers
 
 XML element: ``n:explicit-identifier``, ``n:implicit-identifier``

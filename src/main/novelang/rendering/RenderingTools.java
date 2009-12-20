@@ -16,16 +16,20 @@
  */
 package novelang.rendering;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import novelang.common.*;
+import novelang.designator.Tag;
 import novelang.parser.shared.Lexeme;
 import novelang.parser.GeneratedLexemes;
 import novelang.parser.NodeKind;
+import novelang.system.DefaultCharset;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -41,8 +45,8 @@ public class RenderingTools {
   /**
    * Produces a text-only version of some {@code SyntacticTree}.
    */
-  public static String textualize( final SyntacticTree tree, final Charset charset )
-      throws Exception
+  public static String textualize( final SyntacticTree tree, final Charset charset ) 
+      throws UnsupportedEncodingException 
   {
     return textualize( tree, charset, new PlainTextWriter( charset ) ) ;
   }
@@ -51,35 +55,46 @@ public class RenderingTools {
       final SyntacticTree tree,
       final Charset charset,
       final FragmentWriter fragmentWriter
-  )
-      throws Exception
-  {
+  ) throws UnsupportedEncodingException {
     final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
-    new GenericRenderer( fragmentWriter ).render(
-        new RenderableTree( tree, charset ),
-        byteArrayOutputStream
-    ) ;
+    try {
+      new GenericRenderer( fragmentWriter ).render(
+          new RenderableTree( tree, charset ),
+          byteArrayOutputStream
+      ) ;
+    } catch ( Exception e ) {
+      throw new RuntimeException( "Should not happen, no IO expected", e ) ;
+    }
 
     return new String( byteArrayOutputStream.toByteArray(), charset.name() ) ;
+  }
+  
+  public static Set< Tag > toImplicitTagSet( final SyntacticTree tree ) {
+    final String identifier = toImplicitIdentifier( tree ) ;
+    return Tag.toTagSet( identifier.split( "_" ) ) ;
   }
 
   /**
    * Produces a designator name from some {@code SyntacticTree}.
    */
-  public static String markerize( final SyntacticTree tree, final Charset charset )
-      throws Exception
-  {
+  public static String toImplicitIdentifier( final SyntacticTree tree ) {
     // Produce a String replacing delimiters like ()[]"" and punctuation signs by '_'.
-    String s = textualize( 
-        tree,
-        charset,
-        new PlainTextWriter( charset, DELIMITERS ) {
-          @Override
-          public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
-            write( kinship, asLiteral( word ) ) ;
+    String s = null;
+    try {
+      s = textualize( 
+          tree,
+          DefaultCharset.RENDERING,
+          new PlainTextWriter( DefaultCharset.RENDERING, DELIMITERS ) {
+            @Override
+            public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
+              write( kinship, asLiteral( word ) ) ;
+            }
           }
-        }
-    ) ;
+      );
+    } catch ( UnsupportedEncodingException e ) {
+      throw new RuntimeException( "Should not happen with default encoding", e ) ;
+    }
+    
     s = s.replaceAll( "[,.;?!:]+", "_" ) ;
 
     // Replace diacritics by their "naked" version.
@@ -165,11 +180,11 @@ public class RenderingTools {
       put( NodeKind.BLOCK_INSIDE_PARENTHESIS, TAGGING_PAIR ).
       put( NodeKind.BLOCK_INSIDE_HYPHEN_PAIRS, TAGGING_PAIR ).
       put( NodeKind.BLOCK_INSIDE_SQUARE_BRACKETS, TAGGING_PAIR ).
-      put( NodeKind.BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, TAGGING_PAIR ).
+//      put( NodeKind.BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, TAGGING_PAIR ).
+//      put( NodeKind.BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, TAGGING_PAIR ).
       build()
   ;
 
-  
 
   public static class RenderableTree implements Renderable {
     private final SyntacticTree tree ;

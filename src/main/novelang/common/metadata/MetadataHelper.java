@@ -28,6 +28,7 @@ import org.joda.time.format.DateTimeFormatter;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Tree;
+import novelang.designator.Tag;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import com.google.common.collect.Sets;
@@ -67,14 +68,14 @@ public class MetadataHelper {
    *
    * @return a non-null, possibly empty set.
    */
-  public static Set< String > findTags( final SyntacticTree tree ) {
+  public static Set< Tag > findTags( final SyntacticTree tree ) {
     if( tree.isOneOf( WORD_, WORD_AFTER_CIRCUMFLEX_ACCENT, _STYLE ) ) { 
       return ImmutableSet.of() ;
     }
     if( tree.isOneOf( TAG ) ) {
-      return ImmutableSet.of( tree.getChildAt( 0 ).getText() ) ;
+      return ImmutableSet.of( new Tag( tree.getChildAt( 0 ).getText() ) ) ;
     }
-    final Set< String > tagset = Sets.newLinkedHashSet() ;
+    final Set< Tag > tagset = Sets.newLinkedHashSet() ;
     for( final SyntacticTree child : tree.getChildren() ) {
         tagset.addAll( findTags( child ) ) ;
     }
@@ -110,7 +111,7 @@ public class MetadataHelper {
    */
   public static SyntacticTree createMetadataDecoration( 
       final SyntacticTree tree, 
-      final Set< String > tagset 
+      final Set< Tag > tagset 
   ) {
 
     final List< SyntacticTree > children = Lists.newArrayList() ;
@@ -123,8 +124,7 @@ public class MetadataHelper {
     ) ;
 
     if( tagset.size() > 0 ) {
-      final Iterable< SyntacticTree > tagsAsTrees ;
-      tagsAsTrees = Iterables.transform( Ordering.natural().sortedCopy( tagset ), STRING_TO_TAG ) ;
+      final Iterable< SyntacticTree > tagsAsTrees = Tag.toSyntacticTrees( TAG, tagset ) ;
       final SyntacticTree tagsTree = new SimpleTree( _TAGS.name(), tagsAsTrees ) ;
       children.add( tagsTree ) ;
     }

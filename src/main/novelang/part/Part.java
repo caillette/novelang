@@ -178,7 +178,7 @@ public class Part extends AbstractSourceReader {
           ListMangler.rehierarchizeLists( unhierarchized ) ;
       final Treepath< SyntacticTree > enrichedWithDesignators =
           new DesignatorInterpreter( rehierarchized ).getEnrichedTreepath() ;
-      final Set< String > tagset = MetadataHelper.findTags( tree ) ;
+      final Set< Tag > tagset = MetadataHelper.findTags( tree ) ;
       final Treepath< SyntacticTree > tagsFiltered = 
           TagFilter.filter( enrichedWithDesignators, restrictingTags ) ;
       final Treepath< SyntacticTree > withMetadata = Treepath.create(

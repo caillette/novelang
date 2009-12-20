@@ -16,7 +16,6 @@
  */
 package novelang.rendering;
 
-import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -36,11 +35,11 @@ import java.util.regex.Pattern;
 
 /**
  * Tests for 
- * {@link RenderingTools#markerize(novelang.common.SyntacticTree, java.nio.charset.Charset)}.
+ * {@link RenderingTools#toImplicitIdentifier(novelang.common.SyntacticTree)}.
  *
  * @author Laurent Caillette
  */
-public class RenderingToolsMarkerizeTest {
+public class RenderingToolsForIdentifierTest {
 
   @Test
   public void renderJustAWord() throws Exception {
@@ -192,6 +191,8 @@ public class RenderingToolsMarkerizeTest {
     logRendered( "This is a title... (So what?)" ) ;
     logRendered( "Version `0.1.2.3`" ) ;
     logRendered( "Some ``@#!garbage)<--.§``here!" ) ;
+    logRendered( "Some `@#!garbage)<--.§` here!" ) ;
+    logRendered( "Some `@#!garbage)<--.§` " ) ;
   }
 
 
@@ -200,22 +201,17 @@ public class RenderingToolsMarkerizeTest {
 // Fixture
 // =======
   
-  private static final Log LOG = LogFactory.getLog( RenderingToolsMarkerizeTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( RenderingToolsForIdentifierTest.class ) ;
 
   private static void verify( final String expected, final SyntacticTree tree ) throws Exception {
-    final String rendered = RenderingTools.markerize(
-        tree
-        ,
-        DefaultCharset.RENDERING
-    ) ;
+    final String rendered = RenderingTools.toImplicitIdentifier( tree ) ;
     assertEquals( expected, rendered ) ;
   }
   
   private void logRendered( final String text ) throws Exception {
     final Part part = PartTestingTools.create( text ) ;
-    final String markerized = RenderingTools.markerize( 
-        part.getDocumentTree(), DefaultCharset.RENDERING ) ;
-    LOG.info( markerized ) ;
+    final String identifier = RenderingTools.toImplicitIdentifier( part.getDocumentTree() ) ;
+    LOG.info( "\n    " + text + "\n -> " + identifier ) ;
   }
   
 }

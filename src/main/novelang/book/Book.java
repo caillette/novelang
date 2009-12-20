@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.nio.charset.Charset;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -115,10 +116,11 @@ public class Book extends AbstractSourceReader {
       ) ;
       Treepath< SyntacticTree > rehierarchized =
           Treepath.create( currentEnvironment.getDocumentTree() ) ;
-      final Set< String > tagset = MetadataHelper.findTags( rehierarchized.getTreeAtEnd() ) ;
+      final Set< Tag > tagset = MetadataHelper.findTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
-      rehierarchized = TagFilter.filter( rehierarchized, tagRestrictions ) ;
+      final Set< Tag > effectiveTagRestrictions = Sets.intersection( tagset, tagRestrictions ).immutableCopy() ;
+      rehierarchized = TagFilter.filter( rehierarchized, effectiveTagRestrictions ) ;
 
       currentEnvironment = currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
 

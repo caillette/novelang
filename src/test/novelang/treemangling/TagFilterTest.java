@@ -107,7 +107,7 @@ public class TagFilterTest {
             PART,
             tree(
                 _LEVEL,
-                tree( LEVEL_TITLE, "level" ),
+                tree( LEVEL_TITLE, tree( WORD_, ( "level" ) ) ),
                 tree( PARAGRAPH_REGULAR, TAG1_TREE ,tree( WORD_, "1" ) )
             )
         ),
@@ -115,7 +115,7 @@ public class TagFilterTest {
             PART,
             tree(
                 _LEVEL,
-                tree( LEVEL_TITLE, "level" ),
+                tree( LEVEL_TITLE, tree( WORD_, ( "level" ) ) ),
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "0" ) ),
                 tree( PARAGRAPH_REGULAR, TAG1_TREE ,tree( WORD_, "1" ) )
             )
@@ -152,6 +152,43 @@ public class TagFilterTest {
                 tree(
                     PARAGRAPH_REGULAR,
                     TAG1_TREE,
+                    tree( WORD_, "w" )
+                )
+            )
+        ),
+        tags( TAG_1 )
+    ) ;
+  }
+
+
+  @Test
+  public void retainLevelWithImplicitTag() {
+    verifyFilterTags(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( LEVEL_TITLE, tree( WORD_, "tag-1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "w" )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "x" )
+                )
+            ),
+            tree(
+                _LEVEL,
+                tree( LEVEL_TITLE, tree( WORD_, "tag-1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
                     tree( WORD_, "w" )
                 )
             )
