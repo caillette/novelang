@@ -43,10 +43,10 @@ public class PdfWriter extends XslWriter {
   protected final FopFactory fopFactory ;
 
   public PdfWriter(
-      RenderingConfiguration configuration,
-      ResourceName stylesheet,
-      String namespaceUri,
-      String nameQualifier
+      final RenderingConfiguration configuration,
+      final ResourceName stylesheet,
+      final String namespaceUri,
+      final String nameQualifier
   ) {
     super(
         namespaceUri,
@@ -57,7 +57,7 @@ public class PdfWriter extends XslWriter {
     fopFactory = configuration.getFopFactory() ;
   }
 
-  public PdfWriter( RenderingConfiguration configuration, ResourceName stylesheet ) {
+  public PdfWriter( final RenderingConfiguration configuration, final ResourceName stylesheet ) {
     super( configuration, null == stylesheet ? DEFAULT_FO_STYLESHEET : stylesheet ) ;
     fopFactory = configuration.getFopFactory() ;
   }
@@ -67,9 +67,9 @@ public class PdfWriter extends XslWriter {
 // ==========
 
   protected final ContentHandler createSinkContentHandler(
-      OutputStream outputStream,
-      DocumentMetadata documentMetadata,
-      Charset charset
+      final OutputStream outputStream,
+      final DocumentMetadata documentMetadata,
+      final Charset charset
   )
       throws FOPException
   {

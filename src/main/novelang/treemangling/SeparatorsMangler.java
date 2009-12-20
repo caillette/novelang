@@ -45,7 +45,7 @@ public final class SeparatorsMangler {
    * Removes {@link novelang.parser.NodeKind#WHITESPACE_} and
    * {@link novelang.parser.NodeKind#LINE_BREAK_} tokens in order to ease comparison.
    */
-  public static SyntacticTree removeSeparators( SyntacticTree tree ) {
+  public static SyntacticTree removeSeparators( final SyntacticTree tree ) {
     return removeSeparators( Treepath.create( tree ) ).getTreeAtEnd() ;
   }
   
@@ -100,7 +100,7 @@ public final class SeparatorsMangler {
 
   private static Treepath< SyntacticTree > insertMandatoryWhitespaceIfNeeded(
       final Treepath< SyntacticTree > treepath,
-      SiblingTraverser walker
+      final SiblingTraverser walker
   ) {
     Treepath< SyntacticTree > preceding = treepath ;
     boolean foundWhitespace = false ;

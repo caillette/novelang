@@ -44,7 +44,7 @@ public class StartupTools {
    *
    * @param arguments A non-null array containing no nulls.
    */
-  public static void fixLogDirectory( String[] arguments ) {
+  public static void fixLogDirectory( final String[] arguments ) {
 
     final String logDirectoryName = extractLogDirectory( arguments ) ;
     if( null == logDirectoryName ) {
@@ -97,7 +97,7 @@ public class StartupTools {
    * @param startupArguments
    * @return null if there was no such option.
    */
-  public static String extractLogDirectory( String[] startupArguments ) {
+  public static String extractLogDirectory( final String[] startupArguments ) {
     final String logDirectoryOption =
         GenericParameters.OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ;
     for( int i = 0 ; i < startupArguments.length ; i++ ) {

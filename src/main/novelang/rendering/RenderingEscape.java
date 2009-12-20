@@ -56,7 +56,7 @@ public class RenderingEscape {
     final Map< Character, String > unicodeNameEscapes = Maps.newHashMap() ;
     final Map< Character, String > preferredEscapes = Maps.newHashMap() ;
     final Map< Character, String > htmlMandatoryEscapes = Maps.newHashMap() ;
-    for( Lexeme lexeme : GeneratedLexemes.getLexemes().values() ) {
+    for( final Lexeme lexeme : GeneratedLexemes.getLexemes().values() ) {
       final Character character = lexeme.getCharacter();
       final String unicodeName = lexeme.getUnicodeName() ;
       put( character, SourceUnescape.unicodeUpperNameToEscapeName( unicodeName ), unicodeNameEscapes ) ;
@@ -83,8 +83,12 @@ public class RenderingEscape {
         "Created HTML mandatory escape table with %s entries.", HTML_MANDATORY_ESCAPES.size() ) ;
   }
 
-  private static void put( Character character, String string, Map< Character, String >... maps ) {
-    for( Map< Character, String > map : maps ) {
+  private static void put( 
+      final Character character, 
+      final String string, 
+      final Map< Character, String >... maps 
+  ) {
+    for( final Map< Character, String > map : maps ) {
       map.put( character, string ) ;
     }
   }
@@ -94,7 +98,10 @@ public class RenderingEscape {
 // HTML escape  
 // ===========  
   
-  private static String escapeHtmlIfNeeded( char unescaped, CharsetEncodingCapability capability ) {
+  private static String escapeHtmlIfNeeded( 
+      final char unescaped, 
+      final CharsetEncodingCapability capability 
+  ) {
     final String mandatoryEscape = HTML_MANDATORY_ESCAPES.get( unescaped ) ;
     if( null == mandatoryEscape ) {
       if( capability.canEncode( unescaped ) ) {
@@ -112,7 +119,7 @@ public class RenderingEscape {
     }
   }
   
-  private static String wrapWithHtmlEntityDelimiters( String string ) {
+  private static String wrapWithHtmlEntityDelimiters( final String string ) {
     return "&" + string + ";" ;
   }
 
@@ -125,9 +132,12 @@ public class RenderingEscape {
    * @param capability non-null object.
    * @return a non-null, non-empty String.
    */
-  public static String escapeToHtmlText( String text, CharsetEncodingCapability capability ) {
+  public static String escapeToHtmlText( 
+      final String text, 
+      final CharsetEncodingCapability capability 
+  ) {
     final StringBuffer buffer = new StringBuffer() ;
-    for( char c : text.toCharArray() ) {
+    for( final char c : text.toCharArray() ) {
       final String escaped = escapeHtmlIfNeeded( c, capability ) ;
       buffer.append( escaped ) ;
     }
@@ -140,8 +150,8 @@ public class RenderingEscape {
 // =============  
 
   private static String escapeToSourceIfNeeded( 
-      char unescaped, 
-      CharsetEncodingCapability capability 
+      final char unescaped, 
+      final CharsetEncodingCapability capability 
   ) {
     if( capability.canEncode( unescaped ) ) {
       return "" + unescaped ;
@@ -150,7 +160,7 @@ public class RenderingEscape {
     }
   }
 
-  public static String unconditionalEscapeToSource( char unescaped ) {
+  public static String unconditionalEscapeToSource( final char unescaped ) {
     final String preferredEscape = PREFERRED_ESCAPES.get( unescaped ) ;
     if( null ==  preferredEscape ) {
       final String unicodeEscape = UNICODE_NAME_ESCAPES.get( unescaped );
@@ -166,7 +176,7 @@ public class RenderingEscape {
   }
 
 
-  private static String wrapWithSourceEscapeDelimiters( String string ) {
+  private static String wrapWithSourceEscapeDelimiters( final String string ) {
     return 
         SourceUnescape.ESCAPE_START + 
         string + 
@@ -182,9 +192,12 @@ public class RenderingEscape {
    * @param capability non-null object.
    * @return a non-null, non-empty String.
    */
-  public static String escapeToSourceText( String text, CharsetEncodingCapability capability ) {
+  public static String escapeToSourceText( 
+      final String text, 
+      final CharsetEncodingCapability capability 
+  ) {
     final StringBuffer buffer = new StringBuffer() ;
-    for( char c : text.toCharArray() ) {
+    for( final char c : text.toCharArray() ) {
       final String escaped = escapeToSourceIfNeeded( c, capability ) ;
       buffer.append( escaped ) ;
     }
@@ -203,7 +216,7 @@ public class RenderingEscape {
   public static CharsetEncodingCapability createCapability( final Charset charset ) {
     final CharsetEncoder encoder = charset.newEncoder() ;
     return new CharsetEncodingCapability() {
-      public boolean canEncode( char c ) {
+      public boolean canEncode( final char c ) {
         return encoder.canEncode( c ) ;
       }
     } ;

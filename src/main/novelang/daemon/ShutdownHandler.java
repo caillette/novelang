@@ -41,10 +41,10 @@ public class ShutdownHandler extends GenericHandler{
   public ShutdownHandler() { }
 
   protected void doHandle(
-      String target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      final String target,
+      final HttpServletRequest request,
+      final HttpServletResponse response,
+      final int dispatch
   ) throws IOException, ServletException {
     if( SHUTDOWN_TARGET.equals( target ) ) {
       LOG.info( "Shutdown requested!" ) ;

@@ -58,7 +58,7 @@ public class DocumentProducer {
   private final Charset defaultSourceCharset ;
 
 
-  public DocumentProducer( ProducerConfiguration configuration ) {
+  public DocumentProducer( final ProducerConfiguration configuration ) {
     this.basedir = Preconditions.checkNotNull(
         configuration.getContentConfiguration().getContentRoot() ) ;
     this.renderingConfiguration = Preconditions.checkNotNull(
@@ -84,7 +84,7 @@ public class DocumentProducer {
 
     // Java-flavored curryfication, wow!
     class Serve {
-      public void with( GenericRenderer renderer ) throws Exception {
+      public void with( final GenericRenderer renderer ) throws Exception {
         serve( outputStream, renderer, rendered ) ;
       }
     }
@@ -141,14 +141,14 @@ public class DocumentProducer {
   }
 
   private void serve(
-      OutputStream outputStream,
-      GenericRenderer renderer,
-      Renderable rendered
+      final OutputStream outputStream,
+      final GenericRenderer renderer,
+      final Renderable rendered
   ) throws Exception {
     renderer.render( rendered, outputStream ) ;
   }
 
-  public Renderable createRenderable( AbstractRequest documentRequest )
+  public Renderable createRenderable( final AbstractRequest documentRequest )
       throws IOException
   {
     final Charset suggestedRenderingCharset = renderingConfiguration.getDefaultCharset() ;

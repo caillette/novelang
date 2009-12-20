@@ -97,7 +97,7 @@ public class XslWriterTest {
     return new XslWriter( renderingConfiguration, stylesheet.getResourceName() ) ;
   }
 
-  private static void run( XslWriter xslWriter ) throws Exception {
+  private static void run( final XslWriter xslWriter ) throws Exception {
     final OutputStream sinkOutputStream = new ByteArrayOutputStream() ;
     xslWriter.startWriting( sinkOutputStream, new CustomDocumentMetadata() ) ;
   }
@@ -122,9 +122,9 @@ public class XslWriterTest {
     private final FopFontStatus fopFontStatus ;
 
     public CustomRenderingConfiguration(
-        ResourceLoader resourceLoader,
-        FopFactory fopFactory,
-        FopFontStatus fopFontStatus
+        final ResourceLoader resourceLoader,
+        final FopFactory fopFactory,
+        final FopFontStatus fopFontStatus
     ) {
       this.resourceLoader = resourceLoader ;
       this.fopFactory = fopFactory ;

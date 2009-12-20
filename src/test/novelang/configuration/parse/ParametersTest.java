@@ -194,9 +194,9 @@ public class ParametersTest {
   private static final String DASHED_LOG_DIR = "--log-dir";
 
 
-  private static< T > void assertOnIterable( Iterable< T > actual, T... expected ) {
+  private static< T > void assertOnIterable( final Iterable< T > actual, final T... expected ) {
     final Iterator< T > iterator = actual.iterator() ;
-    for( T expectedElement : expected ) {
+    for( final T expectedElement : expected ) {
       final T actualElement = iterator.next() ;
       assertEquals( expectedElement, actualElement ) ;
     }

@@ -69,7 +69,7 @@ public class SaxConnectorForVerifierTest {
   private static final String NAMESPACE_URI_XSL = "http://www.w3.org/1999/XSL/Transform" ;
   private static final String NAMESPACE_PREFIX_XSL = "xsl" ;
 
-  private static SaxConnectorForVerifier createConnector( String... xpathElements ) {
+  private static SaxConnectorForVerifier createConnector( final String... xpathElements ) {
     return new SaxConnectorForVerifier(
         NAMESPACE_URI_TEST,
         ImmutableSet.of( xpathElements )
@@ -77,8 +77,8 @@ public class SaxConnectorForVerifierTest {
   }
 
   private static void prepare(
-      SaxConnectorForVerifier connectorForVerifier,
-      Locator locator
+      final SaxConnectorForVerifier connectorForVerifier,
+      final Locator locator
   ) throws SAXException {
     connectorForVerifier.setDocumentLocator( locator ) ;
     connectorForVerifier.startDocument() ;
@@ -87,9 +87,9 @@ public class SaxConnectorForVerifierTest {
   }
 
   private void play(
-      SaxConnectorForVerifier connectorForVerifier,
-      String localName,
-      CustomAttributes attributes
+      final SaxConnectorForVerifier connectorForVerifier,
+      final String localName,
+      final CustomAttributes attributes
   ) throws SAXException {
     connectorForVerifier.startElement(
         NAMESPACE_URI_XSL,
@@ -100,19 +100,23 @@ public class SaxConnectorForVerifierTest {
     connectorForVerifier.endElement( NAMESPACE_URI_XSL, localName, "xsl:" + localName ) ;
   }
 
-  private void finish( SaxConnectorForVerifier connectorForVerifier ) throws SAXException {
+  private void finish( final SaxConnectorForVerifier connectorForVerifier ) throws SAXException {
     connectorForVerifier.endPrefixMapping( "xsl" ) ;
     connectorForVerifier.endPrefixMapping( "t" ) ;
     connectorForVerifier.endDocument() ;
   }
 
-  private static CustomAttributes attributes( String name, String value ) {
+  private static CustomAttributes attributes( final String name, final String value ) {
     final CustomAttributes freshAttributes = new CustomAttributes() ;
     add( freshAttributes, name, value ) ;
     return freshAttributes ;
   }
 
-  private static void add( CustomAttributes attributes, String name, String value ) {
+  private static void add( 
+      final CustomAttributes attributes, 
+      final String name, 
+      final String value 
+  ) {
     attributes.addAttribute(
         NAMESPACE_URI_XSL,
         name,
@@ -125,7 +129,7 @@ public class SaxConnectorForVerifierTest {
 
   private static class CustomAttributes extends AttributesImpl {
 
-    public CustomAttributes attributes( String name, String value ) {
+    public CustomAttributes attributes( final String name, final String value ) {
       add( this, name, value ) ;
       return this ;
     }
@@ -152,7 +156,7 @@ public class SaxConnectorForVerifierTest {
       return lineNumber ;
     }
 
-    public void setLineNumber( int lineNumber ) {
+    public void setLineNumber( final int lineNumber ) {
       this.lineNumber = lineNumber ;
     }
 
@@ -160,7 +164,7 @@ public class SaxConnectorForVerifierTest {
       return columnNumber ;
     }
 
-    public void setColumnNumber( int columnNumber ) {
+    public void setColumnNumber( final int columnNumber ) {
       this.columnNumber = columnNumber ;
     }
   }

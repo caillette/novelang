@@ -24,15 +24,15 @@ public class DeclarationException extends Exception {
   public DeclarationException() {
   }
 
-  public DeclarationException( String message ) {
+  public DeclarationException( final String message ) {
     super( message );
   }
 
-  public DeclarationException( String message, Throwable cause ) {
+  public DeclarationException( final String message, final Throwable cause ) {
     super( message, cause );
   }
 
-  public DeclarationException( Throwable cause ) {
+  public DeclarationException( final Throwable cause ) {
     super( cause );
   }
 }

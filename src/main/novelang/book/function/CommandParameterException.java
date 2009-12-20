@@ -23,7 +23,7 @@ package novelang.book.function;
  */
 public class CommandParameterException extends Exception {
 
-  public CommandParameterException( String message ) {
+  public CommandParameterException( final String message ) {
     super( message );
   }
 }

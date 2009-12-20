@@ -69,7 +69,9 @@ public class ConfigurationTools {
   public static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
   public static final Charset DEFAULT_RENDERING_CHARSET = DefaultCharset.RENDERING ;
 
-  public static ProducerConfiguration createProducerConfiguration( GenericParameters parameters )
+  public static ProducerConfiguration createProducerConfiguration( 
+      final GenericParameters parameters 
+  )
       throws FOPException
   {
     final RenderingConfiguration renderingConfiguration =
@@ -87,7 +89,7 @@ public class ConfigurationTools {
     };
   }
 
-  public static DaemonConfiguration createDaemonConfiguration( DaemonParameters parameters )
+  public static DaemonConfiguration createDaemonConfiguration( final DaemonParameters parameters )
       throws FOPException
   {
 
@@ -190,8 +192,8 @@ public class ConfigurationTools {
 
   }
 
-  private static File extractOutputDirectory( BatchParameters parameters ) {
-    File outputDirectory;
+  private static File extractOutputDirectory( final BatchParameters parameters ) {
+    final File outputDirectory;
     if( null == parameters.getOutputDirectory() ) {
       outputDirectory = new File( parameters.getBaseDirectory(), DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
      LOG.info(
@@ -255,7 +257,9 @@ public class ConfigurationTools {
     } ;
   }
 
-  public static RenderingConfiguration createRenderingConfiguration( GenericParameters parameters )
+  public static RenderingConfiguration createRenderingConfiguration( 
+      final GenericParameters parameters 
+  )
       throws FOPException
   {
     final Iterable< File > fontDirectories = findMultipleDirectoriesWithDefault(
@@ -319,8 +323,14 @@ public class ConfigurationTools {
 
   }
 
-  private static Iterable<File> findMultipleDirectoriesWithDefault( File baseDirectory, Iterable<File> userFontDirectories, String directoriesName, String defaultSingleDirectoryName, String directoriesOptionDescription ) {
-    Iterable<File> fontDirectories;
+  private static Iterable<File> findMultipleDirectoriesWithDefault( 
+      final File baseDirectory, 
+      final Iterable<File> userFontDirectories, 
+      final String directoriesName, 
+      final String defaultSingleDirectoryName, 
+      final String directoriesOptionDescription 
+  ) {
+    final Iterable<File> fontDirectories;
     if( userFontDirectories.iterator().hasNext() ) {
       fontDirectories = userFontDirectories ;
       LOG.info(
@@ -346,7 +356,7 @@ public class ConfigurationTools {
     return fontDirectories;
   }
 
-  public static ResourceLoader createResourceLoader( GenericParameters parameters ) {
+  public static ResourceLoader createResourceLoader( final GenericParameters parameters ) {
     final Iterable< File > userDefinedDirectories = findMultipleDirectoriesWithDefault(
         parameters.getBaseDirectory(),
         parameters.getStyleDirectories(),
@@ -400,11 +410,11 @@ public class ConfigurationTools {
   }
 
   protected static File findDefaultDirectoryIfNeeded(
-      File baseDirectory,
-      File userDefinedDirectory,
-      String topic,
-      String directoryDescription,
-      String defaultDirectoryName
+      final File baseDirectory,
+      final File userDefinedDirectory,
+      final String topic,
+      final String directoryDescription,
+      final String defaultDirectoryName
   ) {
     if( null == userDefinedDirectory ) {
       final File defaultDirectory = new File( baseDirectory, defaultDirectoryName ) ;

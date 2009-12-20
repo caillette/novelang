@@ -36,13 +36,13 @@ public class ColorMapper {
     LOG.debug( "Initialized." ) ;
   }
 
-  public String getColorName( String colorIdentifier ) {
+  public String getColorName( final String colorIdentifier ) {
     final String colorName = colorMapper.getColor( colorIdentifier ).getName() ;
     LOG.debug( "getColorName( %s ) -> %s", colorIdentifier, colorName ) ;
     return colorName;
   }
 
-  public String getInverseRgbDeclaration( String colorIdentifier ) {
+  public String getInverseRgbDeclaration( final String colorIdentifier ) {
     final WebColors.WebColor originalColor = colorMapper.getColor( colorIdentifier ) ;
     final String inverseColorDeclaration = originalColor.getInverseRgbDeclaration() ;
     LOG.debug(

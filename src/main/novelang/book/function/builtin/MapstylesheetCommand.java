@@ -31,7 +31,7 @@ public class MapstylesheetCommand extends  AbstractCommand {
     this.stylesheetMaps = ImmutableMap.copyOf( stylesheetMaps ) ;
   }
 
-  public CommandExecutionContext evaluate( CommandExecutionContext context ) {
+  public CommandExecutionContext evaluate( final CommandExecutionContext context ) {
 
     final Map< RenditionMimeType, ResourceName > moreStylesheetMappings = Maps.newHashMap() ;
     final List< Problem > problems = Lists.newArrayList() ;

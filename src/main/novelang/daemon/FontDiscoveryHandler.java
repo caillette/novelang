@@ -44,15 +44,15 @@ public class FontDiscoveryHandler extends GenericHandler{
   public static final String DOCUMENT_NAME = "/~fonts.pdf" ;
   public static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
 
-  public FontDiscoveryHandler( ProducerConfiguration producerConfiguration ) {
+  public FontDiscoveryHandler( final ProducerConfiguration producerConfiguration ) {
     renderingConfiguration = producerConfiguration.getRenderingConfiguration() ;
   }
 
   protected void doHandle( 
-      String target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      final String target,
+      final HttpServletRequest request,
+      final HttpServletResponse response,
+      final int dispatch
   ) throws IOException, ServletException {
     if( DOCUMENT_NAME.equals( target ) ) {
       LOG.info( "Font listing requested" ) ;

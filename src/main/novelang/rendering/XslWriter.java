@@ -67,15 +67,15 @@ public class XslWriter extends XmlWriter {
   protected final EntityEscapeSelector entityEscapeSelector ;
   private static final ResourceName IDENTITY_XSL_FILE_NAME = new ResourceName( "identity.xsl" ) ;
 
-  public XslWriter( RenderingConfiguration configuration, ResourceName xslFileName ) {
+  public XslWriter( final RenderingConfiguration configuration, final ResourceName xslFileName ) {
     this( configuration, xslFileName, DefaultCharset.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
   }
 
   public XslWriter(
-      String namespaceUri,
-      String nameQualifier,
-      RenderingConfiguration configuration,
-      ResourceName xslFileName
+      final String namespaceUri,
+      final String nameQualifier,
+      final RenderingConfiguration configuration,
+      final ResourceName xslFileName
   ) {
     this(
         namespaceUri,
@@ -87,11 +87,11 @@ public class XslWriter extends XmlWriter {
   }
 
   public XslWriter(
-      String namespaceUri,
-      String nameQualifier,
-      RenderingConfiguration configuration,
-      ResourceName xslFileName,
-      RenditionMimeType mimeType
+      final String namespaceUri,
+      final String nameQualifier,
+      final RenderingConfiguration configuration,
+      final ResourceName xslFileName,
+      final RenditionMimeType mimeType
   ) {
     this(
         namespaceUri,
@@ -105,20 +105,20 @@ public class XslWriter extends XmlWriter {
   }
 
   public XslWriter(
-      RenderingConfiguration configuration,
-      ResourceName xslFileName,
-      Charset charset,
-      RenditionMimeType mimeType
+      final RenderingConfiguration configuration,
+      final ResourceName xslFileName,
+      final Charset charset,
+      final RenditionMimeType mimeType
   ) {
     this( configuration, xslFileName, charset, mimeType, NO_ENTITY_ESCAPE ) ;
   }
 
   public XslWriter(
-      RenderingConfiguration configuration,
-      ResourceName xslFileName,
-      Charset charset,
-      RenditionMimeType mimeType,
-      EntityEscapeSelector entityEscapeSelector
+      final RenderingConfiguration configuration,
+      final ResourceName xslFileName,
+      final Charset charset,
+      final RenditionMimeType mimeType,
+      final EntityEscapeSelector entityEscapeSelector
   ) {
     this(
         NAMESPACE_URI,
@@ -132,13 +132,13 @@ public class XslWriter extends XmlWriter {
   }
 
   public XslWriter(
-      String namespaceUri,
-      String nameQualifier,
-      RenderingConfiguration configuration,
+      final String namespaceUri,
+      final String nameQualifier,
+      final RenderingConfiguration configuration,
       ResourceName xslFileName,
-      Charset charset,
-      RenditionMimeType mimeType,
-      EntityEscapeSelector entityEscapeSelector
+      final Charset charset,
+      final RenditionMimeType mimeType,
+      final EntityEscapeSelector entityEscapeSelector
   ) {
     super( namespaceUri, nameQualifier, charset, mimeType ) ;
     this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
@@ -156,9 +156,9 @@ public class XslWriter extends XmlWriter {
 
 
   protected ContentHandler createContentHandler(
-      OutputStream outputStream,
-      DocumentMetadata documentMetadata,
-      Charset charset
+      final OutputStream outputStream,
+      final DocumentMetadata documentMetadata,
+      final Charset charset
   )
       throws Exception
   {
@@ -193,7 +193,7 @@ public class XslWriter extends XmlWriter {
 
   }
 
-  private void configure( Transformer transformer, DocumentMetadata documentMetadata ) {
+  private void configure( final Transformer transformer, final DocumentMetadata documentMetadata ) {
     transformer.setParameter(
         "timestamp",
         documentMetadata.getCreationTimestamp()
@@ -205,9 +205,9 @@ public class XslWriter extends XmlWriter {
   }
 
   protected ContentHandler createSinkContentHandler(
-      OutputStream outputStream,
-      DocumentMetadata documentMetadata,
-      Charset charset
+      final OutputStream outputStream,
+      final DocumentMetadata documentMetadata,
+      final Charset charset
   ) throws Exception
   {
     return super.createContentHandler( outputStream, documentMetadata, charset ) ;
@@ -218,12 +218,12 @@ public class XslWriter extends XmlWriter {
   }
 
   private static final EntityEscapeSelector NO_ENTITY_ESCAPE = new EntityEscapeSelector() {
-    public boolean shouldEscape( String publicId, String systemId ) {
+    public boolean shouldEscape( final String publicId, final String systemId ) {
       return false ;
     }
   } ;
 
-  private static SaxMulticaster connectXpathVerifier( TemplatesHandler templatesHandler ) {
+  private static SaxMulticaster connectXpathVerifier( final TemplatesHandler templatesHandler ) {
     final SaxConnectorForVerifier xpathVerifier =
         new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
 
@@ -242,7 +242,7 @@ public class XslWriter extends XmlWriter {
   protected class LocalEntityResolver implements EntityResolver {
 
     public InputSource resolveEntity(
-        String publicId,
+        final String publicId,
         String systemId
     ) throws SAXException, IOException {
       systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
@@ -265,7 +265,7 @@ public class XslWriter extends XmlWriter {
 
   protected class LocalUriResolver implements URIResolver {
 
-    public Source resolve( String href, String base ) throws TransformerException {
+    public Source resolve( final String href, final String base ) throws TransformerException {
       LOG.debug( "Resolving URI href='%s' base='%s'", href, base ) ;
 
       final SAXTransformerFactory saxTransformerFactory =
@@ -282,7 +282,7 @@ public class XslWriter extends XmlWriter {
       // directly from a Xerces class. Then it would require some kind of wrapper.
       reader = new SAXParser() {
         @Override
-        public void setContentHandler( ContentHandler contentHandler ) {
+        public void setContentHandler( final ContentHandler contentHandler ) {
           final SaxMulticaster multicaster = new SaxMulticaster() ;
           multicaster.add( contentHandler ) ;
           multicaster.add( xpathVerifier ) ;

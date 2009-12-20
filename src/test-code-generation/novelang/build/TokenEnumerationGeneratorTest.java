@@ -74,7 +74,7 @@ public class TokenEnumerationGeneratorTest {
   ) {
     final Predicate< TokenEnumerationGenerator.Item > predicate =
         new Predicate< TokenEnumerationGenerator.Item >() {
-          public boolean apply( TokenEnumerationGenerator.Item item ) {
+          public boolean apply( final TokenEnumerationGenerator.Item item ) {
             return name.equals( item.name ) ;
           }
         }

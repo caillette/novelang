@@ -10,19 +10,19 @@ import java.net.MalformedURLException;
  */
 public class PartFixture {
   
-  public static Part createPart( String content ) {
+  public static Part createPart( final String content ) {
     return new Part( content ) ;
   }
   
-  public static Part createPart( File content ) throws MalformedURLException {
+  public static Part createPart( final File content ) throws MalformedURLException {
     return new Part( content ) ;
   }
   
-  public static Part createStandalonePart( String content ) {
+  public static Part createStandalonePart( final String content ) {
     return new Part( content ).makeStandalone() ;
   }
   
-  public static Part createStandalonePart( File content ) throws MalformedURLException {
+  public static Part createStandalonePart( final File content ) throws MalformedURLException {
     return new Part( content ).makeStandalone() ;
   }
   

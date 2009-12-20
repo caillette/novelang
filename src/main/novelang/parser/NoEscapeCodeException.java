@@ -23,7 +23,7 @@ package novelang.parser;
  */
 public class NoEscapeCodeException extends Exception {
 
-  public NoEscapeCodeException( Character character ) {
+  public NoEscapeCodeException( final Character character ) {
     super( "Unsupported character: " + character ) ;
   }
 }

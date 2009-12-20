@@ -54,11 +54,11 @@ import org.slf4j.LoggerFactory;
   
   private final CharacterConverter[] converters ;
 
-  public LexemeDeclarationExtractor( CharacterConverter... converters ) {
+  public LexemeDeclarationExtractor( final CharacterConverter... converters ) {
     this.converters = converters.clone() ;
   }
 
-  public static Set< Lexeme > extractLexemeDeclarations( String grammar ) {
+  public static Set< Lexeme > extractLexemeDeclarations( final String grammar ) {
     final Matcher matcher = TOKENS_DECLARATIONS.matcher( grammar ) ;
     final Set< Lexeme > declarations = Sets.newHashSet() ;
     while( matcher.find() ) {
@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
 
   }
 
-  private Lexeme extract( Matcher matcher ) {
+  private Lexeme extract( final Matcher matcher ) {
     final int expectedGroupCount = converters.length + 3 ;
     Preconditions.checkArgument(
         matcher.groupCount() == expectedGroupCount,
@@ -96,7 +96,7 @@ import org.slf4j.LoggerFactory;
     return null ;
   }
 
-  private static Lexeme extractLexemeDeclaration( Matcher matcher ) {
+  private static Lexeme extractLexemeDeclaration( final Matcher matcher ) {
     return DECLARATION_EXTRACTOR.extract( matcher ) ;
   }
 
@@ -123,7 +123,7 @@ import org.slf4j.LoggerFactory;
 
   public static class LitteralCharacterConverter implements CharacterConverter {
 
-    public Character convert( String characterDeclaration ) {
+    public Character convert( final String characterDeclaration ) {
       if( 1 != characterDeclaration.length() ) {
         throw new IllegalArgumentException(
             "Should contains one character only, was: '" + characterDeclaration + "'" ) ;
@@ -134,7 +134,7 @@ import org.slf4j.LoggerFactory;
 
   public static class UnicodeCharacterConverter implements CharacterConverter {
 
-    public Character convert( String characterDeclaration ) {
+    public Character convert( final String characterDeclaration ) {
       if( ! characterDeclaration.startsWith( "\\u" ) ) {
         throw new IllegalArgumentException(
             "Should be unicode starting with '\\u', was: '" + characterDeclaration + "'" ) ;
@@ -148,7 +148,7 @@ import org.slf4j.LoggerFactory;
 
   public  static class EscapedCharacterConverter implements CharacterConverter {
 
-    public Character convert( String characterDeclaration ) {
+    public Character convert( final String characterDeclaration ) {
       if( ! characterDeclaration.startsWith( "\\" ) ) {
         throw new IllegalArgumentException(
             "Should be escaped starting with '\\', was: '" + characterDeclaration + "'" ) ;

@@ -41,12 +41,12 @@ public abstract class AbstractDelegatingParser {
   protected final NovelangParser antlrParser;
   private final GrammarDelegate delegate;
 
-  public AbstractDelegatingParser( String text, GrammarDelegate delegate ) {
+  public AbstractDelegatingParser( final String text, final GrammarDelegate delegate ) {
     this.delegate = delegate ;
-    CharStream stream = new ANTLRStringStream( text );
-    NovelangLexer lexer = new NovelangLexer( stream );
+    final CharStream stream = new ANTLRStringStream( text );
+    final NovelangLexer lexer = new NovelangLexer( stream );
     lexer.setProblemDelegate( delegate ) ;
-    CommonTokenStream tokens = new CommonTokenStream( lexer );
+    final CommonTokenStream tokens = new CommonTokenStream( lexer );
     antlrParser = new NovelangParser( tokens ) ;
     antlrParser.setTreeAdaptor( new CustomTreeAdaptor( delegate.getLocationFactory() ) ) ;
     antlrParser.setGrammarDelegate( delegate ) ;

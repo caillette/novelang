@@ -69,7 +69,7 @@ public class NameAwareTestClassRunner extends JUnit4ClassRunner {
 
   private static String extractTestMethodName( final String name ) {
     if( name != null ) {
-      int last = name.lastIndexOf( '(' ) ;
+      final int last = name.lastIndexOf( '(' ) ;
       return last < 0 ? name : name.substring( 0, last ) ;
     }
     return null ;
@@ -77,7 +77,7 @@ public class NameAwareTestClassRunner extends JUnit4ClassRunner {
 
   private static String extractTestClassName( final String name ) {
     if( name != null ) {
-      int last = name.lastIndexOf( '(' ) ;
+      final int last = name.lastIndexOf( '(' ) ;
       return last < 0 ? null : name.substring( last + 1, name.length() - 1 ) ;
     }
     return null ;

@@ -23,7 +23,7 @@ package novelang.batch;
  */
 public class CannotStartException extends Exception {
 
-  public CannotStartException( Throwable cause ) {
+  public CannotStartException( final Throwable cause ) {
     super( cause );
   }
 }

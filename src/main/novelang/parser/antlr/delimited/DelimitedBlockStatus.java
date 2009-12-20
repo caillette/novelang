@@ -33,11 +33,11 @@ import com.google.common.base.Joiner;
   private int endPassedCount = 0 ;
   private int missingDelimiterCount = 0 ;
 
-  DelimitedBlockStatus( BlockDelimiter blockDelimiter ) {
+  DelimitedBlockStatus( final BlockDelimiter blockDelimiter ) {
     this.blockDelimiter = blockDelimiter ;
   }
 
-  /*package*/ DelimitedBlockStatus updatePosition( int line, int column ) {
+  /*package*/ DelimitedBlockStatus updatePosition( final int line, final int column ) {
     if( line >= this.line && column > this.column ) {
       this.line = line ;
       this.column = column ;

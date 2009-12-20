@@ -205,8 +205,8 @@ public class GenericRendererTest {
     private PrintWriter writer ;
 
     public void startWriting(
-        OutputStream outputStream,
-        DocumentMetadata documentMetadata
+        final OutputStream outputStream,
+        final DocumentMetadata documentMetadata
     ) throws Exception {
       writer = new PrintWriter( outputStream ) ;
     }
@@ -215,19 +215,19 @@ public class GenericRendererTest {
       writer.flush() ;
     }
 
-    public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
+    public void start( final Nodepath kinship, final boolean wholeDocument ) throws Exception {
       writer.append( kinship.getCurrent().name() ).append( "(" ) ;
     }
 
-    public void end( Nodepath kinship ) throws Exception {
+    public void end( final Nodepath kinship ) throws Exception {
       writer.append( ")" ) ;
     }
 
-    public void write( Nodepath kinship, String word ) throws Exception {
+    public void write( final Nodepath kinship, final String word ) throws Exception {
       writer.append( word ) ;
     }
 
-    public void writeLiteral( Nodepath kinship, String word ) throws Exception {
+    public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
       write( kinship, word ) ;
     }
 

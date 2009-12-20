@@ -43,15 +43,15 @@ public class XmlWriter implements FragmentWriter {
   private final Charset charset ;
   private final RenditionMimeType mimeType ;
 
-  public XmlWriter( RenditionMimeType mimeType ) {
+  public XmlWriter( final RenditionMimeType mimeType ) {
     this( NAMESPACE_URI, NAME_QUALIFIER, DefaultCharset.RENDERING, mimeType ) ;
   }
 
   public XmlWriter(
-      String namespaceUri,
-      String nameQualifier,
-      Charset charset,
-      RenditionMimeType mimeType
+      final String namespaceUri,
+      final String nameQualifier,
+      final Charset charset,
+      final RenditionMimeType mimeType
   ) {
     this.namespaceUri = Preconditions.checkNotNull( namespaceUri ) ;
     this.nameQualifier = Preconditions.checkNotNull( nameQualifier ) ;
@@ -65,8 +65,8 @@ public class XmlWriter implements FragmentWriter {
 
   
   public void startWriting(
-      OutputStream outputStream,
-      DocumentMetadata documentMetadata
+      final OutputStream outputStream,
+      final DocumentMetadata documentMetadata
   ) throws Exception {
     contentHandler = createContentHandler( outputStream, documentMetadata, charset ) ;
     contentHandler.startDocument() ;
@@ -79,15 +79,15 @@ public class XmlWriter implements FragmentWriter {
     }
   }
 
-  public void start( Nodepath kinship, boolean wholeDocument ) throws Exception {
+  public void start( final Nodepath kinship, final boolean wholeDocument ) throws Exception {
     start( NodeKindTools.tokenNameAsXmlElementName( kinship.getCurrent().name() ), wholeDocument ) ;
   }
   
-  public void start( String elementName ) throws Exception {
+  public void start( final String elementName ) throws Exception {
     start( elementName, false ) ;
   }
   
-  public void start( String elementName, boolean wholeDocument ) throws Exception {
+  public void start( final String elementName, final boolean wholeDocument ) throws Exception {
     final Attributes attributes ;
     if( wholeDocument ) { // Declare the namespace.
       final AttributesImpl mutableAttributes = new AttributesImpl() ;
@@ -110,22 +110,22 @@ public class XmlWriter implements FragmentWriter {
     ) ;
   }
 
-  public void end( Nodepath kinship ) throws Exception {
+  public void end( final Nodepath kinship ) throws Exception {
     end( NodeKindTools.tokenNameAsXmlElementName( kinship.getCurrent().name() ) ) ;
   }
-  public void end( String elementName ) throws Exception {
+  public void end( final String elementName ) throws Exception {
     contentHandler.endElement( namespaceUri, elementName, nameQualifier + ":" + elementName ) ;
   }
 
-  public void write( String word ) throws Exception {
+  public void write( final String word ) throws Exception {
     write( null, word ) ;
   }
 
-  public void write( Nodepath kinship, String word ) throws Exception {
+  public void write( final Nodepath kinship, final String word ) throws Exception {
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
   }
 
-  public void writeLiteral( Nodepath kinship, String word ) throws Exception {
+  public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
     ( ( LexicalHandler ) contentHandler ).startCDATA() ;
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
     ( ( LexicalHandler ) contentHandler ).endCDATA() ;
@@ -136,9 +136,9 @@ public class XmlWriter implements FragmentWriter {
   }
 
   protected ContentHandler createContentHandler(
-      OutputStream outputStream,
-      DocumentMetadata documentMetadata,
-      Charset charset
+      final OutputStream outputStream,
+      final DocumentMetadata documentMetadata,
+      final Charset charset
   )
       throws Exception
   {

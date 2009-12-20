@@ -72,7 +72,12 @@ public class XsltNumberingTest {
 // Fixture
 // =======
 
-  private static void check( String expected, int number, String locale, String caseType ) {
+  private static void check( 
+      final String expected, 
+      final int number, 
+      final String locale, 
+      final String caseType 
+  ) {
     Assert.assertEquals(
         expected,
         Numbering.numberAsText(

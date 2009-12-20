@@ -39,13 +39,13 @@ public enum RenditionMimeType {
 
   private static final Function< RenditionMimeType,String > FILE_EXTENSION_EXTRACTOR =
       new Function< RenditionMimeType, String >() {
-        public String apply( RenditionMimeType renditionMimeType ) {
+        public String apply( final RenditionMimeType renditionMimeType ) {
           return renditionMimeType.getFileExtension() ;
         }
       }
   ;
 
-  private RenditionMimeType( String identifier ) {
+  private RenditionMimeType( final String identifier ) {
     this.identifier = identifier ;
   }
 
@@ -57,8 +57,8 @@ public enum RenditionMimeType {
     return name().toLowerCase() ;
   }
 
-  public static boolean contains( String name ) {
-    for( RenditionMimeType renditionMimeType : RenditionMimeType.values() ) {
+  public static boolean contains( final String name ) {
+    for( final RenditionMimeType renditionMimeType : RenditionMimeType.values() ) {
       if( renditionMimeType.name().toLowerCase().equals( name ) ) {
         return true ;
       }

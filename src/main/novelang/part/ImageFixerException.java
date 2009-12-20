@@ -23,11 +23,11 @@ package novelang.part ;
  */
 public class ImageFixerException extends Exception {
 
-  public ImageFixerException( String s ) {
+  public ImageFixerException( final String s ) {
     super( s ) ;
   }
 
-  public ImageFixerException( String s, Throwable throwable ) {
+  public ImageFixerException( final String s, final Throwable throwable ) {
     super( s, throwable ) ;
   }
 }

@@ -61,11 +61,11 @@ public class Book extends AbstractSourceReader {
 
 
   public Book(
-      File baseDirectory,
-      File bookFile,
-      Charset suggestedSourceCharset,
-      Charset suggestedRenderingCharset,
-      Set< Tag > restrictingTags
+      final File baseDirectory,
+      final File bookFile,
+      final Charset suggestedSourceCharset,
+      final Charset suggestedRenderingCharset,
+      final Set< Tag > restrictingTags
   ) throws IOException {
     this(
         baseDirectory,
@@ -79,12 +79,12 @@ public class Book extends AbstractSourceReader {
 
 
   public Book(
-      File baseDirectory,
-      File bookDirectory,
-      String content,
-      Charset suggestedSourceCharset,
-      Charset defaultRenderingCharset,
-      Set< Tag > tagRestrictions
+      final File baseDirectory,
+      final File bookDirectory,
+      final String content,
+      final Charset suggestedSourceCharset,
+      final Charset defaultRenderingCharset,
+      final Set< Tag > tagRestrictions
   ) {
     super( suggestedSourceCharset, defaultRenderingCharset ) ;
 
@@ -135,7 +135,7 @@ public class Book extends AbstractSourceReader {
     collect( environment.getProblems() ) ;
   }
 
-  protected GenericParser createParser( String content ) {
+  protected GenericParser createParser( final String content ) {
     return new DelegatingBookParser( content, this ) ;
   }
 
@@ -167,7 +167,7 @@ public class Book extends AbstractSourceReader {
       CommandExecutionContext context,
       final Iterable< Command > commands
   ) {
-    for( Command command : commands ) {
+    for( final Command command : commands ) {
       context = command.evaluate( context ) ;
     }
     return context ;

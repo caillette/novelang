@@ -168,11 +168,11 @@ public class TreepathTest {
 // Fixture
 // =======
 
-  private static void print( String message, Treepath< MyTree > treepath ) {
+  private static void print( final String message, final Treepath< MyTree > treepath ) {
     LOG.debug( message + treepath.toString() ) ;
   }
 
-  private static void assertSame( MyTree expected, MyTree actual ) {
+  private static void assertSame( final MyTree expected, final MyTree actual ) {
     final String message =
         "Expected: {" + ( null == expected ? "null" : expected.getPayload() ) + "} " +
         "got {" + ( null == actual ? "null" : actual.getPayload() ) + "}"
@@ -182,7 +182,10 @@ public class TreepathTest {
     }
   }
 
-  private static void assertSame( Treepath< MyTree > expected, Treepath< MyTree > actual ) {
+  private static void assertSame( 
+      final Treepath< MyTree > expected, 
+      final Treepath< MyTree > actual 
+  ) {
     final String message =
         "Expected: {" + ( null == expected ? "null" : expected ) + "} " +
         "got {" + ( null == actual ? "null" : actual ) + "}"

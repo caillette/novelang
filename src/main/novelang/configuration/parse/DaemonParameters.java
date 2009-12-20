@@ -38,7 +38,7 @@ public class DaemonParameters extends GenericParameters {
   private final Integer port ;
   private final Boolean serveRemotes;
 
-  public DaemonParameters( File baseDirectory, String... parameters )
+  public DaemonParameters( final File baseDirectory, final String... parameters )
       throws ArgumentException
   {
     super( baseDirectory, parameters ) ;
@@ -68,7 +68,7 @@ public class DaemonParameters extends GenericParameters {
   }
 
 
-  protected void enrich( Options options ) {
+  protected void enrich( final Options options ) {
     options.addOption( OPTION_HTTPDAEMON_PORT ) ;
     options.addOption( OPTION_HTTPDAEMON_SERVEREMOTES ) ;
   }

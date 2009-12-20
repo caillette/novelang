@@ -39,11 +39,11 @@ public class NodeKindTools {
     throw new Error() ;
   }
 
-  public static NodeKind ofRoot( SyntacticTree tree ) {
+  public static NodeKind ofRoot( final SyntacticTree tree ) {
     return Enum.valueOf( NodeKind.class, tree.getText() ) ;
   }
 
-  public static boolean rootHasNodeKindName( SyntacticTree tree ) {
+  public static boolean rootHasNodeKindName( final SyntacticTree tree ) {
     if( null == tree ) {
       return false ;
     }
@@ -51,7 +51,7 @@ public class NodeKindTools {
     return null != tree && NodeKind.getNames().contains( text ) ;
   }
 
-  public static void ensure( SyntacticTree tree, NodeKind nodeKind ) {
+  public static void ensure( final SyntacticTree tree, final NodeKind nodeKind ) {
     Preconditions.checkNotNull( tree ) ;
     Preconditions.checkNotNull( nodeKind ) ;
     final String nodeText = Preconditions.checkNotNull( tree.getText() ) ;
@@ -63,7 +63,7 @@ public class NodeKindTools {
     }
   }
 
-  public static String tokenNameAsXmlElementName( String tokenName ) {
+  public static String tokenNameAsXmlElementName( final String tokenName ) {
     String result = tokenName.toLowerCase().replace( "_", "-" ) ;
     if( result.startsWith( "-" ) ) {
       result = result.substring( 1 ) ;
@@ -73,7 +73,7 @@ public class NodeKindTools {
 
   private static final Function< String,String > TOKEN_NAME_AS_XML_ELEMENT_NAME =
       new Function< String, String >() {
-        public String apply( String nodeName ) {
+        public String apply( final String nodeName ) {
           return tokenNameAsXmlElementName( nodeName ) ;
         }
       }
@@ -81,7 +81,7 @@ public class NodeKindTools {
 
   private static final Predicate< String > NO_TRAILING_UNDERSCORE =
       new Predicate< String >() {
-        public boolean apply( String s ) {
+        public boolean apply( final String s ) {
           return ! s.endsWith( "_" ) ;
         }
       }

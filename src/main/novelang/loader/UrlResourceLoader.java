@@ -37,7 +37,7 @@ public class UrlResourceLoader implements ResourceLoader {
   private final URL base ;
   private final String searchPath ;
 
-  public UrlResourceLoader( URL base ) {
+  public UrlResourceLoader( final URL base ) {
     final String urlAsString = base.toExternalForm();
     if( urlAsString.endsWith( "/" ) ) {
       this.base = base ;
@@ -51,7 +51,9 @@ public class UrlResourceLoader implements ResourceLoader {
     this.searchPath = createSearchPath( base ) ;
   }
 
-  public InputStream getInputStream( ResourceName resourceName ) throws ResourceNotFoundException {
+  public InputStream getInputStream( 
+      final ResourceName resourceName 
+  ) throws ResourceNotFoundException {
 
     final URL resourceUrl ;
     try {
@@ -70,7 +72,7 @@ public class UrlResourceLoader implements ResourceLoader {
     }
   }
 
-  private final String createSearchPath( URL baseUrl ) {
+  private String createSearchPath( final URL baseUrl ) {
     final StringBuffer buffer = new StringBuffer( "  " + toString() + "\n" ) ;
     buffer.append( "      " ) ;
     buffer.append( baseUrl.toExternalForm() ) ;

@@ -38,7 +38,7 @@ public class SaxMulticaster implements ContentHandler {
 
   private final List< ContentHandler > handlers = Lists.newLinkedList() ;
 
-  public void add( ContentHandler handler ) {
+  public void add( final ContentHandler handler ) {
     Preconditions.checkNotNull( handler ) ;
     handlers.add( handler ) ;
   }
@@ -47,73 +47,85 @@ public class SaxMulticaster implements ContentHandler {
 // ContentHandler methods
 // ======================
 
-  public void setDocumentLocator( Locator locator ) {
-    for( ContentHandler handler : handlers ) {
+  public void setDocumentLocator( final Locator locator ) {
+    for( final ContentHandler handler : handlers ) {
       handler.setDocumentLocator( locator ) ;
     }
   }
 
   public void startDocument() throws SAXException {
-    for( ContentHandler handler : handlers ) {
+    for( final ContentHandler handler : handlers ) {
       handler.startDocument() ;
     }
   }
 
   public void endDocument() throws SAXException {
-    for( ContentHandler handler : handlers ) {
+    for( final ContentHandler handler : handlers ) {
       handler.endDocument() ;
     }
   }
 
-  public void startPrefixMapping( String prefix, String uri ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+  public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {
+    for( final ContentHandler handler : handlers ) {
       handler.startPrefixMapping( prefix, uri ) ;
     }
   }
 
-  public void endPrefixMapping( String prefix ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+  public void endPrefixMapping( final String prefix ) throws SAXException {
+    for( final ContentHandler handler : handlers ) {
       handler.endPrefixMapping( prefix ) ;
     }
   }
 
   public void startElement(
-      String uri,
-      String localName,
-      String qName,
-      Attributes atts
+      final String uri,
+      final String localName,
+      final String qName,
+      final Attributes atts
   ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+    for( final ContentHandler handler : handlers ) {
       handler.startElement( uri, localName, qName, atts ) ;
     }
   }
 
-  public void endElement( String uri, String localName, String qName ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+  public void endElement( 
+      final String uri, 
+      final String localName, 
+      final String qName 
+  ) throws SAXException {
+    for( final ContentHandler handler : handlers ) {
       handler.endElement( uri, localName, qName ) ;
     }
   }
 
-  public void characters( char[] ch, int start, int length ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+  public void characters( 
+      final char[] ch, 
+      final int start, 
+      final int length 
+  ) throws SAXException {
+    for( final ContentHandler handler : handlers ) {
       handler.characters( ch, start, length ) ;
     }
   }
 
-  public void ignorableWhitespace( char[] ch, int start, int length ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+  public void ignorableWhitespace( 
+      final char[] ch, 
+      final int start, 
+      final int length 
+  ) throws SAXException {
+    for( final ContentHandler handler : handlers ) {
       handler.ignorableWhitespace( ch, start, length ) ;
     }
   }
 
-  public void processingInstruction( String target, String data ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+  public void processingInstruction( final String target, final String data ) throws SAXException {
+    for( final ContentHandler handler : handlers ) {
       handler.processingInstruction( target, data ) ;
     }
   }
 
-  public void skippedEntity( String name ) throws SAXException {
-    for( ContentHandler handler : handlers ) {
+  public void skippedEntity( final String name ) throws SAXException {
+    for( final ContentHandler handler : handlers ) {
       handler.skippedEntity( name ) ;
     }
   }

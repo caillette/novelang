@@ -35,7 +35,7 @@ import novelang.treemangling.SeparatorsMangler;
  */
 public class ParserMethod {
 
-  protected ParserMethod( String methodName ) {
+  protected ParserMethod( final String methodName ) {
     this.method = ReflectionTools.getMethod( NovelangParser.class, methodName ) ;
   }
 
@@ -62,27 +62,30 @@ public class ParserMethod {
   }
 
 
-  public SyntacticTree createTree( String text ) {
+  public SyntacticTree createTree( final String text ) {
     final CustomDelegatingParser parser = new CustomDelegatingParser( method, text ) ;
     final SyntacticTree tree = getTree( parser ) ;
     AntlrTestHelper.checkSanity( parser ) ;
     return tree ;    
   }
   
-  public void checkTreeAfterSeparatorRemoval( String text, SyntacticTree expectedTree ) {
+  public void checkTreeAfterSeparatorRemoval( 
+      final String text, 
+      final SyntacticTree expectedTree 
+  ) {
 //    final SyntacticTree actualTree = createTree( text ) ;
     final SyntacticTree actualTree = SeparatorsMangler.removeSeparators( createTree( text ) ) ;
     TreeFixture.assertEqualsNoSeparators( expectedTree, actualTree ) ;
     
   }
   
-  public void checkTree( String text, SyntacticTree expectedTree ) {
+  public void checkTree( final String text, final SyntacticTree expectedTree ) {
     final SyntacticTree actualTree = createTree( text ) ;
     TreeFixture.assertEquals( expectedTree, actualTree ) ;
     
   }
   
-  public void checkFails( String text ) {
+  public void checkFails( final String text ) {
     final CustomDelegatingParser parser = new CustomDelegatingParser( method, text ) ;
     getTree( parser ) ;
     final String readableProblemList = 

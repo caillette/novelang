@@ -61,7 +61,7 @@ public class XmlWriterTest {
 
     private final SyntacticTree syntacticTree ;
 
-    private MyRenderable( SyntacticTree syntacticTree ) {
+    private MyRenderable( final SyntacticTree syntacticTree ) {
       this.syntacticTree = syntacticTree ;
     }
 

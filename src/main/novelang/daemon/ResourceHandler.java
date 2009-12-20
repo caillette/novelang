@@ -50,7 +50,7 @@ public class ResourceHandler extends GenericHandler {
 
   private final ResourceLoader resourceLoader ;
 
-  public ResourceHandler( ProducerConfiguration serverConfiguration ) {
+  public ResourceHandler( final ProducerConfiguration serverConfiguration ) {
     this(
         ResourceLoaderTools.compose(
             serverConfiguration.getRenderingConfiguration().getResourceLoader(),
@@ -63,7 +63,7 @@ public class ResourceHandler extends GenericHandler {
   /**
    * Dirty hack.
    */
-  private static URL createUrlQuiet( File file ) {
+  private static URL createUrlQuiet( final File file ) {
     try {
       return file.toURL() ;
     } catch( MalformedURLException e ) {
@@ -71,16 +71,16 @@ public class ResourceHandler extends GenericHandler {
     }
   }
 
-  protected ResourceHandler( ResourceLoader resourceLoader ) {
+  protected ResourceHandler( final ResourceLoader resourceLoader ) {
     this.resourceLoader = resourceLoader ;
     LOG.debug( "Using resourceLoader %s", resourceLoader ) ;
   }
 
   protected void doHandle(
-      String target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      final String target,
+      final HttpServletRequest request,
+      final HttpServletResponse response,
+      final int dispatch
   )
       throws IOException, ServletException
   {
@@ -124,7 +124,7 @@ public class ResourceHandler extends GenericHandler {
     }
   }
 
-  private static String removeLeadingSolidus( String s ) {
+  private static String removeLeadingSolidus( final String s ) {
     if( s.startsWith( "/" ) ) {
       return s.substring( 1 ) ;
     } else {

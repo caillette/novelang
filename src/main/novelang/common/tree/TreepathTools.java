@@ -56,8 +56,8 @@ public class TreepathTools {
    * @return non-null object.
    */
   public static< T extends Tree > Treepath< T > getSiblingAt(
-      Treepath< T > treepath,
-      int index
+      final Treepath< T > treepath,
+      final int index
   ) throws IllegalArgumentException
   {
     final T end = treepath.getTreeAtEnd() ;
@@ -85,7 +85,7 @@ public class TreepathTools {
    * @throws IllegalArgumentException
    * @see #getPreviousSibling(Treepath)
    */
-  public static< T extends Tree > boolean hasPreviousSibling( Treepath< T > treepath )
+  public static< T extends Tree > boolean hasPreviousSibling( final Treepath< T > treepath )
       throws IllegalArgumentException
   {
     if( treepath.getLength() < 2 ) {
@@ -101,7 +101,7 @@ public class TreepathTools {
    * @throws IllegalArgumentException
    * @see #getNextSibling(Treepath)
    */
-  public static< T extends Tree > boolean hasNextSibling( Treepath< T > treepath )
+  public static< T extends Tree > boolean hasNextSibling( final Treepath< T > treepath )
       throws IllegalArgumentException
   {
     if( treepath.getLength() < 2 ) {
@@ -124,7 +124,7 @@ public class TreepathTools {
    * @see #hasPreviousSibling(Treepath)
    */
   public static< T extends Tree > Treepath< T > getPreviousSibling(
-      Treepath< T > treepath
+      final Treepath< T > treepath
   ) throws IllegalArgumentException
   {
     Preconditions.checkArgument( hasPreviousSibling( treepath ) ) ;
@@ -144,7 +144,7 @@ public class TreepathTools {
    * @return non-null object.
    * @see #hasNextSibling(Treepath)
    */
-  public static< T extends Tree > Treepath< T > getNextSibling( Treepath< T > treepath ) {
+  public static< T extends Tree > Treepath< T > getNextSibling( final Treepath< T > treepath ) {
     Preconditions.checkArgument( hasNextSibling( treepath ) ) ;
     final Treepath< T > previousTreepath = treepath.getPrevious() ;
     return Treepath.create( previousTreepath, treepath.getIndexInPrevious() + 1 ) ;
@@ -164,8 +164,8 @@ public class TreepathTools {
    *
    */
   public static< T extends Tree > Treepath< T > addSiblingLast(
-      Treepath< T > treepath,
-      T tree
+      final Treepath< T > treepath,
+      final T tree
   ) {
     Preconditions.checkArgument( 
         treepath.getLength() > 1, 
@@ -197,8 +197,8 @@ public class TreepathTools {
    *
    */
   public static < T extends Tree > Treepath< T > addChildFirst(
-      Treepath< T > treepath,
-      T tree
+      final Treepath< T > treepath,
+      final T tree
   ) {
     Preconditions.checkArgument( 
         treepath.getLength() > 0,
@@ -229,9 +229,9 @@ public class TreepathTools {
    *
    */
   public static < T extends Tree > Treepath< T > addChildAt(
-      Treepath< T > treepath,
-      T tree,
-      int position
+      final Treepath< T > treepath,
+      final T tree,
+      final int position
   ) {
     Preconditions.checkArgument( 
         treepath.getLength() > 0,
@@ -258,8 +258,8 @@ public class TreepathTools {
    *
    */
   public static < T extends Tree > Treepath< T > addChildLast(
-      Treepath< T > treepath,
-      T tree
+      final Treepath< T > treepath,
+      final T tree
   ) {
     Preconditions.checkArgument( 
         treepath.getLength() > 0,
@@ -288,8 +288,8 @@ public class TreepathTools {
    *
    */
   public static< T extends Tree > Treepath< T > replaceTreepathEnd(
-      Treepath< T > treepath,
-      T newTree
+      final Treepath< T > treepath,
+      final T newTree
   ) {
     if( null == treepath.getPrevious() ) {
       return Treepath.create( newTree ) ;
@@ -314,7 +314,7 @@ public class TreepathTools {
    * @param treepath a non-null object with a minimum height of 2.
    * @return a {@code Treepath} referencing updated trees.
    */
-  public static< T extends Tree > Treepath< T > removeEnd( Treepath< T > treepath ) {
+  public static< T extends Tree > Treepath< T > removeEnd( final Treepath< T > treepath ) {
     Preconditions.checkArgument( 
         treepath.getLength() > 1,
         "Treepath length must be 2 or more" 
@@ -356,7 +356,7 @@ public class TreepathTools {
    * @throws IllegalArgumentException if there was no previous sibling.
    */
   public static < T extends Tree > Treepath< T > becomeLastChildOfPreviousSibling(
-      Treepath< T > targetTreepath
+      final Treepath< T > targetTreepath
   )
       throws IllegalArgumentException
   {
@@ -549,7 +549,7 @@ public class TreepathTools {
    * @return true if index in each parent tree is the same.
    */
   public static < T extends Tree > boolean hasSameStartingIndicesAs( 
-      Treepath< T > maybeParent,  
+      final Treepath< T > maybeParent,  
       Treepath< T > maybeChild  
   ) {
     Preconditions.checkNotNull( maybeParent ) ;
@@ -563,8 +563,8 @@ public class TreepathTools {
   }
   
   private static < T extends Tree > boolean hasSameStartingIndicesAsWithoutCheck( 
-      Treepath< T > maybeParent,  
-      Treepath< T > maybeChild  
+      final Treepath< T > maybeParent,  
+      final Treepath< T > maybeChild  
   ) {
     if( maybeParent.getPrevious() == null ) {
       return true ; // No check needed as both arguments are supposed to have the same length.
@@ -601,7 +601,7 @@ public class TreepathTools {
    * @return the treepath to the next tree, or null.
    * @Deprecated
    */
-  public static< T extends Tree > Treepath< T > getNextInPreorder( Treepath< T > treepath ) {
+  public static< T extends Tree > Treepath< T > getNextInPreorder( final Treepath< T > treepath ) {
     final T tree = treepath.getTreeAtEnd();
     if( tree.getChildCount() > 0 ) {
       return Treepath.create( treepath, 0 ) ;
@@ -609,7 +609,9 @@ public class TreepathTools {
     return getNextUpInPreorder( treepath ) ;
   }
 
-  private static < T extends Tree > Treepath< T > getUpNextInPreorder( Treepath< T > treepath ) {
+  private static < T extends Tree > Treepath< T > getUpNextInPreorder( 
+      final Treepath< T > treepath 
+  ) {
     Treepath< T > previousTreepath = treepath.getPrevious() ;
     while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
       if( hasNextSibling( previousTreepath ) ) {
@@ -628,7 +630,9 @@ public class TreepathTools {
    *
    * @Deprecated
    */
-  public static < T extends Tree > Treepath< T > getNextUpInPreorder( Treepath< T > treepath ) {
+  public static < T extends Tree > Treepath< T > getNextUpInPreorder( 
+      final Treepath< T > treepath 
+  ) {
     if( hasNextSibling( treepath ) ) {
       return getNextSibling( treepath ) ;
     } else {

@@ -32,9 +32,9 @@ import novelang.common.Problem;
 public class HtmlProblemPrinter {
   
   public void printProblems(
-      OutputStream outputStream,
-      Iterable< Problem > problems,
-      String requestedUri
+      final OutputStream outputStream,
+      final Iterable< Problem > problems,
+      final String requestedUri
   ) throws IOException
   {
     final PrintWriter writer = new PrintWriter( outputStream ) ;

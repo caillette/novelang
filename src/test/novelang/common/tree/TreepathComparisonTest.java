@@ -145,11 +145,17 @@ public class TreepathComparisonTest {
   private final Treepath< MyTree > pathToGrandChild21 = Treepath.create( grandParent, 0, 2, 1 ) ;
 
   
-  private static void verifyEqual( Treepath< MyTree > first, Treepath< MyTree > second ) {
+  private static void verifyEqual( 
+      final Treepath< MyTree > first, 
+      final Treepath< MyTree > second 
+  ) {
     assertEquals( 0, first.compareTo( second ) ) ;
   }
 
-  private static void verifySecondGreater( Treepath< MyTree > first, Treepath< MyTree > second ) {
+  private static void verifySecondGreater( 
+      final Treepath< MyTree > first, 
+      final Treepath< MyTree > second 
+  ) {
     Assert.assertTrue( first.compareTo( second ) < 0 ) ;
   }
 

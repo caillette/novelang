@@ -75,7 +75,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
     return parameters;
   }
 
-  public void main( String commandName, String[] arguments ) throws Exception {
+  public void main( final String commandName, final String[] arguments ) throws Exception {
     final File baseDirectory = new File( SystemUtils.USER_DIR ) ;
     main( commandName, true, arguments, baseDirectory ) ;
   }
@@ -88,7 +88,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
   ) throws Exception ;
 
 
-  private void printHelpOnConsole( String commandName, ArgumentException e ) {
+  private void printHelpOnConsole( final String commandName, final ArgumentException e ) {
     if( null != e.getMessage() ) {
       System.out.println( e.getMessage() ) ;
     }
@@ -102,8 +102,8 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
   protected abstract String getSpecificCommandLineParametersDescriptor() ;
 
   protected static void reportProblems(
-      File targetDirectory,
-      Iterable< Problem > allProblems
+      final File targetDirectory,
+      final Iterable< Problem > allProblems
   ) throws IOException {
     final File problemFile = new File( targetDirectory, PROBLEMS_FILENAME ) ;
     final OutputStream outputStream = new FileOutputStream( problemFile ) ;
@@ -115,7 +115,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
   }
 
   // TODO does ToStringBuilder save from doing this?
-  protected static String asString( String[] args ) {
+  protected static String asString( final String[] args ) {
     final StringBuffer buffer = new StringBuffer( "[" ) ;
     boolean first = true ;
     for( int i = 0 ; i < args.length ; i++ ) {
@@ -132,7 +132,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
   }
 
   protected static void resetTargetDirectory(
-      File targetDirectory
+      final File targetDirectory
   ) throws IOException {
     if( targetDirectory.exists() ) {
       LOG.info( "Deleting '%s'...", targetDirectory.getAbsolutePath() ) ;
@@ -145,8 +145,8 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
 
 
   protected static File createOutputFile(
-      File targetDir,
-      DocumentRequest documentRequest
+      final File targetDir,
+      final DocumentRequest documentRequest
   )
       throws IOException
   {

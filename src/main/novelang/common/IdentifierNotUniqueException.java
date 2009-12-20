@@ -29,13 +29,16 @@ public class IdentifierNotUniqueException extends Exception {
   private final String identifier ;
   private final Collection< SyntacticTree > trees ;
 
-  public IdentifierNotUniqueException( String identifier, Collection< SyntacticTree > trees ) {
+  public IdentifierNotUniqueException( 
+      final String identifier, 
+      final Collection< SyntacticTree > trees 
+  ) {
     super( buildMessage( identifier, trees ) ) ;
     this.trees = trees ;
     this.identifier = identifier ;
   }
 
-  private static final String buildMessage( String identifier, Collection< SyntacticTree > trees ) {
+  private static String buildMessage( String identifier, Collection< SyntacticTree > trees ) {
     identifier = Preconditions.checkNotNull( identifier ) ;
     trees = Preconditions.checkNotNull( trees ) ;
     final StringBuffer buffer = new StringBuffer() ;

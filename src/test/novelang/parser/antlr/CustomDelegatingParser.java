@@ -34,7 +34,7 @@ import novelang.common.ReflectionTools;
 
   private final Method parserMethod ;
 
-  public CustomDelegatingParser( Method parserMethod, String text ) {
+  public CustomDelegatingParser( final Method parserMethod, final String text ) {
     super( text, new GrammarDelegate( TreeFixture.LOCATION_FACTORY ) ) ;
     Assert.assertEquals( NovelangParser.class, parserMethod.getDeclaringClass() ) ;
     this.parserMethod = parserMethod ;

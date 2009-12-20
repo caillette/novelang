@@ -56,7 +56,7 @@ public class DtdToolsTest {
   private static final String HYPHEN_ENTITY_ESCAPED =
       " <!ENTITY hyphen \"&amp;hyphen;\" >  <!--=hyphen-->" ;
 
-  private String escapeEntities( String dtd ) throws IOException {
+  private String escapeEntities( final String dtd ) throws IOException {
     final InputSource sourceBeforeEscaping = new InputSource( id ) ;
     sourceBeforeEscaping.setEncoding( "UTF-8" ) ;
     sourceBeforeEscaping.setPublicId( id ) ;

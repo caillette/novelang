@@ -33,10 +33,10 @@ import novelang.parser.shared.Lexeme;
 public class LexemeGenerator extends JavaGenerator {
 
   public LexemeGenerator(
-      File grammarFile,
-      String packageName,
-      String className,
-      File targetDirectory
+      final File grammarFile,
+      final String packageName,
+      final String className,
+      final File targetDirectory
   ) throws IOException
   {
     super( grammarFile, packageName, className, targetDirectory ) ;
@@ -49,7 +49,7 @@ public class LexemeGenerator extends JavaGenerator {
     return generateJavaEnumeration( lexemeDeclarations ) ;
   } 
 
-  protected String generateJavaEnumeration( Set< Lexeme > lexemes ) {
+  protected String generateJavaEnumeration( final Set< Lexeme > lexemes ) {
     final StringTemplate javaEnum = createStringTemplate( "lexemesClass" ) ;
     javaEnum.setAttribute( "lexemes", lexemes ) ;
     return javaEnum.toString() ;
@@ -61,7 +61,7 @@ public class LexemeGenerator extends JavaGenerator {
     public final String declaration ;
     public final String javaComment ;
 
-    public Item( String declaration, String javaComment ) {
+    public Item( final String declaration, final String javaComment ) {
       this.declaration = declaration;
       this.javaComment = javaComment;
     }

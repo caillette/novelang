@@ -36,29 +36,29 @@ public class ProblemDelegate {
 
   public ProblemDelegate() {
     this.locationFactory = new LocationFactory() {
-      public Location createLocation( int line, int column ) {
+      public Location createLocation( final int line, final int column ) {
         return new Location( "<debug>", line, column ) ;
       }
     } ;    
   }
 
-  public ProblemDelegate( LocationFactory locationFactory ) {
+  public ProblemDelegate( final LocationFactory locationFactory ) {
     this.locationFactory = locationFactory;
   }
 
-  public void report( String antlrMessage ) {
+  public void report( final String antlrMessage ) {
     problems.add( Problem.createProblem( locationFactory, antlrMessage ) ) ;
   }
 
-  public void report( RecognitionException exception ) {
+  public void report( final RecognitionException exception ) {
     problems.add( Problem.createProblem( locationFactory, exception ) ) ;
   }
 
-  public void report( String message, int line, int column ) {
+  public void report( final String message, final int line, final int column ) {
     problems.add( Problem.createProblem( message, locationFactory, line, column ) ) ;
   }
 
-  protected void report( Iterable< Problem > problems ) {
+  protected void report( final Iterable< Problem > problems ) {
     Iterables.addAll( this.problems, problems ) ;
   }
 

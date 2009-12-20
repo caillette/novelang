@@ -36,41 +36,41 @@ import novelang.configuration.FopFontStatus;
  */
 public class SyntheticFontMap {
   public static Iterable<FontQuadruplet> retainPriorityAboveZero(
-      Iterable< FontQuadruplet > quadruplets
+      final Iterable< FontQuadruplet > quadruplets
   ) {
     return Iterables.filter( quadruplets, new Predicate< FontQuadruplet >() {
-      public boolean apply( FontQuadruplet quadruplet ) {
+      public boolean apply( final FontQuadruplet quadruplet ) {
         return quadruplet.getFontTriplet().getPriority() > 0 ;
       }
     } ) ;
   }
 
   public static Iterable< FontQuadruplet > retainPriorityZero(
-      Iterable< FontQuadruplet > quadruplets
+      final Iterable< FontQuadruplet > quadruplets
   ) {
     return Iterables.filter( quadruplets, new Predicate< FontQuadruplet >() {
-      public boolean apply( FontQuadruplet quadruplet ) {
+      public boolean apply( final FontQuadruplet quadruplet ) {
         return quadruplet.getFontTriplet().getPriority() == 0 ;
       }
     } ) ;
   }
 
   public static Multimap< String, FontQuadruplet > mapQuadrupletsByCleanNames(
-      Iterable< FontQuadruplet > quadruplets
+      final Iterable< FontQuadruplet > quadruplets
   ) {
     final Multimap< String, FontQuadruplet > map = HashMultimap.create() ;
-    for( FontQuadruplet quadruplet : quadruplets ) {
+    for( final FontQuadruplet quadruplet : quadruplets ) {
       map.put( quadruplet.getFontTriplet().getName(), quadruplet ) ;
     }
     return ImmutableMultimap.copyOf( map ) ;
   }
 
   public static Multimap< String, FontQuadruplet > extractTripletsWithKnownName(
-      Set< String > names,
-      Iterable< FontQuadruplet > quadruplets
+      final Set< String > names,
+      final Iterable< FontQuadruplet > quadruplets
   ) {
     final Multimap< String, FontQuadruplet > extracted = HashMultimap.create() ;
-    for( FontQuadruplet quadruplet : quadruplets ) {
+    for( final FontQuadruplet quadruplet : quadruplets ) {
       final String name = quadruplet.getFontTriplet().getName() ;
       if( names.contains( name ) ) {
         extracted.put( name, quadruplet ) ;
@@ -80,12 +80,12 @@ public class SyntheticFontMap {
   }
 
   public static Multimap< String, FontQuadruplet > createSyntheticFontMap(
-      FopFontStatus fontStatus
+      final FopFontStatus fontStatus
   ) {
     final List< FontQuadruplet > quadruplets = Lists.newArrayList() ;
 
-    for( EmbedFontInfo fontInfo : fontStatus.getFontInfos() ) {
-      for( Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
+    for( final EmbedFontInfo fontInfo : fontStatus.getFontInfos() ) {
+      for( final Object fontTripletAsObject : fontInfo.getFontTriplets() ) {
         final FontTriplet fontTriplet = ( FontTriplet ) fontTripletAsObject ;
         final FontQuadruplet fontQuadruplet =
             new FontQuadruplet( fontInfo.getEmbedFile(), fontTriplet ) ;

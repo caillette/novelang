@@ -34,7 +34,7 @@ public class LogFactory {
 
   private static final Map< String, Log > LOGS = new MapMaker().weakKeys().makeMap() ;
 
-  public static Log getLog( String name ) {
+  public static Log getLog( final String name ) {
     Log log ;
     synchronized( LOGS ) {
       log = LOGS.get( name ) ;
@@ -47,7 +47,7 @@ public class LogFactory {
     return log ;
   }
 
-  public static Log getLog( Class aClass ) {
+  public static Log getLog( final Class aClass ) {
     return getLog( aClass.getName() ) ;
   }
 
@@ -55,7 +55,7 @@ public class LogFactory {
 
     private final Logger logger ;
 
-    private LoggerWrapper( Logger logger ) {
+    private LoggerWrapper( final Logger logger ) {
       this.logger = logger ;
     }
 
@@ -67,15 +67,15 @@ public class LogFactory {
       return logger.isTraceEnabled() ;
     }
 
-    public void trace( String s ) {
+    public void trace( final String s ) {
       logger.trace( s ) ;
     }
 
-    public void trace( String s, Object... o ) {
+    public void trace( final String s, final Object... o ) {
       logger.trace( s, o ) ;
     }
 
-    public void trace( String s, Throwable throwable ) {
+    public void trace( final String s, final Throwable throwable ) {
       logger.trace( s, throwable ) ;
     }
 
@@ -83,15 +83,15 @@ public class LogFactory {
       return logger.isDebugEnabled() ;
     }
 
-    public void debug( String s ) {
+    public void debug( final String s ) {
       logger.debug( s ) ;
     }
 
-    public void debug( String s, Object... o ) {
+    public void debug( final String s, final Object... o ) {
       logger.debug( String.format( s, o ) ) ;
     }
 
-    public void debug( String s, Throwable throwable ) {
+    public void debug( final String s, final Throwable throwable ) {
       logger.debug( s, throwable ) ;
     }
 
@@ -99,15 +99,15 @@ public class LogFactory {
       return logger.isInfoEnabled() ;
     }
 
-    public void info( String s ) {
+    public void info( final String s ) {
       logger.info( s ) ;
     }
 
-    public void info( String s, Object... o ) {
+    public void info( final String s, final Object... o ) {
       logger.info( String.format( s, o ) ) ;
     }
 
-    public void info( String s, Throwable throwable ) {
+    public void info( final String s, final Throwable throwable ) {
       logger.info( s, throwable ) ;
     }
 
@@ -115,15 +115,15 @@ public class LogFactory {
       return logger.isWarnEnabled() ;
     }
 
-    public void warn( String s ) {
+    public void warn( final String s ) {
       logger.warn( s ) ;
     }
 
-    public void warn( String s, Object... o ) {
+    public void warn( final String s, final Object... o ) {
       logger.warn( String.format( s, o ) ) ;
     }
 
-    public void warn( String s, Throwable throwable ) {
+    public void warn( final String s, final Throwable throwable ) {
       logger.warn( s, throwable ) ;
     }
 
@@ -131,15 +131,15 @@ public class LogFactory {
       return logger.isErrorEnabled() ;
     }
 
-    public void error( String s ) {
+    public void error( final String s ) {
       logger.error( s ) ;
     }
 
-    public void error( String s, Object... o ) {
+    public void error( final String s, final Object... o ) {
       logger.error( String.format( s, o ) ) ;
     }
 
-    public void error( String s, Throwable throwable ) {
+    public void error( final String s, final Throwable throwable ) {
       logger.error( s, throwable ) ;
     }
 

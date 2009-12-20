@@ -22,7 +22,7 @@ package novelang.parser;
  */
 public class UnsupportedSymbolException extends Exception {
 
-  public UnsupportedSymbolException( String symbol ) {
+  public UnsupportedSymbolException( final String symbol ) {
     super( "Unsupported symbol: '" + symbol + "'" ) ;
   }
 }

@@ -52,7 +52,7 @@ public enum BlockDelimiter {
   private final String start ;
   private final String[] end ;
 
-  private BlockDelimiter( boolean twin, String start, String... end ) {
+  private BlockDelimiter( final boolean twin, final String start, final String... end ) {
     this.twin = twin ;
     this.start = start ;
     this.end = end.clone() ;
@@ -71,7 +71,7 @@ public enum BlockDelimiter {
   }
 
   private static final Predicate< BlockDelimiter > IS_TWIN = new Predicate<BlockDelimiter>() {
-    public boolean apply( BlockDelimiter blockDelimiter ) {
+    public boolean apply( final BlockDelimiter blockDelimiter ) {
       return blockDelimiter.isTwin() ;
     }
   } ;

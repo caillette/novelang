@@ -47,7 +47,7 @@ public class CustomTree
 
   private final LocationFactory locationFactory ;
 
-  public CustomTree( LocationFactory locationFactory, Token token ) {
+  public CustomTree( final LocationFactory locationFactory, final Token token ) {
 		super( token ) ;
     this.locationFactory = locationFactory ;
   }
@@ -62,8 +62,8 @@ public class CustomTree
     }
   }
 
-  public boolean isOneOf( NodeKind... kinds ) {
-    for( NodeKind kind : kinds ) {
+  public boolean isOneOf( final NodeKind... kinds ) {
+    for( final NodeKind kind : kinds ) {
       if( kind.isRoot( this ) ) {
         return true ;
       }
@@ -71,8 +71,8 @@ public class CustomTree
     return false ;
   }
 
-  public boolean isOneOf( Set< NodeKind > kinds ) {
-    for( NodeKind kind : kinds ) {
+  public boolean isOneOf( final Set< NodeKind > kinds ) {
+    for( final NodeKind kind : kinds ) {
       if( kind.isRoot( this ) ) {
         return true ;
       }
@@ -89,16 +89,16 @@ public class CustomTree
     }
   }
 
-  public CustomTree adopt( SyntacticTree... newChildren ) throws NullArgumentException {
+  public CustomTree adopt( final SyntacticTree... newChildren ) throws NullArgumentException {
     final CustomTree newCustomTree = new CustomTree( locationFactory, token ) ;
-    for( SyntacticTree child : newChildren ) {
+    for( final SyntacticTree child : newChildren ) {
       newCustomTree.addChild( child ) ;
     }
     return newCustomTree ; 
   }
 
 
-  public void addChild( SyntacticTree child ) {
+  public void addChild( final SyntacticTree child ) {
     addChild( convert( child ) ) ;
   }
 
@@ -107,14 +107,14 @@ public class CustomTree
    * cases when a {@code CustomTree} must adopt a {@code SimpleTree}, like when a paragraph
    * is created directly from a Book file (as a {@code SimpleTree}. 
    */
-  private CommonTree convert( SyntacticTree tree ) {
+  private CommonTree convert( final SyntacticTree tree ) {
     if( tree instanceof SimpleTree ) {
       final CommonTree customTree = new CustomTree(
           locationFactory,
           new ClassicToken( // TODO don't swallow line + column information.
               ClassicToken.MIN_TOKEN_TYPE, tree.getText() ) 
       ) ;
-      for( SyntacticTree child : tree.getChildren() ) {
+      for( final SyntacticTree child : tree.getChildren() ) {
         customTree.addChild( convert( child ) ) ;
       }
       return customTree ;
@@ -123,7 +123,7 @@ public class CustomTree
     }
   }
 
-  public SyntacticTree getChildAt( int i ) {
+  public SyntacticTree getChildAt( final int i ) {
     return ( SyntacticTree ) getChild( i );
   }
 

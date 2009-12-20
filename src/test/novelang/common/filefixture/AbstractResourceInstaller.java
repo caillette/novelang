@@ -50,7 +50,7 @@ import novelang.DirectoryFixture;
    * @return created directory.
    * @see #copyTo(Directory, java.io.File)
    */
-  public File copy( Directory directory ) {
+  public File copy( final Directory directory ) {
     final File target = createPhysicalDirectory( getTargetDirectory(), directory.getName() ) ;
     try {
       copyTo( directory, target ) ;
@@ -80,7 +80,7 @@ import novelang.DirectoryFixture;
    * @param directory a non-null object.
    * @see #copy(Directory)
    */
-  public void copyContent( Directory directory ) {
+  public void copyContent( final Directory directory ) {
     try {
       copyTo( directory, getTargetDirectory() ) ;
     } catch( IOException e ) {
@@ -93,20 +93,20 @@ import novelang.DirectoryFixture;
    * @param directory a non-null object.
    * @param physicalTargetDirectory a non-null object representing an existing directory.
    */
-  private static void copyTo( Directory directory, File physicalTargetDirectory )
+  private static void copyTo( final Directory directory, final File physicalTargetDirectory )
       throws IOException
   {
-    for( Directory subdirectory : directory.getSubdirectories() ) {
+    for( final Directory subdirectory : directory.getSubdirectories() ) {
       final File physicalDirectory =
           createPhysicalDirectory( physicalTargetDirectory, subdirectory.getName() ) ;
       copyTo( subdirectory, physicalDirectory ) ;
     }
-    for( Resource resource : directory.getResources() ) {
+    for( final Resource resource : directory.getResources() ) {
       copyTo( resource, physicalTargetDirectory ) ;
     }
   }
 
-  public File createFileObject( Directory scope, SchemaNode node ) {
+  public File createFileObject( final Directory scope, final SchemaNode node ) {
     Preconditions.checkArgument( 
         ResourceSchema.isParentOfOrSameAs( scope, node ),
         "Directory '%s' expected to be parent of '%s'",
@@ -134,7 +134,7 @@ import novelang.DirectoryFixture;
 
     File result = getTargetDirectory();
     final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
-    for( Directory directory : parentHierarchy ) {
+    for( final Directory directory : parentHierarchy ) {
       result = new File( result, directory.getName() ) ;
     }
     result = new File( result, node.getName() ) ;
@@ -148,7 +148,7 @@ import novelang.DirectoryFixture;
    * @param node a non-null object.
    * @return a non-null object.
    */
-  public File createFileObject( SchemaNode node ) {
+  public File createFileObject( final SchemaNode node ) {
     
     final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
 
@@ -165,7 +165,7 @@ import novelang.DirectoryFixture;
 
     File result = getTargetDirectory();
     final Iterable< Directory > parentHierarchy = Iterables.reverse( reverseParentHierarchy ) ;
-    for( Directory directory : parentHierarchy ) {
+    for( final Directory directory : parentHierarchy ) {
       result = new File( result, directory.getName() ) ;
     }
     result = new File( result, node.getName() ) ;
@@ -195,7 +195,7 @@ copyScoped( ResourceTree.D0.dir, ResourceTree.D0_1_0.dir )
    * @param resource a non-null resource under {@code scope}.
    * @return a {@code File} object referencing the node to copy.
    */
-  public File copyScoped( Directory scope, Resource resource ) {
+  public File copyScoped( final Directory scope, final Resource resource ) {
     Preconditions.checkArgument( ResourceSchema.isParentOf( scope, resource ) ) ;
     final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
 
@@ -214,7 +214,7 @@ copyScoped( ResourceTree.D0.dir, ResourceTree.D0_1_0.dir )
 
     File result = null ;
     File target = getTargetDirectory();
-    for( Directory directory : parentHierarchy ) {
+    for( final Directory directory : parentHierarchy ) {
       target = createPhysicalDirectory( target, directory.getName() ) ;
     }
 
@@ -317,7 +317,7 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
    * @param origin a non-null object.
    * @return a {@code File} object referencing the node to copy.
    */
-  public File copyScoped( Directory scope, Directory origin ) {
+  public File copyScoped( final Directory scope, final Directory origin ) {
     
     Preconditions.checkArgument( ResourceSchema.isParentOf( scope, origin ) ) ;
     final List< Directory > reverseParentHierarchy = Lists.newArrayList() ;
@@ -338,7 +338,7 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
 
     File result = null ;
     File target = getTargetDirectory() ;
-    for( Directory directory : parentHierarchy ) {
+    for( final Directory directory : parentHierarchy ) {
       target = createPhysicalDirectory( target, directory.getName() ) ;
       if( origin == directory ) {
         result = target ;
@@ -363,7 +363,7 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
 
 
 
-  private static File copyTo( Resource resource, File physicalTargetDirectory )
+  private static File copyTo( final Resource resource, final File physicalTargetDirectory )
       throws IOException
   {
     final File physicalFile = new File( physicalTargetDirectory, resource.getName() ) ;
@@ -375,7 +375,10 @@ copyScoped( ResourceTree.D0_1.dir, ResourceTree.D0_1_0.dir )
   }
 
 
-  private static File createPhysicalDirectory( File physicalParentDirectory, String name ) {
+  private static File createPhysicalDirectory( 
+      final File physicalParentDirectory, 
+      final String name 
+  ) {
     final File physicalDirectory = new File( physicalParentDirectory, name ) ;
     if( ! physicalDirectory.mkdir() ) {
       if( ! FileUtils.waitFor( physicalDirectory, DirectoryFixture.TIMEOUT_SECONDS ) ) {

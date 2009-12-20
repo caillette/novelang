@@ -198,7 +198,7 @@ public class WebColors {
   private static class WebColorMapBuilder {
     final List< WebColor > webColors = Lists.newArrayList() ;
 
-    public WebColorMapBuilder put( String name, Color color ) {
+    public WebColorMapBuilder put( final String name, final Color color ) {
       final WebColor webColor = new WebColor( name, color ) ;
       if( ! containsSame( webColors, webColor ) ) {
         webColors.add( webColor ) ;
@@ -211,10 +211,10 @@ public class WebColors {
   }
 
   private static boolean containsSame(
-      Iterable< WebColor> namedColors,
-      WebColor webColor
+      final Iterable< WebColor> namedColors,
+      final WebColor webColor
   ) {
-    for( WebColor some : namedColors ) {
+    for( final WebColor some : namedColors ) {
       if( some.getColor().equals( webColor.getColor() ) ) {
         return true ;
       }
@@ -250,7 +250,7 @@ public class WebColors {
     } ;
   }
 
-  protected static Color getInverseColor( Color original ) {
+  protected static Color getInverseColor( final Color original ) {
     return new Color(
         ( original.getRed() + 128 ) % 256,
         ( original.getGreen() + 128 ) % 256,
@@ -258,7 +258,7 @@ public class WebColors {
     ) ;
   }
 
-  protected static String getRgbDeclaration( Color color ) {
+  protected static String getRgbDeclaration( final Color color ) {
     return "rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")" ;
   }
 
@@ -266,7 +266,7 @@ public class WebColors {
     return new InternalColorMapper() {
       final ColorCycler colorCycler = createColorCycler() ;
       final Map< String, WebColor> map = Maps.newHashMap() ;
-      public WebColor getColor( String identifier ) {
+      public WebColor getColor( final String identifier ) {
         if( map.containsKey( identifier ) ) {
           return map.get( identifier ) ;
         } else {
@@ -289,8 +289,8 @@ public class WebColors {
    * Workaround method because Xalan doesn't seem to handle instance method calls properly.
    */
   public static String getMappedColorName(
-      Object colorMapperObject,
-      Object colorIdentifierObject
+      final Object colorMapperObject,
+      final Object colorIdentifierObject
   ) {
     LOG.debug( "colorMapper: %s", ObjectUtils.toString( colorMapperObject ) ) ;
     LOG.debug(
@@ -325,7 +325,7 @@ public class WebColors {
     private final String name ;
     private final Color color ;
 
-    public WebColor( String name, Color color ) {
+    public WebColor( final String name, final Color color ) {
       Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
       this.name = name ;
       this.color = Preconditions.checkNotNull( color ) ;

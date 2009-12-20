@@ -71,9 +71,9 @@ public final class ReflectionTools {
   }
   
   public static Method getMethod( 
-      Class declaringClass, 
-      String methodName, 
-      Class... parameterTypes 
+      final Class declaringClass, 
+      final String methodName, 
+      final Class... parameterTypes 
   ) {
     Preconditions.checkArgument( null != declaringClass ) ;
     Preconditions.checkArgument( null != methodName ) ;
@@ -97,7 +97,11 @@ public final class ReflectionTools {
     
   }
   
-  public static < T > T invoke( Method method, Object object, Object... parameters ) {
+  public static < T > T invoke( 
+      final Method method, 
+      final Object object, 
+      final Object... parameters 
+  ) {
     try {
       return ( T ) method.invoke( object, parameters );
     } catch ( IllegalAccessException e ) {

@@ -44,18 +44,18 @@ public class GenericRenderer implements Renderer {
 
   private static final String DEFAULT_WHITESPACE = " " ;
 
-  public GenericRenderer( FragmentWriter fragmentWriter ) {
+  public GenericRenderer( final FragmentWriter fragmentWriter ) {
     this( fragmentWriter, DEFAULT_WHITESPACE ) ;
   }
 
-  protected GenericRenderer( FragmentWriter fragmentWriter, String whitespace ) {
+  protected GenericRenderer( final FragmentWriter fragmentWriter, final String whitespace ) {
     this.fragmentWriter = Preconditions.checkNotNull( fragmentWriter ) ;
     this.whitespace = whitespace ;
   }
 
   final public void render(
-      Renderable rendered,
-      OutputStream outputStream
+      final Renderable rendered,
+      final OutputStream outputStream
   ) throws Exception {
     if( rendered.hasProblem() ) {
       renderProblems( rendered.getProblems(), outputStream ) ;
@@ -75,9 +75,9 @@ public class GenericRenderer implements Renderer {
   }
 
   private void renderTree(
-      SyntacticTree tree,
-      Nodepath kinship,
-      NodeKind previous
+      final SyntacticTree tree,
+      final Nodepath kinship,
+      final NodeKind previous
   ) throws Exception {
 
     final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
@@ -182,24 +182,28 @@ public class GenericRenderer implements Renderer {
   }
 
   private static void writeLiteral(
-      FragmentWriter fragmentWriter,
-      Nodepath newPath,
-      String literal
+      final FragmentWriter fragmentWriter,
+      final Nodepath newPath,
+      final String literal
   ) throws Exception {
     fragmentWriter.start( newPath, false ) ;
     fragmentWriter.writeLiteral( newPath, literal ) ;
     fragmentWriter.end( newPath ) ;
   }
 
-  private Nodepath createNodepath( Nodepath kinship, NodeKind kind ) {
+  private Nodepath createNodepath( final Nodepath kinship, final NodeKind kind ) {
     return null == kinship ? new Nodepath( kind ) : new Nodepath( kinship, kind );
   }
 
-  private void processByDefault( SyntacticTree tree, Nodepath path, boolean rootElement ) throws Exception {
+  private void processByDefault( 
+      final SyntacticTree tree, 
+      final Nodepath path, 
+      final boolean rootElement 
+  ) throws Exception {
     NodeKind previous;
     fragmentWriter.start( path, rootElement ) ;
     previous = null ;
-    for( SyntacticTree subtree : tree.getChildren() ) {
+    for( final SyntacticTree subtree : tree.getChildren() ) {
       final NodeKind subtreeNodeKind = NodeKindTools.ofRoot( subtree );
       maybeWriteWhitespace( path, previous, subtreeNodeKind ) ;
       renderTree( subtree, path, previous ) ;
@@ -209,16 +213,16 @@ public class GenericRenderer implements Renderer {
   }
 
   private void maybeWriteWhitespace(
-      Nodepath path,
-      NodeKind previous,
-      NodeKind nodeKind
+      final Nodepath path,
+      final NodeKind previous,
+      final NodeKind nodeKind
   ) throws Exception {
     if( ! hasBlockAfterTilde( path ) && Spaces.isTrigger( previous, nodeKind ) ) {
       fragmentWriter.write( path, whitespace ) ;
     }
   }
 
-  private static boolean hasBlockAfterTilde( Nodepath path ) {
+  private static boolean hasBlockAfterTilde( final Nodepath path ) {
     if( path == null ) {
       return false ;
     }
@@ -230,8 +234,8 @@ public class GenericRenderer implements Renderer {
   }
 
   protected RenditionMimeType renderProblems(
-      Iterable< Problem > problems,
-      OutputStream outputStream
+      final Iterable< Problem > problems,
+      final OutputStream outputStream
   ) {
     final PrintWriter writer = new PrintWriter( outputStream ) ;
     for( final Problem problem : problems ) {

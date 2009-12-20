@@ -39,12 +39,12 @@ public class HtmlSink implements ContentHandler {
 
   private final PrintWriter writer ;
 
-  public HtmlSink( OutputStream outputStream, Charset charset ) {
+  public HtmlSink( final OutputStream outputStream, final Charset charset ) {
     final OutputStreamWriter outputStreamWriter = new OutputStreamWriter( outputStream, charset ) ;    
     this.writer = new PrintWriter( outputStreamWriter, true ) ;
   }
 
-  private static boolean isElementIWorthALineBreak( String elementName ) {
+  private static boolean isElementIWorthALineBreak( final String elementName ) {
     final String upperCaseName = elementName.toUpperCase() ;
     return
         upperCaseName.startsWith( "P" )  ||
@@ -69,10 +69,10 @@ public class HtmlSink implements ContentHandler {
   }
 
   public void startElement(
-      String uri,
-      String localName,
-      String qName,
-      Attributes atts
+      final String uri,
+      final String localName,
+      final String qName,
+      final Attributes atts
   ) throws SAXException {
     writer.append( "<" ).append( localName ) ;
     for( int i = 0 ; i < atts.getLength() ; i++ ) {
@@ -86,9 +86,9 @@ public class HtmlSink implements ContentHandler {
   }
 
   public void endElement(
-      String uri,
-      String localName,
-      String qName
+      final String uri,
+      final String localName,
+      final String qName
   ) throws SAXException {
     if( isElementIWorthALineBreak( localName ) ) {
       writer.println() ;
@@ -100,17 +100,17 @@ public class HtmlSink implements ContentHandler {
   }
 
   public void characters(
-      char chars[],
-      int start,
-      int length
+      final char[] chars,
+      final int start,
+      final int length
   ) throws SAXException {
     writer.write( chars, start, length );
   }
 
   public void ignorableWhitespace(
-      char chars[],
-      int start,
-      int length
+      final char[] chars,
+      final int start,
+      final int length
   ) throws SAXException {
     writer.write( chars, start, length );
   }
@@ -120,18 +120,18 @@ public class HtmlSink implements ContentHandler {
 // Uninteresting ContentHandler methods
 // ====================================
 
-  public void setDocumentLocator( Locator locator ) { }
+  public void setDocumentLocator( final Locator locator ) { }
 
-  public void startPrefixMapping( String prefix, String uri )
+  public void startPrefixMapping( final String prefix, final String uri )
       throws SAXException
   { }
 
-  public void endPrefixMapping( String prefix ) throws SAXException { }
+  public void endPrefixMapping( final String prefix ) throws SAXException { }
 
   public void processingInstruction(
-      String target,
-      String data
+      final String target,
+      final String data
   ) throws SAXException { }
 
-  public void skippedEntity( String name ) throws SAXException { }
+  public void skippedEntity( final String name ) throws SAXException { }
 }

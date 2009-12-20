@@ -50,12 +50,12 @@ public class XsltLengthTest {
 // Fixture
 // =======
 
-  private Element createElement( String name ) {
+  private Element createElement( final String name ) {
     final CoreDocumentImpl document = new CoreDocumentImpl() ;
     return document.createElement( name );
   }
 
-  private void addChild( Element parent, String name, String text ) {
+  private void addChild( final Element parent, final String name, final String text ) {
     final Element child = parent.getOwnerDocument().createElement( name ) ;
     child.setTextContent( text ) ;
     parent.appendChild( child ) ;

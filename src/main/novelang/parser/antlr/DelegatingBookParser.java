@@ -32,7 +32,7 @@ public class DelegatingBookParser
     implements BookParser
 {
 
-  public DelegatingBookParser( String text, LocationFactory locationFactory ) {
+  public DelegatingBookParser( final String text, final LocationFactory locationFactory ) {
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 

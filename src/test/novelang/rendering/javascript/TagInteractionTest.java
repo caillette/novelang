@@ -141,7 +141,7 @@ public class TagInteractionTest {
     assertEquals( 24, ALL_HEADERS.size() ) ; 
 
     final String testName = NameAwareTestClassRunner.getTestName() ;
-    File testDirectory = new DirectoryFixture( testName ).getDirectory();
+    final File testDirectory = new DirectoryFixture( testName ).getDirectory();
 
     final ResourceInstaller resourceInstaller = new ResourceInstaller( testDirectory ) ;
     resourceInstaller.copyContent( TaggedPart.dir ) ;
@@ -165,7 +165,7 @@ public class TagInteractionTest {
     webClient = new WebClient();
     webClient.setThrowExceptionOnScriptError( true ) ;
     webClient.setStatusHandler( new StatusHandler() {
-      public void statusMessageChanged( Page page, String s ) {
+      public void statusMessageChanged( final Page page, final String s ) {
         collectedStatusMessages.add( s ) ;
       }
     } ) ;
@@ -202,7 +202,7 @@ public class TagInteractionTest {
     httpDaemon.stop() ;
   }
     
-  private static List< HtmlElement > extractAllHeaders( HtmlPage htmlPage ) {
+  private static List< HtmlElement > extractAllHeaders( final HtmlPage htmlPage ) {
     final List< HtmlElement > allHeaders = Lists.newArrayList() ;
     allHeaders.addAll( ( Collection< ? extends HtmlElement > )
         htmlPage.getByXPath( "/html/body/div/h1" ) ) ;
@@ -212,14 +212,14 @@ public class TagInteractionTest {
   }
 
   private static void verifyHidden(
-      Iterable< HtmlElement > documentElements,
-      Set< String > hiddenHeaders
+      final Iterable< HtmlElement > documentElements,
+      final Set< String > hiddenHeaders
   ) {
     final Set< String > errors = Sets.newTreeSet() ;
 
     final StringBuffer messageBuffer = new StringBuffer( "\n  | header | present | should be |" ) ;
 
-    for( String header : ALL_HEADERS ) {
+    for( final String header : ALL_HEADERS ) {
       final boolean shouldBePresent = ! hiddenHeaders.contains( header ) ;
       final boolean isPresent = findByTextStart( documentElements, header ) != null ;
 
@@ -251,10 +251,10 @@ public class TagInteractionTest {
   }
 
   private static HtmlElement findByTextStart(
-      Iterable< HtmlElement > htmlElements,
-      String textStart
+      final Iterable< HtmlElement > htmlElements,
+      final String textStart
   ) {
-    for( HtmlElement htmlElement : htmlElements ) {
+    for( final HtmlElement htmlElement : htmlElements ) {
       if( cleanTextContent( htmlElement ).startsWith( textStart ) ) {
         return htmlElement ;
       }
@@ -264,7 +264,7 @@ public class TagInteractionTest {
 
   private static final Pattern MEANINGFUL_HEADER_TEXT = Pattern.compile( "(H\\d\\.(?:\\d\\.)?)" ) ;
 
-  private static String cleanTextContent( HtmlElement htmlElement ) {
+  private static String cleanTextContent( final HtmlElement htmlElement ) {
     final String textContent = htmlElement.getTextContent() ;
     final Matcher matcher = MEANINGFUL_HEADER_TEXT.matcher( textContent ) ;
     if( matcher.find() ) {
@@ -283,7 +283,7 @@ public class TagInteractionTest {
 
   private static final Comparator< HtmlElement > HTMLELEMENT_COMPARATOR =
       new Comparator< HtmlElement >() {
-        public int compare( HtmlElement e1, HtmlElement e2 ) {
+        public int compare( final HtmlElement e1, final HtmlElement e2 ) {
           return cleanTextContent( e1 ).compareTo( cleanTextContent( e2 ) ) ;
         }
       }

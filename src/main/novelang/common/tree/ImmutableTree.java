@@ -61,7 +61,7 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
    * @param children may be null but may not contain nulls.
    * @throws NullArgumentException
    */
-  public ImmutableTree( T... children ) throws NullArgumentException {
+  public ImmutableTree( final T... children ) throws NullArgumentException {
     this( Lists.newArrayList( children ) ) ;
   }
 
@@ -91,7 +91,7 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
     return null == children ? 0 : children.length ;
   }
 
-  public final T getChildAt( int index ) {
+  public final T getChildAt( final int index ) {
     if( index >= getChildCount() ) {
       throw new ArrayIndexOutOfBoundsException(
           "Unsupported index: " + index + " (child count: " + getChildCount() + ")" ) ;
@@ -151,7 +151,11 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
    *
    * @see novelang.common.tree.StorageTypeProvider
    */
-  protected static< T extends Tree > T[] createArray( T tree, T fallback, int arraySize ) {
+  protected static< T extends Tree > T[] createArray( 
+      final T tree, 
+      final T fallback, 
+      final int arraySize 
+  ) {
     final Class< T > concreteClass ;
     if( tree instanceof StorageTypeProvider ) {
       concreteClass = ( ( StorageTypeProvider ) tree ).getStorageType() ;

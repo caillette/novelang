@@ -28,7 +28,7 @@ public final class Directory extends SchemaNode implements Comparable< Directory
   private List< Resource > resources = null ;
   private List< Directory > directories = null ;
 
-  protected Directory( String name ) {
+  /*package*/ Directory( final String name ) {
     super( name );
   }
 
@@ -59,7 +59,7 @@ public final class Directory extends SchemaNode implements Comparable< Directory
   /**
    * Comparison occurs on {@link #getName()} as corresponding member is set at instantiation.
    */
-  public int compareTo( Directory other ) {
+  public int compareTo( final Directory other ) {
     return getName().compareTo( other.getName() ) ;
   }
   
@@ -67,14 +67,14 @@ public final class Directory extends SchemaNode implements Comparable< Directory
 // Fields set when interpreting class declarations
 // ===============================================
 
-  /*package*/ void setDirectories( List< Directory > directories ) {
+  /*package*/ void setDirectories( final List< Directory > directories ) {
     if( null != this.directories ) {
       throw new IllegalStateException( "Already set: directories" ) ;
     }
     this.directories = ImmutableList.copyOf( directories ) ;
   }
 
-  /*package*/ void setResources( List< Resource > resources ) {
+  /*package*/ void setResources( final List< Resource > resources ) {
     if( null != this.resources ) {
       throw new IllegalStateException( "Already set: resources" ) ;
     }

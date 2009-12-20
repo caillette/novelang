@@ -37,10 +37,10 @@ public abstract class GenericHandler extends AbstractHandler {
   private static final Log LOG = LogFactory.getLog( GenericHandler.class ) ;
 
   public final void handle(
-      String target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      final String target,
+      final HttpServletRequest request,
+      final HttpServletResponse response,
+      final int dispatch
   ) throws IOException, ServletException {
 
     if( ( ( Request ) request ).isHandled() ) {

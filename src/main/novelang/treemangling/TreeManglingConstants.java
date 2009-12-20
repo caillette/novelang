@@ -55,7 +55,7 @@ public class TreeManglingConstants {
 
     private final Set< NodeKind > delegate ;
 
-    public SyntacticTreeSet( Set< NodeKind > delegate ) {
+    public SyntacticTreeSet( final Set< NodeKind > delegate ) {
       this.delegate = delegate;
     }
 
@@ -72,11 +72,11 @@ public class TreeManglingConstants {
       return delegate.toArray( new NodeKind[ size() ] ) ;
     }
     
-    public static SyntacticTreeSet of( NodeKind... nodeKinds ) {
+    public static SyntacticTreeSet of( final NodeKind... nodeKinds ) {
       return new SyntacticTreeSet( ImmutableSet.of( nodeKinds ) ) ;
     }
     
-    public SyntacticTreeSet union( NodeKind... nodeKinds ) {
+    public SyntacticTreeSet union( final NodeKind... nodeKinds ) {
       return new SyntacticTreeSet( ImmutableSet.copyOf( 
           Sets.union( this, of( nodeKinds ) )
       ) ) ;

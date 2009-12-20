@@ -61,19 +61,19 @@ public class Spaces {
     ;
 
 
-    for( NodeKind first : canonicalStuff ) {
-      for( NodeKind second : canonicalStuff ) {
+    for( final NodeKind first : canonicalStuff ) {
+      for( final NodeKind second : canonicalStuff ) {
         add( first, second ) ;
       }
     }
     
-    for( NodeKind second : canonicalStuff ) {
+    for( final NodeKind second : canonicalStuff ) {
       add( PUNCTUATION_SIGN, second ) ;
     }
 
     add( PUNCTUATION_SIGN, APOSTROPHE_WORDMATE ) ;
 
-    for( NodeKind first : blocks ) {
+    for( final NodeKind first : blocks ) {
       add( first, APOSTROPHE_WORDMATE ) ;
     }
 
@@ -90,7 +90,7 @@ public class Spaces {
   public static final char ZERO_WIDTH_SPACE = '\u200b' ;
   public static final char NO_BREAK_SPACE = '\u00a0' ;
 
-  public static String normalizeLiteral( String rawLiteral ) {
+  public static String normalizeLiteral( final String rawLiteral ) {
     String s = rawLiteral.trim();
     s = s.replaceAll( " +", "" + NO_BREAK_SPACE ) ;
     return s ;
@@ -127,11 +127,11 @@ public class Spaces {
 // Boring stuff
 // ============
 
-  private static void add( NodeKind nodeKind1, NodeKind nodeKind2 ) {
+  private static void add( final NodeKind nodeKind1, final NodeKind nodeKind2 ) {
     SEQUENCES.add( new Sequence( nodeKind1, nodeKind2 ) ) ;
   }
 
-  public static boolean isTrigger( NodeKind first, NodeKind second ) {
+  public static boolean isTrigger( final NodeKind first, final NodeKind second ) {
 
     if( null == first ) {
       return false ;
@@ -145,7 +145,7 @@ public class Spaces {
     private final NodeKind first, second ;
 
 
-    public Sequence( NodeKind first, NodeKind second ) {
+    public Sequence( final NodeKind first, final NodeKind second ) {
       this.first = first;
       this.second = second;
     }
@@ -160,7 +160,7 @@ public class Spaces {
 
 
     @Override
-    public boolean equals( Object o ) {
+    public boolean equals( final Object o ) {
       if( this == o ) {
         return true ;
       }
@@ -168,7 +168,7 @@ public class Spaces {
         return false ;
       }
 
-      Sequence sequence = ( Sequence ) o ;
+      final Sequence sequence = ( Sequence ) o ;
 
       if( first != sequence.first ) {
         return false;

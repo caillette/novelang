@@ -29,7 +29,7 @@ public class BadExpandedNamesException extends SAXException {
 
   final Iterable< BadExpandedName > badExpandedNames ;
 
-  public BadExpandedNamesException( Iterable< BadExpandedName > badExpandedNames ) {
+  public BadExpandedNamesException( final Iterable< BadExpandedName > badExpandedNames ) {
     super(
         "Incorrect XPath expression(s): unknown element name(s)" +
         BadExpandedName.toString( badExpandedNames, "\n  " )

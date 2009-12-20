@@ -43,7 +43,7 @@ public final class ResourceMimeTypes {
    * @param extension a non-null, non-empty String with no leading dot.
    * @return a null object, or a valid MIME type.
    */
-  public static String getMimeType( String extension ) {
+  public static String getMimeType( final String extension ) {
     return EXTENSIONS_FOR_MIMETYPES.get( extension ) ;
   }
 }

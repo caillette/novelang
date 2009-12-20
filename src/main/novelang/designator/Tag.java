@@ -18,7 +18,7 @@ public final class Tag {
   
   private final String name ;
 
-  public Tag( String name ) {
+  public Tag( final String name ) {
     Preconditions.checkNotNull( name ) ;
     Preconditions.checkArgument( ! "".equals( name ) ) ;
     this.name = name ;

@@ -29,7 +29,7 @@ public final class AntlrParserHelper {
 
   private AntlrParserHelper() { }
 
-  public static Location createLocation( LocationFactory factory, TokenStream input ) {
+  public static Location createLocation( final LocationFactory factory, final TokenStream input ) {
     return factory.createLocation(
         ( ( Token ) input.LT( 1 ) ).getLine(),
         ( ( Token ) input.LT( 1 ) ).getCharPositionInLine()

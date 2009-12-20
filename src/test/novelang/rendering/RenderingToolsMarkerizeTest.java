@@ -211,7 +211,7 @@ public class RenderingToolsMarkerizeTest {
     assertEquals( expected, rendered ) ;
   }
   
-  private void logRendered( String text ) throws Exception {
+  private void logRendered( final String text ) throws Exception {
     final Part part = PartTestingTools.create( text ) ;
     final String markerized = RenderingTools.markerize( 
         part.getDocumentTree(), DefaultCharset.RENDERING ) ;

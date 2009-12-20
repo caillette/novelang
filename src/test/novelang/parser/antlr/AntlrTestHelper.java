@@ -33,7 +33,7 @@ public class AntlrTestHelper {
   static final String BREAK = "\n" ;
 
 
-  /*package*/ static void checkSanity( AbstractDelegatingParser parser ) {
+  /*package*/ static void checkSanity( final AbstractDelegatingParser parser ) {
     if( parser.hasProblem() ) {
       throw new AssertionFailedError(
           "Parser has problems. " + createProblemList( parser.getProblems() ) ) ;
@@ -41,12 +41,12 @@ public class AntlrTestHelper {
   }
 
 
-  /*package*/ static DelegatingPartParser createPartParser( String text ) {
+  /*package*/ static DelegatingPartParser createPartParser( final String text ) {
     return new DelegatingPartParser( text, TreeFixture.LOCATION_FACTORY ) ;
   }
 
 
-  public static String createProblemList( Iterable< Problem > problems ) {
+  public static String createProblemList( final Iterable< Problem > problems ) {
     final StringBuffer buffer = new StringBuffer( "Problems:" ) ;
     for( final Problem problem : problems ) {
       buffer.append( "\n    " ) ;

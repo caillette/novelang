@@ -41,7 +41,7 @@ import com.google.common.collect.ImmutableSet;
   private final String elementName;
   private final String attributeName ;
 
-  public XpathAwareAttribute( String elementName, String attributeName ) {
+  public XpathAwareAttribute( final String elementName, final String attributeName ) {
     this.elementName = elementName;
     this.attributeName = attributeName;
   }
@@ -55,7 +55,7 @@ import com.google.common.collect.ImmutableSet;
   }
 
   @Override
-  public boolean equals( Object o ) {
+  public boolean equals( final Object o ) {
     if( this == o ) {
       return true;
     }
@@ -88,7 +88,7 @@ import com.google.common.collect.ImmutableSet;
     return result ;
   }
 
-  static boolean isXpathCombination( XpathAwareAttribute xpathAwareAttribute ) {
+  static boolean isXpathCombination( final XpathAwareAttribute xpathAwareAttribute ) {
     return XPATH_AWARE_ATTRIBUTES.contains( xpathAwareAttribute ) ;
   }
 }

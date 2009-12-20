@@ -45,10 +45,10 @@ public class TokenEnumerationGenerator extends JavaGenerator {
 
 
   public TokenEnumerationGenerator(
-      File grammarFile,
-      String packageName,
-      String className,
-      File targetDirectory
+      final File grammarFile,
+      final String packageName,
+      final String className,
+      final File targetDirectory
   ) throws IOException
   {
     super( grammarFile, packageName, className, targetDirectory ) ;
@@ -98,7 +98,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   static {
     final StringBuffer regexBuilder = new StringBuffer() ;
     regexBuilder.append( "(?: *([A-Z_]+) *;)(?: *//" ) ;
-    for( TokenProperty tokenProperty : TokenProperty.values() ) {
+    for( final TokenProperty tokenProperty : TokenProperty.values() ) {
       regexBuilder
           .append( "(?:\\s+" )
           .append( tokenProperty.getPublicName() )
@@ -110,7 +110,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     LOGGER.debug( "Crafted regex {}", ONE_TOKEN_PATTERN.pattern() ) ;
   }
 
-  protected static Iterable< Item > findAntlrTokens( String grammar ) {
+  protected static Iterable< Item > findAntlrTokens( final String grammar ) {
     final Matcher allTokensMatcher = ALL_TOKENS_PATTERN.matcher( grammar ) ;
     if( ! allTokensMatcher.find() ) {
       LOGGER.warn( "No token found" ) ;
@@ -123,7 +123,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
 
     while( eachTokenMatcher.find() ) {
       final Map< TokenProperty, String > properties = Maps.newHashMap() ;
-      for( TokenProperty tokenProperty : TokenProperty.values() ) {
+      for( final TokenProperty tokenProperty : TokenProperty.values() ) {
         final String propertyValue = eachTokenMatcher.group( tokenProperty.ordinal() + 2 ) ;
         if( null != propertyValue ) {
           properties.put( tokenProperty, propertyValue ) ;
@@ -143,7 +143,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
   }
 
   protected String generateJavaEnumeration(
-      Iterable< Item > enumerationItems
+      final Iterable< Item > enumerationItems
   ) {
     final StringTemplate javaEnum = createStringTemplate( "enum" ) ;
     javaEnum.setAttribute( "items", enumerationItems ) ;
@@ -156,11 +156,11 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     public final boolean punctuationSign ;
     public final TagBehavior tagBehavior ;
 
-    public Item( String name ) {
+    public Item( final String name ) {
       this( name, ImmutableMap.< TokenProperty, String >of() ) ;
     }
 
-    public Item( String name, Map< TokenProperty, String > properties ) {
+    public Item( final String name, final Map< TokenProperty, String > properties ) {
       this.name = name ;
       this.punctuationSign =
           "true".equalsIgnoreCase( properties.get( TokenProperty.PUNCTUATION_SIGN ) ) ;
@@ -173,7 +173,7 @@ public class TokenEnumerationGenerator extends JavaGenerator {
     }
 
     @Override
-    public boolean equals( Object o ) {
+    public boolean equals( final Object o ) {
       if( this == o ) {
         return true ;
       }

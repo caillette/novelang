@@ -44,7 +44,7 @@ public class TagFilter {
 
   public static Treepath< SyntacticTree > filter(
       Treepath< SyntacticTree > treepath,
-      Set< Tag > tags
+      final Set< Tag > tags
   ) {
     LOG.debug( "Filtering on %s", tags ) ;
     
@@ -85,7 +85,7 @@ public class TagFilter {
         // Gets true if one child (TERMINAL or SCOPE) has one of the wanted tags.
         boolean hasTaggedChild = false ;
          
-        for( SyntacticTree child : tree.getChildren() ) {
+        for( final SyntacticTree child : tree.getChildren() ) {
           final TagBehavior childTagBehavior = NodeKindTools.ofRoot( child ).getTagBehavior() ;
           if( childTagBehavior == TagBehavior.NON_TRAVERSABLE ) {
             newChildList.add( child ) ;
@@ -117,10 +117,10 @@ public class TagFilter {
   }
 
   private static boolean hasTag(
-      SyntacticTree tree,
-      Set< Tag > tags
+      final SyntacticTree tree,
+      final Set< Tag > tags
   ) {
-    for( SyntacticTree child : tree.getChildren() ) {
+    for( final SyntacticTree child : tree.getChildren() ) {
       if( child.isOneOf( NodeKind.TAG ) ) {
         if( Tag.contains( tags, child.getChildAt( 0 ).getText() ) ) {
           return true ;
@@ -134,7 +134,7 @@ public class TagFilter {
     public final boolean hasTag ;
     public final SyntacticTree tree ;
 
-    private Result( boolean hasTag, SyntacticTree tree ) {
+    private Result( final boolean hasTag, final SyntacticTree tree ) {
       this.hasTag = hasTag;
       this.tree = Preconditions.checkNotNull( tree ) ;
     }

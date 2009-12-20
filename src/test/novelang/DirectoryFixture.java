@@ -47,11 +47,11 @@ public class DirectoryFixture {
 
   private final Set< String > registeredTestIdentifiers = new HashSet< String >() ;
 
-    public DirectoryFixture( Class testClass ) throws IOException {
+    public DirectoryFixture( final Class testClass ) throws IOException {
     this( ClassUtils.getShortClassName( testClass ) ) ;
   }
 
-  public DirectoryFixture( String testIdentifier ) throws IOException {
+  public DirectoryFixture( final String testIdentifier ) throws IOException {
     this.testIdentifier = testIdentifier ;
     if( registeredTestIdentifiers.contains( testIdentifier ) ) {
       throw new IllegalArgumentException( "Already created for: " + testIdentifier ) ;

@@ -62,10 +62,10 @@ public class AntlrGenerator extends JavaGenerator {
   private static final String FIRST_IMPORT = "import novelang.parser.antlr.ProblemDelegate ;" ;
 
   public AntlrGenerator(
-      File grammarFile,
-      String packageName,
-      String className,
-      File targetDirectory
+      final File grammarFile,
+      final String packageName,
+      final String className,
+      final File targetDirectory
   ) throws IOException
   {
     super( grammarFile, packageName, className, targetDirectory ) ;
@@ -113,9 +113,9 @@ public class AntlrGenerator extends JavaGenerator {
   }
 
   private void fixPackageDeclaration( 
-      File directory, 
-      String radix, 
-      String suffix 
+      final File directory, 
+      final String radix, 
+      final String suffix 
   ) throws IOException {
     
     final File javaFile = new File( directory, radix + suffix + JAVA_EXTENSION ) ;
@@ -144,7 +144,7 @@ public class AntlrGenerator extends JavaGenerator {
    * Checks ANTLR output on the console. This is an easy way to ensure we've been running 
    * ANTLR as expected.
    */
-  private void checkAntlrToolOutput( String output ) {
+  private void checkAntlrToolOutput( final String output ) {
     final String antlrIntroductoryLine = ANTLR_OUTPUT_INTRODUCTION ;
     if( output.startsWith( antlrIntroductoryLine ) ) {
       final int introductoryLineLength = antlrIntroductoryLine.length();
@@ -169,7 +169,7 @@ public class AntlrGenerator extends JavaGenerator {
 
   private static void forbidSystemExitCall() {
     final SecurityManager securityManager = new SecurityManager() {
-      public void checkPermission( Permission permission ) {
+      public void checkPermission( final Permission permission ) {
 	    final String permissionName = permission.getName() ;
         if( permissionName.startsWith( "exitVM" ) ) {
           LOGGER.debug( "Checking permission " + permissionName ) ;

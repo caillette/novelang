@@ -31,8 +31,8 @@ import com.google.common.collect.ImmutableSet;
 public class BookTestTools {
 
   public static Book createBook(
-      File baseDirectory,
-      String content
+      final File baseDirectory,
+      final String content
   ) {
     return new Book(
         baseDirectory,
@@ -45,7 +45,7 @@ public class BookTestTools {
   }
 
   public static Book createBook(
-      File bookFile
+      final File bookFile
   ) throws IOException {
     return new Book(
         bookFile.getParentFile(),

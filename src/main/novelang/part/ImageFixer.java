@@ -60,9 +60,9 @@ public class ImageFixer {
   private final ProblemCollector problemCollector ;
 
   public ImageFixer(
-      File baseDirectory, 
-      File referrerDirectory, 
-      ProblemCollector problemCollector 
+      final File baseDirectory, 
+      final File referrerDirectory, 
+      final ProblemCollector problemCollector 
   ) {
     Preconditions.checkNotNull( baseDirectory ) ;
     Preconditions.checkArgument( baseDirectory.exists(), "Does not exist: '%s'", baseDirectory ) ;
@@ -140,7 +140,7 @@ public class ImageFixer {
 
   private Treepath< SyntacticTree > addImageMetadata(
       Treepath< SyntacticTree > treepathToImage,
-      String imageLocation
+      final String imageLocation
   ) {
       final File imageFile = new File( baseDirectory, imageLocation ) ;
       final NodeKind nodeKind = NodeKind.valueOf( treepathToImage.getTreeAtEnd().getText() ) ;
@@ -165,7 +165,7 @@ public class ImageFixer {
 
   private static Treepath< SyntacticTree > addRasterImageMetadata(
       Treepath< SyntacticTree > treepathToImage,
-      File imageFile
+      final File imageFile
   ) throws IOException {
     LOG.debug( "Extracting raster image metadata from '%s'...", imageFile.getAbsolutePath() ) ;
     final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
@@ -194,7 +194,7 @@ public class ImageFixer {
    */
   private static Treepath< SyntacticTree > addVectorImageMetadata(
       Treepath< SyntacticTree > treepathToImage,
-      File imageFile
+      final File imageFile
   ) throws IOException, DocumentException {
     LOG.debug( "Extracting vector image metadata from '%s'...", imageFile.getAbsolutePath() ) ;
 
@@ -227,8 +227,8 @@ public class ImageFixer {
 
   private static Treepath<SyntacticTree> addImageMetadata(
       Treepath< SyntacticTree > treepathToImage,
-      NodeKind sizeNodeKind,
-      String value
+      final NodeKind sizeNodeKind,
+      final String value
   ) {
     final SyntacticTree withTree = new SimpleTree( sizeNodeKind.name(), new SimpleTree( value ) ) ;
     treepathToImage = TreepathTools.addChildLast( treepathToImage, withTree ).getPrevious() ;
@@ -247,7 +247,7 @@ public class ImageFixer {
    * @throws ImageFixerException if the resource does not exist, or if the resulting file
    *     is not located under given {@code directory}. 
    */
-  protected String relocate( String nameRelativeToReferrer ) 
+  protected String relocate( final String nameRelativeToReferrer ) 
       throws ImageFixerException
   {  
     Preconditions.checkArgument( 
@@ -292,7 +292,7 @@ public class ImageFixer {
     private final String width ;
     private final String height ;
 
-    public ImageDimension( String width, String height ) {
+    public ImageDimension( final String width, final String height ) {
       this.width = width ;
       this.height = height ;
     }
@@ -326,7 +326,7 @@ public class ImageFixer {
    * Dirty implementation only supporting DTD for SVG 1.1 in bundled style directory.
    */
   private static final EntityResolver ENTITY_RESOLVER = new EntityResolver() {
-    public InputSource resolveEntity( String publicId, String systemId ) 
+    public InputSource resolveEntity( final String publicId, final String systemId ) 
         throws SAXException, IOException 
     {
       if( publicId.startsWith( SVG11_PUBLICID_PREFIX_1 ) 

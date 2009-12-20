@@ -61,8 +61,8 @@ public abstract class GenericParameters {
   private final File logDirectory ;
 
   public GenericParameters(
-      File baseDirectory,
-      String[] parameters
+      final File baseDirectory,
+      final String[] parameters
   )
       throws ArgumentException
   {    
@@ -146,7 +146,7 @@ public abstract class GenericParameters {
 
   protected abstract void enrich( Options options ) ;
 
-  private void throwArgumentException( String message ) throws ArgumentException {
+  private void throwArgumentException( final String message ) throws ArgumentException {
     throw new ArgumentException( message, helpPrinter ) ;
   }
 
@@ -263,18 +263,18 @@ public abstract class GenericParameters {
 // ==========
 
   protected File extractDirectory(
-      File baseDirectory,
-      Option option,
-      CommandLine line
+      final File baseDirectory,
+      final Option option,
+      final CommandLine line
   ) throws ArgumentException {
     return extractDirectory( baseDirectory, option, line, true ) ;
   }
 
   protected File extractDirectory(
-      File baseDirectory,
-      Option option,
-      CommandLine line,
-      boolean failOnNonExistingDirectory
+      final File baseDirectory,
+      final Option option,
+      final CommandLine line,
+      final boolean failOnNonExistingDirectory
   )
       throws ArgumentException
   {
@@ -290,20 +290,23 @@ public abstract class GenericParameters {
     return directory ;
   }
 
-  protected final Iterable< File > extractDirectories( File parent, String[] directoryNames )
+  protected final Iterable< File > extractDirectories( 
+      final File parent, 
+      final String[] directoryNames 
+  )
       throws ArgumentException
   {
     final List directories = Lists.newArrayList() ;
-    for( String directoryName : directoryNames ) {
+    for( final String directoryName : directoryNames ) {
       directories.add( extractDirectory( parent, directoryName, true ) ) ;
     }
     return ImmutableList.copyOf( directories ) ;
   }
 
   protected final File extractDirectory(
-      File parent,
-      String directoryName,
-      boolean failOnNonExistingDirectory
+      final File parent,
+      final String directoryName,
+      final boolean failOnNonExistingDirectory
   )
       throws ArgumentException
   {
@@ -409,7 +412,7 @@ public abstract class GenericParameters {
   ;
 
 
-  protected static String createOptionDescription( Option option ) {
+  protected static String createOptionDescription( final Option option ) {
     return OPTIONPREFIX + option.getLongOpt() + ", " + option.getDescription() ;
   }
 
@@ -421,15 +424,23 @@ public abstract class GenericParameters {
   public static class HelpPrinter {
     private final Options options ;
 
-    public HelpPrinter( Options options ) {
+    public HelpPrinter( final Options options ) {
       this.options = options;
     }
 
-    public void print( PrintStream printStream, String commandName, int columns ) {
+    public void print( 
+        final PrintStream printStream, 
+        final String commandName, 
+        final int columns 
+    ) {
       print( new PrintWriter( printStream ), commandName, columns ) ;
     }
     
-    public void print( PrintWriter printWriter, String commandName, int columns ) {
+    public void print( 
+        final PrintWriter printWriter, 
+        final String commandName, 
+        final int columns 
+    ) {
       final HelpFormatter helpFormatter = new HelpFormatter() ;
       helpFormatter.printHelp(
           printWriter,
@@ -444,7 +455,7 @@ public abstract class GenericParameters {
       printWriter.flush() ;
     }
 
-    public String asString( String commandName, int columns ) {
+    public String asString( final String commandName, final int columns ) {
       final StringWriter stringWriter = new StringWriter() ;
       print( new PrintWriter( stringWriter ), commandName, columns ) ;
       return stringWriter.toString() ;
@@ -453,7 +464,7 @@ public abstract class GenericParameters {
 
   private static final String HELP_TRIGGER = OPTIONPREFIX + OPTION_HELP.getLongOpt() ;
 
-  private boolean containsHelpTrigger( String[] parameters ) {
+  private boolean containsHelpTrigger( final String[] parameters ) {
     for( int i = 0 ; i < parameters.length ; i++ ) {
       final String parameter = parameters[ i ] ;
       if( HELP_TRIGGER.equals( parameter ) ) {

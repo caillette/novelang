@@ -28,11 +28,11 @@ import novelang.common.LocationFactory;
 
   private final LocationFactory locationFactory ;
 
-  public CustomTreeAdaptor( LocationFactory locationFactory ) {
+  public CustomTreeAdaptor( final LocationFactory locationFactory ) {
     this.locationFactory = locationFactory;
   }
 
-  public Object create( Token payload ) {
+  public Object create( final Token payload ) {
     return new CustomTree( locationFactory, payload ) ;
   }
 }

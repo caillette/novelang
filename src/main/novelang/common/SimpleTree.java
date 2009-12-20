@@ -37,21 +37,21 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
   private final String text;
   private final Location location ;
 
-  public SimpleTree( String text, SyntacticTree... children ) {
+  public SimpleTree( final String text, final SyntacticTree... children ) {
     this( text, Lists.newArrayList( children ) ) ;
   }
 
-  public SimpleTree( NodeKind nodeKind, SyntacticTree... children ) {
+  public SimpleTree( final NodeKind nodeKind, final SyntacticTree... children ) {
     this( nodeKind.name(), Lists.newArrayList( children ) ) ;
   }
 
-  public SimpleTree( String text, Iterable< ? extends SyntacticTree> children ) {
+  public SimpleTree( final String text, final Iterable< ? extends SyntacticTree> children ) {
     super( children ) ;
     this.text = text ;
     this.location = null ;
   }
 
-  public SyntacticTree adopt( SyntacticTree... newChildren ) throws NullArgumentException {
+  public SyntacticTree adopt( final SyntacticTree... newChildren ) throws NullArgumentException {
     return new SimpleTree( getText(), newChildren ) ;
   }
 
@@ -100,9 +100,9 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     return location ;
   }
 
-  public boolean isOneOf( NodeKind... kinds ) {
+  public boolean isOneOf( final NodeKind... kinds ) {
     if( NodeKindTools.rootHasNodeKindName( this ) ) {
-      for( NodeKind kind : kinds ) {
+      for( final NodeKind kind : kinds ) {
         if( getText().equals( kind.name() ) ) {
           return true ;
         }
@@ -114,11 +114,11 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
   /**
    * Is is possible to remove this kind of duplicate code?
    * 
-   * @see #isOneOf(novelang.parser.NodeKind[]) 
+   * @see #isOneOf(novelang.parser.NodeKind...)  
    */
-  public boolean isOneOf( Set< NodeKind > kinds ) {
+  public boolean isOneOf( final Set< NodeKind > kinds ) {
     if( NodeKindTools.rootHasNodeKindName( this ) ) {
-      for( NodeKind kind : kinds ) {
+      for( final NodeKind kind : kinds ) {
         if( getText().equals( kind.name() ) ) {
           return true ;
         }

@@ -36,8 +36,8 @@ public class LanguageTools {
    * @param values a non-null array that may contain nulls.
    * @return a possibly null value if all {@code values} were null.
    */
-  public static< T > T firstNotNull( T... values ) {
-    for( T value : values ) {
+  public static< T > T firstNotNull( final T... values ) {
+    for( final T value : values ) {
       if( value != null ) {
         return value ;
       }
@@ -54,7 +54,7 @@ public class LanguageTools {
    * @throws RuntimeException
    * @throws Error
    */
-  public static void rethrowUnchecked( Throwable throwable ) {
+  public static void rethrowUnchecked( final Throwable throwable ) {
     if( throwable instanceof Error ) {
       throw ( Error ) throwable ;
     }
@@ -72,7 +72,7 @@ public class LanguageTools {
    * @return a two-byte string.
    * @author Jon A. Cruz http://www.thescripts.com/forum/thread15875.html
    */
-  public static String to8byteHex(char character) {
+  public static String to8byteHex( final char character ) {
     return Integer.toHexString( 0x100 | ( 0x0ff & character ) ).substring( 1 ) ;
   }
 

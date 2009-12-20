@@ -27,7 +27,7 @@ public class FontQuadruplet {
   private final String embedFileName ;
   private final FontTriplet fontTriplet ;
 
-  public FontQuadruplet( String embedFileName, FontTriplet fontTriplet ) {
+  public FontQuadruplet( final String embedFileName, final FontTriplet fontTriplet ) {
     this.embedFileName = embedFileName;
     this.fontTriplet = fontTriplet;
   }

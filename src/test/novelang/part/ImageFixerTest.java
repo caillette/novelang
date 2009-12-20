@@ -360,7 +360,7 @@ public class ImageFixerTest {
 
     private final List< Problem > problems = Lists.newArrayList() ;
 
-    public void collect( Problem problem ) {
+    public void collect( final Problem problem ) {
       problems.add( problem ) ;
     }
 

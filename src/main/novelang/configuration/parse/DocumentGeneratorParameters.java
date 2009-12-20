@@ -41,7 +41,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
 
   private final Iterable< DocumentRequest > documentRequests ;
 
-  public DocumentGeneratorParameters( File baseDirectory, String[] parameters )
+  public DocumentGeneratorParameters( final File baseDirectory, final String[] parameters )
       throws ArgumentException
   {
     super( baseDirectory, parameters );
@@ -74,7 +74,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
 
   }
 
-  protected void enrich( Options options ) {
+  protected void enrich( final Options options ) {
     options.addOption( OPTION_OUTPUT_DIRECTORY ) ;
   }
   

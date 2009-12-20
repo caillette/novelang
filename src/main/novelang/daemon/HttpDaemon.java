@@ -37,11 +37,11 @@ import novelang.configuration.parse.DaemonParameters;
  */
 public class HttpDaemon {
 
-  private static Log LOG = LogFactory.getLog( HttpDaemon.class ) ;
+  private static final Log LOG = LogFactory.getLog( HttpDaemon.class ) ;
 
   private final Server server ;
 
-  public static void main( String commandName, String[] args ) throws Exception {
+  public static void main( final String commandName, final String[] args ) throws Exception {
 
     final DaemonParameters parameters ;
 
@@ -74,7 +74,7 @@ public class HttpDaemon {
     new HttpDaemon( daemonConfiguration ).start() ;
   }
 
-  public HttpDaemon( DaemonConfiguration daemonConfiguration ) {
+  public HttpDaemon( final DaemonConfiguration daemonConfiguration ) {
     final HandlerCollection handlers = new HandlerCollection() ;
     if( ! daemonConfiguration.getServeRemotes() ) {
       handlers.addHandler( new LocalhostOnlyHandler() ) ;
@@ -100,7 +100,7 @@ public class HttpDaemon {
     LOG.info( "Server stopped on port %s", port ) ;
   }
 
-  private static void printHelpOnConsole( String commandName, ArgumentException e ) {
+  private static void printHelpOnConsole( final String commandName, final ArgumentException e ) {
     if( null != e.getMessage() ) {
       System.out.println( e.getMessage() ) ;
     }

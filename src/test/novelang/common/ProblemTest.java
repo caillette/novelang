@@ -27,7 +27,7 @@ public class ProblemTest {
 
   private static final String FILE_LOCATION = "file_location" ;
   private static final LocationFactory LOCATION_FACTORY = new LocationFactory() {
-    public Location createLocation( int line, int column ) {
+    public Location createLocation( final int line, final int column ) {
       return new Location( FILE_LOCATION, line, column ) ;
     }
   } ;

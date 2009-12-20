@@ -68,7 +68,7 @@ public class NovelangTask extends Task {
     return contentRoot ;
   }
 
-  public void setContentRoot( File contentRoot ) {
+  public void setContentRoot( final File contentRoot ) {
     this.contentRoot = contentRoot ;
   }
 
@@ -76,7 +76,7 @@ public class NovelangTask extends Task {
     return styleDirectory;
   }
 
-  public void setStyleDirectory( File styleDirectory ) {
+  public void setStyleDirectory( final File styleDirectory ) {
     this.styleDirectory = styleDirectory;
   }
 
@@ -84,7 +84,7 @@ public class NovelangTask extends Task {
     return documentRequest ;
   }
 
-  public void setDocumentRequest( String documentRequest ) {
+  public void setDocumentRequest( final String documentRequest ) {
     this.documentRequest = documentRequest ;
   }
 
@@ -92,7 +92,7 @@ public class NovelangTask extends Task {
     return contentProperty ;
   }
 
-  public void setContentProperty( String contentProperty ) {
+  public void setContentProperty( final String contentProperty ) {
     this.contentProperty = contentProperty;
   }
 
@@ -100,7 +100,7 @@ public class NovelangTask extends Task {
     return renderingCharsetName ;
   }
 
-  public void setRenderingCharsetName( String renderingCharsetName ) {
+  public void setRenderingCharsetName( final String renderingCharsetName ) {
     this.renderingCharsetName = renderingCharsetName;
   }
 

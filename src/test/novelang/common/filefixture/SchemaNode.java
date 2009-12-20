@@ -30,7 +30,7 @@ import novelang.loader.ResourceName;
   private Class declaringClass ;
   private String underlyingResourcePath = null ;
 
-  protected SchemaNode( String name ) {
+  protected SchemaNode( final String name ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
     this.name = name;
   }
@@ -40,7 +40,7 @@ import novelang.loader.ResourceName;
   }
 
 
-  /*package*/ final void setParent( Directory parent ) {
+  /*package*/ final void setParent( final Directory parent ) {
     this.parent = parent ;
   }
 
@@ -58,7 +58,7 @@ import novelang.loader.ResourceName;
     return null != declaringClass ;
   }
 
-  /*package*/ void setDeclaringClass( Class declaringClass ) {
+  /*package*/ void setDeclaringClass( final Class declaringClass ) {
     if( null != this.declaringClass ) {
       throw new IllegalStateException( "Already set: declaringClass" ) ;
     }

@@ -30,12 +30,12 @@ public class DirectoryCacheValidity implements CacheValidity< DirectoryCacheVali
   private final List< Tuple2< String, Long > > files ;
   private final List< DirectoryCacheValidity > directories ;
 
-  public DirectoryCacheValidity( File root ) {
+  public DirectoryCacheValidity( final File root ) {
     files = Lists.newArrayList() ;
     directories = Lists.newArrayList() ;
   }
 
-  public boolean isValid( DirectoryCacheValidity other ) {
+  public boolean isValid( final DirectoryCacheValidity other ) {
     return false;
   }
 }

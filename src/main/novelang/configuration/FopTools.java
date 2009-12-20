@@ -57,7 +57,7 @@ public class FopTools {
 
   public static final Function< ? super EmbedFontInfo,? extends String >
       EXTRACT_EMBEDFONTINFO_FUNCTION = new Function< EmbedFontInfo, String >() {
-        public String apply( EmbedFontInfo embedFontInfo ) {
+        public String apply( final EmbedFontInfo embedFontInfo ) {
           return embedFontInfo.getEmbedFile() ;
         }
       }
@@ -68,13 +68,13 @@ public class FopTools {
    * using font directories as set by system property.
    */
   public static Configuration createPdfRendererConfiguration(
-      Iterable < File > fontDirectories
+      final Iterable < File > fontDirectories
   ) {
     final MutableConfiguration renderer = new DefaultConfiguration( "renderer" ) ;
     renderer.setAttribute( "mime", "application/pdf" ) ;
     final MutableConfiguration fonts = new DefaultConfiguration( "fonts" ) ;
 
-    for( File fontDirectory : fontDirectories ) {
+    for( final File fontDirectory : fontDirectories ) {
       final MutableConfiguration directory = new DefaultConfiguration( "directory" ) ;
       directory.setAttribute( "recurse", "true" ) ;
       directory.setValue( fontDirectory.getAbsolutePath() ) ;
@@ -88,14 +88,14 @@ public class FopTools {
    * Creates a {@code Configuration} object with {@code <renderers>} element as root.
    */
   public static Configuration createRenderersConfiguration(
-      Iterable< File > fontDirectories
+      final Iterable< File > fontDirectories
   ) {
     final MutableConfiguration renderers = new DefaultConfiguration( "renderers" ) ;
     renderers.addChild( createPdfRendererConfiguration( fontDirectories ) ) ;
     return renderers ;
   }
 
-  public static Configuration createHyphenationConfiguration( File hyphenationDirectory ) {
+  public static Configuration createHyphenationConfiguration( final File hyphenationDirectory ) {
     final URL hyphenationBaseUrl ;
     try {
       hyphenationBaseUrl = hyphenationDirectory.toURI().toURL() ;
@@ -107,7 +107,7 @@ public class FopTools {
     return hyphenationBase ;
   }
 
-  public static String configurationAsString( Configuration configuration ) {
+  public static String configurationAsString( final Configuration configuration ) {
     try {
       final StringWriter stringWriter = new StringWriter() ;
       final OutputFormat format = OutputFormat.createPrettyPrint() ;
@@ -123,14 +123,14 @@ public class FopTools {
     }
   }
 
-  private static Map< String, EmbedFontInfo > extractFailedFontMap( FontCache fontCache ) {
+  private static Map< String, EmbedFontInfo > extractFailedFontMap( final FontCache fontCache ) {
     return ( Map< String, EmbedFontInfo > ) ( Map )
         ReflectionTools.getFieldValue( fontCache, "failedFontMap" ) ;
   }
 
   public static FopFontStatus createGlobalFontStatus(
-      FopFactory fopFactory,
-      Iterable< File > fontDirectories
+      final FopFactory fopFactory,
+      final Iterable< File > fontDirectories
   ) throws FOPException {
     final Configuration pdfRendererConfiguration =
         createPdfRendererConfiguration( fontDirectories ) ;
@@ -152,8 +152,8 @@ public class FopTools {
 
 
   /*package*/ static FopFactory createFopFactory(
-      Iterable< File > fontsDirectories,
-      File hyphenationDirectory
+      final Iterable< File > fontsDirectories,
+      final File hyphenationDirectory
   )
       throws FOPException
   {

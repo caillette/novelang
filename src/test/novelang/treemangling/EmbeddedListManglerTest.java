@@ -262,11 +262,11 @@ public class EmbeddedListManglerTest {
 // Fixture
 // =======  
   
-  private static Log LOG = LogFactory.getLog( EmbeddedListMangler.class ) ;
+  private static final Log LOG = LogFactory.getLog( EmbeddedListMangler.class ) ;
   
   private static void verifyRehierarchizeList(
-      SyntacticTree expectedTree,
-      SyntacticTree flatTree
+      final SyntacticTree expectedTree,
+      final SyntacticTree flatTree
   ) {
     LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;

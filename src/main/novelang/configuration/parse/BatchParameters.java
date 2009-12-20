@@ -37,8 +37,8 @@ public abstract class BatchParameters extends GenericParameters {
 
 
   public BatchParameters(
-      File baseDirectory,
-      String[] parameters
+      final File baseDirectory,
+      final String[] parameters
   ) throws ArgumentException {
     super( baseDirectory, parameters ) ;
     outputDirectory = extractDirectory(

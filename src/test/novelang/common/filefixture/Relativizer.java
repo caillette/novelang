@@ -27,12 +27,12 @@ public final class Relativizer {
   
   private final Directory root ;
 
-  /*package*/ Relativizer( Directory root ) {
+  /*package*/ Relativizer( final Directory root ) {
     Preconditions.checkNotNull( root ) ;
     this.root = root ;
   }
   
-  public String apply( SchemaNode node ) {
+  public String apply( final SchemaNode node ) {
     Preconditions.checkNotNull( node ) ;
     final String parentPath = root.getAbsoluteResourceName();
     final String childPath = node.getAbsoluteResourceName();

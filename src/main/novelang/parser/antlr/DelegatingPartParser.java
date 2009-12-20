@@ -33,7 +33,7 @@ public class DelegatingPartParser
     implements PartParser
 {
 
-  public DelegatingPartParser( String text, LocationFactory locationFactory ) {
+  public DelegatingPartParser( final String text, final LocationFactory locationFactory ) {
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 

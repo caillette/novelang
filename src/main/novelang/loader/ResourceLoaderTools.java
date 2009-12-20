@@ -43,7 +43,7 @@ public class ResourceLoaderTools {
     Preconditions.checkNotNull( second ) ;
 
     return new ResourceLoader() {
-      public InputStream getInputStream( ResourceName resourceName ) {
+      public InputStream getInputStream( final ResourceName resourceName ) {
         try {
           return first.getInputStream( resourceName ) ;
         } catch( ResourceNotFoundException firstException ) {

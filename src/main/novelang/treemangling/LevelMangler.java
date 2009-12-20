@@ -89,7 +89,7 @@ public class LevelMangler {
    */
   private static Treepath< SyntacticTree > rehierarchizeThisLevel(
       Treepath< SyntacticTree > levelIntroducer,
-      int roof
+      final int roof
   ) {
     final int depth = getLevelIntroducerDepth( levelIntroducer.getTreeAtEnd() ) ;
     final int introducerIndex = levelIntroducer.getIndexInPrevious() ;
@@ -144,10 +144,10 @@ public class LevelMangler {
    * {@link NodeKind#LEVEL_INTRODUCER_INDENT_}.
    */
   private static Treepath< SyntacticTree > substitute(
-      Treepath< SyntacticTree > levelIntroducer,
+      final Treepath< SyntacticTree > levelIntroducer,
       SyntacticTree levelTree
   ) {
-    for( SyntacticTree child : levelIntroducer.getTreeAtEnd().getChildren() ) {
+    for( final SyntacticTree child : levelIntroducer.getTreeAtEnd().getChildren() ) {
       if( ! child.isOneOf( LEVEL_INTRODUCER_INDENT_ ) ) {
         levelTree = TreeTools.addFirst( levelTree, child ) ;
       }
@@ -156,7 +156,7 @@ public class LevelMangler {
   }
 
 
-  private static NodeKind getKind( Treepath< SyntacticTree > treepath ) {
+  private static NodeKind getKind( final Treepath< SyntacticTree > treepath ) {
     return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 
@@ -167,7 +167,7 @@ public class LevelMangler {
    * @param tree a tree of {@link NodeKind#LEVEL_INTRODUCER_} kind.
    * @return a number equal to or greater than 1
    */
-  private static int getLevelIntroducerDepth( SyntacticTree tree ) {
+  private static int getLevelIntroducerDepth( final SyntacticTree tree ) {
     Preconditions.checkArgument( tree.isOneOf( LEVEL_INTRODUCER_ ) ) ;
     Preconditions.checkArgument( tree.getChildCount() > 0 ) ;
     final SyntacticTree indentTree = tree.getChildAt( 0 ) ;

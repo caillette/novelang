@@ -74,7 +74,7 @@ public class LevelExploderParameters extends BatchParameters {
 
   }
 
-  protected void enrich( Options options ) {
+  protected void enrich( final Options options ) {
     options.addOption( OPTION_OUTPUT_DIRECTORY ) ;
   }
 

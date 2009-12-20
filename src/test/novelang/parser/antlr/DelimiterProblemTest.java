@@ -121,7 +121,10 @@ public class DelimiterProblemTest {
   }
 
 
-  private void process( String text, ProblemSignature... signatures ) throws RecognitionException {
+  private void process( 
+      final String text, 
+      final ProblemSignature... signatures 
+  ) throws RecognitionException {
     LOG.info( BREAK + text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
@@ -135,13 +138,17 @@ public class DelimiterProblemTest {
     if( signatures.length == 0 ) {
       Assert.assertFalse( problems.iterator().hasNext() );
     } else {
-      for( ProblemSignature signature : signatures ) {
+      for( final ProblemSignature signature : signatures ) {
         Assert.assertTrue( signature.in( problems ) ) ;
       }
     }
   }
 
-  private static final ProblemSignature problem( int line, int column, String messageFragment ) {
+  private static ProblemSignature problem( 
+      final int line, 
+      final int column, 
+      final String messageFragment 
+  ) {
     return new ProblemSignature( line, column, messageFragment ) ;
   }
 
@@ -150,13 +157,13 @@ public class DelimiterProblemTest {
     private final int column ;
     private final String messageElement ;
 
-    private ProblemSignature( int line, int column, String messageElement ) {
+    private ProblemSignature( final int line, final int column, final String messageElement ) {
       this.line = line;
       this.column = column;
       this.messageElement = messageElement;
     }
 
-    private boolean in( Problem problem ) {
+    private boolean in( final Problem problem ) {
       return
           problem.getLocation().getLine() == line
        && problem.getLocation().getColumn() == column
@@ -164,8 +171,8 @@ public class DelimiterProblemTest {
       ;
     }
 
-    private boolean in( Iterable< Problem > problems ) {
-      for( Problem problem : problems ) {
+    private boolean in( final Iterable< Problem > problems ) {
+      for( final Problem problem : problems ) {
         if( in( problem ) ) {
           return true ;
         }

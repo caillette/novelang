@@ -39,7 +39,7 @@ public class ClasspathResourceLoader implements ResourceLoader {
   private final Class reference ;
   private final String path ;
 
-  protected ClasspathResourceLoader( Class reference, String path ) {
+  protected ClasspathResourceLoader( final Class reference, final String path ) {
     this.reference = Preconditions.checkNotNull( reference ) ;
     this.path = null == path ? "" : normalize( path ) ;
   }
@@ -48,11 +48,11 @@ public class ClasspathResourceLoader implements ResourceLoader {
     this( ClasspathResourceLoader.class, null ) ;
   }
 
-  public ClasspathResourceLoader( String path ) {
+  public ClasspathResourceLoader( final String path ) {
     this( ClasspathResourceLoader.class, path ) ;
   }
 
-  public InputStream getInputStream( ResourceName resourceName ) {
+  public InputStream getInputStream( final ResourceName resourceName ) {
     final String absoluteName = path + "/" + resourceName.getName() ; // normalize( resourceName ) ;
     LOG.debug( "Attempting to load '%s'", absoluteName ) ;
 
@@ -88,7 +88,7 @@ public class ClasspathResourceLoader implements ResourceLoader {
 
   private static final String SYSTEM_CLASSPATH = "file:" + SystemUtils.JAVA_HOME ;
 
-  private final String getBestDescriptorForClassloader() {
+  private String getBestDescriptorForClassloader() {
     final ClassLoader classLoader = getClass().getClassLoader();
     final StringBuffer buffer = new StringBuffer( "  " + toString() + "\n" ) ;
     if( classLoader instanceof URLClassLoader ) {

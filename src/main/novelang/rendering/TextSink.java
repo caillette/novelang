@@ -33,11 +33,15 @@ import org.xml.sax.SAXException;
 
   private final PrintWriter writer ;
 
-  public TextSink( OutputStream outputStream ) {
+  public TextSink( final OutputStream outputStream ) {
     writer = new PrintWriter( outputStream );
   }
 
-  public void characters( char chars[], int start, int length ) throws SAXException {
+  public void characters( 
+      final char[] chars, 
+      final int start, 
+      final int length 
+  ) throws SAXException {
     writer.write( chars, start, length ) ;
   }
 
@@ -45,24 +49,39 @@ import org.xml.sax.SAXException;
     writer.flush() ;
   }
 
-  public void ignorableWhitespace( char ch[], int start, int length ) throws SAXException {
+  public void ignorableWhitespace( 
+      final char[] ch, 
+      final int start, 
+      final int length 
+  ) throws SAXException {
     writer.write( ch, start, length ) ;
   }
 
-  public void setDocumentLocator( Locator locator ) { }
+  public void setDocumentLocator( final Locator locator ) { }
 
   public void startDocument() throws SAXException { }
 
-  public void startPrefixMapping( String prefix, String uri ) throws SAXException { }
+  public void startPrefixMapping( final String prefix, final String uri ) throws SAXException { }
 
-  public void endPrefixMapping( String prefix ) throws SAXException { }
+  public void endPrefixMapping( final String prefix ) throws SAXException { }
 
-  public void startElement( String uri, String localName, String qName, Attributes atts )
-      throws SAXException { }
+  public void startElement( 
+      final String uri, 
+      final String localName, 
+      final String qName, 
+      final Attributes atts 
+  ) throws SAXException { }
 
-  public void endElement( String uri, String localName, String qName ) throws SAXException { }
+  public void endElement( 
+      final String uri, 
+      final String localName, 
+      final String qName 
+  ) throws SAXException { }
 
-  public void processingInstruction( String target, String data ) throws SAXException { }
+  public void processingInstruction( 
+      final String target, 
+      final String data 
+  ) throws SAXException { }
 
-  public void skippedEntity( String name ) throws SAXException { }
+  public void skippedEntity( final String name ) throws SAXException { }
 }

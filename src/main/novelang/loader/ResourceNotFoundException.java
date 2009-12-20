@@ -28,25 +28,37 @@ public class ResourceNotFoundException extends RuntimeException {
 
   final String searchPath ;
 
-  public ResourceNotFoundException( String resourceName, String searchPath ) {
+  public ResourceNotFoundException( final String resourceName, final String searchPath ) {
     super( "Not found: '" + resourceName + "' in \n" + searchPath ) ;
     this.searchPath = searchPath ;
   }
 
-  public ResourceNotFoundException( String resourceName, String searchPath, Exception cause ) {
+  public ResourceNotFoundException( 
+      final String resourceName, 
+      final String searchPath, 
+      final Exception cause 
+  ) {
     super( "Not found: '" + resourceName + "' in \n" + searchPath, cause ) ;
     this.searchPath = searchPath ;
   }
 
-  public ResourceNotFoundException( ResourceName resourceName, String searchPath ) {
+  public ResourceNotFoundException( final ResourceName resourceName, final String searchPath ) {
     this( resourceName.getName(), searchPath ) ;
   }
 
-  public ResourceNotFoundException( ResourceName resourceName, String searchPath, Exception cause ) {
+  public ResourceNotFoundException( 
+      final ResourceName resourceName, 
+      final String searchPath, 
+      final Exception cause 
+  ) {
     this( resourceName.getName(), searchPath, cause ) ;
   }
 
-  public ResourceNotFoundException( URL baseUrl, String resourceName, Exception cause ) {
+  public ResourceNotFoundException( 
+      final URL baseUrl, 
+      final String resourceName, 
+      final Exception cause 
+  ) {
     super( "Not found: '" + baseUrl.toExternalForm() + "/" + resourceName + "'", cause ) ;
     this.searchPath = "\n    " + baseUrl.toExternalForm() ;
   }
@@ -55,9 +67,9 @@ public class ResourceNotFoundException extends RuntimeException {
     return searchPath ;
   }
 
-  public static final String concatenateSearchPaths(
-      ResourceNotFoundException first,
-      ResourceNotFoundException second
+  public static String concatenateSearchPaths(
+      final ResourceNotFoundException first,
+      final ResourceNotFoundException second
   ) {
     return first.getSearchPath() + second.getSearchPath() ;
   }

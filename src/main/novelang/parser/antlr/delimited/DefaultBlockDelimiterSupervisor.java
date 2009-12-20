@@ -42,17 +42,17 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
   private final Stack stack = new Stack() ;
   private final List< Problem > problems = Lists.newArrayList() ;
 
-  public DefaultBlockDelimiterSupervisor( LocationFactory locationFactory ) {
+  public DefaultBlockDelimiterSupervisor( final LocationFactory locationFactory ) {
     this.locationFactory = locationFactory;
   }
 
-  public void enterBlockDelimiterBoundary( Token location ) {
+  public void enterBlockDelimiterBoundary( final Token location ) {
     LOG.debug( "Entering block delimiter boundary at line " + location.getLine() ) ;
     stack.grow() ;
   }
 
   public Iterable< Problem > leaveBlockDelimiterBoundary() {
-    Iterable< Problem > boundaryProblems = stack.getTop().getProblems() ;
+    final Iterable< Problem > boundaryProblems = stack.getTop().getProblems() ;
     ( ( DefaultBlockDelimitersBoundary ) stack.getTop() ).dumpStatus() ;
     stack.shrink() ;
     Iterables.addAll( problems, boundaryProblems ) ;
@@ -63,7 +63,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     return ImmutableList.copyOf( problems ) ;
   }
 
-  public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
+  public void startDelimitedText( final BlockDelimiter blockDelimiter, final Token startToken ) {
     if( stack.isEmpty() ) {
       LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;
     } else {
@@ -71,7 +71,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     }
   }
 
-  public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
+  public void reachEndDelimiter( final BlockDelimiter blockDelimiter ) {
     if( stack.isEmpty() ) {
       LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;
     } else {
@@ -79,7 +79,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     }
   }
 
-  public void endDelimitedText( BlockDelimiter blockDelimiter ) {
+  public void endDelimitedText( final BlockDelimiter blockDelimiter ) {
     if( stack.isEmpty() ) {
       LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;
     } else {
@@ -88,8 +88,8 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
   }
 
   public void reportMissingDelimiter(
-      BlockDelimiter blockDelimiter,
-      MismatchedTokenException mismatchedTokenException
+      final BlockDelimiter blockDelimiter,
+      final MismatchedTokenException mismatchedTokenException
   ) throws MismatchedTokenException {
     if( stack.isEmpty() ) {
       LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;

@@ -39,7 +39,7 @@ public class EmbeddedListMangler {
   ) {
     Treepath< SyntacticTree > current = treepathToRehierarchize ;
     while( true ) {
-      Treepath< SyntacticTree > next ;
+      final Treepath< SyntacticTree > next ;
       if( isRawItem( current ) ) {
         
         current = insertPlaceholder( current ) ;
@@ -72,11 +72,13 @@ public class EmbeddedListMangler {
     return Treepath.create( ( SyntacticTree ) new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) ) ;
   }
 
-  private static boolean isRawItem( Treepath< SyntacticTree > current ) {
+  private static boolean isRawItem( final Treepath< SyntacticTree > current ) {
     return current.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ) ;
   }
 
-  private static Treepath< SyntacticTree > insertPlaceholder( Treepath< SyntacticTree > current ) {
+  private static Treepath< SyntacticTree > insertPlaceholder( 
+      final Treepath< SyntacticTree > current 
+  ) {
     return TreepathTools.addChildAt( 
         current.getPrevious(), 
         new SimpleTree( _PLACEHOLDER_ ), 
@@ -98,7 +100,7 @@ public class EmbeddedListMangler {
   private static GobbleResult gobbleThisIndentOrGreater(
       Treepath< SyntacticTree > gobbler,
       Treepath< SyntacticTree > gobbleStart,
-      int firstIndent
+      final int firstIndent
   ) {
     Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
     Preconditions.checkArgument( firstIndent >= 0  ) ;
@@ -178,7 +180,10 @@ public class EmbeddedListMangler {
    * @return a {@code Gobbling} object containing 
    *     the result of the gobble. 
    */
-  private static Gobbling gobble( Treepath< SyntacticTree > gobbleStart, int indentation ) {
+  private static Gobbling gobble( 
+      final Treepath< SyntacticTree > gobbleStart, 
+      int indentation 
+  ) {
     Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
     Treepath< SyntacticTree > start = gobbleStart ;
     
@@ -207,7 +212,7 @@ public class EmbeddedListMangler {
     } while( true ) ;
   }
 
-  private static SyntacticTree makeEmbeddedListItem( Treepath< SyntacticTree > treepath ) {
+  private static SyntacticTree makeEmbeddedListItem( final Treepath< SyntacticTree > treepath ) {
     final Iterable< ? extends SyntacticTree > children = treepath.getTreeAtEnd().getChildren() ;
     return new SimpleTree( _EMBEDDED_LIST_ITEM.name(), children ) ;
   }
@@ -223,9 +228,9 @@ public class EmbeddedListMangler {
     private final int indentation ;
 
     private Gobbling(
-        Treepath< SyntacticTree > treepathMinusGobbled,
-        SyntacticTree gobbledTree,
-        int indentation
+        final Treepath< SyntacticTree > treepathMinusGobbled,
+        final SyntacticTree gobbledTree,
+        final int indentation
     ) {
       this.treepathMinusGobbled = Preconditions.checkNotNull( treepathMinusGobbled ) ;
       this.gobbledTree = Preconditions.checkNotNull( gobbledTree ) ;
@@ -234,7 +239,7 @@ public class EmbeddedListMangler {
       this.indentation = indentation ;
     }
 
-    private Gobbling( Treepath<SyntacticTree> treepathMinusGobbled ) {
+    private Gobbling( final Treepath<SyntacticTree> treepathMinusGobbled ) {
       this.treepathMinusGobbled = treepathMinusGobbled ;
       this.gobbledTree = null ;
       this.indentation = Integer.MIN_VALUE ;
@@ -250,9 +255,9 @@ public class EmbeddedListMangler {
     private final boolean  mayContinue ;
 
     private GobbleResult(
-        Treepath< SyntacticTree > gobbler,
-        Treepath< SyntacticTree > gobbled,
-        boolean mayContinue
+        final Treepath< SyntacticTree > gobbler,
+        final Treepath< SyntacticTree > gobbled,
+        final boolean mayContinue
     ) {
       this.gobbler = Preconditions.checkNotNull( gobbler ) ;
       this.gobbled = Preconditions.checkNotNull( gobbled ) ;
@@ -267,7 +272,7 @@ public class EmbeddedListMangler {
    * one ancestor.
    * @Deprecated
    */
-  private static int getIndentSize( Treepath< SyntacticTree > treepath ) {
+  private static int getIndentSize( final Treepath< SyntacticTree > treepath ) {
     final Treepath< SyntacticTree > previous = treepath.getPrevious();
     if( null == previous ) {
       return 0 ;
@@ -286,7 +291,7 @@ public class EmbeddedListMangler {
     }
   }
   
-  private static int getWhitespaceLength( SyntacticTree tree ) {
+  private static int getWhitespaceLength( final SyntacticTree tree ) {
     Preconditions.checkArgument( tree.isOneOf( WHITESPACE_ ) ) ;
     return tree.getChildCount() > 0 ? tree.getChildAt( 0 ).getText().length() : 0 ;
   }

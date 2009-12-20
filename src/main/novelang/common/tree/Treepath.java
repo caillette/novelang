@@ -73,7 +73,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
   private final int indexInPrevious;
   private final T treeAtEnd;
 
-  private Treepath( Treepath< T > previous, int indexInPrevious ) {
+  private Treepath( final Treepath< T > previous, final int indexInPrevious ) {
     if( null == previous ) {
       throw new NullArgumentException( "Cannot define null previous path with this constructor" ) ;
     }
@@ -82,7 +82,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
     this.indexInPrevious = indexInPrevious;
   }
 
-  private Treepath( T tree ) {
+  private Treepath( final T tree ) {
     previous = null ;
     indexInPrevious = -1 ;
     treeAtEnd = tree ;
@@ -186,7 +186,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @throws IllegalArgumentException if negative distance or distance greater than or
    *     or equal to {@link #getLength()}.
    */
-  public T getTreeAtDistance( int distance ) throws IllegalDistanceException {
+  public T getTreeAtDistance( final int distance ) throws IllegalDistanceException {
     return getTreepathAtDistance( distance ).getTreeAtEnd() ;
   }
 
@@ -200,7 +200,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @throws IllegalArgumentException if negative distance or distance greater than or
    *     or equal to {@link #getLength()}.
    */
-  public Treepath< T > getTreepathAtDistance( int distance ) throws IllegalDistanceException {
+  public Treepath< T > getTreepathAtDistance( final int distance ) throws IllegalDistanceException {
     if( 0 > distance ) {
       throw new IllegalDistanceException( distance ) ;
     }
@@ -229,7 +229,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @throws IllegalArgumentException if negative distance or distance greater than or
    *     or equal to {@link #getLength()}.
    */
-  public Treepath< T > getTreepathAtDistanceFromStart( int distance ) 
+  public Treepath< T > getTreepathAtDistanceFromStart( final int distance ) 
       throws IllegalDistanceException 
   {
     return getTreepathAtDistance( getLength() - distance - 1 ) ; 
@@ -264,8 +264,8 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @return a non-null object.
    */
   public static< T extends Tree > Treepath< T > create(
-      Treepath< T > root,
-      int indexInParent
+      final Treepath< T > root,
+      final int indexInParent
   ) {
     return new Treepath< T >( root, indexInParent ) ;
   }
@@ -279,7 +279,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @return a non-null object.
    * @see #create(Treepath, int...)
    */
-  public static< T extends Tree > Treepath< T > create( T root, int... indexes ) {
+  public static< T extends Tree > Treepath< T > create( final T root, final int... indexes ) {
     return create( create( root ), indexes ) ;
   }
 
@@ -309,8 +309,8 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @see #create(Treepath, int...)
    */
   public static< T extends Tree > Treepath< T > create(
-      Treepath< T > parent,
-      int... indexes
+      final Treepath< T > parent,
+      final int... indexes
   ) {
     if( null == indexes || 0 == indexes.length ) {
       return parent ;
@@ -327,13 +327,13 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @param tree a non-null object.
    * @return a non-null object.
    */
-  public static< T extends Tree > Treepath< T > create( T tree ) {
+  public static< T extends Tree > Treepath< T > create( final T tree ) {
     return new Treepath< T >( tree ) ;
   }
 
 
   private static class IllegalDistanceException extends IllegalArgumentException {
-    public IllegalDistanceException( int distance ) {
+    public IllegalDistanceException( final int distance ) {
       super( "distance=" + distance ) ;
     }
   }

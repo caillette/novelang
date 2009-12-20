@@ -57,7 +57,7 @@ public class SourceUnescape {
     final Map< String, Character > escapedCharacters = Maps.newHashMap() ;
     final Map< String, Character > escapedCharactersAlternatives = Maps.newHashMap() ;
 
-    for( Lexeme lexeme : GeneratedLexemes.getLexemes().values() ) {
+    for( final Lexeme lexeme : GeneratedLexemes.getLexemes().values() ) {
       final String htmlEntityName = lexeme.getHtmlEntityName() ;
       final Character character = lexeme.getCharacter() ;
       escapedCharacters.put( unicodeUpperNameToEscapeName( lexeme.getUnicodeName() ), character ) ;
@@ -74,7 +74,7 @@ public class SourceUnescape {
     return new ImmutableMap.Builder().putAll( UNICODE_ESCAPES ).build() ;
   }
 
-  public static Character unescapeCharacter( String escaped )
+  public static Character unescapeCharacter( final String escaped )
       throws NoUnescapedCharacterException
   {
     Character unescaped = UNICODE_ESCAPES.get( escaped ) ;
@@ -103,7 +103,7 @@ public class SourceUnescape {
     LOG.debug( "Crafted regex %s", HTML_ESCAPE_PATTERN.pattern() ) ;
   }
 
-  public static String unescapeText( String text )
+  public static String unescapeText( final String text )
       throws NoUnescapedCharacterException
   {
     final Matcher matcher = PLAIN_ESCAPE_PATTERN.matcher( text ) ;
@@ -131,7 +131,7 @@ public class SourceUnescape {
   }
 
 
-  public static String unicodeUpperNameToEscapeName( String upperName ) {
+  public static String unicodeUpperNameToEscapeName( final String upperName ) {
     return upperName.toLowerCase().replace( '_', '-' ) ;
   }
 }

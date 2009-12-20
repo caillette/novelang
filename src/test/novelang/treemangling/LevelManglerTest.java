@@ -236,8 +236,8 @@ public class LevelManglerTest {
 // =======
 
   private static void verifyRehierarchizeLevels(
-      SyntacticTree expectedTree,
-      SyntacticTree flatTree
+      final SyntacticTree expectedTree,
+      final SyntacticTree flatTree
   ) {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
@@ -253,7 +253,7 @@ public class LevelManglerTest {
 
 
   private static Treepath< SyntacticTree > rehierarchizeLevels(
-      SyntacticTree flatTree
+      final SyntacticTree flatTree
   ) {
     LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;

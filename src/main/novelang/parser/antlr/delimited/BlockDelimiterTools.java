@@ -34,8 +34,8 @@ public class BlockDelimiterTools {
   }
 
   public static Iterable< Problem > createProblems(
-      LocationFactory locationFactory,
-      DefaultBlockDelimitersBoundary blockDelimitersBoundary
+      final LocationFactory locationFactory,
+      final DefaultBlockDelimitersBoundary blockDelimitersBoundary
   ) {
     return createProblems(
         locationFactory,
@@ -45,11 +45,11 @@ public class BlockDelimiterTools {
 
 
   public static Iterable< Problem > createProblems(
-      LocationFactory locationFactory,
-      Iterable< DelimitedBlockStatus > statuses
+      final LocationFactory locationFactory,
+      final Iterable< DelimitedBlockStatus > statuses
   ) {
     final List< Problem > problems = Lists.newArrayList() ;
-    for( DelimitedBlockStatus status : statuses ) {
+    for( final DelimitedBlockStatus status : statuses ) {
       final Problem problem = Problem.createProblem(
           "Missing delimiter. " +
               "For '" + status.getBlockDelimiter().getStart() + "' there should be a matching " +
@@ -65,7 +65,7 @@ public class BlockDelimiterTools {
     return ImmutableList.copyOf( problems ) ;
   }
 
-  private static String createDelimiterEndMessage( String[] ends) {
+  private static String createDelimiterEndMessage( final String[] ends) {
     return "'" + Joiner.on( "' or '" ).join( ends ) + "'" ;
   }
 

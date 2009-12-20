@@ -47,7 +47,7 @@ public class ResourceNameTest {
 // Fixture
 // =======
 
-  private static void check( String expected, String resourceName ) {
+  private static void check( final String expected, final String resourceName ) {
     Assert.assertEquals( expected, new ResourceName( resourceName ).getName() ) ;
   }
 

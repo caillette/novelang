@@ -60,7 +60,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.renderingCharset = DefaultCharset.RENDERING ;
   }
   
-  public AbstractSourceReader( AbstractSourceReader original ) {
+  public AbstractSourceReader( final AbstractSourceReader original ) {
     this.problems = Lists.newArrayList( original.problems ) ;
     this.thisToString = original.thisToString ;
     this.locationName = original.locationName ;
@@ -68,7 +68,10 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.renderingCharset = original.renderingCharset ;
   }
 
-  public AbstractSourceReader( Charset sourceCharset, Charset defaultRenderingCharset ) {
+  public AbstractSourceReader( 
+      final Charset sourceCharset, 
+      final Charset defaultRenderingCharset 
+  ) {
     this.problems = Lists.newArrayList() ;
     this.thisToString = ClassUtils.getShortClassName( getClass() ) +
         "@" + System.identityHashCode( this ) ;
@@ -84,10 +87,10 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
 
   protected AbstractSourceReader(
-      URL partUrl,
-      Charset sourceCharset,
-      Charset renderingCharset,
-      String thisToString
+      final URL partUrl,
+      final Charset sourceCharset,
+      final Charset renderingCharset,
+      final String thisToString
   ) {
     this.problems = Lists.newArrayList() ;
     this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
@@ -104,7 +107,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     ) ;
   }
 
-  protected String readContent( URL partUrl ) {
+  protected String readContent( final URL partUrl ) {
 
     LOG.info(
         "Attempting to load file '%s' from %s with charset %s",
@@ -151,13 +154,16 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     }
   }
 
-  protected static SyntacticTree addMetadata( SyntacticTree tree, Set< String > tagset ) {
+  protected static SyntacticTree addMetadata( 
+      final SyntacticTree tree, 
+      final Set< String > tagset 
+  ) {
     final SyntacticTree metadata = MetadataHelper.createMetadataDecoration( tree, tagset ) ;
     return TreeTools.addFirst( tree, metadata ) ;
   }
 
 
-  public Location createLocation( int line, int column ) {
+  public Location createLocation( final int line, final int column ) {
     return new Location( locationName, line, column ) ;
   }
 
@@ -182,13 +188,13 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     return ! problems.isEmpty() ;
   }
 
-  protected final void collect( Problem problem ) {
+  protected final void collect( final Problem problem ) {
     LOG.debug( "Collecting Problem: %s", problem ) ;
     problems.add( Preconditions.checkNotNull( problem ) ) ;
   }
   
   private final ProblemCollector problemCollector = new ProblemCollector() {
-    public void collect( Problem problem ) {
+    public void collect( final Problem problem ) {
       AbstractSourceReader.this.collect( problem ) ;
     }
   } ;
@@ -197,8 +203,8 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     return problemCollector ;
   }
 
-  protected final void collect( Iterable< Problem > problems ) {
-    for( Problem problem : problems ) {
+  protected final void collect( final Iterable< Problem > problems ) {
+    for( final Problem problem : problems ) {
       collect( problem ) ;
     }
   }

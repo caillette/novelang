@@ -41,15 +41,15 @@ public class Numbering {
     return "Hello!" ;
   }
 
-  public static String asString( Object treeResultFragment ) {
+  public static String asString( final Object treeResultFragment ) {
     return asString( "", treeResultFragment ) ;
   }
 
 
   public static String numberAsText(
-      Object numberObject,
-      Object localeNameObject,
-      Object caseObject
+      final Object numberObject,
+      final Object localeNameObject,
+      final Object caseObject
   ) {
     final String numberAsString = asString( "number", numberObject ) ;
     final String localeAsString = asString( "locale", localeNameObject ) ;
@@ -102,9 +102,9 @@ public class Numbering {
   }
 
   private static String numberAsLocalizedText(
-      int number,
-      Function< Number, String > textualizer,
-      CaseType caseType
+      final int number,
+      final Function< Number, String > textualizer,
+      final CaseType caseType
   ) {
     switch( caseType ) {
       case CAPITAL:
@@ -124,7 +124,7 @@ public class Numbering {
 
   private static final Function< Number, String > TO_FRENCH_TEXT =
       new Function< Number, String >(){
-        public String apply( Number number ) {
+        public String apply( final Number number ) {
           switch( number.intValue() ) {
           case 0  : return "z\u00e9ro" ;
           case 1  : return "un" ;
@@ -185,7 +185,7 @@ public class Numbering {
 
   private static final Function< Number, String > TO_ENGLISH_TEXT =
       new Function< Number, String >(){
-        public String apply( Number number ) {
+        public String apply( final Number number ) {
           switch( number.intValue() ) {
           case 0  : return "zero" ;
           case 1  : return "one" ;
@@ -244,7 +244,7 @@ public class Numbering {
       }
   } ;
 
-  public static String asString( String name, Object object ) {
+  public static String asString( final String name, final Object object ) {
     return
         ( null == name ? "" : name + ": " )
       + "'" + object + "' "
@@ -254,8 +254,8 @@ public class Numbering {
   }
 
   public static String formatDateTime(
-      Object readableDateTimeObject,
-      Object formatDescriptionObject
+      final Object readableDateTimeObject,
+      final Object formatDescriptionObject
   ) {
     final ReadableDateTime readableDateTime = Preconditions.checkNotNull(
         ( ReadableDateTime ) readableDateTimeObject ) ;
@@ -273,8 +273,8 @@ public class Numbering {
   }
 
   protected static ReadableDateTime unformatDateTime(
-      String formattedDateTime,
-      String formatDescription
+      final String formattedDateTime,
+      final String formatDescription
   ) {
     if( "BASE36".equals( formatDescription ) ) {
       final Long decimalNumber = Long.parseLong( formattedDateTime, 36 ) ;

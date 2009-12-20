@@ -217,14 +217,14 @@ public class TagFilterTest {
   private static final SyntacticTree TAG1_TREE = TAG_1.asSyntacticTree() ;
   private static final SyntacticTree TAG2_TREE = TAG_2.asSyntacticTree() ;
 
-  private static Set< Tag > tags( Tag... tags ) {
+  private static Set< Tag > tags( final Tag... tags ) {
     return ImmutableSet.of( tags ) ;
   }
 
   private static void verifyFilterTags(
-      SyntacticTree expectedTree,
-      SyntacticTree actualTree,
-      Set< Tag > tags
+      final SyntacticTree expectedTree,
+      final SyntacticTree actualTree,
+      final Set< Tag > tags
   ) {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;

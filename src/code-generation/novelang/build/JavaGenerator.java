@@ -62,10 +62,10 @@ public abstract class JavaGenerator {
   private static final String ANTLR_PARSER_PACKAGENAME = GENERIC_PARSER_PACKAGENAME + ".antlr";
 
   public JavaGenerator (
-      File grammarFile,
-      String packageName, 
-      String className, 
-      File targetDirectory 
+      final File grammarFile,
+      final String packageName, 
+      final String className, 
+      final File targetDirectory 
   ) throws IOException
   {
     this.grammarFile = grammarFile.getCanonicalFile() ;
@@ -119,7 +119,7 @@ public abstract class JavaGenerator {
    * 
    * @throws IOException
    */
-  protected final void createDirectory( File target ) throws IOException {
+  protected final void createDirectory( final File target ) throws IOException {
     final File targetDirectory ;
     if( target.isDirectory() ) {
       targetDirectory = target ;
@@ -134,12 +134,12 @@ public abstract class JavaGenerator {
   protected abstract String generateCode() throws IOException ;
 
 
-  public static String readGrammar( File grammarFile ) throws IOException {
+  public static String readGrammar( final File grammarFile ) throws IOException {
     return IOUtils.toString( new FileInputStream( grammarFile ) ) ;
   }
 
 
-  public static void main( String[] args ) throws IOException {
+  public static void main( final String[] args ) throws IOException {
     
     if( args.length == 2 ) {
       final File grammar = new File( args[ 0 ] ) ;
@@ -183,10 +183,10 @@ public abstract class JavaGenerator {
 
   private static final StringTemplateErrorListener STRING_TEMPLATE_ERROR_LISTENER =
       new StringTemplateErrorListener() {
-        public void error( String s, Throwable throwable ) {
+        public void error( final String s, final Throwable throwable ) {
           throw new RuntimeException( s, throwable ) ;
         }
-        public void warning( String s ) {
+        public void warning( final String s ) {
           throw new RuntimeException( s ) ;
         }
       }
@@ -203,7 +203,7 @@ public abstract class JavaGenerator {
     return StringTemplateGroup.loadGroup( "java" ) ;
   }
 
-  protected final StringTemplate createStringTemplate( String templateName ) {
+  protected final StringTemplate createStringTemplate( final String templateName ) {
     final StringTemplate template = STRINGTEMPLATEGROUP.getInstanceOf( templateName ) ;
 
     template.setAttribute( "package", packageName ) ;

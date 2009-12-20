@@ -32,10 +32,10 @@ public class Lexeme {
   private final String ascii62;
 
   public Lexeme( 
-      String unicodeName, 
-      Character character, 
-      String htmlEntityName,
-      String ascii62
+      final String unicodeName, 
+      final Character character, 
+      final String htmlEntityName,
+      final String ascii62
   ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( unicodeName ) ) ;
     Preconditions.checkNotNull( character ) ;
@@ -121,7 +121,7 @@ public class Lexeme {
 
 
   @Override
-  public boolean equals( Object o ) {
+  public boolean equals( final Object o ) {
     if( this == o ) {
       return true ;
     }

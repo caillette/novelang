@@ -145,7 +145,7 @@ public class FragmentIdentifier {
   }
 
   @Override
-  public boolean equals( Object o ) {
+  public boolean equals( final Object o ) {
     if( o instanceof FragmentIdentifier ) {
       return stringRepresentation.equals( ( ( FragmentIdentifier ) o ).stringRepresentation ) ;  
     } else {

@@ -40,9 +40,9 @@ public class NlpWriter extends XslWriter {
   
 
   public NlpWriter(
-      RenderingConfiguration configuration,
-      ResourceName stylesheet,
-      Charset charset
+      final RenderingConfiguration configuration,
+      final ResourceName stylesheet,
+      final Charset charset
   ) {
     super(
         configuration,
@@ -55,7 +55,7 @@ public class NlpWriter extends XslWriter {
 
   protected final ContentHandler createSinkContentHandler(
       final OutputStream outputStream,
-      DocumentMetadata documentMetadata,
+      final DocumentMetadata documentMetadata,
       final Charset charset
   )
       throws Exception
@@ -65,7 +65,7 @@ public class NlpWriter extends XslWriter {
     return new TextSink( outputStream );
   }
 
-  public void write( Nodepath kinship, String word ) throws Exception {
+  public void write( final Nodepath kinship, final String word ) throws Exception {
     final String escaped = RenderingEscape.escapeToSourceText( word, charsetEncodingCapability ) ;
     super.write( kinship, escaped ) ;
   }

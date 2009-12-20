@@ -47,7 +47,7 @@ public class ExpandedNameVerifier {
 
   private final Set< String > nodeNames ;
 
-  public ExpandedNameVerifier( Set< String > nodeNames ) {
+  public ExpandedNameVerifier( final Set< String > nodeNames ) {
     this.nodeNames = ImmutableSet.copyOf( nodeNames ) ;
   }
 
@@ -56,7 +56,7 @@ public class ExpandedNameVerifier {
   private String xmlPrefix = null ;
   private Pattern xpathPattern = null ;
 
-  public void setXmlPrefix( String prefix ) {
+  public void setXmlPrefix( final String prefix ) {
     Preconditions.checkNotNull( prefix ) ;
     Preconditions.checkState( xpathPattern == null ) ;
     xmlPrefix = prefix ;
@@ -76,7 +76,7 @@ public class ExpandedNameVerifier {
 
   private final List< BadExpandedName > badExpandedNames = Lists.newLinkedList() ;
 
-  public void verify( Location location, String xpath ) {
+  public void verify( final Location location, final String xpath ) {
     if ( null != xpathPattern ) {
       final Matcher matcher = xpathPattern.matcher( xpath ) ;
       while( matcher.find() && matcher.groupCount() == 1 ) {

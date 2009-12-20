@@ -149,8 +149,8 @@ public class UrlMangler {
    * @return the new treepath.
    */
   private static Treepath< SyntacticTree > replaceByExternalLink( 
-      Treepath< SyntacticTree > treepathToUrlLiteral,
-      Treepath< SyntacticTree > treepathToName
+      final Treepath< SyntacticTree > treepathToUrlLiteral,
+      final Treepath< SyntacticTree > treepathToName
   ) {
     final SyntacticTree nameTree;
     final SyntacticTree[] children ;
@@ -169,32 +169,32 @@ public class UrlMangler {
     return TreepathTools.replaceTreepathEnd( treepathToUrlLiteral, urlTree ) ;
   }
 
-  private static NodeKind[] kinds( NodeKind... nodeKinds ) {
+  private static NodeKind[] kinds( final NodeKind... nodeKinds ) {
     return nodeKinds ;
   }
 
   private static State evaluate(
-      SyntacticTree tree,
-      NodeKind nodeKind,
-      State positive
+      final SyntacticTree tree,
+      final NodeKind nodeKind,
+      final State positive
   ) {
     return evaluate( tree, kinds( nodeKind ), positive, State.INSIDE_PARAGRAPH ) ;
   }
 
   private static State evaluate(
-      SyntacticTree tree,
-      NodeKind[] nodeKinds,
-      State positive,
-      State negative
+      final SyntacticTree tree,
+      final NodeKind[] nodeKinds,
+      final State positive,
+      final State negative
   ) {
     return tree.isOneOf( nodeKinds ) ? positive : negative ;
   }
 
   private static State evaluate(
-      SyntacticTree tree,
-      Set< NodeKind > nodeKinds,
-      State positive,
-      State negative
+      final SyntacticTree tree,
+      final Set< NodeKind > nodeKinds,
+      final State positive,
+      final State negative
   ) {
     return tree.isOneOf( nodeKinds ) ? positive : negative ;
   }

@@ -80,7 +80,7 @@ public final class EnvironmentTools {
     }
 
     final String pathIndent = indent + "  " ;
-    for( String name : Ordering.natural().sortedCopy( propertyNameList ) ) {
+    for( final String name : Ordering.natural().sortedCopy( propertyNameList ) ) {
       stringBuffer.append( indent ) ;
       final String propertyValue = systemProperties.getProperty( name ) ;
       if( ! appendIfPath( stringBuffer, name, propertyValue, pathIndent ) &&

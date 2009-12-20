@@ -54,7 +54,7 @@ public class SpacesTest {
 // Fixture
 // =======
 
-  private static void verifyHard( String expected, String toBeNormalized ) {
+  private static void verifyHard( final String expected, final String toBeNormalized ) {
     final String normalized = Spaces.normalizeLiteral( toBeNormalized ) ;
     Assert.assertEquals( expected, normalized ) ;
   }

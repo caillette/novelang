@@ -72,8 +72,8 @@ public class FontDiscoveryStreamer {
   private final FopFontStatus fopFontStatus ;
 
   public FontDiscoveryStreamer(
-      RenderingConfiguration renderingConfiguration,
-      ResourceName resourceName
+      final RenderingConfiguration renderingConfiguration,
+      final ResourceName resourceName
   ) {
     xslWriter = createXslWriter( renderingConfiguration, resourceName ) ;
     fopFontStatus = renderingConfiguration.getCurrentFopFontStatus() ;
@@ -81,7 +81,7 @@ public class FontDiscoveryStreamer {
 
 
 
-  public void generate( OutputStream outputStream, final Charset charset ) throws Exception {
+  public void generate( final OutputStream outputStream, final Charset charset ) throws Exception {
 
     final Iterable< Character > supportedCharacters ;
     {
@@ -115,7 +115,7 @@ public class FontDiscoveryStreamer {
 
     if( ! fopFontStatus.getFailedFonts().isEmpty() ) {
       xslWriter.start( ELEMENT_BROKEN ) ;
-      for( String embedFileName : fopFontStatus.getFailedFonts().keySet() ) {
+      for( final String embedFileName : fopFontStatus.getFailedFonts().keySet() ) {
         xslWriter.start( ELEMENT_EMBEDFILE ) ;
         xslWriter.write( embedFileName ) ;
         xslWriter.end( ELEMENT_EMBEDFILE ) ;
@@ -123,8 +123,8 @@ public class FontDiscoveryStreamer {
       xslWriter.end( ELEMENT_BROKEN ) ;
     }
 
-    for( String fontName : quadruplets.keySet() ) {
-      for( FontQuadruplet quadruplet : quadruplets.get( fontName ) ) {
+    for( final String fontName : quadruplets.keySet() ) {
+      for( final FontQuadruplet quadruplet : quadruplets.get( fontName ) ) {
         final FontTriplet fontTriplet = quadruplet.getFontTriplet() ;
         xslWriter.start( ELEMENT_FAMILY ) ; {
 
@@ -149,7 +149,7 @@ public class FontDiscoveryStreamer {
     }
 
     xslWriter.start( ELEMENT_CHARACTERS ) ;
-    for( Character character : supportedCharacters ) {
+    for( final Character character : supportedCharacters ) {
       xslWriter.start( ELEMENT_CHARACTER ) ;
       xslWriter.write( "" + character ) ;
       xslWriter.end( ELEMENT_CHARACTER ) ;
@@ -182,8 +182,8 @@ public class FontDiscoveryStreamer {
   }
 
   protected XslWriter createXslWriter(
-      RenderingConfiguration renderingConfiguration,
-      ResourceName resourceName
+      final RenderingConfiguration renderingConfiguration,
+      final ResourceName resourceName
   ) {
     return new PdfWriter(
         renderingConfiguration,
@@ -200,7 +200,7 @@ public class FontDiscoveryStreamer {
   }
 
   private static final Ordering< Character > CHARACTER_ORDERING = new Ordering< Character >() {
-    public int compare( Character character0, Character character1 ) {
+    public int compare( final Character character0, final Character character1 ) {
       return character0.compareTo( character1 ) ;
     }
   } ;

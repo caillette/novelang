@@ -44,7 +44,7 @@ public class MetadataHelper {
 
   private MetadataHelper() { }
 
-  public static int countWords( Tree tree ) {
+  public static int countWords( final Tree tree ) {
     if( tree instanceof SyntacticTree ) {
       final SyntacticTree syntacticTree = ( SyntacticTree ) tree ;
       if( WORD_.isRoot( syntacticTree ) ) {
@@ -67,7 +67,7 @@ public class MetadataHelper {
    *
    * @return a non-null, possibly empty set.
    */
-  public static Set< String > findTags( SyntacticTree tree ) {
+  public static Set< String > findTags( final SyntacticTree tree ) {
     if( tree.isOneOf( WORD_, WORD_AFTER_CIRCUMFLEX_ACCENT, _STYLE ) ) { 
       return ImmutableSet.of() ;
     }
@@ -75,7 +75,7 @@ public class MetadataHelper {
       return ImmutableSet.of( tree.getChildAt( 0 ).getText() ) ;
     }
     final Set< String > tagset = Sets.newLinkedHashSet() ;
-    for( SyntacticTree child : tree.getChildren() ) {
+    for( final SyntacticTree child : tree.getChildren() ) {
         tagset.addAll( findTags( child ) ) ;
     }
     return tagset ;
@@ -108,7 +108,10 @@ public class MetadataHelper {
    * Decorates a tree with metadata.
    * @return the same tree with a new first {@link NodeKind#_META}.
    */
-  public static SyntacticTree createMetadataDecoration( SyntacticTree tree, Set< String > tagset ) {
+  public static SyntacticTree createMetadataDecoration( 
+      final SyntacticTree tree, 
+      final Set< String > tagset 
+  ) {
 
     final List< SyntacticTree > children = Lists.newArrayList() ;
 
@@ -134,7 +137,7 @@ public class MetadataHelper {
 
   private static final Function< String, SyntacticTree > STRING_TO_TAG =
       new Function< String, SyntacticTree >() {
-        public SyntacticTree apply( String tagname ) {
+        public SyntacticTree apply( final String tagname ) {
           return new SimpleTree( TAG, new SimpleTree( tagname ) ) ;
         }
       }

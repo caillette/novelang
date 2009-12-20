@@ -64,7 +64,7 @@ public class ResourceName {
    * @param name a non-null, non-empty String satisfying the {@link #PATTERN} pattern.
    * @throws IllegalArgumentException
    */
-  public ResourceName( String name ) throws IllegalArgumentException {
+  public ResourceName( final String name ) throws IllegalArgumentException {
     final Matcher matcher = PATTERN.matcher( name ) ;
     if( matcher.matches() && 1 == matcher.groupCount() ) {
       this.name = matcher.group( 0 ) ;
@@ -91,7 +91,7 @@ public class ResourceName {
     return name.hashCode() ;
   }
 
-  public boolean equals( Object o ) {
+  public boolean equals( final Object o ) {
     return o instanceof ResourceName && name.equals( ( ( ResourceName ) o ).getName() ) ;
   }
 }

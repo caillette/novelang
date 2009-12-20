@@ -30,8 +30,8 @@ public class Length {
 
 
   public static Number positionUnderCharacterRemainderThreshold(
-      NodeList nodeList,
-      int characterCountThreshold
+      final NodeList nodeList,
+      final int characterCountThreshold
   ) {
     LOG.debug(
         "Finding position of node with less than %s characters in list of %s nodes",
@@ -77,7 +77,7 @@ public class Length {
     return characters ;
   }
 
-  private static int countCharacters( Node node ) {
+  private static int countCharacters( final Node node ) {
     int count = 0 ;
     final String textContent = node.getTextContent() ;
 //    LOGGER.debug( "Node[ %s ].textContent = '%s'", node.getNodeName(), textContent ) ;
@@ -88,7 +88,7 @@ public class Length {
     return count ;
   }
 
-  private static int countCharacters( NodeList nodeList ) {
+  private static int countCharacters( final NodeList nodeList ) {
     int count = 0 ;
     for( int i = 0 ; i < nodeList.getLength() ; i++ ) {
       final Node node = nodeList.item( i ) ;

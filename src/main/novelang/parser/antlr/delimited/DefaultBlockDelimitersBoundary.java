@@ -42,14 +42,14 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
   private final Map< BlockDelimiter, DelimitedBlockStatus > primes = Maps.newHashMap() ;
 
 
-  public DefaultBlockDelimitersBoundary( LocationFactory locationFactory ) {
+  public DefaultBlockDelimitersBoundary( final LocationFactory locationFactory ) {
     this.locationFactory = locationFactory ;
-    for( BlockDelimiter blockDelimiter : BlockDelimiter.values() ) {
+    for( final BlockDelimiter blockDelimiter : BlockDelimiter.values() ) {
       primes.put( blockDelimiter, new DelimitedBlockStatus( blockDelimiter ) ) ;
     }
   }
 
-  public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
+  public void startDelimitedText( final BlockDelimiter blockDelimiter, final Token startToken ) {
     primes.get( blockDelimiter )
         .updatePosition( startToken.getLine(), startToken.getCharPositionInLine() )
         .increaseStartCount()
@@ -57,17 +57,17 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
   }
 
-  public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
+  public void reachEndDelimiter( final BlockDelimiter blockDelimiter ) {
     primes.get( blockDelimiter ).increaseReachEndCount() ;
   }
 
-  public void endDelimitedText( BlockDelimiter blockDelimiter ) {
+  public void endDelimitedText( final BlockDelimiter blockDelimiter ) {
     primes.get( blockDelimiter ).increaseEndPassedCount() ;
   }
 
   public void reportMissingDelimiter(
-      BlockDelimiter blockDelimiter,
-      MismatchedTokenException mismatchedTokenException
+      final BlockDelimiter blockDelimiter,
+      final MismatchedTokenException mismatchedTokenException
   )
       throws MismatchedTokenException
   {
@@ -76,14 +76,14 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
   public Iterable< DelimitedBlockStatus > getFaultyDelimitedBlocks() {
     final List< DelimitedBlockStatus > faultyDelimitedBlockStatuses = Lists.newArrayList() ;
-    for( BlockDelimiter blockDelimiter : BlockDelimiter.getTwinDelimiters() ) {
+    for( final BlockDelimiter blockDelimiter : BlockDelimiter.getTwinDelimiters() ) {
       final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
       if( ! status.isConsistent() ) {
         faultyDelimitedBlockStatuses.add( status ) ;
       }
     }
     if( faultyDelimitedBlockStatuses.isEmpty() ) {
-      for( BlockDelimiter blockDelimiter : BlockDelimiter.getOnlyDelimiters() ) {
+      for( final BlockDelimiter blockDelimiter : BlockDelimiter.getOnlyDelimiters() ) {
         final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
         if( ! status.isConsistent() ) {
           faultyDelimitedBlockStatuses.add( status ) ;
@@ -99,7 +99,7 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
   public void dumpStatus() {
     final StringBuffer buffer = new StringBuffer() ;
-    for( BlockDelimiter blockDelimiter : BlockDelimiter.values() ) {
+    for( final BlockDelimiter blockDelimiter : BlockDelimiter.values() ) {
       final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
       buffer.append( "\n" ) ;
       buffer.append( String.format( "%1$16s", blockDelimiter.name() ) ) ;

@@ -115,7 +115,7 @@ public class FileToolsTest {
     childFile = new File( parentNoTrailingSeparator, "childFile" ) ;
   }
 
-  private static File createDirectory( File parent, String name ) {
+  private static File createDirectory( final File parent, final String name ) {
     final File directory = new File( parent, name ) ;
     directory.mkdirs() ;
     FileUtils.waitFor( directory, TIMEOUT_MILLISECONDS ) ;

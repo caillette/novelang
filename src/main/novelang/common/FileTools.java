@@ -48,7 +48,7 @@ public class FileTools {
 
   public static final Comparator< ? super File >
   ABSOLUTEPATH_COMPARATOR = new Comparator< File >() {
-    public int compare( File file1, File file2 ) {
+    public int compare( final File file1, final File file2 ) {
       return file1.getAbsolutePath().compareTo( file2.getAbsolutePath() ) ;
     }
   } ;
@@ -71,9 +71,9 @@ public class FileTools {
    *     that were looked for.
    */
   public static File load( 
-      File basedir,
-      String fileNameNoExtension,
-      String... fileExtensions
+      final File basedir,
+      final String fileNameNoExtension,
+      final String... fileExtensions
   ) throws FileNotFoundException {
     final StringBuffer buffer = new StringBuffer( "Not found:" ) ;
     for( final String extension : fileExtensions ) {
@@ -95,10 +95,10 @@ public class FileTools {
 // =============
 
   private static final IOFileFilter VISIBLE_DIRECTORY_FILTER = new IOFileFilter() {
-    public boolean accept( File file ) {
+    public boolean accept( final File file ) {
       return file.isDirectory() && ! file.isHidden() ;
     }
-    public boolean accept( File dir, String name ) {
+    public boolean accept( final File dir, final String name ) {
       return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
     }
   } ;
@@ -112,14 +112,14 @@ public class FileTools {
       );
     }
 
-    protected boolean handleDirectory( File file, int i, Collection collection )
+    protected boolean handleDirectory( final File file, final int i, final Collection collection )
         throws IOException
     {
       collection.add( file ) ;
       return true ;
     }
 
-    public void walk( File root, List< File > results ) throws IOException {
+    public void walk( final File root, final List< File > results ) throws IOException {
       super.walk( root, results ) ;
     }
   }
@@ -137,9 +137,9 @@ public class FileTools {
    * @return a non-null object iterating on non-null objects.
    */
   public static List< File > scanFiles(
-      File directory,
-      String[] extensions,
-      boolean recurse
+      final File directory,
+      final String[] extensions,
+      final boolean recurse
   ) {
     final Collection fileCollection = FileUtils.listFiles(
         directory,
@@ -149,7 +149,7 @@ public class FileTools {
 
     // Workaround: Commons Collection doesn't know about Generics.
     final List< File > files = Lists.newArrayList() ;
-    for( Object o : fileCollection ) {
+    for( final Object o : fileCollection ) {
       files.add( ( File ) o ) ;
     }
     return files ;
@@ -163,7 +163,7 @@ public class FileTools {
    * @param root a non-null object representing a directory.
    * @return a non-null object containing no nulls.
    */
-  public static List< File > scanDirectories( File root ) {
+  public static List< File > scanDirectories( final File root ) {
     final List< File > directories = Lists.newArrayList() ;
     try {
       new MyDirectoryWalker().walk( root, directories ) ;
@@ -178,7 +178,7 @@ public class FileTools {
    * Returns a URL-friendly path where file separator is a solidus, not a reverse solidus.
    * Useful on Windows.
    */
-  public static String urlifyPath( String path ) {
+  public static String urlifyPath( final String path ) {
     return path.replaceAll( "\\\\", "/" ) ;
   }
 
@@ -201,7 +201,10 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
    *     separator.
    * @throws IllegalArgumentException
    */
-  public static String relativizePath( File parent, File child ) throws IllegalArgumentException {
+  public static String relativizePath( 
+      final File parent, 
+      final File child 
+  ) throws IllegalArgumentException {
 
     final String baseAbsolutePath = parent.getAbsolutePath() ;
     if( ! parent.isDirectory() ) {
@@ -226,14 +229,14 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     }
   }
 
-  private static String normalizePath( String path ) {
+  private static String normalizePath( final String path ) {
     return path.endsWith( SystemUtils.FILE_SEPARATOR ) ?
         path :
         path + SystemUtils.FILE_SEPARATOR
     ;
   }
 
-  public static boolean isParentOf( File maybeParent, File maybeChild ) {
+  public static boolean isParentOf( final File maybeParent, final File maybeChild ) {
     final String maybeParentPathName = normalizePath( maybeParent.getAbsolutePath() ) ;
     final String maybeChildPathName = normalizePath( maybeChild.getAbsolutePath() ) ;
     return
@@ -242,7 +245,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     ;
   }
 
-  public static boolean isParentOfOrSameAs( File maybeParent, File maybeChild ) {
+  public static boolean isParentOfOrSameAs( final File maybeParent, final File maybeChild ) {
     final String maybeParentPathName = normalizePath( maybeParent.getAbsolutePath() ) ;
     final String maybeChildPathName = normalizePath( maybeChild.getAbsolutePath() ) ;
     return
@@ -266,7 +269,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
 
           // Defensive copy even if no directory should be added at the time this runs.
           final List< File > files = Lists.newArrayList( DIRECTORIES_TO_CLEAN_ON_EXIT ) ;
-          for( File file : files ) {
+          for( final File file : files ) {
             try {
               LOG.info( "Deleting temporary directory '%s'", file.getAbsolutePath() ) ;
               FileUtils.deleteDirectory( file ) ;
@@ -284,13 +287,13 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     Runtime.getRuntime().addShutdownHook( DIRECTORIES_CLEANER ) ;
   }
 
-  private static String TEMPORARY_DIRECTORY_SUFFIX = ".temp" ;
+  private static final String TEMPORARY_DIRECTORY_SUFFIX = ".temp" ;
   
 
   public static File createTemporaryDirectory(
-      String prefix,
-      File parent,
-      boolean deleteOnExit
+      final String prefix,
+      final File parent,
+      final boolean deleteOnExit
   )
       throws IOException
   {

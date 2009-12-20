@@ -70,7 +70,7 @@ public final class TestResourceTools {
 
   private TestResourceTools() { }
 
-  public static URL getResourceUrl( Class owningClass, String resourceName ) {
+  public static URL getResourceUrl( final Class owningClass, final String resourceName ) {
     final String fullName ;
     if( resourceName.startsWith( "/" ) ) {
       fullName = resourceName ;
@@ -85,7 +85,7 @@ public final class TestResourceTools {
     return owningClass.getResource( fullName ) ;
   }
 
-  public static byte[] readResource( Class owningClass, String resourceName ) {
+  public static byte[] readResource( final Class owningClass, final String resourceName ) {
 
     final URL url = getResourceUrl( owningClass, resourceName ) ;
 
@@ -120,9 +120,9 @@ public final class TestResourceTools {
    * a directory.
    */
   public static File copyResourceToDirectory(
-      Class owningClass,
-      ResourceName resourceName,
-      File destinationDir
+      final Class owningClass,
+      final ResourceName resourceName,
+      final File destinationDir
   ) {
     return copyResourceToDirectory( owningClass, "/" + resourceName.getName(), destinationDir ) ;
   }
@@ -133,9 +133,9 @@ public final class TestResourceTools {
    * a directory.
    */
   public static File copyResourceToDirectory(
-      Class owningClass,
-      String resourceName,
-      File destinationDir
+      final Class owningClass,
+      final String resourceName,
+      final File destinationDir
   ) {
     final byte[] resourceBytes = readResource( owningClass, resourceName ) ;
     final ByteArrayInputStream inputStream =
@@ -164,9 +164,9 @@ public final class TestResourceTools {
    * Copy a resource into given directory, creating no directory above target file.
    */
   public static File copyResourceToDirectoryFlat(
-      Class owningClass,
-      ResourceName resourceName,
-      File destinationDir
+      final Class owningClass,
+      final ResourceName resourceName,
+      final File destinationDir
   ) {
     return copyResourceToDirectoryFlat( owningClass, "/" + resourceName.getName(), destinationDir ) ;
   }
@@ -175,9 +175,9 @@ public final class TestResourceTools {
    * Copy a resource into given directory, creating no directory above target file.
    */
   public static File copyResourceToDirectoryFlat(
-      Class owningClass,
-      String resourceName,
-      File destinationDir
+      final Class owningClass,
+      final String resourceName,
+      final File destinationDir
   ) {
     final byte[] resourceBytes = readResource( owningClass, resourceName ) ;
     final ByteArrayInputStream inputStream =
@@ -198,7 +198,7 @@ public final class TestResourceTools {
     return destinationFile ;
   }
 
-  public static File createDirectory( File parent, String name ) {
+  public static File createDirectory( final File parent, final String name ) {
     final File directory = new File( parent, name ) ;
     if( ! directory.exists() ) {
       directory.mkdirs() ;

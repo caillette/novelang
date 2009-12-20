@@ -33,7 +33,7 @@ import novelang.system.EnvironmentTools;
  */
 public class Main {
 
-  public static void main( String[] originalArguments ) throws Exception {
+  public static void main( final String[] originalArguments ) throws Exception {
     // This must happen first. The need for originalArguments parameter prevents from
     // putting this initialization in a static block.
     StartupTools.fixLogDirectory( originalArguments ) ;
@@ -43,7 +43,7 @@ public class Main {
     new Main().doMain( originalArguments ) ;
   }
 
-  private void doMain( String[] originalArguments ) throws Exception {
+  private void doMain( final String[] originalArguments ) throws Exception {
 
     if( 0 == originalArguments.length ) {
       help() ;
@@ -64,18 +64,18 @@ public class Main {
     printHelp( System.out ) ;
   }
 
-  private void help( String badCommand ) {
+  private void help( final String badCommand ) {
     printBadCommand( System.out, badCommand ) ;
     printHelp( System.out ) ;
   }
 
-  private void printBadCommand( PrintStream out, String badCommand ) {
+  private void printBadCommand( final PrintStream out, final String badCommand ) {
     out.println( "Unknown command: '" + badCommand + "'" ) ;
   }
 
-  private void printHelp( PrintStream out ) {
+  private void printHelp( final PrintStream out ) {
     out.println( "Supported commands: " ) ;
-    for( String commandName : commands.keySet() ) {
+    for( final String commandName : commands.keySet() ) {
       out.println( "  " + commandName + " <arguments>" ) ;
     }
     out.println( "Use <command> --help for help on a particular command." ) ;
@@ -100,21 +100,21 @@ public class Main {
   private final Map< String, ? extends MainCaller > commands = ImmutableMap.of(
       "httpdaemon",
       new MainCaller() {
-        public void main( String commandName, String[] arguments ) throws Exception {
+        public void main( final String commandName, final String[] arguments ) throws Exception {
           HttpDaemon.main( commandName, arguments ) ;
         }
       }
       ,
       DocumentGenerator.COMMAND_NAME,
        new MainCaller() {
-         public void main( String commandName, String[] arguments ) throws Exception {
+         public void main( final String commandName, final String[] arguments ) throws Exception {
            new DocumentGenerator().main( commandName, arguments ) ;
          }
        }
       ,
       "explodelevels",
        new MainCaller() {
-         public void main( String commandName, String[] arguments ) throws Exception {
+         public void main( final String commandName, final String[] arguments ) throws Exception {
            new LevelExploder().main( commandName, arguments ) ;
          }
        }

@@ -28,18 +28,21 @@ public class ArgumentException extends Exception {
   private final GenericParameters.HelpPrinter helpPrinter;
   private final boolean helpRequested ;
 
-  public ArgumentException( GenericParameters.HelpPrinter helpPrinter ) {
+  public ArgumentException( final GenericParameters.HelpPrinter helpPrinter ) {
     helpRequested = true ;
     this.helpPrinter = Preconditions.checkNotNull( helpPrinter ) ;
   }
 
-  public ArgumentException( String message, GenericParameters.HelpPrinter helpPrinter ) {
+  public ArgumentException( 
+      final String message, 
+      final GenericParameters.HelpPrinter helpPrinter 
+  ) {
     super( message ) ;
     this.helpRequested = false ;
     this.helpPrinter = Preconditions.checkNotNull( helpPrinter ) ;
   }
 
-  public ArgumentException( Exception e, GenericParameters.HelpPrinter helpPrinter ) {
+  public ArgumentException( final Exception e, final GenericParameters.HelpPrinter helpPrinter ) {
     this( e.getMessage(), helpPrinter ) ;
   }
 

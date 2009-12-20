@@ -52,7 +52,7 @@ public class Part extends AbstractSourceReader {
   private final SyntacticTree tree ;
   private final File partFileDirectory ;
 
-  private Part( Part other, SyntacticTree newTree ) {
+  private Part( final Part other, final SyntacticTree newTree ) {
     super( other ) ;
     this.partFileDirectory = other.partFileDirectory ;
     this.tree = newTree ;
@@ -61,7 +61,7 @@ public class Part extends AbstractSourceReader {
   /**
    * Only for tests.
    */
-  /*package*/ Part( String content ) {
+  /*package*/ Part( final String content ) {
     tree = createTree( content ) ;
     partFileDirectory = null ;
   }
@@ -75,8 +75,8 @@ public class Part extends AbstractSourceReader {
 
   public Part(
       final File partFile,
-      Charset sourceCharset,
-      Charset suggestedRenderingCharset
+      final Charset sourceCharset,
+      final Charset suggestedRenderingCharset
   ) throws MalformedURLException {
     super(
         partFile.toURI().toURL(),
@@ -92,12 +92,12 @@ public class Part extends AbstractSourceReader {
     tree = createTree( readContent( partFile.toURI().toURL() ) ) ;
   }
 
-  protected GenericParser createParser( String content ) {
+  protected GenericParser createParser( final String content ) {
     return new DelegatingPartParser( content, this ) ;
 
   }
 
-  private SyntacticTree createTree( String content ) {
+  private SyntacticTree createTree( final String content ) {
     final SyntacticTree rawTree = parse( content ) ;
     if( null == rawTree || hasProblem() ) {
       return null ;
@@ -137,7 +137,7 @@ public class Part extends AbstractSourceReader {
   /**
    * This is just for not messing the constructor up with some marginal argument.
    */
-  public Part relocateResourcePaths( File contentRoot ) {
+  public Part relocateResourcePaths( final File contentRoot ) {
     
     if( null == getDocumentTree() || null == partFileDirectory ) {
       LOG.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
@@ -146,7 +146,7 @@ public class Part extends AbstractSourceReader {
     
     final List< Problem > relocationProblems = Lists.newArrayList() ;
     final ProblemCollector problemCollector = new ProblemCollector() {
-      public void collect( Problem problem ) {
+      public void collect( final Problem problem ) {
         relocationProblems.add( problem ) ;
       }
     } ;   
@@ -168,7 +168,7 @@ public class Part extends AbstractSourceReader {
 
   }
 
-  public Part makeStandalone( Set< Tag > restrictingTags ) {
+  public Part makeStandalone( final Set< Tag > restrictingTags ) {
     Preconditions.checkNotNull( restrictingTags ) ;
     if ( null == getDocumentTree() ) {
       return this ;

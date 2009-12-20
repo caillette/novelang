@@ -39,7 +39,7 @@ import novelang.system.DefaultCharset;
  */
 public class SourceCharactersTable {
 
-  public static void main( String[] args ) throws FileNotFoundException {
+  public static void main( final String[] args ) throws FileNotFoundException {
     if( args.length != 1 ) {
       throw new IllegalArgumentException( "Expected argument: destination file name" ) ;
     }
@@ -49,7 +49,10 @@ public class SourceCharactersTable {
   private final RenderingEscape.CharsetEncodingCapability renderingCapability ;
   private final PrintWriter writer ;
 
-  private SourceCharactersTable( String fileName, Charset sourceCharset ) throws FileNotFoundException {
+  private SourceCharactersTable( 
+      final String fileName, 
+      final Charset sourceCharset 
+  ) throws FileNotFoundException {
     final FileOutputStream outputStream = new FileOutputStream( fileName ) ;
     final OutputStreamWriter outputStreamWriter =
         new OutputStreamWriter( outputStream, sourceCharset ) ;
@@ -65,7 +68,7 @@ public class SourceCharactersTable {
 
     final List< Lexeme > lexemes = Ordering.from( COMPARATOR ).sortedCopy(
         GeneratedLexemes.getLexemes().values() ) ;
-    for( Lexeme lexeme : lexemes ) {
+    for( final Lexeme lexeme : lexemes ) {
       final String unicode = CharUtils.unicodeEscaped( lexeme.getCharacter() ).substring( 1 ) ;
       final String decimal = String.format( "%04d", ( int ) lexeme.getCharacter().charValue() ) ;
       final String longEscapeName =
@@ -92,7 +95,7 @@ public class SourceCharactersTable {
     writer.close() ;
   }
 
-  private String simpleEscape( String name ) {
+  private String simpleEscape( final String name ) {
     if( null == name ) {
       return " " ;
     } else {
@@ -100,7 +103,7 @@ public class SourceCharactersTable {
     }
   }
 
-  private String doubleEscape( String name ) {
+  private String doubleEscape( final String name ) {
     if( null == name ) {
       return " " ;
     } else {
@@ -113,7 +116,7 @@ public class SourceCharactersTable {
   }
 
   private static final Comparator< Lexeme > COMPARATOR = new Comparator< Lexeme >() {
-    public int compare( Lexeme lexeme1, Lexeme lexeme2 ) {
+    public int compare( final Lexeme lexeme1, final Lexeme lexeme2 ) {
       return lexeme1.getCharacter().compareTo( lexeme2.getCharacter() ) ;
     }
   };

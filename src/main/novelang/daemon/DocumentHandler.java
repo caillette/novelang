@@ -64,22 +64,22 @@ public class DocumentHandler extends GenericHandler {
   private final Charset renderingCharset ;
 
 
-  public DocumentHandler( ProducerConfiguration serverConfiguration ) {
+  public DocumentHandler( final ProducerConfiguration serverConfiguration ) {
     documentProducer = new DocumentProducer( serverConfiguration ) ;
     renderingCharset = serverConfiguration.getRenderingConfiguration().getDefaultCharset() ;
   }
 
 
   protected void doHandle(
-      String target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      final String target,
+      final HttpServletRequest request,
+      final HttpServletResponse response,
+      final int dispatch
   ) throws IOException, ServletException {
     handle( request, response ) ;
   }
 
-  private void handle( HttpServletRequest request, HttpServletResponse response )
+  private void handle( final HttpServletRequest request, final HttpServletResponse response )
       throws IOException, ServletException
   {
     LOG.info( "Handling request %s", request.getRequestURI() ) ;
@@ -152,8 +152,8 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private void redirectToProblemPage(
-      PolymorphicRequest documentRequest,
-      HttpServletResponse response
+      final PolymorphicRequest documentRequest,
+      final HttpServletResponse response
   ) throws IOException {
     final String redirectionTarget =
         documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX ;
@@ -163,8 +163,8 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private void redirectToOriginalTarget(
-      PolymorphicRequest documentRequest,
-      HttpServletResponse response
+      final PolymorphicRequest documentRequest,
+      final HttpServletResponse response
   ) throws IOException {
     final String redirectionTarget = documentRequest.getOriginalTarget() ;
     response.sendRedirect( redirectionTarget ) ;
@@ -174,17 +174,17 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private void renderProblemsAsRequested(
-      PolymorphicRequest documentRequest,
-      Renderable rendered,
-      ServletOutputStream outputStream
+      final PolymorphicRequest documentRequest,
+      final Renderable rendered,
+      final ServletOutputStream outputStream
   ) throws IOException {
     renderProblems( rendered.getProblems(), documentRequest.getOriginalTarget(), outputStream ) ;
   }
 
   private void renderProblems(
-      Iterable< Problem > problems,
-      String originalTarget,
-      OutputStream outputStream
+      final Iterable< Problem > problems,
+      final String originalTarget,
+      final OutputStream outputStream
   ) throws IOException {
     final HtmlProblemPrinter problemPrinter = new HtmlProblemPrinter() ;
     problemPrinter.printProblems(

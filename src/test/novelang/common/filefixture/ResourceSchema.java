@@ -38,7 +38,11 @@ import com.google.common.collect.Ordering;
  */
 public final class ResourceSchema {
   private static final InvocationHandler NULL_INVOCATION_HANDLER = new InvocationHandler() {
-    public Object invoke( Object o, Method method, Object[] objects ) throws Throwable {
+    public Object invoke( 
+        final Object o, 
+        final Method method, 
+        final Object[] objects 
+    ) throws Throwable {
       throw new UnsupportedOperationException( "invoke" );
     }
   };
@@ -46,14 +50,14 @@ public final class ResourceSchema {
   /**
    * Factory method.
    */
-  public static Directory directory( String name ) {
+  public static Directory directory( final String name ) {
     return new Directory( name ) ;
   }
 
   /**
    * Factory method.
    */
-  public static Resource resource( String name ) {
+  public static Resource resource( final String name ) {
     return new Resource( name ) ;
   }
   
@@ -69,11 +73,11 @@ public final class ResourceSchema {
 // Initialization
 // ==============
 
-  public static void initialize( Class declaration ) {
+  public static void initialize( final Class declaration ) {
     initialize( "", declaration ) ;
   }
 
-  public static void initialize( String resourcePrefix, Class declaration ) {
+  public static void initialize( final String resourcePrefix, final Class declaration ) {
     Preconditions.checkNotNull( declaration ) ;
     Preconditions.checkNotNull( resourcePrefix ) ;
 
@@ -93,12 +97,15 @@ public final class ResourceSchema {
 
   }
 
-  private static void checkUnderlyingResources( String resourcePrefix, Directory directory )
+  private static void checkUnderlyingResources( 
+      final String resourcePrefix, 
+      final Directory directory 
+  )
       throws MissingResourceException, IOException
   {
     final String directoryPath = resourcePrefix + "/" + directory.getName() ;
     directory.setAbsoluteResourceName( directoryPath ) ;
-    for( Resource resource : directory.getResources() ) {
+    for( final Resource resource : directory.getResources() ) {
       resource.setParent( directory ) ;
       final String resourcePath = directoryPath + "/" + resource.getName() ;
       final InputStream inputStream = ResourceSchema.class.getResourceAsStream( resourcePath ) ;
@@ -109,13 +116,13 @@ public final class ResourceSchema {
       resource.setAbsoluteResourceName( resourcePath ) ;
       LOG.debug( "Verified: %s", resource.getAbsoluteResourceName() ) ;
     }
-    for( Directory subDirectory : directory.getSubdirectories() ) {
+    for( final Directory subDirectory : directory.getSubdirectories() ) {
       subDirectory.setParent( directory ) ;
       checkUnderlyingResources( directoryPath, subDirectory ) ;
     }
   }
 
-  private static Directory makeDirectoryOfClass( Class declaringClass )
+  private static Directory makeDirectoryOfClass( final Class declaringClass )
       throws DeclarationException, IllegalAccessException
   {
     final Directory directory = findDirectoryObject( declaringClass ) ;
@@ -125,12 +132,12 @@ public final class ResourceSchema {
     return directory ;
   }
 
-  private static List< Resource > findResources( Class declaringClass )
+  private static List< Resource > findResources( final Class declaringClass )
       throws IllegalAccessException, DeclarationException
   {
     final List< Resource > resources = Lists.newArrayList() ;
     final Field[] fields = declaringClass.getDeclaredFields() ;
-    for( Field field : fields ) {
+    for( final Field field : fields ) {
       checkAllowed( field ) ;
       if( Resource.class.equals( field.getType() ) ) {
         final Resource resource = ( Resource ) field.get( null ) ;
@@ -141,12 +148,12 @@ public final class ResourceSchema {
     return Ordering.natural().sortedCopy( resources ) ;
   }
 
-  private static List< Directory > findDirectories( Class declaringClass )
+  private static List< Directory > findDirectories( final Class declaringClass )
       throws IllegalAccessException, DeclarationException
   {
     final List< Directory > directories = Lists.newArrayList() ;
     final Class[] interfaces = declaringClass.getDeclaredClasses() ;
-    for( Class ynterface : interfaces ) {
+    for( final Class ynterface : interfaces ) {
       checkAllowed( ynterface ) ;
       final Directory directory = makeDirectoryOfClass( ynterface ) ;
       directories.add( directory ) ;
@@ -154,19 +161,19 @@ public final class ResourceSchema {
     return Ordering.natural().sortedCopy( directories ) ;
   }
 
-  private static void checkAllowed( Class ynterface ) throws DeclarationException {
+  private static void checkAllowed( final Class ynterface ) throws DeclarationException {
     if( ynterface.isAnonymousClass() ) {
       throw new DeclarationException( "Misses requirements: " + ynterface ) ;
     }
   }
 
-  private static Directory findDirectoryObject( Class ynterface )
+  private static Directory findDirectoryObject( final Class ynterface )
       throws DeclarationException, IllegalAccessException
   {
     final Field[] fields = ynterface.getDeclaredFields() ;
     boolean found = false ;
     Directory directory = null ;
-    for( Field field : fields ) {
+    for( final Field field : fields ) {
       if( Directory.class.equals( field.getType() ) ) {
         if( found ) {
           throw new DeclarationException( "More than one field of " +
@@ -191,7 +198,7 @@ public final class ResourceSchema {
     }
   }
 
-  private static void checkAllowed( Field field ) throws DeclarationException {
+  private static void checkAllowed( final Field field ) throws DeclarationException {
     final int modifiers = field.getModifiers() ;
     if( Modifier.isAbstract( modifiers )
      || Modifier.isNative( modifiers )
@@ -222,7 +229,7 @@ public final class ResourceSchema {
    * @param maybeParent a non-null object.
    * @param maybeChild a non-null object.
    */
-  public static boolean isParentOf( Directory maybeParent, SchemaNode maybeChild ) {
+  public static boolean isParentOf( final Directory maybeParent, final SchemaNode maybeChild ) {
     Preconditions.checkNotNull( maybeParent ) ;
     Preconditions.checkNotNull( maybeChild ) ;
     return maybeParentOfOrSameAs( maybeParent, maybeChild.getParent() ) ;
@@ -235,18 +242,21 @@ public final class ResourceSchema {
    * @param maybeParent a non-null object.
    * @param maybeChild a non-null object.
    */
-  public static boolean isParentOfOrSameAs( Directory maybeParent, SchemaNode maybeChild ) {
+  public static boolean isParentOfOrSameAs( 
+      final Directory maybeParent, 
+      final SchemaNode maybeChild 
+  ) {
     Preconditions.checkNotNull( maybeParent ) ;
     Preconditions.checkNotNull( maybeChild ) ;
     return maybeParentOfOrSameAs( maybeParent, maybeChild ) ;
   }
   
-  public static Relativizer relativizer( Directory newParent ) {
+  public static Relativizer relativizer( final Directory newParent ) {
     return new Relativizer( newParent ) ;
   }
 
   @Deprecated
-  public static String relativizeResourcePath( Directory parent, SchemaNode child ) {
+  public static String relativizeResourcePath( final Directory parent, final SchemaNode child ) {
     Preconditions.checkNotNull( parent ) ;
     Preconditions.checkNotNull( child ) ;
     final String parentPath = parent.getAbsoluteResourceName();
@@ -260,7 +270,10 @@ public final class ResourceSchema {
     return childPath.substring( parentPath.length() ) ;
   }
 
-  private static boolean maybeParentOfOrSameAs( Directory maybeParent, SchemaNode maybeChild ) {
+  private static boolean maybeParentOfOrSameAs( 
+      final Directory maybeParent, 
+      final SchemaNode maybeChild 
+  ) {
     if( null == maybeChild ) {
       return false ;
     } else if( maybeChild == maybeParent ) {

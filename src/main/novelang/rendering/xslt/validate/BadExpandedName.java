@@ -29,7 +29,12 @@ public class BadExpandedName {
   final String xpath ;
   final String element ;
 
-  public BadExpandedName( Location location, String xpath, String xmlPrefix, String element ) {
+  public BadExpandedName( 
+      final Location location, 
+      final String xpath, 
+      final String xmlPrefix, 
+      final String element 
+  ) {
     this.location = location ;
     this.xpath = xpath ;
     this.xmlPrefix = xmlPrefix ;
@@ -57,9 +62,12 @@ public class BadExpandedName {
     return xmlPrefix + ":" + element + " at " + location ; 
   }
 
-  public static String toString( Iterable< BadExpandedName > badExpandedNames, String indent ) {
+  public static String toString( 
+      final Iterable< BadExpandedName > badExpandedNames, 
+      final String indent 
+  ) {
     final StringBuffer buffer = new StringBuffer() ;
-    for( BadExpandedName bad : badExpandedNames ) {
+    for( final BadExpandedName bad : badExpandedNames ) {
       buffer.append( indent ) ;
       buffer.append( bad.toString() ) ;
     }

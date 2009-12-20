@@ -164,7 +164,7 @@ public class ParagraphParsingTest {
 
   @Test
   public void paragraphIsWordThenSemicolon() throws RecognitionException {
-    SyntacticTree tree = PARSERMETHOD_WORD.createTree( "w0" ) ;
+    final SyntacticTree tree = PARSERMETHOD_WORD.createTree( "w0" ) ;
     LOG.debug( tree.toStringTree() ) ;
 
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 

@@ -48,18 +48,18 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
    */
   public GrammarDelegate() { }
 
-  public GrammarDelegate( LocationFactory locationFactory ) {
+  public GrammarDelegate( final LocationFactory locationFactory ) {
     super( locationFactory ) ;
   }
 
-  public Tree createTree( int tokenIdentifier, String tokenPayload ) {
+  public Tree createTree( final int tokenIdentifier, final String tokenPayload ) {
     return new CustomTree(
         getLocationFactory(),
         new CommonToken( tokenIdentifier, tokenPayload )
     ) ;
   }
 
-  public String unescapeCharacter( String escaped, int line, int column ) {
+  public String unescapeCharacter( final String escaped, final int line, final int column ) {
     try {
       return "" + SourceUnescape.unescapeCharacter( escaped ) ;
     } catch( NoUnescapedCharacterException e ) {
@@ -78,7 +78,7 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
   private static final Log parserLogger = LogFactory.getLog( NovelangParser.class ) ;
   private int loggingRuleDepth = 0 ;
 
-  public void traceIn( String s, int ruleIndex ) {
+  public void traceIn( final String s, final int ruleIndex ) {
     if( parserLogger.isDebugEnabled() ) {
       String indent = "" ;
       for( int i = 0 ; i < loggingRuleDepth ; i++ ) {
@@ -89,7 +89,7 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
     loggingRuleDepth ++ ;
   }
 
-  public void traceOut( String s, int ruleIndex ) {
+  public void traceOut( final String s, final int ruleIndex ) {
     loggingRuleDepth -- ;
   }
 
@@ -102,28 +102,31 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
   private final BlockDelimiterSupervisor blockDelimiterSupervisor =
       new DefaultBlockDelimiterSupervisor( locationFactory ) ;
 
-  public void startDelimitedText( BlockDelimiter blockDelimiter, Token startToken ) {
+  public void startDelimitedText( 
+      final BlockDelimiter blockDelimiter, 
+      final Token startToken 
+  ) {
     blockDelimiterSupervisor.startDelimitedText( blockDelimiter, startToken ) ;
   }
 
-  public void reachEndDelimiter( BlockDelimiter blockDelimiter ) {
+  public void reachEndDelimiter( final BlockDelimiter blockDelimiter ) {
     blockDelimiterSupervisor.reachEndDelimiter( blockDelimiter ) ;
   }
 
-  public void endDelimitedText( BlockDelimiter blockDelimiter ) {
+  public void endDelimitedText( final BlockDelimiter blockDelimiter ) {
     blockDelimiterSupervisor.endDelimitedText( blockDelimiter ) ;
   }
 
   public void reportMissingDelimiter(
-      BlockDelimiter blockDelimiter,
-      MismatchedTokenException mismatchedTokenException
+      final BlockDelimiter blockDelimiter,
+      final MismatchedTokenException mismatchedTokenException
   )
       throws MismatchedTokenException
   {
     blockDelimiterSupervisor.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
   }
 
-  public void enterBlockDelimiterBoundary( Token location ) {
+  public void enterBlockDelimiterBoundary( final Token location ) {
     blockDelimiterSupervisor.enterBlockDelimiterBoundary( location ) ;
   }
 

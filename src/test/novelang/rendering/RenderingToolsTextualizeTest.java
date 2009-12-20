@@ -70,7 +70,7 @@ public class RenderingToolsTextualizeTest {
 // Fixture
 // =======
 
-  private static void verify( String expected, SyntacticTree tree ) throws Exception {
+  private static void verify( final String expected, final SyntacticTree tree ) throws Exception {
     final String rendered = RenderingTools.textualize(
         tree
         ,

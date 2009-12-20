@@ -129,8 +129,8 @@ public final class MandatorySpaceInsertionTest {
 // =======
 
   private static void verifyMandatoryWhitepaceInsertion(
-      SyntacticTree expectedTree,
-      SyntacticTree actualTree
+      final SyntacticTree expectedTree,
+      final SyntacticTree actualTree
   ) {
     final Treepath< SyntacticTree > tree = Treepath.create( actualTree );
     final SyntacticTree rehierarchized =

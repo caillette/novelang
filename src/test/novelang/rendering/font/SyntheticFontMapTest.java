@@ -53,7 +53,7 @@ public class SyntheticFontMapTest {
     final Collection< FontQuadruplet > quadrupletsOne = syntheticMap.get( FONT_ONE ) ;
     Assert.assertEquals( 4, quadrupletsOne.size() ) ;
     final Set< FontTriplet > tripletsOne = Sets.newHashSet() ;
-    for( FontQuadruplet quadruplet : quadrupletsOne ) {
+    for( final FontQuadruplet quadruplet : quadrupletsOne ) {
       final FontTriplet triplet = quadruplet.getFontTriplet();
       if( tripletsOne.contains( triplet ) ) {
         Assert.fail( "Already present: " + triplet + "in " + tripletsOne ) ;
@@ -161,7 +161,10 @@ public class SyntheticFontMapTest {
       FONT_INFOS,
       FAILED_FONTS ) ;
 
-  private static EmbedFontInfo embedFontInfo( String embedFontFile, FontTriplet... fontTriplets ) {
+  private static EmbedFontInfo embedFontInfo( 
+      final String embedFontFile, 
+      final FontTriplet... fontTriplets 
+  ) {
     return new EmbedFontInfo(
         null, // metrics file, no need for that.
         true, // kerning, no need for that.
@@ -170,19 +173,19 @@ public class SyntheticFontMapTest {
     ) ;
   }
 
-  private static FontTriplet tripletNormalNormal( String name, int priority ) {
+  private static FontTriplet tripletNormalNormal( final String name, final int priority ) {
     return new FontTriplet( name, Font.STYLE_NORMAL, Font.WEIGHT_NORMAL, priority ) ;
   }
 
-  private static FontTriplet tripletItalicNormal( String name, int priority ) {
+  private static FontTriplet tripletItalicNormal( final String name, final int priority ) {
     return new FontTriplet( name, Font.STYLE_ITALIC, Font.WEIGHT_NORMAL, priority ) ;
   }
 
-  private static FontTriplet tripletNormalBold( String name, int priority ) {
+  private static FontTriplet tripletNormalBold( final String name, final int priority ) {
     return new FontTriplet( name, Font.STYLE_NORMAL, Font.WEIGHT_BOLD, priority ) ;
   }
 
-  private static FontTriplet tripletItalicBold( String name, int priority ) {
+  private static FontTriplet tripletItalicBold( final String name, final int priority ) {
     return new FontTriplet( name, Font.STYLE_ITALIC, Font.WEIGHT_BOLD, priority ) ;
   }
 

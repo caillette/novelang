@@ -22,7 +22,7 @@ package novelang.common;
  */
 public class UnknownIdentifierException extends Exception {
 
-  public UnknownIdentifierException( String identifier ) {
+  public UnknownIdentifierException( final String identifier ) {
     super( "Unknown identifier: '" + identifier +"'"  ) ;
   }
 }

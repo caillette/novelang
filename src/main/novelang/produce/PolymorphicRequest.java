@@ -25,7 +25,7 @@ import org.apache.commons.lang.ClassUtils;
  */
 public final class PolymorphicRequest extends AbstractRequest {
 
-  protected PolymorphicRequest() { }
+  /*package*/ PolymorphicRequest() { }
 
   @Override
   public String toString() {
@@ -44,7 +44,7 @@ public final class PolymorphicRequest extends AbstractRequest {
   }
 
   @Override
-  public boolean equals( Object o ) {
+  public boolean equals( final Object o ) {
     if( this == o ) {
       return true ;
     }

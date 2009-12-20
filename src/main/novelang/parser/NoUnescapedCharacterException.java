@@ -24,7 +24,7 @@ package novelang.parser;
  */
 public class NoUnescapedCharacterException extends Exception {
 
-  public NoUnescapedCharacterException( String escapeCode ) {
+  public NoUnescapedCharacterException( final String escapeCode ) {
     super( "Unsupported escape code: '" + escapeCode + "'" ) ;
   }
 }

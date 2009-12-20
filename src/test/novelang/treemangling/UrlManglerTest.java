@@ -373,8 +373,8 @@ public class UrlManglerTest {
 // =======
 
   private static void verifyFixNamedUrls(
-      SyntacticTree expectedTree,
-      SyntacticTree rawTree
+      final SyntacticTree expectedTree,
+      final SyntacticTree rawTree
   ) {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
@@ -391,7 +391,7 @@ public class UrlManglerTest {
 
   private static Treepath< SyntacticTree > fixNamedUrls( final SyntacticTree rawTree ) {
     LOG.info( "Raw tree: %s", TreeFixture.asString( rawTree ) ) ;
-    Treepath< SyntacticTree > mangledTreepath =
+    final Treepath< SyntacticTree > mangledTreepath =
         UrlMangler.fixNamedUrls( Treepath.create( rawTree ) ) ;
     SyntacticTree mangledTree = mangledTreepath.getTreeAtEnd() ;
     LOG.info( "Mangled tree: %s", TreeFixture.asString( mangledTree ) ) ;

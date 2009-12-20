@@ -76,7 +76,7 @@ public class DirectoryScanHandler extends GenericHandler {
    */
   public static final String MIME_HINT = "-.html" ;
 
-  public DirectoryScanHandler( ContentConfiguration contentConfiguration ) {
+  public DirectoryScanHandler( final ContentConfiguration contentConfiguration ) {
     this.contentRoot = contentConfiguration.getContentRoot() ;
   }
 
@@ -141,7 +141,10 @@ public class DirectoryScanHandler extends GenericHandler {
     }
   }
 
-  private static void redirectTo( HttpServletResponse response, String redirectionTarget )
+  private static void redirectTo( 
+      final HttpServletResponse response, 
+      final String redirectionTarget 
+  )
       throws IOException
   {
     response.sendRedirect( redirectionTarget ) ;
@@ -153,7 +156,7 @@ public class DirectoryScanHandler extends GenericHandler {
   /**
    * Currently returns true if Apple's Safari browser is detected.
    */
-  private static boolean doesBrowserNeedMimeHint( HttpServletRequest request ) {
+  private static boolean doesBrowserNeedMimeHint( final HttpServletRequest request ) {
     final String userAgent = request.getHeader( "User-Agent" ) ;
     if( null == userAgent ) {
       LOG.warn( "Got no User-Agent in %s", request ) ;
@@ -164,7 +167,9 @@ public class DirectoryScanHandler extends GenericHandler {
     }
   }
 
-  private static void sendUnauthorizedResponse( HttpServletResponse response ) throws IOException {
+  private static void sendUnauthorizedResponse( 
+      final HttpServletResponse response 
+  ) throws IOException {
     LOG.warn( ACCESS_DENIED_MESSAGE ) ;
     response.setStatus( HttpServletResponse.SC_UNAUTHORIZED ) ;
     response.setContentType( HTML_CONTENT_TYPE ) ;
@@ -179,8 +184,8 @@ public class DirectoryScanHandler extends GenericHandler {
   }
 
   private void listFilesAndDirectories(
-    HttpServletResponse response,
-    File scanned
+    final HttpServletResponse response,
+    final File scanned
   ) throws IOException {
 
     final List< File > filesAndDirectories = Lists.newArrayList() ;
@@ -201,9 +206,9 @@ public class DirectoryScanHandler extends GenericHandler {
 
 
   private void generateHtml(
-      OutputStream outputStream,
-      File scannedDirectory,
-      Iterable< File > sortedFiles
+      final OutputStream outputStream,
+      final File scannedDirectory,
+      final Iterable< File > sortedFiles
   ) {
     final PrintWriter writer = new PrintWriter( outputStream ) ;
     writer.println( "<html>" ) ;
@@ -216,7 +221,7 @@ public class DirectoryScanHandler extends GenericHandler {
       writer.println( "<a href=\"..\">..</a><br/>" ) ;
     }
 
-    for( File file : sortedFiles ) {
+    for( final File file : sortedFiles ) {
       final String documentNameRelativeToContentRoot = createLinkablePath( contentRoot, file ) ;
       final String documentNameRelativeToScannedDir = createLinkablePath( scannedDirectory, file ) ;
 
@@ -234,7 +239,7 @@ public class DirectoryScanHandler extends GenericHandler {
     writer.flush() ;
   }
 
-  private static String createLinkablePath( File scannedDirectory, File file ) {
+  private static String createLinkablePath( final File scannedDirectory, final File file ) {
     final String fileNameRelativeToScannedDir =
         FileTools.urlifyPath( FileTools.relativizePath( scannedDirectory, file ) ) ;
     return file.isDirectory() ?
@@ -243,7 +248,7 @@ public class DirectoryScanHandler extends GenericHandler {
     ;
   }
 
-  private static String htmlizeExtension( String relativeFileName ) {
+  private static String htmlizeExtension( final String relativeFileName ) {
     return FilenameUtils.removeExtension( relativeFileName ) +
     ".html";
   }

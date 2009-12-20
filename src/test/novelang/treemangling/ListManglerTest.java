@@ -180,8 +180,8 @@ public class ListManglerTest {
 
 
   private static void verifyRehierarchizeList(
-      SyntacticTree expectedTree,
-      SyntacticTree flatTree
+      final SyntacticTree expectedTree,
+      final SyntacticTree flatTree
   ) {
     LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;

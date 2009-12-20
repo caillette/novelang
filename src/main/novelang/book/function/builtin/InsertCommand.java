@@ -86,7 +86,7 @@ public class InsertCommand extends AbstractCommand {
 
   
 
-  public CommandExecutionContext evaluate( CommandExecutionContext environment ) {
+  public CommandExecutionContext evaluate( final CommandExecutionContext environment ) {
 
     final File insertedFile ;
     {
@@ -178,7 +178,7 @@ public class InsertCommand extends AbstractCommand {
     return environment.update( book.getTreeAtStart() ).addProblems( rawPart.getProblems() ) ;
   }
 
-  private static SyntacticTree createStyleTree( String styleName ) {
+  private static SyntacticTree createStyleTree( final String styleName ) {
     if( null == styleName ) {
       return null ;
     } else {
@@ -230,7 +230,7 @@ public class InsertCommand extends AbstractCommand {
     try {
       book = findLastLevel( book, levelAbove ) ;
       final Iterable< File > partFiles = scanPartFiles( insertedFile, recurse ) ;
-      for( File partFile : partFiles ) {
+      for( final File partFile : partFiles ) {
         Part part = null ;
         try {
           part = new Part( 
@@ -302,7 +302,7 @@ public class InsertCommand extends AbstractCommand {
   }
 
   private static Treepath< SyntacticTree > findLastLevel(
-      Treepath< SyntacticTree > document,
+      final Treepath< SyntacticTree > document,
       final int depth
   ) throws CommandParameterException {
     if( depth == 0 ) {
@@ -348,7 +348,7 @@ public class InsertCommand extends AbstractCommand {
     return book ;
   }
 
-  private Iterable< File > scanPartFiles( File directory, boolean recurse )
+  private Iterable< File > scanPartFiles( final File directory, final boolean recurse )
       throws CommandParameterException
   {
     if( directory.isDirectory() ) {
@@ -363,9 +363,9 @@ public class InsertCommand extends AbstractCommand {
       }
 
       if( LOG.isDebugEnabled() ) {
-        StringBuffer buffer = new StringBuffer(
+        final StringBuffer buffer = new StringBuffer(
             "Scan of '" + directory.getAbsolutePath() + "' found those files:" ) ;
-        for( File file : files ) {
+        for( final File file : files ) {
           try {
             buffer.append( "\n  " ).append( file.getCanonicalPath() ) ;
           } catch( IOException e ) {

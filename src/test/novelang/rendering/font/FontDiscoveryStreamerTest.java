@@ -49,8 +49,8 @@ public class FontDiscoveryStreamerTest {
         new ResourceName( "identity.xsl" )
     ) {
       protected XslWriter createXslWriter(
-          RenderingConfiguration renderingConfiguration,
-          ResourceName resourceName
+          final RenderingConfiguration renderingConfiguration,
+          final ResourceName resourceName
       ) {
         return new XslWriter(
             FontDiscoveryStreamer.NAMESPACE.getURI(),

@@ -51,9 +51,10 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
   private static final Log LOG = LogFactory.getLog( LevelExploder.class ) ;
 
   public void main(
-      String commandName,
-      boolean mayTerminateJvm, String[] arguments,
-      File baseDirectory
+      final String commandName,
+      final boolean mayTerminateJvm, 
+      final String[] arguments,
+      final File baseDirectory
   ) throws Exception {
 
     final LevelExploderParameters parameters ;

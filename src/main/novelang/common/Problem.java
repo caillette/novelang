@@ -33,7 +33,7 @@ public class Problem {
   final Location location ;
   final String message ;
 
-  private Problem( Location location, String message ) {
+  private Problem( final Location location, final String message ) {
     this.location = Preconditions.checkNotNull( location ) ;
     this.message = Preconditions.checkNotNull( message ) ;
   }
@@ -57,17 +57,17 @@ public class Problem {
   private static final Pattern MESSAGE_WITH_LOCATION =
       Pattern.compile( "line (\\d+):(\\d+) (.+)" ) ;
 
-  public static Problem createProblem( String message ) {
+  public static Problem createProblem( final String message ) {
     return new Problem( new Location( "<unknown file>", -1, -1 ), message ) ;
   }
 
-  public static Problem createProblem( Exception exception ) {
+  public static Problem createProblem( final Exception exception ) {
     return new Problem( new Location( "<unknown file>", -1, -1 ), exception.getMessage() ) ;
   }
 
   public static Problem createProblem(
-      LocationFactory locationFactory,
-      Exception exception
+      final LocationFactory locationFactory,
+      final Exception exception
   ) {
     int line = -1 ;
     int column = -1 ;
@@ -82,8 +82,8 @@ public class Problem {
   }
 
   public static Problem createProblem(
-      LocationFactory locationFactory,
-      RecognitionException exception
+      final LocationFactory locationFactory,
+      final RecognitionException exception
   ) {
     final Location location = locationFactory.createLocation(
         exception.line, exception.charPositionInLine ) ;
@@ -92,8 +92,8 @@ public class Problem {
   }
 
   public static Problem createProblem(
-      LocationFactory locationFactory,
-      String message
+      final LocationFactory locationFactory,
+      final String message
   ) {
     final Matcher matcher = MESSAGE_WITH_LOCATION.matcher( message ) ;
     int line = -1 ;
@@ -110,15 +110,15 @@ public class Problem {
     return new Problem( location, bareMessage ) ;
   }
 
-  public static Problem createProblem( String message, Location location ) {
+  public static Problem createProblem( final String message, final Location location ) {
     return new Problem( location, message ) ;
   }
 
   public static Problem createProblem(
-      String message,
-      LocationFactory locationFactory,
-      int line,
-      int column
+      final String message,
+      final LocationFactory locationFactory,
+      final int line,
+      final int column
   ) {
     return new Problem( locationFactory.createLocation( line, column ), message ) ;
   }

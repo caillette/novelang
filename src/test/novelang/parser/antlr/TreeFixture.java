@@ -39,25 +39,25 @@ import novelang.treemangling.SeparatorsMangler;
 public class TreeFixture {
 
   public static final LocationFactory LOCATION_FACTORY = new LocationFactory() {
-    public Location createLocation( int line, int column ) {
+    public Location createLocation( final int line, final int column ) {
       return new Location( "", line, column ) ;
     }
   } ;
 
-  public static SyntacticTree tree( NodeKind nodeKind, SyntacticTree... children ) {
+  public static SyntacticTree tree( final NodeKind nodeKind, final SyntacticTree... children ) {
     return new SimpleTree( nodeKind.name(), children ) ;
   }
 
-  public static SyntacticTree tree( NodeKind nodeKind, String text ) {
+  public static SyntacticTree tree( final NodeKind nodeKind, final String text ) {
     return new SimpleTree( nodeKind.name(), new SimpleTree( text ) ) ;
   }
 
-  public static SyntacticTree tree( NodeKind nodeKind ) {
+  public static SyntacticTree tree( final NodeKind nodeKind ) {
     return new SimpleTree( nodeKind.name() ) ;
 
   }
 
-  public static SyntacticTree tree( NodeKind nodeKind, NodeKind... children ) {
+  public static SyntacticTree tree( final NodeKind nodeKind, final NodeKind... children ) {
     final SyntacticTree[] childTrees = new SyntacticTree[ children.length ] ;
     for( int i = 0; i < children.length ; i++ ) {
       final NodeKind child = children[ i ] ;
@@ -66,15 +66,15 @@ public class TreeFixture {
     return new SimpleTree( nodeKind.name(), childTrees ) ;
   }
 
-  public static SyntacticTree tree( String text ) {
+  public static SyntacticTree tree( final String text ) {
     return new SimpleTree( text ) ;
   }
 
-  public static SyntacticTree tree( String text, SyntacticTree... children ) {
+  public static SyntacticTree tree( final String text, final SyntacticTree... children ) {
     return new SimpleTree( text, children ) ;
   }
 
-  public static SyntacticTree multiTokenTree( String text ) {
+  public static SyntacticTree multiTokenTree( final String text ) {
     final SyntacticTree[] children = new SyntacticTree[ text.length() ] ;
     for( int i = 0 ; i < text.length() ; i++ ) {
       final String s = String.valueOf( text.charAt( i ) ) ;
@@ -84,17 +84,17 @@ public class TreeFixture {
   }
 
   public static void assertEqualsWithSeparators(
-      SyntacticTree expected,
-      SyntacticTree actual
+      final SyntacticTree expected,
+      final SyntacticTree actual
   ) {
     assertEqualsWithSeparators( Treepath.create( expected ), Treepath.create( actual ) ) ;
   }
   
   public static void assertEqualsWithSeparators(
-      Treepath< SyntacticTree > expected,
-      Treepath< SyntacticTree > actual
+      final Treepath< SyntacticTree > expected,
+      final Treepath< SyntacticTree > actual
   ) {
-    int expectedLength = expected.getLength();
+    final int expectedLength = expected.getLength();
     final int actualLength = actual.getLength();
     Assert.assertEquals( "Treepath height", expectedLength, actualLength ) ;
     for( int i = 0 ; i < expected.getLength() ; i++ ) {
@@ -106,13 +106,13 @@ public class TreeFixture {
   }
 
   public static void assertEqualsNoSeparators( 
-      SyntacticTree expected, 
-      SyntacticTree actual 
+      final SyntacticTree expected, 
+      final SyntacticTree actual 
   ) {
     assertEquals( expected, SeparatorsMangler.removeSeparators( actual ) ) ;
   }
   
-  public static void assertEquals( SyntacticTree expected, SyntacticTree actual ) {
+  public static void assertEquals( final SyntacticTree expected, final SyntacticTree actual ) {
     try {
       assertEqualsNoMessage( expected, actual ) ;
     } catch( AssertionError e ) {
@@ -125,7 +125,10 @@ public class TreeFixture {
       throw assertionError;
     }
   }
-  private static void assertEqualsNoMessage( SyntacticTree expected, SyntacticTree actual ) {
+  private static void assertEqualsNoMessage( 
+      final SyntacticTree expected, 
+      final SyntacticTree actual 
+  ) {
     if( NodeKind.LINES_OF_LITERAL.isRoot( expected ) && NodeKind.LINES_OF_LITERAL.isRoot( actual ) ) {
       Assert.assertEquals(
           "Ill-formed test: expected LITERAL node must have exactly one child",
@@ -151,7 +154,7 @@ public class TreeFixture {
   /**
    * Replace sequence of spaces by a single one.
    */
-  public static String normalizeSpaces( String s ) {
+  public static String normalizeSpaces( final String s ) {
     final Matcher matcher = SPACE_NORMALIZER_PATTERN.matcher( s ) ;
     final StringBuffer buffer = new StringBuffer() ;
     while( matcher.find() ) {
@@ -161,7 +164,7 @@ public class TreeFixture {
     return buffer.toString() ;
   }
 
-  public static String asString( SyntacticTree tree ) {
+  public static String asString( final SyntacticTree tree ) {
     if( null == tree ) {
       return "<null>" ;
     } else {

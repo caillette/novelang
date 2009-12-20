@@ -40,7 +40,7 @@ public class TreeTools {
    * @param newChild a non-null object.
    * @return a non-null object.
    */
-  public static < T extends Tree > T addFirst( T tree, T newChild ) {
+  public static < T extends Tree > T addFirst( final T tree, final T newChild ) {
     if( null == newChild ) {
       throw new NullArgumentException( "newChild" ) ;
     }
@@ -61,7 +61,7 @@ public class TreeTools {
    * @param position a value between [0, {@link Tree#getChildCount()}[.
    * @return a non-null object.
    */
-  public static < T extends Tree > T add( T tree, T newChild, int position ) {
+  public static < T extends Tree > T add( final T tree, final T newChild, final int position ) {
     if( null == newChild ) {
       throw new NullArgumentException( "newChild" ) ;
     }
@@ -90,7 +90,7 @@ public class TreeTools {
    * @param newChild a non-null object.
    * @return a non-null object.
    */
-  public static < T extends Tree > T addLast( T tree, T newChild ) {
+  public static < T extends Tree > T addLast( final T tree, final T newChild ) {
     if( null == newChild ) {
       throw new NullArgumentException( "newChild") ;
     }
@@ -111,7 +111,10 @@ public class TreeTools {
    * @return non-null object.
    * @throws org.apache.commons.lang.NullArgumentException if at least one of {@code newChildren} is null.
    */
-  public static < T extends Tree > T addLast( T tree, Iterable< ? extends T > newChildren )
+  public static < T extends Tree > T addLast( 
+      final T tree, 
+      final Iterable< ? extends T > newChildren 
+  )
       throws NullArgumentException
   {
     final List< ? extends T > newChildrenList = Lists.newArrayList( newChildren ) ;
@@ -157,7 +160,7 @@ public class TreeTools {
    * @return a non-null object.
    * @throws ArrayIndexOutOfBoundsException
    */
-  public static < T extends Tree > T remove( T tree, int index )
+  public static < T extends Tree > T remove( final T tree, final int index )
       throws ArrayIndexOutOfBoundsException
   {
     if( index < 0 ) {
@@ -191,7 +194,7 @@ public class TreeTools {
    * @return a non-null object.
    * @throws ArrayIndexOutOfBoundsException
    */
-  public static < T extends Tree > T replace( T parent, int index, T newChild )
+  public static < T extends Tree > T replace( final T parent, final int index, final T newChild )
       throws ArrayIndexOutOfBoundsException
   {
     if( index < 0 ) {
@@ -226,7 +229,11 @@ public class TreeTools {
    * @see novelang.common.tree.StorageTypeProvider forcing child array type
    * @see novelang.common.tree.ImmutableTree#createArray backing implementation
    */
-  protected static< T extends Tree > T[] createArray( T tree, T fallback, int arraySize ) {
+  protected static< T extends Tree > T[] createArray( 
+      final T tree, 
+      final T fallback, 
+      final int arraySize 
+  ) {
     return ImmutableTree.createArray( tree, fallback, arraySize ) ;
   }
 }

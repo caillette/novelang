@@ -38,12 +38,12 @@ public class SaxConnectorForVerifier implements ContentHandler {
   private final String namespaceUri ;
   private final ExpandedNameVerifier verifier ;
 
-  public SaxConnectorForVerifier( String namespaceUri, Set< String > nodeNames ) {
+  public SaxConnectorForVerifier( final String namespaceUri, final Set< String > nodeNames ) {
     this.namespaceUri = namespaceUri ;
     verifier = new ExpandedNameVerifier( nodeNames ) ;
   }
 
-  private void verifyXpath( String xpath ) {
+  private void verifyXpath( final String xpath ) {
     verifier.verify( getLocation(), xpath ) ;
   }
 
@@ -85,7 +85,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
   }
 */
 
-  private static boolean isXslUri( String uri ) {
+  private static boolean isXslUri( final String uri ) {
     return "http://www.w3.org/1999/XSL/Transform".equals( uri ) ;
   }
 
@@ -94,11 +94,11 @@ public class SaxConnectorForVerifier implements ContentHandler {
 // ContentHandler methods
 // ======================
 
-  public void setDocumentLocator( Locator locator ) {
+  public void setDocumentLocator( final Locator locator ) {
     this.locator = locator ;
   }
 
-  public void startPrefixMapping( String prefix, String uri ) throws SAXException {
+  public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {
     if( namespaceUri.equals( uri ) ) {
       if( null == verifier.getXmlPrefix() ) {
         verifier.setXmlPrefix( prefix );
@@ -121,7 +121,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
     }
   }
 
-  public void endPrefixMapping( String prefix ) throws SAXException {
+  public void endPrefixMapping( final String prefix ) throws SAXException {
     if( prefix.equals( verifier.getXmlPrefix() ) ) {
       verifier.unsetXmlPrefix() ;
 /*
@@ -131,10 +131,10 @@ public class SaxConnectorForVerifier implements ContentHandler {
   }
 
   public void startElement(
-      String uri,
-      String localName,
-      String qName,
-      Attributes attributes
+      final String uri,
+      final String localName,
+      final String qName,
+      final Attributes attributes
   ) throws SAXException {
 /*
     LOGGER.debug(
@@ -162,15 +162,30 @@ public class SaxConnectorForVerifier implements ContentHandler {
     verifier.checkNoBadExpandedNames() ;
   }
 
-  public void endElement( String uri, String localName, String qName ) throws SAXException { }
+  public void endElement( 
+      final String uri, 
+      final String localName, 
+      final String qName 
+  ) throws SAXException { }
 
-  public void characters( char[] ch, int start, int length ) throws SAXException { }
+  public void characters( 
+      final char[] ch, 
+      final int start, 
+      final int length 
+  ) throws SAXException { }
 
-  public void ignorableWhitespace( char[] ch, int start, int length ) throws SAXException { }
+  public void ignorableWhitespace( 
+      final char[] ch, 
+      final int start, 
+      final int length 
+  ) throws SAXException { }
 
-  public void processingInstruction( String target, String data ) throws SAXException { }
+  public void processingInstruction( 
+      final String target, 
+      final String data 
+  ) throws SAXException { }
 
-  public void skippedEntity( String name ) throws SAXException { }
+  public void skippedEntity( final String name ) throws SAXException { }
 
   public void startDocument() throws SAXException { }
 

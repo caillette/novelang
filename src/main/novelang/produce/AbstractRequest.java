@@ -66,7 +66,7 @@ import novelang.rendering.RenditionMimeType;
     return renditionMimeType;
   }
 
-  private void setRenditionMimeType( RenditionMimeType renditionMimeType ) {
+  private void setRenditionMimeType( final RenditionMimeType renditionMimeType ) {
     this.renditionMimeType = renditionMimeType;
   }
 
@@ -85,7 +85,7 @@ import novelang.rendering.RenditionMimeType;
     return resourceExtension ;
   }
 
-  private void setResourceExtension( String resourceExtension ) {
+  private void setResourceExtension( final String resourceExtension ) {
     this.resourceExtension = resourceExtension;
   }
 
@@ -100,7 +100,7 @@ import novelang.rendering.RenditionMimeType;
     return documentSourceName;
   }
 
-  private void setDocumentSourceName( String documentSourceName ) {
+  private void setDocumentSourceName( final String documentSourceName ) {
     this.documentSourceName = documentSourceName;
   }
 
@@ -115,7 +115,7 @@ import novelang.rendering.RenditionMimeType;
     return alternateStylesheet ;
   }
 
-  private void setAlternateStylesheet( ResourceName resourceName ) {
+  private void setAlternateStylesheet( final ResourceName resourceName ) {
     this.alternateStylesheet = resourceName ;
   }
 
@@ -130,12 +130,12 @@ import novelang.rendering.RenditionMimeType;
   }
 
   private static final Predicate< Tag > NULL_TAG = new Predicate< Tag >() {
-    public boolean apply( Tag s ) {
+    public boolean apply( final Tag s ) {
       return s == null ;
     }
   } ;
 
-  public void setTags( Set< Tag > tags ) {
+  public void setTags( final Set< Tag > tags ) {
     Preconditions.checkNotNull( tags ) ;
     Preconditions.checkArgument( ! Iterables.any( tags, NULL_TAG ), "Has nulls: %s", tags ) ;
     this.tags = ImmutableSet.copyOf( tags ) ;
@@ -153,7 +153,7 @@ import novelang.rendering.RenditionMimeType;
     return originalTarget;
   }
 
-  private void setOriginalTarget( String originalTarget ) {
+  private void setOriginalTarget( final String originalTarget ) {
     this.originalTarget = originalTarget;
   }
 
@@ -235,9 +235,9 @@ import novelang.rendering.RenditionMimeType;
   }
 
   public static DocumentRequest forgeDocumentRequest(
-      String documentName,
-      RenditionMimeType renditionMimeType,
-      ResourceName stylesheet
+      final String documentName,
+      final RenditionMimeType renditionMimeType,
+      final ResourceName stylesheet
   ) {
     final AbstractRequest documentRequest = new DocumentRequest() ;
     documentRequest.setDocumentSourceName( documentName ) ;
@@ -247,7 +247,7 @@ import novelang.rendering.RenditionMimeType;
     return ( DocumentRequest ) documentRequest ;
   }
 
-  public static PolymorphicRequest createPolymorphicRequest( String requestPath ) {
+  public static PolymorphicRequest createPolymorphicRequest( final String requestPath ) {
     return create( requestPath, new PolymorphicRequest() ) ;
   }
 
@@ -261,8 +261,8 @@ import novelang.rendering.RenditionMimeType;
   }
 
   private static < T extends AbstractRequest > T create(
-      String requestPath,
-      T request
+      final String requestPath,
+      final T request
   )
       throws IllegalArgumentException
   {
@@ -328,12 +328,12 @@ import novelang.rendering.RenditionMimeType;
   }
 
   private static < T extends AbstractRequest > void processParameters(
-      T request,
-      String parameters
+      final T request,
+      final String parameters
   ) {
     final Map< String, String > map = getQueryMap( parameters ) ;
     final Set< String > keys = map.keySet() ;
-    for( String key : keys ) {
+    for( final String key : keys ) {
       final String value = map.get( key ) ;
       if( RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME.equals( key ) ) {
         if( StringUtils.isBlank( value ) ) {
@@ -355,19 +355,19 @@ import novelang.rendering.RenditionMimeType;
   private static Set< Tag > parseTags( final String value ) {
     final String[] stringArray = value.split( RequestTools.LIST_SEPARATOR ) ;
     final Set< Tag > tagSet = Sets.newHashSet() ;
-    for( String tagAsString : stringArray ) {
+    for( final String tagAsString : stringArray ) {
       tagSet.add( new Tag( tagAsString ) ) ;
     }
     return ImmutableSet.copyOf( tagSet ) ;
   }
 
-  private static Map< String, String > getQueryMap( String query ) {
+  private static Map< String, String > getQueryMap( final String query ) {
     if( StringUtils.isBlank( query ) ) {
       return ImmutableMap.of() ;
     } else {
       final String[] params = query.split( "&" ) ;
       final Map< String, String > map = Maps.newHashMap() ;
-      for( String param : params ) {
+      for( final String param : params ) {
         final String[] strings = param.split( "=" ) ;
         final String name = strings[ 0 ] ;
         if( strings.length > 2 ) {
@@ -393,7 +393,7 @@ import novelang.rendering.RenditionMimeType;
 // ===================
 
   @Override
-  public boolean equals( Object o ) {
+  public boolean equals( final Object o ) {
     if( this == o ) {
       return true;
     }
@@ -401,7 +401,7 @@ import novelang.rendering.RenditionMimeType;
       return false;
     }
 
-    AbstractRequest that = ( AbstractRequest ) o;
+    final AbstractRequest that = ( AbstractRequest ) o;
 
     if( alternateStylesheet != null ? !alternateStylesheet.equals( that.alternateStylesheet ) : that.alternateStylesheet != null ) {
       return false;

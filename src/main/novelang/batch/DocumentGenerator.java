@@ -48,10 +48,10 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
   public static final String COMMAND_NAME = "generate";
 
   public void main(
-      String commandName,
-      boolean mayTerminateJvm,
-      String[] arguments,
-      File baseDirectory
+      final String commandName,
+      final boolean mayTerminateJvm,
+      final String[] arguments,
+      final File baseDirectory
   ) throws Exception {
 
     final DocumentGeneratorParameters parameters =
@@ -120,9 +120,9 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
 
 
   private static Iterable< Problem > processDocumentRequest(
-      DocumentRequest documentRequest,
-      File targetDirectory,
-      DocumentProducer documentProducer
+      final DocumentRequest documentRequest,
+      final File targetDirectory,
+      final DocumentProducer documentProducer
   ) throws Exception {
     final File outputFile = createOutputFile(
         targetDirectory,

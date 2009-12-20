@@ -39,7 +39,7 @@ public class ListMangler {
    * Rehierarchize paragraphs which are list items.
    */
   public static Treepath< SyntacticTree > rehierarchizeLists(
-      Treepath< SyntacticTree > parent
+      final Treepath< SyntacticTree > parent
   ) {
     if( parent.getTreeAtEnd().getChildCount() > 0 ) {
       Treepath< SyntacticTree > child = Treepath.create( parent, 0 ) ;
@@ -80,7 +80,7 @@ public class ListMangler {
 
 
 
-  private static NodeKind getKind( Treepath< SyntacticTree > treepath ) {
+  private static NodeKind getKind( final Treepath< SyntacticTree > treepath ) {
     return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
   }
 

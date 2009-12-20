@@ -139,7 +139,8 @@ public class RequestTest {
       "=" + STYLESHEET_RESOURCENAME
   ;
 
-  private static Set< Tag > TAGSET = ImmutableSet.of( new Tag( "tag-1" ), new Tag( "Tag2" ) ) ;
+  private static final Set< Tag > TAGSET = 
+      ImmutableSet.of( new Tag( "tag-1" ), new Tag( "Tag2" ) ) ;
 
   private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ;
   static {
@@ -163,12 +164,12 @@ public class RequestTest {
 
   private static final Log LOG = LogFactory.getLog( RequestTest.class ) ;
 
-  private static DocumentRequest createDocumentRequest( String requestString ) {
+  private static DocumentRequest createDocumentRequest( final String requestString ) {
     LOG.info( "Using %s", requestString ) ;
     return RequestTools.createDocumentRequest( requestString ) ;
   }
 
-  private static PolymorphicRequest createPolymorphicRequest( String requestString ) {
+  private static PolymorphicRequest createPolymorphicRequest( final String requestString ) {
     LOG.info( "Using %s", requestString ) ;
     return RequestTools.createPolymorphicRequest( requestString ) ;
   }

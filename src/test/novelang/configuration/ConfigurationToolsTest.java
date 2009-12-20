@@ -258,7 +258,10 @@ public class ConfigurationToolsTest {
 // Fixture
 // =======
 
-  private void checkAllFontsAreGood( FopFontStatus fontStatus, String... relativeFontNames )
+  private void checkAllFontsAreGood( 
+      final FopFontStatus fontStatus, 
+      final String... relativeFontNames 
+  )
       throws MalformedURLException
   {
     final Iterable< String > embedFilesIterable = Iterables.transform(
@@ -267,14 +270,14 @@ public class ConfigurationToolsTest {
     ) ;
     final Set< String > embedFilesSet = Sets.newHashSet( embedFilesIterable ) ;
     Assert.assertEquals( relativeFontNames.length, embedFilesSet.size() ) ;
-    for( String relativeFontName : relativeFontNames ) {
+    for( final String relativeFontName : relativeFontNames ) {
       final String fontFileUrl = createFontFileUrl( relativeFontName );
       Assert.assertTrue( fontFileUrl, embedFilesSet.contains( fontFileUrl ) ) ;
     }
 
   }
 
-  private String createFontFileUrl( String fontFileName ) throws MalformedURLException {
+  private String createFontFileUrl( final String fontFileName ) throws MalformedURLException {
     return scratchDirectory.getAbsoluteFile().toURI().toURL().toExternalForm()
         + fontFileName.substring( 1 );
   }
@@ -319,25 +322,31 @@ public class ConfigurationToolsTest {
     fontFileNameAlternate = relativizer.apply( FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
   }
 
-  private DaemonParameters createDaemonParameters( String... arguments )
+  private DaemonParameters createDaemonParameters( final String... arguments )
       throws ArgumentException
   {
     return createDaemonParameters( scratchDirectory, arguments ) ;
   }
 
-  private DaemonParameters createDaemonParameters( File baseDirectory, String... arguments )
+  private DaemonParameters createDaemonParameters( 
+      final File baseDirectory, 
+      final String... arguments 
+  )
       throws ArgumentException
   {
     return new DaemonParameters( baseDirectory, arguments ) ;
   }
 
-  private DocumentGeneratorParameters createBatchParameters( String... arguments )
+  private DocumentGeneratorParameters createBatchParameters( final String... arguments )
       throws ArgumentException
   {
     return createBatchParameters( scratchDirectory, arguments ) ;
   }
 
-  private DocumentGeneratorParameters createBatchParameters( File baseDirectory, String... arguments )
+  private DocumentGeneratorParameters createBatchParameters( 
+      final File baseDirectory, 
+      final String... arguments 
+  )
       throws ArgumentException
   {
     return new DocumentGeneratorParameters( baseDirectory, arguments ) ;

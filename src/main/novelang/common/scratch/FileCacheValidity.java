@@ -32,7 +32,7 @@ public class FileCacheValidity implements CacheValidity< FileCacheValidity > {
    * Constructor.
    * @param file a non-null object representing a file.
    */
-  public FileCacheValidity( File file ) {
+  public FileCacheValidity( final File file ) {
     Preconditions.checkNotNull( file ) ;
     Preconditions.checkArgument( file.exists(), "Should exist: %s", file ) ;
     Preconditions.checkArgument( file.isFile(), "Should be a file: %s", file ) ;
@@ -40,7 +40,7 @@ public class FileCacheValidity implements CacheValidity< FileCacheValidity > {
     absolutePath = file.getAbsolutePath();
   }
 
-  public boolean isValid( FileCacheValidity other ) {
+  public boolean isValid( final FileCacheValidity other ) {
     return
         this.absolutePath.equals( other.absolutePath )
      && this.timestamp == other.timestamp

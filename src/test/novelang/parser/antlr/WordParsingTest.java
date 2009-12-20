@@ -89,7 +89,7 @@ public class WordParsingTest {
   @Test
   public void wordIsEveryEscapedCharacter() throws RecognitionException {
     final Map< String, Character > map = SourceUnescape.getMainCharacterEscapes() ;
-    for( String key : map.keySet() ) {
+    for( final String key : map.keySet() ) {
       final String escaped = SourceUnescape.ESCAPE_START + key + SourceUnescape.ESCAPE_END ;
       final Character unescaped = map.get( key ) ;
       PARSERMETHOD_WORD.checkTreeAfterSeparatorRemoval( escaped, tree( WORD_, "" + unescaped ) ) ;

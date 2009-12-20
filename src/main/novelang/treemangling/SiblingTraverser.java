@@ -33,7 +33,7 @@ import com.google.common.base.Function;
   int getOffset() ;
 
   SiblingTraverser FORWARD = new SiblingTraverser() {
-    public Treepath< SyntacticTree > apply( Treepath< SyntacticTree > treepath ) {
+    public Treepath< SyntacticTree > apply( final Treepath< SyntacticTree > treepath ) {
       if( TreepathTools.hasNextSibling( treepath ) ) {
         return TreepathTools.getNextSibling( treepath ) ;
       } else {
@@ -48,7 +48,7 @@ import com.google.common.base.Function;
   } ;
 
   SiblingTraverser BACKWARD = new SiblingTraverser() {
-    public Treepath< SyntacticTree > apply( Treepath< SyntacticTree > treepath ) {
+    public Treepath< SyntacticTree > apply( final Treepath< SyntacticTree > treepath ) {
       if( TreepathTools.hasPreviousSibling( treepath ) ) {
         return TreepathTools.getPreviousSibling( treepath ) ;
       } else {

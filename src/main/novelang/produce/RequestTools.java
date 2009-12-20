@@ -39,18 +39,18 @@ public class RequestTools {
 
   private RequestTools() { throw new Error( "Don't call this" ) ; }
 
-  public static DocumentRequest createDocumentRequest( String rawRequest ) {
+  public static DocumentRequest createDocumentRequest( final String rawRequest ) {
     return AbstractRequest.createDocumentRequest( rawRequest ) ;
   }
 
-  public static PolymorphicRequest createPolymorphicRequest( String rawRequest ) {
+  public static PolymorphicRequest createPolymorphicRequest( final String rawRequest ) {
     return AbstractRequest.createPolymorphicRequest( rawRequest ) ;
   }
 
   public static DocumentRequest forgeDocumentRequest(
-      String documentName,
-      RenditionMimeType renditionMimeType,
-      ResourceName stylesheet
+      final String documentName,
+      final RenditionMimeType renditionMimeType,
+      final ResourceName stylesheet
   ) {
     return AbstractRequest.forgeDocumentRequest( documentName, renditionMimeType, stylesheet ) ;  
   }

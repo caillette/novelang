@@ -42,10 +42,10 @@ public class LocalhostOnlyHandler extends GenericHandler{
   public LocalhostOnlyHandler() { }
 
   protected void doHandle(
-      String target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      final String target,
+      final HttpServletRequest request,
+      final HttpServletResponse response,
+      final int dispatch
   ) throws IOException, ServletException {
     final String remoteAddress = request.getRemoteHost() ;
     if( ! isLocalhost( remoteAddress ) ) {
@@ -73,7 +73,7 @@ public class LocalhostOnlyHandler extends GenericHandler{
 
   }
 
-  private static boolean isLocalhost( String address ) {
+  private static boolean isLocalhost( final String address ) {
     try {
       return InetAddress.getByName( address ).isLoopbackAddress() ;
     } catch ( UnknownHostException e ) {

@@ -232,7 +232,7 @@ public class ResourceSchemaTest {
 
   }
 
-  private void verifyContent( File treeFile ) {
+  private void verifyContent( final File treeFile ) {
     assertTrue( "treeFile=" + treeFile.getAbsolutePath(), treeFile.exists() ) ;
     assertTrue( treeFile.isDirectory() ) ;
 

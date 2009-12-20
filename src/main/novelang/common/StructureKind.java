@@ -31,7 +31,7 @@ public enum StructureKind {
   private final String[] fileExtension ;
 
 
-  StructureKind( String... fileExtension ) {
+  StructureKind( final String... fileExtension ) {
     this.fileExtension = fileExtension ;
   }
 

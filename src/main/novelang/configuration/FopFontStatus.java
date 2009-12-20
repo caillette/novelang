@@ -33,8 +33,8 @@ public final class FopFontStatus {
   private final Map< String, EmbedFontInfo > failedFonts ;
 
   public FopFontStatus(
-      Iterable< EmbedFontInfo > fontInfos,
-      Map< String, EmbedFontInfo > failedFonts
+      final Iterable< EmbedFontInfo > fontInfos,
+      final Map< String, EmbedFontInfo > failedFonts
   ) {
     this.fontInfos = fontInfos;
     this.failedFonts = failedFonts;

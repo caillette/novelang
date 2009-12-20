@@ -36,13 +36,13 @@ public class Nodepath {
     ancestor = null ;
   }
 
-  public Nodepath( NodeKind current ) {
+  public Nodepath( final NodeKind current ) {
     depth = 1 ;
     this.current = Preconditions.checkNotNull( current ) ;
     ancestor = null ;
   }
 
-  public Nodepath( Nodepath ancestor, NodeKind current ) {
+  public Nodepath( final Nodepath ancestor, final NodeKind current ) {
     depth = ancestor.getDepth() + 1 ;
     this.current = Preconditions.checkNotNull( current ) ;
     this.ancestor = ancestor ;
