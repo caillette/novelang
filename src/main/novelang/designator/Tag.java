@@ -15,6 +15,9 @@ import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
 
+
+import org.apache.commons.lang.StringUtils;
+
 import static novelang.parser.NodeKind.TAG;
 import static novelang.parser.NodeKind._TAGS;
 
@@ -49,7 +52,9 @@ public final class Tag implements Comparable< Tag > {
   public static Set< Tag > toTagSet( final String... tagStrings ) {
     final Set< Tag > tagSet = Sets.newHashSet() ;
     for( final String tagAsString : tagStrings ) {
-      tagSet.add( new Tag( tagAsString ) ) ;
+      if( ! StringUtils.isBlank( tagAsString ) ) {
+        tagSet.add( new Tag( tagAsString ) ) ;
+      }
     }
     return ImmutableSet.copyOf( tagSet ) ;
   }

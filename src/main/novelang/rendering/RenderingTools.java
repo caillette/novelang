@@ -33,6 +33,8 @@ import novelang.system.DefaultCharset;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author Laurent Caillette
@@ -68,7 +70,21 @@ public class RenderingTools {
 
     return new String( byteArrayOutputStream.toByteArray(), charset.name() ) ;
   }
-  
+
+
+  public static Set< Tag > toTagSet( final Set< String > tagsAsStrings) {
+    final Set< Tag > tagSet = Sets.newHashSet() ;
+    for( final String tagAsString : tagsAsStrings ) {
+      final String cleanString = toCleanStringForTag( tagAsString ) ;
+      if( ! StringUtils.isBlank( cleanString ) ) {
+        final Tag tag = new Tag( cleanString ) ;
+        tagSet.add( tag ) ;
+      }
+    }
+    return tagSet ;
+  }
+
+
   public static Set< Tag > toImplicitTagSet( final SyntacticTree tree ) {
     final String identifier = toImplicitIdentifier( tree ) ;
     return Tag.toTagSet( identifier.split( "_" ) ) ;
@@ -94,7 +110,12 @@ public class RenderingTools {
     } catch ( UnsupportedEncodingException e ) {
       throw new RuntimeException( "Should not happen with default encoding", e ) ;
     }
-    
+
+    s = toCleanStringForTag( s );
+    return s ;
+  }
+
+  private static String toCleanStringForTag( String s ) {
     s = s.replaceAll( "[,.;?!:]+", "_" ) ;
 
     // Replace diacritics by their "naked" version.
@@ -108,8 +129,8 @@ public class RenderingTools {
     // Collapse sequences that would fool camel-casing.
     s = s.replaceAll( " _", "_" ) ;
     s = s.replaceAll( "_ ", "_" ) ;
-    
-    
+
+
     // Camel-casing: for every word preceded by a ' ' force the 1st letter to upper case.
     final StringBuffer buffer = new StringBuffer() ;
     final Matcher matcher = WORD_BUT_FIRST.matcher( s ) ;
@@ -140,7 +161,7 @@ public class RenderingTools {
 
     // Discard every character which is not a letter, a digit, a '_' or a '-'.
     s = s.replaceAll( "[^0-9a-zA-Z\\-\\_]+", "" ) ;
-    return s ;
+    return s;
   }
 
   private static String asLiteral( final String s )

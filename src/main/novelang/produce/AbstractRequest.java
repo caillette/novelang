@@ -40,6 +40,7 @@ import com.google.common.base.Preconditions;
 import novelang.loader.ResourceName;
 import novelang.rendering.RawResource;
 import novelang.rendering.RenditionMimeType;
+import novelang.rendering.RenderingTools;
 
 /**
  * The base class for requests and a do-everything factory.
@@ -353,12 +354,18 @@ import novelang.rendering.RenditionMimeType;
   }
 
   private static Set< Tag > parseTags( final String value ) {
+    return RenderingTools.toTagSet( ImmutableSet.of( value.split( ";" ) ) ) ;
+
+/*
     final String[] stringArray = value.split( RequestTools.LIST_SEPARATOR ) ;
     final Set< Tag > tagSet = Sets.newHashSet() ;
     for( final String tagAsString : stringArray ) {
-      tagSet.add( new Tag( tagAsString ) ) ;
+      if( ! StringUtils.isBlank( tagAsString ) ) {
+        tagSet.add( new Tag( tagAsString ) ) ;
+      }
     }
     return ImmutableSet.copyOf( tagSet ) ;
+*/
   }
 
   private static Map< String, String > getQueryMap( final String query ) {

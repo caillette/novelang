@@ -106,9 +106,22 @@ public class RequestTest {
   }
 
   @Test
-  public void polymorphicRequestWitTags() {
+  public void polymorphicRequestWithTags() {
     final PolymorphicRequest request =
         createPolymorphicRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
+    assertFalse( request.getDisplayProblems() ) ;
+    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
+    assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
+    assertEquals( TAGSET, request.getTags() ) ;
+
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+  }
+
+  @Test
+  public void polymorphicRequestWithSuspiciousTagDefinition() {
+    final PolymorphicRequest request =
+        createPolymorphicRequest( PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS ) ;
     assertFalse( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
@@ -148,7 +161,7 @@ public class RequestTest {
     for( final Tag tag : TAGSET ) {
       tagsAsString.add( TagTestTools.getTagAsString( tag ) ) ;
     }
-    
+
     PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
         PDF_REQUEST_PATH +
         "?" +
@@ -156,6 +169,24 @@ public class RequestTest {
             Joiner.on( RequestTools.LIST_SEPARATOR ).join( tagsAsString ) +
         "&" +
         RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
+    ;
+  }
+
+  private static final Set< String > TAGS_AS_STRINGSET = Sets.newHashSet();
+  static {
+    for( final Tag tag : TAGSET ) {
+      TAGS_AS_STRINGSET.add( TagTestTools.getTagAsString( tag ) ) ;
+    }
+  }
+
+
+  private static final String PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS ;
+  static {
+    PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS =
+        PDF_REQUEST_PATH +
+        "?" +
+        RequestTools.TAGSET_PARAMETER_NAME + "=;" +
+            Joiner.on( RequestTools.LIST_SEPARATOR ).join(TAGS_AS_STRINGSET)
     ;
   }
 
