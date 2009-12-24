@@ -36,8 +36,13 @@ public final class Tag implements Comparable< Tag > {
     this.name = name ;
   }
 
+  @Deprecated
   public SyntacticTree asSyntacticTree() {
-    return new SimpleTree( TAG, new SimpleTree( name ) ) ;
+    return asSyntacticTree( TAG ) ;
+  }
+
+  public SyntacticTree asSyntacticTree( final NodeKind nodekind ) {
+    return new SimpleTree( Preconditions.checkNotNull( nodekind ), new SimpleTree( name ) ) ;
   }
 
   public static boolean contains( final Set< Tag > tagset, final String tagAsString ) {

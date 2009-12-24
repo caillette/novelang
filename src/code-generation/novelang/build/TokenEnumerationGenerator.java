@@ -87,8 +87,10 @@ public class TokenEnumerationGenerator extends JavaGenerator {
       new Item( "_ZERO_WIDTH_SPACE" ),
       new Item( "_PRESERVED_WHITESPACE" ),
       new Item( "_IMPLICIT_IDENTIFIER" ), 
-      new Item( "_EXPLICIT_IDENTIFIER" ) 
-      
+      new Item( "_EXPLICIT_IDENTIFIER" ),
+      new Item( "_IMPLICIT_TAG" ),
+      new Item( "_EXPLICIT_TAG" ) 
+
   ) ;
 
   private static final Pattern ALL_TOKENS_PATTERN =

@@ -41,8 +41,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class RenderingTools {
 
-  private RenderingTools() {
-  }
+  private RenderingTools() { }
 
   /**
    * Produces a text-only version of some {@code SyntacticTree}.
@@ -164,8 +163,7 @@ public class RenderingTools {
     return s;
   }
 
-  private static String asLiteral( final String s )
-  {
+  private static String asLiteral( final String s ) {
     return s.replaceAll( "[^0-9a-zA-Z]+", "-" ) ;
   }
 
