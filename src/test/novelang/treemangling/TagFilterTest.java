@@ -21,6 +21,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import novelang.designator.Tag;
+import novelang.parser.NodeKind;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.common.SyntacticTree;
@@ -168,7 +169,7 @@ public class TagFilterTest {
             PART,
             tree(
                 _LEVEL,
-                tree( LEVEL_TITLE, tree( WORD_, "tag-1" ) ),
+                tree( _IMPLICIT_TAG, "tag-1" ),
                 tree(
                     PARAGRAPH_REGULAR,
                     tree( WORD_, "w" )
@@ -186,7 +187,9 @@ public class TagFilterTest {
             ),
             tree(
                 _LEVEL,
-                tree( LEVEL_TITLE, tree( WORD_, "tag-1" ) ),
+                tree( _IMPLICIT_TAG, "tag-1" ),
+                // No title to get sure that check happens on _IMPLICIT_TAG.
+                // tree( LEVEL_TITLE, tree( WORD_, "tag-1" ) ), 
                 tree(
                     PARAGRAPH_REGULAR,
                     tree( WORD_, "w" )
@@ -251,8 +254,8 @@ public class TagFilterTest {
 
   private static final Tag TAG_1 = new Tag( "tag-1" ) ;
   private static final Tag TAG_2 = new Tag( "tag-2" ) ;
-  private static final SyntacticTree TAG1_TREE = TAG_1.asSyntacticTree() ;
-  private static final SyntacticTree TAG2_TREE = TAG_2.asSyntacticTree() ;
+  private static final SyntacticTree TAG1_TREE = TAG_1.asSyntacticTree( NodeKind._EXPLICIT_TAG ) ;
+  private static final SyntacticTree TAG2_TREE = TAG_2.asSyntacticTree( NodeKind._EXPLICIT_TAG ) ;
 
   private static Set< Tag > tags( final Tag... tags ) {
     return ImmutableSet.of( tags ) ;

@@ -38,6 +38,8 @@ import com.google.common.collect.Sets;
  * Retains nodes which have at least one of given tags, or a child with at least one of the
  * given tags.
  * 
+ * TODO: use precalculated {@link NodeKind#_IMPLICIT_TAG} instead of recalculating.
+ * 
  * @author Laurent Caillette
  */
 public class TagFilter {
@@ -123,20 +125,20 @@ public class TagFilter {
       final Set< Tag > tags
   ) {
     for( final SyntacticTree child : tree.getChildren() ) {
-      if( child.isOneOf( NodeKind.TAG ) ) {
+      if( child.isOneOf( NodeKind._EXPLICIT_TAG, NodeKind._IMPLICIT_TAG ) ) {
         if( Tag.contains( tags, child.getChildAt( 0 ).getText() ) ) {
           return true ;
         }
       }
     }
-    if( NodeKind._LEVEL.isRoot( tree ) ) {
-      for( final SyntacticTree child : tree.getChildren() ) {
-        if( child.isOneOf( NodeKind.LEVEL_TITLE ) ) {
-          final Set< Tag > implicitTags = RenderingTools.toImplicitTagSet( child ) ;
-          return ! Sets.intersection( tags, implicitTags ).isEmpty() ;
-        }
-      }
-    }
+//    if( NodeKind._LEVEL.isRoot( tree ) ) {
+//      for( final SyntacticTree child : tree.getChildren() ) {
+//        if( child.isOneOf( NodeKind.LEVEL_TITLE ) ) {
+//          final Set< Tag > implicitTags = RenderingTools.toImplicitTagSet( child ) ;
+//          return ! Sets.intersection( tags, implicitTags ).isEmpty() ;
+//        }
+//      }
+//    }
     return false ;
   }
   
