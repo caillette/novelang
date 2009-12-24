@@ -26,7 +26,8 @@ public class TagMangler {
   private TagMangler() { }
 
   public static Treepath< SyntacticTree > enhance( final Treepath< SyntacticTree > treepath ) {
-    return enhanceWithImplicitTags( enhanceWithExplicitTags( treepath ) ) ;
+    final Treepath<SyntacticTree> enhancedWithExplicitTags = enhanceWithExplicitTags( treepath ) ;
+    return enhanceWithImplicitTags( enhancedWithExplicitTags ) ;
   }
 
 // ========
@@ -118,7 +119,7 @@ public class TagMangler {
       treepathToLevel = TreepathTools.addChildFirst(
           treepathToLevel,
           tag.asSyntacticTree( NodeKind._IMPLICIT_TAG )
-      ) ;
+      ).getPrevious() ;
     }
     return treepathToLevel ;
   }

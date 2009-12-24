@@ -63,7 +63,7 @@ public class MetadataHelperTest {
 
     final SyntacticTree tree = tree( BOOK,
         tree( NodeKind.PARAGRAPH_REGULAR,
-            tree( TAG, "t" ),
+            tree( _EXPLICIT_TAG, "t" ),
             tree( WORD_, "foo" ),
             tree( WORD_, "bar" )
         )
@@ -77,7 +77,7 @@ public class MetadataHelperTest {
             tree( _WORD_COUNT, "2" ),
             tree(
                 _TAGS,
-                tree( TAG, "t" )
+                tree( _EXPLICIT_TAG, "t" )
             )
         ),
         meta
@@ -92,10 +92,10 @@ public class MetadataHelperTest {
 
         tree(
             _LEVEL,
-            tree( TAG, "t1" ),
+            tree( _EXPLICIT_TAG, "t1" ),
             tree( PARAGRAPH_REGULAR,
-                tree( TAG, "t2" ),
-                tree( TAG, "t3" ),
+                tree( _EXPLICIT_TAG, "t2" ),
+                tree( _EXPLICIT_TAG, "t3" ),
                 tree( WORD_, "foo" ),
                 tree( WORD_, "bar" )
             )

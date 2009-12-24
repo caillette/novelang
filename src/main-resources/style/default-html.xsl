@@ -247,9 +247,9 @@
 
   <xsl:template name="tags" >
 
-    <xsl:if test="n:tag" >
+    <xsl:if test="n:explicit-tag" >
       <ul class="tags">
-        <xsl:for-each select="n:tag">
+        <xsl:for-each select="n:explicit-tag">
           <li>
             <xsl:value-of select="." />
           </li>

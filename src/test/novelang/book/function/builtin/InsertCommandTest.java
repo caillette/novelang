@@ -148,6 +148,7 @@ public class InsertCommandTest {
             tree( _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "no-chapter" ) ),
                 tree( _LEVEL,
+                    tree( _IMPLICIT_TAG, "Section" ),
                     tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
                     tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
                 )
@@ -387,6 +388,7 @@ public class InsertCommandTest {
                 ),
                 tree( 
                     _LEVEL,
+                    tree( _IMPLICIT_TAG, "Section" ),
                     tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
                     tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
                 )
@@ -431,6 +433,7 @@ public class InsertCommandTest {
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
+                tree( _IMPLICIT_TAG, "L2-4" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L2-4" ) ),
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-2-4" ) )
             )
@@ -479,6 +482,7 @@ public class InsertCommandTest {
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
+                tree( _IMPLICIT_TAG, "L2-4" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L2-4" ) ),
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-2-4" ) )
             )
@@ -525,12 +529,14 @@ public class InsertCommandTest {
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-1-0" ) ),
+                tree( _IMPLICIT_TAG, "L1-0" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L1-0" ) ),
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0" ) )
             ),
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
+                tree( _IMPLICIT_TAG, "L2-4" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L2-4" ) ),
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-2-4" ) )
             )

@@ -254,6 +254,7 @@ public class BookTest {
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\IdentifierOne\\IdentifierTwo" ) ),
+                tree( _IMPLICIT_TAG, "LevelTwo" ),
                 tree( LEVEL_TITLE, tree( WORD_, "LevelTwo" ) ),
                 tree(
                     PARAGRAPH_REGULAR,
@@ -288,6 +289,7 @@ public class BookTest {
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0\\L0-1" ) ),
+                tree( _IMPLICIT_TAG, "L0-1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
                 tree(
                     PARAGRAPH_REGULAR,
@@ -297,6 +299,7 @@ public class BookTest {
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L1" ) ),
+                tree( _IMPLICIT_TAG, "L1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L1" ) ),
                 tree(
                     PARAGRAPH_REGULAR,
@@ -306,6 +309,7 @@ public class BookTest {
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0\\L0-1" ) ),
+                tree( _IMPLICIT_TAG, "L0-1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
                 tree(
                     PARAGRAPH_REGULAR,

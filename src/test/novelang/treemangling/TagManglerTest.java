@@ -62,6 +62,60 @@ public class TagManglerTest {
         )
     ) ;
   }
+  @Test
+  public void dontGoIntoLinesOfLiteral() {
+
+    verifyTagMangling(
+        tree(
+            PART,
+            tree( LINES_OF_LITERAL, "xxx\nyyy\nzzz" )
+        ),
+        tree(
+            PART,
+            tree( LINES_OF_LITERAL, "xxx\nyyy\nzzz" )
+        )
+    ) ;
+  }
+
+
+  @Test
+  public void twoNestedLevelsWithImplicitTags() {
+
+    verifyTagMangling(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_TAG, "title-1" ),
+                tree( LEVEL_TITLE, tree( WORD_, "title-1" ) ),
+                tree(
+                    _LEVEL,
+                    tree( _IMPLICIT_TAG, "title-2" ),
+                    tree( LEVEL_TITLE, tree( WORD_, "title-2" ) ),
+                    tree(
+                        PARAGRAPH_REGULAR,
+                        tree( WORD_, "w" )
+                    )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( LEVEL_TITLE, tree( WORD_, "title-1" ) ),
+                tree(
+                    _LEVEL,
+                    tree( LEVEL_TITLE, tree( WORD_, "title-2" ) ),
+                    tree(
+                        PARAGRAPH_REGULAR,
+                        tree( WORD_, "w" )
+                    )
+                )
+            )
+        )
+    ) ;
+  }
 
 
   @Test
@@ -115,6 +169,45 @@ public class TagManglerTest {
             tree(
                 _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "tag-1" ) ),
+                tree( PARAGRAPH_REGULAR, tree(WORD_, "w" ) )
+            )
+        )
+    ) ;
+  }
+
+
+  @Test
+  public void twoImplicitTags() {
+
+    verifyTagMangling(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_TAG, "tag-1" ),
+                tree( _IMPLICIT_TAG, "tag-2" ),
+                tree( 
+                    LEVEL_TITLE, 
+                    tree( WORD_, "tag-1" ), 
+                    tree( PUNCTUATION_SIGN, tree( SIGN_COLON, "," ) ), 
+                    tree( WORD_, "tag-2" ) 
+                ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "w" )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree( 
+                    LEVEL_TITLE, 
+                    tree( WORD_, "tag-1" ), 
+                    tree( PUNCTUATION_SIGN, tree( SIGN_COLON, "," ) ), 
+                    tree( WORD_, "tag-2" ) 
+                ),
                 tree( PARAGRAPH_REGULAR, tree(WORD_, "w" ) )
             )
         )

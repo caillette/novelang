@@ -57,11 +57,13 @@ public class PartTest {
         PART,
         tree( 
             _LEVEL,
+            tree( _IMPLICIT_TAG, "Section1nlp" ),
             tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 
             _LEVEL,
+            tree( _IMPLICIT_TAG, "section1W11" ),
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree(
                 PARAGRAPH_REGULAR,
@@ -101,12 +103,14 @@ public class PartTest {
         tree( 
             _LEVEL,
             tree( _IMPLICIT_IDENTIFIER, "\\\\Section1nlp" ),
+            tree( _IMPLICIT_TAG, "Section1nlp" ),
             tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
             tree( PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 
             _LEVEL,
             tree( _IMPLICIT_IDENTIFIER, "\\\\section1W11" ),
+            tree( _IMPLICIT_TAG, "section1W11" ),
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree(
                 PARAGRAPH_REGULAR,
@@ -135,15 +139,18 @@ public class PartTest {
         PART,
         tree( 
             _LEVEL,
+            tree( _IMPLICIT_TAG, "Chapter-0" ),
             tree( LEVEL_TITLE, tree( WORD_, "Chapter-0" ) ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_TAG, "Section-0-0" ),
                 tree( LEVEL_TITLE, tree( WORD_, "Section-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-0-1" ) )
             ),
             tree( 
                 _LEVEL,
+                tree( _IMPLICIT_TAG, "Section-0-1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "Section-0-1" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-0-1-0" ) )
                 
@@ -151,15 +158,18 @@ public class PartTest {
         ),
         tree( 
             _LEVEL,
+            tree( _IMPLICIT_TAG, "Chapter-1" ),
             tree( LEVEL_TITLE, tree( WORD_, "Chapter-1" ) ),
             tree( 
                 _LEVEL,
+                tree( _IMPLICIT_TAG, "Section-1-0" ),
                 tree( LEVEL_TITLE, tree( WORD_, "Section-1-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-0" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0-1" ) )           
             ),
             tree( 
                 _LEVEL,
+                tree( _IMPLICIT_TAG, "Section-1-1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "Section-1-1" ) ),
                 tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-1-0" ) )
             )
@@ -221,6 +231,7 @@ public class PartTest {
         PART,
         tree(
             _LEVEL,
+            tree( _IMPLICIT_TAG, "yZ" ),
             tree(
                 LEVEL_TITLE,
                 tree( WORD_, "y" ),

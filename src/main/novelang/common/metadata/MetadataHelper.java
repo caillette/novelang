@@ -72,7 +72,7 @@ public class MetadataHelper {
     if( tree.isOneOf( WORD_, WORD_AFTER_CIRCUMFLEX_ACCENT, _STYLE ) ) { 
       return ImmutableSet.of() ;
     }
-    if( tree.isOneOf( TAG ) ) {
+    if( tree.isOneOf( _EXPLICIT_TAG ) ) {
       return ImmutableSet.of( new Tag( tree.getChildAt( 0 ).getText() ) ) ;
     }
     final Set< Tag > tagset = Sets.newLinkedHashSet() ;
@@ -124,7 +124,7 @@ public class MetadataHelper {
     ) ;
 
     if( tagset.size() > 0 ) {
-      final Iterable< SyntacticTree > tagsAsTrees = Tag.toSyntacticTrees( TAG, tagset ) ;
+      final Iterable< SyntacticTree > tagsAsTrees = Tag.toSyntacticTrees( _EXPLICIT_TAG, tagset ) ;
       final SyntacticTree tagsTree = new SimpleTree( _TAGS.name(), tagsAsTrees ) ;
       children.add( tagsTree ) ;
     }
@@ -135,11 +135,5 @@ public class MetadataHelper {
     ) ;
   }
 
-  private static final Function< String, SyntacticTree > STRING_TO_TAG =
-      new Function< String, SyntacticTree >() {
-        public SyntacticTree apply( final String tagname ) {
-          return new SimpleTree( TAG, new SimpleTree( tagname ) ) ;
-        }
-      }
-  ;
+
 }

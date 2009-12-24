@@ -101,6 +101,8 @@
 
   <xsl:template match="n:implicit-identifier" />
   <xsl:template match="n:explicit-identifier" />
+  <xsl:template match="n:implicit-tag" />
+  <xsl:template match="n:explicit-tag" />
   <xsl:template match="//n:meta/n:word-count" />
   <xsl:template match="n:level-title" />
   <xsl:template match="n:style" />

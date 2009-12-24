@@ -29,6 +29,7 @@ import novelang.common.tree.Treepath;
 import novelang.designator.Tag;
 import novelang.treemangling.DesignatorInterpreter;
 import novelang.treemangling.LevelMangler;
+import novelang.treemangling.TagMangler;
 import novelang.treemangling.UrlMangler;
 import novelang.treemangling.SeparatorsMangler;
 import novelang.treemangling.EmbeddedListMangler;
@@ -108,6 +109,7 @@ public class Part extends AbstractSourceReader {
       rehierarchized = EmbeddedListMangler.rehierarchizeEmbeddedLists( rehierarchized ) ;
       rehierarchized = SeparatorsMangler.removeSeparators( rehierarchized ) ;      
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
+      rehierarchized = TagMangler.enhance( rehierarchized ) ;
 
       return rehierarchized.getTreeAtEnd() ;
     }
