@@ -70,10 +70,12 @@
         <script type="text/javascript" src="/javascript/jquery-rule-1_0_1_min.js" />
         <script type="text/javascript" src="/javascript/color-palette.js" />
         <script type="text/javascript" src="/javascript/tags.js" />
+        <script type="text/javascript" src="/javascript/descriptors.js" />
         <script type="text/javascript"> //<![CDATA[
 
           $( document ).ready( function() {
             initializeTagSystem( "/javascript/colors.htm" ) ;
+            initializeDescriptors() ;
           } ) ;
         //]]></script>
 
@@ -104,6 +106,7 @@
   <xsl:template match="n:level" >
     <div class="tag-scope" >
       <xsl:call-template name="tags" />
+      <xsl:call-template name="descriptor" />       
       <xsl:apply-templates />
     </div>
 
@@ -257,7 +260,22 @@
       </ul>
       <br/>
     </xsl:if>
-
+  </xsl:template>
+  
+  <xsl:template name="descriptor" >
+    <div class="descriptor-disclosure" >§</div>
+    <div class="descriptor-disclosed" >
+      <xsl:if test="n:implicit-tag">
+        <ol>
+          <xsl:for-each select="n:implicit-tag">
+            <li>
+              <xsl:value-of select="."/>
+            </li>
+          </xsl:for-each>
+        </ol>
+        <br/>
+      </xsl:if>
+    </div>
   </xsl:template>
 
 

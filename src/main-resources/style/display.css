@@ -4,6 +4,7 @@ body {
   font-size : 13.5pt ;
  	text-indent : 1em ;
 	text-align : justify ;
+	margin-left: 50pt ;
   /*min-height : 1.30em ;*/
   /*max-height : 1.30em ;*/
 
@@ -147,6 +148,17 @@ p.tag-summary + ul.tags > li {
   text-indent: 0 ;
   margin-left: 1pt ;
   cursor: s-resize ;
+}
+
+
+.descriptor-disclosure {
+  display: none ;
+  float:left;
+  margin-left: -40pt ;
+}
+
+.descriptor-disclosed {
+  display: none ;
 }
 
 
