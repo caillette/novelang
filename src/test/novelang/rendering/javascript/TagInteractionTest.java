@@ -205,9 +205,9 @@ public class TagInteractionTest {
   private static List< HtmlElement > extractAllHeaders( final HtmlPage htmlPage ) {
     final List< HtmlElement > allHeaders = Lists.newArrayList() ;
     allHeaders.addAll( ( Collection< ? extends HtmlElement > )
-        htmlPage.getByXPath( "/html/body/div/h1" ) ) ;
+        htmlPage.getByXPath( "/html/body/h1" ) ) ;
     allHeaders.addAll( ( Collection< ? extends HtmlElement > )
-        htmlPage.getByXPath( "/html/body/div/div/h2" ) ) ;
+        htmlPage.getByXPath( "/html/body/h2" ) ) ;
     return allHeaders ;
   }
 

@@ -179,4 +179,8 @@ p.tag-summary + ul.tags > li {
 
 }
 
+.explicit-identifier {
+  font-weight : bold ;
+}
+
 

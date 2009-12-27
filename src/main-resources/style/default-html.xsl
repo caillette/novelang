@@ -104,12 +104,9 @@
   </xsl:template>
 
   <xsl:template match="n:level" >
-    <div class="tag-scope" >
-      <xsl:call-template name="tags" />
-      <xsl:call-template name="descriptor" />       
-      <xsl:apply-templates />
-    </div>
-
+    <xsl:call-template name="tags" />
+    <xsl:call-template name="descriptor" />
+    <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="//n:level/n:level-title" >
@@ -125,13 +122,10 @@
   </xsl:template>
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
-    <div class="tag-scope" >
-      <xsl:call-template name="tags" />
-      <blockquote>
-        <xsl:apply-templates />
-      </blockquote>
-    </div>
-
+    <xsl:call-template name="tags" />
+    <blockquote>
+      <xsl:apply-templates />
+    </blockquote>
   </xsl:template>
 
   <xsl:template match="n:lines-of-literal" >
@@ -141,13 +135,10 @@
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-regular" >
-    <div class="tag-scope" >
-      <xsl:call-template name="tags" />
-      <p>
-        <xsl:apply-templates />
-      </p>
-    </div>
-
+    <xsl:call-template name="tags" />
+    <p>
+      <xsl:apply-templates />
+    </p>
   </xsl:template>
 
   <xsl:template match="n:url" >
@@ -168,14 +159,11 @@
 
 
   <xsl:template match="n:paragraph-as-list-item" >
-    <div class="tag-scope" >
-      <xsl:call-template name="tags" />
-      <p>
-        &mdash;&nbsp;
-        <xsl:apply-templates />
-      </p>
-    </div>
-
+    <xsl:call-template name="tags" />
+    <p>
+      &mdash;&nbsp;
+      <xsl:apply-templates />
+    </p>
   </xsl:template>
   
   <xsl:template match="n:block-inside-solidus-pairs" >
@@ -199,13 +187,10 @@
 
 
   <xsl:template match="n:cell-rows-with-vertical-line" >
-    <div class="tag-scope">
-      <xsl:call-template name="tags" />
-      <table>
-        <xsl:apply-templates />
-      </table>
-    </div>
-
+    <xsl:call-template name="tags" />
+    <table>
+      <xsl:apply-templates />
+    </table>
   </xsl:template>
 
   <xsl:template match="n:cell-row" >
@@ -267,14 +252,10 @@
       <span class="descriptor-disclosure">§</span>
       <div class="descriptor" >
         <xsl:if test="n:explicit-identifier" >
-          <p class="explicit-identifier">
-            <xsl:value-of select="n:explicit-identifier" />
-          </p>
+          <p class="explicit-identifier"> <xsl:value-of select="n:explicit-identifier" /> </p>
         </xsl:if>
         <xsl:if test="n:implicit-identifier" >
-          <p class="explicit-identifier">
-            <xsl:value-of select="n:implicit-identifier" />
-          </p>
+          <p class="implicit-identifier"> <xsl:value-of select="n:implicit-identifier" /> </p>
         </xsl:if>
         <xsl:if test="n:implicit-tag" >
           <ul>
