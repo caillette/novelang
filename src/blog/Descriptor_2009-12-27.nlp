@@ -1,0 +1,45 @@
+== Descriptors in HTML
+
+Designators are identifiers and tags. Source document may contain explicit designators, but
+since version `0.37.0` Novelang is smart enough to generate //implicit designators// from the
+text of source documents. "Rules"
+http://novelang.blogspot.com/2009/12/generating-human-friendly-designators.html
+for implicit designators are as intuitive as possible, but it is helpful to show somewhere
+the implicit designators Novelang generated for you.
+
+So default HTML stylesheet introduce a new artefact called "descriptor". It's a text area
+surrounding a paragraph or a level title, that unfolds for displaying implicit descriptors
+and maybe other useful things in the future, like location in the source document.
+
+Looks like this:
+
+./images/Descriptor_2009-12-27/descriptor.png
+
+The descriptor shows:
+- Implicit identifier: ``\\ThisIsASectionWithATitle_andStyleInsideTheTitle``
+- Implicit tag:  ``ThisIsASectionWithATitle``
+- Implicit tag:  ``andStyleInsideTheTitle``
+
+While working on layout and animation I found those links useful:
+
+"JQuery"
+http://jquery.com
+, the must-have JavaScript framework for doing everything with browser's DOM in an concise and
+elegant fashion.
+
+"Stuff"
+http://www.smashingmagazine.com/2007/05/01/css-float-theory-things-you-should-know
+"About"
+http://www.smashingmagazine.com/2009/10/19/the-mystery-of-css-float-property
+CSS floats. (As a bonus, found this one about "floatless layout"
+http://tjkdesign.com/articles/float-less_css_layouts.asp
+, may become useful one day.)
+
+"CSS popups"
+http://tjkdesign.com/articles/css%20pop%20ups
+are fine but I gave up this way as the popup only appears with mouse pointer over a drop zone,
+prevents from copy-pasting.
+
+This one about "null HTML links"
+http://tjkdesign.com/articles/nulllinks.asp
+also helped to drop bad ideas.
