@@ -1985,6 +1985,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | LOW_LINE
       | MULTIPLICATION_SIGN
       | NUMBER_SIGN
+      | POUND_SIGN
       | PLUS_SIGN
       | PERCENT_SIGN
       | QUESTION_MARK
@@ -2286,6 +2287,7 @@ MULTIPLICATION_SIGN : '\u00d7' ; // &times;
 NUMBER_SIGN : '#' ;
 PLUS_SIGN : '+' ;
 PERCENT_SIGN : '%' ;
+POUND_SIGN : '£' ;                                      // &pound;
 QUESTION_MARK : '?' ;
 REGISTERED_SIGN : '\u00ae' ;                            // &reg; 
 REVERSE_SOLIDUS : '\\' ;
