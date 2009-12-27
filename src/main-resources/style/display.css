@@ -4,7 +4,7 @@ body {
   font-size : 13.5pt ;
  	text-indent : 1em ;
 	text-align : justify ;
-	margin-left: 50pt ;
+	margin-left: 30pt ;
   /*min-height : 1.30em ;*/
   /*max-height : 1.30em ;*/
 
@@ -92,10 +92,12 @@ td
     background-color: #dfdfdf;
 }
 
+/*
 ul {
   font-size : 13.5pt ;
   
 }
+*/
 
 
 ul.tags {
@@ -151,14 +153,30 @@ p.tag-summary + ul.tags > li {
 }
 
 
+
 .descriptor-disclosure {
-  display: none ;
   float:left;
-  margin-left: -40pt ;
+  margin-left: -30pt ;
+  cursor: s-resize ;
 }
 
-.descriptor-disclosed {
-  display: none ;
+.descriptor {
+  border: 1px solid;
+  -moz-border-radius:5px ;
+  -webkit-border-radius: 5px ;
+  font-size: 9pt ;
+  text-indent: 0;
+  margin : 1px 1px 1px 1px ;
+
+}
+
+.descriptor > ul > li {
+  display : inline ;
+  list-style-type : none ;
+  padding : 2px 2px 2px 2px  ;
+  border: 1px dotted ;
+  margin : 0 10px 0 0 ;
+
 }
 
 

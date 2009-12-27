@@ -17,10 +17,10 @@
 
 function initializeDescriptorSystem() {
 
-  $( ".descriptor-disclosed" ).hide() ;
-
-  $( ".descriptor-disclosed" ).click( function() {
-    $( ".descriptor-disclosure" ).slideToggle( 100 ) ;
+  $( ".descriptor" ).hide() ;
+  
+  $( ".descriptor-disclosure" ).click( function() {
+    $( this ).next().slideToggle( 100 ) ;
   } ) ;
 
 }

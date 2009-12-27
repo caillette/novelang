@@ -75,7 +75,7 @@
 
           $( document ).ready( function() {
             initializeTagSystem( "/javascript/colors.htm" ) ;
-            initializeDescriptors() ;
+            initializeDescriptorSystem() ;
           } ) ;
         //]]></script>
 
@@ -263,19 +263,30 @@
   </xsl:template>
   
   <xsl:template name="descriptor" >
-    <div class="descriptor-disclosure" >§</div>
-    <div class="descriptor-disclosed" >
-      <xsl:if test="n:implicit-tag">
-        <ol>
-          <xsl:for-each select="n:implicit-tag">
-            <li>
-              <xsl:value-of select="."/>
-            </li>
-          </xsl:for-each>
-        </ol>
-        <br/>
-      </xsl:if>
-    </div>
+    <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier">
+      <span class="descriptor-disclosure">§</span>
+      <div class="descriptor" >
+        <xsl:if test="n:explicit-identifier" >
+          <p class="explicit-identifier">
+            <xsl:value-of select="n:explicit-identifier" />
+          </p>
+        </xsl:if>
+        <xsl:if test="n:implicit-identifier" >
+          <p class="explicit-identifier">
+            <xsl:value-of select="n:implicit-identifier" />
+          </p>
+        </xsl:if>
+        <xsl:if test="n:implicit-tag" >
+          <ul>
+            <xsl:for-each select="n:implicit-tag">
+              <li>
+                <xsl:value-of select="." />
+              </li>
+            </xsl:for-each>
+          </ul>
+        </xsl:if>
+      </div>
+    </xsl:if>
   </xsl:template>
 
 
