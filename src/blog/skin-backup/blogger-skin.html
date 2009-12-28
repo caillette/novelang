@@ -86,15 +86,20 @@ body {
    these measurements, the images will also need to change.
    */
 #outer-wrapper {
-  width:740px;
+  width:840px;
   margin:0 auto;
   text-align:$startSide;
   font: $bodyFont;
   }
 #main-wrap1 {
-  width:485px;
+  width:585px;
   float:$startSide;
+/*
+ Commented out because of fixed size:
   background:$mainBgColor url("http://www1.blogblog.com/rounders2/corners_main_bot.gif") no-repeat $startSide bottom;
+*/
+  background:$mainBgColor;
+
   margin:15px 0 0;
   padding:0 0 10px;
   color:$mainTextColor;
@@ -106,13 +111,19 @@ body {
 #main-wrap2 {
   float:$startSide;
   width:100%;
+/*
+  Commented out because of fixed size:  
   background:url("http://www1.blogblog.com/rounders2/corners_main_top.gif") no-repeat $startSide top;
+*/
   padding:10px 0 0;
   }
 #main {
+/*
+ Commented out because of fixed size:
   background:url("http://www.blogblog.com/rounders2/rails_main.gif") repeat-y $startSide;
+*/
   padding:0;
-  width:485px;  
+  width:585px;  
   }
 #sidebar-wrap {
   width:240px;
@@ -126,14 +137,14 @@ body {
 
 .main .widget { 
   margin-top: 4px;
-  width: 468px;
+  width: 568px;
   padding: 0 13px;
 }
 
 .main .Blog {
   margin: 0;
   padding: 0;
-  width: 484px;
+  width: 584px;
 }
 
 /* Links
@@ -155,7 +166,12 @@ a img {
 /* Blog Header
 ----------------------------------------------- */
 #header-wrapper {
+/*
+ Commented out because of fixed size:
   background:$titleBgColor url("http://www2.blogblog.com/rounders2/corners_cap_top.gif") no-repeat $startSide top;
+*/
+  background:$titleBgColor;
+
   margin-top:22px;
   margin-$endSide:0;
   margin-bottom:0;
@@ -167,7 +183,10 @@ a img {
   color:$titleTextColor;
   }
 #header {
+/*
+ Commented out because of fixed size:
   background:url("http://www.blogblog.com/rounders2/corners_cap_bot.gif") no-repeat $startSide bottom;
+*/
   padding:0 15px 8px;
   }
 #header h1 {
@@ -546,11 +565,19 @@ blockquote {
   padding:15px 0 0;
   }
 #footer-wrap2 {
+/*
+  Commented out because of fixed size:
   background:$titleBgColor url("http://www2.blogblog.com/rounders2/corners_cap_top.gif") no-repeat $startSide top;
+*/
+  background:$titleBgColor ;
+
   color:$titleTextColor;
   }
 #footer {
+/*
+  Commented out because of fixed size:
   background:url("http://www.blogblog.com/rounders2/corners_cap_bot.gif") no-repeat $startSide bottom;
+*/
   padding:8px 15px;
   }
 #footer hr {display:none;}
@@ -575,7 +602,7 @@ body#layout #outer-wrapper {
 }
 
 body#layout #outer-wrapper { 
-  width: 730px;
+  width: 830px;
 }
 
 body#layout #footer-wrap1 { 
