@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+
+<head>
+  <b:include data='blog' name='all-head-content'/>
+  <title><data:blog.pageTitle/></title>
+  <b:skin><![CDATA[/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Rounders 2
+Date:     27 Feb 2004
+Updated by: Blogger Team
+----------------------------------------------- */
+
+/* Variable definitions
+  ====================
+   <Variable name="mainBgColor" description="Main Background Color"
+             type="color" default="#fff" value="#e6e6e6">
+   <Variable name="mainTextColor" description="Text Color" type="color"
+             default="#000" value="#000000">
+   <Variable name="postTitleColor" description="Post Title Color" type="color"
+             default="#333" value="#333333">
+   <Variable name="dateHeaderColor" description="Date Header Color"
+             type="color" default="#810" value="#881100">
+   <Variable name="borderColor" description="Post Border Color" type="color"
+             default="#bbb" value="#bbbbbb">
+
+
+   <Variable name="mainLinkColor" description="Link Color" type="color"
+             default="#b30" value="#bb3300">
+   <Variable name="mainVisitedLinkColor" description="Visited Link Color"
+             type="color" default="#c63" value="#cc6633">
+             
+   <Variable name="titleBgColor" description="Page Header Background Color"
+             type="color" default="#710" value="#771100">
+   <Variable name="titleTextColor" description="Blog Title Color"
+             type="color" default="#fff" value="#ffffff">
+
+   <Variable name="topSidebarHeaderColor"
+             description="Top Sidebar Title Color"
+             type="color" default="#fff" value="#ffffff">
+   <Variable name="topSidebarBgColor"
+             description="Top Sidebar Background Color"
+             type="color" default="#999" value="#999999">
+   <Variable name="topSidebarTextColor" description="Top Sidebar Text Color"
+             type="color" default="#fff" value="#ffffff">
+   <Variable name="topSidebarLinkColor" description="Top Sidebar Link Color"
+             type="color" default="#fff" value="#ffffff">
+   <Variable name="topSidebarVisitedLinkColor"
+             description="Top Sidebar Visited Link Color"
+             type="color" default="#ddd" value="#dddddd">
+
+   <Variable name="bodyFont" description="Text Font" type="font"
+             default="normal normal 100% 'Trebuchet MS',Verdana,Arial,Sans-serif" value="normal normal 100% 'Trebuchet MS',Verdana,Arial,Sans-serif">
+   <Variable name="pageTitleFont" description="Blog Title Font" type="font"
+             default="normal bold 200% 'Trebuchet MS',Verdana,Arial,Sans-serif" value="normal bold 200% 'Trebuchet MS',Verdana,Arial,Sans-serif">
+   <Variable name="descriptionFont" description="Blog Description Font" type="font"
+             default="normal normal 100% 'Trebuchet MS',Verdana,Arial,Sans-serif" value="normal normal 100% 'Trebuchet MS',Verdana,Arial,Sans-serif">
+   <Variable name="headerFont" description="Sidebar Title Font" type="font"
+             default="normal bold 100% 'Trebuchet MS',Verdana,Arial,Sans-serif" value="normal bold 100% 'Trebuchet MS',Verdana,Arial,Sans-serif">
+   <Variable name="postTitleFont" description="Post Title Font" type="font"
+             default="normal bold 135% 'Trebuchet MS',Verdana,Arial,Sans-serif" value="normal bold 135% 'Trebuchet MS',Verdana,Arial,Sans-serif">
+   <Variable name="startSide" description="Start side in blog language"
+             type="automatic" default="left" value="left">
+   <Variable name="endSide" description="End side in blog language"
+             type="automatic" default="right" value="right">
+*/
+
+body {
+  background:#ccc;
+  margin:0;
+  text-align:center;
+  line-height: 1.5em;
+  font:x-small Trebuchet MS, Verdana, Arial, Sans-serif;
+  color:$mainTextColor;
+  font-size/* */:/**/small;
+  font-size: /**/small;
+  }
+
+
+/* Page Structure
+----------------------------------------------- */
+/* The images which help create rounded corners depend on the 
+   following widths and measurements. If you want to change 
+   these measurements, the images will also need to change.
+   */
+#outer-wrapper {
+  width:740px;
+  margin:0 auto;
+  text-align:$startSide;
+  font: $bodyFont;
+  }
+#main-wrap1 {
+  width:485px;
+  float:$startSide;
+  background:$mainBgColor url("http://www1.blogblog.com/rounders2/corners_main_bot.gif") no-repeat $startSide bottom;
+  margin:15px 0 0;
+  padding:0 0 10px;
+  color:$mainTextColor;
+  font-size:97%;
+  line-height:1.5em;
+  word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+  overflow: hidden;     /* fix for long non-text content breaking IE sidebar float */
+  }
+#main-wrap2 {
+  float:$startSide;
+  width:100%;
+  background:url("http://www1.blogblog.com/rounders2/corners_main_top.gif") no-repeat $startSide top;
+  padding:10px 0 0;
+  }
+#main {
+  background:url("http://www.blogblog.com/rounders2/rails_main.gif") repeat-y $startSide;
+  padding:0;
+  width:485px;  
+  }
+#sidebar-wrap {
+  width:240px;
+  float:$endSide;
+  margin:15px 0 0;
+  font-size:97%;
+  line-height:1.5em;
+  word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+  overflow: hidden;     /* fix for long non-text content breaking IE sidebar float */
+  }
+
+.main .widget { 
+  margin-top: 4px;
+  width: 468px;
+  padding: 0 13px;
+}
+
+.main .Blog {
+  margin: 0;
+  padding: 0;
+  width: 484px;
+}
+
+/* Links
+----------------------------------------------- */
+a:link {
+  color: $mainLinkColor;
+  }
+a:visited {
+  color: $mainVisitedLinkColor;
+  }
+a:hover {
+  color: $mainVisitedLinkColor;
+  }
+a img {
+  border-width:0;
+  }
+
+
+/* Blog Header
+----------------------------------------------- */
+#header-wrapper {
+  background:$titleBgColor url("http://www2.blogblog.com/rounders2/corners_cap_top.gif") no-repeat $startSide top;
+  margin-top:22px;
+  margin-$endSide:0;
+  margin-bottom:0;
+  margin-$startSide:0;
+  padding-top:8px;
+  padding-$endSide:0;
+  padding-bottom:0;
+  padding-$startSide:0;
+  color:$titleTextColor;
+  }
+#header {
+  background:url("http://www.blogblog.com/rounders2/corners_cap_bot.gif") no-repeat $startSide bottom;
+  padding:0 15px 8px;
+  }
+#header h1 {
+  margin:0;
+  padding:10px 30px 5px;
+  line-height:1.2em;
+  font: $pageTitleFont;
+  }
+#header a,
+#header a:visited {
+  text-decoration:none;
+  color: $titleTextColor;
+  }
+#header .description {
+  margin:0;
+  padding:5px 30px 10px;
+  line-height:1.5em;
+  font: $descriptionFont;
+}
+
+
+/* Posts
+----------------------------------------------- */
+h2.date-header {
+  margin-top:0;
+  margin-$endSide:28px;
+  margin-bottom:0;
+  margin-$startSide:43px;
+  font-size:85%;
+  line-height:2em;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  color:$dateHeaderColor;
+  }
+.post {
+  margin:.3em 0 25px;
+  padding:0 13px;
+  border:1px dotted $borderColor;
+  border-width:1px 0;
+  }
+.post h3 {
+  margin:0;
+  line-height:1.5em;
+  background:url("http://www2.blogblog.com/rounders2/icon_arrow.gif") no-repeat 10px .5em;
+  display:block;
+  border:1px dotted $borderColor;
+  border-width:0 1px 1px;
+  padding-top:2px;
+  padding-$endSide:14px;
+  padding-bottom:2px;
+  padding-$startSide:29px;
+  color: $postTitleColor;
+  font: $postTitleFont;
+  }
+.post h3 a, .post h3 a:visited {
+  text-decoration:none;
+  color: $postTitleColor;
+  }
+a.title-link:hover {
+  background-color: $borderColor;
+  color: $mainTextColor;
+  }
+.post-body {
+  border:1px dotted $borderColor;
+  border-width:0 1px 1px;
+  border-bottom-color:$mainBgColor;
+  padding-top:10px;
+  padding-$endSide:14px;
+  padding-bottom:1px;
+  padding-$startSide:29px;
+  }
+html>body .post-body {
+  border-bottom-width:0;
+  }
+.post-body {
+  margin:0 0 .75em;
+  }
+.post-body blockquote {
+  line-height:1.3em;  
+  }
+.post-footer {
+  background: #eee;
+  margin:0;
+  padding-top:2px;
+  padding-$endSide:14px;
+  padding-bottom:2px;
+  padding-$startSide:29px;
+  border:1px dotted $borderColor;
+  border-width:1px;
+  font-size:100%;
+  line-height:1.5em;
+  color: #666;
+}
+/*
+The first line of the post footer might only have floated text, so we need to give it a height.
+The height comes from the post-footer line-height
+*/
+.post-footer-line-1 {
+  min-height:1.5em;
+  _height:1.5em;
+}
+
+.post-footer p { 
+  margin: 0;
+}
+
+html>body .post-footer {
+  border-bottom-color:transparent;
+  }
+
+.uncustomized-post-template .post-footer {
+  text-align: $endSide;
+}
+
+.uncustomized-post-template .post-author,
+.uncustomized-post-template .post-timestamp {
+  display: block;
+  float: $startSide;
+  text-align:$startSide;
+  margin-$endSide: 4px;
+}
+
+.post-footer a { 
+  color: $mainLinkColor;
+ }
+.post-footer a:hover { 
+  color: $mainVisitedLinkColor;
+ }
+a.comment-link {
+  /* IE5.0/Win doesn't apply padding to inline elements,
+     so we hide these two declarations from it */
+  background/* */:/**/url("http://www.blogblog.com/rounders/icon_comment_$startSide.gif") no-repeat $startSide 45%;
+  padding-$startSide:14px;
+  }
+html>body a.comment-link {
+  /* Respecified, for IE5/Mac's benefit */
+  background:url("http://www.blogblog.com/rounders2/icon_comment_$startSide.gif") no-repeat $startSide 45%;
+  padding-$startSide:14px;
+  }
+.post img {
+  margin-top:0;
+  margin-$endSide:0;
+  margin-bottom:5px;
+  margin-$startSide:0;
+  padding:4px;
+  border:1px solid $borderColor;
+  }
+blockquote {
+  margin:.75em 0;
+  border:1px dotted $borderColor;
+  border-width:1px 0;
+  padding:5px 15px;
+  color: $dateHeaderColor;
+  }
+.post blockquote p {
+  margin:.5em 0;
+  }
+
+#blog-pager-newer-link {
+  float: $startSide;
+  margin-$startSide: 13px;
+ }
+ 
+#blog-pager-older-link {
+  float: $endSide;
+  margin-$endSide: 13px;
+ }
+ 
+#blog-pager {   
+  text-align: center; 
+ }
+
+.feed-links { 
+  clear: both;
+  line-height: 2.5em;
+  margin-$startSide: 13px;
+}
+
+/* Comments
+----------------------------------------------- */
+#comments {
+  margin:-25px 13px 0;
+  border:1px dotted $borderColor;
+  border-width:0 1px 1px;
+  padding-top:20px;
+  padding-$endSide:0;
+  padding-bottom:15px;
+  padding-$startSide:0;
+  }
+#comments h4 {
+  margin:0 0 10px;
+  padding-top:0;
+  padding-$endSide:14px;
+  padding-bottom:2px;
+  padding-$startSide:29px;
+  border-bottom:1px dotted $borderColor;
+  font-size:120%;
+  line-height:1.4em;
+  color:$postTitleColor;
+  }
+#comments-block {
+  margin-top:0;
+  margin-$endSide:15px;
+  margin-bottom:0;
+  margin-$startSide:9px;
+  }
+.comment-author {
+  background:url("http://www.blogblog.com/rounders2/icon_comment_$startSide.gif") no-repeat 2px .3em;
+  margin:.5em 0;
+  padding-top:0;
+  padding-$endSide:0;
+  padding-bottom:0;
+  padding-$startSide:20px;
+  font-weight:bold;
+  }
+.comment-body {
+  margin:0 0 1.25em;
+  padding-top:0;
+  padding-$endSide:0;
+  padding-bottom:0;
+  padding-$startSide:20px;
+  }
+.comment-body p {
+  margin:0 0 .5em;
+  }
+.comment-footer {
+  margin:0 0 .5em;
+  padding-top:0;
+  padding-$endSide:0;
+  padding-bottom:.75em;
+  padding-$startSide:20px;
+  }
+.comment-footer a:link {
+  color: $mainTextColor;
+  }
+.deleted-comment {
+  font-style:italic;
+  color:gray;
+  }
+.comment-form {
+  padding-$startSide:20px;
+  padding-$endSide:5px;
+}
+#comments .comment-form h4 {
+  padding-$startSide:0px;
+}
+
+/* Profile
+----------------------------------------------- */
+.profile-img { 
+  float: $startSide;
+  margin-top: 5px;
+  margin-$endSide: 5px;
+  margin-bottom: 5px;
+  margin-$startSide: 0;
+  border: 4px solid $topSidebarTextColor;
+}
+
+.profile-datablock {
+  margin-top:0;
+  margin-$endSide:15px;
+  margin-bottom:.5em;
+  margin-$startSide:0;
+  padding-top:8px;
+}
+
+.profile-link { 
+  background:url("http://www.blogblog.com/rounders2/icon_profile_$startSide.gif") no-repeat $startSide .1em;
+  padding-$startSide:15px;
+  font-weight:bold;
+}
+
+.profile-textblock {
+  clear: both;
+  margin: 0;
+}
+
+.sidebar .clear, .main .widget .clear { 
+  clear: both;
+}
+
+#sidebartop-wrap {
+  background:$topSidebarBgColor url("http://www.blogblog.com/rounders2/corners_prof_bot.gif") no-repeat $startSide bottom;
+  margin:0px 0px 15px;
+  padding:0px 0px 10px;
+  color:$topSidebarTextColor;
+  }
+
+#sidebartop-wrap2 { 
+ background:url("http://www2.blogblog.com/rounders2/corners_prof_top.gif") no-repeat $startSide top;
+  padding: 10px 0 0;
+  margin:0;
+  border-width:0;
+ }
+
+#sidebartop h2 {
+  line-height:1.5em;
+  color:$topSidebarHeaderColor;
+  border-bottom: 1px dotted $topSidebarHeaderColor;
+  margin-bottom: 0.5em;
+  font: $headerFont;
+}
+
+#sidebartop a { 
+ color: $topSidebarLinkColor;
+}
+
+#sidebartop a:hover { 
+ color: $topSidebarVisitedLinkColor;
+}
+#sidebartop a:visited { 
+ color: $topSidebarVisitedLinkColor;
+}
+/* Sidebar Boxes
+----------------------------------------------- */
+
+.sidebar .widget { 
+  margin:.5em 13px 1.25em;
+  padding:0 0px;
+ }
+
+.widget-content { 
+  margin-top: 0.5em;
+}
+
+#sidebarbottom-wrap1 {
+  background:$mainBgColor url("http://www.blogblog.com/rounders2/corners_side_top.gif") no-repeat $startSide top;
+  margin:0 0 15px;
+  padding:10px 0 0;
+  color: $mainTextColor;
+}
+
+#sidebarbottom-wrap2 {
+  background:url("http://www1.blogblog.com/rounders2/corners_side_bot.gif") no-repeat $startSide bottom;
+  padding:0 0 8px;
+}
+
+.sidebar h2 {
+  margin:0;
+  padding:0 0 .2em;
+  line-height:1.5em;
+  font:$headerFont;
+}
+
+.sidebar ul {
+  list-style:none;
+  margin:0 0 1.25em;
+  padding:0;
+}
+
+.sidebar ul li {
+  background:url("http://www2.blogblog.com/rounders2/icon_arrow_sm.gif") no-repeat 2px .25em;
+  margin:0;
+  padding-top:0;
+  padding-$endSide:0;
+  padding-bottom:3px;
+  padding-$startSide:16px;
+  margin-bottom:3px;
+  border-bottom:1px dotted $borderColor;
+  line-height:1.4em;
+  }
+.sidebar p {
+  margin:0 0 .6em;
+  }
+
+#sidebar h2 {
+  color: $postTitleColor;
+  border-bottom: 1px dotted $postTitleColor;
+ }
+
+/* Footer
+----------------------------------------------- */
+#footer-wrap1 {
+  clear:both;
+  margin:0 0 10px;
+  padding:15px 0 0;
+  }
+#footer-wrap2 {
+  background:$titleBgColor url("http://www2.blogblog.com/rounders2/corners_cap_top.gif") no-repeat $startSide top;
+  color:$titleTextColor;
+  }
+#footer {
+  background:url("http://www.blogblog.com/rounders2/corners_cap_bot.gif") no-repeat $startSide bottom;
+  padding:8px 15px;
+  }
+#footer hr {display:none;}
+#footer p {margin:0;}
+#footer a {color:$titleTextColor;}
+#footer .widget-content {
+  margin:0;
+}
+
+/** Page structure tweaks for layout editor wireframe */
+body#layout #main-wrap1,
+body#layout #sidebar-wrap,
+body#layout #header-wrapper {
+  margin-top: 0;
+}
+
+body#layout #header, body#layout #header-wrapper,
+body#layout #outer-wrapper { 
+  margin-$startSide:0,
+  margin-$endSide: 0;
+  padding: 0;
+}
+
+body#layout #outer-wrapper { 
+  width: 730px;
+}
+
+body#layout #footer-wrap1 { 
+  padding-top: 0;
+ }
+]]></b:skin>
+</head>
+
+<body>
+  <div id='outer-wrapper'>
+
+  <div id='header-wrapper'>
+    <b:section class='header' id='header' maxwidgets='1'>
+<b:widget id='Header1' locked='true' title='The Novelang blog (Header)' type='Header'/>
+</b:section>
+  </div>
+
+  <div id='crosscol-wrapper' style='text-align:center'>
+    <b:section class='crosscol' id='crosscol' showaddelement='no'/>
+  </div>
+
+  <div id='main-wrap1'><div id='main-wrap2'>
+    <b:section class='main' id='main' showaddelement='no'>
+<b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog'/>
+</b:section>
+  </div></div>
+
+  <div id='sidebar-wrap'>
+
+    <div id='sidebartop-wrap'><div id='sidebartop-wrap2'>
+      <b:section class='sidebar' id='sidebartop'>
+<b:widget id='LinkList1' locked='false' title='Links' type='LinkList'/>
+<b:widget id='BlogArchive1' locked='false' title='Blog Archive' type='BlogArchive'/>
+</b:section>
+    </div></div>
+
+    <div id='sidebarbottom-wrap1'><div id='sidebarbottom-wrap2'>
+      <b:section class='sidebar' id='sidebar' preferred='yes'>
+<b:widget id='Label1' locked='false' title='Labels' type='Label'/>
+</b:section>
+    </div></div>
+
+  </div>
+
+  <div id='footer-wrap1'><div id='footer-wrap2'>
+    <b:section class='footer' id='footer'/>
+  </div></div>
+
+</div>
+
+<script type='text/javascript'>
+var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ? &quot;https://ssl.&quot; : &quot;http://www.&quot;);
+document.write(unescape(&quot;%3Cscript src=&#39;&quot; + gaJsHost + &quot;google-analytics.com/ga.js&#39; type=&#39;text/javascript&#39;%3E%3C/script%3E&quot;));
+</script>
+<script type='text/javascript'>
+try {
+var pageTracker = _gat._getTracker(&quot;UA-4856677-1&quot;);
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+</html>
