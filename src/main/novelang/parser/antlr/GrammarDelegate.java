@@ -164,6 +164,13 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
 // Tree creation
 // =============
 
+  public Location createLocation( final Token token ) {
+    return locationFactory.createLocation(
+        token.getLine(),
+        token.getCharPositionInLine()
+    ) ;
+  }
+
   @Deprecated
   public Tree createTree( final int tokenIdentifier, final String tokenPayload ) {
     return new CustomTree(
@@ -174,10 +181,10 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
 
   public Object createTree(
       final int imaginaryTokenIdentifier,
-      final Token locator,
+      final Location location,
       final List list_p
   ) {
-    final Object root_1 = createRoot( imaginaryTokenIdentifier, locator ) ;
+    final Object root_1 = createRoot( imaginaryTokenIdentifier, location ) ;
     final Iterator stream_p = list_p.iterator() ;
 
     if( !( stream_p.hasNext() ) ) {
@@ -196,10 +203,10 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
 
   public Object createTree(
       final int imaginaryTokenIdentifier,
-      final Token locator,
+      final Location location,
       final Object... trees
   ) {
-    final Object root_1 = createRoot( imaginaryTokenIdentifier, locator ) ;
+    final Object root_1 = createRoot( imaginaryTokenIdentifier, location ) ;
     for( final Object tree : trees ) {
       if( tree != null ) {
         adaptor.addChild( root_1, tree ) ;        
@@ -209,10 +216,7 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
     return root_1 ;
   }
 
-  private Object createRoot( final int imaginaryTokenIdentifier, final Token locator ) {
-    final Location location = locationFactory.createLocation(
-        locator.getLine(), locator.getCharPositionInLine() ) ;
-
+  private Object createRoot( final int imaginaryTokenIdentifier, final Location location ) {
     Object tokenAdopter = new CustomTree( null, location ) ;
 
     final Object tokenOwner = adaptor.create(

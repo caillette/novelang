@@ -93,7 +93,8 @@ public class LevelMangler {
   ) {
     final int depth = getLevelIntroducerDepth( levelIntroducer.getTreeAtEnd() ) ;
     final int introducerIndex = levelIntroducer.getIndexInPrevious() ;
-    SyntacticTree levelTree = new SimpleTree( _LEVEL.name() ) ;
+    final SyntacticTree levelIntroducerTree = levelIntroducer.getTreeAtEnd() ;
+    SyntacticTree levelTree = new SimpleTree( _LEVEL.name(), levelIntroducerTree.getLocation() ) ;
 
     while( true ) {
 

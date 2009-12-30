@@ -87,6 +87,7 @@ tokens {
 import novelang.parser.antlr.ProblemDelegate ; // Keep first, used as a marker by code generator.
 import novelang.parser.antlr.GrammarDelegate ;
 import novelang.parser.antlr.delimited.BlockDelimiter ;
+import novelang.common.Location ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 }
@@ -161,7 +162,7 @@ import org.slf4j.LoggerFactory;
 // =========================
 
 part
-  @init { final Token startToken = input.LT( 1 ) ; }
+  @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
   : ( p += mediumbreak | p += largebreak )?
   
     (   p += levelIntroducer
@@ -186,11 +187,11 @@ part
 
     // Was:
     // -> ^( PART $p+ )
-    -> {  delegate.createTree( PART, startToken, $p ) }
+    -> {  delegate.createTree( PART, startLocation, $p ) }
   ;
   
 levelIntroducer 
-  @init { final Token startToken = input.LT( 1 ) ; }
+  @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
   : ( ( tags mediumbreak )?
       ( ( relativeIdentifier | absoluteIdentifier ) mediumbreak )?
       levelIntroducerIndent
@@ -204,7 +205,7 @@ levelIntroducer
 
     -> {  delegate.createTree(
               LEVEL_INTRODUCER_,
-              startToken,
+              startLocation,
               $levelIntroducerIndent.tree,
               $levelTitle.tree,
               $tags.tree,

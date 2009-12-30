@@ -18,7 +18,7 @@ package novelang.common;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ClassUtils;
-import com.google.common.collect.Iterables;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableList;
 import novelang.common.tree.ImmutableTree;
@@ -38,7 +38,11 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
   private final Location location ;
 
   public SimpleTree( final String text, final SyntacticTree... children ) {
-    this( text, Lists.newArrayList( children ) ) ;
+    this( text, null, Lists.newArrayList( children ) ) ;
+  }
+
+  public SimpleTree( final String text, final Location location, final SyntacticTree... children ) {
+    this( text, location, Lists.newArrayList( children ) ) ;
   }
 
   public SimpleTree( final NodeKind nodeKind, final SyntacticTree... children ) {
@@ -46,18 +50,26 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
   }
 
   public SimpleTree( final String text, final Iterable< ? extends SyntacticTree> children ) {
+    this( text, null, children ) ;
+  }
+
+  public SimpleTree(
+      final String text,
+      final Location location,
+      final Iterable< ? extends SyntacticTree > children
+  ) {
     super( children ) ;
+    this.location = location ;
     this.text = text ;
-    this.location = null ;
   }
 
   public SyntacticTree adopt( final SyntacticTree... newChildren ) throws NullArgumentException {
-    return new SimpleTree( getText(), newChildren ) ;
+    return new SimpleTree( getText(), getLocation(), newChildren ) ;
   }
 
   public Iterable< ? extends SyntacticTree > getChildren() {
 
-    final Iterable<? extends SyntacticTree> children = super.getChildren() ;
+    final Iterable< ? extends SyntacticTree > children = super.getChildren() ;
     if( null == children ) {
       return ImmutableList.of() ;
     } else {

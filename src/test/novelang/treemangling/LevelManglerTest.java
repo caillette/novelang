@@ -17,6 +17,8 @@
 package novelang.treemangling;
 
 import org.junit.Test;
+
+import novelang.common.Location;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.common.SyntacticTree;
@@ -231,9 +233,35 @@ public class LevelManglerTest {
   }
 
 
+  @Test
+  public void justLevel1WithLocation() {
+    verifyRehierarchizeLevels(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                LOCATION_1,
+                tree( PARAGRAPH_REGULAR )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                LEVEL_INTRODUCER_,
+                LOCATION_1,
+                tree( LEVEL_INTRODUCER_INDENT_, "==" )
+            ),
+            tree( PARAGRAPH_REGULAR )
+        )
+    ) ;
+  }
+
+
 // =======
 // Fixture
 // =======
+
+  private static final Location LOCATION_1 = new Location( "1" ) ;
 
   private static void verifyRehierarchizeLevels(
       final SyntacticTree expectedTree,
@@ -242,12 +270,12 @@ public class LevelManglerTest {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
-    final Treepath rehierarchized = rehierarchizeLevels( flatTree ) ;
+    final Treepath< SyntacticTree > rehierarchized = rehierarchizeLevels( flatTree ) ;
 
     TreeFixture.assertEqualsWithSeparators(
         expectedTreepath,
         rehierarchized
-    ); ;
+    ) ;
 
   }
 

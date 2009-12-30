@@ -22,6 +22,8 @@ import java.io.PrintWriter;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Joiner;
+
+import novelang.common.Location;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.Renderable;
@@ -204,6 +206,7 @@ public class GenericRenderer implements Renderer {
   ) throws Exception {
     NodeKind previous;
     fragmentWriter.start( path, rootElement ) ;
+//    maybeWriteLocation( tree, path ) ;
     previous = null ;
     for( final SyntacticTree subtree : tree.getChildren() ) {
       final NodeKind subtreeNodeKind = NodeKindTools.ofRoot( subtree );
@@ -221,6 +224,38 @@ public class GenericRenderer implements Renderer {
   ) throws Exception {
     if( ! hasBlockAfterTilde( path ) && Spaces.isTrigger( previous, nodeKind ) ) {
       fragmentWriter.write( path, whitespace ) ;
+    }
+  }
+
+  private void maybeWriteLocation( final SyntacticTree tree, final Nodepath path )
+      throws Exception
+  {
+    final Location location = tree.getLocation() ;
+    if( location != null ) {
+      final Nodepath locationNodepath = new Nodepath( path, NodeKind._LOCATION ) ;
+      final Nodepath resourceNodepath = new Nodepath( locationNodepath, NodeKind._RESOURCE ) ;
+
+      fragmentWriter.start( locationNodepath, false ) ;
+
+        fragmentWriter.start( resourceNodepath, false ) ;
+        fragmentWriter.write( resourceNodepath, location.getFileName() ) ;
+        fragmentWriter.end( resourceNodepath ) ;
+
+        if( location.getLine() >= 0 ) {
+          final Nodepath lineNodepath = new Nodepath( locationNodepath, NodeKind._LINE ) ;
+          fragmentWriter.start( lineNodepath, false ) ;
+          fragmentWriter.write( lineNodepath, "" + location.getLine() ) ;
+          fragmentWriter.end( lineNodepath ) ;
+        }
+
+        if( location.getColumn() >= 0 ) {
+          final Nodepath columnNodepath = new Nodepath( locationNodepath, NodeKind._COLUMN ) ;
+          fragmentWriter.start( columnNodepath, false ) ;
+          fragmentWriter.write( columnNodepath, "" + location.getColumn() ) ;
+          fragmentWriter.end( columnNodepath ) ;
+        }
+
+      fragmentWriter.end( locationNodepath ) ;
     }
   }
 

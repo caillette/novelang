@@ -57,6 +57,23 @@ public class TreeFixture {
 
   }
 
+  public static SyntacticTree tree(
+      final NodeKind nodeKind,
+      final Location location,
+      final SyntacticTree... children
+  ) {
+    return new SimpleTree( nodeKind.name(), location, children ) ;
+  }
+
+  public static SyntacticTree tree(
+      final NodeKind nodeKind,
+      final Location location,
+      final String text
+  ) {
+    return new SimpleTree( nodeKind.name(), location, new SimpleTree( text ) ) ;
+  }
+
+
   public static SyntacticTree tree( final NodeKind nodeKind, final NodeKind... children ) {
     final SyntacticTree[] childTrees = new SyntacticTree[ children.length ] ;
     for( int i = 0; i < children.length ; i++ ) {
@@ -136,9 +153,9 @@ public class TreeFixture {
           expected.getChildCount()
       ) ;
       Assert.assertEquals( 1, actual.getChildCount() ) ;
-      Assert.assertEquals( expected.getChildAt( 0 ).getText(), actual.getChildAt( 0 ).getText() ) ;
+      assertPayloadEquals( expected.getChildAt( 0 ), actual.getChildAt( 0 ) ) ;
     } else {
-      Assert.assertEquals( expected.getText(), actual.getText() ) ;
+      assertPayloadEquals( expected, actual ) ;
       Assert.assertEquals( expected.getChildCount(), actual.getChildCount() ) ;
       for( int index = 0 ; index < expected.getChildCount() ; index++ ) {
         final SyntacticTree expectedChild = expected.getChildAt( index ) ;
@@ -146,6 +163,14 @@ public class TreeFixture {
         assertEqualsNoMessage( expectedChild, actualChild ) ;
       }
     }
+  }
+
+  private static void assertPayloadEquals(
+      final SyntacticTree expected,
+      final SyntacticTree actual
+  ) {
+    Assert.assertEquals( expected.getText(), actual.getText() ) ;
+//    Assert.assertEquals( expected.getLocation(), actual.getLocation() ) ;
   }
 
 
