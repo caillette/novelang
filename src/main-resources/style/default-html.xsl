@@ -75,7 +75,7 @@
 
           $( document ).ready( function() {
             initializeTagSystem( "/javascript/colors.htm" ) ;
-            initializeDescriptorSystem() ;
+            initializeDescriptors() ;
           } ) ;
         //]]></script>
 
