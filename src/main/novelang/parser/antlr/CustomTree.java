@@ -27,6 +27,8 @@ import org.apache.commons.lang.NullArgumentException;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
+import com.google.common.base.Preconditions;
+
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.SimpleTree;
@@ -45,14 +47,25 @@ public class CustomTree
 {
   private static final Log LOG = LogFactory.getLog( CustomTree.class ) ;
 
-  private final LocationFactory locationFactory ;
+//  private final LocationFactory locationFactory ;
+  private final Location location ;
 
+  @Deprecated
   public CustomTree( final LocationFactory locationFactory, final Token token ) {
 		super( token ) ;
-    this.locationFactory = locationFactory ;
+    this.location = createLocation( locationFactory, token ) ;
+  }
+
+  public CustomTree( final Token token, final Location location ) {
+		super( token ) ;
+    this.location = Preconditions.checkNotNull( location ) ;
   }
 
   public Location getLocation() {
+    return location ;
+  }
+
+  private static Location createLocation( final LocationFactory locationFactory, final Token token ) {
     if( null == token ) {
       return locationFactory.createLocation( -1, -1 ) ;
 
@@ -90,7 +103,7 @@ public class CustomTree
   }
 
   public CustomTree adopt( final SyntacticTree... newChildren ) throws NullArgumentException {
-    final CustomTree newCustomTree = new CustomTree( locationFactory, token ) ;
+    final CustomTree newCustomTree = new CustomTree( token, getLocation() ) ;
     for( final SyntacticTree child : newChildren ) {
       newCustomTree.addChild( child ) ;
     }
@@ -110,9 +123,10 @@ public class CustomTree
   private CommonTree convert( final SyntacticTree tree ) {
     if( tree instanceof SimpleTree ) {
       final CommonTree customTree = new CustomTree(
-          locationFactory,
           new ClassicToken( // TODO don't swallow line + column information.
-              ClassicToken.MIN_TOKEN_TYPE, tree.getText() ) 
+              ClassicToken.MIN_TOKEN_TYPE, tree.getText() )
+          ,
+          getLocation()
       ) ;
       for( final SyntacticTree child : tree.getChildren() ) {
         customTree.addChild( convert( child ) ) ;

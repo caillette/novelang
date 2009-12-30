@@ -160,8 +160,9 @@ import org.slf4j.LoggerFactory;
 // Part, chapter and section
 // =========================
 
-part 
-  : ( p += mediumbreak | p += largebreak )? 
+part
+  @init { final Token startToken = input.LT( 1 ) ; }
+  : ( p += mediumbreak | p += largebreak )?
   
     (   p += levelIntroducer
       | p += paragraph 
@@ -181,19 +182,36 @@ part
       | p += cellRowSequence
     ) )*      
     ( mediumbreak | largebreak )? 
-    EOF 
-    -> ^( PART $p+ )
-  ; 
+    EOF
+
+    // Was:
+    // -> ^( PART $p+ )
+    -> {  delegate.createTree( PART, startToken, $p ) }
+  ;
   
 levelIntroducer 
+  @init { final Token startToken = input.LT( 1 ) ; }
   : ( ( tags mediumbreak )?
       ( ( relativeIdentifier | absoluteIdentifier ) mediumbreak )?
       levelIntroducerIndent
       ( whitespace? levelTitle )?
     )
-    -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle? 
-          tags? relativeIdentifier? absoluteIdentifier? 
-        )
+
+    // Was:
+    // -> ^( LEVEL_INTRODUCER_ levelIntroducerIndent levelTitle?
+    //      tags? relativeIdentifier? absoluteIdentifier?
+    //    )
+
+    -> {  delegate.createTree(
+              LEVEL_INTRODUCER_,
+              startToken,
+              $levelIntroducerIndent.tree,
+              $levelTitle.tree,
+              $tags.tree,
+              $relativeIdentifier.tree,
+              $absoluteIdentifier.tree
+       ) }
+
   ;
 
 

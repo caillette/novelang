@@ -48,7 +48,10 @@ public abstract class AbstractDelegatingParser {
     lexer.setProblemDelegate( delegate ) ;
     final CommonTokenStream tokens = new CommonTokenStream( lexer );
     antlrParser = new NovelangParser( tokens ) ;
-    antlrParser.setTreeAdaptor( new CustomTreeAdaptor( delegate.getLocationFactory() ) ) ;
+    final CustomTreeAdaptor treeAdaptor = new CustomTreeAdaptor( delegate.getLocationFactory() );
+    delegate.setAdaptor( treeAdaptor ) ;
+    delegate.setTokenNames( antlrParser.tokenNames ) ;
+    antlrParser.setTreeAdaptor( treeAdaptor ) ;
     antlrParser.setGrammarDelegate( delegate ) ;
   }
 

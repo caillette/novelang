@@ -17,10 +17,18 @@
 
 package novelang.parser.antlr;
 
+import java.util.List;
+import java.util.Iterator;
+
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.RewriteEarlyExitException;
+import org.antlr.runtime.tree.TreeAdaptor;
+import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
+
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.common.Location;
@@ -52,12 +60,10 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
     super( locationFactory ) ;
   }
 
-  public Tree createTree( final int tokenIdentifier, final String tokenPayload ) {
-    return new CustomTree(
-        getLocationFactory(),
-        new CommonToken( tokenIdentifier, tokenPayload )
-    ) ;
-  }
+
+// ================
+// Character escape
+// ================
 
   public String unescapeCharacter( final String escaped, final int line, final int column ) {
     try {
@@ -75,7 +81,7 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
 // Parser rules logging
 // ====================
 
-  private static final Log parserLogger = LogFactory.getLog( NovelangParser.class ) ;
+  private static final Log parserLogger = LogFactory.getLog( GrammarDelegate.class ) ;
   private int loggingRuleDepth = 0 ;
 
   public void traceIn( final String s, final int ruleIndex ) {
@@ -137,11 +143,89 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
     return boundaryProblems;
   }
 
-  /**
-   * TODO remove this method.
-   */
-  public BlockDelimiterSupervisor getBlockDelimiterSupervisor() {
-    return blockDelimiterSupervisor;
+
+// ================================
+// Configuration done by the parser
+// ================================
+
+  private String[] tokenNames = null ;
+
+  public void setTokenNames( final String[] tokenNames ) {
+    this.tokenNames = tokenNames ;
   }
 
+  private TreeAdaptor adaptor = null ;
+
+  public void setAdaptor( final TreeAdaptor adaptor ) {
+    this.adaptor = adaptor ;
+  }
+
+// =============
+// Tree creation
+// =============
+
+  @Deprecated
+  public Tree createTree( final int tokenIdentifier, final String tokenPayload ) {
+    return new CustomTree(
+        getLocationFactory(),
+        new CommonToken( tokenIdentifier, tokenPayload )
+    ) ;
+  }
+
+  public Object createTree(
+      final int imaginaryTokenIdentifier,
+      final Token locator,
+      final List list_p
+  ) {
+    final Object root_1 = createRoot( imaginaryTokenIdentifier, locator ) ;
+    final Iterator stream_p = list_p.iterator() ;
+
+    if( !( stream_p.hasNext() ) ) {
+      throw new RewriteEarlyExitException();
+    }
+    while( stream_p.hasNext() ) {
+      final Object tree = stream_p.next();
+      if( tree != null ) {
+        adaptor.addChild( root_1, tree ) ;
+      }
+
+    }
+    return root_1 ;
+
+  }
+
+  public Object createTree(
+      final int imaginaryTokenIdentifier,
+      final Token locator,
+      final Object... trees
+  ) {
+    final Object root_1 = createRoot( imaginaryTokenIdentifier, locator ) ;
+    for( final Object tree : trees ) {
+      if( tree != null ) {
+        adaptor.addChild( root_1, tree ) ;        
+      }
+    }
+
+    return root_1 ;
+  }
+
+  private Object createRoot( final int imaginaryTokenIdentifier, final Token locator ) {
+    final Location location = locationFactory.createLocation(
+        locator.getLine(), locator.getCharPositionInLine() ) ;
+
+    Object tokenAdopter = new CustomTree( null, location ) ;
+
+    final Object tokenOwner = adaptor.create(
+        imaginaryTokenIdentifier,
+        tokenNames[ imaginaryTokenIdentifier ]
+    ) ;
+    tokenAdopter = adaptor.becomeRoot(
+        tokenOwner,
+        tokenAdopter
+    ) ;
+    return tokenAdopter ;
+  }
+
+
 }
+
