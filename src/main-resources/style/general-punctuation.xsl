@@ -44,6 +44,7 @@
 
 
   <xsl:template match="n:meta" />
+  <xsl:template match="n:location" />
   <xsl:template match="n:image-width" />
   <xsl:template match="n:image-height" />
   <xsl:template match="n:explicit-tag" />

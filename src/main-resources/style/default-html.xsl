@@ -251,6 +251,9 @@
     <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier">
       <span class="descriptor-disclosure">§</span>
       <div class="descriptor" >
+        <xsl:if test="n:location" >
+          <p class="location"> <xsl:value-of select="n:location" /> </p>
+        </xsl:if>
         <xsl:if test="n:explicit-identifier" >
           <p class="explicit-identifier"> <xsl:value-of select="n:explicit-identifier" /> </p>
         </xsl:if>

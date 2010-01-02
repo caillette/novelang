@@ -19,9 +19,13 @@ package novelang.parser.antlr;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
+
+import novelang.common.Location;
 import novelang.common.LocationFactory;
 
 /**
+ * See <a href="http://www.antlr.org/api/Java" >online doco</a>.
+ * 
  * @author Laurent Caillette
 */
 /*package*/ class CustomTreeAdaptor extends CommonTreeAdaptor {
@@ -33,6 +37,33 @@ import novelang.common.LocationFactory;
   }
 
   public Object create( final Token payload ) {
-    return new CustomTree( locationFactory, payload ) ;
+    final Location location ;
+    if( payload == null ) {
+      location = locationFactory.createLocation() ;
+    } else {
+      location = locationFactory.createLocation( payload.getLine(), payload.getCharPositionInLine() );
+
+    }
+    
+    return new CustomTree( payload, location ) ;
   }
+
+  /**
+   * Parent's doco says:
+   * "If oldRoot is a nil root, just copy or move the children to newRoot. 
+   * If not a nil root, make oldRoot a child of newRoot."
+   */
+  @Override
+  public Object becomeRoot( final Object newRoot, final Object oldRoot ) {
+    final CustomTree result = ( CustomTree ) super.becomeRoot( newRoot, oldRoot ) ;
+    result.setLocation( ( ( CustomTree ) oldRoot ).getLocation() ) ;
+    return result ;
+  }
+
+/*
+  @Override
+  public void addChild( Object o, Object o1 ) {
+    super.addChild( o, o1 );
+  }
+*/
 }

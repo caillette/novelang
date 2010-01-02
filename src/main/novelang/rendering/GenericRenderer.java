@@ -19,15 +19,18 @@ package novelang.rendering;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Set;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableSet;
 
 import novelang.common.Location;
 import novelang.common.Nodepath;
 import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
+import novelang.common.TagBehavior;
 import novelang.common.metadata.MetadataHelper;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
@@ -43,16 +46,30 @@ public class GenericRenderer implements Renderer {
 
   private final FragmentWriter fragmentWriter ;
   private final String whitespace ;
+  private final boolean renderLocation ;
 
   private static final String DEFAULT_WHITESPACE = " " ;
 
   public GenericRenderer( final FragmentWriter fragmentWriter ) {
-    this( fragmentWriter, DEFAULT_WHITESPACE ) ;
+    this( fragmentWriter, false, DEFAULT_WHITESPACE ) ;
   }
 
-  protected GenericRenderer( final FragmentWriter fragmentWriter, final String whitespace ) {
+  protected GenericRenderer(
+      final FragmentWriter fragmentWriter,
+      final boolean renderLocation,
+      final String whitespace
+  ) {
     this.fragmentWriter = Preconditions.checkNotNull( fragmentWriter ) ;
     this.whitespace = whitespace ;
+    this.renderLocation = renderLocation ;
+  }
+
+  public GenericRenderer( final FragmentWriter fragmentWriter, final String defaultWhitespace ) {
+    this( fragmentWriter, false, defaultWhitespace ) ;
+  }
+
+  public GenericRenderer( final FragmentWriter fragmentWriter, final boolean renderLocation ) {
+    this( fragmentWriter, renderLocation, DEFAULT_WHITESPACE ) ;
   }
 
   final public void render(
@@ -206,7 +223,7 @@ public class GenericRenderer implements Renderer {
   ) throws Exception {
     NodeKind previous;
     fragmentWriter.start( path, rootElement ) ;
-//    maybeWriteLocation( tree, path ) ;
+    maybeWriteLocation( tree, path ) ;
     previous = null ;
     for( final SyntacticTree subtree : tree.getChildren() ) {
       final NodeKind subtreeNodeKind = NodeKindTools.ofRoot( subtree );
@@ -226,34 +243,23 @@ public class GenericRenderer implements Renderer {
       fragmentWriter.write( path, whitespace ) ;
     }
   }
+  
+  private static final Set< TagBehavior > LOCATION_ENABLED_TAG_BEHAVIORS =
+      ImmutableSet.of( TagBehavior.SCOPE, TagBehavior.TRAVERSABLE ) ;
 
   private void maybeWriteLocation( final SyntacticTree tree, final Nodepath path )
       throws Exception
   {
     final Location location = tree.getLocation() ;
-    if( location != null ) {
+    if( renderLocation && 
+        location != null && 
+        LOCATION_ENABLED_TAG_BEHAVIORS.contains( path.getCurrent().getTagBehavior() ) 
+    ) {
       final Nodepath locationNodepath = new Nodepath( path, NodeKind._LOCATION ) ;
-      final Nodepath resourceNodepath = new Nodepath( locationNodepath, NodeKind._RESOURCE ) ;
 
       fragmentWriter.start( locationNodepath, false ) ;
 
-        fragmentWriter.start( resourceNodepath, false ) ;
-        fragmentWriter.write( resourceNodepath, location.getFileName() ) ;
-        fragmentWriter.end( resourceNodepath ) ;
-
-        if( location.getLine() >= 0 ) {
-          final Nodepath lineNodepath = new Nodepath( locationNodepath, NodeKind._LINE ) ;
-          fragmentWriter.start( lineNodepath, false ) ;
-          fragmentWriter.write( lineNodepath, "" + location.getLine() ) ;
-          fragmentWriter.end( lineNodepath ) ;
-        }
-
-        if( location.getColumn() >= 0 ) {
-          final Nodepath columnNodepath = new Nodepath( locationNodepath, NodeKind._COLUMN ) ;
-          fragmentWriter.start( columnNodepath, false ) ;
-          fragmentWriter.write( columnNodepath, "" + location.getColumn() ) ;
-          fragmentWriter.end( columnNodepath ) ;
-        }
+        fragmentWriter.write( locationNodepath, location.toHumanReadableForm() ) ;
 
       fragmentWriter.end( locationNodepath ) ;
     }

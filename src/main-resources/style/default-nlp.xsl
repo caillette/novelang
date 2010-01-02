@@ -143,6 +143,7 @@
   <xsl:template match="n:block-of-literal-inside-grave-accents" mode="nospace" >`<xsl:apply-templates/>`</xsl:template>
   <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" mode="nospace" >``<xsl:apply-templates/>``</xsl:template>
   <xsl:template match="n:block-inside-parenthesis" mode="nospace" >(<xsl:apply-templates/>)</xsl:template>
+  <xsl:template match="n:location" />
 
 
   <xsl:template match="text()" >

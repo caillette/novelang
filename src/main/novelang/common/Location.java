@@ -52,11 +52,60 @@ public class Location {
     return column;
   }
 
+  public boolean isPositionDefined() {
+    return -1 < line && -1 < column ;
+  }
+
+  public String toHumanReadableForm() {
+    return
+        ( isPositionDefined() ? "(" + line + ":" + column + ") " : "(?) " ) +
+        fileName 
+    ;
+
+  }
+
+// ==============
+// Usual suspects
+// ==============
+
   @Override
   public String toString() {
     return
-        ( -1 == line && -1 == column ? "-:-" : line + ":" + column ) +
-        ":'" + fileName + "'"
+        toHumanReadableForm() 
+//        ( isPositionDefined() ? "-:-" : line + ":" + column ) +
+//        ":'" + fileName + "'"
     ;
+  }
+
+  @Override
+  public boolean equals( final Object other ) {
+    if( this == other ) {
+      return true ;
+    }
+    if( other == null || getClass() != other.getClass() ) {
+      return false ;
+    }
+
+    final Location location = ( Location ) other ;
+
+    if( column != location.column ) {
+      return false ;
+    }
+    if( line != location.line ) {
+      return false ;
+    }
+    if( fileName != null ? !fileName.equals( location.fileName ) : location.fileName != null ) {
+      return false ;
+    }
+
+    return true ;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = fileName != null ? fileName.hashCode() : 0 ;
+    result = 31 * result + line ;
+    result = 31 * result + column ;
+    return result ;
   }
 }

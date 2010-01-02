@@ -30,6 +30,9 @@ public class ProblemTest {
     public Location createLocation( final int line, final int column ) {
       return new Location( FILE_LOCATION, line, column ) ;
     }
+    public Location createLocation() {
+      return new Location( FILE_LOCATION ) ;
+    }
   } ;
 
   @Test

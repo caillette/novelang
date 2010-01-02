@@ -48,7 +48,7 @@ public class CustomTree
   private static final Log LOG = LogFactory.getLog( CustomTree.class ) ;
 
 //  private final LocationFactory locationFactory ;
-  private final Location location ;
+  private Location location ;
 
   @Deprecated
   public CustomTree( final LocationFactory locationFactory, final Token token ) {
@@ -58,14 +58,21 @@ public class CustomTree
 
   public CustomTree( final Token token, final Location location ) {
 		super( token ) ;
-    this.location = Preconditions.checkNotNull( location ) ;
+    this.location = location ;
   }
 
   public Location getLocation() {
     return location ;
   }
 
-  private static Location createLocation( final LocationFactory locationFactory, final Token token ) {
+  public void setLocation( final Location location ) {
+    this.location = location ;
+  }
+
+  private static Location createLocation( 
+      final LocationFactory locationFactory, 
+      final Token token 
+  ) {
     if( null == token ) {
       return locationFactory.createLocation( -1, -1 ) ;
 
@@ -126,7 +133,7 @@ public class CustomTree
           new ClassicToken( // TODO don't swallow line + column information.
               ClassicToken.MIN_TOKEN_TYPE, tree.getText() )
           ,
-          getLocation()
+          tree.getLocation()
       ) ;
       for( final SyntacticTree child : tree.getChildren() ) {
         customTree.addChild( convert( child ) ) ;

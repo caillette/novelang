@@ -110,12 +110,12 @@ public class DocumentProducer {
         break ;
 
       case XML :
-        serve.with( new GenericRenderer( new XmlWriter() ) ) ;
+        serve.with( new GenericRenderer( new XmlWriter(), true ) ) ;
         break ;
 
       case HTML :
         serve.with( new GenericRenderer(
-            new HtmlWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
+            new HtmlWriter( renderingConfiguration, stylesheet, charset ), true ) ) ;
         break ;
 
       case NLP :

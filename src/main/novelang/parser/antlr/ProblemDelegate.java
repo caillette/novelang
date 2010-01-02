@@ -39,6 +39,9 @@ public class ProblemDelegate {
       public Location createLocation( final int line, final int column ) {
         return new Location( "<debug>", line, column ) ;
       }
+      public Location createLocation() {
+        return new Location( "<debug>" ) ;
+      }
     } ;    
   }
 

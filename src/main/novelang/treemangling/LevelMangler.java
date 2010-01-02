@@ -153,12 +153,9 @@ public class LevelMangler {
         levelTree = TreeTools.addFirst( levelTree, child ) ;
       }
     }
-    return TreepathTools.replaceTreepathEnd( levelIntroducer, levelTree ) ;
-  }
-
-
-  private static NodeKind getKind( final Treepath< SyntacticTree > treepath ) {
-    return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
+    final Treepath< SyntacticTree > treepathWithoutIntroducer = 
+        TreepathTools.replaceTreepathEnd( levelIntroducer, levelTree ) ;
+    return treepathWithoutIntroducer ;
   }
 
 

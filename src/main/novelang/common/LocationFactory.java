@@ -26,6 +26,7 @@ package novelang.common;
 public interface LocationFactory {
 
   Location createLocation( int line, int column ) ;
+  Location createLocation() ;
 
 /*
   Problem createProblem( String message ) ;

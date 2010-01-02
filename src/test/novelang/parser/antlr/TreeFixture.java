@@ -42,6 +42,9 @@ public class TreeFixture {
     public Location createLocation( final int line, final int column ) {
       return new Location( "", line, column ) ;
     }
+    public Location createLocation() {
+      return new Location( "" ) ;
+    }
   } ;
 
   public static SyntacticTree tree( final NodeKind nodeKind, final SyntacticTree... children ) {
@@ -111,13 +114,22 @@ public class TreeFixture {
       final Treepath< SyntacticTree > expected,
       final Treepath< SyntacticTree > actual
   ) {
+    assertEqualsWithSeparators( expected, actual, false ) ;
+  }
+
+  public static void assertEqualsWithSeparators(
+      final Treepath< SyntacticTree > expected,
+      final Treepath< SyntacticTree > actual,
+      final boolean checkLocation
+  ) {
     final int expectedLength = expected.getLength();
     final int actualLength = actual.getLength();
     Assert.assertEquals( "Treepath height", expectedLength, actualLength ) ;
     for( int i = 0 ; i < expected.getLength() ; i++ ) {
       assertEquals(
           expected.getTreeAtDistance( i ),
-          actual.getTreeAtDistance( i )
+          actual.getTreeAtDistance( i ),
+          checkLocation
       ) ;
     }
   }
@@ -130,8 +142,16 @@ public class TreeFixture {
   }
   
   public static void assertEquals( final SyntacticTree expected, final SyntacticTree actual ) {
+    assertEquals( expected, actual, false ) ;
+  }
+
+  public static void assertEquals(
+      final SyntacticTree expected,
+      final SyntacticTree actual,
+      final boolean checkLocation
+  ) {
     try {
-      assertEqualsNoMessage( expected, actual ) ;
+      assertEqualsNoMessage( expected, actual, checkLocation ) ;
     } catch( AssertionError e ) {
       final AssertionError assertionError = new AssertionError(
           e.getMessage() +
@@ -146,6 +166,14 @@ public class TreeFixture {
       final SyntacticTree expected, 
       final SyntacticTree actual 
   ) {
+    assertEqualsNoMessage( expected, actual, false ) ;
+  }
+
+  private static void assertEqualsNoMessage(
+      final SyntacticTree expected,
+      final SyntacticTree actual,
+      final boolean checkLocation
+  ) {
     if( NodeKind.LINES_OF_LITERAL.isRoot( expected ) && NodeKind.LINES_OF_LITERAL.isRoot( actual ) ) {
       Assert.assertEquals(
           "Ill-formed test: expected LITERAL node must have exactly one child",
@@ -153,24 +181,27 @@ public class TreeFixture {
           expected.getChildCount()
       ) ;
       Assert.assertEquals( 1, actual.getChildCount() ) ;
-      assertPayloadEquals( expected.getChildAt( 0 ), actual.getChildAt( 0 ) ) ;
+      assertPayloadEquals( expected.getChildAt( 0 ), actual.getChildAt( 0 ), checkLocation ) ;
     } else {
-      assertPayloadEquals( expected, actual ) ;
+      assertPayloadEquals( expected, actual, checkLocation ) ;
       Assert.assertEquals( expected.getChildCount(), actual.getChildCount() ) ;
       for( int index = 0 ; index < expected.getChildCount() ; index++ ) {
         final SyntacticTree expectedChild = expected.getChildAt( index ) ;
         final SyntacticTree actualChild = actual.getChildAt( index ) ;
-        assertEqualsNoMessage( expectedChild, actualChild ) ;
+        assertEqualsNoMessage( expectedChild, actualChild, checkLocation ) ;
       }
     }
   }
 
   private static void assertPayloadEquals(
       final SyntacticTree expected,
-      final SyntacticTree actual
+      final SyntacticTree actual,
+      final boolean checkLocation
   ) {
     Assert.assertEquals( expected.getText(), actual.getText() ) ;
-//    Assert.assertEquals( expected.getLocation(), actual.getLocation() ) ;
+    if( checkLocation ) {
+      Assert.assertEquals( expected.getLocation(), actual.getLocation() ) ;
+    }
   }
 
 

@@ -76,7 +76,7 @@ public class PlainTextWriter implements FragmentWriter {
   public void end( final Nodepath kinship ) throws Exception {
     final DelimiterPair delimiterPair = getDelimiterPair( kinship ) ;
     if( delimiterPair != null ) {
-      write( kinship, delimiterPair.left ) ;
+      write( kinship, delimiterPair.right ) ;
     }
   }
 

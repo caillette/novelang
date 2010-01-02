@@ -202,7 +202,7 @@ public class PartTest {
   }
 
 
-  @Test( timeout = 2000 )
+  @Test( timeout = TEST_TIMEOUT_MILLISECONDS )
   public void problemWithSeparatorsAndEmbeddedLists() {
     final Part part = new Part( "- y `z`" ) ;
     final SyntacticTree expected = tree(
@@ -224,7 +224,7 @@ public class PartTest {
   }
 
 
-  @Test( timeout = 2000 )
+  @Test( timeout = TEST_TIMEOUT_MILLISECONDS )
   public void problemWithSeparatorsAndTitle() {
     final Part part = new Part( "== y `z`" ) ;
     final SyntacticTree expected = tree(
@@ -250,6 +250,7 @@ public class PartTest {
 // =======
 
   private static final Log LOG = LogFactory.getLog( PartTest.class ) ;
+  private static final int TEST_TIMEOUT_MILLISECONDS = 10 * 60 * 1000 ;
 
   static {
       TestResourceTree.initialize() ;

@@ -59,7 +59,7 @@ public class RenderingTools {
   ) throws UnsupportedEncodingException {
     final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
     try {
-      new GenericRenderer( fragmentWriter ).render(
+      new GenericRenderer( fragmentWriter, false ).render(
           new RenderableTree( tree, charset ),
           byteArrayOutputStream
       ) ;

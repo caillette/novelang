@@ -31,6 +31,7 @@ import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
+import novelang.common.Location;
 import novelang.common.metadata.DocumentMetadata;
 import novelang.common.metadata.MetadataHelper;
 import novelang.parser.NodeKind;
@@ -160,6 +161,22 @@ public class GenericRendererTest {
     ) ;
   }
 
+  @Test
+  public void location() throws Exception {
+    final SyntacticTree tree = tree(
+        NodeKind._LEVEL,
+        new Location( "Here" ),
+        tree( _IMPLICIT_IDENTIFIER, "Implicit" ),
+        tree( _EXPLICIT_IDENTIFIER, "Explicit" )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), true, "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals(
+        "_LEVEL(_LOCATION((?) Here)_IMPLICIT_IDENTIFIER(Implicit)_EXPLICIT_IDENTIFIER(Explicit))",
+        getRenderedText()
+    ) ;
+
+  }
 
 // =======
 // Fixture

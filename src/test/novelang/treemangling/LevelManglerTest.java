@@ -27,6 +27,8 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
+import junit.framework.AssertionFailedError;
+
 /**
  * Tests for {@link LevelMangler}.
  * 
@@ -235,7 +237,7 @@ public class LevelManglerTest {
 
   @Test
   public void justLevel1WithLocation() {
-    verifyRehierarchizeLevels(
+    verifyRehierarchizeLevelsWithLocation(
         tree(
             PART,
             tree(
@@ -257,15 +259,56 @@ public class LevelManglerTest {
   }
 
 
+  @Test( expected = AssertionError.class )
+  public void detectLocationDifference() {
+    verifyRehierarchizeLevelsWithLocation(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                LOCATION_1,
+                tree( PARAGRAPH_REGULAR )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                LEVEL_INTRODUCER_,
+                LOCATION_2, // Get sure we detect different locations.
+                tree( LEVEL_INTRODUCER_INDENT_, "==" )
+            ),
+            tree( PARAGRAPH_REGULAR )
+        )
+    ) ;
+  }
+
+
 // =======
 // Fixture
 // =======
 
-  private static final Location LOCATION_1 = new Location( "1" ) ;
+  private static final Location LOCATION_1 = new Location( "LocationOne" ) ;
+  private static final Location LOCATION_2 = new Location( "LocationTwo" ) ;
+
+  private static void verifyRehierarchizeLevelsWithLocation(
+      final SyntacticTree expectedTree,
+      final SyntacticTree flatTree
+  ) {
+    verifyRehierarchizeLevels( expectedTree, flatTree, true ) ;
+  }
 
   private static void verifyRehierarchizeLevels(
       final SyntacticTree expectedTree,
       final SyntacticTree flatTree
+  ) {
+    verifyRehierarchizeLevels( expectedTree, flatTree, false ) ;
+  }
+
+  private static void verifyRehierarchizeLevels(
+      final SyntacticTree expectedTree,
+      final SyntacticTree flatTree,
+      final boolean checkLocation
+
   ) {
     LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
@@ -274,7 +317,8 @@ public class LevelManglerTest {
 
     TreeFixture.assertEqualsWithSeparators(
         expectedTreepath,
-        rehierarchized
+        rehierarchized,
+        checkLocation
     ) ;
 
   }
