@@ -27,6 +27,7 @@ import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
+import novelang.parser.NodeKindTools;
 import novelang.treemangling.SeparatorsMangler;
 
 /**
@@ -172,8 +173,9 @@ public class TreeFixture {
   private static void assertEqualsNoMessage(
       final SyntacticTree expected,
       final SyntacticTree actual,
-      final boolean checkLocation
+      boolean checkLocation
   ) {
+    checkLocation = checkLocation && ! expected.isOneOf( NodeKind.WORD_ ) ;
     if( NodeKind.LINES_OF_LITERAL.isRoot( expected ) && NodeKind.LINES_OF_LITERAL.isRoot( actual ) ) {
       Assert.assertEquals(
           "Ill-formed test: expected LITERAL node must have exactly one child",
@@ -200,7 +202,11 @@ public class TreeFixture {
   ) {
     Assert.assertEquals( expected.getText(), actual.getText() ) ;
     if( checkLocation ) {
-      Assert.assertEquals( expected.getLocation(), actual.getLocation() ) ;
+      Assert.assertEquals(
+          "Unexpected location object on " + TreeFixture.asString( actual ),
+          expected.getLocation(), 
+          actual.getLocation() 
+      ) ;
     }
   }
 

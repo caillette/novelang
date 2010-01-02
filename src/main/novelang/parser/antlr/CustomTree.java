@@ -130,10 +130,8 @@ public class CustomTree
   private CommonTree convert( final SyntacticTree tree ) {
     if( tree instanceof SimpleTree ) {
       final CommonTree customTree = new CustomTree(
-          new ClassicToken( // TODO don't swallow line + column information.
-              ClassicToken.MIN_TOKEN_TYPE, tree.getText() )
-          ,
-          tree.getLocation()
+          new ClassicToken( ClassicToken.MIN_TOKEN_TYPE, tree.getText() ),
+          tree.getLocation() 
       ) ;
       for( final SyntacticTree child : tree.getChildren() ) {
         customTree.addChild( convert( child ) ) ;

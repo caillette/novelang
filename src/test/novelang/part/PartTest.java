@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import novelang.TestResourceTree;
+import novelang.common.Location;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -31,9 +32,12 @@ import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.SourceUnescape;
 import novelang.parser.antlr.TreeFixture;
+
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+
+import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -242,6 +246,50 @@ public class PartTest {
     final SyntacticTree partTree = part.getDocumentTree() ;
     TreeFixture.assertEqualsWithSeparators( expected, partTree ) ;
   }
+  
+  @Test
+  public void dontLoseLocationDuringLevelMangling() throws RecognitionException {
+    
+    final Part part = new Part(
+        "\n" +
+        "\n" +
+        "== Lzéro" + "\n" +
+        "\n" +
+        "p0"
+    ) ;
+    final SyntacticTree expected = tree(
+        PART, 
+        new Location( "<String>", 1, 0 ),
+        tree(
+            _LEVEL, 
+            new Location( "<String>", 3, 0 ),
+            tree( _IMPLICIT_TAG, "Lzero" ),
+            tree(
+                LEVEL_TITLE,
+                new Location( "<String>" ),
+                tree(
+                    WORD_,
+                    new Location( "<String>" ),
+                    "Lzéro" 
+                )
+    ),
+            tree(
+                PARAGRAPH_REGULAR,
+                new Location( "<String>" ),
+                tree(
+                    WORD_,
+                    new Location( "<String>" ),
+                    "p0" 
+                ) 
+            )
+        )
+    ) ;
+    final SyntacticTree partTree = part.getDocumentTree() ;
+    TreeFixture.assertEquals( expected, partTree, true ) ;
+
+  }
+
+  
 
 
 
