@@ -7,7 +7,7 @@ XML elements. Including the CSS was done with one line of code inside the ``XmlW
 XML just needs a processing instruction like this: 
 
 <<<
-«lt»?xml-stylesheet type="text/css" href="/xml.css"?«gt» 
+<?xml-stylesheet type="text/css" href="/xml.css"?> 
 >>>
 
 As I quickly discovered, this was the wrong approach. CSS have no mean to add the name of the element
