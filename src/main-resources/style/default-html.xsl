@@ -249,7 +249,7 @@
   
   <xsl:template name="descriptor" >
     <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier">
-      <span class="descriptor-disclosure">§</span>
+      <span class="descriptor-disclosure"><img src="/icons/Descriptor.png" /></span>
       <div class="descriptor" >
         <xsl:if test="n:location" >
           <p class="location"> <xsl:value-of select="n:location" /> </p>
