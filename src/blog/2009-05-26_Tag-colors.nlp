@@ -51,18 +51,18 @@ distinguishability, but I didn't find it. It seems much more convenient to let a
 Since editing some lines of code would require to switch back-and-forth between the code editor
 and the web browser, I wrote a palette editor based on a HTML page. It looks like this:
 
-./images/Tag-colors_2009-05-26/All-tags.png
+./images/2009-05-26_Tag-colors/All-tags.png
 
 It's easy to change the order of appearance of a color with a drag and drop:
 
-./images/Tag-colors_2009-05-26/Moving-color.png
+./images/2009-05-26_Tag-colors/Moving-color.png
 
 And, after clicking on one color, you set the foreground with an ``alt-click`` on wished color.
 
 Don't forget to save using the Save button (File `>` Save in Web browser's menu won't work).
 Yes, the color palette editor only runs on Firefox by now.
 
-./images/Tag-colors_2009-05-26/Save.png
+./images/2009-05-26_Tag-colors/Save.png
 
 The color palette is located in ``src/main-resources/style/javascript/colors.htm``
 
