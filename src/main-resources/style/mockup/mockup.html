@@ -115,10 +115,10 @@
      * Borders and margins.
      */
 
-
-    .level {
+    /* Common properties for descriptor-enabled containers. */ 
+    .level, blockquote {
       position : relative ;
-      margin : 10px ;
+      margin-left : 10px ;
 
       padding-left : 5px ;
       border-left-style : solid ;
@@ -127,14 +127,23 @@
           /* Mandatory since color animation does not support 'none'. */
       border-left-color : #DDDDDD  ;
 
-
+      padding-bottom : 4px ;
     }
 
     .descriptor {
+
           /* Mandatory since color animation does not support 'none'. */
       background-color : #DDDDDD ;
+
           /* Cause border of this element to juxtapose exactly with container's border. */
       margin-left : -5px ;
+
+          /*  Make right border to go further on the right than other text,
+              causing tags to be right-aligned. */
+      padding-right : 5px ;
+      margin-right : -5px ;
+
+
       font-family : arial, sans-serif ;
 
       -moz-border-top-right-radius : 5px ;
@@ -144,20 +153,27 @@
 
     }
 
-    blockquote {
-      margin : 5px 0 0 10px ;
-      border-left-style : solid ;
-      border-left-color : darkgray ;
-      border-left-width : 5px ;
+    .level {
+      margin-top : 10px ;
+      margin-right : 10px ;
+      margin-bottom : 10px ;
+      padding-bottom : 4px ;
+    }
 
-      padding-left : 5px ;
-      -moz-border-radius : 5px ;
-      -webkit-border-radius : 5px ;
+    blockquote {
+      margin : 5px 0 0 5px ;
+      padding-left : 1px ;
+
+      font-size : 12pt ;
+      font-family: verdana, serif ;
     }
 
     p {
       margin : 5px 0 0 5px ;
       padding-left : 3px ;
+
+      font-size: 13pt ;
+      font-family : times new roman, serif ;
     }
 
 
@@ -224,68 +240,44 @@
   <script type="text/javascript" src="../javascript/jquery-colors-1_0.js" ></script>
   <!--<script type="text/javascript" src="../javascript/jquery-rule-1_0_1_min.js" ></script>-->
   <script type="text/javascript" > //<![CDATA[
+    var SPEED = "fast" ;
+
     $( document ).ready( function() {
       $( ".collapsable-descriptor" ).hide() ;
 
       $( ".descriptor-disclosure" ).click( function() {
-        // $( this ).parent().find( ".collapsable-descriptor" ).slideToggle( 100, toggleBorder ) ;
 
         var descriptor = $( this ).parent() ;
         var container = descriptor.parent() ;
         var collapsibleDescriptor = descriptor.find( ".collapsable-descriptor" ) ;
 
         var visible = ! collapsibleDescriptor.is( ":visible" ) ;
-        collapsibleDescriptor.slideToggle() ;
+
         if( visible ) {
           container.animate( {
               borderLeftStyle : "solid",
-//              borderLeftWidth : "5px",
               borderLeftColor : "darkgrey"
-          }, 1000 ) ;
+          }, SPEED ) ;
           descriptor.animate( {
               paddingLeft : "0px" ,
               backgroundColor : "darkgrey"
-          }, 1000 ) ;
+          }, SPEED ) ;
         } else {
           container.animate( {
-              borderLeftStyle : "none", /* Used to detect disabled state. */
-//              borderLeftWidth : "0",
+              borderLeftStyle : "none",
               borderLeftColor : "#DDDDDD"
-          }, 1000 ) ;
+          }, SPEED ) ;
           descriptor.animate( {
               paddingLeft : "-5px" ,
               backgroundColor : "#DDDDDD"
-          }, 1000 ) ;
+          }, SPEED ) ;
 
         }
+        collapsibleDescriptor.slideToggle() ;
 
 
       } ) ;
     } ) ;
-
-    function toggleBorder() {
-      var descriptor = $( this ).parent() ;
-      var container = descriptor.parent() ;
-      if( container.css( "border-left-style" ) == "none" ) {
-        descriptor.css( {
-            'background' : 'darkgray'
-        } ) ;
-        container.css( {
-            'margin-left' : '7px',
-            'border-left-style' : 'solid',
-            'border-left-width' : '3px'
-        } ) ;
-      } else {
-        descriptor.css( {
-            'background' : 'none'
-        } ) ;
-        container.css( {
-            'margin-left' : '10px',
-            'border-left-style' : 'none',
-            'border-left-width' : '0'
-        } ) ;
-      }
-    }
 
   //]]></script>
 
@@ -300,9 +292,9 @@
       <div class="descriptor">
         <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
         <div class="collapsable-descriptor" >
-          <span
+          <div
               class="location"
-          >(3:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+          >(3:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</div>
           <ul class="identifiers">
             <li class="implicit-identifier">\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</li>
           </ul>
@@ -329,13 +321,22 @@
       </p>
       <blockquote>
         <div class="descriptor">
-          <span
-              class="location"
-          >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+          <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+          <div class="collapsable-descriptor" >
+            <span
+                class="location"
+            >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+            <ul class="identifiers">
+              <li class="explicit-identifier">\\SomeBlockquote</li>
+            </ul>
+          </div>
           <ul class="tags">
+            <li class="explicit-tag">Some-tag</li>
             <li class="explicit-tag">My-tag</li>
+            <li class="explicit-tag">AnotherTag</li>
+            <li class="explicit-tag">moreTag</li>
+            <li class="explicit-tag">evenMore</li>
           </ul>
-
         </div>
 
         <p>This is a “blockquote”.</p>
