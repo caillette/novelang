@@ -1,0 +1,326 @@
+<!--
+  Copyright (C) 2010 Laurent Caillette
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation, either
+  version 3 of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" >
+  <title>Designators mockup</title>
+
+  <style type="text/css">
+
+    /*
+     *  Reset of browser properties.
+     */
+
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, font, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td
+    {
+      margin : 0 ;
+      padding : 0 ;
+      border : 0 ;
+      outline : 0 ;
+      font-weight : inherit ;
+      font-style : inherit ;
+      font-size : 100% ;
+      font-family : inherit ;
+      vertical-align : baseline ;
+      text-indent : 0 ;
+    }
+
+    :focus {
+      outline : 0 ;
+    }
+
+    body {
+      line-height : 1 ;
+      color : black ;
+      width : 700px ;
+      background : #dddddd ;
+      font-size : 12pt ;
+    }
+
+    ol, ul {
+      list-style : none ;
+    }
+
+    /* tables still need 'cellspacing="0"' in the markup */
+    table {
+      border-collapse : separate ;
+      border-spacing : 0 ;
+    }
+
+    caption, th, td {
+      text-align : left ;
+      font-weight : normal ;
+    }
+
+    blockquote :before, blockquote :after,
+    q :before, q :after
+    {
+      content: "" ;
+    }
+
+
+    /*
+     *  Font sizes. 
+     */
+
+    * {
+      font-size : 10pt ;
+    }
+
+    body {
+      font-size : 14pt ;
+    }
+
+    p {
+      font-size : 14pt ;
+    }
+
+    h3 {
+      font-size : 16pt ;
+    }
+    
+    h2 {
+      font-size : 18pt ;
+    }
+
+    h1 {
+      font-size : 20pt ;
+    }
+
+
+    /*
+     * Borders and margins.
+     */
+
+
+    .level {
+      position : relative ;
+      margin : 10px ;
+
+      border-left-style : none ;
+      border-left-color : darkgray  ;
+
+      padding-left : 3px ;
+    }
+
+    .descriptor {
+      background : none ;
+      margin-left : -5px ;  # Go "back" on container's padding.
+      font-family : arial ;
+    }
+
+    blockquote {
+      margin : 5px 0 0 10px ;
+      border-left-style : solid ;
+      border-left-color : darkgray ;
+      border-left-width : 5px ;
+
+      padding-left : 3px ;
+    }
+
+    p {
+      margin : 5px 0 0 5px ;
+      padding-left : 3px ;
+    }
+
+
+
+
+    .location {
+      font-size : 9pt ;
+    }
+
+    ul.identifiers {
+      font-size : 12pt ;
+      list-style : none ;
+      padding-bottom : 6px ;  # Allocate room for list items' bottom border. 
+    }
+
+    li.implicit-identifier, li.explicit-identifier {
+      display : inline ;
+      list-style-type : none ;
+      border : 1px ;
+      font-size : 10pt ;
+      margin : 2px 2px 0 0 ;
+      padding : 2px 2px 2px 0 ;
+      text-indent : 0 ;
+    }
+
+    li.explicit-identifier {
+      font-weight : bold ;
+    }
+
+    ul.tags {
+      //float : right ;
+      text-align : right ;
+      list-style : none ;
+      padding-bottom : 6px ;  # Allocate room for list items' bottom border.
+    }
+
+    li.implicit-tag, li.explicit-tag {
+      display : inline ;
+      list-style-type : none ;
+      border : 1px ;
+      font-size : 9pt ;
+      margin : 2px 2px 0 0 ;
+      padding : 1px 2px 1px 1px ;
+      text-indent : 0 ;
+    }
+
+    li.implicit-tag {
+      border : 1px dotted ;
+    }
+
+    li.explicit-tag {
+      border : 1px solid ;
+    }
+
+    img.descriptor-disclosure {
+      margin-right : -20px ;
+      float : right ;
+    }
+
+  </style>
+
+
+  <script type="text/javascript" src="../javascript/jquery-1_3_2_min.js" ></script>
+  <!--<script type="text/javascript" src="../javascript/jquery-rule-1_0_1_min.js" ></script>-->
+  <script type="text/javascript" > //<![CDATA[
+    $( document ).ready( function() {
+      $( ".collapsable-descriptor" ).hide() ;
+
+      $( ".descriptor-disclosure" ).click( function() {
+        $( this ).parent().find( ".collapsable-descriptor" ).slideToggle( 100, toggleBorder ) ;
+      } ) ;
+    } ) ;
+
+    function toggleBorder() {
+      var descriptor = $( this ).parent() ;
+      var container = descriptor.parent() ;
+      if( container.css( "border-left-style" ) == "none" ) {
+        descriptor.css( {
+            'background' : 'darkgray'
+        } ) ;
+        container.css( {
+            'margin-left' : '7px',
+            'border-left-style' : 'solid',
+            'border-left-width' : '3px'
+        } ) ;
+      } else {
+        descriptor.css( {
+            'background' : 'none'
+        } ) ;
+        container.css( {
+            'margin-left' : '10px',
+            'border-left-style' : 'none',
+            'border-left-width' : '0'
+        } ) ;
+      }
+    }
+
+  //]]></script>
+
+
+</head>
+<body>
+
+  <div class="level" >
+    <h1>This is a chapter with a title</h1>
+
+    <div class="level" >
+      <div class="descriptor">
+        <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+        <div class="collapsable-descriptor" >
+          <span
+              class="location"
+          >(3:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+          <ul class="identifiers">
+            <li class="implicit-identifier">\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</li>
+          </ul>
+        </div>
+        <ul class="tags">
+          <li class="explicit-tag">My-tag</li>
+          <li class="explicit-tag">Some-tag</li>
+          <li class="explicit-tag">AnotherTag</li>
+        </ul>
+      </div>
+      <h2>This is a section with a title (and <i>style</i> inside the title!)</h2>
+
+      <p>
+        This is a single-line paragraph. This is an interpolated clause: – the “silent end”
+        means there is no closing dash. Here is <sup>superscript</sup>.
+        Here are some [brackets] here.
+      </p>
+    </div>
+
+    <div class="level" >
+      <h2>Blockquote demo</h2>
+      <p>
+        This is a paragraph before a “blockquote”.
+      </p>
+      <blockquote>
+        <div class="descriptor">
+          <span
+              class="location"
+          >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+          <ul class="tags">
+            <li class="explicit-tag">My-tag</li>
+          </ul>
+
+        </div>
+
+        <p>This is a “blockquote”.</p>
+        <p>There can be several paragraphs inside.</p>
+      </blockquote>
+      <p>
+        This is a paragraph after a “blockquote”.
+      </p>
+    </div>
+
+
+    <div class="level" >
+      <div class="descriptor">
+        <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+        <div class="collapsable-descriptor" >
+          <span class="location"
+          >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+        </div>
+      </div>
+      <h2>This is a section with no tag</h2>
+
+      <p>
+        Should show how folded descriptor looks like.
+      </p>
+    </div>
+
+
+
+
+  </div>
+
+</body>
+</html>
