@@ -44,7 +44,6 @@
       font-weight : inherit ;
       font-style : inherit ;
       font-size : 100% ;
-      font-family : inherit ;
       vertical-align : baseline ;
       text-indent : 0 ;
     }
@@ -57,7 +56,7 @@
       line-height : 1 ;
       color : black ;
       width : 700px ;
-      background : #dddddd ;
+      background : #DDDDDD ;
       font-size : 12pt ;
     }
 
@@ -121,16 +120,28 @@
       position : relative ;
       margin : 10px ;
 
-      border-left-style : none ;
-      border-left-color : darkgray  ;
+      padding-left : 5px ;
+      border-left-style : solid ;
+      border-left-width : 5px ;
 
-      padding-left : 3px ;
+          /* Mandatory since color animation does not support 'none'. */
+      border-left-color : #DDDDDD  ;
+
+
     }
 
     .descriptor {
-      background : none ;
-      margin-left : -5px ;  # Go "back" on container's padding.
-      font-family : arial ;
+          /* Mandatory since color animation does not support 'none'. */
+      background-color : #DDDDDD ;
+          /* Cause border of this element to juxtapose exactly with container's border. */
+      margin-left : -5px ;
+      font-family : arial, sans-serif ;
+
+      -moz-border-top-right-radius : 5px ;
+      -moz-border-bottom-right-radius : 5px ;
+      -webkit-border-top-right-radius : 5px ;
+      -webkit-border-bottom-right-radius : 5px ;
+
     }
 
     blockquote {
@@ -139,7 +150,9 @@
       border-left-color : darkgray ;
       border-left-width : 5px ;
 
-      padding-left : 3px ;
+      padding-left : 5px ;
+      -moz-border-radius : 5px ;
+      -webkit-border-radius : 5px ;
     }
 
     p {
@@ -157,7 +170,7 @@
     ul.identifiers {
       font-size : 12pt ;
       list-style : none ;
-      padding-bottom : 6px ;  # Allocate room for list items' bottom border. 
+      padding-bottom : 6px ;  // Allocate room for list items' bottom border.
     }
 
     li.implicit-identifier, li.explicit-identifier {
@@ -178,7 +191,7 @@
       //float : right ;
       text-align : right ;
       list-style : none ;
-      padding-bottom : 6px ;  # Allocate room for list items' bottom border.
+      padding-bottom : 6px ;  // Allocate room for list items' bottom border.
     }
 
     li.implicit-tag, li.explicit-tag {
@@ -208,13 +221,45 @@
 
 
   <script type="text/javascript" src="../javascript/jquery-1_3_2_min.js" ></script>
+  <script type="text/javascript" src="../javascript/jquery-colors-1_0.js" ></script>
   <!--<script type="text/javascript" src="../javascript/jquery-rule-1_0_1_min.js" ></script>-->
   <script type="text/javascript" > //<![CDATA[
     $( document ).ready( function() {
       $( ".collapsable-descriptor" ).hide() ;
 
       $( ".descriptor-disclosure" ).click( function() {
-        $( this ).parent().find( ".collapsable-descriptor" ).slideToggle( 100, toggleBorder ) ;
+        // $( this ).parent().find( ".collapsable-descriptor" ).slideToggle( 100, toggleBorder ) ;
+
+        var descriptor = $( this ).parent() ;
+        var container = descriptor.parent() ;
+        var collapsibleDescriptor = descriptor.find( ".collapsable-descriptor" ) ;
+
+        var visible = ! collapsibleDescriptor.is( ":visible" ) ;
+        collapsibleDescriptor.slideToggle() ;
+        if( visible ) {
+          container.animate( {
+              borderLeftStyle : "solid",
+//              borderLeftWidth : "5px",
+              borderLeftColor : "darkgrey"
+          }, 1000 ) ;
+          descriptor.animate( {
+              paddingLeft : "0px" ,
+              backgroundColor : "darkgrey"
+          }, 1000 ) ;
+        } else {
+          container.animate( {
+              borderLeftStyle : "none", /* Used to detect disabled state. */
+//              borderLeftWidth : "0",
+              borderLeftColor : "#DDDDDD"
+          }, 1000 ) ;
+          descriptor.animate( {
+              paddingLeft : "-5px" ,
+              backgroundColor : "#DDDDDD"
+          }, 1000 ) ;
+
+        }
+
+
       } ) ;
     } ) ;
 

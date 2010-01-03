@@ -19,6 +19,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../fop-SNAPSHOT-805900" />
       <excludeFolder url="file://$MODULE_DIR$/../fop-playground" />
       <excludeFolder url="file://$MODULE_DIR$/javadoc" />
+      <excludeFolder url="file://$MODULE_DIR$/log" />
       <excludeFolder url="file://$MODULE_DIR$/test-scratch" />
       <excludeFolder url="file://$MODULE_DIR$/../lib" />
       <excludeFolder url="file://$MODULE_DIR$/../target" />
