@@ -763,7 +763,11 @@ This mail is written in Novelang.
       depends="clean-compile-runtests, generate-documentation, create-jar, package-distribution"
   />
 
-
+  <target  name="deploy-locally"
+      depends="init"
+  >
+    <unzip src="${target.distrib.path}" dest="${distrib.dir}/${project.versionedname}" />
+  </target>
 
 
 
