@@ -174,9 +174,21 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
   @Deprecated
   public Tree createTree( final int tokenIdentifier, final String tokenPayload ) {
     return new CustomTree(
-        new CommonToken( tokenIdentifier, tokenPayload ),
-        getLocationFactory().createLocation() 
-    ) ;
+      new CommonToken( tokenIdentifier, tokenPayload ),
+      getLocationFactory().createLocation()
+      ) ;
+  }
+
+  public Object createTree(
+      final int imaginaryTokenIdentifier,
+      final Location location,
+      final String tokenPayload
+  ) {
+    final Object root_1 = createRoot( imaginaryTokenIdentifier, location ) ;
+    final Object payloadEmbedder = adaptor.create( imaginaryTokenIdentifier, tokenPayload ) ;
+    adaptor.addChild( root_1, payloadEmbedder ) ;
+
+    return root_1 ;
   }
 
   public Object createTree(

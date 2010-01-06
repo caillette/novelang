@@ -1278,15 +1278,25 @@ cell
 
 
 blockQuote
-  : ( p += tags mediumbreak )?	
+  @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
+  : ( p += tags mediumbreak )?
     LESS_THAN_SIGN LESS_THAN_SIGN 
     ( mediumbreak | largebreak )?
     p += paragraph 
     ( largebreak p += paragraph )* 
     ( mediumbreak | largebreak )?
     GREATER_THAN_SIGN GREATER_THAN_SIGN
-    -> ^( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS $p+ )
-  ;  
+
+    // Was:
+    // -> ^( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS $p+ )
+
+     -> {  delegate.createTree(
+               PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+               startLocation,
+               $p
+           )
+         }
+  ;
 
 literal
   : ( tags mediumbreak )?
@@ -1664,16 +1674,23 @@ urlXChar
 // =====
 
 embeddableResource
+  @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
   : externalResourcePath 
     (    ( rasterImageExtension
-          -> ^( RASTER_IMAGE ^( RESOURCE_LOCATION { delegate.createTree( 
-                  RASTER_IMAGE, $externalResourcePath.text + $rasterImageExtension.text ) } 
-              ) ) 
+          -> ^( RASTER_IMAGE { delegate.createTree(
+                      RESOURCE_LOCATION,
+                      startLocation,
+                      $externalResourcePath.text + $rasterImageExtension.text 
+                  ) }
+              )
          )
        | ( vectorImageExtension
-          -> ^( VECTOR_IMAGE ^( RESOURCE_LOCATION { delegate.createTree( 
-                  RASTER_IMAGE, $externalResourcePath.text + $vectorImageExtension.text ) } 
-              ) )
+          -> ^( VECTOR_IMAGE { delegate.createTree(
+                      RESOURCE_LOCATION,
+                      startLocation,
+                      $externalResourcePath.text + $vectorImageExtension.text
+                  ) }
+              ) 
          )
     )
   ;
