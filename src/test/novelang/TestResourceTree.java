@@ -32,6 +32,7 @@ public final class TestResourceTree {
 
     public static void initialize() {
     ResourceSchema.initialize( Images.class ) ;
+    ResourceSchema.initialize( MissingImages.class ) ;
     ResourceSchema.initialize( FontStructure.class ) ;
     ResourceSchema.initialize( TaggedPart.class ) ;
     ResourceSchema.initialize( Scanned.class ) ;
@@ -70,6 +71,13 @@ public final class TestResourceTree {
       }
     }
     
+  }
+
+  public interface MissingImages {
+    Directory dir = directory( "missing-image" ) ;
+
+    Resource MISSING_IMAGE_BOOK = resource( "missing-image-book.nlb" ) ;
+    Resource MISSING_IMAGE_PART = resource( "missing-image.nlp" ) ;
   }
 
   public interface FontStructure {

@@ -243,8 +243,10 @@ public class InsertCommand extends AbstractCommand {
           problems.add( Problem.createProblem( e ) ) ;
         }
         if( null != part && null != part.getDocumentTree() ) {
-          final SyntacticTree partTree =
-              part.relocateResourcePaths( environment.getBaseDirectory() ).getDocumentTree() ;
+          final Part relocatedPart = part.relocateResourcePaths( environment.getBaseDirectory() ) ;
+          Iterables.addAll( problems, relocatedPart.getProblems() ) ;
+
+          final SyntacticTree partTree = relocatedPart.getDocumentTree() ;
           final List< SyntacticTree > partChildren = Lists.newArrayList() ;
 
           if( hasIdentifiers ) {

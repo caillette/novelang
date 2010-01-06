@@ -238,6 +238,23 @@ public class BookTest {
    * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
+  public void detectMissingImage() throws IOException {
+    resourceInstaller.copy( TestResourceTree.MissingImages.MISSING_IMAGE_PART ) ;
+    final File scannedBookWithBadImage =
+        resourceInstaller.copy( TestResourceTree.MissingImages.MISSING_IMAGE_BOOK ) ;
+
+    final Book book = BookTestTools.createBook( scannedBookWithBadImage ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+
+    Assert.assertTrue( book.hasProblem() ) ;
+
+  }
+
+
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
   public void insertWithExplicitIdentifiers() throws IOException {
     resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_1 ) ;
     resourceInstaller.copyWithPath( TestResourceTree.Identifiers.PART_1 ) ;
