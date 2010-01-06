@@ -136,6 +136,7 @@
 
   <xsl:template match="n:paragraph-regular" >
     <xsl:call-template name="tags" />
+    <xsl:call-template name="descriptor" />
     <p>
       <xsl:apply-templates />
     </p>
@@ -248,7 +249,7 @@
   </xsl:template>
   
   <xsl:template name="descriptor" >
-    <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier">
+    <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:location">
       <span class="descriptor-disclosure"><img src="/icons/Descriptor.png" /></span>
       <div class="descriptor" >
         <xsl:if test="n:location" >

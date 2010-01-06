@@ -251,9 +251,12 @@ public class GenericRenderer implements Renderer {
       throws Exception
   {
     final Location location = tree.getLocation() ;
-    if( renderLocation && 
+    final NodeKind nodeKind = path.getCurrent();
+    if( renderLocation &&
         location != null && 
-        LOCATION_ENABLED_TAG_BEHAVIORS.contains( path.getCurrent().getTagBehavior() ) 
+        ( LOCATION_ENABLED_TAG_BEHAVIORS.contains( nodeKind.getTagBehavior() ) ||
+            NodeKind.PARAGRAPH_REGULAR.isRoot( tree )
+        )
     ) {
       final Nodepath locationNodepath = new Nodepath( path, NodeKind._LOCATION ) ;
 

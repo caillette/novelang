@@ -287,7 +287,8 @@ levelTitle
 headerIdentifier : ; // TODO
 
 paragraph 
-	: ( ( p += tags mediumbreak )?	
+  @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
+	: ( ( p += tags mediumbreak )?
       { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
 	    (   ( url ) => p += url
 	      | ( smallDashedListItem ) => p += smallDashedListItem
@@ -304,8 +305,16 @@ paragraph
 	      )
 	    )*
 	    { delegate.leaveBlockDelimiterBoundary() ; }
-	  ) -> ^( PARAGRAPH_REGULAR $p+ )
-    
+
+	  // Was:
+	  // ) -> ^( PARAGRAPH_REGULAR $p+ )
+
+      ) -> {  delegate.createTree(
+                  PARAGRAPH_REGULAR,
+                  startLocation,
+                  $p
+              )
+        }
   ;  
 
 

@@ -253,7 +253,7 @@ public class PartTest {
     final Part part = new Part(
         "\n" +
         "\n" +
-        "== Lzéro" + "\n" +
+        "== Lz\u00E9ro" + "\n" + // '\u00E9' == 'é' Makes tag appear different, debugging easier.
         "\n" +
         "p0"
     ) ;
@@ -270,12 +270,12 @@ public class PartTest {
                 tree(
                     WORD_,
                     new Location( "<String>" ),
-                    "Lzéro" 
+                    "Lz\u00E9ro"
                 )
-    ),
+            ),
             tree(
                 PARAGRAPH_REGULAR,
-                new Location( "<String>" ),
+                new Location( "<String>", 5, 0 ),
                 tree(
                     WORD_,
                     new Location( "<String>" ),
