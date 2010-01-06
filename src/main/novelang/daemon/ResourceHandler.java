@@ -99,7 +99,11 @@ public class ResourceHandler extends GenericHandler {
         final InputStream inputStream = resourceLoader.getInputStream(
             new ResourceName( resourceName ) ) ;
 
-        IOUtils.copy( inputStream, response.getOutputStream() ) ;
+        try {
+          IOUtils.copy( inputStream, response.getOutputStream() ) ; // TODO close stream.
+        } finally {
+          inputStream.close() ;
+        }
 
         response.setStatus( HttpServletResponse.SC_OK ) ;
 
