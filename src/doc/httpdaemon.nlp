@@ -1,12 +1,12 @@
 == Novelang HTTP daemon miscellaneous features
 
-=== The ``--content-dir`` option
+=== The ``--content-root`` option
 
-The ``--content-dir`` option sets the base directory to another value than current directory:
+The ``--content-root`` option sets the base directory to another value than current directory:
 
 <<<
 java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --content-dir=../my-source/documents
+  --content-root=../my-source/documents
 >>>
 
 
