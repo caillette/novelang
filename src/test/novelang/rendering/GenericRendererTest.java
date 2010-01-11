@@ -162,7 +162,7 @@ public class GenericRendererTest {
   }
 
   @Test
-  public void location() throws Exception {
+  public void locationForLevel() throws Exception {
     final SyntacticTree tree = tree(
         NodeKind._LEVEL,
         new Location( "Here" ),
@@ -175,7 +175,20 @@ public class GenericRendererTest {
         "_LEVEL(_LOCATION((?) Here)_IMPLICIT_IDENTIFIER(Implicit)_EXPLICIT_IDENTIFIER(Explicit))",
         getRenderedText()
     ) ;
+  }
 
+  @Test
+  public void locationForParagraph() throws Exception {
+    final SyntacticTree tree = tree(
+        NodeKind.PARAGRAPH_REGULAR,
+        new Location( "Here" )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), true, "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals(
+        "PARAGRAPH_REGULAR(_LOCATION((?) Here))",
+        getRenderedText()
+    ) ;
   }
 
 // =======
