@@ -27,6 +27,7 @@ import java.util.Set;
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
 
 import novelang.designator.Tag;
 import novelang.system.LogFactory;
@@ -118,16 +119,21 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
         sourceCharset.name()
     ) ;
 
+    final String stringContent ;
     try {
       final InputStream inputStream = partUrl.openStream() ;
-      final String stringContent = IOUtils.toString( inputStream, sourceCharset.name() );
+      stringContent = IOUtils.toString( inputStream, sourceCharset.name() );
       inputStream.close() ;
-      return stringContent ;
     } catch( IOException e ) {
       LOG.warn( "Could not load file", e ) ;
       collect( Problem.createProblem( this, e ) ) ;
       return null ;
     }
+    if( StringUtils.isBlank( stringContent ) ) {
+      collect( Problem.createProblem( "Part is empty", createLocation() ) ) ;
+      return null ;
+    }    
+    return stringContent ;
   }
 
 

@@ -36,6 +36,7 @@ public final class TestResourceTree {
     ResourceSchema.initialize( FontStructure.class ) ;
     ResourceSchema.initialize( TaggedPart.class ) ;
     ResourceSchema.initialize( Scanned.class ) ;
+    ResourceSchema.initialize( BookWithEmptyPart.class ) ;
     ResourceSchema.initialize( Served.class ) ;
     ResourceSchema.initialize( Parts.class ) ;
     ResourceSchema.initialize( Identifiers.class ) ;
@@ -133,6 +134,15 @@ public final class TestResourceTree {
       Directory dir = directory( "sub" ) ;
       Resource FILE_3 = resource( "file3.nlp" ) ;
     }
+
+  }
+
+
+  public interface BookWithEmptyPart {
+    Directory dir = directory( "book-with-empty-part" ) ;
+
+    Resource BOOK = resource( "book.nlb" ) ;
+    Resource EMPTY_PART = resource( "empty-part.nlp" ) ;
 
   }
 

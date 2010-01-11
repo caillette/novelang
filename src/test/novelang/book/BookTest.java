@@ -19,7 +19,9 @@ package novelang.book;
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.initialize;
 import novelang.common.SyntacticTree;
+import novelang.common.Problem;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
@@ -29,11 +31,14 @@ import novelang.system.LogFactory;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Test for {@link Book} and also built-in functions.
@@ -54,7 +59,7 @@ public class BookTest {
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath() + " $recurse" // old syntax
     ) ;
-    Assert.assertTrue( book.hasProblem() ) ;
+    assertTrue( book.hasProblem() ) ;
 
   }
 
@@ -81,7 +86,7 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    assertFalse( book.hasProblem() ) ;
 
   }
 
@@ -127,7 +132,7 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    assertFalse( book.hasProblem() ) ;
 
 
   }
@@ -160,7 +165,7 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    assertFalse( book.hasProblem() ) ;
 
 
   }
@@ -212,7 +217,7 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    assertFalse( book.hasProblem() ) ;
   }
 
 
@@ -229,7 +234,29 @@ public class BookTest {
     final Book book = BookTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
-    Assert.assertTrue( book.hasProblem() ) ;
+    assertTrue( book.hasProblem() ) ;
+
+  }
+
+
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand} and empty Part detection
+   * in {@link novelang.common.AbstractSourceReader}.
+   */
+  @Test
+  public void insertEmptyPart() throws IOException {
+    final Resource emptyPartResource = TestResourceTree.BookWithEmptyPart.EMPTY_PART ;
+    resourceInstaller.copy( emptyPartResource ) ;
+    final File bookFile = resourceInstaller.copy( TestResourceTree.BookWithEmptyPart.BOOK ) ;
+
+    final Book book = BookTestTools.createBook( bookFile ) ;
+
+    final Iterator< Problem > problems = book.getProblems().iterator() ;
+    assertTrue( problems.hasNext() ) ;
+    final Problem problem = problems.next() ;
+    assertTrue( problem.getMessage().contains( "Part is empty" ) ) ;
+    assertTrue( problem.getLocation().getFileName().contains( emptyPartResource.getBaseName() ) ) ;
+    assertFalse( problems.hasNext() ) ;
 
   }
 
@@ -246,7 +273,7 @@ public class BookTest {
     final Book book = BookTestTools.createBook( scannedBookWithBadImage ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
 
-    Assert.assertTrue( book.hasProblem() ) ;
+    assertTrue( book.hasProblem() ) ;
 
   }
 
@@ -281,7 +308,7 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    assertFalse( book.hasProblem() ) ;
   }
 
 
@@ -336,7 +363,7 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    assertFalse( book.hasProblem() ) ;
   }
 
 

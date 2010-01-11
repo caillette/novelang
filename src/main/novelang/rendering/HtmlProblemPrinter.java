@@ -45,11 +45,9 @@ public class HtmlProblemPrinter {
     for( final Problem problem : problems ) {
       writer.println( "<p>" ) ;
       final Location location = problem.getLocation();
-      if( location.getLine() > -1 && location.getColumn() > -1 ) {
-        writer.println( "<pre>" ) ;
-        writer.println( location ) ;
-        writer.println( "</pre>" ) ;
-      }
+      writer.println( "<pre>" ) ;
+      writer.println( location ) ;
+      writer.println( "</pre>" ) ;
       writer.println( problem.getMessage() ) ;
       writer.println( "</p>" ) ;
     }
