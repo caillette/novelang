@@ -75,12 +75,6 @@
       font-weight : normal ;
     }
 
-    blockquote :before, blockquote :after,
-    q :before, q :after
-    {
-      content: "" ;
-    }
-
 
     /*
      *  Font sizes. 
@@ -116,7 +110,7 @@
      */
 
     /* Common properties for descriptor-enabled containers. */ 
-    .level, blockquote {
+    .level, blockquote, p {
       position : relative ;
       margin-left : 10px ;
 
@@ -127,7 +121,7 @@
           /* Mandatory since color animation does not support 'none'. */
       border-left-color : #DDDDDD  ;
 
-      padding-bottom : 4px ;
+      /*padding-bottom : 4px ;*/
     }
 
     .descriptor {
@@ -160,16 +154,13 @@
       padding-bottom : 4px ;
     }
 
-    blockquote {
-      margin : 5px 0 0 5px ;
-      padding-left : 1px ;
-
-      font-size : 12pt ;
+    blockquote > p {
       font-family: verdana, serif ;
+      font-size : 10pt ;
     }
 
     p {
-      margin : 5px 0 0 5px ;
+      margin-right : 10px ;
       padding-left : 3px ;
 
       font-size: 13pt ;
@@ -252,15 +243,6 @@
         var collapsibleDescriptor = descriptor.find( ".collapsable-descriptor" ) ;
 
         var visible = ! collapsibleDescriptor.is( ":visible" ) ;
-
-        // Looks like launching 3 animations on the same objects may cause hiccups.
-        // Or is it jut about margins and padding as sometimes suggested?
-        //
-        // http://www.ndoherty.biz/2007/09/jquery-slidetoggle-and-internet-explorer/
-        // http://old.nabble.com/slideToggle-jumpy-at-end-(even-with-padding:-0)-td25145254s27240.html
-        // http://stackoverflow.com/questions/1335461/jquery-slide-is-jumpy
-        // http://jqueryfordesigners.com/animation-jump-quick-tip   + commentaires :
-        //     http://jqueryfordesigners.com/animation-jump-quick-tip/comment-page-2/#comment-1169
 
         if( visible ) {
           container.animate( {
@@ -348,8 +330,35 @@
           </ul>
         </div>
 
-        <p>This is a “blockquote”.</p>
-        <p>There can be several paragraphs inside.</p>
+
+        <p>
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+              <ul class="identifiers">
+                <li class="explicit-identifier">\\SomeBlockquote</li>
+              </ul>
+            </div>
+          </div>
+          This is a “blockquote”.
+        </p>
+        <p>
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+              <ul class="identifiers">
+                <li class="explicit-identifier">\\SomeBlockquote</li>
+              </ul>
+            </div>
+          </div>
+          There can be several paragraphs inside.
+        </p>
       </blockquote>
       <p>
         This is a paragraph after a “blockquote”.
