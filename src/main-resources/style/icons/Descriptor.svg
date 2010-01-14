@@ -14,7 +14,7 @@
    height="32"
    id="svg2"
    version="1.1"
-   inkscape:version="0.47pre4 r22446"
+   inkscape:version="0.47 r22583"
    inkscape:export-filename="/Users/Laurent/Novelang/src/main-resources/style/icons/Descriptor.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
@@ -24,11 +24,11 @@
     <linearGradient
        id="linearGradient3622">
       <stop
-         style="stop-color:#f4da49;stop-opacity:1;"
+         style="stop-color:#c7c7c7;stop-opacity:1;"
          offset="0"
          id="stop3624" />
       <stop
-         style="stop-color:#c24242;stop-opacity:1"
+         style="stop-color:#000000;stop-opacity:0.33333334;"
          offset="1"
          id="stop3626" />
     </linearGradient>
@@ -43,10 +43,10 @@
        inkscape:collect="always"
        xlink:href="#linearGradient3622"
        id="linearGradient3628"
-       x1="15"
-       y1="1030.1591"
-       x2="15"
-       y2="1052.0826"
+       x1="16.504223"
+       y1="1031.6721"
+       x2="16.504223"
+       y2="1046.8853"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.62700703,0,0,0.45613107,6.9892386,572.47463)" />
   </defs>
@@ -57,18 +57,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="10.378203"
-     inkscape:cx="25.130554"
-     inkscape:cy="8.514293"
+     inkscape:zoom="32.902076"
+     inkscape:cx="17.151331"
+     inkscape:cy="5.155035"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      gridtolerance="10"
      inkscape:window-width="1198"
      inkscape:window-height="974"
-     inkscape:window-x="409"
-     inkscape:window-y="14"
-     inkscape:window-maximized="0">
+     inkscape:window-x="170"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
        id="grid2816"
@@ -94,19 +95,15 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1020.3622)">
-    <rect
-       style="fill:url(#linearGradient3628);fill-opacity:1;fill-rule:evenodd;stroke:#432e2e;stroke-width:0.78700000000000003;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2843"
-       width="8.1563864"
-       height="11.403295"
-       x="13.259309"
-       y="1039.4895"
-       rx="4.0781932"
-       ry="3.8776231"
+    <path
+       style="fill:#d0d0d0;fill-opacity:1;fill-rule:evenodd;stroke:#8a8a8a;stroke-width:0.787;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"
        inkscape:transform-center-x="0.94315802"
+       inkscape:transform-center-y="0.00010318683"
+       d="m 14.675004,1041.7082 5.324996,0 c 0.784295,0 1.415695,0.6727 1.415695,1.5083 l 0,6.168 c 0,0.8356 -0.6314,1.5083 -1.415695,1.5083 l -5.324996,0 c -0.784295,0 -1.415695,-0.6727 -1.415695,-1.5083 l 0,-1.542 -3.130502,-1.542 3.130502,-1.542 0,-1.542 c 0,-0.8356 0.6314,-1.5083 1.415695,-1.5083 z"
+       id="rect2843"
+       sodipodi:nodetypes="cccccccccccc"
+       inkscape:export-filename="/Users/Shared/Novelang/src/main-resources/style/icons/Descriptor.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
-       inkscape:export-filename="/Users/Laurent/Novelang/src/main-resources/style/icons/Descriptor.png"
-       inkscape:transform-center-y="0.00013121212" />
+       inkscape:export-ydpi="90" />
   </g>
 </svg>
