@@ -2300,7 +2300,7 @@ LATIN_CAPITAL_LIGATURE_OE : '\u0152' ;                // &OElig;   "OE"
 
 
 SOFTBREAK : ( '\r' '\n' ? ) | '\n' ; 
-WHITESPACE : ( ' ' | '\t' )+ ;
+WHITESPACE : ( ' ' )+ ;
 
 
 AMPERSAND : '&' ; // &amp;

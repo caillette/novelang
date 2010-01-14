@@ -925,6 +925,10 @@ public class ParagraphParsingTest {
   }
 
 
+  @Test
+  public void noTabCharacter() {
+    PARSERMETHOD_PARAGRAPH.checkFails( "no\ttab" ) ;
+  }
 
 
 // =======
