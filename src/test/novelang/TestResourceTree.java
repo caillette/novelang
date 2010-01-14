@@ -177,6 +177,7 @@ public final class TestResourceTree {
     Resource PART_NO_CHAPTER = resource( "no-chapter.nlp" ) ;
     Resource PART_ONE_WORD = resource( "one-word.nlp" ) ;
     Resource PART_SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
+    Resource PART_UTF8_BOM = resource( "utf8-with-bom.nlp" ) ;
 
   }
 

@@ -37,6 +37,7 @@ import com.google.common.collect.Lists;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.TreeTools;
 import novelang.parser.GenericParser;
+import novelang.parser.unicode.UnicodeInputStream;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 
@@ -121,7 +122,9 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
 
     final String stringContent ;
     try {
-      final InputStream inputStream = partUrl.openStream() ;
+      final InputStream bareIinputStream = partUrl.openStream() ;
+      final UnicodeInputStream inputStream = new UnicodeInputStream( bareIinputStream, sourceCharset ) ;
+      inputStream.getEncoding() ;
       stringContent = IOUtils.toString( inputStream, sourceCharset.name() );
       inputStream.close() ;
     } catch( IOException e ) {

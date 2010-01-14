@@ -291,6 +291,12 @@ public class PartTest {
 
   
 
+  @Test
+  public void loadPartUtf8WithBom() throws IOException {
+    final Part part = new Part( resourceInstaller.copy(
+            TestResourceTree.Parts.PART_UTF8_BOM ) ) ;
+    Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+  }
 
 
 // =======

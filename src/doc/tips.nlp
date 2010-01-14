@@ -1,11 +1,5 @@
 == Tips for using Novelang on Microsoft Windows^«reg»
 
-
-=== Unicode
-
-On `Notepad++`, in main menu, chose Format `>` Encode in UTF-8 without BOM.
-
-
 === Escape delimiters
 
 | «laquo» | Alt-0171 |

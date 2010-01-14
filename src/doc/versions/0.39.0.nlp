@@ -1,5 +1,12 @@
---- New character in Novelang grammar: pound sign "`£`".
-
 --- Introduced "descriptors"
 http://novelang.blogspot.com/2009/12/descriptors-in-html.html
 in default HTML stylesheet.
+
+--- Support Unicode files starting with a "BOM"
+http://unicode.org/faq/utf_bom.html#BOM
+(Byte Order Mark).
+
+--- Reject TAB character.
+
+--- New character in Novelang grammar: pound sign "`£`".
+
