@@ -788,4 +788,36 @@ This mail is written in Novelang.
   </target>
 
 
+    <!--
+      ========================================================
+      Generate Unicode names (hex code -> human-readable name)
+      ========================================================
+    -->
+
+    <target name="probe-proxy" depends="init" >
+      <condition property="proxy.enabled" >
+        <and>
+          <isset property="proxy.host" />
+          <isreachable host="${proxy.host}" />
+        </and>
+      </condition>
+    </target>
+
+    <target name="proxy" depends="probe-proxy" if="proxy.enabled">
+      <property name="proxy.port" value="80"/>
+      <property name="proxy.user" value=""/>
+      <property name="proxy.pass" value=""/>
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+        proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
+    </target>
+
+
+  <target  name="generate-unicode-names" depends="init, proxy" >
+
+    <get src="http://unicode.org/charts/charindex.html"
+        dest="${target.dir}/unicode-names.html"
+    />
+  </target>
+
+
 </project>
