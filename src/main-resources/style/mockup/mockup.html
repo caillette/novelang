@@ -110,7 +110,7 @@
      */
 
     /* Common properties for descriptor-enabled containers. */ 
-    .level, blockquote, p {
+    .level, blockquote, div.p {
       position : relative ;
       margin-left : 10px ;
 
@@ -119,7 +119,7 @@
       border-left-width : 5px ;
 
           /* Mandatory since color animation does not support 'none'. */
-      border-left-color : #DDDDDD  ;
+      border-left-color : #DDDDFF  ;
 
       /*padding-bottom : 4px ;*/
     }
@@ -136,8 +136,7 @@
               causing tags to be right-aligned. */
       padding-right : 5px ;
       margin-right : -5px ;
-
-
+      
       font-family : arial, sans-serif ;
 
       -moz-border-top-right-radius : 5px ;
@@ -159,8 +158,8 @@
       font-size : 10pt ;
     }
 
-    p {
-      margin-right : 10px ;
+    div.p {
+      margin-top : 3px ;   /* Create a gap with descriptor above. */ 
       padding-left : 3px ;
 
       font-size: 13pt ;
@@ -221,6 +220,7 @@
 
     img.descriptor-disclosure {
       margin-right : -20px ;
+      margin-top : 5px ;
       float : right ;
     }
 
@@ -331,7 +331,10 @@
         </div>
 
 
-        <p>
+        <!-- Wrap every <p> in a div, because it has no closing tag.
+            Without wrapping, some style on <p> element (border) applies to the parent.  
+        -->
+        <div class="p" > 
           <div class="descriptor">
             <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
             <div class="collapsable-descriptor" >
@@ -343,9 +346,10 @@
               </ul>
             </div>
           </div>
+          <p>
           This is a “blockquote”.
-        </p>
-        <p>
+        </div>
+        <div class="p" >
           <div class="descriptor">
             <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
             <div class="collapsable-descriptor" >
@@ -357,8 +361,9 @@
               </ul>
             </div>
           </div>
+          <p>
           There can be several paragraphs inside.
-        </p>
+        </div>
       </blockquote>
       <p>
         This is a paragraph after a “blockquote”.
