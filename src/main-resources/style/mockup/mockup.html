@@ -156,6 +156,10 @@
       margin-bottom : 6px ;
     }
 
+  #identifier-list {
+    display : none ;
+  }
+
     /*
      * Borders and margins.
      */
@@ -634,6 +638,17 @@
         <input name="evenMore" type="checkbox"><span class="explicit-tag Tag-evenMore">evenMore</span><br>
       </div>
     </form>
+
+    <div id="identifier-list" >
+      <span class="identifier-reference" >\\Blockquote</span>
+      <span class="identifier-reference" >\\ThisIsAChapter_withATitle</span>
+      <span class="identifier-reference" >\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</span>
+      <span class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong_SoWeSeeHowItOverlapsWithTagsByTheWay</span>
+      <span class="identifier-reference" >\\Whatever</span>
+      <span class="identifier-reference" >\\SomeBlockquote</span>
+      <span class="identifier-reference duplicate" >\\Duplicate</span>
+      <span class="identifier-reference duplicate" >\\Duplicate</span>
+    </div>
   </div>
 
 </body>
