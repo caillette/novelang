@@ -53,9 +53,8 @@
     }
 
     body {
-      line-height : 1 ;
+      line-height : 1.3 ;
       color : black ;
-      /*width : 700px ;*/
       background : #DDDDDD ;
       font-size : 12pt ;
     }
@@ -90,21 +89,37 @@
 
     p {
       font-size : 14pt ;
+      font-family : times new roman, serif ;
     }
 
-    h3 {
-      font-size : 16pt ;
-    }
-    
-    h2 {
-      font-size : 18pt ;
+    h1, h2, h3, h4, h5 {
+      font-family : verdana, sans-serif ;
+      margin : 0 0 2px 0 ;
+      line-height : 1 ;
     }
 
     h1 {
       font-size : 20pt ;
     }
 
-  
+    h2 {
+      font-size : 18pt ;
+    }
+
+    h3 {
+      font-size : 16pt ;
+    }
+    
+    h4 {
+      font-size : 15pt ;
+    }
+
+    h5 {
+      font-size : 14pt ;
+    }
+
+
+
     /*
      * Page layout.
      */
@@ -121,16 +136,16 @@
       padding-left : 40px ;
       padding-right : 20px ;
       padding-top : 10px ;
-      background : white ;
+      background : #d5d5d5 ;
     }
    
     #tag-list {
       position : fixed ;
       white-space : nowrap ;
-      border : solid lightgray 1px ;
+      border : solid 1px #a5a5a5 ;
       padding : 4px 4px 2px 2px ;
-      background : ghostwhite ;
-      
+      background : #e5e5e5 ;
+
       border-radius : 7px ;
       -webkit-border-radius : 7px ;
       -moz-border-radius : 7px ;
@@ -155,7 +170,7 @@
       border-left-width : 5px ;
 
           /* Mandatory since color animation does not support 'none'. */
-      border-left-color : #DDDDFF  ;
+      border-left-color : #DDDDDD  ;
 
       /*padding-bottom : 4px ;*/
     }
@@ -164,6 +179,8 @@
 
           /* Mandatory since color animation does not support 'none'. */
       background-color : #DDDDDD ;
+
+      line-height : 1 ;
 
           /* Cause border of this element to juxtapose exactly with container's border. */
       margin-left : -5px ;
@@ -188,13 +205,12 @@
       padding-bottom : 4px ;
     }
 
-    blockquote > p {
-      font-family: verdana, serif ;
-      font-size : 10pt ;
+    blockquote > div.p > p {
+      font-family: georgia, sans-serif ;
+      font-size : 12pt ;
     }
 
     div.p {
-      margin-top : 3px ;   /* Create a gap with descriptor above. */ 
       padding-left : 3px ;
 
       font-size: 13pt ;
@@ -221,6 +237,11 @@
     }
 
 
+    li.explicit-identifier, li.implicit-identifier {
+      font-size : 10pt ;
+      margin-bottom : -2px ;
+    }
+
     li.explicit-identifier {
       font-weight : bold ;
     }
@@ -228,6 +249,7 @@
     ul.tags {
       text-align : right ;  
       list-style : none ;
+      margin-top : -2px ;
       padding-bottom : 6px ;  /*Allocate room for list items' bottom border.*/
     }
 
@@ -237,7 +259,7 @@
       border-color : black ;
       font-family : sans-serif ;
       font-size : 8pt ;
-      margin : 0 ;
+      margin : -15px 0 0 0 ;
       padding : 2px 4px 1px 4px ;
       text-indent : 0 ;
       
@@ -292,7 +314,9 @@
   <script type="text/javascript" src="../javascript/jquery-colors-1_0.js" ></script>
   <!--<script type="text/javascript" src="../javascript/jquery-rule-1_0_1_min.js" ></script>-->
   <script type="text/javascript" > //<![CDATA[
-    var SPEED = "fast" ;
+    const SPEED = "fast" ;
+    const ACTIVE_BACKGROUND = "#c0c0c0" ;
+    const INACTIVE_BACKGROUND = "#DDDDDD" ;
 
     $( document ).ready( function() {
       $( ".collapsable-descriptor" ).hide() ;
@@ -308,20 +332,22 @@
         if( visible ) {
           container.animate( {
               borderLeftStyle : "solid",
-              borderLeftColor : "darkgrey"
+              borderLeftColor : ACTIVE_BACKGROUND
           }, SPEED ) ;
           descriptor.animate( {
               paddingLeft : "0px" ,
-              backgroundColor : "darkgrey"
+              backgroundColor : ACTIVE_BACKGROUND,
+              marginTop : "3px"
           }, SPEED ) ;
         } else {
           container.animate( {
               borderLeftStyle : "none",
-              borderLeftColor : "#DDDDDD"
+              borderLeftColor : INACTIVE_BACKGROUND
           }, SPEED ) ;
           descriptor.animate( {
               paddingLeft : "-5px" ,
-              backgroundColor : "#DDDDDD"
+              backgroundColor : INACTIVE_BACKGROUND,
+              marginTop : "0px"
           }, SPEED ) ;
 
         }
@@ -354,14 +380,15 @@
               class="location"
           >(3:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</div>
           <ul class="identifiers">
-            <li class="implicit-identifier">\\ThisIsAChapterWithATitle</li>
+            <li class="implicit-identifier">\\ThisIsAChapter_withATitle</li>
           </ul>
           <ul class="tags">
-            <li class="implicit-tag">ThisIsAChapterWithATitle</li>
+            <li class="implicit-tag">ThisIsAChapter</li>
+            <li class="implicit-tag">withATitle</li>
           </ul>
         </div>
       </div>
-      <h1>This is a chapter with a title</h1>
+      <h1>This is a chapter, with a title</h1>
   
       <div class="level" >
         <div class="descriptor">
@@ -392,10 +419,24 @@
       </div>
   
       <div class="level" >
+        <div class="descriptor">
+          <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+          <div class="collapsable-descriptor" >
+            <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+          </div>
+        </div>
         <h2>Blockquote demo</h2>
-        <p>
-          This is a paragraph before a “blockquote”.
-        </p>
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph before a blockquote.
+          </p>
+        </div>
         <blockquote>
           <div class="descriptor">
             <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
@@ -404,7 +445,7 @@
                   class="location"
               >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
               <ul class="identifiers">
-                <li class="explicit-identifier">\\SomeBlockquote</li>
+                <li class="explicit-identifier">\\SomeBlockquote_whichIsVeryLong_SoWeSeeHowItOverlapsWithTagsByTheWay</li>
               </ul>
             </div>
             <ul class="tags">
@@ -428,7 +469,7 @@
                     class="location"
                 >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
                 <ul class="identifiers">
-                  <li class="explicit-identifier">\\SomeBlockquote</li>
+                  <li class="explicit-identifier">\\Whatever</li>
                 </ul>
               </div>
             </div>
@@ -448,12 +489,22 @@
               </div>
             </div>
             <p>
-            There can be several paragraphs inside.
+              There can be several paragraphs inside.
+              A paragraph may be very long. It may spread over several lines.
+              It may tell interesting things. Or not.
           </div>
         </blockquote>
-        <p>
-          This is a paragraph after a “blockquote”.
-        </p>
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph after a blockquote.
+          </p>
+        </div>
       </div>
   
   
@@ -466,48 +517,104 @@
           </div>
         </div>
         <h2>This is a section with no tag</h2>
-  
-        <p>
-          Should show how folded descriptor looks like.
-        </p>
-        
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis tristique lacus
-          rutrum sollicitudin. Proin vitae dui urna. Nam sed magna quam. Praesent a tincidunt est.
-          Fusce magna nulla, dapibus eu commodo sed, elementum at nunc. Phasellus scelerisque
-          bibendum felis, non commodo lacus scelerisque quis. In adipiscing porta congue. Lorem
-          ipsum dolor sit amet, consectetur adipiscing elit. Ut mi libero, facilisis in viverra ut,
-          ultrices ut tortor. Suspendisse tempor aliquam urna at interdum. Quisque lacinia accumsan
-          luctus. Proin a ullamcorper nibh.
-        </p>
-        <p>
-          Phasellus viverra purus in tortor volutpat pellentesque sodales ipsum dapibus. Mauris in
-          ligula orci, ac dictum nulla. Cum sociis natoque penatibus et magnis dis parturient
-          montes, nascetur ridiculus mus. Vivamus quis nibh sed elit venenatis dignissim. Phasellus
-          ut nisl quis diam congue pharetra sit amet ut nulla. Vestibulum ante ipsum primis in
-          faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur ut dignissim massa.
-          Fusce lacus tortor, mattis eget eleifend at, ultricies ac augue. Proin faucibus iaculis
-          eleifend. Nam tempor, enim nec euismod interdum, nibh quam mollis erat, quis ultricies
-          eros orci quis erat. Morbi vel justo nec lacus varius consectetur a quis enim.
-        </p>
-        <p>
-          Nunc risus dolor, tristique non ultrices et, vulputate ut enim. Mauris id erat metus.
-          Phasellus tristique ligula et tortor viverra aliquet. Donec non est ac nulla feugiat
-          sodales. Integer consectetur porta lorem, at tristique massa convallis eget. In et magna
-          eget turpis tristique lobortis a quis orci. Nunc eget erat id sapien gravida semper a
-          vitae ipsum. Nulla eget massa velit. Suspendisse egestas mauris sit amet sapien
-          sollicitudin eget semper justo ornare. Quisque vel turpis neque, sit amet tincidunt urna.
-          Phasellus tempor feugiat erat a accumsan.
-        </p>
-        <p>
-          Vestibulum scelerisque euismod malesuada. Quisque gravida imperdiet orci non volutpat.
-          Integer eu dictum urna. Nulla eget est imperdiet odio facilisis pellentesque. Aenean
-          euismod risus a diam ornare aliquam. Integer in mauris ut tortor luctus venenatis in nec
-          felis. Nulla pretium iaculis fringilla. Cum sociis natoque penatibus et magnis dis
-          parturient montes, nascetur ridiculus mus. Integer nunc neque, aliquam quis consequat sit
-          amet, feugiat nec lectus. Nam sagittis nibh vel elit pretium pulvinar. Cras hendrerit
-          ultricies lobortis. Aenean id molestie enim. Duis quis gravida quam.
-        </p>
+
+        <div class="p">
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(37:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+              <ul class="identifiers">
+                <li class="explicit-identifier">\\SomeBlockquote</li>
+              </ul>
+            </div>
+          </div>
+          <p>
+            Should show how folded descriptor looks like.
+          </p>
+        </div>
+
+        <div class="p">
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(39:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+            </div>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis tristique lacus
+            rutrum sollicitudin. Proin vitae dui urna. Nam sed magna quam. Praesent a tincidunt est.
+            Fusce magna nulla, dapibus eu commodo sed, elementum at nunc. Phasellus scelerisque
+            bibendum felis, non commodo lacus scelerisque quis. In adipiscing porta congue. Lorem
+            ipsum dolor sit amet, consectetur adipiscing elit. Ut mi libero, facilisis in viverra ut,
+            ultrices ut tortor. Suspendisse tempor aliquam urna at interdum. Quisque lacinia accumsan
+            luctus. Proin a ullamcorper nibh.
+          </p>
+        </div>
+
+        <div class="p">
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(49:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+            </div>
+          </div>
+          <p>
+            Phasellus viverra purus in tortor volutpat pellentesque sodales ipsum dapibus. Mauris in
+            ligula orci, ac dictum nulla. Cum sociis natoque penatibus et magnis dis parturient
+            montes, nascetur ridiculus mus. Vivamus quis nibh sed elit venenatis dignissim. Phasellus
+            ut nisl quis diam congue pharetra sit amet ut nulla. Vestibulum ante ipsum primis in
+            faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur ut dignissim massa.
+            Fusce lacus tortor, mattis eget eleifend at, ultricies ac augue. Proin faucibus iaculis
+            eleifend. Nam tempor, enim nec euismod interdum, nibh quam mollis erat, quis ultricies
+            eros orci quis erat. Morbi vel justo nec lacus varius consectetur a quis enim.
+          </p>
+        </div>
+
+        <div class="p">
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(52:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+            </div>
+          </div>
+          <p>
+            Nunc risus dolor, tristique non ultrices et, vulputate ut enim. Mauris id erat metus.
+            Phasellus tristique ligula et tortor viverra aliquet. Donec non est ac nulla feugiat
+            sodales. Integer consectetur porta lorem, at tristique massa convallis eget. In et magna
+            eget turpis tristique lobortis a quis orci. Nunc eget erat id sapien gravida semper a
+            vitae ipsum. Nulla eget massa velit. Suspendisse egestas mauris sit amet sapien
+            sollicitudin eget semper justo ornare. Quisque vel turpis neque, sit amet tincidunt urna.
+            Phasellus tempor feugiat erat a accumsan.
+          </p>
+        </div>
+
+        <div class="p">
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(60:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+            </div>
+          </div>
+          <p>
+            Vestibulum scelerisque euismod malesuada. Quisque gravida imperdiet orci non volutpat.
+            Integer eu dictum urna. Nulla eget est imperdiet odio facilisis pellentesque. Aenean
+            euismod risus a diam ornare aliquam. Integer in mauris ut tortor luctus venenatis in nec
+            felis. Nulla pretium iaculis fringilla. Cum sociis natoque penatibus et magnis dis
+            parturient montes, nascetur ridiculus mus. Integer nunc neque, aliquam quis consequat sit
+            amet, feugiat nec lectus. Nam sagittis nibh vel elit pretium pulvinar. Cras hendrerit
+            ultricies lobortis. Aenean id molestie enim. Duis quis gravida quam.
+          </p>
+        </div>
       </div>
   
     </div>
