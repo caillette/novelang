@@ -812,11 +812,28 @@ This mail is written in Novelang.
     </target>
 
 
-  <target  name="generate-unicode-names" depends="init, proxy" >
+  <target  name="generate-unicode-names" depends="proxy, compile-code-generator" >
 
-    <get src="http://unicode.org/charts/charindex.html"
-        dest="${target.dir}/unicode-names.html"
+<!--
+    <get src="${unicode.url}"
+        dest="${unicode.html}"
     />
+
+    <java
+        classname="novelang.build.HtmlToXml"
+        failonerror="true"
+        fork="false"
+    >
+      <classpath refid="deploy-libs" />
+      <classpath refid="build-libs" />
+      <classpath path="${target.buildclasses.dir}" />
+      <arg value="${unicode.html}" />
+      <arg value="${unicode.xml}" />
+    </java>
+-->
+
+    <xslt style="${unicode.xsl}" in="${unicode.xml}" out="${unicode.names}" />
+
   </target>
 
 
