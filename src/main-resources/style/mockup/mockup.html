@@ -55,7 +55,7 @@
     body {
       line-height : 1.3 ;
       color : black ;
-      background : #DDDDDD ;
+      background : #e4e4e4 ;
       font-size : 12pt ;
     }
 
@@ -130,25 +130,31 @@
       min-width : 500px ;
       max-width : 800px ; 
     }
-  
-    #navigation {
+
+    #right-sidebar {
       display : table-cell ;
       padding-left : 40px ;
-      padding-right : 20px ;
+      padding-right : 10px ;
       padding-top : 10px ;
-      background : #d5d5d5 ;
+      background-color : #dddddd ; #d5d5d5 ;
+    }
+
+
+    #navigation {
+      font-size : 10pt ;
     }
    
     #tag-list {
-      position : fixed ;
+      /*position : fixed ;*/
       white-space : nowrap ;
-      border : solid 1px #a5a5a5 ;
+      /*border : solid 1px #a5a5a5 ;*/
       padding : 4px 4px 2px 2px ;
-      background : #e5e5e5 ;
+      /*background : #e5e5e5 ;*/
+      /*background-color : transparent ;*/
 
-      border-radius : 7px ;
-      -webkit-border-radius : 7px ;
-      -moz-border-radius : 7px ;
+      /*border-radius : 7px ;*/
+      /*-webkit-border-radius : 7px ;*/
+      /*-moz-border-radius : 7px ;*/
     }
   
   
@@ -156,9 +162,8 @@
       margin-bottom : 6px ;
     }
 
-  #identifier-list {
-    display : none ;
-  }
+    #identifier-list {
+    }
 
     /*
      * Borders and margins.
@@ -241,8 +246,11 @@
     }
 
 
-    li.explicit-identifier, li.implicit-identifier {
+    li.explicit-identifier, li.implicit-identifier, .identifier-reference {
       font-size : 10pt ;
+    }
+
+    li.explicit-identifier, li.implicit-identifier {
       margin-bottom : -2px ;
     }
 
@@ -285,7 +293,7 @@
       margin-top : 5px ;
       float : right ;
     }
-  
+
     /*
      * Tag colors, generated.
      */
@@ -313,9 +321,16 @@
 
   </style>
 
+  <!--
+      Generated theme:
+      http://jqueryui.com/themeroller/#ffDefault=Verdana%2CArial%2Csans-serif&fwDefault=normal&fsDefault=1.1em&cornerRadius=5px&bgColorHeader=b5b5b5&bgTextureHeader=05_inset_soft.png&bgImgOpacityHeader=50&borderColorHeader=dddddd&fcHeader=222222&iconColorHeader=222222&bgColorContent=dddddd&bgTextureContent=01_flat.png&bgImgOpacityContent=0&borderColorContent=dddddd&fcContent=222222&iconColorContent=222222&bgColorDefault=c5c5c4&bgTextureDefault=02_glass.png&bgImgOpacityDefault=75&borderColorDefault=c4c4c4&fcDefault=555555&iconColorDefault=888888&bgColorHover=dadada&bgTextureHover=02_glass.png&bgImgOpacityHover=75&borderColorHover=999999&fcHover=212121&iconColorHover=454545&bgColorActive=dddddd&bgTextureActive=02_glass.png&bgImgOpacityActive=0&borderColorActive=aaaaaa&fcActive=212121&iconColorActive=454545&bgColorHighlight=fbf9ee&bgTextureHighlight=02_glass.png&bgImgOpacityHighlight=55&borderColorHighlight=fcefa1&fcHighlight=363636&iconColorHighlight=2e83ff&bgColorError=fef1ec&bgTextureError=05_inset_soft.png&bgImgOpacityError=95&borderColorError=cd0a0a&fcError=cd0a0a&iconColorError=cd0a0a&bgColorOverlay=aaaaaa&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=0&opacityOverlay=30&bgColorShadow=aaaaaa&bgTextureShadow=01_flat.png&bgImgOpacityShadow=0&opacityShadow=30&thicknessShadow=8px&offsetTopShadow=-8px&offsetLeftShadow=-8px&cornerRadiusShadow=8px
+  -->
+  <link type="text/css" href="css/custom-theme/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
 
-  <script type="text/javascript" src="../javascript/jquery-1_4_0_min.js" ></script>
+  <script type="text/javascript" src="js/jquery-1.3.2.min.js" ></script>
+  <script type="text/javascript" src="js/jquery-ui-1.7.2.custom.min.js" ></script>
   <script type="text/javascript" src="../javascript/jquery-colors-1_0.js" ></script>
+
   <!--<script type="text/javascript" src="../javascript/jquery-rule-1_0_1_min.js" ></script>-->
   <script type="text/javascript" > //<![CDATA[
     const SPEED = "fast" ;
@@ -364,8 +379,15 @@
       // Force width of navigation area to tag's width.
       // This is because a fixed position (required to make navigation always visible)
       // doesn't allow automatic width calculation.      
-      var width = $( "#tag-list" ).width() ;    
+      var width = Math.max( $( "#tag-list" ).width(), $( "#identifier-list" ).width() ) ;
+      $( "#tag-list" ).width( width ) ;
+      $( "#identifier-list" ).width( width ) ;
       $( "#navigation" ).width( width ) ;
+
+
+      // Tabls
+      $( "#navigation" ).tabs() ;
+
       
     } ) ;
 
@@ -626,30 +648,37 @@
 
 
 
-  <div id="navigation" >
-    <form name="tag-list" id="tag-list">
-      <!--<p id="tag-list-disclosure"></p>-->
+  <div id="right-sidebar">
+    <div id="navigation" >
 
-      <div id="tag-list-content">
-        <input name="My-tag" type="checkbox"><span class="explicit-tag Tag-My-tag">My-tag</span><br>
-        <input name="Some-tag" type="checkbox"><span class="explicit-tag Tag-Some-tag">Some-tag</span><br>
-        <input name="AnotherTag" type="checkbox"><span class="explicit-tag Tag-AnotherTag">AnotherTag</span><br>
-        <input name="MoreTag" type="checkbox"><span class="explicit-tag Tag-moreTag">moreTag</span><br>
-        <input name="evenMore" type="checkbox"><span class="explicit-tag Tag-evenMore">evenMore</span><br>
+      <ul>
+        <li><a href="#tag-list-content">Tags</a></li>
+        <li><a href="#identifier-list">Ids</a></li>
+      </ul>
+
+      <form name="tag-list" id="tag-list">
+        <!--<p id="tag-list-disclosure"></p>-->
+
+        <div id="tag-list-content">
+          <input name="My-tag" type="checkbox"><span class="explicit-tag Tag-My-tag">My-tag</span><br>
+          <input name="Some-tag" type="checkbox"><span class="explicit-tag Tag-Some-tag">Some-tag</span><br>
+          <input name="AnotherTag" type="checkbox"><span class="explicit-tag Tag-AnotherTag">AnotherTag</span><br>
+          <input name="MoreTag" type="checkbox"><span class="explicit-tag Tag-moreTag">moreTag</span><br>
+          <input name="evenMore" type="checkbox"><span class="explicit-tag Tag-evenMore">evenMore</span><br>
+        </div>
+      </form>
+
+      <div id="identifier-list" >
+        <span class="identifier-reference" >\\Blockquote</span> <br/>
+        <span class="identifier-reference" >\\ThisIsAChapter_withATitle</span> <br/>
+        <span class="identifier-reference" >\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</span> <br/>
+        <span class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong<!--_SoWeSeeHowItOverlapsWithTagsByTheWay--></span> <br/>
+        <span class="identifier-reference" >\\Whatever</span> <br/>
+        <span class="identifier-reference" >\\SomeBlockquote</span> <br/>
+        <span class="identifier-reference duplicate" >\\Duplicate</span> <br/>
+        <span class="identifier-reference duplicate" >\\Duplicate</span> <br/>
       </div>
-    </form>
-
-    <div id="identifier-list" >
-      <span class="identifier-reference" >\\Blockquote</span>
-      <span class="identifier-reference" >\\ThisIsAChapter_withATitle</span>
-      <span class="identifier-reference" >\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</span>
-      <span class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong_SoWeSeeHowItOverlapsWithTagsByTheWay</span>
-      <span class="identifier-reference" >\\Whatever</span>
-      <span class="identifier-reference" >\\SomeBlockquote</span>
-      <span class="identifier-reference duplicate" >\\Duplicate</span>
-      <span class="identifier-reference duplicate" >\\Duplicate</span>
     </div>
   </div>
-
 </body>
 </html>
