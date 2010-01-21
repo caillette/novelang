@@ -1,4 +1,4 @@
---- Introduced "descriptors"
+--- Experimental feature: "descriptors"
 http://novelang.blogspot.com/2009/12/descriptors-in-html.html
 in default HTML stylesheet.
 
@@ -8,5 +8,7 @@ http://unicode.org/faq/utf_bom.html#BOM
 
 --- Reject TAB character.
 
---- New character in Novelang grammar: pound sign "`£`".
+--- Display Unicode name of every rejected character
+(as long as it belongs to the set of 16 bit Unicode characters as defined in Unicode `5.2` standard).
 
+--- New character in Novelang grammar: pound sign "`£`".

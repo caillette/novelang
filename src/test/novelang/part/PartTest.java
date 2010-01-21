@@ -95,6 +95,19 @@ public class PartTest {
   }
 
   @Test
+  public void badCharacterCorrectlyShownInProblem() throws IOException {
+    final Part part = new Part( "b¤d" ) ;
+    Assert.assertTrue( part.hasProblem() ) ;
+    final List< Problem > problems = Lists.newArrayList( part.getProblems() ) ;
+    LOG.debug( "Got problems: %s", problems ) ;
+    Assert.assertEquals(
+        "Unrecognized character: CURRENCY_SIGN",
+        part.getProblems().iterator().next().getMessage()
+    ) ;
+
+  }
+
+  @Test
   public void loadPartWithMetadata() throws IOException {
     final Part part = new Part( resourceInstaller.copy(
         TestResourceTree.Parts.PART_JUST_SECTIONS ) ).makeStandalone() ;

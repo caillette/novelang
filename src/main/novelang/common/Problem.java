@@ -23,6 +23,8 @@ import java.util.regex.Pattern;
 import org.antlr.runtime.RecognitionException;
 import com.google.common.base.Preconditions;
 
+import novelang.parser.unicode.UnicodeNames;
+
 /**
  * Represents something bad that happened during document generation.
  * 
@@ -87,10 +89,18 @@ public class Problem {
   ) {
     final Location location = locationFactory.createLocation(
         exception.line, exception.charPositionInLine ) ;
-    final String message = exception.getMessage() == null ? "?" : exception.getMessage() ;
+    final String originalMessage = exception.getMessage() ;
+    final String characterDetail = "Unrecognized character: " +
+        UnicodeNames.getUnicodeName( ( char ) exception.c ) ;
+    final String message = ( originalMessage == null ? "" : originalMessage ) + characterDetail ;
     return new Problem( location, message ) ;
   }
 
+  /**
+   * @deprecated, use standard exception-aware
+   *     {@link #createProblem(LocationFactory, Exception) method}. The parser should trap those
+   *     exceptions. 
+   */
   public static Problem createProblem(
       final LocationFactory locationFactory,
       final String message
