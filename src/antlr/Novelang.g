@@ -1279,13 +1279,17 @@ cell
 
 blockQuote
   @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
-  : ( p += tags mediumbreak )?
-    LESS_THAN_SIGN LESS_THAN_SIGN 
-    ( mediumbreak | largebreak )?
-    p += paragraph 
-    ( largebreak p += paragraph )* 
-    ( mediumbreak | largebreak )?
-    GREATER_THAN_SIGN GREATER_THAN_SIGN
+  : (
+      { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }    
+      ( p += tags mediumbreak )?
+      LESS_THAN_SIGN LESS_THAN_SIGN
+      ( mediumbreak | largebreak )?
+      p += paragraph
+      ( largebreak p += paragraph )*
+      ( mediumbreak | largebreak )?
+      GREATER_THAN_SIGN GREATER_THAN_SIGN
+      { delegate.leaveBlockDelimiterBoundary() ; }
+    )
 
     // Was:
     // -> ^( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS $p+ )

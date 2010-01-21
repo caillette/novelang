@@ -2,6 +2,14 @@ package novelang.part;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Iterables;
+
+import novelang.common.Problem;
+
+import org.junit.Assert;
 
 /**
  * Useful factory methods for tests using {@link Part}.
@@ -9,7 +17,9 @@ import java.net.MalformedURLException;
  * @author Laurent Caillette
  */
 public class PartFixture {
-  
+
+  private PartFixture() { }
+
   public static Part createPart( final String content ) {
     return new Part( content ) ;
   }
@@ -26,5 +36,12 @@ public class PartFixture {
     return new Part( content ).makeStandalone() ;
   }
   
-  
+  public static List< Problem > extractProblems( final Part part )
+  {
+    final List< Problem > problems = Lists.newArrayList() ;
+    Assert.assertTrue( part.hasProblem() ) ;
+    Iterables.addAll( problems, part.getProblems() ) ;
+    return problems ;
+  }
+
 }
