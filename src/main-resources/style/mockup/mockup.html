@@ -89,12 +89,18 @@
 
     p {
       font-size : 14pt ;
-      font-family : times new roman, serif ;
+      font-family : Times New Roman, Times, serif ;
+      /*font-family : georgia, serif ;*/
+      /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
+      /*font-family : Georgia1, Georgia, serif ;*/
     }
 
     h1, h2, h3, h4, h5 {
-      font-family : verdana, sans-serif ;
-      margin : 0 0 2px 0 ;
+
+      /*font-family : Lucida Sans Unicode, sans-serif ;*/
+      /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
+      font-family : Verdana, Verdana, Geneva, sans-serif ;
+      margin : 0 0 0.5em 0 ;
       line-height : 1 ;
     }
 
@@ -133,10 +139,10 @@
 
     #right-sidebar {
       display : table-cell ;
-      padding-left : 40px ;
-      padding-right : 10px ;
-      padding-top : 10px ;
-      background-color : #dddddd ; #d5d5d5 ;
+      padding-left : 30px ;
+      padding-right : 3px ;
+      padding-top : 3px ;
+      background-color : #dddddd ;
     }
 
 
@@ -179,7 +185,7 @@
       border-left-width : 5px ;
 
           /* Mandatory since color animation does not support 'none'. */
-      border-left-color : #DDDDDD  ;
+      border-left-color : #e4e4e4  ;
 
       /*padding-bottom : 4px ;*/
     }
@@ -187,7 +193,7 @@
     .descriptor {
 
           /* Mandatory since color animation does not support 'none'. */
-      background-color : #DDDDDD ;
+      background-color : #e4e4e4 ;
 
       line-height : 1 ;
 
@@ -215,8 +221,12 @@
     }
 
     blockquote > div.p > p {
-      font-family: georgia, sans-serif ;
-      font-size : 12pt ;
+      font-family: arial, sans-serif ;
+      /*font-family: Georgia, sans-serif ;*/
+      /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
+      /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+      
+      font-size : 11pt ;
     }
 
     div.p {
@@ -335,7 +345,7 @@
   <script type="text/javascript" > //<![CDATA[
     const SPEED = "fast" ;
     const ACTIVE_BACKGROUND = "#c0c0c0" ;
-    const INACTIVE_BACKGROUND = "#DDDDDD" ;
+    const INACTIVE_BACKGROUND = "#e4e4e4" ;
 
     $( document ).ready( function() {
       $( ".collapsable-descriptor" ).hide() ;
