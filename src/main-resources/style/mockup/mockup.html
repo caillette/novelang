@@ -98,8 +98,13 @@
     h1, h2, h3, h4, h5 {
 
       /*font-family : Lucida Sans Unicode, sans-serif ;*/
+      /*font-family : Lucida Sans Unicode, Lucida Grande, sans-serif ;*/
+      /*font-family : Trebuchet MS1, Helvetica, sans-serif ;*/
+      /*font-family : Tahoma, Geneva, sans-serif ;*/
       /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
-      font-family : Verdana, Verdana, Geneva, sans-serif ;
+      /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+      font-family : MS Sans Serif, Geneva, sans-serif ;
+      letter-spacing : 0.01em ;
       margin : 0 0 0.5em 0 ;
       line-height : 1 ;
     }
@@ -139,6 +144,7 @@
 
     #right-sidebar {
       display : table-cell ;
+      top : 2px ;
       padding-left : 30px ;
       padding-right : 3px ;
       padding-top : 3px ;
@@ -147,6 +153,7 @@
 
 
     #navigation {
+      position : fixed ;
       font-size : 10pt ;
     }
    
@@ -390,15 +397,18 @@
       // This is because a fixed position (required to make navigation always visible)
       // doesn't allow automatic width calculation.      
       var width = Math.max( $( "#tag-list" ).width(), $( "#identifier-list" ).width() ) ;
+
+
+      $( "#navigation" ).tabs( {
+          selected : 0,
+          collapsible : true,
+          fx : { opacity : "toggle", duration : 100 }
+      } ) ;
+
       $( "#tag-list" ).width( width ) ;
       $( "#identifier-list" ).width( width ) ;
       $( "#navigation" ).width( width ) ;
 
-
-      // Tabls
-      $( "#navigation" ).tabs() ;
-
-      
     } ) ;
 
   //]]></script>
