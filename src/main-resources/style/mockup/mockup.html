@@ -84,11 +84,12 @@
     }
 
     body {
+      display : table ;
       font-size : 14pt ;
     }
 
     p {
-      font-size : 14pt ;
+      font-size : 12pt ;
       font-family : Times New Roman, Times, serif ;
       /*font-family : georgia, serif ;*/
       /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
@@ -96,9 +97,9 @@
     }
 
     h1, h2, h3, h4, h5 {
-
       /*font-family : Lucida Sans Unicode, sans-serif ;*/
-      /*font-family : Lucida Sans Unicode, Lucida Grande, sans-serif ;*/
+
+    /*font-family : Lucida Sans Unicode, Lucida Grande, sans-serif ;*/
       /*font-family : Trebuchet MS1, Helvetica, sans-serif ;*/
       /*font-family : Tahoma, Geneva, sans-serif ;*/
       /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
@@ -110,23 +111,23 @@
     }
 
     h1 {
-      font-size : 20pt ;
-    }
-
-    h2 {
       font-size : 18pt ;
     }
 
-    h3 {
+    h2 {
       font-size : 16pt ;
+    }
+
+    h3 {
+      font-size : 14pt ;
     }
     
     h4 {
-      font-size : 15pt ;
+      font-size : 13pt ;
     }
 
     h5 {
-      font-size : 14pt ;
+      font-size : 12pt ;
     }
 
 
@@ -176,6 +177,7 @@
     }
 
     #identifier-list {
+      overflow-x : hidden ;
     }
 
     /*
@@ -188,11 +190,9 @@
       margin-left : 10px ;
 
       padding-left : 5px ;
-      border-left-style : solid ;
-      border-left-width : 5px ;
+      border-left: 5px solid #e4e4e4 ;
 
-          /* Mandatory since color animation does not support 'none'. */
-      border-left-color : #e4e4e4  ;
+          /* Mandatory since color animation does not support 'none'. */;
 
       /*padding-bottom : 4px ;*/
     }
@@ -392,12 +392,10 @@
         return false ;
       } ) ;
       
-      
-      // Force width of navigation area to tag's width.
-      // This is because a fixed position (required to make navigation always visible)
-      // doesn't allow automatic width calculation.      
-      var width = Math.max( $( "#tag-list" ).width(), $( "#identifier-list" ).width() ) ;
 
+      // Save their natural width before the tabs change it.
+      var identifierListWidth = $( "#identifier-list" ).width() ;
+      var tagListWidth = $( "#tag-list" ).width() ;
 
       $( "#navigation" ).tabs( {
           selected : 0,
@@ -405,9 +403,17 @@
           fx : { opacity : "toggle", duration : 100 }
       } ) ;
 
-      $( "#tag-list" ).width( width ) ;
-      $( "#identifier-list" ).width( width ) ;
-      $( "#navigation" ).width( width ) ;
+      // Force width of navigation area to tag's width.
+      // This is because a fixed position (required to make navigation always visible)
+      // doesn't allow automatic width calculation.
+      if( identifierListWidth > tagListWidth ) {
+        $( "#tag-list" ).width( identifierListWidth ) ;
+      }
+
+      var maxWidth = Math.max( identifierListWidth, tagListWidth ) + 39 ;
+      $( "#right-sidebar" ).width( maxWidth ) ;
+//      $( "#right-sidebar" ).css( "min-width", maxWidth ) ;
+//      $( "#right-sidebar" ).maxWidth( maxWidth ) ;
 
     } ) ;
 
@@ -691,7 +697,7 @@
       <div id="identifier-list" >
         <span class="identifier-reference" >\\Blockquote</span> <br/>
         <span class="identifier-reference" >\\ThisIsAChapter_withATitle</span> <br/>
-        <span class="identifier-reference" >\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</span> <br/>
+        <!--<span class="identifier-reference" >\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</span> <br/>-->
         <span class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong<!--_SoWeSeeHowItOverlapsWithTagsByTheWay--></span> <br/>
         <span class="identifier-reference" >\\Whatever</span> <br/>
         <span class="identifier-reference" >\\SomeBlockquote</span> <br/>
