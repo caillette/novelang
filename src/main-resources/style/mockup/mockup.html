@@ -194,9 +194,6 @@
       padding-left : 5px ;
       border-left: 5px solid #e4e4e4 ;
 
-          /* Mandatory since color animation does not support 'none'. */;
-
-      /*padding-bottom : 4px ;*/
     }
 
     .descriptor {
@@ -316,6 +313,11 @@
       margin-bottom : 4px ;
     }
 
+    .duplicate {
+      text-decoration : line-through ;
+      color : brown ;
+    }
+
     img.descriptor-disclosure {
       margin-right : -20px ;
       margin-top : 5px ;
@@ -415,9 +417,10 @@
         $( "#tag-list" ).width( identifierListWidth ) ;
       }
 
-          // Add extra width because of margins and paddings for the sidebar. 
+      // Add extra width because of margins and paddings for the sidebar.
       var maxWidth = Math.max( identifierListWidth, tagListWidth ) ;
       $( "#right-sidebar" ).width( maxWidth + 10 ) ;
+
       $( "#navigation" ).width( maxWidth ) ;
 
       $( "#navigation" ).tabs( {
