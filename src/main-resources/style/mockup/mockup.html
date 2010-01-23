@@ -242,7 +242,7 @@
       padding-left : 3px ;
 
       font-size: 13pt ;
-      font-family : times new roman, serif ;
+      /*font-family : times new roman, serif ;*/
     }
 
     pre {
@@ -284,11 +284,16 @@
       padding-bottom : 6px ;  /*Allocate room for list items' bottom border.*/
     }
 
-    .implicit-tag, .explicit-tag {
+    .implicit-tag, .explicit-tag, .implicit-identifier, .explicit-identifier,
+        .identifier-reference 
+    {
+      font-family : Arial, Arial, Helvetica, sans-serif ;
+    }
+
+    .implicit-tag, .explicit-tag, .implicit-identifier, .explicit-identifier
+    {
       display : inline ;  /* Required as they appear as list items. */
-      border-width : 1px ;
-      border-color : black ;
-      font-family : sans-serif ;
+      border: 1px black ;
       font-size : 8pt ;
       margin : -15px 0 0 0 ;
       padding : 2px 4px 1px 4px ;
@@ -305,6 +310,10 @@
 
     .explicit-tag {
       border-style : solid ;
+    }
+
+    li.identifier-reference {
+      margin-bottom : 4px ;
     }
 
     img.descriptor-disclosure {
@@ -407,9 +416,9 @@
       }
 
           // Add extra width because of margins and paddings for the sidebar. 
-      var maxWidth = Math.max( identifierListWidth, tagListWidth ) + 40 ;
-      $( "#right-sidebar" ).width( maxWidth ) ;
-      $( "#navigation" ).width( maxWidth - 10 ) ;
+      var maxWidth = Math.max( identifierListWidth, tagListWidth ) ;
+      $( "#right-sidebar" ).width( maxWidth + 10 ) ;
+      $( "#navigation" ).width( maxWidth ) ;
 
       $( "#navigation" ).tabs( {
           selected : 0,
@@ -697,14 +706,16 @@
       </form>
 
       <div id="identifier-list" >
-        <span class="identifier-reference" >\\Blockquote</span> <br/>
-        <span class="identifier-reference" >\\ThisIsAChapter_withATitle</span> <br/>
-        <span class="identifier-reference" >\\ThisIsASectionWithATitle_AndStyleInsideTheTitle</span> <br/>
-        <span class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong<br/><!--&#x200b;-->_SoWeSeeHowItOverlapsWithTagsByTheWay</span> <br/>
-        <span class="identifier-reference" >\\Whatever</span> <br/>
-        <span class="identifier-reference" >\\SomeBlockquote</span> <br/>
-        <span class="identifier-reference duplicate" >\\Duplicate</span> <br/>
-        <span class="identifier-reference duplicate" >\\Duplicate</span> <br/>
+        <ul>
+          <li class="identifier-reference" >\\Blockquote</li>
+          <li class="identifier-reference" >\\ThisIsAChapter&#x200b;_withATitle</li>
+          <li class="identifier-reference" >\\ThisIsASectionWithATitle&#x200b;_AndStyleInsideTheTitle</li>
+          <li class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong&#x200b;_SoWeSeeHowItOverlapsWithTagsByTheWay</li>
+          <li class="identifier-reference" >\\Whatever</li>
+          <li class="identifier-reference" >\\SomeBlockquote</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+        </ul>
       </div>
     </div>
   </div>
