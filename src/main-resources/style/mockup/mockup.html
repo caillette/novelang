@@ -181,6 +181,23 @@
     #identifier-list {
       overflow-x : hidden ;
     }
+  
+    #pin-navigation {
+      position : fixed ;
+      bottom : 0 ;
+      height : 64px ;
+      width : 100% ;
+      display : table-cell ;
+      vertical-align : bottom ; 
+      background : url( "Gradient.png" ) repeat-x bottom fixed ;
+    }
+  
+    #pin-navigation > div {
+      padding-top : 32px ;
+      padding-left : 10px ;
+      font-size : 10pt ;
+      font-family : Verdana, Verdana, Geneva, sans-serif ;
+    }    
 
     /*
      * Borders and margins.
@@ -689,7 +706,10 @@
 
 
   <div id="right-sidebar">
+
+
     <div id="navigation" >
+      
 
       <ul>
         <li><a href="#tag-list-content">Tags</a></li>
@@ -721,6 +741,13 @@
         </ul>
       </div>
     </div>
+    
+    <div id="pin-navigation" >
+      <div>
+        <label><input type="checkbox" id="pin-navigation-button"/>Pin</label>
+      </div>
+    </div>
+    
   </div>
 </body>
 </html>
