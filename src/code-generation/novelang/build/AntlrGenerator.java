@@ -52,7 +52,7 @@ import java.util.regex.Pattern;
  *
  * @author Laurent Caillette
  */
-public class AntlrGenerator extends JavaGenerator {
+public class AntlrGenerator extends GrammarBasedJavaGenerator {
 
   /**
    * Too bad, on't use Novelang log because of build structure. 

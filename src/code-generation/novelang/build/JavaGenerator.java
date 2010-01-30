@@ -1,24 +1,6 @@
-/*
- * Copyright (C) 2008 Laurent Caillette
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package novelang.build;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -30,68 +12,64 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.StringTemplateGroupLoader;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-
+import org.slf4j.LoggerFactory;
 
 /**
- * Single entry point for the build: generates all needed Java files from ANTLR grammar:
- * tokens, supported characters, parser.
- * Also provides the base class for specialized generators.
- * 
+ * Base class for Java code generation.
+ *
  * @author Laurent Caillette
  */
 public abstract class JavaGenerator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( JavaGenerator.class ) ;
-
-  private static final String NODE_ENUMERATION_CLASSNAME = "NodeKind" ;
-  private static final String LEXEMES_CLASSNAME = "GeneratedLexemes" ;
-
+  private static final Logger LOGGER = LoggerFactory.getLogger( GrammarBasedJavaGenerator.class ) ;
   protected static final String JAVA_EXTENSION = ".java" ;
+  protected final String packageName ;
+  protected final String className ;
+  protected final File targetFile ;
+  protected final String generatorName ;
+  protected final String generationTimestamp ;
 
-  private final File grammarFile ;
-  private final String grammar ;
-  private final String packageName ;
-  private final String className ;
-  private final File targetFile ;
-  private final String generatorName ;
-  private final String generationTimestamp ;
-  private static final String GRAMMAR_CLASSNAME = "Novelang";
-  private static final String GENERIC_PARSER_PACKAGENAME = "novelang.parser";
-  private static final String ANTLR_PARSER_PACKAGENAME = GENERIC_PARSER_PACKAGENAME + ".antlr";
+  private static final StringTemplateGroup STRINGTEMPLATEGROUP = loadStringTemplateGroup() ;
 
-  public JavaGenerator (
-      final File grammarFile,
-      final String packageName, 
-      final String className, 
-      final File targetDirectory 
-  ) throws IOException
-  {
-    this.grammarFile = grammarFile.getCanonicalFile() ;
-    this.grammar = readGrammar( grammarFile ) ;
-    this.packageName = packageName ;
-    this.className = className ;
-    this.generatorName = getClass().getName() ;
+  private static final StringTemplateErrorListener STRING_TEMPLATE_ERROR_LISTENER =
+      new StringTemplateErrorListener() {
+        public void error( final String s, final Throwable throwable ) {
+          throw new RuntimeException( s, throwable ) ;
+        }
+        public void warning( final String s ) {
+          throw new RuntimeException( s ) ;
+        }
+      }
+  ;
+
+  public JavaGenerator(
+      final String className,
+      final String packageName,
+      final File targetDirectory
+  ) throws IOException {
+    this.className = className;
+    this.packageName = packageName;
+    generatorName = getClass().getName();
+
+    this.targetFile = resolveTargetFile(
+        targetDirectory, packageName, className + JAVA_EXTENSION ) ;
+
     this.generationTimestamp = new Date().toString() ;
 
-    final String relativePath = packageName.replace( '.', '/' ) ;
-    this.targetFile = new File(
-        targetDirectory,
-        relativePath + "/" + className + JAVA_EXTENSION
-    ).getCanonicalFile() ;
   }
 
-  public final String getGrammar() {
-    return grammar;
-  }
-
-  public File getGrammarFile() {
-    return grammarFile ;
+  public static File resolveTargetFile( 
+      final File targetDirectory,
+      final String packageName,
+      final String simpleFileName
+  ) throws IOException {
+    return new File( targetDirectory, packageName.replace( '.', '/' ) + "/" + simpleFileName ).
+        getCanonicalFile() ;
   }
 
   public final File getTargetFile() {
-    return targetFile ; 
+    return targetFile ;
   }
 
   public final String getPackageName() {
@@ -114,10 +92,10 @@ public abstract class JavaGenerator {
 
   /**
    * Creates given directory, or the directory of a "leaf" file.
-   *  
+   *
    * @param target non-null object representing a leaf file or a directory.
-   * 
-   * @throws IOException
+   *
+   * @throws java.io.IOException
    */
   protected final void createDirectory( final File target ) throws IOException {
     final File targetDirectory ;
@@ -132,65 +110,6 @@ public abstract class JavaGenerator {
   }
 
   protected abstract String generateCode() throws IOException ;
-
-
-  public static String readGrammar( final File grammarFile ) throws IOException {
-    return IOUtils.toString( new FileInputStream( grammarFile ) ) ;
-  }
-
-
-  public static void main( final String[] args ) throws IOException {
-    
-    if( args.length == 2 ) {
-      final File grammar = new File( args[ 0 ] ) ;
-      final File targetDirectory = new File( args[ 1 ] ).getCanonicalFile() ;
-
-      if ( ! targetDirectory.exists() && ! targetDirectory.mkdirs() ) {
-        throw new IOException( "Could not create: '" + targetDirectory.getPath() + "'" ) ;
-      }
-
-      new TokenEnumerationGenerator(
-          grammar,
-          GENERIC_PARSER_PACKAGENAME,
-          NODE_ENUMERATION_CLASSNAME,
-          targetDirectory
-      ).generate() ;
-
-      new LexemeGenerator(
-          grammar,
-          GENERIC_PARSER_PACKAGENAME,
-          LEXEMES_CLASSNAME,
-          targetDirectory
-      ).generate() ;
-
-      new AntlrGenerator(
-          grammar,
-          ANTLR_PARSER_PACKAGENAME,
-          GRAMMAR_CLASSNAME,
-          targetDirectory
-      ).generate() ;
-
-    } else {
-      throw new IllegalArgumentException( 
-          "Usage: " + ClassUtils.getShortClassName( JavaGenerator.class ) + 
-          " <grammar-file> <target-directory>"
-      ) ;
-    }
-    
-  }
-
-  private static final StringTemplateGroup STRINGTEMPLATEGROUP = loadStringTemplateGroup() ;
-
-  private static final StringTemplateErrorListener STRING_TEMPLATE_ERROR_LISTENER =
-      new StringTemplateErrorListener() {
-        public void error( final String s, final Throwable throwable ) {
-          throw new RuntimeException( s, throwable ) ;
-        }
-        public void warning( final String s ) {
-          throw new RuntimeException( s ) ;
-        }
-      }
-  ;
 
   private static StringTemplateGroup loadStringTemplateGroup() {
     final String templateDirectory =

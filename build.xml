@@ -71,6 +71,7 @@
       <include name="**/*.st" />
       <include name="**/*.ttf" />
       <include name="**/*.stg" />
+      <include name="**/*.bin" />
     </patternset>
 
     <path id="deploy-libs" >
@@ -171,7 +172,7 @@
       description="This should superceded generate-antlr target in a near future"
   >
     <java
-        classname="novelang.build.JavaGenerator"
+        classname="novelang.build.CodeGenerator"
         failonerror="true"
         fork="false"
     >

@@ -30,7 +30,7 @@ import novelang.parser.shared.Lexeme;
  *
  * @author Laurent Caillette
  */
-public class LexemeGenerator extends JavaGenerator {
+public class LexemeGenerator extends GrammarBasedJavaGenerator {
 
   public LexemeGenerator(
       final File grammarFile,

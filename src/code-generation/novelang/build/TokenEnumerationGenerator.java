@@ -39,7 +39,7 @@ import com.google.common.collect.ImmutableMap;
  *
  * @author Laurent Caillette
  */
-public class TokenEnumerationGenerator extends JavaGenerator {
+public class TokenEnumerationGenerator extends GrammarBasedJavaGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( TokenEnumerationGenerator.class ) ;
 
