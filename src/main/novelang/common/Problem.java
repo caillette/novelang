@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.MissingTokenException;
 import com.google.common.base.Preconditions;
 
 import novelang.parser.unicode.UnicodeNames;
@@ -90,9 +91,20 @@ public class Problem {
     final Location location = locationFactory.createLocation(
         exception.line, exception.charPositionInLine ) ;
     final String originalMessage = exception.getMessage() ;
-    final String characterDetail = "Unrecognized character: " +
-        UnicodeNames.getUnicodeName( ( char ) exception.c ) ;
-    final String message = ( originalMessage == null ? "" : originalMessage ) + characterDetail ;
+    final String characterDetail = "Unrecognized character: "
+        + exception.c
+//        + UnicodeNames.getUnicodeName( ( char ) exception.c )
+    ;
+
+    String message = originalMessage ;
+
+    if( exception instanceof MissingTokenException ) {
+      message = "Missing " + UnicodeNames.getUnicodeName( ( char )
+          ( ( MissingTokenException ) exception ).expecting ) ;
+    }
+
+    
+    message = ( originalMessage == null ? "" : originalMessage ) + characterDetail ;
     return new Problem( location, message ) ;
   }
 

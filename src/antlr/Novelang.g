@@ -147,6 +147,26 @@ import org.slf4j.LoggerFactory;
   }
 
   @Override
+  public void reportError(org.antlr.runtime.RecognitionException e ) {
+    if( null == delegate ) {
+      super.reportError( e ) ;
+    } else {
+      delegate.report( e ) ;
+    }
+  }
+/*
+  @Override
+  public java.lang.String getErrorMessage(
+      org.antlr.runtime.RecognitionException recognitionException,
+      java.lang.String[] strings
+  ) {
+    System.out.println( "getErrorMessage( " + recognitionException + "\n" + strings ) ;
+    return super.getErrorMessage( recognitionException, strings ) ;
+  }
+*/  
+
+/* 
+  @Override
   public void emitErrorMessage( String string ) {
     if( null == delegate ) {
       super.emitErrorMessage( string ) ;
@@ -154,6 +174,7 @@ import org.slf4j.LoggerFactory;
       delegate.report( string ) ;
     }
   }
+*/
 }
 
 

@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.Assert;
 import org.junit.Ignore;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -15,13 +14,10 @@ import novelang.common.Problem;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
-
 /**
  * @author Laurent Caillette
  */
-public class BlockDelimiterReportsProblemsTest {
+public class ParsingProblemMessagesTest {
 
   @Test
   public void missingClosingDoubleQuote() throws MalformedURLException {
@@ -43,7 +39,7 @@ public class BlockDelimiterReportsProblemsTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( BlockDelimiterReportsProblemsTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( ParsingProblemMessagesTest.class ) ;
 
   private static void verify( final String sourceDocument, final String problemMessageFragment ) {
     final Part part = PartFixture.createStandalonePart( sourceDocument ) ;
