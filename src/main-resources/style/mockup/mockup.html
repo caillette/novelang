@@ -153,26 +153,19 @@
       background-color : #dddddd ;
     }
 
-
     #navigation {
-      position : fixed ;
       top : 6px ;
       font-size : 10pt ;
     }
+
+  .fixed-position {
+    position : fixed ;
+  }
    
     #tag-list {
-      /*position : fixed ;*/
       white-space : nowrap ;
-      /*border : solid 1px #a5a5a5 ;*/
       padding : 4px 4px 2px 2px ;
-      /*background : #e5e5e5 ;*/
-      /*background-color : transparent ;*/
-
-      /*border-radius : 7px ;*/
-      /*-webkit-border-radius : 7px ;*/
-      /*-moz-border-radius : 7px ;*/
     }
-  
   
     #tag-list-content > input {
       margin-bottom : 6px ;
@@ -181,21 +174,22 @@
     #identifier-list {
       overflow-x : hidden ;
     }
+
   
     #pin-navigation {
       position : fixed ;
       bottom : 0 ;
-      height : 64px ;
+      height : 96px ;
       width : 100% ;
       display : table-cell ;
       vertical-align : bottom ; 
       background : url( "Gradient.png" ) repeat-x bottom fixed ;
     }
   
-    #pin-navigation > div {
-      padding-top : 32px ;
+    #pin-navigation > img {
+      padding-top : 60px ;
       padding-left : 10px ;
-      font-size : 10pt ;
+      font-size : 8pt ;
       font-family : Verdana, Verdana, Geneva, sans-serif ;
     }    
 
@@ -447,6 +441,17 @@
       } ) ;
 
     } ) ;
+  
+    function togglePinNavigation() {
+//      alert( "togglePinNavigation()" ) ;
+      $( "#navigation" ).toggleClass( "fixed-position" ) ;        
+//      var navigation = $( "#navigation" ) ;
+//      if( navigation.css( "position" ) ) {
+//        navigation.css( "position", "" ) ;
+//      } else {
+//        navigation.css( "position", "fixed" ) ;
+//      }
+    }
 
   //]]></script>
 
@@ -708,7 +713,7 @@
   <div id="right-sidebar">
 
 
-    <div id="navigation" >
+    <div id="navigation" class="fixed-position" >
       
 
       <ul>
@@ -738,14 +743,76 @@
           <li class="identifier-reference" >\\SomeBlockquote</li>
           <li class="identifier-reference duplicate" >\\Duplicate</li>
           <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
+          <li class="identifier-reference duplicate" >\\Duplicate</li>
         </ul>
+        <br/><br/><br/><br/>
       </div>
     </div>
     
     <div id="pin-navigation" >
-      <div>
-        <label><input type="checkbox" id="pin-navigation-button"/>Pin</label>
-      </div>
+      <!--<div>-->
+        <!--<label>-->
+          <!--<input -->
+              <!--type="checkbox" -->
+              <!--id="pin-navigation-button"-->
+              <!--checked="checked"-->
+              <!--onclick="togglePinNavigation() ;" -->
+          <!--/>-->
+        <!--</label>-->
+      <!--</div>-->
+      <img src="pin/pin.png" alt="" />
     </div>
     
   </div>
