@@ -255,16 +255,30 @@
 
     blockquote > div.p > p {
       font-family: arial, sans-serif ;
+      background : #d6d6d6 ;
       /*font-family: Georgia, sans-serif ;*/
       /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
       /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
       
       font-size : 11pt ;
+
+      margin-right : 12px ;
+
+    }
+
+    blockquote {
+      margin-bottom : 4px ;
+    }
+
+    blockquote > div.descriptor > img.opening-quote{
+      /*float : left ;*/
+      margin-left : -10px ;
+      margin-bottom : -12px ;
+      padding-top : 4px ;
     }
 
     div.p {
       padding-left : 3px ;
-
       font-size: 13pt ;
       /*font-family : times new roman, serif ;*/
     }
@@ -534,7 +548,7 @@
             <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
           </div>
         </div>
-        <h2>Blockquote demo</h2>
+        <h2>Blockquote demo 1</h2>
         <div class="p" >
           <div class="descriptor">
             <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
@@ -564,8 +578,9 @@
               <li class="explicit-tag Tag-moreTag">moreTag</li>
               <li class="explicit-tag Tag-evenMore">evenMore</li>
             </ul>
+            <img src="OpeningQuote.png" class="opening-quote" alt="" >
           </div>
-  
+
   
           <!-- Wrap every <p> in a div, because it has no closing tag.
               Without wrapping, some style on <p> element (border) applies to the parent.  
@@ -616,7 +631,183 @@
         </div>
       </div>
   
-  
+
+      <div class="level" >
+        <div class="descriptor">
+          <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+          <div class="collapsable-descriptor" >
+            <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+          </div>
+        </div>
+        <h2>Blockquote demo 2</h2>
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph before a blockquote.
+          </p>
+        </div>
+        <blockquote>
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+              <ul class="identifiers">
+                <li class="explicit-identifier">\\SomeBlockquote_whichIsVeryLong_SoWeSeeHowItOverlapsWithTagsByTheWay</li>
+              </ul>
+            </div>
+            <img src="OpeningQuote.png" class="opening-quote" alt="" >
+          </div>
+
+
+          <!-- Wrap every <p> in a div, because it has no closing tag.
+              Without wrapping, some style on <p> element (border) applies to the parent.
+          -->
+          <div class="p" >
+            <div class="descriptor">
+              <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+              <div class="collapsable-descriptor" >
+                <span
+                    class="location"
+                >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+                <ul class="identifiers">
+                  <li class="explicit-identifier">\\Whatever</li>
+                </ul>
+
+              </div>
+              <ul class="tags">
+                <li class="explicit-tag Tag-Some-tag" >Some-tag</li>
+                <li class="explicit-tag Tag-My-tag">My-tag</li>
+              </ul>
+
+            </div>
+            <p>
+            This is a “blockquote”.
+          </div>
+          <div class="p" >
+            <div class="descriptor">
+              <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+              <div class="collapsable-descriptor" >
+                <span
+                    class="location"
+                >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+                <ul class="identifiers">
+                  <li class="explicit-identifier">\\SomeBlockquote</li>
+                </ul>
+              </div>
+            </div>
+            <p>
+              There can be several paragraphs inside.
+              A paragraph may be very long. It may spread over several lines.
+              It may tell interesting things. Or not.
+          </div>
+        </blockquote>
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph after a blockquote.
+          </p>
+        </div>
+      </div>
+
+      <div class="level" >
+        <div class="descriptor">
+          <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+          <div class="collapsable-descriptor" >
+            <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+          </div>
+        </div>
+        <h2>Blockquote demo 3</h2>
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph before a blockquote.
+          </p>
+        </div>
+        <blockquote>
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+              <ul class="identifiers">
+                <li class="explicit-identifier">\\SomeBlockquote_whichIsVeryLong_SoWeSeeHowItOverlapsWithTagsByTheWay</li>
+              </ul>
+            </div>
+            <!-- We need something visible to force disclosure icon to appear. Also adds some top margin. -->
+            <img src="OpeningQuote.png" class="opening-quote" alt="" >
+          </div>
+
+
+          <!-- Wrap every <p> in a div, because it has no closing tag.
+              Without wrapping, some style on <p> element (border) applies to the parent.
+          -->
+          <div class="p" >
+            <div class="descriptor">
+              <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+              <div class="collapsable-descriptor" >
+                <span
+                    class="location"
+                >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+                <ul class="identifiers">
+                  <li class="explicit-identifier">\\Whatever</li>
+                </ul>
+
+              </div>
+
+            </div>
+            <p>
+            This is a “blockquote”.
+          </div>
+          <div class="p" >
+            <div class="descriptor">
+              <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+              <div class="collapsable-descriptor" >
+                <span
+                    class="location"
+                >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+                <ul class="identifiers">
+                  <li class="explicit-identifier">\\SomeBlockquote</li>
+                </ul>
+              </div>
+            </div>
+            <p>
+              There can be several paragraphs inside.
+              A paragraph may be very long. It may spread over several lines.
+              It may tell interesting things. Or not.
+          </div>
+        </blockquote>
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph after a blockquote.
+          </p>
+        </div>
+      </div>
+
+
       <div class="level" >
         <div class="descriptor">
           <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
