@@ -55,7 +55,7 @@
     body {
       line-height : 1.3 ;
       color : black ;
-      background : #e4e4e4 ;
+      background : #dddddd ;
       font-size : 12pt ;
     }
 
@@ -86,6 +86,7 @@
     body {
       display : table ;
       font-size : 14pt ;
+      /*background : #dddddd ;*/
     }
 
     p {
@@ -139,7 +140,7 @@
     
     #rendered-document {
       display : table-cell ;
-      /*background : white ;*/
+      background : #e4e4e4 ;
       min-width : 500px ;
       max-width : 800px ; 
     }
@@ -158,9 +159,9 @@
       font-size : 10pt ;
     }
 
-  .fixed-position {
-    position : fixed ;
-  }
+    .fixed-position {
+      position : fixed ;
+    }
    
     #tag-list {
       white-space : nowrap ;
@@ -185,13 +186,28 @@
       vertical-align : bottom ; 
       background : url( "Gradient.png" ) repeat-x bottom fixed ;
     }
-  
-    #pin-navigation > img {
-      padding-top : 60px ;
-      padding-left : 10px ;
+
+    #pin-navigation > ul {
+      margin-top : 80px ;
+      margin-left : 16px ;
       font-size : 8pt ;
-      font-family : Verdana, Verdana, Geneva, sans-serif ;
-    }    
+      font-family : Verdana, Geneva, sans-serif ;
+      color : #bbbbbb ;
+      background : #dddddd ;      
+    }
+
+    #pin-navigation > ul > li {
+      display : inline ;
+      padding-left : 0.5em ;
+      padding-right : 0.5em ;
+      cursor : pointer ;
+    }
+
+    #pin-navigation > ul > li:hover {
+      background : #e4e4e4 ;
+      color : #222222 ;
+    }
+
 
     /*
      * Borders and margins.
@@ -441,16 +457,21 @@
       } ) ;
 
     } ) ;
-  
+
+    var pinnedNavigation = true ;
+
     function togglePinNavigation() {
-//      alert( "togglePinNavigation()" ) ;
-      $( "#navigation" ).toggleClass( "fixed-position" ) ;        
-//      var navigation = $( "#navigation" ) ;
-//      if( navigation.css( "position" ) ) {
-//        navigation.css( "position", "" ) ;
-//      } else {
-//        navigation.css( "position", "fixed" ) ;
-//      }
+      pinnedNavigation = ! pinnedNavigation ;
+      if( pinnedNavigation ) {
+        $( "#pin-navigation > ul > li:last" ).text( "unpin" ) ;
+      } else {
+        $( "#pin-navigation > ul > li:last" ).text( "pin" ) ;
+      }
+      $( "#navigation" ).toggleClass( "fixed-position" ) ;
+    }
+
+    function resetNavigation() {
+
     }
 
   //]]></script>
@@ -738,7 +759,7 @@
           <li class="identifier-reference" >\\Blockquote</li>
           <li class="identifier-reference" >\\ThisIsAChapter&#x200b;_withATitle</li>
           <li class="identifier-reference" >\\ThisIsASectionWithATitle&#x200b;_AndStyleInsideTheTitle</li>
-          <li class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong&#x200b;_SoWeSeeHowItOverlapsWithTagsByTheWay</li>
+          <li class="identifier-reference" >\\SomeBlockquote_whichIsVeryLong_SoWeSeeHowItOverlapsWithTagsByTheWay</li>
           <li class="identifier-reference" >\\Whatever</li>
           <li class="identifier-reference" >\\SomeBlockquote</li>
           <li class="identifier-reference duplicate" >\\Duplicate</li>
@@ -802,17 +823,10 @@
     </div>
     
     <div id="pin-navigation" >
-      <!--<div>-->
-        <!--<label>-->
-          <!--<input -->
-              <!--type="checkbox" -->
-              <!--id="pin-navigation-button"-->
-              <!--checked="checked"-->
-              <!--onclick="togglePinNavigation() ;" -->
-          <!--/>-->
-        <!--</label>-->
-      <!--</div>-->
-      <img src="pin/pin.png" alt="" />
+      <ul>
+        <li onclick="resetNavigation()" >reset</li>
+        <li onclick="togglePinNavigation()">unpin</li>
+      </ul>
     </div>
     
   </div>
