@@ -31,16 +31,17 @@ import com.google.common.collect.Maps;
    */
   private static final String RESOURCE_NAME = "UnicodeData.txt" ;
 
-  private static final String DESCRIPTOR_TEXT = "(?:\\w| |-|<|>)*" ;
+  private static final String DESCRIPTOR_TEXT = "(?:\\w| |-|/|,|<|>|\\(|\\))*" ;
   private static final String IGNORED_DESCRIPTOR = "(?:" + DESCRIPTOR_TEXT + ";)" ;
   private static final String USEFUL_DESCRIPTOR = "(" + DESCRIPTOR_TEXT + ");" ;
 
   private static final Pattern PROPERTY_LINE_PATTERN =
-      Pattern.compile( "(\\w+);" +
+      Pattern.compile( "(\\w{4});" +
           USEFUL_DESCRIPTOR +
           IGNORED_DESCRIPTOR + "{8}" +
           USEFUL_DESCRIPTOR +
-          IGNORED_DESCRIPTOR + "{3}"
+          IGNORED_DESCRIPTOR + "{3}" +
+          "(?:\\w*)"
       ) ;
 
   static {
@@ -57,10 +58,15 @@ import com.google.common.collect.Maps;
   }
 
   public Map< Character, String > loadNames() throws IOException {
+    return extractNames( readProperties() ) ;
+  }
+
+  /*package*/ Map< Character, String > extractNames( final String names ) throws IOException {
     final Map< Character, String > characterToNameMap = Maps.newHashMap() ;
-    final String propertiesAsString = readProperties() ;
-    final Matcher matcher = PROPERTY_LINE_PATTERN.matcher( propertiesAsString ) ;
-    while( matcher.find() ) {
+    final Matcher matcher = PROPERTY_LINE_PATTERN.matcher( names ) ;
+    int limiter = 0 ;
+
+    while( matcher.find() /*&& limiter < 150*/ ) {
       final String code = matcher.group( 1 ) ;
       if( code.length() == 4 ) {
         final String name ;
@@ -75,11 +81,15 @@ import com.google.common.collect.Maps;
         final int codeAsInt = Integer.parseInt( code, 16 ) ; // Be confident!
         final Character character = ( char ) codeAsInt ;
         final String existing = characterToNameMap.get( character ) ;
-        if( existing == null ) {
+        if( existing == null && ! "".equals( name ) ) {
           // Retain first definition, seems that most interesting appear first.
           characterToNameMap.put( character, name ) ;
+//          LOG.info( "Added " + ( ( int ) character ) + " as '" + name + "'" +
+//                  ( character != limiter ? " OOOPS!" : "" )
+//          ) ;
         }
       }
+      limiter++ ;
     }
     return ImmutableMap.copyOf( characterToNameMap ) ;
   }

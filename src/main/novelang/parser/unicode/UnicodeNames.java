@@ -33,9 +33,10 @@ public class UnicodeNames {
 
   public static String getUnicodeName( final char character ) {
     try {
-      return new UnicodeNamesBinaryReader(
+      final String pureName = new UnicodeNamesBinaryReader(
           UnicodeNames.class.getResource( RESOURCE_NAME ) ).getName( character ) ;
-    } catch( IOException e ) {
+      return pureName.replace( ' ', '_' ) ;
+    } catch( Exception e ) {
       LOG.error( "Could not load name for character " + ( int ) character , e ) ;
       return null ;
     }

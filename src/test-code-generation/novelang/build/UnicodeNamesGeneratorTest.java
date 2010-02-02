@@ -1,21 +1,18 @@
 package novelang.build;
 
-import java.util.Map;
-import java.nio.ByteBuffer;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Map;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
-import com.sun.mail.iap.ByteArray;
-import org.junit.Assert;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
-import novelang.system.LogFactory;
 import novelang.system.Log;
+import novelang.system.LogFactory;
 
 /**
  * Tests for {@link novelang.build.UnicodeNamesGenerator}.
@@ -25,7 +22,7 @@ import novelang.system.Log;
 public class UnicodeNamesGeneratorTest {
 
   @Test
-  public void integerToBytes() {
+  public void convertIntegerToBytes() {
 
     for( final Map.Entry< Integer, byte[] > entry : INTEGER_TO_BYTES.entrySet() ) {
       final byte[] expectedBytes = entry.getValue();
@@ -59,12 +56,13 @@ public class UnicodeNamesGeneratorTest {
         .build()
     ;
     final ByteArrayOutputStream bytes = new ByteArrayOutputStream() ;
-    UnicodeNamesGenerator.generate( bytes, map ) ;
+    UnicodeNamesGenerator.generate( bytes, map, 2 ) ;
     final byte[] actualBytes = bytes.toByteArray() ;
 
     final byte[] expectedBytes = new byte[] {
-        0, 0, 0,  8,
-        0, 0, 0, 13,
+        0, 0, 0,  2,          // Size of the offset table.
+        0, 0, 0, 12,          // Offset to "Zero".
+        0, 0, 0, 17,          // Offset to "One".
         90, 101, 114, 111, 0, // Z e r o \0
         79, 110, 101, 0       // O n e \0
     } ;
@@ -92,13 +90,15 @@ public class UnicodeNamesGeneratorTest {
         .build()
     ;
     final ByteArrayOutputStream bytes = new ByteArrayOutputStream() ;
-    UnicodeNamesGenerator.generate( bytes, map ) ;
+    UnicodeNamesGenerator.generate( bytes, map, 4 ) ;
     final byte[] actualBytes = bytes.toByteArray() ;
 
     final byte[] expectedBytes = new byte[] {
-        0, 0, 0, 12,
-        0, 0, 0,  0,
-        0, 0, 0, 17,
+        0, 0, 0,  4,          // 3 characters.
+        0, 0, 0, 20,          // Offset to "Zero".
+        0, 0, 0,  0,          // Offset for some undefined character.
+        0, 0, 0, 25,          // Offset to "One".
+        0, 0, 0,  0,          // Offset for some undefined character.
         90, 101, 114, 111, 0, // Z e r o \0
         84, 119, 111, 0       // T w o \0
     } ;
@@ -124,13 +124,13 @@ public class UnicodeNamesGeneratorTest {
 
   private static final Log LOG = LogFactory.getLog( UnicodeNamesGeneratorTest.class ) ;
 
-  private static BiMap< Integer, byte[] > INTEGER_TO_BYTES =
+  private static final BiMap< Integer, byte[] > INTEGER_TO_BYTES =
       new ImmutableBiMap.Builder< Integer, byte[] >()
       .put(     0, new byte[] { 0, 0, 0,    0 } )
       .put(     1, new byte[] { 0, 0, 0,    1 } )
       .put(    10, new byte[] { 0, 0, 0,   10 } )
       .put(   255, new byte[] { 0, 0, 0,   -1 } )
-      .put( 65535, new byte[] { 0, 0, -1,   -1 } )
+      .put( 65535, new byte[] { 0, 0, -1,  -1 } )
       .build()
   ;
 

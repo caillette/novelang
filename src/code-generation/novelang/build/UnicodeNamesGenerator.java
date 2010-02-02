@@ -23,7 +23,9 @@ import novelang.system.LogFactory;
 /**
  * Generates a file containing every Unicode name.
  * <ul>
- *   <li>First 65536 * 4 bytes: the offsets of the names. 
+ *   <li>First 4 bytes: n, the number of character in the offset table.
+ *   <li>n * 4 bytes: the offsets of the names (from the start of the file).
+ *       Offsets are 32-bit, unsigned ints.
  *   <li>8-bit characters for names, zero-terminated.
  * </ul>
  *
@@ -34,6 +36,7 @@ public class UnicodeNamesGenerator {
   private static final Log LOG = LogFactory.getLog( UnicodeNamesGenerator.class ) ;
   private final File targetFile ;
   private static final int CHARACTER_COUNT_FOR_LOGGING = 10000;
+  private static final int UNSIGNED_MAX_16BIT = 256 * 256;
 
   public UnicodeNamesGenerator(
       final String packageName,
@@ -75,51 +78,71 @@ public class UnicodeNamesGenerator {
       final OutputStream outputStream,
       final Map< Character, String > characterNames
   ) throws IOException {
+    generate( outputStream, characterNames, UNSIGNED_MAX_16BIT ) ;
+  }
+
+
+  /**
+   *  Generates the offset table and the names.
+   *
+   * @param outputStream not flushed.
+   * @param characterNames a Map with characters having contiguous codes that start by 0.
+   */
+  public static void generate(
+      final OutputStream outputStream,
+      final Map< Character, String > characterNames,
+      final int totalCharacterCount
+  ) throws IOException {
     final Set< Character > characters = characterNames.keySet() ;
     final List< Character > characterList = Lists.newArrayList( characters ) ;
     final Map< Integer, Integer > offsetsFromFirstName = Maps.newHashMap() ;
     Collections.sort( characterList, CHARACTER_COMPARATOR /* Needed? */ ) ;
-    Preconditions.checkArgument( characterList.size() <= 256 * 256 ) ;
+    Preconditions.checkArgument( totalCharacterCount <= UNSIGNED_MAX_16BIT ) ;
+    Preconditions.checkArgument( characterList.size() <= totalCharacterCount ) ;
 
     // Find the offset of the name of each character.
     int writePositionFromFirstName = 0 ;
-    int contiguousCharacterIndex = 0 ; // Need an int here because a short is signed.
-    final int maximumCharacterIndex = characterList.get( characterList.size() - 1 ) ;
+    int characterCount = 0 ;
 
-    for( ; contiguousCharacterIndex <= maximumCharacterIndex ; contiguousCharacterIndex ++ ) {
-      final Character character = ( char ) contiguousCharacterIndex ;
+    for( int characterIndex = 0 ; characterIndex < totalCharacterCount ; characterIndex ++ ) {
+      final Character character = ( char ) characterIndex ;
       if( characterNames.containsKey( character ) ) {
-        offsetsFromFirstName.put( contiguousCharacterIndex, writePositionFromFirstName ) ;
+        offsetsFromFirstName.put( characterIndex, writePositionFromFirstName ) ;
         writePositionFromFirstName +=
             characterNames.get( character ).getBytes( CHARSET ).length + // Real length.
             1 // Terminal zero.
         ;
+        characterCount ++ ;
       } else {
-        offsetsFromFirstName.put( contiguousCharacterIndex, null ) ;
+        offsetsFromFirstName.put( characterIndex, null ) ;
       }
-      if( contiguousCharacterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOG.debug( "Calculated offset for character " + contiguousCharacterIndex ) ;
+      if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
+        LOG.debug( "Calculated offset for character " + characterIndex ) ;
       }
     }
+    LOG.debug( "Found " + characterCount + " characters." ) ;
 
-    // Write offsets
-    final int offsetTableSize = contiguousCharacterIndex * 4 ;
-    for( final Map.Entry< Integer, Integer > entry : offsetsFromFirstName.entrySet() ) {
+    // Write character count.
+    outputStream.write( asBytes( totalCharacterCount ) ) ;
+
+    // Write offsets.
+    final int offsetTableSize = totalCharacterCount * 4 ;
+    for( int characterIndex = 0 ; characterIndex < totalCharacterCount ; characterIndex ++ ) {
       final byte[] bytes ;
-      final Integer value = entry.getValue() ;
+      final Integer value = offsetsFromFirstName.get( characterIndex ) ;
       if( value == null ) {
         bytes = ZERO_OFFSET ;
       } else {
-        bytes = asBytes( offsetTableSize + value ) ;
+        bytes = asBytes( 4 + offsetTableSize + value ) ;
       }
       outputStream.write( bytes ) ;
-      if( entry.getKey() % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOG.debug( "Wrote offset entry for character " + entry.getKey() ) ;
+      if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
+        LOG.debug( "Wrote offset entry for character " + characterIndex ) ;
       }
     }
 
     // Write names.
-    for( int characterIndex = 0 ; characterIndex <= maximumCharacterIndex ; characterIndex ++ ) {
+    for( int characterIndex = 0 ; characterIndex <= totalCharacterCount ; characterIndex ++ ) {
       final String characterName = characterNames.get( ( char ) characterIndex ) ;
       if( characterName != null ) {
         final byte[] bytes = characterName.getBytes( CHARSET ) ;

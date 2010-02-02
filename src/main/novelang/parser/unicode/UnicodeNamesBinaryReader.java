@@ -24,13 +24,24 @@ import com.google.common.base.Preconditions;
     this.resourceUrl = Preconditions.checkNotNull( resourceUrl ) ;
   }
 
-  public String getName( final char character ) throws IOException {
+  public String getName( final char character ) throws IOException, CharacterOutOfBoundsException {
     return readName( resourceUrl.openStream(), character ) ;
   }
 
   /*package*/ static String readName( final InputStream inputStream, final char character )
-      throws IOException
-  {
+      throws IOException, CharacterOutOfBoundsException {
+    final byte[] characterCountAsBytes = new byte[ 4 ] ;
+    if( inputStream.read( characterCountAsBytes ) != 4 ) {
+      throw new IOException( "Could not read character count, missing bytes" ) ;
+    }
+    final long characterCount = asLong( characterCountAsBytes ) ;
+    if( characterCount > 256 * 256 ) {
+      throw new IOException( "Incorrect character count, may not exceed 65536" ) ;
+    }
+    if( character >= characterCount ) {
+      throw new CharacterOutOfBoundsException( ( int ) characterCount, character ) ;
+    }
+
     final int firstOffset = character * 4 ;
     skipForSure( inputStream, firstOffset ) ;
 
@@ -44,7 +55,7 @@ import com.google.common.base.Preconditions;
       return null ;
     }
 
-    final long relativeNameOffset = nameOffsetFromStart - firstOffset - 4 ;
+    final long relativeNameOffset = nameOffsetFromStart - firstOffset - 8 ;
     skipForSure( inputStream, relativeNameOffset ) ;
 
     final ByteArrayOutputStream nameBytes = new ByteArrayOutputStream() ;
@@ -57,8 +68,7 @@ import com.google.common.base.Preconditions;
       }
     }
 
-    final String name = nameBytes.toString( CHARSET.name() ) ;
-    return name ;
+    return nameBytes.toString( CHARSET.name() ) ;
   }
 
   /*package*/ static long asLong( final byte[] nameOffsetAsBytes ) {
@@ -67,18 +77,24 @@ import com.google.common.base.Preconditions;
     for( int i = 0 ; i < 4 ; i ++ ) {
       nameOffsetFromStart <<= 8 ; // Does nothing at the first iteration.
 
-      // Get rid of the sign of the byte, and'ing it with 01111111 11111111 11111111 11111111.
+      // Get rid of the sign of the byte by and'ing it.
       final long unsignedByteAsLong = nameOffsetAsBytes[ i ]  & 0x000000FF ;
       nameOffsetFromStart |= unsignedByteAsLong;
     }
     return nameOffsetFromStart ;
   }
 
-  private static void skipForSure( final InputStream inputStream, final long offset )
-      throws IOException {
-    final long skipped = inputStream.skip( offset ) ;
-    if( skipped != offset ) {
-      throw new IOException( "Attempted to skip " + offset + " but skipped " + skipped ) ;
+  private static void skipForSure( final InputStream inputStream, final long relativeOffset )
+      throws IOException
+  {
+
+    long skipped = 0 ;
+    while( skipped < relativeOffset ) {
+      skipped += inputStream.skip( relativeOffset - skipped ) ;
+    }
+    
+    if( skipped != relativeOffset ) {
+      throw new IOException( "Attempted to skip " + relativeOffset + " but skipped " + skipped ) ;
     }
   }
 

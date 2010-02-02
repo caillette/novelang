@@ -1,12 +1,10 @@
 package novelang.parser.unicode;
 
-import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
 
 import org.junit.Test;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -18,13 +16,26 @@ import static org.junit.Assert.assertEquals;
 public class UnicodeNamesBinaryReaderTest {
 
   @Test
-  public void binaryReading() throws IOException {
-    verify( BYTES_SIXTEENBLANKS_SIXTEEN, '\u0040', "Sixty-four" ) ;
+  public void readingInContiguousTable() throws IOException, CharacterOutOfBoundsException {
     verify( BYTES_ZERO_ONE, '\u0000', "Zero" ) ;
     verify( BYTES_ZERO_ONE, '\u0001', "One" ) ;
+  }
+
+  @Test
+  public void readingCharacterInATableWithNulls() throws IOException, CharacterOutOfBoundsException {
     verify( BYTES_ZERO_BLANK_TWO, '\u0000', "Zero" ) ;
     verify( BYTES_ZERO_BLANK_TWO, '\u0001', null ) ;
     verify( BYTES_ZERO_BLANK_TWO, '\u0002', "Two" ) ;
+  }
+
+  @Test
+  public void readingOf65thCharacter() throws IOException, CharacterOutOfBoundsException {
+    verify( BYTES_SIXTEENBLANKS_SIXTEEN, '\u0040', "Sixty-four" ) ;
+  }
+
+  @Test( expected = CharacterOutOfBoundsException.class )
+  public void dontSeekForCharacterPastOffsetTable() throws IOException, CharacterOutOfBoundsException {
+    verify( BYTES_ZERO_ONE, '\u0002', "" ) ;
   }
 
   @Test
@@ -50,28 +61,32 @@ public class UnicodeNamesBinaryReaderTest {
       final byte[] binary,
       final char character,
       final String expectedName
-  ) throws IOException {
+  ) throws IOException, CharacterOutOfBoundsException {
     final InputStream inputStream = new ByteArrayInputStream( binary ) ;
     final String actualName = UnicodeNamesBinaryReader.readName( inputStream, character ) ;
     assertEquals( expectedName, actualName ) ;
   }
 
   private static final byte[] BYTES_ZERO_ONE = new byte[] {
-      0, 0, 0,  8,
-      0, 0, 0, 13,
+      0, 0, 0,  2,          // 2 characters at all.
+      0, 0, 0, 12,
+      0, 0, 0, 17,
       90, 101, 114, 111, 0, // Z e r o \0
       79, 110, 101, 0       // O n e \0
   } ;
 
   private static final byte[] BYTES_ZERO_BLANK_TWO = new byte[] {
-      0, 0, 0, 12,
+      0, 0, 0,  4,          // 4 characters at all.
+      0, 0, 0, 20,
       0, 0, 0,  0,
-      0, 0, 0, 17,
+      0, 0, 0, 25,
+      0, 0, 0,  0,
       90, 101, 114, 111, 0, // Z e r o \0
       84, 119, 111, 0       // T w o \0
   } ;
 
   private static final byte[] BYTES_SIXTEENBLANKS_SIXTEEN = new byte[] {
+      0, 0, 0, 65,  // 65 characters at all.
       0, 0, 0, 0,  // #0
       0, 0, 0, 0,  // #1
       0, 0, 0, 0,  // #2
@@ -136,7 +151,7 @@ public class UnicodeNamesBinaryReaderTest {
       0, 0, 0, 0,  // #61
       0, 0, 0, 0,  // #62
       0, 0, 0, 0,  // #63
-      0, 0, 1, 4,  // #64
+      0, 0, 1, 8,  // #64
       83, 105, 120, 116, 121, 45, 102, 111, 117, 114, 0 // S i x t y - f o u r \0
   } ;
 
