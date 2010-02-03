@@ -30,16 +30,20 @@ public class UnicodeNames {
   private static final Log LOG = LogFactory.getLog( UnicodeNames.class ) ;
   private static final String RESOURCE_NAME = "names.bin" ;
 
+  private UnicodeNames() { }
+
 
   public static String getUnicodeName( final char character ) {
     try {
       final String pureName = new UnicodeNamesBinaryReader(
           UnicodeNames.class.getResource( RESOURCE_NAME ) ).getName( character ) ;
-      return pureName.replace( ' ', '_' ) ;
+      return pureName ;
+    } catch( CharacterOutOfBoundsException e ) {
+      LOG.warn( e.getMessage() ) ;
     } catch( Exception e ) {
       LOG.error( "Could not load name for character " + ( int ) character , e ) ;
-      return null ;
     }
+    return null ;
   }
 
 

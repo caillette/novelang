@@ -11,7 +11,7 @@ distrib
 idea/Novelang.ipr
 src/main-resources/fonts/more-fonts-*
 src/main-resources/more-fonts-*
-src/main/novelang/parser/unicode/names.bin
+names.bin
 *.log
 grammar-debug-classes
 _*

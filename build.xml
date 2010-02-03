@@ -161,13 +161,14 @@
     <copy todir="${target.buildclasses.dir}" >
       <fileset dir="${source.codegeneration.java.dir}" >
         <include name="**/*.stg"  />
+        <include name="**/*.txt"  />
       </fileset>
     </copy>
 
   </target>
 
   <target
-      name="run-code-generator"
+      name="run-java-generator"
       depends="init, compile-code-generator"
       description="This should superceded generate-antlr target in a near future"
   >
@@ -185,13 +186,42 @@
   </target>
 
 
+  <target
+      name="run-unicodenames-generator"
+      depends="init, compile-code-generator"
+      description="Create indexed Unicode names"
+  >
+    <java
+        classname="novelang.build.UnicodeNamesGenerator"
+        failonerror="true"
+        fork="false"
+    >
+      <classpath refid="deploy-libs" />
+      <classpath refid="build-libs" />
+      <classpath path="${target.buildclasses.dir}" />
+      <arg value="${basedir.fullpath}/${target.antlr.generated.dir}" />
+    </java>
+  </target>
+
+
 
   <target
       name="generate-antlr-idea"
       depends="init"
       description="Generate ANTLR parser in IDEA's subdir"
   >
-    <antcall target="run-code-generator" >
+    <antcall target="run-java-generator" >
+      <param name="target.antlr.generated.dir" value="${idea.antlr.generated.dir}" />
+    </antcall>
+  </target>
+
+
+  <target
+      name="generate-unicodenames-idea"
+      depends="init"
+      description="Generate Unicode names in IDEA's subdir"
+  >
+    <antcall target="run-unicodenames-generator" >
       <param name="target.antlr.generated.dir" value="${idea.antlr.generated.dir}" />
     </antcall>
   </target>
@@ -228,7 +258,9 @@
   </target>
 
 
-  <target name="compile-tests" depends="run-code-generator, compile-main" >
+  <target name="compile-tests" 
+          depends="run-java-generator, run-unicodenames-generator, compile-main"
+  >
     
     <mkdir dir="${target.testclasses.dir}" />    
 
@@ -282,7 +314,13 @@
     <delete dir="${target.test.scratchfiles.dir}" />
     <mkdir dir="${target.test.reports.dir}" />
 
-    <junit printsummary="yes" haltonfailure="no" >
+    <junit
+        printsummary="yes"
+        haltonfailure="no"
+        haltonerror="no"
+        failureproperty="junit.broken"
+        errorproperty="junit.broken"
+    >
       <jvmarg value="-Dnovelang.test.scratch.dir=${target.test.scratchfiles.dir}"/>
       <jvmarg value="-Dnovelang.test.scratch.delete=no"/>
       <classpath>
@@ -302,6 +340,8 @@
       </batchtest>
       <formatter type="plain"/>
     </junit>
+
+    <fail if="junit.broken" >There were errors/failures.</fail>
   </target>
 
   <target

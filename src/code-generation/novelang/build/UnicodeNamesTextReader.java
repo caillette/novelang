@@ -9,9 +9,8 @@ import java.net.URL;
 
 
 import org.apache.commons.io.IOUtils;
-
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -24,7 +23,7 @@ import com.google.common.collect.Maps;
  */
 /*package*/ class UnicodeNamesTextReader {
 
-  private static final Log LOG = LogFactory.getLog( UnicodeNamesTextReader.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UnicodeNamesTextReader.class ) ;
 
   /**
    * <a href="http://www.unicode.org/Public/5.2.0/ucd/UnicodeData.txt" >Unicode 5.2</a>
@@ -45,14 +44,14 @@ import com.google.common.collect.Maps;
       ) ;
 
   static {
-    LOG.debug( "Crafted regex: " + PROPERTY_LINE_PATTERN.pattern() ) ;
+    LOGGER.debug( "Crafted regex: " + PROPERTY_LINE_PATTERN.pattern() ) ;
   }
 
 
   private static String readProperties() throws IOException {
 
     final URL resource = UnicodeNamesTextReader.class.getResource( RESOURCE_NAME ) ;
-    LOG.info( "Reading " + resource.toExternalForm() ) ;
+    LOGGER.info( "Reading " + resource.toExternalForm() ) ;
     final InputStream inputStream = resource.openStream() ;
     return IOUtils.toString( inputStream ) ;
   }
@@ -62,7 +61,8 @@ import com.google.common.collect.Maps;
   }
 
   /*package*/ Map< Character, String > extractNames( final String names ) throws IOException {
-    final Map< Character, String > characterToNameMap = Maps.newHashMap() ;
+    final Map< Character, String > characterToNameMap =
+        Maps.newHashMapWithExpectedSize( 256 * 256 ) ;
     final Matcher matcher = PROPERTY_LINE_PATTERN.matcher( names ) ;
     int limiter = 0 ;
 

@@ -25,7 +25,14 @@ import com.google.common.base.Preconditions;
   }
 
   public String getName( final char character ) throws IOException, CharacterOutOfBoundsException {
-    return readName( resourceUrl.openStream(), character ) ;
+    final InputStream inputStream = resourceUrl.openStream() ;
+    final String name ;
+    try {
+      name = readName( inputStream, character ) ;
+    } finally {
+      inputStream.close() ;
+    }
+    return name;
   }
 
   /*package*/ static String readName( final InputStream inputStream, final char character )

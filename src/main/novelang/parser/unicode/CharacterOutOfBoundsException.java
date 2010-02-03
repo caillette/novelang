@@ -22,6 +22,7 @@ package novelang.parser.unicode;
 public class CharacterOutOfBoundsException extends Exception {
 
   public CharacterOutOfBoundsException( final int maximum, final int actual ) {
-    super( "Attempted to read character #" + actual + " but maximum is " + maximum ) ;
+    super( "Attempted to read character #" + actual +
+        " while last character is " + ( maximum - 1 ) ) ;
   }
 }

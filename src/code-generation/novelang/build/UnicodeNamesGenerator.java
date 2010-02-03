@@ -16,9 +16,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.SystemUtils;
-
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import org.apache.commons.lang.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generates a file containing every Unicode name.
@@ -33,7 +33,8 @@ import novelang.system.LogFactory;
  */
 public class UnicodeNamesGenerator {
 
-  private static final Log LOG = LogFactory.getLog( UnicodeNamesGenerator.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UnicodeNamesGenerator.class ) ;
+
   private final File targetFile ;
   private static final int CHARACTER_COUNT_FOR_LOGGING = 10000;
   private static final int UNSIGNED_MAX_16BIT = 256 * 256;
@@ -46,24 +47,24 @@ public class UnicodeNamesGenerator {
     this.targetFile =
         JavaGenerator.resolveTargetFile( targetDirectory, packageName, namesFile ) ;
     if( targetFile.getParentFile().mkdirs() ) {
-      LOG.info( "Created '" + targetDirectory.getAbsolutePath() + "'" ) ;
+      LOGGER.info( "Created '" + targetDirectory.getAbsolutePath() + "'" ) ;
     }
   }
 
   public void generate() throws IOException {
-    LOG.info( "About to generate into '" + targetFile.getAbsolutePath() + "'..." ) ;
+    LOGGER.info( "About to generate into '" + targetFile.getAbsolutePath() + "'..." ) ;
     if( targetFile.exists() ) {
       if( targetFile.delete() ) {
-        LOG.info( "Deleted '" + targetFile.getAbsolutePath() + "'" ) ;
+        LOGGER.info( "Deleted '" + targetFile.getAbsolutePath() + "'" ) ;
       }
     }
     if( ! targetFile.createNewFile() ) {
       throw new IOException( "Could not create '" + targetFile.getAbsolutePath() + "'" ) ;
     }
-    LOG.info( "Loading names..." ) ;
+    LOGGER.info( "Loading names..." ) ;
     final Map< Character, String > characters = new UnicodeNamesTextReader().loadNames() ;
     final OutputStream outputStream = new FileOutputStream( targetFile ) ;
-    LOG.info( "Generating indexed file..." ) ;
+    LOGGER.info( "Generating indexed file..." ) ;
     generate( new BufferedOutputStream( outputStream, 640 * 1024 ), characters ) ;
     outputStream.close() ;
   }
@@ -78,7 +79,14 @@ public class UnicodeNamesGenerator {
       final OutputStream outputStream,
       final Map< Character, String > characterNames
   ) throws IOException {
-    generate( outputStream, characterNames, UNSIGNED_MAX_16BIT ) ;
+
+    final Set< Character > characters = characterNames.keySet() ;
+    final List< Character > characterList = Lists.newArrayList( characters ) ;
+
+    Collections.sort( characterList, CHARACTER_COMPARATOR /* Needed? */ ) ;
+    final int lastCharacterIndex = characterList.get( characterList.size() - 1 ) ;
+
+    generate( outputStream, characterNames, lastCharacterIndex + 1 ) ;
   }
 
 
@@ -93,12 +101,9 @@ public class UnicodeNamesGenerator {
       final Map< Character, String > characterNames,
       final int totalCharacterCount
   ) throws IOException {
-    final Set< Character > characters = characterNames.keySet() ;
-    final List< Character > characterList = Lists.newArrayList( characters ) ;
-    final Map< Integer, Integer > offsetsFromFirstName = Maps.newHashMap() ;
-    Collections.sort( characterList, CHARACTER_COMPARATOR /* Needed? */ ) ;
     Preconditions.checkArgument( totalCharacterCount <= UNSIGNED_MAX_16BIT ) ;
-    Preconditions.checkArgument( characterList.size() <= totalCharacterCount ) ;
+    final Map< Integer, Integer > offsetsFromFirstName =
+        Maps.newHashMapWithExpectedSize( totalCharacterCount ) ;
 
     // Find the offset of the name of each character.
     int writePositionFromFirstName = 0 ;
@@ -117,10 +122,10 @@ public class UnicodeNamesGenerator {
         offsetsFromFirstName.put( characterIndex, null ) ;
       }
       if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOG.debug( "Calculated offset for character " + characterIndex ) ;
+        LOGGER.debug( "Calculated offset for character " + characterIndex ) ;
       }
     }
-    LOG.debug( "Found " + characterCount + " characters." ) ;
+    LOGGER.debug( "Found " + characterCount + " characters." ) ;
 
     // Write character count.
     outputStream.write( asBytes( totalCharacterCount ) ) ;
@@ -137,24 +142,24 @@ public class UnicodeNamesGenerator {
       }
       outputStream.write( bytes ) ;
       if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOG.debug( "Wrote offset entry for character " + characterIndex ) ;
+        LOGGER.debug( "Wrote offset entry for character " + characterIndex ) ;
       }
     }
 
     // Write names.
-    for( int characterIndex = 0 ; characterIndex <= totalCharacterCount ; characterIndex ++ ) {
+    for( int characterIndex = 0 ; characterIndex < totalCharacterCount ; characterIndex ++ ) {
       final String characterName = characterNames.get( ( char ) characterIndex ) ;
       if( characterName != null ) {
-        final byte[] bytes = characterName.getBytes( CHARSET ) ;
+        final byte[] bytes = characterName.replace( ' ', '_' ).getBytes( CHARSET ) ;
         outputStream.write( bytes ) ;
         outputStream.write( TERMINAL_ZERO ) ;
       }
       if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOG.debug( "Wrote name entry for character " + characterIndex ) ;
+        LOGGER.debug( "Wrote name entry for character " + characterIndex ) ;
       }
     }
     outputStream.flush() ;
-    LOG.debug( "Generation complete." ) ;
+    LOGGER.debug( "Generation complete." ) ;
 
   }
 
@@ -181,20 +186,27 @@ public class UnicodeNamesGenerator {
   }
 
 
-// ==============================
-// Main, for interactive testing.
-// ==============================
+// ==============================================
+// Main, supports no arg for interactive testing.
+// ==============================================
 
 
   public static void main( final String[] args ) throws IOException {
-    final File projectDirectory =
-        SystemUtils.USER_DIR.endsWith( "idea" )?
-        new File( SystemUtils.USER_DIR ).getParentFile() :
-        new File( SystemUtils.USER_DIR )
-    ;
-    final File targetDirectory = new File( projectDirectory, "src/main" ) ;
-
-    new File( SystemUtils.USER_DIR );
+    final File targetDirectory ;
+    if( args.length == 0 ) {
+      final File projectDirectory = SystemUtils.USER_DIR.endsWith( "idea" ) ?
+          new File( SystemUtils.USER_DIR ).getParentFile() :
+          new File( SystemUtils.USER_DIR )
+      ;
+      targetDirectory = new File( projectDirectory, "idea/generated/antlr" ) ;
+    } else if( args.length == 1 ) {
+      targetDirectory = new File( args[ 0 ] ) ;
+    } else {
+      throw new IllegalArgumentException(
+          "Usage: " + ClassUtils.getShortClassName( UnicodeNamesGenerator.class ) +
+          "[target-directory]"
+      ) ;
+    }
     new UnicodeNamesGenerator( "novelang.parser.unicode", "names.bin", targetDirectory ).
         generate() ;
 

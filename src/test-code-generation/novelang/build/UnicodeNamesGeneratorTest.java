@@ -28,7 +28,7 @@ public class UnicodeNamesGeneratorTest {
       final byte[] expectedBytes = entry.getValue();
       final String message =
           "Int: " + String.format( "%6d", entry.getKey() ) +
-          " bytes: [ " + asHex( expectedBytes ) + " ]"
+          " bytes: [ " + toHexadecimalString( expectedBytes ) + " ]"
       ;
 
       final byte[] actualBytes = UnicodeNamesGenerator.asBytes( entry.getKey() ) ;
@@ -67,8 +67,8 @@ public class UnicodeNamesGeneratorTest {
         79, 110, 101, 0       // O n e \0
     } ;
     final String message =
-        "Expected: \n[ " + asHex( expectedBytes ) + " ] " +
-        "but got \n[ " + asHex( actualBytes ) + " ]\n" ;
+        "Expected: \n[ " + toHexadecimalString( expectedBytes ) + " ] " +
+        "but got \n[ " + toHexadecimalString( actualBytes ) + " ]\n" ;
     assertEquals( message, expectedBytes.length, actualBytes.length ) ;
     for( int i = 0 ; i < expectedBytes.length ; i ++ ) {
       assertEquals(
@@ -77,6 +77,62 @@ public class UnicodeNamesGeneratorTest {
           actualBytes[ i ]
       ) ;
     }    
+
+  }
+
+  @Test
+  public void generateLastFffd() throws IOException {
+
+    final int lastCharacterIndex = 0xfffd;
+    final Map< Character, String > map = new ImmutableMap.Builder< Character, String >()
+        .put( ( char ) lastCharacterIndex, "Last" ) // 90 101 114 11 0 (total length 5)
+        .build()
+    ;
+    final ByteArrayOutputStream bytes = new ByteArrayOutputStream() ;
+    UnicodeNamesGenerator.generate( bytes, map, lastCharacterIndex + 1 ) ;
+    final byte[] actualBytes = bytes.toByteArray() ;
+
+    final byte[] expectedBytesForCharacterCount = UnicodeNamesGenerator.asBytes(
+        lastCharacterIndex + 1 ) ;
+    assertEquals( expectedBytesForCharacterCount[ 0 ], actualBytes[ 0 ] ) ;
+    assertEquals( expectedBytesForCharacterCount[ 1 ], actualBytes[ 1 ] ) ;
+    assertEquals( expectedBytesForCharacterCount[ 2 ], actualBytes[ 2 ] ) ;
+    assertEquals( expectedBytesForCharacterCount[ 3 ], actualBytes[ 3 ] ) ;
+
+    final int totalBytes =
+        4 +                                  // Character count at start.
+        ( ( lastCharacterIndex + 1 ) * 4 ) + // Offsets
+        5                                    // L a s t \0
+    ;
+    assertEquals( totalBytes, actualBytes.length ) ;
+
+    final byte[] expectedBytesForOffset = UnicodeNamesGenerator.asBytes(
+        4 +                       // Character count. 
+        lastCharacterIndex * 4 +  // Offset table.
+        4                         // Size of the offset itself.
+    ) ;
+    final byte[] expectedBytesForName = new byte[] {
+        76 /*0x4C*/, 97 /*0x4A*/, 115 /*0x74*/, 116 /*0x74*/, 0 } ;
+
+
+    // Dump last actual bytes.
+    final byte[] lastOfActualBytes =
+        new byte[ expectedBytesForOffset.length + expectedBytesForName.length ] ;
+    System.arraycopy( actualBytes, actualBytes.length - lastOfActualBytes.length,
+        lastOfActualBytes, 0, lastOfActualBytes.length ) ;
+
+    final String expectedBytesAsString = toHexadecimalString( expectedBytesForOffset ) + " " +
+        toHexadecimalString( expectedBytesForName );
+    final String actualBytesAsString = toHexadecimalString( lastOfActualBytes );
+    LOG.info(
+        "\nLast expected bytes (offset + name) vs " +
+        "last " + lastOfActualBytes.length + " actual bytes " +
+        "(starting at " + ( actualBytes.length - lastOfActualBytes.length ) + "): \n" +
+        expectedBytesAsString + "\n" +
+        actualBytesAsString
+    ) ;
+
+    assertEquals( expectedBytesAsString, actualBytesAsString ) ;
 
   }
 
@@ -103,8 +159,8 @@ public class UnicodeNamesGeneratorTest {
         84, 119, 111, 0       // T w o \0
     } ;
     final String message =
-        "Expected: \n[ " + asHex( expectedBytes ) + " ] " +
-        "but got \n[ " + asHex( actualBytes ) + " ]\n" ;
+        "Expected: \n[ " + toHexadecimalString( expectedBytes ) + " ] " +
+        "but got \n[ " + toHexadecimalString( actualBytes ) + " ]\n" ;
     assertEquals( message, expectedBytes.length, actualBytes.length ) ;
     for( int i = 0 ; i < expectedBytes.length ; i ++ ) {
       assertEquals(
@@ -134,20 +190,29 @@ public class UnicodeNamesGeneratorTest {
       .build()
   ;
 
-  private static String asHex( final byte[] bytes ) {
+  private static String toHexadecimalString( final byte[] bytes ) {
     final StringBuilder builder = new StringBuilder() ;
     for( final byte b : bytes ) {
-
-      final ByteBuffer bb = ByteBuffer.allocate(4);
-      bb.put( new byte[] { 0, 0, 0, b } ) ;
-      bb.rewind() ;
-      final int unsignedByteVal = bb.getInt() ;
+      final int unsignedByteVal = toUnsignedInt( b ) ;
       builder.append( " " ) ;
-      final String hexString = Integer.toHexString( unsignedByteVal ) ;
-      final String formattedHexString = hexString.length() > 1 ? hexString : "0" + hexString ;
+      final String formattedHexString = unsignedByteTo2DigitHex( unsignedByteVal ) ;
       builder.append( formattedHexString ) ;
     }
     return builder.length() > 0 ? builder.toString().substring( 1 ) : "" ;
+  }
+
+  private static String unsignedByteTo2DigitHex(int unsignedByteVal) {
+    final String hexString = Integer.toHexString( unsignedByteVal ) ;
+    return hexString.length() > 1 ? hexString : "0" + hexString ;
+  }
+
+
+  private static int toUnsignedInt( byte b ) {
+    // There must be a better thing to do.
+    final ByteBuffer byteBuffer = ByteBuffer.allocate( 4 ) ;
+    byteBuffer.put( new byte[] { 0, 0, 0, b } ) ;
+    byteBuffer.rewind() ;
+    return byteBuffer.getInt() ;
   }
 
 }

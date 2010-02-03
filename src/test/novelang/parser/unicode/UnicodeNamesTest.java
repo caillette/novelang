@@ -54,12 +54,16 @@ public class UnicodeNamesTest {
     verify( "CHARACTER_TABULATION", '\t' ) ;
   }
 
-  @Test @Ignore // Some characters have no name.
-  public void verifyAllUnicode16Mapped() {
-    // Forget about sign.
-    for( short counter = Short.MIN_VALUE ; counter < Short.MAX_VALUE ; counter ++ ) {
+  @Test
+  public void lastKnownValue() {
+    verify( "REPLACEMENT_CHARACTER", ( char ) 0xFFFD ) ;
+  }
+
+  @Test
+  public void smokeTestOnEveryCharacter() {
+    for( int counter = 0 ; counter < 256 * 256 ; counter ++ ) {
       final char character = ( char ) counter ;
-      assertNotNull( UnicodeNames.getUnicodeName( character ) ) ;
+      UnicodeNames.getUnicodeName( character ) ;
     }
   }
 
