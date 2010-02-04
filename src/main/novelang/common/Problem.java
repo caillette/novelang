@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.MissingTokenException;
+import org.antlr.runtime.NoViableAltException;
+import org.antlr.runtime.Token;
 import com.google.common.base.Preconditions;
 
 import novelang.parser.unicode.UnicodeNames;
@@ -92,19 +94,32 @@ public class Problem {
         exception.line, exception.charPositionInLine ) ;
     final String originalMessage = exception.getMessage() ;
     final String characterDetail = "Unrecognized character: "
-        + exception.c
-//        + UnicodeNames.getUnicodeName( ( char ) exception.c )
+//        + exception.c
+        + UnicodeNames.getDecoratedName( ( char ) exception.c )
     ;
 
-    String message = originalMessage ;
+    final String message ;
 
     if( exception instanceof MissingTokenException ) {
-      message = "Missing " + UnicodeNames.getUnicodeName( ( char )
-          ( ( MissingTokenException ) exception ).expecting ) ;
+      final MissingTokenException missingTokenException = ( MissingTokenException ) exception ;
+      if( missingTokenException.inserted instanceof Token ) {
+        message = ( ( Token ) missingTokenException.inserted ).getText() ;
+      } else {
+        message = "Missing " + UnicodeNames.getDecoratedName( ( char )
+            missingTokenException.expecting ) ;
+      }
+    } else if( exception instanceof NoViableAltException ) {
+      final NoViableAltException noViableAltException = ( NoViableAltException ) exception ;
+      if( noViableAltException.token == null ) {
+        message = "(Missing token) " + exception ;
+      } else {
+        message = "Unexpected character " + UnicodeNames.getDecoratedName( ( char )
+            noViableAltException.token.getText().charAt( 0 ) ) ;
+      }
+    } else {
+      message = "Unhandled ANTLR exception: " + exception ;
     }
 
-    
-    message = ( originalMessage == null ? "" : originalMessage ) + characterDetail ;
     return new Problem( location, message ) ;
   }
 

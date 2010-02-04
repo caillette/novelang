@@ -1,14 +1,13 @@
 package novelang.parser.unicode;
 
 import org.junit.Test;
-import org.junit.Assert;
-import org.junit.Ignore;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.apache.commons.lang.CharUtils;
 
 import novelang.system.LogFactory;
 import novelang.system.Log;
+import novelang.common.LanguageTools;
 
 /**
  * Tests for {@link UnicodeNames} basing on some well-known values.
@@ -20,7 +19,7 @@ public class UnicodeNamesTest {
   @Test
   public void logSomeBasicCharacterRepresentations() {
     final int aCharacterAsInt = 'a' ;
-    final String aCharacterAsHex = String.format( "%04X", aCharacterAsInt ) ;
+    final String aCharacterAsHex = LanguageTools.to16ByteHex( aCharacterAsInt ) ;
     LOG.info(
         "\nThe 'a' letter" +
         "\nAs int: " + aCharacterAsInt +
@@ -61,9 +60,10 @@ public class UnicodeNamesTest {
 
   @Test
   public void smokeTestOnEveryCharacter() {
-    for( int counter = 0 ; counter < 256 * 256 ; counter ++ ) {
+    final int totalCharacterCount = 256 * 256;
+    for( int counter = totalCharacterCount - 256 ; counter < totalCharacterCount ; counter ++ ) {
       final char character = ( char ) counter ;
-      UnicodeNames.getUnicodeName( character ) ;
+      UnicodeNames.getPureName( character ) ;
     }
   }
 
@@ -74,11 +74,8 @@ public class UnicodeNamesTest {
   private static final Log LOG = LogFactory.getLog( UnicodeNamesTest.class ) ;
 
   private static void verify( final String expected, final char character ) {
-    assertEquals( expected, UnicodeNames.getUnicodeName( character ) ) ;
+    assertEquals( expected, UnicodeNames.getPureName( character ) ) ;
   }
-
-
-
 
 
 }

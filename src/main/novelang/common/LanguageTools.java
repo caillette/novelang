@@ -103,4 +103,8 @@ public class LanguageTools {
       matcher.appendTail( buffer ) ;
       return buffer.toString() ;
   }
+
+  public static String to16ByteHex( int aCharacterAsInt ) {
+    return String.format( "%04X", aCharacterAsInt );
+  }
 }

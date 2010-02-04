@@ -9,6 +9,8 @@ http://unicode.org/faq/utf_bom.html#BOM
 --- Reject TAB character.
 
 --- Display Unicode name of every rejected character
-(as long as it belongs to the set of 16 bit Unicode characters as defined in Unicode `5.2` standard).
+(as long as it belongs to the set of 16 bit Unicode characters as defined in Unicode `5.2`
+standard).
+This feature is experimental and may wreck existing error messages.
 
 --- New character in Novelang grammar: pound sign "`£`".

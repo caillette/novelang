@@ -36,7 +36,6 @@ public class UnicodeNamesGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger( UnicodeNamesGenerator.class ) ;
 
   private final File targetFile ;
-  private static final int CHARACTER_COUNT_FOR_LOGGING = 10000;
   private static final int UNSIGNED_MAX_16BIT = 256 * 256;
 
   public UnicodeNamesGenerator(
@@ -104,6 +103,8 @@ public class UnicodeNamesGenerator {
     Preconditions.checkArgument( totalCharacterCount <= UNSIGNED_MAX_16BIT ) ;
     final Map< Integer, Integer > offsetsFromFirstName =
         Maps.newHashMapWithExpectedSize( totalCharacterCount ) ;
+    final Map< Character, byte[] > characterNamesAsBytes =
+        calculateCharacterNamesAsBytes( characterNames ) ;
 
     // Find the offset of the name of each character.
     int writePositionFromFirstName = 0 ;
@@ -114,15 +115,12 @@ public class UnicodeNamesGenerator {
       if( characterNames.containsKey( character ) ) {
         offsetsFromFirstName.put( characterIndex, writePositionFromFirstName ) ;
         writePositionFromFirstName +=
-            characterNames.get( character ).getBytes( CHARSET ).length + // Real length.
+            characterNamesAsBytes.get( character ).length + // Real length.
             1 // Terminal zero.
         ;
         characterCount ++ ;
       } else {
         offsetsFromFirstName.put( characterIndex, null ) ;
-      }
-      if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOGGER.debug( "Calculated offset for character " + characterIndex ) ;
       }
     }
     LOGGER.debug( "Found " + characterCount + " characters." ) ;
@@ -141,26 +139,33 @@ public class UnicodeNamesGenerator {
         bytes = asBytes( 4 + offsetTableSize + value ) ;
       }
       outputStream.write( bytes ) ;
-      if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOGGER.debug( "Wrote offset entry for character " + characterIndex ) ;
-      }
     }
 
     // Write names.
     for( int characterIndex = 0 ; characterIndex < totalCharacterCount ; characterIndex ++ ) {
-      final String characterName = characterNames.get( ( char ) characterIndex ) ;
-      if( characterName != null ) {
-        final byte[] bytes = characterName.replace( ' ', '_' ).getBytes( CHARSET ) ;
-        outputStream.write( bytes ) ;
+      final byte[] nameBytes = characterNamesAsBytes.get( ( char ) characterIndex ) ;
+      if( nameBytes != null ) {
+        outputStream.write( nameBytes ) ;
         outputStream.write( TERMINAL_ZERO ) ;
-      }
-      if( characterIndex % CHARACTER_COUNT_FOR_LOGGING == 0 ) {
-        LOGGER.debug( "Wrote name entry for character " + characterIndex ) ;
       }
     }
     outputStream.flush() ;
     LOGGER.debug( "Generation complete." ) ;
 
+  }
+
+
+  /**
+   * Getting bytes only once speeds generation up a lot.
+   */
+  private static Map< Character, byte[] > calculateCharacterNamesAsBytes(
+      final Map<Character, String> characterNames
+  ) {
+    final Map< Character, byte[] > map = Maps.newHashMapWithExpectedSize( characterNames.size() ) ;
+    for( final Map.Entry< Character, String > entry : characterNames.entrySet() ) {
+      map.put( entry.getKey(), entry.getValue().replace( ' ', '_' ).getBytes( CHARSET ) ) ;
+    }
+    return map ;
   }
 
   private static final Charset CHARSET = Charset.forName( "UTF-8" ) ;
