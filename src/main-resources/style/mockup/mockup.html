@@ -268,6 +268,7 @@
 
     blockquote > div.p {
       padding-bottom : 0 ; /* Override default to avoid unpleasant gap between colored blocks. */
+      text-align : left ;
 
     }
     blockquote > div.p > p {
@@ -282,9 +283,11 @@
       margin-right : 16px ;
       color : #333333 ;
       padding-left : 4px ;
+      padding-right : 4px ;
     }
 
     blockquote {
+      margin-top : 2px ;
       margin-bottom : 4px ;
     }
 
@@ -321,20 +324,26 @@
       background : #f5f5f5 ;
 
       overflow : visible ;
-      padding-top : 2px ;
-      padding-bottom : 2px ;
-      padding-left : 4px ;
+      padding: 2px 4px ;
       margin-left : 18px ; /* Value set empirically to align with blockquote. */
       margin-right : 16px ;
+
+      -webkit-border-radius : 3px ;
+      -moz-border-radius : 3px ;
+      
 
     }
   
   
   
     div.p {
-      padding-left : 3px ;
       font-size: 13pt ;
       /*font-family : times new roman, serif ;*/
+      text-align : justify ;
+    }
+
+    div.p > p {
+      padding-right : 10px ;
     }
 
 
@@ -346,17 +355,19 @@
 
     ul.identifiers {
       list-style : none ;
+      padding-top : 4px ; 
       padding-bottom : 6px ;  // Allocate room for list items' bottom border.
     }
 
 
     li.explicit-identifier, li.implicit-identifier, .identifier-reference {
-      /*font-size : 11pt ;*/
+      font-size : 10pt ;
     }
 
-    li.explicit-identifier, li.implicit-identifier {
-      margin-bottom : -2px ;
-    }
+    /*li.explicit-identifier, li.implicit-identifier {*/
+      /*margin-top : 20px ;*/
+      /*margin-bottom : -2px ;*/
+    /*}*/
 
     li.explicit-identifier {
       font-weight : bold ;
@@ -365,7 +376,7 @@
     ul.tags {
       text-align : right ;  
       list-style : none ;
-      margin-top : -2px ;
+      margin-top : -3px ;
       padding-bottom : 6px ;  /*Allocate room for list items' bottom border.*/
     }
 
@@ -380,14 +391,19 @@
     {
       display : inline ;  /* Required as they appear as list items. */
       border: 1px black ;
+
+      border-radius : 3px ;
+      -webkit-border-radius : 3px ;
+      -moz-border-radius : 3px ;
+    }
+
+    .implicit-tag, .explicit-tag
+    {
       font-size : 8pt ;
       margin : -15px 0 0 0 ;
       padding : 1px 2px 1px 2px ;
       text-indent : 0 ;
-      
-      border-radius : 3px ;
-      -webkit-border-radius : 3px ;
-      -moz-border-radius : 3px ;
+
     }
 
     .implicit-tag {
@@ -397,6 +413,8 @@
     .explicit-tag {
       border-style : solid ;
     }
+
+
 
     li.identifier-reference {
       margin-bottom : 4px ;
