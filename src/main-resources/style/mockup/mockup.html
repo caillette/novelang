@@ -214,7 +214,7 @@
      */
 
     /* Common properties for descriptor-enabled containers. */ 
-    .level, blockquote, div.p {
+    .level, blockquote, div.p, div.pre {
       position : relative ;
       margin-left : 10px ;
 
@@ -261,34 +261,50 @@
       /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
       
       font-size : 10pt ;
-
-      margin-right : 12px ;
-
     }
 
     blockquote {
       margin-bottom : 4px ;
     }
 
-    blockquote > div.descriptor > img.opening-quote{
+    blockquote > div.descriptor > img.opening-quote {
       /*float : left ;*/
       margin-left : -10px ;
       margin-bottom : -12px ;
       padding-top : 4px ;
     }
 
+  
+    div.pre {
+      background : #f5f5f5 ;
+      /*font-family: Georgia, sans-serif ;*/
+      /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
+      /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+        
+      margin-bottom : 4px ;
+    }
+
+    div.pre > div.descriptor > img.opening-pre {
+      /*float : left ;*/
+      margin-left : -10px ;
+      margin-bottom : -30px ;
+      padding-top : 4px ;
+    }
+
+    pre {
+      font-family : Courier New, Courier, monospace ;
+      overflow : visible ;
+      padding-top : 2px ;
+      padding-bottom : 2px ;
+      font-size : 11pt ;
+    }
+  
+  
+  
     div.p {
       padding-left : 3px ;
       font-size: 13pt ;
       /*font-family : times new roman, serif ;*/
-    }
-
-    pre {
-      overflow-x : scroll ;
-      overflow-y : visible ;
-      padding-top : 2px ;
-      padding-bottom : 2px ;
-      font-size : 12pt ;
     }
 
 
@@ -631,6 +647,13 @@
         </div>
       </div>
   
+      
+      
+      
+      
+      
+      
+      
 
       <div class="level" >
         <div class="descriptor">
@@ -717,6 +740,64 @@
           </div>
           <p>
           This is a paragraph after a blockquote.
+          </p>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      <div class="level" >
+        <div class="descriptor">
+          <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+          <div class="collapsable-descriptor" >
+            <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+          </div>
+        </div>
+        <h2>Preformatted demo</h2>
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph before preformatted text.
+          </p>
+        </div>
+        <div class="pre" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span
+                  class="location"
+              >(33:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</span>
+              <ul class="identifiers">
+                <li class="explicit-identifier">\\SomeBlockquote_whichIsVeryLong_SoWeSeeHowItOverlapsWithTagsByTheWay</li>
+              </ul>
+            </div>
+            <img src="Gears.png" class="opening-pre" alt="" >
+          </div>
+
+          <pre>This is some preformatted text </pre>
+        </div>
+        
+        <div class="p" >
+          <div class="descriptor">
+            <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+            <div class="collapsable-descriptor" >
+              <span class="location">(33:0) file:/Users/Shared/Novelang/somewhere.nlp</span>
+            </div>
+          </div>
+          <p>
+          This is a paragraph after preformatted text.
           </p>
         </div>
       </div>
