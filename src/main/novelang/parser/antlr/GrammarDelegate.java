@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Iterator;
 
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.ParserRuleReturnScope;
@@ -160,6 +161,18 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
     this.adaptor = adaptor ;
   }
 
+
+
+// ========================  
+// Enhanced error reporting
+// ========================  
+
+  public void report( final RecognitionException exception ) {
+    problems.add( Problem.createProblem( locationFactory, exception, tokenNames ) ) ;
+  }
+
+  
+  
 // =============
 // Tree creation
 // =============

@@ -26,6 +26,7 @@ import org.antlr.runtime.NoViableAltException;
 import org.antlr.runtime.Token;
 import com.google.common.base.Preconditions;
 
+import novelang.parser.antlr.error.AntlrErrorInterpreter;
 import novelang.parser.unicode.UnicodeNames;
 
 /**
@@ -88,40 +89,24 @@ public class Problem {
 
   public static Problem createProblem(
       final LocationFactory locationFactory,
+      final RecognitionException exception,
+      final String[] tokenNames
+  ) {
+    final Location location = locationFactory.createLocation(
+        exception.line, exception.charPositionInLine ) ;
+    final String message = AntlrErrorInterpreter.getErrorMessage( exception, tokenNames ) ;
+    return new Problem( location, message ) ;  
+  }
+  
+  
+  public static Problem createProblem(
+      final LocationFactory locationFactory,
       final RecognitionException exception
   ) {
     final Location location = locationFactory.createLocation(
         exception.line, exception.charPositionInLine ) ;
-    final String originalMessage = exception.getMessage() ;
-    final String characterDetail = "Unrecognized character: "
-//        + exception.c
-        + UnicodeNames.getDecoratedName( ( char ) exception.c )
-    ;
-
-    final String message ;
-
-    if( exception instanceof MissingTokenException ) {
-      final MissingTokenException missingTokenException = ( MissingTokenException ) exception ;
-      if( missingTokenException.inserted instanceof Token ) {
-        message = ( ( Token ) missingTokenException.inserted ).getText() ;
-      } else {
-        message = "Missing " + UnicodeNames.getDecoratedName( ( char )
-            missingTokenException.expecting ) ;
-      }
-    } else if( exception instanceof NoViableAltException ) {
-      final NoViableAltException noViableAltException = ( NoViableAltException ) exception ;
-      if( noViableAltException.token == null ) {
-        message = "(Missing token) " + exception ;
-      } else {
-        message = "Unexpected character " + UnicodeNames.getDecoratedName( ( char )
-            noViableAltException.token.getText().charAt( 0 ) ) ;
-      }
-    } else {
-      message = "Unhandled ANTLR exception: " + exception ;
-    }
-
-    return new Problem( location, message ) ;
-  }
+    final String message = exception.getMessage() == null ? "?" : exception.getMessage() ;
+    return new Problem( location, message ) ;  }
 
   /**
    * @deprecated, use standard exception-aware
