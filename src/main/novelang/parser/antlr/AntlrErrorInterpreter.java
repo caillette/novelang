@@ -1,4 +1,4 @@
-package novelang.parser.antlr.error ;
+package novelang.parser.antlr;
 
 import novelang.parser.unicode.UnicodeNames;
 
@@ -73,13 +73,20 @@ public class AntlrErrorInterpreter {
       
     } else if ( e instanceof NoViableAltException ) {
       
-      //NoViableAltException nvae = (NoViableAltException)e ;
+      // NoViableAltException nvae = (NoViableAltException)e ;
       // for development, can add "decision=<<"+nvae.grammarDecisionDescription+">>"
       // and "(decision="+nvae.decisionNumber+") and
       // "state "+nvae.stateNumber
       final NoViableAltException noViableAltException = ( NoViableAltException ) e ;
-      msg = "No viable alternative at input " + 
-          UnicodeNames.getDecoratedName( ( char ) noViableAltException.c ) ;
+      final Token token = noViableAltException.token ;
+      final char charAtError ;
+      if( token != null && token.getText() != null && token.getText().length() == 1 ) {
+        charAtError = token.getText().charAt( 0 ) ;
+      } else {
+        charAtError = ( ( char ) noViableAltException.c ) ;
+      }
+      msg = "No viable alternative at input '" + charAtError + "' " +
+          UnicodeNames.getDecoratedName( charAtError ) ;
 //      msg = "No viable alternative at input " + getTokenErrorDisplay( e.token ) ;
       
     } else if ( e instanceof EarlyExitException ) {

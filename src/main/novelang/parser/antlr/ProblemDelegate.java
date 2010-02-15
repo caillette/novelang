@@ -16,11 +16,13 @@
  */package novelang.parser.antlr;
 
 import java.util.List;
+import java.util.SortedSet;
 
 import org.antlr.runtime.RecognitionException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
@@ -31,7 +33,7 @@ import novelang.common.Problem;
 public class ProblemDelegate {
 
   protected final LocationFactory locationFactory ;
-  protected final List< Problem > problems = Lists.newArrayList() ;
+  protected final SortedSet< Problem > problems = Sets.newTreeSet() ;
 
 
   public ProblemDelegate() {

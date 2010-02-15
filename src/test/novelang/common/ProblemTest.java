@@ -19,6 +19,8 @@ package novelang.common;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author Laurent Caillette
@@ -38,19 +40,38 @@ public class ProblemTest {
   @Test
   public void parseLocationInformationOk() {
     final Problem problem = Problem.createProblem( LOCATION_FACTORY, "line 12:34 blah blah blah" ) ;
-    Assert.assertEquals( 12, problem.getLocation().getLine() ) ;
-    Assert.assertEquals( 34, problem.getLocation().getColumn() ) ;
-    Assert.assertEquals( FILE_LOCATION, problem.getLocation().getFileName() ) ;
-    Assert.assertEquals( "blah blah blah", problem.getMessage() ) ;
+    assertEquals( 12, problem.getLocation().getLine() ) ;
+    assertEquals( 34, problem.getLocation().getColumn() ) ;
+    assertEquals( FILE_LOCATION, problem.getLocation().getFileName() ) ;
+    assertEquals( "blah blah blah", problem.getMessage() ) ;
   }
 
   @Test
   public void parseLocationInformationBad() {
     final Problem problem = Problem.createProblem( LOCATION_FACTORY, "blah blah blah" ) ;
-    Assert.assertEquals( -1, problem.getLocation().getLine() ) ;
-    Assert.assertEquals( -1, problem.getLocation().getColumn() ) ;
-    Assert.assertEquals( FILE_LOCATION, problem.getLocation().getFileName() ) ;
-    Assert.assertEquals( "blah blah blah", problem.getMessage() ) ;
+    assertEquals( -1, problem.getLocation().getLine() ) ;
+    assertEquals( -1, problem.getLocation().getColumn() ) ;
+    assertEquals( FILE_LOCATION, problem.getLocation().getFileName() ) ;
+    assertEquals( "blah blah blah", problem.getMessage() ) ;
   }
+
+
+  @Test
+  public void problemEquals() {
+    assertEquals( Problem.createProblem( "foo" ), Problem.createProblem( "foo" ) );
+    assertEquals(
+        Problem.createProblem( "foo", LOCATION_FACTORY, 1, 1 ),
+        Problem.createProblem( "foo", LOCATION_FACTORY, 1, 1 )
+    ) ;
+    assertFalse( Problem.createProblem( "foo" ).equals( Problem.createProblem( "bar" ) ) ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+
+
 
 }

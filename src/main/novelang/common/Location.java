@@ -22,7 +22,7 @@ package novelang.common;
  *
  * @author Laurent Caillette
  */
-public class Location {
+public class Location implements Comparable< Location > {
 
   private final String fileName ;
   private final int line ;
@@ -107,5 +107,23 @@ public class Location {
     result = 31 * result + line ;
     result = 31 * result + column ;
     return result ;
+  }
+
+  public int compareTo( final Location other ) {
+    if( other == null ) {
+      return 1 ;
+    }
+    final int stringDifference = this.fileName.compareTo( other.getFileName() ) ;
+    if( stringDifference == 0 ) {
+      final int lineDifference = this.line - other.line ;
+      if( lineDifference == 0 ) {
+        final int columnDifference = this.column - other.column ;
+        return columnDifference ;
+      } else {
+        return lineDifference ;
+      }
+    } else {
+      return stringDifference ;
+    }    
   }
 }

@@ -21,20 +21,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.MissingTokenException;
-import org.antlr.runtime.NoViableAltException;
-import org.antlr.runtime.Token;
 import com.google.common.base.Preconditions;
 
-import novelang.parser.antlr.error.AntlrErrorInterpreter;
-import novelang.parser.unicode.UnicodeNames;
+import novelang.parser.antlr.AntlrErrorInterpreter;
 
 /**
  * Represents something bad that happened during document generation.
  * 
  * @author Laurent Caillette
  */
-public class Problem {
+public class Problem implements Comparable< Problem > {
 
   final Location location ;
   final String message ;
@@ -143,5 +139,48 @@ public class Problem {
       final int column
   ) {
     return new Problem( locationFactory.createLocation( line, column ), message ) ;
+  }
+
+
+// ==============
+// Usual suspects
+// ==============
+
+
+  @Override
+  public boolean equals( Object o ) {
+    if( this == o ) return true;
+    if( o == null || getClass() != o.getClass() ) return false;
+
+    Problem problem = ( Problem ) o;
+
+    if( location != null ? !location.equals( problem.location ) : problem.location != null )
+      return false;
+    if( message != null ? !message.equals( problem.message ) : problem.message != null )
+      return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = location != null ? location.hashCode() : 0;
+    result = 31 * result + ( message != null ? message.hashCode() : 0 );
+    return result;
+  }
+
+  public int compareTo( Problem other ) {
+    if( this.equals( other ) ) {
+      return 0 ;
+    }
+    if( other == null ) {
+      return 1 ;
+    }
+    final int locationDifference = getLocation().compareTo( other.getLocation() ) ;
+    if( locationDifference == 0 ) {
+      return message.compareTo( other.getMessage() ) ;
+    } else {
+      return locationDifference ;
+    }
   }
 }

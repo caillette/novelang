@@ -101,7 +101,7 @@ public class PartTest {
     final List< Problem > problems = Lists.newArrayList( part.getProblems() ) ;
     LOG.debug( "Got problems: %s", problems ) ;
     Assert.assertEquals(
-        "Unrecognized character: CURRENCY_SIGN [0x00A4]",
+        "No viable alternative at input '¤' CURRENCY_SIGN [0x00A4]",
         part.getProblems().iterator().next().getMessage()
     ) ;
 
