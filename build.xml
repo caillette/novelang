@@ -145,6 +145,7 @@
     <javac
         destdir="${target.buildclasses.dir}"
         source="${compiler.source}"
+        encoding="${source.encoding}"
         target="${compiler.target}"
         debug="on"
         debuglevel="lines,vars,source"
@@ -232,6 +233,7 @@
     <javac
         destdir="${target.mainclasses.dir}"
         source="${compiler.source}"
+        encoding="${source.encoding}"
         target="${compiler.target}"
         debug="on"
         debuglevel="lines,vars,source"
@@ -271,6 +273,7 @@
         destdir="${target.testclasses.dir}"
         srcdir="${source.test.java.dir}"
         source="${compiler.source}"
+        encoding="${source.encoding}"
         target="${compiler.target}"
     >
       <classpath>
@@ -729,6 +732,7 @@ This mail is written in Novelang.
     <javac
         destdir="${target.mainclasses.dir}"
         source="${compiler.source}"
+        encoding="${source.encoding}"
         target="${compiler.target}"
         debug="on"
         debuglevel="lines,vars,source"

@@ -96,12 +96,12 @@ public class PartTest {
 
   @Test
   public void badCharacterCorrectlyShownInProblem() throws IOException {
-    final Part part = new Part( "b¤d" ) ;
+    final Part part = new Part( "b\u00A4d" ) ;
     Assert.assertTrue( part.hasProblem() ) ;
     final List< Problem > problems = Lists.newArrayList( part.getProblems() ) ;
     LOG.debug( "Got problems: %s", problems ) ;
     Assert.assertEquals(
-        "No viable alternative at input '¤' CURRENCY_SIGN [0x00A4]",
+        "No viable alternative at input '\u00A4' CURRENCY_SIGN [0x00A4]",
         part.getProblems().iterator().next().getMessage()
     ) ;
 
