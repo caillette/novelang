@@ -119,7 +119,10 @@ public class AntlrErrorInterpreter {
     return msg ;
   }
 
-  public static String getTokenErrorDisplay( final Token t ) {
+  private static String getTokenErrorDisplay( final Token t ) {
+    if( t == null ) {
+      return "<null>" ;
+    }
     String s = t.getText() ;
     if ( s == null ) {
       if ( t.getType() == Token.EOF ) {
