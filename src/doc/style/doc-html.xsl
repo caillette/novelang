@@ -149,4 +149,7 @@ pageTracker._trackPageview();
   
   <!--This doesn't work when put in shared.xsl .-->
   <xsl:template match="*[n:style='parameters']" />
+
+  <xsl:template name="descriptor" />
+
 </xsl:stylesheet>
