@@ -39,6 +39,11 @@ public class TagParsingTest {
   }
 
   @Test
+  public void rejectTagContainingIllegalSymbol() throws RecognitionException {
+    PARSERMETHOD_TAG.checkFails( "@é" ) ;
+  }
+
+  @Test
   public void levelIntroducer() throws RecognitionException {
     PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
         "@stuff-1 @stuff-2 " + BREAK +

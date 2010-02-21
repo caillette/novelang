@@ -1826,14 +1826,16 @@ rawWord returns [ String text ]
 }
   : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
       | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
-      | s3 = digit { buffer.append( $s3.text ) ; }
-      | s4 = escapedCharacter  { buffer.append( $s4.unescaped ) ; }
+      | s3 =letterWithDiacritics { buffer.append( $s3.text ) ; }
+      | s4 = digit { buffer.append( $s4.text ) ; }
+      | s5 = escapedCharacter  { buffer.append( $s5.unescaped ) ; }
     )+
-    ( s5 = HYPHEN_MINUS { buffer.append( $s5.text ) ; }
-      (  s6 = hexLetter { buffer.append( $s6.text ) ; }
-       | s7 = nonHexLetter { buffer.append( $s7.text ) ; }
-       | s8 = digit { buffer.append( $s8.text ) ; }
-       | s9 = escapedCharacter  { buffer.append( $s9.unescaped ) ; } 
+    ( s6 = HYPHEN_MINUS { buffer.append( $s6.text ) ; }
+      (  s7 = hexLetter { buffer.append( $s7.text ) ; }
+       | s8 = nonHexLetter { buffer.append( $s8.text ) ; }
+       | s9 = letterWithDiacritics { buffer.append( $s9.text ) ; }
+       | s10 = digit { buffer.append( $s10.text ) ; }
+       | s11 = escapedCharacter  { buffer.append( $s11.unescaped ) ; } 
       )+ 
     )*
     { $text = buffer.toString() ; }
@@ -2028,6 +2030,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
   :     digit
       | hexLetter
       | nonHexLetter 
+      | letterWithDiacritics
       | AMPERSAND 
       | APOSTROPHE   
       | ASTERISK
@@ -2074,7 +2077,9 @@ anySymbolExceptGreaterthansignAndGraveAccent
 
 letters : letter+ ;
 
-letter : hexLetter | nonHexLetter ;
+letter : hexLetter | nonHexLetter | letterWithDiacritics ;
+
+asciiLetter : hexLetter | nonHexLetter ;
 
 digit 
   : DIGIT_0 | DIGIT_1 | DIGIT_2 | DIGIT_3 | DIGIT_4 
@@ -2104,8 +2109,10 @@ nonHexLetter
   | LATIN_CAPITAL_LETTER_S | LATIN_CAPITAL_LETTER_T | LATIN_CAPITAL_LETTER_U
   | LATIN_CAPITAL_LETTER_V | LATIN_CAPITAL_LETTER_W | LATIN_CAPITAL_LETTER_X  
   | LATIN_CAPITAL_LETTER_Y | LATIN_CAPITAL_LETTER_Z
+  ;
 
-  | LATIN_SMALL_LETTER_A_WITH_GRAVE
+letterWithDiacritics
+  : LATIN_SMALL_LETTER_A_WITH_GRAVE
   | LATIN_CAPITAL_LETTER_A_WITH_GRAVE
 
   | LATIN_SMALL_LETTER_A_WITH_CIRCUMFLEX
