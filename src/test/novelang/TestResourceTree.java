@@ -118,6 +118,8 @@ public final class TestResourceTree {
     String UPDATING_TAG_VISIBILITY_STATUS_MESSAGE = "Updating tag visibility..." ;
     String UPDATING_TAG_VISIBILITY_ALERT_MESSAGE = "Done updating tag visibility" ;
     Resource TAGGED = resource( "tags-combinations.nlp" ) ;
+    Resource IMPLICIT_TAGS_PART = resource( "implicit-tags.nlp" ) ;
+    Resource IMPLICIT_TAGS_BOOK = resource( "implicit-tags-book.nlb" ) ;
   }
 
   public interface Scanned {

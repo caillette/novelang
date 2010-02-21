@@ -119,8 +119,7 @@ public class Book extends AbstractSourceReader {
       final Set< Tag > tagset = MetadataHelper.findTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
-      final Set< Tag > effectiveTagRestrictions = Sets.intersection( tagset, tagRestrictions ).immutableCopy() ;
-      rehierarchized = TagFilter.filter( rehierarchized, effectiveTagRestrictions ) ;
+      rehierarchized = TagFilter.filter( rehierarchized, tagRestrictions ) ;
 
       currentEnvironment = currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
 
