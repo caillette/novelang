@@ -1,0 +1,437 @@
+
+/*
+ *  Reset of browser properties.
+ */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td
+{
+  margin : 0 ;
+  padding : 0 ;
+  border : 0 ;
+  outline : 0 ;
+  font-weight : inherit ;
+  font-style : inherit ;
+  font-size : 100% ;
+  vertical-align : baseline ;
+  text-indent : 0 ;
+}
+
+:focus {
+  outline : 0 ;
+}
+
+body {
+  line-height : 1.3 ;
+  color : black ;
+  background : #dddddd ;
+  font-size : 12pt ;
+}
+
+ol, ul {
+  list-style : none ;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+  border-collapse : separate ;
+  border-spacing : 0 ;
+}
+
+caption, th, td {
+  text-align : left ;
+  font-weight : normal ;
+}
+
+
+/*
+ *  Font sizes.
+ */
+
+* {
+  font-size : 10pt ;
+}
+
+body {
+  display : table ;
+  font-size : 14pt ;
+  /*background : #dddddd ;*/
+}
+
+p {
+  /*font-family : Times New Roman, Times, serif ;*/
+  /*font-size : 12pt ;*/
+  color : #3a3a3a ;
+  /*font-family : georgia, serif ;*/
+  /*font-size : 11pt ;*/
+/*font-family : Lucida Grande, Lucida Sans Unicode, sans-serif ;*/
+  font-family : Palatino Linotype, Book Antiqua, Palatino, Georgia, serif ;
+  font-size : 12pt ;
+  line-height : 1.35 ;
+}
+
+h1, h2, h3, h4, h5 {
+  /*font-family : Lucida Sans Unicode, sans-serif ;*/
+  /*font-family : Arial Black, Arial Black, Gadget, sans-serif ;*/
+  /*font-family : Impact, Impact, Charcoal, sans-serif ;*/
+/*font-family : Lucida Sans Unicode, sans-serif ;*/
+/*font-family : Lucida Sans Unicode, Lucida Grande, sans-serif ;*/
+/*font-family : Lucida Grande, sans-serif ;*/
+  /*font-family : Trebuchet MS, Helvetica, sans-serif ;*/
+  /*font-family : Tahoma, Geneva, sans-serif ;*/
+  /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+/*font-family: arial, sans-serif ;*/
+/*font-family : times new roman, serif ;*/
+/*font-family : georgia, serif ;*/
+/*font-family : MS Sans Serif, Geneva, sans-serif ;*/
+/*font-family : MS Serif, New York, serif ;*/
+/*letter-spacing : 0.03em ;*/
+  font-family : Palatino Linotype, Book Antiqua, Palatino, Georgia, serif ;
+font-weight : bold ;
+  margin : 0 0 0.5em 0 ;
+  line-height : 1 ;
+  color : #303030 ;
+}
+
+h1 {
+  font-size : 18pt ;
+}
+
+h2 {
+  font-size : 16pt ;
+}
+
+h3 {
+  font-size : 14pt ;
+}
+
+h4 {
+  font-size : 13pt ;
+}
+
+h5 {
+  font-size : 12pt ;
+}
+
+
+
+/*
+ * Page layout.
+ */
+
+#rendered-document {
+  display : table-cell ;
+  background : #e4e4e4 ;
+  min-width : 500px ;
+  max-width : 800px ;
+}
+
+#right-sidebar {
+  display : table-cell ;
+  top : 2px ;
+  padding-left : 30px ;
+  padding-right : 3px ;
+  padding-top : 3px ;
+  background-color : #dddddd ;
+}
+
+#navigation {
+  top : 6px ;
+  font-size : 10pt ;
+}
+
+.fixed-position {
+  position : fixed ;
+}
+
+#tag-list {
+  white-space : nowrap ;
+  padding : 4px 4px 2px 2px ;
+}
+
+#tag-list-content > input {
+  margin-bottom : 6px ;
+}
+
+#identifier-list {
+  overflow-x : hidden ;
+}
+
+
+#pin-navigation {
+  position : fixed ;
+  bottom : 0 ;
+  height : 96px ;
+  width : 100% ;
+  display : table-cell ;
+  vertical-align : bottom ;
+  background : url( "icons/Gradient.png" ) repeat-x bottom fixed ;
+}
+
+#pin-navigation > ul {
+  margin-top : 80px ;
+  margin-left : 16px ;
+  font-size : 8pt ;
+  /*font-family : Verdana, Geneva, sans-serif ;*/
+  font-family: arial, sans-serif ;
+  color : #bbbbbb ;
+  background : #dddddd ;
+}
+
+#pin-navigation > ul > li {
+  display : inline ;
+  padding-left : 0.5em ;
+  padding-right : 0.5em ;
+  cursor : pointer ;
+}
+
+#pin-navigation > ul > li:hover {
+  background : #e4e4e4 ;
+  color : #222222 ;
+}
+
+
+/*
+ * Borders and margins.
+ */
+
+/* Common properties for descriptor-enabled containers. */
+.level, blockquote, div.p, div.pre {
+  position : relative ;
+  margin-left : 10px ;
+
+  padding-left : 5px ;
+  border-left: 5px solid #e4e4e4 ;
+  /*padding-bottom : 2px ;*/
+
+}
+
+.descriptor {
+
+      /* Mandatory since color animation does not support 'none'. */
+  background-color : #e4e4e4 ;
+
+  line-height : 1 ;
+
+      /* Cause border of this element to juxtapose exactly with container's border. */
+  margin-left : -5px ;
+
+      /*  Make right border to go further on the right than other text,
+          causing tags to be right-aligned. */
+  padding-right : 5px ;
+  margin-right : -5px ;
+
+
+  -moz-border-top-right-radius : 5px ;
+  -moz-border-bottom-right-radius : 5px ;
+  -webkit-border-top-right-radius : 5px ;
+  -webkit-border-bottom-right-radius : 5px ;
+
+}
+
+.level {
+  margin-top : 16px ;
+  margin-bottom : 10px ;
+  padding-bottom : 4px ;
+}
+
+blockquote > div.p {
+  padding-bottom : 0 ; /* Override default to avoid unpleasant gap between colored blocks. */
+  text-align : left ;
+
+}
+blockquote > div.p > p {
+  background : #d6d6d6 ;
+  /*font-family : Lucida Grande, Lucida Sans Unicode, sans-serif ;*/
+  /*font-family: arial, sans-serif ;*/
+  /*font-family: Georgia, sans-serif ;*/
+  font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;
+  /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+
+  font-size : 12pt ;
+  margin-right : 16px ;
+  color : #333333 ;
+  padding-left : 4px ;
+  padding-right : 4px ;
+}
+
+blockquote {
+  margin-top : 2px ;
+  margin-bottom : 4px ;
+}
+
+blockquote > div.descriptor > img.opening-quote {
+  /*float : left ;*/
+  margin-left : -10px ;
+  margin-bottom : -12px ;
+  padding-top : 4px ;
+}
+
+
+div.pre {
+  /*font-family: Georgia, sans-serif ;*/
+  /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
+  /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+
+  margin-bottom : 4px ;
+}
+
+div.pre > div.descriptor > img.opening-pre {
+  /*float : left ;*/
+  margin-left : -18px ;
+  margin-bottom : -22px ;
+  padding-top : 4px ;
+}
+
+pre {
+  font-family : Courier New, Courier, monospace ;
+  font-size : 11pt ;
+  line-height : 1.1 ;
+  /*font-family : Lucida Console, Monaco, monospace ;*/
+  /*font-size : 9pt ;*/
+  /*line-height : 1.3 ;*/
+  background : #f5f5f5 ;
+
+  overflow : visible ;
+  padding: 2px 4px ;
+  margin-left : 18px ; /* Value set empirically to align with blockquote. */
+  margin-right : 16px ;
+
+  -webkit-border-radius : 3px ;
+  -moz-border-radius : 3px ;
+
+
+}
+
+
+
+div.p {
+  font-size: 13pt ;
+  /*font-family : times new roman, serif ;*/
+  text-align : justify ;
+}
+
+div.p > p {
+  padding-right : 16px ;
+}
+
+
+.location {
+  font-size : 9pt ;
+  /*font-family: arial, sans-serif ;*/
+  font-family: Tahoma, Geneva, sans-serif ;
+}
+
+ul.identifiers {
+  list-style : none ;
+  padding-top : 4px ;
+  padding-bottom : 6px ;  // Allocate room for list items' bottom border.
+}
+
+
+li.explicit-identifier, li.implicit-identifier, .identifier-reference {
+  font-size : 10pt ;
+}
+
+/*li.explicit-identifier, li.implicit-identifier {*/
+  /*margin-top : 20px ;*/
+  /*margin-bottom : -2px ;*/
+/*}*/
+
+li.explicit-identifier {
+  font-weight : bold ;
+}
+
+ul.tags {
+  text-align : right ;
+  list-style : none ;
+  margin-top : -3px ;
+  padding-bottom : 6px ;  /*Allocate room for list items' bottom border.*/
+}
+
+.explicit-tag, promoted-tag, .implicit-tag,
+.implicit-identifier, .explicit-identifier, .identifier-reference
+{
+  /*font-family : Arial, Arial, Helvetica, sans-serif ;*/
+  font-family : Lucida Grande, Tahoma, Geneva, sans-serif ;
+}
+
+.explicit-tag, .promoted-tag, .implicit-tag,
+.implicit-identifier, .explicit-identifier
+{
+  display : inline ;  /* Required as they appear as list items. */
+  border: 1px black ;
+
+  border-radius : 3px ;
+  -webkit-border-radius : 3px ;
+  -moz-border-radius : 3px ;
+}
+
+.explicit-tag, .promoted-tag, .implicit-tag
+{
+  font-size : 8pt ;
+  margin : -15px 0 0 0 ;
+  padding : 1px 2px 1px 2px ;
+  text-indent : 0 ;
+
+}
+
+.implicit-tag, .promoted-tag {
+  border-style : dashed ;
+}
+
+.explicit-tag {
+  border-style : solid ;
+}
+
+
+
+li.identifier-reference {
+  margin-bottom : 4px ;
+}
+
+.duplicate {
+  text-decoration : line-through ;
+  color : brown ;
+}
+
+img.descriptor-disclosure {
+  margin-right : -20px ;
+  margin-top : 5px ;
+  float : right ;
+}
+
+
+
+/*
+ * Tag colors, generated.
+
+.Tag-My-tag {
+  color : darkblue ;
+  background-color : deepskyblue ;
+}
+.Tag-Some-tag {
+  color : black ;
+  background-color : darkkhaki ;
+}
+.Tag-AnotherTag {
+  color : maroon ;
+  background-color : darkorange ;
+}
+.Tag-moreTag {
+  color : beige ;
+  background-color : darkslateblue ;
+}
+.Tag-evenMore {
+  color : indigo ;
+  background-color : gold ;
+}
+
+ */
+
