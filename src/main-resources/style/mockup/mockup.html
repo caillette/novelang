@@ -387,7 +387,8 @@
       font-family : Lucida Grande, Tahoma, Geneva, sans-serif ;
     }
 
-    .implicit-tag, .explicit-tag, .implicit-identifier, .explicit-identifier
+    .implicit-tag, .explicit-tag, .outstanding-tag, 
+    .implicit-identifier, .explicit-identifier
     {
       display : inline ;  /* Required as they appear as list items. */
       border: 1px black ;
@@ -397,7 +398,7 @@
       -moz-border-radius : 3px ;
     }
 
-    .implicit-tag, .explicit-tag
+    .implicit-tag, .explicit-tag, .outstanding-tag
     {
       font-size : 8pt ;
       margin : -15px 0 0 0 ;
@@ -406,8 +407,8 @@
 
     }
 
-    .implicit-tag {
-      border-style :  dotted ;
+    .implicit-tag, .outstanding-tag {
+      border-style : dashed ;
     }
 
     .explicit-tag {
@@ -597,16 +598,41 @@
           </ul>
         </div>
         <h2>This is a section with a title (and <i>style</i> inside the title!)</h2>
-  
+
         <p>
           This is a single-line paragraph. This is an interpolated clause: – the “silent end”
           means there is no closing dash. Here is <sup>superscript</sup>.
           Here are some [brackets] here.
         </p>
-        
+
         <!--<pre>This is an annoying sample of &lt;pre&gt; tag that takes a lot of length and fatally overflows on navigation bar's area. Sometime you just let it happen. Sometimes you want a scrollbar. </pre>-->
       </div>
-  
+
+      <div class="level" >
+        <div class="descriptor">
+          <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
+          <div class="collapsable-descriptor" >
+            <div
+                class="location"
+            >(3:0) file:/Users/Shared/Novelang/samples/showcase/showcase.nlp</div>
+            <ul class="identifiers">
+              <li class="implicit-identifier">\\ImplicitOutstandingTag</li>
+              <li class="implicit-identifier">\\My-tag</li>
+            </ul>
+          </div>
+          <ul class="tags">
+            <li class="outstanding-tag Tag-My-tag" >My-tag</li>
+          </ul>
+        </div>
+        <h2>Implicit outstanding tag: "My-tag"</h2>
+
+        <p>
+          This is a single-line paragraph. 
+        </p>
+
+        <!--<pre>This is an annoying sample of &lt;pre&gt; tag that takes a lot of length and fatally overflows on navigation bar's area. Sometime you just let it happen. Sometimes you want a scrollbar. </pre>-->
+      </div>
+
       <div class="level" >
         <div class="descriptor">
           <img class="descriptor-disclosure" src="../icons/Descriptor.png" alt="Descriptor" />
