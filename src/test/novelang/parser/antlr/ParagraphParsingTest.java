@@ -354,10 +354,10 @@ public class ParagraphParsingTest {
     PARSERMETHOD_PARAGRAPH.createTree( "--w0,w1--" );
   }
   
-  @Test @Ignore
+  @Test 
   public void paragraphHasLineBreaksInsideParenthensis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(  
-        "(" + BREAK +
+        "(" + 
         "x" + BREAK +
         ")",
         tree( 

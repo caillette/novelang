@@ -78,7 +78,7 @@ public class EmbeddedListParsingTest {
     ) ;
   }
 
-  @Test @Ignore
+  @Test 
   public void embeddedListItemInsideParenthesis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
         "(" + BREAK +
@@ -90,8 +90,19 @@ public class EmbeddedListParsingTest {
             PARAGRAPH_REGULAR,
             tree(
                 BLOCK_INSIDE_PARENTHESIS,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
+                tree( LINE_BREAK_ ),
+                tree(
+                    EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                    tree( WHITESPACE_, " " ),
+                    tree( WORD_, "w" )
+                    ),
+                tree( LINE_BREAK_ ),
+                tree(
+                    EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                    tree( WHITESPACE_, " " ),
+                    tree( WORD_, "x" )
+                ),
+                tree( LINE_BREAK_ )
             )
         )
     ); ;
