@@ -41,21 +41,21 @@ function initializeTagSystem( colorDefinitions ) {
   // Create the combo boxes.
   for( var i in TAGS ) {
     var tag = TAGS[ i ] ;
-    $( "#tag-list" ).append(
+    $( "#tag-list-content" ).append(
         "<input " +
             "type='checkbox' " +
             "name='" + tag + "' " +
             "onclick='checkTag() ; ' " +
         ">" +
-        "<span class='Tag-" + tag + "' >" + tag + "</span>" +
+        "<span class='explicit-tag Tag-" + tag + "' >" + tag + "</span>" +
         "<br/>"
     ) ;
   }
-  $( "#tag-list" ).wrapInner( "<div id='tag-list-content' ></div>" ) ;
-  $( "#tag-list" ).prepend( "<p id='tag-list-disclosure' >+</p>" ) ;
-  $( "#tag-list-disclosure" ).click( function() {
-    $( "#tag-list-content" ).slideToggle( 100 ) ;
-  } ) ;
+//  $( "#tag-list" ).wrapInner( "<div id='tag-list-content' ></div>" ) ;
+//  $( "#tag-list" ).prepend( "<p id='tag-list-disclosure' >+</p>" ) ;
+//  $( "#tag-list-disclosure" ).click( function() {
+//    $( "#tag-list-content" ).slideToggle( 100 ) ;
+//  } ) ;
 
   if( activeTags.length == 0 ) {
     $( "#tag-list-content" ).hide() ;

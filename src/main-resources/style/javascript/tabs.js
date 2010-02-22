@@ -79,7 +79,7 @@ function initializeTabs() {
   $( "#navigation" ).tabs( {
       selected : 0,
       collapsible : true,
-      fx : { opacity : "toggle", duration : 100 }
+      fx : { opacity : "toggle", duration : 200 }
   } ) ;
 
 } ;

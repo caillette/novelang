@@ -45,6 +45,7 @@
       <head>
         <link rel="stylesheet" type="text/css" href="/display2.css" />
         <link rel="stylesheet" type="text/css" href="/custom.css" />
+        <link rel="stylesheet" type="text/css" href="/jquery-theme/jquery-ui-1_7_2_custom.css" />
         <style type="text/css" /> <!-- Placeholder for dynamically-created tag classes. -->
 
         <xsl:element name="meta" >
@@ -89,12 +90,25 @@
 
         <div id="navigation" class="fixed-position" >
 
-
           <ul>
             <li><a href="#tag-list-content">Tags</a></li>
             <li><a href="#identifier-list">Ids</a></li>
+            <li><a href="#debug-messages">Debug</a></li>
           </ul>
+
+          <form name="tag-list" id="tag-list" >
+            <!-- Dynamically filled. -->
+            <div id="tag-list-content" />
+            <br/>
+          </form>
+
+          <div id="identifier-list" />
+
+          <p id="debug-messages" />
+
         </div>
+
+
 
         <div id="pin-navigation" >
           <ul>
@@ -102,21 +116,20 @@
             <li onclick="togglePinNavigation()">unpin</li>
           </ul>
         </div>
-        
       </div>
 
 
-      <p id="messages" />
-      <div id="externalColorDefinitionsPlaceholder" style="visibility:hidden;" />
+
+      <div id="externalColorDefinitionsPlaceholder" style="display:none;" />
 
       <xsl:if test="//n:meta/n:tags" >
-        <dl id="tag-definitions" >
+        <dl id="tag-definitions" style="display : none ;">
           <xsl:for-each select="//n:meta/n:tags/*">
             <dt><xsl:value-of select="." /></dt>
           </xsl:for-each>
         </dl>
       </xsl:if>
-      
+
 
     </body>
     </html>
@@ -151,7 +164,7 @@
 
   <xsl:template match="n:lines-of-literal" >
     <div class="pre" >
-    <xsl:call-template name="descriptor-for-pre" />
+      <xsl:call-template name="descriptor-for-pre" />
       <pre><xsl:apply-templates/></pre>
     </div>
   </xsl:template>
@@ -286,51 +299,58 @@
     <xsl:param name="icon" />
     <xsl:param name="css-class" />
 
-    <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:location">
-      <div class="descriptor" >
-        <img class="descriptor-disclosure" src="/icons/Descriptor.png" />
-        <div class="collapsable-descriptor" >
-          <xsl:if test="n:location" >
-            <span class="location"> <xsl:value-of select="n:location" /> </span>
+    <div class="descriptor" >
+      <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:location">
+        <img class="descriptor-disclosure" src="/icons/Descriptor.png"/>
+        <div class="collapsable-descriptor">
+          <xsl:if test="n:location">
+            <span class="location">
+              <xsl:value-of select="n:location"/>
+            </span>
           </xsl:if>
-          <xsl:if test="n:explicit-identifier" >
-            <p class="explicit-identifier"> <xsl:value-of select="n:explicit-identifier" /> </p>
+          <xsl:if test="n:explicit-identifier">
+            <p class="explicit-identifier">
+              <xsl:value-of select="n:explicit-identifier"/>
+            </p>
           </xsl:if>
-          <xsl:if test="n:implicit-identifier" >
-            <p class="implicit-identifier"> <xsl:value-of select="n:implicit-identifier" /> </p>
+          <xsl:if test="n:implicit-identifier">
+            <p class="implicit-identifier">
+              <xsl:value-of select="n:implicit-identifier"/>
+            </p>
           </xsl:if>
-          <xsl:if test="n:implicit-tag" >
-            <ul class="tags" >
+          <xsl:if test="n:implicit-tag">
+            <ul class="tags">
               <xsl:for-each select="n:implicit-tag">
-                <li class="implicit-tag" >
-                  <xsl:value-of select="." />
+                <li class="implicit-tag">
+                  <xsl:value-of select="."/>
                 </li>
               </xsl:for-each>
             </ul>
           </xsl:if>
         </div>
 
-        <xsl:if test="n:explicit-tag" >
+        <xsl:if test="n:explicit-tag">
           <ul class="tags">
             <xsl:for-each select="n:explicit-tag">
-              <li class="explicit-tag" >
-                <xsl:value-of select="." />
+              <li class="explicit-tag">
+                <xsl:value-of select="."/>
               </li>
             </xsl:for-each>
           </ul>
           <br/>
         </xsl:if>
+      </xsl:if>
 
-        <xsl:if test="$icon" >
-          <xsl:element name="img" >
-            <xsl:attribute name="src" ><xsl:value-of select="$icon" /></xsl:attribute>
-            <xsl:attribute name="class" ><xsl:value-of select="$css-class" /></xsl:attribute>
-            <xsl:attribute name="alt" />
-          </xsl:element>
-        </xsl:if>
 
-      </div>
-    </xsl:if>
+      <xsl:if test="$icon" >
+        <xsl:element name="img" >
+          <xsl:attribute name="src" ><xsl:value-of select="$icon" /></xsl:attribute>
+          <xsl:attribute name="class" ><xsl:value-of select="$css-class" /></xsl:attribute>
+          <xsl:attribute name="alt" />
+        </xsl:element>
+      </xsl:if>
+
+    </div>
   </xsl:template>
 
 
