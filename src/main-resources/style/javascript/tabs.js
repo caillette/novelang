@@ -59,28 +59,32 @@ function initializeTabs() {
   } ) ;
 
 
-  // Save their natural width before the tabs change it.
+  var tabs = $( "#navigation" ).tabs( {
+      selected : -1,
+      collapsible : true,
+      fx : { opacity : "toggle", duration : 100 }
+  } ) ;
+  // Forces some kid of refresh that doesn't occur if 0 is default.
+  tabs.tabs( "select", 0 ) ;
+
+
+
   var identifierListWidth = $( "#identifier-list" ).width() ;
   var tagListWidth = $( "#tag-list" ).width() ;
+  var navigationWidth = $( "#navigation" ).width() ;
 
-  // Force width of navigation area to tag's width.
-  // This is because a fixed position (required to make navigation always visible)
-  // doesn't allow automatic width calculation.
+  // Force width of navigation area.
+  // This enables smarter resizing where navigation area keeps its full width
+  // while rendered document area shrinks.
   if( identifierListWidth > tagListWidth ) {
     $( "#tag-list" ).width( identifierListWidth ) ;
   }
 
   // Add extra width because of margins and paddings for the sidebar.
-  var maxWidth = Math.max( identifierListWidth, tagListWidth ) ;
+  var maxWidth = Math.max( identifierListWidth, tagListWidth, navigationWidth ) ;
   $( "#right-sidebar" ).width( maxWidth + 10 ) ;
-
   $( "#navigation" ).width( maxWidth ) ;
 
-  $( "#navigation" ).tabs( {
-      selected : 0,
-      collapsible : true,
-      fx : { opacity : "toggle", duration : 200 }
-  } ) ;
 
 } ;
 
