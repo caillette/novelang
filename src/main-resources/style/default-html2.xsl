@@ -200,10 +200,13 @@
 
   <xsl:template match="n:paragraph-as-list-item" >
     <xsl:call-template name="descriptor-vanilla" />
-    <p>
-      &mdash;&nbsp;
-      <xsl:apply-templates />
-    </p>
+    <div class="p" >
+      <p>
+        &mdash;&nbsp;
+        <xsl:apply-templates/>
+      </p>
+    </div>
+
   </xsl:template>
   
   <xsl:template match="n:block-inside-solidus-pairs" >
@@ -337,7 +340,6 @@
               </li>
             </xsl:for-each>
           </ul>
-          <br/>
         </xsl:if>
       </xsl:if>
 
