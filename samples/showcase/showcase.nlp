@@ -20,6 +20,21 @@ There can be several paragraphs inside.
 
 This is a paragraph //after// a "blockquote".
 
+<<
+This is another "blockquote".
+>>
+
+<<
+Several ones may follow.
+- List inside blockquote.
+  - One more item here.
+Blockquotes don't last forever.
+
+No no no.
+>>
+
+
+
 
 === Block literal
 
@@ -33,6 +48,11 @@ Literal //here//.
 
 Character escaping also works here:
 «gt»>>
+{{Now let's see how long, long lines display. They could wrap or a scrollbar may help to see the whole. Hiding is a bad idea.}}
+>>>
+
+<<<
+Short text should have no scrollbar.
 >>>
 
 === Inline literal

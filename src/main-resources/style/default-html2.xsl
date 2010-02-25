@@ -92,8 +92,8 @@
 
           <ul>
             <li><a href="#tag-list-content">Tags</a></li>
-            <li><a href="#identifier-list">Ids</a></li>
-            <li><a href="#debug-messages">Debug</a></li>
+            <!--<li><a href="#identifier-list">Ids</a></li>-->
+            <!--<li><a href="#debug-messages">Debug</a></li>-->
           </ul>
 
           <form name="tag-list" id="tag-list" >

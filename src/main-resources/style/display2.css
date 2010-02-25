@@ -228,21 +228,8 @@ h5 {
 blockquote > div.p {
   padding-bottom : 0 ; /* Override default to avoid unpleasant gap between colored blocks. */
   text-align : left ;
-
-}
-blockquote > div.p > p {
-  background : #d6d6d6 ;
-  /*font-family : Lucida Grande, Lucida Sans Unicode, sans-serif ;*/
-  /*font-family: arial, sans-serif ;*/
-  /*font-family: Georgia, sans-serif ;*/
-  /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
-  /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
-
-  /*font-size : 12pt ;*/
-  margin-right : 16px ;
   color : #333333 ;
   padding-left : 4px ;
-  padding-right : 4px ;
 }
 
 blockquote {
@@ -256,6 +243,19 @@ blockquote > div.descriptor > img.opening-quote {
   margin-bottom : -12px ;
   padding-top : 4px ;
 }
+
+blockquote > div.p > p, blockquote > div.p > ul {
+  background : #d6d6d6 ;
+  margin-right : 16px ;
+  padding-right : 4px ;
+}
+
+blockquote > div.p > ul {
+  list-style-position : inside ;
+  margin-left : 0 ;
+  padding-left : 16px ;
+}
+
 
 
 div.pre {
@@ -282,13 +282,18 @@ pre {
   /*line-height : 1.3 ;*/
   background : #f5f5f5 ;
 
-  overflow : visible ;
   padding: 2px 4px ;
   margin-left : 18px ; /* Value set empirically to align with blockquote. */
   margin-right : 16px ;
 
   -webkit-border-radius : 3px ;
   -moz-border-radius : 3px ;
+
+  
+/*overflow : hidden ;*/
+  /*overflow-x : auto ;*/
+  /*overflow-y : hidden; ;*/
+  /*overflow: -moz-scrollbars-horizontal ;*/
 
 
 }
@@ -324,7 +329,7 @@ code {
   font-size : 90% ;
   padding-left : 0.2em ;
   padding-right : 0.2em ;
-  background : #f5f5f5 ;
+  /*background : #f5f5f5 ;*/
   /*font-weight : normal ;*/
 }
 
