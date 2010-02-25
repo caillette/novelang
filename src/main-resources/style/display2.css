@@ -192,7 +192,6 @@ h5 {
 
   padding-left : 5px ;
   border-left: 5px solid #e4e4e4 ;
-  /*padding-bottom : 2px ;*/
 
 }
 
@@ -244,12 +243,14 @@ blockquote > div.descriptor > img.opening-quote {
   padding-top : 4px ;
 }
 
+/*  The two ones below guarantee that lists and paragraphs look good inside <blockquote>
+    while defining those properties for <blockquote> would mess margins and disclosure image.
+*/
 blockquote > div.p > p, blockquote > div.p > ul {
   background : #d6d6d6 ;
   margin-right : 16px ;
   padding-right : 4px ;
 }
-
 blockquote > div.p > ul {
   list-style-position : inside ;
   margin-left : 0 ;
@@ -267,13 +268,14 @@ div.pre {
 }
 
 div.pre > div.descriptor > img.opening-pre {
-  /*float : left ;*/
   margin-left : -18px ;
   margin-bottom : -22px ;
   padding-top : 4px ;
 }
 
-pre {
+
+
+div.pre > pre {
   font-family : Courier New, Courier, monospace ;
   font-size : 11pt ;
   line-height : 1.1 ;
@@ -289,13 +291,8 @@ pre {
   -webkit-border-radius : 3px ;
   -moz-border-radius : 3px ;
 
+  white-space : pre-line ;
   
-/*overflow : hidden ;*/
-  /*overflow-x : auto ;*/
-  /*overflow-y : hidden; ;*/
-  /*overflow: -moz-scrollbars-horizontal ;*/
-
-
 }
 
 ul {
@@ -348,22 +345,19 @@ div.level > object, div.level > img, table {
 
 
 
-table, td
-{
+table, td {
   position : relative ;
   border : solid #a0a0a0 ;
 }
 
 
-table
-{
+table {
   border-width : 0 0 1px 1px ;
   border-spacing : 0 ;
   border-collapse : collapse ;
 }
 
-td
-{
+td {
     margin : 0 ;
     padding : 4px ;
     border-width : 1px 1px 0 0 ;
@@ -372,11 +366,11 @@ td
 
 
 a {
-  color : #0300b0 ;
+  color : #0100b0 ;
 }
 
 a:visited {
-  color : #6600bb ;
+  color : #440070 ;
 }
 
 a:hover {
@@ -416,8 +410,6 @@ li.explicit-identifier {
 ul.tags {
   text-align : right ;
   list-style : none ;
-  /*margin-top : -3px ;*/
-  /*padding-bottom : 6px ;  *//*Allocate room for list items' bottom border.*/
   line-height : 2 ;
 }
 
@@ -478,30 +470,4 @@ img.descriptor-disclosure {
 }
 
 
-
-/*
- * Tag colors, generated.
-
-.Tag-My-tag {
-  color : darkblue ;
-  background-color : deepskyblue ;
-}
-.Tag-Some-tag {
-  color : black ;
-  background-color : darkkhaki ;
-}
-.Tag-AnotherTag {
-  color : maroon ;
-  background-color : darkorange ;
-}
-.Tag-moreTag {
-  color : beige ;
-  background-color : darkslateblue ;
-}
-.Tag-evenMore {
-  color : indigo ;
-  background-color : gold ;
-}
-
- */
 

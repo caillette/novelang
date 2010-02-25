@@ -163,10 +163,7 @@
   </xsl:template>
 
   <xsl:template match="n:lines-of-literal" >
-    <div class="pre" >
-      <xsl:call-template name="descriptor-for-pre" />
-      <pre><xsl:apply-templates/></pre>
-    </div>
+    <div class="pre" ><xsl:call-template name="descriptor-for-pre" /><pre><xsl:apply-templates/></pre></div>
   </xsl:template>
 
   <xsl:template match="n:style" />

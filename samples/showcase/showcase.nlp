@@ -48,7 +48,7 @@ Literal //here//.
 
 Character escaping also works here:
 «gt»>>
-{{Now let's see how long, long lines display. They could wrap or a scrollbar may help to see the whole. Hiding is a bad idea.}}
+Now let's see how long, long lines display. They could wrap or a scrollbar may help to see the whole. Hiding is a bad idea.
 >>>
 
 <<<
