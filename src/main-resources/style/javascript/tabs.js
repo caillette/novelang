@@ -103,3 +103,13 @@ function togglePinNavigation() {
 function resetNavigation() {
 
 }
+
+
+function spiceUpSpacesInPre() {
+  $( "pre" ).each( function() {
+    var text = $( this ).text() ;
+    text = text.replace( /\x20/g, "\u00a0\u200b" ) ;
+    $( this ).text( text ) ;
+
+  } ) ;
+}

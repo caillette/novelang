@@ -72,6 +72,7 @@
             initializeTagSystem( "/javascript/colors.htm" ) ;
             <!--initializeDescriptors() ;-->
             initializeTabs() ;
+            spiceUpSpacesInPre() ;
           } ) ;
         //]]></script>
 

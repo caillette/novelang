@@ -42,13 +42,13 @@ Literal is for text taken as it is, including spaces and line breaks.
 
 <<<
 Literal //here//.
-  Identation (2 spaces) preserved here.
+  Identation (2 spaces) preserved here. 
   Two emtpy lines following:
 
 
 Character escaping also works here:
 «gt»>>
-Now let's see how long, long lines display. They could wrap or a scrollbar may help to see the whole. Hiding is a bad idea.
+  Now let's see how long, long lines display.    They could wrap or a scrollbar may help to see the whole. Hiding is a bad idea.
 >>>
 
 <<<
