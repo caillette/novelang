@@ -1,0 +1,43 @@
+== HTML showcase
+
+=== Title (with //style//)
+
+Regular paragraph. Not so much to say. Text is justified, see? And line height is always the same for all that regular text.
+
+See a second paragraph.
+
+
+
+
+<<
+This is text inside angled bracket pairs.
+
+There can be as many paragraphs as you want. Text isn't justified here, to strengthen the difference with other paragraphs. 
+>>
+
+Yet another paragraph. Right in time to demo //block inside solidus pairs//, 
+``block````inside````grave````accent````pairs`` and super^script!
+
+<<<
+Now see lines of literal.
+  Keeps indentation and blank lines:
+
+  Yes it works!
+>>>
+
+
+
+  @Prettier @than-ever @Demo
+=== See Tags in action
+
+And tags are prettier than ever!
+
+
+
+== Title of level 1
+
+=== Title of level 2
+
+==== Title of level 3
+
+===== Title of level 4
