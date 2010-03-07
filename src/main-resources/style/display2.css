@@ -267,7 +267,7 @@ div.pre {
   /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
   /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
 
-  margin-bottom : 6px ;
+  margin-bottom : 12px ;
 }
 
 div.pre > div.descriptor > img.opening-pre {
@@ -300,7 +300,7 @@ div.pre > pre {
 
 ul {
   list-style: circle outside ;
-  margin-left : 2em ;
+  margin-left : 1em ;
   margin-right : 16px ;
   position : relative ;
 }
@@ -313,6 +313,14 @@ ul > ul > ul {
   list-style : disc ;
 }
 
+ul.big-list {
+  list-style: circle outside ;
+}
+
+ul.big-list > li {
+  list-style: circle outside ;
+}
+
 
 
 div.p {
@@ -323,6 +331,7 @@ div.p {
 
 div.p > p {
   padding-right : 16px ;
+  text-indent : 1em ;
 }
 
 
