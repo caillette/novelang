@@ -38,6 +38,7 @@ public enum RawResource {
   gif,
   jpg,
   jpeg,
+  ico,
   png ;
 
   private static final Function< RawResource, String > FILE_EXTENSION_EXTRACTOR =

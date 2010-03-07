@@ -35,6 +35,7 @@ public final class ResourceMimeTypes {
       new ImmutableMap.Builder()
       .put( "svg", "image/svg+xml" )
       .put( "js", "text/javascript" )
+      .put( "ico", "image/png" )
       .build()
   ;
 
