@@ -336,8 +336,8 @@ code {
 
 sup {
   line-height : 0 ;
-  font-size : 70% ;
-  vertical-align : top ;
+  font-size : 0.75em ;
+  vertical-align : super ;
 }
 
 
