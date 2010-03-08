@@ -150,6 +150,9 @@ pageTracker._trackPageview();
   <!--This doesn't work when put in shared.xsl .-->
   <xsl:template match="*[n:style='parameters']" />
 
-  <xsl:template name="descriptor" />
+
+  <!-- Override default, we don't want descriptors to appear. -->
+  <xsl:template name="descriptor-body" />
+
 
 </xsl:stylesheet>
