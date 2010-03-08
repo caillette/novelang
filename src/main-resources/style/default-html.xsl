@@ -37,22 +37,15 @@
   <xsl:param name="filename"/>
   <xsl:param name="charset"/>
 
-  <xalan:component
-      prefix="colormapper"
-      functions="getColorName getInverseRgbDeclaration"
-  >
-      <xalan:script lang="javaclass" src="xalan://novelang.rendering.xslt.color.ColorMapper" />
-  </xalan:component>
-
-
   <xsl:output method="xml" />
 
   <xsl:template match="/" >
 
     <html> 
       <head>
-        <link rel="stylesheet" type="text/css" href="/display.css" />
+        <link rel="stylesheet" type="text/css" href="/display2.css" />
         <link rel="stylesheet" type="text/css" href="/custom.css" />
+        <link rel="stylesheet" type="text/css" href="/jquery-theme/jquery-ui-1_7_2_custom.css" />
         <style type="text/css" /> <!-- Placeholder for dynamically-created tag classes. -->
 
         <xsl:element name="meta" >
@@ -68,14 +61,18 @@
 
         <script type="text/javascript" src="/javascript/jquery-1_3_2_min.js" />
         <script type="text/javascript" src="/javascript/jquery-rule-1_0_1_min.js" />
+        <script type="text/javascript" src="/javascript/jquery-ui-1_7_2_custom_min.js" />
         <script type="text/javascript" src="/javascript/color-palette.js" />
         <script type="text/javascript" src="/javascript/tags.js" />
-        <script type="text/javascript" src="/javascript/descriptors.js" />
+        <script type="text/javascript" src="/javascript/tabs.js" />
+        <!--<script type="text/javascript" src="/javascript/descriptors.js" />-->
         <script type="text/javascript"> //<![CDATA[
 
           $( document ).ready( function() {
             initializeTagSystem( "/javascript/colors.htm" ) ;
-            initializeDescriptors() ;
+            <!--initializeDescriptors() ;-->
+            initializeTabs() ;
+            spiceUpSpacesInPre() ;
           } ) ;
         //]]></script>
 
@@ -83,30 +80,68 @@
       </head>
     <body>
 
-      <xsl:apply-templates />
+
+
+      <div id="rendered-document">
+        <xsl:apply-templates />
+      </div>
+
+      <div id="right-sidebar">
+
+
+        <div id="navigation" class="fixed-position" >
+
+          <ul>
+            <li><a href="#tag-list-content">Tags</a></li>
+            <!--<li><a href="#identifier-list">Ids</a></li>-->
+            <!--<li><a href="#debug-messages">Debug</a></li>-->
+          </ul>
+
+          <form name="tag-list" id="tag-list" >
+            <!-- Dynamically filled. -->
+            <div id="tag-list-content" />
+            <br/>
+          </form>
+
+          <div id="identifier-list" />
+
+          <p id="debug-messages" />
+
+        </div>
+
+
+
+        <div id="pin-navigation" >
+          <ul>
+            <li onclick="resetNavigation()" >reset</li>
+            <li onclick="togglePinNavigation()">unpin</li>
+          </ul>
+        </div>
+      </div>
+
+
+
+      <div id="externalColorDefinitionsPlaceholder" style="display:none;" />
 
       <xsl:if test="//n:meta/n:tags" >
-        <dl id="tag-definitions" >
+        <dl id="tag-definitions" style="display : none ;">
           <xsl:for-each select="//n:meta/n:tags/*">
             <dt><xsl:value-of select="." /></dt>
           </xsl:for-each>
         </dl>
       </xsl:if>
 
-      <!-- HtmlUnit needs a form element to find checkboxes inside. -->
-      <form id="tag-list" name="tag-list" />
-
-      <p id="messages" />
-      <div id="externalColorDefinitionsPlaceholder" style="visibility:hidden;" />
 
     </body>
     </html>
   </xsl:template>
 
   <xsl:template match="n:level" >
-    <xsl:call-template name="tags" />
-    <xsl:call-template name="descriptor" />
-    <xsl:apply-templates />
+    <div class="level" >
+      <xsl:call-template name="descriptor-vanilla"/>
+      <xsl:apply-templates/>
+    </div>
+
   </xsl:template>
 
   <xsl:template match="//n:level/n:level-title" >
@@ -122,24 +157,26 @@
   </xsl:template>
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
-    <xsl:call-template name="tags" />
     <blockquote>
+      <xsl:call-template name="descriptor-for-blockquote" />
       <xsl:apply-templates />
     </blockquote>
   </xsl:template>
 
   <xsl:template match="n:lines-of-literal" >
-    <pre><xsl:apply-templates/></pre>
+    <div class="pre" ><xsl:call-template name="descriptor-for-pre" /><pre><xsl:apply-templates/></pre></div>
   </xsl:template>
 
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-regular" >
-    <xsl:call-template name="tags" />
-    <xsl:call-template name="descriptor" />
-    <p>
-      <xsl:apply-templates />
-    </p>
+    <div class="p" >
+      <xsl:call-template name="descriptor-vanilla" />
+      <p>
+        <xsl:apply-templates/>
+      </p>
+    </div>
+
   </xsl:template>
 
   <xsl:template match="n:url" >
@@ -160,11 +197,14 @@
 
 
   <xsl:template match="n:paragraph-as-list-item" >
-    <xsl:call-template name="tags" />
-    <p>
-      &mdash;&nbsp;
-      <xsl:apply-templates />
-    </p>
+    <xsl:call-template name="descriptor-vanilla" />
+    <div class="p" >
+      <p>
+        &mdash;&nbsp;
+        <xsl:apply-templates/>
+      </p>
+    </div>
+
   </xsl:template>
   
   <xsl:template match="n:block-inside-solidus-pairs" >
@@ -188,7 +228,7 @@
 
 
   <xsl:template match="n:cell-rows-with-vertical-line" >
-    <xsl:call-template name="tags" />
+    <xsl:call-template name="descriptor-vanilla" />
     <table>
       <xsl:apply-templates />
     </table>
@@ -234,44 +274,83 @@
   </xsl:template> 
 
 
-  <xsl:template name="tags" >
-
-    <xsl:if test="n:explicit-tag" >
-      <ul class="tags">
-        <xsl:for-each select="n:explicit-tag">
-          <li>
-            <xsl:value-of select="." />
-          </li>
-        </xsl:for-each>
-      </ul>
-      <br/>
-    </xsl:if>
+  <xsl:template name="descriptor-for-blockquote" >
+    <xsl:call-template name="descriptor-body" >
+      <xsl:with-param name="icon" >/icons/OpeningQuote.png</xsl:with-param>
+      <xsl:with-param name="css-class" >opening-quote</xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
-  
-  <xsl:template name="descriptor" >
-    <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:location">
-      <span class="descriptor-disclosure"><img src="/icons/Descriptor.png" /></span>
-      <div class="descriptor" >
-        <xsl:if test="n:location" >
-          <p class="location"> <xsl:value-of select="n:location" /> </p>
-        </xsl:if>
-        <xsl:if test="n:explicit-identifier" >
-          <p class="explicit-identifier"> <xsl:value-of select="n:explicit-identifier" /> </p>
-        </xsl:if>
-        <xsl:if test="n:implicit-identifier" >
-          <p class="implicit-identifier"> <xsl:value-of select="n:implicit-identifier" /> </p>
-        </xsl:if>
-        <xsl:if test="n:implicit-tag" >
-          <ul>
-            <xsl:for-each select="n:implicit-tag">
-              <li>
-                <xsl:value-of select="." />
+
+  <xsl:template name="descriptor-for-pre" >
+    <xsl:call-template name="descriptor-body" >
+      <xsl:with-param name="icon" >/icons/Gears.png</xsl:with-param>
+      <xsl:with-param name="css-class" >opening-pre</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="descriptor-vanilla" >
+    <xsl:call-template name="descriptor-body" >
+      <xsl:with-param name="icon" />
+      <xsl:with-param name="css-class" />
+    </xsl:call-template>
+  </xsl:template>
+
+
+  <xsl:template name="descriptor-body" >
+    <xsl:param name="icon" />
+    <xsl:param name="css-class" />
+
+    <div class="descriptor" >
+      <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:location">
+        <img class="descriptor-disclosure" src="/icons/Descriptor.png"/>
+        <div class="collapsable-descriptor">
+          <xsl:if test="n:location">
+            <span class="location">
+              <xsl:value-of select="n:location"/>
+            </span>
+          </xsl:if>
+          <xsl:if test="n:explicit-identifier">
+            <p class="explicit-identifier">
+              <xsl:value-of select="n:explicit-identifier"/>
+            </p>
+          </xsl:if>
+          <xsl:if test="n:implicit-identifier">
+            <p class="implicit-identifier">
+              <xsl:value-of select="n:implicit-identifier"/>
+            </p>
+          </xsl:if>
+          <xsl:if test="n:implicit-tag">
+            <ul class="tags">
+              <xsl:for-each select="n:implicit-tag">
+                <li class="implicit-tag">
+                  <xsl:value-of select="."/>
+                </li>
+              </xsl:for-each>
+            </ul>
+          </xsl:if>
+        </div>
+
+        <xsl:if test="n:explicit-tag">
+          <ul class="tags">
+            <xsl:for-each select="n:explicit-tag">
+              <li class="explicit-tag">
+                <xsl:value-of select="."/>
               </li>
             </xsl:for-each>
           </ul>
         </xsl:if>
-      </div>
-    </xsl:if>
+      </xsl:if>
+
+
+      <xsl:if test="$icon" >
+        <xsl:element name="img" >
+          <xsl:attribute name="src" ><xsl:value-of select="$icon" /></xsl:attribute>
+          <xsl:attribute name="class" ><xsl:value-of select="$css-class" /></xsl:attribute>
+          <xsl:attribute name="alt" />
+        </xsl:element>
+      </xsl:if>
+
+    </div>
   </xsl:template>
 
 
