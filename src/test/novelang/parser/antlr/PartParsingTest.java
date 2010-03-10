@@ -142,6 +142,25 @@ public class PartParsingTest {
   }
 
   @Test
+  public void blockquoteHasLinesOfLiteral()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+        "<< " + BREAK +
+        "<<< " + BREAK +
+      "literal" + BREAK +
+        ">>> " + BREAK +
+        ">>",
+        tree(
+            PART,
+            tree(
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( LINES_OF_LITERAL, "literal" ) )
+        )
+    ) ;
+  }
+
+  @Test
   public void partIsSectionThenParagraphThenBlockquoteThenParagraph()
       throws RecognitionException
   {

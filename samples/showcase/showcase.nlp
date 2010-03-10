@@ -30,7 +30,11 @@ Several ones may follow.
   - One more item here.
 Blockquotes don't last forever.
 
-No no no.
+<<<
+But there may be literal inside.
+>>>
+
+OK, all for today.
 >>
 
 

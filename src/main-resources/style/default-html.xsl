@@ -43,7 +43,7 @@
 
     <html> 
       <head>
-        <link rel="stylesheet" type="text/css" href="/display2.css" />
+        <link rel="stylesheet" type="text/css" href="/display.css" />
         <link rel="stylesheet" type="text/css" href="/custom.css" />
         <link rel="stylesheet" type="text/css" href="/jquery-theme/jquery-ui-1_7_2_custom.css" />
         <style type="text/css" /> <!-- Placeholder for dynamically-created tag classes. -->
@@ -167,6 +167,10 @@
     <div class="pre" ><xsl:call-template name="descriptor-for-pre" /><pre><xsl:apply-templates/></pre></div>
   </xsl:template>
 
+  <xsl:template match="n:paragraphs-inside-angled-bracket-pairs/n:lines-of-literal" >
+    <div class="pre" ><xsl:call-template name="descriptor-for-pre-inside-blockquote" /><pre><xsl:apply-templates/></pre></div>
+  </xsl:template>
+
   <xsl:template match="n:style" />
 
   <xsl:template match="n:paragraph-regular" >
@@ -284,6 +288,13 @@
   <xsl:template name="descriptor-for-pre" >
     <xsl:call-template name="descriptor-body" >
       <xsl:with-param name="icon" >/icons/Gears.png</xsl:with-param>
+      <xsl:with-param name="css-class" >opening-pre</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="descriptor-for-pre-inside-blockquote" >
+    <xsl:call-template name="descriptor-body" >
+      <xsl:with-param name="icon" />
       <xsl:with-param name="css-class" >opening-pre</xsl:with-param>
     </xsl:call-template>
   </xsl:template>

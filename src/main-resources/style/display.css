@@ -1,186 +1,506 @@
-body {
-  width : 500pt ;
-  background : #dddddd ;
-  font-size : 13.5pt ;
- 	text-indent : 1em ;
-	text-align : justify ;
-	margin-left: 30pt ;
-  /*min-height : 1.30em ;*/
-  /*max-height : 1.30em ;*/
 
+/*
+ *  Reset of browser properties.
+ */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td
+{
+  margin : 0 ;
+  padding : 0 ;
+  border : 0 ;
+  outline : 0 ;
+  font-weight : inherit ;
+  font-style : inherit ;
+  font-size : 100% ;
+  vertical-align : baseline ;
+  text-indent : 0 ;
+}
+
+:focus {
+  outline : 0 ;
+}
+
+ol, ul {
+  list-style : none ;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+  border-collapse : separate ;
+  border-spacing : 0 ;
+}
+
+caption, th, td {
+  text-align : left ;
+  font-weight : normal ;
+}
+
+
+/*
+ *  Font sizes.
+ */
+
+
+body {
+  display : table ;
+  color : #3a3a3a ;
+  background : #dddddd ;
+  /*font-family : georgia, serif ;*/
+  /*font-size : 11pt ;*/
+  /*font-family : Lucida Grande, Lucida Sans Unicode, sans-serif ;*/
+  font-family : Palatino Linotype, Book Antiqua, Palatino, Georgia, serif ;
+  font-size : 12pt ;
+  line-height : 1.35 ;
+}
+
+h1, h2, h3, h4, h5 {
+  /*font-family : Lucida Sans Unicode, sans-serif ;*/
+  /*font-family : Arial Black, Arial Black, Gadget, sans-serif ;*/
+  /*font-family : Impact, Impact, Charcoal, sans-serif ;*/
+/*font-family : Lucida Sans Unicode, sans-serif ;*/
+/*font-family : Lucida Sans Unicode, Lucida Grande, sans-serif ;*/
+/*font-family : Lucida Grande, sans-serif ;*/
+  /*font-family : Trebuchet MS, Helvetica, sans-serif ;*/
+  /*font-family : Tahoma, Geneva, sans-serif ;*/
+  /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+/*font-family: arial, sans-serif ;*/
+/*font-family : times new roman, serif ;*/
+/*font-family : georgia, serif ;*/
+/*font-family : MS Sans Serif, Geneva, sans-serif ;*/
+/*font-family : MS Serif, New York, serif ;*/
+/*letter-spacing : 0.03em ;*/
+  font-family : Palatino Linotype, Book Antiqua, Palatino, Georgia, serif ;
+font-weight : bold ;
+  margin : 0 0 0.5em 0 ;
+  line-height : 1 ;
+  color : #303030 ;
 }
 
 h1 {
-  font-size : 21pt ;
+  font-size : 18pt ;
 }
 
 h2 {
-  font-size : 15pt ;
+  font-size : 16pt ;
 }
 
-h1,h2,h3,h4 {
-  text-indent : 0 ;
-  text-align : left; ;
+h3 {
+  font-size : 14pt ;
 }
 
-p {
-	text-indent : 1em ;
-	text-align : justify ;
-	line-height : 1.30 ;
-	margin : 1pt 0 0 15pt;
-	padding : 5pt ;
+h4 {
+  font-size : 13pt ;
 }
 
-code {
-  font-size : 11pt;
-  white-space:pre;
-}
-
-/* Reserved to html-source.xsl for displaying HTML source elements. */
-tt {
-  font-size : 11pt ;
-  font-weight: bold ;
-}
-
-pre {
+h5 {
   font-size : 12pt ;
-  text-indent : 0 ;
-  text-align : left ;
-  line-height : 1.1 ;
-  margin : 1pt 0 15pt 15pt;
-  padding :0 0 0 10pt ;
-  border-left-style : solid ;
-  border-left-color: brown ;
-  border-left-width: 6px ;
 }
 
-blockquote {
-  border-left: 2px dotted black ;
-  font-size: 13pt;
-  
-}
 
-blockquote > p {
-  font-size : 12.0pt ;
-	text-indent : 0 ;
-	text-align : left ;
-	line-height : 1.25 ;
-	margin : 1pt 0 0 12pt;
-	padding : 0 ;
-}
-
-sup { line-height: 0; } 
-
-table, td
-{
-    border-color: maroon;
-    border-style: solid;
-}
-
-table
-{
-    border-width: 0 0 1pt 1pt;
-    border-spacing: 0;
-    border-collapse: collapse;
-}
-
-td
-{
-    margin: 0;
-    padding: 4pt;
-    border-width: 1pt 1pt 0 0;
-    background-color: #dfdfdf;
-}
 
 /*
-ul {
-  font-size : 13.5pt ;
-  
-}
-*/
+ * Page layout.
+ */
 
-
-ul.tags {
-  margin-right: -100px ;
-  margin-bottom : -2px ;
-  list-style:none ;
+#rendered-document {
+  display : table-cell ;
+  background : #e4e4e4 ;
+  min-width : 500px ;
+  max-width : 1000px ;
 }
 
-#tag-definitions {
-  display: none ;
+#right-sidebar {
+  display : table-cell ;
+  top : 2px ;
+  padding-left : 30px ;
+  padding-right : 3px ;
+  padding-top : 3px ;
+  background-color : #dddddd ;
 }
 
-ul.tags > li, #tag-list
-{
-  float: right ;
-  border: 1px solid;
-  font-size: 9pt ;
-  margin: 2px 0 0 1px ;
-  padding: 2px 2px 1px 2px ;
-  text-indent: 0;
+#navigation {
+  top : 6px ;
+  font-size : 10pt ;
 }
 
-p.tag-summary + ul.tags {
-  text-indent : 0 ;
-  margin-right: 0 ;
-  margin-left: 0 ;
-}
-
-p.tag-summary + ul.tags > li {
-  float: left ;
-  font-size: 10pt ;
-  margin: 4px 4px 4px 4px ;
+.fixed-position {
+  position : fixed ;
 }
 
 #tag-list {
-  display: block;
-  border: solid darkslategray 2px ;
-  position: fixed ;
-  margin-left: 800px;
-  z-index: 99000 ;
-  top: 8px ;
-
-  -moz-border-radius:5px ;
-  -webkit-border-radius: 5px ;
+  white-space : nowrap ;
+  padding : 4px 4px 2px 2px ;
 }
 
-#tag-list-disclosure {
-  font-size: 16pt ;
-  font-weight:bold;
-  text-indent: 0 ;
-  margin-left: 1pt ;
-  cursor: s-resize ;
+#tag-list-content > input {
+  margin-bottom : 6px ;
+}
+
+#identifier-list {
+  overflow-x : hidden ;
 }
 
 
+#pin-navigation {
+  position : fixed ;
+  bottom : 0 ;
+  height : 96px ;
+  width : 100% ;
+  display : table-cell ;
+  vertical-align : bottom ;
+  background : url( "icons/Gradient.png" ) repeat-x bottom fixed ;
+}
 
-.descriptor-disclosure {
-  float:left;
-  margin-left: -30pt ;
-  cursor: s-resize ;
+#pin-navigation > ul {
+  margin-top : 80px ;
+  margin-left : 16px ;
+  font-size : 8pt ;
+  /*font-family : Verdana, Geneva, sans-serif ;*/
+  font-family: arial, sans-serif ;
+  color : #bbbbbb ;
+  background : #dddddd ;
+}
+
+#pin-navigation > ul > li {
+  display : inline ;
+  padding-left : 0.5em ;
+  padding-right : 0.5em ;
+  cursor : pointer ;
+}
+
+#pin-navigation > ul > li:hover {
+  background : #e4e4e4 ;
+  color : #222222 ;
+}
+
+
+/*
+ * Borders and margins.
+ */
+
+/* Common properties for descriptor-enabled containers. */
+.level, blockquote, div.p, div.pre {
+  position : relative ;
+  margin-left : 10px ;
+
+  padding-left : 5px ;
+  border-left: 5px solid #e4e4e4 ;
+
 }
 
 .descriptor {
-  border: 1px solid;
-  -moz-border-radius:5px ;
-  -webkit-border-radius: 5px ;
-  font-size: 9pt ;
-  text-indent: 0;
-  margin : 1px 1px 1px 1px ;
+
+      /* Mandatory since color animation does not support 'none'. */
+  background-color : #e4e4e4 ;
+
+  line-height : 1 ;
+
+      /* Cause border of this element to juxtapose exactly with container's border. */
+  margin-left : -5px ;
+
+      /*  Make right border to go further on the right than other text,
+          causing tags to be right-aligned. */
+  padding-right : 5px ;
+  margin-right : -5px ;
+
+
+  -moz-border-top-right-radius : 5px ;
+  -moz-border-bottom-right-radius : 5px ;
+  -webkit-border-top-right-radius : 5px ;
+  -webkit-border-bottom-right-radius : 5px ;
 
 }
 
-.descriptor > ul > li {
-  display : inline ;
-  list-style-type : none ;
-  padding : 2px 2px 2px 2px  ;
-  border: 1px dotted ;
-  margin : 0 10px 0 0 ;
+.level {
+  margin-top : 16px ;
+  margin-bottom : 10px ;
+  padding-bottom : 4px ;
+}
+
+blockquote > div.p {
+  padding-bottom : 0 ; /* Override default to avoid unpleasant gap between colored blocks. */
+  text-align : left ;
+  color : #333333 ;
+  padding-left : 4px ;
+}
+
+blockquote {
+  margin-top : 2px ;
+  margin-bottom : 4px ;
+}
+
+blockquote > div.descriptor > img.opening-quote {
+  /*float : left ;*/
+  margin-left : -10px ;
+  margin-bottom : -12px ;
+  padding-top : 4px ;
+}
+
+/*  The ones below guarantee that lists and paragraphs look good inside <blockquote>
+    while defining those properties for <blockquote> would mess margins and disclosure image.
+*/
+blockquote > div.p > p, blockquote > div.p > ul {
+  background : #d6d6d6 ;
+  margin-right : 16px ;
+  padding-right : 4px ;
+}
+blockquote > div.p > p {
+  padding-left : 4px ;
+}
+blockquote > div.p > ul {
+  list-style-position : inside ;
+  margin-left : 0 ;
+  padding-left : 16px ;
+}
+
+
+
+div.pre {
+  /*font-family: Georgia, sans-serif ;*/
+  /*font-family : Palatino Linotype, Book Antiqua, Palatino, serif ;*/
+  /*font-family : Verdana, Verdana, Geneva, sans-serif ;*/
+
+  margin-bottom : 12px ;
+}
+
+div.pre > div.descriptor > img.opening-pre {
+  margin-left : -18px ;
+  margin-bottom : -22px ;
+  padding-top : 4px ;
+}
+
+
+
+div.pre > pre {
+  font-family : Courier New, Courier, monospace ;
+  font-size : 11pt ;
+  line-height : 1.1 ;
+  /*font-family : Lucida Console, Monaco, monospace ;*/
+  /*font-size : 9pt ;*/
+  /*line-height : 1.3 ;*/
+  background : #f5f5f5 ;
+
+  padding: 2px 4px ;
+  margin-left : 18px ; /* Value set empirically to align with blockquote. */
+  margin-right : 16px ;
+
+  -webkit-border-radius : 3px ;
+  -moz-border-radius : 3px ;
+
+  white-space : pre-line ;
+  
+}
+
+blockquote > div.pre > pre {
+  margin-top : 0 ;
+  margin-bottom : 0 ;
+}
+blockquote > div.pre > pre {
+  margin: 0 16px 0 0 ;
 
 }
 
-.explicit-identifier {
+
+ul {
+  list-style: circle outside ;
+  margin-left : 3em ;
+  margin-right : 16px ;
+  position : relative ;
+}
+
+ul > ul {
+  list-style : square ;
+  margin-left : 2em ;
+}
+
+ul > ul > ul {
+  list-style : disc ;
+  margin-left : 2em ;
+}
+
+ul.big-list {
+  list-style: circle outside ;
+}
+
+ul.big-list > li {
+  list-style: circle outside ;
+}
+
+
+
+div.p {
+  /*font-size: 13pt ;*/
+  /*font-family : times new roman, serif ;*/
+  text-align : justify ;
+}
+
+div.p > p {
+  padding-right : 16px ;
+  text-indent : 1em ;
+}
+
+
+code {
+  font-size : 90% ;
+  padding-left : 0.2em ;
+  padding-right : 0.2em ;
+  /*background : #f5f5f5 ;*/
+  /*font-weight : normal ;*/
+}
+
+sup {
+  line-height : 0 ;
+  font-size : 0.75em ;
+  vertical-align : super ;
+}
+
+
+
+h1 > code, h2 > code, h3 > code, h4 > code, h5 > code {
+  font-size : 80% ;
+  font-weight : normal ;
+  background : inherit ;
+}
+
+
+
+div.level > object, div.level > img, table {
+  margin : 1em ;
+
+}
+
+
+
+table, td {
+  position : relative ;
+  border : solid #a0a0a0 ;
+}
+
+
+table {
+  border-width : 0 0 1px 1px ;
+  border-spacing : 0 ;
+  border-collapse : collapse ;
+}
+
+td {
+    margin : 0 ;
+    padding : 4px ;
+    border-width : 1px 1px 0 0 ;
+}
+
+
+
+a {
+  color : #0100b0 ;
+}
+
+a:visited {
+  color : #440070 ;
+}
+
+a:hover {
+  color : #1111ff ;
+}
+
+
+
+
+
+.location {
+  font-size : 9pt ;
+  /*font-family: arial, sans-serif ;*/
+  font-family: Tahoma, Geneva, sans-serif ;
+}
+
+ul.identifiers {
+  list-style : none ;
+  padding-top : 4px ;
+  padding-bottom : 6px ;  // Allocate room for list items' bottom border.
+}
+
+
+li.explicit-identifier, li.implicit-identifier, .identifier-reference {
+  font-size : 10pt ;
+}
+
+/*li.explicit-identifier, li.implicit-identifier {*/
+  /*margin-top : 20px ;*/
+  /*margin-bottom : -2px ;*/
+/*}*/
+
+li.explicit-identifier {
   font-weight : bold ;
 }
+
+ul.tags {
+  text-align : right ;
+  list-style : none ;
+  line-height : 2 ;
+}
+
+.explicit-tag, promoted-tag, .implicit-tag,
+.implicit-identifier, .explicit-identifier, .identifier-reference
+{
+  /*font-family : Arial, Arial, Helvetica, sans-serif ;*/
+  font-family : Lucida Grande, Tahoma, Geneva, sans-serif ;
+}
+
+.explicit-tag, .promoted-tag, .implicit-tag,
+.implicit-identifier, .explicit-identifier
+{
+  display : inline ;  /* Required as they appear as list items. */
+  border: 1px black ;
+  border-radius : 3px ;
+  -webkit-border-radius : 3px ;
+  -moz-border-radius : 3px ;
+}
+
+.explicit-tag, .promoted-tag, .implicit-tag
+{
+  font-size : 8pt ;
+  margin : -15px 0 0 0 ;
+  padding : 1px 2px 1px 2px ;
+  text-indent : 0 ;
+
+}
+
+.implicit-tag, .promoted-tag {
+  border-style : dashed ;
+}
+
+.explicit-tag {
+  border-style : solid ;
+}
+
+ul.tags > li {
+  margin-left : 4px ;
+}
+
+
+
+
+li.identifier-reference {
+  margin-bottom : 4px ;
+}
+
+.duplicate {
+  text-decoration : line-through ;
+  color : brown ;
+}
+
+img.descriptor-disclosure {
+  margin-right : -20px ;
+  margin-top : 5px ;
+  float : right ;
+}
+
 
 
