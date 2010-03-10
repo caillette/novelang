@@ -257,7 +257,7 @@ blockquote > div.p > p {
 blockquote > div.p > ul {
   list-style-position : inside ;
   margin-left : 0 ;
-  padding-left : 16px ;
+  padding-left : 26px ;
 }
 
 
@@ -299,11 +299,7 @@ div.pre > pre {
 }
 
 blockquote > div.pre > pre {
-  margin-top : 0 ;
-  margin-bottom : 0 ;
-}
-blockquote > div.pre > pre {
-  margin: 0 16px 0 0 ;
+  margin: 4px 16px 0 0 ;
 
 }
 
