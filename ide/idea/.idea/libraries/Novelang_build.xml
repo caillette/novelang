@@ -1,23 +1,10 @@
 <component name="libraryTable">
   <library name="Novelang-build">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../lib/build/fest-util-1.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/cssparser-0.9.5.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/nekohtml-1.9.12.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/jsch-0.1.38.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/htmlunit-core-js-2.5.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/antlr-2.7.7.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/java-activation-framework-1.1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/javamail-1.4.2.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/fest-reflect-1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/stringtemplate-3.2.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/sac-1.3.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/htmlunit-2.5.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/antlr-3.1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/commons-collections-3.2.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../lib/build/junit-4.8.1.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../lib/build" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../lib/build" recursive="false" />
   </library>
 </component>
