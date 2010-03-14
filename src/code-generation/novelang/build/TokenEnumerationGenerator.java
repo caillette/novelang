@@ -90,6 +90,7 @@ public class TokenEnumerationGenerator extends GrammarBasedJavaGenerator {
       new Item( "_IMPLICIT_IDENTIFIER" ), 
       new Item( "_EXPLICIT_IDENTIFIER" ),
       new Item( "_IMPLICIT_TAG" ),
+      new Item( "_PROMOTED_TAG" ),
       new Item( "_EXPLICIT_TAG" ) 
 
   ) ;
