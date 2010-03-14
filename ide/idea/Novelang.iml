@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../..">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main-resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test-resources" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../configuration/test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/generated/antlr" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test-code-generation" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/code-generation" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/../../antlrworks" />
+      <excludeFolder url="file://$MODULE_DIR$/../../distrib" />
+      <excludeFolder url="file://$MODULE_DIR$/../../idea" />
+      <excludeFolder url="file://$MODULE_DIR$/../../target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Novelang-build" level="project" />
+    <orderEntry type="library" name="Novelang-runtime" level="project" />
+  </component>
+</module>
+
