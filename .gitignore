@@ -10,10 +10,10 @@ distrib
 ide/idea/out
 ide/idea/generated
 ide/idea/test-scratch
+ide/idea/.idea/workspace.xml
 src/main-resources/fonts/more-fonts-*
 src/main-resources/more-fonts-*
 names.bin
 *.log
 grammar-debug-classes
 _*
-*.ipr
