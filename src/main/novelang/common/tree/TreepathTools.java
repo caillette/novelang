@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -579,75 +577,6 @@ public class TreepathTools {
       }
     }
   }
-  
-// ==================  
-// Preorder traversal
-// ==================  
-  
-  
-
-  /**
-   * Returns a {@code Treepath} object to the next tree in a
-   * <a href="http://en.wikipedia.org/wiki/Tree_traversal">preorder</a> traversal.
-   * <pre>
-   *  *t0            *t0            *t0            *t0
-   *   |      next    |      next    |     next     |      next
-   *   t1     -->    *t1     -->    *t1     -->    *t1     -->    null
-   *  /  \           /  \           /  \           /  \           
-   * t2   t3        t2   t3       *t2   t3       t2   *t3
-   * </pre>
-   *
-   * @param treepath a non-null object.
-   * @return the treepath to the next tree, or null.
-   * 
-   * TODO: move to {@link Traversal}
-   */
-  public static< T extends Tree > Treepath< T > getNextInPreorder( final Treepath< T > treepath ) {
-    final T tree = treepath.getTreeAtEnd();
-    if( tree.getChildCount() > 0 ) {
-      return Treepath.create( treepath, 0 ) ;
-    }
-    return getNextUpInPreorder( treepath ) ;
-  }
-
-  /**
-   * TODO: move to {@link Traversal}
-   */
-  private static < T extends Tree > Treepath< T > getUpNextInPreorder( 
-      final Treepath< T > treepath 
-  ) {
-    Treepath< T > previousTreepath = treepath.getPrevious() ;
-    while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
-      if( hasNextSibling( previousTreepath ) ) {
-        return getNextSibling( previousTreepath ) ;
-      } else {
-        previousTreepath = previousTreepath.getPrevious() ;
-      }
-    }
-    return null ;
-  }
-
-  /**
-   * Navigates towards the next sibling or the next sibling of a parent tree.
-   * @param treepath a non-null object.
-   * @return the next tree, or null if there is no other tree to navigate to.
-   *
-   * TODO: move to {@link Traversal}
-   */
-  public static < T extends Tree > Treepath< T > getNextUpInPreorder( 
-      final Treepath< T > treepath 
-  ) {
-    if( hasNextSibling( treepath ) ) {
-      return getNextSibling( treepath ) ;
-    } else {
-      return getUpNextInPreorder( treepath ) ;
-    }
-  }
-  
-  
-// ===================
-// Postorder traversal
-// ===================  
 
 
 }

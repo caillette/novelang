@@ -20,7 +20,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 /**
- * Traversal functions.
+ * {@link Treepath}-based tree traversal functions.
  *
  * @author Laurent Caillette
  */
@@ -39,9 +39,15 @@ public abstract class Traversal< T extends Tree > {
    * @param treepath a non-null object.
    * @return a possibly null object.
    */
-  public abstract Treepath< T > getNext( final Treepath< T > treepath ) ;
+  public abstract Treepath< T > next( final Treepath< T > treepath ) ;
 
 
+  /**
+   * Returns the first eleemnt for this traversal, or null if there is none.
+   * @param treepath a non-null object.
+   * @return a possibly null object.
+   */
+  public abstract Treepath< T > first( final Treepath< T > treepath ) ;
 
 
 // =================
@@ -79,12 +85,12 @@ public abstract class Traversal< T extends Tree > {
 
     /**
      * Returns a {@code Treepath} corresponding to the last tree in a
-     * {@link #getNext(novelang.common.tree.Treepath) postorder traversal}
+     * {@link #next(novelang.common.tree.Treepath) postorder traversal}
      * in the {@link novelang.common.tree.Treepath#getTreeAtStart()} end} tree.
      *
-     * @see #getNext (Treepath)
+     * @see #next (Treepath)
      */
-    public Treepath< T > getFirst( final Treepath< T > treepath ) {
+    public Treepath< T > first( final Treepath< T > treepath ) {
       Treepath< T > result = treepath ;
       while( true ) {
         final T tree = result.getTreeAtEnd() ;
@@ -105,7 +111,7 @@ public abstract class Traversal< T extends Tree > {
      *   |      next    |      next    |     next     |      next
      *  *t1     -->    *t1     -->    *t1     -->     t1     -->    null
      *  /  \           /  \           /  \           /  \
-     * t2  *t3       *t2   t3        t2   t3       t2   *t3
+     * t2  *t3       *t2   t3        t2   t3       t2    t3
      * </pre>
      *
      * This is a valuable traversal algorithm that preserves indexes of unmodified treepaths.
@@ -113,16 +119,14 @@ public abstract class Traversal< T extends Tree > {
      * @param treepath a non-null object.
      * @return the treepath to the next tree, or null.
      */
-    public Treepath< T > getNext(
-        final Treepath< T > treepath
-    ) {
+    public Treepath< T > next( final Treepath< T > treepath ) {
       if( treepath.getLength() > 1 ) {
         if( TreepathTools.hasPreviousSibling( treepath ) ) {
           final Treepath< T > previousSibling = TreepathTools.getPreviousSibling( treepath ) ;
           if( previousSibling.getTreeAtEnd().getChildCount() == 0 ) {
             return previousSibling ;
           } else {
-            return getFirst(previousSibling) ;
+            return first(previousSibling) ;
           }
         } else {
           return treepath.getPrevious() ;
@@ -139,5 +143,86 @@ public abstract class Traversal< T extends Tree > {
 
 
 
+// ========
+// Preorder
+// ========
 
+  /**
+   * Function object capturing a tree filter.
+   */
+  public static final class Preorder< T extends Tree > extends Traversal< T > {
+
+    private Preorder( final Predicate< T > treeFilter ) {
+      super( treeFilter ) ;
+    }
+
+    private Preorder() {
+      this( Predicates.< T >alwaysTrue() ) ;
+    }
+
+    /**
+     * Factory method for type inference.
+     */
+    public static< T extends Tree > Preorder< T > create() {
+      return new Preorder< T >() ;
+    }
+
+
+    @Override
+    public Treepath< T > first( Treepath< T > treepath ) {
+      return treepath.getStart() ;
+    }
+
+    /**
+     * Returns a {@code Treepath} object to the next tree in a
+     * <a href="http://en.wikipedia.org/wiki/Tree_traversal">preorder</a> traversal.
+     * <pre>
+     *  *t0            *t0            *t0            *t0
+     *   |      next    |      next    |     next     |      next
+     *   t1     -->    *t1     -->    *t1     -->    *t1     -->    null
+     *  /  \           /  \           /  \           /  \
+     * t2   t3        t2   t3       *t2   t3       t2   *t3
+     * </pre>
+     *
+     * @param treepath a non-null object.
+     * @return the treepath to the next tree, or null.
+     */
+
+    @Override
+    public Treepath< T > next( Treepath< T > treepath ) {
+      final T tree = treepath.getTreeAtEnd();
+      if( tree.getChildCount() > 0 ) {
+        return Treepath.create( treepath, 0 ) ;
+      }
+      return nextUp( treepath ) ;
+    }
+
+
+    private < T extends Tree > Treepath< T > upNext( final Treepath< T > treepath ) {
+      Treepath< T > previousTreepath = treepath.getPrevious() ;
+      while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
+        if( TreepathTools.hasNextSibling( previousTreepath ) ) {
+          return TreepathTools.getNextSibling( previousTreepath ) ;
+        } else {
+          previousTreepath = previousTreepath.getPrevious() ;
+        }
+      }
+      return null ;
+    }
+
+    /**
+     * Navigates towards the next sibling or the next sibling of a parent tree.
+     * @param treepath a non-null object.
+     * @return the next tree, or null if there is no other tree to navigate to.
+     *
+     */
+    public < T extends Tree > Treepath< T > nextUp( final Treepath< T > treepath ) {
+      if( TreepathTools.hasNextSibling( treepath ) ) {
+        return TreepathTools.getNextSibling( treepath ) ;
+      } else {
+        return upNext( treepath ) ;
+      }
+    }
+
+  }
 }

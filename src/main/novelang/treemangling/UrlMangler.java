@@ -18,6 +18,7 @@ package novelang.treemangling;
 
 import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;
+import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
@@ -110,9 +111,9 @@ public class UrlMangler {
        || current.getTreeAtEnd().isOneOf( _URL ) 
        || tree.isOneOf( TreeManglingConstants.SKIPPED_NODEKINDS_FOR_URLMANGLER )
       ) {
-        current = TreepathTools.getNextUpInPreorder( current ) ;
+        current = PREORDER.nextUp( current ) ;
       } else {
-        current = TreepathTools.getNextInPreorder( current ) ;
+        current = PREORDER.next( current ) ;
       }
 
       if( paragraph == null && state == State.INSIDE_PARAGRAPH ) {
@@ -137,6 +138,9 @@ public class UrlMangler {
     }
     return result.getStart() ;
   }
+
+  private static final Traversal.Preorder< SyntacticTree > PREORDER = Traversal.Preorder.create() ;
+
 
 
   /**

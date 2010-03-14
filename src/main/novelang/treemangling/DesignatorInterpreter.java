@@ -97,7 +97,7 @@ public class DesignatorInterpreter {
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
     final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
     enrichedTreepath = enrich(
-        TRAVERSAL.getFirst( treepath.getStart() ),
+        TRAVERSAL.first( treepath.getStart() ),
         babyInterpreter
     );
 
@@ -181,7 +181,7 @@ public class DesignatorInterpreter {
    * that addind/removing trees doesn't affect indexes of unprocessed trees.
    * 
    * @param treepath The 
-   *         {@link Traversal.MirroredPostorder#getFirst(Treepath) first} tree in a mirrored postorder 
+   *         {@link Traversal.MirroredPostorder#first(Treepath) first} tree in a mirrored postorder
    *         traversal.
    */
   protected static Treepath< SyntacticTree > enrich(
@@ -205,7 +205,7 @@ public class DesignatorInterpreter {
           NodeKind.RELATIVE_IDENTIFIER
       ) ;
 
-      final Treepath< SyntacticTree > next = TRAVERSAL.getNext( treepath ) ;
+      final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;
 
       if( next == null ) {
         return treepath ;

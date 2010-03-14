@@ -19,6 +19,7 @@ package novelang.treemangling;
 import com.google.common.base.Preconditions;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import static novelang.parser.NodeKind.*;
@@ -55,9 +56,9 @@ public class EmbeddedListMangler {
         
         current = result.gobbled ;
         current = TreepathTools.replaceTreepathEnd( current, result.gobbler.getTreeAtStart() ) ;
-        next = TreepathTools.getNextUpInPreorder( current ) ;
+        next = PREORDER.nextUp( current ) ;
       } else {
-        next = TreepathTools.getNextInPreorder( current ) ;
+        next = PREORDER.next( current ) ;
       }
       if( null == next ) {
         return current.getStart() ;
@@ -67,6 +68,8 @@ public class EmbeddedListMangler {
     }
 
   }
+
+  private static final Traversal.Preorder< SyntacticTree > PREORDER = Traversal.Preorder.create() ;
 
   private static Treepath< SyntacticTree > createGobbler() {
     return Treepath.create( ( SyntacticTree ) new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) ) ;

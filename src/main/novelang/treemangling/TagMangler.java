@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;
 import novelang.common.TagBehavior;
+import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKindTools;
@@ -88,14 +89,14 @@ public class TagMangler {
         case SCOPE :
           next = replaceByExplicitTag( next ) ;
         case TRAVERSABLE :
-          next = TreepathTools.getNextInPreorder( next ) ;
+          next = PREORDER.next( next ) ;
           break;
         case TERMINAL :
           next = replaceByExplicitTag( next ) ;
-          next = TreepathTools.getNextInPreorder( next ) ;
+          next = PREORDER.next( next ) ;
           break ;
         case NON_TRAVERSABLE :
-          next = TreepathTools.getNextUpInPreorder( next ) ;
+          next = PREORDER.nextUp( next ) ;
           break ;
       }
       if( next != null ) {
@@ -104,6 +105,10 @@ public class TagMangler {
     }
     return treepath.getStart() ;
   }
+
+  private static final Traversal.Preorder< SyntacticTree > PREORDER = Traversal.Preorder.create() ;
+
+
 
 
   private static Treepath< SyntacticTree > replaceByExplicitTag(
@@ -145,10 +150,10 @@ public class TagMangler {
         case PART :
         case BOOK :
           // TODO replace by Traversal.getFirst()
-          next = TreepathTools.getNextInPreorder( next ) ;
+          next = PREORDER.next( next ) ;
           break ;
         default :
-          next = TreepathTools.getNextUpInPreorder( next ) ;
+          next = PREORDER.nextUp( next ) ;
       }
       if( next != null ) {
         treepath = next ;
@@ -224,7 +229,7 @@ public class TagMangler {
         case PART :
         case BOOK :
           // TODO replace by Traversal.getFirst()
-          next = TreepathTools.getNextInPreorder( next ) ;
+          next = PREORDER.next( next ) ;
           break ;
         default :
           if ( tree.isOneOf( _IMPLICIT_TAG ) ) {
@@ -233,12 +238,12 @@ public class TagMangler {
               final SyntacticTree promotedTag = new SimpleTree( _PROMOTED_TAG, tree.getChildren() ) ;
               next = TreepathTools.replaceTreepathEnd( treepath, promotedTag ) ;
             } else {
-              next = TreepathTools.getNextUpInPreorder( next ) ;
+              next = PREORDER.nextUp( next ) ;
             }
           } else if( nodeKind.getTagBehavior() == TagBehavior.NON_TRAVERSABLE ) { 
-            next = TreepathTools.getNextUpInPreorder( next ) ;
+            next = PREORDER.nextUp( next ) ;
           } else {
-            next = TreepathTools.getNextInPreorder( next ) ;
+            next = PREORDER.next( next ) ;
           }
       }
       
