@@ -599,7 +599,8 @@ public class TreepathTools {
    *
    * @param treepath a non-null object.
    * @return the treepath to the next tree, or null.
-   * @Deprecated
+   * 
+   * TODO: move to {@link Traversal}
    */
   public static< T extends Tree > Treepath< T > getNextInPreorder( final Treepath< T > treepath ) {
     final T tree = treepath.getTreeAtEnd();
@@ -609,6 +610,9 @@ public class TreepathTools {
     return getNextUpInPreorder( treepath ) ;
   }
 
+  /**
+   * TODO: move to {@link Traversal}
+   */
   private static < T extends Tree > Treepath< T > getUpNextInPreorder( 
       final Treepath< T > treepath 
   ) {
@@ -628,7 +632,7 @@ public class TreepathTools {
    * @param treepath a non-null object.
    * @return the next tree, or null if there is no other tree to navigate to.
    *
-   * @Deprecated
+   * TODO: move to {@link Traversal}
    */
   public static < T extends Tree > Treepath< T > getNextUpInPreorder( 
       final Treepath< T > treepath 
