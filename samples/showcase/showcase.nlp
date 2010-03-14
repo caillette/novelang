@@ -8,7 +8,8 @@ This is an interpolated clause:
 Here is super^script. 
 Here are some [brackets] here.
 
-=== Blockquote demo
+
+=== Demo : blockquote
 
 This is a paragraph before a "blockquote".
 
@@ -151,7 +152,7 @@ This is a paragraph starting here...
    
 == Tags
 
-  @some-tag
+  @some-tag @Demo
 === Tagged level
 
   @my-tag @some-tag

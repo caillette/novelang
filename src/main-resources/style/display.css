@@ -463,16 +463,6 @@ ul.tags {
   margin : -15px 0 0 0 ;
   padding : 1px 2px 1px 2px ;
   text-indent : 0 ;
-  
-  /*
-      We don't need to define this property. It's default for implicit tags.
-       For promoted and explicit tags, it seems that Tag-... style overrides border color
-       by defining foreground. This is fixed by setting border-color to black when defining
-       style for Tag-... so we don't need this definition.
-       Black border avoids dirty antialiasing on the corners.
-   */
-  /* border-color : black ; */ 
-
 }
 
 .implicit-tag, .promoted-tag {
