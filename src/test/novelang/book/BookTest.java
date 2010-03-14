@@ -313,6 +313,44 @@ public class BookTest {
   }
 
 
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
+  public void insertWithPromotedTags() throws IOException {
+    resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_BOOK ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_PART ) ;
+    final File bookWithTags =
+        resourceInstaller.createFileObject( TestResourceTree.TaggedPart.PROMOTED_TAGS_BOOK ) ;
+
+    final Book book = BookTestTools.createBook( bookWithTags ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    assertFalse( book.hasProblem() ) ;
+
+    final SyntacticTree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEqualsNoSeparators(
+        tree( BOOK,
+            tree( 
+                _META, 
+                tree( _WORD_COUNT, "2" ),
+                tree( _TAGS, tree( _EXPLICIT_TAG, "Foo" ) )
+            ),
+            tree(
+                _LEVEL,
+                tree( _EXPLICIT_TAG, "Foo" ),
+                tree( LEVEL_TITLE, tree( WORD_, "Foo" ) )
+            ),
+            tree(
+                _LEVEL,
+                tree( _PROMOTED_TAG, "Foo" ),
+                tree( LEVEL_TITLE, tree( WORD_, "Foo" ) )
+            )
+        ),
+        bookTree
+    ) ;
+  }
+
+
 
   /**
    * Test {@link novelang.book.function.builtin.InsertCommand}.

@@ -38,7 +38,7 @@ function initializeTagSystem( colorDefinitions ) {
       []
   ;
 
-  // Create the combo boxes.
+  // Create the checkboxes.
   for( var i in TAGS ) {
     var tag = TAGS[ i ] ;
     $( "#tag-list-content" ).append(

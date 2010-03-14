@@ -4,7 +4,7 @@
 Book files aggregate part files. Book files have the ``.nlb`` suffix  (like NoveLang Book). 
 
 
-  @Identifiers
+  @Identifiers @Command
 === Command : ``insert``
 
 Book files are useful when there is too much text to fit inside one Part file.

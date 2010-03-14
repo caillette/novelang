@@ -48,6 +48,7 @@
   <xsl:template match="n:image-width" />
   <xsl:template match="n:image-height" />
   <xsl:template match="n:explicit-tag" />
+  <xsl:template match="n:promoted-tag" />
   <xsl:template match="n:implicit-tag" />
   <xsl:template match="n:composite-identifier" />
   <xsl:template match="n:relative-identifier" />

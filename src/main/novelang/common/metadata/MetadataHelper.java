@@ -63,25 +63,6 @@ public class MetadataHelper {
     }
   }
 
-  /**
-   * Returns the set of values for {@link NodeKind#TAG}s.
-   *
-   * @return a non-null, possibly empty set.
-   */
-  public static Set< Tag > findTags( final SyntacticTree tree ) {
-    if( tree.isOneOf( WORD_, WORD_AFTER_CIRCUMFLEX_ACCENT, _STYLE ) ) { 
-      return ImmutableSet.of() ;
-    }
-    if( tree.isOneOf( _EXPLICIT_TAG ) ) {
-      return ImmutableSet.of( new Tag( tree.getChildAt( 0 ).getText() ) ) ;
-    }
-    final Set< Tag > tagset = Sets.newLinkedHashSet() ;
-    for( final SyntacticTree child : tree.getChildren() ) {
-        tagset.addAll( findTags( child ) ) ;
-    }
-    return tagset ;
-  }
-
   public static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormat.forPattern( "yyyy-MM-dd kk:mm" ) ;
 

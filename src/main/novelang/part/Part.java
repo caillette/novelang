@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 
 import novelang.common.*;
-import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
 import novelang.designator.Tag;
 import novelang.treemangling.DesignatorInterpreter;
@@ -180,11 +179,13 @@ public class Part extends AbstractSourceReader {
           ListMangler.rehierarchizeLists( unhierarchized ) ;
       final Treepath< SyntacticTree > enrichedWithDesignators =
           new DesignatorInterpreter( rehierarchized ).getEnrichedTreepath() ;
-      final Set< Tag > tagset = MetadataHelper.findTags( tree ) ;
+      final Set< Tag > tagset = TagMangler.findExplicitTags( tree ) ;
       final Treepath< SyntacticTree > tagsFiltered = 
           TagFilter.filter( enrichedWithDesignators, restrictingTags ) ;
+      final Treepath< SyntacticTree > tagsPromoted = 
+          TagMangler.promote( tagsFiltered, tagset ) ;
       final Treepath< SyntacticTree > withMetadata = Treepath.create(
-          addMetadata( tagsFiltered.getTreeAtEnd(), tagset ) ) ;
+          addMetadata( tagsPromoted.getTreeAtEnd(), tagset ) ) ;
       return new Part( this, withMetadata.getTreeAtStart() ) ;
     }
   }

@@ -120,6 +120,8 @@ public final class TestResourceTree {
     Resource TAGGED = resource( "tags-combinations.nlp" ) ;
     Resource IMPLICIT_TAGS_PART = resource( "implicit-tags.nlp" ) ;
     Resource IMPLICIT_TAGS_BOOK = resource( "implicit-tags-book.nlb" ) ;
+    Resource PROMOTED_TAGS_PART = resource( "promoted-tags.nlp" ) ;
+    Resource PROMOTED_TAGS_BOOK = resource( "promoted-tags-book.nlb" ) ;
   }
 
   public interface Scanned {

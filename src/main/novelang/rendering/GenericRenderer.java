@@ -152,6 +152,7 @@ public class GenericRenderer implements Renderer {
       case TAG :
       case _IMPLICIT_TAG :
       case _EXPLICIT_TAG :
+      case _PROMOTED_TAG :
       case _WORD_COUNT :
       case _STYLE :
       case LINES_OF_LITERAL :

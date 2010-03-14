@@ -535,7 +535,7 @@ Other external entities are not supported yet.
 
 === Tags
 
-XML element: ``n:tag``
+XML elements: ``n:explicit-tag``, ``n:promoted-tag``, ``n:implicit-tag``
 
 A tag is a textual marker attached to some piece of a source document.
 It is made of a commercial at ``@``, immediately followed by letters, digts, and hyphen minus
@@ -572,11 +572,13 @@ excluded from rendition.
 Tag usage sample: 
 
 <<<
-  @my-tag
+  @my-tag @Level
 == Tagged level
 
   @my-tag @some-other-tag
 My tagged paragraph.
+
+== Level: no explicit tag
 >>>
 
 The XML structure of source document above looks like this:
@@ -584,22 +586,32 @@ The XML structure of source document above looks like this:
 <<<
 + n:part
   + n:level
-    + n:tag "my-tag"
+    + n:explicit-tag "my-tag"
+    + n:explicit-tag "Level"
     + n:level-title "Tagged level"
     + n:regular-paragraph
-      + n:tag "my-tag"
-      + n:tag "some-other-tag"
+      + n:-explicit-tag "my-tag"
+      + n:explicit-tag "some-other-tag"
       + "My tagged paragraph."
+  + n:level
+    + n:promoted-tag "Level"
+    + n:implicit-tag "noExplicitTag"
+    + n:level-title "Level: no explicit tag"
 >>>
 
-Level titles may also convert to Implicit Tags. Implicit Tags don't appear in the Tag list,
-but filtering on a given Tag retains document fragments tagged with Implicit Tags. 
+Level titles may also convert to Implicit Tags or Promoted Tags. 
+Implicit Tags don't appear in the Tag list, but filtering on a given Tag retains document 
+fragments tagged with Implicit Tags. 
+
 Implicit Tags come out from level title from a few simple transformation rules.
 - Convert every letter to its form without diacritics.
 - Whitespaces disappear.
 - Punctuation signs and delimiters disappear. They become Tag boundaries.
 - The first letter of a word that was preceded by another words gets uppercased.
-Here are a few transformation samples:
+
+Promoted Tags are Implicit Tags that match some Explicit Tag defined elsewhere in the document.
+
+Here are a few transformation samples for Implicit (and Promoted) Tags:
 
 | Original Novelang source          | Implicit Tags |
 | `This is some text. Be cool.`   | ``@BeCool`` ``@ThisIsSomeText``|

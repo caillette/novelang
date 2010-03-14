@@ -47,7 +47,7 @@ function setupColors( tags, colorDefinitions ) {
         for( var tagIndex = 0 ; tagIndex < tags.length ; tagIndex++ ) {
           $.rule(
               "." + "Tag-" + tags[ tagIndex ] + "{ " +
-              "border: solid 1px " + " " + FOREGROUND_COLORS[ tagIndex ] + " ; " +
+              "border-color: black ; " + // 
               "color: " + FOREGROUND_COLORS[ tagIndex ] + " ; " +
               "background-color: " + BACKGROUND_COLORS[ tagIndex ] + " ; " +
               "}"

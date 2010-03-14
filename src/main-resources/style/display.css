@@ -442,7 +442,7 @@ ul.tags {
   line-height : 2 ;
 }
 
-.explicit-tag, promoted-tag, .implicit-tag,
+.explicit-tag, .promoted-tag, .implicit-tag,
 .implicit-identifier, .explicit-identifier, .identifier-reference
 {
   /*font-family : Arial, Arial, Helvetica, sans-serif ;*/
@@ -453,27 +453,34 @@ ul.tags {
 .implicit-identifier, .explicit-identifier
 {
   display : inline ;  /* Required as they appear as list items. */
-  border: 1px black ;
   border-radius : 3px ;
   -webkit-border-radius : 3px ;
   -moz-border-radius : 3px ;
 }
 
-.explicit-tag, .promoted-tag, .implicit-tag
-{
+.explicit-tag, .promoted-tag, .implicit-tag {
   font-size : 8pt ;
   margin : -15px 0 0 0 ;
   padding : 1px 2px 1px 2px ;
   text-indent : 0 ;
+  
+  /*
+      We don't need to define this property. It's default for implicit tags.
+       For promoted and explicit tags, it seems that Tag-... style overrides border color
+       by defining foreground. This is fixed by setting border-color to black when defining
+       style for Tag-... so we don't need this definition.
+       Black border avoids dirty antialiasing on the corners.
+   */
+  /* border-color : black ; */ 
 
 }
 
 .implicit-tag, .promoted-tag {
-  border-style : dashed ;
+  border : dashed 1px ;
 }
 
 .explicit-tag {
-  border-style : solid ;
+  border : solid 1px ;
 }
 
 ul.tags > li {

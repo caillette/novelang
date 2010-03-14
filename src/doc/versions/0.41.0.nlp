@@ -1,3 +1,5 @@
+--- New feature: Promoted Tags. Implicit Tags matching Explicit Tags become Promoted Tags. 
+
 --- Support lines of literal inside paragraphs inside angled bracket pairs.
 
 --- Minor enhancements for HTML default stylesheet.

@@ -9,6 +9,8 @@ import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.NodeKind.WORD_;
 import novelang.designator.Tag;
+
+import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 
 import java.util.Set;
@@ -213,6 +215,36 @@ public class TagManglerTest {
         )
     ) ;
   }
+  
+  @Test
+  public void promote() {
+
+    verifyPromotion(
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( _PROMOTED_TAG, "tag-1" ),
+                    tree( WORD_, "w" )
+                )
+            )
+        ),
+        tree(
+            PART,
+            tree(
+                _LEVEL,
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( _IMPLICIT_TAG, "tag-1" ),
+                    tree( WORD_, "w" )
+                )
+            )
+        ),
+        ImmutableSet.of( new Tag( "tag-1" ) )
+    ) ;    
+  }
 
 
 
@@ -231,6 +263,24 @@ public class TagManglerTest {
 
     final Treepath< SyntacticTree > rehierarchized =
         TagMangler.enhance( Treepath.create( actualTree ) ) ;
+
+    TreeFixture.assertEqualsWithSeparators(
+        expectedTreepath,
+        rehierarchized
+    ) ;
+
+  }
+
+  private static void verifyPromotion(
+      final SyntacticTree expectedTree,
+      final SyntacticTree actualTree,
+      final Set< Tag > explicitTags
+  ) {
+    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
+
+    final Treepath< SyntacticTree > rehierarchized =
+        TagMangler.promote( Treepath.create( actualTree ), explicitTags ) ;
 
     TreeFixture.assertEqualsWithSeparators(
         expectedTreepath,

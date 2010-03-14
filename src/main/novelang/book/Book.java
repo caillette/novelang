@@ -23,11 +23,9 @@ import java.util.List;
 import java.util.Set;
 import java.nio.charset.Charset;
 
-import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
 
 import novelang.book.function.CommandParameterException;
@@ -39,7 +37,6 @@ import novelang.common.SimpleTree;
 import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
 import novelang.common.FileTools;
-import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.Treepath;
 import novelang.designator.Tag;
 import novelang.treemangling.LevelMangler;
@@ -49,7 +46,7 @@ import novelang.treemangling.ListMangler;
 import novelang.parser.NodeKind;
 import novelang.parser.GenericParser;
 import novelang.parser.antlr.DelegatingBookParser;
-import novelang.system.DefaultCharset;
+import novelang.treemangling.TagMangler;
 
 /**
  * Reads a Book file, processes functions and builds a Tree with inclusions and so on.
@@ -116,10 +113,11 @@ public class Book extends AbstractSourceReader {
       ) ;
       Treepath< SyntacticTree > rehierarchized =
           Treepath.create( currentEnvironment.getDocumentTree() ) ;
-      final Set< Tag > tagset = MetadataHelper.findTags( rehierarchized.getTreeAtEnd() ) ;
+      final Set< Tag > tagset = TagMangler.findExplicitTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
       rehierarchized = TagFilter.filter( rehierarchized, tagRestrictions ) ;
+      rehierarchized = TagMangler.promote( rehierarchized, tagset ) ;
 
       currentEnvironment = currentEnvironment.update( rehierarchized.getTreeAtStart() ) ;
 

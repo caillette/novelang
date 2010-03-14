@@ -161,6 +161,21 @@ public class GenericRendererTest {
     ) ;
   }
 
+
+  @Test
+  public void promotedTag() throws Exception {
+    final SyntacticTree tree = tree(
+        NodeKind._LEVEL,
+        tree( _PROMOTED_TAG, "Promoted" )
+    ) ;
+    final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
+    renderer.render( createRenderable( tree ), outputStream ) ;
+    assertEquals(
+        "_LEVEL(_PROMOTED_TAG(Promoted))",
+        getRenderedText()
+    ) ;
+  }
+
   @Test
   public void locationForLevel() throws Exception {
     final SyntacticTree tree = tree(

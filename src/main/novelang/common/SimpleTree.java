@@ -53,6 +53,10 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     this( text, null, children ) ;
   }
 
+  public SimpleTree( final NodeKind nodeKind, final Iterable< ? extends SyntacticTree> children ) {
+    this( nodeKind.name(), children ) ;
+  }
+
   public SimpleTree(
       final String text,
       final Location location,

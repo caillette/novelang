@@ -315,21 +315,25 @@
       <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:location">
         <img class="descriptor-disclosure" src="/icons/Descriptor.png"/>
         <div class="collapsable-descriptor">
+          
           <xsl:if test="n:location">
             <span class="location">
               <xsl:value-of select="n:location"/>
             </span>
           </xsl:if>
+          
           <xsl:if test="n:explicit-identifier">
             <p class="explicit-identifier">
               <xsl:value-of select="n:explicit-identifier"/>
             </p>
           </xsl:if>
+          
           <xsl:if test="n:implicit-identifier">
             <p class="implicit-identifier">
               <xsl:value-of select="n:implicit-identifier"/>
             </p>
           </xsl:if>
+          
           <xsl:if test="n:implicit-tag">
             <ul class="tags">
               <xsl:for-each select="n:implicit-tag">
@@ -339,7 +343,18 @@
               </xsl:for-each>
             </ul>
           </xsl:if>
+          
         </div>
+        
+        <xsl:if test="n:promoted-tag">
+          <ul class="tags">
+            <xsl:for-each select="n:promoted-tag">
+              <li class="promoted-tag">
+                <xsl:value-of select="."/>
+              </li>
+            </xsl:for-each>
+          </ul>
+        </xsl:if>
 
         <xsl:if test="n:explicit-tag">
           <ul class="tags">

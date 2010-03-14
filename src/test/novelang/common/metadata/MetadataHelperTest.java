@@ -25,6 +25,8 @@ import novelang.designator.Tag;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
+import novelang.treemangling.TagMangler;
+
 import static novelang.parser.antlr.TreeFixture.tree;
 
 import com.google.common.collect.ImmutableSet;
@@ -69,7 +71,7 @@ public class MetadataHelperTest {
         )
     ) ;
 
-    final Set< Tag > tagset = MetadataHelper.findTags( tree ) ;
+    final Set< Tag > tagset = TagMangler.findExplicitTags( tree ) ;
     final SyntacticTree meta = MetadataHelper.createMetadataDecoration( tree, tagset ) ;
 
     TreeFixture.assertEqualsNoSeparators(
@@ -102,7 +104,7 @@ public class MetadataHelperTest {
         )
     ) ;
 
-    final Set< Tag > tags = MetadataHelper.findTags( tree ) ;
+    final Set< Tag > tags = TagMangler.findExplicitTags( tree ) ;
     Assert.assertEquals( 3, tags.size() ) ;
     Assert.assertTrue( tags.contains( new Tag( "t1" ) ) ) ;
     Assert.assertTrue( tags.contains( new Tag( "t2" ) ) ) ;
