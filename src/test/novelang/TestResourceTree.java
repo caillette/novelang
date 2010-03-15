@@ -16,9 +16,14 @@
  */
 package novelang;
 
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 import novelang.common.filefixture.Directory;
 import novelang.common.filefixture.Resource;
 import novelang.common.filefixture.ResourceSchema;
+import novelang.designator.Tag;
+
 import static novelang.common.filefixture.ResourceSchema.*;
 
 /**
@@ -115,13 +120,13 @@ public final class TestResourceTree {
     String TAG1 = "T1" ;
     String TAG2 = "T2" ;
     String TAGS_FORM_NAME = "tag-list" ;
-    String UPDATING_TAG_VISIBILITY_STATUS_MESSAGE = "Updating tag visibility..." ;
-    String UPDATING_TAG_VISIBILITY_ALERT_MESSAGE = "Done updating tag visibility" ;
     Resource TAGGED = resource( "tags-combinations.nlp" ) ;
     Resource IMPLICIT_TAGS_PART = resource( "implicit-tags.nlp" ) ;
     Resource IMPLICIT_TAGS_BOOK = resource( "implicit-tags-book.nlb" ) ;
-    Resource PROMOTED_TAGS_PART = resource( "promoted-tags.nlp" ) ;
+
     Resource PROMOTED_TAGS_BOOK = resource( "promoted-tags-book.nlb" ) ;
+    Resource PROMOTED_TAGS_PART_1 = resource( "promoted-tags-1.nlp" ) ;
+
   }
 
   public interface Scanned {

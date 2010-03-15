@@ -203,11 +203,6 @@ public class TagMangler {
 // ========
 
   
-  private static final Set< TagBehavior > NO_TRAVERSAL_FOR_PROMOTION = ImmutableSet.of( 
-      TagBehavior.NON_TRAVERSABLE/*,
-      TagBehavior.TERMINAL*/
-  ) ;
-  
   /**
    * Replaces {@link NodeKind#_IMPLICIT_TAG}s appearing in the given tag set 
    * by {@link NodeKind#_PROMOTED_TAG}s. 
@@ -218,11 +213,11 @@ public class TagMangler {
       Treepath< SyntacticTree > treepath, 
       final Set< Tag > explicitTags 
   ) {
-    for( Treepath< SyntacticTree > next = treepath ; next != null ; ) {    
+    if( treepath.getTreeAtStart().getChildCount() == 0 ) {
+      return treepath.getStart() ;
+    }
+    for( Treepath< SyntacticTree > next = treepath ; next != null ; ) {
       final SyntacticTree tree = next.getTreeAtEnd() ;
-      if( tree.getChildCount() == 0 ) {
-        return treepath.getStart() ;
-      }
       final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
 
       switch( nodeKind ) {

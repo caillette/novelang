@@ -19,6 +19,7 @@ package novelang.part;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,7 +40,6 @@ import novelang.system.LogFactory;
 
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -198,12 +198,13 @@ public class PartTest {
 
   }
   
-  @Test 
+
+  @Test
   public void partWithParsingErrorDoesNotAttemptToCountWords() {
     final Part part = PartFixture.createStandalonePart( "````" ) ;
     Assert.assertTrue( part.hasProblem() ) ;
   }
-  
+
   @Test
   public void problemWithBadEscapeCodeHasLocation() {
     final Part part = new Part(
@@ -327,12 +328,7 @@ public class PartTest {
 
 
 
-  @Before
-  public void setUp() throws IOException {
-
-
-
-
-  }
+  private static final SyntacticTree $FULLSTOP$ = tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP, "." ) );
+  private static final SyntacticTree $COMMA$ = tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) );
 
 }

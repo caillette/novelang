@@ -29,8 +29,6 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 
 import org.apache.commons.lang.SystemUtils;
-import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -318,10 +316,9 @@ public class BookTest {
    */
   @Test
   public void insertWithPromotedTags() throws IOException {
-    resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_BOOK ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_PART ) ;
     final File bookWithTags =
-        resourceInstaller.createFileObject( TestResourceTree.TaggedPart.PROMOTED_TAGS_BOOK ) ;
+        resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_BOOK ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_PART_1 ) ;
 
     final Book book = BookTestTools.createBook( bookWithTags ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -332,18 +329,37 @@ public class BookTest {
         tree( BOOK,
             tree( 
                 _META, 
-                tree( _WORD_COUNT, "2" ),
-                tree( _TAGS, tree( _EXPLICIT_TAG, "Foo" ) )
+                tree( _WORD_COUNT, "7" ),
+                tree(
+                    _TAGS,
+                    tree( _EXPLICIT_TAG, "Bar" ),
+                    tree( _EXPLICIT_TAG, "Foo" ) 
+                )
             ),
             tree(
                 _LEVEL,
+                tree( _EXPLICIT_TAG, "Bar" ),
                 tree( _EXPLICIT_TAG, "Foo" ),
-                tree( LEVEL_TITLE, tree( WORD_, "Foo" ) )
+                tree( LEVEL_TITLE, tree( WORD_, "Foo" ), tree( WORD_, "and" ), tree( WORD_, "Bar" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "y" ),
+                    tree( APOSTROPHE_WORDMATE, "'" ),
+                    tree( _PRESERVED_WHITESPACE ),
+                    tree( WORD_, "z" ),
+                    tree( PUNCTUATION_SIGN, tree( SIGN_FULLSTOP, "." ) )
+                )
             ),
             tree(
                 _LEVEL,
+                tree( _PROMOTED_TAG, "Bar" ),
                 tree( _PROMOTED_TAG, "Foo" ),
-                tree( LEVEL_TITLE, tree( WORD_, "Foo" ) )
+                tree(
+                    LEVEL_TITLE,
+                    tree( WORD_, "Foo" ),
+                    tree( PUNCTUATION_SIGN, tree( SIGN_COMMA, "," ) ),
+                    tree( WORD_, "Bar" )
+                )
             )
         ),
         bookTree
