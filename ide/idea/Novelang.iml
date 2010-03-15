@@ -13,6 +13,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../src/code-generation" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../../antlrworks" />
       <excludeFolder url="file://$MODULE_DIR$/../../distrib" />
+      <excludeFolder url="file://$MODULE_DIR$/test-scratch" />
       <excludeFolder url="file://$MODULE_DIR$/../../idea" />
       <excludeFolder url="file://$MODULE_DIR$/../../target" />
     </content>
