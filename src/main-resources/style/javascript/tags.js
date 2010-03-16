@@ -25,10 +25,6 @@ function initializeTagSystem( colorDefinitions ) {
     TAGS.push( $( this ).text() ) ;
   } ) ;
 
-  $( "ul.tags > li " ).each( function() {
-    $( this ).addClass( "Tag-" + $( this ).text() ) ;
-//    showMessage( "Added class " + $( this ).text() ) ;
-  } ) ;
 
   var uri = location.href ;
   var activeTagsMatcher = uri.match( TAGS_REGEX ) ;
@@ -51,11 +47,6 @@ function initializeTagSystem( colorDefinitions ) {
         "<br/>"
     ) ;
   }
-//  $( "#tag-list" ).wrapInner( "<div id='tag-list-content' ></div>" ) ;
-//  $( "#tag-list" ).prepend( "<p id='tag-list-disclosure' >+</p>" ) ;
-//  $( "#tag-list-disclosure" ).click( function() {
-//    $( "#tag-list-content" ).slideToggle( 100 ) ;
-//  } ) ;
 
   if( activeTags.length == 0 ) {
     $( "#tag-list-content" ).hide() ;

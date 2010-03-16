@@ -336,11 +336,10 @@
           
           <xsl:if test="n:implicit-tag">
             <ul class="tags">
-              <xsl:for-each select="n:implicit-tag">
-                <li class="implicit-tag">
-                  <xsl:value-of select="."/>
-                </li>
-              </xsl:for-each>
+              <li >
+                <xsl:attribute name="class" >implicit-tag Tag-<xsl:value-of select="." /></xsl:attribute>
+                <xsl:value-of select="."/>
+              </li>
             </ul>
           </xsl:if>
           
@@ -349,7 +348,8 @@
         <xsl:if test="n:promoted-tag">
           <ul class="tags">
             <xsl:for-each select="n:promoted-tag">
-              <li class="promoted-tag">
+              <li >
+                <xsl:attribute name="class" >promoted-tag Tag-<xsl:value-of select="." /></xsl:attribute>
                 <xsl:value-of select="."/>
               </li>
             </xsl:for-each>
@@ -359,7 +359,8 @@
         <xsl:if test="n:explicit-tag">
           <ul class="tags">
             <xsl:for-each select="n:explicit-tag">
-              <li class="explicit-tag">
+              <li >
+                <xsl:attribute name="class" >explicit-tag Tag-<xsl:value-of select="." /></xsl:attribute>
                 <xsl:value-of select="."/>
               </li>
             </xsl:for-each>
