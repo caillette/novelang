@@ -24,7 +24,7 @@ Novelang software is free to use and redistribute, under the terms of the GNU Pu
 
 === Install
 
-Requirements : Java 5.
+Requirements : Java 6.
 
 First, download the latest version of Novelang, and unzip it in some directory we'll call 
 ``$NOVELANG_DIR``. 
