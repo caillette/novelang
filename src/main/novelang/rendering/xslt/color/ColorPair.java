@@ -16,11 +16,31 @@
  */
 package novelang.rendering.xslt.color;
 
+import com.google.common.base.Preconditions;
+
 /**
- * Tests for {@link SvgColorsDefinition}.
+ * Represents a background/foreground association between color names defined in
+ * {@link SvgColorsDefinition}.
  *
  * @author Laurent Caillette
  */
-public class WebColorsTest {
+public class ColorPair {
 
+  private final String background ;
+  private final String foreground ;
+
+  public ColorPair( String background, String foreground ) {
+    Preconditions.checkArgument( SvgColorsDefinition.exists( background ) ) ;
+    this.background = ( background ) ;
+    Preconditions.checkArgument( SvgColorsDefinition.exists( foreground ) ) ;
+    this.foreground = foreground ;
+  }
+
+  public String getBackground() {
+    return background ;
+  }
+
+  public String getForeground() {
+    return foreground ;
+  }
 }
