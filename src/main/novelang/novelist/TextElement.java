@@ -27,4 +27,9 @@ public interface TextElement {
 
   String getLiteral() ;
 
+  TextElement EMPTY = new TextElement() {
+    public String getLiteral() {
+      return "" ;
+    }
+  };
 }

@@ -18,8 +18,6 @@ package novelang.novelist;
 
 import java.util.Locale;
 
-import com.google.common.collect.ImmutableList;
-
 /**
  * @author Laurent Caillette
  */

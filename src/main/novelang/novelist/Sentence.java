@@ -16,6 +16,7 @@
  */
 package novelang.novelist;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,14 +25,18 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 
 /**
- * Represents a sequence of {@link TextElement}s (mainly {@link Word}s) with
- * sometimes {@link Punctuation} signs in the middle and one at the end.
+ * Represents a sequence of {@link TextElement}s (mainly {@link Word}s and {@link Punctuation}
+ * signs).
  *
  * @author Laurent Caillette
  */
 public class Sentence implements TextElement {
 
   private final List< TextElement > textElements ;
+
+  public Sentence( final TextElement... textElements ) {
+    this( Arrays.asList( textElements ) ) ;
+  }
 
   public Sentence( final List< TextElement > textElements ) {
     this.textElements = ImmutableList.copyOf( textElements ) ;

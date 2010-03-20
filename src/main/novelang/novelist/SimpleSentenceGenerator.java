@@ -23,9 +23,6 @@ import java.util.Random;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-import static novelang.novelist.RandomizationTools.percentChances;
-import static novelang.novelist.RandomizationTools.percentage;
-
 /**
  * @author Laurent Caillette
  */
@@ -34,23 +31,22 @@ public class SimpleSentenceGenerator implements Generator< Sentence > {
   private final Locale locale ;
   private final Random random ;
   private final Generator.ForWord wordGenerator ;
-  private final int minimumWordCount ;
-  private final int maximumWordCount ;
-  private final float middlePunctuationSignPercentChances ;
+  private final Bounded.IntegerInclusiveExclusive wordCountRange;
+  private final Bounded.Percentage middlePunctuationSign;
+  private final boolean hasEndingPunctuation ;
 
 
   public SimpleSentenceGenerator( final Configuration configuration ) {
     this.locale = configuration.locale ;
     this.random = configuration.random ;
     this.wordGenerator = configuration.wordGenerator ;
-    this.minimumWordCount = configuration.minimumWordCount ;
-    this.maximumWordCount = configuration.maximumWordCount ;
-    this.middlePunctuationSignPercentChances = configuration.middlePunctuationSignPercentChances ;
+    this.wordCountRange = configuration.wordCount ;
+    this.middlePunctuationSign = configuration.middlePunctuationSign ;
+    this.hasEndingPunctuation = configuration.hasEndingPunctuation ;
   }
 
   public Sentence generate() {
-    final int wordCount =
-        RandomizationTools.boundInteger( random, minimumWordCount, maximumWordCount ) ;
+    final int wordCount = this.wordCountRange.boundInteger( random ) ;
     final List< TextElement > textElements = Lists.newArrayList() ;
     wordGenerator.capitalizeNext() ;
 
@@ -62,43 +58,43 @@ public class SimpleSentenceGenerator implements Generator< Sentence > {
         lastAddedMiddlePunctuation = false ;
       } else {
         if( ( wordIndex < wordCount ) &&
-            percentChances( random, middlePunctuationSignPercentChances )
+            middlePunctuationSign.hit( random )
         ) {
-          textElements.add( Punctuation.getMiddle( locale, percentage( random ) ) ) ;
+          textElements.add( Punctuation.getMiddle( locale, Bounded.newPercentage( random ) ) ) ;
           lastAddedMiddlePunctuation = true ;
         }
       }
     }
-    textElements.add( Punctuation.getEnding( locale, percentage( random ) ) ) ;
+    if( hasEndingPunctuation ) {
+      textElements.add( Punctuation.getEnding( locale, Bounded.newPercentage( random ) ) ) ;
+    }
 
     return new Sentence( textElements ) ;
   }
 
 
-  public static class Configuration {
+  public final static class Configuration {
     private final Locale locale ;
     private final Random random ;
     private final ForWord wordGenerator ;
-    private final int minimumWordCount ;
-    private final int maximumWordCount ;
-    private final float middlePunctuationSignPercentChances;
+    private final Bounded.IntegerInclusiveExclusive wordCount ;
+    private final Bounded.Percentage middlePunctuationSign;
+    private final boolean hasEndingPunctuation ;
 
     public Configuration(
         final Locale locale,
         final Random random,
         final ForWord wordGenerator,
-        final int minimumWordCount,
-        final int maximumWordCount,
-        final float middlePunctuationSignPercentChances
+        final Bounded.IntegerInclusiveExclusive wordCount,
+        final Bounded.Percentage middlePunctuationSign,
+        final boolean hasEndingPunctuation
     ) {
-      this.middlePunctuationSignPercentChances = middlePunctuationSignPercentChances;
       this.locale = Preconditions.checkNotNull( locale ) ;
       this.random = Preconditions.checkNotNull( random ) ;
       this.wordGenerator = Preconditions.checkNotNull( wordGenerator ) ;
-      Preconditions.checkArgument( minimumWordCount > 0 ) ;
-      Preconditions.checkArgument( maximumWordCount >= minimumWordCount ) ;
-      this.minimumWordCount = minimumWordCount ;
-      this.maximumWordCount = maximumWordCount ;
+      this.wordCount = Preconditions.checkNotNull( wordCount ) ;
+      this.middlePunctuationSign = Preconditions.checkNotNull( middlePunctuationSign) ;
+      this.hasEndingPunctuation = hasEndingPunctuation ;
     }
   }
 

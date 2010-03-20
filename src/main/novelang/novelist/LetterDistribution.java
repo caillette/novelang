@@ -28,23 +28,23 @@ import novelang.system.LogFactory;
  *
  * @author Laurent Caillette
  */
-public class LetterFrequency extends Frequency< Character > {
+public class LetterDistribution extends Distribution< Character > {
 
-  private static final Log LOG = LogFactory.getLog( LetterFrequency.class ) ;
+  private static final Log LOG = LogFactory.getLog( LetterDistribution.class ) ;
 
-  private LetterFrequency( final Map< Character, Float > frequencies ) {
-    super( LetterFrequency.class.getSimpleName(), frequencies ) ;
+  private LetterDistribution( final Map< Character, Float > frequencies ) {
+    super( LetterDistribution.class.getSimpleName(), frequencies ) ;
   }
 
 
   /**
    * Returns a {@code Map} between a character and its frequency in the given language.
    */
-  public static LetterFrequency getFrequency( final Locale locale ) {
+  public static LetterDistribution getFrequency( final Locale locale ) {
     if( locale != SupportedLocales.DEFAULT_LOCALE ) {
       LOG.warn( "Unsupported: " + locale + ", using default: " + SupportedLocales.DEFAULT_LOCALE ) ;
     }
-    return new LetterFrequency( FRENCH_DISTRIBUTION ) ;
+    return new LetterDistribution( FRENCH_FREQUENCIES ) ;
   }
 
 
@@ -53,7 +53,7 @@ public class LetterFrequency extends Frequency< Character > {
    * <a href="http://en.wikipedia.org/wiki/Letter_frequency" >Wikipedia</a>.
    * <p>
    * Here is the regex for turning the table into Java code. Use a Web browser with Gecko engine
-   * (Firefox, Camino) to copy the right table cells.
+   * (Firefox, Camino) to copy the table cells of interest.
    * See meaning of "{L}" in the regex in
    * <a href="http://www.unicode.org/reports/tr18">Unicode Regular Expressions</a>,
    * "General Category Property" chapter.
@@ -63,7 +63,7 @@ public class LetterFrequency extends Frequency< Character > {
    * .put( '$1', $2f )
    * </pre>
    */
-  private static final Map< Character, Float > FRENCH_DISTRIBUTION =
+  private static final Map< Character, Float > FRENCH_FREQUENCIES =
       new ImmutableMap.Builder< Character, Float >()
       .put( 'a', 7.636f )
       .put( 'b', 0.901f )

@@ -21,9 +21,6 @@ import java.util.Random;
 
 import com.google.common.base.Preconditions;
 
-import static novelang.novelist.RandomizationTools.boundInteger;
-import static novelang.novelist.RandomizationTools.percentage;
-
 /**
  * Endless iterator creating {@link novelang.novelist.Word} instances.
  *
@@ -32,32 +29,30 @@ import static novelang.novelist.RandomizationTools.percentage;
 public class SimpleWordGenerator implements Generator.ForWord {
 
   private final Random random ;
-  private final int minimumSignCount;
-  private final int maximumSignCount;
-  private final LetterFrequency frequency ;
-  private final float circumflexPercentChances ;
+  private final Bounded.IntegerInclusiveExclusive signCount ;
+  private final LetterDistribution distribution ;
+  private final Bounded.Percentage circumflex ;
 
 
   public SimpleWordGenerator( final Configuration configuration ) {
     this.random = configuration.random ;
-    this.minimumSignCount = configuration.minimumSignCount ;
-    this.maximumSignCount = configuration.maximumSignCount ;
-    this.frequency = LetterFrequency.getFrequency( configuration.locale ) ;
-    this.circumflexPercentChances = configuration.circumflexPercentChances ;
+    this.signCount = configuration.signCount ;
+    this.distribution = LetterDistribution.getFrequency( configuration.locale ) ;
+    this.circumflex = configuration.circumflex ;
   }
 
 
   public Word generate() {
-    final int letterCount = boundInteger( random, minimumSignCount, maximumSignCount ) ;
+    final int letterCount = signCount.boundInteger( random ) ;
     final StringBuilder builder = new StringBuilder() ;
     for( int letterIndex = 1 ; letterIndex <= letterCount ; letterIndex ++ ) {
-      Character c = frequency.get( percentage( random ) );
+      Character c = distribution.get( Bounded.newPercentage( random ) );
       if( letterIndex == 1 && testAndClearCapitalize() ) {
           c = Character.toTitleCase( c ) ;
       }
       if( letterIndex > 1 &&
           letterIndex < letterCount &&
-          RandomizationTools.percentChances( random, circumflexPercentChances )
+          circumflex.hit( random )
       ) {
         builder.append( "^" ) ;  
       }
@@ -81,27 +76,22 @@ public class SimpleWordGenerator implements Generator.ForWord {
 
 
 
-  public static class Configuration {
+  public final static class Configuration {
     private final Locale locale ;
     private final Random random ;
-    private final int minimumSignCount ;
-    private final int maximumSignCount ;
-    private final float circumflexPercentChances ;
+    private final Bounded.IntegerInclusiveExclusive signCount ;
+    private final Bounded.Percentage circumflex ;
 
     public Configuration(
         final Locale locale,
         final Random random,
-        final int minimumSignCount,
-        final int maximumSignCount,
-        final float circumflexPercentChances
+        final Bounded.IntegerInclusiveExclusive signCount,
+        final Bounded.Percentage circumflex
     ) {
       this.locale = Preconditions.checkNotNull( locale ) ;
       this.random = Preconditions.checkNotNull( random ) ;
-      Preconditions.checkArgument( minimumSignCount > 0 ) ;
-      Preconditions.checkArgument( maximumSignCount >= minimumSignCount ) ;
-      this.minimumSignCount = minimumSignCount ;
-      this.maximumSignCount = maximumSignCount ;
-      this.circumflexPercentChances = circumflexPercentChances ;
+      this.signCount = Preconditions.checkNotNull( signCount ) ;
+      this.circumflex = Preconditions.checkNotNull( circumflex ) ;
     }
   }
 }

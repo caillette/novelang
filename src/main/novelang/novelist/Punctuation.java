@@ -69,17 +69,17 @@ public enum Punctuation {
     }
   }
 
-  public static TextElement getMiddle( final Locale locale, final float percentage ) {
-    return MIDDLES.get( percentage ).get( locale ) ;
+  public static TextElement getMiddle( final Locale locale, final Bounded.Percentage probability ) {
+    return MIDDLES.get( probability ).get( locale ) ;
   }
 
 
-  public static TextElement getEnding( final Locale locale, final float percentage ) {
-    return ENDINGS.get( percentage ).get( locale ) ;
+  public static TextElement getEnding( final Locale locale, final Bounded.Percentage probability ) {
+    return ENDINGS.get( probability ).get( locale ) ;
   }
 
 
-  private static final Frequency< Punctuation > ENDINGS = new Frequency< Punctuation >(
+  private static final Distribution< Punctuation > ENDINGS = new Distribution< Punctuation >(
       "Punctuation endings",
       new ImmutableMap.Builder< Punctuation, Float >()
           .put( FULL_STOP, 70.0f )
@@ -88,7 +88,7 @@ public enum Punctuation {
           .build()
   ) { } ;
 
-  private static final Frequency< Punctuation > MIDDLES = new Frequency< Punctuation >(
+  private static final Distribution< Punctuation > MIDDLES = new Distribution< Punctuation >(
       "Punctuation middles",
       new ImmutableMap.Builder< Punctuation, Float >()
           .put( COMMA, 80.0f )

@@ -35,7 +35,7 @@ public class GeneratorDemo {
     final Generator< Word > wordGenerator = new SimpleWordGenerator(
         GenerationDefaults.FOR_WORDS ) ;
 
-    generateAndPrint( wordGenerator, 1000 ) ;
+    generateAndPrint( wordGenerator, 1000, true ) ;
   }
 
 
@@ -45,7 +45,17 @@ public class GeneratorDemo {
     final Generator< Sentence > sentenceGenerator =
         new SimpleSentenceGenerator( GenerationDefaults.FOR_SENTENCES ) ;
 
-    generateAndPrint( sentenceGenerator, 100 );
+    generateAndPrint( sentenceGenerator, 100, true );
+  }
+
+
+  @Test
+  public void createSomeLevels() {
+
+    final Generator< Level > levelGenerator =
+        new SimpleLevelGenerator( GenerationDefaults.FOR_LEVELS ) ;
+
+    generateAndPrint( levelGenerator, 30, false ) ;
   }
 
 
@@ -58,21 +68,26 @@ public class GeneratorDemo {
 
   private static void generateAndPrint(
       final Generator< ? extends TextElement > generator,
-      final int iterationCount
+      final int iterationCount,
+      final boolean addBlanks
   ) {
     final StringBuilder textBuilder = new StringBuilder() ;
-
     int lineLength = 0 ;
+    
     for( int i = 0 ; i < iterationCount ; i ++ ) {
-      final String sentence = generator.generate().getLiteral() ;
-      textBuilder.append( sentence ) ;
-      lineLength += sentence.length() ;
-      if( lineLength > LINE_LENGTH ) {
-        textBuilder.append( "\n" ) ;
-        lineLength = 0 ;
-      } else {
+
+      final TextElement textElement = generator.generate() ;
+
+      final String string = textElement.getLiteral() ;
+      textBuilder.append( string ) ;
+
+      if( addBlanks ) {
         textBuilder.append( " " ) ;
-        lineLength ++ ;
+        lineLength += string.length() ;
+        if( lineLength > 80  ) {
+          textBuilder.append( "\n" ) ;
+          lineLength = 0 ;
+        }
       }
     }
 

@@ -16,17 +16,23 @@
  */
 package novelang.novelist;
 
-import java.util.Random;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
- * Generates specialized values from a {@link Random} object.
+ * Markup, supports null or empty {@code String}, transforming to empty.
  *
  * @author Laurent Caillette
  */
-public class RandomizationTools {
+public class Markup implements TextElement {
 
-  public static float percentage( final Random random ) {
-    return ( float ) ( 100.0 * Math.abs( random.nextDouble() ) ) ;
+  private final String literal ;
+
+  public Markup( final String literal ) {
+    this.literal = StringUtils.isBlank( literal ) ? "" : literal ;
   }
 
+  public String getLiteral() {
+    return literal ;
+  }
 }

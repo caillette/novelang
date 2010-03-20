@@ -17,29 +17,62 @@
 package novelang.novelist;
 
 import java.util.Random;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+import novelang.designator.Tag;
 
 /**
  * @author Laurent Caillette
  */
 public interface GenerationDefaults {
 
-  SimpleWordGenerator.Configuration FOR_WORDS =
-      new SimpleWordGenerator.Configuration(
-          SupportedLocales.DEFAULT_LOCALE,
-          new Random(),
-          2,
-          12,
-          0.01f
-      )
-  ;
+  Random RANDOM = new Random( 0L ) ;
+
+  SimpleWordGenerator.Configuration FOR_WORDS = new SimpleWordGenerator.Configuration(
+      SupportedLocales.DEFAULT_LOCALE,
+      RANDOM,
+      Bounded.newInclusiveRange( 2, 12 ),
+      Bounded.newPercentage( 0.01f )
+  ) ;
 
   SimpleSentenceGenerator.Configuration FOR_SENTENCES = new SimpleSentenceGenerator.Configuration(
       SupportedLocales.DEFAULT_LOCALE,
-      new Random(),
+      RANDOM,
       new SimpleWordGenerator( FOR_WORDS ),
-      5,
-      20,
-      18.0f 
+      Bounded.newInclusiveRange( 5, 20 ),
+      Bounded.newPercentage( 18.0f ),
+      true
+  ) ;
+
+  SimpleSentenceGenerator.Configuration FOR_TITLES = new SimpleSentenceGenerator.Configuration(
+      SupportedLocales.DEFAULT_LOCALE,
+      RANDOM,
+      new SimpleWordGenerator( FOR_WORDS ),
+      Bounded.newInclusiveRange( 1, 4 ),
+      Bounded.newPercentage( 10.0f ),
+      false
+  ) ;
+
+  Set< Tag > NO_TAGS = ImmutableSet.of() ;
+
+  Set< Tag > TEN_TAGS = ImmutableSet.of(
+      new Tag( "Zero" ), new Tag( "One"), new Tag( "Two"),
+      new Tag( "Three"), new Tag( "Four"), new Tag( "Five"),
+      new Tag( "Six"), new Tag( "Seven"), new Tag( "Eight"),
+      new Tag( "Nine")
+  ) ;
+
+  SimpleLevelGenerator.Configuration FOR_LEVELS = new SimpleLevelGenerator.Configuration(
+      RANDOM,
+      3,
+      Bounded.newInclusiveRange( 0, 3 ),
+      Bounded.newPercentage( 40.0f ),
+      Bounded.newPercentage( 100.0f ),
+      new SimpleSentenceGenerator( FOR_TITLES ),
+      new SimpleSentenceGenerator( FOR_SENTENCES ),
+      TEN_TAGS,
+      Bounded.newPercentage( 5.0f )
   ) ;
 
 }

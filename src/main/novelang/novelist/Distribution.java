@@ -21,7 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import novelang.system.Log;
@@ -33,33 +32,31 @@ import novelang.system.LogFactory;
  *
  * @author Laurent Caillette
  */
-public abstract class Frequency< T > {
+public abstract class Distribution< T > {
 
-  private static final Log LOG = LogFactory.getLog( Frequency.class ) ;
+  private static final Log LOG = LogFactory.getLog( Distribution.class ) ;
 
   private final Map< T, Float > summedFrequencies ;
 
-  protected Frequency(
+  protected Distribution(
       final String requesterNameForLogging,
       final Map< T, Float > summedFrequencies
   ) {
-    this.summedFrequencies = sumFrequencies( requesterNameForLogging, summedFrequencies ) ;
+    this.summedFrequencies = sumDistributions( requesterNameForLogging, summedFrequencies ) ;
   }
 
-  public T get( final float random100 ) {
-    Preconditions.checkArgument( random100 >= 0.0f ) ;
-    Preconditions.checkArgument( random100 < 100.0f ) ;
+  public T get( final Bounded.Percentage probability ) {
 
     T found = null ;
     for( final Map.Entry< T, Float > entry : summedFrequencies.entrySet() ) {
-      if( entry.getValue() > random100 ) {
+      if( probability.isStrictlySmallerThan( entry.getValue() ) ) {
         found = entry.getKey() ;
         break ;
       }
     }
 
     if( found == null ) {
-      throw new IllegalStateException( "Should not happen: found nothing for " + random100 ) ;
+      throw new IllegalStateException( "Should not happen: found nothing for " + probability ) ;
     }
 
     return found ;
@@ -70,12 +67,12 @@ public abstract class Frequency< T > {
    * Returns an immutable {@code Map} with keys sorted by frequency (descending sort),
    * associated with the sum of their frequency and frequencies of previous keys.
    */
-  protected static< T > Map< T, Float > sumFrequencies(
+  protected static< T > Map< T, Float > sumDistributions(
       final String requesterNameForLogging,
-      final Map< T, Float > individualFrequencies
+      final Map< T, Float > individualDistributions
   ) {
     final List< Map.Entry< T, Float > > sortedKeys =
-        Lists.newArrayList( individualFrequencies.entrySet() ) ;
+        Lists.newArrayList( individualDistributions.entrySet() ) ;
 
     final Comparator< Map.Entry< T, Float > > invertedComparatorOnFrequency =
         new Comparator< Map.Entry< T, Float > >() {
@@ -113,14 +110,13 @@ public abstract class Frequency< T > {
       }
     }
 
-    for( final Map.Entry< T, Float > entry : cumulatedFrequencies.entrySet() ) {
-      LOG.debug( "  " + entry.getKey() + " -> " + entry.getValue() ) ;
+    if( LOG.isDebugEnabled() && false ) {
+      for( final Map.Entry< T, Float > entry : cumulatedFrequencies.entrySet() ) {
+        LOG.debug( "  " + entry.getKey() + " -> " + entry.getValue() ) ;
+      }
     }
     return Collections.unmodifiableMap( cumulatedFrequencies ) ;
   }
-
-
-
 
 
 }

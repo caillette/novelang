@@ -17,9 +17,12 @@
 package novelang.novelist;
 
 /**
+ * Generates an unlimited number of instances.
+ * Implementors may keep a state.
+ *
  * @author Laurent Caillette
  */
-public interface Generator< T > {
+public interface Generator< T extends TextElement > {
 
   T generate() ;
 

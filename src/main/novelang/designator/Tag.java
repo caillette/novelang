@@ -1,5 +1,6 @@
 package novelang.designator;
 
+import com.google.common.base.Function;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
@@ -98,7 +99,6 @@ public final class Tag implements Comparable< Tag > {
   @Override
   public String toString() {
     return getClass().getSimpleName() + "[" + name + "]" ;
-  
   }
 
   public int compareTo( final Tag tag ) {
@@ -107,4 +107,13 @@ public final class Tag implements Comparable< Tag > {
     }
     return this.name.compareTo( tag.name ) ;
   }
+
+
+  public static final Function< Tag, String > FUNCTION_TOSOURCESTRING = 
+      new Function< Tag, String >() {
+        public String apply( final Tag tag ) {
+          return "@" + tag.name ;
+        }
+      }
+  ;
 }
