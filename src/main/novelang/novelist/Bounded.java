@@ -27,19 +27,21 @@ import com.google.common.base.Preconditions;
  */
 public class Bounded {
 
+
+// ==========
+// Percentage
+// ==========
+
   public static Percentage newPercentage( final float value ) {
     return new Percentage( value ) ;
   }
 
   public static Percentage newPercentage( final Random random ) {
-    return newPercentage( RandomizationTools.percentage( random ) ) ;
+    return newPercentage( percentage( random ) ) ;
   }
 
-  public static IntegerInclusiveExclusive newInclusiveRange(
-      final int lowerBoundInclusive,
-      final int upperBoundInclusive
-  ) {
-    return new IntegerInclusiveExclusive( lowerBoundInclusive, upperBoundInclusive + 1 ) ;
+  private static float percentage( final Random random ) {
+    return ( float ) ( 100.0 * Math.abs( random.nextDouble() ) ) ;
   }
 
 
@@ -59,7 +61,7 @@ public class Bounded {
     }
 
     public boolean hit( final Random random ) {
-      return RandomizationTools.percentage( random ) < value;
+      return percentage( random ) < value;
     }
 
     public boolean isStrictlySmallerThan( final float other ) {
@@ -67,6 +69,19 @@ public class Bounded {
     }
 
   }
+
+
+// =====
+// Range
+// =====
+
+  public static IntegerInclusiveExclusive newInclusiveRange(
+      final int lowerBoundInclusive,
+      final int upperBoundInclusive
+  ) {
+    return new IntegerInclusiveExclusive( lowerBoundInclusive, upperBoundInclusive + 1 ) ;
+  }
+  
 
   /**
    * Range defined by two positive integers.
