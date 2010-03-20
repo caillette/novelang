@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.SystemUtils;
-import novelang.system.LogFactory;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -130,10 +130,9 @@ public final class EnvironmentTools {
       final char[] separatorChars = lineSeparator.toCharArray() ;
       stringBuffer.append( LINE_SEPARATOR_PROPERTY_NAME ) ;
       stringBuffer.append( " =" ) ;
-      for( int i = 0 ; i < separatorChars.length ; i++ ) {
-        final char c = separatorChars[ i ];
-        stringBuffer.append( " 0x" ) ;
-        stringBuffer.append( LanguageTools.to8byteHex( c ).toUpperCase() ) ;
+      for( final char c : separatorChars ) {
+        stringBuffer.append( " 0x" );
+        stringBuffer.append( LanguageTools.to8byteHex( c ).toUpperCase() );
       }
       stringBuffer.append( "\n" ) ;
       return true ;
@@ -175,10 +174,10 @@ public final class EnvironmentTools {
         stringBuffer.append( classpathEntries[ 0 ] ) ;
         break ;
       default :
-        for ( int j = 0; j < classpathEntries.length ; j++ ) {
+        for( final File classpathEntry : classpathEntries ) {
           stringBuffer.append( SystemUtils.LINE_SEPARATOR );
           stringBuffer.append( indent );
-          stringBuffer.append( classpathEntries[ j ] );
+          stringBuffer.append( classpathEntry );
         }
     }
 
