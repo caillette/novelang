@@ -1,0 +1,37 @@
+Novelang already does all the typesetting for you. What's next? Writing text, of course!
+The just-started Novelist subproject, which aims to generate big documents for Novelang testing
+under heavy load.
+
+Based on French metrics, random text looks like this:
+
+<<
+Uomuecto eaufues xuner ig ocanerr, ebanu otpaa. Uuse, on eian aibtd, rttaintlufe elvettarrh,
+yrn enemlcmlun, ebcazepuer madscg, êiiovemtt teeost eseeerde ?
+Fetn eearréetcs emrseoss icia ntmvesrud. Aoasro cênit ctainetda aèugedet css eali, unero
+aaie eneoden, nrortio. Oovlod ; tfsmenco méttsna, eesdis uoeaeanao rcuent, desungtt av
+au oneerao, dxuaste umeinétniu lccdeiilne rliùearde veyiritisac yàslu.
+Iinmseuo odiapqied cmiiapearlo ebnjtus uauueis, libginmasa edrc emaèi sllieyr sode !
+>>
+
+It bases on simplistic distribution algorithm. Word count and letter count from uniform distribution
+in a pre-defined range (something like 5-20 for words and 2-12 for letters). Letters come from
+a "frequency table"
+http://en.wikipedia.org/wiki/Letter_frequency
+giving the percentage of appearance for each letter.
+
+While the result doesn't look much like real text, it's good enough to stress basic parsing and
+typesetting.
+
+There has been a lot of research about text analysis, first for cryptography, next for
+natural language analysis and Web crawling.
+Among all of them, there is a nifty one: the "n-grams"
+http://en.wikipedia.org/wiki/N-gram
+, which describe all the different letter sequences of a fixed length in a given text.
+The "demo"
+http://www.wolframalpha.com/input/?i=n-grams+%22Novelang+is+so+sexy+you+know%22
+on Wolfram Alpha is gorgeous. It shows how combinations grow fast: a simple sentence
+like "ceramics come from" contains 69 3-grams.
+Google's "n-grams database"
+http://www.ldc.upenn.edu/Catalog/CatalogEntry.jsp?catalogId=LDC2006T13
+(ranging from 1-grams to 5-grams) weights `24 GiB` gzip'ed and contains near 1 billion of 3-grams.
+Amazingly, this number doesn't increase so much for 4-grams and 5-grams.
