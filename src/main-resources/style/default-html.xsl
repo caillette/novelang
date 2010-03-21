@@ -336,10 +336,12 @@
           
           <xsl:if test="n:implicit-tag">
             <ul class="tags">
-              <li >
-                <xsl:attribute name="class" >implicit-tag Tag-<xsl:value-of select="." /></xsl:attribute>
-                <xsl:value-of select="."/>
-              </li>
+              <xsl:for-each select="n:implicit-tag">
+                <li >
+                  <xsl:attribute name="class" >implicit-tag Tag-<xsl:value-of select="." /></xsl:attribute>
+                  <xsl:value-of select="."/>
+                </li>
+              </xsl:for-each>
             </ul>
           </xsl:if>
           
