@@ -56,8 +56,8 @@ public class SimpleLevelGenerator implements Generator< Level > {
   public Level generate() {
 
     if( stack.getLevelCounter() == 0 && stack.getHeight() == 1 ) {
+      stack.incrementLevelCounter() ;
       if( prelevelProbability.hit( random ) ) {
-        stack.incrementLevelCounter() ;
         // Pre-title body.
         return new Level( bodyGenerator.generate() ) ;
       }
@@ -162,9 +162,9 @@ public class SimpleLevelGenerator implements Generator< Level > {
 
     public String countersHierarchyAsString() {
       if( isBottom() ) {
-        return Integer.toString( levelCounter ) ; 
+        return Integer.toString( levelCounter ) + "." ;
       } else {
-        return previous.countersHierarchyAsString() + "." + levelCounter ;
+        return previous.countersHierarchyAsString() + levelCounter + "." ;
       }
     }
   }
