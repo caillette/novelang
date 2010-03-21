@@ -54,6 +54,13 @@ public interface GenerationDefaults {
       false
   ) ;
 
+  SimpleBodyGenerator.Configuration FOR_BODIES = new SimpleBodyGenerator.Configuration(
+      RANDOM,
+      Bounded.newInclusiveRange( 1, 5 ),
+      Bounded.newInclusiveRange( 1, 6 ),
+      new SimpleSentenceGenerator( FOR_SENTENCES )
+  ) ;
+
   Set< Tag > NO_TAGS = ImmutableSet.of() ;
 
   Set< Tag > TEN_TAGS = ImmutableSet.of(
@@ -70,7 +77,7 @@ public interface GenerationDefaults {
       Bounded.newPercentage( 40.0f ),
       Bounded.newPercentage( 100.0f ),
       new SimpleSentenceGenerator( FOR_TITLES ),
-      new SimpleSentenceGenerator( FOR_SENTENCES ),
+      new SimpleBodyGenerator( FOR_BODIES ),
       TEN_TAGS,
       Bounded.newPercentage( 5.0f )
   ) ;
