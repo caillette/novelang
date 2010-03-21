@@ -40,7 +40,7 @@ public interface GenerationDefaults {
       SupportedLocales.DEFAULT_LOCALE,
       RANDOM,
       new SimpleWordGenerator( FOR_WORDS ),
-      Bounded.newInclusiveRange( 5, 20 ),
+      Bounded.newInclusiveRange( 5, 10 ),
       Bounded.newPercentage( 18.0f ),
       true
   ) ;
@@ -56,8 +56,8 @@ public interface GenerationDefaults {
 
   SimpleBodyGenerator.Configuration FOR_BODIES = new SimpleBodyGenerator.Configuration(
       RANDOM,
+      Bounded.newInclusiveRange( 1, 4 ),
       Bounded.newInclusiveRange( 1, 5 ),
-      Bounded.newInclusiveRange( 1, 6 ),
       new SimpleSentenceGenerator( FOR_SENTENCES )
   ) ;
 
