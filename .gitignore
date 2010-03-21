@@ -14,6 +14,7 @@ ide/idea/.idea/workspace.xml
 src/main-resources/fonts/more-fonts-*
 src/main-resources/more-fonts-*
 names.bin
+git-crunch.sh
 *.log
 grammar-debug-classes
 _*
