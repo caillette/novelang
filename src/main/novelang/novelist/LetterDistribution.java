@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
@@ -37,14 +38,23 @@ public class LetterDistribution extends Distribution< Character > {
   }
 
 
+  private final static Map< Locale, LetterDistribution > DISTRIBUTIONS = Maps.newHashMap() ;
+
   /**
    * Returns a {@code Map} between a character and its frequency in the given language.
    */
-  public static LetterDistribution getFrequency( final Locale locale ) {
+  public synchronized static LetterDistribution getFrequency( final Locale locale ) {
+    final Locale supportedLocale ;
     if( locale != SupportedLocales.DEFAULT_LOCALE ) {
       LOG.warn( "Unsupported: " + locale + ", using default: " + SupportedLocales.DEFAULT_LOCALE ) ;
+      supportedLocale = SupportedLocales.DEFAULT_LOCALE ;
+    } else {
+      supportedLocale = locale ;
     }
-    return new LetterDistribution( FRENCH_FREQUENCIES ) ;
+    if( ! DISTRIBUTIONS.containsKey( supportedLocale ) ) {
+      DISTRIBUTIONS.put( supportedLocale, new LetterDistribution( FRENCH_FREQUENCIES ) ) ;
+    }
+    return DISTRIBUTIONS.get( supportedLocale ) ;
   }
 
 
