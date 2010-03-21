@@ -68,7 +68,7 @@ public class Novelist {
     LOG.info( "Writing done." ) ;
   }
 
-  private static final int DEFAULT_ITERATION_COUNT = 100 ;
+  private static final int DEFAULT_ITERATION_COUNT = 10 ;
 
   public static void main( final String[] args ) throws IOException {
     if( args.length < 1 ) {
