@@ -13,10 +13,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Supplier;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
@@ -27,65 +31,111 @@ public class Novelist {
 
   private static final Log LOG = LogFactory.getLog( Novelist.class );
 
-  private final File targetFile ;
-  private final Generator< ? extends TextElement > generator ;
+  private final List< GhostWriter > ghostWriters ;
 
-  public Novelist( final File targetFile, final Generator< ? extends TextElement > generator ) {
-    this.targetFile = Preconditions.checkNotNull( targetFile ).getAbsoluteFile() ;
-    this.generator = Preconditions.checkNotNull( generator ) ;    
+  public Novelist(
+      final String fileNamePrototype,
+      final Supplier< Generator< ? extends TextElement > > generatorSupplier,
+      final int ghostWriterCount
+  ) throws IOException {
+    final List< GhostWriter > ghostWriterList = Lists.newArrayList() ;
+    for( int i = 1 ; i <= ghostWriterCount ; i ++ ) {
+      final File file = createFreshFile( fileNamePrototype, i ) ;
+      ghostWriterList.add( new GhostWriter( file, generatorSupplier.get() ) ) ;
+    }
+    ghostWriters = ImmutableList.copyOf( ghostWriterList ) ;
   }
 
-  public void write( final int iterationCount, final boolean append ) throws IOException {
-    final OutputStream outputStream ;
-    if( append ) {
-      throw new UnsupportedOperationException( "Appending not supported yet" ) ;
-    } else {
-      if( targetFile.getParentFile().mkdirs() ) {
-        LOG.info( "Created directory '" + targetFile.getParentFile() + "'" ) ;
+  private static File createFreshFile( final String prototype, final int counter ) throws IOException {
+    final File targetFile = new File( prototype + "-" + counter + ".nlp" ) ;
+    if( targetFile.getParentFile().mkdirs() ) {
+      LOG.info( "Created directory '" + targetFile.getParentFile() + "'" ) ;
+    }
+    if( targetFile.exists() ) {
+      if( ! targetFile.delete() ) {
+        throw new IOException( "Could not delete file: '" + targetFile.getAbsolutePath() + "'" ) ;
       }
-      if( targetFile.exists() ) {
-        if( ! targetFile.delete() ) {
-          throw new IOException( "Could not delete file: '" + targetFile.getAbsolutePath() + "'" ) ;
-        }
-        if( ! targetFile.createNewFile() ) {
-          throw new IOException( "Could not create file: '" + targetFile.getAbsolutePath() + "'" ) ;
-        }
+      if( ! targetFile.createNewFile() ) {
+        throw new IOException( "Could not create file: '" + targetFile.getAbsolutePath() + "'" ) ;
       }
     }
+    return targetFile ;
+  }
 
-    LOG.info( "Writing for " + iterationCount + " iterations..." ) ;
 
-    outputStream = new FileOutputStream( targetFile, append ) ;
-    try {
-      for( int iteration = 1 ; iteration <= iterationCount ; iteration ++ ) {
-        final String text = generator.generate().getLiteral() ;
-        IOUtils.write( text, outputStream ) ;
-      }
-    } finally {
-      outputStream.close() ;
+  public void write( final int iterationCount ) throws IOException {
+    for( final GhostWriter ghostWriter : ghostWriters ) {
+      ghostWriter.write( iterationCount ) ;
     }
-
     LOG.info( "Writing done." ) ;
   }
 
-  private static final int DEFAULT_ITERATION_COUNT = 20 ;
+  private static class GhostWriter {
+    private final String name ;
+    private final File file ;
+    private final Generator< ? extends TextElement > generator ;
+    private static final Log WRITER_LOG = LogFactory.getLog( GhostWriter.class ) ;
+
+    private GhostWriter(
+        final File file,
+        final Generator< ? extends TextElement > generator
+    ) {
+      this.name = FilenameUtils.getBaseName( file.getName() ) ;
+      this.file = file ;
+      this.generator = generator ;
+    }
+
+    public void write( final int iterationCount ) throws IOException {
+      final OutputStream outputStream = new FileOutputStream( file, true ) ;
+      try {
+        for( int i = 0 ; i < iterationCount ; i ++ ) {
+          final String text = generator.generate().getLiteral() ;
+          IOUtils.write( text, outputStream ) ;
+          WRITER_LOG.debug( "{" + name + "} wrote " + text.length() + " bytes." ) ;
+        }
+      } finally {
+        outputStream.close() ;
+      }
+    }
+
+  }
+
+  private static final int DEFAULT_GHOSTWRITER_COUNT = 5 ;
+  private static final int DEFAULT_ITERATION_COUNT = 3 ;
 
   public static void main( final String[] args ) throws IOException {
     if( args.length < 1 ) {
-      System.out.println( Novelist.class.getName() + "<target-file> [iteration-count]" ) ;
+      System.out.println( Novelist.class.getName() +
+          "<target-file-noprefix> [ [ghostwriter-count] [iteration-count] ]" ) ;
       System.exit( 1 ) ;
     }
 
-    final int iterationCount ;
+    final int ghostWriterCount ;
     if( args.length < 2 ) {
-      iterationCount = DEFAULT_ITERATION_COUNT ;
+      ghostWriterCount = DEFAULT_GHOSTWRITER_COUNT ;
     } else {
-      iterationCount = Integer.parseInt( args[ 1 ] ) ;
+      ghostWriterCount = Integer.parseInt( args[ 1 ] ) ;
     }
 
+    final int iterationCount ;
+    if( args.length < 3 ) {
+      iterationCount = DEFAULT_ITERATION_COUNT ;
+    } else {
+      iterationCount = Integer.parseInt( args[ 2 ] ) ;
+    }
+
+    final Supplier< Generator< ? extends TextElement > > generatorSupplier =
+        new Supplier<Generator<? extends TextElement>>() {
+          public Generator<? extends TextElement> get() {
+            return new SimpleLevelGenerator( GenerationDefaults.FOR_LEVELS ) ;
+          }
+        }
+    ;
+
     new Novelist(
-        new File( args[ 0 ] ),
-        new SimpleLevelGenerator( GenerationDefaults.FOR_LEVELS )
-    ).write( iterationCount, false ) ;
+        args[ 0 ],
+        generatorSupplier,
+        ghostWriterCount
+    ).write( iterationCount ) ;
   }
 }
