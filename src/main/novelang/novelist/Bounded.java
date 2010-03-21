@@ -55,9 +55,12 @@ public class Bounded {
     private final float value ;
 
     private Percentage( final float value ) {
-      Preconditions.checkArgument( value >= 0.0f ) ;
-      Preconditions.checkArgument( value <= 100.0f ) ;
+      Preconditions.checkArgument( isValid( value ) ) ;
       this.value = value ;
+    }
+
+    public static boolean isValid( final Float value ) {
+      return ( value != null ) && ( value >= 0.0f ) && ( value <= 100.0f ) ;
     }
 
     public boolean hit( final Random random ) {

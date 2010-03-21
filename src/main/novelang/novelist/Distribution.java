@@ -30,6 +30,13 @@ import novelang.system.LogFactory;
  * Given a {@code Map} of objects and their frequency expressed as percentages, this class
  * finds them back with same distribution given a value in a [0..100[ fractional interval.
  *
+ * <p>
+ * Design note: while the {@code Float} objects should be all between 0 and 100, there is
+ * no clear advantage on using a {@link Bounded.Percentage} at creation. 
+ * The {@code Float} instance is held internally and is bound-checked.
+ * Exposing a {@link Bounded.Percentage} for Map creation would require boring code like
+ * {@code put( 'a', Bounded.newPercentage( 7.636f ) )} instead of {@code put( 'a', 7.636f )}.
+ *
  * @author Laurent Caillette
  */
 public abstract class Distribution< T > {
@@ -67,7 +74,7 @@ public abstract class Distribution< T > {
    * Returns an immutable {@code Map} with keys sorted by frequency (descending sort),
    * associated with the sum of their frequency and frequencies of previous keys.
    */
-  protected static< T > Map< T, Float > sumDistributions(
+  private static< T > Map< T, Float > sumDistributions(
       final String requesterNameForLogging,
       final Map< T, Float > individualDistributions
   ) {
@@ -88,9 +95,13 @@ public abstract class Distribution< T > {
     final Map< T, Float > cumulatedFrequencies = Maps.newLinkedHashMap() ;
     float sum = 0.0f ;
 
-    // First, calculate the complete sum.
+    // First, verify validity and calculate the complete sum.
     for( final Map.Entry< T, Float > entry : sortedKeys ) {
-      final float frequency = entry.getValue() ;
+      final Float frequency = entry.getValue() ;
+      if( ! Bounded.Percentage.isValid( frequency ) ) {
+        throw new IllegalArgumentException(
+            "Invalid frequency for '" + entry.getKey() + "': " + frequency ) ;
+      }
       sum += frequency ;
     }
 
@@ -98,8 +109,8 @@ public abstract class Distribution< T > {
     // to reach the total of 100. Boosting first element (the one with highest frequency)
     // introduces minimal change.
     final float correction = 99.999999f - sum ;
-    LOG.info( "For " + requesterNameForLogging + ", " +
-        "sum of raw frequencies: " + sum + "; correction: " + correction ) ;
+
+    logMessageAboutCorrection( requesterNameForLogging, sum, correction ) ;
 
     sum = correction ;
     for( final Map.Entry< T, Float > entry : sortedKeys ) {
@@ -116,6 +127,20 @@ public abstract class Distribution< T > {
       }
     }
     return Collections.unmodifiableMap( cumulatedFrequencies ) ;
+  }
+
+  private static void logMessageAboutCorrection(
+      final String requesterNameForLogging,
+      final float sum,
+      final float correction
+  ) {
+    final String message = "For " + requesterNameForLogging + ", " +
+        "sum of raw frequencies: " + sum + "; correction: " + correction ;
+    if( Math.abs( correction ) > 1.0f ) {
+      LOG.warn( message ) ;
+    } else {
+      LOG.debug( message ) ;
+    }
   }
 
 
