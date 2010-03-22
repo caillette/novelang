@@ -31,5 +31,11 @@ public interface TextElement {
     public String getLiteral() {
       return "" ;
     }
-  };
+  } ;
+
+  TextElement NULL = new TextElement() {
+    public String getLiteral() {
+      return "<NULL text element>" ;
+    }
+  } ;
 }

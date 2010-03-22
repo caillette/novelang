@@ -40,7 +40,7 @@ public interface GenerationDefaults {
       SupportedLocales.DEFAULT_LOCALE,
       RANDOM,
       new SimpleWordGenerator( FOR_WORDS ),
-      Bounded.newInclusiveRange( 5, 10 ),
+      Bounded.newInclusiveRange( 5, 20 ),
       Bounded.newPercentage( 18.0f ),
       true
   ) ;
@@ -70,16 +70,16 @@ public interface GenerationDefaults {
       new Tag( "Nine")
   ) ;
 
-  SimpleLevelGenerator.Configuration FOR_LEVELS = new SimpleLevelGenerator.Configuration(
-      RANDOM,
-      3,
-      Bounded.newInclusiveRange( 0, 3 ),
-      Bounded.newPercentage( 40.0f ),
-      Bounded.newPercentage( 100.0f ),
-      new SimpleSentenceGenerator( FOR_TITLES ),
-      new SimpleBodyGenerator( FOR_BODIES ),
-      TEN_TAGS,
-      Bounded.newPercentage( 5.0f )
-  ) ;
+  SimpleLevelGenerator.Configuration FOR_LEVELS = new SimpleLevelGenerator.Configuration()
+      .withRandom( RANDOM )
+      .withMaximumDepth( 3 )
+      .withSublevelCountRange( 0, 3 )
+      .withSublevelProbability( 40.0f )
+      .withPrelevelProbabiliy( 100.0f )
+      .withTitleGenerator( new SimpleSentenceGenerator( FOR_TITLES ) )
+      .withBodyGenerator( new SimpleBodyGenerator( FOR_BODIES ) )
+      .withTags( TEN_TAGS )
+      .withTagAppearanceProbability( 5.0f )
+  ;
 
 }

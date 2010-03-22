@@ -29,4 +29,5 @@ public interface Generator< T extends TextElement > {
   interface ForWord extends Generator< Word > {
     void capitalizeNext() ;
   }
+
 }

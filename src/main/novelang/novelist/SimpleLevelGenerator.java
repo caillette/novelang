@@ -20,8 +20,11 @@ import java.util.Random;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import novelang.designator.Tag;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Laurent Caillette
@@ -40,15 +43,16 @@ public class SimpleLevelGenerator implements Generator< Level > {
 
 
   public SimpleLevelGenerator( final Configuration configuration ) {
-    this.random = configuration.random ;
-    this.titleGenerator = configuration.titleGenerator ;
-    this.bodyGenerator = configuration.bodyGenerator ;
-    this.prelevelProbability = configuration.prelevelProbability ;
-    this.sublevelProbability = configuration.sublevelProbability ;
-    this.sublevelCountRange = configuration.sublevelCount ;
-    this.maximumStackHeight = configuration.maximumDepth ;
-    this.availableTags = configuration.tags ;
-    this.tagAppearanceProbability = configuration.tagAppearanceProbability ;
+    this.random = checkNotNull( configuration.getRandom() ) ;
+    this.prelevelProbability = checkNotNull( configuration.getPrelevelProbability() ) ;
+    this.sublevelProbability = checkNotNull( configuration.getSublevelProbability() ) ;
+    this.sublevelCountRange = checkNotNull( configuration.getSublevelCountRange() ) ;
+    this.titleGenerator = checkNotNull( configuration.getTitleGenerator() ) ;
+    this.bodyGenerator = checkNotNull( configuration.getBodyGenerator() ) ;
+    this.maximumStackHeight = configuration.getMaximumDepth() ;
+    Preconditions.checkArgument( maximumStackHeight > 0 ) ;
+    this.tagAppearanceProbability = checkNotNull( configuration.getTagAppearanceProbability() ) ;
+    this.availableTags = checkNotNull( configuration.getTags() ) ;
   }
 
   private Stack stack = new Stack() ;
@@ -171,38 +175,122 @@ public class SimpleLevelGenerator implements Generator< Level > {
 
 
   public final static class Configuration {
-    private final Random random ;
-    private final Bounded.Percentage prelevelProbability ;
-    private final Bounded.Percentage sublevelProbability ;
-    private final int maximumDepth ;
-    private final Bounded.IntegerInclusiveExclusive sublevelCount ;
-    private final Generator< Sentence > titleGenerator ;
-    private final Generator< ? extends TextElement > bodyGenerator ;
-    private final Bounded.Percentage tagAppearanceProbability;
-    private final Set< Tag > tags ;
+    
+    private Random random = null ;
+    private Bounded.Percentage prelevelProbability = null ;
+    private Bounded.Percentage sublevelProbability = null ;
+    private int maximumDepth = -1 ;
+    private Bounded.IntegerInclusiveExclusive sublevelCountRange = null ;
+    private Generator< Sentence > titleGenerator = null ;
+    private Generator< ? extends TextElement > bodyGenerator = null ;
+    private Bounded.Percentage tagAppearanceProbability = null ;
+    private Set< Tag > tags = null ;
 
+    public Configuration() { }
 
-    public Configuration(
-        final Random random,
-        final int maximumDepth,
-        final Bounded.IntegerInclusiveExclusive sublevelCount,
-        final Bounded.Percentage sublevelProbability,
-        final Bounded.Percentage prelevelProbability,
-        final Generator< Sentence > titleGenerator,
-        final Generator< ? extends TextElement > bodyGenerator,
-        final Set<Tag> tags,
-        final Bounded.Percentage tagAppearanceProbability
+    private Configuration( final Configuration other ) {
+      random = other.random ;
+      prelevelProbability = other.prelevelProbability ;
+      sublevelProbability = other.sublevelProbability ;
+      maximumDepth = other.maximumDepth ;
+      sublevelCountRange = other.sublevelCountRange ;
+      titleGenerator = other.titleGenerator ;
+      bodyGenerator = other.bodyGenerator ;
+      tagAppearanceProbability = other.tagAppearanceProbability ;
+      tags = other.tags ;
+    }
+
+    public Configuration withRandom( final Random random ) {
+      final Configuration other = new Configuration( this ) ;
+      other.random = random ;
+      return other ;
+    }
+
+    public Random getRandom() {
+      return random ;
+    }
+
+    public Configuration withPrelevelProbabiliy( final float percentage ) {
+      final Configuration other = new Configuration( this ) ;
+      other.prelevelProbability = Bounded.newPercentage( percentage ) ;
+      return other ;
+    }
+
+    public Bounded.Percentage getPrelevelProbability() {
+      return prelevelProbability ;
+    }
+
+    public Configuration withSublevelProbability( final float percentage ) {
+      final Configuration other = new Configuration( this ) ;
+      other.sublevelProbability = Bounded.newPercentage( percentage ) ;
+      return other ;
+    }
+
+    public Bounded.Percentage getSublevelProbability() {
+      return sublevelProbability ;
+    }
+
+    public Configuration withMaximumDepth( final int depth ) {
+      final Configuration other = new Configuration( this ) ;
+      other.maximumDepth = depth ;
+      return other ;
+    }
+
+    public int getMaximumDepth() {
+      return maximumDepth ;
+    }
+
+    public Configuration withSublevelCountRange(
+        final int inclusiveLower,
+        final int exclusiveUpper
     ) {
-      this.random = Preconditions.checkNotNull( random ) ;
-      this.prelevelProbability = Preconditions.checkNotNull( prelevelProbability ) ;
-      this.sublevelCount = Preconditions.checkNotNull( sublevelCount ) ;
-      this.sublevelProbability = Preconditions.checkNotNull( sublevelProbability ) ;
-      this.titleGenerator = titleGenerator ;
-      this.bodyGenerator = bodyGenerator ;
-      Preconditions.checkArgument( maximumDepth > 0 ) ;
-      this.maximumDepth = maximumDepth ;
-      this.tagAppearanceProbability = Preconditions.checkNotNull( tagAppearanceProbability ) ;
-      this.tags = Preconditions.checkNotNull( tags ) ;
+      final Configuration other = new Configuration( this ) ;
+      other.sublevelCountRange = Bounded.newInclusiveRange( inclusiveLower, exclusiveUpper ) ;
+      return other ;
+    }
+
+    public Bounded.IntegerInclusiveExclusive getSublevelCountRange() {
+      return sublevelCountRange ;
+    }
+
+    public Configuration withTitleGenerator( final Generator< Sentence > generator ) {
+      final Configuration other = new Configuration( this ) ;
+      other.titleGenerator = generator ;
+      return other ;
+    }
+
+    public Generator< Sentence > getTitleGenerator() {
+      return titleGenerator ;
+    }
+
+    public Configuration withBodyGenerator( final Generator< ? extends TextElement > generator ) {
+      final Configuration other = new Configuration( this ) ;
+      other.bodyGenerator = generator ;
+      return other ;
+    }
+
+    public Generator< ? extends TextElement > getBodyGenerator() {
+      return bodyGenerator ;
+    }
+
+    public Configuration withTagAppearanceProbability( final float percentage ) {
+      final Configuration other = new Configuration( this ) ;
+      other.tagAppearanceProbability = Bounded.newPercentage( percentage ) ;
+      return other ;
+    }
+
+    public Bounded.Percentage getTagAppearanceProbability() {
+      return tagAppearanceProbability ;
+    }
+
+    public Configuration withTags( final Set< Tag > tags ) {
+      final Configuration other = new Configuration( this ) ;
+      other.tags = tags ;
+      return other ;
+    }
+
+    public Set< Tag > getTags() {
+      return tags ;
     }
   }
 }
