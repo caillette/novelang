@@ -53,9 +53,13 @@ public class SimpleLevelGenerator implements Generator< Level > {
     Preconditions.checkArgument( maximumStackHeight > 0 ) ;
     this.tagAppearanceProbability = checkNotNull( configuration.getTagAppearanceProbability() ) ;
     this.availableTags = checkNotNull( configuration.getTags() ) ;
+
+    final int levelCounterStart = configuration.getLevelCounterStart();
+    Preconditions.checkArgument( levelCounterStart >= 0 ) ;
+    stack = new Stack( levelCounterStart ) ;
   }
 
-  private Stack stack = new Stack() ;
+  private Stack stack ;
 
   public Level generate() {
 
@@ -119,10 +123,10 @@ public class SimpleLevelGenerator implements Generator< Level > {
     private final Integer maximumLevel;
     private int levelCounter ;
 
-    public Stack() {
+    public Stack( final int initialLevelCounter ) {
       previous = null ;
       maximumLevel = null ;
-      levelCounter = 0 ;
+      levelCounter = initialLevelCounter ;
     }
 
     public Stack( final Stack previous, final int maximumLevel ) {
@@ -178,6 +182,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
     
     private Random random = null ;
     private Bounded.Percentage prelevelProbability = null ;
+    private int levelCounterStart = 0 ;
     private Bounded.Percentage sublevelProbability = null ;
     private int maximumDepth = -1 ;
     private Bounded.IntegerInclusiveExclusive sublevelCountRange = null ;
@@ -191,6 +196,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
     private Configuration( final Configuration other ) {
       random = other.random ;
       prelevelProbability = other.prelevelProbability ;
+      levelCounterStart = other.levelCounterStart ;
       sublevelProbability = other.sublevelProbability ;
       maximumDepth = other.maximumDepth ;
       sublevelCountRange = other.sublevelCountRange ;
@@ -218,6 +224,21 @@ public class SimpleLevelGenerator implements Generator< Level > {
 
     public Bounded.Percentage getPrelevelProbability() {
       return prelevelProbability ;
+    }
+
+    public Configuration withLevelCounterStart( final int counter ) {
+      final Configuration other = new Configuration( this ) ;
+      other.levelCounterStart = counter ;
+      return other ;
+    }
+
+    /**
+     * Default value of 0 suitable for the first levels in a document.
+     * When generating one document with several {@link novelang.novelist.Novelist.GhostWriter}s,
+     * each one should have its own counter value.
+     */
+    public int getLevelCounterStart() {
+      return levelCounterStart ;
     }
 
     public Configuration withSublevelProbability( final float percentage ) {

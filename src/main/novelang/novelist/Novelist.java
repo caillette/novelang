@@ -125,8 +125,8 @@ public class Novelist {
     }
 
     final Supplier< Generator< ? extends TextElement > > generatorSupplier =
-        new Supplier<Generator<? extends TextElement>>() {
-          public Generator<? extends TextElement> get() {
+        new Supplier< Generator< ? extends TextElement > >() {
+          public Generator< ? extends TextElement > get() {
             return new SimpleLevelGenerator( GenerationDefaults.FOR_LEVELS ) ;
           }
         }
