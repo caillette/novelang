@@ -35,13 +35,13 @@ public class Novelist {
 
   public Novelist(
       final String fileNamePrototype,
-      final Supplier< Generator< ? extends TextElement > > generatorSupplier,
+      final GeneratorSupplier< Level > generatorSupplier,
       final int ghostWriterCount
   ) throws IOException {
     final List< GhostWriter > ghostWriterList = Lists.newArrayList() ;
     for( int i = 1 ; i <= ghostWriterCount ; i ++ ) {
       final File file = createFreshFile( fileNamePrototype, i ) ;
-      ghostWriterList.add( new GhostWriter( file, generatorSupplier.get() ) ) ;
+      ghostWriterList.add( new GhostWriter( file, generatorSupplier.get( i ) ) ) ;
     }
     ghostWriters = ImmutableList.copyOf( ghostWriterList ) ;
   }
@@ -134,8 +134,20 @@ public class Novelist {
 
     new Novelist(
         args[ 0 ],
-        generatorSupplier,
+        new LevelGeneratorSupplierWithDefaults(), 
         ghostWriterCount
     ).write( iterationCount ) ;
+  }
+
+  public interface GeneratorSupplier< T extends TextElement > {
+    Generator< ? extends T > get( final int number ) ;
+  }
+
+  public static class LevelGeneratorSupplierWithDefaults implements GeneratorSupplier< Level > {
+    public Generator< ? extends Level > get( final int number ) {
+      final SimpleLevelGenerator.Configuration configuration =
+          GenerationDefaults.FOR_LEVELS.withLevelCounterStart( number ) ;
+      return new SimpleLevelGenerator( configuration ) ;
+    }
   }
 }
