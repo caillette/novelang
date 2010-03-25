@@ -124,14 +124,6 @@ public class Novelist {
       iterationCount = Integer.parseInt( args[ 2 ] ) ;
     }
 
-    final Supplier< Generator< ? extends TextElement > > generatorSupplier =
-        new Supplier< Generator< ? extends TextElement > >() {
-          public Generator< ? extends TextElement > get() {
-            return new SimpleLevelGenerator( GenerationDefaults.FOR_LEVELS ) ;
-          }
-        }
-    ;
-
     new Novelist(
         args[ 0 ],
         new LevelGeneratorSupplierWithDefaults(), 
@@ -145,8 +137,10 @@ public class Novelist {
 
   public static class LevelGeneratorSupplierWithDefaults implements GeneratorSupplier< Level > {
     public Generator< ? extends Level > get( final int number ) {
-      final SimpleLevelGenerator.Configuration configuration =
-          GenerationDefaults.FOR_LEVELS.withLevelCounterStart( number ) ;
+      final SimpleLevelGenerator.Configuration configuration = GenerationDefaults.FOR_LEVELS
+          .withLevelCounterStart( number )
+          .withLockLevelCounterAtDepthOne( true )
+      ;
       return new SimpleLevelGenerator( configuration ) ;
     }
   }

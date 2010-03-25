@@ -78,6 +78,7 @@ public interface GenerationDefaults {
       .withSublevelCountRange( Bounded.newInclusiveRange( 0, 3 ) )
       .withSublevelProbability( Bounded.newPercentage( 40.0f ) )
       .withPrelevelProbability( Bounded.newPercentage( 100.0f ) )
+      .withLockLevelCounterAtDepthOne( false )
       .withTitleGenerator( new SimpleSentenceGenerator( FOR_TITLES ) )
       .withBodyGenerator( new SimpleBodyGenerator( FOR_BODIES ) )
       .withTags( TEN_TAGS )

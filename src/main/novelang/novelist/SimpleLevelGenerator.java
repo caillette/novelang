@@ -37,6 +37,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
   private final Bounded.Percentage prelevelProbability ;
   private final Bounded.Percentage sublevelProbability ;
   private final Bounded.IntegerInclusiveExclusive sublevelCountRange;
+  private final boolean lockLevelCounterAtDepthOne ;
   private final int maximumStackHeight ;
   private final Set< Tag > availableTags ;
   private final Bounded.Percentage tagAppearanceProbability ;
@@ -47,6 +48,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
     this.prelevelProbability = checkNotNull( configuration.getPrelevelProbability() ) ;
     this.sublevelProbability = checkNotNull( configuration.getSublevelProbability() ) ;
     this.sublevelCountRange = checkNotNull( configuration.getSublevelCountRange() ) ;
+    this.lockLevelCounterAtDepthOne = configuration.getLockLevelCounterAtDepthOne() ;
     this.titleGenerator = checkNotNull( configuration.getTitleGenerator() ) ;
     this.bodyGenerator = checkNotNull( configuration.getBodyGenerator() ) ;
     this.maximumStackHeight = configuration.getMaximumDepth() ;
@@ -84,14 +86,10 @@ public class SimpleLevelGenerator implements Generator< Level > {
       }
     }
 
-    final Level level = new Level(
-        markup,
-        title,
-        bodyGenerator.generate(),
-        effectiveTags
-    ) ;
     if( stack.maximumLevelReached() ) {
-      stack = stack.pop() ;
+      if( ! lockLevelCounterAtDepthOne || stack.getHeight() > 2 ) {
+        stack = stack.pop() ;
+      }
       stack.incrementLevelCounter() ;
     } else {
       if( sublevelProbability.hit( random ) && stack.getHeight() < maximumStackHeight ) {
@@ -101,6 +99,14 @@ public class SimpleLevelGenerator implements Generator< Level > {
         stack.incrementLevelCounter() ;
       }
     }
+
+    final Level level = new Level(
+        markup,
+        title,
+        bodyGenerator.generate(),
+        effectiveTags
+    ) ;
+
     return level ;
 
   }
@@ -157,11 +163,10 @@ public class SimpleLevelGenerator implements Generator< Level > {
 
     /** @return true if maximum not reached. */
     public void incrementLevelCounter() {
-      if( maximumLevelReached() ) {
-        throw new IllegalStateException( "Don't increment when maximum reached" ) ;
+      if( ! maximumLevelReached() ) {
+//        throw new IllegalStateException( "Don't increment when maximum reached" ) ;
+        levelCounter++ ;
       }
-      levelCounter++ ;
-
     }
 
     public boolean maximumLevelReached() {
@@ -202,7 +207,10 @@ public class SimpleLevelGenerator implements Generator< Level > {
     int getMaximumDepth() ;
 
     Configuration withSublevelCountRange( Bounded.IntegerInclusiveExclusive range ) ;
-    public Bounded.IntegerInclusiveExclusive getSublevelCountRange() ;
+    Bounded.IntegerInclusiveExclusive getSublevelCountRange() ;
+
+    Configuration withLockLevelCounterAtDepthOne( boolean lock ) ;
+    boolean getLockLevelCounterAtDepthOne() ;
 
     Configuration withTitleGenerator( Generator< Sentence > generator ) ;
     Generator< Sentence > getTitleGenerator() ;
@@ -211,7 +219,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
     Generator< ? extends TextElement > getBodyGenerator() ;
 
     Configuration withTagAppearanceProbability( Bounded.Percentage percentage ) ;
-    public Bounded.Percentage getTagAppearanceProbability() ;
+    Bounded.Percentage getTagAppearanceProbability() ;
 
     Configuration withTags( Set< Tag > tags ) ;
     Set< Tag > getTags() ;
