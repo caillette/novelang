@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import novelang.designator.Tag;
+import novelang.system.Pod;
 
 /**
  * @author Laurent Caillette
@@ -70,16 +71,17 @@ public interface GenerationDefaults {
       new Tag( "Nine")
   ) ;
 
-  SimpleLevelGenerator.Configuration FOR_LEVELS = new SimpleLevelGenerator.Configuration()
+  SimpleLevelGenerator.Configuration FOR_LEVELS =
+      Pod.make( SimpleLevelGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withMaximumDepth( 3 )
-      .withSublevelCountRange( 0, 3 )
-      .withSublevelProbability( 40.0f )
-      .withPrelevelProbabiliy( 100.0f )
+      .withSublevelCountRange( Bounded.newInclusiveRange( 0, 3 ) )
+      .withSublevelProbability( Bounded.newPercentage( 40.0f ) )
+      .withPrelevelProbability( Bounded.newPercentage( 100.0f ) )
       .withTitleGenerator( new SimpleSentenceGenerator( FOR_TITLES ) )
       .withBodyGenerator( new SimpleBodyGenerator( FOR_BODIES ) )
       .withTags( TEN_TAGS )
-      .withTagAppearanceProbability( 5.0f )
+      .withTagAppearanceProbability( Bounded.newPercentage( 5.0f ) )
   ;
 
 }

@@ -178,140 +178,42 @@ public class SimpleLevelGenerator implements Generator< Level > {
   }
 
 
-  public final static class Configuration {
+  public interface Configuration {
     
-    private Random random = null ;
-    private Bounded.Percentage prelevelProbability = null ;
-    private int levelCounterStart = 0 ;
-    private Bounded.Percentage sublevelProbability = null ;
-    private int maximumDepth = -1 ;
-    private Bounded.IntegerInclusiveExclusive sublevelCountRange = null ;
-    private Generator< Sentence > titleGenerator = null ;
-    private Generator< ? extends TextElement > bodyGenerator = null ;
-    private Bounded.Percentage tagAppearanceProbability = null ;
-    private Set< Tag > tags = null ;
+    Configuration withRandom( Random random ) ;
+    Random getRandom() ;
 
-    public Configuration() { }
+    Configuration withPrelevelProbability( Bounded.Percentage percentage ) ;
+    Bounded.Percentage getPrelevelProbability() ;
 
-    private Configuration( final Configuration other ) {
-      random = other.random ;
-      prelevelProbability = other.prelevelProbability ;
-      levelCounterStart = other.levelCounterStart ;
-      sublevelProbability = other.sublevelProbability ;
-      maximumDepth = other.maximumDepth ;
-      sublevelCountRange = other.sublevelCountRange ;
-      titleGenerator = other.titleGenerator ;
-      bodyGenerator = other.bodyGenerator ;
-      tagAppearanceProbability = other.tagAppearanceProbability ;
-      tags = other.tags ;
-    }
-
-    public Configuration withRandom( final Random random ) {
-      final Configuration other = new Configuration( this ) ;
-      other.random = random ;
-      return other ;
-    }
-
-    public Random getRandom() {
-      return random ;
-    }
-
-    public Configuration withPrelevelProbabiliy( final float percentage ) {
-      final Configuration other = new Configuration( this ) ;
-      other.prelevelProbability = Bounded.newPercentage( percentage ) ;
-      return other ;
-    }
-
-    public Bounded.Percentage getPrelevelProbability() {
-      return prelevelProbability ;
-    }
-
-    public Configuration withLevelCounterStart( final int counter ) {
-      final Configuration other = new Configuration( this ) ;
-      other.levelCounterStart = counter ;
-      return other ;
-    }
+    Configuration withLevelCounterStart( int counter ) ;
 
     /**
      * Default value of 0 suitable for the first levels in a document.
      * When generating one document with several {@link novelang.novelist.Novelist.GhostWriter}s,
      * each one should have its own counter value.
      */
-    public int getLevelCounterStart() {
-      return levelCounterStart ;
-    }
+    int getLevelCounterStart() ;
 
-    public Configuration withSublevelProbability( final float percentage ) {
-      final Configuration other = new Configuration( this ) ;
-      other.sublevelProbability = Bounded.newPercentage( percentage ) ;
-      return other ;
-    }
+    Configuration withSublevelProbability( Bounded.Percentage percentage ) ;
+    Bounded.Percentage getSublevelProbability() ;
 
-    public Bounded.Percentage getSublevelProbability() {
-      return sublevelProbability ;
-    }
+    Configuration withMaximumDepth( int depth ) ;
+    int getMaximumDepth() ;
 
-    public Configuration withMaximumDepth( final int depth ) {
-      final Configuration other = new Configuration( this ) ;
-      other.maximumDepth = depth ;
-      return other ;
-    }
+    Configuration withSublevelCountRange( Bounded.IntegerInclusiveExclusive range ) ;
+    public Bounded.IntegerInclusiveExclusive getSublevelCountRange() ;
 
-    public int getMaximumDepth() {
-      return maximumDepth ;
-    }
+    Configuration withTitleGenerator( Generator< Sentence > generator ) ;
+    Generator< Sentence > getTitleGenerator() ;
 
-    public Configuration withSublevelCountRange(
-        final int inclusiveLower,
-        final int exclusiveUpper
-    ) {
-      final Configuration other = new Configuration( this ) ;
-      other.sublevelCountRange = Bounded.newInclusiveRange( inclusiveLower, exclusiveUpper ) ;
-      return other ;
-    }
+    Configuration withBodyGenerator( final Generator< ? extends TextElement > generator ) ;
+    Generator< ? extends TextElement > getBodyGenerator() ;
 
-    public Bounded.IntegerInclusiveExclusive getSublevelCountRange() {
-      return sublevelCountRange ;
-    }
+    Configuration withTagAppearanceProbability( Bounded.Percentage percentage ) ;
+    public Bounded.Percentage getTagAppearanceProbability() ;
 
-    public Configuration withTitleGenerator( final Generator< Sentence > generator ) {
-      final Configuration other = new Configuration( this ) ;
-      other.titleGenerator = generator ;
-      return other ;
-    }
-
-    public Generator< Sentence > getTitleGenerator() {
-      return titleGenerator ;
-    }
-
-    public Configuration withBodyGenerator( final Generator< ? extends TextElement > generator ) {
-      final Configuration other = new Configuration( this ) ;
-      other.bodyGenerator = generator ;
-      return other ;
-    }
-
-    public Generator< ? extends TextElement > getBodyGenerator() {
-      return bodyGenerator ;
-    }
-
-    public Configuration withTagAppearanceProbability( final float percentage ) {
-      final Configuration other = new Configuration( this ) ;
-      other.tagAppearanceProbability = Bounded.newPercentage( percentage ) ;
-      return other ;
-    }
-
-    public Bounded.Percentage getTagAppearanceProbability() {
-      return tagAppearanceProbability ;
-    }
-
-    public Configuration withTags( final Set< Tag > tags ) {
-      final Configuration other = new Configuration( this ) ;
-      other.tags = tags ;
-      return other ;
-    }
-
-    public Set< Tag > getTags() {
-      return tags ;
-    }
+    Configuration withTags( Set< Tag > tags ) ;
+    Set< Tag > getTags() ;
   }
 }

@@ -68,20 +68,21 @@ public final class Pod {
           "Unsupported property (must be named getXxx or withXxx):" + methodName ) ;
     }
 
-    for( final PropertyDeclaration declaration : properties.values() ) {
-      if( declaration.getter == null ) {
-        throw new BadDeclarationException( "Missing getXxx method" ) ;
+    for( final Map.Entry< String, PropertyDeclaration > entry : properties.entrySet() ) {
+      if( entry.getValue().getter == null ) {
+        throw new BadDeclarationException( "Missing get" + entry.getKey() + " method" ) ;
       }
-      if( declaration.updater == null ) {
-        throw new BadDeclarationException( "Missing withXxx method" ) ;
+      if( entry.getValue().updater == null ) {
+        throw new BadDeclarationException( "Missing with" + entry.getKey() + " method" ) ;
       }
-      final Class< ? > updaterParameterType0 = declaration.updater.getParameterTypes()[ 0 ] ;
-      if( declaration.getter.getReturnType() != updaterParameterType0 ) {
+      final Class< ? > updaterParameterType0 = entry.getValue().updater.getParameterTypes()[ 0 ] ;
+      if( entry.getValue().getter.getReturnType() != updaterParameterType0 ) {
         throw new BadDeclarationException(
             "Incompatible types: '" +
-            declaration.updater.getName() + "' takes " + updaterParameterType0 +
+            entry.getValue().updater.getName() + "' takes " + updaterParameterType0 +
             ", while '" +
-            declaration.getter.getName() + "' returns " + declaration.getter.getReturnType()
+            entry.getValue().getter.getName() + "' returns " +
+                entry.getValue().getter.getReturnType()
         ) ;
       }
     }
