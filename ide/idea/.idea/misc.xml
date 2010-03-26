@@ -48,9 +48,10 @@
     <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
     <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
     <option name="IGNORE_SPACES_IN_MERGE" value="false" />
-    <configuration useDefault="false">$PROJECT_DIR$/../../../../administrateur/.subversion</configuration>
+    <configuration useDefault="false">C:/administrateur/.subversion</configuration>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="XPathView.XPathProjectComponent">
     <history />
     <find-history />
