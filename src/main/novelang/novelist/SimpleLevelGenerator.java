@@ -91,13 +91,11 @@ public class SimpleLevelGenerator implements Generator< Level > {
       stack = stack.pop() ;
       stack.incrementLevelCounter() ;
     } else {
-      if( sublevelProbability.hit( random ) && stack.getHeight() < maximumStackHeight ) {
-        if( lockLevelCounterAtDepthOne && stack.getHeight() == 1 ) {
-          stack = new Stack( stack, null /* No maximum level. */ ) ;
-        } else {
-          final int sublevelCount = this.sublevelCountRange.boundInteger( random ) ;
-          stack = new Stack( stack, sublevelCount ) ;
-        }
+      if( lockLevelCounterAtDepthOne && stack.getHeight() == 1 ) {
+        stack = new Stack( stack, null /* No maximum level. */ ) ;
+      } else if( sublevelProbability.hit( random ) && stack.getHeight() < maximumStackHeight ) {
+        final int sublevelCount = this.sublevelCountRange.boundInteger( random ) ;
+        stack = new Stack( stack, sublevelCount ) ;
       } else {
         stack.incrementLevelCounter() ;
       }
@@ -234,12 +232,4 @@ public class SimpleLevelGenerator implements Generator< Level > {
     Set< Tag > getTags() ;
   }
   
-  public static final class Converter {
-    public static Bounded.Percentage convert( float f ) {
-      return Bounded.newPercentage( f ) ; 
-    }
-    public static Bounded.IntegerInclusiveExclusive convert( int lower, int upper  ) {
-      return Bounded.newInclusiveRange( lower, upper ) ;
-    }
-  }
 }
