@@ -75,14 +75,14 @@ public interface GenerationDefaults {
       Pod.make( SimpleLevelGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withMaximumDepth( 3 )
-      .withSublevelCountRange( Bounded.newInclusiveRange( 0, 3 ) )
-      .withSublevelProbability( Bounded.newPercentage( 40.0f ) )
-      .withPrelevelProbability( Bounded.newPercentage( 100.0f ) )
+      .withSublevelCountRange( 0, 3 )
+      .withSublevelProbability( 40.0f )
+      .withPrelevelProbability( 100.0f )
       .withLockLevelCounterAtDepthOne( false )
       .withTitleGenerator( new SimpleSentenceGenerator( FOR_TITLES ) )
       .withBodyGenerator( new SimpleBodyGenerator( FOR_BODIES ) )
       .withTags( TEN_TAGS )
-      .withTagAppearanceProbability( Bounded.newPercentage( 5.0f ) )
+      .withTagAppearanceProbability( 5.0f )
   ;
 
 }

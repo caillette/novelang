@@ -23,6 +23,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import novelang.designator.Tag;
+import novelang.system.Pod;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -190,12 +191,13 @@ public class SimpleLevelGenerator implements Generator< Level > {
   }
 
 
+  @Pod.Converter( converterClass = Bounded.class )
   public interface Configuration {
     
     Configuration withRandom( Random random ) ;
     Random getRandom() ;
 
-    Configuration withPrelevelProbability( Bounded.Percentage percentage ) ;
+    Configuration withPrelevelProbability( float percentage ) ;
     Bounded.Percentage getPrelevelProbability() ;
 
     Configuration withLevelCounterStart( int counter ) ;
@@ -207,13 +209,13 @@ public class SimpleLevelGenerator implements Generator< Level > {
      */
     int getLevelCounterStart() ;
 
-    Configuration withSublevelProbability( Bounded.Percentage percentage ) ;
+    Configuration withSublevelProbability( float percentage ) ;
     Bounded.Percentage getSublevelProbability() ;
 
     Configuration withMaximumDepth( int depth ) ;
     int getMaximumDepth() ;
 
-    Configuration withSublevelCountRange( Bounded.IntegerInclusiveExclusive range ) ;
+    Configuration withSublevelCountRange( int lowerBound, int upperBound ) ;
     Bounded.IntegerInclusiveExclusive getSublevelCountRange() ;
 
     Configuration withLockLevelCounterAtDepthOne( boolean lock ) ;
@@ -225,10 +227,19 @@ public class SimpleLevelGenerator implements Generator< Level > {
     Configuration withBodyGenerator( final Generator< ? extends TextElement > generator ) ;
     Generator< ? extends TextElement > getBodyGenerator() ;
 
-    Configuration withTagAppearanceProbability( Bounded.Percentage percentage ) ;
+    Configuration withTagAppearanceProbability( float percentage ) ;
     Bounded.Percentage getTagAppearanceProbability() ;
 
     Configuration withTags( Set< Tag > tags ) ;
     Set< Tag > getTags() ;
+  }
+  
+  public static final class Converter {
+    public static Bounded.Percentage convert( float f ) {
+      return Bounded.newPercentage( f ) ; 
+    }
+    public static Bounded.IntegerInclusiveExclusive convert( int lower, int upper  ) {
+      return Bounded.newInclusiveRange( lower, upper ) ;
+    }
   }
 }
