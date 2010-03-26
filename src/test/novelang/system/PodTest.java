@@ -21,47 +21,105 @@ import static org.junit.Assert.assertNull;
  */
 public class PodTest {
 
+  @Test
+  public void emptyPod() {
+    Pod.make( Empty.class ) ;
+  }
+
+  @Test( expected = Pod.BadDeclarationException.class )
+  public void typeMismatch() {
+    Pod.make( Broken1.class ) ;
+  }
+
+  @Test( expected = Pod.BadDeclarationException.class )
+  public void missingWith() {
+    Pod.make( Broken2.class ) ;
+  }
+
+  @Test( expected = Pod.BadDeclarationException.class )
+  public void missingGet() {
+    Pod.make( Broken3.class ) ;
+  }
+
+  @Test( expected = Pod.BadDeclarationException.class )
+  public void unknownMethodPrefix() {
+    Pod.make( Broken4.class ) ;
+  }
+
+
 
   @Test
   public void vanillaPod() {
-    final VanillaPod initialBun = Pod.make( VanillaPod.class ) ;
-    assertNull( initialBun.getString() ) ;
-    assertEquals( 0L, ( long ) initialBun.getInt() ) ;
-    final VanillaPod updated = initialBun.withInt( 1 ).withString( "Foo" ).withFloat( 2.0f ) ;
+    final Vanilla initial = Pod.make( Vanilla.class ) ;
+    assertNull( initial.getString() ) ;
+    assertEquals( 0L, ( long ) initial.getInt() ) ;
+    final Vanilla updated = initial.withInt( 1 ).withString( "Foo" ).withFloat( 2.0f ) ;
     assertEquals( "Foo", updated.getString() ) ;
     assertEquals( 1L, ( long ) updated.getInt() ) ;
     assertEquals( 2.0, 0.0,( double ) updated.getFloat() ) ;
 
     // Check possible side-effects, too.
-    assertNull( initialBun.getString() ) ;
-    assertEquals( 0L, ( long ) initialBun.getInt() ) ;
+    assertNull( initial.getString() ) ;
+    assertEquals( 0L, ( long ) initial.getInt() ) ;
+  }
 
+  @Test //@Ignore( "Not implemented" )
+  public void conversion() {
+    final ConvertiblePod initial = Pod.make( ConvertiblePod.class ) ;
+    final ConvertiblePod updated = initial.withString( 1, 2.3f ) ;
+    assertEquals( "1, 2.3", updated.getString() ) ;
+    assertNull( initial.getString() ) ;
   }
 
 // =======
 // Fixture
 // =======
 
-  public interface VanillaPod {
+  public interface Empty { }
+
+  public interface Vanilla {
 
     String getString() ;
-    VanillaPod withString( String newString ) ;
+    Vanilla withString( String newString ) ;
 
     int getInt() ;
-    VanillaPod withInt( int newInt ) ;
+    Vanilla withInt( int newInt ) ;
 
     float getFloat() ;
-    VanillaPod withFloat( float newFloat ) ;
+    Vanilla withFloat( float newFloat ) ;
 
   }
+
+
+@SuppressWarnings( { "UnusedDeclaration" } )
+  public interface Broken1 {
+    String getString() ;
+    Broken1 withString( int i ) ;
+  }
+
+  @SuppressWarnings( { "UnusedDeclaration" } )
+  public interface Broken2 {
+    String getSomething() ;
+  }
+
+  @SuppressWarnings( { "UnusedDeclaration" } )
+  public interface Broken3 {
+    Broken3 withSomething() ;
+  }
+
+  public interface Broken4 {
+    void unsupported() ;
+  }
+
 
   @Pod.Converter( converterClass = SomeConverter.class )
-  public interface ConvertedPod {
+  public interface ConvertiblePod {
 
     String getString() ;
-    ConvertedPod withString( int i, float f ) ;
+    ConvertiblePod withString( int i, float f ) ;
   }
 
+  @SuppressWarnings( { "UnusedDeclaration" } )
   public static final class SomeConverter {
     public static String convert( final int i, final float f ) {
       return "" + i + ", " + f ;

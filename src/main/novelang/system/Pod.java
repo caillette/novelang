@@ -9,8 +9,11 @@
  */
 package novelang.system;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
@@ -19,6 +22,49 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 /**
+ * Creates an immutable object with chainable mutators.
+ *
+ * Given such an interface which pairs getters and copy-on-change operators:
+ * <pre>
+public interface Vanilla {
+
+  String getString() ;
+  Vanilla withString( String newString ) ;
+
+  int getInt() ;
+  Vanilla withInt( int newInt ) ;
+
+  float getFloat() ;
+  Vanilla withFloat( float newFloat ) ;
+
+}</pre>
+ * Basing on {@code get} and {@code with} prefixes and type similarity, the {@link Pod#make(Class)}
+ * method generates an object instance behaving as one could expect:
+ * <pre>
+final Vanilla initial = Pod.make( Vanilla.class ) ;
+final Vanilla updated = initial.withInt( 1 ).withString( "Foo" ).withFloat( 2.0f ) ;
+assertEquals( "Foo", updated.getString() ) ;  
+</pre>
+ * When it's convenient to create one object with several parameters, the
+ * {@link Converter#converterClass()} annotation indicates a class containing static methods
+ * for conversion.
+ * <pre>
+@Pod.Converter( converterClass = SomeConverter.class )
+public interface Convertible {
+  String getString() ;
+  Convertible withString( int i, float f ) ;
+}
+
+@SuppressWarnings( { "UnusedDeclaration" } )
+public static final class SomeConverter {
+  public static String convert( final int i, final float f ) {
+    return "" + i + ", " + f ;
+  }
+}
+</pre>
+ * One known problem is, such static method appear as never called.
+ * The {@code @SuppressWarnings( { "UnusedDeclaration" } )} may save some warnings, then.
+ *
  * @author Laurent Caillette
  */
 public final class Pod {
@@ -28,11 +74,11 @@ public final class Pod {
   public static< T > T make( final Class< T > podClass ) {
 
     Preconditions.checkArgument( podClass.isInterface() ) ;
-    final Method[] methods = podClass.getMethods() ;
+    final Method[] podMethods = podClass.getMethods() ;
 
     final Map< String, PropertyDeclaration > properties = Maps.newHashMap() ;
 
-    for( final Method method : methods ) {
+    for( final Method method : podMethods ) {
       final String methodName = method.getName();
 
       if( methodName.startsWith( "get" ) ) {
@@ -69,28 +115,57 @@ public final class Pod {
     }
 
     for( final Map.Entry< String, PropertyDeclaration > entry : properties.entrySet() ) {
-      if( entry.getValue().getter == null ) {
-        throw new BadDeclarationException( "Missing get" + entry.getKey() + " method" ) ;
+      final String propertyName = entry.getKey() ;
+      final PropertyDeclaration declaration = entry.getValue() ;
+      if( declaration.getter == null ) {
+        throw new BadDeclarationException( "Missing getXxx method" ) ;
       }
       if( entry.getValue().updater == null ) {
         throw new BadDeclarationException( "Missing with" + entry.getKey() + " method" ) ;
       }
-      final Class< ? > updaterParameterType0 = entry.getValue().updater.getParameterTypes()[ 0 ] ;
-      if( entry.getValue().getter.getReturnType() != updaterParameterType0 ) {
-        throw new BadDeclarationException(
-            "Incompatible types: '" +
-            entry.getValue().updater.getName() + "' takes " + updaterParameterType0 +
-            ", while '" +
-            entry.getValue().getter.getName() + "' returns " +
-                entry.getValue().getter.getReturnType()
-        ) ;
+      final Class< ? >[] updaterParameterTypes = declaration.updater.getParameterTypes() ;
+      final Class< ? > updaterParameterType0 = updaterParameterTypes[ 0 ] ;
+      if( updaterParameterTypes.length > 1
+       || declaration.getter.getReturnType() != updaterParameterType0
+      ) {
+        final Converter converter = podClass.getAnnotation( Pod.Converter.class ) ;
+        if( converter == null ) {
+          throw new BadDeclarationException(
+              "Incompatible types: '" +
+              declaration.updater.getName() + "' takes " + updaterParameterType0 +
+              ", while '" +
+              declaration.getter.getName() + "' returns " + declaration.getter.getReturnType()
+          ) ;
+        } else {
+          final Class< ? > converterClass = converter.converterClass() ;
+          final Method convertMethod = findConvertMethod(
+              converterClass,
+              declaration.getter.getReturnType(),
+              declaration.updater.getParameterTypes()
+          ) ;
+          if( convertMethod == null ) {
+            throw new BadDeclarationException( "Can't find converter for " + propertyName ) ;
+          } else {
+            declaration.converter = convertMethod ;
+          }
+        }
       }
     }
+
+    final ImmutableMap.Builder< String, Method > convertersBuilder =
+        new ImmutableMap.Builder< String, Method >() ;
+    for( final Map.Entry< String, PropertyDeclaration > entry : properties.entrySet() ) {
+      final Method converter = entry.getValue().converter ;
+      if( converter != null ) {
+        convertersBuilder.put( entry.getKey(), converter ) ;
+      }
+    }
+
     //noinspection unchecked
     return ( T ) Proxy.newProxyInstance(
         Pod.class.getClassLoader(),
         new Class< ? >[] { podClass },
-        new PropertiesKeeper( podClass, EMPTY_MAP )
+        new PropertiesKeeper( podClass, convertersBuilder.build(), EMPTY_MAP )
     ) ;
   }
 
@@ -114,10 +189,45 @@ public final class Pod {
     }
   }
 
+  private static Method findConvertMethod(
+      final Class< ? > converterClass,
+      final Class< ? > returnType,
+      final Class< ? >[] parameterTypes
+  ) {
+    for( final Method candidateConvertMethod : converterClass.getMethods() ) {
+      if( Modifier.isStatic( candidateConvertMethod.getModifiers() )
+       && returnType.isAssignableFrom( candidateConvertMethod.getReturnType() )
+       && areCompatible( parameterTypes, candidateConvertMethod.getParameterTypes() )
+      ) {
+        return candidateConvertMethod ;
+      }
+    }
+    return null ;
+  }
+
+  private static boolean areCompatible(
+      final Class< ? >[] definition,
+      final Class< ? >[] occurence
+  ) {
+    if( definition.length == occurence.length ) {
+      for( int i = 0 ; i < occurence.length ; i ++ ) {
+        final Class< ? > defined = definition[ i ] ;
+        final Class< ? > occuring = occurence[ i ] ;
+        if( ! defined.isAssignableFrom( occuring ) ) {
+          return false ;
+        }
+      }
+      return true ;
+    } else {
+      return false ;
+    }
+  }
+
 
   private static class PropertyDeclaration {
     public Method getter = null ;
     public Method updater = null ;
+    public Method converter = null ;
   }
 
 
@@ -127,13 +237,16 @@ public final class Pod {
   private static class PropertiesKeeper implements InvocationHandler {
 
     private final Class< ? > podClass ;
+    private final Map< String, Method > converters ;
     private final Map< String, Object > values ;
 
     private PropertiesKeeper(
         final Class< ? > podClass,
+        final Map< String, Method > converters,
         final Map< String, Object > values
     ) {
       this.podClass = podClass ;
+      this.converters = converters ;
       this.values = ImmutableMap.copyOf( values ) ;
     }
 
@@ -145,13 +258,20 @@ public final class Pod {
       final String methodName = method.getName() ;
       if( methodName.startsWith( "with" ) ) {
         final String propertyName = methodName.substring( 4 ) ;
+        final Object updateValue ;
+        final Method converter = converters.get( propertyName ) ;
+        if( converter == null ) {
+          updateValue = args[ 0 ] ;
+        } else {
+          updateValue = converter.invoke( null, args ) ;
+        }
         final Map< String, Object > updatedValues = Maps.newHashMap() ;
         updatedValues.putAll( values ) ;
-        updatedValues.put( propertyName, args[ 0 ] ) ;
+        updatedValues.put( propertyName, updateValue ) ;
         return Proxy.newProxyInstance(
             Pod.class.getClassLoader(),
             new Class< ? >[] { podClass },
-            new PropertiesKeeper( podClass, updatedValues )
+            new PropertiesKeeper( podClass, converters, updatedValues )
         ) ;
       }
       if( methodName.startsWith( "get" ) ) {
@@ -170,7 +290,7 @@ public final class Pod {
     }
   }
 
-
+  @Retention( RetentionPolicy.RUNTIME )
   public @interface Converter {
     Class< ? > converterClass() ; 
   }
