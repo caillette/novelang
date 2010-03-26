@@ -87,14 +87,16 @@ public class SimpleLevelGenerator implements Generator< Level > {
     }
 
     if( stack.maximumLevelReached() ) {
-      if( ! lockLevelCounterAtDepthOne || stack.getHeight() > 2 ) {
-        stack = stack.pop() ;
-      }
+      stack = stack.pop() ;
       stack.incrementLevelCounter() ;
     } else {
       if( sublevelProbability.hit( random ) && stack.getHeight() < maximumStackHeight ) {
-        final int sublevelCount = this.sublevelCountRange.boundInteger( random ) ;
-        stack = new Stack( stack, sublevelCount ) ;
+        if( lockLevelCounterAtDepthOne && stack.getHeight() == 1 ) {
+          stack = new Stack( stack, null /* No maximum level. */ ) ;
+        } else {
+          final int sublevelCount = this.sublevelCountRange.boundInteger( random ) ;
+          stack = new Stack( stack, sublevelCount ) ;
+        }
       } else {
         stack.incrementLevelCounter() ;
       }
@@ -130,16 +132,22 @@ public class SimpleLevelGenerator implements Generator< Level > {
     private int levelCounter ;
 
     public Stack( final int initialLevelCounter ) {
-      previous = null ;
-      maximumLevel = null ;
-      levelCounter = initialLevelCounter ;
+      this( null, null, initialLevelCounter ) ;
     }
 
-    public Stack( final Stack previous, final int maximumLevel ) {
+    public Stack( final Stack previous, final Integer maximumLevel ) {
+      this( previous, maximumLevel, 1 ) ;
+    }
+
+    public Stack(
+        final Stack previous,
+        final Integer maximumLevel,
+        final int initialLevelCounter
+    ) {
       this.previous = previous ;
-      Preconditions.checkArgument( maximumLevel >= 0 ) ;
+      Preconditions.checkArgument( maximumLevel == null || maximumLevel >= 0, maximumLevel ) ;
       this.maximumLevel = maximumLevel ;
-      levelCounter = 1 ;
+      levelCounter = initialLevelCounter ;
     }
 
     public boolean isBottom() {
@@ -161,12 +169,11 @@ public class SimpleLevelGenerator implements Generator< Level > {
       return isBottom() ? 1 : 1 + previous.getHeight() ;
     }
 
-    /** @return true if maximum not reached. */
     public void incrementLevelCounter() {
-      if( ! maximumLevelReached() ) {
-//        throw new IllegalStateException( "Don't increment when maximum reached" ) ;
-        levelCounter++ ;
+      if( maximumLevelReached() ) {
+        throw new IllegalStateException( "Don't increment when maximum reached" ) ;
       }
+      levelCounter++ ;
     }
 
     public boolean maximumLevelReached() {
