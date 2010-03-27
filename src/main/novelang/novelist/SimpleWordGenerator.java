@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.google.common.base.Preconditions;
+import novelang.system.Pod;
 
 /**
  * Endless iterator creating {@link novelang.novelist.Word} instances.
@@ -35,10 +36,10 @@ public class SimpleWordGenerator implements Generator.ForWord {
 
 
   public SimpleWordGenerator( final Configuration configuration ) {
-    this.random = configuration.random ;
-    this.signCount = configuration.signCount ;
-    this.distribution = LetterDistribution.getFrequency( configuration.locale ) ;
-    this.circumflex = configuration.circumflex ;
+    this.random = configuration.getRandom() ;
+    this.signCount = configuration.getSignCount() ;
+    this.distribution = LetterDistribution.getFrequency( configuration.getLocale() ) ;
+    this.circumflex = configuration.getCircumflex() ;
   }
 
 
@@ -76,22 +77,21 @@ public class SimpleWordGenerator implements Generator.ForWord {
 
 
 
-  public final static class Configuration {
-    private final Locale locale ;
-    private final Random random ;
-    private final Bounded.IntegerInclusiveExclusive signCount ;
-    private final Bounded.Percentage circumflex ;
+  @Pod.Converter( converterClass = Bounded.class )
+  public interface Configuration {
 
-    public Configuration(
-        final Locale locale,
-        final Random random,
-        final Bounded.IntegerInclusiveExclusive signCount,
-        final Bounded.Percentage circumflex
-    ) {
-      this.locale = Preconditions.checkNotNull( locale ) ;
-      this.random = Preconditions.checkNotNull( random ) ;
-      this.signCount = Preconditions.checkNotNull( signCount ) ;
-      this.circumflex = Preconditions.checkNotNull( circumflex ) ;
-    }
+    Locale getLocale() ;
+    Configuration withLocale( Locale locale ) ;
+    
+    Random getRandom() ;
+    Configuration withRandom( Random random ) ;
+    
+    Bounded.IntegerInclusiveExclusive getSignCount() ;
+    Configuration withSignCount( int lowerBound, int upperBound ) ;
+    
+    Bounded.Percentage getCircumflex() ;
+    Configuration withCircumflex( float probability ) ;
+    
+    
   }
 }

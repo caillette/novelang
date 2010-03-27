@@ -30,37 +30,39 @@ public interface GenerationDefaults {
 
   Random RANDOM = new Random( 0L ) ;
 
-  SimpleWordGenerator.Configuration FOR_WORDS = new SimpleWordGenerator.Configuration(
-      SupportedLocales.DEFAULT_LOCALE,
-      RANDOM,
-      Bounded.newInclusiveRange( 2, 12 ),
-      Bounded.newPercentage( 0.01f )
-  ) ;
+  SimpleWordGenerator.Configuration FOR_WORDS = Pod.create( SimpleWordGenerator.Configuration.class )
+      .withLocale( SupportedLocales.DEFAULT_LOCALE )
+      .withRandom( RANDOM )
+      .withSignCount( 2, 12 )
+      .withCircumflex( 0.01f )
+  ;
 
-  SimpleSentenceGenerator.Configuration FOR_SENTENCES = new SimpleSentenceGenerator.Configuration(
-      SupportedLocales.DEFAULT_LOCALE,
-      RANDOM,
-      new SimpleWordGenerator( FOR_WORDS ),
-      Bounded.newInclusiveRange( 5, 20 ),
-      Bounded.newPercentage( 18.0f ),
-      true
-  ) ;
+  SimpleSentenceGenerator.Configuration FOR_SENTENCES = 
+      Pod.create( SimpleSentenceGenerator.Configuration.class )
+      .withLocale( SupportedLocales.DEFAULT_LOCALE )
+      .withRandom( RANDOM )
+      .withWordGenerator( new SimpleWordGenerator( FOR_WORDS ) )
+      .withWordCount( 5, 20 )
+      .withMiddlePunctuationSign( 18.0f )
+      .withEndingPunctuation( true )
+  ;
 
-  SimpleSentenceGenerator.Configuration FOR_TITLES = new SimpleSentenceGenerator.Configuration(
-      SupportedLocales.DEFAULT_LOCALE,
-      RANDOM,
-      new SimpleWordGenerator( FOR_WORDS ),
-      Bounded.newInclusiveRange( 1, 4 ),
-      Bounded.newPercentage( 10.0f ),
-      false
-  ) ;
+  SimpleSentenceGenerator.Configuration FOR_TITLES = 
+      Pod.create( SimpleSentenceGenerator.Configuration.class )
+      .withLocale( SupportedLocales.DEFAULT_LOCALE )
+      .withRandom( RANDOM )
+      .withWordGenerator( new SimpleWordGenerator( FOR_WORDS ) )
+      .withWordCount( 1, 4 )
+      .withMiddlePunctuationSign( 10.0f )
+      .withEndingPunctuation( false )
+  ;
 
-  SimpleBodyGenerator.Configuration FOR_BODIES = new SimpleBodyGenerator.Configuration(
-      RANDOM,
-      Bounded.newInclusiveRange( 1, 4 ),
-      Bounded.newInclusiveRange( 1, 5 ),
-      new SimpleSentenceGenerator( FOR_SENTENCES )
-  ) ;
+  SimpleBodyGenerator.Configuration FOR_BODIES = Pod.create( SimpleBodyGenerator.Configuration.class )
+      .withRandom( RANDOM )
+      .withParagraphCountRange( 1, 4 )
+      .withSentenceCountRange( 1, 5 )
+      .withSentenceGenerator( new SimpleSentenceGenerator( FOR_SENTENCES ) )
+  ;
 
   Set< Tag > NO_TAGS = ImmutableSet.of() ;
 
@@ -72,7 +74,7 @@ public interface GenerationDefaults {
   ) ;
 
   SimpleLevelGenerator.Configuration FOR_LEVELS =
-      Pod.make( SimpleLevelGenerator.Configuration.class )
+      Pod.create( SimpleLevelGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withMaximumDepth( 3 )
       .withSublevelCountRange( 0, 3 )

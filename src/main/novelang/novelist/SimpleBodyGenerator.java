@@ -21,6 +21,7 @@ import java.util.Random;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import novelang.system.Pod;
 
 /**
  * @author Laurent Caillette
@@ -33,10 +34,10 @@ public class SimpleBodyGenerator implements Generator< Body > {
   private final Generator< Sentence > sentenceGenerator ;
 
   public SimpleBodyGenerator( final Configuration configuration ) {
-    random = configuration.random ;
-    sentenceCountRange = configuration.sentenceCountRange ;
-    paragraphCountRange = configuration.paragraphCountRange ;
-    sentenceGenerator = configuration.sentenceGenerator ;
+    random = configuration.getRandom() ;
+    sentenceCountRange = configuration.getSentenceCountRange() ;
+    paragraphCountRange = configuration.getParagraphCountRange() ;
+    sentenceGenerator = configuration.getSentenceGenerator() ;
   }
 
   public Body generate() {
@@ -54,22 +55,18 @@ public class SimpleBodyGenerator implements Generator< Body > {
     return new Body( textElements ) ;
   }
 
-  public static final class Configuration {
-    private final Random random ;
-    private final Bounded.IntegerInclusiveExclusive sentenceCountRange ;
-    private final Bounded.IntegerInclusiveExclusive paragraphCountRange ;
-    private final Generator< Sentence > sentenceGenerator ;
-
-    public Configuration(
-        final Random random,
-        final Bounded.IntegerInclusiveExclusive sentenceCountRange,
-        final Bounded.IntegerInclusiveExclusive paragraphCountRange,
-        final Generator< Sentence > sentenceGenerator
-    ) {
-      this.random = Preconditions.checkNotNull( random ) ;
-      this.sentenceCountRange = Preconditions.checkNotNull( sentenceCountRange ) ;
-      this.paragraphCountRange = Preconditions.checkNotNull( paragraphCountRange ) ;
-      this.sentenceGenerator = Preconditions.checkNotNull( sentenceGenerator ) ;
-    }
+  @Pod.Converter( converterClass = Bounded.class ) 
+  public interface Configuration {
+    Random getRandom() ;
+    Configuration withRandom( Random random ) ;
+    
+    Bounded.IntegerInclusiveExclusive getSentenceCountRange() ;
+    Configuration withSentenceCountRange( int lowerBound, int upperBound ) ;
+    
+    Bounded.IntegerInclusiveExclusive getParagraphCountRange() ;
+    Configuration withParagraphCountRange( int lowerBound, int upperBound ) ;
+    
+    Generator< Sentence > getSentenceGenerator() ;
+    Configuration withSentenceGenerator( Generator< Sentence > generator ) ;
   }
 }

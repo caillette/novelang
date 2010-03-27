@@ -22,6 +22,7 @@ import java.util.Random;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import novelang.system.Pod;
 
 /**
  * @author Laurent Caillette
@@ -37,12 +38,12 @@ public class SimpleSentenceGenerator implements Generator< Sentence > {
 
 
   public SimpleSentenceGenerator( final Configuration configuration ) {
-    this.locale = configuration.locale ;
-    this.random = configuration.random ;
-    this.wordGenerator = configuration.wordGenerator ;
-    this.wordCountRange = configuration.wordCount ;
-    this.middlePunctuationSign = configuration.middlePunctuationSign ;
-    this.hasEndingPunctuation = configuration.hasEndingPunctuation ;
+    this.locale = configuration.getLocale() ;
+    this.random = configuration.getRandom() ;
+    this.wordGenerator = configuration.getWordGenerator() ;
+    this.wordCountRange = configuration.getWordCount() ;
+    this.middlePunctuationSign = configuration.getMiddlePunctuationSign() ;
+    this.hasEndingPunctuation = configuration.getEndingPunctuation() ;
   }
 
   public Sentence generate() {
@@ -73,29 +74,27 @@ public class SimpleSentenceGenerator implements Generator< Sentence > {
   }
 
 
-  public final static class Configuration {
-    private final Locale locale ;
-    private final Random random ;
-    private final ForWord wordGenerator ;
-    private final Bounded.IntegerInclusiveExclusive wordCount ;
-    private final Bounded.Percentage middlePunctuationSign;
-    private final boolean hasEndingPunctuation ;
+  @Pod.Converter( converterClass = Bounded.class )
+  public interface Configuration {
 
-    public Configuration(
-        final Locale locale,
-        final Random random,
-        final ForWord wordGenerator,
-        final Bounded.IntegerInclusiveExclusive wordCount,
-        final Bounded.Percentage middlePunctuationSign,
-        final boolean hasEndingPunctuation
-    ) {
-      this.locale = Preconditions.checkNotNull( locale ) ;
-      this.random = Preconditions.checkNotNull( random ) ;
-      this.wordGenerator = Preconditions.checkNotNull( wordGenerator ) ;
-      this.wordCount = Preconditions.checkNotNull( wordCount ) ;
-      this.middlePunctuationSign = Preconditions.checkNotNull( middlePunctuationSign) ;
-      this.hasEndingPunctuation = hasEndingPunctuation ;
-    }
+    Locale getLocale() ;
+    Configuration withLocale( Locale locale ) ;
+    
+    Random getRandom() ;
+    Configuration withRandom( Random random ) ;
+    
+    ForWord getWordGenerator() ;
+    Configuration withWordGenerator( ForWord wordGenerator ) ;
+    
+    Bounded.IntegerInclusiveExclusive getWordCount() ;
+    Configuration withWordCount( int lowerBound, int upperBound ) ;
+    
+    Bounded.Percentage getMiddlePunctuationSign() ;
+    Configuration withMiddlePunctuationSign( float probability ) ;
+    
+    boolean getEndingPunctuation() ;
+    Configuration withEndingPunctuation( boolean hasEnding ) ;
+
   }
 
 }

@@ -9,8 +9,10 @@
  */
 package novelang.system;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -38,7 +40,7 @@ public interface Vanilla {
   Vanilla withFloat( float newFloat ) ;
 
 }</pre>
- * Basing on {@code get} and {@code with} prefixes and type similarity, the {@link Pod#make(Class)}
+ * Basing on {@code get} and {@code with} prefixes and type similarity, the {@link Pod#create(Class)}
  * method generates an object instance behaving as one could expect:
  * <pre>
 final Vanilla initial = Pod.make( Vanilla.class ) ;
@@ -71,7 +73,7 @@ public final class Pod {
 
   private Pod() { }
 
-  public static< T > T make( final Class< T > podClass ) {
+  public static< T > T create( final Class< T > podClass ) {
 
     Preconditions.checkArgument( podClass.isInterface() ) ;
     final Method[] podMethods = podClass.getMethods() ;
@@ -118,7 +120,7 @@ public final class Pod {
       final String propertyName = entry.getKey() ;
       final PropertyDeclaration declaration = entry.getValue() ;
       if( declaration.getter == null ) {
-        throw new BadDeclarationException( "Missing getXxx method" ) ;
+        throw new BadDeclarationException( "Missing get" + propertyName + " method" ) ;
       }
       if( entry.getValue().updater == null ) {
         throw new BadDeclarationException( "Missing with" + entry.getKey() + " method" ) ;
@@ -291,6 +293,7 @@ public final class Pod {
   }
 
   @Retention( RetentionPolicy.RUNTIME )
+  @Target( ElementType.TYPE )
   public @interface Converter {
     Class< ? > converterClass() ; 
   }

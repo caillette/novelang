@@ -23,34 +23,34 @@ public class PodTest {
 
   @Test
   public void emptyPod() {
-    Pod.make( Empty.class ) ;
+    Pod.create( Empty.class ) ;
   }
 
   @Test( expected = Pod.BadDeclarationException.class )
   public void typeMismatch() {
-    Pod.make( Broken1.class ) ;
+    Pod.create( Broken1.class ) ;
   }
 
   @Test( expected = Pod.BadDeclarationException.class )
   public void missingWith() {
-    Pod.make( Broken2.class ) ;
+    Pod.create( Broken2.class ) ;
   }
 
   @Test( expected = Pod.BadDeclarationException.class )
   public void missingGet() {
-    Pod.make( Broken3.class ) ;
+    Pod.create( Broken3.class ) ;
   }
 
   @Test( expected = Pod.BadDeclarationException.class )
   public void unknownMethodPrefix() {
-    Pod.make( Broken4.class ) ;
+    Pod.create( Broken4.class ) ;
   }
 
 
 
   @Test
   public void vanillaPod() {
-    final Vanilla initial = Pod.make( Vanilla.class ) ;
+    final Vanilla initial = Pod.create( Vanilla.class ) ;
     assertNull( initial.getString() ) ;
     assertEquals( 0L, ( long ) initial.getInt() ) ;
     final Vanilla updated = initial.withInt( 1 ).withString( "Foo" ).withFloat( 2.0f ) ;
@@ -65,7 +65,7 @@ public class PodTest {
 
   @Test //@Ignore( "Not implemented" )
   public void conversion() {
-    final ConvertiblePod initial = Pod.make( ConvertiblePod.class ) ;
+    final ConvertiblePod initial = Pod.create( ConvertiblePod.class ) ;
     final ConvertiblePod updated = initial.withString( 1, 2.3f ) ;
     assertEquals( "1, 2.3", updated.getString() ) ;
     assertNull( initial.getString() ) ;
