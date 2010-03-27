@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import novelang.system.Log;
@@ -40,14 +40,20 @@ public class Novelist {
   ) throws IOException {
     final List< GhostWriter > ghostWriterList = Lists.newArrayList() ;
     for( int i = 1 ; i <= ghostWriterCount ; i ++ ) {
-      final File file = createFreshFile( fileNamePrototype, i ) ;
+      final File file = createFreshNovellaFile( fileNamePrototype, i ) ;
       ghostWriterList.add( new GhostWriter( file, generatorSupplier.get( i ) ) ) ;
     }
+    createNovebook( FilenameUtils.getPath( fileNamePrototype ) ) ;
     ghostWriters = ImmutableList.copyOf( ghostWriterList ) ;
   }
 
-  private static File createFreshFile( final String prototype, final int counter ) throws IOException {
-    final File targetFile = new File( prototype + "-" + counter + ".nlp" ) ;
+  private static final String BOOK_FILE_NAME = "book.nlb" ;
+  private static final String BOOK_CONTENT = "insert file:." ;
+
+  private static File createFreshNovellaFile( final String prototype, final int counter )
+      throws IOException
+  {
+    final File targetFile = new File( prototype + "-" + String.format( "%04d", counter ) + ".nlp" ) ;
     if( targetFile.getParentFile().mkdirs() ) {
       LOG.info( "Created directory '" + targetFile.getParentFile() + "'" ) ;
     }
@@ -62,6 +68,12 @@ public class Novelist {
     return targetFile ;
   }
 
+
+  private static void createNovebook( final String directoryName ) throws IOException {
+    final File directory = new File( directoryName ) ;
+    final File bookFile = new File( directory, BOOK_FILE_NAME ) ;
+    FileUtils.writeStringToFile( bookFile, BOOK_CONTENT ) ;
+  }
 
   public void write( final int iterationCount ) throws IOException {
     for( final GhostWriter ghostWriter : ghostWriters ) {
