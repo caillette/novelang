@@ -25,6 +25,8 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 
 /**
+ * Generates multiple {@link novelang.part.Part}s incrementally. 
+ *
  * @author Laurent Caillette
  */
 public class Novelist {
@@ -118,7 +120,7 @@ public class Novelist {
   public static void main( final String[] args ) throws IOException {
     if( args.length < 1 ) {
       System.out.println( Novelist.class.getName() +
-          "<target-file-noprefix> [ [ghostwriter-count] [iteration-count] ]" ) ;
+          "<target-file-noprefix> [ ghostwriter-count [iteration-count] ]" ) ;
       System.exit( 1 ) ;
     }
 

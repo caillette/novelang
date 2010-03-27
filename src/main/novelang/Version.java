@@ -57,7 +57,7 @@ public final class Version {
    * with modified {@link #PRODUCT_VERSION_AS_STRING} we don't want to carry additional
    * dependencies. 
    */
-  private void checkArgument( final String message, final boolean condition ) {
+  private static void checkArgument( final String message, final boolean condition ) {
     if( ! condition ) {
       throw new IllegalArgumentException( message ) ;
     }
