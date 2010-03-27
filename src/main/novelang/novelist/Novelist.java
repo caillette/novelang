@@ -9,20 +9,23 @@
  */
 package novelang.novelist;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Generates multiple {@link novelang.part.Part}s incrementally. 
@@ -33,32 +36,53 @@ public class Novelist {
 
   private static final Log LOG = LogFactory.getLog( Novelist.class );
 
-  private final List< GhostWriter > ghostWriters ;
+  private final File directory ;
+  private final String filenamePrototype ;
+  private final GeneratorSupplier< Level > generatorSupplier ;
+  private final List< GhostWriter > ghostWriters = Lists.newArrayList() ;
+  
 
   public Novelist(
+      final File directory,
       final String fileNamePrototype,
       final GeneratorSupplier< Level > generatorSupplier,
       final int ghostWriterCount
   ) throws IOException {
-    final List< GhostWriter > ghostWriterList = Lists.newArrayList() ;
+    checkArgument( directory.isDirectory() ) ;
+    this.directory = directory ;
+    checkArgument( ! StringUtils.isBlank( fileNamePrototype ) ) ;
+    this.filenamePrototype = fileNamePrototype ;
+    this.generatorSupplier = checkNotNull( generatorSupplier ) ;
+    createFreshDirectory( directory ) ;
     for( int i = 1 ; i <= ghostWriterCount ; i ++ ) {
-      final File file = createFreshNovellaFile( fileNamePrototype, i ) ;
-      ghostWriterList.add( new GhostWriter( file, generatorSupplier.get( i ) ) ) ;
+      addGhostWriter() ;
     }
-    createNovebook( FilenameUtils.getPath( fileNamePrototype ) ) ;
-    ghostWriters = ImmutableList.copyOf( ghostWriterList ) ;
+    createNovebook( directory ) ;
   }
 
   private static final String BOOK_FILE_NAME = "book.nlb" ;
   private static final String BOOK_CONTENT = "insert file:." ;
 
-  private static File createFreshNovellaFile( final String prototype, final int counter )
+  private static void createFreshDirectory( final File directory ) throws IOException {
+    if( directory.exists() ) {
+      FileUtils.deleteDirectory( directory ) ;
+      LOG.info( "Deleted directory '" + directory.getAbsolutePath() + "' and all its contents." ) ;
+    }
+    if( directory.mkdirs() ) {
+      LOG.info( "Created directory '" + directory.getAbsolutePath() + "'." ) ;
+    }
+    
+  }
+  
+  private static File createFreshNovellaFile( 
+      final File directory, 
+      final String prototype, 
+      final int counter 
+  )
       throws IOException
   {
-    final File targetFile = new File( prototype + "-" + String.format( "%04d", counter ) + ".nlp" ) ;
-    if( targetFile.getParentFile().mkdirs() ) {
-      LOG.info( "Created directory '" + targetFile.getParentFile() + "'" ) ;
-    }
+    final File targetFile = new File( 
+        directory, prototype + "-" + String.format( "%04d", counter ) + ".nlp" ) ;
     if( targetFile.exists() ) {
       if( ! targetFile.delete() ) {
         throw new IOException( "Could not delete file: '" + targetFile.getAbsolutePath() + "'" ) ;
@@ -71,15 +95,25 @@ public class Novelist {
   }
 
 
-  private static void createNovebook( final String directoryName ) throws IOException {
-    final File directory = new File( directoryName ) ;
+  private static void createNovebook( final File directory ) throws IOException {
     final File bookFile = new File( directory, BOOK_FILE_NAME ) ;
     FileUtils.writeStringToFile( bookFile, BOOK_CONTENT ) ;
+    LOG.info( "Created Novebook: " + bookFile.getAbsolutePath() ) ;
+  }
+  
+  public void addGhostWriter() throws IOException {
+    synchronized( ghostWriters ) {
+      final int ghostWriterIndex = ghostWriters.size() + 1 ;
+      final File file = createFreshNovellaFile( directory, filenamePrototype, ghostWriterIndex ) ;
+      ghostWriters.add( new GhostWriter( file, generatorSupplier.get( ghostWriterIndex ) ) ) ;
+    }
   }
 
   public void write( final int iterationCount ) throws IOException {
-    for( final GhostWriter ghostWriter : ghostWriters ) {
-      ghostWriter.write( iterationCount ) ;
+    synchronized( ghostWriters ) {
+      for( final GhostWriter ghostWriter : ghostWriters ) {
+        ghostWriter.write( iterationCount ) ;
+      }
     }
     LOG.info( "Writing done." ) ;
   }
@@ -139,6 +173,7 @@ public class Novelist {
     }
 
     new Novelist(
+        new File( "." ),
         args[ 0 ],
         new LevelGeneratorSupplierWithDefaults(), 
         ghostWriterCount

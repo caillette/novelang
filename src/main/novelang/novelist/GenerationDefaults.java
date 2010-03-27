@@ -42,7 +42,7 @@ public interface GenerationDefaults {
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
       .withWordGenerator( new SimpleWordGenerator( FOR_WORDS ) )
-      .withWordCount( 5, 20 )
+      .withWordCount( 3, 20 )
       .withMiddlePunctuationSign( 18.0f )
       .withEndingPunctuation( true )
   ;

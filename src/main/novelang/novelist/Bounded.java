@@ -71,6 +71,10 @@ public class Bounded {
       return value < other ;
     }
 
+    @Override
+    public String toString() {
+      return getClass().getSimpleName() + "[" + value + "]" ;
+    }
   }
 
 
