@@ -16,18 +16,9 @@
  */
 package novelang.daemon;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import novelang.TestResourceTree;
+import com.google.common.collect.Lists;
 import novelang.TestResourceTools;
+import novelang.TestResourceTree;
 import novelang.common.LanguageTools;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.filefixture.Resource;
@@ -36,27 +27,41 @@ import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HttpContext;
 import org.junit.After;
 import org.junit.Assert;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * End-to-end tests with {@link HttpDaemon} and the download of some generated documents.
@@ -79,7 +84,7 @@ public class HttpDaemonTest {
     save( "generated.nlp", generated ) ;
     final String normalizedNlpSource = LanguageTools.unixifyLineBreaks( nlpSource ) ;
     final String normalizedShaved = LanguageTools.unixifyLineBreaks( shaved ) ;
-    Assert.assertEquals( normalizedNlpSource, normalizedShaved ) ;
+    assertEquals( normalizedNlpSource, normalizedShaved ) ;
 
   }
 
@@ -102,7 +107,7 @@ public class HttpDaemonTest {
     final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
     final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
     LOG.debug( "Got headers: %s", headers ) ;
-    Assert.assertEquals( "application/pdf", headers[ 0 ].getValue() ) ;
+    assertEquals( "application/pdf", headers[ 0 ].getValue() ) ;
   }
 
   @Test
@@ -129,20 +134,22 @@ public class HttpDaemonTest {
     setup( resource ) ;
 
     final String brokentDocumentName = resource.getBaseName() + HTML ;
-    final HttpResponse httpResponse = followRedirection(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + brokentDocumentName ) ;
-    final String responseBody = httpResponse.getResponseBodyAsString() ;
+    final String brokenDocumentUrl =
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + brokentDocumentName ;
+    final ResponseSnapshot responseSnapshot = followRedirection(
+        brokenDocumentUrl ) ;
 
-    assertTrue( responseBody.contains( "Requested:" ) ) ;
+    assertTrue( responseSnapshot.getContent().contains( "Requested:" ) ) ;
 
     assertTrue(
         "Expected link to requested page",
-        responseBody.contains( brokentDocumentName )
+        responseSnapshot.getContent().contains( brokentDocumentName )
     ) ;
 
-    assertTrue(
-        "Expected path '" + brokentDocumentName + RequestTools.ERRORPAGE_SUFFIX + "'",
-        httpResponse.getPath().contains( brokentDocumentName + RequestTools.ERRORPAGE_SUFFIX )
+    assertEquals( 1L, ( long ) responseSnapshot.getLocationsRedirectedTo().size() ) ;
+    assertEquals(
+        brokenDocumentUrl + RequestTools.ERRORPAGE_SUFFIX,
+        responseSnapshot.getLocationsRedirectedTo().get( 0 ).getValue()
     ) ;
   }
 
@@ -151,13 +158,12 @@ public class HttpDaemonTest {
     final Resource resource = TestResourceTree.Served.GOOD_PART;
     setup( resource ) ;
 
-    final HttpResponse httpResponse = followRedirection(
+    final ResponseSnapshot responseSnapshot = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
         RequestTools.ERRORPAGE_SUFFIX
     ) ;
 
-    final String responseBody = getResponseBodyAsString( httpResponse ) ;
-    assertFalse( responseBody.contains( "Requested:" ) ) ;
+    assertFalse( responseSnapshot.getContent().contains( "Requested:" ) ) ;
 
   }
 
@@ -166,8 +172,9 @@ public class HttpDaemonTest {
     final Resource resource = TestResourceTree.Served.GOOD_PART;
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
-    final HttpResponse httpResponse = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT ) ;
-    checkDirectoryListing( httpResponse, resource ) ;
+    final ResponseSnapshot responseSnapshot =
+        followRedirection( "http://localhost:" + HTTP_DAEMON_PORT ) ;
+    checkDirectoryListing( responseSnapshot, resource ) ;
   }
 
   @Test
@@ -175,8 +182,9 @@ public class HttpDaemonTest {
       final Resource resource = TestResourceTree.Served.GOOD_PART;
       resourceInstaller.copyWithPath( resource ) ;
       setup() ;
-      final HttpResponse httpResponse = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT + "/" ) ;
-      checkDirectoryListing( httpResponse, resource ) ;
+    final String urlAsString = "http://localhost:" + HTTP_DAEMON_PORT + "/";
+    final ResponseSnapshot responseSnapshot = followRedirection( urlAsString ) ;
+      checkDirectoryListing( responseSnapshot, resource ) ;
   }
 
   @Test
@@ -185,14 +193,19 @@ public class HttpDaemonTest {
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
 
-    final HttpResponse method = followRedirection(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/",
+    final String urlAsString = "http://localhost:" + HTTP_DAEMON_PORT + "/";
+    final ResponseSnapshot responseSnapshot = followRedirection(
+        urlAsString,
         SAFARI_USER_AGENT
     ) ;
 
-    Assert.assertTrue( method.getPath().endsWith( "/" + DirectoryScanHandler.MIME_HINT ) ) ;
+    assertEquals( 1L, ( long ) responseSnapshot.getLocationsRedirectedTo().size() ) ;
+    assertEquals( 
+        urlAsString + DirectoryScanHandler.MIME_HINT,
+        responseSnapshot.getLocationsRedirectedTo().get( 0 ).getValue()
+    ) ;
 
-    checkDirectoryListing( method, resource ) ;
+    checkDirectoryListing( responseSnapshot, resource ) ;
 
   }
 
@@ -246,7 +259,7 @@ public class HttpDaemonTest {
   private static final Charset ISO_8859_1 = Charset.forName( "ISO_8859_1" );
 
 
-  private static final long TIMEOUT = 5000 ;
+  private static final int TIMEOUT = 5000 ;
 
 
 
@@ -375,59 +388,104 @@ public class HttpDaemonTest {
 
   private static final String DEFAULT_USER_AGENT = CAMINO_USER_AGENT ;
 
-  private HttpResponse followRedirection( final String originalUrlAsString ) throws IOException {
+  private ResponseSnapshot followRedirection( final String originalUrlAsString )
+      throws IOException
+  {
     return followRedirection( originalUrlAsString, DEFAULT_USER_AGENT ) ;
   }
 
-  private HttpResponse followRedirection(
+  /**
+   * Follows redirection using {@link HttpClient}'s default, and returns response body.
+   */
+  private ResponseSnapshot followRedirection(
       final String originalUrlAsString,
       final String userAgent
   ) throws IOException {
-    final HttpClient httpClient = new DefaultHttpClient() ;
+
+    final List< Header > locationsRedirectedTo = Lists.newArrayList() ;
+
+    final AbstractHttpClient httpClient = new DefaultHttpClient() ;
+
+    httpClient.setRedirectHandler( new RecordingRedirectHandler( locationsRedirectedTo ) ) ;
     final HttpParams parameters = new BasicHttpParams() ;
-    parameters.setLongParameter( CoreConnectionPNames.SO_TIMEOUT, TIMEOUT ) ;
+    parameters.setIntParameter( CoreConnectionPNames.SO_TIMEOUT, TIMEOUT ) ;
     final HttpGet httpGet = new HttpGet( originalUrlAsString ) ;
     httpGet.setHeader( "User-Agent", userAgent ); ;
     httpGet.setParams( parameters ) ;
 //    httpGet.setFollowRedirects( true ) ; // Automatic with HttpClient-4.01. 
     final HttpResponse httpResponse = httpClient.execute( httpGet ) ;
 
-    final String responseBody = getResponseBodyAsString( httpResponse ) ;
-    save( "generated.html", responseBody ) ;
+    final ResponseSnapshot responseSnapshot =
+        new ResponseSnapshot( httpResponse, locationsRedirectedTo ) ;
+    save( "generated.html", responseSnapshot.getContent() ) ;
 
-    return httpResponse ;
+    return responseSnapshot ;
   }
 
   private static void checkDirectoryListing(
-      final HttpResponse httpResponse,
+      final ResponseSnapshot responseSnapshot ,
       final Resource resource
   ) throws IOException {
-    final String responseBody = getResponseBodyAsString( httpResponse ) ;
     final String fullPath = resource.getFullPath().substring( 1 ) ; // Remove leading solidus.
     final String filePath = fullPath + resource.getBaseName() + ".html" ;
 
     LOG.debug( "fullpath='%s'", fullPath ) ;
     LOG.debug( "filepath='%s'", filePath ) ;
-    LOG.debug( "Checking response body: \n%s", responseBody ) ;
+    LOG.debug( "Checking response body: \n%s", responseSnapshot.getContent() ) ;
 
     final String expectedFullPath = "<a href=\"" + fullPath + "\">" + fullPath + "</a>" ;
     LOG.debug( "Expected fullPath='%s'", expectedFullPath ) ;
 
-    assertTrue( responseBody.contains( expectedFullPath ) ) ;
-    assertTrue( responseBody.contains( "<a href=\"" + filePath + "\">" + filePath + "</a>" ) ) ;
+    assertTrue( responseSnapshot.getContent().contains( expectedFullPath ) ) ;
+    assertTrue( responseSnapshot.getContent()
+        .contains( "<a href=\"" + filePath + "\">" + filePath + "</a>" ) ) ;
   }
 
-  private static String getResponseBodyAsString( final HttpResponse httpResponse ) 
-      throws IOException 
-  {
-    final InputStream content = httpResponse.getEntity().getContent() ;
-    final String body;
-    try {
-      body = IOUtils.toString( content, DefaultCharset.RENDERING.name() ) ;
-    } finally {
-      content.close() ; 
+
+  /**
+   * We need to read several values from an {@link HttpResponse} so it would be convenient
+   * to use it as return type for {@link HttpDaemonTest#followRedirection(String, String)}
+   * but it's impossible to read the streamable content more than once.
+   * We turn this by keeping a snapshot of everything needed.
+   */
+  private static class ResponseSnapshot {
+
+    private final String content ;
+    private final List< Header > locationsRedirectedTo ;
+
+    public ResponseSnapshot(
+        final HttpResponse httpResponse,
+        final List< Header > locationsRedirectedTo
+    ) throws IOException {
+      final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
+      httpResponse.getEntity().writeTo( outputStream ) ;
+      content = new String( outputStream.toByteArray(), DefaultCharset.RENDERING.name() ) ;
+      this.locationsRedirectedTo = locationsRedirectedTo ;
     }
-    return body ;
+
+    public String getContent() {
+      return content ;
+    }
+
+    public List< Header > getLocationsRedirectedTo() {
+      return locationsRedirectedTo ;
+    }
   }
 
+  private static class RecordingRedirectHandler extends DefaultRedirectHandler {
+
+    private final List<Header> locations ;
+
+    public RecordingRedirectHandler( final List< Header > locations ) {
+      this.locations = locations ;
+    }
+
+    @Override
+    public URI getLocationURI( final HttpResponse response, final HttpContext context )
+        throws ProtocolException
+    {
+      locations.addAll( Arrays.asList( response.getHeaders( "Location" ) ) ) ;
+      return super.getLocationURI( response, context );
+    }
+  }
 }
