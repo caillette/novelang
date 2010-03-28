@@ -19,6 +19,7 @@ package novelang.daemon;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -41,6 +42,14 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.HttpParams;
 import org.junit.After;
 import org.junit.Assert;
 import static org.junit.Assert.assertFalse;
@@ -88,10 +97,10 @@ public class HttpDaemonTest {
   public void correctMimeTypeForPdf() throws Exception {
     final Resource resource = TestResourceTree.Served.GOOD_PART;
     setup( resource ) ;
-    final GetMethod getMethod = new GetMethod(
+    final HttpGet httpGet = new HttpGet(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ;
-    new HttpClient().executeMethod( getMethod ) ;
-    final Header[] headers = getMethod.getResponseHeaders( "Content-type" ) ;
+    final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
+    final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
     LOG.debug( "Got headers: %s", headers ) ;
     Assert.assertEquals( "application/pdf", headers[ 0 ].getValue() ) ;
   }
@@ -120,9 +129,9 @@ public class HttpDaemonTest {
     setup( resource ) ;
 
     final String brokentDocumentName = resource.getBaseName() + HTML ;
-    final HttpMethod method = followRedirection(
+    final HttpResponse httpResponse = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + brokentDocumentName ) ;
-    final String responseBody = method.getResponseBodyAsString() ;
+    final String responseBody = httpResponse.getResponseBodyAsString() ;
 
     assertTrue( responseBody.contains( "Requested:" ) ) ;
 
@@ -133,7 +142,7 @@ public class HttpDaemonTest {
 
     assertTrue(
         "Expected path '" + brokentDocumentName + RequestTools.ERRORPAGE_SUFFIX + "'",
-        method.getPath().contains( brokentDocumentName + RequestTools.ERRORPAGE_SUFFIX )
+        httpResponse.getPath().contains( brokentDocumentName + RequestTools.ERRORPAGE_SUFFIX )
     ) ;
   }
 
@@ -142,12 +151,12 @@ public class HttpDaemonTest {
     final Resource resource = TestResourceTree.Served.GOOD_PART;
     setup( resource ) ;
 
-    final HttpMethod method = followRedirection(
+    final HttpResponse httpResponse = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
         RequestTools.ERRORPAGE_SUFFIX
     ) ;
 
-    final String responseBody = method.getResponseBodyAsString() ;
+    final String responseBody = getResponseBodyAsString( httpResponse ) ;
     assertFalse( responseBody.contains( "Requested:" ) ) ;
 
   }
@@ -157,8 +166,8 @@ public class HttpDaemonTest {
     final Resource resource = TestResourceTree.Served.GOOD_PART;
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
-    final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT ) ;
-    checkDirectoryListing( method, resource ) ;
+    final HttpResponse httpResponse = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT ) ;
+    checkDirectoryListing( httpResponse, resource ) ;
   }
 
   @Test
@@ -166,8 +175,8 @@ public class HttpDaemonTest {
       final Resource resource = TestResourceTree.Served.GOOD_PART;
       resourceInstaller.copyWithPath( resource ) ;
       setup() ;
-      final HttpMethod method = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT + "/" ) ;
-      checkDirectoryListing( method, resource ) ;
+      final HttpResponse httpResponse = followRedirection( "http://localhost:" + HTTP_DAEMON_PORT + "/" ) ;
+      checkDirectoryListing( httpResponse, resource ) ;
   }
 
   @Test
@@ -176,7 +185,7 @@ public class HttpDaemonTest {
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
 
-    final HttpMethod method = followRedirection(
+    final HttpResponse method = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/",
         SAFARI_USER_AGENT
     ) ;
@@ -237,7 +246,7 @@ public class HttpDaemonTest {
   private static final Charset ISO_8859_1 = Charset.forName( "ISO_8859_1" );
 
 
-  private static final int TIMEOUT = 5000 ;
+  private static final long TIMEOUT = 5000 ;
 
 
 
@@ -366,32 +375,34 @@ public class HttpDaemonTest {
 
   private static final String DEFAULT_USER_AGENT = CAMINO_USER_AGENT ;
 
-  private HttpMethod followRedirection( final String originalUrlAsString ) throws IOException {
+  private HttpResponse followRedirection( final String originalUrlAsString ) throws IOException {
     return followRedirection( originalUrlAsString, DEFAULT_USER_AGENT ) ;
   }
 
-  private HttpMethod followRedirection(
+  private HttpResponse followRedirection(
       final String originalUrlAsString,
       final String userAgent
   ) throws IOException {
-    final HttpClient httpClient = new HttpClient() ;
-    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( TIMEOUT ) ;
-    final HttpMethod method = new GetMethod( originalUrlAsString ) ;
-    method.setRequestHeader( "User-Agent", userAgent ) ;
-    method.setFollowRedirects( true ) ;
-    httpClient.executeMethod( method ) ;
+    final HttpClient httpClient = new DefaultHttpClient() ;
+    final HttpParams parameters = new BasicHttpParams() ;
+    parameters.setLongParameter( CoreConnectionPNames.SO_TIMEOUT, TIMEOUT ) ;
+    final HttpGet httpGet = new HttpGet( originalUrlAsString ) ;
+    httpGet.setHeader( "User-Agent", userAgent ); ;
+    httpGet.setParams( parameters ) ;
+//    httpGet.setFollowRedirects( true ) ; // Automatic with HttpClient-4.01. 
+    final HttpResponse httpResponse = httpClient.execute( httpGet ) ;
 
-    final String responseBody = method.getResponseBodyAsString() ;
+    final String responseBody = getResponseBodyAsString( httpResponse ) ;
     save( "generated.html", responseBody ) ;
 
-    return method;
+    return httpResponse ;
   }
 
-  private void checkDirectoryListing(
-      final HttpMethod method,
+  private static void checkDirectoryListing(
+      final HttpResponse httpResponse,
       final Resource resource
   ) throws IOException {
-    final String responseBody = method.getResponseBodyAsString() ;
+    final String responseBody = getResponseBodyAsString( httpResponse ) ;
     final String fullPath = resource.getFullPath().substring( 1 ) ; // Remove leading solidus.
     final String filePath = fullPath + resource.getBaseName() + ".html" ;
 
@@ -406,5 +417,17 @@ public class HttpDaemonTest {
     assertTrue( responseBody.contains( "<a href=\"" + filePath + "\">" + filePath + "</a>" ) ) ;
   }
 
+  private static String getResponseBodyAsString( final HttpResponse httpResponse ) 
+      throws IOException 
+  {
+    final InputStream content = httpResponse.getEntity().getContent() ;
+    final String body;
+    try {
+      body = IOUtils.toString( content, DefaultCharset.RENDERING.name() ) ;
+    } finally {
+      content.close() ; 
+    }
+    return body ;
+  }
 
 }
