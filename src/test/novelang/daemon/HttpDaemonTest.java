@@ -42,7 +42,6 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -68,6 +67,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "HardcodedFileSeparator" } )
 @RunWith( value = NameAwareTestClassRunner.class )
 public class HttpDaemonTest {
 
@@ -309,6 +309,7 @@ public class HttpDaemonTest {
 
 
 
+  @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
   private HttpDaemon httpDaemon ;
 
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
@@ -412,7 +413,6 @@ public class HttpDaemonTest {
     final HttpGet httpGet = new HttpGet( originalUrlAsString ) ;
     httpGet.setHeader( "User-Agent", userAgent ); ;
     httpGet.setParams( parameters ) ;
-//    httpGet.setFollowRedirects( true ) ; // Automatic with HttpClient-4.01. 
     final HttpResponse httpResponse = httpClient.execute( httpGet ) ;
 
     final ResponseSnapshot responseSnapshot =
@@ -474,7 +474,7 @@ public class HttpDaemonTest {
 
   private static class RecordingRedirectHandler extends DefaultRedirectHandler {
 
-    private final List<Header> locations ;
+    private final List< Header > locations ;
 
     public RecordingRedirectHandler( final List< Header > locations ) {
       this.locations = locations ;
