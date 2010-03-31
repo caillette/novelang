@@ -202,7 +202,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
 
     /**
      * Default value of 0 suitable for the first levels in a document.
-     * When generating one document with several {@link novelang.novelist.Novelist.GhostWriter}s,
+     * When generating one document with several {@link novelang.novelist.Novelist.Ghostwriter}s,
      * each one should have its own counter value.
      */
     int getLevelCounterStart() ;

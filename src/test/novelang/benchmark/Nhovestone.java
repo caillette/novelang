@@ -13,11 +13,21 @@ import novelang.novelist.Novelist;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.HttpParams;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URI;
 
 /**
  * @author Laurent Caillette
@@ -26,7 +36,7 @@ public class Nhovestone {
 
   private static final Log LOG = LogFactory.getLog( Nhovestone.class );
 
-  private final URL documentRequestUrl ;
+  private final URI documentRequestUri;
   private final File documentSourceDirectory ;
 
   
@@ -34,8 +44,10 @@ public class Nhovestone {
   private static final int WARMUP_DEFAULT_GHOSTWRITER_COUNT = 10;
   private static final int WARMUP_DEFAULT_ITERATION_COUNT_PER_PASS = 10 ;
 
-  public Nhovestone( final URL documentRequestUrl, final File documentSourceDirectory ) {
-    this.documentRequestUrl = documentRequestUrl;
+  public Nhovestone( final URL documentRequestUri, final File documentSourceDirectory )
+      throws URISyntaxException
+  {
+    this.documentRequestUri = documentRequestUri.toURI() ;
     this.documentSourceDirectory = documentSourceDirectory;
   }
 
@@ -62,7 +74,7 @@ public class Nhovestone {
   }
 
   /**
-   * Runs with no exit condition, increasing {@link novelang.novelist.Novelist.GhostWriter} count
+   * Runs with no exit condition, increasing {@link novelang.novelist.Novelist.Ghostwriter} count
    * and appending one level to everyone.
    */
   public void runForever() throws IOException {
@@ -74,31 +86,44 @@ public class Nhovestone {
         levelGenerator,
         0
     ) ;
-    while( true ) {
-      novelist.addGhostWriter() ;
+    boolean loop = true ;
+    while( loop ) {
+      novelist.addGhostwriter() ;
       novelist.write( 1 ) ;
-      requestWholeDocument() ;
+      loop = requestWholeDocument() > -1L ;
     }
     
   }
 
+  private static final int TIMEOUT_MILLISECONDS = 5 * 60 * 1000 ;
   private static final int BUFFER_SIZE = 1024 * 1024 ;
   private byte[] buffer = new byte[ BUFFER_SIZE ] ;
 
 
   public long requestWholeDocument() throws IOException {
-    final InputStream inputStream = documentRequestUrl.openStream() ;
-    try {
-      final long startTime = System.currentTimeMillis() ;
-      for( int read = 0 ; read > -1 ; read = inputStream.read( buffer ) ) { }
-      final long endTime = System.currentTimeMillis() ;
-      return endTime - startTime ;
-    } finally {
-      inputStream.close() ;
+    final AbstractHttpClient httpClient = new DefaultHttpClient() ;
+
+    final HttpParams parameters = new BasicHttpParams() ;
+    parameters.setIntParameter( CoreConnectionPNames.SO_TIMEOUT, TIMEOUT_MILLISECONDS ) ;
+    final HttpGet httpGet = new HttpGet( documentRequestUri ) ;
+    httpGet.setParams( parameters ) ;
+    final HttpResponse httpResponse = httpClient.execute( httpGet ) ;
+    if( httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK ) {
+      final InputStream inputStream = httpResponse.getEntity().getContent() ;
+      try {
+        final long startTime = System.currentTimeMillis() ;
+        for( int read = 0 ; read > -1 ; read = inputStream.read( buffer ) ) { }
+        final long endTime = System.currentTimeMillis() ;
+        return endTime - startTime ;
+      } finally {
+        inputStream.close() ;
+      }
+    } else {
+      return -1L ;
     }
   }
 
-  public static void main( final String[] args ) throws IOException {
+  public static void main( final String[] args ) throws IOException, URISyntaxException {
     new Nhovestone(
         new URL( "http://localhost:8080/scratch/novelist/book.html" ),
         new File( "scratch/novelist" ) 
