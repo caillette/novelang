@@ -9,7 +9,6 @@
  */
 package novelang.novelist;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import novelang.system.Log;
 import novelang.system.LogFactory;
@@ -39,14 +38,14 @@ public class Novelist {
   private final File directory ;
   private final String filenamePrototype ;
   private final GeneratorSupplier< Level > generatorSupplier ;
-  private final List< GhostWriter > ghostWriters = Lists.newArrayList() ;
-  
+  private final List<Ghostwriter> ghostwriters = Lists.newArrayList() ;
+
 
   public Novelist(
       final File directory,
       final String fileNamePrototype,
       final GeneratorSupplier< Level > generatorSupplier,
-      final int ghostWriterCount
+      final int ghostwriterCount
   ) throws IOException {
     checkArgument( directory.isDirectory() ) ;
     this.directory = directory ;
@@ -54,8 +53,8 @@ public class Novelist {
     this.filenamePrototype = fileNamePrototype ;
     this.generatorSupplier = checkNotNull( generatorSupplier ) ;
     createFreshDirectory( directory ) ;
-    for( int i = 1 ; i <= ghostWriterCount ; i ++ ) {
-      addGhostWriter() ;
+    for( int i = 1 ; i <= ghostwriterCount ; i ++ ) {
+      addGhostwriter() ;
     }
     createNovebook( directory ) ;
   }
@@ -101,30 +100,41 @@ public class Novelist {
     LOG.info( "Created Novebook: " + bookFile.getAbsolutePath() ) ;
   }
   
-  public void addGhostWriter() throws IOException {
-    synchronized( ghostWriters ) {
-      final int ghostWriterIndex = ghostWriters.size() + 1 ;
-      final File file = createFreshNovellaFile( directory, filenamePrototype, ghostWriterIndex ) ;
-      ghostWriters.add( new GhostWriter( file, generatorSupplier.get( ghostWriterIndex ) ) ) ;
+  public void addGhostwriter() throws IOException {
+    synchronized( ghostwriters ) {
+      final int ghostwriterIndex = ghostwriters.size() + 1 ;
+      final File file = createFreshNovellaFile( directory, filenamePrototype, ghostwriterIndex ) ;
+      ghostwriters.add( new Ghostwriter( file, generatorSupplier.get( ghostwriterIndex ) ) ) ;
+    }
+  }
+
+  public void addGhostwriter( final int iterationCountForNewGhostwriter ) throws IOException {
+    final Ghostwriter newGhostwriter ;
+    synchronized( ghostwriters ) {
+      final int ghostwriterIndex = ghostwriters.size() + 1 ;
+      final File file = createFreshNovellaFile( directory, filenamePrototype, ghostwriterIndex ) ;
+      newGhostwriter = new Ghostwriter( file, generatorSupplier.get( ghostwriterIndex ) );
+      ghostwriters.add( newGhostwriter ) ;
+      newGhostwriter.write( iterationCountForNewGhostwriter ) ;
     }
   }
 
   public void write( final int iterationCount ) throws IOException {
-    synchronized( ghostWriters ) {
-      for( final GhostWriter ghostWriter : ghostWriters ) {
-        ghostWriter.write( iterationCount ) ;
+    synchronized( ghostwriters ) {
+      for( final Ghostwriter ghostwriter : ghostwriters ) {
+        ghostwriter.write( iterationCount ) ;
       }
     }
     LOG.info( "Writing done." ) ;
   }
 
-  private static class GhostWriter {
+  private static class Ghostwriter {
     private final String name ;
     private final File file ;
     private final Generator< ? extends TextElement > generator ;
-    private static final Log WRITER_LOG = LogFactory.getLog( GhostWriter.class ) ;
+    private static final Log WRITER_LOG = LogFactory.getLog( Ghostwriter.class ) ;
 
-    private GhostWriter(
+    private Ghostwriter(
         final File file,
         final Generator< ? extends TextElement > generator
     ) {
@@ -158,11 +168,11 @@ public class Novelist {
       System.exit( 1 ) ;
     }
 
-    final int ghostWriterCount ;
+    final int ghostwriterCount ;
     if( args.length < 2 ) {
-      ghostWriterCount = DEFAULT_GHOSTWRITER_COUNT ;
+      ghostwriterCount = DEFAULT_GHOSTWRITER_COUNT ;
     } else {
-      ghostWriterCount = Integer.parseInt( args[ 1 ] ) ;
+      ghostwriterCount = Integer.parseInt( args[ 1 ] ) ;
     }
 
     final int iterationCount ;
@@ -176,7 +186,7 @@ public class Novelist {
         new File( "." ),
         args[ 0 ],
         new LevelGeneratorSupplierWithDefaults(), 
-        ghostWriterCount
+        ghostwriterCount
     ).write( iterationCount ) ;
   }
 
