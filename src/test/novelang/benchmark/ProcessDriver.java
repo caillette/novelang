@@ -120,8 +120,8 @@ public class ProcessDriver {
     return new InputStreamWatcher( standardOutput ) {
       @Override
       protected void interpretLine( final String line ) {
-        LOG.debug( "Standard output from supervised process: " + line ) ;
-        if( startupSemaphore.availablePermits() > 0 && startupSensor.apply( line ) ) {
+        LOG.debug( "Standard output from supervised process: >>> " + line ) ;
+        if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
           startupSemaphore.release() ;
         }
       }
@@ -138,7 +138,7 @@ public class ProcessDriver {
     return new InputStreamWatcher( standardError ) {
       @Override
       protected void interpretLine( final String line ) {
-        LOG.warn( "Error from supervised process: " + line ) ;
+        LOG.warn( "Error from supervised process: >>> " + line ) ;
       }
 
       @Override
@@ -150,12 +150,18 @@ public class ProcessDriver {
 
 
   private void handleThrowableFromProcess( final Throwable throwable ) {
+    final boolean shouldLog ;
     synchronized( stateLock ) {
       if( state != State.SHUTTINGDOWN && state != State.TERMINATED ) {
         state = State.BROKEN ;
+        shouldLog = false ;
+      } else {
+        shouldLog = true ;
       }
     }
-    LOG.error( "Throwable caught while reading supervised process stream", throwable ) ;
+    if( shouldLog ) {
+      LOG.error( "Throwable caught while reading supervised process stream", throwable ) ;
+    }
   }
 
 
@@ -195,18 +201,24 @@ public class ProcessDriver {
     }
 
     public final void run() {
-      while( ! Thread.currentThread().isInterrupted() ) {
-        try {
-          interpretLine( reader.readLine() ) ;
-        } catch( Throwable t ) {
-          handleThrowable( t ) ;
-          break ;
-        } finally {
+      try {
+        while( ! Thread.currentThread().isInterrupted() ) {
           try {
-            cleanup() ;
-          } catch( IOException e ) {
-            handleThrowable( e ) ;
+            if( reader.ready() ) {
+              interpretLine( reader.readLine() ) ;
+            } else {
+              break ;
+            }
+          } catch( Throwable t ) {
+            handleThrowable( t ) ;
+            break ;
           }
+        }
+      } finally {
+        try {
+          cleanup() ;
+        } catch( IOException e ) {
+          handleThrowable( e ) ;
         }
       }
     }

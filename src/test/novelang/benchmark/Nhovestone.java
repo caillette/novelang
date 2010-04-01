@@ -9,9 +9,14 @@
  */
 package novelang.benchmark;
 
+import novelang.Version;
+import novelang.VersionFormatException;
 import novelang.novelist.Novelist;
+import novelang.system.EnvironmentTools;
+import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -28,6 +33,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Laurent Caillette
@@ -37,6 +43,7 @@ public class Nhovestone {
   private static final Log LOG = LogFactory.getLog( Nhovestone.class );
 
   private final URI documentRequestUri;
+  private final File benchmarkWorkingDirectory;
   private final File documentSourceDirectory ;
 
   
@@ -44,11 +51,16 @@ public class Nhovestone {
   private static final int WARMUP_DEFAULT_GHOSTWRITER_COUNT = 10;
   private static final int WARMUP_DEFAULT_ITERATION_COUNT_PER_PASS = 10 ;
 
-  public Nhovestone( final URL documentRequestUri, final File documentSourceDirectory )
+  public Nhovestone(
+      final URL documentRequestUri,
+      final File benchmarkWorkingDirectory,
+      final File documentSourceDirectory
+  )
       throws URISyntaxException
   {
     this.documentRequestUri = documentRequestUri.toURI() ;
-    this.documentSourceDirectory = documentSourceDirectory;
+    this.benchmarkWorkingDirectory = benchmarkWorkingDirectory;
+    this.documentSourceDirectory = documentSourceDirectory ;
   }
 
   public void warmup( final int passCount ) throws IOException {
@@ -123,11 +135,81 @@ public class Nhovestone {
     }
   }
 
-  public static void main( final String[] args ) throws IOException, URISyntaxException {
+  public void startAndStopHttpDaemon()
+      throws
+      VersionFormatException,
+      IOException,
+      ProcessDriver.ProcessCreationFailedException,
+      InterruptedException
+  {
+    final File contentDirectory = new File( benchmarkWorkingDirectory, "content" ) ;
+    createDirectoryForSure( contentDirectory ) ;
+
+    final Version version = Version.parse( "0.41.0" );
+
+    final File installationDirectory =
+        new File( new File( "distrib" ), "Novelang-" + version.getName() ) ;
+
+    final File applicationWorkingDirectory =
+        new File( benchmarkWorkingDirectory, version.getName() ) ;
+    createDirectoryForSure( applicationWorkingDirectory ) ;
+
+    final File logsDirectory = new File( applicationWorkingDirectory, "logs" ) ;
+    createDirectoryForSure( logsDirectory ) ;
+
+
+    final HttpDaemonDriver httpDaemonDriver = new HttpDaemonDriver(
+        Husk.create( HttpDaemonDriver.Configuration.class )
+        .withWorkingDirectory( applicationWorkingDirectory )
+        .withContentRootDirectory( contentDirectory )
+        .withJvmHeapSizeMegabytes( 32 )
+        .withInstallationDirectory( new File( "distrib" ) )
+        .withLogDirectory( logsDirectory )
+        .withVersion( version )
+        .withTcpPort( 8091 )
+    ) ;
+    httpDaemonDriver.start( 1L, TimeUnit.MINUTES ) ;
+
+    TimeUnit.SECONDS.sleep( 1L ) ;
+
+    httpDaemonDriver.shutdown( true ) ; // TODO send some preliminary signal.
+  }
+
+  private static void createDirectoryForSure( final File directory ) {
+    if( ! directory.exists() ) {
+      if( directory.mkdirs() ) {
+        LOG.debug( "Created directory '" + directory.getAbsolutePath() + "'" ) ;
+      }
+    }
+  }
+
+
+  private static File createBenchmarkWorkingDirectory() throws IOException {
+    final File workingDirectory = new File( "Nhovestone" ) ;
+    FileUtils.deleteDirectory( workingDirectory ) ;
+    if( ! workingDirectory.mkdirs() ) {
+      LOG.warn( "Didn't create working directory as expected: '" + workingDirectory + "'" ) ;
+    } ;
+    return workingDirectory ;
+  }
+
+  public static void main( final String[] args )
+      throws
+      IOException,
+      URISyntaxException,
+      ProcessDriver.ProcessCreationFailedException,
+      VersionFormatException,
+      InterruptedException
+  {
+
+    EnvironmentTools.logSystemProperties() ;
+
     new Nhovestone(
         new URL( "http://localhost:8080/scratch/novelist/book.html" ),
-        new File( "scratch/novelist" ) 
-    ).runForever() ;
+        createBenchmarkWorkingDirectory(),
+        new File( "scratch/novelist" )
+    ).startAndStopHttpDaemon() ;
+//    ).runForever() ;
 //    ).warmup( WARMUP_DEFAULT_PASS_COUNT ) ;
 
     System.exit( 0 ) ;

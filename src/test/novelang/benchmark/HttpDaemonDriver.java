@@ -21,9 +21,11 @@ import com.google.common.collect.ImmutableList;
 import novelang.Version;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.GenericParameters;
+import novelang.system.Husk;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,26 +49,31 @@ public class HttpDaemonDriver {
 
     final ImmutableList.Builder< String > optionsBuilder = new ImmutableList.Builder< String >() ;
 
-    optionsBuilder.add( "java" ) ; // TODO: use the path to current VM.
+//    optionsBuilder.add( SystemUtils.JAVA_HOME + "/bin/java" ) ;
+    optionsBuilder.add( "java" ) ; 
 
     optionsBuilder.add( "-Xmx" + checkNotNull( configuration.getJvmHeapSizeMegabytes() + "M" ) ) ;
 
     optionsBuilder.add( "-Djava.awt.headless=true" ) ;
 
-    for( final String processOption : configuration.getJvmOtherOptions() ) {
-      if( processOption.startsWith( "-Xmx" ) ) {
-        throw new IllegalArgumentException(
-            "Use method in " + Configuration.class.getName() + " to set -Xmx" ) ;
-      } else {
-        optionsBuilder.add( checkNotNull( processOption ) ) ;
+    optionsBuilder.add( "-d64" ) ;
+
+    final Iterable< String > otherJvmOptions = configuration.getJvmOtherOptions() ;
+    if( otherJvmOptions != null ) {
+      for( final String processOption : otherJvmOptions ) {
+        if( processOption.startsWith( "-Xmx" ) ) {
+          throw new IllegalArgumentException(
+              "Use method in " + Configuration.class.getName() + " to set -Xmx" ) ;
+        } else {
+          optionsBuilder.add( checkNotNull( processOption ) ) ;
+        }
       }
     }
 
     optionsBuilder.add( "-jar" ) ;
 
-    final File applicationDirectory =
-        new File( configuration.getVersionsDirectory(), applicationName ) ;
-    optionsBuilder.add( applicationDirectory.getAbsolutePath() + applicationName + ".jar" ) ;
+    optionsBuilder.add( configuration.getInstallationDirectory().getAbsolutePath()
+        + File.separator + applicationName + File.separator + applicationName + ".jar" ) ;
 
     optionsBuilder.add( "httpdaemon" ) ;
 
@@ -108,15 +115,16 @@ public class HttpDaemonDriver {
 
   private static final Predicate< String > PROCESS_STARTED_SENSOR = new Predicate< String >() {
     public boolean apply( final String lineInConsole ) {
-      return lineInConsole.startsWith( "Started " ) ;
+      return lineInConsole.contains( "Server started " ) ;
     }
   } ;
 
 
+  @Husk.Converter( converterClass = ConfigurationHelper.class )
   public interface Configuration {
 
-    File getVersionsDirectory() ;
-    Configuration withVersionsDirectory() ;
+    File getInstallationDirectory() ;
+    Configuration withInstallationDirectory( File directory ) ;
 
     Version getVersion() ;
     Configuration withVersion( Version version ) ;
@@ -131,13 +139,22 @@ public class HttpDaemonDriver {
     Configuration withLogDirectory( File directory ) ;
 
     File getContentRootDirectory() ;
-    Configuration withContentRootDirectory() ;
+    Configuration withContentRootDirectory( File directory ) ;
 
     Integer getJvmHeapSizeMegabytes() ;
-    Configuration withJvmHeapSizeMegabytes( int sizeMegabytes) ;
+    Configuration withJvmHeapSizeMegabytes( Integer sizeMegabytes) ;
 
     Iterable< String > getJvmOtherOptions() ;
     Configuration withJvmOtherOptions( String... options ) ;
 
+  }
+
+  @SuppressWarnings( { "UnusedDeclaration" } )
+  public static class ConfigurationHelper {
+
+    public static Iterable< String > convert( final String... strings ) {
+      return Arrays.asList( strings ) ;
+    }
+    
   }
 }
