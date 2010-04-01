@@ -115,7 +115,10 @@ public class HttpDaemonDriver {
 
   private static final Predicate< String > PROCESS_STARTED_SENSOR = new Predicate< String >() {
     public boolean apply( final String lineInConsole ) {
-      return lineInConsole.contains( "Server started " ) ;
+      // Can't use "Server started" because this message is never flushed to the standard output
+      // in time.
+      //  return lineInConsole.contains( "Server started " ) ;
+      return lineInConsole.contains( "Starting novelang.daemon.HttpDaemon" ) ;
     }
   } ;
 

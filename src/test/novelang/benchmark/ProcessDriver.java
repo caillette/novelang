@@ -187,12 +187,14 @@ public class ProcessDriver {
         state = State.TERMINATED ;
       }
     }
+    LOG.info( "Process ended." ) ;
 
   }
 
 
   private static abstract class InputStreamWatcher implements Runnable {
 
+    private static final Log LOG = LogFactory.getLog( InputStreamWatcher.class );
     private final BufferedReader reader ;
 
     @SuppressWarnings( { "IOResourceOpenedButNotSafelyClosed" } )
@@ -204,13 +206,14 @@ public class ProcessDriver {
       try {
         while( ! Thread.currentThread().isInterrupted() ) {
           try {
-            if( reader.ready() ) {
-              interpretLine( reader.readLine() ) ;
-            } else {
-              break ;
-            }
+            // Tried to read in a buffer manually, doesn't get more chars, just shows
+            // the logging system flushes to the console too lazily.
+            final String line = reader.readLine() ;
+            interpretLine( line ) ;
           } catch( Throwable t ) {
-            handleThrowable( t ) ;
+            if( ! Thread.currentThread().isInterrupted() ) { // Double-check, may have changed.
+              handleThrowable( t ) ;
+            }
             break ;
           }
         }
