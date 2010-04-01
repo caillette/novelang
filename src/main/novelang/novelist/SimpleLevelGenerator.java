@@ -20,10 +20,9 @@ import java.util.Random;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import novelang.designator.Tag;
-import novelang.system.Pod;
+import novelang.system.Husk;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -189,7 +188,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
   }
 
 
-  @Pod.Converter( converterClass = Bounded.class )
+  @Husk.Converter( converterClass = Bounded.class )
   public interface Configuration {
     
     Configuration withRandom( Random random ) ;

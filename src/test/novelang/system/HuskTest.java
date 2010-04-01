@@ -15,42 +15,42 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * Tests for {@link Pod}.
+ * Tests for {@link Husk}.
  *
  * @author Laurent Caillette
  */
-public class PodTest {
+public class HuskTest {
 
   @Test
-  public void emptyPod() {
-    Pod.create( Empty.class ) ;
+  public void emptyHusk() {
+    Husk.create( Empty.class ) ;
   }
 
-  @Test( expected = Pod.BadDeclarationException.class )
+  @Test( expected = Husk.BadDeclarationException.class )
   public void typeMismatch() {
-    Pod.create( Broken1.class ) ;
+    Husk.create( Broken1.class ) ;
   }
 
-  @Test( expected = Pod.BadDeclarationException.class )
+  @Test( expected = Husk.BadDeclarationException.class )
   public void missingWith() {
-    Pod.create( Broken2.class ) ;
+    Husk.create( Broken2.class ) ;
   }
 
-  @Test( expected = Pod.BadDeclarationException.class )
+  @Test( expected = Husk.BadDeclarationException.class )
   public void missingGet() {
-    Pod.create( Broken3.class ) ;
+    Husk.create( Broken3.class ) ;
   }
 
-  @Test( expected = Pod.BadDeclarationException.class )
+  @Test( expected = Husk.BadDeclarationException.class )
   public void unknownMethodPrefix() {
-    Pod.create( Broken4.class ) ;
+    Husk.create( Broken4.class ) ;
   }
 
 
 
   @Test
-  public void vanillaPod() {
-    final Vanilla initial = Pod.create( Vanilla.class ) ;
+  public void vanillaHusk() {
+    final Vanilla initial = Husk.create( Vanilla.class ) ;
     assertNull( initial.getString() ) ;
     assertEquals( 0L, ( long ) initial.getInt() ) ;
     final Vanilla updated = initial.withInt( 1 ).withString( "Foo" ).withFloat( 2.0f ) ;
@@ -65,8 +65,8 @@ public class PodTest {
 
   @Test //@Ignore( "Not implemented" )
   public void conversion() {
-    final ConvertiblePod initial = Pod.create( ConvertiblePod.class ) ;
-    final ConvertiblePod updated = initial.withString( 1, 2.3f ) ;
+    final ConvertibleHusk initial = Husk.create( ConvertibleHusk.class ) ;
+    final ConvertibleHusk updated = initial.withString( 1, 2.3f ) ;
     assertEquals( "1, 2.3", updated.getString() ) ;
     assertNull( initial.getString() ) ;
   }
@@ -112,11 +112,11 @@ public class PodTest {
   }
 
 
-  @Pod.Converter( converterClass = SomeConverter.class )
-  public interface ConvertiblePod {
+  @Husk.Converter( converterClass = SomeConverter.class )
+  public interface ConvertibleHusk {
 
     String getString() ;
-    ConvertiblePod withString( int i, float f ) ;
+    ConvertibleHusk withString( int i, float f ) ;
   }
 
   @SuppressWarnings( { "UnusedDeclaration" } )

@@ -21,7 +21,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import novelang.designator.Tag;
-import novelang.system.Pod;
+import novelang.system.Husk;
 
 /**
  * @author Laurent Caillette
@@ -30,7 +30,7 @@ public interface GenerationDefaults {
 
   Random RANDOM = new Random( 0L ) ;
 
-  SimpleWordGenerator.Configuration FOR_WORDS = Pod.create( SimpleWordGenerator.Configuration.class )
+  SimpleWordGenerator.Configuration FOR_WORDS = Husk.create( SimpleWordGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
       .withSignCount( 2, 12 )
@@ -38,7 +38,7 @@ public interface GenerationDefaults {
   ;
 
   SimpleSentenceGenerator.Configuration FOR_SENTENCES = 
-      Pod.create( SimpleSentenceGenerator.Configuration.class )
+      Husk.create( SimpleSentenceGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
       .withWordGenerator( new SimpleWordGenerator( FOR_WORDS ) )
@@ -48,7 +48,7 @@ public interface GenerationDefaults {
   ;
 
   SimpleSentenceGenerator.Configuration FOR_TITLES = 
-      Pod.create( SimpleSentenceGenerator.Configuration.class )
+      Husk.create( SimpleSentenceGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
       .withWordGenerator( new SimpleWordGenerator( FOR_WORDS ) )
@@ -57,7 +57,7 @@ public interface GenerationDefaults {
       .withEndingPunctuation( false )
   ;
 
-  SimpleBodyGenerator.Configuration FOR_BODIES = Pod.create( SimpleBodyGenerator.Configuration.class )
+  SimpleBodyGenerator.Configuration FOR_BODIES = Husk.create( SimpleBodyGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withParagraphCountRange( 1, 4 )
       .withSentenceCountRange( 1, 5 )
@@ -74,7 +74,7 @@ public interface GenerationDefaults {
   ) ;
 
   SimpleLevelGenerator.Configuration FOR_LEVELS =
-      Pod.create( SimpleLevelGenerator.Configuration.class )
+      Husk.create( SimpleLevelGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withMaximumDepth( 3 )
       .withSublevelCountRange( 0, 3 )

@@ -19,9 +19,8 @@ package novelang.novelist;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import novelang.system.Pod;
+import novelang.system.Husk;
 
 /**
  * @author Laurent Caillette
@@ -55,7 +54,7 @@ public class SimpleBodyGenerator implements Generator< Body > {
     return new Body( textElements ) ;
   }
 
-  @Pod.Converter( converterClass = Bounded.class ) 
+  @Husk.Converter( converterClass = Bounded.class )
   public interface Configuration {
     Random getRandom() ;
     Configuration withRandom( Random random ) ;

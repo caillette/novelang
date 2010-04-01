@@ -20,9 +20,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import novelang.system.Pod;
+import novelang.system.Husk;
 
 /**
  * @author Laurent Caillette
@@ -74,7 +73,7 @@ public class SimpleSentenceGenerator implements Generator< Sentence > {
   }
 
 
-  @Pod.Converter( converterClass = Bounded.class )
+  @Husk.Converter( converterClass = Bounded.class )
   public interface Configuration {
 
     Locale getLocale() ;

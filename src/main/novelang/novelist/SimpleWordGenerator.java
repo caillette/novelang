@@ -19,8 +19,7 @@ package novelang.novelist;
 import java.util.Locale;
 import java.util.Random;
 
-import com.google.common.base.Preconditions;
-import novelang.system.Pod;
+import novelang.system.Husk;
 
 /**
  * Endless iterator creating {@link novelang.novelist.Word} instances.
@@ -77,7 +76,7 @@ public class SimpleWordGenerator implements Generator.ForWord {
 
 
 
-  @Pod.Converter( converterClass = Bounded.class )
+  @Husk.Converter( converterClass = Bounded.class )
   public interface Configuration {
 
     Locale getLocale() ;

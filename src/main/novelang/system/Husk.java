@@ -40,10 +40,10 @@ public interface Vanilla {
   Vanilla withFloat( float newFloat ) ;
 
 }</pre>
- * Basing on {@code get} and {@code with} prefixes and type similarity, the {@link Pod#create(Class)}
+ * Basing on {@code get} and {@code with} prefixes and type similarity, the {@link Husk#create(Class)}
  * method generates an object instance behaving as one could expect:
  * <pre>
-final Vanilla initial = Pod.make( Vanilla.class ) ;
+final Vanilla initial = Husk.create( Vanilla.class ) ;
 final Vanilla updated = initial.withInt( 1 ).withString( "Foo" ).withFloat( 2.0f ) ;
 assertEquals( "Foo", updated.getString() ) ;  
 </pre>
@@ -51,7 +51,7 @@ assertEquals( "Foo", updated.getString() ) ;
  * {@link Converter#converterClass()} annotation indicates a class containing static methods
  * for conversion.
  * <pre>
-@Pod.Converter( converterClass = SomeConverter.class )
+@Husk.Converter( converterClass = SomeConverter.class )
 public interface Convertible {
   String getString() ;
   Convertible withString( int i, float f ) ;
@@ -69,18 +69,18 @@ public static final class SomeConverter {
  *
  * @author Laurent Caillette
  */
-public final class Pod {
+public final class Husk {
 
-  private Pod() { }
+  private Husk() { }
 
-  public static< T > T create( final Class< T > podClass ) {
+  public static< T > T create( final Class< T > huskClass ) {
 
-    Preconditions.checkArgument( podClass.isInterface() ) ;
-    final Method[] podMethods = podClass.getMethods() ;
+    Preconditions.checkArgument( huskClass.isInterface() ) ;
+    final Method[] huskMethods = huskClass.getMethods() ;
 
     final Map< String, PropertyDeclaration > properties = Maps.newHashMap() ;
 
-    for( final Method method : podMethods ) {
+    for( final Method method : huskMethods ) {
       final String methodName = method.getName();
 
       if( methodName.startsWith( "get" ) ) {
@@ -97,10 +97,10 @@ public final class Pod {
         getForSure( properties, propertyName ).getter = method ;
 
       } else if( methodName.startsWith( "with" ) ) {
-        if( method.getReturnType() != podClass ) {
+        if( method.getReturnType() != huskClass ) {
           throw new BadDeclarationException(
               "Bad return type for " + methodName + ": " + method.getReturnType() +
-              ", should be " + podClass.getName()
+              ", should be " + huskClass.getName()
           ) ;
         }
         if( method.getParameterTypes().length == 0 ) {
@@ -130,7 +130,7 @@ public final class Pod {
       if( updaterParameterTypes.length > 1
        || declaration.getter.getReturnType() != updaterParameterType0
       ) {
-        final Converter converter = podClass.getAnnotation( Pod.Converter.class ) ;
+        final Converter converter = huskClass.getAnnotation( Husk.Converter.class ) ;
         if( converter == null ) {
           throw new BadDeclarationException(
               "Incompatible types: '" +
@@ -165,9 +165,9 @@ public final class Pod {
 
     //noinspection unchecked
     return ( T ) Proxy.newProxyInstance(
-        Pod.class.getClassLoader(),
-        new Class< ? >[] { podClass },
-        new PropertiesKeeper( podClass, convertersBuilder.build(), EMPTY_MAP )
+        Husk.class.getClassLoader(),
+        new Class< ? >[] { huskClass },
+        new PropertiesKeeper( huskClass, convertersBuilder.build(), EMPTY_MAP )
     ) ;
   }
 
@@ -238,16 +238,16 @@ public final class Pod {
 
   private static class PropertiesKeeper implements InvocationHandler {
 
-    private final Class< ? > podClass ;
+    private final Class< ? > huskClass;
     private final Map< String, Method > converters ;
     private final Map< String, Object > values ;
 
     private PropertiesKeeper(
-        final Class< ? > podClass,
+        final Class< ? > huskClass,
         final Map< String, Method > converters,
         final Map< String, Object > values
     ) {
-      this.podClass = podClass ;
+      this.huskClass = huskClass;
       this.converters = converters ;
       this.values = ImmutableMap.copyOf( values ) ;
     }
@@ -271,9 +271,9 @@ public final class Pod {
         updatedValues.putAll( values ) ;
         updatedValues.put( propertyName, updateValue ) ;
         return Proxy.newProxyInstance(
-            Pod.class.getClassLoader(),
-            new Class< ? >[] { podClass },
-            new PropertiesKeeper( podClass, converters, updatedValues )
+            Husk.class.getClassLoader(),
+            new Class< ? >[] { huskClass },
+            new PropertiesKeeper( huskClass, converters, updatedValues )
         ) ;
       }
       if( methodName.startsWith( "get" ) ) {
