@@ -67,7 +67,7 @@ public class FileTools {
    * @param fileNameNoExtension
    * @param fileExtensions
    * @return a non-null object.
-   * @throws FileNotFoundException with extensive message listing all names of files
+   * @throws java.io.FileNotFoundException with extensive message listing all names of files
    *     that were looked for.
    */
   public static File load( 
@@ -102,6 +102,7 @@ public class FileTools {
       return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
     }
   } ;
+
 
   private static class MyDirectoryWalker extends DirectoryWalker {
 
@@ -174,12 +175,14 @@ public class FileTools {
 
   }
 
+  private static final Pattern PATTERN = Pattern.compile( "\\\\" ) ;
+
   /**
    * Returns a URL-friendly path where file separator is a solidus, not a reverse solidus.
    * Useful on Windows.
    */
   public static String urlifyPath( final String path ) {
-    return path.replaceAll( "\\\\", "/" ) ;
+    return PATTERN.matcher( path ).replaceAll( "/" );
   }
 
 
@@ -314,5 +317,36 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
 
     return temporaryDirectory ;
   }
+
+
+// ==================
+// Directory creation
+// ==================
+
+  public static File createDirectoryForSure( final File directory ) {
+    if( ! directory.exists() ) {
+      if( directory.mkdirs() ) {
+        LOG.debug( "Created directory '" + directory.getAbsolutePath() + "'" ) ;
+      }
+    }
+    return directory ;
+  }
+
+  public static File createFreshDirectory( final File parentDirectory, final String name )
+      throws IOException
+  {
+    return createFreshDirectory( new File( parentDirectory, name ) ) ; 
+  }
+
+  public static File createFreshDirectory( final String fileName ) throws IOException {
+    return createFreshDirectory( new File( fileName ) ) ;
+  }
+  
+  public static File createFreshDirectory( final File directory ) throws IOException {
+    FileUtils.deleteDirectory( directory ) ;
+    createDirectoryForSure( directory ) ;
+    return directory ;
+  }
+
 
 }

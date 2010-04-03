@@ -11,6 +11,8 @@ package novelang.benchmark;
 
 import novelang.Version;
 import novelang.VersionFormatException;
+import novelang.benchmark.scenario.TimeMeasurer;
+import novelang.common.FileTools;
 import novelang.novelist.Novelist;
 import novelang.system.EnvironmentTools;
 import novelang.system.Husk;
@@ -107,16 +109,16 @@ public class Nhovestone {
     
   }
 
-  private static final int TIMEOUT_MILLISECONDS = 5 * 60 * 1000 ;
   private static final int BUFFER_SIZE = 1024 * 1024 ;
   private byte[] buffer = new byte[ BUFFER_SIZE ] ;
 
 
+  @Deprecated
   public long requestWholeDocument() throws IOException {
     final AbstractHttpClient httpClient = new DefaultHttpClient() ;
 
     final HttpParams parameters = new BasicHttpParams() ;
-    parameters.setIntParameter( CoreConnectionPNames.SO_TIMEOUT, TIMEOUT_MILLISECONDS ) ;
+    parameters.setIntParameter( CoreConnectionPNames.SO_TIMEOUT, TimeMeasurer.TIMEOUT_MILLISECONDS ) ;
     final HttpGet httpGet = new HttpGet( documentRequestUri ) ;
     httpGet.setParams( parameters ) ;
     final HttpResponse httpResponse = httpClient.execute( httpGet ) ;
@@ -135,6 +137,7 @@ public class Nhovestone {
     }
   }
 
+  @Deprecated
   public void startAndStopHttpDaemon()
       throws
       VersionFormatException,
@@ -143,7 +146,7 @@ public class Nhovestone {
       InterruptedException
   {
     final File contentDirectory = new File( benchmarkWorkingDirectory, "content" ) ;
-    createDirectoryForSure( contentDirectory ) ;
+    FileTools.createDirectoryForSure( contentDirectory ) ;
 
     final Version version = Version.parse( "0.41.0" );
 
@@ -152,10 +155,10 @@ public class Nhovestone {
 
     final File applicationWorkingDirectory =
         new File( benchmarkWorkingDirectory, version.getName() ) ;
-    createDirectoryForSure( applicationWorkingDirectory ) ;
+    FileTools.createDirectoryForSure( applicationWorkingDirectory ) ;
 
     final File logsDirectory = new File( applicationWorkingDirectory, "logs" ) ;
-    createDirectoryForSure( logsDirectory ) ;
+    FileTools.createDirectoryForSure( logsDirectory ) ;
 
 
     final HttpDaemonDriver httpDaemonDriver = new HttpDaemonDriver(
@@ -173,14 +176,6 @@ public class Nhovestone {
     TimeUnit.SECONDS.sleep( 1L ) ;
 
     httpDaemonDriver.shutdown( true ) ; // TODO send some preliminary signal.
-  }
-
-  private static void createDirectoryForSure( final File directory ) {
-    if( ! directory.exists() ) {
-      if( directory.mkdirs() ) {
-        LOG.debug( "Created directory '" + directory.getAbsolutePath() + "'" ) ;
-      }
-    }
   }
 
 

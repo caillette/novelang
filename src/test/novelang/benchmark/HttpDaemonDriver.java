@@ -25,6 +25,7 @@ import novelang.system.Husk;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -41,9 +42,12 @@ import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 public class HttpDaemonDriver {
 
   private final ProcessDriver processDriver ;
+  private final int tcpPort ;
 
 
   public HttpDaemonDriver( final Configuration configuration ) {
+
+    tcpPort = configuration.getTcpPort() ;
 
     final String applicationName = "Novelang-" + configuration.getVersion().getName() ;
 
@@ -56,7 +60,11 @@ public class HttpDaemonDriver {
 
     optionsBuilder.add( "-Djava.awt.headless=true" ) ;
 
-    optionsBuilder.add( "-d64" ) ;
+    optionsBuilder.add( "-server" ) ;
+
+    if( "64".equals( System.getProperty( "sun.arch.data.model" ) ) ) {
+      optionsBuilder.add( "-d64" ) ;
+    }
 
     final Iterable< String > otherJvmOptions = configuration.getJvmOtherOptions() ;
     if( otherJvmOptions != null ) {
@@ -78,7 +86,7 @@ public class HttpDaemonDriver {
     optionsBuilder.add( "httpdaemon" ) ;
 
     optionsBuilder.add( OPTIONPREFIX + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT ) ;
-    optionsBuilder.add( "" + configuration.getTcpPort() ) ;
+    optionsBuilder.add( "" + tcpPort ) ;
 
     optionsBuilder.add( OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ) ;
     optionsBuilder.add( checkNotNull( configuration.getLogDirectory() ).getAbsolutePath() ) ;
@@ -86,7 +94,7 @@ public class HttpDaemonDriver {
     optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_CONTENT_ROOT ) ;
     optionsBuilder.add( checkNotNull( configuration.getContentRootDirectory() ).getAbsolutePath() ) ;
 
-    final List< String > processOptions = optionsBuilder.build();
+    final List< String > processOptions = optionsBuilder.build() ;
 
     processDriver = new ProcessDriver(
         checkNotNull( configuration.getWorkingDirectory() ),
@@ -97,6 +105,17 @@ public class HttpDaemonDriver {
 
   }
 
+  
+  public int getTcpPort() {
+    return tcpPort ;
+  }
+
+
+  @SuppressWarnings( { "SocketOpenedButNotSafelyClosed" } )
+  public void ensureTcpPortAvailable() throws IOException {
+    final ServerSocket serverSocket = new ServerSocket( tcpPort ) ;
+    serverSocket.close() ;
+  }
 
   public void start( final long timeout, final TimeUnit timeUnit )
       throws
@@ -104,6 +123,7 @@ public class HttpDaemonDriver {
       ProcessDriver.ProcessCreationFailedException,
       InterruptedException
   {
+    ensureTcpPortAvailable() ;
     processDriver.start( timeout, timeUnit ) ;
   }
 
@@ -117,7 +137,7 @@ public class HttpDaemonDriver {
     public boolean apply( final String lineInConsole ) {
       // Can't use "Server started" because this message is never flushed to the standard output
       // in time.
-      //  return lineInConsole.contains( "Server started " ) ;
+      //   return lineInConsole.contains( "Server started " ) ;
       return lineInConsole.contains( "Starting novelang.daemon.HttpDaemon" ) ;
     }
   } ;

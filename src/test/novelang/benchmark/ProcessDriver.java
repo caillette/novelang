@@ -32,6 +32,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Starts and stops a {@link Process}, watching its standard and error outputs.
  *
+ * Unfortunately the {@link Process} doesn't tell about OS-dependant PID.
+ * There is no chance to kill spawned processes if the VM running {@link ProcessDriver}
+ * crashes.
+ *
+ * See good discussion
+ * <a href="http://blog.igorminar.com/2007/03/how-java-application-can-discover-its.html">here</a>.
+ *
  * @author Laurent Caillette
  */
 public class ProcessDriver {
@@ -174,12 +181,12 @@ public class ProcessDriver {
         ensureInState( State.RUNNING ) ;
         state = State.SHUTTINGDOWN ;
         if( force ) {
+          interruptWatcherThreads() ;
           process.destroy() ;
         } else {
           process.waitFor() ;
+          interruptWatcherThreads() ;
         }
-        standardStreamWatcherThread.interrupt() ;
-        errorStreamWatcherThread.interrupt() ;
       } finally {
         process = null ;
         standardStreamWatcherThread = null ;
@@ -191,10 +198,14 @@ public class ProcessDriver {
 
   }
 
+  private void interruptWatcherThreads() {
+    standardStreamWatcherThread.interrupt() ;
+    errorStreamWatcherThread.interrupt() ;
+  }
+
 
   private static abstract class InputStreamWatcher implements Runnable {
 
-    private static final Log LOG = LogFactory.getLog( InputStreamWatcher.class );
     private final BufferedReader reader ;
 
     @SuppressWarnings( { "IOResourceOpenedButNotSafelyClosed" } )
@@ -240,6 +251,9 @@ public class ProcessDriver {
 
   private State state = State.READY ;
 
+  /**
+   * Synchronization left to caller.
+   */
   private void ensureInState( final State expected ) {
     if( state != expected ) {
       throw new IllegalStateException(

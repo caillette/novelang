@@ -59,7 +59,9 @@ public class Novelist {
     createNovebook( directory ) ;
   }
 
-  private static final String BOOK_FILE_NAME = "book.nlb" ;
+  public static final String BOOK_NAME_RADIX = "book" ;
+  
+  private static final String BOOK_FILE_NAME = BOOK_NAME_RADIX + ".nlb" ;
   private static final String BOOK_CONTENT = "insert file:." ;
 
   private static void createFreshDirectory( final File directory ) throws IOException {
