@@ -51,16 +51,32 @@ public interface Upsizer {
   /**
    * @author Laurent Caillette
    */
-  static class ForNovelist implements Upsizer {
+  class NovellaeLength implements Upsizer {
 
     private final Novelist novelist ;
 
-    public ForNovelist( final Novelist novelist ) {
+    public NovellaeLength( final Novelist novelist ) {
       this.novelist = Preconditions.checkNotNull( novelist ) ;
     }
 
     public void upsize() throws IOException {
       novelist.write( 1 ) ;
+    }
+  }
+
+  /**
+   * @author Laurent Caillette
+   */
+  class NovellaCount implements Upsizer {
+
+    private final Novelist novelist ;
+
+    public NovellaCount( final Novelist novelist ) {
+      this.novelist = Preconditions.checkNotNull( novelist ) ;
+    }
+
+    public void upsize() throws IOException {
+      novelist.addGhostwriter( 1 );
     }
   }
 

@@ -127,7 +127,9 @@ public class ProcessDriver {
     return new InputStreamWatcher( standardOutput ) {
       @Override
       protected void interpretLine( final String line ) {
-        LOG.debug( "Standard output from supervised process: >>> " + line ) ;
+        if( line != null ) {
+          LOG.debug( "Standard output from supervised process: >>> " + line ) ;
+        }
         if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
           startupSemaphore.release() ;
         }
@@ -145,7 +147,9 @@ public class ProcessDriver {
     return new InputStreamWatcher( standardError ) {
       @Override
       protected void interpretLine( final String line ) {
-        LOG.warn( "Error from supervised process: >>> " + line ) ;
+        if( line != null ) {
+          LOG.warn( "Error from supervised process: >>> " + line ) ;
+        }
       }
 
       @Override
@@ -178,14 +182,16 @@ public class ProcessDriver {
   public void shutdown( final boolean force ) throws InterruptedException {
     synchronized( stateLock ) {
       try {
-        ensureInState( State.RUNNING ) ;
-        state = State.SHUTTINGDOWN ;
-        if( force ) {
-          interruptWatcherThreads() ;
-          process.destroy() ;
-        } else {
-          process.waitFor() ;
-          interruptWatcherThreads() ;
+        if( state != State.BROKEN ) {
+          ensureInState( State.RUNNING ) ;
+          state = State.SHUTTINGDOWN ;
+          if( force ) {
+            interruptWatcherThreads() ;
+            process.destroy() ;
+          } else {
+            process.waitFor() ;
+            interruptWatcherThreads() ;
+          }
         }
       } finally {
         process = null ;

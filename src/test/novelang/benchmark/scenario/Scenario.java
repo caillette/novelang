@@ -27,15 +27,18 @@ import novelang.common.FileTools;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * Starts and queries several {@link novelang.benchmark.HttpDaemonDriver}s against an evolving
@@ -52,7 +55,7 @@ public class Scenario< MEASUREMENT > {
   private final Integer maximumIterations ;
 
   /**
-   * Keeps the monitoring state for one given {@link Version}.
+   * Keeps the monitoring state for one given {@link novelang.Version}.
    * Not static as it saves additional generic declaration.
    */
   private class Monitoring {
@@ -66,70 +69,43 @@ public class Scenario< MEASUREMENT > {
   }
 
   /**
-   * Mutable object: contains list of non-null {@link Scenario.Monitoring} objects.
+   * Mutable object: contains list of non-null {@link novelang.benchmark.scenario.Scenario.Monitoring} objects.
    */
   private final Map< Version, Monitoring > monitorings = Maps.newHashMap() ;
   private final String documentRequest ;
   private final Upsizer upsizer ;
   private final Measurer< MEASUREMENT > measurer ;
 
-  public Scenario(
-      final File scenariiDirectory,
-      final Upsizer.Factory upsizerFactory,
-      final File novelangInstallationsDirectory,
-      final Iterable< Version > versions,
-      final int firstTcpPort,
-      final Measurer< MEASUREMENT > measurer
-  ) throws IOException {
-    this(
-        UNKNOWN,
-        DEFAULT_WARMUP_ITERATIONS,
-        DEFAULT_MAXIMUM_ITERATIONS,
-        scenariiDirectory,
-        upsizerFactory,
-        novelangInstallationsDirectory,
-        versions,
-        firstTcpPort,
-        measurer
-    ) ;
-  }
+  public Scenario( final Configuration< ? extends Configuration, MEASUREMENT > configuration )
+      throws IOException
+  {
+
+    name = ( configuration.getScenarioName() == null ) ?
+        getClass().getSimpleName() : configuration.getScenarioName() ;
 
 
-  /**
-   * Hack: we can't call {@link #getClass()} in a constructor calling this( ... ).
-   */
-  @SuppressWarnings( { "RedundantStringConstructorCall" } )
-  private static final String UNKNOWN = new String( "UNKNOWN" ) ;
+    this.warmupIterations = configuration.getWarmupIterationCount() > 0 ?
+        configuration.getWarmupIterationCount() : DEFAULT_WARMUP_ITERATIONS ;
 
+    this.maximumIterations = configuration.getMaximumIterations() > 0 ?
+        configuration.getMaximumIterations() : DEFAULT_MAXIMUM_ITERATIONS ;
 
-  public Scenario(
-      final String scenarioName,
-      final int warmupIterations,
-      final Integer maximumIterations,
-      final File scenariiDirectory,
-      final Upsizer.Factory upsizerFactory,
-      final File novelangInstallationsDirectory,
-      final Iterable< Version > versions,
-      final int firstTcpPort,
-      final Measurer< MEASUREMENT > measurer
-  ) throws IOException {
+    final File scenarioDirectory = FileTools.createFreshDirectory( 
+        configuration.getScenariiDirectory(), sanitizeFileName( name ) ) ;
 
-    //noinspection StringEquality
-    name = ( scenarioName == UNKNOWN ) ? getClass().getSimpleName() : scenarioName ;
-    this.warmupIterations = warmupIterations ;
-    this.maximumIterations = maximumIterations ;
-
-    final File scenarioDirectory = FileTools.createFreshDirectory( scenariiDirectory, name ) ;
     final File contentDirectory = FileTools.createFreshDirectory( scenarioDirectory, "content" ) ;
 
-    upsizer = upsizerFactory.create( contentDirectory ) ;
-    documentRequest = upsizerFactory.getDocumentRequest() ;
+    upsizer = configuration.getUpsizerFactory().create( contentDirectory ) ;
 
-    this.measurer = Preconditions.checkNotNull( measurer ) ;
+    documentRequest = configuration.getUpsizerFactory().getDocumentRequest() ;
+    Preconditions.checkArgument( ! StringUtils.isBlank( documentRequest ) ) ;
 
-    int tcpPort = firstTcpPort ;
+    this.measurer = Preconditions.checkNotNull( configuration.getMeasurer() ) ;
+
+    int tcpPort = configuration.getFirstTcpPort() ;
+    Preconditions.checkArgument( tcpPort > 0 ) ;
     
-    for( final Version version : versions ) {
+    for( final Version version : configuration.getVersions() ) {
       final File versionWorkingDirectory =
           FileTools.createFreshDirectory( scenarioDirectory, version.getName() ) ;
 
@@ -137,8 +113,8 @@ public class Scenario< MEASUREMENT > {
           Husk.create( HttpDaemonDriver.Configuration.class )
           .withWorkingDirectory( versionWorkingDirectory )
           .withContentRootDirectory( contentDirectory )
-          .withJvmHeapSizeMegabytes( 32 )
-          .withInstallationDirectory( novelangInstallationsDirectory )
+          .withJvmHeapSizeMegabytes( 48 )
+          .withInstallationDirectory( configuration.getInstallationsDirectory() )
           .withLogDirectory( versionWorkingDirectory )
           .withVersion( version )
           .withTcpPort( tcpPort )
@@ -150,8 +126,14 @@ public class Scenario< MEASUREMENT > {
     }
   }
 
-  private static final int DEFAULT_WARMUP_ITERATIONS = 10 ;
-  private static final Integer DEFAULT_MAXIMUM_ITERATIONS = 100 ;
+  private static final Pattern SANITIZATION_PATTERN = Pattern.compile( "[^0-9a-zA-Z-_]" ) ;
+
+  private static String sanitizeFileName( final String name ) {
+    return SANITIZATION_PATTERN.matcher( name ).replaceAll( "" );
+  }
+
+  private static final int DEFAULT_WARMUP_ITERATIONS = 100 ;
+  private static final Integer DEFAULT_MAXIMUM_ITERATIONS = 1000 ;
   private static final long LAUNCH_TIMEOUT_SECONDS = 20L ;
 
   /**
@@ -177,7 +159,7 @@ public class Scenario< MEASUREMENT > {
       if( hasReachedMaximumIterations( iterationCount ) ) {
         for( final Monitoring monitoring : monitorings.values() ) {
           if( monitoring.termination != null ) {
-            monitoring.termination = ITERATION_COUNT_EXCEEDED ;
+            monitoring.termination = Terminations.ITERATION_COUNT_EXCEEDED ;
           }
         }
       }
@@ -245,14 +227,15 @@ public class Scenario< MEASUREMENT > {
         } catch( InterruptedException e ) {
           LOG.error( "Could not stop " + driver, e ) ;
         }
-        monitoring.termination = LAST_CLEANUP ;
+        monitoring.termination = Terminations.LAST_CLEANUP ;
       }
     }
   }
 
-  private final static Termination LAST_CLEANUP = new Termination( "Last cleanup" ) ;
-  private final static Termination ITERATION_COUNT_EXCEEDED =
-      new Termination( "Iteration count exceeded" ) ;
+  public interface Terminations {
+    Termination LAST_CLEANUP = new Termination( "Last cleanup" ) ;
+    Termination ITERATION_COUNT_EXCEEDED = new Termination( "Iteration count exceeded" ) ;
+  }
 
   private void warmup( final int passCount ) throws IOException {
 
@@ -306,4 +289,41 @@ public class Scenario< MEASUREMENT > {
   }
 
 
+  @Husk.Converter( converterClass = ConfigurationHelper.class )
+  public interface Configuration< CONFIGURATION extends Configuration, MEASUREMENT > {
+
+    String getScenarioName() ;
+    CONFIGURATION withScenarioName( String name ) ;
+
+    int getWarmupIterationCount() ;
+    CONFIGURATION withWarmupIterationCount( int count ) ;
+
+    Integer getMaximumIterations() ;
+    CONFIGURATION withMaximumIterations( Integer maximumOrNullForNoLimit ) ;
+
+    File getScenariiDirectory() ;
+    CONFIGURATION withScenariiDirectory( File scenariiDirectory ) ;
+
+    Upsizer.Factory getUpsizerFactory() ;
+    CONFIGURATION withUpsizerFactory( Upsizer.Factory factory ) ;
+
+    File getInstallationsDirectory() ;
+    CONFIGURATION withInstallationsDirectory( File directory ) ;
+
+    Iterable< Version > getVersions() ;
+    CONFIGURATION withVersions( Version... versions ) ;
+
+    int getFirstTcpPort() ;
+    CONFIGURATION withFirstTcpPort( int firstTcpPort ) ;
+
+    Measurer< MEASUREMENT > getMeasurer() ;
+    CONFIGURATION withMeasurer( Measurer< MEASUREMENT > measurer ) ;
+
+  }
+
+  public static class ConfigurationHelper {
+    public static Iterable< Version > convert( final Version... versions ) {
+      return Arrays.asList( versions ) ;
+    }
+  }
 }

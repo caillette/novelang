@@ -66,6 +66,10 @@ public static final class SomeConverter {
 </pre>
  * One known problem is, such static method appear as never called.
  * The {@code @SuppressWarnings( { "UnusedDeclaration" } )} may save some warnings, then.
+ * <p>
+ * Another limitation: for a given graph of interfaces, only one {@link Converter} is taken
+ * in account.
+ *
  *
  * @author Laurent Caillette
  */
@@ -97,7 +101,7 @@ public final class Husk {
         getForSure( properties, propertyName ).getter = method ;
 
       } else if( methodName.startsWith( "with" ) ) {
-        if( method.getReturnType() != huskClass ) {
+        if( !method.getReturnType().isAssignableFrom( huskClass ) ) { // Support subclassing.
           throw new BadDeclarationException(
               "Bad return type for " + methodName + ": " + method.getReturnType() +
               ", should be " + huskClass.getName()
@@ -130,7 +134,7 @@ public final class Husk {
       if( updaterParameterTypes.length > 1
        || declaration.getter.getReturnType() != updaterParameterType0
       ) {
-        final Converter converter = huskClass.getAnnotation( Husk.Converter.class ) ;
+        final Converter converter = findConverterAnnotation( huskClass ) ;
         if( converter == null ) {
           throw new BadDeclarationException(
               "Incompatible types: '" +
@@ -169,6 +173,24 @@ public final class Husk {
         new Class< ? >[] { huskClass },
         new PropertiesKeeper( huskClass, convertersBuilder.build(), EMPTY_MAP )
     ) ;
+  }
+
+  private static Converter findConverterAnnotation( final Class< ? > huskClass ) {
+    Class< ? > currentClass = huskClass ;
+    while( currentClass != null ) {
+      final Converter converterAnnotation = currentClass.getAnnotation( Converter.class ) ;
+      if( converterAnnotation != null ) {
+        return converterAnnotation ;
+      }
+      final Class< ? >[] interfaces = currentClass.getInterfaces() ;
+      for( final Class parentInterface : interfaces ) {
+        final Converter annotation = findConverterAnnotation( parentInterface );
+        if( annotation != null ) {
+          return annotation ;
+        }
+      }
+    }
+    return null ;
   }
 
   public static class BadDeclarationException extends RuntimeException {

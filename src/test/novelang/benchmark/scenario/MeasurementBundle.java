@@ -41,6 +41,23 @@ public class MeasurementBundle< MEASUREMENT > implements Iterable< MEASUREMENT >
     return termination ;
   }
 
+  public int getMeasurementCount() {
+    return measurementList.size() ;
+  }
+
+  /**
+   * @param index between 0 and {@link #getMeasurementCount()} - 1.
+   * @return a possibly null value, if the {@link novelang.benchmark.HttpDaemonDriver} crashed
+   *     at startup and did not record anything.
+   */
+  public MEASUREMENT getMeasurement( final int index ) {
+    if( !measurementList.isEmpty() ) {
+      return null ;
+    } else {
+      return measurementList.get( index ) ;
+    }
+  }
+
   public Iterator< MEASUREMENT > iterator() {
     return measurementList.iterator() ;
   }

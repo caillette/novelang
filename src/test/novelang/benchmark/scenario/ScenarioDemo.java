@@ -16,21 +16,26 @@
  */
 package novelang.benchmark.scenario;
 
-import novelang.Version;
-import novelang.benchmark.KnownVersions;
-import novelang.benchmark.ProcessDriver;
-import novelang.benchmark.report.Grapher;
-import novelang.common.FileTools;
-import novelang.novelist.Novelist;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
+import novelang.Version;
+import novelang.benchmark.ProcessDriver;
+import novelang.benchmark.report.Grapher;
+import novelang.common.FileTools;
+import novelang.novelist.Novelist;
+import novelang.system.Husk;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+
+import static novelang.benchmark.KnownVersions.VERSION_0_35_0;
+import static novelang.benchmark.KnownVersions.VERSION_0_38_1;
+import static novelang.benchmark.KnownVersions.VERSION_0_41_0;
 
 /**
  * @author Laurent Caillette
@@ -52,7 +57,7 @@ public class ScenarioDemo {
     final Upsizer.Factory upsizerFactory = new Upsizer.Factory() {
 
       public Upsizer create( final File directory ) throws IOException {
-        return new Upsizer.ForNovelist(
+        return new Upsizer.NovellaeLength(
             new Novelist( directory, "demo", levelGenerator, 1 ) ) ;
       }
 
@@ -61,17 +66,20 @@ public class ScenarioDemo {
       }
     } ;
 
-
-    final Scenario< TimeMeasurement > scenario =
-        new Scenario< TimeMeasurement >(
-            scenarioDirectory,
-            upsizerFactory,
-            versionsDirectory,
-            Arrays.asList( KnownVersions.VERSION_0_41_0, KnownVersions.VERSION_0_38_1 ),
-            9900,
-            new TimeMeasurer()
-        )
+    final ScenarioLibrary.ConfigurationForTimeMeasurement configuration =
+        Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
+        .withScenarioName( "Single Novella growing" )
+        .withWarmupIterationCount( 10 )
+        .withMaximumIterations( 1000 )
+        .withScenariiDirectory( scenarioDirectory )
+        .withUpsizerFactory( ScenarioLibrary.createNovellaLengthUpsizerFactory( new Random( 0L ) ) )
+        .withInstallationsDirectory( versionsDirectory )
+        .withVersions( VERSION_0_41_0, VERSION_0_38_1, VERSION_0_35_0 )
+        .withFirstTcpPort( 9900 )
+        .withMeasurer( new TimeMeasurer() )
     ;
+
+    final Scenario< TimeMeasurement > scenario = new Scenario< TimeMeasurement >( configuration ) ;
 
     scenario.run() ;
 
