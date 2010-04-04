@@ -28,7 +28,7 @@ import java.util.Comparator;
  * 
  * @author Laurent Caillette
  */
-public final class Version {
+public final class Version implements Comparable< Version > {
 
   private final boolean snapshot ;
   private final int major ;
@@ -132,6 +132,10 @@ public final class Version {
         throw new VersionFormatException( s ) ;
       }
     }
+  }
+
+  public int compareTo( final Version other ) {
+    return COMPARATOR.compare( this, other ) ;
   }
 
   /**

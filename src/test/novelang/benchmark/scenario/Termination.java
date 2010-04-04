@@ -14,25 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark;
+package novelang.benchmark.scenario;
 
-import novelang.Version;
-import novelang.VersionFormatException;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Set;
 
 /**
+ * Kind of enum supporting inheritance.
+ *
  * @author Laurent Caillette
  */
-public class KnownVersions {
+public class Termination {
 
-  public static final Version VERSION_0_41_0 = parse( "0.41.0" ) ;
-  public static final Version VERSION_0_38_1 = parse( "0.38.1" ) ;
+  private static final Set< String > names = Sets.newHashSet() ;
 
-  private static Version parse( final String versionAsString ) {
-    try {
-      return Version.parse( versionAsString ) ;
-    } catch( VersionFormatException e ) {
-      throw new RuntimeException( e ) ;
+  private final String name ;
+
+  public Termination( final String name ) {
+    Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
+    synchronized( names ) {
+      Preconditions.checkArgument( ! names.contains( name ) ) ;
+      names.add( name ) ;
     }
+    this.name = name ;
   }
 
+  public String getName() {
+    return name ;
+  }
 }

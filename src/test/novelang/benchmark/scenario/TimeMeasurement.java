@@ -17,7 +17,6 @@
 package novelang.benchmark.scenario;
 
 import com.google.common.base.Preconditions;
-import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormatter;
@@ -39,12 +38,23 @@ public class TimeMeasurement {
   }
 
 
-  private static final PeriodFormatter FORMATTER = new PeriodFormatterBuilder().toFormatter() ;
+  public String asFormattedString() {
+    final Period period = new Period( timeMilliseconds, PeriodType.time() ) ;
+    return FORMATTER.print( period ) ;
+  }
+
+  private static final PeriodFormatter FORMATTER = new PeriodFormatterBuilder()
+      .printZeroAlways()
+      .appendMinutes()
+      .appendSuffix( ":" )
+      .appendSeconds()
+      .appendSuffix( "." )
+      .appendMillis3Digit()
+      .toFormatter()
+      ;
 
   @Override
   public String toString() {
-    final Period period = new Period( timeMilliseconds, PeriodType.time() ) ;
-    
-    return super.toString();
+    return getClass().getSimpleName() + "[" + asFormattedString() + "]" ;
   }
 }

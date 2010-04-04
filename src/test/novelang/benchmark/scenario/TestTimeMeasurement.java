@@ -16,15 +16,29 @@
  */
 package novelang.benchmark.scenario;
 
-import com.google.common.base.Preconditions;
-import novelang.novelist.Novelist;
-
-import java.io.IOException;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.junit.Test;
 
 /**
+ * Tests for {@link TimeMeasurement}.
+ *
  * @author Laurent Caillette
  */
-public interface TimeMeasurementKit {
+public class TestTimeMeasurement {
 
+
+  @Test
+  public void format() {
+    final TimeMeasurement timeMeasurement = new TimeMeasurement( 12345678L ) ;
+    LOG.debug( "Formatted: " + timeMeasurement ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private static final Log LOG = LogFactory.getLog( TestTimeMeasurement.class ) ;
 
 }

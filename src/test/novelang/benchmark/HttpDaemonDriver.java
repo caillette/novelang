@@ -58,7 +58,7 @@ public class HttpDaemonDriver {
 
     optionsBuilder.add( "-Xmx" + checkNotNull( configuration.getJvmHeapSizeMegabytes() + "M" ) ) ;
 
-    optionsBuilder.add( "-Djava.awt.headless=true" ) ;
+//    optionsBuilder.add( "-Djava.awt.headless=true" ) ;
 
     optionsBuilder.add( "-server" ) ;
 

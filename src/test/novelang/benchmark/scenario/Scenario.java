@@ -17,7 +17,6 @@
 package novelang.benchmark.scenario;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -33,12 +32,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Runs several {@link novelang.benchmark.HttpDaemonDriver}s in parallel against an evolving
+ * Starts and queries several {@link novelang.benchmark.HttpDaemonDriver}s against an evolving
  * source document.
  *
  * @author Laurent Caillette
@@ -52,15 +52,23 @@ public class Scenario< MEASUREMENT > {
   private final Integer maximumIterations ;
 
   /**
-   * Mutable objects: contains {@link novelang.benchmark.HttpDaemonDriver}s not yet evaluated
-   * as {@link Measurer#detectStrain(java.util.List, Object)} strained}.
+   * Keeps the monitoring state for one given {@link Version}.
+   * Not static as it saves additional generic declaration.
    */
-  private final Map< Version, HttpDaemonDriver > drivers = Maps.newHashMap() ;
+  private class Monitoring {
+    public final HttpDaemonDriver driver ;
+    public Termination termination = null ;
+    public final List< MEASUREMENT > measurements = Lists.newArrayList() ;
+
+    public Monitoring( final HttpDaemonDriver driver ) {
+      this.driver = driver ;
+    }
+  }
 
   /**
-   * Mutable object: contains list of non-null {@code MEASUREMENT} objects.
+   * Mutable object: contains list of non-null {@link Scenario.Monitoring} objects.
    */
-  private final Map< Version, List< MEASUREMENT > > measurements = Maps.newHashMap() ;
+  private final Map< Version, Monitoring > monitorings = Maps.newHashMap() ;
   private final String documentRequest ;
   private final Upsizer upsizer ;
   private final Measurer< MEASUREMENT > measurer ;
@@ -101,9 +109,9 @@ public class Scenario< MEASUREMENT > {
       final File scenariiDirectory,
       final Upsizer.Factory upsizerFactory,
       final File novelangInstallationsDirectory,
-      final Iterable<Version> versions,
+      final Iterable< Version > versions,
       final int firstTcpPort,
-      final Measurer<MEASUREMENT> measurer
+      final Measurer< MEASUREMENT > measurer
   ) throws IOException {
 
     //noinspection StringEquality
@@ -136,44 +144,78 @@ public class Scenario< MEASUREMENT > {
           .withTcpPort( tcpPort )
       ) ;
 
-      drivers.put( version, httpDaemonDriver ) ;
+      final Monitoring monitoring = new Monitoring( httpDaemonDriver ) ;
+      monitorings.put( version, monitoring ) ;
       tcpPort ++ ;
-
-      measurements.put( version, Lists.< MEASUREMENT >newArrayList() ) ;
     }
   }
 
-  private static final int DEFAULT_WARMUP_ITERATIONS = 1 ;
+  private static final int DEFAULT_WARMUP_ITERATIONS = 10 ;
   private static final Integer DEFAULT_MAXIMUM_ITERATIONS = 100 ;
+  private static final long LAUNCH_TIMEOUT_SECONDS = 20L ;
 
+  /**
+   * Call this once only.
+   */
   public void run()
-      throws
-      InterruptedException,
-      IOException,
-      ProcessDriver.ProcessCreationFailedException
+      throws InterruptedException, IOException, ProcessDriver.ProcessCreationFailedException
   {
-    startDaemons() ;
-    warmup( warmupIterations ) ;
-    for( int iterationCount = 1 ;
-        ( maximumIterations == null || iterationCount <= maximumIterations )
-            && ! drivers.isEmpty() ;
-        iterationCount ++
-    ) {
-      final int daemonCount = drivers.size() ;
-      logPassCount( "Querying " + daemonCount + " daemon(s), pass ", iterationCount );
-      runOnceWithMeasurementsOnEveryDaemon() ;
-      logPassCount( "Done querying " + daemonCount + " daemon(s), pass ", iterationCount );
+    try {
+      startDaemons() ;
+      warmup( warmupIterations ) ;
+      int activeCount = monitorings.size() ;
+      int iterationCount = 1 ;
+      for( ; isBelowMaximumIterations( iterationCount ) && activeCount > 0 ; iterationCount ++ ) {
+        logPassCount( "Querying " + activeCount + " daemon(s), pass %d.", iterationCount ) ;
+        runOnceWithMeasurementsOnEveryDaemon() ;
+        final int updatedActiveCount = countActive( monitorings.values() ) ;
+        final int difference = activeCount - updatedActiveCount ;
+        LOG.info( "Done querying. " +
+            ( difference > 0 ? difference + " daemon(s) terminated." : ""  ) ) ;
+        activeCount = updatedActiveCount ;
+      }
+      if( hasReachedMaximumIterations( iterationCount ) ) {
+        for( final Monitoring monitoring : monitorings.values() ) {
+          if( monitoring.termination != null ) {
+            monitoring.termination = ITERATION_COUNT_EXCEEDED ;
+          }
+        }
+      }
+    } finally {
+      shutdownDaemons() ;
     }
-    shutdownDaemons() ;
   }
 
-  
-  public Map< Version, List< MEASUREMENT > > getMeasurements() {
-    final ImmutableMap.Builder< Version, List< MEASUREMENT > > builder =
-        new ImmutableMap.Builder< Version, List< MEASUREMENT > >() ;
-    for( final Map.Entry< Version, List< MEASUREMENT > > entry : measurements.entrySet() ) {
-      final List< MEASUREMENT > measurementList = ImmutableList.copyOf( entry.getValue() ) ;
-      builder.put( entry.getKey(), measurementList ) ;
+  private boolean isBelowMaximumIterations( final int iterationCount ) {
+    return ( maximumIterations == null || iterationCount <= maximumIterations );
+  }
+
+  private boolean hasReachedMaximumIterations( final int iterationCount ) {
+    return ( maximumIterations != null && iterationCount >= maximumIterations );
+  }
+
+  private int countActive( final Collection< Monitoring > monitorings ) {
+    int count = 0 ;
+    for( final Monitoring monitoring : monitorings ) {
+      if( monitoring.termination == null ) {
+        count ++ ;
+      }
+    }
+    return count ;
+  }
+
+
+  public Map< Version, MeasurementBundle< MEASUREMENT > > getMeasurements() {
+    final ImmutableMap.Builder< Version, MeasurementBundle< MEASUREMENT > > builder =
+        new ImmutableMap.Builder< Version, MeasurementBundle< MEASUREMENT > >() ;
+    for( final Map.Entry< Version, Monitoring > entry : monitorings.entrySet() ) {
+      final MeasurementBundle< MEASUREMENT > measurementBundle =
+          new MeasurementBundle< MEASUREMENT >(
+              entry.getValue().measurements,
+              entry.getValue().termination
+          )
+      ;
+      builder.put( entry.getKey(), measurementBundle ) ;
     }
     return builder.build() ;
   }
@@ -184,8 +226,9 @@ public class Scenario< MEASUREMENT > {
       ProcessDriver.ProcessCreationFailedException,
       InterruptedException
   {
-    for( final HttpDaemonDriver driver : drivers.values() ) {
-      driver.start( 20, TimeUnit.SECONDS ) ;
+    for( final Monitoring monitoring : monitorings.values() ) {
+      final HttpDaemonDriver driver = monitoring.driver ;
+      driver.start( LAUNCH_TIMEOUT_SECONDS, TimeUnit.SECONDS ) ;
     }
   }
 
@@ -193,22 +236,35 @@ public class Scenario< MEASUREMENT > {
    * Normally, all daemons got strained and there are none to stop.
    * But if we get something like a limit on run count this might become useful.
    */
-  private void shutdownDaemons() throws InterruptedException {
-    for( final HttpDaemonDriver driver : drivers.values() ) {
-      driver.shutdown( true ) ;
+  private void shutdownDaemons() {
+    for( final Monitoring monitoring : monitorings.values() ) {
+      final HttpDaemonDriver driver = monitoring.driver ;
+      if( monitoring.termination == null ) {
+        try {
+          driver.shutdown( true ) ;
+        } catch( InterruptedException e ) {
+          LOG.error( "Could not stop " + driver, e ) ;
+        }
+        monitoring.termination = LAST_CLEANUP ;
+      }
     }
   }
+
+  private final static Termination LAST_CLEANUP = new Termination( "Last cleanup" ) ;
+  private final static Termination ITERATION_COUNT_EXCEEDED =
+      new Termination( "Iteration count exceeded" ) ;
 
   private void warmup( final int passCount ) throws IOException {
 
     LOG.info( "Warming up " + name + ", " + passCount + " iterations..." ) ;
     upsizer.upsize() ;
     for( int pass = 1 ; pass <= passCount ; pass ++ ) {
-      for( final HttpDaemonDriver driver : drivers.values() ) {
+      for( final Monitoring monitoring : monitorings.values() ) {
+        final HttpDaemonDriver driver = monitoring.driver ;
         final URL url = createRequestUrl( driver.getTcpPort() ) ;
         measurer.runDry( url ) ;
       }
-      logPassCount( "  Performed warmup pass ", pass ) ;
+      logPassCount( "Performed warmup pass %d.", pass ) ;
     }
     LOG.info( "Warmup of " + name + " complete." ) ;
 
@@ -216,29 +272,27 @@ public class Scenario< MEASUREMENT > {
   }
 
   private static void logPassCount( final String message, final int pass ) {
-    if( pass == 1 || pass == 10 || pass % 100 == 0 ) {
-      LOG.debug( message + pass + "." ) ;
+    if( pass == 1 || pass == 2 || pass == 10 || pass % 100 == 0 ) {
+      LOG.debug( String.format( message, pass ) ) ;
     }
   }
 
 
-  protected final void runOnceWithMeasurementsOnEveryDaemon()
+  private void runOnceWithMeasurementsOnEveryDaemon()
       throws InterruptedException, IOException 
   {
     upsizer.upsize() ;
-    for( final Map.Entry< Version, HttpDaemonDriver > entry : drivers.entrySet() ) {
-      final HttpDaemonDriver driver = entry.getValue() ;
-      final Version version = entry.getKey() ;
-      final URL url = createRequestUrl( driver.getTcpPort() ) ;
-      final MEASUREMENT measurement = measurer.run( url ) ;
-      final List< MEASUREMENT > measurementHistory = measurements.get( version ) ;
-      if( measurement == null
-       || measurer.detectStrain( measurementHistory, measurement )
-      ) {
-        driver.shutdown( true ) ;
-        drivers.remove( version ) ;
-      } else {
-        measurementHistory.add( measurement ) ;
+    for( final Monitoring monitoring : monitorings.values() ) {
+      final URL url = createRequestUrl( monitoring.driver.getTcpPort() ) ;
+      if( monitoring.termination == null ) {
+        final List< MEASUREMENT > measurementHistory = monitoring.measurements ;
+        final Measurer.Result< MEASUREMENT > result = measurer.run( measurementHistory, url ) ;
+        if( result.hasTermination() ) {
+          monitoring.driver.shutdown( true ) ;
+          monitoring.termination = result.getTermination() ;
+        } else {
+          measurementHistory.add( result.getMeasurement() ) ;
+        }
       }
     }
   }

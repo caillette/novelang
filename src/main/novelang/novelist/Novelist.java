@@ -127,7 +127,7 @@ public class Novelist {
         ghostwriter.write( iterationCount ) ;
       }
     }
-    LOG.info( "Writing done." ) ;
+    LOG.debug( "Writing done." ) ;
   }
 
   private static class Ghostwriter {

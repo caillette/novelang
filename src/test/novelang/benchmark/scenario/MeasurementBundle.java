@@ -14,25 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark;
+package novelang.benchmark.scenario;
 
-import novelang.Version;
-import novelang.VersionFormatException;
+import com.google.common.collect.ImmutableList;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Laurent Caillette
  */
-public class KnownVersions {
+public class MeasurementBundle< MEASUREMENT > implements Iterable< MEASUREMENT > {
 
-  public static final Version VERSION_0_41_0 = parse( "0.41.0" ) ;
-  public static final Version VERSION_0_38_1 = parse( "0.38.1" ) ;
+  private final List< MEASUREMENT > measurementList ;
+  private final Termination termination;
 
-  private static Version parse( final String versionAsString ) {
-    try {
-      return Version.parse( versionAsString ) ;
-    } catch( VersionFormatException e ) {
-      throw new RuntimeException( e ) ;
-    }
+  public MeasurementBundle(
+      final List< MEASUREMENT > measurementList,
+      final Termination termination
+  ) {
+    this.measurementList = ImmutableList.copyOf( measurementList ) ;
+    this.termination = termination;
   }
 
+  public Termination getTermination() {
+    return termination ;
+  }
+
+  public Iterator< MEASUREMENT > iterator() {
+    return measurementList.iterator() ;
+  }
 }

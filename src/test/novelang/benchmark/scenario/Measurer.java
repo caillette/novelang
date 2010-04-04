@@ -16,6 +16,8 @@
  */
 package novelang.benchmark.scenario;
 
+import com.google.common.base.Preconditions;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -25,20 +27,65 @@ import java.util.List;
 */
 public interface Measurer< MEASUREMENT > {
 
-  void runDry( URL url ) throws IOException;
+  Termination runDry( URL url ) throws IOException;
 
   /**
-   * Returns the measurement or {@code null} if something went wrong.
-   */
-  MEASUREMENT run( URL url ) throws IOException;
-
-  /**
-   * Returns if a measurement reflects a strain of the called Novelang instance
-   * (like response times going on an exponential trend).
+   * Returns the measurement or the termination reason if something went wrong.
    *
-   * @param previousMeasurements a non-null object, contains no null.
-   * @param lastMeasurement a non-null object.
+   * @param previousMeasurements a non-null list containing no null.
+   * @param url correct URL to call the daemon.
+   * @return a non-null object.
    */
-  boolean detectStrain( List< MEASUREMENT > previousMeasurements, MEASUREMENT lastMeasurement ) ;
+  Result< MEASUREMENT > run( List< MEASUREMENT > previousMeasurements, URL url )
+      throws IOException
+  ;
+
+  
+  final class Result< MEASUREMENT > {
+    
+    private final MEASUREMENT measurement ;
+    private final Termination termination ;
+
+    private Result( final MEASUREMENT measurement ) {
+      this.measurement = Preconditions.checkNotNull( measurement ) ;
+      this.termination = null ;
+    }
+
+    private Result( final Termination termination ) {
+      this.measurement = null ;
+      this.termination = Preconditions.checkNotNull( termination ) ;
+    }
+
+    public boolean hasMeasurement() {
+      return measurement != null ;
+    }
+
+    public boolean hasTermination() {
+      return termination != null ;
+    }
+
+    public MEASUREMENT getMeasurement() {
+      if( measurement == null ) {
+        throw new IllegalStateException( "No measurement" ) ;
+      }
+      return measurement ;
+    }
+
+    public Termination getTermination() {
+      if( termination == null ) {
+        throw new IllegalStateException( "No termination" ) ;
+      }
+      return termination ;
+    }
+
+    public static< MEASUREMENT > Result< MEASUREMENT > create( final MEASUREMENT measurement ) {
+      return new Result< MEASUREMENT >( measurement ) ;
+    }
+
+    public static< MEASUREMENT > Result< MEASUREMENT > create( final Termination termination ) {
+      return new Result< MEASUREMENT >( termination ) ;
+    }
+
+  }
 
 }

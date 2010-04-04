@@ -16,6 +16,7 @@
  */
 package novelang.benchmark.scenario;
 
+import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -39,41 +40,71 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
 
 
   public static final int TIMEOUT_MILLISECONDS = 5 * 60 * 1000 ;
+  private static final int MINIMUM_MEASUREMENT_COUNT_FOR_REGRESSION = 50 ;
+  private static final double GUARD_FACTOR = 6.0 ;
 
   private static final int BUFFER_SIZE = 1024 * 1024 ;
   private byte[] buffer = new byte[ BUFFER_SIZE ] ;
 
-  public TimeMeasurement run( final URL url ) throws IOException {
+  public Result< TimeMeasurement > run(
+      final List< TimeMeasurement > previousMeasurements,
+      final URL url
+  ) throws IOException {
     // HttpKit avoids including creation of HttpClient stuff into measurement. Yeah!
     final HttpKit httpKit = createHttpKit( url ) ;
     final long startTime = System.currentTimeMillis() ;
-    run( httpKit ) ;
+    final Termination termination = run( httpKit ) ;
     final long endTime = System.currentTimeMillis() ;
-    return new TimeMeasurement( endTime - startTime ) ;
+    if( termination == null ) {
+      final TimeMeasurement lastMeasurement = new TimeMeasurement( endTime - startTime ) ;
+      if( detectStrain( previousMeasurements, lastMeasurement ) ) {
+        return Result.create( Terminations.STRAIN ) ;
+      } else {
+        return Result.create( lastMeasurement ) ;
+      }
+    } else {
+      return Result.create( termination ) ;
+    }
   }
 
 
-  public void runDry( final URL url ) throws IOException {
-    run( createHttpKit( url ) ) ;
+  public Termination runDry( final URL url ) {
+    return run( createHttpKit( url ) ) ;
   }
 
-  private static final long GUARD_FACTOR = 4L ;
 
-  public boolean detectStrain(
+
+  /**
+   * Strain means last request exceeded of more than {@value #GUARD_FACTOR} times the time
+   * extrapolated from first half of measurements, using linear regression.
+   *
+   * @param previousMeasurements a non-null object, contains no null.
+   * @param lastMeasurement a non-null object.
+   * @return true if strain detected, false otherwise.
+   */
+  private static boolean detectStrain(
       final List< TimeMeasurement > previousMeasurements,
       final TimeMeasurement lastMeasurement
   ) {
     final int measurementCount = previousMeasurements.size() ;
-    if( measurementCount == 0 ) {
+    if( measurementCount < MINIMUM_MEASUREMENT_COUNT_FOR_REGRESSION ) {
       return false ;
     } else {
-      final long first = previousMeasurements.get( 0 ).getTimeMilliseconds() ;
-      final long middle = previousMeasurements.get( measurementCount / 2 ).getTimeMilliseconds() ;
-      final long delta = middle - first ;
-      final long linearExtrapolationToLast = first + ( 2L * delta ) ;
-      final long maximum = linearExtrapolationToLast + GUARD_FACTOR * delta ;
-      return lastMeasurement.getTimeMilliseconds() < maximum ;
+      final SimpleRegression simpleRegression = new SimpleRegression() ;
+      for( int i = 0 ; i < measurementCount / 2 ; i ++ ) {
+        final TimeMeasurement measurement = previousMeasurements.get( i ) ;
+        simpleRegression.addData( ( double ) i, ( double ) measurement.getTimeMilliseconds() ) ;
+      }
+      final double extrapolated = simpleRegression.predict( ( double ) measurementCount ) ;
+      if( Double.isNaN( extrapolated ) ) {
+        return false ;
+      } else {
+        final double increasing = extrapolated - simpleRegression.getIntercept() ;
+        final double highLimit = simpleRegression.getIntercept() + increasing * GUARD_FACTOR ;
+        return lastMeasurement.getTimeMilliseconds() > ( long ) highLimit ;
+      }
     }
+
   }
 
 
@@ -90,17 +121,26 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
     httpGet.setParams( parameters ) ;
     return new HttpKit( httpClient, httpGet, buffer ) ;
   }
-  
-  private static void run( final HttpKit httpKit ) throws IOException {
-    final HttpResponse httpResponse = httpKit.httpClient.execute( httpKit.httpGet ) ;
-    if( httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK ) {
-      final InputStream inputStream = httpResponse.getEntity().getContent() ;
-      try {
-        for( int read = 0 ; read > -1 ; read = inputStream.read( httpKit.buffer ) ) { }
-      } finally {
-        inputStream.close() ;
+
+
+  private static Termination run( final HttpKit httpKit ) {
+    final HttpResponse httpResponse;
+    try {
+      httpResponse = httpKit.httpClient.execute( httpKit.httpGet );
+      if( httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK ) {
+        final InputStream inputStream = httpResponse.getEntity().getContent() ;
+        try {
+          for( int read = 0 ; read > -1 ; read = inputStream.read( httpKit.buffer ) ) { }
+          return null ;
+        } finally {
+          inputStream.close() ;
+        }
+      } else {
+        return Terminations.HTTP_CODE;
       }
-    }    
+    } catch( IOException e ) {
+      return Terminations.CALLER_EXCEPTION ;
+    }
   }
   
   private static class HttpKit {
@@ -125,6 +165,17 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
     } catch( URISyntaxException e ) {
       throw new RuntimeException( e ) ;
     }
+  }
+
+
+// ==================  
+// Termination causes
+// ==================
+
+  public interface Terminations {
+    Termination HTTP_CODE = new Termination( "HTTP response code not OK" ) ;
+    Termination CALLER_EXCEPTION = new Termination( "Exception occured" ) ;
+    Termination STRAIN = new Termination( "Daemon strained") ;
   }
 
 }

@@ -14,25 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark;
-
-import novelang.Version;
-import novelang.VersionFormatException;
+package novelang.benchmark.scenario;
 
 /**
  * @author Laurent Caillette
  */
-public class KnownVersions {
+public class HttpRequestTools {
 
-  public static final Version VERSION_0_41_0 = parse( "0.41.0" ) ;
-  public static final Version VERSION_0_38_1 = parse( "0.38.1" ) ;
 
-  private static Version parse( final String versionAsString ) {
-    try {
-      return Version.parse( versionAsString ) ;
-    } catch( VersionFormatException e ) {
-      throw new RuntimeException( e ) ;
-    }
-  }
 
+  
 }
