@@ -38,6 +38,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.TextAnchor;
@@ -48,12 +49,14 @@ import org.jfree.ui.TextAnchor;
  * @author Laurent Caillette
  */
 public class Grapher {
+  private static final Color COLOR_GRADIENT_DARK = new Color( 136, 167, 189 );
+  private static final Color COLOR_GRADIENT_LIGHT = new Color( 204, 237, 255 );
 
   public static BufferedImage create(
       final String title,
       final Map< Version, MeasurementBundle< TimeMeasurement > > measurements
   ) {
-    return create( title, measurements, 800, 400 ) ;
+    return create( title, measurements, 600, 300 ) ;
   }
 
   public static BufferedImage create(
@@ -100,8 +103,8 @@ public class Grapher {
 
 
     final GradientPaint gradientPaint = new GradientPaint(
-        0.0f, 0.0f, new Color( 136, 167, 189 ),
-        0.0f, 0.0f, new Color( 204, 237, 255 )
+        0.0f, 0.0f, COLOR_GRADIENT_DARK,
+        0.0f, 0.0f, COLOR_GRADIENT_LIGHT
     );
     plot.setBackgroundPaint( gradientPaint ) ;
 
@@ -122,7 +125,7 @@ public class Grapher {
       final int measurementCount = measurementBundle.getMeasurementCount();
       final String annotationText ;
       annotationText = calculateTerminationText( measurementBundle.getTermination() ) ;
-      if( annotationText != null ) {
+      if( annotationText != null && measurementCount > 0 ) {
         final TimeMeasurement measurement =
             measurementBundle.getMeasurement( measurementCount - 1 ) ;
         if( measurement != null ) {
@@ -136,6 +139,10 @@ public class Grapher {
         }
       }
     }
+
+    final LegendTitle chartLegend = chart.getLegend() ;
+//    chartLegend.setBackgroundPaint( COLOR_GRADIENT_LIGHT ) ;
+    chartLegend.setBorder( 0.0, 0.0, 0.0, 0.0 ); ;
 
 
     final BufferedImage bufferedImage = chart.createBufferedImage( widthPixels, heightPixels ) ;

@@ -41,7 +41,7 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
 
   public static final int TIMEOUT_MILLISECONDS = 5 * 60 * 1000 ;
   private static final int MINIMUM_MEASUREMENT_COUNT_FOR_REGRESSION = 50 ;
-  private static final double GUARD_FACTOR = 6.0 ;
+  private static final double GUARD_FACTOR = 10.0 ;
 
   private static final int BUFFER_SIZE = 1024 * 1024 ;
   private byte[] buffer = new byte[ BUFFER_SIZE ] ;

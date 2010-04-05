@@ -103,7 +103,6 @@ public class FileTools {
     }
   } ;
 
-
   private static class MyDirectoryWalker extends DirectoryWalker {
 
     public MyDirectoryWalker() {
@@ -346,6 +345,17 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     FileUtils.deleteDirectory( directory ) ;
     createDirectoryForSure( directory ) ;
     return directory ;
+  }
+
+
+// =====
+// Names
+// =====
+
+  private static final Pattern SANITIZATION_PATTERN = Pattern.compile( "[^0-9a-zA-Z]" ) ;
+  
+  public static String sanitizeFileName( final String name ) {
+    return SANITIZATION_PATTERN.matcher( name ).replaceAll( "" );
   }
 
 

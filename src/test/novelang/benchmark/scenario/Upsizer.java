@@ -76,7 +76,7 @@ public interface Upsizer {
     }
 
     public void upsize() throws IOException {
-      novelist.addGhostwriter( 1 );
+      novelist.addGhostwriter( 1 ) ;
     }
   }
 

@@ -57,7 +57,7 @@ public class ScenarioLibrary {
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
         .withWordGenerator( new SimpleWordGenerator( forWords ) )
-        .withWordCount( 20, 20 )
+        .withWordCount( 10, 10 )
         .withMiddlePunctuationSign( 18.0f )
         .withEndingPunctuation( true )
     ;
@@ -129,8 +129,8 @@ public class ScenarioLibrary {
     }
 
     public final Upsizer create( final File directory ) throws IOException {
-      return new Upsizer.NovellaeLength(
-          new Novelist( directory, "novella", new LevelGeneratorSupplier( random ), 1 ) ) ;
+      return createUpsizer( new Novelist(
+          directory, "novella", new LevelGeneratorSupplier( random ), 1 ) ) ;
     }
 
     protected abstract Upsizer createUpsizer( final Novelist novelist ) ;

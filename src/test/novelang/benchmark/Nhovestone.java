@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
@@ -37,13 +36,13 @@ import static novelang.benchmark.KnownVersions.VERSION_0_38_1;
 import static novelang.benchmark.KnownVersions.VERSION_0_41_0;
 
 /**
+ * Main class generating the Nhovestone report.
+ *
  * @author Laurent Caillette
  */
 public class Nhovestone {
 
   private static final Log LOG = LogFactory.getLog( Nhovestone.class );
-
-
 
 
   public static void main( final String[] args )
@@ -60,35 +59,52 @@ public class Nhovestone {
     final File scenariiDirectory = FileTools.createFreshDirectory( "_scenario-demo" ) ;
     final File versionsDirectory = new File( "distrib" ) ;
 
-    final ScenarioLibrary.ConfigurationForTimeMeasurement configuration =
+    final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
-        .withScenarioName( "Single Novella growing" )
-        .withWarmupIterationCount( 100 )
-        .withMaximumIterations( 1000 )
+        .withWarmupIterationCount( 10 )
+        .withMaximumIterations( 10000 )
         .withScenariiDirectory( scenariiDirectory )
-//        .withUpsizerFactory( ScenarioLibrary.createNovellaLengthUpsizerFactory( new Random( 0L ) ) )
-        .withUpsizerFactory( ScenarioLibrary.createNovellaCountUpsizerFactory( new Random( 0L ) ) )
         .withInstallationsDirectory( versionsDirectory )
         .withVersions( VERSION_0_41_0, VERSION_0_38_1, VERSION_0_35_0 )
         .withFirstTcpPort( 9900 )
         .withMeasurer( new TimeMeasurer() )
     ;
 
-    final Scenario< TimeMeasurement > scenario =
-        new Scenario< TimeMeasurement >( configuration
-        )
-    ;
+    runScenario( baseConfiguration
+        .withScenarioName( "Single ever-growing Novella" )
+        .withUpsizerFactory( ScenarioLibrary.createNovellaLengthUpsizerFactory( new Random( 0L ) ) )
+    ) ;
+
+    runScenario( baseConfiguration
+        .withScenarioName( "Increasing Novella count" )
+        .withUpsizerFactory( ScenarioLibrary.createNovellaCountUpsizerFactory( new Random( 0L ) ) )
+    ) ;
+
+    System.exit( 0 ) ;
+  }
+
+  private static void runScenario(
+      final ScenarioLibrary.ConfigurationForTimeMeasurement configuration
+  )
+      throws IOException, ProcessDriver.ProcessCreationFailedException, InterruptedException
+  {
+    final Scenario< TimeMeasurement > scenario = new Scenario< TimeMeasurement >( configuration ) ;
 
     scenario.run() ;
 
     final Map< Version, MeasurementBundle< TimeMeasurement > > measurements =
         scenario.getMeasurements() ;
 
-    final BufferedImage image = Grapher.create( "Single ever-growing Novella", measurements ) ;
-    ImageIO.write( image, "png", new File( scenariiDirectory, "graph-single-novella.png" ) ) ;
+    final BufferedImage image = Grapher.create( configuration.getScenarioName(), measurements ) ;
 
+    final File imageDestinationFile = new File(
+        configuration.getScenariiDirectory(),
+        FileTools.sanitizeFileName( configuration.getScenarioName() ) + ".png"
+    ) ;
 
-    System.exit( 0 ) ;
+    ImageIO.write( image, "png", imageDestinationFile ) ;
+
+    LOG.info( "Wrote " + imageDestinationFile.getAbsolutePath() ) ;
   }
 
 }

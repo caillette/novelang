@@ -91,7 +91,7 @@ public class Scenario< MEASUREMENT > {
         configuration.getMaximumIterations() : DEFAULT_MAXIMUM_ITERATIONS ;
 
     final File scenarioDirectory = FileTools.createFreshDirectory( 
-        configuration.getScenariiDirectory(), sanitizeFileName( name ) ) ;
+        configuration.getScenariiDirectory(), FileTools.sanitizeFileName( name ) ) ;
 
     final File contentDirectory = FileTools.createFreshDirectory( scenarioDirectory, "content" ) ;
 
@@ -113,7 +113,7 @@ public class Scenario< MEASUREMENT > {
           Husk.create( HttpDaemonDriver.Configuration.class )
           .withWorkingDirectory( versionWorkingDirectory )
           .withContentRootDirectory( contentDirectory )
-          .withJvmHeapSizeMegabytes( 48 )
+          .withJvmHeapSizeMegabytes( 32 )
           .withInstallationDirectory( configuration.getInstallationsDirectory() )
           .withLogDirectory( versionWorkingDirectory )
           .withVersion( version )
@@ -126,12 +126,7 @@ public class Scenario< MEASUREMENT > {
     }
   }
 
-  private static final Pattern SANITIZATION_PATTERN = Pattern.compile( "[^0-9a-zA-Z-_]" ) ;
-
-  private static String sanitizeFileName( final String name ) {
-    return SANITIZATION_PATTERN.matcher( name ).replaceAll( "" );
-  }
-
+  
   private static final int DEFAULT_WARMUP_ITERATIONS = 100 ;
   private static final Integer DEFAULT_MAXIMUM_ITERATIONS = 1000 ;
   private static final long LAUNCH_TIMEOUT_SECONDS = 20L ;
@@ -148,12 +143,15 @@ public class Scenario< MEASUREMENT > {
       int activeCount = monitorings.size() ;
       int iterationCount = 1 ;
       for( ; isBelowMaximumIterations( iterationCount ) && activeCount > 0 ; iterationCount ++ ) {
-        logPassCount( "Querying " + activeCount + " daemon(s), pass %d.", iterationCount ) ;
+        logPassCount( "Querying " + activeCount + " daemon(s), pass %d...", iterationCount ) ;
         runOnceWithMeasurementsOnEveryDaemon() ;
         final int updatedActiveCount = countActive( monitorings.values() ) ;
         final int difference = activeCount - updatedActiveCount ;
-        LOG.info( "Done querying. " +
-            ( difference > 0 ? difference + " daemon(s) terminated." : ""  ) ) ;
+        if( difference > 0 ) {
+          LOG.info( "Done querying, " + ( difference + " daemon(s) terminated." ) ) ;
+        } else {
+          LOG.debug( "Done querying. " ) ;
+        }
         activeCount = updatedActiveCount ;
       }
       if( hasReachedMaximumIterations( iterationCount ) ) {

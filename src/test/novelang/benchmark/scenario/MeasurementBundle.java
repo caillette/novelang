@@ -51,7 +51,7 @@ public class MeasurementBundle< MEASUREMENT > implements Iterable< MEASUREMENT >
    *     at startup and did not record anything.
    */
   public MEASUREMENT getMeasurement( final int index ) {
-    if( !measurementList.isEmpty() ) {
+    if( ! measurementList.isEmpty() ) {
       return null ;
     } else {
       return measurementList.get( index ) ;

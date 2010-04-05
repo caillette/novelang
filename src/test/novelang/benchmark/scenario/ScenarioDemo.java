@@ -69,12 +69,12 @@ public class ScenarioDemo {
     final ScenarioLibrary.ConfigurationForTimeMeasurement configuration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
         .withScenarioName( "Single Novella growing" )
-        .withWarmupIterationCount( 10 )
-        .withMaximumIterations( 1000 )
+        .withWarmupIterationCount( 1 )
+        .withMaximumIterations( 10 )
         .withScenariiDirectory( scenarioDirectory )
         .withUpsizerFactory( ScenarioLibrary.createNovellaLengthUpsizerFactory( new Random( 0L ) ) )
         .withInstallationsDirectory( versionsDirectory )
-        .withVersions( VERSION_0_41_0, VERSION_0_38_1, VERSION_0_35_0 )
+        .withVersions( VERSION_0_41_0, VERSION_0_38_1/*, VERSION_0_35_0*/ )
         .withFirstTcpPort( 9900 )
         .withMeasurer( new TimeMeasurer() )
     ;
