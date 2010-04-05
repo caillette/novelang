@@ -48,7 +48,7 @@ public class ScenarioLibrary {
         Husk.create( SimpleWordGenerator.Configuration.class )
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
-        .withSignCount( 10, 10 )
+        .withSignCount( 6, 6 )
         .withCircumflex( 0.0f )
     ;
 
@@ -57,7 +57,7 @@ public class ScenarioLibrary {
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
         .withWordGenerator( new SimpleWordGenerator( forWords ) )
-        .withWordCount( 10, 10 )
+        .withWordCount( 6, 6 )
         .withMiddlePunctuationSign( 18.0f )
         .withEndingPunctuation( true )
     ;
@@ -75,8 +75,8 @@ public class ScenarioLibrary {
     final SimpleBodyGenerator.Configuration forBodies =
         Husk.create( SimpleBodyGenerator.Configuration.class )
         .withRandom( random )
-        .withParagraphCountRange( 5, 5 )
-        .withSentenceCountRange( 5, 5 )
+        .withParagraphCountRange( 4, 4 )
+        .withSentenceCountRange( 4, 4 )
         .withSentenceGenerator( new SimpleSentenceGenerator( forSentences ) )
     ;
 

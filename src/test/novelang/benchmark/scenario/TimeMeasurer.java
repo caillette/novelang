@@ -50,7 +50,7 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
       final List< TimeMeasurement > previousMeasurements,
       final URL url
   ) throws IOException {
-    // HttpKit avoids including creation of HttpClient stuff into measurement. Yeah!
+    // HttpKit avoids including creation time of HttpClient stuff into measurement. Yeah!
     final HttpKit httpKit = createHttpKit( url ) ;
     final long startTime = System.currentTimeMillis() ;
     final Termination termination = run( httpKit ) ;

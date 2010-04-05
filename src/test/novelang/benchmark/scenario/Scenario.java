@@ -16,6 +16,16 @@
  */
 package novelang.benchmark.scenario;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -28,17 +38,6 @@ import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.apache.commons.lang.StringUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 /**
  * Starts and queries several {@link novelang.benchmark.HttpDaemonDriver}s against an evolving
@@ -319,6 +318,7 @@ public class Scenario< MEASUREMENT > {
 
   }
 
+  @SuppressWarnings( { "UnusedDeclaration" } )
   public static class ConfigurationHelper {
     public static Iterable< Version > convert( final Version... versions ) {
       return Arrays.asList( versions ) ;

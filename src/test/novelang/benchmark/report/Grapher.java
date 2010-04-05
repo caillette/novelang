@@ -41,6 +41,7 @@ import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
 
 /**
@@ -49,8 +50,6 @@ import org.jfree.ui.TextAnchor;
  * @author Laurent Caillette
  */
 public class Grapher {
-  private static final Color COLOR_GRADIENT_DARK = new Color( 136, 167, 189 );
-  private static final Color COLOR_GRADIENT_LIGHT = new Color( 204, 237, 255 );
 
   public static BufferedImage create(
       final String title,
@@ -88,9 +87,9 @@ public class Grapher {
 
 
     final JFreeChart chart = ChartFactory.createXYLineChart(
-        title,                     // chart title
-        "HttpDaemon call count",   // domain axis label
-        "Duration (seconds)",      // range axis label
+        null,                      // chart title
+        "Call count",              // domain axis label
+        "Response time (seconds)", // range axis label
         dataset,                   // data
         PlotOrientation.VERTICAL,  // orientation
         true,                      // include legend
@@ -141,13 +140,10 @@ public class Grapher {
     }
 
     final LegendTitle chartLegend = chart.getLegend() ;
-//    chartLegend.setBackgroundPaint( COLOR_GRADIENT_LIGHT ) ;
-    chartLegend.setBorder( 0.0, 0.0, 0.0, 0.0 ); ;
+    chartLegend.setBorder( 0.0, 0.0, 0.0, 0.0 ) ;
+    chartLegend.setPosition( RectangleEdge.TOP );
 
-
-    final BufferedImage bufferedImage = chart.createBufferedImage( widthPixels, heightPixels ) ;
-
-    return bufferedImage ;
+    return chart.createBufferedImage( widthPixels, heightPixels );
 
   }
 
@@ -164,6 +160,9 @@ public class Grapher {
   private static double convertToYValue( final TimeMeasurement measurement ) {
     return ( double ) measurement.getTimeMilliseconds() / 1000.0;
   }
+
+  private static final Color COLOR_GRADIENT_DARK = new Color( 136, 167, 189 ) ;
+  private static final Color COLOR_GRADIENT_LIGHT = new Color( 204, 237, 255 ) ;
 
 
 }

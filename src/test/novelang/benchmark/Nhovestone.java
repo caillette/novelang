@@ -61,7 +61,7 @@ public class Nhovestone {
 
     final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
-        .withWarmupIterationCount( 10 )
+        .withWarmupIterationCount( 1000 )
         .withMaximumIterations( 10000 )
         .withScenariiDirectory( scenariiDirectory )
         .withInstallationsDirectory( versionsDirectory )
