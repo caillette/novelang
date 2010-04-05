@@ -40,6 +40,7 @@ import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYAreaRenderer;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYSeries;
@@ -84,7 +85,7 @@ public class Grapher {
     ) ;
 
     final XYPlot plot = ( XYPlot ) chart.getPlot() ;
-    plot.setBackgroundPaint( GRADIENT_PAINT ) ;
+    plot.setBackgroundPaint( BACKGROUND_GRADIENT_PAINT ) ;
 
     addUpsizingsDataset( plot, upsizings );
     addMeasurementsDataset( plot, measurements );
@@ -99,15 +100,18 @@ public class Grapher {
           serieIndex == 0 ? 3.0f : 1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) ;
       measurementsRenderer.setSeriesStroke( serieIndex, stroke ) ;
     }
+    measurementsRenderer.setSeriesFillPaint( 0, new Color( 255, 0, 0, 255 ) ) ;
     plot.setRenderer( MEASUREMENTS_INDEX, measurementsRenderer ) ;
 
-    final XYSplineRenderer upsizingRenderer = new XYSplineRenderer() ;
-    upsizingRenderer.setSeriesShapesVisible( 0, false ) ;
+    final XYAreaRenderer upsizingRenderer = new EnhancedXYAreaRenderer() ;
+    upsizingRenderer.setSeriesFillPaint( 0, UPSIZING_GRADIENT_PAINT ) ;
+    upsizingRenderer.setOutline( true ) ;
+    upsizingRenderer.setSeriesOutlinePaint( 0, COLOR_UPSIZING_LINE ) ;
+
+    // Only for the legend.
+    upsizingRenderer.setSeriesPaint( 0, COLOR_BACKGROUND_DARK ) ;
+
     plot.setRenderer( UPSIZINGS_INDEX, upsizingRenderer ) ;
-
-    plot.configureDomainAxes() ;
-    plot.configureRangeAxes() ;
-
 
     final LegendTitle chartLegend = chart.getLegend() ;
     chartLegend.setBorder( 0.0, 0.0, 0.0, 0.0 ) ;
@@ -212,13 +216,19 @@ public class Grapher {
   private static final int MEASUREMENTS_INDEX = 0 ;
   private static final int UPSIZINGS_INDEX = 1 ;
 
-  private static final Color COLOR_GRADIENT_DARK = new Color( 136, 167, 189 ) ;
-  private static final Color COLOR_GRADIENT_LIGHT = new Color( 204, 237, 255 ) ;
+  private static final Color COLOR_BACKGROUND_DARK = new Color( 136, 167, 189 ) ;
+  private static final Color COLOR_BACKGROUND_LIGHT = new Color( 204, 237, 255 ) ;
 
-  private static final GradientPaint GRADIENT_PAINT = new GradientPaint(
-      0.0f, 0.0f, COLOR_GRADIENT_DARK,
-      0.0f, 0.0f, COLOR_GRADIENT_LIGHT
+  private static final GradientPaint BACKGROUND_GRADIENT_PAINT = new GradientPaint(
+      0.0f, 0.0f, COLOR_BACKGROUND_DARK,
+      0.0f, 0.0f, COLOR_BACKGROUND_LIGHT
   );
 
+  private static final Color COLOR_UPSIZING_DARK = new Color( 136, 167, 189, 20 ) ;
+  private static final Color COLOR_UPSIZING_LIGHT = new Color( 204, 237, 255, 200 ) ;
+  private static final Color COLOR_UPSIZING_LINE = new Color( 240, 240, 255, 100 ) ;
+
+  private static final GradientPaint UPSIZING_GRADIENT_PAINT =
+      new GradientPaint( 0.0f, 0.0f, COLOR_UPSIZING_DARK, 0.0f, 0.0f, COLOR_UPSIZING_LIGHT ) ;
 
 }
