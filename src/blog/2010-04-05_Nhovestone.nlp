@@ -1,0 +1,53 @@
+== Nhovestone
+
+"Nhovestone" is the name of Novelang's dedicated benchmark tool, and also a "geeky pun"
+http://en.wikipedia.org/wiki/Dhrystone 
+.
+
+Nhovestone aims to highlight performance variations across versions using only a few (carefully selected) measurements:
+- How does response time evolve when increasing the number of documents aggregated in a single Book?
+- How does response time evolve when increasing the size of one single document?
+
+Nhovestone doesn't try to generate an absolute performance index. This is because such an index makes sense only when computed from always the same source documents and the same hardware. 
+
+=== How it works
+
+Nhovestone focuses on HTML generation using default stylesheet, because HTML is great for fast edit-and-review roundtrips. It uses the "Novelist"
+http://novelang.blogspot.com/2010/03/novelist-random-text-generation.html 
+to generate pseudo-random text with a realistic structure. For each benchmarked Novelang version, Nhovestone starts a JVM with a small amount of memory (currently ``-Xmx32M``). With few memory the breaking point appears sooner. Nhovestone increases the size of the source ~document(s) in a linear fashion, and after each increasing, measures how long takes the call of a Novelang instance.
+
+=== Performance degradation
+
+Response time start to increase exponentially as document becomes fairly big in regard of available memory. This triggers a lot of CPU-intensive garbage collection consuming a lot of time. Nhovestone detects that a running Novelang HTTP daemon gets "strained" when response time gets above a dynamically-computed threshold. The threshold comes from the straight line drawn from a "linear regression" 
+http://en.wikipedia.org/wiki/Linear_regression 
+on the first half of the measurements, with a slope made steeper by a fixed coefficient. When a response time appears above this straight line, the Novelang HTTP daemon got strained and it's not worth any further measurement.
+
+
+=== Adding Parts
+
+This is the first scenario: for each new measurement, there is an additional Part file. All Parts are more or less equal in size and complexity (including level depth). The graph below shows that performance degradation stays linear until the 300^th call. Then, version `0.41.0` starts suffering before older versions. It's likely that new features require additional memory so starvation occurs sooner. 
+
+./images/2010-04-05_Nhovestone/IncreasingNovellaCount.png
+
+
+=== Increasing the size of the same Part
+
+This is the second scenario:the generated document comes from a single Part file of a size increasing before each call. Each fragment added to the Part has the same size and structure as in the previous test, but all 3 versions show fatigue much sooner (at least `7.5 times`). This shows that creating a Part takes much more temporary memory than the finished Part itself.
+
+./images/2010-04-05_Nhovestone/SingleevergrowingNovella.png
+
+
+=== Tuning
+
+These figures are strongly connected to the volume and the structure of underlying document. Experience shows that small increments generate more measurements (before the fatal strain) and therefore show a more readable trend. They also reduce measurement artefacts that could fool strain detection.
+
+=== Report generation
+
+"JFreeChart" 
+http://www.jfree.org/jfreechart 
+generates those graphs. JFreeChart is probably the best charting library for
+Java at this time, at least on the OSS marketplace. It is stable and highly
+configurable. 
+
+The next step: embed those graphs in a Novelang-generated PDF and publish it as a complement of existing documentation.
+
