@@ -9,6 +9,7 @@
  */
 package novelang.novelist;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import novelang.system.Log;
 import novelang.system.LogFactory;
@@ -56,7 +57,7 @@ public class Novelist {
     for( int i = 1 ; i <= ghostwriterCount ; i ++ ) {
       addGhostwriter() ;
     }
-    createNovebook( directory ) ;
+    createComposium( directory ) ;
   }
 
   public static final String BOOK_NAME_RADIX = "book" ;
@@ -96,10 +97,10 @@ public class Novelist {
   }
 
 
-  private static void createNovebook( final File directory ) throws IOException {
+  private static void createComposium( final File directory ) throws IOException {
     final File bookFile = new File( directory, BOOK_FILE_NAME ) ;
     FileUtils.writeStringToFile( bookFile, BOOK_CONTENT ) ;
-    LOG.info( "Created Novebook: " + bookFile.getAbsolutePath() ) ;
+    LOG.info( "Created Composium: '" + bookFile.getAbsolutePath() + "'" ) ;
   }
   
   public void addGhostwriter() throws IOException {
@@ -110,24 +111,32 @@ public class Novelist {
     }
   }
 
-  public void addGhostwriter( final int iterationCountForNewGhostwriter ) throws IOException {
+  public long addGhostwriter( final int iterationCountForNewGhostwriter ) throws IOException {
     final Ghostwriter newGhostwriter ;
     synchronized( ghostwriters ) {
       final int ghostwriterIndex = ghostwriters.size() + 1 ;
       final File file = createFreshNovellaFile( directory, filenamePrototype, ghostwriterIndex ) ;
       newGhostwriter = new Ghostwriter( file, generatorSupplier.get( ghostwriterIndex ) );
       ghostwriters.add( newGhostwriter ) ;
-      newGhostwriter.write( iterationCountForNewGhostwriter ) ;
+      return newGhostwriter.write( iterationCountForNewGhostwriter ) ;
     }
   }
 
-  public void write( final int iterationCount ) throws IOException {
+  /**
+   * Calls {@link novelang.novelist.Novelist.Ghostwriter#write(int)} multiple times.
+   *
+   * @param iterationCount number of iterations.
+   * @return number of bytes written.
+   */
+  public long write( final int iterationCount ) throws IOException {
+    long bytesWritten = 0 ;
     synchronized( ghostwriters ) {
       for( final Ghostwriter ghostwriter : ghostwriters ) {
-        ghostwriter.write( iterationCount ) ;
+        bytesWritten += ghostwriter.write( iterationCount ) ;
       }
     }
-    LOG.debug( "Writing done." ) ;
+    LOG.debug( "Writing done, wrote " + bytesWritten + " bytes." ) ;
+    return bytesWritten ;
   }
 
   private static class Ghostwriter {
@@ -145,17 +154,21 @@ public class Novelist {
       this.generator = generator ;
     }
 
-    public void write( final int iterationCount ) throws IOException {
+    public long write( final int iterationCount ) throws IOException {
+      Preconditions.checkArgument( iterationCount >= 0 ) ;
+      long bytesWritten = 0L ;
       final OutputStream outputStream = new FileOutputStream( file, true ) ;
       try {
         for( int i = 0 ; i < iterationCount ; i ++ ) {
           final String text = generator.generate().getLiteral() ;
+          bytesWritten += ( long ) text.length() ;
           IOUtils.write( text, outputStream ) ;
-          WRITER_LOG.debug( "{" + name + "} wrote " + text.length() + " bytes." ) ;
+//          WRITER_LOG.debug( "{" + name + "} wrote " + text.length() + " bytes." ) ;
         }
       } finally {
         outputStream.close() ;
       }
+      return bytesWritten ;
     }
 
   }

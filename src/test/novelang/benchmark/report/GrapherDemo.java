@@ -16,6 +16,7 @@
  */
 package novelang.benchmark.report;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import novelang.Version;
@@ -42,7 +43,65 @@ public class GrapherDemo {
 
   private static final Log LOG = LogFactory.getLog( GrapherDemo.class );
   
-  
+
+  public static List< Long > buildUpsizings() {
+    final List< Long > list = Lists.newArrayList() ;
+    list.add( 455L ) ;
+    list.add( 525L ) ;
+    list.add( 435L ) ;
+    list.add( 400L ) ;
+    list.add( 388L ) ;
+    list.add( 482L ) ;
+    list.add( 451L ) ;
+    list.add( 478L ) ;
+    list.add( 448L ) ;
+    list.add( 411L ) ;
+    list.add( 490L ) ;
+    list.add( 476L ) ;
+    list.add( 434L ) ;
+    list.add( 472L ) ;
+    list.add( 410L ) ;
+    list.add( 460L ) ;
+    list.add( 415L ) ;
+    list.add( 463L ) ;
+    list.add( 410L ) ;
+    list.add( 409L ) ;
+    list.add( 437L ) ;
+    list.add( 501L ) ;
+    list.add( 409L ) ;
+    list.add( 404L ) ;
+    list.add( 384L ) ;
+    list.add( 442L ) ;
+    list.add( 461L ) ;
+    list.add( 438L ) ;
+    list.add( 418L ) ;
+    list.add( 419L ) ;
+    list.add( 460L ) ;
+    list.add( 470L ) ;
+    list.add( 438L ) ;
+    list.add( 472L ) ;
+    list.add( 420L ) ;
+    list.add( 430L ) ;
+    list.add( 450L ) ;
+    list.add( 418L ) ;
+    list.add( 493L ) ;
+    list.add( 449L ) ;
+    list.add( 434L ) ;
+    list.add( 411L ) ;
+    list.add( 490L ) ;
+    list.add( 476L ) ;
+    list.add( 472L ) ;
+    list.add( 463L ) ;
+    list.add( 410L ) ;
+    list.add( 410L ) ;
+    list.add( 460L ) ;
+    list.add( 415L ) ;
+    list.add( 409L ) ;
+    list.add( 437L ) ;
+
+    return ImmutableList.copyOf( list ) ;
+  }
+
   public static Map< Version, MeasurementBundle< TimeMeasurement > > buildMap() {
 
     final Map< Version, MeasurementBundle< TimeMeasurement > > map = Maps.newHashMap() ;
@@ -98,7 +157,7 @@ public class GrapherDemo {
     timeMeasurements1.add( new TimeMeasurement( 1231L ) ) ;
     timeMeasurements1.add( new TimeMeasurement( 1319L ) ) ;
     timeMeasurements1.add( new TimeMeasurement( 1579L ) ) ;
-    timeMeasurements1.add( new TimeMeasurement( 2492L ) ) ;
+    timeMeasurements1.add( new TimeMeasurement( 3492L ) ) ;
 
     final MeasurementBundle< TimeMeasurement > measurementBundle1 =
         new MeasurementBundle< TimeMeasurement >(
@@ -172,7 +231,7 @@ public class GrapherDemo {
   public static void main( final String[] args ) throws IOException {
     final File scenarioDirectory = FileTools.createFreshDirectory( "_scenario-demo" ) ;
 
-    final BufferedImage image = Grapher.create( "Scenario", buildMap() ) ;
+    final BufferedImage image = Grapher.create( "Scenario", buildUpsizings(), buildMap() ) ;
     final File imageFile = new File( scenarioDirectory, "graph.png" );
     ImageIO.write( image, "png", imageFile ) ;
 

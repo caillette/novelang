@@ -19,7 +19,7 @@ package novelang.benchmark.scenario;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -33,7 +33,6 @@ import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
-import static novelang.benchmark.KnownVersions.VERSION_0_35_0;
 import static novelang.benchmark.KnownVersions.VERSION_0_38_1;
 import static novelang.benchmark.KnownVersions.VERSION_0_41_0;
 
@@ -54,18 +53,6 @@ public class ScenarioDemo {
     final Novelist.LevelGeneratorSupplierWithDefaults levelGenerator =
         new Novelist.LevelGeneratorSupplierWithDefaults() ;
 
-    final Upsizer.Factory upsizerFactory = new Upsizer.Factory() {
-
-      public Upsizer create( final File directory ) throws IOException {
-        return new Upsizer.NovellaeLength(
-            new Novelist( directory, "demo", levelGenerator, 1 ) ) ;
-      }
-
-      public String getDocumentRequest() {
-        return "/" + Novelist.BOOK_NAME_RADIX + ".html" ;
-      }
-    } ;
-
     final ScenarioLibrary.ConfigurationForTimeMeasurement configuration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
         .withScenarioName( "Single Novella growing" )
@@ -79,14 +66,16 @@ public class ScenarioDemo {
         .withMeasurer( new TimeMeasurer() )
     ;
 
-    final Scenario< TimeMeasurement > scenario = new Scenario< TimeMeasurement >( configuration ) ;
+    final Scenario< Long, TimeMeasurement > scenario =
+        new Scenario< Long, TimeMeasurement >( configuration ) ;
 
     scenario.run() ;
 
     final Map< Version, MeasurementBundle< TimeMeasurement > > measurements =
         scenario.getMeasurements() ;
+    final List< Long > upsizings = scenario.getUpsizings() ;
 
-    final BufferedImage image = Grapher.create( "Scenario", measurements ) ;
+    final BufferedImage image = Grapher.create( "Scenario", upsizings, measurements ) ;
     ImageIO.write( image, "png", new File( scenarioDirectory, "graph.png" ) ) ;
 
   }

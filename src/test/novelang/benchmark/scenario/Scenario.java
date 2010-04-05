@@ -45,7 +45,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Laurent Caillette
  */
-public class Scenario< MEASUREMENT > {
+public class Scenario< UPSIZING, MEASUREMENT > {
 
   private static final Log LOG = LogFactory.getLog( Scenario.class ) ;
 
@@ -72,10 +72,12 @@ public class Scenario< MEASUREMENT > {
    */
   private final Map< Version, Monitoring > monitorings = Maps.newHashMap() ;
   private final String documentRequest ;
-  private final Upsizer upsizer ;
+  private final Upsizer< UPSIZING > upsizer ;
   private final Measurer< MEASUREMENT > measurer ;
 
-  public Scenario( final Configuration< ? extends Configuration, MEASUREMENT > configuration )
+  public Scenario(
+      final Configuration< ? extends Configuration, UPSIZING, MEASUREMENT > configuration
+  )
       throws IOException
   {
 
@@ -199,6 +201,10 @@ public class Scenario< MEASUREMENT > {
     return builder.build() ;
   }
 
+  public List< UPSIZING > getUpsizings() {
+    return upsizer.getUpsizings() ;
+  }
+
 
   private void startDaemons()
       throws IOException,
@@ -287,7 +293,7 @@ public class Scenario< MEASUREMENT > {
 
 
   @Husk.Converter( converterClass = ConfigurationHelper.class )
-  public interface Configuration< CONFIGURATION extends Configuration, MEASUREMENT > {
+  public interface Configuration< CONFIGURATION extends Configuration, UPSIZING, MEASUREMENT > {
 
     String getScenarioName() ;
     CONFIGURATION withScenarioName( String name ) ;
@@ -301,8 +307,8 @@ public class Scenario< MEASUREMENT > {
     File getScenariiDirectory() ;
     CONFIGURATION withScenariiDirectory( File scenariiDirectory ) ;
 
-    Upsizer.Factory getUpsizerFactory() ;
-    CONFIGURATION withUpsizerFactory( Upsizer.Factory factory ) ;
+    Upsizer.Factory< UPSIZING > getUpsizerFactory() ;
+    CONFIGURATION withUpsizerFactory( Upsizer.Factory< UPSIZING > factory ) ;
 
     File getInstallationsDirectory() ;
     CONFIGURATION withInstallationsDirectory( File directory ) ;

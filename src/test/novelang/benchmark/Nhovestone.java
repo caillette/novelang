@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -88,14 +89,18 @@ public class Nhovestone {
   )
       throws IOException, ProcessDriver.ProcessCreationFailedException, InterruptedException
   {
-    final Scenario< TimeMeasurement > scenario = new Scenario< TimeMeasurement >( configuration ) ;
+    final Scenario< Long, TimeMeasurement > scenario =
+        new Scenario< Long, TimeMeasurement >( configuration ) ;
 
     scenario.run() ;
 
     final Map< Version, MeasurementBundle< TimeMeasurement > > measurements =
         scenario.getMeasurements() ;
 
-    final BufferedImage image = Grapher.create( configuration.getScenarioName(), measurements ) ;
+    final List< Long > upsizings = scenario.getUpsizings() ;
+
+    final BufferedImage image = Grapher.create( 
+        configuration.getScenarioName(), upsizings, measurements ) ;
 
     final File imageDestinationFile = new File(
         configuration.getScenariiDirectory(),

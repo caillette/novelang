@@ -117,40 +117,41 @@ public class ScenarioLibrary {
   }
 
 
-  private static abstract class AbstractUpsizerFactory implements Upsizer.Factory {
+  private static abstract class AbstractUpsizerFactory implements Upsizer.Factory< Long > {
     private final Random random ;
 
     private AbstractUpsizerFactory( final Random random ) {
       this.random = random ;
     }
 
+    @SuppressWarnings( { "HardcodedFileSeparator" } )
     public final String getDocumentRequest() {
       return "/" + Novelist.BOOK_NAME_RADIX + ".html" ;
     }
 
-    public final Upsizer create( final File directory ) throws IOException {
+    public final Upsizer< Long > create( final File directory ) throws IOException {
       return createUpsizer( new Novelist(
           directory, "novella", new LevelGeneratorSupplier( random ), 1 ) ) ;
     }
 
-    protected abstract Upsizer createUpsizer( final Novelist novelist ) ;
+    protected abstract Upsizer< Long > createUpsizer( final Novelist novelist ) ;
 
   }
 
-  public static Upsizer.Factory createNovellaLengthUpsizerFactory( final Random random ) {
+  public static Upsizer.Factory< Long > createNovellaLengthUpsizerFactory( final Random random ) {
     return new AbstractUpsizerFactory( random ) {
       @Override
-      protected Upsizer createUpsizer( final Novelist novelist ) {
-        return new Upsizer.NovellaeLength( novelist );
+      protected Upsizer< Long > createUpsizer( final Novelist novelist ) {
+        return new NovelistUpsizer.NovellaeLength( novelist ) ;
       }
     } ;
   }
 
-  public static Upsizer.Factory createNovellaCountUpsizerFactory( final Random random ) {
+  public static Upsizer.Factory< Long > createNovellaCountUpsizerFactory( final Random random ) {
     return new AbstractUpsizerFactory( random ) {
       @Override
-      protected Upsizer createUpsizer( final Novelist novelist ) {
-        return new Upsizer.NovellaCount( novelist );
+      protected Upsizer< Long > createUpsizer( final Novelist novelist ) {
+        return new NovelistUpsizer.NovellaCount( novelist ) ;
       }
     } ;
   }
@@ -164,7 +165,7 @@ public class ScenarioLibrary {
 
 
   public interface ConfigurationForTimeMeasurement
-      extends Scenario.Configuration< ConfigurationForTimeMeasurement, TimeMeasurement > { }
+      extends Scenario.Configuration< ConfigurationForTimeMeasurement, Long, TimeMeasurement > { }
 
 
 }

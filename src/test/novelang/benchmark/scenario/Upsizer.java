@@ -16,26 +16,31 @@
  */
 package novelang.benchmark.scenario;
 
-import com.google.common.base.Preconditions;
-import novelang.novelist.Novelist;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
 * @author Laurent Caillette
 */
-public interface Upsizer {
+public interface Upsizer< UPSIZING > {
 
   /**
    * Creates initial document(s) or augments it (them).
    */
-  void upsize() throws IOException;
+  void upsize() throws IOException ;
 
-  public interface Factory {
+  List< UPSIZING > getUpsizings() ;
 
-    Upsizer create( File contentDirectory ) throws IOException;
+  /**
+   * Using a factory avoids setting the directory to an already-existing instance of the
+   * {@link Upsizer}. The pattern of configuring everything through the constructor works well,
+   * let's apply it.
+   */
+  public interface Factory< UPSISING > {
+
+    Upsizer< UPSISING > create( File contentDirectory ) throws IOException;
 
     /**
      * Returns document request matching with generated document.
@@ -45,39 +50,5 @@ public interface Upsizer {
     String getDocumentRequest() ;
   }
 
-
-
-  
-  /**
-   * @author Laurent Caillette
-   */
-  class NovellaeLength implements Upsizer {
-
-    private final Novelist novelist ;
-
-    public NovellaeLength( final Novelist novelist ) {
-      this.novelist = Preconditions.checkNotNull( novelist ) ;
-    }
-
-    public void upsize() throws IOException {
-      novelist.write( 1 ) ;
-    }
-  }
-
-  /**
-   * @author Laurent Caillette
-   */
-  class NovellaCount implements Upsizer {
-
-    private final Novelist novelist ;
-
-    public NovellaCount( final Novelist novelist ) {
-      this.novelist = Preconditions.checkNotNull( novelist ) ;
-    }
-
-    public void upsize() throws IOException {
-      novelist.addGhostwriter( 1 ) ;
-    }
-  }
 
 }
