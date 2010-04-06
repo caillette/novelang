@@ -41,6 +41,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYAreaRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYSeries;
@@ -101,17 +102,23 @@ public class Grapher {
       measurementsRenderer.setSeriesStroke( serieIndex, stroke ) ;
     }
     measurementsRenderer.setSeriesFillPaint( 0, new Color( 255, 0, 0, 255 ) ) ;
-    plot.setRenderer( MEASUREMENTS_INDEX, measurementsRenderer ) ;
+    plot.setRenderer( MEASUREMENTS_KEY, measurementsRenderer ) ;
 
-    final XYAreaRenderer upsizingRenderer = new EnhancedXYAreaRenderer() ;
-    upsizingRenderer.setSeriesFillPaint( 0, UPSIZING_GRADIENT_PAINT ) ;
-    upsizingRenderer.setOutline( true ) ;
-    upsizingRenderer.setSeriesOutlinePaint( 0, COLOR_UPSIZING_LINE ) ;
+    final XYAreaRenderer upsizingAreaRenderer = new EnhancedXYAreaRenderer() ;
+    upsizingAreaRenderer.setSeriesFillPaint( 0, UPSIZING_GRADIENT_PAINT ) ;
+//    upsizingAreaRenderer.setOutline( true ) ;
+//    upsizingAreaRenderer.setSeriesOutlinePaint( 0, COLOR_UPSIZING_LINE ) ;
+    upsizingAreaRenderer.setSeriesPaint( 0, COLOR_BACKGROUND_DARK ) ; // Only for the legend.
+    plot.setRenderer( UPSIZINGS_KEY_AREA, upsizingAreaRenderer ) ;
 
-    // Only for the legend.
-    upsizingRenderer.setSeriesPaint( 0, COLOR_BACKGROUND_DARK ) ;
+//    final XYLineAndShapeRenderer upsizingLineRenderer = new XYLineAndShapeRenderer() ;
+//    upsizingLineRenderer.setSeriesShapesVisible( 0, false );
+//    upsizingAreaRenderer.setOutline( true ) ;
+//    upsizingLineRenderer.setSeriesOutlinePaint( 0, COLOR_UPSIZING_LINE ) ;
+//    plot.setRenderer( UPSIZINGS_KEY_LINE, upsizingLineRenderer ) ;
 
-    plot.setRenderer( UPSIZINGS_INDEX, upsizingRenderer ) ;
+
+
 
     final LegendTitle chartLegend = chart.getLegend() ;
     chartLegend.setBorder( 0.0, 0.0, 0.0, 0.0 ) ;
@@ -146,11 +153,11 @@ public class Grapher {
 
     }
 
-    plot.setDataset( MEASUREMENTS_INDEX, measurementsDataset ) ;
+    plot.setDataset( MEASUREMENTS_KEY, measurementsDataset ) ;
     final NumberAxis measurementRangeAxis = new NumberAxis( "Response time (seconds)" ) ;
     measurementRangeAxis.setAutoRange( true ) ;
-    plot.setRangeAxis( MEASUREMENTS_INDEX, measurementRangeAxis ) ;
-    plot.mapDatasetToRangeAxis( MEASUREMENTS_INDEX, MEASUREMENTS_INDEX ); ;
+    plot.setRangeAxis( MEASUREMENTS_KEY, measurementRangeAxis ) ;
+    plot.mapDatasetToRangeAxis( MEASUREMENTS_KEY, MEASUREMENTS_KEY ); ;
   }
 
 
@@ -159,7 +166,7 @@ public class Grapher {
     final XYSeries series = new XYSeries( "Source size" ) ;
     int upsizingIndex = 0 ;
     double sum = 0.0 ;
-    double adjustedSum = 0.0 ;
+    double adjustedSum ;
     for( final Long upsizing : upsizings ) {
       sum += upsizing ;
       adjustedSum = sum / 1024.0;
@@ -167,13 +174,15 @@ public class Grapher {
     }
 //    LOG.debug( "Las adjusted sum added: " + upsizingIndex + " -> " + adjustedSum ) ;
     upsizingsDataset.addSeries( series ) ;
-    plot.setDataset( UPSIZINGS_INDEX, upsizingsDataset ) ;
+    plot.setDataset( UPSIZINGS_KEY_AREA, upsizingsDataset ) ;
+//    plot.setDataset( UPSIZINGS_KEY_LINE, upsizingsDataset ) ;
 
     final NumberAxis upsizingRangeAxis = new NumberAxis( "Document source size (KiB)" ) ;
     upsizingRangeAxis.setAutoRange( true ) ;
-    plot.setRangeAxis( UPSIZINGS_INDEX, upsizingRangeAxis ) ;
-    plot.setRangeAxisLocation( UPSIZINGS_INDEX, AxisLocation.BOTTOM_OR_RIGHT ) ;
-    plot.mapDatasetToRangeAxis( UPSIZINGS_INDEX, UPSIZINGS_INDEX );
+    plot.setRangeAxis( UPSIZINGS_KEY_AREA, upsizingRangeAxis ) ;
+    plot.setRangeAxisLocation( UPSIZINGS_KEY_AREA, AxisLocation.BOTTOM_OR_RIGHT ) ;
+    plot.mapDatasetToRangeAxis( UPSIZINGS_KEY_AREA, UPSIZINGS_KEY_AREA );
+//    plot.mapDatasetToRangeAxis( UPSIZINGS_KEY_LINE, UPSIZINGS_KEY_AREA /* Share range axis */ );
   }
 
   private static void addAnnotations(
@@ -213,8 +222,9 @@ public class Grapher {
   }
 
 
-  private static final int MEASUREMENTS_INDEX = 0 ;
-  private static final int UPSIZINGS_INDEX = 1 ;
+  private static final int MEASUREMENTS_KEY = 0 ;
+  private static final int UPSIZINGS_KEY_AREA = 1 ;
+  private static final int UPSIZINGS_KEY_LINE = 2 ;
 
   private static final Color COLOR_BACKGROUND_DARK = new Color( 136, 167, 189 ) ;
   private static final Color COLOR_BACKGROUND_LIGHT = new Color( 204, 237, 255 ) ;
