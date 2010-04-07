@@ -75,7 +75,7 @@ public class ScenarioDemo {
         scenario.getMeasurements() ;
     final List< Long > upsizings = scenario.getUpsizings() ;
 
-    final BufferedImage image = Grapher.create( "Scenario", upsizings, measurements ) ;
+    final BufferedImage image = Grapher.create( upsizings, measurements ) ;
     ImageIO.write( image, "png", new File( scenarioDirectory, "graph.png" ) ) ;
 
   }

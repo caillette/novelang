@@ -31,8 +31,6 @@ import novelang.benchmark.scenario.MeasurementBundle;
 import novelang.benchmark.scenario.Termination;
 import novelang.benchmark.scenario.TimeMeasurement;
 import novelang.benchmark.scenario.TimeMeasurer;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTextAnnotation;
@@ -41,7 +39,6 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYAreaRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYSeries;
@@ -56,18 +53,14 @@ import org.jfree.ui.TextAnchor;
  */
 public class Grapher {
 
-  private static final Log LOG = LogFactory.getLog( Grapher.class ) ;
-
   public static BufferedImage create(
-      final String title,
       final List< Long > upsizings,
       final Map< Version, MeasurementBundle< TimeMeasurement > > measurements
   ) {
-    return create( title, upsizings, measurements, 600, 300 ) ;
+    return create( upsizings, measurements, 600, 300 ) ;
   }
 
   public static BufferedImage create(
-      final String title,
       final List< Long > upsizings,
       final Map< Version, MeasurementBundle< TimeMeasurement > > measurements,
       final int widthPixels,
@@ -106,18 +99,8 @@ public class Grapher {
 
     final XYAreaRenderer upsizingAreaRenderer = new EnhancedXYAreaRenderer() ;
     upsizingAreaRenderer.setSeriesFillPaint( 0, UPSIZING_GRADIENT_PAINT ) ;
-//    upsizingAreaRenderer.setOutline( true ) ;
-//    upsizingAreaRenderer.setSeriesOutlinePaint( 0, COLOR_UPSIZING_LINE ) ;
     upsizingAreaRenderer.setSeriesPaint( 0, COLOR_BACKGROUND_DARK ) ; // Only for the legend.
     plot.setRenderer( UPSIZINGS_KEY_AREA, upsizingAreaRenderer ) ;
-
-//    final XYLineAndShapeRenderer upsizingLineRenderer = new XYLineAndShapeRenderer() ;
-//    upsizingLineRenderer.setSeriesShapesVisible( 0, false );
-//    upsizingAreaRenderer.setOutline( true ) ;
-//    upsizingLineRenderer.setSeriesOutlinePaint( 0, COLOR_UPSIZING_LINE ) ;
-//    plot.setRenderer( UPSIZINGS_KEY_LINE, upsizingLineRenderer ) ;
-
-
 
 
     final LegendTitle chartLegend = chart.getLegend() ;
@@ -175,14 +158,12 @@ public class Grapher {
 //    LOG.debug( "Las adjusted sum added: " + upsizingIndex + " -> " + adjustedSum ) ;
     upsizingsDataset.addSeries( series ) ;
     plot.setDataset( UPSIZINGS_KEY_AREA, upsizingsDataset ) ;
-//    plot.setDataset( UPSIZINGS_KEY_LINE, upsizingsDataset ) ;
 
     final NumberAxis upsizingRangeAxis = new NumberAxis( "Document source size (KiB)" ) ;
     upsizingRangeAxis.setAutoRange( true ) ;
     plot.setRangeAxis( UPSIZINGS_KEY_AREA, upsizingRangeAxis ) ;
     plot.setRangeAxisLocation( UPSIZINGS_KEY_AREA, AxisLocation.BOTTOM_OR_RIGHT ) ;
     plot.mapDatasetToRangeAxis( UPSIZINGS_KEY_AREA, UPSIZINGS_KEY_AREA );
-//    plot.mapDatasetToRangeAxis( UPSIZINGS_KEY_LINE, UPSIZINGS_KEY_AREA /* Share range axis */ );
   }
 
   private static void addAnnotations(
@@ -224,7 +205,6 @@ public class Grapher {
 
   private static final int MEASUREMENTS_KEY = 0 ;
   private static final int UPSIZINGS_KEY_AREA = 1 ;
-  private static final int UPSIZINGS_KEY_LINE = 2 ;
 
   private static final Color COLOR_BACKGROUND_DARK = new Color( 136, 167, 189 ) ;
   private static final Color COLOR_BACKGROUND_LIGHT = new Color( 204, 237, 255 ) ;
@@ -236,7 +216,6 @@ public class Grapher {
 
   private static final Color COLOR_UPSIZING_DARK = new Color( 136, 167, 189, 20 ) ;
   private static final Color COLOR_UPSIZING_LIGHT = new Color( 204, 237, 255, 200 ) ;
-  private static final Color COLOR_UPSIZING_LINE = new Color( 240, 240, 255, 100 ) ;
 
   private static final GradientPaint UPSIZING_GRADIENT_PAINT =
       new GradientPaint( 0.0f, 0.0f, COLOR_UPSIZING_DARK, 0.0f, 0.0f, COLOR_UPSIZING_LIGHT ) ;

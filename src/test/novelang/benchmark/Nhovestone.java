@@ -99,8 +99,8 @@ public class Nhovestone {
 
     final List< Long > upsizings = scenario.getUpsizings() ;
 
-    final BufferedImage image = Grapher.create( 
-        configuration.getScenarioName(), upsizings, measurements ) ;
+    final BufferedImage image = Grapher.create(
+        upsizings, measurements ) ;
 
     final File imageDestinationFile = new File(
         configuration.getScenariiDirectory(),
