@@ -31,6 +31,9 @@ import novelang.benchmark.scenario.MeasurementBundle;
 import novelang.benchmark.scenario.Termination;
 import novelang.benchmark.scenario.TimeMeasurement;
 import novelang.benchmark.scenario.TimeMeasurer;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTextAnnotation;
@@ -38,9 +41,11 @@ import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYAreaRenderer;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
@@ -52,6 +57,8 @@ import org.jfree.ui.TextAnchor;
  * @author Laurent Caillette
  */
 public class Grapher {
+
+  private static final Log LOG = LogFactory.getLog( Grapher.class );
 
   public static BufferedImage create(
       final List< Long > upsizings,
@@ -69,7 +76,7 @@ public class Grapher {
 
     final JFreeChart chart = ChartFactory.createXYLineChart(
         null,                      // chart title
-        "Call count",              // domain axis label
+        "Total source size (KiB)",              // domain axis label
         null,                      // range axis label
         null,                      // data
         PlotOrientation.VERTICAL,  // orientation
@@ -81,8 +88,10 @@ public class Grapher {
     final XYPlot plot = ( XYPlot ) chart.getPlot() ;
     plot.setBackgroundPaint( BACKGROUND_GRADIENT_PAINT ) ;
 
-    addUpsizingsDataset( plot, upsizings );
-    addMeasurementsDataset( plot, measurements );
+    final List< Double > cumulatedUpsizings = cumulate( upsizings ) ;
+
+//    addUpsizingsDataset( plot, cumulatedUpsizings ) ;
+    addMeasurementsDataset( plot, cumulatedUpsizings, measurements );
 
     final NumberAxis domainAxis = ( NumberAxis ) plot.getDomainAxis() ;
     domainAxis.setStandardTickUnits( NumberAxis.createIntegerTickUnits() ) ;
@@ -97,10 +106,10 @@ public class Grapher {
     measurementsRenderer.setSeriesFillPaint( 0, new Color( 255, 0, 0, 255 ) ) ;
     plot.setRenderer( MEASUREMENTS_KEY, measurementsRenderer ) ;
 
-    final XYAreaRenderer upsizingAreaRenderer = new EnhancedXYAreaRenderer() ;
-    upsizingAreaRenderer.setSeriesFillPaint( 0, UPSIZING_GRADIENT_PAINT ) ;
-    upsizingAreaRenderer.setSeriesPaint( 0, COLOR_BACKGROUND_DARK ) ; // Only for the legend.
-    plot.setRenderer( UPSIZINGS_KEY_AREA, upsizingAreaRenderer ) ;
+    final XYBarRenderer upsizingBarRenderer = new XYBarRenderer() ;
+    upsizingBarRenderer.setSeriesFillPaint( 0, UPSIZING_GRADIENT_PAINT ) ;
+    upsizingBarRenderer.setSeriesPaint( 0, COLOR_BACKGROUND_DARK ) ;
+    plot.setRenderer( UPSIZINGS_KEY, upsizingBarRenderer ) ;
 
 
     final LegendTitle chartLegend = chart.getLegend() ;
@@ -113,8 +122,13 @@ public class Grapher {
 
   private static void addMeasurementsDataset(
       final XYPlot plot,
+      final List< Double > cumulatedUpsizings,
       final Map< Version, MeasurementBundle< TimeMeasurement > > measurements
   ) {
+    
+
+
+
     final List< Version > versions = Lists.newArrayList( measurements.keySet() ) ;
     Collections.sort( versions, Ordering.from( Version.COMPARATOR ).reverse() ) ;
 
@@ -126,7 +140,7 @@ public class Grapher {
       final XYSeries series = new XYSeries( version.getName() ) ;
       for( final TimeMeasurement measurement : measurementBundle ) {
         series.add(
-            ( double ) ++ callIndex,
+            ( double ) cumulatedUpsizings.get( ++ callIndex ),
             convertToYValue( measurement )
         ) ;
       }
@@ -144,26 +158,59 @@ public class Grapher {
   }
 
 
-  private static void addUpsizingsDataset( final XYPlot plot, final List< Long > upsizings ) {
-    final XYSeriesCollection upsizingsDataset = new XYSeriesCollection() ;
-    final XYSeries series = new XYSeries( "Source size" ) ;
-    int upsizingIndex = 0 ;
+  private static List< Double > cumulate( final List< Long > upsizings ) {
     double sum = 0.0 ;
-    double adjustedSum ;
+    final List< Double > cumulated = Lists.newArrayList() ;
     for( final Long upsizing : upsizings ) {
-      sum += upsizing ;
-      adjustedSum = sum / 1024.0;
-      series.add( ( double ) ++ upsizingIndex, adjustedSum ) ;
+      sum += ( double ) ( upsizing ) ;
+      cumulated.add( sum / 1024.0 ) ;
     }
-//    LOG.debug( "Las adjusted sum added: " + upsizingIndex + " -> " + adjustedSum ) ;
-    upsizingsDataset.addSeries( series ) ;
-    plot.setDataset( UPSIZINGS_KEY_AREA, upsizingsDataset ) ;
+    return Collections.unmodifiableList( cumulated ) ;
+  }
 
-    final NumberAxis upsizingRangeAxis = new NumberAxis( "Document source size (KiB)" ) ;
-    upsizingRangeAxis.setAutoRange( true ) ;
-    plot.setRangeAxis( UPSIZINGS_KEY_AREA, upsizingRangeAxis ) ;
-    plot.setRangeAxisLocation( UPSIZINGS_KEY_AREA, AxisLocation.BOTTOM_OR_RIGHT ) ;
-    plot.mapDatasetToRangeAxis( UPSIZINGS_KEY_AREA, UPSIZINGS_KEY_AREA );
+  /**
+   * Use of {@link org.jfree.data.statistics.HistogramDataset}:
+   * http://www.koders.com/java/fid5424FAD9F264BE2805F843D7F7668F26727D8615.aspx
+   */
+  private static void addUpsizingsDataset(
+      final XYPlot plot,
+      final List< Double > cumulatedUpsizings
+  ) {
+    final SimpleRegression regression = new SimpleRegression() ;
+    final int upsizingCount = cumulatedUpsizings.size();
+    for( int i = 0 ; i < upsizingCount ; i ++ ) {
+      final double upsizing = cumulatedUpsizings.get( i ) ;
+      regression.addData( upsizing, ( double ) i ) ;
+    }
+    final double last = cumulatedUpsizings.get( upsizingCount - 1 ) ;
+    final int sampleCount = upsizingCount * 10 ;
+    final double[] upsizingsArray = new double[ sampleCount ] ;
+    for( int sampleIndex = 0 ; sampleIndex < sampleCount ; sampleIndex ++ ) {
+      final double x = last * ( ( double ) ( sampleCount - sampleIndex ) / ( double ) sampleCount ) ;
+      upsizingsArray[ sampleIndex ] = regression.predict( x ) ;
+      LOG.debug( "x = " + x + ", upsizingsArray[ " + sampleIndex + " ] = " +
+          upsizingsArray[ sampleIndex ] ) ;
+    }
+    LOG.debug( "regression.predict( 0 ) = " + regression.predict( 0.0 ) ) ;
+    LOG.debug( "last = " + last ) ;
+    LOG.debug( "regression.predict( last ) = " + regression.predict( last ) ) ;
+    final HistogramDataset upsizingsDataset = new HistogramDataset() ;
+    upsizingsDataset.setType( HistogramType.RELATIVE_FREQUENCY ) ;
+    upsizingsDataset.addSeries( "Novella count", upsizingsArray, upsizingCount ) ;
+    plot.setDataset( UPSIZINGS_KEY, upsizingsDataset ) ;
+
+    final NumberAxis upsizingRangeAxis = new NumberAxis( "Novella count" ) ;
+//    upsizingRangeAxis.setAutoRange( true ) ;
+    plot.setRangeAxis( UPSIZINGS_KEY, upsizingRangeAxis ) ;
+    plot.setRangeAxisLocation( UPSIZINGS_KEY, AxisLocation.BOTTOM_OR_RIGHT ) ;
+    plot.mapDatasetToRangeAxis( UPSIZINGS_KEY, UPSIZINGS_KEY );
+
+    final NumberAxis upsizingDomainAxis = new NumberAxis( "Novella count virtual domain axis" ) ;
+//    upsizingDomainAxis.setAutoRange( true ) ;
+    plot.setDomainAxis( UPSIZINGS_KEY, upsizingDomainAxis ); ;
+    plot.setRangeAxisLocation( UPSIZINGS_KEY, AxisLocation.TOP_OR_RIGHT ) ;
+    plot.mapDatasetToRangeAxis( UPSIZINGS_KEY, UPSIZINGS_KEY );
+
   }
 
   private static void addAnnotations(
@@ -204,7 +251,7 @@ public class Grapher {
 
 
   private static final int MEASUREMENTS_KEY = 0 ;
-  private static final int UPSIZINGS_KEY_AREA = 1 ;
+  private static final int UPSIZINGS_KEY = 1 ;
 
   private static final Color COLOR_BACKGROUND_DARK = new Color( 136, 167, 189 ) ;
   private static final Color COLOR_BACKGROUND_LIGHT = new Color( 204, 237, 255 ) ;
