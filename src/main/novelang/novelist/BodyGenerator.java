@@ -25,14 +25,14 @@ import novelang.system.Husk;
 /**
  * @author Laurent Caillette
  */
-public class SimpleBodyGenerator implements Generator< Body > {
+public class BodyGenerator implements Generator< Body > {
 
   private final Random random ;
   private final Bounded.IntegerInclusiveExclusive sentenceCountRange ;
   private final Bounded.IntegerInclusiveExclusive paragraphCountRange ;
   private final Generator< Sentence > sentenceGenerator ;
 
-  public SimpleBodyGenerator( final Configuration configuration ) {
+  public BodyGenerator( final Configuration configuration ) {
     random = configuration.getRandom() ;
     sentenceCountRange = configuration.getSentenceCountRange() ;
     paragraphCountRange = configuration.getParagraphCountRange() ;

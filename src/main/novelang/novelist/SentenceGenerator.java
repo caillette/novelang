@@ -26,7 +26,7 @@ import novelang.system.Husk;
 /**
  * @author Laurent Caillette
  */
-public class SimpleSentenceGenerator implements Generator< Sentence > {
+public class SentenceGenerator implements Generator< Sentence > {
 
   private final Locale locale ;
   private final Random random ;
@@ -36,7 +36,7 @@ public class SimpleSentenceGenerator implements Generator< Sentence > {
   private final boolean hasEndingPunctuation ;
 
 
-  public SimpleSentenceGenerator( final Configuration configuration ) {
+  public SentenceGenerator( final Configuration configuration ) {
     this.locale = configuration.getLocale() ;
     this.random = configuration.getRandom() ;
     this.wordGenerator = configuration.getWordGenerator() ;

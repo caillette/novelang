@@ -22,7 +22,7 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 
 /**
- * Demo for {@link SimpleWordGenerator}.
+ * Demo for {@link WordGenerator}.
  *
  * @author Laurent Caillette
  */
@@ -32,7 +32,7 @@ public class GeneratorDemo {
   @Test
   public void createSomeWords() {
 
-    final Generator< Word > wordGenerator = new SimpleWordGenerator(
+    final Generator< Word > wordGenerator = new WordGenerator(
         GenerationDefaults.FOR_WORDS ) ;
 
     generateAndPrint( wordGenerator, 1000, true ) ;
@@ -43,7 +43,7 @@ public class GeneratorDemo {
   public void createSomeSentences() {
 
     final Generator< Sentence > sentenceGenerator =
-        new SimpleSentenceGenerator( GenerationDefaults.FOR_SENTENCES ) ;
+        new SentenceGenerator( GenerationDefaults.FOR_SENTENCES ) ;
 
     generateAndPrint( sentenceGenerator, 100, true );
   }
@@ -53,7 +53,7 @@ public class GeneratorDemo {
   public void createSomeLevels() {
 
     final Generator< Level > levelGenerator =
-        new SimpleLevelGenerator( GenerationDefaults.FOR_LEVELS ) ;
+        new LevelGenerator( GenerationDefaults.FOR_LEVELS ) ;
 
     generateAndPrint( levelGenerator, 30, false ) ;
   }

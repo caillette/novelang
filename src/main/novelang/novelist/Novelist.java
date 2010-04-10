@@ -211,11 +211,11 @@ public class Novelist {
 
   public static class LevelGeneratorSupplierWithDefaults implements GeneratorSupplier< Level > {
     public Generator< ? extends Level > get( final int number ) {
-      final SimpleLevelGenerator.Configuration configuration = GenerationDefaults.FOR_LEVELS
+      final LevelGenerator.Configuration configuration = GenerationDefaults.FOR_LEVELS
           .withLevelCounterStart( number )
           .withLockLevelCounterAtDepthOne( true )
       ;
-      return new SimpleLevelGenerator( configuration ) ;
+      return new LevelGenerator( configuration ) ;
     }
   }
 }

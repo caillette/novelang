@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author Laurent Caillette
  */
-public class SimpleLevelGenerator implements Generator< Level > {
+public class LevelGenerator implements Generator< Level > {
 
   private final Random random ;
   private final Generator< Sentence > titleGenerator ;
@@ -43,7 +43,7 @@ public class SimpleLevelGenerator implements Generator< Level > {
   private final Bounded.Percentage tagAppearanceProbability ;
 
 
-  public SimpleLevelGenerator( final Configuration configuration ) {
+  public LevelGenerator( final Configuration configuration ) {
     this.random = checkNotNull( configuration.getRandom() ) ;
     this.prelevelProbability = checkNotNull( configuration.getPrelevelProbability() ) ;
     this.sublevelProbability = checkNotNull( configuration.getSublevelProbability() ) ;

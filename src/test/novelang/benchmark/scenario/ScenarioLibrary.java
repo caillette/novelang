@@ -23,13 +23,13 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import novelang.designator.Tag;
+import novelang.novelist.BodyGenerator;
 import novelang.novelist.Generator;
 import novelang.novelist.Level;
+import novelang.novelist.LevelGenerator;
 import novelang.novelist.Novelist;
-import novelang.novelist.SimpleBodyGenerator;
-import novelang.novelist.SimpleLevelGenerator;
-import novelang.novelist.SimpleSentenceGenerator;
-import novelang.novelist.SimpleWordGenerator;
+import novelang.novelist.SentenceGenerator;
+import novelang.novelist.WordGenerator;
 import novelang.novelist.SupportedLocales;
 import novelang.system.Husk;
 
@@ -40,57 +40,57 @@ public class ScenarioLibrary {
   
   private ScenarioLibrary() { }
 
-  public static SimpleLevelGenerator.Configuration createLevelGeneratorConfiguration(
+  public static LevelGenerator.Configuration createLevelGeneratorConfiguration(
       final Random random
   ) {
 
-    final SimpleWordGenerator.Configuration forWords =
-        Husk.create( SimpleWordGenerator.Configuration.class )
+    final WordGenerator.Configuration forWords =
+        Husk.create( WordGenerator.Configuration.class )
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
         .withSignCount( 6, 6 )
         .withCircumflex( 0.0f )
     ;
 
-    final SimpleSentenceGenerator.Configuration forSentences =
-        Husk.create( SimpleSentenceGenerator.Configuration.class )
+    final SentenceGenerator.Configuration forSentences =
+        Husk.create( SentenceGenerator.Configuration.class )
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
-        .withWordGenerator( new SimpleWordGenerator( forWords ) )
+        .withWordGenerator( new WordGenerator( forWords ) )
         .withWordCount( 6, 6 )
         .withMiddlePunctuationSign( 18.0f )
         .withEndingPunctuation( true )
     ;
 
-    final SimpleSentenceGenerator.Configuration forTitles =
-        Husk.create( SimpleSentenceGenerator.Configuration.class )
+    final SentenceGenerator.Configuration forTitles =
+        Husk.create( SentenceGenerator.Configuration.class )
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
-        .withWordGenerator( new SimpleWordGenerator( forWords ) )
+        .withWordGenerator( new WordGenerator( forWords ) )
         .withWordCount( 5, 5 )
         .withMiddlePunctuationSign( 10.0f )
         .withEndingPunctuation( false )
     ;
 
-    final SimpleBodyGenerator.Configuration forBodies =
-        Husk.create( SimpleBodyGenerator.Configuration.class )
+    final BodyGenerator.Configuration forBodies =
+        Husk.create( BodyGenerator.Configuration.class )
         .withRandom( random )
         .withParagraphCountRange( 4, 4 )
         .withSentenceCountRange( 4, 4 )
-        .withSentenceGenerator( new SimpleSentenceGenerator( forSentences ) )
+        .withSentenceGenerator( new SentenceGenerator( forSentences ) )
     ;
 
 
-    final SimpleLevelGenerator.Configuration forLevels =
-        Husk.create( SimpleLevelGenerator.Configuration.class )
+    final LevelGenerator.Configuration forLevels =
+        Husk.create( LevelGenerator.Configuration.class )
         .withRandom( random )
         .withMaximumDepth( 3 )
         .withSublevelCountRange( 3, 3 )
         .withSublevelProbability( 100.0f )
         .withPrelevelProbability( 100.0f )
         .withLockLevelCounterAtDepthOne( false )
-        .withTitleGenerator( new SimpleSentenceGenerator( forTitles ) )
-        .withBodyGenerator( new SimpleBodyGenerator( forBodies ) )
+        .withTitleGenerator( new SentenceGenerator( forTitles ) )
+        .withBodyGenerator( new BodyGenerator( forBodies ) )
         .withTags( TAGS )
         .withTagAppearanceProbability( 10.0f )
         .withLockLevelCounterAtDepthOne( true )
@@ -108,11 +108,11 @@ public class ScenarioLibrary {
     }
 
     public Generator< ? extends Level > get( final int number ) {
-      final SimpleLevelGenerator.Configuration configuration =
+      final LevelGenerator.Configuration configuration =
           createLevelGeneratorConfiguration( random )
           .withLevelCounterStart( number )
       ;
-      return new SimpleLevelGenerator( configuration ) ;
+      return new LevelGenerator( configuration ) ;
     }
   }
 

@@ -26,7 +26,7 @@ import novelang.system.Husk;
  *
  * @author Laurent Caillette
  */
-public class SimpleWordGenerator implements Generator.ForWord {
+public class WordGenerator implements Generator.ForWord {
 
   private final Random random ;
   private final Bounded.IntegerInclusiveExclusive signCount ;
@@ -34,7 +34,7 @@ public class SimpleWordGenerator implements Generator.ForWord {
   private final Bounded.Percentage circumflex ;
 
 
-  public SimpleWordGenerator( final Configuration configuration ) {
+  public WordGenerator( final Configuration configuration ) {
     this.random = configuration.getRandom() ;
     this.signCount = configuration.getSignCount() ;
     this.distribution = LetterDistribution.getFrequency( configuration.getLocale() ) ;

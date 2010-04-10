@@ -30,38 +30,38 @@ public interface GenerationDefaults {
 
   Random RANDOM = new Random( 0L ) ;
 
-  SimpleWordGenerator.Configuration FOR_WORDS = Husk.create( SimpleWordGenerator.Configuration.class )
+  WordGenerator.Configuration FOR_WORDS = Husk.create( WordGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
       .withSignCount( 2, 12 )
       .withCircumflex( 0.01f )
   ;
 
-  SimpleSentenceGenerator.Configuration FOR_SENTENCES = 
-      Husk.create( SimpleSentenceGenerator.Configuration.class )
+  SentenceGenerator.Configuration FOR_SENTENCES = 
+      Husk.create( SentenceGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
-      .withWordGenerator( new SimpleWordGenerator( FOR_WORDS ) )
+      .withWordGenerator( new WordGenerator( FOR_WORDS ) )
       .withWordCount( 3, 20 )
       .withMiddlePunctuationSign( 18.0f )
       .withEndingPunctuation( true )
   ;
 
-  SimpleSentenceGenerator.Configuration FOR_TITLES = 
-      Husk.create( SimpleSentenceGenerator.Configuration.class )
+  SentenceGenerator.Configuration FOR_TITLES = 
+      Husk.create( SentenceGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
-      .withWordGenerator( new SimpleWordGenerator( FOR_WORDS ) )
+      .withWordGenerator( new WordGenerator( FOR_WORDS ) )
       .withWordCount( 1, 4 )
       .withMiddlePunctuationSign( 10.0f )
       .withEndingPunctuation( false )
   ;
 
-  SimpleBodyGenerator.Configuration FOR_BODIES = Husk.create( SimpleBodyGenerator.Configuration.class )
+  BodyGenerator.Configuration FOR_BODIES = Husk.create( BodyGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withParagraphCountRange( 1, 4 )
       .withSentenceCountRange( 1, 5 )
-      .withSentenceGenerator( new SimpleSentenceGenerator( FOR_SENTENCES ) )
+      .withSentenceGenerator( new SentenceGenerator( FOR_SENTENCES ) )
   ;
 
   Set< Tag > NO_TAGS = ImmutableSet.of() ;
@@ -73,16 +73,16 @@ public interface GenerationDefaults {
       new Tag( "Nine")
   ) ;
 
-  SimpleLevelGenerator.Configuration FOR_LEVELS =
-      Husk.create( SimpleLevelGenerator.Configuration.class )
+  LevelGenerator.Configuration FOR_LEVELS =
+      Husk.create( LevelGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withMaximumDepth( 3 )
       .withSublevelCountRange( 0, 3 )
       .withSublevelProbability( 40.0f )
       .withPrelevelProbability( 100.0f )
       .withLockLevelCounterAtDepthOne( false )
-      .withTitleGenerator( new SimpleSentenceGenerator( FOR_TITLES ) )
-      .withBodyGenerator( new SimpleBodyGenerator( FOR_BODIES ) )
+      .withTitleGenerator( new SentenceGenerator( FOR_TITLES ) )
+      .withBodyGenerator( new BodyGenerator( FOR_BODIES ) )
       .withTags( TEN_TAGS )
       .withTagAppearanceProbability( 5.0f )
   ;
