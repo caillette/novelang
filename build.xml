@@ -415,11 +415,11 @@
 
   <target name="generate-documentation" depends="init" >
 
-    <copy todir="${target.documentation.manual.tweaked.dir}" >
-      <fileset dir="${source.documentation.manual.dir}" />
+    <copy todir="${target.manual.tweaked.dir}" >
+      <fileset dir="${source.manual.dir}" />
     </copy>
     
-    <replace dir="${target.documentation.manual.tweaked.dir}" value="${project.version}" >
+    <replace dir="${target.manual.tweaked.dir}" value="${project.version}" >
       <replacetoken>@SNAPSHOT@</replacetoken>
     </replace>
     
@@ -429,11 +429,11 @@
       as the batch generation does it automatically.
     -->
 
-    <property name="logdestination" location="${target.documentation.manual.dir}" />
-    <property name="absolutetarget" location="${target.documentation.manual.site.dir}" />
+    <property name="logdestination" location="${target.manual.dir}" />
+    <property name="absolutetarget" location="${target.manual.site.dir}" />
 
     <echo>absolutetarget=${absolutetarget}</echo>
-    <echo>target.documentation.manual.tweaked.dir=${target.documentation.manual.tweaked.dir}</echo>
+    <echo>target.manual.tweaked.dir=${target.manual.tweaked.dir}</echo>
 
     <!-- Need to create this one before the batch generation starts! -->    
     <mkdir dir="${logdestination}" />
@@ -442,7 +442,7 @@
         classname="${documentation.sourcecharacterstable.class}"
         failonerror="true"
         fork="true"
-        dir="${target.documentation.manual.tweaked.dir}"
+        dir="${target.manual.tweaked.dir}"
     >
       <classpath>
         <path refid="deploy-libs" />
@@ -458,7 +458,7 @@
         classname="${launcher.mainclass}"
         failonerror="true"
         fork="true"
-        dir="${target.documentation.manual.tweaked.dir}"
+        dir="${target.manual.tweaked.dir}"
     >
       <classpath>
         <path refid="deploy-libs" />
@@ -473,19 +473,19 @@
       <arg value="${documentation.fonts.dir}" />
       <arg value="--output-dir" />
       <arg value="${absolutetarget}" />
-      <arg value="${target.documentation.manual.htmldocument}" />
-      <arg value="${target.documentation.manual.pdfdocument}" />
+      <arg value="${target.manual.htmldocument}" />
+      <arg value="${target.manual.pdfdocument}" />
     </java>
 
     <move
-        file="${absolutetarget}/${target.documentation.manual.page}"
+        file="${absolutetarget}/${target.manual.page}"
         tofile="${absolutetarget}/index.html"
     />
 
     <!-- TODO remove this once supported by batch generation -->
     <copy
-        file="${source.documentation.manual.dir}/style/screen.css"
-        todir="${target.documentation.manual.site.dir}"
+        file="${source.manual.dir}/style/screen.css"
+        todir="${target.manual.site.dir}"
     />
 
   </target>
@@ -609,7 +609,7 @@
         verbose="true"
         sftp="true"
     >
-      <fileset dir="${target.documentation.manual.site.dir}" />
+      <fileset dir="${target.manual.site.dir}" />
     </scp>
 
   </target>
@@ -801,7 +801,7 @@ This mail is written in Novelang.
         </patternset>
       </fileset>
 
-      <zipfileset dir="${target.documentation.manual.site.dir}" prefix="documentation" />
+      <zipfileset dir="${target.manual.site.dir}" prefix="documentation" />
       <!--<zipfileset dir="${target.javadoc.dir}" prefix="javadoc" />-->
 
     </zip>
@@ -873,14 +873,7 @@ This mail is written in Novelang.
   Nhovestone
   ==========
 -->
-  
-  <target name="deleteme" depends="init" >
-
-    <copy todir="${target.documentation.nhovestone.dir}" >
-      <fileset dir="${source.documentation.nhovestone.dir}" />
-    </copy>
-  </target>
-       
+         
   
   <target name="nhovestone" depends="init" >
 
@@ -898,13 +891,14 @@ This mail is written in Novelang.
       </classpath>
       <jvmarg value="-Xmx512M" />
       <jvmarg value="-Djava.awt.headless=true" />
-      <arg value="${target.documentation.nhovestone.dir}" />
+      <arg value="${target.nhovestone.dir}" />
       <arg value="${distrib.dir}" />
       <arg value="${documentation.nhovestone.versions}" />
     </java>
 
-    <copy todir="${target.documentation.nhovestone.dir}" >
-      <fileset dir="${source.documentation.nhovestone.dir}" >
+    <!-- Copy after running Nhovestone, which re-creates fresh target directory. -->
+    <copy todir="${target.nhovestone.dir}" >
+      <fileset dir="${source.nhovestone.dir}" >
         <include name="*.nlp" />
         <include name="*.nlb" />
         <include name="**/*.xsl" />
@@ -915,7 +909,7 @@ This mail is written in Novelang.
         classname="${launcher.mainclass}"
         failonerror="true"
         fork="true"
-        dir="${target.documentation.nhovestone.dir}"
+        dir="${target.nhovestone.dir}"
     >
       <classpath>
         <path refid="deploy-libs" />
@@ -925,10 +919,10 @@ This mail is written in Novelang.
       <jvmarg value="-Xmx512M" />
       <jvmarg value="-Djava.awt.headless=true" />
       <arg value="${launcher.batch.command}" />
-      <arg value="--log-dir=${target.documentation.nhovestone.dir}" />
+      <arg value="--log-dir=${target.nhovestone.dir}" />
       <arg value="--output-dir" />
       <arg value="report" />
-      <arg value="${target.documentation.nhovestone.pdfdocument}" />
+      <arg value="${target.nhovestone.pdfdocument}" />
     </java>
     
   </target>
