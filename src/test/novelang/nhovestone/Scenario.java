@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.nhovestone.scenario;
+package novelang.nhovestone;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,16 +30,20 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import novelang.Version;
-import novelang.nhovestone.HttpDaemonDriver;
-import novelang.nhovestone.ProcessDriver;
+import novelang.nhovestone.MeasurementBundle;
+import novelang.nhovestone.driver.HttpDaemonDriver;
+import novelang.nhovestone.driver.ProcessDriver;
 import novelang.common.FileTools;
+import novelang.nhovestone.Termination;
+import novelang.nhovestone.scenario.Measurer;
+import novelang.nhovestone.scenario.Upsizer;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Starts and queries several {@link novelang.nhovestone.HttpDaemonDriver}s against an evolving
+ * Starts and queries several {@link novelang.nhovestone.driver.HttpDaemonDriver}s against an evolving
  * source document.
  *
  * @author Laurent Caillette
@@ -67,7 +71,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
   }
 
   /**
-   * Mutable object: contains list of non-null {@link novelang.nhovestone.scenario.Scenario.Monitoring} objects.
+   * Mutable object: contains list of non-null {@link Scenario.Monitoring} objects.
    */
   private final Map< Version, Monitoring > monitorings = Maps.newHashMap() ;
   private final String documentRequest ;

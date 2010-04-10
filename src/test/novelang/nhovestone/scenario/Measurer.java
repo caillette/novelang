@@ -17,6 +17,7 @@
 package novelang.nhovestone.scenario;
 
 import com.google.common.base.Preconditions;
+import novelang.nhovestone.Termination;
 
 import java.io.IOException;
 import java.net.URL;

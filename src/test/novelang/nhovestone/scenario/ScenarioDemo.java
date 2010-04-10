@@ -26,7 +26,9 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import novelang.Version;
-import novelang.nhovestone.ProcessDriver;
+import novelang.nhovestone.MeasurementBundle;
+import novelang.nhovestone.Scenario;
+import novelang.nhovestone.driver.ProcessDriver;
 import novelang.nhovestone.report.Grapher;
 import novelang.common.FileTools;
 import novelang.novelist.Novelist;
@@ -72,7 +74,7 @@ public class ScenarioDemo {
 
     scenario.run() ;
 
-    final Map< Version, MeasurementBundle< TimeMeasurement > > measurements =
+    final Map< Version, MeasurementBundle< TimeMeasurement >> measurements =
         scenario.getMeasurements() ;
     final List< Long > upsizings = scenario.getUpsizings() ;
 

@@ -23,6 +23,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import novelang.designator.Tag;
+import novelang.nhovestone.Scenario;
 import novelang.novelist.BodyGenerator;
 import novelang.novelist.Generator;
 import novelang.novelist.Level;

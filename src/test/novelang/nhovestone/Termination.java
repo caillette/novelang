@@ -14,14 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.nhovestone.scenario;
+package novelang.nhovestone;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Set;
 
 /**
+ * Kind of enum supporting inheritance.
+ *
  * @author Laurent Caillette
  */
-public class HttpRequestTools {
+public class Termination {
 
+  private static final Set< String > names = Sets.newHashSet() ;
 
+  private final String name ;
 
-  
+  public Termination( final String name ) {
+    Preconditions.checkArgument( ! StringUtils.isBlank( name ) ) ;
+    synchronized( names ) {
+      Preconditions.checkArgument( ! names.contains( name ) ) ;
+      names.add( name ) ;
+    }
+    this.name = name ;
+  }
+
+  public String getName() {
+    return name ;
+  }
 }

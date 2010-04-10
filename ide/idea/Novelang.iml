@@ -11,6 +11,7 @@
       <sourceFolder url="file://$MODULE_DIR$/generated/antlr" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/test-code-generation" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/code-generation" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/../../_nhovestone" />
       <excludeFolder url="file://$MODULE_DIR$/../../antlrworks" />
       <excludeFolder url="file://$MODULE_DIR$/../../distrib" />
       <excludeFolder url="file://$MODULE_DIR$/test-scratch" />

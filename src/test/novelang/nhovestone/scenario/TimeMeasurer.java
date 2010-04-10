@@ -16,6 +16,7 @@
  */
 package novelang.nhovestone.scenario;
 
+import novelang.nhovestone.Termination;
 import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;

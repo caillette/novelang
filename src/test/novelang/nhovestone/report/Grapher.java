@@ -27,8 +27,8 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import novelang.Version;
-import novelang.nhovestone.scenario.MeasurementBundle;
-import novelang.nhovestone.scenario.Termination;
+import novelang.nhovestone.MeasurementBundle;
+import novelang.nhovestone.Termination;
 import novelang.nhovestone.scenario.TimeMeasurement;
 import novelang.nhovestone.scenario.TimeMeasurer;
 import org.jfree.chart.ChartFactory;
@@ -47,7 +47,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
 
 /**
- * Generates the graph representing {@link novelang.nhovestone.scenario.Scenario#getMeasurements()}. 
+ * Generates the graph representing {@link novelang.nhovestone.Scenario#getMeasurements()}. 
  *
  * @author Laurent Caillette
  */
