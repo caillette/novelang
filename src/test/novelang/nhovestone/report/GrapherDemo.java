@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark.report;
+package novelang.nhovestone.report;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import novelang.Version;
-import novelang.benchmark.KnownVersions;
-import novelang.benchmark.scenario.MeasurementBundle;
-import novelang.benchmark.scenario.Scenario;
-import novelang.benchmark.scenario.TimeMeasurement;
-import novelang.benchmark.scenario.TimeMeasurer;
+import novelang.nhovestone.KnownVersions;
+import novelang.nhovestone.scenario.MeasurementBundle;
+import novelang.nhovestone.scenario.Scenario;
+import novelang.nhovestone.scenario.TimeMeasurement;
+import novelang.nhovestone.scenario.TimeMeasurer;
 import novelang.common.FileTools;
 import novelang.system.Log;
 import novelang.system.LogFactory;

@@ -14,20 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark;
+package novelang.nhovestone.scenario;
 
 /**
  * @author Laurent Caillette
  */
-public class SingleRunResult {
+public class HttpRequestTools {
 
-  private final long durationMilliseconds ;
 
-  public SingleRunResult( final long durationMilliseconds ) {
-    this.durationMilliseconds = durationMilliseconds ;
-  }
 
-  public long getDurationMilliseconds() {
-    return durationMilliseconds ;
-  }
+  
 }

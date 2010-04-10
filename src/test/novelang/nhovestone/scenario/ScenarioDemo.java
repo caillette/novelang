@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark.scenario;
+package novelang.nhovestone.scenario;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,16 +26,16 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import novelang.Version;
-import novelang.benchmark.ProcessDriver;
-import novelang.benchmark.report.Grapher;
+import novelang.nhovestone.ProcessDriver;
+import novelang.nhovestone.report.Grapher;
 import novelang.common.FileTools;
 import novelang.novelist.Novelist;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
-import static novelang.benchmark.KnownVersions.VERSION_0_38_1;
-import static novelang.benchmark.KnownVersions.VERSION_0_41_0;
+import static novelang.nhovestone.KnownVersions.VERSION_0_38_1;
+import static novelang.nhovestone.KnownVersions.VERSION_0_41_0;
 
 /**
  * @author Laurent Caillette

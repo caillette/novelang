@@ -11,7 +11,7 @@
 * Found on:
 * http://www.jfree.org/phpBB2/viewtopic.php?f=10&t=15596
 */
-package novelang.benchmark.report;
+package novelang.nhovestone.report;
 
 import java.awt.Color;
 import java.awt.GradientPaint;

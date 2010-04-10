@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark.scenario;
+package novelang.nhovestone.scenario;
 
 import com.google.common.collect.ImmutableList;
 
@@ -47,7 +47,7 @@ public class MeasurementBundle< MEASUREMENT > implements Iterable< MEASUREMENT >
 
   /**
    * @param index between 0 and {@link #getMeasurementCount()} - 1.
-   * @return a possibly null value, if the {@link novelang.benchmark.HttpDaemonDriver} crashed
+   * @return a possibly null value, if the {@link novelang.nhovestone.HttpDaemonDriver} crashed
    *     at startup and did not record anything.
    */
   public MEASUREMENT getMeasurement( final int index ) {

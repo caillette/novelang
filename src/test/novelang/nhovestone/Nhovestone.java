@@ -7,7 +7,7 @@
  *
  * You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark;
+package novelang.nhovestone;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,24 +25,23 @@ import com.google.common.collect.ImmutableList;
 import javax.imageio.ImageIO;
 import novelang.Version;
 import novelang.VersionFormatException;
-import novelang.benchmark.report.Grapher;
-import novelang.benchmark.scenario.MeasurementBundle;
-import novelang.benchmark.scenario.Scenario;
-import novelang.benchmark.scenario.ScenarioLibrary;
-import novelang.benchmark.scenario.TimeMeasurement;
-import novelang.benchmark.scenario.TimeMeasurer;
+import novelang.nhovestone.report.Grapher;
+import novelang.nhovestone.scenario.MeasurementBundle;
+import novelang.nhovestone.scenario.Scenario;
+import novelang.nhovestone.scenario.ScenarioLibrary;
+import novelang.nhovestone.scenario.TimeMeasurement;
+import novelang.nhovestone.scenario.TimeMeasurer;
 import novelang.common.FileTools;
 import novelang.system.DefaultCharset;
 import novelang.system.EnvironmentTools;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-import novelang.system.StartupTools;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
-import static novelang.benchmark.KnownVersions.VERSION_0_35_0;
-import static novelang.benchmark.KnownVersions.VERSION_0_38_1;
-import static novelang.benchmark.KnownVersions.VERSION_0_41_0;
+import static novelang.nhovestone.KnownVersions.VERSION_0_35_0;
+import static novelang.nhovestone.KnownVersions.VERSION_0_38_1;
+import static novelang.nhovestone.KnownVersions.VERSION_0_41_0;
 
 /**
  * Main class generating the Nhovestone report.

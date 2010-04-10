@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.benchmark.report;
+package novelang.nhovestone.report;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -27,10 +27,10 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import novelang.Version;
-import novelang.benchmark.scenario.MeasurementBundle;
-import novelang.benchmark.scenario.Termination;
-import novelang.benchmark.scenario.TimeMeasurement;
-import novelang.benchmark.scenario.TimeMeasurer;
+import novelang.nhovestone.scenario.MeasurementBundle;
+import novelang.nhovestone.scenario.Termination;
+import novelang.nhovestone.scenario.TimeMeasurement;
+import novelang.nhovestone.scenario.TimeMeasurer;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYTextAnnotation;
@@ -47,7 +47,7 @@ import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
 
 /**
- * Generates the graph representing {@link novelang.benchmark.scenario.Scenario#getMeasurements()}. 
+ * Generates the graph representing {@link novelang.nhovestone.scenario.Scenario#getMeasurements()}. 
  *
  * @author Laurent Caillette
  */
