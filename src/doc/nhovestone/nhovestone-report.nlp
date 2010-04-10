@@ -1,15 +1,16 @@
 == Introduction
 
-The Nhovestone benchmark highlights performance variations across Novelang versions, using a
-few carefully selected indicators. 
-It focuses on HTML generation using default stylesheet, because HTML is great for fast 
+Nhovestone is a Novelang-specific benchmark.
+It highlights performance variations across Novelang versions, using a few carefully 
+selected indicators. 
+Nhovestone focuses on HTML generation using default stylesheet, because HTML is great for fast 
 edit-and-review roundtrips.
 
 == JVM characteristics
 
-Each Novelang instance runs in its own JVM.
-
 [JVMCHARACTERISTICS]
+
+(Each Novelang instance runs in a dedicated JVM.)
 
 == Benchmark parameters
 
