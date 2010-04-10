@@ -592,24 +592,45 @@
   </target>
 
 
-
-
-  <target 
-      name="publish-documentation" 
-      depends="login-on-remote-site"
-      description="Copy documentation (except Javadoc) to SourceForge. Files must have been generated first!"
-  >
+  <target name="evaluate-scp-targeturi" depends="login-on-remote-site" >
     <!--
       There has been a strange bug: the input task for the password never 
       executing with a dependency to the generate-documentation target.
       Finally, experience shows it's better to launch publishing apart.
     -->
+    <property  
+        name="scp-target-uri" 
+        value="${publish.remote.user},${publish.remote.project}:${publish.remote.password}@${publish.remote.host}:${publish.remote.doc.dir}"
+    />
+  </target>
+
+
+  <target 
+      name="publish-documentation" 
+      depends="evaluate-scp-targeturi"
+      description="Copy documentation (except Javadoc) to SourceForge. Files must have been generated first!"
+  >
     <scp
-        todir="${publish.remote.user},${publish.remote.project}:${publish.remote.password}@${publish.remote.host}:${publish.remote.doc.dir}"
+        todir="${scp-target-uri}"
         verbose="true"
         sftp="true"
     >
       <fileset dir="${target.manual.site.dir}" />
+    </scp>
+
+  </target>
+
+  <target 
+      name="publish-nhovestone" 
+      depends="evaluate-scp-targeturi"
+      description="Copy Nhovestone report to SourceForge. Files must have been generated first!"
+  >
+    <scp
+        todir="${scp-target-uri}"
+        verbose="true"
+        sftp="true"
+    >
+      <fileset dir="${target.nhovestone.report.dir}" />
     </scp>
 
   </target>
@@ -891,6 +912,7 @@ This mail is written in Novelang.
       </classpath>
       <jvmarg value="-Xmx512M" />
       <jvmarg value="-Djava.awt.headless=true" />
+      <jvmarg value="-Dfile.encoding=${source.encoding}" />
       <arg value="${target.nhovestone.dir}" />
       <arg value="${distrib.dir}" />
       <arg value="${documentation.nhovestone.versions}" />
@@ -921,7 +943,7 @@ This mail is written in Novelang.
       <arg value="${launcher.batch.command}" />
       <arg value="--log-dir=${target.nhovestone.dir}" />
       <arg value="--output-dir" />
-      <arg value="report" />
+      <arg value="${target.nhovestone.report.dirname}" />
       <arg value="${target.nhovestone.pdfdocument}" />
     </java>
     

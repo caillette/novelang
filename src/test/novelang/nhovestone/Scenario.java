@@ -153,10 +153,12 @@ public class Scenario< UPSIZING, MEASUREMENT > {
         runOnceWithMeasurementsOnEveryDaemon() ;
         final int updatedActiveCount = countActive( monitorings.values() ) ;
         final int difference = activeCount - updatedActiveCount ;
+        final String message = "{" + name + "} pass  " + iterationCount + 
+            " on " + updatedActiveCount + " daemons. "  ;
         if( difference > 0 ) {
-          LOG.info( "Done querying, " + ( difference + " daemon(s) terminated." ) ) ;
+          LOG.info( message + ( difference + " daemon(s) terminated." ) ) ;
         } else {
-          LOG.debug( "Done querying. " ) ;
+          LOG.debug( message ) ;
         }
         activeCount = updatedActiveCount ;
       }

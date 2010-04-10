@@ -11,6 +11,7 @@ package novelang.novelist;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.apache.commons.io.FileUtils;
@@ -140,16 +141,14 @@ public class Novelist {
   }
 
   private static class Ghostwriter {
-    private final String name ;
     private final File file ;
     private final Generator< ? extends TextElement > generator ;
-    private static final Log WRITER_LOG = LogFactory.getLog( Ghostwriter.class ) ;
+//    private static final Log WRITER_LOG = LogFactory.getLog( Ghostwriter.class ) ;
 
     private Ghostwriter(
         final File file,
         final Generator< ? extends TextElement > generator
     ) {
-      this.name = FilenameUtils.getBaseName( file.getName() ) ;
       this.file = file ;
       this.generator = generator ;
     }
@@ -162,7 +161,7 @@ public class Novelist {
         for( int i = 0 ; i < iterationCount ; i ++ ) {
           final String text = generator.generate().getLiteral() ;
           bytesWritten += ( long ) text.length() ;
-          IOUtils.write( text, outputStream ) ;
+          IOUtils.write( text, outputStream, DefaultCharset.SOURCE.name() ) ;
 //          WRITER_LOG.debug( "{" + name + "} wrote " + text.length() + " bytes." ) ;
         }
       } finally {

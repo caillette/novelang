@@ -21,7 +21,10 @@ import com.google.common.collect.ImmutableList;
 import novelang.Version;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.configuration.parse.GenericParameters;
+import novelang.system.DefaultCharset;
 import novelang.system.Husk;
+import novelang.system.Log;
+import novelang.system.LogFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +44,8 @@ import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
  */
 public class HttpDaemonDriver {
 
+  private static final Log LOG = LogFactory.getLog( HttpDaemonDriver.class ) ;
+  
   private final ProcessDriver processDriver ;
   private final int tcpPort ;
 
@@ -94,6 +99,9 @@ public class HttpDaemonDriver {
     optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_CONTENT_ROOT ) ;
     optionsBuilder.add( checkNotNull( configuration.getContentRootDirectory() ).getAbsolutePath() ) ;
 
+    optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET ) ;
+    optionsBuilder.add( DefaultCharset.SOURCE.name() ) ;
+
     final List< String > processOptions = optionsBuilder.build() ;
 
     processDriver = new ProcessDriver(
@@ -113,7 +121,15 @@ public class HttpDaemonDriver {
 
   @SuppressWarnings( { "SocketOpenedButNotSafelyClosed" } )
   public void ensureTcpPortAvailable() throws IOException {
-    final ServerSocket serverSocket = new ServerSocket( tcpPort ) ;
+    final ServerSocket serverSocket;
+    try {
+      serverSocket = new ServerSocket( tcpPort );
+    } catch( IOException e ) {
+      // Need to do this because some finally clause in calling class may cause an exception
+      // masking this one.
+      LOG.error( "Port already in use: " + tcpPort ) ;
+      throw e ;
+    }
     serverSocket.close() ;
   }
 
