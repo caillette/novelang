@@ -15,10 +15,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 
+import com.google.common.collect.ImmutableList;
 import javax.imageio.ImageIO;
 import novelang.Version;
 import novelang.VersionFormatException;
@@ -34,6 +37,7 @@ import novelang.system.EnvironmentTools;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import novelang.system.StartupTools;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import static novelang.benchmark.KnownVersions.VERSION_0_35_0;
@@ -47,7 +51,7 @@ import static novelang.benchmark.KnownVersions.VERSION_0_41_0;
  */
 public class Nhovestone {
 
-  private static final Log LOG = LogFactory.getLog( Nhovestone.class );
+  private static final Log LOG = LogFactory.getLog( Nhovestone.class ) ;
 
 
   public static void main( final String[] args )
@@ -58,19 +62,33 @@ public class Nhovestone {
       VersionFormatException,
       InterruptedException
   {
-
     EnvironmentTools.logSystemProperties() ;
 
-    final File scenariiDirectory = FileTools.createFreshDirectory( "_scenario-demo" ) ;
-    final File versionsDirectory = new File( "distrib" ) ;
+    final File scenariiDirectory ;
+    final File versionsDirectory ;
+    final Iterable< Version > versions ;
+    if( args.length == 3 ) {
+      scenariiDirectory = FileTools.createFreshDirectory( args[ 0 ] ) ;
+      versionsDirectory = new File( args[ 1 ] ) ;
+      versions = parseVersions( args[ 2 ] ) ;
+    } else {
+      if( args.length != 0 ) {
+        throw new IllegalArgumentException( "Usage: " + Nhovestone.class.getSimpleName() + 
+            " [ < scenarii-dir > < distrib-dir > < comma-separated-versions > ]" ) ;
+      }
+      scenariiDirectory = FileTools.createFreshDirectory( "_nhovestone" ) ;
+      versionsDirectory = new File( "distrib" ) ;
+      versions = Arrays.asList( VERSION_0_41_0, VERSION_0_38_1, VERSION_0_35_0 ) ;
+    }
+
 
     final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
-        .withWarmupIterationCount( 100 )
-        .withMaximumIterations( 1000 )
+        .withWarmupIterationCount( 1 )
+        .withMaximumIterations( 2 )
         .withScenariiDirectory( scenariiDirectory )
         .withInstallationsDirectory( versionsDirectory )
-        .withVersions( VERSION_0_41_0, VERSION_0_38_1, VERSION_0_35_0 )
+        .withVersions( versions )
         .withFirstTcpPort( 9900 )
         .withJvmHeapSizeMegabytes( 32 )
         .withMeasurer( new TimeMeasurer() )
@@ -96,6 +114,21 @@ public class Nhovestone {
     ) ;
 
     System.exit( 0 ) ;
+  }
+  
+  private static final Pattern COMMASEPARATEDVERSIONSSPLIT_PATTERN = Pattern.compile( "," );  
+  
+  private static Iterable< Version > parseVersions( final String commaSeparatedVersions ) 
+      throws VersionFormatException 
+  {
+    final String[] versionsAsStrings = 
+        COMMASEPARATEDVERSIONSSPLIT_PATTERN.split( commaSeparatedVersions ) ;
+    final ImmutableList.Builder< Version > versionsBuilder = 
+        new ImmutableList.Builder< Version >() ;
+    for( final String versionsAsString : versionsAsStrings ) {
+      versionsBuilder.add( Version.parse( versionsAsString ) ) ;
+    }
+    return versionsBuilder.build() ;
   }
   
   

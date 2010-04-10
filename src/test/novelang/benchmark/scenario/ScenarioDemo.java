@@ -19,6 +19,7 @@ package novelang.benchmark.scenario;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -61,7 +62,7 @@ public class ScenarioDemo {
         .withScenariiDirectory( scenarioDirectory )
         .withUpsizerFactory( ScenarioLibrary.createNovellaLengthUpsizerFactory( new Random( 0L ) ) )
         .withInstallationsDirectory( versionsDirectory )
-        .withVersions( VERSION_0_41_0, VERSION_0_38_1/*, VERSION_0_35_0*/ )
+        .withVersions( Arrays.asList( VERSION_0_41_0, VERSION_0_38_1/*, VERSION_0_35_0*/ ) )
         .withFirstTcpPort( 9900 )
         .withMeasurer( new TimeMeasurer() )
     ;

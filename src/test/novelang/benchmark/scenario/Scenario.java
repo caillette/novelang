@@ -294,7 +294,6 @@ public class Scenario< UPSIZING, MEASUREMENT > {
   }
 
 
-  @Husk.Converter( converterClass = ConfigurationHelper.class )
   public interface Configuration< CONFIGURATION extends Configuration, UPSIZING, MEASUREMENT > {
 
     String getScenarioName() ;
@@ -316,7 +315,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
     CONFIGURATION withInstallationsDirectory( File directory ) ;
 
     Iterable< Version > getVersions() ;
-    CONFIGURATION withVersions( Version... versions ) ;
+    CONFIGURATION withVersions( Iterable< Version > versions ) ;
 
     int getFirstTcpPort() ;
     CONFIGURATION withFirstTcpPort( int firstTcpPort ) ;
@@ -329,10 +328,4 @@ public class Scenario< UPSIZING, MEASUREMENT > {
 
   }
 
-  @SuppressWarnings( { "UnusedDeclaration" } )
-  public static class ConfigurationHelper {
-    public static Iterable< Version > convert( final Version... versions ) {
-      return Arrays.asList( versions ) ;
-    }
-  }
 }

@@ -868,5 +868,69 @@ This mail is written in Novelang.
 
   </target>
 
+<!--
+  ==========
+  Nhovestone
+  ==========
+-->
+  
+  <target name="deleteme" depends="init" >
 
+    <copy todir="${target.documentation.nhovestone.dir}" >
+      <fileset dir="${source.documentation.nhovestone.dir}" />
+    </copy>
+  </target>
+       
+  
+  <target name="nhovestone" depends="init" >
+
+    <java
+        classname="${documentation.nhovestone.class}"
+        failonerror="true"
+        fork="true"
+    >
+      <classpath>
+        <path refid="build-libs" />
+        <path refid="deploy-libs" />
+        <pathelement location="${target.mainclasses.dir}" />
+        <pathelement location="${target.testclasses.dir}" />
+        <pathelement location="${configuration.main.dir}" />
+      </classpath>
+      <jvmarg value="-Xmx512M" />
+      <jvmarg value="-Djava.awt.headless=true" />
+      <arg value="${target.documentation.nhovestone.dir}" />
+      <arg value="${distrib.dir}" />
+      <arg value="${documentation.nhovestone.versions}" />
+    </java>
+
+    <copy todir="${target.documentation.nhovestone.dir}" >
+      <fileset dir="${source.documentation.nhovestone.dir}" >
+        <include name="*.nlp" />
+        <include name="*.nlb" />
+        <include name="**/*.xsl" />
+      </fileset>
+    </copy>
+       
+    <java
+        classname="${launcher.mainclass}"
+        failonerror="true"
+        fork="true"
+        dir="${target.documentation.nhovestone.dir}"
+    >
+      <classpath>
+        <path refid="deploy-libs" />
+        <pathelement location="${target.mainclasses.dir}" />
+        <pathelement location="${configuration.main.dir}" />
+      </classpath>
+      <jvmarg value="-Xmx512M" />
+      <jvmarg value="-Djava.awt.headless=true" />
+      <arg value="${launcher.batch.command}" />
+      <arg value="--log-dir=${target.documentation.nhovestone.dir}" />
+      <arg value="--output-dir" />
+      <arg value="report" />
+      <arg value="${target.documentation.nhovestone.pdfdocument}" />
+    </java>
+    
+  </target>
+  
 </project>
