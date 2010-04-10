@@ -38,11 +38,6 @@
   <xsl:param name="filename"/>
   
   <xsl:variable 
-      name="title"      
-      select="/n:book/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='TITLE'    ]/n:cell[ 2 ]" 
-  />
-  
-  <xsl:variable 
       name="generationtimestamp"      
       select="/n:book/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='GENERATIONTIMESTAMP'    ]/n:cell[ 2 ]" 
   />
@@ -62,7 +57,7 @@
           padding-top="40pt"
           padding-bottom="10pt"
       >
-        <xsl:value-of select="$title"/>
+        Nhovestone report
       </fo:block>
 
       <fo:block
@@ -73,7 +68,7 @@
         <xsl:for-each
             select="/n:book/n:level[ n:level-title='VERSIONS' ]/n:paragraph-regular/n:embedded-list-with-hyphen/n:embedded-list-item">
           <xsl:if test="position() > 2">, </xsl:if>
-          <xsl:value-of select="."/>
+          <fo:inline font-weight="bold" ><xsl:value-of select="."/></fo:inline> 
           <xsl:if test="position() = 1"> against </xsl:if>
         </xsl:for-each>
       </fo:block>
@@ -129,7 +124,6 @@
         </fo:block>
       </fo:table-cell>
     </fo:table-row>        
-    
   </xsl:template>
   
   
@@ -142,7 +136,19 @@
         <xsl:attribute name="content-height"><xsl:value-of select="220"/></xsl:attribute>
       </fo:external-graphic>
     </fo:block>
-  </xsl:template>  
+  </xsl:template>
+  
+  <xsl:template match="n:level" >
+    <fo:block keep-together="always" >
+      <xsl:apply-imports />
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template match="n:paragraph-regular" >
+    <fo:block keep-together="1" >
+      <xsl:apply-imports/>
+    </fo:block>
+  </xsl:template>
   
 
 

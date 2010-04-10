@@ -7,6 +7,8 @@ edit-and-review roundtrips.
 
 == JVM characteristics
 
+Each Novelang instance runs in its own JVM.
+
 [JVMCHARACTERISTICS]
 
 == Benchmark parameters
@@ -17,10 +19,14 @@ edit-and-review roundtrips.
 
 == Increasing Novella count
 
+Before each HTTP request, there is a new Novella included in the document sources.
+
 ./IncreasingNovellacount.png
 
 
 == Single ever-growing Novella
+
+The same Novella gets bigger and bigger before each HTTP request. 
 
 ./SingleevergrowingNovella.png
 
