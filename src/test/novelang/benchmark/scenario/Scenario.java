@@ -102,6 +102,8 @@ public class Scenario< UPSIZING, MEASUREMENT > {
     Preconditions.checkArgument( ! StringUtils.isBlank( documentRequest ) ) ;
 
     this.measurer = Preconditions.checkNotNull( configuration.getMeasurer() ) ;
+    
+    Preconditions.checkArgument( configuration.getJvmHeapSizeMegabytes() > 0 ) ;
 
     int tcpPort = configuration.getFirstTcpPort() ;
     Preconditions.checkArgument( tcpPort > 0 ) ;
@@ -114,7 +116,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
           Husk.create( HttpDaemonDriver.Configuration.class )
           .withWorkingDirectory( versionWorkingDirectory )
           .withContentRootDirectory( contentDirectory )
-          .withJvmHeapSizeMegabytes( 32 )
+          .withJvmHeapSizeMegabytes( configuration.getJvmHeapSizeMegabytes() )
           .withInstallationDirectory( configuration.getInstallationsDirectory() )
           .withLogDirectory( versionWorkingDirectory )
           .withVersion( version )
@@ -318,6 +320,9 @@ public class Scenario< UPSIZING, MEASUREMENT > {
 
     int getFirstTcpPort() ;
     CONFIGURATION withFirstTcpPort( int firstTcpPort ) ;
+    
+    int getJvmHeapSizeMegabytes() ;
+    CONFIGURATION withJvmHeapSizeMegabytes( int megabytes ) ;
 
     Measurer< MEASUREMENT > getMeasurer() ;
     CONFIGURATION withMeasurer( Measurer< MEASUREMENT > measurer ) ;

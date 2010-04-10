@@ -12,6 +12,8 @@ package novelang.benchmark;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +29,12 @@ import novelang.benchmark.scenario.ScenarioLibrary;
 import novelang.benchmark.scenario.TimeMeasurement;
 import novelang.benchmark.scenario.TimeMeasurer;
 import novelang.common.FileTools;
+import novelang.system.DefaultCharset;
 import novelang.system.EnvironmentTools;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import static novelang.benchmark.KnownVersions.VERSION_0_35_0;
 import static novelang.benchmark.KnownVersions.VERSION_0_38_1;
@@ -68,6 +72,7 @@ public class Nhovestone {
         .withInstallationsDirectory( versionsDirectory )
         .withVersions( VERSION_0_41_0, VERSION_0_38_1, VERSION_0_35_0 )
         .withFirstTcpPort( 9900 )
+        .withJvmHeapSizeMegabytes( 32 )
         .withMeasurer( new TimeMeasurer() )
     ;
 
@@ -84,8 +89,69 @@ public class Nhovestone {
         ,
         true
     ) ;
+    
+    writeNhovestoneParameters( 
+        new File( scenariiDirectory, "report-parameters.nlp" ), 
+        baseConfiguration 
+    ) ;
 
     System.exit( 0 ) ;
+  }
+  
+  
+  private static void writeNhovestoneParameters( 
+      final File parametersFile, 
+      final Scenario.Configuration< ?, ?, ? > configuration 
+  ) throws IOException {
+    final Writer writer = new FileWriterWithEncoding( parametersFile, DefaultCharset.SOURCE ) ;
+    final PrintWriter printWriter = new PrintWriter( writer ) ;
+    try {
+      printWriter.println( "== VERSIONS" ) ;
+      printWriter.println( "" ) ;
+      for( final Version version : configuration.getVersions() ) {
+        printWriter.println( "- `" + version.getName() + "`" ) ;  
+      }
+      printWriter.println( "" ) ;
+      printWriter.println( "== NHOVESTONEPARAMETERS" ) ;
+      printWriter.println( "" ) ;
+      printRow( printWriter, "Warmup iterations", configuration.getWarmupIterationCount() ) ;
+      printRow( printWriter, "Maximum iterations", configuration.getMaximumIterations() ) ;
+      printRow( printWriter, "JVM heap size (MB)", configuration.getJvmHeapSizeMegabytes() ) ;
+      printWriter.println( "" ) ;
+      printWriter.println( "== JVMCHARACTERISTICS" ) ;
+      printWriter.println( "" ) ;
+      printRow( printWriter, "java.version" ) ;
+      printRow( printWriter, "java.vm.name" ) ;
+      printRow( printWriter, "os.arch" ) ;
+      printRow( printWriter, "os.name" ) ;
+      printRow( printWriter, "os.version" ) ;
+      printRow( printWriter, "Available processors", Runtime.getRuntime().availableProcessors() ) ;
+    } finally {
+      printWriter.close() ;
+    }
+  }
+  
+  private static void printRow( final PrintWriter printWriter, final String systemPropertyName ) {
+    final String systemPropertyValue = System.getProperty( systemPropertyName ) ;
+    if( systemPropertyValue != null ) {
+      printRow( printWriter, systemPropertyName, systemPropertyValue ) ;
+    }
+  }
+  
+  private static void printRow( 
+      final PrintWriter printWriter, 
+      final String cell1, 
+      final int cell2 
+  ) {
+    printRow( printWriter, cell1, "" + cell2 ) ;
+  }
+  
+  private static void printRow( 
+      final PrintWriter printWriter, 
+      final String cell1, 
+      final String cell2 
+  ) {
+    printWriter.println( "| `" + cell1 + "` | `" + cell2 +  "` | " ) ;
   }
 
   private static void runScenario(
