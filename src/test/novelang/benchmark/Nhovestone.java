@@ -62,8 +62,8 @@ public class Nhovestone {
 
     final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
-        .withWarmupIterationCount( 1000 )
-        .withMaximumIterations( 10000 )
+        .withWarmupIterationCount( 100 )
+        .withMaximumIterations( 1000 )
         .withScenariiDirectory( scenariiDirectory )
         .withInstallationsDirectory( versionsDirectory )
         .withVersions( VERSION_0_41_0, VERSION_0_38_1, VERSION_0_35_0 )
@@ -74,18 +74,24 @@ public class Nhovestone {
     runScenario( baseConfiguration
         .withScenarioName( "Single ever-growing Novella" )
         .withUpsizerFactory( ScenarioLibrary.createNovellaLengthUpsizerFactory( new Random( 0L ) ) )
+        ,
+        false
     ) ;
 
     runScenario( baseConfiguration
         .withScenarioName( "Increasing Novella count" )
         .withUpsizerFactory( ScenarioLibrary.createNovellaCountUpsizerFactory( new Random( 0L ) ) )
+        ,
+        true
     ) ;
 
     System.exit( 0 ) ;
   }
 
   private static void runScenario(
-      final ScenarioLibrary.ConfigurationForTimeMeasurement configuration
+      final ScenarioLibrary.ConfigurationForTimeMeasurement configuration,
+      final boolean showUpsizingCount 
+
   )
       throws IOException, ProcessDriver.ProcessCreationFailedException, InterruptedException
   {
@@ -99,8 +105,7 @@ public class Nhovestone {
 
     final List< Long > upsizings = scenario.getUpsizings() ;
 
-    final BufferedImage image = Grapher.create(
-        upsizings, measurements ) ;
+    final BufferedImage image = Grapher.create( upsizings, measurements, showUpsizingCount ) ;
 
     final File imageDestinationFile = new File(
         configuration.getScenariiDirectory(),

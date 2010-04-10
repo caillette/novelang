@@ -415,11 +415,11 @@
 
   <target name="generate-documentation" depends="init" >
 
-    <copy todir="${target.documentation.tweaked.dir}" >
-      <fileset dir="${source.documentation.dir}" />
+    <copy todir="${target.documentation.manual.tweaked.dir}" >
+      <fileset dir="${source.documentation.manual.dir}" />
     </copy>
     
-    <replace dir="${target.documentation.tweaked.dir}" value="${project.version}" >
+    <replace dir="${target.documentation.manual.tweaked.dir}" value="${project.version}" >
       <replacetoken>@SNAPSHOT@</replacetoken>
     </replace>
     
@@ -429,11 +429,11 @@
       as the batch generation does it automatically.
     -->
 
-    <property name="logdestination" location="${target.documentation.dir}" />
-    <property name="absolutetarget" location="${target.documentation.site.dir}" />
+    <property name="logdestination" location="${target.documentation.manual.dir}" />
+    <property name="absolutetarget" location="${target.documentation.manual.site.dir}" />
 
     <echo>absolutetarget=${absolutetarget}</echo>
-    <echo>target.documentation.tweaked.dir=${target.documentation.tweaked.dir}</echo>
+    <echo>target.documentation.manual.tweaked.dir=${target.documentation.manual.tweaked.dir}</echo>
 
     <!-- Need to create this one before the batch generation starts! -->    
     <mkdir dir="${logdestination}" />
@@ -442,7 +442,7 @@
         classname="${documentation.sourcecharacterstable.class}"
         failonerror="true"
         fork="true"
-        dir="${target.documentation.tweaked.dir}"
+        dir="${target.documentation.manual.tweaked.dir}"
     >
       <classpath>
         <path refid="deploy-libs" />
@@ -458,7 +458,7 @@
         classname="${launcher.mainclass}"
         failonerror="true"
         fork="true"
-        dir="${target.documentation.tweaked.dir}"
+        dir="${target.documentation.manual.tweaked.dir}"
     >
       <classpath>
         <path refid="deploy-libs" />
@@ -473,19 +473,19 @@
       <arg value="${documentation.fonts.dir}" />
       <arg value="--output-dir" />
       <arg value="${absolutetarget}" />
-      <arg value="${target.documentation.htmldocument}" />
-      <arg value="${target.documentation.pdfdocument}" />
+      <arg value="${target.documentation.manual.htmldocument}" />
+      <arg value="${target.documentation.manual.pdfdocument}" />
     </java>
 
     <move
-        file="${absolutetarget}/${target.documentation.page}"
+        file="${absolutetarget}/${target.documentation.manual.page}"
         tofile="${absolutetarget}/index.html"
     />
 
     <!-- TODO remove this once supported by batch generation -->
     <copy
-        file="${source.documentation.dir}/style/screen.css"
-        todir="${target.documentation.site.dir}"
+        file="${source.documentation.manual.dir}/style/screen.css"
+        todir="${target.documentation.manual.site.dir}"
     />
 
   </target>
@@ -609,7 +609,7 @@
         verbose="true"
         sftp="true"
     >
-      <fileset dir="${target.documentation.site.dir}" />
+      <fileset dir="${target.documentation.manual.site.dir}" />
     </scp>
 
   </target>
@@ -801,7 +801,7 @@ This mail is written in Novelang.
         </patternset>
       </fileset>
 
-      <zipfileset dir="${target.documentation.site.dir}" prefix="documentation" />
+      <zipfileset dir="${target.documentation.manual.site.dir}" prefix="documentation" />
       <!--<zipfileset dir="${target.javadoc.dir}" prefix="javadoc" />-->
 
     </zip>

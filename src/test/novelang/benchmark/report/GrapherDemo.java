@@ -231,7 +231,7 @@ public class GrapherDemo {
   public static void main( final String[] args ) throws IOException {
     final File scenarioDirectory = FileTools.createFreshDirectory( "_scenario-demo" ) ;
 
-    final BufferedImage image = Grapher.create( buildUpsizings(), buildMap() ) ;
+    final BufferedImage image = Grapher.create( buildUpsizings(), buildMap(), false ) ;
     final File imageFile = new File( scenarioDirectory, "graph.png" );
     ImageIO.write( image, "png", imageFile ) ;
 

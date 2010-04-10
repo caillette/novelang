@@ -54,15 +54,17 @@ import org.jfree.ui.TextAnchor;
 public class Grapher {
 
   public static BufferedImage create(
-      final List< Long > upsizings,
-      final Map< Version, MeasurementBundle< TimeMeasurement > > measurements
+      final List<Long> upsizings,
+      final Map<Version, MeasurementBundle<TimeMeasurement>> measurements,
+      final boolean showUpsizingCount 
   ) {
-    return create( upsizings, measurements, 600, 300 ) ;
+    return create( upsizings, measurements, showUpsizingCount, 600, 300 ) ;
   }
 
   public static BufferedImage create(
       final List< Long > upsizings,
       final Map< Version, MeasurementBundle< TimeMeasurement > > measurements,
+      final boolean showUpsizingCount, 
       final int widthPixels,
       final int heightPixels
   ) {
@@ -90,12 +92,14 @@ public class Grapher {
     domainAxis.setAxisLinePaint( NULL_COLOR ) ;
     domainAxis.setAutoRangeStickyZero( false ) ;
 
-    final NumberAxis novellaCountAxis = new NumberAxis( "Novella count" );
-    novellaCountAxis.setLowerBound( 1.0 ) ;
-    novellaCountAxis.setUpperBound( ( double ) cumulatedUpsizings.size() ) ;
-    novellaCountAxis.setAxisLinePaint( NULL_COLOR ) ;
-    plot.setDomainAxis( UPSIZINGS_KEY, novellaCountAxis ) ;
-    plot.setDomainAxisLocation( UPSIZINGS_KEY, AxisLocation.TOP_OR_RIGHT ) ;
+    if( showUpsizingCount ) {
+      final NumberAxis novellaCountAxis = new NumberAxis( "Novella count" );
+      novellaCountAxis.setLowerBound( 1.0 ) ;
+      novellaCountAxis.setUpperBound( ( double ) cumulatedUpsizings.size() ) ;
+      novellaCountAxis.setAxisLinePaint( NULL_COLOR ) ;
+      plot.setDomainAxis( UPSIZINGS_KEY, novellaCountAxis ) ;
+      plot.setDomainAxisLocation( UPSIZINGS_KEY, AxisLocation.TOP_OR_RIGHT ) ;
+    }
 
     final XYSplineRenderer measurementsRenderer = new XYSplineRenderer() ;
     for( int serieIndex = 0 ; serieIndex < measurements.size() ; serieIndex ++ ) {
