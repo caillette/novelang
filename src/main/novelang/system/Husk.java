@@ -176,13 +176,12 @@ public final class Husk {
   }
 
   private static Converter findConverterAnnotation( final Class< ? > huskClass ) {
-    Class< ? > currentClass = huskClass ;
-    while( currentClass != null ) {
-      final Converter converterAnnotation = currentClass.getAnnotation( Converter.class ) ;
+    if( huskClass != null ) {
+      final Converter converterAnnotation = huskClass.getAnnotation( Converter.class ) ;
       if( converterAnnotation != null ) {
         return converterAnnotation ;
       }
-      final Class< ? >[] interfaces = currentClass.getInterfaces() ;
+      final Class< ? >[] interfaces = huskClass.getInterfaces() ;
       for( final Class parentInterface : interfaces ) {
         final Converter annotation = findConverterAnnotation( parentInterface );
         if( annotation != null ) {
