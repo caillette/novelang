@@ -1,0 +1,68 @@
+== New hierarchy for generated text
+
+Formerly:
+
+<<<
+Novelang
++-- src
+    +-- blog
+    +-- doc          // Sources for Web site
+        +-- style
+>>>
+
+Currently it is:
+
+<<<
+Novelang
++-- src
+    +-- blog
+    +-- doc
+        +-- manual
+        +-- nhovestone
+>>>
+
+
+Synonyms for "documentation":
+- Handbook.
+- Guidebook.
+- Textbook.
+
+Synonyms for "document":
+- Paper.
+- Report.
+- Writing.
+
+Worth to be considered:
+- Perusal.
+- Reading.
+- Lecture.
+
+Candidate names for the directory above blog`/`documentation`/`Nhovestone report sources:
+- ``text-src``.
+- ``doc-src``.
+- ``writing``.
+
+Small problem: Java code is some kind of text or writing, too. Could we say it's written for
+direct consumption by humans?
+
+
+Finally we could have:
+
+<<<
+Novelang
++-- src                // Unchanged.
++-- writing
+    +-- blog
+    +-- documentation
+    +-- nhovestone
+>>>
+
+<<<
+Novelang
++-- src                // Unchanged.
++-- documentation
+    +-- blog
+    +-- website
+    +-- nhovestone
+>>>
+
