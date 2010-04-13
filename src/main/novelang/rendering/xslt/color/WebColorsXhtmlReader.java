@@ -16,6 +16,7 @@
  */
 package novelang.rendering.xslt.color;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -23,16 +24,25 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.stream.StreamFilter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.events.XMLEvent;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.BODY;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DL;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DOCUMENT;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DONE;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DT;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.EM;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.HTML;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.NONE;
+import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.STRONG;
 
 /**
  * @author Laurent Caillette
@@ -48,7 +58,11 @@ public class WebColorsXhtmlReader {
     colorPairs = readColorPairs( resourceUrl ) ;
   }
 
-  private static List< ColorPair > readColorPairs( final URL resourceUrl ) {
+  public WebColorsXhtmlReader( final String xml ) throws XMLStreamException, IOException {
+    colorPairs = readColorPairs( new ByteArrayInputStream( xml.getBytes( CHARSET ) ) ) ;
+  }
+
+  private List< ColorPair > readColorPairs( final URL resourceUrl ) {
     try {
       if( resourceUrl == null ) {
         LOG.error( "Color cycle disabled: could not read from " + resourceUrl ) ;
@@ -68,32 +82,170 @@ public class WebColorsXhtmlReader {
     return ImmutableList.of() ;
   }
 
-  /*package*/ static List< ColorPair > readColorPairs( final InputStream inputStream )
-      throws IOException, XMLStreamException {
+  /*package*/ List< ColorPair > readColorPairs( final InputStream inputStream )
+      throws IOException, XMLStreamException
+  {
     final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance() ;
-    final XMLStreamReader streamReader = xmlInputFactory.createXMLStreamReader( inputStream ) ;
-    final XMLStreamReader filteredReader = xmlInputFactory.createFilteredReader(
-        streamReader,
-        new StreamFilter() {
-          public boolean accept( final XMLStreamReader xmlStreamReader ) {
-            return false ;
-          }
+
+    String backgroundColorName = null ;
+    String foregroundColorName = null ;
+    final ImmutableList.Builder< ColorPair > colorPairsBuilder =
+        new ImmutableList.Builder< ColorPair >() ;
+
+    final XMLStreamReader parser = xmlInputFactory.createXMLStreamReader( inputStream ) ;
+    for (int event = parser.next() ;
+        event != XMLStreamConstants.END_DOCUMENT ;
+        event = parser.next()
+    ) {
+        final QName elementQualifiedName ;
+
+        switch( event ) {
+
+          case XMLStreamConstants.START_ELEMENT :
+            elementQualifiedName = parser.getName() ;
+            switch( state ) {
+              case NONE :
+                changeState( DOCUMENT, NONE ) ;
+                break ;
+              case DOCUMENT :
+                if( changeIfNameMatches( elementQualifiedName, HTML ) ) break ;
+              case HTML :
+                if( changeIfNameMatches( elementQualifiedName, BODY ) ) break ;
+              case BODY:
+                if( changeIfNameMatches( elementQualifiedName, DL ) ) break ;
+              case DL:
+                if( changeIfNameMatches( elementQualifiedName, DT ) ) break ;
+              case DT:
+                if( changeIfNameMatches( elementQualifiedName, STRONG ) ) break ;
+                if( changeIfNameMatches( elementQualifiedName, EM ) ) break ;
+//              case STRONG:
+//                throw new IllegalStateException( "State: " + state ) ;
+//              case EM:
+//                throw new IllegalStateException( "State: " + state ) ;
+//              case DONE :
+//                break ;
+              default : break ;
+            }
+            break ;
+
+          case XMLStreamConstants.END_ELEMENT :
+            elementQualifiedName = parser.getName() ;
+            switch( state ) {
+//              case NONE :
+//                throw new IllegalStateException( "State: ") ;
+//              case DOCUMENT :
+//                throw new IllegalStateException( "State: " + state ) ;
+              case HTML :
+                if( changeIfNameMatches( elementQualifiedName, DOCUMENT ) ) break ;
+              case BODY :
+                if( changeIfNameMatches( elementQualifiedName, HTML ) ) break ;
+              case DL :
+                if( changeIfNameMatches( elementQualifiedName, BODY ) ) break ;
+              case DT :
+                if( changeIfNameMatches( elementQualifiedName, DL ) ) {
+                  colorPairsBuilder.add(
+                      new ColorPair( backgroundColorName, foregroundColorName ) ) ;
+                  backgroundColorName = null ;
+                  foregroundColorName = null ;
+                  break ;
+                }
+              case STRONG:
+                if( changeIfNameMatches( elementQualifiedName, STRONG, DT ) ) break ;
+              case EM :
+                if( changeIfNameMatches( elementQualifiedName, EM, DT ) ) break ;
+              case DONE :
+                break ;
+              default : break ;
+            }
+            break ;
+
+
+          case XMLStreamConstants.CHARACTERS :
+            switch( state ) {
+              case STRONG:
+                backgroundColorName = parser.getText() ;
+                break ;
+              case EM :
+                foregroundColorName = parser.getText() ;
+                break ;
+            }
+            break ;
+
+
+          case XMLStreamConstants.END_DOCUMENT :
+            changeState( DONE, DOCUMENT ) ;
+            break ;
+
+          default : break ;
         }
-    ) ;
-    while( filteredReader.hasNext() ) {
-      filteredReader.next() ;
     }
-    
-    throw new UnsupportedOperationException( "readColorPairs" ) ;
+    return colorPairsBuilder.build() ;
   }
 
-
+  /**
+   * Returns an {@code Iterable} returning {@code Iterator}s that cycle forever.
+   * @return a non-null object returning a non-null {@code Iterator}.
+   */
   public Iterable< ColorPair > getColorCycler() {
     return new Iterable< ColorPair >() {
       public Iterator< ColorPair > iterator() {
         return Iterators.cycle( colorPairs ) ;
       }
     } ;
+  }
+
+  public List< ColorPair > getColorPairs() {
+    return colorPairs ;
+  }
+
+  /*package visibility for static import*/ enum State {
+    NONE( null ),
+    DOCUMENT( null ), 
+    HTML( new QName( "html" ) ),
+    BODY( new QName( "body" ) ),
+    DL( new QName( "dl" ) ),
+    DT( new QName( "dt" ) ),
+    STRONG( new QName( "strong" ) ),
+    EM( new QName( "em" ) ),
+    DONE( null );
+
+    private final QName elementName ;
+
+    State( final QName elementName ) {
+      this.elementName = elementName ;
+    }
+
+    public QName getElementName() {
+      return elementName ;
+    }
+  }
+  
+  private State state = NONE ;
+
+  private boolean changeIfNameMatches( final QName elementName, final State newStateIfMatch ) {
+    return changeIfNameMatches( elementName, newStateIfMatch, newStateIfMatch ) ;
+  }
+
+  private boolean changeIfNameMatches(
+      final QName elementName,
+      final State stateToMatch,
+      final State newStateIfMatch
+  ) {
+    if( stateToMatch.getElementName().equals( elementName ) ) {
+      state = newStateIfMatch ;
+      return true ;
+    }
+    return false ;
+  }
+
+  private void changeState( final State newState, final State expectedCurrentState ) {
+    if( state != expectedCurrentState ) {
+      throw new IllegalStateException( 
+          "From state " + state + " tried to change to " + newState + 
+          " while in " + expectedCurrentState + "." 
+      ) ;
+    }
+    state = newState ;
   }
 
 }

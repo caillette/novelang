@@ -20,14 +20,19 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link WebColorsXhtmlReader}.
@@ -46,32 +51,34 @@ public class WebColorsXhtmlReaderTest {
   }
 
 
-  @Test @Ignore
+  @Test 
   public void readSimpleXhtml() throws XMLStreamException, IOException {
 
     final String xhtml =
-        "<html>                                                  \n" +
-        "<body>                                                  \n" +
-        "<head>                                                  \n" +
-        "  <title>Whatever</title>                               \n" +
-        "</head>                                                 \n" +
-        "<dt><strong>deepskyblue</strong><em>darkblue</em></dt>  \n" +
-        "<dt><strong>darkorange</strong><em>maroon</em></dt>     \n" +
-        "<dt><strong>darkslateblue</strong><em>beige</em></dt>   \n" +
-        "</body>                                                 \n" +
+        "<html>                                                    \n" +
+//        "<head>                                                    \n" +
+//        "  <title>Whatever</title>                                 \n" +
+//        "</head>                                                   \n" +
+        "<body>                                                    \n" +
+        "<dl>                                                      \n" +
+        "  <dt><strong>deepskyblue</strong><em>darkblue</em></dt>  \n" +
+        "  <dt><strong>darkorange</strong><em>maroon</em></dt>     \n" +
+        "  <dt><strong>darkslateblue</strong><em>beige</em></dt>   \n" +
+        "  </dl>                                                   \n" +
+        "</body>                                                   \n" +
         "</html>"
     ;
-    final InputStream inputStream = new ByteArrayInputStream( xhtml.getBytes( CHARSET ) ) ;
-    final List< ColorPair > colorPairs = WebColorsXhtmlReader.readColorPairs( inputStream ) ;
 
-    assertEquals( "deepskyblue", colorPairs.get( 0 ).getBackground() ) ;
-    assertEquals( "darkblue", colorPairs.get( 0 ).getForeground() ) ;
+    final WebColorsXhtmlReader colorsReader = new WebColorsXhtmlReader( xhtml ) ;
+    LOG.info( "Got those colors: " + colorsReader.getColorPairs() ) ;
 
-    assertEquals( "darkorange", colorPairs.get( 1 ).getBackground() ) ;
-    assertEquals( "maroon", colorPairs.get( 1 ).getForeground() ) ;
+    final Iterator< ColorPair > colorPairs = colorsReader.getColorCycler().iterator() ;
 
-    assertEquals( "darkslateblue", colorPairs.get( 2 ).getBackground() ) ;
-    assertEquals( "beige", colorPairs.get( 2 ).getForeground() ) ;
+    assertTrue( colorPairs.hasNext() ) ;
+    verify( "deepskyblue", "darkblue", colorPairs.next() ) ;
+    verify( "darkorange", "maroon", colorPairs.next() ) ;
+    verify( "darkslateblue", "beige", colorPairs.next() ) ;
+    verify( "deepskyblue", "darkblue", colorPairs.next() ) ; // Cycling.
 
   }
 
@@ -80,6 +87,15 @@ public class WebColorsXhtmlReaderTest {
 // Fixture
 // =======
 
-  private static final Charset CHARSET = Charset.forName( "UTF-8" ) ;
+  private static final Log LOG = LogFactory.getLog( WebColorsXhtmlReaderTest.class ) ;
+
+  private static void verify(
+      final String expectedBackgroundColorName,
+      final String expectedForegroundColorName,
+      final ColorPair colorPair
+  ) {
+    assertEquals( expectedBackgroundColorName, colorPair.getBackground() ) ;
+    assertEquals( expectedForegroundColorName, colorPair.getForeground() ) ;
+  }
 
 }

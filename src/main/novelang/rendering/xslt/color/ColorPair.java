@@ -30,9 +30,15 @@ public class ColorPair {
   private final String foreground ;
 
   public ColorPair( String background, String foreground ) {
-    Preconditions.checkArgument( SvgColorsDefinition.exists( background ) ) ;
+    Preconditions.checkArgument(
+        SvgColorsDefinition.exists( background ), 
+        "No such color: %s", background
+    ) ;
     this.background = ( background ) ;
-    Preconditions.checkArgument( SvgColorsDefinition.exists( foreground ) ) ;
+    Preconditions.checkArgument(
+        SvgColorsDefinition.exists( foreground ),
+        "No such color: %s", foreground
+    ) ;
     this.foreground = foreground ;
   }
 
