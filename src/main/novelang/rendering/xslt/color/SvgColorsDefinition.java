@@ -19,11 +19,15 @@ package novelang.rendering.xslt.color;
 import java.awt.Color;
 import java.util.Map;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 /**
  * From <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" >SVG specification</a>
  * which defines colors names and values for CSS.
+ *
+ * @deprecated Use {@link novelang.rendering.xslt.color.WebColorsXhtmlReader} which reads an
+ *     editable color list.
  *
  * @author Laurent Caillette
  */
@@ -31,10 +35,7 @@ public class SvgColorsDefinition {
 
   
   public static Color get( final String name ) {
-    final Color color = COLORS.get( name ) ;
-    if( name == null ) {
-      throw new IllegalArgumentException( "Unsupported name: " + name ) ;
-    }
+    final Color color = COLORS.get( Preconditions.checkNotNull( name ) ) ;
     return color ;
   }
 
@@ -195,7 +196,7 @@ public class SvgColorsDefinition {
   }
 
 
-  public static boolean exists( String svgColorName ) {
+  public static boolean exists( final String svgColorName ) {
     return COLORS.containsKey( svgColorName ) ;
   }
 }

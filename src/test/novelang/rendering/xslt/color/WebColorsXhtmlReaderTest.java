@@ -56,9 +56,9 @@ public class WebColorsXhtmlReaderTest {
 
     final String xhtml =
         "<html>                                                    \n" +
-//        "<head>                                                    \n" +
-//        "  <title>Whatever</title>                                 \n" +
-//        "</head>                                                   \n" +
+        "<head>                                                    \n" +
+        "  <title>Whatever</title>                                 \n" +
+        "</head>                                                   \n" +
         "<body>                                                    \n" +
         "<dl>                                                      \n" +
         "  <dt><strong>deepskyblue</strong><em>darkblue</em></dt>  \n" +

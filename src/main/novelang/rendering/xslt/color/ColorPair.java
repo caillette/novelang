@@ -29,7 +29,7 @@ public class ColorPair {
   private final String background ;
   private final String foreground ;
 
-  public ColorPair( String background, String foreground ) {
+  public ColorPair( final String background, final String foreground ) {
     Preconditions.checkArgument(
         SvgColorsDefinition.exists( background ), 
         "No such color: %s", background
@@ -48,5 +48,14 @@ public class ColorPair {
 
   public String getForeground() {
     return foreground ;
+  }
+
+  @Override
+  public String toString() {
+    return "ColorPair{" +
+        "background='" + background + '\'' +
+        ", foreground='" + foreground + '\'' +
+        '}'
+    ;
   }
 }

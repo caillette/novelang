@@ -118,12 +118,6 @@ public class WebColorsXhtmlReader {
               case DT:
                 if( changeIfNameMatches( elementQualifiedName, STRONG ) ) break ;
                 if( changeIfNameMatches( elementQualifiedName, EM ) ) break ;
-//              case STRONG:
-//                throw new IllegalStateException( "State: " + state ) ;
-//              case EM:
-//                throw new IllegalStateException( "State: " + state ) ;
-//              case DONE :
-//                break ;
               default : break ;
             }
             break ;
@@ -131,10 +125,6 @@ public class WebColorsXhtmlReader {
           case XMLStreamConstants.END_ELEMENT :
             elementQualifiedName = parser.getName() ;
             switch( state ) {
-//              case NONE :
-//                throw new IllegalStateException( "State: ") ;
-//              case DOCUMENT :
-//                throw new IllegalStateException( "State: " + state ) ;
               case HTML :
                 if( changeIfNameMatches( elementQualifiedName, DOCUMENT ) ) break ;
               case BODY :
@@ -142,13 +132,13 @@ public class WebColorsXhtmlReader {
               case DL :
                 if( changeIfNameMatches( elementQualifiedName, BODY ) ) break ;
               case DT :
-                if( changeIfNameMatches( elementQualifiedName, DL ) ) {
+                if( changeIfNameMatches( elementQualifiedName, DT, DL ) ) {
                   colorPairsBuilder.add(
                       new ColorPair( backgroundColorName, foregroundColorName ) ) ;
                   backgroundColorName = null ;
                   foregroundColorName = null ;
-                  break ;
                 }
+                break ;
               case STRONG:
                 if( changeIfNameMatches( elementQualifiedName, STRONG, DT ) ) break ;
               case EM :
@@ -160,7 +150,7 @@ public class WebColorsXhtmlReader {
             break ;
 
 
-          case XMLStreamConstants.CHARACTERS :
+          case XMLStreamConstants.CHARACTERS : // Color names short enough to read all at once.
             switch( state ) {
               case STRONG:
                 backgroundColorName = parser.getText() ;
