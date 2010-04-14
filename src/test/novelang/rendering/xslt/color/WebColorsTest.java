@@ -16,11 +16,72 @@
  */
 package novelang.rendering.xslt.color;
 
+import java.io.IOException;
+import java.util.Iterator;
+
+import javax.xml.stream.XMLStreamException;
+
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
- * Tests for {@link SvgColorsDefinition}.
+ * Tests for {@link WebColors}.
  *
  * @author Laurent Caillette
  */
 public class WebColorsTest {
+
+
+  @Test 
+  public void readSimpleXhtml() throws XMLStreamException, IOException {
+
+    final String xhtml =
+        "<html>                                                    \n" +
+        "<head>                                                    \n" +
+        "  <title>Whatever</title>                                 \n" +
+        "</head>                                                   \n" +
+        "<body>                                                    \n" +
+        "<dl>                                                      \n" +
+        "  <dt><strong>deepskyblue</strong><em>darkblue</em></dt>  \n" +
+        "  <dt><strong>darkorange</strong><em>maroon</em></dt>     \n" +
+        "  <dt><strong>darkslateblue</strong><em>beige</em></dt>   \n" +
+        "  </dl>                                                   \n" +
+        "</body>                                                   \n" +
+        "</html>"
+    ;
+
+    final WebColors colorsReader = new WebColors( xhtml ) ;
+    LOG.info( "Got those colors: " + colorsReader.getColorPairs() ) ;
+
+    final Iterator< ColorPair > colorPairs = colorsReader.getColorCycler().iterator() ;
+
+    assertTrue( colorPairs.hasNext() ) ;
+    verify( "deepskyblue", "darkblue", colorPairs.next() ) ;
+    verify( "darkorange", "maroon", colorPairs.next() ) ;
+    verify( "darkslateblue", "beige", colorPairs.next() ) ;
+    verify( "deepskyblue", "darkblue", colorPairs.next() ) ; // Cycling.
+
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private static final Log LOG = LogFactory.getLog( WebColorsTest.class ) ;
+
+  private static void verify(
+      final String expectedBackgroundColorName,
+      final String expectedForegroundColorName,
+      final ColorPair colorPair
+  ) {
+    assertEquals( expectedBackgroundColorName, colorPair.getBackground() ) ;
+    assertEquals( expectedForegroundColorName, colorPair.getForeground() ) ;
+  }
 
 }

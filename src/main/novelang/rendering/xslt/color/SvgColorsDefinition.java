@@ -26,9 +26,6 @@ import com.google.common.collect.ImmutableMap;
  * From <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" >SVG specification</a>
  * which defines colors names and values for CSS.
  *
- * @deprecated Use {@link novelang.rendering.xslt.color.WebColorsXhtmlReader} which reads an
- *     editable color list.
- *
  * @author Laurent Caillette
  */
 public class SvgColorsDefinition {

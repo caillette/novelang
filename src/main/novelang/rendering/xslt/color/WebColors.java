@@ -31,55 +31,69 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.BODY;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DL;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DOCUMENT;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DONE;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.DT;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.EM;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.HTML;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.NONE;
-import static novelang.rendering.xslt.color.WebColorsXhtmlReader.State.STRONG;
+import static novelang.rendering.xslt.color.WebColors.State.*;
 
 /**
  * @author Laurent Caillette
  */
-public class WebColorsXhtmlReader {
+public class WebColors {
 
-  private static final Log LOG = LogFactory.getLog( WebColorsXhtmlReader.class );
+  public static final WebColors INSTANCE ;
+  static {
+    try {
+      INSTANCE = new WebColors( ColorPair.class.getResource( "/style/javascript/colors.htm" ) );
+    } catch( XMLStreamException e ) {
+      throw new RuntimeException( e ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+  }
+
+
+  /*package*/ WebColors( final URL resourceUrl ) throws XMLStreamException, IOException {
+    colorPairs = readColorPairs( resourceUrl ) ;
+  }
+
+  /*package*/ WebColors( final String xml ) throws XMLStreamException, IOException {
+    colorPairs = readColorPairs( new ByteArrayInputStream( xml.getBytes( CHARSET ) ) ) ;
+  }
+
+
+  /**
+   * Returns an {@code Iterable} returning {@code Iterator}s that cycle forever.
+   * @return a non-null object returning a non-null {@code Iterator}.
+   */
+  public Iterable< ColorPair > getColorCycler() {
+    return new Iterable< ColorPair >() {
+      public Iterator< ColorPair > iterator() {
+        return Iterators.cycle( colorPairs ) ;
+      }
+    } ;
+  }
+
+  public List< ColorPair > getColorPairs() {
+    return colorPairs ;
+  }
+
+  
   private static final Charset CHARSET = Charset.forName( "UTF-8" ) ;
 
   private final List< ColorPair > colorPairs ;
 
-  public WebColorsXhtmlReader( final URL resourceUrl ) {
-    colorPairs = readColorPairs( resourceUrl ) ;
-  }
 
-  public WebColorsXhtmlReader( final String xml ) throws XMLStreamException, IOException {
-    colorPairs = readColorPairs( new ByteArrayInputStream( xml.getBytes( CHARSET ) ) ) ;
-  }
-
-  private List< ColorPair > readColorPairs( final URL resourceUrl ) {
+  private List< ColorPair > readColorPairs( final URL resourceUrl )
+      throws IOException, XMLStreamException
+  {
+    final InputStream inputStream = resourceUrl.openStream() ;
     try {
-      if( resourceUrl == null ) {
-        LOG.error( "Color cycle disabled: could not read from " + resourceUrl ) ;
-      } else {
-        final InputStream inputStream = resourceUrl.openStream() ;
-        try {
-          return readColorPairs( inputStream ) ;
-        } finally {
-          if( inputStream != null ) {
-            inputStream.close() ;
-          }
-        }
+      return readColorPairs( inputStream );
+    } finally {
+      if( inputStream != null ) {
+        inputStream.close();
       }
-    } catch( Exception e ) {
-      LOG.error( "Color cycle disabled: could not read from " + resourceUrl.toExternalForm(), e ) ;
     }
-    return ImmutableList.of() ;
+
   }
 
   /*package*/ List< ColorPair > readColorPairs( final InputStream inputStream )
@@ -172,21 +186,9 @@ public class WebColorsXhtmlReader {
     return colorPairsBuilder.build() ;
   }
 
-  /**
-   * Returns an {@code Iterable} returning {@code Iterator}s that cycle forever.
-   * @return a non-null object returning a non-null {@code Iterator}.
-   */
-  public Iterable< ColorPair > getColorCycler() {
-    return new Iterable< ColorPair >() {
-      public Iterator< ColorPair > iterator() {
-        return Iterators.cycle( colorPairs ) ;
-      }
-    } ;
-  }
-
-  public List< ColorPair > getColorPairs() {
-    return colorPairs ;
-  }
+// =====
+// State
+// =====
 
   /*package visibility for static import*/ enum State {
     NONE( null ),
