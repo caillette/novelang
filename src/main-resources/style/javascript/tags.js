@@ -58,9 +58,6 @@ function initializeTagSystem( colorDefinitions ) {
 
   }
 
-
-
-  setupColors( TAGS, colorDefinitions ) ;
 }
 
 function showMessage( message ) {

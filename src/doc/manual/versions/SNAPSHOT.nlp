@@ -6,3 +6,7 @@ report: Novelang has its own benchmark!
  
 --- Added stylesheet ``html-FR.xsl`` for French punctuation.
 
+--- Performance enhancement: HTML page with many tags should load faster.
+Instead of dynamically computing styles on the Web browser, HTML rendered by the server directly
+includes those styles.
+

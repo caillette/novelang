@@ -39,32 +39,22 @@ import static novelang.rendering.xslt.color.WebColors.State.*;
  */
 public class WebColors {
 
-  public static final WebColors INSTANCE ;
-  static {
-    try {
-      INSTANCE = new WebColors( ColorPair.class.getResource( "/style/javascript/colors.htm" ) );
-    } catch( XMLStreamException e ) {
-      throw new RuntimeException( e ) ;
-    } catch( IOException e ) {
-      throw new RuntimeException( e ) ;
-    }
-  }
-
+  private final List< ColorPair > colorPairs ;
 
   /*package*/ WebColors( final URL resourceUrl ) throws XMLStreamException, IOException {
     colorPairs = readColorPairs( resourceUrl ) ;
   }
 
+
   /*package*/ WebColors( final String xml ) throws XMLStreamException, IOException {
     colorPairs = readColorPairs( new ByteArrayInputStream( xml.getBytes( CHARSET ) ) ) ;
   }
-
 
   /**
    * Returns an {@code Iterable} returning {@code Iterator}s that cycle forever.
    * @return a non-null object returning a non-null {@code Iterator}.
    */
-  public Iterable< ColorPair > getColorCycler() {
+  public Iterable< ColorPair > createColorCycler() {
     return new Iterable< ColorPair >() {
       public Iterator< ColorPair > iterator() {
         return Iterators.cycle( colorPairs ) ;
@@ -76,10 +66,44 @@ public class WebColors {
     return colorPairs ;
   }
 
-  
-  private static final Charset CHARSET = Charset.forName( "UTF-8" ) ;
+// =========
+// Singleton
+// =========
 
-  private final List< ColorPair > colorPairs ;
+
+  public static final WebColors INSTANCE ;
+
+  /**
+   * Still in {@code javascript} directory because the editor relies on JavaScript.
+   */
+  @SuppressWarnings( { "HardcodedFileSeparator" } )
+  private static final String COLORS_DEFINITION = "/style/javascript/colors.htm" ;
+
+  static {
+    try {
+      INSTANCE = new WebColors( ColorPair.class.getResource( COLORS_DEFINITION ) );
+    } catch( XMLStreamException e ) {
+      throw new RuntimeException( e ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+  }
+
+
+// =====
+// Xalan
+// =====
+
+
+  
+
+
+// ================
+// Reading resource
+// ================
+
+
+  private static final Charset CHARSET = Charset.forName( "UTF-8" ) ;
 
 
   private List< ColorPair > readColorPairs( final URL resourceUrl )
@@ -186,9 +210,10 @@ public class WebColors {
     return colorPairsBuilder.build() ;
   }
 
-// =====
-// State
-// =====
+
+// ============
+// Parser state
+// ============
 
   /*package visibility for static import*/ enum State {
     NONE( null ),

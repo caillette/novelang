@@ -20,13 +20,11 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLStreamException;
-
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -58,7 +56,7 @@ public class WebColorsTest {
     final WebColors colorsReader = new WebColors( xhtml ) ;
     LOG.info( "Got those colors: " + colorsReader.getColorPairs() ) ;
 
-    final Iterator< ColorPair > colorPairs = colorsReader.getColorCycler().iterator() ;
+    final Iterator< ColorPair > colorPairs = colorsReader.createColorCycler().iterator() ;
 
     assertTrue( colorPairs.hasNext() ) ;
     verify( "deepskyblue", "darkblue", colorPairs.next() ) ;
@@ -68,6 +66,10 @@ public class WebColorsTest {
 
   }
 
+  @Test
+  public void singletonIsHere() {
+    assertTrue( WebColors.INSTANCE.createColorCycler().iterator().hasNext() ) ;
+  }
 
 // =======
 // Fixture

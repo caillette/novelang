@@ -27,8 +27,6 @@
     xmlns:xalan="http://xml.apache.org/xalan"
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
     xmlns:nlx="xalan://novelang.rendering.xslt"
-    xmlns:colormapper="novelang.rendering.xslt.color.ColorMapper"
-    extension-element-prefixes="colormapper"
     exclude-result-prefixes="nlx"
 >
   <xsl:import href="punctuation-US-EN.xsl" />
@@ -38,6 +36,9 @@
   <xsl:param name="charset"/>
 
   <xsl:output method="xml" />
+
+  <xsl:variable name="webColor" select="nlx:WebColor.new()" />
+
 
   <xsl:template match="/" >
 
@@ -62,22 +63,30 @@
         <script type="text/javascript" src="/javascript/jquery-1_3_2_min.js" />
         <script type="text/javascript" src="/javascript/jquery-rule-1_0_1_min.js" />
         <script type="text/javascript" src="/javascript/jquery-ui-1_7_2_custom_min.js" />
-        <script type="text/javascript" src="/javascript/color-palette.js" />
         <script type="text/javascript" src="/javascript/tags.js" />
         <script type="text/javascript" src="/javascript/tabs.js" />
-        <!--<script type="text/javascript" src="/javascript/descriptors.js" />-->
         <script type="text/javascript"> //<![CDATA[
-
           $( document ).ready( function() {
             initializeTagSystem( "/javascript/colors.htm" ) ;
-            <!--initializeDescriptors() ;-->
             initializeTabs() ;
             spiceUpSpacesInPre() ;
           } ) ;
         //]]></script>
 
 
+        <style type="text/css" >
+          <xsl:for-each select="//n:meta/n:tags/n:explicit-tag" >
+            .Tag-<xsl:value-of select="." /> {
+              color: <xsl:value-of select="nlx:foreground( $webColor )" /> ;
+              border-color: <xsl:value-of select="nlx:foreground( $webColor )" /> ;
+              background-color: <xsl:value-of select="nlx:background( $webColor )" /> ;
+            }
+            <xsl:value-of select="nlx:next( $webColor )" />
+          </xsl:for-each>
+        </style>
+
       </head>
+
     <body>
 
 
