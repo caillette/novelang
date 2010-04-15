@@ -129,9 +129,6 @@
       </div>
 
 
-
-      <div id="externalColorDefinitionsPlaceholder" style="display:none;" />
-
       <xsl:if test="//n:meta/n:tags" >
         <dl id="tag-definitions" style="display : none ;">
           <xsl:for-each select="//n:meta/n:tags/*">
