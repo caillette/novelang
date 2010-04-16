@@ -49,7 +49,7 @@ public class Novelist {
       final GeneratorSupplier< Level > generatorSupplier,
       final int ghostwriterCount
   ) throws IOException {
-    checkArgument( directory.isDirectory() ) ;
+    checkArgument( directory.isDirectory() || ! directory.exists() ) ;
     this.directory = directory ;
     checkArgument( ! StringUtils.isBlank( fileNamePrototype ) ) ;
     this.filenamePrototype = fileNamePrototype ;
@@ -197,7 +197,7 @@ public class Novelist {
     }
 
     new Novelist(
-        new File( "." ),
+        new File( "_novelist" ),
         args[ 0 ],
         new LevelGeneratorSupplierWithDefaults(), 
         ghostwriterCount
