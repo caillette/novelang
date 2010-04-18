@@ -20,6 +20,7 @@ package novelang.parser.antlr;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import org.antlr.runtime.tree.Tree;
@@ -33,21 +34,50 @@ import org.antlr.runtime.tree.Tree;
  */
 public class TreeConverter {
   
-  public static SyntacticTree convert( final Tree antlrTree ) {
-    if( antlrTree.getChildCount() > 0 ) {
-      final List< SyntacticTree > children = Lists.newArrayList() ;
-      for( int childIndex = 0 ; childIndex < antlrTree.getChildCount() ; childIndex ++ ) {
-        children.add( convert( antlrTree.getChild( childIndex ) ) ) ;
-      }
-      if( antlrTree instanceof CustomTree ) { // Need to check because of ANTLR error nodes.
-        final CustomTree customTree = ( CustomTree ) antlrTree ;
-        return new SimpleTree( customTree.getText(), customTree.getLocation(), children ) ;        
-      } else {
-        return new SimpleTree( antlrTree.getText(), children ) ;
-      }
+  public static SyntacticTree convert( 
+      final Tree antlrTree, 
+      final TokenNameProvider tokenNameProvider 
+  ) {
+
+    final String originalText = antlrTree.getText() ;
+    final String treeText ;
+    final Location location ;
+    final String childText ;
+    final List< SyntacticTree > children ;
+
+    if( antlrTree instanceof CustomTree ) { // Need to check because of ANTLR error nodes.
+      final CustomTree customTree = ( CustomTree ) antlrTree ;
+      childText = customTree.getChildText() ;
+      location = customTree.getLocation() ;
     } else {
-      // TODO pool punctuation signs and whitespaces.
-      return new SimpleTree( antlrTree.getText() ) ;
+      childText = null ;
+      location = null ;
+    }
+    
+    if( antlrTree.getChildCount() > 0 ) {
+      children = Lists.newArrayList() ;
+      if( childText != null ) {
+        children.add( new SimpleTree( childText ) ) ;
+      }
+      for( int childIndex = 0 ; childIndex < antlrTree.getChildCount() ; childIndex ++ ) {
+        children.add( convert( antlrTree.getChild( childIndex ), tokenNameProvider ) ) ;
+      }
+      treeText = originalText ;
+    } else if( childText == null ) {
+      children = null ;
+      treeText = originalText ;
+    } else {
+      children = Lists.newArrayList() ;
+      children.add( new SimpleTree( childText ) ) ;
+      treeText = tokenNameProvider.getTokenName( antlrTree.getType() );
+    }
+    
+    
+    // TODO pool punctuation signs and whitespaces.
+    if( children == null ) {
+      return new SimpleTree( treeText, location ) ;
+    } else {
+      return new SimpleTree( treeText, location, children ) ;      
     }
   }
   

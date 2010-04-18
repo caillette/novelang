@@ -29,10 +29,16 @@ import org.antlr.runtime.tree.CommonTree;
 public class CustomTree extends CommonTree
 {
   private Location location ;
+  private final String childText ;
 
   public CustomTree( final Token token, final Location location ) {
+    this( token, location, null ) ;
+  }
+  
+  public CustomTree( final Token token, final Location location, final String childText ) {
 		super( token ) ;
     this.location = location ;
+    this.childText = childText ;
   }
 
   public Location getLocation() {
@@ -43,5 +49,7 @@ public class CustomTree extends CommonTree
     this.location = location ;
   }
 
-
+  public String getChildText() {
+    return childText ;
+  }
 }

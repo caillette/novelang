@@ -90,7 +90,7 @@ public abstract class AbstractDelegatingParser {
       getDelegate().report( ( ( CommonErrorNode ) tree ).trappedException ) ;
       result = null ;
     } else {
-      result = TreeConverter.convert( ( Tree ) tree ) ;
+      result = TreeConverter.convert( ( Tree ) tree, getDelegate() ) ;
     }
     return result ;
   }

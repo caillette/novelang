@@ -59,7 +59,7 @@ public class ParserMethod {
       return null ;
     }
     
-    return TreeConverter.convert( ( Tree ) node ) ;
+    return TreeConverter.convert( ( Tree ) node, parser.getDelegate() ) ;
   }
 
 

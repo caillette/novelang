@@ -243,7 +243,7 @@ levelIntroducer
 
 tag
   : ( COMMERCIAL_AT s = symbolicName )
-    -> ^( TAG { delegate.createTree( TAG, $s.text ) }  )
+    -> { delegate.createTree( TAG, $s.text ) }  
   ;
   
   
@@ -274,7 +274,7 @@ absoluteIdentifier
   
 identifierSegment
   : symbolicName
-    -> ^( { delegate.createTree( TAG, $symbolicName.text ) }  )
+    -> { delegate.createTree( $symbolicName.text ) }  
   ;
 
 // =====================
@@ -1329,7 +1329,7 @@ literal
     WHITESPACE? SOFTBREAK
     l = literalLines
     SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
-    -> ^( LINES_OF_LITERAL { delegate.createTree( LINES_OF_LITERAL, $l.unescaped ) } )
+    -> { delegate.createTree( LINES_OF_LITERAL, $l.unescaped ) } 
   ;  
 
 literalLines returns [ String unescaped ]
@@ -1405,8 +1405,7 @@ softInlineLiteral
       | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT
-    -> ^( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS 
-          { delegate.createTree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, buffer.toString() ) } )
+    -> { delegate.createTree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, buffer.toString() ) } 
   ;
   
 hardInlineLiteral
@@ -1419,9 +1418,7 @@ hardInlineLiteral
       | s3 = escapedCharacter { buffer.append( $s3.unescaped ) ; }
     )+ 
     GRAVE_ACCENT GRAVE_ACCENT
-    -> ^( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS 
-          { delegate.createTree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, buffer.toString() ) } 
-        )
+    -> { delegate.createTree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS, buffer.toString() ) } 
   ;
   
   
@@ -1452,24 +1449,19 @@ leadingPunctuationSign
   ;
 
 punctuationSign
-  : s1 = COMMA -> ^( PUNCTUATION_SIGN
-      ^( SIGN_COMMA { delegate.createTree( SIGN_COMMA, $s1.text ) } ) )
+  : s1 = COMMA -> ^( PUNCTUATION_SIGN { delegate.createTree( SIGN_COMMA, $s1.text ) } )
       
   | ( FULL_STOP FULL_STOP FULL_STOP ) => FULL_STOP FULL_STOP FULL_STOP 
-      -> ^( PUNCTUATION_SIGN
-              ^( SIGN_ELLIPSIS { delegate.createTree( SIGN_ELLIPSIS, "..." ) } ) )
+      -> ^( PUNCTUATION_SIGN { delegate.createTree( SIGN_ELLIPSIS, "..." ) } )
               
-  | s3 = FULL_STOP  -> ^( PUNCTUATION_SIGN
-      ^( SIGN_FULLSTOP { delegate.createTree( SIGN_FULLSTOP, $s3.text ) } ) )
+  | s3 = FULL_STOP  -> ^( PUNCTUATION_SIGN { delegate.createTree( SIGN_FULLSTOP, $s3.text ) } )
   | s4 = QUESTION_MARK -> ^( PUNCTUATION_SIGN
-      ^( SIGN_QUESTIONMARK { delegate.createTree( SIGN_QUESTIONMARK, $s4.text ) } ) )
+      { delegate.createTree( SIGN_QUESTIONMARK, $s4.text ) } )
   | s5 = EXCLAMATION_MARK -> ^( PUNCTUATION_SIGN
-      ^( SIGN_EXCLAMATIONMARK { delegate.createTree( SIGN_EXCLAMATIONMARK, $s5.text ) } ) )
-  | s6 = SEMICOLON -> ^( PUNCTUATION_SIGN
-      ^( SIGN_SEMICOLON { delegate.createTree( SIGN_SEMICOLON, $s6.text ) } ) )
-  | s7 = COLON -> ^( PUNCTUATION_SIGN
-      ^( SIGN_COLON { delegate.createTree( SIGN_COLON, $s7.text ) } ) )
-  | s8 = APOSTROPHE -> ^( APOSTROPHE_WORDMATE { delegate.createTree( APOSTROPHE_WORDMATE, $s8.text ) } ) 
+      { delegate.createTree( SIGN_EXCLAMATIONMARK, $s5.text ) } ) 
+  | s6 = SEMICOLON -> ^( PUNCTUATION_SIGN { delegate.createTree( SIGN_SEMICOLON, $s6.text ) } )
+  | s7 = COLON -> ^( PUNCTUATION_SIGN { delegate.createTree( SIGN_COLON, $s7.text ) } ) 
+  | s8 = APOSTROPHE -> { delegate.createTree( APOSTROPHE_WORDMATE, $s8.text ) }  
   ;
   
   
@@ -1479,8 +1471,8 @@ punctuationSign
 // ===================================
 
 url
-  : ( http = httpUrl -> ^( URL_LITERAL { delegate.createTree( URL_LITERAL, $http.text ) } )	)
-  | ( file = fileUrl -> ^( URL_LITERAL { delegate.createTree( URL_LITERAL, $file.text ) } )	) 
+  : ( http = httpUrl -> { delegate.createTree( URL_LITERAL, $http.text ) } )	
+  | ( file = fileUrl -> { delegate.createTree( URL_LITERAL, $file.text ) } )	 
   ;
     
 fileUrl                                   
@@ -1804,12 +1796,11 @@ subblockAfterTilde
 
 word
   : ( w1 = rawWord ( CIRCUMFLEX_ACCENT w2 = rawWord ) )
-    -> ^( WORD_ 
-            { delegate.createTree( WORD_, $w1.text ) } 
-            ^( WORD_AFTER_CIRCUMFLEX_ACCENT { delegate.createTree( WORD_, $w2.text ) } )
+    -> ^(   WORD_ { delegate.createTree( $w1.text ) } 
+            ^( WORD_AFTER_CIRCUMFLEX_ACCENT { delegate.createTree( $w2.text ) } )
         )	
   | ( w = rawWord )
-    -> ^( WORD_ { delegate.createTree( WORD_, $w.text ) } )
+    -> { delegate.createTree( WORD_, $w.text ) } 
   ;  
   
 symbolicName
@@ -1902,9 +1893,8 @@ keywordSort
   : ( LATIN_SMALL_LETTER_S LATIN_SMALL_LETTER_O LATIN_SMALL_LETTER_R LATIN_SMALL_LETTER_T 
       EQUALS_SIGN s = sortOrder 
     )
-    -> ^( COMMAND_INSERT_SORT_ 
-          { delegate.createTree( COMMAND_INSERT_SORT_, $s.text ) }
-        )    
+    -> { delegate.createTree( COMMAND_INSERT_SORT_, $s.text ) }
+           
   ;
   
 sortOrder
@@ -1924,9 +1914,8 @@ parameterLevelAbove
       LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_A LATIN_SMALL_LETTER_B LATIN_SMALL_LETTER_O 
       LATIN_SMALL_LETTER_V LATIN_SMALL_LETTER_E EQUALS_SIGN s = digit+
     )
-    -> ^( COMMAND_INSERT_LEVELABOVE_ 
-          { delegate.createTree( COMMAND_INSERT_STYLE_, $s.text ) }         
-        )
+    -> { delegate.createTree( COMMAND_INSERT_LEVELABOVE_, $s.text ) }         
+       
   ;
   
 parameterInsertStyle
@@ -1934,9 +1923,7 @@ parameterInsertStyle
       LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_E EQUALS_SIGN
       s = rawExtendedWord
     )
-    -> ^( COMMAND_INSERT_STYLE_ 
-          { delegate.createTree( COMMAND_INSERT_STYLE_, $s.text ) } 
-        )
+    -> { delegate.createTree( COMMAND_INSERT_STYLE_, $s.text ) } 
   ;
 
   
@@ -1956,15 +1943,15 @@ keywordMapstylesheet
 
 assignmentArgument    
   : ( key = rawExtendedWord EQUALS_SIGN value = rawExtendedWord )
-      -> ^( COMMAND_MAPSTYLESHEET_ASSIGNMENT_ 
-              { delegate.createTree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, $key.text ) } 
-              { delegate.createTree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, $value.text ) } 
+      -> ^( COMMAND_MAPSTYLESHEET_ASSIGNMENT_
+              { delegate.createTree( $key.text ) } 
+              { delegate.createTree( $value.text ) } 
           )     
   ;
 
 extendedWord
   : w = rawExtendedWord 
-    -> ^( EXTENDED_WORD_ { delegate.createTree( EXTENDED_WORD_, $w.text ) } )	
+    -> { delegate.createTree( EXTENDED_WORD_, $w.text ) } 	
   ;  
 
 /** This intermediary rule is useful as I didn't find how to
@@ -2002,16 +1989,12 @@ softbreak : SOFTBREAK -> ^( LINE_BREAK_ ) ;
 
 whitespace : 
   WHITESPACE 
-  -> ^( WHITESPACE_ 
-        { delegate.createTree( WHITESPACE_, $whitespace.text ) } 
-      ) 
+  -> { delegate.createTree( WHITESPACE_, $whitespace.text ) } 
 ;
 
 levelIntroducerIndent 
   : EQUALS_SIGN EQUALS_SIGN+
-    -> ^( LEVEL_INTRODUCER_INDENT_ 
-          { delegate.createTree( LEVEL_INTRODUCER_INDENT_, $levelIntroducerIndent.text ) } 
-        )	
+    -> { delegate.createTree( LEVEL_INTRODUCER_INDENT_, $levelIntroducerIndent.text ) } 
   ;
 
 mediumbreak

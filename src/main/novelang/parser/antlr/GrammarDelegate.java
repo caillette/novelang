@@ -17,36 +17,36 @@
 
 package novelang.parser.antlr;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.MismatchedTokenException;
-import org.antlr.runtime.ParserRuleReturnScope;
-import org.antlr.runtime.tree.Tree;
-import org.antlr.runtime.tree.RewriteEarlyExitException;
-import org.antlr.runtime.tree.TreeAdaptor;
-import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
-
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
-import novelang.parser.antlr.delimited.BlockDelimiter;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
+import novelang.parser.antlr.delimited.BlockDelimiter;
 import novelang.parser.antlr.delimited.BlockDelimiterSupervisor;
 import novelang.parser.antlr.delimited.DefaultBlockDelimiterSupervisor;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.RewriteEarlyExitException;
+import org.antlr.runtime.tree.Tree;
+import org.antlr.runtime.tree.TreeAdaptor;
 
 /**
  * Holds stuff which is not convenient to code inside ANTLR grammar because of code generation.
  *
  * @author Laurent Caillette
  */
-public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSupervisor {
+public class GrammarDelegate 
+    extends ProblemDelegate 
+    implements BlockDelimiterSupervisor, TokenNameProvider 
+{
 
   private static final Log LOGGER = LogFactory.getLog( GrammarDelegate.class ) ;
 
@@ -162,6 +162,14 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
   }
 
 
+// =================  
+// TokenNameProvider
+// =================  
+  
+  public String getTokenName( final int imaginaryTokenIndex ) {
+    return tokenNames[ imaginaryTokenIndex ] ;
+  }
+
 
 // ========================  
 // Enhanced error reporting
@@ -184,24 +192,31 @@ public class GrammarDelegate extends ProblemDelegate implements BlockDelimiterSu
     ) ;
   }
 
-  @Deprecated
-  public Tree createTree( final int tokenIdentifier, final String tokenPayload ) {
+  public Tree createTree( final int imaginaryTokenIdentifier, final String tokenPayload ) {
     return new CustomTree(
-      new CommonToken( tokenIdentifier, tokenPayload ),
-      getLocationFactory().createLocation()
-      ) ;
+        new CommonToken( imaginaryTokenIdentifier ),
+        getLocationFactory().createLocation(),
+        tokenPayload
+    ) ;
   }
 
-  public Object createTree(
+  public Tree createTree( final String tokenPayload ) {
+    return new CustomTree(
+        new CommonToken( -1, tokenPayload ),
+        getLocationFactory().createLocation()
+    ) ;
+  }
+
+  public static Object createTree(
       final int imaginaryTokenIdentifier,
       final Location location,
       final String tokenPayload
   ) {
-    final Object root_1 = createRoot( imaginaryTokenIdentifier, location ) ;
-    final Object payloadEmbedder = adaptor.create( imaginaryTokenIdentifier, tokenPayload ) ;
-    adaptor.addChild( root_1, payloadEmbedder ) ;
-
-    return root_1 ;
+    return new CustomTree(
+        new CommonToken( imaginaryTokenIdentifier ),
+        location,
+        tokenPayload
+    ) ;
   }
 
   public Object createTree(
