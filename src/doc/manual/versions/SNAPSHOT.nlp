@@ -10,3 +10,6 @@ report: Novelang has its own benchmark!
 Instead of dynamically computing styles on the Web browser, HTML rendered by the server directly
 includes those styles.
 
+--- Various performance enhancements on document generation.
+- Don't rely on string comparisons to find the kind of a node in document's AST (Abstract Syntax Tree).
+- Buffered read of Part files.
