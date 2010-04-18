@@ -30,6 +30,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
+import org.antlr.runtime.tree.Tree;
 //import NovelangLexer;
 //import AllTokens;
 
@@ -89,7 +90,7 @@ public abstract class AbstractDelegatingParser {
       getDelegate().report( ( ( CommonErrorNode ) tree ).trappedException ) ;
       result = null ;
     } else {
-      result = ( SyntacticTree ) tree ;
+      result = TreeConverter.convert( ( Tree ) tree ) ;
     }
     return result ;
   }
