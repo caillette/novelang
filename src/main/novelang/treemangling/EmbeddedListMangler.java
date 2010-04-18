@@ -217,7 +217,7 @@ public class EmbeddedListMangler {
 
   private static SyntacticTree makeEmbeddedListItem( final Treepath< SyntacticTree > treepath ) {
     final Iterable< ? extends SyntacticTree > children = treepath.getTreeAtEnd().getChildren() ;
-    return new SimpleTree( _EMBEDDED_LIST_ITEM.name(), children ) ;
+    return new SimpleTree( _EMBEDDED_LIST_ITEM, children ) ;
   }
 
 

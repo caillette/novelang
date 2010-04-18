@@ -35,10 +35,6 @@ public enum StructureKind {
     this.fileExtension = fileExtension ;
   }
 
-  public String getPathToken() {
-    return name().toLowerCase() ;
-  }
-
   public String[] getFileExtensions() {
     return fileExtension.clone() ;
   }

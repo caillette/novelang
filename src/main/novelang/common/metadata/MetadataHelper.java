@@ -99,19 +99,19 @@ public class MetadataHelper {
 
     children.add(
         new SimpleTree(
-            NodeKind._WORD_COUNT.name(),
+            NodeKind._WORD_COUNT,
             new SimpleTree( "" + countWords( tree ) )
         )
     ) ;
 
     if( tagset.size() > 0 ) {
       final Iterable< SyntacticTree > tagsAsTrees = Tag.toSyntacticTrees( _EXPLICIT_TAG, tagset ) ;
-      final SyntacticTree tagsTree = new SimpleTree( _TAGS.name(), tagsAsTrees ) ;
+      final SyntacticTree tagsTree = new SimpleTree( _TAGS, tagsAsTrees ) ;
       children.add( tagsTree ) ;
     }
 
     return new SimpleTree(
-        NodeKind._META.name(),
+        NodeKind._META,
         children
     ) ;
   }

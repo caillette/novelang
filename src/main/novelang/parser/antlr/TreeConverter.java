@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.parser.NodeKind;
 import org.antlr.runtime.tree.Tree;
 
 /**
@@ -41,6 +42,7 @@ public class TreeConverter {
 
     final String originalText = antlrTree.getText() ;
     final String treeText ;
+    final NodeKind treeKind ;
     final Location location ;
     final String childText ;
     final List< SyntacticTree > children ;
@@ -62,22 +64,34 @@ public class TreeConverter {
       for( int childIndex = 0 ; childIndex < antlrTree.getChildCount() ; childIndex ++ ) {
         children.add( convert( antlrTree.getChild( childIndex ), tokenNameProvider ) ) ;
       }
-      treeText = originalText ;
     } else if( childText == null ) {
       children = null ;
-      treeText = originalText ;
     } else {
       children = Lists.newArrayList() ;
       children.add( new SimpleTree( childText ) ) ;
-      treeText = tokenNameProvider.getTokenName( antlrTree.getType() );
     }
-    
-    
+
+
+    if( antlrTree.getType() >= 0 && antlrTree instanceof CustomTree ) {
+      treeText = null ;
+      treeKind = NodeKind.valueOf( tokenNameProvider.getTokenName( antlrTree.getType() ) ) ;
+    } else {
+      treeText = originalText ; 
+      treeKind = null ;
+    }
+
+
     // TODO pool punctuation signs and whitespaces.
     if( children == null ) {
-      return new SimpleTree( treeText, location ) ;
+      return treeKind == null ? 
+          new SimpleTree( treeText, location ) : 
+          new SimpleTree( treeKind, location ) 
+      ;
     } else {
-      return new SimpleTree( treeText, location, children ) ;      
+      return treeKind == null ? 
+          new SimpleTree( treeText, location, children ) : 
+          new SimpleTree( treeKind, location, children ) 
+      ;
     }
   }
   

@@ -230,7 +230,7 @@ public class ImageFixer {
       final NodeKind sizeNodeKind,
       final String value
   ) {
-    final SyntacticTree withTree = new SimpleTree( sizeNodeKind.name(), new SimpleTree( value ) ) ;
+    final SyntacticTree withTree = new SimpleTree( sizeNodeKind, new SimpleTree( value ) ) ;
     treepathToImage = TreepathTools.addChildLast( treepathToImage, withTree ).getPrevious() ;
     return treepathToImage;
   }

@@ -71,7 +71,7 @@ public final class Tag implements Comparable< Tag > {
   ) {
     final List< SyntacticTree > tagsAsTrees = Lists.newArrayListWithCapacity( tagset.size() ) ;
     for( final Tag tag : Ordering.natural().sortedCopy( tagset ) ) {
-      tagsAsTrees.add( new SimpleTree( tagNodeKind.name(), new SimpleTree( tag.name ) ) ) ;
+      tagsAsTrees.add( new SimpleTree( tagNodeKind, new SimpleTree( tag.name ) ) ) ;
     }
     return ImmutableList.copyOf( tagsAsTrees ) ;    
   }

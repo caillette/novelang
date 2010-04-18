@@ -49,15 +49,15 @@ public class TreeFixture {
   } ;
 
   public static SyntacticTree tree( final NodeKind nodeKind, final SyntacticTree... children ) {
-    return new SimpleTree( nodeKind.name(), children ) ;
+    return new SimpleTree( nodeKind, children ) ;
   }
 
   public static SyntacticTree tree( final NodeKind nodeKind, final String text ) {
-    return new SimpleTree( nodeKind.name(), new SimpleTree( text ) ) ;
+    return new SimpleTree( nodeKind, new SimpleTree( text ) ) ;
   }
 
   public static SyntacticTree tree( final NodeKind nodeKind ) {
-    return new SimpleTree( nodeKind.name() ) ;
+    return new SimpleTree( nodeKind ) ;
 
   }
 
@@ -66,7 +66,7 @@ public class TreeFixture {
       final Location location,
       final SyntacticTree... children
   ) {
-    return new SimpleTree( nodeKind.name(), location, children ) ;
+    return new SimpleTree( nodeKind, location, children ) ;
   }
 
   public static SyntacticTree tree(
@@ -74,7 +74,7 @@ public class TreeFixture {
       final Location location,
       final String text
   ) {
-    return new SimpleTree( nodeKind.name(), location, new SimpleTree( text ) ) ;
+    return new SimpleTree( nodeKind, location, new SimpleTree( text ) ) ;
   }
 
 
@@ -82,9 +82,9 @@ public class TreeFixture {
     final SyntacticTree[] childTrees = new SyntacticTree[ children.length ] ;
     for( int i = 0; i < children.length ; i++ ) {
       final NodeKind child = children[ i ] ;
-      childTrees[ i ] = new SimpleTree( child.name() ) ;
+      childTrees[ i ] = new SimpleTree( child ) ;
     }
-    return new SimpleTree( nodeKind.name(), childTrees ) ;
+    return new SimpleTree( nodeKind, childTrees ) ;
   }
 
   public static SyntacticTree tree( final String text ) {

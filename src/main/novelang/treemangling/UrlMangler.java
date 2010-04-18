@@ -167,7 +167,7 @@ public class UrlMangler {
     }
 
     final SyntacticTree urlTree = new SimpleTree(
-        NodeKind._URL.name(),
+        NodeKind._URL,
         children
     ) ;
     return TreepathTools.replaceTreepathEnd( treepathToUrlLiteral, urlTree ) ;

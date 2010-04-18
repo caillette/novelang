@@ -182,7 +182,7 @@ public class InsertCommand extends AbstractCommand {
     if( null == styleName ) {
       return null ;
     } else {
-      return new SimpleTree( NodeKind._STYLE.name(), new SimpleTree( styleName ) ) ;
+      return new SimpleTree( NodeKind._STYLE, new SimpleTree( styleName ) ) ;
     }
   }
 
@@ -331,13 +331,13 @@ public class InsertCommand extends AbstractCommand {
       final SyntacticTree styleTree
   ) {
     final SyntacticTree word = new SimpleTree(
-        WORD_.name(),
+        WORD_,
         new SimpleTree( FilenameUtils.getBaseName( partFile.getName() ) )
     ) ;
-    final SyntacticTree title = new SimpleTree( NodeKind.LEVEL_TITLE.name(), word ) ;
+    final SyntacticTree title = new SimpleTree( NodeKind.LEVEL_TITLE, word ) ;
 
     SyntacticTree chapterTree = TreeTools.addFirst(
-        new SimpleTree( NodeKind._LEVEL.name(), partTrees ),
+        new SimpleTree( NodeKind._LEVEL, partTrees ),
         title
     ) ;
 

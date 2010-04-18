@@ -53,7 +53,7 @@ public class ListMangler {
               break ;
             } else {
               final SyntacticTree list =
-                  new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN.name(), child.getTreeAtEnd() ) ;
+                  new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN, child.getTreeAtEnd() ) ;
               child = TreepathTools.replaceTreepathEnd( child, list ) ;
               insideList = true ;
             }

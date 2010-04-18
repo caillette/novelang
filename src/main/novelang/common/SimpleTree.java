@@ -25,6 +25,7 @@ import novelang.common.tree.ImmutableTree;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -34,7 +35,8 @@ import java.util.Set;
  */
 public class SimpleTree extends ImmutableTree< SyntacticTree > implements SyntacticTree {
 
-  private final String text;
+  private final String text ;
+  private final NodeKind nodekind ;
   private final Location location ;
 
   public SimpleTree( final String text, final SyntacticTree... children ) {
@@ -45,16 +47,20 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     this( text, location, Lists.newArrayList( children ) ) ;
   }
 
-  public SimpleTree( final NodeKind nodeKind, final SyntacticTree... children ) {
-    this( nodeKind.name(), Lists.newArrayList( children ) ) ;
-  }
-
   public SimpleTree( final String text, final Iterable< ? extends SyntacticTree> children ) {
     this( text, null, children ) ;
   }
 
-  public SimpleTree( final NodeKind nodeKind, final Iterable< ? extends SyntacticTree> children ) {
-    this( nodeKind.name(), children ) ;
+  public SimpleTree( final NodeKind nodeKind, final SyntacticTree... children ) {
+    this( nodeKind, Lists.newArrayList( children ) ) ;
+  }
+
+  public SimpleTree( 
+      final NodeKind nodeKind, 
+      final Location location, 
+      final SyntacticTree... children 
+  ) {
+    this( nodeKind, location, Lists.newArrayList( children ) ) ;
   }
 
   public SimpleTree(
@@ -65,10 +71,30 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     super( children ) ;
     this.location = location ;
     this.text = text ;
+    this.nodekind = null ;
+  }
+
+  public SimpleTree(
+      final NodeKind nodeKind,
+      final Location location,
+      final Iterable< ? extends SyntacticTree > children
+  ) {
+    super( children ) ;
+    this.location = location ;
+    this.nodekind = nodeKind ;
+    this.text = nodeKind.name() ;
+  }
+
+  public SimpleTree( final NodeKind nodeKind, final Iterable< ? extends SyntacticTree > children ) {
+    this( nodeKind, null, children ) ;
   }
 
   public SyntacticTree adopt( final SyntacticTree... newChildren ) throws NullArgumentException {
-    return new SimpleTree( getText(), getLocation(), newChildren ) ;
+    if( nodekind == null ) {
+      return new SimpleTree( getText(), getLocation(), newChildren ) ;
+    } else {
+      return new SimpleTree( getNodeKind(), getLocation(), newChildren ) ;
+    }
   }
 
   public Iterable< ? extends SyntacticTree > getChildren() {
@@ -86,7 +112,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
   }
 
   public String toStringTree() {
-    final StringBuffer buffer = new StringBuffer() ;
+    final StringBuilder buffer = new StringBuilder() ;
     
     final boolean shouldWrap = getChildCount() > 0 ;
 
@@ -116,15 +142,37 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     return location ;
   }
 
+  public NodeKind getNodeKind() {
+    return nodekind ;
+  }
+
   public boolean isOneOf( final NodeKind... kinds ) {
+
+    boolean equalityByKind = false ;
+    for( final NodeKind kind : kinds ) {
+      if( kind == getNodeKind() ) {
+        equalityByKind = true ;
+        break ;
+      }
+    }
+
+/*
+    boolean equalityByName = false ;
     if( NodeKindTools.rootHasNodeKindName( this ) ) {
       for( final NodeKind kind : kinds ) {
         if( getText().equals( kind.name() ) ) {
-          return true ;
+          equalityByName = true ;
+          break ;
         }
       }
     }
-    return false ;
+
+    if( equalityByKind != equalityByName ) {
+      throw new IllegalStateException() ;
+    }
+*/
+    
+    return equalityByKind ;
   }
 
   /**
@@ -133,14 +181,30 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
    * @see #isOneOf(novelang.parser.NodeKind...)  
    */
   public boolean isOneOf( final Set< NodeKind > kinds ) {
+    boolean equalityByKind = false ;
+    for( final NodeKind kind : kinds ) {
+      if( kind == getNodeKind() ) {
+        equalityByKind = true ;
+        break ;
+      }
+    }
+
+/*
+    boolean equalityByName = false ;
     if( NodeKindTools.rootHasNodeKindName( this ) ) {
       for( final NodeKind kind : kinds ) {
         if( getText().equals( kind.name() ) ) {
-          return true ;
+          equalityByName = true ;
+          break ;
         }
       }
     }
-    return false ;
+    if( equalityByKind != equalityByName ) {
+      throw new IllegalStateException() ;
+    }
+*/
+
+    return equalityByKind ;
   }
 
   public Class< ? extends SyntacticTree > getStorageType() {

@@ -71,7 +71,7 @@ public class InsertCommandTest {
 
     final CommandExecutionContext initialContext =
         new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( new SimpleTree( BOOK.name() ) )
+        update( new SimpleTree( BOOK ) )
     ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
@@ -104,7 +104,7 @@ public class InsertCommandTest {
 
     final CommandExecutionContext initialContext =
         new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( new SimpleTree( BOOK.name() ) )
+        update( new SimpleTree( BOOK ) )
     ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
@@ -133,7 +133,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext initialContext =
         new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ;
     final CommandExecutionContext result = insertCommand.evaluate( initialContext ) ;
@@ -175,7 +175,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
@@ -210,7 +210,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 
@@ -234,7 +234,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext( brokenContentDirectory ).update( initialTree ) ) ;
 
@@ -344,7 +344,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK.name() ) ;
+    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
 

@@ -38,6 +38,11 @@ public interface SyntacticTree
 
   Location getLocation() ;
 
+  /**
+   * May return {@code null}.
+   */
+  NodeKind getNodeKind() ;
+
   String toStringTree() ;
 
   boolean isOneOf( NodeKind... nodeKind ) ;
