@@ -181,13 +181,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
    * @see #isOneOf(novelang.parser.NodeKind...)  
    */
   public boolean isOneOf( final Set< NodeKind > kinds ) {
-    boolean equalityByKind = false ;
-    for( final NodeKind kind : kinds ) {
-      if( kind == getNodeKind() ) {
-        equalityByKind = true ;
-        break ;
-      }
-    }
+    final boolean equalityByKind = kinds.contains( getNodeKind() ) ;
 
 /*
     boolean equalityByName = false ;
