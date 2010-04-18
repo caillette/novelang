@@ -1,5 +1,6 @@
 package novelang.parser.unicode ;
 
+import java.io.BufferedInputStream;
 import java.io.IOException ;
 import java.io.InputStream ;
 import java.io.PushbackInputStream ;
@@ -46,17 +47,16 @@ public class UnicodeInputStream extends InputStream {
   final PushbackInputStream internalInputStream;
   final Charset defaultEncoding ;
   private boolean initialized = false ;
-  private Charset encoding ;
+  private Charset encoding = null ;
 
   private static final int BOM_SIZE = 4 ;
+  private static final int BUFFER_SIZE = 1024 * 32 ;
 
+  @SuppressWarnings( { "IOResourceOpenedButNotSafelyClosed" } )
   public UnicodeInputStream( final InputStream in, final Charset defaultEncoding ) {
-    internalInputStream = new PushbackInputStream( in, BOM_SIZE ) ;
+    final BufferedInputStream bufferedInputStream = new BufferedInputStream( in, BUFFER_SIZE ) ;
+    internalInputStream = new PushbackInputStream( bufferedInputStream, BOM_SIZE ) ;
     this.defaultEncoding = Preconditions.checkNotNull( defaultEncoding ) ;
-  }
-
-  public Charset getDefaultEncoding() {
-    return defaultEncoding ;
   }
 
   public Charset getEncoding() {
