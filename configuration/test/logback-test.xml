@@ -37,6 +37,10 @@
     <level value="WARN" />
   </logger>
 
+  <logger name="novelang.common.tree.Statistics" >
+    <level value="WARN" />
+  </logger>
+
   <root>
     <appender-ref ref="STDOUT" />
     <level value="INFO" />

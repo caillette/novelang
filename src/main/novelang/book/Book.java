@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.nio.charset.Charset;
 
+import novelang.common.tree.Statistics;
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -113,6 +114,9 @@ public class Book extends AbstractSourceReader {
       ) ;
       Treepath< SyntacticTree > rehierarchized =
           Treepath.create( currentEnvironment.getDocumentTree() ) ;
+
+      Statistics.logStatistics( rehierarchized.getTreeAtStart() ) ;
+
       final Set< Tag > tagset = TagMangler.findExplicitTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;

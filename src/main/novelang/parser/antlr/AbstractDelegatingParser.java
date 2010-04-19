@@ -19,6 +19,7 @@ package novelang.parser.antlr;
 
 import java.util.List;
 
+import novelang.common.tree.Statistics;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -91,6 +92,7 @@ public abstract class AbstractDelegatingParser {
       result = null ;
     } else {
       result = TreeConverter.convert( ( Tree ) tree, getDelegate() ) ;
+      Statistics.logStatistics( result ) ;
     }
     return result ;
   }
