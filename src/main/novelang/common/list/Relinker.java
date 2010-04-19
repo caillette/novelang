@@ -23,6 +23,6 @@ public interface Relinker< T extends Cell > {
    * @return a possibly null object, meaning removal (when {@code original} wasn't null) or
    *         do-nothing (when {@code original} was null, at the extremi of the traversal).
    */
-  Cell< T > apply( int listSize, int index, Cell< T > original, Cell< T > lastKept ) ;
+  T apply( int listSize, int index, T original, T lastKept ) ;
 
 }

@@ -5,30 +5,30 @@ package novelang.common.list;
  */
 public class Relinkers {
 
-  public static< T extends Cell > Relinker< T > firstElementRemover() {
+  public static< T extends Cell< T > > Relinker< T > firstElementRemover() {
     return new RemoveFirst< T >() ;
   }
 
-  public static< T extends Cell > Relinker< T > lastElementRemover() {
+  public static< T extends Cell< T > > Relinker< T > lastElementRemover() {
     return new RemoveLast< T >() ;
   }
 
-  public static class RemoveFirst< T extends Cell > implements Relinker< T > {
+  public static class RemoveFirst< T extends Cell< T > > implements Relinker< T > {
 
     public int startsAt( final int listSize ) {
       return -1 ;
     }
 
-    public Cell< T > apply(
+    public T apply(
         final int listSize,
         final int index,
-        final Cell< T > original,
-        final Cell< T > lastKept
+        final T original,
+        final T lastKept
     ) {
-      if( index == 0 ) {
+      if( index <= 0 ) {
         return null ;
       } else {
-        return original.relink( lastKept ) ;
+        return original == null ? null : original.relink( lastKept ) ;
       }
     }
   }
@@ -39,16 +39,16 @@ public class Relinkers {
       return listSize - 1 ;
     }
 
-    public Cell< T > apply(
+    public T apply(
         final int listSize,
         final int index,
-        final Cell< T > original,
-        final Cell< T > lastKept
+        final T original,
+        final T lastKept
     ) {
       if( index == listSize -1 ) {
         return null ; 
       } else {
-        return original.relink( lastKept ) ;
+        return null ; // Should happen only for trailing insertion placeholder.
       }
     }
   }

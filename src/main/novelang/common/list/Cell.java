@@ -17,14 +17,14 @@ public interface Cell< T extends Cell > {
    *
    * @return a possibly null object.
    */
-  Cell< T > getLinked() ;
+  T getLinked() ;
 
   /**
    * Returns a copy of this object referencing a new linked element.
    * @param newLinked a possibly null object.
    * @return a non-null object.
    */
-  Cell< T > relink( final Cell< T > newLinked ) ;
+  T relink( final T newLinked ) ;
 
 
 }

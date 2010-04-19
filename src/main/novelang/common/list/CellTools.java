@@ -14,11 +14,11 @@ public class CellTools {
 
   private CellTools() { }
 
-  public static< T extends Cell > int size( final Cell< T > list ) {
+  public static< T extends Cell< ? > > int size( final T list ) {
     return calculateSize( Preconditions.checkNotNull( list ) ) ;
   }
 
-  private static< T extends Cell > int calculateSize( final Cell< T > list ) {
+  private static< T extends Cell< ? > > int calculateSize( final T list ) {
     if( list == null ) {
       return 0 ;
     } else {
@@ -26,10 +26,10 @@ public class CellTools {
     }
   }
 
-  public static< T extends Cell > Cell< T > atDistance( final Cell< T > list, final int distance ) {
+  public static< T extends Cell< T > > T atDistance( final T list, final int distance ) {
     Preconditions.checkArgument( distance >= 0 ) ;
     int step = 0 ;
-    Cell< T > current = list ;
+    T current = list ;
     while( current != null ) {
       if( step == distance ) {
         return current ;
@@ -41,8 +41,8 @@ public class CellTools {
         "Distance of " + distance + " while list size is " + step ) ;
   }
 
-  public static< T extends Cell > Cell< T > atOppositeDistance(
-      final Cell< T > list,
+  public static< T extends Cell< T > > T atOppositeDistance(
+      final T list,
       final int oppositeDistance
   ) {
     Preconditions.checkArgument( oppositeDistance >= 0 ) ;
@@ -56,9 +56,9 @@ public class CellTools {
   }
 
 
-  private static< T extends Cell > List< Cell< T > > asJavaList( final Cell< T > list ) {
-    final List< Cell< T > > javaList = Lists.newArrayList() ;
-    Cell< T > current = Preconditions.checkNotNull( list ) ;
+  private static< T extends Cell< T > > List< T > asJavaList( final T list ) {
+    final List< T > javaList = Lists.newArrayList() ;
+    T current = Preconditions.checkNotNull( list ) ;
     while( current != null ) {
       javaList.add( current ) ;
       current = current.getLinked() ;
@@ -66,22 +66,22 @@ public class CellTools {
     return javaList ;
   }
 
-  public static< T extends Cell > Cell< T > addLast( ) {
+  public static< T extends Cell< T > > T addLast( ) {
     throw new UnsupportedOperationException( "TODO" ) ;
   }
 
-  public static< T extends Cell > Cell< T > removeFirst( final Cell< T > list ) {
+  public static< T extends Cell< T > > T removeFirst( final T list ) {
     final Relinker< T > relinker = Relinkers.firstElementRemover() ;
 
     throw new UnsupportedOperationException( "removeFirst" ) ;
   }
 
-  public static< T extends Cell > Cell< T > apply(
-      final Cell< T > list,
+  public static< T extends Cell< T > > T apply(
+      final T list,
       final Relinker< T > relinker
   ) {
-    Cell< T > lastResult ;
-    Cell< T > backupResult ;
+    T lastResult ;
+    T backupResult ;
     final int size = size( list ) ;
 
     lastResult = relinker.apply( size, -1, null, null ) ;
@@ -90,7 +90,7 @@ public class CellTools {
          oppositeDistance < size ;
          oppositeDistance ++
     ) {
-      final Cell< T > original = atDistance( list, oppositeDistance ) ;
+      final T original = atDistance( list, oppositeDistance ) ;
       backupResult = relinker.apply( size, oppositeDistance, original, lastResult ) ;
       lastResult = backupResult == null ? lastResult : backupResult ;
     }
