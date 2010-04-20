@@ -72,4 +72,39 @@ public interface Tree< T extends Tree > {
    */
   T adopt( Iterable< T > newChildren ) throws NullArgumentException ;
 
+  /**
+   * Behavior of a function object for mutating {@link Tree}'s children.
+   * <p>
+   * This interface defines the contract for changing a list in every possible way:
+   * <ul>
+   *   <li>Insert any number of elements at any place.
+   *   <li>Remove any element.
+   *   <li>Update (change reference to) any element.
+   * </ul>
+   *
+   * @author Laurent Caillette
+   */
+  public static interface Evolver< T > {
+
+    /**
+     * Gives a hint to avoid full list traversal whenever possible.
+     *
+     * @param listSize a value inside [ 1, {@link Integer#MAX_VALUE} ] interval.
+     * @return a value inside [ -1, {@code listSize} ] interval.
+     */
+//    int startsAt( int listSize ) ;
+
+    /**
+     * Returns the updated element.
+     *
+     * @param listSize number of elements, a value inside [ 0, {@link Integer#MAX_VALUE} ] interval.
+     * @param index a value inside [ -1, {@code listSize} ] interval.
+     * @param original a possibly null object.
+     * @return a possibly null object, meaning removal (when {@code original} wasn't null) or
+     *         do-nothing (when {@code original} was null, at the extremi of the traversal).
+     */
+    T apply( int index, T original, int listSize ) ;
+
+
+  }
 }
