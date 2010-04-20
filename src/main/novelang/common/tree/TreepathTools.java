@@ -161,7 +161,7 @@ public class TreepathTools {
    * @return non-null {@code Treepath} with the same end but with updated parents.
    *
    */
-  public static< T extends Tree > Treepath< T > addSiblingLast(
+  public static< T extends Tree< T > > Treepath< T > addSiblingLast(
       final Treepath< T > treepath,
       final T tree
   ) {
@@ -194,7 +194,7 @@ public class TreepathTools {
    * @return non-null {@code Treepath} referencing updated trees.
    *
    */
-  public static < T extends Tree > Treepath< T > addChildFirst(
+  public static < T extends Tree< T > > Treepath< T > addChildFirst(
       final Treepath< T > treepath,
       final T tree
   ) {
@@ -226,7 +226,7 @@ public class TreepathTools {
    * @return non-null {@code Treepath} referencing updated trees.
    *
    */
-  public static < T extends Tree > Treepath< T > addChildAt(
+  public static < T extends Tree< T > > Treepath< T > addChildAt(
       final Treepath< T > treepath,
       final T tree,
       final int position
@@ -255,7 +255,7 @@ public class TreepathTools {
    * @return non-null {@code Treepath} referencing updated trees.
    *
    */
-  public static < T extends Tree > Treepath< T > addChildLast(
+  public static < T extends Tree< T > > Treepath< T > addChildLast(
       final Treepath< T > treepath,
       final T tree
   ) {
@@ -285,7 +285,7 @@ public class TreepathTools {
    * @return non-null {@code Treepath} with the same end referencing updated trees.
    *
    */
-  public static< T extends Tree > Treepath< T > replaceTreepathEnd(
+  public static< T extends Tree< T > > Treepath< T > replaceTreepathEnd(
       final Treepath< T > treepath,
       final T newTree
   ) {
@@ -312,7 +312,7 @@ public class TreepathTools {
    * @param treepath a non-null object with a minimum height of 2.
    * @return a {@code Treepath} referencing updated trees.
    */
-  public static< T extends Tree > Treepath< T > removeEnd( final Treepath< T > treepath ) {
+  public static< T extends Tree< T > > Treepath< T > removeEnd( final Treepath< T > treepath ) {
     Preconditions.checkArgument( 
         treepath.getLength() > 1,
         "Treepath length must be 2 or more" 
@@ -381,7 +381,7 @@ public class TreepathTools {
    * @return non-null object representing path to moved {@code Tree}.
    * @throws IllegalArgumentException if there was no previous sibling.
    */
-  public static< T extends Tree > Treepath< T > removePreviousSibling(
+  public static< T extends Tree< T > > Treepath< T > removePreviousSibling(
       final Treepath< T > treepath
   ) {
     Preconditions.checkArgument( treepath.getLength() >= 2, "Treepath length must be 2 or more" ) ;
@@ -413,7 +413,7 @@ public class TreepathTools {
    * @return non-null object representing path to moved {@code Tree}.
    * @throws IllegalArgumentException if there was no previous sibling.
    */
-  public static< T extends Tree > Treepath< T > removeNextSibling(
+  public static< T extends Tree< T > > Treepath< T > removeNextSibling(
       final Treepath< T > treepath
   ) {
     if( treepath.getLength() < 2 ) {

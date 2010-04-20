@@ -25,6 +25,11 @@ public class MyTree extends ImmutableTree< MyTree > {
 
   private final String payload ;
 
+  public MyTree( final String payload, final Iterable< MyTree > children ) {
+    super( children ) ;
+    this.payload = payload ;
+  }
+
   public MyTree( final String payload, final MyTree... children ) {
     super( children ) ;
     this.payload = payload ;
@@ -34,7 +39,7 @@ public class MyTree extends ImmutableTree< MyTree > {
     return payload;
   }
 
-  public MyTree adopt( final MyTree... newChildren ) {
+  public MyTree adopt( final Iterable< MyTree > newChildren ) {
     return new MyTree( payload, newChildren ) ;
   }
 

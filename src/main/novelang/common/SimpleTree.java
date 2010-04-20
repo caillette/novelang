@@ -89,7 +89,9 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     this( nodeKind, null, children ) ;
   }
 
-  public SyntacticTree adopt( final SyntacticTree... newChildren ) throws NullArgumentException {
+  public SyntacticTree adopt( final Iterable< SyntacticTree > newChildren )
+      throws NullArgumentException
+  {
     if( nodekind == null ) {
       return new SimpleTree( getText(), getLocation(), newChildren ) ;
     } else {

@@ -18,6 +18,7 @@ package novelang.common.tree;
 
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.NullArgumentException;
 import com.google.common.collect.Lists;
 
@@ -40,17 +41,13 @@ public class TreeTools {
    * @param newChild a non-null object.
    * @return a non-null object.
    */
-  public static < T extends Tree > T addFirst( final T tree, final T newChild ) {
-    if( null == newChild ) {
-      throw new NullArgumentException( "newChild" ) ;
-    }
-    final T[] newArray = createArray( tree, newChild, tree.getChildCount() + 1 ) ;
-
-    newArray[ 0 ] = newChild ;
+  public static < T extends Tree< T > > T addFirst( final T tree, final T newChild ) {
+    final List< T > newChildList = Lists.newArrayListWithCapacity( tree.getChildCount() + 1 ) ;
+    newChildList.add( Preconditions.checkNotNull( newChild ) ) ;
     for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
-      newArray[ i + 1 ] = ( T ) tree.getChildAt( i );
+      newChildList.add( tree.getChildAt( i ) ) ;
     }
-    return ( T ) tree.adopt( newArray ) ;
+    return tree.adopt( newChildList ) ;
   }
 
   /**
@@ -61,26 +58,23 @@ public class TreeTools {
    * @param position a value between [0, {@link Tree#getChildCount()}[.
    * @return a non-null object.
    */
-  public static < T extends Tree > T add( final T tree, final T newChild, final int position ) {
-    if( null == newChild ) {
-      throw new NullArgumentException( "newChild" ) ;
-    }
+  public static < T extends Tree< T > > T add( final T tree, final T newChild, final int position ) {
+    Preconditions.checkNotNull( newChild ) ;
     if( position < 0 || position > tree.getChildCount()  ) {
       throw new IllegalArgumentException(
           "Invalid position:" + position + " as childcount=" + tree.getChildCount() ) ;
     }
-    final T[] newArray = createArray( tree, newChild, tree.getChildCount() + 1 ) ;
-
+    final List< T > newChildList = Lists.newArrayListWithCapacity( tree.getChildCount() + 1 ) ;
     int oldArrayIndex = 0 ;
     for( int newArrayIndex = 0 ; newArrayIndex <= tree.getChildCount() ; newArrayIndex ++ ) {
       if( position == newArrayIndex  ) {
-        newArray[ newArrayIndex ] = newChild ;
+        newChildList.add( newArrayIndex, newChild ) ;
       } else {
-        newArray[ newArrayIndex ] = ( T ) tree.getChildAt( oldArrayIndex ) ;
+        newChildList.add( newArrayIndex, tree.getChildAt( oldArrayIndex ) ) ;
         oldArrayIndex++ ;
       }
     }
-    return ( T ) tree.adopt( newArray ) ;
+    return tree.adopt( newChildList ) ;
   }
 
   /**
@@ -90,17 +84,13 @@ public class TreeTools {
    * @param newChild a non-null object.
    * @return a non-null object.
    */
-  public static < T extends Tree > T addLast( final T tree, final T newChild ) {
-    if( null == newChild ) {
-      throw new NullArgumentException( "newChild") ;
-    }
-    final T[] newArray = createArray( tree, newChild, tree.getChildCount() + 1 ) ;
-
-    newArray[ tree.getChildCount() ] = newChild ;
+  public static < T extends Tree< T > > T addLast( final T tree, final T newChild ) {
+    final List< T > newChildList = Lists.newArrayListWithCapacity( tree.getChildCount() + 1 ) ;
     for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
-      newArray[ i ] = ( T ) tree.getChildAt( i );
+      newChildList.add( i, tree.getChildAt( i ) ) ;
     }
-    return ( T ) tree.adopt( newArray );
+    newChildList.add( Preconditions.checkNotNull( newChild ) ) ;
+    return tree.adopt( newChildList ) ;
   }
 
   /**
@@ -109,46 +99,38 @@ public class TreeTools {
    * @param tree a non-null object that may implement {@link StorageTypeProvider}.
    * @param newChildren a non-null object iterating over non-null objects.
    * @return non-null object.
-   * @throws org.apache.commons.lang.NullArgumentException if at least one of {@code newChildren} is null.
    */
-  public static < T extends Tree > T addLast( 
+  public static < T extends Tree< T > > T addLast( 
       final T tree, 
       final Iterable< ? extends T > newChildren 
-  )
-      throws NullArgumentException
-  {
+  ) {
     final List< ? extends T > newChildrenList = Lists.newArrayList( newChildren ) ;
     if( 0 >= newChildrenList.size() ) {
       return tree ;
     } else {
       // We treat the first child in a special way because it is used to guess the
-      // typeof the array. By not performing the check below, caller would get
+      // typeof the array. Without the check below, caller would get
       // an obscure NullPointerException when attempting to get the class of the null object.
       final T firstChild = newChildrenList.get( 0 ) ;
       if( null == firstChild ) {
         throw new NullArgumentException( "Null child at index 0" ) ;
       }
 
-      final T[] newArray = createArray(
-          tree,
-          firstChild,
-          tree.getChildCount() + newChildrenList.size()
-      ) ;
+      final List< T > newChildList = Lists.newArrayListWithCapacity( tree.getChildCount() + 1 ) ;
 
       int i ;
       for( i = 0 ; i < tree.getChildCount() ; i++ ) {
-        final T child = ( T ) tree.getChildAt( i ) ;
+        final T child = tree.getChildAt( i ) ;
         if( null == child ) {
           throw new NullArgumentException( "Null child at index " + i ) ;
         }
-        newArray[ i ] = child;
+        newChildList.add( i, child ) ;
       }
       for( int j = 0 ; j < newChildrenList.size() ; j++ ) {
-        newArray[ i + j ] = newChildrenList.get( j ) ;
+        newChildList.add( i + j, newChildrenList.get( j ) ) ;
       }
 
-      return ( T ) tree.adopt( newArray );
-
+      return tree.adopt( newChildList ) ;
     }
 
   }
@@ -160,31 +142,27 @@ public class TreeTools {
    * @return a non-null object.
    * @throws ArrayIndexOutOfBoundsException
    */
-  public static < T extends Tree > T remove( final T tree, final int index )
+  public static < T extends Tree< T > > T remove( final T tree, final int index )
       throws ArrayIndexOutOfBoundsException
   {
-    if( index < 0 ) {
-      throw new ArrayIndexOutOfBoundsException( "Negative index: " + index ) ;
-    }
+    Preconditions.checkArgument( index >= 0 ) ;
+
     if( tree.getChildCount() < index ) {
       throw new ArrayIndexOutOfBoundsException(
           "Cannot remove child at index " + index +
           " (child count: " + tree.getChildCount() + ")"
       ) ;
     }
-    final T[] newArray = ( T[] ) createArray(
-        tree,
-        tree.getChildAt( 0 ),
-        tree.getChildCount() - 1
-    ) ;
+
+    final List< T > newChildList = Lists.newArrayListWithCapacity( tree.getChildCount() - 1 ) ;
 
     int keep = 0 ;
     for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
       if( i != index ) {
-        newArray[ keep ++ ] = ( T ) tree.getChildAt( i );
+        newChildList.add( keep ++, tree.getChildAt( i ) ) ;
       }
     }
-    return ( T ) tree.adopt( newArray ) ;
+    return tree.adopt( newChildList ) ;
   }
 
   /**
@@ -194,7 +172,7 @@ public class TreeTools {
    * @return a non-null object.
    * @throws ArrayIndexOutOfBoundsException
    */
-  public static < T extends Tree > T replace( final T parent, final int index, final T newChild )
+  public static < T extends Tree< T > > T replace( final T parent, final int index, final T newChild )
       throws ArrayIndexOutOfBoundsException
   {
     if( index < 0 ) {
@@ -206,34 +184,20 @@ public class TreeTools {
           " (child count: " + parent.getChildCount() + ")"
       ) ;
     }
-    final T[] newArray = ( T[] ) createArray(
-        parent,
-        parent.getChildAt( 0 ),
-        parent.getChildCount()
-    ) ;
+
+    final List< T > newChildList = Lists.newArrayListWithCapacity( parent.getChildCount() ) ;
 
     for( int i = 0 ; i < parent.getChildCount() ; i++ ) {
       if( i == index ) {
-        newArray[ i ] = newChild ;
+        newChildList.add( i, newChild ) ;
       } else {
-        newArray[ i ] = ( T ) parent.getChildAt( i );
+        newChildList.add( i, parent.getChildAt( i ) ) ;
       }
     }
-    return ( T ) parent.adopt( newArray ) ;
+
+    return parent.adopt( newChildList ) ;
+
   }
 
 
-  /**
-   * Creates an array for storing children.
-   *
-   * @see novelang.common.tree.StorageTypeProvider forcing child array type
-   * @see novelang.common.tree.ImmutableTree#createArray backing implementation
-   */
-  protected static< T extends Tree > T[] createArray( 
-      final T tree, 
-      final T fallback, 
-      final int arraySize 
-  ) {
-    return ImmutableTree.createArray( tree, fallback, arraySize ) ;
-  }
 }

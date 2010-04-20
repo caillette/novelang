@@ -22,7 +22,7 @@ import org.apache.commons.lang.NullArgumentException;
  * This interface captures the essential behavior of an immutable tree.
  * <p>
  * The strange recursive definition using generics is required for strong-typing the
- * {@link #adopt(Tree[])} method across implementors.
+ * {@link #adopt(Iterable)} method across implementors.
  *
  * @see TreeTools manipulation primitives
  * @see ImmutableTree a base implementation
@@ -68,7 +68,8 @@ public interface Tree< T extends Tree > {
    *
    * @param newChildren a non-null array containing no nulls.
    * @return a non-null object.
+   *
    */
-  T adopt( T... newChildren ) throws NullArgumentException ;
+  T adopt( Iterable< T > newChildren ) throws NullArgumentException ;
 
 }

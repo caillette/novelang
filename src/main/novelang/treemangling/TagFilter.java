@@ -109,9 +109,9 @@ public class TagFilter {
           return null ;
         }
         
-        final SyntacticTree[] newChildArray =
-            newChildList.toArray( new SyntacticTree[ newChildList.size() ] ) ;
-        return new Result( hasTaggedChild, tree.adopt( newChildArray ) ) ;
+//        final SyntacticTree[] newChildArray =
+//            newChildList.toArray( new SyntacticTree[ newChildList.size() ] ) ;
+        return new Result( hasTaggedChild, tree.adopt( newChildList ) ) ;
 
       default :
         return new Result( false, tree ) ;

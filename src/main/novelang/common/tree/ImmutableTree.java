@@ -27,29 +27,11 @@ import com.google.common.collect.ObjectArrays;
 /**
  * Immutable base class for homogeneous n-ary trees.
  * <p>
- * This class is generic for strong-typing the {@link Tree#adopt(Tree[]) adopt} method.
- * Subclass {@code Tree} like this:
- * <pre>
- public class MyTree extends ImmutableTree< MyTree > {
-
-   private final String payload ; // New stuff!
-
-   public MyTree( String payload, MyTree... children ) {
-     super( children ) ;
-     this.payload = payload ;
-   }
-
-   protected MyTree adopt( MyTree[] newChildren ) {
-     return new MyTree( payload, newChildren ) ;
-   }
-
-   // ... Additional behaviors.
-}
- * </pre>
+ * This class is generic for strong-typing the {@link Tree#adopt(Iterable)}} method.
  * 
  * @author Laurent Caillette
  */
-public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
+public abstract class ImmutableTree< T extends Tree< T > > implements Tree< T > {
 
   /**
    * Don't be stupid using reflection to make this mutable!
@@ -61,7 +43,7 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
    * @param children may be null but may not contain nulls.
    * @throws NullArgumentException
    */
-  public ImmutableTree( final T... children ) throws NullArgumentException {
+  protected ImmutableTree( final T... children ) throws NullArgumentException {
     this( Lists.newArrayList( children ) ) ;
   }
 
@@ -71,9 +53,9 @@ public abstract class ImmutableTree< T extends Tree > implements Tree< T > {
    *     non-null objects.
    * @throws NullArgumentException
    */
-  public ImmutableTree( final Iterable< ? extends T > children ) throws NullArgumentException {
+  protected ImmutableTree( final Iterable< ? extends T > children ) throws NullArgumentException {
     final List< T > childList = Lists.newArrayList( children ) ;
-    if( 0 == childList.size() ) {
+    if( childList.isEmpty() ) {
       this.children = null ;
     } else {
       this.children = ( T[] ) createArray( this, childList.get( 0 ), childList.size() ) ;
