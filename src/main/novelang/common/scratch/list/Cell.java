@@ -1,4 +1,4 @@
-package novelang.common.list;
+package novelang.common.scratch.list;
 
 /**
  * Represents an entry of a simple-linked list.

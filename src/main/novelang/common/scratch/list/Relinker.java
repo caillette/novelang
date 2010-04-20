@@ -1,4 +1,4 @@
-package novelang.common.list;
+package novelang.common.scratch.list;
 
 /**
  * Generic update operator.

@@ -14,28 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.common.scratch;
-
-import java.io.File;
-import java.util.List;
-
-import com.google.common.collect.Lists;
+package novelang.common.scratch.cache;
 
 /**
  * @author Laurent Caillette
  */
-public class DirectoryCacheValidity implements CacheValidity< DirectoryCacheValidity >
-{
+public interface Cacheable< T extends Cacheable > {
 
-  private final List< Tuple2< String, Long > > files ;
-  private final List< DirectoryCacheValidity > directories ;
+  Key generateKey() ;
 
-  public DirectoryCacheValidity( final File root ) {
-    files = Lists.newArrayList() ;
-    directories = Lists.newArrayList() ;
-  }
+  CacheValidity< T > generateCacheValidity() ;
 
-  public boolean isValid( final DirectoryCacheValidity other ) {
-    return false;
-  }
+  interface Key< T > { }
+
 }
