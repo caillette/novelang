@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
@@ -70,8 +71,24 @@ public class ConfigurationTools {
   private static final String DEFAULT_STYLE_DIR = "style" ;
   public static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
   public static final Charset DEFAULT_RENDERING_CHARSET = DefaultCharset.RENDERING ;
-  private static final ExecutorService EXECUTOR_SERVICE =
-      Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() ) ;
+
+
+  private static final ThreadGroup EXECUTOR_THREAD_GROUP = new ThreadGroup( "Executor" ) ;
+
+  private static final ThreadFactory EXECUTOR_THREAD_FACTORY = new ThreadFactory() {
+    public Thread newThread( final Runnable runnable ) {
+      final Thread thread = new Thread( EXECUTOR_THREAD_GROUP, runnable ) ;
+      thread.setDaemon( true ) ;
+      return thread ;
+    }
+  } ;
+
+  public static ThreadFactory getExecutorThreadFactory() {
+    return EXECUTOR_THREAD_FACTORY ;
+  }
+
+  private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool( 
+      Runtime.getRuntime().availableProcessors(), EXECUTOR_THREAD_FACTORY ) ;
 
   public static ProducerConfiguration createProducerConfiguration( 
       final GenericParameters parameters 

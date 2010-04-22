@@ -65,7 +65,11 @@ public class NovelangTask extends Task {
   private String documentRequest ;
   private String contentProperty ;
   private String renderingCharsetName ;
-  private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() );
+
+  private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool( 
+      Runtime.getRuntime().availableProcessors(),
+      ConfigurationTools.getExecutorThreadFactory()
+  ) ;
 
   public File getContentRoot() {
     return contentRoot ;

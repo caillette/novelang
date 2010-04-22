@@ -78,7 +78,10 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
           configuration,
           outputDirectory,
           documentProducer,
-          Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() ),
+          Executors.newFixedThreadPool(
+              Runtime.getRuntime().availableProcessors(),
+              ConfigurationTools.getExecutorThreadFactory()
+          ),
           allProblems
       ) ;
 

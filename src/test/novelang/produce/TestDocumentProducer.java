@@ -6,6 +6,7 @@ import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.filefixture.Resource;
+import novelang.configuration.ConfigurationTools;
 import novelang.configuration.ContentConfiguration;
 import novelang.configuration.FopFontStatus;
 import novelang.configuration.ProducerConfiguration;
@@ -137,7 +138,7 @@ public class TestDocumentProducer {
       }
 
       public ExecutorService getExecutorService() {
-        return Executors.newSingleThreadExecutor() ;
+        return Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ) ;
       }
     } ;
   }

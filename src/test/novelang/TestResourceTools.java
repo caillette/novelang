@@ -69,7 +69,8 @@ import com.google.common.base.Preconditions;
 public final class TestResourceTools {
 
   private static final Log LOG = LogFactory.getLog( TestResourceTools.class ) ;
-  private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+  private static final ExecutorService EXECUTOR_SERVICE =
+      Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ) ;
 
   private TestResourceTools() { }
 

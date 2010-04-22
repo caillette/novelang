@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 
+import novelang.configuration.ConfigurationTools;
 import novelang.designator.Tag;
 import novelang.system.DefaultCharset;
 import com.google.common.collect.ImmutableSet;
@@ -38,7 +39,7 @@ public class BookTestTools {
     return new Book(
         baseDirectory,
         baseDirectory,
-        Executors.newSingleThreadExecutor(),
+        Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ),
         content,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
@@ -52,7 +53,7 @@ public class BookTestTools {
     return new Book(
         bookFile.getParentFile(),
         bookFile,
-        Executors.newSingleThreadExecutor(),
+        Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
