@@ -19,6 +19,7 @@ package novelang.book;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -44,6 +45,7 @@ public final class CommandExecutionContext {
 
   private final File baseDirectory ;
   private final File bookDirectory ;
+  private final ExecutorService executorService ;
   private final Charset sourceCharset ;
   private final Charset renderingCharset ;
   private final Map< RenditionMimeType, ResourceName > mappedStylesheets ;
@@ -62,11 +64,13 @@ public final class CommandExecutionContext {
   private CommandExecutionContext( 
       final CommandExecutionContext other, 
       final SyntacticTree alternateBookTree,
+      final ExecutorService executorService,
       final Iterable< Problem > moreProblems,
       final Map< RenditionMimeType, ResourceName > moreStylesheetMappings
   ) {
     this.baseDirectory = other.baseDirectory ;
     this.bookDirectory = other.bookDirectory ;
+    this.executorService = Preconditions.checkNotNull( executorService ) ;
     this.sourceCharset = other.sourceCharset ;
     this.renderingCharset = other.renderingCharset ;
 
@@ -92,14 +96,22 @@ public final class CommandExecutionContext {
   }
 
 
-  public CommandExecutionContext( final File baseDirectory ) {
-    this( baseDirectory, baseDirectory ) ;
+  public CommandExecutionContext(
+      final File baseDirectory,
+      final ExecutorService executorService
+  ) {
+    this( baseDirectory, baseDirectory, executorService ) ;
   }
 
 
-  public CommandExecutionContext( final File baseDirectory, final File bookDirectory ) {
+  public CommandExecutionContext(
+      final File baseDirectory,
+      final File bookDirectory,
+      final ExecutorService executorService
+  ) {
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     this.bookDirectory = Preconditions.checkNotNull( bookDirectory ) ;
+    this.executorService = Preconditions.checkNotNull( executorService ) ;
     this.sourceCharset = DefaultCharset.SOURCE ;
     this.renderingCharset = DefaultCharset.RENDERING ;
     this.mappedStylesheets = Maps.newHashMap() ;
@@ -118,6 +130,9 @@ public final class CommandExecutionContext {
     return bookDirectory;
   }
 
+  public ExecutorService getExecutorService() {
+    return executorService ;
+  }
 
   public Charset getSourceCharset() {
     return sourceCharset ;
@@ -157,6 +172,7 @@ public final class CommandExecutionContext {
     return new CommandExecutionContext(
         this,
         this.getDocumentTree(),
+        executorService,
         this.getProblems(),
         moreStylesheetMappings
     ) ;
@@ -169,12 +185,24 @@ public final class CommandExecutionContext {
 
 
   public CommandExecutionContext update( final SyntacticTree bookTree ) {
-    return new CommandExecutionContext( this, bookTree, getProblems(), mappedStylesheets ) ;
+    return new CommandExecutionContext(
+        this,
+        bookTree,
+        executorService,
+        getProblems(),
+        mappedStylesheets
+    ) ;
   }
 
 
   public CommandExecutionContext addProblems( final Iterable< Problem > problems ) {
-    return new CommandExecutionContext( this, getDocumentTree(), problems, mappedStylesheets ) ;
+    return new CommandExecutionContext(
+        this,
+        getDocumentTree(),
+        executorService,
+        problems,
+        mappedStylesheets
+    ) ;
   }
 
 
@@ -182,6 +210,7 @@ public final class CommandExecutionContext {
     return new CommandExecutionContext(
         this,
         getDocumentTree(),
+        executorService,
         ImmutableList.of( problem ),
         mappedStylesheets
     ) ;

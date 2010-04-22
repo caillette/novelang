@@ -30,6 +30,8 @@ import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.MissingResourceException;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -67,6 +69,7 @@ import com.google.common.base.Preconditions;
 public final class TestResourceTools {
 
   private static final Log LOG = LogFactory.getLog( TestResourceTools.class ) ;
+  private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
 
   private TestResourceTools() { }
 
@@ -237,6 +240,7 @@ public final class TestResourceTools {
             public Charset getDefaultCharset() {
               return renderingCharset ;
             }
+
           } ;
         }
 
@@ -250,11 +254,19 @@ public final class TestResourceTools {
             }
           } ;
         }
+
+        public ExecutorService getExecutorService() {
+          return EXECUTOR_SERVICE ;          
+        }
       } ;
 
     }
 
-    public static ProducerConfiguration createProducerConfiguration(
+  public static ExecutorService getExecutorService() {
+    return EXECUTOR_SERVICE ;
+  }
+
+  public static ProducerConfiguration createProducerConfiguration(
         final File contentDirectory,
         final File styleDirectory,
         final boolean shouldAddClasspathResourceLoader,

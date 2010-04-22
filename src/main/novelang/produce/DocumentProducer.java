@@ -21,6 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import novelang.system.LogFactory;
 import novelang.system.Log;
@@ -56,6 +58,7 @@ public class DocumentProducer {
   private final File basedir ;
   private final RenderingConfiguration renderingConfiguration ;
   private final Charset defaultSourceCharset ;
+  private final ExecutorService executorService ;
 
 
   public DocumentProducer( final ProducerConfiguration configuration ) {
@@ -65,6 +68,7 @@ public class DocumentProducer {
         configuration.getRenderingConfiguration() ) ;
     this.defaultSourceCharset = Preconditions.checkNotNull(
         configuration.getContentConfiguration().getSourceCharset() ) ;
+    this.executorService = configuration.getExecutorService() ;
   }
 
   public Iterable< Problem > produce(
@@ -148,9 +152,8 @@ public class DocumentProducer {
     renderer.render( rendered, outputStream ) ;
   }
 
-  public Renderable createRenderable( final AbstractRequest documentRequest )
-      throws IOException
-  {
+  public Renderable createRenderable( final AbstractRequest documentRequest ) throws IOException {
+
     final Charset suggestedRenderingCharset = renderingConfiguration.getDefaultCharset() ;
     LOG.debug( "About to create renderable with document source name '%s'...",
         documentRequest.getDocumentSourceName() ) ;
@@ -164,6 +167,7 @@ public class DocumentProducer {
       return new Book(
           basedir,
           bookFile,
+          executorService,
           defaultSourceCharset,
           suggestedRenderingCharset,
           documentRequest.getTags()

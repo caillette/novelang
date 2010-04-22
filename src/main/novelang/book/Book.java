@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.nio.charset.Charset;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import novelang.common.tree.Statistics;
 import org.apache.commons.io.FileUtils;
@@ -63,6 +65,7 @@ public class Book extends AbstractSourceReader {
   public Book(
       final File baseDirectory,
       final File bookFile,
+      final ExecutorService executorService,
       final Charset suggestedSourceCharset,
       final Charset suggestedRenderingCharset,
       final Set< Tag > restrictingTags
@@ -70,6 +73,7 @@ public class Book extends AbstractSourceReader {
     this(
         baseDirectory,
         bookFile.getParentFile(),
+        executorService,
         FileUtils.readFileToString( bookFile ),  // TODO take care of encoding, Unicode et al.
         suggestedSourceCharset,
         suggestedRenderingCharset,
@@ -81,6 +85,7 @@ public class Book extends AbstractSourceReader {
   public Book(
       final File baseDirectory,
       final File bookDirectory,
+      final ExecutorService executorService,
       final String content,
       final Charset suggestedSourceCharset,
       final Charset defaultRenderingCharset,
@@ -101,7 +106,7 @@ public class Book extends AbstractSourceReader {
     ) ;
 
     CommandExecutionContext currentEnvironment =
-        new CommandExecutionContext( baseDirectory, bookDirectory ) ;
+        new CommandExecutionContext( baseDirectory, bookDirectory, executorService ) ;
 
 
     final SyntacticTree tree = parse( content ) ;

@@ -21,6 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
@@ -68,6 +70,8 @@ public class ConfigurationTools {
   private static final String DEFAULT_STYLE_DIR = "style" ;
   public static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
   public static final Charset DEFAULT_RENDERING_CHARSET = DefaultCharset.RENDERING ;
+  private static final ExecutorService EXECUTOR_SERVICE =
+      Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() ) ;
 
   public static ProducerConfiguration createProducerConfiguration( 
       final GenericParameters parameters 
@@ -85,6 +89,10 @@ public class ConfigurationTools {
       }
       public ContentConfiguration getContentConfiguration() {
         return contentConfiguration ;
+      }
+
+      public ExecutorService getExecutorService() {
+        return EXECUTOR_SERVICE;
       }
     };
   }

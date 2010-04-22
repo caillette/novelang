@@ -1,7 +1,9 @@
 package novelang.book.function.builtin;
 
+import com.google.common.collect.Maps;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;
+import novelang.book.function.builtin.insert.PartCreator;
 import novelang.common.FileTools;
 import novelang.common.Location;
 import novelang.common.Problem;
@@ -32,8 +34,13 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * @author Laurent Caillette
@@ -230,16 +237,24 @@ public class InsertCommand extends AbstractCommand {
     try {
       book = findLastLevel( book, levelAbove ) ;
       final Iterable< File > partFiles = scanPartFiles( insertedFile, recurse ) ;
+      final Map< File, Future< Part > > futureParts = Maps.newHashMap() ;
+
+
+      for( final File partFile : partFiles ) {
+        final PartCreator partCreator = new PartCreator(
+            partFile, environment.getSourceCharset(), environment.getRenderingCharset() ) ;
+        futureParts.put( partFile, environment.getExecutorService().submit( partCreator ) ) ;
+      }
+
       for( final File partFile : partFiles ) {
         Part part = null ;
         try {
-          part = new Part( 
-              partFile, 
-              environment.getSourceCharset(), 
-              environment.getRenderingCharset() 
-          ) ;
+          // environment.getExecutorService()...
+          part = futureParts.get( partFile ).get() ;
           Iterables.addAll( problems, part.getProblems() ) ;
-        } catch( MalformedURLException e ) {
+        } catch( ExecutionException e ) {
+          problems.add( Problem.createProblem( ( Exception ) e.getCause() ) ) ;
+        } catch( InterruptedException e ) {
           problems.add( Problem.createProblem( e ) ) ;
         }
         if( null != part && null != part.getDocumentTree() ) {
@@ -296,14 +311,13 @@ public class InsertCommand extends AbstractCommand {
         Iterables.addAll( problems, createProblems( identifiedFragments, getLocation() ) ) ;
       }
 
-    } catch( IOException e ) {
-      problems.add( Problem.createProblem( e ) ) ;
     } catch( CommandParameterException e ) {
       problems.add( Problem.createProblem( e ) ) ;
     }
 
     return environment.update( book.getTreeAtStart() ).addProblems( problems ) ;
   }
+
 
   private static Treepath< SyntacticTree > findLastLevel(
       final Treepath< SyntacticTree > document,

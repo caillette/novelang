@@ -20,6 +20,9 @@ package novelang.daemon;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
+
+import com.google.common.base.Preconditions;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -62,11 +65,13 @@ public class DocumentHandler extends GenericHandler {
 
   private final DocumentProducer documentProducer ;
   private final Charset renderingCharset ;
+  private final ExecutorService executorService ;
 
 
   public DocumentHandler( final ProducerConfiguration serverConfiguration ) {
     documentProducer = new DocumentProducer( serverConfiguration ) ;
     renderingCharset = serverConfiguration.getRenderingConfiguration().getDefaultCharset() ;
+    executorService = Preconditions.checkNotNull( serverConfiguration.getExecutorService() ) ;
   }
 
 
@@ -100,7 +105,7 @@ public class DocumentHandler extends GenericHandler {
 
         final Renderable rendered ;
         try {
-          rendered = documentProducer.createRenderable( documentRequest );
+          rendered = documentProducer.createRenderable( documentRequest ) ;
         } catch( IOException e ) {
           renderProblems(
               Lists.newArrayList( Problem.createProblem( e ) ),

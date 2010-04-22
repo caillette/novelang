@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import novelang.TestResourceTools;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import static org.junit.Assert.*;
@@ -71,8 +72,10 @@ public class InsertCommandTest {
     ) ;
 
     final CommandExecutionContext initialContext =
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( new SimpleTree( BOOK ) )
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( new SimpleTree( BOOK ) )
     ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
@@ -104,8 +107,10 @@ public class InsertCommandTest {
     ) ;
 
     final CommandExecutionContext initialContext =
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( new SimpleTree( BOOK ) )
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( new SimpleTree( BOOK ) )
     ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
@@ -136,7 +141,10 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext initialContext =
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ;
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree ) ;
     final CommandExecutionContext result = insertCommand.evaluate( initialContext ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -178,7 +186,10 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -213,7 +224,10 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -237,7 +251,10 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( brokenContentDirectory ).update( initialTree ) ) ;
+        new CommandExecutionContext(
+            brokenContentDirectory,
+            TestResourceTools.getExecutorService()
+        ).update( initialTree ) ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -269,7 +286,10 @@ public class InsertCommandTest {
     ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -347,7 +367,10 @@ public class InsertCommandTest {
 
     final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree ) ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;
     assertNotNull( result.getDocumentTree() ) ;
@@ -375,7 +398,10 @@ public class InsertCommandTest {
         tree( _LEVEL )
     ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).update( initialTree ) ) ;
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertEqualsNoSeparators( 
@@ -423,8 +449,10 @@ public class InsertCommandTest {
     final SyntacticTree initialTree = tree( BOOK ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( initialTree ) 
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree )
     ) ;
 
 
@@ -469,8 +497,10 @@ public class InsertCommandTest {
     final SyntacticTree initialTree = tree( BOOK ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( initialTree )
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree )
     ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -516,8 +546,10 @@ public class InsertCommandTest {
     final SyntacticTree initialTree = tree( BOOK ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( initialTree )
+        new CommandExecutionContext( 
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree )
     ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -566,8 +598,10 @@ public class InsertCommandTest {
     final SyntacticTree initialTree = tree( BOOK ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
-        new CommandExecutionContext( resourceInstaller.getTargetDirectory() ).
-        update( initialTree )
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree )
     ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;

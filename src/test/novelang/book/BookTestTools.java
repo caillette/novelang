@@ -18,6 +18,7 @@ package novelang.book;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 import novelang.designator.Tag;
 import novelang.system.DefaultCharset;
@@ -37,6 +38,7 @@ public class BookTestTools {
     return new Book(
         baseDirectory,
         baseDirectory,
+        Executors.newSingleThreadExecutor(),
         content,
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
@@ -50,6 +52,7 @@ public class BookTestTools {
     return new Book(
         bookFile.getParentFile(),
         bookFile,
+        Executors.newSingleThreadExecutor(),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()

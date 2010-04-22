@@ -19,6 +19,8 @@ package novelang.book;
 import novelang.DirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
+
+import novelang.TestResourceTools;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.Relativizer;
@@ -59,6 +61,7 @@ public class BookWithImagesTest {
     final Book book = new Book(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesExplicit,
+        TestResourceTools.getExecutorService(),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
@@ -81,6 +84,7 @@ public class BookWithImagesTest {
     final Book book = new Book(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesRecurse,
+        TestResourceTools.getExecutorService(),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()

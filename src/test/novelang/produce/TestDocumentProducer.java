@@ -26,6 +26,8 @@ import org.junit.runners.NameAwareTestClassRunner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -132,6 +134,10 @@ public class TestDocumentProducer {
             return DefaultCharset.SOURCE ;
           }
         } ;
+      }
+
+      public ExecutorService getExecutorService() {
+        return Executors.newSingleThreadExecutor() ;
       }
     } ;
   }

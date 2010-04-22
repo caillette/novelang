@@ -27,4 +27,5 @@ public interface LevelExploderConfiguration extends BatchConfiguration {
 
   DocumentRequest getDocumentRequest() ;
 
+
 }

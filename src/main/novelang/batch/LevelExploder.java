@@ -101,7 +101,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     try {
 
       final Renderable document = documentProducer.createRenderable(
-          configuration.getDocumentRequest() ) ;
+          configuration.getDocumentRequest() );
       for( final SyntacticTree child : document.getDocumentTree().getChildren() ) {
         if( child.isOneOf( NodeKind._LEVEL ) ) {
           processLevel(

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.fop.apps.FopFactory;
 import org.apache.tools.ant.BuildException;
@@ -63,7 +65,8 @@ public class NovelangTask extends Task {
   private String documentRequest ;
   private String contentProperty ;
   private String renderingCharsetName ;
-  
+  private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() );
+
   public File getContentRoot() {
     return contentRoot ;
   }
@@ -166,6 +169,10 @@ public class NovelangTask extends Task {
 
       public ContentConfiguration getContentConfiguration() {
         return contentConfiguration ;
+      }
+
+      public ExecutorService getExecutorService() {
+        return EXECUTOR_SERVICE ;
       }
     } ;
 

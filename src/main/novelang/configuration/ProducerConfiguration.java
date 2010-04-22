@@ -17,10 +17,14 @@
 
 package novelang.configuration;
 
+import java.util.concurrent.ExecutorService;
+
 /**
  * @author Laurent Caillette
  */
 public interface ProducerConfiguration {
   RenderingConfiguration getRenderingConfiguration() ;
   ContentConfiguration getContentConfiguration() ;
+  ExecutorService getExecutorService() ;
+
 }

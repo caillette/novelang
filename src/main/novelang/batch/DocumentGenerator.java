@@ -20,6 +20,8 @@ package novelang.batch;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import novelang.system.LogFactory;
 import com.google.common.collect.Iterables;
@@ -72,7 +74,13 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
           new DocumentProducer( configuration.getProducerConfiguration() ) ;
       final List< Problem > allProblems = Lists.newArrayList() ;
 
-      processDocumentRequests( configuration, outputDirectory, documentProducer, allProblems ) ;
+      processDocumentRequests(
+          configuration,
+          outputDirectory,
+          documentProducer,
+          Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() ),
+          allProblems
+      ) ;
 
       if( ! allProblems.isEmpty() ) {
         reportProblems( outputDirectory, allProblems ) ;
@@ -100,7 +108,8 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
       final DocumentGeneratorConfiguration configuration,
       final File outputDirectory,
       final DocumentProducer documentProducer,
-      final List< Problem > allProblems 
+      final ExecutorService executorService,
+      final List< Problem > allProblems
   ) throws Exception {
     for( final DocumentRequest documentRequest : configuration.getDocumentRequests() ) {
       Iterables.addAll(
@@ -108,7 +117,8 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
           processDocumentRequest(
               documentRequest,
               outputDirectory,
-              documentProducer
+              documentProducer,
+              executorService
           )
       ) ;
     }
@@ -122,7 +132,8 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
   private static Iterable< Problem > processDocumentRequest(
       final DocumentRequest documentRequest,
       final File targetDirectory,
-      final DocumentProducer documentProducer
+      final DocumentProducer documentProducer,
+      final ExecutorService executorService
   ) throws Exception {
     final File outputFile = createOutputFile(
         targetDirectory,
