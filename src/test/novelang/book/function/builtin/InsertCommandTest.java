@@ -17,6 +17,7 @@
 package novelang.book.function.builtin;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import org.fest.reflect.core.Reflection;
@@ -399,7 +400,7 @@ public class InsertCommandTest {
   }
 
   @Test
-  public void useSimpleFragmentIdentifier() throws MalformedURLException {
+  public void useSimpleFragmentIdentifier() throws IOException {
 
     final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
     LOG.info( 
@@ -445,9 +446,7 @@ public class InsertCommandTest {
 
 
   @Test
-  public void identifierWithSingleFileTreatedAsMultiple() 
-      throws MalformedURLException 
-  {
+  public void identifierWithSingleFileTreatedAsMultiple() throws IOException {
 
     final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
     LOG.info(

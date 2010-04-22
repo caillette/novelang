@@ -1,5 +1,7 @@
 package novelang.book.function;
 
+import java.io.IOException;
+
 import novelang.book.CommandExecutionContext;
 
 /**

@@ -18,6 +18,7 @@
 package novelang.part;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -40,6 +41,7 @@ import novelang.system.DefaultCharset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
+import org.apache.commons.io.FileUtils;
 
 /**
  * A Part loads a Tree, building a table of identifiers for subnodes
@@ -69,7 +71,7 @@ public class Part extends AbstractSourceReader {
   /**
    * Only for tests.
    */
-  /*package*/ Part( final File partFile ) throws MalformedURLException {
+  /*package*/ Part( final File partFile ) throws IOException {
     this( partFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING ) ;
   }
 
@@ -77,9 +79,9 @@ public class Part extends AbstractSourceReader {
       final File partFile,
       final Charset sourceCharset,
       final Charset suggestedRenderingCharset
-  ) throws MalformedURLException {
+  ) throws IOException {
     super(
-        partFile.toURI().toURL(),
+        partFile.getAbsolutePath(),
         sourceCharset,
         suggestedRenderingCharset,
         "part[" + partFile.getName() + "]"
@@ -89,7 +91,7 @@ public class Part extends AbstractSourceReader {
         "Part file cannot be a directory: %s", partFile
     ) ;
     this.partFileDirectory = partFile.getParentFile() ;
-    tree = createTree( readContent( partFile.toURI().toURL() ) ) ;
+    tree = createTree( readContent( partFile ) ) ;
   }
 
   protected GenericParser createParser( final String content ) {

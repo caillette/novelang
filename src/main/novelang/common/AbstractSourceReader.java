@@ -16,6 +16,8 @@
  */
 package novelang.common;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -91,14 +93,14 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
 
   protected AbstractSourceReader(
-      final URL partUrl,
+      final String locationName,
       final Charset sourceCharset,
       final Charset renderingCharset,
       final String thisToString
   ) {
     this.problems = Lists.newArrayList() ;
     this.thisToString = thisToString + "@" + System.identityHashCode( this ) ;
-    this.locationName = partUrl.toExternalForm() ;
+    this.locationName = Preconditions.checkNotNull( locationName ) ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
     this.renderingCharset = Preconditions.checkNotNull( renderingCharset ) ;
     LOG.debug(
@@ -111,18 +113,18 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     ) ;
   }
 
-  protected String readContent( final URL partUrl ) {
+  protected String readContent( final File file ) {
 
     LOG.info(
         "Attempting to load file '%s' from %s with charset %s",
-        partUrl.toExternalForm(), 
+        file.getAbsolutePath(),
         this,
         sourceCharset.name()
     ) ;
 
     final String stringContent ;
     try {
-      final InputStream bareIinputStream = partUrl.openStream() ;
+      final InputStream bareIinputStream = new FileInputStream( file ) ;
       final UnicodeInputStream inputStream = new UnicodeInputStream( bareIinputStream, sourceCharset ) ;
       inputStream.getEncoding() ;
       stringContent = IOUtils.toString( inputStream, sourceCharset.name() );

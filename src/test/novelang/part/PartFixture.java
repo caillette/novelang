@@ -1,6 +1,7 @@
 package novelang.part;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class PartFixture {
     return new Part( content ) ;
   }
   
-  public static Part createPart( final File content ) throws MalformedURLException {
+  public static Part createPart( final File content ) throws IOException {
     return new Part( content ) ;
   }
   
@@ -32,7 +33,7 @@ public class PartFixture {
     return new Part( content ).makeStandalone() ;
   }
   
-  public static Part createStandalonePart( final File content ) throws MalformedURLException {
+  public static Part createStandalonePart( final File content ) throws IOException {
     return new Part( content ).makeStandalone() ;
   }
   

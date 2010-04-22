@@ -24,6 +24,7 @@ import java.util.Set;
 import java.nio.charset.Charset;
 
 import novelang.common.tree.Statistics;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -69,7 +70,7 @@ public class Book extends AbstractSourceReader {
     this(
         baseDirectory,
         bookFile.getParentFile(),
-        IOUtils.toString( new FileInputStream( bookFile ) ),
+        FileUtils.readFileToString( bookFile ),  // TODO take care of encoding, Unicode et al.
         suggestedSourceCharset,
         suggestedRenderingCharset,
         restrictingTags
@@ -166,7 +167,7 @@ public class Book extends AbstractSourceReader {
     return ImmutableList.copyOf( commands ) ;
   }
 
-  private CommandExecutionContext callCommands(
+  private static CommandExecutionContext callCommands(
       CommandExecutionContext context,
       final Iterable< Command > commands
   ) {

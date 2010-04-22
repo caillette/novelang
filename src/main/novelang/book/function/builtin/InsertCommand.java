@@ -118,7 +118,7 @@ public class InsertCommand extends AbstractCommand {
           environment.getSourceCharset(),
           environment.getRenderingCharset()
       ) ;
-    } catch( MalformedURLException e ) {
+    } catch( IOException e ) {
       return environment.addProblems( Lists.newArrayList( Problem.createProblem( e ) ) ) ;
     }
 
@@ -296,6 +296,8 @@ public class InsertCommand extends AbstractCommand {
         Iterables.addAll( problems, createProblems( identifiedFragments, getLocation() ) ) ;
       }
 
+    } catch( IOException e ) {
+      problems.add( Problem.createProblem( e ) ) ;
     } catch( CommandParameterException e ) {
       problems.add( Problem.createProblem( e ) ) ;
     }
