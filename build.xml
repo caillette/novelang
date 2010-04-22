@@ -642,11 +642,11 @@
   >
 
     <novelang
-        contentRoot="src/doc"
-        styleDirectory="src/doc/style"
-        documentRequest="/versions/${project.version}.html?stylesheet=announcement-html.xsl"
+        contentRoot="${source.manual.dir}"
+        styleDirectory="${source.manual.dir}/style"
+        documentRequest="/${source.versions.dir.name}/${project.version}.html?stylesheet=announcement-html.xsl"
         contentProperty="html"
-        />
+    />
     <echo>About to send:
 ${html}
     </echo>
@@ -673,9 +673,9 @@ ${html}
 
 
     <novelang
-        contentRoot="src/doc"
-        styleDirectory="src/doc/style"
-        documentRequest="/versions/${project.version}.nlp?stylesheet=announcement-plaintext.xsl"
+        contentRoot="${source.manual.dir}"
+        styleDirectory="${source.manual.dir}/style"
+        documentRequest="/${source.versions.dir.name}/${project.version}.html?stylesheet=announcement-plaintext.xsl"
         contentProperty="plaintext"
     />
     <echo>About to send:
