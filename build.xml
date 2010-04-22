@@ -434,6 +434,7 @@
 
     <echo>absolutetarget=${absolutetarget}</echo>
     <echo>target.manual.tweaked.dir=${target.manual.tweaked.dir}</echo>
+    <echo>logdestination=${logdestination}</echo>
 
     <!-- Need to create this one before the batch generation starts! -->    
     <mkdir dir="${logdestination}" />
@@ -468,7 +469,8 @@
       <jvmarg value="-Xmx512M" />
       <jvmarg value="-Djava.awt.headless=true" />
       <arg value="${launcher.batch.command}" />
-      <arg value="--log-dir=${logdestination}" />
+      <arg value="--log-dir" />
+      <arg value="${logdestination}" />
       <arg value="--font-dirs" />
       <arg value="${documentation.fonts.dir}" />
       <arg value="--output-dir" />
