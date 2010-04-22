@@ -1,0 +1,19 @@
+--- Now requires Java 6.
+
+--- New "Nhovestone"
+http://novelang.sf.net/nhovestone.pdf 
+report: Novelang has its own benchmark!
+ 
+--- Added stylesheet ``html-FR.xsl`` for French punctuation.
+
+--- Performance enhancement on rendered HTML page: when containing many tags it should load faster.
+Instead of dynamically computing styles on the Web browser, HTML rendered by the server directly
+includes those styles.
+
+--- Various performance enhancements on document generation. With the same amount of memory
+(``-Xmx`` parameter), Novelang handles documents twice bigger and serves them `20 %` faster than
+previous version. "Benchmark"
+http://novelang.sourceforge.net/nhovestone.pdf
+ran against version `0.41.0` and `0.38.1`. This includes buffered reading of Part files,
+multithreaded Part rendering, and reduced memory consumption when dealing with AST
+(Abstract Syntax Tree). 
