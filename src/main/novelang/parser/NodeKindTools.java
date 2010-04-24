@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Function;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -40,27 +39,11 @@ public class NodeKindTools {
   }
 
   public static NodeKind ofRoot( final SyntacticTree tree ) {
-    return Enum.valueOf( NodeKind.class, tree.getText() ) ;
-  }
-
-  public static boolean rootHasNodeKindName( final SyntacticTree tree ) {
-    if( null == tree ) {
-      return false ;
+    final NodeKind nodeKind = tree.getNodeKind() ;
+    if( nodeKind == null ) {
+      throw new IllegalStateException( "No nodeKind" ) ;
     }
-    final String text = tree.getText() ;
-    return null != tree && NodeKind.getNames().contains( text ) ;
-  }
-
-  public static void ensure( final SyntacticTree tree, final NodeKind nodeKind ) {
-    Preconditions.checkNotNull( tree ) ;
-    Preconditions.checkNotNull( nodeKind ) ;
-    final String nodeText = Preconditions.checkNotNull( tree.getText() ) ;
-    if( ! NodeKind.getNames().contains( nodeText ) ) {
-      throw new RuntimeException( "Not a known node kind: '" + nodeText + "'" ) ;
-    }
-    if( nodeKind != ofRoot( tree ) ) {
-      throw new RuntimeException( "Expected: " + nodeKind + ", got: " + nodeText ) ;
-    }
+    return nodeKind;
   }
 
   public static String tokenNameAsXmlElementName( final String tokenName ) {
@@ -88,15 +71,9 @@ public class NodeKindTools {
   ;
 
   public static Set< String > getRenderingNames() {
-
     final List< String > filteredNames = Lists.newArrayList(
         Collections2.filter( NodeKind.getNames(), NO_TRAILING_UNDERSCORE ) ) ;
     final List< String > sortedNames = Ordering.natural().sortedCopy( filteredNames ) ;
-    return Sets.newTreeSet(
-        Lists.transform(
-            sortedNames,
-            TOKEN_NAME_AS_XML_ELEMENT_NAME
-        )
-    ) ;
+    return Sets.newTreeSet( Lists.transform( sortedNames, TOKEN_NAME_AS_XML_ELEMENT_NAME ) ) ;
   }
 }
