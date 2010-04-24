@@ -44,6 +44,7 @@ import java.util.Iterator;
  * 
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "HardcodedFileSeparator" } )
 @RunWith( value = NameAwareTestClassRunner.class )
 public class BookTest {
 
@@ -373,10 +374,9 @@ public class BookTest {
    */
   @Test
   public void insertWithImplicitIdentifiers() throws IOException {
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_2 ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.PART_2 ) ;
     final File bookWithIdentifier =
-        resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK_2 ) ;
+        resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_2 ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.PART_2 ) ;
 
     final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -422,7 +422,29 @@ public class BookTest {
   }
 
 
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
+  public void insertWithRecurseShouldKeepImplicitIdentifiers() throws IOException {
+    final File bookWithIdentifier =
+        resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_3_RECURSE ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory.PART_3 ) ;
 
+    verifyBook3( bookWithIdentifier );
+  }
+
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
+  public void insertShouldKeepImplicitIdentifiers() throws IOException {
+    final File bookWithIdentifier =
+        resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_3_STRAIGHT ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory.PART_3 ) ;
+
+    verifyBook3( bookWithIdentifier );
+  }
 
 // =======
 // Fixture
@@ -436,5 +458,53 @@ public class BookTest {
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
+
+
+  private static void verifyBook3( final File bookWithIdentifier ) throws IOException {
+    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+
+    final SyntacticTree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEqualsNoSeparators(
+        tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "6" ) ),
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0" ) ),
+                tree( _IMPLICIT_TAG, "L0-1" ),
+                tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p0-1" )
+                )
+            ),
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L1" ) ),
+                tree( _IMPLICIT_TAG, "L1" ),
+                tree( LEVEL_TITLE, tree( WORD_, "L1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p1" )
+                )
+            ),
+            tree(
+                _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0-1" ) ),
+                tree( _IMPLICIT_TAG, "L0-1" ),
+                tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p0-1" )
+                )
+            )
+        ),
+        bookTree
+    ) ;
+    assertFalse( book.hasProblem() ) ;
+  }
+
+
+
 
 }

@@ -195,6 +195,13 @@ public final class TestResourceTree {
     Resource PART_1 = resource( "identifiers-1.nlp" ) ;
     Resource BOOK_2 = resource( "identifiers-book2.nlb" ) ;
     Resource PART_2 = resource( "identifiers-2.nlp" ) ;
+    Resource BOOK_3_STRAIGHT = resource( "identifiers-book3-straight.nlb" ) ;
+    Resource BOOK_3_RECURSE = resource( "identifiers-book3-recurse.nlb" ) ;
+
+    interface Subdirectory {
+      Directory dir = directory( "sub" ) ;
+      Resource PART_3 = resource( "identifiers-3.nlp" ) ;
+    }
   }
 
   
