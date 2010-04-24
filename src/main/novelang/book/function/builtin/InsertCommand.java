@@ -1,5 +1,7 @@
 package novelang.book.function.builtin;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;
@@ -30,6 +32,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
+import novelang.treemangling.TreeManglingConstants;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -54,6 +57,7 @@ public class InsertCommand extends AbstractCommand {
   private final int levelAbove ;
   private final String styleName ;
   private final Iterable< FragmentIdentifier > fragmentIdentifiers ;
+
 
   public InsertCommand(
       final Location location,
@@ -157,9 +161,9 @@ public class InsertCommand extends AbstractCommand {
         if( addIdentifiers.hasDesignatorProblem() ) {
           return environment.addProblems( addIdentifiers.getDesignatorProblems() ) ;
         }
-        partTrees = addIdentifiers.getPartTrees() ;
+        partTrees = removeHeadIfNeeded( levelHead, addIdentifiers.getPartTrees() ) ;
       } else {
-        partTrees = partTree.getChildren() ;
+        partTrees = removeHeadIfNeeded( levelHead, partTree.getChildren() ) ;
       }
 
       if( levelHead == LevelHead.CREATE_LEVEL ) {
@@ -273,13 +277,15 @@ public class InsertCommand extends AbstractCommand {
                     designatorInterpreter.get( fragmentIdentifier ) ;
                 if( fragment != null ) {
                   identifiedFragments.put( fragmentIdentifier, part ) ;
-                  partChildren.add( fragment.getTreeAtEnd() ) ;
+                  Iterables.addAll( partChildren,
+                      removeHeadIfNeeded( levelHead, fragment.getTreeAtEnd() ) ) ;
                 }
               }
             }
 
           } else {
-            Iterables.addAll( partChildren, partTree.getChildren() ) ;
+            Iterables.addAll( partChildren,
+                removeHeadIfNeeded( levelHead, partTree.getChildren() ) ) ;
           }
 
           if( levelHead == LevelHead.CREATE_LEVEL ) {
@@ -463,11 +469,52 @@ public class InsertCommand extends AbstractCommand {
       return partTrees ;
     }
   }
+
+  private static Iterable< ? extends SyntacticTree > removeHeadIfNeeded(
+      final LevelHead levelHead,
+      final SyntacticTree tree
+  ) {
+    return removeHeadIfNeeded( levelHead, ImmutableList.of( tree ) ) ;
+  }
+
+  private static Iterable< ? extends SyntacticTree > removeHeadIfNeeded(
+      final LevelHead levelHead,
+      final Iterable< ? extends SyntacticTree > trees
+  ) {
+    if( levelHead == LevelHead.NO_HEAD ) {
+      SyntacticTree level = null ;
+      int levelCount = 0 ;
+      int paragraphoidCount = 0 ;
+
+      for( final SyntacticTree tree : trees ) {
+        if( tree.getNodeKind() == NodeKind._LEVEL ) {
+          level = tree ;
+           levelCount ++ ;
+        }
+        if( TreeManglingConstants.PARAGRAPHOID_NODEKINDS.contains( tree.getNodeKind() ) ) {
+          paragraphoidCount ++ ;
+        }
+      }
+      if( levelCount == 1 && paragraphoidCount == 0 ) {
+        final SyntacticTree cleanedTree = TreeTools.remove( level, LEVEL_DECORATION_PREDICATE ) ;
+        return cleanedTree.getChildren() ;
+      }
+    }
+    return trees ;
+  }
+
   
-  
-// ==============  
-// Generated code
-// ==============
+
+  private static final Predicate<SyntacticTree> LEVEL_DECORATION_PREDICATE =
+      new Predicate< SyntacticTree >() {
+        public boolean apply( final SyntacticTree syntacticTree ) {
+          return TreeManglingConstants.LEVEL_DECORATION_NODEKINDS
+              .contains( syntacticTree.getNodeKind() ) ;
+        }
+      }
+  ;
+
+
 
   @Override
   public String toString() {

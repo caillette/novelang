@@ -524,6 +524,49 @@ public class InsertCommandTest {
 
 
   @Test
+  public void insertIdentifierWithNoHead() throws IOException {
+
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_1 ) ;
+    LOG.info(
+        "Loaded Part \n%s",
+        new Part( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
+            getDocumentTree().toStringTree()
+    ) ;
+
+    final InsertCommand insertCommand = new InsertCommand(
+        NULL_LOCATION,
+        "file:.",
+        true,
+        null,
+        LevelHead.NO_HEAD,
+        0,
+        null,
+        ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-1-0" ) )
+    ) ;
+
+    final SyntacticTree initialTree = tree( BOOK ) ;
+
+    final CommandExecutionContext result = insertCommand.evaluate(
+        new CommandExecutionContext(
+            resourceInstaller.getTargetDirectory(),
+            TestResourceTools.getExecutorService()
+        ).update( initialTree )
+    ) ;
+
+    assertFalse( result.getProblems().iterator().hasNext() ) ;
+
+    assertEqualsNoSeparators(
+        tree(
+            BOOK,
+            tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0" ) )
+        ),
+        result.getDocumentTree()
+    ) ;
+
+  }
+
+
+  @Test
   public void useIdentifiersAcrossMultipleParts() 
       throws MalformedURLException 
   {

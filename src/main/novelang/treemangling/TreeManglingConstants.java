@@ -48,6 +48,22 @@ public class TreeManglingConstants {
       CELL_ROWS_WITH_VERTICAL_LINE
   ) ;
 
+  public static final SyntacticTreeSet PARAGRAPHOID_NODEKINDS = PARAGRAPH_NODEKINDS.union(
+      PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+      LINES_OF_LITERAL,
+      RASTER_IMAGE,
+      VECTOR_IMAGE,
+      CELL_ROWS_WITH_VERTICAL_LINE
+  ) ;
+
+  public static final SyntacticTreeSet LEVEL_DECORATION_NODEKINDS = SyntacticTreeSet.of(
+      LEVEL_TITLE,
+      _IMPLICIT_TAG,
+      _EXPLICIT_TAG,
+      _IMPLICIT_IDENTIFIER,
+      _EXPLICIT_IDENTIFIER
+  ) ;
+
   /**
    * Just narrowing the type returned by {@link #toArray()}.
    */

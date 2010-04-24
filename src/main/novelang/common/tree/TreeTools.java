@@ -19,6 +19,7 @@ package novelang.common.tree;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import org.apache.commons.lang.NullArgumentException;
 import com.google.common.collect.Lists;
 
@@ -160,6 +161,30 @@ public class TreeTools {
     for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
       if( i != index ) {
         newChildList.add( keep ++, tree.getChildAt( i ) ) ;
+      }
+    }
+    return tree.adopt( newChildList ) ;
+  }
+
+  /**
+   * Returns a copy of this {@code Tree} minus the child of given index.
+   * @param tree a non-null object that may implement {@link StorageTypeProvider}.
+   * @param predicate a {@code Predicate} returning {@code true} for children to keep.
+   * @return a non-null object.
+   * @throws ArrayIndexOutOfBoundsException
+   */
+  public static < T extends Tree< T > > T remove(
+      final T tree, 
+      final Predicate< ? super T > predicate
+  )
+      throws ArrayIndexOutOfBoundsException
+  {
+    final List< T > newChildList = Lists.newArrayListWithCapacity( tree.getChildCount() ) ;
+
+    for( int i = 0 ; i < tree.getChildCount() ; i++ ) {
+      final T child = tree.getChildAt( i );
+      if( ! predicate.apply( child ) ) {
+        newChildList.add( child ) ;
       }
     }
     return tree.adopt( newChildList ) ;

@@ -37,7 +37,9 @@ insert file:. recurse
 The ``createlevel`` option adds the content of the file under one new level.
 The level title is the filename, path and ``.nlp`` extension being trimmed.
 
-
+The ``nohead`` option takes effect when using identifiers (explained later).
+When the identifier references a level, this options causes the level title to disappear.
+The ``nohead`` option is mutually exclusive with the ``createlevel`` option.
 
 The ``sort`` option provides a sorting method when inserting several files.
 
