@@ -16,6 +16,7 @@
  */
 package novelang.treemangling;
 
+import com.google.common.collect.ImmutableSet;
 import novelang.common.SyntacticTree;
 import novelang.common.SimpleTree;
 import novelang.common.tree.Traversal;
@@ -57,7 +58,7 @@ public class UrlMangler {
         case OUTSIDE_PARAGRAPH:
           state = evaluate(
               tree,
-              TreeManglingConstants.PARAGRAPH_NODEKINDS.toArray(  ),
+              TreeManglingConstants.PARAGRAPH_NODEKINDS_CONTAINING_URL,
               State.INSIDE_PARAGRAPH,
               State.OUTSIDE_PARAGRAPH
           ) ;
@@ -111,7 +112,7 @@ public class UrlMangler {
        || current.getTreeAtEnd().isOneOf( _URL ) 
        || tree.isOneOf( TreeManglingConstants.SKIPPED_NODEKINDS_FOR_URLMANGLER )
       ) {
-        current = PREORDER.nextUp( current ) ;
+        current = Traversal.Preorder.nextUp( current ) ;
       } else {
         current = PREORDER.next( current ) ;
       }
@@ -173,25 +174,12 @@ public class UrlMangler {
     return TreepathTools.replaceTreepathEnd( treepathToUrlLiteral, urlTree ) ;
   }
 
-  private static NodeKind[] kinds( final NodeKind... nodeKinds ) {
-    return nodeKinds ;
-  }
-
   private static State evaluate(
       final SyntacticTree tree,
       final NodeKind nodeKind,
       final State positive
   ) {
-    return evaluate( tree, kinds( nodeKind ), positive, State.INSIDE_PARAGRAPH ) ;
-  }
-
-  private static State evaluate(
-      final SyntacticTree tree,
-      final NodeKind[] nodeKinds,
-      final State positive,
-      final State negative
-  ) {
-    return tree.isOneOf( nodeKinds ) ? positive : negative ;
+    return evaluate( tree, ImmutableSet.of( nodeKind ), positive, State.INSIDE_PARAGRAPH ) ;
   }
 
   private static State evaluate(
@@ -207,7 +195,6 @@ public class UrlMangler {
     OUTSIDE_PARAGRAPH,
     INSIDE_PARAGRAPH,
     CANDIDATE_URL_NAME,
-    SEPARATOR_AFTER_DOUBLE_QUOTES,
     URL
   }
   

@@ -148,11 +148,11 @@ public class Problem implements Comparable< Problem > {
 
 
   @Override
-  public boolean equals( Object o ) {
+  public boolean equals( final Object o ) {
     if( this == o ) return true;
     if( o == null || getClass() != o.getClass() ) return false;
 
-    Problem problem = ( Problem ) o;
+    final Problem problem = ( Problem ) o;
 
     if( location != null ? !location.equals( problem.location ) : problem.location != null )
       return false;
@@ -169,7 +169,7 @@ public class Problem implements Comparable< Problem > {
     return result;
   }
 
-  public int compareTo( Problem other ) {
+  public int compareTo( final Problem other ) {
     if( this.equals( other ) ) {
       return 0 ;
     }

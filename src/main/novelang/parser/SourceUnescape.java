@@ -43,13 +43,13 @@ public class SourceUnescape {
    * Left-pointing double angle quotation mark "&#xab;".
    * Must be the same as declared in the grammar!
    */
-  public static Character ESCAPE_START = '\u00ab' ; // «
+  public static final Character ESCAPE_START = '\u00ab' ; // «
 
   /**
    * Right-pointing double angle quotation mark "&#xbb;".
    * Must be the same as declared in the grammar!
    */
-  public static Character ESCAPE_END = '\u00bb' ; // »
+  public static final Character ESCAPE_END = '\u00bb' ; // »
 
 
   static {
@@ -71,7 +71,7 @@ public class SourceUnescape {
   }
 
   public static Map< String, Character > getMainCharacterEscapes() {
-    return new ImmutableMap.Builder().putAll( UNICODE_ESCAPES ).build() ;
+    return new ImmutableMap.Builder< String, Character >().putAll( UNICODE_ESCAPES ).build() ;
   }
 
   public static Character unescapeCharacter( final String escaped )
@@ -107,7 +107,7 @@ public class SourceUnescape {
       throws NoUnescapedCharacterException
   {
     final Matcher matcher = PLAIN_ESCAPE_PATTERN.matcher( text ) ;
-    final StringBuffer buffer = new StringBuffer() ;
+    final StringBuilder buffer = new StringBuilder();
     int keepFrom = 0 ;
     while( matcher.find() ) {
       if( matcher.start() > 0 && keepFrom < text.length() ) {

@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class TreeManglingConstants {
   
-  static final SyntacticTreeSet PARAGRAPH_NODEKINDS = SyntacticTreeSet.of(
+  static final SyntacticTreeSet PARAGRAPH_NODEKINDS_CONTAINING_URL = SyntacticTreeSet.of(
       PARAGRAPH_REGULAR,
       PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_
   ) ;
@@ -48,7 +48,7 @@ public class TreeManglingConstants {
       CELL_ROWS_WITH_VERTICAL_LINE
   ) ;
 
-  public static final SyntacticTreeSet PARAGRAPHOID_NODEKINDS = PARAGRAPH_NODEKINDS.union(
+  public static final SyntacticTreeSet PARAGRAPHOID_NODEKINDS = PARAGRAPH_NODEKINDS_CONTAINING_URL.union(
       PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
       LINES_OF_LITERAL,
       RASTER_IMAGE,
