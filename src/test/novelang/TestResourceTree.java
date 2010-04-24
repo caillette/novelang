@@ -16,21 +16,19 @@
  */
 package novelang;
 
-import java.util.Set;
-
-import com.google.common.collect.ImmutableSet;
 import novelang.common.filefixture.Directory;
 import novelang.common.filefixture.Resource;
 import novelang.common.filefixture.ResourceSchema;
-import novelang.designator.Tag;
 
-import static novelang.common.filefixture.ResourceSchema.*;
+import static novelang.common.filefixture.ResourceSchema.directory;
+import static novelang.common.filefixture.ResourceSchema.resource;
 
 /**
  * Schema of all resources used by tests.
  * 
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "InnerClassFieldHidesOuterClassField" } )
 public final class TestResourceTree {
 
     private TestResourceTree() { }
