@@ -3,6 +3,7 @@ package novelang.book.function.builtin;
 import com.google.common.collect.Maps;
 import novelang.book.CommandExecutionContext;
 import novelang.book.function.CommandParameterException;
+import novelang.book.function.builtin.insert.LevelHead;
 import novelang.book.function.builtin.insert.PartCreator;
 import novelang.common.FileTools;
 import novelang.common.Location;
@@ -33,12 +34,9 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -52,17 +50,17 @@ public class InsertCommand extends AbstractCommand {
   private final String fileName ;
   private final boolean recurse ;
   private final FileOrdering< ? > fileOrdering ;
-  private final boolean createLevel ;
+  private final LevelHead levelHead;
   private final int levelAbove ;
   private final String styleName ;
   private final Iterable< FragmentIdentifier > fragmentIdentifiers ;
-  
+
   public InsertCommand(
       final Location location,
       final String fileUrl, 
       final boolean recurse, 
       final FileOrdering fileOrdering,
-      final boolean createLevel,
+      final LevelHead levelHead,
       final int levelAbove,
       final String styleName,
       final Iterable< FragmentIdentifier > fragmentIdentifiers
@@ -70,7 +68,7 @@ public class InsertCommand extends AbstractCommand {
     super( location ) ;
     this.fileName = fileUrl.substring( "file:".length() ) ; 
     this.recurse = recurse ;
-    this.createLevel = createLevel ;
+    this.levelHead = levelHead ;
     this.styleName = styleName ;
     
     if( fileOrdering == null ) {
@@ -164,7 +162,7 @@ public class InsertCommand extends AbstractCommand {
         partTrees = partTree.getChildren() ;
       }
 
-      if( createLevel ) {
+      if( levelHead == LevelHead.CREATE_LEVEL ) {
         book = createChapterFromPartFilename(
               book,
               insertedFile,
@@ -284,7 +282,7 @@ public class InsertCommand extends AbstractCommand {
             Iterables.addAll( partChildren, partTree.getChildren() ) ;
           }
 
-          if( createLevel ) {
+          if( levelHead == LevelHead.CREATE_LEVEL ) {
             book = createChapterFromPartFilename(
                 book,
                 partFile,
@@ -476,7 +474,7 @@ public class InsertCommand extends AbstractCommand {
     return "InsertCommand{" +
         "fileName='" + fileName + '\'' +
         ", recurse=" + recurse +
-        ", createLevel=" + createLevel +
+        ", levelHead=" + levelHead +
         ", styleName='" + styleName + '\'' +
         ", fragmentIdentifiers=" + fragmentIdentifiers +
         '}'

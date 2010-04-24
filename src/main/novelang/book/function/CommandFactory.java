@@ -1,24 +1,23 @@
 package novelang.book.function;
 
-import novelang.common.SyntacticTree;
-import static novelang.parser.NodeKind.*;
-import novelang.parser.NodeKindTools;
-import novelang.parser.NodeKind;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import novelang.book.function.builtin.FileOrdering;
 import novelang.book.function.builtin.InsertCommand;
 import novelang.book.function.builtin.MapstylesheetCommand;
-import novelang.book.function.builtin.FileOrdering;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import novelang.book.function.builtin.insert.LevelHead;
+import novelang.common.SyntacticTree;
 import novelang.designator.FragmentIdentifier;
+import novelang.parser.NodeKind;
+import novelang.parser.NodeKindTools;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.base.Preconditions;
-
-import java.util.Map;
-import java.util.List;
+import static novelang.parser.NodeKind.*;
 
 /**
  * Creates instances of {@link Command}.
@@ -27,15 +26,13 @@ import java.util.List;
  */
 public class CommandFactory {
   
-  private static final Log LOG = LogFactory.getLog( CommandFactory.class ) ;
-
   /**
    * Creates the {@link Command} instance from given {@code SyntacticTree}'s root.
    * 
    * @param treeOfCommand A {@code SyntacticTree} instance of appropriate node type
-   * @return
+   * @return a non-null object.
    */
-  public Command createFunctionCall( final SyntacticTree treeOfCommand ) 
+  public static Command createFunctionCall( final SyntacticTree treeOfCommand )
       throws CommandParameterException
   {
     
@@ -46,8 +43,11 @@ public class CommandFactory {
         final String fileName = getTextOfChild( treeOfCommand, URL_LITERAL, true ) ;
         final boolean recurse = hasChild( treeOfCommand, COMMAND_INSERT_RECURSE_ ) ;
         final FileOrdering fileOrdering = createFileOrdering( 
-            getTextOfChild( treeOfCommand, COMMAND_INSERT_SORT_, false ) ) ; 
-        final boolean createLevel = hasChild( treeOfCommand, COMMAND_INSERT_CREATELEVEL_ ) ;
+            getTextOfChild( treeOfCommand, COMMAND_INSERT_SORT_, false ) ) ;
+        final LevelHead levelHead =
+            hasChild( treeOfCommand, COMMAND_INSERT_CREATELEVEL_ ) ? LevelHead.CREATE_LEVEL :
+            hasChild( treeOfCommand, COMMAND_INSERT_NOHEAD_ ) ? LevelHead.NO_HEAD : null
+        ;
         final String levelAboveAsString =
             getTextOfChild( treeOfCommand, COMMAND_INSERT_LEVELABOVE_, false ) ;
         final String styleName = getTextOfChild( treeOfCommand, COMMAND_INSERT_STYLE_, false ) ;
@@ -59,7 +59,7 @@ public class CommandFactory {
             fileName,
             recurse,
             fileOrdering, 
-            createLevel,
+            levelHead,
             levelAboveAsString == null ? 0 : Integer.parseInt( levelAboveAsString ),
             styleName,
             fragmentIdentifiers

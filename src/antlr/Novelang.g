@@ -73,6 +73,7 @@ tokens {
   
   COMMAND_INSERT_ ;
   COMMAND_INSERT_CREATELEVEL_ ;
+  COMMAND_INSERT_NOHEAD_ ;
   COMMAND_INSERT_LEVELABOVE_ ;
   COMMAND_INSERT_RECURSE_ ;
   COMMAND_INSERT_SORT_ ;
@@ -1869,7 +1870,7 @@ functionCallInsert
       whitespace p += url 
       ( mediumbreak p += keywordRecurse )?
       ( mediumbreak p += keywordSort )?
-      ( mediumbreak p += keywordCreateLevel )?
+      ( mediumbreak p += keywordCreateLevel | mediumbreak p += keywordNoHead )?
       ( mediumbreak p += parameterLevelAbove )?
       ( mediumbreak p += parameterInsertStyle ) ?        
       ( mediumbreak p += compositeIdentifier )*        
@@ -1909,6 +1910,13 @@ keywordCreateLevel
     -> ^( COMMAND_INSERT_CREATELEVEL_ )
   ;
   
+keywordNoHead
+  : ( LATIN_SMALL_LETTER_N LATIN_SMALL_LETTER_O LATIN_SMALL_LETTER_H
+      LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_A LATIN_SMALL_LETTER_D
+    )
+    -> ^( COMMAND_INSERT_NOHEAD_ )
+  ;
+
 parameterLevelAbove
   : ( LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_E LATIN_SMALL_LETTER_V LATIN_SMALL_LETTER_E 
       LATIN_SMALL_LETTER_L LATIN_SMALL_LETTER_A LATIN_SMALL_LETTER_B LATIN_SMALL_LETTER_O 

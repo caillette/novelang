@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 import novelang.TestResourceTools;
+import novelang.book.function.builtin.insert.LevelHead;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import static org.junit.Assert.*;
@@ -65,7 +66,7 @@ public class InsertCommandTest {
         oneWordFile.toURI().toURL().toExternalForm(),
         false,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of()
@@ -100,7 +101,7 @@ public class InsertCommandTest {
             toURI().toURL().toExternalForm(),
         false,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of()
@@ -133,7 +134,7 @@ public class InsertCommandTest {
         noChapterFile.toURI().toURL().toExternalForm(),
         false,
         null,
-        true,
+        LevelHead.CREATE_LEVEL,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of()
@@ -178,7 +179,7 @@ public class InsertCommandTest {
         oneWordFile.toURI().toURL().toExternalForm(),
         false,
         null,
-        false,
+        null,
         0,
         "myStyle",
         ImmutableList.< FragmentIdentifier >of()
@@ -216,7 +217,7 @@ public class InsertCommandTest {
         resourceInstaller.getTargetDirectory().toURI().toURL().toExternalForm(),
         true,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of()
@@ -243,7 +244,7 @@ public class InsertCommandTest {
         brokenContentDirectory.toURI().toURL().toExternalForm(),
         true,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of()
@@ -271,7 +272,7 @@ public class InsertCommandTest {
         oneWordFile.toURI().toURL().toExternalForm(),
         false,
         null,
-        false,
+        null,
         1,
         null,
         ImmutableList.<FragmentIdentifier>of()
@@ -359,7 +360,7 @@ public class InsertCommandTest {
         oneWordFile.toURI().toURL().toExternalForm(),
         true,
         null,
-        false,
+        null,
         1,
         null,
         ImmutableList.< FragmentIdentifier >of()
@@ -387,7 +388,7 @@ public class InsertCommandTest {
         resourceInstaller.getTargetDirectory().toURI().toURL().toExternalForm(),
         true,
         null,
-        false,
+        null,
         1,
         null,
         ImmutableList.< FragmentIdentifier >of()
@@ -440,7 +441,7 @@ public class InsertCommandTest {
         partFile.toURI().toURL().toExternalForm(),
         true,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
@@ -488,7 +489,7 @@ public class InsertCommandTest {
         "file:.", 
         true,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
@@ -534,7 +535,7 @@ public class InsertCommandTest {
         "file:.", 
         true,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of(
@@ -589,7 +590,7 @@ public class InsertCommandTest {
         "file:.", 
         true,
         null,
-        false,
+        null,
         0,
         null,
         ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )

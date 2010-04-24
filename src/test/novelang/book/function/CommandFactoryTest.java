@@ -5,6 +5,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.book.function.builtin.InsertCommand;
 import novelang.book.function.builtin.MapstylesheetCommand;
 import novelang.book.function.builtin.FileOrdering;
+import novelang.book.function.builtin.insert.LevelHead;
 import novelang.designator.FragmentIdentifier;
 
 import org.fest.reflect.core.Reflection;
@@ -20,11 +21,12 @@ import java.util.Iterator;
  * 
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "HardcodedFileSeparator" } )
 public class CommandFactoryTest {
   
   @Test
   public void insertCommandWithDefaults() throws CommandParameterException {
-    final Command command = new CommandFactory().createFunctionCall(
+    final Command command = CommandFactory.createFunctionCall(
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:/wxy" )
@@ -34,15 +36,15 @@ public class CommandFactoryTest {
     assertEquals( "/wxy", extractFileName( command ) ) ;
     assertFalse( extractRecurse( command ) ) ;
     assertSame( FileOrdering.DEFAULT, extractFileOrdering( command ) ) ;
-    assertFalse( extractCreateLevel( command ) ) ;
-    assertEquals( 0, extractLevelAbove( command ) );
+    assertNull( extractLevelHead( command ) ) ;
+    assertEquals( 0L, ( long ) extractLevelAbove( command ) );
     assertNull( extractStyleName( command ) ) ;
     assertFalse( extractFragmentIdentifiers( command ).iterator().hasNext() ) ;
   }
   
   @Test
   public void insertCommandWithAllOptions() throws CommandParameterException {
-    final Command command = new CommandFactory().createFunctionCall(
+    final Command command = CommandFactory.createFunctionCall(
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:x/y/z.nlp" ),
@@ -59,8 +61,8 @@ public class CommandFactoryTest {
     assertEquals( "x/y/z.nlp", extractFileName( command ) ) ;
     assertTrue( extractRecurse( command ) ) ;
     assertTrue( extractFileOrdering( command ) instanceof FileOrdering.ByAbsolutePath ) ;
-    assertTrue( extractCreateLevel( command ) ) ;
-    assertEquals( 3, extractLevelAbove( command ) ) ;
+    assertSame( LevelHead.CREATE_LEVEL, extractLevelHead( command ) ) ;
+    assertEquals( 3L, ( long ) extractLevelAbove( command ) ) ;
     assertEquals( "whatever", extractStyleName( command ) ) ;
     final Iterator< FragmentIdentifier > absoluteIdentifiers = 
         extractFragmentIdentifiers( command ).iterator() ;
@@ -71,7 +73,7 @@ public class CommandFactoryTest {
   
   @Test
   public void mapstylesheetCommand() throws CommandParameterException {
-    final Command command = new CommandFactory().createFunctionCall(
+    final Command command = CommandFactory.createFunctionCall(
         tree(
             COMMAND_MAPSTYLESHEET_,
             tree( COMMAND_MAPSTYLESHEET_ASSIGNMENT_, tree( "abc" ), tree( "def" ) ),
@@ -80,7 +82,7 @@ public class CommandFactoryTest {
     ) ;
     assertTrue( "Got: " + command, command instanceof MapstylesheetCommand ) ;
     final Map< String, String > stylesheetMap = extractStylesheetMaps( command ) ;
-    assertEquals( 2, stylesheetMap.size() ) ;
+    assertEquals( 2L, ( long ) stylesheetMap.size() ) ;
     assertEquals( "def", stylesheetMap.get( "abc" ) ) ;
     assertEquals( "jkl", stylesheetMap.get( "ghi" ) ) ;
     
@@ -103,8 +105,8 @@ public class CommandFactoryTest {
     return Reflection.field( "recurse" ).ofType( Boolean.TYPE ).in( insertCommand ).get() ;
   }
   
-  private static boolean extractCreateLevel( final Command insertCommand ) {
-    return Reflection.field( "createLevel" ).ofType( Boolean.TYPE ).in( insertCommand ).get() ;
+  private static LevelHead extractLevelHead( final Command insertCommand ) {
+    return Reflection.field( "levelHead" ).ofType( LevelHead.class ).in( insertCommand ).get() ;
   }
 
   private static int extractLevelAbove( final Command insertCommand ) {
@@ -133,5 +135,5 @@ public class CommandFactoryTest {
         get() 
     ;
   }
-  
+
 }
