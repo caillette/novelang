@@ -1806,7 +1806,7 @@ word
   
 symbolicName
   : ( hexLetter | nonHexLetter | digit )
-    ( HYPHEN_MINUS? ( hexLetter | nonHexLetter | digit ) )*
+    ( ( HYPHEN_MINUS | LOW_LINE )? ( hexLetter | nonHexLetter | digit ) )*
   ;
 
 /** This intermediary rule is useful as I didn't find how to
