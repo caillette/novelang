@@ -67,7 +67,7 @@ import java.util.Comparator;
  *
  * @author Laurent Caillette
  */
-public final class Treepath< T extends Tree > implements Comparable< Treepath< T > > {
+public final class Treepath< T extends Tree< T > > implements Comparable< Treepath< T > > {
 
   private final Treepath< T > previous;
   private final int indexInPrevious;
@@ -78,7 +78,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
       throw new NullArgumentException( "Cannot define null previous path with this constructor" ) ;
     }
     this.previous = previous;
-    this.treeAtEnd = ( T ) previous.getTreeAtEnd().getChildAt( indexInPrevious ) ;
+    this.treeAtEnd = previous.getTreeAtEnd().getChildAt( indexInPrevious );
     this.indexInPrevious = indexInPrevious;
   }
 
@@ -239,7 +239,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
   @Override
   public String toString() {
     boolean first = true ;
-    final StringBuffer buffer = new StringBuffer() ;
+    final StringBuilder buffer = new StringBuilder();
     for( int i = 0 ; i < this.getLength() ; i++ ) {
       if( first ) {
         first = false ;
@@ -263,7 +263,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @param indexInParent positive integer, must be a valid index.
    * @return a non-null object.
    */
-  public static< T extends Tree > Treepath< T > create(
+  public static< T extends Tree< T > > Treepath< T > create(
       final Treepath< T > root,
       final int indexInParent
   ) {
@@ -279,7 +279,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @return a non-null object.
    * @see #create(Treepath, int...)
    */
-  public static< T extends Tree > Treepath< T > create( final T root, final int... indexes ) {
+  public static< T extends Tree< T > > Treepath< T > create( final T root, final int... indexes ) {
     return create( create( root ), indexes ) ;
   }
 
@@ -308,7 +308,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @return a non-null object.
    * @see #create(Treepath, int...)
    */
-  public static< T extends Tree > Treepath< T > create(
+  public static< T extends Tree< T > > Treepath< T > create(
       final Treepath< T > parent,
       final int... indexes
   ) {
@@ -327,7 +327,7 @@ public final class Treepath< T extends Tree > implements Comparable< Treepath< T
    * @param tree a non-null object.
    * @return a non-null object.
    */
-  public static< T extends Tree > Treepath< T > create( final T tree ) {
+  public static< T extends Tree< T > > Treepath< T > create( final T tree ) {
     return new Treepath< T >( tree ) ;
   }
 

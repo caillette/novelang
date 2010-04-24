@@ -27,7 +27,7 @@ import com.google.common.base.Preconditions;
  * 
  * @author Laurent Caillette
  */
-public class RobustPath< T extends Tree > {
+public class RobustPath< T extends Tree< T > > {
   
   private final int[] indexes ;
   final Predicate< T > treeFilter ;
@@ -50,7 +50,7 @@ public class RobustPath< T extends Tree > {
       final T tree = result.getTreeAtEnd() ;
       int translatedIndex = -1 ;
       for( int childIndex = 0 ; childIndex < tree.getChildCount() ; childIndex ++ ) {
-        if( treeFilter.apply( ( T ) tree.getChildAt( childIndex ) ) ) {
+        if( treeFilter.apply( tree.getChildAt( childIndex ) ) ) {
           translatedIndex ++ ;
         }
         if( translatedIndex == indexes[ treepathIndex ] ) {
@@ -64,11 +64,11 @@ public class RobustPath< T extends Tree > {
   }
   
   
-  public static < T extends Tree > RobustPath< T > create( final Treepath< T > treepath ) {
+  public static < T extends Tree< T > > RobustPath< T > create( final Treepath< T > treepath ) {
     return create( treepath, Predicates.< T >alwaysTrue() ) ;
   }
 
-  public static < T extends Tree > RobustPath< T > create( 
+  public static < T extends Tree< T > > RobustPath< T > create(
       final Treepath< T > treepath, 
       final Predicate< T > filter 
   ) {
@@ -82,7 +82,7 @@ public class RobustPath< T extends Tree > {
         int filteredIndexInPrevious = -1 ;
         final T parentTree = ( T ) intermediate.getPrevious().getTreeAtEnd() ;
         for( int childIndex = 0 ; childIndex <= naturalIndexInPrevious ; childIndex ++ ) {
-          if( filter.apply( (T) parentTree.getChildAt( childIndex ) ) ) {
+          if( filter.apply( parentTree.getChildAt( childIndex ) ) ) {
             filteredIndexInPrevious ++ ;
           }
         }

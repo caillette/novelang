@@ -53,7 +53,7 @@ public class TreepathTools {
    * @param index inside [ 0, child count of previous tree [
    * @return non-null object.
    */
-  public static< T extends Tree > Treepath< T > getSiblingAt(
+  public static< T extends Tree< T > > Treepath< T > getSiblingAt(
       final Treepath< T > treepath,
       final int index
   ) throws IllegalArgumentException
@@ -83,7 +83,7 @@ public class TreepathTools {
    * @throws IllegalArgumentException
    * @see #getPreviousSibling(Treepath)
    */
-  public static< T extends Tree > boolean hasPreviousSibling( final Treepath< T > treepath )
+  public static< T extends Tree< T > > boolean hasPreviousSibling( final Treepath< T > treepath )
       throws IllegalArgumentException
   {
     if( treepath.getLength() < 2 ) {
@@ -99,7 +99,7 @@ public class TreepathTools {
    * @throws IllegalArgumentException
    * @see #getNextSibling(Treepath)
    */
-  public static< T extends Tree > boolean hasNextSibling( final Treepath< T > treepath )
+  public static< T extends Tree< T > > boolean hasNextSibling( final Treepath< T > treepath )
       throws IllegalArgumentException
   {
     if( treepath.getLength() < 2 ) {
@@ -121,7 +121,7 @@ public class TreepathTools {
    * @return non-null object.
    * @see #hasPreviousSibling(Treepath)
    */
-  public static< T extends Tree > Treepath< T > getPreviousSibling(
+  public static< T extends Tree< T > > Treepath< T > getPreviousSibling(
       final Treepath< T > treepath
   ) throws IllegalArgumentException
   {
@@ -142,7 +142,7 @@ public class TreepathTools {
    * @return non-null object.
    * @see #hasNextSibling(Treepath)
    */
-  public static< T extends Tree > Treepath< T > getNextSibling( final Treepath< T > treepath ) {
+  public static< T extends Tree< T > > Treepath< T > getNextSibling( final Treepath< T > treepath ) {
     Preconditions.checkArgument( hasNextSibling( treepath ) ) ;
     final Treepath< T > previousTreepath = treepath.getPrevious() ;
     return Treepath.create( previousTreepath, treepath.getIndexInPrevious() + 1 ) ;
@@ -353,7 +353,7 @@ public class TreepathTools {
    * @return non-null object representing path to moved {@code Tree}.
    * @throws IllegalArgumentException if there was no previous sibling.
    */
-  public static < T extends Tree > Treepath< T > becomeLastChildOfPreviousSibling(
+  public static < T extends Tree< T > > Treepath< T > becomeLastChildOfPreviousSibling(
       final Treepath< T > targetTreepath
   )
       throws IllegalArgumentException
@@ -456,7 +456,7 @@ public class TreepathTools {
    * @throws IllegalArgumentException if the subtree is containing the tree it is supposed to be
    *     removed from, or if both treepaths don't have the same tree at start.
    */
-  public static< T extends Tree > Treepath< T > removeSubtree(
+  public static< T extends Tree< T > > Treepath< T > removeSubtree(
       final Treepath< T > containerTreepath,
       final Treepath< T > subTreepath
 
@@ -522,7 +522,7 @@ public class TreepathTools {
 
 
 
-  private static< T extends Tree > Iterable< Treepath< T > > invert( Treepath< T > treepath ) {
+  private static< T extends Tree< T > > Iterable< Treepath< T > > invert( Treepath< T > treepath ) {
     final List< Treepath< T > > treepaths = new ArrayList< Treepath< T > >( treepath.getLength() ) ;
     while( true ) {
       treepaths.add( treepath ) ;
@@ -546,7 +546,7 @@ public class TreepathTools {
    *     one of {@code maybeparent}. 
    * @return true if index in each parent tree is the same.
    */
-  public static < T extends Tree > boolean hasSameStartingIndicesAs( 
+  public static < T extends Tree< T > > boolean hasSameStartingIndicesAs(
       final Treepath< T > maybeParent,  
       Treepath< T > maybeChild  
   ) {
@@ -560,7 +560,7 @@ public class TreepathTools {
     return hasSameStartingIndicesAsWithoutCheck( maybeParent, maybeChild ) ;
   }
   
-  private static < T extends Tree > boolean hasSameStartingIndicesAsWithoutCheck( 
+  private static < T extends Tree< T > > boolean hasSameStartingIndicesAsWithoutCheck( 
       final Treepath< T > maybeParent,  
       final Treepath< T > maybeChild  
   ) {

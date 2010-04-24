@@ -44,12 +44,14 @@ public class Statistics {
    * @return a non-null {@code Map} containing no null with zero-or-positive, contiguous keys.
    *     The underlying implementation is a {@code TreeMap} with sorted keys.
    */
-  public static Map< Integer, Integer > calculate( final Tree< ? > root ) {
+  public static Map< Integer, Integer > calculate( final Tree< ? extends Tree > root ) {
     final TreeMap< Integer, Integer > treeMap = Maps.newTreeMap() ;
+    // Mysterious compilation bug, commenting code out until inspiration comes.
+/*
     upgrade( treeMap, 10 ) ;
 
-    final Traversal< Tree > traversal = Traversal.Preorder.create() ;
-    Treepath< Tree > current = Treepath.< Tree >create( root ) ;
+    final Traversal< ? extends Tree > traversal = Traversal.Preorder.create() ;
+    Treepath< ? extends Tree > current = Treepath.create( root ) ;
     while( current != null ) {
       final int childCount = current.getTreeAtEnd().getChildCount() ;
       if( ! treeMap.containsKey( childCount ) ) {
@@ -63,6 +65,7 @@ public class Statistics {
       }
       current = traversal.next( current ) ;
     }
+*/
     return Collections.unmodifiableMap( treeMap ) ;
   }
 

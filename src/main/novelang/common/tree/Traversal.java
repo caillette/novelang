@@ -24,7 +24,7 @@ import com.google.common.base.Predicates;
  *
  * @author Laurent Caillette
  */
-public abstract class Traversal< T extends Tree > {
+public abstract class Traversal< T extends Tree< T > > {
 
   protected final Predicate< T > treeFilter ;
 
@@ -57,7 +57,7 @@ public abstract class Traversal< T extends Tree > {
   /**
    * Function object capturing a tree filter.
    */
-  public static final class MirroredPostorder< T extends Tree > extends Traversal< T > {
+  public static final class MirroredPostorder< T extends Tree< T > > extends Traversal< T > {
 
     private MirroredPostorder( final Predicate< T > treeFilter ) {
       super( treeFilter ) ;
@@ -70,14 +70,14 @@ public abstract class Traversal< T extends Tree > {
     /**
      * Factory method for type inference.
      */
-    public static< T extends Tree > MirroredPostorder< T > create() {
+    public static< T extends Tree< T > > MirroredPostorder< T > create() {
       return new MirroredPostorder< T >() ;
     }
 
     /**
      * Factory method for type inference.
      */
-    public static< T extends Tree > MirroredPostorder< T > create(
+    public static< T extends Tree< T > > MirroredPostorder< T > create(
         final Predicate< T > treeFilter
     ) {
       return new MirroredPostorder< T >( treeFilter ) ;
@@ -150,7 +150,7 @@ public abstract class Traversal< T extends Tree > {
   /**
    * Function object capturing a tree filter.
    */
-  public static final class Preorder< T extends Tree > extends Traversal< T > {
+  public static final class Preorder< T extends Tree< T > > extends Traversal< T > {
 
     private Preorder( final Predicate< T > treeFilter ) {
       super( treeFilter ) ;
@@ -163,13 +163,13 @@ public abstract class Traversal< T extends Tree > {
     /**
      * Factory method for type inference.
      */
-    public static< T extends Tree > Preorder< T > create() {
+    public static< T extends Tree< T > > Preorder< T > create() {
       return new Preorder< T >() ;
     }
 
 
     @Override
-    public Treepath< T > first( Treepath< T > treepath ) {
+    public Treepath< T > first( final Treepath< T > treepath ) {
       return treepath.getStart() ;
     }
 
@@ -189,7 +189,7 @@ public abstract class Traversal< T extends Tree > {
      */
 
     @Override
-    public Treepath< T > next( Treepath< T > treepath ) {
+    public Treepath< T > next( final Treepath< T > treepath ) {
       final T tree = treepath.getTreeAtEnd();
       if( tree.getChildCount() > 0 ) {
         return Treepath.create( treepath, 0 ) ;
@@ -198,7 +198,7 @@ public abstract class Traversal< T extends Tree > {
     }
 
 
-    private < T extends Tree > Treepath< T > upNext( final Treepath< T > treepath ) {
+    private static < T extends Tree< T > > Treepath< T > upNext( final Treepath< T > treepath ) {
       Treepath< T > previousTreepath = treepath.getPrevious() ;
       while( previousTreepath != null && previousTreepath.getPrevious() != null ) {
         if( TreepathTools.hasNextSibling( previousTreepath ) ) {
@@ -216,7 +216,7 @@ public abstract class Traversal< T extends Tree > {
      * @return the next tree, or null if there is no other tree to navigate to.
      *
      */
-    public < T extends Tree > Treepath< T > nextUp( final Treepath< T > treepath ) {
+    public static < T extends Tree< T > > Treepath< T > nextUp( final Treepath< T > treepath ) {
       if( TreepathTools.hasNextSibling( treepath ) ) {
         return TreepathTools.getNextSibling( treepath ) ;
       } else {
