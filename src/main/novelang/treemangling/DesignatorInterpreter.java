@@ -189,6 +189,18 @@ public class DesignatorInterpreter {
       final FragmentMapper< RobustPath< SyntacticTree > > mapper
   ) {
     while( true ) {
+
+/*
+      // Doesn't seem to help:
+      // Remove previous implicit identifiers. This is required for Books, where implicit
+      // identifiers come from previously computed Parts.
+      // TODO add a parameter to Part creation telling it shouldn't calculate implicit identifiers.
+      treepath = removeDirectChildren(
+          treepath,
+          NodeKind._IMPLICIT_IDENTIFIER
+      ) ;
+*/
+      
       final FragmentIdentifier pureIdentifier = 
           findIdentifier( treepath, mapper.getPureIdentifierMap() ) ;
       if( pureIdentifier != null ) {

@@ -429,7 +429,10 @@ public class InsertCommand extends AbstractCommand {
     }
     return problems ;
   }
-  
+
+  /**
+   * Kind of function with multiple return values.
+   */
   private static class AddIdentifiers {
     
     private final List< Problem > designatorProblems = Lists.newArrayList() ;
