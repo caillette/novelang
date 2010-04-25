@@ -53,6 +53,7 @@ import novelang.system.LogFactory;
  *
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "HardcodedFileSeparator" } )
 @RunWith( value = NameAwareTestClassRunner.class )
 public class InsertCommandTest {
 
@@ -158,6 +159,7 @@ public class InsertCommandTest {
             tree( _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "no-chapter" ) ),
                 tree( _LEVEL,
+                    tree( _IMPLICIT_IDENTIFIER, "\\\\Section" ),
                     tree( _IMPLICIT_TAG, "Section" ),
                     tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
                     tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )
