@@ -1,1 +1,3 @@
 --- Added ``nohead`` option to ``insert`` command.
+
+--- Fixed some bugs around identifiers.

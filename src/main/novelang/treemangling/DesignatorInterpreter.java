@@ -190,25 +190,14 @@ public class DesignatorInterpreter {
   ) {
     while( true ) {
 
-/*
-      // Doesn't seem to help:
-      // Remove previous implicit identifiers. This is required for Books, where implicit
-      // identifiers come from previously computed Parts.
-      // TODO add a parameter to Part creation telling it shouldn't calculate implicit identifiers.
-      treepath = removeDirectChildren(
-          treepath,
-          NodeKind._IMPLICIT_IDENTIFIER
-      ) ;
-*/
-      
-      final FragmentIdentifier pureIdentifier = 
+      final FragmentIdentifier pureIdentifier =
           findIdentifier( treepath, mapper.getPureIdentifierMap() ) ;
       if( pureIdentifier != null ) {
         treepath = add( treepath, pureIdentifier, NodeKind._EXPLICIT_IDENTIFIER ) ;
       }
       final FragmentIdentifier derivedIdentifier = 
           findIdentifier( treepath, mapper.getDerivedIdentifierMap() ) ;
-      if( derivedIdentifier != null ) {
+      if( derivedIdentifier != null && mayAddImplicitIdentifier( treepath ) ) {
         treepath = add( treepath, derivedIdentifier, NodeKind._IMPLICIT_IDENTIFIER ) ;
       }
       treepath = removeDirectChildren(
@@ -226,6 +215,26 @@ public class DesignatorInterpreter {
       }
     }
   }
+
+  /**
+   * This is useful because we need to generate implicit identifiers at {@link novelang.book.Book}
+   * level since implicit identifiers may not be the same as those calculate at
+   * {@link novelang.part.Part} level. So new identifiers shouldn't collapse with old ones.
+   * <ul>
+   *   <li>There should be no implicit identifier if an explicit identifier is already present.
+   *   <li>Don't add an implicit identifier if there is already one.
+   * </ul>
+   */
+  private static boolean mayAddImplicitIdentifier( final Treepath< SyntacticTree > treepath ) {
+    final SyntacticTree tree = treepath.getTreeAtEnd() ;
+    for( final SyntacticTree child : tree.getChildren() ) {
+      if( child.isOneOf( NodeKind._EXPLICIT_IDENTIFIER, NodeKind._IMPLICIT_IDENTIFIER ) ) {
+        return false ;
+      }
+    }
+    return true ;
+  }
+
 
   private static Treepath< SyntacticTree > removeDirectChildren(
       final Treepath< SyntacticTree > treepath, 
