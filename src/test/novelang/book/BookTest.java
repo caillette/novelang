@@ -107,6 +107,7 @@ public class BookTest {
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\file1" ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
                     PARAGRAPH_REGULAR,
@@ -115,6 +116,7 @@ public class BookTest {
             ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\file2" ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
                     PARAGRAPH_REGULAR,
@@ -123,6 +125,7 @@ public class BookTest {
             ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\file3" ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
                     PARAGRAPH_REGULAR,
@@ -189,6 +192,7 @@ public class BookTest {
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\file1" ) ),
                 tree( _STYLE, tree( CUSTOM_STYLE ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "file1" ) ),
                 tree(
@@ -198,6 +202,7 @@ public class BookTest {
             ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\file2" ) ),
                 tree( _STYLE, tree( CUSTOM_STYLE ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "file2" ) ),
                 tree(
@@ -207,6 +212,7 @@ public class BookTest {
             ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\file3" ) ),
                 tree( _STYLE, tree( CUSTOM_STYLE ) ),
                 tree( LEVEL_TITLE, tree( WORD_, "file3" ) ),
                 tree(
@@ -339,6 +345,7 @@ public class BookTest {
             ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\FooAndBar" ) ),
                 tree( _EXPLICIT_TAG, "Bar" ),
                 tree( _EXPLICIT_TAG, "Foo" ),
                 tree( LEVEL_TITLE, tree( WORD_, "Foo" ), tree( WORD_, "and" ), tree( WORD_, "Bar" ) ),
@@ -353,6 +360,7 @@ public class BookTest {
             ),
             tree(
                 _LEVEL,
+                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\Foo_Bar" ) ),
                 tree( _PROMOTED_TAG, "Bar" ),
                 tree( _PROMOTED_TAG, "Foo" ),
                 tree(
@@ -467,16 +475,37 @@ public class BookTest {
     final SyntacticTree bookTree = book.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
         tree( BOOK,
-            tree( _META, tree( _WORD_COUNT, "6" ) ),
+            tree( _META, tree( _WORD_COUNT, "8" ) ),
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0" ) ),
-                tree( _IMPLICIT_TAG, "L0-1" ),
-                tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
+                tree( _IMPLICIT_TAG, "L0" ),
+                tree( LEVEL_TITLE, tree( WORD_, "L0" ) ),
                 tree(
                     PARAGRAPH_REGULAR,
-                    tree( WORD_, "p0-1" )
+                    tree( WORD_, "p0" )
+                ),
+                tree(     
+                    _LEVEL,
+                    tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0-0" ) ),
+                    tree( _IMPLICIT_TAG, "L0-0" ),
+                    tree( LEVEL_TITLE, tree( WORD_, "L0-0" ) ),
+                    tree(
+                        PARAGRAPH_REGULAR,
+                        tree( WORD_, "p0-0" )
+                    )
+                ),
+                tree(     
+                    _LEVEL,
+                    tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0-1" ) ),
+                    tree( _IMPLICIT_TAG, "L0-1" ),
+                    tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
+                    tree(
+                        PARAGRAPH_REGULAR,
+                        tree( WORD_, "p0-1" )
+                    )
                 )
+                
             ),
             tree(
                 _LEVEL,
@@ -486,16 +515,6 @@ public class BookTest {
                 tree(
                     PARAGRAPH_REGULAR,
                     tree( WORD_, "p1" )
-                )
-            ),
-            tree(
-                _LEVEL,
-                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0-1" ) ),
-                tree( _IMPLICIT_TAG, "L0-1" ),
-                tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
-                tree(
-                    PARAGRAPH_REGULAR,
-                    tree( WORD_, "p0-1" )
                 )
             )
         ),

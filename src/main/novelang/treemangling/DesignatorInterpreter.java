@@ -97,7 +97,7 @@ public class DesignatorInterpreter {
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
     final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
     enrichedTreepath = enrich(
-        TRAVERSAL.first( treepath.getStart() ),
+        TRAVERSAL.first( treepath ),
         babyInterpreter
     );
 

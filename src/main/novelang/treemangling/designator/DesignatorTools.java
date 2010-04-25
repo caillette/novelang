@@ -22,7 +22,7 @@ public class DesignatorTools {
   public static final Predicate< SyntacticTree > IDENTIFIER_TREE_FILTER =
     new Predicate< SyntacticTree >() {
       public boolean apply( final SyntacticTree tree ) {
-        return tree.isOneOf( NodeKind._LEVEL, NodeKind.PART ) ;
+        return tree.isOneOf( NodeKind._LEVEL, NodeKind.PART, NodeKind.BOOK ) ;
       }
     }
 ;

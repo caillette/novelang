@@ -86,7 +86,7 @@ public abstract class Traversal< T extends Tree< T > > {
     /**
      * Returns a {@code Treepath} corresponding to the last tree in a
      * {@link #next(novelang.common.tree.Treepath) postorder traversal}
-     * in the {@link novelang.common.tree.Treepath#getTreeAtStart()} end} tree.
+     * in the {@link Treepath#getTreeAtEnd()} end} tree.
      *
      * @see #next (Treepath)
      */

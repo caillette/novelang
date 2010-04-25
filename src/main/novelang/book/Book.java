@@ -26,6 +26,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 import novelang.common.tree.Statistics;
+import novelang.treemangling.DesignatorInterpreter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
@@ -123,6 +124,8 @@ public class Book extends AbstractSourceReader {
 
       Statistics.logStatistics( rehierarchized.getTreeAtStart() ) ;
 
+      rehierarchized = new DesignatorInterpreter( rehierarchized ).getEnrichedTreepath() ;
+      
       final Set< Tag > tagset = TagMangler.findExplicitTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;
