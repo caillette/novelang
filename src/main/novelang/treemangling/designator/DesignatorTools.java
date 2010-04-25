@@ -3,10 +3,14 @@ package novelang.treemangling.designator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.collect.Sets;
 import novelang.common.SyntacticTree;
 import novelang.common.TagBehavior;
+import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
+import novelang.common.tree.TreepathTools;
 import novelang.rendering.RenderingTools;
 import novelang.parser.NodeKind;
 import novelang.designator.FragmentIdentifier;
@@ -19,13 +23,18 @@ import com.google.common.base.Predicate;
  * @author Laurent Caillette
  */
 public class DesignatorTools {
+
   public static final Predicate< SyntacticTree > IDENTIFIER_TREE_FILTER =
     new Predicate< SyntacticTree >() {
       public boolean apply( final SyntacticTree tree ) {
         return tree.isOneOf( NodeKind._LEVEL, NodeKind.PART, NodeKind.BOOK ) ;
       }
     }
-;
+  ;
+
+  public static final Traversal.MirroredPostorder< SyntacticTree > TRAVERSAL =
+    Traversal.MirroredPostorder.create( IDENTIFIER_TREE_FILTER )
+  ;
 
   private DesignatorTools() { }
 
@@ -42,9 +51,6 @@ public class DesignatorTools {
     }
     IDENTIFIER_BEARING_NODEKINDS = EnumSet.copyOf( nodeKinds ) ;
   }
-
-  public static final NodeKind[] IDENTIFIER_BEARING_NODEKINDS_ARRAY =
-      IDENTIFIER_BEARING_NODEKINDS.toArray( new NodeKind[ IDENTIFIER_BEARING_NODEKINDS.size() ] ) ;
 
 
   public static String getMarkerText( final SyntacticTree tree ) throws Exception {
@@ -86,11 +92,80 @@ public class DesignatorTools {
       final Map< FragmentIdentifier, Treepath< SyntacticTree > > identifierMap,
       final String prefix
   ) {
-    for( final FragmentIdentifier fragmentIdentifier : identifierMap.keySet() ) {
+    for( final Map.Entry< FragmentIdentifier, Treepath< SyntacticTree > >
+        fragmentIdentifierTreepathEntry : identifierMap.entrySet()
+    ) {
       stringBuilder.append( prefix ) ;
-      stringBuilder.append( fragmentIdentifier ) ;
+      stringBuilder.append( fragmentIdentifierTreepathEntry.getKey() ) ;
       stringBuilder.append( " -> " ) ;
-      stringBuilder.append( identifierMap.get( fragmentIdentifier ) ) ;
+      stringBuilder.append( fragmentIdentifierTreepathEntry.getValue() ) ;
     }
   }
+
+  public static IdentifierCollisions findCollisions( Treepath< SyntacticTree > treepath ) {
+    final Set< String > implicitIdentifiers = Sets.newHashSet() ;
+    final Set< String > implicitIdentifierCollisions = Sets.newHashSet() ;
+    treepath = TRAVERSAL.first( treepath ) ;
+
+    while( true ) {
+      detectCollisions(
+          treepath,
+          implicitIdentifiers,
+          implicitIdentifierCollisions,
+          NodeKind._IMPLICIT_IDENTIFIER
+      ) ;
+      final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;
+      if( next == null ) {
+        return new IdentifierCollisions() {
+          public boolean implicitIdentifierCollides( final SyntacticTree tree ) {
+            return implicitIdentifierCollisions.contains( tree.getChildAt( 0 ).getText() ) ;
+          }
+        } ;
+      } else {
+        treepath = next ;
+      }
+    }
+  }
+
+  private static void detectCollisions(
+      final Treepath< SyntacticTree > treepath,
+      final Set< String > identifierSet,
+      final Set< String > collisionSet,
+      final NodeKind nodeKind
+  ) {
+    final SyntacticTree tree = treepath.getTreeAtEnd();
+    if( tree.isOneOf( nodeKind ) ) {
+      final String identifierAsString = tree.getChildAt( 0 ).getText() ;
+      if( identifierSet.contains( identifierAsString ) ) {
+        collisionSet.add( identifierAsString ) ;
+      } else {
+        identifierSet.add( identifierAsString ) ;
+      }
+    }
+  }
+
+
+  public static Treepath< SyntacticTree > removeCollidingIdentifiers(
+      final IdentifierCollisions identifierCollisions,
+      Treepath< SyntacticTree > treepath,
+      final NodeKind nodeKind
+  ) {
+    treepath = TRAVERSAL.first( treepath ) ;
+    while( true ) {
+      final SyntacticTree parentTree = treepath.getTreeAtEnd() ;
+      for( int i = 0 ; i < parentTree.getChildCount() ; i ++ ) {
+        final SyntacticTree child = parentTree.getChildAt( i ) ;
+        if( child.isOneOf( nodeKind ) && identifierCollisions.implicitIdentifierCollides( child ) ) {
+          treepath = TreepathTools.removeEnd(  Treepath.create( treepath, i ) ) ;
+        }
+      }
+      final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;
+      if( next == null ) {
+        return treepath ;
+      } else {
+        treepath = next ;
+      }
+    }
+  }
+
 }

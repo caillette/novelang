@@ -214,7 +214,7 @@ public class DesignatorInterpreterEnrichmentTest {
     final Treepath< SyntacticTree > originalTreepath = Treepath.create( originalTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized = DesignatorInterpreterAccessor.enrich(
-        DesignatorInterpreter.TRAVERSAL.first( originalTreepath ),
+        DesignatorTools.TRAVERSAL.first( originalTreepath ),
 //        originalTreepath,
         fragmentMapper
     ) ;

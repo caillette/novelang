@@ -86,18 +86,12 @@ public class DesignatorInterpreter {
 
   private final Iterable< Problem > problems  ;
 
-  /**
-   * Made package-protected for tests.
-   */
-  /*package*/ static final Traversal.MirroredPostorder< SyntacticTree > TRAVERSAL =
-      Traversal.MirroredPostorder.create( DesignatorTools.IDENTIFIER_TREE_FILTER )
-  ;
   private final Treepath< SyntacticTree > enrichedTreepath;
 
   public DesignatorInterpreter( final Treepath< SyntacticTree > treepath ) {
     final BabyInterpreter babyInterpreter = new BabyInterpreter( treepath ) ;
     enrichedTreepath = enrich(
-        TRAVERSAL.first( treepath ),
+        DesignatorTools.TRAVERSAL.first( treepath ),
         babyInterpreter
     );
 
@@ -190,6 +184,11 @@ public class DesignatorInterpreter {
   ) {
     while( true ) {
 
+//      treepath = removeDirectChildren(
+//          treepath,
+//          NodeKind._IMPLICIT_IDENTIFIER
+//      ) ;
+
       final FragmentIdentifier pureIdentifier =
           findIdentifier( treepath, mapper.getPureIdentifierMap() ) ;
       if( pureIdentifier != null ) {
@@ -206,7 +205,7 @@ public class DesignatorInterpreter {
           NodeKind.RELATIVE_IDENTIFIER
       ) ;
 
-      final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;
+      final Treepath< SyntacticTree > next = DesignatorTools.TRAVERSAL.next( treepath ) ;
 
       if( next == null ) {
         return treepath ;

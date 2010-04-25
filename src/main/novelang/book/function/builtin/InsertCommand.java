@@ -151,9 +151,12 @@ public class InsertCommand extends AbstractCommand {
     final boolean hasIdentifiers = fragmentIdentifiers.iterator().hasNext() ;
 
     if( partTree != null ) {
+
+      final DesignatorInterpreter designatorInterpreter =
+          new DesignatorInterpreter( Treepath.create( partTree ) ) ;
       if( hasIdentifiers ) {
         final AddIdentifiers addIdentifiers = new AddIdentifiers(
-            new DesignatorInterpreter( Treepath.create( partTree ) ), 
+            designatorInterpreter,
             fragmentIdentifiers, 
             getLocation(),
             true
@@ -163,7 +166,9 @@ public class InsertCommand extends AbstractCommand {
         }
         partTrees = removeHeadIfNeeded( levelHead, addIdentifiers.getPartTrees() ) ;
       } else {
-        partTrees = removeHeadIfNeeded( levelHead, partTree.getChildren() ) ;
+        final SyntacticTree partTreeWithIdentifiers =
+            designatorInterpreter.getEnrichedTreepath().getTreeAtStart() ;
+        partTrees = removeHeadIfNeeded( levelHead, partTreeWithIdentifiers.getChildren() ) ;
       }
 
       if( levelHead == LevelHead.CREATE_LEVEL ) {
@@ -266,12 +271,13 @@ public class InsertCommand extends AbstractCommand {
           final SyntacticTree partTree = relocatedPart.getDocumentTree() ;
           final List< SyntacticTree > partChildren = Lists.newArrayList() ;
 
-          if( hasIdentifiers ) {
-            final DesignatorInterpreter designatorInterpreter =
-                new DesignatorInterpreter( Treepath.create( partTree ) ) ;
-            if( designatorInterpreter.hasProblem() ) {
-              Iterables.addAll( problems, designatorInterpreter.getProblems() ) ;
-            } else {
+          final DesignatorInterpreter designatorInterpreter =
+              new DesignatorInterpreter( Treepath.create( partTree ) ) ;
+
+          if( designatorInterpreter.hasProblem() ) {
+            Iterables.addAll( problems, designatorInterpreter.getProblems() ) ;
+          } else {
+            if( hasIdentifiers ) {
               for( final FragmentIdentifier fragmentIdentifier : fragmentIdentifiers ) {
                 final Treepath< SyntacticTree > fragment =
                     designatorInterpreter.get( fragmentIdentifier ) ;
@@ -281,12 +287,12 @@ public class InsertCommand extends AbstractCommand {
                       removeHeadIfNeeded( levelHead, fragment.getTreeAtEnd() ) ) ;
                 }
               }
+            } else {
+              Iterables.addAll( partChildren,
+                  removeHeadIfNeeded( levelHead, partTree.getChildren() ) ) ;
             }
-
-          } else {
-            Iterables.addAll( partChildren,
-                removeHeadIfNeeded( levelHead, partTree.getChildren() ) ) ;
           }
+
 
           if( levelHead == LevelHead.CREATE_LEVEL ) {
             book = createChapterFromPartFilename(
@@ -461,7 +467,7 @@ public class InsertCommand extends AbstractCommand {
     }
     
     public boolean hasDesignatorProblem() {
-      return designatorProblems.size() > 0 ;
+      return ! designatorProblems.isEmpty() ;
     }
     
     public Iterable< Problem > getDesignatorProblems() {

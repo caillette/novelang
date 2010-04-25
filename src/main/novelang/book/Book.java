@@ -17,18 +17,16 @@
 package novelang.book;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.nio.charset.Charset;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 import novelang.common.tree.Statistics;
-import novelang.treemangling.DesignatorInterpreter;
+import novelang.treemangling.designator.IdentifierCollisions;
+import novelang.treemangling.designator.DesignatorTools;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
@@ -124,7 +122,10 @@ public class Book extends AbstractSourceReader {
 
       Statistics.logStatistics( rehierarchized.getTreeAtStart() ) ;
 
-      rehierarchized = new DesignatorInterpreter( rehierarchized ).getEnrichedTreepath() ;
+      // TODO: output colliding explicit identifiers into resulting tree.
+      final IdentifierCollisions collisions = DesignatorTools.findCollisions( rehierarchized ) ;
+      rehierarchized = DesignatorTools.removeCollidingIdentifiers(
+          collisions, rehierarchized, NodeKind._IMPLICIT_IDENTIFIER ) ;
       
       final Set< Tag > tagset = TagMangler.findExplicitTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
