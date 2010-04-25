@@ -418,6 +418,7 @@ public class InsertCommandTest {
                 ),
                 tree( 
                     _LEVEL,
+                    tree( _IMPLICIT_IDENTIFIER  , "\\\\Section" ),
                     tree( _IMPLICIT_TAG, "Section" ),
                     tree( LEVEL_TITLE, tree( WORD_, "Section" ) ),
                     tree( PARAGRAPH_REGULAR, tree( WORD_, "paragraph" ) )

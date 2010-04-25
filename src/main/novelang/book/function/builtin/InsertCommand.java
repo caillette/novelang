@@ -288,8 +288,10 @@ public class InsertCommand extends AbstractCommand {
                 }
               }
             } else {
+              final SyntacticTree treeWithIdentifiers =
+                  designatorInterpreter.getEnrichedTreepath().getTreeAtStart() ;
               Iterables.addAll( partChildren,
-                  removeHeadIfNeeded( levelHead, partTree.getChildren() ) ) ;
+                  removeHeadIfNeeded( levelHead, treeWithIdentifiers.getChildren() ) ) ;
             }
           }
 

@@ -116,9 +116,8 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   protected String readContent( final File file ) {
 
     LOG.info(
-        "Attempting to load file '%s' from %s with charset %s",
+        "Attempting to load file '%s' with charset %s",
         file.getAbsolutePath(),
-        this,
         sourceCharset.name()
     ) ;
 
