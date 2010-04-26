@@ -243,7 +243,7 @@
 
     <div class="descriptor" >
       <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:colliding-explicit-identifier or n:location">
-        <img class="descriptor-disclosure" src="/icons/Descriptor.png"/>
+        <img class="descriptor-disclosure" src="/icons/Descriptor.png" />
         <div class="collapsable-descriptor" style="display : none ;">
 
           <xsl:if test="n:location">

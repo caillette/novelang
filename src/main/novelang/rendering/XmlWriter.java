@@ -142,9 +142,12 @@ public class XmlWriter implements FragmentWriter {
   )
       throws Exception
   {
+    final OutputFormat outputFormat = new OutputFormat( "  ", true, charset.name() ) ;
+    outputFormat.setExpandEmptyElements( false ) ;
+    outputFormat.setXHTML( true ) ;
     return new XMLWriter(
         outputStream,
-        new OutputFormat( "  ", true, charset.name() )
+        outputFormat
     ) ;
   }
 
