@@ -31,13 +31,9 @@ public enum <name> {
   private final boolean punctuationSign ;
   private final TagBehavior tagBehavior ;
 
-  <name>( boolean punctuationSign, TagBehavior tagBehavior ) {
+  <name>( final boolean punctuationSign, final TagBehavior tagBehavior ) {
     this.punctuationSign = punctuationSign ;
     this.tagBehavior = tagBehavior ;
-  }
-
-  public boolean isPunctuationSign() {
-    return punctuationSign ;
   }
 
   public TagBehavior getTagBehavior() {
@@ -47,7 +43,7 @@ public enum <name> {
   private static final Set\< String > NAMES ;
   static {
     final Set\< String > names = Sets.newHashSet() ;
-    for( NodeKind nodeKind : NodeKind.values() ) {
+    for( final NodeKind nodeKind : NodeKind.values() ) {
       names.add( nodeKind.name() ) ;
     }
     NAMES = Collections.unmodifiableSet( names ) ;
