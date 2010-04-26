@@ -55,6 +55,7 @@
   <xsl:template match="n:absolute-identifier" />
   <xsl:template match="n:implicit-identifier" />
   <xsl:template match="n:explicit-identifier" />
+  <xsl:template match="n:colliding-explicit-identifier" />
 
   
 </xsl:stylesheet>

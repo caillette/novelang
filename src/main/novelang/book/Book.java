@@ -124,9 +124,11 @@ public class Book extends AbstractSourceReader {
 
       // TODO: output colliding explicit identifiers into resulting tree.
       final IdentifierCollisions collisions = DesignatorTools.findCollisions( rehierarchized ) ;
-      rehierarchized = DesignatorTools.removeCollidingIdentifiers(
-          collisions, rehierarchized, NodeKind._IMPLICIT_IDENTIFIER ) ;
-      
+      rehierarchized = DesignatorTools.removeCollidingImplicitIdentifiers(
+          collisions, rehierarchized ) ;
+      rehierarchized = DesignatorTools.tagCollidingExplicitIdentifiers(
+          collisions, rehierarchized ) ;
+
       final Set< Tag > tagset = TagMangler.findExplicitTags( rehierarchized.getTreeAtEnd() ) ;
       rehierarchized = ListMangler.rehierarchizeLists( rehierarchized ) ;
       rehierarchized = LevelMangler.rehierarchizeLevels( rehierarchized ) ;

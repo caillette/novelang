@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.TagBehavior;
 import novelang.common.tree.Traversal;
@@ -156,20 +157,45 @@ public class DesignatorTools {
   }
 
 
-  public static Treepath< SyntacticTree > removeCollidingIdentifiers(
+  public static Treepath< SyntacticTree > removeCollidingImplicitIdentifiers(
       final IdentifierCollisions identifierCollisions,
-      Treepath< SyntacticTree > treepath,
-      final NodeKind nodeKind
+      Treepath< SyntacticTree > treepath
   ) {
     treepath = TRAVERSAL.first( treepath ) ;
     while( true ) {
       final SyntacticTree parentTree = treepath.getTreeAtEnd() ;
       for( int i = 0 ; i < parentTree.getChildCount() ; i ++ ) {
         final SyntacticTree child = parentTree.getChildAt( i ) ;
-        if( child.isOneOf( nodeKind )
+        if( child.isOneOf( NodeKind._IMPLICIT_IDENTIFIER )
          && identifierCollisions.implicitIdentifierCollides( child )
         ) {
-          treepath = TreepathTools.removeEnd(  Treepath.create( treepath, i ) ) ;
+          treepath = TreepathTools.removeEnd( Treepath.create( treepath, i ) ) ;
+        }
+      }
+      final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;
+      if( next == null ) {
+        return treepath ;
+      } else {
+        treepath = next ;
+      }
+    }
+  }
+
+  public static Treepath< SyntacticTree > tagCollidingExplicitIdentifiers(
+      final IdentifierCollisions identifierCollisions,
+      Treepath< SyntacticTree > treepath
+  ) {
+    treepath = TRAVERSAL.first( treepath ) ;
+    while( true ) {
+      final SyntacticTree parentTree = treepath.getTreeAtEnd() ;
+      for( int i = 0 ; i < parentTree.getChildCount() ; i ++ ) {
+        final SyntacticTree child = parentTree.getChildAt( i ) ;
+        if( child.isOneOf( NodeKind._EXPLICIT_IDENTIFIER )
+         && identifierCollisions.explicitIdentifierCollides( child )
+        ) {
+          final SyntacticTree newChild = new SimpleTree(
+              NodeKind._COLLIDING_EXPLICIT_IDENTIFIER, child.getChildAt( 0 ) ) ;
+          treepath = TreepathTools.replaceTreepathEnd( Treepath.create( treepath, i ), newChild ) ;
         }
       }
       final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;

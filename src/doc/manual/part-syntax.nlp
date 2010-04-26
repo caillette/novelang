@@ -624,7 +624,8 @@ Here are a few transformation samples for Implicit (and Promoted) Tags:
   
 === Identifiers
 
-XML element: ``n:explicit-identifier``, ``n:implicit-identifier``
+XML element: ``n:implicit-identifier``, ``n:explicit-identifier``,
+``n:colliding-explicit-identifier``
 
 An identifier is a textual marker identifying a level inside a Part.
 The ``insert`` command (explained in "Book syntax" chapter) recognizes identifiers to insert
@@ -699,7 +700,9 @@ It has:
 Implicit identifiers resolve in both absolute and relative identifiers, as long as they don't
 collide with another identifier. That's why ``Other`` cannot resolve as absolute identifier.
 
-
+Novelang checks uniqueness of explicit identifiers within the same Part. Since Parts are created
+independantly, identifiers may collide when aggregating Parts into a single Book.
+With Novelang default HTML stylsheet, colliding identifiers show striked out.
 
 === Escaped characters
 

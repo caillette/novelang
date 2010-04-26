@@ -1,3 +1,9 @@
 --- Added ``nohead`` option to ``insert`` command.
 
 --- Fixed some bugs around identifiers.
+
+--- Introduced detection of colliding explicit identifiers. This has no useful purpose for now but
+will serve as a basis for implementing internal links.
+
+--- Performance enhancement on HTML document rendering in a Web browser: don't use JavaScript
+to set collapsible descriptors hidden.

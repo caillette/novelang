@@ -96,7 +96,8 @@ public class BookTest {
   @Test
   public void insertWithRecursiveFileScan() throws IOException {
     resourceInstaller.copy( TestResourceTree.Scanned.dir ) ;
-    final File scannedBookNoStyle = resourceInstaller.createFileObject( TestResourceTree.Scanned.BOOK ) ;
+    final File scannedBookNoStyle =
+        resourceInstaller.createFileObject( TestResourceTree.Scanned.BOOK ) ;
 
     final Book book = BookTestTools.createBook( scannedBookNoStyle ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -426,10 +427,53 @@ public class BookTest {
    * Test {@link novelang.book.function.builtin.InsertCommand}.
    */
   @Test
+  public void insertWithCollidingIdentifiers() throws IOException {
+    final File bookWithIdentifier =
+        resourceInstaller.copy( TestResourceTree.Identifiers.BOOK_4 ) ;
+    resourceInstaller.copy( TestResourceTree.Identifiers.Subdirectory4.dir ) ;
+
+    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+
+    final SyntacticTree bookTree = book.getDocumentTree() ;
+    TreeFixture.assertEqualsNoSeparators(
+        tree( BOOK,
+            tree( _META, tree( _WORD_COUNT, "4" ) ),
+            tree(
+                _LEVEL,
+                tree( _COLLIDING_EXPLICIT_IDENTIFIER, "\\\\Collider" ),
+                tree( _IMPLICIT_TAG, "L0" ),
+                tree( LEVEL_TITLE, tree( WORD_, "L0" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p0" )
+                )
+            ),
+            tree(
+                _LEVEL,
+                tree( _COLLIDING_EXPLICIT_IDENTIFIER, "\\\\Collider" ),
+                tree( _IMPLICIT_TAG, "L1" ),
+                tree( LEVEL_TITLE, tree( WORD_, "L1" ) ),
+                tree(
+                    PARAGRAPH_REGULAR,
+                    tree( WORD_, "p1" )
+                )
+            )
+        ),
+        bookTree
+    ) ;
+    assertFalse( book.hasProblem() ) ;
+  }
+
+
+  /**
+   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   */
+  @Test
   public void insertWithRecurseShouldKeepImplicitIdentifiers() throws IOException {
     final File bookWithIdentifier =
         resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_3_RECURSE ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory.PART_3 ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory3.PART_3 ) ;
 
     verifyBook3( bookWithIdentifier );
   }
@@ -441,7 +485,7 @@ public class BookTest {
   public void insertShouldKeepImplicitIdentifiers() throws IOException {
     final File bookWithIdentifier =
         resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_3_STRAIGHT ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory.PART_3 ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory3.PART_3 ) ;
 
     verifyBook3( bookWithIdentifier );
   }

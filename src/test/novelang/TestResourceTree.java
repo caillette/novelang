@@ -197,10 +197,17 @@ public final class TestResourceTree {
     Resource PART_2 = resource( "identifiers-2.nlp" ) ;
     Resource BOOK_3_STRAIGHT = resource( "identifiers-book3-straight.nlb" ) ;
     Resource BOOK_3_RECURSE = resource( "identifiers-book3-recurse.nlb" ) ;
+    Resource BOOK_4 = resource( "identifiers-book4.nlb" ) ;
 
-    interface Subdirectory {
-      Directory dir = directory( "sub" ) ;
+    interface Subdirectory3 {
+      Directory dir = directory( "sub3" ) ;
       Resource PART_3 = resource( "identifiers-3.nlp" ) ;
+    }
+
+    interface Subdirectory4 {
+      Directory dir = directory( "sub4" ) ;
+      Resource PART_4_0 = resource( "identifiers-4-0.nlp" ) ;
+      Resource PART_4_1 = resource( "identifiers-4-1.nlp" ) ;
     }
   }
 

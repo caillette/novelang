@@ -21,8 +21,6 @@ const INACTIVE_BACKGROUND = "#e4e4e4" ;
 
 function initializeTabs() {
 
-  $( ".collapsable-descriptor" ).hide() ;
-
   $( ".descriptor-disclosure" ).click( function() {
 
     var descriptor = $( this ).parent() ;

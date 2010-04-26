@@ -242,9 +242,9 @@
     <xsl:param name="css-class" />
 
     <div class="descriptor" >
-      <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:location">
+      <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:colliding-explicit-identifier or n:location">
         <img class="descriptor-disclosure" src="/icons/Descriptor.png"/>
-        <div class="collapsable-descriptor">
+        <div class="collapsable-descriptor" style="display : none ;">
 
           <xsl:if test="n:location">
             <span class="location">
@@ -259,6 +259,13 @@
             </p>
           </xsl:if>
           
+          <xsl:if test="n:colliding-explicit-identifier">
+            <br/>
+            <p class="colliding-explicit-identifier" >
+              <xsl:value-of select="n:colliding-explicit-identifier"/>
+            </p>
+          </xsl:if>
+
           <xsl:if test="n:implicit-identifier">
             <br/>
             <p class="implicit-identifier">

@@ -449,6 +449,10 @@ ul.tags {
   font-family : Lucida Grande, Tahoma, Geneva, sans-serif ;
 }
 
+.colliding-explicit-identifier {
+  text-decoration : line-through ;
+}
+
 .explicit-tag, .promoted-tag, .implicit-tag,
 .implicit-identifier, .explicit-identifier
 {
