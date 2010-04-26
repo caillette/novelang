@@ -105,7 +105,9 @@ public class DesignatorTools {
   public static IdentifierCollisions findCollisions( Treepath< SyntacticTree > treepath ) {
     final Set< String > implicitIdentifiers = Sets.newHashSet() ;
     final Set< String > implicitIdentifierCollisions = Sets.newHashSet() ;
-    treepath = TRAVERSAL.first( treepath ) ;
+    final Set< String > explicitIdentifiers = Sets.newHashSet() ;
+    final Set< String > explicitIdentifierCollisions = Sets.newHashSet() ;
+    treepath = TRAVERSAL.first( treepath ) ; // No need for reverse preorder but reusing filter.
 
     while( true ) {
       detectCollisions(
@@ -114,11 +116,20 @@ public class DesignatorTools {
           implicitIdentifierCollisions,
           NodeKind._IMPLICIT_IDENTIFIER
       ) ;
+      detectCollisions(
+          treepath,
+          explicitIdentifiers,
+          explicitIdentifierCollisions,
+          NodeKind._EXPLICIT_IDENTIFIER
+      ) ;
       final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;
       if( next == null ) {
         return new IdentifierCollisions() {
           public boolean implicitIdentifierCollides( final SyntacticTree tree ) {
             return implicitIdentifierCollisions.contains( tree.getChildAt( 0 ).getText() ) ;
+          }
+          public boolean explicitIdentifierCollides( final SyntacticTree tree ) {
+            return explicitIdentifierCollisions.contains( tree.getChildAt( 0 ).getText() ) ;
           }
         } ;
       } else {
@@ -155,7 +166,9 @@ public class DesignatorTools {
       final SyntacticTree parentTree = treepath.getTreeAtEnd() ;
       for( int i = 0 ; i < parentTree.getChildCount() ; i ++ ) {
         final SyntacticTree child = parentTree.getChildAt( i ) ;
-        if( child.isOneOf( nodeKind ) && identifierCollisions.implicitIdentifierCollides( child ) ) {
+        if( child.isOneOf( nodeKind )
+         && identifierCollisions.implicitIdentifierCollides( child )
+        ) {
           treepath = TreepathTools.removeEnd(  Treepath.create( treepath, i ) ) ;
         }
       }

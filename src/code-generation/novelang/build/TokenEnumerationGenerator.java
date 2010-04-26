@@ -91,7 +91,8 @@ public class TokenEnumerationGenerator extends GrammarBasedJavaGenerator {
       new Item( "_EXPLICIT_IDENTIFIER" ),
       new Item( "_IMPLICIT_TAG" ),
       new Item( "_PROMOTED_TAG" ),
-      new Item( "_EXPLICIT_TAG" ) 
+      new Item( "_EXPLICIT_TAG" ),
+      new Item( "_COLLIDING_EXPLICIT_TAG" )
 
   ) ;
 
@@ -100,9 +101,11 @@ public class TokenEnumerationGenerator extends GrammarBasedJavaGenerator {
 
   private static final Pattern ONE_TOKEN_PATTERN ;
   static {
-    final StringBuffer regexBuilder = new StringBuffer() ;
+    final StringBuilder regexBuilder = new StringBuilder();
+    //noinspection HardcodedFileSeparator
     regexBuilder.append( "(?: *([A-Z_]+) *;)(?: *//" ) ;
     for( final TokenProperty tokenProperty : TokenProperty.values() ) {
+      //noinspection HardcodedFileSeparator
       regexBuilder
           .append( "(?:\\s+" )
           .append( tokenProperty.getPublicName() )

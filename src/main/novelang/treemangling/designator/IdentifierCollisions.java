@@ -30,4 +30,9 @@ public interface IdentifierCollisions {
    */
   boolean implicitIdentifierCollides( SyntacticTree tree ) ;
 
+  /**
+   * @param tree has a {@link novelang.common.SyntacticTree#getNodeKind() kind} of ...IDENTIFIER.
+   */
+  boolean explicitIdentifierCollides( SyntacticTree tree ) ;
+
 }
