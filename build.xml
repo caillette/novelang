@@ -647,6 +647,15 @@
         documentRequest="/${source.versions.dir.name}/${project.version}.html?stylesheet=announcement-html.xsl"
         contentProperty="html"
     />
+
+
+    <novelang
+        contentRoot="${source.manual.dir}"
+        styleDirectory="${source.manual.dir}/style"
+        documentRequest="/${source.versions.dir.name}/${project.version}.nlp?stylesheet=announcement-plaintext.xsl"
+        contentProperty="plaintext"
+    />
+    
     <echo>About to send:
 ${html}
     </echo>
@@ -672,15 +681,11 @@ ${html}
     </mail>
 
 
-    <novelang
-        contentRoot="${source.manual.dir}"
-        styleDirectory="${source.manual.dir}/style"
-        documentRequest="/${source.versions.dir.name}/${project.version}.html?stylesheet=announcement-plaintext.xsl"
-        contentProperty="plaintext"
-    />
+
     <echo>About to send:
 ${plaintext}
     </echo>
+
 
     <mail
         mailhost="${publish.mailhost}"
@@ -702,26 +707,21 @@ A new release of Novelang is available from download. Get it "here"
 ${announcement.download.url}
 now!
 
-These are the outstanding changes in `${project.versionedname}`:
+Outstanding changes in `${project.versionedname}`:
 ${plaintext}
 
-
 Enjoy!
-
 
 The Novelang team
 
 ${announcement.project.homepage}
 ${announcement.project.blog}
 
-This mail is written in Novelang.
+(This mail is written in Novelang.)
       </message>
     </mail>
+
   </target>
-
-
-
-
 
 
 
