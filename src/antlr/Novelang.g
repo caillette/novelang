@@ -23,7 +23,7 @@ options { output = AST ; }
 // Beware of line comments, which are processed.
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;        // tagbehavior=SCOPE
-  BOOK ;                                          // tagbehavior=TRAVERSABLE 
+  COMPOSIUM ;                                     // tagbehavior=TRAVERSABLE 
   LEVEL_INTRODUCER_ ;
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
@@ -69,7 +69,7 @@ tokens {
   SIGN_SEMICOLON ;       // punctuationsign=true
   SIGN_COLON ;           // punctuationsign=true
 
-  // Book stuff
+  // Composium stuff
   
   COMMAND_INSERT_ ;
   COMMAND_INSERT_CREATELEVEL_ ;
@@ -1846,17 +1846,17 @@ escapedCharacter returns [ String unescaped ]
   ;
 
 
-// ==================
-// Book-related rules
-// ==================
+// =======================
+// Composium-related rules
+// =======================
 
-book
+composium
   : ( mediumbreak | largebreak )?
     functionCall
     ( largebreak functionCall )*      
     ( mediumbreak | largebreak )?
     EOF 
-    -> ^( BOOK functionCall* )
+    -> ^( COMPOSIUM functionCall* )
   ;
   
 

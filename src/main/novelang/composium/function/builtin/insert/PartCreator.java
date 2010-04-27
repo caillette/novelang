@@ -1,4 +1,4 @@
-package novelang.book.function.builtin.insert;
+package novelang.composium.function.builtin.insert;
 
 import java.io.File;
 import java.nio.charset.Charset;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.book;
+package novelang.composium;
 
 import novelang.TestResourceTree;
 import static novelang.TestResourceTree.initialize;
@@ -40,13 +40,13 @@ import java.io.IOException;
 import java.util.Iterator;
 
 /**
- * Test for {@link Book} and also built-in functions.
+ * Test for {@link Composium} and also built-in functions.
  * 
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "HardcodedFileSeparator" } )
 @RunWith( value = NameAwareTestClassRunner.class )
-public class BookTest {
+public class ComposiumTest {
 
   /**
    * Test that some parsing error produces a Problem.
@@ -55,29 +55,29 @@ public class BookTest {
   public void badCommandGeneratesProblem() {
     final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
-    final Book book = BookTestTools.createBook(
+    final Composium composium = ComposiumTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath() + " $recurse" // old syntax
     ) ;
-    assertTrue( book.hasProblem() ) ;
+    assertTrue( composium.hasProblem() ) ;
 
   }
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void justInsert() {
     final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
-    final Book book = BookTestTools.createBook(
+    final Composium composium = ComposiumTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + absoluteFilePath
     ) ;
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "1" ) ),
             tree(
                 PARAGRAPH_REGULAR,
@@ -86,12 +86,12 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
 
   }
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithRecursiveFileScan() throws IOException {
@@ -99,12 +99,12 @@ public class BookTest {
     final File scannedBookNoStyle =
         resourceInstaller.createFileObject( TestResourceTree.Scanned.BOOK ) ;
 
-    final Book book = BookTestTools.createBook( scannedBookNoStyle ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( scannedBookNoStyle ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
@@ -133,13 +133,13 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
 
 
   }
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithFlatFileScan() throws IOException {
@@ -147,13 +147,13 @@ public class BookTest {
     final File scannedBookNoStyleNoRecurse = resourceInstaller.createFileObject(
         TestResourceTree.Scanned.BOOK_NORECURSE ) ;
 
-    final Book book = BookTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( 
-            BOOK,
+        tree(
+            COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 PARAGRAPH_REGULAR,
@@ -166,14 +166,14 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
 
 
   }
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithFileScanAndStyle() throws IOException {
@@ -181,12 +181,12 @@ public class BookTest {
     final File scannedBookWithStyle = resourceInstaller.createFileObject(
         TestResourceTree.Scanned.BOOK_WITHSTYLE ) ;
 
-    final Book book = BookTestTools.createBook( scannedBookWithStyle );
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( scannedBookWithStyle );
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
@@ -218,13 +218,13 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
   }
 
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithBadPart() throws IOException {
@@ -232,16 +232,16 @@ public class BookTest {
     final File scannedBookWithBadPart =
         resourceInstaller.copy( TestResourceTree.Served.BROKEN_BOOK_BAD_SCANNED_NOVELLA ) ;
 
-    final Book book = BookTestTools.createBook( scannedBookWithBadPart ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( scannedBookWithBadPart ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    assertTrue( book.hasProblem() ) ;
+    assertTrue( composium.hasProblem() ) ;
 
   }
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand} and empty Novella detection
+   * Test {@link novelang.composium.function.builtin.InsertCommand} and empty Novella detection
    * in {@link novelang.common.AbstractSourceReader}.
    */
   @Test
@@ -250,9 +250,9 @@ public class BookTest {
     resourceInstaller.copy( emptyPartResource ) ;
     final File bookFile = resourceInstaller.copy( TestResourceTree.BookWithEmptyPart.BOOK ) ;
 
-    final Book book = BookTestTools.createBook( bookFile ) ;
+    final Composium composium = ComposiumTestTools.createBook( bookFile ) ;
 
-    final Iterator< Problem > problems = book.getProblems().iterator() ;
+    final Iterator< Problem > problems = composium.getProblems().iterator() ;
     assertTrue( problems.hasNext() ) ;
     final Problem problem = problems.next() ;
     assertTrue( problem.getMessage().contains( "Novella is empty" ) ) ;
@@ -263,7 +263,7 @@ public class BookTest {
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void detectMissingImage() throws IOException {
@@ -271,16 +271,16 @@ public class BookTest {
     final File scannedBookWithBadImage =
         resourceInstaller.copy( TestResourceTree.MissingImages.MISSING_IMAGE_BOOK ) ;
 
-    final Book book = BookTestTools.createBook( scannedBookWithBadImage ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( scannedBookWithBadImage ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    assertTrue( book.hasProblem() ) ;
+    assertTrue( composium.hasProblem() ) ;
 
   }
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithExplicitIdentifiers() throws IOException {
@@ -289,12 +289,12 @@ public class BookTest {
     final File bookWithIdentifier =
         resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK_1 ) ;
 
-    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 _LEVEL,
@@ -309,12 +309,12 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
   }
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithPromotedTags() throws IOException {
@@ -322,13 +322,13 @@ public class BookTest {
         resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_BOOK ) ;
     resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_PART_1 ) ;
 
-    final Book book = BookTestTools.createBook( bookWithTags ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
-    assertFalse( book.hasProblem() ) ;
+    final Composium composium = ComposiumTestTools.createBook( bookWithTags ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    assertFalse( composium.hasProblem() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( 
                 _META, 
                 tree( _WORD_COUNT, "7" ),
@@ -373,7 +373,7 @@ public class BookTest {
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithImplicitIdentifiers() throws IOException {
@@ -381,12 +381,12 @@ public class BookTest {
         resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_2 ) ;
     resourceInstaller.copyWithPath( TestResourceTree.Identifiers.NOVELLA_2 ) ;
 
-    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
@@ -419,12 +419,12 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
   }
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithCollidingIdentifiers() throws IOException {
@@ -432,12 +432,12 @@ public class BookTest {
         resourceInstaller.copy( TestResourceTree.Identifiers.BOOK_4 ) ;
     resourceInstaller.copy( TestResourceTree.Identifiers.Subdirectory4.dir ) ;
 
-    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "4" ) ),
             tree(
                 _LEVEL,
@@ -462,12 +462,12 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
   }
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithRecurseShouldKeepImplicitIdentifiers() throws IOException {
@@ -479,7 +479,7 @@ public class BookTest {
   }
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void insertShouldKeepImplicitIdentifiers() throws IOException {
@@ -498,19 +498,19 @@ public class BookTest {
     initialize() ;
   }
 
-  private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( ComposiumTest.class ) ;
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
 
 
   private static void verifyBook3( final File bookWithIdentifier ) throws IOException {
-    final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _META, tree( _WORD_COUNT, "8" ) ),
             tree(
                 _LEVEL,
@@ -556,7 +556,7 @@ public class BookTest {
         ),
         bookTree
     ) ;
-    assertFalse( book.hasProblem() ) ;
+    assertFalse( composium.hasProblem() ) ;
   }
 
 

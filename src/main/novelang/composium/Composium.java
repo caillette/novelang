@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.book;
+package novelang.composium;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,9 +31,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.base.Preconditions;
 
-import novelang.book.function.CommandParameterException;
-import novelang.book.function.Command;
-import novelang.book.function.CommandFactory;
+import novelang.composium.function.CommandParameterException;
+import novelang.composium.function.Command;
+import novelang.composium.function.CommandFactory;
 import novelang.common.AbstractSourceReader;
 import novelang.common.Problem;
 import novelang.common.SimpleTree;
@@ -52,16 +52,16 @@ import novelang.parser.antlr.DelegatingBookParser;
 import novelang.treemangling.TagMangler;
 
 /**
- * Reads a Book file, processes functions and builds a Tree with inclusions and so on.
+ * Reads a Composium file, processes functions and builds a Tree with inclusions and so on.
  *
  * @author Laurent Caillette
  */
-public class Book extends AbstractSourceReader {
+public class Composium extends AbstractSourceReader {
 
   private final CommandExecutionContext environment ;
 
 
-  public Book(
+  public Composium(
       final File baseDirectory,
       final File bookFile,
       final ExecutorService executorService,
@@ -81,7 +81,7 @@ public class Book extends AbstractSourceReader {
   }
 
 
-  public Book(
+  public Composium(
       final File baseDirectory,
       final File bookDirectory,
       final ExecutorService executorService,
@@ -114,7 +114,7 @@ public class Book extends AbstractSourceReader {
 
       final Iterable< Command > commands = createCommands( new CommandFactory(), rawTree ) ;
       currentEnvironment = callCommands(
-          currentEnvironment.update( new SimpleTree( NodeKind.BOOK ) ),
+          currentEnvironment.update( new SimpleTree( NodeKind.COMPOSIUM ) ),
           commands
       ) ;
       Treepath< SyntacticTree > rehierarchized =

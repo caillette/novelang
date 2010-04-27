@@ -14,15 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.book;
+package novelang.composium;
 
-import novelang.DirectoryFixture;
 import static novelang.TestResourceTree.Images;
 import static novelang.TestResourceTree.initialize;
 
 import novelang.TestResourceTools;
 import novelang.common.SyntacticTree;
-import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -46,19 +44,19 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Tests for {@link Book} with embedded images.
+ * Tests for {@link Composium} with embedded images.
  *
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
-public class BookWithImagesTest {
+public class ComposiumWithImagesTest {
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void imagesInPartsWithExplicitNames() throws IOException {
-    final Book book = new Book(
+    final Composium composium = new Composium(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesExplicit,
         TestResourceTools.getExecutorService(),
@@ -66,22 +64,22 @@ public class BookWithImagesTest {
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
     ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
         EXPECTED_BOOK_TREE,
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    Assert.assertFalse( composium.hasProblem() ) ;
   }
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand}.
+   * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void imagesInPartsWithRecurse() throws IOException {
-    final Book book = new Book(
+    final Composium composium = new Composium(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesRecurse,
         TestResourceTools.getExecutorService(),
@@ -89,14 +87,14 @@ public class BookWithImagesTest {
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
     ) ;
-    LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = book.getDocumentTree() ;
+    final SyntacticTree bookTree = composium.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
         EXPECTED_BOOK_TREE,
         bookTree
     ) ;
-    Assert.assertFalse( book.hasProblem() ) ;
+    Assert.assertFalse( composium.hasProblem() ) ;
   }
 
 
@@ -136,7 +134,7 @@ public class BookWithImagesTest {
     LOG.info( "bookWithImagesRecurse: '%s'", bookWithImagesRecurse );
   }
 
-  private static final Log LOG = LogFactory.getLog( BookWithImagesTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( ComposiumWithImagesTest.class ) ;
 
   private static final String VECTOR_IMAGE_WIDTH = Images.VECTOR_IMAGE_WIDTH ;
   private static final String VECTOR_IMAGE_HEIGHT = Images.VECTOR_IMAGE_HEIGHT ;
@@ -144,7 +142,7 @@ public class BookWithImagesTest {
   private static final String RASTER_IMAGE_HEIGHT = Images.RASTER_IMAGE_HEIGHT ;
 
   private static final SyntacticTree EXPECTED_BOOK_TREE = tree(
-      BOOK,
+      COMPOSIUM,
       tree( _META, tree( _WORD_COUNT, "0" ) ),
       tree(
           VECTOR_IMAGE,

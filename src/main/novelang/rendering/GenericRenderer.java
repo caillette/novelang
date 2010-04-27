@@ -191,7 +191,7 @@ public class GenericRenderer implements Renderer {
         processByDefault( tree, createNodepath( kinship, LEVEL_TITLE ), false ) ;
         break ;
 
-      case BOOK:
+      case COMPOSIUM:
       case NOVELLA:
         isRootElement = true ;
 

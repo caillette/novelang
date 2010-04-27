@@ -1,4 +1,4 @@
-package novelang.book.function.builtin;
+package novelang.composium.function.builtin;
 
 import novelang.Version;
 import novelang.VersionFormatException;

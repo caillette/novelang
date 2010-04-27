@@ -148,7 +148,7 @@ public class TagMangler {
             }
           }
         case NOVELLA:
-        case BOOK :
+        case COMPOSIUM:
           // TODO replace by Traversal.getFirst()
           next = PREORDER.next( next ) ;
           break ;
@@ -222,7 +222,7 @@ public class TagMangler {
 
       switch( nodeKind ) {
         case NOVELLA:
-        case BOOK :
+        case COMPOSIUM:
           // TODO replace by Traversal.getFirst()
           next = PREORDER.next( next ) ;
           break ;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.book.function.builtin;
+package novelang.composium.function.builtin;
 
 import java.io.File;
 
@@ -23,15 +23,15 @@ import org.junit.Assert;
 import org.junit.Test;
 import novelang.system.LogFactory;
 import novelang.system.Log;
-import novelang.book.CommandExecutionContext;
-import novelang.book.function.CommandParameterException;
+import novelang.composium.CommandExecutionContext;
+import novelang.composium.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.loader.ResourceName;
 import novelang.rendering.RenditionMimeType;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Tests for {@link novelang.book.function.builtin.MapstylesheetCommand}.
+ * Tests for {@link novelang.composium.function.builtin.MapstylesheetCommand}.
  *
  * @author Laurent Caillette
  */

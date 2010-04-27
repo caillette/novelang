@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.book.function.builtin;
+package novelang.composium.function.builtin;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
 import novelang.TestResourceTools;
-import novelang.book.function.builtin.insert.LevelHead;
+import novelang.composium.function.builtin.insert.LevelHead;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import static org.junit.Assert.*;
@@ -33,8 +33,8 @@ import com.google.common.collect.ImmutableList;
 import novelang.TestResourceTree;
 import novelang.designator.FragmentIdentifier;
 import static novelang.TestResourceTree.initialize;
-import novelang.book.CommandExecutionContext;
-import novelang.book.function.CommandParameterException;
+import novelang.composium.CommandExecutionContext;
+import novelang.composium.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
@@ -77,7 +77,7 @@ public class InsertCommandTest {
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
             TestResourceTools.getExecutorService()
-        ).update( new SimpleTree( BOOK ) )
+        ).update( new SimpleTree( COMPOSIUM ) )
     ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
@@ -88,7 +88,7 @@ public class InsertCommandTest {
     assertNotNull( result.getDocumentTree() ) ;
 
     assertEqualsNoSeparators(
-        tree( BOOK, tree( PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
+        tree( COMPOSIUM, tree( PARAGRAPH_REGULAR, tree( WORD_, "oneword" ) ) ),
         result.getDocumentTree()
     ) ;
 
@@ -112,7 +112,7 @@ public class InsertCommandTest {
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
             TestResourceTools.getExecutorService()
-        ).update( new SimpleTree( BOOK ) )
+        ).update( new SimpleTree( COMPOSIUM ) )
     ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
@@ -141,7 +141,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
+    final SyntacticTree initialTree = new SimpleTree( COMPOSIUM ) ;
     final CommandExecutionContext initialContext =
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
@@ -155,7 +155,7 @@ public class InsertCommandTest {
     assertNotNull( documentTree ) ;
 
     assertEqualsNoSeparators(
-        tree( BOOK,
+        tree( COMPOSIUM,
             tree( _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "no-chapter" ) ),
                 tree( _LEVEL,
@@ -187,7 +187,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
+    final SyntacticTree initialTree = new SimpleTree( COMPOSIUM ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
@@ -199,7 +199,7 @@ public class InsertCommandTest {
 
     assertEqualsNoSeparators(
         tree(
-            BOOK,
+            COMPOSIUM,
             tree(
                 PARAGRAPH_REGULAR,
                 tree( _STYLE, "myStyle" ),
@@ -225,7 +225,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
+    final SyntacticTree initialTree = new SimpleTree( COMPOSIUM ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
@@ -252,7 +252,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
+    final SyntacticTree initialTree = new SimpleTree( COMPOSIUM ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             brokenContentDirectory,
@@ -281,7 +281,7 @@ public class InsertCommandTest {
     ) ;
 
     final SyntacticTree initialTree = tree(
-        BOOK,
+        COMPOSIUM,
         tree(
             _LEVEL,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
@@ -299,7 +299,7 @@ public class InsertCommandTest {
 
     assertEqualsNoSeparators(
         tree(
-            BOOK,
+            COMPOSIUM,
             tree(
                 _LEVEL,
                 tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
@@ -322,7 +322,7 @@ public class InsertCommandTest {
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
     final SyntacticTree book = tree(
-        BOOK,
+        COMPOSIUM,
         tree( PARAGRAPH_REGULAR ),
         level
     ) ;
@@ -341,7 +341,7 @@ public class InsertCommandTest {
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
     final SyntacticTree book = tree(
-        BOOK,
+        COMPOSIUM,
         tree( PARAGRAPH_REGULAR ),
         tree( _LEVEL, level )
     ) ;
@@ -368,7 +368,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of()
     ) ;
 
-    final SyntacticTree initialTree = new SimpleTree( BOOK ) ;
+    final SyntacticTree initialTree = new SimpleTree( COMPOSIUM ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
@@ -397,7 +397,7 @@ public class InsertCommandTest {
     ) ;
 
     final SyntacticTree initialTree = tree(
-        BOOK,
+        COMPOSIUM,
         tree( _LEVEL )
     ) ;
     final CommandExecutionContext result = insertCommand.evaluate(
@@ -408,8 +408,8 @@ public class InsertCommandTest {
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
     assertEqualsNoSeparators( 
-        tree( 
-            BOOK, 
+        tree(
+            COMPOSIUM,
             tree( 
                 _LEVEL,
                 tree(
@@ -450,7 +450,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
     ) ;
 
-    final SyntacticTree initialTree = tree( BOOK ) ;
+    final SyntacticTree initialTree = tree( COMPOSIUM ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
@@ -462,7 +462,7 @@ public class InsertCommandTest {
 
     assertEqualsNoSeparators(
         tree(
-            BOOK,
+            COMPOSIUM,
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
@@ -498,7 +498,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
     ) ;
 
-    final SyntacticTree initialTree = tree( BOOK ) ;
+    final SyntacticTree initialTree = tree( COMPOSIUM ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
@@ -511,7 +511,7 @@ public class InsertCommandTest {
 
     assertEqualsNoSeparators(
         tree(
-            BOOK,
+            COMPOSIUM,
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-2-4" ) ),
@@ -547,7 +547,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-1-0" ) )
     ) ;
 
-    final SyntacticTree initialTree = tree( BOOK ) ;
+    final SyntacticTree initialTree = tree( COMPOSIUM ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
@@ -560,7 +560,7 @@ public class InsertCommandTest {
 
     assertEqualsNoSeparators(
         tree(
-            BOOK,
+            COMPOSIUM,
             tree( PARAGRAPH_REGULAR, tree( WORD_, "Paragraph-1-0" ) )
         ),
         result.getDocumentTree()
@@ -590,7 +590,7 @@ public class InsertCommandTest {
         )
     ) ;
 
-    final SyntacticTree initialTree = tree( BOOK ) ;
+    final SyntacticTree initialTree = tree( COMPOSIUM ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext( 
@@ -603,7 +603,7 @@ public class InsertCommandTest {
 
     assertEqualsNoSeparators(
         tree(
-            BOOK,
+            COMPOSIUM,
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, tree( "\\\\level-1-0" ) ),
@@ -642,7 +642,7 @@ public class InsertCommandTest {
         ImmutableList.< FragmentIdentifier >of( new FragmentIdentifier( "level-2-4" ) )
     ) ;
 
-    final SyntacticTree initialTree = tree( BOOK ) ;
+    final SyntacticTree initialTree = tree( COMPOSIUM ) ;
 
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(

@@ -1,12 +1,12 @@
-package novelang.book.function.builtin;
+package novelang.composium.function.builtin;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import novelang.book.CommandExecutionContext;
-import novelang.book.function.CommandParameterException;
-import novelang.book.function.builtin.insert.LevelHead;
-import novelang.book.function.builtin.insert.PartCreator;
+import novelang.composium.CommandExecutionContext;
+import novelang.composium.function.CommandParameterException;
+import novelang.composium.function.builtin.insert.LevelHead;
+import novelang.composium.function.builtin.insert.PartCreator;
 import novelang.common.FileTools;
 import novelang.common.Location;
 import novelang.common.Problem;

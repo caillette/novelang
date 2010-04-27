@@ -45,7 +45,7 @@ public class NovellaParsingTest {
 
   /**
    * An attempt to reproduce bad behavior occuring with 
-   * {@link novelang.book.BookWithImagesTest#imagesInPartsWithExplicitNames}.
+   * {@link novelang.composium.ComposiumWithImagesTest#imagesInPartsWithExplicitNames}.
    */
   @Test
   public void partIsTwoImages() {

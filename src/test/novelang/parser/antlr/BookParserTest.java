@@ -23,15 +23,15 @@ import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import org.junit.Test;
 
 /**
- * Tests for Book parsing (with functions).
+ * Tests for Composium parsing (with functions).
  * 
  * @author Laurent Caillette
  */
 public class BookParserTest {
-  
+
   @Test
   public void book() {
-    PARSERMETHOD_BOOK.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_COMPOSIUM.checkTreeAfterSeparatorRemoval(
         BREAK + BREAK +
         " insert file:x/y/z createlevel " + BREAK +
         "   style=whatever" + BREAK +
@@ -42,7 +42,7 @@ public class BookParserTest {
         " insert file:uvw.nlp " + BREAK         
         ,
         tree(
-            BOOK,
+            COMPOSIUM,
             tree(
                 COMMAND_INSERT_,
                 tree( URL_LITERAL, "file:x/y/z" ),
@@ -220,7 +220,7 @@ public class BookParserTest {
   private static final ParserMethod PARSERMETHOD_FUNCTIONCALL_MAPSTYLESHEET =
       new ParserMethod( "functionCallMapstylesheet" ) ;
   
-  private static final ParserMethod PARSERMETHOD_BOOK = new ParserMethod( "book" ) ;
+  private static final ParserMethod PARSERMETHOD_COMPOSIUM = new ParserMethod( "composium" ) ;
   
   
   

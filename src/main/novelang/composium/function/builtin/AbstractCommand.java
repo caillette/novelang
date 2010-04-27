@@ -1,9 +1,7 @@
-package novelang.book.function.builtin;
+package novelang.composium.function.builtin;
 
-import novelang.book.function.Command;
+import novelang.composium.function.Command;
 import novelang.common.Location;
-
-import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette

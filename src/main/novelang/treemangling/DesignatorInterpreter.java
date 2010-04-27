@@ -216,7 +216,7 @@ public class DesignatorInterpreter {
   }
 
   /**
-   * This is useful because we need to generate implicit identifiers at {@link novelang.book.Book}
+   * This is useful because we need to generate implicit identifiers at {@link novelang.composium.Composium}
    * level since implicit identifiers may not be the same as those calculate at
    * {@link novelang.novella.Novella} level. So new identifiers shouldn't collapse with old ones.
    * <ul>

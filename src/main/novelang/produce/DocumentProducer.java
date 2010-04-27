@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutorService;
 import novelang.novella.Novella;
 import novelang.system.LogFactory;
 import novelang.system.Log;
-import novelang.book.Book;
+import novelang.composium.Composium;
 import novelang.common.FileTools;
 import novelang.common.LanguageTools;
 import novelang.common.Problem;
@@ -161,9 +161,9 @@ public class DocumentProducer {
       final File bookFile = FileTools.load(
           basedir,
           documentRequest.getDocumentSourceName(),
-          StructureKind.BOOK.getFileExtensions()
+          StructureKind.COMPOSIUM.getFileExtensions()
       ) ;
-      return new Book(
+      return new Composium(
           basedir,
           bookFile,
           executorService,

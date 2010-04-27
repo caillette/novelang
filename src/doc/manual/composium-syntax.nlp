@@ -1,18 +1,18 @@
 
-== Book files
+== Composium files
 
-Book files aggregate novella files. Book files have the ``.nlb`` suffix  (like NoveLang Book).
+Composium files aggregate novella files. Composium files have the ``.nlb`` suffix  (like NoveLang Composium).
 
 
   @Identifiers @Command
 === Command : ``insert``
 
-Book files are useful when there is too much text to fit inside one Novella file.
-It is also easier to reorganize small Novellas by changing their order in a Book file than
+Composium files are useful when there is too much text to fit inside one Novella file.
+It is also easier to reorganize small Novellas by changing their order in a Composium file than
 copy-pasting inside one big file.
 
-When Novella files become too numerous, Book files can refer to multiple Novella files at once.
-Referring to project layout, here is a well-formed Book file:
+When Novella files become too numerous, Composium files can refer to multiple Novella files at once.
+Referring to project layout, here is a well-formed Composium file:
 
 <<<
 insert file:path/to/myfirstnovella.nlp
@@ -20,7 +20,7 @@ insert file:path/to/myfirstnovella.nlp
 insert file:path/to/mysecondnovella.nlp
 >>>
 
-When the Novellas are located in the same directory as the Book file, the single dot notation
+When the Novellas are located in the same directory as the Composium file, the single dot notation
 (for current directory) is supported:
 
 <<<
@@ -98,7 +98,7 @@ insert file:my-novella \\Some\Identifier \\Some\Other\One
 === Command : ``mapstylesheet``
 
 The "mapstylesheet" command defines a stylesheet for one or more MIME type.
-Referring to project layout above, here is the command to insert in ``book.nlb`` file in order
+Referring to project layout above, here is the command to insert in ``composium.nlb`` file in order
 to render HTML documents with ``html-beautiful.xsl`` and PDF documents with ``pdf-beautiful.xsl``.
 
 <<<

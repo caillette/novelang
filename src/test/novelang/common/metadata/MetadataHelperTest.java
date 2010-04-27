@@ -41,7 +41,7 @@ public class MetadataHelperTest {
   @Test
   public void generateDocumentMetadataNoTags() {
 
-    final SyntacticTree tree = tree( BOOK,
+    final SyntacticTree tree = tree( COMPOSIUM,
         tree( NodeKind.PARAGRAPH_REGULAR,
             tree( WORD_, "foo" ),
             tree( WORD_, "bar" )
@@ -63,7 +63,7 @@ public class MetadataHelperTest {
   @Test
   public void generateDocumentMetadataIncludingTags() {
 
-    final SyntacticTree tree = tree( BOOK,
+    final SyntacticTree tree = tree( COMPOSIUM,
         tree( NodeKind.PARAGRAPH_REGULAR,
             tree( _EXPLICIT_TAG, "t" ),
             tree( WORD_, "foo" ),
@@ -90,7 +90,7 @@ public class MetadataHelperTest {
   @Test
   public void findTags() {
     final SyntacticTree tree = tree(
-        BOOK,
+        COMPOSIUM,
 
         tree(
             _LEVEL,

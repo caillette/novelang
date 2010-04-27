@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.book;
+package novelang.composium;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,17 +26,17 @@ import novelang.system.DefaultCharset;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * Some methods for creating {@link Book} instances easily.
+ * Some methods for creating {@link Composium} instances easily.
  *
  * @author Laurent Caillette
  */
-public class BookTestTools {
+public class ComposiumTestTools {
 
-  public static Book createBook(
+  public static Composium createBook(
       final File baseDirectory,
       final String content
   ) {
-    return new Book(
+    return new Composium(
         baseDirectory,
         baseDirectory,
         Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ),
@@ -47,10 +47,10 @@ public class BookTestTools {
     ) ;
   }
 
-  public static Book createBook(
+  public static Composium createBook(
       final File bookFile
   ) throws IOException {
-    return new Book(
+    return new Composium(
         bookFile.getParentFile(),
         bookFile,
         Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ),

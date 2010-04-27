@@ -21,7 +21,7 @@ insert file:i18n.nlp
 
 insert file:stylesheets.nlp
 
-insert file:book-syntax.nlp
+insert file:composium-syntax.nlp
 
 insert file:fonts.nlp
 

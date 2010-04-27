@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.book;
+package novelang.composium;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -34,9 +34,9 @@ import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
 
 /**
- * Contains all input and output for {@link novelang.book.function.Command} evaluation.
+ * Contains all input and output for {@link novelang.composium.function.Command} evaluation.
  * If some functions need to communicate by changing some shared value (like the map of 
- * the stylesheets, or Book's tree) this happen through this class and this class only.
+ * the stylesheets, or Composium's tree) this happen through this class and this class only.
  * 
  *  
  * @author Laurent Caillette

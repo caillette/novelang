@@ -1,7 +1,7 @@
 package novelang.produce;
 
 import novelang.TestResourceTree;
-import novelang.book.BookTest;
+import novelang.composium.ComposiumTest;
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -47,7 +47,7 @@ public class TestDocumentProducer {
   public void tagFilteringOnImplicitTagForBook() throws IOException {
     resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.IMPLICIT_TAGS_PART ) ;
     final Resource bookResource = TestResourceTree.TaggedPart.IMPLICIT_TAGS_BOOK ;
-    verifyFooTagApplies( BOOK, bookResource ) ;
+    verifyFooTagApplies( COMPOSIUM, bookResource ) ;
   }
 
   @Test
@@ -146,7 +146,7 @@ public class TestDocumentProducer {
     TestResourceTree.initialize() ;
   }
 
-  private static final Log LOG = LogFactory.getLog( BookTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( ComposiumTest.class ) ;
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
 }

@@ -38,6 +38,6 @@ public class DelegatingBookParser
 
 
   protected Object callParserMethod() throws RecognitionException {
-    return antlrParser.book().getTree() ;
+    return antlrParser.composium().getTree() ;
   }
 }
