@@ -4,13 +4,13 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.concurrent.Callable;
 
-import novelang.part.Part;
+import novelang.novella.Novella;
 
 /**
  * 
 * @author Laurent Caillette
 */
-public class PartCreator implements Callable< Part > {
+public class PartCreator implements Callable<Novella> {
 
   private final File partFile ;
   private final Charset sourceCharset ;
@@ -26,7 +26,7 @@ public class PartCreator implements Callable< Part > {
     this.renderingCharset = renderingCharset;
   }
 
-  public Part call() throws Exception {
-    return new Part( partFile, sourceCharset, renderingCharset ) ;
+  public Novella call() throws Exception {
+    return new Novella( partFile, sourceCharset, renderingCharset ) ;
   }
 }

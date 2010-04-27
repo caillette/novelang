@@ -23,7 +23,7 @@ import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static novelang.parser.antlr.TreeFixture.tree;
 import novelang.parser.SourceUnescape;
 import static novelang.parser.NodeKind.*;
-import static novelang.parser.NodeKind.PART;
+import static novelang.parser.NodeKind.NOVELLA;
 
 /**
  * Tests for parsing various kinds of literal.
@@ -82,13 +82,13 @@ public class LiteralParsingTest {
 
   @Test
   public void someLiteral() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
       "<<<" + BREAK +
       "  Here is some " + BREAK +
       "  //Literal// " + BREAK +
       ">>>",
       tree(
-          PART,
+          NOVELLA,
           tree( LINES_OF_LITERAL, "  Here is some " + BREAK + "  //Literal// " )
       )
     ) ;
@@ -96,12 +96,12 @@ public class LiteralParsingTest {
 
   @Test @Ignore
   public void someLiteralContainingLineComment() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "<<<" + BREAK +
         "%% Not to be commented" +
         ">>>",
         tree(
-            PART,
+            NOVELLA,
             tree( LINES_OF_LITERAL, "%% Not to be commented" )
         )
     ) ;
@@ -109,10 +109,10 @@ public class LiteralParsingTest {
 
   @Test
   public void someLiteralContainingLowerthanSign() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "<<<" + BREAK +
         "<" + BREAK +
-        ">>>", tree( PART, tree( LINES_OF_LITERAL, "<" )
+        ">>>", tree( NOVELLA, tree( LINES_OF_LITERAL, "<" )
       )
     ) ;
   }
@@ -126,23 +126,23 @@ public class LiteralParsingTest {
         ">> >>>"
     ;
 
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "<<<" + BREAK +
         verbatim + BREAK +
-        ">>>", tree( PART, tree( LINES_OF_LITERAL, verbatim ) )
+        ">>>", tree( NOVELLA, tree( LINES_OF_LITERAL, verbatim ) )
     ) ;
   }
 
 
   @Test @Ignore
   public void taggedLiteral() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "@t" + BREAK +
         "<<<" + BREAK +
         "L" +
         ">>>",
         tree(
-            PART,
+            NOVELLA,
             tree( TAG, "t" ),
             tree( LINES_OF_LITERAL, "L" )
         )
@@ -161,7 +161,7 @@ public class LiteralParsingTest {
       new ParserMethod( "softInlineLiteral" ) ;
   private static final ParserMethod PARSERMETHOD_HARD_INLINE_LITERAL =
       new ParserMethod( "hardInlineLiteral" ) ;
-  private static final ParserMethod PARSERMETHOD_PART =
-      new ParserMethod( "part" ) ;
+  private static final ParserMethod PARSERMETHOD_NOVELLA =
+      new ParserMethod( "novella" ) ;
 
 }

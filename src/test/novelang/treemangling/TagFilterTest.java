@@ -43,7 +43,7 @@ public class TagFilterTest {
   @Test
   public void doNothingWhenNothingToDo() {
     final SyntacticTree tree = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_REGULAR )
     );
@@ -58,7 +58,7 @@ public class TagFilterTest {
   public void filterJustOneParagraphOnTwo() {
     verifyFilterTags(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 TAG1_TREE ,
@@ -66,7 +66,7 @@ public class TagFilterTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 TAG1_TREE,
@@ -85,11 +85,11 @@ public class TagFilterTest {
   public void keepUntaggedContentWhenNoMatchingTag() {
     verifyFilterTags(
         tree(
-            PART,
+            NOVELLA,
             tree( _URL )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( _URL ), // Must be NON_TRAVERSABLE!
             tree(
                 PARAGRAPH_REGULAR,
@@ -105,7 +105,7 @@ public class TagFilterTest {
   public void dontRetainUntaggedPrecedingSiblingWhenInsideAScope() {
     verifyFilterTags(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, ( "level" ) ) ),
@@ -113,7 +113,7 @@ public class TagFilterTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, ( "level" ) ) ),
@@ -129,7 +129,7 @@ public class TagFilterTest {
   public void retainParentLevel() {
     verifyFilterTags(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree(
@@ -140,7 +140,7 @@ public class TagFilterTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree(
@@ -166,7 +166,7 @@ public class TagFilterTest {
   public void retainLevelWithImplicitTag() {
     verifyFilterTags(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_TAG, "tag-1" ),
@@ -177,7 +177,7 @@ public class TagFilterTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree(
@@ -210,7 +210,7 @@ public class TagFilterTest {
   public void retainParagraphsInsideListWithTripleHyphen() {
     verifyFilterTags(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_INTRODUCER_, tree( WORD_, "x" ) ),
@@ -225,7 +225,7 @@ public class TagFilterTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_INTRODUCER_, tree( WORD_, "x" ) ),

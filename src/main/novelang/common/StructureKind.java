@@ -20,13 +20,13 @@ package novelang.common;
 import com.google.common.collect.ObjectArrays;
 
 /**
- * Tells about the structural kind of document source: Book or Part.
+ * Tells about the structural kind of document source: Book or Novella.
  *
  * @author Laurent Caillette
  */
 public enum StructureKind {
   BOOK( "nlb" ),
-  PART( "nlp" ) ;
+  NOVELLA( "nlp", "novella" );
 
   private final String[] fileExtension ;
 
@@ -42,7 +42,7 @@ public enum StructureKind {
   public static String[] getAllFileExtensions() {
     return ObjectArrays.concat(
         BOOK.getFileExtensions(),
-        PART.getFileExtensions(),
+        NOVELLA.getFileExtensions(),
         String.class
     ) ; 
   }

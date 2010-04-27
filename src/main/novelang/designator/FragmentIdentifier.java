@@ -10,7 +10,7 @@ import java.util.List;
 
 
 /**
- * Identifier for a Part's fragment.
+ * Identifier for a Novella's fragment.
  * 
  * @author Laurent Caillette
  */

@@ -130,7 +130,7 @@ public class HttpDaemonTest {
 
   @Test
   public void htmlBrokenCausesRedirection() throws Exception {
-    final Resource resource = TestResourceTree.Served.BROKEN_PART;
+    final Resource resource = TestResourceTree.Served.BROKEN_NOVELLA;
     setup( resource ) ;
 
     final String brokentDocumentName = resource.getBaseName() + HTML ;

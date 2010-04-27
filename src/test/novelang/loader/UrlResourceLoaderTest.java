@@ -40,7 +40,7 @@ public class UrlResourceLoaderTest {
 
   @Test
   public void absoluteOk() throws IOException {
-    final Resource resource = TestResourceTree.Parts.PART_ONE_WORD ;
+    final Resource resource = TestResourceTree.Parts.NOVELLA_ONE_WORD;
     resourceInstaller.copy( resource ) ;
     final UrlResourceLoader loader = new UrlResourceLoader(
         resourceInstaller.getTargetDirectory().toURI().toURL() ) ;

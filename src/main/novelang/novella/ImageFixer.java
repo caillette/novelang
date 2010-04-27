@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.part ;
+package novelang.novella;
 
 import com.google.common.base.Preconditions;
 import novelang.common.*;
@@ -44,7 +44,7 @@ import javax.imageio.ImageIO;
 
 /**
  * Transforms the path of embeddable resources (like {@link NodeKind#RASTER_IMAGE} or
- * {@link NodeKind#VECTOR_IMAGE}) that are initially relative to the Part they are referenced from,
+ * {@link NodeKind#VECTOR_IMAGE}) that are initially relative to the Novella they are referenced from,
  * into a path relative to the base directory of the content.
  * This is done by changing the text of the {@link NodeKind#RESOURCE_LOCATION} node.
  * Also reads resolution of bitmap images and adds corresponding nodes.

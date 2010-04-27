@@ -15,11 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang.part;
+package novelang.novella;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
@@ -41,20 +40,19 @@ import novelang.system.DefaultCharset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;
-import org.apache.commons.io.FileUtils;
 
 /**
- * A Part loads a Tree, building a table of identifiers for subnodes
+ * A Novella loads a Tree, building a table of identifiers for subnodes
  * and a list of encountered Problems.
  *
  * @author Laurent Caillette
  */
-public class Part extends AbstractSourceReader {
+public class Novella extends AbstractSourceReader {
 
   private final SyntacticTree tree ;
   private final File partFileDirectory ;
 
-  private Part( final Part other, final SyntacticTree newTree ) {
+  private Novella( final Novella other, final SyntacticTree newTree ) {
     super( other ) ;
     this.partFileDirectory = other.partFileDirectory ;
     this.tree = newTree ;
@@ -63,7 +61,7 @@ public class Part extends AbstractSourceReader {
   /**
    * Only for tests.
    */
-  /*package*/ Part( final String content ) {
+  /*package*/ Novella( final String content ) {
     tree = createTree( content ) ;
     partFileDirectory = null ;
   }
@@ -71,27 +69,27 @@ public class Part extends AbstractSourceReader {
   /**
    * Only for tests.
    */
-  /*package*/ Part( final File partFile ) throws IOException {
-    this( partFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING ) ;
+  /*package*/ Novella( final File novellaFile ) throws IOException {
+    this( novellaFile, DefaultCharset.SOURCE, DefaultCharset.RENDERING ) ;
   }
 
-  public Part(
-      final File partFile,
+  public Novella(
+      final File file,
       final Charset sourceCharset,
       final Charset suggestedRenderingCharset
   ) throws IOException {
     super(
-        partFile.getAbsolutePath(),
+        file.getAbsolutePath(),
         sourceCharset,
         suggestedRenderingCharset,
-        "part[" + partFile.getName() + "]"
+        "novella[" + file.getName() + "]"
     ) ;
     Preconditions.checkArgument( 
-        ! partFile.isDirectory(), 
-        "Part file cannot be a directory: %s", partFile
+        ! file.isDirectory(),
+        "Novella file cannot be a directory: %s", file
     ) ;
-    this.partFileDirectory = partFile.getParentFile() ;
-    tree = createTree( readContent( partFile ) ) ;
+    this.partFileDirectory = file.getParentFile() ;
+    tree = createTree( readContent( file ) ) ;
   }
 
   protected GenericParser createParser( final String content ) {
@@ -140,7 +138,7 @@ public class Part extends AbstractSourceReader {
   /**
    * This is just for not messing the constructor up with some marginal argument.
    */
-  public Part relocateResourcePaths( final File contentRoot ) {
+  public Novella relocateResourcePaths( final File contentRoot ) {
     
     if( null == getDocumentTree() || null == partFileDirectory ) {
       LOG.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
@@ -164,14 +162,14 @@ public class Part extends AbstractSourceReader {
           problemCollector 
       ).relocateResources( getDocumentTree() ) ;
     }
-    Part.this.collect( relocationProblems ); ;
-//    Iterators.addAll( relocationProblems, Part.this.getProblems().iterator() ) ;
+    Novella.this.collect( relocationProblems ); ;
+//    Iterators.addAll( relocationProblems, Novella.this.getProblems().iterator() ) ;
 
-    return new Part( this, fixedTree ) ;
+    return new Novella( this, fixedTree ) ;
 
   }
 
-  public Part makeStandalone( final Set< Tag > restrictingTags ) {
+  public Novella makeStandalone( final Set< Tag > restrictingTags ) {
     Preconditions.checkNotNull( restrictingTags ) ;
     if ( null == getDocumentTree() ) {
       return this ;
@@ -188,11 +186,11 @@ public class Part extends AbstractSourceReader {
           TagMangler.promote( tagsFiltered, tagset ) ;
       final Treepath< SyntacticTree > withMetadata = Treepath.create(
           addMetadata( tagsPromoted.getTreeAtEnd(), tagset ) ) ;
-      return new Part( this, withMetadata.getTreeAtStart() ) ;
+      return new Novella( this, withMetadata.getTreeAtStart() ) ;
     }
   }
 
-  public Part makeStandalone() {
+  public Novella makeStandalone() {
     return makeStandalone( ImmutableSet.< Tag >of() ) ;
   }
 }

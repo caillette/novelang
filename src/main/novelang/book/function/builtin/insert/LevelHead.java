@@ -22,7 +22,7 @@ package novelang.book.function.builtin.insert;
 public enum LevelHead {
 
   /**
-   * Enclose added Part into a Level with Part's file name.
+   * Enclose added Novella into a Level with Novella's file name.
    */
   CREATE_LEVEL,
 

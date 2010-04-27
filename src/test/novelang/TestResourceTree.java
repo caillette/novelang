@@ -64,7 +64,7 @@ public final class TestResourceTree {
     interface Child {
 
       Directory dir = directory( "child" ) ;
-      Resource PART_2 = resource( "images2.nlp" ) ;
+      Resource NOVELLA_2 = resource( "images2.nlp" ) ;
       Resource BLUE_GIF = resource( "Blue-128x64.gif" ) ;
 
       interface Grandchild {
@@ -149,7 +149,7 @@ public final class TestResourceTree {
     Directory dir = directory( "book-with-empty-part" ) ;
 
     Resource BOOK = resource( "book.nlb" ) ;
-    Resource EMPTY_PART = resource( "empty-part.nlp" ) ;
+    Resource EMPTY_NOVELLA = resource( "empty-part.nlp" ) ;
 
   }
 
@@ -159,12 +159,12 @@ public final class TestResourceTree {
 
     Resource GOOD_PART = resource( "good.nlp" ) ;
     Resource GOOD_BOOK = resource( "good.nlb" ) ;
-    Resource BROKEN_PART = resource( "broken.nlp" ) ;
-    Resource BROKEN_BOOK_BAD_REFERENCED_PART = resource( "book-broken-1.nlb" ) ;
-    Resource BROKEN_BOOK_BAD_SCANNED_PART = resource( "book-bad-scanned-part.nlb" ) ;
+    Resource BROKEN_NOVELLA = resource( "broken.nlp" ) ;
+    Resource BROKEN_BOOK_BAD_REFERENCED_NOVELLA = resource( "book-broken-1.nlb" ) ;
+    Resource BROKEN_BOOK_BAD_SCANNED_NOVELLA = resource( "book-bad-scanned-part.nlb" ) ;
     Resource BOOK_ALTERNATE_XSL = resource( "book-alternatexsl.nlb" ) ;
 
-      public interface Style {
+    public interface Style {
       Directory dir = directory( "style" ) ;
 
       Resource VOID_XSL = resource( "void.xsl" ) ;
@@ -175,16 +175,16 @@ public final class TestResourceTree {
   public interface Parts {
     Directory dir = directory( "parts" ) ;
 
-    Resource PART_BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
-    Resource PART_JUST_SECTIONS = resource( "just-sections.nlp" ) ;
-    Resource PART_MANY_IDENTIFIERS = resource( "many-identifiers.nlp" ) ;
-    Resource PART_SOME_IDENTIFIERS_1 = resource( "some-identifiers-1.nlp" ) ;
-    Resource PART_SOME_IDENTIFIERS_2 = resource( "some-identifiers-2.nlp" ) ;
-    Resource PART_MISSING_IMAGES = resource( "missing-images.nlp" ) ;
-    Resource PART_NO_CHAPTER = resource( "no-chapter.nlp" ) ;
-    Resource PART_ONE_WORD = resource( "one-word.nlp" ) ;
-    Resource PART_SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
-    Resource PART_UTF8_BOM = resource( "utf8-with-bom.nlp" ) ;
+    Resource NOVELLA_BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
+    Resource NOVELLA_JUST_SECTIONS = resource( "just-sections.nlp" ) ;
+    Resource NOVELLA_MANY_IDENTIFIERS = resource( "many-identifiers.nlp" ) ;
+    Resource NOVELLA_SOME_IDENTIFIERS_1 = resource( "some-identifiers-1.nlp" ) ;
+    Resource NOVELLA_SOME_IDENTIFIERS_2 = resource( "some-identifiers-2.nlp" ) ;
+    Resource NOVELLA_MISSING_IMAGES = resource( "missing-images.nlp" ) ;
+    Resource NOVELLA_NO_CHAPTER = resource( "no-chapter.nlp" ) ;
+    Resource NOVELLA_ONE_WORD = resource( "one-word.nlp" ) ;
+    Resource NOVELLA_SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
+    Resource NOVELLA_UTF8_BOM = resource( "utf8-with-bom.nlp" ) ;
 
   }
 
@@ -192,9 +192,9 @@ public final class TestResourceTree {
     Directory dir = directory( "identifiers" ) ;
 
     Resource BOOK_1 = resource( "identifiers-book1.nlb" ) ;
-    Resource PART_1 = resource( "identifiers-1.nlp" ) ;
+    Resource NOVELLA_1 = resource( "identifiers-1.nlp" ) ;
     Resource BOOK_2 = resource( "identifiers-book2.nlb" ) ;
-    Resource PART_2 = resource( "identifiers-2.nlp" ) ;
+    Resource NOVELLA_2 = resource( "identifiers-2.nlp" ) ;
     Resource BOOK_3_STRAIGHT = resource( "identifiers-book3-straight.nlb" ) ;
     Resource BOOK_3_RECURSE = resource( "identifiers-book3-recurse.nlb" ) ;
     Resource BOOK_4 = resource( "identifiers-book4.nlb" ) ;
@@ -206,8 +206,8 @@ public final class TestResourceTree {
 
     interface Subdirectory4 {
       Directory dir = directory( "sub4" ) ;
-      Resource PART_4_0 = resource( "identifiers-4-0.nlp" ) ;
-      Resource PART_4_1 = resource( "identifiers-4-1.nlp" ) ;
+      Resource NOVELLA_4_0 = resource( "identifiers-4-0.nlp" ) ;
+      Resource NOVELLA_4_1 = resource( "identifiers-4-1.nlp" ) ;
     }
   }
 

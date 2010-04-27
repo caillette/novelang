@@ -15,7 +15,6 @@ import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -29,7 +28,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Generates multiple {@link novelang.part.Part}s incrementally. 
+ * Generates multiple {@link novelang.novella.Novella}s incrementally. 
  *
  * @author Laurent Caillette
  */

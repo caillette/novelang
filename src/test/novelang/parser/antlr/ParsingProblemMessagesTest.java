@@ -3,13 +3,13 @@ package novelang.parser.antlr;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import novelang.novella.Novella;
+import novelang.novella.NovellaFixture;
 import org.junit.Test;
 import org.junit.Ignore;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import novelang.part.Part;
-import novelang.part.PartFixture;
 import novelang.common.Problem;
 import novelang.system.LogFactory;
 import novelang.system.Log;
@@ -43,8 +43,8 @@ public class ParsingProblemMessagesTest {
 
   private static void verify( final String sourceDocument, final String problemMessageFragment ) {
     LOG.info( "For document: \n" + sourceDocument ) ;
-    final Part part = PartFixture.createStandalonePart( sourceDocument ) ;
-    final List< Problem > problems = PartFixture.extractProblems( part ) ;
+    final Novella novella = NovellaFixture.createStandaloneNovella( sourceDocument ) ;
+    final List< Problem > problems = NovellaFixture.extractProblems( novella ) ;
     assertEquals( problems.toString(), 1, problems.size() ) ;
     final String message = problems.get( 0 ).getMessage();
     LOG.info( "Expecting message fragment: '" + problemMessageFragment + "'") ;

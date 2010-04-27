@@ -53,7 +53,7 @@ public class BookTest {
    */
   @Test
   public void badCommandGeneratesProblem() {
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
     final Book book = BookTestTools.createBook(
         SystemUtils.getUserDir(),
@@ -68,7 +68,7 @@ public class BookTest {
    */
   @Test
   public void justInsert() {
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
     final Book book = BookTestTools.createBook(
@@ -228,9 +228,9 @@ public class BookTest {
    */
   @Test
   public void insertWithBadPart() throws IOException {
-    resourceInstaller.copy( TestResourceTree.Served.BROKEN_PART ) ;
+    resourceInstaller.copy( TestResourceTree.Served.BROKEN_NOVELLA ) ;
     final File scannedBookWithBadPart =
-        resourceInstaller.copy( TestResourceTree.Served.BROKEN_BOOK_BAD_SCANNED_PART ) ;
+        resourceInstaller.copy( TestResourceTree.Served.BROKEN_BOOK_BAD_SCANNED_NOVELLA ) ;
 
     final Book book = BookTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;
@@ -241,12 +241,12 @@ public class BookTest {
 
 
   /**
-   * Test {@link novelang.book.function.builtin.InsertCommand} and empty Part detection
+   * Test {@link novelang.book.function.builtin.InsertCommand} and empty Novella detection
    * in {@link novelang.common.AbstractSourceReader}.
    */
   @Test
   public void insertEmptyPart() throws IOException {
-    final Resource emptyPartResource = TestResourceTree.BookWithEmptyPart.EMPTY_PART ;
+    final Resource emptyPartResource = TestResourceTree.BookWithEmptyPart.EMPTY_NOVELLA;
     resourceInstaller.copy( emptyPartResource ) ;
     final File bookFile = resourceInstaller.copy( TestResourceTree.BookWithEmptyPart.BOOK ) ;
 
@@ -255,7 +255,7 @@ public class BookTest {
     final Iterator< Problem > problems = book.getProblems().iterator() ;
     assertTrue( problems.hasNext() ) ;
     final Problem problem = problems.next() ;
-    assertTrue( problem.getMessage().contains( "Part is empty" ) ) ;
+    assertTrue( problem.getMessage().contains( "Novella is empty" ) ) ;
     assertTrue( problem.getLocation().getFileName().contains( emptyPartResource.getBaseName() ) ) ;
     assertFalse( problems.hasNext() ) ;
 
@@ -285,7 +285,7 @@ public class BookTest {
   @Test
   public void insertWithExplicitIdentifiers() throws IOException {
     resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_1 ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.PART_1 ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.NOVELLA_1 ) ;
     final File bookWithIdentifier =
         resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK_1 ) ;
 
@@ -379,7 +379,7 @@ public class BookTest {
   public void insertWithImplicitIdentifiers() throws IOException {
     final File bookWithIdentifier =
         resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_2 ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.PART_2 ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.NOVELLA_2 ) ;
 
     final Book book = BookTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Book's document tree: %s", book.getDocumentTree().toStringTree() ) ;

@@ -221,7 +221,7 @@ public class LevelParsingTest {
   public void levelIsAnonymousAndHasBlockquoteWithTwoParagraphs()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "===" + BREAK +
         BREAK +
         "<< w0 w1" + BREAK +
@@ -229,7 +229,7 @@ public class LevelParsingTest {
         "w2" + BREAK +
         ">>",
         tree(
-            PART,
+            NOVELLA,
             tree( LEVEL_INTRODUCER_ , tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
@@ -242,7 +242,7 @@ public class LevelParsingTest {
 
   @Test
   public void levelIsAnonymousAndHasBlockquoteWithBreakInside() throws RecognitionException {
-    PARSERMETHOD_PART.createTree(
+    PARSERMETHOD_NOVELLA.createTree(
         "===" + BREAK +
         BREAK +
         "<< w0 w1" + BREAK +
@@ -273,8 +273,8 @@ public class LevelParsingTest {
   private static final ParserMethod PARSERMETHOD_TITLE =
       new ParserMethod( "levelTitle" ) ;
 
-  private static final ParserMethod PARSERMETHOD_PART =
-      new ParserMethod( "part" ) ;
+  private static final ParserMethod PARSERMETHOD_NOVELLA =
+      new ParserMethod( "novella" ) ;
 
   private static final SyntacticTree TREE_SIGN_EXCLAMATION_MARK =
       tree( PUNCTUATION_SIGN, tree( SIGN_EXCLAMATIONMARK, "!" ) ) ;

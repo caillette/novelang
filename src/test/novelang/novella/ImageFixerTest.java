@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.part ;
+package novelang.novella;
 
 import com.google.common.collect.Lists;
 import novelang.DirectoryFixture;
@@ -54,8 +54,8 @@ public class ImageFixerTest {
   public void noChange() {
     final ImageFixer pathRelocator =
         new ImageFixer( parentDirectory, parentDirectory, null ) ;
-    final SyntacticTree tree = tree( 
-        PART, 
+    final SyntacticTree tree = tree(
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ) 
     ) ;
     TreeFixture.assertEqualsNoSeparators(  
@@ -70,8 +70,8 @@ public class ImageFixerTest {
     final ImageFixer pathRelocator =
         new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
     
-    final SyntacticTree treeToAbsolutize = tree( 
-        PART, 
+    final SyntacticTree treeToAbsolutize = tree(
+        NOVELLA,
         tree( 
             PARAGRAPH_REGULAR,
             tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, RESOURCE_UNDER_PARENT ) )
@@ -81,8 +81,8 @@ public class ImageFixerTest {
     
     final String expectedAbsoluteResourceLocation = RESOURCE_UNDER_PARENT;
     
-    final SyntacticTree expectedTree = tree( 
-        PART, 
+    final SyntacticTree expectedTree = tree(
+        NOVELLA,
         tree( 
             PARAGRAPH_REGULAR,
             tree( 
@@ -112,7 +112,7 @@ public class ImageFixerTest {
         new ImageFixer( grandChildDirectory, grandChildDirectory, problemCollector ) ;
 
     final SyntacticTree treeToAbsolutize = tree(
-        PART,
+        NOVELLA,
         tree(
             PARAGRAPH_REGULAR,
             tree( 
@@ -130,7 +130,7 @@ public class ImageFixerTest {
         RESOURCE_UNDER_GRANDCHILD_ABSOLUTE_TO_ITSELF ; 
 
     final SyntacticTree expectedTree = tree(
-        PART,
+        NOVELLA,
         tree(
             PARAGRAPH_REGULAR,
             tree(
@@ -157,8 +157,8 @@ public class ImageFixerTest {
     final ImageFixer pathRelocator =
         new ImageFixer( parentDirectory, parentDirectory, problemCollector ) ;
     
-    final SyntacticTree treeToAbsolutize = tree( 
-        PART, 
+    final SyntacticTree treeToAbsolutize = tree(
+        NOVELLA,
         tree( 
             PARAGRAPH_REGULAR,
             tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, "./doesnotexist" ) )

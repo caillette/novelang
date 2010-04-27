@@ -147,7 +147,7 @@ public class TagMangler {
               next = addImplicitTags( next, tagset ) ;
             }
           }
-        case PART :
+        case NOVELLA:
         case BOOK :
           // TODO replace by Traversal.getFirst()
           next = PREORDER.next( next ) ;
@@ -221,7 +221,7 @@ public class TagMangler {
       final NodeKind nodeKind = NodeKindTools.ofRoot( tree ) ;
 
       switch( nodeKind ) {
-        case PART :
+        case NOVELLA:
         case BOOK :
           // TODO replace by Traversal.getFirst()
           next = PREORDER.next( next ) ;

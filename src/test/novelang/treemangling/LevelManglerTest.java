@@ -27,8 +27,6 @@ import static novelang.parser.NodeKind.*;
 import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
 
-import junit.framework.AssertionFailedError;
-
 /**
  * Tests for {@link LevelMangler}.
  * 
@@ -41,7 +39,7 @@ public class LevelManglerTest {
   @Test
   public void doNothingWhenNothingToDo() {
     final SyntacticTree tree = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_REGULAR )
     );
@@ -55,14 +53,14 @@ public class LevelManglerTest {
   public void justLevel1() {
     verifyRehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( PARAGRAPH_REGULAR )
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "==" ) ),
             tree( PARAGRAPH_REGULAR )
         )
@@ -73,7 +71,7 @@ public class LevelManglerTest {
   public void keepTitle() {
     verifyRehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_ ) ) ,
@@ -81,7 +79,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 LEVEL_INTRODUCER_,
                 tree( LEVEL_INTRODUCER_INDENT_, "==" ),
@@ -96,7 +94,7 @@ public class LevelManglerTest {
   public void keepTag() {
     verifyRehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_ ) ) ,
@@ -105,7 +103,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 LEVEL_INTRODUCER_,
                 tree( LEVEL_INTRODUCER_INDENT_, "==" ),
@@ -121,7 +119,7 @@ public class LevelManglerTest {
   public void somethingPrecedingLevel1() {
     verifyRehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
             tree(
                 _LEVEL,
@@ -129,7 +127,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "==" ) ),
             tree( PARAGRAPH_REGULAR )
@@ -141,7 +139,7 @@ public class LevelManglerTest {
   public void level1NestingLevel2() {
     verifyRehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( PARAGRAPH_REGULAR ),
@@ -152,7 +150,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "==" ) ),
             tree( PARAGRAPH_REGULAR ),
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
@@ -165,7 +163,7 @@ public class LevelManglerTest {
   public void badDepthOrder() {
     rehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree( _PARAGRAPH_AS_LIST_ITEM ),
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "==" ) ),
@@ -178,7 +176,7 @@ public class LevelManglerTest {
   public void level1NestingLevel2NestingLevel3() {
     verifyRehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( PARAGRAPH_REGULAR ),
@@ -193,7 +191,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "==" ) ),
             tree( PARAGRAPH_REGULAR ),
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
@@ -208,7 +206,7 @@ public class LevelManglerTest {
   public void level1NestingLevel2ThenLevel1Again() {
     verifyRehierarchizeLevels(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( PARAGRAPH_REGULAR ),
@@ -223,7 +221,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "==" ) ),
             tree( PARAGRAPH_REGULAR ),
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
@@ -239,7 +237,7 @@ public class LevelManglerTest {
   public void justLevel1WithLocation() {
     verifyRehierarchizeLevelsWithLocation(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 LOCATION_1,
@@ -247,7 +245,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 LEVEL_INTRODUCER_,
                 LOCATION_1,
@@ -263,7 +261,7 @@ public class LevelManglerTest {
   public void detectLocationDifference() {
     verifyRehierarchizeLevelsWithLocation(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 LOCATION_1,
@@ -271,7 +269,7 @@ public class LevelManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 LEVEL_INTRODUCER_,
                 LOCATION_2, // Get sure we detect different locations.

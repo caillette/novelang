@@ -43,7 +43,7 @@ import novelang.common.tree.Treepath;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.part.Part;
+import novelang.novella.Novella;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
@@ -60,7 +60,7 @@ public class InsertCommandTest {
   @Test
   public void goodFileUrl() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -128,7 +128,7 @@ public class InsertCommandTest {
   public void createChapterForSinglePart() 
       throws CommandParameterException, MalformedURLException
   {
-    final File noChapterFile = resourceInstaller.copy( TestResourceTree.Parts.PART_NO_CHAPTER ) ;
+    final File noChapterFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -174,7 +174,7 @@ public class InsertCommandTest {
   @Test
   public void addStyle() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -239,7 +239,7 @@ public class InsertCommandTest {
   @Test
   public void recurseWithSomeBrokenPart() throws CommandParameterException, MalformedURLException {
     final File brokenContentDirectory =
-        resourceInstaller.copy( TestResourceTree.Parts.PART_BROKEN_CANNOTPARSE ).getParentFile() ;
+        resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_BROKEN_CANNOTPARSE ).getParentFile() ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -267,7 +267,7 @@ public class InsertCommandTest {
   @Test
   public void levelAboveIs1() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -355,7 +355,7 @@ public class InsertCommandTest {
   @Test
   public void noLevelaboveCausesProblem() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -382,8 +382,8 @@ public class InsertCommandTest {
   @Test
   public void recurseWithLevelabove1() throws CommandParameterException, MalformedURLException {
 
-    resourceInstaller.copy( TestResourceTree.Parts.PART_ONE_WORD ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Parts.dir, TestResourceTree.Parts.PART_NO_CHAPTER ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
+    resourceInstaller.copyWithPath( TestResourceTree.Parts.dir, TestResourceTree.Parts.NOVELLA_NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -432,10 +432,10 @@ public class InsertCommandTest {
   @Test
   public void useSimpleFragmentIdentifier() throws IOException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
     LOG.info( 
-        "Loaded Part \n%s", 
-        new Part( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
+        "Loaded Novella \n%s",
+        new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
             getDocumentTree().toStringTree() 
     ) ;
     
@@ -480,10 +480,10 @@ public class InsertCommandTest {
   @Test
   public void identifierWithSingleFileTreatedAsMultiple() throws IOException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
     LOG.info(
-        "Loaded Part \n%s",
-        new Part( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
+        "Loaded Novella \n%s",
+        new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
             getDocumentTree().toStringTree()
     ) ;
 
@@ -529,10 +529,10 @@ public class InsertCommandTest {
   @Test
   public void insertIdentifierWithNoHead() throws IOException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_1 ) ;
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_1 ) ;
     LOG.info(
-        "Loaded Part \n%s",
-        new Part( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
+        "Loaded Novella \n%s",
+        new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
             getDocumentTree().toStringTree()
     ) ;
 
@@ -573,8 +573,8 @@ public class InsertCommandTest {
   public void useIdentifiersAcrossMultipleParts() 
       throws MalformedURLException 
   {
-    resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_1 ) ;
-    resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_1 ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -628,8 +628,8 @@ public class InsertCommandTest {
   public void detectIdentifierCollisionThroughMultipleParts() 
       throws MalformedURLException 
   {
-    resourceInstaller.copy( TestResourceTree.Parts.PART_SOME_IDENTIFIERS_2 ) ;
-    resourceInstaller.copy( TestResourceTree.Parts.PART_MANY_IDENTIFIERS ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
+    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_MANY_IDENTIFIERS ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,

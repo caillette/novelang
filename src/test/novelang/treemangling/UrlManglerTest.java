@@ -37,7 +37,7 @@ public class UrlManglerTest {
   @Test
   public void doNothingWhenNothingToDo() {
     final SyntacticTree tree = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_REGULAR )
     );
@@ -51,7 +51,7 @@ public class UrlManglerTest {
   public void namedUrlAtStartOfAPart() {
     verifyFixNamedUrls( 
         tree(
-            PART,
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,
                 tree(
@@ -61,8 +61,8 @@ public class UrlManglerTest {
                 )                            
             )            
         ),
-        tree( 
-            PART,
+        tree(
+            NOVELLA,
             tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR,
@@ -98,7 +98,7 @@ public class UrlManglerTest {
   public void namedUrlWithSquareBrackets() {
     verifyFixNamedUrls(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 tree(
@@ -109,7 +109,7 @@ public class UrlManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 tree( BLOCK_INSIDE_SQUARE_BRACKETS, tree( WORD_, "name" ) ),
@@ -128,7 +128,7 @@ public class UrlManglerTest {
   public void fixNamedUrlAtStartOfParagraphAfterLevelIntroducer() {
     verifyFixNamedUrls( 
         tree(
-            PART,
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,
                 tree( WORD_, "p" )
@@ -147,8 +147,8 @@ public class UrlManglerTest {
                 )                            
             )            
         ),
-        tree( 
-            PART,
+        tree(
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,
                 tree( WORD_, "p" )
@@ -181,7 +181,7 @@ public class UrlManglerTest {
   public void fixUnnamedUrlAtStartOfAPart() {
     verifyFixNamedUrls( 
         tree(
-            PART,
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,
                 tree(
@@ -190,8 +190,8 @@ public class UrlManglerTest {
                 )                            
             )            
         ),
-        tree( 
-            PART,
+        tree(
+            NOVELLA,
             tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR,
@@ -297,7 +297,7 @@ public class UrlManglerTest {
   public void dontGetFooledByPreviousParagraphsInsideAngledBracketPairs() {
     verifyFixNamedUrls(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "w" ) )
@@ -312,7 +312,7 @@ public class UrlManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( PARAGRAPH_REGULAR, tree( WORD_, "w" ) )
@@ -336,7 +336,7 @@ public class UrlManglerTest {
   public void detectNotSameParagraph() {
     verifyFixNamedUrls(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) )
@@ -351,7 +351,7 @@ public class UrlManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "q" ) )

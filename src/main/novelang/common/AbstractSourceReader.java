@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
@@ -134,7 +132,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       return null ;
     }
     if( StringUtils.isBlank( stringContent ) ) {
-      collect( Problem.createProblem( "Part is empty", createLocation() ) ) ;
+      collect( Problem.createProblem( "Novella is empty", createLocation() ) ) ;
       return null ;
     }    
     return stringContent ;

@@ -45,12 +45,12 @@ public class TagParsingTest {
 
   @Test
   public void levelIntroducer() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "@stuff-1 @stuff-2 " + BREAK +
         "  @stuff-3 " + BREAK +
         "==",
         tree(
-            PART,
+            NOVELLA,
             tree(
                 LEVEL_INTRODUCER_,
                 tree( LEVEL_INTRODUCER_INDENT_, "==" ),
@@ -70,6 +70,6 @@ public class TagParsingTest {
 
   private static final Log LOG = LogFactory.getLog( TagParsingTest.class ) ;
   private static final ParserMethod PARSERMETHOD_TAG = new ParserMethod( "tag" ) ;
-  private static final ParserMethod PARSERMETHOD_PART = new ParserMethod( "part" ) ;
+  private static final ParserMethod PARSERMETHOD_NOVELLA = new ParserMethod( "novella" ) ;
 
 }

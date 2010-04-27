@@ -16,6 +16,8 @@
  */
 package novelang.rendering;
 
+import novelang.novella.Novella;
+import novelang.novella.NovellaFixture;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -25,8 +27,6 @@ import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 import novelang.designator.Tag;
-import novelang.part.Part;
-import novelang.part.PartTestingTools;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
@@ -171,8 +171,8 @@ public class RenderingToolsForTagTest {
   }
   
   private void logRendered( final String text ) throws Exception {
-    final Part part = PartTestingTools.create( text ) ;
-    final Set< Tag > tags = RenderingTools.toImplicitTagSet( part.getDocumentTree() ) ;
+    final Novella novella = NovellaFixture.create( text ) ;
+    final Set< Tag > tags = RenderingTools.toImplicitTagSet( novella.getDocumentTree() ) ;
     LOG.info( "\n    " + text + "\n -> " + tags ) ;
   }
   

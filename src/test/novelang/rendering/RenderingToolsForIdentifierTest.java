@@ -16,6 +16,7 @@
  */
 package novelang.rendering;
 
+import novelang.novella.NovellaFixture;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -25,9 +26,7 @@ import novelang.common.SyntacticTree;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 
-import novelang.part.Part;
-import novelang.part.PartTestingTools;
-import novelang.system.DefaultCharset;
+import novelang.novella.Novella;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
@@ -209,8 +208,8 @@ public class RenderingToolsForIdentifierTest {
   }
   
   private void logRendered( final String text ) throws Exception {
-    final Part part = PartTestingTools.create( text ) ;
-    final String identifier = RenderingTools.toImplicitIdentifier( part.getDocumentTree() ) ;
+    final Novella novella = NovellaFixture.create( text ) ;
+    final String identifier = RenderingTools.toImplicitIdentifier( novella.getDocumentTree() ) ;
     LOG.info( "\n    " + text + "\n -> " + identifier ) ;
   }
   

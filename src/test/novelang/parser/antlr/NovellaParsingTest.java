@@ -25,18 +25,18 @@ import static novelang.parser.NodeKind.*;
 import static novelang.parser.NodeKind.WORD_;
 
 /**
- * Tests for parsing of a whole part.
+ * Tests for parsing of a whole Novella.
  *
  * @author Laurent Caillette
  */
-public class PartParsingTest {
+public class NovellaParsingTest {
 
   @Test
   public void partIsJustImage() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
       "./foo.jpg",
         tree(
-          PART,
+            NOVELLA,
           tree( RASTER_IMAGE, tree( RESOURCE_LOCATION, tree( "./foo.jpg" ) ) )
         )
     ) ;
@@ -49,13 +49,13 @@ public class PartParsingTest {
    */
   @Test
   public void partIsTwoImages() {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(  
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "./y.svg" + BREAK +
         BREAK +
         "../z.jpg"
         ,
         tree(
-            PART,
+            NOVELLA,
             tree(
                 VECTOR_IMAGE,
                 tree( RESOURCE_LOCATION, "./y.svg" )
@@ -70,14 +70,14 @@ public class PartParsingTest {
 
   @Test
   public void partWithSeveralMultilineParagraphs() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         BREAK +
         "p0 w01" + BREAK +
         "w02" + BREAK +
         BREAK +
         "p1 w11" + BREAK +
         "w12", tree(
-            PART,
+            NOVELLA,
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ), tree( WORD_, "w01" ), tree( WORD_, "w02" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p1" ), tree( WORD_, "w11" ), tree( WORD_, "w12" )
      ) ) ) ;
@@ -85,7 +85,7 @@ public class PartParsingTest {
 
   @Test
   public void partHasTrailingSpacesEverywhere() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         BREAK +
         "  " + BREAK +
         " p0 w01  " + BREAK +
@@ -93,7 +93,7 @@ public class PartParsingTest {
         "  " + BREAK +
         "p1 w11  " + BREAK +
         " w12 ", tree(
-            PART,
+            NOVELLA,
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ), tree( WORD_, "w01" ), tree( WORD_, "w02" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p1" ), tree( WORD_, "w11" ), tree( WORD_, "w12" ) )
         )
@@ -106,12 +106,12 @@ public class PartParsingTest {
   public void paragraphsInsideAngledBracketPairsHaveTag()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "@t" + BREAK +
         "<<w" + BREAK +
         ">>",
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( TAG, "t" ),
@@ -125,13 +125,13 @@ public class PartParsingTest {
   public void partHasAnonymousSectionAndHasBlockquoteWithSingleParagraph()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "===" + BREAK +
         BREAK +
         "<< w0 w1" + BREAK +
         ">>",
         tree(
-            PART,
+            NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
@@ -145,14 +145,14 @@ public class PartParsingTest {
   public void blockquoteHasLinesOfLiteral()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "<< " + BREAK +
         "<<< " + BREAK +
       "literal" + BREAK +
         ">>> " + BREAK +
         ">>",
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( LINES_OF_LITERAL, "literal" ) )
@@ -164,7 +164,7 @@ public class PartParsingTest {
   public void partIsSectionThenParagraphThenBlockquoteThenParagraph()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "===" + BREAK +
         BREAK +
         "p0" + BREAK +
@@ -173,7 +173,7 @@ public class PartParsingTest {
         ">>" + BREAK +
         BREAK +
         "p1",
-        tree( PART,
+        tree( NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) ),
             tree(
@@ -187,14 +187,14 @@ public class PartParsingTest {
 
   @Test
   public void partIsChapterThenSectionThenSingleWordParagraph() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "== c0" + BREAK +
         BREAK +
         "=== s0" + BREAK +
         BREAK +
         "p0",
         tree(
-            PART,
+            NOVELLA,
             tree(
                 LEVEL_INTRODUCER_,
                 tree( LEVEL_INTRODUCER_INDENT_, "=="),
@@ -212,7 +212,7 @@ public class PartParsingTest {
 
   @Test
   public void partIsAnonymousSectionsWithLeadingBreaks() throws RecognitionException {
-    PARSERMETHOD_PART.checkTreeAfterSeparatorRemoval(
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         BREAK +
         BREAK +
         "===" + BREAK +
@@ -221,7 +221,7 @@ public class PartParsingTest {
         BREAK +
         "===" + BREAK +
         BREAK +
-        "p1", tree( PART,
+        "p1", tree( NOVELLA,
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p0" ) ),
             tree( LEVEL_INTRODUCER_, tree( LEVEL_INTRODUCER_INDENT_, "===" ) ),
@@ -237,7 +237,7 @@ public class PartParsingTest {
    */
   @Test
   public void partMadeOfParticularContent() throws RecognitionException {
-    PARSERMETHOD_PART.createTree(
+    PARSERMETHOD_NOVELLA.createTree(
         "===" + BREAK +
         BREAK +
         " lobs "
@@ -246,22 +246,22 @@ public class PartParsingTest {
 
   @Test
   public void partIsBigDashedListItem() throws RecognitionException {
-    PARSERMETHOD_PART.createTree( "--- w." ) ;
+    PARSERMETHOD_NOVELLA.createTree( "--- w." ) ;
   }
 
   @Test
   public void partIsBigListItemWithColumnAndSoftInlineLiteral() throws RecognitionException {
-    PARSERMETHOD_PART.createTree( "--- w : `y`" ) ;
+    PARSERMETHOD_NOVELLA.createTree( "--- w : `y`" ) ;
   }
 
   @Test
   public void partIsBigListItemWithSoftInlineLiteral() throws RecognitionException {
-    PARSERMETHOD_PART.createTree( "--- `y`" ) ;
+    PARSERMETHOD_NOVELLA.createTree( "--- `y`" ) ;
   }
 
   @Test
   public void partIsDoubleQuotedWordsWithApostropheAndPeriod() throws RecognitionException {
-    PARSERMETHOD_PART.createTree( "\"x'y.\"" ) ;
+    PARSERMETHOD_NOVELLA.createTree( "\"x'y.\"" ) ;
   }
 
 
@@ -271,7 +271,7 @@ public class PartParsingTest {
 // Fixture
 // =======
 
-  private static final ParserMethod PARSERMETHOD_PART =
-      new ParserMethod( "part" ) ;
+  private static final ParserMethod PARSERMETHOD_NOVELLA =
+      new ParserMethod( "novella" ) ;
 
 }

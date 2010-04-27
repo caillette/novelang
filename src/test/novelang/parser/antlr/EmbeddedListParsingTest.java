@@ -17,7 +17,6 @@
 package novelang.parser.antlr;
 
 import org.junit.Test;
-import org.junit.Ignore;
 import org.antlr.runtime.RecognitionException;
 import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
@@ -63,7 +62,7 @@ public class EmbeddedListParsingTest {
     PARSERMETHOD_PART.checkTree(
         "- y'z.",
         tree(
-            PART,
+            NOVELLA,
             tree( PARAGRAPH_REGULAR,
                 tree(
                     EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
@@ -171,7 +170,7 @@ public class EmbeddedListParsingTest {
   private static final ParserMethod PARSERMETHOD_PARAGRAPH =
       new ParserMethod( "paragraph" ) ;
   private static final ParserMethod PARSERMETHOD_PART =
-      new ParserMethod( "part" ) ;
+      new ParserMethod( "novella" ) ;
   private final ParserMethod PARSERMETHOD_SMALL_DASHED_LIST_ITEM =
       new ParserMethod( "smallDashedListItem" ) ;
 

@@ -21,9 +21,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
+import novelang.novella.Novella;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.book.Book;
@@ -35,7 +35,6 @@ import novelang.common.StructureKind;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
-import novelang.part.Part;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.HtmlWriter;
 import novelang.rendering.NlpWriter;
@@ -176,9 +175,9 @@ public class DocumentProducer {
       final File partFile = FileTools.load(
           basedir,
           documentRequest.getDocumentSourceName(),
-          StructureKind.PART.getFileExtensions()
+          StructureKind.NOVELLA.getFileExtensions()
       ) ;
-      return new Part( 
+      return new Novella(
           partFile, 
           defaultSourceCharset, 
           suggestedRenderingCharset

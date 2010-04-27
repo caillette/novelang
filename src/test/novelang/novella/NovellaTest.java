@@ -15,11 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang.part;
+package novelang.novella;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,17 +47,17 @@ import org.junit.runners.NameAwareTestClassRunner;
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
-public class PartTest {
+public class NovellaTest {
 
 
   @Test
   public void loadPartOk() throws IOException {
-    final Part part = new Part( resourceInstaller.copy(
-            TestResourceTree.Parts.PART_JUST_SECTIONS ) ) ;
-    final SyntacticTree partTree = part.getDocumentTree();
+    final Novella novella = new Novella( resourceInstaller.copy(
+            TestResourceTree.Parts.NOVELLA_JUST_SECTIONS ) ) ;
+    final SyntacticTree partTree = novella.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree(
-        PART,
+        NOVELLA,
         tree( 
             _LEVEL,
             tree( _IMPLICIT_TAG, "Section1nlp" ),
@@ -79,16 +78,16 @@ public class PartTest {
     ) ;
 
     TreeFixture.assertEqualsNoSeparators( expected, partTree ) ;
-    Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+    Assert.assertFalse( novella.getProblems().iterator().hasNext() ) ;
   }
 
   @Test
   public void partWithMissingImagesHasProblem() throws IOException {
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.PART_MISSING_IMAGES ) ;
-    final Part part = new Part( partFile ) ;
-    part.relocateResourcePaths( partFile.getParentFile() ) ;
-    Assert.assertTrue( part.hasProblem() ) ;
-    final List< Problem > problems = Lists.newArrayList( part.getProblems() ) ;
+    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_MISSING_IMAGES ) ;
+    final Novella novella = new Novella( partFile ) ;
+    novella.relocateResourcePaths( partFile.getParentFile() ) ;
+    Assert.assertTrue( novella.hasProblem() ) ;
+    final List< Problem > problems = Lists.newArrayList( novella.getProblems() ) ;
     LOG.debug( "Got problems: %s", problems ) ;
     Assert.assertEquals( 2, problems.size() ) ;
 
@@ -96,24 +95,24 @@ public class PartTest {
 
   @Test
   public void badCharacterCorrectlyShownInProblem() throws IOException {
-    final Part part = new Part( "b\u00A4d" ) ;
-    Assert.assertTrue( part.hasProblem() ) ;
-    final List< Problem > problems = Lists.newArrayList( part.getProblems() ) ;
+    final Novella novella = new Novella( "b\u00A4d" ) ;
+    Assert.assertTrue( novella.hasProblem() ) ;
+    final List< Problem > problems = Lists.newArrayList( novella.getProblems() ) ;
     LOG.debug( "Got problems: %s", problems ) ;
     Assert.assertEquals(
         "No viable alternative at input '\u00A4' CURRENCY_SIGN [0x00A4]",
-        part.getProblems().iterator().next().getMessage()
+        novella.getProblems().iterator().next().getMessage()
     ) ;
 
   }
 
   @Test
   public void loadPartWithMetadata() throws IOException {
-    final Part part = new Part( resourceInstaller.copy(
-        TestResourceTree.Parts.PART_JUST_SECTIONS ) ).makeStandalone() ;
-    final SyntacticTree partTree = part.getDocumentTree();
+    final Novella novella = new Novella( resourceInstaller.copy(
+        TestResourceTree.Parts.NOVELLA_JUST_SECTIONS ) ).makeStandalone() ;
+    final SyntacticTree partTree = novella.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
-    final SyntacticTree expected = tree( PART,
+    final SyntacticTree expected = tree( NOVELLA,
         tree( _META,
             tree( _WORD_COUNT, "8" )
         ),        
@@ -139,21 +138,21 @@ public class PartTest {
     ) ;
 
     TreeFixture.assertEqualsNoSeparators( expected, partTree ) ;
-    Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+    Assert.assertFalse( novella.getProblems().iterator().hasNext() ) ;
   }
 
   /**
-   * Checks that a single Part file gets rehierarchized.
+   * Checks that a single Novella file gets rehierarchized.
    * @throws IOException
    */
   @Test
   public void loadSimpleStructure() throws IOException {
-    final Part part = new Part( resourceInstaller.copy(
-        TestResourceTree.Parts.PART_SIMPLE_STRUCTURE ) ) ; 
-    final SyntacticTree partTree = part.getDocumentTree();
+    final Novella novella = new Novella( resourceInstaller.copy(
+        TestResourceTree.Parts.NOVELLA_SIMPLE_STRUCTURE ) ) ;
+    final SyntacticTree partTree = novella.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
-    final SyntacticTree expected = tree( 
-        PART,
+    final SyntacticTree expected = tree(
+        NOVELLA,
         tree( 
             _LEVEL,
             tree( _IMPLICIT_TAG, "Chapter-0" ),
@@ -194,25 +193,25 @@ public class PartTest {
     ) ;
 
     TreeFixture.assertEqualsNoSeparators( expected, partTree ) ;
-    Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+    Assert.assertFalse( novella.getProblems().iterator().hasNext() ) ;
 
   }
   
 
   @Test
   public void partWithParsingErrorDoesNotAttemptToCountWords() {
-    final Part part = PartFixture.createStandalonePart( "````" ) ;
-    Assert.assertTrue( part.hasProblem() ) ;
+    final Novella novella = NovellaFixture.createStandaloneNovella( "````" ) ;
+    Assert.assertTrue( novella.hasProblem() ) ;
   }
 
   @Test
   public void problemWithBadEscapeCodeHasLocation() {
-    final Part part = new Part(
+    final Novella novella = new Novella(
         "\n" +
         "..." + SourceUnescape.ESCAPE_START + "unknown-escape-code" + SourceUnescape.ESCAPE_END
     ) ;
-    Assert.assertTrue( part.hasProblem() ) ;
-    final Iterator<Problem> problems = part.getProblems().iterator();
+    Assert.assertTrue( novella.hasProblem() ) ;
+    final Iterator<Problem> problems = novella.getProblems().iterator();
     final Problem problem = problems.next() ;
     Assert.assertFalse( problems.hasNext() ) ;
     Assert.assertEquals( 2, problem.getLocation().getLine() ) ;
@@ -222,9 +221,9 @@ public class PartTest {
 
   @Test( timeout = TEST_TIMEOUT_MILLISECONDS )
   public void problemWithSeparatorsAndEmbeddedLists() {
-    final Part part = new Part( "- y `z`" ) ;
+    final Novella novella = new Novella( "- y `z`" ) ;
     final SyntacticTree expected = tree(
-        PART,
+        NOVELLA,
         tree(
             PARAGRAPH_REGULAR,
             tree(
@@ -237,16 +236,16 @@ public class PartTest {
             )
         )
     ) ;
-    final SyntacticTree partTree = part.getDocumentTree() ;
+    final SyntacticTree partTree = novella.getDocumentTree() ;
     TreeFixture.assertEqualsWithSeparators( expected, partTree ) ;
   }
 
 
   @Test( timeout = TEST_TIMEOUT_MILLISECONDS )
   public void problemWithSeparatorsAndTitle() {
-    final Part part = new Part( "== y `z`" ) ;
+    final Novella novella = new Novella( "== y `z`" ) ;
     final SyntacticTree expected = tree(
-        PART,
+        NOVELLA,
         tree(
             _LEVEL,
             tree( _IMPLICIT_TAG, "yZ" ),
@@ -257,14 +256,14 @@ public class PartTest {
             )
         )
     ) ;
-    final SyntacticTree partTree = part.getDocumentTree() ;
+    final SyntacticTree partTree = novella.getDocumentTree() ;
     TreeFixture.assertEqualsWithSeparators( expected, partTree ) ;
   }
   
   @Test
   public void dontLoseLocationDuringLevelMangling() throws RecognitionException {
     
-    final Part part = new Part(
+    final Novella novella = new Novella(
         "\n" +
         "\n" +
         "== Lz\u00E9ro" + "\n" + // '\u00E9' == 'é' Makes tag appear different, debugging easier.
@@ -272,7 +271,7 @@ public class PartTest {
         "p0"
     ) ;
     final SyntacticTree expected = tree(
-        PART, 
+        NOVELLA,
         new Location( "<String>", 1, 0 ),
         tree(
             _LEVEL, 
@@ -298,7 +297,7 @@ public class PartTest {
             )
         )
     ) ;
-    final SyntacticTree partTree = part.getDocumentTree() ;
+    final SyntacticTree partTree = novella.getDocumentTree() ;
     TreeFixture.assertEquals( expected, partTree, true ) ;
 
   }
@@ -307,9 +306,9 @@ public class PartTest {
 
   @Test
   public void loadPartUtf8WithBom() throws IOException {
-    final Part part = new Part( resourceInstaller.copy(
-            TestResourceTree.Parts.PART_UTF8_BOM ) ) ;
-    Assert.assertFalse( part.getProblems().iterator().hasNext() ) ;
+    final Novella novella = new Novella( resourceInstaller.copy(
+            TestResourceTree.Parts.NOVELLA_UTF8_BOM ) ) ;
+    Assert.assertFalse( novella.getProblems().iterator().hasNext() ) ;
   }
 
 
@@ -317,7 +316,7 @@ public class PartTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( PartTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( NovellaTest.class ) ;
   private static final int TEST_TIMEOUT_MILLISECONDS = 10 * 60 * 1000 ;
 
   static {

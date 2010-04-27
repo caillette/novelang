@@ -16,7 +16,7 @@ import static novelang.parser.NodeKind.LEVEL_TITLE;
 import static novelang.parser.NodeKind.WORD_;
 import static novelang.parser.NodeKind.RELATIVE_IDENTIFIER;
 import static novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
-import static novelang.parser.NodeKind.PART;
+import static novelang.parser.NodeKind.NOVELLA;
 import novelang.designator.FragmentIdentifier;
 
 /**
@@ -28,7 +28,7 @@ public class BabyInterpreterTest {
 
   @Test
   public void nothing() {
-    final BabyInterpreter interpreter = createInterpreter( tree( PART ) ) ;
+    final BabyInterpreter interpreter = createInterpreter( tree( NOVELLA ) ) ;
     assertEquals( 0, interpreter.getPureIdentifierMap().keySet().size() );
     assertFalse( "", interpreter.getProblems().iterator().hasNext() ) ;
   }
@@ -36,7 +36,7 @@ public class BabyInterpreterTest {
 
   /**
    * <pre>
-   *    part
+   *  novella
    *     |
    * yLevel \\y
    *     |
@@ -57,11 +57,11 @@ public class BabyInterpreterTest {
     final FragmentIdentifier yIdentifier = new FragmentIdentifier( "y" ) ;
     final FragmentIdentifier zIdentifier = new FragmentIdentifier( yIdentifier, "z" ) ;
 
-    final SyntacticTree part = tree(
-        PART,
+    final SyntacticTree novella = tree(
+        NOVELLA,
         yLevel
     ) ;
-    final BabyInterpreter interpreter = createInterpreter( part ) ;
+    final BabyInterpreter interpreter = createInterpreter( novella ) ;
 
     assertFalse( interpreter.hasProblem() ) ;
 
@@ -72,12 +72,12 @@ public class BabyInterpreterTest {
 
     assertSame(
         yLevel,
-        makeTree( interpreter.getPureIdentifierMap().get( yIdentifier ), part )
+        makeTree( interpreter.getPureIdentifierMap().get( yIdentifier ), novella )
     ) ;
 
     assertSame(
         zLevel,
-        makeTree( interpreter.getPureIdentifierMap().get( zIdentifier ), part )
+        makeTree( interpreter.getPureIdentifierMap().get( zIdentifier ), novella )
     ) ;
 
 
@@ -86,7 +86,7 @@ public class BabyInterpreterTest {
 
   /**
    * <pre>
-   *   PART
+   *   novella
    *     |  
    * yLevel \\y
    *     |
@@ -108,11 +108,11 @@ public class BabyInterpreterTest {
     final FragmentIdentifier zLikeRelativeIdentifier = new FragmentIdentifier( yIdentifier, "z" ) ;
     final FragmentIdentifier zLikeAbsoluteIdentifier = new FragmentIdentifier( "z" ) ;
 
-    final SyntacticTree part = tree(
-        PART,
+    final SyntacticTree novella = tree(
+        NOVELLA,
         yLevel
     ) ;
-    final BabyInterpreter interpreter = createInterpreter( part ) ;
+    final BabyInterpreter interpreter = createInterpreter( novella ) ;
 
     final Map< FragmentIdentifier, RobustPath< SyntacticTree > > pureIdentifiers =
         interpreter.getPureIdentifierMap() ;
@@ -128,17 +128,17 @@ public class BabyInterpreterTest {
 
     assertSame(
         yLevel,
-        makeTree( pureIdentifiers.get( yIdentifier ), part )
+        makeTree( pureIdentifiers.get( yIdentifier ), novella )
     ) ;
 
     assertSame(
         zLevel,
-        makeTree( derivedIdentifiers.get( zLikeRelativeIdentifier ), part )
+        makeTree( derivedIdentifiers.get( zLikeRelativeIdentifier ), novella )
     ) ;
 
     assertSame(
         zLevel,
-        makeTree( derivedIdentifiers.get( zLikeAbsoluteIdentifier ), part )
+        makeTree( derivedIdentifiers.get( zLikeAbsoluteIdentifier ), novella )
     ) ;
 
 
@@ -148,7 +148,7 @@ public class BabyInterpreterTest {
   @Test
   public void dontDeriveIdentifierFromDuplicateTitles() {
     final SyntacticTree tree = tree(
-        PART,
+        NOVELLA,
         tree( _LEVEL, tree( LEVEL_TITLE, tree( WORD_, "z" ) ) ),
         tree( _LEVEL, tree( LEVEL_TITLE, tree( WORD_, "z" ) ) )
     ) ;
@@ -162,7 +162,7 @@ public class BabyInterpreterTest {
 
   /**
    * <pre>
-   *          PART
+   *        NOVELLA
    *       /       \
    * zLevel "z"     xLevel \\x
    *               /      \
@@ -190,13 +190,13 @@ public class BabyInterpreterTest {
         yLevel
     ) ;
     
-    final SyntacticTree part = tree(
+    final SyntacticTree novella = tree(
         _LEVEL,
         zLevel,
         xLevel
     ) ;
 
-    final BabyInterpreter interpreter = createInterpreter( part ) ;
+    final BabyInterpreter interpreter = createInterpreter( novella ) ;
 
     assertFalse( interpreter.hasProblem() ) ;
     assertEquals( 2, interpreter.getPureIdentifierMap().keySet().size() ) ;

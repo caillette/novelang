@@ -31,8 +31,8 @@ public class DesignatorInterpreterEnrichmentTest {
   @Test
   public void enrichNothing() {
     verifyEnrich(
-        tree( PART ),
-        tree( PART ),
+        tree( NOVELLA ),
+        tree( NOVELLA ),
         new FragmentMapperBuilder().build()
     ) ;
   }
@@ -45,13 +45,13 @@ public class DesignatorInterpreterEnrichmentTest {
         tree( ABSOLUTE_IDENTIFIER, tree( "L0" ) )
     ) ;
 
-    final SyntacticTree partTree = tree( PART, levelTree ) ;
+    final SyntacticTree partTree = tree( NOVELLA, levelTree ) ;
 
     final Treepath< SyntacticTree > levelTreepath = Treepath.create( partTree, 0 ) ;
 
     verifyEnrich(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, "\\\\L0" )
@@ -84,7 +84,7 @@ public class DesignatorInterpreterEnrichmentTest {
         tree( ABSOLUTE_IDENTIFIER, tree( "L1" ) )
     ) ;
 
-    final SyntacticTree partTree = tree( PART, levelTree0, levelTree1 ) ;
+    final SyntacticTree partTree = tree( NOVELLA, levelTree0, levelTree1 ) ;
 
     final RobustPath< SyntacticTree > path0 = RobustPath.create(
         Treepath.create( partTree, 0 ),
@@ -97,7 +97,7 @@ public class DesignatorInterpreterEnrichmentTest {
 
     verifyEnrich(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_IDENTIFIER, "\\\\L0" )
@@ -122,7 +122,7 @@ public class DesignatorInterpreterEnrichmentTest {
         _LEVEL
     ) ;
 
-    final SyntacticTree partTree = tree( PART, levelTree ) ;
+    final SyntacticTree partTree = tree( NOVELLA, levelTree ) ;
 
     final Treepath< SyntacticTree > levelTreepath = Treepath.create( partTree, 0 ) ;
 
@@ -135,7 +135,7 @@ public class DesignatorInterpreterEnrichmentTest {
     
     verifyEnrich(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_IDENTIFIER, "\\\\L0" )

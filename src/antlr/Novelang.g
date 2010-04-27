@@ -39,7 +39,7 @@ tokens {
   BLOCK_AFTER_TILDE ;
   SUBBLOCK ;
   LINES_OF_LITERAL ;                             
-  PART ;                                         // tagbehavior=TRAVERSABLE
+  NOVELLA ;                                      // tagbehavior=TRAVERSABLE
   PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL
   PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;   // tagbehavior=TERMINAL
   WORD_AFTER_CIRCUMFLEX_ACCENT ;
@@ -179,11 +179,11 @@ import org.slf4j.LoggerFactory;
 }
 
 
-// =========================
-// Part, chapter and section
-// =========================
+// ============================
+// Novella, chapter and section
+// ============================
 
-part
+novella
   @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
   : ( p += mediumbreak | p += largebreak )?
   
@@ -208,8 +208,8 @@ part
     EOF
 
     // Was:
-    // -> ^( PART $p+ )
-    -> {  delegate.createTree( PART, startLocation, $p ) }
+    // -> ^( NOVELLA $p+ )
+    -> {  delegate.createTree( NOVELLA, startLocation, $p ) }
   ;
   
 levelIntroducer 
@@ -1467,7 +1467,7 @@ punctuationSign
   
   
 // ===================================
-// Part-related URL rules
+// Novella-related URL rules
 // http://www.ietf.org/rfc/rfc1738.txt
 // ===================================
 

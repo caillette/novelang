@@ -129,7 +129,7 @@ Blah.
 The level structure of the Part looks like this:
 
 <<<
-+ n:part
++ n:novella
   + n:paragraph-regular "Text at depth 0"
   + n:level
   | + n:level-title "Depth 1"
@@ -584,7 +584,7 @@ My tagged paragraph.
 The XML structure of source document above looks like this:
 
 <<<
-+ n:part
++ n:novella
   + n:level
     + n:explicit-tag "my-tag"
     + n:explicit-tag "Level"

@@ -37,7 +37,7 @@ public class ListManglerTest {
   @Test
   public void doNothingWhenNothingToDo() {
     final SyntacticTree tree = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_REGULAR )
     );
@@ -51,7 +51,7 @@ public class ListManglerTest {
   @Test
   public void aggregateList() {
     final SyntacticTree expected = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree(
             _LIST_WITH_TRIPLE_HYPHEN,
@@ -62,7 +62,7 @@ public class ListManglerTest {
     ) ;
 
     final SyntacticTree toBeRehierarchized = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
@@ -74,7 +74,7 @@ public class ListManglerTest {
   @Test
   public void aggregateListInsideLevelIntroducer() {
     final SyntacticTree expected = tree(
-        PART,
+        NOVELLA,
         tree( LEVEL_INTRODUCER_,
           tree( PARAGRAPH_REGULAR ),
           tree(
@@ -88,7 +88,7 @@ public class ListManglerTest {
     ) ;
 
     final SyntacticTree toBeRehierarchized = tree(
-        PART,
+        NOVELLA,
         tree(
             LEVEL_INTRODUCER_,
             tree( PARAGRAPH_REGULAR ),
@@ -107,7 +107,7 @@ public class ListManglerTest {
   @Test
   public void aggregateListInsidePlainLevel() {
     final SyntacticTree expected = tree(
-        PART,
+        NOVELLA,
         tree( _LEVEL,
           tree( PARAGRAPH_REGULAR ),
           tree(
@@ -121,7 +121,7 @@ public class ListManglerTest {
     ) ;
 
     final SyntacticTree toBeRehierarchized = tree(
-        PART,
+        NOVELLA,
         tree(
             _LEVEL,
             tree( PARAGRAPH_REGULAR ),
@@ -141,7 +141,7 @@ public class ListManglerTest {
   @Test
   public void aggregateSeveralLists() {
     final SyntacticTree expected = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree(
             _LIST_WITH_TRIPLE_HYPHEN,
@@ -159,7 +159,7 @@ public class ListManglerTest {
 
     ) ;
     final SyntacticTree toBeRehierarchized = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),

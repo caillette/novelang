@@ -22,7 +22,6 @@ import java.io.PrintWriter;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
 
 import novelang.common.Location;
@@ -193,7 +192,7 @@ public class GenericRenderer implements Renderer {
         break ;
 
       case BOOK:
-      case PART :
+      case NOVELLA:
         isRootElement = true ;
 
       default :

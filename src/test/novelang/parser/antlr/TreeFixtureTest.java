@@ -31,15 +31,15 @@ public class TreeFixtureTest {
   @Test
   public void testRemoveSeparators() {
     TreeFixture.assertEqualsNoSeparators(  
-        tree( 
-            PART,
+        tree(
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,
                 tree( WORD_, "w" )
             )
         ),
         SeparatorsMangler.removeSeparators( tree(
-            PART,
+            NOVELLA,
             tree( WHITESPACE_ ),
             tree( LINE_BREAK_ ),
             tree( 

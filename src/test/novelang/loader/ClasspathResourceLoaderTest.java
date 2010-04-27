@@ -35,7 +35,7 @@ public class ClasspathResourceLoaderTest {
   public void relativizedOk() throws IOException {
     final ClasspathResourceLoader loader = new ClasspathResourceLoader() ;
     final InputStream inputStream = loader.getInputStream(
-        TestResourceTree.Parts.PART_ONE_WORD.getResourceName() ) ;
+        TestResourceTree.Parts.NOVELLA_ONE_WORD.getResourceName() ) ;
     final String resource = IOUtils.toString( inputStream ) ;
     Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
   }

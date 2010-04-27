@@ -18,7 +18,6 @@ import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
-import junit.framework.Assert;
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +53,7 @@ public class TestDocumentProducer {
   @Test
   public void tagFilteringOnImplicitTagForPart() throws IOException {
     final Resource bookResource = TestResourceTree.TaggedPart.IMPLICIT_TAGS_PART ;
-    verifyFooTagApplies( PART, bookResource ) ;
+    verifyFooTagApplies( NOVELLA, bookResource ) ;
   }
 
 

@@ -19,7 +19,8 @@ import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.WORD_;
-import novelang.part.Part;
+
+import novelang.novella.Novella;
 import novelang.designator.FragmentIdentifier;
 import novelang.system.Log;
 import novelang.system.LogFactory;
@@ -120,9 +121,9 @@ public class InsertCommand extends AbstractCommand {
   ) {
     LOG.debug( "Command %s evaluating flatly on %s", this, insertedFile  ) ;
     
-    final Part rawPart;
+    final Novella rawNovella;
     try {
-      rawPart = new Part( 
+      rawNovella = new Novella(
           insertedFile,
           environment.getSourceCharset(),
           environment.getRenderingCharset()
@@ -132,7 +133,7 @@ public class InsertCommand extends AbstractCommand {
     }
 
     final Renderable partWithRelocation =
-        rawPart.relocateResourcePaths( environment.getBaseDirectory() ) ;
+        rawNovella.relocateResourcePaths( environment.getBaseDirectory() ) ;
 
     final SyntacticTree partTree = partWithRelocation.getDocumentTree() ;
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
@@ -189,7 +190,7 @@ public class InsertCommand extends AbstractCommand {
 
     }
 
-    return environment.update( book.getTreeAtStart() ).addProblems( rawPart.getProblems() ) ;
+    return environment.update( book.getTreeAtStart() ).addProblems( rawNovella.getProblems() ) ;
   }
 
   private static SyntacticTree createStyleTree( final String styleName ) {
@@ -204,21 +205,21 @@ public class InsertCommand extends AbstractCommand {
    * When inserting from several files, Identifiers make things more complex.
    * Identifier resolution must occur on all scanned Parts as a whole for preserving uniqueness 
    * of the Identifiers. 
-   * (If the user doesn't want unique Identifiers he/she should insert from each Part
+   * (If the user doesn't want unique Identifiers he/she should insert from each Novella
    * explicitely, or use Tags.)
    * <p>
    * With {@link DesignatorInterpreter} alone, processing all scanned Parts at once drops
-   * information about the originating Part (and therefore the originating File) of each 
+   * information about the originating Novella (and therefore the originating File) of each
    * inserted Fragment. This prevents level creation from working properly, and from 
-   * reporting Part files in which collisions occur.
+   * reporting Novella files in which collisions occur.
    * <p>
-   * An approach for keeping originating Part would be to decorate every Identifier-enabled 
+   * An approach for keeping originating Novella would be to decorate every Identifier-enabled
    * node with its origin before processing the whole with {@link DesignatorInterpreter}. 
    * This will happen in the future, but not as a particular case here.
    * <p>
    * The approach of choice relies on after-the-fact conflict detection. 
    * If requested Identifiers appear once and once only in the set of inserted Parts, 
-   * then processing each Part individually gives the same result. Identifier unicity check
+   * then processing each Novella individually gives the same result. Identifier unicity check
    * occurs by ensuring that requested Identifier appears once and once only in every
    * {@link DesignatorInterpreter}.
    */
@@ -233,7 +234,7 @@ public class InsertCommand extends AbstractCommand {
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
     Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
     final boolean hasIdentifiers = fragmentIdentifiers.iterator().hasNext() ;
-    final Multimap< FragmentIdentifier, Part > identifiedFragments ;
+    final Multimap< FragmentIdentifier, Novella> identifiedFragments ;
     if( hasIdentifiers ) {
       identifiedFragments = HashMultimap.create();
     } else {
@@ -244,7 +245,7 @@ public class InsertCommand extends AbstractCommand {
     try {
       book = findLastLevel( book, levelAbove ) ;
       final Iterable< File > partFiles = scanPartFiles( insertedFile, recurse ) ;
-      final Map< File, Future< Part > > futureParts = Maps.newHashMap() ;
+      final Map< File, Future<Novella> > futureParts = Maps.newHashMap() ;
 
 
       for( final File partFile : partFiles ) {
@@ -254,21 +255,21 @@ public class InsertCommand extends AbstractCommand {
       }
 
       for( final File partFile : partFiles ) {
-        Part part = null ;
+        Novella novella = null ;
         try {
           // environment.getExecutorService()...
-          part = futureParts.get( partFile ).get() ;
-          Iterables.addAll( problems, part.getProblems() ) ;
+          novella = futureParts.get( partFile ).get() ;
+          Iterables.addAll( problems, novella.getProblems() ) ;
         } catch( ExecutionException e ) {
           problems.add( Problem.createProblem( ( Exception ) e.getCause() ) ) ;
         } catch( InterruptedException e ) {
           problems.add( Problem.createProblem( e ) ) ;
         }
-        if( null != part && null != part.getDocumentTree() ) {
-          final Part relocatedPart = part.relocateResourcePaths( environment.getBaseDirectory() ) ;
-          Iterables.addAll( problems, relocatedPart.getProblems() ) ;
+        if( null != novella && null != novella.getDocumentTree() ) {
+          final Novella relocatedNovella = novella.relocateResourcePaths( environment.getBaseDirectory() ) ;
+          Iterables.addAll( problems, relocatedNovella.getProblems() ) ;
 
-          final SyntacticTree partTree = relocatedPart.getDocumentTree() ;
+          final SyntacticTree partTree = relocatedNovella.getDocumentTree() ;
           final List< SyntacticTree > partChildren = Lists.newArrayList() ;
 
           final DesignatorInterpreter designatorInterpreter =
@@ -282,7 +283,7 @@ public class InsertCommand extends AbstractCommand {
                 final Treepath< SyntacticTree > fragment =
                     designatorInterpreter.get( fragmentIdentifier ) ;
                 if( fragment != null ) {
-                  identifiedFragments.put( fragmentIdentifier, part ) ;
+                  identifiedFragments.put( fragmentIdentifier, novella ) ;
                   Iterables.addAll( partChildren,
                       removeHeadIfNeeded( levelHead, fragment.getTreeAtEnd() ) ) ;
                 }
@@ -385,7 +386,7 @@ public class InsertCommand extends AbstractCommand {
       final Iterable< File > files ;
       try {
         final List< File > scannedFiles = FileTools.scanFiles( 
-            directory, StructureKind.PART.getFileExtensions(), recurse );
+            directory, StructureKind.NOVELLA.getFileExtensions(), recurse );
         files = fileOrdering.sort( scannedFiles ) ;
       } catch ( FileOrdering.CriteriaException e ) {
         LOG.info( "Could not sort files from '" + directory.getAbsolutePath() + "'", e ) ;
@@ -415,21 +416,21 @@ public class InsertCommand extends AbstractCommand {
 
 
   private static Iterable< Problem > createProblems(
-      final Multimap< FragmentIdentifier, Part > identifiedFragments,
+      final Multimap< FragmentIdentifier, Novella> identifiedFragments,
       final Location location
   ) {
     final List< Problem > problems = Lists.newArrayList() ;
     for( final FragmentIdentifier fragmentIdentifier : identifiedFragments.keySet() ) {
-      final Collection< Part > parts = identifiedFragments.get( fragmentIdentifier ) ;
-      if( parts == null ) {
+      final Collection<Novella> novellas = identifiedFragments.get( fragmentIdentifier ) ;
+      if( novellas == null ) {
         problems.add( Problem.createProblem(
-            "Could not find " + fragmentIdentifier + " in any given Part",
+            "Could not find " + fragmentIdentifier + " in any given Novella",
             location
         ) ) ;
-      } else if( parts.size() > 1 ) {
+      } else if( novellas.size() > 1 ) {
         problems.add( Problem.createProblem(
             "Identifier " + fragmentIdentifier + " found multiple times in:" +
-            Joiner.on( "\n" ).join( parts )
+            Joiner.on( "\n" ).join( novellas )
             ,
             location
         ) ) ;

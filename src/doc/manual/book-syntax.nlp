@@ -1,26 +1,26 @@
 
 == Book files
 
-Book files aggregate part files. Book files have the ``.nlb`` suffix  (like NoveLang Book). 
+Book files aggregate novella files. Book files have the ``.nlb`` suffix  (like NoveLang Book).
 
 
   @Identifiers @Command
 === Command : ``insert``
 
-Book files are useful when there is too much text to fit inside one Part file.
-It is also easier to reorganize small Parts by changing their order in a Book file than
+Book files are useful when there is too much text to fit inside one Novella file.
+It is also easier to reorganize small Novellas by changing their order in a Book file than
 copy-pasting inside one big file.
 
-When Part files become too numerous, Book files can refer to multiple Part files at once.
+When Novella files become too numerous, Book files can refer to multiple Novella files at once.
 Referring to project layout, here is a well-formed Book file:
 
 <<<
-insert file:path/to/myfirstpart.nlp
+insert file:path/to/myfirstnovella.nlp
 
-insert file:path/to/mysecondpart.nlp
+insert file:path/to/mysecondnovella.nlp
 >>>
 
-When the Parts are located in the same directory as the Book file, the single dot notation
+When the Novellas are located in the same directory as the Book file, the single dot notation
 (for current directory) is supported:
 
 <<<
@@ -28,7 +28,7 @@ insert file:.
 >>>
 
 
-The ``recurse`` option scans parts in subdirectories.
+The ``recurse`` option scans novellas in subdirectories.
 
 <<<
 insert file:. recurse
@@ -47,7 +47,7 @@ The ``sort`` option provides a sorting method when inserting several files.
 insert file:. sort=path+
 >>>
 
-The ``sort`` option determines the ordering of Parts when there are many. Currently supported
+The ``sort`` option determines the ordering of Novellas when there are many. Currently supported
 values are:
 - ``path+`` for ascending sort on path name.
 - ``path-`` for descending sort on file name.
@@ -64,10 +64,10 @@ The ``levelabove`` option adds the content of the ~file(s) under the last previo
 level.
 
 <<<
-insert file:some-part.nlp levelabove=2
+insert file:some-novella.nlp levelabove=2
 >>>
 
-The ``style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added part.
+The ``style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added novella.
 
 <<<
 insert file:. 
@@ -85,11 +85,11 @@ Expert users will find this is useful for customizing the output right from an X
 >>>
 
 
-A sequence of composite identifiers (as defined in "Part syntax" chapter) limits the insertion
-of reference Part to some fragments.
+A sequence of composite identifiers (as defined in "Novella syntax" chapter) limits the insertion
+of reference Novella to some fragments.
 
 <<<
-insert file:my-part \\Some\Identifier \\Some\Other\One
+insert file:my-novella \\Some\Identifier \\Some\Other\One
 >>>
 
 

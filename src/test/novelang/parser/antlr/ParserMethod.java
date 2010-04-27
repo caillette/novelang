@@ -16,17 +16,15 @@
  */
 package novelang.parser.antlr;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.antlr.runtime.tree.CommonErrorNode;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.Tree;
-import org.junit.Assert;
-import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
 import novelang.common.SyntacticTree;
 import novelang.treemangling.SeparatorsMangler;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonErrorNode;
+import org.antlr.runtime.tree.Tree;
+import org.junit.Assert;
 
 
 /**

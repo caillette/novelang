@@ -35,7 +35,7 @@ public class EmbeddedListManglerTest {
   @Test
   public void doNothingWhenNothingToDo() {
     final SyntacticTree tree = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_REGULAR )
     );
@@ -50,7 +50,7 @@ public class EmbeddedListManglerTest {
   public void justOneItem() {
     verifyRehierarchizeList(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
                 tree(
@@ -61,7 +61,7 @@ public class EmbeddedListManglerTest {
             tree( WORD_, "z" )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
             tree( LINE_BREAK_ ),
             tree( WORD_, "z" )
@@ -73,7 +73,7 @@ public class EmbeddedListManglerTest {
   public void twoListsOfOneItemEach() {
     verifyRehierarchizeList(
         tree(
-            PART,
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,
                 tree(
@@ -91,7 +91,7 @@ public class EmbeddedListManglerTest {
             tree( PARAGRAPH_REGULAR, tree( WORD_, "z" ) )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,  
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
@@ -113,7 +113,7 @@ public class EmbeddedListManglerTest {
   public void twoItemsOfSameLevel() {
     verifyRehierarchizeList(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
@@ -121,7 +121,7 @@ public class EmbeddedListManglerTest {
             )
         ),
         tree(
-                PART,
+            NOVELLA,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
@@ -133,7 +133,7 @@ public class EmbeddedListManglerTest {
   public void twoItemsOfSameLevelWithIndent() {
     verifyRehierarchizeList(
         tree(
-            PART,
+            NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR, 
                 tree(
@@ -144,7 +144,7 @@ public class EmbeddedListManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( WHITESPACE_, "  " ),
             tree( PARAGRAPH_REGULAR, 
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
@@ -160,7 +160,7 @@ public class EmbeddedListManglerTest {
   public void twoItemsOfDifferentLevel() {
     verifyRehierarchizeList(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
@@ -171,7 +171,7 @@ public class EmbeddedListManglerTest {
             )
         ),
         tree(
-                PART,
+            NOVELLA,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
@@ -184,7 +184,7 @@ public class EmbeddedListManglerTest {
   public void depth1Then2Then1() {
     verifyRehierarchizeList(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) ),
@@ -196,7 +196,7 @@ public class EmbeddedListManglerTest {
             )
         ),
         tree(
-                PART,
+            NOVELLA,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
@@ -211,7 +211,7 @@ public class EmbeddedListManglerTest {
   public void depth1Then2Then2Then1() {
     verifyRehierarchizeList(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _EMBEDDED_LIST_WITH_HYPHEN,
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "w" ) ),
@@ -224,7 +224,7 @@ public class EmbeddedListManglerTest {
             )
         ),
         tree(
-                PART,
+            NOVELLA,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
@@ -244,7 +244,7 @@ public class EmbeddedListManglerTest {
   public void detectInconsistentIndent() {
     EmbeddedListMangler.rehierarchizeEmbeddedLists( Treepath.create( 
         tree(
-                PART,
+            NOVELLA,
                 tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),  // indent = 2

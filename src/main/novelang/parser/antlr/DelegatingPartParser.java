@@ -38,7 +38,7 @@ public class DelegatingPartParser
   }
 
   protected Object callParserMethod() throws RecognitionException {
-    return antlrParser.part().getTree() ;
+    return antlrParser.novella().getTree() ;
   }
 
 }

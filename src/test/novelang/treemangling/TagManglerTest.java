@@ -26,7 +26,7 @@ public class TagManglerTest {
   @Test
   public void doNothingWhenNothingToDo() {
     final SyntacticTree tree = tree(
-        PART,
+        NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_REGULAR )
     );
@@ -39,7 +39,7 @@ public class TagManglerTest {
 
     verifyTagMangling(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _EXPLICIT_TAG, "tag-1" ),
@@ -51,7 +51,7 @@ public class TagManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( TAG, "tag-1" ),
@@ -69,11 +69,11 @@ public class TagManglerTest {
 
     verifyTagMangling(
         tree(
-            PART,
+            NOVELLA,
             tree( LINES_OF_LITERAL, "xxx\nyyy\nzzz" )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree( LINES_OF_LITERAL, "xxx\nyyy\nzzz" )
         )
     ) ;
@@ -85,7 +85,7 @@ public class TagManglerTest {
 
     verifyTagMangling(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_TAG, "title-1" ),
@@ -102,7 +102,7 @@ public class TagManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "title-1" ) ),
@@ -125,7 +125,7 @@ public class TagManglerTest {
 
     verifyTagMangling(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree(
@@ -136,7 +136,7 @@ public class TagManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree(
@@ -155,7 +155,7 @@ public class TagManglerTest {
 
     verifyTagMangling(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_TAG, "tag-1" ),
@@ -167,7 +167,7 @@ public class TagManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( LEVEL_TITLE, tree( WORD_, "tag-1" ) ),
@@ -183,7 +183,7 @@ public class TagManglerTest {
 
     verifyTagMangling(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( _IMPLICIT_TAG, "tag-1" ),
@@ -201,7 +201,7 @@ public class TagManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree( 
@@ -221,7 +221,7 @@ public class TagManglerTest {
 
     verifyPromotion(
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree(
@@ -232,7 +232,7 @@ public class TagManglerTest {
             )
         ),
         tree(
-            PART,
+            NOVELLA,
             tree(
                 _LEVEL,
                 tree(

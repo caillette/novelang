@@ -28,16 +28,16 @@ import org.junit.Test;
  * @author Laurent Caillette
  */
 public class NamedUrlTest {
-  
+
 
   @Test
   public void namedUrlWithIndentOutsideParagraph() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree(
+    PARSERMETHOD_NOVELLA.checkTree(
         "  \"name\"" + BREAK +
         "http://foo.com"
         ,
-        tree( 
-            PART,
+        tree(
+            NOVELLA,
             tree( WHITESPACE_, "  " ),
             tree( 
                 PARAGRAPH_REGULAR,
@@ -52,13 +52,13 @@ public class NamedUrlTest {
 
   @Test
   public void indentInsideParagraph() throws RecognitionException {
-    PARSERMETHOD_PART.checkTree(
+    PARSERMETHOD_NOVELLA.checkTree(
         "nothing" + BREAK +
         "  \"name\"" + BREAK +
         "http://foo.com"
         ,
-        tree( 
-            PART,
+        tree(
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 tree( WORD_, "nothing" ),
@@ -81,13 +81,13 @@ public class NamedUrlTest {
   public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph1()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTree(
+    PARSERMETHOD_NOVELLA.checkTree(
         "== t" + BREAK +
         BREAK +
         "  \"name\" " + BREAK +
         "http://foo.com",
         tree(
-            PART,
+            NOVELLA,
             tree(
                 LEVEL_INTRODUCER_,
                 tree( LEVEL_INTRODUCER_INDENT_, "==" ),
@@ -117,7 +117,7 @@ public class NamedUrlTest {
   public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph2()
       throws RecognitionException
   {
-    PARSERMETHOD_PART.checkTree(
+    PARSERMETHOD_NOVELLA.checkTree(
         "p" + BREAK +
         BREAK +
         "== t" + BREAK +
@@ -125,7 +125,7 @@ public class NamedUrlTest {
         "  \"name\" " + BREAK +
         "http://foo.com",
         tree(
-            PART,
+            NOVELLA,
             tree(
                 PARAGRAPH_REGULAR,
                 tree( WORD_, "p" )
@@ -158,8 +158,8 @@ public class NamedUrlTest {
 // Fixture
 // =======
 
-  private final ParserMethod PARSERMETHOD_PART =
-      new ParserMethod( "part" ) ;
+  private final ParserMethod PARSERMETHOD_NOVELLA =
+      new ParserMethod( "novella" ) ;
 
 
 
