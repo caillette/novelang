@@ -25,6 +25,8 @@ public interface ResourceEnumerator extends Named, Timestamped {
 
   ResourceEnumerator getParent() ;
 
+  ResourceEnumerator getRoot() ;
+
   Iterable< ResourceEnumerator > getChildEnumerators() ;
 
   Iterable< StreamableResource > getStreamableResources() ;
