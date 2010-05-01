@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (C) 2010 Laurent Caillette
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <relativePath>../../pom.xml</relativePath>
+    <groupId>org.novelang</groupId>
+    <artifactId>Novelang</artifactId>
+    <version>SNAPSHOT</version>
+  </parent>
+
+  <name>Novelang-unicode-reader</name>
+  <artifactId>unicode-reader</artifactId>
+
+  <properties>
+    <generated-binaries>${project.build.outputDirectory}</generated-binaries>
+  </properties>
+
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.novelang</groupId>
+        <artifactId>unicode-names-generator</artifactId>
+        <version>SNAPSHOT</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <packageRootDirectory>${generated-binaries}</packageRootDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+<!--
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>add-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${generated-binaries}</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+-->
+
+
+      
+    </plugins>
+
+<!--
+    <resources>
+      <resource>
+        <directory>${generated-binaries}</directory>
+        <includes>
+          <include>**/*.bin</include>
+        </includes>
+      </resource>
+    </resources>
+-->
+
+  </build>
+
+
+
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.novelang</groupId>
+      <artifactId>primer</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+
+  </dependencies>
+
+  
+</project>
+

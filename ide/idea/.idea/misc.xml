@@ -27,6 +27,14 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/../../pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/primer/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/unicode-names-generator/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/unicode-names-reader/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/antlr-parser/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/antlr-ground/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/antlr-cap/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/antlr-generation/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/antlr-lexeme/pom.xml" />
       </list>
     </option>
   </component>

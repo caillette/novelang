@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (C) 2010 Laurent Caillette
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <relativePath>../../pom.xml</relativePath>
+    <groupId>org.novelang</groupId>
+    <artifactId>Novelang</artifactId>
+    <version>SNAPSHOT</version>
+  </parent>
+
+  <name>Novelang-antlr-parser</name>
+  <artifactId>antlr-parser</artifactId>
+
+  <properties>
+    <generated-binaries>${project.build.outputDirectory}</generated-binaries>
+    <grammar-file>${basedir}/src/main/antlr3/novelang/parser/antlr/Novelang.g</grammar-file>
+  </properties>
+
+  
+  <build>
+    <plugins>
+
+
+      <!-- Run with:
+          mvn org.antlr:antlr3-maven-plugin:antlr
+          http://www.antlr.org/wiki/display/ANTLR3/Using+ANTLR+3+with+Maven+2
+      *** Currently disabled as ANTLR-3.1.3 doesn't like current Novelang grammar. ***
+      -->
+<!--
+      <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr3-maven-plugin</artifactId>
+        <version>3.1.3-1</version>
+
+        <executions>
+
+          <execution>
+            <goals>
+              <goal>antlr</goal>
+            </goals>
+
+            <configuration>
+              <sourceDirectory>src/main/antlr3</sourceDirectory>
+              <verbose>true</verbose>
+            </configuration>
+            
+          </execution>
+        </executions>
+      </plugin>
+-->
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+
+                <property name="compile-classpath" refid="maven.compile.classpath"/>
+
+                <java
+                    classname="org.antlr.Tool"
+                    fork="true"
+                    maxmemory="1G"
+                    failonerror="true"
+                    classpath="${compile-classpath}"
+                    >
+                  <arg value="-fo"/>
+                  <arg value="${project.build.sourceDirectory}"/>
+                  <arg value="${grammar-file}" />
+                </java>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <groupId>${parent.groupId}</groupId>
+        <artifactId>antlr-lexeme</artifactId>
+        <version>${parent.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <packageRootDirectory>${generated-binaries}</packageRootDirectory>
+              <grammarFile>${grammar-file}</grammarFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+    </plugins>
+  </build>
+
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.novelang</groupId>
+      <artifactId>antlr-ground</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${lib.antlr.groupid}</groupId>
+      <artifactId>${lib.antlr.artefactid}</artifactId>
+      <version>${lib.antlr.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    
+  </dependencies>
+
+
+  
+</project>
+

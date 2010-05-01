@@ -23,10 +23,83 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.novelang</groupId>
   <artifactId>Novelang</artifactId>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <version>SNAPSHOT</version>
   <name>Novelang</name>
   <url>http://novelang.sf.net</url>
+
+  <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <lib.cobertura.groupid>org.codehaus.mojo</lib.cobertura.groupid>
+    <lib.cobertura.artefactid>cobertura-maven-plugin</lib.cobertura.artefactid>
+    <lib.cobertura.version>2.4</lib.cobertura.version>
+
+    <lib.antlr.groupid>org.antlr</lib.antlr.groupid>
+    <lib.antlr.artefactid>antlr</lib.antlr.artefactid>
+    <lib.antlr.version>3.1.1</lib.antlr.version>
+
+    <lib.logback.groupid>ch.qos.logback</lib.logback.groupid>
+    <lib.logback.version>0.9.20</lib.logback.version>
+
+    <lib.maven-plugin.groupid>org.apache.maven</lib.maven-plugin.groupid>
+    <lib.maven-plugin.artefactid>maven-plugin-api</lib.maven-plugin.artefactid>
+    <lib.maven-plugin.version>2.0</lib.maven-plugin.version>
+
+  </properties>
+
+
+  <build>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>${lib.cobertura.groupid}</groupId>
+          <artifactId>${lib.cobertura.artefactid}</artifactId>
+          <version>${lib.cobertura.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+
+      <plugin>
+        <groupId>${lib.cobertura.groupid}</groupId>
+        <artifactId>${lib.cobertura.artefactid}</artifactId>
+        <version>${lib.cobertura.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+          <encoding>UTF-8</encoding>
+          <debug>on</debug>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+
+  
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>${lib.cobertura.groupid}</groupId>
+        <artifactId>${lib.cobertura.artefactid}</artifactId>
+        <version>${lib.cobertura.version}</version>
+      </plugin>
+    </plugins>
+  </reporting>
+
+
+
   <dependencies>
 
     <dependency>
@@ -41,12 +114,6 @@
       <artifactId>ant</artifactId>
       <version>1.7.0</version>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr3-maven-plugin</artifactId>
-      <version>3.1.1</version>
     </dependency>
 
     <dependency>
@@ -121,16 +188,16 @@
     </dependency>
 
     <dependency>
-      <groupId>ch.qos.logback</groupId>
+      <groupId>${lib.logback.groupid}</groupId>
       <artifactId>logback-core</artifactId>
-      <version>0.9.20</version>
+      <version>${lib.logback.version}</version>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
-      <groupId>ch.qos.logback</groupId>
+      <groupId>${lib.logback.groupid}</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>0.9.20</version>
+      <version>${lib.logback.version}</version>
       <scope>runtime</scope>
     </dependency>
 

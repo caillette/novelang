@@ -35,7 +35,7 @@
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="-encoding UTF8" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-encoding UTF8 -target 1.5" />
   </component>
 </project>
 

@@ -3,6 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Novelang.iml" filepath="$PROJECT_DIR$/Novelang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/antlr-cap/antlr-cap.iml" filepath="$PROJECT_DIR$/../../projects/antlr-cap/antlr-cap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/antlr-generation/antlr-generation.iml" filepath="$PROJECT_DIR$/../../projects/antlr-generation/antlr-generation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/antlr-ground/antlr-ground.iml" filepath="$PROJECT_DIR$/../../projects/antlr-ground/antlr-ground.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/antlr-lexeme/antlr-lexeme.iml" filepath="$PROJECT_DIR$/../../projects/antlr-lexeme/antlr-lexeme.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/antlr-parser/antlr-parser.iml" filepath="$PROJECT_DIR$/../../projects/antlr-parser/antlr-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/primer/primer.iml" filepath="$PROJECT_DIR$/../../projects/primer/primer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-names-generator/unicode-names-generator.iml" filepath="$PROJECT_DIR$/../../projects/unicode-names-generator/unicode-names-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-names-reader/unicode-names-reader.iml" filepath="$PROJECT_DIR$/../../projects/unicode-names-reader/unicode-names-reader.iml" />
     </modules>
   </component>
 </project>
