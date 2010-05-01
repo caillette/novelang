@@ -11,6 +11,7 @@ ide/idea/out
 ide/idea/generated
 ide/idea/test-scratch
 ide/idea/.idea/workspace.xml
+ide/idea/.idea/libraries
 src/main-resources/fonts/more-fonts-*
 src/main-resources/more-fonts-*
 names.bin
