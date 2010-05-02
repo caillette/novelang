@@ -104,7 +104,7 @@ public abstract class JavaGenerator {
 
   private static StringTemplateGroup loadStringTemplateGroup() {
     final String templateDirectory =
-        ClassUtils.getPackageName( TokenEnumerationGenerator.class ).replace( '.', '/' ) ;
+        ClassUtils.getPackageName( JavaGenerator.class ).replace( '.', '/' ) ;
     LOGGER.info( "Loading StringTemplates from classpath directory: '{}'", templateDirectory ) ;
 
     final StringTemplateGroupLoader loader =

@@ -129,7 +129,13 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.novelang</groupId>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>tree</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
       <artifactId>antlr-ground</artifactId>
       <version>${parent.version}</version>
     </dependency>
