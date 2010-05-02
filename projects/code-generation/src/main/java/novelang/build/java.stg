@@ -22,6 +22,7 @@ import java.util.Set ;
 import com.google.common.collect.Sets ;
 import novelang.common.SyntacticTree ;
 import novelang.common.TagBehavior;
+import novelang.common.tree.Tree;
 import static novelang.common.TagBehavior.* ;
 
 <javadoc()>
@@ -57,7 +58,7 @@ public enum <name> {
    * Returns if a given {@code Tree} is of expected kind.
    * @param tree may be null.
    */
-  public boolean isRoot( SyntacticTree tree ) {
+  public boolean isRoot( Tree tree ) {
     if( null == tree ) {
       return false ;
     }
