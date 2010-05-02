@@ -21,14 +21,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ClassUtils;
 
 
 /**
- * Single entry point for the build: generates all needed Java files from ANTLR grammar:
- * tokens, supported characters, parser.
- * Also provides the base class for specialized generators.
+ * Base class for generating Java files from ANTLR grammar.
  * 
  * @author Laurent Caillette
  */
@@ -37,7 +35,7 @@ public abstract class GrammarBasedJavaGenerator extends JavaGenerator {
   private final File grammarFile ;
   private final String grammar ;
 
-  public GrammarBasedJavaGenerator(
+  protected GrammarBasedJavaGenerator(
       final File grammarFile,
       final String packageName, 
       final String className, 
@@ -60,7 +58,7 @@ public abstract class GrammarBasedJavaGenerator extends JavaGenerator {
 
 
   public static String readGrammar( final File grammarFile ) throws IOException {
-    return IOUtils.toString( new FileInputStream( grammarFile ) ) ;
+    return FileUtils.readFileToString( grammarFile ) ;
   }
 
 

@@ -13,22 +13,9 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-unicode-generator</name>
-  <artifactId>unicode-generator</artifactId>
+  <name>Novelang-antlr-token</name>
+  <artifactId>antlr-token</artifactId>
   <packaging>maven-plugin</packaging>
-
-
-  <build>
-    <resources>
-      <resource>
-        <directory>${project.build.sourceDirectory}</directory>
-        <includes>
-          <include>**/*.txt</include>
-        </includes>
-      </resource>
-    </resources>
-  </build>
-
 
 
   <dependencies>

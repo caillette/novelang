@@ -28,19 +28,6 @@ import org.slf4j.LoggerFactory;
  */
 public class LogFactory {
 
-  private static final boolean MAVEN_PRESENT ;
-  static {
-    out : {
-      try {
-        Class.forName( "org.apache.maven.plugin.AbstractMojo" ) ;
-      } catch( ClassNotFoundException e ) {
-        MAVEN_PRESENT = false ;
-        break out ;
-      }
-      MAVEN_PRESENT = true ;
-    }
-  }
-
   private static final Object LOCK = new Object() ;
 
   private static org.apache.maven.plugin.logging.Log mavenPluginLog;

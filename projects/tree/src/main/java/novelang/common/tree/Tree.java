@@ -73,7 +73,7 @@ public interface Tree< T extends Tree > {
   T adopt( Iterable< T > newChildren ) throws NullArgumentException ;
 
   /**
-   * Behavior of a function object for mutating {@link Tree}'s children.
+   * Experimental: behavior of a function object for mutating {@link Tree}'s children.
    * <p>
    * This interface defines the contract for changing a list in every possible way:
    * <ul>

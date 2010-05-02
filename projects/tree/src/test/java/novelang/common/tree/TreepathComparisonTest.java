@@ -16,8 +16,6 @@
  */
 package novelang.common.tree;
 
-import novelang.system.Log;
-import novelang.system.LogFactory;
 
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -160,7 +158,6 @@ public class TreepathComparisonTest {
   }
 
   
-  private static final Log LOG = LogFactory.getLog( TreepathComparisonTest.class ) ;
 
 
 }

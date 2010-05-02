@@ -14,6 +14,7 @@ ide/idea/.idea/workspace.xml
 ide/idea/.idea/libraries
 src/main-resources/fonts/more-fonts-*
 src/main-resources/more-fonts-*
+projects/*/*.iml
 names.bin
 git-crunch.sh
 *.log

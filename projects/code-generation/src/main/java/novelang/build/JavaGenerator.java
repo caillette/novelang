@@ -43,7 +43,7 @@ public abstract class JavaGenerator {
       }
   ;
 
-  public JavaGenerator(
+  protected JavaGenerator(
       final String className,
       final String packageName,
       final File targetDirectory

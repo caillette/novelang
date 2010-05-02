@@ -2,10 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="" />
-    <mapping directory="$PROJECT_DIR$/../../projects/antlr-cap" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../../projects/antlr-generation" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../../projects/antlr-ground" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../../projects/antlr-lexeme" vcs="Git" />
   </component>
 </project>
 

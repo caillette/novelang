@@ -35,6 +35,12 @@
         <option value="$PROJECT_DIR$/../../projects/antlr-cap/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/antlr-generation/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/antlr-lexeme/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/unicode-reader/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/unicode-generator/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/code-generation/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/antlr-token/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/antlr-tree/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/tree/pom.xml" />
       </list>
     </option>
   </component>

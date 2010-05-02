@@ -18,15 +18,11 @@ package novelang.common.tree;
 
 import java.util.Arrays;
 
+import junit.framework.AssertionFailedError;
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import junit.framework.AssertionFailedError;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.base.Joiner;
 
 /**
  * Tests for {@link novelang.common.tree.Treepath}.
@@ -34,8 +30,6 @@ import com.google.common.base.Joiner;
  * @author Laurent Caillette
  */
 public class TreepathTest {
-
-  private static final Log LOG = LogFactory.getLog( TreepathTest.class ) ;
 
   @Test
   public void testTreepathLength1() {
@@ -64,8 +58,6 @@ public class TreepathTest {
     final Treepath< MyTree > pathToParent = Treepath.create( parent ) ;
     final Treepath< MyTree > pathToChild = Treepath.create( pathToParent, 0 ) ;
 
-    print( "Treepath: ", pathToChild ) ;
-
     assertEquals( 2, pathToChild.getLength() ) ;
     assertSame( parent, pathToChild.getTreeAtDistance( 1 ) ) ;
     assertSame( child, pathToChild.getTreeAtDistance( 0 )) ;
@@ -84,7 +76,6 @@ public class TreepathTest {
     final Treepath< MyTree > pathToParent = Treepath.create( parent ) ;
     final Treepath< MyTree > pathToChild = Treepath.create( pathToParent, 0 ) ;
     final Treepath< MyTree > pathToGrandChild = Treepath.create( pathToChild, 0 ) ;
-    print("Treepath: ", pathToGrandChild ) ;
 
     assertEquals( 3, pathToGrandChild.getLength() ) ;
     assertSame( parent, pathToGrandChild.getTreeAtStart() ) ;
@@ -168,9 +159,6 @@ public class TreepathTest {
 // Fixture
 // =======
 
-  private static void print( final String message, final Treepath< MyTree > treepath ) {
-    LOG.debug( message + treepath.toString() ) ;
-  }
 
   private static void assertSame( final MyTree expected, final MyTree actual ) {
     final String message =

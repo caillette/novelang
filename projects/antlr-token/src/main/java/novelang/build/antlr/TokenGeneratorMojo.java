@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.IOException;
 
 import novelang.build.CodeGenerationConstants;
-import novelang.build.CodeGenerationTools;
-import novelang.build.antlr.LexemeGenerator;
 import novelang.system.LogFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -35,7 +33,7 @@ import org.apache.maven.plugin.MojoFailureException;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "UnusedDeclaration" } )
-public class LexemeGeneratorMojo extends AbstractMojo {
+public class TokenGeneratorMojo extends AbstractMojo {
 
   /**
    * Target directory for generation (where to generate parent packages).
@@ -47,7 +45,7 @@ public class LexemeGeneratorMojo extends AbstractMojo {
   private File packageRootDirectory;
 
   /**
-   * Grammar file to parse.
+   * Grammar file.
    *
    * @parameter expression="${generate.grammarFile}"
    * @required
@@ -61,10 +59,10 @@ public class LexemeGeneratorMojo extends AbstractMojo {
     LogFactory.setMavenPluginLog( getLog() ) ;
 
     try {
-      new LexemeGenerator(
+      new TokenGenerator(
           grammarFile,
           CodeGenerationConstants.GENERIC_PARSER_PACKAGENAME,
-          CodeGenerationConstants.LEXEMES_CLASSNAME,
+          CodeGenerationConstants.NODE_ENUMERATION_CLASSNAME,
           packageRootDirectory
       ).generate() ;
     } catch( IOException e ) {

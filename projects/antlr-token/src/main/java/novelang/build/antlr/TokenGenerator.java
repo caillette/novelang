@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang.build;
+package novelang.build.antlr;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import novelang.build.GrammarBasedJavaGenerator;
 import org.antlr.stringtemplate.StringTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +40,12 @@ import com.google.common.collect.ImmutableMap;
  *
  * @author Laurent Caillette
  */
-public class TokenEnumerationGenerator extends GrammarBasedJavaGenerator {
+public class TokenGenerator extends GrammarBasedJavaGenerator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( TokenEnumerationGenerator.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( TokenGenerator.class ) ;
 
 
-  public TokenEnumerationGenerator(
+  public TokenGenerator(
       final File grammarFile,
       final String packageName,
       final String className,
