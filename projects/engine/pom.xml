@@ -13,41 +13,38 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-treefixture</name>
-  <artifactId>treefixture</artifactId>
+  <name>Novelang-engine</name>
+  <artifactId>engine</artifactId>
 
   <dependencies>
 
+    <!-- FOP configuration. -->
+    <dependency>
+      <groupId> org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.3.1</version>
+    </dependency>
+
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>tree</artifactId>
+      <artifactId>primer</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>parser-antlr</artifactId>
+      <artifactId>parser-facade</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>parser-supplement</artifactId>
+      <artifactId>vanilla-fixture</artifactId>
       <version>${parent.version}</version>
+      <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>${parent.groupId}</groupId>
-      <artifactId>syntactic-tree</artifactId>
-      <version>${parent.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.junit.groupid}</groupId>
-      <artifactId>${lib.junit.artefactid}</artifactId>
-      <version>${lib.junit.version}</version>
-      <scope>compile</scope>
-    </dependency>
+    
 
   </dependencies>
 

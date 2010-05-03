@@ -53,6 +53,9 @@
         <option value="$PROJECT_DIR$/../../projects/separator/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/parser-supplement/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/vanilla-fixture/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/tree-fixture/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/engine/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/ant-task/pom.xml" />
       </list>
     </option>
   </component>

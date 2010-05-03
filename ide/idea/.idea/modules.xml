@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../../Novelang.iml" filepath="$PROJECT_DIR$/../../Novelang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/ant-task/ant-task.iml" filepath="$PROJECT_DIR$/../../projects/ant-task/ant-task.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/engine/engine.iml" filepath="$PROJECT_DIR$/../../projects/engine/engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-ground/parser-ground.iml" filepath="$PROJECT_DIR$/../../projects/parser-ground/parser-ground.iml" />
@@ -13,7 +15,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../projects/primer/primer.iml" filepath="$PROJECT_DIR$/../../projects/primer/primer.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" filepath="$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/tree/tree.iml" filepath="$PROJECT_DIR$/../../projects/tree/tree.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/treefixture/treefixture.iml" filepath="$PROJECT_DIR$/../../projects/treefixture/treefixture.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/tree-fixture/tree-fixture.iml" filepath="$PROJECT_DIR$/../../projects/tree-fixture/tree-fixture.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-generator/unicode-generator.iml" filepath="$PROJECT_DIR$/../../projects/unicode-generator/unicode-generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-names-generator/unicode-names-generator.iml" filepath="$PROJECT_DIR$/../../projects/unicode-names-generator/unicode-names-generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-names-reader/unicode-names-reader.iml" filepath="$PROJECT_DIR$/../../projects/unicode-names-reader/unicode-names-reader.iml" />

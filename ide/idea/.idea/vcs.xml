@@ -2,6 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="" />
+    <mapping directory="$PROJECT_DIR$/../../projects/ant-task" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../projects/engine" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../projects/tree-fixture" vcs="Git" />
   </component>
 </project>
 

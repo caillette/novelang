@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -14,10 +13,16 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-parser-facade</name>
-  <artifactId>parser-facade</artifactId>
+  <name>Novelang-tree-fixture</name>
+  <artifactId>tree-fixture</artifactId>
 
   <dependencies>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>tree</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
@@ -38,32 +43,11 @@
     </dependency>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
-      <artifactId>tree-fixture</artifactId>
-      <version>${parent.version}</version>
-      <scope>test</scope>
+      <groupId>${lib.junit.groupid}</groupId>
+      <artifactId>${lib.junit.artefactid}</artifactId>
+      <version>${lib.junit.version}</version>
+      <scope>compile</scope>
     </dependency>
-
-    <dependency>
-      <groupId>${parent.groupId}</groupId>
-      <artifactId>vanilla-fixture</artifactId>
-      <version>${parent.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${parent.groupId}</groupId>
-      <artifactId>unicode-reader</artifactId>
-      <version>${parent.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.antlr.groupid}</groupId>
-      <artifactId>${lib.antlr-runtime.artefactid}</artifactId>
-      <version>${lib.antlr.version}</version>
-    </dependency>
-
-    
 
   </dependencies>
 
