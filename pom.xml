@@ -33,6 +33,10 @@
     <lib.maven-plugin.artefactid>maven-plugin-api</lib.maven-plugin.artefactid>
     <lib.maven-plugin.version>2.0</lib.maven-plugin.version>
 
+    <lib.junit.groupid>junit</lib.junit.groupid>
+    <lib.junit.artefactid>junit</lib.junit.artefactid>
+    <lib.junit.version>4.8.1</lib.junit.version>
+
   </properties>
 
 
@@ -89,9 +93,9 @@
   <dependencies>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <groupId>${lib.junit.groupid}</groupId>
+      <artifactId>${lib.junit.artefactid}</artifactId>
+      <version>${lib.junit.version}</version>
       <scope>test</scope>
     </dependency>
 

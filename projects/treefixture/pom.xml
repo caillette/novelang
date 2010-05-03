@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <relativePath>../../pom.xml</relativePath>
+    <groupId>org.novelang</groupId>
+    <artifactId>Novelang</artifactId>
+    <version>SNAPSHOT</version>
+  </parent>
+
+  <name>Novelang-treefixture</name>
+  <artifactId>treefixture</artifactId>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>tree</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>parser-antlr</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>parser-supplement</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>syntactic-tree</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${lib.junit.groupid}</groupId>
+      <artifactId>${lib.junit.artefactid}</artifactId>
+      <version>${lib.junit.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+  </dependencies>
+
+
+
+
+</project>
+

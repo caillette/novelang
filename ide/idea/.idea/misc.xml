@@ -41,6 +41,18 @@
         <option value="$PROJECT_DIR$/../../projects/antlr-token/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/antlr-tree/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/tree/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/treefixture/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/syntactic-tree/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-antlr/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-antlr/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-cap/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-ground/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-lexeme-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-token-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-facade/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/separator/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/parser-supplement/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/vanilla-fixture/pom.xml" />
       </list>
     </option>
   </component>

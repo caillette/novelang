@@ -93,7 +93,7 @@ public class Problem implements Comparable< Problem > {
     // TODO reactivate this once solved dependency mess introduced (unveiled) by Maven.
 //    final String message = AntlrErrorInterpreter.getErrorMessage( exception, tokenNames ) ;
 //    return new Problem( location, message ) ;
-    return new Problem( location, exception.getMessage() ) ; // Bad.  
+    return new Problem( location, "TODO: interpret error" + exception.getMessage() ) ; // Bad.  
   }
   
   
