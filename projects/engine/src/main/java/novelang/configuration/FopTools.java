@@ -124,8 +124,8 @@ public class FopTools {
   }
 
   private static Map< String, EmbedFontInfo > extractFailedFontMap( final FontCache fontCache ) {
-    return ( Map< String, EmbedFontInfo > ) ( Map )
-        ReflectionTools.getFieldValue( fontCache, "failedFontMap" ) ;
+    return ( Map< String, EmbedFontInfo > )
+        ReflectionTools.getFieldValue( fontCache, "failedFontMap" );
   }
 
   public static FopFontStatus createGlobalFontStatus(

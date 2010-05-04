@@ -48,7 +48,7 @@ public class MetadataHelper {
   public static int countWords( final Tree tree ) {
     if( tree instanceof SyntacticTree ) {
       final SyntacticTree syntacticTree = ( SyntacticTree ) tree ;
-      if( WORD_.isRoot( syntacticTree ) ) {
+      if( WORD_ == syntacticTree.getNodeKind() ) {
         return 1 ;
       }
     }

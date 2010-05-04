@@ -32,7 +32,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.apache.xerces.parsers.SAXParser;
+import javax.xml.parsers.SAXParser;
 import novelang.system.LogFactory;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -278,17 +278,20 @@ public class XslWriter extends XmlWriter {
 
       final XMLReader reader ;
 
-      // It would be more standard to use XMLReaderFactory.createXMLReader() instead of deriving
-      // directly from a Xerces class. Then it would require some kind of wrapper.
-      reader = new SAXParser() {
-        @Override
-        public void setContentHandler( final ContentHandler contentHandler ) {
-          final SaxMulticaster multicaster = new SaxMulticaster() ;
-          multicaster.add( contentHandler ) ;
-          multicaster.add( xpathVerifier ) ;
-          super.setContentHandler( multicaster ) ;
-        }
-      } ;
+
+      try {
+        reader = new ForwardingXmlReader( XMLReaderFactory.createXMLReader() ) {
+          @Override
+          public void setContentHandler( final ContentHandler contentHandler ) {
+            final SaxMulticaster multicaster = new SaxMulticaster() ;
+            multicaster.add( contentHandler ) ;
+            multicaster.add( xpathVerifier ) ;
+            super.setContentHandler( multicaster ) ;
+          }
+        } ;
+      } catch( SAXException e ) {
+        throw new RuntimeException( e ) ;
+      }
 
       reader.setEntityResolver( entityResolver ) ;
 

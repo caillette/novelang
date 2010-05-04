@@ -37,10 +37,10 @@ public class SegmentExtractor
             pathToIdentifier.getTreeAtEnd()
     ;
 
-    if( NodeKind.ABSOLUTE_IDENTIFIER.isRoot( tree ) ) {
+    if( NodeKind.ABSOLUTE_IDENTIFIER == tree.getNodeKind() ) {
       segment = extractSegment( tree ) ;
       identifierDefinition = IdentifierDefinition.ABSOLUTE ;
-    } else if( NodeKind.RELATIVE_IDENTIFIER.isRoot( tree ) ) {
+    } else if( NodeKind.RELATIVE_IDENTIFIER ==tree.getNodeKind() ) {
       segment = extractSegment( tree ) ;
       identifierDefinition = IdentifierDefinition.RELATIVE ;
     } else {
@@ -87,9 +87,9 @@ public class SegmentExtractor
       final Treepath< SyntacticTree > pathToIdentifier
   ) {
     final SyntacticTree identifierTree = pathToIdentifier.getTreeAtEnd() ;
-    if( NodeKind.ABSOLUTE_IDENTIFIER.isRoot( identifierTree ) ) {
+    if( NodeKind.ABSOLUTE_IDENTIFIER == identifierTree.getNodeKind() ) {
       return new FragmentIdentifier( extractSegment( identifierTree ) ) ;
-    } else if( NodeKind.RELATIVE_IDENTIFIER.isRoot( identifierTree ) ) {
+    } else if( NodeKind.RELATIVE_IDENTIFIER == identifierTree.getNodeKind() ) {
       if( parentIdentifier == null ) {
         throw new IllegalArgumentException( // TODO accumulate errors instead.
             "Missing absolute identifier above relative identifier " + identifierTree ) ;
