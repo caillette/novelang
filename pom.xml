@@ -163,6 +163,21 @@
     </dependency>
 
     <dependency>
+      <!-- dom4j needs that for XPath queries. TODO: remove once ImageFixer uses pull parsing. -->
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.1.1</version>
+      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <!-- Avoids collision with JDK classes. -->
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.0.1</version>
@@ -180,6 +195,13 @@
         <groupId>org.apache.xmlgraphics</groupId>
         <artifactId>fop</artifactId>
         <version>0.95</version>
+      <exclusions>
+        <exclusion>
+          <!-- Avoids collision with JDK classes. -->
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>

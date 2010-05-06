@@ -166,6 +166,7 @@ public class XslWriter extends XmlWriter {
 
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
+
     saxTransformerFactory.setURIResolver( uriResolver ) ;
 
     final TemplatesHandler templatesHandler = saxTransformerFactory.newTemplatesHandler() ;

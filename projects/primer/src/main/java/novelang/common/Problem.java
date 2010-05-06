@@ -60,7 +60,11 @@ public class Problem implements Comparable< Problem > {
       Pattern.compile( "line (\\d+):(\\d+) (.+)" ) ;
 
   public static Problem createProblem( final String message ) {
-    return new Problem( new Location( "<unknown file>", -1, -1 ), message ) ;
+    return createProblem( new Location( "<unknown file>", -1, -1 ), message ) ;
+  }
+
+  public static Problem createProblem( final Location location, final String message ) {
+    return new Problem( location, message ) ;
   }
 
   public static Problem createProblem( final Exception exception ) {
@@ -93,7 +97,7 @@ public class Problem implements Comparable< Problem > {
     // TODO reactivate this once solved dependency mess introduced (unveiled) by Maven.
 //    final String message = AntlrErrorInterpreter.getErrorMessage( exception, tokenNames ) ;
 //    return new Problem( location, message ) ;
-    return new Problem( location, "TODO: interpret error" + exception.getMessage() ) ; // Bad.  
+    return createProblem( location, "TODO: interpret error" + exception.getMessage() ) ; // Bad.
   }
   
   

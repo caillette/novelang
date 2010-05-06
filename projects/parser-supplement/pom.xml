@@ -31,6 +31,12 @@
       <version>${parent.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>unicode-reader</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
   </dependencies>
 
 </project>
