@@ -36,7 +36,6 @@
         <option value="$PROJECT_DIR$/../../projects/antlr-generation/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/antlr-lexeme/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/unicode-reader/pom.xml" />
-        <option value="$PROJECT_DIR$/../../projects/unicode-generator/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/code-generation/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/antlr-token/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/antlr-tree/pom.xml" />
@@ -52,10 +51,11 @@
         <option value="$PROJECT_DIR$/../../projects/parser-facade/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/separator/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/parser-supplement/pom.xml" />
-        <option value="$PROJECT_DIR$/../../projects/vanilla-fixture/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/tree-fixture/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/engine/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/ant-task/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/unicode-generator-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/syntactic-tree-fixture/pom.xml" />
       </list>
     </option>
   </component>

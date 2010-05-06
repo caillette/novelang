@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-tree-fixture</name>
-  <artifactId>tree-fixture</artifactId>
+  <name>Novelang-syntactic-tree-fixture</name>
+  <artifactId>syntactic-tree-fixture</artifactId>
 
   <dependencies>
 

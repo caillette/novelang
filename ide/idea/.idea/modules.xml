@@ -14,11 +14,10 @@
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-token-plugin/parser-token-plugin.iml" filepath="$PROJECT_DIR$/../../projects/parser-token-plugin/parser-token-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/primer/primer.iml" filepath="$PROJECT_DIR$/../../projects/primer/primer.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" filepath="$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/syntactic-tree-fixture/syntactic-tree-fixture.iml" filepath="$PROJECT_DIR$/../../projects/syntactic-tree-fixture/syntactic-tree-fixture.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/tree/tree.iml" filepath="$PROJECT_DIR$/../../projects/tree/tree.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/tree-fixture/tree-fixture.iml" filepath="$PROJECT_DIR$/../../projects/tree-fixture/tree-fixture.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-generator/unicode-generator.iml" filepath="$PROJECT_DIR$/../../projects/unicode-generator/unicode-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-generator-plugin/unicode-generator-plugin.iml" filepath="$PROJECT_DIR$/../../projects/unicode-generator-plugin/unicode-generator-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" filepath="$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" filepath="$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" />
     </modules>
   </component>
 </project>

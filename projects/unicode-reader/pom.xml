@@ -26,7 +26,7 @@
 
       <plugin>
         <groupId>${parent.groupId}</groupId>
-        <artifactId>unicode-generator</artifactId>
+        <artifactId>unicode-generator-plugin</artifactId>
         <version>${parent.version}</version>
         <executions>
           <execution>
@@ -42,6 +42,18 @@
       </plugin>
       
     </plugins>
+
+    <resources>
+
+      <resource>
+        <directory>${project.build.sourceDirectory}</directory>
+        <includes>
+          <include>**/*.bin</include>
+        </includes>
+      </resource>
+
+    </resources>
+
   </build>
 
 

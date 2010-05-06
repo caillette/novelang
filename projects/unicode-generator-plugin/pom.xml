@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-unicode-generator</name>
-  <artifactId>unicode-generator</artifactId>
+  <name>Novelang-unicode-generator-plugin</name>
+  <artifactId>unicode-generator-plugin</artifactId>
   <packaging>maven-plugin</packaging>
 
 
