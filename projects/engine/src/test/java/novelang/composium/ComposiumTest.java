@@ -16,8 +16,9 @@
  */
 package novelang.composium;
 
-import novelang.TestResourceTree;
-import static novelang.TestResourceTree.initialize;
+import novelang.ResourcesForTests;
+
+import static novelang.ResourcesForTests.initialize;
 import novelang.common.SyntacticTree;
 import novelang.common.Problem;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -53,7 +54,7 @@ public class ComposiumTest {
    */
   @Test
   public void badCommandGeneratesProblem() {
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final Composium composium = ComposiumTestTools.createBook(
         SystemUtils.getUserDir(),
@@ -68,7 +69,7 @@ public class ComposiumTest {
    */
   @Test
   public void justInsert() {
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
     final Composium composium = ComposiumTestTools.createBook(
@@ -95,9 +96,9 @@ public class ComposiumTest {
    */
   @Test
   public void insertWithRecursiveFileScan() throws IOException {
-    resourceInstaller.copy( TestResourceTree.Scanned.dir ) ;
+    resourceInstaller.copy( ResourcesForTests.Scanned.dir ) ;
     final File scannedBookNoStyle =
-        resourceInstaller.createFileObject( TestResourceTree.Scanned.BOOK ) ;
+        resourceInstaller.createFileObject( ResourcesForTests.Scanned.BOOK ) ;
 
     final Composium composium = ComposiumTestTools.createBook( scannedBookNoStyle ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -143,9 +144,9 @@ public class ComposiumTest {
    */
   @Test
   public void insertWithFlatFileScan() throws IOException {
-    resourceInstaller.copy( TestResourceTree.Scanned.dir ) ;
+    resourceInstaller.copy( ResourcesForTests.Scanned.dir ) ;
     final File scannedBookNoStyleNoRecurse = resourceInstaller.createFileObject(
-        TestResourceTree.Scanned.BOOK_NORECURSE ) ;
+        ResourcesForTests.Scanned.BOOK_NORECURSE ) ;
 
     final Composium composium = ComposiumTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -177,9 +178,9 @@ public class ComposiumTest {
    */
   @Test
   public void insertWithFileScanAndStyle() throws IOException {
-    resourceInstaller.copy( TestResourceTree.Scanned.dir ) ;
+    resourceInstaller.copy( ResourcesForTests.Scanned.dir ) ;
     final File scannedBookWithStyle = resourceInstaller.createFileObject(
-        TestResourceTree.Scanned.BOOK_WITHSTYLE ) ;
+        ResourcesForTests.Scanned.BOOK_WITHSTYLE ) ;
 
     final Composium composium = ComposiumTestTools.createBook( scannedBookWithStyle );
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -228,9 +229,9 @@ public class ComposiumTest {
    */
   @Test
   public void insertWithBadPart() throws IOException {
-    resourceInstaller.copy( TestResourceTree.Served.BROKEN_NOVELLA ) ;
+    resourceInstaller.copy( ResourcesForTests.Served.BROKEN_NOVELLA ) ;
     final File scannedBookWithBadPart =
-        resourceInstaller.copy( TestResourceTree.Served.BROKEN_BOOK_BAD_SCANNED_NOVELLA ) ;
+        resourceInstaller.copy( ResourcesForTests.Served.BROKEN_BOOK_BAD_SCANNED_NOVELLA ) ;
 
     final Composium composium = ComposiumTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -246,9 +247,9 @@ public class ComposiumTest {
    */
   @Test
   public void insertEmptyPart() throws IOException {
-    final Resource emptyPartResource = TestResourceTree.BookWithEmptyPart.EMPTY_NOVELLA;
+    final Resource emptyPartResource = ResourcesForTests.BookWithEmptyPart.EMPTY_NOVELLA;
     resourceInstaller.copy( emptyPartResource ) ;
-    final File bookFile = resourceInstaller.copy( TestResourceTree.BookWithEmptyPart.BOOK ) ;
+    final File bookFile = resourceInstaller.copy( ResourcesForTests.BookWithEmptyPart.BOOK ) ;
 
     final Composium composium = ComposiumTestTools.createBook( bookFile ) ;
 
@@ -267,9 +268,9 @@ public class ComposiumTest {
    */
   @Test
   public void detectMissingImage() throws IOException {
-    resourceInstaller.copy( TestResourceTree.MissingImages.MISSING_IMAGE_PART ) ;
+    resourceInstaller.copy( ResourcesForTests.MissingImages.MISSING_IMAGE_PART ) ;
     final File scannedBookWithBadImage =
-        resourceInstaller.copy( TestResourceTree.MissingImages.MISSING_IMAGE_BOOK ) ;
+        resourceInstaller.copy( ResourcesForTests.MissingImages.MISSING_IMAGE_BOOK ) ;
 
     final Composium composium = ComposiumTestTools.createBook( scannedBookWithBadImage ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -284,10 +285,10 @@ public class ComposiumTest {
    */
   @Test
   public void insertWithExplicitIdentifiers() throws IOException {
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_1 ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.NOVELLA_1 ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.BOOK_1 ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.NOVELLA_1 ) ;
     final File bookWithIdentifier =
-        resourceInstaller.createFileObject( TestResourceTree.Identifiers.BOOK_1 ) ;
+        resourceInstaller.createFileObject( ResourcesForTests.Identifiers.BOOK_1 ) ;
 
     final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -319,8 +320,8 @@ public class ComposiumTest {
   @Test
   public void insertWithPromotedTags() throws IOException {
     final File bookWithTags =
-        resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_BOOK ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.PROMOTED_TAGS_PART_1 ) ;
+        resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.PROMOTED_TAGS_BOOK ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.PROMOTED_TAGS_PART_1 ) ;
 
     final Composium composium = ComposiumTestTools.createBook( bookWithTags ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -378,8 +379,8 @@ public class ComposiumTest {
   @Test
   public void insertWithImplicitIdentifiers() throws IOException {
     final File bookWithIdentifier =
-        resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_2 ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.NOVELLA_2 ) ;
+        resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.BOOK_2 ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.NOVELLA_2 ) ;
 
     final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -429,8 +430,8 @@ public class ComposiumTest {
   @Test
   public void insertWithCollidingIdentifiers() throws IOException {
     final File bookWithIdentifier =
-        resourceInstaller.copy( TestResourceTree.Identifiers.BOOK_4 ) ;
-    resourceInstaller.copy( TestResourceTree.Identifiers.Subdirectory4.dir ) ;
+        resourceInstaller.copy( ResourcesForTests.Identifiers.BOOK_4 ) ;
+    resourceInstaller.copy( ResourcesForTests.Identifiers.Subdirectory4.dir ) ;
 
     final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
@@ -472,8 +473,8 @@ public class ComposiumTest {
   @Test
   public void insertWithRecurseShouldKeepImplicitIdentifiers() throws IOException {
     final File bookWithIdentifier =
-        resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_3_RECURSE ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory3.PART_3 ) ;
+        resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.BOOK_3_RECURSE ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.Subdirectory3.PART_3 ) ;
 
     verifyBook3( bookWithIdentifier );
   }
@@ -484,8 +485,8 @@ public class ComposiumTest {
   @Test
   public void insertShouldKeepImplicitIdentifiers() throws IOException {
     final File bookWithIdentifier =
-        resourceInstaller.copyWithPath( TestResourceTree.Identifiers.BOOK_3_STRAIGHT ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Identifiers.Subdirectory3.PART_3 ) ;
+        resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.BOOK_3_STRAIGHT ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.Subdirectory3.PART_3 ) ;
 
     verifyBook3( bookWithIdentifier );
   }

@@ -24,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
@@ -39,7 +38,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
-import org.junit.Assert;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.system.DefaultCharset;
@@ -66,13 +64,13 @@ import com.google.common.base.Preconditions;
  *
  * @author Laurent Caillette
  */
-public final class TestResourceTools {
+public final class ResourceTools {
 
-  private static final Log LOG = LogFactory.getLog( TestResourceTools.class ) ;
+  private static final Log LOG = LogFactory.getLog( ResourceTools.class ) ;
   private static final ExecutorService EXECUTOR_SERVICE =
       Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ) ;
 
-  private TestResourceTools() { }
+  private ResourceTools() { }
 
   public static URL getResourceUrl( final Class owningClass, final String resourceName ) {
     final String fullName ;

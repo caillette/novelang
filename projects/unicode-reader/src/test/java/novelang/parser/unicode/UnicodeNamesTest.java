@@ -1,14 +1,12 @@
 package novelang.parser.unicode;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import org.apache.commons.lang.CharUtils;
-
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.common.LanguageTools;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.apache.commons.lang.CharUtils;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link UnicodeNames} basing on some well-known values.

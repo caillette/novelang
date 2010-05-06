@@ -17,8 +17,8 @@
 package novelang.daemon;
 
 import com.google.common.collect.Lists;
-import novelang.TestResourceTools;
-import novelang.TestResourceTree;
+import novelang.ResourceTools;
+import novelang.ResourcesForTests;
 import novelang.common.LanguageTools;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.filefixture.Resource;
@@ -74,7 +74,7 @@ public class HttpDaemonTest {
   @Test
   public void nlpOk() throws Exception {
 
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     final String nlpSource = alternateSetup( resource, ISO_8859_1 ) ;
     final String generated = readAsString( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" +
@@ -90,7 +90,7 @@ public class HttpDaemonTest {
 
   @Test
   public void pdfOk() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     alternateSetup( resource, ISO_8859_1 ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ) ;
@@ -100,7 +100,7 @@ public class HttpDaemonTest {
 
   @Test
   public void correctMimeTypeForPdf() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
     final HttpGet httpGet = new HttpGet(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ;
@@ -121,7 +121,7 @@ public class HttpDaemonTest {
 
   @Test
   public void htmlNoSmoke() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML ) ) ;
@@ -130,7 +130,7 @@ public class HttpDaemonTest {
 
   @Test
   public void htmlBrokenCausesRedirection() throws Exception {
-    final Resource resource = TestResourceTree.Served.BROKEN_NOVELLA;
+    final Resource resource = ResourcesForTests.Served.BROKEN_NOVELLA;
     setup( resource ) ;
 
     final String brokentDocumentName = resource.getBaseName() + HTML ;
@@ -155,7 +155,7 @@ public class HttpDaemonTest {
 
   @Test
   public void errorPageForUnbrokenHtmlNotBrokenCausesRedirection() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
 
     final ResponseSnapshot responseSnapshot = followRedirection(
@@ -169,7 +169,7 @@ public class HttpDaemonTest {
 
   @Test
   public void listDirectoryContentNoTrailingSolidus() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
     final ResponseSnapshot responseSnapshot =
@@ -179,7 +179,7 @@ public class HttpDaemonTest {
 
   @Test
   public void listDirectoryContentWithTrailingSolidus() throws Exception {
-      final Resource resource = TestResourceTree.Served.GOOD_PART;
+      final Resource resource = ResourcesForTests.Served.GOOD_PART;
       resourceInstaller.copyWithPath( resource ) ;
       setup() ;
     final String urlAsString = "http://localhost:" + HTTP_DAEMON_PORT + "/";
@@ -189,7 +189,7 @@ public class HttpDaemonTest {
 
   @Test
   public void listDirectoryContentWithSafari() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
 
@@ -211,16 +211,16 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInQueryParameter() throws Exception {
-    final Resource resource = TestResourceTree.Served.GOOD_BOOK ;
+    final Resource resource = ResourcesForTests.Served.GOOD_BOOK ;
     resourceInstaller.copy( resource ) ;
-    resourceInstaller.copy( TestResourceTree.Served.GOOD_PART ) ;
+    resourceInstaller.copy( ResourcesForTests.Served.GOOD_PART ) ;
     final File stylesheetFile = resourceInstaller.copyScoped(
-        TestResourceTree.Served.dir, TestResourceTree.Served.Style.VOID_XSL ) ;
+        ResourcesForTests.Served.dir, ResourcesForTests.Served.Style.VOID_XSL ) ;
     setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
     final byte[] generated = readAsBytes( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
-                "?stylesheet=" + TestResourceTree.Served.Style.VOID_XSL.getName()
+                "?stylesheet=" + ResourcesForTests.Served.Style.VOID_XSL.getName()
     ) ) ;
 
     save( "generated.html", generated ) ;
@@ -230,11 +230,11 @@ public class HttpDaemonTest {
 
   @Test
   public void testAlternateStylesheetInBook() throws Exception {
-      final Resource resource = TestResourceTree.Served.BOOK_ALTERNATE_XSL ;
+      final Resource resource = ResourcesForTests.Served.BOOK_ALTERNATE_XSL ;
       resourceInstaller.copy( resource ) ;
-      resourceInstaller.copy( TestResourceTree.Served.GOOD_PART ) ;
+      resourceInstaller.copy( ResourcesForTests.Served.GOOD_PART ) ;
       final File stylesheetFile = resourceInstaller.copyScoped(
-          TestResourceTree.Served.dir, TestResourceTree.Served.Style.VOID_XSL ) ;
+          ResourcesForTests.Served.dir, ResourcesForTests.Served.Style.VOID_XSL ) ;
       setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
       final byte[] generated = readAsBytes( new URL(
@@ -253,7 +253,7 @@ public class HttpDaemonTest {
   private static final Log LOG = LogFactory.getLog( HttpDaemonTest.class ) ;
 
   static {
-    TestResourceTree.initialize() ;  
+    ResourcesForTests.initialize() ;
   }
 
   private static final Charset ISO_8859_1 = Charset.forName( "ISO_8859_1" );
@@ -349,7 +349,7 @@ public class HttpDaemonTest {
   private void daemonSetup( final File styleDirectory, final Charset renderingCharset )
       throws Exception
   {
-    httpDaemon = new HttpDaemon( TestResourceTools.createDaemonConfiguration(
+    httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
         HTTP_DAEMON_PORT,
         resourceInstaller.getTargetDirectory(),
         styleDirectory,
@@ -361,7 +361,7 @@ public class HttpDaemonTest {
   private void daemonSetup( final Charset renderingCharset )
       throws Exception
   {
-    httpDaemon = new HttpDaemon( TestResourceTools.createDaemonConfiguration(
+    httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
         HTTP_DAEMON_PORT,
         resourceInstaller.getTargetDirectory(),
         renderingCharset

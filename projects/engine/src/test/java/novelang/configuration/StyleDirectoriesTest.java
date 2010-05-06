@@ -1,6 +1,6 @@
 package novelang.configuration;
 
-import novelang.TestResourceTree;
+import novelang.ResourcesForTests;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.configuration.parse.DaemonParameters;
@@ -26,12 +26,12 @@ public class StyleDirectoriesTest {
   
   @Test
   public void findDefaultStyleDirectory() throws ArgumentException {
-    resourceInstaller.copyWithPath( TestResourceTree.Served.Style.VOID_XSL ) ;
-    final File baseDirectory = resourceInstaller.createFileObject( TestResourceTree.Served.dir ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.Served.Style.VOID_XSL ) ;
+    final File baseDirectory = resourceInstaller.createFileObject( ResourcesForTests.Served.dir ) ;
     final DaemonParameters parameters = new DaemonParameters( baseDirectory ) ;
     final ResourceLoader resourceLoader = ConfigurationTools.createResourceLoader( parameters ) ;
     Assert.assertNotNull( resourceLoader.getInputStream( 
-        TestResourceTree.Served.Style.VOID_XSL.getResourceName() ) ) ;
+        ResourcesForTests.Served.Style.VOID_XSL.getResourceName() ) ) ;
   }
 
   @Test
@@ -40,16 +40,16 @@ public class StyleDirectoriesTest {
         new DaemonParameters( resourceInstaller.getTargetDirectory() ) ;
     final ResourceLoader resourceLoader = ConfigurationTools.createResourceLoader( parameters ) ;
     Assert.assertNotNull( resourceLoader.getInputStream( new ResourceName(
-        TestResourceTree.MainResources.Style.DEFAULT_PDF_XSL.getName() ) ) ) ;
+        ResourcesForTests.MainResources.Style.DEFAULT_PDF_XSL.getName() ) ) ) ;
   }
 
   @Test
   public void findResourceAmongMultipleDeclaredDirectories() throws ArgumentException {
     // Any two different directories containing resources would make it.
     final File resource1 = resourceInstaller.copyWithPath( 
-        TestResourceTree.FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
+        ResourcesForTests.FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
     final File resource2 = resourceInstaller.copyWithPath( 
-        TestResourceTree.FontStructure.Fonts.MONO ) ;
+        ResourcesForTests.FontStructure.Fonts.MONO ) ;
     
     final DaemonParameters parameters = new DaemonParameters( 
         resourceInstaller.getTargetDirectory(),
@@ -67,7 +67,7 @@ public class StyleDirectoriesTest {
 // =======  
   
   static {
-    TestResourceTree.initialize() ;
+    ResourcesForTests.initialize() ;
   }
   
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ; 

@@ -18,6 +18,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../projects/tree/tree.iml" filepath="$PROJECT_DIR$/../../projects/tree/tree.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-generator-plugin/unicode-generator-plugin.iml" filepath="$PROJECT_DIR$/../../projects/unicode-generator-plugin/unicode-generator-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" filepath="$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" filepath="$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" />
     </modules>
   </component>
 </project>

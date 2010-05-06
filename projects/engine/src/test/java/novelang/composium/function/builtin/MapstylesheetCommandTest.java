@@ -18,7 +18,7 @@ package novelang.composium.function.builtin;
 
 import java.io.File;
 
-import novelang.TestResourceTools;
+import novelang.ResourceTools;
 import org.junit.Assert;
 import org.junit.Test;
 import novelang.system.LogFactory;
@@ -53,7 +53,7 @@ public class MapstylesheetCommandTest {
 
 
     final CommandExecutionContext result = definition.evaluate(
-        new CommandExecutionContext( new File( "" ), TestResourceTools.getExecutorService() ) );
+        new CommandExecutionContext( new File( "" ), ResourceTools.getExecutorService() ) );
 
     Assert.assertEquals(
         new ResourceName( "dir/stylesheet.xsl" ),

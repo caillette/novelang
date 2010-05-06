@@ -18,12 +18,12 @@ package novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
 
+import novelang.ResourcesForTests;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
 import novelang.system.LogFactory;
-import novelang.TestResourceTools;
-import novelang.TestResourceTree;
+import novelang.ResourceTools;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
@@ -44,12 +44,12 @@ public class NumberingTest {
   @Test
   public void testNodeset() throws Exception {
     final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
-    resourceInstaller.copy( TestResourceTree.XslFormatting.dir ) ;
+    resourceInstaller.copy( ResourcesForTests.XslFormatting.dir ) ;
 
 
-    final ProducerConfiguration serverConfiguration = TestResourceTools.createProducerConfiguration(
+    final ProducerConfiguration serverConfiguration = ResourceTools.createProducerConfiguration(
         resourceInstaller.getTargetDirectory(),
-        resourceInstaller.createFileObject( TestResourceTree.XslFormatting.dir ),
+        resourceInstaller.createFileObject( ResourcesForTests.XslFormatting.dir ),
         true,
         DefaultCharset.RENDERING
     ) ;
@@ -57,15 +57,15 @@ public class NumberingTest {
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;
 
     final String documentName =
-        TestResourceTree.XslFormatting.PART_SOMECHAPTERS.getPathNoEndSeparator() + "/" +
-        TestResourceTree.XslFormatting.PART_SOMECHAPTERS.getBaseName()
+        ResourcesForTests.XslFormatting.PART_SOMECHAPTERS.getPathNoEndSeparator() + "/" +
+        ResourcesForTests.XslFormatting.PART_SOMECHAPTERS.getBaseName()
     ;
     LOG.debug( "Document name = '%s'", documentName ) ;
 
     final DocumentRequest documentRequest = RequestTools.forgeDocumentRequest(
         documentName,
         RenditionMimeType.PDF,
-        TestResourceTree.XslFormatting.XSL_NUMBERING.getResourceName()
+        ResourcesForTests.XslFormatting.XSL_NUMBERING.getResourceName()
     ) ;
 
     documentProducer.produce( documentRequest, outputStream ) ;
@@ -82,7 +82,7 @@ public class NumberingTest {
 
 
   static {
-    TestResourceTree.initialize() ;
+    ResourcesForTests.initialize() ;
   }
 
 }

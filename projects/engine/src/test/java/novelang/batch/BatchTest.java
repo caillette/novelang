@@ -20,13 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Permission;
 
+import novelang.ResourcesForTests;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import novelang.TestResourceTree;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -59,7 +59,7 @@ public class BatchTest {
   @Test
   public void generateOneDocumentOk() throws Exception {
     final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
-    final Resource resource = TestResourceTree.Served.GOOD_PART;
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copy( resource ) ;
     final String renderedDocumentName = resource.getBaseName() + "." + HTML_EXTENSION;
 
@@ -88,7 +88,7 @@ public class BatchTest {
   private static final Log LOG = LogFactory.getLog( BatchTest.class ) ;
 
   static {
-    TestResourceTree.initialize() ;
+    ResourcesForTests.initialize() ;
   }
 
   private static final String HTML_EXTENSION = RenditionMimeType.HTML.getFileExtension() ;

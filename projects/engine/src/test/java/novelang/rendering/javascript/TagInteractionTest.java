@@ -34,9 +34,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import novelang.DirectoryFixture;
-import novelang.TestResourceTree;
-import static novelang.TestResourceTree.TaggedPart;
-import novelang.TestResourceTools;
+import novelang.ResourcesForTests;
+import static novelang.ResourcesForTests.TaggedPart;
+import novelang.ResourceTools;
 import novelang.common.filefixture.ResourceInstaller;
 import novelang.configuration.ConfigurationTools;
 import novelang.daemon.HttpDaemon;
@@ -123,7 +123,7 @@ public class TagInteractionTest {
   private static final Log LOG = LogFactory.getLog( TagInteractionTest.class ) ;
 
   static {
-    TestResourceTree.initialize() ;
+    ResourcesForTests.initialize() ;
   }
 
   private static final int HTTP_DAEMON_PORT = 8081 ;
@@ -149,7 +149,7 @@ public class TagInteractionTest {
     final ResourceLoader resourceLoader =
         new ClasspathResourceLoader( "/" + ConfigurationTools.BUNDLED_STYLE_DIR ) ;
 
-    httpDaemon = new HttpDaemon( TestResourceTools.createDaemonConfiguration(
+    httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
         HTTP_DAEMON_PORT,
         testDirectory,
         resourceLoader

@@ -1,6 +1,6 @@
 package novelang.produce;
 
-import novelang.TestResourceTree;
+import novelang.ResourcesForTests;
 import novelang.composium.ComposiumTest;
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
@@ -45,14 +45,14 @@ public class TestDocumentProducer {
 
   @Test
   public void tagFilteringOnImplicitTagForBook() throws IOException {
-    resourceInstaller.copyWithPath( TestResourceTree.TaggedPart.IMPLICIT_TAGS_PART ) ;
-    final Resource bookResource = TestResourceTree.TaggedPart.IMPLICIT_TAGS_BOOK ;
+    resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.IMPLICIT_TAGS_PART ) ;
+    final Resource bookResource = ResourcesForTests.TaggedPart.IMPLICIT_TAGS_BOOK ;
     verifyFooTagApplies( COMPOSIUM, bookResource ) ;
   }
 
   @Test
   public void tagFilteringOnImplicitTagForPart() throws IOException {
-    final Resource bookResource = TestResourceTree.TaggedPart.IMPLICIT_TAGS_PART ;
+    final Resource bookResource = ResourcesForTests.TaggedPart.IMPLICIT_TAGS_PART ;
     verifyFooTagApplies( NOVELLA, bookResource ) ;
   }
 
@@ -143,7 +143,7 @@ public class TestDocumentProducer {
   }
   
   static {
-    TestResourceTree.initialize() ;
+    ResourcesForTests.initialize() ;
   }
 
   private static final Log LOG = LogFactory.getLog( ComposiumTest.class ) ;

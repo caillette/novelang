@@ -16,10 +16,10 @@
  */
 package novelang.composium;
 
-import static novelang.TestResourceTree.Images;
-import static novelang.TestResourceTree.initialize;
+import static novelang.ResourcesForTests.Images;
+import static novelang.ResourcesForTests.initialize;
 
-import novelang.TestResourceTools;
+import novelang.ResourceTools;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceSchema;
@@ -59,7 +59,7 @@ public class ComposiumWithImagesTest {
     final Composium composium = new Composium(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesExplicit,
-        TestResourceTools.getExecutorService(),
+        ResourceTools.getExecutorService(),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
@@ -82,7 +82,7 @@ public class ComposiumWithImagesTest {
     final Composium composium = new Composium(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesRecurse,
-        TestResourceTools.getExecutorService(),
+        ResourceTools.getExecutorService(),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()

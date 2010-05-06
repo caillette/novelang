@@ -20,7 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import novelang.TestResourceTools;
+import novelang.ResourceTools;
+import novelang.ResourcesForTests;
 import novelang.composium.function.builtin.insert.LevelHead;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
@@ -30,9 +31,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 
 import com.google.common.collect.ImmutableList;
-import novelang.TestResourceTree;
 import novelang.designator.FragmentIdentifier;
-import static novelang.TestResourceTree.initialize;
+import static novelang.ResourcesForTests.initialize;
 import novelang.composium.CommandExecutionContext;
 import novelang.composium.function.CommandParameterException;
 import novelang.common.Location;
@@ -60,7 +60,7 @@ public class InsertCommandTest {
   @Test
   public void goodFileUrl() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -76,7 +76,7 @@ public class InsertCommandTest {
     final CommandExecutionContext initialContext =
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( new SimpleTree( COMPOSIUM ) )
     ;
 
@@ -111,7 +111,7 @@ public class InsertCommandTest {
     final CommandExecutionContext initialContext =
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( new SimpleTree( COMPOSIUM ) )
     ;
 
@@ -128,7 +128,7 @@ public class InsertCommandTest {
   public void createChapterForSinglePart() 
       throws CommandParameterException, MalformedURLException
   {
-    final File noChapterFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_NO_CHAPTER ) ;
+    final File noChapterFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -145,7 +145,7 @@ public class InsertCommandTest {
     final CommandExecutionContext initialContext =
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree ) ;
     final CommandExecutionContext result = insertCommand.evaluate( initialContext ) ;
 
@@ -174,7 +174,7 @@ public class InsertCommandTest {
   @Test
   public void addStyle() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -191,7 +191,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -229,7 +229,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -239,7 +239,7 @@ public class InsertCommandTest {
   @Test
   public void recurseWithSomeBrokenPart() throws CommandParameterException, MalformedURLException {
     final File brokenContentDirectory =
-        resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_BROKEN_CANNOTPARSE ).getParentFile() ;
+        resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_BROKEN_CANNOTPARSE ).getParentFile() ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -256,7 +256,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             brokenContentDirectory,
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree ) ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;
@@ -267,7 +267,7 @@ public class InsertCommandTest {
   @Test
   public void levelAboveIs1() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -291,7 +291,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -355,7 +355,7 @@ public class InsertCommandTest {
   @Test
   public void noLevelaboveCausesProblem() throws CommandParameterException, MalformedURLException {
 
-    final File oneWordFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
+    final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,        
@@ -372,7 +372,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree ) ) ;
 
     assertTrue( result.getProblems().iterator().hasNext() ) ;
@@ -382,8 +382,8 @@ public class InsertCommandTest {
   @Test
   public void recurseWithLevelabove1() throws CommandParameterException, MalformedURLException {
 
-    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_ONE_WORD ) ;
-    resourceInstaller.copyWithPath( TestResourceTree.Parts.dir, TestResourceTree.Parts.NOVELLA_NO_CHAPTER ) ;
+    resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
+    resourceInstaller.copyWithPath( ResourcesForTests.Parts.dir, ResourcesForTests.Parts.NOVELLA_NO_CHAPTER ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -403,7 +403,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree ) ) ;
 
     assertFalse( result.getProblems().iterator().hasNext() ) ;
@@ -432,7 +432,7 @@ public class InsertCommandTest {
   @Test
   public void useSimpleFragmentIdentifier() throws IOException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
+    final File partFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
     LOG.info( 
         "Loaded Novella \n%s",
         new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
@@ -455,7 +455,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree )
     ) ;
 
@@ -480,7 +480,7 @@ public class InsertCommandTest {
   @Test
   public void identifierWithSingleFileTreatedAsMultiple() throws IOException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
+    final File partFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
     LOG.info(
         "Loaded Novella \n%s",
         new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
@@ -503,7 +503,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree )
     ) ;
 
@@ -529,7 +529,7 @@ public class InsertCommandTest {
   @Test
   public void insertIdentifierWithNoHead() throws IOException {
 
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_1 ) ;
+    final File partFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_1 ) ;
     LOG.info(
         "Loaded Novella \n%s",
         new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
@@ -552,7 +552,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree )
     ) ;
 
@@ -573,8 +573,8 @@ public class InsertCommandTest {
   public void useIdentifiersAcrossMultipleParts() 
       throws MalformedURLException 
   {
-    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_1 ) ;
-    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
+    resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_1 ) ;
+    resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -595,7 +595,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext( 
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree )
     ) ;
 
@@ -628,8 +628,8 @@ public class InsertCommandTest {
   public void detectIdentifierCollisionThroughMultipleParts() 
       throws MalformedURLException 
   {
-    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
-    resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_MANY_IDENTIFIERS ) ;
+    resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
+    resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_MANY_IDENTIFIERS ) ;
 
     final InsertCommand insertCommand = new InsertCommand(
         NULL_LOCATION,
@@ -647,7 +647,7 @@ public class InsertCommandTest {
     final CommandExecutionContext result = insertCommand.evaluate(
         new CommandExecutionContext(
             resourceInstaller.getTargetDirectory(),
-            TestResourceTools.getExecutorService()
+            ResourceTools.getExecutorService()
         ).update( initialTree )
     ) ;
 

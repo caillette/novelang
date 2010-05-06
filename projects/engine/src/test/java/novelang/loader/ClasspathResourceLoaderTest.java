@@ -24,7 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import novelang.TestResourceTree;
+import novelang.ResourcesForTests;
 
 /**
  * @author Laurent Caillette
@@ -35,7 +35,7 @@ public class ClasspathResourceLoaderTest {
   public void relativizedOk() throws IOException {
     final ClasspathResourceLoader loader = new ClasspathResourceLoader() ;
     final InputStream inputStream = loader.getInputStream(
-        TestResourceTree.Parts.NOVELLA_ONE_WORD.getResourceName() ) ;
+        ResourcesForTests.Parts.NOVELLA_ONE_WORD.getResourceName() ) ;
     final String resource = IOUtils.toString( inputStream ) ;
     Assert.assertFalse( StringUtils.isBlank( resource ) ) ;
   }

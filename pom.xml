@@ -41,6 +41,24 @@
   <name>Novelang</name>
   <url>http://novelang.sf.net</url>
 
+  <modules>
+    <module>projects/primer</module>
+    <module>projects/code-generation</module>
+    <module>projects/unicode-reader</module>
+    <module>projects/unicode-generator-plugin</module>
+    <module>projects/tree</module>
+    <module>projects/vanilla-fixture</module>
+    <module>projects/parser-antlr</module>
+    <module>projects/parser-ground</module>
+    <module>projects/parser-lexeme-plugin</module>
+    <module>projects/parser-token-plugin</module>
+    <module>projects/syntactic-tree</module>
+    <module>projects/syntactic-tree-fixture</module>
+    <module>projects/parser-supplement</module>
+    <module>projects/parser-facade</module>
+    <module>projects/engine</module>
+  </modules>
+
 
   <build>
 

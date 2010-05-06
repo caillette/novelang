@@ -20,13 +20,13 @@ package novelang.loader;
 import java.io.IOException;
 import java.io.InputStream;
 
+import novelang.ResourcesForTests;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import novelang.TestResourceTree;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -40,7 +40,7 @@ public class UrlResourceLoaderTest {
 
   @Test
   public void absoluteOk() throws IOException {
-    final Resource resource = TestResourceTree.Parts.NOVELLA_ONE_WORD;
+    final Resource resource = ResourcesForTests.Parts.NOVELLA_ONE_WORD;
     resourceInstaller.copy( resource ) ;
     final UrlResourceLoader loader = new UrlResourceLoader(
         resourceInstaller.getTargetDirectory().toURI().toURL() ) ;
@@ -66,7 +66,7 @@ public class UrlResourceLoaderTest {
   private static final Log LOG = LogFactory.getLog( UrlResourceLoaderTest.class ) ;
 
   static {
-      TestResourceTree.initialize() ;
+      ResourcesForTests.initialize() ;
   }
 
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;

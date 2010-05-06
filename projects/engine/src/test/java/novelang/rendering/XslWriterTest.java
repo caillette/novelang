@@ -21,12 +21,12 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+import novelang.ResourcesForTests;
 import org.apache.fop.apps.FopFactory;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.junit.Test;
 import junit.framework.Assert;
-import novelang.TestResourceTree;
 import novelang.common.metadata.DocumentMetadata;
 import novelang.common.filefixture.Resource;
 import novelang.configuration.FopFontStatus;
@@ -46,19 +46,19 @@ public class XslWriterTest {
 
   @Test( expected = BadExpandedNamesException.class )
   public void brokenXpathInStylesheet() throws Exception {
-    final XslWriter xslWriter = createXslWriter( TestResourceTree.XslFormatting.XSL_BADXPATH_1 ) ;
+    final XslWriter xslWriter = createXslWriter( ResourcesForTests.XslFormatting.XSL_BADXPATH_1 ) ;
     run( xslWriter ) ;
   }
 
   @Test( expected = BadExpandedNamesException.class )
   public void brokenXpathInStylesheetImport() throws Exception {
-    final XslWriter xslWriter = createXslWriter( TestResourceTree.XslFormatting.XSL_BADXPATH_2 ) ;
+    final XslWriter xslWriter = createXslWriter( ResourcesForTests.XslFormatting.XSL_BADXPATH_2 ) ;
     run( xslWriter ) ;
   }
 
   @Test
   public void locationOfBrokenXpath() throws Exception {
-    final XslWriter xslWriter = createXslWriter( TestResourceTree.XslFormatting.XSL_BADXPATH_2 ) ;
+    final XslWriter xslWriter = createXslWriter( ResourcesForTests.XslFormatting.XSL_BADXPATH_2 ) ;
     try {
       run( xslWriter ) ;
       Assert.fail( "Did not throw expected exception" ) ;
@@ -85,7 +85,7 @@ public class XslWriterTest {
 // =======
 
   static {
-      TestResourceTree.initialize() ;
+      ResourcesForTests.initialize() ;
   }
 
   private static XslWriter createXslWriter( final Resource stylesheet ) {

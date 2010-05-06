@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static org.junit.Assert.*;
+
+import novelang.ResourceTools;
 import org.junit.Before;
 import org.junit.Test;
 import novelang.system.LogFactory;
@@ -28,7 +30,6 @@ import novelang.system.Log;
 import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.Lists;
 import novelang.DirectoryFixture;
-import novelang.TestResourceTools;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
 
@@ -225,10 +226,10 @@ public class ParametersTest {
     scratchDirectory =
         new DirectoryFixture( ParametersTest.class ).getDirectory() ;
 
-    directoryAaa = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
-    directoryBbb = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
-    directoryCcc = TestResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
-    directoryCccDdd = TestResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
+    directoryAaa = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
+    directoryBbb = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
+    directoryCcc = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
+    directoryCccDdd = ResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
 
     assertTrue( directoryAaa.exists() ) ;
     assertTrue( directoryBbb.exists() ) ;

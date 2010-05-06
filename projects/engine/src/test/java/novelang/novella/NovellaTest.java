@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import novelang.TestResourceTree;
+import novelang.ResourcesForTests;
 import novelang.common.Location;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
@@ -53,7 +53,7 @@ public class NovellaTest {
   @Test
   public void loadPartOk() throws IOException {
     final Novella novella = new Novella( resourceInstaller.copy(
-            TestResourceTree.Parts.NOVELLA_JUST_SECTIONS ) ) ;
+            ResourcesForTests.Parts.NOVELLA_JUST_SECTIONS ) ) ;
     final SyntacticTree partTree = novella.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree(
@@ -83,7 +83,7 @@ public class NovellaTest {
 
   @Test
   public void partWithMissingImagesHasProblem() throws IOException {
-    final File partFile = resourceInstaller.copy( TestResourceTree.Parts.NOVELLA_MISSING_IMAGES ) ;
+    final File partFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_MISSING_IMAGES ) ;
     final Novella novella = new Novella( partFile ) ;
     novella.relocateResourcePaths( partFile.getParentFile() ) ;
     Assert.assertTrue( novella.hasProblem() ) ;
@@ -109,7 +109,7 @@ public class NovellaTest {
   @Test
   public void loadPartWithMetadata() throws IOException {
     final Novella novella = new Novella( resourceInstaller.copy(
-        TestResourceTree.Parts.NOVELLA_JUST_SECTIONS ) ).makeStandalone() ;
+        ResourcesForTests.Parts.NOVELLA_JUST_SECTIONS ) ).makeStandalone() ;
     final SyntacticTree partTree = novella.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree( NOVELLA,
@@ -148,7 +148,7 @@ public class NovellaTest {
   @Test
   public void loadSimpleStructure() throws IOException {
     final Novella novella = new Novella( resourceInstaller.copy(
-        TestResourceTree.Parts.NOVELLA_SIMPLE_STRUCTURE ) ) ;
+        ResourcesForTests.Parts.NOVELLA_SIMPLE_STRUCTURE ) ) ;
     final SyntacticTree partTree = novella.getDocumentTree();
     Assert.assertNotNull( partTree ) ;
     final SyntacticTree expected = tree(
@@ -307,7 +307,7 @@ public class NovellaTest {
   @Test
   public void loadPartUtf8WithBom() throws IOException {
     final Novella novella = new Novella( resourceInstaller.copy(
-            TestResourceTree.Parts.NOVELLA_UTF8_BOM ) ) ;
+            ResourcesForTests.Parts.NOVELLA_UTF8_BOM ) ) ;
     Assert.assertFalse( novella.getProblems().iterator().hasNext() ) ;
   }
 
@@ -320,7 +320,7 @@ public class NovellaTest {
   private static final int TEST_TIMEOUT_MILLISECONDS = 10 * 60 * 1000 ;
 
   static {
-      TestResourceTree.initialize() ;
+      ResourcesForTests.initialize() ;
   }
 
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;

@@ -29,11 +29,11 @@ import static novelang.common.filefixture.ResourceSchema.resource;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "InnerClassFieldHidesOuterClassField" } )
-public final class TestResourceTree {
+public final class ResourcesForTests {
 
-    private TestResourceTree() { }
+    private ResourcesForTests() { }
 
-    public static void initialize() {
+  public static void initialize() {
     ResourceSchema.initialize( Images.class ) ;
     ResourceSchema.initialize( MissingImages.class ) ;
     ResourceSchema.initialize( FontStructure.class ) ;

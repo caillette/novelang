@@ -18,8 +18,8 @@ package novelang.novella;
 
 import com.google.common.collect.Lists;
 import novelang.DirectoryFixture;
-import static novelang.TestResourceTree.Images;
-import static novelang.TestResourceTree.initialize;
+import static novelang.ResourcesForTests.Images;
+import static novelang.ResourcesForTests.initialize;
 import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;

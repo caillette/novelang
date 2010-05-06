@@ -31,8 +31,8 @@ import org.junit.Test;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import novelang.DirectoryFixture;
-import novelang.TestResourceTree;
-import static novelang.TestResourceTree.FontStructure;
+import novelang.ResourcesForTests;
+import static novelang.ResourcesForTests.FontStructure;
 import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.ResourceSchema;
@@ -295,7 +295,7 @@ public class ConfigurationToolsTest {
   private final String fontDirNameAlternate ;
 
   static {
-    TestResourceTree.initialize() ;
+    ResourcesForTests.initialize() ;
   }
 
   /**
