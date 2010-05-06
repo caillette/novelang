@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -75,5 +76,14 @@ public class NodeKindTools {
         Collections2.filter( NodeKind.getNames(), NO_TRAILING_UNDERSCORE ) ) ;
     final List< String > sortedNames = Ordering.natural().sortedCopy( filteredNames ) ;
     return Sets.newTreeSet( Lists.transform( sortedNames, TOKEN_NAME_AS_XML_ELEMENT_NAME ) ) ;
+  }
+
+  public static boolean is( final NodeKind nodeKind, final SyntacticTree tree ) {
+    Preconditions.checkNotNull( nodeKind ) ;
+    if( tree == null ) {
+      return false ;
+    } else {
+      return nodeKind == tree.getNodeKind() ;
+    }
   }
 }

@@ -7,6 +7,7 @@ import novelang.common.Problem;
 import novelang.common.tree.Treepath;
 import novelang.parser.NodeKind;
 import novelang.designator.FragmentIdentifier;
+import novelang.parser.NodeKindTools;
 
 /**
  * Given a {@link Treepath} to some identifier-bearing tree, extracts a single identifier
@@ -37,10 +38,10 @@ public class SegmentExtractor
             pathToIdentifier.getTreeAtEnd()
     ;
 
-    if( NodeKind.ABSOLUTE_IDENTIFIER == tree.getNodeKind() ) {
+    if( NodeKindTools.is( NodeKind.ABSOLUTE_IDENTIFIER, tree ) ) {
       segment = extractSegment( tree ) ;
       identifierDefinition = IdentifierDefinition.ABSOLUTE ;
-    } else if( NodeKind.RELATIVE_IDENTIFIER ==tree.getNodeKind() ) {
+    } else if( NodeKindTools.is( NodeKind.RELATIVE_IDENTIFIER, tree ) ) {
       segment = extractSegment( tree ) ;
       identifierDefinition = IdentifierDefinition.RELATIVE ;
     } else {
