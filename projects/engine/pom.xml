@@ -44,6 +44,13 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>tree-fixture</artifactId>
+      <version>${parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
 </project>

@@ -17,8 +17,6 @@
       <module fileurl="file://$PROJECT_DIR$/../../projects/tree/tree.iml" filepath="$PROJECT_DIR$/../../projects/tree/tree.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/tree-fixture/tree-fixture.iml" filepath="$PROJECT_DIR$/../../projects/tree-fixture/tree-fixture.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-generator/unicode-generator.iml" filepath="$PROJECT_DIR$/../../projects/unicode-generator/unicode-generator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-names-generator/unicode-names-generator.iml" filepath="$PROJECT_DIR$/../../projects/unicode-names-generator/unicode-names-generator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-names-reader/unicode-names-reader.iml" filepath="$PROJECT_DIR$/../../projects/unicode-names-reader/unicode-names-reader.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" filepath="$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" filepath="$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" />
     </modules>
