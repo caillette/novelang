@@ -28,6 +28,7 @@ import novelang.parser.SourceUnescape;
 import novelang.parser.antlr.delimited.BlockDelimiter;
 import novelang.parser.antlr.delimited.BlockDelimiterSupervisor;
 import novelang.parser.antlr.delimited.DefaultBlockDelimiterSupervisor;
+import novelang.parser.antlr.ParsingProblems;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.antlr.runtime.CommonToken;
@@ -176,7 +177,7 @@ public class GrammarDelegate
 // ========================  
 
   public void report( final RecognitionException exception ) {
-    problems.add( Problem.createProblem( locationFactory, exception, tokenNames ) ) ;
+    problems.add( ParsingProblems.createProblem( locationFactory, exception, tokenNames ) ) ;
   }
 
   
