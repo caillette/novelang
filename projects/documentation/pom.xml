@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <relativePath>../../pom.xml</relativePath>
+    <groupId>org.novelang</groupId>
+    <artifactId>Novelang</artifactId>
+    <version>SNAPSHOT</version>
+  </parent>
+
+  <name>Novelang-documentation</name>
+  <artifactId>documentation</artifactId>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <generateReports>false</generateReports>
+        </configuration>
+      </plugin>
+      
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>site</phase>
+            <configuration>
+              <tasks>
+
+                <property name="classpath" refid="maven.runtime.classpath"/>
+                <echo>classpath=${classpath}</echo>
+
+                <java
+                    classname="${novelang.launcher.mainClass}"
+                    classpath="${classpath}"
+                    dir="src/doc"
+                    failonerror="true"
+                    fork="true"
+                >
+                  <jvmarg value="-Xmx512M" />
+                  <jvmarg value="-Djava.awt.headless=true" />
+                  <arg value="${novelang.launcher.batchCommand}" />
+                  <arg value="--output-dir" />
+                  <arg value="${project.build.directory}/doc" />
+                  <arg value="/novelang.html" />
+                </java>
+
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>engine</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+  </dependencies>
+
+
+</project>
+

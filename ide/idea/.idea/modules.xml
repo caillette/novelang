@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../Novelang.iml" filepath="$PROJECT_DIR$/../../Novelang.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/ant-task/ant-task.iml" filepath="$PROJECT_DIR$/../../projects/ant-task/ant-task.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/documentation/documentation.iml" filepath="$PROJECT_DIR$/../../projects/documentation/documentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/engine/engine.iml" filepath="$PROJECT_DIR$/../../projects/engine/engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" />
@@ -13,6 +14,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-supplement/parser-supplement.iml" filepath="$PROJECT_DIR$/../../projects/parser-supplement/parser-supplement.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-token-plugin/parser-token-plugin.iml" filepath="$PROJECT_DIR$/../../projects/parser-token-plugin/parser-token-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/primer/primer.iml" filepath="$PROJECT_DIR$/../../projects/primer/primer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/producer-plugin/producer-plugin.iml" filepath="$PROJECT_DIR$/../../projects/producer-plugin/producer-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" filepath="$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/syntactic-tree-fixture/syntactic-tree-fixture.iml" filepath="$PROJECT_DIR$/../../projects/syntactic-tree-fixture/syntactic-tree-fixture.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/tree/tree.iml" filepath="$PROJECT_DIR$/../../projects/tree/tree.iml" />

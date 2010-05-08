@@ -131,7 +131,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
     return buffer.toString() ;
   }
 
-  protected static void resetTargetDirectory(
+  public static void resetTargetDirectory(
       final File targetDirectory
   ) throws IOException {
     if( targetDirectory.exists() ) {

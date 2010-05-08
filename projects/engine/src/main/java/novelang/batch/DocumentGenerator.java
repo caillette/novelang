@@ -78,10 +78,6 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
           configuration,
           outputDirectory,
           documentProducer,
-          Executors.newFixedThreadPool(
-              Runtime.getRuntime().availableProcessors(),
-              ConfigurationTools.getExecutorThreadFactory()
-          ),
           allProblems
       ) ;
 
@@ -107,11 +103,10 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
     );
   }
 
-  protected void processDocumentRequests(
+  public static void processDocumentRequests(
       final DocumentGeneratorConfiguration configuration,
       final File outputDirectory,
       final DocumentProducer documentProducer,
-      final ExecutorService executorService,
       final List< Problem > allProblems
   ) throws Exception {
     for( final DocumentRequest documentRequest : configuration.getDocumentRequests() ) {
@@ -120,8 +115,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
           processDocumentRequest(
               documentRequest,
               outputDirectory,
-              documentProducer,
-              executorService
+              documentProducer
           )
       ) ;
     }
@@ -135,8 +129,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
   private static Iterable< Problem > processDocumentRequest(
       final DocumentRequest documentRequest,
       final File targetDirectory,
-      final DocumentProducer documentProducer,
-      final ExecutorService executorService
+      final DocumentProducer documentProducer
   ) throws Exception {
     final File outputFile = createOutputFile(
         targetDirectory,

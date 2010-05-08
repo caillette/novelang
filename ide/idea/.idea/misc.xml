@@ -56,6 +56,8 @@
         <option value="$PROJECT_DIR$/../../projects/ant-task/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/unicode-generator-plugin/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/syntactic-tree-fixture/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/producer-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/documentation/pom.xml" />
       </list>
     </option>
   </component>
