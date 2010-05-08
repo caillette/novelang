@@ -17,10 +17,11 @@
   <artifactId>documentation</artifactId>
 
   <properties>
-    <rawDocumentSources>${basedir}/src/main/resources</rawDocumentSources>
-    <enhancedDocumentSources>${project.build.outputDirectory}</enhancedDocumentSources>
+    <rawDocumentSources>${basedir}/src/main/doc</rawDocumentSources>
+    <enhancedDocumentSources>${project.build.directory}/enhanced</enhancedDocumentSources>
     <lexemeTableDocument>${enhancedDocumentSources}/source-characters.nlp</lexemeTableDocument>
-    <generatedDocumentsDirectory>${project.build.directory}/doc</generatedDocumentsDirectory>
+    <generatedDocumentsDirectory>${project.build.directory}/documentation</generatedDocumentsDirectory>
+    <novelang.build.lexemeTableMainClass>novelang.build.documentation.LexemeTable</novelang.build.lexemeTableMainClass>
   </properties>
 
 
@@ -38,13 +39,16 @@
       </plugin>
 -->
 
+
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <phase>generate-sources</phase>
+            <phase>compile</phase>
             <configuration>
               <tasks>
+
+                <property name="classpath" refid="maven.runtime.classpath"/>
 
                 <echo>enhancedDocumentSources=${enhancedDocumentSources}</echo>
                 <echo>project.version=${project.version}</echo>
@@ -60,43 +64,24 @@
                   <replacevalue>${project.version}</replacevalue>
                 </replace>
 
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>      
+                <!--
+                    Not using a plugin for this as we can't have 3 phases following expected
+                    sequence (should be something like generate-resources, prepare-resources,
+                    compile, but the 1st one for string replacement was always missing).
+                -->
+                <java
+                    classname="${novelang.build.lexemeTableMainClass}"
+                    classpath="${classpath}"
+                    dir="${enhancedDocumentSources}"
+                    failonerror="true"
+                    fork="true"
+                >
+                  <jvmarg value="-Xmx512M" />
+                  <jvmarg value="-Djava.awt.headless=true" />
+                  <arg value="${lexemeTableDocument}" />
+                </java>
 
-      <plugin>
-        <groupId>${parent.groupId}</groupId>
-        <artifactId>lexeme-table-plugin</artifactId>
-        <version>${parent.version}</version>
-        <executions>
-          <execution>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <destinationFile>${lexemeTableDocument}</destinationFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <configuration>
-              <tasks>
-
-                <property name="classpath" refid="maven.runtime.classpath"/>
-                <echo>classpath=${classpath}</echo>
-
+                <!-- Now running the big thing! -->
                 <java
                     classname="${novelang.launcher.mainClass}"
                     classpath="${classpath}"
@@ -109,9 +94,15 @@
                   <arg value="${novelang.launcher.batchCommand}" />
                   <arg value="--output-dir" />
                   <arg value="${generatedDocumentsDirectory}" />
+                  <arg value="--log-dir" />
+                  <arg value="${project.build.directory}" />
                   <arg value="/novelang.html" />
-                  <!--<arg value="/novelang.pdf" />-->
+                  <arg value="/novelang.pdf" />
                 </java>
+
+                <copy todir="${generatedDocumentsDirectory}" flatten="true" >
+                  <fileset dir="${enhancedDocumentSources}" includes="**/*.css" /> 
+                </copy>
 
               </tasks>
             </configuration>
@@ -130,6 +121,12 @@
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>engine</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>lexeme-table-plugin</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
