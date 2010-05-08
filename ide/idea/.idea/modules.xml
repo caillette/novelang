@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/documentation/documentation.iml" filepath="$PROJECT_DIR$/../../projects/documentation/documentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/engine/engine.iml" filepath="$PROJECT_DIR$/../../projects/engine/engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../projects/lexeme-table-plugin/lexeme-table-plugin.iml" filepath="$PROJECT_DIR$/../../projects/lexeme-table-plugin/lexeme-table-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../projects/parser-ground/parser-ground.iml" filepath="$PROJECT_DIR$/../../projects/parser-ground/parser-ground.iml" />

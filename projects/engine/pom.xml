@@ -36,13 +36,6 @@
       <artifactId>jaxen</artifactId>
       <version>1.1.1</version>
       <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <!-- Avoids collision with JDK classes. -->
-          <groupId>xalan</groupId>
-          <artifactId>xalan</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     
     <dependency>
@@ -56,13 +49,20 @@
         <groupId>org.apache.xmlgraphics</groupId>
         <artifactId>fop</artifactId>
         <version>0.95</version>
-      <exclusions>
-        <exclusion>
-          <!-- Avoids collision with JDK classes. -->
-          <groupId>xalan</groupId>
-          <artifactId>xalan</artifactId>
-        </exclusion>
-      </exclusions>
+    </dependency>
+
+    <dependency>
+      <!-- JDK's XSLT implementation doesn't work well. -->
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.1</version>
+    </dependency>
+
+    <dependency>
+      <!-- JDK's XSLT implementation doesn't work well. -->
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.9.1</version>
     </dependency>
 
     <dependency>

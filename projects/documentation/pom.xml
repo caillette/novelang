@@ -16,9 +16,18 @@
   <name>Novelang-documentation</name>
   <artifactId>documentation</artifactId>
 
+  <properties>
+    <rawDocumentSources>${basedir}/src/main/resources</rawDocumentSources>
+    <enhancedDocumentSources>${project.build.outputDirectory}</enhancedDocumentSources>
+    <lexemeTableDocument>${enhancedDocumentSources}/source-characters.nlp</lexemeTableDocument>
+    <generatedDocumentsDirectory>${project.build.directory}/doc</generatedDocumentsDirectory>
+  </properties>
+
+
   <build>
     <plugins>
 
+<!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -27,13 +36,61 @@
           <generateReports>false</generateReports>
         </configuration>
       </plugin>
-      
+-->
 
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <phase>site</phase>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+
+                <echo>enhancedDocumentSources=${enhancedDocumentSources}</echo>
+                <echo>project.version=${project.version}</echo>
+
+                <!-- Copy source documents to generated sources directory. -->
+                <copy todir="${enhancedDocumentSources}" >
+                  <fileset dir="${rawDocumentSources}" />
+                </copy>
+
+                <!-- Set version number. -->
+                <replace dir="${enhancedDocumentSources}" >
+                  <replacetoken>@SNAPSHOT@</replacetoken>
+                  <replacevalue>${project.version}</replacevalue>
+                </replace>
+
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
+
+      <plugin>
+        <groupId>${parent.groupId}</groupId>
+        <artifactId>lexeme-table-plugin</artifactId>
+        <version>${parent.version}</version>
+        <executions>
+          <execution>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <destinationFile>${lexemeTableDocument}</destinationFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>compile</phase>
             <configuration>
               <tasks>
 
@@ -43,7 +100,7 @@
                 <java
                     classname="${novelang.launcher.mainClass}"
                     classpath="${classpath}"
-                    dir="src/doc"
+                    dir="${enhancedDocumentSources}"
                     failonerror="true"
                     fork="true"
                 >
@@ -51,8 +108,9 @@
                   <jvmarg value="-Djava.awt.headless=true" />
                   <arg value="${novelang.launcher.batchCommand}" />
                   <arg value="--output-dir" />
-                  <arg value="${project.build.directory}/doc" />
+                  <arg value="${generatedDocumentsDirectory}" />
                   <arg value="/novelang.html" />
+                  <!--<arg value="/novelang.pdf" />-->
                 </java>
 
               </tasks>
@@ -63,7 +121,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
     </plugins>
   </build>
 

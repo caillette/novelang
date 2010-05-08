@@ -58,6 +58,7 @@
         <option value="$PROJECT_DIR$/../../projects/syntactic-tree-fixture/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/producer-plugin/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/documentation/pom.xml" />
+        <option value="$PROJECT_DIR$/../../projects/lexeme-table-plugin/pom.xml" />
       </list>
     </option>
   </component>

@@ -14,16 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.parser.documentation;
+package novelang.build.documentation;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.List;
 
+import novelang.system.Log;
+import novelang.system.LogFactory;
 import org.apache.commons.lang.CharUtils;
 import com.google.common.collect.Ordering;
 import novelang.parser.GeneratedLexemes;
@@ -37,30 +41,44 @@ import novelang.system.DefaultCharset;
  *
  * @author Laurent Caillette
  */
-public class SourceCharactersTable {
+public class LexemeTable {
+
+  private static final Log LOG = LogFactory.getLog( LexemeTable.class );
 
   public static void main( final String[] args ) throws FileNotFoundException {
     if( args.length != 1 ) {
       throw new IllegalArgumentException( "Expected argument: destination file name" ) ;
     }
-    new SourceCharactersTable( args[ 0 ], DefaultCharset.SOURCE ).writeSourceDocument().close() ;
+    writeSourceDocument( new File( args[ 0 ] ) ) ;
   }
 
-  private final RenderingEscape.CharsetEncodingCapability renderingCapability ;
-  private final PrintWriter writer ;
+//  private final RenderingEscape.CharsetEncodingCapability renderingCapability ;
 
-  private SourceCharactersTable( 
-      final String fileName, 
-      final Charset sourceCharset 
+  public static void writeSourceDocument( final File file ) throws FileNotFoundException {
+    writeSourceDocument( file, DefaultCharset.SOURCE ) ;
+  }
+
+  public static void writeSourceDocument(
+      final File file,
+      final Charset sourceCharset
   ) throws FileNotFoundException {
-    final FileOutputStream outputStream = new FileOutputStream( fileName ) ;
-    final OutputStreamWriter outputStreamWriter =
-        new OutputStreamWriter( outputStream, sourceCharset ) ;
-    writer = new PrintWriter( outputStreamWriter, true ) ;
-    renderingCapability = RenderingEscape.createCapability( sourceCharset ) ;
+    final FileOutputStream outputStream = new FileOutputStream( file ) ;
+    final PrintWriter printWriter ;
+    try {
+      printWriter = new PrintWriter( new OutputStreamWriter( outputStream, sourceCharset ), true ) ;
+      writeSourceDocument( printWriter ) ;
+      printWriter.flush() ;
+      printWriter.close() ;
+    } finally {
+      try {
+        outputStream.close() ;
+      } catch( IOException e ) {
+        LOG.error( "Couldn't close file '" + file.getAbsolutePath() + "' properly", e ) ;
+      }
+    }
   }
 
-  private SourceCharactersTable writeSourceDocument() {
+  private static void writeSourceDocument( final PrintWriter writer ) {
 
     writer.println( "== Characters supported in source documents" ) ;
     writer.println() ;
@@ -87,15 +105,9 @@ public class SourceCharactersTable {
       writer.println() ;
     }
 
-    return this ;
   }
 
-  private void close() {
-    writer.flush() ;
-    writer.close() ;
-  }
-
-  private String simpleEscape( final String name ) {
+  private static String simpleEscape( final String name ) {
     if( null == name ) {
       return " " ;
     } else {
@@ -103,7 +115,7 @@ public class SourceCharactersTable {
     }
   }
 
-  private String doubleEscape( final String name ) {
+  private static String doubleEscape( final String name ) {
     if( null == name ) {
       return " " ;
     } else {
