@@ -6,10 +6,10 @@
       http://maven.apache.org/xsd/assembly-1.1.0.xsd"
 >
   <!--
-      Appears appended to the artefact, e.g. and id of "zip-doc" would give this:
-      documentation-SNAPSHOT-zip-doc.zip 
+      Known as the "classifier".
+      Appears appended to the artefact, e.g. documentation-SNAPSHOT-doc-only.zip.
   -->
-  <id/>
+  <!--<id>doc-only</id>-->
 
   <formats>
     <format>zip</format>
@@ -20,7 +20,7 @@
   <fileSets>
     <fileSet>
       <directory>${generatedDocumentsDirectory}</directory>
-      <outputDirectory>/documentation</outputDirectory>
+      <outputDirectory>/</outputDirectory>
       <includes>
         <include>*.pdf</include>
         <include>*.html</include>

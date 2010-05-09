@@ -5,10 +5,10 @@
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0
       http://maven.apache.org/xsd/assembly-1.1.0.xsd"
 >
-  <id>release</id>
+  <id/>
 
   <formats>
-    <format>dir</format>
+    <format>zip</format>
   </formats>
 
   <includeBaseDirectory>true</includeBaseDirectory>
@@ -16,9 +16,6 @@
   <moduleSets>
 
     <moduleSet>
-      <includes>
-        <include>*</include>
-      </includes>
       <excludes>
         <exclude>*fixture</exclude>
         <exclude>*plugin</exclude>
@@ -29,17 +26,35 @@
       </binaries>
     </moduleSet>
 
+    <!--
+        This doesn't work because of a probable bug in assembly plugin.
+        The workaround is to stage the files through some Ant task and package them as fileset.
+
     <moduleSet>
       <includes>
-        <include>documentation</include>
+        <include>org.novelang:documentation</include>
       </includes>
       <binaries>
+        <attachmentClassifier>doc-only</attachmentClassifier>
         <outputDirectory>documentation</outputDirectory>
         <unpack>true</unpack>
+        <useStrictFiltering>true</useStrictFiltering>
       </binaries>
     </moduleSet>
+    -->
 
   </moduleSets>
+
+  <fileSets>
+    <fileSet>
+      <directory>modules/documentation/target/documentation</directory>
+      <outputDirectory>/documentation</outputDirectory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+
 
   <dependencySets>
 
@@ -51,6 +66,16 @@
     </dependencySet>
 
   </dependencySets>
+
+<!--
+  <repositories>
+    <repository>
+      <includeMetadata>true</includeMetadata>
+      <outputDirectory>maven2-repository</outputDirectory>
+    </repository>
+  </repositories>
+-->
+
 
 </assembly>
 

@@ -50,7 +50,6 @@
 
   <modules>
     <module>modules/primer</module>
-<!--
     <module>modules/code-generation</module>
     <module>modules/unicode-reader</module>
     <module>modules/unicode-generator-plugin</module>
@@ -65,7 +64,7 @@
     <module>modules/parser-supplement</module>
     <module>modules/parser-facade</module>
     <module>modules/engine</module>
--->
+    <module>modules/documentation</module>
   </modules>
 
 
