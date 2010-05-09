@@ -31,6 +31,10 @@
     <lib.maven-plugin.artefactid>maven-plugin-api</lib.maven-plugin.artefactid>
     <lib.maven-plugin.version>2.0</lib.maven-plugin.version>
 
+    <lib.maven-assembly-plugin.groupId>org.apache.maven.plugins</lib.maven-assembly-plugin.groupId>
+    <lib.maven-assembly-plugin.artefactId>maven-assembly-plugin</lib.maven-assembly-plugin.artefactId>
+    <lib.maven-assembly-plugin.version>2.2-beta-5</lib.maven-assembly-plugin.version>
+
     <lib.junit.groupid>junit</lib.junit.groupid>
     <lib.junit.artefactid>junit</lib.junit.artefactid>
     <lib.junit.version>4.8.1</lib.junit.version>
@@ -46,6 +50,7 @@
 
   <modules>
     <module>modules/primer</module>
+<!--
     <module>modules/code-generation</module>
     <module>modules/unicode-reader</module>
     <module>modules/unicode-generator-plugin</module>
@@ -60,6 +65,7 @@
     <module>modules/parser-supplement</module>
     <module>modules/parser-facade</module>
     <module>modules/engine</module>
+-->
   </modules>
 
 
@@ -78,11 +84,12 @@
     <plugins>
 
       <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-5</version>
+        <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
+        <version>${lib.maven-assembly-plugin.version}</version>
         <configuration>
           <descriptors>
-            <descriptor>src/assemble/bin.xml</descriptor>
+            <descriptor>src/assemble/release.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>

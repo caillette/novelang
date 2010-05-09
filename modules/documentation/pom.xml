@@ -15,13 +15,14 @@
 
   <name>Novelang-documentation</name>
   <artifactId>documentation</artifactId>
+  <packaging>pom</packaging>
 
   <properties>
     <rawDocumentSources>${basedir}/src/main/doc</rawDocumentSources>
     <enhancedDocumentSources>${project.build.directory}/enhanced</enhancedDocumentSources>
     <lexemeTableDocument>${enhancedDocumentSources}/source-characters.nlp</lexemeTableDocument>
     <generatedDocumentsDirectory>${project.build.directory}/documentation</generatedDocumentsDirectory>
-    <novelang.build.lexemeTableMainClass>novelang.build.documentation.LexemeTable</novelang.build.lexemeTableMainClass>
+    <lexemeTableMainClass>novelang.build.documentation.LexemeTable</lexemeTableMainClass>
   </properties>
 
 
@@ -70,7 +71,7 @@
                     compile, but the 1st one for string replacement was always missing).
                 -->
                 <java
-                    classname="${novelang.build.lexemeTableMainClass}"
+                    classname="${lexemeTableMainClass}"
                     classpath="${classpath}"
                     dir="${enhancedDocumentSources}"
                     failonerror="true"
@@ -81,7 +82,7 @@
                   <arg value="${lexemeTableDocument}" />
                 </java>
 
-                <!-- Now running the big thing! -->
+                <!-- Now running the big thing! Can't use a plugin because of XSLT bug. -->
                 <java
                     classname="${novelang.launcher.mainClass}"
                     classpath="${classpath}"
@@ -108,6 +109,26 @@
             </configuration>
             <goals>
               <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
+        <version>${lib.maven-assembly-plugin.version}</version>
+        <configuration>
+          <descriptors>
+            <descriptor>src/assemble/bin.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id> <!-- This is used for inheritance merges. -->
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
             </goals>
           </execution>
         </executions>
