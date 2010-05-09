@@ -26,7 +26,6 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/../../pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/primer/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/unicode-names-generator/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/unicode-names-reader/pom.xml" />
@@ -59,6 +58,26 @@
         <option value="$PROJECT_DIR$/../../projects/producer-plugin/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/documentation/pom.xml" />
         <option value="$PROJECT_DIR$/../../projects/lexeme-table-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/vanilla-fixture/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/unicode-reader/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/unicode-generator-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/tree/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/syntactic-tree-fixture/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/syntactic-tree/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/producer-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/primer/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/parser-token-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/parser-supplement/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/parser-lexeme-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/parser-ground/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/parser-facade/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/parser-antlr/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/lexeme-table-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/engine/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/documentation/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/code-generation/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/ant-task/pom.xml" />
+        <option value="$PROJECT_DIR$/../../pom.xml" />
       </list>
     </option>
   </component>

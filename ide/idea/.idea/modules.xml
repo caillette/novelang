@@ -3,25 +3,25 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../../Novelang.iml" filepath="$PROJECT_DIR$/../../Novelang.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/ant-task/ant-task.iml" filepath="$PROJECT_DIR$/../../projects/ant-task/ant-task.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../projects/code-generation/code-generation.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/documentation/documentation.iml" filepath="$PROJECT_DIR$/../../projects/documentation/documentation.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/engine/engine.iml" filepath="$PROJECT_DIR$/../../projects/engine/engine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/lexeme-table-plugin/lexeme-table-plugin.iml" filepath="$PROJECT_DIR$/../../projects/lexeme-table-plugin/lexeme-table-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../projects/parser-antlr/parser-antlr.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../projects/parser-facade/parser-facade.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/parser-ground/parser-ground.iml" filepath="$PROJECT_DIR$/../../projects/parser-ground/parser-ground.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/parser-lexeme-plugin/parser-lexeme-plugin.iml" filepath="$PROJECT_DIR$/../../projects/parser-lexeme-plugin/parser-lexeme-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/parser-supplement/parser-supplement.iml" filepath="$PROJECT_DIR$/../../projects/parser-supplement/parser-supplement.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/parser-token-plugin/parser-token-plugin.iml" filepath="$PROJECT_DIR$/../../projects/parser-token-plugin/parser-token-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/primer/primer.iml" filepath="$PROJECT_DIR$/../../projects/primer/primer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/producer-plugin/producer-plugin.iml" filepath="$PROJECT_DIR$/../../projects/producer-plugin/producer-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" filepath="$PROJECT_DIR$/../../projects/syntactic-tree/syntactic-tree.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/syntactic-tree-fixture/syntactic-tree-fixture.iml" filepath="$PROJECT_DIR$/../../projects/syntactic-tree-fixture/syntactic-tree-fixture.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/tree/tree.iml" filepath="$PROJECT_DIR$/../../projects/tree/tree.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-generator-plugin/unicode-generator-plugin.iml" filepath="$PROJECT_DIR$/../../projects/unicode-generator-plugin/unicode-generator-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" filepath="$PROJECT_DIR$/../../projects/unicode-reader/unicode-reader.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" filepath="$PROJECT_DIR$/../../projects/vanilla-fixture/vanilla-fixture.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/ant-task/ant-task.iml" filepath="$PROJECT_DIR$/../../modules/ant-task/ant-task.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/documentation/documentation.iml" filepath="$PROJECT_DIR$/../../modules/documentation/documentation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/engine/engine.iml" filepath="$PROJECT_DIR$/../../modules/engine/engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" filepath="$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/parser-ground/parser-ground.iml" filepath="$PROJECT_DIR$/../../modules/parser-ground/parser-ground.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/parser-lexeme-plugin/parser-lexeme-plugin.iml" filepath="$PROJECT_DIR$/../../modules/parser-lexeme-plugin/parser-lexeme-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/parser-supplement/parser-supplement.iml" filepath="$PROJECT_DIR$/../../modules/parser-supplement/parser-supplement.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/parser-token-plugin/parser-token-plugin.iml" filepath="$PROJECT_DIR$/../../modules/parser-token-plugin/parser-token-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/primer/primer.iml" filepath="$PROJECT_DIR$/../../modules/primer/primer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/producer-plugin/producer-plugin.iml" filepath="$PROJECT_DIR$/../../modules/producer-plugin/producer-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/syntactic-tree/syntactic-tree.iml" filepath="$PROJECT_DIR$/../../modules/syntactic-tree/syntactic-tree.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/syntactic-tree-fixture/syntactic-tree-fixture.iml" filepath="$PROJECT_DIR$/../../modules/syntactic-tree-fixture/syntactic-tree-fixture.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/tree/tree.iml" filepath="$PROJECT_DIR$/../../modules/tree/tree.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/unicode-generator-plugin/unicode-generator-plugin.iml" filepath="$PROJECT_DIR$/../../modules/unicode-generator-plugin/unicode-generator-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/unicode-reader/unicode-reader.iml" filepath="$PROJECT_DIR$/../../modules/unicode-reader/unicode-reader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/vanilla-fixture/vanilla-fixture.iml" filepath="$PROJECT_DIR$/../../modules/vanilla-fixture/vanilla-fixture.iml" />
     </modules>
   </component>
 </project>
