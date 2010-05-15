@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
+import static novelang.nhovestone.driver.VirtualMachineTools.SYSTEMPROPERTYNAME_STICKER;
 
 /**
  * Starts and stops an {@link novelang.daemon.HttpDaemon} in its deployment directory,
@@ -48,6 +49,7 @@ public class HttpDaemonDriver {
   
   private final ProcessDriver processDriver ;
   private final int tcpPort ;
+  private final Sticker sticker ;
 
 
   public HttpDaemonDriver( final Configuration configuration ) {
@@ -59,7 +61,11 @@ public class HttpDaemonDriver {
     final ImmutableList.Builder< String > optionsBuilder = new ImmutableList.Builder< String >() ;
 
 //    optionsBuilder.add( SystemUtils.JAVA_HOME + "/bin/java" ) ;
-    optionsBuilder.add( "java" ) ; 
+    optionsBuilder.add( "java" ) ;
+
+    this.sticker = Sticker.create() ;
+
+    optionsBuilder.add( SYSTEMPROPERTYNAME_STICKER + "=" + sticker.asString() ) ;
 
     optionsBuilder.add( "-Xmx" + checkNotNull( configuration.getJvmHeapSizeMegabytes() + "M" ) ) ;
 
