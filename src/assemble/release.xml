@@ -47,8 +47,9 @@
 
   <fileSets>
     <fileSet>
+      <!-- Ugly. -->
       <directory>modules/documentation/target/documentation</directory>
-      <outputDirectory>/documentation</outputDirectory>
+      <outputDirectory>/doc</outputDirectory>
       <includes>
         <include>**/*</include>
       </includes>
