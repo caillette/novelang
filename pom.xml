@@ -12,8 +12,8 @@
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <novelang.launcher.mainClass>novelang.launcher.Main</novelang.launcher.mainClass>
-    <novelang.launcher.batchCommand>generate</novelang.launcher.batchCommand>
+    <novelang.bootstrap.mainClass>novelang.bootstrap.Main</novelang.bootstrap.mainClass>
+    <novelang.bootstrap.batchCommand>generate</novelang.bootstrap.batchCommand>
 
     <lib.cobertura.groupid>org.codehaus.mojo</lib.cobertura.groupid>
     <lib.cobertura.artefactid>cobertura-maven-plugin</lib.cobertura.artefactid>
@@ -30,6 +30,10 @@
     <lib.maven-plugin.groupid>org.apache.maven</lib.maven-plugin.groupid>
     <lib.maven-plugin.artefactid>maven-plugin-api</lib.maven-plugin.artefactid>
     <lib.maven-plugin.version>2.0</lib.maven-plugin.version>
+
+    <lib.maven-jar-plugin.groupid>org.apache.maven.plugins</lib.maven-jar-plugin.groupid>
+    <lib.maven-jar-plugin.artefactid>maven-jar-plugin</lib.maven-jar-plugin.artefactid>
+    <lib.maven-jar-plugin.version>2.3</lib.maven-jar-plugin.version>
 
     <lib.maven-assembly-plugin.groupId>org.apache.maven.plugins</lib.maven-assembly-plugin.groupId>
     <lib.maven-assembly-plugin.artefactId>maven-assembly-plugin</lib.maven-assembly-plugin.artefactId>
@@ -64,6 +68,7 @@
     <module>modules/parser-supplement</module>
     <module>modules/parser-facade</module>
     <module>modules/engine</module>
+    <module>modules/bootstrap</module>
     <module>modules/documentation</module>
   </modules>
 
@@ -102,8 +107,8 @@
           <target>1.5</target>
           <source>1.5</source>
           <encoding>UTF-8</encoding>
-          <debug>on</debug>
-          <debuglevel>lines, vars, source</debuglevel>
+          <debug>true</debug>
+          <debuglevel>lines,vars,source</debuglevel>
         </configuration>
       </plugin>
 

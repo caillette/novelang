@@ -78,6 +78,7 @@
         <option value="$PROJECT_DIR$/../../modules/code-generation/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/ant-task/pom.xml" />
         <option value="$PROJECT_DIR$/../../pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/bootrap/pom.xml" />
       </list>
     </option>
   </component>

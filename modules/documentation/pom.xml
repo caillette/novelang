@@ -84,7 +84,7 @@
 
                 <!-- Now running the big thing! Can't use a plugin because of XSLT bug. -->
                 <java
-                    classname="${novelang.launcher.mainClass}"
+                    classname="${novelang.bootstrap.mainClass}"
                     classpath="${classpath}"
                     dir="${enhancedDocumentSources}"
                     failonerror="true"
@@ -92,7 +92,7 @@
                 >
                   <jvmarg value="-Xmx512M" />
                   <jvmarg value="-Djava.awt.headless=true" />
-                  <arg value="${novelang.launcher.batchCommand}" />
+                  <arg value="${novelang.bootstrap.batchCommand}" />
                   <arg value="--output-dir" />
                   <arg value="${generatedDocumentsDirectory}" />
                   <arg value="--log-dir" />
@@ -141,7 +141,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>engine</artifactId>
+      <artifactId>bootstrap</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

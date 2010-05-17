@@ -61,21 +61,20 @@
 
     <dependencySet>
       <unpack>false</unpack>
-      <scope>runtime</scope>
       <useTransitiveDependencies>true</useTransitiveDependencies>
-      <outputDirectory>lib/3rdparty</outputDirectory>
+      <outputDirectory>lib</outputDirectory>
+      <scope>runtime</scope>
     </dependencySet>
 
   </dependencySets>
 
-<!--
   <repositories>
     <repository>
       <includeMetadata>true</includeMetadata>
-      <outputDirectory>maven2-repository</outputDirectory>
+      <outputDirectory>lib</outputDirectory>
+      <scope>runtime</scope>
     </repository>
   </repositories>
--->
 
 
 </assembly>
