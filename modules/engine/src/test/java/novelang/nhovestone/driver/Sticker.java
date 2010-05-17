@@ -16,6 +16,8 @@
  */
 package novelang.nhovestone.driver;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Represents some kind of unique identifier to attach to created system processes as Java
  * system property.
@@ -26,10 +28,7 @@ package novelang.nhovestone.driver;
  */
 public final class Sticker {
 
-  @SuppressWarnings( { "StaticNonFinalField" } )
-  private static Long lastGenerated = null ;
-
-  private static final Object LOCK = new Object() ;
+  private static final AtomicLong lastGenerated = new AtomicLong( System.currentTimeMillis() ) ;
 
   private final long value ;
 
@@ -37,24 +36,35 @@ public final class Sticker {
     this.value = value ;
   }
 
-  @SuppressWarnings( { "SleepWhileHoldingLock", "CallToNativeMethodWhileLocked" } )
+  /**
+   * Returns a unique value as long as nobody sets the system clock to a past value.
+   * This seems preferable to use some persistent thing.
+   * As far as I know, this method is thread-safe. If two threads write the {@link #lastGenerated}
+   * with the same millisecond value, there is one which will detect its write made no change,
+   * so it will wait for one turn.
+   *
+   * @return a non-null object holding a unique value.
+   */
   public static Sticker create() {
     long generated = System.currentTimeMillis() ;
-    synchronized( LOCK ) {
-      if( lastGenerated != null ) {
-        while( generated <= lastGenerated ) {
-          try {
-            Thread.sleep( 1 ) ;
-          } catch( InterruptedException e ) {
-            throw new RuntimeException( "Should never happen", e ) ;
-          }
-          generated = System.currentTimeMillis() ;
-        }
+    for( ; generated == lastGenerated.getAndSet( generated ) ;
+         generated = System.currentTimeMillis()
+    ) {
+      try {
+        Thread.sleep( RESOLUTION ) ;
+      } catch( InterruptedException e ) {
+        throw new RuntimeException( "Should never happen", e ) ;
       }
-      lastGenerated = generated ;
     }
     return new Sticker( generated ) ;
   }
+
+
+  /**
+   * See <a href="http://blogs.sun.com/dholmes/entry/inside_the_hotspot_vm_clocks" >this article</a>.
+   */
+  private static final long RESOLUTION = 15L ;
+
 
   
   @Override
