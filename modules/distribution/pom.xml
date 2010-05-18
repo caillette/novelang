@@ -13,26 +13,21 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <artifactId>Novelang-bootstrap</artifactId>
-  <name>${artifactId}</name>
+  <artifactId>Novelang-distribution</artifactId>
+  <name>Novelang</name>
 
 
   <build>
     <plugins>
 
       <plugin>
-        <groupId>${lib.maven-jar-plugin.groupid}</groupId>
-        <artifactId>${lib.maven-jar-plugin.artefactid}</artifactId>
-        <version>${lib.maven-jar-plugin.version}</version>
+        <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
+        <version>${lib.maven-assembly-plugin.version}</version>
         <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <classpathPrefix/>
-              <classpathLayoutType>simple</classpathLayoutType>
-              <Main-Class>${novelang.bootstrap.mainClass}</Main-Class>
-            </manifest>
-          </archive>
+          <descriptors>
+            <descriptor>src/assemble/release.xml</descriptor>
+          </descriptors>
         </configuration>
       </plugin>
 
@@ -40,19 +35,24 @@
   </build>
 
 
-
-
   <dependencies>
-
+        
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-engine</artifactId>
+      <artifactId>Novelang-bootstrap</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
+<!--
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-documentation</artifactId>
+      <version>${parent.version}</version>
+      <classifier>generated</classifier>
+    </dependency>
+-->
 
   </dependencies>
 
-  
 </project>
 

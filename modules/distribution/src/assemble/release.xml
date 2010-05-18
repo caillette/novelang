@@ -15,46 +15,49 @@
 
   <moduleSets>
 
+<!--
     <moduleSet>
       <excludes>
         <exclude>*fixture</exclude>
         <exclude>*plugin</exclude>
+        <exclude>*documentation</exclude>
       </excludes>
       <binaries>
         <outputDirectory>lib</outputDirectory>
         <unpack>false</unpack>
       </binaries>
     </moduleSet>
+-->
 
     <!--
         This doesn't work because of a probable bug in assembly plugin.
         The workaround is to stage the files through some Ant task and package them as fileset.
-
-    <moduleSet>
-      <includes>
-        <include>org.novelang:documentation</include>
-      </includes>
-      <binaries>
-        <attachmentClassifier>doc-only</attachmentClassifier>
-        <outputDirectory>documentation</outputDirectory>
-        <unpack>true</unpack>
-        <useStrictFiltering>true</useStrictFiltering>
-      </binaries>
-    </moduleSet>
     -->
+
+    <!--<moduleSet>-->
+      <!--<includes>-->
+        <!--<include>org.novelang:Novelang-documentation</include>-->
+      <!--</includes>-->
+      <!--<binaries>-->
+        <!--<attachmentClassifier>generated</attachmentClassifier>-->
+        <!--<outputDirectory>documentation</outputDirectory>-->
+        <!--<unpack>true</unpack>-->
+        <!--<useStrictFiltering>true</useStrictFiltering>-->
+      <!--</binaries>-->
+    <!--</moduleSet>-->
 
   </moduleSets>
 
-  <fileSets>
-    <fileSet>
-      <!-- Ugly. -->
-      <directory>modules/documentation/target/documentation</directory>
-      <outputDirectory>/doc</outputDirectory>
-      <includes>
-        <include>**/*</include>
-      </includes>
-    </fileSet>
-  </fileSets>
+  <!--<fileSets>-->
+    <!--<fileSet>-->
+       <!--Ugly. -->
+      <!--<directory>modules/documentation/target/documentation</directory>-->
+      <!--<outputDirectory>/doc</outputDirectory>-->
+      <!--<includes>-->
+        <!--<include>**/*</include>-->
+      <!--</includes>-->
+    <!--</fileSet>-->
+  <!--</fileSets>-->
 
 
   <dependencySets>
@@ -64,10 +67,14 @@
       <useTransitiveDependencies>true</useTransitiveDependencies>
       <outputDirectory>lib</outputDirectory>
       <scope>runtime</scope>
+      <excludes>
+        <exclude>*-distribution*</exclude>
+      </excludes>
     </dependencySet>
 
   </dependencySets>
 
+<!--
   <repositories>
     <repository>
       <includeMetadata>true</includeMetadata>
@@ -75,6 +82,7 @@
       <scope>runtime</scope>
     </repository>
   </repositories>
+-->
 
 
 </assembly>

@@ -71,6 +71,7 @@
     <module>modules/bootstrap</module>
     <module>modules/lexeme-table-plugin</module>
     <module>modules/documentation</module>
+    <module>modules/distribution</module>
   </modules>
 
 
@@ -87,17 +88,6 @@
     </pluginManagement>
 
     <plugins>
-
-      <plugin>
-        <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
-        <version>${lib.maven-assembly-plugin.version}</version>
-        <configuration>
-          <descriptors>
-            <descriptor>src/assemble/release.xml</descriptor>
-          </descriptors>
-        </configuration>
-      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

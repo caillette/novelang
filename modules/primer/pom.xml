@@ -30,7 +30,7 @@
   </parent>
 
   <artifactId>Novelang-primer</artifactId>
-  <name>${artifactId}</name>
+  <name>Novelang-primer</name>
 
 
   <dependencies>
