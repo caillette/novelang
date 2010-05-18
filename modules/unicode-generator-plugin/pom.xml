@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-unicode-generator-plugin</name>
-  <artifactId>unicode-generator-plugin</artifactId>
+  <artifactId>Novelang-unicode-generator-plugin</artifactId>
+  <name>${artifactId}</name>
   <packaging>maven-plugin</packaging>
 
 
@@ -41,7 +41,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>code-generation</artifactId>
+      <artifactId>Novelang-code-generation</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

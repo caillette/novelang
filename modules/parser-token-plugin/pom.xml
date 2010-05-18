@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-parser-token-plugin</name>
-  <artifactId>parser-token-plugin</artifactId>
+  <artifactId>Novelang-parser-token-plugin</artifactId>
+  <name>${artifactId}</name>
   <packaging>maven-plugin</packaging>
 
 
@@ -28,7 +28,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>code-generation</artifactId>
+      <artifactId>Novelang-code-generation</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

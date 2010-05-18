@@ -29,8 +29,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-primer</name>
-  <artifactId>primer</artifactId>
+  <artifactId>Novelang-primer</artifactId>
+  <name>${artifactId}</name>
 
 
   <dependencies>

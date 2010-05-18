@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-vanilla-fixture</name>
-  <artifactId>vanilla-fixture</artifactId>
+  <artifactId>Novelang-vanilla-fixture</artifactId>
+  <name>${artifactId}</name>
 
   <dependencies>
 

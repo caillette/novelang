@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-bootstrap</name>
-  <artifactId>bootstrap</artifactId>
+  <artifactId>Novelang-bootstrap</artifactId>
+  <name>${artifactId}</name>
 
 
   <build>
@@ -46,7 +46,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>engine</artifactId>
+      <artifactId>Novelang-engine</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-code-generation</name>
-  <artifactId>code-generation</artifactId>
+  <artifactId>Novelang-code-generation</artifactId>
+  <name>${artifactId}</name>
 
   <build>
     <resources>
@@ -31,7 +31,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>primer</artifactId>
+      <artifactId>Novelang-primer</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

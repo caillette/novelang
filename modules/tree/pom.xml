@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-tree</name>
-  <artifactId>tree</artifactId>
+  <artifactId>Novelang-tree</artifactId>
+  <name>${artifactId}</name>
 
   <dependencies>
 

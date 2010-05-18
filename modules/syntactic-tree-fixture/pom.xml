@@ -13,32 +13,32 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-syntactic-tree-fixture</name>
-  <artifactId>syntactic-tree-fixture</artifactId>
+  <artifactId>Novelang-syntactic-tree-fixture</artifactId>
+  <name>${artifactId}</name>
 
   <dependencies>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>tree</artifactId>
+      <artifactId>Novelang-tree</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>parser-antlr</artifactId>
+      <artifactId>Novelang-parser-antlr</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>parser-supplement</artifactId>
+      <artifactId>Novelang-parser-supplement</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>syntactic-tree</artifactId>
+      <artifactId>Novelang-syntactic-tree</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

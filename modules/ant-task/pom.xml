@@ -15,7 +15,7 @@
   </parent>
 
   <name>Novelang-ant-task</name>
-  <artifactId>ant-task</artifactId>
+  <artifactId>${name}</artifactId>
 
   <dependencies>
 
@@ -27,7 +27,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>engine</artifactId>
+      <artifactId>Novelang-engine</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

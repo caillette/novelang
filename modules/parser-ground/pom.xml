@@ -13,14 +13,14 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-parser-ground</name>
-  <artifactId>parser-ground</artifactId>
+  <artifactId>Novelang-parser-ground</artifactId>
+  <name>${artifactId}</name>
 
   <dependencies>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>primer</artifactId>
+      <artifactId>Novelang-primer</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

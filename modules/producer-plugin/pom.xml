@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-producer-plugin</name>
-  <artifactId>producer-plugin</artifactId>
+  <artifactId>Novelang-producer-plugin</artifactId>
+  <name>${artifactId}</name>
   <packaging>maven-plugin</packaging>
 
 
@@ -28,7 +28,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>engine</artifactId>
+      <artifactId>Novelang-engine</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

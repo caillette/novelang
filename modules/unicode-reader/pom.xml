@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-unicode-reader</name>
-  <artifactId>unicode-reader</artifactId>
+  <artifactId>Novelang-unicode-reader</artifactId>
+  <name>${artifactId}</name>
 
   <properties>
     <generated-binaries>${project.build.outputDirectory}</generated-binaries>
@@ -26,7 +26,7 @@
 
       <plugin>
         <groupId>${parent.groupId}</groupId>
-        <artifactId>unicode-generator-plugin</artifactId>
+        <artifactId>Novelang-unicode-generator-plugin</artifactId>
         <version>${parent.version}</version>
         <executions>
           <execution>
@@ -63,7 +63,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>primer</artifactId>
+      <artifactId>Novelang-primer</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

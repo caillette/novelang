@@ -69,6 +69,7 @@
     <module>modules/parser-facade</module>
     <module>modules/engine</module>
     <module>modules/bootstrap</module>
+    <module>modules/lexeme-table-plugin</module>
     <module>modules/documentation</module>
   </modules>
 

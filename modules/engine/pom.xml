@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-engine</name>
-  <artifactId>engine</artifactId>
+  <artifactId>Novelang-engine</artifactId>
+  <name>${artifactId}</name>
 
   <dependencies>
 
@@ -81,26 +81,26 @@
     
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>primer</artifactId>
+      <artifactId>Novelang-primer</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>parser-facade</artifactId>
+      <artifactId>Novelang-parser-facade</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>vanilla-fixture</artifactId>
+      <artifactId>Novelang-vanilla-fixture</artifactId>
       <version>${parent.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>syntactic-tree-fixture</artifactId>
+      <artifactId>Novelang-syntactic-tree-fixture</artifactId>
       <version>${parent.version}</version>
       <scope>test</scope>
     </dependency>

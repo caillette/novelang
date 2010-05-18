@@ -106,8 +106,8 @@ public class HttpDaemonTest {
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ;
     final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
     final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
-    LOG.debug( "Got headers: %s", headers ) ;
-    assertEquals( "application/pdf", headers[ 0 ].getValue() ) ;
+    assertTrue( "Got:" + Arrays.asList( headers ), headers.length > 0 ) ;
+    assertEquals( "Got:" + Arrays.asList( headers ), "application/pdf", headers[ 0 ].getValue() ) ;
   }
 
   @Test

@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-lexeme-table-plugin</name>
-  <artifactId>lexeme-table-plugin</artifactId>
+  <artifactId>Novelang-lexeme-table-plugin</artifactId>
+  <name>${artifactId}</name>
   <packaging>maven-plugin</packaging>
 
 
@@ -28,7 +28,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>engine</artifactId>
+      <artifactId>Novelang-engine</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

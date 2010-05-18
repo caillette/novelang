@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-documentation</name>
-  <artifactId>documentation</artifactId>
+  <artifactId>Novelang-documentation</artifactId>
+  <name>${artifactId}</name>
   <packaging>pom</packaging>
 
   <properties>
@@ -141,13 +141,13 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>bootstrap</artifactId>
+      <artifactId>Novelang-bootstrap</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>lexeme-table-plugin</artifactId>
+      <artifactId>Novelang-lexeme-table-plugin</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

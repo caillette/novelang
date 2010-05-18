@@ -13,8 +13,8 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <name>Novelang-parser-antlr</name>
-  <artifactId>parser-antlr</artifactId>
+  <artifactId>Novelang-parser-antlr</artifactId>
+  <name>${artifactId}</name>
 
   <properties>
     <generated-binaries>${project.build.outputDirectory}</generated-binaries>
@@ -87,7 +87,7 @@
 
       <plugin>
         <groupId>${parent.groupId}</groupId>
-        <artifactId>parser-lexeme-plugin</artifactId>
+        <artifactId>Novelang-parser-lexeme-plugin</artifactId>
         <version>${parent.version}</version>
         <executions>
           <execution>
@@ -105,7 +105,7 @@
 
       <plugin>
         <groupId>${parent.groupId}</groupId>
-        <artifactId>parser-token-plugin</artifactId>
+        <artifactId>Novelang-parser-token-plugin</artifactId>
         <version>${parent.version}</version>
         <executions>
           <execution>
@@ -130,13 +130,13 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>tree</artifactId>
+      <artifactId>Novelang-tree</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>parser-ground</artifactId>
+      <artifactId>Novelang-parser-ground</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
