@@ -70,6 +70,8 @@
     <orderEntry type="module" module-name="parser-supplement" exported="" />
     <orderEntry type="module" module-name="syntactic-tree" exported="" />
     <orderEntry type="module" module-name="unicode-reader" exported="" />
+    <orderEntry type="module" module-name="documentation" exported="" />
+    <orderEntry type="module" module-name="lexeme-table-plugin" exported="" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-math:commons-math:1.2" level="project" />

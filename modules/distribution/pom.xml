@@ -43,14 +43,13 @@
       <version>${parent.version}</version>
     </dependency>
 
-<!--
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-documentation</artifactId>
       <version>${parent.version}</version>
+      <type>zip</type>
       <classifier>generated</classifier>
     </dependency>
--->
 
   </dependencies>
 

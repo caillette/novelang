@@ -13,52 +13,6 @@
 
   <includeBaseDirectory>true</includeBaseDirectory>
 
-  <moduleSets>
-
-<!--
-    <moduleSet>
-      <excludes>
-        <exclude>*fixture</exclude>
-        <exclude>*plugin</exclude>
-        <exclude>*documentation</exclude>
-      </excludes>
-      <binaries>
-        <outputDirectory>lib</outputDirectory>
-        <unpack>false</unpack>
-      </binaries>
-    </moduleSet>
--->
-
-    <!--
-        This doesn't work because of a probable bug in assembly plugin.
-        The workaround is to stage the files through some Ant task and package them as fileset.
-    -->
-
-    <!--<moduleSet>-->
-      <!--<includes>-->
-        <!--<include>org.novelang:Novelang-documentation</include>-->
-      <!--</includes>-->
-      <!--<binaries>-->
-        <!--<attachmentClassifier>generated</attachmentClassifier>-->
-        <!--<outputDirectory>documentation</outputDirectory>-->
-        <!--<unpack>true</unpack>-->
-        <!--<useStrictFiltering>true</useStrictFiltering>-->
-      <!--</binaries>-->
-    <!--</moduleSet>-->
-
-  </moduleSets>
-
-  <!--<fileSets>-->
-    <!--<fileSet>-->
-       <!--Ugly. -->
-      <!--<directory>modules/documentation/target/documentation</directory>-->
-      <!--<outputDirectory>/doc</outputDirectory>-->
-      <!--<includes>-->
-        <!--<include>**/*</include>-->
-      <!--</includes>-->
-    <!--</fileSet>-->
-  <!--</fileSets>-->
-
 
   <dependencySets>
 
@@ -69,20 +23,22 @@
       <scope>runtime</scope>
       <excludes>
         <exclude>*-distribution*</exclude>
+        <exclude>*-documentation*</exclude>
+        <exclude>*plugin*</exclude>
       </excludes>
+    </dependencySet>
+
+    <dependencySet>
+      <unpack>true</unpack>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <outputDirectory>documentation</outputDirectory>
+      <includes>
+        <include>*-documentation*</include>
+      </includes>
     </dependencySet>
 
   </dependencySets>
 
-<!--
-  <repositories>
-    <repository>
-      <includeMetadata>true</includeMetadata>
-      <outputDirectory>lib</outputDirectory>
-      <scope>runtime</scope>
-    </repository>
-  </repositories>
--->
 
 
 </assembly>
