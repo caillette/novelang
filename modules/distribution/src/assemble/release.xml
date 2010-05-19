@@ -19,6 +19,7 @@
     <dependencySet>
       <unpack>false</unpack>
       <useTransitiveDependencies>true</useTransitiveDependencies>
+      <useProjectAttachments>false</useProjectAttachments> <!-- No observable effect. -->
       <outputDirectory>lib</outputDirectory>
       <scope>runtime</scope>
       <excludes>
@@ -39,6 +40,31 @@
 
   </dependencySets>
 
+  <fileSets>
+
+    <!--
+        We can't get the job done using moduleSets because we're not in the parent project,
+        so we don't see every module (and source inclusion doesn't seem to work for declared
+        dependencies). So we're taking the dirty way here.
+    -->
+    <fileSet>
+      <directory>../..</directory>
+      <outputDirectory/>
+      <includes>
+        <include>/src</include>
+        <include>/modules/**</include>
+        <include>/pom.xml</include>
+      </includes>
+      <excludes>
+        <exclude>**/target/**</exclude>
+        <exclude>**/distrib/**</exclude>
+        <exclude>**/lib/**</exclude>
+        <exclude>**/*.iml</exclude>
+        <exclude>**/test-scratch/**</exclude>
+      </excludes>
+    </fileSet>
+
+  </fileSets>
 
 
 </assembly>
