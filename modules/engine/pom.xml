@@ -18,60 +18,54 @@
 
   <properties>
     <updatedVersionSources.dir>${project.build.directory}/tweaked</updatedVersionSources.dir>
+    <versionJavaClassName>Version</versionJavaClassName>
   </properties>
 
   <build>
+    
 
     <plugins>
+
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
+            <phase>process-classes</phase>
             <!--
-                We can't compile Version.java separately (at least using Maven plugins).
-                So we copy all the Java sources before modifying Version.java.
+                There is no known mean to configure Maven compiler plugin to compile
+                one file separately, from its special source path.
+                So we cheat here, using Ant's Javac task. This overwrites normally compiled class.
             -->
-            <phase>generate-sources</phase>
             <configuration>
               <tasks>
 
+                <delete dir="${updatedVersionSources.dir}" />
                 <mkdir dir="${updatedVersionSources.dir}" />
 
                 <copy todir="${updatedVersionSources.dir}" >
                   <fileset dir="${project.build.sourceDirectory}" >
-                    <include name="**/Version.java" />
+                    <include name="**/${versionJavaClassName}.java" />
                   </fileset>
                 </copy>
 
                 <replace dir="${updatedVersionSources.dir}" value="${project.version}" >
                   <replacetoken>@SNAPSHOT@</replacetoken>
                 </replace>
+                
+                <javac
+                    srcdir="${updatedVersionSources.dir}"
+                    destdir="${project.build.outputDirectory}"
+                    debug="on"
+                />
 
               </tasks>
             </configuration>
             <goals>
               <goal>run</goal>
             </goals>
-            
           </execution>
         </executions>
-      </plugin>
 
-      <plugin>
-        <groupId>${lib.maven-compiler-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-compiler-plugin.artefactId}</artifactId>
-        <version>${lib.maven-compiler-plugin.version}</version>
-        <executions>
-          <execution>
-            <phase>process-classes</phase>
-          </execution>
-        </executions>
-        <configuration>
-          <sourceDirectory>${updatedVersionSources.dir}</sourceDirectory>
-          <includes>
-              <include>**/Version.java</include>
-          </includes>
-        </configuration>
       </plugin>
 
     </plugins>
