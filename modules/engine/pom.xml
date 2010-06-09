@@ -16,6 +16,56 @@
   <artifactId>Novelang-engine</artifactId>
   <name>${artifactId}</name>
 
+  <properties>
+    <tweakedSources.dir>${project.build.directory}/tweaked</tweakedSources.dir>
+  </properties>
+
+  <build>
+
+    <sourceDirectory>${tweakedSources.dir}</sourceDirectory>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <!--
+                We can't compile Version.java separately (at least using Maven plugins).
+                So we copy all the Java sources before modifying Version.java.
+            -->
+
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+
+                <mkdir dir="${tweakedSources.dir}" />
+
+                <echo>project.build.sourceDirectory=${project.build.sourceDirectory}</echo>
+
+                <copy todir="${tweakedSources.dir}" >
+                  <fileset dir="${project.basedir}/src/main/java" >
+                    <include name="**/*.java" />
+                  </fileset>
+                </copy>
+
+                <replace dir="${tweakedSources.dir}" value="${project.version}" >
+                  <include name="**/Version.java" />
+                  <replacetoken>@SNAPSHOT@</replacetoken>
+                </replace>
+
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
+
   <dependencies>
 
 <!--
