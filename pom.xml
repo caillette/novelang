@@ -39,6 +39,10 @@
     <lib.maven-assembly-plugin.artefactId>maven-assembly-plugin</lib.maven-assembly-plugin.artefactId>
     <lib.maven-assembly-plugin.version>2.2-beta-5</lib.maven-assembly-plugin.version>
 
+    <lib.maven-compiler-plugin.groupId>org.apache.maven.plugins</lib.maven-compiler-plugin.groupId>
+    <lib.maven-compiler-plugin.artefactId>maven-compiler-plugin</lib.maven-compiler-plugin.artefactId>
+    <lib.maven-compiler-plugin.version>2.3</lib.maven-compiler-plugin.version>
+
     <lib.junit.groupid>junit</lib.junit.groupid>
     <lib.junit.artefactid>junit</lib.junit.artefactid>
     <lib.junit.version>4.8.1</lib.junit.version>
@@ -90,9 +94,9 @@
     <plugins>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3</version>
+        <groupId>${lib.maven-compiler-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-compiler-plugin.artefactId}</artifactId>
+        <version>${lib.maven-compiler-plugin.version}</version>
         <configuration>
           <fork>true</fork>
           <target>1.5</target>

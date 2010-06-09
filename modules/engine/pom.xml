@@ -17,12 +17,10 @@
   <name>${artifactId}</name>
 
   <properties>
-    <tweakedSources.dir>${project.build.directory}/tweaked</tweakedSources.dir>
+    <updatedVersionSources.dir>${project.build.directory}/tweaked</updatedVersionSources.dir>
   </properties>
 
   <build>
-
-    <sourceDirectory>${tweakedSources.dir}</sourceDirectory>
 
     <plugins>
       <plugin>
@@ -33,23 +31,19 @@
                 We can't compile Version.java separately (at least using Maven plugins).
                 So we copy all the Java sources before modifying Version.java.
             -->
-
             <phase>generate-sources</phase>
             <configuration>
               <tasks>
 
-                <mkdir dir="${tweakedSources.dir}" />
+                <mkdir dir="${updatedVersionSources.dir}" />
 
-                <echo>project.build.sourceDirectory=${project.build.sourceDirectory}</echo>
-
-                <copy todir="${tweakedSources.dir}" >
-                  <fileset dir="${project.basedir}/src/main/java" >
-                    <include name="**/*.java" />
+                <copy todir="${updatedVersionSources.dir}" >
+                  <fileset dir="${project.build.sourceDirectory}" >
+                    <include name="**/Version.java" />
                   </fileset>
                 </copy>
 
-                <replace dir="${tweakedSources.dir}" value="${project.version}" >
-                  <include name="**/Version.java" />
+                <replace dir="${updatedVersionSources.dir}" value="${project.version}" >
                   <replacetoken>@SNAPSHOT@</replacetoken>
                 </replace>
 
@@ -62,6 +56,24 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>${lib.maven-compiler-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-compiler-plugin.artefactId}</artifactId>
+        <version>${lib.maven-compiler-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <sourceDirectory>${updatedVersionSources.dir}</sourceDirectory>
+          <includes>
+              <include>**/Version.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
   
