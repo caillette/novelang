@@ -97,8 +97,13 @@
                   <arg value="${generatedDocumentsDirectory}" />
                   <arg value="--log-dir" />
                   <arg value="${project.build.directory}" />
+                  
                   <arg value="/novelang.html" />
                   <arg value="/novelang.pdf" />
+
+                  <arg value="/versions/${project.version}.html?stylesheet=announcement-html.xsl" />                  
+                  <arg value="/versions/${project.version}.nlp?stylesheet=announcement-plaintext.xsl" />                  
+
                 </java>
 
                 <copy todir="${generatedDocumentsDirectory}" flatten="true" >
@@ -120,7 +125,8 @@
         <version>${lib.maven-assembly-plugin.version}</version>
         <configuration>
           <descriptors>
-            <descriptor>src/assemble/bin.xml</descriptor>
+            <descriptor>src/assemble/bundle.xml</descriptor>
+            <descriptor>src/assemble/release-notes.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>

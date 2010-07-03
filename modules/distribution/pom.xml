@@ -14,7 +14,7 @@
   </parent>
 
   <artifactId>Novelang-distribution</artifactId>
-  <name>Novelang</name>
+  <name>Novelang-distribution</name>
 
 
   <build>
@@ -48,7 +48,7 @@
       <artifactId>Novelang-documentation</artifactId>
       <version>${parent.version}</version>
       <type>zip</type>
-      <classifier>generated</classifier>
+      <classifier>bundle</classifier>
     </dependency>
 
   </dependencies>
