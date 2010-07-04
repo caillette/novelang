@@ -47,6 +47,14 @@
     <lib.junit.artefactid>junit</lib.junit.artefactid>
     <lib.junit.version>4.8.1</lib.junit.version>
 
+    <lib.wagon-maven-plugin.groupId>org.codehaus.mojo</lib.wagon-maven-plugin.groupId>
+    <lib.wagon-maven-plugin.artifactId>wagon-maven-plugin</lib.wagon-maven-plugin.artifactId>
+    <lib.wagon-maven-plugin.version>1.0-beta-3</lib.wagon-maven-plugin.version>
+
+    <lib.properties-maven-plugin.groupId>org.novelang</lib.properties-maven-plugin.groupId>
+    <lib.properties-maven-plugin.artefactId>Novelang-properties-plugin</lib.properties-maven-plugin.artefactId>
+    <lib.properties-maven-plugin.version>SNAPSHOT</lib.properties-maven-plugin.version>
+
   </properties>
 
   <groupId>org.novelang</groupId>
@@ -81,13 +89,23 @@
 
   <build>
 
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0-beta-6</version>
+      </extension>
+    </extensions>
+
     <pluginManagement>
       <plugins>
+
         <plugin>
           <groupId>${lib.cobertura.groupid}</groupId>
           <artifactId>${lib.cobertura.artefactid}</artifactId>
           <version>${lib.cobertura.version}</version>
         </plugin>
+
       </plugins>
     </pluginManagement>
 
@@ -106,6 +124,44 @@
           <debuglevel>lines,vars,source</debuglevel>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>${lib.properties-maven-plugin.groupId}</groupId>
+        <artifactId>${lib.properties-maven-plugin.artefactId}</artifactId>
+        <version>${lib.properties-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>initialize</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+            <configuration>
+              <filePaths>
+                <filePath>${user.home}/.novelang-project.properties</filePath>
+              </filePaths>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>announcement.user.name=${announcement.user.name}</echo>
+                <echo>user.home=${user.home}</echo>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
 
     </plugins>
 

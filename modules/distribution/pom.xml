@@ -17,6 +17,22 @@
   <name>Novelang-distribution</name>
 
 
+<!--
+  <distributionManagement>
+    <repository>
+      <id>repo</id>
+      <name>Repository Name</name>
+      <url>scp://host/path/to/repo</url>
+    </repository>
+    <snapshotRepository>
+      <id>repo</id>
+      <name>Repository Name</name>
+      <url>scp://host/path/to/repo</url>
+    </snapshotRepository>
+  </distributionManagement>
+-->
+
+
   <build>
     <plugins>
 
@@ -30,6 +46,30 @@
           </descriptors>
         </configuration>
       </plugin>
+
+
+      <plugin>
+        <groupId>${lib.wagon-maven-plugin.groupId}</groupId>
+        <artifactId>${lib.wagon-maven-plugin.artifactId}</artifactId>
+        <version>${lib.wagon-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>upload-release</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>upload</goal>
+            </goals>
+            <configuration>
+              <fromDir>${build.directory}</fromDir>
+              <includes>${artifactId}-${version}.zip</includes>
+              <excludes>pom.xml</excludes>
+              <url>scp://${publish.remote.user},${publish.remote.project}:${publish.remote.password}@${publish.remote.host}</url>
+              <toDir>${publish.remote.release.dir}</toDir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
 
     </plugins>
   </build>
