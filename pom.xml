@@ -126,6 +126,12 @@
       </plugin>
 
       <plugin>
+        <!--
+          Using a tweaked plugin supporting external files.
+          Default implementation prohibits this, as it makes build non-repeatable.
+          But we need to keep some confidential information (for publishing) out of
+          public repository.
+        -->
         <groupId>${lib.properties-maven-plugin.groupId}</groupId>
         <artifactId>${lib.properties-maven-plugin.artefactId}</artifactId>
         <version>${lib.properties-maven-plugin.version}</version>
@@ -144,18 +150,20 @@
         </executions>
       </plugin>
 
+
+      <!-- Hopefully executes after plugin declared above; needs declared properties. -->
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <phase>validate</phase>
+            <phase>initialize</phase>
             <goals>
               <goal>run</goal>
             </goals>
             <configuration>
               <tasks>
-                <echo>announcement.user.name=${announcement.user.name}</echo>
                 <echo>user.home=${user.home}</echo>
+                <echo>announcement.user.name=${announcement.user.name}</echo>
               </tasks>
             </configuration>
           </execution>

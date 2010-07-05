@@ -48,6 +48,7 @@
       </plugin>
 
 
+      <!-- Experimental. -->
       <plugin>
         <groupId>${lib.wagon-maven-plugin.groupId}</groupId>
         <artifactId>${lib.wagon-maven-plugin.artifactId}</artifactId>
