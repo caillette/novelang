@@ -9,7 +9,7 @@
       Known as the "classifier".
       Appears appended to the artefact, e.g. documentation-SNAPSHOT-bundled.zip.
   -->
-  <id>bundle</id>
+  <id>website</id>
 
   <formats>
     <format>zip</format>

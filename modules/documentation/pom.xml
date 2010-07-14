@@ -25,27 +25,43 @@
     <lexemeTableMainClass>novelang.build.documentation.LexemeTable</lexemeTableMainClass>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <id>ignored</id>
+      <name>Just make deploy plugin happy</name>
+      <url>scp://null</url>
+    </repository>
+  </distributionManagement>
 
   <build>
     <plugins>
-
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>2.1</version>
-        <configuration>
-          <generateReports>false</generateReports>
-        </configuration>
-      </plugin>
--->
 
 
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>user.home=${user.home}</echo>
+                <echo>blogging.blog.secretpostingaddress=${blogging.blog.secretpostingaddress}</echo>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
             <phase>compile</phase>
+            <!--<phase>none</phase>-->
             <configuration>
               <tasks>
 
@@ -119,13 +135,14 @@
         </executions>
       </plugin>
 
+
       <plugin>
         <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
         <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
         <version>${lib.maven-assembly-plugin.version}</version>
         <configuration>
           <descriptors>
-            <descriptor>src/assemble/bundle.xml</descriptor>
+            <descriptor>src/assemble/website.xml</descriptor>
             <descriptor>src/assemble/release-notes.xml</descriptor>
           </descriptors>
         </configuration>
@@ -139,6 +156,40 @@
           </execution>
         </executions>
       </plugin>
+
+
+      
+
+
+      <!--
+        Warning: this target directly copies files from target directory instead of
+        pre-unzipping the artefact in local repository.
+      -->
+      <plugin>
+        <groupId>${lib.wagon-maven-plugin.groupId}</groupId>
+        <artifactId>${lib.wagon-maven-plugin.artifactId}</artifactId>
+        <version>${lib.wagon-maven-plugin.version}</version>
+
+        <executions>
+          <execution>
+            <id>upload-documentation</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>upload</goal>
+            </goals>
+            <configuration>
+              <fromDir>${generatedDocumentsDirectory}</fromDir>
+              <!--<includes>*.html,*.css,*.pdf</includes>-->
+              <includes>*.txt</includes>
+              <serverId>website.novelang.sourceforge.net</serverId>
+              <url>sftp://${publish.remote.host}</url>
+              <toDir>${publish.remote.doc.dir}</toDir>
+            </configuration>
+          </execution>
+        </executions>
+
+      </plugin>
+      
 
     </plugins>
   </build>

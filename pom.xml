@@ -15,6 +15,19 @@
     <novelang.bootstrap.mainClass>novelang.bootstrap.Main</novelang.bootstrap.mainClass>
     <novelang.bootstrap.batchCommand>generate</novelang.bootstrap.batchCommand>
 
+
+    <!-- Publishing. TODO: prefix with "novelang." once it works. -->
+
+    <publish.remote.host>frs.sourceforge.net</publish.remote.host>
+    <publish.remote.project.name>novelang</publish.remote.project.name>
+    <publish.remote.dir>n/no/novelang</publish.remote.dir>
+    <publish.remote.doc.dir>home/groups/${publish.remote.dir}/htdocs</publish.remote.doc.dir>
+    <publish.remote.release.dir>/home/frs/project/${publish.remote.dir}</publish.remote.release.dir>
+    
+
+
+    <!-- Dependencies. -->
+
     <lib.cobertura.groupid>org.codehaus.mojo</lib.cobertura.groupid>
     <lib.cobertura.artefactid>cobertura-maven-plugin</lib.cobertura.artefactid>
     <lib.cobertura.version>2.4</lib.cobertura.version>
@@ -51,9 +64,17 @@
     <lib.wagon-maven-plugin.artifactId>wagon-maven-plugin</lib.wagon-maven-plugin.artifactId>
     <lib.wagon-maven-plugin.version>1.0-beta-3</lib.wagon-maven-plugin.version>
 
+    <lib.maven-wagon-ssh.groupId>org.apache.maven.wagon</lib.maven-wagon-ssh.groupId>
+    <lib.maven-wagon-ssh.artifactId>wagon-ssh</lib.maven-wagon-ssh.artifactId>
+    <lib.maven-wagon-ssh.version>1.0-beta-6</lib.maven-wagon-ssh.version>
+
     <lib.properties-maven-plugin.groupId>org.novelang</lib.properties-maven-plugin.groupId>
     <lib.properties-maven-plugin.artefactId>Novelang-properties-plugin</lib.properties-maven-plugin.artefactId>
     <lib.properties-maven-plugin.version>SNAPSHOT</lib.properties-maven-plugin.version>
+
+    <lib.maven-deploy-plugin.groupId>org.apache.maven.plugins</lib.maven-deploy-plugin.groupId>
+    <lib.maven-deploy-plugin.artefactId>maven-deploy-plugin</lib.maven-deploy-plugin.artefactId>
+    <lib.maven-deploy-plugin.version>2.5</lib.maven-deploy-plugin.version>
 
   </properties>
 
@@ -91,9 +112,9 @@
 
     <extensions>
       <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>1.0-beta-6</version>
+        <groupId>${lib.maven-wagon-ssh.groupId}</groupId>
+        <artifactId>${lib.maven-wagon-ssh.artifactId}</artifactId>
+        <version>${lib.maven-wagon-ssh.version}</version>
       </extension>
     </extensions>
 
@@ -117,21 +138,22 @@
         <version>${lib.maven-compiler-plugin.version}</version>
         <configuration>
           <fork>true</fork>
-          <target>1.5</target>
-          <source>1.5</source>
+          <target>1.6</target>
+          <source>1.6</source>
           <encoding>UTF-8</encoding>
           <debug>true</debug>
           <debuglevel>lines,vars,source</debuglevel>
         </configuration>
       </plugin>
 
+      <!--
+        Using a tweaked plugin supporting external files.
+        Default implementation prohibits this, as it makes build non-repeatable.
+        But we need to keep some confidential information (for publishing) out of
+        public repository.
+      -->
+<!--
       <plugin>
-        <!--
-          Using a tweaked plugin supporting external files.
-          Default implementation prohibits this, as it makes build non-repeatable.
-          But we need to keep some confidential information (for publishing) out of
-          public repository.
-        -->
         <groupId>${lib.properties-maven-plugin.groupId}</groupId>
         <artifactId>${lib.properties-maven-plugin.artefactId}</artifactId>
         <version>${lib.properties-maven-plugin.version}</version>
@@ -149,26 +171,42 @@
           </execution>
         </executions>
       </plugin>
+-->
 
 
       <!-- Hopefully executes after plugin declared above; needs declared properties. -->
+<!--
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <phase>initialize</phase>
+            <phase>validate</phase>
             <goals>
               <goal>run</goal>
             </goals>
             <configuration>
               <tasks>
                 <echo>user.home=${user.home}</echo>
-                <echo>announcement.user.name=${announcement.user.name}</echo>
+                <echo>blogging.blog.secretpostingaddress=${blogging.blog.secretpostingaddress}</echo>
               </tasks>
             </configuration>
           </execution>
         </executions>
       </plugin>
+-->
+
+      <!--
+        Disable default deployment because we don't want to feed an Maven repository.
+        Instead, Wagon directly uploads files on SourceForge.
+      -->
+      <plugin>
+        <groupId>${lib.maven-deploy-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-deploy-plugin.artefactId}</artifactId>
+        <version>${lib.maven-deploy-plugin.version}</version>
+        <configuration>
+          <skip>true</skip>
+       </configuration>
+     </plugin>
 
 
     </plugins>
@@ -332,5 +370,16 @@
 
 
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>website.novelang.sourceforge.net</id>
+      <name>Novelang website on SourceForge</name>
+      <!--<url>file:///Users/administrateur/Desktop/fake-deployment-target</url>-->
+      <url>file:///dev/null</url>
+    </repository>
+  </distributionManagement>
+
+
 </project>
 
