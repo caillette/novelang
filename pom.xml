@@ -384,17 +384,23 @@
 
   </dependencies>
 
+  <!-- Required by deploy plugin, even if not used. -->
   <distributionManagement>
     <repository>
       <id>website.novelang.sourceforge.net</id>
       <name>Novelang website on SourceForge</name>
-      <!--<url>file:///Users/administrateur/Desktop/fake-deployment-target</url>-->
       <url>file:///dev/null</url>
     </repository>
   </distributionManagement>
 
 
   <developers>
+    
+    <!--
+      Must be the first of the list to become the mail sender when deploying
+      Novelang-distribution.
+      This is because I don't know another way to configure the changes-plugin.
+    -->
     <developer>
       <id>announcer</id>
       <name>Novelang release announcer</name>

@@ -115,14 +115,14 @@
             <configuration>
               <smtpHost>${publish.mailhost}</smtpHost>
               <smtpPort>${publish.mailport}</smtpPort>
+              <sslMode>true</sslMode>
               <username>${announcement.user.name}</username>
               <password>${announcement.user.password}</password>
-              <!--<mailSender>announcer</mailSender>-->
               <subject>${project.name}-${project.version} released!</subject>
-              <template>${project.version}.html</template>
+              <template>${project.version}.nlp</template>
               <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
               <toAddresses>
-                <toAddress>laurent.caillette@gmail.com</toAddress>
+                <toAddress>novelang.announcer@gmail.com</toAddress>
               </toAddresses>
             </configuration>
           </execution>
