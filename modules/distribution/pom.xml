@@ -41,6 +41,94 @@
         </executions>
       </plugin>
 
+      <plugin>
+        <groupId>${lib.maven-dependency-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-dependency-plugin.artefactId}</artifactId>
+        <version>${lib.maven-dependency-plugin.version}</version>
+
+        <executions>
+          <execution>
+            <id>blog-posting</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${parent.groupId}</groupId>
+                  <artifactId>Novelang-documentation</artifactId>
+                  <version>${parent.version}</version>
+                  <classifier>${novelang.documentation.releasenotes.classifier}</classifier>
+                  <type>zip</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/announcement</outputDirectory>
+                </artifactItem>
+              </artifactItems>              
+            </configuration>            
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--
+        Warning: this target directly copies files from target directory instead of
+        pre-unzipping the artefact in local repository.
+      -->
+      <plugin>
+        <groupId>${lib.wagon-maven-plugin.groupId}</groupId>
+        <artifactId>${lib.wagon-maven-plugin.artifactId}</artifactId>
+        <version>${lib.wagon-maven-plugin.version}</version>
+
+        <executions>
+          <execution>
+            <id>upload-distribution</id>
+            <!--<phase>deploy</phase>-->
+            <phase>none</phase>
+            <goals>
+              <goal>upload</goal>
+            </goals>
+            <configuration>
+              <fromDir>${build.directory}</fromDir>
+              <!--<includes>${project.name}-{project.version}.zip</includes>-->
+              <includes>*.txt</includes>
+              <serverId>novelang.sourceforge.net</serverId>
+              <url>sftp://${publish.remote.host}</url>
+              <toDir>${publish.remote.release.dir}</toDir>
+            </configuration>
+          </execution>
+        </executions>
+
+      </plugin>
+
+      <plugin>
+        <groupId>${lib.maven-changes-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-changes-plugin.artefactId}</artifactId>
+        <version>${lib.maven-changes-plugin.version}</version>
+
+        <executions>
+          <execution>
+            <id>blog-posting</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>announcement-mail</goal>
+            </goals>
+            <configuration>
+              <smtpHost>${publish.mailhost}</smtpHost>
+              <smtpPort>${publish.mailport}</smtpPort>
+              <username>${announcement.user.name}</username>
+              <password>${announcement.user.password}</password>
+              <!--<mailSender>announcer</mailSender>-->
+              <subject>${project.name}-${project.version} released!</subject>
+              <template>${project.version}.html</template>
+              <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
+              <toAddresses>
+                <toAddress>laurent.caillette@gmail.com</toAddress>
+              </toAddresses>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 

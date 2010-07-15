@@ -181,7 +181,7 @@
               <fromDir>${generatedDocumentsDirectory}</fromDir>
               <!--<includes>*.html,*.css,*.pdf</includes>-->
               <includes>*.txt</includes>
-              <serverId>website.novelang.sourceforge.net</serverId>
+              <serverId>novelang.sourceforge.net</serverId>
               <url>sftp://${publish.remote.host}</url>
               <toDir>${publish.remote.doc.dir}</toDir>
             </configuration>

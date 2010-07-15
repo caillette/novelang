@@ -26,7 +26,7 @@
       Known as the "classifier".
       Appears appended to the artefact, e.g. documentation-SNAPSHOT-bundled.zip.
   -->
-  <id>release-notes</id>
+  <id>${novelang.documentation.releasenotes.classifier}</id>
 
   <formats>
     <format>zip</format>
@@ -36,10 +36,10 @@
 
   <fileSets>
     <fileSet>
-      <directory>${generatedDocumentsDirectory}</directory>
+      <directory>${generatedDocumentsDirectory}/versions</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
-        <include>versions/*</include>
+        <include>*</include>
       </includes>
     </fileSet>
 

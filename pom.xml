@@ -23,7 +23,8 @@
     <publish.remote.dir>n/no/novelang</publish.remote.dir>
     <publish.remote.doc.dir>home/groups/${publish.remote.dir}/htdocs</publish.remote.doc.dir>
     <publish.remote.release.dir>/home/frs/project/${publish.remote.dir}</publish.remote.release.dir>
-    
+
+    <novelang.documentation.releasenotes.classifier>release-notes</novelang.documentation.releasenotes.classifier>
 
 
     <!-- Dependencies. -->
@@ -75,6 +76,18 @@
     <lib.maven-deploy-plugin.groupId>org.apache.maven.plugins</lib.maven-deploy-plugin.groupId>
     <lib.maven-deploy-plugin.artefactId>maven-deploy-plugin</lib.maven-deploy-plugin.artefactId>
     <lib.maven-deploy-plugin.version>2.5</lib.maven-deploy-plugin.version>
+
+    <lib.maven-changes-plugin.groupId>org.apache.maven.plugins</lib.maven-changes-plugin.groupId>
+    <lib.maven-changes-plugin.artefactId>maven-changes-plugin</lib.maven-changes-plugin.artefactId>
+    <lib.maven-changes-plugin.version>2.3</lib.maven-changes-plugin.version>
+
+    <lib.maven-postman-plugin.groupId>ch.fortysix</lib.maven-postman-plugin.groupId>
+    <lib.maven-postman-plugin.artefactId>maven-postman-plugin</lib.maven-postman-plugin.artefactId>
+    <lib.maven-postman-plugin.version>0.1.2</lib.maven-postman-plugin.version>
+
+    <lib.maven-dependency-plugin.groupId>org.apache.maven.plugins</lib.maven-dependency-plugin.groupId>
+    <lib.maven-dependency-plugin.artefactId>maven-dependency-plugin</lib.maven-dependency-plugin.artefactId>
+    <lib.maven-dependency-plugin.version>2.1</lib.maven-dependency-plugin.version>
 
   </properties>
 
@@ -379,6 +392,20 @@
       <url>file:///dev/null</url>
     </repository>
   </distributionManagement>
+
+
+  <developers>
+    <developer>
+      <id>announcer</id>
+      <name>Novelang release announcer</name>
+      <email>${announcement.user.email}</email>
+      <roles>
+        <role>send emails</role>
+      </roles>
+    </developer>
+
+  </developers>
+
 
 
 </project>

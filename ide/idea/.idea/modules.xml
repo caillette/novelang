@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" filepath="$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" filepath="$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/ant-task/ant-task.iml" filepath="$PROJECT_DIR$/../../modules/ant-task/ant-task.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/distribution/distribution.iml" filepath="$PROJECT_DIR$/../../modules/distribution/distribution.iml" />
