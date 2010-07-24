@@ -6,7 +6,7 @@
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
     <artifactId>Novelang</artifactId>
-    <version>SNAPSHOT</version>
+    <version>0.44.0</version>
   </parent>
 
   <artifactId>Novelang-distribution</artifactId>
@@ -86,7 +86,7 @@
             </goals>
             <configuration>
               <fromDir>${build.directory}</fromDir>
-              <includes>${project.name}-{project.version}.zip</includes>
+              <includes>${project.name}-${project.version}.zip</includes>
               <!--<includes>*.txt</includes>-->
               <serverId>novelang.sourceforge.net</serverId>
               <url>sftp://${publish.remote.host}</url>
