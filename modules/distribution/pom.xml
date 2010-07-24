@@ -73,6 +73,7 @@
       <!--
         Warning: this target directly copies files from target directory instead of
         pre-unzipping the artefact in local repository.
+        See also: documentation deployment.
       -->
       <plugin>
         <groupId>${lib.wagon-maven-plugin.groupId}</groupId>
@@ -106,6 +107,29 @@
         <version>${lib.maven-changes-plugin.version}</version>
 
         <executions>
+
+          <execution>
+            <id>mailing-list-posting</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>announcement-mail</goal>
+            </goals>
+            <configuration>
+              <smtpHost>${publish.mailhost}</smtpHost>
+              <smtpPort>${publish.mailport}</smtpPort>
+              <sslMode>true</sslMode>
+              <username>${announcement.user.name}</username>
+              <password>${announcement.user.password}</password>
+              <subject>${parent.artifactId}-${project.version} released!</subject>
+              <template>${project.version}.nlp</template>
+              <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
+              <toAddresses>
+                <toAddress>${announcement.user.email}</toAddress>
+              </toAddresses>
+              <mailContentType>text/plain</mailContentType>
+            </configuration>
+          </execution>
+
           <execution>
             <id>blog-posting</id>
             <phase>deploy</phase>
@@ -118,12 +142,13 @@
               <sslMode>true</sslMode>
               <username>${announcement.user.name}</username>
               <password>${announcement.user.password}</password>
-              <subject>${project.name}-${project.version} released!</subject>
-              <template>${project.version}.nlp</template>
+              <subject>${parent.artifactId}-${project.version} released!</subject>
+              <template>${project.version}.html</template>
               <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
               <toAddresses>
-                <toAddress>novelang.announcer@gmail.com</toAddress>
+                <toAddress>${blogging.blog.secretpostingaddress}</toAddress>
               </toAddresses>
+              <mailContentType>text/html</mailContentType>
             </configuration>
           </execution>
         </executions>

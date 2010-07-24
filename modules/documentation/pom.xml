@@ -164,6 +164,7 @@
       <!--
         Warning: this target directly copies files from target directory instead of
         pre-unzipping the artefact in local repository.
+        See also: distribution deployment.
       -->
       <plugin>
         <groupId>${lib.wagon-maven-plugin.groupId}</groupId>
