@@ -41,13 +41,13 @@ import java.io.IOException;
 import java.util.Iterator;
 
 /**
- * Test for {@link Composium} and also built-in functions.
+ * Test for {@link Opus} and also built-in functions.
  * 
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "HardcodedFileSeparator" } )
 @RunWith( value = NameAwareTestClassRunner.class )
-public class ComposiumTest {
+public class OpusTest {
 
   /**
    * Test that some parsing error produces a Problem.
@@ -56,7 +56,7 @@ public class ComposiumTest {
   public void badCommandGeneratesProblem() {
     final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
-    final Composium composium = ComposiumTestTools.createBook(
+    final Opus composium = ComposiumTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath() + " $recurse" // old syntax
     ) ;
@@ -72,7 +72,7 @@ public class ComposiumTest {
     final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
-    final Composium composium = ComposiumTestTools.createBook(
+    final Opus composium = ComposiumTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + absoluteFilePath
     ) ;
@@ -100,7 +100,7 @@ public class ComposiumTest {
     final File scannedBookNoStyle =
         resourceInstaller.createFileObject( ResourcesForTests.Scanned.BOOK ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( scannedBookNoStyle ) ;
+    final Opus composium = ComposiumTestTools.createBook( scannedBookNoStyle ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = composium.getDocumentTree() ;
@@ -148,7 +148,7 @@ public class ComposiumTest {
     final File scannedBookNoStyleNoRecurse = resourceInstaller.createFileObject(
         ResourcesForTests.Scanned.BOOK_NORECURSE ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
+    final Opus composium = ComposiumTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = composium.getDocumentTree() ;
@@ -182,7 +182,7 @@ public class ComposiumTest {
     final File scannedBookWithStyle = resourceInstaller.createFileObject(
         ResourcesForTests.Scanned.BOOK_WITHSTYLE ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( scannedBookWithStyle );
+    final Opus composium = ComposiumTestTools.createBook( scannedBookWithStyle );
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = composium.getDocumentTree() ;
@@ -233,7 +233,7 @@ public class ComposiumTest {
     final File scannedBookWithBadPart =
         resourceInstaller.copy( ResourcesForTests.Served.BROKEN_BOOK_BAD_SCANNED_NOVELLA ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( scannedBookWithBadPart ) ;
+    final Opus composium = ComposiumTestTools.createBook( scannedBookWithBadPart ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     assertTrue( composium.hasProblem() ) ;
@@ -251,7 +251,7 @@ public class ComposiumTest {
     resourceInstaller.copy( emptyPartResource ) ;
     final File bookFile = resourceInstaller.copy( ResourcesForTests.BookWithEmptyPart.BOOK ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( bookFile ) ;
+    final Opus composium = ComposiumTestTools.createBook( bookFile ) ;
 
     final Iterator< Problem > problems = composium.getProblems().iterator() ;
     assertTrue( problems.hasNext() ) ;
@@ -272,7 +272,7 @@ public class ComposiumTest {
     final File scannedBookWithBadImage =
         resourceInstaller.copy( ResourcesForTests.MissingImages.MISSING_IMAGE_BOOK ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( scannedBookWithBadImage ) ;
+    final Opus composium = ComposiumTestTools.createBook( scannedBookWithBadImage ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     assertTrue( composium.hasProblem() ) ;
@@ -290,7 +290,7 @@ public class ComposiumTest {
     final File bookWithIdentifier =
         resourceInstaller.createFileObject( ResourcesForTests.Identifiers.BOOK_1 ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = composium.getDocumentTree() ;
@@ -323,7 +323,7 @@ public class ComposiumTest {
         resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.PROMOTED_TAGS_BOOK ) ;
     resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.PROMOTED_TAGS_PART_1 ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( bookWithTags ) ;
+    final Opus composium = ComposiumTestTools.createBook( bookWithTags ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
     assertFalse( composium.hasProblem() ) ;
 
@@ -382,7 +382,7 @@ public class ComposiumTest {
         resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.BOOK_2 ) ;
     resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.NOVELLA_2 ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = composium.getDocumentTree() ;
@@ -433,7 +433,7 @@ public class ComposiumTest {
         resourceInstaller.copy( ResourcesForTests.Identifiers.BOOK_4 ) ;
     resourceInstaller.copy( ResourcesForTests.Identifiers.Subdirectory4.dir ) ;
 
-    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = composium.getDocumentTree() ;
@@ -499,14 +499,14 @@ public class ComposiumTest {
     initialize() ;
   }
 
-  private static final Log LOG = LogFactory.getLog( ComposiumTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( OpusTest.class ) ;
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
 
 
   private static void verifyBook3( final File bookWithIdentifier ) throws IOException {
-    final Composium composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
+    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
     LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = composium.getDocumentTree() ;

@@ -44,19 +44,19 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Tests for {@link Composium} with embedded images.
+ * Tests for {@link Opus} with embedded images.
  *
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
-public class ComposiumWithImagesTest {
+public class OpusWithImagesTest {
 
   /**
    * Test {@link novelang.composium.function.builtin.InsertCommand}.
    */
   @Test
   public void imagesInPartsWithExplicitNames() throws IOException {
-    final Composium composium = new Composium(
+    final Opus composium = new Opus(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesExplicit,
         ResourceTools.getExecutorService(),
@@ -79,7 +79,7 @@ public class ComposiumWithImagesTest {
    */
   @Test
   public void imagesInPartsWithRecurse() throws IOException {
-    final Composium composium = new Composium(
+    final Opus composium = new Opus(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesRecurse,
         ResourceTools.getExecutorService(),
@@ -134,7 +134,7 @@ public class ComposiumWithImagesTest {
     LOG.info( "bookWithImagesRecurse: '%s'", bookWithImagesRecurse );
   }
 
-  private static final Log LOG = LogFactory.getLog( ComposiumWithImagesTest.class ) ;
+  private static final Log LOG = LogFactory.getLog( OpusWithImagesTest.class ) ;
 
   private static final String VECTOR_IMAGE_WIDTH = Images.VECTOR_IMAGE_WIDTH ;
   private static final String VECTOR_IMAGE_HEIGHT = Images.VECTOR_IMAGE_HEIGHT ;

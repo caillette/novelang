@@ -56,12 +56,12 @@ import novelang.treemangling.TagMangler;
  *
  * @author Laurent Caillette
  */
-public class Composium extends AbstractSourceReader {
+public class Opus extends AbstractSourceReader {
 
   private final CommandExecutionContext environment ;
 
 
-  public Composium(
+  public Opus(
       final File baseDirectory,
       final File bookFile,
       final ExecutorService executorService,
@@ -81,7 +81,7 @@ public class Composium extends AbstractSourceReader {
   }
 
 
-  public Composium(
+  public Opus(
       final File baseDirectory,
       final File bookDirectory,
       final ExecutorService executorService,

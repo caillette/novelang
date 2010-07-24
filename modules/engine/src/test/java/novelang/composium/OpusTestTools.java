@@ -26,17 +26,17 @@ import novelang.system.DefaultCharset;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * Some methods for creating {@link Composium} instances easily.
+ * Some methods for creating {@link Opus} instances easily.
  *
  * @author Laurent Caillette
  */
-public class ComposiumTestTools {
+public class OpusTestTools {
 
-  public static Composium createBook(
+  public static Opus createBook(
       final File baseDirectory,
       final String content
   ) {
-    return new Composium(
+    return new Opus(
         baseDirectory,
         baseDirectory,
         Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ),
@@ -47,10 +47,10 @@ public class ComposiumTestTools {
     ) ;
   }
 
-  public static Composium createBook(
+  public static Opus createBook(
       final File bookFile
   ) throws IOException {
-    return new Composium(
+    return new Opus(
         bookFile.getParentFile(),
         bookFile,
         Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ),
