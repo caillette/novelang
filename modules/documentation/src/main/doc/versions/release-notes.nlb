@@ -1,0 +1,3 @@
+insert file:../doc-parameters.nlp style=parameters
+
+insert file:./@SNAPSHOT@.nlp

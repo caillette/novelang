@@ -1,1 +1,3 @@
---- Renamed Part into Novella. and Book into Composium. Nicer, clearer.
+--- Renamed Part into Novella and Book into Composium. Nicer, clearer. New recommended file suffixes are ``.novella`` and ``.composium``. Old ``.nlp`` and ``.nlb`` suffixes still supported.
+
+--- Switched build system from Ant to Maven. This should be transparent for users.

@@ -22,7 +22,11 @@
       name="newsFeed"   
       select="/n:composium/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='NEWSFEED' ]/n:cell[ 2 ]" 
   />
-  
+  <xsl:variable
+      name="download"
+      select="/n:composium/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='DOWNLOAD' ]/n:cell[ 2 ]" 
+  />
+
   <xsl:template match="*[n:style='parameters']" />
   
 

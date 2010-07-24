@@ -15,6 +15,7 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
   <xsl:import href="default-nlp.xsl" />
+  <xsl:import href="shared.xsl" />
   
   <xsl:output method="text" omit-xml-declaration="true" standalone="true" />
 
@@ -29,5 +30,21 @@
 
   <!--This doesn't work when put in shared.xsl .-->
   <xsl:template match="*[n:style='parameters']" />
-  
+
+  <xsl:template match="/" >
+Just released Novelang-<xsl:value-of select="$version" />!
+
+Summary of changes:<xsl:apply-templates />
+
+Download it from "here"
+<xsl:value-of select="$download" />
+.
+
+Enjoy!
+
+The Novelang Team
+
+(This email is written in Novelang.)
+</xsl:template>
+
 </xsl:stylesheet>

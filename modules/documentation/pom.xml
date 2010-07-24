@@ -117,8 +117,8 @@
                   <arg value="/novelang.html" />
                   <arg value="/novelang.pdf" />
 
-                  <arg value="/versions/${project.version}.html?stylesheet=announcement-html.xsl" />                  
-                  <arg value="/versions/${project.version}.nlp?stylesheet=announcement-plaintext.xsl" />                  
+                  <arg value="/versions/release-notes.html?stylesheet=announcement-html.xsl" />
+                  <arg value="/versions/release-notes.nlp?stylesheet=announcement-plaintext.xsl" />                  
 
                 </java>
 

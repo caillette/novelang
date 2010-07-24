@@ -44,7 +44,16 @@
   <xsl:output method="xml" />
 
   <xsl:template match="/" >
-    <xsl:apply-templates />
+    <html>
+      <body>
+        <p>Just released Novelang-<xsl:value-of select="$version" />!</p>
+        <p>Summary of changes:</p>
+        <xsl:apply-templates />
+        <p>Download it from <a><xsl:attribute name="href" ><xsl:value-of select="$download" /></xsl:attribute>here</a>.</p>
+        <p>Enjoy!</p>
+      </body>
+    </html>
+
   </xsl:template>
 
   <xsl:template match="n:level" >

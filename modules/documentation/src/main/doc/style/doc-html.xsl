@@ -75,13 +75,14 @@
 
           <div id="Links" >
             <ul>
+              <li><a><xsl:attribute name="href" ><xsl:value-of select="$download" /></xsl:attribute>Download</a> </li>
               <xsl:for-each
                   select="/n:composium/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
               >
                 <li>
                   <xsl:apply-templates/>
                 </li>
-                
+
               </xsl:for-each>
             </ul>
           </div>

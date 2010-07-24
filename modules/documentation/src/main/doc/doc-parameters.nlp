@@ -4,6 +4,7 @@
 | TITLE    | Novelang                                             |
 | SUBTITLE | Press-ready PDF from a Wiki syntax                   | 
 | NEWSFEED | ``http://novelang.blogspot.com/feeds/posts/default`` | 
+| DOWNLOAD | ``http://sourceforge.net/projects/novelang/files`` |
 
 
 == LINKS
@@ -19,9 +20,6 @@ http://groups.google.com/group/novelang-developers/topics
 
 "On SourceForge"
 http://sourceforge.net/projects/novelang
-
-"Download"
-http://sourceforge.net/projects/novelang/files
 
 "Sources on Github"
 http://github.com/caillette/novelang/tree/master
