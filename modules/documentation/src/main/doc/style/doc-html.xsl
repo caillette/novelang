@@ -77,7 +77,7 @@
             <ul>
               <li><a><xsl:attribute name="href" ><xsl:value-of select="$download" /></xsl:attribute>Download</a> </li>
               <xsl:for-each
-                  select="/n:composium/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
+                  select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
               >
                 <li>
                   <xsl:apply-templates/>
@@ -113,7 +113,7 @@ pageTracker._trackPageview();
     </html>
   </xsl:template>
 
-  <xsl:template match="/n:composium/n:level-title" />
+  <xsl:template match="/n:opus/n:level-title" />
 
   <xsl:template match="//n:level" >
     <div class="chapter" >

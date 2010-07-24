@@ -147,7 +147,7 @@ The level structure of the Part looks like this:
       + n:paragraph-regular "..."
 >>>
 
-As explained later in this document, the depth of levels may be changed (increased) at Composium level.
+As explained later in this document, the depth of levels may be changed (increased) at Opus level.
 This is useful for creating documents which have great depth, while keeping edited content with
 at reasonable depth.
 
@@ -628,7 +628,7 @@ XML element: ``n:implicit-identifier``, ``n:explicit-identifier``,
 ``n:colliding-explicit-identifier``
 
 An identifier is a textual marker identifying a level inside a Part.
-The ``insert`` command (explained in "Composium syntax" chapter) recognizes identifiers to insert
+The ``insert`` command (explained in "Opus syntax" chapter) recognizes identifiers to insert
 only given levels.
 
 As defined in a Part, an identifier may be either absolute or relative. 
@@ -701,7 +701,7 @@ Implicit identifiers resolve in both absolute and relative identifiers, as long 
 collide with another identifier. That's why ``Other`` cannot resolve as absolute identifier.
 
 Novelang checks uniqueness of explicit identifiers within the same Part. Since Parts are created
-independantly, identifiers may collide when aggregating Novellæ into a single Composium.
+independantly, identifiers may collide when aggregating Novellæ into a single Opus.
 With Novelang default HTML stylsheet, colliding identifiers show striked out.
 
 === Escaped characters

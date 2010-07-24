@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.composium;
+package novelang.opus;
 
 import novelang.ResourcesForTests;
 
@@ -56,29 +56,29 @@ public class OpusTest {
   public void badCommandGeneratesProblem() {
     final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
-    final Opus composium = ComposiumTestTools.createBook(
+    final Opus opus = OpusTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + oneWordFile.getAbsolutePath() + " $recurse" // old syntax
     ) ;
-    assertTrue( composium.hasProblem() ) ;
+    assertTrue( opus.hasProblem() ) ;
 
   }
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void justInsert() {
     final File oneWordFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_ONE_WORD ) ;
 
     final String absoluteFilePath = oneWordFile.getAbsolutePath().replace( '\\', '/' ) ;
-    final Opus composium = ComposiumTestTools.createBook(
+    final Opus opus = OpusTestTools.createBook(
         SystemUtils.getUserDir(),
         "insert file:" + absoluteFilePath
     ) ;
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( _META, tree( _WORD_COUNT, "1" ) ),
             tree(
                 PARAGRAPH_REGULAR,
@@ -87,12 +87,12 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
 
   }
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithRecursiveFileScan() throws IOException {
@@ -100,12 +100,12 @@ public class OpusTest {
     final File scannedBookNoStyle =
         resourceInstaller.createFileObject( ResourcesForTests.Scanned.BOOK ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( scannedBookNoStyle ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( scannedBookNoStyle ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
@@ -134,13 +134,13 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
 
 
   }
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithFlatFileScan() throws IOException {
@@ -148,13 +148,13 @@ public class OpusTest {
     final File scannedBookNoStyleNoRecurse = resourceInstaller.createFileObject(
         ResourcesForTests.Scanned.BOOK_NORECURSE ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
         tree(
-            COMPOSIUM,
+            OPUS,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 PARAGRAPH_REGULAR,
@@ -167,14 +167,14 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
 
 
   }
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithFileScanAndStyle() throws IOException {
@@ -182,12 +182,12 @@ public class OpusTest {
     final File scannedBookWithStyle = resourceInstaller.createFileObject(
         ResourcesForTests.Scanned.BOOK_WITHSTYLE ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( scannedBookWithStyle );
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( scannedBookWithStyle );
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
@@ -219,13 +219,13 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
   }
 
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithBadPart() throws IOException {
@@ -233,16 +233,16 @@ public class OpusTest {
     final File scannedBookWithBadPart =
         resourceInstaller.copy( ResourcesForTests.Served.BROKEN_BOOK_BAD_SCANNED_NOVELLA ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( scannedBookWithBadPart ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( scannedBookWithBadPart ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    assertTrue( composium.hasProblem() ) ;
+    assertTrue( opus.hasProblem() ) ;
 
   }
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand} and empty Novella detection
+   * Test {@link novelang.opus.function.builtin.InsertCommand} and empty Novella detection
    * in {@link novelang.common.AbstractSourceReader}.
    */
   @Test
@@ -251,9 +251,9 @@ public class OpusTest {
     resourceInstaller.copy( emptyPartResource ) ;
     final File bookFile = resourceInstaller.copy( ResourcesForTests.BookWithEmptyPart.BOOK ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( bookFile ) ;
+    final Opus opus = OpusTestTools.createBook( bookFile ) ;
 
-    final Iterator< Problem > problems = composium.getProblems().iterator() ;
+    final Iterator< Problem > problems = opus.getProblems().iterator() ;
     assertTrue( problems.hasNext() ) ;
     final Problem problem = problems.next() ;
     assertTrue( problem.getMessage().contains( "Novella is empty" ) ) ;
@@ -264,7 +264,7 @@ public class OpusTest {
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void detectMissingImage() throws IOException {
@@ -272,16 +272,16 @@ public class OpusTest {
     final File scannedBookWithBadImage =
         resourceInstaller.copy( ResourcesForTests.MissingImages.MISSING_IMAGE_BOOK ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( scannedBookWithBadImage ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( scannedBookWithBadImage ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    assertTrue( composium.hasProblem() ) ;
+    assertTrue( opus.hasProblem() ) ;
 
   }
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithExplicitIdentifiers() throws IOException {
@@ -290,12 +290,12 @@ public class OpusTest {
     final File bookWithIdentifier =
         resourceInstaller.createFileObject( ResourcesForTests.Identifiers.BOOK_1 ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 _LEVEL,
@@ -310,12 +310,12 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
   }
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithPromotedTags() throws IOException {
@@ -323,13 +323,13 @@ public class OpusTest {
         resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.PROMOTED_TAGS_BOOK ) ;
     resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.PROMOTED_TAGS_PART_1 ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( bookWithTags ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
-    assertFalse( composium.hasProblem() ) ;
+    final Opus opus = OpusTestTools.createBook( bookWithTags ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    assertFalse( opus.hasProblem() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( 
                 _META, 
                 tree( _WORD_COUNT, "7" ),
@@ -374,7 +374,7 @@ public class OpusTest {
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithImplicitIdentifiers() throws IOException {
@@ -382,12 +382,12 @@ public class OpusTest {
         resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.BOOK_2 ) ;
     resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.NOVELLA_2 ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( _META, tree( _WORD_COUNT, "6" ) ),
             tree(
                 _LEVEL,
@@ -420,12 +420,12 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
   }
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithCollidingIdentifiers() throws IOException {
@@ -433,12 +433,12 @@ public class OpusTest {
         resourceInstaller.copy( ResourcesForTests.Identifiers.BOOK_4 ) ;
     resourceInstaller.copy( ResourcesForTests.Identifiers.Subdirectory4.dir ) ;
 
-    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( _META, tree( _WORD_COUNT, "4" ) ),
             tree(
                 _LEVEL,
@@ -463,12 +463,12 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
   }
 
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertWithRecurseShouldKeepImplicitIdentifiers() throws IOException {
@@ -480,7 +480,7 @@ public class OpusTest {
   }
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void insertShouldKeepImplicitIdentifiers() throws IOException {
@@ -506,12 +506,12 @@ public class OpusTest {
 
 
   private static void verifyBook3( final File bookWithIdentifier ) throws IOException {
-    final Opus composium = ComposiumTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
-        tree( COMPOSIUM,
+        tree( OPUS,
             tree( _META, tree( _WORD_COUNT, "8" ) ),
             tree(
                 _LEVEL,
@@ -557,7 +557,7 @@ public class OpusTest {
         ),
         bookTree
     ) ;
-    assertFalse( composium.hasProblem() ) ;
+    assertFalse( opus.hasProblem() ) ;
   }
 
 

@@ -1,11 +1,11 @@
-package novelang.composium.function;
+package novelang.opus.function;
 
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.composium.function.builtin.InsertCommand;
-import novelang.composium.function.builtin.MapstylesheetCommand;
-import novelang.composium.function.builtin.FileOrdering;
-import novelang.composium.function.builtin.insert.LevelHead;
+import novelang.opus.function.builtin.InsertCommand;
+import novelang.opus.function.builtin.MapstylesheetCommand;
+import novelang.opus.function.builtin.FileOrdering;
+import novelang.opus.function.builtin.insert.LevelHead;
 import novelang.designator.FragmentIdentifier;
 
 import org.fest.reflect.core.Reflection;

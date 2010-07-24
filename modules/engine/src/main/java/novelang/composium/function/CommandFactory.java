@@ -1,4 +1,4 @@
-package novelang.composium.function;
+package novelang.opus.function;
 
 import java.util.List;
 import java.util.Map;
@@ -8,10 +8,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import novelang.composium.function.builtin.FileOrdering;
-import novelang.composium.function.builtin.InsertCommand;
-import novelang.composium.function.builtin.MapstylesheetCommand;
-import novelang.composium.function.builtin.insert.LevelHead;
+import novelang.opus.function.builtin.FileOrdering;
+import novelang.opus.function.builtin.InsertCommand;
+import novelang.opus.function.builtin.MapstylesheetCommand;
+import novelang.opus.function.builtin.insert.LevelHead;
 import novelang.common.SyntacticTree;
 import novelang.designator.FragmentIdentifier;
 import novelang.parser.NodeKind;

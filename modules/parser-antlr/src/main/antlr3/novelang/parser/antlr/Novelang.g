@@ -23,7 +23,7 @@ options { output = AST ; }
 // Beware of line comments, which are processed.
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;        // tagbehavior=SCOPE
-  COMPOSIUM ;                                     // tagbehavior=TRAVERSABLE 
+  OPUS ;                                     // tagbehavior=TRAVERSABLE
   LEVEL_INTRODUCER_ ;
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
@@ -69,7 +69,7 @@ tokens {
   SIGN_SEMICOLON ;       // punctuationsign=true
   SIGN_COLON ;           // punctuationsign=true
 
-  // Composium stuff
+  // Opus stuff
   
   COMMAND_INSERT_ ;
   COMMAND_INSERT_CREATELEVEL_ ;
@@ -1849,16 +1849,16 @@ escapedCharacter returns [ String unescaped ]
 
 
 // =======================
-// Composium-related rules
+// Opus-related rules
 // =======================
 
-composium
+opus
   : ( mediumbreak | largebreak )?
     functionCall
     ( largebreak functionCall )*      
     ( mediumbreak | largebreak )?
     EOF 
-    -> ^( COMPOSIUM functionCall* )
+    -> ^( OPUS functionCall* )
   ;
   
 

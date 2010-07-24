@@ -1,6 +1,6 @@
-package novelang.composium.function.builtin;
+package novelang.opus.function.builtin;
 
-import novelang.composium.CommandExecutionContext;
+import novelang.opus.CommandExecutionContext;
 import novelang.rendering.RenditionMimeType;
 import novelang.loader.ResourceName;
 import novelang.common.Problem;

@@ -39,7 +39,7 @@
   
   <xsl:variable 
       name="generationtimestamp"      
-      select="/n:composium/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='GENERATIONTIMESTAMP'    ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='GENERATIONTIMESTAMP'    ]/n:cell[ 2 ]"
   />
   
   <xsl:template match="*[n:style='parameters']" />
@@ -66,7 +66,7 @@
           >
         Version
         <xsl:for-each
-            select="/n:composium/n:level[ n:level-title='VERSIONS' ]/n:paragraph-regular/n:embedded-list-with-hyphen/n:embedded-list-item">
+            select="/n:opus/n:level[ n:level-title='VERSIONS' ]/n:paragraph-regular/n:embedded-list-with-hyphen/n:embedded-list-item">
           <xsl:if test="position() > 2">, </xsl:if>
           <fo:inline font-weight="bold" ><xsl:value-of select="."/></fo:inline> 
           <xsl:if test="position() = 1"> against </xsl:if>
@@ -83,7 +83,7 @@
       <fo:table-column column-width="proportional-column-width(1)" />
       <fo:table-column column-width="proportional-column-width(1)" />
       <fo:table-body>
-        <xsl:for-each select="/n:composium/n:level[ n:level-title='JVMCHARACTERISTICS' ]/n:cell-rows-with-vertical-line/n:cell-row" >
+        <xsl:for-each select="/n:opus/n:level[ n:level-title='JVMCHARACTERISTICS' ]/n:cell-rows-with-vertical-line/n:cell-row" >
           <xsl:call-template name="table-row" >
             <xsl:with-param name="cell1" select="n:cell[ 1 ]" />
             <xsl:with-param name="cell2" select="n:cell[ 2 ]" />
@@ -98,7 +98,7 @@
       <fo:table-column column-width="proportional-column-width(1)" />
       <fo:table-column column-width="proportional-column-width(1)" />
       <fo:table-body>
-        <xsl:for-each select="/n:composium/n:level[ n:level-title='NHOVESTONEPARAMETERS' ]/n:cell-rows-with-vertical-line/n:cell-row" >
+        <xsl:for-each select="/n:opus/n:level[ n:level-title='NHOVESTONEPARAMETERS' ]/n:cell-rows-with-vertical-line/n:cell-row" >
           <xsl:call-template name="table-row" >
             <xsl:with-param name="cell1" select="n:cell[ 1 ]" />
             <xsl:with-param name="cell2" select="n:cell[ 2 ]" />

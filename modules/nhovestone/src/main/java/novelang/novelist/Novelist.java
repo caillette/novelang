@@ -57,7 +57,7 @@ public class Novelist {
     for( int i = 1 ; i <= ghostwriterCount ; i ++ ) {
       addGhostwriter() ;
     }
-    createComposium( directory ) ;
+    createOpus( directory ) ;
   }
 
   public static final String BOOK_NAME_RADIX = "book" ;
@@ -97,10 +97,10 @@ public class Novelist {
   }
 
 
-  private static void createComposium( final File directory ) throws IOException {
+  private static void createOpus( final File directory ) throws IOException {
     final File bookFile = new File( directory, BOOK_FILE_NAME ) ;
     FileUtils.writeStringToFile( bookFile, BOOK_CONTENT ) ;
-    LOG.info( "Created Composium: '" + bookFile.getAbsolutePath() + "'" ) ;
+    LOG.info( "Created Opus: '" + bookFile.getAbsolutePath() + "'" ) ;
   }
   
   public void addGhostwriter() throws IOException {

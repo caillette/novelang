@@ -1,9 +1,9 @@
-package novelang.composium.function;
+package novelang.opus.function;
 
-import novelang.composium.CommandExecutionContext;
+import novelang.opus.CommandExecutionContext;
 
 /**
- * Represents an occurence of a command call inside a Composium file.
+ * Represents an occurence of a command call inside a Opus file.
  * 
  * @author Laurent Caillette
  */

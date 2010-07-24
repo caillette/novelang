@@ -31,7 +31,7 @@ public enum TagBehavior {
 
   /**
    * Traverse but don't look for a tag inside. Useful for top-level nodes like 
-   * {@link novelang.parser.NodeKind#NOVELLA} or {@link novelang.parser.NodeKind#COMPOSIUM}.
+   * {@link novelang.parser.NodeKind#NOVELLA} or {@link novelang.parser.NodeKind#OPUS}.
    */
   TRAVERSABLE,
 

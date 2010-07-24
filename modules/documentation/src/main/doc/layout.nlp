@@ -2,13 +2,13 @@
 
 Basically, a Novelang project is a directory containing files to be processed by Novelang. It is the directory from where Novelang was launched.
 
-Projects are useful when you deal with big documents. Big documents are made of several Part files aggregated through a Composium file. A Novelang project may also contain custom stylesheets, for user-defined rendering of PDF or HTML documents.
+Projects are useful when you deal with big documents. Big documents are made of several Part files aggregated through a Opus file. A Novelang project may also contain custom stylesheets, for user-defined rendering of PDF or HTML documents.
 
 Typical layout of a Novelang project looks like this: 
 
 <<<
 /
-  composium.nlb               <- Composium file
+  opus.nlb               <- Opus file
   style/                      <- Directory containing styles
     pdf.xsl                   <- A stylesheet file
     html.xsl

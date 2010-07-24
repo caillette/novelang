@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package novelang.composium;
+package novelang.opus;
 
 import static novelang.ResourcesForTests.Images;
 import static novelang.ResourcesForTests.initialize;
@@ -52,11 +52,11 @@ import java.io.IOException;
 public class OpusWithImagesTest {
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void imagesInPartsWithExplicitNames() throws IOException {
-    final Opus composium = new Opus(
+    final Opus opus = new Opus(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesExplicit,
         ResourceTools.getExecutorService(),
@@ -64,22 +64,22 @@ public class OpusWithImagesTest {
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
     ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
         EXPECTED_BOOK_TREE,
         bookTree
     ) ;
-    Assert.assertFalse( composium.hasProblem() ) ;
+    Assert.assertFalse( opus.hasProblem() ) ;
   }
 
   /**
-   * Test {@link novelang.composium.function.builtin.InsertCommand}.
+   * Test {@link novelang.opus.function.builtin.InsertCommand}.
    */
   @Test
   public void imagesInPartsWithRecurse() throws IOException {
-    final Opus composium = new Opus(
+    final Opus opus = new Opus(
         resourceInstaller.getTargetDirectory(),
         bookWithImagesRecurse,
         ResourceTools.getExecutorService(),
@@ -87,14 +87,14 @@ public class OpusWithImagesTest {
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
     ) ;
-    LOG.debug( "Composium's document tree: %s", composium.getDocumentTree().toStringTree() ) ;
+    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
 
-    final SyntacticTree bookTree = composium.getDocumentTree() ;
+    final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
         EXPECTED_BOOK_TREE,
         bookTree
     ) ;
-    Assert.assertFalse( composium.hasProblem() ) ;
+    Assert.assertFalse( opus.hasProblem() ) ;
   }
 
 
@@ -142,7 +142,7 @@ public class OpusWithImagesTest {
   private static final String RASTER_IMAGE_HEIGHT = Images.RASTER_IMAGE_HEIGHT ;
 
   private static final SyntacticTree EXPECTED_BOOK_TREE = tree(
-      COMPOSIUM,
+      OPUS,
       tree( _META, tree( _WORD_COUNT, "0" ) ),
       tree(
           VECTOR_IMAGE,

@@ -1,6 +1,6 @@
-package novelang.composium.function.builtin;
+package novelang.opus.function.builtin;
 
-import novelang.composium.function.Command;
+import novelang.opus.function.Command;
 import novelang.common.Location;
 
 /**

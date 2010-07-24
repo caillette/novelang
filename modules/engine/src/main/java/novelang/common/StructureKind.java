@@ -20,12 +20,12 @@ package novelang.common;
 import com.google.common.collect.ObjectArrays;
 
 /**
- * Tells about the structural kind of document source: Composium or Novella.
+ * Tells about the structural kind of document source: Opus or Novella.
  *
  * @author Laurent Caillette
  */
 public enum StructureKind {
-  COMPOSIUM( "nlb", "composium" ),
+  OPUS( "nlb", "opus" ),
   NOVELLA( "nlp", "novella" );
 
   private final String[] fileExtension ;
@@ -41,7 +41,7 @@ public enum StructureKind {
 
   public static String[] getAllFileExtensions() {
     return ObjectArrays.concat(
-        COMPOSIUM.getFileExtensions(),
+        OPUS.getFileExtensions(),
         NOVELLA.getFileExtensions(),
         String.class
     ) ; 

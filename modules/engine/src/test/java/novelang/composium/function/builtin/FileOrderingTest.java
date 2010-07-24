@@ -1,4 +1,4 @@
-package novelang.composium.function.builtin;
+package novelang.opus.function.builtin;
 
 import org.junit.Test;
 import org.junit.Assert;

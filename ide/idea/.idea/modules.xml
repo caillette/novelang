@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" filepath="$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" filepath="$PROJECT_DIR$/../../modules/bootstrap/Novelang-bootstrap.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone/Novelang-nhovestone.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone/Novelang-nhovestone.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/ant-task/ant-task.iml" filepath="$PROJECT_DIR$/../../modules/ant-task/ant-task.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/bootstrap/bootstrap.iml" filepath="$PROJECT_DIR$/../../modules/bootstrap/bootstrap.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" />
@@ -12,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/documentation/documentation.iml" filepath="$PROJECT_DIR$/../../modules/documentation/documentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/engine/engine.iml" filepath="$PROJECT_DIR$/../../modules/engine/engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" filepath="$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../novelang.iml" filepath="$PROJECT_DIR$/../../novelang.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" />

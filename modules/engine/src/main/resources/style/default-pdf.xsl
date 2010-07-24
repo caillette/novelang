@@ -111,7 +111,7 @@
   <!--Override this template in stylesheet importing this one-->
   <xsl:template name="custom-document-start" />
 
-  <xsl:template match="/n:composium/n:level-title[1]" >
+  <xsl:template match="/n:opus/n:level-title[1]" >
     <fo:block
         padding-top="40pt"
         font-size="28pt"
@@ -121,7 +121,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="/n:composium/n:level-title[position() > 1]" >
+  <xsl:template match="/n:opus/n:level-title[position() > 1]" >
     <fo:block
         padding-top="16pt"
         font-size="18pt"
@@ -131,7 +131,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="/n:composium/n:level-title[position() = last()]" >
+  <xsl:template match="/n:opus/n:level-title[position() = last()]" >
     <fo:block
         padding-top="16pt"
         padding-bottom="30pt"

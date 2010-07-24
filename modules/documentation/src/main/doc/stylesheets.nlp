@@ -23,7 +23,7 @@ any other stylesheet name:
 http://localhost:8080/chapter-1.html?stylesheet=html-beautiful.xsl
 >>>
 
-Stylesheets may be defined for a whole Composium as explained later, see the "mapstylesheet" command.
+Stylesheets may be defined for a whole Opus as explained later, see the "mapstylesheet" command.
 
 
 === eXtensible Stylesheet Language

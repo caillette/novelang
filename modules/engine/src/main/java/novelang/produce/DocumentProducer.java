@@ -23,10 +23,10 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 
+import novelang.opus.Opus;
 import novelang.novella.Novella;
 import novelang.system.LogFactory;
 import novelang.system.Log;
-import novelang.composium.Composium;
 import novelang.common.FileTools;
 import novelang.common.LanguageTools;
 import novelang.common.Problem;
@@ -161,9 +161,9 @@ public class DocumentProducer {
       final File bookFile = FileTools.load(
           basedir,
           documentRequest.getDocumentSourceName(),
-          StructureKind.COMPOSIUM.getFileExtensions()
+          StructureKind.OPUS.getFileExtensions()
       ) ;
-      return new Composium(
+      return new Opus(
           basedir,
           bookFile,
           executorService,
