@@ -89,6 +89,22 @@
     <lib.maven-dependency-plugin.artefactId>maven-dependency-plugin</lib.maven-dependency-plugin.artefactId>
     <lib.maven-dependency-plugin.version>2.1</lib.maven-dependency-plugin.version>
 
+    <lib.jfreechart.groupId>jfree</lib.jfreechart.groupId>
+    <lib.jfreechart.artefactId>jfreechart</lib.jfreechart.artefactId>
+    <lib.jfreechart.version>1.0.13</lib.jfreechart.version>
+
+    <lib.jfree-jcommon.groupId>jfree</lib.jfree-jcommon.groupId>
+    <lib.jfree-jcommon.artefactId>jcommon</lib.jfree-jcommon.artefactId>
+    <lib.jfree-jcommon.version>1.0.15</lib.jfree-jcommon.version>
+
+    <lib.apache-httpclient.groupId>org.apache.httpcomponents</lib.apache-httpclient.groupId>
+    <lib.apache-httpclient.artefactId>httpclient</lib.apache-httpclient.artefactId>
+    <lib.apache-httpclient.version>4.0.1</lib.apache-httpclient.version>
+
+    <lib.apache-commons-math.groupId>commons-math</lib.apache-commons-math.groupId>
+    <lib.apache-commons-math.artefactId>commons-math</lib.apache-commons-math.artefactId>
+    <lib.apache-commons-math.version>1.2</lib.apache-commons-math.version>
+
   </properties>
 
   <groupId>org.novelang</groupId>
@@ -307,9 +323,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.0.1</version>
+      <groupId>${lib.apache-httpclient.groupId}</groupId>
+      <artifactId>${lib.apache-httpclient.artefactId}</artifactId>
+      <version>${lib.apache-httpclient.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -353,13 +369,6 @@
       <artifactId>mail</artifactId>
       <version>1.4</version>
       <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>jfree</groupId>
-      <artifactId>jfreechart</artifactId>
-      <version>1.0.12</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
