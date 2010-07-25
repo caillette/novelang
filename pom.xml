@@ -266,10 +266,10 @@
 
   <scm>
     <!--<connection>scm:https://caillette@github.com/caillette/novelang.git</connection>-->
-    <!--<connection>scm:git:file://.</connection>-->
-    <connection>scm:git:git@github.com:caillette/novelang.git</connection>
-    <url>scm:git:git@github.com:caillette/novelang.git</url>
-    <developerConnection>scm:git:git@github.com:caillette/novelang.git</developerConnection>
+    <connection>scm:git:file://.</connection>
+    <!--<connection>scm:git:git@github.com:caillette/novelang.git</connection>-->
+    <!--<url>scm:git:git@github.com:caillette/novelang.git</url>-->
+    <!--<developerConnection>scm:git:git@github.com:caillette/novelang.git</developerConnection>-->
   </scm>
 
   <reporting>
