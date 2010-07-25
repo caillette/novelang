@@ -110,9 +110,7 @@
                   <fileset dir="${enhancedDocumentSources}" includes="**/*.css" /> 
                 </copy>
 
-                <move file="${generatedDocumentsDirectory}/novelang.html"
-                      tofile="${generatedDocumentsDirectory}/index.html"
-                />
+                <move file="${generatedDocumentsDirectory}/novelang.html" tofile="${generatedDocumentsDirectory}/index.html" />
 
               </tasks>
             </configuration>
