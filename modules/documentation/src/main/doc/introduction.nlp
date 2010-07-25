@@ -27,7 +27,7 @@ Novelang software is free to use and redistribute, under the terms of the GNU Pu
 Requirements : Java 6.
 
 First, download the latest version of Novelang, and unzip it in some directory we'll call 
-``$NOVELANG_DIR``. 
+``$NOVELANG_HOME``.
 
 
 === First document
@@ -44,7 +44,7 @@ Hello, world!
 Then, from the directory where the file is located, launch the Novelang dæmon:
 
 <<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
+java -jar httpdaemon $NOVELANG_HOME/lib/Novelang-bootstrap-$VERSION.jar
 >>>
 
 Open your favorite Web browser at this address:

@@ -1,3 +1,3 @@
 --- Renamed Part into Novella and Book into Opus. Nicer, clearer. New recommended file suffixes are ``.novella`` and ``.opus``. Old ``.nlp`` and ``.nlb`` suffixes still supported.
 
---- Switched build system from Ant to Maven. This should be transparent for users.
+--- Switched build system from Ant to Maven. Because all jars stand in the ``lib`` directory, this impacts the command line for launching Novelang.
