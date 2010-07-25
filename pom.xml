@@ -193,7 +193,7 @@
         <version>${lib.maven-release-plugin.version}</version>
         <configuration>
           <preparationGoals>install</preparationGoals>
-          <goals>deploy  </goals>
+          <goals>deploy</goals>
         </configuration>
       </plugin>
 
@@ -412,12 +412,16 @@
 
   </dependencies>
 
-  <!-- Required by deploy plugin, even if not used. -->
+  <!--
+    release:perform wants some valid VCS where release:prepare did put the stuff into.
+    Let's say the local one is enough.
+    deploy:deploy wants a non-empty value.
+  -->
   <distributionManagement>
     <repository>
       <id>website.novelang.sourceforge.net</id>
       <name>Novelang website on SourceForge</name>
-      <url>file:///dev/null</url>
+      <url>file://./</url>
     </repository>
   </distributionManagement>
 
