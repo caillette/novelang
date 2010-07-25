@@ -191,6 +191,9 @@
         <groupId>${lib.maven-release-plugin.groupId}</groupId>
         <artifactId>${lib.maven-release-plugin.artefactId}</artifactId>
         <version>${lib.maven-release-plugin.version}</version>
+        <configuration>
+          <!--<goals>deploy</goals>-->
+        </configuration>
       </plugin>
 
       <!--
