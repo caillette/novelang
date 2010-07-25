@@ -1,0 +1,32 @@
+<configuration debug="false" scanPeriod="1 seconds" >
+
+  <appender
+      name="FILE"
+      class="ch.qos.logback.core.FileAppender"
+  >
+    <File>target/novelang.log</File>
+
+    <Append>false</Append>
+
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</Pattern>
+    </layout>
+
+  </appender>
+
+  <logger name="novelang" >
+    <level value="INFO" />
+  </logger>
+
+
+  <logger name="novelang.parser.antlr" >
+    <level value="WARN" />
+  </logger>
+
+  
+  <root>
+    <level value="WARN" />
+    <appender-ref ref="FILE" />
+  </root>
+
+</configuration>
