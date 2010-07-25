@@ -192,6 +192,7 @@
         <artifactId>${lib.maven-release-plugin.artefactId}</artifactId>
         <version>${lib.maven-release-plugin.version}</version>
         <configuration>
+          <preparationGoals>install</preparationGoals>
           <!--<goals>deploy</goals>-->
         </configuration>
       </plugin>
