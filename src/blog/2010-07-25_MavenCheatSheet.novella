@@ -1,0 +1,100 @@
+== Maven cheat sheet
+
+This is a list of useful Maven commands. They work with `Novelang-0.44.2`. Later version will probably make some of them less verbose, using some default parameters.
+
+Convention: the ``Novelang/$`` represents the command prompt, with working directory being Novelang's home directory. Subdirectories appear when needed.
+
+
+=== Plugin versions
+
+
+Stay up-to-date by listing more recent plugins (there is another goal for dependencies) :
+
+<<<
+Novelang/$ mvn versions:display-plugin-updates
+>>>
+
+Show dependency tree:
+
+<<<
+Novelang/$ mvn dependency:tree
+>>>
+
+
+=== Feed local repository with fresh artifacts
+
+<<<
+Novelang/$ mvn clean install 
+>>>
+
+
+
+
+=== Force child modules version
+
+Force the version of every child module to the one of the parent :
+
+<<<
+Novelang/$ mvn -N versions:update-child-modules
+>>>
+
+
+=== Performing a release (may be specific to `Novelang-0.44.2`)
+
+First, clean previous POM backup files:
+
+<<<
+Novelang/$ mvn release:clean
+>>>
+
+Then prepare the release. This does the following:
+- Check VCS state. Includes: no uncommitted file; remote repository sync'ed with local.
+- Change the POM versions to release version (shown as ``M.m.f`` in the snippet below).
+- Run the build, using declared ``<preparationGoals>``.
+- Commit changed POMs to local SCM.
+- Tag the SCM locally.
+- Pushes the changes on remote repository, including tags (failing on a conflict).
+- Revert SCM versions to development version.
+
+<<<
+Novelang/$ mvn -e --batch-mode release:prepare -Drelease=false -DlocalCheckout=true -DreleaseVersion=M.m.f -DdevelopmentVersion=SNAPSHOT -Dtag=release-M.m.f > build.log
+>>>
+
+This part is likely to fail. If something goes wrong:
+- Reset git in the ``--hard`` way, to the version immediately before Maven's changes.
+- Delete ``release-M.m.f`` tag local git repository. 
+- Delete ``release-M.m.f`` tag on remote git repository: ``git push -v github :refs/tags/release-M.m.f``
+- Force synchronization between local git repository and remote one. This may be done by committing an innocuous change, then pushing it with ``--force`` option (better idea, anyone?).
+- Call again: ``Novelang/$ mvn release:clean``
+- Get sure that's everything OK with gitk.
+
+Once this is done, our git repositories contain good,tagged stuff. Last step is to perform the final build. 
+
+<<<
+Novelang/$ mvn release:perform
+>>>
+
+(There is no additional parameter to pass; the ``release.prepare`` did create some POM copies with relevant information.)
+
+The ``release.perform`` goal performs a fresh checkout in ``Novelang/target/checkout`` where all the ``pom.xml`` contain expected ``M.m.f`` version. The build calls the ``deploy:deploy`` on ``Novelang-documentation`` and ``Novelang-distribution`` which upload relevant files on SourceForge and send email notifications.
+
+
+
+=== Useful links
+
+"Using master password."
+http://www.sonatype.com/books/mvnref-book/reference/appendix-settings-sect-encrypting-passwords.html 
+
+"Mini-guide"
+http://maven.apache.org/guides/mini/guide-releasing.html
+about Maven release plugin.
+
+=== Untested
+
+Resume from a give module folder instead of restarting the build since the beginning:
+
+<<<
+Novelang/$ mvn reactor:resume -Dfrom=bar 
+>>>
+
+
