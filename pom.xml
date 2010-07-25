@@ -162,6 +162,19 @@
         </plugin>
 
 
+        <!--
+          Disable default deployment because we don't want to feed an Maven repository.
+          Instead, Wagon directly uploads files on SourceForge.
+        -->
+        <plugin>
+          <groupId>${lib.maven-deploy-plugin.groupId}</groupId>
+          <artifactId>${lib.maven-deploy-plugin.artefactId}</artifactId>
+          <version>${lib.maven-deploy-plugin.version}</version>
+          <configuration>
+            <skip>true</skip>
+         </configuration>
+       </plugin>
+
       </plugins>
     </pluginManagement>
 
@@ -245,20 +258,6 @@
         </executions>
       </plugin>
 -->
-
-      <!--
-        Disable default deployment because we don't want to feed an Maven repository.
-        Instead, Wagon directly uploads files on SourceForge.
-      -->
-      <plugin>
-        <groupId>${lib.maven-deploy-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-deploy-plugin.artefactId}</artifactId>
-        <version>${lib.maven-deploy-plugin.version}</version>
-        <configuration>
-          <skip>true</skip>
-       </configuration>
-     </plugin>
-
 
     </plugins>
 
@@ -421,7 +420,7 @@
     <repository>
       <id>website.novelang.sourceforge.net</id>
       <name>Novelang website on SourceForge</name>
-      <url>file://./</url>
+      <url>file://.</url>
     </repository>
   </distributionManagement>
 
