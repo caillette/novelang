@@ -175,6 +175,18 @@
          </configuration>
        </plugin>
 
+        <plugin>
+          <groupId>${lib.maven-release-plugin.groupId}</groupId>
+          <artifactId>${lib.maven-release-plugin.artefactId}</artifactId>
+          <version>${lib.maven-release-plugin.version}</version>
+          <configuration>
+            <localCheckout>true</localCheckout>
+            <tag>release-${releaseVersion}</tag>
+            <developmentVersion>SNAPSHOT</developmentVersion>
+          </configuration>
+        </plugin>
+
+
       </plugins>
     </pluginManagement>
 
