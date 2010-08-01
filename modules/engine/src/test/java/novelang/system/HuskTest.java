@@ -63,7 +63,18 @@ public class HuskTest {
     assertEquals( 0L, ( long ) initial.getInt() ) ;
   }
 
-  @Test //@Ignore( "Not implemented" )
+  @Test
+  public void inheritingHusk() {
+    final Child initialChild = Husk.create( Child.class ) ;
+    assertNull( initialChild.getInteger() ) ;
+    assertNull( initialChild.getString() ) ;
+    final Child updatedChild1 = initialChild.withInteger( 1 ) ;
+    assertEquals( 1L, ( long ) updatedChild1.getInteger().intValue() ) ;
+    final Child updatedChild2 = initialChild.withString( "ppiirre" ) ;
+    assertEquals( "ppiirre", updatedChild2.getString() ) ;
+  }
+
+  @Test
   public void conversion() {
     final ConvertibleHusk initial = Husk.create( ConvertibleHusk.class ) ;
     final ConvertibleHusk updated = initial.withString( 1, 2.3f ) ;
@@ -90,6 +101,16 @@ public class HuskTest {
 
   }
 
+  @SuppressWarnings( { "UnusedDeclaration" } )
+  public interface Parent< CONFIGURATION extends Parent > {
+    String getString() ;
+    CONFIGURATION withString( String newString ) ;
+  }
+
+  public interface Child extends Parent< Child > {
+    Integer getInteger() ;
+    Child withInteger( Integer newInteger ) ;
+  }
 
 @SuppressWarnings( { "UnusedDeclaration" } )
   public interface Broken1 {
