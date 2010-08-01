@@ -33,7 +33,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-engine</artifactId>
+      <artifactId>Novelang-bootstrap</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

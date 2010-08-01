@@ -27,8 +27,6 @@ import novelang.Version;
 import novelang.VersionFormatException;
 import novelang.nhovestone.driver.ProcessDriver;
 import novelang.nhovestone.report.Grapher;
-import novelang.nhovestone.MeasurementBundle;
-import novelang.nhovestone.Scenario;
 import novelang.nhovestone.scenario.ScenarioLibrary;
 import novelang.nhovestone.scenario.TimeMeasurement;
 import novelang.nhovestone.scenario.TimeMeasurer;
@@ -38,11 +36,12 @@ import novelang.system.EnvironmentTools;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import novelang.system.StartupTools;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
-import static novelang.nhovestone.KnownVersions.VERSION_0_35_0;
-import static novelang.nhovestone.KnownVersions.VERSION_0_38_1;
-import static novelang.nhovestone.KnownVersions.VERSION_0_41_0;
+import static novelang.KnownVersions.VERSION_0_35_0;
+import static novelang.KnownVersions.VERSION_0_38_1;
+import static novelang.KnownVersions.VERSION_0_41_0;
 
 /**
  * Main class generating the Nhovestone report.
@@ -51,10 +50,8 @@ import static novelang.nhovestone.KnownVersions.VERSION_0_41_0;
  */
 public class Nhovestone {
 
-  private static final Log LOG = LogFactory.getLog( Nhovestone.class ) ;
 
-
-  public static void main( final String[] args )
+  public static void main( final String... arguments )
       throws
       IOException,
       URISyntaxException,
@@ -62,17 +59,23 @@ public class Nhovestone {
       VersionFormatException,
       InterruptedException
   {
+    // This must happen first. The need for originalArguments parameter prevents from
+    // putting this initialization in a static block.
+    StartupTools.fixLogDirectory( arguments ) ;
+    final Log log = LogFactory.getLog( Nhovestone.class ) ;
+    log.info( "Running with command-line arguments %s...", ImmutableList.of( arguments ) ) ;
     EnvironmentTools.logSystemProperties() ;
+
 
     final File scenariiDirectory ;
     final File versionsDirectory ;
     final Iterable< Version > versions ;
-    if( args.length == 3 ) {
-      scenariiDirectory = FileTools.createFreshDirectory( args[ 0 ] ) ;
-      versionsDirectory = new File( args[ 1 ] ) ;
-      versions = parseVersions( args[ 2 ] ) ;
+    if( arguments.length == 3 ) {
+      scenariiDirectory = FileTools.createFreshDirectory( arguments[ 0 ] ) ;
+      versionsDirectory = new File( arguments[ 1 ] ) ;
+      versions = parseVersions( arguments[ 2 ] ) ;
     } else {
-      if( args.length != 0 ) {
+      if( arguments.length != 0 ) {
         throw new IllegalArgumentException( "Usage: " + Nhovestone.class.getSimpleName() + 
             " [ < scenarii-dir > < distrib-dir > < comma-separated-versions > ]" ) ;
       }
@@ -98,16 +101,18 @@ public class Nhovestone {
         .withScenarioName( "Single ever-growing Novella" )
         .withUpsizerFactory( ScenarioLibrary.createNovellaLengthUpsizerFactory( new Random( 0L ) ) )
         ,
-        false
+        false,
+        log
     ) ;
 
     runScenario( baseConfiguration
         .withScenarioName( "Increasing Novella count" )
         .withUpsizerFactory( ScenarioLibrary.createNovellaCountUpsizerFactory( new Random( 0L ) ) )
         ,
-        true
+        true,
+        log
     ) ;
-    
+
     writeNhovestoneParameters( 
         new File( scenariiDirectory, "report-parameters.nlp" ), 
         baseConfiguration 
@@ -189,7 +194,8 @@ public class Nhovestone {
 
   private static void runScenario(
       final ScenarioLibrary.ConfigurationForTimeMeasurement configuration,
-      final boolean showUpsizingCount 
+      final boolean showUpsizingCount,
+      final Log log
 
   )
       throws IOException, ProcessDriver.ProcessCreationFailedException, InterruptedException
@@ -213,7 +219,7 @@ public class Nhovestone {
 
     ImageIO.write( image, "png", imageDestinationFile ) ;
 
-    LOG.info( "Wrote " + imageDestinationFile.getAbsolutePath() ) ;
+    log.info( "Wrote " + imageDestinationFile.getAbsolutePath() ) ;
   }
 
 }

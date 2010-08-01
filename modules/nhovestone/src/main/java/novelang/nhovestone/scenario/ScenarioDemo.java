@@ -36,8 +36,8 @@ import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 
-import static novelang.nhovestone.KnownVersions.VERSION_0_38_1;
-import static novelang.nhovestone.KnownVersions.VERSION_0_41_0;
+import static novelang.KnownVersions.VERSION_0_38_1;
+import static novelang.KnownVersions.VERSION_0_41_0;
 
 /**
  * @author Laurent Caillette

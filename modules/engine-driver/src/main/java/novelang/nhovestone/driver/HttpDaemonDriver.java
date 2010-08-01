@@ -16,26 +16,17 @@
  */
 package novelang.nhovestone.driver;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.concurrent.TimeUnit;
+
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import novelang.Version;
 import novelang.configuration.parse.DaemonParameters;
-import novelang.configuration.parse.GenericParameters;
-import novelang.system.DefaultCharset;
+import novelang.daemon.HttpDaemon;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
-import static novelang.nhovestone.driver.VirtualMachineTools.SYSTEMPROPERTYNAME_STICKER;
 
 /**
  * Starts and stops an {@link novelang.daemon.HttpDaemon} in its deployment directory,
@@ -43,88 +34,68 @@ import static novelang.nhovestone.driver.VirtualMachineTools.SYSTEMPROPERTYNAME_
  *
  * @author Laurent Caillette
  */
-public class HttpDaemonDriver {
+public class HttpDaemonDriver extends EngineDriver {
 
   private static final Log LOG = LogFactory.getLog( HttpDaemonDriver.class ) ;
   
-  private final ProcessDriver processDriver ;
   private final int tcpPort ;
-  private final Sticker sticker ;
 
 
   public HttpDaemonDriver( final Configuration configuration ) {
-
-    tcpPort = configuration.getTcpPort() ;
-
-    final String applicationName = "Novelang-" + configuration.getVersion().getName() ;
-
-    final ImmutableList.Builder< String > optionsBuilder = new ImmutableList.Builder< String >() ;
-
-//    optionsBuilder.add( SystemUtils.JAVA_HOME + "/bin/java" ) ;
-    optionsBuilder.add( "java" ) ;
-
-    this.sticker = Sticker.create() ;
-
-    optionsBuilder.add( SYSTEMPROPERTYNAME_STICKER + "=" + sticker.asString() ) ;
-
-    optionsBuilder.add( "-Xmx" + checkNotNull( configuration.getJvmHeapSizeMegabytes() + "M" ) ) ;
-
-//    optionsBuilder.add( "-Djava.awt.headless=true" ) ;
-
-    optionsBuilder.add( "-server" ) ;
-
-    if( "64".equals( System.getProperty( "sun.arch.data.model" ) ) ) {
-      optionsBuilder.add( "-d64" ) ;
-    }
-
-    final Iterable< String > otherJvmOptions = configuration.getJvmOtherOptions() ;
-    if( otherJvmOptions != null ) {
-      for( final String processOption : otherJvmOptions ) {
-        if( processOption.startsWith( "-Xmx" ) ) {
-          throw new IllegalArgumentException(
-              "Use method in " + Configuration.class.getName() + " to set -Xmx" ) ;
-        } else {
-          optionsBuilder.add( checkNotNull( processOption ) ) ;
-        }
-      }
-    }
-
-    optionsBuilder.add( "-jar" ) ;
-
-    optionsBuilder.add( configuration.getInstallationDirectory().getAbsolutePath()
-        + File.separator + applicationName + File.separator + applicationName + ".jar" ) ;
-
-    optionsBuilder.add( "httpdaemon" ) ;
-
-    optionsBuilder.add( OPTIONPREFIX + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT ) ;
-    optionsBuilder.add( "" + tcpPort ) ;
-
-    optionsBuilder.add( OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ) ;
-    optionsBuilder.add( checkNotNull( configuration.getLogDirectory() ).getAbsolutePath() ) ;
-
-    optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_CONTENT_ROOT ) ;
-    optionsBuilder.add( checkNotNull( configuration.getContentRootDirectory() ).getAbsolutePath() ) ;
-
-    optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET ) ;
-    optionsBuilder.add( DefaultCharset.SOURCE.name() ) ;
-
-    final List< String > processOptions = optionsBuilder.build() ;
-
-    processDriver = new ProcessDriver(
-        checkNotNull( configuration.getWorkingDirectory() ),
-        applicationName,
-        processOptions,
+    super(
+        enrichWithProgramArguments( configuration ),
+        HttpDaemon.COMMAND_NAME,
         PROCESS_STARTED_SENSOR
     ) ;
 
+    // Could avoid this check either by some complicated inheritance that Husk doesn't
+    // support for now, or by adding a constructor parameter in the superclass.
+    Preconditions.checkArgument(
+        configuration.getProgramOtherOptions() == null,
+        "Use method in " + Configuration.class.getName() + " to set program options"
+    ) ;
+
+    this.tcpPort = getTcpPortForSure( configuration ) ;
   }
 
-  
+
+  private static int getTcpPortForSure( final Configuration configuration ) {
+    final Integer tcpPort = configuration.getTcpPort() ;
+    if( tcpPort == null ) {
+      return novelang.configuration.ConfigurationTools.DEFAULT_HTTP_DAEMON_PORT ;
+    } else {
+      return tcpPort ;
+    }
+
+  }
+
+
+  private static EngineDriver.Configuration enrichWithProgramArguments(
+      final Configuration configuration
+  )
+  {
+    return configuration.withProgramOtherOptions(
+        "--" + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT,
+        "" + getTcpPortForSure( configuration )
+    ) ;
+  }
+
   public int getTcpPort() {
     return tcpPort ;
   }
 
+  @Override
+  public void start( final long timeout, final TimeUnit timeUnit )
+      throws
+      IOException,
+      ProcessDriver.ProcessCreationFailedException,
+      InterruptedException
+  {
+    ensureTcpPortAvailable() ;
+    super.start( timeout, timeUnit );
+  }
 
+  
   @SuppressWarnings( { "SocketOpenedButNotSafelyClosed" } )
   public void ensureTcpPortAvailable() throws IOException {
     final ServerSocket serverSocket;
@@ -139,21 +110,6 @@ public class HttpDaemonDriver {
     serverSocket.close() ;
   }
 
-  public void start( final long timeout, final TimeUnit timeUnit )
-      throws
-      IOException,
-      ProcessDriver.ProcessCreationFailedException,
-      InterruptedException
-  {
-    ensureTcpPortAvailable() ;
-    processDriver.start( timeout, timeUnit ) ;
-  }
-
-
-  public void shutdown( final boolean force ) throws InterruptedException {
-    processDriver.shutdown( force ) ;
-  }
-
 
   private static final Predicate< String > PROCESS_STARTED_SENSOR = new Predicate< String >() {
     public boolean apply( final String lineInConsole ) {
@@ -166,40 +122,10 @@ public class HttpDaemonDriver {
 
 
   @Husk.Converter( converterClass = ConfigurationHelper.class )
-  public interface Configuration {
-
-    File getInstallationDirectory() ;
-    Configuration withInstallationDirectory( File directory ) ;
-
-    Version getVersion() ;
-    Configuration withVersion( Version version ) ;
+  public interface Configuration extends EngineDriver.Configuration< Configuration > {
 
     Integer getTcpPort() ;
     Configuration withTcpPort( Integer port ) ;
-
-    File getWorkingDirectory() ;
-    Configuration withWorkingDirectory( File directory ) ;
-
-    File getLogDirectory() ;
-    Configuration withLogDirectory( File directory ) ;
-
-    File getContentRootDirectory() ;
-    Configuration withContentRootDirectory( File directory ) ;
-
-    Integer getJvmHeapSizeMegabytes() ;
-    Configuration withJvmHeapSizeMegabytes( Integer sizeMegabytes) ;
-
-    Iterable< String > getJvmOtherOptions() ;
-    Configuration withJvmOtherOptions( String... options ) ;
-
   }
 
-  @SuppressWarnings( { "UnusedDeclaration" } )
-  public static class ConfigurationHelper {
-
-    public static Iterable< String > convert( final String... strings ) {
-      return Arrays.asList( strings ) ;
-    }
-    
-  }
 }

@@ -40,6 +40,7 @@ public class HttpDaemon {
   private static final Log LOG = LogFactory.getLog( HttpDaemon.class ) ;
 
   private final Server server ;
+  public static final String COMMAND_NAME = "httpdaemon";
 
   public static void main( final String commandName, final String[] args ) throws Exception {
 

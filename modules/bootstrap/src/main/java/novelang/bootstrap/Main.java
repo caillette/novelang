@@ -98,7 +98,7 @@ public class Main {
    * system up during their static initialization.
    */
   private final Map< String, ? extends MainCaller > commands = ImmutableMap.of(
-      "httpdaemon",
+      HttpDaemon.COMMAND_NAME,
       new MainCaller() {
         public void main( final String commandName, final String[] arguments ) throws Exception {
           HttpDaemon.main( commandName, arguments ) ;
