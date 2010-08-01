@@ -82,6 +82,8 @@
         <option value="$PROJECT_DIR$/../../modules/distribution/pom.xml" />
         <option value="$PROJECT_DIR$/../../bootstrap/properties-plugin/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/nhovestone/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/process-driver/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/engine-driver/pom.xml" />
       </list>
     </option>
   </component>

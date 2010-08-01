@@ -95,11 +95,11 @@
 
     <lib.jfreechart.groupId>jfree</lib.jfreechart.groupId>
     <lib.jfreechart.artefactId>jfreechart</lib.jfreechart.artefactId>
-    <lib.jfreechart.version>1.0.13</lib.jfreechart.version>
+    <lib.jfreechart.version>1.0.12</lib.jfreechart.version>
 
     <lib.jfree-jcommon.groupId>jfree</lib.jfree-jcommon.groupId>
     <lib.jfree-jcommon.artefactId>jcommon</lib.jfree-jcommon.artefactId>
-    <lib.jfree-jcommon.version>1.0.15</lib.jfree-jcommon.version>
+    <lib.jfree-jcommon.version>1.0.9</lib.jfree-jcommon.version>
 
     <lib.apache-httpclient.groupId>org.apache.httpcomponents</lib.apache-httpclient.groupId>
     <lib.apache-httpclient.artefactId>httpclient</lib.apache-httpclient.artefactId>
@@ -133,6 +133,7 @@
     <module>modules/syntactic-tree-fixture</module>
     <module>modules/parser-supplement</module>
     <module>modules/parser-facade</module>
+    <module>modules/process-driver</module>
     <module>modules/engine</module>
     <module>modules/bootstrap</module>
     <module>modules/lexeme-table-plugin</module>

@@ -28,7 +28,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-engine</artifactId>
+      <artifactId>Novelang-engine-driver</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

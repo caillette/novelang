@@ -27,12 +27,19 @@
 
   <artifactId>Novelang-nhovestone</artifactId>
   <name>${project.artifactId}</name>
+  <packaging>pom</packaging>
 
   <dependencies>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-engine</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-engine-driver</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
@@ -62,9 +69,33 @@
       <scope>compile</scope>
     </dependency>
 
-
-
   </dependencies>
+
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>nhovestone</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>Running Nhovestone here...</echo>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
 
 </project>
 
