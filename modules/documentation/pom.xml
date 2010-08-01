@@ -65,7 +65,7 @@
 
                 <echo>enhancedDocumentSources=${enhancedDocumentSources}</echo>
                 <echo>project.version=${project.version}</echo>
-                <echo>execution classpath=${classpath}</echo>
+                <!--<echo>execution classpath=${classpath}</echo>-->
 
                 <!-- Copy source documents to generated sources directory. -->
                 <copy todir="${enhancedDocumentSources}">

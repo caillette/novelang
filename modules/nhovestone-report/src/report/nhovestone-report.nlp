@@ -1,0 +1,33 @@
+== Introduction
+
+Nhovestone is a Novelang-specific benchmark.
+It highlights performance variations across Novelang versions, using a few carefully 
+selected indicators. 
+Nhovestone focuses on HTML generation using default stylesheet, because HTML is great for fast 
+edit-and-review roundtrips.
+
+== JVM characteristics
+
+[JVMCHARACTERISTICS]
+
+(Each Novelang instance runs in a dedicated JVM.)
+
+== Benchmark parameters
+
+
+[NHOVESTONEPARAMETERS]
+
+
+== Increasing Novella count
+
+Before each HTTP request, there is a new Novella included in the document sources.
+
+./IncreasingNovellacount.png
+
+
+== Single ever-growing Novella
+
+The same Novella gets bigger and bigger before each HTTP request. 
+
+./SingleevergrowingNovella.png
+

@@ -1,0 +1,6 @@
+mapstylesheet
+  pdf=nhovestone-pdf.xsl
+
+insert file:nhovestone-report.nlp
+
+insert file:report-parameters.nlp style=parameters

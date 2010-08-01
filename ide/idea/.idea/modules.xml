@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/engine-driver/engine-driver.iml" filepath="$PROJECT_DIR$/../../modules/engine-driver/engine-driver.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" filepath="$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../novelang.iml" filepath="$PROJECT_DIR$/../../novelang.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" />

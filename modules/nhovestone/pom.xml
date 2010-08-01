@@ -27,7 +27,7 @@
 
   <artifactId>Novelang-nhovestone</artifactId>
   <name>${project.artifactId}</name>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
   <dependencies>
 
@@ -66,35 +66,9 @@
       <groupId>${lib.apache-commons-math.groupId}</groupId>
       <artifactId>${lib.apache-commons-math.artefactId}</artifactId>
       <version>${lib.apache-commons-math.version}</version>
-      <scope>compile</scope>
     </dependency>
 
   </dependencies>
-
-
-  <build>
-    <plugins>
-
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>nhovestone</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <echo>Running Nhovestone here...</echo>
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-    </plugins>
-  </build>
 
 
 </project>

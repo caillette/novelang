@@ -119,27 +119,29 @@
   <url>http://novelang.sf.net</url>
 
   <modules>
-    <module>modules/primer</module>
-    <module>modules/code-generation</module>
-    <module>modules/unicode-reader</module>
-    <module>modules/unicode-generator-plugin</module>
-    <module>modules/tree</module>
-    <module>modules/vanilla-fixture</module>
-    <module>modules/parser-antlr</module>
-    <module>modules/parser-ground</module>
-    <module>modules/parser-lexeme-plugin</module>
-    <module>modules/parser-token-plugin</module>
-    <module>modules/syntactic-tree</module>
-    <module>modules/syntactic-tree-fixture</module>
-    <module>modules/parser-supplement</module>
-    <module>modules/parser-facade</module>
-    <module>modules/process-driver</module>
-    <module>modules/engine</module>
     <module>modules/bootstrap</module>
-    <module>modules/lexeme-table-plugin</module>
-    <module>modules/nhovestone</module>
+    <module>modules/code-generation</module>
     <module>modules/documentation</module>
     <module>modules/distribution</module>
+    <module>modules/engine</module>
+    <module>modules/engine-driver</module>
+    <module>modules/lexeme-table-plugin</module>
+    <module>modules/nhovestone</module>
+    <module>modules/parser-antlr</module>
+    <module>modules/parser-facade</module>
+    <module>modules/parser-ground</module>
+    <module>modules/parser-lexeme-plugin</module>
+    <module>modules/parser-supplement</module>
+    <module>modules/parser-token-plugin</module>
+    <module>modules/primer</module>
+    <module>modules/process-driver</module>
+    <module>modules/producer-plugin</module>
+    <module>modules/syntactic-tree</module>
+    <module>modules/syntactic-tree-fixture</module>
+    <module>modules/tree</module>
+    <module>modules/unicode-reader</module>
+    <module>modules/unicode-generator-plugin</module>
+    <module>modules/vanilla-fixture</module>
   </modules>
 
 
@@ -350,13 +352,6 @@
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.2.1</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.apache-httpclient.groupId}</groupId>
-      <artifactId>${lib.apache-httpclient.artefactId}</artifactId>
-      <version>${lib.apache-httpclient.version}</version>
       <scope>test</scope>
     </dependency>
 

@@ -73,6 +73,15 @@
 -->
 
     <dependency>
+      <groupId>${lib.apache-httpclient.groupId}</groupId>
+      <artifactId>${lib.apache-httpclient.artefactId}</artifactId>
+      <version>${lib.apache-httpclient.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    
+
+    <dependency>
         <groupId>dom4j</groupId>
         <artifactId>dom4j</artifactId>
         <version>1.6.1</version>

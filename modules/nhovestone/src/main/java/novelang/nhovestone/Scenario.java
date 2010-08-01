@@ -30,11 +30,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import novelang.Version;
-import novelang.nhovestone.MeasurementBundle;
 import novelang.nhovestone.driver.HttpDaemonDriver;
 import novelang.nhovestone.driver.ProcessDriver;
 import novelang.common.FileTools;
-import novelang.nhovestone.Termination;
 import novelang.nhovestone.scenario.Measurer;
 import novelang.nhovestone.scenario.Upsizer;
 import novelang.system.Husk;
@@ -117,13 +115,13 @@ public class Scenario< UPSIZING, MEASUREMENT > {
 
       final HttpDaemonDriver httpDaemonDriver = new HttpDaemonDriver(
           Husk.create( HttpDaemonDriver.Configuration.class )
-          .withWorkingDirectory( versionWorkingDirectory )
           .withContentRootDirectory( contentDirectory )
           .withJvmHeapSizeMegabytes( configuration.getJvmHeapSizeMegabytes() )
-          .withInstallationDirectory( configuration.getInstallationsDirectory() )
+          .withInstallationsDirectory( configuration.getInstallationsDirectory() )
           .withLogDirectory( versionWorkingDirectory )
           .withVersion( version )
           .withTcpPort( tcpPort )
+          .withWorkingDirectory( versionWorkingDirectory )
       ) ;
 
       final Monitoring monitoring = new Monitoring( httpDaemonDriver ) ;

@@ -84,6 +84,7 @@
         <option value="$PROJECT_DIR$/../../modules/nhovestone/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/process-driver/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/engine-driver/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/nhovestone-report/pom.xml" />
       </list>
     </option>
   </component>

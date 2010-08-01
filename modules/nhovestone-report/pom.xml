@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (C) 2010 Laurent Caillette
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses />.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <relativePath>../../pom.xml</relativePath>
+    <groupId>org.novelang</groupId>
+    <artifactId>Novelang</artifactId>
+    <version>SNAPSHOT</version>
+  </parent>
+
+  <artifactId>Novelang-nhovestone-report</artifactId>
+  <name>${project.artifactId}</name>
+  <packaging>pom</packaging>
+
+  <properties>
+    <nhovestoneWorkingDirectory>${build.outputDirectory}/nhovestone</nhovestoneWorkingDirectory>
+    <nhovestoneMainClass>novelang.nhovestone.Nhovestone</nhovestoneMainClass>
+    <distributionsDirectory>../../distrib</distributionsDirectory>
+    <benchmarkedVersions>${project.version},0.43.0</benchmarkedVersions>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-nhovestone</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+  </dependencies>
+
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>nhovestone</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>Running Nhovestone here...</echo>
+
+                <property name="classpath" refid="maven.runtime.classpath" />
+                <echo>Using classpath ${classpath}</echo>
+                
+                <java classname="${nhovestoneMainClass}" failonerror="true" >
+                  <classpath>
+                    <pathelement path="${java.class.path}" />
+                    <pathelement path="${classpath}" />
+                  </classpath>
+                  <arg value="${nhovestoneWorkingDirectory}" />
+                  <arg value="${distributionsDirectory}" />
+                  <arg value="${benchmarkedVersions}" />
+                </java>
+
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>Novelang-producer-plugin</artifactId>
+        <groupId>${parent.groupId}</groupId>
+        <version>${parent.version}</version>
+        <executions>
+          <execution>
+            <id>nhovestone</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>produce</goal>
+            </goals>
+            <configuration>
+              <workingDirectory>${nhovestoneWorkingDirectory}</workingDirectory>
+              <contentRootDirectory>${nhovestoneWorkingDirectory}</contentRootDirectory>
+              <outputDirectory>${nhovestoneWorkingDirectory}/report</outputDirectory>
+              <documentsToRender>
+                <param>report.pdf</param>
+              </documentsToRender>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+
+</project>
+

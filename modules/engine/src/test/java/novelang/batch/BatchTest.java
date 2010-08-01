@@ -45,13 +45,13 @@ public class BatchTest {
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitWithIncorrectParameters() throws Exception {
-    new DocumentGenerator().main( "tesing", new String[ 0 ] ) ;
+    new DocumentGenerator().main( "testing", new String[ 0 ] ) ;
   }
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitBecauseHelpRequeted() throws Exception {
     new DocumentGenerator().main(
-        "tesing", 
+        "testing",
         new String[] { GenericParameters.OPTIONPREFIX + GenericParameters.HELP_OPTION_NAME }
     ) ;
   }

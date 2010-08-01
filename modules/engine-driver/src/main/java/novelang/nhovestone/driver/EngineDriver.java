@@ -18,11 +18,9 @@ package novelang.nhovestone.driver;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import novelang.KnownVersions;
@@ -70,19 +68,22 @@ public abstract class EngineDriver {
 
     checkArgument( ! StringUtils.isBlank( commandName ) ) ;
 
-    final Version version = Preconditions.checkNotNull( configuration.getVersion() ) ;
+    final Version version = configuration.getVersion() ;
 
     final String absoluteClasspath = configuration.getAbsoluteClasspath() ;
-    final File installationDirectory = configuration.getInstallationDirectory() ;
+    final File installationDirectory = configuration.getInstallationsDirectory() ;
     if( absoluteClasspath == null ) {
-      Preconditions.checkArgument( installationDirectory.exists(), installationDirectory ) ;
+      checkArgument( installationDirectory.exists(), installationDirectory ) ;
+      checkNotNull( version ) ;
     } else {
-      Preconditions.checkArgument( ! StringUtils.isBlank( absoluteClasspath ) ) ;
-      Preconditions.checkArgument( installationDirectory == null, installationDirectory ) ;
-    }    
+      checkArgument( ! StringUtils.isBlank( absoluteClasspath ) ) ;
+      checkArgument( installationDirectory == null, installationDirectory ) ;
+    }
 
-    final String applicationName =
-        "Novelang-" + configuration.getVersion().getName() + ":" + commandName ;
+    final String applicationName = "Novelang"
+        + ( version == null ? "" : "-" + version.getName() )
+        + ":" + commandName
+    ;
 
     final ImmutableList.Builder< String > optionsBuilder = new ImmutableList.Builder< String >() ;
 
@@ -124,6 +125,8 @@ public abstract class EngineDriver {
       optionsBuilder.add( absoluteClasspath ) ;
     }
 
+    optionsBuilder.add( "novelang.bootstrap.Main" ) ;
+
     optionsBuilder.add( commandName ) ;
 
     final Iterable< String > otherProgramOptions = configuration.getProgramOtherOptions() ;
@@ -133,8 +136,10 @@ public abstract class EngineDriver {
       }
     }
 
-    optionsBuilder.add( OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ) ;
-    optionsBuilder.add( checkNotNull( configuration.getLogDirectory() ).getAbsolutePath() ) ;
+    if( configuration.getLogDirectory() != null ) {
+      optionsBuilder.add( OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ) ;
+      optionsBuilder.add( configuration.getLogDirectory().getAbsolutePath() ) ;
+    }
 
     optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_CONTENT_ROOT ) ;
     optionsBuilder.add( checkNotNull(
@@ -180,22 +185,22 @@ public abstract class EngineDriver {
      * @return null if {@link #getAbsoluteClasspath()} returns a non-null value, a directory
      *         containing an unzipped Novelang installation otherwise.
      */
-    File getInstallationDirectory() ;
+    File getInstallationsDirectory() ;
 
     /**
      * Mutually exclusive with {@link #withAbsoluteClasspath(String)}.
      */
-    CONFIGURATION withInstallationDirectory( File directory ) ;
+    CONFIGURATION withInstallationsDirectory( File directory ) ;
 
     /**
-     * Mutually exclusive with {@link #getInstallationDirectory()}.
-     * @return null if {@link #getInstallationDirectory()} returns a non-null value, a valid
+     * Mutually exclusive with {@link #getInstallationsDirectory()}.
+     * @return null if {@link #getInstallationsDirectory()} returns a non-null value, a valid
      *         classpath otherwise.
      */
     String getAbsoluteClasspath() ;
 
     /**
-     * Mutually exclusive with {@link #withInstallationDirectory(java.io.File)}.
+     * Mutually exclusive with {@link #withInstallationsDirectory(java.io.File)}.
      */
     CONFIGURATION withAbsoluteClasspath( String absoluteClasspath ) ;
 
@@ -227,7 +232,7 @@ public abstract class EngineDriver {
   public static class ConfigurationHelper {
 
     public static Iterable< String > convert( final String... strings ) {
-      return Arrays.asList( strings ) ;
+      return ImmutableList.of( strings ) ;
     }
 
   }

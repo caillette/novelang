@@ -19,7 +19,9 @@ package novelang.build.batch;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import novelang.batch.AbstractDocumentGenerator;
 import novelang.batch.DocumentGenerator;
@@ -28,17 +30,28 @@ import novelang.configuration.ConfigurationTools;
 import novelang.configuration.DocumentGeneratorConfiguration;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.DocumentGeneratorParameters;
+import novelang.nhovestone.driver.DocumentGeneratorDriver;
+import novelang.nhovestone.driver.ProcessDriver;
 import novelang.produce.DocumentProducer;
+import novelang.system.Husk;
+import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.apache.fop.apps.FOPException;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 
 /**
- * Doesn't work, probably because of
- * <a href="http://forums.sun.com/thread.jspa?threadID=5134880">some Xalan bug</a>.
- * Generates Java source containing lexemes extracted from an ANTLR grammar.
+ * Starts a {@link novelang.batch.DocumentGenerator} through a
+ * {@link novelang.nhovestone.driver.DocumentGeneratorDriver}.
+ *
+ * Running the {@link DocumentProducer} in the same JVM doesn't work because of
+ * <a href="http://forums.sun.com/thread.jspa?threadID=5134880">some Xalan bug</a>
+ * which wrecks XSL-based document rendering.
  *
  * @goal produce
  *
@@ -48,64 +61,108 @@ import org.apache.maven.plugin.MojoFailureException;
 public class BatchProducerMojo extends AbstractMojo {
 
   /**
-   * Base directory for documents.
+   * The classpath for the standalone JVM.
    *
-   * @parameter expression="${produce.baseDirectory}"
-   * @required
+   * @parameter expression="${produce.jvmClasspath}"
+//   * @required
    */
-  @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
-  private File baseDirectory ;
+//  private String jvmClasspath = null ;
 
   /**
-   * Raw parameters.
-   * TODO: use Mojo properties.
+   * The heap size in megabytes for the standalone JVM.
    *
-   * @parameter expression="${produce.commandLineArguments}"
+   * @parameter expression="${produce.jvmHeapSizeMegabytes}"
    */
-  @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
-  private String[] commandLineArguments ;
+  @SuppressWarnings( { "FieldCanBeLocal" } )
+  private Integer jvmHeapSizeMegabytes = 512 ;
+
+  /**
+   * Base directory for documents sources.
+   *
+   * @parameter expression="${produce.contentRootDirectory}"
+   * @required
+   */
+  private File contentRootDirectory = null ;
+
+  /**
+   * Base directory for rendered documents.
+   *
+   * @parameter expression="${produce.outputDirectory}"
+   * @required
+   */
+  private File outputDirectory = null ;
+
+  /**
+   * Directory where to write log file(s) to.
+   *
+   * @parameter expression="${produce.logDirectory}"
+   */
+  private File logDirectory = null ;
+
+  /**
+   * Working directory, which serves as reference for default directories like style or fonts.
+   *
+   * @parameter expression="${produce.workingDirectory}"
+   * @required
+   */
+  private File workingDirectory = null ;
+
+
+  /**
+   * List of documents to render.
+   *
+   * @parameter
+   * @required
+   */
+  private List< String > documentsToRender = null ;
+  
+
+  /**
+   * @parameter expression="${project}"
+   * @required
+   * @readonly
+   */
+  private MavenProject project ;
+
 
   public void execute() throws MojoExecutionException, MojoFailureException {
     LogFactory.setMavenPluginLog( getLog() ) ;
 
-    // Code more or less copy-pasted from DocumentGenerator. TODO: refactor both.
+    final Log log = LogFactory.getLog( getClass() ) ;
 
-    final List< Problem > allProblems = Lists.newArrayList() ;
-
+    final List< String > classpathElements;
     try {
-      final DocumentGeneratorParameters parameters = new DocumentGeneratorParameters(
-          baseDirectory,
-          commandLineArguments
-      ) ;
-      final DocumentGeneratorConfiguration configuration =
-          ConfigurationTools.createDocumentGeneratorConfiguration( parameters ) ;
-      final File outputDirectory = configuration.getOutputDirectory();
-      AbstractDocumentGenerator.resetTargetDirectory( outputDirectory ) ;
+      classpathElements = project.getRuntimeClasspathElements();
+    } catch( DependencyResolutionRequiredException e ) {
+      throw new MojoExecutionException( "Something got wrong", e ) ;
+    }
+/*
+    for( final String classpathElement : classpathElements ) {
+      log.info( "Classpath element %s", classpathElement ) ;
+    }
+*/
 
+    DocumentGeneratorDriver.Configuration configuration =
+        Husk.create( DocumentGeneratorDriver.Configuration.class )
+        .withAbsoluteClasspath( Joiner.on( File.pathSeparator ).join( classpathElements ) )
+        .withContentRootDirectory( contentRootDirectory )
+        .withOutputDirectory( outputDirectory )
+        .withWorkingDirectory( workingDirectory )
+    ;
 
-      final DocumentProducer documentProducer =
-          new DocumentProducer( configuration.getProducerConfiguration() ) ;
-      DocumentGenerator.processDocumentRequests(
-          configuration,
-          outputDirectory,
-          documentProducer,
-          allProblems
-      ) ;
+    if( logDirectory != null ) {
+      configuration = configuration.withLogDirectory( logDirectory ) ;
+    }
+    if( jvmHeapSizeMegabytes != null ) {
+      configuration = configuration.withJvmHeapSizeMegabytes( jvmHeapSizeMegabytes ) ;
+    }
 
-    } catch( ArgumentException e ) {
-      throw new MojoExecutionException( "Incorrect arguments", e ) ;
-    } catch( FOPException e ) {
-      throw new MojoExecutionException( "Could not configure FOP", e ) ;
-    } catch( IOException e ) {
-      throw new MojoExecutionException( "IO problem", e ) ;
+    final DocumentGeneratorDriver driver = new DocumentGeneratorDriver( configuration ) ;
+    try {
+      driver.start( 1L, TimeUnit.MINUTES ) ;
+      driver.shutdown( false ) ;
     } catch( Exception e ) {
-      getLog().error( e ) ;
-      throw new MojoExecutionException( "Something bad happened", e );
+      throw new MojoExecutionException( "Driver execution failed", e );
     }
-
-    if( ! allProblems.isEmpty() ) {
-      throw new MojoExecutionException( "Generation problem: " + allProblems.toString() ) ;
-    }
-
   }
 }

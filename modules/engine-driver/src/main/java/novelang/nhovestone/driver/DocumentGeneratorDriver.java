@@ -16,12 +16,14 @@
  */
 package novelang.nhovestone.driver;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import novelang.batch.DocumentGenerator;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.daemon.HttpDaemon;
@@ -42,9 +44,20 @@ public class DocumentGeneratorDriver extends EngineDriver {
 
   public DocumentGeneratorDriver( final Configuration configuration ) {
     super(
-        configuration,
+        enrichWithProgramArguments( configuration ),
         DocumentGenerator.COMMAND_NAME,
         PROCESS_STARTED_SENSOR
+    ) ;
+    Preconditions.checkNotNull( configuration.getOutputDirectory() ) ;
+  }
+
+  private static EngineDriver.Configuration enrichWithProgramArguments(
+      final Configuration configuration
+  )
+  {
+    return configuration.withProgramOtherOptions(
+        "--" + novelang.configuration.parse.BatchParameters.OPTIONNAME_OUTPUTDIRECTORY,
+        "" + configuration.getOutputDirectory()
     ) ;
   }
 
@@ -66,16 +79,13 @@ public class DocumentGeneratorDriver extends EngineDriver {
    * Always returns true. This works because normal usage is to wait for natural process
    * termination.
    */
-  private static final Predicate< String > PROCESS_STARTED_SENSOR = new Predicate< String >() {
-    public boolean apply( final String lineInConsole ) {
-      return true ;
-    }
-  } ;
+  private static final Predicate< String > PROCESS_STARTED_SENSOR = Predicates.alwaysTrue() ;
 
 
   @Husk.Converter( converterClass = ConfigurationHelper.class )
   public interface Configuration extends EngineDriver.Configuration< Configuration > {
-
+    File getOutputDirectory() ;
+    Configuration withOutputDirectory( File directory ) ;
   }
 
 }

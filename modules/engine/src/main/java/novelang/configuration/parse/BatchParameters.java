@@ -27,9 +27,12 @@ import java.io.File;
 public abstract class BatchParameters extends GenericParameters {
 
   private final File outputDirectory ;
+
+  public static final String OPTIONNAME_OUTPUTDIRECTORY = "output-dir" ;
+
   @SuppressWarnings({"AccessStaticViaInstance"})
   static final Option OPTION_OUTPUT_DIRECTORY = OptionBuilder
-      .withLongOpt( "output-dir" )
+      .withLongOpt( OPTIONNAME_OUTPUTDIRECTORY )
       .withDescription( "Output directory for rendered documents" )
       .hasArg()
       .create()
