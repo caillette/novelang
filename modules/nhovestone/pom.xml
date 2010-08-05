@@ -27,7 +27,7 @@
 
   <artifactId>Novelang-nhovestone</artifactId>
   <name>${project.artifactId}</name>
-  <packaging>jar</packaging>
+  <packaging>maven-plugin</packaging>
 
   <dependencies>
 

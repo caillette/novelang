@@ -123,9 +123,8 @@ public abstract class EngineDriver {
     if( absoluteClasspath != null ) {
       optionsBuilder.add( "-cp" ) ;
       optionsBuilder.add( absoluteClasspath ) ;
+      optionsBuilder.add( "novelang.bootstrap.Main" ) ;
     }
-
-    optionsBuilder.add( "novelang.bootstrap.Main" ) ;
 
     optionsBuilder.add( commandName ) ;
 

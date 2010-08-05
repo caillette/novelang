@@ -152,7 +152,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
         final int updatedActiveCount = countActive( monitorings.values() ) ;
         final int difference = activeCount - updatedActiveCount ;
         final String message = "{" + name + "} pass  " + iterationCount + 
-            " on " + updatedActiveCount + " daemons. "  ;
+            " on " + activeCount + " daemons. "  ;
         if( difference > 0 ) {
           LOG.info( message + ( difference + " daemon(s) terminated." ) ) ;
         } else {
@@ -264,7 +264,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
 
   private static void logPassCount( final String message, final int pass ) {
     if( pass == 1 || pass == 2 || pass == 10 || pass % 100 == 0 ) {
-      LOG.debug( String.format( message, pass ) ) ;
+      LOG.info( String.format( message, pass ) ) ;
     }
   }
 

@@ -17,6 +17,8 @@
 package novelang.nhovestone.scenario;
 
 import novelang.nhovestone.Termination;
+import novelang.system.Log;
+import novelang.system.LogFactory;
 import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -39,6 +41,7 @@ import java.util.List;
  */
 public class TimeMeasurer implements Measurer< TimeMeasurement > {
 
+  private static final Log LOG = LogFactory.getLog( TimeMeasurer.class );
 
   public static final int TIMEOUT_MILLISECONDS = 5 * 60 * 1000 ;
   private static final int MINIMUM_MEASUREMENT_COUNT_FOR_REGRESSION = 50 ;
@@ -128,7 +131,8 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
     final HttpResponse httpResponse;
     try {
       httpResponse = httpKit.httpClient.execute( httpKit.httpGet );
-      if( httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK ) {
+      final int statusCode = httpResponse.getStatusLine().getStatusCode();
+      if( statusCode == HttpStatus.SC_OK ) {
         final InputStream inputStream = httpResponse.getEntity().getContent() ;
         try {
           for( int read = 0 ; read > -1 ; read = inputStream.read( httpKit.buffer ) ) { }

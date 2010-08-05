@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableList;
 import javax.imageio.ImageIO;
@@ -73,7 +72,7 @@ public class Nhovestone {
     if( arguments.length == 3 ) {
       scenariiDirectory = FileTools.createFreshDirectory( arguments[ 0 ] ) ;
       versionsDirectory = new File( arguments[ 1 ] ) ;
-      versions = parseVersions( arguments[ 2 ] ) ;
+      versions = NhovestoneTools.parseVersions( arguments[ 2 ] ) ;
     } else {
       if( arguments.length != 0 ) {
         throw new IllegalArgumentException( "Usage: " + Nhovestone.class.getSimpleName() + 
@@ -85,6 +84,17 @@ public class Nhovestone {
     }
 
 
+    run( log, scenariiDirectory, versionsDirectory, versions ) ;
+
+    System.exit( 0 ) ;
+  }
+
+  public static void run(
+      final Log log,
+      final File scenariiDirectory,
+      final File versionsDirectory,
+      final Iterable< Version > versions
+  ) throws IOException, ProcessDriver.ProcessCreationFailedException, InterruptedException {
     final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
         .withWarmupIterationCount( 1000 )
@@ -113,30 +123,13 @@ public class Nhovestone {
         log
     ) ;
 
-    writeNhovestoneParameters( 
-        new File( scenariiDirectory, "report-parameters.nlp" ), 
-        baseConfiguration 
+    writeNhovestoneParameters(
+        new File( scenariiDirectory, "report-parameters.nlp" ),
+        baseConfiguration
     ) ;
+  }
 
-    System.exit( 0 ) ;
-  }
-  
-  private static final Pattern COMMASEPARATEDVERSIONSSPLIT_PATTERN = Pattern.compile( "," );  
-  
-  private static Iterable< Version > parseVersions( final String commaSeparatedVersions ) 
-      throws VersionFormatException 
-  {
-    final String[] versionsAsStrings = 
-        COMMASEPARATEDVERSIONSSPLIT_PATTERN.split( commaSeparatedVersions ) ;
-    final ImmutableList.Builder< Version > versionsBuilder = 
-        new ImmutableList.Builder< Version >() ;
-    for( final String versionsAsString : versionsAsStrings ) {
-      versionsBuilder.add( Version.parse( versionsAsString ) ) ;
-    }
-    return versionsBuilder.build() ;
-  }
-  
-  
+
   private static void writeNhovestoneParameters( 
       final File parametersFile, 
       final Scenario.Configuration< ?, ?, ? > configuration 

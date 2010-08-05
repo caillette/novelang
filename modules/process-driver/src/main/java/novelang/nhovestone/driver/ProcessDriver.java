@@ -200,7 +200,7 @@ public class ProcessDriver {
         state = State.TERMINATED ;
       }
     }
-    LOG.info( "Process ended." ) ;
+    LOG.info( "Process ended" + process + "." ) ;
 
   }
 

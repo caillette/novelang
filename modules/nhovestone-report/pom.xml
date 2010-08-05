@@ -51,11 +51,32 @@
     <plugins>
 
       <plugin>
+        <groupId>${parent.groupId}</groupId>
+        <artifactId>Novelang-nhovestone</artifactId>
+        <version>${parent.version}</version>
+        <executions>
+          <execution>
+            <id>nhovestone</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <workingDirectory>${build.directory}/nhovestone</workingDirectory>
+              <distributionsDirectory>../../distrib</distributionsDirectory>
+              <novelangVersions>SNAPSHOT,0.43.0,0.38.1</novelangVersions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
             <id>nhovestone</id>
-            <phase>integration-test</phase>
+            <phase>disabled</phase>
             <goals>
               <goal>run</goal>
             </goals>
@@ -64,7 +85,7 @@
                 <echo>Running Nhovestone here...</echo>
 
                 <property name="classpath" refid="maven.runtime.classpath" />
-                <echo>Using classpath ${classpath}</echo>
+                <!--<echo>Using classpath ${classpath}</echo>-->
                 
                 <java classname="${nhovestoneMainClass}" failonerror="true" >
                   <classpath>
@@ -89,7 +110,7 @@
         <executions>
           <execution>
             <id>nhovestone</id>
-            <phase>post-integration-test</phase>
+            <phase>disabled</phase>
             <goals>
               <goal>produce</goal>
             </goals>
