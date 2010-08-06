@@ -117,7 +117,7 @@
               <contentRootDirectory>${nhovestoneWorkingDirectory}</contentRootDirectory>
               <outputDirectory>${nhovestoneWorkingDirectory}/report</outputDirectory>
               <documentsToRender>
-                <param>nhovestone-report.xml</param>
+                <param>nhovestone.pdf</param>
               </documentsToRender>
             </configuration>
           </execution>
