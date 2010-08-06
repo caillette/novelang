@@ -1,0 +1,6 @@
+mapstylesheet
+  pdf=nhovestone-pdf.xsl
+
+insert file:nhovestone-report.novella
+
+insert file:report-parameters.novella style=parameters

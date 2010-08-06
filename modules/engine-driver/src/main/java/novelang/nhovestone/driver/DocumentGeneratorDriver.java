@@ -55,10 +55,12 @@ public class DocumentGeneratorDriver extends EngineDriver {
       final Configuration configuration
   )
   {
-    return configuration.withProgramOtherOptions(
-        "--" + novelang.configuration.parse.BatchParameters.OPTIONNAME_OUTPUTDIRECTORY,
-        "" + configuration.getOutputDirectory()
-    ) ;
+    return configuration
+        .withProgramOtherOptions(
+            "--" + novelang.configuration.parse.BatchParameters.OPTIONNAME_OUTPUTDIRECTORY,
+            "" + configuration.getOutputDirectory()
+        )
+    ;
   }
 
 
@@ -86,6 +88,7 @@ public class DocumentGeneratorDriver extends EngineDriver {
   public interface Configuration extends EngineDriver.Configuration< Configuration > {
     File getOutputDirectory() ;
     Configuration withOutputDirectory( File directory ) ;
+
   }
 
 }

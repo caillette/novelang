@@ -54,7 +54,8 @@ import org.apache.maven.project.MavenProject;
  * which wrecks XSL-based document rendering.
  *
  * @goal produce
- *
+ * @requiresDependencyResolution runtime
+ * 
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "UnusedDeclaration" } )
@@ -132,15 +133,18 @@ public class BatchProducerMojo extends AbstractMojo {
 
     final List< String > classpathElements;
     try {
-      classpathElements = project.getRuntimeClasspathElements();
+      classpathElements = project.getRuntimeClasspathElements() ;
     } catch( DependencyResolutionRequiredException e ) {
       throw new MojoExecutionException( "Something got wrong", e ) ;
     }
 /*
     for( final String classpathElement : classpathElements ) {
-      log.info( "Classpath element %s", classpathElement ) ;
+      log.info( "%s - Classpath element: %s", getClass().getSimpleName(), classpathElement ) ;
     }
 */
+
+    final String[] documentNames = documentsToRender.toArray(
+        new String[ documentsToRender.size() ] ) ;
 
     DocumentGeneratorDriver.Configuration configuration =
         Husk.create( DocumentGeneratorDriver.Configuration.class )
@@ -148,6 +152,7 @@ public class BatchProducerMojo extends AbstractMojo {
         .withContentRootDirectory( contentRootDirectory )
         .withOutputDirectory( outputDirectory )
         .withWorkingDirectory( workingDirectory )
+        .withProgramArguments( documentNames )
     ;
 
     if( logDirectory != null ) {

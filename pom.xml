@@ -89,6 +89,10 @@
     <lib.maven-dependency-plugin.artefactId>maven-dependency-plugin</lib.maven-dependency-plugin.artefactId>
     <lib.maven-dependency-plugin.version>2.1</lib.maven-dependency-plugin.version>
 
+    <lib.maven-resources-plugin.groupId>org.apache.maven.plugins</lib.maven-resources-plugin.groupId>
+    <lib.maven-resources-plugin.artefactId>maven-resources-plugin</lib.maven-resources-plugin.artefactId>
+    <lib.maven-resources-plugin.version>2.4.3</lib.maven-resources-plugin.version>
+
     <lib.versions-maven-plugin.groupId>org.codehaus.mojo</lib.versions-maven-plugin.groupId>
     <lib.versions-maven-plugin.artefactId>versions-maven-plugin</lib.versions-maven-plugin.artefactId>
     <lib.versions-maven-plugin.version>1.2</lib.versions-maven-plugin.version>

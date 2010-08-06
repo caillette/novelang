@@ -124,7 +124,7 @@ public class Nhovestone {
     ) ;
 
     writeNhovestoneParameters(
-        new File( scenariiDirectory, "report-parameters.nlp" ),
+        new File( scenariiDirectory, "report-parameters.novella" ),
         baseConfiguration
     ) ;
   }

@@ -121,6 +121,7 @@ public abstract class EngineDriver {
     }
 
     if( absoluteClasspath != null ) {
+//      LOG.info( "Using absolute classpath: '" + absoluteClasspath + "'" ) ;
       optionsBuilder.add( "-cp" ) ;
       optionsBuilder.add( absoluteClasspath ) ;
       optionsBuilder.add( "novelang.bootstrap.Main" ) ;
@@ -146,6 +147,15 @@ public abstract class EngineDriver {
 
     optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET ) ;
     optionsBuilder.add( DefaultCharset.SOURCE.name() ) ;
+
+    final Iterable< String > programArguments = configuration.getProgramArguments() ;
+    if( programArguments != null ) {
+      for( final String programArgument : programArguments ) {
+        optionsBuilder.add( checkNotNull( programArgument ) ) ;
+      }
+    }
+
+
 
     final List< String > processOptions = optionsBuilder.build() ;
 
@@ -224,6 +234,9 @@ public abstract class EngineDriver {
 
     Iterable< String > getProgramOtherOptions() ;
     CONFIGURATION withProgramOtherOptions( String... options ) ;
+
+    Iterable< String > getProgramArguments() ;
+    CONFIGURATION withProgramArguments( String... options ) ;
 
   }
 

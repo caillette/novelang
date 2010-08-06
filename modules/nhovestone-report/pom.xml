@@ -30,7 +30,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <nhovestoneWorkingDirectory>${build.outputDirectory}/nhovestone</nhovestoneWorkingDirectory>
+    <nhovestoneWorkingDirectory>${build.directory}/nhovestone</nhovestoneWorkingDirectory>
     <nhovestoneMainClass>novelang.nhovestone.Nhovestone</nhovestoneMainClass>
     <distributionsDirectory>../../distrib</distributionsDirectory>
     <benchmarkedVersions>${project.version},0.43.0</benchmarkedVersions>
@@ -48,7 +48,38 @@
 
 
   <build>
+
+
+
     <plugins>
+
+      <plugin>
+        <groupId>${lib.maven-resources-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-resources-plugin.artefactId}</artifactId>
+        <version>${lib.maven-resources-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${nhovestoneWorkingDirectory}</outputDirectory>
+              <resources>
+                <resource>
+                  <filtering>false</filtering>
+                  <directory>src/report</directory>
+                  <targetPath>${nhovestoneWorkingDirectory}</targetPath>
+                  <includes>
+                    <include>nhovestone-*</include>
+                    <include>*.xsl</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <plugin>
         <groupId>${parent.groupId}</groupId>
@@ -57,47 +88,14 @@
         <executions>
           <execution>
             <id>nhovestone</id>
-            <phase>post-integration-test</phase>
+            <phase>_integration-test</phase>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
-              <workingDirectory>${build.directory}/nhovestone</workingDirectory>
+              <workingDirectory>${nhovestoneWorkingDirectory}</workingDirectory>
               <distributionsDirectory>../../distrib</distributionsDirectory>
-              <novelangVersions>SNAPSHOT,0.43.0,0.38.1</novelangVersions>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>nhovestone</id>
-            <phase>disabled</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <echo>Running Nhovestone here...</echo>
-
-                <property name="classpath" refid="maven.runtime.classpath" />
-                <!--<echo>Using classpath ${classpath}</echo>-->
-                
-                <java classname="${nhovestoneMainClass}" failonerror="true" >
-                  <classpath>
-                    <pathelement path="${java.class.path}" />
-                    <pathelement path="${classpath}" />
-                  </classpath>
-                  <arg value="${nhovestoneWorkingDirectory}" />
-                  <arg value="${distributionsDirectory}" />
-                  <arg value="${benchmarkedVersions}" />
-                </java>
-
-              </tasks>
+              <novelangVersions>${benchmarkedVersions}</novelangVersions>
             </configuration>
           </execution>
         </executions>
@@ -110,7 +108,7 @@
         <executions>
           <execution>
             <id>nhovestone</id>
-            <phase>disabled</phase>
+            <phase>post-integration-test</phase>
             <goals>
               <goal>produce</goal>
             </goals>
@@ -119,7 +117,7 @@
               <contentRootDirectory>${nhovestoneWorkingDirectory}</contentRootDirectory>
               <outputDirectory>${nhovestoneWorkingDirectory}/report</outputDirectory>
               <documentsToRender>
-                <param>report.pdf</param>
+                <param>nhovestone-report.xml</param>
               </documentsToRender>
             </configuration>
           </execution>

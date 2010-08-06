@@ -23,7 +23,7 @@ options { output = AST ; }
 // Beware of line comments, which are processed.
 tokens {
   PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;        // tagbehavior=SCOPE
-  OPUS ;                                     // tagbehavior=TRAVERSABLE
+  OPUS ;                                          // tagbehavior=TRAVERSABLE
   LEVEL_INTRODUCER_ ;
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;

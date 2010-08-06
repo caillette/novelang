@@ -58,7 +58,7 @@ import novelang.treemangling.TagMangler;
  */
 public class Opus extends AbstractSourceReader {
 
-  private final CommandExecutionContext environment ;
+  private final novelang.opus.CommandExecutionContext environment ;
 
 
   public Opus(
