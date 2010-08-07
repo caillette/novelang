@@ -31,7 +31,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.mail:mail:1.4" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:1.6" level="project" />
-    <orderEntry type="module" module-name="parser-ground" />
+    <orderEntry type="library" name="Maven: org.novelang:Novelang-parser-ground:SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="primer" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.1.1" level="project" />
@@ -41,7 +41,7 @@
     <orderEntry type="module" module-name="parser-supplement" />
     <orderEntry type="module" module-name="syntactic-tree" />
     <orderEntry type="module" module-name="unicode-reader" />
-    <orderEntry type="module" module-name="syntactic-tree-fixture" scope="TEST" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.novelang:Novelang-syntactic-tree-fixture:SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.1" level="project" />
     <orderEntry type="module" module-name="vanilla-fixture" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
