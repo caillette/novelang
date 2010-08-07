@@ -131,6 +131,10 @@
     <module>modules/engine-driver</module>
     <module>modules/lexeme-table-plugin</module>
     <module>modules/nhovestone</module>
+
+    <!-- Don't include: we don't want to run a whole benchmark for each integration-test. -->
+    <!-- <module>modules/nhovestone-report</module> -->
+
     <module>modules/parser-antlr</module>
     <module>modules/parser-facade</module>
     <module>modules/parser-ground</module>
@@ -430,9 +434,9 @@
   -->
   <distributionManagement>
     <repository>
-      <id>website.novelang.sourceforge.net</id>
-      <name>Novelang website on SourceForge</name>
-      <url>file://.</url>
+      <id>nullrepository</id>
+      <name>Null repository (shortcutting Maven default deployment)</name>
+      <url>file://./target/null-repository</url>
     </repository>
   </distributionManagement>
 

@@ -30,10 +30,15 @@
   <packaging>pom</packaging>
 
   <properties>
-    <nhovestoneWorkingDirectory>${build.directory}/nhovestone</nhovestoneWorkingDirectory>
+    <nhovestoneWorkingDirectory>${build.directory}</nhovestoneWorkingDirectory>
+
+    <!-- Need a dedicated directory because Novelang batch generation cleans output directory. -->
+    <nhovestoneReportDirectory>${nhovestoneWorkingDirectory}/report</nhovestoneReportDirectory>
+
     <nhovestoneMainClass>novelang.nhovestone.Nhovestone</nhovestoneMainClass>
     <distributionsDirectory>../../distrib</distributionsDirectory>
-    <benchmarkedVersions>${project.version},0.43.0</benchmarkedVersions>
+    <nhovestoneReportFilename>nhovestone.pdf</nhovestoneReportFilename>
+    <benchmarkedVersions>${project.version},0.43.0,0.38.1</benchmarkedVersions>
   </properties>
 
   <dependencies>
@@ -59,7 +64,7 @@
         <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>
-            <phase>generate-resources</phase>
+            <phase>_generate-resources</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -71,8 +76,8 @@
                   <directory>src/report</directory>
                   <targetPath>${nhovestoneWorkingDirectory}</targetPath>
                   <includes>
-                    <include>nhovestone-*</include>
-                    <include>*.xsl</include>
+                    <include>nhovestone*</include>
+                    <include>**/*.xsl</include>
                   </includes>
                 </resource>
               </resources>
@@ -94,7 +99,7 @@
             </goals>
             <configuration>
               <workingDirectory>${nhovestoneWorkingDirectory}</workingDirectory>
-              <distributionsDirectory>../../distrib</distributionsDirectory>
+              <distributionsDirectory>${distributionsDirectory}</distributionsDirectory>
               <novelangVersions>${benchmarkedVersions}</novelangVersions>
             </configuration>
           </execution>
@@ -115,15 +120,45 @@
             <configuration>
               <workingDirectory>${nhovestoneWorkingDirectory}</workingDirectory>
               <contentRootDirectory>${nhovestoneWorkingDirectory}</contentRootDirectory>
-              <outputDirectory>${nhovestoneWorkingDirectory}/report</outputDirectory>
+              <outputDirectory>${nhovestoneReportDirectory}</outputDirectory>
               <documentsToRender>
-                <param>nhovestone.pdf</param>
+                <param>${nhovestoneReportFilename}</param>
               </documentsToRender>
             </configuration>
           </execution>
         </executions>
       </plugin>
 
+
+
+      <!--
+        Warning: this target directly copies files from target directory instead of
+        pre-unzipping the artefact in local repository.
+        See also: distribution deployment.
+      -->
+      <plugin>
+        <groupId>${lib.wagon-maven-plugin.groupId}</groupId>
+        <artifactId>${lib.wagon-maven-plugin.artifactId}</artifactId>
+        <version>${lib.wagon-maven-plugin.version}</version>
+
+        <executions>
+          <execution>
+            <id>upload-nhovestone-report</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>upload</goal>
+            </goals>
+            <configuration>
+              <fromDir>${nhovestoneReportDirectory}</fromDir>
+              <includes>${nhovestoneReportFilename}</includes>
+              <serverId>novelang.sourceforge.net</serverId>
+              <url>sftp://${publish.remote.host}</url>
+              <toDir>${publish.remote.doc.dir}</toDir>
+            </configuration>
+          </execution>
+        </executions>
+
+      </plugin>
     </plugins>
   </build>
 
