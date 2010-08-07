@@ -64,7 +64,7 @@
         <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>
-            <phase>_generate-resources</phase>
+            <phase>generate-resources</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -93,7 +93,7 @@
         <executions>
           <execution>
             <id>nhovestone</id>
-            <phase>_integration-test</phase>
+            <phase>integration-test</phase>
             <goals>
               <goal>generate</goal>
             </goals>
