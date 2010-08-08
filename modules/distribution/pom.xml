@@ -120,7 +120,9 @@
               <template>release-notes.novella</template>
               <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
               <toAddresses>
-                <toAddress>${announcement.user.email}</toAddress>
+                <!--<toAddress>${announcement.user.email}</toAddress>-->
+                <toAddress>novelang-users@googlegroups.com</toAddress>
+                <toAddress>novelang-developers@googlegroups.com</toAddress>
               </toAddresses>
               <mailContentType>text/plain</mailContentType>
             </configuration>
