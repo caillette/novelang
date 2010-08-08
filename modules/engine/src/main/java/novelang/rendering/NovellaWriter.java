@@ -31,22 +31,22 @@ import novelang.loader.ResourceName;
  * 
  * @author Laurent Caillette
  */
-public class NlpWriter extends XslWriter {
+public class NovellaWriter extends XslWriter {
 
-  protected static final ResourceName DEFAULT_NLP_STYLESHEET = new ResourceName( "nlp.xsl" ) ;
+  protected static final ResourceName DEFAULT_NOVELLA_STYLESHEET = new ResourceName( "novella.xsl" ) ;
   
   private final RenderingEscape.CharsetEncodingCapability charsetEncodingCapability ;
 
   
 
-  public NlpWriter(
+  public NovellaWriter(
       final RenderingConfiguration configuration,
       final ResourceName stylesheet,
       final Charset charset
   ) {
     super(
         configuration,
-        null == stylesheet ? DEFAULT_NLP_STYLESHEET : stylesheet,
+        null == stylesheet ? DEFAULT_NOVELLA_STYLESHEET : stylesheet,
         charset,
         RenditionMimeType.NOVELLA
     ) ;

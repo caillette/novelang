@@ -33,12 +33,12 @@ import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.LevelExploderParameters;
 import novelang.produce.DocumentProducer;
+import novelang.rendering.NovellaWriter;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.parser.NodeKind;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.GenericRenderer;
-import novelang.rendering.NlpWriter;
 import novelang.rendering.RenderingTools;
 
 /**
@@ -133,7 +133,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     ) ;
     LOG.debug( "Outputting to file '" + destinationFile.getAbsolutePath() + "'" ) ;
     final FileOutputStream fileOutputStream = new FileOutputStream( destinationFile ) ;
-    new GenericRenderer( new NlpWriter(
+    new GenericRenderer( new NovellaWriter(
         producerConfiguration.getRenderingConfiguration(),
         null,
         charset

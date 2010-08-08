@@ -103,7 +103,7 @@ public class UrlParsingTest {
   }
 
   @Test
-  public void urlFilePathFileDotNlp() throws RecognitionException {
+  public void urlFilePathFileDotNovella() throws RecognitionException {
     PARSERMETHOD_URL.checkTreeAfterSeparatorRemoval(
         "file:/path/file.ppp",
         tree( URL_LITERAL, "file:/path/file.ppp" )

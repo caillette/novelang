@@ -60,8 +60,8 @@ public class NovellaTest {
         NOVELLA,
         tree( 
             _LEVEL,
-            tree( _IMPLICIT_TAG, "Section1nlp" ),
-            tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
+            tree( _IMPLICIT_TAG, "Section1novella" ),
+            tree( LEVEL_TITLE, tree( WORD_, "Section1novella" ) ),
             tree( NodeKind.PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 
@@ -118,9 +118,9 @@ public class NovellaTest {
         ),        
         tree( 
             _LEVEL,
-            tree( _IMPLICIT_IDENTIFIER, "\\\\Section1nlp" ),
-            tree( _IMPLICIT_TAG, "Section1nlp" ),
-            tree( LEVEL_TITLE, tree( WORD_, "Section1nlp" ) ),
+            tree( _IMPLICIT_IDENTIFIER, "\\\\Section1novella" ),
+            tree( _IMPLICIT_TAG, "Section1novella" ),
+            tree( LEVEL_TITLE, tree( WORD_, "Section1novella" ) ),
             tree( PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 

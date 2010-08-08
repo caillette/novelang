@@ -72,19 +72,19 @@ import static org.junit.Assert.assertTrue;
 public class HttpDaemonTest {
 
   @Test
-  public void nlpOk() throws Exception {
+  public void novellaOk() throws Exception {
 
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    final String nlpSource = alternateSetup( resource, ISO_8859_1 ) ;
+    final String novellaSource = alternateSetup( resource, ISO_8859_1 ) ;
     final String generated = readAsString( new URL(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" +
         resource.getName()
     ) ) ;
     final String shaved = shaveComments( generated ) ;
     save( "generated.novella", generated ) ;
-    final String normalizedNlpSource = LanguageTools.unixifyLineBreaks( nlpSource ) ;
+    final String normalizedNovellaSource = LanguageTools.unixifyLineBreaks( novellaSource ) ;
     final String normalizedShaved = LanguageTools.unixifyLineBreaks( shaved ) ;
-    assertEquals( normalizedNlpSource, normalizedShaved ) ;
+    assertEquals( normalizedNovellaSource, normalizedShaved ) ;
 
   }
 
@@ -324,8 +324,8 @@ public class HttpDaemonTest {
   private String setup( final Resource resource ) throws Exception {
     resourceInstaller.copy( resource ) ;
     daemonSetup( DefaultCharset.RENDERING ) ;
-    final String nlpSource = resource.getAsString( DefaultCharset.SOURCE ) ;
-    return nlpSource ;
+    final String novellaSource = resource.getAsString( DefaultCharset.SOURCE ) ;
+    return novellaSource ;
   }
 
   private void setup(
@@ -341,8 +341,8 @@ public class HttpDaemonTest {
   ) throws Exception {
     resourceInstaller.copy( resource ) ;
     daemonSetup( renderingCharset ) ;
-    final String nlpSource = resource.getAsString( DefaultCharset.SOURCE ) ;
-    return nlpSource ;
+    final String novellaSource = resource.getAsString( DefaultCharset.SOURCE ) ;
+    return novellaSource ;
   }
 
 

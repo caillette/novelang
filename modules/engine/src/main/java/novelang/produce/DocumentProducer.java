@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutorService;
 
 import novelang.opus.Opus;
 import novelang.novella.Novella;
+import novelang.rendering.NovellaWriter;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import novelang.common.FileTools;
@@ -37,7 +38,6 @@ import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.HtmlWriter;
-import novelang.rendering.NlpWriter;
 import novelang.rendering.PdfWriter;
 import novelang.rendering.PlainTextWriter;
 import novelang.rendering.RenditionMimeType;
@@ -123,7 +123,7 @@ public class DocumentProducer {
 
       case NOVELLA:
         serve.with( new GenericRenderer(
-            new NlpWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
+            new NovellaWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
         break ;
 
       case FO :
