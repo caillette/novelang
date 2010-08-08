@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 public enum RenditionMimeType {
   
   TXT( "text/plain" ),
-  NLP( "text/plain" ),
+  NOVELLA( "text/plain" ),
   XML( "text/xml" ),
   FO( "text/xml" ),
   PDF( "application/pdf" ),

@@ -121,7 +121,7 @@ public class DocumentProducer {
             new HtmlWriter( renderingConfiguration, stylesheet, charset ), true ) ) ;
         break ;
 
-      case NLP :
+      case NOVELLA:
         serve.with( new GenericRenderer(
             new NlpWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
         break ;

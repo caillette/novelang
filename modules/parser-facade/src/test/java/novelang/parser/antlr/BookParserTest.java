@@ -39,7 +39,7 @@ public class BookParserTest {
         " mapstylesheet a=b c=d " + BREAK +
         "   e=f  " + BREAK +
         BREAK +
-        " insert file:uvw.nlp " + BREAK         
+        " insert file:uvw.novella " + BREAK
         ,
         tree(
             OPUS,

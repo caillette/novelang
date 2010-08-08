@@ -61,10 +61,10 @@ public class LevelExploderParameters extends BatchParameters {
         throw new IllegalArgumentException(
             "Malformed document request: '" + sourceArgument + "'" ) ;
       }
-      if( documentRequest.getRenditionMimeType() != RenditionMimeType.NLP ) {
+      if( documentRequest.getRenditionMimeType() != RenditionMimeType.NOVELLA ) {
         throw new IllegalArgumentException(
             "Wrong mime type: '" + documentRequest.getRenditionMimeType() + "', " +
-            "expecting " + RenditionMimeType.NLP.getFileExtension()
+            "expecting " + RenditionMimeType.NOVELLA.getFileExtension()
         ) ;
       }
     } catch( IllegalArgumentException e ) {

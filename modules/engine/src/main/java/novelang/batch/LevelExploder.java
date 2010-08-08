@@ -129,7 +129,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     ) ;
     final File destinationFile = new File(
         outputDirectory,
-        title + "." + RenditionMimeType.NLP.getFileExtension()
+        title + "." + RenditionMimeType.NOVELLA.getFileExtension()
     ) ;
     LOG.debug( "Outputting to file '" + destinationFile.getAbsolutePath() + "'" ) ;
     final FileOutputStream fileOutputStream = new FileOutputStream( destinationFile ) ;

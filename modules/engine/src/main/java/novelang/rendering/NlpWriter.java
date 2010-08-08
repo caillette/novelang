@@ -48,7 +48,7 @@ public class NlpWriter extends XslWriter {
         configuration,
         null == stylesheet ? DEFAULT_NLP_STYLESHEET : stylesheet,
         charset,
-        RenditionMimeType.NLP 
+        RenditionMimeType.NOVELLA
     ) ;
     this.charsetEncodingCapability = RenderingEscape.createCapability( charset ) ;
   }
