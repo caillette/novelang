@@ -1,0 +1,27 @@
+== Batch charset transcoding
+
+Here is a Bash script transcoding all ``.novella`` files from `ISO-8859-1` to `UTF-8`,
+including those in subdirectories.
+
+<<<
+#!/bin/bash
+
+for i in `find . -name "*.novella" `
+do
+  echo $i
+  if test ! -d $i ; then
+    iconv -f iso-8859-1 -t utf8 $i >> $i-utf
+    rm $i
+    mv $i-utf $i
+  fi
+done
+>>>
+
+Of course it doesn't perform ultra-clever, Novelang-friendly transcoding like changing
+``«laquo»latin-capital-letter-o-with-double-acute«raquo»`` to
+``«latin-capital-letter-o-with-double-acute»`` inside the sources,
+but I can't beat its performance `/ price` ratio.
+
+
+Found on:
+http://niko.gramophon.com/index.php?op=ViewArticle&articleId=6380

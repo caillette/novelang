@@ -1,0 +1,71 @@
+== Idiom: custom blocks
+
+Novelang has no semantic markup, insteads it creates an AST (Abstract Syntax Tree) to feed a 
+stylesheet with. This allows creating document-specific idioms, to be handled at stylesheet level.
+Here is one.
+
+Starting from source document like this:
+
+<<<
+<<
+[INFO] This is an info block.
+>>
+
+<<
+[WARNING] Beware of "this" paragraph.
+
+(This warning spreads on several paragraphs.)
+>>
+>>>
+
+We want lines of literal to appear in a special manner (like within a frame and with a special
+icon in the margin). Here is how to achieve this:
+
+
+<<<
+<?xml version="1.0"?>
+<xsl:stylesheet
+   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+   xmlns:n="http://novelang.org/book-xml/1.0"
+>
+ <xsl:import href="default-html.xsl" />
+ <xsl:import href="punctuation-FR.xsl" />
+
+ <xsl:template match="/" >
+   <xsl:apply-imports/>
+ </xsl:template>
+
+ <xsl:template match="n:paragraphs-inside-angled-bracket-pairs" >
+   <xsl:choose>
+     <xsl:when 
+         test="n:paragraph-regular[1]/n:block-inside-square-brackets[1]='WARNING'" 
+     >
+       <blockquote>
+         <b>WARNING</b><br/>
+         <xsl:apply-templates />
+       </blockquote>
+     </xsl:when>
+     <xsl:when 
+         test="n:paragraph-regular[1]/n:block-inside-square-brackets[1]='INFO'" 
+     >
+       <blockquote>
+         <b>INFO</b><br/>
+         <xsl:apply-templates />
+       </blockquote>
+     </xsl:when>
+     <xsl:otherwise>
+       <blockquote>
+         <xsl:apply-templates />
+       </blockquote>
+     </xsl:otherwise>
+   </xsl:choose>
+
+ </xsl:template>
+
+ <xsl:template 
+     match="n:block-inside-square-brackets[ text()='WARNING' or text()='INFO' ]" 
+ />
+
+</xsl:stylesheet>
+
+>>>

@@ -1,0 +1,71 @@
+== Internationalization
+
+Novelang aims to support a wide range of languages, at least those with Roman characters.
+There are three aspects to consider:
+- The character set of the source ~document(s) .
+- The character set of the rendered document.
+- The characters recognized by Novelang grammar.
+
+Taking advantage of the underlying Java platform, Novelang supports numerous charsets.
+See the "list"
+http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html
+.
+
+=== Source document charset
+
+Source document charset is set at Novelang startup, using ``--source-charset`` option
+(documented as an HTTP daemon feature).
+
+
+Reading a source document in a charset which is not the one expected may result into incorrect
+character display, and even make the source document unreadable.
+
+Charset mismatch can happen when working across different platforms with different
+default charsets.
+For Western European versions of Mac OS X, ``MacRoman`` is operating system's default charset,
+while for Western European versions of Microsoft Windows it is ``Cp1250``.  
+
+In order to prevent various headaches, you must be aware of the charset of your source documents,
+and use a text editor which is explicit about the charset in use.
+
+Recommended source document charset is ``UTF-8``, which supports a wide range of characters.
+
+
+=== Rendered document charset
+
+Rendered document charset is set at Novelang startup, using ``--rendering-charset`` option 
+(documented as an HTTP daemon feature).
+
+The character set of the rendered document makes only sense for text-based formats
+like HTML. For HTML, Novelang will do its best to provide named HTML entities
+(making HTML source more readable).
+But, unless you need some special transcoding operation, ``UTF-8`` will always be great.
+
+PDF don't care about rendered document charset as it uses Unicode internally.
+But rendered document may look wrong with a font that don't support
+its characters. Luckily, Novelang supports a preview of available fonts
+(with ``/~fonts.pdf`` pseudo-document).
+
+
+=== Characters in the Novelang grammar
+
+The characters recognized by Novelang are hardcoded in its guts.
+While Novelang reads and writes a lot of charsets, only some of the characters in this
+charset are supported.
+In order to keep the Novelang grammar meaningful, it's not possible to admit any character,
+especially symbols and punctuation signs.
+Letters, like Roman ones with diacritics, will be added on a case-by-case basis.
+
+By now, all letters of those languages are supported: 
+English, French, Hungarian.
+
+
+=== Additional resources
+
+--- A "brief introduction"
+http://www.joelonsoftware.com/articles/Unicode.html
+by Joel Spolsky.
+
+--- A "longer article"
+http://www.cs.tut.fi/~jkorpela/chars.html
+.

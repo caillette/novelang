@@ -1,0 +1,56 @@
+== First Novelang demo in the enterprise world!
+
+Last week I gave an introduction to Novelang at a software publisher's who's looking at a
+collaborative tool for writing it's product's documentation.
+The attenders were the internal IT manager, two technical writers and and an IT intern.
+Technical writers were enthusiastic, since Novelang is a huge leap from FrameMaker and Robohelp
+-- that's what they're working with for now-_. They had a look at "Scenari"
+http://scenari-platform.org/projects/scenari/en/pres/co/desc.html
+and "Nuxeo"
+http://www.nuxeo.com
+.
+While both are open-source product, the setup fees seemed hugely overpriced.
+
+(In my own humble opinion, Scenari is overengineered crap with excessively complex
+graphical editor. But it has nice slides to explain the "What You See Is What You Mean"
+concept. I spent no time looking at Nuxeo for now.)
+
+The technical writers really liked that Novelang never asks for more information
+that the very minimum required (I guess FrameMaker doesn't do that).
+I had a chance to show off with how whitespaces, non-breakable spaces, zero-width spaces,
+indentation, line breaks, separators, and automatic handling of punctuation typography through
+a customizable stylesheet.
+After spending countless hours on those obscure cases that's //great// to discover that I'm not
+the only guy to who this matters (oh, by the way both tech writers are girls).
+
+Now they're evaluating the product but I already got some feedeback.
+
+With somebody looking over my should, I realized how Novelang installation looks ugly.
+I unzipped the Novelang archive, did set a pair of system properties, and
+wrote a `.bat` file at the root of their working directory, all with my bare hands.
+
+The "local webserver" concept is confusing. For most of people, a webserver is a remote host.
+This leads to some confusion on collaborative features. They were tempted to store the source
+document on a shared network drive. On the other hand, they're not used to source control tools
+like CVS (the one in use in their company).
+
+The lack of graphical editor looks strange to people who are not accustomed to technical writing.
+
+There is no "guided tour" document nor "cheat sheet" to give an overview of every feature and
+how to use it best.
+
+I had a deep look at the documents they're producing for now.
+The content seems to fit in Novelang syntax. They have some very big tables with one column full
+of content like lists. For this, a level-based structure seems more appropriate than Novelang's
+cell rows.
+
+Having image resolution for PDF hardcoded to `300 dpi` won't work here.
+At least they need a command-line option until "stylesheet metadata"
+http://novelang.blogspot.com/2008/09/opening-access-to-fop-configuration.html
+gets implemented.
+
+A big requirement is the already-discussed "index"
+http://novelang.blogspot.com/2009/06/book-index.html
+feature.
+
+To be continued!

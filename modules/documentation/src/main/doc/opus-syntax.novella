@@ -1,0 +1,108 @@
+
+== Opus files
+
+Opus files aggregate novella files. Opus files have the ``.opus`` suffix  (like NoveLang Opus).
+
+
+  @Identifiers @Command
+=== Command : ``insert``
+
+Opus files are useful when there is too much text to fit inside one Novella file.
+It is also easier to reorganize small Novellas by changing their order in a Opus file than
+copy-pasting inside one big file.
+
+When Novella files become too numerous, Opus files can refer to multiple Novella files at once.
+Referring to project layout, here is a well-formed Opus file:
+
+<<<
+insert file:path/to/myfirstnovella.novella
+
+insert file:path/to/mysecondnovella.novella
+>>>
+
+When the Novellas are located in the same directory as the Opus file, the single dot notation
+(for current directory) is supported:
+
+<<<
+insert file:. 
+>>>
+
+
+The ``recurse`` option scans novellas in subdirectories.
+
+<<<
+insert file:. recurse
+>>>
+
+The ``createlevel`` option adds the content of the file under one new level.
+The level title is the filename, path and ``.novella`` extension being trimmed.
+
+The ``nohead`` option takes effect when using identifiers (explained later).
+When the identifier references a level, this options causes the level title to disappear.
+The ``nohead`` option is mutually exclusive with the ``createlevel`` option.
+
+The ``sort`` option provides a sorting method when inserting several files.
+
+<<<
+insert file:. sort=path+
+>>>
+
+The ``sort`` option determines the ordering of Novellas when there are many. Currently supported
+values are:
+- ``path+`` for ascending sort on path name.
+- ``path-`` for descending sort on file name.
+- ``version+`` for ascending sort on version number.
+- ``version-`` for descending sort on version number.
+
+Version number if for files names of ``major.minor.fix.novella`` format, where ``major``, ``minor``
+and ``fix`` are positive numbers (this is Novelang's format for version numbers by the way).
+
+
+
+
+The ``levelabove`` option adds the content of the ~file(s) under the last previously created
+level.
+
+<<<
+insert file:some-novella.novella levelabove=2
+>>>
+
+The ``style=...`` assignment adds a ``STYLE`` node to each of the trees corresponding to added novella.
+
+<<<
+insert file:. 
+  style=mystyle
+>>>
+
+Expert users will find this is useful for customizing the output right from an XSLT stylesheet:
+
+<<<
+<!-- Process styled chapter: -->
+<xsl:apply-templates select="//n:chapter[n:style='mystyle']" />
+
+<!-- Don't process styled chapter: -->
+<xsl:apply-templates select="//n:chapter[not(n:style!='')]" /> 
+>>>
+
+
+A sequence of composite identifiers (as defined in "Novella syntax" chapter) limits the insertion
+of reference Novella to some fragments.
+
+<<<
+insert file:my-novella \\Some\Identifier \\Some\Other\One
+>>>
+
+
+
+
+=== Command : ``mapstylesheet``
+
+The "mapstylesheet" command defines a stylesheet for one or more MIME type.
+Referring to project layout above, here is the command to insert in ``opus.opus`` file in order
+to render HTML documents with ``html-beautiful.xsl`` and PDF documents with ``pdf-beautiful.xsl``.
+
+<<<
+mapstylesheets 
+    html=html-beautiful.xsl
+    pdf=pdf-beautiful.xsl
+>>>

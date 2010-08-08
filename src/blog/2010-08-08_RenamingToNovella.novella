@@ -1,0 +1,18 @@
+== Script for renaming to new extensions
+
+Here is a Bash script (tested on Mac OS X) that renames every
+``.nlp`` into ``.novella`` and ``.nlb`` into ``.opus``.
+It also changes file content. Use with care.
+
+<<<
+#!/bin/sh
+
+SED='s/\.nlp/\.novella/g;s/\.nlb/\.opus/g'
+for file in `find src modules \( -name *.nlp -o -name *.nlb \) `
+do
+  newfile=` echo "$file" | sed $SED `
+  echo "$file -> $newfile"
+  sed $SED < $file > $newfile
+  rm $file
+done
+>>>

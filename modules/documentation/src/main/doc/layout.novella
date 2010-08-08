@@ -1,0 +1,33 @@
+== Projects
+
+Basically, a Novelang project is a directory containing files to be processed by Novelang. It is the directory from where Novelang was launched.
+
+Projects are useful when you deal with big documents. Big documents are made of several Novella files aggregated through a Opus file. A Novelang project may also contain custom stylesheets, for user-defined rendering of PDF or HTML documents.
+
+Typical layout of a Novelang project looks like this: 
+
+<<<
+/
+  opus.opus                   <- Opus file
+  style/                      <- Directory containing styles
+    pdf.xsl                   <- A stylesheet file
+    html.xsl
+  fonts/                      <- Fonts directory
+    Garamond.ttf
+    Garamond.bold.ttf  
+    Garamond-bold-italic.ttf  <- a font file
+    Garamond-italic.ttf
+  developer-manual/
+    chapter-1.novella         <- A Novella file
+    chapter-2.novella
+    chapter-3.novella
+  hyphenation/                <- Hyphenation directory
+    en_US.xml                 <- Hyphenation definition
+    hyphenation.dtd           <- Mandatory file
+  user-manual/
+    chapter-1.novella     
+    chapter-2.novella
+>>>
+
+
+

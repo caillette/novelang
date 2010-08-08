@@ -1,0 +1,102 @@
+== Of inconsistent depth for levels and embedded lists
+
+
+Now I'm working on the tree rehierarchization, which means taking flat items and giving them a 
+tree-like structure. This applies for embedded lists and levels.
+ 
+For a Novelang source document like this:
+
+<<<
+Blah.
+
+== Depth 1
+
+Boo.
+
+=== Depth 2
+
+Yuck.
+>>>
+
+
+The parser converts this into an almost flat structure where text preceded by a sequence of 
+equal signs become //level introducers//. So we get this intermediary structure:
+
+<<<
+n:part
+ +-- n:paragraph-regular "Blah."
+ +-- level-introducer "==", "Depth 1"
+ +-- n:paragraph-regular "Boo."
+ +-- level-introducer "===", "Depth 2"
+ +-- n:paragraph-regular "Yuck."
+>>>
+
+A rather hidden step is the //hierarhizer// which converts level introducers (which also convey 
+indentation information) into plain levels. Hierarchizer's result looks like this: 
+
+<<<
+n:part
+ +-- n:paragraph-regular "Blah."
+ +-- n:level
+      +-- n:level-title "Depth 1"
+      +-- n:paragraph-regular "Boo."
+      +-- n:level
+           +-- n:level-title "Depth 2"
+           +-- n:paragraph-regular "Yuck."
+>>>
+
+This all works the same with (yet unimplemented) embedded lists so we won't have the discussion 
+twice. Just keep in mind how embedded lists look like:
+
+<<<
+- depth 1
+  - depth 2
+>>>
+
+Now what should happen if source document looks like this? See:
+ 
+<<<
+=== Depth 2
+
+== Depth 1
+
+>>>
+
+More generally, what should happen when a level introducer has no preceding level
+introducer of a smaller depth? 
+
+A tempting approach is promoting first item to the smallest depth. 
+This looks smart but this would distort information. Example above becomes:
+
+<<<
+n:part
+ +-- n:level
+      +-- n:level-title "Depth 2"
+ +-- n:level
+      +-- n:level-title "Depth 1"
+>>>
+
+
+The hierarchizer could also create a level from nothing in order to keep the correct depth.
+This is information distortion as well: 
+
+<<<
+n:part
+ +-- n:level         // Created from nothing
+      +-- n:level
+           +-- n:level-title "Depth 2"
+ +-- n:level
+      +-- n:level-title "Depth 1"
+>>>
+
+Here is the real question: how could inconsistent level depth mean something? 
+
+There could be some extreme cases when concatenating different Parts, 
+but this should not pollute more general cases.  
+
+Maybe the intent is to have a rendered document with small titles in some kind of introduction 
+happening before a the big title of some kind of chapter. 
+Then it should be handled at stylesheet level. 
+
+Yet the cleanest and simplest approach for handling depth inconsistencies for levels and
+embedded lists is to spit an error. 

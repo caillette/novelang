@@ -47,7 +47,7 @@ public class CommandFactoryTest {
     final Command command = CommandFactory.createFunctionCall(
         tree(
             COMMAND_INSERT_,
-            tree( URL_LITERAL, "file:x/y/z.nlp" ),
+            tree( URL_LITERAL, "file:x/y/z.novella" ),
             tree( COMMAND_INSERT_RECURSE_ ),
             tree( COMMAND_INSERT_SORT_, "path+" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
@@ -58,7 +58,7 @@ public class CommandFactoryTest {
         )    
     ) ;
     assertTrue( "Got: " + command, command instanceof InsertCommand ) ;
-    assertEquals( "x/y/z.nlp", extractFileName( command ) ) ;
+    assertEquals( "x/y/z.novella", extractFileName( command ) ) ;
     assertTrue( extractRecurse( command ) ) ;
     assertTrue( extractFileOrdering( command ) instanceof FileOrdering.ByAbsolutePath ) ;
     assertSame( LevelHead.CREATE_LEVEL, extractLevelHead( command ) ) ;

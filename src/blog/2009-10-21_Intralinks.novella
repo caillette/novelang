@@ -1,0 +1,111 @@
+
+== Internal References
+
+An //Internal Reference// is a reference from one place in a document, to another one. It differs from URL because URLs are opaque to Novelang. Novelang has no idea about what's in a URL, but Novelang checks the consistency of an Internal Reference.
+
+There has been some "posts"
+http://novelang.blogspot.com/search?q=identifier
+about Internal References on this blog but things have changed since and it's time to think back about the whole. Novelang implements Identifiers since version `0.36.0`. //Explicit Identifiers// are declared "by hand". Explicit Identifiers can be absolute and relative ones (prefixed by ``\\`` and ``\`` respectively).
+
+By now (`0.36.0`) their declaration is restricted to levels and look more or less like this:
+
+<<<
+  \\top
+== Section 1
+
+  \subsection
+=== Section 1-1
+
+...
+>>>
+
+The ``insert`` command pulls only the corresponding subset of a given Part:
+
+<<<
+insert file:some-part.novella \\top\subsection
+>>>
+
+//Implicit Identifiers// are under development. Implicit Identifiers rely on the leve title itself, and an optional overhanging Absolute Identifier. Only unique Implicit Identifiers are recognized. Considering this source document (same as above with a second subsection):
+
+<<<
+  \\top
+== Section 1
+
+  \subsection
+=== Section 1-1
+
+=== Section 1-2
+>>>
+
+The last declaration creates two Implicit Identifiers ``\\Section_1-2`` and ``\\top\Section_1-2``. Since the first form may not be unique in the whole Part, the second form appears if there is some Absolute Identifier in an overhanging level. An Implicit Identifier always resolves as absolute.
+
+While Identifiers are good for including only a subset of a given Part, they provide a foundation for even more impressive features :
+- Reuse of a document fragment (like an image).
+- Define hyperlinks in the generated document, along with a description (like "section four, `p. 138`").
+
+Internal links define a graph throughout the document tree. But, as their definition come from a Part, and because Parts can be partially added (through an Identifier, by the way), is there a chance to make this a total mess?
+
+A Book cannot render if there are dangling Internal Links. But, as Parts may link to foreign Identifiers, how could Novelang distinguish a completely broken Part from a one which would render correctly from inside a book? The answer is: it can't. The renderer just adds some icon or whatever to tell the link is broken, possibly because that's how it is supposed to be.
+
+Implicit Identifiers that are correct in the scope of a Part may collide with another Part when in the scope of a Book. This means that calculating Identifier collisions from Identifiers found by Parts would prevent non-colliding Identifier from working in the case the conflict-causing Part fragments were not added. The easy way to solve this is to let the Book recalculate every Identifier and check for collisions. Collisions may prevent the document from rendering (if they were caused by explicit Identifiers) or just discard some implicit Identifiers.
+
+It appears that every Internal Link must be declared as absolute. This buries the idea of relative links (like within a Level). Relative Links made all those thinkings much less clear at a time.
+
+An interesting issue comes with cross-booklet Links, for Books spreading over several HTML documents. While this is a rendering problem, it strongly depends on the structure of the Book itself. Ideally, links inside the same HTML page is done only with HTML anchor (``href="#..."``). The only way to detect if a link refers to a target inside the same HTML document is to know how the whole Book gets split. This will probably happen with stylesheet metadata.
+
+How to deal with images? There is the plan to define them apart, with kind of decorations like title, alternate title, expected size under some rendering method, and so on. Could look like this:
+
+<<<
+\\dog
+== image
+
+./MyDog.png
+
+This is my dog
+
+| BigBook   | 10cm  | 15cm  | 300dpi |
+| SmallBook | 300px | 450px |        |
+>>>
+
+This definition occurs in a ``dog.nd`` file. The ``.nd`` suffix stands for "Novelang Definitions". Its syntax is a subset of standard Part syntax.
+
+A Book references such definitions as any other Parts. The ``.nd`` syntax tells which syntax to apply.
+
+<<<
+insert file:dog.nd
+>>>
+
+Now any other Part may reference the ``\\dog`` definition. There are two kind of references for such an image: embedding and linking. The syntax is almost the same for both:
+
+<<<
+\\dog\*  // Embedding.
+\\dog\-  // Linking.
+>>>
+
+For embedding, the resulting AST (Abtract Syntax Tree) is the same as when referencing the image resource (``./MyDog.png``) directly, with a few additions:
+
+<<<
++ n:raster-image
+  + n:absolute-identifier \\dog
+  + n:resource-location ../MyDog.png
+  + n:resource-description "This is my dog"
+  + n:image-rendering-hints
+    + n:hint-name "BigBook"
+    + n:hint      "10cm"
+    + n:hint      "15cm"
+    + n:hint      "300dpi"
+  + n:image-rendering-hints
+    + n:hint-name "SmallBook"
+    + n:hint      "10cm"
+    + n:hint      "15cm"
+>>>
+
+For linking, we don't need so much:
+
+
+<<<
++ n:internal-link
+  + n:raster-image
+    + n:absolute-identifier \\dog
+    + n:resource-description "This is my dog"
+>>>

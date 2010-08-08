@@ -20,9 +20,9 @@ public class FileOrderingTest {
   @Test
   public void filenameOrdering() throws FileOrdering.CriteriaException {
     
-    final File fileX = new File( "a/a/x.nlp" ) ;
-    final File fileY = new File( "a/a/y.nlp" ) ;
-    final File fileZ = new File( "a/b/z.nlp" ) ;
+    final File fileX = new File( "a/a/x.novella" ) ;
+    final File fileY = new File( "a/a/y.novella" ) ;
+    final File fileZ = new File( "a/b/z.novella" ) ;
     
     final Iterable< File > unsortedFiles = ImmutableList.of( fileY, fileZ, fileX ) ;
     final Iterable< File > sortedFiles = new FileOrdering.ByAbsolutePath().sort( unsortedFiles ) ;
@@ -37,9 +37,9 @@ public class FileOrderingTest {
   @Test
   public void filenameOrderingWithDoubleInvert() throws FileOrdering.CriteriaException {
     
-    final File fileX = new File( "a/a/x.nlp" ) ;
-    final File fileY = new File( "a/a/y.nlp" ) ;
-    final File fileZ = new File( "a/b/z.nlp" ) ;
+    final File fileX = new File( "a/a/x.novella" ) ;
+    final File fileY = new File( "a/a/y.novella" ) ;
+    final File fileZ = new File( "a/b/z.novella" ) ;
     
     final Iterable< File > unsortedFiles = ImmutableList.of( fileY, fileZ, fileX ) ;
     final Iterable< File > sortedFiles = 
@@ -55,9 +55,9 @@ public class FileOrderingTest {
   @Test
   public void invertedFilenameOrdering() throws FileOrdering.CriteriaException {
     
-    final File fileX = new File( "a/a/x.nlp" ) ;
-    final File fileY = new File( "a/a/y.nlp" ) ;
-    final File fileZ = new File( "a/b/z.nlp" ) ;
+    final File fileX = new File( "a/a/x.novella" ) ;
+    final File fileY = new File( "a/a/y.novella" ) ;
+    final File fileZ = new File( "a/b/z.novella" ) ;
     
     final Iterable< File > unsortedFiles = ImmutableList.of( fileY, fileZ, fileX ) ;
     final Iterable< File > sortedFiles = 
@@ -72,10 +72,10 @@ public class FileOrderingTest {
   
   @Test
   public void versionOrdering() throws FileOrdering.CriteriaException {
-    final File file_snapshot = new File( "a/SNAPSHOT.nlp" ) ;
-    final File file_1_1_2 =    new File( "b/1.1.2.nlp" ) ;
-    final File file_1_0_0 =    new File( "b/1.0.0.nlp" ) ;
-    final File file_0_1_2 =    new File( "a/0.2.1.nlp" ) ;
+    final File file_snapshot = new File( "a/SNAPSHOT.novella" ) ;
+    final File file_1_1_2 =    new File( "b/1.1.2.novella" ) ;
+    final File file_1_0_0 =    new File( "b/1.0.0.novella" ) ;
+    final File file_0_1_2 =    new File( "a/0.2.1.novella" ) ;
     
     final Iterable< File > unsortedFiles = ImmutableList.of( 
         file_1_0_0, file_0_1_2, file_snapshot, file_1_1_2 ) ;
@@ -92,10 +92,10 @@ public class FileOrderingTest {
   
   @Test
   public void invertedVersionOrdering() throws FileOrdering.CriteriaException {
-    final File file_snapshot = new File( "a/SNAPSHOT.nlp" ) ;
-    final File file_1_1_2 =    new File( "b/1.1.2.nlp" ) ;
-    final File file_1_0_0 =    new File( "b/1.0.0.nlp" ) ;
-    final File file_0_1_2 =    new File( "a/0.2.1.nlp" ) ;
+    final File file_snapshot = new File( "a/SNAPSHOT.novella" ) ;
+    final File file_1_1_2 =    new File( "b/1.1.2.novella" ) ;
+    final File file_1_0_0 =    new File( "b/1.0.0.novella" ) ;
+    final File file_0_1_2 =    new File( "a/0.2.1.novella" ) ;
     
     final Iterable< File > unsortedFiles = ImmutableList.of( 
         file_1_0_0, file_0_1_2, file_snapshot, file_1_1_2 ) ;
@@ -113,8 +113,8 @@ public class FileOrderingTest {
   
   @Test
   public void badVersionFormat() {
-    final File bad1 = new File( "bad1.nlp" ) ;
-    final File bad2 = new File( "bad2.nlp" ) ;
+    final File bad1 = new File( "bad1.novella" ) ;
+    final File bad2 = new File( "bad2.novella" ) ;
     
     final Iterable< File > unsortedFiles = ImmutableList.of( bad1, bad2 ) ;
     try {

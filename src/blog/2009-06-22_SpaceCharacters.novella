@@ -1,0 +1,75 @@
+== Removing unwanted spaces (continued)
+
+This is about some kind of brand new operator: it groups all words an blocks and punctuation signs
+which are not separated by space.
+
+A great feature of Novelang is to apply standard typographic rules, especially when there is
+punctuation. The problem is, sometimes you can't apply those rules in a blunt manner.
+
+Consider these cases: on the left, what's in the source document, and on the right default
+rendering.
+
+| Source document     | Default rendering            | Hack                                        |
+| ``imprimé(e)s``     | imprimé(e)s                  | ``«grave-accent»imprimé(e)s«grave-accent»`` |
+| ``F.B.I.``          | F.B.I.  (superfluous spaces) | ``«grave-accent»F.B.I«grave-accent»``       |
+| ``computer//ing//`` | computer//ing//              | No hack available                           |
+
+Default space insertion makes it all wrong. I tried to "fix" 
+http://novelang.blogspot.com/2009/05/space-character-and-related-stuff.html
+it by detecting proximity (lack of spaces) between casual words and blocks inside grave accents.
+But, if adding other cases like full stops, blocks inside solidus pairs and blocks inside
+parenthesis, we end up with many complex tranformations which just break existing whitespace
+addition for the common case.
+
+The solution is something more generic. I'm thinking about a special character which groups
+everything that follows until there is a space, a line break or the end of the document.
+This character would be the tilde ``~`` because it looks like a kind of elastic ligature.
+
+So, with source document like this:
+
+<<<
+~computer//ing//
+>>>
+
+We get an AST (Abstract Syntax Tree) like this:
+
+<<<
++ block-after-tilde
+  + word "computer"
+  + block-inside-pair-of-solidus "ing"
+>>>
+
+But we still miss the feature of adding zero-width spaces when needed. How to express this?
+Since zero-width spaces only make sense inside a group with no space, we can reuse the tile
+character safely.
+
+This:
+
+<<<
+~A.L.L.~O.F~'E.M.
+>>>
+
+...becomes:
+
+<<<
++ block-after-tilde
+  + subblock
+    + word "A"
+    + punctuation-sign full-stop
+    + word "L"
+    + punctuation-sign full-stop
+    + word "L"
+    + punctuation-sign full-stop
+  + subblock
+    + word "O"
+    + punctuation-sign full-stop
+    + word "F"
+    + punctuation-sign full-stop
+  + subblock
+    + apostrophe-wordmate
+    + word "E"
+    + punctuation-sign full-stop
+    + word "M"
+>>>
+
+And this is enough for the stylesheet to find where to insert zero-width spaces.

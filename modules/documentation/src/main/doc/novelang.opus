@@ -1,0 +1,37 @@
+mapstylesheet
+    html=doc-html.xsl
+    pdf=doc-pdf.xsl
+
+insert file:doc-parameters.novella style=parameters
+
+
+insert file:introduction.novella
+
+insert file:status.novella
+
+insert file:versions/. sort=version- createlevel levelabove=1
+
+insert file:rationale.novella
+
+insert file:novella-syntax.novella
+
+insert file:layout.novella
+
+insert file:i18n.novella
+
+insert file:stylesheets.novella
+
+insert file:opus-syntax.novella
+
+insert file:fonts.novella
+
+insert file:hyphenation.novella
+
+insert file:httpdaemon.novella
+
+insert file:generator.novella
+
+insert file:tips.novella
+
+
+insert file:source-characters.novella style=character-escapes

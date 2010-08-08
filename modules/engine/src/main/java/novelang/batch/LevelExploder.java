@@ -171,7 +171,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
   }
 
   protected String getSpecificCommandLineParametersDescriptor() {
-    return " [OPTIONS] document-to-split.nlp";
+    return " [OPTIONS] document-to-split.novella";
   }
 
 }

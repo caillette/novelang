@@ -57,14 +57,14 @@ public final class ResourcesForTests {
 
     Resource RED_PNG = resource( "Red-128x64.png" ) ;
     Resource GREEN_JPG = resource( "Green-128x64.jpg" ) ;
-    Resource BOOK_EXPLICIT = resource( "images-book-explicit.nlb" ) ;
-    Resource BOOK_RECURSIVE = resource( "images-book-recursive.nlb" ) ;
-    Resource PART_1 = resource( "images1.nlp" ) ;
+    Resource BOOK_EXPLICIT = resource( "images-book-explicit.opus" ) ;
+    Resource BOOK_RECURSIVE = resource( "images-book-recursive.opus" ) ;
+    Resource PART_1 = resource( "images1.novella" ) ;
 
     interface Child {
 
       Directory dir = directory( "child" ) ;
-      Resource NOVELLA_2 = resource( "images2.nlp" ) ;
+      Resource NOVELLA_2 = resource( "images2.novella" ) ;
       Resource BLUE_GIF = resource( "Blue-128x64.gif" ) ;
 
       interface Grandchild {
@@ -80,8 +80,8 @@ public final class ResourcesForTests {
   public interface MissingImages {
     Directory dir = directory( "missing-image" ) ;
 
-    Resource MISSING_IMAGE_BOOK = resource( "missing-image-book.nlb" ) ;
-    Resource MISSING_IMAGE_PART = resource( "missing-image.nlp" ) ;
+    Resource MISSING_IMAGE_BOOK = resource( "missing-image-book.opus" ) ;
+    Resource MISSING_IMAGE_PART = resource( "missing-image.novella" ) ;
   }
 
   public interface FontStructure {
@@ -118,28 +118,28 @@ public final class ResourcesForTests {
     String TAG1 = "T1" ;
     String TAG2 = "T2" ;
     String TAGS_FORM_NAME = "tag-list" ;
-    Resource TAGGED = resource( "tags-combinations.nlp" ) ;
-    Resource IMPLICIT_TAGS_PART = resource( "implicit-tags.nlp" ) ;
-    Resource IMPLICIT_TAGS_BOOK = resource( "implicit-tags-book.nlb" ) ;
+    Resource TAGGED = resource( "tags-combinations.novella" ) ;
+    Resource IMPLICIT_TAGS_PART = resource( "implicit-tags.novella" ) ;
+    Resource IMPLICIT_TAGS_BOOK = resource( "implicit-tags-book.opus" ) ;
 
-    Resource PROMOTED_TAGS_BOOK = resource( "promoted-tags-book.nlb" ) ;
-    Resource PROMOTED_TAGS_PART_1 = resource( "promoted-tags-1.nlp" ) ;
+    Resource PROMOTED_TAGS_BOOK = resource( "promoted-tags-book.opus" ) ;
+    Resource PROMOTED_TAGS_PART_1 = resource( "promoted-tags-1.novella" ) ;
 
   }
 
   public interface Scanned {
     Directory dir = directory( "scanned" ) ;
 
-    Resource FILE_1 = resource( "file1.nlp" ) ;
-    Resource FILE_2 = resource( "file2.nlp" ) ;
+    Resource FILE_1 = resource( "file1.novella" ) ;
+    Resource FILE_2 = resource( "file2.novella" ) ;
 
-    Resource BOOK = resource( "book.nlb" ) ;
-    Resource BOOK_NORECURSE = resource( "book-norecurse.nlb" ) ;
-    Resource BOOK_WITHSTYLE = resource( "book-withstyle.nlb" ) ;
+    Resource BOOK = resource( "book.opus" ) ;
+    Resource BOOK_NORECURSE = resource( "book-norecurse.opus" ) ;
+    Resource BOOK_WITHSTYLE = resource( "book-withstyle.opus" ) ;
 
     public interface Subdirectory {
       Directory dir = directory( "sub" ) ;
-      Resource FILE_3 = resource( "file3.nlp" ) ;
+      Resource FILE_3 = resource( "file3.novella" ) ;
     }
 
   }
@@ -148,8 +148,8 @@ public final class ResourcesForTests {
   public interface BookWithEmptyPart {
     Directory dir = directory( "book-with-empty-part" ) ;
 
-    Resource BOOK = resource( "book.nlb" ) ;
-    Resource EMPTY_NOVELLA = resource( "empty-part.nlp" ) ;
+    Resource BOOK = resource( "book.opus" ) ;
+    Resource EMPTY_NOVELLA = resource( "empty-part.novella" ) ;
 
   }
 
@@ -157,12 +157,12 @@ public final class ResourcesForTests {
   public interface Served {
     Directory dir = directory( "served" ) ;
 
-    Resource GOOD_PART = resource( "good.nlp" ) ;
-    Resource GOOD_BOOK = resource( "good.nlb" ) ;
-    Resource BROKEN_NOVELLA = resource( "broken.nlp" ) ;
-    Resource BROKEN_BOOK_BAD_REFERENCED_NOVELLA = resource( "book-broken-1.nlb" ) ;
-    Resource BROKEN_BOOK_BAD_SCANNED_NOVELLA = resource( "book-bad-scanned-part.nlb" ) ;
-    Resource BOOK_ALTERNATE_XSL = resource( "book-alternatexsl.nlb" ) ;
+    Resource GOOD_PART = resource( "good.novella" ) ;
+    Resource GOOD_BOOK = resource( "good.opus" ) ;
+    Resource BROKEN_NOVELLA = resource( "broken.novella" ) ;
+    Resource BROKEN_BOOK_BAD_REFERENCED_NOVELLA = resource( "book-broken-1.opus" ) ;
+    Resource BROKEN_BOOK_BAD_SCANNED_NOVELLA = resource( "book-bad-scanned-part.opus" ) ;
+    Resource BOOK_ALTERNATE_XSL = resource( "book-alternatexsl.opus" ) ;
 
     public interface Style {
       Directory dir = directory( "style" ) ;
@@ -175,39 +175,39 @@ public final class ResourcesForTests {
   public interface Parts {
     Directory dir = directory( "parts" ) ;
 
-    Resource NOVELLA_BROKEN_CANNOTPARSE = resource( "broken-cannotparse.nlp" ) ;
-    Resource NOVELLA_JUST_SECTIONS = resource( "just-sections.nlp" ) ;
-    Resource NOVELLA_MANY_IDENTIFIERS = resource( "many-identifiers.nlp" ) ;
-    Resource NOVELLA_SOME_IDENTIFIERS_1 = resource( "some-identifiers-1.nlp" ) ;
-    Resource NOVELLA_SOME_IDENTIFIERS_2 = resource( "some-identifiers-2.nlp" ) ;
-    Resource NOVELLA_MISSING_IMAGES = resource( "missing-images.nlp" ) ;
-    Resource NOVELLA_NO_CHAPTER = resource( "no-chapter.nlp" ) ;
-    Resource NOVELLA_ONE_WORD = resource( "one-word.nlp" ) ;
-    Resource NOVELLA_SIMPLE_STRUCTURE = resource( "simple-structure.nlp" ) ;
-    Resource NOVELLA_UTF8_BOM = resource( "utf8-with-bom.nlp" ) ;
+    Resource NOVELLA_BROKEN_CANNOTPARSE = resource( "broken-cannotparse.novella" ) ;
+    Resource NOVELLA_JUST_SECTIONS = resource( "just-sections.novella" ) ;
+    Resource NOVELLA_MANY_IDENTIFIERS = resource( "many-identifiers.novella" ) ;
+    Resource NOVELLA_SOME_IDENTIFIERS_1 = resource( "some-identifiers-1.novella" ) ;
+    Resource NOVELLA_SOME_IDENTIFIERS_2 = resource( "some-identifiers-2.novella" ) ;
+    Resource NOVELLA_MISSING_IMAGES = resource( "missing-images.novella" ) ;
+    Resource NOVELLA_NO_CHAPTER = resource( "no-chapter.novella" ) ;
+    Resource NOVELLA_ONE_WORD = resource( "one-word.novella" ) ;
+    Resource NOVELLA_SIMPLE_STRUCTURE = resource( "simple-structure.novella" ) ;
+    Resource NOVELLA_UTF8_BOM = resource( "utf8-with-bom.novella" ) ;
 
   }
 
   public interface Identifiers {
     Directory dir = directory( "identifiers" ) ;
 
-    Resource BOOK_1 = resource( "identifiers-book1.nlb" ) ;
-    Resource NOVELLA_1 = resource( "identifiers-1.nlp" ) ;
-    Resource BOOK_2 = resource( "identifiers-book2.nlb" ) ;
-    Resource NOVELLA_2 = resource( "identifiers-2.nlp" ) ;
-    Resource BOOK_3_STRAIGHT = resource( "identifiers-book3-straight.nlb" ) ;
-    Resource BOOK_3_RECURSE = resource( "identifiers-book3-recurse.nlb" ) ;
-    Resource BOOK_4 = resource( "identifiers-book4.nlb" ) ;
+    Resource BOOK_1 = resource( "identifiers-book1.opus" ) ;
+    Resource NOVELLA_1 = resource( "identifiers-1.novella" ) ;
+    Resource BOOK_2 = resource( "identifiers-book2.opus" ) ;
+    Resource NOVELLA_2 = resource( "identifiers-2.novella" ) ;
+    Resource BOOK_3_STRAIGHT = resource( "identifiers-book3-straight.opus" ) ;
+    Resource BOOK_3_RECURSE = resource( "identifiers-book3-recurse.opus" ) ;
+    Resource BOOK_4 = resource( "identifiers-book4.opus" ) ;
 
     interface Subdirectory3 {
       Directory dir = directory( "sub3" ) ;
-      Resource PART_3 = resource( "identifiers-3.nlp" ) ;
+      Resource PART_3 = resource( "identifiers-3.novella" ) ;
     }
 
     interface Subdirectory4 {
       Directory dir = directory( "sub4" ) ;
-      Resource NOVELLA_4_0 = resource( "identifiers-4-0.nlp" ) ;
-      Resource NOVELLA_4_1 = resource( "identifiers-4-1.nlp" ) ;
+      Resource NOVELLA_4_0 = resource( "identifiers-4-0.novella" ) ;
+      Resource NOVELLA_4_1 = resource( "identifiers-4-1.novella" ) ;
     }
   }
 
@@ -215,7 +215,7 @@ public final class ResourcesForTests {
   public interface XslFormatting {
     Directory dir = directory( "styles" ) ;
 
-    Resource PART_SOMECHAPTERS = resource( "some-chapters.nlp" ) ;
+    Resource PART_SOMECHAPTERS = resource( "some-chapters.novella" ) ;
     Resource XSL_NUMBERING = resource( "format-numbering.xsl" ) ;
     Resource XSL_BADXPATH_1 = resource( "bad-xpath-1.xsl" ) ;
     Resource XSL_BADXPATH_2 = resource( "bad-xpath-2.xsl" ) ;

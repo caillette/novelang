@@ -57,7 +57,7 @@ public class BookParserTest {
             ),
             tree(
                 COMMAND_INSERT_,
-                tree( URL_LITERAL, "file:uvw.nlp" )
+                tree( URL_LITERAL, "file:uvw.novella" )
             )
             
         )
@@ -156,11 +156,11 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithEverything() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:x/y/z.nlp recurse sort=version- createlevel style=whatever " +
+        "insert file:x/y/z.novella recurse sort=version- createlevel style=whatever " +
         "\\\\u-v_w\\x \\\\y\\z",
         tree(
             COMMAND_INSERT_,
-            tree( URL_LITERAL, "file:x/y/z.nlp" ),
+            tree( URL_LITERAL, "file:x/y/z.novella" ),
             tree( COMMAND_INSERT_RECURSE_ ),
             tree( COMMAND_INSERT_SORT_, "version-" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),

@@ -1,0 +1,76 @@
+== Identifiers
+
+Again, it's about "identifiers"
+http://novelang.blogspot.com/search/label/identifier
+. In previous blog entries we saw how an identifier may look like: as a decoration on a title,
+paragraph... Source document below defines two identifiers: one relative and one absolute.
+
+<<<
+    \\chapter-one-identifier
+== Chapter one
+
+    \section-one-identifier
+=== Section one
+
+...
+>>>
+
+There are two ways to use them:
+- Inside a Book, for retaining subsets of the whole document.
+- Inside a source document, for referencing other document fragments.
+
+Retaining subsets of the whole document in a book looks straightforward. A Book has its own syntax
+so there is no risk of confusion at all. Could be something like :
+
+<<<
+insert foo.novella
+   \\chapter-one-identifier\section-one-identifier
+>>>
+
+A simple rule arises: reference must be absolute when used outside of the defining document.
+
+Coexistence with tags is no problem, neither.
+Just compute the whole document tree first, then retain tags as usual.
+
+
+Now the big question: how to use identifiers as reference to document fragments, from inside
+a document fragment? We've seen some use cases:
+- Include an image defined elsewhere with lots of options that would clutter textual content.
+- Include a reference to an image (like a stylesheet-computed figure number).
+- Include a hyperlink to the document fragment.
+
+Sure, it's tempting to allow the inclusion of another fragment. But many problem arise then,
+like cyclic references or creating crazy structures, like a level inside a paragraph.
+The problem of raising correct error messages put apart, this adds a lot of overhead to the
+user and makes Novelang look too much like a programming language.
+
+We've seen the syntax for including a reference to an image:
+
+<<<
+-\\my-image
+>>>
+
+In order to improve consistency (and help grammar generator a bit) the inclusion of the image could
+be:
+
+<<<
+*\\my-image
+>>>
+
+I like it because the hyphen minus is mimicking the line of text of a legend (seen from a
+long distance) and the asterisk some kind of flower which is ok for a picture. 
+
+How to handle dangling references when rendering a single part?
+The fail-fast approach of Novelang tells us that spitting an error should be the default.
+So it's left to user to add a query parameter telling that unresolved identifiers should be stubbed:
+
+<<<
+/my-document.html?stub-identifiers
+>>>
+
+(As for tags, choosing this option may be helped by a bit of JavaScript.)
+
+The stylesheet would render stubbed identifers with a special style, like a gray hatched rectangle
+for images.
+
+To be done: tell about relative identifiers inside a Part.

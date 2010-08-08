@@ -81,7 +81,7 @@ public class HttpDaemonTest {
         resource.getName()
     ) ) ;
     final String shaved = shaveComments( generated ) ;
-    save( "generated.nlp", generated ) ;
+    save( "generated.novella", generated ) ;
     final String normalizedNlpSource = LanguageTools.unixifyLineBreaks( nlpSource ) ;
     final String normalizedShaved = LanguageTools.unixifyLineBreaks( shaved ) ;
     assertEquals( normalizedNlpSource, normalizedShaved ) ;

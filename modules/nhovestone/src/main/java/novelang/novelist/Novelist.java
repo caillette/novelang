@@ -60,7 +60,7 @@ public class Novelist {
     createOpus( directory ) ;
   }
 
-  public static final String BOOK_NAME_RADIX = "book" ;
+  public static final String BOOK_NAME_RADIX = "opus" ;
   
   private static final String BOOK_FILE_NAME = BOOK_NAME_RADIX + ".nlb" ;
   private static final String BOOK_CONTENT = "insert file:." ;
@@ -84,7 +84,7 @@ public class Novelist {
       throws IOException
   {
     final File targetFile = new File( 
-        directory, prototype + "-" + String.format( "%04d", counter ) + ".nlp" ) ;
+        directory, prototype + "-" + String.format( "%04d", counter ) + ".novella" ) ;
     if( targetFile.exists() ) {
       if( ! targetFile.delete() ) {
         throw new IOException( "Could not delete file: '" + targetFile.getAbsolutePath() + "'" ) ;

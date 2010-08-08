@@ -1,0 +1,28 @@
+=== SVG support
+
+I knew it, I knew it... SVG support //cannot// be seamless, at least not at the first try.
+First I thought that Safari beta 4 was not SVG-enabled but it appears that it displays whole
+SVG files (with ``.svg`` extension in the URL). And, when embedded in a ``<object>`` tag,
+SVG may work, too, as shown here:
+
+http://labs.silverorange.com/archive/2006/january/howtoinclude
+
+So why are Novelang-generated pages not displaying embedded SVG?
+I noticed that everytime I refreshed the page, Safari downloaded the ``.svg`` file.
+Could that be something about the MIME type?
+For the page above, Safari's Web Inspector tells that Content-Type is ``text/xml``.
+For the Novelang-generated page, there is no Content-Type. I should fix that first.
+
+Camino (same rendering engine as Firefox) understands SVG well, but adds some ugly scrollbars.
+They disappear when the size is set manually (maybe adding a few pixels).
+Adding image size will require some SVG parsing, the same way raster images are loaded
+by the Part to get their true size.
+
+Aside of this, the article on `silverorange.com` gives a nice trick for replacing SVG by a raster image:
+just embed the reference to the raster image inside the ``<object>`` element.
+So when Novelang is requested a non-existing ``.png`` file, it could try to locate the same file but
+with a ``.svg`` extension and return the rasterized image.
+As a consequence, the batch mode should anticipate this and produce ``.png`` files for all
+``.svg`` ones. 
+
+Yes, the Web server is something to be invented again and again.

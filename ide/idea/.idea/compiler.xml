@@ -31,6 +31,8 @@
       <entry name="?*.nlb" />
       <entry name="?*.txt" />
       <entry name="?*.bin" />
+      <entry name="?*.novella" />
+      <entry name="?*.opus" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

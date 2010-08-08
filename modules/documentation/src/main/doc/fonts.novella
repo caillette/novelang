@@ -1,0 +1,46 @@
+== Fonts
+
+Novelang PDF generation relies on Apache FOP, which support custom fonts. Every PDF reader basically supports 14 fonts: serif, sans-serif, monospace, and some symbol fonts. Non-symbol fonts all come in four flavor: normal, bold, italic, and bold-italic. Not that much fun! So users are encouraged to set their own fonts. 
+
+=== Font files
+
+Those fonts must be True Type fonts in ``.ttf`` files.
+
+Requesting a manual setting of requested fonts may seem an unnecessary burden. On the other hand, people using publishing tools often complain about a missing font or a broken one, when importing documents created on another computer. By making fonts a part of a Novelang project (with same strategy as for content and stylesheets) we expect you to avoid those annoyances.
+
+=== Font directories
+
+If there is a directory named ``fonts`` right under your project root, it is automatically recognized as the fonts directory and Novelang attempts to load every file ending by ``.ttf`` as a font. This doesn't include subdirectories.
+
+You can specify alternate font directories by setting the ``--font-dirs`` option at startup. Directory names are whitespace-separated like this:
+
+<<<
+--font-dirs=fonts/some-fonts fonts/other-fonts
+>>>
+
+=== Font list
+
+You can see the list of registered fonts from your browser with following URL:
+
+<<<
+http://localhost:8080/~fonts.pdf
+>>>
+
+
+=== Turn it on
+
+Inside a XSL-FO stylesheet you set the font-family of a block or an inline element with the ``font-family`` attribute. With the "Bitstream-Vera-Sans" correctly installed you'll declare something like this:
+
+<<<
+<fo:block
+    font-family="Bitstream-Vera-Sans"
+    ...
+>
+  ...
+>>>
+
+
+=== Font licensing
+
+All fonts shipping with Novelang are licensed under the GNU Public License.
+As a consequence, if you create an electronic document embedding those fonts (precisely what happens with a PDF) your document becomes GPL-licensed. If this is not the wished behavior, consider using other fonts.  

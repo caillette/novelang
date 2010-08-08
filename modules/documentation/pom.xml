@@ -16,7 +16,7 @@
   <properties>
     <rawDocumentSources>${basedir}/src/main/doc</rawDocumentSources>
     <enhancedDocumentSources>${project.build.directory}/enhanced</enhancedDocumentSources>
-    <lexemeTableDocument>${enhancedDocumentSources}/source-characters.nlp</lexemeTableDocument>
+    <lexemeTableDocument>${enhancedDocumentSources}/source-characters.novella</lexemeTableDocument>
     <generatedDocumentsDirectory>${project.build.directory}/documentation</generatedDocumentsDirectory>
     <lexemeTableMainClass>novelang.build.documentation.LexemeTable</lexemeTableMainClass>
   </properties>

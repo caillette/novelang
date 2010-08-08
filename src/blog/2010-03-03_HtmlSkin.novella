@@ -1,0 +1,90 @@
+== HTML default stylesheet improvements
+
+A new default HTML stylesheet will be available soon. It should improve Novelang usability a lot. Key features are:
+
+- A better look.
+
+- Scaling up with metadata-oriented features.
+
+./images/2010-03-03_HtmlSkin/wholePage.png
+
+=== Fluid layout
+
+New layout supports horizontal resize. The column for rendered text may span from 500 to 1000 pixels.
+
+Lines of literal (``<pre>`` tag) wrap if they are too long. Because wrapping only occurs with the ``white-space : pre-line`` style, which discards indentation by default. To prevent this, some JavaScript replaces every space character inside a ``<pre>`` by a non-brekable space, immediately followed by a zero-width space. This causes a clean-looking wrapping, but text copied in the clipboard has unwanted character.
+
+=== Overall look
+
+Titles are indented. This is a compromise with the Descriptor feature (described later).
+
+Line spacing is constant, even between two paragraphs, or between a paragraph and an embedded list. There is a slight loss of information (it may be hard to see where a paragraph begins) but this globally increases readability.
+
+=== Fonts
+
+Font choice has a huge impact on overall look. Chosing fonts is hard stuff, because fonts rendering is "hardly the same"
+
+http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html
+
+across Web browsers. Font readability also changes a lot, depending on line spacing, contrast, and other fonts around.
+
+The convention is: serif font for rendered document, sans-serif for extra information like actions and tags. Literal (``<pre>`` and ``<code>``) shows with a fixed-with font, which is serif, too.
+
+After experimenting with a lot of combinations, finally, the winners are:
+
+--- "Palatino Linotype"
+
+http://en.wikipedia.org/wiki/Palatino
+
+for the rendered document. This gorgeous font is a bit more readable than Times New Roman. It's available on all platform, and looks gorgeous with appropriate contrats (dark grey over light gray instead of black over white).
+
+--- "Lucida Grande"
+
+http://en.wikipedia.org/wiki/Lucida_Grande
+
+with "Tahoma"
+
+http://en.wikipedia.org/wiki/Tahoma_(typeface)
+
+as second choice.
+
+Lucida Grande is highly readable (was chosen as default for Mac OS X), but sophisticated enough to not look "poor" aside Palatino.
+
+--- "Courier New"
+
+http://en.wikipedia.org/wiki/Courier_New
+
+is not new at all, but it mixes harmoniously across text in Palatino.
+
+Those fonts display much better on `Mac OS X`, or with Safari on Windows XP.
+
+=== Descriptors
+
+Descriptors appeared in `Novelang-0.39.0`, as an experimental feature. They now display with a nice fade and animation, in order to preserve user's visual landmarks. Descriptor have a vertical bar that helps to see the scope of the descriptor. This vertical bar only shows when Descriptor is discloed.
+
+Descriptor disclosers now appear close to Tag column. This avoids polluting the left margin.
+
+=== Scalable lists for metadata
+
+On big documents, there can be so many tags they don't fit in the height on a Web browser's window.
+But //most of time//, they all fit so it's convenient to have all of them at a fixed position.
+How to deal with the exception without hurting common case?
+Having a 2^nd scrollbar in a browser's frame looks confusing.
+But the scrollbar has a great feature: it shows that some items are out of sight.
+One trick could be displaying a huge popup, but this probably means a lot of work for a poor result.
+
+Finally, the solution comes with a fade to grey at the end of the list to show that all items
+don't show. A tiny button "unpins" the tag list from the top of Web browser's window and lets
+it go to the document's beginning.
+So, when entering the "`1 %` case" we still have a standard behavior.
+
+Here is the Tag tab in its default pinned state (note the fade at the bottom and scrollbar position):
+
+./images/2010-03-03_HtmlSkin/manyTags-pinned.png
+
+Unpinning causes it to scroll with the rest of the document:
+
+./images/2010-03-03_HtmlSkin/manyTags-unpinned.png
+
+
+In addition to Tags, there will be, in a (hopefully near) future, more metadata like Identifiers. Tags show up under a tab bar where it's easy to add new tabs.  

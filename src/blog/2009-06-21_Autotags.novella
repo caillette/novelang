@@ -1,0 +1,42 @@
+== Autotagging
+
+The "Tag" 
+http://novelang.blogspot.com/2009/05/novelang-0270-released.html
+feature is great. It turns out that I'm mainly using it to tag levels, and too often it leads 
+to duplicate information like this:
+
+<<<
+  @Graphics
+== Graphics
+
+...
+>>>
+
+What I want is to simply write:
+
+<<<
+== Graphics
+
+...
+>>>
+
+And then Novelang should guess that "Graphics" matches the ``Graphics`` tag. 
+I call this "Autotagging". 
+
+We need a few simple tranformations rules to turn titles into tags.
+
+| "foo"      | ``@foo``      |
+| "Foo"      | ``@Foo``      |
+| "Foo bar"  | ``@Foobar``   |
+| "Foo, bar" | ``@Foo @bar`` |
+| "Foo. Bar" | ``@Foo @Bar`` |
+| "Foo-bar"  | ``@Foo-bar``  |
+
+Automatically-generated tags wouldn't be part of the tag list, but they would be used for the
+matching of a known tag with existing level titles.
+
+Depending on the document, this behavior may produce a lot of noise so it requires explicit 
+activation.
+
+Of course, the default tag list (with checkboxes) has a new option to enable autotagging, 
+with some JavaScript adding an ``autotag`` parameter in the URL.

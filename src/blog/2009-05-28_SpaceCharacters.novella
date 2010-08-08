@@ -1,0 +1,54 @@
+== Space character and related stuff
+
+=== Blocks of literal
+
+Most of times, the text inside blocks of literal should be kept in one piece.
+A blatant example is a numeric value and its unit.
+
+- Compact several spaces into one for the same reason as above.
+- Trim leading and trailing spaces. Otherwise they offer a suspicious mean to override text layout.
+- Replace spaces by non-break spaces.
+
+With the low line character ``_`` figuring the no-break space we'd like to obtain such
+transformation:
+
+<<<
+` 20   m  ` -> `20_m`
+>>>
+
+This means a long block of literal with several spaces (transformed into no-break spaces) could
+become very cumbersome and mess the layout. So we need a hint to allow line breaks at some places.
+This can be done by splitting the big block of literal into several small ones, which are not
+separated by spaces.
+
+With the vertical bar character `|` figuring the zero-width space we have such transformation:
+
+<<<
+   `Y.O.U.``A.R.E.``B.E.A.U.T.I.F.U.L` 
+-> `Y.O.U.|A.R.E.|B.E.A.U.T.I.F.U.L`
+>>>
+
+See more about the zero-width space "here"
+http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Grapheme_joiners_and_non-joiners
+. A quick test shows that FOP supports it.
+
+Implementation will be done at tree-mangling level. A whitespace between two consecutive blocks of
+literal will be replaced by a special node meaning that a break is allowed here. The special node
+will be replaced by a no-width space at rendering time.
+
+
+=== Apostrophe
+
+This technique could be useful to keep apostrophe character stuck to a word when in last position.
+By now, Novelang does not take care of the whitespace after or before the apostrophe.
+
+<<<
+he's here     -> he«left-single-quotation-mark»s here
+houses' roofs -> houses«left-single-quotation-mark»roofs
+during '60    -> during«left-single-quotation-mark»60
+>>>
+
+This is because whitespaces are used as separators, but don't cary "real" information
+(except in a few cases, like indentation for embedded lists).
+Before discarding ``WHITESPACE`` nodes, the ones immediately preceding or following an apostrophe
+could become an ``EXPLICIT_WHITESPACE`` to be rendered as, yes, a space character.
