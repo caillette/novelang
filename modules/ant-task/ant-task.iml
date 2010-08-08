@@ -11,7 +11,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.7.0" level="project" />
-    <orderEntry type="library" name="Maven: org.novelang:Novelang-engine:SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="engine" />
     <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.0.b2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: jaxen:jaxen:1.1.1" level="project" />
@@ -66,7 +66,7 @@
     <orderEntry type="module" module-name="parser-facade" />
     <orderEntry type="module" module-name="parser-antlr" />
     <orderEntry type="module" module-name="tree" />
-    <orderEntry type="library" name="Maven: org.novelang:Novelang-parser-ground:SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="parser-ground" />
     <orderEntry type="library" name="Maven: org.antlr:antlr:3.1.1" level="project" />
     <orderEntry type="module" module-name="parser-supplement" />
     <orderEntry type="module" module-name="syntactic-tree" />
