@@ -103,7 +103,7 @@
                   <arg value="/novelang.pdf" />
 
                   <arg value="/versions/release-notes.html?stylesheet=announcement-html.xsl" />
-                  <arg value="/versions/release-notes.nlp?stylesheet=announcement-plaintext.xsl" />                  
+                  <arg value="/versions/release-notes.novella?stylesheet=announcement-plaintext.xsl" />                  
 
                 </java>
 

@@ -117,7 +117,7 @@
               <username>${announcement.user.name}</username>
               <password>${announcement.user.password}</password>
               <subject>${parent.artifactId}-${project.version} released!</subject>
-              <template>release-notes.nlp</template>
+              <template>release-notes.novella</template>
               <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
               <toAddresses>
                 <toAddress>${announcement.user.email}</toAddress>
