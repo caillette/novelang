@@ -1821,15 +1821,17 @@ rawWord returns [ String text ]
   : (   s1 = hexLetter { buffer.append( $s1.text ) ; }
       | s2 = nonHexLetter { buffer.append( $s2.text ) ; }
       | s3 =letterWithDiacritics { buffer.append( $s3.text ) ; }
-      | s4 = digit { buffer.append( $s4.text ) ; }
-      | s5 = escapedCharacter  { buffer.append( $s5.unescaped ) ; }
+      | s4 = greekLetter { buffer.append( $s4.text ) ; }
+      | s5 = digit { buffer.append( $s5.text ) ; }
+      | s6 = escapedCharacter  { buffer.append( $s6.unescaped ) ; }
     )+
-    ( s6 = HYPHEN_MINUS { buffer.append( $s6.text ) ; }
-      (  s7 = hexLetter { buffer.append( $s7.text ) ; }
-       | s8 = nonHexLetter { buffer.append( $s8.text ) ; }
-       | s9 = letterWithDiacritics { buffer.append( $s9.text ) ; }
-       | s10 = digit { buffer.append( $s10.text ) ; }
-       | s11 = escapedCharacter  { buffer.append( $s11.unescaped ) ; } 
+    ( s7 = HYPHEN_MINUS { buffer.append( $s7.text ) ; }
+      (  s8 = hexLetter { buffer.append( $s8.text ) ; }
+       | s9 = nonHexLetter { buffer.append( $s9.text ) ; }
+       | s10 = letterWithDiacritics { buffer.append( $s10.text ) ; }
+       | s11 = greekLetter { buffer.append( $s11.text ) ; }
+       | s12 = digit { buffer.append( $s12.text ) ; }
+       | s13 = escapedCharacter  { buffer.append( $s13.unescaped ) ; }
       )+ 
     )*
     { $text = buffer.toString() ; }
@@ -2024,7 +2026,8 @@ anySymbolExceptGreaterthansignAndGraveAccent
       | hexLetter
       | nonHexLetter 
       | letterWithDiacritics
-      | AMPERSAND 
+      | greekLetter
+      | AMPERSAND
       | APOSTROPHE   
       | ASTERISK
       | CIRCUMFLEX_ACCENT
@@ -2070,7 +2073,7 @@ anySymbolExceptGreaterthansignAndGraveAccent
 
 letters : letter+ ;
 
-letter : hexLetter | nonHexLetter | letterWithDiacritics ;
+letter : hexLetter | nonHexLetter | letterWithDiacritics | greekLetter ;
 
 asciiLetter : hexLetter | nonHexLetter ;
 
@@ -2177,7 +2180,57 @@ letterWithDiacritics
   ;
 
 
-
+greekLetter :
+    GREEK_CAPITAL_LETTER_ALPHA
+  | GREEK_CAPITAL_LETTER_BETA
+  | GREEK_CAPITAL_LETTER_GAMMA
+  | GREEK_CAPITAL_LETTER_DELTA
+  | GREEK_CAPITAL_LETTER_EPSILON
+  | GREEK_CAPITAL_LETTER_ZETA
+  | GREEK_CAPITAL_LETTER_ETA
+  | GREEK_CAPITAL_LETTER_THETA
+  | GREEK_CAPITAL_LETTER_IOTA
+  | GREEK_CAPITAL_LETTER_KAPPA
+  | GREEK_CAPITAL_LETTER_LAMBDA
+  | GREEK_CAPITAL_LETTER_MU
+  | GREEK_CAPITAL_LETTER_NU
+  | GREEK_CAPITAL_LETTER_XI
+  | GREEK_CAPITAL_LETTER_OMICRON
+  | GREEK_CAPITAL_LETTER_PI
+  | GREEK_CAPITAL_LETTER_RHO
+  | GREEK_CAPITAL_LETTER_SIGMA
+  | GREEK_CAPITAL_LETTER_TAU
+  | GREEK_CAPITAL_LETTER_UPSILON
+  | GREEK_CAPITAL_LETTER_PHI
+  | GREEK_CAPITAL_LETTER_CHI
+  | GREEK_CAPITAL_LETTER_PSI
+  | GREEK_CAPITAL_LETTER_OMEGA
+  | GREEK_SMALL_LETTER_ALPHA
+  | GREEK_SMALL_LETTER_BETA
+  | GREEK_SMALL_LETTER_GAMMA
+  | GREEK_SMALL_LETTER_DELTA
+  | GREEK_SMALL_LETTER_EPSILON
+  | GREEK_SMALL_LETTER_ZETA
+  | GREEK_SMALL_LETTER_ETA
+  | GREEK_SMALL_LETTER_THETA
+  | GREEK_SMALL_LETTER_IOTA
+  | GREEK_SMALL_LETTER_KAPPA
+  | GREEK_SMALL_LETTER_LAMBDA
+  | GREEK_SMALL_LETTER_MU
+  | GREEK_SMALL_LETTER_NU
+  | GREEK_SMALL_LETTER_XI
+  | GREEK_SMALL_LETTER_OMICRON
+  | GREEK_SMALL_LETTER_PI
+  | GREEK_SMALL_LETTER_RHO
+  | GREEK_SMALL_LETTER_FINAL_SIGMA
+  | GREEK_SMALL_LETTER_SIGMA
+  | GREEK_SMALL_LETTER_TAU
+  | GREEK_SMALL_LETTER_UPSILON
+  | GREEK_SMALL_LETTER_PHI
+  | GREEK_SMALL_LETTER_CHI
+  | GREEK_SMALL_LETTER_PSI
+  | GREEK_SMALL_LETTER_OMEGA
+  ;
 
 
 // ======
@@ -2321,6 +2374,58 @@ LATIN_CAPITAL_LETTER_U_WITH_DOUBLE_ACUTE : '\u0170' ; //           "U"
     
 LATIN_SMALL_LIGATURE_OE : '\u0153' ;                  // &oelig;   "oe"
 LATIN_CAPITAL_LIGATURE_OE : '\u0152' ;                // &OElig;   "OE"
+
+
+
+GREEK_CAPITAL_LETTER_ALPHA : '\u0391' ;               // &Alpha;   
+GREEK_CAPITAL_LETTER_BETA : '\u0392' ;                // &Beta;
+GREEK_CAPITAL_LETTER_GAMMA : '\u0393' ;               // &Gamma;
+GREEK_CAPITAL_LETTER_DELTA : '\u0394' ;               // &Delta;
+GREEK_CAPITAL_LETTER_EPSILON : '\u0395' ;             // &Epsilon;
+GREEK_CAPITAL_LETTER_ZETA : '\u0396' ;                // &Zeta;
+GREEK_CAPITAL_LETTER_ETA : '\u0397' ;                 // &Eta;
+GREEK_CAPITAL_LETTER_THETA : '\u0398' ;               // &Theta;
+GREEK_CAPITAL_LETTER_IOTA : '\u0399' ;                // &Iota;
+GREEK_CAPITAL_LETTER_KAPPA : '\u039A' ;               // &Kappa;
+GREEK_CAPITAL_LETTER_LAMBDA : '\u039B' ;              // &Lambda;
+GREEK_CAPITAL_LETTER_MU : '\u039C' ;                  // &Mu;
+GREEK_CAPITAL_LETTER_NU : '\u039D' ;                  // &Nu;
+GREEK_CAPITAL_LETTER_XI : '\u039E' ;                  // &Xi;
+GREEK_CAPITAL_LETTER_OMICRON : '\u039F' ;             // &Omicron;
+GREEK_CAPITAL_LETTER_PI : '\u03A0' ;                  // &Pi;
+GREEK_CAPITAL_LETTER_RHO : '\u03A1' ;                 // &Rho;
+GREEK_CAPITAL_LETTER_SIGMA : '\u03A3' ;               // &Sigma;
+GREEK_CAPITAL_LETTER_TAU : '\u03A4' ;                 // &Tau;
+GREEK_CAPITAL_LETTER_UPSILON : '\u03A5' ;             // &Upsilon;
+GREEK_CAPITAL_LETTER_PHI : '\u03A6' ;                 // &Phi;
+GREEK_CAPITAL_LETTER_CHI : '\u03A7' ;                 // &Chi;
+GREEK_CAPITAL_LETTER_PSI : '\u03A8' ;                 // &Psi;
+GREEK_CAPITAL_LETTER_OMEGA : '\u03A9' ;               // &Omega;
+GREEK_SMALL_LETTER_ALPHA : '\u03B1' ;                 // &alpha;
+GREEK_SMALL_LETTER_BETA : '\u03B2' ;                  // &beta;
+GREEK_SMALL_LETTER_GAMMA : '\u03B3' ;                 // &gamma;
+GREEK_SMALL_LETTER_DELTA : '\u03B4' ;                 // &delta;
+GREEK_SMALL_LETTER_EPSILON : '\u03B5' ;               // &epsilon;
+GREEK_SMALL_LETTER_ZETA : '\u03B6' ;                  // &zeta;
+GREEK_SMALL_LETTER_ETA : '\u03B7' ;                   // &eta;
+GREEK_SMALL_LETTER_THETA : '\u03B8' ;                 // &theta;
+GREEK_SMALL_LETTER_IOTA : '\u03B9' ;                  // &iota;
+GREEK_SMALL_LETTER_KAPPA : '\u03BA' ;                 // &kappa;
+GREEK_SMALL_LETTER_LAMBDA : '\u03BB' ;                // &lambda;
+GREEK_SMALL_LETTER_MU : '\u03BC' ;                    // &mu;
+GREEK_SMALL_LETTER_NU : '\u03BD' ;                    // &nu;
+GREEK_SMALL_LETTER_XI : '\u03BE' ;                    // &xi;
+GREEK_SMALL_LETTER_OMICRON : '\u03BF' ;               // &omicron;
+GREEK_SMALL_LETTER_PI : '\u03C0' ;                    // &pi;
+GREEK_SMALL_LETTER_RHO : '\u03C1' ;                   // &rho;
+GREEK_SMALL_LETTER_FINAL_SIGMA : '\u03C2' ;           // &sigmaf;
+GREEK_SMALL_LETTER_SIGMA : '\u03C3' ;                 // &sigma;
+GREEK_SMALL_LETTER_TAU : '\u03C4' ;                   // &tau;
+GREEK_SMALL_LETTER_UPSILON : '\u03C5' ;               // &upsilon;
+GREEK_SMALL_LETTER_PHI : '\u03C6' ;                   // &phi;
+GREEK_SMALL_LETTER_CHI : '\u03C7' ;                   // &chi;
+GREEK_SMALL_LETTER_PSI : '\u03C8' ;                   // &psi;
+GREEK_SMALL_LETTER_OMEGA : '\u03C9' ;                 // &omega;
 
 
 
