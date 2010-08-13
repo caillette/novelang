@@ -2,7 +2,7 @@
   <configuration default="false" name="HttpDaemon at project root" type="Application" factoryName="Application">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
     <option name="MAIN_CLASS_NAME" value="novelang.bootstrap.Main" />
-    <option name="VM_PARAMETERS" value="-Djava.awt.headless=true -Xmx512M" />
+    <option name="VM_PARAMETERS" value="-Djava.awt.headless=true -Xmx512M -Dlogback.configurationFile=configuration/test/logback-test.xml" />
     <option name="PROGRAM_PARAMETERS" value="httpdaemon --log-dir ide/idea --style-dirs modules/engine/src/main/resources/style --font-dirs modules/engine/src/main/resources/fonts  " />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../.." />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -12,7 +12,13 @@
     <option name="PASS_PARENT_ENVS" value="true" />
     <module name="bootstrap" />
     <envs />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="51707" />
+      <option name="TRANSPORT" value="0" />
+      <option name="LOCAL" value="true" />
+    </RunnerSettings>
     <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Debug" />
     <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>

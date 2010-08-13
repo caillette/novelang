@@ -1,4 +1,4 @@
-<configuration scanPeriod="1 seconds" >
+<configuration scan="true" scanPeriod="1 seconds" >
 
   <appender
       name="STDOUT"
