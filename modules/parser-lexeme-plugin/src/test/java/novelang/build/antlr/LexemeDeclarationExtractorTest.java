@@ -18,29 +18,32 @@ package novelang.build.antlr;
 
 import java.util.Set;
 
+import novelang.parser.shared.Lexeme;
+import novelang.system.Log;
+import novelang.system.LogFactory;
+import org.apache.commons.lang.CharUtils;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.parser.shared.Lexeme;
 
 /**
  * Tests for {@link LexemeGenerator}.
  *
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "HardcodedFileSeparator" } )
 public class LexemeDeclarationExtractorTest {
 
   @Test
   public void extractSupportedCharacters() {
     final String grammar =
-        createAntlrDeclaration( SMALL_X, "x" ) +
-        createAntlrDeclaration( BIG_X, "X" ) +
-        createAntlrDeclaration( ZERO, "0" ) +
-        createAntlrDeclaration( AGRAVE, "\u00e0" ) +
-        createAntlrDeclaration( RSOLIDUS, "\\\\" ) +
-        createAntlrDeclaration( VBAR, "|" )
+        createAntlrDeclaration( SMALL_X ) +
+        createAntlrDeclaration( BIG_X ) +
+        createAntlrDeclaration( ZERO ) +
+        createAntlrDeclaration( AGRAVE ) +
+        createAntlrDeclaration( RSOLIDUS ) +
+        createAntlrDeclaration( VBAR )
     ;
 
     LOG.info( "Created grammar: \n%s", grammar );
@@ -50,7 +53,7 @@ public class LexemeDeclarationExtractorTest {
 
     LOG.debug( "Got: %s", declarations ) ;
 
-    assertEquals( 6, declarations.size() ) ;
+    assertEquals( 6L, ( long ) declarations.size() ) ;
 
     assertTrue( declarations.contains( SMALL_X ) ) ;
     assertTrue( declarations.contains( BIG_X ) ) ;
@@ -63,25 +66,37 @@ public class LexemeDeclarationExtractorTest {
 
   @Test
   public void extractJustPunctuationSign() {
-    final String grammar = createAntlrDeclaration( VBAR, "|" ) ;
+    final String grammar = createAntlrDeclaration( VBAR ) ;
     final Set<Lexeme> declarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
     LOG.debug( "Got: %s", declarations ) ;
-    assertEquals( 1, declarations.size() ) ;
+    assertEquals( 1L, ( long ) declarations.size() ) ;
     assertTrue( declarations.contains( VBAR ) ) ;
 
   }
 
   @Test
-  public void extractJustUnicode() {
-    final String grammar = createAntlrDeclaration( AGRAVE, "\u00e0" ) ;
+  public void extractJustUnicodeLowerCase() {
+    final String grammar = createAntlrDeclaration( AGRAVE ) ;
     final Set<Lexeme> lexemeDeclarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
     LOG.debug( "Got: %s", lexemeDeclarations ) ;
-    assertEquals( 1, lexemeDeclarations.size() ) ;
+    assertEquals( 1L, ( long ) lexemeDeclarations.size() ) ;
     assertTrue( lexemeDeclarations.contains( AGRAVE ) ) ;
+
+  }
+
+  @Test
+  public void extractJustUnicodeUpperCase() {
+    final String grammar = createAntlrDeclaration( ICUTE, SymbolRepresentation.UNICODE_UPPER ) ;
+    final Set< Lexeme > lexemeDeclarations =
+        LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
+
+    LOG.debug( "Got: %s", lexemeDeclarations ) ;
+    assertEquals( 1L, ( long ) lexemeDeclarations.size() ) ;
+    assertTrue( lexemeDeclarations.contains( ICUTE ) ) ;
 
   }
 
@@ -107,17 +122,37 @@ public class LexemeDeclarationExtractorTest {
   private static final Lexeme BIG_X = new Lexeme( "BIG_X", 'X', null, "X" ) ;
   private static final Lexeme ZERO = new Lexeme( "ZERO", '0', null, "000" ) ;
   private static final Lexeme AGRAVE = new Lexeme( "AGRAVE", '\u00e0', "agrave", "a" ) ;
+  private static final Lexeme ICUTE = new Lexeme( "ICUTE", '\u00ED', "icute", "i" ) ;
   private static final Lexeme RSOLIDUS = new Lexeme( "RSOLIDUS", '\\', null, null ) ;
   private static final Lexeme VBAR = new Lexeme( "VBAR", '|', null, null ) ;
 
-  private String createAntlrDeclaration( 
+  private static String createAntlrDeclaration( final Lexeme declaration ) {
+    return createAntlrDeclaration( declaration, SymbolRepresentation.LITERAL ) ;
+  }
+
+  private static String createAntlrDeclaration(
       final Lexeme declaration, 
-      final String symbol
+      final SymbolRepresentation symbolRepresentation
   ) {
     final StringBuilder declarationBuilder = new StringBuilder() ;
     declarationBuilder.append( declaration.getUnicodeName() ) ;
     declarationBuilder.append( " : '" ) ;
-    declarationBuilder.append( symbol ) ;
+
+    final String unicodeEscaped = CharUtils.unicodeEscaped( declaration.getCharacter() ) ;
+    switch( symbolRepresentation ) {
+      case LITERAL :
+        declarationBuilder.append( declaration.getCharacter() ) ;
+        break ;
+      case UNICODE_LOWER :
+        declarationBuilder.append( unicodeEscaped ) ;
+        break ;
+      case UNICODE_UPPER :
+        declarationBuilder.append( "\\u" ) ;
+        declarationBuilder.append( unicodeEscaped.substring( 2 ).toUpperCase() ) ;
+        break ;
+      default :
+        throw new IllegalArgumentException( "Unsupported: " + symbolRepresentation ) ;
+    }
     declarationBuilder.append( "' ; " ) ;
     if( declaration.hasHtmlEntityName() || declaration.hasDiacriticlessRepresentation() ) {
       declarationBuilder.append( "// " ) ;
@@ -136,6 +171,8 @@ public class LexemeDeclarationExtractorTest {
     return declarationBuilder.toString() ;
   }
   
-
+  private enum SymbolRepresentation {
+    LITERAL, UNICODE_LOWER, UNICODE_UPPER
+  }
 
 }

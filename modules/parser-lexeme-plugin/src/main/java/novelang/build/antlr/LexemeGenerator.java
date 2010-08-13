@@ -57,17 +57,6 @@ public class LexemeGenerator extends GrammarBasedJavaGenerator {
 
   }
 
-  public static final class Item {
-
-    public final String declaration ;
-    public final String javaComment ;
-
-    public Item( final String declaration, final String javaComment ) {
-      this.declaration = declaration;
-      this.javaComment = javaComment;
-    }
-  }
-
 
 
 
