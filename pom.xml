@@ -113,6 +113,10 @@
     <lib.apache-commons-math.artefactId>commons-math</lib.apache-commons-math.artefactId>
     <lib.apache-commons-math.version>1.2</lib.apache-commons-math.version>
 
+    <lib.fest-assert.groupId>org.easytesting</lib.fest-assert.groupId>
+    <lib.fest-assert.artifactId>fest-assert</lib.fest-assert.artifactId>
+    <lib.fest-assert.version>1.3</lib.fest-assert.version>
+
   </properties>
 
   <groupId>org.novelang</groupId>
@@ -129,6 +133,7 @@
     <module>modules/distribution</module>
     <module>modules/engine</module>
     <module>modules/engine-driver</module>
+    <module>modules/insider</module>
     <module>modules/lexeme-table-plugin</module>
     <module>modules/nhovestone</module>
 
@@ -144,6 +149,8 @@
     <module>modules/primer</module>
     <module>modules/process-driver</module>
     <module>modules/producer-plugin</module>
+    <module>modules/shell</module>
+    <module>modules/shell-fixture</module>
     <module>modules/syntactic-tree</module>
     <module>modules/syntactic-tree-fixture</module>
     <module>modules/tree</module>
@@ -232,55 +239,6 @@
           <goals>deploy</goals>
         </configuration>
       </plugin>
-
-      <!--
-        Using a tweaked plugin supporting external files.
-        Default implementation prohibits this, as it makes build non-repeatable.
-        But we need to keep some confidential information (for publishing) out of
-        public repository.
-      -->
-<!--
-      <plugin>
-        <groupId>${lib.properties-maven-plugin.groupId}</groupId>
-        <artifactId>${lib.properties-maven-plugin.artefactId}</artifactId>
-        <version>${lib.properties-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-            <configuration>
-              <filePaths>
-                <filePath>${user.home}/.novelang-project.properties</filePath>
-              </filePaths>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
--->
-
-
-      <!-- Hopefully executes after plugin declared above; needs declared properties. -->
-<!--
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <echo>user.home=${user.home}</echo>
-                <echo>blogging.blog.secretpostingaddress=${blogging.blog.secretpostingaddress}</echo>
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
--->
 
     </plugins>
 
@@ -389,6 +347,13 @@
       <artifactId>logback-classic</artifactId>
       <version>${lib.logback.version}</version>
       <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>${lib.fest-assert.groupId}</groupId>
+      <artifactId>${lib.fest-assert.artifactId}</artifactId>
+      <version>${lib.fest-assert.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

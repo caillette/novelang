@@ -21,6 +21,13 @@
       <scope>compile</scope>
     </dependency>
 
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-primer</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    
   </dependencies>
 
 

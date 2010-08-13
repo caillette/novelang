@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang ;
+package novelang;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 import novelang.system.LogFactory;
 import novelang.system.Log;
 import com.google.common.base.Preconditions;
+import org.junit.runners.NameAwareTestClassRunner;
 
 /**
  * Creates directories on-demand for test purposes.
@@ -47,11 +48,16 @@ public class DirectoryFixture {
 
   private final Set< String > registeredTestIdentifiers = new HashSet< String >() ;
 
-    public DirectoryFixture( final Class testClass ) throws IOException {
+  public DirectoryFixture() throws IOException {
+    this( NameAwareTestClassRunner.getTestName() ) ;
+  }
+
+  public DirectoryFixture( final Class testClass ) throws IOException {
     this( ClassUtils.getShortClassName( testClass ) ) ;
   }
 
   public DirectoryFixture( final String testIdentifier ) throws IOException {
+    Preconditions.checkArgument( ! StringUtils.isBlank( testIdentifier ) ) ;
     this.testIdentifier = testIdentifier ;
     if( registeredTestIdentifiers.contains( testIdentifier ) ) {
       throw new IllegalArgumentException( "Already created for: " + testIdentifier ) ;

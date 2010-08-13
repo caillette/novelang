@@ -85,6 +85,10 @@
         <option value="$PROJECT_DIR$/../../modules/process-driver/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/engine-driver/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/nhovestone-report/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/insider/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/shell/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/shell-fixture/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/agentjar-embedder/pom.xml" />
       </list>
     </option>
   </component>
