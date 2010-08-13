@@ -185,6 +185,8 @@ public final class ResourcesForTests {
     Resource NOVELLA_ONE_WORD = resource( "one-word.novella" ) ;
     Resource NOVELLA_SIMPLE_STRUCTURE = resource( "simple-structure.novella" ) ;
     Resource NOVELLA_UTF8_BOM = resource( "utf8-with-bom.novella" ) ;
+    Resource NOVELLA_GREEK = resource( "greek.novella" ) ;
+    Resource NOVELLA_POLISH = resource( "polish.novella" ) ;
 
   }
 

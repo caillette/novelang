@@ -27,10 +27,12 @@ import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import org.apache.commons.httpclient.HttpConstants;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.ProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -108,6 +110,20 @@ public class HttpDaemonTest {
     final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
     assertTrue( "Got:" + Arrays.asList( headers ), headers.length > 0 ) ;
     assertEquals( "Got:" + Arrays.asList( headers ), "application/pdf", headers[ 0 ].getValue() ) ;
+  }
+
+  @Test
+  public void greekCharactersOk() throws Exception {
+    final Resource novellaGreek = ResourcesForTests.Parts.NOVELLA_GREEK ;
+    setup( novellaGreek ) ;
+    renderAndCheckStatusCode( novellaGreek, "greek.pdf" );
+  }
+
+  @Test
+  public void polishCharactersOk() throws Exception {
+    final Resource novellaPolish = ResourcesForTests.Parts.NOVELLA_POLISH ;
+    setup( novellaPolish ) ;
+    renderAndCheckStatusCode( novellaPolish, "polish.pdf" );
   }
 
   @Test
@@ -488,4 +504,21 @@ public class HttpDaemonTest {
       return super.getLocationURI( response, context );
     }
   }
+
+
+  private void renderAndCheckStatusCode( final Resource resource, final String savedFileName )
+      throws IOException
+  {
+    final HttpGet httpGet = new HttpGet(
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ;
+    final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
+
+    final ByteArrayOutputStream responseContent = new ByteArrayOutputStream() ;
+    IOUtils.copy( httpResponse.getEntity().getContent(), responseContent ) ;
+    save( savedFileName, responseContent.toByteArray() ) ;
+    final int statusCode = httpResponse.getStatusLine().getStatusCode();
+    assertEquals( ( long ) HttpStatus.SC_OK, ( long ) statusCode ) ;
+  }
+
+
 }
