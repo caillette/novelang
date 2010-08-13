@@ -20,21 +20,19 @@ package novelang.batch;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import novelang.system.LogFactory;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import novelang.common.Problem;
-import novelang.configuration.DocumentGeneratorConfiguration;
 import novelang.configuration.ConfigurationTools;
+import novelang.configuration.DocumentGeneratorConfiguration;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.DocumentGeneratorParameters;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
-import novelang.system.StartupTools;
 import novelang.system.Log;
+import novelang.system.LogFactory;
+import novelang.system.StartupTools;
 
 /**
  * The main class for running document generation in command-line mode.

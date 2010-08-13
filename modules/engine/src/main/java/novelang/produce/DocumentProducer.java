@@ -143,7 +143,7 @@ public class DocumentProducer {
     
   }
 
-  private void serve(
+  private static void serve(
       final OutputStream outputStream,
       final GenericRenderer renderer,
       final Renderable rendered
