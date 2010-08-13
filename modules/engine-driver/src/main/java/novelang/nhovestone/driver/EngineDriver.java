@@ -179,8 +179,8 @@ public abstract class EngineDriver {
   }
 
 
-  public void shutdown( final boolean force ) throws InterruptedException {
-    processDriver.shutdown( force ) ;
+  public int shutdown( final boolean force ) throws InterruptedException {
+    return processDriver.shutdown( force ) ;
   }
 
   

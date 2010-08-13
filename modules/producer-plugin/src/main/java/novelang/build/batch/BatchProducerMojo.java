@@ -165,7 +165,10 @@ public class BatchProducerMojo extends AbstractMojo {
     final DocumentGeneratorDriver driver = new DocumentGeneratorDriver( configuration ) ;
     try {
       driver.start( 1L, TimeUnit.MINUTES ) ;
-      driver.shutdown( false ) ;
+      final int exitCode = driver.shutdown( false );
+      if( exitCode != 0 ) {
+        throw new Exception( "Process ended with exit code " + exitCode ) ;
+      }
     } catch( Exception e ) {
       throw new MojoExecutionException( "Driver execution failed", e );
     }

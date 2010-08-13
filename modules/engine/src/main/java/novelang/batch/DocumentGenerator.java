@@ -83,6 +83,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
         reportProblems( outputDirectory, allProblems ) ;
         System.err.println(
             "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
+        throw new GenerationFailedException( allProblems ) ;
       }
 
     } catch( Exception e ) {

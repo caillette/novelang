@@ -49,6 +49,7 @@ public class ProcessDriver {
   private final List< String > processArguments ;
   private final Predicate< String > startupSensor ;
 
+  private final String displayName ;
   private final ThreadGroup threadGroup ;
   private Thread standardStreamWatcherThread = null ;
   private Thread errorStreamWatcherThread = null ;
@@ -64,6 +65,7 @@ public class ProcessDriver {
     this.workingDirectory = workingDirectory ;
     this.processArguments = processArguments ;
     this.startupSensor = startupSensor ;
+    this.displayName = displayName ;
     threadGroup = new ThreadGroup( getClass().getSimpleName() + "-" + displayName ) ;
   }
 
@@ -77,7 +79,7 @@ public class ProcessDriver {
     final Semaphore startupSemaphore = new Semaphore( 0 ) ;
     final String processAsString ;
 
-    LOG.info( "Starting process in directory '" + workingDirectory.getAbsolutePath() + "'" ) ;
+    LOG.info( displayName, " starting process in directory '" + workingDirectory.getAbsolutePath() + "'" ) ;
     LOG.info( "Arguments: " + processArguments ) ;
 
     synchronized( stateLock ) {
@@ -113,10 +115,9 @@ public class ProcessDriver {
       } else {
         state = State.RUNNING ;
       }
-      processAsString = process.toString() ;
     }
 
-    LOG.info( "Successfully started " + processAsString ) ;
+    LOG.info( "Successfully started ", displayName, "." ) ;
   }
 
 
@@ -128,10 +129,10 @@ public class ProcessDriver {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.debug( "Standard output from supervised process: >>> " + line ) ;
-        }
-        if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
-          startupSemaphore.release() ;
+          LOG.debug( "Standard output from supervised process in ", displayName, ": >>> " + line ) ;
+          if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
+            startupSemaphore.release() ;
+          }
         }
       }
 
@@ -148,7 +149,7 @@ public class ProcessDriver {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.warn( "Error from supervised process: >>> " + line ) ;
+          LOG.warn( "Error from supervised process in ", displayName, ": >>> " + line ) ;
         }
       }
 
@@ -161,37 +162,41 @@ public class ProcessDriver {
 
 
   private void handleThrowableFromProcess( final Throwable throwable ) {
-    final boolean shouldLog ;
+//    final boolean shouldLog ;
     synchronized( stateLock ) {
       if( state != State.SHUTTINGDOWN && state != State.TERMINATED ) {
         state = State.BROKEN ;
-        shouldLog = false ;
+//        shouldLog = false ;
       } else {
-        shouldLog = true ;
+//        shouldLog = true ;
       }
     }
-    if( shouldLog ) {
-      LOG.error( "Throwable caught while reading supervised process stream", throwable ) ;
-    }
+//    if( shouldLog ) {
+      LOG.error(
+          "Throwable caught while reading supervised process stream in " + displayName,
+          throwable
+      ) ;
   }
 
 
   public static class ProcessCreationFailedException extends Exception { }
 
 
-  public void shutdown( final boolean force ) throws InterruptedException {
+  public int shutdown( final boolean force ) throws InterruptedException {
+    int exitCode = 0 ;
     synchronized( stateLock ) {
       try {
-        if( state != State.BROKEN ) {
-          ensureInState( State.RUNNING ) ;
+        if( state == State.RUNNING ) {
           state = State.SHUTTINGDOWN ;
           if( force ) {
             interruptWatcherThreads() ;
             process.destroy() ;
           } else {
-            process.waitFor() ;
+            exitCode = process.waitFor();
             interruptWatcherThreads() ;
           }
+        } else {
+            LOG.warn( "Trying to shutdown while in ", state, " state for ", displayName, "." ) ;
         }
       } finally {
         process = null ;
@@ -200,8 +205,8 @@ public class ProcessDriver {
         state = State.TERMINATED ;
       }
     }
-    LOG.info( "Process ended" + process + "." ) ;
-
+    LOG.info( "Process ended for %s, returning %s", displayName, exitCode ) ;
+    return exitCode ;
   }
 
   private void interruptWatcherThreads() {
@@ -260,8 +265,16 @@ public class ProcessDriver {
   /**
    * Synchronization left to caller.
    */
-  private void ensureInState( final State expected ) {
+  private void ensureInState( final State expected, final State... otherExpected ) {
     if( state != expected ) {
+        for( final State other : otherExpected )
+        {
+            if( state == other )
+            {
+                return ;
+            }
+        }
+
       throw new IllegalStateException(
           "Expected to be in state " + expected + " but was in " + state ) ;
     }
