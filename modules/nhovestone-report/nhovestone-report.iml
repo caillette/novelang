@@ -75,6 +75,7 @@
     <orderEntry type="module" module-name="syntactic-tree" />
     <orderEntry type="module" module-name="unicode-reader" />
     <orderEntry type="module" module-name="engine-driver" />
+    <orderEntry type="library" name="Maven: org.novelang:Novelang-process-driver:SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="shell" />
     <orderEntry type="module" module-name="insider" />
     <orderEntry type="module" module-name="insider" />

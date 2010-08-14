@@ -81,6 +81,10 @@
     <lib.maven-deploy-plugin.artefactId>maven-deploy-plugin</lib.maven-deploy-plugin.artefactId>
     <lib.maven-deploy-plugin.version>2.5</lib.maven-deploy-plugin.version>
 
+    <lib.maven-surefire-plugin.groupId>org.apache.maven.plugins</lib.maven-surefire-plugin.groupId>
+    <lib.maven-surefire-plugin.artefactId>maven-surefire-plugin</lib.maven-surefire-plugin.artefactId>
+    <lib.maven-surefire-plugin.version>2.5</lib.maven-surefire-plugin.version>
+
     <lib.maven-changes-plugin.groupId>org.apache.maven.plugins</lib.maven-changes-plugin.groupId>
     <lib.maven-changes-plugin.artefactId>maven-changes-plugin</lib.maven-changes-plugin.artefactId>
     <lib.maven-changes-plugin.version>2.3</lib.maven-changes-plugin.version>
@@ -180,6 +184,12 @@
           <groupId>${lib.cobertura.groupid}</groupId>
           <artifactId>${lib.cobertura.artefactid}</artifactId>
           <version>${lib.cobertura.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>${lib.maven-surefire-plugin.groupId}</groupId>
+          <artifactId>${lib.maven-surefire-plugin.artefactId}</artifactId>
+          <version>${lib.maven-surefire-plugin.version}</version>
         </plugin>
 
 
