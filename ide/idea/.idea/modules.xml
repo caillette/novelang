@@ -21,7 +21,6 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-supplement/parser-supplement.iml" filepath="$PROJECT_DIR$/../../modules/parser-supplement/parser-supplement.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-token-plugin/parser-token-plugin.iml" filepath="$PROJECT_DIR$/../../modules/parser-token-plugin/parser-token-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/primer/primer.iml" filepath="$PROJECT_DIR$/../../modules/primer/primer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../modules/process-driver/process-driver.iml" filepath="$PROJECT_DIR$/../../modules/process-driver/process-driver.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/producer-plugin/producer-plugin.iml" filepath="$PROJECT_DIR$/../../modules/producer-plugin/producer-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/shell/shell.iml" filepath="$PROJECT_DIR$/../../modules/shell/shell.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/shell-fixture/shell-fixture.iml" filepath="$PROJECT_DIR$/../../modules/shell-fixture/shell-fixture.iml" />

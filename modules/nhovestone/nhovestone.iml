@@ -77,7 +77,6 @@
     <orderEntry type="module" module-name="syntactic-tree" />
     <orderEntry type="module" module-name="unicode-reader" />
     <orderEntry type="module" module-name="engine-driver" />
-    <orderEntry type="module" module-name="process-driver" />
     <orderEntry type="module" module-name="shell" />
     <orderEntry type="module" module-name="insider" />
     <orderEntry type="module" module-name="insider" />

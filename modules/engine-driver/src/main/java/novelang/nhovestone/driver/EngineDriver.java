@@ -40,7 +40,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 
 /**
- * Encapsulates a {@link ProcessDriver}, factoring common code for running either a
+ * Encapsulates a {@link JavaShell}, factoring common code for running either a
  * {@link novelang.daemon.HttpDaemon} or {@link novelang.batch.DocumentGenerator}. 
  *
  * @author Laurent Caillette
