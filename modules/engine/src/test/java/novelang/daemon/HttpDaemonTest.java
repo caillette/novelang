@@ -16,6 +16,18 @@
  */
 package novelang.daemon;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.google.common.collect.Lists;
 import novelang.ResourceTools;
 import novelang.ResourcesForTests;
@@ -27,7 +39,6 @@ import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-import org.apache.commons.httpclient.HttpConstants;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -47,18 +58,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.net.URI;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
