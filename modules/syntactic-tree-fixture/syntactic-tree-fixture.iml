@@ -14,9 +14,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="tree" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0" level="project" />
-    <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
-    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.3" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:jcl-over-slf4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: ch.qos.logback:logback-core:0.9.24" level="project" />
