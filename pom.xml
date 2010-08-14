@@ -136,6 +136,10 @@
     <lib.apache-commons-io.artefactId>commons-io</lib.apache-commons-io.artefactId>
     <lib.apache-commons-io.version>1.4</lib.apache-commons-io.version>
 
+    <lib.joda-time.groupId>joda-time</lib.joda-time.groupId>
+    <lib.joda-time.artefactId>joda-time</lib.joda-time.artefactId>
+    <lib.joda-time.version>1.6.1</lib.joda-time.version>
+
     <lib.fest-assert.groupId>org.easytesting</lib.fest-assert.groupId>
     <lib.fest-assert.artifactId>fest-assert</lib.fest-assert.artifactId>
     <lib.fest-assert.version>1.3</lib.fest-assert.version>
@@ -399,9 +403,9 @@
     </dependency>
 
     <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>1.6</version>
+      <groupId>${lib.joda-time.groupId}</groupId>
+      <artifactId>${lib.joda-time.artefactId}</artifactId>
+      <version>${lib.joda-time.version}</version>
     </dependency>
 
     <dependency>
