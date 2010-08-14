@@ -37,6 +37,9 @@
     <lib.logback.groupid>ch.qos.logback</lib.logback.groupid>
     <lib.logback.version>0.9.24</lib.logback.version>
 
+    <lib.slf4j.groupid>org.slf4j</lib.slf4j.groupid>
+    <lib.slf4j.version>1.6.1</lib.slf4j.version>
+
     <lib.maven-plugin.groupid>org.apache.maven</lib.maven-plugin.groupid>
     <lib.maven-plugin.artefactid>maven-plugin-api</lib.maven-plugin.artefactid>
     <lib.maven-plugin.version>2.0</lib.maven-plugin.version>
@@ -342,9 +345,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.slf4j</groupId>
+      <groupId>${lib.slf4j.groupid}</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.5.11</version>
+      <version>${lib.slf4j.version}</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -397,9 +400,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.slf4j</groupId>
+      <groupId>${lib.slf4j.groupid}</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.5.11</version>
+      <version>${lib.slf4j.version}</version>
     </dependency>
 
 
