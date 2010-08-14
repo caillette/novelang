@@ -58,7 +58,6 @@
 
     <plugins>
 
-<!--
       <plugin>
         <groupId>${lib.maven-resources-plugin.groupId}</groupId>
         <artifactId>${lib.maven-resources-plugin.artefactId}</artifactId>
@@ -106,7 +105,6 @@
           </execution>
         </executions>
       </plugin>
--->
 
       <plugin>
         <artifactId>Novelang-producer-plugin</artifactId>
