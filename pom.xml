@@ -43,7 +43,11 @@
 
     <lib.maven-jar-plugin.groupid>org.apache.maven.plugins</lib.maven-jar-plugin.groupid>
     <lib.maven-jar-plugin.artefactid>maven-jar-plugin</lib.maven-jar-plugin.artefactid>
-    <lib.maven-jar-plugin.version>2.3</lib.maven-jar-plugin.version>
+    <lib.maven-jar-plugin.version>2.3.1</lib.maven-jar-plugin.version>
+
+    <lib.maven-shade-plugin.groupid>org.apache.maven.plugins</lib.maven-shade-plugin.groupid>
+    <lib.maven-shade-plugin.artefactid>maven-shade-plugin</lib.maven-shade-plugin.artefactid>
+    <lib.maven-shade-plugin.version>1.4</lib.maven-shade-plugin.version>
 
     <lib.maven-assembly-plugin.groupId>org.apache.maven.plugins</lib.maven-assembly-plugin.groupId>
     <lib.maven-assembly-plugin.artefactId>maven-assembly-plugin</lib.maven-assembly-plugin.artefactId>

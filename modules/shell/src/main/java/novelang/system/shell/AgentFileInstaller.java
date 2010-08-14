@@ -35,6 +35,7 @@ import org.apache.commons.io.FileUtils;
 public class AgentFileInstaller {
 
   private static final Log LOG = LogFactory.getLog( AgentFileInstaller.class ) ;
+  public static final String AGENTJARFILE_PROPERTYNAME = "novelang.system.shell.agentjarfile";
 
   private AgentFileInstaller() { }
 
@@ -52,11 +53,25 @@ public class AgentFileInstaller {
   public static File getJarFile() {
     synchronized( LOCK ) {
       if( jarFile == null ) {
-        try {
-          jarFile = File.createTempFile( "Novelang-insider-agent", ".jar" ) ;
-          copyResourceToFile( JAR_RESOURCE_NAME, jarFile ) ;
-        } catch( IOException e ) {
-          throw new RuntimeException( e ) ;
+
+        final String jarFileNameFromSystemProperty =
+            System.getProperty( AGENTJARFILE_PROPERTYNAME ) ;
+
+        if( jarFileNameFromSystemProperty != null ) {
+          jarFile = new File( jarFileNameFromSystemProperty ) ;
+          if( ! jarFile.isFile() ) {
+            throw new IllegalArgumentException(
+                "Jar file '" + jarFile.getAbsolutePath() + "' doesn't exist as a file" ) ;
+          }
+          LOG.info( "Using jar file '" + jarFile.getAbsolutePath() + "' " +
+              "set from system property " + AGENTJARFILE_PROPERTYNAME + "." ) ;
+        } else {
+          try {
+            jarFile = File.createTempFile( "Novelang-insider-agent", ".jar" ) ;
+            copyResourceToFile( JAR_RESOURCE_NAME, jarFile ) ;
+          } catch( IOException e ) {
+            throw new RuntimeException( e ) ;
+          }
         }
       }
       return jarFile ;

@@ -7,7 +7,7 @@
 >
   <!--
       Known as the "classifier".
-      Appears appended to the artefact, e.g. documentation-SNAPSHOT-bundled.zip.
+      Appears appended to the artefact, e.g. 'Novelang-insider-SNAPSHOT-embedder.jar'.
   -->
   <id>embedder</id>
 
@@ -39,7 +39,7 @@
         <include>*.jar</include>
       </includes>
       <excludes>
-        <exclude>*.class</exclude>
+        <exclude>*embedder*</exclude>
       </excludes>
     </fileSet>
 

@@ -37,7 +37,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Laurent Caillette
  */
 @RunWith( NameAwareTestClassRunner.class )
-public class TestStupidListener {
+public class StupidListenerTest {
 
   @Test
   public void startAndListen() throws IOException, InterruptedException {

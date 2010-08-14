@@ -31,9 +31,17 @@ public class LocalInsider implements Insider {
 
   private final AtomicLong keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
 
-  @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public LocalInsider() {
-    final long delay = HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS ;
+    this( HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS ) ;
+  }
+
+
+  @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
+  public LocalInsider( final long delay ) {
+
+    System.out.println( "Initializing " + getClass().getSimpleName()
+        + " with fatal heartbeat delay of " + delay + " milliseconds..." ) ;
+
     final Thread heartbeatReceiver = new Thread(
         new Runnable() {
           @Override
@@ -42,9 +50,9 @@ public class LocalInsider implements Insider {
               Thread.sleep( delay ) ;
               final long lag = currentTimeMillis() - keepaliveCounter.get() ;
               if( lag > delay ) {
-                System.out.println( "No heartbeat for more than " + delay + " milliseconds, " +
-                    "exiting with value of " + STATUS_HEARTBEAT_PERIOD_EXPIRED + "..." ) ;
-                System.exit( STATUS_HEARTBEAT_PERIOD_EXPIRED ) ;
+                System.err.println( "No heartbeat for more than " + delay + " milliseconds, " +
+                    "halting with status of " + STATUS_HEARTBEAT_PERIOD_EXPIRED + "." ) ;
+                Runtime.getRuntime().halt( STATUS_HEARTBEAT_PERIOD_EXPIRED ) ;
               }
             } catch( InterruptedException ignore ) { }
           }
@@ -72,7 +80,10 @@ public class LocalInsider implements Insider {
 
   @Override
   public void keepAlive() {
+    System.out.println( "Received keepalive call at " + currentTimeMillis() + "." ) ;
     keepaliveCounter.set( currentTimeMillis() ) ;
   }
 
+  @Override
+  public void checkAlive() { }
 }

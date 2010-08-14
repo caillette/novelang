@@ -48,11 +48,29 @@ public class InsiderAgent
      * Called when launching a JVM with {@code -javaagent} option.
      * See <a href="http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html">Java Instrumentation specification</a>.
      */
-    public static void premain( final String args )
+    public static void premain( final String arguments )
     {
         final MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer() ;
+        final LocalInsider managedBean ;
+
         try {
-          final LocalInsider managedBean = new LocalInsider() ;
+          if( arguments != null
+              && arguments.startsWith( Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME )
+          ) out : {
+            final String delayAsString = arguments.substring(
+                Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME.length() ) ;
+            final long delay;
+            try {
+              delay = Long.parseLong( delayAsString );
+            } catch( NumberFormatException e ) {
+              System.err.println( "Couldn't parse arguments '" + arguments + "', using defaults." ) ;
+              managedBean = new LocalInsider() ;
+              break out ;
+            }
+            managedBean = new LocalInsider( delay ) ;
+          } else {
+            managedBean = new LocalInsider() ;
+          }
           beanServer.registerMBean( managedBean, Insider.NAME ) ;
         } catch( Exception e ) {
           // Checked exceptions prevent the JVM from loading the agent.

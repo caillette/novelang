@@ -41,6 +41,8 @@ public interface Insider {
    */
   int STATUS_HEARTBEAT_PERIOD_EXPIRED = -1 ;
 
+  String MAXIMUM_HEARTBEATDELAY_PARAMETERNAME = "maximumHeartbeatDelay=" ;
+
   void shutdown() ;
 
   /**
@@ -48,5 +50,12 @@ public interface Insider {
    * to keep the process alive.
    */
   void keepAlive() ;
+
+  /**
+   * For tests only. Doesn't activate keepalive.
+   * Implementation has nothing to do because calling a remote method successfully tells
+   * that remote service is alive.
+   */
+  void checkAlive() ;
 
 }

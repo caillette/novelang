@@ -23,9 +23,15 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import org.apache.commons.lang.StringUtils;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Starts and stops a {@link Process}, watching its standard and error outputs.
@@ -53,17 +59,21 @@ public abstract class Shell {
   private Thread errorStreamWatcherThread = null ;
   private Process process = null ;
 
+  private static final ImmutableList< String > NO_PARAMETERS = ImmutableList.of() ;
 
-  public Shell(
+
+  protected Shell(
       final File workingDirectory,
       final String nickname,
       final List< String > processArguments,
       final Predicate< String > startupSensor
   ) {
+    checkArgument( workingDirectory.isDirectory() ) ;
     this.workingDirectory = workingDirectory ;
-    this.processArguments = processArguments ;
-    this.startupSensor = startupSensor ;
-    this.nickname = nickname;
+    this.processArguments = processArguments == null ? NO_PARAMETERS : processArguments ;
+    this.startupSensor = checkNotNull( startupSensor ) ;
+    checkArgument( ! StringUtils.isBlank( nickname ) ) ;
+    this.nickname = nickname ;
     threadGroup = new ThreadGroup( getClass().getSimpleName() + "-" + nickname ) ;
   }
 
@@ -79,7 +89,8 @@ public abstract class Shell {
   {
     final Semaphore startupSemaphore = new Semaphore( 0 ) ;
 
-    LOG.info( nickname, " starting process in directory '" + workingDirectory.getAbsolutePath() + "'" ) ;
+    LOG.info( nickname + " starting process in directory '"
+        + workingDirectory.getAbsolutePath() + "'" ) ;
     LOG.info( "Arguments: " + processArguments ) ;
 
     synchronized( stateLock ) {
@@ -117,7 +128,7 @@ public abstract class Shell {
       }
     }
 
-    LOG.info( "Successfully started ", nickname, "." ) ;
+    LOG.info( "Successfully started " + nickname + "." ) ;
   }
 
 
@@ -129,7 +140,7 @@ public abstract class Shell {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.debug( "Standard output from supervised process in ", nickname, ": >>> " + line ) ;
+          LOG.debug( "Standard output from supervised process in " + nickname + ": >>> " + line ) ;
           if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
             startupSemaphore.release() ;
           }
@@ -149,7 +160,7 @@ public abstract class Shell {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.warn( "Error from supervised process in ", nickname, ": >>> " + line ) ;
+          LOG.warn( "Error from " + nickname + ": >>> " + line ) ;
         }
       }
 
@@ -191,7 +202,7 @@ public abstract class Shell {
             interruptWatcherThreads() ;
           }
         } else {
-            LOG.warn( "Trying to shutdown while in ", state, " state for ", nickname, "." ) ;
+            LOG.warn( "Trying to shutdown while in " + state + " state for " + nickname + "." ) ;
         }
       } finally {
         process = null ;

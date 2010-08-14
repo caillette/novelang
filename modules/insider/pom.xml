@@ -52,6 +52,10 @@
         </configuration>
       </plugin>
 
+      <!--
+          Declare a 'Novelang-insider-VERSION-embedder.jar' artifact making the agent jar
+          available as a resource in the classpath for those who launch VMs.
+      -->
       <plugin>
         <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
         <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>

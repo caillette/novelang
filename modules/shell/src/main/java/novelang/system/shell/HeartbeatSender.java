@@ -18,6 +18,7 @@ package novelang.system.shell;
 
 import novelang.system.shell.insider.Insider;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -30,16 +31,27 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
   private final Thread thread ;
 
-  @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public HeartbeatSender( final Insider insider, final String processNickname ) {
+    this( insider, processNickname, Insider.HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS / 10L ) ;
+  }
+
+
+  @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
+  public HeartbeatSender(
+      final Insider insider,
+      final String processNickname,
+      final long heartbeatPeriodMilliseconds
+  ) {
     checkNotNull( insider ) ;
+    checkArgument( heartbeatPeriodMilliseconds > 0L ) ;
+
     thread = new Thread(
         new Runnable() {
           @Override
           public void run() {
             while( true ) {
               try {
-                Thread.sleep( Insider.HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS / 10L ) ;
+                Thread.sleep( heartbeatPeriodMilliseconds ) ;
               } catch( InterruptedException e ) {
                 break ;
               }

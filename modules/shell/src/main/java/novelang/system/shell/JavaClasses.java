@@ -21,9 +21,12 @@ import java.util.Arrays;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import org.apache.commons.lang.StringUtils;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Represents executable Java classes.
@@ -35,7 +38,10 @@ public abstract class JavaClasses {
   private final ImmutableList< String > elements ;
 
   protected JavaClasses( final ImmutableList< String > elements ) {
-    this.elements = Preconditions.checkNotNull( elements ) ;    
+    this.elements = checkNotNull( elements ) ;
+    for( final String element : elements ) {
+      checkArgument( ! StringUtils.isBlank( element ) , "Can't have blank element: %s", elements ) ;
+    }
   }
 
 
@@ -48,7 +54,7 @@ public abstract class JavaClasses {
 
     public SingleJar( final File jarFile ) {
       super( ImmutableList.of( "-jar", jarFile.getAbsolutePath() ) ) ;
-      Preconditions.checkArgument( jarFile.isFile() ) ;
+      checkArgument( jarFile.isFile() ) ;
     }
 
   }

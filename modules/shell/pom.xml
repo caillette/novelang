@@ -29,6 +29,8 @@
   <name>${artifactId}</name>
 
 
+  
+  
   <dependencies>
 
     <dependency>
@@ -43,12 +45,12 @@
       <version>${parent.version}</version>
     </dependency>
 
+    <!-- Gives access to the Insider jar as a resource in the classpath. -->
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-insider</artifactId>
       <version>${parent.version}</version>
       <classifier>embedder</classifier>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -58,13 +60,7 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-shell-fixture</artifactId>
-      <version>${parent.version}</version>
-      <scope>test</scope>
-    </dependency>
-
+    <!-- Give access to the dummy program as resource in the classpath to copy the jar out. -->
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-shell-fixture</artifactId>

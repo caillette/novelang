@@ -45,7 +45,7 @@
     <!--
         We can't get the job done using moduleSets because we're not in the parent project,
         so we don't see every module (and source inclusion doesn't seem to work for declared
-        dependencies). So we're taking the dirty way here.
+        dependencies). We're taking the dirty way here.
     -->
     <fileSet>
       <directory>../..</directory>

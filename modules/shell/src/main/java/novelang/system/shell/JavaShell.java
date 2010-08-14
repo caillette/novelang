@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import javax.management.InstanceNotFoundException;
@@ -35,10 +35,12 @@ import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
+import javax.naming.ServiceUnavailableException;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.insider.Insider;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -70,31 +72,33 @@ public class JavaShell extends Shell {
   private final Object lock = new Object() ;
   
   private final int jmxPort ;
+  private final Integer heartbeatPeriodMilliseconds ;
 
-  public JavaShell(
-      final String nickname,
-      final File workingDirectory,
-      final List< String > jvmArguments,
-      final JavaClasses javaClasses,
-      final List< String > programArguments,
-      final Predicate< String > startupSensor,
-      final int jmxPort
-  ) {
+  public JavaShell( final Parameters parameters ) {
     super(
-        workingDirectory,
-        nickname,
-        createProcessArguments( jvmArguments, jmxPort, javaClasses, programArguments ),
-        startupSensor
+        parameters.getWorkingDirectory(),
+        parameters.getNickname(),
+        createProcessArguments(
+            parameters.getJvmArguments(),
+            parameters.getJmxPort(),
+            parameters.getJavaClasses(),
+            parameters.getProgramArguments(),
+            parameters.getHeartbeatFatalDelayMilliseconds()
+        ),
+        parameters.getStartupSensor()
     ) ;
-    Preconditions.checkArgument( jmxPort > 0 ) ;
-    this.jmxPort = jmxPort ;
+    checkArgument( parameters.getJmxPort() > 0 ) ;
+    this.jmxPort = parameters.getJmxPort() ;
+    this.heartbeatPeriodMilliseconds = parameters.getHeartbeatPeriodMilliseconds() ;
   }
+
 
   private static List< String > createProcessArguments(
       final List< String > jvmArguments,
       final int jmxPort,
       final JavaClasses javaClasses,
-      final List< String > programArguments
+      final List< String > programArguments,
+      final Integer heartbeatMaximumPeriod
   ) {
     final List< String > argumentList = Lists.newArrayList() ;
 
@@ -110,9 +114,18 @@ public class JavaShell extends Shell {
     argumentList.add( "-Dcom.sun.management.jmxremote.authenticate=false" ) ;
     argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
 
-    argumentList.add( "-javaagent:" + AgentFileInstaller.getJarFile().getAbsolutePath() ) ;
+    argumentList.add(
+        "-javaagent:" + AgentFileInstaller.getJarFile().getAbsolutePath()
+        + ( heartbeatMaximumPeriod == null
+            ? ""
+            : "=" + Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME + heartbeatMaximumPeriod
+        )
+    ) ;
 
-    argumentList.addAll( jvmArguments ) ;
+    if( jvmArguments != null ) {
+      argumentList.addAll( jvmArguments ) ;
+    }
+
     argumentList.addAll( javaClasses.asStringList() ) ;
     argumentList.addAll( programArguments ) ;
 
@@ -131,7 +144,26 @@ public class JavaShell extends Shell {
     synchronized( lock ) {
       super.start( timeout, timeUnit ) ;
       connect() ;
-      heartbeatThread = new HeartbeatSender( insider, getNickname() ) ;
+      if( heartbeatPeriodMilliseconds == null ) {
+        heartbeatThread = new HeartbeatSender( insider, getNickname() ) ;
+      } else {
+        heartbeatThread = new HeartbeatSender(
+            insider, getNickname(), heartbeatPeriodMilliseconds ) ;
+      }
+    }
+  }
+
+  public boolean isUp() {
+    synchronized( lock ) {
+      if( insider == null ) {
+        throw new IllegalStateException( "Not ready" ) ;
+      }
+      try {
+        insider.checkAlive() ;
+        return true ;
+      } catch( Exception e ) {
+        return false ;
+      }
     }
   }
 
@@ -185,16 +217,37 @@ public class JavaShell extends Shell {
 // ===
 
 
-  private void connect() throws IOException {
+  private void connect() throws IOException, InterruptedException {
     final JMXServiceURL url;
     try {
       url = new JMXServiceURL( "service:jmx:rmi:///jndi/rmi://:" + jmxPort + "/jmxrmi" );
     } catch( MalformedURLException e ) {
       throw new Error( e );
     }
-    jmxConnector = JMXConnectorFactory.connect( url, null ) ;
+    connectWithRetries( url ) ;
     jmxConnection = jmxConnector.getMBeanServerConnection() ;
     insider = getManagedBean( Insider.class, Insider.NAME ) ;
+  }
+
+  private void connectWithRetries( final JMXServiceURL url )
+      throws IOException, InterruptedException
+  {
+    int attemptCount = 0 ;
+    while( true ) {
+      try {
+        jmxConnector = JMXConnectorFactory.connect( url, null ) ;
+        return ;
+      } catch( IOException e ) {
+        if( e.getCause() instanceof ServiceUnavailableException ) {
+          if( attemptCount ++ < 10 ) {
+            LOG.debug( "Couldn't connect to " + url + ", waiting a bit before another attempt..." ) ;
+            TimeUnit.MILLISECONDS.sleep( 100L ) ;
+          } else {
+            throw e ;
+          }
+        }
+      }
+    }
   }
 
 
@@ -242,9 +295,39 @@ public class JavaShell extends Shell {
   }
 
   private static void logCouldntUnregister( final Object culprit, final Exception e ) {
-    LOG.info( "Couldn't disconnect or unregister " + culprit + ", cause: " + e.getClass() +
+    LOG.debug( "Couldn't disconnect or unregister " + culprit + ", cause: " + e.getClass() +
         " (may be normal if other VM terminated)." ) ;
   }
 
 
+  public static interface Parameters {
+
+    String getNickname() ;
+    Parameters withNickname( String nickname ) ;
+
+    File getWorkingDirectory() ;
+    Parameters withWorkingDirectory( File workingDirectory ) ;
+
+    ImmutableList< String > getJvmArguments() ;
+    Parameters withJvmArguments( ImmutableList< String > jvmArguments ) ;
+
+    JavaClasses getJavaClasses() ;
+    Parameters withJavaClasses( JavaClasses javaClasses ) ;
+
+    ImmutableList< String > getProgramArguments() ;
+    Parameters withProgramArguments( ImmutableList< String > programArguments ) ;
+
+    Predicate< String > getStartupSensor() ;
+    Parameters withStartupSensor( Predicate< String > startupSensor ) ;
+
+    int getJmxPort() ;
+    Parameters withJmxPort( int jmxPort ) ;
+
+    Integer getHeartbeatFatalDelayMilliseconds() ;
+    Parameters withHeartbeatFatalDelayMilliseconds( Integer maximum ) ;
+
+    Integer getHeartbeatPeriodMilliseconds() ;
+    Parameters withHeartbeatPeriodMilliseconds( Integer maximum ) ;
+
+  }
 }
