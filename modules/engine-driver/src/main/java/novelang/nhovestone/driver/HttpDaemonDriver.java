@@ -27,6 +27,7 @@ import novelang.daemon.HttpDaemon;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import novelang.system.shell.Shell;
 
 /**
  * Starts and stops an {@link novelang.daemon.HttpDaemon} in its deployment directory,
@@ -60,7 +61,7 @@ public class HttpDaemonDriver extends EngineDriver {
 
 
   private static int getTcpPortForSure( final Configuration configuration ) {
-    final Integer tcpPort = configuration.getTcpPort() ;
+    final Integer tcpPort = configuration.getHttpPort() ;
     if( tcpPort == null ) {
       return novelang.configuration.ConfigurationTools.DEFAULT_HTTP_DAEMON_PORT ;
     } else {
@@ -72,8 +73,7 @@ public class HttpDaemonDriver extends EngineDriver {
 
   private static EngineDriver.Configuration enrichWithProgramArguments(
       final Configuration configuration
-  )
-  {
+  ) {
     return configuration.withProgramOtherOptions(
         "--" + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT,
         "" + getTcpPortForSure( configuration )
@@ -88,8 +88,8 @@ public class HttpDaemonDriver extends EngineDriver {
   public void start( final long timeout, final TimeUnit timeUnit )
       throws
       IOException,
-      ProcessDriver.ProcessCreationFailedException,
-      InterruptedException
+      InterruptedException,
+      Shell.ProcessCreationFailedException
   {
     ensureTcpPortAvailable() ;
     super.start( timeout, timeUnit );
@@ -124,8 +124,8 @@ public class HttpDaemonDriver extends EngineDriver {
   @Husk.Converter( converterClass = ConfigurationHelper.class )
   public interface Configuration extends EngineDriver.Configuration< Configuration > {
 
-    Integer getTcpPort() ;
-    Configuration withTcpPort( Integer port ) ;
+    Integer getHttpPort() ;
+    Configuration withHttpPort( Integer port ) ;
   }
 
 }

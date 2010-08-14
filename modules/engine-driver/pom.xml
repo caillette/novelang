@@ -39,6 +39,12 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-shell</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-engine</artifactId>
       <version>${parent.version}</version>
     </dependency>

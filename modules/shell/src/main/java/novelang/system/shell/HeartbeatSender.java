@@ -32,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
   private final Thread thread ;
 
   public HeartbeatSender( final Insider insider, final String processNickname ) {
-    this( insider, processNickname, Insider.HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS / 10L ) ;
+    this( insider, processNickname, Insider.HEARTBEAT_FATAL_DELAY_MILLISECONDS / 10L ) ;
   }
 
 

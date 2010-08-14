@@ -19,6 +19,8 @@ package novelang.system.shell.insider;
 import javax.management.MXBean;
 import javax.management.ObjectName;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static novelang.system.shell.insider.JmxTools.getObjectNameQuiet;
 
 /**
@@ -29,7 +31,7 @@ import static novelang.system.shell.insider.JmxTools.getObjectNameQuiet;
 @MXBean
 public interface Insider {
 
-  long HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS = 10000L ;
+  long HEARTBEAT_FATAL_DELAY_MILLISECONDS = MILLISECONDS.convert( 10L, SECONDS ) ;
 
   /**
    * JMX stuff.
@@ -46,15 +48,15 @@ public interface Insider {
   void shutdown() ;
 
   /**
-   * Call this method at intervals shorter than {@link #HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS}
+   * Call this method at intervals shorter than {@link #HEARTBEAT_FATAL_DELAY_MILLISECONDS}
    * to keep the process alive.
    */
   void keepAlive() ;
 
   /**
    * For tests only. Doesn't activate keepalive.
-   * Implementation has nothing to do because calling a remote method successfully tells
-   * that remote service is alive.
+   * Implementation should do exactly nothing because calling a remote method successfully just
+   * tells that remote service is alive.
    */
   void checkAlive() ;
 

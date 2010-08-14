@@ -75,9 +75,18 @@ public abstract class JavaClasses {
       ) ;
     }
 
+    public ClasspathAndMain( final String mainClassName, final Iterable< String > fileNames ) {
+      super( ImmutableList.< String >builder()
+          .add( "-cp" )
+          .add( Joiner.on( File.pathSeparator ).join( fileNames ) )
+          .add( mainClassName )
+          .build()
+      ) ;
+    }
+
   }
 
-  private static final Function< File, String > FILES_TO_NAMES = new Function<File, String>() {
+  private static final Function< File, String > FILES_TO_NAMES = new Function< File, String >() {
     @Override
     public String apply( final File from ) {
       return from.getAbsolutePath() ;

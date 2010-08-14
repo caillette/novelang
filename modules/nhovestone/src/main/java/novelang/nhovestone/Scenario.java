@@ -29,6 +29,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import novelang.KnownVersions;
 import novelang.Version;
 import novelang.nhovestone.driver.HttpDaemonDriver;
 import novelang.nhovestone.driver.ProcessDriver;
@@ -38,6 +39,7 @@ import novelang.nhovestone.scenario.Upsizer;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import novelang.system.shell.Shell;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -117,10 +119,11 @@ public class Scenario< UPSIZING, MEASUREMENT > {
           Husk.create( HttpDaemonDriver.Configuration.class )
           .withContentRootDirectory( contentDirectory )
           .withJvmHeapSizeMegabytes( configuration.getJvmHeapSizeMegabytes() )
-          .withInstallationsDirectory( configuration.getInstallationsDirectory() )
+          .withJavaClasses( KnownVersions.asJavaClasses(
+              configuration.getInstallationsDirectory(), version ) )
           .withLogDirectory( versionWorkingDirectory )
           .withVersion( version )
-          .withTcpPort( tcpPort )
+          .withHttpPort( tcpPort )
           .withWorkingDirectory( versionWorkingDirectory )
       ) ;
 
@@ -139,7 +142,10 @@ public class Scenario< UPSIZING, MEASUREMENT > {
    * Call this once only.
    */
   public void run()
-      throws InterruptedException, IOException, ProcessDriver.ProcessCreationFailedException
+      throws
+      InterruptedException,
+      IOException,
+      Shell.ProcessCreationFailedException
   {
     try {
       startDaemons() ;
@@ -213,8 +219,8 @@ public class Scenario< UPSIZING, MEASUREMENT > {
 
   private void startDaemons()
       throws IOException,
-      ProcessDriver.ProcessCreationFailedException,
-      InterruptedException
+      InterruptedException,
+      Shell.ProcessCreationFailedException
   {
     for( final Monitoring monitoring : monitorings.values() ) {
       final HttpDaemonDriver driver = monitoring.driver ;
@@ -233,6 +239,8 @@ public class Scenario< UPSIZING, MEASUREMENT > {
         try {
           driver.shutdown( true ) ;
         } catch( InterruptedException e ) {
+          LOG.error( "Could not stop " + driver, e ) ;
+        } catch( IOException e ) {
           LOG.error( "Could not stop " + driver, e ) ;
         }
         monitoring.termination = Terminations.LAST_CLEANUP ;

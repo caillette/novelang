@@ -32,7 +32,7 @@ public class LocalInsider implements Insider {
   private final AtomicLong keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
 
   public LocalInsider() {
-    this( HEARTBEAT_MAXIMUM_PERIOD_MILLISECONDS ) ;
+    this( HEARTBEAT_FATAL_DELAY_MILLISECONDS ) ;
   }
 
 

@@ -18,24 +18,26 @@ package novelang.nhovestone.driver;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import novelang.KnownVersions;
 import novelang.Version;
 import novelang.configuration.parse.GenericParameters;
 import novelang.system.DefaultCharset;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import novelang.system.TcpPortBooker;
+import novelang.system.shell.JavaClasses;
+import novelang.system.shell.JavaShell;
+import novelang.system.shell.Shell;
+import novelang.system.shell.ShutdownStyle;
 import org.apache.commons.lang.StringUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
-import static novelang.nhovestone.driver.VirtualMachineTools.SYSTEMPROPERTYNAME_STICKER;
 
 /**
  * Encapsulates a {@link ProcessDriver}, factoring common code for running either a
@@ -47,8 +49,9 @@ public abstract class EngineDriver {
 
   private static final Log LOG = LogFactory.getLog( EngineDriver.class ) ;
 
-  private final ProcessDriver processDriver ;
-  private final Sticker sticker ;
+  private final JavaShell javaShell;
+  
+  public static final String NOVELANG_BOOTSTRAP_MAIN_CLASS_NAME = "novelang.bootstrap.Main";
 
 
   /**
@@ -70,38 +73,12 @@ public abstract class EngineDriver {
 
     final Version version = configuration.getVersion() ;
 
-    final String absoluteClasspath = configuration.getAbsoluteClasspath() ;
-    final File installationDirectory = configuration.getInstallationsDirectory() ;
-    if( absoluteClasspath == null ) {
-      checkArgument( installationDirectory.exists(), installationDirectory ) ;
-      checkNotNull( version ) ;
-    } else {
-      checkArgument( ! StringUtils.isBlank( absoluteClasspath ) ) ;
-      checkArgument( installationDirectory == null, installationDirectory ) ;
-    }
-
     final String applicationName = "Novelang"
         + ( version == null ? "" : "-" + version.getName() )
         + ":" + commandName
     ;
 
-    final ImmutableList.Builder< String > optionsBuilder = new ImmutableList.Builder< String >() ;
-
-    optionsBuilder.add( "java" ) ;
-
-    this.sticker = Sticker.create() ;
-
-    optionsBuilder.add( SYSTEMPROPERTYNAME_STICKER + "=" + sticker.asString() ) ;
-
-    optionsBuilder.add( "-Xmx" + checkNotNull( configuration.getJvmHeapSizeMegabytes() + "M" ) ) ;
-
-    optionsBuilder.add( "-Djava.awt.headless=true" ) ;
-
-    optionsBuilder.add( "-server" ) ;
-
-    if( "64".equals( System.getProperty( "sun.arch.data.model" ) ) ) {
-      optionsBuilder.add( "-d64" ) ;
-    }
+    final ImmutableList.Builder< String > jvmOptionsBuilder = ImmutableList.builder() ;
 
     final Iterable< String > otherJvmOptions = configuration.getJvmOtherOptions() ;
     if( otherJvmOptions != null ) {
@@ -110,61 +87,64 @@ public abstract class EngineDriver {
           throw new IllegalArgumentException(
               "Use method in " + Configuration.class.getName() + " to set -Xmx" ) ;
         } else {
-          optionsBuilder.add( checkNotNull( processOption ) ) ;
+          jvmOptionsBuilder.add( checkNotNull( processOption ) ) ;
         }
       }
     }
-
-    if( installationDirectory != null ) {
-      optionsBuilder.add( "-jar" ) ;
-      optionsBuilder.add( KnownVersions.getAbsoluteJarPath( installationDirectory, version ) ) ;
+    jvmOptionsBuilder.add( "-Xmx" + checkNotNull(
+        configuration.getJvmHeapSizeMegabytes() + "M" ) ) ;
+    jvmOptionsBuilder.add( "-Djava.awt.headless=true" ) ;
+    jvmOptionsBuilder.add( "-server" ) ;
+    if( "64".equals( System.getProperty( "sun.arch.data.model" ) ) ) {
+      jvmOptionsBuilder.add( "-d64" ) ;
     }
 
-    if( absoluteClasspath != null ) {
-//      LOG.info( "Using absolute classpath: '" + absoluteClasspath + "'" ) ;
-      optionsBuilder.add( "-cp" ) ;
-      optionsBuilder.add( absoluteClasspath ) ;
-      optionsBuilder.add( "novelang.bootstrap.Main" ) ;
-    }
 
-    optionsBuilder.add( commandName ) ;
+    final ImmutableList.Builder< String > programOptionsBuilder = ImmutableList.builder() ;
+    programOptionsBuilder.add( commandName ) ;
 
     final Iterable< String > otherProgramOptions = configuration.getProgramOtherOptions() ;
     if( otherProgramOptions != null ) {
       for( final String programOption : otherProgramOptions ) {
-        optionsBuilder.add( checkNotNull( programOption ) ) ;
+        programOptionsBuilder.add( checkNotNull( programOption ) ) ;
       }
     }
 
     if( configuration.getLogDirectory() != null ) {
-      optionsBuilder.add( OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ) ;
-      optionsBuilder.add( configuration.getLogDirectory().getAbsolutePath() ) ;
+      programOptionsBuilder.add( OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ) ;
+      programOptionsBuilder.add( configuration.getLogDirectory().getAbsolutePath() ) ;
     }
 
-    optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_CONTENT_ROOT ) ;
-    optionsBuilder.add( checkNotNull(
+    programOptionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_CONTENT_ROOT ) ;
+    programOptionsBuilder.add( checkNotNull(
         configuration.getContentRootDirectory() ).getAbsolutePath() ) ;
 
-    optionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET ) ;
-    optionsBuilder.add( DefaultCharset.SOURCE.name() ) ;
+    programOptionsBuilder.add(
+        OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET ) ;
+    programOptionsBuilder.add( DefaultCharset.SOURCE.name() ) ;
 
     final Iterable< String > programArguments = configuration.getProgramArguments() ;
     if( programArguments != null ) {
       for( final String programArgument : programArguments ) {
-        optionsBuilder.add( checkNotNull( programArgument ) ) ;
+        programOptionsBuilder.add( checkNotNull( programArgument ) ) ;
       }
     }
 
 
+    JavaShell.Parameters parameters =
+        Husk.create( JavaShell.Parameters.class );
+    parameters = parameters
+        .withWorkingDirectory( configuration.getWorkingDirectory() )
+        .withNickname( "Novelang-" + version.getName() )
+        .withJvmArguments( jvmOptionsBuilder.build() )
+        .withJavaClasses( configuration.getJavaClasses() )
+        .withProgramArguments( programOptionsBuilder.build() )
+        .withStartupSensor( startupSensor )
+        .withJmxPort( TcpPortBooker.THIS.find() )
+    ;
 
-    final List< String > processOptions = optionsBuilder.build() ;
 
-    processDriver = new ProcessDriver(
-        checkNotNull( configuration.getWorkingDirectory() ),
-        applicationName,
-        processOptions,
-        startupSensor
-    ) ;
+    javaShell = new JavaShell( parameters ) ;
 
   }
 
@@ -172,15 +152,14 @@ public abstract class EngineDriver {
   public void start( final long timeout, final TimeUnit timeUnit )
       throws
       IOException,
-      ProcessDriver.ProcessCreationFailedException,
-      InterruptedException
+      InterruptedException, Shell.ProcessCreationFailedException
   {
-    processDriver.start( timeout, timeUnit ) ;
+    javaShell.start( timeout, timeUnit ) ;
   }
 
 
-  public int shutdown( final boolean force ) throws InterruptedException {
-    return processDriver.shutdown( force ) ;
+  public Integer shutdown( final boolean force ) throws InterruptedException, IOException {
+    return javaShell.shutdown( force ? ShutdownStyle.FORCED : ShutdownStyle.WAIT ) ;
   }
 
   
@@ -189,30 +168,8 @@ public abstract class EngineDriver {
   @Husk.Converter( converterClass = ConfigurationHelper.class )
   public interface Configuration< CONFIGURATION extends Configuration > {
 
-    /**
-     * Mutually exclusive with {@link #getAbsoluteClasspath()}.
-     * @return null if {@link #getAbsoluteClasspath()} returns a non-null value, a directory
-     *         containing an unzipped Novelang installation otherwise.
-     */
-    File getInstallationsDirectory() ;
-
-    /**
-     * Mutually exclusive with {@link #withAbsoluteClasspath(String)}.
-     */
-    CONFIGURATION withInstallationsDirectory( File directory ) ;
-
-    /**
-     * Mutually exclusive with {@link #getInstallationsDirectory()}.
-     * @return null if {@link #getInstallationsDirectory()} returns a non-null value, a valid
-     *         classpath otherwise.
-     */
-    String getAbsoluteClasspath() ;
-
-    /**
-     * Mutually exclusive with {@link #withInstallationsDirectory(java.io.File)}.
-     */
-    CONFIGURATION withAbsoluteClasspath( String absoluteClasspath ) ;
-
+    JavaClasses getJavaClasses() ;
+    CONFIGURATION withJavaClasses( JavaClasses javaClasses ) ;
 
     Version getVersion() ;
     CONFIGURATION withVersion( Version version ) ;

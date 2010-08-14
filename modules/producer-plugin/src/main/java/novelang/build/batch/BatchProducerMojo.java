@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import novelang.Version;
+import novelang.VersionFormatException;
 import novelang.batch.AbstractDocumentGenerator;
 import novelang.batch.DocumentGenerator;
 import novelang.common.Problem;
@@ -31,11 +33,13 @@ import novelang.configuration.DocumentGeneratorConfiguration;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.DocumentGeneratorParameters;
 import novelang.nhovestone.driver.DocumentGeneratorDriver;
+import novelang.nhovestone.driver.EngineDriver;
 import novelang.nhovestone.driver.ProcessDriver;
 import novelang.produce.DocumentProducer;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
+import novelang.system.shell.JavaClasses;
 import org.apache.fop.apps.FOPException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -142,17 +146,25 @@ public class BatchProducerMojo extends AbstractMojo {
       log.info( "%s - Classpath element: %s", getClass().getSimpleName(), classpathElement ) ;
     }
 */
+    final Version version;
+    try {
+      version = Version.parse( project.getVersion() );
+    } catch( VersionFormatException e ) {
+      throw new MojoExecutionException( "Couldn't parse version '" + project.getVersion() + "'" ) ;
+    }
 
     final String[] documentNames = documentsToRender.toArray(
         new String[ documentsToRender.size() ] ) ;
 
     DocumentGeneratorDriver.Configuration configuration =
         Husk.create( DocumentGeneratorDriver.Configuration.class )
-        .withAbsoluteClasspath( Joiner.on( File.pathSeparator ).join( classpathElements ) )
+        .withJavaClasses( new JavaClasses.ClasspathAndMain(
+            EngineDriver.NOVELANG_BOOTSTRAP_MAIN_CLASS_NAME, classpathElements ) )
         .withContentRootDirectory( contentRootDirectory )
         .withOutputDirectory( outputDirectory )
         .withWorkingDirectory( workingDirectory )
         .withProgramArguments( documentNames )
+        .withVersion( version )
     ;
 
     if( logDirectory != null ) {

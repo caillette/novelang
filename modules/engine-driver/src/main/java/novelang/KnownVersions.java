@@ -19,8 +19,7 @@ package novelang;
 import java.io.File;
 
 import com.google.common.base.Preconditions;
-import novelang.Version;
-import novelang.VersionFormatException;
+import novelang.system.shell.JavaClasses;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -56,6 +55,8 @@ public class KnownVersions {
    * @param installationsDirectory a non-null object representing a directory.
    * @param version a non-null object.
    * @return a valid path, without the leading file separator.
+   *
+   * @deprecated use {@link #asJavaClasses(java.io.File, Version)}.
    */
   public static String getAbsoluteJarPath(
       final File installationsDirectory,
@@ -81,6 +82,35 @@ public class KnownVersions {
           "Novelang-" + version.getName() + File.separator +
           "Novelang-" + version.getName() + ".jar"
       ;
+    }
+  }
+
+  /**
+   * Returns the path to the bootstrapping jar, relative to application installation directory.
+   * @param installationsDirectory a non-null object representing a directory.
+   * @param version a non-null object.
+   * @return a valid path, without the leading file separator.
+   */
+  public static JavaClasses asJavaClasses(
+      final File installationsDirectory,
+      final Version version
+  ) {
+    Preconditions.checkNotNull( version ) ;
+    if( Version.COMPARATOR.compare( VERSION_0_44_0, version ) <= 0 ) {
+        return new JavaClasses.SingleJar( new File(
+            FilenameUtils.normalizeNoEndSeparator( installationsDirectory.getAbsolutePath() ) +
+            File.separator +
+            "Novelang-distribution-" + version.getName() + File.separator +
+            "lib" + File.separator +
+            "Novelang-bootstrap-" + version.getName() + ".jar"
+        ) ) ;
+    } else {
+      return new JavaClasses.SingleJar( new File(
+          FilenameUtils.normalizeNoEndSeparator( installationsDirectory.getAbsolutePath() ) +
+          File.separator +
+          "Novelang-" + version.getName() + File.separator +
+          "Novelang-" + version.getName() + ".jar"
+      ) ) ;
     }
   }
 

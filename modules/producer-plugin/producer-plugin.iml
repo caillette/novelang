@@ -9,7 +9,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
-      <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -47,6 +46,9 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.mail:mail:1.4" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:1.6" level="project" />
+    <orderEntry type="module" module-name="shell" />
+    <orderEntry type="module" module-name="insider" />
+    <orderEntry type="module" module-name="insider" />
     <orderEntry type="module" module-name="engine" />
     <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.0.b2" level="project" />

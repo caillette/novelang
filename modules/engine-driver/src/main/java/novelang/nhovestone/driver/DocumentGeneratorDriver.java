@@ -70,7 +70,7 @@ public class DocumentGeneratorDriver extends EngineDriver {
    * Always performs a non-forced shutdown.
    */
   @Override
-  public int shutdown( final boolean force ) throws InterruptedException {
+  public Integer shutdown( final boolean force ) throws InterruptedException, IOException {
     if( force ) {
       LOG.warn( "Forced shutdown not supported." ) ;
     }

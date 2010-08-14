@@ -176,9 +176,10 @@ public class JavaShell extends Shell {
    * @throws InterruptedException should not happen.
    * @throws IOException too bad.
    */
-  public void shutdown( final ShutdownStyle shutdownStyle )
+  public Integer shutdown( final ShutdownStyle shutdownStyle )
       throws InterruptedException, IOException
   {
+    Integer exitStatus = null ;
     synchronized( lock ) {
 
       heartbeatThread.stop() ;
@@ -191,11 +192,11 @@ public class JavaShell extends Shell {
               LOG.info( "Requesting shutdown (through JMX) for ", getNickname(), "..." ) ;
               insider.shutdown() ;
             } catch( Exception e ) {
-              shutdownProcess( true ) ;
+              exitStatus = shutdownProcess( true ) ;
             }
             // ... After asking for shutdown, we wait for natural process end. TODO: add timeout.
           case WAIT :
-            shutdownProcess( false ) ;
+            exitStatus = shutdownProcess( false ) ;
             break ;
           case FORCED :
             shutdownProcess( true ) ;
@@ -207,7 +208,9 @@ public class JavaShell extends Shell {
         disconnect() ;
       }
     }
-    LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname() + "." ) ;
+    LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
+        + " with exit status code of " + exitStatus + "." ) ;
+    return exitStatus ;
   }
 
 
