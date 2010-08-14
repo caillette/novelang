@@ -89,7 +89,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
   public void stop() {
     if( thread.isInterrupted() ) {
-      throw new IllegalStateException( "Should not happen: thread already interrupted" ) ;
+      throw new IllegalStateException( "Thread already interrupted" ) ;
     }
     thread.interrupt() ;
   }
