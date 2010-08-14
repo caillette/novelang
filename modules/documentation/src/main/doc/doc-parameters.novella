@@ -1,10 +1,10 @@
 
-| VERSION  | `@SNAPSHOT@`                                         |                       
+| VERSION  | `@project.version@`                                  | %% Maven expands this token.                         
 | AUTHOR   | `Laurent Caillette`                                  |                       
 | TITLE    | Novelang                                             |
 | SUBTITLE | Press-ready PDF from a Wiki syntax                   | 
 | NEWSFEED | ``http://novelang.blogspot.com/feeds/posts/default`` | 
-| DOWNLOAD | ``http://sourceforge.net/projects/novelang/files`` |
+| DOWNLOAD | ``http://sourceforge.net/projects/novelang/files``   |
 
 
 == LINKS

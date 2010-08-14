@@ -16,6 +16,11 @@
  */
 package novelang.system.shell;
 
+import java.lang.reflect.UndeclaredThrowableException;
+import java.rmi.ConnectException;
+
+import novelang.system.Log;
+import novelang.system.LogFactory;
 import novelang.system.shell.insider.Insider;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -28,6 +33,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Laurent Caillette
  */
 /*package*/ class HeartbeatSender {
+
+  private static final Log LOG = LogFactory.getLog( HeartbeatSender.class ) ;
 
   private final Thread thread ;
 
@@ -45,22 +52,37 @@ import static com.google.common.base.Preconditions.checkNotNull;
     checkNotNull( insider ) ;
     checkArgument( heartbeatPeriodMilliseconds > 0L ) ;
 
-    thread = new Thread(
-        new Runnable() {
-          @Override
-          public void run() {
-            while( true ) {
-              try {
-                Thread.sleep( heartbeatPeriodMilliseconds ) ;
-              } catch( InterruptedException e ) {
-                break ;
-              }
-              insider.keepAlive() ;
+    LOG.debug( "Initializing for " + processNickname
+        + " with a heartbeat of " + heartbeatPeriodMilliseconds + " milliseconds..." ) ;
+
+    final Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+/*
+        LOG.info( "Running " + Thread.currentThread().getName()
+            + "for " + processNickname
+            + " with a heartbeat of " + heartbeatPeriodMilliseconds + " milliseconds..."
+        ) ;
+*/
+        while( true ) {
+          try {
+            Thread.sleep( heartbeatPeriodMilliseconds ) ;
+          } catch( InterruptedException e ) {
+            break;
+          }
+          try {
+            insider.keepAlive();
+          } catch( UndeclaredThrowableException e ) {
+            if( e.getCause() instanceof ConnectException ) {
+              LOG.debug( "Could not send heartbeat to " + processNickname + "." );
+            } else {
+              LOG.error( "Could not send heartbeat to " + processNickname + ".", e );
             }
           }
-        },
-        "Heartbeat-" + processNickname
-    ) ;
+        }
+      }
+    } ;
+    thread = new Thread( runnable, "Heartbeat-" + processNickname ) ;
     thread.setDaemon( true ) ;
     thread.start() ;
   }

@@ -33,12 +33,82 @@
     <plugins>
 
 
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${enhancedDocumentSources}</outputDirectory>
+              <delimiters>
+                <delimiter>@</delimiter>
+              </delimiters>
+              <resources>
+                <resource>
+                  <directory>${rawDocumentSources}</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>${parent.groupId}</groupId>
+        <artifactId>Novelang-lexeme-table-plugin</artifactId>
+        <version>${parent.version}</version>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <destinationFile>${lexemeTableDocument}</destinationFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <artifactId>Novelang-producer-plugin</artifactId>
+        <groupId>${parent.groupId}</groupId>
+        <version>${parent.version}</version>
+        <executions>
+          <execution>
+            <id>nhovestone</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>produce</goal>
+            </goals>
+            <configuration>
+              <workingDirectory>${enhancedDocumentSources}</workingDirectory>
+              <contentRootDirectory>${enhancedDocumentSources}</contentRootDirectory>
+              <outputDirectory>${generatedDocumentsDirectory}</outputDirectory>
+              <documentsToRender>
+                <param>/novelang.html"</param>
+                <param>/novelang.pdf"</param>
+                <param>/versions/release-notes.html?stylesheet=announcement-html.xsl"</param>
+                <param>/versions/release-notes.novella?stylesheet=announcement-plaintext.xsl"</param>
+              </documentsToRender>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       
+
+
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <phase>compile</phase>
+            <phase>process-classes</phase>
             <!--<phase>none</phase>-->
             <configuration>
               <tasks>
@@ -49,36 +119,16 @@
                 <echo>project.version=${project.version}</echo>
                 <!--<echo>execution classpath=${classpath}</echo>-->
 
-                <!-- Copy source documents to generated sources directory. -->
-                <copy todir="${enhancedDocumentSources}">
-                  <fileset dir="${rawDocumentSources}" />
-                </copy>
-
-                <!-- Set version number. -->
-                <replace dir="${enhancedDocumentSources}">
-                  <replacetoken>@SNAPSHOT@</replacetoken>
-                  <replacevalue>${project.version}</replacevalue>
-                </replace>
-
-                <!--
-                    Not using a plugin for this as we can't have 3 phases following expected
-                    sequence (should be something like generate-resources, prepare-resources,
-                    compile, but the 1st one for string replacement was always missing).
-                -->
-                <java classname="${lexemeTableMainClass}" classpath="${classpath}" dir="${enhancedDocumentSources}" failonerror="true" fork="true">
-                  <jvmarg value="-Xmx512M" />
-                  <jvmarg value="-Djava.awt.headless=true" />
-                  <arg value="${lexemeTableDocument}" />
-                </java>
 
                 <!-- Now running the big thing! Can't use a plugin because of XSLT bug. -->
+<!--
                 <java classname="${novelang.bootstrap.mainClass}" classpath="${classpath}" dir="${enhancedDocumentSources}" failonerror="true" fork="true">
                   <jvmarg value="-Xmx512M" />
                   <jvmarg value="-Djava.awt.headless=true" />
                   <arg value="${novelang.bootstrap.batchCommand}" />
-                  <arg value="--output-dir" />
+                  <arg value="- -output-dir" />
                   <arg value="${generatedDocumentsDirectory}" />
-                  <arg value="--log-dir" />
+                  <arg value="- -log-dir" />
                   <arg value="${project.build.directory}" />
                   
                   <arg value="/novelang.html" />
@@ -88,6 +138,7 @@
                   <arg value="/versions/release-notes.novella?stylesheet=announcement-plaintext.xsl" />                  
 
                 </java>
+-->
 
                 <copy todir="${generatedDocumentsDirectory}" flatten="true">
                   <fileset dir="${enhancedDocumentSources}" includes="**/*.css" /> 

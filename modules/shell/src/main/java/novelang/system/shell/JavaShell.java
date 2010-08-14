@@ -181,10 +181,6 @@ public class JavaShell extends Shell {
   {
     Integer exitStatus = null ;
     synchronized( lock ) {
-
-      heartbeatThread.stop() ;
-      heartbeatThread = null ;
-
       try {
         switch( shutdownStyle ) {
           case GENTLE :
@@ -205,6 +201,7 @@ public class JavaShell extends Shell {
             throw new IllegalArgumentException( "Unsupported: " + shutdownStyle ) ;
         }
       } finally {
+        stopHeartbeat() ;
         disconnect() ;
       }
     }
@@ -213,6 +210,10 @@ public class JavaShell extends Shell {
     return exitStatus ;
   }
 
+  private void stopHeartbeat() {
+    heartbeatThread.stop() ;
+    heartbeatThread = null ;
+  }
 
 
 // ===
