@@ -35,7 +35,7 @@
     <lib.antlr.version>3.1.1</lib.antlr.version>
 
     <lib.logback.groupid>ch.qos.logback</lib.logback.groupid>
-    <lib.logback.version>0.9.20</lib.logback.version>
+    <lib.logback.version>0.9.24</lib.logback.version>
 
     <lib.maven-plugin.groupid>org.apache.maven</lib.maven-plugin.groupid>
     <lib.maven-plugin.artefactid>maven-plugin-api</lib.maven-plugin.artefactid>
