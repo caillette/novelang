@@ -98,8 +98,8 @@ public class Nhovestone {
   ) throws IOException, Shell.ProcessCreationFailedException, InterruptedException {
     final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
-        .withWarmupIterationCount( 10 )
-        .withMaximumIterations( 10 )
+        .withWarmupIterationCount( 1000 )
+        .withMaximumIterations( 10000 )
         .withScenariiDirectory( scenariiDirectory )
         .withInstallationsDirectory( versionsDirectory )
         .withVersions( versions )
