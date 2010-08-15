@@ -16,14 +16,14 @@
  */
 package novelang.parser.antlr;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
-
-import org.antlr.runtime.RecognitionException;
-import org.junit.Assert;
+import java.lang.reflect.Method;
 
 import novelang.common.LanguageTools;
 import novelang.common.ReflectionTools;
+import org.antlr.runtime.RecognitionException;
+
+import static org.junit.Assert.assertSame;
 
 /**
  * Calls a pluggable method of ANTLR-generated parser.
@@ -36,7 +36,8 @@ import novelang.common.ReflectionTools;
 
   public CustomDelegatingParser( final Method parserMethod, final String text ) {
     super( text, new GrammarDelegate( TreeFixture.LOCATION_FACTORY ) ) ;
-    Assert.assertEquals( NovelangParser.class, parserMethod.getDeclaringClass() ) ;
+    // Full qualified name because IDEA gets fooled by Maven projects.
+    assertSame( novelang.parser.antlr.NovelangParser.class, parserMethod.getDeclaringClass() );
     this.parserMethod = parserMethod ;
   }
 
