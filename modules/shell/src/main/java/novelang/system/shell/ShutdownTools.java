@@ -111,6 +111,7 @@ public class ShutdownTools
         ) ;
         thread.setDaemon( true ) ;
         Runtime.getRuntime().addShutdownHook( thread ) ;
+        shutdownHookInstalled = true ;
       }
     }
   }

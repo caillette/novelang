@@ -54,9 +54,10 @@ public interface Insider {
   void keepAlive() ;
 
   /**
-   * Returns a value that may match with running JVM's process identifier.
+   * Returns JVM's {@link java.lang.management.RuntimeMXBean#getName()}.
+   * This saves creating another remote bean.
    * Doesn't activate keepalive so tests may use it to check that remote service is alive.
    */
-  int getProcessIdentifier() ;
+  String getVirtualMachineName() ;
 
 }

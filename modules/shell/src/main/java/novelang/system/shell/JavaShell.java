@@ -138,7 +138,7 @@ public class JavaShell extends Shell {
   private MBeanServerConnection jmxConnection = null ;
   private Insider insider = null ;
   private HeartbeatSender heartbeatThread = null ;
-  private int processIdentifier = JmxTools.UNDEFINED_PROCESS_ID ;
+  private int processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
 
   @Override
   public String getNickname() {
@@ -148,7 +148,7 @@ public class JavaShell extends Shell {
       currentIdentifier = processIdentifier ;
     }
     return defaultNickname + (
-        currentIdentifier == JmxTools.UNDEFINED_PROCESS_ID ? "" : "#" + processIdentifier ) ;
+        currentIdentifier == JavaShellTools.UNDEFINED_PROCESS_ID ? "" : "#" + processIdentifier ) ;
   }
 
   @Override
@@ -158,7 +158,7 @@ public class JavaShell extends Shell {
     synchronized( lock ) {
       super.start( timeout, timeUnit ) ;
       connect() ;
-      processIdentifier = insider.getProcessIdentifier() ;
+      processIdentifier = JavaShellTools.extractProcessId( insider.getVirtualMachineName() ) ;
       if( heartbeatPeriodMilliseconds == null ) {
         heartbeatThread = new HeartbeatSender( insider, getNickname() ) ;
       } else {
@@ -174,7 +174,7 @@ public class JavaShell extends Shell {
         throw new IllegalStateException( "Not ready" ) ;
       }
       try {
-        insider.getProcessIdentifier() ;
+        insider.getVirtualMachineName() ;
         return true ;
       } catch( Exception ignored ) {
         return false ;
@@ -219,7 +219,7 @@ public class JavaShell extends Shell {
       } finally {
         stopHeartbeat() ;
         disconnect() ;
-        processIdentifier = JmxTools.UNDEFINED_PROCESS_ID ;
+        processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
       }
     }
     LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
@@ -239,11 +239,11 @@ public class JavaShell extends Shell {
 
 
   private void connect() throws IOException, InterruptedException {
-    final JMXServiceURL url;
+    final JMXServiceURL url ;
     try {
       url = new JMXServiceURL( "service:jmx:rmi:///jndi/rmi://:" + jmxPort + "/jmxrmi" );
     } catch( MalformedURLException e ) {
-      throw new Error( e );
+      throw new Error( e ) ;
     }
     connectWithRetries( url ) ;
     jmxConnection = jmxConnector.getMBeanServerConnection() ;
@@ -263,9 +263,9 @@ public class JavaShell extends Shell {
         if(    cause instanceof ServiceUnavailableException
             || cause instanceof java.rmi.ConnectException
         ) {
-          if( attemptCount ++ < 50 ) {
+          if( attemptCount ++ < 10 ) {
             LOG.debug( "Couldn't connect to " + url + ", waiting a bit before another attempt..." ) ;
-            TimeUnit.MILLISECONDS.sleep( 200L ) ;
+            TimeUnit.MILLISECONDS.sleep( 500L ) ;
           } else {
             throw e ;
           }

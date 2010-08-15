@@ -16,6 +16,7 @@
  */
 package novelang.system.shell.insider;
 
+import java.lang.management.ManagementFactory;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.currentTimeMillis;
@@ -30,7 +31,8 @@ import static java.lang.System.currentTimeMillis;
 public class LocalInsider implements Insider {
 
   private final AtomicLong keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
-  private final int processIdentifier ;
+  private String virtualMachineName = null ;
+  private final Object lock = new Object() ;
 
   public LocalInsider() {
     this( HEARTBEAT_FATAL_DELAY_MILLISECONDS ) ;
@@ -40,10 +42,9 @@ public class LocalInsider implements Insider {
   @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public LocalInsider( final long delay ) {
 
-    processIdentifier = JmxTools.getProcessId() ;
-
     System.out.println( "Initializing " + getClass().getSimpleName()
-        + "with: processIdentifier=" + processIdentifier + ", "
+        + "with: "
+//        + "virtualMachineName=" + virtualMachineName + ", "
         + "fatalHeartbeatDelay=" + delay + " milliseconds..." ) ;
 
     final Thread heartbeatReceiver = new Thread(
@@ -89,7 +90,12 @@ public class LocalInsider implements Insider {
   }
 
   @Override
-  public int getProcessIdentifier() {
-    return processIdentifier ;
+  public String getVirtualMachineName() {
+    synchronized( lock ) {
+      if( virtualMachineName == null ) {
+        virtualMachineName = ManagementFactory.getRuntimeMXBean().getName() ;
+      }
+    }
+    return virtualMachineName ;
   }
 }
