@@ -116,6 +116,7 @@ public class BatchProducerMojo extends AbstractMojo {
   private MavenProject project ;
 
 
+  @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     LogFactory.setMavenPluginLog( getLog() ) ;
 

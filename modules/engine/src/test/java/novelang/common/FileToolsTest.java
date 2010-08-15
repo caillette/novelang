@@ -99,7 +99,6 @@ public class FileToolsTest {
   private File parentNoTrailingSeparator;
   private File parentWithTrailingSeparator;
   private File childDirectory;
-  private File grandChildDirectory;
   private File childFile;
 
   @Before
@@ -111,7 +110,7 @@ public class FileToolsTest {
     parentNoTrailingSeparator = createDirectory( scratchDirectory, "parent" ) ;
     parentWithTrailingSeparator = createDirectory( scratchDirectory, "parent/" ) ;
     childDirectory = createDirectory( parentNoTrailingSeparator, "childDirectory" ) ;
-    grandChildDirectory = createDirectory( parentNoTrailingSeparator, "grandChildDirectory" ) ;
+    createDirectory( parentNoTrailingSeparator, "grandChildDirectory" );
     childFile = new File( parentNoTrailingSeparator, "childFile" ) ;
   }
 

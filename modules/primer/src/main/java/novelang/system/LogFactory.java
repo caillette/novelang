@@ -30,6 +30,7 @@ public class LogFactory {
 
   private static final Object LOCK = new Object() ;
 
+  @SuppressWarnings( { "StaticNonFinalField" } )
   private static org.apache.maven.plugin.logging.Log mavenPluginLog;
 
   public static void setMavenPluginLog( final org.apache.maven.plugin.logging.Log log ) {

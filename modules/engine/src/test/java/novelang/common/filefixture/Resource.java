@@ -34,7 +34,7 @@ import org.apache.commons.io.FilenameUtils;
  */
 public final class Resource extends SchemaNode implements Comparable< Resource > {
 
-  /*package*/ Resource( String name ) {
+  /*package*/ Resource( final String name ) {
     super( name ) ;
   }
 

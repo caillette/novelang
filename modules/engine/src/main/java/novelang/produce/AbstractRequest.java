@@ -131,6 +131,7 @@ import novelang.rendering.RenderingTools;
   }
 
   private static final Predicate< Tag > NULL_TAG = new Predicate< Tag >() {
+    @Override
     public boolean apply( final Tag s ) {
       return s == null ;
     }

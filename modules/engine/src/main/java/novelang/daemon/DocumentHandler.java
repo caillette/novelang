@@ -65,13 +65,11 @@ public class DocumentHandler extends GenericHandler {
 
   private final DocumentProducer documentProducer ;
   private final Charset renderingCharset ;
-  private final ExecutorService executorService ;
 
 
   public DocumentHandler( final ProducerConfiguration serverConfiguration ) {
     documentProducer = new DocumentProducer( serverConfiguration ) ;
     renderingCharset = serverConfiguration.getRenderingConfiguration().getDefaultCharset() ;
-    executorService = Preconditions.checkNotNull( serverConfiguration.getExecutorService() ) ;
   }
 
 

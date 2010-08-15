@@ -76,14 +76,15 @@ public class ClasspathResourceLoader implements ResourceLoader {
   /**
    * Force "/" at beginning, removes "/" at end.
    */
-  private static String normalize( String path ) {
+  private static String normalize( final String path ) {
+    String newPath = path ;
     if( ! path.startsWith( "/" ) ) {
-      path = "/" + path ;
+      newPath = "/" + path ;
     }
     if( path.endsWith( "/" ) ) {
-      path = path.substring( 0, path.length() - 1 ) ;
+      newPath = path.substring( 0, path.length() - 1 ) ;
     }
-    return path ;
+    return newPath ;
   }
 
   private static final String SYSTEM_CLASSPATH = "file:" + SystemUtils.JAVA_HOME ;

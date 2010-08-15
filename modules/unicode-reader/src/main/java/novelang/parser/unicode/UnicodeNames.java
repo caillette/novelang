@@ -64,7 +64,7 @@ public class UnicodeNames {
     }
   }
 
-  private static String toHexadecimalString( char character ) {
+  private static String toHexadecimalString( final char character ) {
     return "0x" + LanguageTools.to16ByteHex( character ).toUpperCase();
   }
 

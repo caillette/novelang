@@ -52,14 +52,14 @@ public class MeasurementBundle< MEASUREMENT > implements Iterable< MEASUREMENT >
    *     at startup and did not record anything.
    */
   public MEASUREMENT getMeasurement( final int index ) {
-    if( ! measurementList.isEmpty() ) {
-      return null ;
+    if( measurementList.isEmpty() ) {
+      return measurementList.get( index );
     } else {
-      return measurementList.get( index ) ;
+      return null;
     }
   }
 
-  public Iterator< MEASUREMENT > iterator() {
+  @Override public Iterator< MEASUREMENT > iterator() {
     return measurementList.iterator() ;
   }
 }

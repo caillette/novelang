@@ -46,8 +46,6 @@ public class DirectoryFixture {
 
   private final String testIdentifier ;
 
-  private final Set< String > registeredTestIdentifiers = new HashSet< String >() ;
-
   public DirectoryFixture() throws IOException {
     this( NameAwareTestClassRunner.getTestName() ) ;
   }
@@ -59,10 +57,6 @@ public class DirectoryFixture {
   public DirectoryFixture( final String testIdentifier ) throws IOException {
     Preconditions.checkArgument( ! StringUtils.isBlank( testIdentifier ) ) ;
     this.testIdentifier = testIdentifier ;
-    if( registeredTestIdentifiers.contains( testIdentifier ) ) {
-      throw new IllegalArgumentException( "Already created for: " + testIdentifier ) ;
-    }
-    registeredTestIdentifiers.add( testIdentifier ) ;
     LOG.debug( "Created %s", this ) ;
 
   }
@@ -118,7 +112,7 @@ public class DirectoryFixture {
     return allFixturesDirectory ;
   }
 
-  public static int TIMEOUT_SECONDS = 5 ;
+  public static final int TIMEOUT_SECONDS = 5 ;
 
   private File scratchDirectory;
 

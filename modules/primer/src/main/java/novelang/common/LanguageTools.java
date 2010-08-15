@@ -104,7 +104,7 @@ public class LanguageTools {
       return buffer.toString() ;
   }
 
-  public static String to16ByteHex( int aCharacterAsInt ) {
+  public static String to16ByteHex( final int aCharacterAsInt ) {
     return String.format( "%04X", aCharacterAsInt );
   }
 }

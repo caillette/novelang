@@ -203,13 +203,13 @@ public class UnicodeNamesGeneratorTest {
     return builder.length() > 0 ? builder.toString().substring( 1 ) : "" ;
   }
 
-  private static String unsignedByteTo2DigitHex(int unsignedByteVal) {
+  private static String unsignedByteTo2DigitHex( final int unsignedByteVal) {
     final String hexString = Integer.toHexString( unsignedByteVal ) ;
     return hexString.length() > 1 ? hexString : "0" + hexString ;
   }
 
 
-  private static int toUnsignedInt( byte b ) {
+  private static int toUnsignedInt( final byte b ) {
     // There must be a better thing to do.
     final ByteBuffer byteBuffer = ByteBuffer.allocate( 4 ) ;
     byteBuffer.put( new byte[] { 0, 0, 0, b } ) ;

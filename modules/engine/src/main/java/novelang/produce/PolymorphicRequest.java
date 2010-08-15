@@ -81,7 +81,7 @@ public final class PolymorphicRequest extends AbstractRequest {
     return displayProblems;
   }
 
-  protected void setDisplayProblems( boolean displayProblems ) {
+  protected void setDisplayProblems( final boolean displayProblems ) {
     this.displayProblems = displayProblems;
   }
 

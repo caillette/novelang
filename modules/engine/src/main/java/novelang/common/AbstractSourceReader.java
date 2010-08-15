@@ -190,10 +190,12 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
 // Problems
 // ========  
   
+  @Override
   public Iterable< Problem > getProblems() {
     return ImmutableList.copyOf( problems ) ;
   }
 
+  @Override
   public boolean hasProblem() {
     return ! problems.isEmpty() ;
   }
@@ -204,6 +206,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
   
   private final ProblemCollector problemCollector = new ProblemCollector() {
+    @Override
     public void collect( final Problem problem ) {
       AbstractSourceReader.this.collect( problem ) ;
     }

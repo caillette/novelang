@@ -27,14 +27,12 @@ import com.google.common.base.Preconditions;
 public class IdentifierNotUniqueException extends Exception {
 
   private final String identifier ;
-  private final Collection< SyntacticTree > trees ;
 
   public IdentifierNotUniqueException( 
       final String identifier, 
       final Collection< SyntacticTree > trees 
   ) {
     super( buildMessage( identifier, trees ) ) ;
-    this.trees = trees ;
     this.identifier = identifier ;
   }
 

@@ -56,6 +56,7 @@ public class WebColors {
    */
   public Iterable< ColorPair > createColorCycler() {
     return new Iterable< ColorPair >() {
+      @Override
       public Iterator< ColorPair > iterator() {
         return Iterators.cycle( colorPairs ) ;
       }

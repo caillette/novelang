@@ -47,15 +47,15 @@ public class XYAreaChartDemo3 extends ApplicationFrame {
    *
    * @param title the frame title.
    */
-  public XYAreaChartDemo3( String title ) {
+  public XYAreaChartDemo3( final String title ) {
     super( title );
-    JPanel chartPanel = createDemoPanel();
+    final JPanel chartPanel = createDemoPanel();
     chartPanel.setPreferredSize( new java.awt.Dimension( 500, 270 ) );
     setContentPane( chartPanel );
   }
 
   private static XYDataset createDataset() {
-    TimeSeries series1 = new TimeSeries( "Random 1" );
+    final TimeSeries series1 = new TimeSeries( "Random 1" );
     double value = 0.0;
     Day day = new Day();
     for( int i = 0 ; i < 50 ; i++ ) {
@@ -63,7 +63,7 @@ public class XYAreaChartDemo3 extends ApplicationFrame {
       series1.add( day, value );
       day = ( Day ) day.next();
     }
-    TimeSeriesCollection dataset = new TimeSeriesCollection( series1 );
+    final TimeSeriesCollection dataset = new TimeSeriesCollection( series1 );
     return dataset;
   }
 
@@ -73,8 +73,8 @@ public class XYAreaChartDemo3 extends ApplicationFrame {
    * @param dataset the dataset.
    * @return The chart.
    */
-  private static JFreeChart createChart( XYDataset dataset ) {
-    JFreeChart chart = ChartFactory.createXYAreaChart(
+  private static JFreeChart createChart( final XYDataset dataset ) {
+    final JFreeChart chart = ChartFactory.createXYAreaChart(
         "XY Area Chart Demo 3",
         "Time", "Value",
         dataset,
@@ -83,13 +83,13 @@ public class XYAreaChartDemo3 extends ApplicationFrame {
         false,  // tool tips
         false  // URLs
     );
-    XYPlot plot = ( XYPlot ) chart.getPlot();
-    EnhancedXYAreaRenderer renderer = new EnhancedXYAreaRenderer();
+    final XYPlot plot = ( XYPlot ) chart.getPlot();
+    final EnhancedXYAreaRenderer renderer = new EnhancedXYAreaRenderer();
     plot.setRenderer( 0, renderer );
     renderer.setSeriesFillPaint( 0, new GradientPaint( 0f, 0f, Color.green, 0f, 0f, Color.blue ) );
     renderer.setOutline( true );
     renderer.setSeriesOutlinePaint( 0, Color.black );
-    ValueAxis domainAxis = new DateAxis( "Time" );
+    final ValueAxis domainAxis = new DateAxis( "Time" );
     domainAxis.setLowerMargin( 0.0 );
     domainAxis.setUpperMargin( 0.0 );
     plot.setDomainAxis( domainAxis );
@@ -116,8 +116,8 @@ public class XYAreaChartDemo3 extends ApplicationFrame {
    *
    * @param args ignored.
    */
-  public static void main( String[] args ) {
-    XYAreaChartDemo3 demo = new XYAreaChartDemo3( "XY Area Chart Demo 3" );
+  public static void main( final String[] args ) {
+    final XYAreaChartDemo3 demo = new XYAreaChartDemo3( "XY Area Chart Demo 3" );
     demo.pack();
     RefineryUtilities.centerFrameOnScreen( demo );
     demo.setVisible( true );
