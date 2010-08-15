@@ -76,7 +76,6 @@
         <option value="$PROJECT_DIR$/../../modules/engine/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/documentation/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/code-generation/pom.xml" />
-        <option value="$PROJECT_DIR$/../../modules/ant-task/pom.xml" />
         <option value="$PROJECT_DIR$/../../pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/bootrap/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/distribution/pom.xml" />
