@@ -30,6 +30,7 @@ import static java.lang.System.currentTimeMillis;
 public class LocalInsider implements Insider {
 
   private final AtomicLong keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
+  private final int processIdentifier ;
 
   public LocalInsider() {
     this( HEARTBEAT_FATAL_DELAY_MILLISECONDS ) ;
@@ -39,8 +40,11 @@ public class LocalInsider implements Insider {
   @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public LocalInsider( final long delay ) {
 
+    processIdentifier = JmxTools.getProcessId() ;
+
     System.out.println( "Initializing " + getClass().getSimpleName()
-        + " with fatal heartbeat delay of " + delay + " milliseconds..." ) ;
+        + "with: processIdentifier=" + processIdentifier + ", "
+        + "fatalHeartbeatDelay=" + delay + " milliseconds..." ) ;
 
     final Thread heartbeatReceiver = new Thread(
         new Runnable() {
@@ -85,5 +89,7 @@ public class LocalInsider implements Insider {
   }
 
   @Override
-  public void checkAlive() { }
+  public int getProcessIdentifier() {
+    return processIdentifier ;
+  }
 }

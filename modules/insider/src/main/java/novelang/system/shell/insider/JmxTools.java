@@ -16,6 +16,8 @@
  */
 package novelang.system.shell.insider;
 
+import java.lang.management.ManagementFactory;
+
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
@@ -33,4 +35,34 @@ public class JmxTools {
       throw new RuntimeException( e ) ;
     }
   }
+
+
+  /**
+   * Tries to obtain system process identifier of running JVM.
+   *
+   * @return -1 if not found, process identifier otherwise.
+   *
+   * @author from <a href="http://samuelsjoberg.com/archive/2006/12/jvm-pid" >Samuel Sjöberg</a>'s
+   *     blog.
+   */
+  public static int getProcessId() {
+    final String name = ManagementFactory.getRuntimeMXBean().getName() ;
+    final StringBuilder pid = new StringBuilder() ;
+    for( int i = 0, l = name.length()  ; i < l  ; i++ ) {
+      if( Character.isDigit( name.charAt( i ) ) ) {
+        pid.append( name.charAt( i ) ) ;
+      } else if( pid.length() > 0 ) {
+        break ;
+      }
+    }
+    try {
+      return Integer.parseInt( pid.toString() ) ;
+    } catch( NumberFormatException ignored ) {
+      return UNKNOWN_PROCESS_ID;
+    }
+  }
+
+  public static final int UNDEFINED_PROCESS_ID = -1 ;
+  public static final int UNKNOWN_PROCESS_ID = -2 ;
+
 }

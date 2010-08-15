@@ -39,6 +39,7 @@ import javax.naming.ServiceUnavailableException;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.insider.Insider;
+import novelang.system.shell.insider.JmxTools;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -73,6 +74,7 @@ public class JavaShell extends Shell {
   
   private final int jmxPort ;
   private final Integer heartbeatPeriodMilliseconds ;
+
 
   public JavaShell( final Parameters parameters ) {
     super(
@@ -136,6 +138,18 @@ public class JavaShell extends Shell {
   private MBeanServerConnection jmxConnection = null ;
   private Insider insider = null ;
   private HeartbeatSender heartbeatThread = null ;
+  private int processIdentifier = JmxTools.UNDEFINED_PROCESS_ID ;
+
+  @Override
+  public String getNickname() {
+    final String defaultNickname = super.getNickname() ;
+    final int currentIdentifier ;
+    synchronized( lock ) {
+      currentIdentifier = processIdentifier ;
+    }
+    return defaultNickname + (
+        currentIdentifier == JmxTools.UNDEFINED_PROCESS_ID ? "" : "#" + processIdentifier ) ;
+  }
 
   @Override
   public void start( final long timeout, final TimeUnit timeUnit )
@@ -144,6 +158,7 @@ public class JavaShell extends Shell {
     synchronized( lock ) {
       super.start( timeout, timeUnit ) ;
       connect() ;
+      processIdentifier = insider.getProcessIdentifier() ;
       if( heartbeatPeriodMilliseconds == null ) {
         heartbeatThread = new HeartbeatSender( insider, getNickname() ) ;
       } else {
@@ -159,9 +174,9 @@ public class JavaShell extends Shell {
         throw new IllegalStateException( "Not ready" ) ;
       }
       try {
-        insider.checkAlive() ;
+        insider.getProcessIdentifier() ;
         return true ;
-      } catch( Exception e ) {
+      } catch( Exception ignored ) {
         return false ;
       }
     }
@@ -185,10 +200,11 @@ public class JavaShell extends Shell {
         switch( shutdownStyle ) {
           case GENTLE :
             try {
-              LOG.info( "Requesting shutdown (through JMX) for ", getNickname(), "..." ) ;
+              LOG.info( "Requesting shutdown (through JMX) for " + getNickname() + "..." ) ;
               insider.shutdown() ;
             } catch( Exception e ) {
               exitStatus = shutdownProcess( true ) ;
+              break ;
             }
             // ... After asking for shutdown, we wait for natural process end. TODO: add timeout.
           case WAIT :
@@ -203,6 +219,7 @@ public class JavaShell extends Shell {
       } finally {
         stopHeartbeat() ;
         disconnect() ;
+        processIdentifier = JmxTools.UNDEFINED_PROCESS_ID ;
       }
     }
     LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
@@ -242,10 +259,13 @@ public class JavaShell extends Shell {
         jmxConnector = JMXConnectorFactory.connect( url, null ) ;
         return ;
       } catch( IOException e ) {
-        if( e.getCause() instanceof ServiceUnavailableException ) {
-          if( attemptCount ++ < 10 ) {
+        final Throwable cause = e.getCause() ;
+        if(    cause instanceof ServiceUnavailableException
+            || cause instanceof java.rmi.ConnectException
+        ) {
+          if( attemptCount ++ < 50 ) {
             LOG.debug( "Couldn't connect to " + url + ", waiting a bit before another attempt..." ) ;
-            TimeUnit.MILLISECONDS.sleep( 100L ) ;
+            TimeUnit.MILLISECONDS.sleep( 200L ) ;
           } else {
             throw e ;
           }

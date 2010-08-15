@@ -28,10 +28,6 @@ import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
-import novelang.system.shell.AgentFileInstaller;
-import novelang.system.shell.JavaClasses;
-import novelang.system.shell.JavaShell;
-import novelang.system.shell.ShutdownStyle;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +62,7 @@ public class JavaShellTest {
       final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
 
       javaShell.start( 10L, TimeUnit.SECONDS ) ;
+      LOG.info( "Started process known as " + javaShell.getNickname() + "." ) ;
       javaShell.shutdown( ShutdownStyle.GENTLE ) ;
 
       final List< String > log = readLines( shellFixture.getLogFile() ) ;

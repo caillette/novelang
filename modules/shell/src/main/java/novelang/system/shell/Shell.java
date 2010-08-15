@@ -77,8 +77,8 @@ public abstract class Shell {
     threadGroup = new ThreadGroup( getClass().getSimpleName() + "-" + nickname ) ;
   }
 
-  public final String getNickname() {
-    return nickname;
+  public String getNickname() {
+    return nickname ;
   }
 
   public void start( final long timeout, final TimeUnit timeUnit )
@@ -89,7 +89,7 @@ public abstract class Shell {
   {
     final Semaphore startupSemaphore = new Semaphore( 0 ) ;
 
-    LOG.info( nickname + " starting process in directory '"
+    LOG.info( getNickname() + " starting process in directory '"
         + workingDirectory.getAbsolutePath() + "'" ) ;
     LOG.info( "Arguments: " + processArguments ) ;
 
@@ -128,7 +128,7 @@ public abstract class Shell {
       }
     }
 
-    LOG.info( "Successfully started " + nickname + "." ) ;
+    LOG.info( "Successfully started " + getNickname() + "." ) ;
   }
 
 
@@ -140,7 +140,8 @@ public abstract class Shell {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.debug( "Standard output from supervised process in " + nickname + ": >>> " + line ) ;
+          LOG.debug( "Standard output from supervised process in " +
+              getNickname() + ": >>> " + line ) ;
           if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
             startupSemaphore.release() ;
           }
@@ -160,7 +161,7 @@ public abstract class Shell {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.warn( "Error from " + nickname + ": >>> " + line ) ;
+          LOG.warn( "Error from " + getNickname() + ": >>> " + line ) ;
         }
       }
 
@@ -179,7 +180,7 @@ public abstract class Shell {
       }
     }
       LOG.error(
-          "Throwable caught while reading supervised process stream in " + nickname,
+          "Throwable caught while reading supervised process stream in " + getNickname(),
           throwable
       ) ;
   }
@@ -202,7 +203,8 @@ public abstract class Shell {
             interruptWatcherThreads() ;
           }
         } else {
-            LOG.warn( "Trying to shutdown while in " + state + " state for " + nickname + "." ) ;
+            LOG.warn(
+                "Trying to shutdown while in " + state + " state for " + getNickname() + "." ) ;
         }
       } finally {
         process = null ;
@@ -211,7 +213,7 @@ public abstract class Shell {
         state = State.TERMINATED ;
       }
     }
-    LOG.info( "Process ended for %s, returning %s", nickname, exitCode ) ;
+    LOG.info( "Process ended for %s, returning %s", getNickname(), exitCode ) ;
     return exitCode ;
   }
 
