@@ -29,6 +29,7 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -47,49 +48,36 @@ public class JavaShellTest {
   @Test
   public void getTheOfficialJar() throws IOException {
     if( isLikelyToWork() ) {
-
       final File jarFile = AgentFileInstaller.getJarFile() ;
       assertThat( jarFile ).isNotNull() ;
-
     }
   }
 
-  @Test
-  public void startForeignProgram() throws Exception {
-    if( isLikelyToWork() ) {
-      final ShellFixture shellFixture = new ShellFixture() ;
 
-      final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
-
-      javaShell.start( 10L, TimeUnit.SECONDS ) ;
-      LOG.info( "Started process known as " + javaShell.getNickname() + "." ) ;
-      javaShell.shutdown( ShutdownStyle.GENTLE ) ;
-
-      final List< String > log = readLines( shellFixture.getLogFile() ) ;
-      assertThat( log )
-          .hasSize( 2 )
-          .contains( "Starting up and listening...", "Terminated." )
-      ;
-    }
-
-  }
 
   @Test
+  @Ignore( "Eats 10 seconds of build time" )
   public void startForeignProgramAndMissHeartbeat() throws Exception {
+
+    final int heartbeatPeriod = 100 * 1000 ;
+    final int heartbeatFatalDelay = 10 * 1000 ;
+    final long isDownCheckPeriod = 500L ;
+    final int isDownRetryCount = ( int ) ( ( long ) heartbeatFatalDelay / isDownCheckPeriod + 1L ) ;
+
     if( isLikelyToWork() ) {
 
       final ShellFixture shellFixture = new ShellFixture() ;
 
       final JavaShell.Parameters parameters = shellFixture.getParameters()
-          .withHeartbeatPeriodMilliseconds( 2000 )
-          .withHeartbeatFatalDelayMilliseconds( 1000 )
+          .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
+          .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
       ;
       final JavaShell javaShell = new JavaShell( parameters ) ;
 
-      javaShell.start( 10L, TimeUnit.SECONDS ) ;
+      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
       try {
         final IsDown isDown = new IsDown( javaShell );
-        assertEventually( isDown, 100L, TimeUnit.MILLISECONDS, 100 ) ;
+        assertEventually( isDown, isDownCheckPeriod, TimeUnit.MILLISECONDS, isDownRetryCount ) ;
       } finally {
         javaShell.shutdown( ShutdownStyle.FORCED ) ;
       }
@@ -103,12 +91,36 @@ public class JavaShellTest {
 
   }
 
+  @Test
+  public void startForeignProgram() throws Exception {
+    if( isLikelyToWork() ) {
+      final ShellFixture shellFixture = new ShellFixture() ;
+
+      final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
+
+      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+      LOG.info( "Started process known as " + javaShell.getNickname() + "." ) ;
+      javaShell.shutdown( ShutdownStyle.GENTLE ) ;
+
+      final List< String > log = readLines( shellFixture.getLogFile() ) ;
+      assertThat( log )
+          .hasSize( 2 )
+          .contains( "Starting up and listening...", "Terminated." )
+      ;
+    }
+
+  }
+
 
 // =======
 // Fixture
 // =======
 
   private static final Log LOG = LogFactory.getLog( JavaShellTest.class ) ;
+
+  public static final long SHELL_STARTUP_TIMEOUT_DURATION = 10L ;
+  public static final TimeUnit SHELL_STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
+
 
   private static final Predicate< String > STUPID_LISTENER_STARTED = new Predicate<String>() {
     @Override
@@ -234,6 +246,8 @@ public class JavaShellTest {
       return getClass().getSimpleName() ;
     }
   }
+
+  
   public static void assertEventually(
       final StandalonePredicate predicate,
       final long period,

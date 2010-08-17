@@ -158,6 +158,12 @@ public class JavaShell extends Shell {
     synchronized( lock ) {
       super.start( timeout, timeUnit ) ;
       connect() ;
+
+      // This may not be necessary.
+      // It calls #keepAlive() before #getVirtualMachine() because it may be unsafe to call
+      // an internal JMX method (for VM name) before JMX stuff finished to initialize itself.
+      insider.keepAlive() ;
+
       processIdentifier = JavaShellTools.extractProcessId( insider.getVirtualMachineName() ) ;
       if( heartbeatPeriodMilliseconds == null ) {
         heartbeatThread = new HeartbeatSender( insider, getNickname() ) ;

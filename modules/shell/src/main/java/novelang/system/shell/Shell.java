@@ -140,8 +140,7 @@ public abstract class Shell {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.debug( "Standard output from supervised process in " +
-              getNickname() + ": >>> " + line ) ;
+          LOG.debug( "Standard output from " + getNickname() + ": >>> " + line ) ;
           if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
             startupSemaphore.release() ;
           }

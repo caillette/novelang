@@ -31,8 +31,7 @@ import static java.lang.System.currentTimeMillis;
 public class LocalInsider implements Insider {
 
   private final AtomicLong keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
-  private String virtualMachineName = null ;
-  private final Object lock = new Object() ;
+  private final String virtualMachineName ;
 
   public LocalInsider() {
     this( HEARTBEAT_FATAL_DELAY_MILLISECONDS ) ;
@@ -41,25 +40,33 @@ public class LocalInsider implements Insider {
 
   @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public LocalInsider( final long delay ) {
+    virtualMachineName = ManagementFactory.getRuntimeMXBean().getName() ;
 
-    System.out.println( "Initializing " + getClass().getSimpleName()
+    printOut( "Initializing " + getClass().getSimpleName() + " "
+        + "from thread " + Thread.currentThread() + " "
         + "with: "
-//        + "virtualMachineName=" + virtualMachineName + ", "
-        + "fatalHeartbeatDelay=" + delay + " milliseconds..." ) ;
+        + "virtualMachineName=" + virtualMachineName + ", "
+        + "fatalHeartbeatDelay=" + delay + " milliseconds..."
+    ) ;
 
     final Thread heartbeatReceiver = new Thread(
         new Runnable() {
           @Override
           public void run() {
-            try {
-              Thread.sleep( delay ) ;
-              final long lag = currentTimeMillis() - keepaliveCounter.get() ;
-              if( lag > delay ) {
-                System.err.println( "No heartbeat for more than " + delay + " milliseconds, " +
-                    "halting with status of " + STATUS_HEARTBEAT_PERIOD_EXPIRED + "." ) ;
-                Runtime.getRuntime().halt( STATUS_HEARTBEAT_PERIOD_EXPIRED ) ;
-              }
-            } catch( InterruptedException ignore ) { }
+            while( true ) {
+              try {
+//                printOut(
+//                    "Started keepalive watcher from thread " + Thread.currentThread() + "." ) ;
+                Thread.sleep( delay ) ;
+                final long lag = currentTimeMillis() - keepaliveCounter.get() ;
+                if( lag > delay ) {
+                  printErr( "No heartbeat for more than " + delay + " milliseconds, " +
+                      "halting with status of " + STATUS_HEARTBEAT_PERIOD_EXPIRED + "." ) ;
+                  Runtime.getRuntime().halt( STATUS_HEARTBEAT_PERIOD_EXPIRED ) ;
+                  break ; // Avoid a compilation warning because of infinite loop.
+                }
+              } catch( InterruptedException ignore ) { }
+            }
           }
         }
         ,getClass().getSimpleName() + "-HeartbeatReceiver"
@@ -75,6 +82,7 @@ public class LocalInsider implements Insider {
   public void shutdown() {
     new Thread(
         new Runnable() {
+          @Override
           public void run() {
             System.exit( 0 ) ;
           }
@@ -85,17 +93,22 @@ public class LocalInsider implements Insider {
 
   @Override
   public void keepAlive() {
-    System.out.println( "Received keepalive call at " + currentTimeMillis() + "." ) ;
+//    printOut( "Received keepalive call at " + currentTimeMillis() + "." ) ;
     keepaliveCounter.set( currentTimeMillis() ) ;
   }
 
   @Override
   public String getVirtualMachineName() {
-    synchronized( lock ) {
-      if( virtualMachineName == null ) {
-        virtualMachineName = ManagementFactory.getRuntimeMXBean().getName() ;
-      }
-    }
     return virtualMachineName ;
+  }
+
+  private static void printOut( final String message ) {
+    System.out.println( message ) ;
+    System.out.flush() ;
+  }
+
+  private static void printErr( final String message ) {
+    System.err.println( message ) ;
+    System.err.flush() ;
   }
 }
