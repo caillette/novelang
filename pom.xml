@@ -179,6 +179,7 @@
     <module>modules/parser-token-plugin</module>
     <module>modules/primer</module>
     <module>modules/producer-plugin</module>
+    <module>modules/process-driver</module>
     <module>modules/shell</module>
     <module>modules/shell-fixture</module>
     <module>modules/syntactic-tree</module>
