@@ -32,6 +32,23 @@
   <build>
     <plugins>
 
+      <plugin>
+        <artifactId>Novelang-producer-plugin</artifactId>
+        <groupId>${parent.groupId}</groupId>
+        <version>${parent.version}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <contentRootDirectory>${rawDocumentSources}</contentRootDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
 
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>

@@ -49,7 +49,7 @@ import org.apache.maven.project.MavenProject;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "UnusedDeclaration" } )
-public class BatchProducerMojo extends AbstractMojo {
+public class BatchProducerMojo extends AbstractProducerMojo {
 
   /**
    * The classpath for the standalone JVM.
@@ -68,27 +68,12 @@ public class BatchProducerMojo extends AbstractMojo {
   private Integer jvmHeapSizeMegabytes = 512 ;
 
   /**
-   * Base directory for documents sources.
-   *
-   * @parameter expression="${produce.contentRootDirectory}"
-   * @required
-   */
-  private File contentRootDirectory = null ;
-
-  /**
    * Base directory for rendered documents.
    *
    * @parameter expression="${produce.outputDirectory}"
    * @required
    */
   private File outputDirectory = null ;
-
-  /**
-   * Directory where to write log file(s) to.
-   *
-   * @parameter expression="${produce.logDirectory}"
-   */
-  private File logDirectory = null ;
 
   /**
    * Working directory, which serves as reference for default directories like style or fonts.
@@ -106,14 +91,6 @@ public class BatchProducerMojo extends AbstractMojo {
    * @required
    */
   private List< String > documentsToRender = null ;
-  
-
-  /**
-   * @parameter expression="${project}"
-   * @required
-   * @readonly
-   */
-  private MavenProject project ;
 
 
   @Override
@@ -133,12 +110,7 @@ public class BatchProducerMojo extends AbstractMojo {
       log.info( "%s - Classpath element: %s", getClass().getSimpleName(), classpathElement ) ;
     }
 */
-    final Version version;
-    try {
-      version = Version.parse( project.getVersion() );
-    } catch( VersionFormatException e ) {
-      throw new MojoExecutionException( "Couldn't parse version '" + project.getVersion() + "'" ) ;
-    }
+    final Version version = getVersion() ;
 
     final String[] documentNames = documentsToRender.toArray(
         new String[ documentsToRender.size() ] ) ;
@@ -172,4 +144,5 @@ public class BatchProducerMojo extends AbstractMojo {
       throw new MojoExecutionException( "Driver execution failed", e );
     }
   }
+
 }
