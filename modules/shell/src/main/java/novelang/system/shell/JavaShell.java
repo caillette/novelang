@@ -117,7 +117,7 @@ public class JavaShell extends Shell {
     argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
 
     argumentList.add(
-        "-javaagent:" + AgentFileInstaller.getJarFile().getAbsolutePath()
+        "-javaagent:" + AgentFileInstaller.getInstance().getJarFile().getAbsolutePath()
         + ( heartbeatMaximumPeriod == null
             ? ""
             : "=" + Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME + heartbeatMaximumPeriod

@@ -22,7 +22,7 @@
     <dependencySet>
       <unpack>false</unpack>
       <useTransitiveDependencies>false</useTransitiveDependencies>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory>${resourcesDestinationDirectory}</outputDirectory>
       <includes>
         <include>*-insider</include>
       </includes>
@@ -30,20 +30,14 @@
 
   </dependencySets>
 
-
-  <fileSets>
-    <fileSet>
-      <directory>${project.build.directory}</directory>
-      <outputDirectory>/</outputDirectory>
-      <includes>
-        <include>*.jar</include>
-      </includes>
-      <excludes>
-        <exclude>*embedder*</exclude>
-      </excludes>
-    </fileSet>
-
-  </fileSets>
+  <files>
+    <file>
+      <outputDirectory>${resourcesDestinationDirectory}</outputDirectory>
+      <source>${project.basedir}/src/main/resources/version.txt</source>
+      <filtered>true</filtered>
+    </file>
+  </files>
+  
 
 
 </assembly>

@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.MissingResourceException;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import org.apache.commons.io.FileUtils;
@@ -29,20 +31,62 @@ import org.apache.commons.io.FileUtils;
  * Installs the jar of the {@link novelang.system.shell.insider.InsiderAgent} somewhere
  * on the local filesystem.
  * The JVM installs agents from plain jar files.
+ * <p>
+ * This class applies the
+ * <a href="http://en.wikipedia.org/wiki/Initialization_on_demand_holder_idiom">Initialization on demand idiom</a>.
  *
  * @author Laurent Caillette
  */
 public class AgentFileInstaller {
 
   private static final Log LOG = LogFactory.getLog( AgentFileInstaller.class ) ;
-  public static final String AGENTJARFILE_PROPERTYNAME = "novelang.system.shell.agentjarfile";
 
-  private AgentFileInstaller() { }
+  /**
+   * Name of the system property to set the agent jar file externally.
+   * This is useful when running tests from an IDE.
+   */
+  public static final String AGENTJARFILE_SYSTEMPROPERTYNAME =
+      "novelang.system.shell.agentjarfile" ;
 
-  private static final Object LOCK = new Object() ;
+  /**
+   * Version of the embedded jar. Needed to find its resource name.
+   */
+  private final String version ;
 
-  @SuppressWarnings( { "StaticNonFinalField" } )
-  private static File jarFile = null ;
+  private final File jarFile ;
+
+
+  private AgentFileInstaller() throws IOException {
+
+    version = Resources.toString(
+        AgentFileInstaller.class.getResource( VERSION_RESOURCE_NAME ),
+        Charsets.UTF_8
+    ) ;
+
+    final String jarFileNameFromSystemProperty =
+        System.getProperty( AGENTJARFILE_SYSTEMPROPERTYNAME ) ;
+
+    if( jarFileNameFromSystemProperty == null ) {
+      try {
+        jarFile = File.createTempFile( "Novelang-insider-agent", ".jar" ) ;
+        copyResourceToFile( JAR_RESOURCE_NAME_RADIX + version + ".jar", jarFile ) ;
+      } catch( IOException e ) {
+        throw new RuntimeException( e ) ;
+      }
+    } else {
+      jarFile = new File( jarFileNameFromSystemProperty ) ;
+      if( ! jarFile.isFile() ) {
+        throw new IllegalArgumentException(
+            "Jar file '" + jarFile.getAbsolutePath() + "' doesn't exist as a file" ) ;
+      }
+      LOG.info( "Using jar file '" + jarFile.getAbsolutePath() + "' " +
+          "set from system property " + AGENTJARFILE_SYSTEMPROPERTYNAME + "." ) ;
+    }
+
+  }
+
+  private final Object lock = new Object() ;
+
 
   /**
    * Returns a {@code File} object referencing the jar containing the
@@ -50,32 +94,16 @@ public class AgentFileInstaller {
    *
    * @return a non-null object.
    */
-  public static File getJarFile() {
-    synchronized( LOCK ) {
-      if( jarFile == null ) {
+  public File getJarFile() {
+    return jarFile ;
+  }
 
-        final String jarFileNameFromSystemProperty =
-            System.getProperty( AGENTJARFILE_PROPERTYNAME ) ;
 
-        if( jarFileNameFromSystemProperty != null ) {
-          jarFile = new File( jarFileNameFromSystemProperty ) ;
-          if( ! jarFile.isFile() ) {
-            throw new IllegalArgumentException(
-                "Jar file '" + jarFile.getAbsolutePath() + "' doesn't exist as a file" ) ;
-          }
-          LOG.info( "Using jar file '" + jarFile.getAbsolutePath() + "' " +
-              "set from system property " + AGENTJARFILE_PROPERTYNAME + "." ) ;
-        } else {
-          try {
-            jarFile = File.createTempFile( "Novelang-insider-agent", ".jar" ) ;
-            copyResourceToFile( JAR_RESOURCE_NAME, jarFile ) ;
-          } catch( IOException e ) {
-            throw new RuntimeException( e ) ;
-          }
-        }
-      }
-      return jarFile ;
-    }
+
+  public void copyVersionedJarToFile( final String jarResourceRadix, final File file )
+      throws IOException
+  {
+    copyResourceToFile( jarResourceRadix + version + ".jar", file ) ;
   }
 
   public static void copyResourceToFile( final String resourceName, final File file )
@@ -97,10 +125,37 @@ public class AgentFileInstaller {
 
   /**
    * Defined by the assembly of the Insider project.
-   * TODO: get correct version everytime.
    */
   @SuppressWarnings( { "HardcodedFileSeparator" } )
-  private static final String JAR_RESOURCE_NAME = "/Novelang-insider-SNAPSHOT.jar" ;
+  private static final String JAR_RESOURCE_NAME_RADIX =
+      "/novelang/system/shell/Novelang-insider-" ;
 
+  /**
+   * Defined by the assembly of the Insider project.
+   */
+  @SuppressWarnings( { "HardcodedFileSeparator" } )
+  private static final String VERSION_RESOURCE_NAME=
+      "/novelang/system/shell/version.txt" ;
+
+
+// ========================
+// Initialization on demand
+// ========================
+
+  @SuppressWarnings( { "UtilityClassWithoutPrivateConstructor" } )
+  private static class LazyHolder {
+    private static final AgentFileInstaller INSTANCE ;
+    static {
+      try {
+        INSTANCE = new AgentFileInstaller() ;
+      } catch( IOException e ) {
+        throw new RuntimeException( e ) ;
+      }
+    }
+  }
+
+  public static AgentFileInstaller getInstance() {
+    return LazyHolder.INSTANCE ;
+  }
 
 }

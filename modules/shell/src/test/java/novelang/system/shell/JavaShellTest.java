@@ -48,7 +48,7 @@ public class JavaShellTest {
   @Test
   public void getTheOfficialJar() throws IOException {
     if( isLikelyToWork() ) {
-      final File jarFile = AgentFileInstaller.getJarFile() ;
+      final File jarFile = AgentFileInstaller.getInstance().getJarFile() ;
       assertThat( jarFile ).isNotNull() ;
     }
   }
@@ -140,7 +140,7 @@ public class JavaShellTest {
     }
 
     try {
-      AgentFileInstaller.getJarFile() ;
+      AgentFileInstaller.getInstance().getJarFile() ;
     } catch( MissingResourceException e ) {
       LOG.warn( "Not running as Maven test, nor couldn't find agent jar file" +
           " (check system properties). Skipping " + NameAwareTestClassRunner.getTestName() +
@@ -166,7 +166,8 @@ public class JavaShellTest {
     final String fixtureJarFileAsString = System.getProperty( FIXTUREJARFILE_PROPERTYNAME ) ;
     if( fixtureJarFileAsString == null ) {
       final File jarFile = new File( directory, "java-program.jar" ) ;
-      AgentFileInstaller.copyResourceToFile( FIXTURE_PROGRAM_JAR_RESOURCE_NAME, jarFile ) ;
+      AgentFileInstaller.getInstance().copyVersionedJarToFile(
+          FIXTURE_PROGRAM_JAR_RESOURCE_RADIX, jarFile ) ;
       return jarFile ;
     } else {
       final File existingJarFile = new File( fixtureJarFileAsString ) ;
@@ -182,8 +183,8 @@ public class JavaShellTest {
    * TODO: Make this work for non-SNAPSHOT versions.
    */
   @SuppressWarnings( { "HardcodedFileSeparator" } )
-  private static final String FIXTURE_PROGRAM_JAR_RESOURCE_NAME =
-      "/Novelang-shell-fixture-SNAPSHOT.jar" ;
+  private static final String FIXTURE_PROGRAM_JAR_RESOURCE_RADIX =
+      "/Novelang-shell-fixture-" ;
 
 
 

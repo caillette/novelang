@@ -47,7 +47,7 @@ public class ShutdownTools
   public static final String SHUTDOWN_TATTOO_PROPERTYNAME = "novelang.system.shell.tattoo" ;
 
   public static void shutdownAllTattooedVirtualMachines() {
-    shutdownAllTattooedVirtualMachines( AgentFileInstaller.getJarFile() ) ;
+    shutdownAllTattooedVirtualMachines( AgentFileInstaller.getInstance().getJarFile() ) ;
   }
 
   private static void shutdownAllTattooedVirtualMachines( final File shutdownAgentJar ) {
