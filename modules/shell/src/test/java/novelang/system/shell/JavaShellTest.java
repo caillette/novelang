@@ -60,7 +60,7 @@ public class JavaShellTest {
   public void startForeignProgramAndMissHeartbeat() throws Exception {
 
     final int heartbeatPeriod = 100 * 1000 ;
-    final int heartbeatFatalDelay = 10 * 1000 ;
+    final int heartbeatFatalDelay = 10 * 1000 ; // JVM can take that long to start up.
     final long isDownCheckPeriod = 500L ;
     final int isDownRetryCount = ( int ) ( ( long ) heartbeatFatalDelay / isDownCheckPeriod + 1L ) ;
 
@@ -122,7 +122,7 @@ public class JavaShellTest {
   public static final TimeUnit SHELL_STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
 
 
-  private static final Predicate< String > STUPID_LISTENER_STARTED = new Predicate<String>() {
+  private static final Predicate< String > STUPID_LISTENER_STARTED = new Predicate< String >() {
     @Override
     public boolean apply( final String input ) {
       return input.startsWith( "Started." ) ;
