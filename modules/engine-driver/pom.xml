@@ -34,19 +34,19 @@
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-process-driver</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-shell</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-engine</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.version}</version>
     </dependency>
 
 
