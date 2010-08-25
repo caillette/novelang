@@ -159,7 +159,7 @@ public class JavaShellTest {
 
 
   private static final String FIXTUREJARFILE_PROPERTYNAME =
-      "novelang.system.shell.test.fixturejarfile" ;
+      "novelang.system.shell.fixturejarfile" ;
 
 
   private static File installFixturePrograms( final File directory ) throws IOException {
@@ -170,7 +170,8 @@ public class JavaShellTest {
           FIXTURE_PROGRAM_JAR_RESOURCE_RADIX, jarFile ) ;
       return jarFile ;
     } else {
-      final File existingJarFile = new File( fixtureJarFileAsString ) ;
+      final File existingJarFile = AgentFileInstaller.getInstance()
+          .resolveWithVersion( fixtureJarFileAsString ) ;
       if( ! existingJarFile.isFile() ) {
         throw new IllegalArgumentException( "Not an existing file: '" + existingJarFile + "'" ) ;
       }

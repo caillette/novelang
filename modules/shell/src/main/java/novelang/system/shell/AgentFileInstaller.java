@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.MissingResourceException;
+import java.util.regex.Pattern;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -44,9 +45,21 @@ public class AgentFileInstaller {
   /**
    * Name of the system property to set the agent jar file externally.
    * This is useful when running tests from an IDE.
+   * The "{@value #VERSION_PLACEHOLDER}" substring evaluates to
    */
   public static final String AGENTJARFILE_SYSTEMPROPERTYNAME =
       "novelang.system.shell.agentjarfile" ;
+
+  private static final String VERSION_PLACEHOLDER = "${project.version}" ;
+
+  private static final String DEFAULT_VERSION = "SNAPSHOT" ;
+
+  /**
+   * Name of the system property to set the version overriding the content of the
+   * {@value #VERSION_RESOURCE_NAME} resource.
+   */
+  public static final String VERSIONOVERRIDE_SYSTEMPROPERTYNAME =
+      "novelang.system.shell.versionoverride" ;
 
   /**
    * Version of the embedded jar. Needed to find its resource name.
@@ -54,35 +67,53 @@ public class AgentFileInstaller {
   private final String version ;
 
   private final File jarFile ;
+  public static final String VERSION_PLACEHOLDER_REGEX = Pattern.quote( VERSION_PLACEHOLDER );
 
 
   private AgentFileInstaller() throws IOException {
 
-    version = Resources.toString(
-        AgentFileInstaller.class.getResource( VERSION_RESOURCE_NAME ),
-        Charsets.UTF_8
-    ) ;
+    final String versionOverride = System.getProperty( VERSIONOVERRIDE_SYSTEMPROPERTYNAME ) ;
+    if( versionOverride == null ) {
+      final URL versionResource = AgentFileInstaller.class.getResource( VERSION_RESOURCE_NAME ) ;
+      version = Resources.toString( versionResource, Charsets.UTF_8 ) ;
+      LOG.info( "Using version '" + version + "' as found inside " +
+          "'" + VERSION_RESOURCE_NAME + "' resource."  ) ;
+
+    } else {
+      version = versionOverride ;
+      LOG.info( "Using version override '" + version + "' from system property " +
+          "'" + VERSIONOVERRIDE_SYSTEMPROPERTYNAME + "'."  ) ;
+    }
+
 
     final String jarFileNameFromSystemProperty =
         System.getProperty( AGENTJARFILE_SYSTEMPROPERTYNAME ) ;
 
     if( jarFileNameFromSystemProperty == null ) {
       try {
-        jarFile = File.createTempFile( "Novelang-insider-agent", ".jar" ) ;
+        jarFile = File.createTempFile( "Novelang-insider-agent", ".jar" ).getCanonicalFile() ;
         copyResourceToFile( JAR_RESOURCE_NAME_RADIX + version + ".jar", jarFile ) ;
+        LOG.info( "Using jar file '" + jarFile.getAbsolutePath() + "'." ) ;
       } catch( IOException e ) {
         throw new RuntimeException( e ) ;
       }
     } else {
-      jarFile = new File( jarFileNameFromSystemProperty ) ;
+      jarFile = resolveWithVersion( jarFileNameFromSystemProperty ) ;
       if( ! jarFile.isFile() ) {
         throw new IllegalArgumentException(
             "Jar file '" + jarFile.getAbsolutePath() + "' doesn't exist as a file" ) ;
       }
       LOG.info( "Using jar file '" + jarFile.getAbsolutePath() + "' " +
-          "set from system property " + AGENTJARFILE_SYSTEMPROPERTYNAME + "." ) ;
+          "set from system property '" + AGENTJARFILE_SYSTEMPROPERTYNAME + "'." ) ;
     }
 
+  }
+
+  public File resolveWithVersion( final String filenameWithVersionPlaceholders ) {
+    final String resolvedJarFileName = filenameWithVersionPlaceholders.replaceAll(
+        VERSION_PLACEHOLDER_REGEX, version ) ;
+    final File resolvedFile = new File( resolvedJarFileName );
+    return resolvedFile;
   }
 
   private final Object lock = new Object() ;

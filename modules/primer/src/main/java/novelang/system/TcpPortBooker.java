@@ -47,7 +47,11 @@ public interface TcpPortBooker {
   int find() ;
 
 
-  int LOWEST_PORT = 1000 ;
+  /**
+   * Don't use port 1024 which is default for RMI registry. 
+   */
+  int LOWEST_PORT = 2048 ;
+
   int HIGHEST_PORT = 65535 ;
 
 }

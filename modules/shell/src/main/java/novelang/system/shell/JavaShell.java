@@ -40,6 +40,7 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.insider.Insider;
 import novelang.system.shell.insider.JmxTools;
+import org.apache.commons.io.FileUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -115,6 +116,10 @@ public class JavaShell extends Shell {
     // No security yet.
     argumentList.add( "-Dcom.sun.management.jmxremote.authenticate=false" ) ;
     argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
+
+    // Temporary: log JMX activity
+    argumentList.add( "-Djava.util.logging.config.file=" +
+        JAVA_UTIL_LOGGING_CONFIGURATION_FILE.getAbsolutePath() ) ;
 
     argumentList.add(
         "-javaagent:" + AgentFileInstaller.getInstance().getJarFile().getAbsolutePath()
@@ -247,7 +252,7 @@ public class JavaShell extends Shell {
   private void connect() throws IOException, InterruptedException {
     final JMXServiceURL url ;
     try {
-      url = new JMXServiceURL( "service:jmx:rmi:///jndi/rmi://:" + jmxPort + "/jmxrmi" );
+      url = new JMXServiceURL( "service:jmx:rmi:///jndi/rmi://localhost:" + jmxPort + "/jmxrmi" );
     } catch( MalformedURLException e ) {
       throw new Error( e ) ;
     }
@@ -259,6 +264,7 @@ public class JavaShell extends Shell {
   private void connectWithRetries( final JMXServiceURL url )
       throws IOException, InterruptedException
   {
+    LOG.info( "Connecting to '" + url + "'..." ) ;
     int attemptCount = 0 ;
     while( true ) {
       try {
@@ -330,6 +336,10 @@ public class JavaShell extends Shell {
   }
 
 
+// ==========  
+// Parameters
+// ==========
+
   public static interface Parameters {
 
     String getNickname() ;
@@ -360,4 +370,42 @@ public class JavaShell extends Shell {
     Parameters withHeartbeatPeriodMilliseconds( Integer maximum ) ;
 
   }
+
+  
+  
+// ====================================  
+// Java Util Logging configuration file
+// ====================================
+  
+  
+  private static final List< String > JAVA_UTIL_LOGGING_CONFIGURATION = ImmutableList.of( 
+      "handlers= java.util.logging.ConsoleHandler",
+      ".level=INFO",
+      "",
+      "java.util.logging.FileHandler.pattern = %h/java%u.log",
+      "java.util.logging.FileHandler.limit = 50000",
+      "java.util.logging.FileHandler.count = 1",
+      "java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter",
+      "",
+      "java.util.logging.ConsoleHandler.level = FINEST",
+      "java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter",
+      "",
+      "// Use FINER or FINEST for javax.management.remote.level - FINEST is",
+      "// very verbose...",
+      "//",
+      "javax.management.level=FINEST",
+      "javax.management.remote.level=FINER"
+  ) ;
+
+  private static final File JAVA_UTIL_LOGGING_CONFIGURATION_FILE ;
+  static {
+    try {
+      JAVA_UTIL_LOGGING_CONFIGURATION_FILE =
+          File.createTempFile( "javautillogging", "properties" ).getCanonicalFile() ;
+      FileUtils.writeLines( JAVA_UTIL_LOGGING_CONFIGURATION_FILE, JAVA_UTIL_LOGGING_CONFIGURATION ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+  }
+  
 }
