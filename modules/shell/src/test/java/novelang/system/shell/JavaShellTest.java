@@ -59,8 +59,8 @@ public class JavaShellTest {
 //  @Ignore( "Eats 10 seconds of build time" )
   public void startForeignProgramAndMissHeartbeat() throws Exception {
 
-    final int heartbeatPeriod = 100 * 1000 ;
-    final int heartbeatFatalDelay = 10 * 1000 ; // JVM can take that long to start up.
+    final int heartbeatPeriod = 2 * 1000 ;
+    final int heartbeatFatalDelay = 1 * 1000 ; // JVM can take that long to start up.
     final long isDownCheckPeriod = 500L ;
     final int isDownRetryCount = ( int ) ( ( long ) heartbeatFatalDelay / isDownCheckPeriod + 1L ) ;
 
@@ -121,7 +121,7 @@ public class JavaShellTest {
 
   private static final Log LOG = LogFactory.getLog( JavaShellTest.class ) ;
 
-  public static final long SHELL_STARTUP_TIMEOUT_DURATION = 30L ;
+  public static final long SHELL_STARTUP_TIMEOUT_DURATION = 20L ;
   public static final TimeUnit SHELL_STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
 
 
@@ -218,7 +218,7 @@ public class JavaShellTest {
               "novelang.system.shell.StupidListener",
               jarFile
           ) )
-          .withStartupSensor( STUPID_LISTENER_STARTED )
+//          .withStartupSensor( STUPID_LISTENER_STARTED )
           .withProgramArguments( of(
               logFile.getAbsolutePath(),
               Integer.toString( dummyListenerPort )

@@ -97,7 +97,7 @@ public class JavaShell extends Shell {
   private static final Predicate< String > LOCAL_INSIDER_STARTED = new Predicate< String >() {
     @Override
     public boolean apply( final String input ) {
-      return input.startsWith( "Started novelang.system.shell.insider.LocalInsider." ) ;
+      return input.contains( "Started novelang.system.shell.insider.LocalInsider." ) ;
     }
   } ;
 
@@ -126,8 +126,8 @@ public class JavaShell extends Shell {
     argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
 
     // Temporary: log JMX activity
-    argumentList.add( "-Djava.util.logging.config.file=" +
-        JAVA_UTIL_LOGGING_CONFIGURATION_FILE.getAbsolutePath() ) ;
+//    argumentList.add( "-Djava.util.logging.config.file=" +
+//        JAVA_UTIL_LOGGING_CONFIGURATION_FILE.getAbsolutePath() ) ;
 
     argumentList.add(
         "-javaagent:" + AgentFileInstaller.getInstance().getJarFile().getAbsolutePath()
@@ -177,12 +177,8 @@ public class JavaShell extends Shell {
   {
     synchronized( stateLock ) {
       super.start( timeout, timeUnit ) ;
-//      TimeUnit.SECONDS.sleep( 10L ) ;
       connect() ;
 
-      // This may not be necessary.
-      // It calls #keepAlive() before #getVirtualMachine() because it may be unsafe to call
-      // an internal JMX method (for VM name) before JMX stuff finished to initialize itself.
       insider.keepAlive() ;
 
       synchronized( processIdentifierLock ) {
@@ -297,9 +293,9 @@ public class JavaShell extends Shell {
         if(    cause instanceof ServiceUnavailableException
             || cause instanceof java.rmi.ConnectException
         ) {
-          if( attemptCount ++ < 50 ) {
+          if( attemptCount ++ < 10 ) {
             LOG.debug( "Couldn't connect to " + url + ", waiting a bit before another attempt..." ) ;
-            TimeUnit.MILLISECONDS.sleep( 1000L ) ;
+            TimeUnit.MILLISECONDS.sleep( 200L ) ;
           } else {
             throw e ;
           }
@@ -386,8 +382,8 @@ public class JavaShell extends Shell {
     ImmutableList< String > getProgramArguments() ;
     Parameters withProgramArguments( ImmutableList< String > programArguments ) ;
 
-    Predicate< String > getStartupSensor() ;
-    Parameters withStartupSensor( Predicate< String > startupSensor ) ;
+//    Predicate< String > getStartupSensor() ;
+//    Parameters withStartupSensor( Predicate< String > startupSensor ) ;
 
     int getJmxPort() ;
     Parameters withJmxPort( int jmxPort ) ;
