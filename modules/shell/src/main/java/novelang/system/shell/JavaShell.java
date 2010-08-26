@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
@@ -39,7 +40,6 @@ import javax.naming.ServiceUnavailableException;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.insider.Insider;
-import org.apache.commons.io.FileUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -73,7 +73,8 @@ public class JavaShell extends Shell {
   
   private final int jmxPort ;
   private final Integer heartbeatPeriodMilliseconds ;
-
+  private final Semaphore ownStartupSensorSemaphore ;
+  private final int startupSensorSemaphorePermitCount ;
 
   public JavaShell( final Parameters parameters ) {
     super(
@@ -86,13 +87,20 @@ public class JavaShell extends Shell {
             parameters.getProgramArguments(),
             parameters.getHeartbeatFatalDelayMilliseconds()
         ),
-//        parameters.getStartupSensor()
-        LOCAL_INSIDER_STARTED
-    ) ;
+        createTieredStartupSensor(
+            LOCAL_INSIDER_STARTED,
+            parameters.getStartupSensor()
+        )
+    );
     checkArgument( parameters.getJmxPort() > 0 ) ;
     this.jmxPort = parameters.getJmxPort() ;
     this.heartbeatPeriodMilliseconds = parameters.getHeartbeatPeriodMilliseconds() ;
+    this.ownStartupSensorSemaphore = THREADLOCAL_SEMAPHORE.get() ;
+    this.startupSensorSemaphorePermitCount = THREADLOCAL_PERMITCOUNT.get() ;
+    THREADLOCAL_SEMAPHORE.set( null ) ;
+    THREADLOCAL_PERMITCOUNT.set( null ) ;
   }
+
 
   private static final Predicate< String > LOCAL_INSIDER_STARTED = new Predicate< String >() {
     @Override
@@ -181,9 +189,6 @@ public class JavaShell extends Shell {
 
       insider.keepAlive() ;
 
-      synchronized( processIdentifierLock ) {
-        processIdentifier = JavaShellTools.extractProcessId( insider.getVirtualMachineName() ) ;
-      }
       if( heartbeatPeriodMilliseconds == null ) {
         heartbeatSender = new HeartbeatSender( insider, getNickname() ) ;
       } else {
@@ -191,6 +196,13 @@ public class JavaShell extends Shell {
             insider, getNickname(), heartbeatPeriodMilliseconds ) ;
       }
     }
+    synchronized( processIdentifierLock ) {
+      processIdentifier = JavaShellTools.extractProcessId( insider.getVirtualMachineName() ) ;
+    }
+    ownStartupSensorSemaphore.tryAcquire(
+        startupSensorSemaphorePermitCount,
+        timeUnit.toMillis( timeout ) / 2L, TimeUnit.MILLISECONDS
+    ) ;
   }
 
   public boolean isUp() {
@@ -220,8 +232,8 @@ public class JavaShell extends Shell {
       throws InterruptedException, IOException
   {
     Integer exitStatus = null ;
-    synchronized( stateLock ) {
-      try {
+    try {
+      synchronized( stateLock ) {
         switch( shutdownStyle ) {
           case GENTLE :
             try {
@@ -241,12 +253,12 @@ public class JavaShell extends Shell {
           default :
             throw new IllegalArgumentException( "Unsupported: " + shutdownStyle ) ;
         }
-      } finally {
-        stopHeartbeat() ;
-        disconnect() ;
-        synchronized( processIdentifierLock ) {
-          processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
-        }
+      }
+    } finally {
+      stopHeartbeat() ;
+      disconnect() ;
+      synchronized( processIdentifierLock ) {
+        processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
       }
     }
     LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
@@ -382,8 +394,8 @@ public class JavaShell extends Shell {
     ImmutableList< String > getProgramArguments() ;
     Parameters withProgramArguments( ImmutableList< String > programArguments ) ;
 
-//    Predicate< String > getStartupSensor() ;
-//    Parameters withStartupSensor( Predicate< String > startupSensor ) ;
+    Predicate< String > getStartupSensor() ;
+    Parameters withStartupSensor( Predicate< String > startupSensor ) ;
 
     int getJmxPort() ;
     Parameters withJmxPort( int jmxPort ) ;
@@ -397,37 +409,27 @@ public class JavaShell extends Shell {
   }
 
   
-  
-// ====================================  
-// Java Util Logging configuration file
-// ====================================
-  
-  
-  private static final List< String > JAVA_UTIL_LOGGING_CONFIGURATION = ImmutableList.of( 
-      "handlers= java.util.logging.ConsoleHandler",
-      ".level=INFO",
-      "",
-      "java.util.logging.FileHandler.pattern = %h/java%u.log",
-      "java.util.logging.FileHandler.limit = 50000",
-      "java.util.logging.FileHandler.count = 1",
-      "java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter",
-      "",
-      "java.util.logging.ConsoleHandler.level = FINEST",
-      "java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter",
-      "",
-      "javax.management.level=FINEST",
-      "javax.management.remote.level=FINER"
-  ) ;
 
-  private static final File JAVA_UTIL_LOGGING_CONFIGURATION_FILE ;
-  static {
-    try {
-      JAVA_UTIL_LOGGING_CONFIGURATION_FILE =
-          File.createTempFile( "javautillogging", "properties" ).getCanonicalFile() ;
-      FileUtils.writeLines( JAVA_UTIL_LOGGING_CONFIGURATION_FILE, JAVA_UTIL_LOGGING_CONFIGURATION ) ;
-    } catch( IOException e ) {
-      throw new RuntimeException( e ) ;
-    }
+// =======================================================================
+// Boring stuff to access member variable before superclass initialization
+// =======================================================================
+
+  private static final ThreadLocal< Semaphore > THREADLOCAL_SEMAPHORE =
+      new ThreadLocal< Semaphore >() ;
+
+  private static final ThreadLocal< Integer > THREADLOCAL_PERMITCOUNT =
+      new ThreadLocal< Integer >() ;
+
+  private static TieredStartupSensor createTieredStartupSensor(
+      final Predicate< String >... startupSensors
+  ) {
+    final Semaphore semaphore = new Semaphore( 0, true ) ;
+    final TieredStartupSensor tieredStartupSensor =
+        new TieredStartupSensor( semaphore, startupSensors ) ;
+    THREADLOCAL_SEMAPHORE.set( semaphore ) ;
+    THREADLOCAL_PERMITCOUNT.set( tieredStartupSensor.getInitialPredicateCount() ) ;
+    return tieredStartupSensor ;
   }
-  
+
+
 }

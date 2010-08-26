@@ -62,7 +62,7 @@ public class JavaShellTest {
     final int heartbeatPeriod = 2 * 1000 ;
     final int heartbeatFatalDelay = 1 * 1000 ; // JVM can take that long to start up.
     final long isDownCheckPeriod = 500L ;
-    final int isDownRetryCount = ( int ) ( ( long ) heartbeatFatalDelay / isDownCheckPeriod + 1L ) ;
+    final int isDownRetryCount = ( int ) ( ( long ) heartbeatFatalDelay / isDownCheckPeriod + 10L ) ;
 
     if( isLikelyToWork() ) {
 

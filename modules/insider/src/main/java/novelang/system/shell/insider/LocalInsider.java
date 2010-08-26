@@ -17,7 +17,6 @@
 package novelang.system.shell.insider;
 
 import java.lang.management.ManagementFactory;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
@@ -107,17 +106,18 @@ public class LocalInsider implements Insider {
     return virtualMachineName ;
   }
 
-  private static final String TIMESTAMP_FORMAT = "HH:mm:ss,SSS ";
-
   private static void printOut( final String message ) {
-    final DateFormat dateFormat = new SimpleDateFormat( TIMESTAMP_FORMAT ) ;
-    System.out.println( dateFormat.format( new Date() ) + message ) ;
+    System.out.println( createTimestamp() + message ) ;
     System.out.flush() ;
   }
 
   private static void printErr( final String message ) {
-    final DateFormat dateFormat = new SimpleDateFormat( TIMESTAMP_FORMAT ) ;
-    System.out.println( dateFormat.format( new Date() ) + message ) ;
+    System.out.println( createTimestamp() + message ) ;
     System.err.flush() ;
+  }
+
+  private static String createTimestamp() {
+//    return new SimpleDateFormat( "HH:mm:ss,SSS " ).format( new Date() );
+    return "" ;
   }
 }

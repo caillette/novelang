@@ -16,13 +16,20 @@
  */
 package novelang.system.shell;
 
-import java.lang.management.ManagementFactory;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Removes clutter from {@link JavaShell}.
  * @author Laurent Caillette
  */
 public class JavaShellTools {
+
+
 
   private JavaShellTools() {
   }
@@ -53,5 +60,40 @@ public class JavaShellTools {
 
   public static final int UNDEFINED_PROCESS_ID = -1 ;
   public static final int UNKNOWN_PROCESS_ID = -2 ;
+
+
+// ====================================
+// Java Util Logging configuration file
+// ====================================
+
+
+  static final List< String > JAVA_UTIL_LOGGING_CONFIGURATION = ImmutableList.of(
+    "handlers= java.util.logging.ConsoleHandler",
+    ".level=INFO",
+    "",
+    "java.util.logging.FileHandler.pattern = %h/java%u.log",
+    "java.util.logging.FileHandler.limit = 50000",
+    "java.util.logging.FileHandler.count = 1",
+    "java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter",
+    "",
+    "java.util.logging.ConsoleHandler.level = FINEST",
+    "java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter",
+    "",
+    "javax.management.level=FINEST",
+    "javax.management.remote.level=FINER"
+) ;
+
+  static final File JAVA_UTIL_LOGGING_CONFIGURATION_FILE ;
+  static {
+    try {
+      JAVA_UTIL_LOGGING_CONFIGURATION_FILE =
+          File.createTempFile( "javautillogging", "properties" ).getCanonicalFile() ;
+      FileUtils.writeLines( JavaShellTools.JAVA_UTIL_LOGGING_CONFIGURATION_FILE, JavaShellTools.JAVA_UTIL_LOGGING_CONFIGURATION ) ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+  }
+
+
 
 }
