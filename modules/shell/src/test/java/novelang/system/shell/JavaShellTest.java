@@ -56,7 +56,7 @@ public class JavaShellTest {
 
 
   @Test
-  @Ignore( "Eats 10 seconds of build time" )
+//  @Ignore( "Eats 10 seconds of build time" )
   public void startForeignProgramAndMissHeartbeat() throws Exception {
 
     final int heartbeatPeriod = 100 * 1000 ;
@@ -72,10 +72,10 @@ public class JavaShellTest {
           .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
           .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
       ;
-      final JavaShell javaShell = new JavaShell( parameters ) ;
 
-      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+      final JavaShell javaShell = new JavaShell( parameters ) ;
       try {
+        javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
         final IsDown isDown = new IsDown( javaShell );
         assertEventually( isDown, isDownCheckPeriod, TimeUnit.MILLISECONDS, isDownRetryCount ) ;
       } finally {
@@ -97,10 +97,13 @@ public class JavaShellTest {
       final ShellFixture shellFixture = new ShellFixture() ;
 
       final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
-
-      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
-      LOG.info( "Started process known as " + javaShell.getNickname() + "." ) ;
-      javaShell.shutdown( ShutdownStyle.GENTLE ) ;
+      try {
+        javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+        LOG.info( "Started process known as " + javaShell.getNickname() + "." ) ;
+        javaShell.shutdown( ShutdownStyle.GENTLE ) ;
+      } catch( Exception e ) {
+        javaShell.shutdown( ShutdownStyle.FORCED ) ;
+      }
 
       final List< String > log = readLines( shellFixture.getLogFile() ) ;
       assertThat( log )
@@ -118,7 +121,7 @@ public class JavaShellTest {
 
   private static final Log LOG = LogFactory.getLog( JavaShellTest.class ) ;
 
-  public static final long SHELL_STARTUP_TIMEOUT_DURATION = 10L ;
+  public static final long SHELL_STARTUP_TIMEOUT_DURATION = 30L ;
   public static final TimeUnit SHELL_STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
 
 

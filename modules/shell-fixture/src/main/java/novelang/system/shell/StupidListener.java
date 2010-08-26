@@ -1,4 +1,4 @@
-package novelang.system.shell;/*
+/*
  * Copyright (C) 2008 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
@@ -14,6 +14,7 @@ package novelang.system.shell;/*
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package novelang.system.shell;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,6 +29,9 @@ import java.net.ServerSocket;
  */
 @SuppressWarnings( { "JavadocReference", "SocketOpenedButNotSafelyClosed" } )
 public class StupidListener {
+  
+  private StupidListener() {
+  }
 
   public static void main( final String... arguments ) throws IOException, InterruptedException {
     final File logFile = new File( arguments[ 0 ] ) ;

@@ -39,7 +39,6 @@ import javax.naming.ServiceUnavailableException;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.insider.Insider;
-import novelang.system.shell.insider.JmxTools;
 import org.apache.commons.io.FileUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -71,7 +70,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class JavaShell extends Shell {
 
   private static final Log LOG = LogFactory.getLog( JavaShell.class ) ;
-  private final Object lock = new Object() ;
   
   private final int jmxPort ;
   private final Integer heartbeatPeriodMilliseconds ;
@@ -88,12 +86,22 @@ public class JavaShell extends Shell {
             parameters.getProgramArguments(),
             parameters.getHeartbeatFatalDelayMilliseconds()
         ),
-        parameters.getStartupSensor()
+//        parameters.getStartupSensor()
+        LOCAL_INSIDER_STARTED
     ) ;
     checkArgument( parameters.getJmxPort() > 0 ) ;
     this.jmxPort = parameters.getJmxPort() ;
     this.heartbeatPeriodMilliseconds = parameters.getHeartbeatPeriodMilliseconds() ;
   }
+
+  private static final Predicate< String > LOCAL_INSIDER_STARTED = new Predicate< String >() {
+    @Override
+    public boolean apply( final String input ) {
+      return input.startsWith( "Started novelang.system.shell.insider.LocalInsider." ) ;
+    }
+  } ;
+
+
 
 
   private static List< String > createProcessArguments(
@@ -142,26 +150,34 @@ public class JavaShell extends Shell {
   private JMXConnector jmxConnector = null ;
   private MBeanServerConnection jmxConnection = null ;
   private Insider insider = null ;
-  private HeartbeatSender heartbeatThread = null ;
+  private HeartbeatSender heartbeatSender = null ;
+
+  /**
+   * We need a dedicated lock for {@link #processIdentifier} otherwise there is a deadlock
+   * when watcher threads try to access it while {@link #connect()} executes.
+   */
+  private final Object processIdentifierLock = new Object() ;
+
   private int processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
 
   @Override
   public String getNickname() {
     final String defaultNickname = super.getNickname() ;
     final int currentIdentifier ;
-    synchronized( lock ) {
+    synchronized( processIdentifierLock ) {
       currentIdentifier = processIdentifier ;
     }
     return defaultNickname + (
-        currentIdentifier == JavaShellTools.UNDEFINED_PROCESS_ID ? "" : "#" + processIdentifier ) ;
+        currentIdentifier == JavaShellTools.UNDEFINED_PROCESS_ID ? "" : "#" + currentIdentifier ) ;
   }
 
   @Override
   public void start( final long timeout, final TimeUnit timeUnit )
       throws IOException, InterruptedException, ProcessCreationFailedException
   {
-    synchronized( lock ) {
+    synchronized( stateLock ) {
       super.start( timeout, timeUnit ) ;
+//      TimeUnit.SECONDS.sleep( 10L ) ;
       connect() ;
 
       // This may not be necessary.
@@ -169,18 +185,20 @@ public class JavaShell extends Shell {
       // an internal JMX method (for VM name) before JMX stuff finished to initialize itself.
       insider.keepAlive() ;
 
-      processIdentifier = JavaShellTools.extractProcessId( insider.getVirtualMachineName() ) ;
+      synchronized( processIdentifierLock ) {
+        processIdentifier = JavaShellTools.extractProcessId( insider.getVirtualMachineName() ) ;
+      }
       if( heartbeatPeriodMilliseconds == null ) {
-        heartbeatThread = new HeartbeatSender( insider, getNickname() ) ;
+        heartbeatSender = new HeartbeatSender( insider, getNickname() ) ;
       } else {
-        heartbeatThread = new HeartbeatSender(
+        heartbeatSender = new HeartbeatSender(
             insider, getNickname(), heartbeatPeriodMilliseconds ) ;
       }
     }
   }
 
   public boolean isUp() {
-    synchronized( lock ) {
+    synchronized( stateLock ) {
       if( insider == null ) {
         throw new IllegalStateException( "Not ready" ) ;
       }
@@ -206,7 +224,7 @@ public class JavaShell extends Shell {
       throws InterruptedException, IOException
   {
     Integer exitStatus = null ;
-    synchronized( lock ) {
+    synchronized( stateLock ) {
       try {
         switch( shutdownStyle ) {
           case GENTLE :
@@ -230,7 +248,9 @@ public class JavaShell extends Shell {
       } finally {
         stopHeartbeat() ;
         disconnect() ;
-        processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+        synchronized( processIdentifierLock ) {
+          processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+        }
       }
     }
     LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
@@ -239,8 +259,10 @@ public class JavaShell extends Shell {
   }
 
   private void stopHeartbeat() {
-    heartbeatThread.stop() ;
-    heartbeatThread = null ;
+    if( heartbeatSender != null ) {
+      heartbeatSender.stop() ;
+      heartbeatSender = null ;
+    }
   }
 
 
@@ -275,9 +297,9 @@ public class JavaShell extends Shell {
         if(    cause instanceof ServiceUnavailableException
             || cause instanceof java.rmi.ConnectException
         ) {
-          if( attemptCount ++ < 10 ) {
+          if( attemptCount ++ < 50 ) {
             LOG.debug( "Couldn't connect to " + url + ", waiting a bit before another attempt..." ) ;
-            TimeUnit.MILLISECONDS.sleep( 500L ) ;
+            TimeUnit.MILLISECONDS.sleep( 1000L ) ;
           } else {
             throw e ;
           }
@@ -293,7 +315,7 @@ public class JavaShell extends Shell {
     checkNotNull( beanClass ) ;
     checkNotNull( beanName ) ;
 
-    synchronized( lock ) {
+    synchronized( stateLock ) {
       final Object cachedBean = managedBeans.get( beanName ) ;
       final BEAN bean ;
       if( cachedBean == null ) {
@@ -309,25 +331,32 @@ public class JavaShell extends Shell {
 
 
   private void disconnect() {
-    for( final ObjectName beanName : managedBeans.keySet() ) {
-      try {
-        jmxConnection.unregisterMBean( beanName ) ;
-      } catch( InstanceNotFoundException e ) {
-        logCouldntUnregister( beanName, e ) ;
-      } catch( MBeanRegistrationException e ) {
-        logCouldntUnregister( beanName, e ) ;
-      } catch( IOException e ) {
-        logCouldntUnregister( beanName, e ) ;
-      }
-    }
-    managedBeans.clear() ;
     try {
-      jmxConnector.close() ;
-    } catch( IOException e ) {
-      logCouldntUnregister( jmxConnector, e ) ;
+      if( jmxConnection != null ) {
+        for( final ObjectName beanName : managedBeans.keySet() ) {
+          try {
+            jmxConnection.unregisterMBean( beanName ) ;
+          } catch( InstanceNotFoundException e ) {
+            logCouldntUnregister( beanName, e ) ;
+          } catch( MBeanRegistrationException e ) {
+            logCouldntUnregister( beanName, e ) ;
+          } catch( IOException e ) {
+            logCouldntUnregister( beanName, e ) ;
+          }
+        }
+      }
+      if( jmxConnector != null ) {
+        try {
+          jmxConnector.close() ;
+        } catch( IOException e ) {
+          logCouldntUnregister( jmxConnector, e ) ;
+        }
+      }
+    } finally {
+      managedBeans.clear() ;
+      jmxConnection = null ;
+      jmxConnector = null ;
     }
-    jmxConnection = null ;
-    jmxConnector = null ;
   }
 
   private static void logCouldntUnregister( final Object culprit, final Exception e ) {
@@ -390,9 +419,6 @@ public class JavaShell extends Shell {
       "java.util.logging.ConsoleHandler.level = FINEST",
       "java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter",
       "",
-      "// Use FINER or FINEST for javax.management.remote.level - FINEST is",
-      "// very verbose...",
-      "//",
       "javax.management.level=FINEST",
       "javax.management.remote.level=FINER"
   ) ;

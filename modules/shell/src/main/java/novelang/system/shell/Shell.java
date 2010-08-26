@@ -128,7 +128,7 @@ public abstract class Shell {
       }
     }
 
-    LOG.info( "Successfully started " + getNickname() + "." ) ;
+    LOG.info( "Successfully launched process: " + getNickname() + " (it may be initializing now)." ) ;
   }
 
 
@@ -141,7 +141,7 @@ public abstract class Shell {
       protected void interpretLine( final String line ) {
         if( line != null ) {
           LOG.debug( "Standard output from " + getNickname() + ": >>> " + line ) ;
-          if( startupSemaphore.availablePermits() == 0 && startupSensor.apply( line ) ) {
+          if( /*startupSemaphore.availablePermits() == 0 &&*/ startupSensor.apply( line ) ) {
             startupSemaphore.release() ;
           }
         }
@@ -222,14 +222,14 @@ public abstract class Shell {
   }
 
 
-  private final Object stateLock = new Object() ;
+  protected final Object stateLock = new Object() ;
 
   private State state = State.READY ;
 
   /**
    * Synchronization left to caller.
    */
-  private void ensureInState( final State expected, final State... otherExpected ) {
+  protected final void ensureInState( final State expected, final State... otherExpected ) {
     if( state != expected ) {
         for( final State other : otherExpected )
         {

@@ -17,6 +17,9 @@
 package novelang.system.shell.insider;
 
 import java.lang.management.ManagementFactory;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.currentTimeMillis;
@@ -73,6 +76,8 @@ public class LocalInsider implements Insider {
     ) ;
     heartbeatReceiver.setDaemon( true ) ;
     heartbeatReceiver.start() ;
+    
+    printOut( "Started " + getClass().getName() + "." ) ;
   }
 
   /**
@@ -102,13 +107,17 @@ public class LocalInsider implements Insider {
     return virtualMachineName ;
   }
 
+  private static final String TIMESTAMP_FORMAT = "HH:mm:ss,SSS ";
+
   private static void printOut( final String message ) {
-    System.out.println( message ) ;
+    final DateFormat dateFormat = new SimpleDateFormat( TIMESTAMP_FORMAT ) ;
+    System.out.println( dateFormat.format( new Date() ) + message ) ;
     System.out.flush() ;
   }
 
   private static void printErr( final String message ) {
-    System.err.println( message ) ;
+    final DateFormat dateFormat = new SimpleDateFormat( TIMESTAMP_FORMAT ) ;
+    System.out.println( dateFormat.format( new Date() ) + message ) ;
     System.err.flush() ;
   }
 }
