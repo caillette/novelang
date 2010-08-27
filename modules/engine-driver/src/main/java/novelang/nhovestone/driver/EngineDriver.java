@@ -31,7 +31,7 @@ import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import novelang.system.shell.JavaClasses;
 import novelang.system.shell.JavaShell;
-import novelang.system.shell.Shell;
+import novelang.system.shell.ProcessShell;
 import novelang.system.shell.ShutdownStyle;
 import org.apache.commons.lang.StringUtils;
 
@@ -152,7 +152,7 @@ public abstract class EngineDriver {
   public void start( final long timeout, final TimeUnit timeUnit )
       throws
       IOException,
-      InterruptedException, Shell.ProcessCreationFailedException
+      InterruptedException, ProcessShell.ProcessCreationFailedException
   {
     javaShell.start( timeout, timeUnit ) ;
   }

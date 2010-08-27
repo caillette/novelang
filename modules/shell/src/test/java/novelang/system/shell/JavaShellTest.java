@@ -24,12 +24,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
 import novelang.DirectoryFixture;
+import novelang.RepeatedAssertFixture;
+import novelang.StandalonePredicate;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import org.apache.commons.io.FileUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -59,10 +60,10 @@ public class JavaShellTest {
 //  @Ignore( "Eats 10 seconds of build time" )
   public void startForeignProgramAndMissHeartbeat() throws Exception {
 
-    final int heartbeatPeriod = 2 * 1000 ;
-    final int heartbeatFatalDelay = 1 * 1000 ; // JVM can take that long to start up.
-    final long isDownCheckPeriod = 500L ;
-    final int isDownRetryCount = ( int ) ( ( long ) heartbeatFatalDelay / isDownCheckPeriod + 10L ) ;
+    final int heartbeatPeriod = 10 * 1000 ;
+    final int heartbeatFatalDelay = 2 * 1000 ; 
+    final long maybeDownCheckPeriod = 200L ;
+    final int maybeDownRetryCount = ( int ) ( ( long ) heartbeatPeriod / maybeDownCheckPeriod ) ;
 
     if( isLikelyToWork() ) {
 
@@ -76,17 +77,18 @@ public class JavaShellTest {
       final JavaShell javaShell = new JavaShell( parameters ) ;
       try {
         javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
-        final IsDown isDown = new IsDown( javaShell );
-        assertEventually( isDown, isDownCheckPeriod, TimeUnit.MILLISECONDS, isDownRetryCount ) ;
+        final MaybeDown maybeDown = new MaybeDown( javaShell );
+        RepeatedAssertFixture.assertEventually(
+            maybeDown, maybeDownCheckPeriod, TimeUnit.MILLISECONDS, maybeDownRetryCount ) ;
+        final List< String > log = readLines( shellFixture.getLogFile() ) ;
+        assertThat( log )
+            .hasSize( 1 )
+            .contains( "Starting up and listening..." )
+        ;
       } finally {
         javaShell.shutdown( ShutdownStyle.FORCED ) ;
       }
 
-      final List< String > log = readLines( shellFixture.getLogFile() ) ;
-      assertThat( log )
-          .hasSize( 1 )
-          .contains( "Starting up and listening..." )
-      ;
     }
 
   }
@@ -218,7 +220,7 @@ public class JavaShellTest {
               "novelang.system.shell.StupidListener",
               jarFile
           ) )
-//          .withStartupSensor( STUPID_LISTENER_STARTED )
+          .withStartupSensor( STUPID_LISTENER_STARTED )
           .withProgramArguments( of(
               logFile.getAbsolutePath(),
               Integer.toString( dummyListenerPort )
@@ -229,15 +231,11 @@ public class JavaShellTest {
   }
 
 
-  public interface StandalonePredicate {
-    boolean apply() ;
-  }
-
-  private static class IsDown implements StandalonePredicate {
+  private static class MaybeDown implements StandalonePredicate {
 
     private final JavaShell javaShell ;
 
-    public IsDown( final JavaShell javaShell ) {
+    public MaybeDown( final JavaShell javaShell ) {
       this.javaShell = javaShell ;
     }
 
@@ -252,33 +250,5 @@ public class JavaShellTest {
     }
   }
 
-  
-  public static void assertEventually(
-      final StandalonePredicate predicate,
-      final long period,
-      final TimeUnit timeUnit,
-      final int retries
-  ) {
-    checkArgument( retries > 0 ) ;
-    checkArgument( period > 0L ) ;
 
-    int retryCount = 0 ;
-    while( true ) {
-
-      if( predicate.apply() ) {
-        return ;
-      }
-      if( retryCount ++ < retries ) {
-        try {
-          LOG.debug( "Unmatched predicate " + predicate + ", waiting a bit and retrying..." );
-          timeUnit.sleep( period ) ;
-        } catch( InterruptedException e ) {
-          throw new RuntimeException( "Should not happen", e ) ;
-        }
-        continue ;
-      }
-      fail( "Unmatched predicate after " + retries + " retries." ) ;
-    }
-
-  }
 }

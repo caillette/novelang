@@ -34,7 +34,7 @@ import novelang.novelist.Novelist;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-import novelang.system.shell.Shell;
+import novelang.system.shell.ProcessShell;
 
 import static novelang.KnownVersions.VERSION_0_38_1;
 import static novelang.KnownVersions.VERSION_0_41_0;
@@ -48,7 +48,7 @@ public class ScenarioDemo {
 
 
   public static void main( final String[] args )
-      throws IOException, InterruptedException, Shell.ProcessCreationFailedException
+      throws IOException, InterruptedException, ProcessShell.ProcessCreationFailedException
   {
     final File scenarioDirectory = FileTools.createFreshDirectory( "_scenario-demo" ) ;
     final File versionsDirectory = new File( "distrib" ) ;

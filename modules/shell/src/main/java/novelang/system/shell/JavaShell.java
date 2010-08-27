@@ -18,6 +18,7 @@ package novelang.system.shell;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.RuntimeMXBean;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
@@ -67,13 +68,23 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-public class JavaShell extends Shell {
+public class JavaShell extends ProcessShell {
 
   private static final Log LOG = LogFactory.getLog( JavaShell.class ) ;
   
   private final int jmxPort ;
   private final Integer heartbeatPeriodMilliseconds ;
+
+  /**
+   * A semaphore that is slightly redundant with the one inside {@link ProcessShell}
+   * but this helps preserving encapsulation.
+   */
   private final Semaphore ownStartupSensorSemaphore ;
+
+  /**
+   * The count of permits that {@link #ownStartupSensorSemaphore} will try to acquire.
+   * It depends upon the number of sensors inside {@link TieredStartupSensor}.
+   */
   private final int startupSensorSemaphorePermitCount ;
 
   public JavaShell( final Parameters parameters ) {
@@ -99,13 +110,22 @@ public class JavaShell extends Shell {
     this.startupSensorSemaphorePermitCount = THREADLOCAL_PERMITCOUNT.get() ;
     THREADLOCAL_SEMAPHORE.set( null ) ;
     THREADLOCAL_PERMITCOUNT.set( null ) ;
+
+    // Code checker happy: avoid access in both synchronized and unsynchronized context.
+    synchronized( stateLock ) {
+      jmxConnector = null ;
+      jmxConnection = null ;
+      heartbeatSender = null ;
+      insider = null ;
+    }
   }
 
 
   private static final Predicate< String > LOCAL_INSIDER_STARTED = new Predicate< String >() {
     @Override
     public boolean apply( final String input ) {
-      return input.contains( "Started novelang.system.shell.insider.LocalInsider." ) ;
+      // Seems printed by the JVM itself.
+      return input.contains( "Loaded novelang.system.shell.insider.InsiderAgent." ) ;
     }
   } ;
 
@@ -133,7 +153,7 @@ public class JavaShell extends Shell {
     argumentList.add( "-Dcom.sun.management.jmxremote.authenticate=false" ) ;
     argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
 
-    // Temporary: log JMX activity
+    // Log JMX activity. Didn't prove useful.
 //    argumentList.add( "-Djava.util.logging.config.file=" +
 //        JAVA_UTIL_LOGGING_CONFIGURATION_FILE.getAbsolutePath() ) ;
 
@@ -155,10 +175,10 @@ public class JavaShell extends Shell {
     return argumentList ;
   }
 
-  private JMXConnector jmxConnector = null ;
-  private MBeanServerConnection jmxConnection = null ;
-  private Insider insider = null ;
-  private HeartbeatSender heartbeatSender = null ;
+  private JMXConnector jmxConnector ;
+  private MBeanServerConnection jmxConnection;
+  private Insider insider;
+  private HeartbeatSender heartbeatSender;
 
   /**
    * We need a dedicated lock for {@link #processIdentifier} otherwise there is a deadlock
@@ -197,12 +217,15 @@ public class JavaShell extends Shell {
       }
     }
     synchronized( processIdentifierLock ) {
-      processIdentifier = JavaShellTools.extractProcessId( insider.getVirtualMachineName() ) ;
+      final RuntimeMXBean runtimeMXBean = getManagedBean(
+          RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
+      processIdentifier = JavaShellTools.extractProcessId( runtimeMXBean.getName() ) ;
     }
     ownStartupSensorSemaphore.tryAcquire(
         startupSensorSemaphorePermitCount,
         timeUnit.toMillis( timeout ) / 2L, TimeUnit.MILLISECONDS
     ) ;
+    LOG.info( "Started " + getNickname() + "." ) ;
   }
 
   public boolean isUp() {
@@ -211,8 +234,7 @@ public class JavaShell extends Shell {
         throw new IllegalStateException( "Not ready" ) ;
       }
       try {
-        insider.getVirtualMachineName() ;
-        return true ;
+        return insider.isAlive() ;
       } catch( Exception ignored ) {
         return false ;
       }
@@ -231,19 +253,24 @@ public class JavaShell extends Shell {
   public Integer shutdown( final ShutdownStyle shutdownStyle )
       throws InterruptedException, IOException
   {
+    LOG.info( "Shutdown (" + shutdownStyle + ") requested for " + getNickname() + "..." ) ;
+
+    // Code checker happy: avoid access to static member in synchronized context.
+    final Log log = LOG ;
+
     Integer exitStatus = null ;
-    try {
-      synchronized( stateLock ) {
+    synchronized( stateLock ) {
+      try {
         switch( shutdownStyle ) {
           case GENTLE :
             try {
-              LOG.info( "Requesting shutdown (through JMX) for " + getNickname() + "..." ) ;
               insider.shutdown() ;
             } catch( Exception e ) {
+              log.info( "Shutdown request failed: " + e.getMessage() + ", forcing..." ) ;
               exitStatus = shutdownProcess( true ) ;
               break ;
             }
-            // ... After asking for shutdown, we wait for natural process end. TODO: add timeout.
+            // ... After asking for shutdown, we wait for natural process end. TODO: add timeout?
           case WAIT :
             exitStatus = shutdownProcess( false ) ;
             break ;
@@ -253,15 +280,16 @@ public class JavaShell extends Shell {
           default :
             throw new IllegalArgumentException( "Unsupported: " + shutdownStyle ) ;
         }
-      }
-    } finally {
-      stopHeartbeat() ;
-      disconnect() ;
-      synchronized( processIdentifierLock ) {
-        processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+        log.info( "Shutdown (" + shutdownStyle + ") successful for " + getNickname() + "." ) ;
+      } finally {
+        stopHeartbeat() ;
+        disconnect() ;
+        synchronized( processIdentifierLock ) {
+          processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+        }
       }
     }
-    LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
+    log.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
         + " with exit status code of " + exitStatus + "." ) ;
     return exitStatus ;
   }
@@ -279,6 +307,9 @@ public class JavaShell extends Shell {
 // ===
 
 
+  /**
+   * Synchronization on {@link #stateLock} left to caller.
+   */
   private void connect() throws IOException, InterruptedException {
     final JMXServiceURL url ;
     try {
@@ -294,11 +325,12 @@ public class JavaShell extends Shell {
   private void connectWithRetries( final JMXServiceURL url )
       throws IOException, InterruptedException
   {
-    LOG.info( "Connecting to '" + url + "'..." ) ;
+    LOG.info( "Connecting to " + url + " ..." ) ;
     int attemptCount = 0 ;
     while( true ) {
       try {
         jmxConnector = JMXConnectorFactory.connect( url, null ) ;
+        LOG.debug( "Successfully connected to " + url ) ;
         return ;
       } catch( IOException e ) {
         final Throwable cause = e.getCause() ;

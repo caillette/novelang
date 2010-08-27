@@ -38,7 +38,7 @@ import novelang.nhovestone.scenario.Upsizer;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
-import novelang.system.shell.Shell;
+import novelang.system.shell.ProcessShell;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -144,7 +144,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
       throws
       InterruptedException,
       IOException,
-      Shell.ProcessCreationFailedException
+      ProcessShell.ProcessCreationFailedException
   {
     try {
       startDaemons() ;
@@ -219,7 +219,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
   private void startDaemons()
       throws IOException,
       InterruptedException,
-      Shell.ProcessCreationFailedException
+      ProcessShell.ProcessCreationFailedException
   {
     for( final Monitoring monitoring : monitorings.values() ) {
       final HttpDaemonDriver driver = monitoring.driver ;

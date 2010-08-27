@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import novelang.system.Log;
@@ -37,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Starts and stops a {@link Process}, watching its standard and error outputs.
  *
  * Unfortunately the {@link Process} doesn't tell about OS-dependant PID.
- * There is no chance to kill spawned processes if the VM running {@link Shell}
+ * There is no chance to kill spawned processes if the VM running {@link ProcessShell}
  * crashes.
  *
  * See good discussion
@@ -45,9 +44,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-public abstract class Shell {
+public abstract class ProcessShell {
 
-  private static final Log LOG = LogFactory.getLog( Shell.class ) ;
+  private static final Log LOG = LogFactory.getLog( ProcessShell.class ) ;
 
   private final File workingDirectory ;
   private final List< String > processArguments ;
@@ -62,7 +61,7 @@ public abstract class Shell {
   private static final ImmutableList< String > NO_PARAMETERS = ImmutableList.of() ;
 
 
-  protected Shell(
+  protected ProcessShell(
       final File workingDirectory,
       final String nickname,
       final List< String > processArguments,
@@ -188,6 +187,9 @@ public abstract class Shell {
   public static class ProcessCreationFailedException extends Exception { }
 
 
+  /**
+   * Requests to shut the process down. This method is not aware if the process was alread down.
+   */
   protected final Integer shutdownProcess( final boolean force ) throws InterruptedException {
     Integer exitCode = null ;
     synchronized( stateLock ) {
@@ -212,7 +214,7 @@ public abstract class Shell {
         state = State.TERMINATED ;
       }
     }
-    LOG.info( "Process ended for %s, returning %s", getNickname(), exitCode ) ;
+    LOG.info( "Process shutdown ended for %s, returning %s", getNickname(), exitCode ) ;
     return exitCode ;
   }
 

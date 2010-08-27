@@ -17,8 +17,6 @@
 package novelang.system.shell.insider;
 
 import java.lang.management.ManagementFactory;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.System.currentTimeMillis;
@@ -32,7 +30,7 @@ import static java.lang.System.currentTimeMillis;
 @SuppressWarnings( { "JavadocReference" } )
 public class LocalInsider implements Insider {
 
-  private final AtomicLong keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
+  private final AtomicLong keepaliveCounter ;
   private final String virtualMachineName ;
 
   public LocalInsider() {
@@ -45,11 +43,12 @@ public class LocalInsider implements Insider {
     virtualMachineName = ManagementFactory.getRuntimeMXBean().getName() ;
 
     printOut( "Initializing " + getClass().getSimpleName() + " "
-        + "from thread " + Thread.currentThread() + " "
         + "with: "
         + "virtualMachineName=" + virtualMachineName + ", "
         + "fatalHeartbeatDelay=" + delay + " milliseconds..."
     ) ;
+
+    keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
 
     final Thread heartbeatReceiver = new Thread(
         new Runnable() {
@@ -57,8 +56,8 @@ public class LocalInsider implements Insider {
           public void run() {
             while( true ) {
               try {
-//                printOut(
-//                    "Started keepalive watcher from thread " + Thread.currentThread() + "." ) ;
+                printOut(
+                    "Started keepalive watcher from thread " + Thread.currentThread() + "." ) ;
                 Thread.sleep( delay ) ;
                 final long lag = currentTimeMillis() - keepaliveCounter.get() ;
                 if( lag > delay ) {
@@ -75,8 +74,11 @@ public class LocalInsider implements Insider {
     ) ;
     heartbeatReceiver.setDaemon( true ) ;
     heartbeatReceiver.start() ;
+
+    // Reset the counter for an approximative synchronization with heartbeat thread start time.
+    // A semaphore may be overkill.
+    keepAlive() ;
     
-    printOut( "Started " + getClass().getName() + "." ) ;
   }
 
   /**
@@ -102,8 +104,8 @@ public class LocalInsider implements Insider {
   }
 
   @Override
-  public String getVirtualMachineName() {
-    return virtualMachineName ;
+  public boolean isAlive() {
+    return true ;
   }
 
   private static void printOut( final String message ) {

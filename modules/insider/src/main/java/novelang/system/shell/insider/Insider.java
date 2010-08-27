@@ -54,10 +54,9 @@ public interface Insider {
   void keepAlive() ;
 
   /**
-   * Returns JVM's {@link java.lang.management.RuntimeMXBean#getName()}.
-   * This saves creating another remote bean.
-   * Doesn't activate keepalive so tests may use it to check that remote service is alive.
+   * Does nothing, but calling this method doesn't activate keepalive so tests may use it
+   * to check that remote service is alive.
    */
-  String getVirtualMachineName() ;
+  boolean isAlive() ;
 
 }

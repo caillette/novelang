@@ -18,9 +18,12 @@ package novelang.system.shell;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -60,6 +63,15 @@ public class JavaShellTools {
 
   public static final int UNDEFINED_PROCESS_ID = -1 ;
   public static final int UNKNOWN_PROCESS_ID = -2 ;
+
+  public static final ObjectName RUNTIME_MX_BEAN_OBJECTNAME ;
+  static {
+    try {
+      RUNTIME_MX_BEAN_OBJECTNAME = new ObjectName( ManagementFactory.RUNTIME_MXBEAN_NAME ) ;
+    } catch( MalformedObjectNameException e ) {
+      throw new RuntimeException( e ) ;
+    }
+  }
 
 
 // ====================================

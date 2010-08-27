@@ -53,7 +53,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
     checkArgument( heartbeatPeriodMilliseconds > 0L ) ;
 
     LOG.debug( "Initializing for " + processNickname
-        + " with a heartbeat of " + heartbeatPeriodMilliseconds + " milliseconds..." ) ;
+        + " with a heartbeat period of " + heartbeatPeriodMilliseconds + " milliseconds..." ) ;
 
     final Runnable runnable = new Runnable() {
       @Override

@@ -116,8 +116,6 @@ public class AgentFileInstaller {
     return resolvedFile;
   }
 
-  private final Object lock = new Object() ;
-
 
   /**
    * Returns a {@code File} object referencing the jar containing the
