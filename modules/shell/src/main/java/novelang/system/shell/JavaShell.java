@@ -417,6 +417,8 @@ public class JavaShell extends ProcessShell {
 // Parameters
 // ==========
 
+  
+
   public static interface Parameters {
 
     String getNickname() ;

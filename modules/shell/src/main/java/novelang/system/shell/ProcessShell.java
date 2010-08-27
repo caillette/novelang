@@ -173,7 +173,9 @@ public abstract class ProcessShell {
 
   private void handleThrowableFromProcess( final Throwable throwable ) {
     synchronized( stateLock ) {
-      if( state != State.SHUTTINGDOWN && state != State.TERMINATED ) {
+      if( state != State.SHUTTINGDOWN
+          && state != State.READY // Makes sense if a complete shutdown just occured.
+      ) {
         state = State.BROKEN ;
       }
     }
@@ -211,7 +213,7 @@ public abstract class ProcessShell {
         process = null ;
         standardStreamWatcherThread = null ;
         errorStreamWatcherThread = null ;
-        state = State.TERMINATED ;
+        state = State.READY ; //TERMINATED ;
       }
     }
     LOG.debug( "Process shutdown ended for %s, returning %s.", getNickname(), exitCode ) ;
@@ -247,6 +249,6 @@ public abstract class ProcessShell {
   }
 
 
-  private enum State { READY, RUNNING, BROKEN, SHUTTINGDOWN, TERMINATED }
+  private enum State { READY, RUNNING, BROKEN, SHUTTINGDOWN/*, TERMINATED*/ }
 
 }

@@ -25,7 +25,6 @@ import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
-import javax.management.ObjectName;
 import novelang.DirectoryFixture;
 import novelang.RepeatedAssert;
 import novelang.StandalonePredicate;
@@ -34,7 +33,6 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
@@ -42,6 +40,7 @@ import org.junit.runners.NameAwareTestClassRunner;
 import static com.google.common.collect.ImmutableList.of;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Laurent Caillette
@@ -60,6 +59,15 @@ public class JavaShellTest {
 
 
   @Test
+  public void startTwice() throws Exception {
+
+    if( isLikelyToWork() ) {
+      startAndShutdown( new JavaShell( new ShellFixture().getParameters() ) ) ;
+      startAndShutdown( new JavaShell( new ShellFixture().getParameters() ) ) ;
+    }
+  }
+
+  @Test
   public void useAsJmxConnector() throws Exception {
 
     if( isLikelyToWork() ) {
@@ -69,7 +77,7 @@ public class JavaShellTest {
         final RuntimeMXBean runtimeMXBean = javaShell.getManagedBean(
             RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
         final String virtualMachineName = runtimeMXBean.getVmName() ;
-        Assert.assertNotNull( virtualMachineName ) ;
+        assertNotNull( virtualMachineName ) ;
         LOG.info( "Returned VM name: '" + virtualMachineName + "'" ) ;
       } finally {
         javaShell.shutdown( ShutdownStyle.FORCED ) ;
@@ -77,7 +85,7 @@ public class JavaShellTest {
     }
   }
 
-  
+
   @Test
   public void detectProgramExitedOnItsOwn() throws Exception {
 
@@ -239,6 +247,20 @@ public class JavaShellTest {
     }
 
   }
+
+  private static void startAndShutdown( final JavaShell javaShell )
+      throws IOException, InterruptedException, ProcessShell.ProcessCreationFailedException
+  {
+    javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+    try {
+      assertNotNull( javaShell.getManagedBean( RuntimeMXBean.class,
+          JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ).getVmName() ) ;
+    } finally {
+      javaShell.shutdown( ShutdownStyle.GENTLE ) ;
+    }
+  }
+
+
 
   /**
    * TODO: Make this work for non-SNAPSHOT versions.
