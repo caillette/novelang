@@ -139,22 +139,32 @@ public class JavaShellTest {
 
     for( final StackTraceElement element : new Exception().getStackTrace() ) {
       if( element.getClassName().contains( "org.apache.maven.surefire.Surefire" ) ) {
-        // Maven tests should work all time.
+        // Maven tests should work all time unless broken for good reason.
         return true ;
       }
     }
 
-    try {
-      AgentFileInstaller.getInstance().getJarFile() ;
-    } catch( MissingResourceException e ) {
-      LOG.warn( "Not running as Maven test, nor couldn't find agent jar file" +
-          " (check system properties). Skipping " + NameAwareTestClassRunner.getTestName() +
-          " because needed resources may be missing."
-      ) ;
+    final String warning = "Not running as Maven test, nor couldn't find agent jar file" +
+            " (check system properties). Skipping " + NameAwareTestClassRunner.getTestName() +
+            " because needed resources may be missing."
+    ;
+    String message = warning ;
+
+    if( AgentFileInstaller.mayHaveValidInstance() ) {
+      try {
+        AgentFileInstaller.getInstance().getJarFile() ;
+        message = null ;
+      } catch( MissingResourceException ignore ) { }
+    }
+
+    if( message == null ) {
+      return true ;
+    } else {
+      LOG.warn( message ) ;
       return false ;
     }
 
-    return true ;
+
   }
 
   @SuppressWarnings( { "unchecked" } )

@@ -69,6 +69,12 @@ public class AgentFileInstaller {
   private final File jarFile ;
   public static final String VERSION_PLACEHOLDER_REGEX = Pattern.quote( VERSION_PLACEHOLDER );
 
+  public static boolean mayHaveValidInstance() {
+    return
+           System.getProperty( VERSIONOVERRIDE_SYSTEMPROPERTYNAME ) != null 
+        || AgentFileInstaller.class.getResource( VERSION_RESOURCE_NAME ) != null
+    ;
+  }
 
   private AgentFileInstaller() throws IOException {
 
