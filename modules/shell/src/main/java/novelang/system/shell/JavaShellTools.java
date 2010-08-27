@@ -22,8 +22,10 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
+import novelang.system.shell.insider.Insider;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -107,5 +109,46 @@ public class JavaShellTools {
   }
 
 
+  static List< String > createProcessArguments(
+      final List< String > jvmArguments,
+      final int jmxPort,
+      final JavaClasses javaClasses,
+      final List< String > programArguments,
+      final Integer heartbeatMaximumPeriod
+  ) {
+    final List< String > argumentList = Lists.newArrayList() ;
 
+    // This is a very optimistic approach for obtaining Java executable.
+    // TODO: see how Ant's Java task solves this.
+    argumentList.add( "java" ) ;
+
+    argumentList.add( "-D" + ShutdownTools.SHUTDOWN_TATTOO_PROPERTYNAME ) ;
+
+    argumentList.add( "-Dcom.sun.management.jmxremote.port=" + jmxPort ) ;
+
+    // No security yet.
+    argumentList.add( "-Dcom.sun.management.jmxremote.authenticate=false" ) ;
+    argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
+
+    // Log JMX activity. Didn't prove useful.
+//    argumentList.add( "-Djava.util.logging.config.file=" +
+//        JAVA_UTIL_LOGGING_CONFIGURATION_FILE.getAbsolutePath() ) ;
+
+    argumentList.add(
+        "-javaagent:" + AgentFileInstaller.getInstance().getJarFile().getAbsolutePath()
+        + ( heartbeatMaximumPeriod == null
+            ? ""
+            : "=" + Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME + heartbeatMaximumPeriod
+        )
+    ) ;
+
+    if( jvmArguments != null ) {
+      argumentList.addAll( jvmArguments ) ;
+    }
+
+    argumentList.addAll( javaClasses.asStringList() ) ;
+    argumentList.addAll( programArguments ) ;
+
+    return argumentList ;
+  }
 }

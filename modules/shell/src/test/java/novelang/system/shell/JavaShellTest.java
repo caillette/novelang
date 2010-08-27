@@ -18,27 +18,30 @@ package novelang.system.shell;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.RuntimeMXBean;
+import java.net.Socket;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
+import javax.management.ObjectName;
 import novelang.DirectoryFixture;
-import novelang.RepeatedAssertFixture;
+import novelang.RepeatedAssert;
 import novelang.StandalonePredicate;
 import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.ImmutableList.of;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author Laurent Caillette
@@ -57,11 +60,49 @@ public class JavaShellTest {
 
 
   @Test
-//  @Ignore( "Eats 10 seconds of build time" )
+  public void useAsJmxConnector() throws Exception {
+
+    if( isLikelyToWork() ) {
+      final JavaShell javaShell = new JavaShell( new ShellFixture().getParameters() ) ;
+      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+      try {
+        final RuntimeMXBean runtimeMXBean = javaShell.getManagedBean(
+            RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
+        final String virtualMachineName = runtimeMXBean.getVmName() ;
+        Assert.assertNotNull( virtualMachineName ) ;
+        LOG.info( "Returned VM name: '" + virtualMachineName + "'" ) ;
+      } finally {
+        javaShell.shutdown( ShutdownStyle.FORCED ) ;
+      }
+    }
+  }
+
+  
+  @Test
+  public void detectProgramExitedOnItsOwn() throws Exception {
+
+    if( isLikelyToWork() ) {
+
+      final ShellFixture shellFixture = new ShellFixture() ;
+      final int heartbeatFatalDelay = 1000 ;
+      final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
+              .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
+              .withHeartbeatPeriodMilliseconds( 100 )
+      ) ;
+      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+      shellFixture.askForSelfTermination() ;
+      Thread.sleep( ( long ) heartbeatFatalDelay ) ;
+      assertFalse( javaShell.isUp() ) ;
+    }
+  }
+
+
+
+  @Test
   public void startForeignProgramAndMissHeartbeat() throws Exception {
 
     final int heartbeatPeriod = 10 * 1000 ;
-    final int heartbeatFatalDelay = 2 * 1000 ; 
+    final int heartbeatFatalDelay = 1 * 1000 ; 
     final long maybeDownCheckPeriod = 200L ;
     final int maybeDownRetryCount = ( int ) ( ( long ) heartbeatPeriod / maybeDownCheckPeriod ) ;
 
@@ -77,9 +118,12 @@ public class JavaShellTest {
       final JavaShell javaShell = new JavaShell( parameters ) ;
       try {
         javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
-        final MaybeDown maybeDown = new MaybeDown( javaShell );
-        RepeatedAssertFixture.assertEventually(
-            maybeDown, maybeDownCheckPeriod, TimeUnit.MILLISECONDS, maybeDownRetryCount ) ;
+        RepeatedAssert.assertEventually(
+            new MaybeDown( javaShell ),
+            maybeDownCheckPeriod,
+            TimeUnit.MILLISECONDS,
+            maybeDownRetryCount
+        ) ;
         final List< String > log = readLines( shellFixture.getLogFile() ) ;
         assertThat( log )
             .hasSize( 1 )
@@ -92,6 +136,7 @@ public class JavaShellTest {
     }
 
   }
+
 
   @Test
   public void startForeignProgram() throws Exception {
@@ -205,8 +250,10 @@ public class JavaShellTest {
 
 
   private static class ShellFixture {
-    private final File logFile;
+
+    private final File logFile ;
     private final JavaShell.Parameters parameters ;
+    private final int dummyListenerPort ;
 
     public File getLogFile() {
       return logFile;
@@ -218,7 +265,7 @@ public class JavaShellTest {
 
     public ShellFixture() throws IOException {
       final int jmxPort = TcpPortBooker.THIS.find() ;
-      final int dummyListenerPort = TcpPortBooker.THIS.find() ;
+      dummyListenerPort = TcpPortBooker.THIS.find() ;
       final File scratchDirectory = new DirectoryFixture().getDirectory() ;
       logFile = new File( scratchDirectory, "dummy.txt" );
       final File jarFile = installFixturePrograms( scratchDirectory ) ;
@@ -237,6 +284,15 @@ public class JavaShellTest {
           ) )
           .withJmxPort( jmxPort )
       ;
+    }
+
+    public void askForSelfTermination() {
+      try {
+        final Socket clientSocket = new Socket( "localhost", dummyListenerPort ) ;
+        clientSocket.close() ;
+      } catch( IOException e ) {
+        LOG.debug( "Couldn't open socket on port " + dummyListenerPort + ": " + e.getMessage() ) ;
+      }
     }
   }
 

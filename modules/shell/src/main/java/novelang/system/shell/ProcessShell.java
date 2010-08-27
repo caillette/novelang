@@ -88,8 +88,8 @@ public abstract class ProcessShell {
   {
     final Semaphore startupSemaphore = new Semaphore( 0 ) ;
 
-    LOG.info( getNickname() + " starting process in directory '"
-        + workingDirectory.getAbsolutePath() + "'" ) ;
+    LOG.info( "Starting process " + getNickname() + " in directory '"
+        + workingDirectory.getAbsolutePath() + "'..." ) ;
     LOG.info( "Arguments: " + processArguments ) ;
 
     synchronized( stateLock ) {
@@ -214,7 +214,7 @@ public abstract class ProcessShell {
         state = State.TERMINATED ;
       }
     }
-    LOG.info( "Process shutdown ended for %s, returning %s", getNickname(), exitCode ) ;
+    LOG.debug( "Process shutdown ended for %s, returning %s.", getNickname(), exitCode ) ;
     return exitCode ;
   }
 

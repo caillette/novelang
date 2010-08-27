@@ -28,7 +28,7 @@ import static com.google.common.collect.Lists.newLinkedList;
 import static java.util.Arrays.asList;
 
 /**
- * Evaluates a stack of {@link Predicate} against lines coming from process standard output.
+ * Evaluates a stack of {@link Predicate}s against lines coming from process standard output.
  * For each matching line, the {@link #semaphore} release one permits.
  * In order to make releases happen in order, the semaphore must be fair.
  * Each matched {@link Predicate} goes out of the stack. When the last {@link Predicate}

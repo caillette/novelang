@@ -38,14 +38,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
   private final Thread thread ;
 
-  public HeartbeatSender( final Insider insider, final String processNickname ) {
-    this( insider, processNickname, Insider.HEARTBEAT_FATAL_DELAY_MILLISECONDS / 10L ) ;
+  public HeartbeatSender(
+      final Insider insider,
+      final Notifiee notifiee,
+      final String processNickname
+  ) {
+    this( insider, notifiee, processNickname, Insider.HEARTBEAT_FATAL_DELAY_MILLISECONDS / 10L ) ;
   }
 
 
   @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public HeartbeatSender(
       final Insider insider,
+      final Notifiee notifiee,
       final String processNickname,
       final long heartbeatPeriodMilliseconds
   ) {
@@ -70,16 +75,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
           } catch( InterruptedException e ) {
             break;
           }
+          if( Thread.currentThread().isInterrupted() ) {
+            // Exit from the loop if thread interruption occured while we're not sleeping.
+            break ;
+          }
           try {
             insider.keepAlive();
           } catch( UndeclaredThrowableException e ) {
+/*
             if( e.getCause() instanceof ConnectException ) {
               LOG.debug( "Could not send heartbeat to " + processNickname + "." );
             } else {
               LOG.error( "Could not send heartbeat to " + processNickname + ".", e );
             }
+*/
+            break ;
           }
         }
+        notifiee.onUnreachableProcess() ;
       }
     } ;
     thread = new Thread( runnable, "Heartbeat-" + processNickname ) ;
@@ -92,6 +105,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
       throw new IllegalStateException( "Thread already interrupted" ) ;
     }
     thread.interrupt() ;
+  }
+
+
+  public interface Notifiee {
+    void onUnreachableProcess() ;
   }
 
 

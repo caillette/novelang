@@ -20,14 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
 import java.net.MalformedURLException;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import javax.management.InstanceNotFoundException;
 import javax.management.JMX;
@@ -87,11 +85,18 @@ public class JavaShell extends ProcessShell {
    */
   private final int startupSensorSemaphorePermitCount ;
 
+  private final HeartbeatSender.Notifiee heartbeatSenderNotifiee = new HeartbeatSender.Notifiee() {
+    @Override
+    public void onUnreachableProcess() {
+      handleUnreachableProcess() ;
+    }
+  } ;
+
   public JavaShell( final Parameters parameters ) {
     super(
         parameters.getWorkingDirectory(),
         parameters.getNickname(),
-        createProcessArguments(
+        JavaShellTools.createProcessArguments(
             parameters.getJvmArguments(),
             parameters.getJmxPort(),
             parameters.getJavaClasses(),
@@ -130,51 +135,6 @@ public class JavaShell extends ProcessShell {
   } ;
 
 
-
-
-  private static List< String > createProcessArguments(
-      final List< String > jvmArguments,
-      final int jmxPort,
-      final JavaClasses javaClasses,
-      final List< String > programArguments,
-      final Integer heartbeatMaximumPeriod
-  ) {
-    final List< String > argumentList = Lists.newArrayList() ;
-
-    // This is a very optimistic approach for obtaining Java executable.
-    // TODO: see how Ant's Java task solves this.
-    argumentList.add( "java" ) ;
-
-    argumentList.add( "-D" + ShutdownTools.SHUTDOWN_TATTOO_PROPERTYNAME ) ;
-
-    argumentList.add( "-Dcom.sun.management.jmxremote.port=" + jmxPort ) ;
-
-    // No security yet.
-    argumentList.add( "-Dcom.sun.management.jmxremote.authenticate=false" ) ;
-    argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
-
-    // Log JMX activity. Didn't prove useful.
-//    argumentList.add( "-Djava.util.logging.config.file=" +
-//        JAVA_UTIL_LOGGING_CONFIGURATION_FILE.getAbsolutePath() ) ;
-
-    argumentList.add(
-        "-javaagent:" + AgentFileInstaller.getInstance().getJarFile().getAbsolutePath()
-        + ( heartbeatMaximumPeriod == null
-            ? ""
-            : "=" + Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME + heartbeatMaximumPeriod
-        )
-    ) ;
-
-    if( jvmArguments != null ) {
-      argumentList.addAll( jvmArguments ) ;
-    }
-
-    argumentList.addAll( javaClasses.asStringList() ) ;
-    argumentList.addAll( programArguments ) ;
-
-    return argumentList ;
-  }
-
   private JMXConnector jmxConnector ;
   private MBeanServerConnection jmxConnection;
   private Insider insider;
@@ -199,6 +159,12 @@ public class JavaShell extends ProcessShell {
         currentIdentifier == JavaShellTools.UNDEFINED_PROCESS_ID ? "" : "#" + currentIdentifier ) ;
   }
 
+
+// =======
+// Startup
+// =======
+
+
   @Override
   public void start( final long timeout, final TimeUnit timeUnit )
       throws IOException, InterruptedException, ProcessCreationFailedException
@@ -210,10 +176,14 @@ public class JavaShell extends ProcessShell {
       insider.keepAlive() ;
 
       if( heartbeatPeriodMilliseconds == null ) {
-        heartbeatSender = new HeartbeatSender( insider, getNickname() ) ;
+        heartbeatSender = new HeartbeatSender( insider, heartbeatSenderNotifiee, getNickname() ) ;
       } else {
         heartbeatSender = new HeartbeatSender(
-            insider, getNickname(), heartbeatPeriodMilliseconds ) ;
+            insider,
+            heartbeatSenderNotifiee,
+            getNickname(),
+            heartbeatPeriodMilliseconds
+        ) ;
       }
     }
     synchronized( processIdentifierLock ) {
@@ -228,10 +198,16 @@ public class JavaShell extends ProcessShell {
     LOG.info( "Started " + getNickname() + "." ) ;
   }
 
+  /**
+   * Checks if the managed JVM is up by issuing a JMX call.
+   *
+   * @return {@code true} if the call succeeded, {@code false} otherwise (process not started
+   *         or JMX connection lost or process terminated).
+   */
   public boolean isUp() {
     synchronized( stateLock ) {
       if( insider == null ) {
-        throw new IllegalStateException( "Not ready" ) ;
+        return false ;
       }
       try {
         return insider.isAlive() ;
@@ -240,6 +216,13 @@ public class JavaShell extends ProcessShell {
       }
     }
   }
+
+
+
+// ===================
+// Process termination
+// ===================
+
 
   /**
    * Requests the underlying process to shutdown. When requested to shut down in a
@@ -260,46 +243,69 @@ public class JavaShell extends ProcessShell {
 
     Integer exitStatus = null ;
     synchronized( stateLock ) {
-      try {
-        switch( shutdownStyle ) {
-          case GENTLE :
-            try {
-              insider.shutdown() ;
-            } catch( Exception e ) {
-              log.info( "Shutdown request failed: " + e.getMessage() + ", forcing..." ) ;
-              exitStatus = shutdownProcess( true ) ;
+      if( insider == null ) {
+        log.info( "Not started or already shut down." ) ;
+      } else {
+        try {
+          switch( shutdownStyle ) {
+            case GENTLE :
+              try {
+                insider.shutdown() ;
+              } catch( Exception e ) {
+                log.info( "Shutdown request failed: " + e.getMessage() + ", forcing..." ) ;
+                exitStatus = shutdownProcess( true ) ;
+                break ;
+              }
+              // ... After asking for shutdown, we wait for natural process end. TODO: add timeout?
+            case WAIT :
+              exitStatus = shutdownProcess( false ) ;
               break ;
-            }
-            // ... After asking for shutdown, we wait for natural process end. TODO: add timeout?
-          case WAIT :
-            exitStatus = shutdownProcess( false ) ;
-            break ;
-          case FORCED :
-            shutdownProcess( true ) ;
-            break ;
-          default :
-            throw new IllegalArgumentException( "Unsupported: " + shutdownStyle ) ;
-        }
-        log.info( "Shutdown (" + shutdownStyle + ") successful for " + getNickname() + "." ) ;
-      } finally {
-        stopHeartbeat() ;
-        disconnect() ;
-        synchronized( processIdentifierLock ) {
-          processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+            case FORCED :
+              shutdownProcess( true ) ;
+              break ;
+            default :
+              throw new IllegalArgumentException( "Unsupported: " + shutdownStyle ) ;
+          }
+        } finally {
+          cleanup();
         }
       }
     }
-    log.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
+    LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
         + " with exit status code of " + exitStatus + "." ) ;
     return exitStatus ;
   }
 
-  private void stopHeartbeat() {
+  private void cleanup() {
+    insider = null ;
     if( heartbeatSender != null ) {
       heartbeatSender.stop() ;
       heartbeatSender = null ;
     }
+    disconnect() ;
+    synchronized( processIdentifierLock ) {
+      processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+    }
+    LOG.info( "Cleanup done for " + getNickname() + "." ) ;
   }
+
+  private void handleUnreachableProcess() {
+    final Log log = LOG ;
+    synchronized( stateLock ) {
+      if( insider != null ) {
+        log.info( "Couldn't send heartbeat to " + getNickname() + ", cleaning up..." );
+        try {
+          // Clean process-related resources.
+          shutdownProcess( true ) ;
+        } catch( InterruptedException e ) {
+          throw new RuntimeException( "Not supposed to happen during a forced shutdown", e ) ;
+        }
+        cleanup() ;
+      }
+    }
+  }
+
+
 
 
 // ===
@@ -400,8 +406,10 @@ public class JavaShell extends ProcessShell {
   }
 
   private static void logCouldntUnregister( final Object culprit, final Exception e ) {
+/*
     LOG.debug( "Couldn't disconnect or unregister " + culprit + ", cause: " + e.getClass() +
         " (may be normal if other VM terminated)." ) ;
+*/
   }
 
 

@@ -27,11 +27,11 @@ import static org.junit.Assert.fail;
 /**
  * @author Laurent Caillette
  */
-public class RepeatedAssertFixture {
+public class RepeatedAssert {
 
-  private static final Log LOG = LogFactory.getLog( RepeatedAssertFixture.class ) ;
+  private static final Log LOG = LogFactory.getLog( RepeatedAssert.class ) ;
 
-  private RepeatedAssertFixture() {
+  private RepeatedAssert() {
   }
 
   public static void assertEventually(
