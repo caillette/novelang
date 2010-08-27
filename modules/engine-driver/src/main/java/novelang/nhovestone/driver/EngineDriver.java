@@ -31,7 +31,9 @@ import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import novelang.system.shell.JavaClasses;
 import novelang.system.shell.JavaShell;
-import novelang.system.shell.ProcessShell;
+import novelang.system.shell.JavaShellParameters;
+import novelang.system.shell.ProcessCreationException;
+import novelang.system.shell.ProcessInitializationException;
 import novelang.system.shell.ShutdownStyle;
 import org.apache.commons.lang.StringUtils;
 
@@ -131,8 +133,8 @@ public abstract class EngineDriver {
     }
 
 
-    JavaShell.Parameters parameters =
-        Husk.create( JavaShell.Parameters.class );
+    JavaShellParameters parameters =
+        Husk.create( JavaShellParameters.class );
     parameters = parameters
         .withWorkingDirectory( configuration.getWorkingDirectory() )
         .withNickname( "Novelang-" + version.getName() )
@@ -152,9 +154,11 @@ public abstract class EngineDriver {
   public void start( final long timeout, final TimeUnit timeUnit )
       throws
       IOException,
-      InterruptedException, ProcessShell.ProcessCreationFailedException
+      InterruptedException,
+      ProcessCreationException,
+      ProcessInitializationException
   {
-    javaShell.start( timeout, timeUnit ) ;
+    javaShell.start() ;
   }
 
 

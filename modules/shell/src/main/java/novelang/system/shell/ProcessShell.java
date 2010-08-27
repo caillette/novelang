@@ -80,11 +80,11 @@ public abstract class ProcessShell {
     return nickname ;
   }
 
-  public void start( final long timeout, final TimeUnit timeUnit )
+  protected final void start( final long timeout, final TimeUnit timeUnit )
       throws
       IOException, 
       InterruptedException,
-      ProcessCreationFailedException
+      ProcessCreationException
   {
     final Semaphore startupSemaphore = new Semaphore( 0 ) ;
 
@@ -121,7 +121,7 @@ public abstract class ProcessShell {
       startupSemaphore.tryAcquire( 1, timeout, timeUnit ) ;
 
       if( state == State.BROKEN ) {
-        throw new ProcessCreationFailedException() ;
+        throw new ProcessCreationException( "Couldn't create " + getNickname() ) ;
       } else {
         state = State.RUNNING ;
       }
@@ -184,9 +184,6 @@ public abstract class ProcessShell {
           throwable
       ) ;
   }
-
-
-  public static class ProcessCreationFailedException extends Exception { }
 
 
   /**

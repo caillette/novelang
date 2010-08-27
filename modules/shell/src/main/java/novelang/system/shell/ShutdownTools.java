@@ -31,7 +31,7 @@ import novelang.system.LogFactory ;
  * Uses <a href="http://java.sun.com/javase/6/docs/jdk/api/attach/spec/index.html" >Attach API</a>
  * to shut JVMs down.
  * It shuts down every local JVM started with {@value #SHUTDOWN_TATTOO_PROPERTYNAME} system
- * property. The {@link JavaShell#start(long, java.util.concurrent.TimeUnit)} method should
+ * property. The {@link ProcessShell#start()} method should
  * take care of this.
  *
  * @author Laurent Caillette

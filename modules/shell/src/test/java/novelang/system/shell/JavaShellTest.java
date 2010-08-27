@@ -57,6 +57,23 @@ public class JavaShellTest {
   }
 
 
+  @Test( expected = ProcessInitializationException.class )
+  public void cannotStart() throws Exception {
+
+    if( isLikelyToWork() ) {
+      final ShellFixture shellFixture = new ShellFixture() ;
+      final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
+          .withJavaClasses( new JavaClasses.ClasspathAndMain(
+              "ThisClassDoesNotExist",
+              shellFixture.getJarFile()
+          )
+      ) ) ;
+      javaShell.start() ;
+    } else {
+      throw new ProcessInitializationException( "Whatever", null ) ;
+    }
+  }
+
 
   @Test
   public void startTwice() throws Exception {
@@ -72,7 +89,7 @@ public class JavaShellTest {
 
     if( isLikelyToWork() ) {
       final JavaShell javaShell = new JavaShell( new ShellFixture().getParameters() ) ;
-      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+      javaShell.start() ;
       try {
         final RuntimeMXBean runtimeMXBean = javaShell.getManagedBean(
             RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
@@ -97,7 +114,7 @@ public class JavaShellTest {
               .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
               .withHeartbeatPeriodMilliseconds( 100 )
       ) ;
-      javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+      javaShell.start() ;
       shellFixture.askForSelfTermination() ;
       Thread.sleep( ( long ) heartbeatFatalDelay ) ;
       assertFalse( javaShell.isUp() ) ;
@@ -118,14 +135,14 @@ public class JavaShellTest {
 
       final ShellFixture shellFixture = new ShellFixture() ;
 
-      final JavaShell.Parameters parameters = shellFixture.getParameters()
+      final JavaShellParameters parameters = shellFixture.getParameters()
           .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
           .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
       ;
 
       final JavaShell javaShell = new JavaShell( parameters ) ;
       try {
-        javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+        javaShell.start() ;
         RepeatedAssert.assertEventually(
             new MaybeDown( javaShell ),
             maybeDownCheckPeriod,
@@ -153,7 +170,7 @@ public class JavaShellTest {
 
       final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
       try {
-        javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+        javaShell.start() ;
         LOG.info( "Started process known as " + javaShell.getNickname() + "." ) ;
         javaShell.shutdown( ShutdownStyle.GENTLE ) ;
       } catch( Exception e ) {
@@ -248,10 +265,8 @@ public class JavaShellTest {
 
   }
 
-  private static void startAndShutdown( final JavaShell javaShell )
-      throws IOException, InterruptedException, ProcessShell.ProcessCreationFailedException
-  {
-    javaShell.start( SHELL_STARTUP_TIMEOUT_DURATION, SHELL_STARTUP_TIMEOUT_UNIT ) ;
+  private static void startAndShutdown( final JavaShell javaShell ) throws Exception {
+    javaShell.start() ;
     try {
       assertNotNull( javaShell.getManagedBean( RuntimeMXBean.class,
           JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ).getVmName() ) ;
@@ -274,15 +289,20 @@ public class JavaShellTest {
   private static class ShellFixture {
 
     private final File logFile ;
-    private final JavaShell.Parameters parameters ;
+    private final JavaShellParameters parameters ;
     private final int dummyListenerPort ;
+    private final File jarFile ;
 
     public File getLogFile() {
       return logFile;
     }
 
-    public JavaShell.Parameters getParameters() {
+    public JavaShellParameters getParameters() {
       return parameters;
+    }
+
+    public File getJarFile() {
+      return jarFile ;
     }
 
     public ShellFixture() throws IOException {
@@ -290,9 +310,9 @@ public class JavaShellTest {
       dummyListenerPort = TcpPortBooker.THIS.find() ;
       final File scratchDirectory = new DirectoryFixture().getDirectory() ;
       logFile = new File( scratchDirectory, "dummy.txt" );
-      final File jarFile = installFixturePrograms( scratchDirectory ) ;
+      jarFile = installFixturePrograms( scratchDirectory ) ;
 
-      parameters = Husk.create( JavaShell.Parameters.class )
+      parameters = Husk.create( JavaShellParameters.class )
           .withNickname( "Stupid" )
           .withWorkingDirectory( scratchDirectory )
           .withJavaClasses( new JavaClasses.ClasspathAndMain(

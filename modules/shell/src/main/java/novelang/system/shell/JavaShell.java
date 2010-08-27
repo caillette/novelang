@@ -16,7 +16,6 @@
  */
 package novelang.system.shell;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
 import java.net.MalformedURLException;
@@ -25,7 +24,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import javax.management.InstanceNotFoundException;
 import javax.management.JMX;
@@ -85,14 +83,11 @@ public class JavaShell extends ProcessShell {
    */
   private final int startupSensorSemaphorePermitCount ;
 
-  private final HeartbeatSender.Notifiee heartbeatSenderNotifiee = new HeartbeatSender.Notifiee() {
-    @Override
-    public void onUnreachableProcess() {
-      handleUnreachableProcess() ;
-    }
-  } ;
+  private final long startupTimeoutDuration ;
+  private final TimeUnit startupTimeoutTimeUnit ;
 
-  public JavaShell( final Parameters parameters ) {
+
+  public JavaShell( final JavaShellParameters parameters ) {
     super(
         parameters.getWorkingDirectory(),
         parameters.getNickname(),
@@ -107,9 +102,30 @@ public class JavaShell extends ProcessShell {
             LOCAL_INSIDER_STARTED,
             parameters.getStartupSensor()
         )
-    );
+    ) ;
+
     checkArgument( parameters.getJmxPort() > 0 ) ;
     this.jmxPort = parameters.getJmxPort() ;
+
+    {
+      final Long timeoutDuration = parameters.getStartupTimeoutDuration() ;
+      if( timeoutDuration == null ) {
+        this.startupTimeoutDuration = STARTUP_TIMEOUT_DURATION ;
+      } else {
+        checkArgument( timeoutDuration > 0 ) ;
+        this.startupTimeoutDuration = timeoutDuration ;
+      }
+    }
+
+    {
+      final TimeUnit timeUnit = parameters.getStartupTimeoutTimeUnit() ;
+      if( timeUnit == null ) {
+        this.startupTimeoutTimeUnit = STARTUP_TIMEOUT_UNIT ;
+      } else {
+        this.startupTimeoutTimeUnit = timeUnit ;
+      }
+    }
+
     this.heartbeatPeriodMilliseconds = parameters.getHeartbeatPeriodMilliseconds() ;
     this.ownStartupSensorSemaphore = THREADLOCAL_SEMAPHORE.get() ;
     this.startupSensorSemaphorePermitCount = THREADLOCAL_PERMITCOUNT.get() ;
@@ -165,37 +181,63 @@ public class JavaShell extends ProcessShell {
 // =======
 
 
-  @Override
-  public void start( final long timeout, final TimeUnit timeUnit )
-      throws IOException, InterruptedException, ProcessCreationFailedException
+  public void start()
+      throws
+      IOException,
+      InterruptedException,
+      ProcessCreationException,
+      ProcessInitializationException
   {
-    synchronized( stateLock ) {
-      super.start( timeout, timeUnit ) ;
-      connect() ;
+    // There are two steps to ensure JVM is ready.
+    // First, launch the process and wait for the magic message in the console
+    // claiming InsiderAgent loaded.
+    // Second, obtain the JMX connection.
+    // Following the principle of the least surprise, we keep the overall timeout
+    // as defined. For each step, we wait half of the overall timeout.
+    final long adjustedTimeoutDurationMilliseconds =
+        startupTimeoutTimeUnit.toMillis( startupTimeoutDuration ) / 2L ;
 
-      insider.keepAlive() ;
-
-      if( heartbeatPeriodMilliseconds == null ) {
-        heartbeatSender = new HeartbeatSender( insider, heartbeatSenderNotifiee, getNickname() ) ;
-      } else {
-        heartbeatSender = new HeartbeatSender(
-            insider,
-            heartbeatSenderNotifiee,
-            getNickname(),
-            heartbeatPeriodMilliseconds
-        ) ;
+    try {
+      synchronized( stateLock ) {
+        super.start( adjustedTimeoutDurationMilliseconds, TimeUnit.MILLISECONDS ) ;
+        connect() ;
+        insider.keepAlive() ; // Ensure JMX working.
+        startHeartbeatSender() ;
       }
+      synchronized( processIdentifierLock ) {
+        final RuntimeMXBean runtimeMXBean = getManagedBean(
+            RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
+        processIdentifier = JavaShellTools.extractProcessId( runtimeMXBean.getName() ) ;
+      }
+      ownStartupSensorSemaphore.tryAcquire(
+          startupSensorSemaphorePermitCount,
+          adjustedTimeoutDurationMilliseconds,
+          TimeUnit.MILLISECONDS
+      ) ;
+      LOG.info( "Started " + getNickname() + "." ) ;
+
+    } catch( Exception e ) {
+      LOG.error( "Couldn't start " + getNickname() + ". Cleaning up..." ) ;
+      shutdownProcessQuiet() ;
+      cleanup() ;
+      if( e instanceof ProcessCreationException ) {
+        throw ( ProcessCreationException ) e ;
+      }
+      throw new ProcessInitializationException( "Couldn't initialize " + getNickname(), e ) ;
     }
-    synchronized( processIdentifierLock ) {
-      final RuntimeMXBean runtimeMXBean = getManagedBean(
-          RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
-      processIdentifier = JavaShellTools.extractProcessId( runtimeMXBean.getName() ) ;
+  }
+
+  private void startHeartbeatSender() {
+    if( heartbeatPeriodMilliseconds == null ) {
+      heartbeatSender = new HeartbeatSender( insider, heartbeatSenderNotifiee, getNickname() ) ;
+    } else {
+      heartbeatSender = new HeartbeatSender(
+          insider,
+          heartbeatSenderNotifiee,
+          getNickname(),
+          heartbeatPeriodMilliseconds
+      ) ;
     }
-    ownStartupSensorSemaphore.tryAcquire(
-        startupSensorSemaphorePermitCount,
-        timeUnit.toMillis( timeout ) / 2L, TimeUnit.MILLISECONDS
-    ) ;
-    LOG.info( "Started " + getNickname() + "." ) ;
   }
 
   /**
@@ -267,6 +309,7 @@ public class JavaShell extends ProcessShell {
               throw new IllegalArgumentException( "Unsupported: " + shutdownStyle ) ;
           }
         } finally {
+          shutdownProcessQuiet() ;
           cleanup();
         }
       }
@@ -278,34 +321,48 @@ public class JavaShell extends ProcessShell {
 
   private void cleanup() {
     insider = null ;
-    if( heartbeatSender != null ) {
-      heartbeatSender.stop() ;
-      heartbeatSender = null ;
-    }
-    disconnect() ;
-    synchronized( processIdentifierLock ) {
-      processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+    try {
+      if( heartbeatSender != null ) {
+        heartbeatSender.stop() ;
+        heartbeatSender = null ;
+      }
+      disconnect() ;
+      synchronized( processIdentifierLock ) {
+        processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
+      }
+    } catch( Exception e ) {
+      LOG.error( "Something went wrong during cleanup.", e ) ;
     }
     LOG.info( "Cleanup done for " + getNickname() + "." ) ;
   }
+
+
+  private final HeartbeatSender.Notifiee heartbeatSenderNotifiee = new HeartbeatSender.Notifiee() {
+    @Override
+    public void onUnreachableProcess() {
+      handleUnreachableProcess() ;
+    }
+  } ;
 
   private void handleUnreachableProcess() {
     final Log log = LOG ;
     synchronized( stateLock ) {
       if( insider != null ) {
         log.info( "Couldn't send heartbeat to " + getNickname() + ", cleaning up..." );
-        try {
-          // Clean process-related resources.
-          shutdownProcess( true ) ;
-        } catch( InterruptedException e ) {
-          throw new RuntimeException( "Not supposed to happen during a forced shutdown", e ) ;
-        }
+        shutdownProcessQuiet() ;
         cleanup() ;
       }
     }
   }
 
-
+  private void shutdownProcessQuiet() {
+    try {
+      // Clean process-related resources.
+      shutdownProcess( true ) ;
+    } catch( InterruptedException e ) {
+      LOG.error( "Not supposed to happen during a forced shutdown", e ) ;
+    }
+  }
 
 
 // ===
@@ -413,44 +470,13 @@ public class JavaShell extends ProcessShell {
   }
 
 
-// ==========  
-// Parameters
-// ==========
+// ==============
+// Default values
+// ==============
 
-  
+  private static final long STARTUP_TIMEOUT_DURATION = 20L ;
+  private static final TimeUnit STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
 
-  public static interface Parameters {
-
-    String getNickname() ;
-    Parameters withNickname( String nickname ) ;
-
-    File getWorkingDirectory() ;
-    Parameters withWorkingDirectory( File workingDirectory ) ;
-
-    ImmutableList< String > getJvmArguments() ;
-    Parameters withJvmArguments( ImmutableList< String > jvmArguments ) ;
-
-    JavaClasses getJavaClasses() ;
-    Parameters withJavaClasses( JavaClasses javaClasses ) ;
-
-    ImmutableList< String > getProgramArguments() ;
-    Parameters withProgramArguments( ImmutableList< String > programArguments ) ;
-
-    Predicate< String > getStartupSensor() ;
-    Parameters withStartupSensor( Predicate< String > startupSensor ) ;
-
-    int getJmxPort() ;
-    Parameters withJmxPort( int jmxPort ) ;
-
-    Integer getHeartbeatFatalDelayMilliseconds() ;
-    Parameters withHeartbeatFatalDelayMilliseconds( Integer maximum ) ;
-
-    Integer getHeartbeatPeriodMilliseconds() ;
-    Parameters withHeartbeatPeriodMilliseconds( Integer maximum ) ;
-
-  }
-
-  
 
 // =======================================================================
 // Boring stuff to access member variable before superclass initialization
