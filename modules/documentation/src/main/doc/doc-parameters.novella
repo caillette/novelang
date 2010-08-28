@@ -1,5 +1,5 @@
 
-| VERSION  | `@project.version@`                                  | %% Maven expands this token.                         
+| VERSION  | `@project.version@`                                  |                          
 | AUTHOR   | `Laurent Caillette`                                  |                       
 | TITLE    | Novelang                                             |
 | SUBTITLE | Press-ready PDF from a Wiki syntax                   | 
