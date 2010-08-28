@@ -45,7 +45,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-nhovestone</artifactId>
+      <artifactId>Novelang-nhovestone-plugin</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
@@ -88,7 +88,7 @@
 
       <plugin>
         <groupId>${parent.groupId}</groupId>
-        <artifactId>Novelang-nhovestone</artifactId>
+        <artifactId>Novelang-nhovestone-plugin</artifactId>
         <version>${parent.version}</version>
         <executions>
           <execution>

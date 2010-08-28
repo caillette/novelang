@@ -15,12 +15,14 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/logger-mojo/logger-mojo.iml" filepath="$PROJECT_DIR$/../../modules/logger-mojo/logger-mojo.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/logger-slf4j/logger-slf4j.iml" filepath="$PROJECT_DIR$/../../modules/logger-slf4j/logger-slf4j.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone-plugin/nhovestone-plugin.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone-plugin/nhovestone-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../novelang.iml" filepath="$PROJECT_DIR$/../../novelang.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" filepath="$PROJECT_DIR$/../../modules/parser-antlr/parser-antlr.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" filepath="$PROJECT_DIR$/../../modules/parser-facade/parser-facade.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-ground/parser-ground.iml" filepath="$PROJECT_DIR$/../../modules/parser-ground/parser-ground.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-lexeme-plugin/parser-lexeme-plugin.iml" filepath="$PROJECT_DIR$/../../modules/parser-lexeme-plugin/parser-lexeme-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/parser-lexeme-plugin-test/parser-lexeme-plugin-test.iml" filepath="$PROJECT_DIR$/../../modules/parser-lexeme-plugin-test/parser-lexeme-plugin-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-supplement/parser-supplement.iml" filepath="$PROJECT_DIR$/../../modules/parser-supplement/parser-supplement.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/parser-token-plugin/parser-token-plugin.iml" filepath="$PROJECT_DIR$/../../modules/parser-token-plugin/parser-token-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/primer/primer.iml" filepath="$PROJECT_DIR$/../../modules/primer/primer.iml" />
@@ -31,6 +33,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/syntactic-tree-fixture/syntactic-tree-fixture.iml" filepath="$PROJECT_DIR$/../../modules/syntactic-tree-fixture/syntactic-tree-fixture.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/tree/tree.iml" filepath="$PROJECT_DIR$/../../modules/tree/tree.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/unicode-generator-plugin/unicode-generator-plugin.iml" filepath="$PROJECT_DIR$/../../modules/unicode-generator-plugin/unicode-generator-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/unicode-generator-plugin-test/unicode-generator-plugin-test.iml" filepath="$PROJECT_DIR$/../../modules/unicode-generator-plugin-test/unicode-generator-plugin-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/unicode-reader/unicode-reader.iml" filepath="$PROJECT_DIR$/../../modules/unicode-reader/unicode-reader.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/vanilla-fixture/vanilla-fixture.iml" filepath="$PROJECT_DIR$/../../modules/vanilla-fixture/vanilla-fixture.iml" />
     </modules>

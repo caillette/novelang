@@ -1,1 +1,7 @@
---- Fixed missing author name in documentation.
+
+New experimental features for code reuse:
+
+--- `Novelang-attirail` subproject aggregating various tools.
+It's not part of standard distribution, by now it requires separate rebuild. 
+
+--- Pluggable logging implementation.

@@ -174,6 +174,7 @@
     <module>modules/logger-mojo</module>
     <module>modules/logger-slf4j</module>
     <module>modules/nhovestone</module>
+    <module>modules/nhovestone-plugin</module>
 
     <!-- Don't include: we don't want to run a whole benchmark for each integration-test. -->
     <!-- <module>modules/nhovestone-report</module> -->
@@ -182,6 +183,7 @@
     <module>modules/parser-facade</module>
     <module>modules/parser-ground</module>
     <module>modules/parser-lexeme-plugin</module>
+    <module>modules/parser-lexeme-plugin-test</module>
     <module>modules/parser-supplement</module>
     <module>modules/parser-token-plugin</module>
     <module>modules/primer</module>
@@ -193,6 +195,7 @@
     <module>modules/tree</module>
     <module>modules/unicode-reader</module>
     <module>modules/unicode-generator-plugin</module>
+    <module>modules/unicode-generator-plugin-test</module>
     <module>modules/vanilla-fixture</module>
   </modules>
 

@@ -25,46 +25,28 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <artifactId>Novelang-nhovestone</artifactId>
+  <artifactId>Novelang-nhovestone-plugin</artifactId>
   <name>${project.artifactId}</name>
+  <packaging>maven-plugin</packaging>
 
   <dependencies>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-bootstrap</artifactId>
+      <artifactId>Novelang-logger-mojo</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-engine-driver</artifactId>
+      <artifactId>Novelang-nhovestone</artifactId>
       <version>${parent.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.jfree-jcommon.groupId}</groupId>
-      <artifactId>${lib.jfreechart.artefactId}</artifactId>
-      <version>${lib.jfreechart.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>${lib.jfree-jcommon.groupId}</groupId>
-      <artifactId>${lib.jfree-jcommon.artefactId}</artifactId>
-      <version>${lib.jfree-jcommon.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.apache-httpclient.groupId}</groupId>
-      <artifactId>${lib.apache-httpclient.artefactId}</artifactId>
-      <version>${lib.apache-httpclient.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.apache-commons-math.groupId}</groupId>
-      <artifactId>${lib.apache-commons-math.artefactId}</artifactId>
-      <version>${lib.apache-commons-math.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>${parent.groupId}</groupId>
+          <artifactId>Novelang-logger-slf4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>
