@@ -64,6 +64,10 @@
     <lib.maven-release-plugin.artefactId>maven-release-plugin</lib.maven-release-plugin.artefactId>
     <lib.maven-release-plugin.version>2.0</lib.maven-release-plugin.version>
 
+    <lib.maven-shade-plugin.groupId>org.apache.maven.plugins</lib.maven-shade-plugin.groupId>
+    <lib.maven-shade-plugin.artefactId>maven-shade-plugin</lib.maven-shade-plugin.artefactId>
+    <lib.maven-shade-plugin.version>1.4</lib.maven-shade-plugin.version>
+
     <lib.junit.groupid>junit</lib.junit.groupid>
     <lib.junit.artefactid>junit</lib.junit.artefactid>
     <lib.junit.version>4.8.1</lib.junit.version>

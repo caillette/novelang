@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../modules/attirail/attirail.iml" filepath="$PROJECT_DIR$/../../modules/attirail/attirail.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/bootstrap/bootstrap.iml" filepath="$PROJECT_DIR$/../../modules/bootstrap/bootstrap.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" filepath="$PROJECT_DIR$/../../modules/code-generation/code-generation.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/distribution/distribution.iml" filepath="$PROJECT_DIR$/../../modules/distribution/distribution.iml" />
@@ -10,6 +11,8 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/engine-driver/engine-driver.iml" filepath="$PROJECT_DIR$/../../modules/engine-driver/engine-driver.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/insider/insider.iml" filepath="$PROJECT_DIR$/../../modules/insider/insider.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" filepath="$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/logger/logger.iml" filepath="$PROJECT_DIR$/../../modules/logger/logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/logger-slf4j/logger-slf4j.iml" filepath="$PROJECT_DIR$/../../modules/logger-slf4j/logger-slf4j.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../novelang.iml" filepath="$PROJECT_DIR$/../../novelang.iml" />

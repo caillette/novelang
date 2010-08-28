@@ -91,6 +91,9 @@
         <option value="$PROJECT_DIR$/../../modules/shell/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/shell-fixture/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/agentjar-embedder/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/attirail/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/logger/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/logger-slf4j/pom.xml" />
       </list>
     </option>
   </component>
