@@ -20,9 +20,12 @@ import java.io.File;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
 import java.nio.charset.Charset;
+import java.util.List;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import org.apache.commons.cli.CommandLine;
@@ -33,11 +36,6 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 /**
  * Base class for command-line parameters parsing.

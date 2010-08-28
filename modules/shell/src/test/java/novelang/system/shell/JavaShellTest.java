@@ -28,9 +28,9 @@ import com.google.common.base.Predicate;
 import novelang.DirectoryFixture;
 import novelang.RepeatedAssert;
 import novelang.StandalonePredicate;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.system.Husk;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -95,7 +95,7 @@ public class JavaShellTest {
             RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
         final String virtualMachineName = runtimeMXBean.getVmName() ;
         assertNotNull( virtualMachineName ) ;
-        LOG.info( "Returned VM name: '" + virtualMachineName + "'" ) ;
+        LOGGER.info( "Returned VM name: '", virtualMachineName, "'" ) ;
       } finally {
         javaShell.shutdown( ShutdownStyle.FORCED ) ;
       }
@@ -171,7 +171,7 @@ public class JavaShellTest {
       final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
       try {
         javaShell.start() ;
-        LOG.info( "Started process known as " + javaShell.getNickname() + "." ) ;
+        LOGGER.info( "Started process known as ", javaShell.getNickname(), "." ) ;
         javaShell.shutdown( ShutdownStyle.GENTLE ) ;
       } catch( Exception e ) {
         javaShell.shutdown( ShutdownStyle.FORCED ) ;
@@ -191,7 +191,7 @@ public class JavaShellTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( JavaShellTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( JavaShellTest.class ) ;
 
   public static final long SHELL_STARTUP_TIMEOUT_DURATION = 20L ;
   public static final TimeUnit SHELL_STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
@@ -230,7 +230,7 @@ public class JavaShellTest {
     if( message == null ) {
       return true ;
     } else {
-      LOG.warn( message ) ;
+      LOGGER.warn( message ) ;
       return false ;
     }
 
@@ -333,7 +333,7 @@ public class JavaShellTest {
         final Socket clientSocket = new Socket( "localhost", dummyListenerPort ) ;
         clientSocket.close() ;
       } catch( IOException e ) {
-        LOG.debug( "Couldn't open socket on port " + dummyListenerPort + ": " + e.getMessage() ) ;
+        LOGGER.debug( "Couldn't open socket on port ", dummyListenerPort, ": ", e.getMessage() ) ;
       }
     }
   }

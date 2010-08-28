@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.lang.StringUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -46,7 +46,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class ProcessShell {
 
-  private static final Log LOG = LogFactory.getLog( ProcessShell.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ProcessShell.class ) ;
 
   private final File workingDirectory ;
   private final List< String > processArguments ;
@@ -88,9 +88,9 @@ public abstract class ProcessShell {
   {
     final Semaphore startupSemaphore = new Semaphore( 0 ) ;
 
-    LOG.info( "Starting process " + getNickname() + " in directory '"
-        + workingDirectory.getAbsolutePath() + "'..." ) ;
-    LOG.info( "Arguments: " + processArguments ) ;
+    LOGGER.info( "Starting process ", getNickname(), " in directory '",
+        workingDirectory.getAbsolutePath(), "'..." ) ;
+    LOGGER.info( "Arguments: ", processArguments ) ;
 
     synchronized( stateLock ) {
 
@@ -127,7 +127,8 @@ public abstract class ProcessShell {
       }
     }
 
-    LOG.info( "Successfully launched process: " + getNickname() + " (it may be initializing now)." ) ;
+    LOGGER.info( "Successfully launched process: ", getNickname(),
+        " (it may be initializing now)." ) ;
   }
 
 
@@ -139,7 +140,7 @@ public abstract class ProcessShell {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.debug( "Standard output from " + getNickname() + ": >>> " + line ) ;
+          LOGGER.debug( "Standard output from ", getNickname(), ": >>> ", line ) ;
           if( /*startupSemaphore.availablePermits() == 0 &&*/ startupSensor.apply( line ) ) {
             startupSemaphore.release() ;
           }
@@ -159,7 +160,7 @@ public abstract class ProcessShell {
       @Override
       protected void interpretLine( final String line ) {
         if( line != null ) {
-          LOG.warn( "Error from " + getNickname() + ": >>> " + line ) ;
+          LOGGER.warn( "Error from ", getNickname(), ": >>> ", line ) ;
         }
       }
 
@@ -179,8 +180,8 @@ public abstract class ProcessShell {
         state = State.BROKEN ;
       }
     }
-      LOG.error(
-          "Throwable caught while reading supervised process stream in " + getNickname(),
+      LOGGER.error(
+          "Throwable caught while reading supervised process stream in ", getNickname(),
           throwable
       ) ;
   }
@@ -203,8 +204,8 @@ public abstract class ProcessShell {
             interruptWatcherThreads() ;
           }
         } else {
-            LOG.warn(
-                "Trying to shutdown while in " + state + " state for " + getNickname() + "." ) ;
+            LOGGER.warn(
+                "Trying to shutdown while in ", state, " state for ", getNickname(), "." ) ;
         }
       } finally {
         process = null ;
@@ -213,7 +214,7 @@ public abstract class ProcessShell {
         state = State.READY ; //TERMINATED ;
       }
     }
-    LOG.debug( "Process shutdown ended for %s, returning %s.", getNickname(), exitCode ) ;
+    LOGGER.debug( "Process shutdown ended for ", getNickname(), ", returning ", exitCode, "'." ) ;
     return exitCode ;
   }
 

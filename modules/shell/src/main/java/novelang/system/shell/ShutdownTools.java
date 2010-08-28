@@ -16,16 +16,16 @@
  */
 package novelang.system.shell ;
 
-import java.io.File ;
-import java.io.IOException ;
-import java.util.List ;
-import java.util.Properties ;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
 
-import com.sun.tools.attach.AttachNotSupportedException ;
-import com.sun.tools.attach.VirtualMachine ;
-import com.sun.tools.attach.VirtualMachineDescriptor ;
-import novelang.system.Log ;
-import novelang.system.LogFactory ;
+import com.sun.tools.attach.AttachNotSupportedException;
+import com.sun.tools.attach.VirtualMachine;
+import com.sun.tools.attach.VirtualMachineDescriptor;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Uses <a href="http://java.sun.com/javase/6/docs/jdk/api/attach/spec/index.html" >Attach API</a>
@@ -39,7 +39,7 @@ import novelang.system.LogFactory ;
 public class ShutdownTools
 
 {
-  private static final Log LOG = LogFactory.getLog( ShutdownTools.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ShutdownTools.class ) ;
 
   private ShutdownTools() { }
 
@@ -66,12 +66,12 @@ public class ShutdownTools
       } catch( AttachNotSupportedException e ) {
         // Don't complain if the process already died.
         if( ! e.getMessage().startsWith( "no such process" ) ) {
-          LOG.warn( "Counldn't attach, may be normal if other VM did shut down", e.getMessage() ) ;
+          LOGGER.warn( "Counldn't attach, may be normal if other VM did shut down", e.getMessage() ) ;
         }
       } catch( IOException e ) {
         // Don't complain if the process already died.
         if( ! e.getMessage().startsWith( "no such process" ) ) {
-          LOG.warn( "Counldn't attach, may be normal if other VM did shut down", e.getMessage() ) ;
+          LOGGER.warn( "Counldn't attach, may be normal if other VM did shut down", e.getMessage() ) ;
         }
 
       }
@@ -80,12 +80,12 @@ public class ShutdownTools
 
   private static void shutdown( final VirtualMachine virtualMachine, final File shutdownAgentJar ) {
     final String agentJarAbsolutePath = shutdownAgentJar.getAbsolutePath() ;
-    LOG.warn( "Forcing shutdown of Virtual Machine '", virtualMachine.id(), "' using '",
+    LOGGER.warn( "Forcing shutdown of Virtual Machine '", virtualMachine.id(), "' using '",
         agentJarAbsolutePath, "'..." ) ;
     try {
       virtualMachine.loadAgent( agentJarAbsolutePath ) ;
     } catch( Exception e ) {
-      LOG.warn( "Couldn't load agent on ", virtualMachine.id(),
+      LOGGER.warn( "Couldn't load agent on ", virtualMachine.id(),
           " (maybe it's shutting down?): ", e.getMessage() ) ;
     }
   }
@@ -97,13 +97,13 @@ public class ShutdownTools
   public static void installShutdownHookIfNeeded( final File shutdownAgentJar ) {
     synchronized( LOCK ) {
       if( !shutdownHookInstalled ) {
-        LOG.info( "Installing shutdown hook..." ) ;
+        LOGGER.info( "Installing shutdown hook..." ) ;
         final Thread thread = new Thread(
             new Runnable() {
 
               @Override
               public void run() {
-                LOG.info( "Executing shutdown hook..." ) ;
+                LOGGER.info( "Executing shutdown hook..." ) ;
                 shutdownAllTattooedVirtualMachines( shutdownAgentJar ) ;
               }
             },

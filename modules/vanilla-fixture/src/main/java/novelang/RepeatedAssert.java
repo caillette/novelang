@@ -18,8 +18,8 @@ package novelang;
 
 import java.util.concurrent.TimeUnit;
 
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.junit.Assert.fail;
@@ -29,7 +29,7 @@ import static org.junit.Assert.fail;
  */
 public class RepeatedAssert {
 
-  private static final Log LOG = LogFactory.getLog( RepeatedAssert.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( RepeatedAssert.class ) ;
 
   private RepeatedAssert() {
   }
@@ -43,8 +43,8 @@ public class RepeatedAssert {
     checkArgument( retries > 0 ) ;
     checkArgument( period > 0L ) ;
 
-    LOG.debug( "Asserting for a maximum duration of " +
-        period * ( long ) retries + " " + timeUnit + "..." ) ;
+    LOGGER.debug( "Asserting for a maximum duration of ",
+        period * ( long ) retries, " ", timeUnit, "..." ) ;
     
     int retryCount = 0 ;
     while( true ) {
@@ -54,7 +54,7 @@ public class RepeatedAssert {
       }
       if( retryCount ++ < retries ) {
         try {
-          LOG.debug( "Unmatched predicate " + predicate + ", waiting a bit and retrying..." );
+          LOGGER.debug( "Unmatched predicate " + predicate + ", waiting a bit and retrying..." );
           timeUnit.sleep( period ) ;
         } catch( InterruptedException e ) {
           throw new RuntimeException( "Should not happen", e ) ;

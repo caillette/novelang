@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -40,7 +40,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class AgentFileInstaller {
 
-  private static final Log LOG = LogFactory.getLog( AgentFileInstaller.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( AgentFileInstaller.class ) ;
 
   /**
    * Name of the system property to set the agent jar file externally.
@@ -82,13 +82,13 @@ public class AgentFileInstaller {
     if( versionOverride == null ) {
       final URL versionResource = AgentFileInstaller.class.getResource( VERSION_RESOURCE_NAME ) ;
       version = Resources.toString( versionResource, Charsets.UTF_8 ) ;
-      LOG.info( "Using version '" + version + "' as found inside " +
-          "'" + VERSION_RESOURCE_NAME + "' resource."  ) ;
+      LOGGER.info( "Using version '", version, "' as found inside ",
+          "'", VERSION_RESOURCE_NAME, "' resource."  ) ;
 
     } else {
       version = versionOverride ;
-      LOG.info( "Using version override '" + version + "' from system property " +
-          "'" + VERSIONOVERRIDE_SYSTEMPROPERTYNAME + "'."  ) ;
+      LOGGER.info( "Using version override '", version, "' from system property ",
+          "'", VERSIONOVERRIDE_SYSTEMPROPERTYNAME, "'."  ) ;
     }
 
 
@@ -99,7 +99,7 @@ public class AgentFileInstaller {
       try {
         jarFile = File.createTempFile( "Novelang-insider-agent", ".jar" ).getCanonicalFile() ;
         copyResourceToFile( JAR_RESOURCE_NAME_RADIX + version + ".jar", jarFile ) ;
-        LOG.info( "Using jar file '" + jarFile.getAbsolutePath() + "'." ) ;
+        LOGGER.info( "Using jar file '", jarFile.getAbsolutePath(), "'." ) ;
       } catch( IOException e ) {
         throw new RuntimeException( e ) ;
       }
@@ -109,8 +109,8 @@ public class AgentFileInstaller {
         throw new IllegalArgumentException(
             "Jar file '" + jarFile.getAbsolutePath() + "' doesn't exist as a file" ) ;
       }
-      LOG.info( "Using jar file '" + jarFile.getAbsolutePath() + "' " +
-          "set from system property '" + AGENTJARFILE_SYSTEMPROPERTYNAME + "'." ) ;
+      LOGGER.info( "Using jar file '", jarFile.getAbsolutePath(), "' ",
+          "set from system property '", AGENTJARFILE_SYSTEMPROPERTYNAME, "'." ) ;
     }
 
   }
@@ -153,8 +153,8 @@ public class AgentFileInstaller {
       ) ;
     }
 
-    LOG.info( "Copying resource '" + resourceName + "' to " +
-            "'" + file.getAbsolutePath() + "'" ) ;
+    LOGGER.info( "Copying resource '", resourceName, "' to ",
+            "'", file.getAbsolutePath(), "'" ) ;
     FileUtils.copyURLToFile( resourceUrl, file ) ;
   }
 

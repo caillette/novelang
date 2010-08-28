@@ -17,10 +17,9 @@
 package novelang.system.shell;
 
 import java.lang.reflect.UndeclaredThrowableException;
-import java.rmi.ConnectException;
 
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.system.shell.insider.Insider;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -34,7 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 /*package*/ class HeartbeatSender {
 
-  private static final Log LOG = LogFactory.getLog( HeartbeatSender.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( HeartbeatSender.class ) ;
 
   private final Thread thread ;
 
@@ -57,8 +56,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
     checkNotNull( insider ) ;
     checkArgument( heartbeatPeriodMilliseconds > 0L ) ;
 
-    LOG.debug( "Initializing for " + processNickname
-        + " with a heartbeat period of " + heartbeatPeriodMilliseconds + " milliseconds..." ) ;
+    LOGGER.debug( "Initializing for ", processNickname,
+        " with a heartbeat period of ", heartbeatPeriodMilliseconds, " milliseconds..." ) ;
 
     final Runnable runnable = new Runnable() {
       @Override

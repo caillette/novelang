@@ -19,18 +19,15 @@ package novelang;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
+import com.google.common.base.Preconditions;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.StandardToStringStyle;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import static org.junit.Assert.assertTrue;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.base.Preconditions;
 import org.junit.runners.NameAwareTestClassRunner;
 
 /**
@@ -42,7 +39,7 @@ import org.junit.runners.NameAwareTestClassRunner;
  */
 public class DirectoryFixture {
 
-  private static final Log LOG = LogFactory.getLog( DirectoryFixture.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DirectoryFixture.class ) ;
 
   private final String testIdentifier ;
 
@@ -57,7 +54,7 @@ public class DirectoryFixture {
   public DirectoryFixture( final String testIdentifier ) throws IOException {
     Preconditions.checkArgument( ! StringUtils.isBlank( testIdentifier ) ) ;
     this.testIdentifier = testIdentifier ;
-    LOG.debug( "Created %s", this ) ;
+    LOGGER.debug( "Created ", this ) ;
 
   }
 
@@ -103,10 +100,10 @@ public class DirectoryFixture {
         FileUtils.deleteDirectory( file ) ;
       } else {
         if( file.mkdir() ) {
-          LOG.debug( "Created '%s'", file.getAbsolutePath() ) ;
+          LOGGER.debug( "Created '", file.getAbsolutePath(), "'." ) ;
         }
       }
-      LOG.info( "Created '%s' as clean directory for all fixtures.", file.getAbsolutePath() ) ;
+      LOGGER.info( "Created ", file.getAbsolutePath(), "' as clean directory for all fixtures." ) ;
     }
     allFixturesDirectory = file;
     return allFixturesDirectory ;
@@ -123,7 +120,7 @@ public class DirectoryFixture {
         FileUtils.deleteDirectory( scratchDirectory ) ;
       }
       if( scratchDirectory.mkdirs() ) {
-        LOG.debug( "Created '%s'", scratchDirectory.getAbsolutePath() ) ;
+        LOGGER.debug( "Created '", scratchDirectory.getAbsolutePath(), "'." ) ;
       }
     }
     return scratchDirectory;
@@ -133,7 +130,7 @@ public class DirectoryFixture {
     Preconditions.checkArgument( ! StringUtils.isBlank( directoryName ) ) ;
     final File directory = new File( getDirectory(), directoryName ) ;
     if( directory.mkdirs() ) {
-      LOG.debug( "Created '%s'", directory.getAbsolutePath() ) ;
+      LOGGER.debug( "Created '", directory.getAbsolutePath(), "'." ) ;
     }
     return directory ;
   }

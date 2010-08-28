@@ -34,8 +34,8 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import javax.naming.ServiceUnavailableException;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.system.shell.insider.Insider;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -66,8 +66,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class JavaShell extends ProcessShell {
 
-  private static final Log LOG = LogFactory.getLog( JavaShell.class ) ;
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger( JavaShell.class ) ;
+
   private final int jmxPort ;
   private final Integer heartbeatPeriodMilliseconds ;
 
@@ -214,10 +214,10 @@ public class JavaShell extends ProcessShell {
           adjustedTimeoutDurationMilliseconds,
           TimeUnit.MILLISECONDS
       ) ;
-      LOG.info( "Started " + getNickname() + "." ) ;
+      LOGGER.info( "Started ", getNickname(), "." ) ;
 
     } catch( Exception e ) {
-      LOG.error( "Couldn't start " + getNickname() + ". Cleaning up..." ) ;
+      LOGGER.error( "Couldn't start ", getNickname(), ". Cleaning up..." ) ;
       shutdownProcessQuiet() ;
       cleanup() ;
       if( e instanceof ProcessCreationException ) {
@@ -278,15 +278,15 @@ public class JavaShell extends ProcessShell {
   public Integer shutdown( final ShutdownStyle shutdownStyle )
       throws InterruptedException, IOException
   {
-    LOG.info( "Shutdown (" + shutdownStyle + ") requested for " + getNickname() + "..." ) ;
+    LOGGER.info( "Shutdown (", shutdownStyle, ") requested for ", getNickname(), "..." ) ;
 
     // Code checker happy: avoid access to static member in synchronized context.
-    final Log log = LOG ;
+    final Logger logger = LOGGER ;
 
     Integer exitStatus = null ;
     synchronized( stateLock ) {
       if( insider == null ) {
-        log.info( "Not started or already shut down." ) ;
+        logger.info( "Not started or already shut down." ) ;
       } else {
         try {
           switch( shutdownStyle ) {
@@ -294,7 +294,7 @@ public class JavaShell extends ProcessShell {
               try {
                 insider.shutdown() ;
               } catch( Exception e ) {
-                log.info( "Shutdown request failed: " + e.getMessage() + ", forcing..." ) ;
+                logger.info( "Shutdown request failed: ", e.getMessage(), ", forcing..." ) ;
                 exitStatus = shutdownProcess( true ) ;
                 break ;
               }
@@ -314,8 +314,8 @@ public class JavaShell extends ProcessShell {
         }
       }
     }
-    LOG.info( "Shutdown (" + shutdownStyle + ") complete for " + getNickname()
-        + " with exit status code of " + exitStatus + "." ) ;
+    LOGGER.info( "Shutdown (", shutdownStyle, ") complete for ", getNickname(),
+        " with exit status code of ", exitStatus, "." ) ;
     return exitStatus ;
   }
 
@@ -331,9 +331,9 @@ public class JavaShell extends ProcessShell {
         processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
       }
     } catch( Exception e ) {
-      LOG.error( "Something went wrong during cleanup.", e ) ;
+      LOGGER.error( e, "Something went wrong during cleanup." ) ;
     }
-    LOG.info( "Cleanup done for " + getNickname() + "." ) ;
+    LOGGER.info( "Cleanup done for ", getNickname(), "." ) ;
   }
 
 
@@ -345,10 +345,10 @@ public class JavaShell extends ProcessShell {
   } ;
 
   private void handleUnreachableProcess() {
-    final Log log = LOG ;
+    final Logger logger = LOGGER ;
     synchronized( stateLock ) {
       if( insider != null ) {
-        log.info( "Couldn't send heartbeat to " + getNickname() + ", cleaning up..." );
+        logger.info( "Couldn't send heartbeat to ", getNickname(), ", cleaning up..." );
         shutdownProcessQuiet() ;
         cleanup() ;
       }
@@ -357,10 +357,9 @@ public class JavaShell extends ProcessShell {
 
   private void shutdownProcessQuiet() {
     try {
-      // Clean process-related resources.
       shutdownProcess( true ) ;
     } catch( InterruptedException e ) {
-      LOG.error( "Not supposed to happen during a forced shutdown", e ) ;
+      LOGGER.error( e, "Not supposed to happen during a forced shutdown" ) ;
     }
   }
 
@@ -388,12 +387,12 @@ public class JavaShell extends ProcessShell {
   private void connectWithRetries( final JMXServiceURL url )
       throws IOException, InterruptedException
   {
-    LOG.info( "Connecting to " + url + " ..." ) ;
+    LOGGER.info( "Connecting to ", url, " ..." ) ;
     int attemptCount = 0 ;
     while( true ) {
       try {
         jmxConnector = JMXConnectorFactory.connect( url, null ) ;
-        LOG.debug( "Successfully connected to " + url ) ;
+        LOGGER.debug( "Successfully connected to ", url ) ;
         return ;
       } catch( IOException e ) {
         final Throwable cause = e.getCause() ;
@@ -401,7 +400,7 @@ public class JavaShell extends ProcessShell {
             || cause instanceof java.rmi.ConnectException
         ) {
           if( attemptCount ++ < 10 ) {
-            LOG.debug( "Couldn't connect to " + url + ", waiting a bit before another attempt..." ) ;
+            LOGGER.debug( "Couldn't connect to ", url, ", waiting a bit before another attempt..." ) ;
             TimeUnit.MILLISECONDS.sleep( 200L ) ;
           } else {
             throw e ;
