@@ -37,7 +37,9 @@ package novelang.logger;
 
   private static String buildMessage( final String message, final Object... messageObjects ) {
     final StringBuilder stringBuilder = new StringBuilder( ) ;
-    if( message != null ) {
+    if( message == null ) {
+      stringBuilder.append( "<null>" ) ;
+    } else {
       stringBuilder.append( message ) ;
     }
     add( stringBuilder, messageObjects ) ;
@@ -52,7 +54,9 @@ package novelang.logger;
 
   private static void add( final StringBuilder stringBuilder, final Object... messageObjects ) {
     for( final Object messageObject : messageObjects ) {
-      if( messageObject != null ) {
+      if( messageObject == null ) {
+        stringBuilder.append( "<null>" ) ;
+      } else {
         stringBuilder.append( messageObject.toString() ) ;
       }
     }
