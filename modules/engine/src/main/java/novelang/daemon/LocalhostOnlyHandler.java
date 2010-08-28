@@ -20,14 +20,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.mortbay.jetty.Request;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.rendering.RenditionMimeType;
+import org.mortbay.jetty.Request;
 
 /**
  *
@@ -35,7 +35,7 @@ import novelang.rendering.RenditionMimeType;
  */
 public class LocalhostOnlyHandler extends GenericHandler{
 
-  private static final Log LOG = LogFactory.getLog( LocalhostOnlyHandler.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( LocalhostOnlyHandler.class ) ;
 
   private static final String HTML_CONTENT_TYPE = RenditionMimeType.HTML.getFileExtension() ;
 
@@ -49,7 +49,7 @@ public class LocalhostOnlyHandler extends GenericHandler{
   ) throws IOException, ServletException {
     final String remoteAddress = request.getRemoteHost() ;
     if( ! isLocalhost( remoteAddress ) ) {
-      LOG.info( "Unauthorized connection: %s", remoteAddress ) ;
+      LOGGER.info( "Unauthorized connection: ", remoteAddress ) ;
       response.setStatus( HttpServletResponse.SC_UNAUTHORIZED ) ;
 
       final PrintWriter writer = new PrintWriter( response.getOutputStream() ) ;
@@ -77,7 +77,7 @@ public class LocalhostOnlyHandler extends GenericHandler{
     try {
       return InetAddress.getByName( address ).isLoopbackAddress() ;
     } catch ( UnknownHostException e ) {
-      LOG.warn( "Could not resolve: '" + address + "'" ) ;
+      LOGGER.warn( "Could not resolve: '", address, "'" ) ;
       return false ;
     }
   }

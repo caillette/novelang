@@ -141,7 +141,7 @@ public class Novella extends AbstractSourceReader {
   public Novella relocateResourcePaths( final File contentRoot ) {
     
     if( null == getDocumentTree() || null == partFileDirectory ) {
-      LOG.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
+      LOGGER.warn( "Resource paths not relocated. This may be normal when running tests" ) ;
       return this ;
     }    
     

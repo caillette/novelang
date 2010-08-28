@@ -26,8 +26,6 @@ import novelang.Version;
 import novelang.configuration.parse.GenericParameters;
 import novelang.system.DefaultCharset;
 import novelang.system.Husk;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.system.TcpPortBooker;
 import novelang.system.shell.JavaClasses;
 import novelang.system.shell.JavaShell;
@@ -48,8 +46,6 @@ import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
  * @author Laurent Caillette
  */
 public abstract class EngineDriver {
-
-  private static final Log LOG = LogFactory.getLog( EngineDriver.class ) ;
 
   private final JavaShell javaShell;
   

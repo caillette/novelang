@@ -17,15 +17,8 @@
 
 package novelang.rendering;
 
-import java.util.List;
-
-import org.junit.Test;
 import org.junit.Assert;
-import org.apache.commons.lang.StringEscapeUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
 
 /**
  * Tests for {@link Spaces}.

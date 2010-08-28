@@ -17,25 +17,24 @@
 
 package novelang.treemangling;
 
+import java.util.Arrays;
+import java.util.Map;
+
+import com.google.common.collect.Maps;
 import novelang.common.Problem;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
+import novelang.common.tree.RobustPath;
 import novelang.common.tree.Traversal;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.common.tree.RobustPath;
 import novelang.designator.FragmentIdentifier;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKind;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.treemangling.designator.BabyInterpreter;
 import novelang.treemangling.designator.DesignatorTools;
 import novelang.treemangling.designator.FragmentMapper;
-
-import com.google.common.collect.Maps;
-
-import java.util.Arrays;
-import java.util.Map;
 
 /**
  * Creates a Mapping from designators ({@link FragmentIdentifier}s or, in the future, tags)
@@ -72,7 +71,7 @@ import java.util.Map;
  */
 public class DesignatorInterpreter {
   
-  private static final Log LOG = LogFactory.getLog( DesignatorInterpreter.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DesignatorInterpreter.class ) ;
 
   /**
    * Contains only pure identifiers (defined explicitely).
@@ -99,13 +98,13 @@ public class DesignatorInterpreter {
     derivedIdentifiers = remap( babyInterpreter.getDerivedIdentifierMap(), enrichedTreepath ) ;
     problems = babyInterpreter.getProblems() ;
 
-    if ( LOG.isDebugEnabled() ) {
+    if ( LOGGER.isDebugEnabled() ) {
       final StringBuilder stringBuilder = new StringBuilder() ;
       stringBuilder.append( "\n  Pure identifiers:" ) ;
       DesignatorTools.dumpIdentifierMap( stringBuilder, pureIdentifiers, "\n    " ) ;
       stringBuilder.append( "\n  Derived identifiers:" ) ;
       DesignatorTools.dumpIdentifierMap( stringBuilder, derivedIdentifiers, "\n    " ) ;
-      LOG.debug( "Created %s%s", this, stringBuilder ) ;
+      LOGGER.debug( "Created ", this, stringBuilder ) ;
     }
 
   }

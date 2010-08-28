@@ -21,9 +21,9 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.io.IOUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import org.xml.sax.InputSource;
 
 /**
@@ -34,13 +34,13 @@ import org.xml.sax.InputSource;
  */
 public class DtdTools {
 
-  private static final Log LOG = LogFactory.getLog( DtdTools.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DtdTools.class );
 
   private static final Pattern PATTERN = Pattern.compile(
       "\\<\\!ENTITY\\s+(\\w+)\\s+\\\"(&#(?:\\d|\\w|\\;)+)\\\"\\s*?\\>" ) ;
 
   static {
-    LOG.debug( "Crafted regex %s", PATTERN.pattern() ) ;
+    LOGGER.debug( "Crafted regex ", PATTERN.pattern() ) ;
   }
   private static final String REPLACEMENT = "<!ENTITY $1 \"&amp;$1;\" > " ;
 

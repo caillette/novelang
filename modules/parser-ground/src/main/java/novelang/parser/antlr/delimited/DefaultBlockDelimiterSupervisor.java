@@ -18,15 +18,15 @@ package novelang.parser.antlr.delimited;
 
 import java.util.List;
 
-import org.antlr.runtime.Token;
-import org.antlr.runtime.MismatchedTokenException;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.common.Problem;
-import novelang.common.LocationFactory;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import novelang.common.LocationFactory;
+import novelang.common.Problem;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.Token;
 
 /**
  * Delegates to multiple {@link BlockDelimitersBoundary}.
@@ -35,8 +35,8 @@ import com.google.common.collect.ImmutableList;
  */
 public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor{
 
-  private static final Log LOG =
-      LogFactory.getLog( DefaultBlockDelimiterSupervisor.class ) ;
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger( DefaultBlockDelimiterSupervisor.class );
 
   private final LocationFactory locationFactory ;
   private final Stack stack = new Stack() ;
@@ -47,7 +47,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
   }
 
   public void enterBlockDelimiterBoundary( final Token location ) {
-    LOG.debug( "Entering block delimiter boundary at line " + location.getLine() ) ;
+    LOGGER.debug( "Entering block delimiter boundary at line " + location.getLine() ) ;
     stack.grow() ;
   }
 
@@ -65,7 +65,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
 
   public void startDelimitedText( final BlockDelimiter blockDelimiter, final Token startToken ) {
     if( stack.isEmpty() ) {
-      LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;
+      LOGGER.warn( "Empty stack! Ignoring start of block delimiter" ) ;
     } else {
       stack.getTop().startDelimitedText( blockDelimiter, startToken ) ;
     }
@@ -73,7 +73,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
 
   public void reachEndDelimiter( final BlockDelimiter blockDelimiter ) {
     if( stack.isEmpty() ) {
-      LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;
+      LOGGER.warn( "Empty stack! Ignoring start of block delimiter" ) ;
     } else {
       stack.getTop().reachEndDelimiter( blockDelimiter ) ;
     }
@@ -81,7 +81,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
 
   public void endDelimitedText( final BlockDelimiter blockDelimiter ) {
     if( stack.isEmpty() ) {
-      LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;
+      LOGGER.warn( "Empty stack! Ignoring start of block delimiter" ) ;
     } else {
       stack.getTop().endDelimitedText( blockDelimiter ) ;
     }
@@ -92,7 +92,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
       final MismatchedTokenException mismatchedTokenException
   ) throws MismatchedTokenException {
     if( stack.isEmpty() ) {
-      LOG.warn( "Empty stack! Ignoring start of block delimiter" ) ;
+      LOGGER.warn( "Empty stack! Ignoring start of block delimiter" ) ;
     } else {
       stack.getTop().reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
     }

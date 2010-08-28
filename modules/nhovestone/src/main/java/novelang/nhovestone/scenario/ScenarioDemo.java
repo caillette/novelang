@@ -32,8 +32,6 @@ import novelang.nhovestone.Scenario;
 import novelang.nhovestone.report.Grapher;
 import novelang.novelist.Novelist;
 import novelang.system.Husk;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.system.shell.ProcessCreationException;
 import novelang.system.shell.ProcessInitializationException;
 
@@ -44,9 +42,6 @@ import static novelang.KnownVersions.VERSION_0_41_0;
  * @author Laurent Caillette
  */
 public class ScenarioDemo {
-
-  private static final Log LOG = LogFactory.getLog( ScenarioDemo.class ) ;
-
 
   public static void main( final String[] args )
       throws

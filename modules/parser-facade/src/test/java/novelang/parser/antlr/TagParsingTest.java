@@ -16,13 +16,12 @@
  */
 package novelang.parser.antlr;
 
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import org.junit.Test;
 import antlr.RecognitionException;
+import org.junit.Test;
+
 import static novelang.parser.NodeKind.*;
-import static novelang.parser.antlr.TreeFixture.tree;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette
@@ -68,7 +67,6 @@ public class TagParsingTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( TagParsingTest.class ) ;
   private static final ParserMethod PARSERMETHOD_TAG = new ParserMethod( "tag" ) ;
   private static final ParserMethod PARSERMETHOD_NOVELLA = new ParserMethod( "novella" ) ;
 

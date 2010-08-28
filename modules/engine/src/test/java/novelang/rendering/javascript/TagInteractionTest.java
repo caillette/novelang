@@ -10,15 +10,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FilenameUtils;
-import org.junit.After;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.StatusHandler;
@@ -34,15 +25,26 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import novelang.DirectoryFixture;
-import novelang.ResourcesForTests;
-import static novelang.ResourcesForTests.TaggedPart;
 import novelang.ResourceTools;
+import novelang.ResourcesForTests;
 import novelang.common.filefixture.ResourceInstaller;
 import novelang.configuration.ConfigurationTools;
 import novelang.daemon.HttpDaemon;
 import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.rendering.RenditionMimeType;
+import org.apache.commons.io.FilenameUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+
+import static novelang.ResourcesForTests.TaggedPart;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for Javascript-based interactive behavior.
@@ -84,7 +86,7 @@ public class TagInteractionTest {
   @Test
   public void restrictToTag1() throws IOException, InterruptedException {
     tag1Checkbox.click() ;
-    LOG.info( "Just clicked on the checkbox. Let's see what happens" ) ;
+    LOGGER.info( "Just clicked on the checkbox. Let's see what happens" ) ;
     webClient.waitForBackgroundJavaScript( AJAX_TIMEOUT_MILLISECONDS ) ;
     verifyHidden( getCurrentHeaders(), ImmutableSet.< String >of(
         H0_0,
@@ -120,7 +122,7 @@ public class TagInteractionTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( TagInteractionTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( TagInteractionTest.class ) ;
 
   static {
     ResourcesForTests.initialize() ;
@@ -177,19 +179,22 @@ public class TagInteractionTest {
         "." + RenditionMimeType.HTML.getFileExtension()
     ) ;
     if( ! ( page instanceof HtmlPage ) ) {
-      LOG.error( "Got page of type %s", page.getClass().getName() ) ;
+      LOGGER.error( "Got page of type ", page.getClass().getName() ) ;
       final UnexpectedPage unexpectedPage = ( UnexpectedPage ) page ;
-      LOG.error( "Unexpected page!" ) ;
-      LOG.error( "  Staus message: %s", unexpectedPage.getWebResponse().getStatusMessage() ) ;
-      LOG.error( "  Response headers: %s", unexpectedPage.getWebResponse().getResponseHeaders() ) ;
-      LOG.error( "Page content:\n%s", unexpectedPage.getWebResponse().getContentAsString() ) ;
+      LOGGER.error( "Unexpected page!" ) ;
+      LOGGER.error( "  Staus message: ", unexpectedPage.getWebResponse().getStatusMessage() ) ;
+      LOGGER.error( "  Response headers: ", unexpectedPage.getWebResponse().getResponseHeaders() ) ;
+      LOGGER.error( "Page content:\n", unexpectedPage.getWebResponse().getContentAsString() ) ;
       fail( "Could not load the page." ) ;
     }
     final HtmlPage htmlPage = HtmlPage.class.cast( page ) ;
 
-    LOG.info( "Now the whole page should have finished loading and initializing." ) ;
+    LOGGER.info( "Now the whole page should have finished loading and initializing." ) ;
     
-    LOG.debug( "This is the HTML we got:\n\n%s\n", htmlPage.asXml() ) ;
+    LOGGER.debug( "This is the HTML we got:\n\n",
+        htmlPage.asXml(),
+        "\n"
+    ) ;
 
     final HtmlForm tagList = htmlPage.getFormByName( TaggedPart.TAGS_FORM_NAME ) ;
     tag1Checkbox = tagList.getInputByName( TaggedPart.TAG1 );
@@ -242,7 +247,7 @@ public class TagInteractionTest {
       }
     }
 
-    LOG.info( messageBuffer.toString() ) ;
+    LOGGER.info( messageBuffer.toString() ) ;
 
     if( errors.size() > 0 ) {
       fail( errors.toString() ) ;

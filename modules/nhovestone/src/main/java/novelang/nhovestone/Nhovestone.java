@@ -25,6 +25,8 @@ import javax.imageio.ImageIO;
 import novelang.Version;
 import novelang.VersionFormatException;
 import novelang.common.FileTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.nhovestone.report.Grapher;
 import novelang.nhovestone.scenario.ScenarioLibrary;
 import novelang.nhovestone.scenario.TimeMeasurement;
@@ -32,8 +34,6 @@ import novelang.nhovestone.scenario.TimeMeasurer;
 import novelang.system.DefaultCharset;
 import novelang.system.EnvironmentTools;
 import novelang.system.Husk;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.system.StartupTools;
 import novelang.system.shell.ProcessCreationException;
 import novelang.system.shell.ProcessInitializationException;
@@ -63,8 +63,8 @@ public class Nhovestone {
     // This must happen first. The need for originalArguments parameter prevents from
     // putting this initialization in a static block.
     StartupTools.fixLogDirectory( arguments ) ;
-    final Log log = LogFactory.getLog( Nhovestone.class ) ;
-    log.info( "Running with command-line arguments %s...", ImmutableList.of( arguments ) ) ;
+    final Logger log = LoggerFactory.getLogger( Nhovestone.class );
+    log.info( "Running with command-line arguments ", ImmutableList.of( arguments ), "..." ) ;
     EnvironmentTools.logSystemProperties() ;
 
 
@@ -92,7 +92,7 @@ public class Nhovestone {
   }
 
   public static void run(
-      final Log log,
+      final Logger log,
       final File scenariiDirectory,
       final File versionsDirectory,
       final Iterable< Version > versions
@@ -196,7 +196,7 @@ public class Nhovestone {
   private static void runScenario(
       final ScenarioLibrary.ConfigurationForTimeMeasurement configuration,
       final boolean showUpsizingCount,
-      final Log log
+      final Logger logger
 
   )
       throws
@@ -224,7 +224,7 @@ public class Nhovestone {
 
     ImageIO.write( image, "png", imageDestinationFile ) ;
 
-    log.info( "Wrote " + imageDestinationFile.getAbsolutePath() ) ;
+    logger.info( "Wrote ", imageDestinationFile.getAbsolutePath() ) ;
   }
 
 }

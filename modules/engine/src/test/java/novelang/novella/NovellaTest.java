@@ -28,20 +28,19 @@ import novelang.common.Location;
 import novelang.common.Problem;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.*;
 import novelang.parser.SourceUnescape;
 import novelang.parser.antlr.TreeFixture;
-
-import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
+
+import static novelang.parser.NodeKind.*;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette
@@ -88,7 +87,7 @@ public class NovellaTest {
     novella.relocateResourcePaths( partFile.getParentFile() ) ;
     Assert.assertTrue( novella.hasProblem() ) ;
     final List< Problem > problems = Lists.newArrayList( novella.getProblems() ) ;
-    LOG.debug( "Got problems: %s", problems ) ;
+    LOGGER.debug( "Got problems: ", problems ) ;
     Assert.assertEquals( 2, problems.size() ) ;
 
   }
@@ -98,7 +97,7 @@ public class NovellaTest {
     final Novella novella = new Novella( "b\u00A4d" ) ;
     Assert.assertTrue( novella.hasProblem() ) ;
     final List< Problem > problems = Lists.newArrayList( novella.getProblems() ) ;
-    LOG.debug( "Got problems: %s", problems ) ;
+    LOGGER.debug( "Got problems: ", problems ) ;
     Assert.assertEquals(
         "No viable alternative at input '\u00A4' CURRENCY_SIGN [0x00A4]",
         novella.getProblems().iterator().next().getMessage()
@@ -316,7 +315,8 @@ public class NovellaTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( NovellaTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( NovellaTest.class ) ;
+
   private static final int TEST_TIMEOUT_MILLISECONDS = 10 * 60 * 1000 ;
 
   static {

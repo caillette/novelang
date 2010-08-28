@@ -21,13 +21,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import novelang.common.Location;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Given an XPath expression, this class checks that all expanded names with a given prefix
@@ -43,7 +43,7 @@ import novelang.common.Location;
  */
 public class ExpandedNameVerifier {
 
-  private static final Log LOG = LogFactory.getLog( ExpandedNameVerifier.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ExpandedNameVerifier.class ) ;
 
   private final Set< String > nodeNames ;
 
@@ -61,7 +61,7 @@ public class ExpandedNameVerifier {
     Preconditions.checkState( xpathPattern == null ) ;
     xmlPrefix = prefix ;
     xpathPattern = Pattern.compile( prefix + XPATH_PATTERN_FRAGMENT ) ;
-    LOG.debug( "Crafted regex: %s", xpathPattern.toString() ) ;
+    LOGGER.debug( "Crafted regex: ", xpathPattern.toString() ) ;
   }
 
   public void unsetXmlPrefix() {

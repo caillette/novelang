@@ -16,31 +16,32 @@
  */
 package novelang.novella;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import novelang.DirectoryFixture;
-import static novelang.ResourcesForTests.Images;
-import static novelang.ResourcesForTests.initialize;
 import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;
+import novelang.common.filefixture.Relativizer;
 import novelang.common.filefixture.ResourceInstaller;
 import novelang.common.filefixture.ResourceSchema;
-import novelang.common.filefixture.Relativizer;
-import static novelang.parser.NodeKind.*;
-import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.antlr.TreeFixture;
 import org.junit.Assert;
-import static org.junit.Assert.assertSame;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import static novelang.ResourcesForTests.Images;
+import static novelang.ResourcesForTests.initialize;
+import static novelang.parser.NodeKind.*;
+import static novelang.parser.antlr.TreeFixture.tree;
+import static org.junit.Assert.assertSame;
 
 /**
  * Tests for {@link ImageFixer}
@@ -275,7 +276,7 @@ public class ImageFixerTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( ImageFixerTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ImageFixerTest.class ) ;
 
   private static final String RESOURCE_UNDER_PARENT ;
   private static final String RESOURCE_UNDER_CHILD ;
@@ -332,13 +333,16 @@ public class ImageFixerTest {
     final String actualRelativeResourceName = 
         pathRelocator.relocate( resourceNameRelativeToReferrer ) ;
 
-    LOG.info(
-        "Checking...\n  baseDirectory='%s'\n  referrerDirectory='%s'\n" +
-        "  resourceNameRelativeToReferrer='%s'\n  expectedRelativeResourceName='%s'",
+    LOGGER.info(
+        "Checking...\n  baseDirectory='",
         baseDirectory,
+        "'\n  referrerDirectory='",
         referrerDirectory,
+        "'\n  resourceNameRelativeToReferrer='",
         resourceNameRelativeToReferrer,
-        expectedRelativeResourceName
+        "'\n  expectedRelativeResourceName=''",
+        expectedRelativeResourceName,
+        "'"
     ) ;
 
     Assert.assertEquals( expectedRelativeResourceName, actualRelativeResourceName ) ;

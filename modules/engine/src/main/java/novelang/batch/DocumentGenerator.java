@@ -28,10 +28,10 @@ import novelang.configuration.ConfigurationTools;
 import novelang.configuration.DocumentGeneratorConfiguration;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.DocumentGeneratorParameters;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.system.StartupTools;
 
 /**
@@ -44,7 +44,8 @@ import novelang.system.StartupTools;
  */
 public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGeneratorParameters > {
 
-  private static final Log LOG = LogFactory.getLog( DocumentGenerator.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentGenerator.class );
+
   public static final String COMMAND_NAME = "generate";
 
   public void main(
@@ -58,11 +59,8 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
         createParametersOrExit( commandName, mayTerminateJvm, arguments, baseDirectory ) ;
 
     try {
-      LOG.info(
-          "Starting %s with arguments %s",
-          getClass().getSimpleName(),
-          asString( arguments )
-      ) ;
+      LOGGER.info( "Starting ", getClass().getSimpleName(),
+          " with arguments ", asString( arguments ) ) ;
 
       final DocumentGeneratorConfiguration configuration =
           ConfigurationTools.createDocumentGeneratorConfiguration( parameters ) ;
@@ -87,7 +85,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
       }
 
     } catch( Exception e ) {
-      LOG.error( "Fatal", e ) ;
+      LOGGER.error( e, "Fatal" ) ;
       throw e ;
     }
   }
@@ -134,7 +132,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
         targetDirectory,
         documentRequest
     ) ;
-    LOG.info( "Generating document file '%s'...", outputFile.getAbsolutePath() ) ;
+    LOGGER.info( "Generating document file '", outputFile.getAbsolutePath(), "'..." ) ;
     final FileOutputStream outputStream = new FileOutputStream( outputFile ) ;
     final Iterable< Problem > problems = documentProducer.produce( documentRequest, outputStream ) ;
     outputStream.flush() ;

@@ -16,31 +16,35 @@
  */
 package novelang.novella;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import com.google.common.base.Preconditions;
-import novelang.common.*;
+import javax.imageio.ImageIO;
+import novelang.common.FileTools;
+import novelang.common.Problem;
+import novelang.common.ProblemCollector;
+import novelang.common.SimpleTree;
+import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.parser.NodeKind;
-import novelang.loader.ResourceLoader;
-import novelang.loader.ClasspathResourceLoader;
-import novelang.loader.ResourceName;
 import novelang.configuration.ConfigurationTools;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceLoader;
+import novelang.loader.ResourceName;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.NodeKind;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import org.dom4j.io.SAXReader;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.IOException;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 
 /**
  * Transforms the path of embeddable resources (like {@link NodeKind#RASTER_IMAGE} or
@@ -53,7 +57,7 @@ import javax.imageio.ImageIO;
  */
 public class ImageFixer {
   
-  private static final Log LOG = LogFactory.getLog( ImageFixer.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ImageFixer.class );
   
   private final File baseDirectory;
   private final File referrerDirectory ;
@@ -80,12 +84,14 @@ public class ImageFixer {
     this.baseDirectory = baseDirectory;
     this.referrerDirectory = referrerDirectory ;
     this.problemCollector = problemCollector ;
-    LOG.debug(
-        "Created %s contentRoot: '%s', referrerDirectory: '%s'",
+    LOGGER.debug(
+        "Created ",
         ClassUtils.getShortClassName( getClass() ),
+        " contentRoot: '",
         baseDirectory.getAbsolutePath(),
-        referrerDirectory.getAbsolutePath()
-
+        "', referrerDirectory: '",
+            referrerDirectory.getAbsolutePath(),
+        "'"
     ) ;
   }
 
@@ -118,12 +124,15 @@ public class ImageFixer {
         try {
           newLocation = relocate( oldLocation ) ;
         } catch ( ImageFixerException e ) {
-          LOG.debug( "%s got exception: %s", // Just debug level, exception will raise later.
-              ClassUtils.getShortClassName( getClass() ), e.getMessage() ) ;
-          problemCollector.collect( Problem.createProblem( e ) ) ;          
+          LOGGER.debug(
+              ClassUtils.getShortClassName( getClass() ),
+              " got exception: ", // Just debug level, exception will raise later.
+              e.getMessage()
+          ) ;
+          problemCollector.collect( Problem.createProblem( e ) ) ;
           return treepathToImage ; // Leave unchanged.
         }
-        LOG.debug( "Replacing '%s' by '%s'", oldLocation, newLocation ) ;
+        LOGGER.debug( "Replacing '", oldLocation, "' by '", newLocation, "'" ) ;
         final Treepath< SyntacticTree > treepathToResourceLocation = 
             Treepath.create( treepathToImage, i, 0 ) ;
         treepathToImage = TreepathTools.replaceTreepathEnd(
@@ -158,7 +167,7 @@ public class ImageFixer {
       } catch( Exception e ) {
         final String message = "Could not read '" + imageLocation + "'";
         problemCollector.collect( Problem.createProblem( message ) ) ;
-        LOG.warn( message, e ) ;
+        LOGGER.warn( e, message ) ;
       }
     return treepathToImage ;
   }
@@ -167,7 +176,7 @@ public class ImageFixer {
       Treepath< SyntacticTree > treepathToImage,
       final File imageFile
   ) throws IOException {
-    LOG.debug( "Extracting raster image metadata from '%s'...", imageFile.getAbsolutePath() ) ;
+    LOGGER.debug( "Extracting raster image metadata from '", imageFile.getAbsolutePath(), "'..." ) ;
     final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
 
     treepathToImage = addImageMetadata(
@@ -196,7 +205,10 @@ public class ImageFixer {
       Treepath< SyntacticTree > treepathToImage,
       final File imageFile
   ) throws IOException, DocumentException {
-    LOG.debug( "Extracting vector image metadata from '%s'...", imageFile.getAbsolutePath() ) ;
+    LOGGER.debug( "Extracting vector image metadata from '",
+        imageFile.getAbsolutePath(),
+        "'..."
+    ) ;
 
     final SAXReader reader = new SAXReader() ;
     reader.setEntityResolver( ENTITY_RESOLVER ) ;
@@ -207,7 +219,7 @@ public class ImageFixer {
       final String width = svgNode.valueOf( "@width" ) ;
       final String height = svgNode.valueOf( "@height" ) ;
 
-      LOG.debug( "Found: width:'%s', height:'%s'", width, height ) ;
+      LOGGER.debug( "Found: width:'", width, "', height:'", height, "'" );
 
       if( ! StringUtils.isBlank( width ) && ! StringUtils.isBlank( height ) ) {
         treepathToImage = addImageMetadata(
@@ -334,12 +346,14 @@ public class ImageFixer {
        || publicId.startsWith( SVG11_PUBLICID_PREFIX_3 )  
       ) {
         final String dtdResourceName = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
-        LOG.debug(
-            "Attempting to load definition for publicIdentifier='%s', systemIdentifier='%s"  +
-            "', resourceName='%s'",
+        LOGGER.debug(
+            "Attempting to load definition for publicIdentifier='",
             publicId,
+            "', systemIdentifier='",
             systemId,
-            dtdResourceName
+            "', resourceName='",
+            dtdResourceName,
+            "'"
         ) ;
         return new InputSource( 
             ENTITY_RESOURCE_LOADER.getInputStream( 

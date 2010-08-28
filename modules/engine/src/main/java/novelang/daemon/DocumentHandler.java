@@ -20,27 +20,24 @@ package novelang.daemon;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.concurrent.ExecutorService;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import org.mortbay.jetty.Request;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.collect.Lists;
-import com.google.common.base.Joiner;
 import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.configuration.ProducerConfiguration;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentProducer;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
 import novelang.rendering.HtmlProblemPrinter;
+import org.apache.commons.lang.StringUtils;
+import org.mortbay.jetty.Request;
 
 /**
  * Serves rendered content.
@@ -61,7 +58,7 @@ import novelang.rendering.HtmlProblemPrinter;
  */
 public class DocumentHandler extends GenericHandler {
 
-  private static final Log LOG = LogFactory.getLog( DocumentHandler.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentHandler.class );
 
   private final DocumentProducer documentProducer ;
   private final Charset renderingCharset ;
@@ -85,7 +82,7 @@ public class DocumentHandler extends GenericHandler {
   private void handle( final HttpServletRequest request, final HttpServletResponse response )
       throws IOException, ServletException
   {
-    LOG.info( "Handling request %s", request.getRequestURI() ) ;
+    LOGGER.info( "Handling request ", request.getRequestURI() ) ;
     
     final String rawRequest = request.getPathInfo() +
         ( StringUtils.isBlank( request.getQueryString() ) ? "" : "?" + request.getQueryString() )
@@ -110,7 +107,7 @@ public class DocumentHandler extends GenericHandler {
               documentRequest.getOriginalTarget(),
               outputStream
           ) ;
-          LOG.error( "Unexpected exception", e ) ;
+          LOGGER.error( e, "Unexpected exception" ) ;
           throw e ;
         }
 
@@ -123,8 +120,8 @@ public class DocumentHandler extends GenericHandler {
           }
 
         } else if( rendered.hasProblem() ) {
-          LOG.warn(
-              "Document had following problems: \n  %s",
+          LOGGER.warn(
+              "Document had following problems: \n  ",
               Joiner.on( "\n  " ).join( rendered.getProblems() )  
           ) ;
           redirectToProblemPage( documentRequest, response ) ;
@@ -148,7 +145,7 @@ public class DocumentHandler extends GenericHandler {
         }
 
         ( ( Request ) request ).setHandled( true ) ;
-        LOG.info( "Handled request %s", request.getRequestURI() ) ;
+        LOGGER.info( "Handled request ", request.getRequestURI() ) ;
       }
 
     }
@@ -162,7 +159,7 @@ public class DocumentHandler extends GenericHandler {
         documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX ;
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
-    LOG.info( "Redirected to '%s'", redirectionTarget ) ;
+    LOGGER.info( "Redirected to '", redirectionTarget, "'" );
   }
 
   private void redirectToOriginalTarget(
@@ -173,7 +170,8 @@ public class DocumentHandler extends GenericHandler {
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
     response.setContentType( documentRequest.getRenditionMimeType().getMimeName() ) ;
-    LOG.info( "Redirected to '%s'", redirectionTarget ) ;
+    LOGGER.info( "Redirected to '", redirectionTarget, "'" ) ;
+
   }
 
   private void renderProblemsAsRequested(
@@ -195,7 +193,7 @@ public class DocumentHandler extends GenericHandler {
         problems,
         originalTarget
     ) ;
-    LOG.info( "Served error request '%s'", originalTarget ) ;
+    LOGGER.info( "Served error request '", originalTarget, "'" ) ;
 
   }
 

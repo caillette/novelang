@@ -20,18 +20,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.junit.Assert.*;
-
-import novelang.ResourceTools;
-import org.junit.Before;
-import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import org.apache.commons.lang.ClassUtils;
 import com.google.common.collect.Lists;
 import novelang.DirectoryFixture;
+import novelang.ResourceTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
+import org.apache.commons.lang.ClassUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link GenericParameters}, {@link DocumentGeneratorParameters}, {@link DaemonParameters}.
@@ -178,7 +178,7 @@ public class ParametersTest {
       new DocumentGeneratorParameters( scratchDirectory, arguments ) ;
       fail( "Exception should have been thrown" ) ;
     } catch( ArgumentException e ) {
-      LOG.info( e.getHelpPrinter().asString( ClassUtils.getShortClassName( getClass() ), 80 ) );
+      LOGGER.info( e.getHelpPrinter().asString( ClassUtils.getShortClassName( getClass() ), 80 ) );
     }
   }
 
@@ -186,7 +186,7 @@ public class ParametersTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( ParametersTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ParametersTest.class );
 
   private static final String DASHED_CONTENTROOT = "--content-root";
   private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir";

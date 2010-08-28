@@ -24,9 +24,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import novelang.configuration.parse.DaemonParameters;
 import novelang.daemon.HttpDaemon;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.system.Husk;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.system.shell.ProcessCreationException;
 import novelang.system.shell.ProcessInitializationException;
 
@@ -38,7 +38,7 @@ import novelang.system.shell.ProcessInitializationException;
  */
 public class HttpDaemonDriver extends EngineDriver {
 
-  private static final Log LOG = LogFactory.getLog( HttpDaemonDriver.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemonDriver.class );
   
   private final int tcpPort ;
 
@@ -106,7 +106,7 @@ public class HttpDaemonDriver extends EngineDriver {
     } catch( IOException e ) {
       // Need to do this because some finally clause in calling class may cause an exception
       // masking this one.
-      LOG.error( "Port already in use: " + tcpPort ) ;
+      LOGGER.error( "Port already in use: ", tcpPort ) ;
       throw e ;
     }
     serverSocket.close() ;

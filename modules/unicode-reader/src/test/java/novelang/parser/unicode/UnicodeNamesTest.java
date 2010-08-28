@@ -1,8 +1,8 @@
 package novelang.parser.unicode;
 
 import novelang.common.LanguageTools;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.lang.CharUtils;
 import org.junit.Test;
 
@@ -19,11 +19,11 @@ public class UnicodeNamesTest {
   public void logSomeBasicCharacterRepresentations() {
     final int aCharacterAsInt = 'a' ;
     final String aCharacterAsHex = LanguageTools.to16ByteHex( aCharacterAsInt ) ;
-    LOG.info(
-        "\nThe 'a' letter" +
-        "\nAs int: " + aCharacterAsInt +
-        "\nAs hex: " + aCharacterAsHex +
-        "\nUnicode escaped: " + CharUtils.unicodeEscaped( 'a' ) 
+    LOGGER.info(
+        "\nThe 'a' letter",
+        "\nAs int: ", aCharacterAsInt,
+        "\nAs hex: ", aCharacterAsHex,
+        "\nUnicode escaped: ", CharUtils.unicodeEscaped( 'a' )
     ) ;
   }
 
@@ -70,7 +70,7 @@ public class UnicodeNamesTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( UnicodeNamesTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UnicodeNamesTest.class ) ;
 
   private static void verify( final String expected, final char character ) {
     assertEquals( expected, UnicodeNames.getPureName( character ) ) ;

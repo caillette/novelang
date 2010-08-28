@@ -19,8 +19,8 @@ package novelang.common.filefixture;
 import java.io.File;
 
 import com.google.common.base.Preconditions;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * A concrete class that holds an immutable reference to the target directory.
@@ -28,7 +28,8 @@ import novelang.system.Log;
  */
 public class ResourceInstaller extends AbstractResourceInstaller {
 
-  private static final Log LOG = LogFactory.getLog( ResourceInstaller.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceInstaller.class );
+
   private final File targetDirectory ;
 
   /**
@@ -41,9 +42,9 @@ public class ResourceInstaller extends AbstractResourceInstaller {
     Preconditions.checkArgument( targetDirectory.exists() ) ;
     Preconditions.checkArgument( targetDirectory.isDirectory() ) ;
     this.targetDirectory = targetDirectory;
-    LOG.debug(
-        "Created " + getClass().getSimpleName() +
-        " on directory '" + targetDirectory.getAbsolutePath() + "'"
+    LOGGER.debug(
+        "Created ", getClass().getSimpleName(),
+        " on directory '", targetDirectory.getAbsolutePath(), "'"
     ) ;
   }
 

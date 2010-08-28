@@ -19,14 +19,14 @@ package novelang.parser.antlr.delimited;
 import java.util.List;
 import java.util.Map;
 
-import org.antlr.runtime.MismatchedTokenException;
-import org.antlr.runtime.Token;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import novelang.common.Problem;
 import novelang.common.LocationFactory;
+import novelang.common.Problem;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.Token;
 
 /**
  * Receives notifications from {@link novelang.parser.antlr.GrammarDelegate} from what's going on with delimiters.
@@ -35,8 +35,7 @@ import novelang.common.LocationFactory;
  */
 public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
-  private static final Log LOG = LogFactory.getLog(
-      DefaultBlockDelimitersBoundary.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DefaultBlockDelimitersBoundary.class );
 
   private final LocationFactory locationFactory ;
   private final Map< BlockDelimiter, DelimitedBlockStatus > primes = Maps.newHashMap() ;
@@ -106,7 +105,7 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
       buffer.append( " " ) ;
       buffer.append( status.getInternalStatusAsString() ) ;
     }
-    LOG.debug( buffer.toString() ) ;
+    LOGGER.debug( buffer.toString() ) ;
 
   }
 

@@ -1,12 +1,22 @@
 package novelang.opus.function.builtin;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import novelang.opus.CommandExecutionContext;
-import novelang.opus.function.CommandParameterException;
-import novelang.opus.function.builtin.insert.LevelHead;
-import novelang.opus.function.builtin.insert.PartCreator;
+import com.google.common.collect.Multimap;
 import novelang.common.FileTools;
 import novelang.common.Location;
 import novelang.common.Problem;
@@ -17,39 +27,27 @@ import novelang.common.SyntacticTree;
 import novelang.common.tree.TreeTools;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
-import novelang.parser.NodeKind;
-import static novelang.parser.NodeKind.WORD_;
-
-import novelang.novella.Novella;
 import novelang.designator.FragmentIdentifier;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.novella.Novella;
+import novelang.opus.CommandExecutionContext;
+import novelang.opus.function.CommandParameterException;
+import novelang.opus.function.builtin.insert.LevelHead;
+import novelang.opus.function.builtin.insert.PartCreator;
+import novelang.parser.NodeKind;
 import novelang.treemangling.DesignatorInterpreter;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-
 import novelang.treemangling.TreeManglingConstants;
 import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import static novelang.parser.NodeKind.WORD_;
 
 /**
  * @author Laurent Caillette
  */
 public class InsertCommand extends AbstractCommand {
   
-  private static final Log LOG = LogFactory.getLog( InsertCommand.class ) ;  
+  private static final Logger LOGGER = LoggerFactory.getLogger( InsertCommand.class );
   
   private final String fileName ;
   private final boolean recurse ;
@@ -77,7 +75,7 @@ public class InsertCommand extends AbstractCommand {
     this.styleName = styleName ;
     
     if( fileOrdering == null ) {
-      LOG.debug( "No file ordering set, using default" ) ;
+      LOGGER.debug( "No file ordering set, using default" ) ;
       this.fileOrdering = FileOrdering.DEFAULT ;      
     } else {
       this.fileOrdering = fileOrdering ;  
@@ -119,8 +117,8 @@ public class InsertCommand extends AbstractCommand {
       final CommandExecutionContext environment,
       final File insertedFile
   ) {
-    LOG.debug( "Command %s evaluating flatly on %s", this, insertedFile  ) ;
-    
+    LOGGER.debug( "Command ", this, " evaluating flatly on ", insertedFile );
+
     final Novella rawNovella;
     try {
       rawNovella = new Novella(
@@ -228,8 +226,8 @@ public class InsertCommand extends AbstractCommand {
       final File insertedFile,
       final boolean recurse
   ) {
-    LOG.debug( "Command %s evaluating recursively on %s", this, insertedFile  ) ;
-    
+    LOGGER.debug( "Command ", this, " evaluating recursively on ", insertedFile ) ;
+
     final List< Problem > problems = Lists.newArrayList() ;
     final SyntacticTree styleTree = createStyleTree( styleName ) ;
     Treepath< SyntacticTree > book = Treepath.create( environment.getDocumentTree() ) ;
@@ -389,11 +387,11 @@ public class InsertCommand extends AbstractCommand {
             directory, StructureKind.NOVELLA.getFileExtensions(), recurse );
         files = fileOrdering.sort( scannedFiles ) ;
       } catch ( FileOrdering.CriteriaException e ) {
-        LOG.info( "Could not sort files from '" + directory.getAbsolutePath() + "'", e ) ;
+        LOGGER.info( e, "Could not sort files from '", directory.getAbsolutePath(), "'" ) ;
         throw new CommandParameterException( "Could not sort files: " + e.getMessage() ) ;
       }
 
-      if( LOG.isDebugEnabled() ) {
+      if( LOGGER.isDebugEnabled() ) {
         final StringBuffer buffer = new StringBuffer(
             "Scan of '" + directory.getAbsolutePath() + "' found those files:" ) ;
         for( final File file : files ) {
@@ -403,7 +401,7 @@ public class InsertCommand extends AbstractCommand {
             throw new RuntimeException( e ) ;
           }
         }
-        LOG.debug( buffer.toString() ) ;
+        LOGGER.debug( buffer.toString() ) ;
       }
 
       return files ;

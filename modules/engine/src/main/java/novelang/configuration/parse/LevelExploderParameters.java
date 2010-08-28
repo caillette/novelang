@@ -18,14 +18,13 @@ package novelang.configuration.parse;
 
 import java.io.File;
 
-import org.apache.commons.cli.Options;
-
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import com.google.common.collect.Lists;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
 import novelang.rendering.RenditionMimeType;
-import com.google.common.collect.Lists;
+import org.apache.commons.cli.Options;
 
 /**
  * Same as {@link DocumentGeneratorParameters} but allows only one single document request
@@ -33,7 +32,7 @@ import com.google.common.collect.Lists;
  */
 public class LevelExploderParameters extends BatchParameters {
 
-  private static final Log LOG = LogFactory.getLog( LevelExploderParameters.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( LevelExploderParameters.class ) ;
   private final DocumentRequest documentRequest ;
 
   public LevelExploderParameters(
@@ -43,7 +42,7 @@ public class LevelExploderParameters extends BatchParameters {
     super( baseDirectory, parameters ) ;
 
     final String[] sourceArguments = line.getArgs() ;
-    LOG.debug( "found: sources = %s", Lists.newArrayList( sourceArguments ) ) ;
+    LOGGER.debug( "found: sources = ", Lists.newArrayList( sourceArguments ) ) ;
 
     if( sourceArguments.length == 0 ) {
       throw new ArgumentException( "No source document", helpPrinter ) ;
@@ -70,7 +69,7 @@ public class LevelExploderParameters extends BatchParameters {
     } catch( IllegalArgumentException e ) {
       throw new ArgumentException( e, helpPrinter ) ;
     }
-    LOG.debug( "Document request = %s", documentRequest ) ;
+    LOGGER.debug( "Document request = ", documentRequest ) ;
 
   }
 

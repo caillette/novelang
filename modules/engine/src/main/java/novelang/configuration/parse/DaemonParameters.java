@@ -18,11 +18,11 @@ package novelang.configuration.parse;
 
 import java.io.File;
 
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
 /**
  * Parses command-line arguments for {@link novelang.daemon.HttpDaemon}.
@@ -33,7 +33,7 @@ import novelang.system.Log;
  */
 public class DaemonParameters extends GenericParameters {
 
-  private static final Log LOG = LogFactory.getLog( DaemonParameters.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DaemonParameters.class );
 
   private final Integer port ;
   private final Boolean serveRemotes;
@@ -45,7 +45,12 @@ public class DaemonParameters extends GenericParameters {
 
     if( line.hasOption( OPTION_HTTPDAEMON_PORT.getLongOpt() ) ) {
       final String portParameter = line.getOptionValue( OPTION_HTTPDAEMON_PORT.getLongOpt() ) ;
-      LOG.debug( "found: %s = '%s'", OPTION_HTTPDAEMON_PORT.getLongOpt(), portParameter ) ;
+      LOGGER.debug( "found: ",
+          OPTION_HTTPDAEMON_PORT.getLongOpt(),
+          " = '",
+          portParameter,
+          "'"
+      ) ;
       try {
         port = Integer.parseInt( portParameter ) ;
       } catch( NumberFormatException e ) {
@@ -57,10 +62,7 @@ public class DaemonParameters extends GenericParameters {
 
     if( line.hasOption( OPTION_HTTPDAEMON_SERVEREMOTES.getLongOpt() ) ) {
       this.serveRemotes = true ;
-      LOG.debug(
-          "found: %s",
-          OPTION_HTTPDAEMON_SERVEREMOTES.getLongOpt()
-      ) ;
+      LOGGER.debug( "found: ", OPTION_HTTPDAEMON_SERVEREMOTES.getLongOpt() ) ;
     } else {
       serveRemotes = null ;
     }

@@ -20,6 +20,8 @@ package novelang.rendering;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+
+import com.google.common.base.Preconditions;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -31,32 +33,29 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
-
-import javax.xml.parsers.SAXParser;
-import novelang.system.LogFactory;
+import novelang.common.metadata.DocumentMetadata;
+import novelang.configuration.RenderingConfiguration;
+import novelang.loader.ResourceLoader;
+import novelang.loader.ResourceName;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.NodeKindTools;
+import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
+import novelang.rendering.xslt.validate.SaxMulticaster;
+import novelang.system.DefaultCharset;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-import com.google.common.base.Preconditions;
-import novelang.common.metadata.DocumentMetadata;
-import novelang.configuration.RenderingConfiguration;
-import novelang.loader.ResourceLoader;
-import novelang.loader.ResourceName;
-import novelang.parser.NodeKindTools;
-import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
-import novelang.rendering.xslt.validate.SaxMulticaster;
-import novelang.system.DefaultCharset;
-import novelang.system.Log;
 
 /**
  * @author Laurent Caillette
  */
 public class XslWriter extends XmlWriter {
 
-  protected static final Log LOG = LogFactory.getLog( XslWriter.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( XslWriter.class ) ;
 
   protected final EntityResolver entityResolver;
   protected final URIResolver uriResolver;
@@ -150,7 +149,7 @@ public class XslWriter extends XmlWriter {
     this.xslFileName = xslFileName ;
     entityResolver = new LocalEntityResolver() ;
     uriResolver = new LocalUriResolver() ;
-    LOG.debug( "Created %s with stylesheet %s", getClass().getName(), xslFileName ) ;
+    LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", xslFileName ) ;
   }
 
 
@@ -162,7 +161,7 @@ public class XslWriter extends XmlWriter {
   )
       throws Exception
   {
-    LOG.debug( "Creating ContentHandler with charset %s", charset.name() );
+    LOGGER.debug( "Creating ContentHandler with charset ", charset.name() );
 
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
@@ -248,11 +247,8 @@ public class XslWriter extends XmlWriter {
     ) throws SAXException, IOException {
       systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
       final boolean shouldEscapeEntity = entityEscapeSelector.shouldEscape( publicId, systemId ) ;
-      LOG.debug(
-          "Resolving entity publicId='%s' systemId='%s' escape=%s" ,
-          publicId,
-          systemId,
-          shouldEscapeEntity
+      LOGGER.debug( "Resolving entity publicId='", publicId, "' systemId='", systemId, "' " +
+          "escape=", shouldEscapeEntity
       ) ;
       final InputSource dtdSource = new InputSource(
           resourceLoader.getInputStream( new ResourceName( systemId ) ) );
@@ -267,7 +263,7 @@ public class XslWriter extends XmlWriter {
   protected class LocalUriResolver implements URIResolver {
 
     public Source resolve( final String href, final String base ) throws TransformerException {
-      LOG.debug( "Resolving URI href='%s' base='%s'", href, base ) ;
+      LOGGER.debug( "Resolving URI href='", href, "' base='", base, "'" ) ;
 
       final SAXTransformerFactory saxTransformerFactory =
           ( SAXTransformerFactory ) TransformerFactory.newInstance() ;

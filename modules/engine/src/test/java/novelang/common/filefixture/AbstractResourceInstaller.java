@@ -21,15 +21,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import novelang.DirectoryFixture;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.DirectoryFixture;
 
 /**
  * Performs filesystem-oriented operations on {@link Resource} and {@link Directory}.
@@ -37,9 +34,6 @@ import novelang.DirectoryFixture;
  * @author Laurent Caillette
  */
 /*package*/ abstract class AbstractResourceInstaller {
-
-  private static final Log LOG = LogFactory.getLog( AbstractResourceInstaller.class ) ;
-
 
   public abstract File getTargetDirectory() ;
 

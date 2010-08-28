@@ -16,9 +16,9 @@
  */
 package novelang.rendering.xslt;
 
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.Version;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Contains functions to be called from XSLT.
@@ -27,10 +27,10 @@ import novelang.Version;
  */
 public class Versioning {
 
-  private static final Log LOG = LogFactory.getLog( Versioning.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Versioning.class );
 
   public static String versionName() {
-    LOG.debug( "Called versionName()" ) ;
+    LOGGER.debug( "Called versionName()" ) ;
     return Version.CURRENT_PRODUCT_VERSION.getName() ;
   }
 

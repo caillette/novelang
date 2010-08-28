@@ -2,10 +2,9 @@ package novelang.parser.unicode;
 
 
 import novelang.build.CodeGenerationTools;
-
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.common.LanguageTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Reads Unicode character names from a binary file
@@ -17,7 +16,8 @@ import novelang.common.LanguageTools;
  */
 public class UnicodeNames {
 
-  private static final Log LOG = LogFactory.getLog( UnicodeNames.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UnicodeNames.class ) ;
+
 
   private UnicodeNames() { }
 
@@ -35,15 +35,15 @@ public class UnicodeNames {
       final String pureName = new UnicodeNamesBinaryReader(
           UnicodeNames.class.getResource( CodeGenerationTools.UNICODE_NAMES_BINARY ) ).getName( character ) ;
       if( pureName == null ) {
-        LOG.warn( "No name found for character " + characterAsString ) ;
+        LOGGER.warn( "No name found for character ", characterAsString ) ;
       } else {
-        LOG.debug( "Found name for character " + characterAsString + " '" + pureName + "'" ) ;
+        LOGGER.debug( "Found name for character ", characterAsString, " '", pureName, "'" ) ;
       }
       return pureName ;
     } catch( Exception e ) {
       exception = e ;
     }
-    LOG.error( "No name found for character " + characterAsString , exception ) ;
+    LOGGER.error( exception, "No name found for character ", characterAsString ) ;
     return null ;
   }
 

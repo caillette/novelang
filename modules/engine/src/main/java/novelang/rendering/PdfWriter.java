@@ -20,24 +20,20 @@ package novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+import novelang.common.metadata.DocumentMetadata;
+import novelang.configuration.RenderingConfiguration;
+import novelang.loader.ResourceName;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import org.xml.sax.ContentHandler;
-import novelang.common.metadata.DocumentMetadata;
-import novelang.configuration.RenderingConfiguration;
-import novelang.loader.ResourceName;
 
 /**
  * @author Laurent Caillette
  */
 public class PdfWriter extends XslWriter {
-
-  private static final Log LOG = LogFactory.getLog( PdfWriter.class ) ;
 
   public static final ResourceName DEFAULT_FO_STYLESHEET = new ResourceName( "pdf.xsl" ) ;
   protected final FopFactory fopFactory ;

@@ -17,27 +17,27 @@
 
 package novelang.daemon;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.File;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.IOUtils;
-import org.mortbay.jetty.Request;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.configuration.ProducerConfiguration;
 import novelang.loader.ResourceLoader;
+import novelang.loader.ResourceLoaderTools;
 import novelang.loader.ResourceName;
 import novelang.loader.ResourceNotFoundException;
-import novelang.loader.ResourceLoaderTools;
 import novelang.loader.UrlResourceLoader;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.PolymorphicRequest;
 import novelang.produce.RequestTools;
+import org.apache.commons.io.IOUtils;
+import org.mortbay.jetty.Request;
 
 /**
  * Holds resources which don't require rendering.
@@ -46,7 +46,7 @@ import novelang.produce.RequestTools;
  */
 public class ResourceHandler extends GenericHandler {
 
-  private static final Log LOG = LogFactory.getLog( ResourceHandler.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceHandler.class ) ;
 
   private final ResourceLoader resourceLoader ;
 
@@ -73,7 +73,7 @@ public class ResourceHandler extends GenericHandler {
 
   protected ResourceHandler( final ResourceLoader resourceLoader ) {
     this.resourceLoader = resourceLoader ;
-    LOG.debug( "Using resourceLoader %s", resourceLoader ) ;
+    LOGGER.debug( "Using resourceLoader ", resourceLoader ) ;
   }
 
   protected void doHandle(
@@ -84,7 +84,7 @@ public class ResourceHandler extends GenericHandler {
   )
       throws IOException, ServletException
   {
-    LOG.debug( "Attempting to handle %s", request.getRequestURI() ) ;
+    LOGGER.debug( "Attempting to handle ", request.getRequestURI() ) ;
 
     final PolymorphicRequest documentRequest = 
         RequestTools.createPolymorphicRequest( request.getPathInfo() ) ;
@@ -114,14 +114,16 @@ public class ResourceHandler extends GenericHandler {
         }
 
         ( ( Request ) request ).setHandled( true ) ;
-        LOG.debug(
-            "Handled request '%s' with content-type '%s'",
-            request.getRequestURI(), 
-            contentType 
+        LOGGER.debug(
+            "Handled request '",
+            request.getRequestURI(),
+            "' with content-type '",
+            contentType,
+            "'."
         ) ;
         
       } catch( ResourceNotFoundException e ) {
-        LOG.debug( "Could not serve %s", request.getRequestURI() ) ;
+        LOGGER.debug( "Could not serve ", request.getRequestURI() ) ;
         // Then do nothing, we just don't handle that request.
       }
 

@@ -18,9 +18,9 @@ package novelang.build.antlr;
 
 import java.util.Set;
 
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.shared.Lexeme;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import org.apache.commons.lang.CharUtils;
 import org.junit.Test;
 
@@ -46,12 +46,12 @@ public class LexemeDeclarationExtractorTest {
         createAntlrDeclaration( VBAR )
     ;
 
-    LOG.info( "Created grammar: \n%s", grammar );
+    LOGGER.info( "Created grammar: \n", grammar );
 
     final Set< Lexeme > declarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
-    LOG.debug( "Got: %s", declarations ) ;
+    LOGGER.debug( "Got: ", declarations ) ;
 
     assertEquals( 6L, ( long ) declarations.size() ) ;
 
@@ -70,7 +70,7 @@ public class LexemeDeclarationExtractorTest {
     final Set<Lexeme> declarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
-    LOG.debug( "Got: %s", declarations ) ;
+    LOGGER.debug( "Got: ", declarations ) ;
     assertEquals( 1L, ( long ) declarations.size() ) ;
     assertTrue( declarations.contains( VBAR ) ) ;
 
@@ -82,7 +82,7 @@ public class LexemeDeclarationExtractorTest {
     final Set<Lexeme> lexemeDeclarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
-    LOG.debug( "Got: %s", lexemeDeclarations ) ;
+    LOGGER.debug( "Got: ", lexemeDeclarations ) ;
     assertEquals( 1L, ( long ) lexemeDeclarations.size() ) ;
     assertTrue( lexemeDeclarations.contains( AGRAVE ) ) ;
 
@@ -94,7 +94,7 @@ public class LexemeDeclarationExtractorTest {
     final Set< Lexeme > lexemeDeclarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( grammar ) ;
 
-    LOG.debug( "Got: %s", lexemeDeclarations ) ;
+    LOGGER.debug( "Got: ", lexemeDeclarations ) ;
     assertEquals( 1L, ( long ) lexemeDeclarations.size() ) ;
     assertTrue( lexemeDeclarations.contains( ICUTE ) ) ;
 
@@ -116,7 +116,8 @@ public class LexemeDeclarationExtractorTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( LexemeDeclarationExtractorTest.class ) ;
+  private static final Logger LOGGER = 
+      LoggerFactory.getLogger( LexemeDeclarationExtractorTest.class );
 
   private static final Lexeme SMALL_X = new Lexeme( "SMALL_X", 'x', null, null ) ;
   private static final Lexeme BIG_X = new Lexeme( "BIG_X", 'X', null, "X" ) ;

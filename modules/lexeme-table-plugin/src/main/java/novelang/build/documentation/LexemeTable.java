@@ -26,15 +26,15 @@ import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.List;
 
-import novelang.system.Log;
-import novelang.system.LogFactory;
-import org.apache.commons.lang.CharUtils;
 import com.google.common.collect.Ordering;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.GeneratedLexemes;
 import novelang.parser.SourceUnescape;
 import novelang.parser.shared.Lexeme;
 import novelang.rendering.RenderingEscape;
 import novelang.system.DefaultCharset;
+import org.apache.commons.lang.CharUtils;
 
 /**
  * Generates a source document containing all characters supported in input.
@@ -43,7 +43,7 @@ import novelang.system.DefaultCharset;
  */
 public class LexemeTable {
 
-  private static final Log LOG = LogFactory.getLog( LexemeTable.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( LexemeTable.class );
 
   public static void main( final String[] args ) throws FileNotFoundException {
     if( args.length != 1 ) {
@@ -73,7 +73,7 @@ public class LexemeTable {
       try {
         outputStream.close() ;
       } catch( IOException e ) {
-        LOG.error( "Couldn't close file '" + file.getAbsolutePath() + "' properly", e ) ;
+        LOGGER.error( e, "Couldn't close file '", file.getAbsolutePath(), "' properly." ) ;
       }
     }
   }

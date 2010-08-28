@@ -17,16 +17,15 @@
 
 package novelang.parser.antlr;
 
+import novelang.common.SyntacticTree;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.SourceUnescape;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Ignore;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.common.SyntacticTree;
-import novelang.parser.NodeKind;
+
 import static novelang.parser.NodeKind.*;
-import static novelang.parser.NodeKind.PARAGRAPH_REGULAR;
-import novelang.parser.SourceUnescape;
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 import static novelang.parser.antlr.TreeFixture.tree;
 
@@ -165,7 +164,7 @@ public class ParagraphParsingTest {
   @Test
   public void paragraphIsWordThenSemicolon() throws RecognitionException {
     final SyntacticTree tree = PARSERMETHOD_WORD.createTree( "w0" ) ;
-    LOG.debug( tree.toStringTree() ) ;
+    LOGGER.debug( tree.toStringTree() ) ;
 
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0;", 
@@ -935,7 +934,8 @@ public class ParagraphParsingTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( ParagraphParsingTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ParagraphParsingTest.class );
+
   private static final ParserMethod PARSERMETHOD_WORD =
       new ParserMethod( "word" ) ;
   private static final ParserMethod PARSERMETHOD_PARAGRAPH =

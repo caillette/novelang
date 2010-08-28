@@ -16,9 +16,14 @@
  */
 package novelang.nhovestone.scenario;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.List;
+
 import novelang.nhovestone.Termination;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -29,19 +34,11 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.List;
-
 /**
  * @author Laurent Caillette
  */
 public class TimeMeasurer implements Measurer< TimeMeasurement > {
 
-  private static final Log LOG = LogFactory.getLog( TimeMeasurer.class );
 
   public static final int TIMEOUT_MILLISECONDS = 5 * 60 * 1000 ;
   private static final int MINIMUM_MEASUREMENT_COUNT_FOR_REGRESSION = 50 ;

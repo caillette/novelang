@@ -23,8 +23,8 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Given a {@code Map} of objects and their frequency expressed as percentages, this class
@@ -41,7 +41,7 @@ import novelang.system.LogFactory;
  */
 public abstract class Distribution< T > {
 
-  private static final Log LOG = LogFactory.getLog( Distribution.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Distribution.class );
 
   private final Map< T, Float > summedFrequencies ;
 
@@ -121,9 +121,9 @@ public abstract class Distribution< T > {
       }
     }
 
-    if( LOG.isDebugEnabled() && false ) {
+    if( LOGGER.isDebugEnabled() && false ) {
       for( final Map.Entry< T, Float > entry : cumulatedFrequencies.entrySet() ) {
-        LOG.debug( "  " + entry.getKey() + " -> " + entry.getValue() ) ;
+        LOGGER.debug( "  ", entry.getKey(), " -> ", entry.getValue() ) ;
       }
     }
     return Collections.unmodifiableMap( cumulatedFrequencies ) ;
@@ -137,9 +137,9 @@ public abstract class Distribution< T > {
     final String message = "For " + requesterNameForLogging + ", " +
         "sum of raw frequencies: " + sum + "; correction: " + correction ;
     if( Math.abs( correction ) > 1.0f ) {
-      LOG.warn( message ) ;
+      LOGGER.warn( message ) ;
     } else {
-      LOG.debug( message ) ;
+      LOGGER.debug( message ) ;
     }
   }
 

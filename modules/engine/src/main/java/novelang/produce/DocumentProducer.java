@@ -23,11 +23,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 
-import novelang.opus.Opus;
-import novelang.novella.Novella;
-import novelang.rendering.NovellaWriter;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import com.google.common.base.Preconditions;
 import novelang.common.FileTools;
 import novelang.common.LanguageTools;
 import novelang.common.Problem;
@@ -36,14 +32,18 @@ import novelang.common.StructureKind;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.novella.Novella;
+import novelang.opus.Opus;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.HtmlWriter;
+import novelang.rendering.NovellaWriter;
 import novelang.rendering.PdfWriter;
 import novelang.rendering.PlainTextWriter;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.XmlWriter;
 import novelang.rendering.XslWriter;
-import com.google.common.base.Preconditions;
 
 /**
  * Produces a document into passed-in {@link DocumentRequest}s.
@@ -52,7 +52,7 @@ import com.google.common.base.Preconditions;
  */
 public class DocumentProducer {
 
-  private static final Log LOG = LogFactory.getLog( DocumentProducer.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentProducer.class ) ;
 
   private final File basedir ;
   private final RenderingConfiguration renderingConfiguration ;
@@ -92,8 +92,14 @@ public class DocumentProducer {
       }
     }
     final Serve serve = new Serve() ;
+    LOGGER.debug(
+        "Attempting to produce '",
+        request.getOriginalTarget(),
+        "' ",
+        request.toString(),
+        ""
+    ) ;
 
-    LOG.debug( "Attempting to produce '%s' %s", request.getOriginalTarget(), request.toString() ) ;
 
     final ResourceName stylesheet = LanguageTools.firstNotNull(
         request.getAlternateStylesheet(),
@@ -136,7 +142,7 @@ public class DocumentProducer {
         throw new IllegalArgumentException( "Unsupported: " + mimeType ) ;
     }
 
-    LOG.debug( "Done with '%s'", request.getOriginalTarget() ) ;
+    LOGGER.debug( "Done with '", request.getOriginalTarget(), "'." ) ;
 
 
     return rendered.getProblems() ;
@@ -154,8 +160,10 @@ public class DocumentProducer {
   public Renderable createRenderable( final AbstractRequest documentRequest ) throws IOException {
 
     final Charset suggestedRenderingCharset = renderingConfiguration.getDefaultCharset() ;
-    LOG.debug( "About to create renderable with document source name '%s'...",
-        documentRequest.getDocumentSourceName() ) ;
+    LOGGER.debug( "About to create renderable with document source name '",
+        documentRequest.getDocumentSourceName(),
+        "'..."
+    ) ;
 
     try {
       final File bookFile = FileTools.load(

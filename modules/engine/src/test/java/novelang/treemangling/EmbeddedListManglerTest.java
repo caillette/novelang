@@ -18,12 +18,13 @@ package novelang.treemangling;
 
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import static novelang.parser.NodeKind.*;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+
+import static novelang.parser.NodeKind.*;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link EmbeddedListMangler}.
@@ -262,14 +263,14 @@ public class EmbeddedListManglerTest {
 // Fixture
 // =======  
   
-  private static final Log LOG = LogFactory.getLog( EmbeddedListMangler.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( EmbeddedListManglerTest.class );
   
   private static void verifyRehierarchizeList(
       final SyntacticTree expectedTree,
       final SyntacticTree flatTree
   ) {
-    LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    LOGGER.info( "Flat tree: ", TreeFixture.asString( flatTree ) ) ;
+    LOGGER.info( "Expected tree: ", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 

@@ -27,13 +27,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Lists;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang.SystemUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.collect.Lists;
 
 /**
  * Utility class for doing things with files.
@@ -42,7 +42,7 @@ import com.google.common.collect.Lists;
  */
 public class FileTools {
 
-  private static final Log LOG = LogFactory.getLog( FileTools.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( FileTools.class );
 
   private FileTools() { }
 
@@ -267,16 +267,16 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
   private static final Thread DIRECTORIES_CLEANER = new Thread(
       new Runnable() {
         public void run() {
-          LOG.debug( "Cleaning up directories scheduled for deletion..." );
+          LOGGER.debug( "Cleaning up directories scheduled for deletion..." );
 
           // Defensive copy even if no directory should be added at the time this runs.
           final List< File > files = Lists.newArrayList( DIRECTORIES_TO_CLEAN_ON_EXIT ) ;
           for( final File file : files ) {
             try {
-              LOG.info( "Deleting temporary directory '%s'", file.getAbsolutePath() ) ;
+              LOGGER.info( "Deleting temporary directory '", file.getAbsolutePath(), "'" ) ;
               FileUtils.deleteDirectory( file ) ;
             } catch( IOException e ) {
-              LOG.error( "Failed to clean directory", e ) ;
+              LOGGER.error( e, "Failed to clean directory" ) ;
             }
           }
         }
@@ -311,7 +311,8 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
     }
     if( deleteOnExit && null != temporaryDirectory ) {
       DIRECTORIES_TO_CLEAN_ON_EXIT.add( temporaryDirectory ) ;
-      LOG.info( "Scheduled for deletion on exit: '%s'", temporaryDirectory.getAbsolutePath() ) ;
+      LOGGER.info( "Scheduled for deletion on exit: '",
+          temporaryDirectory.getAbsolutePath(), "'" ) ;
     }
 
     return temporaryDirectory ;
@@ -325,7 +326,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
   public static File createDirectoryForSure( final File directory ) {
     if( ! directory.exists() ) {
       if( directory.mkdirs() ) {
-        LOG.debug( "Created directory '" + directory.getAbsolutePath() + "'" ) ;
+        LOGGER.debug( "Created directory '", directory.getAbsolutePath(), "'" ) ;
       }
     }
     return directory ;

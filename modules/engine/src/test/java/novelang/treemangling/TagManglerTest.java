@@ -1,19 +1,18 @@
 package novelang.treemangling;
 
-import novelang.system.Log;
-import novelang.system.LogFactory;
-import novelang.common.SyntacticTree;
-import novelang.common.tree.Treepath;
-import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.NodeKind.*;
-import static novelang.parser.NodeKind.WORD_;
-import novelang.designator.Tag;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.Treepath;
+import novelang.designator.Tag;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.antlr.TreeFixture;
 import org.junit.Test;
 
-import java.util.Set;
+import static novelang.parser.NodeKind.*;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link TagMangler}.
@@ -252,13 +251,13 @@ public class TagManglerTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( TagManglerTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( TagManglerTest.class );
 
   private static void verifyTagMangling(
       final SyntacticTree expectedTree,
       final SyntacticTree actualTree
   ) {
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    LOGGER.info( "Expected tree: ", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized =
@@ -276,7 +275,7 @@ public class TagManglerTest {
       final SyntacticTree actualTree,
       final Set< Tag > explicitTags
   ) {
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    LOGGER.info( "Expected tree: ", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized =

@@ -23,12 +23,13 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.SystemUtils;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import novelang.common.LanguageTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * Utility class for dumping system properties.
@@ -37,7 +38,7 @@ import novelang.common.LanguageTools;
  */
 public final class EnvironmentTools {
 
-  private static final Log LOGGER = LogFactory.getLog( EnvironmentTools.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( EnvironmentTools.class ) ;
 
   private EnvironmentTools() { }
 

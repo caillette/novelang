@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.google.common.collect.Maps;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Calculates and prints statistics about a {@link Tree}'s population.
@@ -34,7 +34,7 @@ import novelang.system.LogFactory;
  */
 public class Statistics {
 
-  private static final Log LOG = LogFactory.getLog( Statistics.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Statistics.class );
 
   /**
    * Returns a {@code Map} between the number of children and the number of nodes with this
@@ -88,7 +88,7 @@ public class Statistics {
   private static final int MAX_BAR_LENGTH = 40 ;
 
   public static void logStatistics( final Tree< ? > tree ) {
-    if( LOG.isDebugEnabled() ) {
+    if( LOGGER.isDebugEnabled() ) {
       final Map< Integer, Integer > map = calculate( tree ) ;
       final StringBuilder stringBuilder = new StringBuilder( "\n" ) ;
       int maximum = 0 ;
@@ -108,7 +108,7 @@ public class Statistics {
       }
       stringBuilder.append( "-----------------\n" ) ;
       stringBuilder.append( String.format( "  Child count: %d \n", childCount ) ) ;
-      LOG.debug( stringBuilder.toString() ) ;
+      LOGGER.debug( stringBuilder.toString() ) ;
     }
   }
 

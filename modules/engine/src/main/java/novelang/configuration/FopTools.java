@@ -23,6 +23,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Function;
+import novelang.common.LanguageTools;
+import novelang.common.ReflectionTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
@@ -37,11 +42,6 @@ import org.apache.fop.render.DefaultFontResolver;
 import org.apache.fop.render.PrintRendererConfigurator;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.base.Function;
-import novelang.common.LanguageTools;
-import novelang.common.ReflectionTools;
 
 /**
  * Utility class for generating FOP configuration with hyphenation files and custom fonts.
@@ -50,7 +50,7 @@ import novelang.common.ReflectionTools;
  */
 public class FopTools {
 
-  private static final Log LOG = LogFactory.getLog( FopTools.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( FopTools.class );
 
   private static final String CONFIGURATION_NOT_SERIALIZED =
       "Could not serialize configuration to string" ;
@@ -117,7 +117,7 @@ public class FopTools {
 
       return stringWriter.toString() ;
     } catch( Exception e ) {
-      LOG.error( CONFIGURATION_NOT_SERIALIZED, e ) ;
+      LOGGER.error( e, CONFIGURATION_NOT_SERIALIZED ) ;
       LanguageTools.rethrowUnchecked( e ) ;
       throw new Error( "Should never execute, just make compiler happy" ) ;
     }
@@ -185,8 +185,7 @@ public class FopTools {
         configuration.addChild( hyphenationBase ) ;
       }
 
-      LOG.debug( "Created configuration: \n%s",
-          configurationAsString( configuration ) ) ;
+      LOGGER.debug( "Created configuration: \n", configurationAsString( configuration ) ) ;
 
       fopFactory.setUserConfig( configuration ) ;
     }

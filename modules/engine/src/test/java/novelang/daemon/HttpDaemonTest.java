@@ -34,11 +34,11 @@ import novelang.ResourcesForTests;
 import novelang.common.LanguageTools;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.filefixture.Resource;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.RequestTools;
 import novelang.rendering.RenditionMimeType;
 import novelang.system.DefaultCharset;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -265,7 +265,7 @@ public class HttpDaemonTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( HttpDaemonTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemonTest.class );
 
   static {
     ResourcesForTests.initialize() ;
@@ -305,14 +305,14 @@ public class HttpDaemonTest {
   private void save( final String name, final String document ) throws IOException {
     final File file = new File( resourceInstaller.getTargetDirectory(), name ) ;
     FileUtils.writeStringToFile( file, document ) ;
-    LOG.info( "Wrote file '%s'", file.getAbsolutePath() ) ;
+    LOGGER.info( "Wrote file '", file.getAbsolutePath(), "'" ) ;
   }
 
   private void save( final String name, final byte[] document ) throws IOException {
     final File file = new File( resourceInstaller.getTargetDirectory(), name ) ;
     FileUtils.writeByteArrayToFile(
         new File( resourceInstaller.getTargetDirectory(), name ), document ) ;
-    LOG.info( "Wrote file '%s'", file.getAbsolutePath() ) ;
+    LOGGER.info( "Wrote file '", file.getAbsolutePath(), "'" );
   }
 
   private static final int HTTP_DAEMON_PORT = 8081 ;
@@ -444,12 +444,12 @@ public class HttpDaemonTest {
     final String fullPath = resource.getFullPath().substring( 1 ) ; // Remove leading solidus.
     final String filePath = fullPath + resource.getBaseName() + ".html" ;
 
-    LOG.debug( "fullpath='%s'", fullPath ) ;
-    LOG.debug( "filepath='%s'", filePath ) ;
-    LOG.debug( "Checking response body: \n%s", responseSnapshot.getContent() ) ;
+    LOGGER.debug( "fullpath='", fullPath, "'" ) ;
+    LOGGER.debug( "filepath='", filePath, "'" ) ;
+    LOGGER.debug( "Checking response body: \n", responseSnapshot.getContent() ) ;
 
     final String expectedFullPath = "<a href=\"" + fullPath + "\">" + fullPath + "</a>" ;
-    LOG.debug( "Expected fullPath='%s'", expectedFullPath ) ;
+    LOGGER.debug( "Expected fullPath='", expectedFullPath, "'" ) ;
 
     assertTrue( responseSnapshot.getContent().contains( expectedFullPath ) ) ;
     assertTrue( responseSnapshot.getContent()

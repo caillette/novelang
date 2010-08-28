@@ -18,19 +18,19 @@ package novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
 
-import novelang.ResourcesForTests;
-import org.junit.Test;
-import org.junit.runners.NameAwareTestClassRunner;
-import org.junit.runner.RunWith;
-import novelang.system.LogFactory;
 import novelang.ResourceTools;
+import novelang.ResourcesForTests;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
-import novelang.system.DefaultCharset;
-import novelang.system.Log;
 import novelang.configuration.ProducerConfiguration;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
+import novelang.system.DefaultCharset;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
 
 /**
  * Test for displaying page and chapter numbers, including a Java function call.
@@ -60,8 +60,7 @@ public class NumberingTest {
         ResourcesForTests.XslFormatting.PART_SOMECHAPTERS.getPathNoEndSeparator() + "/" +
         ResourcesForTests.XslFormatting.PART_SOMECHAPTERS.getBaseName()
     ;
-    LOG.debug( "Document name = '%s'", documentName ) ;
-
+    LOGGER.debug( "Document name = '", documentName, "'." ) ;
     final DocumentRequest documentRequest = RequestTools.forgeDocumentRequest(
         documentName,
         RenditionMimeType.PDF,
@@ -78,7 +77,7 @@ public class NumberingTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( NumberingTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( NumberingTest.class );
 
 
   static {

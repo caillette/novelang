@@ -16,21 +16,22 @@
  */
 package novelang.rendering.xslt;
 
+import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.lang.ArrayUtils;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.base.Function;
-import com.google.common.base.Preconditions;
 
 /**
  * @author Laurent Caillette
  */
 public class Numbering {
 
-  private static final Log LOG = LogFactory.getLog( Numbering.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Numbering.class ) ;
+
   private static final DateTimeFormatter DATE_TIME_FORMATTER_NOSEPARATOR = DateTimeFormat.forPattern( "yyyyMMddkkmm" );
 
   /**
@@ -62,16 +63,18 @@ public class Numbering {
       try {
         possibleCaseType = CaseType.valueOf( ( ( String ) caseObject ).toUpperCase() ) ;
       } catch( IllegalArgumentException e ) {
-        LOG.warn(
-            "Not a supported case type: %s (supported: %s)",
+        LOGGER.warn(
+            "Not a supported case type: ",
             caseObject,
-            ArrayUtils.toString( CaseType.values() )
+            " (supported: ",
+            ArrayUtils.toString( CaseType.values() ),
+            ")"
         ) ;
         possibleCaseType = CaseType.LOWER ;
       }
       caseType = possibleCaseType ;
     } else {
-      LOG.warn( "Case type is not a String: %s", caseAsString ) ;
+      LOGGER.warn( "Case type is not a String: ", caseAsString, "." ) ;
       caseType = CaseType.LOWER ;
     }
 
@@ -85,14 +88,14 @@ public class Numbering {
       } else if( "EN".equals( localeNameObject ) ) {
         numberAsText = numberAsLocalizedText( number.intValue(), TO_ENGLISH_TEXT, caseType ) ;
       } else {
-        LOG.warn( "Locale not supported: %s", localeAsString ) ;
+        LOGGER.warn( "Locale not supported: ", localeAsString, "." ) ;
         numberAsText = number.toString() ;
       }
       return numberAsText ;
 
     } else {
       final String message = "!NAN! Cannot convert to number: " + numberAsString ;
-      LOG.error( message ) ;
+      LOGGER.error( message ) ;
       return message ;
     }
   }
@@ -115,7 +118,7 @@ public class Numbering {
       case UPPER:
         return textualizer.apply( number ).toUpperCase() ;
       default :
-        LOG.warn( "Unsupported case: %s", caseType ) ;
+        LOGGER.warn( "Unsupported case: ", caseType ) ;
         return textualizer.apply( number ) ;
     }
 

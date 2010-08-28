@@ -21,8 +21,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Defines character frequencies idepending on language.
@@ -31,7 +31,7 @@ import novelang.system.LogFactory;
  */
 public class LetterDistribution extends Distribution< Character > {
 
-  private static final Log LOG = LogFactory.getLog( LetterDistribution.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( LetterDistribution.class ) ;
 
   private LetterDistribution( final Map< Character, Float > frequencies ) {
     super( LetterDistribution.class.getSimpleName(), frequencies ) ;
@@ -46,7 +46,7 @@ public class LetterDistribution extends Distribution< Character > {
   public synchronized static LetterDistribution getFrequency( final Locale locale ) {
     final Locale supportedLocale ;
     if( locale != SupportedLocales.DEFAULT_LOCALE ) {
-      LOG.warn( "Unsupported: " + locale + ", using default: " + SupportedLocales.DEFAULT_LOCALE ) ;
+      LOGGER.warn( "Unsupported: ", locale, ", using default: ", SupportedLocales.DEFAULT_LOCALE ) ;
       supportedLocale = SupportedLocales.DEFAULT_LOCALE ;
     } else {
       supportedLocale = locale ;

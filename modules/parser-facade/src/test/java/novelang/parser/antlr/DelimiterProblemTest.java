@@ -16,17 +16,18 @@
  */
 package novelang.parser.antlr;
 
+import com.google.common.base.Joiner;
+import novelang.common.Problem;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.antlr.runtime.RecognitionException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
-import novelang.common.Problem;
-import com.google.common.base.Joiner;
 
 /**
  * Get sure that delimiters problems are correctly reported.
@@ -112,12 +113,12 @@ public class DelimiterProblemTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( DelimiterProblemTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DelimiterProblemTest.class ) ;
 
   @Before
   public void before() {
     final String testName = NameAwareTestClassRunner.getTestName() ;
-    LOG.info( "\n\nRunning %s", testName ) ;
+    LOGGER.info( "\n\nRunning ", testName ) ;
   }
 
 
@@ -125,12 +126,12 @@ public class DelimiterProblemTest {
       final String text, 
       final ProblemSignature... signatures 
   ) throws RecognitionException {
-    LOG.info( BREAK + text ) ;
+    LOGGER.info( BREAK + text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
     final Iterable< Problem > problems = parser.getProblems() ;
         // parser.getDelegate().getBlockDelimiterSupervisor().getProblems() ;
-    LOG.debug( "Faulty blocks: %s",
+    LOGGER.debug( "Faulty blocks: ",
         problems.iterator().hasNext() ?
         "\n    " + Joiner.on( "\n    " ).join( problems ) :
         "none."

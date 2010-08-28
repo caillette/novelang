@@ -18,11 +18,11 @@ package novelang.parser;
 
 import java.util.Set;
 
+import com.google.common.base.Joiner;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.base.Joiner;
 
 /**
  * Tests for {@link NodeKindTools}.
@@ -31,12 +31,12 @@ import com.google.common.base.Joiner;
  */
 public class NodeKindToolsTest {
 
-  private static final Log LOG = LogFactory.getLog( NodeKindToolsTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( NodeKindToolsTest.class );
 
   @Test
   public void renderingNames() {
     final Set< String > names = NodeKindTools.getRenderingNames() ;
-    LOG.info( "Rendering names:\n  %s\n", Joiner.on( ",\n  " ).join( names ) ) ;
+    LOGGER.info( "Rendering names:\n  ", Joiner.on( ",\n  " ).join( names ) ) ;
     Assert.assertTrue( names.contains(
         NodeKindTools.tokenNameAsXmlElementName( NodeKind.BLOCK_INSIDE_DOUBLE_QUOTES.name() ) ) ) ;
     Assert.assertFalse( names.contains(

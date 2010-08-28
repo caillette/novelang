@@ -18,14 +18,14 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
 /**
  * Base class for serving requests, with catch-all error handling.
@@ -34,7 +34,7 @@ import novelang.system.Log;
  */
 public abstract class GenericHandler extends AbstractHandler {
 
-  private static final Log LOG = LogFactory.getLog( GenericHandler.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( GenericHandler.class );
 
   public final void handle(
       final String target,
@@ -65,7 +65,7 @@ public abstract class GenericHandler extends AbstractHandler {
       response.getOutputStream().print( "</body>" );
       response.getOutputStream().print( "</html>" );
 
-      LOG.warn( "Exception occured", e );
+      LOGGER.warn( e, "Exception occured" );
 
     }
 

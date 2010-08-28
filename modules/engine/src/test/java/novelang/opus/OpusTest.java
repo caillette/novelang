@@ -16,29 +16,28 @@
  */
 package novelang.opus;
 
-import novelang.ResourcesForTests;
-
-import static novelang.ResourcesForTests.initialize;
-import novelang.common.SyntacticTree;
-import novelang.common.Problem;
-import novelang.common.filefixture.JUnitAwareResourceInstaller;
-import novelang.common.filefixture.Resource;
-import static novelang.parser.NodeKind.*;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-
-import org.apache.commons.lang.SystemUtils;
-import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+
+import novelang.ResourcesForTests;
+import novelang.common.Problem;
+import novelang.common.SyntacticTree;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.antlr.TreeFixture;
+import org.apache.commons.lang.SystemUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+
+import static novelang.ResourcesForTests.initialize;
+import static novelang.parser.NodeKind.*;
+import static novelang.parser.antlr.TreeFixture.tree;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for {@link Opus} and also built-in functions.
@@ -101,7 +100,7 @@ public class OpusTest {
         resourceInstaller.createFileObject( ResourcesForTests.Scanned.BOOK ) ;
 
     final Opus opus = OpusTestTools.createBook( scannedBookNoStyle ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -149,7 +148,7 @@ public class OpusTest {
         ResourcesForTests.Scanned.BOOK_NORECURSE ) ;
 
     final Opus opus = OpusTestTools.createBook( scannedBookNoStyleNoRecurse ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -183,7 +182,7 @@ public class OpusTest {
         ResourcesForTests.Scanned.BOOK_WITHSTYLE ) ;
 
     final Opus opus = OpusTestTools.createBook( scannedBookWithStyle );
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -234,7 +233,7 @@ public class OpusTest {
         resourceInstaller.copy( ResourcesForTests.Served.BROKEN_BOOK_BAD_SCANNED_NOVELLA ) ;
 
     final Opus opus = OpusTestTools.createBook( scannedBookWithBadPart ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     assertTrue( opus.hasProblem() ) ;
 
@@ -273,7 +272,7 @@ public class OpusTest {
         resourceInstaller.copy( ResourcesForTests.MissingImages.MISSING_IMAGE_BOOK ) ;
 
     final Opus opus = OpusTestTools.createBook( scannedBookWithBadImage ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     assertTrue( opus.hasProblem() ) ;
 
@@ -291,7 +290,7 @@ public class OpusTest {
         resourceInstaller.createFileObject( ResourcesForTests.Identifiers.BOOK_1 ) ;
 
     final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -324,7 +323,7 @@ public class OpusTest {
     resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.PROMOTED_TAGS_PART_1 ) ;
 
     final Opus opus = OpusTestTools.createBook( bookWithTags ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
     assertFalse( opus.hasProblem() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
@@ -383,7 +382,7 @@ public class OpusTest {
     resourceInstaller.copyWithPath( ResourcesForTests.Identifiers.NOVELLA_2 ) ;
 
     final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -434,7 +433,7 @@ public class OpusTest {
     resourceInstaller.copy( ResourcesForTests.Identifiers.Subdirectory4.dir ) ;
 
     final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -499,7 +498,8 @@ public class OpusTest {
     initialize() ;
   }
 
-  private static final Log LOG = LogFactory.getLog( OpusTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( OpusTest.class );
+
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
@@ -507,7 +507,7 @@ public class OpusTest {
 
   private static void verifyBook3( final File bookWithIdentifier ) throws IOException {
     final Opus opus = OpusTestTools.createBook( bookWithIdentifier ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(

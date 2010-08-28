@@ -19,14 +19,12 @@ package novelang.build.antlr;
 
 import java.util.List;
 
-import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.base.Predicate;
 import junit.framework.Assert;
 import novelang.common.TagBehavior;
+import org.junit.Test;
 
 
 /**
@@ -34,9 +32,6 @@ import novelang.common.TagBehavior;
  * @author Laurent Caillette
  */
 public class TokenEnumerationGeneratorTest {
-
-  private static final Log LOG =
-      LogFactory.getLog( TokenEnumerationGeneratorTest.class ) ;
 
   @Test
   public void testFindTokens() {

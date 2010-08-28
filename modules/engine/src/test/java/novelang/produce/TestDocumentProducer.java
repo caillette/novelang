@@ -1,7 +1,12 @@
 package novelang.produce;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import novelang.ResourcesForTests;
-import novelang.opus.OpusTest;
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -12,27 +17,19 @@ import novelang.configuration.FopFontStatus;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceLoader;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.TreeFixture;
 import novelang.system.DefaultCharset;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static novelang.parser.NodeKind.*;
-import static novelang.parser.NodeKind.WORD_;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -69,7 +66,7 @@ public class TestDocumentProducer {
         bookFile.getParentFile(), 
         "/" + bookResource.getBaseName() + ".html?tags=Foo" 
     ) ;
-    LOG.info( "Got:\n" + tree.toStringTree() ) ;
+    LOGGER.info( "Got:\n", tree.toStringTree() ) ;
 
     TreeFixture.assertEqualsNoSeparators(
         tree( root,
@@ -146,7 +143,7 @@ public class TestDocumentProducer {
     ResourcesForTests.initialize() ;
   }
 
-  private static final Log LOG = LogFactory.getLog( OpusTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( TestDocumentProducer.class ) ;
   private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
 
 }

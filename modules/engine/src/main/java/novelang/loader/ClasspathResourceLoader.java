@@ -22,10 +22,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import org.apache.commons.lang.SystemUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.google.common.base.Preconditions;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * Loads resources relative to the root package of some given class
@@ -35,7 +35,7 @@ import com.google.common.base.Preconditions;
  */
 public class ClasspathResourceLoader implements ResourceLoader {
 
-  private static final Log LOG = LogFactory.getLog( ClasspathResourceLoader.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ClasspathResourceLoader.class ) ;
   private final Class reference ;
   private final String path ;
 
@@ -54,20 +54,20 @@ public class ClasspathResourceLoader implements ResourceLoader {
 
   public InputStream getInputStream( final ResourceName resourceName ) {
     final String absoluteName = path + "/" + resourceName.getName() ; // normalize( resourceName ) ;
-    LOG.debug( "Attempting to load '%s'", absoluteName ) ;
+    LOGGER.debug( "Attempting to load '", absoluteName, "'" ) ;
 
     final URL url = reference.getResource( absoluteName ) ;
     if( null == url ) {
-      LOG.debug( "Could not find resource '%s' from %s", absoluteName, this ) ;
+      LOGGER.debug( "Could not find resource '", absoluteName, "' from ", this ) ;
       throw new ResourceNotFoundException( absoluteName, getBestDescriptorForClassloader() ) ;
     }
     final String urlAsString = url.toExternalForm();
     try {
       final InputStream inputStream = url.openStream();
-      LOG.info( "Opened stream '%s'", urlAsString ) ;
+      LOGGER.info( "Opened stream '", urlAsString, "'" ) ;
       return inputStream;
     } catch( IOException e ) {
-      LOG.debug( "Could not find resource '%s' from %s", urlAsString, this ) ;
+      LOGGER.debug( "Could not find resource '", urlAsString, "' from ", this ) ;
       throw new ResourceNotFoundException( absoluteName, getBestDescriptorForClassloader(), e ) ;
     }
   }

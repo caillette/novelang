@@ -18,18 +18,14 @@ package novelang.nhovestone.driver;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import novelang.batch.DocumentGenerator;
-import novelang.configuration.parse.DaemonParameters;
-import novelang.daemon.HttpDaemon;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.system.Husk;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 
 /**
  * Starts and stops an {@link novelang.produce.DocumentProducer} in its deployment directory,
@@ -39,7 +35,7 @@ import novelang.system.LogFactory;
  */
 public class DocumentGeneratorDriver extends EngineDriver {
 
-  private static final Log LOG = LogFactory.getLog( DocumentGeneratorDriver.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DocumentGeneratorDriver.class ) ;
 
 
   public DocumentGeneratorDriver( final Configuration configuration ) {
@@ -72,7 +68,7 @@ public class DocumentGeneratorDriver extends EngineDriver {
   @Override
   public Integer shutdown( final boolean force ) throws InterruptedException, IOException {
     if( force ) {
-      LOG.warn( "Forced shutdown not supported." ) ;
+      LOGGER.warn( "Forced shutdown not supported." ) ;
     }
     return super.shutdown( false ) ;
   }

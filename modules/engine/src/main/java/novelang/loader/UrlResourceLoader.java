@@ -22,8 +22,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Loads resources relative to a given URL.
@@ -32,7 +32,7 @@ import novelang.system.Log;
  */
 public class UrlResourceLoader implements ResourceLoader {
 
-  private static final Log LOG = LogFactory.getLog( UrlResourceLoader.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UrlResourceLoader.class ) ;
 
   private final URL base ;
   private final String searchPath ;
@@ -59,15 +59,15 @@ public class UrlResourceLoader implements ResourceLoader {
     try {
       resourceUrl = new URL( base, resourceName.getName() ) ;
     } catch( MalformedURLException e ) {
-      LOG.debug( "Could not find resource '%s' from %s", resourceName.getName(), this ) ;
+      LOGGER.debug( "Could not find resource '", resourceName.getName(), "' from ", this ) ;
       throw new ResourceNotFoundException( resourceName, searchPath, e );
     }
     try {
       final InputStream inputStream = resourceUrl.openStream() ;
-      LOG.debug( "Opened stream '%s'", resourceUrl.toExternalForm() ) ;
+      LOGGER.debug( "Opened stream '", resourceUrl.toExternalForm(), "'" );
       return inputStream;
     } catch( IOException e ) {
-      LOG.debug( "Could not find resource '%s' from %s", resourceUrl, this ) ;
+      LOGGER.debug( "Could not find resource '", resourceUrl, "' from ", this );
       throw new ResourceNotFoundException( resourceName, searchPath, e );
     }
   }

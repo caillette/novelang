@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.shared.Lexeme;
 
 /**
@@ -34,7 +34,7 @@ import novelang.parser.shared.Lexeme;
  */
 public class SourceUnescape {
 
-  private static final Log LOG = LogFactory.getLog( SourceUnescape.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( SourceUnescape.class );
 
   private static final Map< String, Character > UNICODE_ESCAPES;
   private static final Map< String, Character > HTML_ENTITY_NAMES_ESCAPES;
@@ -82,11 +82,11 @@ public class SourceUnescape {
       unescaped = HTML_ENTITY_NAMES_ESCAPES.get( escaped ) ;
       if ( null == unescaped ) {
         final NoUnescapedCharacterException exception = new NoUnescapedCharacterException( escaped ) ;
-        LOG.warn( "Unsupported symbol", exception ) ;
+        LOGGER.warn( exception, "Unsupported symbol" ) ;
         throw exception ;
       }
     }
-    LOG.debug( "Escaped: '%s'", escaped ) ;
+    LOGGER.debug( "Escaped: '", escaped, "'" ) ;
     return unescaped ;
   }
 
@@ -99,8 +99,8 @@ public class SourceUnescape {
       Pattern.compile( "(\\&(\\w+);)" ) ;
 
   static {
-    LOG.debug( "Crafted regex %s", PLAIN_ESCAPE_PATTERN.pattern() ) ;
-    LOG.debug( "Crafted regex %s", HTML_ESCAPE_PATTERN.pattern() ) ;
+    LOGGER.debug( "Crafted regex ", PLAIN_ESCAPE_PATTERN.pattern() ) ;
+    LOGGER.debug( "Crafted regex ", HTML_ESCAPE_PATTERN.pattern() ) ;
   }
 
   public static String unescapeText( final String text )

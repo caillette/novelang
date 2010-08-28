@@ -18,18 +18,20 @@ package novelang.common.filefixture;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.MissingResourceException;
-
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.loader.ResourceName;
-import novelang.loader.ClasspathResourceLoader;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 
 /**
  * Transforms the hierarchical representation of resources into real files.
@@ -64,7 +66,7 @@ public final class ResourceSchema {
   private static final ClasspathResourceLoader CLASSPATH_RESOURCE_LOADER = 
       new ClasspathResourceLoader() ;
 
-  private static final Log LOG = LogFactory.getLog( ResourceSchema.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceSchema.class );
 
   private ResourceSchema() { }
 
@@ -114,7 +116,7 @@ public final class ResourceSchema {
       }
       inputStream.close() ;
       resource.setAbsoluteResourceName( resourcePath ) ;
-      LOG.debug( "Verified: %s", resource.getAbsoluteResourceName() ) ;
+      LOGGER.debug( "Verified: ", resource.getAbsoluteResourceName() ) ;
     }
     for( final Directory subDirectory : directory.getSubdirectories() ) {
       subDirectory.setParent( directory ) ;

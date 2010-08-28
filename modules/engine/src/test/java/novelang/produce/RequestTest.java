@@ -19,18 +19,18 @@ package novelang.produce;
 
 import java.util.Set;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang.StringUtils;
-import static org.junit.Assert.*;
-import org.junit.Test;
-
 import novelang.designator.Tag;
 import novelang.designator.TagTestTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.rendering.RenditionMimeType;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.base.Joiner;
+import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Laurent Caillette
@@ -193,15 +193,15 @@ public class RequestTest {
   private static final String REQUEST_PATH_BROKEN =
       PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;
 
-  private static final Log LOG = LogFactory.getLog( RequestTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( RequestTest.class ) ;
 
   private static DocumentRequest createDocumentRequest( final String requestString ) {
-    LOG.info( "Using %s", requestString ) ;
+    LOGGER.info( "Using ", requestString ) ;
     return RequestTools.createDocumentRequest( requestString ) ;
   }
 
   private static PolymorphicRequest createPolymorphicRequest( final String requestString ) {
-    LOG.info( "Using %s", requestString ) ;
+    LOGGER.info( "Using ", requestString ) ;
     return RequestTools.createPolymorphicRequest( requestString ) ;
   }
 

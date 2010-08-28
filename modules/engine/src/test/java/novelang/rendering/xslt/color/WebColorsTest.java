@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLStreamException;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -54,7 +54,7 @@ public class WebColorsTest {
     ;
 
     final WebColors colorsReader = new WebColors( xhtml ) ;
-    LOG.info( "Got those colors: " + colorsReader.getColorPairs() ) ;
+    LOGGER.info( "Got those colors: ", colorsReader.getColorPairs() ) ;
 
     final Iterator< ColorPair > colorPairs = colorsReader.createColorCycler().iterator() ;
 
@@ -75,7 +75,7 @@ public class WebColorsTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( WebColorsTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( WebColorsTest.class );
 
   private static void verify(
       final String expectedBackgroundColorName,

@@ -16,23 +16,20 @@
  */
 package novelang.treemangling;
 
-import java.util.Set;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import novelang.common.SyntacticTree;
 import novelang.common.TagBehavior;
 import novelang.common.tree.Treepath;
 import novelang.common.tree.TreepathTools;
 import novelang.designator.Tag;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKind;
 import novelang.parser.NodeKindTools;
-import novelang.rendering.RenderingTools;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
 
 /**
  * Retains nodes which have at least one of given tags, or a child with at least one of the
@@ -44,13 +41,13 @@ import com.google.common.collect.Sets;
  */
 public class TagFilter {
   
-  private static final Log LOG = LogFactory.getLog( TagFilter.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( TagFilter.class );
 
   public static Treepath< SyntacticTree > filter(
       Treepath< SyntacticTree > treepath,
       final Set< Tag > tags
   ) {
-    LOG.debug( "Filtering on %s", tags ) ;
+    LOGGER.debug( "Filtering on ", tags ) ;
     
     if( ! tags.isEmpty() ) {
       final SyntacticTree tree = treepath.getTreeAtEnd() ;
@@ -60,7 +57,7 @@ public class TagFilter {
       }
     }
 
-    LOG.debug( "Done filtering on %s", tags ) ;
+    LOGGER.debug( "Done filtering on ", tags ) ;
 
     return treepath ;
   }

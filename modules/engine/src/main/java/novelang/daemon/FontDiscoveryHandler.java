@@ -17,19 +17,19 @@
 package novelang.daemon;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.mortbay.jetty.Request;
-import novelang.system.LogFactory;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.RenderingConfiguration;
 import novelang.loader.ResourceName;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.font.FontDiscoveryStreamer;
 import novelang.system.DefaultCharset;
-import novelang.system.Log;
+import org.mortbay.jetty.Request;
 
 /**
  * Generates a PDF document showing available fonts.
@@ -38,7 +38,7 @@ import novelang.system.Log;
  */
 public class FontDiscoveryHandler extends GenericHandler{
 
-  private static final Log LOG = LogFactory.getLog( FontDiscoveryHandler.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( FontDiscoveryHandler.class ) ;
 
   private final RenderingConfiguration renderingConfiguration ;
   public static final String DOCUMENT_NAME = "/~fonts.pdf" ;
@@ -55,7 +55,7 @@ public class FontDiscoveryHandler extends GenericHandler{
       final int dispatch
   ) throws IOException, ServletException {
     if( DOCUMENT_NAME.equals( target ) ) {
-      LOG.info( "Font listing requested" ) ;
+      LOGGER.info( "Font listing requested" ) ;
 
       final FontDiscoveryStreamer  fontDiscoveryStreamer =
           new FontDiscoveryStreamer( renderingConfiguration, STYLESHEET ) ;
@@ -70,7 +70,7 @@ public class FontDiscoveryHandler extends GenericHandler{
       response.setContentType( RenditionMimeType.PDF.getMimeName() ) ;
 //      response.setContentType( RenditionMimeType.XML.getMimeName() ) ;
         ( ( Request ) request ).setHandled( true ) ;
-        LOG.debug( "Handled request %s", request.getRequestURI() ) ;
+        LOGGER.debug( "Handled request ", request.getRequestURI() ) ;
     }
   }
 

@@ -16,32 +16,30 @@
  */
 package novelang.opus;
 
-import static novelang.ResourcesForTests.Images;
-import static novelang.ResourcesForTests.initialize;
-
-import novelang.ResourceTools;
-import novelang.common.SyntacticTree;
-import novelang.common.filefixture.Relativizer;
-import novelang.common.filefixture.ResourceSchema;
-import novelang.common.filefixture.JUnitAwareResourceInstaller;
-import static novelang.parser.NodeKind.*;
-
-import novelang.designator.Tag;
-import novelang.parser.antlr.TreeFixture;
-import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.system.DefaultCharset;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import java.io.File;
+import java.io.IOException;
 
 import com.google.common.collect.ImmutableSet;
+import novelang.ResourceTools;
+import novelang.common.SyntacticTree;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Relativizer;
+import novelang.common.filefixture.ResourceSchema;
+import novelang.designator.Tag;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.antlr.TreeFixture;
+import novelang.system.DefaultCharset;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
 
-import java.io.File;
-import java.io.IOException;
+import static novelang.ResourcesForTests.Images;
+import static novelang.ResourcesForTests.initialize;
+import static novelang.parser.NodeKind.*;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link Opus} with embedded images.
@@ -64,7 +62,7 @@ public class OpusWithImagesTest {
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
     ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -87,7 +85,7 @@ public class OpusWithImagesTest {
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
     ) ;
-    LOG.debug( "Opus's document tree: %s", opus.getDocumentTree().toStringTree() ) ;
+    LOGGER.debug( "Opus's document tree: ", opus.getDocumentTree().toStringTree() ) ;
 
     final SyntacticTree bookTree = opus.getDocumentTree() ;
     TreeFixture.assertEqualsNoSeparators(
@@ -130,11 +128,11 @@ public class OpusWithImagesTest {
     bookWithImagesExplicit = resourceInstaller.createFileObject( Images.dir, Images.BOOK_EXPLICIT ) ;
     bookWithImagesRecurse = resourceInstaller.createFileObject( Images.dir, Images.BOOK_RECURSIVE ) ;
     
-    LOG.info( "bookWithImagesExplicit: '%s'", bookWithImagesExplicit );
-    LOG.info( "bookWithImagesRecurse: '%s'", bookWithImagesRecurse );
+    LOGGER.info( "bookWithImagesExplicit: '", bookWithImagesExplicit, "'" ) ;
+    LOGGER.info( "bookWithImagesRecurse: '", bookWithImagesRecurse, "'" );
   }
 
-  private static final Log LOG = LogFactory.getLog( OpusWithImagesTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( OpusWithImagesTest.class ) ;
 
   private static final String VECTOR_IMAGE_WIDTH = Images.VECTOR_IMAGE_WIDTH ;
   private static final String VECTOR_IMAGE_HEIGHT = Images.VECTOR_IMAGE_HEIGHT ;

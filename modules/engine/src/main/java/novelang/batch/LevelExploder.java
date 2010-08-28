@@ -18,12 +18,12 @@ package novelang.batch;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 import java.nio.charset.Charset;
+import java.util.List;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.common.SyntacticTree;
@@ -32,14 +32,14 @@ import novelang.configuration.LevelExploderConfiguration;
 import novelang.configuration.ProducerConfiguration;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.LevelExploderParameters;
-import novelang.produce.DocumentProducer;
-import novelang.rendering.NovellaWriter;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKind;
-import novelang.rendering.RenditionMimeType;
+import novelang.produce.DocumentProducer;
 import novelang.rendering.GenericRenderer;
+import novelang.rendering.NovellaWriter;
 import novelang.rendering.RenderingTools;
+import novelang.rendering.RenditionMimeType;
 
 /**
  * Writes top levels into separate files.
@@ -48,7 +48,7 @@ import novelang.rendering.RenderingTools;
  */
 public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParameters> {
 
-  private static final Log LOG = LogFactory.getLog( LevelExploder.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( LevelExploder.class ) ;
 
   public void main(
       final String commandName,
@@ -62,11 +62,8 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     parameters = createParametersOrExit( commandName, true, arguments, baseDirectory ) ;
 
     try {
-      LOG.info(
-          "Starting %s with arguments %s",
-          getClass().getSimpleName(),
-          asString( arguments )
-      ) ;
+      LOGGER.info( "Starting ", getClass().getSimpleName(),
+          " with arguments ", asString( arguments ) );
 
       final LevelExploderConfiguration configuration =
           ConfigurationTools.createExplodeLevelsConfiguration( parameters ); ;
@@ -88,7 +85,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
       }
 
     } catch( Exception e ) {
-      LOG.error( "Fatal", e ) ;
+      LOGGER.error( e, "Fatal" ) ;
       throw e ;
     }
   }
@@ -131,7 +128,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
         outputDirectory,
         title + "." + RenditionMimeType.NOVELLA.getFileExtension()
     ) ;
-    LOG.debug( "Outputting to file '" + destinationFile.getAbsolutePath() + "'" ) ;
+    LOGGER.debug( "Outputting to file '", destinationFile.getAbsolutePath(), "'" ) ;
     final FileOutputStream fileOutputStream = new FileOutputStream( destinationFile ) ;
     new GenericRenderer( new NovellaWriter(
         producerConfiguration.getRenderingConfiguration(),
@@ -151,12 +148,12 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     for( final SyntacticTree child : level.getChildren() ) {
       if( child.isOneOf( NodeKind.LEVEL_TITLE ) ) {
         final String title = RenderingTools.textualize( child, charset ) ;
-        LOG.debug( "Found title: '" + title + "'" ) ;
+        LOGGER.debug( "Found title: '", title, "'" ) ;
         return title.replace( ' ', '_' ) ; // TODO replace more filename-wrecking chars.
       }
     }
     final String generatedTitle = String.format( "_%d3", titleGenerator++ );
-    LOG.debug( "Generated title: '" + generatedTitle + "'" ) ;
+    LOGGER.debug( "Generated title: '", generatedTitle, "'" ) ;
     return generatedTitle ;
   }
 

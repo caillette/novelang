@@ -19,13 +19,13 @@ package novelang.rendering;
 
 import java.util.Set;
 
-import com.google.common.collect.Sets;
 import com.google.common.collect.ImmutableSet;
-
+import com.google.common.collect.Sets;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKind;
+
 import static novelang.parser.NodeKind.*;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
 /**
  * Handles tricky rules about inserting spaces at the right place.
@@ -34,7 +34,7 @@ import novelang.system.Log;
  */
 public class Spaces {
 
-  private static final Log LOG = LogFactory.getLog( Spaces.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Spaces.class );
   private static final Set< Sequence > SEQUENCES = Sets.newHashSet() ;
   
   
@@ -118,7 +118,7 @@ public class Spaces {
       stringBuilder.append( 
           String.format( format, sequence.first.toString(), sequence.second.toString() ) ) ;
     }
-    LOG.debug( "Added following sequences:\n%s", stringBuilder.toString() ) ;
+    LOGGER.debug( "Added following sequences:\n", stringBuilder.toString() ) ;
   }
 
   

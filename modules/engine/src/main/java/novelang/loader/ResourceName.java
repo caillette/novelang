@@ -19,9 +19,9 @@ package novelang.loader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.lang.ClassUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
 /**
  * Holds a resource name, guaranteeing the respect of a {@link #PATTERN}.
@@ -35,7 +35,7 @@ import novelang.system.Log;
  */
 public class ResourceName {
 
-  private static final Log LOG = LogFactory.getLog( ResourceName.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceName.class );
 
   private final String name ;
 
@@ -56,7 +56,7 @@ public class ResourceName {
   ) ;
 
   static {
-    LOG.debug( "Crafter regex %s", PATTERN.pattern() ) ;
+    LOGGER.debug( "Crafter regex ", PATTERN.pattern() ) ;
   }
   /**
    * Constructor.

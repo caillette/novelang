@@ -16,8 +16,8 @@
  */
 package novelang.nhovestone.scenario;
 
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.junit.Test;
 
 /**
@@ -31,7 +31,7 @@ public class TestTimeMeasurement {
   @Test
   public void format() {
     final TimeMeasurement timeMeasurement = new TimeMeasurement( 12345678L ) ;
-    LOG.debug( "Formatted: " + timeMeasurement ) ;
+    LOGGER.debug( "Formatted: " + timeMeasurement ) ;
   }
 
 
@@ -39,6 +39,6 @@ public class TestTimeMeasurement {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( TestTimeMeasurement.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( TestTimeMeasurement.class );
 
 }

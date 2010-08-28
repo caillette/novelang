@@ -19,16 +19,16 @@ package novelang.daemon;
 
 import java.io.File;
 
-import org.apache.commons.lang.SystemUtils;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.HandlerCollection;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.Version;
 import novelang.configuration.ConfigurationTools;
 import novelang.configuration.DaemonConfiguration;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.DaemonParameters;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import org.apache.commons.lang.SystemUtils;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.handler.HandlerCollection;
 
 /**
  * Main class for Novelang document generator daemon.
@@ -37,7 +37,7 @@ import novelang.configuration.parse.DaemonParameters;
  */
 public class HttpDaemon {
 
-  private static final Log LOG = LogFactory.getLog( HttpDaemon.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
 
   private final Server server ;
   public static final String COMMAND_NAME = "httpdaemon";
@@ -54,7 +54,7 @@ public class HttpDaemon {
         System.exit( -1 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
       } else {
-        LOG.error( "Parameters exception, printing help and exiting.", e ) ;
+        LOGGER.error( e, "Parameters exception, printing help and exiting." ) ;
         printHelpOnConsole( commandName, e ) ;
         System.exit( -2 ) ;
         throw new Error( "Never executes but makes compiler happy" ) ;
@@ -71,7 +71,7 @@ public class HttpDaemon {
     ;
     System.out.println( starting ) ;
 
-    LOG.info( starting ) ;
+    LOGGER.info( starting ) ;
     new HttpDaemon( daemonConfiguration ).start() ;
   }
 
@@ -92,13 +92,13 @@ public class HttpDaemon {
 
   public void start() throws Exception {
     server.start() ;
-    LOG.info( "Server started on port %s", server.getConnectors()[ 0 ].getLocalPort() ) ;
+    LOGGER.info( "Server started on port ", server.getConnectors()[ 0 ].getLocalPort() ) ;
   }
 
   public void stop() throws Exception {
     final int port = server.getConnectors()[ 0 ].getLocalPort();
     server.stop() ;
-    LOG.info( "Server stopped on port %s", port ) ;
+    LOGGER.info( "Server stopped on port ", port ) ;
   }
 
   private static void printHelpOnConsole( final String commandName, final ArgumentException e ) {

@@ -20,14 +20,14 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.Map;
 
-import org.apache.commons.lang.CharUtils;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.GeneratedLexemes;
 import novelang.parser.SourceUnescape;
 import novelang.parser.shared.Lexeme;
+import org.apache.commons.lang.CharUtils;
 
 /**
  * Escapes characters for rendering. Based on {@link GeneratedLexemes}.
@@ -42,7 +42,7 @@ import novelang.parser.shared.Lexeme;
  */
 public class RenderingEscape {
 
-  private static final Log LOG = LogFactory.getLog( RenderingEscape.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( RenderingEscape.class ) ;
 
 // ===============  
 // Tables creation
@@ -71,16 +71,25 @@ public class RenderingEscape {
     put( Spaces.NO_BREAK_SPACE, "nbsp", preferredEscapes, htmlMandatoryEscapes ) ;
 
     UNICODE_NAME_ESCAPES = ImmutableMap.copyOf( unicodeNameEscapes ) ;
-    LOG.debug(
-        "Created Unicode name escape table with %s entries.", UNICODE_NAME_ESCAPES.size() ) ;
+    LOGGER.debug(
+        "Created Unicode name escape table with ",
+        UNICODE_NAME_ESCAPES.size(),
+        " entries."
+    ) ;
  
     PREFERRED_ESCAPES = ImmutableMap.copyOf( preferredEscapes ) ;
-    LOG.debug(
-        "Created preferred escape table with %s entries.", PREFERRED_ESCAPES.size() ) ;
+    LOGGER.debug(
+        "Created preferred escape table with ",
+        PREFERRED_ESCAPES.size(),
+        " entries."
+    ) ;
 
     HTML_MANDATORY_ESCAPES = ImmutableMap.copyOf( htmlMandatoryEscapes ) ;
-    LOG.debug(
-        "Created HTML mandatory escape table with %s entries.", HTML_MANDATORY_ESCAPES.size() ) ;
+    LOGGER.debug(
+        "Created HTML mandatory escape table with ",
+        HTML_MANDATORY_ESCAPES.size(),
+        " entries."
+    ) ;
   }
 
   private static void put( 

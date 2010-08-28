@@ -16,21 +16,19 @@
  */
 package novelang.rendering;
 
+import java.util.Set;
+
+import novelang.common.SyntacticTree;
+import novelang.designator.Tag;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.novella.Novella;
 import novelang.novella.NovellaFixture;
 import org.junit.Test;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
 
-import novelang.common.SyntacticTree;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
-
-import novelang.designator.Tag;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-
-import java.util.Set;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for 
@@ -160,7 +158,7 @@ public class RenderingToolsForTagTest {
 // Fixture
 // =======
   
-  private static final Log LOG = LogFactory.getLog( RenderingToolsForTagTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( RenderingToolsForTagTest.class );
 
   private static void verify( 
       final SyntacticTree tree, 
@@ -173,7 +171,7 @@ public class RenderingToolsForTagTest {
   private void logRendered( final String text ) throws Exception {
     final Novella novella = NovellaFixture.create( text ) ;
     final Set< Tag > tags = RenderingTools.toImplicitTagSet( novella.getDocumentTree() ) ;
-    LOG.info( "\n    " + text + "\n -> " + tags ) ;
+    LOGGER.info( "\n    " + text + "\n -> " + tags ) ;
   }
   
 }

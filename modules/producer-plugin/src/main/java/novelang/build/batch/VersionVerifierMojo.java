@@ -20,7 +20,8 @@ import java.io.File;
 import java.io.IOException;
 
 import novelang.Version;
-import novelang.system.Log;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.system.LogFactory;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -45,7 +46,8 @@ public class VersionVerifierMojo extends AbstractProducerMojo {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     LogFactory.setMavenPluginLog( getLog() ) ;
-    final Log log = LogFactory.getLog( getClass() ) ;
+    final Logger log = LoggerFactory.getLogger( getClass() ) ;
+
 
     final File versionFile;
     final Version version = getVersion() ;
@@ -60,7 +62,7 @@ public class VersionVerifierMojo extends AbstractProducerMojo {
     if( ! versionFile.exists() ) {
       throw new MojoExecutionException( "Missing '" + versionFile.getAbsolutePath() + "'" ) ;
     }
-    log.info( "Found '" + versionFile.getAbsolutePath() + "'." ) ;
+    log.info( "Found '", versionFile.getAbsolutePath(), "'." ) ;
 
   }
 }

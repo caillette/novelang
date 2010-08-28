@@ -9,20 +9,20 @@
  */
 package novelang.novelist;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import novelang.system.DefaultCharset;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.system.DefaultCharset;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class Novelist {
 
-  private static final Log LOG = LogFactory.getLog( Novelist.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( Novelist.class );
 
   private final File directory ;
   private final String filenamePrototype ;
@@ -68,10 +68,10 @@ public class Novelist {
   private static void createFreshDirectory( final File directory ) throws IOException {
     if( directory.exists() ) {
       FileUtils.deleteDirectory( directory ) ;
-      LOG.info( "Deleted directory '" + directory.getAbsolutePath() + "' and all its contents." ) ;
+      LOGGER.info( "Deleted directory '", directory.getAbsolutePath(), "' and all its contents." ) ;
     }
     if( directory.mkdirs() ) {
-      LOG.info( "Created directory '" + directory.getAbsolutePath() + "'." ) ;
+      LOGGER.info( "Created directory '", directory.getAbsolutePath(), "'." ) ;
     }
     
   }
@@ -100,7 +100,7 @@ public class Novelist {
   private static void createOpus( final File directory ) throws IOException {
     final File bookFile = new File( directory, BOOK_FILE_NAME ) ;
     FileUtils.writeStringToFile( bookFile, BOOK_CONTENT ) ;
-    LOG.info( "Created Opus: '" + bookFile.getAbsolutePath() + "'" ) ;
+    LOGGER.info( "Created Opus: '", bookFile.getAbsolutePath(), "'" ) ;
   }
   
   public void addGhostwriter() throws IOException {
@@ -135,7 +135,7 @@ public class Novelist {
         bytesWritten += ghostwriter.write( iterationCount ) ;
       }
     }
-    LOG.debug( "Writing done, wrote " + bytesWritten + " bytes." ) ;
+    LOGGER.debug( "Writing done, wrote ", bytesWritten, " bytes." ) ;
     return bytesWritten ;
   }
 

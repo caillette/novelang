@@ -19,13 +19,13 @@ package novelang.configuration.parse;
 import java.io.File;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
+import org.apache.commons.cli.Options;
 
 /**
  * Parses command-line arguments for {@link novelang.batch.DocumentGenerator}.
@@ -37,7 +37,8 @@ import novelang.produce.RequestTools;
  */
 public class DocumentGeneratorParameters extends BatchParameters {
 
-  private static final Log LOG = LogFactory.getLog( DocumentGeneratorParameters.class ) ;
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger( DocumentGeneratorParameters.class ) ;
 
   private final Iterable< DocumentRequest > documentRequests ;
 
@@ -46,7 +47,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
   {
     super( baseDirectory, parameters );
     final String[] sourceArguments = line.getArgs() ;
-    LOG.debug( "found: sources = %s", Lists.newArrayList( sourceArguments ) ) ;
+    LOGGER.debug( "found: sources = ", Lists.newArrayList( sourceArguments ) ) ;
 
     if( sourceArguments.length == 0 ) {
       throw new ArgumentException( "No source documents", helpPrinter ) ;
@@ -69,7 +70,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
         }
       }
       documentRequests = ImmutableList.copyOf( requestList ) ;
-      LOG.debug( "Document requests = %s", documentRequests ) ;
+      LOGGER.debug( "Document requests = ", documentRequests ) ;
     }
 
   }

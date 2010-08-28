@@ -16,32 +16,32 @@
  */
 package novelang.nhovestone.report;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import novelang.KnownVersions;
-import novelang.Version;
-import novelang.nhovestone.MeasurementBundle;
-import novelang.nhovestone.Scenario;
-import novelang.nhovestone.scenario.TimeMeasurement;
-import novelang.nhovestone.scenario.TimeMeasurer;
-import novelang.common.FileTools;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import javax.imageio.ImageIO;
+import novelang.KnownVersions;
+import novelang.Version;
+import novelang.common.FileTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.nhovestone.MeasurementBundle;
+import novelang.nhovestone.Scenario;
+import novelang.nhovestone.scenario.TimeMeasurement;
+import novelang.nhovestone.scenario.TimeMeasurer;
+
 /**
  * @author Laurent Caillette
  */
 public class GrapherDemo {
 
-  private static final Log LOG = LogFactory.getLog( GrapherDemo.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( GrapherDemo.class );
   
 
   public static List< Long > buildUpsizings() {
@@ -235,7 +235,7 @@ public class GrapherDemo {
     final File imageFile = new File( scenarioDirectory, "graph.png" );
     ImageIO.write( image, "png", imageFile ) ;
 
-    LOG.info( "Wrote " + imageFile.getAbsolutePath() ) ;
+    LOGGER.info( "Wrote '", imageFile.getAbsolutePath(), "'." ) ;
 
   }
 }

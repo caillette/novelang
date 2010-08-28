@@ -18,14 +18,14 @@ package novelang.daemon;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.mortbay.jetty.Request;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.rendering.RenditionMimeType;
+import org.mortbay.jetty.Request;
 
 /**
  *
@@ -33,7 +33,8 @@ import novelang.rendering.RenditionMimeType;
  */
 public class ShutdownHandler extends GenericHandler{
 
-  private static final Log LOG = LogFactory.getLog( ShutdownHandler.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ShutdownHandler.class );
+
   private static final String SHUTDOWN_TARGET = "/~shutdown.html";
 
   private static final String HTML_CONTENT_TYPE = RenditionMimeType.HTML.getFileExtension() ;
@@ -47,7 +48,7 @@ public class ShutdownHandler extends GenericHandler{
       final int dispatch
   ) throws IOException, ServletException {
     if( SHUTDOWN_TARGET.equals( target ) ) {
-      LOG.info( "Shutdown requested!" ) ;
+      LOGGER.info( "Shutdown requested!" ) ;
       response.setStatus( HttpServletResponse.SC_UNAUTHORIZED ) ;
 
       final PrintWriter writer = new PrintWriter( response.getOutputStream() ) ;

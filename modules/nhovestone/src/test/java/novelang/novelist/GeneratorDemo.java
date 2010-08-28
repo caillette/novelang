@@ -16,10 +16,9 @@
  */
 package novelang.novelist;
 
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.junit.Test;
-
-import novelang.system.Log;
-import novelang.system.LogFactory;
 
 /**
  * Demo for {@link WordGenerator}.
@@ -63,7 +62,7 @@ public class GeneratorDemo {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( GeneratorDemo.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( GeneratorDemo.class ) ;
 
 
   private static void generateAndPrint(
@@ -91,7 +90,7 @@ public class GeneratorDemo {
       }
     }
 
-    LOG.info( "Generated:\n\n" + textBuilder ) ;
+    LOGGER.info( "Generated:\n\n", textBuilder ) ;
   }
 
 

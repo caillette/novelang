@@ -24,22 +24,21 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
 
-import org.antlr.runtime.RecognitionException;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ClassUtils;
-import org.apache.commons.lang.StringUtils;
-
-import novelang.designator.Tag;
-import novelang.system.LogFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import novelang.common.metadata.MetadataHelper;
 import novelang.common.tree.TreeTools;
+import novelang.designator.Tag;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.GenericParser;
 import novelang.parser.unicode.UnicodeInputStream;
 import novelang.system.DefaultCharset;
-import novelang.system.Log;
+import org.antlr.runtime.RecognitionException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Base class holding parsing and some error-handling.
@@ -48,7 +47,8 @@ import novelang.system.Log;
  */
 public abstract class AbstractSourceReader implements LocationFactory, Renderable {
 
-  protected static final Log LOG = LogFactory.getLog( AbstractSourceReader.class ) ;
+  protected static final Logger LOGGER = LoggerFactory.getLogger( AbstractSourceReader.class ) ;
+
   private final String thisToString ;
   private final List< Problem > problems ;
   protected final String locationName ;
@@ -82,11 +82,14 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.locationName = "<String>" ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
     this.renderingCharset = Preconditions.checkNotNull( defaultRenderingCharset ) ;
-    LOG.debug(
-        "Creating %s[ sourceCharset=%s, renderingCharset=%s ]",
+    LOGGER.debug(
+        "Creating ",
         thisToString,
+        "[ sourceCharset=",
         sourceCharset.name(),
-        renderingCharset.name()
+        ", renderingCharset=",
+        renderingCharset.name(),
+        " ]"
     ) ;
   }
 
@@ -101,21 +104,25 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.locationName = Preconditions.checkNotNull( locationName ) ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
     this.renderingCharset = Preconditions.checkNotNull( renderingCharset ) ;
-    LOG.debug(
-        "Creating %s[locationName='%s', sourceCharset=%s, renderingCharset=%s ]",
-        thisToString,
+    LOGGER.debug(
+        "Creating ",
+            thisToString,
+        "[locationName='",
         locationName,
+        "', sourceCharset=",
         sourceCharset.name(),
-        renderingCharset.name()
-
+        ", renderingCharset=",
+        renderingCharset.name(),
+        " ]"
     ) ;
   }
 
   protected String readContent( final File file ) {
 
-    LOG.info(
-        "Attempting to load file '%s' with charset %s",
+    LOGGER.info(
+        "Attempting to load file '",
         file.getAbsolutePath(),
+        "' with charset ",
         sourceCharset.name()
     ) ;
 
@@ -127,7 +134,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       stringContent = IOUtils.toString( inputStream, sourceCharset.name() );
       inputStream.close() ;
     } catch( IOException e ) {
-      LOG.warn( "Could not load file", e ) ;
+      LOGGER.warn( e, "Could not load file" ) ;
       collect( Problem.createProblem( this, e ) ) ;
       return null ;
     }
@@ -158,7 +165,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
       return syntacticTree ;
 
     } catch( RecognitionException e ) {
-      LOG.warn( "Could not parse file", e ) ;
+      LOGGER.warn( e, "Could not parse file" ) ;
       collect( Problem.createProblem( this, e ) ) ;
       return null ;
     }
@@ -201,7 +208,7 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
   }
 
   protected final void collect( final Problem problem ) {
-    LOG.debug( "Collecting Problem: %s", problem ) ;
+    LOGGER.debug( "Collecting: ", problem ) ;
     problems.add( Preconditions.checkNotNull( problem ) ) ;
   }
   

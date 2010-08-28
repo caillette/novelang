@@ -19,7 +19,8 @@ package novelang.nhovestone;
 import java.io.File;
 
 import novelang.Version;
-import novelang.system.Log;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.system.LogFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -59,16 +60,16 @@ public class NhovestoneMojo extends AbstractMojo {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     LogFactory.setMavenPluginLog( getLog() ) ;
-    final Log log = LogFactory.getLog( NhovestoneMojo.class ) ;
-    log.info( "Using working directory: '" + workingDirectory + "'." ) ;
-    log.info( "Using distributions directory: '" + distributionsDirectory + "'." ) ;
+    final Logger logger = LoggerFactory.getLogger( NhovestoneMojo.class ) ;
+    logger.info( "Using working directory: '" + workingDirectory + "'." ) ;
+    logger.info( "Using distributions directory: '" + distributionsDirectory + "'." ) ;
     final String benchmarkedVersions = novelangVersions == null ? "SNAPSHOT" : novelangVersions ;
-    log.info( "Using version(s): '" + benchmarkedVersions + "'." ) ;
+    logger.info( "Using version(s): '" + benchmarkedVersions + "'." ) ;
 
 
     try {
       final Iterable< Version > versions = NhovestoneTools.parseVersions( benchmarkedVersions ) ;
-      Nhovestone.run( log, workingDirectory, distributionsDirectory, versions ) ; 
+      Nhovestone.run( logger, workingDirectory, distributionsDirectory, versions ) ;
     } catch( Exception e ) {
       throw new MojoExecutionException( "Couldn't run Nhovestone", e );
     }

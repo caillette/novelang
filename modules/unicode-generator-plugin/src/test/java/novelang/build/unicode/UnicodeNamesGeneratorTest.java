@@ -8,13 +8,11 @@ import java.util.Map;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
-import static org.junit.Assert.assertEquals;
-
-import novelang.build.unicode.UnicodeNamesGenerator;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.junit.Test;
 
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link novelang.build.unicode.UnicodeNamesGenerator}.
@@ -43,7 +41,7 @@ public class UnicodeNamesGeneratorTest {
             actualBytes[ i ]
         ) ;
       }
-      LOG.info( message ) ;
+      LOGGER.info( message ) ;
 
     }
 
@@ -126,11 +124,11 @@ public class UnicodeNamesGeneratorTest {
     final String expectedBytesAsString = toHexadecimalString( expectedBytesForOffset ) + " " +
         toHexadecimalString( expectedBytesForName );
     final String actualBytesAsString = toHexadecimalString( lastOfActualBytes );
-    LOG.info(
-        "\nLast expected bytes (offset + name) vs " +
-        "last " + lastOfActualBytes.length + " actual bytes " +
-        "(starting at " + ( actualBytes.length - lastOfActualBytes.length ) + "): \n" +
-        expectedBytesAsString + "\n" +
+    LOGGER.info(
+        "\nLast expected bytes (offset + name) vs ",
+        "last ", lastOfActualBytes.length, " actual bytes ",
+        "(starting at ", ( actualBytes.length - lastOfActualBytes.length ), "): \n",
+        expectedBytesAsString, "\n",
         actualBytesAsString
     ) ;
 
@@ -180,7 +178,7 @@ public class UnicodeNamesGeneratorTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( UnicodeNamesGeneratorTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UnicodeNamesGeneratorTest.class );
 
   private static final BiMap< Integer, byte[] > INTEGER_TO_BYTES =
       new ImmutableBiMap.Builder< Integer, byte[] >()

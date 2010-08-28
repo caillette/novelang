@@ -21,16 +21,16 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import novelang.ResourcesForTests;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runners.NameAwareTestClassRunner;
 import org.junit.runner.RunWith;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.common.filefixture.JUnitAwareResourceInstaller;
-import novelang.common.filefixture.Resource;
+import org.junit.runners.NameAwareTestClassRunner;
 
 /**
  * @author Laurent Caillette
@@ -45,7 +45,7 @@ public class UrlResourceLoaderTest {
     final UrlResourceLoader loader = new UrlResourceLoader(
         resourceInstaller.getTargetDirectory().toURI().toURL() ) ;
     final ResourceName resourceName = resource.getResourceName() ;
-    LOG.debug( "Attempting to get resource '%s'", resourceName ) ;
+    LOGGER.debug( "Attempting to get resource '", resourceName, "'" );
     final InputStream inputStream = loader.getInputStream( resourceName ) ;
     final String resourceAsString = IOUtils.toString( inputStream ) ;
     Assert.assertFalse( StringUtils.isBlank( resourceAsString ) ) ;
@@ -63,7 +63,7 @@ public class UrlResourceLoaderTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( UrlResourceLoaderTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( UrlResourceLoaderTest.class );
 
   static {
       ResourcesForTests.initialize() ;

@@ -23,14 +23,13 @@ import java.util.List;
 import novelang.common.Location;
 import novelang.common.LocationFactory;
 import novelang.common.Problem;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.NoUnescapedCharacterException;
 import novelang.parser.SourceUnescape;
 import novelang.parser.antlr.delimited.BlockDelimiter;
 import novelang.parser.antlr.delimited.BlockDelimiterSupervisor;
 import novelang.parser.antlr.delimited.DefaultBlockDelimiterSupervisor;
-import novelang.parser.antlr.ParsingProblems;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.RecognitionException;
@@ -49,7 +48,7 @@ public class GrammarDelegate
     implements BlockDelimiterSupervisor, TokenNameProvider, ParserDelegate
 {
 
-  private static final Log LOGGER = LogFactory.getLog( GrammarDelegate.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( GrammarDelegate.class );
 
   /**
    * With this constructor the {@code LocationFactory} gives only partial information.
@@ -83,7 +82,7 @@ public class GrammarDelegate
 // Parser rules logging
 // ====================
 
-  private static final Log parserLogger = LogFactory.getLog( GrammarDelegate.class ) ;
+  private static final Logger parserLogger = LoggerFactory.getLogger( GrammarDelegate.class ) ;
   private int loggingRuleDepth = 0 ;
 
   public void traceIn( final String s, final int ruleIndex ) {

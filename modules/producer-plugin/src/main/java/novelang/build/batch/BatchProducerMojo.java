@@ -21,19 +21,17 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import novelang.Version;
-import novelang.VersionFormatException;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.nhovestone.driver.DocumentGeneratorDriver;
 import novelang.nhovestone.driver.EngineDriver;
 import novelang.produce.DocumentProducer;
 import novelang.system.Husk;
-import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.JavaClasses;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
 
 /**
  * Starts a {@link novelang.batch.DocumentGenerator} through a
@@ -95,9 +93,6 @@ public class BatchProducerMojo extends AbstractProducerMojo {
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    LogFactory.setMavenPluginLog( getLog() ) ;
-
-    final Log log = LogFactory.getLog( getClass() ) ;
 
     final List< String > classpathElements;
     try {

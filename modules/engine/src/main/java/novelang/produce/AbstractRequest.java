@@ -17,30 +17,28 @@
 
 package novelang.produce;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-
-import novelang.designator.Tag;
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.base.Predicate;
-import com.google.common.base.Preconditions;
+import novelang.designator.Tag;
 import novelang.loader.ResourceName;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.rendering.RawResource;
-import novelang.rendering.RenditionMimeType;
 import novelang.rendering.RenderingTools;
+import novelang.rendering.RenditionMimeType;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * The base class for requests and a do-everything factory.
@@ -53,7 +51,7 @@ import novelang.rendering.RenderingTools;
  */
 /*package*/ abstract class AbstractRequest {
 
-  private static final Log LOG = LogFactory.getLog( AbstractRequest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( AbstractRequest.class ) ;
 
   private static final String ERRORPAGE_SUFFIX_REGEX = "/error\\.html";
 
@@ -222,11 +220,11 @@ import novelang.rendering.RenderingTools;
           createPattern( PatternKind.POLYMORPHIC ) ;
 
   static {
-    LOG.debug( "Crafted regex for Document only: %s",
+    LOGGER.debug( "Crafted regex for Document only: ",
             PATTERN_DOCUMENT_REQUEST.pattern() ) ;
-    LOG.debug( "Crafted regex for Polymorphic requests: %s",
+    LOGGER.debug( "Crafted regex for Polymorphic requests: ",
             PATTERN_POLYMORPHIC_REQUEST.pattern() ) ;
-    LOG.debug( "Crafted regex for Document without parameters: %s",
+    LOGGER.debug( "Crafted regex for Document without parameters: ",
             PATTERN_DOCUMENT_REQUEST_NOPARAMETERS.pattern() ) ;
   }
 
@@ -318,12 +316,12 @@ import novelang.rendering.RenderingTools;
       }
 
 
-      LOG.debug( "Parsed: %s", request ) ;
+      LOGGER.debug( "Parsed: ", request ) ;
 
       return request ;
 
     } else {
-      LOG.warn( "Could not parse: '%s'", requestPath ) ;
+      LOGGER.warn( "Could not parse: '", requestPath, "'." );
       return null ;
     }
 

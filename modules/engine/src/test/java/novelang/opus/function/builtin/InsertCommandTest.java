@@ -20,33 +20,35 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import com.google.common.collect.ImmutableList;
 import novelang.ResourceTools;
 import novelang.ResourcesForTests;
-import novelang.opus.function.builtin.insert.LevelHead;
-import org.fest.reflect.core.Reflection;
-import org.fest.reflect.reference.TypeRef;
-import static org.junit.Assert.*;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
-
-import com.google.common.collect.ImmutableList;
-import novelang.designator.FragmentIdentifier;
-import static novelang.ResourcesForTests.initialize;
-import novelang.opus.CommandExecutionContext;
-import novelang.opus.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.common.SimpleTree;
 import novelang.common.SyntacticTree;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.tree.Treepath;
+import novelang.designator.FragmentIdentifier;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.novella.Novella;
+import novelang.opus.CommandExecutionContext;
+import novelang.opus.function.CommandParameterException;
+import novelang.opus.function.builtin.insert.LevelHead;
+import novelang.system.DefaultCharset;
+import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.NameAwareTestClassRunner;
+
+import static novelang.ResourcesForTests.initialize;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.assertEqualsNoSeparators;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.novella.Novella;
-import novelang.system.DefaultCharset;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link InsertCommand}.
@@ -433,8 +435,8 @@ public class InsertCommandTest {
   public void useSimpleFragmentIdentifier() throws IOException {
 
     final File partFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
-    LOG.info( 
-        "Loaded Novella \n%s",
+    LOGGER.info(
+        "Loaded Novella \n",
         new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
             getDocumentTree().toStringTree() 
     ) ;
@@ -481,8 +483,8 @@ public class InsertCommandTest {
   public void identifierWithSingleFileTreatedAsMultiple() throws IOException {
 
     final File partFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_2 ) ;
-    LOG.info(
-        "Loaded Novella \n%s",
+    LOGGER.info(
+        "Loaded Novella \n",
         new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
             getDocumentTree().toStringTree()
     ) ;
@@ -530,8 +532,8 @@ public class InsertCommandTest {
   public void insertIdentifierWithNoHead() throws IOException {
 
     final File partFile = resourceInstaller.copy( ResourcesForTests.Parts.NOVELLA_SOME_IDENTIFIERS_1 ) ;
-    LOG.info(
-        "Loaded Novella \n%s",
+    LOGGER.info(
+        "Loaded Novella \n",
         new Novella( partFile, DefaultCharset.SOURCE,DefaultCharset.RENDERING ).
             getDocumentTree().toStringTree()
     ) ;
@@ -660,7 +662,7 @@ public class InsertCommandTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( InsertCommandTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( InsertCommandTest.class );
   
   private static final Location NULL_LOCATION = new Location( "", -1, -1 ) ;
 

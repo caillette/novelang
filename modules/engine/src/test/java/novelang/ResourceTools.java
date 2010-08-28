@@ -24,37 +24,37 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.MissingResourceException;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import novelang.configuration.ConfigurationTools;
+import novelang.configuration.ContentConfiguration;
+import novelang.configuration.DaemonConfiguration;
+import novelang.configuration.FopFontStatus;
+import novelang.configuration.ProducerConfiguration;
+import novelang.configuration.RenderingConfiguration;
+import novelang.loader.ClasspathResourceLoader;
+import novelang.loader.ResourceLoader;
+import novelang.loader.ResourceLoaderTools;
+import novelang.loader.ResourceName;
+import novelang.loader.UrlResourceLoader;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.system.DefaultCharset;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.system.DefaultCharset;
-import novelang.loader.ResourceName;
-import novelang.loader.ResourceLoader;
-import novelang.loader.ClasspathResourceLoader;
-import novelang.loader.UrlResourceLoader;
-import novelang.loader.ResourceLoaderTools;
-import novelang.configuration.ProducerConfiguration;
-import novelang.configuration.RenderingConfiguration;
-import novelang.configuration.FopFontStatus;
-import novelang.configuration.ContentConfiguration;
-import novelang.configuration.ConfigurationTools;
-import novelang.configuration.DaemonConfiguration;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.base.Preconditions;
 
 /**
  * Utility class for dealing with test-dedicated resources.
@@ -66,7 +66,8 @@ import com.google.common.base.Preconditions;
  */
 public final class ResourceTools {
 
-  private static final Log LOG = LogFactory.getLog( ResourceTools.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( ResourceTools.class );
+
   private static final ExecutorService EXECUTOR_SERVICE =
       Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ) ;
 
@@ -99,7 +100,11 @@ public final class ResourceTools {
       ) ;
     }
 
-    LOG.info( "Loading resource '%s' from %s", url.toExternalForm(), owningClass ) ;
+    LOGGER.info( "Loading resource '",
+        url.toExternalForm(),
+        "' from ",
+        owningClass
+    ) ;
     final InputStream inputStream;
     try {
       inputStream = url.openStream();

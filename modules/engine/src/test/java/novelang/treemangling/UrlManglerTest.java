@@ -16,13 +16,14 @@
  */
 package novelang.treemangling;
 
-import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import static novelang.parser.NodeKind.*;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.antlr.TreeFixture;
+import org.junit.Test;
+
+import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -31,8 +32,6 @@ import static novelang.parser.antlr.TreeFixture.tree;
  * @author Laurent Caillette
  */
 public class UrlManglerTest {
-
-  private static final Log LOG = LogFactory.getLog( UrlManglerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -372,11 +371,13 @@ public class UrlManglerTest {
 // Fixture
 // =======
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( UrlManglerTest.class ) ;
+
   private static void verifyFixNamedUrls(
       final SyntacticTree expectedTree,
       final SyntacticTree rawTree
   ) {
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    LOGGER.info( "Expected tree: ", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized = fixNamedUrls( rawTree ) ;
@@ -390,13 +391,13 @@ public class UrlManglerTest {
 
 
   private static Treepath< SyntacticTree > fixNamedUrls( final SyntacticTree rawTree ) {
-    LOG.info( "Raw tree: %s", TreeFixture.asString( rawTree ) ) ;
+    LOGGER.info( "Raw tree: ", TreeFixture.asString( rawTree ) ) ;
     final Treepath< SyntacticTree > mangledTreepath =
         UrlMangler.fixNamedUrls( Treepath.create( rawTree ) ) ;
     SyntacticTree mangledTree = mangledTreepath.getTreeAtEnd() ;
-    LOG.info( "Mangled tree: %s", TreeFixture.asString( mangledTree ) ) ;
+    LOGGER.info( "Mangled tree: ", TreeFixture.asString( mangledTree ) ) ;
     mangledTree = SeparatorsMangler.removeSeparators( mangledTree ) ;
-    LOG.info( "  No separators: %s", TreeFixture.asString( mangledTree ) ) ;
+    LOGGER.info( "  No separators: ", TreeFixture.asString( mangledTree ) ) ;
 
     return mangledTreepath ;
 

@@ -19,12 +19,12 @@ package novelang.rendering;
 import java.io.IOException;
 import java.io.StringReader;
 
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import org.xml.sax.InputSource;
 
 /**
@@ -37,7 +37,7 @@ public class DtdToolsTest {
   @Test
   public void smokeTest() throws IOException {
     final String escapedDtd = escapeEntities( HYPHEN_ENTITY ) ;
-    LOG.info( "Escaped DTD:\n%s", escapedDtd ) ;
+    LOGGER.info( "Escaped DTD:\n", escapedDtd ) ;
   }
 
   @Test
@@ -49,7 +49,7 @@ public class DtdToolsTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( DtdToolsTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( DtdToolsTest.class );
 
   private static final String HYPHEN_ENTITY =
       " <!ENTITY  hyphen  \"&#x2010;\"  > <!--=hyphen-->" ;

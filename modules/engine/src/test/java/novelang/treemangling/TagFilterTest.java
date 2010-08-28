@@ -18,18 +18,18 @@ package novelang.treemangling;
 
 import java.util.Set;
 
-import org.junit.Test;
-
-import novelang.designator.Tag;
-import novelang.parser.NodeKind;
-import novelang.system.Log;
-import novelang.system.LogFactory;
+import com.google.common.collect.ImmutableSet;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import static novelang.parser.antlr.TreeFixture.tree;
+import novelang.designator.Tag;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.NodeKind;
 import novelang.parser.antlr.TreeFixture;
+import org.junit.Test;
+
 import static novelang.parser.NodeKind.*;
-import com.google.common.collect.ImmutableSet;
+import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link TagFilter}.
@@ -37,8 +37,6 @@ import com.google.common.collect.ImmutableSet;
  * @author Laurent Caillette
  */
 public class TagFilterTest {
-
-  private static final Log LOG = LogFactory.getLog( LevelManglerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -252,6 +250,9 @@ public class TagFilterTest {
 // Fixture
 // =======
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( TagFilterTest.class ) ;
+
+
   private static final Tag TAG_1 = new Tag( "tag-1" ) ;
   private static final Tag TAG_2 = new Tag( "tag-2" ) ;
   private static final SyntacticTree TAG1_TREE = TAG_1.asSyntacticTree( NodeKind._EXPLICIT_TAG ) ;
@@ -266,7 +267,7 @@ public class TagFilterTest {
       final SyntacticTree actualTree,
       final Set< Tag > tags
   ) {
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    LOGGER.info( "Expected tree: ", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized = 

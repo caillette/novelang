@@ -16,19 +16,19 @@
  */
 package novelang.rendering.xslt;
 
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.junit.Assert;
 import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 
 /**
  * @author Laurent Caillette
  */
 public class XsltNumberingTest {
 
-  private static final Log LOG = LogFactory.getLog( XsltNumberingTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( XsltNumberingTest.class );
 
   @Test
   public void convertToNumber() {
@@ -58,9 +58,10 @@ public class XsltNumberingTest {
   @Test
   public void printScrambledDateTime() {
     final String scrambled = "2k917b2k";
-    LOG.info(
-        "Unscrambling %s: %s",
+    LOGGER.info(
+        "Unscrambling ",
         scrambled,
+        ": ",
         Numbering.formatDateTime(
             Numbering.unformatDateTime( scrambled, "BASE36" ),
             "yyyy-MM-dd kk:mm"

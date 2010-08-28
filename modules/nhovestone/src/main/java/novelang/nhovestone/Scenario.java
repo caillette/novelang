@@ -32,12 +32,12 @@ import com.google.common.collect.Maps;
 import novelang.KnownVersions;
 import novelang.Version;
 import novelang.common.FileTools;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.nhovestone.driver.HttpDaemonDriver;
 import novelang.nhovestone.scenario.Measurer;
 import novelang.nhovestone.scenario.Upsizer;
 import novelang.system.Husk;
-import novelang.system.Log;
-import novelang.system.LogFactory;
 import novelang.system.shell.ProcessCreationException;
 import novelang.system.shell.ProcessInitializationException;
 import org.apache.commons.lang.StringUtils;
@@ -50,7 +50,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Scenario< UPSIZING, MEASUREMENT > {
 
-  private static final Log LOG = LogFactory.getLog( Scenario.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Scenario.class );
 
   private final String name ;
   private final int warmupIterations ;
@@ -161,9 +161,9 @@ public class Scenario< UPSIZING, MEASUREMENT > {
         final String message = "{" + name + "} pass  " + iterationCount + 
             " on " + activeCount + " daemons. "  ;
         if( difference > 0 ) {
-          LOG.info( message + ( difference + " daemon(s) terminated." ) ) ;
+          LOGGER.info( message, ( difference + " daemon(s) terminated." ) ) ;
         } else {
-          LOG.debug( message ) ;
+          LOGGER.debug( message ) ;
         }
         activeCount = updatedActiveCount ;
       }
@@ -241,9 +241,9 @@ public class Scenario< UPSIZING, MEASUREMENT > {
         try {
           driver.shutdown( true ) ;
         } catch( InterruptedException e ) {
-          LOG.error( "Could not stop " + driver, e ) ;
+          LOGGER.error( e, "Could not stop " + driver ) ;
         } catch( IOException e ) {
-          LOG.error( "Could not stop " + driver, e ) ;
+          LOGGER.error( e, "Could not stop " + driver ) ;
         }
         monitoring.termination = Terminations.LAST_CLEANUP ;
       }
@@ -257,7 +257,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
 
   private void warmup( final int passCount ) throws IOException {
 
-    LOG.info( "Warming up " + name + ", " + passCount + " iterations..." ) ;
+    LOGGER.info( "Warming up " + name + ", " + passCount + " iterations..." ) ;
     upsizer.upsize() ;
     for( int pass = 1 ; pass <= passCount ; pass ++ ) {
       for( final Monitoring monitoring : monitorings.values() ) {
@@ -267,14 +267,14 @@ public class Scenario< UPSIZING, MEASUREMENT > {
       }
       logPassCount( "Performed warmup pass %d.", pass ) ;
     }
-    LOG.info( "Warmup of " + name + " complete." ) ;
+    LOGGER.info( "Warmup of ", name, " complete." ) ;
 
 
   }
 
   private static void logPassCount( final String message, final int pass ) {
     if( pass == 1 || pass == 2 || pass == 10 || pass % 100 == 0 ) {
-      LOG.info( String.format( message, pass ) ) ;
+      LOGGER.info( String.format( message, pass ) ) ;
     }
   }
 

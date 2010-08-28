@@ -16,8 +16,8 @@
  */
 package novelang.rendering.xslt;
 
-import novelang.system.LogFactory;
-import novelang.system.Log;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -26,23 +26,29 @@ import org.w3c.dom.NodeList;
  */
 public class Length {
 
-  private static final Log LOG = LogFactory.getLog( Length.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( Length.class ) ;
 
 
   public static Number positionUnderCharacterRemainderThreshold(
       final NodeList nodeList,
       final int characterCountThreshold
   ) {
-    LOG.debug(
-        "Finding position of node with less than %s characters in list of %s nodes",
+    LOGGER.debug(
+        "Finding position of node with less than ",
         characterCountThreshold,
-        nodeList.getLength()
+        " characters in list of ",
+        nodeList.getLength(),
+        " nodes"
     ) ;
     int total = 0 ;
     int lastMatchingNodeIndex = -1 ;
     for( int i = nodeList.getLength() - 1 ; i >= 0 ; i-- ) {
       final Node node = nodeList.item( i ) ;
-      LOG.debug( "  Node[ %s ] = %s", i, node.getNodeName() ) ;
+      LOGGER.debug( "  Node[ ",
+          i,
+          " ] = ",
+          node.getNodeName()
+      ) ;
       final int count = countCharacters( node ) ;
       if( characterCountThreshold < total + count ) {
         break ;
@@ -51,7 +57,7 @@ public class Length {
         lastMatchingNodeIndex = i ;
       }
     }
-    LOG.debug( "  Returning position %s", lastMatchingNodeIndex ) ;
+    LOGGER.debug( "  Returning position ", lastMatchingNodeIndex ) ;
     return lastMatchingNodeIndex ;
   }
 

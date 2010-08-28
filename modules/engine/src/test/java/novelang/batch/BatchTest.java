@@ -21,19 +21,19 @@ import java.io.IOException;
 import java.security.Permission;
 
 import novelang.ResourcesForTests;
+import novelang.common.filefixture.JUnitAwareResourceInstaller;
+import novelang.common.filefixture.Resource;
+import novelang.configuration.ConfigurationTools;
+import novelang.configuration.parse.GenericParameters;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.rendering.RenditionMimeType;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.NameAwareTestClassRunner;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.common.filefixture.JUnitAwareResourceInstaller;
-import novelang.common.filefixture.Resource;
-import novelang.configuration.ConfigurationTools;
-import novelang.configuration.parse.GenericParameters;
-import novelang.rendering.RenditionMimeType;
 
 /**
  * Tests for {@link DocumentGenerator}.
@@ -77,7 +77,7 @@ public class BatchTest {
         ), 
         renderedDocumentName
     ) ;
-    LOG.debug( "Rendered document = '%s'", renderedDocument.getAbsolutePath() ) ;
+    LOGGER.debug( "Rendered document = '", renderedDocument.getAbsolutePath(), "'" ) ;
     Assert.assertTrue( renderedDocument.exists() ) ;
   }
 
@@ -85,7 +85,8 @@ public class BatchTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( BatchTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( BatchTest.class );
+
 
   static {
     ResourcesForTests.initialize() ;

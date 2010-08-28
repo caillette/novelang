@@ -19,12 +19,10 @@ package novelang.common.filefixture;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.runners.NameAwareTestClassRunner;
-
-import com.google.common.base.Preconditions;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.DirectoryFixture;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import org.junit.runners.NameAwareTestClassRunner;
 
 /**
  * Like {@link ResourceInstaller} but directory name changes along with test's name
@@ -34,7 +32,7 @@ import novelang.DirectoryFixture;
  */
 public class JUnitAwareResourceInstaller extends AbstractResourceInstaller {
 
-  private static final Log LOG = LogFactory.getLog( JUnitAwareResourceInstaller.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( JUnitAwareResourceInstaller.class );
 
   private String lastTestName = null ;
   private File lastScratchDirectory = null ;
@@ -61,7 +59,7 @@ public class JUnitAwareResourceInstaller extends AbstractResourceInstaller {
         // for an unclear reason.
         lastTestName = null ;
         lastScratchDirectory = null ;
-        LOG.error( "Could not get directory fixture", e ) ;
+        LOGGER.error( e, "Could not get directory fixture" ) ;
         throw new AssertionError( "Could not get directory fixture" );
       }
     }

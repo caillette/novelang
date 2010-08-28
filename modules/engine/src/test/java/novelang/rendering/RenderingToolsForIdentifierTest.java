@@ -16,21 +16,20 @@
  */
 package novelang.rendering;
 
-import novelang.novella.NovellaFixture;
-import org.junit.Test;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import org.fest.reflect.core.Reflection;
+import java.util.regex.Pattern;
 
 import novelang.common.SyntacticTree;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.novella.Novella;
+import novelang.novella.NovellaFixture;
+import org.fest.reflect.core.Reflection;
+import org.junit.Test;
+
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
-
-import novelang.novella.Novella;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests for 
@@ -200,7 +199,8 @@ public class RenderingToolsForIdentifierTest {
 // Fixture
 // =======
   
-  private static final Log LOG = LogFactory.getLog( RenderingToolsForIdentifierTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( 
+      RenderingToolsForIdentifierTest.class ) ;
 
   private static void verify( final String expected, final SyntacticTree tree ) throws Exception {
     final String rendered = RenderingTools.toImplicitIdentifier( tree ) ;
@@ -210,7 +210,7 @@ public class RenderingToolsForIdentifierTest {
   private void logRendered( final String text ) throws Exception {
     final Novella novella = NovellaFixture.create( text ) ;
     final String identifier = RenderingTools.toImplicitIdentifier( novella.getDocumentTree() ) ;
-    LOG.info( "\n    " + text + "\n -> " + identifier ) ;
+    LOGGER.info( "\n    " + text + "\n -> " + identifier ) ;
   }
   
 }

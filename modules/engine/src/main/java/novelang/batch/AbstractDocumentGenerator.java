@@ -17,20 +17,19 @@
 package novelang.batch;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.FileOutputStream;
 
-import org.apache.commons.lang.SystemUtils;
-import org.apache.commons.io.FileUtils;
-
+import novelang.common.Problem;
 import novelang.configuration.parse.ArgumentException;
 import novelang.configuration.parse.GenericParameters;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-import novelang.common.Problem;
-import novelang.rendering.HtmlProblemPrinter;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentRequest;
+import novelang.rendering.HtmlProblemPrinter;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * Base class for batch commands.
@@ -39,7 +38,8 @@ import novelang.produce.DocumentRequest;
  */
 public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
 
-  private static final Log LOG = LogFactory.getLog( AbstractDocumentGenerator.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( AbstractDocumentGenerator.class );
+
   protected static final String PROBLEMS_FILENAME = "problems.html" ;
 
   protected abstract P createParameters(
@@ -64,7 +64,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
         }
         throw new CannotStartException( e ) ;
       } else {
-        LOG.error( "Parameters exception, printing help and exiting.", e ) ;
+        LOGGER.error( e, "Parameters exception, printing help and exiting." ) ;
         printHelpOnConsole( commandName, e ) ;
         if( mayTerminateJvm ) {
           System.exit( -2 ) ;
@@ -135,11 +135,11 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
       final File targetDirectory
   ) throws IOException {
     if( targetDirectory.exists() ) {
-      LOG.info( "Deleting '%s'...", targetDirectory.getAbsolutePath() ) ;
+      LOGGER.info( "Deleting '", targetDirectory.getAbsolutePath(), "'..." ) ;
     }
     FileUtils.deleteDirectory( targetDirectory ) ;
     FileUtils.forceMkdir( targetDirectory ) ;
-    LOG.info( "Created '%s'...", targetDirectory.getAbsolutePath() ) ;
+    LOGGER.info( "Created '", targetDirectory.getAbsolutePath(), "'..." ) ;
   }
 
 
@@ -153,7 +153,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
     final String relativeFileName = documentRequest.getDocumentSourceName() +
         "." + documentRequest.getRenditionMimeType().getFileExtension() ;
     final File outputFile =  new File( targetDir, relativeFileName ) ;
-    LOG.debug( "Resolved output file name '%s'", outputFile.getAbsolutePath() ) ;
+    LOGGER.debug( "Resolved output file name '", outputFile.getAbsolutePath(), "'" );
     FileUtils.forceMkdir( outputFile.getParentFile() );
     return outputFile ;
   }

@@ -18,17 +18,17 @@ package novelang.opus.function.builtin;
 
 import java.io.File;
 
+import com.google.common.collect.ImmutableMap;
 import novelang.ResourceTools;
-import org.junit.Assert;
-import org.junit.Test;
-import novelang.system.LogFactory;
-import novelang.system.Log;
-import novelang.opus.CommandExecutionContext;
-import novelang.opus.function.CommandParameterException;
 import novelang.common.Location;
 import novelang.loader.ResourceName;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.opus.CommandExecutionContext;
+import novelang.opus.function.CommandParameterException;
 import novelang.rendering.RenditionMimeType;
-import com.google.common.collect.ImmutableMap;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for {@link novelang.opus.function.builtin.MapstylesheetCommand}.
@@ -37,7 +37,7 @@ import com.google.common.collect.ImmutableMap;
  */
 public class MapstylesheetCommandTest {
 
-  private static final Log LOG = LogFactory.getLog( MapstylesheetCommandTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( MapstylesheetCommandTest.class ) ;
 
   @Test
   public void correctMapping() throws CommandParameterException {
@@ -49,7 +49,7 @@ public class MapstylesheetCommandTest {
         new Location( "", -1, -1 ),
         map
     ) ;
-    LOG.debug( "Stylesheet map: \n%s", map ) ;
+    LOGGER.debug( "Stylesheet map: \n", map ) ;
 
 
     final CommandExecutionContext result = definition.evaluate(

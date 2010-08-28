@@ -3,21 +3,21 @@ package novelang.treemangling;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+import novelang.common.SyntacticTree;
+import novelang.common.tree.RobustPath;
+import novelang.common.tree.Treepath;
+import novelang.designator.FragmentIdentifier;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
+import novelang.parser.antlr.TreeFixture;
+import novelang.treemangling.designator.DesignatorTools;
+import novelang.treemangling.designator.FragmentMapper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
-import novelang.common.SyntacticTree;
-import novelang.common.tree.Treepath;
-import novelang.common.tree.RobustPath;
-import novelang.designator.FragmentIdentifier;
 import static novelang.parser.NodeKind.*;
-import novelang.parser.antlr.TreeFixture;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.system.Log;
-import novelang.system.LogFactory;
-import novelang.treemangling.designator.FragmentMapper;
-import novelang.treemangling.designator.DesignatorTools;
 
 /**
  * Tests for
@@ -159,7 +159,8 @@ public class DesignatorInterpreterEnrichmentTest {
 // Fixture
 // =======
 
-  private static final Log LOG = LogFactory.getLog( EmbeddedListMangler.class ) ;
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger( DesignatorInterpreterEnrichmentTest.class ) ;
 
   private static class FragmentMapperBuilder {
     private final ImmutableMap.Builder< FragmentIdentifier, RobustPath< SyntacticTree > >
@@ -208,8 +209,8 @@ public class DesignatorInterpreterEnrichmentTest {
       final SyntacticTree originalTree,
       final FragmentMapper< RobustPath< SyntacticTree > > fragmentMapper
   ) {
-    LOG.info( "Flat tree: %s", TreeFixture.asString( originalTree ) ) ;
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    LOGGER.info( "Flat tree: ", TreeFixture.asString( originalTree ) ) ;
+    LOGGER.info( "Expected tree: ", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
     final Treepath< SyntacticTree > originalTreepath = Treepath.create( originalTree ) ;
 

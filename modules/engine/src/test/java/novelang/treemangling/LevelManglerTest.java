@@ -16,15 +16,15 @@
  */
 package novelang.treemangling;
 
-import org.junit.Test;
-
 import novelang.common.Location;
-import novelang.system.LogFactory;
-import novelang.system.Log;
 import novelang.common.SyntacticTree;
 import novelang.common.tree.Treepath;
-import static novelang.parser.NodeKind.*;
+import novelang.logger.Logger;
+import novelang.logger.LoggerFactory;
 import novelang.parser.antlr.TreeFixture;
+import org.junit.Test;
+
+import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
 
 /**
@@ -34,7 +34,7 @@ import static novelang.parser.antlr.TreeFixture.tree;
  */
 public class LevelManglerTest {
 
-  private static final Log LOG = LogFactory.getLog( LevelManglerTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( LevelManglerTest.class );
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -308,7 +308,7 @@ public class LevelManglerTest {
       final boolean checkLocation
 
   ) {
-    LOG.info( "Expected tree: %s", TreeFixture.asString( expectedTree ) ) ;
+    LOGGER.info( "Expected tree: ", TreeFixture.asString( expectedTree ) ) ;
     final Treepath< SyntacticTree > expectedTreepath = Treepath.create( expectedTree ) ;
 
     final Treepath< SyntacticTree > rehierarchized = rehierarchizeLevels( flatTree ) ;
@@ -325,7 +325,7 @@ public class LevelManglerTest {
   private static Treepath< SyntacticTree > rehierarchizeLevels(
       final SyntacticTree flatTree
   ) {
-    LOG.info( "Flat tree: %s", TreeFixture.asString( flatTree ) ) ;
+    LOGGER.info( "Flat tree: ", TreeFixture.asString( flatTree ) ) ;
     final Treepath< SyntacticTree > flatTreepath = Treepath.create( flatTree ) ;
 
     return LevelMangler.rehierarchizeLevels( flatTreepath ) ;
