@@ -18,6 +18,7 @@ package novelang.parser.antlr;
 
 import com.google.common.base.Joiner;
 import novelang.common.Problem;
+import novelang.testing.junit.NameAwareTestClassRunner;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import org.antlr.runtime.RecognitionException;
@@ -25,7 +26,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
 
 import static novelang.parser.antlr.AntlrTestHelper.BREAK;
 

@@ -42,7 +42,7 @@ import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKindTools;
 import novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import novelang.rendering.xslt.validate.SaxMulticaster;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;

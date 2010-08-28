@@ -32,13 +32,12 @@ import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
-import novelang.system.StartupTools;
 
 /**
  * The main class for running document generation in command-line mode.
  *
  * The {@code Logger} instance is NOT held in statically-initialized final field as it would
- * trigger premature initialization, we want a call to {@link StartupTools} to happen first.
+ * trigger premature initialization, we want a call to {@link novelang.outfit.LogbackConfigurationTools} to happen first.
  *
  * @author Laurent Caillette
  */

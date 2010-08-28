@@ -28,7 +28,7 @@ import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.rendering.RenditionMimeType;
 import novelang.rendering.font.FontDiscoveryStreamer;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.mortbay.jetty.Request;
 
 /**

@@ -29,7 +29,7 @@ import novelang.designator.Tag;
 import novelang.parser.shared.Lexeme;
 import novelang.parser.GeneratedLexemes;
 import novelang.parser.NodeKind;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

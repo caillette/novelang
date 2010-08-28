@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
+import novelang.testing.DirectoryFixture;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
 import org.junit.Assert;
@@ -30,7 +31,6 @@ import org.junit.Test;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import novelang.DirectoryFixture;
 import novelang.ResourcesForTests;
 import static novelang.ResourcesForTests.FontStructure;
 import novelang.common.filefixture.Relativizer;
@@ -45,7 +45,7 @@ import novelang.configuration.parse.GenericParameters;
 import static novelang.configuration.parse.GenericParameters.OPTIONNAME_CONTENT_ROOT;
 import static novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
 import novelang.produce.DocumentRequest;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 
 /**
  * Tests for {@link ConfigurationTools}.

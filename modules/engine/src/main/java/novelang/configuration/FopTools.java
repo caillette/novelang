@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Function;
-import novelang.common.LanguageTools;
+import com.google.common.base.Throwables;
 import novelang.common.ReflectionTools;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
@@ -118,8 +118,7 @@ public class FopTools {
       return stringWriter.toString() ;
     } catch( Exception e ) {
       LOGGER.error( e, CONFIGURATION_NOT_SERIALIZED ) ;
-      LanguageTools.rethrowUnchecked( e ) ;
-      throw new Error( "Should never execute, just make compiler happy" ) ;
+      throw Throwables.propagate( e ) ;
     }
   }
 

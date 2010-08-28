@@ -19,7 +19,7 @@ package novelang.parser.antlr;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import novelang.common.LanguageTools;
+import com.google.common.base.Throwables;
 import novelang.common.ReflectionTools;
 import org.antlr.runtime.RecognitionException;
 
@@ -54,8 +54,7 @@ import static org.junit.Assert.assertSame;
       if( e.getCause() instanceof RecognitionException ) {
         throw ( RecognitionException ) e.getCause() ;
       } else {
-        LanguageTools.rethrowUnchecked( e ) ;
-        throw new Error( "Compiler happy" ) ;
+        throw Throwables.propagate( e ) ;
       } 
     }
 

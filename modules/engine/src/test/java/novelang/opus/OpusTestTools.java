@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 
 import novelang.configuration.ConfigurationTools;
 import novelang.designator.Tag;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import com.google.common.collect.ImmutableSet;
 
 /**

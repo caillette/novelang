@@ -27,10 +27,10 @@ import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentProducer;
 import novelang.produce.DocumentRequest;
 import novelang.produce.RequestTools;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
+import novelang.testing.junit.NameAwareTestClassRunner;
 
 /**
  * Test for displaying page and chapter numbers, including a Java function call.

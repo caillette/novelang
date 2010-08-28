@@ -37,7 +37,7 @@ import novelang.common.metadata.MetadataHelper;
 import novelang.parser.NodeKind;
 import static novelang.parser.NodeKind.*;
 import static novelang.parser.antlr.TreeFixture.tree;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 
 /**
  * @author Laurent Caillette

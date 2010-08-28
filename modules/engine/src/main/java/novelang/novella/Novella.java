@@ -36,7 +36,7 @@ import novelang.treemangling.TagFilter;
 import novelang.treemangling.ListMangler;
 import novelang.parser.antlr.DelegatingPartParser;
 import novelang.parser.GenericParser;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.base.Preconditions;

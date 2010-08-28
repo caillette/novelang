@@ -21,7 +21,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import novelang.designator.Tag;
-import novelang.system.Husk;
+import novelang.outfit.Husk;
 
 /**
  * @author Laurent Caillette
@@ -30,7 +30,7 @@ public interface GenerationDefaults {
 
   Random RANDOM = new Random( 0L ) ;
 
-  WordGenerator.Configuration FOR_WORDS = Husk.create( WordGenerator.Configuration.class )
+  WordGenerator.Configuration FOR_WORDS = novelang.outfit.Husk.create( WordGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
       .withSignCount( 2, 12 )
@@ -48,7 +48,7 @@ public interface GenerationDefaults {
   ;
 
   SentenceGenerator.Configuration FOR_TITLES = 
-      Husk.create( SentenceGenerator.Configuration.class )
+      novelang.outfit.Husk.create( SentenceGenerator.Configuration.class )
       .withLocale( SupportedLocales.DEFAULT_LOCALE )
       .withRandom( RANDOM )
       .withWordGenerator( new WordGenerator( FOR_WORDS ) )
@@ -57,7 +57,7 @@ public interface GenerationDefaults {
       .withEndingPunctuation( false )
   ;
 
-  BodyGenerator.Configuration FOR_BODIES = Husk.create( BodyGenerator.Configuration.class )
+  BodyGenerator.Configuration FOR_BODIES = novelang.outfit.Husk.create( BodyGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withParagraphCountRange( 1, 4 )
       .withSentenceCountRange( 1, 5 )
@@ -74,7 +74,7 @@ public interface GenerationDefaults {
   ) ;
 
   LevelGenerator.Configuration FOR_LEVELS =
-      Husk.create( LevelGenerator.Configuration.class )
+      novelang.outfit.Husk.create( LevelGenerator.Configuration.class )
       .withRandom( RANDOM )
       .withMaximumDepth( 3 )
       .withSublevelCountRange( 0, 3 )

@@ -24,15 +24,14 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import novelang.Version;
 import novelang.configuration.parse.GenericParameters;
-import novelang.system.DefaultCharset;
-import novelang.system.Husk;
-import novelang.system.TcpPortBooker;
-import novelang.system.shell.JavaClasses;
-import novelang.system.shell.JavaShell;
-import novelang.system.shell.JavaShellParameters;
-import novelang.system.shell.ProcessCreationException;
-import novelang.system.shell.ProcessInitializationException;
-import novelang.system.shell.ShutdownStyle;
+import novelang.outfit.DefaultCharset;
+import novelang.outfit.TcpPortBooker;
+import novelang.outfit.shell.JavaClasses;
+import novelang.outfit.shell.JavaShell;
+import novelang.outfit.shell.JavaShellParameters;
+import novelang.outfit.shell.ProcessCreationException;
+import novelang.outfit.shell.ProcessInitializationException;
+import novelang.outfit.shell.ShutdownStyle;
 import org.apache.commons.lang.StringUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -130,7 +129,7 @@ public abstract class EngineDriver {
 
 
     JavaShellParameters parameters =
-        Husk.create( JavaShellParameters.class );
+        novelang.outfit.Husk.create( JavaShellParameters.class );
     parameters = parameters
         .withWorkingDirectory( configuration.getWorkingDirectory() )
         .withNickname( "Novelang-" + version.getName() )
@@ -165,7 +164,7 @@ public abstract class EngineDriver {
   
 
 
-  @Husk.Converter( converterClass = ConfigurationHelper.class )
+  @novelang.outfit.Husk.Converter( converterClass = ConfigurationHelper.class )
   public interface Configuration< CONFIGURATION extends Configuration > {
 
     JavaClasses getJavaClasses() ;

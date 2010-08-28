@@ -31,14 +31,15 @@ import java.util.regex.Pattern;
 import com.google.common.collect.Lists;
 import novelang.ResourceTools;
 import novelang.ResourcesForTests;
-import novelang.common.LanguageTools;
+import novelang.outfit.TextTools;
 import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import novelang.common.filefixture.Resource;
+import novelang.testing.junit.NameAwareTestClassRunner;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.produce.RequestTools;
 import novelang.rendering.RenditionMimeType;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -57,7 +58,6 @@ import org.apache.http.protocol.HttpContext;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -83,8 +83,8 @@ public class HttpDaemonTest {
     ) ) ;
     final String shaved = shaveComments( generated ) ;
     save( "generated.novella", generated ) ;
-    final String normalizedNovellaSource = LanguageTools.unixifyLineBreaks( novellaSource ) ;
-    final String normalizedShaved = LanguageTools.unixifyLineBreaks( shaved ) ;
+    final String normalizedNovellaSource = TextTools.unixifyLineBreaks( novellaSource ) ;
+    final String normalizedShaved = TextTools.unixifyLineBreaks( shaved ) ;
     assertEquals( normalizedNovellaSource, normalizedShaved ) ;
 
   }

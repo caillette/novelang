@@ -33,7 +33,7 @@ import novelang.parser.GeneratedLexemes;
 import novelang.parser.SourceUnescape;
 import novelang.parser.shared.Lexeme;
 import novelang.rendering.RenderingEscape;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.apache.commons.lang.CharUtils;
 
 /**

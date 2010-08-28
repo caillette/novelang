@@ -19,7 +19,7 @@ package novelang;
 import java.io.File;
 
 import com.google.common.base.Preconditions;
-import novelang.system.shell.JavaClasses;
+import novelang.outfit.shell.JavaClasses;
 import org.apache.commons.io.FilenameUtils;
 
 /**

@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
-import novelang.system.Husk;
+import novelang.outfit.Husk;
 
 /**
  * @author Laurent Caillette

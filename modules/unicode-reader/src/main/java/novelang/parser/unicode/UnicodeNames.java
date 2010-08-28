@@ -2,7 +2,7 @@ package novelang.parser.unicode;
 
 
 import novelang.build.CodeGenerationTools;
-import novelang.common.LanguageTools;
+import novelang.outfit.TextTools;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 
@@ -65,7 +65,7 @@ public class UnicodeNames {
   }
 
   private static String toHexadecimalString( final char character ) {
-    return "0x" + LanguageTools.to16ByteHex( character ).toUpperCase();
+    return "0x" + TextTools.to16ByteHex( character ).toUpperCase();
   }
 
 }

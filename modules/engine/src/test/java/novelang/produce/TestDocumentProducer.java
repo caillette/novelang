@@ -21,11 +21,11 @@ import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.TreeFixture;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
+import novelang.testing.junit.NameAwareTestClassRunner;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;

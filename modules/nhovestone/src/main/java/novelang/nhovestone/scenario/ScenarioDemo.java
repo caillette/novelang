@@ -31,9 +31,9 @@ import novelang.nhovestone.MeasurementBundle;
 import novelang.nhovestone.Scenario;
 import novelang.nhovestone.report.Grapher;
 import novelang.novelist.Novelist;
-import novelang.system.Husk;
-import novelang.system.shell.ProcessCreationException;
-import novelang.system.shell.ProcessInitializationException;
+import novelang.outfit.Husk;
+import novelang.outfit.shell.ProcessCreationException;
+import novelang.outfit.shell.ProcessInitializationException;
 
 import static novelang.KnownVersions.VERSION_0_38_1;
 import static novelang.KnownVersions.VERSION_0_41_0;

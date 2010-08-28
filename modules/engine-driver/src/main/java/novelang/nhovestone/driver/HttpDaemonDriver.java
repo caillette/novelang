@@ -26,9 +26,9 @@ import novelang.configuration.parse.DaemonParameters;
 import novelang.daemon.HttpDaemon;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
-import novelang.system.Husk;
-import novelang.system.shell.ProcessCreationException;
-import novelang.system.shell.ProcessInitializationException;
+import novelang.outfit.Husk;
+import novelang.outfit.shell.ProcessCreationException;
+import novelang.outfit.shell.ProcessInitializationException;
 
 /**
  * Starts and stops an {@link novelang.daemon.HttpDaemon} in its deployment directory,

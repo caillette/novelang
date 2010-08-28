@@ -25,7 +25,7 @@
     <level value="DEBUG" />
   </logger>
 
-  <logger name="novelang.system.EnvironmentTools" >
+  <logger name="novelang.outfit.EnvironmentTools" >
     <level value="WARN" />
   </logger>
 

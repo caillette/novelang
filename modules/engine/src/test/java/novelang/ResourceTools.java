@@ -48,7 +48,7 @@ import novelang.loader.ResourceName;
 import novelang.loader.UrlResourceLoader;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;

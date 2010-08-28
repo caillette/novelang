@@ -19,7 +19,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;

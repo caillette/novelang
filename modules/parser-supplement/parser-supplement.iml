@@ -28,6 +28,7 @@
     <orderEntry type="module" module-name="parser-antlr" />
     <orderEntry type="module" module-name="parser-ground" />
     <orderEntry type="module" module-name="primer" />
+    <orderEntry type="module" module-name="bolt" />
     <orderEntry type="module" module-name="logger" />
     <orderEntry type="module" module-name="logger-slf4j" scope="RUNTIME" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:jcl-over-slf4j:1.6.1" level="project" />

@@ -1,6 +1,6 @@
 package novelang.parser.unicode;
 
-import novelang.common.LanguageTools;
+import novelang.outfit.TextTools;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import org.apache.commons.lang.CharUtils;
@@ -18,7 +18,7 @@ public class UnicodeNamesTest {
   @Test
   public void logSomeBasicCharacterRepresentations() {
     final int aCharacterAsInt = 'a' ;
-    final String aCharacterAsHex = LanguageTools.to16ByteHex( aCharacterAsInt ) ;
+    final String aCharacterAsHex = TextTools.to16ByteHex( aCharacterAsInt ) ;
     LOGGER.info(
         "\nThe 'a' letter",
         "\nAs int: ", aCharacterAsInt,

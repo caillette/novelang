@@ -35,7 +35,7 @@ import novelang.loader.ClasspathResourceLoader;
 import novelang.loader.ResourceLoader;
 import novelang.rendering.xslt.validate.BadExpandedName;
 import novelang.rendering.xslt.validate.BadExpandedNamesException;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 
 /**
  * Tests for {@link novelang.rendering.XslWriter}.

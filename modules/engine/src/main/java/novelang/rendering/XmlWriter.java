@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import novelang.common.Nodepath;
 import novelang.common.metadata.DocumentMetadata;
 import novelang.parser.NodeKindTools;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 
 /**
  * @author Laurent Caillette

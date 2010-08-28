@@ -1,6 +1,7 @@
 package novelang.configuration;
 
 import novelang.ResourcesForTests;
+import novelang.testing.junit.NameAwareTestClassRunner;
 import novelang.loader.ResourceLoader;
 import novelang.loader.ResourceName;
 import novelang.configuration.parse.DaemonParameters;
@@ -11,7 +12,6 @@ import novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
 
 import java.io.File;
 

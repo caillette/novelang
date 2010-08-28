@@ -31,12 +31,12 @@ import novelang.nhovestone.report.Grapher;
 import novelang.nhovestone.scenario.ScenarioLibrary;
 import novelang.nhovestone.scenario.TimeMeasurement;
 import novelang.nhovestone.scenario.TimeMeasurer;
-import novelang.system.DefaultCharset;
-import novelang.system.EnvironmentTools;
-import novelang.system.Husk;
-import novelang.system.StartupTools;
-import novelang.system.shell.ProcessCreationException;
-import novelang.system.shell.ProcessInitializationException;
+import novelang.outfit.DefaultCharset;
+import novelang.outfit.EnvironmentTools;
+import novelang.outfit.Husk;
+import novelang.outfit.LogbackConfigurationTools;
+import novelang.outfit.shell.ProcessCreationException;
+import novelang.outfit.shell.ProcessInitializationException;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import static novelang.KnownVersions.VERSION_0_35_0;
@@ -62,7 +62,7 @@ public class Nhovestone {
   {
     // This must happen first. The need for originalArguments parameter prevents from
     // putting this initialization in a static block.
-    StartupTools.fixLogDirectory( arguments ) ;
+    LogbackConfigurationTools.fixLogDirectory( arguments ) ;
     final Logger log = LoggerFactory.getLogger( Nhovestone.class );
     log.info( "Running with command-line arguments ", ImmutableList.of( arguments ), "..." ) ;
     EnvironmentTools.logSystemProperties() ;

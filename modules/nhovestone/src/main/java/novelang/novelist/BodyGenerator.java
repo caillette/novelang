@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
-import novelang.system.Husk;
 
 /**
  * @author Laurent Caillette
@@ -54,7 +53,7 @@ public class BodyGenerator implements Generator< Body > {
     return new Body( textElements ) ;
   }
 
-  @Husk.Converter( converterClass = Bounded.class )
+  @novelang.outfit.Husk.Converter( converterClass = Bounded.class )
   public interface Configuration {
     Random getRandom() ;
     Configuration withRandom( Random random ) ;

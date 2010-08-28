@@ -31,7 +31,7 @@ import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
 import novelang.loader.ResourceName;
 import novelang.rendering.RenditionMimeType;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 
 /**
  * Contains all input and output for {@link novelang.opus.function.Command} evaluation.

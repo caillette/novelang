@@ -19,14 +19,14 @@ package novelang.common.filefixture;
 import java.io.File;
 import java.io.IOException;
 
-import novelang.DirectoryFixture;
+import novelang.testing.DirectoryFixture;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
-import org.junit.runners.NameAwareTestClassRunner;
+import novelang.testing.junit.NameAwareTestClassRunner;
 
 /**
  * Like {@link ResourceInstaller} but directory name changes along with test's name
- * as given by {@link org.junit.runners.NameAwareTestClassRunner}.
+ * as given by {@link novelang.testing.junit.NameAwareTestClassRunner}.
  *
  * @author Laurent Caillette
  */

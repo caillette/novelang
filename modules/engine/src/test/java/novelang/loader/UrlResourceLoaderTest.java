@@ -30,7 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
+import novelang.testing.junit.NameAwareTestClassRunner;
 
 /**
  * @author Laurent Caillette

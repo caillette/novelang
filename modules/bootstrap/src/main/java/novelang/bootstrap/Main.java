@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableMap;
 import novelang.batch.DocumentGenerator;
 import novelang.batch.LevelExploder;
 import novelang.daemon.HttpDaemon;
-import novelang.system.StartupTools;
-import novelang.system.EnvironmentTools;
+import novelang.outfit.LogbackConfigurationTools;
+import novelang.outfit.EnvironmentTools;
 
 /**
  * The single entry point for launching all Novelang commands.
@@ -36,8 +36,7 @@ public class Main {
   public static void main( final String[] originalArguments ) throws Exception {
     // This must happen first. The need for originalArguments parameter prevents from
     // putting this initialization in a static block.
-    StartupTools.fixLogDirectory( originalArguments ) ;
-    StartupTools.installXalan() ;
+    LogbackConfigurationTools.fixLogDirectory( originalArguments ) ;
     EnvironmentTools.logSystemProperties() ;
 
     new Main().doMain( originalArguments ) ;

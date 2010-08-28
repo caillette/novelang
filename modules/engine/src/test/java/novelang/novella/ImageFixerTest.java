@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import novelang.DirectoryFixture;
+import novelang.testing.DirectoryFixture;
 import novelang.common.Problem;
 import novelang.common.ProblemCollector;
 import novelang.common.SyntacticTree;
@@ -35,7 +35,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
+import novelang.testing.junit.NameAwareTestClassRunner;
 
 import static novelang.ResourcesForTests.Images;
 import static novelang.ResourcesForTests.initialize;

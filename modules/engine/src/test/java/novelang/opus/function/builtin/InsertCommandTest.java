@@ -35,12 +35,12 @@ import novelang.novella.Novella;
 import novelang.opus.CommandExecutionContext;
 import novelang.opus.function.CommandParameterException;
 import novelang.opus.function.builtin.insert.LevelHead;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
+import novelang.testing.junit.NameAwareTestClassRunner;
 
 import static novelang.ResourcesForTests.initialize;
 import static novelang.parser.NodeKind.*;

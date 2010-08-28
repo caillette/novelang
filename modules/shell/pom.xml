@@ -35,7 +35,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-primer</artifactId>
+      <artifactId>Novelang-bolt</artifactId>
       <version>${parent.version}</version>
     </dependency>
 
@@ -53,6 +53,13 @@
       <classifier>embedder</classifier>
     </dependency>
 
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-logger-slf4j</artifactId>
+      <version>${parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-vanilla-fixture</artifactId>

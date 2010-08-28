@@ -25,7 +25,6 @@ import java.util.concurrent.ExecutorService;
 
 import com.google.common.base.Preconditions;
 import novelang.common.FileTools;
-import novelang.common.LanguageTools;
 import novelang.common.Problem;
 import novelang.common.Renderable;
 import novelang.common.StructureKind;
@@ -36,6 +35,7 @@ import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.novella.Novella;
 import novelang.opus.Opus;
+import novelang.outfit.ArrayTools;
 import novelang.rendering.GenericRenderer;
 import novelang.rendering.HtmlWriter;
 import novelang.rendering.NovellaWriter;
@@ -101,7 +101,7 @@ public class DocumentProducer {
     ) ;
 
 
-    final ResourceName stylesheet = LanguageTools.firstNotNull(
+    final ResourceName stylesheet = ArrayTools.firstNotNull(
         request.getAlternateStylesheet(),
         rendered.getCustomStylesheetMap().get( mimeType )
     ) ;

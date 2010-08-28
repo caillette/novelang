@@ -34,7 +34,7 @@ import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.parser.GenericParser;
 import novelang.parser.unicode.UnicodeInputStream;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.antlr.runtime.RecognitionException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;

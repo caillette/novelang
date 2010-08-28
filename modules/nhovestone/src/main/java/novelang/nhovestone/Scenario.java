@@ -37,9 +37,8 @@ import novelang.logger.LoggerFactory;
 import novelang.nhovestone.driver.HttpDaemonDriver;
 import novelang.nhovestone.scenario.Measurer;
 import novelang.nhovestone.scenario.Upsizer;
-import novelang.system.Husk;
-import novelang.system.shell.ProcessCreationException;
-import novelang.system.shell.ProcessInitializationException;
+import novelang.outfit.shell.ProcessCreationException;
+import novelang.outfit.shell.ProcessInitializationException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -116,7 +115,7 @@ public class Scenario< UPSIZING, MEASUREMENT > {
           FileTools.createFreshDirectory( scenarioDirectory, version.getName() ) ;
 
       final HttpDaemonDriver httpDaemonDriver = new HttpDaemonDriver(
-          Husk.create( HttpDaemonDriver.Configuration.class )
+          novelang.outfit.Husk.create( HttpDaemonDriver.Configuration.class )
           .withContentRootDirectory( contentDirectory )
           .withJvmHeapSizeMegabytes( configuration.getJvmHeapSizeMegabytes() )
           .withJavaClasses( KnownVersions.asJavaClasses(

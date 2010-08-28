@@ -162,6 +162,7 @@
   <url>http://novelang.sf.net</url>
 
   <modules>
+    <module>modules/bolt</module>
     <module>modules/bootstrap</module>
     <module>modules/code-generation</module>
     <module>modules/documentation</module>

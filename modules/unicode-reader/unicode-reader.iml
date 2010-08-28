@@ -16,6 +16,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="primer" />
+    <orderEntry type="module" module-name="bolt" />
     <orderEntry type="module" module-name="logger" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:r05" level="project" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />

@@ -17,11 +17,8 @@
 package novelang.parser.antlr;
 
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.CommonErrorNode;
 
 import novelang.common.LocationFactory;
-import novelang.common.SyntacticTree;
-import novelang.common.LanguageTools;
 import novelang.parser.BookParser;
 
 /**

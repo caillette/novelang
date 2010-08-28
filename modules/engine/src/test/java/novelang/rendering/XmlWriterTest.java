@@ -27,7 +27,7 @@ import novelang.common.StylesheetMap;
 import novelang.common.SyntacticTree;
 import novelang.parser.NodeKind;
 import novelang.parser.antlr.TreeFixture;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 
 /**
  * Tests for {@link XmlWriter}.

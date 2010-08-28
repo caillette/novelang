@@ -19,8 +19,6 @@ package novelang.novelist;
 import java.util.Locale;
 import java.util.Random;
 
-import novelang.system.Husk;
-
 /**
  * Endless iterator creating {@link novelang.novelist.Word} instances.
  *
@@ -76,7 +74,7 @@ public class WordGenerator implements Generator.ForWord {
 
 
 
-  @Husk.Converter( converterClass = Bounded.class )
+  @novelang.outfit.Husk.Converter( converterClass = Bounded.class )
   public interface Configuration {
 
     Locale getLocale() ;

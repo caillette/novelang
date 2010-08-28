@@ -30,10 +30,10 @@
 
 
   <properties>
-    <agentClass>novelang.system.shell.insider.InsiderAgent</agentClass>
+    <agentClass>novelang.outfit.shell.insider.InsiderAgent</agentClass>
 
     <!-- Keep this synchronized with some constant inside AgentFileInstaller. -->
-    <resourcesDestinationDirectory>/novelang/system/shell</resourcesDestinationDirectory>
+    <resourcesDestinationDirectory>/novelang/outfit/shell</resourcesDestinationDirectory>
 
   </properties>
 

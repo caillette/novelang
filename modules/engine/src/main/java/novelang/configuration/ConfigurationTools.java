@@ -39,7 +39,7 @@ import novelang.loader.UrlResourceLoader;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.produce.DocumentRequest;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
 

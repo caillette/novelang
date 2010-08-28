@@ -25,7 +25,7 @@ import com.google.common.base.Predicates;
 import novelang.batch.DocumentGenerator;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
-import novelang.system.Husk;
+import novelang.outfit.Husk;
 
 /**
  * Starts and stops an {@link novelang.produce.DocumentProducer} in its deployment directory,

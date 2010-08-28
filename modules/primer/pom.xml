@@ -18,6 +18,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <description>
+    Common Novelang-specific classes. Almost all other Novelang projects need this one.
+  </description>
+
   <parent>
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
@@ -32,7 +36,7 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-logger</artifactId>
+      <artifactId>Novelang-bolt</artifactId>
       <version>${parent.version}</version>
     </dependency>
 

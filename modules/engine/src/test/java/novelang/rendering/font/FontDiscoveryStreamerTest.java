@@ -28,7 +28,7 @@ import novelang.loader.ResourceName;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.rendering.XslWriter;
-import novelang.system.DefaultCharset;
+import novelang.outfit.DefaultCharset;
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
 

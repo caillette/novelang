@@ -98,6 +98,7 @@
         <option value="$PROJECT_DIR$/../../modules/parser-lexeme-plugin-test/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/unicode-generator-plugin-test/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/nhovestone-plugin/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/bolt/pom.xml" />
       </list>
     </option>
   </component>

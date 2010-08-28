@@ -32,7 +32,7 @@ import novelang.novelist.Novelist;
 import novelang.novelist.SentenceGenerator;
 import novelang.novelist.WordGenerator;
 import novelang.novelist.SupportedLocales;
-import novelang.system.Husk;
+import novelang.outfit.Husk;
 
 /**
  * @author Laurent Caillette
@@ -54,7 +54,7 @@ public class ScenarioLibrary {
     ;
 
     final SentenceGenerator.Configuration forSentences =
-        Husk.create( SentenceGenerator.Configuration.class )
+        novelang.outfit.Husk.create( SentenceGenerator.Configuration.class )
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
         .withWordGenerator( new WordGenerator( forWords ) )
@@ -64,7 +64,7 @@ public class ScenarioLibrary {
     ;
 
     final SentenceGenerator.Configuration forTitles =
-        Husk.create( SentenceGenerator.Configuration.class )
+        novelang.outfit.Husk.create( SentenceGenerator.Configuration.class )
         .withLocale( SupportedLocales.DEFAULT_LOCALE )
         .withRandom( random )
         .withWordGenerator( new WordGenerator( forWords ) )
@@ -74,7 +74,7 @@ public class ScenarioLibrary {
     ;
 
     final BodyGenerator.Configuration forBodies =
-        Husk.create( BodyGenerator.Configuration.class )
+        novelang.outfit.Husk.create( BodyGenerator.Configuration.class )
         .withRandom( random )
         .withParagraphCountRange( 4, 4 )
         .withSentenceCountRange( 4, 4 )
@@ -83,7 +83,7 @@ public class ScenarioLibrary {
 
 
     final LevelGenerator.Configuration forLevels =
-        Husk.create( LevelGenerator.Configuration.class )
+        novelang.outfit.Husk.create( LevelGenerator.Configuration.class )
         .withRandom( random )
         .withMaximumDepth( 3 )
         .withSublevelCountRange( 3, 3 )

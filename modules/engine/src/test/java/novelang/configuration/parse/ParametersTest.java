@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import com.google.common.collect.Lists;
-import novelang.DirectoryFixture;
+import novelang.testing.DirectoryFixture;
 import novelang.ResourceTools;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;

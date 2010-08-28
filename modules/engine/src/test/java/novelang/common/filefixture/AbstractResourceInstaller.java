@@ -24,7 +24,7 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import novelang.DirectoryFixture;
+import novelang.testing.DirectoryFixture;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 

@@ -31,7 +31,7 @@ import novelang.parser.antlr.TreeFixture;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.NameAwareTestClassRunner;
+import novelang.testing.junit.NameAwareTestClassRunner;
 
 import static novelang.ResourcesForTests.initialize;
 import static novelang.parser.NodeKind.*;
