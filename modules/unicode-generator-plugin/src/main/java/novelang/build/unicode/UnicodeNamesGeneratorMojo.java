@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 import novelang.build.CodeGenerationTools;
-import novelang.system.LogFactory;
+import novelang.logger.ConcreteLoggerFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -47,7 +47,7 @@ public class UnicodeNamesGeneratorMojo extends AbstractMojo {
   public void execute() throws MojoExecutionException, MojoFailureException {
     getLog().info( "Generating into: '" + packageRootDirectory + "'" ) ;
 
-    LogFactory.setMavenPluginLog( getLog() ) ;
+    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
 
     try {
       new UnicodeNamesGenerator(

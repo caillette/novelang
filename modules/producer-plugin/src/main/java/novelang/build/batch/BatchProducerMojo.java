@@ -22,13 +22,10 @@ import java.util.concurrent.TimeUnit;
 
 import novelang.Version;
 import novelang.logger.ConcreteLoggerFactory;
-import novelang.logger.Logger;
-import novelang.logger.LoggerFactory;
 import novelang.nhovestone.driver.DocumentGeneratorDriver;
 import novelang.nhovestone.driver.EngineDriver;
 import novelang.produce.DocumentProducer;
 import novelang.system.Husk;
-import novelang.system.LogFactory;
 import novelang.system.shell.JavaClasses;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;

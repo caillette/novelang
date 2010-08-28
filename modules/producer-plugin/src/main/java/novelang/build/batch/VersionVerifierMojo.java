@@ -23,7 +23,6 @@ import novelang.Version;
 import novelang.logger.ConcreteLoggerFactory;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
-import novelang.system.LogFactory;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 

@@ -33,6 +33,29 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-logger-mojo</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+
+    <!--
+      Just here to force exclusion of logger-slf4j instead of excluding it from
+      other 2 Novelang dependencies.
+    -->
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-primer</artifactId>
+      <version>${parent.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>${parent.groupId}</groupId>
+          <artifactId>Novelang-logger-slf4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-bootstrap</artifactId>
       <version>${parent.version}</version>
     </dependency>

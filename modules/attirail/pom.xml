@@ -65,6 +65,19 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-primer</artifactId>
+      <version>${parent.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>${parent.groupId}</groupId>
+          <artifactId>Novelang-logger-slf4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-tree</artifactId>
       <version>${parent.version}</version>
       <scope>compile</scope>

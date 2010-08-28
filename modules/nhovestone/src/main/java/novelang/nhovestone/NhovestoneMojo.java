@@ -19,9 +19,9 @@ package novelang.nhovestone;
 import java.io.File;
 
 import novelang.Version;
+import novelang.logger.ConcreteLoggerFactory;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
-import novelang.system.LogFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -59,7 +59,7 @@ public class NhovestoneMojo extends AbstractMojo {
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    LogFactory.setMavenPluginLog( getLog() ) ;
+    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
     final Logger logger = LoggerFactory.getLogger( NhovestoneMojo.class ) ;
     logger.info( "Using working directory: '" + workingDirectory + "'." ) ;
     logger.info( "Using distributions directory: '" + distributionsDirectory + "'." ) ;

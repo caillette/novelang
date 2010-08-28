@@ -19,7 +19,7 @@ package novelang.build.documentation;
 import java.io.File;
 import java.io.IOException;
 
-import novelang.system.LogFactory;
+import novelang.logger.ConcreteLoggerFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -44,9 +44,8 @@ public class LexemeTableMojo extends AbstractMojo {
   private File destinationFile;
 
   public void execute() throws MojoExecutionException, MojoFailureException {
+    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
     getLog().info( "Generating into: '" + destinationFile.getAbsolutePath() + "'" ) ;
-
-    LogFactory.setMavenPluginLog( getLog() ) ;
 
     try {
       LexemeTable.writeSourceDocument( destinationFile ) ;
