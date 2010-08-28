@@ -28,6 +28,7 @@ import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.ProcessCreationException;
+import novelang.system.shell.ProcessInitializationException;
 
 /**
  * Starts and stops an {@link novelang.daemon.HttpDaemon} in its deployment directory,
@@ -89,7 +90,8 @@ public class HttpDaemonDriver extends EngineDriver {
       throws
       IOException,
       InterruptedException,
-      ProcessCreationException
+      ProcessCreationException,
+      ProcessInitializationException 
   {
     ensureTcpPortAvailable() ;
     super.start( timeout, timeUnit );

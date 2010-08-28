@@ -36,6 +36,7 @@ import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.StartupTools;
 import novelang.system.shell.ProcessCreationException;
+import novelang.system.shell.ProcessInitializationException;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import static novelang.KnownVersions.VERSION_0_35_0;
@@ -56,7 +57,8 @@ public class Nhovestone {
       URISyntaxException,
       ProcessCreationException,
       VersionFormatException,
-      InterruptedException
+      InterruptedException,
+      ProcessInitializationException
   {
     // This must happen first. The need for originalArguments parameter prevents from
     // putting this initialization in a static block.
@@ -94,7 +96,13 @@ public class Nhovestone {
       final File scenariiDirectory,
       final File versionsDirectory,
       final Iterable< Version > versions
-  ) throws IOException, ProcessCreationException, InterruptedException {
+  )
+      throws
+      IOException,
+      ProcessCreationException,
+      InterruptedException,
+      ProcessInitializationException
+  {
     final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
         .withWarmupIterationCount( 1000 )
@@ -191,7 +199,11 @@ public class Nhovestone {
       final Log log
 
   )
-      throws IOException, ProcessCreationException, InterruptedException
+      throws
+      IOException,
+      ProcessCreationException,
+      InterruptedException,
+      ProcessInitializationException
   {
     final Scenario< Long, TimeMeasurement > scenario =
         new Scenario< Long, TimeMeasurement >( configuration ) ;

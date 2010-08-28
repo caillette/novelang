@@ -39,6 +39,7 @@ import novelang.system.Husk;
 import novelang.system.Log;
 import novelang.system.LogFactory;
 import novelang.system.shell.ProcessCreationException;
+import novelang.system.shell.ProcessInitializationException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -144,7 +145,8 @@ public class Scenario< UPSIZING, MEASUREMENT > {
       throws
       InterruptedException,
       IOException,
-      ProcessCreationException
+      ProcessCreationException,
+      ProcessInitializationException
   {
     try {
       startDaemons() ;
@@ -219,7 +221,8 @@ public class Scenario< UPSIZING, MEASUREMENT > {
   private void startDaemons()
       throws IOException,
       InterruptedException,
-      ProcessCreationException
+      ProcessCreationException,
+      ProcessInitializationException
   {
     for( final Monitoring monitoring : monitorings.values() ) {
       final HttpDaemonDriver driver = monitoring.driver ;
