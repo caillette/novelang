@@ -31,6 +31,19 @@
   <dependencies>
 
     <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-logger</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-logger-slf4j</artifactId>
+      <version>${parent.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
       <groupId>${lib.maven-plugin.groupid}</groupId>
       <artifactId>${lib.maven-plugin.artefactid}</artifactId>
       <version>${lib.maven-plugin.version}</version>

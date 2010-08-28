@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
  * The wrapping of {@link org.apache.maven.plugin.logging.Log} is for code running as a Maven
  * plugin. There is some singleton ugliness here but I couldn't figure a better approach.
  *
+ * @deprecated use {@link novelang.logger.LoggerFactory}.
+ *
  * @author Laurent Caillette
  */
 public class LogFactory {

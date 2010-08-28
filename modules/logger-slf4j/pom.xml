@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   
   <description>
-    A logger based on SLF4J. 
+    A Logger implementation based on SLF4J. 
   </description>
 
   <parent>

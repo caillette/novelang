@@ -19,6 +19,8 @@ package novelang.system;
 /**
  * A wrapper around {@link LogFactory} with varargs support and less clutter.
  *
+ * @deprecated use {@link novelang.logger.Logger}.
+ *
  * @author Laurent Caillette
  */
 public interface Log {
