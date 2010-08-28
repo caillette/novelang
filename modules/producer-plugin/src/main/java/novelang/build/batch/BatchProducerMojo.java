@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import novelang.Version;
+import novelang.logger.ConcreteLoggerFactory;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.nhovestone.driver.DocumentGeneratorDriver;
@@ -93,6 +94,8 @@ public class BatchProducerMojo extends AbstractProducerMojo {
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
+
+    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
 
     final List< String > classpathElements;
     try {

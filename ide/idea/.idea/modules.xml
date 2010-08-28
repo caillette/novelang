@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/insider/insider.iml" filepath="$PROJECT_DIR$/../../modules/insider/insider.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" filepath="$PROJECT_DIR$/../../modules/lexeme-table-plugin/lexeme-table-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/logger/logger.iml" filepath="$PROJECT_DIR$/../../modules/logger/logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/logger-mojo/logger-mojo.iml" filepath="$PROJECT_DIR$/../../modules/logger-mojo/logger-mojo.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/logger-slf4j/logger-slf4j.iml" filepath="$PROJECT_DIR$/../../modules/logger-slf4j/logger-slf4j.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone/nhovestone.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" filepath="$PROJECT_DIR$/../../modules/nhovestone-report/nhovestone-report.iml" />

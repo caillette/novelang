@@ -170,6 +170,9 @@
     <module>modules/engine-driver</module>
     <module>modules/insider</module>
     <module>modules/lexeme-table-plugin</module>
+    <module>modules/logger</module>
+    <module>modules/logger-mojo</module>
+    <module>modules/logger-slf4j</module>
     <module>modules/nhovestone</module>
 
     <!-- Don't include: we don't want to run a whole benchmark for each integration-test. -->
@@ -368,26 +371,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>${lib.slf4j.groupid}</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <version>${lib.slf4j.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.logback.groupid}</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>${lib.logback.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.logback.groupid}</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${lib.logback.version}</version>
-      <scope>runtime</scope>
-    </dependency>
 
     <dependency>
       <groupId>${lib.fest-assert.groupId}</groupId>

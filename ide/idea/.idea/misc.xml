@@ -94,6 +94,7 @@
         <option value="$PROJECT_DIR$/../../modules/attirail/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/logger/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/logger-slf4j/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/logger-mojo/pom.xml" />
       </list>
     </option>
   </component>

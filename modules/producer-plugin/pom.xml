@@ -36,8 +36,20 @@
 
     <dependency>
       <groupId>${parent.groupId}</groupId>
+      <artifactId>Novelang-logger-mojo</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-engine-driver</artifactId>
       <version>${parent.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>${parent.groupId}</groupId>
+          <artifactId>Novelang-logger-slf4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>

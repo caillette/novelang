@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 import novelang.Version;
+import novelang.logger.ConcreteLoggerFactory;
 import novelang.logger.Logger;
 import novelang.logger.LoggerFactory;
 import novelang.system.LogFactory;
@@ -39,13 +40,15 @@ import org.apache.maven.plugin.MojoFailureException;
  *
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "UnusedDeclaration" } )
 public class VersionVerifierMojo extends AbstractProducerMojo {
 
 
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    LogFactory.setMavenPluginLog( getLog() ) ;
+    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
+    
     final Logger log = LoggerFactory.getLogger( getClass() ) ;
 
 

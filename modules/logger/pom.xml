@@ -28,9 +28,6 @@
   <artifactId>Novelang-logger</artifactId>
   <name>${artifactId}</name>
 
-  <dependencies>
-
-  </dependencies>
 
 </project>
 

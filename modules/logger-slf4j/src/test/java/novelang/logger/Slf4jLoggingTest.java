@@ -16,11 +16,13 @@
  */
 package novelang.logger;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Laurent Caillette
  */
+@Ignore( "It pollutes Maven logs." )
 public class Slf4jLoggingTest {
 
   @Test

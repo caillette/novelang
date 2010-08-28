@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   
   <description>
-    A Logger implementation based on SLF4J. 
+    A Logger implementation based on Maven's plugin log. 
   </description>
 
   <parent>
@@ -29,7 +29,7 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <artifactId>Novelang-logger-slf4j</artifactId>
+  <artifactId>Novelang-logger-mojo</artifactId>
   <name>${artifactId}</name>
 
   <dependencies>
@@ -42,26 +42,10 @@
     </dependency>
 
     <dependency>
-      <groupId>${lib.slf4j.groupid}</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <version>${lib.slf4j.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.logback.groupid}</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>${lib.logback.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>${lib.logback.groupid}</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${lib.logback.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-
+      <groupId>${lib.maven-plugin.groupid}</groupId>
+      <artifactId>${lib.maven-plugin.artefactid}</artifactId>
+      <version>${lib.maven-plugin.version}</version>
+    </dependency>    
 
   </dependencies>
 
