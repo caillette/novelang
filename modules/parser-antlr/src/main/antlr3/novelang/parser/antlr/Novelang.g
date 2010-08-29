@@ -85,18 +85,18 @@ tokens {
 }
 
 @header {
-package novelang.parser.antlr ;
-import novelang.parser.antlr.ProblemDelegate ; // Keep first, used as a marker by code generator.
-import novelang.parser.antlr.ParserDelegate ;
-import novelang.parser.antlr.delimited.BlockDelimiter ;
-import novelang.common.Location ;
+package org.novelang.parser.antlr ;
+import org.novelang.parser.antlr.ProblemDelegate ; // Keep first, used as a marker by code generator.
+import org.novelang.parser.antlr.ParserDelegate ;
+import org.novelang.parser.antlr.delimited.BlockDelimiter ;
+import org.novelang.common.Location ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 }
 
 @lexer::header {
-package novelang.parser.antlr ;
-import novelang.parser.antlr.ProblemDelegate ; 
+package org.novelang.parser.antlr ;
+import org.novelang.parser.antlr.ProblemDelegate ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 }

@@ -21,23 +21,23 @@
     <level value="WARN" />
   </logger>
 
-  <logger name="novelang" >
+  <logger name="org.novelang" >
     <level value="DEBUG" />
   </logger>
 
-  <logger name="novelang.outfit.EnvironmentTools" >
+  <logger name="org.novelang.outfit.EnvironmentTools" >
     <level value="WARN" />
   </logger>
 
-  <logger name="novelang.loader" >
+  <logger name="org.novelang.loader" >
     <level value="INFO" />
   </logger>
 
-  <logger name="novelang.parser.antlr" >
+  <logger name="org.novelang.parser.antlr" >
     <level value="WARN" />
   </logger>
 
-  <logger name="novelang.common.tree.Statistics" >
+  <logger name="org.novelang.common.tree.Statistics" >
     <level value="WARN" />
   </logger>
 

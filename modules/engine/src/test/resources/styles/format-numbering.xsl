@@ -10,7 +10,7 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
     xmlns:xalan="http://xml.apache.org/xalan"
-    xmlns:nlx="xalan://novelang.rendering.xslt.Numbering"
+    xmlns:nlx="xalan://org.novelang.rendering.xslt.Numbering"
  >
   <xsl:import href="default-pdf.xsl" />
 

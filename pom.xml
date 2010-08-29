@@ -8,7 +8,7 @@
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <novelang.bootstrap.mainClass>novelang.bootstrap.Main</novelang.bootstrap.mainClass>
+    <novelang.bootstrap.mainClass>org.novelang.bootstrap.Main</novelang.bootstrap.mainClass>
     <novelang.bootstrap.batchCommand>generate</novelang.bootstrap.batchCommand>
 
 

@@ -18,7 +18,7 @@
     <enhancedDocumentSources>${project.build.directory}/enhanced</enhancedDocumentSources>
     <lexemeTableDocument>${enhancedDocumentSources}/source-characters.novella</lexemeTableDocument>
     <generatedDocumentsDirectory>${project.build.directory}/documentation</generatedDocumentsDirectory>
-    <lexemeTableMainClass>novelang.build.documentation.LexemeTable</lexemeTableMainClass>
+    <lexemeTableMainClass>org.novelang.build.documentation.LexemeTable</lexemeTableMainClass>
   </properties>
 
   <distributionManagement>

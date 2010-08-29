@@ -20,7 +20,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xalan="http://xml.apache.org/xalan"
-    xmlns:nlx="xalan://novelang.rendering.xslt"
+    xmlns:nlx="xalan://org.novelang.rendering.xslt"
 >
 
   <xsl:variable name="webColor" select="nlx:WebColor.new()" />

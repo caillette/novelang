@@ -19,12 +19,12 @@
 
   </appender>
 
-  <logger name="novelang" >
+  <logger name="org.novelang" >
     <level value="INFO" />
   </logger>
 
 
-  <logger name="novelang.parser.antlr" >
+  <logger name="org.novelang.parser.antlr" >
     <level value="WARN" />
   </logger>
 

@@ -19,7 +19,7 @@
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
     xmlns:xalan="http://xml.apache.org/xalan"
     xmlns:exslt="http://exslt.org/common"
-    xmlns:nlx="xalan://novelang.rendering.xslt.Numbering"
+    xmlns:nlx="xalan://org.novelang.rendering.xslt.Numbering"
  >
   <xsl:import href="default-pdf.xsl" />
 

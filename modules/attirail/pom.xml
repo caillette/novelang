@@ -90,6 +90,12 @@
       <artifactId>Novelang-shell</artifactId>
       <version>${parent.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>${parent.groupId}</groupId>
+          <artifactId>Novelang-logger-slf4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>

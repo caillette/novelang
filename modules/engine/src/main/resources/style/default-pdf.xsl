@@ -36,7 +36,7 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
-    xmlns:nlx="xalan://novelang.rendering.xslt"
+    xmlns:nlx="xalan://org.novelang.rendering.xslt"
 >
   <xsl:import href="punctuation-US-EN.xsl" />
 

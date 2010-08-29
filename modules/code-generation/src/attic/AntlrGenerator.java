@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package novelang.build;
+package org.novelang.build;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.io.IOUtils;

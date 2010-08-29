@@ -33,7 +33,7 @@
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xalan="http://xml.apache.org/xalan"
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
-    xmlns:nlx="xalan://novelang.rendering.xslt"
+    xmlns:nlx="xalan://org.novelang.rendering.xslt"
     exclude-result-prefixes="nlx"
 >
   <xsl:import href="simple-html.xsl" />

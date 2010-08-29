@@ -1,4 +1,4 @@
-package novelang.build;
+package org.novelang.build;
 
 import java.io.IOException;
 import java.io.File;
@@ -15,7 +15,7 @@ public class CodeGenerator {
   private CodeGenerator() { }
 
   private static final String GRAMMAR_CLASSNAME = "Novelang" ;
-  private static final String GENERIC_PARSER_PACKAGENAME = "novelang.parser" ;
+  private static final String GENERIC_PARSER_PACKAGENAME = "org.novelang.parser" ;
   private static final String NODE_ENUMERATION_CLASSNAME = "NodeKind" ;
   private static final String LEXEMES_CLASSNAME = "GeneratedLexemes" ;
   private static final String ANTLR_PARSER_PACKAGENAME = GENERIC_PARSER_PACKAGENAME + ".antlr";

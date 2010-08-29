@@ -35,7 +35,7 @@
     <!-- Need a dedicated directory because Novelang batch generation cleans output directory. -->
     <nhovestoneReportDirectory>${nhovestoneWorkingDirectory}/report</nhovestoneReportDirectory>
 
-    <nhovestoneMainClass>novelang.nhovestone.Nhovestone</nhovestoneMainClass>
+    <nhovestoneMainClass>org.novelang.nhovestone.Nhovestone</nhovestoneMainClass>
     <distributionsDirectory>../../distrib</distributionsDirectory>
     <nhovestoneReportFilename>nhovestone.pdf</nhovestoneReportFilename>
     <benchmarkedVersions>${project.version},0.43.0,0.38.1</benchmarkedVersions>
