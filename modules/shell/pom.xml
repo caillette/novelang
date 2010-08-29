@@ -22,7 +22,7 @@
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
     <artifactId>Novelang</artifactId>
-    <version>0.46.0</version>
+    <version>SNAPSHOT</version>
   </parent>
 
   <artifactId>Novelang-shell</artifactId>
