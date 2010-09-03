@@ -13,7 +13,7 @@
   <name>${artifactId}</name>
 
   <properties>
-    <updatedVersionSources.dir>${project.build.directory}/tweaked</updatedVersionSources.dir>
+    <updatedVersionSources.dir>${project.build.directory}/generated-sources</updatedVersionSources.dir>
     <versionJavaClassName>Version</versionJavaClassName>
   </properties>
 
@@ -23,40 +23,65 @@
     <plugins>
 
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
+        <groupId>${lib.maven-resources-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-resources-plugin.artefactId}</artifactId>
+        <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>
-            <phase>process-classes</phase>
-            <!--
-                There is no known mean to configure Maven compiler plugin to compile
-                one file separately, from its special source path.
-                So we cheat here, using Ant's Javac task. This overwrites normally compiled class.
-            -->
-            <configuration>
-              <tasks>
-
-                <delete dir="${updatedVersionSources.dir}" />
-                <mkdir dir="${updatedVersionSources.dir}" />
-
-                <copy todir="${updatedVersionSources.dir}">
-                  <fileset dir="${project.build.sourceDirectory}">
-                    <include name="**/${versionJavaClassName}.java" />
-                  </fileset>
-                </copy>
-
-                <replace dir="${updatedVersionSources.dir}" value="${project.version}">
-                  <replacetoken>@SNAPSHOT@</replacetoken>
-                </replace>
-                
-                <javac srcdir="${updatedVersionSources.dir}" destdir="${project.build.outputDirectory}" debug="on" />
-
-              </tasks>
-            </configuration>
+            <id>copy-version</id>
+            <phase>generate-sources</phase>
             <goals>
-              <goal>run</goal>
+              <goal>copy-resources</goal>
             </goals>
+            <configuration>
+              <outputDirectory>${updatedVersionSources.dir}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.build.sourceDirectory}</directory>
+                  <filtering>true</filtering>
+                  <includes>
+                    <include>**/${versionJavaClassName}.java</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>${lib.maven-compiler-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-compiler-plugin.artefactId}</artifactId>
+        <version>${lib.maven-compiler-plugin.version}</version>
+
+        <executions>
+
+          <execution>
+            <id>default-compile</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>**/${versionJavaClassName}.java</include>
+              </includes>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>compile-the-rest</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/${versionJavaClassName}.java</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+
+        </executions>
+
 
       </plugin>
 

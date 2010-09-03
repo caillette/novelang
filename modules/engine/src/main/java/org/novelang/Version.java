@@ -25,6 +25,8 @@ import java.util.Comparator;
  * of the whole application. 
  * By default the version is "SNAPSHOT" and the build process replaces a magic string by the
  * version number of the release.
+ * In order to replace the magic string at build time, this class compiles separately so it
+ * shouldn't depend on other Novelang classes. 
  * 
  * @author Laurent Caillette
  */
@@ -87,7 +89,7 @@ public final class Version {
   /**
    * This very string is replaced by the official version number by the build script.
    */
-  private static final String PRODUCT_VERSION_AS_STRING = "@SNAPSHOT@" ;
+  private static final String PRODUCT_VERSION_AS_STRING = "@project.version@" ;
 
   /**
    * Current version, reflects changes performed by build script.
@@ -119,7 +121,7 @@ public final class Version {
   }
   
   public static Version parse( final String s ) throws VersionFormatException {
-    if( ( "@" + SNAPSHOT + "@" ).equals( s ) || SNAPSHOT.equals( s ) ) {
+    if( ( "@" + "project.version" + "@" ).equals( s ) || SNAPSHOT.equals( s ) ) {
       return new Version() ;
     } else {
       final Matcher matcher = PATTERN.matcher( s ) ;
@@ -144,6 +146,7 @@ public final class Version {
      * Compares its two arguments for order. Returns a negative integer, zero, or a positive 
      * integer as the first argument is less than, equal to, or greater than the second.
      */
+    @Override
     public int compare( final Version version1, final Version version2 ) {
       
       if( version1 == version2 ) {
