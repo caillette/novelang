@@ -19,7 +19,7 @@ public class VersionTest {
   
   @Test
   public void parseSnapshot() throws VersionFormatException {
-    assertTrue( Version.parse( "@" + "SNAPSHOT@" ).isSnapshot() ) ;
+    assertTrue( Version.parse( "@" + "project.version@" ).isSnapshot() ) ;
     assertTrue( Version.parse( "SNAPSHOT" ).isSnapshot() ) ;
     assertTrue( Version.parse( new Version().getName() ).isSnapshot() ) ;
   }

@@ -13,7 +13,7 @@
   <name>${artifactId}</name>
 
   <properties>
-    <updatedVersionSources.dir>${project.build.directory}/generated-sources</updatedVersionSources.dir>
+    <updatedVersionSources.dir>${project.build.directory}/generated-sources/version</updatedVersionSources.dir>
     <versionJavaClassName>Version</versionJavaClassName>
   </properties>
 
@@ -57,7 +57,7 @@
         <executions>
 
           <execution>
-            <id>default-compile</id>
+            <id>default-compile</id> <!-- Override default compilation. -->
             <goals>
               <goal>compile</goal>
             </goals>
