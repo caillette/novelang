@@ -152,6 +152,16 @@
     <lib.fest-assert.artifactId>fest-assert</lib.fest-assert.artifactId>
     <lib.fest-assert.version>1.3</lib.fest-assert.version>
 
+    <lib.maven-project.groupId>org.apache.maven</lib.maven-project.groupId>
+    <lib.maven-project.artefactId>maven-project</lib.maven-project.artefactId>
+    <lib.maven-project.version>2.2.1</lib.maven-project.version>
+
+    <lib.maven-model.groupId>org.apache.maven</lib.maven-model.groupId>
+    <lib.maven-model.artefactId>maven-project</lib.maven-model.artefactId>
+    <lib.maven-model.version>2.2.1</lib.maven-model.version>
+
+
+
   </properties>
 
   <groupId>org.novelang</groupId>
@@ -162,6 +172,7 @@
   <url>http://novelang.sf.net</url>
 
   <modules>
+    <module>modules/assembly-descriptor</module>
     <module>modules/bolt</module>
     <module>modules/bootstrap</module>
     <module>modules/code-generation</module>
@@ -191,6 +202,7 @@
     <module>modules/producer-plugin</module>
     <module>modules/shell</module>
     <module>modules/shell-fixture</module>
+    <module>modules/source-plugin</module>
     <module>modules/syntactic-tree</module>
     <module>modules/syntactic-tree-fixture</module>
     <module>modules/tree</module>

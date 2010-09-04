@@ -2,6 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <description>
+    Aggregates sources of other Novelang projects referenced as dependencies, into
+    a single archive or directory.
+    There is a lot of hardcoding but making it parameterizable for hypothetical reuse
+    would be a joke since there are too many cases to cover.
+  </description>
+  
   <parent>
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
@@ -9,7 +16,7 @@
     <version>SNAPSHOT</version>
   </parent>
 
-  <artifactId>Novelang-producer-plugin</artifactId>
+  <artifactId>Novelang-source-plugin</artifactId>
   <name>${artifactId}</name>
   <packaging>maven-plugin</packaging>
 
@@ -34,23 +41,13 @@
       <version>${lib.maven-model.version}</version>
     </dependency>
 
+
     <dependency>
       <groupId>${parent.groupId}</groupId>
       <artifactId>Novelang-logger-mojo</artifactId>
       <version>${parent.version}</version>
     </dependency>
     
-    <dependency>
-      <groupId>${parent.groupId}</groupId>
-      <artifactId>Novelang-engine-driver</artifactId>
-      <version>${parent.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>${parent.groupId}</groupId>
-          <artifactId>Novelang-logger-slf4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
 
   </dependencies>
 

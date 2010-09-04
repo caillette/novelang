@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../modules/assembly-descriptor/assembly-descriptor.iml" filepath="$PROJECT_DIR$/../../modules/assembly-descriptor/assembly-descriptor.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/attirail/attirail.iml" filepath="$PROJECT_DIR$/../../modules/attirail/attirail.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/bolt/bolt.iml" filepath="$PROJECT_DIR$/../../modules/bolt/bolt.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/bootstrap/bootstrap.iml" filepath="$PROJECT_DIR$/../../modules/bootstrap/bootstrap.iml" />
@@ -30,6 +31,7 @@
       <module fileurl="file://$PROJECT_DIR$/../../modules/producer-plugin/producer-plugin.iml" filepath="$PROJECT_DIR$/../../modules/producer-plugin/producer-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/shell/shell.iml" filepath="$PROJECT_DIR$/../../modules/shell/shell.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/shell-fixture/shell-fixture.iml" filepath="$PROJECT_DIR$/../../modules/shell-fixture/shell-fixture.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../modules/source-plugin/source-plugin.iml" filepath="$PROJECT_DIR$/../../modules/source-plugin/source-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/syntactic-tree/syntactic-tree.iml" filepath="$PROJECT_DIR$/../../modules/syntactic-tree/syntactic-tree.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/syntactic-tree-fixture/syntactic-tree-fixture.iml" filepath="$PROJECT_DIR$/../../modules/syntactic-tree-fixture/syntactic-tree-fixture.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../modules/tree/tree.iml" filepath="$PROJECT_DIR$/../../modules/tree/tree.iml" />

@@ -99,6 +99,8 @@
         <option value="$PROJECT_DIR$/../../modules/unicode-generator-plugin-test/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/nhovestone-plugin/pom.xml" />
         <option value="$PROJECT_DIR$/../../modules/bolt/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/assembly-descriptor/pom.xml" />
+        <option value="$PROJECT_DIR$/../../modules/source-plugin/pom.xml" />
       </list>
     </option>
   </component>

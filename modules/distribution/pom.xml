@@ -22,9 +22,16 @@
         <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
         <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
         <version>${lib.maven-assembly-plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>${parent.groupId}</groupId>
+            <artifactId>Novelang-assembly-descriptor</artifactId>
+            <version>${parent.version}</version>
+          </dependency>
+        </dependencies>
         <configuration>
           <descriptors>
-            <descriptor>src/assemble/release.xml</descriptor>
+            <descriptor>distribution.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>
