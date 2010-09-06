@@ -338,6 +338,31 @@
     </plugins>
   </reporting>
 
+  <profiles>
+    <profile>
+      <id>windows_profile</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <toolsjar>${java.home}/../lib/tools.jar</toolsjar>
+      </properties>
+    </profile>
+    <profile>
+      <id>osx_profile</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <properties>
+        <toolsjar>${java.home}/../Classes/classes.jar</toolsjar>
+      </properties>
+    </profile>
+  </profiles>
+  
 
 
   <dependencies>
