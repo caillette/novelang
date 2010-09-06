@@ -35,6 +35,7 @@
     <orderEntry type="module" module-name="vanilla-fixture" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.1" level="project" />
     <orderEntry type="module" module-name="shell-fixture" scope="TEST" />
+    <orderEntry type="library" name="Maven: com.sun:tools:1.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.easytesting:fest-reflect:1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.easytesting:fest-util:1.1" level="project" />
