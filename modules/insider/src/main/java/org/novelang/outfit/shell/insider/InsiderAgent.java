@@ -87,6 +87,7 @@ public class InsiderAgent
     {
         new Thread( new Runnable()
         {
+            @Override
             public void run()
             {
                 System.out.println( getClass().getName() + " halting JVM..." ) ;

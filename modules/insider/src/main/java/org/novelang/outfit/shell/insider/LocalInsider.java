@@ -31,7 +31,6 @@ import static java.lang.System.currentTimeMillis;
 public class LocalInsider implements Insider {
 
   private final AtomicLong keepaliveCounter ;
-  private final String virtualMachineName ;
 
   public LocalInsider() {
     this( HEARTBEAT_FATAL_DELAY_MILLISECONDS ) ;
@@ -40,7 +39,7 @@ public class LocalInsider implements Insider {
 
   @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public LocalInsider( final long delay ) {
-    virtualMachineName = ManagementFactory.getRuntimeMXBean().getName() ;
+    final String virtualMachineName = ManagementFactory.getRuntimeMXBean().getName();
 
     printOut( "Initializing " + getClass().getSimpleName() + " "
         + "with: "
@@ -54,10 +53,10 @@ public class LocalInsider implements Insider {
         new Runnable() {
           @Override
           public void run() {
+            printOut(
+                "Started keepalive watcher from thread " + Thread.currentThread() + "." ) ;
             while( true ) {
               try {
-                printOut(
-                    "Started keepalive watcher from thread " + Thread.currentThread() + "." ) ;
                 Thread.sleep( delay ) ;
                 final long lag = currentTimeMillis() - keepaliveCounter.get() ;
                 if( lag > delay ) {
