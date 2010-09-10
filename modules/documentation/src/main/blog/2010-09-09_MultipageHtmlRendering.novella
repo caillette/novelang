@@ -2,7 +2,7 @@
 
 === What we need
 
-Let's dive into the big subject. What we need: rendering a single Novelang document over multiple HTML pages. By now, Novelang documentation takes one single huge page, which makes non-linear reading quite uncomfortable. Of course, this should work for both batch and interactive rendering.
+How hard would that be to render a single Novelang document over multiple HTML pages? Better ask: how cool would that be? Think about Novelang documentation taking one single huge page. This makes non-linear reading quite uncomfortable. Of course, multi-page rendering should work for both batch and interactive mode.
 
 === Technical implications
 
