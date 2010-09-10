@@ -70,6 +70,7 @@ public class DocumentHandler extends GenericHandler {
   }
 
 
+  @Override
   protected void doHandle(
       final String target,
       final HttpServletRequest request,
