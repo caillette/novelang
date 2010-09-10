@@ -83,5 +83,54 @@ Now for each page, Novelang creates the corresponding file out of the page name.
 
 This should be enough for the Renderer to figure how to render only the page of interest. It might need to peek elsewhere in the document tree (like for a footer with a copyright notice, or find other chapter names for a navigation bar).
 
-There is an additional role for node identifiers: they might help to "enhance" internal links by adding the prefix corresponding to the target page.
+=== Mix with other features (present or future)
+
+There is an additional role for node identifiers: they might help to "enhance" internal links by adding the prefix corresponding to the target page. (The internal link feature is yet in inception phase. It just seems easier to implement it right after multipage rendering.)
+
+
+=== New URL scheme
+
+With single-page rendering, the rendered document has the same name as the source document (with the difference of the extension). Multi-page adds a new "dimension". Because the name of the page may collide with another document's name, the name of the originating document prefixes the page name. Using ``~`` as separator we would have:
+
+<<<
+/main/documentation~syntax.html
+>>>
+
+Let's see which character we could use (only checked on Mac OS X, to do: check on Windows): 
+ 
+| Character | Escaped? | Comments                                            |
+| ``~`` | No  | Already used for Novelang meta pages.                        |
+| ``^`` | No  | Meaningless in that context.                                 |
+| ``#`` | No  | Fragment in URL.                                             |
+| ``,`` | No  | Hard to distinguish from full stop ``.`` character.          |
+| ``!`` | No  | Hard to read.                                                |  
+| ``_`` | No  | Too common in file names.                                    |
+| ``+`` | No  | Used in URL encoding. Usage unrelated to "plus" meaning.     |
+| ``%`` | No  | Used in URL encoding.                                        |
+| ``=`` | Yes | Used in URL encoding. Usage unrelated to "equality" meaning. |
+| ``$`` | Yes | Overused.                                                    |    
+| ``;`` | Yes | Hard to read.                                                |
+| ``|`` | Yes | Hard to read.                                                |
+| ``'`` | Yes | Hard to read.                                                |
+| ``&`` | Yes | Already used for URL parameters.                             |
+| ``?`` | Yes | Already used for URL parameters, DOS wildcard.               |
+| ``@`` | Yes | Inverted meaning if page name appears second.                |
+| ``{`` | Yes | Weird because unpaired. Meaningful otherwise.                |
+| ``§`` | Yes | Mac  OS X console doesn't like it.                           |
+| ``:`` | `-` | Path separator on Unix.                                      |
+
+The "Escaped?" column means, it requires escaping on Mac OS X console.
+
+Finally, it turns out that ``~`` ("tilde") looks the best. There is no technical collision with current usage for meta pages, and it's not a problem to switch to a different character since the URL are not meant to persist in any way.
+
+Special case: if the page identifier was blank, the page separator doesn't appear so we would still have: 
+
+<<<
+/main/documentation.html
+>>>
+
+This naming scheme also implies that all pages appear flatly in the same directory. This should help when resolving resource names.
+
+
+
 
