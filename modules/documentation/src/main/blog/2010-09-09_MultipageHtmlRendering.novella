@@ -1,0 +1,87 @@
+== Technical study: multi-page HTML rendering
+
+=== What we need
+
+Let's dive into the big subject. What we need: rendering a single Novelang document over multiple HTML pages. By now, Novelang documentation takes one single huge page, which makes non-linear reading quite uncomfortable. Of course, this should work for both batch and interactive rendering.
+
+=== Technical implications
+
+For batch rendering, there can be a simple approach. Xalan (XSLT rendering engine) offers the "Redirect extention"
+http://xml.apache.org/xalan-j/extensionslib.html#redirect 
+for redirecting output into a given file. 
+
+<<<
+<xsl:template match="/doc/foo">
+  <redirect:write select="@file">
+    <foo-out>
+      <xsl:apply-templates/>
+    </foo-out>
+  </redirect:write>
+</xsl:template>
+>>>  
+
+Unfortunately, this is not suitable for interactive rendering. For interactive rendering, the endering process must known both:
+- The requested page, through  a URL aware of the page (as sub-part of the whole document).
+- The whole document, because we may need to render links to other chapters or whatever.
+
+The same need arises for batch rendering but with Xalan's Redirect extension mentioned above, the whole logic gets buried inside the XSLT (which probably makes it quite complex).
+
+Obviously, we need a Renderer to work the same way for batch and interactive rendering, `e. g.` there should be no special handling of interactive or batch rendering in the XSL stylesheet. (But multi-page rendering would require a special stylesheet anyways, at least for generating navigation.)
+
+While XSLT-based rendering is the most common case in Novelang, it's better to think about the general contract of a ``org.novelang.rendering.Renderer``.  As it already does, the Renderer should spit bytes into a ``java.io.OutputStream`` with no knowledge wether it is a file or a socket. The job of creating the output (which means chosing a file name in the case of batch rendering) is left to some upstream object opening the ``OutputStream``. Currently, this is done by ``org.novelang.batch.DocumentGenerator`` or ``org.novelang.daemon.DocumentHandler`` which both end by calling ``DocumentProducer``, passing it the ``OutputStream``. 
+
+So rendering stage needs additional logic. Interactive rendering implies to extract the requested page from the URL. Batch rendering implies to find the list of pages to create corresponding files on the filesystem. 
+
+=== New Renderer contract
+
+There can't be unique way to split a document into pages, so we have new responsabilties for our Renderer:
+- Given a document tree (as a ``org.novelang.common.SyntacticTree``) it  calculates a list of page identifiers.
+- Given the same  document tree, plus a page identifier, it renders the corresponding page to an ``OutputStream``. 
+With something like a single empty page identifier, we should get the same single-page rendering as we have now.
+
+For an XSLT-based Renderer, we should embed page identifiers generation in the same XSL stylesheet (as a part of already-discussed "stylesheet metadata"
+http://novelang.blogspot.com/2008/09/opening-access-to-fop-configuration.html 
+):
+
+<<<
+<xsl:stylesheet [namespaces blah blah] >
+
+  <nlm:multipage>
+    <!-- 
+      Some XSL tranformations here,
+      starting from <n:opus> element. 
+    -->
+  </nlm:multipage>
+
+  ...
+>>>
+
+Before page rendering occurs, Novelang asks the Renderer for page identifiers. The default XSL-based Renderer applies the content of the ``<nlm:multipage>`` element (if there is one) as a stylesheet //on the whole document tree//. Then it obtains a list of page identifiers as follows:
+
+<<<
+<pages>
+  <page name="Home" >/n:opus</page-identifier>
+  <page name="ChapterOne" >/n:opus/n:level[1]</page-identifier>
+  <page name="ChapterTwo" >/n:opus/n:level[2]</page-identifier>
+<pages>
+>>>
+
+Of course each page name is unique. In order to achieve this with no tweak, the document tree may embed unique identifiers by extending the semantic of ``n:implicit-identifier`` or by adding a new ``n:unique-identifier`` element. Node paths seem easy to "generate"
+http://www.dpawson.co.uk/xsl/sect2/N6077.html#d8278e153 
+.
+
+Now for each page, Novelang creates the corresponding file out of the page name. If the stylesheet in the ``</nlm:multipage>`` did chose filesystem-friendly names, those will be used verbatim (otherwise we may apply some variant of URL encoding). And, for each page, Novelang calls the Renderer with the whole document tree again, and passes additional metadata elements to tell the Renderer which page it is rendering. Input XML looks like this:
+
+<<<
+<n:opus>
+  <n:meta>
+    <n:page-name>ChapterOne</n:page-name>
+    <n:page-path>/n:opus/n:level[1]</n:page-path>
+  </n:meta>
+</n:opus>
+>>>
+
+This should be enough for the Renderer to figure how to render only the page of interest. It might need to peek elsewhere in the document tree (like for a footer with a copyright notice, or find other chapter names for a navigation bar).
+
+There is an additional role for node identifiers: they might help to "enhance" internal links by adding the prefix corresponding to the target page.
+
