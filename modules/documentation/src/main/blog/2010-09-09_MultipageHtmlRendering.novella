@@ -6,7 +6,7 @@ How hard would that be to render a single Novelang document over multiple HTML p
 
 === Technical implications
 
-For batch rendering, there can be a simple approach. Xalan (XSLT rendering engine) offers the "Redirect extention"
+For batch rendering, there can be a simple approach. Xalan (XSLT rendering engine) offers the "redirect extension"
 http://xml.apache.org/xalan-j/extensionslib.html#redirect 
 for redirecting output into a given file. 
 
@@ -83,23 +83,37 @@ Now for each page, Novelang creates the corresponding file out of the page name.
 
 This should be enough for the Renderer to figure how to render only the page of interest. It might need to peek elsewhere in the document tree (like for a footer with a copyright notice, or find other chapter names for a navigation bar).
 
+
 === Mix with other features (present or future)
 
 There is an additional role for node identifiers: they might help to "enhance" internal links by adding the prefix corresponding to the target page. (The internal link feature is yet in inception phase. It just seems easier to implement it right after multipage rendering.)
 
 
+=== Unique page names
+
+Novelang's Fragment Identifier is the perfect candidate to generate page identifers. Unfortunately, composite identifier contain the ``\`` character. Should we escape it, or mix it with some weird pseudo-directory feature? But maybe it's time to remove relative identifiers which never proved useful, and don't guarantee identifer uniqueness, anyways.
+
+It's easy to create a new ``<n:unique-identifier>`` element by adding a simple counter to a colliding identifier. The ``<n:unique-identifier>`` value for some given document fragment may change across several generations, when adding fragments with colliding identifiers. This won't be a problem for internal links (links defined by the document itself) prohibit usage of unique identifier. Remember: unique identifiers are only for pure HTML links.
+
+If there is a chance that a foreign HTML documents links to the HTML anchor defined by the unique identifier (in a pure WWWW -- World Wide Web Way-_) then document author should use explicit identifiers. 
+
 === New URL scheme
 
-With single-page rendering, the rendered document has the same name as the source document (with the difference of the extension). Multi-page adds a new "dimension". Because the name of the page may collide with another document's name, the name of the originating document prefixes the page name. Using ``~`` as separator we would have:
+With single-page rendering, the rendered document has the same name as the source document (with the difference of the extension). Multi-page adds a new "dimension". Because the name of the page may collide with another document's name, the name of the originating document prefixes the page name. Let's look at different options:
 
 <<<
 /main/documentation~syntax.html
+/main/documentation!syntax.html
+/main/documentation,syntax.html
+/main/documentation^syntax.html
+/main/documentation--syntax.html
 >>>
 
 Let's see which character we could use (only checked on Mac OS X, to do: check on Windows): 
  
 | Character | Escaped? | Comments                                            |
 | ``~`` | No  | Already used for Novelang meta pages.                        |
+| ``-`` | No  | Already used for Novelang identifiers.                       |
 | ``^`` | No  | Meaningless in that context.                                 |
 | ``#`` | No  | Fragment in URL.                                             |
 | ``,`` | No  | Hard to distinguish from full stop ``.`` character.          |
@@ -121,7 +135,7 @@ Let's see which character we could use (only checked on Mac OS X, to do: check o
 
 The "Escaped?" column means, it requires escaping on Mac OS X console.
 
-Finally, it turns out that ``~`` ("tilde") looks the best. There is no technical collision with current usage for meta pages, and it's not a problem to switch to a different character since the URL are not meant to persist in any way.
+Finally, it turns out that ``--`` looks the best, especially with a variable-width font like in Mac OS X Finder or Windows Explorer. 
 
 Special case: if the page identifier was blank, the page separator doesn't appear so we would still have: 
 
