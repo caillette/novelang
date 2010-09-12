@@ -217,7 +217,7 @@ novella
 levelIntroducer 
   @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
   : ( ( tags mediumbreak )?
-      ( ( relativeIdentifier | absoluteIdentifier ) mediumbreak )?
+      ( absoluteIdentifier mediumbreak )?
       levelIntroducerIndent
       ( whitespace? levelTitle )?
     )
@@ -233,7 +233,6 @@ levelIntroducer
               $levelIntroducerIndent.tree,
               $levelTitle.tree,
               $tags.tree,
-              $relativeIdentifier.tree,
               $absoluteIdentifier.tree
        ) }
 
@@ -261,24 +260,20 @@ tags
 
 
 compositeIdentifier
-  : REVERSE_SOLIDUS ( REVERSE_SOLIDUS identifierSegment )+
-    -> ^( COMPOSITE_IDENTIFIER  identifierSegment+ )
+  : REVERSE_SOLIDUS REVERSE_SOLIDUS symbolicName
+    -> ^( COMPOSITE_IDENTIFIER { delegate.createTree( $symbolicName.text ) } )
   ;
   
-relativeIdentifier
-  : ( REVERSE_SOLIDUS identifierSegment )
-    -> ^( RELATIVE_IDENTIFIER  identifierSegment  )
-  ;
 
 absoluteIdentifier
-  : REVERSE_SOLIDUS ( REVERSE_SOLIDUS identifierSegment )
-    -> ^( ABSOLUTE_IDENTIFIER  identifierSegment )
+  : REVERSE_SOLIDUS REVERSE_SOLIDUS symbolicName
+    -> ^( ABSOLUTE_IDENTIFIER { delegate.createTree( $symbolicName.text ) } )
   ;
   
-identifierSegment
-  : symbolicName
-    -> { delegate.createTree( $symbolicName.text ) }  
-  ;
+//identifierSegment
+//  : symbolicName
+//    -> { delegate.createTree( $symbolicName.text ) }  
+//  ;
 
 // =====================
 // Paragraph and related

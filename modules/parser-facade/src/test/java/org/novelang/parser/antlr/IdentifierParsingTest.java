@@ -42,21 +42,12 @@ public class IdentifierParsingTest {
   @Test
   public void compositeIdentifier() throws RecognitionException {
     PARSERMETHOD_COMPOSITEIDENTIFIER.checkTreeAfterSeparatorRemoval(
-        "\\\\ab\\solute",
-        tree( COMPOSITE_IDENTIFIER, tree( "ab" ), tree( "solute" ) )
+        "\\\\absolute",
+        tree( COMPOSITE_IDENTIFIER, tree( "absolute" ) )
 
     ) ;
   }
 
-
-  @Test
-  public void parseRelativeIdentifier() throws RecognitionException {
-    PARSERMETHOD_RELATIVEIDENTIFIER.checkTreeAfterSeparatorRemoval(
-        "\\relative",
-        tree( RELATIVE_IDENTIFIER, "relative" )
-
-    ) ;
-  }
 
 
 
@@ -67,8 +58,6 @@ public class IdentifierParsingTest {
 
   private static final ParserMethod PARSERMETHOD_ABSOLUTEIDENTIFIER = 
       new ParserMethod( "absoluteIdentifier" ) ;
-  private static final ParserMethod PARSERMETHOD_RELATIVEIDENTIFIER = 
-      new ParserMethod( "relativeIdentifier" ) ;
   private static final ParserMethod PARSERMETHOD_COMPOSITEIDENTIFIER =
       new ParserMethod( "compositeIdentifier" ) ;
 

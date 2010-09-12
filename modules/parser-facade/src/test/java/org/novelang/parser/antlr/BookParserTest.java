@@ -131,11 +131,11 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithOneFragmentIdentifier() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:. \\\\y\\z",
+        "insert file:. \\\\z",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
-            tree( COMPOSITE_IDENTIFIER, tree( "y" ), tree( "z" ) )
+            tree( COMPOSITE_IDENTIFIER, tree( "z" ) )
         )    
     ) ;
   }
@@ -143,12 +143,12 @@ public class BookParserTest {
   @Test
   public void insertFunctionCallWithTwoFragmentIdentifiers() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
-        "insert file:. \\\\w\\x \\\\y\\z",
+        "insert file:. \\\\y \\\\z",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
-            tree( COMPOSITE_IDENTIFIER, tree( "w" ), tree( "x" ) ),
-            tree( COMPOSITE_IDENTIFIER, tree( "y" ), tree( "z" ) )
+            tree( COMPOSITE_IDENTIFIER, tree( "y" ) ),
+            tree( COMPOSITE_IDENTIFIER, tree( "z" ) )
         )    
     ) ;
   }
@@ -157,7 +157,7 @@ public class BookParserTest {
   public void insertFunctionCallWithEverything() {
     PARSERMETHOD_FUNCTIONCALL_INSERT.checkTreeAfterSeparatorRemoval(  
         "insert file:x/y/z.novella recurse sort=version- createlevel style=whatever " +
-        "\\\\u-v_w\\x \\\\y\\z",
+        "\\\\u-v_w \\\\xyz",
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:x/y/z.novella" ),
@@ -165,8 +165,8 @@ public class BookParserTest {
             tree( COMMAND_INSERT_SORT_, "version-" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
             tree( COMMAND_INSERT_STYLE_, "whatever" ),
-            tree( COMPOSITE_IDENTIFIER, tree( "u-v_w" ), tree( "x" ) ),
-            tree( COMPOSITE_IDENTIFIER, tree( "y" ), tree( "z" ) )
+            tree( COMPOSITE_IDENTIFIER, tree( "u-v_w" ) ),
+            tree( COMPOSITE_IDENTIFIER, tree( "xyz" ) )
         )    
     ) ;
   }

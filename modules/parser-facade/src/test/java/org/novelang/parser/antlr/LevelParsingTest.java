@@ -88,18 +88,6 @@ public class LevelParsingTest {
   }
 
 
-  @Test
-  public void levelHasRelativeIdentifier() throws RecognitionException {
-    PARSERMETHOD_LEVEL_INTRODUCER.checkTreeAfterSeparatorRemoval(
-        "\\foo" + BREAK +
-        "===",
-        tree(
-            LEVEL_INTRODUCER_,
-            tree( LEVEL_INTRODUCER_INDENT_, "===" ),
-            tree( RELATIVE_IDENTIFIER, "foo" )
-        )
-    ) ;
-  }
 
   @Test
   public void levelHasOneParagraphWithEmphasisThenWordOnTwoLines() throws RecognitionException {
