@@ -18,8 +18,10 @@
 package org.novelang.rendering;
 
 import java.io.OutputStream;
+import java.util.Map;
 
 import org.novelang.common.Renderable;
+import org.novelang.common.SyntacticTree;
 
 /**
  * @author Laurent Caillette
@@ -38,5 +40,7 @@ public interface Renderer {
   ) throws Exception ;
 
   RenditionMimeType getMimeType() ;
+
+//  Map< PageIdentifier, String > findPageIdentifiers( SyntacticTree documentTree ) ;
 
 }

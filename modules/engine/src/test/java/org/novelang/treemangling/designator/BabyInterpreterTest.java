@@ -3,21 +3,14 @@ package org.novelang.treemangling.designator;
 import java.util.Map;
 
 import org.junit.Test;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertNull;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.RobustPath;
-import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.novelang.parser.NodeKind._LEVEL;
-import static org.novelang.parser.NodeKind.LEVEL_TITLE;
-import static org.novelang.parser.NodeKind.WORD_;
-import static org.novelang.parser.NodeKind.RELATIVE_IDENTIFIER;
-import static org.novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
-import static org.novelang.parser.NodeKind.NOVELLA;
+import org.novelang.common.tree.Treepath;
 import org.novelang.designator.FragmentIdentifier;
+
+import static org.junit.Assert.*;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for {@link BabyInterpreter}.
@@ -40,14 +33,14 @@ public class BabyInterpreterTest {
    *     |
    * yLevel \\y
    *     |
-   * zLevel \z
+   * zLevel \\z
    * </pre>
    */
   @Test
   public void twoAbsoluteIdentifiers() {
     final SyntacticTree zLevel = tree(
         _LEVEL,
-        tree( RELATIVE_IDENTIFIER, "z" )
+        tree( ABSOLUTE_IDENTIFIER, "z" )
     ) ;
     final SyntacticTree yLevel = tree(
         _LEVEL,
@@ -55,7 +48,7 @@ public class BabyInterpreterTest {
         zLevel
     ) ;
     final FragmentIdentifier yIdentifier = new FragmentIdentifier( "y" ) ;
-    final FragmentIdentifier zIdentifier = new FragmentIdentifier( yIdentifier, "z" ) ;
+    final FragmentIdentifier zIdentifier = new FragmentIdentifier( "z" ) ;
 
     final SyntacticTree novella = tree(
         NOVELLA,
@@ -105,7 +98,6 @@ public class BabyInterpreterTest {
         zLevel
     ) ;
     final FragmentIdentifier yIdentifier = new FragmentIdentifier( "y" ) ;
-    final FragmentIdentifier zLikeRelativeIdentifier = new FragmentIdentifier( yIdentifier, "z" ) ;
     final FragmentIdentifier zLikeAbsoluteIdentifier = new FragmentIdentifier( "z" ) ;
 
     final SyntacticTree novella = tree(
@@ -116,7 +108,7 @@ public class BabyInterpreterTest {
 
     final Map< FragmentIdentifier, RobustPath< SyntacticTree > > pureIdentifiers =
         interpreter.getPureIdentifierMap() ;
-    assertEquals( 1, pureIdentifiers.keySet().size() ) ;
+    assertEquals( 1L, ( long ) pureIdentifiers.keySet().size() ) ;
 
     final Map< FragmentIdentifier, RobustPath< SyntacticTree > > derivedIdentifiers =
         interpreter.getDerivedIdentifierMap() ;
@@ -124,16 +116,11 @@ public class BabyInterpreterTest {
 
     assertFalse( interpreter.hasProblem() ) ;
 
-    assertEquals( 2, derivedIdentifiers.keySet().size() ) ;
+    assertEquals( 1L, ( long ) derivedIdentifiers.keySet().size() ) ;
 
     assertSame(
         yLevel,
         makeTree( pureIdentifiers.get( yIdentifier ), novella )
-    ) ;
-
-    assertSame(
-        zLevel,
-        makeTree( derivedIdentifiers.get( zLikeRelativeIdentifier ), novella )
     ) ;
 
     assertSame(
@@ -180,7 +167,7 @@ public class BabyInterpreterTest {
     
     final SyntacticTree yLevel = tree(
         _LEVEL,
-        tree( RELATIVE_IDENTIFIER, "y" ),
+        tree( ABSOLUTE_IDENTIFIER, "y" ),
         zLevel
     ) ;
     
@@ -199,8 +186,8 @@ public class BabyInterpreterTest {
     final BabyInterpreter interpreter = createInterpreter( novella ) ;
 
     assertFalse( interpreter.hasProblem() ) ;
-    assertEquals( 2, interpreter.getPureIdentifierMap().keySet().size() ) ;
-    assertEquals( 1, interpreter.getDerivedIdentifierMap().keySet().size() ) ;
+    assertEquals( 2L, ( long ) interpreter.getPureIdentifierMap().keySet().size() ) ;
+    assertEquals( 0L, ( long ) interpreter.getDerivedIdentifierMap().keySet().size() ) ;
     assertFalse( interpreter.hasProblem() ) ;
   }
 
@@ -240,7 +227,6 @@ public class BabyInterpreterTest {
     final FragmentIdentifier xIdentifier = new FragmentIdentifier( "x" ) ;
     final FragmentIdentifier yIdentifier = new FragmentIdentifier( "y" ) ;
     final FragmentIdentifier zIdentifier = new FragmentIdentifier( "z" ) ;
-    final FragmentIdentifier yzIdentifier = new FragmentIdentifier( yIdentifier, "z" ) ;
 
     final BabyInterpreter interpreter = createInterpreter( wLevel ) ;
     final Map< FragmentIdentifier, RobustPath< SyntacticTree > > derivedIdentifiers =
@@ -250,8 +236,8 @@ public class BabyInterpreterTest {
 
     assertFalse( interpreter.hasProblem() ) ;
 
-    assertEquals( 1, pureIdentifierTreepathMap.keySet().size() ) ;
-    assertEquals( 2, derivedIdentifiers.keySet().size() ) ;
+    assertEquals( 1L, ( long ) pureIdentifierTreepathMap.keySet().size() ) ;
+    assertEquals( 1L, ( long ) derivedIdentifiers.keySet().size() ) ;
 
 
     assertSame(
@@ -262,11 +248,6 @@ public class BabyInterpreterTest {
     assertSame(
         yLevel,
         makeTree( pureIdentifierTreepathMap.get( yIdentifier ), wLevel )
-    ) ;
-
-    assertSame(
-        zLevel,
-        makeTree( derivedIdentifiers.get( yzIdentifier ), wLevel )
     ) ;
 
     assertNull( pureIdentifierTreepathMap.get( zIdentifier ) ) ;

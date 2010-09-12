@@ -53,8 +53,8 @@ public class CommandFactoryTest {
             tree( COMMAND_INSERT_CREATELEVEL_ ),
             tree( COMMAND_INSERT_LEVELABOVE_, "3" ),
             tree( COMMAND_INSERT_STYLE_, "whatever" ),
-            tree( COMPOSITE_IDENTIFIER, tree( "w" ), tree( "x" ) ),
-            tree( COMPOSITE_IDENTIFIER, tree( "y" ), tree( "z" ) )
+            tree( COMPOSITE_IDENTIFIER, tree( "yyy" ) ),
+            tree( COMPOSITE_IDENTIFIER, tree( "zzz" ) )
         )    
     ) ;
     assertTrue( "Got: " + command, command instanceof InsertCommand ) ;
@@ -66,8 +66,8 @@ public class CommandFactoryTest {
     assertEquals( "whatever", extractStyleName( command ) ) ;
     final Iterator< FragmentIdentifier > absoluteIdentifiers = 
         extractFragmentIdentifiers( command ).iterator() ;
-    assertEquals( new FragmentIdentifier( "w", "x" ), absoluteIdentifiers.next() ) ;
-    assertEquals( new FragmentIdentifier( "y", "z" ), absoluteIdentifiers.next() ) ;
+    assertEquals( new FragmentIdentifier( "yyy" ), absoluteIdentifiers.next() ) ;
+    assertEquals( new FragmentIdentifier( "zzz" ), absoluteIdentifiers.next() ) ;
     assertFalse( absoluteIdentifiers.hasNext() ) ;
   }
   

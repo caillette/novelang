@@ -40,7 +40,7 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
 
   public BabyInterpreter( final Treepath< SyntacticTree > treepath ) {
     final Collector collector = new Collector() ;
-    process( collector, treepath, null ) ;
+    process( collector, treepath ) ;
     pureIdentifiers = Collections.unmodifiableMap( collector.pureIdentifiers ) ;
     for( final FragmentIdentifier duplicate : collector.duplicateDerivedIdentifiers ) {
       collector.derivedIdentifiers.remove( duplicate ) ;
@@ -90,8 +90,7 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
 
   private void process(
       final Collector collector,
-      final Treepath< SyntacticTree > treepath,
-      final FragmentIdentifier parentIdentifier
+      final Treepath< SyntacticTree > treepath
   ) {
     final SyntacticTree tree = treepath.getTreeAtEnd() ;
     if( tree.isOneOf( DesignatorTools.IDENTIFIER_BEARING_NODEKINDS ) ) {
@@ -117,27 +116,6 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
           }
           break ;
 
-        case RELATIVE :
-          if ( parentIdentifier == null ) {
-            addProblem(
-                collector,
-                tree,
-                "Missing absolute parent identifier for relative identifier '" + segment + "'"
-            ) ;
-            explicitIdentifier = null ;
-          } else {
-            explicitIdentifier = new FragmentIdentifier( parentIdentifier, segment ) ;
-            if( verifyFreshness( 
-                collector, tree, explicitIdentifier, collector.pureIdentifiers ) 
-            ) {
-              collector.pureIdentifiers.put(
-                  explicitIdentifier,
-                  RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
-              ) ;
-            }
-          }
-          break ;
-
         case IMPLICIT :
           explicitIdentifier = null ;
           final FragmentIdentifier implicitAbsoluteIdentifier = new FragmentIdentifier( segment ) ;
@@ -150,18 +128,6 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
             ) ;
           }
 
-          if( parentIdentifier != null ) {
-            final FragmentIdentifier implicitRelativeIdentifier =
-                new FragmentIdentifier( parentIdentifier, segment ) ;
-            if( collector.derivedIdentifiers.containsKey( implicitRelativeIdentifier ) ) {
-              collector.duplicateDerivedIdentifiers.add( implicitRelativeIdentifier ) ;
-            } else {
-              collector.derivedIdentifiers.put( 
-                  implicitRelativeIdentifier,
-                  RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
-              ) ;
-            }
-          }
           break ;
 
         default :
@@ -171,8 +137,7 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
       for( int i = 0 ; i < tree.getChildCount() ; i ++ ) {
         process(
             collector,
-            Treepath.create( treepath, i ),
-            explicitIdentifier
+            Treepath.create( treepath, i )
         ) ;
       }
 

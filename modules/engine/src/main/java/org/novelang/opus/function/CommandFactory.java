@@ -105,11 +105,7 @@ public class CommandFactory {
   
   private static FragmentIdentifier getFragmentIdentifier( final SyntacticTree tree ) {
     Preconditions.checkArgument( tree.isOneOf( COMPOSITE_IDENTIFIER ) ) ;
-    final List< String > segments = Lists.newArrayList() ;
-    for( final SyntacticTree child : tree.getChildren() ) {
-      segments.add( child.getText() ) ;
-    }
-    return new FragmentIdentifier( segments ) ; 
+    return new FragmentIdentifier( tree.getChildAt( 0 ).getText() ) ; 
   }
   
   

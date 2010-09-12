@@ -95,10 +95,7 @@ public class SegmentExtractor
         throw new IllegalArgumentException( // TODO accumulate errors instead.
             "Missing absolute identifier above relative identifier " + identifierTree ) ;
       } else {
-        return new FragmentIdentifier(
-            parentIdentifier,
-            new FragmentIdentifier( extractSegment( identifierTree ) )
-        ) ;
+        return new FragmentIdentifier( extractSegment( identifierTree ) ) ;
       }
     }
     return null ;

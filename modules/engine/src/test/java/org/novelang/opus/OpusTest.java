@@ -298,7 +298,7 @@ public class OpusTest {
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 _LEVEL,
-                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\IdentifierOne\\IdentifierTwo" ) ),
+                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\IdentifierTwo" ) ),
                 tree( _IMPLICIT_TAG, "LevelTwo" ),
                 tree( LEVEL_TITLE, tree( WORD_, "LevelTwo" ) ),
                 tree(
