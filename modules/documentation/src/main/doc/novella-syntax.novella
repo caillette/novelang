@@ -629,22 +629,9 @@ XML element: ``n:implicit-identifier``, ``n:explicit-identifier``,
 
 An identifier is a textual marker identifying a level inside a Novella.
 The ``insert`` command (explained in "Opus syntax" chapter) recognizes identifiers to insert
-only given levels.
-
-As defined in a Novella, an identifier may be either absolute or relative.
-
---- An absolute identifier starts with a double
-reverse solidus ``\\``. A relative identifier starts with a single reverse solidus ``\``.
-The rest of the identifier is made of letters, digts, and hyphen minus
+only given levels. An identifier starts with a double
+reverse solidus ``\\``. The rest of the identifier is made of letters, digts, and hyphen minus
 (hyphen minus may only appear between letters and digits and there cannot be two consecutive ones).
-
---- A relative identifier refers to another relative identifier, or to an absolute identifer,
-along the hierarchy of the level they are attached to.
-Going upwards in a hierarchy of relative identifiers, there must be an absolute one at the top.
-Considering hierachical order, an identifier may not have several immediate subordinates
-with the same name.
-
-As Novelang reads a Novella file, it resolves relative identifiers as absolute ones.
 
 Because often, titles are good candidates for identifiers, they resolve implicitely as identifiers
 as long as they are unique. As a result of Novella processing, an identifier may be either explicit
@@ -660,6 +647,7 @@ Paragraph 0
 == Level 1
 
 
+  \\One-one
 === Level 1.1
 
 Paragraph 1.1
@@ -670,12 +658,10 @@ Paragraph 1.1
 Other level (2)
 
 
-  \Two
 === Level 1.2
 
 Paragraph 1.2
 
-  \Three
 ==== Level 1.2.1
 
 Paragraph 1.2.1
@@ -687,22 +673,20 @@ Other level (2)
 >>>
 
 It has:
-- 3 explicit identifiers:
+- 2 explicit identifiers:
   - ``\\One``
-  - ``\\One\Two``
-  - ``\\One\Three``
+  - ``\\One-onz``
 - 3 implicit identifers:
-  - ``\\Level-1.1``
-  - ``\\One\Level-1.1``
-  - ``\\One\Other``
-  - ``\\One\Two\Other``
+  - ``\\Level-1_2``
+  - ``\\Level-1_2_1``
 
-Implicit identifiers resolve in both absolute and relative identifiers, as long as they don't
-collide with another identifier. That's why ``Other`` cannot resolve as absolute identifier.
+Implicit identifiers do exist as long as they don't
+collide with another identifier. That's why ``Other`` doesn't appear as an implicit identifier.
 
 Novelang checks uniqueness of explicit identifiers within the same Novella. Since Novellæ are created
 independantly, identifiers may collide when aggregating Novellæ into a single Opus.
 With Novelang default HTML stylsheet, colliding identifiers show striked out.
+
 
 === Escaped characters
 

@@ -89,7 +89,7 @@ A sequence of composite identifiers (as defined in "Novella syntax" chapter) lim
 of reference Novella to some fragments.
 
 <<<
-insert file:my-novella \\Some\Identifier \\Some\Other\One
+insert file:my-novella \\Some-identifier \\Some-other
 >>>
 
 
