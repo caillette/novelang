@@ -35,6 +35,9 @@
             </goals>
             <configuration>
               <outputDirectory>${updatedVersionSources.dir}</outputDirectory>
+              <delimiters>
+                <delimiter>@</delimiter>
+              </delimiters>
               <resources>
                 <resource>
                   <directory>${project.build.sourceDirectory}</directory>
