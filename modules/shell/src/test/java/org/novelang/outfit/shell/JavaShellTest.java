@@ -19,12 +19,16 @@ package org.novelang.outfit.shell;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.net.Socket;
+import java.rmi.ConnectException;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
+import org.novelang.outfit.TcpPortBooker;
+import org.novelang.outfit.shell.insider.Insider;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.RepeatedAssert;
 import org.novelang.testing.StandalonePredicate;
@@ -41,6 +45,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
+ * Tests for {@link JavaShell}.
+ * This test needs the embedded Insider jar in the classpath (see insider Maven project).
+ * For running from an IDE, needs parameters like this:
+ * <pre>
+-Dlogback.configurationFile=configuration/test/logback-test.xml
+-Dorg.novelang.outfit.shell.agentjarfile=/Users/currentuser/.m2/repository/org/novelang/Novelang-insider/${project.version}/Novelang-insider-${project.version}.jar
+-Dorg.novelang.outfit.shell.fixturejarfile=/Users/currentuser/.m2/repository/org/novelang/Novelang-shell-fixture/${project.version}/Novelang-shell-fixture-${project.version}.jar
+-Dorg.novelang.outfit.shell.versionoverride=SNAPSHOT
+ * </pre>
+ * 
  * @author Laurent Caillette
  */
 @RunWith( NameAwareTestClassRunner.class )
@@ -113,9 +127,10 @@ public class JavaShellTest {
               .withHeartbeatPeriodMilliseconds( 100 )
       ) ;
       javaShell.start() ;
+      final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
       shellFixture.askForSelfTermination() ;
       Thread.sleep( ( long ) heartbeatFatalDelay ) ;
-      assertFalse( javaShell.isUp() ) ;
+      assertThat( maybeDown.apply() ).isTrue() ;
     }
   }
 
@@ -136,17 +151,24 @@ public class JavaShellTest {
       final JavaShellParameters parameters = shellFixture.getParameters()
           .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
           .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
+          .withJmxPortConfiguredAtJvmStartup( TcpPortBooker.THIS.find() )
+          .withJmxKit( new DefaultJmxKit( ) )          
       ;
 
       final JavaShell javaShell = new JavaShell( parameters ) ;
       try {
         javaShell.start() ;
+
+        final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
+        assertThat( maybeDown.apply() ).isFalse() ; // Test health.
+
         RepeatedAssert.assertEventually(
-            new MaybeDown( javaShell ),
+            maybeDown,
             maybeDownCheckPeriod,
             TimeUnit.MILLISECONDS,
             maybeDownRetryCount
         ) ;
+
         final List< String > log = readLines( shellFixture.getLogFile() ) ;
         assertThat( log )
             .hasSize( 1 )
@@ -322,7 +344,8 @@ public class JavaShellTest {
               logFile.getAbsolutePath(),
               Integer.toString( dummyListenerPort )
           ) )
-          .withJmxPort( jmxPort )
+          .withJmxPortConfiguredAtJvmStartup( jmxPort )
+          .withJmxKit( new DefaultJmxKit() )
       ;
     }
 
@@ -339,15 +362,23 @@ public class JavaShellTest {
 
   private static class MaybeDown implements StandalonePredicate {
 
-    private final JavaShell javaShell ;
+    private final Insider insider ;
 
-    public MaybeDown( final JavaShell javaShell ) {
-      this.javaShell = javaShell ;
+    public MaybeDown( final JavaShell javaShell ) throws IOException, InterruptedException {
+      insider = javaShell.getManagedBean( Insider.class, Insider.NAME ) ;
     }
 
     @Override
     public boolean apply() {
-      return ! javaShell.isUp() ;
+      try {
+        return ! insider.isAlive() ;
+      } catch( UndeclaredThrowableException e ) {
+        if( e.getCause() instanceof java.rmi.ConnectException ) {
+          return true ;
+        } else {
+          throw e ;
+        }
+      }
     }
 
     @Override

@@ -59,4 +59,13 @@ public interface Insider {
    */
   boolean isAlive() ;
 
+  /**
+   * Causes a call to {@code System.out.println}.
+   */
+  void printStandard( String message ) ;
+
+  /**
+   * Causes a call to {@code System.err.println}.
+   */
+  void printError( String message ) ;
 }

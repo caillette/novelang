@@ -26,6 +26,7 @@ import org.novelang.Version;
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.TcpPortBooker;
+import org.novelang.outfit.shell.DefaultJmxKit;
 import org.novelang.outfit.shell.JavaClasses;
 import org.novelang.outfit.shell.JavaShell;
 import org.novelang.outfit.shell.JavaShellParameters;
@@ -137,7 +138,8 @@ public abstract class EngineDriver {
         .withJavaClasses( configuration.getJavaClasses() )
         .withProgramArguments( programOptionsBuilder.build() )
         .withStartupSensor( startupSensor )
-        .withJmxPort( TcpPortBooker.THIS.find() )
+        .withJmxPortConfiguredAtJvmStartup( TcpPortBooker.THIS.find() )
+        .withJmxKit( new DefaultJmxKit() )
     ;
 
 

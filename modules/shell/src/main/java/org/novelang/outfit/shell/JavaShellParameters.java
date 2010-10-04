@@ -47,9 +47,6 @@ public interface JavaShellParameters {
   Predicate< String > getStartupSensor() ;
   JavaShellParameters withStartupSensor( Predicate< String > startupSensor ) ;
 
-  int getJmxPort() ;
-  JavaShellParameters withJmxPort( int jmxPort ) ;
-
   Integer getHeartbeatFatalDelayMilliseconds() ;
   JavaShellParameters withHeartbeatFatalDelayMilliseconds( Integer maximum ) ;
 
@@ -61,5 +58,21 @@ public interface JavaShellParameters {
 
   TimeUnit getStartupTimeoutTimeUnit() ;
   JavaShellParameters withStartupTimeoutTimeUnit( TimeUnit timeUnit ) ;
+
+  /**
+   * May be null, then there should be a null {@link #getJmxPortConfiguredAtJvmStartup()}.
+   *
+   * @return a possibly null object. 
+   */
+  BootstrappingJmxKit getJmxKit() ;
+  JavaShellParameters withJmxKit( BootstrappingJmxKit jmxKit ) ;
+
+  /**
+   * May be null, then {@link #getJmxKit()} should be null.
+   *
+   * @return a possibly null object.
+   */
+  Integer getJmxPortConfiguredAtJvmStartup() ;
+  JavaShellParameters withJmxPortConfiguredAtJvmStartup( Integer port ) ;
 
 }

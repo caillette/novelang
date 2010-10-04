@@ -45,7 +45,7 @@ public interface Vanilla {
  * <pre>
 final Vanilla initial = Husk.create( Vanilla.class ) ;
 final Vanilla updated = initial.withInt( 1 ).withString( "Foo" ).withFloat( 2.0f ) ;
-assertEquals( "Foo", updated.getString() ) ;  
+assertEquals( "Foo", updated.getString() ) ;
 </pre>
  * When it's convenient to create one object with several parameters, the
  * {@link Converter#converterClass()} annotation indicates a class containing static methods
@@ -254,19 +254,19 @@ public final class Husk {
   }
 
 
-  private static final ImmutableMap< String ,Object > EMPTY_MAP = ImmutableMap.of() ;
+  private static final ImmutableMap< String, MaybeNullHolder > EMPTY_MAP = ImmutableMap.of() ;
 
 
   private static class PropertiesKeeper implements InvocationHandler {
 
     private final Class< ? > huskClass;
     private final Map< String, Method > converters ;
-    private final Map< String, Object > values ;
+    private final Map< String, MaybeNullHolder > values ;
 
     private PropertiesKeeper(
         final Class< ? > huskClass,
         final Map< String, Method > converters,
-        final Map< String, Object > values
+        final Map< String, MaybeNullHolder > values
     ) {
       this.huskClass = huskClass;
       this.converters = converters ;
@@ -288,9 +288,9 @@ public final class Husk {
         } else {
           updateValue = converter.invoke( null, args ) ;
         }
-        final Map< String, Object > updatedValues = Maps.newHashMap() ;
+        final Map< String, MaybeNullHolder > updatedValues = Maps.newHashMap() ;
         updatedValues.putAll( values ) ;
-        updatedValues.put( propertyName, updateValue ) ;
+        updatedValues.put( propertyName, new MaybeNullHolder( updateValue ) ) ;
         return Proxy.newProxyInstance(
             Husk.class.getClassLoader(),
             new Class< ? >[] { huskClass },
@@ -299,12 +299,13 @@ public final class Husk {
       }
       if( methodName.startsWith( "get" ) ) {
         final String propertyName = methodName.substring( 3 ) ;
-        final Object value = values.get( propertyName ) ;
+        final MaybeNullHolder mapValue = values.get( propertyName ) ;
+        final Object pureValue = mapValue == null ? null : mapValue.maybeNull ;
         final Class< ? > returnType = method.getReturnType() ;
-        if( value == null && returnType.isPrimitive() ) {
+        if( pureValue == null && returnType.isPrimitive() ) {
           return 0 ;
         } else {
-          return value ;
+          return pureValue ;
         }
       }
       throw new IllegalStateException(
@@ -313,9 +314,20 @@ public final class Husk {
     }
   }
 
+  /**
+   * The {@link ImmutableMap} can't hold null values, we deal with that.
+   */
+  private static class MaybeNullHolder {
+    public final Object maybeNull ;
+
+    public MaybeNullHolder( final Object maybeNull ) {
+      this.maybeNull = maybeNull ;
+    }
+  }
+
   @Retention( RetentionPolicy.RUNTIME )
   @Target( ElementType.TYPE )
   public @interface Converter {
-    Class< ? > converterClass() ; 
+    Class< ? > converterClass() ;
   }
 }

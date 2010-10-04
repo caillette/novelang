@@ -41,7 +41,7 @@ public class LocalInsider implements Insider {
   public LocalInsider( final long delay ) {
     final String virtualMachineName = ManagementFactory.getRuntimeMXBean().getName();
 
-    printOut( "Initializing " + getClass().getSimpleName() + " "
+    printStandard( "Initializing " + getClass().getSimpleName() + " "
         + "with: "
         + "virtualMachineName=" + virtualMachineName + ", "
         + "fatalHeartbeatDelay=" + delay + " milliseconds..."
@@ -53,14 +53,15 @@ public class LocalInsider implements Insider {
         new Runnable() {
           @Override
           public void run() {
-            printOut(
+            printStandard(
                 "Started keepalive watcher from thread " + Thread.currentThread() + "." ) ;
             while( true ) {
               try {
                 Thread.sleep( delay ) ;
                 final long lag = currentTimeMillis() - keepaliveCounter.get() ;
                 if( lag > delay ) {
-                  printErr( "No heartbeat for more than " + delay + " milliseconds, " +
+                  printError(
+                      "No heartbeat for more than " + delay + " milliseconds, " +
                       "halting with status of " + STATUS_HEARTBEAT_PERIOD_EXPIRED + "." ) ;
                   Runtime.getRuntime().halt( STATUS_HEARTBEAT_PERIOD_EXPIRED ) ;
                   break ; // Avoid a compilation warning because of infinite loop.
@@ -107,12 +108,14 @@ public class LocalInsider implements Insider {
     return true ;
   }
 
-  private static void printOut( final String message ) {
+  @Override
+  public void printStandard( final String message ) {
     System.out.println( createTimestamp() + message ) ;
     System.out.flush() ;
   }
 
-  private static void printErr( final String message ) {
+  @Override
+  public void printError( final String message ) {
     System.out.println( createTimestamp() + message ) ;
     System.err.flush() ;
   }

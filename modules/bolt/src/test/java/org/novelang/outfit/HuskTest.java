@@ -64,6 +64,13 @@ public class HuskTest {
   }
 
   @Test
+  public void supportNull() {
+    final Vanilla initial = org.novelang.outfit.Husk.create( Vanilla.class ) ;
+    final Vanilla updated = initial.withString( null ) ;
+    assertNull( updated.getString() ) ;
+  }
+
+  @Test
   public void inheritingHusk() {
     final Child initialChild = Husk.create( Child.class ) ;
     assertNull( initialChild.getInteger() ) ;

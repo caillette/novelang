@@ -18,22 +18,12 @@ package org.novelang.outfit.shell;
 
 import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
-import java.net.MalformedURLException;
-import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
-import javax.management.InstanceNotFoundException;
-import javax.management.JMX;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
-import javax.naming.ServiceUnavailableException;
+
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.shell.insider.Insider;
@@ -43,19 +33,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Starts and shuts down a JVM with an {@link org.novelang.outfit.shell.insider.InsiderAgent}
- * that installs an {@link Insider} for various tasks.
+ * that installs an {@link org.novelang.outfit.shell.insider.Insider} for various tasks.
  * This class takes great care of JVM shutdown.
  * <ul>
  *   <li>
- *     With a {@link ShutdownStyle#GENTLE} shutdown, it calls
+ *     With a {@link org.novelang.outfit.shell.ShutdownStyle#GENTLE} shutdown, it calls
  *     {@link org.novelang.outfit.shell.insider.Insider#shutdown()} that attempts to perform
  *     a nice {@code System.exit()} that calls shutdown hooks.
  *   </li> <li>
  *     The JVM starts with a special system property
- *     {@value ShutdownTools#SHUTDOWN_TATTOO_PROPERTYNAME} used by
- *     {@link ShutdownTools#shutdownAllTattooedVirtualMachines()} to recognize JVMs to shut down.
+ *     {@value org.novelang.outfit.shell.ShutdownTools#SHUTDOWN_TATTOO_PROPERTYNAME} used by
+ *     {@link org.novelang.outfit.shell.ShutdownTools#shutdownAllTattooedVirtualMachines()} to recognize JVMs to shut down.
  *   </li> <li>
- *     The {@link Insider} in the JVM halts when
+ *     The {@link org.novelang.outfit.shell.insider.Insider} in the JVM halts when
  *     {@link org.novelang.outfit.shell.insider.Insider#keepAlive()} wasn't called for a few seconds.
  *     The {@link JavaShell} runs a thread doing this, so if its JVM gets down, the JVM it started
  *     soon goes down, too.
@@ -68,23 +58,29 @@ public class JavaShell extends ProcessShell {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( JavaShell.class ) ;
 
-  private final int jmxPort ;
+  private final BootstrappingJmxKit jmxKit ;
   private final Integer heartbeatPeriodMilliseconds ;
 
   /**
-   * A semaphore that is slightly redundant with the one inside {@link ProcessShell}
+   * A semaphore that is slightly redundant with the one inside {@link org.novelang.outfit.shell.ProcessShell}
    * but this helps preserving encapsulation.
    */
   private final Semaphore ownStartupSensorSemaphore ;
 
   /**
    * The count of permits that {@link #ownStartupSensorSemaphore} will try to acquire.
-   * It depends upon the number of sensors inside {@link TieredStartupSensor}.
+   * It depends upon the number of sensors inside {@link org.novelang.outfit.shell.TieredStartupSensor}.
    */
   private final int startupSensorSemaphorePermitCount ;
 
   private final long startupTimeoutDuration ;
   private final TimeUnit startupTimeoutTimeUnit ;
+
+  /**
+   * We use this object even when using always the same {@link JmxKit} because it does useful things.
+   */
+  private final JmxBeanPool jmxBeanPool ;
+
 
 
   public JavaShell( final JavaShellParameters parameters ) {
@@ -93,10 +89,11 @@ public class JavaShell extends ProcessShell {
         parameters.getNickname(),
         JavaShellTools.createProcessArguments(
             parameters.getJvmArguments(),
-            parameters.getJmxPort(),
+            parameters.getJmxKit(),
+            parameters.getJmxPortConfiguredAtJvmStartup(),
             parameters.getJavaClasses(),
             parameters.getProgramArguments(),
-            parameters.getHeartbeatFatalDelayMilliseconds()
+            calculateHeartbeatFatalDelay( parameters )
         ),
         createTieredStartupSensor(
             LOCAL_INSIDER_STARTED,
@@ -104,8 +101,15 @@ public class JavaShell extends ProcessShell {
         )
     ) ;
 
-    checkArgument( parameters.getJmxPort() > 0 ) ;
-    this.jmxPort = parameters.getJmxPort() ;
+    LOGGER.warn( "Using a forked implementation!" );
+
+    this.jmxKit = parameters.getJmxKit() ;
+    if( this.jmxKit != null ) {
+      // Host is always localhost since we create process only on the local machine.
+      jmxBeanPool = new JmxBeanPool( "localhost", checkNotNull( parameters.getJmxPortConfiguredAtJvmStartup() ) ) ;
+    } else {
+      jmxBeanPool = null ;
+    }
 
     {
       final Long timeoutDuration = parameters.getStartupTimeoutDuration() ;
@@ -116,6 +120,7 @@ public class JavaShell extends ProcessShell {
         this.startupTimeoutDuration = timeoutDuration ;
       }
     }
+
 
     {
       final TimeUnit timeUnit = parameters.getStartupTimeoutTimeUnit() ;
@@ -134,15 +139,24 @@ public class JavaShell extends ProcessShell {
 
     // Code checker happy: avoid access in both synchronized and unsynchronized context.
     synchronized( stateLock ) {
-      jmxConnector = null ;
-      jmxConnection = null ;
       heartbeatSender = null ;
       insider = null ;
     }
   }
 
 
-  private static final Predicate< String > LOCAL_INSIDER_STARTED = new Predicate< String >() {
+  private static final String HEARTBEAT_FATAL_DELAY_PROPERTYNAME = "org.novelang.outfit.shell.heartbeatfataldelay" ;  
+
+  private static Integer calculateHeartbeatFatalDelay( final JavaShellParameters parameters ) {
+    final String systemProperty = System.getProperty( HEARTBEAT_FATAL_DELAY_PROPERTYNAME ) ;
+    if( systemProperty == null ) {
+      return parameters.getHeartbeatFatalDelayMilliseconds() ;
+    } else {
+      return Integer.parseInt( systemProperty ) ;
+    }
+  }
+
+    private static final Predicate< String > LOCAL_INSIDER_STARTED = new Predicate< String >() {
     @Override
     public boolean apply( final String input ) {
       // Seems printed by the JVM itself.
@@ -151,8 +165,6 @@ public class JavaShell extends ProcessShell {
   } ;
 
 
-  private JMXConnector jmxConnector ;
-  private MBeanServerConnection jmxConnection;
   private Insider insider;
   private HeartbeatSender heartbeatSender;
 
@@ -201,13 +213,17 @@ public class JavaShell extends ProcessShell {
       synchronized( stateLock ) {
         super.start( adjustedTimeoutDurationMilliseconds, TimeUnit.MILLISECONDS ) ;
         connect() ;
-        insider.keepAlive() ; // Ensure JMX working.
-        startHeartbeatSender() ;
+        if( insider != null ) {
+          insider.keepAlive() ; // Ensure JMX working.
+          startHeartbeatSender() ;
+        }
       }
-      synchronized( processIdentifierLock ) {
-        final RuntimeMXBean runtimeMXBean = getManagedBean(
-            RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
-        processIdentifier = JavaShellTools.extractProcessId( runtimeMXBean.getName() ) ;
+      if( hasDefaultJmxKit() ) {
+        synchronized( processIdentifierLock ) {
+          final RuntimeMXBean runtimeMXBean = getManagedBean(
+              RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
+          processIdentifier = JavaShellTools.extractProcessId( runtimeMXBean.getName() ) ;
+        }
       }
       ownStartupSensorSemaphore.tryAcquire(
           startupSensorSemaphorePermitCount,
@@ -240,25 +256,6 @@ public class JavaShell extends ProcessShell {
     }
   }
 
-  /**
-   * Checks if the managed JVM is up by issuing a JMX call.
-   *
-   * @return {@code true} if the call succeeded, {@code false} otherwise (process not started
-   *         or JMX connection lost or process terminated).
-   */
-  public boolean isUp() {
-    synchronized( stateLock ) {
-      if( insider == null ) {
-        return false ;
-      }
-      try {
-        return insider.isAlive() ;
-      } catch( Exception ignored ) {
-        return false ;
-      }
-    }
-  }
-
 
 
 // ===================
@@ -266,14 +263,15 @@ public class JavaShell extends ProcessShell {
 // ===================
 
 
-  /**
+    /**
    * Requests the underlying process to shutdown. When requested to shut down in a
-   * {@link ShutdownStyle#GENTLE} or {@link ShutdownStyle#WAIT} style, the method waits until the
+   * {@link org.novelang.outfit.shell.ShutdownStyle#GENTLE} or
+   * {@link org.novelang.outfit.shell.ShutdownStyle#WAIT} style, the method waits until the
    * process gently terminates.
    *
    * @param shutdownStyle a non-null object.
    * @throws InterruptedException should not happen.
-   * @throws IOException too bad.
+   * @throws java.io.IOException too bad.
    */
   public Integer shutdown( final ShutdownStyle shutdownStyle )
       throws InterruptedException, IOException
@@ -292,7 +290,9 @@ public class JavaShell extends ProcessShell {
           switch( shutdownStyle ) {
             case GENTLE :
               try {
-                insider.shutdown() ;
+                  if( hasDefaultJmxKit() ) {
+                    insider.shutdown() ;
+                  }
               } catch( Exception e ) {
                 logger.info( "Shutdown request failed: ", e.getMessage(), ", forcing..." ) ;
                 exitStatus = shutdownProcess( true ) ;
@@ -326,7 +326,9 @@ public class JavaShell extends ProcessShell {
         heartbeatSender.stop() ;
         heartbeatSender = null ;
       }
-      disconnect() ;
+      if( jmxBeanPool != null ) {
+        jmxBeanPool.disconnectAll() ;
+      }
       synchronized( processIdentifierLock ) {
         processIdentifier = JavaShellTools.UNDEFINED_PROCESS_ID ;
       }
@@ -368,104 +370,34 @@ public class JavaShell extends ProcessShell {
 // JMX
 // ===
 
+  public final boolean hasDefaultJmxKit() {
+    return jmxKit != null ;
+  }
 
   /**
    * Synchronization on {@link #stateLock} left to caller.
    */
   private void connect() throws IOException, InterruptedException {
-    final JMXServiceURL url ;
-    try {
-      url = new JMXServiceURL( "service:jmx:rmi:///jndi/rmi://localhost:" + jmxPort + "/jmxrmi" );
-    } catch( MalformedURLException e ) {
-      throw new Error( e ) ;
+    if( jmxKit != null ) {
+      insider = getManagedBean( Insider.class, Insider.NAME ) ;
     }
-    connectWithRetries( url ) ;
-    jmxConnection = jmxConnector.getMBeanServerConnection() ;
-    insider = getManagedBean( Insider.class, Insider.NAME ) ;
   }
 
-  private void connectWithRetries( final JMXServiceURL url )
-      throws IOException, InterruptedException
+
+  /**
+   * Returns a proxy on a JMX bean in the launched JVM, using default {@link JmxKit}.
+   *
+   * @param beanClass a non-null object.
+   * @param beanName a non-null object.
+   * @return a non-null object.
+   *
+   * @throws IllegalStateException if {@link #hasDefaultJmxKit()} returns {@code false}.
+   */
+  public < BEAN > BEAN getManagedBean( final Class< BEAN > beanClass, final ObjectName beanName )
+        throws IOException, InterruptedException
   {
-    LOGGER.info( "Connecting to ", url, " ..." ) ;
-    int attemptCount = 0 ;
-    while( true ) {
-      try {
-        jmxConnector = JMXConnectorFactory.connect( url, null ) ;
-        LOGGER.debug( "Successfully connected to ", url ) ;
-        return ;
-      } catch( IOException e ) {
-        final Throwable cause = e.getCause() ;
-        if(    cause instanceof ServiceUnavailableException
-            || cause instanceof java.rmi.ConnectException
-        ) {
-          if( attemptCount ++ < 10 ) {
-            LOGGER.debug( "Couldn't connect to ", url, ", waiting a bit before another attempt..." ) ;
-            TimeUnit.MILLISECONDS.sleep( 200L ) ;
-          } else {
-            throw e ;
-          }
-        }
-      }
-    }
-  }
-
-
-  private final Map< ObjectName, Object > managedBeans = Maps.newHashMap() ;
-
-  public < BEAN > BEAN getManagedBean( final Class< BEAN > beanClass, final ObjectName beanName ) {
-    checkNotNull( beanClass ) ;
-    checkNotNull( beanName ) ;
-
-    synchronized( stateLock ) {
-      final Object cachedBean = managedBeans.get( beanName ) ;
-      final BEAN bean ;
-      if( cachedBean == null ) {
-        bean = JMX.newMBeanProxy( jmxConnection, beanName, beanClass, true ) ;
-        managedBeans.put( beanName, bean ) ;
-      } else {
-        //noinspection unchecked
-        bean = ( BEAN ) cachedBean ;
-      }
-      return bean ;
-    }
-  }
-
-
-  private void disconnect() {
-    try {
-      if( jmxConnection != null ) {
-        for( final ObjectName beanName : managedBeans.keySet() ) {
-          try {
-            jmxConnection.unregisterMBean( beanName ) ;
-          } catch( InstanceNotFoundException e ) {
-            logCouldntUnregister( beanName, e ) ;
-          } catch( MBeanRegistrationException e ) {
-            logCouldntUnregister( beanName, e ) ;
-          } catch( IOException e ) {
-            logCouldntUnregister( beanName, e ) ;
-          }
-        }
-      }
-      if( jmxConnector != null ) {
-        try {
-          jmxConnector.close() ;
-        } catch( IOException e ) {
-          logCouldntUnregister( jmxConnector, e ) ;
-        }
-      }
-    } finally {
-      managedBeans.clear() ;
-      jmxConnection = null ;
-      jmxConnector = null ;
-    }
-  }
-
-  private static void logCouldntUnregister( final Object culprit, final Exception e ) {
-/*
-    LOG.debug( "Couldn't disconnect or unregister " + culprit + ", cause: " + e.getClass() +
-        " (may be normal if other VM terminated)." ) ;
-*/
+    Preconditions.checkState( hasDefaultJmxKit() ) ;
+    return jmxBeanPool.getManagedBean( beanClass, beanName, jmxKit ) ;
   }
 
 

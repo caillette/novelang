@@ -20,13 +20,18 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import java.util.Map;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanRegistrationException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
-import org.novelang.outfit.shell.insider.Insider;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Removes clutter from {@link JavaShell}.
@@ -35,9 +40,13 @@ import org.apache.commons.io.FileUtils;
 public class JavaShellTools {
 
 
+  public static final Runnable NULL_RUNNABLE = new Runnable() {
+    @Override
+    public void run() { }
+  } ;
 
-  private JavaShellTools() {
-  }
+
+  private JavaShellTools() { }
 
   /**
    * Tries to obtain system process identifier of running JVM.
@@ -81,7 +90,7 @@ public class JavaShellTools {
 // ====================================
 
 
-  static final List< String > JAVA_UTIL_LOGGING_CONFIGURATION = ImmutableList.of(
+  static final ImmutableList< String > JAVA_UTIL_LOGGING_CONFIGURATION = ImmutableList.of(
     "handlers= java.util.logging.ConsoleHandler",
     ".level=INFO",
     "",
@@ -109,11 +118,12 @@ public class JavaShellTools {
   }
 
 
-  static List< String > createProcessArguments(
-      final List< String > jvmArguments,
-      final int jmxPort,
+  static ImmutableList< String > createProcessArguments(
+      final ImmutableList< String > jvmArguments,
+      final BootstrappingJmxKit jmxKit,
+      final Integer jmxPort,
       final JavaClasses javaClasses,
-      final List< String > programArguments,
+      final ImmutableList< String > programArguments,
       final Integer heartbeatMaximumPeriod
   ) {
     final List< String > argumentList = Lists.newArrayList() ;
@@ -124,23 +134,18 @@ public class JavaShellTools {
 
     argumentList.add( "-D" + ShutdownTools.SHUTDOWN_TATTOO_PROPERTYNAME ) ;
 
-    argumentList.add( "-Dcom.sun.management.jmxremote.port=" + jmxPort ) ;
-
-    // No security yet.
-    argumentList.add( "-Dcom.sun.management.jmxremote.authenticate=false" ) ;
-    argumentList.add( "-Dcom.sun.management.jmxremote.ssl=false" ) ;
+    if( jmxKit == null ) {
+        Preconditions.checkArgument( jmxPort == null, "Null jmxKit implies null jmxPort" ) ;
+    }
+    else
+    {
+        checkNotNull( jmxPort ) ;
+        argumentList.addAll( jmxKit.getJvmProperties( jmxPort, heartbeatMaximumPeriod ) ) ;
+    }
 
     // Log JMX activity. Didn't prove useful.
 //    argumentList.add( "-Djava.util.logging.config.file=" +
 //        JAVA_UTIL_LOGGING_CONFIGURATION_FILE.getAbsolutePath() ) ;
-
-    argumentList.add(
-        "-javaagent:" + AgentFileInstaller.getInstance().getJarFile().getAbsolutePath()
-        + ( heartbeatMaximumPeriod == null
-            ? ""
-            : "=" + Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME + heartbeatMaximumPeriod
-        )
-    ) ;
 
     if( jvmArguments != null ) {
       argumentList.addAll( jvmArguments ) ;
@@ -149,6 +154,52 @@ public class JavaShellTools {
     argumentList.addAll( javaClasses.asStringList() ) ;
     argumentList.addAll( programArguments ) ;
 
-    return argumentList ;
+    return ImmutableList.copyOf( argumentList ) ;
   }
+
+
+// ===
+// JMX
+// ===
+
+
+  /**
+   * Unregisters JMX Beans and closes the {@link javax.management.remote.JMXConnector}s.
+   * This method should close the default JMX connector o {@link JavaShell} because, when there is one, there is always
+   * a registered {@link org.novelang.outfit.shell.insider.Insider} at startup so it should appear inside the
+   * {@code Map}.
+   *
+   */
+  /*package*/ static void disconnectAll( final Map<JmxBeanKey, JmxBeanValue > connectedBeans ) {
+
+    // First, unregister all beans.
+    for( final JmxBeanValue value : connectedBeans.values() ) {
+      try {
+        value.getConnectionBundle().connection.unregisterMBean( value.getObjectName() ) ;
+      } catch( InstanceNotFoundException e ) {
+        logCouldntUnregister( value.getObjectName(), e ) ;
+      } catch( MBeanRegistrationException e ) {
+        logCouldntUnregister( value.getObjectName(), e ) ;
+      } catch( IOException e ) {
+        logCouldntUnregister( value.getObjectName(), e ) ;
+      }
+    }
+
+    // Now we can close safely. The JMXConnector#close() method has no effect when called more than once.
+    for( final JmxBeanValue value : connectedBeans.values() ) {
+      try {
+        value.getConnectionBundle().connector.close() ;
+      } catch( IOException e ) {
+        logCouldntUnregister( value.getConnectionBundle().connector, e ) ;
+      }
+    }
+  }
+
+  private static void logCouldntUnregister( final Object culprit, final Exception e ) {
+/*
+    LOG.debug( "Couldn't disconnect or unregister " + culprit + ", cause: " + e.getClass() +
+        " (may be normal if other VM terminated)." ) ;
+*/
+  }
+
 }
