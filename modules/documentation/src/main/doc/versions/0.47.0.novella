@@ -1,0 +1,5 @@
+--- Feature removal: relative identifier. Never used, and would make "multipage rendering"
+http://novelang.blogspot.com/2010/09/technical-study-multi-page-html.html
+much more complicated.
+
+--- Small enhancements to Novelang-attirail, the reusable library. 
