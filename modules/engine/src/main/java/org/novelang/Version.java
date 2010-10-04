@@ -89,7 +89,7 @@ public final class Version {
   /**
    * This very string is replaced by the official version number by the build script.
    */
-  private static final String PRODUCT_VERSION_AS_STRING = "@project.version@" ;
+  private static final String PRODUCT_VERSION_AS_STRING = "${project.version}" ;
 
   /**
    * Current version, reflects changes performed by build script.

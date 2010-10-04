@@ -35,9 +35,7 @@
             </goals>
             <configuration>
               <outputDirectory>${updatedVersionSources.dir}</outputDirectory>
-              <delimiters>
-                <delimiter>@</delimiter>
-              </delimiters>
+              <!-- Delimiter '@' doesn't seem to work here. --> 
               <resources>
                 <resource>
                   <directory>${project.build.sourceDirectory}</directory>
