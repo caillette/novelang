@@ -121,7 +121,7 @@ public final class Version {
   }
   
   public static Version parse( final String s ) throws VersionFormatException {
-    if( ( "@" + "project.version" + "@" ).equals( s ) || SNAPSHOT.equals( s ) ) {
+    if( ( "${" + "project.version" + "}" ).equals( s ) || SNAPSHOT.equals( s ) ) {
       return new Version() ;
     } else {
       final Matcher matcher = PATTERN.matcher( s ) ;
