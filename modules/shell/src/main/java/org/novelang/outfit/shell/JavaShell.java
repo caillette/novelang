@@ -101,8 +101,6 @@ public class JavaShell extends ProcessShell {
         )
     ) ;
 
-    LOGGER.warn( "Using a forked implementation!" );
-
     this.jmxKit = parameters.getJmxKit() ;
     if( this.jmxKit != null ) {
       // Host is always localhost since we create process only on the local machine.
