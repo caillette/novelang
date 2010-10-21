@@ -256,6 +256,24 @@ public class GrammarDelegate
     return root_1 ;
   }
 
+  public Object createTree(
+      final int imaginaryTokenIdentifier,
+      final Location location,
+      final String payload,
+      final Object... trees
+  ) {
+//    final CustomTree customTree = new CustomTree( );
+
+    final Object root_1 = createTree( imaginaryTokenIdentifier, location, payload ) ;
+    for( final Object tree : trees ) {
+      if( tree != null ) {
+        adaptor.addChild( root_1, tree ) ;
+      }
+    }
+
+    return root_1 ;
+  }
+
   public Object createRoot( final int imaginaryTokenIdentifier, final Location location ) {
     final CustomTree customTree = ( CustomTree ) adaptor.create(
         imaginaryTokenIdentifier,

@@ -155,7 +155,8 @@ public class NovellaParsingTest {
             NOVELLA,
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
-                tree( LINES_OF_LITERAL, "literal" ) )
+                tree( LINES_OF_LITERAL, tree( RAW_LINES, "literal" ) )
+            )
         )
     ) ;
   }

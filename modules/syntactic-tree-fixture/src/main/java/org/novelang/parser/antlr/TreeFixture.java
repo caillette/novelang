@@ -178,13 +178,33 @@ public class TreeFixture {
     if( NodeKind.LINES_OF_LITERAL == expected.getNodeKind()
      && NodeKind.LINES_OF_LITERAL == actual.getNodeKind()
     ) {
+/*
       Assert.assertEquals(
           "Ill-formed test: expected LITERAL node must have exactly one child",
           1,
           expected.getChildCount()
       ) ;
       Assert.assertEquals( 1, actual.getChildCount() ) ;
-      assertPayloadEquals( expected.getChildAt( 0 ), actual.getChildAt( 0 ), checkLocation ) ;
+*/
+      Assert.assertTrue(
+          "Ill-formed test: expected LITERAL node must have at least one child",
+          expected.getChildCount() >= 1
+      ) ;
+      Assert.assertEquals( expected.getChildCount(), actual.getChildCount() ) ;
+
+      final int lastIndex = expected.getChildCount() - 1 ;
+
+      for( int index = 0 ; index < expected.getChildCount() ; index++ ) {
+        final SyntacticTree expectedChild = expected.getChildAt( index ) ;
+        final SyntacticTree actualChild = actual.getChildAt( index ) ;
+        assertEqualsNoMessage( expectedChild, actualChild, checkLocation ) ;
+      }
+
+      assertPayloadEquals(
+          expected.getChildAt( lastIndex ),
+          actual.getChildAt( lastIndex ),
+          checkLocation
+      ) ;
     } else {
       assertPayloadEquals( expected, actual, checkLocation ) ;
       Assert.assertEquals( expected.getChildCount(), actual.getChildCount() ) ;

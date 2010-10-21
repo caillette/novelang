@@ -63,7 +63,7 @@
 
   </xsl:template>
 
-  <xsl:template match="n:lines-of-literal" >
+  <xsl:template match="n:lines-of-literal/n:raw-lines" >
 
 &lt;&lt;&lt;
 <xsl:apply-templates/>

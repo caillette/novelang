@@ -83,5 +83,12 @@ public interface ParserDelegate {
           Object... trees
       );
 
+  Object createTree(
+          int imaginaryTokenIdentifier,
+          Location location,
+          String payload,
+          Object... trees
+      );
+
   Object createRoot( int imaginaryTokenIdentifier, Location location );
 }

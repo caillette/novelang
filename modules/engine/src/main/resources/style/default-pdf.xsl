@@ -200,7 +200,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:lines-of-literal" >
+  <xsl:template match="n:lines-of-literal/n:raw-lines" >
     <fo:block
         text-align="left"
         text-indent="0em"

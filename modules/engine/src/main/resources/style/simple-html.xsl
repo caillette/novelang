@@ -94,7 +94,11 @@
   </xsl:template>
 
   <xsl:template match="n:lines-of-literal" >
-    <div class="pre" ><xsl:call-template name="descriptor-for-pre" /><pre><xsl:apply-templates/></pre></div>
+    <div class="pre" >
+      <!--<xsl:call-template name="descriptor-vanilla" />-->
+      <!--<xsl:apply-templates select="n:tag"/>-->
+      <xsl:call-template name="descriptor-for-pre" /><pre><xsl:apply-templates select="n:raw-lines"/></pre>
+    </div>
   </xsl:template>
 
   <xsl:template match="n:paragraphs-inside-angled-bracket-pairs/n:lines-of-literal" >

@@ -38,7 +38,7 @@ public class LiteralParsingTest {
     PARSERMETHOD_LITERAL.checkTreeAfterSeparatorRemoval(
         "<<<" + BREAK +
         verbatim + BREAK +
-        ">>>", tree( LINES_OF_LITERAL, verbatim )
+        ">>>", tree( LINES_OF_LITERAL, tree( RAW_LINES, verbatim ) )
     ) ;
   }
 
@@ -49,7 +49,7 @@ public class LiteralParsingTest {
         "2" +
             SourceUnescape.ESCAPE_START + "greater-than-sign" + SourceUnescape.ESCAPE_END +
             "1" + BREAK +
-        ">>>", tree( LINES_OF_LITERAL, "2>1" )
+        ">>>", tree( LINES_OF_LITERAL, tree( RAW_LINES, "2>1" ) )
     ) ;
   }
 
@@ -89,7 +89,7 @@ public class LiteralParsingTest {
       ">>>",
       tree(
           NOVELLA,
-          tree( LINES_OF_LITERAL, "  Here is some " + BREAK + "  //Literal// " )
+          tree( LINES_OF_LITERAL, tree( RAW_LINES, "  Here is some " + BREAK + "  //Literal// " ) )
       )
     ) ;
   }
@@ -102,7 +102,7 @@ public class LiteralParsingTest {
         ">>>",
         tree(
             NOVELLA,
-            tree( LINES_OF_LITERAL, "%% Not to be commented" )
+            tree( LINES_OF_LITERAL, tree( RAW_LINES, "%% Not to be commented" ) )
         )
     ) ;
   }
@@ -112,7 +112,7 @@ public class LiteralParsingTest {
     PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "<<<" + BREAK +
         "<" + BREAK +
-        ">>>", tree( NOVELLA, tree( LINES_OF_LITERAL, "<" )
+        ">>>", tree( NOVELLA, tree( LINES_OF_LITERAL, tree( RAW_LINES, "<" ) )
       )
     ) ;
   }
@@ -129,22 +129,21 @@ public class LiteralParsingTest {
     PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "<<<" + BREAK +
         verbatim + BREAK +
-        ">>>", tree( NOVELLA, tree( LINES_OF_LITERAL, verbatim ) )
+        ">>>", tree( NOVELLA, tree( LINES_OF_LITERAL, tree( RAW_LINES, verbatim ) ) )
     ) ;
   }
 
 
-  @Test @Ignore
+  @Test 
   public void taggedLiteral() throws RecognitionException {
     PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "@t" + BREAK +
         "<<<" + BREAK +
-        "L" +
+        "L" + BREAK +
         ">>>",
         tree(
             NOVELLA,
-            tree( TAG, "t" ),
-            tree( LINES_OF_LITERAL, "L" )
+            tree( LINES_OF_LITERAL, tree( TAG, "t" ), tree( RAW_LINES, "L" ) ) 
         )
     ) ;
   }

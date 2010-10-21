@@ -388,7 +388,7 @@ wrapped into a ``n:embedded-list-item`` element. Sublists are also wrappend in
 
 === Lines of literal
 
-XML element: ``n:lines-of-literal``
+XML element: ``n:lines-of-literal``, ``n:raw-lines``
 
 Three lower-than signs``<<<`` and three greater-than signs ``>>>`` may enclose one line of literal
 text or more.
@@ -407,6 +407,9 @@ Here is literal.
   Indentation will be kept.
 «greater-than-sign»>>
 >>>
+
+The ``n:raw-lines`` element appears wrapped inside the ``n:lines-of-literal`` element.
+Such an enclosed element is useful as a placeholder for tags. 
 
 
 === Word after circumflex accent

@@ -155,7 +155,7 @@ public class GenericRenderer implements Renderer {
       case _PROMOTED_TAG :
       case _WORD_COUNT :
       case _STYLE :
-      case LINES_OF_LITERAL :
+      case RAW_LINES :
       case _IMAGE_WIDTH:
       case _IMAGE_HEIGHT:
         final SyntacticTree literalTree = tree.getChildAt( 0 ) ;

@@ -39,6 +39,7 @@ tokens {
   BLOCK_AFTER_TILDE ;
   SUBBLOCK ;
   LINES_OF_LITERAL ;                             
+  RAW_LINES ;                             
   NOVELLA ;                                      // tagbehavior=TRAVERSABLE
   PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL
   PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;   // tagbehavior=TERMINAL
@@ -1322,15 +1323,16 @@ blockQuote
   ;
 
 literal
-  : ( tags mediumbreak )?
+  @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
+  : ( t = tags mediumbreak )?
     LESS_THAN_SIGN LESS_THAN_SIGN LESS_THAN_SIGN 
     WHITESPACE? SOFTBREAK
-    l = literalLines
+    lines = literalLines
     SOFTBREAK GREATER_THAN_SIGN GREATER_THAN_SIGN GREATER_THAN_SIGN 
-    -> { delegate.createTree( LINES_OF_LITERAL, $l.unescaped ) } 
+    -> { delegate.createTree( LINES_OF_LITERAL, startLocation, $t.tree, $lines.tree ) } 
   ;  
 
-literalLines returns [ String unescaped ]
+literalLines
 @init {
   final StringBuffer buffer = new StringBuffer() ;
 }
@@ -1338,7 +1340,7 @@ literalLines returns [ String unescaped ]
     ( s2 = SOFTBREAK { buffer.append( $s2.text ) ; }
       s3 = literalLine { buffer.append( $s3.unescaped ) ; }
     )*
-    { $unescaped = buffer.toString() ; }        
+    -> { delegate.createTree( RAW_LINES, buffer.toString() ) } 
   ;
 
     
