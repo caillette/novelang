@@ -6,7 +6,7 @@
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
     <artifactId>Novelang</artifactId>
-    <version>0.48.0</version>
+    <version>SNAPSHOT</version>
   </parent>
 
   <artifactId>Novelang-lexeme-table-plugin</artifactId>
