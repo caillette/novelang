@@ -1273,10 +1273,20 @@ smallDashedListItem
 // =====
 
 cellRowSequence
-  : ( c += tags mediumbreak )?	
+  @init { final Location startLocation = delegate.createLocation( input.LT( 1 ) ) ; }
+  : ( c += tags mediumbreak )?
     c += cellRow 
     ( ( WHITESPACE? SOFTBREAK WHITESPACE? ) c += cellRow )*
-    -> ^( CELL_ROWS_WITH_VERTICAL_LINE $c+ )
+    // Was:
+    // -> ^( CELL_ROWS_WITH_VERTICAL_LINE $c+ )
+
+     -> {  delegate.createTree(
+               CELL_ROWS_WITH_VERTICAL_LINE,
+               startLocation,
+               $c
+           )
+         }
+
   ;
 
 cellRow
