@@ -38,7 +38,7 @@ tokens {
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ;
   BLOCK_AFTER_TILDE ;
   SUBBLOCK ;
-  LINES_OF_LITERAL ;                             
+  LINES_OF_LITERAL ;                             // tagbehavior=TERMINAL
   RAW_LINES ;                             
   NOVELLA ;                                      // tagbehavior=TRAVERSABLE
   PARAGRAPH_REGULAR ;                            // tagbehavior=TERMINAL

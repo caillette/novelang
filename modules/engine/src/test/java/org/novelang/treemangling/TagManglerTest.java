@@ -64,16 +64,16 @@ public class TagManglerTest {
     ) ;
   }
   @Test
-  public void dontGoIntoLinesOfLiteral() {
+  public void dontGoIntoRawLines() {
 
     verifyTagMangling(
         tree(
             NOVELLA,
-            tree( LINES_OF_LITERAL, "xxx\nyyy\nzzz" )
+            tree( RAW_LINES, "xxx\nyyy\nzzz" )
         ),
         tree(
             NOVELLA,
-            tree( LINES_OF_LITERAL, "xxx\nyyy\nzzz" )
+            tree( RAW_LINES, "xxx\nyyy\nzzz" )
         )
     ) ;
   }
@@ -142,6 +142,34 @@ public class TagManglerTest {
                     PARAGRAPH_REGULAR,
                     tree( TAG, "tag-1" ),
                     tree( WORD_, "w" )
+                )
+            )
+        )
+    ) ;
+  }
+@Test
+  public void oneExplicitTagOnLinesOfLiteral() {
+
+    verifyTagMangling(
+        tree(
+            NOVELLA,
+            tree(
+                _LEVEL,
+                tree(
+                    LINES_OF_LITERAL,
+                    tree( _EXPLICIT_TAG, "tag-1" ),
+                    tree( RAW_LINES, "w" )
+                )
+            )
+        ),
+        tree(
+            NOVELLA,
+            tree(
+                _LEVEL,
+                tree(
+                    LINES_OF_LITERAL,
+                    tree( TAG, "tag-1" ),
+                    tree( RAW_LINES, "w" )
                 )
             )
         )

@@ -95,8 +95,6 @@
 
   <xsl:template match="n:lines-of-literal" >
     <div class="pre" >
-      <!--<xsl:call-template name="descriptor-vanilla" />-->
-      <!--<xsl:apply-templates select="n:tag"/>-->
       <xsl:call-template name="descriptor-for-pre" /><pre><xsl:apply-templates select="n:raw-lines"/></pre>
     </div>
   </xsl:template>
@@ -246,7 +244,7 @@
     <xsl:param name="css-class" />
 
     <div class="descriptor" >
-      <xsl:if test="n:implicit-tag or n:implicit-identifier or n:explicit-identifier or n:colliding-explicit-identifier or n:location">
+      <xsl:if test="n:implicit-tag or n:explicit-tag or n:implicit-identifier or n:explicit-identifier or n:colliding-explicit-identifier or n:location">
         <img class="descriptor-disclosure" src="/icons/Descriptor.png" />
         <div class="collapsable-descriptor" style="display : none ;">
 

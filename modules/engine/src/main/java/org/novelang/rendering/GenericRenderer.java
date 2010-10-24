@@ -256,7 +256,8 @@ public class GenericRenderer implements Renderer {
     if( renderLocation &&
         location != null && 
         ( LOCATION_ENABLED_TAG_BEHAVIORS.contains( nodeKind.getTagBehavior() ) ||
-            NodeKind.PARAGRAPH_REGULAR == tree.getNodeKind()
+            NodeKind.PARAGRAPH_REGULAR == tree.getNodeKind() ||
+            NodeKind.LINES_OF_LITERAL == tree.getNodeKind()
         )
     ) {
       final Nodepath locationNodepath = new Nodepath( path, NodeKind._LOCATION ) ;
