@@ -1,0 +1,7 @@
+--- Fixed startup option in documentation.
+
+--- Tags and location for lines of literal. Required an intermediate ``n:raw-lines`` element
+nested inside ``n:lines-of-literal``. This might break existing stylesheets.
+
+--- Location for cell rows with vertical line. 
+
