@@ -12,16 +12,29 @@
   <artifactId>Novelang-engine</artifactId>
   <name>${artifactId}</name>
 
+  <description>
+    The real thing happens here: document parsing and rendering.
+  </description>
+
+  <!--
+      The class containing the version at the time of the build goes in a separate source
+       directory. So we can tweak it apart. 
+       This is because compiler plugin doesn't support compile source roots redefinition.
+       Instead, we add a source root corresponding to the tweaked version class.
+  -->
   <properties>
-    <updatedVersionSources.dir>${project.build.directory}/generated-sources/version</updatedVersionSources.dir>
+    <originalVersionSources.dir>src/main/version</originalVersionSources.dir>
+    <updatedVersionSources.dir>${project.build.directory}/generated-sources/updated-version</updatedVersionSources.dir>
     <versionJavaClassName>Version</versionJavaClassName>
   </properties>
 
   <build>
     
-
     <plugins>
 
+
+
+      <!-- Then, copy the version class with its update. -->
       <plugin>
         <groupId>${lib.maven-resources-plugin.groupId}</groupId>
         <artifactId>${lib.maven-resources-plugin.artefactId}</artifactId>
@@ -35,10 +48,10 @@
             </goals>
             <configuration>
               <outputDirectory>${updatedVersionSources.dir}</outputDirectory>
-              <!-- Delimiter '@' doesn't seem to work here. --> 
+              <!-- Delimiter '@' doesn't seem to work here. -->
               <resources>
                 <resource>
-                  <directory>${project.build.sourceDirectory}</directory>
+                  <directory>${originalVersionSources.dir}</directory>
                   <filtering>true</filtering>
                   <includes>
                     <include>**/${versionJavaClassName}.java</include>
@@ -51,39 +64,23 @@
       </plugin>
 
       <plugin>
-        <groupId>${lib.maven-compiler-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-compiler-plugin.artefactId}</artifactId>
-        <version>${lib.maven-compiler-plugin.version}</version>
-
+        <groupId>${lib.build-helper-plugin.groupId}</groupId>
+        <artifactId>${lib.build-helper-plugin.artefactId}</artifactId>
+        <version>${lib.build-helper-plugin.version}</version>
         <executions>
-
           <execution>
-            <id>default-compile</id> <!-- Override default compilation. -->
+            <id>add-source</id>
+            <phase>generate-sources</phase>
             <goals>
-              <goal>compile</goal>
+              <goal>add-source</goal>
             </goals>
             <configuration>
-              <includes>
-                <include>**/${versionJavaClassName}.java</include>
-              </includes>
+              <sources>
+                <source>${updatedVersionSources.dir}</source>
+              </sources>
             </configuration>
           </execution>
-
-          <execution>
-            <id>compile-the-rest</id>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <excludes>
-                <exclude>**/${versionJavaClassName}.java</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-
         </executions>
-
-
       </plugin>
 
     </plugins>

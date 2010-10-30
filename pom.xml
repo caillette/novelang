@@ -58,7 +58,11 @@
 
     <lib.maven-compiler-plugin.groupId>org.apache.maven.plugins</lib.maven-compiler-plugin.groupId>
     <lib.maven-compiler-plugin.artefactId>maven-compiler-plugin</lib.maven-compiler-plugin.artefactId>
-    <lib.maven-compiler-plugin.version>2.3</lib.maven-compiler-plugin.version>
+    <lib.maven-compiler-plugin.version>2.3.2</lib.maven-compiler-plugin.version>
+
+    <lib.build-helper-plugin.groupId>org.codehaus.mojo</lib.build-helper-plugin.groupId>
+    <lib.build-helper-plugin.artefactId>build-helper-maven-plugin</lib.build-helper-plugin.artefactId>
+    <lib.build-helper-plugin.version>1.5</lib.build-helper-plugin.version>
 
     <lib.maven-release-plugin.groupId>org.apache.maven.plugins</lib.maven-release-plugin.groupId>
     <lib.maven-release-plugin.artefactId>maven-release-plugin</lib.maven-release-plugin.artefactId>
