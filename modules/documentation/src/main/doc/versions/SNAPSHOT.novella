@@ -1,0 +1,5 @@
+--- Switched to `Maven 3`. This required no change but future build features may not work with formerly-used `Maven 2.2.1`.
+
+--- TODO: support numbered lists.
+
+--- Delayed: upgrade to `FOP-1.0`. what about OFFO ?
