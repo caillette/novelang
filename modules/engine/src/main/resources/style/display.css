@@ -31,16 +31,6 @@ ol, ul {
   list-style : none ;
 }
 
-/* tables still need 'cellspacing="0"' in the markup */
-table {
-  border-collapse : separate ;
-  border-spacing : 0 ;
-}
-
-caption, th, td {
-  text-align : left ;
-  font-weight : normal ;
-}
 
 
 /*
@@ -372,23 +362,32 @@ div.level > object, div.level > img, table {
 
 }
 
+caption, td {
+  text-align : left ;
+  font-weight : normal ;
+}
+
+th {
+  text-align : center; ;
+  font-weight : bold ;
+}
 
 
-table, td {
+table, td, th {
   position : relative ;
   border : solid #a0a0a0 ;
 }
 
-
+/* tables still need 'cellspacing="0"' in the markup */
 table {
   border-width : 0 0 1px 1px ;
   border-spacing : 0 ;
   border-collapse : collapse ;
 }
 
-td {
+td, th {
     margin : 0 ;
-    padding : 4px ;
+    padding : 2px ;
     border-width : 1px 1px 0 0 ;
 }
 

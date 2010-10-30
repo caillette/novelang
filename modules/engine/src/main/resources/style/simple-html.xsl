@@ -166,7 +166,18 @@
   <xsl:template match="n:cell-rows-with-vertical-line" >
     <xsl:call-template name="descriptor-vanilla" />
     <table>
-      <xsl:apply-templates />
+      <xsl:choose>
+        <xsl:when test="count( * ) > 2" >
+          <tr>
+            <xsl:apply-templates select="n:cell-row[ position() = 1 ]/*" mode="header" />
+          </tr>
+          <xsl:apply-templates select="n:cell-row[ position() > 1 ]" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+
     </table>
   </xsl:template>
 
@@ -182,6 +193,12 @@
     </td>
   </xsl:template>
   
+  <xsl:template match="n:cell" mode="header" >
+    <th>
+      <xsl:apply-templates/>
+    </th>
+  </xsl:template>
+
   <xsl:template match="n:raster-image/n:resource-location" >
     <img>
       <xsl:attribute name="src" ><xsl:value-of select="." /></xsl:attribute>

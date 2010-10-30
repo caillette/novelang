@@ -1,6 +1,8 @@
 
---- TODO: Make first table row a table header.
+--- In default stylesheet for HTML and PDF, the first ``n:cell-row`` element renders as a table
+header, if there is more than one. This might break existing documents.
 
 --- TODO: support numbered lists.
 
---- Delayed: upgrade to `FOP-1.0`.
+--- Delayed: upgrade to `FOP-1.0`. what about OFFO ?
+

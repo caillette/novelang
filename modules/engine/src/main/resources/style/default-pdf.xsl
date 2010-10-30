@@ -361,7 +361,20 @@
       </xsl:for-each>
 
       <fo:table-body>
-        <xsl:apply-templates />
+
+        <xsl:choose>
+          <xsl:when test="count( * ) > 1" >
+            <fo:table-row>
+              <xsl:apply-templates select="n:cell-row[ position() = 1 ]/*" mode="header" />
+            </fo:table-row>
+            <xsl:apply-templates select="n:cell-row[ position() > 1 ]" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+ 
+
       </fo:table-body>
 
     </fo:table>
@@ -376,6 +389,19 @@
   <xsl:template match="n:cell" >
     <fo:table-cell padding="2pt" border="1pt solid black">
       <fo:block>
+        <xsl:apply-templates />
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+
+  <xsl:template match="n:cell" mode="header" >
+    <fo:table-cell
+        padding="2pt"
+        border="1pt solid black"
+        text-align="center"
+        background-color="#f4f4f4"
+    >
+      <fo:block font-weight="bold">
         <xsl:apply-templates />
       </fo:block>
     </fo:table-cell>
