@@ -24,19 +24,22 @@ Paragraph //with// "many" features -- not all (but many) -_.
 === Embedded lists 
 
 First list
-# 0
+# first
 Second list
-# 0
-# 1
-  # 1-0
-  # 1-1
-    # 1-1-0
-# 2
+# n0
+# n1
+  # n1-0
+  # n1-1
+    # n1-1-0
+# n2
 End of second list. Third list
-- 0
-  - 0-0
-- 1
-And that's all. 
+- h0
+- h1
+  - h1-0
+  - h1-1
+    - h1-1-0
+- h2
+ 
 
 
 === Literal
