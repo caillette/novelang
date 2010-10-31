@@ -81,6 +81,12 @@ public class AgentFileInstaller {
     final String versionOverride = System.getProperty( VERSIONOVERRIDE_SYSTEMPROPERTYNAME ) ;
     if( versionOverride == null ) {
       final URL versionResource = AgentFileInstaller.class.getResource( VERSION_RESOURCE_NAME ) ;
+      if( versionResource == null ) {
+        throw new IllegalStateException( "Couldn't find resource for '" + VERSION_RESOURCE_NAME + "' " +
+            "(when building with Maven, this may be caused by Insider jar not present " +
+            "in the repository for current version)"
+        ) ;
+      }
       version = Resources.toString( versionResource, Charsets.UTF_8 ) ;
       LOGGER.info( "Using version '", version, "' as found inside ",
           "'", VERSION_RESOURCE_NAME, "' resource."  ) ;
