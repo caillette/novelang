@@ -137,7 +137,7 @@ Question mark? Exclamation mark! Comma, semicolon; colon: full stop. Ellipsis...
 
 === Paragraphs and embedded lists
 
-This is a paragraph starting here...
+This is a paragraph with embedded list using hyphens...
   - One
   - Two
   - Three
@@ -148,7 +148,18 @@ This is a paragraph starting here...
     - Three dot three
   - Four
   - Five    
-...and ending there.
+...and as we are in the same paragraph, using number sign...
+  # One
+  # Two
+  # Three
+    # Three dot one
+    # Three dot two
+      # Three dot two dot one
+      # Three dot two dot two
+    # Three dot three
+  # Four
+  # Five    
+... paragraph ends there.
    
 == Tags
 
@@ -186,7 +197,8 @@ This paragraph has several own tags.
 
 
 @yo
-| Cell row sequence | is also taggable |
+| Cell row sequence |
+| is also taggable  |
 
 
 == Anonymous section

@@ -183,7 +183,9 @@ public class GenericRenderer implements Renderer {
         processByDefault( tree, createNodepath( kinship, _PARAGRAPH_AS_LIST_ITEM ), false ) ;
         break ;
 
+      // Is this still useful? EmbeddedListMangler should have discarded parsed tokens.
       case EMBEDDED_LIST_ITEM_WITH_HYPHEN_ :
+      case EMBEDDED_LIST_ITEM_NUMBERED_ :
         processByDefault( tree, createNodepath( kinship, _EMBEDDED_LIST_ITEM ), false ) ;
         break ;
 
