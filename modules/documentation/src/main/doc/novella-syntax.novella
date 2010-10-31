@@ -362,28 +362,35 @@ gets wrapped into a ``n:list-with-triple-hyphen`` element.
 
 === Embedded list
 
-XML elements: ``n:embedded-list-with-hyphen``, ``n:embedded-list-item``
+XML elements: ``n:embedded-list-with-hyphen``, ``n:embedded-list-with-number-sign``,
+``n:embedded-list-item``
 
-Inside a paragraph, a single hyphen ``-`` declares a list item.
+Inside a paragraph, a single hyphen ``-`` or a number sign ``#``declares a list item.
 A list item is made of one single line (a line break would be interpreted as the end of item).
-An embedded list may declare subitems, with a greater indentation than containing item. 
+An embedded list may declare subitems, with a greater indentation than containing item.
+All items of the same list have the same leading character (the behavior when mixing them remains
+undefined at this time).
 
 With Novelang default stylesheet, the embedded list is rendered as a list, supporting nested 
 elements (up to 3 levels with PDF, unlimited levels with HTML):
 
 <<<
-Start of the paragraph.
+One embedded list:
 - Item one.
 - Item two.
   - Item two one.
   - Item two two.
 - Item three.
+And another one, in the same paragraph
+# Item one.
+# Item two.
+  # Item two one.
 End of paragraph.
 >>>
 
-As XML elements, the list is wrapped in a ``n:embedded-list-with-hyphen``, while each item gets
-wrapped into a ``n:embedded-list-item`` element. Sublists are also wrappend in 
-``n:embedded-list-with-hyphen`` elements.
+As XML elements, the list is wrapped in a ``n:embedded-list-with-hyphen`` or
+``n:embedded-list-with-number-sign``, while each item gets
+wrapped into a ``n:embedded-list-item`` element. Sublists are wrapped the same way.
 
 
 === Lines of literal
