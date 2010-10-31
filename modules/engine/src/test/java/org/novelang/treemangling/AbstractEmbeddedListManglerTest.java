@@ -16,22 +16,23 @@
  */
 package org.novelang.treemangling;
 
+import org.junit.Test;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
-import org.junit.Test;
 
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
- * Tests for {@link EmbeddedListMangler}.
- * 
+ * Tests for {@link org.novelang.treemangling.EmbeddedListMangler}.
+ *
  * @author Laurent Caillette
  */
-public class EmbeddedListManglerTest {
+public abstract class AbstractEmbeddedListManglerTest {
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -53,7 +54,7 @@ public class EmbeddedListManglerTest {
         tree(
             NOVELLA,
             tree(
-                _EMBEDDED_LIST_WITH_HYPHEN,
+                getSyntheticToken(),
                 tree(
                     _EMBEDDED_LIST_ITEM,
                     tree( WORD_, "y" )
@@ -63,7 +64,7 @@ public class EmbeddedListManglerTest {
         ),
         tree(
             NOVELLA,
-            tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+            tree( getParsedToken(), tree( WORD_, "y" ) ),
             tree( LINE_BREAK_ ),
             tree( WORD_, "z" )
         )
@@ -78,14 +79,14 @@ public class EmbeddedListManglerTest {
             tree( 
                 PARAGRAPH_REGULAR,
                 tree(
-                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    getSyntheticToken(),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) )
                 )
             ),
             tree( 
                 PARAGRAPH_REGULAR,
                 tree(
-                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    getSyntheticToken(),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) )
                 )
             ),
@@ -95,12 +96,12 @@ public class EmbeddedListManglerTest {
             NOVELLA,
             tree( 
                 PARAGRAPH_REGULAR,  
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) )
+                tree( getParsedToken(), tree( WORD_, "x" ) )
              ),
             tree( LINE_BREAK_ ),
             tree( 
                 PARAGRAPH_REGULAR,  
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) )
+                tree( getParsedToken(), tree( WORD_, "y" ) )
              ),
             tree( 
                 PARAGRAPH_REGULAR,  
@@ -116,16 +117,16 @@ public class EmbeddedListManglerTest {
         tree(
             NOVELLA,
             tree(
-                _EMBEDDED_LIST_WITH_HYPHEN,
+                getSyntheticToken(),
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
             )
         ),
         tree(
             NOVELLA,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( getParsedToken(), tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+                tree( getParsedToken(), tree( WORD_, "z" ) )
         )
     ) ;
   }
@@ -138,7 +139,7 @@ public class EmbeddedListManglerTest {
             tree( 
                 PARAGRAPH_REGULAR, 
                 tree(
-                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    getSyntheticToken(),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
                 )
@@ -148,10 +149,10 @@ public class EmbeddedListManglerTest {
             NOVELLA,
             tree( WHITESPACE_, "  " ),
             tree( PARAGRAPH_REGULAR, 
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( getParsedToken(), tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+                tree( getParsedToken(), tree( WORD_, "z" ) )
             )
         )
     ) ;
@@ -163,20 +164,20 @@ public class EmbeddedListManglerTest {
         tree(
             NOVELLA,
             tree(
-                _EMBEDDED_LIST_WITH_HYPHEN,
+                getSyntheticToken(),
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) ),
                 tree(
-                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    getSyntheticToken(),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
                 )                
             )
         ),
         tree(
             NOVELLA,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( getParsedToken(), tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+                tree( getParsedToken(), tree( WORD_, "z" ) )
         )
     ) ;
   }
@@ -187,10 +188,10 @@ public class EmbeddedListManglerTest {
         tree(
             NOVELLA,
             tree(
-                _EMBEDDED_LIST_WITH_HYPHEN,
+                getSyntheticToken(),
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) ),
                 tree(
-                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    getSyntheticToken(),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) )
                 ),
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "z" ) )
@@ -198,12 +199,12 @@ public class EmbeddedListManglerTest {
         ),
         tree(
             NOVELLA,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
+                tree( getParsedToken(), tree( WORD_, "x" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( getParsedToken(), tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+                tree( getParsedToken(), tree( WORD_, "z" ) )
         )
     ) ;
   }
@@ -214,10 +215,10 @@ public class EmbeddedListManglerTest {
         tree(
             NOVELLA,
             tree(
-                _EMBEDDED_LIST_WITH_HYPHEN,
+                getSyntheticToken(),
                 tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "w" ) ),
                 tree(
-                    _EMBEDDED_LIST_WITH_HYPHEN,
+                    getSyntheticToken(),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "x" ) ),
                     tree( _EMBEDDED_LIST_ITEM, tree( WORD_, "y" ) )
                 ),
@@ -226,15 +227,15 @@ public class EmbeddedListManglerTest {
         ),
         tree(
             NOVELLA,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "w" ) ),
+                tree( getParsedToken(), tree( WORD_, "w" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
+                tree( getParsedToken(), tree( WORD_, "x" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( getParsedToken(), tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+                tree( getParsedToken(), tree( WORD_, "z" ) )
         )
     ) ;
   }
@@ -246,13 +247,13 @@ public class EmbeddedListManglerTest {
     EmbeddedListMangler.rehierarchizeEmbeddedLists( Treepath.create( 
         tree(
             NOVELLA,
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "x" ) ),
+                tree( getParsedToken(), tree( WORD_, "x" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, "  " ),  // indent = 2
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "y" ) ),
+                tree( getParsedToken(), tree( WORD_, "y" ) ),
                 tree( LINE_BREAK_ ),
                 tree( WHITESPACE_, " " ),   // indent = 1
-                tree( EMBEDDED_LIST_ITEM_WITH_HYPHEN_, tree( WORD_, "z" ) )
+                tree( getParsedToken(), tree( WORD_, "z" ) )
         )
     ) ) ;
   }
@@ -263,7 +264,7 @@ public class EmbeddedListManglerTest {
 // Fixture
 // =======  
   
-  private static final Logger LOGGER = LoggerFactory.getLogger( EmbeddedListManglerTest.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( AbstractEmbeddedListManglerTest.class );
   
   private static void verifyRehierarchizeList(
       final SyntacticTree expectedTree,
@@ -282,5 +283,16 @@ public class EmbeddedListManglerTest {
         rehierarchized.getTreeAtEnd()
     ) ;
   }
+
+  
+  /**
+   * Originally, was {@link NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_}
+   */
+  protected abstract NodeKind getParsedToken() ;
+
+  /**
+   * Originally, was {@link NodeKind#_EMBEDDED_LIST_WITH_HYPHEN}
+   */
+  protected abstract NodeKind getSyntheticToken() ;
   
 }

@@ -320,6 +320,22 @@ ul.big-list > li {
 }
 
 
+ol {
+  list-style : decimal ;
+  margin-left : 3em ;
+  margin-right : 16px ;
+  position : relative ;
+}
+
+ol > ol {
+  list-style : lower-latin ;
+  margin-left : 1em ;
+}
+
+ol > ol > ol {
+  list-style : lower-greek ;
+  margin-left : 2em ;
+}
 
 div.p {
   /*font-size: 13pt ;*/

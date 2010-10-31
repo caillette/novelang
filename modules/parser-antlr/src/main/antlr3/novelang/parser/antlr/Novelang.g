@@ -49,6 +49,7 @@ tokens {
   VECTOR_IMAGE ;
   RESOURCE_LOCATION ;
   EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ;
+  EMBEDDED_LIST_ITEM_NUMBERED_ ;
   CELL ;
   CELL_ROW ;
   CELL_ROWS_WITH_VERTICAL_LINE ;                 // tagbehavior=TERMINAL
@@ -287,14 +288,11 @@ absoluteIdentifier
 levelTitle
   : (
       { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
-      (   t += smallDashedListItem
-	      | ( t += mixedDelimitedSpreadBlock 
-	          ( t += whitespace t += mixedDelimitedSpreadBlock )* 
-	        )
-	    )
+      (   t += mixedDelimitedSpreadBlock 
+	        ( t += whitespace t += mixedDelimitedSpreadBlock )* 	        
+      )
 	    ( t += whitespace? t += softbreak 
 	      (   ( url ) => t += url
-	        | ( smallDashedListItem ) => t += smallDashedListItem
 	        | ( t += whitespace? t += mixedDelimitedSpreadBlock 
 	            ( t += whitespace t += mixedDelimitedSpreadBlock )* 
 	          )        
@@ -312,6 +310,7 @@ paragraph
       { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
 	    (   ( url ) => p += url
 	      | ( smallDashedListItem ) => p += smallDashedListItem
+	      | ( smallNumberedListItem ) => p += smallNumberedListItem
 	      | ( p += mixedDelimitedSpreadBlock 
 	          ( p += whitespace p+= mixedDelimitedSpreadBlock )* 
 	        )
@@ -319,6 +318,7 @@ paragraph
 	    ( p += whitespace? p += softbreak 
 	      (   ( url ) => p += url
 	        | ( whitespace? smallDashedListItem ) => p += whitespace? p += smallDashedListItem
+	        | ( whitespace? smallNumberedListItem ) => p += whitespace? p += smallNumberedListItem
 	        | ( p += whitespace? p += mixedDelimitedSpreadBlock 
 	            ( p += whitespace p+= mixedDelimitedSpreadBlock )* 
 	          )
@@ -401,6 +401,9 @@ spreadBlockBody  // Relies on mixedDelimitedSpreadBlock
         | ( ( softbreak whitespace? smallDashedListItem ) => 
                   ( softbreak whitespace? smallDashedListItem ) 
           )
+        | ( ( softbreak whitespace? smallNumberedListItem ) => 
+                  ( softbreak whitespace? smallNumberedListItem ) 
+          )
 	    )
 	    
       ( ( (
@@ -408,6 +411,9 @@ spreadBlockBody  // Relies on mixedDelimitedSpreadBlock
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -440,6 +446,9 @@ spreadBlockBody  // Relies on mixedDelimitedSpreadBlock
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -646,6 +655,9 @@ spreadBlockBodyNoDoubleQuotes  // Relies on: mixedDelimitedSpreadBlockNoDoubleQu
         | ( ( softbreak whitespace? smallDashedListItem ) => 
                   ( softbreak whitespace? smallDashedListItem ) 
           )
+        | ( ( softbreak whitespace? smallNumberedListItem ) => 
+                  ( softbreak whitespace? smallNumberedListItem ) 
+          )
 	    )
 	    
       ( ( (
@@ -653,6 +665,9 @@ spreadBlockBodyNoDoubleQuotes  // Relies on: mixedDelimitedSpreadBlockNoDoubleQu
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -685,6 +700,9 @@ spreadBlockBodyNoDoubleQuotes  // Relies on: mixedDelimitedSpreadBlockNoDoubleQu
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -834,6 +852,9 @@ spreadBlockBodyNoEmphasis      // Relies on: mixedDelimitedSpreadBlockNoEmphasis
         | ( ( softbreak whitespace? smallDashedListItem ) => 
                   ( softbreak whitespace? smallDashedListItem ) 
           )
+        | ( ( softbreak whitespace? smallNumberedListItem ) => 
+                  ( softbreak whitespace? smallNumberedListItem ) 
+          )
 	    )
 	    
       ( ( (
@@ -841,6 +862,9 @@ spreadBlockBodyNoEmphasis      // Relies on: mixedDelimitedSpreadBlockNoEmphasis
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -873,6 +897,9 @@ spreadBlockBodyNoEmphasis      // Relies on: mixedDelimitedSpreadBlockNoEmphasis
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -1077,6 +1104,9 @@ spreadBlockBodyNoHyphenPair  // Relies on: mixedDelimitedSpreadBlockNoHyphenPair
         | ( ( softbreak whitespace? smallDashedListItem ) => 
                   ( softbreak whitespace? smallDashedListItem ) 
           )
+        | ( ( softbreak whitespace? smallNumberedListItem ) => 
+                  ( softbreak whitespace? smallNumberedListItem ) 
+          )
 	    )
 	    
       ( ( (
@@ -1084,6 +1114,9 @@ spreadBlockBodyNoHyphenPair  // Relies on: mixedDelimitedSpreadBlockNoHyphenPair
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -1116,6 +1149,9 @@ spreadBlockBodyNoHyphenPair  // Relies on: mixedDelimitedSpreadBlockNoHyphenPair
 		          ) 
 		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
 		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
 		          )
 		        | ( 
 		            ( 
@@ -1250,6 +1286,7 @@ bigDashedListItem
             ( url ) => i += url
 //          | ( smallDashedListItem ) => i += smallDashedListItem
           | ( whitespace? smallDashedListItem ) => i += whitespace? i += smallDashedListItem
+          | ( whitespace? smallNumberedListItem ) => i += whitespace? i += smallNumberedListItem
           | ( i += whitespace? i += mixedDelimitedSpreadBlock 
               ( i += whitespace i += mixedDelimitedSpreadBlock )* 
             )
@@ -1265,6 +1302,14 @@ smallDashedListItem
     ( b += whitespace b += mixedDelimitedMonoblock )+
     { delegate.leaveBlockDelimiterBoundary() ; }
     -> ^( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ $b+ )
+  ;
+
+smallNumberedListItem
+  : NUMBER_SIGN
+    { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
+    ( b += whitespace b += mixedDelimitedMonoblock )+
+    { delegate.leaveBlockDelimiterBoundary() ; }
+    -> ^( EMBEDDED_LIST_ITEM_NUMBERED_ $b+ )
   ;
 
 

@@ -21,6 +21,24 @@ Paragraph //with// "many" features -- not all (but many) -_.
 --- Big list item. 
 
 
+=== Embedded lists 
+
+First list
+# 0
+Second list
+# 0
+# 1
+  # 1-0
+  # 1-1
+    # 1-1-0
+# 2
+End of second list. Third list
+- 0
+  - 0-0
+- 1
+And that's all. 
+
+
 === Literal
 
 <<<

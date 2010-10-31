@@ -220,6 +220,12 @@
     </ul>
   </xsl:template> 
 
+  <xsl:template match="n:embedded-list-with-number-sign" >
+    <ol>
+      <xsl:apply-templates/>
+    </ol>
+  </xsl:template>
+
   <xsl:template match="n:embedded-list-item" >
     <li>
       <xsl:apply-templates/>

@@ -97,6 +97,39 @@
 
 --- <xsl:apply-templates/></xsl:template>
 
+  
+  <xsl:template match="n:paragraph-regular/n:embedded-list-with-hyphen" ><xsl:apply-templates/><xsl:text>
+</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="n:paragraph-regular/n:embedded-list-with-number-sign" ><xsl:apply-templates/><xsl:text>
+</xsl:text>
+</xsl:template>
+
+  <xsl:template match="n:embedded-list-with-hyphen/n:embedded-list-item" >
+- <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-hyphen/n:embedded-list-with-hyphen/n:embedded-list-item" >
+  - <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-hyphen/n:embedded-list-with-hyphen/n:embedded-list-with-hyphen/n:embedded-list-item" >
+    - <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-number-sign/n:embedded-list-item" >
+# <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-number-sign/n:embedded-list-with-number-sign/n:embedded-list-item" >
+  # <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-number-sign/n:embedded-list-with-number-sign/n:embedded-list-with-number-sign/n:embedded-list-item" >
+    # <xsl:apply-templates/>
+  </xsl:template>
+
 
 
   <xsl:template match="n:implicit-identifier" />

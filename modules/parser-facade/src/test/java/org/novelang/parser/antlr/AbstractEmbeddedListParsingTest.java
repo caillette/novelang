@@ -16,27 +16,29 @@
  */
 package org.novelang.parser.antlr;
 
-import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
-import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import org.junit.Test;
+import org.novelang.parser.NodeKind;
+
 import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for embedded list parsing.
  *
  * @author Laurent Caillette
  */
-public class EmbeddedListParsingTest {
+public abstract class AbstractEmbeddedListParsingTest {
   
   @Test
   public void embeddedListItemMinimum() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
-        "- w",
+        getMarker() + " w",
         tree(
             PARAGRAPH_REGULAR,
             tree(
-                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                getNodeKind(),
                 tree( WHITESPACE_, " " ),
                 tree( WORD_, "w" )
             )
@@ -48,9 +50,9 @@ public class EmbeddedListParsingTest {
   public void paragraphIsTwoSmallListItems()
       throws RecognitionException
   {
-    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree(
-        "- x" + BREAK +
-        "- y"
+    getParserListMethod().createTree(
+        getMarker() + " x" + BREAK +
+        getMarker() + " y"
     ) ;
   }
 
@@ -60,12 +62,12 @@ public class EmbeddedListParsingTest {
   @Test
   public void embeddedListItemApostropheAndDot() throws RecognitionException {
     PARSERMETHOD_PART.checkTree(
-        "- y'z.",
+        getMarker() + " y'z.",
         tree(
             NOVELLA,
             tree( PARAGRAPH_REGULAR,
                 tree(
-                    EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                    getNodeKind(),
                     tree( WHITESPACE_, " " ),
                     tree( WORD_, "y" ),
                     tree( APOSTROPHE_WORDMATE, "'" ),
@@ -81,8 +83,8 @@ public class EmbeddedListParsingTest {
   public void embeddedListItemInsideParenthesis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
         "(" + BREAK +
-        "- w" + BREAK +
-        "- x" + BREAK +
+        getMarker() + " w" + BREAK +
+        getMarker() + " x" + BREAK +
         ")"
         ,
         tree(
@@ -91,38 +93,38 @@ public class EmbeddedListParsingTest {
                 BLOCK_INSIDE_PARENTHESIS,
                 tree( LINE_BREAK_ ),
                 tree(
-                    EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                    getNodeKind(),
                     tree( WHITESPACE_, " " ),
                     tree( WORD_, "w" )
                     ),
                 tree( LINE_BREAK_ ),
                 tree(
-                    EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                    getNodeKind(),
                     tree( WHITESPACE_, " " ),
                     tree( WORD_, "x" )
                 ),
                 tree( LINE_BREAK_ )
             )
         )
-    ); ;
+    ) ;
   }
 
   @Test
   public void severalEmbeddedListItems() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTree(
-        "- w1" + BREAK +
-        "  - w2" + BREAK,
+        getMarker() + " w1" + BREAK +
+        "  " + getMarker() + " w2" + BREAK,
         tree(
             PARAGRAPH_REGULAR,
             tree(
-                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                getNodeKind(),
                 tree( WHITESPACE_, " " ),
                 tree( WORD_, "w1" )
             ),
             tree( LINE_BREAK_ ),
             tree( WHITESPACE_, "  " ),
             tree(
-                EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+                getNodeKind(),
                 tree( WHITESPACE_, " " ),
                 tree( WORD_, "w2" )
             )
@@ -133,15 +135,15 @@ public class EmbeddedListParsingTest {
 
   @Test
   public void smallDashedListItemIsSingleWord() throws RecognitionException {
-    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x" ) ;
+    getParserListMethod().createTree( getMarker() + " x" ) ;
   }
 
   @Test
   public void smallDashedListItemIsSeveralWords() throws RecognitionException {
-    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.checkTree(
-        "- x y z",
+    getParserListMethod().checkTree(
+        getMarker() + " x y z",
         tree(
-            EMBEDDED_LIST_ITEM_WITH_HYPHEN_,
+            getNodeKind(),
             tree( WHITESPACE_, " " ),
             tree( WORD_, "x" ),
             tree( WHITESPACE_, " " ),
@@ -155,12 +157,12 @@ public class EmbeddedListParsingTest {
 
   @Test
   public void smallDashedListItemHasParenthesisAndDoubleQuotes() throws RecognitionException {
-    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- x (\"y \") z" ) ;
+    getParserListMethod().createTree( getMarker() + " x (\"y \") z" ) ;
   }
 
   @Test
   public void smallDashedListItemHasBlockAfterTilde() throws RecognitionException {
-    PARSERMETHOD_SMALL_DASHED_LIST_ITEM.createTree( "- ~x" ) ;
+    getParserListMethod().createTree( getMarker() + " ~x" ) ;
   }
 
 // =======
@@ -171,8 +173,9 @@ public class EmbeddedListParsingTest {
       new ParserMethod( "paragraph" ) ;
   private static final ParserMethod PARSERMETHOD_PART =
       new ParserMethod( "novella" ) ;
-  private final ParserMethod PARSERMETHOD_SMALL_DASHED_LIST_ITEM =
-      new ParserMethod( "smallDashedListItem" ) ;
 
+  protected abstract char getMarker() ;
+  protected abstract NodeKind getNodeKind() ;
+  protected abstract ParserMethod getParserListMethod() ;
 
 }

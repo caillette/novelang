@@ -22,16 +22,20 @@ import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Traversal;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
+import org.novelang.parser.NodeKind;
+
 import static org.novelang.parser.NodeKind.*;
 
 /**
- * Rehiererachizes embedded lists, with {@link org.novelang.parser.NodeKind#_EMBEDDED_LIST_WITH_HYPHEN}
- * elements wrapping {@link org.novelang.parser.NodeKind#_EMBEDDED_LIST_ITEM}.
- *  
+ * Rehiererachizes embedded lists, wrapping them in
+ * {@link org.novelang.parser.NodeKind#_EMBEDDED_LIST_ITEM}.
+ *
  * @author Laurent Caillette
  */
 public class EmbeddedListMangler {
-  
+
+  private EmbeddedListMangler() { }
+
   /**
    * Rehierarchize embedded list items.
    */
@@ -41,17 +45,26 @@ public class EmbeddedListMangler {
     Treepath< SyntacticTree > current = treepathToRehierarchize ;
     while( true ) {
       final Treepath< SyntacticTree > next ;
-      if( isRawItem( current ) ) {
-        
+      final NodeKind parsedToken = extractParsedToken( current ) ;
+      if( parsedToken != null ) {
+
+        final NodeKind syntheticToken = getSyntheticToken( parsedToken ) ;
+
         current = insertPlaceholder( current ) ;
         // Now currents refers to a new _PLACEHOLDER_ child right before first raw item.
 
         // The gobbler is a treepath because it may be used as a stack.
-        final Treepath< SyntacticTree > gobbler = createGobbler() ;
+        final Treepath< SyntacticTree > gobbler = createGobbler( syntheticToken ) ;
         
         final int indentation = getIndentSize( current ) ; // Hitting placeholder, but no problem.
         
-        final GobbleResult result = gobbleThisIndentOrGreater( gobbler, current, indentation ) ;
+        final GobbleResult result = gobbleThisIndentOrGreater(
+            gobbler,
+            current,
+            indentation,
+            parsedToken,
+            syntheticToken
+        ) ;
         // So we have gobbled every items in sequence, just leaving the placeholder.
         
         current = result.gobbled ;
@@ -71,12 +84,36 @@ public class EmbeddedListMangler {
 
   private static final Traversal.Preorder< SyntacticTree > PREORDER = Traversal.Preorder.create() ;
 
-  private static Treepath< SyntacticTree > createGobbler() {
-    return Treepath.create( ( SyntacticTree ) new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN ) ) ;
+  private static Treepath< SyntacticTree > createGobbler( final NodeKind syntheticToken ) {
+    return Treepath.create( ( SyntacticTree ) new SimpleTree( syntheticToken ) ) ;
   }
 
-  private static boolean isRawItem( final Treepath< SyntacticTree > current ) {
-    return current.getTreeAtEnd().isOneOf( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ ) ;
+  /**
+   * @return {@code null} if given {@link Treepath} if no no interest, the parsed token otherwise.
+   */
+  private static NodeKind extractParsedToken( final Treepath< SyntacticTree > current ) {
+    final NodeKind parsedToken = current.getTreeAtEnd().getNodeKind() ;
+    if( getSyntheticToken( parsedToken ) != null ) {
+      return parsedToken ;
+    } else {
+      return null ;
+    }
+  }
+
+  @SuppressWarnings( { "EnumSwitchStatementWhichMissesCases" } )
+  private static NodeKind getSyntheticToken( final NodeKind parsedToken ) {
+    if( parsedToken == null ) {
+      return null ;
+    } else {
+      switch( parsedToken ) {
+        case EMBEDDED_LIST_ITEM_WITH_HYPHEN_ :
+          return _EMBEDDED_LIST_WITH_HYPHEN ;
+        case EMBEDDED_LIST_ITEM_NUMBERED_ :
+          return _EMBEDDED_LIST_WITH_NUMBER_SIGN ;
+        default :
+          return null ;
+      }
+    }
   }
 
   private static Treepath< SyntacticTree > insertPlaceholder( 
@@ -91,25 +128,29 @@ public class EmbeddedListMangler {
 
 
   /**
-   * Gobbles all consecutive {@link org.novelang.parser.NodeKind#EMBEDDED_LIST_ITEM_WITH_HYPHEN_} nodes
-   * of the same indent or with a greater indent.
+   * Gobbles all consecutive nodes which have given parsed token, and which are
+   * of the same indent or are of a greater indent.
    *
    * @param gobbler a tree which solely holds the new embedded list structure.
    * @param gobbleStart where the gobbling starts in the document. Nodes of interest are removed.
    * @param firstIndent indent found by the caller, must be 0 or more.
+   * @param parsedToken
+   * @param syntheticToken
    * @return a non-null {@code GobbleResult} with a {@code gobbler} value never null, but with
    *     a {@code gobbled} value that can be null when nodes of interest have all been gobbled.
    */
   private static GobbleResult gobbleThisIndentOrGreater(
       Treepath< SyntacticTree > gobbler,
       Treepath< SyntacticTree > gobbleStart,
-      final int firstIndent
+      final int firstIndent,
+      final NodeKind parsedToken,
+      final NodeKind syntheticToken
   ) {
     Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
     Preconditions.checkArgument( firstIndent >= 0  ) ;
     
     do {
-      final Gobbling gobbling = gobble( gobbleStart, firstIndent ) ;
+      final Gobbling gobbling = gobble( gobbleStart, firstIndent, parsedToken ) ;
 
       if( gobbling.success ) {
         if( firstIndent == gobbling.indentation ) {        // Gobble at same indentation
@@ -118,15 +159,15 @@ public class EmbeddedListMangler {
         } else if( firstIndent < gobbling.indentation ) {  // Gobble at greater indentation
           gobbler = TreepathTools.addChildLast(
               gobbler,
-              new SimpleTree( _EMBEDDED_LIST_WITH_HYPHEN )
+              new SimpleTree( syntheticToken )
           ) ;
           final GobbleResult result = gobbleThisIndentOrGreater(
               gobbler,
               gobbleStart,
-              gobbling.indentation
+              gobbling.indentation, parsedToken, syntheticToken
           ) ;
           if( result.mayContinue ) {
-            final Gobbling gobblingLookahead = gobble( result.gobbled, -1 ) ;
+            final Gobbling gobblingLookahead = gobble( result.gobbled, -1, parsedToken ) ;
             if( gobblingLookahead.indentation > firstIndent ) {
               // If the indentation is greater than current after gobbling all nodes of same
               // indent or greater, this means there is some "inbetween" indent.
@@ -158,9 +199,9 @@ public class EmbeddedListMangler {
    * have been gobbled (this would discard useful information about where to insert the new
    * rehierarchized list). 
    * <p> 
-   * Gobbling removes following siblings of the {@code _PLACEHOLDER}. If one interesting 
-   * item (evaluated by {@link #isRawItem(Treepath)}) is found, or if there is no following sibling, 
-   * then the method returns. 
+   * Gobbling removes following siblings of the {@code _PLACEHOLDER}. If one interesting item
+   * (evaluated by {@link #extractParsedToken(org.novelang.common.tree.Treepath})
+   * is found, or if there is no following sibling, then the method returns.
    * <p>
    * If, when looking for next siblings of {@code _PLACEHOLDER_} node, a 
    * {@link org.novelang.parser.NodeKind#WHITESPACE_} is encountered, it sets the value of
@@ -177,15 +218,17 @@ public class EmbeddedListMangler {
    * {@link Gobbling#gobbledTree} is the gobbled item. 
    *  
    * 
+   * @param parsedToken
    * @param gobbleStart a treepath to the {@code _PLACEHOLDER} node which precedes the sequence
    * of raw items.
    * 
    * @return a {@code Gobbling} object containing 
    *     the result of the gobble. 
    */
-  private static Gobbling gobble( 
-      final Treepath< SyntacticTree > gobbleStart, 
-      int indentation 
+  private static Gobbling gobble(
+      final Treepath< SyntacticTree > gobbleStart,
+      int indentation,
+      final NodeKind parsedToken
   ) {
     Preconditions.checkArgument( gobbleStart.getTreeAtEnd().isOneOf( _PLACEHOLDER_ ) ) ;
     Treepath< SyntacticTree > start = gobbleStart ;
@@ -193,7 +236,7 @@ public class EmbeddedListMangler {
     do {
       if( TreepathTools.hasNextSibling( start ) ) {
         final Treepath< SyntacticTree > next = TreepathTools.getNextSibling( start ) ;
-        if( isRawItem( next ) ) {
+        if( extractParsedToken( next ) != null ) {
           final Treepath< SyntacticTree > minusNext =
               TreepathTools.removeNextSibling( start ) ;
           return new Gobbling( minusNext, makeEmbeddedListItem( next ), indentation ) ;

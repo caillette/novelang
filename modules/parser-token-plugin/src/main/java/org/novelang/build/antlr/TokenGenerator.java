@@ -76,6 +76,7 @@ public class TokenGenerator extends GrammarBasedJavaGenerator {
       new Item( "_PARAGRAPH_AS_LIST_ITEM" ),
 
       new Item( "_EMBEDDED_LIST_WITH_HYPHEN" ),
+      new Item( "_EMBEDDED_LIST_WITH_NUMBER_SIGN" ),
       new Item( "_EMBEDDED_LIST_ITEM" ),
       new Item( "_META_TIMESTAMP" ),
       new Item( "_META" ),
