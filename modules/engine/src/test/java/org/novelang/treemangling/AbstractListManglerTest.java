@@ -16,24 +16,25 @@
  */
 package org.novelang.treemangling;
 
+import org.junit.Test;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
-import org.junit.Test;
 
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
- * Tests for {@link org.novelang.treemangling.ListMangler}.
+ * Tests for {@link ListMangler}.
  *
  * @author Laurent Caillette
  */
-public class ListManglerTest {
+public abstract class AbstractListManglerTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( ListManglerTest.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( AbstractListManglerTest.class ) ;
 
   @Test
   public void doNothingWhenNothingToDo() {
@@ -55,9 +56,9 @@ public class ListManglerTest {
         NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree(
-            _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
+            getSyntheticToken(),
+            tree( getParsedToken() ),
+            tree( getParsedToken() )
         ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
@@ -65,12 +66,13 @@ public class ListManglerTest {
     final SyntacticTree toBeRehierarchized = tree(
         NOVELLA,
         tree( PARAGRAPH_REGULAR ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+        tree( getParsedToken() ),
+        tree( getParsedToken() ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
     verifyRehierarchizeList( expected, toBeRehierarchized ) ;
   }
+
 
   @Test
   public void aggregateListInsideLevelIntroducer() {
@@ -79,9 +81,9 @@ public class ListManglerTest {
         tree( LEVEL_INTRODUCER_,
           tree( PARAGRAPH_REGULAR ),
           tree(
-              _LIST_WITH_TRIPLE_HYPHEN,
-              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
+              getSyntheticToken(),
+              tree( getParsedToken() ),
+              tree( getParsedToken() )
           ),
           tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
@@ -93,8 +95,8 @@ public class ListManglerTest {
         tree(
             LEVEL_INTRODUCER_,
             tree( PARAGRAPH_REGULAR ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+            tree( getParsedToken() ),
+            tree( getParsedToken() ),
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
         tree(
@@ -112,9 +114,9 @@ public class ListManglerTest {
         tree( _LEVEL,
           tree( PARAGRAPH_REGULAR ),
           tree(
-              _LIST_WITH_TRIPLE_HYPHEN,
-              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-              tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
+              getSyntheticToken(),
+              tree( getParsedToken() ),
+              tree( getParsedToken() )
           ),
           tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
@@ -126,8 +128,8 @@ public class ListManglerTest {
         tree(
             _LEVEL,
             tree( PARAGRAPH_REGULAR ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+            tree( getParsedToken() ),
+            tree( getParsedToken() ),
             tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
         ),
         tree(
@@ -145,16 +147,16 @@ public class ListManglerTest {
         NOVELLA,
         tree( PARAGRAPH_REGULAR ),
         tree(
-            _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
+            getSyntheticToken(),
+            tree( getParsedToken() ),
+            tree( getParsedToken() )
         ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
         tree(
-            _LIST_WITH_TRIPLE_HYPHEN,
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
+            getSyntheticToken(),
+            tree( getParsedToken() ),
+            tree( getParsedToken() ),
+            tree( getParsedToken() )
         ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, "" )
 
@@ -162,12 +164,12 @@ public class ListManglerTest {
     final SyntacticTree toBeRehierarchized = tree(
         NOVELLA,
         tree( PARAGRAPH_REGULAR ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+        tree( getParsedToken() ),
+        tree( getParsedToken() ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
+        tree( getParsedToken() ),
+        tree( getParsedToken() ),
+        tree( getParsedToken() ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS, "" )
     ) ;
     verifyRehierarchizeList( expected, toBeRehierarchized ) ;
@@ -198,5 +200,16 @@ public class ListManglerTest {
 
 
   }
+
+
+  protected abstract NodeKind getSyntheticToken() ;
+
+  /**
+   * This token appears in expected trees because that's the
+   * {@link org.novelang.rendering.GenericRenderer}
+   * which finally transforms it into a token for rendition.
+   * TODO: move that into the {@link org.novelang.treemangling.ListMangler}
+   */
+  protected abstract NodeKind getParsedToken() ;
 
 }

@@ -58,6 +58,17 @@ public class ListMangler {
               insideList = true ;
             }
             break ;
+          case PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN:
+            if( insideList ) {
+              child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
+              break ;
+            } else {
+              final SyntacticTree list =
+                  new SimpleTree( _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN, child.getTreeAtEnd() ) ;
+              child = TreepathTools.replaceTreepathEnd( child, list ) ;
+              insideList = true ;
+            }
+            break ;
           case _LEVEL :
           case LEVEL_INTRODUCER_:
             child = rehierarchizeLists( child ) ;

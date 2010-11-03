@@ -179,9 +179,12 @@ public class GenericRenderer implements Renderer {
       case LEVEL_INTRODUCER_INDENT_ :
         break ;
 
+      // Is this still useful? EmbeddedListMangler should have discarded parsed tokens.
       case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ :
+      case PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN :
         processByDefault( tree, createNodepath( kinship, _PARAGRAPH_AS_LIST_ITEM ), false ) ;
         break ;
+
 
       // Is this still useful? EmbeddedListMangler should have discarded parsed tokens.
       case EMBEDDED_LIST_ITEM_WITH_HYPHEN_ :

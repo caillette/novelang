@@ -70,6 +70,7 @@ public class TokenGenerator extends GrammarBasedJavaGenerator {
       new Item( "_STYLE" ),
       new Item( "_LEVEL", TAG_SCOPE ),
       new Item( "_LIST_WITH_TRIPLE_HYPHEN", TAG_TRAVERSABLE ),
+      new Item( "_LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN", TAG_TRAVERSABLE ),
 
       /*  Crafted out of PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ by GenericRenderer,
           no tag scope then. */
