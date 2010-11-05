@@ -13,7 +13,7 @@
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
     <artifactId>Novelang</artifactId>
-    <version>SNAPSHOT</version>
+    <version>0.50.0</version>
   </parent>
 
   <artifactId>Novelang-source-plugin</artifactId>
