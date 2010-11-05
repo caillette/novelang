@@ -34,22 +34,6 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
  */
 public abstract class AbstractListManglerTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( AbstractListManglerTest.class ) ;
-
-  @Test
-  public void doNothingWhenNothingToDo() {
-    final SyntacticTree tree = tree(
-        NOVELLA,
-        tree( PARAGRAPH_REGULAR ),
-        tree( PARAGRAPH_REGULAR )
-    );
-    verifyRehierarchizeList(
-        tree,
-        tree
-    ) ;
-  }
-
-
   @Test
   public void aggregateList() {
     final SyntacticTree expected = tree(
@@ -180,9 +164,10 @@ public abstract class AbstractListManglerTest {
 // Fixture
 // =======
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( AbstractListManglerTest.class ) ;
 
 
-  private static void verifyRehierarchizeList(
+  static void verifyRehierarchizeList(
       final SyntacticTree expectedTree,
       final SyntacticTree flatTree
   ) {

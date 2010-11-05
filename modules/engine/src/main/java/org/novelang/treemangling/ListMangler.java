@@ -43,37 +43,37 @@ public class ListMangler {
   ) {
     if( parent.getTreeAtEnd().getChildCount() > 0 ) {
       Treepath< SyntacticTree > child = Treepath.create( parent, 0 ) ;
-      boolean insideList = false ;
+      NodeKind insideList = null ;
       while( true ) {
         final NodeKind nodeKind = getKind( child ) ;
-        switch( nodeKind ) {
+        switch( nodeKind ) { // TODO: factorize.
           case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_:
-            if( insideList ) {
+            if( insideList == _LIST_WITH_TRIPLE_HYPHEN ) {
               child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
               break ;
             } else {
               final SyntacticTree list =
                   new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN, child.getTreeAtEnd() ) ;
               child = TreepathTools.replaceTreepathEnd( child, list ) ;
-              insideList = true ;
+              insideList = _LIST_WITH_TRIPLE_HYPHEN ;
             }
             break ;
           case PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN:
-            if( insideList ) {
+            if( insideList == _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ) {
               child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
               break ;
             } else {
               final SyntacticTree list =
                   new SimpleTree( _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN, child.getTreeAtEnd() ) ;
               child = TreepathTools.replaceTreepathEnd( child, list ) ;
-              insideList = true ;
+              insideList = _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ;
             }
             break ;
           case _LEVEL :
           case LEVEL_INTRODUCER_:
             child = rehierarchizeLists( child ) ;
           default :
-            insideList = false ;
+            insideList = null ;
             break ;
         }
         if( TreepathTools.hasNextSibling( child ) ) {

@@ -295,7 +295,8 @@
     <!--</fo:block>-->
   </xsl:template>
 
-  <xsl:template match="n:paragraph-as-list-item" >
+
+  <xsl:template match="n:list-with-triple-hyphen/n:paragraph-as-list-item" >
     <fo:block
         text-align="justify"
         text-indent="1em"
@@ -310,6 +311,29 @@
         <xsl:apply-templates/>
       </fo:inline>
     </fo:block>
+  </xsl:template>
+
+  <xsl:template match="n:list-with-double-hyphen-and-plus-sign" >
+    <fo:list-block
+        provisional-distance-between-starts="6pt"
+        provisional-label-separation="10pt">
+      <xsl:apply-templates/>
+    </fo:list-block>
+  </xsl:template>
+
+  <xsl:template match="n:list-with-double-hyphen-and-plus-sign/n:paragraph-as-list-item" >
+    <fo:list-item space-before="5pt">
+      <fo:list-item-label end-indent="label-end()" >
+        <fo:block text-indent="1pt" >
+          <xsl:number count="n:paragraph-as-list-item" format="1."/>
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body>
+        <fo:block text-indent="20pt"> <!--Better way?-->
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
   </xsl:template>
 
 

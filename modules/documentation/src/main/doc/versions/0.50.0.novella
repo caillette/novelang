@@ -1,6 +1,8 @@
 --- Embedded numbered lists (``n:embedded-list-with-number-sign``).
 
+--- Paragraphs as numbered lists (``n:list-with-double-hyphen-and-plus-sign``).
+
 --- Switched to `Maven 3`. This required no change but future build features may not work with
 formerly-used `Maven 2.2.1`.
 
---- Delayed: upgrade to `FOP-1.0`. What about OFFO ?
+%%--- Delayed: upgrade to `FOP-1.0`. What about OFFO ?

@@ -132,7 +132,20 @@
   </xsl:template>
 
 
-  <xsl:template match="n:paragraph-as-list-item" >
+  <xsl:template match="n:list-with-double-hyphen-and-plus-sign" >
+    <xsl:for-each select="n:paragraph-as-list-item" >
+      <xsl:call-template name="descriptor-vanilla" />
+      <div class="p" >
+        <p>
+          <xsl:value-of select="position()" />.&nbsp;
+          <xsl:apply-templates />
+        </p>
+      </div>
+    </xsl:for-each>
+
+  </xsl:template>
+  
+  <xsl:template match="n:list-with-triple-hyphen/n:paragraph-as-list-item" >
     <xsl:call-template name="descriptor-vanilla" />
     <div class="p" >
       <p>
@@ -140,9 +153,8 @@
         <xsl:apply-templates/>
       </p>
     </div>
-
   </xsl:template>
-  
+
   <xsl:template match="n:block-inside-solidus-pairs" >
     <i><xsl:apply-templates/></i>
   </xsl:template>

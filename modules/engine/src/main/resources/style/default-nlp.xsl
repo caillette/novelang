@@ -93,11 +93,15 @@
   </xsl:template>
 
 
-  <xsl:template match="n:paragraph-as-list-item" >
+  <xsl:template match="n:list-with-triple-hyphen/n:paragraph-as-list-item" >
 
 --- <xsl:apply-templates/></xsl:template>
 
-  
+  <xsl:template match="n:list-with-double-hyphen-and-plus-sign/n:paragraph-as-list-item" >
+
+--+ <xsl:apply-templates/></xsl:template>
+
+
   <xsl:template match="n:paragraph-regular/n:embedded-list-with-hyphen" ><xsl:apply-templates/><xsl:text>
 </xsl:text>
   </xsl:template>
