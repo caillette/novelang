@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>Novelang-documentation</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
   <packaging>pom</packaging>
 
   <properties>
@@ -34,8 +34,8 @@
 
       <plugin>
         <artifactId>Novelang-producer-plugin</artifactId>
-        <groupId>${parent.groupId}</groupId>
-        <version>${parent.version}</version>
+        <groupId>${project.parent.groupId}</groupId>
+        <version>${project.parent.version}</version>
         <executions>
           <execution>
             <phase>validate</phase>
@@ -46,12 +46,34 @@
               <contentRootDirectory>${rawDocumentSources}</contentRootDirectory>
             </configuration>
           </execution>
+
+          <execution>
+            <id>nhovestone</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>produce</goal>
+            </goals>
+            <configuration>
+              <workingDirectory>${enhancedDocumentSources}</workingDirectory>
+              <contentRootDirectory>${enhancedDocumentSources}</contentRootDirectory>
+              <outputDirectory>${generatedDocumentsDirectory}</outputDirectory>
+              <documentsToRender>
+                <param>/novelang.html"</param>
+                <param>/novelang.pdf"</param>
+                <param>/versions/release-notes.html?stylesheet=announcement-html.xsl"</param>
+                <param>/versions/release-notes.novella?stylesheet=announcement-plaintext.xsl"</param>
+              </documentsToRender>
+            </configuration>
+          </execution>
+          
         </executions>
       </plugin>
 
 
       <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
+        <groupId>${lib.maven-resources-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-resources-plugin.artefactId}</artifactId>
+        <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -75,9 +97,9 @@
       </plugin>
 
       <plugin>
-        <groupId>${parent.groupId}</groupId>
+        <groupId>${project.parent.groupId}</groupId>
         <artifactId>Novelang-lexeme-table-plugin</artifactId>
-        <version>${parent.version}</version>
+        <version>${project.parent.version}</version>
         <executions>
           <execution>
             <phase>process-resources</phase>
@@ -91,34 +113,6 @@
         </executions>
       </plugin>
 
-
-      <plugin>
-        <artifactId>Novelang-producer-plugin</artifactId>
-        <groupId>${parent.groupId}</groupId>
-        <version>${parent.version}</version>
-        <executions>
-          <execution>
-            <id>nhovestone</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>produce</goal>
-            </goals>
-            <configuration>
-              <workingDirectory>${enhancedDocumentSources}</workingDirectory>
-              <contentRootDirectory>${enhancedDocumentSources}</contentRootDirectory>
-              <outputDirectory>${generatedDocumentsDirectory}</outputDirectory>
-              <documentsToRender>
-                <param>/novelang.html"</param>
-                <param>/novelang.pdf"</param>
-                <param>/versions/release-notes.html?stylesheet=announcement-html.xsl"</param>
-                <param>/versions/release-notes.novella?stylesheet=announcement-plaintext.xsl"</param>
-              </documentsToRender>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      
 
 
       <plugin>
@@ -158,9 +152,9 @@
         <version>${lib.maven-assembly-plugin.version}</version>
         <dependencies>
           <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>Novelang-assembly-descriptor</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -220,15 +214,15 @@
   <dependencies>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-bootstrap</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-lexeme-table-plugin</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
   </dependencies>

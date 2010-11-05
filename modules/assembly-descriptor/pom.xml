@@ -30,7 +30,7 @@
   </parent>
 
   <artifactId>Novelang-assembly-descriptor</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
 </project>
 

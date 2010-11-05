@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>Novelang-unicode-reader</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
   <properties>
     <generated-binaries>${project.build.outputDirectory}</generated-binaries>
@@ -21,9 +21,9 @@
     <plugins>
 
       <plugin>
-        <groupId>${parent.groupId}</groupId>
+        <groupId>${project.parent.groupId}</groupId>
         <artifactId>Novelang-unicode-generator-plugin</artifactId>
-        <version>${parent.version}</version>
+        <version>${project.parent.version}</version>
         <executions>
           <execution>
             <phase>generate-resources</phase>
@@ -58,9 +58,9 @@
   <dependencies>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-primer</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
 

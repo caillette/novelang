@@ -10,24 +10,24 @@
   </parent>
 
   <artifactId>Novelang-parser-lexeme-plugin-test</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
 
   <dependencies>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-logger-slf4j</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-parser-lexeme-plugin</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
       <exclusions>
         <exclusion>
-          <groupId>${parent.groupId}</groupId>
+          <groupId>${project.parent.groupId}</groupId>
           <artifactId>Novelang-logger-mojo</artifactId>
         </exclusion>
       </exclusions>

@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>Novelang-bootstrap</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
 
   <build>
@@ -41,9 +41,9 @@
   <dependencies>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-engine</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
 

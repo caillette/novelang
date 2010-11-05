@@ -44,9 +44,9 @@
   <dependencies>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-nhovestone-plugin</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
   </dependencies>
@@ -87,9 +87,9 @@
       </plugin>
 
       <plugin>
-        <groupId>${parent.groupId}</groupId>
+        <groupId>${project.parent.groupId}</groupId>
         <artifactId>Novelang-nhovestone-plugin</artifactId>
-        <version>${parent.version}</version>
+        <version>${project.parent.version}</version>
         <executions>
           <execution>
             <id>nhovestone</id>
@@ -108,8 +108,8 @@
 
       <plugin>
         <artifactId>Novelang-producer-plugin</artifactId>
-        <groupId>${parent.groupId}</groupId>
-        <version>${parent.version}</version>
+        <groupId>${project.parent.groupId}</groupId>
+        <version>${project.parent.version}</version>
         <executions>
           <execution>
             <id>nhovestone</id>

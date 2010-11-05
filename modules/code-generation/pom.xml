@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>Novelang-code-generation</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
   <build>
     <resources>
@@ -26,9 +26,9 @@
   <dependencies>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-primer</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
     <dependency>

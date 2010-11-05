@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>Novelang-producer-plugin</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
   <packaging>maven-plugin</packaging>
 
 
@@ -35,18 +35,18 @@
     </dependency>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-logger-mojo</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-engine-driver</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
       <exclusions>
         <exclusion>
-          <groupId>${parent.groupId}</groupId>
+          <groupId>${project.parent.groupId}</groupId>
           <artifactId>Novelang-logger-slf4j</artifactId>
         </exclusion>
       </exclusions>

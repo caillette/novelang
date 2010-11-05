@@ -26,7 +26,7 @@
   </parent>
 
   <artifactId>Novelang-insider</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
 
   <properties>
@@ -74,9 +74,9 @@
 
         <dependencies>
           <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>Novelang-assembly-descriptor</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
           </dependency>
         </dependencies>
         <executions>

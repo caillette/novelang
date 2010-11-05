@@ -26,7 +26,7 @@
   </parent>
 
   <artifactId>Novelang-shell</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
 
   
@@ -34,43 +34,43 @@
   <dependencies>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-bolt</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-insider</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
     <!-- Gives access to the Insider jar as a resource in the classpath. -->
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-insider</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
       <classifier>embedder</classifier>
     </dependency>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-logger-slf4j</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-vanilla-fixture</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
 
     <!-- Give access to the dummy program as resource in the classpath to copy the jar out. -->
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-shell-fixture</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
       <classifier>embedder</classifier>
       <scope>test</scope>
     </dependency>

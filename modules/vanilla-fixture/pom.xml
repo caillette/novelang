@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>Novelang-vanilla-fixture</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
 
   <dependencies>
 
@@ -23,9 +23,9 @@
 
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-bolt</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     
   </dependencies>

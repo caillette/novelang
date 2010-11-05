@@ -24,9 +24,9 @@
         <version>${lib.maven-assembly-plugin.version}</version>
         <dependencies>
           <dependency>
-            <groupId>${parent.groupId}</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>Novelang-assembly-descriptor</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -59,9 +59,9 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>${parent.groupId}</groupId>
+                  <groupId>${project.parent.groupId}</groupId>
                   <artifactId>Novelang-documentation</artifactId>
-                  <version>${parent.version}</version>
+                  <version>${project.parent.version}</version>
                   <classifier>${novelang.documentation.releasenotes.classifier}</classifier>
                   <type>zip</type>
                   <overWrite>true</overWrite>
@@ -92,7 +92,7 @@
               <goal>upload</goal>
             </goals>
             <configuration>
-              <fromDir>${build.directory}</fromDir>
+              <fromDir>${project.build.directory}</fromDir>
               <includes>${project.name}-${project.version}.zip</includes>
               <!--<includes>*.txt</includes>-->
               <serverId>novelang.sourceforge.net</serverId>
@@ -123,9 +123,9 @@
               <sslMode>true</sslMode>
               <username>${announcement.user.name}</username>
               <password>${announcement.user.password}</password>
-              <subject>${parent.artifactId}-${project.version} released!</subject>
+              <subject>${project.parent.artifactId}-${project.version} released!</subject>
               <template>release-notes.novella</template>
-              <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
+              <templateOutputDirectory>${project.build.directory}/announcement</templateOutputDirectory>
               <toAddresses>
                 <!--<toAddress>${announcement.user.email}</toAddress>-->
                 <toAddress>novelang-users@googlegroups.com</toAddress>
@@ -147,9 +147,9 @@
               <sslMode>true</sslMode>
               <username>${announcement.user.name}</username>
               <password>${announcement.user.password}</password>
-              <subject>${parent.artifactId}-${project.version} released!</subject>
+              <subject>${project.parent.artifactId}-${project.version} released!</subject>
               <template>release-notes.html</template>
-              <templateOutputDirectory>${build.directory}/announcement</templateOutputDirectory>
+              <templateOutputDirectory>${project.build.directory}/announcement</templateOutputDirectory>
               <toAddresses>
                 <toAddress>${blogging.blog.secretpostingaddress}</toAddress>
               </toAddresses>
@@ -160,21 +160,21 @@
       </plugin>
 
     </plugins>
-  </build>
+  </build>  
 
 
   <dependencies>
         
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-bootstrap</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-documentation</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
       <type>zip</type>
       <classifier>website</classifier>
     </dependency>

@@ -17,7 +17,7 @@
   </parent>
 
   <artifactId>Novelang-source-plugin</artifactId>
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
   <packaging>maven-plugin</packaging>
 
 
@@ -43,9 +43,9 @@
 
 
     <dependency>
-      <groupId>${parent.groupId}</groupId>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-logger-mojo</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     
 
