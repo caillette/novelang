@@ -281,10 +281,10 @@ public class JavaShell extends ProcessShell {
 
     Integer exitStatus = null ;
     synchronized( stateLock ) {
-      if( insider == null ) {
-        logger.info( "Not started or already shut down." ) ;
-      } else {
-        try {
+      try {
+        if( insider == null ) {
+          logger.info( "Not started or already shut down." ) ;
+        } else {
           switch( shutdownStyle ) {
             case GENTLE :
               try {
@@ -306,10 +306,12 @@ public class JavaShell extends ProcessShell {
             default :
               throw new IllegalArgumentException( "Unsupported: " + shutdownStyle ) ;
           }
-        } finally {
-          shutdownProcessQuiet() ;
-          cleanup();
         }
+      } finally {
+        // Do this all the time because there can be a running process and a null insider
+        // in the case of no default jmxKit.
+        shutdownProcessQuiet() ;
+        cleanup();
       }
     }
     LOGGER.info( "Shutdown (", shutdownStyle, ") complete for ", getNickname(),

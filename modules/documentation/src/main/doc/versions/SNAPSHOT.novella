@@ -1,1 +1,5 @@
-Nothing yet.
+--- Minor fix on ``JavaShell`` for cleaner shutdown when there is no default ``JmxKit``.
+This only may affect users of `Novelang-attirail` subproject.
+
+
+
