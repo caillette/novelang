@@ -164,6 +164,10 @@
     <lib.maven-project.artefactId>maven-project</lib.maven-project.artefactId>
     <lib.maven-project.version>2.2.1</lib.maven-project.version>
 
+    <lib.maven-javadoc-plugin.groupId>org.apache.maven.plugins</lib.maven-javadoc-plugin.groupId>
+    <lib.maven-javadoc-plugin.artefactId>maven-javadoc-plugin</lib.maven-javadoc-plugin.artefactId>
+    <lib.maven-javadoc-plugin.version>2.7</lib.maven-javadoc-plugin.version>
+
 
 
   </properties>
@@ -335,6 +339,15 @@
         <version>2.5</version>
       </plugin>
 
+      <plugin>
+        <groupId>${lib.maven-javadoc-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-javadoc-plugin.artefactId}</artifactId>
+        <version>${lib.maven-javadoc-plugin.version}</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      
     </plugins>
   </reporting>
 
