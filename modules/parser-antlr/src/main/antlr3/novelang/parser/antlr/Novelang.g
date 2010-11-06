@@ -22,8 +22,8 @@ options { output = AST ; }
 // Those tokens are turned into a NodeKind.java by TokenEnumerationGenerator.
 // Beware of line comments, which are processed.
 tokens {
-  PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;                  // tagbehavior=SCOPE
-  OPUS ;                                                    // tagbehavior=TRAVERSABLE
+  PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS ;                    // tagbehavior=SCOPE
+  OPUS ;                                                      // tagbehavior=TRAVERSABLE
   LEVEL_INTRODUCER_ ;
   LEVEL_INTRODUCER_INDENT_ ;
   LEVEL_TITLE ;
@@ -38,12 +38,12 @@ tokens {
   BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS ;
   BLOCK_AFTER_TILDE ;
   SUBBLOCK ;
-  LINES_OF_LITERAL ;                                        // tagbehavior=TERMINAL
+  LINES_OF_LITERAL ;                                          // tagbehavior=TERMINAL
   RAW_LINES ;                             
-  NOVELLA ;                                                 // tagbehavior=TRAVERSABLE
-  PARAGRAPH_REGULAR ;                                       // tagbehavior=TERMINAL
-  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;              // tagbehavior=TERMINAL
-  PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ; // tagbehavior=TERMINAL
+  NOVELLA ;                                                   // tagbehavior=TRAVERSABLE
+  PARAGRAPH_REGULAR ;                                         // tagbehavior=TERMINAL
+  PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ;                // tagbehavior=TERMINAL
+  PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN ; // tagbehavior=TERMINAL
   WORD_AFTER_CIRCUMFLEX_ACCENT ;
   URL_LITERAL ;  
   RASTER_IMAGE ;
@@ -53,7 +53,7 @@ tokens {
   EMBEDDED_LIST_ITEM_NUMBERED_ ;
   CELL ;
   CELL_ROW ;
-  CELL_ROWS_WITH_VERTICAL_LINE ;                            // tagbehavior=TERMINAL
+  CELL_ROWS_WITH_VERTICAL_LINE ;                              // tagbehavior=TERMINAL
   WORD_ ;
   WHITESPACE_ ;
   LINE_BREAK_ ;
@@ -64,13 +64,13 @@ tokens {
 
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
-  SIGN_COMMA ;                                              // punctuationsign=true
-  SIGN_FULLSTOP ;                                           // punctuationsign=true
-  SIGN_ELLIPSIS ;                                           // punctuationsign=true
-  SIGN_QUESTIONMARK ;                                       // punctuationsign=true
-  SIGN_EXCLAMATIONMARK ;                                    // punctuationsign=true
-  SIGN_SEMICOLON ;                                          // punctuationsign=true
-  SIGN_COLON ;                                              // punctuationsign=true
+  SIGN_COMMA ;                                                // punctuationsign=true
+  SIGN_FULLSTOP ;                                             // punctuationsign=true
+  SIGN_ELLIPSIS ;                                             // punctuationsign=true
+  SIGN_QUESTIONMARK ;                                         // punctuationsign=true
+  SIGN_EXCLAMATIONMARK ;                                      // punctuationsign=true
+  SIGN_SEMICOLON ;                                            // punctuationsign=true
+  SIGN_COLON ;                                                // punctuationsign=true
 
   // Opus stuff
   
@@ -1302,7 +1302,7 @@ bigDashedListItem
 bigNumberedListItem
   : 
     ( i += tags mediumbreak )?	
-    HYPHEN_MINUS HYPHEN_MINUS PLUS_SIGN
+    HYPHEN_MINUS HYPHEN_MINUS NUMBER_SIGN
     { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
     ( i += whitespace i += mixedDelimitedSpreadBlock )*
     ( ( i += whitespace? i += softbreak 
@@ -1315,7 +1315,7 @@ bigNumberedListItem
               ( i += whitespace i += mixedDelimitedSpreadBlock )* 
             )
         )
-      )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN $i* )
+      )* -> ^( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN $i* )
     )
     { delegate.leaveBlockDelimiterBoundary() ; }
   ;

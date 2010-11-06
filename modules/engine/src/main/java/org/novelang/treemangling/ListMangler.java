@@ -22,7 +22,6 @@ import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.parser.NodeKind;
 import static org.novelang.parser.NodeKind.*;
-import org.novelang.parser.NodeKindTools;
 
 /**
  * All contiguous List stuff becomes wrapped inside a
@@ -61,15 +60,15 @@ public class ListMangler {
                 insideList = _LIST_WITH_TRIPLE_HYPHEN ;
               }
               break ;
-            case PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN:
-              if( insideList == _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ) {
+            case PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN:
+              if( insideList == _LIST_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN ) {
                 child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
                 break ;
               } else {
                 final SyntacticTree list =
-                    new SimpleTree( _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN, child.getTreeAtEnd() ) ;
+                    new SimpleTree( _LIST_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN, child.getTreeAtEnd() ) ;
                 child = TreepathTools.replaceTreepathEnd( child, list ) ;
-                insideList = _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ;
+                insideList = _LIST_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN ;
               }
               break ;
             case _LEVEL :

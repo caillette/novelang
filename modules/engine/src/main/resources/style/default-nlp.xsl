@@ -97,9 +97,9 @@
 
 --- <xsl:apply-templates/></xsl:template>
 
-  <xsl:template match="n:list-with-double-hyphen-and-plus-sign/n:paragraph-as-list-item" >
+  <xsl:template match="n:list-with-double-hyphen-and-number-sign/n:paragraph-as-list-item" >
 
---+ <xsl:apply-templates/></xsl:template>
+--# <xsl:apply-templates/></xsl:template>
 
 
   <xsl:template match="n:paragraph-regular/n:embedded-list-with-hyphen" ><xsl:apply-templates/><xsl:text>

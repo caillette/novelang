@@ -18,11 +18,8 @@ package org.novelang.treemangling;
 
 import org.junit.Test;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.tree.Treepath;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.parser.NodeKind;
-import org.novelang.parser.antlr.TreeFixture;
 
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
@@ -49,9 +46,9 @@ public class ListManglerTest {
             tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ )
         ),
         tree(
-            _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN,
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ),
-            tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN )
+            _LIST_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN,
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN ),
+            tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN )
         ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
@@ -61,8 +58,8 @@ public class ListManglerTest {
         tree( PARAGRAPH_REGULAR ),
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
         tree( PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_ ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ),
-        tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN ),
+        tree( PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN ),
         tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS )
     ) ;
     AbstractListManglerTest.verifyRehierarchizeList( expected, toBeRehierarchized ) ;

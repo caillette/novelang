@@ -362,7 +362,7 @@ gets wrapped into a ``n:list-with-triple-hyphen`` element.
 
 === List with double hyphen and plus sign
 
-XML elements: ``n:list-with-double-hyphen-and-plus-sign``, ``n:paragraph-as-list-item``
+XML elements: ``n:list-with-double-hyphen-and-number-sign``, ``n:paragraph-as-list-item``
 
 A double hyphen and a plus sign ``--+`` may start a paragraph, which becomes a list item.
 They must take place on the first column of the line.
@@ -377,7 +377,7 @@ With Novelang default stylesheet, such a paragraph is rendered as a numbered lis
 >>>
 
 As XML element, the paragraph itself is a ``n:paragraph-as-list-item``, while the sequence of items
-gets wrapped into a ``n:list-with-double-hyphen-and-plus-sign`` element.
+gets wrapped into a ``n:list-with-double-hyphen-and-number-sign`` element.
 
 
 === Embedded list

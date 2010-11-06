@@ -313,7 +313,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="n:list-with-double-hyphen-and-plus-sign" >
+  <xsl:template match="n:list-with-double-hyphen-and-number-sign" >
     <fo:list-block
         provisional-distance-between-starts="6pt"
         provisional-label-separation="10pt">
@@ -321,7 +321,7 @@
     </fo:list-block>
   </xsl:template>
 
-  <xsl:template match="n:list-with-double-hyphen-and-plus-sign/n:paragraph-as-list-item" >
+  <xsl:template match="n:list-with-double-hyphen-and-number-sign/n:paragraph-as-list-item" >
     <fo:list-item space-before="5pt">
       <fo:list-item-label end-indent="label-end()" >
         <fo:block text-indent="1pt" >

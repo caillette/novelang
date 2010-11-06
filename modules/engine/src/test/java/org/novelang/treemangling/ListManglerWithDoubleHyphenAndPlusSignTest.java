@@ -18,8 +18,8 @@ package org.novelang.treemangling;
 
 import org.novelang.parser.NodeKind;
 
-import static org.novelang.parser.NodeKind.PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN;
-import static org.novelang.parser.NodeKind._LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN;
+import static org.novelang.parser.NodeKind.PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN;
+import static org.novelang.parser.NodeKind._LIST_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN;
 
 /**
  * Tests for {@link ListMangler}.
@@ -36,12 +36,12 @@ public class ListManglerWithDoubleHyphenAndPlusSignTest extends AbstractListMang
 
   @Override
   protected NodeKind getSyntheticToken() {
-    return _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN;
+    return _LIST_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN;
   }
 
 
   @Override
   protected NodeKind getParsedToken() {
-    return PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN;
+    return PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN;
   }
 }

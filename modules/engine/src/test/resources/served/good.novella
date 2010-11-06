@@ -22,11 +22,11 @@ Paragraph //with// "many" features -- not all (but many) -_.
 
 --- Big list item two
 
---+ First numbered item
+--# First numbered item
 
---+ Second numbered item
+--# Second numbered item
 
---+ Third numbered item 
+--# Third numbered item 
 
 
 === Embedded lists 

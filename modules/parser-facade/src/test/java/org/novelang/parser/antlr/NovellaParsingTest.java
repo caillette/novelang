@@ -189,14 +189,14 @@ public class NovellaParsingTest {
   {
     PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         "<< " + BREAK +
-        "--+ Foo" + BREAK +
+        "--# Foo" + BREAK +
         ">>",
         tree(
             NOVELLA,
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree(
-                    PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN,
+                    PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN,
                     tree( WORD_, "Foo" )
                 )
             )

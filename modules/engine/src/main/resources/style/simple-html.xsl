@@ -132,7 +132,7 @@
   </xsl:template>
 
 
-  <xsl:template match="n:list-with-double-hyphen-and-plus-sign" >
+  <xsl:template match="n:list-with-double-hyphen-and-number-sign" >
     <xsl:for-each select="n:paragraph-as-list-item" >
       <xsl:call-template name="descriptor-vanilla" />
       <div class="p" >
