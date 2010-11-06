@@ -114,7 +114,7 @@
 
     <lib.maven-site-plugin.groupId>org.apache.maven.plugins</lib.maven-site-plugin.groupId>
     <lib.maven-site-plugin.artifactid>maven-site-plugin</lib.maven-site-plugin.artifactid>
-    <lib.maven-site-plugin.version>2.1</lib.maven-site-plugin.version>
+    <lib.maven-site-plugin.version>2.1.1</lib.maven-site-plugin.version>
 
     <lib.versions-maven-plugin.groupId>org.codehaus.mojo</lib.versions-maven-plugin.groupId>
     <lib.versions-maven-plugin.artifactid>versions-maven-plugin</lib.versions-maven-plugin.artifactid>
