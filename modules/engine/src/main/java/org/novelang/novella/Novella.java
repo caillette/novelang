@@ -79,17 +79,18 @@ public class Novella extends AbstractSourceReader {
       final Charset suggestedRenderingCharset
   ) throws IOException {
     super(
-        file.getAbsolutePath(),
+        file.getCanonicalPath(),
         sourceCharset,
         suggestedRenderingCharset,
         "novella[" + file.getName() + "]"
     ) ;
+    final File canonicalFile = file.getCanonicalFile() ;
     Preconditions.checkArgument( 
-        ! file.isDirectory(),
-        "Novella file cannot be a directory: %s", file
+        ! canonicalFile.isDirectory(),
+        "Novella file cannot be a directory: %s", canonicalFile
     ) ;
-    this.partFileDirectory = file.getParentFile() ;
-    tree = createTree( readContent( file ) ) ;
+    this.partFileDirectory = canonicalFile.getParentFile() ;
+    tree = createTree( readContent( canonicalFile ) ) ;
   }
 
   protected GenericParser createParser( final String content ) {

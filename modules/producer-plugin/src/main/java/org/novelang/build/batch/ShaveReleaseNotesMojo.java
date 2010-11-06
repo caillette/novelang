@@ -19,29 +19,25 @@ package org.novelang.build.batch;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.novelang.Version;
 import org.novelang.logger.ConcreteLoggerFactory;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 
 
 /**
- * Verifies there is a file named {@code versions/${project.version}.novella}
- * under {@link #contentRootDirectory}.
- * This is useful to make the build fail clear and fast if there is a missing
- * release note.
+ * Drops the {@code SNAPSHOT.novella} file is current version is not a snapshot.
  *
- * @goal check
+ * @goal drop-snapshot-version-if-needed
  *
  * @requiresDependencyResolution runtime
  *
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "UnusedDeclaration" } )
-public class VersionVerifierMojo extends AbstractProducerMojo {
-
+public class ShaveReleaseNotesMojo extends AbstractProducerMojo {
 
 
   @Override
@@ -50,19 +46,18 @@ public class VersionVerifierMojo extends AbstractProducerMojo {
     
     final Logger log = LoggerFactory.getLogger( getClass() ) ;
 
-
-    final File versionFile;
     final Version version = getVersion() ;
-    try {
-      versionFile = getReleaseNoteSourceFile( version ) ;
-    } catch( IOException e ) {
-      throw new MojoExecutionException( "Couldn't create File object for " + version, e ) ;
+    if( ! version.isSnapshot() ) {
+      try {
+        final File releaseNotesFile = getReleaseNoteSourceFile( Version.SNAPSHOT ) ;
+        if( releaseNotesFile.delete() ) {
+          log.info( "Deleted '", releaseNotesFile.getAbsolutePath(), "'." ) ;
+        }
+      } catch( IOException e ) {
+        throw new MojoExecutionException( "Couldn't create File object for " + version, e ) ;
+      }
+
     }
-    if( ! versionFile.exists() ) {
-      throw new MojoExecutionException( "Missing '" + versionFile.getAbsolutePath() + "'" ) ;
-    }
-    log.info( "Found '", versionFile.getAbsolutePath(), "'." ) ;
 
   }
-
 }

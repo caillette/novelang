@@ -37,7 +37,7 @@ public final class Version {
   private final int minor ;
   private final int fix ;
 
-  public Version() {
+  private Version() {
     snapshot = true ;
     this.major = -999 ;
     this.minor = -999 ;
@@ -110,18 +110,20 @@ public final class Version {
     }
   }
 
-  private static final String SNAPSHOT = "SNAPSHOT" ;
+  private static final String SNAPSHOT_NAME = "SNAPSHOT" ;
+
+  public static final Version SNAPSHOT = new Version() ;
 
   public boolean isSnapshot() {
     return snapshot ;
   }
 
   public String getName() {
-    return isSnapshot() ? SNAPSHOT : major + "." + minor + "." + fix ;
+    return isSnapshot() ? SNAPSHOT_NAME : major + "." + minor + "." + fix ;
   }
   
   public static Version parse( final String s ) throws VersionFormatException {
-    if( ( "${" + "project.version" + "}" ).equals( s ) || SNAPSHOT.equals( s ) ) {
+    if( ( "${" + "project.version" + "}" ).equals( s ) || SNAPSHOT_NAME.equals( s ) ) {
       return new Version() ;
     } else {
       final Matcher matcher = PATTERN.matcher( s ) ;

@@ -48,7 +48,19 @@
           </execution>
 
           <execution>
-            <id>nhovestone</id>
+            <id>maybe-drop-snapshot-release-note</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>drop-snapshot-version-if-needed</goal>
+            </goals>
+            <configuration>
+              <contentRootDirectory>${enhancedDocumentSources}</contentRootDirectory>
+            </configuration>
+          </execution>
+
+
+          <execution>
+            <id>produce-documents</id>
             <phase>compile</phase>
             <goals>
               <goal>produce</goal>
@@ -76,7 +88,7 @@
         <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>
-            <phase>generate-sources</phase>
+            <phase>generate-resources</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -91,6 +103,7 @@
                   <filtering>true</filtering>
                 </resource>
               </resources>
+
             </configuration>
           </execution>
         </executions>
@@ -222,6 +235,7 @@
       <artifactId>Novelang-lexeme-table-plugin</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
+
 
   </dependencies>
 

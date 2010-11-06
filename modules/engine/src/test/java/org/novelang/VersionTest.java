@@ -12,7 +12,7 @@ public class VersionTest {
   
   @Test
   public void defaultsForSnapshot() {
-    final Version snapshot = new Version();
+    final Version snapshot = Version.SNAPSHOT ;
     assertTrue( snapshot.isSnapshot() ) ;
     assertEquals( "SNAPSHOT", snapshot.getName() ) ;
   }
@@ -21,7 +21,7 @@ public class VersionTest {
   public void parseSnapshot() throws VersionFormatException {
     assertTrue( Version.parse( "${" + "project.version}" ).isSnapshot() ) ;
     assertTrue( Version.parse( "SNAPSHOT" ).isSnapshot() ) ;
-    assertTrue( Version.parse( new Version().getName() ).isSnapshot() ) ;
+    assertTrue( Version.parse( Version.SNAPSHOT.getName() ).isSnapshot() ) ;
   }
   
   @Test
@@ -65,23 +65,22 @@ public class VersionTest {
   
   @Test( expected = IllegalStateException.class )
   public void noMajorNumberForSnapshot() {
-    new Version().getMajor() ;
+    Version.SNAPSHOT.getMajor() ;
   }
   
   @Test( expected = IllegalStateException.class )
   public void noMinorNumberForSnapshot() {
-    new Version().getMinor() ;
+    Version.SNAPSHOT.getMinor() ;
   }
   
   @Test( expected = IllegalStateException.class )
   public void noFixNumberForSnapshot() {
-    new Version().getFix() ;
+    Version.SNAPSHOT.getFix() ;
   }
   
   @Test
   public void compare() {
-    final Version vSnapshotA = new Version() ;
-    final Version vSnapshotB = new Version() ;
+    final Version vSnapshotA = Version.SNAPSHOT ;
     final Version v3_1_1 = new Version( 3, 1, 1 ) ;
     final Version v3_1_1b = new Version( 3, 1, 1 ) ;
     final Version v2_3_1 = new Version( 2, 3, 1 ) ;
@@ -95,7 +94,6 @@ public class VersionTest {
     compare(  1, vSnapshotA, null ) ;
     
     compare(  0, vSnapshotA, vSnapshotA ) ;
-    compare(  0, vSnapshotA, vSnapshotB ) ;
     compare(  0, v3_1_1,     v3_1_1b ) ;
     compare(  0, v3_1_1,     v3_1_1b ) ;
     compare(  0, v3_1_1b,    v3_1_1 ) ;

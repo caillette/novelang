@@ -17,6 +17,7 @@
 package org.novelang.build.batch;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.novelang.Version;
 import org.novelang.VersionFormatException;
@@ -58,5 +59,13 @@ public abstract class AbstractProducerMojo extends AbstractMojo {
       throw new MojoExecutionException( "Couldn't parse version '" + project.getVersion() + "'" ) ;
     }
     return version ;
+  }
+
+  protected final File getReleaseNoteSourceFile( final Version version ) throws IOException {
+    final File versionFile = new File(
+        contentRootDirectory,
+        "versions/" + version.getName() + ".novella"
+    ).getCanonicalFile() ;
+    return versionFile ;
   }
 }
