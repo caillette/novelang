@@ -16,13 +16,13 @@
  */
 package org.novelang.parser.antlr;
 
-import org.junit.Test;
 import org.antlr.runtime.RecognitionException;
-import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import org.junit.Test;
 import org.novelang.parser.NodeKind;
+
 import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.NodeKind.WORD_;
+import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
+import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for parsing of a whole Novella.
@@ -47,6 +47,7 @@ public class NovellaParsingTest {
    * An attempt to reproduce bad behavior occuring with 
    * {@link org.novelang.opus.OpusWithImagesTest#imagesInPartsWithExplicitNames}.
    */
+  @SuppressWarnings( { "JavadocReference" } )
   @Test
   public void partIsTwoImages() {
     PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
@@ -156,6 +157,48 @@ public class NovellaParsingTest {
             tree(
                 PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
                 tree( LINES_OF_LITERAL, tree( RAW_LINES, "literal" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void paragraphInsideAngledBracketPairsHasListWithTripleHyphen()
+      throws RecognitionException
+  {
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
+        "<< " + BREAK +
+        "--- Foo" + BREAK +
+        ">>",
+        tree(
+            NOVELLA,
+            tree(
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree(
+                    PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+                    tree( WORD_, "Foo" )
+                )
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void paragraphInsideAngledBracketPairsHasListWithDoubleHyphenAndPlusSign()
+      throws RecognitionException
+  {
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
+        "<< " + BREAK +
+        "--+ Foo" + BREAK +
+        ">>",
+        tree(
+            NOVELLA,
+            tree(
+                PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree(
+                    PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN,
+                    tree( WORD_, "Foo" )
+                )
             )
         )
     ) ;

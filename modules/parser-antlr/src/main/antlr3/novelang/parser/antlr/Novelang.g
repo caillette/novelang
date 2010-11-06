@@ -1383,8 +1383,17 @@ blockQuote
       ( p += tags mediumbreak )?
       LESS_THAN_SIGN LESS_THAN_SIGN
       ( mediumbreak | largebreak )?
-      ( p += paragraph | p += literal )
-      ( largebreak ( p += paragraph | p += literal ) )*
+      (   p += paragraph 
+        | p += literal 
+        | p+= bigDashedListItem 
+        | p += bigNumberedListItem 
+      )
+      ( largebreak ( 
+          p += paragraph 
+        | p += literal 
+        | p+= bigDashedListItem 
+        | p += bigNumberedListItem 
+      ) )*
       ( mediumbreak | largebreak )?
       GREATER_THAN_SIGN GREATER_THAN_SIGN
       { delegate.leaveBlockDelimiterBoundary() ; }

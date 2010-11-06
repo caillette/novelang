@@ -160,6 +160,36 @@ public abstract class AbstractListManglerTest {
   }
 
 
+
+  @Test
+  public void listInsideAngledBracketPairs() {
+    final SyntacticTree expected = tree(
+        NOVELLA,
+        tree( _LEVEL,
+          tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+              tree(
+                  getSyntheticToken(),
+                  tree( getParsedToken() ),
+                  tree( getParsedToken() )
+              )
+          )
+        )
+    ) ;
+
+    final SyntacticTree toBeRehierarchized = tree(
+        NOVELLA,
+        tree(
+            _LEVEL,
+            tree( PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS,
+                tree( getParsedToken() ),
+                tree( getParsedToken() )
+            )
+        )
+    ) ;
+    verifyRehierarchizeList( expected, toBeRehierarchized ) ;
+  }
+
+
 // =======
 // Fixture
 // =======

@@ -33,6 +33,8 @@ import org.novelang.parser.NodeKindTools;
  */
 public class ListMangler {
 
+  private ListMangler() {
+  }
 
 
   /**
@@ -46,35 +48,38 @@ public class ListMangler {
       NodeKind insideList = null ;
       while( true ) {
         final NodeKind nodeKind = getKind( child ) ;
-        switch( nodeKind ) { // TODO: factorize.
-          case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_:
-            if( insideList == _LIST_WITH_TRIPLE_HYPHEN ) {
-              child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
+        if( nodeKind != null ) {
+          switch( nodeKind ) { // TODO: factorize.
+            case PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_:
+              if( insideList == _LIST_WITH_TRIPLE_HYPHEN ) {
+                child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
+                break ;
+              } else {
+                final SyntacticTree list =
+                    new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN, child.getTreeAtEnd() ) ;
+                child = TreepathTools.replaceTreepathEnd( child, list ) ;
+                insideList = _LIST_WITH_TRIPLE_HYPHEN ;
+              }
               break ;
-            } else {
-              final SyntacticTree list =
-                  new SimpleTree( _LIST_WITH_TRIPLE_HYPHEN, child.getTreeAtEnd() ) ;
-              child = TreepathTools.replaceTreepathEnd( child, list ) ;
-              insideList = _LIST_WITH_TRIPLE_HYPHEN ;
-            }
-            break ;
-          case PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN:
-            if( insideList == _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ) {
-              child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
+            case PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN:
+              if( insideList == _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ) {
+                child = TreepathTools.becomeLastChildOfPreviousSibling( child ).getPrevious() ;
+                break ;
+              } else {
+                final SyntacticTree list =
+                    new SimpleTree( _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN, child.getTreeAtEnd() ) ;
+                child = TreepathTools.replaceTreepathEnd( child, list ) ;
+                insideList = _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ;
+              }
               break ;
-            } else {
-              final SyntacticTree list =
-                  new SimpleTree( _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN, child.getTreeAtEnd() ) ;
-              child = TreepathTools.replaceTreepathEnd( child, list ) ;
-              insideList = _LIST_WITH_DOUBLE_HYPHEN_AND_PLUS_SIGN ;
-            }
-            break ;
-          case _LEVEL :
-          case LEVEL_INTRODUCER_:
-            child = rehierarchizeLists( child ) ;
-          default :
-            insideList = null ;
-            break ;
+            case _LEVEL :
+            case LEVEL_INTRODUCER_:
+            case PARAGRAPHS_INSIDE_ANGLED_BRACKET_PAIRS :
+              child = rehierarchizeLists( child ) ;
+            default :
+              insideList = null ;
+              break ;
+          }
         }
         if( TreepathTools.hasNextSibling( child ) ) {
           child = TreepathTools.getNextSibling( child ) ;
@@ -92,7 +97,10 @@ public class ListMangler {
 
 
   private static NodeKind getKind( final Treepath< SyntacticTree > treepath ) {
-    return NodeKindTools.ofRoot( treepath.getTreeAtEnd() ) ;
+
+    final SyntacticTree tree = treepath.getTreeAtEnd() ;
+    final NodeKind nodeKind = tree.getNodeKind() ;
+    return nodeKind ;
   }
 
 
