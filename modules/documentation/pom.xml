@@ -128,8 +128,6 @@
                     files directly in the target directory.
                 -->
 
-                <property name="classpath" refid="maven.runtime.classpath" />
-
                 <copy todir="${generatedDocumentsDirectory}" flatten="true">
                   <fileset dir="${enhancedDocumentSources}" includes="**/*.css" /> 
                 </copy>
