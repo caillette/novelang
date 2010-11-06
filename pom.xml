@@ -112,6 +112,10 @@
     <lib.maven-resources-plugin.artefactId>maven-resources-plugin</lib.maven-resources-plugin.artefactId>
     <lib.maven-resources-plugin.version>2.4.3</lib.maven-resources-plugin.version>
 
+    <lib.maven-site-plugin.groupId>org.apache.maven.plugins</lib.maven-site-plugin.groupId>
+    <lib.maven-site-plugin.artefactId>maven-site-plugin</lib.maven-site-plugin.artefactId>
+    <lib.maven-site-plugin.version>2.1</lib.maven-site-plugin.version>
+
     <lib.versions-maven-plugin.groupId>org.codehaus.mojo</lib.versions-maven-plugin.groupId>
     <lib.versions-maven-plugin.artefactId>versions-maven-plugin</lib.versions-maven-plugin.artefactId>
     <lib.versions-maven-plugin.version>1.2</lib.versions-maven-plugin.version>
@@ -267,6 +271,15 @@
             <developmentVersion>SNAPSHOT</developmentVersion>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>${lib.maven-site-plugin.groupId}</groupId>
+          <artifactId>${lib.maven-site-plugin.artefactId}</artifactId>
+          <version>${lib.maven-site-plugin.version}</version>
+          <configuration>
+            <generateReports>false</generateReports>
+         </configuration>
+       </plugin>
 
 
       </plugins>
