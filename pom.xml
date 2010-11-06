@@ -166,7 +166,8 @@
 
     <lib.maven-javadoc-plugin.groupId>org.apache.maven.plugins</lib.maven-javadoc-plugin.groupId>
     <lib.maven-javadoc-plugin.artefactId>maven-javadoc-plugin</lib.maven-javadoc-plugin.artefactId>
-    <lib.maven-javadoc-plugin.version>2.7</lib.maven-javadoc-plugin.version>
+    <!-- Avoiding slow build http://jira.codehaus.org/browse/MJAVADOC-268 -->
+    <lib.maven-javadoc-plugin.version>2.5</lib.maven-javadoc-plugin.version>
 
 
 
@@ -281,6 +282,14 @@
          </configuration>
        </plugin>
 
+        <plugin>
+          <groupId>${lib.maven-javadoc-plugin.groupId}</groupId>
+          <artifactId>${lib.maven-javadoc-plugin.artefactId}</artifactId>
+          <version>${lib.maven-javadoc-plugin.version}</version>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
 
       </plugins>
     </pluginManagement>
@@ -316,6 +325,8 @@
           <goals>deploy</goals>
         </configuration>
       </plugin>
+
+      
 
     </plugins>
 
