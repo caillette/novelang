@@ -333,24 +333,10 @@
   <reporting>
     <plugins>
 
-<!--
-      <plugin>
-        <groupId>${lib.cobertura.groupid}</groupId>
-        <artifactId>${lib.cobertura.artefactid}</artifactId>
-        <version>${lib.cobertura.version}</version>
-      </plugin>
--->
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
         <version>2.5</version>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.7</version>
       </plugin>
 
     </plugins>
