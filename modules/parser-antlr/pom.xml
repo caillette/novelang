@@ -132,7 +132,7 @@
 
     <dependency>
       <groupId>${lib.antlr.groupid}</groupId>
-      <artifactId>${lib.antlr-compiler.artefactid}</artifactId>
+      <artifactId>${lib.antlr-compiler.artifactid}</artifactId>
       <version>${lib.antlr.version}</version>
       <scope>compile</scope>
     </dependency>

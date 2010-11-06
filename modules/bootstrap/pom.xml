@@ -18,7 +18,7 @@
 
       <plugin>
         <groupId>${lib.maven-jar-plugin.groupid}</groupId>
-        <artifactId>${lib.maven-jar-plugin.artefactid}</artifactId>
+        <artifactId>${lib.maven-jar-plugin.artifactid}</artifactId>
         <version>${lib.maven-jar-plugin.version}</version>
         <configuration>
           <archive>

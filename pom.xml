@@ -26,12 +26,12 @@
     <!-- Dependencies. -->
 
     <lib.cobertura.groupid>org.codehaus.mojo</lib.cobertura.groupid>
-    <lib.cobertura.artefactid>cobertura-maven-plugin</lib.cobertura.artefactid>
+    <lib.cobertura.artifactid>cobertura-maven-plugin</lib.cobertura.artifactid>
     <lib.cobertura.version>2.4</lib.cobertura.version>
 
     <lib.antlr.groupid>org.antlr</lib.antlr.groupid>
-    <lib.antlr-compiler.artefactid>antlr</lib.antlr-compiler.artefactid>
-    <lib.antlr-runtime.artefactid>antlr-runtime</lib.antlr-runtime.artefactid>
+    <lib.antlr-compiler.artifactid>antlr</lib.antlr-compiler.artifactid>
+    <lib.antlr-runtime.artifactid>antlr-runtime</lib.antlr-runtime.artifactid>
     <lib.antlr.version>3.1.1</lib.antlr.version>
 
     <lib.logback.groupid>ch.qos.logback</lib.logback.groupid>
@@ -41,39 +41,39 @@
     <lib.slf4j.version>1.6.1</lib.slf4j.version>
 
     <lib.maven-plugin.groupid>org.apache.maven</lib.maven-plugin.groupid>
-    <lib.maven-plugin.artefactid>maven-plugin-api</lib.maven-plugin.artefactid>
+    <lib.maven-plugin.artifactid>maven-plugin-api</lib.maven-plugin.artifactid>
     <lib.maven-plugin.version>2.0</lib.maven-plugin.version>
 
     <lib.maven-jar-plugin.groupid>org.apache.maven.plugins</lib.maven-jar-plugin.groupid>
-    <lib.maven-jar-plugin.artefactid>maven-jar-plugin</lib.maven-jar-plugin.artefactid>
+    <lib.maven-jar-plugin.artifactid>maven-jar-plugin</lib.maven-jar-plugin.artifactid>
     <lib.maven-jar-plugin.version>2.3.1</lib.maven-jar-plugin.version>
 
     <lib.maven-shade-plugin.groupid>org.apache.maven.plugins</lib.maven-shade-plugin.groupid>
-    <lib.maven-shade-plugin.artefactid>maven-shade-plugin</lib.maven-shade-plugin.artefactid>
+    <lib.maven-shade-plugin.artifactid>maven-shade-plugin</lib.maven-shade-plugin.artifactid>
     <lib.maven-shade-plugin.version>1.4</lib.maven-shade-plugin.version>
 
     <lib.maven-assembly-plugin.groupId>org.apache.maven.plugins</lib.maven-assembly-plugin.groupId>
-    <lib.maven-assembly-plugin.artefactId>maven-assembly-plugin</lib.maven-assembly-plugin.artefactId>
+    <lib.maven-assembly-plugin.artifactid>maven-assembly-plugin</lib.maven-assembly-plugin.artifactid>
     <lib.maven-assembly-plugin.version>2.2-beta-5</lib.maven-assembly-plugin.version>
 
     <lib.maven-compiler-plugin.groupId>org.apache.maven.plugins</lib.maven-compiler-plugin.groupId>
-    <lib.maven-compiler-plugin.artefactId>maven-compiler-plugin</lib.maven-compiler-plugin.artefactId>
+    <lib.maven-compiler-plugin.artifactid>maven-compiler-plugin</lib.maven-compiler-plugin.artifactid>
     <lib.maven-compiler-plugin.version>2.3.2</lib.maven-compiler-plugin.version>
 
     <lib.build-helper-plugin.groupId>org.codehaus.mojo</lib.build-helper-plugin.groupId>
-    <lib.build-helper-plugin.artefactId>build-helper-maven-plugin</lib.build-helper-plugin.artefactId>
+    <lib.build-helper-plugin.artifactid>build-helper-maven-plugin</lib.build-helper-plugin.artifactid>
     <lib.build-helper-plugin.version>1.5</lib.build-helper-plugin.version>
 
     <lib.maven-release-plugin.groupId>org.apache.maven.plugins</lib.maven-release-plugin.groupId>
-    <lib.maven-release-plugin.artefactId>maven-release-plugin</lib.maven-release-plugin.artefactId>
+    <lib.maven-release-plugin.artifactid>maven-release-plugin</lib.maven-release-plugin.artifactid>
     <lib.maven-release-plugin.version>2.0</lib.maven-release-plugin.version>
 
     <lib.maven-shade-plugin.groupId>org.apache.maven.plugins</lib.maven-shade-plugin.groupId>
-    <lib.maven-shade-plugin.artefactId>maven-shade-plugin</lib.maven-shade-plugin.artefactId>
+    <lib.maven-shade-plugin.artifactid>maven-shade-plugin</lib.maven-shade-plugin.artifactid>
     <lib.maven-shade-plugin.version>1.4</lib.maven-shade-plugin.version>
 
     <lib.junit.groupid>junit</lib.junit.groupid>
-    <lib.junit.artefactid>junit</lib.junit.artefactid>
+    <lib.junit.artifactid>junit</lib.junit.artifactid>
     <lib.junit.version>4.8.1</lib.junit.version>
 
     <lib.wagon-maven-plugin.groupId>org.codehaus.mojo</lib.wagon-maven-plugin.groupId>
@@ -85,71 +85,71 @@
     <lib.maven-wagon-ssh.version>1.0-beta-6</lib.maven-wagon-ssh.version>
 
     <lib.properties-maven-plugin.groupId>org.novelang</lib.properties-maven-plugin.groupId>
-    <lib.properties-maven-plugin.artefactId>Novelang-properties-plugin</lib.properties-maven-plugin.artefactId>
+    <lib.properties-maven-plugin.artifactid>Novelang-properties-plugin</lib.properties-maven-plugin.artifactid>
     <lib.properties-maven-plugin.version>SNAPSHOT</lib.properties-maven-plugin.version>
 
     <lib.maven-deploy-plugin.groupId>org.apache.maven.plugins</lib.maven-deploy-plugin.groupId>
-    <lib.maven-deploy-plugin.artefactId>maven-deploy-plugin</lib.maven-deploy-plugin.artefactId>
+    <lib.maven-deploy-plugin.artifactid>maven-deploy-plugin</lib.maven-deploy-plugin.artifactid>
     <lib.maven-deploy-plugin.version>2.5</lib.maven-deploy-plugin.version>
 
     <lib.maven-surefire-plugin.groupId>org.apache.maven.plugins</lib.maven-surefire-plugin.groupId>
-    <lib.maven-surefire-plugin.artefactId>maven-surefire-plugin</lib.maven-surefire-plugin.artefactId>
+    <lib.maven-surefire-plugin.artifactid>maven-surefire-plugin</lib.maven-surefire-plugin.artifactid>
     <lib.maven-surefire-plugin.version>2.5</lib.maven-surefire-plugin.version>
 
     <lib.maven-changes-plugin.groupId>org.apache.maven.plugins</lib.maven-changes-plugin.groupId>
-    <lib.maven-changes-plugin.artefactId>maven-changes-plugin</lib.maven-changes-plugin.artefactId>
+    <lib.maven-changes-plugin.artifactid>maven-changes-plugin</lib.maven-changes-plugin.artifactid>
     <lib.maven-changes-plugin.version>2.3</lib.maven-changes-plugin.version>
 
     <lib.maven-postman-plugin.groupId>ch.fortysix</lib.maven-postman-plugin.groupId>
-    <lib.maven-postman-plugin.artefactId>maven-postman-plugin</lib.maven-postman-plugin.artefactId>
+    <lib.maven-postman-plugin.artifactid>maven-postman-plugin</lib.maven-postman-plugin.artifactid>
     <lib.maven-postman-plugin.version>0.1.2</lib.maven-postman-plugin.version>
 
     <lib.maven-dependency-plugin.groupId>org.apache.maven.plugins</lib.maven-dependency-plugin.groupId>
-    <lib.maven-dependency-plugin.artefactId>maven-dependency-plugin</lib.maven-dependency-plugin.artefactId>
+    <lib.maven-dependency-plugin.artifactid>maven-dependency-plugin</lib.maven-dependency-plugin.artifactid>
     <lib.maven-dependency-plugin.version>2.1</lib.maven-dependency-plugin.version>
 
     <lib.maven-resources-plugin.groupId>org.apache.maven.plugins</lib.maven-resources-plugin.groupId>
-    <lib.maven-resources-plugin.artefactId>maven-resources-plugin</lib.maven-resources-plugin.artefactId>
+    <lib.maven-resources-plugin.artifactid>maven-resources-plugin</lib.maven-resources-plugin.artifactid>
     <lib.maven-resources-plugin.version>2.4.3</lib.maven-resources-plugin.version>
 
     <lib.maven-site-plugin.groupId>org.apache.maven.plugins</lib.maven-site-plugin.groupId>
-    <lib.maven-site-plugin.artefactId>maven-site-plugin</lib.maven-site-plugin.artefactId>
+    <lib.maven-site-plugin.artifactid>maven-site-plugin</lib.maven-site-plugin.artifactid>
     <lib.maven-site-plugin.version>2.1</lib.maven-site-plugin.version>
 
     <lib.versions-maven-plugin.groupId>org.codehaus.mojo</lib.versions-maven-plugin.groupId>
-    <lib.versions-maven-plugin.artefactId>versions-maven-plugin</lib.versions-maven-plugin.artefactId>
+    <lib.versions-maven-plugin.artifactid>versions-maven-plugin</lib.versions-maven-plugin.artifactid>
     <lib.versions-maven-plugin.version>1.2</lib.versions-maven-plugin.version>
 
     <lib.jfreechart.groupId>jfree</lib.jfreechart.groupId>
-    <lib.jfreechart.artefactId>jfreechart</lib.jfreechart.artefactId>
+    <lib.jfreechart.artifactid>jfreechart</lib.jfreechart.artifactid>
     <lib.jfreechart.version>1.0.12</lib.jfreechart.version>
 
     <lib.jfree-jcommon.groupId>jfree</lib.jfree-jcommon.groupId>
-    <lib.jfree-jcommon.artefactId>jcommon</lib.jfree-jcommon.artefactId>
+    <lib.jfree-jcommon.artifactid>jcommon</lib.jfree-jcommon.artifactid>
     <lib.jfree-jcommon.version>1.0.9</lib.jfree-jcommon.version>
 
     <lib.apache-httpclient.groupId>org.apache.httpcomponents</lib.apache-httpclient.groupId>
-    <lib.apache-httpclient.artefactId>httpclient</lib.apache-httpclient.artefactId>
+    <lib.apache-httpclient.artifactid>httpclient</lib.apache-httpclient.artifactid>
     <lib.apache-httpclient.version>4.0.1</lib.apache-httpclient.version>
 
     <lib.apache-commons-math.groupId>commons-math</lib.apache-commons-math.groupId>
-    <lib.apache-commons-math.artefactId>commons-math</lib.apache-commons-math.artefactId>
+    <lib.apache-commons-math.artifactid>commons-math</lib.apache-commons-math.artifactid>
     <lib.apache-commons-math.version>1.2</lib.apache-commons-math.version>
 
     <lib.apache-commons-lang.groupId>commons-lang</lib.apache-commons-lang.groupId>
-    <lib.apache-commons-lang.artefactId>commons-lang</lib.apache-commons-lang.artefactId>
+    <lib.apache-commons-lang.artifactid>commons-lang</lib.apache-commons-lang.artifactid>
     <lib.apache-commons-lang.version>2.5</lib.apache-commons-lang.version>
 
     <lib.apache-commons-cli.groupId>commons-cli</lib.apache-commons-cli.groupId>
-    <lib.apache-commons-cli.artefactId>commons-cli</lib.apache-commons-cli.artefactId>
+    <lib.apache-commons-cli.artifactid>commons-cli</lib.apache-commons-cli.artifactid>
     <lib.apache-commons-cli.version>1.2</lib.apache-commons-cli.version>
 
     <lib.apache-commons-io.groupId>commons-io</lib.apache-commons-io.groupId>
-    <lib.apache-commons-io.artefactId>commons-io</lib.apache-commons-io.artefactId>
+    <lib.apache-commons-io.artifactid>commons-io</lib.apache-commons-io.artifactid>
     <lib.apache-commons-io.version>1.4</lib.apache-commons-io.version>
 
     <lib.joda-time.groupId>joda-time</lib.joda-time.groupId>
-    <lib.joda-time.artefactId>joda-time</lib.joda-time.artefactId>
+    <lib.joda-time.artifactid>joda-time</lib.joda-time.artifactid>
     <lib.joda-time.version>1.6.1</lib.joda-time.version>
 
     <lib.htmlunit.groupId>net.sourceforge.htmlunit</lib.htmlunit.groupId>
@@ -161,11 +161,11 @@
     <lib.fest-assert.version>1.3</lib.fest-assert.version>
 
     <lib.maven-project.groupId>org.apache.maven</lib.maven-project.groupId>
-    <lib.maven-project.artefactId>maven-project</lib.maven-project.artefactId>
+    <lib.maven-project.artifactid>maven-project</lib.maven-project.artifactid>
     <lib.maven-project.version>2.2.1</lib.maven-project.version>
 
     <lib.maven-javadoc-plugin.groupId>org.apache.maven.plugins</lib.maven-javadoc-plugin.groupId>
-    <lib.maven-javadoc-plugin.artefactId>maven-javadoc-plugin</lib.maven-javadoc-plugin.artefactId>
+    <lib.maven-javadoc-plugin.artifactid>maven-javadoc-plugin</lib.maven-javadoc-plugin.artifactid>
     <!-- Avoiding slow build http://jira.codehaus.org/browse/MJAVADOC-268 -->
     <lib.maven-javadoc-plugin.version>2.5</lib.maven-javadoc-plugin.version>
 
@@ -238,13 +238,13 @@
 
         <plugin>
           <groupId>${lib.cobertura.groupid}</groupId>
-          <artifactId>${lib.cobertura.artefactid}</artifactId>
+          <artifactId>${lib.cobertura.artifactid}</artifactId>
           <version>${lib.cobertura.version}</version>
         </plugin>
 
         <plugin>
           <groupId>${lib.maven-surefire-plugin.groupId}</groupId>
-          <artifactId>${lib.maven-surefire-plugin.artefactId}</artifactId>
+          <artifactId>${lib.maven-surefire-plugin.artifactid}</artifactId>
           <version>${lib.maven-surefire-plugin.version}</version>
         </plugin>
 
@@ -255,7 +255,7 @@
         -->
         <plugin>
           <groupId>${lib.maven-deploy-plugin.groupId}</groupId>
-          <artifactId>${lib.maven-deploy-plugin.artefactId}</artifactId>
+          <artifactId>${lib.maven-deploy-plugin.artifactid}</artifactId>
           <version>${lib.maven-deploy-plugin.version}</version>
           <configuration>
             <skip>true</skip>
@@ -264,7 +264,7 @@
 
         <plugin>
           <groupId>${lib.maven-release-plugin.groupId}</groupId>
-          <artifactId>${lib.maven-release-plugin.artefactId}</artifactId>
+          <artifactId>${lib.maven-release-plugin.artifactid}</artifactId>
           <version>${lib.maven-release-plugin.version}</version>
           <configuration>
             <localCheckout>true</localCheckout>
@@ -275,7 +275,7 @@
 
         <plugin>
           <groupId>${lib.maven-site-plugin.groupId}</groupId>
-          <artifactId>${lib.maven-site-plugin.artefactId}</artifactId>
+          <artifactId>${lib.maven-site-plugin.artifactid}</artifactId>
           <version>${lib.maven-site-plugin.version}</version>
           <configuration>
             <generateReports>false</generateReports>
@@ -284,7 +284,7 @@
 
         <plugin>
           <groupId>${lib.maven-javadoc-plugin.groupId}</groupId>
-          <artifactId>${lib.maven-javadoc-plugin.artefactId}</artifactId>
+          <artifactId>${lib.maven-javadoc-plugin.artifactid}</artifactId>
           <version>${lib.maven-javadoc-plugin.version}</version>
           <configuration>
             <skip>true</skip>
@@ -298,13 +298,13 @@
 
       <plugin>
         <groupId>${lib.versions-maven-plugin.groupId}</groupId>
-        <artifactId>${lib.versions-maven-plugin.artefactId}</artifactId>
+        <artifactId>${lib.versions-maven-plugin.artifactid}</artifactId>
         <version>${lib.versions-maven-plugin.version}</version>
       </plugin>
 
       <plugin>
         <groupId>${lib.maven-compiler-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-compiler-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-compiler-plugin.artifactid}</artifactId>
         <version>${lib.maven-compiler-plugin.version}</version>
         <configuration>
           <fork>true</fork>
@@ -318,7 +318,7 @@
 
       <plugin>
         <groupId>${lib.maven-release-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-release-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-release-plugin.artifactid}</artifactId>
         <version>${lib.maven-release-plugin.version}</version>
         <configuration>
           <preparationGoals>install</preparationGoals>
@@ -352,7 +352,7 @@
 
       <plugin>
         <groupId>${lib.maven-javadoc-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-javadoc-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-javadoc-plugin.artifactid}</artifactId>
         <version>${lib.maven-javadoc-plugin.version}</version>
         <configuration>
           <skip>true</skip>
@@ -393,7 +393,7 @@
 
     <dependency>
       <groupId>${lib.junit.groupid}</groupId>
-      <artifactId>${lib.junit.artefactid}</artifactId>
+      <artifactId>${lib.junit.artifactid}</artifactId>
       <version>${lib.junit.version}</version>
       <scope>test</scope>
     </dependency>
@@ -406,19 +406,19 @@
 
     <dependency>
       <groupId>${lib.apache-commons-cli.groupId}</groupId>
-      <artifactId>${lib.apache-commons-cli.artefactId}</artifactId>
+      <artifactId>${lib.apache-commons-cli.artifactid}</artifactId>
       <version>${lib.apache-commons-cli.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${lib.apache-commons-io.groupId}</groupId>
-      <artifactId>${lib.apache-commons-io.artefactId}</artifactId>
+      <artifactId>${lib.apache-commons-io.artifactid}</artifactId>
       <version>${lib.apache-commons-io.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${lib.apache-commons-lang.groupId}</groupId>
-      <artifactId>${lib.apache-commons-lang.artefactId}</artifactId>
+      <artifactId>${lib.apache-commons-lang.artifactid}</artifactId>
       <version>${lib.apache-commons-lang.version}</version>
     </dependency>
 
@@ -460,7 +460,7 @@
 
     <dependency>
       <groupId>${lib.joda-time.groupId}</groupId>
-      <artifactId>${lib.joda-time.artefactId}</artifactId>
+      <artifactId>${lib.joda-time.artifactid}</artifactId>
       <version>${lib.joda-time.version}</version>
     </dependency>
 

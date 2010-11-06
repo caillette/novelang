@@ -44,26 +44,26 @@
 
     <dependency>
       <groupId>${lib.jfree-jcommon.groupId}</groupId>
-      <artifactId>${lib.jfreechart.artefactId}</artifactId>
+      <artifactId>${lib.jfreechart.artifactid}</artifactId>
       <version>${lib.jfreechart.version}</version>
     </dependency>
     
     <dependency>
       <groupId>${lib.jfree-jcommon.groupId}</groupId>
-      <artifactId>${lib.jfree-jcommon.artefactId}</artifactId>
+      <artifactId>${lib.jfree-jcommon.artifactid}</artifactId>
       <version>${lib.jfree-jcommon.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${lib.apache-httpclient.groupId}</groupId>
-      <artifactId>${lib.apache-httpclient.artefactId}</artifactId>
+      <artifactId>${lib.apache-httpclient.artifactid}</artifactId>
       <version>${lib.apache-httpclient.version}</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>${lib.apache-commons-math.groupId}</groupId>
-      <artifactId>${lib.apache-commons-math.artefactId}</artifactId>
+      <artifactId>${lib.apache-commons-math.artifactid}</artifactId>
       <version>${lib.apache-commons-math.version}</version>
     </dependency>
 

@@ -20,7 +20,7 @@
 
       <plugin>
         <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-assembly-plugin.artifactid}</artifactId>
         <version>${lib.maven-assembly-plugin.version}</version>
         <dependencies>
           <dependency>
@@ -46,7 +46,7 @@
 
       <plugin>
         <groupId>${lib.maven-dependency-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-dependency-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-dependency-plugin.artifactid}</artifactId>
         <version>${lib.maven-dependency-plugin.version}</version>
 
         <executions>
@@ -106,7 +106,7 @@
 
       <plugin>
         <groupId>${lib.maven-changes-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-changes-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-changes-plugin.artifactid}</artifactId>
         <version>${lib.maven-changes-plugin.version}</version>
 
         <executions>

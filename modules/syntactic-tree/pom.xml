@@ -29,7 +29,7 @@
 
     <dependency>
       <groupId>${lib.antlr.groupid}</groupId>
-      <artifactId>${lib.antlr-runtime.artefactid}</artifactId>
+      <artifactId>${lib.antlr-runtime.artifactid}</artifactId>
       <version>${lib.antlr.version}</version>
     </dependency>
 

@@ -60,7 +60,7 @@
 
       <plugin>
         <groupId>${lib.maven-resources-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-resources-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-resources-plugin.artifactid}</artifactId>
         <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>

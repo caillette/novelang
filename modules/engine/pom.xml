@@ -37,7 +37,7 @@
       <!-- Then, copy the version class with its update. -->
       <plugin>
         <groupId>${lib.maven-resources-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-resources-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-resources-plugin.artifactid}</artifactId>
         <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>
@@ -65,7 +65,7 @@
 
       <plugin>
         <groupId>${lib.build-helper-plugin.groupId}</groupId>
-        <artifactId>${lib.build-helper-plugin.artefactId}</artifactId>
+        <artifactId>${lib.build-helper-plugin.artifactid}</artifactId>
         <version>${lib.build-helper-plugin.version}</version>
         <executions>
           <execution>
@@ -97,7 +97,7 @@
 
     <dependency>
       <groupId>${lib.apache-httpclient.groupId}</groupId>
-      <artifactId>${lib.apache-httpclient.artefactId}</artifactId>
+      <artifactId>${lib.apache-httpclient.artifactid}</artifactId>
       <version>${lib.apache-httpclient.version}</version>
       <scope>test</scope>
     </dependency>

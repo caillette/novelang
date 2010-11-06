@@ -40,7 +40,7 @@
 
     <dependency>
       <groupId>${lib.junit.groupid}</groupId>
-      <artifactId>${lib.junit.artefactid}</artifactId>
+      <artifactId>${lib.junit.artifactid}</artifactId>
       <version>${lib.junit.version}</version>
       <scope>compile</scope>
     </dependency>

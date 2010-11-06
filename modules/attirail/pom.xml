@@ -69,7 +69,7 @@
 
       <plugin>
         <groupId>${lib.maven-shade-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-shade-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-shade-plugin.artifactid}</artifactId>
         <version>${lib.maven-shade-plugin.version}</version>
         <configuration>
           <artifactSet>
@@ -91,7 +91,7 @@
 
       <plugin>
         <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
-        <artifactId>${lib.maven-assembly-plugin.artefactId}</artifactId>
+        <artifactId>${lib.maven-assembly-plugin.artifactid}</artifactId>
         <version>${lib.maven-assembly-plugin.version}</version>
         <dependencies>
           <dependency>
