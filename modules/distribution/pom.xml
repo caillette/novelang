@@ -14,6 +14,11 @@
   <packaging>pom</packaging>
 
 
+  <properties>
+    <novelang.local-distributions.dir>../../distrib</novelang.local-distributions.dir>
+    <novelang.deployed-artifact.shortname>${project.name}-${project.version}</novelang.deployed-artifact.shortname>
+    <novelang.deployed-artifact.fullname>${novelang.deployed-artifact.shortname}.zip</novelang.deployed-artifact.fullname>
+  </properties>
   
   <build>
     <plugins>
@@ -37,6 +42,7 @@
         <executions>
           <execution>
             <phase>package</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <goal>single</goal>
             </goals>
@@ -53,6 +59,7 @@
           <execution>
             <id>blog-posting</id>
             <phase>prepare-package</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <goal>unpack</goal>
             </goals>
@@ -93,7 +100,7 @@
             </goals>
             <configuration>
               <fromDir>${project.build.directory}</fromDir>
-              <includes>${project.name}-${project.version}.zip</includes>
+              <includes>${novelang.deployed-artifact.fullname}</includes>
               <!--<includes>*.txt</includes>-->
               <serverId>novelang.sourceforge.net</serverId>
               <url>sftp://${publish.remote.host}</url>
@@ -114,6 +121,7 @@
           <execution>
             <id>mailing-list-posting</id>
             <phase>deploy</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <goal>announcement-mail</goal>
             </goals>
@@ -138,6 +146,7 @@
           <execution>
             <id>blog-posting</id>
             <phase>deploy</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <goal>announcement-mail</goal>
             </goals>
@@ -155,6 +164,42 @@
               </toAddresses>
               <mailContentType>text/html</mailContentType>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--
+        Warning: this target directly copies files from target directory instead of
+        pre-unzipping the artefact in local repository.
+        See also: documentation deployment.
+      -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>deploy-to-local-distributions-directory</id>
+            <phase>deploy</phase>
+            <configuration>
+              <tasks>
+                <echo message="Using archive: ${project.build.directory}/${novelang.deployed-artifact.fullname}" />
+
+                <copy
+                    todir="${novelang.local-distributions.dir}"
+                    file="${project.build.directory}/${novelang.deployed-artifact.fullname}"
+                    overwrite="true"
+                />
+
+                <delete dir="${novelang.local-distributions.dir}/${novelang.deployed-artifact.shortname}" />
+
+                <unzip
+                    src="${novelang.local-distributions.dir}/${novelang.deployed-artifact.fullname}"
+                    dest="${novelang.local-distributions.dir}"
+                />
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
