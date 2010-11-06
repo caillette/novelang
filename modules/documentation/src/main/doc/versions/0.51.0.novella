@@ -1,0 +1,3 @@
+--- Fixed: list with double hyphen and number sign was using a "plus sign" everywhere
+(source documents and XML elements). This might break existing documents and stylesheet using
+this brand new feature.
