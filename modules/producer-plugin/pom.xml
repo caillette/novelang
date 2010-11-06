@@ -29,12 +29,6 @@
     </dependency>
 
     <dependency>
-      <groupId>${lib.maven-model.groupId}</groupId>
-      <artifactId>${lib.maven-model.artefactId}</artifactId>
-      <version>${lib.maven-model.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-logger-mojo</artifactId>
       <version>${project.parent.version}</version>

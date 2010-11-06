@@ -164,10 +164,6 @@
     <lib.maven-project.artefactId>maven-project</lib.maven-project.artefactId>
     <lib.maven-project.version>2.2.1</lib.maven-project.version>
 
-    <lib.maven-model.groupId>org.apache.maven</lib.maven-model.groupId>
-    <lib.maven-model.artefactId>maven-project</lib.maven-model.artefactId>
-    <lib.maven-model.version>2.2.1</lib.maven-model.version>
-
 
 
   </properties>
