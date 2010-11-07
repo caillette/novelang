@@ -154,7 +154,7 @@
 
     <lib.joda-time.groupId>joda-time</lib.joda-time.groupId>
     <lib.joda-time.artifactid>joda-time</lib.joda-time.artifactid>
-    <lib.joda-time.version>1.6.1</lib.joda-time.version>
+    <lib.joda-time.version>1.6.2</lib.joda-time.version>
 
     <lib.htmlunit.groupId>net.sourceforge.htmlunit</lib.htmlunit.groupId>
     <lib.htmlunit.artifactId>htmlunit</lib.htmlunit.artifactId>
