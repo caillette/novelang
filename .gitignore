@@ -20,6 +20,7 @@ git-crunch.sh
 *.log
 grammar-debug-classes
 _*
+*.xml~
 pom.xml.versionsBackup
 pom.xml.releaseBackup
 /release.properties
