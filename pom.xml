@@ -74,7 +74,7 @@
 
     <lib.junit.groupid>junit</lib.junit.groupid>
     <lib.junit.artifactid>junit</lib.junit.artifactid>
-    <lib.junit.version>4.8.1</lib.junit.version>
+    <lib.junit.version>4.8.2</lib.junit.version>
 
     <lib.wagon-maven-plugin.groupId>org.codehaus.mojo</lib.wagon-maven-plugin.groupId>
     <lib.wagon-maven-plugin.artifactId>wagon-maven-plugin</lib.wagon-maven-plugin.artifactId>
