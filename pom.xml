@@ -170,7 +170,7 @@
 
     <lib.google-guava.groupId>com.google.guava</lib.google-guava.groupId>
     <lib.google-guava.artifactId>guava</lib.google-guava.artifactId>
-    <lib.google-guava.version>r05</lib.google-guava.version>
+    <lib.google-guava.version>r07</lib.google-guava.version>
 
     <lib.jcraft-java-secure-channel.groupId>com.jcraft</lib.jcraft-java-secure-channel.groupId>
     <lib.jcraft-java-secure-channel.artifactId>jsch</lib.jcraft-java-secure-channel.artifactId>
