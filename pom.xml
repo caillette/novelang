@@ -228,7 +228,7 @@
   <groupId>org.novelang</groupId>
   <artifactId>Novelang</artifactId>
   <packaging>pom</packaging>
-  <version>SNAPSHOT</version>
+  <version>0.51.1</version>
   <name>Novelang</name>
   <url>http://novelang.sf.net</url>
 

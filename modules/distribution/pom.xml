@@ -6,7 +6,7 @@
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
     <artifactId>Novelang</artifactId>
-    <version>SNAPSHOT</version>
+    <version>0.51.1</version>
   </parent>
 
   <artifactId>Novelang-distribution</artifactId>
@@ -183,18 +183,11 @@
               <tasks>
                 <echo message="Using archive: ${project.build.directory}/${novelang.deployed-artifact.fullname}" />
 
-                <copy
-                    todir="${novelang.local-distributions.dir}"
-                    file="${project.build.directory}/${novelang.deployed-artifact.fullname}"
-                    overwrite="true"
-                />
+                <copy todir="${novelang.local-distributions.dir}" file="${project.build.directory}/${novelang.deployed-artifact.fullname}" overwrite="true" />
 
                 <delete dir="${novelang.local-distributions.dir}/${novelang.deployed-artifact.shortname}" />
 
-                <unzip
-                    src="${novelang.local-distributions.dir}/${novelang.deployed-artifact.fullname}"
-                    dest="${novelang.local-distributions.dir}"
-                />
+                <unzip src="${novelang.local-distributions.dir}/${novelang.deployed-artifact.fullname}" dest="${novelang.local-distributions.dir}" />
               </tasks>
             </configuration>
             <goals>
