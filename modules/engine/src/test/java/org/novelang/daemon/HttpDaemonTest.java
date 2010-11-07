@@ -30,23 +30,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.Lists;
-import org.fest.assertions.Assertions;
-import org.novelang.ResourceTools;
-import org.novelang.ResourcesForTests;
-import org.novelang.common.filefixture.Directory;
-import org.novelang.common.filefixture.ResourceInstaller;
-import org.novelang.configuration.ConfigurationTools;
-import org.novelang.configuration.parse.DaemonParameters;
-import org.novelang.configuration.parse.GenericParameters;
-import org.novelang.outfit.TextTools;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
-import org.novelang.common.filefixture.Resource;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.RequestTools;
-import org.novelang.rendering.RenditionMimeType;
-import org.novelang.outfit.DefaultCharset;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -65,6 +48,21 @@ import org.apache.http.protocol.HttpContext;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.novelang.ResourceTools;
+import org.novelang.ResourcesForTests;
+import org.novelang.common.filefixture.Directory;
+import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
+import org.novelang.common.filefixture.Resource;
+import org.novelang.configuration.ConfigurationTools;
+import org.novelang.configuration.parse.DaemonParameters;
+import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.TextTools;
+import org.novelang.produce.RequestTools;
+import org.novelang.rendering.RenditionMimeType;
+import org.novelang.testing.junit.NameAwareTestClassRunner;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.util.PDFTextStripper;
 
@@ -154,8 +152,8 @@ public class HttpDaemonTest {
     final String pdfText = extractPdfText( generated ) ;
     assertThat( pdfText )
         .contains( ResourcesForTests.FontStructure.Parent.Child.MONO_OBLIQUE.getBaseName() )
-        // TODO: support broken font detection, lost with FOP-1.0.
-//        .contains( ResourcesForTests.FontStructure.Parent.Child.BAD.getBaseName() )
+        .contains( "There are broken fonts!" )
+        .contains( ResourcesForTests.FontStructure.Parent.Child.BAD.getBaseName() )
     ;
 
     LOGGER.debug( "Text extracted from PDF: ", pdfText ) ;

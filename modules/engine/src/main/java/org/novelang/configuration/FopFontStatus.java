@@ -18,8 +18,7 @@ package org.novelang.configuration;
 
 import java.util.Map;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.apache.fop.fonts.EmbedFontInfo;
 
 /**
@@ -32,14 +31,15 @@ import org.apache.fop.fonts.EmbedFontInfo;
 public final class FopFontStatus {
 
   private final Iterable< EmbedFontInfo > fontInfos ;
-  private final Map< String, EmbedFontInfo > failedFonts ;
+  private final ImmutableSet< String > failedFontFileNames;
 
   public FopFontStatus(
       final Iterable< EmbedFontInfo > fontInfos,
-      final Map< String, EmbedFontInfo > failedFonts
+      final ImmutableSet< String > failedFontFileNames
   ) {
     this.fontInfos = fontInfos;
-    this.failedFonts = failedFonts;
+    this.failedFontFileNames = failedFontFileNames == null ?
+        ImmutableSet.< String >of() : failedFontFileNames ;
   }
 
   public Iterable< EmbedFontInfo > getFontInfos() {
@@ -49,7 +49,7 @@ public final class FopFontStatus {
   /**
    * @return a non-null object.
    */
-  public Map< String, EmbedFontInfo > getFailedFonts() {
-    return failedFonts == null ? ImmutableMap.< String, EmbedFontInfo >of() : failedFonts ;
+  public ImmutableSet< String > getFailedFontFileNames() {
+    return failedFontFileNames ;
   }
 }

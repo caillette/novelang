@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.Font;
 import org.apache.fop.fonts.FontTriplet;
@@ -152,10 +153,8 @@ public class SyntheticFontMapTest {
       INFO_FONT_TWO_NORMAL_NORMAL
   ) ;
 
-  public static final Map< String, EmbedFontInfo > FAILED_FONTS = ImmutableMap.of(
-      FAILED_FONT_X, new EmbedFontInfo( "", false, null, "", "" ),
-      FAILED_FONT_Y, new EmbedFontInfo( "", false, null, "", "" )
-  ) ;
+  public static final ImmutableSet< String > FAILED_FONTS = ImmutableSet.of(
+      FAILED_FONT_X, FAILED_FONT_Y ) ;
 
   public static final FopFontStatus FONT_STATUS = new FopFontStatus(
       FONT_INFOS,

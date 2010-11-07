@@ -32,6 +32,7 @@
     <format>jar</format>
   </formats>
 
+
   <includeBaseDirectory>false</includeBaseDirectory>
 
   <dependencySets>
@@ -61,6 +62,5 @@
     </fileSet>
 
   </fileSets>
-
-
+  
 </assembly>

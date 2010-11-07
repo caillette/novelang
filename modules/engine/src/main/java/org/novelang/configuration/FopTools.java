@@ -25,8 +25,11 @@ import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableSet;
 import org.apache.fop.fonts.FontEventListener;
 import org.apache.fop.render.pdf.PDFRendererConfigurator;
+import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
 import org.novelang.common.ReflectionTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -124,9 +127,11 @@ public class FopTools {
     }
   }
 
-  private static Map< String, EmbedFontInfo > extractFailedFontMap( final FontCache fontCache ) {
-    return ( Map< String, EmbedFontInfo > )
-        ReflectionTools.getFieldValue( fontCache, "failedFontMap" );
+  private static ImmutableSet< String > extractFailedFontMap( final FOUserAgent foUserAgent ) {
+    final FontCache fontCache = foUserAgent.getFactory().getFontManager().getFontCache() ;
+    final Map< String, Long > fieldValue = Reflection.field( "failedFontMap" )
+        .ofType( new TypeRef< Map< String, Long > >() {} ).in( fontCache ).get() ;
+    return ImmutableSet.copyOf( fieldValue.keySet() ) ;
   }
 
   public static FopFontStatus createGlobalFontStatus(
@@ -138,7 +143,7 @@ public class FopTools {
     final FOUserAgent foUserAgent = fopFactory.newFOUserAgent() ;
     final FontResolver fontResolver = new DefaultFontResolver( foUserAgent ) ;
     final FontCache fontCache = new FontCache() ;
-    
+
     @SuppressWarnings( { "unchecked" } )
     final List< EmbedFontInfo > fontList = ( List< EmbedFontInfo > )
         new PDFRendererConfigurator( foUserAgent ) {
@@ -156,7 +161,7 @@ public class FopTools {
             null
         )
     ;
-    final Map< String, EmbedFontInfo > failedFontMap = extractFailedFontMap( fontCache ) ;
+    final ImmutableSet< String > failedFontMap = extractFailedFontMap( foUserAgent ) ;
     return new FopFontStatus( fontList, failedFontMap ) ;
   }
 

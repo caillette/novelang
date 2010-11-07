@@ -20,6 +20,8 @@
 
   <description>
     A very simple application to launch for testing the JavaShell.
+    The jar comes in an "embedded" flavor so JavaShell's tests can drop it somewhere
+    on the filesystem and launch it as a standalone application.
   </description>
 
   <parent>
@@ -54,7 +56,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
     </plugins>
   </build>
 

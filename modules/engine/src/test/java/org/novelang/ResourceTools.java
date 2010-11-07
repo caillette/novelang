@@ -29,12 +29,14 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.ContentConfiguration;
 import org.novelang.configuration.DaemonConfiguration;
@@ -235,7 +237,7 @@ public final class ResourceTools {
 
             public FopFontStatus getCurrentFopFontStatus() {
               final Iterable<EmbedFontInfo> fontInfo = ImmutableList.of() ;
-              final Map< String, EmbedFontInfo > failedFonts = ImmutableMap.of() ;
+              final ImmutableSet< String > failedFonts = ImmutableSet.of() ;
               return new FopFontStatus(
                   fontInfo,
                   failedFonts

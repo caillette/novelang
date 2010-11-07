@@ -72,13 +72,6 @@
         <artifactId>${lib.maven-assembly-plugin.artifactid}</artifactId>
         <version>${lib.maven-assembly-plugin.version}</version>
 
-        <dependencies>
-          <dependency>
-            <groupId>${project.parent.groupId}</groupId>
-            <artifactId>Novelang-assembly-descriptor</artifactId>
-            <version>${project.parent.version}</version>
-          </dependency>
-        </dependencies>
         <executions>
           <execution>
             <id>sources</id>
@@ -91,7 +84,8 @@
         <configuration>
           <descriptors>
             <!-- Embed the main jar in another jar for copying as a file. -->
-            <descriptor>embedder.xml</descriptor>            
+            <descriptor>src/assemble/embedder.xml</descriptor>            
+            <!--<descriptor>embedder.xml</descriptor>            -->
           </descriptors>
         </configuration>
 

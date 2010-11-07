@@ -492,7 +492,6 @@
       <groupId>${lib.fest-reflect.groupId}</groupId>
       <artifactId>${lib.fest-reflect.artifactId}</artifactId>
       <version>${lib.fest-reflect.version}</version>
-      <scope>test</scope>
     </dependency>
 
     <dependency>

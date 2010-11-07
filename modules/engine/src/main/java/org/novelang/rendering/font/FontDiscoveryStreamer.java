@@ -108,14 +108,14 @@ public class FontDiscoveryStreamer {
 
     xslWriter.start( ELEMENT_ROOT, true ) ;
 
-    if( fopFontStatus.getFailedFonts().isEmpty() && quadruplets.keySet().isEmpty() ) {
+    if( fopFontStatus.getFailedFontFileNames().isEmpty() && quadruplets.keySet().isEmpty() ) {
       xslWriter.start( ELEMENT_NOFONTFOUNT ) ;
       xslWriter.end( ELEMENT_NOFONTFOUNT ) ; 
     }
 
-    if( ! fopFontStatus.getFailedFonts().isEmpty() ) {
+    if( ! fopFontStatus.getFailedFontFileNames().isEmpty() ) {
       xslWriter.start( ELEMENT_BROKEN ) ;
-      for( final String embedFileName : fopFontStatus.getFailedFonts().keySet() ) {
+      for( final String embedFileName : fopFontStatus.getFailedFontFileNames() ) {
         xslWriter.start( ELEMENT_EMBEDFILE ) ;
         xslWriter.write( embedFileName ) ;
         xslWriter.end( ELEMENT_EMBEDFILE ) ;
