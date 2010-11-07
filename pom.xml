@@ -94,7 +94,7 @@
 
     <lib.maven-surefire-plugin.groupId>org.apache.maven.plugins</lib.maven-surefire-plugin.groupId>
     <lib.maven-surefire-plugin.artifactid>maven-surefire-plugin</lib.maven-surefire-plugin.artifactid>
-    <lib.maven-surefire-plugin.version>2.5</lib.maven-surefire-plugin.version>
+    <lib.maven-surefire-plugin.version>2.6</lib.maven-surefire-plugin.version>
 
     <lib.maven-changes-plugin.groupId>org.apache.maven.plugins</lib.maven-changes-plugin.groupId>
     <lib.maven-changes-plugin.artifactid>maven-changes-plugin</lib.maven-changes-plugin.artifactid>
@@ -114,7 +114,7 @@
 
     <lib.maven-site-plugin.groupId>org.apache.maven.plugins</lib.maven-site-plugin.groupId>
     <lib.maven-site-plugin.artifactid>maven-site-plugin</lib.maven-site-plugin.artifactid>
-    <lib.maven-site-plugin.version>2.1.1</lib.maven-site-plugin.version>
+    <lib.maven-site-plugin.version>2.1</lib.maven-site-plugin.version>
 
     <lib.versions-maven-plugin.groupId>org.codehaus.mojo</lib.versions-maven-plugin.groupId>
     <lib.versions-maven-plugin.artifactid>versions-maven-plugin</lib.versions-maven-plugin.artifactid>
@@ -148,6 +148,10 @@
     <lib.apache-commons-io.artifactid>commons-io</lib.apache-commons-io.artifactid>
     <lib.apache-commons-io.version>1.4</lib.apache-commons-io.version>
 
+    <lib.apache-commons-collections.groupId>commons-collections</lib.apache-commons-collections.groupId>
+    <lib.apache-commons-collections.artifactid>commons-collections</lib.apache-commons-collections.artifactid>
+    <lib.apache-commons-collections.version>3.2.1</lib.apache-commons-collections.version>
+
     <lib.joda-time.groupId>joda-time</lib.joda-time.groupId>
     <lib.joda-time.artifactid>joda-time</lib.joda-time.artifactid>
     <lib.joda-time.version>1.6.1</lib.joda-time.version>
@@ -160,14 +164,27 @@
     <lib.fest-assert.artifactId>fest-assert</lib.fest-assert.artifactId>
     <lib.fest-assert.version>1.3</lib.fest-assert.version>
 
+    <lib.fest-reflect.groupId>org.easytesting</lib.fest-reflect.groupId>
+    <lib.fest-reflect.artifactId>fest-reflect</lib.fest-reflect.artifactId>
+    <lib.fest-reflect.version>1.2</lib.fest-reflect.version>
+
+    <lib.google-guava.groupId>com.google.guava</lib.google-guava.groupId>
+    <lib.google-guava.artifactId>guava</lib.google-guava.artifactId>
+    <lib.google-guava.version>r05</lib.google-guava.version>
+
+    <lib.jcraft-java-secure-channel.groupId>com.jcraft</lib.jcraft-java-secure-channel.groupId>
+    <lib.jcraft-java-secure-channel.artifactId>jsch</lib.jcraft-java-secure-channel.artifactId>
+    <lib.jcraft-java-secure-channel.version>0.1.42</lib.jcraft-java-secure-channel.version>
+
     <lib.maven-project.groupId>org.apache.maven</lib.maven-project.groupId>
     <lib.maven-project.artifactid>maven-project</lib.maven-project.artifactid>
     <lib.maven-project.version>2.2.1</lib.maven-project.version>
 
     <lib.maven-javadoc-plugin.groupId>org.apache.maven.plugins</lib.maven-javadoc-plugin.groupId>
     <lib.maven-javadoc-plugin.artifactid>maven-javadoc-plugin</lib.maven-javadoc-plugin.artifactid>
-    <!-- Avoiding slow build http://jira.codehaus.org/browse/MJAVADOC-268 -->
+    <!-- Avoiding slow build with release:perform http://jira.codehaus.org/browse/MJAVADOC-268 -->
     <lib.maven-javadoc-plugin.version>2.5</lib.maven-javadoc-plugin.version>
+
 
 
 
@@ -345,9 +362,9 @@
     <plugins>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.5</version>
+        <groupId>${lib.maven-surefire-plugin.groupId}</groupId>
+        <artifactId>${lib.maven-surefire-plugin.artifactid}</artifactId>
+        <version>${lib.maven-surefire-plugin.version}</version>
       </plugin>
 
       <plugin>
@@ -399,9 +416,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>r05</version>
+      <groupId>${lib.google-guava.groupId}</groupId>
+      <artifactId>${lib.google-guava.artifactId}</artifactId>
+      <version>${lib.google-guava.version}</version>
     </dependency>
 
     <dependency>
@@ -423,19 +440,11 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>3.2.1</version>
+      <groupId>${lib.apache-commons-collections.groupId}</groupId>
+      <artifactId>${lib.apache-commons-collections.artifactid}</artifactId>
+      <version>${lib.apache-commons-collections.version}</version>
       <scope>test</scope>
     </dependency>
-
-    <dependency>
-      <groupId>org.easytesting</groupId>
-      <artifactId>fest-reflect</artifactId>
-      <version>1.2</version>
-      <scope>test</scope>
-    </dependency>
-
 
     <dependency>
       <groupId>${lib.fest-assert.groupId}</groupId>
@@ -445,9 +454,16 @@
     </dependency>
 
     <dependency>
-      <groupId>com.jcraft</groupId>
-      <artifactId>jsch</artifactId>
-      <version>0.1.42</version>
+      <groupId>${lib.fest-reflect.groupId}</groupId>
+      <artifactId>${lib.fest-reflect.artifactId}</artifactId>
+      <version>${lib.fest-reflect.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>${lib.jcraft-java-secure-channel.groupId}</groupId>
+      <artifactId>${lib.jcraft-java-secure-channel.artifactId}</artifactId>
+      <version>${lib.jcraft-java-secure-channel.version}</version>
       <scope>runtime</scope>
     </dependency>
 
