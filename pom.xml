@@ -146,7 +146,7 @@
 
     <lib.apache-commons-io.groupId>commons-io</lib.apache-commons-io.groupId>
     <lib.apache-commons-io.artifactid>commons-io</lib.apache-commons-io.artifactid>
-    <lib.apache-commons-io.version>1.4</lib.apache-commons-io.version>
+    <lib.apache-commons-io.version>2.0</lib.apache-commons-io.version>
 
     <lib.apache-commons-collections.groupId>commons-collections</lib.apache-commons-collections.groupId>
     <lib.apache-commons-collections.artifactid>commons-collections</lib.apache-commons-collections.artifactid>
