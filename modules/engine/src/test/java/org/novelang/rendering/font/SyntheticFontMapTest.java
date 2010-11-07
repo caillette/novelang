@@ -153,8 +153,8 @@ public class SyntheticFontMapTest {
   ) ;
 
   public static final Map< String, EmbedFontInfo > FAILED_FONTS = ImmutableMap.of(
-      FAILED_FONT_X, new EmbedFontInfo( "", false, null, "" ),
-      FAILED_FONT_Y, new EmbedFontInfo( "", false, null, "" )
+      FAILED_FONT_X, new EmbedFontInfo( "", false, null, "", "" ),
+      FAILED_FONT_Y, new EmbedFontInfo( "", false, null, "", "" )
   ) ;
 
   public static final FopFontStatus FONT_STATUS = new FopFontStatus(
@@ -169,7 +169,8 @@ public class SyntheticFontMapTest {
         null, // metrics file, no need for that.
         true, // kerning, no need for that.
         Arrays.asList( fontTriplets ),
-        embedFontFile
+        embedFontFile,
+        ""
     ) ;
   }
 

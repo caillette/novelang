@@ -353,7 +353,7 @@ import org.apache.commons.lang.StringUtils;
   }
 
   private static Set< Tag > parseTags( final String value ) {
-    return RenderingTools.toTagSet( ImmutableSet.of( value.split( ";" ) ) ) ;
+    return RenderingTools.toTagSet( ImmutableSet.copyOf( value.split( ";" ) ) ) ;
 
 /*
     final String[] stringArray = value.split( RequestTools.LIST_SEPARATOR ) ;

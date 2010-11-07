@@ -130,6 +130,12 @@
       <version>${lib.fop.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>${lib.pdfbox.groupId}</groupId>
+      <artifactId>${lib.pdfbox.artifactid}</artifactId>
+      <version>${lib.pdfbox.version}</version>
+    </dependency>
+
 
     <dependency>
       <!-- JDK's XSLT implementation doesn't work well. -->
@@ -152,12 +158,12 @@
     </dependency>
 
 
-    
-<!--
-  =================
-  Novelang modules.
-  =================
--->
+
+    <!--
+      =================
+      Novelang modules.
+      =================
+    -->
     
     <dependency>
       <groupId>${project.parent.groupId}</groupId>

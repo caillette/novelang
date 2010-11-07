@@ -16,6 +16,7 @@
  */
 package org.novelang.daemon;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -29,8 +30,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.Lists;
+import org.fest.assertions.Assertions;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
+import org.novelang.common.filefixture.Directory;
+import org.novelang.common.filefixture.ResourceInstaller;
+import org.novelang.configuration.ConfigurationTools;
+import org.novelang.configuration.parse.DaemonParameters;
+import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.outfit.TextTools;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
@@ -58,7 +65,10 @@ import org.apache.http.protocol.HttpContext;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.pdfbox.pdmodel.PDDocument;
+import org.pdfbox.util.PDFTextStripper;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -126,12 +136,29 @@ public class HttpDaemonTest {
   }
 
   @Test
-  public void fontListingMakesNoSmoke() throws Exception {
+  public void emptyFontListingMakesNoSmoke() throws Exception {
     setup() ;
     final byte[] generated = readAsBytes(
         new URL( "http://localhost:" + HTTP_DAEMON_PORT + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
     save( "generated.pdf", generated ) ;
-    assertTrue( generated.length > 100 ) ;
+    final String pdfText = extractPdfText( generated ) ;
+    assertThat( pdfText ).contains( "No font found." ) ;
+  }
+
+  @Test
+  public void fontListingMakesNoSmoke() throws Exception {
+    daemonSetupWithFonts( ResourcesForTests.FontStructure.Parent.Child.dir ) ;
+    final byte[] generated = readAsBytes(
+        new URL( "http://localhost:" + HTTP_DAEMON_PORT + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
+    save( "generated.pdf", generated ) ;
+    final String pdfText = extractPdfText( generated ) ;
+    assertThat( pdfText )
+        .contains( ResourcesForTests.FontStructure.Parent.Child.MONO_OBLIQUE.getBaseName() )
+        // TODO: support broken font detection, lost with FOP-1.0.
+//        .contains( ResourcesForTests.FontStructure.Parent.Child.BAD.getBaseName() )
+    ;
+
+    LOGGER.debug( "Text extracted from PDF: ", pdfText ) ;
   }
 
   @Test
@@ -384,6 +411,26 @@ public class HttpDaemonTest {
     httpDaemon.start() ;
   }
 
+  private void daemonSetupWithFonts( final Directory fontDirectory )
+      throws Exception
+  {
+    final File directoryAsFile = resourceInstaller.copy( fontDirectory ) ;
+
+
+    final DaemonParameters daemonParameters = new DaemonParameters(
+        resourceInstaller.getTargetDirectory(),
+        GenericParameters.OPTIONPREFIX + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT,
+        "" + HTTP_DAEMON_PORT,
+        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_FONT_DIRECTORIES,
+        directoryAsFile.getAbsolutePath()
+    ) ;
+
+    httpDaemon = new HttpDaemon(
+        ConfigurationTools.createDaemonConfiguration( daemonParameters ) ) ;
+
+    httpDaemon.start() ;
+  }
+
 
   @After
   public void tearDown() throws Exception {
@@ -519,5 +566,13 @@ public class HttpDaemonTest {
     assertEquals( ( long ) HttpStatus.SC_OK, ( long ) statusCode ) ;
   }
 
+  private static String extractPdfText( final byte[] pdfBytes ) throws IOException {
+    final PDDocument pdfDocument = PDDocument.load( new ByteArrayInputStream( pdfBytes ) ) ;
+    try {
+      return new PDFTextStripper().getText( pdfDocument ) ;
+    } finally {
+      pdfDocument.close() ;
+    }
+  }
 
 }

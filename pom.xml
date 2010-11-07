@@ -178,7 +178,11 @@
 
     <lib.fop.groupId>org.apache.xmlgraphics</lib.fop.groupId>
     <lib.fop.artifactid>fop</lib.fop.artifactid>
-    <lib.fop.version>0.95</lib.fop.version>
+    <lib.fop.version>1.0</lib.fop.version>
+
+    <lib.pdfbox.groupId>pdfbox</lib.pdfbox.groupId>
+    <lib.pdfbox.artifactid>pdfbox</lib.pdfbox.artifactid>
+    <lib.pdfbox.version>0.7.3</lib.pdfbox.version>
 
     <lib.xalan.groupId>xalan</lib.xalan.groupId>
     <lib.xalan.artifactid>xalan</lib.xalan.artifactid>

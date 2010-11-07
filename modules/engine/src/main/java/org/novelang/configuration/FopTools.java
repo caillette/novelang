@@ -25,6 +25,8 @@ import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import org.apache.fop.fonts.FontEventListener;
+import org.apache.fop.render.pdf.PDFRendererConfigurator;
 import org.novelang.common.ReflectionTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -136,13 +138,22 @@ public class FopTools {
     final FOUserAgent foUserAgent = fopFactory.newFOUserAgent() ;
     final FontResolver fontResolver = new DefaultFontResolver( foUserAgent ) ;
     final FontCache fontCache = new FontCache() ;
+    
+    @SuppressWarnings( { "unchecked" } )
     final List< EmbedFontInfo > fontList = ( List< EmbedFontInfo > )
-        PrintRendererConfigurator.buildFontListFromConfiguration(
+        new PDFRendererConfigurator( foUserAgent ) {
+          @Override
+          protected List buildFontList(
+              final Configuration configuration,
+              final FontResolver resolver,
+              final FontEventListener listener
+          ) throws FOPException {
+            return super.buildFontList( configuration, resolver, listener ) ;
+          }
+        }.buildFontList(
             pdfRendererConfiguration,
-            null,
             fontResolver,
-            false,
-            fontCache
+            null
         )
     ;
     final Map< String, EmbedFontInfo > failedFontMap = extractFailedFontMap( fontCache ) ;
