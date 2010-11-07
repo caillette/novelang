@@ -1,0 +1,5 @@
+--- Upgraded from `FOP-0.95` to "`FOP-1.0`"
+http://xmlgraphics.apache.org/fop/1.0/releaseNotes_1.0.html
+. FOP is the library for generating PDF documents.
+
+--- Various other library upgrades that shouldn't affect normal users.
