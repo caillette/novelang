@@ -343,6 +343,10 @@
     <fo:inline font-style="italic" ><xsl:apply-templates/></fo:inline>
   </xsl:template>
 
+  <xsl:template match="n:block-inside-asterisk-pairs" >
+    <fo:inline font-weight="bold" ><xsl:apply-templates/></fo:inline>
+  </xsl:template>
+
   <xsl:template match="n:word-after-circumflex-accent" >
     <fo:inline
         font-style="italic"

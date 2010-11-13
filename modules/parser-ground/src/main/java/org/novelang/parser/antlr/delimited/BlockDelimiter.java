@@ -45,6 +45,7 @@ public enum BlockDelimiter {
   SQUARE_BRACKETS( true, "[", "]" ),
   DOUBLE_QUOTES( false, "\"", "\"" ),
   SOLIDUS_PAIRS( false, "//", "//" ),
+  ASTERISK_PAIRS( false, "**", "**" ),
   TWO_HYPHENS( false, "--", "--", "-_" ),
   ;
 

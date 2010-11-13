@@ -43,6 +43,7 @@ public class Spaces {
     final Set< NodeKind > blocks = ImmutableSet.of(
         BLOCK_AFTER_TILDE,
         BLOCK_INSIDE_DOUBLE_QUOTES,
+        BLOCK_INSIDE_ASTERISK_PAIRS,
         BLOCK_INSIDE_HYPHEN_PAIRS,
         BLOCK_INSIDE_TWO_HYPHENS_THEN_HYPHEN_LOW_LINE,
         BLOCK_INSIDE_PARENTHESIS,

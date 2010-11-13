@@ -159,6 +159,10 @@
     <i><xsl:apply-templates/></i>
   </xsl:template>
 
+  <xsl:template match="n:block-inside-asterisk-pairs" >
+    <b><xsl:apply-templates/></b>
+  </xsl:template>
+
   <xsl:template match="n:block-of-literal-inside-grave-accents" >
     <xsl:apply-templates/>
   </xsl:template>

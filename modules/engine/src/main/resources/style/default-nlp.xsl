@@ -148,6 +148,8 @@
 
   <xsl:template match="n:block-inside-solidus-pairs" >//<xsl:apply-templates/>//</xsl:template>
 
+  <xsl:template match="n:block-inside-asterisk-pairs" >**<xsl:apply-templates/>**</xsl:template>
+
   <xsl:template match="n:block-inside-parenthesis" >(<xsl:apply-templates/>)</xsl:template>
 
   <xsl:template match="n:block-inside-square-brackets" >[<xsl:apply-templates/>]</xsl:template>

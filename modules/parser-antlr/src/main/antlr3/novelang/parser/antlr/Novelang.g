@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008, 2009 Laurent Caillette
+ * Copyright (C) 2008, 2009, 2010 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -352,6 +352,7 @@ delimitedSpreadblock
   | squarebracketsSpreadblock
   | doubleQuotedSpreadBlock
   | emphasizedSpreadBlock
+  | astericizedSpreadBlock
   | hyphenPairSpreadBlock
   ;
 
@@ -360,12 +361,14 @@ delimitedTightblock
   | squarebracketsTightblock
   | doubleQuotedTightblock
   | emphasizedTightblock
+  | astericizedTightblock
   | hyphenPairTightblock
   ;
 
 delimitedTightblockNoSeparator
   : parenthesizedTightblockNoSeparator
   | emphasizedTightblockNoSeparator
+  | astericizedTightblockNoSeparator
   ;
 
 mixedDelimitedSpreadBlock  
@@ -646,6 +649,7 @@ delimitedSpreadblockNoDoubleQuotes
   : parenthesizedSpreadblock
   | squarebracketsSpreadblock
   | emphasizedSpreadBlock
+  | astericizedSpreadBlock
   | hyphenPairSpreadBlock
   ;
 
@@ -777,6 +781,7 @@ delimitedTightblockNoDoubleQuotes
   : parenthesizedTightblock
   | squarebracketsTightblock
   | emphasizedTightblock
+  | astericizedTightblock
   ;
 
 monoblockBodyNoDoubleQuotes
@@ -845,6 +850,7 @@ delimitedSpreadblockNoEmphasis
   | squarebracketsSpreadblock
   | doubleQuotedSpreadBlock
   | hyphenPairSpreadBlock
+  | astericizedSpreadBlock
   ;
 
 spreadBlockBodyNoEmphasis      // Relies on: mixedDelimitedSpreadBlockNoEmphasis
@@ -930,9 +936,6 @@ spreadBlockBodyNoEmphasis      // Relies on: mixedDelimitedSpreadBlockNoEmphasis
   ;  
 
 mixedDelimitedSpreadBlockNoEmphasis
-//  : ( word ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? )? ) 
-//  | ( ( punctuationSign | delimitedSpreadblockNoEmphasis )+ word? ) 
-//  ;
   : ( word 
       ( (   punctuationSign 
           | delimitedSpreadblockNoEmphasis 
@@ -1017,9 +1020,6 @@ monoblockBodyNoEmphasisNoSeparator
   ;  
 
 mixedDelimitedTightblockNoEmphasis
-//  : ( word ( ( punctuationSign | delimitedTightblockNoEmphasis )+ word? )? ) 
-//  | ( ( punctuationSign | delimitedTightblockNoEmphasis )+ word? ) 
-//  ;
   : ( word 
       ( (   punctuationSign 
           | delimitedTightblockNoEmphasis 
@@ -1070,6 +1070,255 @@ mixedDelimitedTightblockNoEmphasisNoSeparator
 
 
   
+  
+  
+  
+// ========
+// Asterisks
+// ========
+
+astericizedSpreadBlock
+	: ( 
+      { delegate.startDelimitedText( BlockDelimiter.ASTERISK_PAIRS, input.LT( 1 ) ) ; }
+	    ASTERISK ASTERISK whitespace?
+	    ( b += spreadBlockBodyNoAsterisks 
+	      whitespace? 
+	    )?
+	    { delegate.reachEndDelimiter( BlockDelimiter.ASTERISK_PAIRS ) ; }
+	    ASTERISK ASTERISK
+      { delegate.endDelimitedText( BlockDelimiter.ASTERISK_PAIRS ) ; }
+	  ) -> ^( BLOCK_INSIDE_ASTERISK_PAIRS $b+ )
+  ;
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.ASTERISK_PAIRS, mte ) ; }
+
+delimitedSpreadblockNoAsterisks
+  : parenthesizedSpreadblock
+  | squarebracketsSpreadblock
+  | doubleQuotedSpreadBlock
+  | hyphenPairSpreadBlock
+  ;
+
+spreadBlockBodyNoAsterisks      // Relies on: mixedDelimitedSpreadBlockNoAsterisks
+  : 
+    (  // Beginning by URL or smallDashedListItem
+      (
+          ( ( softbreak url ) => ( softbreak url ) 
+          ) 
+        | ( ( softbreak whitespace? smallDashedListItem ) => 
+                  ( softbreak whitespace? smallDashedListItem ) 
+          )
+        | ( ( softbreak whitespace? smallNumberedListItem ) => 
+                  ( softbreak whitespace? smallNumberedListItem ) 
+          )
+	    )
+	    
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoAsterisks 
+		              ( whitespace mixedDelimitedSpreadBlockNoAsterisks )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoAsterisks 
+				              ( whitespace mixedDelimitedSpreadBlockNoAsterisks )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoAsterisks 
+				  ( whitespace mixedDelimitedSpreadBlockNoAsterisks )*
+				)?   	    
+  	  )   	  
+    )
+    
+  | ( // Other kind of beginning: just text 
+
+      mixedDelimitedSpreadBlockNoAsterisks 
+      ( whitespace mixedDelimitedSpreadBlockNoAsterisks )*
+      
+      ( ( (
+		          ( ( whitespace? softbreak url ) => ( whitespace? softbreak url ) 
+		          ) 
+		        | ( ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallDashedListItem ) 
+		          )
+		        | ( ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		             => ( whitespace? softbreak whitespace? smallNumberedListItem ) 
+		          )
+		        | ( 
+		            ( 
+		              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoAsterisks 
+		              ( whitespace mixedDelimitedSpreadBlockNoAsterisks )* 
+		              whitespace? softbreak // lookahead: don't consume this block if last.
+		            )
+		            =>  ( 
+				              whitespace? softbreak whitespace? mixedDelimitedSpreadBlockNoAsterisks 
+				              ( whitespace mixedDelimitedSpreadBlockNoAsterisks )* 
+		                )            
+		          )
+		      )*	      
+	   	    whitespace? softbreak 
+   	    )
+   	    
+				( whitespace? mixedDelimitedSpreadBlockNoAsterisks 
+				  ( whitespace mixedDelimitedSpreadBlockNoAsterisks )*
+				)?
+   	    
+   	  )?
+
+    )
+  ;  
+
+mixedDelimitedSpreadBlockNoAsterisks
+//  : ( word ( ( punctuationSign | delimitedSpreadblockNoAsterisks )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedSpreadblockNoAsterisks )+ word? ) 
+//  ;
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedSpreadblockNoAsterisks 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedSpreadblockNoAsterisks 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedSpreadblockNoAsterisks 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    )
+  | blockAfterTilde  whitespace
+  ;
+
+  
+
+astericizedTightblock
+	: ( 
+      { delegate.startDelimitedText( BlockDelimiter.ASTERISK_PAIRS, input.LT( 1 ) ) ; }
+	    ASTERISK ASTERISK whitespace?
+	    ( b += monoblockBodyNoAsterisks 
+	      whitespace? 
+	    )?
+	    { delegate.reachEndDelimiter( BlockDelimiter.ASTERISK_PAIRS ) ; }
+	    ASTERISK ASTERISK
+      { delegate.endDelimitedText( BlockDelimiter.ASTERISK_PAIRS ) ; }
+	  ) -> ^( BLOCK_INSIDE_ASTERISK_PAIRS $b+ )
+  ;
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.ASTERISK_PAIRS, mte ) ; }
+  
+
+astericizedTightblockNoSeparator
+	: ( 
+      { delegate.startDelimitedText( BlockDelimiter.ASTERISK_PAIRS, input.LT( 1 ) ) ; }
+	    ASTERISK ASTERISK 
+	    ( b += monoblockBodyNoAsterisksNoSeparator )?
+	    { delegate.reachEndDelimiter( BlockDelimiter.ASTERISK_PAIRS ) ; }
+	    ASTERISK ASTERISK
+      { delegate.endDelimitedText( BlockDelimiter.ASTERISK_PAIRS ) ; }
+	  ) -> ^( BLOCK_INSIDE_ASTERISK_PAIRS $b+ )
+  ;
+  catch[ MismatchedTokenException mte ] {
+      delegate.reportMissingDelimiter( BlockDelimiter.ASTERISK_PAIRS, mte ) ; }
+  
+
+delimitedTightblockNoAsterisks
+  : parenthesizedTightblock
+  | squarebracketsTightblock
+  | doubleQuotedTightblock
+  | hyphenPairTightblock
+  ;
+
+delimitedTightblockNoAsterisksNoSeparator
+  : parenthesizedTightblockNoSeparator
+  ;
+
+monoblockBodyNoAsterisks
+  : ( mixedDelimitedTightblockNoAsterisks
+      ( whitespace mixedDelimitedTightblockNoAsterisks )*
+    )
+    ( whitespace? softbreak whitespace? 
+      mixedDelimitedTightblockNoAsterisks
+      ( whitespace 
+        mixedDelimitedTightblockNoAsterisks
+      )*                   
+    )* 
+  ;  
+
+monoblockBodyNoAsterisksNoSeparator
+  : mixedDelimitedTightblockNoAsterisksNoSeparator
+  ;  
+
+mixedDelimitedTightblockNoAsterisks
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedTightblockNoAsterisks 
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedTightblockNoAsterisks 
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedTightblockNoAsterisks 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
+  ;
+
+
+mixedDelimitedTightblockNoAsterisksNoSeparator
+  : ( word 
+      ( (   punctuationSign 
+          | delimitedTightblockNoAsterisksNoSeparator  
+          | softInlineLiteral 
+          | hardInlineLiteral 
+      ) word? )*
+	  ) 
+  | ( (   punctuationSign 
+        | delimitedTightblockNoAsterisksNoSeparator
+        | softInlineLiteral 
+        | hardInlineLiteral 
+      )
+      ( word? 
+        (   punctuationSign 
+          | delimitedTightblockNoAsterisksNoSeparator 
+          | softInlineLiteral 
+          | hardInlineLiteral           
+        ) 
+      )*   
+      word?
+    ) 
+  ;
+
+
+  
 
 // ===============================================
 // Block inside hyphen pairs (interpolated clause)
@@ -1096,6 +1345,7 @@ delimitedSpreadblockNoHyphenPair
   : parenthesizedSpreadblock
   | squarebracketsSpreadblock 
   | emphasizedSpreadBlock
+  | astericizedSpreadBlock
   | doubleQuotedSpreadBlock
   ;
 
@@ -1227,6 +1477,7 @@ delimitedTightblockNoHyphenPair
   : parenthesizedTightblock
   | squarebracketsTightblock
   | emphasizedTightblock
+  | astericizedTightblock
   | doubleQuotedTightblock
   ;
 
@@ -1243,9 +1494,6 @@ monoblockBodyNoHyphenPair
   ;  
 
 mixedDelimitedTightblockNoHyphenPair
-//  : ( word ( ( punctuationSign | delimitedTightblockNoHyphenPair )+ word? )? ) 
-//  | ( ( punctuationSign | delimitedTightblockNoHyphenPair )+ word? ) 
-//  ;
   : ( word 
       ( (   punctuationSign 
           | delimitedTightblockNoHyphenPair 
