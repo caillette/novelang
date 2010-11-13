@@ -85,7 +85,7 @@ delimitedSpreadblockNoXxx
 >>>  
 
 
-This is more or less the same for monoblocks. "Tightblocks" stand for blocks containing no line breaks, like cells and embedded lists.
+This is more or less the same for tightblocks. "Tightblocks" stand for blocks containing no line breaks, like cells and embedded lists.
 
 <<<
 cell  // Same for embedded list items.
@@ -106,10 +106,10 @@ delimitedTightblock
   ;
 
 xxxTightblock
-  : XXX monoblockBodyNoXxx XXX
+  : XXX tightblockBodyNoXxx XXX
   ;
 
-monoblockBodyNoXxx
+tightblockBodyNoXxx
   : ... mixedDelimitedTightblockNoXxx ...
   ;
 
