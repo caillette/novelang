@@ -47,6 +47,24 @@ public abstract class AbstractEmbeddedListParsingTest {
   }
 
   @Test
+  public void embeddedListItemHasAsterisksPair() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTree(
+        getMarker() + " **w**",
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                getNodeKind(),
+                tree( WHITESPACE_, " " ),
+                tree(
+                    BLOCK_INSIDE_ASTERISK_PAIRS,
+                    tree( WORD_, "w" )
+                )
+            )
+        )
+    ) ;
+  }
+
+  @Test
   public void paragraphIsTwoSmallListItems()
       throws RecognitionException
   {

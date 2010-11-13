@@ -106,7 +106,7 @@ public class ParagraphParsingTest {
                 tree( WORD_, "z" )
             )            
         ) 
-    ); ;
+    ) ;
   }
 
 
@@ -250,6 +250,13 @@ public class ParagraphParsingTest {
   }
 
   @Test
+  public void paragraphBodyIsAstericizedWordThenWord()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.createTree( "**w0**w1" );
+  }
+
+  @Test
   public void paragraphIsWordsWithApostropheThenEmphasis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0 w1'w2//w3//.", 
@@ -267,11 +274,36 @@ public class ParagraphParsingTest {
   }
 
   @Test
+  public void paragraphIsAstericizedWord() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
+        "**w0**.",
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_ASTERISK_PAIRS, tree( WORD_, "w0" ) ),
+            TREE_SIGN_FULLSTOP
+        )
+    ) ;
+
+  }
+
+  @Test
   public void paragraphIsMultilineQuote() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.createTree( 
         "\"w1" + BREAK +
         "w2\"" 
     );
+  }
+
+  @Test
+  public void paragraphIsMultilineAstericized() throws RecognitionException {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
+        "**w0" + BREAK +
+        "w1**",
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_ASTERISK_PAIRS, tree( WORD_, "w0" ), tree( WORD_, "w1" ) )
+        )
+    ) ;
   }
 
   @Test
@@ -632,6 +664,13 @@ public class ParagraphParsingTest {
   }
 
   @Test
+  public void paragraphBodyHasDoubleHyphensInsideDoubleQuotes()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.createTree( "--\"--w--\"--" );
+  }
+
+  @Test
   public void paragraphBodyHasWordThenInterpolatedClauseSilentEndThenFullStop()
       throws RecognitionException
   {
@@ -661,6 +700,55 @@ public class ParagraphParsingTest {
       throws RecognitionException
   {
     PARSERMETHOD_PARAGRAPH.createTree( "\"(w0 -- w1 (w2 [w3]) --)\"" );
+  }
+
+  @Test
+  public void multipleNestingsWithAsterisks()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval(
+        "** w0 \" w1 ** w2 ( w3 ** w4 -- w5 ** w6 [ w7 ** w8 **]**--**)**\"**" ,
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                BLOCK_INSIDE_ASTERISK_PAIRS,
+                tree( WORD_, "w0" ),
+                tree(
+                    BLOCK_INSIDE_DOUBLE_QUOTES,
+                    tree( WORD_, "w1" ),
+                    tree(
+                        BLOCK_INSIDE_ASTERISK_PAIRS,
+                        tree( WORD_, "w2" ),
+                        tree(
+                            BLOCK_INSIDE_PARENTHESIS,
+                            tree( WORD_, "w3" ),
+                            tree(
+                                BLOCK_INSIDE_ASTERISK_PAIRS,
+                                tree( WORD_, "w4" ),
+                                tree(
+                                    BLOCK_INSIDE_HYPHEN_PAIRS,
+                                    tree( WORD_, "w5" ),
+                                    tree(
+                                        BLOCK_INSIDE_ASTERISK_PAIRS,
+                                        tree( WORD_, "w6" ),
+                                        tree(
+                                            BLOCK_INSIDE_SQUARE_BRACKETS,
+                                            tree( WORD_, "w7" ),
+                                            tree(
+                                                BLOCK_INSIDE_ASTERISK_PAIRS,
+                                                tree( WORD_, "w8" )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    ) ;
+
   }
 
   @Test

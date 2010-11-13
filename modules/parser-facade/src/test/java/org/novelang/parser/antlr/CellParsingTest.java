@@ -51,6 +51,20 @@ public class CellParsingTest {
   }
 
   @Test
+  public void asteriskPairInsideCell() throws RecognitionException {
+    PARSERMETHOD_CELL_ROW_SEQUENCE.checkTreeAfterSeparatorRemoval(
+        "| **x** |",
+        tree(
+            CELL_ROWS_WITH_VERTICAL_LINE,
+            tree(
+                CELL_ROW,
+                tree( CELL,  tree( BLOCK_INSIDE_ASTERISK_PAIRS, tree( WORD_, "x" ) ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
   public void cellRowSequence1x1Tagged() throws RecognitionException {
     PARSERMETHOD_CELL_ROW_SEQUENCE.checkTreeAfterSeparatorRemoval(
         "@t" + BREAK +

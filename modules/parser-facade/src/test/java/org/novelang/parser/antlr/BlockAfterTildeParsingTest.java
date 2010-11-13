@@ -71,6 +71,21 @@ public class BlockAfterTildeParsingTest {
   }
 
   @Test
+  public void compositeBlockWithAsterisksPair() {
+    PARSERMETHOD_BLOCK_AFTER_TILDE.checkTree(
+        "~w**x**",
+        tree(
+            BLOCK_AFTER_TILDE,
+            tree(
+                SUBBLOCK,
+                tree( WORD_, "w" ),
+                tree( BLOCK_INSIDE_ASTERISK_PAIRS, tree( WORD_, "x" ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
   public void compositeBlockWithBlockInsideGraveAccents() {
     PARSERMETHOD_BLOCK_AFTER_TILDE.checkTree(
         "~w`/`x",
