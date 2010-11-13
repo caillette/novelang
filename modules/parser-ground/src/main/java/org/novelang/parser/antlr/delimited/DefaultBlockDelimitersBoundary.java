@@ -75,14 +75,14 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
   public Iterable< DelimitedBlockStatus > getFaultyDelimitedBlocks() {
     final List< DelimitedBlockStatus > faultyDelimitedBlockStatuses = Lists.newArrayList() ;
-    for( final BlockDelimiter blockDelimiter : BlockDelimiter.getTwinDelimiters() ) {
+    for( final BlockDelimiter blockDelimiter : BlockDelimiter.getPairedDelimiters() ) {
       final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
       if( ! status.isConsistent() ) {
         faultyDelimitedBlockStatuses.add( status ) ;
       }
     }
     if( faultyDelimitedBlockStatuses.isEmpty() ) {
-      for( final BlockDelimiter blockDelimiter : BlockDelimiter.getPairedDelimiters() ) {
+      for( final BlockDelimiter blockDelimiter : BlockDelimiter.getTwinDelimiters() ) {
         final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
         if( ! status.isConsistent() ) {
           faultyDelimitedBlockStatuses.add( status ) ;

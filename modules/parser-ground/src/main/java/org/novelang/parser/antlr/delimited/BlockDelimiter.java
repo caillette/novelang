@@ -79,13 +79,13 @@ public enum BlockDelimiter {
       return blockDelimiter.isTwin() ;
     }
   } ;
-  private static final Predicate< BlockDelimiter > IS_ONLY = Predicates.not( IS_TWIN ) ;
+  private static final Predicate< BlockDelimiter > IS_PAIRED = Predicates.not( IS_TWIN ) ;
 
   public static Iterable< BlockDelimiter > getTwinDelimiters() {
     return Iterables.filter( ImmutableList.of( values() ), IS_TWIN ) ;
   }
 
   public static Iterable< BlockDelimiter > getPairedDelimiters() {
-    return Iterables.filter( ImmutableList.of( values() ), IS_ONLY ) ;
+    return Iterables.filter( ImmutableList.of( values() ), IS_PAIRED ) ;
   }
 }

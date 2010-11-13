@@ -140,7 +140,7 @@ public class DelimiterProblemTest {
       Assert.assertFalse( problems.iterator().hasNext() );
     } else {
       for( final ProblemSignature signature : signatures ) {
-        Assert.assertTrue( signature.in( problems ) ) ;
+        Assert.assertTrue( "Got: " + problems, signature.in( problems ) ) ;
       }
     }
   }
