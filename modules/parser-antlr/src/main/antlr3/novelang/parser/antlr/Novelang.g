@@ -354,17 +354,17 @@ delimitedSpreadblock
   | hyphenPairSpreadBlock
   ;
 
-delimitedMonoblock
-  : parenthesizedMonoblock
-  | squarebracketsMonoblock
-  | doubleQuotedMonoblock
-  | emphasizedMonoblock
-  | hyphenPairMonoblock
+delimitedTightblock
+  : parenthesizedTightblock
+  | squarebracketsTightblock
+  | doubleQuotedTightblock
+  | emphasizedTightblock
+  | hyphenPairTightblock
   ;
 
-delimitedMonoblockNoSeparator
-  : parenthesizedMonoblockNoSeparator
-  | emphasizedMonoblockNoSeparator
+delimitedTightblockNoSeparator
+  : parenthesizedTightblockNoSeparator
+  | emphasizedTightblockNoSeparator
   ;
 
 mixedDelimitedSpreadBlock  
@@ -479,15 +479,15 @@ spreadBlockBody  // Relies on mixedDelimitedSpreadBlock
 
 
 monoblockBody
-  : mixedDelimitedMonoblock
-    ( whitespace mixedDelimitedMonoblock )*
+  : mixedDelimitedTightblock
+    ( whitespace mixedDelimitedTightblock )*
   ;  
 
 monoblockBodyNoSeparator
   : 
     ( word 
       ( (   punctuationSign 
-          | delimitedMonoblockNoSeparator 
+          | delimitedTightblockNoSeparator 
           | softInlineLiteral 
           | hardInlineLiteral 
       ) word? )*
@@ -495,13 +495,13 @@ monoblockBodyNoSeparator
   | 
   
     ( (   punctuationSign 
-        | delimitedMonoblockNoSeparator
+        | delimitedTightblockNoSeparator
         | softInlineLiteral 
         | hardInlineLiteral 
       )
       ( word? 
         (   punctuationSign 
-          | delimitedMonoblockNoSeparator
+          | delimitedTightblockNoSeparator
           | softInlineLiteral 
           | hardInlineLiteral           
         ) 
@@ -511,11 +511,11 @@ monoblockBodyNoSeparator
   ;  
 
   
-mixedDelimitedMonoblock  
+mixedDelimitedTightblock  
   : 
     ( word 
       ( (   punctuationSign 
-          | delimitedMonoblock 
+          | delimitedTightblock 
           | softInlineLiteral 
           | hardInlineLiteral 
       ) word? )*
@@ -560,7 +560,7 @@ parenthesizedSpreadblock
   catch[ MismatchedTokenException mte ] {
       delegate.reportMissingDelimiter( BlockDelimiter.PARENTHESIS, mte ) ; }
 
-parenthesizedMonoblock
+parenthesizedTightblock
   : ( 
       { delegate.startDelimitedText( BlockDelimiter.PARENTHESIS, input.LT( 1 ) ) ; }
       LEFT_PARENTHESIS whitespace?
@@ -575,7 +575,7 @@ parenthesizedMonoblock
   catch[ MismatchedTokenException mte ] {
       delegate.reportMissingDelimiter( BlockDelimiter.PARENTHESIS, mte ) ; }
 
-parenthesizedMonoblockNoSeparator
+parenthesizedTightblockNoSeparator
   : ( 
       { delegate.startDelimitedText( BlockDelimiter.PARENTHESIS, input.LT( 1 ) ) ; }
       LEFT_PARENTHESIS monoblockBodyNoSeparator
@@ -606,7 +606,7 @@ squarebracketsSpreadblock
   catch[ MismatchedTokenException mte ] {
       delegate.reportMissingDelimiter( BlockDelimiter.SQUARE_BRACKETS, mte ) ; }
 
-squarebracketsMonoblock
+squarebracketsTightblock
   : ( 
       { delegate.startDelimitedText( BlockDelimiter.SQUARE_BRACKETS, input.LT( 1 ) ) ; }
       LEFT_SQUARE_BRACKET whitespace?
@@ -756,7 +756,7 @@ mixedDelimitedSpreadBlockNoDoubleQuotes
   | blockAfterTilde    
   ;
 
-doubleQuotedMonoblock
+doubleQuotedTightblock
  : ( 
       { delegate.startDelimitedText( BlockDelimiter.DOUBLE_QUOTES, input.LT( 1 ) ) ; }
       DOUBLE_QUOTE whitespace?
@@ -772,43 +772,43 @@ doubleQuotedMonoblock
       delegate.reportMissingDelimiter( BlockDelimiter.DOUBLE_QUOTES, mte ) ; }
   
 
-delimitedMonoblockNoDoubleQuotes
-  : parenthesizedMonoblock
-  | squarebracketsMonoblock
-  | emphasizedMonoblock
+delimitedTightblockNoDoubleQuotes
+  : parenthesizedTightblock
+  | squarebracketsTightblock
+  | emphasizedTightblock
   ;
 
 monoblockBodyNoDoubleQuotes
-  : ( mixedDelimitedMonoblockNoDoubleQuotes
-      ( whitespace mixedDelimitedMonoblockNoDoubleQuotes )*
+  : ( mixedDelimitedTightblockNoDoubleQuotes
+      ( whitespace mixedDelimitedTightblockNoDoubleQuotes )*
     )
     ( whitespace? softbreak whitespace? 
-      mixedDelimitedMonoblockNoDoubleQuotes
+      mixedDelimitedTightblockNoDoubleQuotes
       ( whitespace 
-        mixedDelimitedMonoblockNoDoubleQuotes
+        mixedDelimitedTightblockNoDoubleQuotes
       )*                   
     )* 
   ;  
 
-mixedDelimitedMonoblockNoDoubleQuotes
-//  : ( word ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? )? ) 
-//  | ( ( punctuationSign | delimitedMonoblockNoDoubleQuotes )+ word? ) 
+mixedDelimitedTightblockNoDoubleQuotes
+//  : ( word ( ( punctuationSign | delimitedTightblockNoDoubleQuotes )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedTightblockNoDoubleQuotes )+ word? ) 
 //  ;
   : ( word 
       ( (   punctuationSign 
-          | delimitedMonoblockNoDoubleQuotes 
+          | delimitedTightblockNoDoubleQuotes 
           | softInlineLiteral 
           | hardInlineLiteral 
       ) word? )*
 	  ) 
   | ( (   punctuationSign 
-        | delimitedMonoblockNoDoubleQuotes 
+        | delimitedTightblockNoDoubleQuotes 
         | softInlineLiteral 
         | hardInlineLiteral 
       )
       ( word? 
         (   punctuationSign 
-          | delimitedMonoblockNoDoubleQuotes 
+          | delimitedTightblockNoDoubleQuotes 
           | softInlineLiteral 
           | hardInlineLiteral           
         ) 
@@ -958,7 +958,7 @@ mixedDelimitedSpreadBlockNoEmphasis
 
   
 
-emphasizedMonoblock
+emphasizedTightblock
 	: ( 
       { delegate.startDelimitedText( BlockDelimiter.SOLIDUS_PAIRS, input.LT( 1 ) ) ; }
 	    SOLIDUS SOLIDUS whitespace?
@@ -974,7 +974,7 @@ emphasizedMonoblock
       delegate.reportMissingDelimiter( BlockDelimiter.SOLIDUS_PAIRS, mte ) ; }
   
 
-emphasizedMonoblockNoSeparator
+emphasizedTightblockNoSeparator
 	: ( 
       { delegate.startDelimitedText( BlockDelimiter.SOLIDUS_PAIRS, input.LT( 1 ) ) ; }
 	    SOLIDUS SOLIDUS 
@@ -988,52 +988,52 @@ emphasizedMonoblockNoSeparator
       delegate.reportMissingDelimiter( BlockDelimiter.SOLIDUS_PAIRS, mte ) ; }
   
 
-delimitedMonoblockNoEmphasis
-  : parenthesizedMonoblock
-  | squarebracketsMonoblock
-  | doubleQuotedMonoblock
-  | hyphenPairMonoblock
+delimitedTightblockNoEmphasis
+  : parenthesizedTightblock
+  | squarebracketsTightblock
+  | doubleQuotedTightblock
+  | hyphenPairTightblock
   ;
 
-delimitedMonoblockNoEmphasisNoSeparator
-  : parenthesizedMonoblockNoSeparator
+delimitedTightblockNoEmphasisNoSeparator
+  : parenthesizedTightblockNoSeparator
   ;
 
 monoblockBodyNoEmphasis
-  : ( mixedDelimitedMonoblockNoEmphasis
-      ( whitespace mixedDelimitedMonoblockNoEmphasis )*
+  : ( mixedDelimitedTightblockNoEmphasis
+      ( whitespace mixedDelimitedTightblockNoEmphasis )*
     )
     ( whitespace? softbreak whitespace? 
-      mixedDelimitedMonoblockNoEmphasis
+      mixedDelimitedTightblockNoEmphasis
       ( whitespace 
-        mixedDelimitedMonoblockNoEmphasis
+        mixedDelimitedTightblockNoEmphasis
       )*                   
     )* 
   ;  
 
 monoblockBodyNoEmphasisNoSeparator
-  : mixedDelimitedMonoblockNoEmphasisNoSeparator
+  : mixedDelimitedTightblockNoEmphasisNoSeparator
   ;  
 
-mixedDelimitedMonoblockNoEmphasis
-//  : ( word ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? )? ) 
-//  | ( ( punctuationSign | delimitedMonoblockNoEmphasis )+ word? ) 
+mixedDelimitedTightblockNoEmphasis
+//  : ( word ( ( punctuationSign | delimitedTightblockNoEmphasis )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedTightblockNoEmphasis )+ word? ) 
 //  ;
   : ( word 
       ( (   punctuationSign 
-          | delimitedMonoblockNoEmphasis 
+          | delimitedTightblockNoEmphasis 
           | softInlineLiteral 
           | hardInlineLiteral 
       ) word? )*
 	  ) 
   | ( (   punctuationSign 
-        | delimitedMonoblockNoEmphasis 
+        | delimitedTightblockNoEmphasis 
         | softInlineLiteral 
         | hardInlineLiteral 
       )
       ( word? 
         (   punctuationSign 
-          | delimitedMonoblockNoEmphasis 
+          | delimitedTightblockNoEmphasis 
           | softInlineLiteral 
           | hardInlineLiteral           
         ) 
@@ -1043,22 +1043,22 @@ mixedDelimitedMonoblockNoEmphasis
   ;
 
 
-mixedDelimitedMonoblockNoEmphasisNoSeparator
+mixedDelimitedTightblockNoEmphasisNoSeparator
   : ( word 
       ( (   punctuationSign 
-          | delimitedMonoblockNoEmphasisNoSeparator  
+          | delimitedTightblockNoEmphasisNoSeparator  
           | softInlineLiteral 
           | hardInlineLiteral 
       ) word? )*
 	  ) 
   | ( (   punctuationSign 
-        | delimitedMonoblockNoEmphasisNoSeparator
+        | delimitedTightblockNoEmphasisNoSeparator
         | softInlineLiteral 
         | hardInlineLiteral 
       )
       ( word? 
         (   punctuationSign 
-          | delimitedMonoblockNoEmphasisNoSeparator 
+          | delimitedTightblockNoEmphasisNoSeparator 
           | softInlineLiteral 
           | hardInlineLiteral           
         ) 
@@ -1206,7 +1206,7 @@ mixedDelimitedSpreadBlockNoHyphenPair
   ;
   
 
-hyphenPairMonoblock
+hyphenPairTightblock
  : ( 
       { delegate.startDelimitedText( BlockDelimiter.TWO_HYPHENS, input.LT( 1 ) ) ; }
       HYPHEN_MINUS HYPHEN_MINUS whitespace?
@@ -1222,44 +1222,44 @@ hyphenPairMonoblock
       delegate.reportMissingDelimiter( BlockDelimiter.TWO_HYPHENS, mte ) ; }
   
 
-delimitedMonoblockNoHyphenPair
-  : parenthesizedMonoblock
-  | squarebracketsMonoblock
-  | emphasizedMonoblock
-  | doubleQuotedMonoblock
+delimitedTightblockNoHyphenPair
+  : parenthesizedTightblock
+  | squarebracketsTightblock
+  | emphasizedTightblock
+  | doubleQuotedTightblock
   ;
 
 monoblockBodyNoHyphenPair
-  : ( mixedDelimitedMonoblockNoHyphenPair
-      ( whitespace mixedDelimitedMonoblockNoHyphenPair )*
+  : ( mixedDelimitedTightblockNoHyphenPair
+      ( whitespace mixedDelimitedTightblockNoHyphenPair )*
     )
     ( whitespace? softbreak whitespace? 
-      mixedDelimitedMonoblockNoHyphenPair
+      mixedDelimitedTightblockNoHyphenPair
       ( whitespace 
-        mixedDelimitedMonoblockNoHyphenPair
+        mixedDelimitedTightblockNoHyphenPair
       )*                   
     )* 
   ;  
 
-mixedDelimitedMonoblockNoHyphenPair
-//  : ( word ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? )? ) 
-//  | ( ( punctuationSign | delimitedMonoblockNoHyphenPair )+ word? ) 
+mixedDelimitedTightblockNoHyphenPair
+//  : ( word ( ( punctuationSign | delimitedTightblockNoHyphenPair )+ word? )? ) 
+//  | ( ( punctuationSign | delimitedTightblockNoHyphenPair )+ word? ) 
 //  ;
   : ( word 
       ( (   punctuationSign 
-          | delimitedMonoblockNoHyphenPair 
+          | delimitedTightblockNoHyphenPair 
           | softInlineLiteral 
           | hardInlineLiteral 
       ) word? )*
 	  ) 
   | ( (   punctuationSign 
-        | delimitedMonoblockNoHyphenPair 
+        | delimitedTightblockNoHyphenPair 
         | softInlineLiteral 
         | hardInlineLiteral 
       )
       ( word? 
         (   punctuationSign 
-          | delimitedMonoblockNoHyphenPair 
+          | delimitedTightblockNoHyphenPair 
           | softInlineLiteral 
           | hardInlineLiteral           
         ) 
@@ -1323,7 +1323,7 @@ bigNumberedListItem
 smallDashedListItem
   : HYPHEN_MINUS 
     { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
-    ( b += whitespace b += mixedDelimitedMonoblock )+
+    ( b += whitespace b += mixedDelimitedTightblock )+
     { delegate.leaveBlockDelimiterBoundary() ; }
     -> ^( EMBEDDED_LIST_ITEM_WITH_HYPHEN_ $b+ )
   ;
@@ -1331,7 +1331,7 @@ smallDashedListItem
 smallNumberedListItem
   : NUMBER_SIGN
     { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
-    ( b += whitespace b += mixedDelimitedMonoblock )+
+    ( b += whitespace b += mixedDelimitedTightblock )+
     { delegate.leaveBlockDelimiterBoundary() ; }
     -> ^( EMBEDDED_LIST_ITEM_NUMBERED_ $b+ )
   ;
@@ -1365,10 +1365,10 @@ cellRow
   
 cell
   : { delegate.enterBlockDelimiterBoundary( input.LT( 1 ) ) ; }
-    ( mixedDelimitedMonoblock ( whitespace mixedDelimitedMonoblock )* whitespace? )? 
+    ( mixedDelimitedTightblock ( whitespace mixedDelimitedTightblock )* whitespace? )? 
     { delegate.leaveBlockDelimiterBoundary() ; }
     VERTICAL_LINE
-    -> ^( CELL mixedDelimitedMonoblock* )
+    -> ^( CELL mixedDelimitedTightblock* )
   ;  
 
 // =======  
@@ -1858,20 +1858,20 @@ subblockAfterTilde
   : (  
 	    (  s += word 
 	      ( (   s += punctuationSign 
-	          | s += delimitedMonoblockNoSeparator
+	          | s += delimitedTightblockNoSeparator
 	          | s += softInlineLiteral 
 	          | s += hardInlineLiteral 
 	      ) s += word? )*
 		  ) 
 	  | ( 
 	      (   s += punctuationSign 
-	        | s += delimitedMonoblockNoSeparator
+	        | s += delimitedTightblockNoSeparator
 	        | s += softInlineLiteral 
 	        | s += hardInlineLiteral 
 	      )
 	      ( s += word? 
 	        (   s += punctuationSign 
-	          | s += delimitedMonoblockNoSeparator
+	          | s += delimitedTightblockNoSeparator
 	          | s += softInlineLiteral 
 	          | s += hardInlineLiteral           
 	        ) 
