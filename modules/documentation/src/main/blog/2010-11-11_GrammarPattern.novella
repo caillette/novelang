@@ -1,0 +1,130 @@
+== Grammar pattern: twin delimiters
+
+This post describes a tricky point of Novelang's grammar design: how to handle twin delimiters like ``//`` in a non-ambiguous manner for an ANTLR grammar. It's a useful refresh before adding long-awaited ``**`` (asterisk pair) delimiter.
+
+
+=== The problem
+
+For paired delimiters like ``(`` and ``) or ``[`` and ``]`` it's easy to know when to "open" or "close" a block, and support nested blocks. In contrast, a twin delimiter is an opening one if not preceded by a closing one inside the same block, regardless of what happens in subblocks. This is a complicated way to say we support this kind of nesting:
+
+<<<
+// block-1 ( block-2 //block-3// ) //
+
++ block-inside-solidus-pairs
+    block-1
+  + block-inside-parenthesis
+      block-2
+    + block-inside-solidus-pairs
+        block-3
+>>>
+
+We also support this:
+
+<<<
+block-1 // block-2 // block-3 // block-4 //
+
+  block-1
++ block-inside-solidus-pairs
+    block-2
+  block-3
++ block-inside-solidus-pairs
+    block-4
+>>>
+
+(We have only one level of nesting here. 2 levels of nesting is counter-intuitive and would have required very complex lookahead.)
+
+
+=== The pattern
+
+The pattern is to define special grammatical elements when inside a block defined by a twin delimiter, to propagate this element cannot appear again, unless inside some other subblock.
+
+Taking "XXX" for the name of some twin delimiter, here is a simplified version of the grammar for spreadblocks. The term "spreadblock" stands for a block that may spread on several lines (containing single line breaks).
+
+<<<
+paragraph
+  : ... mixedDelimitedSpreadblock
+  ;
+
+mixedDelimitedSpreadblock
+  : word ( punctuationSign | delimitedSpreadblock ) ...
+
+delimitedSpreadblock
+  : xxxSpreadblock
+  : parenthesizedSpreadblock
+  | squareBracketsSpreadblock
+  | doubleQuotedSpreadblock
+  | hyphenPairSpreadblock
+  ;
+
+parenthesizedSpreadblock  
+  : '(' spreadblockBody ')' // Same for other paired delimiters.
+  ;
+
+spreadblockBody
+  : ... mixedDelimitedSpreadblock
+  ;
+
+xxxSpreadblock
+  : XXX spreadblockBodyNoXxx XXX
+  ;
+
+spreadblockBodyNoXxx
+  : ... mixedDelimitedSpreadblockNoXxx ...
+  ;
+
+mixedDelimitedSpreadblockNoXxx
+  : ... delimitedSpreadblockNoXxx ...
+  ;
+
+delimitedSpreadblockNoXxx
+  : parenthesizedSpreadblock
+  | squareBracketsSpreadblock
+  | doubleQuotedSpreadblock
+  | hyphenPairSpreadblock
+  ;
+>>>  
+
+
+This is more or less the same for monoblocks. "Tightblocks" stand for blocks containing no line breaks, like cells and embedded lists.
+
+<<<
+cell  // Same for embedded list items.
+  : ... mixedDelimitedTightblock ..
+  ;
+
+mixedDelimitedTightblock
+  : word ( punctuationSign | delimitedTightblock | ... ) ...
+  : word ( punctuationSign | delimitedSpreadblock | ... ) ...
+  ;
+
+delimitedTightblock
+  : xxxTightblock
+  | parenthesizedTightblock
+  | squareBracketsTightblock
+  | doubleQuotedTightblock
+  | hyphenPairTightblock
+  ;
+
+xxxTightblock
+  : XXX monoblockBodyNoXxx XXX
+  ;
+
+monoblockBodyNoXxx
+  : ... mixedDelimitedTightblockNoXxx ...
+  ;
+
+mixedDelimitedTightblockNoXxx
+  : word ( punctuationSign | delimitedTightblockNoXxx ) ...
+  ;
+
+delimitedTightblockNoXxx
+  : parenthesizedTightblock 
+  | squarebracketsTightblock
+  | doubleQuotedTightblock
+  | hyphenPairTightblock
+  ; // That's all.
+>>>
+
+Thought it is over? There is another kind of block, the ``delimitedTightblockNoSeparator`` used inside the ``subblockAfterTilde`` which reflects each block inside ``~x~y~z``! But at this point you probably got the idea.
+
+Yes this makes the grammar quite verbose, but factoring it would reduce ANTLR's ability to check for inconsistencies. Anyways, the slightest addition brings the need of writing test cases for every logical path inside each ANTLR grammar rule.
