@@ -5,7 +5,7 @@ This post describes a tricky point of Novelang's grammar design: how to handle t
 
 === The problem
 
-For paired delimiters like ``(`` and ``) or ``[`` and ``]`` it's easy to know when to "open" or "close" a block, and support nested blocks. In contrast, a twin delimiter is an opening one if not preceded by a closing one inside the same block, regardless of what happens in subblocks. This is a complicated way to say we support this kind of nesting:
+For paired delimiters like ``(`` and ``)`` or ``[`` and ``]`` it's easy to know when to "open" or "close" a block, and support nested blocks. In contrast, a twin delimiter is an opening one if not preceded by a closing one inside the same block, regardless of what happens in subblocks. This is a complicated way to say we support this kind of nesting:
 
 <<<
 // block-1 ( block-2 //block-3// ) //

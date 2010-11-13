@@ -30,10 +30,13 @@ import com.google.common.collect.ImmutableList;
  *
  * <p>
  * Definition : <em>twin delimiters</em> are start and end delimiters for a kind of block, and
- * those two delimiters cannot be confused.
+ * those two delimiters are the same.
  * <p>
- * Definition : <em>only delimiters</em> are delimiters which are the same for the beginning
- * and the end of the block.
+ * Definition : <em>paired delimiters</em> are start and end delimiters for a kind of block, and
+ * those two delimiters are different. It's possible to deduce one delimiter from the other.
+ * <p>
+ * Unluckily, the {@link #TWO_HYPHENS} is treated as an hybrid case.
+ *
  *
  * @see DefaultBlockDelimitersBoundary
  *
@@ -41,12 +44,12 @@ import com.google.common.collect.ImmutableList;
  */
 public enum BlockDelimiter {
 
-  PARENTHESIS( true, "(", ")" ),
-  SQUARE_BRACKETS( true, "[", "]" ),
-  DOUBLE_QUOTES( false, "\"", "\"" ),
-  SOLIDUS_PAIRS( false, "//", "//" ),
-  ASTERISK_PAIRS( false, "**", "**" ),
-  TWO_HYPHENS( false, "--", "--", "-_" ),
+  PARENTHESIS( false, "(", ")" ),
+  SQUARE_BRACKETS( false, "[", "]" ),
+  DOUBLE_QUOTES( true, "\"", "\"" ),
+  SOLIDUS_PAIRS( true, "//", "//" ),
+  ASTERISK_PAIRS( true, "**", "**" ),
+  TWO_HYPHENS( true, "--", "--", "-_" ),
   ;
 
   private final boolean twin ;
@@ -82,7 +85,7 @@ public enum BlockDelimiter {
     return Iterables.filter( ImmutableList.of( values() ), IS_TWIN ) ;
   }
 
-  public static Iterable< BlockDelimiter > getOnlyDelimiters() {
+  public static Iterable< BlockDelimiter > getPairedDelimiters() {
     return Iterables.filter( ImmutableList.of( values() ), IS_ONLY ) ;
   }
 }

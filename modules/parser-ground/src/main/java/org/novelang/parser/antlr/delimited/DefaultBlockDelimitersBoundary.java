@@ -82,7 +82,7 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
       }
     }
     if( faultyDelimitedBlockStatuses.isEmpty() ) {
-      for( final BlockDelimiter blockDelimiter : BlockDelimiter.getOnlyDelimiters() ) {
+      for( final BlockDelimiter blockDelimiter : BlockDelimiter.getPairedDelimiters() ) {
         final DelimitedBlockStatus status = primes.get( blockDelimiter ) ;
         if( ! status.isConsistent() ) {
           faultyDelimitedBlockStatuses.add( status ) ;
