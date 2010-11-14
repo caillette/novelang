@@ -18,6 +18,8 @@ package org.novelang.rendering;
 
 import java.util.regex.Pattern;
 
+import com.google.common.base.Preconditions;
+
 /**
  * A page name for a multipage document.
  * The name is filesystem and URL friendly.
@@ -29,7 +31,13 @@ public class PageIdentifier {
   private final String name ;
 
   public PageIdentifier( final String name ) {
-    this.name = name == null ? "" : name ;
+    this.name = Preconditions.checkNotNull( name ) ;
+    Preconditions.checkArgument(
+        PATTERN.matcher( name ).matches(),
+        "Name '%s' doesn't match %s",
+        name,
+        PATTERN.pattern()
+    ) ;
   }
 
   /**
@@ -46,4 +54,31 @@ public class PageIdentifier {
    */
   private static final Pattern PATTERN = Pattern.compile( "[a-zA-Z0-9]+(?:[_\\-][a-zA-Z0-9]+)*" ) ;
 
+  @Override
+  public boolean equals( final Object other ) {
+    if( this == other ) {
+      return true ;
+    }
+    if( other == null || getClass() != other.getClass() ) {
+      return false ;
+    }
+
+    final PageIdentifier that = ( PageIdentifier ) other ;
+
+    if( ! name.equals( that.name ) ) {
+      return false ;
+    }
+
+    return true ;
+  }
+
+  @Override
+  public int hashCode() {
+    return name.hashCode() ;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + name + "]" ;
+  }
 }

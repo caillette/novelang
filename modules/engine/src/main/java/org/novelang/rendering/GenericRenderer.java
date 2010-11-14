@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import org.novelang.common.Location;
@@ -86,6 +87,11 @@ public class GenericRenderer implements Renderer {
       renderTree( root, null, null ) ;
       fragmentWriter.finishWriting() ;
     }
+  }
+
+  @Override
+  public ImmutableMap<PageIdentifier, String> extractPageIdentifiers( final SyntacticTree documentTree ) {
+    throw new UnsupportedOperationException( "TODO" ) ;
   }
 
   public RenditionMimeType getMimeType() {
