@@ -69,7 +69,7 @@
   </xsl:template>
 
   <xsl:template match="n:lines-of-literal" >
-<tt>&amp;lt;pre&amp;gt;</tt><pre><xsl:value-of select="."/></pre><tt>&amp;lt;/pre&amp;gt;</tt>
+<tt>&amp;lt;pre&amp;gt;</tt><pre><xsl:value-of select="n:raw-lines"/></pre><tt>&amp;lt;/pre&amp;gt;</tt>
   </xsl:template>
 
   <xsl:template match="n:style" />
@@ -137,6 +137,12 @@
   <xsl:template match="n:block-of-literal-inside-grave-accent-pairs" ><tt>&amp;lt;code&amp;gt;</tt><code><xsl:apply-templates/></code><tt>&amp;lt;/code&amp;gt;</tt></xsl:template>
 
   <xsl:template match="n:apostrophe-wordmate" ><tt>&rsquo;</tt></xsl:template>
+
+  <xsl:template match="n:location" />
+  <xsl:template match="n:implicit-identifier" />
+  <xsl:template match="n:explicit-identifier" />
+  <xsl:template match="n:implicit-tag" />
+  <xsl:template match="n:explicit-tag" />
 
 
 </xsl:stylesheet>
