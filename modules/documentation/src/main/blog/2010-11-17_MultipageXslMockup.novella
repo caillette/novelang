@@ -1,0 +1,205 @@
+== XSL mockup for multipage rendering
+
+Here is how an XSL would render a multipage document.
+
+First, let's consider the whole document defining the opus:
+
+<<<
+== One
+
+Some text of level one.
+
+== Two
+
+Some text of level two.
+
+=== Two-one
+
+Some text of level two-one.
+>>>
+
+The XML form of the document above is:
+
+<<<
+<?xml version="1.0" encoding="UTF-8" ?>
+<opus>
+  <level>
+    <title>One</title>
+    <paragraph>Some text of level one.</paragraph>
+  </level>
+  <level>
+    <title>Two</title>
+    <paragraph>Some text of level two.</paragraph>
+    <level>
+      <title>Two-one</title>
+      <paragraph>Some text of level two-one.</paragraph>
+    </level>
+  </level>
+</opus>
+>>>
+
+Let's take for granted that Novelang supports XSL metadata. Our multipage-enabled stylesheet would
+define an embedded stylesheet that transforms a whole opus into a simple map of page names and
+page paths. A path is whatever the stylesheet may reprocess, but an XPath expression is quite good.
+For the document above, here is how our map could look like, if we want to support 2 levels:
+
+<<<
+page1 -> /opus/level[1]
+page2 -> /opus/level[2]
+page3 -> /opus/level[2]/level[1]
+>>>
+
+Please note that, at this point, the decisision to support a given depth, or exclude some tagged
+levels, entirely belongs to the page-extracting stylesheet.
+
+By merging the page map with the opus, we get the XML input for the rendering of one page:
+
+<<<
+<opus>
+  <meta>
+    <page>
+      <name>page2</name>
+      <path>/opus/level[2]</path>
+    </page>
+  </meta>
+
+  <level>
+    <title>One</title>
+    <paragraph>Some text of level one.</paragraph>
+  </level>
+  <level>
+    <title>Two</title>
+    <paragraph>Some text of level two.</paragraph>
+    <level>
+      <title>Two-one</title>
+      <paragraph>Some text of level two-one.</paragraph>
+    </level>
+  </level>
+</opus>
+>>>
+
+(Note: the ``n:`` namespace prefix doesn't appear here for brevity.)
+
+The stylesheet gets this whole document as input for every page. All what changes is the
+``name``, ``path`` pair in the ``meta/page`` element. The stylesheet needs to know which page
+it is rendering, and the whole document tree as well, in order to create a navigation bar or
+any kind of header or footer corresponding to a specially-titled or tagged level of the document.
+
+This involves some XSL trickery: evaluating an XPath expression at runtime. While it's not part
+of `XPath 1.0` specification, it is a part of semi-official "EXSLT"
+http://www.exslt.org
+communitiy initiative. The ``dyn:evaluate``
+http://www.exslt.org/dyn/functions/evaluate
+does that for us. It works well with `Xalan-2.7.1` which is the XSLT engine bundled with Novelang
+(it works a slightly better than JDK's one).
+
+In the stylesheet below, we save useful expressions into variables.
+
+The root template prints those variables, then a pseudo-navigation bar made of nested lists.
+
+The nested loop for iterating over ``level`` elements is rather ugly but it makes sense as
+we don't want infinite deph of titles in a navigation bar.
+
+The ``title-with-locator`` template just adds bold on the title in the navigation bar that
+corresponds to current page.
+
+All other templates mimic Novelang's standard rendering.
+
+<<<
+<xsl:stylesheet
+    version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:dyn="http://exslt.org/dynamic"
+    extension-element-prefixes="dyn"
+>
+  <!-- Be sure to use Xalan-2.7.1 (not JDK's default). -->
+
+  <!--
+    Here, expect a meta section, embedding a stylesheet that extracts
+    the pages we'll find in the meta section of input document.
+  -->
+
+  <xsl:output method="html" />
+
+  <xsl:variable name="page-name" select="/opus/meta/page/name" />
+  <xsl:variable name="page-path" select="/opus/meta/page/path" />
+  <xsl:variable name="page-nodeset" select="dyn:evaluate( $page-path )" />
+  <xsl:variable name="page-id" select="generate-id( $page-nodeset )" />
+
+  <xsl:template match="meta/page" >
+    $page-name=<xsl:value-of select="$page-name" />
+    $page-path=<xsl:value-of select="$page-path" />
+    $page-id=<xsl:value-of select="$page-id" />
+  </xsl:template>
+
+  <xsl:template match="/opus" >
+    <html>
+      <xsl:apply-templates select="meta" />
+
+      <!-- Navigation bar -->
+      <ul>
+        <xsl:for-each select="level">
+          <li>
+            <xsl:call-template name="title-with-locator"/>
+          </li>
+          <xsl:if test="level">
+            <ul>
+              <xsl:for-each select="level">
+                <li>
+                  <xsl:call-template name="title-with-locator"/>
+                </li>
+              </xsl:for-each>
+            </ul>
+          </xsl:if>
+        </xsl:for-each>
+      </ul>
+
+      <!-- Document body, same templates as usual -->
+      <xsl:apply-templates select="$page-nodeset" />
+
+    </html>
+
+  </xsl:template>
+
+
+  <xsl:template match="paragraph" >
+    <p>
+      <xsl:value-of select="." />
+    </p>
+  </xsl:template>
+
+  <xsl:template match="title" />
+
+  <xsl:template match="level" >
+    <h2><xsl:value-of select="title" /></h2>
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="level/level" >
+    <h3><xsl:value-of select="title" /></h3>
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template name="title-with-locator" >
+    <xsl:text>
+    </xsl:text>
+    <xsl:choose>
+      <xsl:when test="generate-id( . ) = $page-id" >
+        <b><xsl:call-template name="title-alone" /></b>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="title-alone" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="title-alone" >
+    Title: <xsl:value-of select="title" />
+  </xsl:template>
+
+</xsl:stylesheet>
+>>>
+
+Finally, this is how the rendering looks like:
+
+./images/2010-11-17_XslMockupForMultipage/rendering.png
