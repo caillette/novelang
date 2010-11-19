@@ -51,6 +51,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
+ * Writes XML basing on an XSLT stylesheet.
+ *
  * @author Laurent Caillette
  */
 public class XslWriter extends XmlWriter {
@@ -134,7 +136,7 @@ public class XslWriter extends XmlWriter {
       final String namespaceUri,
       final String nameQualifier,
       final RenderingConfiguration configuration,
-      ResourceName xslFileName,
+      final ResourceName xslFileName,
       final Charset charset,
       final RenditionMimeType mimeType,
       final EntityEscapeSelector entityEscapeSelector
@@ -143,13 +145,16 @@ public class XslWriter extends XmlWriter {
     this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
     this.resourceLoader = Preconditions.checkNotNull( configuration.getResourceLoader() ) ;
 
+    final ResourceName safeXslFileName;
     if( null == xslFileName ) {
-      xslFileName = IDENTITY_XSL_FILE_NAME ;
+      safeXslFileName = IDENTITY_XSL_FILE_NAME;
+    } else {
+      safeXslFileName = xslFileName ;
     }
-    this.xslFileName = xslFileName ;
+    this.xslFileName = safeXslFileName ;
     entityResolver = new LocalEntityResolver() ;
     uriResolver = new LocalUriResolver() ;
-    LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", xslFileName ) ;
+    LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", safeXslFileName ) ;
   }
 
 
@@ -194,7 +199,10 @@ public class XslWriter extends XmlWriter {
 
   }
 
-  private void configure( final Transformer transformer, final DocumentMetadata documentMetadata ) {
+  private static void configure(
+      final Transformer transformer,
+      final DocumentMetadata documentMetadata
+  ) {
     transformer.setParameter(
         "timestamp",
         documentMetadata.getCreationTimestamp()
@@ -246,15 +254,16 @@ public class XslWriter extends XmlWriter {
     @Override
     public InputSource resolveEntity(
         final String publicId,
-        String systemId
+        final String systemId
     ) throws SAXException, IOException {
-      systemId = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
-      final boolean shouldEscapeEntity = entityEscapeSelector.shouldEscape( publicId, systemId ) ;
-      LOGGER.debug( "Resolving entity publicId='", publicId, "' systemId='", systemId, "' " +
+      final String cleanSystemId = systemId.substring( systemId.lastIndexOf( '/' ) + 1 ) ;
+      final boolean shouldEscapeEntity =
+          entityEscapeSelector.shouldEscape( publicId, cleanSystemId ) ;
+      LOGGER.debug( "Resolving entity publicId='", publicId, "' systemId='", cleanSystemId, "' " +
           "escape=", shouldEscapeEntity
       ) ;
       final InputSource dtdSource = new InputSource(
-          resourceLoader.getInputStream( new ResourceName( systemId ) ) );
+          resourceLoader.getInputStream( new ResourceName( cleanSystemId ) ) );
       if( shouldEscapeEntity ) {
         return DtdTools.escapeEntities( dtdSource ) ;
       } else {
