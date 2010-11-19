@@ -30,7 +30,9 @@ import com.google.common.collect.ImmutableMap;
  */
 public class SvgColorsDefinition {
 
-  
+  private SvgColorsDefinition() { }
+
+
   public static Color get( final String name ) {
     final Color color = COLORS.get( Preconditions.checkNotNull( name ) ) ;
     return color ;

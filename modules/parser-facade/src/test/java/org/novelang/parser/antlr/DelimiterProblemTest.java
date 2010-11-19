@@ -122,15 +122,14 @@ public class DelimiterProblemTest {
   }
 
 
-  private void process( 
+  private static void process( 
       final String text, 
       final ProblemSignature... signatures 
-  ) throws RecognitionException {
+  ) {
     LOGGER.info( BREAK + text ) ;
     final DelegatingPartParser parser = AntlrTestHelper.createPartParser( text ) ;
     parser.parse() ;
     final Iterable< Problem > problems = parser.getProblems() ;
-        // parser.getDelegate().getBlockDelimiterSupervisor().getProblems() ;
     LOGGER.debug( "Faulty blocks: ",
         problems.iterator().hasNext() ?
         "\n    " + Joiner.on( "\n    " ).join( problems ) :

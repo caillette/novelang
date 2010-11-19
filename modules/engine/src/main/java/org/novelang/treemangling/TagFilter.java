@@ -43,6 +43,8 @@ public class TagFilter {
   
   private static final Logger LOGGER = LoggerFactory.getLogger( TagFilter.class );
 
+  private TagFilter() {}
+
   public static Treepath< SyntacticTree > filter(
       Treepath< SyntacticTree > treepath,
       final Set< Tag > tags

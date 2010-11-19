@@ -167,6 +167,7 @@ public class TagInteractionTest {
     webClient = new WebClient();
     webClient.setThrowExceptionOnScriptError( true ) ;
     webClient.setStatusHandler( new StatusHandler() {
+      @Override
       public void statusMessageChanged( final Page page, final String s ) {
         collectedStatusMessages.add( s ) ;
       }
@@ -288,6 +289,7 @@ public class TagInteractionTest {
 
   private static final Comparator< HtmlElement > HTMLELEMENT_COMPARATOR =
       new Comparator< HtmlElement >() {
+        @Override
         public int compare( final HtmlElement e1, final HtmlElement e2 ) {
           return cleanTextContent( e1 ).compareTo( cleanTextContent( e2 ) ) ;
         }

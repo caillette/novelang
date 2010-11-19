@@ -43,7 +43,7 @@ public class LexemeTableMojo extends AbstractMojo {
   @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
   private File destinationFile;
 
-  public void execute() throws MojoExecutionException, MojoFailureException {
+  @Override public void execute() throws MojoExecutionException, MojoFailureException {
     ConcreteLoggerFactory.setMojoLog( getLog() ) ;
     getLog().info( "Generating into: '" + destinationFile.getAbsolutePath() + "'" ) ;
 

@@ -42,6 +42,8 @@ public class KnownVersions {
    */
   public static final Version VERSION_0_35_0 = parse( "0.35.0" ) ;
 
+  private KnownVersions() { }
+
   private static Version parse( final String versionAsString ) {
     try {
       return Version.parse( versionAsString ) ;

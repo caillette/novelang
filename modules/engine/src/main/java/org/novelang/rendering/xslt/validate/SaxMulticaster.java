@@ -47,36 +47,42 @@ public class SaxMulticaster implements ContentHandler {
 // ContentHandler methods
 // ======================
 
+  @Override
   public void setDocumentLocator( final Locator locator ) {
     for( final ContentHandler handler : handlers ) {
       handler.setDocumentLocator( locator ) ;
     }
   }
 
+  @Override
   public void startDocument() throws SAXException {
     for( final ContentHandler handler : handlers ) {
       handler.startDocument() ;
     }
   }
 
+  @Override
   public void endDocument() throws SAXException {
     for( final ContentHandler handler : handlers ) {
       handler.endDocument() ;
     }
   }
 
+  @Override
   public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {
     for( final ContentHandler handler : handlers ) {
       handler.startPrefixMapping( prefix, uri ) ;
     }
   }
 
+  @Override
   public void endPrefixMapping( final String prefix ) throws SAXException {
     for( final ContentHandler handler : handlers ) {
       handler.endPrefixMapping( prefix ) ;
     }
   }
 
+  @Override
   public void startElement(
       final String uri,
       final String localName,
@@ -88,7 +94,8 @@ public class SaxMulticaster implements ContentHandler {
     }
   }
 
-  public void endElement( 
+  @Override
+  public void endElement(
       final String uri, 
       final String localName, 
       final String qName 
@@ -98,7 +105,8 @@ public class SaxMulticaster implements ContentHandler {
     }
   }
 
-  public void characters( 
+  @Override
+  public void characters(
       final char[] ch, 
       final int start, 
       final int length 
@@ -108,7 +116,8 @@ public class SaxMulticaster implements ContentHandler {
     }
   }
 
-  public void ignorableWhitespace( 
+  @Override
+  public void ignorableWhitespace(
       final char[] ch, 
       final int start, 
       final int length 
@@ -118,12 +127,14 @@ public class SaxMulticaster implements ContentHandler {
     }
   }
 
+  @Override
   public void processingInstruction( final String target, final String data ) throws SAXException {
     for( final ContentHandler handler : handlers ) {
       handler.processingInstruction( target, data ) ;
     }
   }
 
+  @Override
   public void skippedEntity( final String name ) throws SAXException {
     for( final ContentHandler handler : handlers ) {
       handler.skippedEntity( name ) ;

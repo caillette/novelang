@@ -42,7 +42,9 @@ import org.novelang.nhovestone.scenario.TimeMeasurer;
 public class GrapherDemo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GrapherDemo.class );
-  
+
+  private GrapherDemo() { }
+
 
   public static List< Long > buildUpsizings() {
     final List< Long > list = Lists.newArrayList() ;

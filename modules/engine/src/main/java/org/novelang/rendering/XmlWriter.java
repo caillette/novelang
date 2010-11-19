@@ -64,6 +64,7 @@ public class XmlWriter implements FragmentWriter {
   }
 
   
+  @Override
   public void startWriting(
       final OutputStream outputStream,
       final DocumentMetadata documentMetadata
@@ -72,6 +73,7 @@ public class XmlWriter implements FragmentWriter {
     contentHandler.startDocument() ;
   }
 
+  @Override
   public void finishWriting() throws Exception {
     contentHandler.endDocument() ;
     if( contentHandler instanceof XMLWriter ) {
@@ -79,6 +81,7 @@ public class XmlWriter implements FragmentWriter {
     }
   }
 
+  @Override
   public void start( final Nodepath kinship, final boolean wholeDocument ) throws Exception {
     start( NodeKindTools.tokenNameAsXmlElementName( kinship.getCurrent().name() ), wholeDocument ) ;
   }
@@ -110,6 +113,7 @@ public class XmlWriter implements FragmentWriter {
     ) ;
   }
 
+  @Override
   public void end( final Nodepath kinship ) throws Exception {
     end( NodeKindTools.tokenNameAsXmlElementName( kinship.getCurrent().name() ) ) ;
   }
@@ -121,16 +125,19 @@ public class XmlWriter implements FragmentWriter {
     write( null, word ) ;
   }
 
+  @Override
   public void write( final Nodepath kinship, final String word ) throws Exception {
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
   }
 
+  @Override
   public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
     ( ( LexicalHandler ) contentHandler ).startCDATA() ;
     contentHandler.characters( word.toCharArray(), 0, word.length() ) ;
     ( ( LexicalHandler ) contentHandler ).endCDATA() ;
   }
 
+  @Override
   public RenditionMimeType getMimeType() {
     return mimeType ;
   }

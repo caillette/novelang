@@ -45,6 +45,8 @@ public class LexemeTable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( LexemeTable.class );
 
+  private LexemeTable() { }
+
   public static void main( final String[] args ) throws FileNotFoundException {
     if( args.length != 1 ) {
       throw new IllegalArgumentException( "Expected argument: destination file name" ) ;
@@ -128,7 +130,7 @@ public class LexemeTable {
   }
 
   private static final Comparator< Lexeme > COMPARATOR = new Comparator< Lexeme >() {
-    public int compare( final Lexeme lexeme1, final Lexeme lexeme2 ) {
+    @Override public int compare( final Lexeme lexeme1, final Lexeme lexeme2 ) {
       return lexeme1.getCharacter().compareTo( lexeme2.getCharacter() ) ;
     }
   };

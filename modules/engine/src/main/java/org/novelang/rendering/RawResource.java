@@ -43,6 +43,7 @@ public enum RawResource {
 
   private static final Function< RawResource, String > FILE_EXTENSION_EXTRACTOR =
       new Function< RawResource, String >() {
+        @Override
         public String apply( final RawResource rawResource ) {
           return rawResource.name() ;
         }

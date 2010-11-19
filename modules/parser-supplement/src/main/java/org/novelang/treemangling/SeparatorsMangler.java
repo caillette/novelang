@@ -32,10 +32,7 @@ import com.google.common.collect.ImmutableSet;
  */
 public final class SeparatorsMangler {
 
-  private static final ImmutableSet< NodeKind > BLOCKS_OF_LITERAL = ImmutableSet.of(
-      BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS,
-      BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENT_PAIRS
-  ) ;
+  private SeparatorsMangler() { }
 
 // ==================  
 // Whitespace removal

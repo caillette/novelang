@@ -81,6 +81,7 @@ public class TagMangler {
 // ========
 
 
+  @SuppressWarnings( { "AssignmentToForLoopParameter" } )
   public static Treepath< SyntacticTree > enhanceWithExplicitTags(
       Treepath< SyntacticTree > treepath
   ) {
@@ -135,6 +136,7 @@ public class TagMangler {
 // ========
 
 
+  @SuppressWarnings( { "AssignmentToForLoopParameter" } )
   public static Treepath< SyntacticTree > enhanceWithImplicitTags(
       Treepath< SyntacticTree > treepath
   ) {
@@ -209,7 +211,8 @@ public class TagMangler {
    * 
    * @see #promote(Treepath, Set) 
    */
-  public static Treepath< SyntacticTree > promote( 
+  @SuppressWarnings( { "AssignmentToForLoopParameter" } )
+  public static Treepath< SyntacticTree > promote(
       Treepath< SyntacticTree > treepath, 
       final Set< Tag > explicitTags 
   ) {

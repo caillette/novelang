@@ -152,6 +152,7 @@ public class EnhancedXYAreaRenderer extends XYAreaRenderer {
    *                 the caller.
    * @return A state object for use by the renderer.
    */
+  @Override
   public XYItemRendererState initialise(
       final Graphics2D g2,
       final Rectangle2D dataArea,
@@ -181,6 +182,7 @@ public class EnhancedXYAreaRenderer extends XYAreaRenderer {
    *                       (<code>null</code> permitted).
    * @param pass           the pass index.
    */
+  @Override
   public void drawItem(
       final Graphics2D g2,
       final XYItemRendererState state,

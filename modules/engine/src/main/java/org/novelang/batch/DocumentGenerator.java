@@ -47,6 +47,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
 
   public static final String COMMAND_NAME = "generate";
 
+  @Override
   public void main(
       final String commandName,
       final boolean mayTerminateJvm,
@@ -89,6 +90,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
     }
   }
 
+  @Override
   protected DocumentGeneratorParameters createParameters(
       final String[] arguments,
       final File baseDirectory
@@ -117,6 +119,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
     }
   }
 
+  @Override
   protected String getSpecificCommandLineParametersDescriptor() {
     return " [OPTIONS] document1 [document2...]";
   }

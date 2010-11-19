@@ -33,7 +33,7 @@ public class CodeGenerator {
 // Main
 // ====
 
-  public static void main( final String[] args ) throws IOException {
+  public static void main( final String[] args )  {
 /*
 
     if( args.length == 2 ) {

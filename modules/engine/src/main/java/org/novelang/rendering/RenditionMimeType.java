@@ -39,6 +39,7 @@ public enum RenditionMimeType {
 
   private static final Function< RenditionMimeType,String > FILE_EXTENSION_EXTRACTOR =
       new Function< RenditionMimeType, String >() {
+        @Override
         public String apply( final RenditionMimeType renditionMimeType ) {
           return renditionMimeType.getFileExtension() ;
         }

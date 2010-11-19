@@ -87,6 +87,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     this( nodeKind, null, children ) ;
   }
 
+  @Override
   public SyntacticTree adopt( final Iterable< SyntacticTree > newChildren )
       throws NullArgumentException
   {
@@ -97,6 +98,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     }
   }
 
+  @Override
   public Iterable< ? extends SyntacticTree > getChildren() {
 
     final Iterable< ? extends SyntacticTree > children = super.getChildren() ;
@@ -107,10 +109,12 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     }
   }
 
+  @Override
   public String getText() {
     return text;
   }
 
+  @Override
   public String toStringTree() {
     final StringBuilder buffer = new StringBuilder() ;
     
@@ -138,14 +142,17 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     return buffer.toString() ;
   }
 
+  @Override
   public Location getLocation() {
     return location ;
   }
 
+  @Override
   public NodeKind getNodeKind() {
     return nodekind ;
   }
 
+  @Override
   public boolean isOneOf( final NodeKind... kinds ) {
 
     boolean equalityByKind = false ;
@@ -180,6 +187,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
    * 
    * @see #isOneOf(org.novelang.parser.NodeKind...)
    */
+  @Override
   public boolean isOneOf( final Set< NodeKind > kinds ) {
     final boolean equalityByKind = kinds.contains( getNodeKind() ) ;
 
@@ -201,6 +209,7 @@ public class SimpleTree extends ImmutableTree< SyntacticTree > implements Syntac
     return equalityByKind ;
   }
 
+  @Override
   public Class< ? extends SyntacticTree > getStorageType() {
     return SyntacticTree.class ;
   }

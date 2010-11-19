@@ -53,6 +53,7 @@ public class LexemeGeneratorMojo extends AbstractMojo {
   @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
   private File grammarFile;
 
+  @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     getLog().info( "Generating into: '" + packageRootDirectory + "'" ) ;
 

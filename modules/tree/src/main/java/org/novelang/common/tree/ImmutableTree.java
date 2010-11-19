@@ -69,10 +69,12 @@ public abstract class ImmutableTree< T extends Tree< T > > implements Tree< T > 
     }
   }
 
+  @Override
   public final int getChildCount() {
     return null == children ? 0 : children.length ;
   }
 
+  @Override
   public final T getChildAt( final int index ) {
     if( index >= getChildCount() ) {
       throw new ArrayIndexOutOfBoundsException(
@@ -88,6 +90,7 @@ public abstract class ImmutableTree< T extends Tree< T > > implements Tree< T > 
    */
   public Iterable< ? extends T > getChildren() {
     return new Iterable() {
+      @Override
       public Iterator< T > iterator() {
         return new ChildrenIterator() ;
       }
@@ -98,10 +101,12 @@ public abstract class ImmutableTree< T extends Tree< T > > implements Tree< T > 
 
     private int current = 0 ;
 
+    @Override
     public boolean hasNext() {
       return current < getChildCount() ;
     }
 
+    @Override
     public T next() throws NoSuchElementException {
       if( hasNext() ) {
         return ImmutableTree.this.getChildAt( current++ ) ;
@@ -111,6 +116,7 @@ public abstract class ImmutableTree< T extends Tree< T > > implements Tree< T > 
       }
     }
 
+    @Override
     public void remove() {
       throw new UnsupportedOperationException( "remove" ) ;
     }

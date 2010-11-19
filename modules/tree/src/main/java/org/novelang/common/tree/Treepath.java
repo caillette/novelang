@@ -359,6 +359,7 @@ public final class Treepath< T extends Tree< T > > implements Comparable< Treepa
    * @throws IllegalArgumentException if {@code other} doesn't refer to the same 
    *     {@link #getTreeAtStart() start tree} . 
    */
+  @Override
   public int compareTo( final Treepath< T > other ) {
     Preconditions.checkNotNull( other ) ;
     Preconditions.checkArgument( other.getTreeAtStart() == this.getTreeAtStart() ) ;

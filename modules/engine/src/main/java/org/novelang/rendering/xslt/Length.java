@@ -28,6 +28,8 @@ public class Length {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Length.class ) ;
 
+  private Length() { }
+
 
   public static Number positionUnderCharacterRemainderThreshold(
       final NodeList nodeList,

@@ -154,6 +154,7 @@ public class XslWriter extends XmlWriter {
 
 
 
+  @Override
   protected ContentHandler createContentHandler(
       final OutputStream outputStream,
       final DocumentMetadata documentMetadata,
@@ -218,6 +219,7 @@ public class XslWriter extends XmlWriter {
   }
 
   private static final EntityEscapeSelector NO_ENTITY_ESCAPE = new EntityEscapeSelector() {
+    @Override
     public boolean shouldEscape( final String publicId, final String systemId ) {
       return false ;
     }
@@ -241,6 +243,7 @@ public class XslWriter extends XmlWriter {
    */
   protected class LocalEntityResolver implements EntityResolver {
 
+    @Override
     public InputSource resolveEntity(
         final String publicId,
         String systemId
@@ -262,6 +265,7 @@ public class XslWriter extends XmlWriter {
 
   protected class LocalUriResolver implements URIResolver {
 
+    @Override
     public Source resolve( final String href, final String base ) throws TransformerException {
       LOGGER.debug( "Resolving URI href='", href, "' base='", base, "'" ) ;
 

@@ -101,38 +101,47 @@ public class TestDocumentProducer {
   
   private static ProducerConfiguration createConfiguration( final File contentRoot ) {
     return new ProducerConfiguration() {
+      @Override
       public RenderingConfiguration getRenderingConfiguration() {
         return new RenderingConfiguration() {
+          @Override
           public ResourceLoader getResourceLoader() {
             throw new UnsupportedOperationException( "Should not be called for this test" ) ; 
           }
 
+          @Override
           public FopFactory getFopFactory() {
             throw new UnsupportedOperationException( "Should not be called for this test" ) ;
           }
 
+          @Override
           public FopFontStatus getCurrentFopFontStatus() {
             throw new UnsupportedOperationException( "Should not be called for this test" ) ;
           }
 
+          @Override
           public Charset getDefaultCharset() {
             return DefaultCharset.RENDERING ;
           }
         } ;
       }
 
+      @Override
       public ContentConfiguration getContentConfiguration() {
         return new ContentConfiguration() {
+          @Override
           public File getContentRoot() {
             return contentRoot ;
           }
 
+          @Override
           public Charset getSourceCharset() {
             return DefaultCharset.SOURCE ;
           }
         } ;
       }
 
+      @Override
       public ExecutorService getExecutorService() {
         return Executors.newSingleThreadExecutor( ConfigurationTools.getExecutorThreadFactory() ) ;
       }

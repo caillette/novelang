@@ -53,6 +53,7 @@ public class NovellaWriter extends XslWriter {
     this.charsetEncodingCapability = RenderingEscape.createCapability( charset ) ;
   }
 
+  @Override
   protected final ContentHandler createSinkContentHandler(
       final OutputStream outputStream,
       final DocumentMetadata documentMetadata,
@@ -65,6 +66,7 @@ public class NovellaWriter extends XslWriter {
     return new TextSink( outputStream );
   }
 
+  @Override
   public void write( final Nodepath kinship, final String word ) throws Exception {
     final String escaped = RenderingEscape.escapeToSourceText( word, charsetEncodingCapability ) ;
     super.write( kinship, escaped ) ;

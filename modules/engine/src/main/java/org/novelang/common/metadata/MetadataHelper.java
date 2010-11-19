@@ -72,10 +72,12 @@ public class MetadataHelper {
     final ReadableDateTime timestamp = createTimestamp() ;
 
     return new DocumentMetadata() {
+      @Override
       public ReadableDateTime getCreationTimestamp() {
         return timestamp ;
       }
 
+      @Override
       public Charset getCharset() {
         return charset ;
       }

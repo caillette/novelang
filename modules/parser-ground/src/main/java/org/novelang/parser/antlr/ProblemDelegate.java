@@ -37,9 +37,11 @@ public class ProblemDelegate {
 
   public ProblemDelegate() {
     this.locationFactory = new LocationFactory() {
+      @Override
       public Location createLocation( final int line, final int column ) {
         return new Location( "<debug>", line, column ) ;
       }
+      @Override
       public Location createLocation() {
         return new Location( "<debug>" ) ;
       }

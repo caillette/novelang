@@ -34,10 +34,14 @@ import org.novelang.configuration.FopFontStatus;
  * @author Laurent Caillette
  */
 public class SyntheticFontMap {
+
+  private SyntheticFontMap() { }
+
   public static Iterable<FontQuadruplet> retainPriorityAboveZero(
       final Iterable< FontQuadruplet > quadruplets
   ) {
     return Iterables.filter( quadruplets, new Predicate< FontQuadruplet >() {
+      @Override
       public boolean apply( final FontQuadruplet quadruplet ) {
         return quadruplet.getFontTriplet().getPriority() > 0 ;
       }
@@ -48,6 +52,7 @@ public class SyntheticFontMap {
       final Iterable< FontQuadruplet > quadruplets
   ) {
     return Iterables.filter( quadruplets, new Predicate< FontQuadruplet >() {
+      @Override
       public boolean apply( final FontQuadruplet quadruplet ) {
         return quadruplet.getFontTriplet().getPriority() == 0 ;
       }

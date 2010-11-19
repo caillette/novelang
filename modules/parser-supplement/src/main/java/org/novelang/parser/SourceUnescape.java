@@ -51,6 +51,8 @@ public class SourceUnescape {
    */
   public static final Character ESCAPE_END = '\u00bb' ; // »
 
+  private SourceUnescape() { }
+
 
   static {
 

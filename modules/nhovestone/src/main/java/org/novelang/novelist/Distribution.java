@@ -83,6 +83,7 @@ public abstract class Distribution< T > {
 
     final Comparator< Map.Entry< T, Float > > invertedComparatorOnFrequency =
         new Comparator< Map.Entry< T, Float > >() {
+          @Override
           public int compare(
               final Map.Entry< T, Float > entry1,
               final Map.Entry< T, Float > entry2

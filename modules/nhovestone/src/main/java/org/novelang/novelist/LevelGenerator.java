@@ -62,6 +62,7 @@ public class LevelGenerator implements Generator< Level > {
 
   private Stack stack ;
 
+  @Override
   public Level generate() {
 
     if( stack.getLevelCounter() == 0 && stack.getHeight() == 1 ) {

@@ -52,6 +52,8 @@ public class RenderingEscape {
   private static final Map< Character, String > PREFERRED_ESCAPES ;
   private static final Map< Character, String > HTML_MANDATORY_ESCAPES ;
 
+  private RenderingEscape() { }
+
   static {
     final Map< Character, String > unicodeNameEscapes = Maps.newHashMap() ;
     final Map< Character, String > preferredEscapes = Maps.newHashMap() ;
@@ -225,6 +227,7 @@ public class RenderingEscape {
   public static CharsetEncodingCapability createCapability( final Charset charset ) {
     final CharsetEncoder encoder = charset.newEncoder() ;
     return new CharsetEncodingCapability() {
+      @Override
       public boolean canEncode( final char c ) {
         return encoder.canEncode( c ) ;
       }

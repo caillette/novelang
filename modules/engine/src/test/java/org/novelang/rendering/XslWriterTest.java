@@ -106,10 +106,12 @@ public class XslWriterTest {
 
     final ReadableDateTime timestamp = new DateTime() ;
 
+    @Override
     public ReadableDateTime getCreationTimestamp() {
       return timestamp ;
     }
 
+    @Override
     public Charset getCharset() {
       return DefaultCharset.RENDERING;
     }
@@ -131,18 +133,22 @@ public class XslWriterTest {
       this.fopFontStatus = fopFontStatus ;
     }
 
+    @Override
     public ResourceLoader getResourceLoader() {
       return resourceLoader ;
     }
 
+    @Override
     public FopFactory getFopFactory() {
       return fopFactory ;
     }
 
+    @Override
     public FopFontStatus getCurrentFopFontStatus() {
       return fopFontStatus ;
     }
 
+    @Override
     public Charset getDefaultCharset() {
       return DefaultCharset.RENDERING ;
     }

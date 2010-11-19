@@ -70,6 +70,7 @@ public class DaemonParameters extends GenericParameters {
   }
 
 
+  @Override
   protected void enrich( final Options options ) {
     options.addOption( OPTION_HTTPDAEMON_PORT ) ;
     options.addOption( OPTION_HTTPDAEMON_SERVEREMOTES ) ;

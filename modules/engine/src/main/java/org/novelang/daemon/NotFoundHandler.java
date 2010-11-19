@@ -30,6 +30,7 @@ import org.mortbay.jetty.handler.AbstractHandler;
  */
 public class NotFoundHandler extends AbstractHandler {
 
+  @Override
   public void handle(
       final String target,
       final HttpServletRequest request,

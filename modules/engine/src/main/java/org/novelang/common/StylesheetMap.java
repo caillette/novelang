@@ -39,6 +39,7 @@ public interface StylesheetMap {
    * Returns null for every call. 
    */
   StylesheetMap EMPTY_MAP = new StylesheetMap() {
+    @Override
     public ResourceName get( final RenditionMimeType renditionMimeType ) {
       return null ;
     }

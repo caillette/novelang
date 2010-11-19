@@ -149,6 +149,9 @@ public class HuskTest {
 
   @SuppressWarnings( { "UnusedDeclaration" } )
   public static final class SomeConverter {
+
+    private SomeConverter() {}
+
     public static String convert( final int i, final float f ) {
       return "" + i + ", " + f ;
     }

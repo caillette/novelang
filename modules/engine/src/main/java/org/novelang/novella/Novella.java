@@ -93,6 +93,7 @@ public class Novella extends AbstractSourceReader {
     tree = createTree( readContent( canonicalFile ) ) ;
   }
 
+  @Override
   protected GenericParser createParser( final String content ) {
     return new DelegatingPartParser( content, this ) ;
 
@@ -115,6 +116,7 @@ public class Novella extends AbstractSourceReader {
     }
   }
 
+  @Override
   public StylesheetMap getCustomStylesheetMap() {
     return StylesheetMap.EMPTY_MAP ;
   }
@@ -127,6 +129,7 @@ public class Novella extends AbstractSourceReader {
    * Returns result of parsing, may be null if it failed.
    * @return a possibly null object.
    */
+  @Override
   public SyntacticTree getDocumentTree() {
     return tree ;
   }
@@ -148,6 +151,7 @@ public class Novella extends AbstractSourceReader {
     
     final List< Problem > relocationProblems = Lists.newArrayList() ;
     final ProblemCollector problemCollector = new ProblemCollector() {
+      @Override
       public void collect( final Problem problem ) {
         relocationProblems.add( problem ) ;
       }

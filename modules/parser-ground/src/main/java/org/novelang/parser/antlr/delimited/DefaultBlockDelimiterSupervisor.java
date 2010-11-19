@@ -46,11 +46,13 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     this.locationFactory = locationFactory;
   }
 
+  @Override
   public void enterBlockDelimiterBoundary( final Token location ) {
     LOGGER.debug( "Entering block delimiter boundary at line " + location.getLine() ) ;
     stack.grow() ;
   }
 
+  @Override
   public Iterable< Problem > leaveBlockDelimiterBoundary() {
     final Iterable< Problem > boundaryProblems = stack.getTop().getProblems() ;
     ( ( DefaultBlockDelimitersBoundary ) stack.getTop() ).dumpStatus() ;
@@ -59,10 +61,12 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     return boundaryProblems ;
   }
 
+  @Override
   public Iterable< Problem > getProblems() {
     return ImmutableList.copyOf( problems ) ;
   }
 
+  @Override
   public void startDelimitedText( final BlockDelimiter blockDelimiter, final Token startToken ) {
     if( stack.isEmpty() ) {
       LOGGER.warn( "Empty stack! Ignoring start of block delimiter" ) ;
@@ -71,6 +75,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     }
   }
 
+  @Override
   public void reachEndDelimiter( final BlockDelimiter blockDelimiter ) {
     if( stack.isEmpty() ) {
       LOGGER.warn( "Empty stack! Ignoring start of block delimiter" ) ;
@@ -79,6 +84,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     }
   }
 
+  @Override
   public void endDelimitedText( final BlockDelimiter blockDelimiter ) {
     if( stack.isEmpty() ) {
       LOGGER.warn( "Empty stack! Ignoring start of block delimiter" ) ;
@@ -87,6 +93,7 @@ public class DefaultBlockDelimiterSupervisor implements BlockDelimiterSupervisor
     }
   }
 
+  @Override
   public void reportMissingDelimiter(
       final BlockDelimiter blockDelimiter,
       final MismatchedTokenException mismatchedTokenException

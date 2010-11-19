@@ -50,11 +50,12 @@ import static org.novelang.KnownVersions.VERSION_0_41_0;
  */
 public class Nhovestone {
 
+  private Nhovestone() { }
+
 
   public static void main( final String... arguments )
       throws
       IOException,
-      URISyntaxException,
       ProcessCreationException,
       VersionFormatException,
       InterruptedException,

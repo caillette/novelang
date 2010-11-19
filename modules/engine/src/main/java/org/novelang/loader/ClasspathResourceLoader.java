@@ -52,6 +52,7 @@ public class ClasspathResourceLoader implements ResourceLoader {
     this( ClasspathResourceLoader.class, path ) ;
   }
 
+  @Override
   public InputStream getInputStream( final ResourceName resourceName ) {
     final String absoluteName = path + "/" + resourceName.getName() ; // normalize( resourceName ) ;
     LOGGER.debug( "Attempting to load '", absoluteName, "'" ) ;

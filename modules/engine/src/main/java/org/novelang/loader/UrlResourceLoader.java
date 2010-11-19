@@ -51,7 +51,8 @@ public class UrlResourceLoader implements ResourceLoader {
     this.searchPath = createSearchPath( base ) ;
   }
 
-  public InputStream getInputStream( 
+  @Override
+  public InputStream getInputStream(
       final ResourceName resourceName 
   ) throws ResourceNotFoundException {
 

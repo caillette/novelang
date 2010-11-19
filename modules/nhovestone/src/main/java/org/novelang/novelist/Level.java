@@ -57,6 +57,7 @@ public class Level implements TextElement {
   }
 
 
+  @Override
   public String getLiteral() {
     final StringBuilder builder = new StringBuilder() ;
 

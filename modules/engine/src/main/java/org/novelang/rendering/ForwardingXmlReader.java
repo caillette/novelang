@@ -40,66 +40,80 @@ class ForwardingXmlReader implements XMLReader {
     this.delegate = Preconditions.checkNotNull( delegate ) ;
   }
 
+  @Override
   public boolean getFeature( final String name )
       throws SAXNotRecognizedException, SAXNotSupportedException
   {
     return delegate.getFeature( name );
   }
 
+  @Override
   public void setFeature( final String name, final boolean value )
       throws SAXNotRecognizedException, SAXNotSupportedException
   {
     delegate.setFeature( name, value );
   }
 
+  @Override
   public Object getProperty( final String name )
       throws SAXNotRecognizedException, SAXNotSupportedException
   {
     return delegate.getProperty( name );
   }
 
+  @Override
   public void setProperty( final String name, final Object value )
       throws SAXNotRecognizedException, SAXNotSupportedException
   {
     delegate.setProperty( name, value );
   }
 
+  @Override
   public void setEntityResolver( final EntityResolver resolver ) {
     delegate.setEntityResolver( resolver );
   }
 
+  @Override
   public EntityResolver getEntityResolver() {
     return delegate.getEntityResolver();
   }
 
+  @Override
   public void setDTDHandler( final DTDHandler handler ) {
     delegate.setDTDHandler( handler );
   }
 
+  @Override
   public DTDHandler getDTDHandler() {
     return delegate.getDTDHandler();
   }
 
+  @Override
   public void setContentHandler( final ContentHandler handler ) {
     delegate.setContentHandler( handler );
   }
 
+  @Override
   public ContentHandler getContentHandler() {
     return delegate.getContentHandler();
   }
 
+  @Override
   public void setErrorHandler( final ErrorHandler handler ) {
     delegate.setErrorHandler( handler );
   }
 
+  @Override
   public ErrorHandler getErrorHandler() {
     return delegate.getErrorHandler() ;
   }
 
+  @Override
   public void parse( final InputSource input ) throws IOException, SAXException {
     delegate.parse( input );
   }
 
+  @Override
   public void parse( final String systemId ) throws IOException, SAXException {
     delegate.parse( systemId );
   }

@@ -40,6 +40,8 @@ import java.util.Set;
  */
 public class UrlMangler {
 
+  private UrlMangler() { }
+
   public static Treepath< SyntacticTree > fixNamedUrls(
       final Treepath< SyntacticTree > treepath
   ) {

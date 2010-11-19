@@ -50,15 +50,18 @@ public class HtmlWriter extends XslWriter {
     charsetEncodingCapability = RenderingEscape.createCapability( charset ) ;
   }
 
+  @Override
   public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
       super.write( kinship, RenderingEscape.escapeToHtmlText( word, charsetEncodingCapability ) ) ;
   }
 
+  @Override
   public void write( final Nodepath kinship, final String word ) throws Exception {
     super.write( kinship, RenderingEscape.escapeToHtmlText( word, charsetEncodingCapability ) ) ;
   }
 
 
+  @Override
   protected ContentHandler createSinkContentHandler(
       final OutputStream outputStream,
       final DocumentMetadata documentMetadata,
@@ -68,6 +71,7 @@ public class HtmlWriter extends XslWriter {
   }
 
   private static final EntityEscapeSelector ESCAPE_ISO_ENTITIES = new EntityEscapeSelector() {
+    @Override
     public boolean shouldEscape( final String publicId, final String systemId ) {
       return publicId.startsWith( "ISO 8879:1986//ENTITIES" ) ;
     }

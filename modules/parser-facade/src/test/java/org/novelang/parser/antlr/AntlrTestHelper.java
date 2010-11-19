@@ -30,6 +30,8 @@ public class AntlrTestHelper {
 
   static final String BREAK = "\n" ;
 
+  private AntlrTestHelper() {}
+
 
   /*package*/ static void checkSanity( final AbstractDelegatingParser parser ) {
     if( parser.hasProblem() ) {
@@ -45,7 +47,7 @@ public class AntlrTestHelper {
 
 
   public static String createProblemList( final Iterable< Problem > problems ) {
-    final StringBuffer buffer = new StringBuffer( "Problems:" ) ;
+    final StringBuilder buffer = new StringBuilder( "Problems:" );
     for( final Problem problem : problems ) {
       buffer.append( "\n    " ) ;
       buffer.append( problem.getMessage() ) ;

@@ -48,6 +48,7 @@ public class FileTools {
 
   public static final Comparator< ? super File >
   ABSOLUTEPATH_COMPARATOR = new Comparator< File >() {
+    @Override
     public int compare( final File file1, final File file2 ) {
       return file1.getAbsolutePath().compareTo( file2.getAbsolutePath() ) ;
     }
@@ -95,9 +96,11 @@ public class FileTools {
 // =============
 
   private static final IOFileFilter VISIBLE_DIRECTORY_FILTER = new IOFileFilter() {
+    @Override
     public boolean accept( final File file ) {
       return file.isDirectory() && ! file.isHidden() ;
     }
+    @Override
     public boolean accept( final File dir, final String name ) {
       return ! dir.isHidden() /*&& ! name.startsWith( "." )*/ ;
     }
@@ -112,6 +115,7 @@ public class FileTools {
       );
     }
 
+    @Override
     protected boolean handleDirectory( final File file, final int i, final Collection collection )
         throws IOException
     {
@@ -266,6 +270,7 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
 
   private static final Thread DIRECTORIES_CLEANER = new Thread(
       new Runnable() {
+        @Override
         public void run() {
           LOGGER.debug( "Cleaning up directories scheduled for deletion..." );
 

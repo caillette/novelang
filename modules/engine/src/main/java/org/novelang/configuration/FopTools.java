@@ -62,11 +62,14 @@ public class FopTools {
 
   public static final Function< ? super EmbedFontInfo,? extends String >
       EXTRACT_EMBEDFONTINFO_FUNCTION = new Function< EmbedFontInfo, String >() {
+        @Override
         public String apply( final EmbedFontInfo embedFontInfo ) {
           return embedFontInfo.getEmbedFile() ;
         }
       }
   ;
+
+  private FopTools() {}
 
   /**
    * Creates a {@code Configuration} object with {@code <renderer>} as element root,

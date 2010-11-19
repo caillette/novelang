@@ -34,13 +34,8 @@ public class Numbering {
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER_NOSEPARATOR = DateTimeFormat.forPattern( "yyyyMMddkkmm" );
 
-  /**
-   * Just to get an easy case.
-   * @return The constant String "{@code Hello!}".
-   */
-  public static String hello() {
-    return "Hello!" ;
-  }
+  private Numbering() { }
+
 
   public static String asString( final Object treeResultFragment ) {
     return asString( "", treeResultFragment ) ;
@@ -101,7 +96,7 @@ public class Numbering {
   }
 
   private enum CaseType {
-    LOWER, UPPER, CAPITAL ;
+    LOWER, UPPER, CAPITAL
   }
 
   private static String numberAsLocalizedText(
@@ -127,6 +122,7 @@ public class Numbering {
 
   private static final Function< Number, String > TO_FRENCH_TEXT =
       new Function< Number, String >(){
+        @Override
         public String apply( final Number number ) {
           switch( number.intValue() ) {
           case 0  : return "z\u00e9ro" ;
@@ -188,6 +184,7 @@ public class Numbering {
 
   private static final Function< Number, String > TO_ENGLISH_TEXT =
       new Function< Number, String >(){
+        @Override
         public String apply( final Number number ) {
           switch( number.intValue() ) {
           case 0  : return "zero" ;

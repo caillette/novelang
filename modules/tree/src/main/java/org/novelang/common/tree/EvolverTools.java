@@ -8,6 +8,8 @@ import com.google.common.base.Preconditions;
  * @author Laurent Caillette
  */
 public class EvolverTools {
+  
+  private EvolverTools() { }
 
   public static< T > Tree.Evolver< T > firstElementRemover() {
     return new RemoveFirst< T >() ;
@@ -22,12 +24,14 @@ public class EvolverTools {
   }
 
   public static class RemoveFirst< T > implements Tree.Evolver< T > {
+    @Override
     public T apply( final int index, final T original, final int listSize ) {
       return index <= 0 ? null : original ;
     }
   }
 
   public static class RemoveLast< T > implements Tree.Evolver< T > {
+    @Override
     public T apply( final int index, final T original, final int listSize ) {
       return index == listSize - 1 ? null : original ;
     }
@@ -41,6 +45,7 @@ public class EvolverTools {
       this.indexForRemoval = indexForRemoval ;
     }
 
+    @Override
     public T apply( final int index, final T original, final int listSize ) {
       if( listSize < indexForRemoval + 1 ) {
         throw new IllegalArgumentException(

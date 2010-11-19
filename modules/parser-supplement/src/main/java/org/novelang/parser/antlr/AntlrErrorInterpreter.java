@@ -21,6 +21,7 @@ import org.antlr.runtime.UnwantedTokenException ;
  */
 public class AntlrErrorInterpreter {
 
+  private AntlrErrorInterpreter() {}
 
   public static String getErrorMessage( final RecognitionException e, final String[] tokenNames ) {
     String msg = e.getMessage() ;

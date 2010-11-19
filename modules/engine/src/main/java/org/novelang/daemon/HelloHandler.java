@@ -32,6 +32,7 @@ import org.mortbay.jetty.handler.AbstractHandler;
  */
 public class HelloHandler extends AbstractHandler {
 
+  @Override
   public void handle(
       final String target,
       final HttpServletRequest request,

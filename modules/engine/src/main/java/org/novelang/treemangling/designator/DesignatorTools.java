@@ -27,6 +27,7 @@ public class DesignatorTools {
 
   public static final Predicate< SyntacticTree > IDENTIFIER_TREE_FILTER =
     new Predicate< SyntacticTree >() {
+      @Override
       public boolean apply( final SyntacticTree tree ) {
         return tree.isOneOf( NodeKind._LEVEL, NodeKind.NOVELLA, NodeKind.OPUS ) ;
       }
@@ -126,9 +127,11 @@ public class DesignatorTools {
       final Treepath< SyntacticTree > next = TRAVERSAL.next( treepath ) ;
       if( next == null ) {
         return new IdentifierCollisions() {
+          @Override
           public boolean implicitIdentifierCollides( final SyntacticTree tree ) {
             return implicitIdentifierCollisions.contains( tree.getChildAt( 0 ).getText() ) ;
           }
+          @Override
           public boolean explicitIdentifierCollides( final SyntacticTree tree ) {
             return explicitIdentifierCollisions.contains( tree.getChildAt( 0 ).getText() ) ;
           }

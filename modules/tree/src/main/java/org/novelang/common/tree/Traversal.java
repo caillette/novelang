@@ -90,6 +90,7 @@ public abstract class Traversal< T extends Tree< T > > {
      *
      * @see #next (Treepath)
      */
+    @Override
     public Treepath< T > first( final Treepath< T > treepath ) {
       Treepath< T > result = treepath ;
       while( true ) {
@@ -119,6 +120,7 @@ public abstract class Traversal< T extends Tree< T > > {
      * @param treepath a non-null object.
      * @return the treepath to the next tree, or null.
      */
+    @Override
     public Treepath< T > next( final Treepath< T > treepath ) {
       if( treepath.getLength() > 1 ) {
         if( TreepathTools.hasPreviousSibling( treepath ) ) {

@@ -36,6 +36,7 @@ import org.novelang.common.LocationFactory;
     this.locationFactory = locationFactory;
   }
 
+  @Override
   public Object create( final Token payload ) {
     final Location location ;
     if( payload == null ) {

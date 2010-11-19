@@ -80,6 +80,7 @@ public class DirectoryScanHandler extends GenericHandler {
     this.contentRoot = contentConfiguration.getContentRoot() ;
   }
 
+  @Override
   protected void doHandle(
       final String target,
       final HttpServletRequest request,

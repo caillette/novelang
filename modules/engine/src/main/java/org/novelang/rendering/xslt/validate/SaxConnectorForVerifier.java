@@ -94,10 +94,12 @@ public class SaxConnectorForVerifier implements ContentHandler {
 // ContentHandler methods
 // ======================
 
+  @Override
   public void setDocumentLocator( final Locator locator ) {
     this.locator = locator ;
   }
 
+  @Override
   public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {
     if( namespaceUri.equals( uri ) ) {
       if( null == verifier.getXmlPrefix() ) {
@@ -121,6 +123,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
     }
   }
 
+  @Override
   public void endPrefixMapping( final String prefix ) throws SAXException {
     if( prefix.equals( verifier.getXmlPrefix() ) ) {
       verifier.unsetXmlPrefix() ;
@@ -130,6 +133,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
     }
   }
 
+  @Override
   public void startElement(
       final String uri,
       final String localName,
@@ -158,35 +162,42 @@ public class SaxConnectorForVerifier implements ContentHandler {
 
   }
 
+  @Override
   public void endDocument() throws SAXException {
     verifier.checkNoBadExpandedNames() ;
   }
 
-  public void endElement( 
+  @Override
+  public void endElement(
       final String uri, 
       final String localName, 
       final String qName 
   ) throws SAXException { }
 
-  public void characters( 
+  @Override
+  public void characters(
       final char[] ch, 
       final int start, 
       final int length 
   ) throws SAXException { }
 
-  public void ignorableWhitespace( 
+  @Override
+  public void ignorableWhitespace(
       final char[] ch, 
       final int start, 
       final int length 
   ) throws SAXException { }
 
-  public void processingInstruction( 
+  @Override
+  public void processingInstruction(
       final String target, 
       final String data 
   ) throws SAXException { }
 
+  @Override
   public void skippedEntity( final String name ) throws SAXException { }
 
+  @Override
   public void startDocument() throws SAXException { }
 
 }

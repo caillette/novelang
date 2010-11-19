@@ -75,6 +75,7 @@ public enum BlockDelimiter {
   }
 
   private static final Predicate< BlockDelimiter > IS_TWIN = new Predicate<BlockDelimiter>() {
+    @Override
     public boolean apply( final BlockDelimiter blockDelimiter ) {
       return blockDelimiter.isTwin() ;
     }

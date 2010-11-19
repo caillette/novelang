@@ -18,6 +18,7 @@
 package org.novelang.rendering;
 
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -88,12 +89,16 @@ public class Spaces {
 // Literal normalization
 // =====================
 
-  public static final char ZERO_WIDTH_SPACE = '\u200b' ;
   public static final char NO_BREAK_SPACE = '\u00a0' ;
+
+  private static final Pattern PATTERN = Pattern.compile( " +" );
+
+  private Spaces() {
+  }
 
   public static String normalizeLiteral( final String rawLiteral ) {
     String s = rawLiteral.trim();
-    s = s.replaceAll( " +", "" + NO_BREAK_SPACE ) ;
+    s = PATTERN.matcher( s ).replaceAll( "" + NO_BREAK_SPACE );
     return s ;
   }
 
@@ -143,7 +148,8 @@ public class Spaces {
   }
 
   private static final class Sequence {
-    private final NodeKind first, second ;
+    private final NodeKind first;
+    private final NodeKind second ;
 
 
     public Sequence( final NodeKind first, final NodeKind second ) {

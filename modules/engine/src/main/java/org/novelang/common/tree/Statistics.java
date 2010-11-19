@@ -36,6 +36,8 @@ public class Statistics {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Statistics.class );
 
+  private Statistics() { }
+
   /**
    * Returns a {@code Map} between the number of children and the number of nodes with this
    * number of children for the given {@link Tree}.
@@ -69,21 +71,6 @@ public class Statistics {
     return Collections.unmodifiableMap( treeMap ) ;
   }
 
-  private static void upgrade(
-      final TreeMap< Integer, Integer > treeMap,
-      final int maximum
-  ) {
-    int maximumKey = -1 ;
-    for( final Integer key : treeMap.keySet() ) {
-      if( key != null ) {
-        maximumKey = Math.max( maximumKey, key ) ;
-      }
-    }
-    for( int newKey = maximumKey + 1 ; newKey <= maximum ; newKey ++ ) {
-      treeMap.put( newKey, 0 ) ;
-    }
-
-  }
 
   private static final int MAX_BAR_LENGTH = 40 ;
 

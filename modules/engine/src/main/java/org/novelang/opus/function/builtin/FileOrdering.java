@@ -55,6 +55,7 @@ public abstract class FileOrdering< T > {
 
   private Comparator< Wrapper > createWrapperComparator( final Comparator< T > comparator ) {
     return new Comparator< Wrapper >() {
+      @Override
       public int compare( final Wrapper fileWrapper1, final Wrapper fileWrapper2 ) {
         return comparator.compare( fileWrapper1.criterion, fileWrapper2.criterion ) ;
       }
@@ -114,15 +115,18 @@ public abstract class FileOrdering< T > {
   public FileOrdering< T > inverse() {
     return new FileOrdering< T >() {
 
+      @Override
       protected Comparator< T > createComparator() {
         final Comparator< T > originalComparator = FileOrdering.this.createComparator() ;
         return new Comparator< T >() {
+          @Override
           public int compare( final T o1, final T o2 ) {
             return originalComparator.compare( o2, o1 ) ;
           }
         } ;
       }
 
+      @Override
       protected T createCriterion( final File file ) throws CriterionCreationException {
         return FileOrdering.this.createCriterion( file ) ;
       }
@@ -143,14 +147,17 @@ public abstract class FileOrdering< T > {
    */
   public static class ByAbsolutePath extends FileOrdering< String > {
     
+    @Override
     protected Comparator< String > createComparator() {
       return new Comparator< String >() {
+        @Override
         public int compare( final String s1, final String s2 ) {
           return s1.compareTo( s2 ) ; // Nulls not handled but should be OK.
         }
       } ;
     }
 
+    @Override
     protected String createCriterion( final File file ) {
       return file.getAbsolutePath() ;
     }
@@ -160,10 +167,12 @@ public abstract class FileOrdering< T > {
   
   public static class ByVersionNumber extends FileOrdering< Version > {
     
+    @Override
     protected Comparator< Version > createComparator() {
       return Version.COMPARATOR ;
     }
 
+    @Override
     protected Version createCriterion( final File file ) throws CriterionCreationException {
       final String fileRadix = FilenameUtils.getBaseName( file.getName() ) ;
       try {

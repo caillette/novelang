@@ -25,9 +25,12 @@ import org.novelang.logger.LoggerFactory;
  * 
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "UnusedDeclaration" } )
 public class Versioning {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Versioning.class );
+
+  private Versioning() { }
 
   public static String versionName() {
     LOGGER.debug( "Called versionName()" ) ;

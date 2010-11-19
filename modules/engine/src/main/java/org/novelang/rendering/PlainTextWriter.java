@@ -50,10 +50,12 @@ public class PlainTextWriter implements FragmentWriter {
 
   private PrintWriter writer ;
 
+  @Override
   public RenditionMimeType getMimeType() {
     return RenditionMimeType.TXT ;
   }
 
+  @Override
   public void startWriting(
       final OutputStream outputStream,
       final DocumentMetadata documentMetadata
@@ -62,10 +64,12 @@ public class PlainTextWriter implements FragmentWriter {
     writer = new PrintWriter( outputStreamWriter ) ;
   }
 
+  @Override
   public void finishWriting() throws Exception {
     writer.flush() ;
   }
 
+  @Override
   public void start( final Nodepath kinship, final boolean wholeDocument ) throws Exception {
     final DelimiterPair delimiterPair = getDelimiterPair( kinship ) ;
     if( delimiterPair != null ) {
@@ -73,6 +77,7 @@ public class PlainTextWriter implements FragmentWriter {
     }
   }
 
+  @Override
   public void end( final Nodepath kinship ) throws Exception {
     final DelimiterPair delimiterPair = getDelimiterPair( kinship ) ;
     if( delimiterPair != null ) {
@@ -80,10 +85,12 @@ public class PlainTextWriter implements FragmentWriter {
     }
   }
 
+  @Override
   public void write( final Nodepath path, final String word ) throws Exception {
     writer.append( word ) ;
   }
 
+  @Override
   public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
     write( kinship, word ) ;
   }

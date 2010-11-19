@@ -65,22 +65,27 @@ public class XmlWriterTest {
       this.syntacticTree = syntacticTree ;
     }
 
+    @Override
     public Iterable< Problem > getProblems() {
       return null;
     }
 
+    @Override
     public Charset getRenderingCharset() {
       return DefaultCharset.RENDERING;
     }
 
+    @Override
     public boolean hasProblem() {
       return false ;
     }
 
+    @Override
     public SyntacticTree getDocumentTree() {
       return syntacticTree ;
     }
 
+    @Override
     public StylesheetMap getCustomStylesheetMap() {
       return null ;
     }

@@ -34,7 +34,9 @@ import org.antlr.runtime.tree.Tree;
  * @author Laurent Caillette
  */
 public class TreeConverter {
-  
+
+  private TreeConverter() {}
+
   public static SyntacticTree convert( 
       final Tree antlrTree, 
       final TokenNameProvider tokenNameProvider 

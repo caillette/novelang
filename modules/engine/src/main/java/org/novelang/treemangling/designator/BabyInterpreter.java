@@ -59,6 +59,7 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
    * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
    *     referencing the same tree as passed to the constructor.
    */
+  @Override
   public Map< FragmentIdentifier, RobustPath< SyntacticTree > > getPureIdentifierMap() {
     return pureIdentifiers ;
   }
@@ -190,8 +191,8 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
     derivedIdentifiers = Maps.newHashMap() ;
 
 
-    public Set< FragmentIdentifier > duplicateDerivedIdentifiers = Sets.newHashSet() ;
+    public final Set< FragmentIdentifier > duplicateDerivedIdentifiers = Sets.newHashSet() ;
 
-    public List< Problem > problems = Lists.newArrayList() ;
+    public final List< Problem > problems = Lists.newArrayList() ;
   }
 }

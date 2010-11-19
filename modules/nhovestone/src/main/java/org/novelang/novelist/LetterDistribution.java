@@ -45,11 +45,11 @@ public class LetterDistribution extends Distribution< Character > {
    */
   public synchronized static LetterDistribution getFrequency( final Locale locale ) {
     final Locale supportedLocale ;
-    if( locale != SupportedLocales.DEFAULT_LOCALE ) {
-      LOGGER.warn( "Unsupported: ", locale, ", using default: ", SupportedLocales.DEFAULT_LOCALE ) ;
-      supportedLocale = SupportedLocales.DEFAULT_LOCALE ;
+    if( locale == SupportedLocales.DEFAULT_LOCALE ) {
+      supportedLocale = locale;
     } else {
-      supportedLocale = locale ;
+      LOGGER.warn( "Unsupported: ", locale, ", using default: ", SupportedLocales.DEFAULT_LOCALE );
+      supportedLocale = SupportedLocales.DEFAULT_LOCALE;
     }
     if( ! DISTRIBUTIONS.containsKey( supportedLocale ) ) {
       DISTRIBUTIONS.put( supportedLocale, new LetterDistribution( FRENCH_FREQUENCIES ) ) ;

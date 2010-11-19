@@ -123,6 +123,7 @@ import org.slf4j.LoggerFactory;
 
   public static class LitteralCharacterConverter implements CharacterConverter {
 
+    @Override
     public Character convert( final String characterDeclaration ) {
       if( 1 != characterDeclaration.length() ) {
         throw new IllegalArgumentException(
@@ -134,6 +135,7 @@ import org.slf4j.LoggerFactory;
 
   public static class UnicodeCharacterConverter implements CharacterConverter {
 
+    @Override
     public Character convert( final String characterDeclaration ) {
       if( ! characterDeclaration.startsWith( "\\u" ) ) {
         throw new IllegalArgumentException(
@@ -148,6 +150,7 @@ import org.slf4j.LoggerFactory;
 
   public  static class EscapedCharacterConverter implements CharacterConverter {
 
+    @Override
     public Character convert( final String characterDeclaration ) {
       if( ! characterDeclaration.startsWith( "\\" ) ) {
         throw new IllegalArgumentException(

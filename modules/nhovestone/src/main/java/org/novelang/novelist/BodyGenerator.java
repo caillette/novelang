@@ -38,6 +38,7 @@ public class BodyGenerator implements Generator< Body > {
     sentenceGenerator = configuration.getSentenceGenerator() ;
   }
 
+  @Override
   public Body generate() {
     final int sentenceCount = sentenceCountRange.boundInteger( random ) ;
     final int paragraphCount = paragraphCountRange.boundInteger( random ) ;

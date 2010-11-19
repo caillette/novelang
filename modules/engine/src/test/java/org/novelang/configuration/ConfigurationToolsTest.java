@@ -32,6 +32,8 @@ import org.junit.Test;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import org.novelang.ResourcesForTests;
+
+import static org.junit.Assert.assertTrue;
 import static org.novelang.ResourcesForTests.FontStructure;
 import org.novelang.common.filefixture.Relativizer;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -85,7 +87,7 @@ public class ConfigurationToolsTest {
             OPTIONPREFIX + OPTIONNAME_HTTPDAEMON_SERVEREMOTES
         )
     ) ;
-    Assert.assertEquals( true, configuration.getServeRemotes() ) ;
+    assertTrue( configuration.getServeRemotes() );
   }
 
   @Test
@@ -123,7 +125,7 @@ public class ConfigurationToolsTest {
 
     final Iterable< DocumentRequest > documentRequests = configuration.getDocumentRequests() ;
     final Iterator<DocumentRequest> iterator = documentRequests.iterator() ;
-    Assert.assertTrue( iterator.hasNext() ) ;
+    assertTrue( iterator.hasNext() ) ;
     Assert.assertEquals( "1.html", iterator.next().getDocumentSourceName() ) ;
     Assert.assertEquals( "2.html", iterator.next().getDocumentSourceName() ) ;
     Assert.assertFalse( iterator.hasNext() ) ;
@@ -272,7 +274,7 @@ public class ConfigurationToolsTest {
     Assert.assertEquals( relativeFontNames.length, embedFilesSet.size() ) ;
     for( final String relativeFontName : relativeFontNames ) {
       final String fontFileUrl = createFontFileUrl( relativeFontName );
-      Assert.assertTrue( fontFileUrl, embedFilesSet.contains( fontFileUrl ) ) ;
+      assertTrue( fontFileUrl, embedFilesSet.contains( fontFileUrl ) ) ;
     }
 
   }

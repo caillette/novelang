@@ -223,15 +223,19 @@ public class GenericRendererTest {
   private static Renderable createRenderable( final SyntacticTree tree ) {
     final DocumentMetadata documentMetadata = MetadataHelper.createMetadata( DefaultCharset.RENDERING ) ;
     return new Renderable() {
+      @Override
       public Iterable< Problem > getProblems() {
         return ImmutableList.of() ;
       }
+      @Override
       public Charset getRenderingCharset() {
         return DefaultCharset.RENDERING ;
       }
+      @Override
       public boolean hasProblem() {
         return false;
       }
+      @Override
       public SyntacticTree getDocumentTree() {
         return tree ;
       }
@@ -239,6 +243,7 @@ public class GenericRendererTest {
         return documentMetadata;
       }
 
+      @Override
       public StylesheetMap getCustomStylesheetMap() {
         return StylesheetMap.EMPTY_MAP ;
       }
@@ -249,6 +254,7 @@ public class GenericRendererTest {
 
     private PrintWriter writer ;
 
+    @Override
     public void startWriting(
         final OutputStream outputStream,
         final DocumentMetadata documentMetadata
@@ -256,26 +262,32 @@ public class GenericRendererTest {
       writer = new PrintWriter( outputStream ) ;
     }
 
+    @Override
     public void finishWriting() throws Exception {
       writer.flush() ;
     }
 
+    @Override
     public void start( final Nodepath kinship, final boolean wholeDocument ) throws Exception {
       writer.append( kinship.getCurrent().name() ).append( "(" ) ;
     }
 
+    @Override
     public void end( final Nodepath kinship ) throws Exception {
       writer.append( ")" ) ;
     }
 
+    @Override
     public void write( final Nodepath kinship, final String word ) throws Exception {
       writer.append( word ) ;
     }
 
+    @Override
     public void writeLiteral( final Nodepath kinship, final String word ) throws Exception {
       write( kinship, word ) ;
     }
 
+    @Override
     public RenditionMimeType getMimeType() {
       return null ;
     }

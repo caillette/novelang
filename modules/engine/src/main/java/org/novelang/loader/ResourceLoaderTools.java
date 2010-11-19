@@ -43,6 +43,7 @@ public class ResourceLoaderTools {
     Preconditions.checkNotNull( second ) ;
 
     return new ResourceLoader() {
+      @Override
       public InputStream getInputStream( final ResourceName resourceName ) {
         try {
           return first.getInputStream( resourceName ) ;

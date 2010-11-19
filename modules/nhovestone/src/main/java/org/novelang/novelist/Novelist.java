@@ -174,6 +174,7 @@ public class Novelist {
   private static final int DEFAULT_GHOSTWRITER_COUNT = 5 ;
   private static final int DEFAULT_ITERATION_COUNT = 3 ;
 
+  @SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
   public static void main( final String[] args ) throws IOException {
     if( args.length < 1 ) {
       System.out.println( Novelist.class.getName() +
@@ -208,6 +209,7 @@ public class Novelist {
   }
 
   public static class LevelGeneratorSupplierWithDefaults implements GeneratorSupplier< Level > {
+    @Override
     public Generator< ? extends Level > get( final int number ) {
       final LevelGenerator.Configuration configuration = GenerationDefaults.FOR_LEVELS
           .withLevelCounterStart( number )

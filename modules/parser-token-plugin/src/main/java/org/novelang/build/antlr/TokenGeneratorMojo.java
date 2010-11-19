@@ -53,6 +53,7 @@ public class TokenGeneratorMojo extends AbstractMojo {
   @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
   private File grammarFile;
 
+  @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     ConcreteLoggerFactory.setMojoLog( getLog() ) ;
     getLog().info( "Generating into: '" + packageRootDirectory + "'" ) ;

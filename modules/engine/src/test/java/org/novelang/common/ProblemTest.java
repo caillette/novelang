@@ -28,9 +28,11 @@ public class ProblemTest {
 
   private static final String FILE_LOCATION = "file_location" ;
   private static final LocationFactory LOCATION_FACTORY = new LocationFactory() {
+    @Override
     public Location createLocation( final int line, final int column ) {
       return new Location( FILE_LOCATION, line, column ) ;
     }
+    @Override
     public Location createLocation() {
       return new Location( FILE_LOCATION ) ;
     }

@@ -47,6 +47,7 @@ public class Sentence implements TextElement {
     return textElements.iterator() ;
   }
 
+  @Override
   public String getLiteral() {
     final StringBuilder text = new StringBuilder() ;
     final PeekingIterator< TextElement > peekingIterator = Iterators.peekingIterator( iterator() ) ;

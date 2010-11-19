@@ -48,6 +48,7 @@ public class FontDiscoveryStreamerTest {
         HOLLOW_RENDERING_CONFIGURATION,
         new ResourceName( "identity.xsl" )
     ) {
+      @Override
       protected XslWriter createXslWriter(
           final RenderingConfiguration renderingConfiguration,
           final ResourceName resourceName
@@ -81,16 +82,20 @@ public class FontDiscoveryStreamerTest {
 
   private static final RenderingConfiguration HOLLOW_RENDERING_CONFIGURATION =
       new RenderingConfiguration() {
+        @Override
         public ResourceLoader getResourceLoader() {
           return RESOURCE_LOADER;
         }
+        @Override
         public FopFactory getFopFactory() { // Yet unused.
           return null ;
         }
+        @Override
         public FopFontStatus getCurrentFopFontStatus() {
           return SyntheticFontMapTest.FONT_STATUS ;
         }
 
+        @Override
         public Charset getDefaultCharset() {
           return DefaultCharset.RENDERING ;
         }

@@ -99,6 +99,7 @@ public final class Tag implements Comparable< Tag > {
     return getClass().getSimpleName() + "[" + name + "]" ;
   }
 
+  @Override
   public int compareTo( final Tag tag ) {
     if( tag == null ) {
       return 1 ;
@@ -109,6 +110,7 @@ public final class Tag implements Comparable< Tag > {
 
   public static final Function< Tag, String > FUNCTION_TOSOURCESTRING = 
       new Function< Tag, String >() {
+        @Override
         public String apply( final Tag tag ) {
           return "@" + tag.name ;
         }

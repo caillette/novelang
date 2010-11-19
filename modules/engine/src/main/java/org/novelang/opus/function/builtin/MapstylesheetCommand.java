@@ -30,6 +30,7 @@ public class MapstylesheetCommand extends  AbstractCommand {
     this.stylesheetMaps = ImmutableMap.copyOf( stylesheetMaps ) ;
   }
 
+  @Override
   public CommandExecutionContext evaluate( final CommandExecutionContext context ) {
 
     final Map< RenditionMimeType, ResourceName > moreStylesheetMappings = Maps.newHashMap() ;

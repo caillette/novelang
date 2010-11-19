@@ -214,7 +214,6 @@ public class ParametersTest {
   private File directoryAaa ;
   private File directoryBbb ;
   private File directoryCcc ;
-  private File directoryCccDdd ;
 
   private static final String OUTPUT_FILE_NAME = "/this-is-not-a-directory-but-output-file.html" ;
 
@@ -229,7 +228,7 @@ public class ParametersTest {
     directoryAaa = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
     directoryBbb = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
     directoryCcc = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
-    directoryCccDdd = ResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
+    File directoryCccDdd=ResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD );
 
     assertTrue( directoryAaa.exists() ) ;
     assertTrue( directoryBbb.exists() ) ;

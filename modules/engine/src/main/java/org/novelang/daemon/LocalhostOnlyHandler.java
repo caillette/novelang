@@ -41,6 +41,7 @@ public class LocalhostOnlyHandler extends GenericHandler{
 
   public LocalhostOnlyHandler() { }
 
+  @Override
   protected void doHandle(
       final String target,
       final HttpServletRequest request,

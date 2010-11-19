@@ -118,11 +118,13 @@ public class UnicodeInputStream extends InputStream {
     initialized = true ;
   }
 
+  @Override
   public void close() throws IOException {
     initialized = true ;
     internalInputStream.close() ;
   }
 
+  @Override
   public int read() throws IOException {
     initialized = true ;
     return internalInputStream.read() ;

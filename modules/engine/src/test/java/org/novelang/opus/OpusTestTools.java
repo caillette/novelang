@@ -32,6 +32,8 @@ import com.google.common.collect.ImmutableSet;
  */
 public class OpusTestTools {
 
+  private OpusTestTools() { }
+
   public static Opus createBook(
       final File baseDirectory,
       final String content

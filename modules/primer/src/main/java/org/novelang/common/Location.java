@@ -109,6 +109,7 @@ public class Location implements Comparable< Location > {
     return result ;
   }
 
+  @Override
   public int compareTo( final Location other ) {
     if( other == null ) {
       return 1 ;

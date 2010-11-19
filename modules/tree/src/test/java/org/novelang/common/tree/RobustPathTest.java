@@ -159,6 +159,7 @@ public class RobustPathTest {
 
   private static final Predicate< MyTree > PAYLOD_STARTS_BY_LETTER =
       new Predicate< MyTree >() {
+          @Override
           public boolean apply( final MyTree MyTree ) {
             return Character.isLetter( MyTree.getPayload().charAt( 0 ) ) ;
           }

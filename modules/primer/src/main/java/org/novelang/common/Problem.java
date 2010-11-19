@@ -175,6 +175,7 @@ public class Problem implements Comparable< Problem > {
     return result;
   }
 
+  @Override
   public int compareTo( final Problem other ) {
     if( this.equals( other ) ) {
       return 0 ;

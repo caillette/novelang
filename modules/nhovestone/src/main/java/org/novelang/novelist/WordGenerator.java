@@ -40,6 +40,7 @@ public class WordGenerator implements Generator.ForWord {
   }
 
 
+  @Override
   public Word generate() {
     final int letterCount = signCount.boundInteger( random ) ;
     final StringBuilder builder = new StringBuilder() ;
@@ -62,6 +63,7 @@ public class WordGenerator implements Generator.ForWord {
 
   private boolean capitalizeNext = false ;
 
+  @Override
   public void capitalizeNext() {
     capitalizeNext = true ;
   }

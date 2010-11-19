@@ -110,10 +110,12 @@ public class BatchTest {
   }
 
   private static class NoExitSecurityManager extends SecurityManager {
+    @Override
     public void checkExit( final int status ) {
       throw new CannotExitVirtualMachineWhileTestingException() ;
     }
 
+    @Override
     public void checkPermission( final Permission perm ) { }
   }
 

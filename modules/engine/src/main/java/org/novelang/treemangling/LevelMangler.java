@@ -34,6 +34,8 @@ import org.novelang.parser.NodeKindTools;
  */
 public class LevelMangler {
 
+  private LevelMangler() {}
+
   public static Treepath< SyntacticTree > rehierarchizeLevels(
       final Treepath< SyntacticTree > treepathToRehierarchize
   ) {

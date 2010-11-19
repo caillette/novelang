@@ -32,6 +32,7 @@ public class Markup implements TextElement {
     this.literal = StringUtils.isBlank( literal ) ? "" : literal ;
   }
 
+  @Override
   public String getLiteral() {
     return literal ;
   }

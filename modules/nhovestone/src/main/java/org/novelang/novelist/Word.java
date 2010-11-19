@@ -35,6 +35,7 @@ public class Word implements TextElement {
     this.literal = literal ;
   }
 
+  @Override
   public String getLiteral() {
     return literal ;
   }

@@ -26,6 +26,8 @@ import java.io.IOException;
  */
 public class CodeGenerationTools {
 
+  private CodeGenerationTools() { }
+
   public static File resolveTargetFile(
       final File targetDirectory,
       final String packageName,

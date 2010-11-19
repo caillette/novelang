@@ -43,6 +43,7 @@ public class LexemeGenerator extends GrammarBasedJavaGenerator {
     super( grammarFile, packageName, className, targetDirectory ) ;
   }
 
+  @Override
   protected String generateCode() {
     final Set< Lexeme > lexemeDeclarations =
         LexemeDeclarationExtractor.extractLexemeDeclarations( getGrammar() ) ;

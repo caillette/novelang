@@ -27,6 +27,9 @@ import org.antlr.runtime.RecognitionException;
  * @author Laurent Caillette
  */
 public class ParsingProblems {
+
+  private ParsingProblems() { }
+
   public static Problem createProblem(
       final LocationFactory locationFactory,
       final RecognitionException exception,

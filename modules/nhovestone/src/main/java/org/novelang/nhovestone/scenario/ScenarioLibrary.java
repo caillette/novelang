@@ -108,6 +108,7 @@ public class ScenarioLibrary {
       this.random = random ;
     }
 
+    @Override
     public Generator< ? extends Level > get( final int number ) {
       final LevelGenerator.Configuration configuration =
           createLevelGeneratorConfiguration( random )
@@ -125,11 +126,13 @@ public class ScenarioLibrary {
       this.random = random ;
     }
 
+    @Override
     @SuppressWarnings( { "HardcodedFileSeparator" } )
     public final String getDocumentRequest() {
       return "/" + Novelist.BOOK_NAME_RADIX + ".html" ;
     }
 
+    @Override
     public final Upsizer< Long > create( final File directory ) throws IOException {
       return createUpsizer( new Novelist(
           directory, "novella", new LevelGeneratorSupplier( random ), 1 ) ) ;

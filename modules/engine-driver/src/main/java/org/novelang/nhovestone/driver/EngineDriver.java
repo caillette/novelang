@@ -201,6 +201,8 @@ public abstract class EngineDriver {
   @SuppressWarnings( { "UnusedDeclaration" } )
   public static class ConfigurationHelper {
 
+    private ConfigurationHelper() {  }
+
     public static Iterable< String > convert( final String... strings ) {
       return ImmutableList.of( strings ) ;
     }

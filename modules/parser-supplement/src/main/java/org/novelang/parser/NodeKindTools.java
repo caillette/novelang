@@ -57,6 +57,7 @@ public class NodeKindTools {
 
   private static final Function< String,String > TOKEN_NAME_AS_XML_ELEMENT_NAME =
       new Function< String, String >() {
+        @Override
         public String apply( final String nodeName ) {
           return tokenNameAsXmlElementName( nodeName ) ;
         }
@@ -65,6 +66,7 @@ public class NodeKindTools {
 
   private static final Predicate< String > NO_TRAILING_UNDERSCORE =
       new Predicate< String >() {
+        @Override
         public boolean apply( final String s ) {
           return ! s.endsWith( "_" ) ;
         }

@@ -44,6 +44,8 @@ public class DtdTools {
   }
   private static final String REPLACEMENT = "<!ENTITY $1 \"&amp;$1;\" > " ;
 
+  private DtdTools() { }
+
   public static InputSource escapeEntities( final InputSource unescapedInputSource )
       throws IOException
   {

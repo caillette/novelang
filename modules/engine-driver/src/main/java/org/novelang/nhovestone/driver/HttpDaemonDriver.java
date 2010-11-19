@@ -114,6 +114,7 @@ public class HttpDaemonDriver extends EngineDriver {
 
 
   private static final Predicate< String > PROCESS_STARTED_SENSOR = new Predicate< String >() {
+    @Override
     public boolean apply( final String lineInConsole ) {
       // Can't use "Server started" because this message is never flushed to the standard output
       // in time.

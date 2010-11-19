@@ -44,6 +44,7 @@ public class UnicodeNamesGeneratorMojo extends AbstractMojo {
   @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
   private File packageRootDirectory;
 
+  @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     getLog().info( "Generating into: '" + packageRootDirectory + "'" ) ;
 

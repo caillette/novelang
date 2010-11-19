@@ -56,6 +56,7 @@ public enum Punctuation {
     public Element( final String text ) {
       this.text = text ;
     }
+    @Override
     public String getLiteral() {
       return this.text ;
     }

@@ -59,7 +59,7 @@ public class UnicodeNamesGeneratorTest {
     UnicodeNamesGenerator.generate( bytes, map, 2 ) ;
     final byte[] actualBytes = bytes.toByteArray() ;
 
-    final byte[] expectedBytes = new byte[] {
+    final byte[] expectedBytes = {
         0, 0, 0,  2,          // Size of the offset table.
         0, 0, 0, 12,          // Offset to "Zero".
         0, 0, 0, 17,          // Offset to "One".
@@ -111,7 +111,7 @@ public class UnicodeNamesGeneratorTest {
         lastCharacterIndex * 4 +  // Offset table.
         4                         // Size of the offset itself.
     ) ;
-    final byte[] expectedBytesForName = new byte[] {
+    final byte[] expectedBytesForName = {
         76 /*0x4C*/, 97 /*0x4A*/, 115 /*0x74*/, 116 /*0x74*/, 0 } ;
 
 
@@ -149,7 +149,7 @@ public class UnicodeNamesGeneratorTest {
     UnicodeNamesGenerator.generate( bytes, map, 4 ) ;
     final byte[] actualBytes = bytes.toByteArray() ;
 
-    final byte[] expectedBytes = new byte[] {
+    final byte[] expectedBytes = {
         0, 0, 0,  4,          // 3 characters.
         0, 0, 0, 20,          // Offset to "Zero".
         0, 0, 0,  0,          // Offset for some undefined character.

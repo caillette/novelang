@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableSet;
 public class SaxConnectorForVerifierTest {
 
   @Test
-  public void testVerifyOk() throws SAXException, BadExpandedNamesException {
+  public void testVerifyOk() throws SAXException {
 
     final SaxConnectorForVerifier connectorForVerifier = createConnector( "foo", "bar" ) ;
     prepare( connectorForVerifier, new CustomLocator() ) ;
@@ -144,14 +144,17 @@ public class SaxConnectorForVerifierTest {
     private int lineNumber = -1 ;
     private int columnNumber = -1 ;
 
+    @Override
     public String getPublicId() {
       return publicId ;
     }
 
+    @Override
     public String getSystemId() {
       return systemId ;
     }
 
+    @Override
     public int getLineNumber() {
       return lineNumber ;
     }
@@ -160,6 +163,7 @@ public class SaxConnectorForVerifierTest {
       this.lineNumber = lineNumber ;
     }
 
+    @Override
     public int getColumnNumber() {
       return columnNumber ;
     }

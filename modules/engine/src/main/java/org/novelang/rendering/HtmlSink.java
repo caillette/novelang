@@ -59,15 +59,18 @@ public class HtmlSink implements ContentHandler {
 // Interesting ContentHandler methods
 // ==================================
 
+  @Override
   public void startDocument() throws SAXException {
     writer.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"" ) ;
     writer.println( "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" ) ;
   }
 
+  @Override
   public void endDocument() throws SAXException {
     writer.flush() ;
   }
 
+  @Override
   public void startElement(
       final String uri,
       final String localName,
@@ -85,6 +88,7 @@ public class HtmlSink implements ContentHandler {
     }
   }
 
+  @Override
   public void endElement(
       final String uri,
       final String localName,
@@ -99,6 +103,7 @@ public class HtmlSink implements ContentHandler {
     }    
   }
 
+  @Override
   public void characters(
       final char[] chars,
       final int start,
@@ -107,6 +112,7 @@ public class HtmlSink implements ContentHandler {
     writer.write( chars, start, length );
   }
 
+  @Override
   public void ignorableWhitespace(
       final char[] chars,
       final int start,
@@ -120,18 +126,23 @@ public class HtmlSink implements ContentHandler {
 // Uninteresting ContentHandler methods
 // ====================================
 
+  @Override
   public void setDocumentLocator( final Locator locator ) { }
 
+  @Override
   public void startPrefixMapping( final String prefix, final String uri )
       throws SAXException
   { }
 
+  @Override
   public void endPrefixMapping( final String prefix ) throws SAXException { }
 
+  @Override
   public void processingInstruction(
       final String target,
       final String data
   ) throws SAXException { }
 
+  @Override
   public void skippedEntity( final String name ) throws SAXException { }
 }

@@ -34,6 +34,7 @@ public class DelegatingBookParser
   }
 
 
+  @Override
   protected Object callParserMethod() throws RecognitionException {
     return antlrParser.opus().getTree() ;
   }

@@ -31,6 +31,7 @@ public class Body implements TextElement {
     this.textElements = textElements ;
   }
 
+  @Override
   public String getLiteral() {
     final StringBuilder text = new StringBuilder() ;
     for( final TextElement textElement : textElements ) {
@@ -40,6 +41,7 @@ public class Body implements TextElement {
   }
 
   public static final TextElement INTERSTICE = new TextElement() {
+    @Override
     public String getLiteral() {
       return "\n\n" ;
     }

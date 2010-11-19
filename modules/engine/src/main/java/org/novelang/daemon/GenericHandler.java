@@ -36,12 +36,13 @@ public abstract class GenericHandler extends AbstractHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericHandler.class );
 
+  @Override
   public final void handle(
       final String target,
       final HttpServletRequest request,
       final HttpServletResponse response,
       final int dispatch
-  ) throws IOException, ServletException {
+  ) throws IOException {
 
     if( ( ( Request ) request ).isHandled() ) {
       // Jetty seems to pass the request to every handler, even if a previous one

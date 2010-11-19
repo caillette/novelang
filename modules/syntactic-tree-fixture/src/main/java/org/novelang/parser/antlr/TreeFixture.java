@@ -39,13 +39,17 @@ import org.novelang.treemangling.SeparatorsMangler;
 public class TreeFixture {
 
   public static final LocationFactory LOCATION_FACTORY = new LocationFactory() {
+    @Override
     public Location createLocation( final int line, final int column ) {
       return new Location( "", line, column ) ;
     }
+    @Override
     public Location createLocation() {
       return new Location( "" ) ;
     }
   } ;
+
+  private TreeFixture() {}
 
   public static SyntacticTree tree( final NodeKind nodeKind, final SyntacticTree... children ) {
     return new SimpleTree( nodeKind, children ) ;

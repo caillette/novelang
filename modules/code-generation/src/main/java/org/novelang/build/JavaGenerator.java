@@ -34,9 +34,11 @@ public abstract class JavaGenerator {
 
   private static final StringTemplateErrorListener STRING_TEMPLATE_ERROR_LISTENER =
       new StringTemplateErrorListener() {
+        @Override
         public void error( final String s, final Throwable throwable ) {
           throw new RuntimeException( s, throwable ) ;
         }
+        @Override
         public void warning( final String s ) {
           throw new RuntimeException( s ) ;
         }

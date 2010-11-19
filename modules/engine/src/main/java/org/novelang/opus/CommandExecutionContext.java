@@ -79,6 +79,7 @@ public final class CommandExecutionContext {
     newMap.putAll( moreStylesheetMappings ) ;
     this.mappedStylesheets = ImmutableMap.copyOf( newMap ) ;
     this.stylesheetMap = new StylesheetMap() {
+      @Override
       public ResourceName get( final RenditionMimeType renditionMimeType ) {
         return mappedStylesheets.get( renditionMimeType ) ;
       }

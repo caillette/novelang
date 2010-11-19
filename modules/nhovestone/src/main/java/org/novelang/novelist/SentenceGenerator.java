@@ -45,6 +45,7 @@ public class SentenceGenerator implements Generator< Sentence > {
     this.hasEndingPunctuation = configuration.getEndingPunctuation() ;
   }
 
+  @Override
   public Sentence generate() {
     final int wordCount = this.wordCountRange.boundInteger( random ) ;
     final List< TextElement > textElements = Lists.newArrayList() ;

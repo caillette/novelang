@@ -57,7 +57,4 @@ public class HtmlProblemPrinter {
   }
 
 
-  public RenditionMimeType getMimeType() {
-    return RenditionMimeType.HTML ;
-  }
 }

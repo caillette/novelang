@@ -50,6 +50,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
 
   private static final Logger LOGGER = LoggerFactory.getLogger( LevelExploder.class ) ;
 
+  @Override
   public void main(
       final String commandName,
       final boolean mayTerminateJvm, 
@@ -157,6 +158,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     return generatedTitle ;
   }
 
+  @Override
   protected LevelExploderParameters createParameters(
       final String[] arguments,
       final File baseDirectory
@@ -167,6 +169,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     );
   }
 
+  @Override
   protected String getSpecificCommandLineParametersDescriptor() {
     return " [OPTIONS] document-to-split.novella";
   }

@@ -214,22 +214,27 @@ public class RenderingTools {
       this.charset = charset ;
     }
 
+    @Override
     public Iterable<Problem> getProblems() {
       return ImmutableList.of() ;
     }
 
+    @Override
     public Charset getRenderingCharset() {
       return charset;
     }
 
+    @Override
     public boolean hasProblem() {
       return false ;
     }
 
+    @Override
     public SyntacticTree getDocumentTree() {
       return tree;
     }
 
+    @Override
     public StylesheetMap getCustomStylesheetMap() {
       return null ;
     }

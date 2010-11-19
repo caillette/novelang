@@ -28,12 +28,14 @@ public interface TextElement {
   String getLiteral() ;
 
   TextElement EMPTY = new TextElement() {
+    @Override
     public String getLiteral() {
       return "" ;
     }
   } ;
 
   TextElement NULL = new TextElement() {
+    @Override
     public String getLiteral() {
       return "<NULL text element>" ;
     }

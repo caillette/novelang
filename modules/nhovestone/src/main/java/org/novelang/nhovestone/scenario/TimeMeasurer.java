@@ -45,8 +45,9 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
   private static final double GUARD_FACTOR = 10.0 ;
 
   private static final int BUFFER_SIZE = 1024 * 1024 ;
-  private byte[] buffer = new byte[ BUFFER_SIZE ] ;
+  private final byte[] buffer = new byte[ BUFFER_SIZE ] ;
 
+  @Override
   public Result< TimeMeasurement > run(
       final List< TimeMeasurement > previousMeasurements,
       final URL url
@@ -69,6 +70,7 @@ public class TimeMeasurer implements Measurer< TimeMeasurement > {
   }
 
 
+  @Override
   public Termination runDry( final URL url ) {
     return run( createHttpKit( url ) ) ;
   }

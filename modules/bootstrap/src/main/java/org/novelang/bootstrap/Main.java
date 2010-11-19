@@ -59,10 +59,12 @@ public class Main {
     }
   }
 
+  @SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
   private void help() {
     printHelp( System.out ) ;
   }
 
+  @SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
   private void help( final String badCommand ) {
     printBadCommand( System.out, badCommand ) ;
     printHelp( System.out ) ;
@@ -99,6 +101,7 @@ public class Main {
   private final Map< String, ? extends MainCaller > commands = ImmutableMap.of(
       HttpDaemon.COMMAND_NAME,
       new MainCaller() {
+        @Override
         public void main( final String commandName, final String[] arguments ) throws Exception {
           HttpDaemon.main( commandName, arguments ) ;
         }
@@ -106,6 +109,7 @@ public class Main {
       ,
       DocumentGenerator.COMMAND_NAME,
        new MainCaller() {
+         @Override
          public void main( final String commandName, final String[] arguments ) throws Exception {
            new DocumentGenerator().main( commandName, arguments ) ;
          }
@@ -113,6 +117,7 @@ public class Main {
       ,
       "explodelevels",
        new MainCaller() {
+         @Override
          public void main( final String commandName, final String[] arguments ) throws Exception {
            new LevelExploder().main( commandName, arguments ) ;
          }

@@ -72,6 +72,7 @@ public class GenericRenderer implements Renderer {
     this( fragmentWriter, renderLocation, DEFAULT_WHITESPACE ) ;
   }
 
+  @Override
   final public void render(
       final Renderable rendered,
       final OutputStream outputStream
@@ -94,6 +95,7 @@ public class GenericRenderer implements Renderer {
     throw new UnsupportedOperationException( "TODO" ) ;
   }
 
+  @Override
   public RenditionMimeType getMimeType() {
     return fragmentWriter.getMimeType() ;
   }
@@ -293,7 +295,7 @@ public class GenericRenderer implements Renderer {
 
   }
 
-  protected RenditionMimeType renderProblems(
+  protected static void renderProblems(
       final Iterable< Problem > problems,
       final OutputStream outputStream
   ) {
@@ -303,7 +305,6 @@ public class GenericRenderer implements Renderer {
       writer.println( "    " + problem.getMessage() ) ;
     }
     writer.flush() ;
-    return RenditionMimeType.TXT;
   }
 
 

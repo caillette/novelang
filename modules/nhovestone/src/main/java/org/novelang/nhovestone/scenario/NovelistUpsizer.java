@@ -36,12 +36,14 @@ public abstract class NovelistUpsizer implements Upsizer< Long > {
     this.novelist = Preconditions.checkNotNull( novelist ) ;
   }
 
+  @Override
   public final void upsize() throws IOException {
     upsizings.add( doUpsize() ) ;
   }
 
   protected abstract long doUpsize() throws IOException;
 
+  @Override
   public final List< Long > getUpsizings() {
     return ImmutableList.copyOf( upsizings ) ;
   }
@@ -55,6 +57,7 @@ public abstract class NovelistUpsizer implements Upsizer< Long > {
       super( novelist ) ;
     }
 
+    @Override
     protected long doUpsize() throws IOException {
       return novelist.write( 1 ) ;
     }
@@ -70,6 +73,7 @@ public abstract class NovelistUpsizer implements Upsizer< Long > {
       super( novelist ) ;
     }
 
+    @Override
     protected long doUpsize() throws IOException {
       return novelist.addGhostwriter( 1 ) ;
     }

@@ -43,15 +43,15 @@ public class DirectoryFixture {
 
   private final String testIdentifier ;
 
-  public DirectoryFixture() throws IOException {
+  public DirectoryFixture() {
     this( NameAwareTestClassRunner.getTestName() ) ;
   }
 
-  public DirectoryFixture( final Class testClass ) throws IOException {
+  public DirectoryFixture( final Class testClass ) {
     this( ClassUtils.getShortClassName( testClass ) ) ;
   }
 
-  public DirectoryFixture( final String testIdentifier ) throws IOException {
+  public DirectoryFixture( final String testIdentifier ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( testIdentifier ) ) ;
     this.testIdentifier = testIdentifier ;
     LOGGER.debug( "Created ", this ) ;

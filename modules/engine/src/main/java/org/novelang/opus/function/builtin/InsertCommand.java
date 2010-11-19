@@ -94,6 +94,7 @@ public class InsertCommand extends AbstractCommand {
 
   
 
+  @Override
   public CommandExecutionContext evaluate( final CommandExecutionContext environment ) {
 
     final File insertedFile ;
@@ -517,6 +518,7 @@ public class InsertCommand extends AbstractCommand {
 
   private static final Predicate<SyntacticTree> LEVEL_DECORATION_PREDICATE =
       new Predicate< SyntacticTree >() {
+        @Override
         public boolean apply( final SyntacticTree syntacticTree ) {
           return TreeManglingConstants.LEVEL_DECORATION_NODEKINDS
               .contains( syntacticTree.getNodeKind() ) ;

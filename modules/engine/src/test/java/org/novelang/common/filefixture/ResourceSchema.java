@@ -40,7 +40,8 @@ import org.novelang.logger.LoggerFactory;
  */
 public final class ResourceSchema {
   private static final InvocationHandler NULL_INVOCATION_HANDLER = new InvocationHandler() {
-    public Object invoke( 
+    @Override
+    public Object invoke(
         final Object o, 
         final Method method, 
         final Object[] objects 

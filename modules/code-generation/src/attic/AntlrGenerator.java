@@ -71,6 +71,7 @@ public class AntlrGenerator extends GrammarBasedJavaGenerator {
     super( grammarFile, packageName, className, targetDirectory ) ;
   }
 
+  @java.lang.Override
   public void generate() throws IOException {
 
     final File targetDirectory = getTargetFile().getParentFile() ;
@@ -134,6 +135,7 @@ public class AntlrGenerator extends GrammarBasedJavaGenerator {
     fileOutputStream.close() ;
   }
 
+  @java.lang.Override
   protected String generateCode() throws IOException {
     throw new UnsupportedOperationException( "Don't call this method" ) ; 
   }
@@ -169,6 +171,7 @@ public class AntlrGenerator extends GrammarBasedJavaGenerator {
 
   private static void forbidSystemExitCall() {
     final SecurityManager securityManager = new SecurityManager() {
+      @java.lang.Override
       public void checkPermission( final Permission permission ) {
 	    final String permissionName = permission.getName() ;
         if( permissionName.startsWith( "exitVM" ) ) {

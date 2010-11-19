@@ -41,6 +41,7 @@ public class ShutdownHandler extends GenericHandler{
 
   public ShutdownHandler() { }
 
+  @Override
   protected void doHandle(
       final String target,
       final HttpServletRequest request,

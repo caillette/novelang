@@ -55,6 +55,7 @@ public class TokenGenerator extends GrammarBasedJavaGenerator {
     super( grammarFile, packageName, className, targetDirectory ) ;
   }
 
+  @Override
   protected String generateCode() {
     final Iterable< Item > enumerationItems = findAntlrTokens( getGrammar() ) ;
     return generateJavaEnumeration( enumerationItems ) ;

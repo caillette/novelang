@@ -170,11 +170,12 @@ public class UnicodeNamesGenerator {
   }
 
   private static final Charset CHARSET = Charset.forName( "UTF-8" ) ;
-  private static final byte[] TERMINAL_ZERO = new byte[] { 0 } ;
-  private static final byte[] ZERO_OFFSET = new byte[] { 0, 0, 0, 0 } ;
+  private static final byte[] TERMINAL_ZERO = { 0 } ;
+  private static final byte[] ZERO_OFFSET = { 0, 0, 0, 0 } ;
 
   private static final Comparator< Character > CHARACTER_COMPARATOR =
       new Comparator< Character >() {
+        @Override
         public int compare( final Character c1, final Character c2 ) {
           return ( ( int ) c1.charValue() ) - ( ( int ) c2.charValue() ) ;
         }

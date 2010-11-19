@@ -35,6 +35,7 @@ import org.mortbay.jetty.handler.HandlerCollection;
  *
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
 public class HttpDaemon {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;

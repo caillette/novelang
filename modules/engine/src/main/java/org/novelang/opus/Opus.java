@@ -150,14 +150,17 @@ public class Opus extends AbstractSourceReader {
     collect( environment.getProblems() ) ;
   }
 
+  @Override
   protected GenericParser createParser( final String content ) {
     return new DelegatingBookParser( content, this ) ;
   }
 
+  @Override
   public SyntacticTree getDocumentTree() {
     return environment.getDocumentTree() ;
   }
 
+  @Override
   public StylesheetMap getCustomStylesheetMap() {
     return environment.getCustomStylesheets() ;
   }

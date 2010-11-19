@@ -98,18 +98,19 @@ public class ImageFixer {
   public SyntacticTree relocateResources( final SyntacticTree tree ) {
     return relocateAllResources( Treepath.create( tree ) ).getTreeAtEnd() ;
   }
-  
-  private Treepath< SyntacticTree > relocateAllResources( Treepath< SyntacticTree > treepath ) {
-    final SyntacticTree tree = treepath.getTreeAtEnd() ;
+
+  private Treepath<SyntacticTree> relocateAllResources( Treepath<SyntacticTree> treepath ) {
+    Treepath<SyntacticTree> treepath1 = treepath;
+    final SyntacticTree tree = treepath1.getTreeAtEnd();
     if( tree.isOneOf( NodeKind.RASTER_IMAGE, NodeKind.VECTOR_IMAGE ) ) {
-      treepath = fixImage( treepath ) ;
+      treepath1 = fixImage( treepath1 );
     } else {
-      final int childCount = tree.getChildCount() ;
+      final int childCount = tree.getChildCount();
       for( int i = 0 ; i < childCount ; i++ ) {
-        treepath = relocateAllResources( Treepath.create( treepath, i ) ).getPrevious() ;        
+        treepath1 = relocateAllResources( Treepath.create( treepath1, i ) ).getPrevious();
       }
     }
-    return treepath ;
+    return treepath1;
   }
 
   private Treepath< SyntacticTree > fixImage(
@@ -196,8 +197,8 @@ public class ImageFixer {
   /**
    * Extracts {@code /svg/@width} and {@code /svg/@height} from SVG file and puts them verbatim.
    * This implementation is highly unefficient. It parsers the whole SVG document and requires
-   * bundled SVG-related DTD (meaning a <em>lot</em> of files). 
-   * A <a href="http://www.extreme.indiana.edu/xgws/xsoap/xpp/" >pull</a> parser would do a 
+   * bundled SVG-related DTD (meaning a <em>lot</em> of files).
+   * A <a href="http://www.extreme.indiana.edu/xgws/xsoap/xpp/" >pull</a> parser would do a
    * much better job.
    * TODO use a pull parser.
    */
@@ -226,7 +227,7 @@ public class ImageFixer {
             treepathToImage,
             NodeKind._IMAGE_WIDTH,
             width
-        ) ;  
+        ) ;
         treepathToImage = addImageMetadata(
             treepathToImage,
             NodeKind._IMAGE_HEIGHT,
@@ -238,13 +239,12 @@ public class ImageFixer {
   }
 
   private static Treepath<SyntacticTree> addImageMetadata(
-      Treepath< SyntacticTree > treepathToImage,
+      final Treepath<SyntacticTree> treepathToImage,
       final NodeKind sizeNodeKind,
       final String value
   ) {
-    final SyntacticTree withTree = new SimpleTree( sizeNodeKind, new SimpleTree( value ) ) ;
-    treepathToImage = TreepathTools.addChildLast( treepathToImage, withTree ).getPrevious() ;
-    return treepathToImage;
+    final SyntacticTree withTree = new SimpleTree( sizeNodeKind, new SimpleTree( value ) );
+    return TreepathTools.addChildLast( treepathToImage, withTree ).getPrevious();
   }
 
 
@@ -338,7 +338,8 @@ public class ImageFixer {
    * Dirty implementation only supporting DTD for SVG 1.1 in bundled style directory.
    */
   private static final EntityResolver ENTITY_RESOLVER = new EntityResolver() {
-    public InputSource resolveEntity( final String publicId, final String systemId ) 
+    @Override
+    public InputSource resolveEntity( final String publicId, final String systemId )
         throws SAXException, IOException 
     {
       if( publicId.startsWith( SVG11_PUBLICID_PREFIX_1 ) 

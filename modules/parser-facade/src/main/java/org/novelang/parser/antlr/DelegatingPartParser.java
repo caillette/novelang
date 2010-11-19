@@ -33,6 +33,7 @@ public class DelegatingPartParser
     super( text, new GrammarDelegate( locationFactory ) ) ;
   }
 
+  @Override
   protected Object callParserMethod() throws RecognitionException {
     return antlrParser.novella().getTree() ;
   }

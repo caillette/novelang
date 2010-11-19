@@ -39,6 +39,7 @@ public class MyTree extends ImmutableTree< MyTree > {
     return payload;
   }
 
+  @Override
   public MyTree adopt( final Iterable< MyTree > newChildren ) {
     return new MyTree( payload, newChildren ) ;
   }

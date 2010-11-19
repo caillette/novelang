@@ -27,7 +27,7 @@ import static java.lang.System.currentTimeMillis;
  * 
  * @author Laurent Caillette
  */
-@SuppressWarnings( { "JavadocReference" } )
+@SuppressWarnings( { "JavadocReference", "UseOfSystemOutOrSystemErr" } )
 public class LocalInsider implements Insider {
 
   private final AtomicLong keepaliveCounter ;

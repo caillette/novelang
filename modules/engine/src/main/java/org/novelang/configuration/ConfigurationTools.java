@@ -76,12 +76,15 @@ public class ConfigurationTools {
   private static final ThreadGroup EXECUTOR_THREAD_GROUP = new ThreadGroup( "Executor" ) ;
 
   private static final ThreadFactory EXECUTOR_THREAD_FACTORY = new ThreadFactory() {
+    @Override
     public Thread newThread( final Runnable runnable ) {
       final Thread thread = new Thread( EXECUTOR_THREAD_GROUP, runnable ) ;
       thread.setDaemon( true ) ;
       return thread ;
     }
   } ;
+
+  private ConfigurationTools() { }
 
   public static ThreadFactory getExecutorThreadFactory() {
     return EXECUTOR_THREAD_FACTORY ;
@@ -101,13 +104,16 @@ public class ConfigurationTools {
         createContentConfiguration( parameters ) ;
 
     return new ProducerConfiguration() {
+      @Override
       public RenderingConfiguration getRenderingConfiguration() {
         return renderingConfiguration ;
       }
+      @Override
       public ContentConfiguration getContentConfiguration() {
         return contentConfiguration ;
       }
 
+      @Override
       public ExecutorService getExecutorService() {
         return EXECUTOR_SERVICE;
       }
@@ -165,14 +171,17 @@ public class ConfigurationTools {
     }
 
     return new DaemonConfiguration() {
+      @Override
       public int getPort() {
         return port ;
       }
 
+      @Override
       public boolean getServeRemotes() {
         return serveRemotes ;
       }
 
+      @Override
       public ProducerConfiguration getProducerConfiguration() {
         return producerConfiguration ;
       }
@@ -188,12 +197,15 @@ public class ConfigurationTools {
     outputDirectory = extractOutputDirectory( parameters ) ;
 
     return new LevelExploderConfiguration() {
+      @Override
       public ProducerConfiguration getProducerConfiguration() {
         return producerConfiguration ;
       }
+      @Override
       public DocumentRequest getDocumentRequest() {
         return parameters.getDocumentRequest() ;
       }
+      @Override
       public File getOutputDirectory() {
         return outputDirectory ;
       }
@@ -212,12 +224,15 @@ public class ConfigurationTools {
     outputDirectory = extractOutputDirectory( parameters ) ;
 
     return new DocumentGeneratorConfiguration() {
+      @Override
       public ProducerConfiguration getProducerConfiguration() {
         return producerConfiguration ;
       }
+      @Override
       public Iterable< DocumentRequest > getDocumentRequests() {
         return parameters.getDocumentRequests() ;
       }
+      @Override
       public File getOutputDirectory() {
         return outputDirectory ;
       }
@@ -288,9 +303,11 @@ public class ConfigurationTools {
     }
 
     return new ContentConfiguration() {
+      @Override
       public File getContentRoot() {
         return contentRoot ;
       }
+      @Override
       public Charset getSourceCharset() {
         return defaultSourceCharset ;
       }
@@ -342,13 +359,16 @@ public class ConfigurationTools {
     }
 
     return new RenderingConfiguration() {
+      @Override
       public ResourceLoader getResourceLoader() {
         return resourceLoader ;
       }
+      @Override
       public FopFactory getFopFactory() {
         return fopFactory ;
       }
 
+      @Override
       public FopFontStatus getCurrentFopFontStatus() {
         try {
           return FopTools.createGlobalFontStatus( fopFactory, fontDirectories ) ;
@@ -357,6 +377,7 @@ public class ConfigurationTools {
         }
       }
 
+      @Override
       public Charset getDefaultCharset() {
         return defaultRenderingCharset ;
       }

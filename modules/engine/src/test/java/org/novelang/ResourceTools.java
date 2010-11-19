@@ -226,15 +226,19 @@ public final class ResourceTools {
     ) {
       return new ProducerConfiguration() {
 
+        @Override
         public RenderingConfiguration getRenderingConfiguration() {
           return new RenderingConfiguration() {
+            @Override
             public ResourceLoader getResourceLoader() {
               return resourceLoader ;
             }
+            @Override
             public FopFactory getFopFactory() {
               return FopFactory.newInstance() ;
             }
 
+            @Override
             public FopFontStatus getCurrentFopFontStatus() {
               final Iterable<EmbedFontInfo> fontInfo = ImmutableList.of() ;
               final ImmutableSet< String > failedFonts = ImmutableSet.of() ;
@@ -243,6 +247,7 @@ public final class ResourceTools {
                   failedFonts
               ) ;
             }
+            @Override
             public Charset getDefaultCharset() {
               return renderingCharset ;
             }
@@ -250,17 +255,21 @@ public final class ResourceTools {
           } ;
         }
 
+        @Override
         public ContentConfiguration getContentConfiguration() {
           return new ContentConfiguration() {
+            @Override
             public File getContentRoot() {
               return contentDirectory;
             }
+            @Override
             public Charset getSourceCharset() {
               return DefaultCharset.SOURCE ;
             }
           } ;
         }
 
+        @Override
         public ExecutorService getExecutorService() {
           return EXECUTOR_SERVICE ;          
         }
@@ -342,13 +351,16 @@ public final class ResourceTools {
       ) ;
 
       return new DaemonConfiguration() {
+        @Override
         public int getPort() {
           return httpDaemonPort ;
         }
+        @Override
         public ProducerConfiguration getProducerConfiguration() {
           return producerConfiguration ;
         }
 
+        @Override
         public boolean getServeRemotes() {
           return true ;
         }
@@ -367,13 +379,16 @@ public final class ResourceTools {
       ) ;
 
       return new DaemonConfiguration() {
+        @Override
         public int getPort() {
           return httpDaemonPort ;
         }
+        @Override
         public ProducerConfiguration getProducerConfiguration() {
           return producerConfiguration ;
         }
 
+        @Override
         public boolean getServeRemotes() {
           return true ;
         }
@@ -393,13 +408,16 @@ public final class ResourceTools {
       ) ;
 
       return new DaemonConfiguration() {
+        @Override
         public int getPort() {
           return httpDaemonPort ;
         }
+        @Override
         public ProducerConfiguration getProducerConfiguration() {
           return producerConfiguration ;
         }
 
+        @Override
         public boolean getServeRemotes() {
           return true ;
         }

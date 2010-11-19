@@ -76,6 +76,7 @@ public class ResourceHandler extends GenericHandler {
     LOGGER.debug( "Using resourceLoader ", resourceLoader ) ;
   }
 
+  @Override
   protected void doHandle(
       final String target,
       final HttpServletRequest request,

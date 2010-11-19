@@ -364,6 +364,7 @@ public class ImageFixerTest {
 
     private final List< Problem > problems = Lists.newArrayList() ;
 
+    @Override
     public void collect( final Problem problem ) {
       problems.add( problem ) ;
     }

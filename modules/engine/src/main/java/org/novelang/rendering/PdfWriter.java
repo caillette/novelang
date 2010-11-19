@@ -62,6 +62,7 @@ public class PdfWriter extends XslWriter {
 // Generation
 // ==========
 
+  @Override
   protected final ContentHandler createSinkContentHandler(
       final OutputStream outputStream,
       final DocumentMetadata documentMetadata,

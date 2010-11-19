@@ -37,6 +37,7 @@ public class JUnitAwareResourceInstaller extends AbstractResourceInstaller {
   private String lastTestName = null ;
   private File lastScratchDirectory = null ;
 
+  @Override
   public File getTargetDirectory() {
 
     final String testName = NameAwareTestClassRunner.getTestName() ;

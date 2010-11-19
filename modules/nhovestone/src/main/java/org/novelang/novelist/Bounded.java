@@ -27,12 +27,14 @@ import com.google.common.base.Preconditions;
  */
 public class Bounded {
 
+  private Bounded() { }
+
 
 // ==========
 // Percentage
 // ==========
 
-  public static Percentage newPercentage( final float value ) {
+  private static Percentage newPercentage( final float value ) {
     return new Percentage( value ) ;
   }
 

@@ -40,7 +40,7 @@ public class UnicodeNamesBinaryReaderTest {
 
   @Test
   public void longFromByteArray() {
-    final byte[] bytes = new byte[] { 0, 4, 6, -128 } ;
+    final byte[] bytes = { 0, 4, 6, -128 } ;
     assertEquals( 263808, UnicodeNamesBinaryReader.asLong( bytes ) ) ;
   }
 
@@ -67,7 +67,7 @@ public class UnicodeNamesBinaryReaderTest {
     assertEquals( expectedName, actualName ) ;
   }
 
-  private static final byte[] BYTES_ZERO_ONE = new byte[] {
+  private static final byte[] BYTES_ZERO_ONE = {
       0, 0, 0,  2,          // 2 characters at all.
       0, 0, 0, 12,
       0, 0, 0, 17,
@@ -75,7 +75,7 @@ public class UnicodeNamesBinaryReaderTest {
       79, 110, 101, 0       // O n e \0
   } ;
 
-  private static final byte[] BYTES_ZERO_BLANK_TWO = new byte[] {
+  private static final byte[] BYTES_ZERO_BLANK_TWO = {
       0, 0, 0,  4,          // 4 characters at all.
       0, 0, 0, 20,
       0, 0, 0,  0,
@@ -85,7 +85,7 @@ public class UnicodeNamesBinaryReaderTest {
       84, 119, 111, 0       // T w o \0
   } ;
 
-  private static final byte[] BYTES_SIXTEENBLANKS_SIXTEEN = new byte[] {
+  private static final byte[] BYTES_SIXTEENBLANKS_SIXTEEN = {
       0, 0, 0, 65,  // 65 characters at all.
       0, 0, 0, 0,  // #0
       0, 0, 0, 0,  // #1

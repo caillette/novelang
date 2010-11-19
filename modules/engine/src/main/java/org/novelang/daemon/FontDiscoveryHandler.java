@@ -48,7 +48,8 @@ public class FontDiscoveryHandler extends GenericHandler{
     renderingConfiguration = producerConfiguration.getRenderingConfiguration() ;
   }
 
-  protected void doHandle( 
+  @Override
+  protected void doHandle(
       final String target,
       final HttpServletRequest request,
       final HttpServletResponse response,

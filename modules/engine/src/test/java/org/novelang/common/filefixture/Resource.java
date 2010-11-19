@@ -38,6 +38,7 @@ public final class Resource extends SchemaNode implements Comparable< Resource >
     super( name ) ;
   }
 
+  @Override
   public final Directory getRoot() {
     if( getParent() == null ) {
       return null ;
@@ -51,6 +52,7 @@ public final class Resource extends SchemaNode implements Comparable< Resource >
   /**
    * Comparison occurs on {@link #getName()} as corresponding member is set at instantiation.
    */
+  @Override
   public int compareTo( final Resource other ) {
     return getName().compareTo( other.getName() ) ;
   }

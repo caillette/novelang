@@ -64,6 +64,8 @@ public class TreeManglingConstants {
       _EXPLICIT_IDENTIFIER
   ) ;
 
+  private TreeManglingConstants() {  }
+
   /**
    * Just narrowing the type returned by {@link #toArray()}.
    */
@@ -75,10 +77,12 @@ public class TreeManglingConstants {
       this.delegate = delegate;
     }
 
+    @Override
     public Iterator< NodeKind > iterator() {
       return delegate.iterator() ;
     }
 
+    @Override
     public int size() {
       return delegate.size() ;
     }

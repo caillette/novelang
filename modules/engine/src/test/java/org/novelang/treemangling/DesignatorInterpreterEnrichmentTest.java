@@ -149,8 +149,8 @@ public class DesignatorInterpreterEnrichmentTest {
 
   @Test
   public void beSureOfWhatHappensWithArrayComparison() {
-    final int[] array1 = new int[] { 0, 1, 2, 3 } ;
-    final int[] array2 = new int[] { 0, 1, 2, 3 } ;
+    final int[] array1 = { 0, 1, 2, 3 } ;
+    final int[] array2 = { 0, 1, 2, 3 } ;
     Assert.assertTrue( Arrays.equals( array1, array2 ) );
   }
   
@@ -192,10 +192,12 @@ public class DesignatorInterpreterEnrichmentTest {
       final Map< FragmentIdentifier, RobustPath< SyntacticTree > > derived =
               derivedIdentifierMapBuilder.build() ;
       return new FragmentMapper< RobustPath< SyntacticTree > >() {
+        @Override
         public Map< FragmentIdentifier, RobustPath< SyntacticTree > > getPureIdentifierMap() {
           return pure ;
         }
 
+        @Override
         public Map< FragmentIdentifier, RobustPath< SyntacticTree > > getDerivedIdentifierMap() {
           return derived ;
         }

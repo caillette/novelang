@@ -96,9 +96,11 @@ public class FontDiscoveryStreamer {
         SyntheticFontMap.createSyntheticFontMap( fopFontStatus ) ;
 
     final DocumentMetadata documentMetadata = new DocumentMetadata() {
+      @Override
       public ReadableDateTime getCreationTimestamp() {
         return new DateTime() ; // No null allowed!
       }
+      @Override
       public Charset getCharset() {
         return charset ;
       }
@@ -200,6 +202,7 @@ public class FontDiscoveryStreamer {
   }
 
   private static final Ordering< Character > CHARACTER_ORDERING = new Ordering< Character >() {
+    @Override
     public int compare( final Character character0, final Character character1 ) {
       return character0.compareTo( character1 ) ;
     }

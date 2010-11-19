@@ -37,7 +37,8 @@ import org.xml.sax.SAXException;
     writer = new PrintWriter( outputStream );
   }
 
-  public void characters( 
+  @Override
+  public void characters(
       final char[] chars, 
       final int start, 
       final int length 
@@ -45,11 +46,13 @@ import org.xml.sax.SAXException;
     writer.write( chars, start, length ) ;
   }
 
+  @Override
   public void endDocument() throws SAXException {
     writer.flush() ;
   }
 
-  public void ignorableWhitespace( 
+  @Override
+  public void ignorableWhitespace(
       final char[] ch, 
       final int start, 
       final int length 
@@ -57,31 +60,39 @@ import org.xml.sax.SAXException;
     writer.write( ch, start, length ) ;
   }
 
+  @Override
   public void setDocumentLocator( final Locator locator ) { }
 
+  @Override
   public void startDocument() throws SAXException { }
 
+  @Override
   public void startPrefixMapping( final String prefix, final String uri ) throws SAXException { }
 
+  @Override
   public void endPrefixMapping( final String prefix ) throws SAXException { }
 
-  public void startElement( 
+  @Override
+  public void startElement(
       final String uri, 
       final String localName, 
       final String qName, 
       final Attributes atts 
   ) throws SAXException { }
 
-  public void endElement( 
+  @Override
+  public void endElement(
       final String uri, 
       final String localName, 
       final String qName 
   ) throws SAXException { }
 
-  public void processingInstruction( 
+  @Override
+  public void processingInstruction(
       final String target, 
       final String data 
   ) throws SAXException { }
 
+  @Override
   public void skippedEntity( final String name ) throws SAXException { }
 }

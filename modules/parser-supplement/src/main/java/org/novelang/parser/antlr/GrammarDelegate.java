@@ -66,6 +66,7 @@ public class GrammarDelegate
 // Character escape
 // ================
 
+  @Override
   public String unescapeCharacter( final String escaped, final int line, final int column ) {
     try {
       return "" + SourceUnescape.unescapeCharacter( escaped ) ;
@@ -85,6 +86,7 @@ public class GrammarDelegate
   private static final Logger parserLogger = LoggerFactory.getLogger( GrammarDelegate.class ) ;
   private int loggingRuleDepth = 0 ;
 
+  @Override
   public void traceIn( final String s, final int ruleIndex ) {
     if( parserLogger.isDebugEnabled() ) {
       String indent = "" ;
@@ -96,6 +98,7 @@ public class GrammarDelegate
     loggingRuleDepth ++ ;
   }
 
+  @Override
   public void traceOut( final String s, final int ruleIndex ) {
     loggingRuleDepth -- ;
   }
@@ -109,21 +112,25 @@ public class GrammarDelegate
   private final BlockDelimiterSupervisor blockDelimiterSupervisor =
       new DefaultBlockDelimiterSupervisor( locationFactory ) ;
 
-  public void startDelimitedText( 
+  @Override
+  public void startDelimitedText(
       final BlockDelimiter blockDelimiter, 
       final Token startToken 
   ) {
     blockDelimiterSupervisor.startDelimitedText( blockDelimiter, startToken ) ;
   }
 
+  @Override
   public void reachEndDelimiter( final BlockDelimiter blockDelimiter ) {
     blockDelimiterSupervisor.reachEndDelimiter( blockDelimiter ) ;
   }
 
+  @Override
   public void endDelimitedText( final BlockDelimiter blockDelimiter ) {
     blockDelimiterSupervisor.endDelimitedText( blockDelimiter ) ;
   }
 
+  @Override
   public void reportMissingDelimiter(
       final BlockDelimiter blockDelimiter,
       final MismatchedTokenException mismatchedTokenException
@@ -133,10 +140,12 @@ public class GrammarDelegate
     blockDelimiterSupervisor.reportMissingDelimiter( blockDelimiter, mismatchedTokenException ) ;
   }
 
+  @Override
   public void enterBlockDelimiterBoundary( final Token location ) {
     blockDelimiterSupervisor.enterBlockDelimiterBoundary( location ) ;
   }
 
+  @Override
   public Iterable< Problem > leaveBlockDelimiterBoundary() {
     final Iterable< Problem > boundaryProblems =
         blockDelimiterSupervisor.leaveBlockDelimiterBoundary() ;
@@ -151,12 +160,14 @@ public class GrammarDelegate
 
   private String[] tokenNames = null ;
 
+  @Override
   public void setTokenNames( final String[] tokenNames ) {
     this.tokenNames = tokenNames ;
   }
 
   private TreeAdaptor adaptor = null ;
 
+  @Override
   public void setAdaptor( final TreeAdaptor adaptor ) {
     this.adaptor = adaptor ;
   }
@@ -166,6 +177,7 @@ public class GrammarDelegate
 // TokenNameProvider
 // =================  
   
+  @Override
   public String getTokenName( final int imaginaryTokenIndex ) {
     return tokenNames[ imaginaryTokenIndex ] ;
   }
@@ -175,6 +187,7 @@ public class GrammarDelegate
 // Enhanced error reporting
 // ========================  
 
+  @Override
   public void report( final RecognitionException exception ) {
     problems.add( ParsingProblems.createProblem( locationFactory, exception, tokenNames ) ) ;
   }
@@ -185,6 +198,7 @@ public class GrammarDelegate
 // Tree creation
 // =============
 
+  @Override
   public Location createLocation( final Token token ) {
     return locationFactory.createLocation(
         token.getLine(),
@@ -192,6 +206,7 @@ public class GrammarDelegate
     ) ;
   }
 
+  @Override
   public Tree createTree( final int imaginaryTokenIdentifier, final String tokenPayload ) {
     return new CustomTree(
         new CommonToken( imaginaryTokenIdentifier ),
@@ -200,6 +215,7 @@ public class GrammarDelegate
     ) ;
   }
 
+  @Override
   public Tree createTree( final String tokenPayload ) {
     return new CustomTree(
         new CommonToken( -1, tokenPayload ),
@@ -207,6 +223,7 @@ public class GrammarDelegate
     ) ;
   }
 
+  @Override
   public Tree createTree(
       final int imaginaryTokenIdentifier,
       final Location location,
@@ -219,6 +236,7 @@ public class GrammarDelegate
     ) ;
   }
 
+  @Override
   public Object createTree(
       final int imaginaryTokenIdentifier,
       final Location location,
@@ -241,6 +259,7 @@ public class GrammarDelegate
 
   }
 
+  @Override
   public Object createTree(
       final int imaginaryTokenIdentifier,
       final Location location,
@@ -256,6 +275,7 @@ public class GrammarDelegate
     return root_1 ;
   }
 
+  @Override
   public Object createTree(
       final int imaginaryTokenIdentifier,
       final Location location,
@@ -274,6 +294,7 @@ public class GrammarDelegate
     return root_1 ;
   }
 
+  @Override
   public Object createRoot( final int imaginaryTokenIdentifier, final Location location ) {
     final CustomTree customTree = ( CustomTree ) adaptor.create(
         imaginaryTokenIdentifier,

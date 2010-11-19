@@ -43,6 +43,8 @@ import static org.novelang.KnownVersions.VERSION_0_41_0;
  */
 public class ScenarioDemo {
 
+  private ScenarioDemo() { }
+
   public static void main( final String[] args )
       throws
       IOException,

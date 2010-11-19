@@ -48,6 +48,7 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
     }
   }
 
+  @Override
   public void startDelimitedText( final BlockDelimiter blockDelimiter, final Token startToken ) {
     primes.get( blockDelimiter )
         .updatePosition( startToken.getLine(), startToken.getCharPositionInLine() )
@@ -56,14 +57,17 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
 
   }
 
+  @Override
   public void reachEndDelimiter( final BlockDelimiter blockDelimiter ) {
     primes.get( blockDelimiter ).increaseReachEndCount() ;
   }
 
+  @Override
   public void endDelimitedText( final BlockDelimiter blockDelimiter ) {
     primes.get( blockDelimiter ).increaseEndPassedCount() ;
   }
 
+  @Override
   public void reportMissingDelimiter(
       final BlockDelimiter blockDelimiter,
       final MismatchedTokenException mismatchedTokenException
@@ -92,6 +96,7 @@ public class DefaultBlockDelimitersBoundary implements BlockDelimitersBoundary {
     return faultyDelimitedBlockStatuses ;
   }
 
+  @Override
   public Iterable<Problem> getProblems() {
     return BlockDelimiterTools.createProblems( locationFactory, getFaultyDelimitedBlocks() ) ;
   }

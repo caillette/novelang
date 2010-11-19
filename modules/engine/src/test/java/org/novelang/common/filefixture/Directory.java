@@ -40,6 +40,7 @@ public final class Directory extends SchemaNode implements Comparable< Directory
     return directories ;
   }
 
+  @Override
   public Directory getRoot() {
     if( getParent() == null ) {
       return this ;
@@ -59,6 +60,7 @@ public final class Directory extends SchemaNode implements Comparable< Directory
   /**
    * Comparison occurs on {@link #getName()} as corresponding member is set at instantiation.
    */
+  @Override
   public int compareTo( final Directory other ) {
     return getName().compareTo( other.getName() ) ;
   }

@@ -53,6 +53,8 @@ import org.jfree.ui.TextAnchor;
  */
 public class Grapher {
 
+  private Grapher() { }
+
   public static BufferedImage create(
       final List<Long> upsizings,
       final Map<Version, MeasurementBundle<TimeMeasurement>> measurements,

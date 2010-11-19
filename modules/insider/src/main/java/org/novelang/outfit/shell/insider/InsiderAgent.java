@@ -35,7 +35,7 @@ import javax.management.MBeanServer;
  *
  * @author Laurent Caillette
  */
-@SuppressWarnings( { "UnusedDeclaration" } )
+@SuppressWarnings( { "UnusedDeclaration", "UseOfSystemOutOrSystemErr" } )
 public class InsiderAgent
 {
 
