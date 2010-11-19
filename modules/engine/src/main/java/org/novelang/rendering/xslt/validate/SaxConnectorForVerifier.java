@@ -155,7 +155,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
         final XpathAwareAttribute xpathAwareAttribute =
             new XpathAwareAttribute( localName, attributes.getLocalName( i ) ) ;
         if( XpathAwareAttribute.isXpathCombination( xpathAwareAttribute ) ) {
-          verifyXpath( attributes.getValue( i ) ); ;
+          verifyXpath( attributes.getValue( i ) ) ;
         }
       }
     }
