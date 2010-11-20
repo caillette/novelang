@@ -26,10 +26,9 @@ package org.novelang.configuration.fop;
   TARGET_RESOLUTION( "target-resolution" ),
   RENDERERS( "renderers" ),
   RENDERER( "renderer" ),
-  FONTS( "fonts" ),
-  DIRECTORY( "directory" ),
+  FONTS_DIRECTORY( "fonts-directory" ),
   OUTPUT_PROFILE( "output-profile" ),
-  FILTER_LIST( "filter-list" ),
+  FILTER_LIST( "filterList" ),
   VALUE( "value" ) ;
 
   private final String localName ;
@@ -42,6 +41,9 @@ package org.novelang.configuration.fop;
     return localName ;
   }
 
+
+
+
   /**
    * @return a possibly null object.
    */
@@ -52,5 +54,10 @@ package org.novelang.configuration.fop;
       }
     }
     return null ;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "{" + localName + "}" ;
   }
 }

@@ -9,6 +9,8 @@
  */
 package org.novelang.outfit;
 
+import org.fest.assertions.Assert;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -24,6 +26,12 @@ public class HuskTest {
   @Test
   public void emptyHusk() {
     Husk.create( Empty.class ) ;
+  }
+
+  @Test
+  public void huskToString() {
+    final Empty empty = Husk.create( Empty.class ) ;
+    Assertions.assertThat( empty.toString() ).startsWith( Empty.class.getName() ) ;
   }
 
   @Test( expected = Husk.BadDeclarationException.class )

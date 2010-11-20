@@ -73,4 +73,8 @@ public class TextTools {
   public static String to16ByteHex( final int aCharacterAsInt ) {
     return String.format( "%04X", aCharacterAsInt );
   }
+
+  public static void clear( final StringBuilder stringBuilder ) {
+    stringBuilder.delete( 0, stringBuilder.length() ) ;
+  }
 }

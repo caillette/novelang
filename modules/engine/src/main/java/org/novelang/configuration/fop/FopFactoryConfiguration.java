@@ -21,48 +21,63 @@ import com.google.common.collect.ImmutableSet;
 import org.novelang.loader.ResourceName;
 
 /**
- * Mockup of a Husk mapping to FOP configuration as it looks in
- * <a href="http://novelang.blogspot.com/2008/09/opening-access-to-fop-configuration.html">stylesheet metadata blog entry</a>.
+ * Represents the configuration of a {@link org.apache.fop.apps.FopFactory} for the user-defined
+ * subset in XSLT stylsheet metatdata.
+ * See: <a href="http://novelang.blogspot.com/2008/09/opening-access-to-fop-configuration.html">stylesheet metadata blog entry</a>.
  *
  * @author Laurent Caillette
  */
 public interface FopFactoryConfiguration {
 
   int getTargetResolution() ;
-
+  FopFactoryConfiguration withTargetResolution( int resolutionDpi ) ;
 
   ImmutableSet< Renderer > getRenderers() ;
+  FopFactoryConfiguration withRenderers( ImmutableSet< Renderer > renderers ) ;
 
   interface Renderer {
 
     String getMime() ;
+    Renderer withMime( String mime ) ;
 
-    ResourceName getOuputProfile() ;
+    ResourceName getOutputProfile() ;
+    Renderer withOutputProfile( ResourceName resourceName ) ;
 
-    Fonts getFonts() ;
+    /**
+     * Instantiators should take care of initializing this member to a non-null value.
+     * @return a non-null object by convention.
+     */
+    ImmutableList< FontsDirectory > getFontsDirectories() ;
+    Renderer withFontsDirectories( ImmutableList< FontsDirectory > fontsDirectory ) ;
 
-    ImmutableList< Filters > getFilters() ;
+    interface FontsDirectory {
 
+      boolean getRecursive() ;
+      FontsDirectory withRecursive( boolean recursive ) ;
 
-    interface Fonts {
-
-      FontDirectory getDirectory() ;
-
-      interface FontDirectory {
-
-        boolean getRecursive() ;
-
-        ResourceName getPath() ;
-
-      }
+      /**
+       * TODO: use safer type, like {@link ResourceName} (alas it currently requires an extension).
+       */
+      String getPath() ;
+      FontsDirectory withPath( String path ) ;
 
     }
+
+
+    /**
+     * Instantiators should take care of initializing this member to a non-null value.
+     * @return a non-null object by convention.
+     */
+    ImmutableList< Filters > getFilters() ;
+    Renderer withFilters( ImmutableList< Filters > filters ) ;
 
     interface Filters {
 
       String getType() ;
+      Filters withType( String type ) ;
 
       ImmutableList< String > getValues() ;
+      Filters withValues( ImmutableList< String > values ) ;
       
     }
   }

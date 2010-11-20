@@ -309,6 +309,9 @@ public final class Husk {
           return pureValue ;
         }
       }
+      if( "toString".equals( methodName ) && method.getParameterTypes().length == 0 ) {
+        return huskClass.getName() + "{proxy@" + System.identityHashCode( proxy ) + "}" ; 
+      }
       throw new IllegalStateException(
           "This should not happend: invoking unsupported method " + methodName ) ;
 
@@ -323,6 +326,16 @@ public final class Husk {
 
     public MaybeNullHolder( final Object maybeNull ) {
       this.maybeNull = maybeNull ;
+    }
+
+    @Override
+    public String toString() {
+      if( maybeNull == null ) {
+        return "null" ;
+      } else {
+        return maybeNull.toString() ;
+      }
+
     }
   }
 

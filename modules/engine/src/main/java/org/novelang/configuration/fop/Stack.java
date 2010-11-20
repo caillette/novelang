@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2010 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,72 +21,110 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import org.novelang.outfit.CollectionTools;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * A stack of "buildup" objects (representing objects being built during XML parsing),
+ * associating a "segment" to each stacked buildup, enforcing that stacked segments respect
+ * a known order known as a "path".
+ *
+ * @param< SEGMENT >
+ * @param< BUILDUP > 
+ *
  * @author Laurent Caillette
  */
-public class Stack< T > {
+/*package*/ class Stack< SEGMENT, BUILDUP > {
 
-  private final ImmutableSet< ImmutableList< T > > legalPaths ;
-  private final Function< T, String > pathElementToString ;
+  private final ImmutableSet< ImmutableList< SEGMENT > > legalPaths ;
+  private final Function< SEGMENT, String > pathElementToString ;
 
   public Stack(
-      final ImmutableSet< ImmutableList< T > > legalPaths,
-      final Function< T, String > pathElementToString
+      final ImmutableSet< ImmutableList< SEGMENT > > legalPaths,
+      final Function< SEGMENT, String > pathElementToString
   ) {
     this.legalPaths = checkNotNull( legalPaths ) ;
     this.pathElementToString = checkNotNull( pathElementToString ) ;
   }
 
-  private ImmutableList< T > elements = ImmutableList.of() ;
+  private ImmutableList< Cell< SEGMENT, BUILDUP> > cells = ImmutableList.of() ;
 
-  public void push( final T element ) throws IllegalPathException {
-    final ImmutableList< T > newPath = ImmutableList.< T >builder()
-        .addAll( elements )
-        .add( element )
-        .build()
-    ;
-    if( legalPaths.contains( newPath ) ) {
-      elements = newPath ;
+  public void push( final SEGMENT segment, final BUILDUP buildup ) throws IllegalPathException {
+    final ImmutableList< Cell< SEGMENT, BUILDUP> > newCells =
+        CollectionTools.append( cells, new Cell< SEGMENT, BUILDUP>( segment, buildup ) ) ;
+    final ImmutableList< SEGMENT > newPath = CollectionTools.append( getPath(), segment ) ;
+    if( ! newPath.isEmpty() && legalPaths.contains( newPath ) ) {
+      cells = newCells ;
     } else {
       throw new IllegalPathException( newPath, pathElementToString ) ;
     }
   }
 
-  public T pop() {
-    if( elements.isEmpty() ) {
-      throw new IllegalStateException( "Empty stack" ) ;
-    } else {
-      final int lastIndex = elements.size() - 1;
-      final T top = elements.get( lastIndex ) ;
-
-      // Joy of removing last element from an immutable list.
-      final ImmutableList.Builder< T > remover = ImmutableList.builder() ;
-      for( int i = 0 ; i < elements.size() - 1 ; i ++ ) {
-        remover.add( elements.get( i ) ) ;
-      }
-      elements = remover.build() ;
-      return top ;
-    }
+  public void pop() {
+    checkNotEmpty() ;
+    cells = CollectionTools.removeLast( cells ) ;
   }
 
-  public T top() {
-    if( elements.isEmpty() ) {
+  public SEGMENT topSegment() {
+    checkNotEmpty() ;
+    final int lastIndex = cells.size() - 1;
+    return cells.get( lastIndex ).segment ;
+  }
+
+  public BUILDUP getBuildupOnTop() {
+    return getBuildupAtDepth( 0 ) ;
+  }
+
+  public BUILDUP getBuildupUnderTop() {
+    return getBuildupAtDepth( 1 ) ;
+  }
+
+  public BUILDUP getBuildupAtDepth( final int depth ) {
+    checkNotEmpty() ;
+    final int index = cells.size() - 1 - depth ;
+    return cells.get( index ).buildup ;
+  }
+
+  public void setTopBuildup( final BUILDUP buildup ) {
+    checkNotEmpty() ;
+    final ImmutableList.Builder< Cell< SEGMENT, BUILDUP > > newStackBuilder =
+        ImmutableList.builder() ;
+    for( int i = 0 ; i < cells.size() - 1 ; i ++ ) {
+      newStackBuilder.add( cells.get( i ) ) ;
+    }
+    newStackBuilder.add( new Cell< SEGMENT, BUILDUP >( topSegment(), buildup ) ) ;
+    cells = newStackBuilder.build() ;
+  }
+
+  private void checkNotEmpty() {
+    if( isEmpty() ) {
       throw new IllegalStateException( "Empty stack" ) ;
-    } else {
-      final int lastIndex = elements.size() - 1;
-      return elements.get( lastIndex ) ;
     }
   }
 
   public boolean isEmpty() {
-    return elements.isEmpty() ;
+    return cells.isEmpty() ;
   }
 
-  public ImmutableList< T > allElements() {
-    return ImmutableList.copyOf( elements ) ;
+  public ImmutableList< SEGMENT > getPath() {
+    final ImmutableList.Builder< SEGMENT > builder = ImmutableList.builder() ;
+    for( final Cell< SEGMENT, ? > cell : cells ) {
+      builder.add( cell.segment ) ;
+    }
+    return builder.build() ;
+  }
+
+  public String getPathAsString() {
+    return pathElementsAsString( getPath(), pathElementToString ) ;
+  }
+
+  private static< T > String pathElementsAsString(
+      final ImmutableList< T > path,
+      final Function< T, String > pathElementToString
+  ) {
+    return Joiner.on( "/" ).join( Iterables.transform( path, pathElementToString ) ) ;
   }
 
   /**
@@ -98,10 +136,20 @@ public class Stack< T > {
         final ImmutableList< T > path,
         final Function< T , String> pathElementToString
     ) {
-      super(
-          "Not a legal path: " +
-              Joiner.on( "/" ).join( Iterables.transform( path, pathElementToString ) )
-      ) ;
+      super( "Not a legal path: " +
+              "'" + pathElementsAsString( path, pathElementToString ) + "'" ) ;
     }
   }
+
+
+  private static final class Cell< SEGMENT, BUILDUP > {
+    private final SEGMENT segment ;
+    private final BUILDUP buildup ;
+
+    private Cell( final SEGMENT segment, final BUILDUP buildup ) {
+      this.segment = checkNotNull( segment ) ;
+      this.buildup = buildup ;
+    }
+  }
+
 }

@@ -16,21 +16,20 @@
  */
 package org.novelang.configuration.fop;
 
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-
 /**
- * Thrown by {@link org.novelang.configuration.fop.FopFactoryConfigurationReader}.
- *
  * @author Laurent Caillette
  */
-public class ConfigurationStructureException extends SAXException {
-  public ConfigurationStructureException( final Locator locator, final String message ) {
-    super(
-        message + (
-            locator == null ? "" :
-            ( " at line " + locator.getLineNumber() + ", column " + locator.getColumnNumber() )
-        )
-    ) ;
+public enum XmlAttribute {
+  MIME( "mime" ),
+  RECURSIVE( "recursive" ) ;
+
+  private final String attributeName;
+
+  XmlAttribute( final String attributeName ) {
+    this.attributeName = attributeName ;
+  }
+
+  public String getAttributeName() {
+    return attributeName ;
   }
 }
