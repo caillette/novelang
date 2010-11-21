@@ -35,6 +35,7 @@ import org.novelang.common.metadata.MetadataHelper;
 import org.novelang.parser.NodeKind;
 import static org.novelang.parser.NodeKind.*;
 import org.novelang.parser.NodeKindTools;
+import org.novelang.rendering.multipage.PageIdentifier;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific

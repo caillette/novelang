@@ -100,9 +100,9 @@ public class TestFopCustomizationReader {
   private static final String XML = "<xsl:stylesheet\n" +
       "    version=\"1.0\"\n" +
       "    xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\n" +
-      "    xmlns:nmeta=\"http://novelang.org/meta-xsl/1.0\"\n" +
+      "    xmlns:xslmeta=\"http://novelang.org/xsl-meta/1.0\"\n" +
       ">\n" +
-      "  <nmeta:fop version=\"1.0\" >\n" +
+      "  <xslmeta:fop version=\"1.0\" >\n" +
       "    <target-resolution> 72</target-resolution>\n" +
       "    <renderer mime=\"application/pdf\" >\n" +
       "      <fonts-directory>my/fonts</fonts-directory>\n" +
@@ -116,7 +116,7 @@ public class TestFopCustomizationReader {
       "        <value>ascii-85</value>\n" +
       "      </filterList>\n" +
       "    </renderer>\n" +
-      "  </nmeta:fop>\n" +
+      "  </xslmeta:fop>\n" +
       "\n" +
       "</xsl:stylesheet>"
   ;

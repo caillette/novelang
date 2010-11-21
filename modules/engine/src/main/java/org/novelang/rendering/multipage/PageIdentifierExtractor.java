@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.rendering;
+package org.novelang.rendering.multipage;
 
 import com.google.common.collect.ImmutableMap;
 import org.novelang.common.SyntacticTree;
@@ -22,7 +22,7 @@ import org.novelang.common.SyntacticTree;
 /**
  * Given a {@link SyntacticTree}, returns an abstraction of subtrees.
  * The {@code Map} has {@link PageIdentifier}s for keys, and for values a {@code String}
- * that a {@link Renderer} may use for finding the same subtree again.
+ * that a {@link org.novelang.rendering.Renderer} may use for finding the same subtree again.
  *
  * @author Laurent Caillette
  */

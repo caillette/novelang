@@ -14,23 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.configuration.fop;
+package org.novelang.rendering.multipage;
 
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
+import com.google.common.collect.ImmutableMap;
+import org.dom4j.Document;
+import org.novelang.common.SyntacticTree;
 
 /**
- * Thrown by {@link FopCustomizationReader}.
+ * Computes the pages of a document tree, using
+ * previously-{@link XslMultipageStylesheetCapture captured}
+ * stylesheet.
  *
  * @author Laurent Caillette
  */
-public class ConfigurationStructureException extends SAXException {
-  public ConfigurationStructureException( final Locator locator, final String message ) {
-    super(
-        message + (
-            locator == null ? "" :
-            ( " at line " + locator.getLineNumber() + ", column " + locator.getColumnNumber() )
-        )
-    ) ;
+public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
+
+  public XslPageIdentifierExtractor( final Document stylesheetDocument ) {
+  }
+
+  @Override
+  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers( final SyntacticTree documentTree ) {
+    throw new UnsupportedOperationException( "TODO" ) ;
   }
 }

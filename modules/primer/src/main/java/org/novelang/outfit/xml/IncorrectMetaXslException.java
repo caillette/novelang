@@ -14,30 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.novelang.outfit.xml;
 
-package org.novelang.rendering;
-
-import java.io.OutputStream;
-
-import org.novelang.common.Renderable;
-import org.novelang.rendering.multipage.PageIdentifierExtractor;
+import org.xml.sax.SAXException;
 
 /**
+ * Thrown by {@link org.novelang.outfit.xml.MetaXslContentHandler}.
+ *
  * @author Laurent Caillette
  */
-public interface Renderer extends PageIdentifierExtractor {
-
-  /**
-   * Renders the book.
-   * @param rendered
-   * @param outputStream @return the MIME type of rendered book (useful when it changes to text or HTML for
-   *     displaying problems).
-   */
-  void render(
-      Renderable rendered,
-      OutputStream outputStream
-  ) throws Exception ;
-
-  RenditionMimeType getMimeType() ;
-
+public class IncorrectMetaXslException extends SAXException {
+  public IncorrectMetaXslException( final String message ) {
+    super( message ) ;
+  }
 }

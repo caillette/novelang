@@ -17,7 +17,6 @@
 package org.novelang.configuration.fop;
 
 import com.google.common.base.Function;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
@@ -27,9 +26,10 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.CollectionTools;
 import org.novelang.outfit.Husk;
 import org.novelang.outfit.TextTools;
+import org.novelang.outfit.xml.IncorrectMetaXslException;
+import org.novelang.outfit.xml.MetaXslContentHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import static com.google.common.collect.ImmutableList.of;
@@ -42,12 +42,10 @@ import static org.novelang.configuration.fop.XmlElement.*;
  *
  * @author Laurent Caillette
  */
-public class FopCustomizationReader implements ContentHandler {
+public class FopCustomizationReader extends MetaXslContentHandler {
 
   private static final Logger LOGGER =
       LoggerFactory.getLogger( FopCustomizationReader.class ) ;
-
-  private final String namespaceUri ;
 
   private static final Function< XmlElement,String > PATH_ELEMENT_TO_STRING =
       new Function< XmlElement, String >() {
@@ -59,12 +57,7 @@ public class FopCustomizationReader implements ContentHandler {
   ;
 
   public FopCustomizationReader() {
-    this( XSL_META_NAMESPACE_URI ) ;
-  }
-
-  public FopCustomizationReader( final String namespaceUri ) {
-    Preconditions.checkArgument( ! StringUtils.isBlank( namespaceUri ) ) ;
-    this.namespaceUri = namespaceUri ;
+    super() ;
   }
 
   private final ImmutableList.Builder<FopCustomization> configurations =
@@ -74,81 +67,26 @@ public class FopCustomizationReader implements ContentHandler {
    * Returns all the parsed configurations.
    * @return a non-null, possibly empty list.
    */
-  public ImmutableList<FopCustomization> getConfigurations() {
+  public ImmutableList< FopCustomization > getConfigurations() {
     return configurations.build() ;
   }
 
-// =======
-// Locator
-// =======
-
-  private Locator locator = null ;
 
   @Override
-  public void setDocumentLocator( final Locator locator ) {
-    this.locator = locator ;
-  }
-
-  private void throwException( final String message ) throws ConfigurationStructureException {
-    throw new ConfigurationStructureException(
-        locator,
-        message + ( stack.isEmpty() ? "" : ( "(in " + stack.getPathAsString() + ")" ) )
+  protected void throwException( final String message ) throws IncorrectMetaXslException {
+    throw new IncorrectMetaXslException( buildMessageWithLocation( message )
+        + ( stack.isEmpty() ? "" : " (in " + stack.getPathAsString() + ")" )
     ) ;
   }
 
 
-
-// ================
-// Namespace prefix
-// ================
-
-  public static final String XSL_META_NAMESPACE_URI = "http://novelang.org/meta-xsl/1.0" ;
-
-
-  private String namespacePrefix = null ;
-
-  @Override
-  public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {
-    if( namespaceUri.equals( uri ) ) {
-      if( namespacePrefix == null ) {
-        namespacePrefix = Preconditions.checkNotNull( prefix ) ;
-      } else {
-        throw new IllegalStateException(
-            "Namespace URI '" + namespaceUri + "' already mapped to '" + namespacePrefix +"'" ) ; 
-      }
-    }
-  }
-
-  @Override
-  public void endPrefixMapping( final String prefix ) throws SAXException {
-    if( prefix.equals( namespacePrefix ) ) {
-      namespacePrefix = null ;
-    }
-  }
-
-  private boolean isMetaPrefix( final String uri ) {
-    return namespaceUri.equals( uri ) ;
-  }
 
 
 // =======
 // Element
 // =======
 
-  private static final ImmutableSet< ImmutableList< XmlElement > > ELEMENT_PATHS = ImmutableSet.of(
-      of( FOP, TARGET_RESOLUTION ),
-      of( FOP, RENDERER ),
-      of( FOP, RENDERER, FONTS_DIRECTORY ),
-      of( FOP, RENDERER, OUTPUT_PROFILE ),
-      of( FOP, RENDERER, FILTER_LIST ),
-      of( FOP, RENDERER, FILTER_LIST, VALUE ),
-      of( FOP )
-  ) ;
 
-  private final Stack< XmlElement, Object > stack =
-      new Stack< XmlElement, Object >( ELEMENT_PATHS, PATH_ELEMENT_TO_STRING ) ;
-
-  
   @Override
   public void startElement(
       final String uri,
@@ -160,7 +98,7 @@ public class FopCustomizationReader implements ContentHandler {
     final XmlElement element = XmlElement.fromLocalName( localName ) ;
 
     try {
-      if( FOP == element ) {
+      if( XmlElement.FOP == element ) {
         // We care of meta prefix only for local root FOP element.
         if( !isMetaPrefix( uri ) ) {
           throwException( "Expecting '" + element + "' element in " +
@@ -173,7 +111,7 @@ public class FopCustomizationReader implements ContentHandler {
       }
       if( element != null ) {
         stack.push( element, preparePush( element, attributes ) ) ;
-        LOGGER.debug( ">>> ", stack.getPathAsString() ) ;
+        FopCustomizationReader.LOGGER.debug( ">>> ", stack.getPathAsString() ) ;
       }
     } catch( Stack.IllegalPathException e ) {
       throwException( e.getMessage() ) ;
@@ -189,7 +127,7 @@ public class FopCustomizationReader implements ContentHandler {
     if( ! stack.isEmpty() ) {
       final Object newBuildup = preparePop() ;
       stack.pop() ;
-      LOGGER.debug( "<<< ", stack.getPathAsString() ) ;
+      FopCustomizationReader.LOGGER.debug( "<<< ", stack.getPathAsString() ) ;
       if( stack.isEmpty() ) {
         if( newBuildup != null ) {
           throw new IllegalStateException(
@@ -200,6 +138,21 @@ public class FopCustomizationReader implements ContentHandler {
       }
     }
   }
+
+
+  private static final ImmutableSet< ImmutableList< XmlElement > > ELEMENT_PATHS = ImmutableSet.of(
+      of( FOP, TARGET_RESOLUTION ),
+      of( FOP, RENDERER ),
+      of( FOP, RENDERER, FONTS_DIRECTORY ),
+      of( FOP, RENDERER, OUTPUT_PROFILE ),
+      of( FOP, RENDERER, FILTER_LIST ),
+      of( FOP, RENDERER, FILTER_LIST, VALUE ),
+      of( FOP )
+  ) ;
+
+  private final Stack< XmlElement, Object > stack =
+      new Stack< XmlElement, Object >( ELEMENT_PATHS, PATH_ELEMENT_TO_STRING ) ;
+
 
 // ====
 // Text
@@ -217,19 +170,18 @@ public class FopCustomizationReader implements ContentHandler {
     charactersCollector.append( ch, start, length ) ;
   }
 
-  private String getAndClearCollectedText() {
+  protected String getAndClearCollectedText() {
     final String collectedText = charactersCollector.toString() ;
     TextTools.clear( charactersCollector ) ;
     return collectedText ;
   }
-
 
 // ========
 // Stacking
 // ========
 
   private Object preparePush( final XmlElement element, final Attributes attributes )
-      throws ConfigurationStructureException
+      throws IncorrectMetaXslException
   {
 
     switch( element ) {
@@ -267,7 +219,7 @@ public class FopCustomizationReader implements ContentHandler {
    * Returns the new element at the top of the stack after popping.
    * This method typically read the current top of the stack, or the collected text.
    */
-  private Object preparePop() throws ConfigurationStructureException {
+  private Object preparePop() throws IncorrectMetaXslException {
 
     switch( stack.topSegment() ) {
 
@@ -325,7 +277,7 @@ public class FopCustomizationReader implements ContentHandler {
   private String getStringAttributeValue(
       final Attributes attributes,
       final XmlAttribute attribute
-  ) throws ConfigurationStructureException {
+  ) throws IncorrectMetaXslException {
     final String actualValue = attributes.getValue( attribute.getAttributeName() ) ;
     if( actualValue == null ) {
       throwException( "Missing '" + attribute.getAttributeName() + "' attribute" ) ;
@@ -339,7 +291,7 @@ public class FopCustomizationReader implements ContentHandler {
       final Attributes attributes,
       final XmlAttribute attribute,
       final boolean defaultValue
-  ) throws ConfigurationStructureException {
+  ) throws IncorrectMetaXslException {
     final String actualValue = attributes.getValue( attribute.getAttributeName() ) ;
     if( actualValue == null ) {
       return defaultValue ;
@@ -359,7 +311,7 @@ public class FopCustomizationReader implements ContentHandler {
   /**
    * Side effect: clears collected text.
    */
-  private int getIntegerFromCollectedText() throws ConfigurationStructureException {
+  private int getIntegerFromCollectedText() throws IncorrectMetaXslException {
     final String text = StringUtils.trim( getAndClearCollectedText() ) ;
     try {
       return Integer.parseInt( text ) ;
@@ -372,7 +324,7 @@ public class FopCustomizationReader implements ContentHandler {
   /**
    * Side effect: clears collected text.
    */
-  private ResourceName getResourceNameFromCollectedText() throws ConfigurationStructureException {
+  private ResourceName getResourceNameFromCollectedText() throws IncorrectMetaXslException {
     final String text = StringUtils.trim( getAndClearCollectedText() ) ;
     try {
       if( StringUtils.isBlank( text ) ) {
@@ -389,29 +341,4 @@ public class FopCustomizationReader implements ContentHandler {
 
 
 
-// =======
-// Ignored
-// =======
-
-  @Override
-  public void startDocument() throws SAXException { }
-
-  @Override
-  public void endDocument() throws SAXException { }
-
-  @Override
-  public void ignorableWhitespace(
-      final char[] ch,
-      final int start,
-      final int length
-  ) throws SAXException { }
-
-  @Override
-  public void processingInstruction(
-      final String target,
-      final String data
-  ) throws SAXException { }
-
-  @Override
-  public void skippedEntity( final String name ) throws SAXException { }
 }

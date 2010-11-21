@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;
@@ -44,7 +45,7 @@ public class XmlWriter implements FragmentWriter {
   private final RenditionMimeType mimeType ;
 
   public XmlWriter( final RenditionMimeType mimeType ) {
-    this( NAMESPACE_URI, NAME_QUALIFIER, DefaultCharset.RENDERING, mimeType ) ;
+    this( XmlNamespaces.TREE_NAMESPACE_URI, XmlNamespaces.TREE_NAME_QUALIFIER, DefaultCharset.RENDERING, mimeType ) ;
   }
 
   public XmlWriter(
@@ -158,8 +159,6 @@ public class XmlWriter implements FragmentWriter {
     ) ;
   }
 
-  protected static final String NAMESPACE_URI = "http://novelang.org/book-xml/1.0" ;
-  protected static final String NAME_QUALIFIER = "n" ;
   private static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl() ;
 
 

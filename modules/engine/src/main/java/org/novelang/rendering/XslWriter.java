@@ -39,6 +39,7 @@ import org.novelang.loader.ResourceLoader;
 import org.novelang.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.xml.XmlNamespaces;
 import org.novelang.parser.NodeKindTools;
 import org.novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import org.novelang.rendering.xslt.validate.SaxMulticaster;
@@ -122,8 +123,8 @@ public class XslWriter extends XmlWriter {
       final EntityEscapeSelector entityEscapeSelector
   ) {
     this(
-        NAMESPACE_URI,
-        NAME_QUALIFIER,
+        XmlNamespaces.TREE_NAMESPACE_URI,
+        XmlNamespaces.TREE_NAME_QUALIFIER,
         configuration,
         xslFileName,
         charset,
@@ -235,7 +236,7 @@ public class XslWriter extends XmlWriter {
 
   private static SaxMulticaster connectXpathVerifier( final TemplatesHandler templatesHandler ) {
     final SaxConnectorForVerifier xpathVerifier =
-        new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
+        new SaxConnectorForVerifier( XmlNamespaces.TREE_NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
 
     final SaxMulticaster multicaster = new SaxMulticaster() ;
     multicaster.add( templatesHandler ) ;
@@ -283,7 +284,7 @@ public class XslWriter extends XmlWriter {
       saxTransformerFactory.setURIResolver( uriResolver ) ;
 
       final SaxConnectorForVerifier xpathVerifier =
-          new SaxConnectorForVerifier( NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
+          new SaxConnectorForVerifier( XmlNamespaces.TREE_NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
 
 
       final XMLReader reader ;
