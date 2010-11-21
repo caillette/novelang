@@ -24,7 +24,6 @@ package org.novelang.configuration.fop;
 /*package*/ enum XmlElement {
   FOP( "fop" ),
   TARGET_RESOLUTION( "target-resolution" ),
-  RENDERERS( "renderers" ),
   RENDERER( "renderer" ),
   FONTS_DIRECTORY( "fonts-directory" ),
   OUTPUT_PROFILE( "output-profile" ),

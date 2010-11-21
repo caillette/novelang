@@ -36,16 +36,16 @@ import static com.google.common.collect.ImmutableList.of;
 import static org.novelang.configuration.fop.XmlElement.*;
 
 /**
- * Creates a {@link FopFactoryConfiguration}.
+ * Creates a {@link FopCustomization}.
  * We're implementing the rather unconvenient {@link ContentHandler} because
  * {@link org.novelang.rendering.XslWriter} loads XSL stylesheets from a SAX source.
  *
  * @author Laurent Caillette
  */
-public class FopFactoryConfigurationReader implements ContentHandler {
+public class FopCustomizationReader implements ContentHandler {
 
   private static final Logger LOGGER =
-      LoggerFactory.getLogger( FopFactoryConfigurationReader.class ) ;
+      LoggerFactory.getLogger( FopCustomizationReader.class ) ;
 
   private final String namespaceUri ;
 
@@ -58,23 +58,23 @@ public class FopFactoryConfigurationReader implements ContentHandler {
       }
   ;
 
-  public FopFactoryConfigurationReader() {
+  public FopCustomizationReader() {
     this( XSL_META_NAMESPACE_URI ) ;
   }
 
-  public FopFactoryConfigurationReader( final String namespaceUri ) {
+  public FopCustomizationReader( final String namespaceUri ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( namespaceUri ) ) ;
     this.namespaceUri = namespaceUri ;
   }
 
-  private final ImmutableList.Builder< FopFactoryConfiguration > configurations =
+  private final ImmutableList.Builder<FopCustomization> configurations =
       ImmutableList.builder() ;
 
   /**
    * Returns all the parsed configurations.
    * @return a non-null, possibly empty list.
    */
-  public ImmutableList< FopFactoryConfiguration > getConfigurations() {
+  public ImmutableList<FopCustomization> getConfigurations() {
     return configurations.build() ;
   }
 
@@ -137,12 +137,11 @@ public class FopFactoryConfigurationReader implements ContentHandler {
 
   private static final ImmutableSet< ImmutableList< XmlElement > > ELEMENT_PATHS = ImmutableSet.of(
       of( FOP, TARGET_RESOLUTION ),
-      of( FOP, RENDERERS ),
-      of( FOP, RENDERERS, RENDERER ),
-      of( FOP, RENDERERS, RENDERER, FONTS_DIRECTORY ),
-      of( FOP, RENDERERS, RENDERER, OUTPUT_PROFILE ),
-      of( FOP, RENDERERS, RENDERER, FILTER_LIST ),
-      of( FOP, RENDERERS, RENDERER, FILTER_LIST, VALUE ),
+      of( FOP, RENDERER ),
+      of( FOP, RENDERER, FONTS_DIRECTORY ),
+      of( FOP, RENDERER, OUTPUT_PROFILE ),
+      of( FOP, RENDERER, FILTER_LIST ),
+      of( FOP, RENDERER, FILTER_LIST, VALUE ),
       of( FOP )
   ) ;
 
@@ -235,28 +234,28 @@ public class FopFactoryConfigurationReader implements ContentHandler {
 
     switch( element ) {
       case FOP :
-        return Husk.create( FopFactoryConfiguration.class ) ;
+        return Husk.create( FopCustomization.class )
+            .withRenderers( ImmutableSet.< FopCustomization.Renderer >of() )
+        ;
       case TARGET_RESOLUTION :
         return null ;
-      case RENDERERS :
-        return ImmutableSet.< FopFactoryConfiguration.Renderer >of() ;
       case RENDERER :
-        final FopFactoryConfiguration.Renderer renderer =
-            Husk.create( FopFactoryConfiguration.Renderer.class ) ;
+        final FopCustomization.Renderer renderer =
+            Husk.create( FopCustomization.Renderer.class ) ;
         return renderer
             .withMime( getStringAttributeValue( attributes, XmlAttribute.MIME ) )
             .withFontsDirectories(
-                ImmutableList.< FopFactoryConfiguration.Renderer.FontsDirectory >of() )
-            .withFilters( ImmutableList.< FopFactoryConfiguration.Renderer.Filters >of() )
+                ImmutableList.< FopCustomization.Renderer.FontsDirectory >of() )
+            .withFilters( ImmutableList.< FopCustomization.Renderer.Filters >of() )
         ;
       case FONTS_DIRECTORY :
-        return Husk.create( FopFactoryConfiguration.Renderer.FontsDirectory.class )
+        return Husk.create( FopCustomization.Renderer.FontsDirectory.class )
             .withRecursive( getBooleanAttributeValue( attributes, XmlAttribute.RECURSIVE, false ) )
         ;
       case OUTPUT_PROFILE :
         return null ;
       case FILTER_LIST :
-        return ImmutableList.< FopFactoryConfiguration.Renderer.Filters >of() ;
+        return ImmutableList.< FopCustomization.Renderer.Filters >of() ;
       case VALUE :
         return null ;
       default :
@@ -273,47 +272,42 @@ public class FopFactoryConfigurationReader implements ContentHandler {
     switch( stack.topSegment() ) {
 
       case FOP :
-        configurations.add( ( FopFactoryConfiguration ) stack.getBuildupOnTop() ) ;
+        configurations.add( ( FopCustomization ) stack.getBuildupOnTop() ) ;
         return null ;
 
       case TARGET_RESOLUTION :
-        return ( ( FopFactoryConfiguration ) stack.getBuildupUnderTop() )
+        return ( ( FopCustomization ) stack.getBuildupUnderTop() )
             .withTargetResolution( getIntegerFromCollectedText() ) ;
 
-      case RENDERERS :
-        final FopFactoryConfiguration configuration = ( FopFactoryConfiguration )
-            stack.getBuildupUnderTop() ;
-        return configuration.withRenderers(
-            ( ImmutableSet< FopFactoryConfiguration.Renderer > ) stack.getBuildupOnTop() ) ;
-
       case RENDERER :
-        final ImmutableSet< FopFactoryConfiguration.Renderer > renderers =
-            ( ImmutableSet< FopFactoryConfiguration.Renderer > ) stack.getBuildupUnderTop() ;
-        final FopFactoryConfiguration.Renderer renderer =
-            ( FopFactoryConfiguration.Renderer ) stack.getBuildupOnTop() ;
-        return CollectionTools.append( renderers, renderer ) ;
+        final FopCustomization fopCustomization = ( FopCustomization ) stack.getBuildupUnderTop() ;
+        final FopCustomization.Renderer renderer =
+            ( FopCustomization.Renderer ) stack.getBuildupOnTop() ;
+        return fopCustomization.withRenderers(
+            CollectionTools.append( fopCustomization.getRenderers(), renderer ) ) ;
 
       case FONTS_DIRECTORY :
-        final FopFactoryConfiguration.Renderer renderer0 =
-            ( FopFactoryConfiguration.Renderer ) stack.getBuildupUnderTop() ;
+        final FopCustomization.Renderer renderer0 =
+            ( FopCustomization.Renderer ) stack.getBuildupUnderTop() ;
         final String directoryName = StringUtils.trim( getAndClearCollectedText() ) ;
         if( StringUtils.isBlank( directoryName ) ) {
           throwException( "Directory name cannot be empty" ) ;
         }
-        final FopFactoryConfiguration.Renderer.FontsDirectory fontsDirectory =
-            ( ( FopFactoryConfiguration.Renderer.FontsDirectory ) stack.getBuildupOnTop() )
+        final FopCustomization.Renderer.FontsDirectory fontsDirectory =
+            ( ( FopCustomization.Renderer.FontsDirectory ) stack.getBuildupOnTop() )
             .withPath( directoryName )
         ;
         return renderer0.withFontsDirectories(
             CollectionTools.append( renderer0.getFontsDirectories(), fontsDirectory ) ) ;
 
       case OUTPUT_PROFILE:
-        final FopFactoryConfiguration.Renderer renderer1 =
-            ( FopFactoryConfiguration.Renderer ) stack.getBuildupUnderTop() ;
+        final FopCustomization.Renderer renderer1 =
+            ( FopCustomization.Renderer ) stack.getBuildupUnderTop() ;
         final ResourceName profile = getResourceNameFromCollectedText() ;
         return renderer1.withOutputProfile( profile ) ;
 
       case FILTER_LIST:
+        // TODO.
         break;
       case VALUE:
         break;
@@ -370,7 +364,7 @@ public class FopFactoryConfigurationReader implements ContentHandler {
     try {
       return Integer.parseInt( text ) ;
     } catch( NumberFormatException e ) {
-      throwException( "Couldn't parse '" + text + "' as an integer value in " ) ;
+      throwException( "Couldn't parse '" + text + "' as an integer value " ) ;
       return 0 ; // Never executes but makes compiler happy.
     }
   }

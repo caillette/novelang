@@ -27,14 +27,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import org.novelang.configuration.fop.FopFactoryConfiguration.Renderer ;
+import org.novelang.configuration.fop.FopCustomization.Renderer ;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * @author Laurent Caillette
  */
-public class TestFopFactoryConfigurationReader {
+public class TestFopCustomizationReader {
 
   @Test
   public void justReadXml() throws SAXException, IOException {
@@ -44,7 +44,7 @@ public class TestFopFactoryConfigurationReader {
   @Test
   public void verifyConfiguration() throws SAXException, IOException {
     parse( fopConfigurationReader, XML ) ;
-    final FopFactoryConfiguration configuration = getUniqueConfiguration() ;
+    final FopCustomization configuration = getUniqueConfiguration() ;
 
     assertThat( configuration.getTargetResolution() ).isEqualTo( 72 ) ;
 
@@ -78,18 +78,18 @@ public class TestFopFactoryConfigurationReader {
 // Fixture
 // =======
 
-  private final FopFactoryConfigurationReader fopConfigurationReader =
-      new FopFactoryConfigurationReader() ;
+  private final FopCustomizationReader fopConfigurationReader =
+      new FopCustomizationReader() ;
 
-  private FopFactoryConfiguration getUniqueConfiguration() {
-    final ImmutableList< FopFactoryConfiguration > configurations =
+  private FopCustomization getUniqueConfiguration() {
+    final ImmutableList<FopCustomization> configurations =
         fopConfigurationReader.getConfigurations() ;
     assertThat( configurations ).hasSize( 1 ) ;
     return configurations.get( 0 ) ;
   }
 
   private static void parse(
-      final FopFactoryConfigurationReader fopConfigurationReader,
+      final FopCustomizationReader fopConfigurationReader,
       final String xml
   ) throws SAXException, IOException {
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
@@ -104,20 +104,18 @@ public class TestFopFactoryConfigurationReader {
       ">\n" +
       "  <nmeta:fop version=\"1.0\" >\n" +
       "    <target-resolution> 72</target-resolution>\n" +
-      "    <renderers>\n" +
-      "      <renderer mime=\"application/pdf\" >\n" +
-      "        <fonts-directory>my/fonts</fonts-directory>\n" +
-      "        <fonts-directory recursive=\"true\" >more/fonts</fonts-directory>\n" +
-      "        <output-profile>profiles/EuropeISOCoatedFOGRA27.icc</output-profile>\n" +
-      "        <filterList>\n" +
-      "          <value>null</value>\n" +
-      "        </filterList>\n" +
-      "        <filterList type=\"image\" >\n" +
-      "          <value>flate</value>\n" +
-      "          <value>ascii-85</value>\n" +
-      "        </filterList>\n" +
-      "      </renderer>\n" +
-      "    </renderers>\n" +
+      "    <renderer mime=\"application/pdf\" >\n" +
+      "      <fonts-directory>my/fonts</fonts-directory>\n" +
+      "      <fonts-directory recursive=\"true\" >more/fonts</fonts-directory>\n" +
+      "      <output-profile>profiles/EuropeISOCoatedFOGRA27.icc</output-profile>\n" +
+      "      <filterList>\n" +
+      "        <value>null</value>\n" +
+      "      </filterList>\n" +
+      "      <filterList type=\"image\" >\n" +
+      "        <value>flate</value>\n" +
+      "        <value>ascii-85</value>\n" +
+      "      </filterList>\n" +
+      "    </renderer>\n" +
       "  </nmeta:fop>\n" +
       "\n" +
       "</xsl:stylesheet>"

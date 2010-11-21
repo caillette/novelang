@@ -20,7 +20,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * Thrown by {@link org.novelang.configuration.fop.FopFactoryConfigurationReader}.
+ * Thrown by {@link FopCustomizationReader}.
  *
  * @author Laurent Caillette
  */

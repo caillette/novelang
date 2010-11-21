@@ -27,13 +27,13 @@ import org.novelang.loader.ResourceName;
  *
  * @author Laurent Caillette
  */
-public interface FopFactoryConfiguration {
+public interface FopCustomization {
 
   int getTargetResolution() ;
-  FopFactoryConfiguration withTargetResolution( int resolutionDpi ) ;
+  FopCustomization withTargetResolution( int resolutionDpi ) ;
 
   ImmutableSet< Renderer > getRenderers() ;
-  FopFactoryConfiguration withRenderers( ImmutableSet< Renderer > renderers ) ;
+  FopCustomization withRenderers( ImmutableSet< Renderer > renderers ) ;
 
   interface Renderer {
 
@@ -56,7 +56,8 @@ public interface FopFactoryConfiguration {
       FontsDirectory withRecursive( boolean recursive ) ;
 
       /**
-       * TODO: use safer type, like {@link ResourceName} (alas it currently requires an extension).
+       * TODO: use safer type, like {@link ResourceName} (alas it currently requires an extension),
+       * or simply a {@link java.io.File} object relative to the style directory.
        */
       String getPath() ;
       FontsDirectory withPath( String path ) ;
@@ -66,6 +67,7 @@ public interface FopFactoryConfiguration {
 
     /**
      * Instantiators should take care of initializing this member to a non-null value.
+     * TODO: implement.
      * @return a non-null object by convention.
      */
     ImmutableList< Filters > getFilters() ;
