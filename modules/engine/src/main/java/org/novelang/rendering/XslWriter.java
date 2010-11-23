@@ -17,11 +17,9 @@
 
 package org.novelang.rendering;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import com.google.common.base.Preconditions;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -50,6 +48,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Writes XML basing on an XSLT stylesheet.
@@ -143,8 +143,8 @@ public class XslWriter extends XmlWriter {
       final EntityEscapeSelector entityEscapeSelector
   ) {
     super( namespaceUri, nameQualifier, charset, mimeType ) ;
-    this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
-    this.resourceLoader = Preconditions.checkNotNull( configuration.getResourceLoader() ) ;
+    this.entityEscapeSelector = checkNotNull( entityEscapeSelector ) ;
+    this.resourceLoader = checkNotNull( configuration.getResourceLoader() ) ;
 
     final ResourceName safeXslFileName;
     if( null == xslFileName ) {
@@ -153,7 +153,7 @@ public class XslWriter extends XmlWriter {
       safeXslFileName = xslFileName ;
     }
     this.xslFileName = safeXslFileName ;
-    entityResolver = new LocalEntityResolver() ;
+    entityResolver = new LocalEntityResolver( resourceLoader, entityEscapeSelector ) ;
     uriResolver = new LocalUriResolver() ;
     LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", safeXslFileName ) ;
   }
@@ -244,34 +244,6 @@ public class XslWriter extends XmlWriter {
     return multicaster ;
   }
 
-
-  /**
-   * Fetches local files in the same directory as the stylesheet.
-   * This is because the {@code systemId} as read by the stylesheet loader is prefixed
-   * with current directory (bug?).
-   */
-  protected class LocalEntityResolver implements EntityResolver {
-
-    @Override
-    public InputSource resolveEntity(
-        final String publicId,
-        final String systemId
-    ) throws SAXException, IOException {
-      final String cleanSystemId = systemId.substring( systemId.lastIndexOf( '/' ) + 1 ) ;
-      final boolean shouldEscapeEntity =
-          entityEscapeSelector.shouldEscape( publicId, cleanSystemId ) ;
-      LOGGER.debug( "Resolving entity publicId='", publicId, "' systemId='", cleanSystemId, "' " +
-          "escape=", shouldEscapeEntity
-      ) ;
-      final InputSource dtdSource = new InputSource(
-          resourceLoader.getInputStream( new ResourceName( cleanSystemId ) ) );
-      if( shouldEscapeEntity ) {
-        return DtdTools.escapeEntities( dtdSource ) ;
-      } else {
-        return dtdSource;
-      }
-    }
-  }
 
   protected class LocalUriResolver implements URIResolver {
 

@@ -45,6 +45,7 @@ public final class ResourcesForTests {
     ResourceSchema.initialize( Identifiers.class ) ;
     ResourceSchema.initialize( XslFormatting.class ) ;
     ResourceSchema.initialize( MainResources.Style.class ) ;
+    ResourceSchema.initialize( Multipage.class ) ;
   }
     
   public interface Images {
@@ -233,5 +234,14 @@ public final class ResourcesForTests {
       
       Resource DEFAULT_PDF_XSL = resource( "default-pdf.xsl" ) ;
     }
+  }
+
+
+  public interface Multipage {
+    Directory dir = directory( "multipage" ) ;
+
+    Resource NOVELLA_MULTIPAGE_XSL = resource( "novella-multipage.xsl" ) ;
+    Resource XML_DOCUMENT = resource( "document.xml" ) ;
+    
   }
 }

@@ -34,7 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
 /**
  * @author Laurent Caillette
  */
-public class TestFopCustomizationReader {
+public class FopCustomizationReaderTest {
 
   @Test
   public void justReadXml() throws SAXException, IOException {

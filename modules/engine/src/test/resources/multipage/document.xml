@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<n:novella xmlns:n="http://novelang.org/book-xml/1.0">
+
+  <n:meta>
+    <n:word-count><![CDATA[12]]></n:word-count>
+  </n:meta>
+
+  <n:level>
+    <n:level-title>Level-0</n:level-title>
+
+    <n:paragraph-regular>
+      Paragraph-0
+    </n:paragraph-regular>
+
+    <n:level>
+      <n:level-title>Level-0-0</n:level-title>
+      <n:paragraph-regular>
+        Paragraph-0-0
+      </n:paragraph-regular>
+    </n:level>
+
+    <n:level>
+      <n:level-title>Level-0-1</n:level-title>
+      <n:paragraph-regular>
+        Paragraph-0-1
+      </n:paragraph-regular>
+
+    </n:level>
+  </n:level>
+
+
+  <n:level>
+    <n:level-title>Level-1</n:level-title>
+
+    <n:paragraph-regular>
+      Paragraph-1
+    </n:paragraph-regular>
+
+    <n:level>
+      <n:level-title>Level-1-0</n:level-title>
+      <n:paragraph-regular>
+        Paragraph-1-0
+      </n:paragraph-regular>
+    </n:level>
+
+    <n:level>
+      <n:level-title>Level-1-1</n:level-title>
+      <n:paragraph-regular>
+        Paragraph-1-1
+      </n:paragraph-regular>
+    </n:level>
+
+  </n:level>
+
+</n:novella>

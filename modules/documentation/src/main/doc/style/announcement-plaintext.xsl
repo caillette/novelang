@@ -14,7 +14,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
 >
-  <xsl:import href="default-nlp.xsl" />
+  <xsl:import href="default-novella.xsl" />
   <xsl:import href="shared.xsl" />
   
   <xsl:output method="text" omit-xml-declaration="true" standalone="true" />
