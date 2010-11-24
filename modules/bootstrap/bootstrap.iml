@@ -71,14 +71,14 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: ch.qos.logback:logback-core:0.9.24" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: ch.qos.logback:logback-classic:0.9.24" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.2" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:stringtemplate:3.2" level="project" />
     <orderEntry type="library" name="Maven: antlr:antlr:2.7.7" level="project" />
     <orderEntry type="module" module-name="parser-facade" />
     <orderEntry type="module" module-name="parser-antlr" />
     <orderEntry type="module" module-name="tree" />
     <orderEntry type="module" module-name="parser-ground" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr:3.2" level="project" />
     <orderEntry type="module" module-name="parser-supplement" />
     <orderEntry type="module" module-name="syntactic-tree" />
     <orderEntry type="module" module-name="unicode-reader" />

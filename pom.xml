@@ -120,7 +120,7 @@
     <lib.antlr.groupid>org.antlr</lib.antlr.groupid>
     <lib.antlr-compiler.artifactid>antlr</lib.antlr-compiler.artifactid>
     <lib.antlr-runtime.artifactid>antlr-runtime</lib.antlr-runtime.artifactid>
-    <lib.antlr.version>3.1.1</lib.antlr.version>
+    <lib.antlr.version>3.2</lib.antlr.version>
 
     <lib.logback.groupid>ch.qos.logback</lib.logback.groupid>
     <lib.logback.version>0.9.24</lib.logback.version>
