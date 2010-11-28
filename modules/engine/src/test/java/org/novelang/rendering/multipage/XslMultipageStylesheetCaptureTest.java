@@ -17,21 +17,20 @@
 package org.novelang.rendering.multipage;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
+import org.dom4j.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.ResourceInstaller;
-import org.novelang.loader.ClasspathResourceLoader;
-import org.novelang.loader.ResourceLoader;
-import org.novelang.rendering.LocalEntityResolver;
-import org.novelang.rendering.XslWriter;
+import org.novelang.outfit.loader.ClasspathResourceLoader;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.xml.EntityEscapeSelector;
+import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 import org.xml.sax.InputSource;
@@ -47,7 +46,7 @@ import static org.novelang.ResourcesForTests.initialize;
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
-@Ignore( "Unfinished implementation" )
+//@Ignore( "Unfinished implementation" )
 public class XslMultipageStylesheetCaptureTest {
 
   @Test
@@ -62,9 +61,12 @@ public class XslMultipageStylesheetCaptureTest {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
     reader.setContentHandler( stylesheetCapture ) ;
-    reader.parse( new InputSource( FileUtils.readFileToString( stylesheet ) ) ) ;
+    reader.parse( new InputSource( new StringReader( FileUtils.readFileToString( stylesheet ) ) ) ) ;
 
-    stylesheetCapture.getStylesheetDocument() ;
+
+    final Document stylesheetDocument = stylesheetCapture.getStylesheetDocument() ;
+
+    LOGGER.info( "Got:\n", stylesheetDocument.asXML() ) ;
 
   }
 
@@ -74,12 +76,15 @@ public class XslMultipageStylesheetCaptureTest {
 // =======
 
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      XslMultipageStylesheetCaptureTest.class ) ;
+
   static {
     initialize() ;
   }
 
-  private static final XslWriter.EntityEscapeSelector NO_ENTITY_ESCAPE =
-      new XslWriter.EntityEscapeSelector() {
+  private static final EntityEscapeSelector NO_ENTITY_ESCAPE =
+      new EntityEscapeSelector() {
         @Override
         public boolean shouldEscape( final String publicId, final String systemId ) {
           return false ;

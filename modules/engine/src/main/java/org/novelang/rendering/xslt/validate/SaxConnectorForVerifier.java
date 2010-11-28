@@ -18,6 +18,7 @@ package org.novelang.rendering.xslt.validate;
 
 import java.util.Set;
 
+import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -86,7 +87,7 @@ public class SaxConnectorForVerifier implements ContentHandler {
 */
 
   private static boolean isXslUri( final String uri ) {
-    return "http://www.w3.org/1999/XSL/Transform".equals( uri ) ;
+    return XmlNamespaces.XSL_NAMESPACE_URI.equals( uri ) ;
   }
 
 

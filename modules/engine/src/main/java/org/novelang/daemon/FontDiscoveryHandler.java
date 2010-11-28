@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;

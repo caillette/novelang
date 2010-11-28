@@ -25,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.novelang.outfit.xml.DtdTools;
 import org.xml.sax.InputSource;
 
 /**

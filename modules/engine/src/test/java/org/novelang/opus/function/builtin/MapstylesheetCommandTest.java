@@ -21,7 +21,7 @@ import java.io.File;
 import com.google.common.collect.ImmutableMap;
 import org.novelang.ResourceTools;
 import org.novelang.common.Location;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.opus.CommandExecutionContext;

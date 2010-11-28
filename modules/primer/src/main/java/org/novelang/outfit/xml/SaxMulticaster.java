@@ -14,16 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.rendering.xslt.validate;
+package org.novelang.outfit.xml;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Makes a single SAX event source feed two SAX event consumers through the {@link ContentHandler}
@@ -36,12 +35,19 @@ import com.google.common.collect.Lists;
  */
 public class SaxMulticaster implements ContentHandler {
 
-  private final List< ContentHandler > handlers = Lists.newLinkedList() ;
+  private final ImmutableList< ContentHandler > handlers  ;
 
-  public void add( final ContentHandler handler ) {
-    Preconditions.checkNotNull( handler ) ;
-    handlers.add( handler ) ;
+  public SaxMulticaster(
+      final ContentHandler first,
+      final ImmutableList< ContentHandler > others
+  ) {
+    this( ImmutableList.< ContentHandler >builder().add( first ).addAll( others ).build() ) ;
   }
+
+  public SaxMulticaster( final ImmutableList< ContentHandler > handlers ) {
+    this.handlers = checkNotNull( handlers ) ;
+  }
+
 
 // ======================
 // ContentHandler methods

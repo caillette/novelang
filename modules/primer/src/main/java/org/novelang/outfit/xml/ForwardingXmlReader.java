@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.rendering;
+package org.novelang.outfit.xml;
 
 import java.io.IOException;
 
@@ -30,13 +30,16 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
 
 /**
-* @author Laurent Caillette
-*/
-class ForwardingXmlReader implements XMLReader {
+ * Forwards every method call to another {@link org.xml.sax.XMLReader},
+ * implementing the Adapter pattern.
+ *
+ * @author Laurent Caillette
+ */
+public class ForwardingXmlReader implements XMLReader {
 
   private final XMLReader delegate ;
 
-  ForwardingXmlReader( final XMLReader delegate ) {
+  protected ForwardingXmlReader( final XMLReader delegate ) {
     this.delegate = Preconditions.checkNotNull( delegate ) ;
   }
 

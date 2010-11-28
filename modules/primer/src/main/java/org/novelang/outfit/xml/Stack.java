@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.configuration.fop;
+package org.novelang.outfit.xml;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-/*package*/ class Stack< SEGMENT, BUILDUP > {
+public class Stack< SEGMENT, BUILDUP > {
 
   private final ImmutableSet< ImmutableList< SEGMENT > > legalPaths ;
   private final Function< SEGMENT, String > pathElementToString ;

@@ -18,6 +18,7 @@ package org.novelang.rendering.xslt.validate;
 
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Test;
+import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -66,13 +67,11 @@ public class SaxConnectorForVerifierTest {
 // =======
 
   private static final String NAMESPACE_URI_TEST = "http://novelang/test" ;
-  private static final String NAMESPACE_URI_XSL = "http://www.w3.org/1999/XSL/Transform" ;
-  private static final String NAMESPACE_PREFIX_XSL = "xsl" ;
 
   private static SaxConnectorForVerifier createConnector( final String... xpathElements ) {
     return new SaxConnectorForVerifier(
         NAMESPACE_URI_TEST,
-        ImmutableSet.of( xpathElements )
+        ImmutableSet.copyOf( xpathElements )
     ) ;
   }
 
@@ -83,7 +82,7 @@ public class SaxConnectorForVerifierTest {
     connectorForVerifier.setDocumentLocator( locator ) ;
     connectorForVerifier.startDocument() ;
     connectorForVerifier.startPrefixMapping( "t", NAMESPACE_URI_TEST ) ;
-    connectorForVerifier.startPrefixMapping( "xsl", NAMESPACE_URI_XSL ) ;
+    connectorForVerifier.startPrefixMapping( "xsl", XmlNamespaces.XSL_NAMESPACE_URI ) ;
   }
 
   private void play(
@@ -92,12 +91,12 @@ public class SaxConnectorForVerifierTest {
       final CustomAttributes attributes
   ) throws SAXException {
     connectorForVerifier.startElement(
-        NAMESPACE_URI_XSL,
+        XmlNamespaces.XSL_NAMESPACE_URI,
         localName,
         "xsl:" + localName,
         attributes
     ) ;
-    connectorForVerifier.endElement( NAMESPACE_URI_XSL, localName, "xsl:" + localName ) ;
+    connectorForVerifier.endElement( XmlNamespaces.XSL_NAMESPACE_URI, localName, "xsl:" + localName ) ;
   }
 
   private void finish( final SaxConnectorForVerifier connectorForVerifier ) throws SAXException {
@@ -118,9 +117,9 @@ public class SaxConnectorForVerifierTest {
       final String value 
   ) {
     attributes.addAttribute(
-        NAMESPACE_URI_XSL,
+        XmlNamespaces.XSL_NAMESPACE_URI,
         name,
-        NAMESPACE_PREFIX_XSL + ":" + name,
+        XmlNamespaces.XSL_NAME_QUALIFIER + ":" + name,
         "<no type set>",
         value
     ) ;

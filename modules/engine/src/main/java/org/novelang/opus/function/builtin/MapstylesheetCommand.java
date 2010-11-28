@@ -2,7 +2,7 @@ package org.novelang.opus.function.builtin;
 
 import org.novelang.opus.CommandExecutionContext;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.common.Problem;
 import org.novelang.common.Location;
 

@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;

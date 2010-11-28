@@ -20,11 +20,12 @@ package org.novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.xml.sax.ContentHandler;
 import org.novelang.common.Nodepath;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 
 /**
  * @author Laurent Caillette

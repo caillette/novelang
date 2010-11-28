@@ -16,7 +16,7 @@ import org.novelang.configuration.ContentConfiguration;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.NodeKind;

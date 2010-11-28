@@ -20,34 +20,29 @@ package org.novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.Templates;
+import com.google.common.collect.ImmutableList;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.loader.ResourceLoader;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.xml.EntityEscapeSelector;
+import org.novelang.outfit.xml.LocalEntityResolver;
+import org.novelang.outfit.xml.LocalUriResolver;
+import org.novelang.outfit.xml.SaxMulticaster;
 import org.novelang.outfit.xml.XmlNamespaces;
+import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.parser.NodeKindTools;
 import org.novelang.rendering.xslt.validate.SaxConnectorForVerifier;
-import org.novelang.rendering.xslt.validate.SaxMulticaster;
 import org.novelang.outfit.DefaultCharset;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -154,10 +149,15 @@ public class XslWriter extends XmlWriter {
     }
     this.xslFileName = safeXslFileName ;
     entityResolver = new LocalEntityResolver( resourceLoader, entityEscapeSelector ) ;
-    uriResolver = new LocalUriResolver() ;
+    uriResolver = new LocalUriResolver( resourceLoader, entityResolver ) {
+      @Override
+      protected ImmutableList< ContentHandler > createAdditionalContentHandlers() {
+        return XslWriter.createAdditionalContentHandlers() ;
+      }
+
+    } ;
     LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", safeXslFileName ) ;
   }
-
 
 
   @Override
@@ -170,26 +170,14 @@ public class XslWriter extends XmlWriter {
   {
     LOGGER.debug( "Creating ContentHandler with charset ", charset.name() );
 
-    final SAXTransformerFactory saxTransformerFactory =
-        ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
-
-    saxTransformerFactory.setURIResolver( uriResolver ) ;
-
-    final TemplatesHandler templatesHandler = saxTransformerFactory.newTemplatesHandler() ;
+    final TransformerHandler transformerHandler = new XslTransformerFactory.FromResource(
+        resourceLoader,
+        xslFileName,
+        entityResolver,
+        uriResolver,
+        createAdditionalContentHandlers()
+    ).newTransformerHandler() ;
     
-    final XMLReader reader = XMLReaderFactory.createXMLReader() ;
-
-    final ContentHandler multicaster = connectXpathVerifier( templatesHandler ) ;
-
-    reader.setContentHandler( multicaster ) ;
-
-    reader.setEntityResolver( entityResolver ) ;
-
-    reader.parse( new InputSource( resourceLoader.getInputStream( xslFileName ) ) ) ;
-
-    final Templates templates = templatesHandler.getTemplates() ;
-    final TransformerHandler transformerHandler =
-        saxTransformerFactory.newTransformerHandler( templates ) ;
     configure( transformerHandler.getTransformer(), documentMetadata ) ;
 
     final ContentHandler sinkContentHandler =
@@ -214,6 +202,9 @@ public class XslWriter extends XmlWriter {
     ) ;
   }
 
+  /**
+   * Hook for letting subclasses post-process XSL output.
+   */
   protected ContentHandler createSinkContentHandler(
       final OutputStream outputStream,
       final DocumentMetadata documentMetadata,
@@ -221,10 +212,6 @@ public class XslWriter extends XmlWriter {
   ) throws Exception
   {
     return super.createContentHandler( outputStream, documentMetadata, charset ) ;
-  }
-
-  public interface EntityEscapeSelector {
-    boolean shouldEscape( String publicId, String systemId ) ;
   }
 
   private static final EntityEscapeSelector NO_ENTITY_ESCAPE = new EntityEscapeSelector() {
@@ -235,55 +222,15 @@ public class XslWriter extends XmlWriter {
   } ;
 
   private static SaxMulticaster connectXpathVerifier( final TemplatesHandler templatesHandler ) {
-    final SaxConnectorForVerifier xpathVerifier =
-        new SaxConnectorForVerifier( XmlNamespaces.TREE_NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
+    return new SaxMulticaster( templatesHandler, createAdditionalContentHandlers() ) ;
+  }
 
-    final SaxMulticaster multicaster = new SaxMulticaster() ;
-    multicaster.add( templatesHandler ) ;
-    multicaster.add( xpathVerifier ) ;
-    return multicaster ;
+  private static ImmutableList< ContentHandler > createAdditionalContentHandlers() {
+    return ImmutableList.< ContentHandler >of( new SaxConnectorForVerifier(
+        XmlNamespaces.TREE_NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ) ;
   }
 
 
-  protected class LocalUriResolver implements URIResolver {
-
-    @Override
-    public Source resolve( final String href, final String base ) throws TransformerException {
-      LOGGER.debug( "Resolving URI href='", href, "' base='", base, "'" ) ;
-
-      final SAXTransformerFactory saxTransformerFactory =
-          ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
-      saxTransformerFactory.setURIResolver( uriResolver ) ;
-
-      final SaxConnectorForVerifier xpathVerifier =
-          new SaxConnectorForVerifier( XmlNamespaces.TREE_NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ;
 
 
-      final XMLReader reader ;
-
-
-      try {
-        reader = new ForwardingXmlReader( XMLReaderFactory.createXMLReader() ) {
-          @Override
-          public void setContentHandler( final ContentHandler contentHandler ) {
-            final SaxMulticaster multicaster = new SaxMulticaster() ;
-            multicaster.add( contentHandler ) ;
-            multicaster.add( xpathVerifier ) ;
-            super.setContentHandler( multicaster ) ;
-          }
-        } ;
-      } catch( SAXException e ) {
-        throw new RuntimeException( e ) ;
-      }
-
-      reader.setEntityResolver( entityResolver ) ;
-
-      return new SAXSource(
-          reader,
-          new InputSource( resourceLoader.getInputStream( new ResourceName( href ) ) )
-      ) ;
-
-    }
-
-  }
 }

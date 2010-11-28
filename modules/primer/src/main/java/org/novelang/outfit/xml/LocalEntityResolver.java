@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.rendering;
+package org.novelang.outfit.xml;
 
 import java.io.IOException;
 
-import org.novelang.loader.ResourceLoader;
-import org.novelang.loader.ResourceName;
+import com.google.common.base.Preconditions;
+import org.novelang.outfit.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.xml.sax.EntityResolver;
@@ -38,14 +39,14 @@ public class LocalEntityResolver implements EntityResolver {
   private static final Logger LOGGER = LoggerFactory.getLogger( LocalEntityResolver.class );
 
   private final ResourceLoader resourceLoader ;
-  private final XslWriter.EntityEscapeSelector entityEscapeSelector ;
+  private final EntityEscapeSelector entityEscapeSelector ;
 
   public LocalEntityResolver(
       final ResourceLoader resourceLoader,
-      final XslWriter.EntityEscapeSelector entityEscapeSelector
+      final EntityEscapeSelector entityEscapeSelector
   ) {
     this.resourceLoader = checkNotNull( resourceLoader ) ;
-    this.entityEscapeSelector = checkNotNull( entityEscapeSelector ) ;
+    this.entityEscapeSelector = Preconditions.checkNotNull( entityEscapeSelector ) ;
   }
 
   @Override

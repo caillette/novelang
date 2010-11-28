@@ -23,7 +23,8 @@ import org.dom4j.Document;
 import org.dom4j.io.SAXContentHandler;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.xml.MetaXslContentHandler;
+import org.novelang.outfit.xml.ForwardingContentHandler;
+import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.Locator;
@@ -37,7 +38,7 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class XslMultipageStylesheetCapture extends MetaXslContentHandler {
+public class XslMultipageStylesheetCapture extends ForwardingContentHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( XslMultipageStylesheetCapture.class ) ;
 
@@ -52,7 +53,7 @@ public class XslMultipageStylesheetCapture extends MetaXslContentHandler {
     this.entityResolver = Preconditions.checkNotNull( entityResolver ) ;
   }
 
-  public Document getStylesheetDocument() {
+  /*package*/ Document getStylesheetDocument() {
     return stylesheetDocument ;
   }
 
@@ -62,6 +63,9 @@ public class XslMultipageStylesheetCapture extends MetaXslContentHandler {
     return isMetaPrefix( uri ) && MULTIPAGE_STYLESHEET_LOCALNAME.equals( localName ) ;
   }
 
+  private String getXsltPrefixMapping() {
+    return getPrefixMappings().inverse().get( XmlNamespaces.XSL_NAMESPACE_URI ) ;
+  }
 
 
   @Override
@@ -86,6 +90,19 @@ public class XslMultipageStylesheetCapture extends MetaXslContentHandler {
             getNamespacePrefix() + ":" + MULTIPAGE_STYLESHEET_LOCALNAME ) ;
       }
     }
+    if( documentBuilder != null ) {
+      if( isNestedStylesheetRootElement( uri, localName ) ) {
+        documentBuilder.startElement(
+            XmlNamespaces.XSL_NAMESPACE_URI,
+            "stylesheet",
+            getXsltPrefixMapping() + ":" + "stylesheet",
+            attributes
+        ) ;
+      } else {
+        documentBuilder.startElement( uri, localName, qName, attributes ) ;
+      }
+    }
+
   }
 
   @Override
@@ -95,7 +112,15 @@ public class XslMultipageStylesheetCapture extends MetaXslContentHandler {
       final String qName
   ) throws SAXException {
     if( documentBuilder != null ) {
-      documentBuilder.endElement( uri, localName, qName ) ;
+      if( isNestedStylesheetRootElement( uri, localName ) ) {
+        documentBuilder.endElement(
+            XmlNamespaces.XSL_NAMESPACE_URI,
+            "stylesheet",
+            getXsltPrefixMapping() + ":" + "stylesheet"
+        ) ;
+      } else {
+        documentBuilder.endElement( uri, localName, qName ) ;
+      }
       if( isNestedStylesheetRootElement( uri, localName ) ) {
         documentBuilder.endDocument() ;
         if( stylesheetDocument != null ) {

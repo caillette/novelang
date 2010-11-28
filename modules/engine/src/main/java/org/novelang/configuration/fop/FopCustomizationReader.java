@@ -20,17 +20,14 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
-import org.novelang.loader.ResourceName;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.CollectionTools;
 import org.novelang.outfit.Husk;
-import org.novelang.outfit.TextTools;
 import org.novelang.outfit.xml.IncorrectMetaXslException;
-import org.novelang.outfit.xml.MetaXslContentHandler;
+import org.novelang.outfit.xml.StackBasedElementReader;
+import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 import static com.google.common.collect.ImmutableList.of;
 import static org.novelang.configuration.fop.XmlElement.*;
@@ -42,10 +39,19 @@ import static org.novelang.configuration.fop.XmlElement.*;
  *
  * @author Laurent Caillette
  */
-public class FopCustomizationReader extends MetaXslContentHandler {
+public class FopCustomizationReader
+    extends StackBasedElementReader< XmlElement, XmlAttribute, Object >
+{
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger( FopCustomizationReader.class ) ;
+  public FopCustomizationReader() {
+    super(
+        XmlNamespaces.XSL_META_NAMESPACE_URI,
+        ELEMENT_PATHS,
+        PATH_ELEMENT_TO_STRING,
+        ATTRIBUTE_TO_NAME,
+        FIND_FROM_LOCAL_NAME
+    ) ;
+  }
 
   private static final Function< XmlElement,String > PATH_ELEMENT_TO_STRING =
       new Function< XmlElement, String >() {
@@ -56,11 +62,35 @@ public class FopCustomizationReader extends MetaXslContentHandler {
       }
   ;
 
-  public FopCustomizationReader() {
-    super() ;
-  }
+  private static final Function< XmlAttribute,String > ATTRIBUTE_TO_NAME =
+      new Function< XmlAttribute, String >() {
+        @Override
+        public String apply( final XmlAttribute attribute ) {
+          return attribute.getAttributeName() ;
+        }
+      }
+  ;
 
-  private final ImmutableList.Builder<FopCustomization> configurations =
+  private static final Function< String, XmlElement > FIND_FROM_LOCAL_NAME =
+      new Function< String, XmlElement >() {
+        @Override
+        public XmlElement apply( final String localName ) {
+          return XmlElement.fromLocalName( localName ) ;
+        }
+      }
+  ;
+  private static final ImmutableSet< ImmutableList< XmlElement > > ELEMENT_PATHS = ImmutableSet.of(
+      of( FOP, TARGET_RESOLUTION ),
+      of( FOP, RENDERER ),
+      of( FOP, RENDERER, FONTS_DIRECTORY ),
+      of( FOP, RENDERER, OUTPUT_PROFILE ),
+      of( FOP, RENDERER, FILTER_LIST ),
+      of( FOP, RENDERER, FILTER_LIST, VALUE ),
+      of( FOP )
+  ) ;
+
+
+  private final ImmutableList.Builder< FopCustomization > configurations =
       ImmutableList.builder() ;
 
   /**
@@ -72,115 +102,21 @@ public class FopCustomizationReader extends MetaXslContentHandler {
   }
 
 
-  @Override
-  protected void throwException( final String message ) throws IncorrectMetaXslException {
-    throw new IncorrectMetaXslException( buildMessageWithLocation( message )
-        + ( stack.isEmpty() ? "" : " (in " + stack.getPathAsString() + ")" )
-    ) ;
-  }
-
-
-
-
 // =======
 // Element
 // =======
 
 
-  @Override
-  public void startElement(
-      final String uri,
-      final String localName,
-      final String qName,
-      final Attributes attributes
-  ) throws SAXException {
-
-    final XmlElement element = XmlElement.fromLocalName( localName ) ;
-
-    try {
-      if( XmlElement.FOP == element ) {
-        // We care of meta prefix only for local root FOP element.
-        if( !isMetaPrefix( uri ) ) {
-          throwException( "Expecting '" + element + "' element in " +
-              "'" + namespaceUri + "' namespace" ) ;
-        }
-      } else if( ! stack.isEmpty() ) {
-        if( element == null ) {
-          throwException( "Unknown element: '" + localName + "'" ) ;
-        }
-      }
-      if( element != null ) {
-        stack.push( element, preparePush( element, attributes ) ) ;
-        FopCustomizationReader.LOGGER.debug( ">>> ", stack.getPathAsString() ) ;
-      }
-    } catch( Stack.IllegalPathException e ) {
-      throwException( e.getMessage() ) ;
-    }
-  }
-
-  @Override
-  public void endElement(
-      final String uri,
-      final String localName,
-      final String qName
-  ) throws SAXException {
-    if( ! stack.isEmpty() ) {
-      final Object newBuildup = preparePop() ;
-      stack.pop() ;
-      FopCustomizationReader.LOGGER.debug( "<<< ", stack.getPathAsString() ) ;
-      if( stack.isEmpty() ) {
-        if( newBuildup != null ) {
-          throw new IllegalStateException(
-              "Stack is getting empty but got a non-null value frop preparePop(): " + newBuildup ) ;
-        }
-      } else {
-        stack.setTopBuildup( newBuildup ) ;
-      }
-    }
-  }
-
-
-  private static final ImmutableSet< ImmutableList< XmlElement > > ELEMENT_PATHS = ImmutableSet.of(
-      of( FOP, TARGET_RESOLUTION ),
-      of( FOP, RENDERER ),
-      of( FOP, RENDERER, FONTS_DIRECTORY ),
-      of( FOP, RENDERER, OUTPUT_PROFILE ),
-      of( FOP, RENDERER, FILTER_LIST ),
-      of( FOP, RENDERER, FILTER_LIST, VALUE ),
-      of( FOP )
-  ) ;
-
-  private final Stack< XmlElement, Object > stack =
-      new Stack< XmlElement, Object >( ELEMENT_PATHS, PATH_ELEMENT_TO_STRING ) ;
-
-
-// ====
+  // ====
 // Text
 // ====
 
-  @SuppressWarnings( { "StringBufferField" } )
-  private final StringBuilder charactersCollector = new StringBuilder() ;
-
-  @Override
-  public void characters(
-      final char[] ch,
-      final int start,
-      final int length
-  ) throws SAXException {
-    charactersCollector.append( ch, start, length ) ;
-  }
-
-  protected String getAndClearCollectedText() {
-    final String collectedText = charactersCollector.toString() ;
-    TextTools.clear( charactersCollector ) ;
-    return collectedText ;
-  }
-
-// ========
+  // ========
 // Stacking
 // ========
 
-  private Object preparePush( final XmlElement element, final Attributes attributes )
+  @Override
+  protected Object preparePush( final XmlElement element, final Attributes attributes )
       throws IncorrectMetaXslException
   {
 
@@ -219,34 +155,35 @@ public class FopCustomizationReader extends MetaXslContentHandler {
    * Returns the new element at the top of the stack after popping.
    * This method typically read the current top of the stack, or the collected text.
    */
-  private Object preparePop() throws IncorrectMetaXslException {
+  @Override
+  protected Object preparePop() throws IncorrectMetaXslException {
 
-    switch( stack.topSegment() ) {
+    switch( getTopSegment() ) {
 
       case FOP :
-        configurations.add( ( FopCustomization ) stack.getBuildupOnTop() ) ;
+        configurations.add( ( FopCustomization ) getBuildupOnTop() ) ;
         return null ;
 
       case TARGET_RESOLUTION :
-        return ( ( FopCustomization ) stack.getBuildupUnderTop() )
+        return ( ( FopCustomization ) getBuildupUnderTop() )
             .withTargetResolution( getIntegerFromCollectedText() ) ;
 
       case RENDERER :
-        final FopCustomization fopCustomization = ( FopCustomization ) stack.getBuildupUnderTop() ;
+        final FopCustomization fopCustomization = ( FopCustomization ) getBuildupUnderTop() ;
         final FopCustomization.Renderer renderer =
-            ( FopCustomization.Renderer ) stack.getBuildupOnTop() ;
+            ( FopCustomization.Renderer ) getBuildupOnTop() ;
         return fopCustomization.withRenderers(
             CollectionTools.append( fopCustomization.getRenderers(), renderer ) ) ;
 
       case FONTS_DIRECTORY :
         final FopCustomization.Renderer renderer0 =
-            ( FopCustomization.Renderer ) stack.getBuildupUnderTop() ;
+            ( FopCustomization.Renderer ) getBuildupUnderTop() ;
         final String directoryName = StringUtils.trim( getAndClearCollectedText() ) ;
         if( StringUtils.isBlank( directoryName ) ) {
           throwException( "Directory name cannot be empty" ) ;
         }
         final FopCustomization.Renderer.FontsDirectory fontsDirectory =
-            ( ( FopCustomization.Renderer.FontsDirectory ) stack.getBuildupOnTop() )
+            ( ( FopCustomization.Renderer.FontsDirectory ) getBuildupOnTop() )
             .withPath( directoryName )
         ;
         return renderer0.withFontsDirectories(
@@ -254,7 +191,7 @@ public class FopCustomizationReader extends MetaXslContentHandler {
 
       case OUTPUT_PROFILE:
         final FopCustomization.Renderer renderer1 =
-            ( FopCustomization.Renderer ) stack.getBuildupUnderTop() ;
+            ( FopCustomization.Renderer ) getBuildupUnderTop() ;
         final ResourceName profile = getResourceNameFromCollectedText() ;
         return renderer1.withOutputProfile( profile ) ;
 
@@ -266,79 +203,13 @@ public class FopCustomizationReader extends MetaXslContentHandler {
     }
 
     // Default: avoid to discard stacks' top.
-    return stack.getBuildupUnderTop() ;
+    return getBuildupUnderTop() ;
   }
 
 
 // =========
 // Utilities
 // =========
-
-  private String getStringAttributeValue(
-      final Attributes attributes,
-      final XmlAttribute attribute
-  ) throws IncorrectMetaXslException {
-    final String actualValue = attributes.getValue( attribute.getAttributeName() ) ;
-    if( actualValue == null ) {
-      throwException( "Missing '" + attribute.getAttributeName() + "' attribute" ) ;
-      return null ; // Never executes but compiler gets happy.
-    } else {
-      return actualValue ;
-    }
-  }
-
-  private boolean getBooleanAttributeValue(
-      final Attributes attributes,
-      final XmlAttribute attribute,
-      final boolean defaultValue
-  ) throws IncorrectMetaXslException {
-    final String actualValue = attributes.getValue( attribute.getAttributeName() ) ;
-    if( actualValue == null ) {
-      return defaultValue ;
-    } else {
-      if( "true".equalsIgnoreCase( actualValue ) ) {
-        return true ;
-      } else if( "false".equalsIgnoreCase( actualValue ) ) {
-        return false ;
-      } else {
-        throwException(
-            "Unsupported boolean value '" + actualValue + "', must be 'true' or 'false'" ) ;
-        return false ; // Never executes but compiler gets pleased.
-      }
-    }
-  }
-
-  /**
-   * Side effect: clears collected text.
-   */
-  private int getIntegerFromCollectedText() throws IncorrectMetaXslException {
-    final String text = StringUtils.trim( getAndClearCollectedText() ) ;
-    try {
-      return Integer.parseInt( text ) ;
-    } catch( NumberFormatException e ) {
-      throwException( "Couldn't parse '" + text + "' as an integer value " ) ;
-      return 0 ; // Never executes but makes compiler happy.
-    }
-  }
-
-  /**
-   * Side effect: clears collected text.
-   */
-  private ResourceName getResourceNameFromCollectedText() throws IncorrectMetaXslException {
-    final String text = StringUtils.trim( getAndClearCollectedText() ) ;
-    try {
-      if( StringUtils.isBlank( text ) ) {
-        return null ;
-      } else {
-        return new ResourceName( text ) ;
-      }
-    } catch( IllegalArgumentException e ) {
-      throwException( e.getMessage() ) ;
-      return null ; // Never executes but makes compiler happy.
-    }
-  }
-
-
 
 
 }

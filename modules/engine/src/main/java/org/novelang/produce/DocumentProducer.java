@@ -30,7 +30,7 @@ import org.novelang.common.Renderable;
 import org.novelang.common.StructureKind;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.novella.Novella;

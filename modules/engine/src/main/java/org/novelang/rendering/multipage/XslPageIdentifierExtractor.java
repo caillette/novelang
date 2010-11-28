@@ -16,9 +16,21 @@
  */
 package org.novelang.rendering.multipage;
 
+import java.io.IOException;
+
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.TransformerHandler;
 import org.dom4j.Document;
 import org.novelang.common.SyntacticTree;
+import org.novelang.outfit.xml.XslTransformerFactory;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.SAXException;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Computes the pages of a document tree, using
@@ -29,11 +41,40 @@ import org.novelang.common.SyntacticTree;
  */
 public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
 
-  public XslPageIdentifierExtractor( final Document stylesheetDocument ) {
+  private final Document stylesheetDocument ;
+  private final EntityResolver entityResolver ;
+  private final URIResolver uriResolver ;
+
+  public XslPageIdentifierExtractor(
+      final EntityResolver entityResolver,
+      final URIResolver uriResolver,
+      final XslMultipageStylesheetCapture multipageStylesheetCapture
+  ) {
+    this.entityResolver = checkNotNull( entityResolver ) ;
+    this.uriResolver = checkNotNull( uriResolver ) ;
+    this.stylesheetDocument = checkNotNull(
+        multipageStylesheetCapture.getStylesheetDocument() ) ;
   }
 
+
   @Override
-  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers( final SyntacticTree documentTree ) {
+  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
+      final SyntacticTree documentTree
+  )
+      throws IOException, TransformerConfigurationException, SAXException
+  {
+    
+
+    final XslTransformerFactory xslTransformerFactory = new XslTransformerFactory.FromDom4jDocument(
+        stylesheetDocument,
+        entityResolver,
+        uriResolver,
+        ImmutableList.< ContentHandler >of()
+    ) ;
+    final TransformerHandler transformerHandler =
+        xslTransformerFactory.newTransformerHandler() ;
+
+
     throw new UnsupportedOperationException( "TODO" ) ;
   }
 }

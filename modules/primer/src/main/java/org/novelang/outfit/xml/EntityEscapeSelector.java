@@ -14,27 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package org.novelang.loader;
-
-import java.io.InputStream;
+package org.novelang.outfit.xml;
 
 /**
- * The most simple contract for loading a resource.
- * An interface is useful here instead of URLs because
- * {@link ClasspathResourceLoader} handles lots of URLs by itself in a opaque way
- * (that should stay opaque anyways).
- * 
- * @author Laurent Caillette
+ * Hook for letting subclasses define if some XML entity requires escaping.
+ * Default never escapes.
  */
-public interface ResourceLoader {
-
-  /**
-   * Returns an {@code InputStream} for the given resource name,
-   * relative to the {@code ResourceLoader}.
-   * @param resourceName a non-null object.
-   * @return a non-null object.
-   */
-  InputStream getInputStream( ResourceName resourceName ) throws ResourceNotFoundException ;
-
+public interface EntityEscapeSelector {
+  boolean shouldEscape( String publicId, String systemId ) ;
 }

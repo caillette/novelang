@@ -2,8 +2,8 @@ package org.novelang.configuration;
 
 import org.novelang.ResourcesForTests;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
-import org.novelang.loader.ResourceLoader;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.configuration.parse.ArgumentException;
 import org.novelang.configuration.parse.GenericParameters;

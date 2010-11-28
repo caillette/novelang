@@ -20,7 +20,7 @@ package org.novelang.configuration;
 import java.nio.charset.Charset;
 
 import org.apache.fop.apps.FopFactory;
-import org.novelang.loader.ResourceLoader;
+import org.novelang.outfit.loader.ResourceLoader;
 
 /**
  * @author Laurent Caillette

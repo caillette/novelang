@@ -18,7 +18,7 @@ package org.novelang.configuration.fop;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 
 /**
  * Represents the configuration of a {@link org.apache.fop.apps.FopFactory} for the user-defined

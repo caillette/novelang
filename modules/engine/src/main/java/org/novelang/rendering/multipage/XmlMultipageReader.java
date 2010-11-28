@@ -14,41 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.loader;
+package org.novelang.rendering.multipage;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.novelang.outfit.xml.ForwardingContentHandler;
+import org.novelang.outfit.xml.StackBasedElementReader;
+import org.novelang.outfit.xml.XmlNamespaces;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 /**
- * Tests for {@link ResourceName}.
+ * Reads XML representing a list of pages as internally rendered by
+ * {@link org.novelang.rendering.multipage.XslPageIdentifierExtractor}.
  *
  * @author Laurent Caillette
  */
-public class ResourceNameTest {
+public class XmlMultipageReader /*extends StackBasedElementReader*/ {
 
-  @Test
-  public void wellFormed() {
-    new ResourceName( "foo.bar" ) ;
-    new ResourceName( "dir/foo.bar" ) ;
-  }
-
-  @Test( expected = IllegalArgumentException.class )
-  public void testLeadingSolidus() {
-    new ResourceName( "/foo.bar" ) ;
-  }
-
-  @Test( expected = IllegalArgumentException.class )
-  public void testDoubleFullStop() {
-    new ResourceName( "dir/../foo.bar" ) ;
+  public XmlMultipageReader() {
+//    super( XmlNamespaces.TREE_NAMESPACE_URI ) ;
   }
 
 
-// =======
-// Fixture
-// =======
 
-  private static void check( final String expected, final String resourceName ) {
-    Assert.assertEquals( expected, new ResourceName( resourceName ).getName() ) ;
+  private enum MultipageElement {
+    PAGES, PAGE, NAME, PATH 
   }
-
 }

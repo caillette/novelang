@@ -16,30 +16,33 @@
  */
 package org.novelang.outfit.xml;
 
-import java.util.Map;
-
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableBiMap;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * SAX content handler for XSL stylehseet metadata.
+ * Base class for implementing a SAX {@code ContentHandler}, with a dedicated feature
+ * for detecting if an element is in a given namespace (set as a constructor parameter).
+ * For convenience, default value is "{@value #DEFAULT_NAMESPACE_URI}".
  *
  * @author Laurent Caillette
  */
-public abstract class MetaXslContentHandler implements ContentHandler {
+public abstract class ForwardingContentHandler implements ContentHandler {
 
   protected final String namespaceUri ;
 
-  protected MetaXslContentHandler() {
-    this( XmlNamespaces.XSL_META_NAMESPACE_URI ) ;
+  private static final String DEFAULT_NAMESPACE_URI = XmlNamespaces.XSL_META_NAMESPACE_URI ;
+
+  protected ForwardingContentHandler() {
+    this( DEFAULT_NAMESPACE_URI ) ;
   }
 
-  protected MetaXslContentHandler( final String namespaceUri ) {
+  protected ForwardingContentHandler( final String namespaceUri ) {
     this.namespaceUri = Preconditions.checkNotNull( namespaceUri ) ;
   }
 
@@ -85,14 +88,17 @@ public abstract class MetaXslContentHandler implements ContentHandler {
     return namespacePrefix ;
   }
 
+  /**
+   * @return a non-null object.
+   */
   public String getNamespaceUri() {
     return namespaceUri ;
   }
 
-  private final Map< String, String > prefixMappings = Maps.newTreeMap() ;
+  private final BiMap< String, String > prefixMappings = HashBiMap.create() ;
 
-  public final ImmutableMap< String, String> getPrefixMappings() {
-    return ImmutableMap.copyOf( prefixMappings ) ;
+  public final ImmutableBiMap< String, String> getPrefixMappings() {
+    return ImmutableBiMap.copyOf( prefixMappings ) ;
   }
 
   @Override

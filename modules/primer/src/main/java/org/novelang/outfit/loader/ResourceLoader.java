@@ -14,27 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.rendering.multipage;
 
-import com.google.common.collect.ImmutableMap;
-import org.novelang.common.SyntacticTree;
+package org.novelang.outfit.loader;
+
+import java.io.InputStream;
 
 /**
- * Given a {@link SyntacticTree}, returns an abstraction of subtrees.
- * The {@code Map} has {@link PageIdentifier}s for keys, and for values a {@code String}
- * that a {@link org.novelang.rendering.Renderer} may use for finding the same subtree again.
- *
+ * The most simple contract for loading a resource.
+ * An interface is useful here instead of URLs because
+ * {@link ClasspathResourceLoader} handles lots of URLs by itself in a opaque way
+ * (that should stay opaque anyways).
+ * 
  * @author Laurent Caillette
  */
-public interface PageIdentifierExtractor {
+public interface ResourceLoader {
 
   /**
-   * Extracts the identifiers.
-   *
-   * @param documentTree a non-null object.
-   * @return a non-null but possibly empty {@code Map}.
+   * Returns an {@code InputStream} for the given resource name,
+   * relative to the {@code ResourceLoader}.
+   * @param resourceName a non-null object.
+   * @return a non-null object.
    */
-  ImmutableMap< PageIdentifier, String > extractPageIdentifiers( SyntacticTree documentTree )
-      throws Exception ;
+  InputStream getInputStream( ResourceName resourceName ) throws ResourceNotFoundException ;
 
 }

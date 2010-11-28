@@ -16,7 +16,7 @@
  */
 package org.novelang.produce;
 
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
 
 /**

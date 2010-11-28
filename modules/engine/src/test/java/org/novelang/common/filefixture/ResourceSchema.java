@@ -29,7 +29,7 @@ import java.util.MissingResourceException;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import org.novelang.loader.ClasspathResourceLoader;
+import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 

@@ -14,27 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.rendering.multipage;
+package org.novelang.outfit.loader;
 
-import com.google.common.collect.ImmutableMap;
-import org.novelang.common.SyntacticTree;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * Given a {@link SyntacticTree}, returns an abstraction of subtrees.
- * The {@code Map} has {@link PageIdentifier}s for keys, and for values a {@code String}
- * that a {@link org.novelang.rendering.Renderer} may use for finding the same subtree again.
+ * Tests for {@link ResourceName}.
  *
  * @author Laurent Caillette
  */
-public interface PageIdentifierExtractor {
+public class ResourceNameTest {
 
-  /**
-   * Extracts the identifiers.
-   *
-   * @param documentTree a non-null object.
-   * @return a non-null but possibly empty {@code Map}.
-   */
-  ImmutableMap< PageIdentifier, String > extractPageIdentifiers( SyntacticTree documentTree )
-      throws Exception ;
+  @Test
+  public void wellFormed() {
+    new ResourceName( "foo.bar" ) ;
+    new ResourceName( "dir/foo.bar" ) ;
+  }
+
+  @Test( expected = IllegalArgumentException.class )
+  public void testLeadingSolidus() {
+    new ResourceName( "/foo.bar" ) ;
+  }
+
+  @Test( expected = IllegalArgumentException.class )
+  public void testDoubleFullStop() {
+    new ResourceName( "dir/../foo.bar" ) ;
+  }
+
+
+// =======
+// Fixture
+// =======
+
+  private static void check( final String expected, final String resourceName ) {
+    Assert.assertEquals( expected, new ResourceName( resourceName ).getName() ) ;
+  }
 
 }

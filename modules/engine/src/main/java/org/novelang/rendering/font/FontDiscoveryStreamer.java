@@ -31,7 +31,7 @@ import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.loader.ResourceName;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.parser.GeneratedLexemes;
 import org.novelang.rendering.PdfWriter;
 import org.novelang.rendering.XslWriter;
