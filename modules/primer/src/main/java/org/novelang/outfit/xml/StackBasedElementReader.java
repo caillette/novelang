@@ -37,7 +37,7 @@ import static com.google.common.collect.ImmutableList.of;
  * @author Laurent Caillette
  */
 public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
-    extends ForwardingContentHandler {
+    extends ContentHandlerAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( StackBasedElementReader.class ) ;
 
@@ -45,7 +45,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
   private final Function< ATTRIBUTE, String > attributeToName ;
   private final ELEMENT rootElement ;
 
-  private final Stack< ELEMENT, BUILDUP > stack ;
+  private final BuildupStack< ELEMENT, BUILDUP > stack ;
 
   protected StackBasedElementReader(
       final String namespaceUri,
@@ -61,15 +61,15 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
     // Will throw some ugly exception if preconditions (at least one element) aren't met.
     this.rootElement = elementPaths.asList().get( 0 ).get( 0 ) ;
 
-    this.stack = new Stack< ELEMENT, BUILDUP >( elementPaths, pathElementToString ) ;
+    this.stack = new BuildupStack< ELEMENT, BUILDUP >( elementPaths, pathElementToString ) ;
   }
 
   @SuppressWarnings( { "StringBufferField" } )
   private final StringBuilder charactersCollector = new StringBuilder() ;
 
   @Override
-  protected void throwException( final String message ) throws IncorrectMetaXslException {
-    throw new IncorrectMetaXslException( buildMessageWithLocation( message )
+  protected void throwException( final String message ) throws IncorrectXmlException {
+    throw new IncorrectXmlException( buildMessageWithLocation( message )
         + ( stack.isEmpty() ? "" : " (in " + stack.getPathAsString() + ")" )
     ) ;
   }
@@ -100,7 +100,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
         stack.push( element, preparePush( element, attributes ) ) ;
         StackBasedElementReader.LOGGER.debug( ">>> ", stack.getPathAsString() ) ;
       }
-    } catch( Stack.IllegalPathException e ) {
+    } catch( BuildupStack.IllegalPathException e ) {
       throwException( e.getMessage() ) ;
     }
   }
@@ -127,9 +127,9 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
   }
 
   protected abstract BUILDUP preparePush( ELEMENT element, Attributes attributes )
-      throws IncorrectMetaXslException;
+      throws IncorrectXmlException;
 
-  protected abstract BUILDUP preparePop() throws IncorrectMetaXslException;
+  protected abstract BUILDUP preparePop() throws IncorrectXmlException;
 
 
 
@@ -157,7 +157,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
   protected final String getStringAttributeValue(
       final Attributes attributes,
       final ATTRIBUTE attribute
-  ) throws IncorrectMetaXslException {
+  ) throws IncorrectXmlException {
     final String actualValue = attributes.getValue( attributeToName.apply( attribute ) ) ;
     if( actualValue == null ) {
       throwException( "Missing '" + attributeToName.apply( attribute ) + "' attribute" ) ;
@@ -171,7 +171,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
       final Attributes attributes,
       final ATTRIBUTE attribute,
       final boolean defaultValue
-  ) throws IncorrectMetaXslException {
+  ) throws IncorrectXmlException {
     final String actualValue = attributes.getValue( attributeToName.apply( attribute ) ) ;
     if( actualValue == null ) {
       return defaultValue ;
@@ -212,7 +212,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
   /**
    * Side effect: clears collected text.
    */
-  protected final int getIntegerFromCollectedText() throws IncorrectMetaXslException {
+  protected final int getIntegerFromCollectedText() throws IncorrectXmlException {
     final String text = StringUtils.trim( getAndClearCollectedText() ) ;
     try {
       return Integer.parseInt( text ) ;
@@ -225,7 +225,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
   /**
    * Side effect: clears collected text.
    */
-  protected final ResourceName getResourceNameFromCollectedText() throws IncorrectMetaXslException {
+  protected final ResourceName getResourceNameFromCollectedText() throws IncorrectXmlException {
     final String text = StringUtils.trim( getAndClearCollectedText() ) ;
     try {
       if( StringUtils.isBlank( text ) ) {

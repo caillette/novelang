@@ -23,7 +23,7 @@ import org.dom4j.Document;
 import org.dom4j.io.SAXContentHandler;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.xml.ForwardingContentHandler;
+import org.novelang.outfit.xml.ContentHandlerAdapter;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class XslMultipageStylesheetCapture extends ForwardingContentHandler {
+public class XslMultipageStylesheetCapture extends ContentHandlerAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( XslMultipageStylesheetCapture.class ) ;
 

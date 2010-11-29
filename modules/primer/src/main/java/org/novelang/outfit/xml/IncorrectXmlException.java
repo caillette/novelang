@@ -19,12 +19,12 @@ package org.novelang.outfit.xml;
 import org.xml.sax.SAXException;
 
 /**
- * Thrown by {@link ForwardingContentHandler}.
+ * Thrown by {@link ContentHandlerAdapter}.
  *
  * @author Laurent Caillette
  */
-public class IncorrectMetaXslException extends SAXException {
-  public IncorrectMetaXslException( final String message ) {
+public class IncorrectXmlException extends SAXException {
+  public IncorrectXmlException( final String message ) {
     super( message ) ;
   }
 }

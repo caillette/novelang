@@ -23,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.CollectionTools;
 import org.novelang.outfit.Husk;
-import org.novelang.outfit.xml.IncorrectMetaXslException;
+import org.novelang.outfit.xml.IncorrectXmlException;
 import org.novelang.outfit.xml.StackBasedElementReader;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
@@ -109,7 +109,7 @@ public class FopCustomizationReader
 
   @Override
   protected Object preparePush( final XmlElement element, final Attributes attributes )
-      throws IncorrectMetaXslException
+      throws IncorrectXmlException
   {
 
     switch( element ) {
@@ -148,7 +148,7 @@ public class FopCustomizationReader
    * This method typically read the current top of the stack, or the collected text.
    */
   @Override
-  protected Object preparePop() throws IncorrectMetaXslException {
+  protected Object preparePop() throws IncorrectXmlException {
 
     switch( getTopSegment() ) {
 

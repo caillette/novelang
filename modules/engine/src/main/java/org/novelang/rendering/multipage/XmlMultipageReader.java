@@ -25,7 +25,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.novelang.outfit.Husk;
-import org.novelang.outfit.xml.IncorrectMetaXslException;
+import org.novelang.outfit.xml.IncorrectXmlException;
 import org.novelang.outfit.xml.StackBasedElementReader;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
@@ -65,7 +65,7 @@ import static org.novelang.rendering.multipage.MultipageElement.*;
 
   @Override
   protected Object preparePush( final MultipageElement element, final Attributes attributes )
-      throws IncorrectMetaXslException
+      throws IncorrectXmlException
   {
     switch( element ) {
       case PAGES :
@@ -82,7 +82,7 @@ import static org.novelang.rendering.multipage.MultipageElement.*;
   }
 
   @Override
-  protected Object preparePop() throws IncorrectMetaXslException {
+  protected Object preparePop() throws IncorrectXmlException {
     final MultipageElement topSegment = getTopSegment();
     switch( topSegment ) {
       case PAGES :

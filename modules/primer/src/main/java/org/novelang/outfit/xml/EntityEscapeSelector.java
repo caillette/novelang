@@ -17,9 +17,19 @@
 package org.novelang.outfit.xml;
 
 /**
- * Hook for letting subclasses define if some XML entity requires escaping.
- * Default never escapes.
+ * Decides of XML entity escaping.
  */
 public interface EntityEscapeSelector {
+
   boolean shouldEscape( String publicId, String systemId ) ;
+
+  /**
+   * Performs no escape at all.
+   */
+  EntityEscapeSelector NO_ENTITY_ESCAPE = new EntityEscapeSelector() {
+    @Override
+    public boolean shouldEscape( final String publicId, final String systemId ) {
+      return false ;
+    }
+  } ;
 }

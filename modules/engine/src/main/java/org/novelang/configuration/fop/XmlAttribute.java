@@ -19,7 +19,7 @@ package org.novelang.configuration.fop;
 /**
  * @author Laurent Caillette
  */
-public enum XmlAttribute {
+/*package*/ enum XmlAttribute {
   MIME( "mime" ),
   RECURSIVE( "recursive" ) ;
 

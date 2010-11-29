@@ -36,12 +36,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-public class Stack< SEGMENT, BUILDUP > {
+public class BuildupStack< SEGMENT, BUILDUP > {
 
   private final ImmutableSet< ImmutableList< SEGMENT > > legalPaths ;
   private final Function< SEGMENT, String > pathElementToString ;
 
-  public Stack(
+  public BuildupStack(
       final ImmutableSet< ImmutableList< SEGMENT > > legalPaths,
       final Function< SEGMENT, String > pathElementToString
   ) {

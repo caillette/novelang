@@ -97,7 +97,7 @@ public class XslWriter extends XmlWriter {
         xslFileName,
         DefaultCharset.RENDERING,
         mimeType,
-        NO_ENTITY_ESCAPE
+        EntityEscapeSelector.NO_ENTITY_ESCAPE
     ) ;
   }
 
@@ -107,7 +107,7 @@ public class XslWriter extends XmlWriter {
       final Charset charset,
       final RenditionMimeType mimeType
   ) {
-    this( configuration, xslFileName, charset, mimeType, NO_ENTITY_ESCAPE ) ;
+    this( configuration, xslFileName, charset, mimeType, EntityEscapeSelector.NO_ENTITY_ESCAPE ) ;
   }
 
   public XslWriter(
@@ -213,13 +213,6 @@ public class XslWriter extends XmlWriter {
   {
     return super.createContentHandler( outputStream, documentMetadata, charset ) ;
   }
-
-  private static final EntityEscapeSelector NO_ENTITY_ESCAPE = new EntityEscapeSelector() {
-    @Override
-    public boolean shouldEscape( final String publicId, final String systemId ) {
-      return false ;
-    }
-  } ;
 
   private static SaxMulticaster connectXpathVerifier( final TemplatesHandler templatesHandler ) {
     return new SaxMulticaster( templatesHandler, createAdditionalContentHandlers() ) ;
