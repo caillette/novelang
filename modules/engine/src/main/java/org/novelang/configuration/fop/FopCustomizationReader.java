@@ -102,16 +102,8 @@ public class FopCustomizationReader
   }
 
 
-// =======
-// Element
-// =======
 
-
-  // ====
-// Text
-// ====
-
-  // ========
+// ========
 // Stacking
 // ========
 

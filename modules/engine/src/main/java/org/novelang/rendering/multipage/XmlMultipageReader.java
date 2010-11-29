@@ -16,11 +16,22 @@
  */
 package org.novelang.rendering.multipage;
 
-import org.novelang.outfit.xml.ForwardingContentHandler;
+import java.util.Map;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
+import org.novelang.outfit.Husk;
+import org.novelang.outfit.xml.IncorrectMetaXslException;
 import org.novelang.outfit.xml.StackBasedElementReader;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+
+import static com.google.common.collect.ImmutableList.of;
+import static org.novelang.rendering.multipage.MultipageElement.*;
 
 /**
  * Reads XML representing a list of pages as internally rendered by
@@ -28,15 +39,118 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class XmlMultipageReader /*extends StackBasedElementReader*/ {
+/*package*/ class XmlMultipageReader
+    extends StackBasedElementReader< MultipageElement, Void, Object >
+{
 
   public XmlMultipageReader() {
-//    super( XmlNamespaces.TREE_NAMESPACE_URI ) ;
+    super(
+        XmlNamespaces.TREE_NAMESPACE_URI,
+        ELEMENT_PATHS,
+        MULTIPAGE_ELEMENT_TO_STRING,
+        NULL_FUNCTION_FOR_ATTRIBUTE, 
+        FIND_FROM_LOCAL_NAME
+    ) ;
+  }
+
+  private final Map< PageIdentifier, String > pageIdentifiers = Maps.newLinkedHashMap() ;
+
+  public Map< PageIdentifier, String > getPageIdentifiers() {
+    return ImmutableMap.copyOf( pageIdentifiers ) ;
+  }
+
+// ========
+// Stacking
+// ========
+
+  @Override
+  protected Object preparePush( final MultipageElement element, final Attributes attributes )
+      throws IncorrectMetaXslException
+  {
+    switch( element ) {
+      case PAGES :
+        return null ;
+      case PAGE :
+        return Husk.create( PageBuildup.class ) ;
+      case IDENTIFIER:
+        return null ;
+      case PATH :
+        return null ;
+      default : throw new IllegalArgumentException( "Unsupported: " + element ) ;
+    }
+
+  }
+
+  @Override
+  protected Object preparePop() throws IncorrectMetaXslException {
+    final MultipageElement topSegment = getTopSegment();
+    switch( topSegment ) {
+      case PAGES :
+        return null ;
+      case PAGE:
+        final PageBuildup pageBuildup = ( PageBuildup ) getBuildupOnTop() ;
+        pageIdentifiers.put( pageBuildup.getPageIdentifier(), pageBuildup.getPath() ) ;
+        return null ;
+      case IDENTIFIER:
+        final PageBuildup buildup0 = ( PageBuildup ) getBuildupUnderTop() ;
+        final String text = StringUtils.trim( getAndClearCollectedText() ) ;
+        return buildup0.withPageIdentifier( new PageIdentifier( text ) ) ;
+      case PATH:
+        final PageBuildup buildup1 = ( PageBuildup ) getBuildupUnderTop() ;
+        return buildup1.withPath( StringUtils.trim( getAndClearCollectedText() ) ) ;
+      default :
+        throw new IllegalArgumentException( "Unsupported: " + topSegment ) ;
+    }
   }
 
 
+  private static interface PageBuildup {
+    PageIdentifier getPageIdentifier() ;
+    PageBuildup withPageIdentifier( PageIdentifier name ) ;
+    String getPath() ;
+    PageBuildup withPath( String path ) ;
 
-  private enum MultipageElement {
-    PAGES, PAGE, NAME, PATH 
   }
+
+// ================
+// Boring constants
+// ================
+
+  private static final ImmutableSet< ImmutableList< MultipageElement > > ELEMENT_PATHS =
+      ImmutableSet.of(
+          of( PAGES ),
+          of( PAGES, PAGE ),
+          of( PAGES, PAGE, IDENTIFIER ),
+          of( PAGES, PAGE, PATH )
+      )
+  ;
+
+  private static final Function< MultipageElement, String > MULTIPAGE_ELEMENT_TO_STRING =
+      new Function< MultipageElement, String >() {
+        @Override
+        public String apply( final MultipageElement input ) {
+          return input.getLocalName() ;
+        }
+      }
+  ;
+
+  private static final Function< String, MultipageElement > FIND_FROM_LOCAL_NAME =
+      new Function< String, MultipageElement >() {
+        @Override
+        public MultipageElement apply( final String input ) {
+          return MultipageElement.fromLocalName( input ) ;
+        }
+      }
+  ;
+
+  private static final Function< Void, String > NULL_FUNCTION_FOR_ATTRIBUTE =
+      new Function< Void, String >() {
+        @Override
+        public String apply( final Void input ) {
+          throw new UnsupportedOperationException( "Should never be called" ) ;
+        }
+      }
+  ;
+
+
 }

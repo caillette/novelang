@@ -17,6 +17,7 @@
 package org.novelang.outfit;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -35,6 +36,18 @@ public class CollectionTools {
     return ImmutableList.< T >builder()
         .addAll( list )
         .add( element )
+        .build()
+    ;
+  }
+
+  public static < K, V > ImmutableMap< K, V > append(
+      final ImmutableMap< K, V > map,
+      final K key,
+      final V value
+  ) {
+    return ImmutableMap.< K, V >builder()
+        .putAll( map )
+        .put( key, value )
         .build()
     ;
   }
