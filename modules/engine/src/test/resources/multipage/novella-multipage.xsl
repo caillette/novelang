@@ -16,12 +16,17 @@
 
     <xsl:template match="/" >
 
-      <xsl:for-each select="/n:opus/n:level">
-        <xslmeta:page>
-          <name><xsl:value-of select="n:level-title"/></name>
-          <path>/opus/level[<xsl:value-of select="position()"/>]</path>
-        </xslmeta:page>
-      </xsl:for-each>
+      <n:pages>
+        <xsl:for-each select="/n:opus/n:level">
+          <page>
+            <identifier>
+              <xsl:value-of select="n:level-title"/>
+            </identifier>
+            <path>/opus/level[<xsl:value-of select="position()"/>]
+            </path>
+          </page>
+        </xsl:for-each>
+      </n:pages>
 
     </xsl:template>
 
@@ -30,15 +35,14 @@
 
  <xsl:template match="/" >
 
+   <!--Doesn't try to simulate real navigation bar.-->
+
    [Navigation]
-   <xsl:for-each select="/n:opus/n:level">
-     <xslmeta:page>
-       <name><xsl:value-of select="n:level-title"/></name>
-       <path>/opus/level[<xsl:value-of select="position()"/>]</path>
-     </xslmeta:page>
+   <xsl:for-each select="/n:meta/n:page">
+     <xsl:value-of select="n:identifier"/>
    </xsl:for-each>
 
-   [Page]
+   [Whole opus]
    <xsl:apply-imports/>
    
  </xsl:template>

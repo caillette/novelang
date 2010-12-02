@@ -37,7 +37,8 @@ import static com.google.common.collect.ImmutableList.of;
  * @author Laurent Caillette
  */
 public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
-    extends ContentHandlerAdapter {
+    extends ContentHandlerAdapter
+{
 
   private static final Logger LOGGER = LoggerFactory.getLogger( StackBasedElementReader.class ) ;
 

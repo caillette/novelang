@@ -30,6 +30,7 @@ import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
+import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.designator.Tag;
 import org.novelang.opus.Opus;
@@ -57,18 +58,17 @@ import static org.novelang.ResourcesForTests.initialize;
  * @author Laurent Caillette
  */
 @RunWith( value = NameAwareTestClassRunner.class )
-//@Ignore( "Unfinished implementation" )
 public class XslPageIdentifierExtractorTest {
 
   @Test
-  public void extractStylesheetDocument() throws Exception, SAXException {
+  public void extractPageIdentifiers() throws Exception {
 
     final ResourceInstaller installer =
         new ResourceInstaller( new DirectoryFixture().getDirectory() ) ;
     final File stylesheetFile =
         installer.copy( ResourcesForTests.Multipage.NOVELLA_MULTIPAGE_XSL ) ;
-    final File novellaFile =
-        installer.copy( ResourcesForTests.Multipage.NOVELLA_DOCUMENT ) ;
+    final Resource novellaDocument = ResourcesForTests.Multipage.NOVELLA_DOCUMENT ;
+    installer.copy( novellaDocument ) ;
 
     final ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader() ;
     final EntityResolver entityResolver =
@@ -94,7 +94,7 @@ public class XslPageIdentifierExtractorTest {
         installer.getTargetDirectory(),
         installer.getTargetDirectory(),
         Executors.newSingleThreadExecutor(),
-        "insert file:document.novella",
+        "insert file:" + novellaDocument.getName(),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
         ImmutableSet.< Tag >of()
@@ -107,7 +107,6 @@ public class XslPageIdentifierExtractorTest {
         new PageIdentifier( "Level-0" ), "/opus/level[1]",
         new PageIdentifier( "Level-1" ), "/opus/level[2]"
     ) ) ;
-
 
   }
 
