@@ -242,6 +242,7 @@ public final class ResourcesForTests {
 
     Resource NOVELLA_MULTIPAGE_XSL = resource( "novella-multipage.xsl" ) ;
     Resource XML_DOCUMENT = resource( "document.xml" ) ;
-    
+    Resource NOVELLA_DOCUMENT = resource( "document.novella" ) ;
+
   }
 }

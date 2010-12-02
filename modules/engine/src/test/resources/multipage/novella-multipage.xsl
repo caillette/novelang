@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+    version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xslmeta="http://novelang.org/xsl-meta/1.0"
 >

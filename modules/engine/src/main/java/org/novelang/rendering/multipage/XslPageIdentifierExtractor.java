@@ -16,16 +16,23 @@
  */
 package org.novelang.rendering.multipage;
 
-import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
+import org.apache.commons.io.output.NullOutputStream;
 import org.dom4j.Document;
 import org.novelang.common.SyntacticTree;
+import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.outfit.xml.XslTransformerFactory;
+import org.novelang.rendering.GenericRenderer;
+import org.novelang.rendering.RenditionMimeType;
+import org.novelang.rendering.XmlWriter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
@@ -61,9 +68,8 @@ public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
   public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
       final SyntacticTree documentTree
   )
-      throws IOException, TransformerConfigurationException, SAXException
+      throws Exception
   {
-    
 
     final XslTransformerFactory xslTransformerFactory = new XslTransformerFactory.FromDom4jDocument(
         stylesheetDocument,
@@ -71,10 +77,27 @@ public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
         uriResolver,
         ImmutableList.< ContentHandler >of()
     ) ;
-    final TransformerHandler transformerHandler =
-        xslTransformerFactory.newTransformerHandler() ;
 
+    final TransformerHandler transformerHandler = xslTransformerFactory.newTransformerHandler() ;
 
-    throw new UnsupportedOperationException( "TODO" ) ;
+    final XmlMultipageReader multipageReader = new XmlMultipageReader() ;
+    transformerHandler.setResult( new SAXResult( multipageReader ) );
+
+    final XmlWriter xmlWriter = new XmlWriter( RenditionMimeType.XML ) {
+      @Override
+      protected ContentHandler createContentHandler(
+          final OutputStream outputStream,
+          final DocumentMetadata documentMetadata,
+          final Charset charset
+      ) throws Exception {
+        return transformerHandler ;
+      }
+    } ;
+
+    final GenericRenderer renderer = new GenericRenderer( xmlWriter ) ;
+
+    renderer.renderTree( documentTree, new NullOutputStream(), null  ) ;
+
+    return multipageReader.getPageIdentifiers() ;
   }
 }

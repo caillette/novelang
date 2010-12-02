@@ -19,8 +19,10 @@ package org.novelang.rendering.multipage;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import org.dom4j.Document;
 import org.dom4j.io.SAXContentHandler;
+import org.novelang.common.SyntacticTree;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.xml.ContentHandlerAdapter;
@@ -38,7 +40,10 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class XslMultipageStylesheetCapture extends ContentHandlerAdapter {
+public class XslMultipageStylesheetCapture
+    extends ContentHandlerAdapter
+    implements PageIdentifierExtractor
+{
 
   private static final Logger LOGGER = LoggerFactory.getLogger( XslMultipageStylesheetCapture.class ) ;
 
@@ -48,11 +53,16 @@ public class XslMultipageStylesheetCapture extends ContentHandlerAdapter {
 
   private Document stylesheetDocument = null ;
 
-  public XslMultipageStylesheetCapture( final EntityResolver entityResolver )
-  {
+  public XslMultipageStylesheetCapture( final EntityResolver entityResolver ) {
     this.entityResolver = Preconditions.checkNotNull( entityResolver ) ;
   }
 
+  /**
+   * This method allows to hide the {@link Document} object from the public API;
+   * the {@link XslPageIdentifierExtractor} calls it to get what it wants.
+   *
+   * @return a possibly null object, depending on the state.
+   */
   /*package*/ Document getStylesheetDocument() {
     return stylesheetDocument ;
   }
@@ -67,6 +77,17 @@ public class XslMultipageStylesheetCapture extends ContentHandlerAdapter {
     return getPrefixMappings().inverse().get( XmlNamespaces.XSL_NAMESPACE_URI ) ;
   }
 
+  @Override
+  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
+      final SyntacticTree documentTree
+  ) throws Exception {
+    throw new UnsupportedOperationException( "TODO" ) ;
+
+  }
+
+// ==============
+// ContentHandler
+// ==============
 
   @Override
   public void startElement(

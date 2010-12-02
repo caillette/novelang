@@ -55,7 +55,7 @@ import static org.novelang.rendering.multipage.MultipageElement.*;
 
   private final Map< PageIdentifier, String > pageIdentifiers = Maps.newLinkedHashMap() ;
 
-  public Map< PageIdentifier, String > getPageIdentifiers() {
+  public ImmutableMap< PageIdentifier, String > getPageIdentifiers() {
     return ImmutableMap.copyOf( pageIdentifiers ) ;
   }
 

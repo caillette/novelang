@@ -19,25 +19,36 @@ package org.novelang.rendering.multipage;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.concurrent.Executors;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import javax.xml.transform.URIResolver;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.ResourceInstaller;
+import org.novelang.designator.Tag;
+import org.novelang.opus.Opus;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
+import org.novelang.outfit.xml.LocalUriResolver;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.novelang.ResourcesForTests.initialize;
 
 /**
@@ -47,26 +58,56 @@ import static org.novelang.ResourcesForTests.initialize;
  */
 @RunWith( value = NameAwareTestClassRunner.class )
 //@Ignore( "Unfinished implementation" )
-public class XslMultipageStylesheetCaptureTest {
+public class XslPageIdentifierExtractorTest {
 
   @Test
-  public void extractStylesheetDocument() throws IOException, SAXException {
+  public void extractStylesheetDocument() throws Exception, SAXException {
+
     final ResourceInstaller installer =
         new ResourceInstaller( new DirectoryFixture().getDirectory() ) ;
-    final File stylesheet = installer.copy( ResourcesForTests.Multipage.NOVELLA_MULTIPAGE_XSL ) ;
-    final File xml = installer.copy( ResourcesForTests.Multipage.XML_DOCUMENT ) ;
+    final File stylesheetFile =
+        installer.copy( ResourcesForTests.Multipage.NOVELLA_MULTIPAGE_XSL ) ;
+    final File novellaFile =
+        installer.copy( ResourcesForTests.Multipage.NOVELLA_DOCUMENT ) ;
 
-    final XslMultipageStylesheetCapture stylesheetCapture = new XslMultipageStylesheetCapture(
-        new LocalEntityResolver( new ClasspathResourceLoader(), NO_ENTITY_ESCAPE ) ) ;
+    final ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader() ;
+    final EntityResolver entityResolver =
+        new LocalEntityResolver( resourceLoader, NO_ENTITY_ESCAPE ) ;
+    final URIResolver uriResolver = new LocalUriResolver( resourceLoader, entityResolver ) ;
+
+    final XslMultipageStylesheetCapture stylesheetCapture =
+        new XslMultipageStylesheetCapture( entityResolver ) ;
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
     reader.setContentHandler( stylesheetCapture ) ;
-    reader.parse( new InputSource( new StringReader( FileUtils.readFileToString( stylesheet ) ) ) ) ;
+    reader.parse( new InputSource(
+        new StringReader( FileUtils.readFileToString( stylesheetFile ) ) ) ) ;
 
 
     final Document stylesheetDocument = stylesheetCapture.getStylesheetDocument() ;
+    LOGGER.info( "Got stylesheet:\n", stylesheetDocument.asXML() ) ;
 
-    LOGGER.info( "Got:\n", stylesheetDocument.asXML() ) ;
+    final PageIdentifierExtractor pageIdentifierExtractor = new XslPageIdentifierExtractor(
+        entityResolver, uriResolver, stylesheetCapture ) ;
+
+    final Opus opus = new Opus(
+        installer.getTargetDirectory(),
+        installer.getTargetDirectory(),
+        Executors.newSingleThreadExecutor(),
+        "insert file:document.novella",
+        DefaultCharset.SOURCE,
+        DefaultCharset.RENDERING,
+        ImmutableSet.< Tag >of()
+    ) ;
+
+    final ImmutableMap< PageIdentifier,String > pages =
+        pageIdentifierExtractor.extractPageIdentifiers( opus.getDocumentTree() ) ;
+
+    assertThat( pages ).isEqualTo( ImmutableMap.of(
+        new PageIdentifier( "Level-0" ), "/opus/level[1]",
+        new PageIdentifier( "Level-1" ), "/opus/level[2]"
+    ) ) ;
+
 
   }
 
@@ -77,7 +118,7 @@ public class XslMultipageStylesheetCaptureTest {
 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
-      XslMultipageStylesheetCaptureTest.class ) ;
+      XslPageIdentifierExtractorTest.class ) ;
 
   static {
     initialize() ;

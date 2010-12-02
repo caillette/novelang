@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-public class BuildupStack< SEGMENT, BUILDUP > {
+/*package*/ class BuildupStack< SEGMENT, BUILDUP > {
 
   private final ImmutableSet< ImmutableList< SEGMENT > > legalPaths ;
   private final Function< SEGMENT, String > pathElementToString ;

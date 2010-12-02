@@ -19,6 +19,7 @@ package org.novelang.rendering;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
@@ -86,7 +87,7 @@ public class GenericRenderer implements Renderer {
           MetadataHelper.createMetadata( rendered.getRenderingCharset() )
       ) ;
       final SyntacticTree root = rendered.getDocumentTree() ;
-      renderTree( root, null, null ) ;
+      renderTreeInternal( root, null, null ) ;
       fragmentWriter.finishWriting() ;
     }
   }
@@ -101,7 +102,20 @@ public class GenericRenderer implements Renderer {
     return fragmentWriter.getMimeType() ;
   }
 
-  private void renderTree(
+  public void renderTree(
+      final SyntacticTree tree,
+      final OutputStream outputStream,
+      final Charset renderingCharset
+  ) throws Exception {
+    fragmentWriter.startWriting(
+        outputStream,
+        MetadataHelper.createMetadata( renderingCharset )
+    ) ;
+    renderTreeInternal( tree, null, null ) ;
+    fragmentWriter.finishWriting() ;
+  }
+
+  private void renderTreeInternal(
       final SyntacticTree tree,
       final Nodepath kinship,
       final NodeKind previous
@@ -120,7 +134,7 @@ public class GenericRenderer implements Renderer {
         if( tree.getChildCount() > 1 ) {
           for( int childIndex = 1 ; childIndex < tree.getChildCount() ; childIndex++ ) {
             final SyntacticTree child = tree.getChildAt( childIndex ) ;
-            renderTree( child, newPath, WORD_ ) ;
+            renderTreeInternal( child, newPath, WORD_ ) ;
           }
         }
         break ;
@@ -243,7 +257,7 @@ public class GenericRenderer implements Renderer {
     for( final SyntacticTree subtree : tree.getChildren() ) {
       final NodeKind subtreeNodeKind = NodeKindTools.ofRoot( subtree );
       maybeWriteWhitespace( path, previous, subtreeNodeKind ) ;
-      renderTree( subtree, path, previous ) ;
+      renderTreeInternal( subtree, path, previous ) ;
       previous = subtreeNodeKind;
     }
     fragmentWriter.end( path ) ;
