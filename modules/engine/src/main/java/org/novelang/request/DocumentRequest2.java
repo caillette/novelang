@@ -43,7 +43,7 @@ public interface DocumentRequest2 extends AnyRequest {
    * Never null if {@link #isRendered()} is true (but may be empty then).
    * Always null if {@link #isRendered()} is false.
    */
-  ImmutableSet<Tag> getTags();
+  ImmutableSet< Tag > getTags() ;
 
   /**
    * If {@link #isRendered()} is true, maybe true or false.

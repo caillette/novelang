@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.ImmutableSet;
 import org.novelang.common.*;
 import org.novelang.designator.Tag;
 import org.novelang.parser.shared.Lexeme;
@@ -71,8 +72,8 @@ public class RenderingTools {
   }
 
 
-  public static Set< Tag > toTagSet( final Set< String > tagsAsStrings) {
-    final Set< Tag > tagSet = Sets.newHashSet() ;
+  public static ImmutableSet< Tag > toTagSet( final Set< String > tagsAsStrings) {
+    final ImmutableSet.Builder< Tag > tagSet = ImmutableSet.builder() ;
     for( final String tagAsString : tagsAsStrings ) {
       final String cleanString = toCleanStringForTag( tagAsString ) ;
       if( ! StringUtils.isBlank( cleanString ) ) {
@@ -80,7 +81,7 @@ public class RenderingTools {
         tagSet.add( tag ) ;
       }
     }
-    return tagSet ;
+    return tagSet.build() ;
   }
 
 

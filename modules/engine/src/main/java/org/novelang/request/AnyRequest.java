@@ -24,13 +24,18 @@ package org.novelang.request;
 public interface AnyRequest {
 
   /**
-   * Returns the original target part of the request.
+   * Returns the original target part of the request, excluding the part requesting to
+   * {@link DocumentRequest2#getDisplayProblems()}.
+   *
    * @return a non-null, non-empty {@code String}.
    */
   String getOriginalTarget() ;
 
   /**
-   * Returns the document source name (including its path).
+   * Returns the document source name, including its path but excluding the
+   * {@link DocumentRequest2#getRenditionMimeType()} or
+   * {@link ResourceRequest2#getResourceExtension()}.
+   *
    * @return a non-null, non-empty {@code String}.
    */
   String getDocumentSourceName() ;

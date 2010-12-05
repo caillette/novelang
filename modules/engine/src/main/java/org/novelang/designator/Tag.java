@@ -29,6 +29,13 @@ public final class Tag implements Comparable< Tag > {
   
   private final String name ;
 
+  public static final Function<Tag,String> EXTRACT_TAG_NAME = new Function< Tag, String >() {
+    @Override
+    public String apply( final Tag tag ) {
+      return tag.name ;
+    }
+  };
+
   public Tag( final String name ) {
     Preconditions.checkNotNull( name ) ;
     Preconditions.checkArgument( ! "".equals( name ) ) ;

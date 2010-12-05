@@ -16,10 +16,23 @@
  */
 package org.novelang.request;
 
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import org.apache.commons.lang.StringUtils;
 import org.novelang.designator.Tag;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.loader.ResourceName;
+import org.novelang.produce.RequestTools;
+import org.novelang.rendering.RawResource;
+import org.novelang.rendering.RenderingTools;
 import org.novelang.rendering.RenditionMimeType;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -30,11 +43,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class GenericRequest implements DocumentRequest2, ResourceRequest2 {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( GenericRequest.class ) ;
 // =======
 // For all
 // =======
 
   private final String originalTarget ;
+  private static final String TAG_SEPARATOR = ";" ;
 
   @Override
   public String getOriginalTarget() {
@@ -119,7 +134,6 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
       final ImmutableSet< Tag > tags
   ) {
     checkHasCharacters( originalTarget ) ;
-    this.originalTarget = originalTarget ;
     checkHasCharacters( documentSourceName ) ;
     this.documentSourceName = documentSourceName ;
     this.rendered = true ;
@@ -129,19 +143,36 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
     this.displayProblems = displayProblems ;
 
     this.resourceExtension = null ;
+    this.originalTarget = rebuildOriginalTarget() ;
+  }
+
+  private String rebuildOriginalTarget() {
+    final ImmutableList.Builder< String > parametersBuilder = ImmutableList.builder() ;
+    if( alternateStylesheet != null ) {
+      parametersBuilder.add(
+          RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + alternateStylesheet.getName() ) ;
+    }
+    if( ! getTags().isEmpty() ) {
+      final Iterable< String > tagNames = Iterables.transform( getTags(), Tag.EXTRACT_TAG_NAME ) ;
+
+      parametersBuilder.add( RequestTools.TAGSET_PARAMETER_NAME + "=" +
+          Joiner.on( TAG_SEPARATOR ).join( tagNames ) ) ;
+    }
+    final ImmutableList< String > parameters = parametersBuilder.build() ;
+    return documentSourceName + "." + renditionMimeType.getFileExtension() +
+        ( parameters.isEmpty() ? "" : "?" + Joiner.on( "&" ).join( parameters ) ) ;
   }
 
   private GenericRequest(
       final String originalTarget,
       final String documentSourceName,
-      final boolean rendered,
       final String resourceExtension
   ) {
     checkHasCharacters( originalTarget ) ;
-    this.originalTarget = originalTarget ;
+    this.originalTarget = documentSourceName + "." + resourceExtension ;
     checkHasCharacters( documentSourceName ) ;
     this.documentSourceName = documentSourceName ;
-    this.rendered = rendered ;
+    this.rendered = false ;
     checkHasCharacters( resourceExtension ) ;
     this.resourceExtension = resourceExtension ;
 
@@ -160,8 +191,181 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
 // Parsing
 // =======
 
-  public static AnyRequest parse( final String originalTarget ) {
-    throw new UnsupportedOperationException( "TODO" ) ;
+  private static final String TAG_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9\\-_]*"  ;
+
+  private static Pattern createPattern() {
+    final StringBuilder buffer = new StringBuilder() ;
+
+    buffer.append( "(" ) ;
+
+    // The path without extension. No double dots for security reasons (forbid '..').
+    buffer.append( "((?:\\/(?:\\w|-|_)+(?:\\.(?:\\w|-|_)+)*)+)" ) ;
+
+    // The extension defining the MIME type.
+    buffer.append( "(?:\\.(" ) ;
+
+    final ImmutableList< String > allExtensions = ImmutableList.< String >builder()
+        .addAll( RenditionMimeType.getFileExtensions() )
+        .addAll( RawResource.getFileExtensions() )
+        .build()
+    ;
+
+    buffer.append( Joiner.on( "|" ).join( allExtensions ) ) ;
+    buffer.append( "))" ) ;
+    buffer.append( ")" ) ;
+
+    // This duplicates the 'tag' rule in ANTLR grammar. Shame.
+    final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
+
+    buffer.append( "(?:\\?" ) ;
+    buffer.append( parameter ) ;
+    buffer.append( ")?" ) ;
+
+    return Pattern.compile( buffer.toString() ) ;
+  }
+
+  private static final Pattern DOCUMENT_PATTERN = createPattern() ;
+  static {
+    LOGGER.debug( "Crafted regex: ", DOCUMENT_PATTERN.pattern() ) ;
+  }
+
+  private static String extractExtension( final String path ) throws MalformedRequestException {
+    final Matcher matcher = DOCUMENT_PATTERN.matcher( path ) ;
+    if( matcher.find() && matcher.groupCount() >= 3 ) {
+      return matcher.group( 3 ) ;
+    } else {
+      throw new MalformedRequestException( "Doesn't contain an extension: '" + path + "'" ) ;
+    }
+  }
+
+  private static ImmutableMap< String, String > getQueryMap( final String query ) throws MalformedRequestException {
+    if( StringUtils.isBlank( query ) ) {
+      return ImmutableMap.of() ;
+    } else {
+      final String[] params = query.split( "&" ) ;
+      final ImmutableMap.Builder< String, String > map = ImmutableMap.builder() ;
+      for( final String param : params ) {
+        final String[] strings = param.split( "=" ) ;
+        final String name = strings[ 0 ] ;
+        if( strings.length > 2 ) {
+          throw new MalformedRequestException( "Multiple '=' for parameter " + name ) ;
+        }
+        final String value ;
+        if( strings.length > 1 ) {
+          value = strings[ 1 ] ;
+        } else {
+          value = null ;
+        }
+        if( map.build().keySet().contains( name ) ) {
+          throw new MalformedRequestException( "Duplicate value for parameter " + name ) ;
+        }
+        map.put( name, value ) ;
+      }
+      return map.build() ;
+    }
+  }
+
+
+  private static ResourceName extractResourceName(
+      final ImmutableMap< String, String > parameterMap
+  ) {
+    final String parameterValue = parameterMap.get(
+        RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME ) ;
+    if( parameterValue == null ) {
+      return null ;
+    } else {
+      return new ResourceName( parameterValue ) ;
+    }
+  }
+
+  private static final Pattern TAGS_PATTERN =
+      Pattern.compile( TAG_PATTERN + "(?:" + TAG_SEPARATOR + TAG_PATTERN + ")*" ) ;
+  private static final Pattern TAGS_SEPARATOR_PATTERN = Pattern.compile( TAG_SEPARATOR ) ;
+
+  private static ImmutableSet< Tag > parseTags( final String value ) throws MalformedRequestException {
+    if( TAGS_PATTERN.matcher( value ).matches() ) {
+      return RenderingTools.toTagSet( ImmutableSet.copyOf( TAGS_SEPARATOR_PATTERN.split( value ) ) ) ;
+    } else {
+      throw new MalformedRequestException( "Bad tag sequence: '" + value + "'" ) ;
+    }
+  }
+
+
+  private static ImmutableSet< Tag > extractTags(
+      final ImmutableMap< String, String > parameterMap
+ ) throws MalformedRequestException {
+    final String parameterValue = parameterMap.get( RequestTools.TAG_NAME_PARAMETER ) ;
+    if( parameterValue == null ) {
+      return ImmutableSet.of() ;
+    } else {
+      return parseTags( parameterValue ) ;
+    }
+  }
+
+  private static void verifyAllParameterNames( final Set< String > parameterNames )
+      throws MalformedRequestException
+  {
+    for( final String parameterName : parameterNames ) {
+      if( ! RequestTools.SUPPORTED_PARAMETER_NAMES.contains( parameterName ) ) {
+        throw new MalformedRequestException(
+            "Unsupported query parameter: '" + parameterName + "'" ) ;
+      }
+    }
+  }
+
+
+  public static AnyRequest parse( final String originalTarget ) throws MalformedRequestException {
+    final Matcher matcher = DOCUMENT_PATTERN.matcher( originalTarget ) ;
+    if( matcher.find() && matcher.groupCount() >= 2 ) {
+
+      final String fullTarget = matcher.group( 1 ) ; // With extension, without params.
+
+      final boolean showProblems = fullTarget.endsWith( RequestTools.ERRORPAGE_SUFFIX ) ;
+
+      final String targetMinusError ;
+      if( showProblems ) {
+        targetMinusError = fullTarget.substring(
+            0, fullTarget.length() - RequestTools.ERRORPAGE_SUFFIX.length() ) ;
+      } else {
+        targetMinusError = fullTarget ;
+      }
+
+      final String rawDocumentMimeType = extractExtension( targetMinusError ) ;
+      final String rawDocumentSourceName = targetMinusError.substring(
+            0, targetMinusError.length() - rawDocumentMimeType.length() - 1 ) ;
+
+      final RenditionMimeType renditionMimeType = RenditionMimeType.maybeValueOf(
+          rawDocumentMimeType == null ? null : rawDocumentMimeType.toUpperCase() ) ;
+
+      final ImmutableMap< String, String > parameterMap = matcher.groupCount() >= 4 ?
+          getQueryMap( matcher.group( 4 ) ) : ImmutableMap.< String, String >of() ;
+      verifyAllParameterNames( parameterMap.keySet() ) ;
+
+      final ResourceName alternateStylesheet = extractResourceName( parameterMap ) ;
+
+      final ImmutableSet< Tag > tagset = extractTags( parameterMap ) ;
+
+      final AnyRequest request ;
+      if( renditionMimeType == null ) {
+        request = new GenericRequest( originalTarget, rawDocumentSourceName, rawDocumentMimeType ) ;
+      } else {
+        request = new GenericRequest(
+            originalTarget,
+            rawDocumentSourceName,
+            showProblems,
+            renditionMimeType,
+            alternateStylesheet,
+            tagset
+        ) ;
+      }
+      LOGGER.debug( "Parsed: ", request ) ;
+
+      return request ;
+
+    } else {
+      throw new MalformedRequestException( "Could not parse: '" + originalTarget + "'." ) ;
+    }
+
   }
 
 
@@ -172,27 +376,13 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
 
   @Override
   public String toString() {
-    final String generic = getClass().getSimpleName() + "[" +
-        "originalTarget" + "=" + getOriginalTarget() +
-        "; documentSourceName" + "=" + getDocumentSourceName()
-    ;
-
-    final String specific ;
-    if( isRendered() ) {
-      specific =
-          "; displayProblems" + "=" + getDisplayProblems() +
-          "; documentMimeType" + "=" +
-              ( getRenditionMimeType() == null ? "<null>" : getRenditionMimeType().getMimeName() ) +
-          "; stylesheet" + "=" + getAlternateStylesheet() +
-          "; tags" + "=" + getTags() +
-          "]"
-      ;
-
-    } else {
-     specific = "; resourceExtension=" + getResourceExtension() ;
+    final StringBuilder stringBuilder = new StringBuilder( getClass().getSimpleName() + "[" ) ;
+    if( isRendered() && getDisplayProblems() ) {
+      stringBuilder.append( "displayProblems=true; " ) ;
     }
-
-    return generic + specific + "]" ;
+    stringBuilder.append( getOriginalTarget() ) ;
+    stringBuilder.append( "]" ) ;
+    return stringBuilder.toString() ;
   }
 
   @Override

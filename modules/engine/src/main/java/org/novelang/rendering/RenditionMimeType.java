@@ -60,11 +60,18 @@ public enum RenditionMimeType {
 
   public static boolean contains( final String name ) {
     for( final RenditionMimeType renditionMimeType : RenditionMimeType.values() ) {
-      if( renditionMimeType.name().toLowerCase().equals( name ) ) {
+      if( renditionMimeType.name().equals( name ) ) {
         return true ;
       }
     }
     return false ;
+  }
+
+  /**
+   * @return A possibly null value.
+   */
+  public static RenditionMimeType maybeValueOf( final String name ) {
+    return contains( name ) ? valueOf( name ) : null ;
   }
 
   public static Iterable< String > getFileExtensions() {

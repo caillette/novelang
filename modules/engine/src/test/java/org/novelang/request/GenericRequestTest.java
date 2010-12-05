@@ -23,14 +23,11 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.novelang.designator.Tag;
 import org.novelang.designator.TagTestTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.DocumentRequest;
-import org.novelang.produce.PolymorphicRequest;
 import org.novelang.produce.RequestTools;
 import org.novelang.rendering.RenditionMimeType;
 
@@ -41,11 +38,10 @@ import static org.junit.Assert.*;
  *
  * @author Laurent Caillette
  */
-@Ignore( "Unfinished implementation" )
 public class GenericRequestTest {
 
   @Test
-  public void documentRequest() {
+  public void documentRequest() throws MalformedRequestException {
     final DocumentRequest2 request = createDocumentRequest( PDF_REQUEST_PATH ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
@@ -56,13 +52,13 @@ public class GenericRequestTest {
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
     assertNull( request.getAlternateStylesheet() ) ;
 
-    assertEquals( "pdf", ( ( ResourceRequest2 ) request ).getResourceExtension() ) ;    
+//    assertEquals( "pdf", ( ( ResourceRequest2 ) request ).getResourceExtension() ) ;
   }
 
   @Test
-  public void documentRequestWithStylesheet() {
+  public void documentRequestWithStylesheet() throws MalformedRequestException {
     final DocumentRequest2 request = createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
-    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( PDF_REQUEST_PATH_WITHSTYLESHEET, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
     assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
@@ -71,11 +67,11 @@ public class GenericRequestTest {
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
 
-    assertEquals( "pdf", ( ( ResourceRequest2 ) request ).getResourceExtension() ) ;
+//    assertEquals( "pdf", ( ( ResourceRequest2 ) request ).getResourceExtension() ) ;
   }
 
   @Test
-  public void documentRequestWithDots() {
+  public void documentRequestWithDots() throws MalformedRequestException {
     final DocumentRequest2 request = createDocumentRequest( DOTTEDHTML_REQUEST_PATH ) ;
     assertEquals( DOTTEDHTML_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.HTML, request.getRenditionMimeType() ) ;
@@ -92,19 +88,19 @@ public class GenericRequestTest {
 
 
   @Test
-  public void polymorphicRequestForError() {
+  public void polymorphicRequestForError() throws MalformedRequestException {
     final DocumentRequest2 request = createDocumentRequest( REQUEST_PATH_BROKEN ) ;
 
     assertTrue( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
-
+    assertTrue( request.getDisplayProblems() ) ;
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
 
   @Test
-  public void polymorphicRequestForRawResource() {
+  public void polymorphicRequestForRawResource() throws MalformedRequestException {
     final ResourceRequest2 request = createResourceRequest( CSS_REQUEST_PATH ) ;
 //    assertFalse( request.getDisplayProblems() ) ;
     assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
@@ -115,11 +111,11 @@ public class GenericRequestTest {
   }
 
   @Test
-  public void polymorphicRequestWithTags() {
+  public void polymorphicRequestWithTags() throws MalformedRequestException {
     final DocumentRequest2 request =
         createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
     assertFalse( request.getDisplayProblems() ) ;
-    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
+    assertEquals( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
     assertEquals( TAGSET, request.getTags() ) ;
@@ -127,17 +123,9 @@ public class GenericRequestTest {
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
 
-  @Test
-  public void polymorphicRequestWithSuspiciousTagDefinition() {
-    final DocumentRequest2 request =
-        createDocumentRequest( PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS ) ;
-    assertFalse( request.getDisplayProblems() ) ;
-    assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
-    assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
-    assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
-    assertEquals( TAGSET, request.getTags() ) ;
-
-    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+  @Test( expected = MalformedRequestException.class )
+  public void polymorphicRequestWithSuspiciousTagDefinition() throws MalformedRequestException {
+    createDocumentRequest( PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS ) ;
   }
 
 
@@ -157,8 +145,7 @@ public class GenericRequestTest {
 
   private static final String PDF_REQUEST_PATH_WITHSTYLESHEET =
       PDF_REQUEST_PATH +
-      "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME +
-      "=" + STYLESHEET_RESOURCENAME
+      "?stylesheet=" + STYLESHEET_RESOURCENAME
   ;
 
   private static final Set< Tag > TAGSET = 
@@ -174,10 +161,10 @@ public class GenericRequestTest {
     PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
         PDF_REQUEST_PATH +
         "?" +
-        RequestTools.TAGSET_PARAMETER_NAME + "=" +
-            Joiner.on( RequestTools.LIST_SEPARATOR ).join( tagsAsString ) +
+        RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME +
         "&" +
-        RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
+            RequestTools.TAGSET_PARAMETER_NAME + "=" +
+                Joiner.on( RequestTools.LIST_SEPARATOR ).join( tagsAsString ) 
     ;
   }
 
@@ -195,7 +182,7 @@ public class GenericRequestTest {
         PDF_REQUEST_PATH +
         "?" +
         RequestTools.TAGSET_PARAMETER_NAME + "=;" +
-            Joiner.on( RequestTools.LIST_SEPARATOR ).join(TAGS_AS_STRINGSET)
+            Joiner.on( RequestTools.LIST_SEPARATOR ).join( TAGS_AS_STRINGSET )
     ;
   }
 
@@ -204,12 +191,16 @@ public class GenericRequestTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericRequestTest.class ) ;
 
-  private static DocumentRequest2 createDocumentRequest( final String requestString ) {
+  private static DocumentRequest2 createDocumentRequest( final String requestString )
+      throws MalformedRequestException
+  {
     LOGGER.info( "Using ", requestString ) ;
     return ( DocumentRequest2 ) GenericRequest.parse( requestString ) ;
   }
 
-  private static ResourceRequest2 createResourceRequest( final String requestString ) {
+  private static ResourceRequest2 createResourceRequest( final String requestString )
+      throws MalformedRequestException
+  {
     LOGGER.info( "Using ", requestString ) ;
     return ( ResourceRequest2 ) GenericRequest.parse( requestString ) ;
   }
