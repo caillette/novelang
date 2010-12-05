@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Laurent Caillette
+ * Copyright (C) 2010 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -238,21 +239,24 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
     }
   }
 
-  private static ImmutableMap< String, String > getQueryMap( final String query ) throws MalformedRequestException {
+  private static ImmutableMap< String, String > getQueryMap( final String query )
+      throws MalformedRequestException
+  {
     if( StringUtils.isBlank( query ) ) {
       return ImmutableMap.of() ;
     } else {
-      final String[] params = query.split( "&" ) ;
+      final Iterable< String > params = Splitter.on( '&' ).split( query ) ;
       final ImmutableMap.Builder< String, String > map = ImmutableMap.builder() ;
       for( final String param : params ) {
-        final String[] strings = param.split( "=" ) ;
-        final String name = strings[ 0 ] ;
-        if( strings.length > 2 ) {
+        final ImmutableList< String > strings =
+            ImmutableList.copyOf( Splitter.on( '=' ).split( param ) ) ;
+        final String name = strings.get( 0 ) ;
+        if( strings.size() > 2 ) {
           throw new MalformedRequestException( "Multiple '=' for parameter " + name ) ;
         }
         final String value ;
-        if( strings.length > 1 ) {
-          value = strings[ 1 ] ;
+        if( strings.size() > 1 ) {
+          value = strings.get( 1 ) ;
         } else {
           value = null ;
         }
@@ -286,7 +290,7 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
     if( TAGS_PATTERN.matcher( value ).matches() ) {
       return RenderingTools.toTagSet( ImmutableSet.copyOf( TAGS_SEPARATOR_PATTERN.split( value ) ) ) ;
     } else {
-      throw new MalformedRequestException( "Bad tag sequence: '" + value + "'" ) ;
+      throw new MalformedRequestException( "Bad tags: '" + value + "'" ) ;
     }
   }
 
