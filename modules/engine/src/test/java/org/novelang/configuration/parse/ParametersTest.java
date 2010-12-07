@@ -27,9 +27,9 @@ import org.junit.Test;
 import org.novelang.ResourceTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.request.DocumentRequest2;
-import org.novelang.request.GenericRequest;
-import org.novelang.request.MalformedRequestException;
+import org.novelang.produce.DocumentRequest;
+import org.novelang.produce.GenericRequest;
+import org.novelang.produce.MalformedRequestException;
 import org.novelang.testing.DirectoryFixture;
 
 import static org.junit.Assert.*;
@@ -218,10 +218,10 @@ public class ParametersTest {
 
   private static final String OUTPUT_FILE_NAME = "/this-is-not-a-directory-but-output-file.html" ;
 
-  private static final DocumentRequest2 DOCUMENT_REQUEST ;
+  private static final DocumentRequest DOCUMENT_REQUEST ;
   static {
     try {
-      DOCUMENT_REQUEST = ( DocumentRequest2 ) GenericRequest.parse( OUTPUT_FILE_NAME ) ;
+      DOCUMENT_REQUEST = ( DocumentRequest ) GenericRequest.parse( OUTPUT_FILE_NAME ) ;
     } catch( MalformedRequestException e ) {
       throw new RuntimeException( e ) ;
     }

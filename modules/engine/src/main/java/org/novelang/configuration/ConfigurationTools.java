@@ -41,7 +41,7 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.UrlResourceLoader;
-import org.novelang.request.DocumentRequest2;
+import org.novelang.produce.DocumentRequest;
 
 /**
  * Creates various Configuration objects from {@link GenericParameters}.
@@ -202,7 +202,7 @@ public class ConfigurationTools {
         return producerConfiguration ;
       }
       @Override
-      public DocumentRequest2 getDocumentRequest() {
+      public DocumentRequest getDocumentRequest() {
         return parameters.getDocumentRequest() ;
       }
       @Override
@@ -229,7 +229,7 @@ public class ConfigurationTools {
         return producerConfiguration ;
       }
       @Override
-      public Iterable< DocumentRequest2 > getDocumentRequests() {
+      public Iterable<DocumentRequest> getDocumentRequests() {
         return parameters.getDocumentRequests() ;
       }
       @Override

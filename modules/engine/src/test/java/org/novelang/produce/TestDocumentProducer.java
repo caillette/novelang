@@ -25,9 +25,6 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.request.DocumentRequest2;
-import org.novelang.request.GenericRequest;
-import org.novelang.request.MalformedRequestException;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 import static junit.framework.Assert.assertFalse;
@@ -37,7 +34,7 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for
- * {@link org.novelang.produce.DocumentProducer#createRenderable(org.novelang.request.DocumentRequest2)}.
+ * {@link org.novelang.produce.DocumentProducer#createRenderable(DocumentRequest)}.
  * 
  * @author Laurent Caillette
  */
@@ -94,7 +91,7 @@ public class TestDocumentProducer {
       final File contentRoot,
       final String requestAsString 
   ) throws IOException, MalformedRequestException {
-    final DocumentRequest2 request = ( DocumentRequest2 ) GenericRequest.parse( requestAsString ) ;
+    final DocumentRequest request = ( DocumentRequest ) GenericRequest.parse( requestAsString ) ;
     assertNotNull( request ) ;
     final Renderable renderable = 
         new DocumentProducer( createConfiguration( contentRoot ) ).createRenderable( request ) ;

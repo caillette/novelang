@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.novelang.request;
+package org.novelang.produce;
 
 import java.util.Set;
 
@@ -41,7 +41,7 @@ public class GenericRequestTest {
 
   @Test
   public void documentRequest() throws MalformedRequestException {
-    final DocumentRequest2 request = createDocumentRequest( PDF_REQUEST_PATH ) ;
+    final DocumentRequest request = createDocumentRequest( PDF_REQUEST_PATH ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
@@ -56,7 +56,7 @@ public class GenericRequestTest {
 
   @Test
   public void documentRequestWithStylesheet() throws MalformedRequestException {
-    final DocumentRequest2 request = createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
+    final DocumentRequest request = createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
     assertEquals( PDF_REQUEST_PATH_WITHSTYLESHEET, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.PDF, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
@@ -71,7 +71,7 @@ public class GenericRequestTest {
 
   @Test
   public void documentRequestWithDots() throws MalformedRequestException {
-    final DocumentRequest2 request = createDocumentRequest( DOTTEDHTML_REQUEST_PATH ) ;
+    final DocumentRequest request = createDocumentRequest( DOTTEDHTML_REQUEST_PATH ) ;
     assertEquals( DOTTEDHTML_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( RenditionMimeType.HTML, request.getRenditionMimeType() ) ;
     assertTrue( request.isRendered() ) ;
@@ -88,7 +88,7 @@ public class GenericRequestTest {
 
   @Test
   public void polymorphicRequestForError() throws MalformedRequestException {
-    final DocumentRequest2 request = createDocumentRequest( REQUEST_PATH_BROKEN ) ;
+    final DocumentRequest request = createDocumentRequest( REQUEST_PATH_BROKEN ) ;
 
     assertTrue( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH, request.getOriginalTarget() ) ;
@@ -100,18 +100,18 @@ public class GenericRequestTest {
 
   @Test
   public void polymorphicRequestForRawResource() throws MalformedRequestException {
-    final ResourceRequest2 request = createResourceRequest( CSS_REQUEST_PATH ) ;
+    final ResourceRequest request = createResourceRequest( CSS_REQUEST_PATH ) ;
 //    assertFalse( request.getDisplayProblems() ) ;
     assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
     assertEquals( SIMPLE_REQUEST_BODY, request.getDocumentSourceName() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
-    assertNull( ( ( DocumentRequest2 ) request ).getRenditionMimeType() ) ;
+    assertNull( ( ( DocumentRequest ) request ).getRenditionMimeType() ) ;
   }
 
   @Test
   public void polymorphicRequestWithTags() throws MalformedRequestException {
-    final DocumentRequest2 request =
+    final DocumentRequest request =
         createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
     assertFalse( request.getDisplayProblems() ) ;
     assertEquals( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS, request.getOriginalTarget() ) ;
@@ -190,18 +190,18 @@ public class GenericRequestTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericRequestTest.class ) ;
 
-  private static DocumentRequest2 createDocumentRequest( final String requestString )
+  private static DocumentRequest createDocumentRequest( final String requestString )
       throws MalformedRequestException
   {
     LOGGER.info( "Using ", requestString ) ;
-    return ( DocumentRequest2 ) GenericRequest.parse( requestString ) ;
+    return ( DocumentRequest ) GenericRequest.parse( requestString ) ;
   }
 
-  private static ResourceRequest2 createResourceRequest( final String requestString )
+  private static ResourceRequest createResourceRequest( final String requestString )
       throws MalformedRequestException
   {
     LOGGER.info( "Using ", requestString ) ;
-    return ( ResourceRequest2 ) GenericRequest.parse( requestString ) ;
+    return ( ResourceRequest ) GenericRequest.parse( requestString ) ;
   }
 
 

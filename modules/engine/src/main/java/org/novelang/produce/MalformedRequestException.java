@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.request;
+package org.novelang.produce;
 
 /**
- * Thrown by {@link org.novelang.request.GenericRequest#parse(String)}.
+ * Thrown by {@link GenericRequest#parse(String)}.
  * 
  * @author Laurent Caillette
  */

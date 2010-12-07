@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.request;
+package org.novelang.produce;
 
 /**
  * Common behavior for all requests.
@@ -25,7 +25,7 @@ public interface AnyRequest {
 
   /**
    * Returns the original target part of the request, excluding the part requesting to
-   * {@link DocumentRequest2#getDisplayProblems()}.
+   * {@link DocumentRequest#getDisplayProblems()}.
    *
    * @return a non-null, non-empty {@code String}.
    */
@@ -33,8 +33,8 @@ public interface AnyRequest {
 
   /**
    * Returns the document source name, including its path but excluding the
-   * {@link DocumentRequest2#getRenditionMimeType()} or
-   * {@link ResourceRequest2#getResourceExtension()}.
+   * {@link DocumentRequest#getRenditionMimeType()} or
+   * {@link ResourceRequest#getResourceExtension()}.
    *
    * @return a non-null, non-empty {@code String}.
    */

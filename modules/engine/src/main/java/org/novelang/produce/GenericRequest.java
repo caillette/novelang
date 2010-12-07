@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.request;
+package org.novelang.produce;
 
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -41,7 +41,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author Laurent Caillette
  */
-public final class GenericRequest implements DocumentRequest2, ResourceRequest2 {
+public final class GenericRequest implements DocumentRequest, ResourceRequest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericRequest.class ) ;
 // =======

@@ -29,7 +29,7 @@ import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.HtmlProblemPrinter;
-import org.novelang.request.DocumentRequest2;
+import org.novelang.produce.DocumentRequest;
 
 /**
  * Base class for batch commands.
@@ -146,7 +146,7 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
 
   protected static File createOutputFile(
       final File targetDir,
-      final DocumentRequest2 documentRequest
+      final DocumentRequest documentRequest
   )
       throws IOException
   {

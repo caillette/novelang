@@ -36,9 +36,9 @@ import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.loader.ResourceNotFoundException;
 import org.novelang.outfit.loader.UrlResourceLoader;
-import org.novelang.request.GenericRequest;
-import org.novelang.request.MalformedRequestException;
-import org.novelang.request.ResourceRequest2;
+import org.novelang.produce.GenericRequest;
+import org.novelang.produce.MalformedRequestException;
+import org.novelang.produce.ResourceRequest;
 
 /**
  * Holds resources which don't require rendering.
@@ -88,9 +88,9 @@ public class ResourceHandler extends GenericHandler {
   {
     LOGGER.debug( "Attempting to handle ", request.getRequestURI() ) ;
 
-    final ResourceRequest2 documentRequest;
+    final ResourceRequest documentRequest;
     try {
-      documentRequest = ( ResourceRequest2 ) GenericRequest.parse( request.getPathInfo() ) ;
+      documentRequest = ( ResourceRequest ) GenericRequest.parse( request.getPathInfo() ) ;
     } catch( MalformedRequestException e ) {
       throw new ServletException( e );
     }

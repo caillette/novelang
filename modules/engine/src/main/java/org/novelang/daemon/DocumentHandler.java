@@ -35,11 +35,11 @@ import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.DocumentProducer;
+import org.novelang.produce.DocumentRequest;
 import org.novelang.rendering.HtmlProblemPrinter;
-import org.novelang.request.AnyRequest;
-import org.novelang.request.DocumentRequest2;
-import org.novelang.request.GenericRequest;
-import org.novelang.request.MalformedRequestException;
+import org.novelang.produce.AnyRequest;
+import org.novelang.produce.GenericRequest;
+import org.novelang.produce.MalformedRequestException;
 
 /**
  * Serves rendered content.
@@ -105,7 +105,7 @@ public class DocumentHandler extends GenericHandler {
       final ServletOutputStream outputStream = response.getOutputStream();
 
       if( someRequest.isRendered() ) {
-        final DocumentRequest2 documentRequest = ( DocumentRequest2 ) someRequest ;
+        final DocumentRequest documentRequest = ( DocumentRequest ) someRequest ;
 
         final Renderable rendered ;
         try {
@@ -161,7 +161,7 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private static void redirectToProblemPage(
-      final DocumentRequest2 documentRequest,
+      final DocumentRequest documentRequest,
       final HttpServletResponse response
   ) throws IOException {
     final String redirectionTarget =
@@ -172,7 +172,7 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private static void redirectToOriginalTarget(
-      final DocumentRequest2 documentRequest,
+      final DocumentRequest documentRequest,
       final HttpServletResponse response
   ) throws IOException {
     final String redirectionTarget = documentRequest.getOriginalTarget() ;
@@ -184,7 +184,7 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private void renderProblemsAsRequested(
-      final DocumentRequest2 documentRequest,
+      final DocumentRequest documentRequest,
       final Renderable rendered,
       final ServletOutputStream outputStream
   ) throws IOException {

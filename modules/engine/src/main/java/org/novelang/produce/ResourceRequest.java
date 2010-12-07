@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.novelang.request;
+package org.novelang.produce;
 
 /**
  * The behavior of a resource request.
  *
  * @author Laurent Caillette
  */
-public interface ResourceRequest2 extends AnyRequest {
+public interface ResourceRequest extends AnyRequest {
 
   /**
    * Always null if {@link #isRendered()} is true.

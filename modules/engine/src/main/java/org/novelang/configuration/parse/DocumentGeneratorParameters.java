@@ -24,9 +24,9 @@ import com.google.common.collect.Lists;
 import org.apache.commons.cli.Options;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.request.DocumentRequest2;
-import org.novelang.request.GenericRequest;
-import org.novelang.request.MalformedRequestException;
+import org.novelang.produce.DocumentRequest;
+import org.novelang.produce.GenericRequest;
+import org.novelang.produce.MalformedRequestException;
 
 /**
  * Parses command-line arguments for {@link org.novelang.batch.DocumentGenerator}.
@@ -41,7 +41,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
   private static final Logger LOGGER =
       LoggerFactory.getLogger( DocumentGeneratorParameters.class ) ;
 
-  private final Iterable< DocumentRequest2 > documentRequests ;
+  private final Iterable<DocumentRequest> documentRequests ;
 
   public DocumentGeneratorParameters( final File baseDirectory, final String[] parameters )
       throws ArgumentException
@@ -53,14 +53,14 @@ public class DocumentGeneratorParameters extends BatchParameters {
     if( sourceArguments.length == 0 ) {
       throw new ArgumentException( "No source documents", helpPrinter ) ;
     } else {
-      final List< DocumentRequest2 > requestList = Lists.newArrayList() ;
+      final List<DocumentRequest> requestList = Lists.newArrayList() ;
       for( String sourceArgument : sourceArguments ) {
         try {
           if( ! sourceArgument.startsWith( "/" ) ) {
             sourceArgument = "/" + sourceArgument ;
           }
-          final DocumentRequest2 documentRequest =
-              ( DocumentRequest2 ) GenericRequest.parse( sourceArgument ) ;
+          final DocumentRequest documentRequest =
+              ( DocumentRequest ) GenericRequest.parse( sourceArgument ) ;
           if( null == documentRequest ) {
             throw new IllegalArgumentException(
                 "Malformed document request: '" + sourceArgument + "'" ) ;
@@ -87,7 +87,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
    * Returns document requests.
    * @return a non-null object iterating over no nulls, containing at least one element.
    */
-  public Iterable< DocumentRequest2 > getDocumentRequests() {
+  public Iterable<DocumentRequest> getDocumentRequests() {
     return documentRequests ;
   }
 

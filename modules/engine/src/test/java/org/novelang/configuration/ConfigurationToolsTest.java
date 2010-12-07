@@ -38,7 +38,7 @@ import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.outfit.DefaultCharset;
-import org.novelang.request.DocumentRequest2;
+import org.novelang.produce.DocumentRequest;
 import org.novelang.testing.DirectoryFixture;
 
 import static org.junit.Assert.assertTrue;
@@ -122,8 +122,8 @@ public class ConfigurationToolsTest {
 
     Assert.assertEquals( new File( SystemUtils.USER_DIR ), configuration.getOutputDirectory() ) ;
 
-    final Iterable<DocumentRequest2> documentRequests = configuration.getDocumentRequests() ;
-    final Iterator<DocumentRequest2> iterator = documentRequests.iterator() ;
+    final Iterable<DocumentRequest> documentRequests = configuration.getDocumentRequests() ;
+    final Iterator<DocumentRequest> iterator = documentRequests.iterator() ;
     assertTrue( iterator.hasNext() ) ;
     Assert.assertEquals( "1.html", iterator.next().getDocumentSourceName() ) ;
     Assert.assertEquals( "2.html", iterator.next().getDocumentSourceName() ) ;

@@ -28,8 +28,8 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.DocumentProducer;
-import org.novelang.request.DocumentRequest2;
-import org.novelang.request.GenericRequest;
+import org.novelang.produce.GenericRequest;
+import org.novelang.produce.DocumentRequest;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 /**
@@ -61,7 +61,7 @@ public class NumberingTest {
         ResourcesForTests.XslFormatting.PART_SOMECHAPTERS.getBaseName()
     ;
     LOGGER.debug( "Document name = '", documentName, "'." ) ;
-    final DocumentRequest2 documentRequest = ( DocumentRequest2 ) GenericRequest.parse(
+    final DocumentRequest documentRequest = ( DocumentRequest ) GenericRequest.parse(
         "/" + documentName + "." + RenditionMimeType.PDF.getFileExtension() +
         "?stylesheet=" + ResourcesForTests.XslFormatting.XSL_NUMBERING.getResourceName().getName()
     ) ;
