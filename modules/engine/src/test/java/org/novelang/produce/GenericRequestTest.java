@@ -163,7 +163,7 @@ public class GenericRequestTest {
         GenericRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME +
         "&" +
             GenericRequest.TAGSET_PARAMETER_NAME + "=" +
-                Joiner.on( GenericRequest.LIST_SEPARATOR ).join( tagsAsString )
+                Joiner.on( ";" ).join( tagsAsString )
     ;
   }
 
@@ -181,7 +181,7 @@ public class GenericRequestTest {
         PDF_REQUEST_PATH +
         "?" +
         GenericRequest.TAGSET_PARAMETER_NAME + "=;" +
-            Joiner.on( GenericRequest.LIST_SEPARATOR ).join( TAGS_AS_STRINGSET )
+            Joiner.on( ";" ).join( TAGS_AS_STRINGSET )
     ;
   }
 

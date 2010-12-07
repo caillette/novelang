@@ -44,22 +44,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class GenericRequest implements DocumentRequest, ResourceRequest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericRequest.class ) ;
-// =======
-// For all
-// =======
 
-  private final String originalTarget ;
-  private static final String TAG_SEPARATOR = ";" ;
   public static final String ERRORPAGE_SUFFIX = "/error.html";
   public static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
   public static final String TAGSET_PARAMETER_NAME= "tags" ;
   public static final ImmutableSet< String > SUPPORTED_PARAMETER_NAMES =
       ImmutableSet.of( ALTERNATE_STYLESHEET_PARAMETER_NAME, TAGSET_PARAMETER_NAME ) ;
+
   /**
    * <a href="http://www.ietf.org/rfc/rfc2396.txt" >RFC</a> p. 26-27.
    */
   public static final String LIST_SEPARATOR = ";" ;
-  public static final String TAG_NAME_PARAMETER = "tags" ;
+
+
+// =======
+// For all
+// =======
+
+  private final String originalTarget ;
 
   @Override
   public String getOriginalTarget() {
@@ -102,7 +104,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
   private final ImmutableSet< Tag > tags ;
 
   @Override
-  public ImmutableSet<Tag> getTags() {
+  public ImmutableSet< Tag > getTags() {
     return tags ;
   }
 
@@ -166,7 +168,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
       final Iterable< String > tagNames = Iterables.transform( getTags(), Tag.EXTRACT_TAG_NAME ) ;
 
       parametersBuilder.add( TAGSET_PARAMETER_NAME + "=" +
-          Joiner.on( TAG_SEPARATOR ).join( tagNames ) ) ;
+          Joiner.on( LIST_SEPARATOR ).join( tagNames ) ) ;
     }
     final ImmutableList< String > parameters = parametersBuilder.build() ;
     return documentSourceName + "." + renditionMimeType.getFileExtension() +
@@ -292,8 +294,8 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
   }
 
   private static final Pattern TAGS_PATTERN =
-      Pattern.compile( TAG_PATTERN + "(?:" + TAG_SEPARATOR + TAG_PATTERN + ")*" ) ;
-  private static final Pattern TAGS_SEPARATOR_PATTERN = Pattern.compile( TAG_SEPARATOR ) ;
+      Pattern.compile( TAG_PATTERN + "(?:" + LIST_SEPARATOR + TAG_PATTERN + ")*" ) ;
+  private static final Pattern TAGS_SEPARATOR_PATTERN = Pattern.compile( LIST_SEPARATOR ) ;
 
   private static ImmutableSet< Tag > parseTags( final String value ) throws MalformedRequestException {
     if( TAGS_PATTERN.matcher( value ).matches() ) {
@@ -307,7 +309,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
   private static ImmutableSet< Tag > extractTags(
       final ImmutableMap< String, String > parameterMap
  ) throws MalformedRequestException {
-    final String parameterValue = parameterMap.get( TAG_NAME_PARAMETER ) ;
+    final String parameterValue = parameterMap.get( TAGSET_PARAMETER_NAME ) ;
     if( parameterValue == null ) {
       return ImmutableSet.of() ;
     } else {
