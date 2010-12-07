@@ -23,32 +23,30 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.novelang.request.DocumentRequest2;
-import org.novelang.testing.DirectoryFixture;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import org.novelang.ResourcesForTests;
-
-import static org.junit.Assert.assertTrue;
-import static org.novelang.ResourcesForTests.FontStructure;
 import org.novelang.common.filefixture.Relativizer;
 import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.common.filefixture.ResourceSchema;
 import org.novelang.configuration.parse.ArgumentException;
 import org.novelang.configuration.parse.DaemonParameters;
-import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
-import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
 import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.outfit.DefaultCharset;
+import org.novelang.request.DocumentRequest2;
+import org.novelang.testing.DirectoryFixture;
+
+import static org.junit.Assert.assertTrue;
+import static org.novelang.ResourcesForTests.FontStructure;
+import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
+import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
 import static org.novelang.configuration.parse.GenericParameters.OPTIONNAME_CONTENT_ROOT;
 import static org.novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
-import org.novelang.produce.DocumentRequest;
-import org.novelang.outfit.DefaultCharset;
 
 /**
  * Tests for {@link ConfigurationTools}.

@@ -22,10 +22,10 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Base class for serving requests, with catch-all error handling.

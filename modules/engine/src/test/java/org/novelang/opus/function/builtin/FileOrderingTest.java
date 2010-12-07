@@ -1,14 +1,14 @@
 package org.novelang.opus.function.builtin;
 
-import org.junit.Test;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
 import java.io.File;
 import java.util.Iterator;
 
 import com.google.common.collect.ImmutableList;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests for {@link FileOrdering}.

@@ -21,11 +21,9 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.apache.commons.cli.Options;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.DocumentRequest;
-import org.novelang.produce.RequestTools;
-import org.apache.commons.cli.Options;
 import org.novelang.request.DocumentRequest2;
 import org.novelang.request.GenericRequest;
 import org.novelang.request.MalformedRequestException;

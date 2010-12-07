@@ -19,6 +19,9 @@ package org.novelang.daemon;
 
 import java.io.File;
 
+import org.apache.commons.lang.SystemUtils;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.handler.HandlerCollection;
 import org.novelang.Version;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.DaemonConfiguration;
@@ -26,9 +29,6 @@ import org.novelang.configuration.parse.ArgumentException;
 import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.apache.commons.lang.SystemUtils;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.HandlerCollection;
 
 /**
  * Main class for Novelang document generator daemon.

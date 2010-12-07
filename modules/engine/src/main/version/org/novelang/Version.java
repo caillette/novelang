@@ -16,9 +16,9 @@
  */
 package org.novelang;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.Comparator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Represents a version number with the "major + minor + fix" scheme, and also the version

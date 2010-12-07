@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
@@ -12,11 +14,9 @@ import org.novelang.common.TagBehavior;
 import org.novelang.common.tree.Traversal;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
-import org.novelang.rendering.RenderingTools;
-import org.novelang.parser.NodeKind;
 import org.novelang.designator.FragmentIdentifier;
-import com.google.common.collect.Lists;
-import com.google.common.base.Predicate;
+import org.novelang.parser.NodeKind;
+import org.novelang.rendering.RenderingTools;
 
 /**
  * 

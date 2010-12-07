@@ -18,17 +18,17 @@ package org.novelang.rendering;
 
 import java.util.Set;
 
+import org.junit.Test;
 import org.novelang.common.SyntacticTree;
 import org.novelang.designator.Tag;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.novella.Novella;
 import org.novelang.novella.NovellaFixture;
-import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for 

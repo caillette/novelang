@@ -16,13 +16,13 @@
  */
 package org.novelang.rendering.xslt.validate;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Test;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Tests for {@link SaxConnectorForVerifier}.

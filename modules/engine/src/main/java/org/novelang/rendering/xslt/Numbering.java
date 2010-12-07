@@ -18,12 +18,12 @@ package org.novelang.rendering.xslt;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.commons.lang.ArrayUtils;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * @author Laurent Caillette

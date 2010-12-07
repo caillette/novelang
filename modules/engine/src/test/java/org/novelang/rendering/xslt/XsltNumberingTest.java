@@ -16,12 +16,12 @@
  */
 package org.novelang.rendering.xslt;
 
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.junit.Assert;
 import org.junit.Test;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * @author Laurent Caillette

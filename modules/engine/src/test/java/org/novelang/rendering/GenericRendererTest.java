@@ -23,21 +23,22 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 import com.google.common.collect.ImmutableList;
+import org.junit.Test;
+import org.novelang.common.Location;
 import org.novelang.common.Nodepath;
 import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.common.StylesheetMap;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.Location;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.MetadataHelper;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.NodeKind;
+
+import static org.junit.Assert.assertEquals;
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
-import org.novelang.outfit.DefaultCharset;
 
 /**
  * @author Laurent Caillette

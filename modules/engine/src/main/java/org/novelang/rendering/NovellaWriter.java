@@ -20,11 +20,11 @@ package org.novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import org.xml.sax.ContentHandler;
-import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.Nodepath;
+import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
+import org.xml.sax.ContentHandler;
 
 /**
  * A {@link FragmentWriter} which rewrites Novelang source.

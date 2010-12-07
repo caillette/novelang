@@ -1,18 +1,16 @@
 package org.novelang.opus.function.builtin;
 
-import org.novelang.Version;
-import org.novelang.VersionFormatException;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
-
 import java.io.File;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import org.apache.commons.io.FilenameUtils;
+import org.novelang.Version;
+import org.novelang.VersionFormatException;
 
 /**
  * Provides various file sorting means.

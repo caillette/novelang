@@ -1,19 +1,18 @@
 package org.novelang.configuration;
 
+import java.io.File;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
+import org.novelang.configuration.parse.ArgumentException;
+import org.novelang.configuration.parse.DaemonParameters;
+import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
-import org.novelang.configuration.parse.DaemonParameters;
-import org.novelang.configuration.parse.ArgumentException;
-import org.novelang.configuration.parse.GenericParameters;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
-
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-
-import java.io.File;
+import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 /**
  * Test for {@link ConfigurationTools} dedicated to style directories, which comes with some

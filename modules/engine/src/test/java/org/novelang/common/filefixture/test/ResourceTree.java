@@ -18,6 +18,7 @@ package org.novelang.common.filefixture.test;
 
 import org.novelang.common.filefixture.Directory;
 import org.novelang.common.filefixture.Resource;
+
 import static org.novelang.common.filefixture.ResourceSchema.directory;
 import static org.novelang.common.filefixture.ResourceSchema.resource;
 

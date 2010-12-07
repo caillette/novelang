@@ -28,14 +28,14 @@ import com.google.common.collect.Ordering;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FilenameUtils;
+import org.mortbay.jetty.Request;
 import org.novelang.common.FileTools;
 import org.novelang.common.StructureKind;
 import org.novelang.configuration.ContentConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
-import org.apache.commons.io.FilenameUtils;
-import org.mortbay.jetty.Request;
 
 /**
  * Displays directory content.

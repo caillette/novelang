@@ -28,12 +28,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.Lists;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang.SystemUtils;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Utility class for doing things with files.

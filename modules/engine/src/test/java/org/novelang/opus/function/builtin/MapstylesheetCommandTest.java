@@ -19,16 +19,16 @@ package org.novelang.opus.function.builtin;
 import java.io.File;
 
 import com.google.common.collect.ImmutableMap;
+import org.junit.Assert;
+import org.junit.Test;
 import org.novelang.ResourceTools;
 import org.novelang.common.Location;
-import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.opus.CommandExecutionContext;
 import org.novelang.opus.function.CommandParameterException;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Tests for {@link org.novelang.opus.function.builtin.MapstylesheetCommand}.

@@ -21,15 +21,15 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.mortbay.jetty.Request;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.font.FontDiscoveryStreamer;
-import org.novelang.outfit.DefaultCharset;
-import org.mortbay.jetty.Request;
 
 /**
  * Generates a PDF document showing available fonts.

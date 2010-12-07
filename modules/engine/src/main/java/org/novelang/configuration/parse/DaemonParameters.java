@@ -18,11 +18,11 @@ package org.novelang.configuration.parse;
 
 import java.io.File;
 
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Parses command-line arguments for {@link org.novelang.daemon.HttpDaemon}.

@@ -21,21 +21,21 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
-import org.novelang.ResourcesForTests;
+import junit.framework.Assert;
 import org.apache.fop.apps.FopFactory;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.junit.Test;
-import junit.framework.Assert;
-import org.novelang.common.metadata.DocumentMetadata;
+import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.rendering.xslt.validate.BadExpandedName;
 import org.novelang.rendering.xslt.validate.BadExpandedNamesException;
-import org.novelang.outfit.DefaultCharset;
 
 /**
  * Tests for {@link org.novelang.rendering.XslWriter}.

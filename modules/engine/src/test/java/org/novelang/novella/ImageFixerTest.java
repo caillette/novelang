@@ -21,7 +21,10 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import org.novelang.testing.DirectoryFixture;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.common.Problem;
 import org.novelang.common.ProblemCollector;
 import org.novelang.common.SyntacticTree;
@@ -31,17 +34,14 @@ import org.novelang.common.filefixture.ResourceSchema;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.antlr.TreeFixture;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
+import static org.junit.Assert.assertSame;
 import static org.novelang.ResourcesForTests.Images;
 import static org.novelang.ResourcesForTests.initialize;
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.junit.Assert.assertSame;
 
 /**
  * Tests for {@link ImageFixer}

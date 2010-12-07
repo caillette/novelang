@@ -1,8 +1,8 @@
 package org.novelang.daemon;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.fest.reflect.core.Reflection;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for {@link LocalhostOnlyHandler}.

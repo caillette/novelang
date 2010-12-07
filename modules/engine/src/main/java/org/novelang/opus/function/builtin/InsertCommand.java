@@ -17,6 +17,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import org.apache.commons.io.FilenameUtils;
 import org.novelang.common.FileTools;
 import org.novelang.common.Location;
 import org.novelang.common.Problem;
@@ -38,7 +39,6 @@ import org.novelang.opus.function.builtin.insert.PartCreator;
 import org.novelang.parser.NodeKind;
 import org.novelang.treemangling.DesignatorInterpreter;
 import org.novelang.treemangling.TreeManglingConstants;
-import org.apache.commons.io.FilenameUtils;
 
 import static org.novelang.parser.NodeKind.WORD_;
 

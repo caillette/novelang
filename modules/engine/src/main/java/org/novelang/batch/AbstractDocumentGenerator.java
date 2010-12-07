@@ -21,15 +21,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.novelang.common.Problem;
 import org.novelang.configuration.parse.ArgumentException;
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.DocumentRequest;
 import org.novelang.rendering.HtmlProblemPrinter;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.novelang.request.DocumentRequest2;
 
 /**

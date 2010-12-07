@@ -22,12 +22,12 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.CharUtils;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.GeneratedLexemes;
 import org.novelang.parser.SourceUnescape;
 import org.novelang.parser.shared.Lexeme;
-import org.apache.commons.lang.CharUtils;
 
 /**
  * Escapes characters for rendering. Based on {@link GeneratedLexemes}.

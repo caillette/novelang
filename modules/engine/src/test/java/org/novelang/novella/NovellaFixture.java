@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.novelang.common.Problem;
 import org.junit.Assert;
+import org.novelang.common.Problem;
 
 /**
  * Useful factory methods for tests using {@link Novella}.

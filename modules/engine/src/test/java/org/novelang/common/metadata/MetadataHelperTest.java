@@ -18,18 +18,17 @@ package org.novelang.common.metadata;
 
 import java.util.Set;
 
-import org.junit.Test;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Assert;
+import org.junit.Test;
 import org.novelang.common.SyntacticTree;
 import org.novelang.designator.Tag;
 import org.novelang.parser.NodeKind;
-import static org.novelang.parser.NodeKind.*;
 import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.treemangling.TagMangler;
 
+import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
-
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Tests for {@link MetadataHelper}.

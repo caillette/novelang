@@ -18,9 +18,10 @@
 package org.novelang.common.metadata;
 
 import java.nio.charset.Charset;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
+import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -30,9 +31,10 @@ import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Tree;
 import org.novelang.designator.Tag;
 import org.novelang.parser.NodeKind;
-import static org.novelang.parser.NodeKind.*;
 
-import com.google.common.collect.Lists;
+import static org.novelang.parser.NodeKind.WORD_;
+import static org.novelang.parser.NodeKind._EXPLICIT_TAG;
+import static org.novelang.parser.NodeKind._TAGS;
 
 /**
  * @author Laurent Caillette

@@ -21,18 +21,16 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.ClassUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.novelang.ResourceTools;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.request.DocumentRequest2;
 import org.novelang.request.GenericRequest;
 import org.novelang.request.MalformedRequestException;
 import org.novelang.testing.DirectoryFixture;
-import org.novelang.ResourceTools;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.DocumentRequest;
-import org.novelang.produce.RequestTools;
-import org.apache.commons.lang.ClassUtils;
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.junit.Assert.*;
 

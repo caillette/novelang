@@ -21,7 +21,9 @@ import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.parser.NodeKind;
-import static org.novelang.parser.NodeKind.*;
+
+import static org.novelang.parser.NodeKind._LIST_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN;
+import static org.novelang.parser.NodeKind._LIST_WITH_TRIPLE_HYPHEN;
 
 /**
  * All contiguous List stuff becomes wrapped inside a

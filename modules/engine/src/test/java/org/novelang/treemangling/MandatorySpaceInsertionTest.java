@@ -16,12 +16,13 @@
  */
 package org.novelang.treemangling;
 
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
-import static org.novelang.parser.NodeKind.*;
 import org.novelang.parser.antlr.TreeFixture;
+
+import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**

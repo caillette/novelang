@@ -16,12 +16,15 @@
  */
 package org.novelang.rendering;
 
+import java.nio.charset.Charset;
+
+import org.junit.Test;
 import org.novelang.parser.NoUnescapedCharacterException;
 import org.novelang.parser.SourceUnescape;
-import static org.junit.Assert.*;
-import org.junit.Test;
 
-import java.nio.charset.Charset;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link RenderingEscape}.

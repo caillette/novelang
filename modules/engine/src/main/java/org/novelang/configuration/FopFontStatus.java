@@ -16,8 +16,6 @@
  */
 package org.novelang.configuration;
 
-import java.util.Map;
-
 import com.google.common.collect.ImmutableSet;
 import org.apache.fop.fonts.EmbedFontInfo;
 

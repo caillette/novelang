@@ -26,13 +26,6 @@ import java.util.Map;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableSet;
-import org.apache.fop.fonts.FontEventListener;
-import org.apache.fop.render.pdf.PDFRendererConfigurator;
-import org.fest.reflect.core.Reflection;
-import org.fest.reflect.reference.TypeRef;
-import org.novelang.common.ReflectionTools;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
@@ -42,11 +35,16 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.FontCache;
+import org.apache.fop.fonts.FontEventListener;
 import org.apache.fop.fonts.FontResolver;
 import org.apache.fop.render.DefaultFontResolver;
-import org.apache.fop.render.PrintRendererConfigurator;
+import org.apache.fop.render.pdf.PDFRendererConfigurator;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Utility class for generating FOP configuration with hyphenation files and custom fonts.

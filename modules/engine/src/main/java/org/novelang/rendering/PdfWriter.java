@@ -20,14 +20,14 @@ package org.novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import org.novelang.common.metadata.DocumentMetadata;
-import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.outfit.loader.ResourceName;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.novelang.common.metadata.DocumentMetadata;
+import org.novelang.configuration.RenderingConfiguration;
+import org.novelang.outfit.loader.ResourceName;
 import org.xml.sax.ContentHandler;
 
 /**

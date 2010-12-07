@@ -19,18 +19,18 @@ package org.novelang.rendering.font;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 
+import org.apache.fop.apps.FopFactory;
+import org.junit.Test;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.XslWriter;
-import org.novelang.outfit.DefaultCharset;
-import org.apache.fop.apps.FopFactory;
-import org.junit.Test;
 
 /**
  * Tests for {@link FontDiscoveryStreamer}.

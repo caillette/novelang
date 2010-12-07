@@ -1,19 +1,18 @@
 package org.novelang.treemangling.designator;
 
-import org.novelang.common.Problem;
-import org.novelang.common.SyntacticTree;
-import org.novelang.common.tree.Treepath;
-import org.novelang.common.tree.RobustPath;
-import org.novelang.designator.FragmentIdentifier;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.novelang.common.Problem;
+import org.novelang.common.SyntacticTree;
+import org.novelang.common.tree.RobustPath;
+import org.novelang.common.tree.Treepath;
+import org.novelang.designator.FragmentIdentifier;
 
 /**
  * This class creates maps from {@link FragmentIdentifier} to {@link Treepath} objects

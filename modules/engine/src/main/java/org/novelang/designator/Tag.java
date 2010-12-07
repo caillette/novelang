@@ -1,22 +1,19 @@
 package org.novelang.designator;
 
-import com.google.common.base.Function;
-import org.novelang.common.SimpleTree;
-import org.novelang.common.SyntacticTree;
-import org.novelang.parser.NodeKind;
+import java.util.List;
+import java.util.Set;
 
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-
-import java.util.List;
-import java.util.Set;
-
-
 import org.apache.commons.lang.StringUtils;
+import org.novelang.common.SimpleTree;
+import org.novelang.common.SyntacticTree;
+import org.novelang.parser.NodeKind;
 
 import static org.novelang.parser.NodeKind.TAG;
 

@@ -20,10 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 
+import com.google.common.collect.ImmutableSet;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.designator.Tag;
 import org.novelang.outfit.DefaultCharset;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Some methods for creating {@link Opus} instances easily.

@@ -18,12 +18,12 @@ package org.novelang.rendering.xslt.validate;
 
 import java.util.Set;
 
+import org.novelang.common.Location;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.novelang.common.Location;
 
 /**
  * Connects the {@link ExpandedNameVerifier} to a {@code ContentHanler}.

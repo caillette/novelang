@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLStreamException;
+import org.junit.Test;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

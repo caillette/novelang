@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.commons.lang.SystemUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Problem;
 import org.novelang.common.SyntacticTree;
@@ -28,16 +31,13 @@ import org.novelang.common.filefixture.Resource;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.antlr.TreeFixture;
-import org.apache.commons.lang.SystemUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.novelang.ResourcesForTests.initialize;
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Test for {@link Opus} and also built-in functions.

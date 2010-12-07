@@ -23,6 +23,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import org.antlr.runtime.RecognitionException;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Location;
 import org.novelang.common.Problem;
@@ -33,10 +37,6 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.SourceUnescape;
 import org.novelang.parser.antlr.TreeFixture;
-import org.antlr.runtime.RecognitionException;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 import static org.novelang.parser.NodeKind.*;

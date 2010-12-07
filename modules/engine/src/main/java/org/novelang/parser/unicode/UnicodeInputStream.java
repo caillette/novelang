@@ -1,9 +1,9 @@
 package org.novelang.parser.unicode ;
 
 import java.io.BufferedInputStream;
-import java.io.IOException ;
-import java.io.InputStream ;
-import java.io.PushbackInputStream ;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PushbackInputStream;
 import java.nio.charset.Charset;
 
 import com.google.common.base.Preconditions;

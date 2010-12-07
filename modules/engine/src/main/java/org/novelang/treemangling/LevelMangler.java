@@ -23,8 +23,11 @@ import org.novelang.common.tree.TreeTools;
 import org.novelang.common.tree.Treepath;
 import org.novelang.common.tree.TreepathTools;
 import org.novelang.parser.NodeKind;
-import static org.novelang.parser.NodeKind.*;
 import org.novelang.parser.NodeKindTools;
+
+import static org.novelang.parser.NodeKind.LEVEL_INTRODUCER_;
+import static org.novelang.parser.NodeKind.LEVEL_INTRODUCER_INDENT_;
+import static org.novelang.parser.NodeKind._LEVEL;
 
 /**
  * {@link NodeKind#LEVEL_INTRODUCER_} become {@link org.novelang.parser.NodeKind#_LEVEL}.

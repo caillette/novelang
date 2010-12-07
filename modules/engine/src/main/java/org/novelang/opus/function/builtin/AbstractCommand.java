@@ -1,7 +1,7 @@
 package org.novelang.opus.function.builtin;
 
-import org.novelang.opus.function.Command;
 import org.novelang.common.Location;
+import org.novelang.opus.function.Command;
 
 /**
  * @author Laurent Caillette

@@ -23,23 +23,27 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
 
-import org.novelang.common.*;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import org.novelang.common.AbstractSourceReader;
+import org.novelang.common.Problem;
+import org.novelang.common.ProblemCollector;
+import org.novelang.common.StylesheetMap;
+import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
 import org.novelang.designator.Tag;
+import org.novelang.outfit.DefaultCharset;
+import org.novelang.parser.GenericParser;
+import org.novelang.parser.antlr.DelegatingPartParser;
 import org.novelang.treemangling.DesignatorInterpreter;
+import org.novelang.treemangling.EmbeddedListMangler;
 import org.novelang.treemangling.LevelMangler;
+import org.novelang.treemangling.ListMangler;
+import org.novelang.treemangling.SeparatorsMangler;
+import org.novelang.treemangling.TagFilter;
 import org.novelang.treemangling.TagMangler;
 import org.novelang.treemangling.UrlMangler;
-import org.novelang.treemangling.SeparatorsMangler;
-import org.novelang.treemangling.EmbeddedListMangler;
-import org.novelang.treemangling.TagFilter;
-import org.novelang.treemangling.ListMangler;
-import org.novelang.parser.antlr.DelegatingPartParser;
-import org.novelang.parser.GenericParser;
-import org.novelang.outfit.DefaultCharset;
-import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.base.Preconditions;
 
 /**
  * A Novella loads a Tree, building a table of identifiers for subnodes

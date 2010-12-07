@@ -26,18 +26,18 @@ import java.net.URL;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.IOUtils;
+import org.mortbay.jetty.Request;
 import org.novelang.configuration.ProducerConfiguration;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.loader.ResourceNotFoundException;
 import org.novelang.outfit.loader.UrlResourceLoader;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.PolymorphicRequest;
 import org.novelang.produce.RequestTools;
-import org.apache.commons.io.IOUtils;
-import org.mortbay.jetty.Request;
 
 /**
  * Holds resources which don't require rendering.

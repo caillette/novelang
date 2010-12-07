@@ -2,11 +2,11 @@ package org.novelang.treemangling.designator;
 
 import java.util.List;
 
-import org.novelang.common.SyntacticTree;
 import org.novelang.common.Problem;
+import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
-import org.novelang.parser.NodeKind;
 import org.novelang.designator.FragmentIdentifier;
+import org.novelang.parser.NodeKind;
 import org.novelang.parser.NodeKindTools;
 
 /**

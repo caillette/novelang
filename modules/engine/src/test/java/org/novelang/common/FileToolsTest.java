@@ -20,12 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.novelang.testing.DirectoryFixture;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.novelang.testing.DirectoryFixture;
 
 /**
  * Tests for {@link FileTools}.

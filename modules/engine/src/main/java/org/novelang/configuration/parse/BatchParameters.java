@@ -16,10 +16,10 @@
  */
 package org.novelang.configuration.parse;
 
+import java.io.File;
+
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
-
-import java.io.File;
 
 /**
  * @author Laurent Caillette

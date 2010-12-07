@@ -16,26 +16,28 @@
  */
 package org.novelang.rendering;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.io.ByteArrayOutputStream;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.ImmutableSet;
-import org.novelang.common.*;
-import org.novelang.designator.Tag;
-import org.novelang.parser.shared.Lexeme;
-import org.novelang.parser.GeneratedLexemes;
-import org.novelang.parser.NodeKind;
-import org.novelang.outfit.DefaultCharset;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
+import org.novelang.common.Nodepath;
+import org.novelang.common.Problem;
+import org.novelang.common.Renderable;
+import org.novelang.common.StylesheetMap;
+import org.novelang.common.SyntacticTree;
+import org.novelang.designator.Tag;
+import org.novelang.outfit.DefaultCharset;
+import org.novelang.parser.GeneratedLexemes;
+import org.novelang.parser.NodeKind;
+import org.novelang.parser.shared.Lexeme;
 
 /**
  * @author Laurent Caillette

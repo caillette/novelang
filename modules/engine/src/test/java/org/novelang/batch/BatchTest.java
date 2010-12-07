@@ -20,6 +20,11 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Permission;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
@@ -28,11 +33,6 @@ import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 /**

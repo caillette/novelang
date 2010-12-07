@@ -24,10 +24,10 @@ import java.net.UnknownHostException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.mortbay.jetty.Request;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
-import org.mortbay.jetty.Request;
 
 /**
  *

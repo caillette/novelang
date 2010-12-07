@@ -20,6 +20,10 @@ import java.io.File;
 import java.io.IOException;
 
 import com.google.common.collect.ImmutableSet;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourceTools;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
@@ -28,12 +32,8 @@ import org.novelang.common.filefixture.ResourceSchema;
 import org.novelang.designator.Tag;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.outfit.DefaultCharset;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 import static org.novelang.ResourcesForTests.Images;

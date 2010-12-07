@@ -20,18 +20,18 @@ package org.novelang.rendering;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+import com.google.common.base.Preconditions;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.novelang.common.Nodepath;
+import org.novelang.common.metadata.DocumentMetadata;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.xml.XmlNamespaces;
+import org.novelang.parser.NodeKindTools;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
-import com.google.common.base.Preconditions;
-import org.novelang.common.Nodepath;
-import org.novelang.common.metadata.DocumentMetadata;
-import org.novelang.parser.NodeKindTools;
-import org.novelang.outfit.DefaultCharset;
 
 /**
  * @author Laurent Caillette

@@ -24,9 +24,9 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.novelang.testing.DirectoryFixture;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.novelang.testing.DirectoryFixture;
 
 /**
  * Performs filesystem-oriented operations on {@link Resource} and {@link Directory}.

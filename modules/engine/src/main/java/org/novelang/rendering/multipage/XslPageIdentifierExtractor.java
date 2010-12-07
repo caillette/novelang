@@ -21,7 +21,6 @@ import java.nio.charset.Charset;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
@@ -35,7 +34,6 @@ import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.XmlWriter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

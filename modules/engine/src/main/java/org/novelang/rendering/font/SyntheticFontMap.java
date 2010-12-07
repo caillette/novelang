@@ -19,14 +19,14 @@ package org.novelang.rendering.font;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.fop.fonts.EmbedFontInfo;
-import org.apache.fop.fonts.FontTriplet;
 import com.google.common.base.Predicate;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.HashMultimap;
+import org.apache.fop.fonts.EmbedFontInfo;
+import org.apache.fop.fonts.FontTriplet;
 import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;
 

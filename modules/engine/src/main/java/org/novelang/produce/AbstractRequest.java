@@ -31,14 +31,14 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.novelang.designator.Tag;
-import org.novelang.outfit.loader.ResourceName;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RawResource;
 import org.novelang.rendering.RenderingTools;
 import org.novelang.rendering.RenditionMimeType;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * The base class for requests and a do-everything factory.

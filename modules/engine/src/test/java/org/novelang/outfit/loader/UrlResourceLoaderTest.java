@@ -20,16 +20,16 @@ package org.novelang.outfit.loader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.novelang.ResourcesForTests;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
-import org.novelang.common.filefixture.Resource;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.novelang.ResourcesForTests;
+import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
+import org.novelang.common.filefixture.Resource;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 /**

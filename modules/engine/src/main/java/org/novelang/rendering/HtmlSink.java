@@ -18,8 +18,8 @@
 package org.novelang.rendering;
 
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
 import org.xml.sax.Attributes;

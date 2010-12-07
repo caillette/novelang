@@ -25,9 +25,9 @@ import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.common.StylesheetMap;
 import org.novelang.common.SyntacticTree;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.outfit.DefaultCharset;
 
 /**
  * Tests for {@link XmlWriter}.

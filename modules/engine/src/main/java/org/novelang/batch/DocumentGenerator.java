@@ -31,7 +31,6 @@ import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.DocumentProducer;
-import org.novelang.produce.DocumentRequest;
 import org.novelang.request.DocumentRequest2;
 
 /**

@@ -19,9 +19,9 @@ package org.novelang.common.filefixture;
 import java.io.File;
 import java.io.IOException;
 
-import org.novelang.testing.DirectoryFixture;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 /**

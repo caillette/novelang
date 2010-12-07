@@ -24,27 +24,27 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import org.novelang.testing.DirectoryFixture;
-import org.novelang.ResourceTools;
-import org.novelang.ResourcesForTests;
-import org.novelang.common.filefixture.ResourceInstaller;
-import org.novelang.configuration.ConfigurationTools;
-import org.novelang.daemon.HttpDaemon;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
-import org.novelang.outfit.loader.ClasspathResourceLoader;
-import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-import org.novelang.rendering.RenditionMimeType;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.novelang.ResourceTools;
+import org.novelang.ResourcesForTests;
+import org.novelang.common.filefixture.ResourceInstaller;
+import org.novelang.configuration.ConfigurationTools;
+import org.novelang.daemon.HttpDaemon;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.loader.ClasspathResourceLoader;
+import org.novelang.outfit.loader.ResourceLoader;
+import org.novelang.rendering.RenditionMimeType;
+import org.novelang.testing.DirectoryFixture;
+import org.novelang.testing.junit.NameAwareTestClassRunner;
 
-import static org.novelang.ResourcesForTests.TaggedPart;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.novelang.ResourcesForTests.TaggedPart;
 
 /**
  * Tests for Javascript-based interactive behavior.

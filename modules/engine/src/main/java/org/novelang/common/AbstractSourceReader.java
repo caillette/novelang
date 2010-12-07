@@ -27,18 +27,18 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.antlr.runtime.RecognitionException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
 import org.novelang.common.metadata.MetadataHelper;
 import org.novelang.common.tree.TreeTools;
 import org.novelang.designator.Tag;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.GenericParser;
 import org.novelang.parser.unicode.UnicodeInputStream;
-import org.novelang.outfit.DefaultCharset;
-import org.antlr.runtime.RecognitionException;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ClassUtils;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Base class holding parsing and some error-handling.

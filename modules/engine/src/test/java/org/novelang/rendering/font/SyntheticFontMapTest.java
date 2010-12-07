@@ -18,19 +18,17 @@ package org.novelang.rendering.font;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import org.apache.fop.fonts.EmbedFontInfo;
 import org.apache.fop.fonts.Font;
 import org.apache.fop.fonts.FontTriplet;
 import org.junit.Assert;
 import org.junit.Test;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;
 

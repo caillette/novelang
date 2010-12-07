@@ -18,38 +18,37 @@ package org.novelang.opus;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
-import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 
-import org.novelang.common.tree.Statistics;
-import org.novelang.treemangling.designator.IdentifierCollisions;
-import org.novelang.treemangling.designator.DesignatorTools;
-import org.apache.commons.io.FileUtils;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.base.Preconditions;
-
-import org.novelang.opus.function.CommandParameterException;
-import org.novelang.opus.function.Command;
-import org.novelang.opus.function.CommandFactory;
+import org.apache.commons.io.FileUtils;
 import org.novelang.common.AbstractSourceReader;
+import org.novelang.common.FileTools;
 import org.novelang.common.Problem;
 import org.novelang.common.SimpleTree;
 import org.novelang.common.StylesheetMap;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.FileTools;
+import org.novelang.common.tree.Statistics;
 import org.novelang.common.tree.Treepath;
 import org.novelang.designator.Tag;
+import org.novelang.opus.function.Command;
+import org.novelang.opus.function.CommandFactory;
+import org.novelang.opus.function.CommandParameterException;
+import org.novelang.parser.GenericParser;
+import org.novelang.parser.NodeKind;
+import org.novelang.parser.antlr.DelegatingBookParser;
 import org.novelang.treemangling.LevelMangler;
+import org.novelang.treemangling.ListMangler;
 import org.novelang.treemangling.SeparatorsMangler;
 import org.novelang.treemangling.TagFilter;
-import org.novelang.treemangling.ListMangler;
-import org.novelang.parser.NodeKind;
-import org.novelang.parser.GenericParser;
-import org.novelang.parser.antlr.DelegatingBookParser;
 import org.novelang.treemangling.TagMangler;
+import org.novelang.treemangling.designator.DesignatorTools;
+import org.novelang.treemangling.designator.IdentifierCollisions;
 
 /**
  * Reads a Opus file, processes functions and builds a Tree with inclusions and so on.

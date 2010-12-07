@@ -16,9 +16,9 @@
  */
 package org.novelang.rendering.xslt.validate;
 
-import org.xml.sax.SAXException;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import org.xml.sax.SAXException;
 
 /**
  * Thrown when incorrect names were found in XPath expression(s).

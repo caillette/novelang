@@ -3,13 +3,13 @@ package org.novelang.parser.antlr;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import org.junit.Ignore;
+import org.junit.Test;
 import org.novelang.common.Problem;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.novella.Novella;
 import org.novelang.novella.NovellaFixture;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

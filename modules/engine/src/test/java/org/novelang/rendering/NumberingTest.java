@@ -18,18 +18,16 @@ package org.novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.DocumentProducer;
-import org.novelang.produce.DocumentRequest;
-import org.novelang.produce.RequestTools;
 import org.novelang.outfit.DefaultCharset;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.novelang.produce.DocumentProducer;
 import org.novelang.request.DocumentRequest2;
 import org.novelang.request.GenericRequest;
 import org.novelang.testing.junit.NameAwareTestClassRunner;

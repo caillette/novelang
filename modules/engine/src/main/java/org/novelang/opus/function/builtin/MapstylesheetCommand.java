@@ -1,18 +1,16 @@
 package org.novelang.opus.function.builtin;
 
-import org.novelang.opus.CommandExecutionContext;
-import org.novelang.rendering.RenditionMimeType;
-import org.novelang.outfit.loader.ResourceName;
-import org.novelang.common.Problem;
-import org.novelang.common.Location;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Lists;
-
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.novelang.common.Location;
+import org.novelang.common.Problem;
+import org.novelang.opus.CommandExecutionContext;
+import org.novelang.outfit.loader.ResourceName;
+import org.novelang.rendering.RenditionMimeType;
 
 /**
  * @author Laurent Caillette

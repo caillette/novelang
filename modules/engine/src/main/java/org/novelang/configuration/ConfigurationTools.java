@@ -27,21 +27,20 @@ import java.util.concurrent.ThreadFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.apache.fop.apps.FOPException;
+import org.apache.fop.apps.FopFactory;
 import org.novelang.configuration.parse.BatchParameters;
 import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.configuration.parse.LevelExploderParameters;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.UrlResourceLoader;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-import org.novelang.produce.DocumentRequest;
-import org.novelang.outfit.DefaultCharset;
-import org.apache.fop.apps.FOPException;
-import org.apache.fop.apps.FopFactory;
 import org.novelang.request.DocumentRequest2;
 
 /**

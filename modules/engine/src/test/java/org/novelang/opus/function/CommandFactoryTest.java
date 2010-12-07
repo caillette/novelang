@@ -1,20 +1,20 @@
 package org.novelang.opus.function;
 
-import static org.novelang.parser.NodeKind.*;
-import static org.novelang.parser.antlr.TreeFixture.tree;
-import org.novelang.opus.function.builtin.InsertCommand;
-import org.novelang.opus.function.builtin.MapstylesheetCommand;
-import org.novelang.opus.function.builtin.FileOrdering;
-import org.novelang.opus.function.builtin.insert.LevelHead;
-import org.novelang.designator.FragmentIdentifier;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import org.novelang.designator.FragmentIdentifier;
+import org.novelang.opus.function.builtin.FileOrdering;
+import org.novelang.opus.function.builtin.InsertCommand;
+import org.novelang.opus.function.builtin.MapstylesheetCommand;
+import org.novelang.opus.function.builtin.insert.LevelHead;
 
-import java.util.Map;
-import java.util.Iterator;
+import static org.junit.Assert.*;
+import static org.novelang.parser.NodeKind.*;
+import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * Tests for{@link CommandFactory}.

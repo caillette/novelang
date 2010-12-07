@@ -29,9 +29,9 @@ import com.google.common.collect.Maps;
 import org.novelang.common.Problem;
 import org.novelang.common.StylesheetMap;
 import org.novelang.common.SyntacticTree;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.outfit.DefaultCharset;
 
 /**
  * Contains all input and output for {@link org.novelang.opus.function.Command} evaluation.

@@ -25,7 +25,6 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import org.novelang.common.Location;
 import org.novelang.common.Nodepath;
 import org.novelang.common.Problem;
@@ -34,9 +33,10 @@ import org.novelang.common.SyntacticTree;
 import org.novelang.common.TagBehavior;
 import org.novelang.common.metadata.MetadataHelper;
 import org.novelang.parser.NodeKind;
-import static org.novelang.parser.NodeKind.*;
 import org.novelang.parser.NodeKindTools;
 import org.novelang.rendering.multipage.PageIdentifier;
+
+import static org.novelang.parser.NodeKind.*;
 
 /**
  * The only implementation of {@code Renderer} making sense as it delegates all specific

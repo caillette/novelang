@@ -17,7 +17,6 @@
 package org.novelang.rendering.multipage;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.Executors;
 
@@ -26,18 +25,17 @@ import com.google.common.collect.ImmutableSet;
 import javax.xml.transform.URIResolver;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
-import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.designator.Tag;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.opus.Opus;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
@@ -45,7 +43,6 @@ import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 

@@ -20,17 +20,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
-import static org.apache.commons.lang.SystemUtils.FILE_SEPARATOR;
-import org.novelang.testing.DirectoryFixture;
 import org.novelang.common.filefixture.Directory;
-import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.common.filefixture.ResourceSchema;
+import org.novelang.testing.DirectoryFixture;
+import org.novelang.testing.junit.NameAwareTestClassRunner;
+
+import static org.apache.commons.lang.SystemUtils.FILE_SEPARATOR;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link org.novelang.common.filefixture.ResourceSchema}.

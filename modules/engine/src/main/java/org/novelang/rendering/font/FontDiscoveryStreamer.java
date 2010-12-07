@@ -20,13 +20,13 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Set;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 import org.apache.fop.fonts.FontTriplet;
 import org.dom4j.Namespace;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;

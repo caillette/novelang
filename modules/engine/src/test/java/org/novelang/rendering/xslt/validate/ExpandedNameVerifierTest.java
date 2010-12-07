@@ -18,10 +18,10 @@ package org.novelang.rendering.xslt.validate;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import org.junit.Assert;
+import org.junit.Test;
 import org.novelang.common.Location;
 
 /**
