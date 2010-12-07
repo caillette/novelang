@@ -26,6 +26,9 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.RequestTools;
 import org.apache.commons.cli.Options;
+import org.novelang.request.DocumentRequest2;
+import org.novelang.request.GenericRequest;
+import org.novelang.request.MalformedRequestException;
 
 /**
  * Parses command-line arguments for {@link org.novelang.batch.DocumentGenerator}.
@@ -40,7 +43,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
   private static final Logger LOGGER =
       LoggerFactory.getLogger( DocumentGeneratorParameters.class ) ;
 
-  private final Iterable< DocumentRequest > documentRequests ;
+  private final Iterable< DocumentRequest2 > documentRequests ;
 
   public DocumentGeneratorParameters( final File baseDirectory, final String[] parameters )
       throws ArgumentException
@@ -52,20 +55,22 @@ public class DocumentGeneratorParameters extends BatchParameters {
     if( sourceArguments.length == 0 ) {
       throw new ArgumentException( "No source documents", helpPrinter ) ;
     } else {
-      final List< DocumentRequest > requestList = Lists.newArrayList() ;
+      final List< DocumentRequest2 > requestList = Lists.newArrayList() ;
       for( String sourceArgument : sourceArguments ) {
         try {
           if( ! sourceArgument.startsWith( "/" ) ) {
             sourceArgument = "/" + sourceArgument ;
           }
-          final DocumentRequest documentRequest =
-              RequestTools.createDocumentRequest( sourceArgument ) ;
+          final DocumentRequest2 documentRequest =
+              ( DocumentRequest2 ) GenericRequest.parse( sourceArgument ) ;
           if( null == documentRequest ) {
             throw new IllegalArgumentException(
                 "Malformed document request: '" + sourceArgument + "'" ) ;
           }
           requestList.add( documentRequest ) ;
         } catch( IllegalArgumentException e ) {
+          throw new ArgumentException( e, helpPrinter ) ;
+        } catch( MalformedRequestException e ) {
           throw new ArgumentException( e, helpPrinter ) ;
         }
       }
@@ -84,7 +89,7 @@ public class DocumentGeneratorParameters extends BatchParameters {
    * Returns document requests.
    * @return a non-null object iterating over no nulls, containing at least one element.
    */
-  public Iterable< DocumentRequest > getDocumentRequests() {
+  public Iterable< DocumentRequest2 > getDocumentRequests() {
     return documentRequests ;
   }
 

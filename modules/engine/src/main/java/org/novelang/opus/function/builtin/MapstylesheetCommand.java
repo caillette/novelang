@@ -26,8 +26,12 @@ public class MapstylesheetCommand extends  AbstractCommand {
       final Map< String, String > stylesheetMaps
   ) {
     super( location ) ;
-    Preconditions.checkNotNull( stylesheetMaps ) ;    
-    this.stylesheetMaps = ImmutableMap.copyOf( stylesheetMaps ) ;
+    // Hack: upper-casing so we have a chance to match enum's name.
+    final ImmutableMap.Builder< String, String > builder = ImmutableMap.builder() ;
+    for( final Map.Entry< String, String > stringEntry : stylesheetMaps.entrySet() ) {
+      builder.put( stringEntry.getKey().toUpperCase(), stringEntry.getValue() ) ;
+    }
+    this.stylesheetMaps = builder.build() ;
   }
 
   @Override

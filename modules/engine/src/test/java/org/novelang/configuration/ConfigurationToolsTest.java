@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.novelang.request.DocumentRequest2;
 import org.novelang.testing.DirectoryFixture;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
@@ -123,8 +124,8 @@ public class ConfigurationToolsTest {
 
     Assert.assertEquals( new File( SystemUtils.USER_DIR ), configuration.getOutputDirectory() ) ;
 
-    final Iterable< DocumentRequest > documentRequests = configuration.getDocumentRequests() ;
-    final Iterator<DocumentRequest> iterator = documentRequests.iterator() ;
+    final Iterable<DocumentRequest2> documentRequests = configuration.getDocumentRequests() ;
+    final Iterator<DocumentRequest2> iterator = documentRequests.iterator() ;
     assertTrue( iterator.hasNext() ) ;
     Assert.assertEquals( "1.html", iterator.next().getDocumentSourceName() ) ;
     Assert.assertEquals( "2.html", iterator.next().getDocumentSourceName() ) ;

@@ -38,6 +38,10 @@ import org.novelang.produce.RequestTools;
 import org.novelang.rendering.HtmlProblemPrinter;
 import org.apache.commons.lang.StringUtils;
 import org.mortbay.jetty.Request;
+import org.novelang.request.AnyRequest;
+import org.novelang.request.DocumentRequest2;
+import org.novelang.request.GenericRequest;
+import org.novelang.request.MalformedRequestException;
 
 /**
  * Serves rendered content.
@@ -89,15 +93,21 @@ public class DocumentHandler extends GenericHandler {
         ( StringUtils.isBlank( request.getQueryString() ) ? "" : "?" + request.getQueryString() )
     ;
 
-    final PolymorphicRequest documentRequest = RequestTools.createPolymorphicRequest( rawRequest ) ;
+    final AnyRequest someRequest;
+    try {
+      someRequest = GenericRequest.parse( rawRequest );
+    } catch( MalformedRequestException e ) {
+      throw new ServletException( e );
+    }
 
-    if( null == documentRequest ) {
+    if( null == someRequest ) {
       return ;
     } else {
 
       final ServletOutputStream outputStream = response.getOutputStream();
 
-      if( documentRequest.isRendered() ) {
+      if( someRequest.isRendered() ) {
+        final DocumentRequest2 documentRequest = ( DocumentRequest2 ) someRequest ;
 
         final Renderable rendered ;
         try {
@@ -105,7 +115,7 @@ public class DocumentHandler extends GenericHandler {
         } catch( IOException e ) {
           renderProblems(
               Lists.newArrayList( Problem.createProblem( e ) ),
-              documentRequest.getOriginalTarget(),
+              someRequest.getOriginalTarget(),
               outputStream
           ) ;
           LOGGER.error( e, "Unexpected exception" ) ;
@@ -152,8 +162,8 @@ public class DocumentHandler extends GenericHandler {
     }
   }
 
-  private void redirectToProblemPage(
-      final PolymorphicRequest documentRequest,
+  private static void redirectToProblemPage(
+      final DocumentRequest2 documentRequest,
       final HttpServletResponse response
   ) throws IOException {
     final String redirectionTarget =
@@ -163,8 +173,8 @@ public class DocumentHandler extends GenericHandler {
     LOGGER.info( "Redirected to '", redirectionTarget, "'" );
   }
 
-  private void redirectToOriginalTarget(
-      final PolymorphicRequest documentRequest,
+  private static void redirectToOriginalTarget(
+      final DocumentRequest2 documentRequest,
       final HttpServletResponse response
   ) throws IOException {
     final String redirectionTarget = documentRequest.getOriginalTarget() ;
@@ -176,14 +186,14 @@ public class DocumentHandler extends GenericHandler {
   }
 
   private void renderProblemsAsRequested(
-      final PolymorphicRequest documentRequest,
+      final DocumentRequest2 documentRequest,
       final Renderable rendered,
       final ServletOutputStream outputStream
   ) throws IOException {
     renderProblems( rendered.getProblems(), documentRequest.getOriginalTarget(), outputStream ) ;
   }
 
-  private void renderProblems(
+  private static void renderProblems(
       final Iterable< Problem > problems,
       final String originalTarget,
       final OutputStream outputStream

@@ -44,6 +44,7 @@ import org.novelang.rendering.PlainTextWriter;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.XmlWriter;
 import org.novelang.rendering.XslWriter;
+import org.novelang.request.DocumentRequest2;
 
 /**
  * Produces a document into passed-in {@link DocumentRequest}s.
@@ -71,14 +72,14 @@ public class DocumentProducer {
   }
 
   public Iterable< Problem > produce(
-      final AbstractRequest request,
+      final DocumentRequest2 request,
       final OutputStream outputStream
   ) throws Exception {
     return produce( request, createRenderable( request ), outputStream ) ;
   }
 
   public Iterable< Problem > produce(
-      final AbstractRequest request,
+      final DocumentRequest2 request,
       final Renderable rendered,
       final OutputStream outputStream
   ) throws Exception {
@@ -157,7 +158,7 @@ public class DocumentProducer {
     renderer.render( rendered, outputStream ) ;
   }
 
-  public Renderable createRenderable( final AbstractRequest documentRequest ) throws IOException {
+  public Renderable createRenderable( final DocumentRequest2 documentRequest ) throws IOException {
 
     final Charset suggestedRenderingCharset = renderingConfiguration.getDefaultCharset() ;
     LOGGER.debug( "About to create renderable with document source name '",

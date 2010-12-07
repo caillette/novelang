@@ -83,8 +83,8 @@ public class CommandFactoryTest {
     assertTrue( "Got: " + command, command instanceof MapstylesheetCommand ) ;
     final Map< String, String > stylesheetMap = extractStylesheetMaps( command ) ;
     assertEquals( 2L, ( long ) stylesheetMap.size() ) ;
-    assertEquals( "def", stylesheetMap.get( "abc" ) ) ;
-    assertEquals( "jkl", stylesheetMap.get( "ghi" ) ) ;
+    assertEquals( "def", stylesheetMap.get( "ABC" ) ) ;
+    assertEquals( "jkl", stylesheetMap.get( "GHI" ) ) ;
     
   }
 

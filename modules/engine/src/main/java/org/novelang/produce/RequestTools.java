@@ -43,14 +43,23 @@ public class RequestTools {
 
   private RequestTools() { throw new Error( "Don't call this" ) ; }
 
+  /**
+   * @deprecated Use {@link org.novelang.request.GenericRequest#parse(String)}.
+   */
   public static DocumentRequest createDocumentRequest( final String rawRequest ) {
     return AbstractRequest.createDocumentRequest( rawRequest ) ;
   }
 
+  /**
+   * @deprecated Use {@link org.novelang.request.GenericRequest#parse(String)}.
+   */
   public static PolymorphicRequest createPolymorphicRequest( final String rawRequest ) {
     return AbstractRequest.createPolymorphicRequest( rawRequest ) ;
   }
 
+  /**
+   * @deprecated Use {@link org.novelang.request.GenericRequest#parse(String)}.
+   */
   public static DocumentRequest forgeDocumentRequest(
       final String documentName,
       final RenditionMimeType renditionMimeType,

@@ -25,6 +25,9 @@ import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.RequestTools;
 import org.novelang.rendering.RenditionMimeType;
 import org.apache.commons.cli.Options;
+import org.novelang.request.DocumentRequest2;
+import org.novelang.request.GenericRequest;
+import org.novelang.request.MalformedRequestException;
 
 /**
  * Same as {@link DocumentGeneratorParameters} but allows only one single document request
@@ -33,7 +36,7 @@ import org.apache.commons.cli.Options;
 public class LevelExploderParameters extends BatchParameters {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( LevelExploderParameters.class ) ;
-  private final DocumentRequest documentRequest ;
+  private final DocumentRequest2 documentRequest ;
 
   public LevelExploderParameters(
       final File baseDirectory,
@@ -55,7 +58,7 @@ public class LevelExploderParameters extends BatchParameters {
       if( ! sourceArgument.startsWith( "/" ) ) {
         sourceArgument = "/" + sourceArgument ;
       }
-      documentRequest = RequestTools.createDocumentRequest( sourceArgument ) ;
+      documentRequest = ( DocumentRequest2 ) GenericRequest.parse( sourceArgument ) ;
       if( null == documentRequest ) {
         throw new IllegalArgumentException(
             "Malformed document request: '" + sourceArgument + "'" ) ;
@@ -68,6 +71,8 @@ public class LevelExploderParameters extends BatchParameters {
       }
     } catch( IllegalArgumentException e ) {
       throw new ArgumentException( e, helpPrinter ) ;
+    } catch( MalformedRequestException e ) {
+      throw new ArgumentException( e, helpPrinter ) ;
     }
     LOGGER.debug( "Document request = ", documentRequest ) ;
 
@@ -79,7 +84,7 @@ public class LevelExploderParameters extends BatchParameters {
   }
 
 
-  public DocumentRequest getDocumentRequest() {
+  public DocumentRequest2 getDocumentRequest() {
     return documentRequest ;
   }
 }

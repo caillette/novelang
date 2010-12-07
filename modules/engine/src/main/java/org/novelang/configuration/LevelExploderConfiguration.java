@@ -16,7 +16,7 @@
  */
 package org.novelang.configuration;
 
-import org.novelang.produce.DocumentRequest;
+import org.novelang.request.DocumentRequest2;
 
 /**
  * Configuration used by {@link org.novelang.batch.LevelExploder}.
@@ -25,7 +25,7 @@ import org.novelang.produce.DocumentRequest;
  */
 public interface LevelExploderConfiguration extends BatchConfiguration {
 
-  DocumentRequest getDocumentRequest() ;
+  DocumentRequest2 getDocumentRequest() ;
 
 
 }

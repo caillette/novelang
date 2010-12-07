@@ -42,6 +42,7 @@ import org.novelang.produce.DocumentRequest;
 import org.novelang.outfit.DefaultCharset;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FopFactory;
+import org.novelang.request.DocumentRequest2;
 
 /**
  * Creates various Configuration objects from {@link GenericParameters}.
@@ -202,7 +203,7 @@ public class ConfigurationTools {
         return producerConfiguration ;
       }
       @Override
-      public DocumentRequest getDocumentRequest() {
+      public DocumentRequest2 getDocumentRequest() {
         return parameters.getDocumentRequest() ;
       }
       @Override
@@ -229,7 +230,7 @@ public class ConfigurationTools {
         return producerConfiguration ;
       }
       @Override
-      public Iterable< DocumentRequest > getDocumentRequests() {
+      public Iterable< DocumentRequest2 > getDocumentRequests() {
         return parameters.getDocumentRequests() ;
       }
       @Override

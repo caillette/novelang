@@ -16,7 +16,7 @@
  */
 package org.novelang.configuration;
 
-import org.novelang.produce.DocumentRequest;
+import org.novelang.request.DocumentRequest2;
 
 /**
  * @author Laurent Caillette
@@ -27,7 +27,7 @@ public interface DocumentGeneratorConfiguration extends BatchConfiguration {
    * Returns documents requests.
    * @return a non-null object iterating over no null, with at least one element.
    */
-  Iterable< DocumentRequest > getDocumentRequests() ;
+  Iterable<DocumentRequest2> getDocumentRequests() ;
 
 
 }

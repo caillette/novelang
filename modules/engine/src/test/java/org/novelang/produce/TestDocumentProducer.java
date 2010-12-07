@@ -6,6 +6,9 @@ import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.fop.apps.FopFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Renderable;
 import org.novelang.common.SyntacticTree;
@@ -16,15 +19,15 @@ import org.novelang.configuration.ContentConfiguration;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
-import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.outfit.DefaultCharset;
-import org.apache.fop.apps.FopFactory;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.novelang.request.DocumentRequest2;
+import org.novelang.request.GenericRequest;
+import org.novelang.request.MalformedRequestException;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 import static junit.framework.Assert.assertFalse;
@@ -33,7 +36,8 @@ import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
- * Tests for {@link org.novelang.produce.DocumentProducer#createRenderable(AbstractRequest)}.
+ * Tests for
+ * {@link org.novelang.produce.DocumentProducer#createRenderable(org.novelang.request.DocumentRequest2)}.
  * 
  * @author Laurent Caillette
  */
@@ -41,14 +45,14 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
 public class TestDocumentProducer {
 
   @Test
-  public void tagFilteringOnImplicitTagForBook() throws IOException {
+  public void tagFilteringOnImplicitTagForBook() throws IOException, MalformedRequestException {
     resourceInstaller.copyWithPath( ResourcesForTests.TaggedPart.IMPLICIT_TAGS_PART ) ;
     final Resource bookResource = ResourcesForTests.TaggedPart.IMPLICIT_TAGS_BOOK ;
     verifyFooTagApplies( OPUS, bookResource ) ;
   }
 
   @Test
-  public void tagFilteringOnImplicitTagForPart() throws IOException {
+  public void tagFilteringOnImplicitTagForPart() throws IOException, MalformedRequestException {
     final Resource bookResource = ResourcesForTests.TaggedPart.IMPLICIT_TAGS_PART ;
     verifyFooTagApplies( NOVELLA, bookResource ) ;
   }
@@ -58,9 +62,8 @@ public class TestDocumentProducer {
 // Fixture
 // =======
   
-  private void verifyFooTagApplies( final NodeKind root, final Resource bookResource ) 
-      throws IOException 
-  {
+  private void verifyFooTagApplies( final NodeKind root, final Resource bookResource )
+      throws IOException, MalformedRequestException {
     final File bookFile = resourceInstaller.copyWithPath( bookResource ) ;
     final SyntacticTree tree = produceTree( 
         bookFile.getParentFile(), 
@@ -90,8 +93,8 @@ public class TestDocumentProducer {
   private static SyntacticTree produceTree(
       final File contentRoot,
       final String requestAsString 
-  ) throws IOException {
-    final AbstractRequest request = RequestTools.createDocumentRequest( requestAsString ) ;
+  ) throws IOException, MalformedRequestException {
+    final DocumentRequest2 request = ( DocumentRequest2 ) GenericRequest.parse( requestAsString ) ;
     assertNotNull( request ) ;
     final Renderable renderable = 
         new DocumentProducer( createConfiguration( contentRoot ) ).createRenderable( request ) ;

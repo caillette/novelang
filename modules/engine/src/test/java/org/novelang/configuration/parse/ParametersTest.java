@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import com.google.common.collect.Lists;
+import org.novelang.request.DocumentRequest2;
+import org.novelang.request.GenericRequest;
+import org.novelang.request.MalformedRequestException;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.ResourceTools;
 import org.novelang.logger.Logger;
@@ -217,8 +220,14 @@ public class ParametersTest {
 
   private static final String OUTPUT_FILE_NAME = "/this-is-not-a-directory-but-output-file.html" ;
 
-  private static final DocumentRequest DOCUMENT_REQUEST =
-      RequestTools.createDocumentRequest( OUTPUT_FILE_NAME ) ;
+  private static final DocumentRequest2 DOCUMENT_REQUEST ;
+  static {
+    try {
+      DOCUMENT_REQUEST = ( DocumentRequest2 ) GenericRequest.parse( OUTPUT_FILE_NAME ) ;
+    } catch( MalformedRequestException e ) {
+      throw new RuntimeException( e ) ;
+    }
+  }
 
   @Before
   public void setUp() throws IOException {
