@@ -34,11 +34,16 @@ import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RawResource;
 import org.novelang.rendering.RenderingTools;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.rendering.multipage.PageIdentifier;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * Unique implementation encapsulating the request for a rendered document or a resource.
+ *
+ * TODO: use ANTLR for parsing.
+ *
  * @author Laurent Caillette
  */
 public final class GenericRequest implements DocumentRequest, ResourceRequest {
@@ -55,6 +60,8 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
    * <a href="http://www.ietf.org/rfc/rfc2396.txt" >RFC</a> p. 26-27.
    */
   public static final String LIST_SEPARATOR = ";" ;
+
+  private static final String PAGEIDENTIFIER_PREFIX = "--";
 
 
 // =======
@@ -115,6 +122,12 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
     return displayProblems ;
   }
 
+  private final PageIdentifier pageIdentifier ;
+
+  @Override
+  public PageIdentifier getPageIdentifier() {
+    return pageIdentifier ;
+  }
 // ============
 // Non-rendered
 // ============
@@ -142,9 +155,11 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
       final String documentSourceName,
       final boolean displayProblems,
       final RenditionMimeType renditionMimeType,
+      final PageIdentifier pageIdentifier,
       final ResourceName alternateStylesheet,
-      final ImmutableSet< Tag > tags
+      final ImmutableSet<Tag> tags
   ) {
+    this.pageIdentifier = pageIdentifier;
     checkHasCharacters( originalTarget ) ;
     checkHasCharacters( documentSourceName ) ;
     this.documentSourceName = documentSourceName ;
@@ -171,8 +186,10 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
           Joiner.on( LIST_SEPARATOR ).join( tagNames ) ) ;
     }
     final ImmutableList< String > parameters = parametersBuilder.build() ;
-    return documentSourceName + "." + renditionMimeType.getFileExtension() +
-        ( parameters.isEmpty() ? "" : "?" + Joiner.on( "&" ).join( parameters ) ) ;
+    return documentSourceName
+        + ( pageIdentifier == null ? "" : PAGEIDENTIFIER_PREFIX + pageIdentifier.getName() )
+        + "." + renditionMimeType.getFileExtension()
+        + ( parameters.isEmpty() ? "" : "?" + Joiner.on( "&" ).join( parameters ) ) ;
   }
 
   private GenericRequest(
@@ -189,6 +206,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
     this.resourceExtension = resourceExtension ;
 
     renditionMimeType = null ;
+    pageIdentifier = null ;
     alternateStylesheet = null ;
     tags = null ;
     displayProblems = false ;
@@ -205,13 +223,22 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
 
   private static final String TAG_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9\\-_]*"  ;
 
+  /**
+   * Allow non-word characters only in the middle of word characters and if they are not
+   * consecutive.
+   */
+  private static final String PATH_SEGMENT_PATTERN = "[A-Za-z0-9]+(?:(?:-|_|\\.)[A-Za-z0-9]+)*" ;
+
   private static Pattern createPattern() {
     final StringBuilder buffer = new StringBuilder() ;
 
     buffer.append( "(" ) ;
 
     // The path without extension. No double dots for security reasons (forbid '..').
-    buffer.append( "((?:\\/(?:\\w|-|_)+(?:\\.(?:\\w|-|_)+)*)+)" ) ;
+    buffer.append( "((?:\\/" + PATH_SEGMENT_PATTERN + ")+)" ) ;
+
+    // Page identifier.
+    buffer.append( "(?:--(" + PATH_SEGMENT_PATTERN + "))?" ) ;
 
     // The extension defining the MIME type.
     buffer.append( "(?:\\.(" ) ;
@@ -243,8 +270,8 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
 
   private static String extractExtension( final String path ) throws MalformedRequestException {
     final Matcher matcher = DOCUMENT_PATTERN.matcher( path ) ;
-    if( matcher.find() && matcher.groupCount() >= 3 ) {
-      return matcher.group( 3 ) ;
+    if( matcher.find() && matcher.groupCount() >= 4 ) {
+      return matcher.group( 4 ) ;
     } else {
       throw new MalformedRequestException( "Doesn't contain an extension: '" + path + "'" ) ;
     }
@@ -331,9 +358,10 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
 
   public static AnyRequest parse( final String originalTarget ) throws MalformedRequestException {
     final Matcher matcher = DOCUMENT_PATTERN.matcher( originalTarget ) ;
-    if( matcher.find() && matcher.groupCount() >= 2 ) {
+    if( matcher.find() && matcher.groupCount() >= 4 ) {
 
-      final String fullTarget = matcher.group( 1 ) ; // With extension, without params.
+      // Document source name plus extension, minus page identifier.
+      final String fullTarget = matcher.group( 2 ) + "." + matcher.group( 4 ) ;
 
       final boolean showProblems = fullTarget.endsWith( ERRORPAGE_SUFFIX ) ;
 
@@ -349,11 +377,15 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
       final String rawDocumentSourceName = targetMinusError.substring(
             0, targetMinusError.length() - rawDocumentMimeType.length() - 1 ) ;
 
+      final String maybePageIdentifier = matcher.group( 3 );
+      final PageIdentifier pageIdentifier =
+          maybePageIdentifier == null ? null : new PageIdentifier( maybePageIdentifier ) ;
+
       final RenditionMimeType renditionMimeType = RenditionMimeType.maybeValueOf(
           rawDocumentMimeType == null ? null : rawDocumentMimeType.toUpperCase() ) ;
 
-      final ImmutableMap< String, String > parameterMap = matcher.groupCount() >= 4 ?
-          getQueryMap( matcher.group( 4 ) ) : ImmutableMap.< String, String >of() ;
+      final ImmutableMap< String, String > parameterMap = matcher.groupCount() >= 5 ?
+          getQueryMap( matcher.group( 5 ) ) : ImmutableMap.< String, String >of() ;
       verifyAllParameterNames( parameterMap.keySet() ) ;
 
       final ResourceName alternateStylesheet = extractResourceName( parameterMap ) ;
@@ -369,6 +401,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
             rawDocumentSourceName,
             showProblems,
             renditionMimeType,
+            pageIdentifier,
             alternateStylesheet,
             tagset
         ) ;
@@ -449,6 +482,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
   public int hashCode() {
     int result = originalTarget.hashCode() ;
     result = 31 * result + documentSourceName.hashCode();
+    result = 31 * result + ( pageIdentifier != null ? pageIdentifier.hashCode() : 0 ) ;
     result = 31 * result + ( rendered ? 1 : 0 ) ;
     result = 31 * result + ( renditionMimeType != null ? renditionMimeType.hashCode() : 0 ) ;
     result = 31 * result + ( alternateStylesheet != null ? alternateStylesheet.hashCode() : 0 ) ;

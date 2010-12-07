@@ -43,6 +43,8 @@ public interface AnyRequest {
   /**
    * Returns if the document is the result of rendering, or if it is a resource served as-is.
    * Depending on the value, some other properties make or don't make sense.
+   * if it returns true, it is safe to cast the instance into {@link DocumentRequest}.
+   * if it returns false, it is safe to cast the instance into {@link ResourceRequest}.
    */
   boolean isRendered() ;
 }

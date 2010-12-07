@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import org.novelang.designator.Tag;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.rendering.multipage.PageIdentifier;
 
 /**
  * The behavior of a document request.
@@ -50,5 +51,11 @@ public interface DocumentRequest extends AnyRequest {
    * Always false if {@link #isRendered()} is false.
    */
   boolean getDisplayProblems();
+
+
+  /**
+   * Maybe null, and always null if {@link #isRendered()} is false.
+   */
+  PageIdentifier getPageIdentifier() ;
 
 }

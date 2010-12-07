@@ -29,6 +29,7 @@ import org.novelang.designator.TagTestTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.rendering.multipage.PageIdentifier;
 
 import static org.junit.Assert.*;
 
@@ -87,7 +88,7 @@ public class GenericRequestTest {
 
 
   @Test
-  public void polymorphicRequestForError() throws MalformedRequestException {
+  public void requestForError() throws MalformedRequestException {
     final DocumentRequest request = createDocumentRequest( REQUEST_PATH_BROKEN ) ;
 
     assertTrue( request.getDisplayProblems() ) ;
@@ -99,7 +100,7 @@ public class GenericRequestTest {
   }
 
   @Test
-  public void polymorphicRequestForRawResource() throws MalformedRequestException {
+  public void resource() throws MalformedRequestException {
     final ResourceRequest request = createResourceRequest( CSS_REQUEST_PATH ) ;
 //    assertFalse( request.getDisplayProblems() ) ;
     assertEquals( CSS_REQUEST_PATH, request.getOriginalTarget() ) ;
@@ -110,7 +111,7 @@ public class GenericRequestTest {
   }
 
   @Test
-  public void polymorphicRequestWithTags() throws MalformedRequestException {
+  public void documentRequestWithTags() throws MalformedRequestException {
     final DocumentRequest request =
         createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
     assertFalse( request.getDisplayProblems() ) ;
@@ -122,9 +123,43 @@ public class GenericRequestTest {
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
   }
 
+  @Test
+  public void pageIdentifier() throws MalformedRequestException {
+    final String originalTarget = "/path/document--page_identifier.html";
+    final DocumentRequest request = createDocumentRequest( originalTarget ) ;
+    assertFalse( request.getDisplayProblems() ) ;
+    assertEquals( originalTarget, request.getOriginalTarget() ) ;
+    assertEquals( RenditionMimeType.HTML, request.getRenditionMimeType() ) ;
+    assertEquals( "/path/document", request.getDocumentSourceName() ) ;
+    assertEquals( NO_TAG, request.getTags() ) ;
+    assertEquals( new PageIdentifier( "page_identifier" ), request.getPageIdentifier() ) ;
+
+    assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+  }
+
   @Test( expected = MalformedRequestException.class )
   public void polymorphicRequestWithSuspiciousTagDefinition() throws MalformedRequestException {
-    createDocumentRequest( PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS ) ;
+    createDocumentRequest( "/path/to/file.pdf?tags=;t1;t2" ) ;
+  }
+
+  @Test( expected = MalformedRequestException.class )
+  public void incorrectDocumentSourceName1() throws MalformedRequestException {
+    createDocumentRequest( "/foo-_bar.pdf" ) ;
+  }
+
+  @Test( expected = MalformedRequestException.class )
+  public void incorrectDocumentSourceName2() throws MalformedRequestException {
+    createDocumentRequest( "/foo__bar.pdf" ) ;
+  }
+
+  @Test( expected = MalformedRequestException.class )
+  public void incorrectDocumentSourceName3() throws MalformedRequestException {
+    createDocumentRequest( "/fo..o.pdf" ) ;
+  }
+
+  @Test( expected = MalformedRequestException.class )
+  public void incorrectDocumentSourceName4() throws MalformedRequestException {
+    createDocumentRequest( "/fo./.o.pdf" ) ;
   }
 
 
@@ -147,8 +182,10 @@ public class GenericRequestTest {
       "?stylesheet=" + STYLESHEET_RESOURCENAME
   ;
 
-  private static final Set< Tag > TAGSET = 
+  private static final ImmutableSet< Tag > TAGSET =
       ImmutableSet.of( new Tag( "tag-1" ), new Tag( "Tag2" ) ) ;
+
+  private static final ImmutableSet< Tag > NO_TAG = ImmutableSet.of() ;
 
   private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ;
   static {
@@ -175,15 +212,8 @@ public class GenericRequestTest {
   }
 
 
-  private static final String PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS ;
-  static {
-    PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS =
-        PDF_REQUEST_PATH +
-        "?" +
-        GenericRequest.TAGSET_PARAMETER_NAME + "=;" +
-            Joiner.on( ";" ).join( TAGS_AS_STRINGSET )
-    ;
-  }
+  private static final String PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS =
+      "/path/to/file.pdf?tags=;t1;t2" ;
 
   private static final String REQUEST_PATH_BROKEN =
       PDF_REQUEST_PATH + GenericRequest.ERRORPAGE_SUFFIX ;
