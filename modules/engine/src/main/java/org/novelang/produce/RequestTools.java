@@ -28,19 +28,6 @@ import org.novelang.rendering.RenditionMimeType;
  */
 public class RequestTools {
 
-  public static final String ERRORPAGE_SUFFIX = "/error.html";
-  public static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
-  public static final String TAGSET_PARAMETER_NAME= "tags" ;
-
-  public static final ImmutableSet< String > SUPPORTED_PARAMETER_NAMES =
-      ImmutableSet.of( ALTERNATE_STYLESHEET_PARAMETER_NAME, TAGSET_PARAMETER_NAME ) ;
-
-  /**
-   * <a href="http://www.ietf.org/rfc/rfc2396.txt" >RFC</a> p. 26-27.
-   */
-  public static final String LIST_SEPARATOR = ";" ;
-  public static final String TAG_NAME_PARAMETER = "tags" ;
-
   private RequestTools() { throw new Error( "Don't call this" ) ; }
 
   /**

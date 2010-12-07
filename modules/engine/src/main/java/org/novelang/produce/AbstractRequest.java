@@ -39,6 +39,7 @@ import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RawResource;
 import org.novelang.rendering.RenderingTools;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.request.GenericRequest;
 
 /**
  * The base class for requests and a do-everything factory.
@@ -202,7 +203,7 @@ import org.novelang.rendering.RenditionMimeType;
         contains( patternKind )
     ) {
       // This duplicates the 'tag' rule in ANTLR grammar. Shame.
-      final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
+      final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + GenericRequest.LIST_SEPARATOR + "]+)" ;
 
       buffer.append( "(?:\\?" ) ;
       buffer.append( parameter ) ;
@@ -276,7 +277,7 @@ import org.novelang.rendering.RenditionMimeType;
 
       final String fullTarget = matcher.group( 1 ) ; // With extension, without params.
 
-      final boolean containsError = fullTarget.endsWith( RequestTools.ERRORPAGE_SUFFIX ) ;
+      final boolean containsError = fullTarget.endsWith( GenericRequest.ERRORPAGE_SUFFIX ) ;
       if( request instanceof PolymorphicRequest ) {
         ( ( PolymorphicRequest ) request ).setDisplayProblems( containsError ) ;
       }
@@ -284,7 +285,7 @@ import org.novelang.rendering.RenditionMimeType;
       final String targetMinusError ;
       if( containsError ) {
         targetMinusError = fullTarget.substring(
-            0, fullTarget.length() - RequestTools.ERRORPAGE_SUFFIX.length() ) ;
+            0, fullTarget.length() - GenericRequest.ERRORPAGE_SUFFIX.length() ) ;
       } else {
         targetMinusError = fullTarget ;
       }
@@ -335,14 +336,14 @@ import org.novelang.rendering.RenditionMimeType;
     final Set< String > keys = map.keySet() ;
     for( final String key : keys ) {
       final String value = map.get( key ) ;
-      if( RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME.equals( key ) ) {
+      if( GenericRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME.equals( key ) ) {
         if( StringUtils.isBlank( value ) ) {
           throw new IllegalArgumentException( "No value for parameter " + key ) ;
         } else {
           request.setAlternateStylesheet( new ResourceName( value ) ) ;
         }
       }
-      if( RequestTools.TAG_NAME_PARAMETER.equals( key ) ) {
+      if( GenericRequest.TAG_NAME_PARAMETER.equals( key ) ) {
         if( StringUtils.isBlank( value ) ) {
           throw new IllegalArgumentException( "No value for parameter " + key ) ;
         } else {

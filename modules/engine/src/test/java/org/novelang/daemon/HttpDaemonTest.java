@@ -60,8 +60,8 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.TextTools;
-import org.novelang.produce.RequestTools;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.request.GenericRequest;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.util.PDFTextStripper;
@@ -188,7 +188,7 @@ public class HttpDaemonTest {
 
     assertEquals( 1L, ( long ) responseSnapshot.getLocationsRedirectedTo().size() ) ;
     assertEquals(
-        brokenDocumentUrl + RequestTools.ERRORPAGE_SUFFIX,
+        brokenDocumentUrl + GenericRequest.ERRORPAGE_SUFFIX,
         responseSnapshot.getLocationsRedirectedTo().get( 0 ).getValue()
     ) ;
   }
@@ -200,7 +200,7 @@ public class HttpDaemonTest {
 
     final ResponseSnapshot responseSnapshot = followRedirection(
         "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
-        RequestTools.ERRORPAGE_SUFFIX
+        GenericRequest.ERRORPAGE_SUFFIX
     ) ;
 
     assertFalse( responseSnapshot.getContent().contains( "Requested:" ) ) ;

@@ -36,8 +36,9 @@ import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.loader.ResourceNotFoundException;
 import org.novelang.outfit.loader.UrlResourceLoader;
-import org.novelang.produce.PolymorphicRequest;
-import org.novelang.produce.RequestTools;
+import org.novelang.request.GenericRequest;
+import org.novelang.request.MalformedRequestException;
+import org.novelang.request.ResourceRequest2;
 
 /**
  * Holds resources which don't require rendering.
@@ -87,8 +88,12 @@ public class ResourceHandler extends GenericHandler {
   {
     LOGGER.debug( "Attempting to handle ", request.getRequestURI() ) ;
 
-    final PolymorphicRequest documentRequest = 
-        RequestTools.createPolymorphicRequest( request.getPathInfo() ) ;
+    final ResourceRequest2 documentRequest;
+    try {
+      documentRequest = ( ResourceRequest2 ) GenericRequest.parse( request.getPathInfo() ) ;
+    } catch( MalformedRequestException e ) {
+      throw new ServletException( e );
+    }
 
     if( null != documentRequest ) {
 

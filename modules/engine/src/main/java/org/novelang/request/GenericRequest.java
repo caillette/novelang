@@ -31,7 +31,6 @@ import org.novelang.designator.Tag;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.loader.ResourceName;
-import org.novelang.produce.RequestTools;
 import org.novelang.rendering.RawResource;
 import org.novelang.rendering.RenderingTools;
 import org.novelang.rendering.RenditionMimeType;
@@ -51,6 +50,16 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
 
   private final String originalTarget ;
   private static final String TAG_SEPARATOR = ";" ;
+  public static final String ERRORPAGE_SUFFIX = "/error.html";
+  public static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
+  public static final String TAGSET_PARAMETER_NAME= "tags" ;
+  public static final ImmutableSet< String > SUPPORTED_PARAMETER_NAMES =
+      ImmutableSet.of( ALTERNATE_STYLESHEET_PARAMETER_NAME, TAGSET_PARAMETER_NAME ) ;
+  /**
+   * <a href="http://www.ietf.org/rfc/rfc2396.txt" >RFC</a> p. 26-27.
+   */
+  public static final String LIST_SEPARATOR = ";" ;
+  public static final String TAG_NAME_PARAMETER = "tags" ;
 
   @Override
   public String getOriginalTarget() {
@@ -151,12 +160,12 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
     final ImmutableList.Builder< String > parametersBuilder = ImmutableList.builder() ;
     if( alternateStylesheet != null ) {
       parametersBuilder.add(
-          RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + alternateStylesheet.getName() ) ;
+          ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + alternateStylesheet.getName() ) ;
     }
     if( ! getTags().isEmpty() ) {
       final Iterable< String > tagNames = Iterables.transform( getTags(), Tag.EXTRACT_TAG_NAME ) ;
 
-      parametersBuilder.add( RequestTools.TAGSET_PARAMETER_NAME + "=" +
+      parametersBuilder.add( TAGSET_PARAMETER_NAME + "=" +
           Joiner.on( TAG_SEPARATOR ).join( tagNames ) ) ;
     }
     final ImmutableList< String > parameters = parametersBuilder.build() ;
@@ -216,7 +225,7 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
     buffer.append( ")" ) ;
 
     // This duplicates the 'tag' rule in ANTLR grammar. Shame.
-    final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + RequestTools.LIST_SEPARATOR + "]+)" ;
+    final String parameter = "([a-zA-Z0-9\\-\\=_&\\./" + LIST_SEPARATOR + "]+)" ;
 
     buffer.append( "(?:\\?" ) ;
     buffer.append( parameter ) ;
@@ -274,7 +283,7 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
       final ImmutableMap< String, String > parameterMap
   ) {
     final String parameterValue = parameterMap.get(
-        RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME ) ;
+        ALTERNATE_STYLESHEET_PARAMETER_NAME ) ;
     if( parameterValue == null ) {
       return null ;
     } else {
@@ -298,7 +307,7 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
   private static ImmutableSet< Tag > extractTags(
       final ImmutableMap< String, String > parameterMap
  ) throws MalformedRequestException {
-    final String parameterValue = parameterMap.get( RequestTools.TAG_NAME_PARAMETER ) ;
+    final String parameterValue = parameterMap.get( TAG_NAME_PARAMETER ) ;
     if( parameterValue == null ) {
       return ImmutableSet.of() ;
     } else {
@@ -310,7 +319,7 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
       throws MalformedRequestException
   {
     for( final String parameterName : parameterNames ) {
-      if( ! RequestTools.SUPPORTED_PARAMETER_NAMES.contains( parameterName ) ) {
+      if( ! SUPPORTED_PARAMETER_NAMES.contains( parameterName ) ) {
         throw new MalformedRequestException(
             "Unsupported query parameter: '" + parameterName + "'" ) ;
       }
@@ -324,12 +333,12 @@ public final class GenericRequest implements DocumentRequest2, ResourceRequest2 
 
       final String fullTarget = matcher.group( 1 ) ; // With extension, without params.
 
-      final boolean showProblems = fullTarget.endsWith( RequestTools.ERRORPAGE_SUFFIX ) ;
+      final boolean showProblems = fullTarget.endsWith( ERRORPAGE_SUFFIX ) ;
 
       final String targetMinusError ;
       if( showProblems ) {
         targetMinusError = fullTarget.substring(
-            0, fullTarget.length() - RequestTools.ERRORPAGE_SUFFIX.length() ) ;
+            0, fullTarget.length() - ERRORPAGE_SUFFIX.length() ) ;
       } else {
         targetMinusError = fullTarget ;
       }

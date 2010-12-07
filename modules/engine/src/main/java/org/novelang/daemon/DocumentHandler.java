@@ -35,7 +35,6 @@ import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.DocumentProducer;
-import org.novelang.produce.RequestTools;
 import org.novelang.rendering.HtmlProblemPrinter;
 import org.novelang.request.AnyRequest;
 import org.novelang.request.DocumentRequest2;
@@ -166,7 +165,7 @@ public class DocumentHandler extends GenericHandler {
       final HttpServletResponse response
   ) throws IOException {
     final String redirectionTarget =
-        documentRequest.getOriginalTarget() + RequestTools.ERRORPAGE_SUFFIX ;
+        documentRequest.getOriginalTarget() + GenericRequest.ERRORPAGE_SUFFIX ;
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
     LOGGER.info( "Redirected to '", redirectionTarget, "'" );

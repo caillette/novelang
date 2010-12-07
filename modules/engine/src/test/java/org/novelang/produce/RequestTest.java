@@ -29,6 +29,7 @@ import org.novelang.designator.TagTestTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.request.GenericRequest;
 
 import static org.junit.Assert.*;
 
@@ -148,7 +149,7 @@ public class RequestTest {
 
   private static final String PDF_REQUEST_PATH_WITHSTYLESHEET =
       PDF_REQUEST_PATH +
-      "?" + RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME +
+      "?" + GenericRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME +
       "=" + STYLESHEET_RESOURCENAME
   ;
 
@@ -165,10 +166,10 @@ public class RequestTest {
     PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
         PDF_REQUEST_PATH +
         "?" +
-        RequestTools.TAGSET_PARAMETER_NAME + "=" +
-            Joiner.on( RequestTools.LIST_SEPARATOR ).join( tagsAsString ) +
+        GenericRequest.TAGSET_PARAMETER_NAME + "=" +
+            Joiner.on( GenericRequest.LIST_SEPARATOR ).join( tagsAsString ) +
         "&" +
-        RequestTools.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
+        GenericRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
     ;
   }
 
@@ -185,13 +186,13 @@ public class RequestTest {
     PDF_REQUEST_PATH_WITH_ILL_FORMED_TAGS =
         PDF_REQUEST_PATH +
         "?" +
-        RequestTools.TAGSET_PARAMETER_NAME + "=;" +
-            Joiner.on( RequestTools.LIST_SEPARATOR ).join(TAGS_AS_STRINGSET)
+        GenericRequest.TAGSET_PARAMETER_NAME + "=;" +
+            Joiner.on( GenericRequest.LIST_SEPARATOR ).join(TAGS_AS_STRINGSET)
     ;
   }
 
   private static final String REQUEST_PATH_BROKEN =
-      PDF_REQUEST_PATH + RequestTools.ERRORPAGE_SUFFIX ;
+      PDF_REQUEST_PATH + GenericRequest.ERRORPAGE_SUFFIX ;
 
   private static final Logger LOGGER = LoggerFactory.getLogger( RequestTest.class ) ;
 
