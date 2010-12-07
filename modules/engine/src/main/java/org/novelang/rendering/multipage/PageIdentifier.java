@@ -52,7 +52,7 @@ public class PageIdentifier {
   /**
    * Identical to Tag syntax.
    */
-  private static final Pattern PATTERN = Pattern.compile( "[a-zA-Z0-9]+(?:[_\\-][a-zA-Z0-9]+)*" ) ;
+  public static final Pattern PATTERN = Pattern.compile( "[a-zA-Z0-9]+(?:[_\\-][a-zA-Z0-9]+)*" ) ;
 
   @Override
   public boolean equals( final Object other ) {

@@ -229,6 +229,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
    */
   private static final String PATH_SEGMENT_PATTERN = "[A-Za-z0-9]+(?:(?:-|_|\\.)[A-Za-z0-9]+)*" ;
 
+
   private static Pattern createPattern() {
     final StringBuilder buffer = new StringBuilder() ;
 
@@ -238,7 +239,9 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
     buffer.append( "((?:\\/" + PATH_SEGMENT_PATTERN + ")+)" ) ;
 
     // Page identifier.
-    buffer.append( "(?:--(" + PATH_SEGMENT_PATTERN + "))?" ) ;
+    buffer.append( "(?:--(" ) ;
+    buffer.append( PageIdentifier.PATTERN.pattern() ) ;
+    buffer.append( "))?" );
 
     // The extension defining the MIME type.
     buffer.append( "(?:\\.(" ) ;
