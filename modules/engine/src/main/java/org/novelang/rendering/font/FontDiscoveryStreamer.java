@@ -28,6 +28,7 @@ import org.dom4j.Namespace;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.novelang.common.metadata.DocumentMetadata;
+import org.novelang.common.metadata.Page;
 import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
@@ -103,6 +104,11 @@ public class FontDiscoveryStreamer {
       @Override
       public Charset getCharset() {
         return charset ;
+      }
+
+      @Override
+      public Page getPage() {
+        return null ;
       }
     } ;
 

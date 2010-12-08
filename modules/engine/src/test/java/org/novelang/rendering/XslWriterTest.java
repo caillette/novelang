@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.metadata.DocumentMetadata;
+import org.novelang.common.metadata.Page;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.DefaultCharset;
@@ -114,6 +115,11 @@ public class XslWriterTest {
     @Override
     public Charset getCharset() {
       return DefaultCharset.RENDERING;
+    }
+
+    @Override
+    public Page getPage() {
+      return null ;
     }
   }
 

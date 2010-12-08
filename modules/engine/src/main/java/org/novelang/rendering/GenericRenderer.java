@@ -32,9 +32,11 @@ import org.novelang.common.Renderable;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.TagBehavior;
 import org.novelang.common.metadata.MetadataHelper;
+import org.novelang.common.metadata.Page;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.NodeKindTools;
-import org.novelang.rendering.multipage.PageIdentifier;
+import org.novelang.rendering.multipage.PageIdentifierExtractor;
 
 import static org.novelang.parser.NodeKind.*;
 
@@ -77,14 +79,15 @@ public class GenericRenderer implements Renderer {
   @Override
   final public void render(
       final Renderable rendered,
-      final OutputStream outputStream
+      final OutputStream outputStream,
+      final Page page
   ) throws Exception {
     if( rendered.hasProblem() ) {
       renderProblems( rendered.getProblems(), outputStream ) ;
     } else {
       fragmentWriter.startWriting(
           outputStream,
-          MetadataHelper.createMetadata( rendered.getRenderingCharset() )
+          MetadataHelper.createMetadata( rendered.getRenderingCharset(), page )
       ) ;
       final SyntacticTree root = rendered.getDocumentTree() ;
       renderTreeInternal( root, null, null ) ;
@@ -93,8 +96,14 @@ public class GenericRenderer implements Renderer {
   }
 
   @Override
-  public ImmutableMap<PageIdentifier, String> extractPageIdentifiers( final SyntacticTree documentTree ) {
-    throw new UnsupportedOperationException( "TODO" ) ;
+  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
+      final SyntacticTree documentTree
+  ) throws Exception {
+    if( fragmentWriter instanceof PageIdentifierExtractor ) {
+      return ( ( PageIdentifierExtractor ) fragmentWriter ).extractPageIdentifiers( documentTree ) ;
+    } else {
+      return EMPTY_MAP ;
+    }
   }
 
   @Override
@@ -105,11 +114,12 @@ public class GenericRenderer implements Renderer {
   public void renderTree(
       final SyntacticTree tree,
       final OutputStream outputStream,
-      final Charset renderingCharset
+      final Charset renderingCharset,
+      final Page page
   ) throws Exception {
     fragmentWriter.startWriting(
         outputStream,
-        MetadataHelper.createMetadata( renderingCharset )
+        MetadataHelper.createMetadata( renderingCharset, page )
     ) ;
     renderTreeInternal( tree, null, null ) ;
     fragmentWriter.finishWriting() ;

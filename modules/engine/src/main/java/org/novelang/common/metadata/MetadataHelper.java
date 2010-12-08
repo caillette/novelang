@@ -30,6 +30,7 @@ import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Tree;
 import org.novelang.designator.Tag;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.NodeKind;
 
 import static org.novelang.parser.NodeKind.WORD_;
@@ -69,7 +70,11 @@ public class MetadataHelper {
   }
 
 
-  public static DocumentMetadata createMetadata( final Charset charset ) {
+  public static DocumentMetadata createMetadata() {
+    return createMetadata( DefaultCharset.RENDERING, null ) ;
+  }
+  
+  public static DocumentMetadata createMetadata( final Charset charset, final Page page ) {
 
     final ReadableDateTime timestamp = createTimestamp() ;
 
@@ -82,6 +87,11 @@ public class MetadataHelper {
       @Override
       public Charset getCharset() {
         return charset ;
+      }
+
+      @Override
+      public Page getPage() {
+        return page ;
       }
     } ;
   }

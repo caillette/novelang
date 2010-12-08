@@ -17,7 +17,7 @@
 package org.novelang.rendering;
 
 import org.junit.Test;
-import org.novelang.rendering.multipage.PageIdentifier;
+import org.novelang.common.metadata.PageIdentifier;
 
 import static org.fest.assertions.Assertions.assertThat;
 

@@ -20,6 +20,7 @@ package org.novelang.rendering;
 import java.io.OutputStream;
 
 import org.novelang.common.Renderable;
+import org.novelang.common.metadata.Page;
 import org.novelang.rendering.multipage.PageIdentifierExtractor;
 
 /**
@@ -29,13 +30,16 @@ public interface Renderer extends PageIdentifierExtractor {
 
   /**
    * Renders the book.
-   * @param rendered
-   * @param outputStream @return the MIME type of rendered book (useful when it changes to text or HTML for
-   *     displaying problems).
+   *
+   * @param rendered cannot be null.
+   * @param outputStream cannot be null.
+   * @param page may be null, if {@link #extractPageIdentifiers(org.novelang.common.SyntacticTree)}
+   *          returned an empty {@code Map}.
    */
   void render(
       Renderable rendered,
-      OutputStream outputStream
+      OutputStream outputStream,
+      Page page
   ) throws Exception ;
 
   RenditionMimeType getMimeType() ;

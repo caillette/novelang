@@ -29,7 +29,7 @@ import org.novelang.designator.TagTestTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.rendering.multipage.PageIdentifier;
+import org.novelang.common.metadata.PageIdentifier;
 
 import static org.junit.Assert.*;
 

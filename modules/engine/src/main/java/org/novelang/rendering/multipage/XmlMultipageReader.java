@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.outfit.Husk;
 import org.novelang.outfit.xml.IncorrectXmlException;
 import org.novelang.outfit.xml.StackBasedElementReader;

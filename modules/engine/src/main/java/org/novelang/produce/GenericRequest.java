@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang.StringUtils;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.designator.Tag;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -34,7 +35,6 @@ import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RawResource;
 import org.novelang.rendering.RenderingTools;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.rendering.multipage.PageIdentifier;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

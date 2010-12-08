@@ -154,7 +154,7 @@ public class DocumentProducer {
       final GenericRenderer renderer,
       final Renderable rendered
   ) throws Exception {
-    renderer.render( rendered, outputStream ) ;
+    renderer.render( rendered, outputStream, null ) ;
   }
 
   public Renderable createRenderable( final DocumentRequest documentRequest ) throws IOException {

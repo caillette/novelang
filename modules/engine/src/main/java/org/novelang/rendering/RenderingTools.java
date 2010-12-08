@@ -64,8 +64,8 @@ public class RenderingTools {
     try {
       new GenericRenderer( fragmentWriter, false ).render(
           new RenderableTree( tree, charset ),
-          byteArrayOutputStream
-      ) ;
+          byteArrayOutputStream,
+          null ) ;
     } catch ( Exception e ) {
       throw new RuntimeException( "Should not happen, no IO expected", e ) ;
     }

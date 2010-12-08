@@ -45,7 +45,11 @@ public class XmlWriter implements FragmentWriter {
   private final RenditionMimeType mimeType ;
 
   public XmlWriter( final RenditionMimeType mimeType ) {
-    this( XmlNamespaces.TREE_NAMESPACE_URI, XmlNamespaces.TREE_NAME_QUALIFIER, DefaultCharset.RENDERING, mimeType ) ;
+    this(
+        XmlNamespaces.TREE_NAMESPACE_URI,
+        XmlNamespaces.TREE_NAME_QUALIFIER,
+        DefaultCharset.RENDERING, mimeType
+    ) ;
   }
 
   public XmlWriter(

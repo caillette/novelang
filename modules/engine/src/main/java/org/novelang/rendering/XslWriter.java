@@ -21,12 +21,15 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
+import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -40,6 +43,9 @@ import org.novelang.outfit.xml.SaxMulticaster;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.parser.NodeKindTools;
+import org.novelang.rendering.multipage.PageIdentifierExtractor;
+import org.novelang.rendering.multipage.XslMultipageStylesheetCapture;
+import org.novelang.rendering.multipage.XslPageIdentifierExtractor;
 import org.novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -51,7 +57,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-public class XslWriter extends XmlWriter {
+public class XslWriter extends XmlWriter implements PageIdentifierExtractor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( XslWriter.class ) ;
 
@@ -63,6 +69,8 @@ public class XslWriter extends XmlWriter {
   protected final ResourceLoader resourceLoader ;
   protected final EntityEscapeSelector entityEscapeSelector ;
   private static final ResourceName IDENTITY_XSL_FILE_NAME = new ResourceName( "identity.xsl" ) ;
+
+  private final XslMultipageStylesheetCapture multipageStylesheetCapture;
 
   public XslWriter( final RenderingConfiguration configuration, final ResourceName xslFileName ) {
     this( configuration, xslFileName, DefaultCharset.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
@@ -152,13 +160,25 @@ public class XslWriter extends XmlWriter {
     uriResolver = new LocalUriResolver( resourceLoader, entityResolver ) {
       @Override
       protected ImmutableList< ContentHandler > createAdditionalContentHandlers() {
-        return XslWriter.createAdditionalContentHandlers() ;
+        return XslWriter.createAdditionalContentHandlers( multipageStylesheetCapture ) ;
       }
-
     } ;
+    multipageStylesheetCapture = new XslMultipageStylesheetCapture( entityResolver );
+
     LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", safeXslFileName ) ;
   }
 
+  @Override
+  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
+      final SyntacticTree documentTree
+  ) throws Exception
+  {
+    return new XslPageIdentifierExtractor(
+        entityResolver,
+        uriResolver, 
+        multipageStylesheetCapture
+    ).extractPageIdentifiers( documentTree ) ;
+  }
 
   @Override
   protected ContentHandler createContentHandler(
@@ -175,7 +195,7 @@ public class XslWriter extends XmlWriter {
         xslFileName,
         entityResolver,
         uriResolver,
-        createAdditionalContentHandlers()
+        createAdditionalContentHandlers( multipageStylesheetCapture )
     ).newTransformerHandler() ;
     
     configure( transformerHandler.getTransformer(), documentMetadata ) ;
@@ -192,14 +212,8 @@ public class XslWriter extends XmlWriter {
       final Transformer transformer,
       final DocumentMetadata documentMetadata
   ) {
-    transformer.setParameter(
-        "timestamp",
-        documentMetadata.getCreationTimestamp()
-    ) ;
-    transformer.setParameter(
-        "charset",
-        documentMetadata.getCharset().name()
-    ) ;
+    transformer.setParameter( "timestamp", documentMetadata.getCreationTimestamp() ) ;
+    transformer.setParameter( "charset", documentMetadata.getCharset().name() ) ;
   }
 
   /**
@@ -214,13 +228,25 @@ public class XslWriter extends XmlWriter {
     return super.createContentHandler( outputStream, documentMetadata, charset ) ;
   }
 
-  private static SaxMulticaster connectXpathVerifier( final TemplatesHandler templatesHandler ) {
-    return new SaxMulticaster( templatesHandler, createAdditionalContentHandlers() ) ;
+  private static ImmutableList< ContentHandler > createAdditionalContentHandlers(
+  ) {
+    return ImmutableList.of( createSaxConnectorVerifier() ) ;
   }
 
-  private static ImmutableList< ContentHandler > createAdditionalContentHandlers() {
-    return ImmutableList.< ContentHandler >of( new SaxConnectorForVerifier(
-        XmlNamespaces.TREE_NAMESPACE_URI, NodeKindTools.getRenderingNames() ) ) ;
+  private static ContentHandler createSaxConnectorVerifier() {
+    return new SaxConnectorForVerifier(
+        XmlNamespaces.TREE_NAMESPACE_URI,
+        NodeKindTools.getRenderingNames()
+    ) ;
+  }
+
+  private static ImmutableList< ContentHandler > createAdditionalContentHandlers(
+      final XslMultipageStylesheetCapture multipageStylesheetCapture
+  ) {
+    return ImmutableList.of(
+        createSaxConnectorVerifier(),
+        multipageStylesheetCapture
+    ) ;
   }
 
 

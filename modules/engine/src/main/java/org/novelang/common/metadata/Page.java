@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Laurent Caillette
+ * Copyright (C) 2008 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,31 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.novelang.common.metadata;
 
-import java.nio.charset.Charset;
-
-import org.joda.time.ReadableDateTime;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * Holds a consistent pair of
+ * ({@link PageIdentifier}, {@code String})
+ * as returned by
+ * {@link org.novelang.rendering.multipage.PageIdentifierExtractor#extractPageIdentifiers(org.novelang.common.SyntacticTree)}.
+ *
  * @author Laurent Caillette
  */
-public interface DocumentMetadata {
+public final class Page {
+
+  private final PageIdentifier pageIdentifier ;
+  private final String path ;
+
+  public Page( final PageIdentifier pageIdentifier, final String path ) {
+    this.pageIdentifier = checkNotNull( pageIdentifier ) ;
+    this.path = checkNotNull( path ) ;
+  }
 
   /**
    * @return a non-null object.
    */
-  public ReadableDateTime getCreationTimestamp() ;
+  public PageIdentifier getPageIdentifier() {
+    return pageIdentifier ;
+  }
 
   /**
-   * @return a non-null object.
+   * @return a non-null, but possibly empty {@code String}.
    */
-  public Charset getCharset() ;
-
-  /**
-   * @return a possibly null object.
-   */
-  public Page getPage() ;
-
+  public String getPath() {
+    return path ;
+  }
 }

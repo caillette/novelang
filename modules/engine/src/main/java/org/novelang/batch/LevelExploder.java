@@ -135,7 +135,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
         producerConfiguration.getRenderingConfiguration(),
         null,
         charset
-    ) ).render( new RenderingTools.RenderableTree( level, charset ), fileOutputStream ) ;
+    ) ).render( new RenderingTools.RenderableTree( level, charset ), fileOutputStream, null ) ;
     fileOutputStream.flush() ;
     fileOutputStream.close() ;
   }

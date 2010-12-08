@@ -28,6 +28,7 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.dom4j.Document;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.rendering.GenericRenderer;
 import org.novelang.rendering.RenditionMimeType;
@@ -63,7 +64,7 @@ public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
 
 
   @Override
-  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
+  public ImmutableMap<PageIdentifier, String > extractPageIdentifiers(
       final SyntacticTree documentTree
   )
       throws Exception
@@ -94,7 +95,7 @@ public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
 
     final GenericRenderer renderer = new GenericRenderer( xmlWriter ) ;
 
-    renderer.renderTree( documentTree, new NullOutputStream(), null  ) ;
+    renderer.renderTree( documentTree, new NullOutputStream(), null, null  ) ;
 
     return multipageReader.getPageIdentifiers() ;
   }

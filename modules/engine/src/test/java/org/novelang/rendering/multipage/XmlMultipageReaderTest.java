@@ -21,6 +21,7 @@ import java.io.StringReader;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
+import org.novelang.common.metadata.PageIdentifier;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;

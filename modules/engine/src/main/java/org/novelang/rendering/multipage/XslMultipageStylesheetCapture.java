@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableMap;
 import org.dom4j.Document;
 import org.dom4j.io.SAXContentHandler;
 import org.novelang.common.SyntacticTree;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.xml.ContentHandlerAdapter;
@@ -40,10 +41,7 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class XslMultipageStylesheetCapture
-    extends ContentHandlerAdapter
-    implements PageIdentifierExtractor
-{
+public class XslMultipageStylesheetCapture extends ContentHandlerAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( XslMultipageStylesheetCapture.class ) ;
 
@@ -77,13 +75,6 @@ public class XslMultipageStylesheetCapture
     return getPrefixMappings().inverse().get( XmlNamespaces.XSL_NAMESPACE_URI ) ;
   }
 
-  @Override
-  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
-      final SyntacticTree documentTree
-  ) throws Exception {
-    throw new UnsupportedOperationException( "TODO" ) ;
-
-  }
 
 // ==============
 // ContentHandler

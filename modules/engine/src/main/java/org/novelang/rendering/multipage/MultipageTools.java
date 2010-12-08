@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Laurent Caillette
+ * Copyright (C) 2008 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,31 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.novelang.rendering.multipage;
 
-package org.novelang.common.metadata;
-
-import java.nio.charset.Charset;
-
-import org.joda.time.ReadableDateTime;
+import com.google.common.collect.ImmutableMap;
+import org.novelang.common.metadata.Page;
+import org.novelang.common.metadata.PageIdentifier;
 
 /**
  * @author Laurent Caillette
  */
-public interface DocumentMetadata {
+public class MultipageTools {
 
-  /**
-   * @return a non-null object.
-   */
-  public ReadableDateTime getCreationTimestamp() ;
+  private MultipageTools() { }
 
-  /**
-   * @return a non-null object.
-   */
-  public Charset getCharset() ;
-
-  /**
-   * @return a possibly null object.
-   */
-  public Page getPage() ;
-
+  public static Page getPage(
+      final ImmutableMap<PageIdentifier, String > map,
+      final PageIdentifier pageIdentifier
+  ) {
+    final String path = map.get( pageIdentifier ) ;
+    return new Page( pageIdentifier, path ) ;
+  }
 }

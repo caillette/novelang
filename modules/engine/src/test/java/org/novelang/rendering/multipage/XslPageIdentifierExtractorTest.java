@@ -30,6 +30,7 @@ import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.designator.Tag;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -97,7 +98,7 @@ public class XslPageIdentifierExtractorTest {
         ImmutableSet.< Tag >of()
     ) ;
 
-    final ImmutableMap< PageIdentifier,String > pages =
+    final ImmutableMap<PageIdentifier,String > pages =
         pageIdentifierExtractor.extractPageIdentifiers( opus.getDocumentTree() ) ;
 
     assertThat( pages ).isEqualTo( ImmutableMap.of(
