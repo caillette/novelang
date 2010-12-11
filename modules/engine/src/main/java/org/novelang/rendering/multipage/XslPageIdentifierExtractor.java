@@ -45,7 +45,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
+public class XslPageIdentifierExtractor implements PagesExtractor {
 
   private final Document stylesheetDocument ;
   private final EntityResolver entityResolver ;
@@ -58,17 +58,20 @@ public class XslPageIdentifierExtractor implements PageIdentifierExtractor {
   ) {
     this.entityResolver = checkNotNull( entityResolver ) ;
     this.uriResolver = checkNotNull( uriResolver ) ;
-    this.stylesheetDocument = checkNotNull(
-        multipageStylesheetCapture.getStylesheetDocument() ) ;
+    this.stylesheetDocument = multipageStylesheetCapture.getStylesheetDocument() ;
   }
 
 
   @Override
-  public ImmutableMap<PageIdentifier, String > extractPageIdentifiers(
+  public ImmutableMap<PageIdentifier, String > extractPages(
       final SyntacticTree documentTree
   )
       throws Exception
   {
+
+    if( stylesheetDocument == null ) {
+      return PagesExtractor.EMPTY_MAP ;
+    }
 
     final XslTransformerFactory xslTransformerFactory = new XslTransformerFactory.FromDom4jDocument(
         stylesheetDocument,

@@ -61,8 +61,6 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
    */
   public static final String LIST_SEPARATOR = ";" ;
 
-  private static final String PAGEIDENTIFIER_PREFIX = "--";
-
 
 // =======
 // For all

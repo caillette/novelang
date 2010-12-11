@@ -30,6 +30,7 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.DocumentProducer;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.DocumentRequest;
+import org.novelang.produce.StreamDirector;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 /**
@@ -66,7 +67,11 @@ public class NumberingTest {
         "?stylesheet=" + ResourcesForTests.XslFormatting.XSL_NUMBERING.getResourceName().getName()
     ) ;
 
-    documentProducer.produce( documentRequest, outputStream ) ;
+    documentProducer.produce(
+        documentRequest,
+        documentProducer.createRenderable( documentRequest ),
+        StreamDirector.forExistingStream( outputStream ) 
+    ) ;
     final String result = new String( outputStream.toByteArray() ) ;
 
 //    LOGGER.info( "Produced: %s", result ) ;

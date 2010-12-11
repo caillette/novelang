@@ -28,6 +28,8 @@ import org.novelang.common.FileTools;
 import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.common.StructureKind;
+import org.novelang.common.metadata.Page;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.logger.Logger;
@@ -36,6 +38,7 @@ import org.novelang.novella.Novella;
 import org.novelang.opus.Opus;
 import org.novelang.outfit.ArrayTools;
 import org.novelang.outfit.loader.ResourceName;
+import org.novelang.rendering.FragmentWriter;
 import org.novelang.rendering.GenericRenderer;
 import org.novelang.rendering.HtmlWriter;
 import org.novelang.rendering.NovellaWriter;
@@ -72,15 +75,8 @@ public class DocumentProducer {
 
   public Iterable< Problem > produce(
       final DocumentRequest request,
-      final OutputStream outputStream
-  ) throws Exception {
-    return produce( request, createRenderable( request ), outputStream ) ;
-  }
-
-  public Iterable< Problem > produce(
-      final DocumentRequest request,
       final Renderable rendered,
-      final OutputStream outputStream
+      final StreamDirector streamDirector
   ) throws Exception {
 
     final RenditionMimeType mimeType = request.getRenditionMimeType() ;
@@ -88,7 +84,7 @@ public class DocumentProducer {
     // Java-flavored curryfication, wow!
     class Serve {
       public void with( final GenericRenderer renderer ) throws Exception {
-        serve( outputStream, renderer, rendered ) ;
+        serve( streamDirector, renderer, request.getPageIdentifier(), rendered ) ;
       }
     }
     final Serve serve = new Serve() ;
@@ -107,54 +103,73 @@ public class DocumentProducer {
     ) ;
 
     final Charset charset = rendered.getRenderingCharset() ;
+    final FragmentWriter fragmentWriter ;
+    boolean renderLocation = false ;
 
     switch( mimeType ) {
 
       case PDF :
-        serve.with( new GenericRenderer( new PdfWriter( renderingConfiguration, stylesheet ) ) ) ;
+        fragmentWriter = new PdfWriter( renderingConfiguration, stylesheet ) ;
         break ;
 
       case TXT :
-        serve.with( new GenericRenderer( new PlainTextWriter( charset ) ) ) ;
+        fragmentWriter = new PlainTextWriter( charset ) ;
         break ;
 
       case XML :
-        serve.with( new GenericRenderer( new XmlWriter(), true ) ) ;
+        fragmentWriter = new XmlWriter() ;
+        renderLocation = true ;
         break ;
 
       case HTML :
-        serve.with( new GenericRenderer(
-            new HtmlWriter( renderingConfiguration, stylesheet, charset ), true ) ) ;
+        fragmentWriter = new HtmlWriter( renderingConfiguration, stylesheet, charset ) ;
+        renderLocation = true ;
         break ;
 
       case NOVELLA:
-        serve.with( new GenericRenderer(
-            new NovellaWriter( renderingConfiguration, stylesheet, charset ) ) ) ;
+        fragmentWriter = new NovellaWriter( renderingConfiguration, stylesheet, charset ) ;
         break ;
 
       case FO :
         final ResourceName foStylesheet =
             stylesheet == null ? PdfWriter.DEFAULT_FO_STYLESHEET : stylesheet ;
-        serve.with( new GenericRenderer( new XslWriter( renderingConfiguration, foStylesheet ) ) ) ;
+        fragmentWriter = new XslWriter( renderingConfiguration, foStylesheet ) ;
         break ;
 
       default :
         throw new IllegalArgumentException( "Unsupported: " + mimeType ) ;
     }
 
-    LOGGER.debug( "Done with '", request.getOriginalTarget(), "'." ) ;
+    serve.with( new GenericRenderer( fragmentWriter, renderLocation ) ) ;
 
+    LOGGER.debug( "Done with '", request.getOriginalTarget(), "'." ) ;
 
     return rendered.getProblems() ;
     
   }
 
   private static void serve(
-      final OutputStream outputStream,
+      final StreamDirector streamDirector,
       final GenericRenderer renderer,
-      final Renderable rendered
+      final PageIdentifier pageIdentifier,
+      final Renderable renderable
   ) throws Exception {
-    renderer.render( rendered, outputStream, null ) ;
+    streamDirector.feedStreams(
+        renderable,
+        renderer,
+        pageIdentifier,
+        new StreamDirector.StreamFeeder() {
+          @Override
+          public void feed(
+              final Renderable someRenderable,
+              final OutputStream outputStream,
+              final Page page
+          ) throws Exception {
+            renderer.render( someRenderable, outputStream, page ) ;
+          }
+        }
+
+    ) ;
   }
 
   public Renderable createRenderable( final DocumentRequest documentRequest ) throws IOException {

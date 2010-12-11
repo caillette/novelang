@@ -32,6 +32,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.DocumentProducer;
 import org.novelang.produce.DocumentRequest;
+import org.novelang.produce.StreamDirector;
 
 /**
  * The main class for running document generation in command-line mode.
@@ -130,15 +131,11 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
       final File targetDirectory,
       final DocumentProducer documentProducer
   ) throws Exception {
-    final File outputFile = createOutputFile(
-        targetDirectory,
-        documentRequest
+    final Iterable< Problem > problems = documentProducer.produce(
+        documentRequest,
+        documentProducer.createRenderable( documentRequest ),
+        StreamDirector.forDirectory( documentRequest, targetDirectory )
     ) ;
-    LOGGER.info( "Generating document file '", outputFile.getAbsolutePath(), "'..." ) ;
-    final FileOutputStream outputStream = new FileOutputStream( outputFile ) ;
-    final Iterable< Problem > problems = documentProducer.produce( documentRequest, outputStream ) ;
-    outputStream.flush() ;
-    outputStream.close() ;
     return problems ;
   }
 

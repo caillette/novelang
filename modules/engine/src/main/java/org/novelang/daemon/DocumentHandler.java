@@ -36,6 +36,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.DocumentProducer;
 import org.novelang.produce.DocumentRequest;
+import org.novelang.produce.StreamDirector;
 import org.novelang.rendering.HtmlProblemPrinter;
 import org.novelang.produce.AnyRequest;
 import org.novelang.produce.GenericRequest;
@@ -145,7 +146,11 @@ public class DocumentHandler extends GenericHandler {
 
           response.setStatus( HttpServletResponse.SC_OK ) ;
           try {
-            documentProducer.produce( documentRequest, rendered, outputStream ) ;
+            documentProducer.produce(
+                documentRequest,
+                rendered,
+                StreamDirector.forExistingStream( outputStream )
+            ) ;
           } catch( Exception e ) {
             throw new ServletException( e ) ;
           }

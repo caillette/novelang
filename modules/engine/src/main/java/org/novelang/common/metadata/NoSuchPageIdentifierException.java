@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Laurent Caillette
+ * Copyright (C) 2008 Laurent Caillette
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,34 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.novelang.common.metadata;
 
-package org.novelang.rendering;
-
-import java.io.OutputStream;
-
-import org.novelang.common.Renderable;
-import org.novelang.common.metadata.Page;
-import org.novelang.rendering.multipage.PagesExtractor;
+import com.google.common.collect.ImmutableMap;
 
 /**
+ * Thrown when requesting a page with an unknown identifier.
+ * The presence of the identifier depends on what
+ * {@link org.novelang.rendering.multipage.PagesExtractor#extractPages(org.novelang.common.SyntacticTree)}
+ * did return.
+ *
  * @author Laurent Caillette
  */
-public interface Renderer extends PagesExtractor {
-
-  /**
-   * Renders the book.
-   *
-   * @param rendered cannot be null.
-   * @param outputStream cannot be null.
-   * @param page may be null, if {@link #extractPages(org.novelang.common.SyntacticTree)}
-   *          returned an empty {@code Map}.
-   */
-  void render(
-      Renderable rendered,
-      OutputStream outputStream,
-      Page page
-  ) throws Exception ;
-
-  RenditionMimeType getMimeType() ;
-
+public class NoSuchPageIdentifierException extends Exception {
+  public NoSuchPageIdentifierException(
+      final PageIdentifier pageIdentifier,
+      final ImmutableMap< PageIdentifier, String > pageMap
+  ) {
+    super( "Unknown identifier '" + pageIdentifier + "' inside " + pageMap ) ;
+  }
 }

@@ -25,7 +25,6 @@ import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
@@ -39,11 +38,10 @@ import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
-import org.novelang.outfit.xml.SaxMulticaster;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.parser.NodeKindTools;
-import org.novelang.rendering.multipage.PageIdentifierExtractor;
+import org.novelang.rendering.multipage.PagesExtractor;
 import org.novelang.rendering.multipage.XslMultipageStylesheetCapture;
 import org.novelang.rendering.multipage.XslPageIdentifierExtractor;
 import org.novelang.rendering.xslt.validate.SaxConnectorForVerifier;
@@ -57,7 +55,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Laurent Caillette
  */
-public class XslWriter extends XmlWriter implements PageIdentifierExtractor {
+public class XslWriter extends XmlWriter implements PagesExtractor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( XslWriter.class ) ;
 
@@ -169,7 +167,7 @@ public class XslWriter extends XmlWriter implements PageIdentifierExtractor {
   }
 
   @Override
-  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
+  public ImmutableMap< PageIdentifier, String > extractPages(
       final SyntacticTree documentTree
   ) throws Exception
   {
@@ -177,7 +175,7 @@ public class XslWriter extends XmlWriter implements PageIdentifierExtractor {
         entityResolver,
         uriResolver, 
         multipageStylesheetCapture
-    ).extractPageIdentifiers( documentTree ) ;
+    ).extractPages( documentTree ) ;
   }
 
   @Override

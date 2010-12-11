@@ -29,6 +29,8 @@ import org.novelang.common.metadata.PageIdentifier;
  */
 public interface DocumentRequest extends AnyRequest {
 
+  String PAGEIDENTIFIER_PREFIX = "--";
+
   /**
    * Never null if {@link #isRendered()} is true, always null if {@link #isRendered()} is false.
    */

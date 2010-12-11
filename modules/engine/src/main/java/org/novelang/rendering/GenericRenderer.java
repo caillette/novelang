@@ -36,7 +36,7 @@ import org.novelang.common.metadata.Page;
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.NodeKindTools;
-import org.novelang.rendering.multipage.PageIdentifierExtractor;
+import org.novelang.rendering.multipage.PagesExtractor;
 
 import static org.novelang.parser.NodeKind.*;
 
@@ -96,11 +96,11 @@ public class GenericRenderer implements Renderer {
   }
 
   @Override
-  public ImmutableMap< PageIdentifier, String > extractPageIdentifiers(
+  public ImmutableMap< PageIdentifier, String > extractPages(
       final SyntacticTree documentTree
   ) throws Exception {
-    if( fragmentWriter instanceof PageIdentifierExtractor ) {
-      return ( ( PageIdentifierExtractor ) fragmentWriter ).extractPageIdentifiers( documentTree ) ;
+    if( fragmentWriter instanceof PagesExtractor ) {
+      return ( ( PagesExtractor ) fragmentWriter ).extractPages( documentTree ) ;
     } else {
       return EMPTY_MAP ;
     }

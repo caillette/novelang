@@ -27,11 +27,4 @@ public class MultipageTools {
 
   private MultipageTools() { }
 
-  public static Page getPage(
-      final ImmutableMap<PageIdentifier, String > map,
-      final PageIdentifier pageIdentifier
-  ) {
-    final String path = map.get( pageIdentifier ) ;
-    return new Page( pageIdentifier, path ) ;
-  }
 }

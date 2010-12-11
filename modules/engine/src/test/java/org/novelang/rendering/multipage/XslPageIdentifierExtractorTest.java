@@ -85,7 +85,7 @@ public class XslPageIdentifierExtractorTest {
     final Document stylesheetDocument = stylesheetCapture.getStylesheetDocument() ;
     LOGGER.info( "Got stylesheet:\n", stylesheetDocument.asXML() ) ;
 
-    final PageIdentifierExtractor pageIdentifierExtractor = new XslPageIdentifierExtractor(
+    final PagesExtractor pageIdentifierExtractor = new XslPageIdentifierExtractor(
         entityResolver, uriResolver, stylesheetCapture ) ;
 
     final Opus opus = new Opus(
@@ -99,7 +99,7 @@ public class XslPageIdentifierExtractorTest {
     ) ;
 
     final ImmutableMap<PageIdentifier,String > pages =
-        pageIdentifierExtractor.extractPageIdentifiers( opus.getDocumentTree() ) ;
+        pageIdentifierExtractor.extractPages( opus.getDocumentTree() ) ;
 
     assertThat( pages ).isEqualTo( ImmutableMap.of(
         new PageIdentifier( "Level-0" ), "/opus/level[1]",

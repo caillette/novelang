@@ -16,13 +16,15 @@
  */
 package org.novelang.common.metadata;
 
+import com.google.common.collect.ImmutableMap;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Holds a consistent pair of
  * ({@link PageIdentifier}, {@code String})
  * as returned by
- * {@link org.novelang.rendering.multipage.PageIdentifierExtractor#extractPageIdentifiers(org.novelang.common.SyntacticTree)}.
+ * {@link org.novelang.rendering.multipage.PagesExtractor#extractPages(org.novelang.common.SyntacticTree)}.
  *
  * @author Laurent Caillette
  */
@@ -31,7 +33,7 @@ public final class Page {
   private final PageIdentifier pageIdentifier ;
   private final String path ;
 
-  public Page( final PageIdentifier pageIdentifier, final String path ) {
+  private Page( final PageIdentifier pageIdentifier, final String path ) {
     this.pageIdentifier = checkNotNull( pageIdentifier ) ;
     this.path = checkNotNull( path ) ;
   }
@@ -49,4 +51,22 @@ public final class Page {
   public String getPath() {
     return path ;
   }
+
+  /**
+   * @return a non-null object.
+   * @throws NoSuchPageIdentifierException if no page found for this identifier.
+   */
+  public static Page get(
+      final ImmutableMap< PageIdentifier, String > map,
+      final PageIdentifier pageIdentifier
+  ) throws NoSuchPageIdentifierException {
+    final String path = map.get( pageIdentifier ) ;
+
+    if( path == null ) {
+      throw new NoSuchPageIdentifierException( pageIdentifier, map ) ;
+    } else {
+      return new Page( pageIdentifier, path ) ;
+    }
+  }
+
 }

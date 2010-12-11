@@ -29,17 +29,19 @@ import org.novelang.common.metadata.PageIdentifier;
  *
  * @author Laurent Caillette
  */
-public interface PageIdentifierExtractor {
+public interface PagesExtractor {
 
   /**
-   * Extracts the identifiers.
+   * Extracts the identifiers along with associated path, each pair forming a
+   * {@link org.novelang.common.metadata.Page}.
+   * 
    * Returns a {@code Map} rather than a set of {@link org.novelang.common.metadata.Page} because the latter wouldn't
    * guarantee key uniqueness (unless some severe twist to the {@code Set} contract).
    *
    * @param documentTree a non-null object.
    * @return a non-null but possibly empty {@code Map}.
    */
-  ImmutableMap< PageIdentifier, String > extractPageIdentifiers( SyntacticTree documentTree )
+  ImmutableMap< PageIdentifier, String > extractPages( SyntacticTree documentTree )
       throws Exception ;
 
   ImmutableMap< PageIdentifier, String > EMPTY_MAP = ImmutableMap.of() ;
