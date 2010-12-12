@@ -48,6 +48,10 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
 
   public static final String COMMAND_NAME = "generate";
 
+  /**
+   *
+   * @param commandName unused, except for displaying help message.
+   */
   @Override
   public void main(
       final String commandName,
@@ -80,6 +84,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
 
       if( ! allProblems.isEmpty() ) {
         reportProblems( outputDirectory, allProblems ) ;
+        //noinspection UseOfSystemOutOrSystemErr
         System.err.println(
             "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
         throw new GenerationFailedException( allProblems ) ;

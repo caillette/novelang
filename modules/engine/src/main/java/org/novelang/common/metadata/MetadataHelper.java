@@ -29,13 +29,12 @@ import org.joda.time.format.DateTimeFormatter;
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Tree;
+import org.novelang.common.tree.Treepath;
+import org.novelang.common.tree.TreepathTools;
 import org.novelang.designator.Tag;
 import org.novelang.outfit.DefaultCharset;
-import org.novelang.parser.NodeKind;
 
-import static org.novelang.parser.NodeKind.WORD_;
-import static org.novelang.parser.NodeKind._EXPLICIT_TAG;
-import static org.novelang.parser.NodeKind._TAGS;
+import static org.novelang.parser.NodeKind.*;
 
 /**
  * @author Laurent Caillette
@@ -98,7 +97,7 @@ public class MetadataHelper {
 
   /**
    * Decorates a tree with metadata.
-   * @return the same tree with a new first {@link NodeKind#_META}.
+   * @return the same tree with a new first {@link org.novelang.parser.NodeKind#_META}.
    */
   public static SyntacticTree createMetadataDecoration( 
       final SyntacticTree tree, 
@@ -109,22 +108,71 @@ public class MetadataHelper {
 
     children.add(
         new SimpleTree(
-            NodeKind._WORD_COUNT,
+            _WORD_COUNT,
             new SimpleTree( "" + countWords( tree ) )
         )
     ) ;
 
-    if( tagset.size() > 0 ) {
+    if( ! tagset.isEmpty() ) {
       final Iterable< SyntacticTree > tagsAsTrees = Tag.toSyntacticTrees( _EXPLICIT_TAG, tagset ) ;
       final SyntacticTree tagsTree = new SimpleTree( _TAGS, tagsAsTrees ) ;
       children.add( tagsTree ) ;
     }
 
     return new SimpleTree(
-        NodeKind._META,
+        _META,
         children
     ) ;
   }
 
+
+  /**
+   * Adds a {@link org.novelang.parser.NodeKind#_META}/{@link org.novelang.parser.NodeKind#_PAGE}
+   * element.
+   *
+   * @param page a possibly null object.
+   * @return the root of the tree reflecting this addition, or the original tree if {@code page}
+   *         is null.
+   */
+  public static SyntacticTree createMetadataDecoration(
+      final SyntacticTree tree,
+      final Page page
+  ) {
+    if( page == null ) {
+      return tree ;
+    }
+
+    final SyntacticTree pageTree = new SimpleTree(
+        _PAGE,
+        new SimpleTree( _PAGE_IDENTIFIER, new SimpleTree( page.getPageIdentifier().getName() ) ),
+        new SimpleTree( _PAGE_PATH, new SimpleTree( page.getPath() ) )
+    ) ;
+
+    final Treepath< SyntacticTree > treepath = Treepath.create( tree ) ;
+
+    Treepath< SyntacticTree > treepathToMetaChild = null ;
+    for( int i = 0 ; i < tree.getChildCount() ; i ++ ) {
+      final SyntacticTree child = tree.getChildAt( i ) ;
+      if( child.isOneOf( _META ) ) {
+        treepathToMetaChild = Treepath.create( treepath, i ) ;
+        break ;
+      }
+    }
+
+    if( treepathToMetaChild == null ) {
+      treepathToMetaChild =
+          TreepathTools.addChildAt( treepath, new SimpleTree( _META, pageTree ), 0 ) ;
+    } else {
+      for( int i = 0 ; i < treepathToMetaChild.getTreeAtEnd().getChildCount() ; i ++ ) {
+        final SyntacticTree child = treepathToMetaChild.getTreeAtEnd().getChildAt( i ) ;
+        if( child.isOneOf( _PAGE ) ) {
+          throw new IllegalArgumentException( "Already has a " + _PAGE + " child" ) ;
+        }
+      }      
+      treepathToMetaChild = TreepathTools.addChildLast( treepathToMetaChild, pageTree ) ;
+    }
+
+    return treepathToMetaChild.getTreeAtStart() ;
+  }
 
 }

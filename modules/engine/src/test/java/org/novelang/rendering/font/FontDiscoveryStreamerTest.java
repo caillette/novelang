@@ -17,8 +17,10 @@
 package org.novelang.rendering.font;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
+import javax.xml.transform.TransformerConfigurationException;
 import org.apache.fop.apps.FopFactory;
 import org.junit.Test;
 import org.novelang.configuration.ConfigurationTools;
@@ -31,6 +33,7 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.XslWriter;
+import org.xml.sax.SAXException;
 
 /**
  * Tests for {@link FontDiscoveryStreamer}.
@@ -52,7 +55,7 @@ public class FontDiscoveryStreamerTest {
       protected XslWriter createXslWriter(
           final RenderingConfiguration renderingConfiguration,
           final ResourceName resourceName
-      ) {
+      ) throws IOException, TransformerConfigurationException, SAXException {
         return new XslWriter(
             FontDiscoveryStreamer.NAMESPACE.getURI(),
             FontDiscoveryStreamer.NAMESPACE.getPrefix(),

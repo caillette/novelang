@@ -88,13 +88,7 @@ public class DocumentProducer {
       }
     }
     final Serve serve = new Serve() ;
-    LOGGER.debug(
-        "Attempting to produce '",
-        request.getOriginalTarget(),
-        "' ",
-        request.toString(),
-        ""
-    ) ;
+    LOGGER.debug( "Attempting to produce ", request );
 
 
     final ResourceName stylesheet = ArrayTools.firstNotNull(

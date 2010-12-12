@@ -157,7 +157,7 @@ public class XmlWriter implements FragmentWriter {
     final OutputFormat outputFormat = new OutputFormat( "  ", true, charset.name() ) ;
     outputFormat.setExpandEmptyElements( false ) ;
     outputFormat.setXHTML( true ) ;
-    return new XMLWriter(
+    return new XMLWriter( // That's another class, not an instance of the current one.
         outputStream,
         outputFormat
     ) ;

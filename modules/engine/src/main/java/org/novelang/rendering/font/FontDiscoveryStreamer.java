@@ -16,6 +16,7 @@
  */
 package org.novelang.rendering.font;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Set;
@@ -23,6 +24,7 @@ import java.util.Set;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+import javax.xml.transform.TransformerConfigurationException;
 import org.apache.fop.fonts.FontTriplet;
 import org.dom4j.Namespace;
 import org.joda.time.DateTime;
@@ -36,6 +38,7 @@ import org.novelang.outfit.loader.ResourceName;
 import org.novelang.parser.GeneratedLexemes;
 import org.novelang.rendering.PdfWriter;
 import org.novelang.rendering.XslWriter;
+import org.xml.sax.SAXException;
 
 /**
  * Generates a PDF in an {@code OutputStream}.
@@ -75,7 +78,7 @@ public class FontDiscoveryStreamer {
   public FontDiscoveryStreamer(
       final RenderingConfiguration renderingConfiguration,
       final ResourceName resourceName
-  ) {
+  ) throws IOException, TransformerConfigurationException, SAXException {
     xslWriter = createXslWriter( renderingConfiguration, resourceName ) ;
     fopFontStatus = renderingConfiguration.getCurrentFopFontStatus() ;
   }
@@ -192,7 +195,7 @@ public class FontDiscoveryStreamer {
   protected XslWriter createXslWriter(
       final RenderingConfiguration renderingConfiguration,
       final ResourceName resourceName
-  ) {
+  ) throws IOException, TransformerConfigurationException, SAXException {
     return new PdfWriter(
         renderingConfiguration,
         resourceName,

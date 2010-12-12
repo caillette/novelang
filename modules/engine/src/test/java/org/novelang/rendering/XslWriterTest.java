@@ -17,10 +17,12 @@
 package org.novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+import javax.xml.transform.TransformerConfigurationException;
 import junit.framework.Assert;
 import org.apache.fop.apps.FopFactory;
 import org.joda.time.DateTime;
@@ -37,6 +39,7 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.rendering.xslt.validate.BadExpandedName;
 import org.novelang.rendering.xslt.validate.BadExpandedNamesException;
+import org.xml.sax.SAXException;
 
 /**
  * Tests for {@link org.novelang.rendering.XslWriter}.
@@ -59,9 +62,8 @@ public class XslWriterTest {
 
   @Test
   public void locationOfBrokenXpath() throws Exception {
-    final XslWriter xslWriter = createXslWriter( ResourcesForTests.XslFormatting.XSL_BADXPATH_2 ) ;
     try {
-      run( xslWriter ) ;
+      createXslWriter( ResourcesForTests.XslFormatting.XSL_BADXPATH_2 ) ;
       Assert.fail( "Did not throw expected exception" ) ;
     } catch( BadExpandedNamesException e ) {
       final Iterator< BadExpandedName > badExpandedNames = e.getBadExpandedNames().iterator() ;
@@ -89,7 +91,7 @@ public class XslWriterTest {
       ResourcesForTests.initialize() ;
   }
 
-  private static XslWriter createXslWriter( final Resource stylesheet ) {
+  private static XslWriter createXslWriter( final Resource stylesheet ) throws Exception {
     final RenderingConfiguration renderingConfiguration = new CustomRenderingConfiguration(
         new ClasspathResourceLoader( stylesheet.getParent().getAbsoluteResourceName() ),
         null,

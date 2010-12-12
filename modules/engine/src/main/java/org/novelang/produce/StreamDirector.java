@@ -66,6 +66,7 @@ public abstract class StreamDirector {
         if( pageIdentifier == null ) {
           if( supportsMultipage() ) {
             feedDefaultPage( renderable, streamFeeder ) ;
+            LOGGER.debug( "Feeding additional pages: ", pageMap ) ;
             for( final PageIdentifier someIdentifier : pageMap.keySet() ) {
               feedPage( renderable, streamFeeder, Page.get( pageMap, someIdentifier ) );
             }
@@ -104,7 +105,7 @@ public abstract class StreamDirector {
   protected abstract OutputStream getOutputStream( final PageIdentifier pageIdentifier )
       throws IOException ;
 
-  protected abstract void finishWith( final OutputStream outputStream ) ;
+  protected abstract void finishWith( final OutputStream outputStream ) throws IOException ;
 
   protected abstract boolean supportsMultipage() ;
 
@@ -153,7 +154,6 @@ public abstract class StreamDirector {
             + "." + documentRequest.getRenditionMimeType().getFileExtension()
         ;
         final File outputFile =  new File( directory, relativeFileName ) ;
-        LOGGER.debug( "Resolved output file name '", outputFile.getAbsolutePath(), "'" );
         FileUtils.forceMkdir( outputFile.getParentFile() );
 
         LOGGER.info( "Generating document file '", outputFile.getAbsolutePath(), "'..." ) ;
@@ -161,8 +161,8 @@ public abstract class StreamDirector {
       }
 
       @Override
-      protected void finishWith( final OutputStream outputStream ) {
-
+      protected void finishWith( final OutputStream outputStream ) throws IOException {
+        outputStream.close() ;
       }
 
       @Override

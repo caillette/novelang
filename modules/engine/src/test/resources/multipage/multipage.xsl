@@ -2,14 +2,15 @@
 <xsl:stylesheet
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xsle="http://www.w3.org/1999/XSL/Transform/embedded"
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xslmeta="http://novelang.org/xsl-meta/1.0"
 >
   <xsl:import href="default-novella.xsl" />
 
-  <xsl:param name="timestamp"/>
-  <xsl:param name="filename"/>
-  <xsl:param name="charset"/>
+  <xsl:param name="timestamp" />
+  <xsl:param name="filename" />
+  <xsl:param name="charset" />
 
   
   <xslmeta:multipage>
@@ -39,12 +40,15 @@
 
    [Navigation]
    <xsl:for-each select="/n:meta/n:page">
-     <xsl:value-of select="n:identifier"/>
+     Page:<xsl:value-of select="n:page-identifier"/>
    </xsl:for-each>
 
    [Whole opus]
-   <xsl:apply-imports/>
+   <xsl:apply-templates/>
    
  </xsl:template>
-  
+
+
+
+
 </xsl:stylesheet>

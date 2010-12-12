@@ -240,9 +240,10 @@ public final class ResourcesForTests {
   public interface Multipage {
     Directory dir = directory( "multipage" ) ;
 
-    Resource NOVELLA_MULTIPAGE_XSL = resource( "novella-multipage.xsl" ) ;
+    Resource MULTIPAGE_XSL = resource( "multipage.xsl" ) ;
     Resource XML_DOCUMENT = resource( "document.xml" ) ;
-    Resource NOVELLA_DOCUMENT = resource( "document.novella" ) ;
+    Resource MULTIPAGE_NOVELLA = resource( "multipage-content.novella" ) ;
+    Resource MULTIPAGE_OPUS = resource( "multipage.opus" ) ;
 
   }
 }

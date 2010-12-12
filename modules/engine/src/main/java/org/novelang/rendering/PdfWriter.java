@@ -17,9 +17,11 @@
 
 package org.novelang.rendering;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+import javax.xml.transform.TransformerConfigurationException;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
@@ -29,6 +31,7 @@ import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * @author Laurent Caillette
@@ -43,7 +46,7 @@ public class PdfWriter extends XslWriter {
       final ResourceName stylesheet,
       final String namespaceUri,
       final String nameQualifier
-  ) {
+  ) throws IOException, TransformerConfigurationException, SAXException {
     super(
         namespaceUri,
         nameQualifier,
@@ -53,7 +56,9 @@ public class PdfWriter extends XslWriter {
     fopFactory = configuration.getFopFactory() ;
   }
 
-  public PdfWriter( final RenderingConfiguration configuration, final ResourceName stylesheet ) {
+  public PdfWriter( final RenderingConfiguration configuration, final ResourceName stylesheet )
+      throws IOException, TransformerConfigurationException, SAXException
+  {
     super( configuration, null == stylesheet ? DEFAULT_FO_STYLESHEET : stylesheet ) ;
     fopFactory = configuration.getFopFactory() ;
   }

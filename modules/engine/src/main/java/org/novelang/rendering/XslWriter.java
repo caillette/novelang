@@ -17,12 +17,14 @@
 
 package org.novelang.rendering;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
@@ -38,6 +40,7 @@ import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
+import org.novelang.outfit.xml.SaxMulticaster;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.parser.NodeKindTools;
@@ -47,6 +50,7 @@ import org.novelang.rendering.multipage.XslPageIdentifierExtractor;
 import org.novelang.rendering.xslt.validate.SaxConnectorForVerifier;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.SAXException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -69,8 +73,11 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
   private static final ResourceName IDENTITY_XSL_FILE_NAME = new ResourceName( "identity.xsl" ) ;
 
   private final XslMultipageStylesheetCapture multipageStylesheetCapture;
+  private TransformerHandler transformerHandler;
 
-  public XslWriter( final RenderingConfiguration configuration, final ResourceName xslFileName ) {
+  public XslWriter( final RenderingConfiguration configuration, final ResourceName xslFileName )
+      throws IOException, TransformerConfigurationException, SAXException
+  {
     this( configuration, xslFileName, DefaultCharset.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
   }
 
@@ -79,7 +86,8 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final String nameQualifier,
       final RenderingConfiguration configuration,
       final ResourceName xslFileName
-  ) {
+  ) throws IOException, TransformerConfigurationException, SAXException
+  {
     this(
         namespaceUri,
         nameQualifier,
@@ -95,7 +103,8 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final RenderingConfiguration configuration,
       final ResourceName xslFileName,
       final RenditionMimeType mimeType
-  ) {
+  ) throws IOException, TransformerConfigurationException, SAXException
+  {
     this(
         namespaceUri,
         nameQualifier,
@@ -112,7 +121,9 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final ResourceName xslFileName,
       final Charset charset,
       final RenditionMimeType mimeType
-  ) {
+  )
+      throws IOException, TransformerConfigurationException, SAXException
+  {
     this( configuration, xslFileName, charset, mimeType, EntityEscapeSelector.NO_ENTITY_ESCAPE ) ;
   }
 
@@ -122,7 +133,9 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final Charset charset,
       final RenditionMimeType mimeType,
       final EntityEscapeSelector entityEscapeSelector
-  ) {
+  )
+      throws IOException, TransformerConfigurationException, SAXException
+  {
     this(
         XmlNamespaces.TREE_NAMESPACE_URI,
         XmlNamespaces.TREE_NAME_QUALIFIER,
@@ -142,7 +155,9 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final Charset charset,
       final RenditionMimeType mimeType,
       final EntityEscapeSelector entityEscapeSelector
-  ) {
+  )
+      throws IOException, TransformerConfigurationException, SAXException
+  {
     super( namespaceUri, nameQualifier, charset, mimeType ) ;
     this.entityEscapeSelector = checkNotNull( entityEscapeSelector ) ;
     this.resourceLoader = checkNotNull( configuration.getResourceLoader() ) ;
@@ -155,13 +170,33 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     }
     this.xslFileName = safeXslFileName ;
     entityResolver = new LocalEntityResolver( resourceLoader, entityEscapeSelector ) ;
+
+    multipageStylesheetCapture = new XslMultipageStylesheetCapture( entityResolver ) ;
+    final SaxMulticaster mutableSaxMulticaster =
+        createAdditionalContentHandlers( multipageStylesheetCapture ) ;
+
     uriResolver = new LocalUriResolver( resourceLoader, entityResolver ) {
       @Override
-      protected ImmutableList< ContentHandler > createAdditionalContentHandlers() {
-        return XslWriter.createAdditionalContentHandlers( multipageStylesheetCapture ) ;
+      protected ContentHandler createAdditionalContentHandler() {
+        // Called after initializing multipageStylesheetCapture.
+        // Here we recreate a fresh verifier for each XML document, because the
+        // SaxConnectorForVerifier doesn't support reuse. 
+        return createAdditionalContentHandlers( multipageStylesheetCapture ) ;
       }
     } ;
-    multipageStylesheetCapture = new XslMultipageStylesheetCapture( entityResolver );
+
+    // Causes XSL parsing. This activates content handlers in mutableSaxMulticaster.
+    transformerHandler = new XslTransformerFactory.FromResource(
+        resourceLoader,
+        xslFileName,
+        entityResolver,
+        uriResolver,
+        createAdditionalContentHandlers( multipageStylesheetCapture )
+    ).newTransformerHandler() ;
+
+    // Now the multipageStylesheetCapture and verifier did their job, let's remove them.
+    // ... But is their a chance to hit them again? XSL parsing seems done once for all.
+    mutableSaxMulticaster.removeAll() ;
 
     LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", safeXslFileName ) ;
   }
@@ -188,21 +223,13 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
   {
     LOGGER.debug( "Creating ContentHandler with charset ", charset.name() );
 
-    final TransformerHandler transformerHandler = new XslTransformerFactory.FromResource(
-        resourceLoader,
-        xslFileName,
-        entityResolver,
-        uriResolver,
-        createAdditionalContentHandlers( multipageStylesheetCapture )
-    ).newTransformerHandler() ;
-    
     configure( transformerHandler.getTransformer(), documentMetadata ) ;
 
     final ContentHandler sinkContentHandler =
         createSinkContentHandler( outputStream, documentMetadata, charset ) ;
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
 
-    return transformerHandler ;
+    return transformerHandler;
 
   }
 
@@ -226,11 +253,6 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     return super.createContentHandler( outputStream, documentMetadata, charset ) ;
   }
 
-  private static ImmutableList< ContentHandler > createAdditionalContentHandlers(
-  ) {
-    return ImmutableList.of( createSaxConnectorVerifier() ) ;
-  }
-
   private static ContentHandler createSaxConnectorVerifier() {
     return new SaxConnectorForVerifier(
         XmlNamespaces.TREE_NAMESPACE_URI,
@@ -238,10 +260,10 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     ) ;
   }
 
-  private static ImmutableList< ContentHandler > createAdditionalContentHandlers(
+  private static SaxMulticaster createAdditionalContentHandlers(
       final XslMultipageStylesheetCapture multipageStylesheetCapture
   ) {
-    return ImmutableList.of(
+    return new SaxMulticaster(
         createSaxConnectorVerifier(),
         multipageStylesheetCapture
     ) ;

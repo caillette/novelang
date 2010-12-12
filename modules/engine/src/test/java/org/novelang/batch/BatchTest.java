@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Permission;
 
+import org.fest.assertions.Assertions;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,8 +33,12 @@ import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.produce.DocumentRequest;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.novelang.produce.DocumentRequest.PAGEIDENTIFIER_PREFIX;
 
 /**
  * Tests for {@link DocumentGenerator}.
@@ -45,7 +50,7 @@ public class BatchTest {
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
   public void exitWithIncorrectParameters() throws Exception {
-    new DocumentGenerator().main( "testing", new String[ 0 ] ) ;
+    new DocumentGenerator().main( "testing", COMMAND_LINE_ARGUMENT_EMPTY ) ;
   }
 
   @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
@@ -61,7 +66,7 @@ public class BatchTest {
     final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copy( resource ) ;
-    final String renderedDocumentName = resource.getBaseName() + "." + HTML_EXTENSION;
+    final String renderedDocumentName = resource.getBaseName() + "." + MIME_FILE_EXTENSION;
 
     new DocumentGenerator().main(
         "testing",
@@ -81,6 +86,47 @@ public class BatchTest {
     Assert.assertTrue( renderedDocument.exists() ) ;
   }
 
+  @Test
+//  @Ignore( "Unfinished implementation" )
+  public void generateMultipageDocumentOk() throws Exception {
+    final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+    final Resource novellaResource = ResourcesForTests.Multipage.MULTIPAGE_NOVELLA;
+    resourceInstaller.copy( novellaResource ) ;
+    final Resource opusResource = ResourcesForTests.Multipage.MULTIPAGE_OPUS;
+    resourceInstaller.copy( opusResource ) ;
+    final Resource stylesheetResource = ResourcesForTests.Multipage.MULTIPAGE_XSL;
+    final File stylesheetFile = resourceInstaller.copy( stylesheetResource ) ;
+    final String renderedDocumentName =
+          opusResource.getBaseName() + "." + MIME_FILE_EXTENSION
+        + "?" + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME
+        + "=" + stylesheetResource.getName() 
+    ;
+
+    new DocumentGenerator().main(
+        "testing",
+        false,
+        new String[] {
+            "/" + renderedDocumentName,
+            GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_STYLE_DIRECTORIES,
+            stylesheetFile.getParentFile().getCanonicalPath() 
+        },
+        resourceInstaller.getTargetDirectory()
+    ) ;
+
+    final File outputDirectory = new File(
+        resourceInstaller.getTargetDirectory(),
+        ConfigurationTools.DEFAULT_OUTPUT_DIRECTORY_NAME
+    ) ;
+    final File mainDocument = createFileObject( outputDirectory, opusResource, null ) ;
+    final File ancillaryDocument0 = createFileObject( outputDirectory, opusResource, "Level-0" ) ;
+    final File ancillaryDocument1 = createFileObject( outputDirectory, opusResource, "Level-1" ) ;
+
+    assertThat( mainDocument ).exists() ;
+    assertThat( ancillaryDocument0 ).exists() ;
+    assertThat( ancillaryDocument1 ).exists() ;
+  }
+
+
 // =======
 // Fixture
 // =======
@@ -92,7 +138,8 @@ public class BatchTest {
     ResourcesForTests.initialize() ;
   }
 
-  private static final String HTML_EXTENSION = RenditionMimeType.HTML.getFileExtension() ;
+  private static final String MIME_FILE_EXTENSION = RenditionMimeType.NOVELLA.getFileExtension() ;
+  private static final String[] COMMAND_LINE_ARGUMENT_EMPTY = new String[ 0 ];
 
 
   private SecurityManager savedSecurityManager ;
@@ -108,6 +155,21 @@ public class BatchTest {
   public void tearDown() {
     System.setSecurityManager( savedSecurityManager ) ;
   }
+
+  private static File createFileObject(
+      final File outputDirectory,
+      final Resource opusResource,
+      final String pageIdentifierAsString
+  ) {
+    return new File(
+        outputDirectory,
+        opusResource.getBaseName()
+            + ( pageIdentifierAsString == null ? ""
+                : PAGEIDENTIFIER_PREFIX + pageIdentifierAsString )
+            + "." + MIME_FILE_EXTENSION
+    ) ;
+  }
+
 
   private static class NoExitSecurityManager extends SecurityManager {
     @Override

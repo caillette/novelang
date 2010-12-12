@@ -16,38 +16,51 @@
  */
 package org.novelang.outfit.xml;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
- * Makes a single SAX event source feed two SAX event consumers through the {@link ContentHandler}
- * interface.
+ * Makes a single SAX event source feed one SAX event consumer or more through the
+ * {@link ContentHandler} interface.
  * <p>
  * All exceptions are fatal; if one {@code ContentHandler} throws an exception, there is no
- * recovery and other handlers won't be called. 
+ * recovery and other handlers won't be called.
+ * <p>
+ * TODO: refactor into a {@code SaxInterceptorStack}
+ * where elements may implement a {@code SaxCancellator} interface with a single
+ * {@code boolean cancelNext()} method. When this method returns true, the {@link SaxMulticaster}
+ * doesn't call methods for elements above in the stack (saying for one method to intercept,
+ * the {@link SaxMulticaster} calls the same method for every element of the stack from bottom
+ * to top. This way, the {@link XslMultipageStylesheetCapture} can swallow XSL operations
+ * in the metadata section, so they don't appear at a bad place.
+ *
  *
  * @author Laurent Caillette
  */
-public class SaxMulticaster implements ContentHandler {
+public final class SaxMulticaster implements ContentHandler {
 
-  private final ImmutableList< ContentHandler > handlers  ;
+  private final List< ContentHandler > handlers  ;
 
   public SaxMulticaster(
       final ContentHandler first,
-      final ImmutableList< ContentHandler > others
+      final ContentHandler... others
   ) {
-    this( ImmutableList.< ContentHandler >builder().add( first ).addAll( others ).build() ) ;
+    this( ImmutableList.< ContentHandler >builder().add( first ).add( others ).build() ) ;
   }
 
   public SaxMulticaster( final ImmutableList< ContentHandler > handlers ) {
-    this.handlers = checkNotNull( handlers ) ;
+    this.handlers = Lists.newArrayList( handlers ) ;
   }
 
+  public void removeAll() {
+    handlers.clear() ;
+  }
 
 // ======================
 // ContentHandler methods

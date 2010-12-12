@@ -79,6 +79,6 @@ public class PageIdentifier {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "[" + name + "]" ;
+    return getClass().getSimpleName() + "{" + name + "}" ;
   }
 }

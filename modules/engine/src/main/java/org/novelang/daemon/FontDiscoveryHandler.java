@@ -21,6 +21,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.TransformerConfigurationException;
 import org.mortbay.jetty.Request;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
@@ -30,6 +31,7 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.font.FontDiscoveryStreamer;
+import org.xml.sax.SAXException;
 
 /**
  * Generates a PDF document showing available fonts.
@@ -58,8 +60,14 @@ public class FontDiscoveryHandler extends GenericHandler{
     if( DOCUMENT_NAME.equals( target ) ) {
       LOGGER.info( "Font listing requested" ) ;
 
-      final FontDiscoveryStreamer  fontDiscoveryStreamer =
-          new FontDiscoveryStreamer( renderingConfiguration, STYLESHEET ) ;
+      final FontDiscoveryStreamer  fontDiscoveryStreamer;
+      try {
+        fontDiscoveryStreamer = new FontDiscoveryStreamer( renderingConfiguration, STYLESHEET );
+      } catch( TransformerConfigurationException e ) {
+        throw new ServletException( e ) ;
+      } catch( SAXException e ) {
+        throw new ServletException( e );
+      }
 
       response.setStatus( HttpServletResponse.SC_OK ) ;
       try {

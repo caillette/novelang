@@ -197,7 +197,7 @@ public class GenericRequestTest {
     PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
         PDF_REQUEST_PATH +
         "?" +
-        GenericRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME +
+        DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME +
         "&" +
             GenericRequest.TAGSET_PARAMETER_NAME + "=" +
                 Joiner.on( ";" ).join( tagsAsString )

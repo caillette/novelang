@@ -25,6 +25,7 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.io.output.NullOutputStream;
 import org.novelang.common.Location;
 import org.novelang.common.Nodepath;
 import org.novelang.common.Problem;
@@ -66,7 +67,9 @@ public class GenericRenderer implements Renderer {
     this.fragmentWriter = Preconditions.checkNotNull( fragmentWriter ) ;
     this.whitespace = whitespace ;
     this.renderLocation = renderLocation ;
+
   }
+
 
   public GenericRenderer( final FragmentWriter fragmentWriter, final String defaultWhitespace ) {
     this( fragmentWriter, false, defaultWhitespace ) ;
@@ -89,7 +92,8 @@ public class GenericRenderer implements Renderer {
           outputStream,
           MetadataHelper.createMetadata( rendered.getRenderingCharset(), page )
       ) ;
-      final SyntacticTree root = rendered.getDocumentTree() ;
+      final SyntacticTree root = MetadataHelper
+          .createMetadataDecoration( rendered.getDocumentTree(), page ) ;
       renderTreeInternal( root, null, null ) ;
       fragmentWriter.finishWriting() ;
     }
@@ -121,7 +125,7 @@ public class GenericRenderer implements Renderer {
         outputStream,
         MetadataHelper.createMetadata( renderingCharset, page )
     ) ;
-    renderTreeInternal( tree, null, null ) ;
+    renderTreeInternal( MetadataHelper.createMetadataDecoration( tree, page ), null, null ) ;
     fragmentWriter.finishWriting() ;
   }
 
@@ -187,6 +191,8 @@ public class GenericRenderer implements Renderer {
       case _EXPLICIT_TAG :
       case _PROMOTED_TAG :
       case _WORD_COUNT :
+      case _PAGE_IDENTIFIER :
+      case _PAGE_PATH :
       case _STYLE :
       case RAW_LINES :
       case _IMAGE_WIDTH:

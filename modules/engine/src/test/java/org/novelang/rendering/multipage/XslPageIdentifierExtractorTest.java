@@ -64,8 +64,8 @@ public class XslPageIdentifierExtractorTest {
     final ResourceInstaller installer =
         new ResourceInstaller( new DirectoryFixture().getDirectory() ) ;
     final File stylesheetFile =
-        installer.copy( ResourcesForTests.Multipage.NOVELLA_MULTIPAGE_XSL ) ;
-    final Resource novellaDocument = ResourcesForTests.Multipage.NOVELLA_DOCUMENT ;
+        installer.copy( ResourcesForTests.Multipage.MULTIPAGE_XSL ) ;
+    final Resource novellaDocument = ResourcesForTests.Multipage.MULTIPAGE_NOVELLA;
     installer.copy( novellaDocument ) ;
 
     final ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader() ;

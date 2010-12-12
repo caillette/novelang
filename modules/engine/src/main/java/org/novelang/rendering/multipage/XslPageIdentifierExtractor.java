@@ -19,7 +19,6 @@ package org.novelang.rendering.multipage;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
@@ -76,8 +75,7 @@ public class XslPageIdentifierExtractor implements PagesExtractor {
     final XslTransformerFactory xslTransformerFactory = new XslTransformerFactory.FromDom4jDocument(
         stylesheetDocument,
         entityResolver,
-        uriResolver,
-        ImmutableList.< ContentHandler >of()
+        uriResolver
     ) ;
 
     final TransformerHandler transformerHandler = xslTransformerFactory.newTransformerHandler() ;

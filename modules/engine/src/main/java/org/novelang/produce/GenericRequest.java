@@ -51,7 +51,6 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
   private static final Logger LOGGER = LoggerFactory.getLogger( GenericRequest.class ) ;
 
   public static final String ERRORPAGE_SUFFIX = "/error.html";
-  public static final String ALTERNATE_STYLESHEET_PARAMETER_NAME= "stylesheet" ;
   public static final String TAGSET_PARAMETER_NAME= "tags" ;
   public static final ImmutableSet< String > SUPPORTED_PARAMETER_NAMES =
       ImmutableSet.of( ALTERNATE_STYLESHEET_PARAMETER_NAME, TAGSET_PARAMETER_NAME ) ;

@@ -17,15 +17,18 @@
 
 package org.novelang.rendering;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+import javax.xml.transform.TransformerConfigurationException;
 import org.novelang.common.Nodepath;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 /**
  * @author Laurent Caillette
@@ -40,7 +43,7 @@ public class HtmlWriter extends XslWriter {
       final RenderingConfiguration configuration,
       final ResourceName stylesheet,
       final Charset charset
-  ) {
+  ) throws IOException, TransformerConfigurationException, SAXException {
     super(
         configuration,
         null == stylesheet ? DEFAULT_HTML_STYLESHEET : stylesheet,
