@@ -19,7 +19,7 @@ package org.novelang.outfit.xml;
 import org.xml.sax.SAXException;
 
 /**
- * Thrown by {@link ContentHandlerAdapter}.
+ * Thrown by {@link NamespaceAwareContentHandlerAdapter}.
  *
  * @author Laurent Caillette
  */

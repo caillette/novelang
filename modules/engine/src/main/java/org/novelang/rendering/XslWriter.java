@@ -180,7 +180,7 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       protected ContentHandler createAdditionalContentHandler() {
         // Called after initializing multipageStylesheetCapture.
         // Here we recreate a fresh verifier for each XML document, because the
-        // SaxConnectorForVerifier doesn't support reuse. 
+        // SaxConnectorForVerifier doesn't support reuse.
         return createAdditionalContentHandlers( multipageStylesheetCapture ) ;
       }
     } ;

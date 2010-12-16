@@ -32,17 +32,17 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public abstract class ContentHandlerAdapter implements ContentHandler {
+public abstract class NamespaceAwareContentHandlerAdapter implements ContentHandler {
 
   protected final String namespaceUri ;
 
   private static final String DEFAULT_NAMESPACE_URI = XmlNamespaces.XSL_META_NAMESPACE_URI ;
 
-  protected ContentHandlerAdapter() {
+  protected NamespaceAwareContentHandlerAdapter() {
     this( DEFAULT_NAMESPACE_URI ) ;
   }
 
-  protected ContentHandlerAdapter( final String namespaceUri ) {
+  protected NamespaceAwareContentHandlerAdapter( final String namespaceUri ) {
     this.namespaceUri = Preconditions.checkNotNull( namespaceUri ) ;
   }
 

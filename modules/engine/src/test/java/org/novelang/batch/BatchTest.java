@@ -99,7 +99,7 @@ public class BatchTest {
     final String renderedDocumentName =
           opusResource.getBaseName() + "." + MIME_FILE_EXTENSION
         + "?" + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME
-        + "=" + stylesheetResource.getName() 
+        + "=" + stylesheetResource.getName()
     ;
 
     new DocumentGenerator().main(

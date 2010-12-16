@@ -13,6 +13,7 @@
   <xsl:param name="charset" />
 
   
+<!--
   <xslmeta:multipage>
 
     <xsl:template match="/" >
@@ -32,6 +33,7 @@
     </xsl:template>
 
   </xslmeta:multipage>
+-->
 
 
  <xsl:template match="/" >

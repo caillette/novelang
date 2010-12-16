@@ -19,14 +19,11 @@ package org.novelang.rendering.multipage;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import org.dom4j.Document;
 import org.dom4j.io.SAXContentHandler;
-import org.novelang.common.SyntacticTree;
-import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.xml.ContentHandlerAdapter;
+import org.novelang.outfit.xml.NamespaceAwareContentHandlerAdapter;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
@@ -41,7 +38,7 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class XslMultipageStylesheetCapture extends ContentHandlerAdapter {
+public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerAdapter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( XslMultipageStylesheetCapture.class ) ;
 

@@ -18,11 +18,8 @@ package org.novelang.outfit.xml;
 
 import java.io.IOException;
 
-import com.google.common.collect.ImmutableList;
-import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -92,7 +89,7 @@ public abstract class XslTransformerFactory {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
 
-    final ContentHandler contentHandler = additionalContentHandler == null ? templatesHandler : 
+    final ContentHandler contentHandler = additionalContentHandler == null ? templatesHandler :
         new SaxMulticaster( templatesHandler, additionalContentHandler ) ;
     reader.setContentHandler( contentHandler ) ;
 
@@ -165,6 +162,10 @@ public abstract class XslTransformerFactory {
       saxWriter.setContentHandler( reader.getContentHandler() ) ;
       saxWriter.write( document ) ; 
     }
+  }
+
+  public interface ContentHandlerDecoratorInstaller {
+    ContentHandler install( final ContentHandler original ) ;
   }
 
 }

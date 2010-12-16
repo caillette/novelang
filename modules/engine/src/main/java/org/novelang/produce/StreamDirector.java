@@ -26,6 +26,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.FileUtils;
 import org.novelang.common.Renderable;
+import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.Page;
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.logger.Logger;
@@ -51,10 +52,25 @@ public abstract class StreamDirector {
 
   public void feedStreams(
       final Renderable renderable,
-      final PagesExtractor pageIdentifierExtractor,
+      PagesExtractor pageIdentifierExtractor,
       final PageIdentifier pageIdentifier,
       final StreamFeeder streamFeeder
   ) throws Exception {
+
+    // Hack. TODO: remove this.
+    pageIdentifierExtractor = new PagesExtractor() {
+      @Override
+      public ImmutableMap<PageIdentifier, String> extractPages( final SyntacticTree documentTree )
+          throws Exception
+      {
+        return ImmutableMap.of(
+            new PageIdentifier( "Level-0" ), "/opus/level[1]",
+            new PageIdentifier( "Level-1" ), "/opus/level[2]"
+        ) ;
+      }
+    } ;
+    
+
     if( pageIdentifierExtractor == null ) {
       feedDefaultPage( renderable, streamFeeder ) ;
     } else {
@@ -64,14 +80,12 @@ public abstract class StreamDirector {
         feedDefaultPage( renderable, streamFeeder ) ;
       } else {
         if( pageIdentifier == null ) {
+          feedDefaultPage( renderable, streamFeeder ) ;
           if( supportsMultipage() ) {
-            feedDefaultPage( renderable, streamFeeder ) ;
             LOGGER.debug( "Feeding additional pages: ", pageMap ) ;
             for( final PageIdentifier someIdentifier : pageMap.keySet() ) {
               feedPage( renderable, streamFeeder, Page.get( pageMap, someIdentifier ) );
             }
-          } else {
-            feedDefaultPage( renderable, streamFeeder ) ;
           }
         } else {
           final Page page = Page.get( pageMap, pageIdentifier ) ;
