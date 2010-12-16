@@ -25,11 +25,9 @@ import org.xml.sax.Locator;
  *
  * @author Laurent Caillette
  */
-public final class NullContentHandler implements ContentHandler {
+public class ContentHandlerAdapter implements ContentHandler {
 
-  private NullContentHandler() { }
-
-  public static final ContentHandler INSTANCE = new NullContentHandler() ;
+  public static final ContentHandler INSTANCE = new ContentHandlerAdapter() ;
 
   @Override
   public void setDocumentLocator( final Locator locator ) { }
