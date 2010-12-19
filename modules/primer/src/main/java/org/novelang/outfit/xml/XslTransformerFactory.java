@@ -48,20 +48,17 @@ public abstract class XslTransformerFactory {
   private final EntityResolver entityResolver ;
   private final URIResolver uriResolver ;
 
-  /**
-   * May be null.
-   */
-  private final ContentHandler additionalContentHandler;
+  private final DecoratorInstaller decoratorInstaller;
 
 
   protected XslTransformerFactory(
       final EntityResolver entityResolver,
       final URIResolver uriResolver,
-      final ContentHandler additionalContentHandler
+      final DecoratorInstaller decoratorInstaller
   ) {
     this.entityResolver = checkNotNull( entityResolver ) ;
     this.uriResolver = checkNotNull( uriResolver ) ;
-    this.additionalContentHandler = checkNotNull( additionalContentHandler ) ;
+    this.decoratorInstaller = checkNotNull( decoratorInstaller ) ;
   }
 
   protected XslTransformerFactory(
@@ -70,7 +67,7 @@ public abstract class XslTransformerFactory {
   ) {
     this.entityResolver = checkNotNull( entityResolver ) ;
     this.uriResolver = checkNotNull( uriResolver ) ;
-    this.additionalContentHandler = null ;
+    this.decoratorInstaller = DecoratorInstaller.NULL ;
   }
 
 
@@ -89,8 +86,7 @@ public abstract class XslTransformerFactory {
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
 
-    final ContentHandler contentHandler = additionalContentHandler == null ? templatesHandler :
-        new SaxMulticaster( templatesHandler, additionalContentHandler ) ;
+    final ContentHandler contentHandler = decoratorInstaller.decorate(templatesHandler ) ;
     reader.setContentHandler( contentHandler ) ;
 
     reader.setEntityResolver( entityResolver ) ;
@@ -113,9 +109,9 @@ public abstract class XslTransformerFactory {
         final InputSource inputSource,
         final EntityResolver entityResolver,
         final URIResolver uriResolver,
-        final ContentHandler additionalContentHandler
+        final DecoratorInstaller decoratorInstaller
     ) {
-      super( entityResolver, uriResolver, additionalContentHandler ) ;
+      super( entityResolver, uriResolver, decoratorInstaller ) ;
       this.inputSource = checkNotNull( inputSource ) ;
     }
 
@@ -132,13 +128,13 @@ public abstract class XslTransformerFactory {
         final ResourceName xslFileName,
         final EntityResolver entityResolver,
         final URIResolver uriResolver,
-        final ContentHandler additionalContentHandler
+        final DecoratorInstaller decoratorInstaller
     ) {
       super(
           new InputSource( resourceLoader.getInputStream( xslFileName ) ),
           entityResolver,
           uriResolver,
-          additionalContentHandler
+          decoratorInstaller
       ) ;
     }
   }
@@ -164,8 +160,16 @@ public abstract class XslTransformerFactory {
     }
   }
 
-  public interface ContentHandlerDecoratorInstaller {
-    ContentHandler install( final ContentHandler original ) ;
+  public interface DecoratorInstaller {
+
+    ContentHandler decorate( final ContentHandler original ) ;
+
+    DecoratorInstaller NULL = new DecoratorInstaller() {
+      @Override
+      public ContentHandler decorate( final ContentHandler original ) {
+        return original ;
+      }
+    } ;
   }
 
 }

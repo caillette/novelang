@@ -68,9 +68,8 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
   @SuppressWarnings( { "StringBufferField" } )
   private final StringBuilder charactersCollector = new StringBuilder() ;
 
-  @Override
   protected void throwException( final String message ) throws IncorrectXmlException {
-    throw new IncorrectXmlException( buildMessageWithLocation( message )
+    throw new IncorrectXmlException( getNamespaceAwareness().buildMessageWithLocation( message )
         + ( stack.isEmpty() ? "" : " (in " + stack.getPathAsString() + ")" )
     ) ;
   }
@@ -88,9 +87,9 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
     try {
       if( rootElement.equals( element ) ) {
         // We care of meta prefix only for local root FOP element.
-        if( !isMetaPrefix( uri ) ) {
+        if( ! getNamespaceAwareness().isMetaPrefix( uri ) ) {
           throwException( "Expecting '" + element + "' element in " +
-              "'" + namespaceUri + "' namespace" ) ;
+              "'" + getNamespaceAwareness().getNamespaceUri() + "' namespace" ) ;
         }
       } else if( ! stack.isEmpty() ) {
         if( element == null ) {

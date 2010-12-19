@@ -53,11 +53,11 @@ public class XslPageIdentifierExtractor implements PagesExtractor {
   public XslPageIdentifierExtractor(
       final EntityResolver entityResolver,
       final URIResolver uriResolver,
-      final XslMultipageStylesheetCapture multipageStylesheetCapture
+      final Document stylesheetDocument
   ) {
     this.entityResolver = checkNotNull( entityResolver ) ;
     this.uriResolver = checkNotNull( uriResolver ) ;
-    this.stylesheetDocument = multipageStylesheetCapture.getStylesheetDocument() ;
+    this.stylesheetDocument = stylesheetDocument ;
   }
 
 

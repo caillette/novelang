@@ -21,13 +21,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
+import org.dom4j.Document;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.PageIdentifier;
@@ -40,7 +40,7 @@ import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
-import org.novelang.outfit.xml.SaxMulticaster;
+import org.novelang.outfit.xml.SaxPipeline;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.parser.NodeKindTools;
@@ -72,7 +72,6 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
   protected final EntityEscapeSelector entityEscapeSelector ;
   private static final ResourceName IDENTITY_XSL_FILE_NAME = new ResourceName( "identity.xsl" ) ;
 
-  private final XslMultipageStylesheetCapture multipageStylesheetCapture;
   private TransformerHandler transformerHandler;
 
   public XslWriter( final RenderingConfiguration configuration, final ResourceName xslFileName )
@@ -171,47 +170,25 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     this.xslFileName = safeXslFileName ;
     entityResolver = new LocalEntityResolver( resourceLoader, entityEscapeSelector ) ;
 
-    multipageStylesheetCapture = new XslMultipageStylesheetCapture( entityResolver ) ;
-    final SaxMulticaster mutableSaxMulticaster =
-        createAdditionalContentHandlers( multipageStylesheetCapture ) ;
-
     uriResolver = new LocalUriResolver( resourceLoader, entityResolver ) {
       @Override
-      protected ContentHandler createAdditionalContentHandler() {
-        // Called after initializing multipageStylesheetCapture.
-        // Here we recreate a fresh verifier for each XML document, because the
-        // SaxConnectorForVerifier doesn't support reuse.
-        return createAdditionalContentHandlers( multipageStylesheetCapture ) ;
+      protected ContentHandler decorate( final ContentHandler original ) {
+        return xslTransformerFactoryDecoratorInstaller.decorate( original ) ;
       }
     } ;
 
-    // Causes XSL parsing. This activates content handlers in mutableSaxMulticaster.
+    // Causes XSL parsing.  
     transformerHandler = new XslTransformerFactory.FromResource(
         resourceLoader,
         xslFileName,
         entityResolver,
         uriResolver,
-        createAdditionalContentHandlers( multipageStylesheetCapture )
+        xslTransformerFactoryDecoratorInstaller
     ).newTransformerHandler() ;
-
-    // Now the multipageStylesheetCapture and verifier did their job, let's remove them.
-    // ... But is their a chance to hit them again? XSL parsing seems done once for all.
-    mutableSaxMulticaster.removeAll() ;
 
     LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", safeXslFileName ) ;
   }
 
-  @Override
-  public ImmutableMap< PageIdentifier, String > extractPages(
-      final SyntacticTree documentTree
-  ) throws Exception
-  {
-    return new XslPageIdentifierExtractor(
-        entityResolver,
-        uriResolver, 
-        multipageStylesheetCapture
-    ).extractPages( documentTree ) ;
-  }
 
   @Override
   protected ContentHandler createContentHandler(
@@ -253,23 +230,71 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     return super.createContentHandler( outputStream, documentMetadata, charset ) ;
   }
 
-  private static ContentHandler createSaxConnectorVerifier() {
-    return new SaxConnectorForVerifier(
-        XmlNamespaces.TREE_NAMESPACE_URI,
-        NodeKindTools.getRenderingNames()
-    ) ;
+
+// ===========
+// SaxPipeline
+// ===========
+
+  /**
+   * Decorates {@link XslTransformerFactory}'s {@code TemplatesHandler} with a fresh
+   * {@link SaxPipeline} which performs stylesheet element name validation
+   * (using {@link SaxConnectorForVerifier}) and captures a nested stylesheet
+   * (using {@link XslMultipageStylesheetCapture} if any.
+   * Because of XSL's import mechanism, there can be multiple nested stylesheets.
+   * But since &lt;import> is the first instruction in a stylesheet, we can safely
+   * assume that last nested stylesheet is the one to apply.
+   * Except for element name validation (which remains silent if everything's fine),
+   * the only side-effect of this method is to call {@link #setLastParsedStylesheet(Document)}
+   */
+  private final XslTransformerFactory.DecoratorInstaller xslTransformerFactoryDecoratorInstaller =
+      new XslTransformerFactory.DecoratorInstaller() {
+        @Override
+        public ContentHandler decorate( final ContentHandler original ) {
+          final SaxPipeline pipeline = new SaxPipeline( original ) ;
+          pipeline.add( new SaxPipeline.ForkingStage( new SaxConnectorForVerifier(
+              XmlNamespaces.TREE_NAMESPACE_URI,
+              NodeKindTools.getRenderingNames()
+          ) ), 0 ) ;
+          pipeline.add( new XslMultipageStylesheetCapture( entityResolver ) {
+            @Override
+            protected void onStylesheetDocumentBuilt( final Document stylesheetDocument ) {
+              setLastParsedStylesheet( stylesheetDocument ) ;
+            }
+          }, 1 ) ;
+          return pipeline ;
+        }
+      }
+  ;
+
+// ==================
+// Stylesheet capture
+// ==================
+
+
+  @Override
+  public ImmutableMap< PageIdentifier, String > extractPages(
+      final SyntacticTree documentTree
+  ) throws Exception
+  {
+    return new XslPageIdentifierExtractor(
+        entityResolver,
+        uriResolver,
+        getLastParsedStylesheet()
+    ).extractPages( documentTree ) ;
   }
 
-  private static SaxMulticaster createAdditionalContentHandlers(
-      final XslMultipageStylesheetCapture multipageStylesheetCapture
-  ) {
-    return new SaxMulticaster(
-        createSaxConnectorVerifier(),
-        multipageStylesheetCapture
-    ) ;
+  private Document lastParsedStylesheet = null ;
+
+  private void setLastParsedStylesheet( final Document document ) {
+    this.lastParsedStylesheet = checkNotNull( document ) ;
   }
 
-
+  /**
+   * @return a possibly null object.
+   */
+  private Document getLastParsedStylesheet() {
+    return lastParsedStylesheet ;
+  }
 
 
 }

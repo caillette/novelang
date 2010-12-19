@@ -38,7 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Resolves an URI into an XML {@link Source}, basing on a
  * {@link org.novelang.outfit.loader.ResourceLoader}.
- * This class offers a {@link #createAdditionalContentHandler() hook} to plug multiple content
+ * This class offers a {@link #decorate(org.xml.sax.ContentHandler)} hook} to plug multiple content
  * handlers, like for checking if XML element names for Novelang document tree are valid ones.
  *
  * @author Laurent Caillette
@@ -73,13 +73,7 @@ public class LocalUriResolver implements URIResolver {
       reader = new ForwardingXmlReader( XMLReaderFactory.createXMLReader() ) {
          @Override
          public void setContentHandler( final ContentHandler defaultContentHandler ) {
-           final ContentHandler additionalContentHandler = createAdditionalContentHandler() ;
-           if( additionalContentHandler == null ) {
-             super.setContentHandler( defaultContentHandler ) ;
-           } else {
-             super.setContentHandler( new SaxMulticaster(
-                 defaultContentHandler, additionalContentHandler ) ) ;
-           }
+           super.setContentHandler( decorate( defaultContentHandler ) ) ;
          }
       } ;
     } catch( SAXException e ) {
@@ -96,13 +90,13 @@ public class LocalUriResolver implements URIResolver {
   }
 
   /**
-   * Hook for having some additional {@code ContentHandler} listening to SAX events of
-   * included documents. We can't pass this object to the constructor, because
-   * each included document should have its own fresh {@code ContentHandler}s.
+   * Hook for decorating original {@code ContentHandler} to tweak or listen to SAX events.
+   * No way to do that in the constructor, because each included document should have
+   * its own fresh {@code ContentHandler}s.
    *
    * @return a possibly null object.
    */
-  protected ContentHandler createAdditionalContentHandler() {
-    return null ;
+  protected ContentHandler decorate( final ContentHandler original ) {
+    return original ;
   }
 }

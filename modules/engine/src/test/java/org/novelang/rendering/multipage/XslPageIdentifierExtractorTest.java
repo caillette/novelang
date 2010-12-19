@@ -73,20 +73,27 @@ public class XslPageIdentifierExtractorTest {
         new LocalEntityResolver( resourceLoader, NO_ENTITY_ESCAPE ) ;
     final URIResolver uriResolver = new LocalUriResolver( resourceLoader, entityResolver ) ;
 
+    final Document[] stylesheetDocumentReference = new Document[ 1 ] ;
+
     final XslMultipageStylesheetCapture stylesheetCapture =
-        new XslMultipageStylesheetCapture( entityResolver ) ;
+        new XslMultipageStylesheetCapture( entityResolver ) {
+          @Override
+          protected void onStylesheetDocumentBuilt( final Document freshStylesheetDocument ) {
+            stylesheetDocumentReference[ 0 ] = freshStylesheetDocument ;
+          }
+        }
+    ;
 
     final XMLReader reader = XMLReaderFactory.createXMLReader() ;
     reader.setContentHandler( stylesheetCapture ) ;
     reader.parse( new InputSource(
         new StringReader( FileUtils.readFileToString( stylesheetFile ) ) ) ) ;
+    final Document stylesheetDocument = stylesheetDocumentReference[ 0 ] ;
 
-
-    final Document stylesheetDocument = stylesheetCapture.getStylesheetDocument() ;
     LOGGER.info( "Got stylesheet:\n", stylesheetDocument.asXML() ) ;
 
     final PagesExtractor pageIdentifierExtractor = new XslPageIdentifierExtractor(
-        entityResolver, uriResolver, stylesheetCapture ) ;
+        entityResolver, uriResolver, stylesheetDocument ) ;
 
     final Opus opus = new Opus(
         installer.getTargetDirectory(),

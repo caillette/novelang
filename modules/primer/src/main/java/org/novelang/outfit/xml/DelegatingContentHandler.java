@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public abstract class DelegatingContentHandler implements ContentHandler {
+public abstract class DelegatingContentHandler extends ContentHandlerAdapter {
 
   /**
    * @return a non-null object.
@@ -34,8 +34,8 @@ public abstract class DelegatingContentHandler implements ContentHandler {
   protected abstract ContentHandler getDelegate() ;
 
   @Override
-  public void setDocumentLocator( final Locator locator ) {
-    getDelegate().setDocumentLocator( locator ) ;
+  protected void afterDocumentLocatorSet() {
+    getDelegate().setDocumentLocator( getDocumentLocator() ) ;
   }
 
   @Override

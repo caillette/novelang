@@ -23,11 +23,11 @@ import org.dom4j.Document;
 import org.dom4j.io.SAXContentHandler;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.xml.NamespaceAwareContentHandlerAdapter;
+import org.novelang.outfit.xml.NamespaceAwareness;
+import org.novelang.outfit.xml.SaxPipeline;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
@@ -38,38 +38,53 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerAdapter {
+public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( XslMultipageStylesheetCapture.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      XslMultipageStylesheetCapture.class ) ;
 
   private SAXContentHandler documentBuilder = null ;
 
   private final EntityResolver entityResolver ;
 
-  private Document stylesheetDocument = null ;
+
+  /**
+   * Override to do something with freshly-parsed stylesheet.
+   *
+   * @param stylesheetDocument a non-null object.
+   */
+  protected abstract void onStylesheetDocumentBuilt( final Document stylesheetDocument ) ;
+
 
   public XslMultipageStylesheetCapture( final EntityResolver entityResolver ) {
     this.entityResolver = Preconditions.checkNotNull( entityResolver ) ;
   }
 
-  /**
-   * This method allows to hide the {@link Document} object from the public API;
-   * the {@link XslPageIdentifierExtractor} calls it to get what it wants.
-   *
-   * @return a possibly null object, depending on the state.
-   */
-  /*package*/ Document getStylesheetDocument() {
-    return stylesheetDocument ;
+  private boolean insideNestedStylesheet() {
+    return documentBuilder != null ;
+  }
+
+// ==================
+// NamespaceAwareness
+// ==================
+
+  private final NamespaceAwareness namespaceAwareness =
+      new NamespaceAwareness( XmlNamespaces.XSL_META_NAMESPACE_URI ) ;
+
+  private NamespaceAwareness getNamespaceAwareness() {
+    return namespaceAwareness ;
   }
 
   private static final String MULTIPAGE_STYLESHEET_LOCALNAME = "multipage" ;
 
   private boolean isNestedStylesheetRootElement( final String uri, final String localName ) {
-    return isMetaPrefix( uri ) && MULTIPAGE_STYLESHEET_LOCALNAME.equals( localName ) ;
+    return getNamespaceAwareness().isMetaPrefix( uri )
+        && MULTIPAGE_STYLESHEET_LOCALNAME.equals( localName ) ;
   }
 
   private String getXsltPrefixMapping() {
-    return getPrefixMappings().inverse().get( XmlNamespaces.XSL_NAMESPACE_URI ) ;
+    return getNamespaceAwareness().getPrefixMappings().inverse()
+        .get( XmlNamespaces.XSL_NAMESPACE_URI ) ;
   }
 
 
@@ -86,17 +101,18 @@ public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerA
   ) throws SAXException {
     if( isNestedStylesheetRootElement( uri, localName ) ) {
       if( documentBuilder == null ) {
-        stylesheetDocument = null ;
         documentBuilder = new SAXContentHandler() ;
-        documentBuilder.setDocumentLocator( locator ) ;
+        documentBuilder.setDocumentLocator( getDocumentLocator() ) ;
         documentBuilder.setEntityResolver( entityResolver ) ;
         documentBuilder.startDocument() ;
-        for( final Map.Entry< String, String > prefixMapping : getPrefixMappings().entrySet() ) {
+        for( final Map.Entry< String, String > prefixMapping
+            : getNamespaceAwareness().getPrefixMappings().entrySet()
+        ) {
           documentBuilder.startPrefixMapping( prefixMapping.getKey(), prefixMapping.getValue() ) ;
         }
       } else {
-        throwException( "Not allowed: nested " +
-            getNamespacePrefix() + ":" + MULTIPAGE_STYLESHEET_LOCALNAME ) ;
+        getNamespaceAwareness().throwException( "Not allowed: nested " +
+            getNamespaceAwareness().getNamespacePrefix() + ":" + MULTIPAGE_STYLESHEET_LOCALNAME ) ;
       }
     }
     if( documentBuilder != null ) {
@@ -110,6 +126,9 @@ public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerA
       } else {
         documentBuilder.startElement( uri, localName, qName, attributes ) ;
       }
+    }
+    if( ! insideNestedStylesheet() ) {
+      super.startElement( uri, localName, qName, attributes ) ;
     }
 
   }
@@ -132,36 +151,42 @@ public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerA
       }
       if( isNestedStylesheetRootElement( uri, localName ) ) {
         documentBuilder.endDocument() ;
-        if( stylesheetDocument != null ) {
-          LOGGER.warn( "Overwriting previous document" ) ;
-        }
-        stylesheetDocument = documentBuilder.getDocument() ;
+        onStylesheetDocumentBuilt( documentBuilder.getDocument() ) ;
         documentBuilder = null ;
       }
+    }
+    if( ! insideNestedStylesheet() ) {
+      super.endElement( uri, localName, qName ) ;
     }
   }
 
   @Override
-  public void setDocumentLocator( final Locator locator ) {
-    super.setDocumentLocator( locator ) ;
+  protected void afterDocumentLocatorSet() {
+    namespaceAwareness.setDocumentLocator( getDocumentLocator() ) ;
     if( documentBuilder != null ) {
-      documentBuilder.setDocumentLocator( locator ) ;
+      documentBuilder.setDocumentLocator( getDocumentLocator() ) ;
     }
   }
 
   @Override
   public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {
-    super.startPrefixMapping( prefix, uri ) ;
+    namespaceAwareness.startPrefixMapping( prefix, uri ) ;
     if( documentBuilder != null ) {
       documentBuilder.startPrefixMapping( prefix, uri ) ;
+    }
+    if( ! insideNestedStylesheet() ) {
+      super.startPrefixMapping( prefix, uri ) ;
     }
   }
 
   @Override
   public void endPrefixMapping( final String prefix ) throws SAXException {
-    super.endPrefixMapping( prefix ) ;
+    namespaceAwareness.endPrefixMapping( prefix ) ;
     if( documentBuilder != null ) {
       documentBuilder.endPrefixMapping( prefix ) ;
+    }
+    if( ! insideNestedStylesheet() ) {
+      super.endPrefixMapping( prefix ) ;
     }
   }
 
@@ -174,6 +199,10 @@ public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerA
     if( documentBuilder != null ) {
       documentBuilder.characters( characters, start, length ) ;
     }
+    if( ! insideNestedStylesheet() ) {
+      super.characters( characters, start, length ) ;
+    }
+
   }
 
   @Override
@@ -185,6 +214,9 @@ public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerA
     if( documentBuilder != null ) {
       documentBuilder.ignorableWhitespace( characters, start, length ) ;
     }
+    if( ! insideNestedStylesheet() ) {
+      super.ignorableWhitespace( characters, start, length ) ;
+    }
   }
 
   @Override
@@ -195,12 +227,19 @@ public class XslMultipageStylesheetCapture extends NamespaceAwareContentHandlerA
     if( documentBuilder != null ) {
       documentBuilder.processingInstruction( target, data ) ;
     }
+    if( ! insideNestedStylesheet() ) {
+      super.processingInstruction( target, data ) ;
+    }
+
   }
 
   @Override
   public void skippedEntity( final String name ) throws SAXException {
     if( documentBuilder != null ) {
       documentBuilder.skippedEntity( name ) ;
+    }
+    if( ! insideNestedStylesheet() ) {
+      super.skippedEntity( name ) ;
     }
   }
 }

@@ -64,7 +64,7 @@ public class SaxPipeline extends DelegatingContentHandler {
   protected final ContentHandler getContentHandlerAt( final int position ) {
     checkArgument( position >= 0, "Postion of %s lower than 0", position ) ;
     checkArgument( position <= getContentHandlerCount(),
-        "Position of %s greater than stage count of %s", getContentHandlerCount() ) ;
+        "Position of %s greater than ContentHandler count of %s", getContentHandlerCount() ) ;
     if( position == getContentHandlerCount() - 1 ) {
       return end ;
     } else {
@@ -105,7 +105,11 @@ public class SaxPipeline extends DelegatingContentHandler {
 
   // Don't need more methods by now, we're not building a framework here.
 
-  public static class Stage extends DelegatingContentHandler {
+// =====
+// Stage
+// =====
+
+  public abstract static class Stage extends DelegatingContentHandler {
 
     /**
      * Set directly by the owning {@link SaxPipeline}.
@@ -118,7 +122,14 @@ public class SaxPipeline extends DelegatingContentHandler {
     protected final ContentHandler getDelegate() {
       return delegate ;
     }
+
+    @Override
+    public String toString() {
+      return getClass().getSimpleName() + "{" + delegate + "}" ;
+    }
   }
+
+  public static final class HollowStage extends Stage { }
 
 
   /**
@@ -137,10 +148,10 @@ public class SaxPipeline extends DelegatingContentHandler {
       this.fork = checkNotNull( fork ) ;
     }
 
+
     @Override
-    public void setDocumentLocator( final Locator locator ) {
-      fork.setDocumentLocator( locator ) ;
-      super.setDocumentLocator( locator ) ;
+    protected void afterDocumentLocatorSet() {
+      fork.setDocumentLocator( getDocumentLocator() ) ;
     }
 
     @Override
