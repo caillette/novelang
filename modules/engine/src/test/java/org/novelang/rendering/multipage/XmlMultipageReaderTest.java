@@ -65,14 +65,14 @@ public class XmlMultipageReaderTest {
       "<n:pages\n" +
       "    xmlns:n=\"http://novelang.org/book-xml/1.0\"\n" +
       ">\n" +
-      "  <page>\n" +
-      "    <identifier>One</identifier>\n" +
-      "    <path>value-1</path>\n" +
-      "  </page>\n" +
-      "  <page>\n" +
-      "    <identifier>Two</identifier>\n" +
-      "    <path>value-2</path>\n" +
-      "  </page>\n" +
+      "  <n:page>\n" +
+      "    <n:page-identifier>One</n:page-identifier>\n" +
+      "    <n:page-path>value-1</n:page-path>\n" +
+      "  </n:page>\n" +
+      "  <n:page>\n" +
+      "    <n:page-identifier>Two</n:page-identifier>\n" +
+      "    <n:page-path>value-2</n:page-path>\n" +
+      "  </n:page>\n" +
       "</n:pages>"
   ;
 

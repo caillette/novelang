@@ -76,7 +76,8 @@ public class SaxPipeline extends DelegatingContentHandler {
     checkNotNull( stage ) ;
     checkArgument( position >= 0 ) ;
     checkArgument( position < getContentHandlerCount() ) ;
-    checkArgument( stage.delegate == null, "Stage %s already belongs to a pipeline", stage ) ;
+    checkArgument(
+        ! isExplicitelySet( stage.delegate ), "Stage %s already belongs to a pipeline", stage ) ;
     stages.add( position, stage ) ;
     chainStagesAround( position ) ;
   }
@@ -89,7 +90,7 @@ public class SaxPipeline extends DelegatingContentHandler {
     checkArgument( position >= 0 ) ;
     checkArgument( position < getContentHandlerCount(),
         "There must be at least %s stage(s), wrong position: %s", stages.size(), position ) ;
-    stages.get( position ).delegate = null ;
+    stages.get( position ).delegate = UNASSIGNED ;
     stages.set( position, replacement ) ;
     chainStagesAround( position ) ;
   }
@@ -109,14 +110,27 @@ public class SaxPipeline extends DelegatingContentHandler {
 // Stage
 // =====
 
+  private static boolean isExplicitelySet( final ContentHandler contentHandler ) {
+    return contentHandler != null && contentHandler != UNASSIGNED ;
+  }
+
+  /**
+   * Magic non-null value to tell that a {@link Stage} doesn't belong to a {@link SaxPipeline} while
+   * keeping its {@link Stage#delegate} value non null for usage outside of a {@link SaxPipeline}.
+   */
+  private static final ContentHandler UNASSIGNED = new ContentHandlerAdapter() {
+    @Override
+    public String toString() {
+      return SaxPipeline.class.getSimpleName() + ".UNASSIGNED" ;
+    }
+  } ;
+
   public abstract static class Stage extends DelegatingContentHandler {
 
     /**
-     * Set directly by the owning {@link SaxPipeline}.
-     * Never null when the {@link Stage} runs inside the owning {@link SaxPipeline}.
+     * Set directly by the owning {@link SaxPipeline}. Never null.
      */
-    @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
-    private ContentHandler delegate ;
+    private ContentHandler delegate = UNASSIGNED ;
 
     @Override
     protected final ContentHandler getDelegate() {
@@ -125,7 +139,7 @@ public class SaxPipeline extends DelegatingContentHandler {
 
     @Override
     public String toString() {
-      return getClass().getSimpleName() + "{" + delegate + "}" ;
+      return getClass().getSimpleName() + "{delegate=" + delegate + "}" ;
     }
   }
 

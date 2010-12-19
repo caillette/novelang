@@ -73,9 +73,9 @@ import static org.novelang.rendering.multipage.MultipageElement.*;
         return null ;
       case PAGE :
         return Husk.create( PageBuildup.class ) ;
-      case IDENTIFIER:
+      case PAGE_IDENTIFIER:
         return null ;
-      case PATH :
+      case PAGE_PATH:
         return null ;
       default : throw new IllegalArgumentException( "Unsupported: " + element ) ;
     }
@@ -92,11 +92,11 @@ import static org.novelang.rendering.multipage.MultipageElement.*;
         final PageBuildup pageBuildup = ( PageBuildup ) getBuildupOnTop() ;
         pageIdentifiers.put( pageBuildup.getPageIdentifier(), pageBuildup.getPath() ) ;
         return null ;
-      case IDENTIFIER:
+      case PAGE_IDENTIFIER:
         final PageBuildup buildup0 = ( PageBuildup ) getBuildupUnderTop() ;
         final String text = StringUtils.trim( getAndClearCollectedText() ) ;
         return buildup0.withPageIdentifier( new PageIdentifier( text ) ) ;
-      case PATH:
+      case PAGE_PATH:
         final PageBuildup buildup1 = ( PageBuildup ) getBuildupUnderTop() ;
         return buildup1.withPath( StringUtils.trim( getAndClearCollectedText() ) ) ;
       default :
@@ -121,8 +121,8 @@ import static org.novelang.rendering.multipage.MultipageElement.*;
       ImmutableSet.of(
           of( PAGES ),
           of( PAGES, PAGE ),
-          of( PAGES, PAGE, IDENTIFIER ),
-          of( PAGES, PAGE, PATH )
+          of( PAGES, PAGE, PAGE_IDENTIFIER ),
+          of( PAGES, PAGE, PAGE_PATH )
       )
   ;
 

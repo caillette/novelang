@@ -13,27 +13,24 @@
   <xsl:param name="charset" />
 
   
-<!--
   <xslmeta:multipage>
 
     <xsl:template match="/" >
 
       <n:pages>
         <xsl:for-each select="/n:opus/n:level">
-          <page>
-            <identifier>
+          <n:page>
+            <n:page-identifier>
               <xsl:value-of select="n:level-title"/>
-            </identifier>
-            <path>/opus/level[<xsl:value-of select="position()"/>]
-            </path>
-          </page>
+            </n:page-identifier>
+            <n:page-path>/opus/level[<xsl:value-of select="position()"/>]</n:page-path>
+          </n:page>
         </xsl:for-each>
       </n:pages>
 
     </xsl:template>
 
   </xslmeta:multipage>
--->
 
 
  <xsl:template match="/" >

@@ -20,10 +20,10 @@ package org.novelang.rendering.multipage;
  * @author Laurent Caillette
  */
 /*package*/ enum MultipageElement {
-  PAGES, PAGE, IDENTIFIER, PATH ;
+  PAGES, PAGE, PAGE_IDENTIFIER, PAGE_PATH;
 
   public String getLocalName() {
-    return name().toLowerCase() ;
+    return name().replace( '_', '-' ).toLowerCase() ;
   }
 
   /**

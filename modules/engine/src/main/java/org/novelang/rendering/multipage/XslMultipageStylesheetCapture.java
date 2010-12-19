@@ -40,9 +40,6 @@ import org.xml.sax.SAXException;
  */
 public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      XslMultipageStylesheetCapture.class ) ;
-
   private SAXContentHandler documentBuilder = null ;
 
   private final EntityResolver entityResolver ;
@@ -56,7 +53,7 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
   protected abstract void onStylesheetDocumentBuilt( final Document stylesheetDocument ) ;
 
 
-  public XslMultipageStylesheetCapture( final EntityResolver entityResolver ) {
+  protected XslMultipageStylesheetCapture( final EntityResolver entityResolver ) {
     this.entityResolver = Preconditions.checkNotNull( entityResolver ) ;
   }
 

@@ -90,7 +90,8 @@ public class XslPageIdentifierExtractorTest {
         new StringReader( FileUtils.readFileToString( stylesheetFile ) ) ) ) ;
     final Document stylesheetDocument = stylesheetDocumentReference[ 0 ] ;
 
-    LOGGER.info( "Got stylesheet:\n", stylesheetDocument.asXML() ) ;
+    LOGGER.info( "Got stylesheet:\n",
+        stylesheetDocument == null ? "null" : stylesheetDocument.asXML() ) ;
 
     final PagesExtractor pageIdentifierExtractor = new XslPageIdentifierExtractor(
         entityResolver, uriResolver, stylesheetDocument ) ;
