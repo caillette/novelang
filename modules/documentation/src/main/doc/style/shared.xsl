@@ -4,27 +4,31 @@
 >
   <xsl:variable 
       name="title"      
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='TITLE'    ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='TITLE'          ]/n:cell[ 2 ]"
   />
   <xsl:variable 
       name="subtitle"   
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='SUBTITLE' ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='SUBTITLE'       ]/n:cell[ 2 ]"
   />
   <xsl:variable 
       name="version"    
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='VERSION'  ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='VERSION'        ]/n:cell[ 2 ]"
   />
   <xsl:variable 
       name="author"     
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='AUTHOR'   ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='AUTHOR'         ]/n:cell[ 2 ]"
   />
-  <xsl:variable 
+  <xsl:variable
+      name="copyright-year"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='COPYRIGHT-YEAR' ]/n:cell[ 2 ]"
+  />
+  <xsl:variable
       name="newsFeed"   
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='NEWSFEED' ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='NEWSFEED'       ]/n:cell[ 2 ]"
   />
   <xsl:variable
       name="download"
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[1]='DOWNLOAD' ]/n:cell[ 2 ]" 
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='DOWNLOAD'       ]/n:cell[ 2 ]"
   />
 
   <xsl:template match="*[n:style='parameters']" />

@@ -1,10 +1,11 @@
 
-| VERSION  | `@project.version@`                                  |                          
-| AUTHOR   | `Laurent Caillette`                                  |                       
-| TITLE    | Novelang                                             |
-| SUBTITLE | Press-ready PDF from a Wiki syntax                   | 
-| NEWSFEED | ``http://novelang.blogspot.com/feeds/posts/default`` | 
-| DOWNLOAD | ``http://sourceforge.net/projects/novelang/files``   |
+| VERSION        | `@project.version@`                                  |
+| AUTHOR         | `Laurent Caillette`                                  |
+| COPYRIGHT-YEAR | 2010                                                 |                       
+| TITLE          | Novelang                                             |
+| SUBTITLE       | Press-ready PDF from a Wiki syntax                   |
+| NEWSFEED       | ``http://novelang.blogspot.com/feeds/posts/default`` |
+| DOWNLOAD       | ``http://sourceforge.net/projects/novelang/files``   |
 
 
 == LINKS
