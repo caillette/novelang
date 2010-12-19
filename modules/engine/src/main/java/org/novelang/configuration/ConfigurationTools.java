@@ -385,19 +385,19 @@ public class ConfigurationTools {
 
   }
 
-  private static Iterable<File> findMultipleDirectoriesWithDefault( 
+  private static Iterable< File > findMultipleDirectoriesWithDefault(
       final File baseDirectory, 
-      final Iterable<File> userFontDirectories, 
+      final Iterable< File > userDirectories,
       final String directoriesName, 
       final String defaultSingleDirectoryName, 
       final String directoriesOptionDescription 
   ) {
-    final Iterable<File> fontDirectories;
-    if( userFontDirectories.iterator().hasNext() ) {
-      fontDirectories = userFontDirectories ;
+    final Iterable<File> directories;
+    if( userDirectories.iterator().hasNext() ) {
+      directories = userDirectories ;
       LOGGER.info(
-          "Got font directories from custom value '",
-          fontDirectories,
+          "Got " + directoriesName + " from custom value '",
+          directories,
           "' (from option: ",
           directoriesOptionDescription,
           ")."
@@ -412,12 +412,12 @@ public class ConfigurationTools {
       ) ;
 
       if( null == maybeDefaultDirectory ) {
-        fontDirectories = ImmutableList.of() ;
+        directories = ImmutableList.of() ;
       } else {
-        fontDirectories = Lists.newArrayList( maybeDefaultDirectory ) ;
+        directories = Lists.newArrayList( maybeDefaultDirectory ) ;
       }
     }
-    return fontDirectories;
+    return directories;
   }
 
   public static ResourceLoader createResourceLoader( final GenericParameters parameters ) {
@@ -431,15 +431,6 @@ public class ConfigurationTools {
     return createResourceLoader( userDefinedDirectories ) ;
   }
 
-  public static ResourceLoader createResourceLoader(
-      final File contentDirectory,
-      final File userDefinedStyleDirectory,
-      final String description
-  ) {
-    // Let's wreck the Ant task for a moment!
-    throw new UnsupportedOperationException( "createResourceLoader" ) ;
-  }
-  
   public static ResourceLoader createResourceLoader( 
       final Iterable< File > userDefinedDirectories
   ) {
