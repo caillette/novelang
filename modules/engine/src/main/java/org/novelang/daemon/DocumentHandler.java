@@ -28,6 +28,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.StopWatch;
+import org.joda.time.Duration;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.mortbay.jetty.Request;
 import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
@@ -106,6 +110,9 @@ public class DocumentHandler extends GenericHandler {
       final ServletOutputStream outputStream = response.getOutputStream();
 
       if( someRequest.isRendered() ) {
+        final StopWatch stopWatch = new StopWatch() ;
+        stopWatch.start() ;
+
         final DocumentRequest documentRequest = ( DocumentRequest ) someRequest ;
 
         final Renderable rendered ;
@@ -159,10 +166,18 @@ public class DocumentHandler extends GenericHandler {
         }
 
         ( ( Request ) request ).setHandled( true ) ;
-        LOGGER.info( "Handled request ", request.getRequestURI() ) ;
+        LOGGER.info( "Handled request ", request.getRequestURI(),
+            " in ", formatDuration( stopWatch.getTime() ), "." ) ;
       }
 
     }
+  }
+
+
+  private static String formatDuration( final long milliseconds ) {
+    final long seconds = milliseconds / 1000 ;
+    return String.format( "%d.%03d", seconds, ( milliseconds % 1000 ) )
+        + " second" + ( seconds > 1 ? "s" : "" ) ;
   }
 
   private static void redirectToProblemPage(

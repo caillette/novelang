@@ -75,12 +75,12 @@ public class FileTools {
       final File basedir,
       final String fileNameNoExtension,
       final String... fileExtensions
-  ) throws FileNotFoundException {
+  ) throws IOException {
     final StringBuffer buffer = new StringBuffer( "Not found:" ) ;
     for( final String extension : fileExtensions ) {
       final File file = new File( basedir, fileNameNoExtension + "." + extension ) ;
       if( file.exists() ) {
-        return file ;
+        return file.getCanonicalFile() ;
       } else {
         buffer.append( "\n    '" ) ;
         buffer.append( file.getAbsolutePath() ) ;

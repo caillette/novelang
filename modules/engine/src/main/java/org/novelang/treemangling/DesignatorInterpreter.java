@@ -104,7 +104,7 @@ public class DesignatorInterpreter {
       DesignatorTools.dumpIdentifierMap( stringBuilder, pureIdentifiers, "\n    " ) ;
       stringBuilder.append( "\n  Derived identifiers:" ) ;
       DesignatorTools.dumpIdentifierMap( stringBuilder, derivedIdentifiers, "\n    " ) ;
-      LOGGER.debug( "Created ", this, stringBuilder ) ;
+//      LOGGER.debug( "Created ", this, stringBuilder ) ;
     }
 
   }

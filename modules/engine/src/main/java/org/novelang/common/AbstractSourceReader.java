@@ -82,15 +82,15 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.locationName = "<String>" ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
     this.renderingCharset = Preconditions.checkNotNull( defaultRenderingCharset ) ;
-    LOGGER.debug(
-        "Creating ",
-        thisToString,
-        "[ sourceCharset=",
-        sourceCharset.name(),
-        ", renderingCharset=",
-        renderingCharset.name(),
-        " ]"
-    ) ;
+//    LOGGER.debug(
+//        "Creating ",
+//        thisToString,
+//        "[ sourceCharset=",
+//        sourceCharset.name(),
+//        ", renderingCharset=",
+//        renderingCharset.name(),
+//        " ]"
+//    ) ;
   }
 
   protected AbstractSourceReader(
@@ -104,17 +104,17 @@ public abstract class AbstractSourceReader implements LocationFactory, Renderabl
     this.locationName = Preconditions.checkNotNull( locationName ) ;
     this.sourceCharset = Preconditions.checkNotNull( sourceCharset ) ;
     this.renderingCharset = Preconditions.checkNotNull( renderingCharset ) ;
-    LOGGER.debug(
-        "Creating ",
-            thisToString,
-        "[locationName='",
-        locationName,
-        "', sourceCharset=",
-        sourceCharset.name(),
-        ", renderingCharset=",
-        renderingCharset.name(),
-        " ]"
-    ) ;
+//    LOGGER.debug(
+//        "Creating ",
+//            thisToString,
+//        "[locationName='",
+//        locationName,
+//        "', sourceCharset=",
+//        sourceCharset.name(),
+//        ", renderingCharset=",
+//        renderingCharset.name(),
+//        " ]"
+//    ) ;
   }
 
   protected String readContent( final File file ) {

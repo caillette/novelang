@@ -180,6 +180,10 @@ public class DocumentProducer {
           documentRequest.getDocumentSourceName(),
           StructureKind.OPUS.getFileExtensions()
       ) ;
+
+      LOGGER.info( "Attempting to load file '", bookFile, "' with charset ",
+          suggestedRenderingCharset.name() ) ;
+      
       return new Opus(
           basedir,
           bookFile,

@@ -8,6 +8,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.novelang.common.Location;
 import org.novelang.common.Problem;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.opus.CommandExecutionContext;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.rendering.RenditionMimeType;
@@ -16,6 +18,8 @@ import org.novelang.rendering.RenditionMimeType;
  * @author Laurent Caillette
  */
 public class MapstylesheetCommand extends  AbstractCommand {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( MapstylesheetCommand.class ) ;
   
   private final Map< String, String > stylesheetMaps ;
 
@@ -57,6 +61,7 @@ public class MapstylesheetCommand extends  AbstractCommand {
     
     if( problems.isEmpty() ) {
       try {
+        LOGGER.debug( "Additional mappings: ", moreStylesheetMappings ) ;
         return context.addMappings( moreStylesheetMappings ) ;
       } catch( CommandExecutionContext.DuplicateStylesheetMappingException e ) {
         problems.add( Problem.createProblem( e ) ) ;
