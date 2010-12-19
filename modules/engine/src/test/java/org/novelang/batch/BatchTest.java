@@ -92,12 +92,28 @@ public class BatchTest {
 
   @Test
   public void generateMultipageDocumentOk() throws Exception {
+    final Resource stylesheetResource = ResourcesForTests.Multipage.MULTIPAGE_XSL;
+    runMultipageRendering( stylesheetResource ) ;
+  }
+
+  @Test
+  public void generateMultipageDocumentWithImport() throws Exception {
+    final Resource stylesheetResource = ResourcesForTests.Multipage.MULTIPAGE_IMPORTED_XSL;
+    runMultipageRendering( stylesheetResource, ResourcesForTests.Multipage.MULTIPAGE_XSL ) ;
+  }
+
+  private static void runMultipageRendering(
+      final Resource stylesheetResource,
+      final Resource... otherResources
+  ) throws Exception {
     final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+    for( final Resource otherResource : otherResources ) {
+      resourceInstaller.copy( otherResource ) ;
+    }
     final Resource novellaResource = ResourcesForTests.Multipage.MULTIPAGE_NOVELLA;
     resourceInstaller.copy( novellaResource ) ;
     final Resource opusResource = ResourcesForTests.Multipage.MULTIPAGE_OPUS;
     resourceInstaller.copy( opusResource ) ;
-    final Resource stylesheetResource = ResourcesForTests.Multipage.MULTIPAGE_XSL;
     final File stylesheetFile = resourceInstaller.copy( stylesheetResource ) ;
     final String renderedDocumentName =
           opusResource.getBaseName() + "." + MIME_FILE_EXTENSION
@@ -111,7 +127,7 @@ public class BatchTest {
         new String[] {
             "/" + renderedDocumentName,
             GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_STYLE_DIRECTORIES,
-            stylesheetFile.getParentFile().getCanonicalPath() 
+            stylesheetFile.getParentFile().getCanonicalPath()
         },
         resourceInstaller.getTargetDirectory()
     ) ;

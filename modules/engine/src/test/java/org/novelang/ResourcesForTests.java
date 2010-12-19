@@ -241,6 +241,7 @@ public final class ResourcesForTests {
     Directory dir = directory( "multipage" ) ;
 
     Resource MULTIPAGE_XSL = resource( "multipage.xsl" ) ;
+    Resource MULTIPAGE_IMPORTED_XSL = resource( "multipage-imported.xsl" ) ;
     Resource XML_DOCUMENT = resource( "document.xml" ) ;
     Resource MULTIPAGE_NOVELLA = resource( "multipage-content.novella" ) ;
     Resource MULTIPAGE_OPUS = resource( "multipage.opus" ) ;
