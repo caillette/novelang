@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -60,8 +61,10 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.TextTools;
+import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.rendering.multipage.MultipageFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.util.PDFTextStripper;
@@ -285,7 +288,29 @@ public class HttpDaemonTest {
 
   }
 
-  
+
+
+  @Test
+  public void multipage() throws Exception {
+
+    final MultipageFixture multipageFixture = new MultipageFixture(
+        resourceInstaller,
+        ResourcesForTests.Multipage.MULTIPAGE_XSL,
+        ResourcesForTests.MainResources.Style.DEFAULT_NOVELLA_XSL
+    ) ;
+
+    setup( multipageFixture.getStylesheetFile().getParentFile(), DefaultCharset.RENDERING ) ;
+
+    save( multipageFixture.getAncillaryDocument0File(),
+        buildUrl( multipageFixture.requestForAncillaryDocument0() ) ) ;
+    save( multipageFixture.getMainDocumentFile(), buildUrl( multipageFixture.requestForMain() ) ) ;
+    save( multipageFixture.getAncillaryDocument1File(),
+        buildUrl( multipageFixture.requestForAncillaryDocument1() ) ) ;
+
+    multipageFixture.verifyGeneratedFiles() ;
+  }
+
+
 // =======
 // Fixture
 // =======
@@ -315,6 +340,12 @@ public class HttpDaemonTest {
     return buffer.toString() ;
   }
 
+  private static URL buildUrl( final DocumentRequest documentRequest )
+      throws MalformedURLException
+  {
+    return new URL( "http://localhost:" + HTTP_DAEMON_PORT + documentRequest.getOriginalTarget() ) ;
+  }
+
   private static String readAsString( final URL url ) throws IOException {
     final StringWriter stringWriter = new StringWriter() ;
     IOUtils.copy( url.openStream(), stringWriter ) ;
@@ -334,10 +365,17 @@ public class HttpDaemonTest {
   }
 
   private void save( final String name, final byte[] document ) throws IOException {
-    final File file = new File( resourceInstaller.getTargetDirectory(), name ) ;
-    FileUtils.writeByteArrayToFile(
-        new File( resourceInstaller.getTargetDirectory(), name ), document ) ;
-    LOGGER.info( "Wrote file '", file.getAbsolutePath(), "'" );
+    save( new File( resourceInstaller.getTargetDirectory(), name ), document ) ;
+  }
+
+  private static void save( final File file, final byte[] document ) throws IOException {
+    FileUtils.writeByteArrayToFile( file, document ) ;
+    LOGGER.info( "Wrote file '", file.getAbsolutePath(), "'" ) ;
+  }
+
+  private static void save( final File file, final URL documentUrl ) throws IOException {
+    FileUtils.writeByteArrayToFile( file, readAsBytes( documentUrl ) ) ;
+    LOGGER.info( "Wrote file '", file.getAbsolutePath(), "'" ) ;
   }
 
   private static final int HTTP_DAEMON_PORT = 8081 ;

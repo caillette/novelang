@@ -39,6 +39,7 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.rendering.multipage.MultipageFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -92,8 +93,7 @@ public class BatchTest {
 
   @Test
   public void generateMultipageDocumentOk() throws Exception {
-    final Resource stylesheetResource = ResourcesForTests.Multipage.MULTIPAGE_XSL;
-    runMultipageRendering( stylesheetResource ) ;
+    runMultipageRendering( ResourcesForTests.Multipage.MULTIPAGE_XSL ) ;
   }
 
   @Test
@@ -102,48 +102,6 @@ public class BatchTest {
     runMultipageRendering( stylesheetResource, ResourcesForTests.Multipage.MULTIPAGE_XSL ) ;
   }
 
-  private static void runMultipageRendering(
-      final Resource stylesheetResource,
-      final Resource... otherResources
-  ) throws Exception {
-    final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
-    for( final Resource otherResource : otherResources ) {
-      resourceInstaller.copy( otherResource ) ;
-    }
-    final Resource novellaResource = ResourcesForTests.Multipage.MULTIPAGE_NOVELLA;
-    resourceInstaller.copy( novellaResource ) ;
-    final Resource opusResource = ResourcesForTests.Multipage.MULTIPAGE_OPUS;
-    resourceInstaller.copy( opusResource ) ;
-    final File stylesheetFile = resourceInstaller.copy( stylesheetResource ) ;
-    final String renderedDocumentName =
-          opusResource.getBaseName() + "." + MIME_FILE_EXTENSION
-        + "?" + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME
-        + "=" + stylesheetResource.getName()
-    ;
-
-    new DocumentGenerator().main(
-        "testing",
-        false,
-        new String[] {
-            "/" + renderedDocumentName,
-            GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_STYLE_DIRECTORIES,
-            stylesheetFile.getParentFile().getCanonicalPath()
-        },
-        resourceInstaller.getTargetDirectory()
-    ) ;
-
-    final File outputDirectory = new File(
-        resourceInstaller.getTargetDirectory(),
-        ConfigurationTools.DEFAULT_OUTPUT_DIRECTORY_NAME
-    ) ;
-    final File mainDocument = createFileObject( outputDirectory, opusResource, null ) ;
-    final File ancillaryDocument0 = createFileObject( outputDirectory, opusResource, "Level-0" ) ;
-    final File ancillaryDocument1 = createFileObject( outputDirectory, opusResource, "Level-1" ) ;
-
-    assertThat( mainDocument ).exists() ;
-    verify( ancillaryDocument0, "Level-0/opus/level[1]" ) ;
-    verify( ancillaryDocument1, "Level-1/opus/level[2]" ) ;
-  }
 
 
 // =======
@@ -161,6 +119,28 @@ public class BatchTest {
   private static final String[] COMMAND_LINE_ARGUMENT_EMPTY = new String[ 0 ];
 
 
+  private static void runMultipageRendering(
+      final Resource stylesheetResource,
+      final Resource... otherResources
+  ) throws Exception {
+    final MultipageFixture multipageFixture =
+        new MultipageFixture( stylesheetResource, otherResources ) ;
+
+    new DocumentGenerator().main(
+        "testing",
+        false,
+        new String[] {
+            multipageFixture.requestForMain().getOriginalTarget(),
+            GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_STYLE_DIRECTORIES,
+            multipageFixture.getStylesheetFile().getParentFile().getCanonicalPath()
+        },
+        multipageFixture.getBaseDirectory()
+    ) ;
+
+    multipageFixture.verifyGeneratedFiles() ;
+  }
+
+  
   private SecurityManager savedSecurityManager ;
 
 

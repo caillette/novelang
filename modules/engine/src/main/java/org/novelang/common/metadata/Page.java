@@ -52,6 +52,11 @@ public final class Page {
     return path ;
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "{" + pageIdentifier.getName() + ";" + path + "}" ;
+  }
+
   /**
    * @return a non-null object.
    * @throws NoSuchPageIdentifierException if no page found for this identifier.

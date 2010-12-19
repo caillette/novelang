@@ -52,24 +52,10 @@ public abstract class StreamDirector {
 
   public void feedStreams(
       final Renderable renderable,
-      PagesExtractor pageIdentifierExtractor,
+      final PagesExtractor pageIdentifierExtractor,
       final PageIdentifier pageIdentifier,
       final StreamFeeder streamFeeder
   ) throws Exception {
-
-    // Hack. TODO: remove this.
-    pageIdentifierExtractor = new PagesExtractor() {
-      @Override
-      public ImmutableMap<PageIdentifier, String> extractPages( final SyntacticTree documentTree )
-          throws Exception
-      {
-        return ImmutableMap.of(
-            new PageIdentifier( "Level-0" ), "/opus/level[1]",
-            new PageIdentifier( "Level-1" ), "/opus/level[2]"
-        ) ;
-      }
-    } ;
-    
 
     if( pageIdentifierExtractor == null ) {
       feedDefaultPage( renderable, streamFeeder ) ;

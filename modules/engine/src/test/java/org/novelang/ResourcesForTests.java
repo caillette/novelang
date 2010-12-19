@@ -233,6 +233,7 @@ public final class ResourcesForTests {
       Directory dir = directory( "style" ) ;
       
       Resource DEFAULT_PDF_XSL = resource( "default-pdf.xsl" ) ;
+      Resource DEFAULT_NOVELLA_XSL = resource( "default-novella.xsl" ) ;
     }
   }
 
