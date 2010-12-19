@@ -20,7 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Permission;
 
+import org.apache.commons.io.FileUtils;
 import org.fest.assertions.Assertions;
+import org.fest.assertions.Condition;
+import org.fest.reflect.core.Reflection;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +36,7 @@ import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
@@ -87,7 +91,6 @@ public class BatchTest {
   }
 
   @Test
-//  @Ignore( "Unfinished implementation" )
   public void generateMultipageDocumentOk() throws Exception {
     final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
     final Resource novellaResource = ResourcesForTests.Multipage.MULTIPAGE_NOVELLA;
@@ -122,8 +125,8 @@ public class BatchTest {
     final File ancillaryDocument1 = createFileObject( outputDirectory, opusResource, "Level-1" ) ;
 
     assertThat( mainDocument ).exists() ;
-    assertThat( ancillaryDocument0 ).exists() ;
-    assertThat( ancillaryDocument1 ).exists() ;
+    verify( ancillaryDocument0, "Level-0/opus/level[1]" ) ;
+    verify( ancillaryDocument1, "Level-1/opus/level[2]" ) ;
   }
 
 
@@ -149,6 +152,9 @@ public class BatchTest {
   public void setUp() throws IOException {
     savedSecurityManager = System.getSecurityManager() ;
     System.setSecurityManager( new NoExitSecurityManager() ) ;
+
+//    Reflection.staticField( "DEBUG" ).ofType( Boolean.TYPE )
+//        .in( org.apache.xalan.transformer.TransformerHandlerImpl.class ).set( true ) ;
   }
 
   @After
@@ -168,6 +174,15 @@ public class BatchTest {
                 : PAGEIDENTIFIER_PREFIX + pageIdentifierAsString )
             + "." + MIME_FILE_EXTENSION
     ) ;
+  }
+
+  private static void verify( final File ancillaryDocumentFile, final String mustContain )
+      throws IOException
+  {
+    assertThat( ancillaryDocumentFile ).exists() ;
+    final String fileContent = FileUtils.readFileToString(
+        ancillaryDocumentFile, DefaultCharset.RENDERING.name() ) ;
+    assertThat( fileContent ).contains( mustContain ) ;
   }
 
 

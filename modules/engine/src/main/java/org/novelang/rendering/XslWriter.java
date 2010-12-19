@@ -27,6 +27,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
+import org.apache.xalan.transformer.TransformerImpl;
 import org.dom4j.Document;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
@@ -206,7 +207,11 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
         createSinkContentHandler( outputStream, documentMetadata, charset ) ;
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
 
-    return transformerHandler;
+    // Workaround to XALANJ-101. Works along with hacked TransformerImpl.
+    // Returning tranformerHandler alone was good enough until trying to reuse the transformer
+    // (for multipage output).
+    return ( ( TransformerImpl ) transformerHandler.getTransformer() )
+        .getInputContentHandler( true ) ;
 
   }
 
