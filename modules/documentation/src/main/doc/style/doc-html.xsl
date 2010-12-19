@@ -24,6 +24,9 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:n="http://novelang.org/book-xml/1.0"
+    xmlns:xslmeta="http://novelang.org/xsl-meta/1.0"
+    xmlns:dyn="http://exslt.org/dynamic"
+    extension-element-prefixes="dyn"    
 >
   <xsl:import href="default-html.xsl" />
   <xsl:import href="shared.xsl" />
@@ -35,6 +38,28 @@
 
   <xsl:output method="xml" />
 
+<!--
+  <xslmeta:multipage>
+
+    <xsl:template match="/" >
+
+      <n:pages>
+        <xsl:for-each select="/n:opus/n:level">
+          <n:page>
+            <n:page-identifier>
+              <xsl:value-of select="n:level-title"/>
+            </n:page-identifier>
+            <n:page-path>/opus/level[<xsl:value-of select="position()"/>]</n:page-path>
+          </n:page>
+        </xsl:for-each>
+      </n:pages>
+
+    </xsl:template>
+
+  </xslmeta:multipage>
+-->
+
+
   <xsl:template match="/" >
 
     <html>
@@ -45,11 +70,11 @@
         </xsl:element>
 
         <meta name="Generator" content="Novelang" />
-        <meta name= "Copyright" content="Laurent Caillette 2008" />
+        <meta name= "Copyright" ><xsl:attribute name="content" > <xsl:apply-templates select="$author" /><xsl:text> </xsl:text><xsl:apply-templates select="$copyright-year" /></xsl:attribute></meta>
         <title>Novelang</title>
 
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
-        <link rel="stylesheet" type="text/css" href="screen.css" />
+        <link rel="stylesheet" type="text/css" href="/screen.css" />
 
         <link rel="alternate" type="application/atom+xml" title="News feed (Atom)" >
         <xsl:attribute name="href" ><xsl:value-of select="$newsFeed" /></xsl:attribute>
