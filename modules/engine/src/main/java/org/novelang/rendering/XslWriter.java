@@ -19,6 +19,7 @@ package org.novelang.rendering;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 
 import com.google.common.collect.ImmutableMap;
@@ -29,6 +30,8 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
 import org.apache.xalan.transformer.TransformerImpl;
 import org.dom4j.Document;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.PageIdentifier;
@@ -42,6 +45,8 @@ import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
 import org.novelang.outfit.xml.SaxPipeline;
+import org.novelang.outfit.xml.TransformerErrorListener;
+import org.novelang.outfit.xml.TransformerMultiException;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.parser.NodeKindTools;
@@ -73,10 +78,16 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
   protected final EntityEscapeSelector entityEscapeSelector ;
   private static final ResourceName IDENTITY_XSL_FILE_NAME = new ResourceName( "identity.xsl" ) ;
 
+  /**
+   * Accumulates problems during XSL parsing and transformation.
+   * May need some extra care if we want to make the {@link XslWriter} reusable.
+   */
+  private final TransformerErrorListener transformerErrorListener = new TransformerErrorListener() ;
+
   private TransformerHandler transformerHandler;
 
   public XslWriter( final RenderingConfiguration configuration, final ResourceName xslFileName )
-      throws IOException, TransformerConfigurationException, SAXException
+      throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
   {
     this( configuration, xslFileName, DefaultCharset.RENDERING, DEFAULT_RENDITION_MIME_TYPE ) ;
   }
@@ -86,7 +97,7 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final String nameQualifier,
       final RenderingConfiguration configuration,
       final ResourceName xslFileName
-  ) throws IOException, TransformerConfigurationException, SAXException
+  ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
   {
     this(
         namespaceUri,
@@ -103,7 +114,7 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final RenderingConfiguration configuration,
       final ResourceName xslFileName,
       final RenditionMimeType mimeType
-  ) throws IOException, TransformerConfigurationException, SAXException
+  ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
   {
     this(
         namespaceUri,
@@ -122,7 +133,7 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final Charset charset,
       final RenditionMimeType mimeType
   )
-      throws IOException, TransformerConfigurationException, SAXException
+      throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
   {
     this( configuration, xslFileName, charset, mimeType, EntityEscapeSelector.NO_ENTITY_ESCAPE ) ;
   }
@@ -134,7 +145,7 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final RenditionMimeType mimeType,
       final EntityEscapeSelector entityEscapeSelector
   )
-      throws IOException, TransformerConfigurationException, SAXException
+      throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
   {
     this(
         XmlNamespaces.TREE_NAMESPACE_URI,
@@ -156,7 +167,7 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       final RenditionMimeType mimeType,
       final EntityEscapeSelector entityEscapeSelector
   )
-      throws IOException, TransformerConfigurationException, SAXException
+      throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
   {
     super( namespaceUri, nameQualifier, charset, mimeType ) ;
     this.entityEscapeSelector = checkNotNull( entityEscapeSelector ) ;
@@ -178,16 +189,18 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
       }
     } ;
 
-    // Causes XSL parsing.  
+    // Triggers XSL parsing.  
     transformerHandler = new XslTransformerFactory.FromResource(
         resourceLoader,
         xslFileName,
         entityResolver,
         uriResolver,
-        xslTransformerFactoryDecoratorInstaller
+        xslTransformerFactoryDecoratorInstaller,
+        transformerErrorListener
     ).newTransformerHandler() ;
 
     LOGGER.debug( "Created ", getClass().getName(), " with stylesheet ", safeXslFileName ) ;
+    logLastParsedStylesheet() ;
   }
 
 
@@ -207,11 +220,13 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
         createSinkContentHandler( outputStream, documentMetadata, charset ) ;
     transformerHandler.setResult( new SAXResult( sinkContentHandler ) ) ;
 
+    final TransformerImpl transformer = ( TransformerImpl ) transformerHandler.getTransformer() ;
+    transformer.setErrorListener( transformerErrorListener ) ;
+
     // Workaround to XALANJ-101. Works along with hacked TransformerImpl.
     // Returning tranformerHandler alone was good enough until trying to reuse the transformer
     // (for multipage output).
-    return ( ( TransformerImpl ) transformerHandler.getTransformer() )
-        .getInputContentHandler( true ) ;
+    return transformer.getInputContentHandler( true ) ;
 
   }
 
@@ -235,8 +250,13 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     return super.createContentHandler( outputStream, documentMetadata, charset ) ;
   }
 
+  @Override
+  public void finishWriting() throws Exception {
+    super.finishWriting() ;
+    transformerErrorListener.flush() ;
+  }
 
-// ===========
+  // ===========
 // SaxPipeline
 // ===========
 
@@ -299,6 +319,21 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
    */
   private Document getLastParsedStylesheet() {
     return lastParsedStylesheet ;
+  }
+
+  private void logLastParsedStylesheet() {
+    if( lastParsedStylesheet != null ) {
+
+      final StringWriter stringWriter = new StringWriter() ;
+      final XMLWriter writer = new XMLWriter( stringWriter, OutputFormat.createPrettyPrint() ) ;
+      try {
+        writer.write( lastParsedStylesheet ) ;
+      } catch( IOException e ) {
+        throw new RuntimeException( e ) ;
+      }
+
+      LOGGER.debug( "Parsed nested stylesheet: ", stringWriter.toString() ) ;
+    }
   }
 
 

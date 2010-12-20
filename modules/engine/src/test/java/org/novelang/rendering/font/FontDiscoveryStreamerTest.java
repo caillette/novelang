@@ -32,6 +32,7 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
+import org.novelang.outfit.xml.TransformerMultiException;
 import org.novelang.rendering.XslWriter;
 import org.xml.sax.SAXException;
 
@@ -55,7 +56,8 @@ public class FontDiscoveryStreamerTest {
       protected XslWriter createXslWriter(
           final RenderingConfiguration renderingConfiguration,
           final ResourceName resourceName
-      ) throws IOException, TransformerConfigurationException, SAXException {
+      ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
+      {
         return new XslWriter(
             FontDiscoveryStreamer.NAMESPACE.getURI(),
             FontDiscoveryStreamer.NAMESPACE.getPrefix(),

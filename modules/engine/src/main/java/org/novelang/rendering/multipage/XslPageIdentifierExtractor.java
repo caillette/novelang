@@ -24,10 +24,12 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
 import org.apache.commons.io.output.NullOutputStream;
+import org.apache.xalan.transformer.TransformerImpl;
 import org.dom4j.Document;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.PageIdentifier;
+import org.novelang.outfit.xml.TransformerErrorListener;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.rendering.GenericRenderer;
 import org.novelang.rendering.RenditionMimeType;
@@ -72,13 +74,19 @@ public class XslPageIdentifierExtractor implements PagesExtractor {
       return PagesExtractor.EMPTY_MAP ;
     }
 
+    final TransformerErrorListener transformerErrorListener = new TransformerErrorListener() ;
+    
     final XslTransformerFactory xslTransformerFactory = new XslTransformerFactory.FromDom4jDocument(
         stylesheetDocument,
         entityResolver,
-        uriResolver
+        uriResolver,
+        transformerErrorListener
     ) ;
+    
+    transformerErrorListener.flush() ;
 
     final TransformerHandler transformerHandler = xslTransformerFactory.newTransformerHandler() ;
+    transformerHandler.getTransformer().setErrorListener( transformerErrorListener ) ;
 
     final XmlMultipageReader multipageReader = new XmlMultipageReader() ;
     transformerHandler.setResult( new SAXResult( multipageReader ) );
@@ -97,6 +105,8 @@ public class XslPageIdentifierExtractor implements PagesExtractor {
     final GenericRenderer renderer = new GenericRenderer( xmlWriter ) ;
 
     renderer.renderTree( documentTree, new NullOutputStream(), null, null  ) ;
+
+    transformerErrorListener.flush() ;
 
     return multipageReader.getPageIdentifiers() ;
   }

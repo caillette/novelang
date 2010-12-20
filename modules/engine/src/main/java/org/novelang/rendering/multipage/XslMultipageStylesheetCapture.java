@@ -19,6 +19,7 @@ package org.novelang.rendering.multipage;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
+import org.apache.xml.utils.MutableAttrListImpl;
 import org.dom4j.Document;
 import org.dom4j.io.SAXContentHandler;
 import org.novelang.logger.Logger;
@@ -29,6 +30,7 @@ import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Captures the XML document inside a &lt;{@value #MULTIPAGE_STYLESHEET_LOCALNAME}> element
@@ -114,11 +116,16 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
     }
     if( documentBuilder != null ) {
       if( isNestedStylesheetRootElement( uri, localName ) ) {
+
+        final AttributesImpl attributesWithVersion = new MutableAttrListImpl( attributes ) ;
+        // String uri, String localName, String qName, String type, String value
+        attributesWithVersion.addAttribute( "", "version", "version", "", "1.0" ) ;
+
         documentBuilder.startElement(
             XmlNamespaces.XSL_NAMESPACE_URI,
             "stylesheet",
             getXsltPrefixMapping() + ":" + "stylesheet",
-            attributes
+            attributesWithVersion
         ) ;
       } else {
         documentBuilder.startElement( uri, localName, qName, attributes ) ;

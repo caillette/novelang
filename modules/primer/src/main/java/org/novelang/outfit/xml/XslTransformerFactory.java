@@ -18,6 +18,7 @@ package org.novelang.outfit.xml;
 
 import java.io.IOException;
 
+import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -50,12 +51,19 @@ public abstract class XslTransformerFactory {
 
   private final DecoratorInstaller decoratorInstaller;
 
+  /**
+   * May be null.
+   */
+  private final TransformerErrorListener transformerErrorListener;
+
 
   protected XslTransformerFactory(
       final EntityResolver entityResolver,
       final URIResolver uriResolver,
-      final DecoratorInstaller decoratorInstaller
+      final DecoratorInstaller decoratorInstaller,
+      final TransformerErrorListener transformerErrorListener
   ) {
+    this.transformerErrorListener = transformerErrorListener;
     this.entityResolver = checkNotNull( entityResolver ) ;
     this.uriResolver = checkNotNull( uriResolver ) ;
     this.decoratorInstaller = checkNotNull( decoratorInstaller ) ;
@@ -63,8 +71,10 @@ public abstract class XslTransformerFactory {
 
   protected XslTransformerFactory(
       final EntityResolver entityResolver,
-      final URIResolver uriResolver
+      final URIResolver uriResolver,
+      final TransformerErrorListener transformerErrorListener
   ) {
+    this.transformerErrorListener = transformerErrorListener;
     this.entityResolver = checkNotNull( entityResolver ) ;
     this.uriResolver = checkNotNull( uriResolver ) ;
     this.decoratorInstaller = DecoratorInstaller.NULL ;
@@ -73,14 +83,16 @@ public abstract class XslTransformerFactory {
 
   
   public final TransformerHandler newTransformerHandler()
-      throws TransformerConfigurationException, SAXException, IOException
+      throws TransformerConfigurationException, SAXException, IOException, TransformerMultiException 
   {
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;
 
     saxTransformerFactory.setURIResolver( uriResolver ) ;
 
-    saxTransformerFactory.setErrorListener( new TransformerErrorListener( ) ) ;
+    if( transformerErrorListener != null ) {
+      saxTransformerFactory.setErrorListener( transformerErrorListener ) ;
+    }
 
     final TemplatesHandler templatesHandler = saxTransformerFactory.newTemplatesHandler() ;
 
@@ -93,8 +105,15 @@ public abstract class XslTransformerFactory {
 
     parse( reader ) ;
 
+    if( transformerErrorListener != null ) {
+      transformerErrorListener.flush() ;
+    }
+
     final Templates templates = templatesHandler.getTemplates() ;
-    return saxTransformerFactory.newTransformerHandler( templates ) ;
+    final TransformerHandler transformerHandler =
+        saxTransformerFactory.newTransformerHandler( templates ) ;
+
+    return transformerHandler;
 
   }
 
@@ -109,9 +128,10 @@ public abstract class XslTransformerFactory {
         final InputSource inputSource,
         final EntityResolver entityResolver,
         final URIResolver uriResolver,
-        final DecoratorInstaller decoratorInstaller
+        final DecoratorInstaller decoratorInstaller,
+        final TransformerErrorListener transformerErrorListener
     ) {
-      super( entityResolver, uriResolver, decoratorInstaller ) ;
+      super( entityResolver, uriResolver, decoratorInstaller, transformerErrorListener ) ;
       this.inputSource = checkNotNull( inputSource ) ;
     }
 
@@ -128,13 +148,15 @@ public abstract class XslTransformerFactory {
         final ResourceName xslFileName,
         final EntityResolver entityResolver,
         final URIResolver uriResolver,
-        final DecoratorInstaller decoratorInstaller
+        final DecoratorInstaller decoratorInstaller,
+        final TransformerErrorListener tranformerErrorListener
     ) {
       super(
           new InputSource( resourceLoader.getInputStream( xslFileName ) ),
           entityResolver,
           uriResolver,
-          decoratorInstaller
+          decoratorInstaller,
+          tranformerErrorListener
       ) ;
     }
   }
@@ -146,9 +168,10 @@ public abstract class XslTransformerFactory {
     public FromDom4jDocument(
         final Document dom4jDocument,
         final EntityResolver entityResolver,
-        final URIResolver uriResolver
+        final URIResolver uriResolver,
+        final TransformerErrorListener transformerErrorListener
     ) {
-      super( entityResolver, uriResolver ) ;
+      super( entityResolver, uriResolver, transformerErrorListener ) ;
       this.document = checkNotNull( dom4jDocument ) ;
     }
 

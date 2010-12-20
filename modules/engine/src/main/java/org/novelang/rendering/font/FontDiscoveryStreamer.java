@@ -35,6 +35,7 @@ import org.novelang.configuration.FontQuadruplet;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
+import org.novelang.outfit.xml.TransformerMultiException;
 import org.novelang.parser.GeneratedLexemes;
 import org.novelang.rendering.PdfWriter;
 import org.novelang.rendering.XslWriter;
@@ -78,7 +79,8 @@ public class FontDiscoveryStreamer {
   public FontDiscoveryStreamer(
       final RenderingConfiguration renderingConfiguration,
       final ResourceName resourceName
-  ) throws IOException, TransformerConfigurationException, SAXException {
+  ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException 
+  {
     xslWriter = createXslWriter( renderingConfiguration, resourceName ) ;
     fopFontStatus = renderingConfiguration.getCurrentFopFontStatus() ;
   }
@@ -195,7 +197,7 @@ public class FontDiscoveryStreamer {
   protected XslWriter createXslWriter(
       final RenderingConfiguration renderingConfiguration,
       final ResourceName resourceName
-  ) throws IOException, TransformerConfigurationException, SAXException {
+  ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException {
     return new PdfWriter(
         renderingConfiguration,
         resourceName,

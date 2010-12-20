@@ -27,6 +27,7 @@ import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.EntityEscapeSelector;
+import org.novelang.outfit.xml.TransformerMultiException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -43,7 +44,7 @@ public class HtmlWriter extends XslWriter {
       final RenderingConfiguration configuration,
       final ResourceName stylesheet,
       final Charset charset
-  ) throws IOException, TransformerConfigurationException, SAXException {
+  ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException {
     super(
         configuration,
         null == stylesheet ? DEFAULT_HTML_STYLESHEET : stylesheet,

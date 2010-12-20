@@ -1,1 +1,6 @@
-Nothing yet.
+--- Multipage output.
+
+--- Better logging, less crap.
+
+--- More restrictive rules when applying XSL stylesheets. Generation now breaks on warnings.
+This might break existing incorrect stylesheets.

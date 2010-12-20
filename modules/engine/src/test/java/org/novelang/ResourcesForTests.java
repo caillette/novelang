@@ -245,6 +245,7 @@ public final class ResourcesForTests {
     Resource MULTIPAGE_IMPORTED_XSL = resource( "multipage-imported.xsl" ) ;
     Resource XML_DOCUMENT = resource( "document.xml" ) ;
     Resource MULTIPAGE_NOVELLA = resource( "multipage-content.novella" ) ;
+    Resource MULTIPAGE_HAZARDOUS_NOVELLA = resource( "multipage-hazardous-content.novella" ) ;
     Resource MULTIPAGE_OPUS = resource( "multipage.opus" ) ;
 
   }

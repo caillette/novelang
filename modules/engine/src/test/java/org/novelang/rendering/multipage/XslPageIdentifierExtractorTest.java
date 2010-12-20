@@ -60,12 +60,46 @@ public class XslPageIdentifierExtractorTest {
 
   @Test
   public void extractPageIdentifiers() throws Exception {
+    verify(
+        ResourcesForTests.Multipage.MULTIPAGE_NOVELLA,
+        ImmutableMap.of(
+            new PageIdentifier( "Level-0" ), "/opus/level[1]",
+            new PageIdentifier( "Level-1" ), "/opus/level[2]"
+        )
+    ) ;
+  }
 
+  @Test
+  public void extractPageIdentifiersFromHazardousContent() throws Exception {
+    verify(
+        ResourcesForTests.Multipage.MULTIPAGE_HAZARDOUS_NOVELLA,
+        ImmutableMap.of(
+            new PageIdentifier( "Level-0" ), "/opus/level[1]",
+            new PageIdentifier( "Level-1" ), "/opus/level[2]"
+        )
+    ) ;
+  }
+
+// =======
+// Fixture
+// =======
+
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+      XslPageIdentifierExtractorTest.class ) ;
+
+  static {
+    initialize() ;
+  }
+
+  private static void verify(
+      final Resource novellaDocument,
+      final ImmutableMap< PageIdentifier, String > expectedPages
+  ) throws Exception {
     final ResourceInstaller installer =
         new ResourceInstaller( new DirectoryFixture().getDirectory() ) ;
     final File stylesheetFile =
         installer.copy( ResourcesForTests.Multipage.MULTIPAGE_XSL ) ;
-    final Resource novellaDocument = ResourcesForTests.Multipage.MULTIPAGE_NOVELLA;
     installer.copy( novellaDocument ) ;
 
     final ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader() ;
@@ -103,31 +137,15 @@ public class XslPageIdentifierExtractorTest {
         "insert file:" + novellaDocument.getName(),
         DefaultCharset.SOURCE,
         DefaultCharset.RENDERING,
-        ImmutableSet.< Tag >of()
+        ImmutableSet.<Tag>of()
     ) ;
 
     final ImmutableMap<PageIdentifier,String > pages =
         pageIdentifierExtractor.extractPages( opus.getDocumentTree() ) ;
 
-    assertThat( pages ).isEqualTo( ImmutableMap.of(
-        new PageIdentifier( "Level-0" ), "/opus/level[1]",
-        new PageIdentifier( "Level-1" ), "/opus/level[2]"
-    ) ) ;
-
+    assertThat( pages ).isEqualTo( expectedPages ) ;
   }
 
-
-// =======
-// Fixture
-// =======
-
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      XslPageIdentifierExtractorTest.class ) ;
-
-  static {
-    initialize() ;
-  }
 
   private static final EntityEscapeSelector NO_ENTITY_ESCAPE =
       new EntityEscapeSelector() {
