@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import javax.xml.transform.URIResolver;
 import org.apache.commons.io.FileUtils;
-import org.dom4j.Document;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,8 +73,13 @@ public class XslPageIdentifierExtractorTest {
 
   /**
    * The {@link ResourcesForTests.Multipage#MULTIPAGE_XSL} use level title as it is,
-   * so it may produce an invalid {@link PageIdentifier}. This test guarantees the
-   * exception makes its way out.
+   * so it may produce an invalid {@link PageIdentifier}, like when using
+   * {@link ResourcesForTests.Multipage#MULTIPAGE_HAZARDOUS_NOVELLA}.
+   * This test guarantees the exception makes its way out.
+   * <p>
+   * Maybe this test should take a more general form because it's about a wider mechanism
+   * that takes place in {@link org.novelang.outfit.xml.TransformerErrorListener} and what's
+   * installing it. 
    */
   @Test( expected = TransformerMultiException.class )
   public void rethrowExceptionFromXslTransformer() throws Exception {
