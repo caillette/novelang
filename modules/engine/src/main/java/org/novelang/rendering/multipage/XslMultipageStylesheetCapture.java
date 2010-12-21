@@ -20,12 +20,9 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import org.apache.xml.utils.MutableAttrListImpl;
-import org.dom4j.Document;
-import org.dom4j.io.SAXContentHandler;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.xml.NamespaceAwareness;
 import org.novelang.outfit.xml.SaxPipeline;
+import org.novelang.outfit.xml.SaxRecorder;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
@@ -42,17 +39,18 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
 
-  private SAXContentHandler documentBuilder = null ;
+  private SaxRecorder documentBuilder = null ;
 
+  /**
+   * TODO use this one.
+   */
   private final EntityResolver entityResolver ;
 
 
   /**
-   * Override to do something with freshly-parsed stylesheet.
-   *
-   * @param stylesheetDocument a non-null object.
+   * Override to do something with freshly-parsed stylesheet like saving it somewhere.
    */
-  protected abstract void onStylesheetDocumentBuilt( final Document stylesheetDocument ) ;
+  protected abstract void onStylesheetDocumentBuilt( SaxRecorder.Player stylesheetPlayer ) ;
 
 
   protected XslMultipageStylesheetCapture( final EntityResolver entityResolver ) {
@@ -100,9 +98,9 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
   ) throws SAXException {
     if( isNestedStylesheetRootElement( uri, localName ) ) {
       if( documentBuilder == null ) {
-        documentBuilder = new SAXContentHandler() ;
+        documentBuilder = new SaxRecorder() ;
         documentBuilder.setDocumentLocator( getDocumentLocator() ) ;
-        documentBuilder.setEntityResolver( entityResolver ) ;
+//        documentBuilder.setEntityResolver( entityResolver ) ;
         documentBuilder.startDocument() ;
         for( final Map.Entry< String, String > prefixMapping
             : getNamespaceAwareness().getPrefixMappings().entrySet()
@@ -158,7 +156,7 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
       }
       if( isNestedStylesheetRootElement( uri, localName ) ) {
         documentBuilder.endDocument() ;
-        onStylesheetDocumentBuilt( documentBuilder.getDocument() ) ;
+        onStylesheetDocumentBuilt( documentBuilder.getPlayer() ) ;
         documentBuilder = null ;
       }
     }
@@ -209,7 +207,6 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
     if( ! insideNestedStylesheet() ) {
       super.characters( characters, start, length ) ;
     }
-
   }
 
   @Override

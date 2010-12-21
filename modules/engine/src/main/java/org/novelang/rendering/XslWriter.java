@@ -45,6 +45,7 @@ import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
 import org.novelang.outfit.xml.SaxPipeline;
+import org.novelang.outfit.xml.SaxRecorder;
 import org.novelang.outfit.xml.TransformerErrorListener;
 import org.novelang.outfit.xml.TransformerMultiException;
 import org.novelang.outfit.xml.XmlNamespaces;
@@ -269,7 +270,8 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
    * But since &lt;import> is the first instruction in a stylesheet, we can safely
    * assume that last nested stylesheet is the one to apply.
    * Except for element name validation (which remains silent if everything's fine),
-   * the only side-effect of this method is to call {@link #setLastParsedStylesheet(Document)}
+   * the only side-effect of this method is to call
+   * {@link #setLastParsedStylesheet(org.novelang.outfit.xml.SaxRecorder.Player)}
    */
   private final XslTransformerFactory.DecoratorInstaller xslTransformerFactoryDecoratorInstaller =
       new XslTransformerFactory.DecoratorInstaller() {
@@ -282,8 +284,8 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
           ) ), 0 ) ;
           pipeline.add( new XslMultipageStylesheetCapture( entityResolver ) {
             @Override
-            protected void onStylesheetDocumentBuilt( final Document stylesheetDocument ) {
-              setLastParsedStylesheet( stylesheetDocument ) ;
+            protected void onStylesheetDocumentBuilt( final SaxRecorder.Player stylesheetPlayer ) {
+              setLastParsedStylesheet( stylesheetPlayer ) ;
             }
           }, 1 ) ;
           return pipeline ;
@@ -308,16 +310,16 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     ).extractPages( documentTree ) ;
   }
 
-  private Document lastParsedStylesheet = null ;
+  private SaxRecorder.Player lastParsedStylesheet = null ;
 
-  private void setLastParsedStylesheet( final Document document ) {
-    this.lastParsedStylesheet = checkNotNull( document ) ;
+  private void setLastParsedStylesheet( final SaxRecorder.Player stylesheetPlayer ) {
+    this.lastParsedStylesheet = checkNotNull( stylesheetPlayer ) ;
   }
 
   /**
    * @return a possibly null object.
    */
-  private Document getLastParsedStylesheet() {
+  private SaxRecorder.Player getLastParsedStylesheet() {
     return lastParsedStylesheet ;
   }
 

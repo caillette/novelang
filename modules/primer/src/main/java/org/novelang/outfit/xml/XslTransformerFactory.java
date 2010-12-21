@@ -183,6 +183,26 @@ public abstract class XslTransformerFactory {
     }
   }
 
+  public static class FromPlayer extends XslTransformerFactory {
+
+    private final SaxRecorder.Player player ;
+
+    public FromPlayer(
+        final SaxRecorder.Player player,
+        final EntityResolver entityResolver,
+        final URIResolver uriResolver,
+        final TransformerErrorListener transformerErrorListener
+    ) {
+      super( entityResolver, uriResolver, transformerErrorListener ) ;
+      this.player = checkNotNull( player ) ;
+    }
+
+    @Override
+    protected void parse( final XMLReader reader ) throws IOException, SAXException {
+      player.playOn( reader.getContentHandler() ) ;
+    }
+  }
+
   public interface DecoratorInstaller {
 
     ContentHandler decorate( final ContentHandler original ) ;

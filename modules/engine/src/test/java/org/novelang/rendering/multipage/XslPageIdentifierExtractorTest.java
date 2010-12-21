@@ -40,6 +40,7 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
+import org.novelang.outfit.xml.SaxRecorder;
 import org.novelang.outfit.xml.TransformerMultiException;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
@@ -113,13 +114,13 @@ public class XslPageIdentifierExtractorTest {
         new LocalEntityResolver( resourceLoader, NO_ENTITY_ESCAPE ) ;
     final URIResolver uriResolver = new LocalUriResolver( resourceLoader, entityResolver ) ;
 
-    final Document[] stylesheetDocumentReference = new Document[ 1 ] ;
+    final SaxRecorder.Player[] stylesheetPlayerReference = new SaxRecorder.Player[ 1 ] ;
 
     final XslMultipageStylesheetCapture stylesheetCapture =
         new XslMultipageStylesheetCapture( entityResolver ) {
           @Override
-          protected void onStylesheetDocumentBuilt( final Document freshStylesheetDocument ) {
-            stylesheetDocumentReference[ 0 ] = freshStylesheetDocument ;
+          protected void onStylesheetDocumentBuilt( final SaxRecorder.Player freshStylesheetPlayer ) {
+            stylesheetPlayerReference[ 0 ] = freshStylesheetPlayer ;
           }
         }
     ;
@@ -128,13 +129,13 @@ public class XslPageIdentifierExtractorTest {
     reader.setContentHandler( stylesheetCapture ) ;
     reader.parse( new InputSource(
         new StringReader( FileUtils.readFileToString( stylesheetFile ) ) ) ) ;
-    final Document stylesheetDocument = stylesheetDocumentReference[ 0 ] ;
+    final SaxRecorder.Player stylesheetPlayer = stylesheetPlayerReference[ 0 ] ;
 
     LOGGER.info( "Got stylesheet:\n",
-        stylesheetDocument == null ? "null" : stylesheetDocument.asXML() ) ;
+        stylesheetPlayer == null ? "null" : SaxRecorder.asXml( stylesheetPlayer ) ) ;
 
     final PagesExtractor pageIdentifierExtractor = new XslPageIdentifierExtractor(
-        entityResolver, uriResolver, stylesheetDocument ) ;
+        entityResolver, uriResolver, stylesheetPlayer ) ;
 
     final Opus opus = new Opus(
         installer.getTargetDirectory(),

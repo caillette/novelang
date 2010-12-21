@@ -24,11 +24,11 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
 import org.apache.commons.io.output.NullOutputStream;
-import org.apache.xalan.transformer.TransformerImpl;
 import org.dom4j.Document;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.PageIdentifier;
+import org.novelang.outfit.xml.SaxRecorder;
 import org.novelang.outfit.xml.TransformerErrorListener;
 import org.novelang.outfit.xml.XslTransformerFactory;
 import org.novelang.rendering.GenericRenderer;
@@ -48,18 +48,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class XslPageIdentifierExtractor implements PagesExtractor {
 
-  private final Document stylesheetDocument ;
+  private final SaxRecorder.Player stylesheetPlayer;
   private final EntityResolver entityResolver ;
   private final URIResolver uriResolver ;
 
   public XslPageIdentifierExtractor(
       final EntityResolver entityResolver,
       final URIResolver uriResolver,
-      final Document stylesheetDocument
+      final SaxRecorder.Player stylesheetPlayer
   ) {
     this.entityResolver = checkNotNull( entityResolver ) ;
     this.uriResolver = checkNotNull( uriResolver ) ;
-    this.stylesheetDocument = stylesheetDocument ;
+    this.stylesheetPlayer = stylesheetPlayer ;
   }
 
 
@@ -70,14 +70,14 @@ public class XslPageIdentifierExtractor implements PagesExtractor {
       throws Exception
   {
 
-    if( stylesheetDocument == null ) {
+    if( stylesheetPlayer == null ) {
       return PagesExtractor.EMPTY_MAP ;
     }
 
     final TransformerErrorListener transformerErrorListener = new TransformerErrorListener() ;
     
-    final XslTransformerFactory xslTransformerFactory = new XslTransformerFactory.FromDom4jDocument(
-        stylesheetDocument,
+    final XslTransformerFactory xslTransformerFactory = new XslTransformerFactory.FromPlayer(
+        stylesheetPlayer,
         entityResolver,
         uriResolver,
         transformerErrorListener

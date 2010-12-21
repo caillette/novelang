@@ -16,7 +16,16 @@
  */
 package org.novelang.outfit.xml;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import com.google.common.collect.ImmutableList;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXContentHandler;
+import org.dom4j.io.XMLWriter;
+import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -82,6 +91,16 @@ public final class SaxRecorder extends ContentHandlerAdapter {
     }
   }
 
+  public static String asXml( final Player player ) throws SAXException, IOException {
+    final SAXContentHandler saxContentHandler = new SAXContentHandler() ;
+    player.playOn( saxContentHandler ) ;
+    final StringWriter stringWriter = new StringWriter() ;
+    new XMLWriter( stringWriter , OutputFormat.createPrettyPrint() )
+        .write( saxContentHandler.getDocument() ) ;
+    return stringWriter.toString() ;
+  }
+
+
 
 // ==============
 // ContentHandler
@@ -89,7 +108,7 @@ public final class SaxRecorder extends ContentHandlerAdapter {
 
 
   @Override
-  public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {
+  public void startPrefixMapping( final String prefix, final String uri ) {
     add( new Event( getLocationRecord() ) {
       @Override
       public void replay( final ContentHandler target ) throws SAXException {

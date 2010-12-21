@@ -18,32 +18,26 @@ package org.novelang.outfit.xml;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.xml.SaxRecorder.LocationRecord;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests for {@link SaxRecorder}.
@@ -63,7 +57,8 @@ public class SaxRecorderTest {
     final ContentHandlerAdapter target = mock( ContentHandlerAdapter.class ) ;
     final LocationGrabber locationGrabber = installLocationGrabber( target ) ;
 
-    recorder.getPlayer().playOn( target ) ;
+    final SaxRecorder.Player player = recorder.getPlayer() ;
+    player.playOn( target ) ;
 
     final Iterator< LocationRecord > locations = locationGrabber.getLocationsIterator() ;
 
@@ -119,11 +114,15 @@ public class SaxRecorderTest {
     assertThat( locations.next() ).isEqualTo( new LocationRecord( 6, 1 ) ) ;
 
     assertThat( locations.hasNext() ).isFalse() ;
+
+    LOGGER.info( "Got: \n", SaxRecorder.asXml( player ) ) ;
   }
 
 // =======
 // Fixture
 // =======
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( SaxRecorderTest.class ) ;
 
   private static final String BREAK = "\n" ;
   private static final String XML =
