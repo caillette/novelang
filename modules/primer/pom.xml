@@ -64,6 +64,15 @@
       <artifactId>${lib.antlr-runtime.artifactid}</artifactId>
       <version>${lib.antlr.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>${lib.mockito.groupId}</groupId>
+      <artifactId>${lib.mockito.artifactId}</artifactId>
+      <version>${lib.mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    
     
 
   </dependencies>

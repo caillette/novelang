@@ -44,7 +44,7 @@ public class ContentHandlerAdapter implements ContentHandler {
   protected void afterDocumentLocatorSet() { }
 
   /**
-   * Convenience implementation.
+   * Convenience implementation for tests.
    *
    * @return the same value as for last call of {@link #setDocumentLocator(org.xml.sax.Locator)},
    *        or null.

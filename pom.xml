@@ -213,6 +213,10 @@
     <lib.google-guava.artifactId>guava</lib.google-guava.artifactId>
     <lib.google-guava.version>r07</lib.google-guava.version>
 
+    <lib.mockito.groupId>org.mockito</lib.mockito.groupId>
+    <lib.mockito.artifactId>mockito-core</lib.mockito.artifactId>
+    <lib.mockito.version>1.8.1</lib.mockito.version>
+
     <lib.jcraft-java-secure-channel.groupId>com.jcraft</lib.jcraft-java-secure-channel.groupId>
     <lib.jcraft-java-secure-channel.artifactId>jsch</lib.jcraft-java-secure-channel.artifactId>
     <lib.jcraft-java-secure-channel.version>0.1.42</lib.jcraft-java-secure-channel.version>

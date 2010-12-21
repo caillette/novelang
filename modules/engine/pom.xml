@@ -103,6 +103,13 @@
     </dependency>
 
     <dependency>
+      <groupId>${lib.mockito.groupId}</groupId>
+      <artifactId>${lib.mockito.artifactId}</artifactId>
+      <version>${lib.mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>${lib.dom4j.groupId}</groupId>
       <artifactId>${lib.dom4j.artifactid}</artifactId>
       <version>${lib.dom4j.version}</version>
