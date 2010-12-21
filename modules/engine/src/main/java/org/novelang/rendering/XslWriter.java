@@ -324,18 +324,19 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
   }
 
   private void logLastParsedStylesheet() {
-    if( lastParsedStylesheet != null ) {
-
-      final StringWriter stringWriter = new StringWriter() ;
-      final XMLWriter writer = new XMLWriter( stringWriter, OutputFormat.createPrettyPrint() ) ;
+    final String xml ;
+    if( lastParsedStylesheet == null ) {
+      xml = null ;
+    } else {
       try {
-        writer.write( lastParsedStylesheet ) ;
+        xml = SaxRecorder.asXml( lastParsedStylesheet ) ;
+      } catch( SAXException e ) {
+        throw new RuntimeException( e ) ;
       } catch( IOException e ) {
         throw new RuntimeException( e ) ;
       }
-
-      LOGGER.debug( "Parsed nested stylesheet: ", stringWriter.toString() ) ;
     }
+    LOGGER.debug( "Parsed nested stylesheet: ", xml ) ;
   }
 
 

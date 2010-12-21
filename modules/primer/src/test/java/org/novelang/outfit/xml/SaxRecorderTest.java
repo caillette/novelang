@@ -102,35 +102,33 @@ public class SaxRecorderTest {
         "", "child", "child",
         new ImmutableAttributes.Builder().add( "", "a", "a", "CDATA", "value" ).build()
     ) ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 4, 20 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new LocationRecord( 4, 21 ) ) ;
 
     verify( target ).endElement( "", "child", "child" ) ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 4, 20 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new LocationRecord( 4, 21 ) ) ;
 
     verify( target ).endElement( "", "root", "root" ) ;
     assertThat( locations.next() ).isEqualTo( new LocationRecord( 5, 8 ) ) ;
 
     verify( target ).endDocument() ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 6, 1 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new LocationRecord( 5, 8 ) ) ;
 
     assertThat( locations.hasNext() ).isFalse() ;
 
-    LOGGER.info( "Got: \n", SaxRecorder.asXml( player ) ) ;
+    assertThat( SaxRecorder.asXml( player ) ).isEqualTo( XML ) ;
   }
 
 // =======
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( SaxRecorderTest.class ) ;
-
   private static final String BREAK = "\n" ;
   private static final String XML =
-      "<?xml version=\"1.0\" ?>" + BREAK  // 1
-    + "<root>" + BREAK                    // 2
-    + "text" + BREAK                      // 3
-    + "<child a=\"value\" />" + BREAK     // 4
-    + "</root>" + BREAK                   // 5
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + BREAK  // 1
+    + "<root>" + BREAK                                      // 2
+    + " text " + BREAK                                      // 3
+    + "  <child a=\"value\"/>" + BREAK                      // 4
+    + "</root>"                                             // 5
   ;
 
 

@@ -20,12 +20,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import com.google.common.collect.ImmutableList;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXContentHandler;
 import org.dom4j.io.XMLWriter;
-import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -95,7 +91,9 @@ public final class SaxRecorder extends ContentHandlerAdapter {
     final SAXContentHandler saxContentHandler = new SAXContentHandler() ;
     player.playOn( saxContentHandler ) ;
     final StringWriter stringWriter = new StringWriter() ;
-    new XMLWriter( stringWriter , OutputFormat.createPrettyPrint() )
+
+    // Don't pretty print, would mess original whitespaces.
+    new XMLWriter( stringWriter/*, OutputFormat.createPrettyPrint()*/ )
         .write( saxContentHandler.getDocument() ) ;
     return stringWriter.toString() ;
   }
@@ -272,12 +270,16 @@ public final class SaxRecorder extends ContentHandlerAdapter {
     public static final LocationRecord NULL = new LocationRecord( null, null, -1, -1 ) ;
 
     public static LocationRecord create( final Locator locator ) {
-      return new LocationRecord(
-          locator.getPublicId(),
-          locator.getSystemId(),
-          locator.getLineNumber(),
-          locator.getColumnNumber()
-      ) ;
+      if( locator == null ) {
+        return NULL ;
+      } else {
+        return new LocationRecord(
+            locator.getPublicId(),
+            locator.getSystemId(),
+            locator.getLineNumber(),
+            locator.getColumnNumber()
+        ) ;
+      }
     }
 
     @Override
