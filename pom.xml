@@ -186,6 +186,7 @@
 
     <lib.xalan.groupId>xalan</lib.xalan.groupId>
     <lib.xalan.artifactid>xalan</lib.xalan.artifactid>
+    <!-- Beware of the hack that needed to patch TransformerImpl class. -->
     <lib.xalan.version>2.7.1</lib.xalan.version>
 
     <lib.xerces.groupId>xerces</lib.xerces.groupId>
