@@ -38,6 +38,7 @@
 
   <xsl:output method="xml" />
 
+<!--
   <xslmeta:multipage>
 
     <xsl:template match="/" >
@@ -56,6 +57,7 @@
     </xsl:template>
 
   </xslmeta:multipage>
+-->
 
 
   <xsl:template match="/" >

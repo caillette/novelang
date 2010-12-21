@@ -17,7 +17,7 @@
   <xsl:import href="default-novella.xsl" />
   <xsl:import href="shared.xsl" />
   
-  <xsl:output method="text" omit-xml-declaration="true" standalone="true" />
+  <xsl:output method="text" omit-xml-declaration="yes" standalone="yes" />
 
 
   <xsl:template name="metadata-header" />
