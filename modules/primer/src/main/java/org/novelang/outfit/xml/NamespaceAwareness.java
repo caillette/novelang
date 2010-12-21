@@ -24,8 +24,11 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * Base class for implementing a SAX {@code ContentHandler}, with a dedicated feature
- * for detecting if an element is in a given namespace (set as a constructor parameter).
+ * Logic for detecting if an XML element is in a given namespace (set as a constructor parameter).
+ * Its main job is to remember namespace mappings.
+ * <p> 
+ * This class is useful when implementing a SAX {@code ContentHandler} which expects to react upon
+ * some element of a given namespace.
  *
  * @author Laurent Caillette
  */

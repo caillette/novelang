@@ -26,7 +26,7 @@ import org.novelang.outfit.CompositeException;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Log all errors as they come and keep them for rethrowing.
+ * Logs all errors as they come and keeps them for rethrowing.
  *
  * @author Laurent Caillette
  */

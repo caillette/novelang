@@ -40,7 +40,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Applies an XSL stylesheet.
+ * Loads an XSL stylesheet (includes parsing) from various sources.
  *
  * @author Laurent Caillette
  */
