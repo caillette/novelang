@@ -143,6 +143,9 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
       final String localName,
       final String qName
   ) throws SAXException {
+    // Remain symmetrical with startElement, evaluate this before changing documentBuilder.
+    final boolean wasInsideNestedStylesheet = insideNestedStylesheet() ;
+
     if( documentBuilder != null ) {
       if( isNestedStylesheetRootElement( uri, localName ) ) {
         documentBuilder.endElement(
@@ -159,7 +162,7 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
         documentBuilder = null ;
       }
     }
-    if( ! insideNestedStylesheet() ) {
+    if( !wasInsideNestedStylesheet ) {
       super.endElement( uri, localName, qName ) ;
     }
   }

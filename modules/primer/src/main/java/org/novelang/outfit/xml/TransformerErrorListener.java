@@ -64,7 +64,7 @@ public class TransformerErrorListener implements ErrorListener {
   public void flush() throws TransformerMultiException {
     final ImmutableList< Exception > list = exceptions.build() ;
     if( ! list.isEmpty() ) {
-      throw new TransformerMultiException( "Problem(s) hit when procssing stylesheet", list ) ;
+      throw new TransformerMultiException( "Problem(s) hit when processing stylesheet", list ) ;
     }
   }
 }

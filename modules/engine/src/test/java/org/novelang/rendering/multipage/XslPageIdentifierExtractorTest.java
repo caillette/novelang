@@ -40,6 +40,7 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
+import org.novelang.outfit.xml.TransformerMultiException;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 import org.xml.sax.EntityResolver;
@@ -69,8 +70,13 @@ public class XslPageIdentifierExtractorTest {
     ) ;
   }
 
-  @Test
-  public void extractPageIdentifiersFromHazardousContent() throws Exception {
+  /**
+   * The {@link ResourcesForTests.Multipage#MULTIPAGE_XSL} use level title as it is,
+   * so it may produce an invalid {@link PageIdentifier}. This test guarantees the
+   * exception makes its way out.
+   */
+  @Test( expected = TransformerMultiException.class )
+  public void rethrowExceptionFromXslTransformer() throws Exception {
     verify(
         ResourcesForTests.Multipage.MULTIPAGE_HAZARDOUS_NOVELLA,
         ImmutableMap.of(

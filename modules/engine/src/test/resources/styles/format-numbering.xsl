@@ -93,7 +93,7 @@
               $timestamp=<xsl:value-of select="nlx:formatDateTime( $timestamp, 'yyyy-MM-dd kk:mm') " />
             </fo:block>
             <fo:block>
-              $timestamp as hex=<xsl:value-of select="nlx:formatDateTime( $timestamp, 'HEX')" />
+              $timestamp as hex=<xsl:value-of select="nlx:formatDateTime( $timestamp, 'BASE36')" />
             </fo:block>
 
 
