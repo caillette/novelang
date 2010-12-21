@@ -57,14 +57,15 @@ public class TransformerErrorListener implements ErrorListener {
 
   @Override
   public void fatalError( final TransformerException e ) throws TransformerException {
-    logger.error( e.getMessageAndLocation(), "Fatal" ) ;
+    logger.error( "Fatal !!! ", e.getMessageAndLocation() ) ;
     exceptions.add( e ) ;
   }
 
   public void flush() throws TransformerMultiException {
     final ImmutableList< Exception > list = exceptions.build() ;
     if( ! list.isEmpty() ) {
-      throw new TransformerMultiException( "Problem(s) hit when processing stylesheet", list ) ;
+      throw new TransformerMultiException(
+          "Problem" + ( list.size() > 1 ? "s" : "" ) + " hit when processing stylesheet", list ) ;
     }
   }
 }

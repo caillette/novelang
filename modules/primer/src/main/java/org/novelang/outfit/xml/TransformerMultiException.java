@@ -17,7 +17,10 @@
 package org.novelang.outfit.xml;
 
 import com.google.common.collect.ImmutableList;
+import javax.xml.transform.SourceLocator;
+import javax.xml.transform.TransformerException;
 import org.novelang.outfit.CompositeException;
+import org.xml.sax.SAXException;
 
 /**
  * Thrown by {@link TransformerErrorListener}.
@@ -30,6 +33,25 @@ public class TransformerMultiException extends CompositeException {
       final String message,
       final ImmutableList< Exception > exceptions
   ) {
-    super( message, exceptions ) ;
+    super( createMessageWithSources( message, exceptions ), exceptions ) ;
+  }
+
+  private static String createMessageWithSources(
+      final String originalMessage,
+      final ImmutableList< Exception > exceptions
+  ) {
+    final StringBuilder messageBuilder = new StringBuilder( originalMessage ) ;
+    for( final Exception exception : exceptions ) {
+      if( exception instanceof TransformerException ) {
+        final SourceLocator sourceLocator = ( ( TransformerException ) exception ).getLocator() ;
+        if( sourceLocator != null ) {
+          messageBuilder.append( "\n" ) ;
+          messageBuilder.append( ImmutableSourceLocator.asSingleLineString( sourceLocator ) ) ;
+          messageBuilder.append( " - " ) ;
+          messageBuilder.append( exception.getMessage() ) ;
+        }
+      }
+    }
+    return messageBuilder.toString() ;
   }
 }

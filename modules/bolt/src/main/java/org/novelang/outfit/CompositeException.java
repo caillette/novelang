@@ -34,16 +34,8 @@ public class CompositeException extends Exception {
   private final ImmutableList< Exception > exceptions ;
 
   public CompositeException( final String message, final ImmutableList< Exception > exceptions ) {
-    super( buildMessage( message, exceptions ) ) ;
+    super( message ) ;
     this.exceptions = checkNotNull( exceptions ) ;
-  }
-
-  private static String buildMessage(
-      final String message,
-      final ImmutableList< Exception > exceptions
-  ) {
-    return message + " - Got " + exceptions.size() +
-        " exception" + ( exceptions.size() > 1 ? "s" : "" )  ;
   }
 
   @Override

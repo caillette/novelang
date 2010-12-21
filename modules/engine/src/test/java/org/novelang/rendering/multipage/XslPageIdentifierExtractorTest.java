@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableSet;
 import javax.xml.transform.URIResolver;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
@@ -78,13 +79,20 @@ public class XslPageIdentifierExtractorTest {
    */
   @Test( expected = TransformerMultiException.class )
   public void rethrowExceptionFromXslTransformer() throws Exception {
-    verify(
-        ResourcesForTests.Multipage.MULTIPAGE_HAZARDOUS_NOVELLA,
-        ImmutableMap.of(
-            new PageIdentifier( "Level-0" ), "/opus/level[1]",
-            new PageIdentifier( "Level-1" ), "/opus/level[2]"
-        )
-    ) ;
+    try {
+      verify(
+          ResourcesForTests.Multipage.MULTIPAGE_HAZARDOUS_NOVELLA,
+          ImmutableMap.of(
+              new PageIdentifier( "Level-0" ), "/opus/level[1]",
+              new PageIdentifier( "Level-1" ), "/opus/level[2]"
+          )
+      ) ;
+    } catch( TransformerMultiException e ) {
+      LOGGER.info( e, "Caught expected exception" ) ;
+      Assertions.assertThat( e.getMessage() ).contains(
+          "line=19; column=16 - java.lang.IllegalArgumentException: Name '' doesn't match " ) ;
+      throw e ;
+    }
   }
 
 // =======

@@ -25,9 +25,6 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.xml.SaxRecorder.LocationRecord;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -60,13 +57,13 @@ public class SaxRecorderTest {
     final SaxRecorder.Player player = recorder.getPlayer() ;
     player.playOn( target ) ;
 
-    final Iterator< LocationRecord > locations = locationGrabber.getLocationsIterator() ;
+    final Iterator<ImmutableSourceLocator> locations = locationGrabber.getLocationsIterator() ;
 
     verify( target ).startDocument() ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 1, 1 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new ImmutableSourceLocator( 1, 1 ) ) ;
 
     verify( target ).startElement( "", "root", "root", new ImmutableAttributes() ) ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 2, 7 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new ImmutableSourceLocator( 2, 7 ) ) ;
 
 
 /*
@@ -102,16 +99,16 @@ public class SaxRecorderTest {
         "", "child", "child",
         new ImmutableAttributes.Builder().add( "", "a", "a", "CDATA", "value" ).build()
     ) ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 4, 21 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new ImmutableSourceLocator( 4, 21 ) ) ;
 
     verify( target ).endElement( "", "child", "child" ) ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 4, 21 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new ImmutableSourceLocator( 4, 21 ) ) ;
 
     verify( target ).endElement( "", "root", "root" ) ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 5, 8 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new ImmutableSourceLocator( 5, 8 ) ) ;
 
     verify( target ).endDocument() ;
-    assertThat( locations.next() ).isEqualTo( new LocationRecord( 5, 8 ) ) ;
+    assertThat( locations.next() ).isEqualTo( new ImmutableSourceLocator( 5, 8 ) ) ;
 
     assertThat( locations.hasNext() ).isFalse() ;
 
@@ -150,21 +147,21 @@ public class SaxRecorderTest {
    */
   private static class LocationGrabber implements Answer {
 
-    private final ImmutableList.Builder< SaxRecorder.LocationRecord > locations =
+    private final ImmutableList.Builder< ImmutableSourceLocator > locations =
         ImmutableList.builder() ;
 
     @Override
     public Object answer( final InvocationOnMock invocation ) throws Throwable {
       final ContentHandlerAdapter locatorOwner = ( ContentHandlerAdapter ) invocation.getMock() ;
-      locations.add( SaxRecorder.LocationRecord.create( locatorOwner.getDocumentLocator() ) ) ;
+      locations.add( ImmutableSourceLocator.create( locatorOwner.getDocumentLocator() ) ) ;
       return null ;
     }
 
-    public ImmutableList< SaxRecorder.LocationRecord > getLocations() {
+    public ImmutableList<ImmutableSourceLocator> getLocations() {
       return locations.build() ;
     }
 
-    public Iterator< SaxRecorder.LocationRecord > getLocationsIterator() {
+    public Iterator<ImmutableSourceLocator> getLocationsIterator() {
       return getLocations().iterator() ;
     }
   }

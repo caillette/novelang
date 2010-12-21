@@ -222,8 +222,8 @@ public final class SaxRecorder extends ContentHandlerAdapter {
 // Recorder objects
 // ================
 
-  private LocationRecord getLocationRecord() {
-    return LocationRecord.create( getDocumentLocator() ) ;
+  private ImmutableSourceLocator getLocationRecord() {
+    return ImmutableSourceLocator.create( getDocumentLocator() ) ;
   }
 
   private final ImmutableList.Builder< Event > events = ImmutableList.builder() ;
@@ -233,129 +233,41 @@ public final class SaxRecorder extends ContentHandlerAdapter {
   }
 
   private static abstract class Event {
-    private final LocationRecord locationRecord ;
+    private final ImmutableSourceLocator locationRecord ;
 
-    protected Event( final LocationRecord locationRecord ) {
+    protected Event( final ImmutableSourceLocator locationRecord ) {
       this.locationRecord = checkNotNull( locationRecord ) ;
     }
 
     public abstract void replay( final ContentHandler target ) throws SAXException;
   }
 
-  protected static final class LocationRecord {
-    private final String publicId ;
-    private final String systemId ;
-    private final int lineNumber ;
-    private final int columnNumber ;
-
-    public LocationRecord(
-        final int lineNumber,
-        final int columnNumber
-    ) {
-      this( null, null, lineNumber, columnNumber ) ;
-    }
-    
-    public LocationRecord(
-        final String publicId,
-        final String systemId,
-        final int lineNumber,
-        final int columnNumber
-    ) {
-      this.publicId = publicId ;
-      this.systemId = systemId ;
-      this.lineNumber = lineNumber ;
-      this.columnNumber = columnNumber ;
-    }
-
-    public static final LocationRecord NULL = new LocationRecord( null, null, -1, -1 ) ;
-
-    public static LocationRecord create( final Locator locator ) {
-      if( locator == null ) {
-        return NULL ;
-      } else {
-        return new LocationRecord(
-            locator.getPublicId(),
-            locator.getSystemId(),
-            locator.getLineNumber(),
-            locator.getColumnNumber()
-        ) ;
-      }
-    }
-
-    @Override
-    public boolean equals( final Object other ) {
-      if( this == other ) {
-        return true ;
-      }
-      if( other == null || getClass() != other.getClass() ) {
-        return false ;
-      }
-
-      final LocationRecord that = ( LocationRecord ) other ;
-
-      if( columnNumber != that.columnNumber ) {
-        return false ;
-      }
-      if( lineNumber != that.lineNumber ) {
-        return false ;
-      }
-      if( publicId != null ? !publicId.equals( that.publicId ) : that.publicId != null ) {
-        return false ;
-      }
-      if( systemId != null ? !systemId.equals( that.systemId ) : that.systemId != null ) {
-        return false ;
-      }
-
-      return true ;
-    }
-
-    @Override
-    public int hashCode() {
-      int result = publicId != null ? publicId.hashCode() : 0 ;
-      result = 31 * result + ( systemId != null ? systemId.hashCode() : 0 ) ;
-      result = 31 * result + lineNumber ;
-      result = 31 * result + columnNumber ;
-      return result ;
-    }
-
-    @Override
-    public String toString() {
-      return getClass().getSimpleName() + "{"
-          + ( publicId == null ? "" : "publicId=" + publicId + "; " )
-          + ( systemId == null ? "" : "systemId=" + systemId + "; " )
-          + "line=" + lineNumber + "; "
-          + "column=" + columnNumber
-          + "}"
-      ;
-    }
-  }
-
   private static class InstrumentedLocator implements Locator {
 
-    private LocationRecord locationRecord = LocationRecord.NULL ;
+    private ImmutableSourceLocator locationRecord = ImmutableSourceLocator.NULL ;
 
-    public void setLocationRecord( final LocationRecord locationRecord ) {
+    public void setLocationRecord( final ImmutableSourceLocator locationRecord ) {
       this.locationRecord = checkNotNull( locationRecord ) ;
     }
 
     @Override
     public String getPublicId() {
-      return locationRecord.publicId ;
+      return locationRecord.getPublicId() ;
     }
 
     @Override
     public String getSystemId() {
-      return locationRecord.systemId ;
+      return locationRecord.getSystemId() ;
     }
 
     @Override
     public int getLineNumber() {
-      return locationRecord.lineNumber ;
+      return locationRecord.getLineNumber() ;
     }
 
     @Override
     public int getColumnNumber() {
-      return locationRecord.columnNumber ;
+      return locationRecord.getColumnNumber() ;
     }
   }
 
