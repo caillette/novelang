@@ -98,7 +98,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
       }
       if( element != null ) {
         stack.push( element, preparePush( element, attributes ) ) ;
-        StackBasedElementReader.LOGGER.debug( ">>> ", stack.getPathAsString() ) ;
+//        StackBasedElementReader.LOGGER.debug( ">>> ", stack.getPathAsString() ) ;
       }
     } catch( BuildupStack.IllegalPathException e ) {
       throwException( e.getMessage() ) ;
@@ -114,7 +114,7 @@ public abstract class StackBasedElementReader< ELEMENT, ATTRIBUTE, BUILDUP >
     if( ! stack.isEmpty() ) {
       final BUILDUP newBuildup = preparePop() ;
       stack.pop() ;
-      StackBasedElementReader.LOGGER.debug( "<<< ", stack.getPathAsString() ) ;
+//      StackBasedElementReader.LOGGER.debug( "<<< ", stack.getPathAsString() ) ;
       if( stack.isEmpty() ) {
         if( newBuildup != null ) {
           throw new IllegalStateException(

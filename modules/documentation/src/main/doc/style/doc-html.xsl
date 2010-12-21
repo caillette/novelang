@@ -38,7 +38,6 @@
 
   <xsl:output method="xml" />
 
-<!--
   <xslmeta:multipage>
 
     <xsl:template match="/" >
@@ -47,7 +46,7 @@
         <xsl:for-each select="/n:opus/n:level">
           <n:page>
             <n:page-identifier>
-              <xsl:value-of select="n:level-title"/>
+              <xsl:value-of select="position()"/>
             </n:page-identifier>
             <n:page-path>/opus/level[<xsl:value-of select="position()"/>]</n:page-path>
           </n:page>
@@ -57,7 +56,6 @@
     </xsl:template>
 
   </xslmeta:multipage>
--->
 
 
   <xsl:template match="/" >
@@ -103,6 +101,19 @@
               <li><a><xsl:attribute name="href" ><xsl:value-of select="$download" /></xsl:attribute>Download</a> </li>
               <xsl:for-each
                   select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
+              >
+                <li>
+                  <xsl:apply-templates/>
+                </li>
+
+              </xsl:for-each>
+            </ul>
+          </div>
+
+          <div id="Chapters" >
+            <ul>
+              <xsl:for-each
+                  select="/n:opus/n:level/n:level-title[ text() != 'LINKS' ]"
               >
                 <li>
                   <xsl:apply-templates/>
