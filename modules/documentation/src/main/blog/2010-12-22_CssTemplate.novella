@@ -17,3 +17,7 @@ has great explainations but stretch isn't good.
 http://www.dynamicdrive.com/style/layouts/item/css-fixed-layout-31-fixed-fixed-fixed/
 zooms correctly. Much simpler. 
 License: unknown.
+
+"Elastic-fluid hybrid"
+http://www.csszengarden.com/?cssfile=http://green-beast.com/portfolio/zen/css/zen.css
+got it right. It scales up and down in with, staying in fixed limits.

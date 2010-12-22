@@ -1,4 +1,6 @@
-== Novelang HTTP daemon miscellaneous features
+== HTTP daemon
+
+Here are some useful command-line and request options.
 
 === The ``--content-root`` option
 

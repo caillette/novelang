@@ -109,7 +109,7 @@
           <div class="innertube">
             <h1><xsl:value-of select="$title" /></h1>
             <!-- Commented as long as it conflicts with top-level titles. -->
-            <!--<div class="chapter" > <h1> <xsl:value-of select="$subtitle" /></h1> </div>-->
+            <h2> <xsl:value-of select="$subtitle" /></h2> 
           </div>
         </div>
 
@@ -121,7 +121,7 @@
           </div>
         </div>
 
-        <div id="leftcolumn">
+        <div id="rightcolumn">
           <div class="innertube">
             <ul>
               <xsl:for-each select="/n:opus/n:level[ n:level-title != 'LINKS' ]">
@@ -146,7 +146,7 @@
         </div>
 
 
-        <div id="rightcolumn">
+        <div id="leftcolumn">
           <div class="innertube">
 
             <div id="Author" >Written by <xsl:apply-templates select="$author" /></div>

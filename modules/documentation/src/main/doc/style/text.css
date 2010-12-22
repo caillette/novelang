@@ -79,7 +79,7 @@ ul.paragraph-as-list {
 }
 
 h1 {
-  color: #700;
+  color: #900;
   font-family: "Gill Sans", Georgia, serif;
   font-size: 1.15em; /* was 1.46em for Georgia */
   line-height: 1.3em;
@@ -91,7 +91,7 @@ h1 {
 }
 
 h2 {
-  color: #700;
+  color: #900;
   font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
   font-size: 0.9em;
   text-align: left;
@@ -202,6 +202,7 @@ pre {
   border-width: 1px 0 1px 0;
   border-color: #6b6b6b;
   border-style: dashed;
+  white-space : pre-wrap ;
 }
 
 code {
@@ -217,7 +218,7 @@ code {
 }
 
 h2 > code {
-  font-family : Courier ;
+  font-family : Courier, monospace ;
   border-style : none ;
   padding: 0 ;
   font-size : 1.2em ;
@@ -266,36 +267,35 @@ td
     background-color: #dcdcdc;
 }
 
-#leftcolumn ul {
-  list-style-type: none ;
-  margin-left: 0 ;
-  font-size: 0.9em ;
-  background-color: transparent ;
-  border-color: transparent ;
+#topsection {
+  font-family : "Gill Sans", Georgia, serif ;
 }
 
-#leftcolumn li {
-  margin-top : 10px ;
-  line-height: 1.1 ;
+#topsection h1 {
+  font-size : 3em ;
+  margin : 50px 0 0 0 ;
+  color : #B00 ;
+  text-transform : none ;
 }
 
+#topsection h2 {
+  font-size : 1em ;
+  margin : 5px 0 0 0 ;
+  color : #B00 ;
+  text-transform : none ;
+}
+
+
+#leftcolumn {
+  text-align : right ;
+}
 
 #leftcolumn a {
-  color: #700;
-  background-color: transparent ;
-  border-style : none ;
-}
-
-#leftcolumn a:hover{
-  color: #D00;
-}
-
-#rightcolumn a {
   border-style : none ;
   color : #900 ;
 }
 
-#rightcolumn ul {
+#leftcolumn ul {
   list-style-type: none ;
   margin-left: 0 ;
   background-color: transparent ;
@@ -305,18 +305,52 @@ td
 }
 
 
-
 #Author {
-  color : #700 ;
+  color : #900 ;
   line-height : 1.1em ;
 }
 
 #Version {
-  margin-top : 10px ;
+  margin-top : 20px ;
+  line-height : 1.1em ;
   color : #696969 ;
+}
+
+#Links {
+  margin-top : 30px ;
+  font-size : 0.8em ;
 }
 
 #Sponsors {
   visibility : hidden ;
   border-style : none ;
 }
+
+
+
+
+#rightcolumn ul {
+  list-style-type: none ;
+  /*font-family : Lucida Sans Unicode, Lucida Grande, sans-serif ;*/
+  font-size: 0.9em ;
+  background-color: transparent ;
+  border-color: transparent ;
+}
+
+#rightcolumn li {
+  margin-top : 12px ;
+  line-height: 1.1 ;
+  letter-spacing : .03em ;   
+}
+
+
+#rightcolumn a {
+  color: #900;
+  background-color: transparent ;
+  border-style : none ;
+}
+
+#rightcolumn a:hover{
+  color: #D00;
+}
+

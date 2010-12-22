@@ -18,7 +18,8 @@ body {
 
 #topsection {
 /*background : #EAEAEA ;*/
-  height : 90px ; /*Height of top section*/
+  height : 130px ; /*Height of top section*/
+  margin-left : 180px ; /* Width of #leftcolumn */
 }
 
 #contentwrapper {
@@ -32,6 +33,8 @@ body {
   margin : -50px 190px 0 180px ;
 }
 
+
+
 #leftcolumn {
   float : left ;
   width : 180px ; /*Width of left column in pixel*/
@@ -40,13 +43,24 @@ body {
   /*background : #C8FC98 ;*/
 }
 
+#leftcolumn .innertube {
+  margin-right : 40px ;
+}
+
 #rightcolumn {
   float : left ;
   width : 190px ; /*Width of right column*/
   margin-left : -190px ; /*Set left margin to -(RightColumnWidth)*/
-  margin-top : 20px ;
+  margin-top : 30px ;
   /*background : #FDE95E ;*/
 }
+
+#rightcolumn .innertube {
+  margin-left : 0 ;
+}
+
+
+
 
 #footer {
   clear : left ;
@@ -61,8 +75,4 @@ body {
   color : #FFFF80 ;
 }
 
-#contentcolumn .innertube {
-  margin: 0 30px 30px ;
-
-}
 

@@ -1,5 +1,7 @@
 
-== Why we need one more word processor
+== Rationale
+
+Or: why do we need one more word processor?
 
 
 === WYSIWIG word processors
@@ -70,7 +72,7 @@ and "Coding Horror"
 http://www.codinghorror.com/blog/archives/001116.html
 .
 
-== Technical considerations
+== Design
 
 Novelang relies on a three-stage processing : source parsing, tree mangling, rendering. 
 
