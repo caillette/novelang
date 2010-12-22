@@ -42,15 +42,15 @@ public class TransformerMultiException extends CompositeException {
   ) {
     final StringBuilder messageBuilder = new StringBuilder( originalMessage ) ;
     for( final Exception exception : exceptions ) {
+      messageBuilder.append( "\n" ) ;
       if( exception instanceof TransformerException ) {
         final SourceLocator sourceLocator = ( ( TransformerException ) exception ).getLocator() ;
         if( sourceLocator != null ) {
-          messageBuilder.append( "\n" ) ;
           messageBuilder.append( ImmutableSourceLocator.asSingleLineString( sourceLocator ) ) ;
           messageBuilder.append( " - " ) ;
-          messageBuilder.append( exception.getMessage() ) ;
         }
       }
+      messageBuilder.append( exception.getMessage() ) ;
     }
     return messageBuilder.toString() ;
   }

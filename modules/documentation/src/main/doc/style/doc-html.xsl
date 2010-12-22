@@ -34,7 +34,11 @@
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
   <xsl:param name="charset"/>
-  
+
+  <xsl:variable name="page-name" select="/n:opus/n:meta/n:page/n:page-identifier" />
+  <xsl:variable name="page-path" select="/n:opus/n:meta/n:page/n:page-path" />
+  <xsl:variable name="page-nodeset" select="dyn:evaluate( $page-path )" />
+  <xsl:variable name="page-id" select="generate-id( $page-nodeset )" />
 
   <xsl:output method="xml" />
 
@@ -47,8 +51,9 @@
           <n:page>
             <n:page-identifier>
               <xsl:value-of select="position()"/>
+              <!--<xsl:value-of select="n:level-title"/>-->
             </n:page-identifier>
-            <n:page-path>/opus/level[<xsl:value-of select="position()"/>]</n:page-path>
+            <n:page-path>/n:opus/n:level[<xsl:value-of select="position()"/>]</n:page-path>
           </n:page>
         </xsl:for-each>
       </n:pages>
@@ -84,8 +89,9 @@
       <div id="Box">
 
         <div id="Title" ><xsl:value-of select="$title" /></div>
-        
-        <div class="chapter" > <h1> <xsl:value-of select="$subtitle" /></h1> </div>
+
+        <!-- Commented as long as it conflicts with top-level titles. -->
+        <!--<div class="chapter" > <h1> <xsl:value-of select="$subtitle" /></h1> </div>-->
 
         <xsl:apply-templates />
 
@@ -112,11 +118,12 @@
 
           <div id="Chapters" >
             <ul>
-              <xsl:for-each
-                  select="/n:opus/n:level/n:level-title[ text() != 'LINKS' ]"
-              >
-                <li>
-                  <xsl:apply-templates/>
+              <xsl:for-each select="/n:opus/n:level[ n:level-title != 'LINKS' ]" >
+              <li>
+                  <a>
+                    <xsl:attribute name="href" >novelang--<xsl:value-of select="position()" />.html</xsl:attribute>
+                    <xsl:apply-templates select="n:level-title" />
+                  </a>
                 </li>
 
               </xsl:for-each>
@@ -147,6 +154,18 @@ pageTracker._trackPageview();
 } catch(err) {}</script>      
     </body>
     </html>
+  </xsl:template>
+
+  <xsl:template match="/n:opus" >
+    <xsl:choose>
+      <xsl:when test="n:meta/n:page/n:page-identifier" >
+        <xsl:apply-templates select="$page-nodeset" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="/n:opus/n:level[ 1 ]" />
+      </xsl:otherwise>
+    </xsl:choose>
+
   </xsl:template>
 
   <xsl:template match="/n:opus/n:level-title" />

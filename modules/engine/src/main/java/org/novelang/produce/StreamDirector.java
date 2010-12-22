@@ -62,13 +62,14 @@ public abstract class StreamDirector {
     } else {
       final ImmutableMap< PageIdentifier,String > pageMap =
           pageIdentifierExtractor.extractPages( renderable.getDocumentTree() ) ;
+      LOGGER.info( "PageMap: ", pageMap ) ;
       if( pageMap.isEmpty() ) {
         feedDefaultPage( renderable, streamFeeder ) ;
       } else {
         if( pageIdentifier == null ) {
           feedDefaultPage( renderable, streamFeeder ) ;
           if( supportsMultipage() ) {
-            LOGGER.debug( "Feeding additional pages: ", pageMap ) ;
+            LOGGER.debug( "Feeding additional page(s)... " ) ;
             for( final PageIdentifier someIdentifier : pageMap.keySet() ) {
               feedPage( renderable, streamFeeder, Page.get( pageMap, someIdentifier ) );
             }

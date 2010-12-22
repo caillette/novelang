@@ -55,6 +55,7 @@ public class SaxConnectorForVerifierTest {
     play( connectorForVerifier, "template", attributes( "match", "t:unknown" ) ) ;
     play( connectorForVerifier, "if", attributes( "test", "t:foo/x:ignore" ) ) ;
     play( connectorForVerifier, "if", attributes( "test", "t:foo/t:baz" ) ) ;
+    play( connectorForVerifier, "variable", attributes( "select", "t:foo/t:baz" ) ) ;
 
     finish( connectorForVerifier ) ;
 
@@ -85,7 +86,7 @@ public class SaxConnectorForVerifierTest {
     connectorForVerifier.startPrefixMapping( "xsl", XmlNamespaces.XSL_NAMESPACE_URI ) ;
   }
 
-  private void play(
+  private static void play(
       final SaxConnectorForVerifier connectorForVerifier,
       final String localName,
       final CustomAttributes attributes
@@ -99,7 +100,7 @@ public class SaxConnectorForVerifierTest {
     connectorForVerifier.endElement( XmlNamespaces.XSL_NAMESPACE_URI, localName, "xsl:" + localName ) ;
   }
 
-  private void finish( final SaxConnectorForVerifier connectorForVerifier ) throws SAXException {
+  private static void finish( final SaxConnectorForVerifier connectorForVerifier ) throws SAXException {
     connectorForVerifier.endPrefixMapping( "xsl" ) ;
     connectorForVerifier.endPrefixMapping( "t" ) ;
     connectorForVerifier.endDocument() ;

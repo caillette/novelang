@@ -2,7 +2,6 @@ mapstylesheet
     html=doc-html.xsl
     pdf=doc-pdf.xsl
 
-insert file:doc-parameters.novella style=parameters
 
 
 insert file:introduction.novella
@@ -35,3 +34,5 @@ insert file:tips.novella
 
 
 insert file:source-characters.novella style=character-escapes
+
+insert file:doc-parameters.novella style=parameters
