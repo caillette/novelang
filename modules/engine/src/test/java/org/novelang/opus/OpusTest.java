@@ -298,7 +298,7 @@ public class OpusTest {
             tree( _META, tree( _WORD_COUNT, "2" ) ),
             tree(
                 _LEVEL,
-                tree( _EXPLICIT_IDENTIFIER, tree( "\\\\IdentifierTwo" ) ),
+                tree( _EXPLICIT_IDENTIFIER, tree( "IdentifierTwo" ) ),
                 tree( _IMPLICIT_TAG, "LevelTwo" ),
                 tree( LEVEL_TITLE, tree( WORD_, "LevelTwo" ) ),
                 tree(
@@ -340,7 +340,7 @@ public class OpusTest {
             ),
             tree(
                 _LEVEL,
-                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\FooAndBar" ) ),
+                tree( _IMPLICIT_IDENTIFIER, tree( "FooAndBar" ) ),
                 tree( _EXPLICIT_TAG, "Bar" ),
                 tree( _EXPLICIT_TAG, "Foo" ),
                 tree( LEVEL_TITLE, tree( WORD_, "Foo" ), tree( WORD_, "and" ), tree( WORD_, "Bar" ) ),
@@ -355,7 +355,7 @@ public class OpusTest {
             ),
             tree(
                 _LEVEL,
-                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\Foo_Bar" ) ),
+                tree( _IMPLICIT_IDENTIFIER, tree( "Foo_Bar" ) ),
                 tree( _PROMOTED_TAG, "Bar" ),
                 tree( _PROMOTED_TAG, "Foo" ),
                 tree(
@@ -399,7 +399,7 @@ public class OpusTest {
             ),
             tree(
                 _LEVEL,
-                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L1" ) ),
+                tree( _IMPLICIT_IDENTIFIER, tree( "L1" ) ),
                 tree( _IMPLICIT_TAG, "L1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L1" ) ),
                 tree(
@@ -441,7 +441,7 @@ public class OpusTest {
             tree( _META, tree( _WORD_COUNT, "4" ) ),
             tree(
                 _LEVEL,
-                tree( _COLLIDING_EXPLICIT_IDENTIFIER, "\\\\Collider" ),
+                tree( _COLLIDING_EXPLICIT_IDENTIFIER, "Collider" ),
                 tree( _IMPLICIT_TAG, "L0" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L0" ) ),
                 tree(
@@ -451,7 +451,7 @@ public class OpusTest {
             ),
             tree(
                 _LEVEL,
-                tree( _COLLIDING_EXPLICIT_IDENTIFIER, "\\\\Collider" ),
+                tree( _COLLIDING_EXPLICIT_IDENTIFIER, "Collider" ),
                 tree( _IMPLICIT_TAG, "L1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L1" ) ),
                 tree(
@@ -515,7 +515,7 @@ public class OpusTest {
             tree( _META, tree( _WORD_COUNT, "8" ) ),
             tree(
                 _LEVEL,
-                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0" ) ),
+                tree( _IMPLICIT_IDENTIFIER, tree( "L0" ) ),
                 tree( _IMPLICIT_TAG, "L0" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L0" ) ),
                 tree(
@@ -524,7 +524,7 @@ public class OpusTest {
                 ),
                 tree(     
                     _LEVEL,
-                    tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0-0" ) ),
+                    tree( _IMPLICIT_IDENTIFIER, tree( "L0-0" ) ),
                     tree( _IMPLICIT_TAG, "L0-0" ),
                     tree( LEVEL_TITLE, tree( WORD_, "L0-0" ) ),
                     tree(
@@ -534,7 +534,7 @@ public class OpusTest {
                 ),
                 tree(     
                     _LEVEL,
-                    tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L0-1" ) ),
+                    tree( _IMPLICIT_IDENTIFIER, tree( "L0-1" ) ),
                     tree( _IMPLICIT_TAG, "L0-1" ),
                     tree( LEVEL_TITLE, tree( WORD_, "L0-1" ) ),
                     tree(
@@ -546,7 +546,7 @@ public class OpusTest {
             ),
             tree(
                 _LEVEL,
-                tree( _IMPLICIT_IDENTIFIER, tree( "\\\\L1" ) ),
+                tree( _IMPLICIT_IDENTIFIER, tree( "L1" ) ),
                 tree( _IMPLICIT_TAG, "L1" ),
                 tree( LEVEL_TITLE, tree( WORD_, "L1" ) ),
                 tree(

@@ -117,14 +117,14 @@ public class NovellaTest {
         ),        
         tree( 
             _LEVEL,
-            tree( _IMPLICIT_IDENTIFIER, "\\\\Section1novella" ),
+            tree( _IMPLICIT_IDENTIFIER, "Section1novella" ),
             tree( _IMPLICIT_TAG, "Section1novella" ),
             tree( LEVEL_TITLE, tree( WORD_, "Section1novella" ) ),
             tree( PARAGRAPH_REGULAR, tree( WORD_, "p00" ), tree( WORD_, "w001" ) )
         ),
         tree( 
             _LEVEL,
-            tree( _IMPLICIT_IDENTIFIER, "\\\\section1W11" ),
+            tree( _IMPLICIT_IDENTIFIER, "section1W11" ),
             tree( _IMPLICIT_TAG, "section1W11" ),
             tree( LEVEL_TITLE, tree( WORD_, "section1" ), tree( WORD_, "w11" ) ),
             tree(

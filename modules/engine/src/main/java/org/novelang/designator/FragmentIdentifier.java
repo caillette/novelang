@@ -16,7 +16,7 @@ public class FragmentIdentifier {
 
 
   public FragmentIdentifier( final String stringRepresentation ) {
-    this.stringRepresentation = "\\\\" + checkNotNull( stringRepresentation ) ;
+    this.stringRepresentation = checkNotNull( stringRepresentation ) ;
     checkArgument( ! StringUtils.isBlank( stringRepresentation ) ) ;
   }
 
@@ -36,7 +36,7 @@ public class FragmentIdentifier {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "[" + stringRepresentation + "]" ;
+    return getClass().getSimpleName() + "[\\\\" + stringRepresentation + "]" ;
   }
 
   public String getAbsoluteRepresentation() {

@@ -54,7 +54,7 @@ public class DesignatorInterpreterEnrichmentTest {
             NOVELLA,
             tree(
                 _LEVEL,
-                tree( _EXPLICIT_IDENTIFIER, "\\\\L0" )
+                tree( _EXPLICIT_IDENTIFIER, "L0" )
             )                
         ),
         partTree,
@@ -100,11 +100,11 @@ public class DesignatorInterpreterEnrichmentTest {
             NOVELLA,
             tree(
                 _LEVEL,
-                tree( _EXPLICIT_IDENTIFIER, "\\\\L0" )
+                tree( _EXPLICIT_IDENTIFIER, "L0" )
             ),
             tree(
                 _LEVEL,
-                tree( _EXPLICIT_IDENTIFIER, "\\\\L1" )
+                tree( _EXPLICIT_IDENTIFIER, "L1" )
             )
         ),
         partTree,
@@ -138,7 +138,7 @@ public class DesignatorInterpreterEnrichmentTest {
             NOVELLA,
             tree(
                 _LEVEL,
-                tree( _IMPLICIT_IDENTIFIER, "\\\\L0" )
+                tree( _IMPLICIT_IDENTIFIER, "L0" )
             )                
         ),
         partTree,

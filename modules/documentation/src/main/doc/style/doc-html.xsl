@@ -30,6 +30,8 @@
 >
   <xsl:import href="default-html.xsl" />
   <xsl:import href="shared.xsl" />
+  <xsl:import href="multipage-identifier.xsl" />
+  
   
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
@@ -44,16 +46,18 @@
 
   <xslmeta:multipage>
 
+    <xsl:import href="multipage-identifier.xsl" />
+
     <xsl:template match="/" >
 
       <n:pages>
-        <xsl:for-each select="/n:opus/n:level">
+        <xsl:for-each select="/n:opus/n:level[ position() > 1 ]">
           <n:page>
             <n:page-identifier>
-              <xsl:value-of select="position()"/>
-              <!--<xsl:value-of select="n:level-title"/>-->
+              <xsl:call-template name="extract-page-identifier" />
             </n:page-identifier>
-            <n:page-path>/n:opus/n:level[<xsl:value-of select="position()"/>]</n:page-path>
+            <n:page-path>/n:opus/n:level[<xsl:value-of select="position()"/>]
+            </n:page-path>
           </n:page>
         </xsl:for-each>
       </n:pages>
@@ -121,7 +125,16 @@
               <xsl:for-each select="/n:opus/n:level[ n:level-title != 'LINKS' ]" >
               <li>
                   <a>
-                    <xsl:attribute name="href" >novelang--<xsl:value-of select="position()" />.html</xsl:attribute>
+                    <xsl:choose>
+                      <xsl:when test="position() > 1" >
+                        <xsl:attribute name="href">
+                          novelang--<xsl:call-template name="extract-page-identifier" />.html
+                        </xsl:attribute>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:attribute name="href">novelang.html</xsl:attribute>
+                      </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:apply-templates select="n:level-title" />
                   </a>
                 </li>
@@ -202,13 +215,17 @@ pageTracker._trackPageview();
     </ul>
   </xsl:template>
   
-  
+
+
+
   <!--This doesn't work when put in shared.xsl .-->
   <xsl:template match="*[n:style='parameters']" />
 
 
   <!-- Override default, we don't want descriptors to appear. -->
   <xsl:template name="descriptor-body" />
+
+
 
 
 </xsl:stylesheet>
