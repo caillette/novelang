@@ -89,8 +89,12 @@
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
 
         <!-- Ugly: support both relative (http://.../doc/) and absolute stylesheet (batch). --> 
-        <link rel="stylesheet" type="text/css" href="/screen.css" />
-        <link rel="stylesheet" type="text/css" href="screen.css" />
+        <link rel="stylesheet" type="text/css" href="/reset.css" />
+        <link rel="stylesheet" type="text/css" href="reset.css" />
+        <link rel="stylesheet" type="text/css" href="/layout.css" />
+        <link rel="stylesheet" type="text/css" href="layout.css" />
+        <link rel="stylesheet" type="text/css" href="/text.css" />
+        <link rel="stylesheet" type="text/css" href="text.css" />
 
         <link rel="alternate" type="application/atom+xml" title="News feed (Atom)" >
         <xsl:attribute name="href" ><xsl:value-of select="$newsFeed" /></xsl:attribute>
@@ -99,70 +103,83 @@
 
       </head>
     <body>
-      <div id="Box">
+      <div id="maincontainer">
 
-        <div id="Title" ><xsl:value-of select="$title" /></div>
-
-        <!-- Commented as long as it conflicts with top-level titles. -->
-        <!--<div class="chapter" > <h1> <xsl:value-of select="$subtitle" /></h1> </div>-->
-        
-        <xsl:apply-templates />
-
-
-        <div id="Sidebar">
-
-
-          <div id="Author" >Written by <xsl:apply-templates select="$author" /></div>
-          <div id="Version" >version <xsl:value-of select="$version" /></div>
-
-          <div id="Links" >
-            <ul>
-              <li><a><xsl:attribute name="href" ><xsl:value-of select="$download" /></xsl:attribute>Download</a> </li>
-              <xsl:for-each
-                  select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
-              >
-                <li>
-                  <xsl:apply-templates/>
-                </li>
-
-              </xsl:for-each>
-            </ul>
+        <div id="topsection">
+          <div class="innertube">
+            <h1><xsl:value-of select="$title" /></h1>
+            <!-- Commented as long as it conflicts with top-level titles. -->
+            <!--<div class="chapter" > <h1> <xsl:value-of select="$subtitle" /></h1> </div>-->
           </div>
+        </div>
 
-          <div id="Chapters" >
+        <div id="contentwrapper">
+          <div id="contentcolumn">
+            <div class="innertube">
+              <xsl:apply-templates />
+            </div>
+          </div>
+        </div>
+
+        <div id="leftcolumn">
+          <div class="innertube">
             <ul>
-              <xsl:for-each select="/n:opus/n:level[ n:level-title != 'LINKS' ]" >
-              <li>
+              <xsl:for-each select="/n:opus/n:level[ n:level-title != 'LINKS' ]">
+                <li>
                   <a>
                     <xsl:choose>
-                      <xsl:when test="position() > 1" >
+                      <xsl:when test="position() > 1">
                         <xsl:attribute name="href">
-                          novelang--<xsl:call-template name="extract-page-identifier" />.html
+                          novelang--<xsl:call-template name="extract-page-identifier"/>.html
                         </xsl:attribute>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:attribute name="href">novelang.html</xsl:attribute>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:apply-templates select="n:level-title" />
+                    <xsl:apply-templates select="n:level-title" mode="navigation"/>
                   </a>
                 </li>
-
               </xsl:for-each>
             </ul>
           </div>
+        </div>
 
 
-          <div id="Sponsors" >
-            <a href="http://sourceforge.net">
-              <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=2"
-                   width="125" height="37" border="0" alt="SourceForge.net Logo" />
-            </a>
+        <div id="rightcolumn">
+          <div class="innertube">
 
-          </div> <!-- Sponsors -->
+            <div id="Author" >Written by <xsl:apply-templates select="$author" /></div>
+            <div id="Version" >version <xsl:value-of select="$version" /></div>
 
-        </div> <!-- Sidebar -->
-      </div> <!-- Box -->
+            <div id="Links" >
+              <ul>
+                <li><a><xsl:attribute name="href" ><xsl:value-of select="$download" /></xsl:attribute>Download</a> </li>
+                <xsl:for-each
+                    select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
+                >
+                  <li>
+                    <xsl:apply-templates/>
+                  </li>
+
+                </xsl:for-each>
+              </ul>
+            </div>
+
+            <div id="Sponsors" >
+              <a href="http://sourceforge.net">
+                <img src="http://sflogo.sourceforge.net/sflogo.php?group_id=227480&amp;type=9"
+                     border="0" alt="SourceForge.net Logo" />
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+
+
 
 
 <script type="text/javascript">
@@ -192,20 +209,12 @@ pageTracker._trackPageview();
 
   <xsl:template match="/n:opus/n:level-title" />
 
-  <xsl:template match="//n:level" >
-    <div class="chapter" >
-      <xsl:apply-templates />
-    </div>
+  <xsl:template match="n:level/n:level-title" mode="navigation" >
+    <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="//n:level/n:level-title" >
     <h1><xsl:apply-templates /></h1>
-  </xsl:template>
-
-  <xsl:template match="//n:level/n:level" >
-    <div class="section" >
-      <xsl:apply-templates />
-    </div>
   </xsl:template>
 
   <xsl:template match="//n:level/n:level/n:level-title" >

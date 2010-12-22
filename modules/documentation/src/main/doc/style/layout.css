@@ -1,0 +1,68 @@
+/*
+Taken from:
+http://www.dynamicdrive.com/style/layouts/item/css-fixed-layout-31-fixed-fixed-fixed
+*/
+
+@charset "utf-8" ;
+
+body {
+  margin : 0 ;
+  padding : 0 ;
+  line-height : 1.5em ;
+}
+
+#maincontainer {
+  width : 840px ; /*Width of main container*/
+  margin : 0 auto ; /*Center container on page*/
+}
+
+#topsection {
+/*background : #EAEAEA ;*/
+  height : 90px ; /*Height of top section*/
+}
+
+#contentwrapper {
+  float : left ;
+  width : 100% ;
+}
+
+#contentcolumn {
+  /* Margins for content column. Should be "0 RightColumnWidth 0 LeftColumnWidth". */
+  /* There is a hack with top margin: it corresponds to the top margin of a h1. */
+  margin : -50px 190px 0 180px ;
+}
+
+#leftcolumn {
+  float : left ;
+  width : 180px ; /*Width of left column in pixel*/
+  margin-left : -840px ; /*Set margin to that of -(MainContainerWidth)*/
+  margin-top : 20px ;
+  /*background : #C8FC98 ;*/
+}
+
+#rightcolumn {
+  float : left ;
+  width : 190px ; /*Width of right column*/
+  margin-left : -190px ; /*Set left margin to -(RightColumnWidth)*/
+  margin-top : 20px ;
+  /*background : #FDE95E ;*/
+}
+
+#footer {
+  clear : left ;
+  width : 100% ;
+  background : black ;
+  color : #FFF ;
+  text-align : center ;
+  padding : 4px 0 ;
+}
+
+#footer a {
+  color : #FFFF80 ;
+}
+
+#contentcolumn .innertube {
+  margin: 0 30px 30px ;
+
+}
+

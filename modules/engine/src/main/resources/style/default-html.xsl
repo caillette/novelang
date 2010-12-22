@@ -51,6 +51,7 @@
 
     <html> 
       <head>
+        <link rel="stylesheet" type="text/css" href="/reset.css" />
         <link rel="stylesheet" type="text/css" href="/display.css" />
         <link rel="stylesheet" type="text/css" href="/custom.css" />
         <link rel="stylesheet" type="text/css" href="/jquery-theme/jquery-ui-1_7_2_custom.css" />
