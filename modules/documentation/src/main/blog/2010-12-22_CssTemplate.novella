@@ -1,0 +1,19 @@
+== Some 3-column CSS layouts
+
+"Three Column Stretch"
+http://www.positioniseverything.net/thr.col.stretch.html 
+: strech isn't that good, makes too long lines for main text.
+
+"Piefecta -- A superb 3-col tableless layout -- long right col"
+http://www.positioniseverything.net/piefecta-rigid-right.html 
+looks good on Safari and zooms well. Tells it deals with various browser bugs. Probably the finest piece of engineering but too many fixes are making it unreadable. We don't care about supporting IE6.
+License: unknown.
+
+"The Holy Grail 3 column Liquid Layout"
+http://matthewjamestaylor.com/blog/ultimate-3-column-holy-grail-ems.htm
+has great explainations but stretch isn't good.
+
+"CSS Fixed Layout `#3.1` (Fixed-Fixed-Fixed)"
+http://www.dynamicdrive.com/style/layouts/item/css-fixed-layout-31-fixed-fixed-fixed/
+zooms correctly. Much simpler. 
+License: unknown.
