@@ -51,14 +51,20 @@
     <xsl:template match="/" >
 
       <n:pages>
-        <xsl:for-each select="/n:opus/n:level[ position() > 1 ]">
-          <n:page>
-            <n:page-identifier>
-              <xsl:call-template name="extract-page-identifier" />
-            </n:page-identifier>
-            <n:page-path>/n:opus/n:level[<xsl:value-of select="position()"/>]
-            </n:page-path>
-          </n:page>
+        <xsl:for-each select="/n:opus/n:level">
+          <!--
+              This test makes sense because chosing n:level[ position() > 1 ]
+               introduces a shift in the elements.
+          -->
+          <xsl:if test="position() > 1" > 
+            <n:page>
+              <n:page-identifier>
+                <xsl:call-template name="extract-page-identifier"/>
+              </n:page-identifier>
+              <n:page-path>/n:opus/n:level[<xsl:value-of select="position()"/>]
+              </n:page-path>
+            </n:page>
+          </xsl:if>
         </xsl:for-each>
       </n:pages>
 
@@ -81,7 +87,10 @@
         <title>Novelang</title>
 
         <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45" />
+
+        <!-- Ugly: support both relative (http://.../doc/) and absolute stylesheet (batch). --> 
         <link rel="stylesheet" type="text/css" href="/screen.css" />
+        <link rel="stylesheet" type="text/css" href="screen.css" />
 
         <link rel="alternate" type="application/atom+xml" title="News feed (Atom)" >
         <xsl:attribute name="href" ><xsl:value-of select="$newsFeed" /></xsl:attribute>
@@ -96,7 +105,7 @@
 
         <!-- Commented as long as it conflicts with top-level titles. -->
         <!--<div class="chapter" > <h1> <xsl:value-of select="$subtitle" /></h1> </div>-->
-
+        
         <xsl:apply-templates />
 
 
