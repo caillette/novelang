@@ -82,7 +82,7 @@ public class LexemeTable {
 
   private static void writeSourceDocument( final PrintWriter writer ) {
 
-    writer.println( "== Characters supported in source documents" ) ;
+    writer.println( "== Supported characters" ) ;
     writer.println() ;
     writer.println( "| Escape name | Alias | Hex | Dec | Preview |" ) ;
 

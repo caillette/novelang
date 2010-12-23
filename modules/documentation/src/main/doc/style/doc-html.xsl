@@ -46,7 +46,7 @@
   <xsl:variable name="page-id" select="generate-id( $page-nodeset )"/>
   <xsl:variable name="page-undefined" select="count( /n:opus/n:meta/n:page ) = 0"/>
 
-  <xsl:output method="xml"/>
+  <xsl:output method="html"/>
 
   <xslmeta:multipage>
 
@@ -114,7 +114,7 @@
 
 
       </head>
-      <body>
+      <body bgcolor="#C0C0C0" >
 
         <div class="colmask threecol">
           <div class="colmid">
@@ -143,24 +143,19 @@
                 </div>
 
                 <div id="Links">
-                  <ul>
-                    <li>
-                      <a>
-                        <xsl:attribute name="href">
-                          <xsl:value-of select="$download"/>
-                        </xsl:attribute>
-                        Download
-                      </a>
-                    </li>
-                    <xsl:for-each
-                        select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
-                        >
-                      <li>
-                        <xsl:apply-templates/>
-                      </li>
-
-                    </xsl:for-each>
-                  </ul>
+                  <p>
+                    <a>
+                      <xsl:attribute name="href">
+                        <xsl:value-of select="$download"/>
+                      </xsl:attribute>
+                      Download
+                    </a>
+                  </p>
+                  <xsl:for-each
+                      select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
+                  >
+                    <p><xsl:apply-templates/></p>
+                  </xsl:for-each>
                 </div>
 
                 <div id="Sponsors">
@@ -217,8 +212,7 @@
         <script type="text/javascript">
           var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." :
           "http://www.");
-          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js'
-          type='text/javascript'%3E%3C/script%3E"));
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
         </script>
         <script type="text/javascript">
           try {

@@ -54,15 +54,15 @@ body {
 }
 
 .header {
-  height : 6em ; /* Correlated with top-margin of col2 and col3. */
+  height : 5.1em ; /* Correlated with top-margin of col2 and col3. */
 }
 
 .col2 {
-  margin-top : 10em ; /* Affected by header's height and h1's top margin in content. */
+  margin-top : 11.7em ; /* Affected by header's height and h1's top margin in content. */
 }
 
 .col3 {
-  margin-top : 11em ; /* Affected by header's height and h1's top margin in content. */
+  margin-top : 12em ; /* Affected by header's height and h1's top margin in content. */
 }
 
 /* End of LC's hacks */

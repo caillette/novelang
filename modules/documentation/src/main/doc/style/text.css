@@ -19,7 +19,8 @@
 ;
 
 body {
-  font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+  font-family: Verdana, "Bitstream Vera Sans", sans-serif ;
+  font-size : 14px ;
   line-height: 1.8em ;
   color: #222 ;
   background-color: #ccc ;
@@ -78,32 +79,28 @@ ul.paragraph-as-list {
   padding: 0 ;
 }
 
+h1, h2 {
+  font-family: "Gill Sans", Georgia, serif;
+  text-align: left;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin: 3em 0 1.5em 0;
+}
+
 h1 {
   color: #A00;
-  font-family: "Gill Sans", Georgia, serif;
   font-size: 1.3em; /* was 1.46em for Georgia */
   line-height: 1.3em;
   text-align: left;
   letter-spacing: .3em;
-  font-weight: normal;
   margin: 3em 0 1.25em 0;
-  text-transform: uppercase;
 }
 
 h2 {
   color: #A00;
-  font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
   font-size: 1em;
-  text-align: left;
-  font-weight: normal;
   line-height: 1.8em;
   letter-spacing: .5em;
-  margin: 3em 0 1.5em 0;
-  text-transform: uppercase;
-}
-
-h1 + h2 {
-  margin-top: 2em;
 }
 
 h2 + h3 {
@@ -246,25 +243,29 @@ hr {
 }
 
 
-table, td
+table, td, th
 {
-    border-color: maroon;
-    border-style: solid;
+  border: solid maroon ;
 }
 
 table
 {
-    border-width: 0 0 1pt 1pt;
-    border-spacing: 0;
-    border-collapse: collapse;
+    border-width : 0 0 1pt 1pt ;
+    border-spacing : 0 ;
+    border-collapse : collapse ;
 }
 
-td
+td, th {
+  border : solid maroon 1pt ;
+  margin : 0 ;
+  padding : 4pt ;
+  background-color : #d2d2d2 ;
+}
+
+
+th
 {
-    margin: 0;
-    padding: 4pt;
-    border-width: 1pt 1pt 0 0;
-    background-color: #dcdcdc;
+  /*border-bottom-width: 2pt ;*/
 }
 
 .header {
@@ -328,8 +329,10 @@ td
   margin-top : 2em ;
   margin-right : 1em ;
   font-size : 0.9em ;
-  letter-spacing : .5em ;
+  letter-spacing : .3em ;
   line-height : 1.3 ;
+  font-family : "Gill Sans", Georgia, serif ;
+  text-transform : uppercase ;
 }
 
 #Links li {

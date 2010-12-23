@@ -142,10 +142,11 @@
                 -->
 
                 <copy todir="${generatedDocumentsDirectory}" flatten="true">
-                  <fileset dir="${enhancedDocumentSources}" includes="**/*.css" /> 
+                  <fileset dir="${enhancedDocumentSources}" >
+                    <include name="**/*.css" />
+                    <include name="**/*.html" /> <!-- index.html -> novelang.html -->
+                  </fileset>
                 </copy>
-
-                <move file="${generatedDocumentsDirectory}/novelang.html" tofile="${generatedDocumentsDirectory}/index.html" />
 
               </tasks>
             </configuration>
