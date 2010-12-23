@@ -233,7 +233,7 @@
   <groupId>org.novelang</groupId>
   <artifactId>Novelang</artifactId>
   <packaging>pom</packaging>
-  <version>0.53.0</version>
+  <version>SNAPSHOT</version>
   <name>Novelang</name>
   <url>http://novelang.sf.net</url>
 
