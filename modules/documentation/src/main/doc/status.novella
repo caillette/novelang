@@ -1,6 +1,6 @@
 == Status and history
 
-Novelang is stable, with more thant 600 automated non-regression tests.
+Novelang is stable, with more thant 700 automated non-regression tests.
 
 Bug fixing and documentation are first priority. Then come syntax enhancements. 
 Defining a good syntax fitting for most use cases while allowing exceptions is a process 

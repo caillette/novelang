@@ -185,8 +185,11 @@ thead {
 }
 
 ul, ol {
-  padding-left: 1.25em;
-  margin: 0 0 2em 1em;
+  margin: 0 0 2em 0 ;
+}
+
+li {
+  margin-left : 1.5em ;
 }
 
 pre {
@@ -225,13 +228,6 @@ ul {
   list-style-type: square;
 }
 
-ul ul {
-  list-style-type: square;
-}
-
-ul ul ul {
-  list-style-type: square;
-}
 
 hr {
   height: 1px;
@@ -289,6 +285,7 @@ th
 
 .col2 {
   text-align : right ;
+  padding-right : 1.5em ;
 }
 
 .col2 a {
@@ -327,7 +324,6 @@ th
 
 #Links {
   margin-top : 2em ;
-  margin-right : 1em ;
   font-size : 0.9em ;
   letter-spacing : .3em ;
   line-height : 1.3 ;
