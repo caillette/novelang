@@ -279,12 +279,16 @@ ul > ul > ul {
 }
 
 ul.big-list {
-  list-style: circle outside ;
+  list-style: none ;
+  margin-left : 2em ;
 }
 
-ul.big-list > li {
-  list-style: circle outside ;
+ol.big-list {
+  list-style: decimal ;
+  margin-left : 3.4em ;
+  list-style-position:outside;
 }
+
 
 
 ol {
