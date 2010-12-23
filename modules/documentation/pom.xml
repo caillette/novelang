@@ -6,7 +6,7 @@
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
     <artifactId>Novelang</artifactId>
-    <version>SNAPSHOT</version>
+    <version>0.53.0</version>
   </parent>
 
   <artifactId>Novelang-documentation</artifactId>
@@ -142,7 +142,7 @@
                 -->
 
                 <copy todir="${generatedDocumentsDirectory}" flatten="true">
-                  <fileset dir="${enhancedDocumentSources}" >
+                  <fileset dir="${enhancedDocumentSources}">
                     <include name="**/*.css" />
                     <include name="**/*.html" /> <!-- index.html -> novelang.html -->
                   </fileset>
