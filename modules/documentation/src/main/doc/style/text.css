@@ -79,7 +79,7 @@ ul.paragraph-as-list {
 }
 
 h1 {
-  color: #900;
+  color: #A00;
   font-family: "Gill Sans", Georgia, serif;
   font-size: 1.15em; /* was 1.46em for Georgia */
   line-height: 1.3em;
@@ -91,7 +91,7 @@ h1 {
 }
 
 h2 {
-  color: #900;
+  color: #A00;
   font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
   font-size: 0.9em;
   text-align: left;

@@ -23,6 +23,10 @@
       select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='COPYRIGHT-YEAR' ]/n:cell[ 2 ]"
   />
   <xsl:variable
+      name="sf-logo"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='SF-LOGO'        ]/n:cell[ 2 ]"
+  />
+  <xsl:variable
       name="newsFeed"   
       select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='NEWSFEED'       ]/n:cell[ 2 ]"
   />
