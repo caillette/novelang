@@ -265,7 +265,7 @@ td, th {
 
 th
 {
-  /*border-bottom-width: 2pt ;*/
+  font-weight : bold;;
 }
 
 .header {

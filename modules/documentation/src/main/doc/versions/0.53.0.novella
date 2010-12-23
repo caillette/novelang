@@ -1,0 +1,9 @@
+--- Experimental support for Multipage. See the result in Novelang documentation.
+
+--- Small logging enhancements.
+
+--- More restrictive rules when applying XSL stylesheets. Generation now breaks on warnings.
+This might break existing incorrect stylesheets.
+
+--- Changed default representation of Fragment Identifiers, both Implicit and Explicit.
+Removed leading double reverse solidus ``\\`` when rendering (still required in document sources).
