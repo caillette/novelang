@@ -97,7 +97,6 @@
         </meta>
         <title>Novelang</title>
 
-        <meta name="viewport" content="width=700, initial-scale=0.45, minimum-scale=0.45"/>
 
         <!-- Ugly: support both relative (http://.../doc/) and absolute stylesheet (batch). -->
         <link rel="stylesheet" type="text/css" href="/reset.css"/>
@@ -116,95 +115,101 @@
 
       </head>
       <body>
-        <div id="maincontainer">
 
-          <div id="topsection">
-            <div class="innertube">
-              <h1>
-                <xsl:value-of select="$title"/>
-              </h1>
-              <!-- Commented as long as it conflicts with top-level titles. -->
-              <h2>
-                <xsl:value-of select="$subtitle"/>
-              </h2>
-            </div>
-          </div>
+        <div class="colmask threecol">
+          <div class="colmid">
+            <div class="colleft">
+              <div class="col1">
 
-          <div id="contentwrapper">
-            <div id="contentcolumn">
-              <div class="innertube">
-                <xsl:apply-templates/>
-              </div>
-            </div>
-          </div>
+                <div class="header">
+                  <h1>
+                    <xsl:value-of select="$title"/>
+                  </h1>
+                  <h2>
+                    <xsl:value-of select="$subtitle"/>
+                  </h2>
+                </div>
+                
 
-          <div id="rightcolumn">
-            <div class="innertube">
-              <ul>
-                <xsl:for-each select="/n:opus/n:level[ n:level-title != 'LINKS' ]">
-                  <li>
-                    <xsl:choose>
-                      <!-- Ugly, because we can't get $page-id for identifierless page. -->
-                      <xsl:when test="generate-id( . ) = $page-id or ( $page-undefined and position() = 1 )">
-                        <b>
-                          <xsl:call-template name="level-link"/>
-                        </b>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:call-template name="level-link"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </li>
-                </xsl:for-each>
-              </ul>
-            </div>
-          </div>
-
-
-          <div id="leftcolumn">
-            <div class="innertube">
-
-              <div id="Author">Written by
-                <xsl:apply-templates select="$author"/>
-              </div>
-              <div id="Version">version
-                <xsl:value-of select="$version"/>
+                <div class="co1inside" >
+                  <xsl:apply-templates/>
+                </div>
               </div>
 
-              <div id="Links">
-                <ul>
-                  <li>
-                    <a>
-                      <xsl:attribute name="href">
-                        <xsl:value-of select="$download"/>
-                      </xsl:attribute>
-                      Download
-                    </a>
-                  </li>
-                  <xsl:for-each
-                      select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
-                      >
+              <div class="col2">
+
+                <div id="Version">version
+                  <xsl:value-of select="$version"/>
+                </div>
+
+                <div id="Links">
+                  <ul>
                     <li>
-                      <xsl:apply-templates/>
+                      <a>
+                        <xsl:attribute name="href">
+                          <xsl:value-of select="$download"/>
+                        </xsl:attribute>
+                        Download
+                      </a>
                     </li>
+                    <xsl:for-each
+                        select="/n:opus/n:level[ n:style='parameters' and n:level-title='LINKS' ]/n:paragraph-regular"
+                        >
+                      <li>
+                        <xsl:apply-templates/>
+                      </li>
 
+                    </xsl:for-each>
+                  </ul>
+                </div>
+
+                <div id="Sponsors">
+                  <a href="http://sourceforge.net">
+                    <img border="0" alt="SourceForge.net Logo">
+                      <xsl:attribute name="src">
+                        <xsl:value-of select="$sf-logo"/>
+                      </xsl:attribute>
+                    </img>
+                  </a>
+                </div>
+
+              </div>
+
+              <div class="col3">
+                <ul>
+                  <xsl:for-each select="/n:opus/n:level[ n:level-title != 'LINKS' ]">
+                    <li>
+                      <xsl:choose>
+                        <!-- Ugly, because we can't get $page-id for identifierless page. -->
+                        <xsl:when test="generate-id( . ) = $page-id or ( $page-undefined and position() = 1 )">
+                          <b>
+                            <xsl:call-template name="level-link"/>
+                          </b>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:call-template name="level-link"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </li>
                   </xsl:for-each>
                 </ul>
               </div>
 
-              <div id="Sponsors">
-                <a href="http://sourceforge.net">
-                  <img border="0" alt="SourceForge.net Logo">
-                    <xsl:attribute name="src">
-                      <xsl:value-of select="$sf-logo"/>
-                    </xsl:attribute>
-                  </img>
-                </a>
-              </div>
+
 
             </div>
           </div>
+        </div>
 
+        <div id="footer">
+          <div id="ProjectAuthor">
+            &copy; <xsl:apply-templates select="$copyright-year"/>
+              <xsl:text> </xsl:text>
+            <xsl:apply-templates select="$author"/>
+          </div>
+          <div id="CssAuthor">
+            CSS layout inspired by <a href="http://matthewjamestaylor.com/blog/perfect-3-column.htm">Perfect 'Holy Grail' 3 Column Liquid Layout</a> by <a href="http://matthewjamestaylor.com">Matthew James Taylor</a>.
+          </div>
 
         </div>
 

@@ -9,10 +9,6 @@ http://www.positioniseverything.net/piefecta-rigid-right.html
 looks good on Safari and zooms well. Tells it deals with various browser bugs. Probably the finest piece of engineering but too many fixes are making it unreadable. We don't care about supporting IE6.
 License: unknown.
 
-"The Holy Grail 3 column Liquid Layout"
-http://matthewjamestaylor.com/blog/ultimate-3-column-holy-grail-ems.htm
-has great explainations but stretch isn't good.
-
 "CSS Fixed Layout `#3.1` (Fixed-Fixed-Fixed)"
 http://www.dynamicdrive.com/style/layouts/item/css-fixed-layout-31-fixed-fixed-fixed/
 zooms correctly. Much simpler. 
@@ -24,3 +20,16 @@ got it right. It scales up and down in with, staying in fixed limits.
 Read author's "comments"
 http://green-beast.com/blog/?p=67
 .
+
+Also check this "tutorial"
+http://jontangerine.com/log/2007/09/the-incredible-em-and-elastic-layouts-with-css
+about elastic layout.
+
+"The Holy Grail 3 column Liquid Layout"
+http://matthewjamestaylor.com/blog/ultimate-3-column-holy-grail-ems.htm
+has great explainations. (Only 1 error on "W3C validator" 
+http://validator.w3.org 
+but the element reported to be missing appears as it should -- validator bug?-_)
+License : free to use, linkback appreciated.
+After a close look, it seems that forcing ``min-width`` and ``max-width`` for the column (worst case: nesting another ``div``) and using proper text alignment could do the job.
+

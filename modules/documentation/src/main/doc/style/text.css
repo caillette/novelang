@@ -81,7 +81,7 @@ ul.paragraph-as-list {
 h1 {
   color: #A00;
   font-family: "Gill Sans", Georgia, serif;
-  font-size: 1.15em; /* was 1.46em for Georgia */
+  font-size: 1.3em; /* was 1.46em for Georgia */
   line-height: 1.3em;
   text-align: left;
   letter-spacing: .3em;
@@ -93,7 +93,7 @@ h1 {
 h2 {
   color: #A00;
   font-family: "Gill Sans", Verdana, "Bitstream Vera Sans", sans-serif;
-  font-size: 0.9em;
+  font-size: 1em;
   text-align: left;
   font-weight: normal;
   line-height: 1.8em;
@@ -267,18 +267,18 @@ td
     background-color: #dcdcdc;
 }
 
-#topsection {
+.header {
   font-family : "Gill Sans", Georgia, serif ;
 }
 
-#topsection h1 {
+.header h1 {
   font-size : 3em ;
   margin : 50px 0 0 0 ;
   color : #B00 ;
   text-transform : none ;
 }
 
-#topsection h2 {
+.header h2 {
   font-size : 1em ;
   margin : 5px 0 0 0 ;
   color : #B00 ;
@@ -286,28 +286,36 @@ td
 }
 
 
-#leftcolumn {
+.col2 {
   text-align : right ;
 }
 
-#leftcolumn a {
+.col2 a {
   border-style : none ;
   color : #900 ;
 }
 
-#leftcolumn ul {
+.col2 ul {
   list-style-type: none ;
   margin-left: 0 ;
   background-color: transparent ;
   border-color : transparent ;
   text-transform : uppercase ;
-  text-align : right ;
+  /*text-align : right ;*/
 }
 
 
-#Author {
-  color : #900 ;
-  line-height : 1.1em ;
+#ProjectAuthor {
+  font-size : 0.9em ;
+}
+
+#CssAuthor {
+  font-size : 0.8em ;
+}
+
+#footer {
+  text-align : center ;
+  padding-top : 3em ; 
 }
 
 #Version {
@@ -317,8 +325,15 @@ td
 }
 
 #Links {
-  margin-top : 30px ;
-  font-size : 0.8em ;
+  margin-top : 2em ;
+  margin-right : 1em ;
+  font-size : 0.9em ;
+  letter-spacing : .5em ;
+  line-height : 1.3 ;
+}
+
+#Links li {
+  margin-bottom : 1.4em ;
 }
 
 #Sponsors {
@@ -329,28 +344,23 @@ td
 
 
 
-#rightcolumn ul {
+.col3 ul {
   list-style-type: none ;
   /*font-family : Lucida Sans Unicode, Lucida Grande, sans-serif ;*/
-  font-size: 0.9em ;
+  font-size: 0.8em ;
   background-color: transparent ;
   border-color: transparent ;
 }
 
-#rightcolumn li {
+.col3 li {
   margin-top : 12px ;
   line-height: 1.1 ;
-  letter-spacing : .03em ;   
+  letter-spacing : .03em ;
 }
 
 
-#rightcolumn a {
-  color: #900;
-  background-color: transparent ;
+.col3 a {
+  color: #444;
   border-style : none ;
-}
-
-#rightcolumn a:hover{
-  color: #D00;
 }
 

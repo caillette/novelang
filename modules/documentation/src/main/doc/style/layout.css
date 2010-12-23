@@ -1,78 +1,103 @@
 /*
-Taken from:
-http://www.dynamicdrive.com/style/layouts/item/css-fixed-layout-31-fixed-fixed-fixed
+From:
+http://matthewjamestaylor.com/blog/perfect-3-column.htm
 */
-
-@charset "utf-8" ;
 
 body {
   margin : 0 ;
   padding : 0 ;
-  line-height : 1.5em ;
-}
-
-#maincontainer {
-  width : 840px ; /*Width of main container*/
-  margin : 0 auto ; /*Center container on page*/
-}
-
-#topsection {
-/*background : #EAEAEA ;*/
-  height : 130px ; /*Height of top section*/
-  margin-left : 180px ; /* Width of #leftcolumn */
-}
-
-#contentwrapper {
-  float : left ;
+  border : 0 ;      /* This removes the border around the viewport in old versions of IE */
   width : 100% ;
-}
-
-#contentcolumn {
-  /* Margins for content column. Should be "0 RightColumnWidth 0 LeftColumnWidth". */
-  /* There is a hack with top margin: it corresponds to the top margin of a h1. */
-  margin : -50px 190px 0 180px ;
+  min-width : 600px ;    /* Minimum width of layout - remove line if not required */
+          /* The min-width property does not work in old versions of Internet Explorer */
 }
 
 
-
-#leftcolumn {
+/* 'widths' sub menu */
+#layoutdims {
+  clear : both ;
+  border-top : 4px solid #000 ;
+  margin : 0 ;
+  padding : 6px 15px !important ;
+  /*text-align : right ;*/
+}
+/* column container */
+.colmask {
+  position : relative ;  /* This fixes the IE7 overflow hidden bug */
+  clear : both ;
   float : left ;
-  width : 180px ; /*Width of left column in pixel*/
-  margin-left : -840px ; /*Set margin to that of -(MainContainerWidth)*/
-  margin-top : 20px ;
-  /*background : #C8FC98 ;*/
+  width : 100% ;      /* width of whole page */
+  overflow : hidden ;    /* This chops off any overhanging divs */
 }
-
-#leftcolumn .innertube {
-  margin-right : 40px ;
-}
-
-#rightcolumn {
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
   float : left ;
-  width : 190px ; /*Width of right column*/
-  margin-left : -190px ; /*Set left margin to -(RightColumnWidth)*/
-  margin-top : 30px ;
-  /*background : #FDE95E ;*/
+  width : 100% ;      /* width of page */
+  position : relative ;
+}
+.col1,
+.col2,
+.col3 {
+  float : left ;
+  position : relative ;
+  padding : 0 0 1em 0 ;  /* no left and right padding on columns, we just make them narrower instead
+          only padding top and bottom is included here, make it whatever value you need */
+  overflow : hidden ;
 }
 
-#rightcolumn .innertube {
-  margin-left : 0 ;
+/* LC's hacks */
+
+.co1inside {
+  max-width  :  40em  ;
 }
 
+.header {
+  height : 6em ; /* Correlated with top-margin of col2 and col3. */
+}
+
+.col2 {
+  margin-top : 10em ; /* Affected by header's height and h1's top margin in content. */
+}
+
+.col3 {
+  margin-top : 11em ; /* Affected by header's height and h1's top margin in content. */
+}
+
+/* End of LC's hacks */
 
 
-
+/* 3 Column settings */
+.threecol {
+}
+.threecol .colmid {
+  right : 25% ;      /* width of the right column */
+}
+.threecol .colleft {
+  right : 50% ;      /* width of the middle column */
+}
+.threecol .col1 {
+  width : 46% ;      /* width of center column content (column width minus padding on either side) */
+  left : 102% ;      /* 100% plus left padding of center column */
+}
+.threecol .col2 {
+  width : 21% ;      /* Width of left column content (column width minus padding on either side) */
+  left : 31% ;      /* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+}
+.threecol .col3 {
+  width : 21% ;      /* Width of right column content (column width minus padding on either side) */
+  left : 85% ;      /* Please make note of the brackets here:
+          (100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
+}
+/* Footer styles */
 #footer {
-  clear : left ;
+  clear : both ;
+  float : left ;
   width : 100% ;
-  background : black ;
-  color : #FFF ;
-  text-align : center ;
-  padding : 4px 0 ;
+  /*border-top : 1px solid #000 ;*/
 }
-
-#footer a {
-  color : #FFFF80 ;
+#footer p {
+  padding : 10px ;
+  margin : 0 ;
 }
-
-
