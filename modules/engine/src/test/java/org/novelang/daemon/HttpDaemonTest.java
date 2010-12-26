@@ -289,8 +289,8 @@ public class HttpDaemonTest {
 
     save( "generated.html", responseSnapshot.getContent() ) ;
     assertThat( responseSnapshot.getContent() ).contains(
-        "Line=25; column= 38 - "
-        + "xsl:this-is-not-supposed-to-work is not allowed in this position in the stylesheet!"
+        "line=25; column=38 - "
+        + "xsl:this-is-not-supposed-to-work is not allowed in this position in the stylesheet"
     ) ;
 
   }
