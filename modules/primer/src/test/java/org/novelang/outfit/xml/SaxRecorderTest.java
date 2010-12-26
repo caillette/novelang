@@ -51,13 +51,14 @@ public class SaxRecorderTest {
     xmlReader.setContentHandler( recorder ) ;
     xmlReader.parse( new InputSource( new StringReader( XML ) ) ) ;
 
-    final ContentHandlerAdapter target = mock( ContentHandlerAdapter.class ) ;
+    // Using a spy to use implementation of get/setLocator.
+    final ContentHandlerAdapter target = spy( new ContentHandlerAdapter() ) ;
     final LocationGrabber locationGrabber = installLocationGrabber( target ) ;
 
     final SaxRecorder.Player player = recorder.getPlayer() ;
     player.playOn( target ) ;
 
-    final Iterator<ImmutableSourceLocator> locations = locationGrabber.getLocationsIterator() ;
+    final Iterator< ImmutableSourceLocator > locations = locationGrabber.getLocationsIterator() ;
 
     verify( target ).startDocument() ;
     assertThat( locations.next() ).isEqualTo( new ImmutableSourceLocator( 1, 1 ) ) ;

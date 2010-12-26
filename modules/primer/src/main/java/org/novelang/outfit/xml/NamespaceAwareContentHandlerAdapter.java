@@ -44,8 +44,8 @@ public abstract class NamespaceAwareContentHandlerAdapter extends ContentHandler
 
   @Override
   public void setDocumentLocator( final Locator locator ) {
-    namespaceAwareness.setDocumentLocator( getDocumentLocator() ) ;
     super.setDocumentLocator( locator );
+    namespaceAwareness.setDocumentLocator( getDocumentLocator() ) ;
   }
 
   @Override

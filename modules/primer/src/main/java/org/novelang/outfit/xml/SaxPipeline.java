@@ -165,8 +165,8 @@ public class SaxPipeline extends DelegatingContentHandler {
 
     @Override
     public void setDocumentLocator( final Locator locator ) {
-      fork.setDocumentLocator( getDocumentLocator() ) ;
       super.setDocumentLocator( locator ) ;
+      fork.setDocumentLocator( getDocumentLocator() ) ;
     }
 
     @Override
