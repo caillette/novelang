@@ -19,8 +19,7 @@ The batch document genrator has the same options as the HTTP dæemon with follow
 - No ``--port`` option.
 - Directory listing not supported.
 - Font listing not supported.
-- When font list is the last option before document requests, it should end by a double
-hyphen minus: ``generate --font-dirs dir1 dir2 -- /document.html``
+- When font list is the last option before document requests, it should end by a double hyphen minus: ``generate --font-dirs dir1 dir2 -- /document.html``
 
 
 The batch document generator supports one additional option: ``--output-dir``
