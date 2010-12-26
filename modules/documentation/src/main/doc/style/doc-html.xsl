@@ -312,7 +312,7 @@
   <xsl:template match="n:block-inside-square-brackets[ text() = 'SUBLEVELS' ]" >
     <ul>
       <xsl:for-each select="ancestor-or-self::node()[ name()= 'n:level' ]/n:level">
-        <li><xsl:value-o select="n:level-title"/> </li>
+        <li><xsl:value-of select="n:level-title"/> </li>
       </xsl:for-each>
     </ul>
   </xsl:template>

@@ -27,9 +27,9 @@ import org.xml.sax.SAXException;
  *
  * @author Laurent Caillette
  */
-public class TransformerMultiException extends CompositeException {
+public class TransformerCompositeException extends CompositeException {
 
-  public TransformerMultiException(
+  public TransformerCompositeException(
       final String message,
       final ImmutableList< Exception > exceptions
   ) {
@@ -44,13 +44,10 @@ public class TransformerMultiException extends CompositeException {
     for( final Exception exception : exceptions ) {
       messageBuilder.append( "\n" ) ;
       if( exception instanceof TransformerException ) {
-        final SourceLocator sourceLocator = ( ( TransformerException ) exception ).getLocator() ;
-        if( sourceLocator != null ) {
-          messageBuilder.append( ImmutableSourceLocator.asSingleLineString( sourceLocator ) ) ;
-          messageBuilder.append( " - " ) ;
-        }
+        messageBuilder.append( ( ( TransformerException ) exception ).getMessageAndLocation() ) ;
+      } else {
+        messageBuilder.append( exception.getMessage() ) ;
       }
-      messageBuilder.append( exception.getMessage() ) ;
     }
     return messageBuilder.toString() ;
   }
