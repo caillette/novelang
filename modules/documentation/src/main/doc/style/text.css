@@ -192,6 +192,12 @@ li {
   margin-left : 1.5em ;
 }
 
+ul > li {
+  list-style-type : square ;
+  list-style : square ;
+}
+
+
 pre {
   font-family: "Bitstream Vera Sans Mono", Courier, Monaco, ProFont, "American Typewriter", "Andale Mono", monospace;
   line-height: 1.45em;
@@ -225,8 +231,10 @@ h2 > code {
 }
 
 ul {
-  list-style-type: square;
+  list-style: square ;
 }
+
+
 
 
 hr {

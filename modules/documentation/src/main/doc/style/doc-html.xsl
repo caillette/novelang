@@ -60,7 +60,7 @@
               This test makes sense because chosing n:level[ position() > 1 ]
                introduces a shift in the elements.
           -->
-          <xsl:if test="position() > 1">
+          <xsl:if test="position() > 1 and n:level-title != 'LINKS' ">
             <n:page>
               <n:page-identifier>
                 <xsl:call-template name="extract-page-identifier"/>
@@ -262,11 +262,12 @@
     </code>
   </xsl:template>
 
-  <xsl:template match="n:paragraph-as-list-item">
-    <ul class="paragraph-as-list">
-      <li>
-        <xsl:apply-templates/>
-      </li>
+  <xsl:template match="n:list-with-triple-hyphen" >
+    <xsl:call-template name="descriptor-vanilla" />
+    <ul class="big-list" >
+      <xsl:for-each select="n:paragraph-as-list-item" >
+        <li><xsl:apply-templates/></li>
+      </xsl:for-each>
     </ul>
   </xsl:template>
 
@@ -294,6 +295,27 @@
 
   <!-- Override default, we don't want descriptors to appear. -->
   <xsl:template name="descriptor-body"/>
+
+
+  <!--
+    Unfinished implementation.
+    - Needs unique identifiers to link properly.
+    - Needs layout parameter.
+
+    About layout parameter:
+    When there are a lot of versions, a bulletted list is too long.
+    A flat list is probably the best because multi-column layout can easily go wrong
+    depending on the layout.
+    This could do the job:
+    | SUBLEVELS | flat |    
+  -->
+  <xsl:template match="n:block-inside-square-brackets[ text() = 'SUBLEVELS' ]" >
+    <ul>
+      <xsl:for-each select="ancestor-or-self::node()[ name()= 'n:level' ]/n:level">
+        <li><xsl:value-o select="n:level-title"/> </li>
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
 
 
 </xsl:stylesheet>
