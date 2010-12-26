@@ -30,7 +30,7 @@ import org.apache.fop.apps.MimeConstants;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
-import org.novelang.outfit.xml.TransformerMultiException;
+import org.novelang.outfit.xml.TransformerCompositeException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -47,7 +47,7 @@ public class PdfWriter extends XslWriter {
       final ResourceName stylesheet,
       final String namespaceUri,
       final String nameQualifier
-  ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException {
+  ) throws IOException, TransformerConfigurationException, SAXException, TransformerCompositeException {
     super(
         namespaceUri,
         nameQualifier,
@@ -58,7 +58,7 @@ public class PdfWriter extends XslWriter {
   }
 
   public PdfWriter( final RenderingConfiguration configuration, final ResourceName stylesheet )
-      throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException 
+      throws IOException, TransformerConfigurationException, SAXException, TransformerCompositeException
   {
     super( configuration, null == stylesheet ? DEFAULT_FO_STYLESHEET : stylesheet ) ;
     fopFactory = configuration.getFopFactory() ;

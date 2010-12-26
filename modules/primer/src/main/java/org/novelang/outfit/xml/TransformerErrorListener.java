@@ -21,7 +21,6 @@ import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.CompositeException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -46,25 +45,51 @@ public class TransformerErrorListener implements ErrorListener {
   @Override
   public void warning( final TransformerException e ) throws TransformerException {
     logger.warn( e.getMessageAndLocation() ) ;
-    exceptions.add( e ) ;
+    addException( e ) ;
   }
 
   @Override
   public void error( final TransformerException e ) throws TransformerException {
     logger.error( e.getMessageAndLocation() ) ;
-    exceptions.add( e ) ;
+    addException( e ) ;
   }
 
   @Override
   public void fatalError( final TransformerException e ) throws TransformerException {
     logger.error( "Fatal !!! ", e.getMessageAndLocation() ) ;
-    exceptions.add( e ) ;
+    addException( e ) ;
   }
 
-  public void flush() throws TransformerMultiException {
+  /**
+   * Create safe {@code Exception} objects that don't suffer from {@code SourceLocator}
+   * state change that occurs after notification.
+   */
+  @SuppressWarnings( { "ThrowableInstanceNeverThrown" } )
+  private void addException( final TransformerException original ) {
+    final TransformerException safeException ;
+    if( original.getLocator() == null ) {
+      safeException = new TransformerException(
+        original.getMessage(),
+        original.getCause()
+    ) ;
+    } else {
+      safeException = new TransformerException(
+          original.getMessage(),
+          ImmutableSourceLocator.create( original.getLocator() ),
+          original.getCause()
+          ) ;
+
+    }
+    safeException.setStackTrace( original.getStackTrace() ) ;
+    exceptions.add( safeException ) ;
+  }
+
+
+
+  public void flush() throws TransformerCompositeException {
     final ImmutableList< Exception > list = exceptions.build() ;
     if( ! list.isEmpty() ) {
-      throw new TransformerMultiException(
+      throw new TransformerCompositeException(
           "Problem" + ( list.size() > 1 ? "s" : "" ) + " hit when processing stylesheet", list ) ;
     }
   }

@@ -44,10 +44,13 @@ public class TransformerCompositeException extends CompositeException {
     for( final Exception exception : exceptions ) {
       messageBuilder.append( "\n" ) ;
       if( exception instanceof TransformerException ) {
-        messageBuilder.append( ( ( TransformerException ) exception ).getMessageAndLocation() ) ;
-      } else {
-        messageBuilder.append( exception.getMessage() ) ;
+        final SourceLocator sourceLocator = ( ( TransformerException ) exception ).getLocator() ;
+        if( sourceLocator != null ) {
+          messageBuilder.append( ImmutableSourceLocator.asSingleLineString( sourceLocator ) ) ;
+          messageBuilder.append( " - " ) ;
+        }
       }
+      messageBuilder.append( exception.getMessage() ) ;
     }
     return messageBuilder.toString() ;
   }

@@ -41,7 +41,7 @@ import org.novelang.outfit.xml.EntityEscapeSelector;
 import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
 import org.novelang.outfit.xml.SaxRecorder;
-import org.novelang.outfit.xml.TransformerMultiException;
+import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 import org.xml.sax.EntityResolver;
@@ -81,7 +81,7 @@ public class XslPageIdentifierExtractorTest {
    * that takes place in {@link org.novelang.outfit.xml.TransformerErrorListener} and what's
    * installing it. 
    */
-  @Test( expected = TransformerMultiException.class )
+  @Test( expected = TransformerCompositeException.class )
   public void rethrowExceptionFromXslTransformer() throws Exception {
     try {
       verify(
@@ -91,7 +91,7 @@ public class XslPageIdentifierExtractorTest {
               new PageIdentifier( "Level-1" ), "/opus/level[2]"
           )
       ) ;
-    } catch( TransformerMultiException e ) {
+    } catch( TransformerCompositeException e ) {
       LOGGER.info( e, "Caught expected exception" ) ;
       Assertions.assertThat( e.getMessage() ).contains(
           "line=19; column=16 - java.lang.IllegalArgumentException: Name '' doesn't match " ) ;

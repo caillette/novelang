@@ -29,7 +29,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ResourceName;
-import org.novelang.outfit.xml.TransformerMultiException;
+import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.font.FontDiscoveryStreamer;
 import org.xml.sax.SAXException;
@@ -68,7 +68,7 @@ public class FontDiscoveryHandler extends GenericHandler{
         throw new ServletException( e ) ;
       } catch( SAXException e ) {
         throw new ServletException( e );
-      } catch( TransformerMultiException e ) {
+      } catch( TransformerCompositeException e ) {
         throw new ServletException( e );
       }
 

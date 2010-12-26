@@ -16,6 +16,7 @@
  */
 package org.novelang.outfit.xml;
 
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
@@ -42,10 +43,10 @@ public abstract class NamespaceAwareContentHandlerAdapter extends ContentHandler
 
 
   @Override
-  protected void afterDocumentLocatorSet() {
-    namespaceAwareness.setDocumentLocator( getDocumentLocator() ) ;    
+  public void setDocumentLocator( final Locator locator ) {
+    namespaceAwareness.setDocumentLocator( getDocumentLocator() ) ;
+    super.setDocumentLocator( locator );
   }
-
 
   @Override
   public void startPrefixMapping( final String prefix, final String uri ) throws SAXException {

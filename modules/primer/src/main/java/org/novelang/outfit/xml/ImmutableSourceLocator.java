@@ -66,6 +66,19 @@ public final class ImmutableSourceLocator implements SourceLocator {
     }
   }
 
+  public static ImmutableSourceLocator create( final SourceLocator locator ) {
+    if( locator == null ) {
+      return NULL ;
+    } else {
+      return new ImmutableSourceLocator(
+          locator.getPublicId(),
+          locator.getSystemId(),
+          locator.getLineNumber(),
+          locator.getColumnNumber()
+      ) ;
+    }
+  }
+
   @Override
   public String getPublicId() {
     return publicId ;

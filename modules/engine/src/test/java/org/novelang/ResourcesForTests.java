@@ -169,6 +169,7 @@ public final class ResourcesForTests {
       Directory dir = directory( "style" ) ;
 
       Resource VOID_XSL = resource( "void.xsl" ) ;
+      Resource ERRONEOUS_XSL = resource( "erroneous.xsl" ) ;
     }
 
   }

@@ -26,7 +26,7 @@ import org.novelang.common.Nodepath;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.outfit.loader.ResourceName;
-import org.novelang.outfit.xml.TransformerMultiException;
+import org.novelang.outfit.xml.TransformerCompositeException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -47,7 +47,7 @@ public class NovellaWriter extends XslWriter {
       final RenderingConfiguration configuration,
       final ResourceName stylesheet,
       final Charset charset
-  ) throws IOException, TransformerConfigurationException, SAXException, TransformerMultiException
+  ) throws IOException, TransformerConfigurationException, SAXException, TransformerCompositeException
   {
     super(
         configuration,

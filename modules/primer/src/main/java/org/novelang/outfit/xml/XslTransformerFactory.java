@@ -18,7 +18,6 @@ package org.novelang.outfit.xml;
 
 import java.io.IOException;
 
-import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -83,7 +82,7 @@ public abstract class XslTransformerFactory {
 
   
   public final TransformerHandler newTransformerHandler()
-      throws TransformerConfigurationException, SAXException, IOException, TransformerMultiException 
+      throws TransformerConfigurationException, SAXException, IOException, TransformerCompositeException
   {
     final SAXTransformerFactory saxTransformerFactory =
         ( SAXTransformerFactory ) TransformerFactory.newInstance() ;

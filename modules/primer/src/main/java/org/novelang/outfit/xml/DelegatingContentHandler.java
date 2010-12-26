@@ -34,7 +34,8 @@ public abstract class DelegatingContentHandler extends ContentHandlerAdapter {
   protected abstract ContentHandler getDelegate() ;
 
   @Override
-  protected void afterDocumentLocatorSet() {
+  public void setDocumentLocator( final Locator locator ) {
+    super.setDocumentLocator( locator ) ;
     getDelegate().setDocumentLocator( getDocumentLocator() ) ;
   }
 

@@ -46,6 +46,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
+import org.fest.assertions.Assertions;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -268,6 +269,29 @@ public class HttpDaemonTest {
 
     save( "generated.html", generated ) ;
     assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
+
+  }
+
+  @Test
+  public void indicateErrorLocationForBrokentStylesheet() throws Exception {
+    final Resource resource = ResourcesForTests.Served.GOOD_PART ;
+    resourceInstaller.copy( resource ) ;
+    final Resource stylesheetResource = ResourcesForTests.Served.Style.ERRONEOUS_XSL ;
+    final File stylesheetFile = resourceInstaller.copyScoped(
+        ResourcesForTests.Served.dir, stylesheetResource ) ;
+    setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
+
+
+    final ResponseSnapshot responseSnapshot = followRedirection(
+        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
+            "?stylesheet=" + stylesheetResource.getName()
+    ) ;
+
+    save( "generated.html", responseSnapshot.getContent() ) ;
+    assertThat( responseSnapshot.getContent() ).contains(
+        "Line=25; column= 38 - "
+        + "xsl:this-is-not-supposed-to-work is not allowed in this position in the stylesheet!"
+    ) ;
 
   }
 

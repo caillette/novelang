@@ -31,17 +31,13 @@ public class ContentHandlerAdapter implements ContentHandler {
 
   private Locator locator = null ;
 
-  @Override
-  public final void setDocumentLocator( final Locator locator ) {
-    this.locator = locator ;
-    afterDocumentLocatorSet() ;
-  }
-
   /**
-   * Override this one instead of {@link #setDocumentLocator(org.xml.sax.Locator)}.
-   * This avoids forgetting to call {@code super#...}.
+   * Don't forget to call {@code super...} when overriding.
    */
-  protected void afterDocumentLocatorSet() { }
+  @Override
+  public void setDocumentLocator( final Locator locator ) {
+    this.locator = locator ;
+  }
 
   /**
    * Convenience implementation for tests.

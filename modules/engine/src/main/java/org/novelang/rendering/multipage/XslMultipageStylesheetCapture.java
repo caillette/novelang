@@ -26,6 +26,7 @@ import org.novelang.outfit.xml.SaxRecorder;
 import org.novelang.outfit.xml.XmlNamespaces;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -165,8 +166,10 @@ public abstract class XslMultipageStylesheetCapture extends SaxPipeline.Stage {
     }
   }
 
+
   @Override
-  protected void afterDocumentLocatorSet() {
+  public void setDocumentLocator( final Locator locator ) {
+    super.setDocumentLocator( locator ) ;
     namespaceAwareness.setDocumentLocator( getDocumentLocator() ) ;
     if( documentBuilder != null ) {
       documentBuilder.setDocumentLocator( getDocumentLocator() ) ;
