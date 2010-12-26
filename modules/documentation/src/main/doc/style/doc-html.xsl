@@ -263,7 +263,6 @@
   </xsl:template>
 
   <xsl:template match="n:list-with-triple-hyphen" >
-    <xsl:call-template name="descriptor-vanilla" />
     <ul class="big-list" >
       <xsl:for-each select="n:paragraph-as-list-item" >
         <li><xsl:apply-templates/></li>

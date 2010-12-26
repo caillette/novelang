@@ -56,6 +56,24 @@
 
   </xsl:template>
 
+
+  <xsl:template match="n:paragraph-regular" >
+    <p>
+      <xsl:apply-templates/>
+    </p>
+  </xsl:template>
+
+  <xsl:template match="n:list-with-triple-hyphen" >
+    <ul>
+      <xsl:for-each select="n:paragraph-as-list-item" >
+        <li><xsl:apply-templates/></li>
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
+
+
+
   <xsl:template match="n:level" >
     <p>
       <strong><xsl:apply-templates/></strong>
@@ -65,14 +83,6 @@
   <xsl:template match="//n:block-inside-square-brackets/n:block-of-literal-inside-grave-accent-pairs" >
     <code><xsl:value-of select="." /></code>
   </xsl:template>  
-
-  <xsl:template match="n:paragraph-as-list-item" >
-    <ul>
-      <li>
-        <xsl:apply-templates/>
-      </li>
-    </ul>
-  </xsl:template>
   
   
   <!--This doesn't work when put in shared.xsl .-->
