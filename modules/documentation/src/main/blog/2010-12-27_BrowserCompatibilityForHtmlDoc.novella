@@ -1,0 +1,12 @@
+== Browser compatibility for HTML documentation
+
+Since version `0.53.0` Novelang HTML documentation displays correctly on following browsers:
+- Safari `5.0` (Mac OS X `10.6.5`, Windows XP 32bits SP3).
+- Firefox `3.6` (Mac OS X `10.6.5`, Windows XP 32bits SP3).
+- Google Chrome `8.0` (Windows XP 32bits SP3).
+- Internet Explorer 8 (Windows XP 32bits SP3).
+
+The website also passed "W3C validation"
+http://validator.w3.org/check?uri=novelang.org&charset=%28detect+automatically%29&doctype=Inline&group=0
+for HTML `4.0` Transitional.
+ 
