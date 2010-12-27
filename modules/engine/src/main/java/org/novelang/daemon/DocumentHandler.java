@@ -124,7 +124,6 @@ public class DocumentHandler extends GenericHandler {
               someRequest.getOriginalTarget(),
               outputStream
           ) ;
-          LOGGER.error( e, "Unexpected exception" ) ;
           throw e ;
         }
 
