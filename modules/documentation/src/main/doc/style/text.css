@@ -357,12 +357,15 @@ th
   font-size: 0.8em ;
   background-color: transparent ;
   border-color: transparent ;
+  margin-left : 0 ;
 }
 
 .col3 li {
   margin-top : 12px ;
   line-height: 1.1 ;
   letter-spacing : .03em ;
+  list-style-type: none ;
+  margin-left : 0 ;
 }
 
 
