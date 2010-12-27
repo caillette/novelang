@@ -273,15 +273,21 @@ public class ConfigurationTools {
       if( null == charset ) {
         defaultSourceCharset = DefaultCharset.SOURCE ;
         LOGGER.info(
-            "Default source charset is ",
+            "Source charset is ",
             defaultSourceCharset.name(),
-            " (from option ",
+            " by default (option not set: ",
             parameters.getDefaultSourceCharsetOptionDescription(),
             ")."
         ) ;
       } else {
         defaultSourceCharset = charset ;
-        LOGGER.info( "Default source charset set as ", defaultSourceCharset.name() ) ;
+        LOGGER.info(
+            "Source charset set as ",
+            defaultSourceCharset.name(),
+            "( from option ",
+            parameters.getDefaultSourceCharsetOptionDescription(),
+            ")."
+        ) ;
       }
     }
     
@@ -346,15 +352,21 @@ public class ConfigurationTools {
       if( null == charset ) {
         defaultRenderingCharset = DefaultCharset.RENDERING ;
         LOGGER.info(
-            "Default rendering charset is ",
+            "Rendering charset is ",
             defaultRenderingCharset.name(),
-            " (from option ",
+            " by default (option not set: ",
             parameters.getDefaultRenderingCharsetOptionDescription(),
             ")."
         ) ;
       } else {
         defaultRenderingCharset = charset ;
-        LOGGER.info( "Default rendering charset set as ", defaultRenderingCharset.name() ) ;
+        LOGGER.info(
+            "Rendering charset set as ",
+            defaultRenderingCharset.name(),
+            "( from option ",
+            parameters.getDefaultRenderingCharsetOptionDescription(), 
+            ")."
+        ) ;
       }
     }
 
