@@ -121,6 +121,28 @@
   </xsl:template>
 
 
+  <xsl:template match="n:list-with-triple-hyphen" >
+    &amp;lt;ul&amp;gt;
+      <xsl:for-each select="n:paragraph-as-list-item" >
+        &amp;lt;li&amp;gt;<xsl:apply-templates/>&amp;lt;/li&amp;gt;
+      </xsl:for-each>
+    &amp;lt;/ul&amp;gt;
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-with-hyphen" >
+    &amp;lt;ul&amp;gt;
+      <xsl:apply-templates/>
+    &amp;lt;/ul&amp;gt;
+  </xsl:template>
+
+  <xsl:template match="n:embedded-list-item" >
+    &amp;lt;li&amp;gt;
+      <xsl:apply-templates/>
+    &amp;lt;/li&amp;gt;
+  </xsl:template>
+
+
+
   
   <xsl:template match="n:block-inside-double-quotes" ><tt>&ldquo;</tt><xsl:apply-templates/><tt>&rdquo;</tt></xsl:template>
 
