@@ -58,6 +58,8 @@
     <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-transcoder:1.7" level="project" />
     <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-svggen:1.7" level="project" />
     <orderEntry type="library" name="Maven: org.apache.xmlgraphics:batik-extension:1.7" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.barcode4j:barcode4j-fop-ext:2.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.barcode4j:barcode4j:2.0" level="project" />
     <orderEntry type="library" name="Maven: pdfbox:pdfbox:0.7.3" level="project" />
     <orderEntry type="library" name="Maven: org.fontbox:fontbox:0.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.jempbox:jempbox:0.2.0" level="project" />
