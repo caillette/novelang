@@ -206,6 +206,10 @@ public class FopTools {
       fopFactory.setUserConfig( configuration ) ;
     }
 
+    // Hack until we get Barcode4J-2.1 available as Maven artifact.
+    // http://www.mail-archive.com/fop-dev@xmlgraphics.apache.org/msg10500.html
+    fopFactory.getRendererFactory().setRendererPreferred( true ) ;
+
     return fopFactory ;
   }
 }

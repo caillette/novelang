@@ -138,6 +138,12 @@
     </dependency>
 
     <dependency>
+      <groupId>${lib.barcode4j.groupId}</groupId>
+      <artifactId>${lib.barcode4j.artifactid}</artifactId>
+      <version>${lib.barcode4j.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>${lib.pdfbox.groupId}</groupId>
       <artifactId>${lib.pdfbox.artifactid}</artifactId>
       <version>${lib.pdfbox.version}</version>

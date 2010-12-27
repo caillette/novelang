@@ -180,6 +180,15 @@
     <lib.fop.artifactid>fop</lib.fop.artifactid>
     <lib.fop.version>1.0</lib.fop.version>
 
+    <lib.barcode4j.groupId>net.sf.barcode4j</lib.barcode4j.groupId>
+    <lib.barcode4j.artifactid>barcode4j-fop-ext</lib.barcode4j.artifactid>
+    <lib.barcode4j.version>2.0</lib.barcode4j.version>
+<!--
+    Using some hack in FopTools until this becomes available:
+    <lib.barcode4j.artifactid>barcode4j-fop-ext-complete</lib.barcode4j.artifactid>
+    <lib.barcode4j.version>2.1</lib.barcode4j.version>
+-->
+
     <lib.pdfbox.groupId>pdfbox</lib.pdfbox.groupId>
     <lib.pdfbox.artifactid>pdfbox</lib.pdfbox.artifactid>
     <lib.pdfbox.version>0.7.3</lib.pdfbox.version>

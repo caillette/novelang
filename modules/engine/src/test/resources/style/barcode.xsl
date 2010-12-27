@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE foo [
 
-  <!ENTITY LandL "L &amp; L" >
-  <!ENTITY Love1 "SAIMERENTBEAUCOUP" >
-  <!ENTITY Love2 "ETNEURENTPASDENFANTS" >
-  <!ENTITY GuineaPig "Mais un cochon d'Inde de luxe !" >
+  <!ENTITY text1 "Novelang" >
+  <!ENTITY text2 "ELECTRONIC" >
+  <!ENTITY text3 "DOCUMENTGENERATOR" >
+  <!ENTITY text4 "Does barcodes, too" >
 
   <!ENTITY % Fo PUBLIC
       "http://www.w3.org/1999/XSL/Format"
@@ -51,13 +51,13 @@
         >
           <fo:block-container
               absolute-position="fixed"
-              top="50mm"
+              top="110mm"
               left="61mm"
               fox:transform="rotate(10)"
           >
             <fo:block>
               <fo:instream-foreign-object>
-                <barcode:barcode message="&LandL;">
+                <barcode:barcode message="&text1;">
                   <barcode:datamatrix>
                     <barcode:module-width>9.5mm</barcode:module-width>
                     <barcode:shape>force-square</barcode:shape>
@@ -72,7 +72,7 @@
           <fo:block space-before="210mm" text-align="center">
             <fo:block>
               <fo:instream-foreign-object>
-                <barcode:barcode message="&Love1;">
+                <barcode:barcode message="&text2;">
                   <barcode:royal-mail-cbc>
                     <barcode:module-width>0.7mm</barcode:module-width>
                     <barcode:track-height>1.25mm</barcode:track-height>
@@ -84,7 +84,7 @@
             </fo:block>
             <fo:block>
               <fo:instream-foreign-object>
-                <barcode:barcode message="&Love2;">
+                <barcode:barcode message="&text3;">
                   <barcode:royal-mail-cbc>
                     <barcode:module-width>0.5mm</barcode:module-width>
                     <barcode:track-height>1.25mm</barcode:track-height>
@@ -99,7 +99,7 @@
 
           <fo:block space-before="10mm" text-align="center" >
             <fo:instream-foreign-object>
-              <barcode:barcode message="&GuineaPig;" >
+              <barcode:barcode message="&text4;" >
                 <barcode:pdf417>
                   <barcode:module-width>0.352777mm</barcode:module-width>
                   <!-- 1 pixel at 72dpi -->
@@ -128,16 +128,16 @@
               Traduction !
             </fo:block>
             <fo:block space-before="6mm" font-size="30pt" font-weight="bold" >
-              &LandL;
+              &text1;
             </fo:block>
             <fo:block space-before="6mm" font-weight="bold" >
-              &Love1;
+              &text2;
             </fo:block>
             <fo:block space-before="6mm" font-weight="bold" >
-              &Love2;
+              &text3;
             </fo:block>
             <fo:block space-before="4mm" font-weight="bold" >
-              &GuineaPig;
+              &text4;
             </fo:block>
           </fo:block>
 
