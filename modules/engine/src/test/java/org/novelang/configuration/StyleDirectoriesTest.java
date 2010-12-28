@@ -9,7 +9,7 @@ import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.configuration.parse.ArgumentException;
 import org.novelang.configuration.parse.DaemonParameters;
-import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
@@ -52,7 +52,7 @@ public class StyleDirectoriesTest {
     
     final DaemonParameters parameters = new DaemonParameters( 
         resourceInstaller.getTargetDirectory(),
-        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_STYLE_DIRECTORIES,
+        GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_STYLE_DIRECTORIES,
         resource1.getParentFile().getAbsolutePath(), 
         resource2.getParentFile().getAbsolutePath() 
     ) ;

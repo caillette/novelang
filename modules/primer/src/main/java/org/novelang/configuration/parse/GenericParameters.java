@@ -32,7 +32,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
@@ -71,15 +70,15 @@ public abstract class GenericParameters {
 
     this.baseDirectory = Preconditions.checkNotNull( baseDirectory ) ;
     options = new Options() ;
-    options.addOption( OPTION_HELP ) ;
-    options.addOption( OPTION_CONTENT_ROOT ) ;
-    options.addOption( OPTION_FONT_DIRECTORIES ) ;
-    options.addOption( OPTION_EMPTY ) ;
-    options.addOption( OPTION_STYLE_DIRECTORIES ) ;
-    options.addOption( OPTION_LOG_DIRECTORY ) ;
-    options.addOption( OPTION_HYPHENATION_DIRECTORY ) ;
-    options.addOption( OPTION_DEFAULT_SOURCE_CHARSET ) ;
-    options.addOption( OPTION_DEFAULT_RENDERING_CHARSET ) ;
+    options.addOption( GenericParametersConstants.OPTION_HELP ) ;
+    options.addOption( GenericParametersConstants.OPTION_CONTENT_ROOT ) ;
+    options.addOption( GenericParametersConstants.OPTION_FONT_DIRECTORIES ) ;
+    options.addOption( GenericParametersConstants.OPTION_EMPTY ) ;
+    options.addOption( GenericParametersConstants.OPTION_STYLE_DIRECTORIES ) ;
+    options.addOption( GenericParametersConstants.OPTION_LOG_DIRECTORY ) ;
+    options.addOption( GenericParametersConstants.OPTION_HYPHENATION_DIRECTORY ) ;
+    options.addOption( GenericParametersConstants.OPTION_DEFAULT_SOURCE_CHARSET ) ;
+    options.addOption( GenericParametersConstants.OPTION_DEFAULT_RENDERING_CHARSET ) ;
     enrich( options ) ;
 
     helpPrinter = new HelpPrinter( options ) ;
@@ -94,31 +93,31 @@ public abstract class GenericParameters {
     try {
       line = parser.parse( options, parameters ) ;
 
-      logDirectory = extractDirectory( baseDirectory, OPTION_LOG_DIRECTORY, line, false ) ;
+      logDirectory = extractDirectory( baseDirectory, GenericParametersConstants.OPTION_LOG_DIRECTORY, line, false ) ;
 
-      if( line.hasOption( OPTION_CONTENT_ROOT.getLongOpt() ) ) {
-        contentRoot = extractDirectory( baseDirectory, OPTION_CONTENT_ROOT, line ) ;
+      if( line.hasOption( GenericParametersConstants.OPTION_CONTENT_ROOT.getLongOpt() ) ) {
+        contentRoot = extractDirectory( baseDirectory, GenericParametersConstants.OPTION_CONTENT_ROOT, line ) ;
       } else {
         contentRoot = null ;
       }
 
-      if( line.hasOption( OPTION_DEFAULT_SOURCE_CHARSET.getLongOpt() ) ) {
+      if( line.hasOption( GenericParametersConstants.OPTION_DEFAULT_SOURCE_CHARSET.getLongOpt() ) ) {
         defaultSourceCharset = Charset.forName(
-            line.getOptionValue( OPTION_DEFAULT_SOURCE_CHARSET.getLongOpt() ) ) ;
+            line.getOptionValue( GenericParametersConstants.OPTION_DEFAULT_SOURCE_CHARSET.getLongOpt() ) ) ;
       } else {
         defaultSourceCharset = null ;
       }
 
-      if( line.hasOption( OPTION_DEFAULT_RENDERING_CHARSET.getLongOpt() ) ) {
+      if( line.hasOption( GenericParametersConstants.OPTION_DEFAULT_RENDERING_CHARSET.getLongOpt() ) ) {
         defaultRenderingCharset = Charset.forName(
-            line.getOptionValue( OPTION_DEFAULT_RENDERING_CHARSET.getLongOpt() ) ) ;
+            line.getOptionValue( GenericParametersConstants.OPTION_DEFAULT_RENDERING_CHARSET.getLongOpt() ) ) ;
       } else {
         defaultRenderingCharset = null ;
       }
 
-      if( line.hasOption( OPTION_STYLE_DIRECTORIES.getLongOpt() ) ) {
+      if( line.hasOption( GenericParametersConstants.OPTION_STYLE_DIRECTORIES.getLongOpt() ) ) {
         final String[] styleDirectoriesNames =
-            line.getOptionValues( OPTION_STYLE_DIRECTORIES.getLongOpt() ) ;
+            line.getOptionValues( GenericParametersConstants.OPTION_STYLE_DIRECTORIES.getLongOpt() ) ;
         LOGGER.debug( "Argument for Style directories = '",
             Lists.newArrayList( styleDirectoriesNames ), "'" ) ;
         styleDirectories = extractDirectories( baseDirectory, styleDirectoriesNames ) ;
@@ -126,11 +125,11 @@ public abstract class GenericParameters {
         styleDirectories = ImmutableList.of() ;
       }
 
-      hyphenationDirectory = extractDirectory( baseDirectory, OPTION_HYPHENATION_DIRECTORY, line ) ;
+      hyphenationDirectory = extractDirectory( baseDirectory, GenericParametersConstants.OPTION_HYPHENATION_DIRECTORY, line ) ;
 
-      if( line.hasOption( OPTION_FONT_DIRECTORIES.getLongOpt() ) ) {
+      if( line.hasOption( GenericParametersConstants.OPTION_FONT_DIRECTORIES.getLongOpt() ) ) {
         final String[] fontDirectoriesNames =
-            line.getOptionValues( OPTION_FONT_DIRECTORIES.getLongOpt() ) ;
+            line.getOptionValues( GenericParametersConstants.OPTION_FONT_DIRECTORIES.getLongOpt() ) ;
         LOGGER.debug( "Argument for Font directories = '",
             Lists.newArrayList( fontDirectoriesNames ), "'" ) ;
         fontDirectories = extractDirectories( baseDirectory, fontDirectoriesNames ) ;
@@ -172,32 +171,11 @@ public abstract class GenericParameters {
   }
 
   /**
-   * Returns a human-readable description of {@link #OPTION_CONTENT_ROOT}.
-   */
-  public String getContentRootOptionDescription() {
-    return createOptionDescription( OPTION_CONTENT_ROOT ) ;
-  }
-
-  /**
-   * Returns a human-readable description of {@link #OPTION_FONT_DIRECTORIES}.
-   */
-  public String getFontDirectoriesOptionDescription() {
-    return createOptionDescription( OPTION_FONT_DIRECTORIES ) ;
-  }
-
-  /**
    * Returns the directories containing embeddable font files.
    * @return a non-null object iterating over no nulls.
    */
   public Iterable< File > getFontDirectories() {
     return fontDirectories;
-  }
-
-  /**
-   * Returns a human-readable description of {@link #OPTION_STYLE_DIRECTORIES}.
-   */
-  public String getStyleDirectoriesDescription() {
-    return createOptionDescription( OPTION_STYLE_DIRECTORIES ) ;
   }
 
   /**
@@ -208,12 +186,6 @@ public abstract class GenericParameters {
     return styleDirectories;
   }
 
-  /**
-   * Returns a human-readable of {@link #OPTION_HYPHENATION_DIRECTORY}.
-   */
-  public String getHyphenationDirectoryOptionDescription() {
-    return createOptionDescription( OPTION_HYPHENATION_DIRECTORY ) ;
-  }
   /**
    * Returns the directory containing hyphenation files.
    * @return a null object if undefined, a reference to an existing directory otherwise.
@@ -231,12 +203,6 @@ public abstract class GenericParameters {
   }
 
   /**
-   * Returns a human-readable of {@link #OPTION_DEFAULT_SOURCE_CHARSET}.
-   */
-  public String getDefaultSourceCharsetOptionDescription() {
-    return createOptionDescription( OPTION_DEFAULT_SOURCE_CHARSET ) ;
-  }
-  /**
    * Returns the default charset for source documents.
    * @return a null object if undefined, a valid {@code Charset} otherwise.
    */
@@ -244,12 +210,6 @@ public abstract class GenericParameters {
     return defaultSourceCharset ;
   }
 
-  /**
-   * Returns a human-readable of {@link #OPTION_DEFAULT_RENDERING_CHARSET}.
-   */
-  public String getDefaultRenderingCharsetOptionDescription() {
-    return createOptionDescription( OPTION_DEFAULT_RENDERING_CHARSET ) ;
-  }
   /**
    * Returns the default charset for rendering documents.
    * @return a null object if undefined, a valid {@code Charset} otherwise.
@@ -328,96 +288,8 @@ public abstract class GenericParameters {
 // Commons-CLI stuff
 // =================
 
-  public static final String OPTIONNAME_FONT_DIRECTORIES = "font-dirs" ;
 
-  private static final Option OPTION_FONT_DIRECTORIES = OptionBuilder
-      .withLongOpt( OPTIONNAME_FONT_DIRECTORIES )
-      .withDescription( "Directories containing embeddable fonts" )
-      .withValueSeparator()
-      .hasArgs()
-      .create()
-  ;
-
-  private static final Option OPTION_EMPTY = OptionBuilder
-      .withLongOpt( "" )
-      .withDescription( "Empty option to end directory list" )
-      .create()
-  ;
-
-  public static final String OPTIONNAME_CONTENT_ROOT = "content-root" ;
-  
-  private static final Option OPTION_CONTENT_ROOT = OptionBuilder
-      .withLongOpt( OPTIONNAME_CONTENT_ROOT )
-      .withDescription( "Root directory for content files" )
-      .withValueSeparator()
-      .hasArg()
-      .create()
-  ;
-
-  public static final String OPTIONNAME_STYLE_DIRECTORIES = "style-dirs" ;
-
-  private static final Option OPTION_STYLE_DIRECTORIES = OptionBuilder
-      .withLongOpt( OPTIONNAME_STYLE_DIRECTORIES )
-      .withDescription( "Directories containing style files" )
-      .withValueSeparator()
-      .hasArgs()
-      .create()
-  ;
-
-  public static final String OPTIONNAME_DEFAULT_SOURCE_CHARSET = "source-charset" ;
-
-  private static final Option OPTION_DEFAULT_SOURCE_CHARSET = OptionBuilder
-      .withLongOpt( OPTIONNAME_DEFAULT_SOURCE_CHARSET )
-      .withDescription( "Default charset for source documents" )
-      .withValueSeparator()
-      .hasArg()
-      .create()
-  ;
-
-  public static final String OPTIONNAME_DEFAULT_RENDERING_CHARSET = "rendering-charset" ;
-
-  private static final Option OPTION_DEFAULT_RENDERING_CHARSET = OptionBuilder
-      .withLongOpt( OPTIONNAME_DEFAULT_RENDERING_CHARSET )
-      .withDescription( "Default charset for rendered documents" )
-      .withValueSeparator()
-      .hasArg()
-      .create()
-  ;
-
-
-  public static final String OPTIONPREFIX = "--" ;
-  public static final String LOG_DIRECTORY_OPTION_NAME = "log-dir" ;
-
-  private static final Option OPTION_LOG_DIRECTORY = OptionBuilder
-      .withLongOpt( LOG_DIRECTORY_OPTION_NAME )
-      .withDescription( "Directory containing log file(s)" )
-      .withValueSeparator()
-      .hasArg()
-      .create()
-  ;
-
-  private static final Option OPTION_HYPHENATION_DIRECTORY = OptionBuilder
-      .withLongOpt( "hyphenation-dir" )
-      .withDescription( "Directory containing hyphenation files" )
-      .withValueSeparator()
-      .hasArg()
-      .create()
-  ;
-
-  public static final String HELP_OPTION_NAME = "help";
-  private static final Option OPTION_HELP = OptionBuilder
-      .withLongOpt( HELP_OPTION_NAME )
-      .withDescription( "Print help" )
-      .create()
-  ;
-
-
-  protected static String createOptionDescription( final Option option ) {
-    return OPTIONPREFIX + option.getLongOpt() + ", " + option.getDescription() ;
-  }
-
-
-// ====
+  // ====
 // Help
 // ====
 
@@ -462,12 +334,10 @@ public abstract class GenericParameters {
     }
   }
 
-  private static final String HELP_TRIGGER = OPTIONPREFIX + OPTION_HELP.getLongOpt() ;
-
   private boolean containsHelpTrigger( final String[] parameters ) {
     for( int i = 0 ; i < parameters.length ; i++ ) {
       final String parameter = parameters[ i ] ;
-      if( HELP_TRIGGER.equals( parameter ) ) {
+      if( GenericParametersConstants.HELP_TRIGGER.equals( parameter ) ) {
         return true ;
       }
     }

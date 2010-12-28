@@ -46,7 +46,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
-import org.fest.assertions.Assertions;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +56,7 @@ import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.parse.DaemonParameters;
-import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
@@ -479,9 +478,9 @@ public class HttpDaemonTest {
 
     final DaemonParameters daemonParameters = new DaemonParameters(
         resourceInstaller.getTargetDirectory(),
-        GenericParameters.OPTIONPREFIX + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT,
+        GenericParametersConstants.OPTIONPREFIX + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT,
         "" + HTTP_DAEMON_PORT,
-        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_FONT_DIRECTORIES,
+        GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_FONT_DIRECTORIES,
         directoryAsFile.getAbsolutePath()
     ) ;
 

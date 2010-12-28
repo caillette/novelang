@@ -33,10 +33,12 @@ import org.novelang.configuration.parse.BatchParameters;
 import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.configuration.parse.LevelExploderParameters;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.LogbackConfigurationTools;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceLoaderTools;
@@ -98,6 +100,9 @@ public class ConfigurationTools {
   )
       throws FOPException
   {
+    // Does nothing but triggers some useful logging.
+    extractLogDirectory( parameters ) ;
+    
     final RenderingConfiguration renderingConfiguration =
         createRenderingConfiguration( parameters ) ;
     final ContentConfiguration contentConfiguration =
@@ -264,6 +269,10 @@ public class ConfigurationTools {
     return outputDirectory;
   }
 
+  private static File extractLogDirectory( final GenericParameters parameters ) {
+    return LogbackConfigurationTools.prepareLogDirectory( parameters.getLogDirectory(), LOGGER ) ;
+  }
+
   public static ContentConfiguration createContentConfiguration(
       final GenericParameters parameters
   ) {
@@ -276,7 +285,7 @@ public class ConfigurationTools {
             "Source charset is ",
             defaultSourceCharset.name(),
             " by default (option not set: ",
-            parameters.getDefaultSourceCharsetOptionDescription(),
+            GenericParametersConstants.getDefaultSourceCharsetOptionDescription(),
             ")."
         ) ;
       } else {
@@ -285,7 +294,7 @@ public class ConfigurationTools {
             "Source charset set as ",
             defaultSourceCharset.name(),
             "( from option ",
-            parameters.getDefaultSourceCharsetOptionDescription(),
+            GenericParametersConstants.getDefaultSourceCharsetOptionDescription(),
             ")."
         ) ;
       }
@@ -302,7 +311,7 @@ public class ConfigurationTools {
             "Content root is '",
             contentRoot,
             "' (from option '",
-            parameters.getContentRootOptionDescription(),
+            GenericParametersConstants.getContentRootOptionDescription(),
             "')"
         ) ;
       }
@@ -330,14 +339,14 @@ public class ConfigurationTools {
         parameters.getFontDirectories(),
         "font directories",
         DEFAULT_FONTS_DIRECTORY_NAME,
-        parameters.getFontDirectoriesOptionDescription() 
+        GenericParametersConstants.getFontDirectoriesOptionDescription()
     ) ;
 
     final File hyphenationDirectory = findDefaultDirectoryIfNeeded(
         parameters.getBaseDirectory(),
         parameters.getHyphenationDirectory(),
         "hyphenation directory",
-        parameters.getHyphenationDirectoryOptionDescription(),
+        GenericParametersConstants.getHyphenationDirectoryOptionDescription(),
         DEFAULT_HYPHENATION_DIRECTORY_NAME
     ) ;
 
@@ -355,7 +364,7 @@ public class ConfigurationTools {
             "Rendering charset is ",
             defaultRenderingCharset.name(),
             " by default (option not set: ",
-            parameters.getDefaultRenderingCharsetOptionDescription(),
+            GenericParametersConstants.getDefaultRenderingCharsetOptionDescription(),
             ")."
         ) ;
       } else {
@@ -364,7 +373,7 @@ public class ConfigurationTools {
             "Rendering charset set as ",
             defaultRenderingCharset.name(),
             "( from option ",
-            parameters.getDefaultRenderingCharsetOptionDescription(), 
+            GenericParametersConstants.getDefaultRenderingCharsetOptionDescription(),
             ")."
         ) ;
       }
@@ -438,7 +447,7 @@ public class ConfigurationTools {
         parameters.getStyleDirectories(),
         "style directories",
         DEFAULT_STYLE_DIR,
-        parameters.getStyleDirectoriesDescription() 
+        GenericParametersConstants.getStyleDirectoriesDescription()
     ) ;
     return createResourceLoader( userDefinedDirectories ) ;
   }

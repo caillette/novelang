@@ -21,9 +21,6 @@ import java.io.IOException;
 import java.security.Permission;
 
 import org.apache.commons.io.FileUtils;
-import org.fest.assertions.Assertions;
-import org.fest.assertions.Condition;
-import org.fest.reflect.core.Reflection;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,11 +30,10 @@ import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.configuration.ConfigurationTools;
-import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
-import org.novelang.produce.DocumentRequest;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.multipage.MultipageFixture;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
@@ -62,7 +58,7 @@ public class BatchTest {
   public void exitBecauseHelpRequeted() throws Exception {
     new DocumentGenerator().main(
         "testing",
-        new String[] { GenericParameters.OPTIONPREFIX + GenericParameters.HELP_OPTION_NAME }
+        new String[] { GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.HELP_OPTION_NAME }
     ) ;
   }
 
@@ -131,7 +127,7 @@ public class BatchTest {
         false,
         new String[] {
             multipageFixture.requestForMain().getOriginalTarget(),
-            GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_STYLE_DIRECTORIES,
+            GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_STYLE_DIRECTORIES,
             multipageFixture.getStylesheetFile().getParentFile().getCanonicalPath()
         },
         multipageFixture.getBaseDirectory()

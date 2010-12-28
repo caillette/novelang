@@ -37,6 +37,7 @@ import org.novelang.configuration.parse.ArgumentException;
 import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.testing.DirectoryFixture;
@@ -45,8 +46,8 @@ import static org.junit.Assert.assertTrue;
 import static org.novelang.ResourcesForTests.FontStructure;
 import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
 import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
-import static org.novelang.configuration.parse.GenericParameters.OPTIONNAME_CONTENT_ROOT;
-import static org.novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
+import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONNAME_CONTENT_ROOT;
+import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONPREFIX;
 
 /**
  * Tests for {@link ConfigurationTools}.
@@ -174,7 +175,7 @@ public class ConfigurationToolsTest {
   {
     final DaemonParameters parameters = createDaemonParameters(
         fontStructureDirectory,
-        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_FONT_DIRECTORIES,
+        GenericParameters.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_FONT_DIRECTORIES,
         fontDirNameAlternate
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
@@ -194,7 +195,7 @@ public class ConfigurationToolsTest {
       throws ArgumentException, FOPException
   {
     final DaemonParameters parameters = createDaemonParameters(
-        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_RENDERING_CHARSET,
+        GenericParameters.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_DEFAULT_RENDERING_CHARSET,
         ISO_8859_2.name()
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
@@ -231,7 +232,7 @@ public class ConfigurationToolsTest {
       throws ArgumentException, FOPException
   {
     final DaemonParameters parameters = createDaemonParameters(
-        GenericParameters.OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET,
+        GenericParameters.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_DEFAULT_SOURCE_CHARSET,
         MAC_ROMAN.name()
     ) ;
     final ContentConfiguration contentConfiguration = ConfigurationTools

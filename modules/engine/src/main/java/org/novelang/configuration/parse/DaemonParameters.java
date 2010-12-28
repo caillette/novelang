@@ -92,7 +92,7 @@ public class DaemonParameters extends GenericParameters {
   }
 
   public String getHttpDaemonPortOptionDescription() {
-    return createOptionDescription( OPTION_HTTPDAEMON_PORT ) ;
+    return GenericParametersConstants.createOptionDescription( OPTION_HTTPDAEMON_PORT ) ;
   }
 
   public static final String OPTIONNAME_HTTPDAEMON_PORT = "port" ;
@@ -107,7 +107,7 @@ public class DaemonParameters extends GenericParameters {
   public static final String OPTIONNAME_HTTPDAEMON_SERVEREMOTES = "serve-remotes" ;
 
   public String getHttpDaemonServeRemotesOptionDescription() {
-    return createOptionDescription( OPTION_HTTPDAEMON_SERVEREMOTES ) ;
+    return GenericParametersConstants.createOptionDescription( OPTION_HTTPDAEMON_SERVEREMOTES ) ;
   }
 
   private static final Option OPTION_HTTPDAEMON_SERVEREMOTES = OptionBuilder

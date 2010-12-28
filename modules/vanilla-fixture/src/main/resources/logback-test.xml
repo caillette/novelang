@@ -4,8 +4,7 @@
       name="FILE"
       class="ch.qos.logback.core.FileAppender"
   >
-    <!-- System property MUST be set. See LogbackConfigurationTools.-->
-    <File>${org.novelang.log.dir}/novelang.log</File>
+    <File>target/novelang.log</File>
 
     <append>false</append>
 
@@ -24,7 +23,7 @@
     <level value="WARN" />
   </logger>
 
-  
+
   <root>
     <level value="WARN" />
     <appender-ref ref="FILE" />

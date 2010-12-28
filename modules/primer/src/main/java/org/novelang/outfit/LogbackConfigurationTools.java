@@ -17,8 +17,12 @@
 package org.novelang.outfit;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.configuration.parse.GenericParametersConstants;
+import org.novelang.logger.ConsoleLogger;
+import org.novelang.logger.Logger;
 
 /**
  * Helps logging system to initialize correctly.
@@ -31,7 +35,7 @@ import org.novelang.configuration.parse.GenericParameters;
  */
 public class LogbackConfigurationTools {
 
-  private static final String DEFAULT_LOG_DIR = ".";
+  public static final String DEFAULT_LOG_DIR = ".";
 
   public static final String LOG_DIR_SYSTEMPROPERTYNAME = "org.novelang.log.dir" ;
 
@@ -39,29 +43,29 @@ public class LogbackConfigurationTools {
    * This method sets the value of the {@value #LOG_DIR_SYSTEMPROPERTYNAME} system property
    * as it is required by Logback configuration for production deployment. It delegates to
    * {@link #extractLogDirectory(String[])} for finding the value out from startup arguments.
-   *
+   * It also logs some stuff.
+   * <p>
    * TODO something like <a href="http://logback.qos.ch/xref/chapter3/MyApp2.html">this</a>.
    *
    * @param arguments A non-null array containing no nulls.
    */
   public static void fixLogDirectory( final String[] arguments ) {
-
+    final File logDirectoryFromParameters ;
     final String logDirectoryName = extractLogDirectory( arguments ) ;
-    if( null == logDirectoryName ) {
-      System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, DEFAULT_LOG_DIR ) ;
-      System.out.println( "Log directory set to '" + DEFAULT_LOG_DIR + "'" ) ;
+    if( logDirectoryName == null ) {
+      logDirectoryFromParameters = null ;
     } else {
-      final File logDirectory = new File( logDirectoryName ) ;
-      if( ! logDirectory.exists() ) {
-        logDirectory.mkdirs() ;
-      }
-      System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, logDirectory.getAbsolutePath() ) ;
-      System.out.println( "System property [" +
-          LogbackConfigurationTools.LOG_DIR_SYSTEMPROPERTYNAME + "] set to '" +
-          logDirectory.getAbsolutePath() + "'"
-      ) ;
-
+      logDirectoryFromParameters = new File( logDirectoryName ) ;
     }
+
+    final File realLogDirectory =
+        prepareLogDirectory( logDirectoryFromParameters, ConsoleLogger.INSTANCE ) ;
+
+    System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, realLogDirectory.getPath() ) ;
+    System.out.println( "System property [" +
+        LogbackConfigurationTools.LOG_DIR_SYSTEMPROPERTYNAME + "] set to '" +
+        realLogDirectory.getAbsolutePath() + "'."
+    ) ;
 
   }
 
@@ -81,7 +85,7 @@ public class LogbackConfigurationTools {
    */
   public static String extractLogDirectory( final String[] startupArguments ) {
     final String logDirectoryOption =
-        GenericParameters.OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ;
+        GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.LOG_DIRECTORY_OPTION_NAME ;
     for( int i = 0 ; i < startupArguments.length ; i++ ) {
       final String startupArgument = startupArguments[ i ] ;
       if( startupArgument.equals( logDirectoryOption ) && i < startupArgument.length() - 1 ) {
@@ -91,4 +95,53 @@ public class LogbackConfigurationTools {
     return null ;
   }
 
+  /**
+   * This method gets also called by {@code ConfigurationTools} for proper logging,
+   * so logged messages must stay consistent.
+   * The first call is for configuring the logging system, the second call is for
+   * logging in the logging system.
+   * <p>
+   * Sidenote: a better logging system with in-memory, pre-configuration recording
+   * would remove that mess.
+   */
+  public static File prepareLogDirectory(
+      final File logDirectoryFromParameters,
+      final Logger logger
+  ) {
+    final File logDirectory;
+    if( null == logDirectoryFromParameters ) {
+      logDirectory = canonicize( new File( DEFAULT_LOG_DIR ) ) ;
+      logger.info(
+          "Got log directory from default value '",
+          DEFAULT_LOG_DIR,
+          "' (option not set: ",
+          GenericParametersConstants.getLogDirectoryOptionDescription(),
+          ")."
+      ) ;
+    } else {
+      logDirectory = canonicize( logDirectoryFromParameters ) ;
+      logger.info(
+          "Got log directory from custom value '",
+          logDirectory,
+          "' (from option: ",
+          GenericParametersConstants.getLogDirectoryOptionDescription(),
+          ")."
+      ) ;
+    }
+    if( logDirectory.mkdirs() ) {
+      logger.info( "Created '" + logDirectory.getAbsolutePath() + "'." ) ;
+    }
+    return logDirectory ;
+  }
+
+
+  private static File canonicize( final File logDirectoryFromParameters ) {
+    final File logDirectory ;
+    try {
+      logDirectory = logDirectoryFromParameters.getCanonicalFile() ;
+    } catch( IOException e ) {
+      throw new RuntimeException( e ) ;
+    }
+    return logDirectory ;
+  }
 }

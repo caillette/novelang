@@ -62,7 +62,7 @@ public abstract class BatchParameters extends GenericParameters {
 
 
   public String getOutputDirectoryOptionDescription() {
-    return createOptionDescription( OPTION_OUTPUT_DIRECTORY ) ;
+    return GenericParametersConstants.createOptionDescription( OPTION_OUTPUT_DIRECTORY ) ;
   }
 
 }

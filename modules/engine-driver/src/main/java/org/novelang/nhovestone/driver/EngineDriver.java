@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import org.novelang.Version;
-import org.novelang.configuration.parse.GenericParameters;
+import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.TcpPortBooker;
 import org.novelang.outfit.shell.DefaultJmxKit;
@@ -37,7 +37,7 @@ import org.apache.commons.lang.StringUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.novelang.configuration.parse.GenericParameters.OPTIONPREFIX;
+import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONPREFIX;
 
 /**
  * Encapsulates a {@link JavaShell}, factoring common code for running either a
@@ -109,16 +109,16 @@ public abstract class EngineDriver {
     }
 
     if( configuration.getLogDirectory() != null ) {
-      programOptionsBuilder.add( OPTIONPREFIX + GenericParameters.LOG_DIRECTORY_OPTION_NAME ) ;
+      programOptionsBuilder.add( OPTIONPREFIX + GenericParametersConstants.LOG_DIRECTORY_OPTION_NAME ) ;
       programOptionsBuilder.add( configuration.getLogDirectory().getAbsolutePath() ) ;
     }
 
-    programOptionsBuilder.add( OPTIONPREFIX + GenericParameters.OPTIONNAME_CONTENT_ROOT ) ;
+    programOptionsBuilder.add( OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_CONTENT_ROOT ) ;
     programOptionsBuilder.add( checkNotNull(
         configuration.getContentRootDirectory() ).getAbsolutePath() ) ;
 
     programOptionsBuilder.add(
-        OPTIONPREFIX + GenericParameters.OPTIONNAME_DEFAULT_SOURCE_CHARSET ) ;
+        OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_DEFAULT_SOURCE_CHARSET ) ;
     programOptionsBuilder.add( DefaultCharset.SOURCE.name() ) ;
 
     final Iterable< String > programArguments = configuration.getProgramArguments() ;
