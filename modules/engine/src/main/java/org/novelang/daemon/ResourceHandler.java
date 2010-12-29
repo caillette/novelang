@@ -27,7 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.mortbay.jetty.Request;
+import org.eclipse.jetty.server.Request;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -81,8 +81,7 @@ public class ResourceHandler extends GenericHandler {
   protected void doHandle(
       final String target,
       final HttpServletRequest request,
-      final HttpServletResponse response,
-      final int dispatch
+      final HttpServletResponse response
   )
       throws IOException, ServletException
   {

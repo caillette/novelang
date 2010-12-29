@@ -202,9 +202,10 @@
     <lib.xerces.artifactid>xercesImpl</lib.xerces.artifactid>
     <lib.xerces.version>2.9.1</lib.xerces.version>
 
-    <lib.jetty.groupId>org.mortbay.jetty</lib.jetty.groupId>
-    <lib.jetty.artifactid>jetty</lib.jetty.artifactid>
-    <lib.jetty.version>6.1.24</lib.jetty.version>
+    <lib.jetty.groupId>org.eclipse.jetty</lib.jetty.groupId>
+    <lib.jetty.artifactid>jetty-server</lib.jetty.artifactid>
+    <lib.jetty.version>7.2.2.v20101205</lib.jetty.version>
+    <!--<lib.jetty.version>[7.2,8)</lib.jetty.version>-->
 
     <lib.htmlunit.groupId>net.sourceforge.htmlunit</lib.htmlunit.groupId>
     <lib.htmlunit.artifactId>htmlunit</lib.htmlunit.artifactId>

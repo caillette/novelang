@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mortbay.jetty.Request;
+import org.eclipse.jetty.server.Request;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
@@ -45,8 +45,7 @@ public class ShutdownHandler extends GenericHandler{
   protected void doHandle(
       final String target,
       final HttpServletRequest request,
-      final HttpServletResponse response,
-      final int dispatch
+      final HttpServletResponse response
   ) throws IOException, ServletException {
     if( SHUTDOWN_TARGET.equals( target ) ) {
       LOGGER.info( "Shutdown requested!" ) ;

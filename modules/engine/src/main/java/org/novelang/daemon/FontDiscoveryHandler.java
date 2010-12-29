@@ -22,7 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
-import org.mortbay.jetty.Request;
+import org.eclipse.jetty.server.Request;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.logger.Logger;
@@ -55,8 +55,7 @@ public class FontDiscoveryHandler extends GenericHandler{
   protected void doHandle(
       final String target,
       final HttpServletRequest request,
-      final HttpServletResponse response,
-      final int dispatch
+      final HttpServletResponse response
   ) throws IOException, ServletException {
     if( DOCUMENT_NAME.equals( target ) ) {
       LOGGER.info( "Font listing requested" ) ;

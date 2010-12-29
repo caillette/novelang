@@ -22,8 +22,8 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mortbay.jetty.Request;
-import org.mortbay.jetty.handler.AbstractHandler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 
 /**
  * @author Laurent Caillette
@@ -33,9 +33,9 @@ public class NotFoundHandler extends AbstractHandler {
   @Override
   public void handle(
       final String target,
+      final Request jettyRequest,
       final HttpServletRequest request,
-      final HttpServletResponse response,
-      final int dispatch
+      final HttpServletResponse response
   )
       throws IOException, ServletException
   {

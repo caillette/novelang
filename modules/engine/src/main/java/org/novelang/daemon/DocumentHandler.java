@@ -29,22 +29,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
-import org.joda.time.Duration;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.mortbay.jetty.Request;
+import org.eclipse.jetty.server.Request;
 import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.produce.AnyRequest;
 import org.novelang.produce.DocumentProducer;
 import org.novelang.produce.DocumentRequest;
-import org.novelang.produce.StreamDirector;
-import org.novelang.rendering.HtmlProblemPrinter;
-import org.novelang.produce.AnyRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.MalformedRequestException;
+import org.novelang.produce.StreamDirector;
+import org.novelang.rendering.HtmlProblemPrinter;
 
 /**
  * Serves rendered content.
@@ -81,8 +78,7 @@ public class DocumentHandler extends GenericHandler {
   protected void doHandle(
       final String target,
       final HttpServletRequest request,
-      final HttpServletResponse response,
-      final int dispatch
+      final HttpServletResponse response
   ) throws IOException, ServletException {
     handle( request, response ) ;
   }

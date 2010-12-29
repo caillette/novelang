@@ -22,8 +22,8 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mortbay.jetty.Request;
-import org.mortbay.jetty.handler.AbstractHandler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 
@@ -39,9 +39,9 @@ public abstract class GenericHandler extends AbstractHandler {
   @Override
   public final void handle(
       final String target,
+      final Request jettyRequest,
       final HttpServletRequest request,
-      final HttpServletResponse response,
-      final int dispatch
+      final HttpServletResponse response
   ) throws IOException {
 
     if( ( ( Request ) request ).isHandled() ) {
@@ -51,7 +51,7 @@ public abstract class GenericHandler extends AbstractHandler {
     }
 
     try {
-      doHandle( target, request, response, dispatch ) ;
+      doHandle( target, request, response ) ;
     } catch( Exception e ) {
       response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR ) ;
       response.getOutputStream().print( "<html>" );
@@ -75,8 +75,7 @@ public abstract class GenericHandler extends AbstractHandler {
   protected abstract void doHandle(
       String target,
       HttpServletRequest request,
-      HttpServletResponse response,
-      int dispatch
+      HttpServletResponse response
   ) throws IOException, ServletException ;
 
 
