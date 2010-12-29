@@ -175,7 +175,7 @@ public class ConfigurationToolsTest {
   {
     final DaemonParameters parameters = createDaemonParameters(
         fontStructureDirectory,
-        GenericParameters.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_FONT_DIRECTORIES,
+        GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_FONT_DIRECTORIES,
         fontDirNameAlternate
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
@@ -195,7 +195,7 @@ public class ConfigurationToolsTest {
       throws ArgumentException, FOPException
   {
     final DaemonParameters parameters = createDaemonParameters(
-        GenericParameters.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_DEFAULT_RENDERING_CHARSET,
+        GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_DEFAULT_RENDERING_CHARSET,
         ISO_8859_2.name()
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
@@ -232,7 +232,7 @@ public class ConfigurationToolsTest {
       throws ArgumentException, FOPException
   {
     final DaemonParameters parameters = createDaemonParameters(
-        GenericParameters.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_DEFAULT_SOURCE_CHARSET,
+        GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_DEFAULT_SOURCE_CHARSET,
         MAC_ROMAN.name()
     ) ;
     final ContentConfiguration contentConfiguration = ConfigurationTools
