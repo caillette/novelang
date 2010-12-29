@@ -40,7 +40,7 @@ public final class ConsoleLogger extends AbstractLogger {
       throwable.printStackTrace( new PrintWriter( stringWriter ) ) ;
       stackTrace = stringWriter.toString() ;
     }
-    System.err.println( "[" + level + "] " + ( message == null ? "" : message ) + stackTrace ) ;
+    System.out.println( "[" + level + "] " + ( message == null ? "" : message ) + stackTrace ) ;
   }
 
   @Override
