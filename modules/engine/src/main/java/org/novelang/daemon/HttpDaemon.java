@@ -89,6 +89,7 @@ public class HttpDaemon {
     handlers.addHandler( new ResourceHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
     server = new Server( daemonConfiguration.getPort() ) ;
     server.setHandler( handlers ) ;
+    server.setThreadPool( new JettyThreadPool() ) ;
   }
 
   public void start() throws Exception {
