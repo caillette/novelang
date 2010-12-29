@@ -85,7 +85,7 @@ public class ResourceHandler extends GenericHandler {
   )
       throws IOException, ServletException
   {
-    LOGGER.debug( "Attempting to handle ", request.getRequestURI() ) ;
+    LOGGER.debug( "Handling ", request.getRequestURI(), "..." ) ;
 
     final ResourceRequest documentRequest;
     try {

@@ -88,7 +88,7 @@ public class DirectoryScanHandler extends GenericHandler {
   )
       throws IOException, ServletException
   {
-    LOGGER.debug( "Attempting to handle request for user agent ",
+    LOGGER.debug( "Handling request for user agent ",
         request.getHeader( "User-Agent" ) ) ;
 
     if( target.contains( ".." ) ) {
