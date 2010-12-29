@@ -18,16 +18,19 @@ package org.novelang.novella;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.google.common.base.Preconditions;
 import javax.imageio.ImageIO;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLResolver;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
 import org.novelang.common.FileTools;
 import org.novelang.common.Problem;
 import org.novelang.common.ProblemCollector;
@@ -42,9 +45,6 @@ import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.parser.NodeKind;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * Transforms the path of embeddable resources (like {@link NodeKind#RASTER_IMAGE} or
@@ -62,6 +62,12 @@ public class ImageFixer {
   private final File baseDirectory;
   private final File referrerDirectory ;
   private final ProblemCollector problemCollector ;
+
+  /**
+   * Validation guarantees we're embedding valid SVG files.
+   * It relies on {@link #ENTITY_RESOLVER}.
+   */
+  private static final boolean VALIDATE_SVG = true ;
 
   public ImageFixer(
       final File baseDirectory, 
@@ -99,7 +105,7 @@ public class ImageFixer {
     return relocateAllResources( Treepath.create( tree ) ).getTreeAtEnd() ;
   }
 
-  private Treepath<SyntacticTree> relocateAllResources( Treepath<SyntacticTree> treepath ) {
+  private Treepath<SyntacticTree> relocateAllResources( final Treepath< SyntacticTree > treepath ) {
     Treepath<SyntacticTree> treepath1 = treepath;
     final SyntacticTree tree = treepath1.getTreeAtEnd();
     if( tree.isOneOf( NodeKind.RASTER_IMAGE, NodeKind.VECTOR_IMAGE ) ) {
@@ -114,8 +120,9 @@ public class ImageFixer {
   }
 
   private Treepath< SyntacticTree > fixImage(
-      Treepath< SyntacticTree > treepathToImage
+      final Treepath< SyntacticTree > treepathToImage
   ) {
+    Treepath< SyntacticTree > newTreepath ;
     final SyntacticTree imageTree = treepathToImage.getTreeAtEnd() ;
     for( int i = 0 ; i < imageTree.getChildCount() ; i++ ) {
       final SyntacticTree child = imageTree.getChildAt( i ) ;
@@ -136,12 +143,12 @@ public class ImageFixer {
         LOGGER.debug( "Replacing '", oldLocation, "' by '", newLocation, "'" ) ;
         final Treepath< SyntacticTree > treepathToResourceLocation = 
             Treepath.create( treepathToImage, i, 0 ) ;
-        treepathToImage = TreepathTools.replaceTreepathEnd(
+        newTreepath = TreepathTools.replaceTreepathEnd(
             treepathToResourceLocation, 
             new SimpleTree( newLocation ) 
         ).getPrevious().getPrevious() ;
-        treepathToImage = addImageMetadata( treepathToImage, newLocation ) ;
-        return treepathToImage ;
+        newTreepath = addImageMetadata( newTreepath, newLocation ) ;
+        return newTreepath ;
       }
     }    
     throw new IllegalArgumentException( 
@@ -149,18 +156,20 @@ public class ImageFixer {
   }
 
   private Treepath< SyntacticTree > addImageMetadata(
-      Treepath< SyntacticTree > treepathToImage,
+      final Treepath< SyntacticTree > treepathToImage,
       final String imageLocation
   ) {
       final File imageFile = new File( baseDirectory, imageLocation ) ;
       final NodeKind nodeKind = NodeKind.valueOf( treepathToImage.getTreeAtEnd().getText() ) ;
+      Treepath< SyntacticTree > newTreepath = treepathToImage ;
       try {
+        //noinspection EnumSwitchStatementWhichMissesCases
         switch( nodeKind ) {
           case RASTER_IMAGE :
-            treepathToImage = addRasterImageMetadata( treepathToImage, imageFile ) ;
+            newTreepath = addRasterImageMetadata( newTreepath, imageFile ) ;
             break ;
           case VECTOR_IMAGE :
-            treepathToImage = addVectorImageMetadata( treepathToImage, imageFile ) ;
+            newTreepath = addVectorImageMetadata( newTreepath, imageFile ) ;
             break ;
           default :
             break ;
@@ -170,72 +179,101 @@ public class ImageFixer {
         problemCollector.collect( Problem.createProblem( message ) ) ;
         LOGGER.warn( e, message ) ;
       }
-    return treepathToImage ;
+    return newTreepath ;
   }
 
   private static Treepath< SyntacticTree > addRasterImageMetadata(
-      Treepath< SyntacticTree > treepathToImage,
+      final Treepath< SyntacticTree > treepathToImage,
       final File imageFile
   ) throws IOException {
     LOGGER.debug( "Extracting raster image metadata from '", imageFile.getAbsolutePath(), "'..." ) ;
+    Treepath< SyntacticTree > newTreepath = treepathToImage ;
+
     final BufferedImage bufferedImage = ImageIO.read( imageFile ) ;
 
-    treepathToImage = addImageMetadata(
-        treepathToImage,
+    newTreepath = addImageMetadata(
+        newTreepath,
         NodeKind._IMAGE_WIDTH,
         bufferedImage.getWidth() + "px"
     ) ;
 
-    treepathToImage = addImageMetadata(
-        treepathToImage,
+    newTreepath = addImageMetadata(
+        newTreepath,
         NodeKind._IMAGE_HEIGHT,
         bufferedImage.getHeight() + "px"
     ) ;
-    return treepathToImage;
+    return newTreepath ;
   }
 
   /**
-   * Extracts {@code /svg/@width} and {@code /svg/@height} from SVG file and puts them verbatim.
-   * This implementation is highly unefficient. It parsers the whole SVG document and requires
-   * bundled SVG-related DTD (meaning a <em>lot</em> of files).
-   * A <a href="http://www.extreme.indiana.edu/xgws/xsoap/xpp/" >pull</a> parser would do a
-   * much better job.
-   * TODO use a pull parser.
+   * Decorates the referenced {@link NodeKind#VECTOR_IMAGE} with {@link NodeKind#_IMAGE_WIDTH }
+   * and {@link NodeKind#_IMAGE_HEIGHT}.
+   * TODO: Seems that loading XML document triggers a connection to Internet (w3c.org).
    */
   private static Treepath< SyntacticTree > addVectorImageMetadata(
-      Treepath< SyntacticTree > treepathToImage,
+      final Treepath< SyntacticTree > treepathToImage,
       final File imageFile
-  ) throws IOException, DocumentException {
+  ) throws IOException, XMLStreamException {
+
     LOGGER.debug( "Extracting vector image metadata from '",
         imageFile.getAbsolutePath(),
         "'..."
     ) ;
+    String width = null ;
+    String height = null ;
 
-    final SAXReader reader = new SAXReader() ;
-    reader.setEntityResolver( ENTITY_RESOLVER ) ;
-    final Document document = reader.read( imageFile.toURI().toURL() ) ;
-    final Node svgNode = document.selectSingleNode( "/svg" ) ;
+    final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance() ;
+    final InputStream inputStream = new FileInputStream( imageFile ) ;
+    try {
 
-    if( null != svgNode ) {
-      final String width = svgNode.valueOf( "@width" ) ;
-      final String height = svgNode.valueOf( "@height" ) ;
-
-      LOGGER.debug( "Found: width:'", width, "', height:'", height, "'" );
-
-      if( ! StringUtils.isBlank( width ) && ! StringUtils.isBlank( height ) ) {
-        treepathToImage = addImageMetadata(
-            treepathToImage,
-            NodeKind._IMAGE_WIDTH,
-            width
-        ) ;
-        treepathToImage = addImageMetadata(
-            treepathToImage,
-            NodeKind._IMAGE_HEIGHT,
-            height
-        ) ;
+      if( VALIDATE_SVG ) {
+        xmlInputFactory.setProperty( "javax.xml.stream.resolver", ENTITY_RESOLVER );
+      } else {
+        xmlInputFactory.setProperty( "javax.xml.stream.isValidating", false ) ;
       }
+      final XMLStreamReader reader = xmlInputFactory.createXMLStreamReader( inputStream ) ;
+      for( int event = reader.next() ;
+          event != XMLStreamConstants.END_DOCUMENT ;
+          event = reader.next()
+      ) {
+        if( event == XMLStreamConstants.START_ELEMENT
+            && "svg".equals( reader.getName().getLocalPart() )
+        ) {
+          width = reader.getAttributeValue( "", "width" ) ;
+          height = reader.getAttributeValue( "", "height" ) ;
+          break ;
+        }
+      }
+    } finally {
+      inputStream.close() ;
     }
-    return treepathToImage;
+
+    return addImageMetadata( treepathToImage, width, height );
+  }
+
+  /**
+   * @param width maybe null.
+   * @param height maybe null.
+   */
+  private static Treepath< SyntacticTree > addImageMetadata(
+      final Treepath< SyntacticTree > treepathToImage,
+      final String width,
+      final String height
+  ) {
+    Treepath< SyntacticTree > newTreepath = treepathToImage ;
+    if( ! StringUtils.isBlank( width ) && ! StringUtils.isBlank( height ) ) {
+      newTreepath = addImageMetadata(
+          newTreepath,
+          NodeKind._IMAGE_WIDTH,
+          width
+      ) ;
+      newTreepath = addImageMetadata(
+          newTreepath,
+          NodeKind._IMAGE_HEIGHT,
+          height
+      ) ;
+    }
+    return newTreepath ;
   }
 
   private static Treepath<SyntacticTree> addImageMetadata(
@@ -300,29 +338,12 @@ public class ImageFixer {
   }
 
 
-  protected final static class ImageDimension {
-    private final String width ;
-    private final String height ;
-
-    public ImageDimension( final String width, final String height ) {
-      this.width = width ;
-      this.height = height ;
-    }
-
-    public String getWidth() {
-      return width ;
-    }
-
-    public String getHeight() {
-      return height ;
-    }
-  }
 
   /**
-   * This global variable is dirty.
-   * TODO propagate the {@code ResourceLoader} up to here.
+   * This global variable is dirty, but we use it only for loading SVG entities.
+   * The good approach is rather to use a pull parser and drop that.
    */
-  private static final ResourceLoader ENTITY_RESOURCE_LOADER = 
+  private static final ResourceLoader ENTITY_RESOURCE_LOADER =
       new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
 
   private static final String SVG11_PUBLICID_PREFIX_1 = "-//W3C//ENTITIES SVG 1.1" ;
@@ -336,17 +357,24 @@ public class ImageFixer {
 
   /**
    * Dirty implementation only supporting DTD for SVG 1.1 in bundled style directory.
+   * We need a resolver here in order to keep DTD validation and avoid an Internet
+   * connection (to w3c.org) during parsing.
+   * Set {@link #VALIDATE_SVG} to false for disabling entity resolving.
    */
-  private static final EntityResolver ENTITY_RESOLVER = new EntityResolver() {
+  private static final XMLResolver ENTITY_RESOLVER = new XMLResolver() {
     @Override
-    public InputSource resolveEntity( final String publicId, final String systemId )
-        throws SAXException, IOException 
+    public InputStream resolveEntity(
+        final String publicId,
+        final String systemId,
+        final String baseURI,
+        final String namespace
+    )
     {
-      if( publicId.startsWith( SVG11_PUBLICID_PREFIX_1 ) 
-       || publicId.startsWith( SVG11_PUBLICID_PREFIX_2 )  
-       || publicId.startsWith( SVG11_PUBLICID_PREFIX_3 )  
+      if( publicId.startsWith( SVG11_PUBLICID_PREFIX_1 )
+       || publicId.startsWith( SVG11_PUBLICID_PREFIX_2 )
+       || publicId.startsWith( SVG11_PUBLICID_PREFIX_3 )
       ) {
-        final String dtdResourceName = systemId.substring( systemId.lastIndexOf( "/" ) + 1 ) ;
+        final String dtdResourceName = systemId.substring( systemId.lastIndexOf( '/' ) + 1 ) ;
         LOGGER.debug(
             "Attempting to load definition for publicIdentifier='",
             publicId,
@@ -356,14 +384,15 @@ public class ImageFixer {
             dtdResourceName,
             "'"
         ) ;
-        return new InputSource( 
-            ENTITY_RESOURCE_LOADER.getInputStream( 
-                new ResourceName( SVG_1_1_DTD_RESOURCE_PREFIX + "/" + dtdResourceName ) ) ) ;
+        return
+            ENTITY_RESOURCE_LOADER.getInputStream(
+                new ResourceName( SVG_1_1_DTD_RESOURCE_PREFIX + "/" + dtdResourceName ) ) ;
       } else {
-        throw new IllegalArgumentException( 
+        throw new IllegalArgumentException(
             "Unsupported yet: public identifier='" + publicId + "', systemId='" + systemId + "'" ) ;
       }
     }
+
   } ;
-  
+
 }
