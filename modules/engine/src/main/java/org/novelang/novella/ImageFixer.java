@@ -66,8 +66,9 @@ public class ImageFixer {
   /**
    * Validation guarantees we're embedding valid SVG files.
    * It relies on {@link #ENTITY_RESOLVER}.
+   * Doesn't seem very useful if we only read a small part of the file.
    */
-  private static final boolean VALIDATE_SVG = true ;
+  private static final boolean VALIDATE_SVG = false ;
 
   public ImageFixer(
       final File baseDirectory, 
