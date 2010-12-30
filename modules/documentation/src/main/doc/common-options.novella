@@ -1,0 +1,71 @@
+
+== 
+
+=== The ``--content-root`` option
+
+The ``--content-root`` option sets the base directory to another value than current directory:
+
+<<<
+--content-root=../my-source/documents
+>>>
+
+
+=== The ``--log-dir`` option
+
+The ``--log-dir`` option sets where Novelang daemon writes its log files.
+
+<<<
+--log-dir=logs
+>>>
+
+
+=== The ``--font-dirs`` option
+
+The ``--font-dirs`` option sets multiple directories where Novelang daemon looks for fonts.
+
+<<<
+--font-dirs my/fonts-1 /Users/Shared/Fonts
+>>>
+
+
+=== The ``--style-dirs`` option
+
+The ``--style-dirs`` option sets multiple directories where Novelang daemon looks for stylesheets 
+and related resources. See chapter about stylesheet for details.
+
+
+<<<
+--style-dirs my/styles-1 /Users/Shared/Fonts
+>>>
+
+
+=== The ``--hyphenation-dir`` option
+
+The ``--hyphenation-dir`` option sets where Novelang should attempt to load hyphenation files from.
+
+<<<
+--hyphenation-dir=my/directory
+>>>
+
+
+=== The ``--source-charset`` option
+
+The ``--source-charset`` option sets the charset of source documents.
+
+<<<
+--source-charset MacRoman
+>>>
+
+Default value is ``UTF-8``.
+
+
+=== The ``--rendering-charset`` option
+
+The ``--rendering-charset`` option sets the charset of rendered documents.
+
+<<<
+--rendering-charset iso-8859-2
+>>>
+
+Default value is ``UTF-8``.
+

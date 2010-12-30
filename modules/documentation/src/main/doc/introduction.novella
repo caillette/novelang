@@ -44,7 +44,7 @@ Hello, world!
 Then, from the directory where the file is located, launch the Novelang dæmon:
 
 <<<
-java -jar httpdaemon $NOVELANG_HOME/lib/Novelang-bootstrap-$VERSION.jar httpdaemon
+java -jar $NOVELANG_HOME/lib/Novelang-bootstrap-$VERSION.jar httpdaemon
 >>>
 
 Open your favorite Web browser at this address:

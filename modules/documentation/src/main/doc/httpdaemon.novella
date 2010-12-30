@@ -1,15 +1,13 @@
 == HTTP daemon
 
-Here are some useful command-line and request options.
+Novelang HTTP daemon runs as a Web server and displays documents in a Web browser.
 
-=== The ``--content-root`` option
-
-The ``--content-root`` option sets the base directory to another value than current directory:
+It starts like this:
 
 <<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --content-root=../my-source/documents
+java -jar $NOVELANG_HOME/lib/Novelang-bootstrap-$VERSION.jar httpdaemon [options]
 >>>
+
 
 
 === The ``--port`` option
@@ -17,8 +15,7 @@ java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
 The ``--port`` option sets the TCP port of which the daemon listens to:
 
 <<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --port=8083
+--port=8083
 >>>
 
 Then URL for accessing documents becomes something like:
@@ -26,59 +23,6 @@ Then URL for accessing documents becomes something like:
 <<<
 http://localhost:8083/mydocument.html
 >>>
-
-=== The ``--log-dir`` option
-
-The ``--log-dir`` option sets where Novelang daemon writes its log files.
-
-<<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --log-dir=logs
->>>
-
-
-=== The ``--font-dirs`` option
-
-The ``--font-dirs`` option sets multiple directories where Novelang daemon looks for fonts.
-
-<<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --font-dirs my/fonts-1 /Users/Shared/Fonts
->>>
-
-
-=== The ``--style-dirs`` option
-
-The ``--style-dirs`` option sets multiple directories where Novelang daemon looks for stylesheets 
-and related resources. See chapter about stylesheet for details.
-
-
-<<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --style-dirs my/styles-1 /Users/Shared/Fonts
->>>
-
-
-=== The ``--hyphenation-dir`` option
-
-The ``--hyphenation-dir`` option sets where Novelang should attempt to load hyphenation files from.
-
-<<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --hyphenation-dir=my/directory
->>>
-
-
-=== The ``--source-charset`` option
-
-The ``--source-charset`` option sets the charset of source documents.
-
-<<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --source-charset MacRoman
->>>
-
-Default value is ``UTF-8``.
 
 
 === The ``--serve-remotes`` option
@@ -89,43 +33,9 @@ It is not recommended to activate this option because Novelang is not architectu
 run as a Web server serving many concurrent requests.
 
 <<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --serve-remotes
+--serve-remotes
 >>>
 
 Default value is ``false``.
 
 
-=== The ``--rendering-charset`` option
-
-The ``--rendering-charset`` option sets the charset of rendered documents.
-
-<<<
-java -jar httpdaemon $NOVELANG_DIR/novelang-VERSION.jar
-  --rendering-charset iso-8859-2
->>>
-
-Default value is ``UTF-8``.
-
-
-=== Directory listing
-
-You can list the content of a directory by not giving any document name.
-
-This will list every file ending by document source extension (currently "``.novella``" or "``.opus``"),
-including those in subdirectories. Every subdirectory also appear, even if it contains none of
-those files.
-Document sources become hyperlinks to their HTML form.
-
-Here are samples of valid URLs for directory listings:
-
-<<<
-http://localhost:8080
-http://localhost:8080/
-http://localhost:8080/samples
-http://localhost:8080/samples/
->>>
-
-
-Because of a known Safari bug, Safari browsers get redirected to a fake page named ``-.html``
-but the feature remains the same, however.

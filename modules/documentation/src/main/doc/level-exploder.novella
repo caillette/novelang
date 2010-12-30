@@ -1,0 +1,27 @@
+
+== Level Exploder
+
+The Level Exploder is a batch tool for generating multiple documents from the levels of one
+existing document. A typical usage is for slimming down a document that has become too big. 
+
+Document is requested with a path relative to the directory the level exploder was launched from.
+
+If current directory contains a ``big.novella`` file with three levels named "one", "two" and "three"
+then following invocation will generate three files named ``output/one.novella``, ``output/two.novella``
+and ``output/three.novella``:
+
+<<<
+java -jar $NOVELANG_DIR/novelang-VERSION.jar explodelevels
+  /big.novella
+>>>
+
+
+=== The ``--output-dir`` option
+
+The ``--output-dir`` option sets the output directory, where rendered documents are generated to.
+
+<<<
+--output-dir exploded
+>>>
+
+Default value is ``output``.

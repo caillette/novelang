@@ -26,12 +26,25 @@ insert file:fonts.novella
 
 insert file:hyphenation.novella
 
+
 insert file:httpdaemon.novella
+
+insert file:common-options.novella levelabove=2
+
+insert file:httpdaemon-supplement.novella levelabove=2
+
 
 insert file:generator.novella
 
-insert file:tips.novella
+insert file:common-options.novella levelabove=2
 
+
+insert file:level-exploder.novella
+
+insert file:common-options.novella levelabove=2
+
+
+insert file:tips.novella
 
 insert file:source-characters.novella style=character-escapes
 
