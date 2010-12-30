@@ -17,6 +17,7 @@
 package org.novelang.novella;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -62,13 +63,6 @@ public class ImageFixer {
   private final File baseDirectory;
   private final File referrerDirectory ;
   private final ProblemCollector problemCollector ;
-
-  /**
-   * Validation guarantees we're embedding valid SVG files.
-   * It relies on {@link #ENTITY_RESOLVER}.
-   * Doesn't seem very useful if we only read a small part of the file.
-   */
-  private static final boolean VALIDATE_SVG = false ;
 
   public ImageFixer(
       final File baseDirectory, 
@@ -227,11 +221,7 @@ public class ImageFixer {
     final InputStream inputStream = new FileInputStream( imageFile ) ;
     try {
 
-      if( VALIDATE_SVG ) {
-        xmlInputFactory.setProperty( "javax.xml.stream.resolver", ENTITY_RESOLVER );
-      } else {
-        xmlInputFactory.setProperty( "javax.xml.stream.isValidating", false ) ;
-      }
+      xmlInputFactory.setProperty( "javax.xml.stream.resolver", ENTITY_RESOLVER );
       final XMLStreamReader reader = xmlInputFactory.createXMLStreamReader( inputStream ) ;
       for( int event = reader.next() ;
           event != XMLStreamConstants.END_DOCUMENT ;
@@ -339,28 +329,8 @@ public class ImageFixer {
   }
 
 
-
   /**
-   * This global variable is dirty, but we use it only for loading SVG entities.
-   * The good approach is rather to use a pull parser and drop that.
-   */
-  private static final ResourceLoader ENTITY_RESOURCE_LOADER =
-      new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
-
-  private static final String SVG11_PUBLICID_PREFIX_1 = "-//W3C//ENTITIES SVG 1.1" ;
-  private static final String SVG11_PUBLICID_PREFIX_2 = "-//W3C//DTD SVG 1.1" ;
-  private static final String SVG11_PUBLICID_PREFIX_3 = "-//W3C//ELEMENTS SVG 1.1" ;
-
-  /**
-   * This is the path under default {@value ConfigurationTools#BUNDLED_STYLE_DIR}.
-   */
-  private static final String SVG_1_1_DTD_RESOURCE_PREFIX = "svg11-dtd";
-
-  /**
-   * Dirty implementation only supporting DTD for SVG 1.1 in bundled style directory.
-   * We need a resolver here in order to keep DTD validation and avoid an Internet
-   * connection (to w3c.org) during parsing.
-   * Set {@link #VALIDATE_SVG} to false for disabling entity resolving.
+   * Always returns an empty {@code InputStream} with the effect of disabling any entity inclusion.
    */
   private static final XMLResolver ENTITY_RESOLVER = new XMLResolver() {
     @Override
@@ -371,27 +341,7 @@ public class ImageFixer {
         final String namespace
     )
     {
-      if( publicId.startsWith( SVG11_PUBLICID_PREFIX_1 )
-       || publicId.startsWith( SVG11_PUBLICID_PREFIX_2 )
-       || publicId.startsWith( SVG11_PUBLICID_PREFIX_3 )
-      ) {
-        final String dtdResourceName = systemId.substring( systemId.lastIndexOf( '/' ) + 1 ) ;
-        LOGGER.debug(
-            "Attempting to load definition for publicIdentifier='",
-            publicId,
-            "', systemIdentifier='",
-            systemId,
-            "', resourceName='",
-            dtdResourceName,
-            "'"
-        ) ;
-        return
-            ENTITY_RESOURCE_LOADER.getInputStream(
-                new ResourceName( SVG_1_1_DTD_RESOURCE_PREFIX + "/" + dtdResourceName ) ) ;
-      } else {
-        throw new IllegalArgumentException(
-            "Unsupported yet: public identifier='" + publicId + "', systemId='" + systemId + "'" ) ;
-      }
+      return new ByteArrayInputStream( new byte[] { } ) ;
     }
 
   } ;
