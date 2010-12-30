@@ -70,8 +70,8 @@
               <contentRootDirectory>${enhancedDocumentSources}</contentRootDirectory>
               <outputDirectory>${generatedDocumentsDirectory}</outputDirectory>
               <documentsToRender>
-                <param>/novelang.html"</param>
-                <param>/novelang.pdf"</param>
+                <param>/Novelang.html"</param>
+                <param>/Novelang.pdf"</param>
                 <param>/versions/release-notes.html?stylesheet=announcement-html.xsl"</param>
                 <param>/versions/release-notes.novella?stylesheet=announcement-plaintext.xsl"</param>
               </documentsToRender>
@@ -144,7 +144,7 @@
                 <copy todir="${generatedDocumentsDirectory}" flatten="true">
                   <fileset dir="${enhancedDocumentSources}">
                     <include name="**/*.css" />
-                    <include name="**/*.html" /> <!-- index.html -> novelang.html -->
+                    <include name="**/*.html" /> <!-- index.html -> Novelang.html -->
                   </fileset>
                 </copy>
 
