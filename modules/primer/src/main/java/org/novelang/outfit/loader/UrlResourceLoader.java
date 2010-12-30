@@ -30,12 +30,12 @@ import org.novelang.logger.LoggerFactory;
  * 
  * @author Laurent Caillette
  */
-public class UrlResourceLoader implements ResourceLoader {
+public class UrlResourceLoader extends AbstractResourceLoader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( UrlResourceLoader.class ) ;
 
   private final URL base ;
-  private final String searchPath ;
+  private final String multilineDescription;
 
   public UrlResourceLoader( final URL base ) {
     final String urlAsString = base.toExternalForm();
@@ -48,36 +48,34 @@ public class UrlResourceLoader implements ResourceLoader {
         throw new RuntimeException( e ) ;
       }
     }
-    this.searchPath = createSearchPath( base ) ;
+    this.multilineDescription = getClass().getSimpleName() + " " + base.toExternalForm() ;
   }
 
   @Override
-  public InputStream getInputStream(
-      final ResourceName resourceName 
-  ) throws ResourceNotFoundException {
+  protected String getMultilineDescription() {
+    return multilineDescription ;
+  }
+
+  @Override
+  public InputStream maybeGetInputStream( final ResourceName resourceName ) {
 
     final URL resourceUrl ;
     try {
       resourceUrl = new URL( base, resourceName.getName() ) ;
     } catch( MalformedURLException e ) {
-      LOGGER.debug( "Could not find resource '", resourceName.getName(), "' from ", this ) ;
-      throw new ResourceNotFoundException( resourceName, searchPath, e );
+      throw new RuntimeException( e ) ;
+    }
+    if( resourceUrl == null ) {
+      return null ;
     }
     try {
       final InputStream inputStream = resourceUrl.openStream() ;
       LOGGER.debug( "Opened stream '", resourceUrl.toExternalForm(), "'" );
-      return inputStream;
+      return inputStream ;
     } catch( IOException e ) {
-      LOGGER.debug( "Could not find resource '", resourceUrl, "' from ", this );
-      throw new ResourceNotFoundException( resourceName, searchPath, e );
+      // Is there a case where this makes more sense than rethrowing in a RuntimeException?
+      return null ;
     }
   }
 
-  private String createSearchPath( final URL baseUrl ) {
-    final StringBuffer buffer = new StringBuffer( "  " + toString() + "\n" ) ;
-    buffer.append( "      " ) ;
-    buffer.append( baseUrl.toExternalForm() ) ;
-    buffer.append( "\n" ) ;
-    return buffer.toString() ;
-  }
 }

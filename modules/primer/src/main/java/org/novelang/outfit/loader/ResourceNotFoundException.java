@@ -17,7 +17,7 @@
 
 package org.novelang.outfit.loader;
 
-import java.net.URL;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Thrown by {@link ResourceLoader} when expected resource wasn't there.
@@ -29,16 +29,19 @@ public class ResourceNotFoundException extends RuntimeException {
   final String searchPath ;
 
   public ResourceNotFoundException( final String resourceName, final String searchPath ) {
-    super( "Not found: '" + resourceName + "' in \n" + searchPath ) ;
+    super( "Not found: '" + resourceName + "'" + searchPathAsFragmentMessage( searchPath ) ) ;
     this.searchPath = searchPath ;
   }
 
-  public ResourceNotFoundException( 
+  public ResourceNotFoundException(
       final String resourceName, 
       final String searchPath, 
       final Exception cause 
   ) {
-    super( "Not found: '" + resourceName + "' in \n" + searchPath, cause ) ;
+    super(
+        "Not found: '" + resourceName + "'" + searchPathAsFragmentMessage( searchPath ),
+        cause
+    ) ;
     this.searchPath = searchPath ;
   }
 
@@ -54,15 +57,9 @@ public class ResourceNotFoundException extends RuntimeException {
     this( resourceName.getName(), searchPath, cause ) ;
   }
 
-  public ResourceNotFoundException( 
-      final URL baseUrl, 
-      final String resourceName, 
-      final Exception cause 
-  ) {
-    super( "Not found: '" + baseUrl.toExternalForm() + "/" + resourceName + "'", cause ) ;
-    this.searchPath = "\n    " + baseUrl.toExternalForm() ;
-  }
-
+  /**
+   * @return a possibly null {@code String}.
+   */
   public final String getSearchPath() {
     return searchPath ;
   }
@@ -73,5 +70,10 @@ public class ResourceNotFoundException extends RuntimeException {
   ) {
     return first.getSearchPath() + second.getSearchPath() ;
   }
+
+  private static String searchPathAsFragmentMessage( final String searchPath ) {
+    return ( StringUtils.isBlank( searchPath ) ? "" : " in \n" + searchPath );
+  }
+
 
 }

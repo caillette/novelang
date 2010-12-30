@@ -40,6 +40,7 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.LogbackConfigurationTools;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
+import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.UrlResourceLoader;
@@ -455,12 +456,12 @@ public class ConfigurationTools {
   public static ResourceLoader createResourceLoader( 
       final Iterable< File > userDefinedDirectories
   ) {
-    final ResourceLoader classpathResourceLoader = 
+    final ClasspathResourceLoader classpathResourceLoader =
         new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
     final Iterator< File > userDefinedDirectoryIterator = userDefinedDirectories.iterator() ;
     
     if( userDefinedDirectoryIterator.hasNext() ) {
-      ResourceLoader resultingResourceLoader = classpathResourceLoader ;
+      CompositeResourceLoader resultingResourceLoader = new CompositeResourceLoader( classpathResourceLoader ) ;
       
       while ( userDefinedDirectoryIterator.hasNext() ) {
         final File userStyleDirectory = userDefinedDirectoryIterator.next() ;
@@ -470,9 +471,8 @@ public class ConfigurationTools {
         } catch( MalformedURLException e ) {
           throw new RuntimeException( e );
         }
-        resultingResourceLoader = ResourceLoaderTools.compose( 
-            new UrlResourceLoader( userStyleUrl ), 
-            resultingResourceLoader 
+        resultingResourceLoader = new CompositeResourceLoader(
+            resultingResourceLoader, new UrlResourceLoader( userStyleUrl )
         ) ;
       }
 

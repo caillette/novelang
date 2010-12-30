@@ -33,15 +33,17 @@ import org.apache.commons.lang.SystemUtils;
  *
  * @author Laurent Caillette
  */
-public class ClasspathResourceLoader implements ResourceLoader {
+public class ClasspathResourceLoader extends AbstractResourceLoader {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( ClasspathResourceLoader.class ) ;
   private final Class reference ;
   private final String path ;
+  private final String searchPathForDescription ;
 
   protected ClasspathResourceLoader( final Class reference, final String path ) {
     this.reference = Preconditions.checkNotNull( reference ) ;
     this.path = null == path ? "" : normalize( path ) ;
+    searchPathForDescription = getBestDescriptorForClassloader() ;
   }
 
   public ClasspathResourceLoader() {
@@ -53,26 +55,28 @@ public class ClasspathResourceLoader implements ResourceLoader {
   }
 
   @Override
-  public InputStream getInputStream( final ResourceName resourceName ) {
+  protected String getMultilineDescription() {
+    return searchPathForDescription ;
+  }
+
+
+  @Override
+  public InputStream maybeGetInputStream( final ResourceName resourceName ) {
     final String absoluteName = path + "/" + resourceName.getName() ; // normalize( resourceName ) ;
-    LOGGER.debug( "Attempting to load '", absoluteName, "'" ) ;
 
     final URL url = reference.getResource( absoluteName ) ;
     if( null == url ) {
-      LOGGER.debug( "Could not find resource '", absoluteName, "' from ", this ) ;
-      throw new ResourceNotFoundException( absoluteName, getBestDescriptorForClassloader() ) ;
+      return null ;
     }
     final String urlAsString = url.toExternalForm();
     try {
       final InputStream inputStream = url.openStream();
-      LOGGER.info( "Opened stream '", urlAsString, "'" ) ;
+      LOGGER.info( "Opened stream '", urlAsString, "'." ) ;
       return inputStream;
     } catch( IOException e ) {
-      LOGGER.debug( "Could not find resource '", urlAsString, "' from ", this ) ;
       throw new ResourceNotFoundException( absoluteName, getBestDescriptorForClassloader(), e ) ;
     }
   }
-
 
   /**
    * Force "/" at beginning, removes "/" at end.
@@ -92,21 +96,20 @@ public class ClasspathResourceLoader implements ResourceLoader {
 
   private String getBestDescriptorForClassloader() {
     final ClassLoader classLoader = getClass().getClassLoader();
-    final StringBuffer buffer = new StringBuffer( "  " + toString() + "\n" ) ;
+    final StringBuilder buffer = new StringBuilder( toString() );
     if( classLoader instanceof URLClassLoader ) {
       final URLClassLoader urlClassLoader = ( URLClassLoader ) classLoader ;
       final URL[] urls = urlClassLoader.getURLs() ;
-      for( int i = 0 ; i < urls.length ; i++ ) {
-        final URL url = urls[ i ] ;
+      for( final URL url : urls ) {
         final String urlAsString = url.toExternalForm();
         if( ! urlAsString.startsWith( SYSTEM_CLASSPATH ) ) {
-          buffer.append( "      " ) ;
-          buffer.append( urlAsString ) ;
           buffer.append( "\n" ) ;
+          buffer.append( "    " ) ;
+          buffer.append( urlAsString ) ;
         }
       }
     } else {
-      buffer.append( "    " ).append( classLoader.toString() );
+      buffer.append( " " ).append( classLoader.toString() );
     }
     return buffer.toString() ;
   }

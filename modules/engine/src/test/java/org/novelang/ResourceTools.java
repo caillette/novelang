@@ -50,6 +50,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
+import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.ResourceName;
@@ -311,18 +312,20 @@ public final class ResourceTools {
         final boolean shouldAddClasspathResourceLoader,
         final Charset renderingCharset
     ) {
-      final ResourceLoader resourceLoader ;
-      final ResourceLoader customResourceLoader ;
+      final CompositeResourceLoader resourceLoader ;
+      final CompositeResourceLoader customResourceLoader ;
       if( styleDirectory == null ) {
-        resourceLoader = new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ;
+        resourceLoader = new CompositeResourceLoader(
+            new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ) ;
       } else {
         try {
-          customResourceLoader = new UrlResourceLoader( styleDirectory.toURI().toURL() ) ;
+          customResourceLoader = new CompositeResourceLoader(
+              new UrlResourceLoader( styleDirectory.toURI().toURL() ) ) ;
         } catch( MalformedURLException e ) {
           throw new Error( e ) ;
         }
         if( shouldAddClasspathResourceLoader ) {
-          resourceLoader = ResourceLoaderTools.compose(
+          resourceLoader = new CompositeResourceLoader(
               customResourceLoader,
               new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
           ) ;

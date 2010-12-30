@@ -31,6 +31,7 @@ import org.eclipse.jetty.server.Request;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.ResourceName;
@@ -53,7 +54,7 @@ public class ResourceHandler extends GenericHandler {
 
   public ResourceHandler( final ProducerConfiguration serverConfiguration ) {
     this(
-        ResourceLoaderTools.compose(
+        new CompositeResourceLoader(
             serverConfiguration.getRenderingConfiguration().getResourceLoader(),
             new UrlResourceLoader( createUrlQuiet(
                 serverConfiguration.getContentConfiguration().getContentRoot() ) )
@@ -74,7 +75,12 @@ public class ResourceHandler extends GenericHandler {
 
   protected ResourceHandler( final ResourceLoader resourceLoader ) {
     this.resourceLoader = resourceLoader ;
-    LOGGER.debug( "Using resourceLoader ", resourceLoader ) ;
+    LOGGER.debug(
+        "Using resourceLoader ",
+        resourceLoader instanceof CompositeResourceLoader
+            ? ( ( CompositeResourceLoader ) resourceLoader ).getMultilineDescription()
+            : resourceLoader 
+    ) ;
   }
 
   @Override
