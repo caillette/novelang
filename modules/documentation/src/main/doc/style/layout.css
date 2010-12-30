@@ -3,6 +3,10 @@ From:
 http://matthewjamestaylor.com/blog/perfect-3-column.htm
 */
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   margin : 0 ;
   padding : 0 ;
