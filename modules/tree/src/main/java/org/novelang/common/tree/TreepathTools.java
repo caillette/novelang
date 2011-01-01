@@ -22,6 +22,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.AbstractIterator;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Manipulation of immutable {@link Tree}s through {@link Treepath}s.
@@ -512,6 +517,39 @@ public class TreepathTools {
     return result ;
   }
 
+  public static< T extends Tree< T > > Iterator iteratorOnChildren(
+      final Treepath< T > treepath
+  ) {
+    return iteratorOnChildren( treepath, Predicates.< T >alwaysTrue() ) ;
+  }
+
+  public static< T extends Tree< T > > Iterator< Treepath< T > > iteratorOnChildren(
+      final Treepath< T > treepath,
+      final Predicate< T > filter
+  ) {
+    checkNotNull( filter ) ;
+    final T treeAtEnd = treepath.getTreeAtEnd() ;
+    final int childCount = treeAtEnd.getChildCount() ;
+    return new AbstractIterator< Treepath< T > >() {
+      private int childIndex = 0 ;
+
+      @Override
+      protected Treepath< T > computeNext() {
+        while( true ) {
+          if( childIndex >= childCount ) {
+            endOfData() ;
+            return null ;
+          }
+          final int childIndexForCreation = childIndex ++ ;
+          final T child = treeAtEnd.getChildAt( childIndexForCreation ) ;
+          if( filter.apply( child ) ) {
+            return Treepath.create( treepath, childIndexForCreation ) ;
+          }
+        }
+      }
+    } ;
+  }
+
 
   private enum RemovalProgress {
     UNSPLIT,
@@ -550,8 +588,8 @@ public class TreepathTools {
       final Treepath< T > maybeParent,  
       Treepath< T > maybeChild  
   ) {
-    Preconditions.checkNotNull( maybeParent ) ;
-    Preconditions.checkNotNull( maybeChild ) ;
+    checkNotNull( maybeParent ) ;
+    checkNotNull( maybeChild ) ;
     Preconditions.checkArgument( maybeParent.getLength() <= maybeChild.getLength() ) ;
     
     while( maybeChild.getLength() > maybeParent.getLength() ) {

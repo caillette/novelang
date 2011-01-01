@@ -170,11 +170,6 @@
       <version>${lib.jetty.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>${lib.jaxen.groupId}</groupId>
-      <artifactId>${lib.jaxen.artifactid}</artifactId>
-      <version>${lib.jaxen.version}</version>
-    </dependency>
 
 
 

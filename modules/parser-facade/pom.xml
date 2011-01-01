@@ -49,6 +49,13 @@
 
     <dependency>
       <groupId>${project.parent.groupId}</groupId>
+      <artifactId>Novelang-syntactic-tree-fixture</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-unicode-reader</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
@@ -59,6 +66,11 @@
       <version>${lib.antlr.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>${lib.jaxen.groupId}</groupId>
+      <artifactId>${lib.jaxen.artifactid}</artifactId>
+      <version>${lib.jaxen.version}</version>
+    </dependency>
     
 
   </dependencies>

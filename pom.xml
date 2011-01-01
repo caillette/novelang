@@ -229,7 +229,7 @@
 
     <lib.jaxen.groupId>jaxen</lib.jaxen.groupId>
     <lib.jaxen.artifactId>jaxen-core</lib.jaxen.artifactId>
-    <lib.jaxen.version>1.1.1</lib.jaxen.version>
+    <lib.jaxen.version>1.1.3</lib.jaxen.version>
 
     <lib.jcraft-java-secure-channel.groupId>com.jcraft</lib.jcraft-java-secure-channel.groupId>
     <lib.jcraft-java-secure-channel.artifactId>jsch</lib.jcraft-java-secure-channel.artifactId>
