@@ -1,0 +1,47 @@
+== Architecture
+
+Novelang runs as a batch tool, or as an HTTP dæmon.
+Both use the same engine, passing URL-like requests (like ``/doc/Novelang.pdf``).
+
+Novelang acts as a processing pipe, which doesn't keep any internal state between two
+document requests.
+
+The rendition of a document occurs through 3 mains stages:
+- Source parsing.
+- Tree mangling.
+- Rendering.
+
+
+=== Source parsing
+
+Source parsing is about reading a source files into an AST (Abstract Syntax Tree).
+The AST is made of nodes with a text payload, an optional type label, and zero or more children.
+
+The parser relies on "ANTLR-generated"
+http://antlr.org
+code. 
+The AST is an immutable object. As a consequence, many tricky parts of Novelang code don't do
+any side-effect, which greatly improve reliability.
+
+Source parsing occurs in parallel when a single Opus file includes several Novella files.
+
+
+
+=== Tree mangling
+
+The tree mangling reorganizes the AST before rendering.
+This occurs in many steps.
+
+Some of those steps are :
+- Integrating double-quoted text as ``n:url-literal`` inside ``n:url`` nodes.
+- Building hierarchies for levels and lists.
+- Finding identifiers and detecting identifier collisions.
+
+
+=== Rendering
+
+Rendering converts the AST to a human-readable format, like PDF or HTML.
+There is a built-in renderer relying on XSL but as the Renderer is basically a function taking
+an output stream and an AST as input parameters, rendering can occur in virtually any format.
+
+

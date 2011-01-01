@@ -1,8 +1,7 @@
-== Projects
+== Directory layout
 
-Basically, a Novelang project is a directory containing files to be processed by Novelang. It is the directory from where Novelang was launched.
-
-Projects are useful when you deal with big documents. Big documents are made of several Novella files aggregated through a Opus file. A Novelang project may also contain custom stylesheets, for user-defined rendering of PDF or HTML documents.
+Novelang searches all its files in various directories.
+There are options to customize those directories, but it's convenient to know about the defaults.
 
 Typical layout of a Novelang project looks like this: 
 

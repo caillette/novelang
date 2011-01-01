@@ -10,7 +10,11 @@ insert file:status.novella
 
 insert file:versions/. sort=version- createlevel levelabove=1
 
+insert file:faq.novella
+
 insert file:rationale.novella
+
+insert file:architecture.novella
 
 insert file:novella-syntax.novella
 

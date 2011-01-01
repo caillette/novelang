@@ -1,12 +1,11 @@
-== Status and history
+== Release notes 
 
-Novelang is stable, with more thant 700 automated non-regression tests.
 
-Bug fixing and documentation are first priority. Then come syntax enhancements. 
-Defining a good syntax fitting for most use cases while allowing exceptions is a process 
-on the long run. 
-For this reason, syntax may change with no warning until version `1.0.0`. 
-Keep informed reading the "blog"
-http://novelang.blogspot.com
-.
+=== Meaning of the version number
 
+Version number has the "Major, Minor, Fix" form.
+Before Novelang reaches version `1.0.0`, a change in "Minor" means a new feature.
+A change in "Fix" means a bugfix, while retaining compatibiliy with documents and stylesheets.
+
+Release notes do report when there is a possible compatibility break with existing documents and
+stylesheets. 

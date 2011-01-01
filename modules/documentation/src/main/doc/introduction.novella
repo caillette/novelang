@@ -1,17 +1,12 @@
 == Introduction
 
-Novelang takes plain text files and transforms them into nicely-formatted documents like PDF or HTML.
-Unlike mainstream word-processors, it keeps you focused on the text you type in and what it means, 
-instead of struggling with how it should appear. 
-It relies on the text editor of your choice, with a very simple syntax to add some formatting hints. 
-You can see resulting documents from your Web browser or generate them from command-line. 
+Novelang transforms text files, written with a wiki-like syntax, into nicely-formatted documents
+like PDF or HTML, using customizable stylesheets.
 
-Plain text is great as it is cross-platform and can be viewed under almost any condition. 
-It takes less space and is easier to manipulate through automated processes, including search.
-
-Novelang enforces a consistent presentation across a set of documents through stylesheets that 
-can be customized.
-This page was produced with Novelang, using a dedicated stylesheet.
+Novelang targets professional writers with the need to focus on the content, letting the automated
+rendition to the boring job.
+Because of Novelang's fine-grained text parsing, rendition takes care of correct spacing and
+punctutation, which usually bring `80 %` of typographic errors. 
 
 Novelang is a project started by Laurent Caillette, a Java architect who believes in the power of simple, reliable tools.
 You can mail him on Users mailing list or leave a comment on the Novelang blog (see links).

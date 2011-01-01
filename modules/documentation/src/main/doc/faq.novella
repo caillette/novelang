@@ -1,0 +1,62 @@
+== Frequently asked questions
+
+** Is there a chance to see a WYSIWYG editor for Novelang? **
+
+Definitely no.
+Novelang's primary purpose is to reject the WYSIWYG (What You See Is What You Get) fraud.
+By the way WYSIWYG makes no sense when supporting multiple rendition formats.
+
+
+** Why so many versions? **
+
+Delivering by small increments makes bug detection and analysis easier.
+Novelang's automated release process makes easy and cheap to deliver a lot. 
+
+
+** Is Novelang good enough for production? **
+
+Sure it is. Each new version passes more than 700 non-regression tests.
+
+
+** Who's using Novelang? **
+
+Very few people. The author, Laurent Caillette, write most of his documents using Novelang.
+
+
+** Will Novelang become a commercial product? **
+
+The market is already full of content management systems and wiki stuff, so Novelang would
+have very low visibility. There are better chances to sell customization service.
+But monetization is not a priority.
+
+
+** Default PDF stylesheet is ugly. Any chance to fix this? **
+
+Yeah. This will occur one day.
+
+
+** XSL sucks. Is there another mean to define stylesheets? **
+
+Yeah it sucks but it offers a single, well-documented mean to support various rendition formats.
+Using XSL out-of-the-box helpes to focus on other topics, like defining a correct syntax
+for source documents.
+In the future, Novelang may support a dedicated language, probably based on Closure.
+There are already some clever tentatives for "XML"
+http://richhickey.github.com/clojure-contrib/prxml-api.html
+and "HTML"
+https://github.com/mmcgrana/clj-html
+. That's a lot of insights to get to support FO.
+
+
+** FO sucks. Is there any other mean to generate PDF? **
+
+FO is great for a certain kind of documents with simple and precise layout.
+FO handles hyphenation, page references to page numbers, various stylings, that are very
+complicated to make working when put together.
+Lot of FO ugliness comes from the XML syntax for writing XSL stylesheets.
+
+
+** What about supporting more character sets? **
+
+Because Novelang's grammar is very strict, it requires some changes to support new characters.
+Those will be added at user's request (already happened for Hungarian).

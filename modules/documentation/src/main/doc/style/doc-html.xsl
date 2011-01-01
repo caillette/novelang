@@ -276,11 +276,11 @@
       <xsl:choose>
         <xsl:when test="position() > 1">
           <xsl:attribute name="href">
-            novelang--<xsl:call-template name="extract-page-identifier"/>.html
+            Novelang--<xsl:call-template name="extract-page-identifier"/>.html
           </xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:attribute name="href">novelang.html</xsl:attribute>
+          <xsl:attribute name="href">Novelang.html</xsl:attribute>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="n:level-title" mode="navigation"/>

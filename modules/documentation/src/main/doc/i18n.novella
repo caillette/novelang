@@ -56,11 +56,11 @@ In order to keep the Novelang grammar meaningful, it's not possible to admit any
 especially symbols and punctuation signs.
 Letters, like Roman ones with diacritics, will be added on a case-by-case basis.
 
-By now, all letters of those languages are supported: 
+By now, Novelang supports all letters of those languages: 
 English, French, Hungarian.
 
 
-=== Additional resources
+=== Additional resources about Unicode
 
 --- A "brief introduction"
 http://www.joelonsoftware.com/articles/Unicode.html
