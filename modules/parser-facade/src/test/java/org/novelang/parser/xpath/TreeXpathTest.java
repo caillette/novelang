@@ -18,6 +18,7 @@ package org.novelang.parser.xpath;
 
 import com.google.common.collect.ImmutableList;
 import org.jaxen.JaxenException;
+import org.jaxen.UnresolvableException;
 import org.junit.Test;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
@@ -64,6 +65,11 @@ public class TreeXpathTest {
 
     assertThat( treepaths ).hasSize( 1 ) ;
     assertThat( treepaths.get( 0 ).getTreeAtEnd().getNodeKind() ).isEqualTo( _LEVEL ) ;
+  }
+
+  @Test( expected = UnresolvableException.class )
+  public void noNamespaceOtherThanN() throws JaxenException {
+    new SyntacticTreeXpath( "xn:level" ).selectNodes( tree( OPUS, tree( _LEVEL ) ) ) ;
   }
 
 
