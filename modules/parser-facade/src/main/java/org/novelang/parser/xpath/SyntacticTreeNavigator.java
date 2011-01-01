@@ -226,7 +226,7 @@ public class SyntacticTreeNavigator extends DefaultNavigator {
 
   @Override
   public Iterator getAttributeAxisIterator( final Object contextNode ) throws UnsupportedAxisException {
-    return JaxenConstants.EMPTY_ITERATOR ;
+    throw new UnsupportedAxisException( "Namespaces not supported" ) ;
   }
 
   @Override
