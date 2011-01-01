@@ -3,8 +3,8 @@
 Novelang transforms text files, written with a wiki-like syntax, into nicely-formatted documents
 like PDF or HTML, using customizable stylesheets.
 
-Novelang targets professional writers with the need to focus on the content, letting the automated
-rendition to the boring job.
+Novelang targets professional writers who need to focus on the content, letting the automated
+rendition do the boring job.
 Because of Novelang's fine-grained text parsing, rendition takes care of correct spacing and
 punctutation, which usually bring `80 %` of typographic errors. 
 
