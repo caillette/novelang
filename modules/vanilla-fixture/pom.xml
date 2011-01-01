@@ -6,7 +6,7 @@
     <relativePath>../../pom.xml</relativePath>
     <groupId>org.novelang</groupId>
     <artifactId>Novelang</artifactId>
-    <version>SNAPSHOT</version>
+    <version>0.53.5</version>
   </parent>
 
   <artifactId>Novelang-vanilla-fixture</artifactId>
