@@ -21,7 +21,8 @@ The parser relies on "ANTLR-generated"
 http://antlr.org
 code. 
 The AST is an immutable object. As a consequence, many tricky parts of Novelang code don't do
-any side-effect, which greatly improve reliability.
+any side-effect, which greatly improve reliability. Novelang developed its own algorithms for
+dealing with immutable trees.
 
 Source parsing occurs in parallel when a single Opus file includes several Novella files.
 

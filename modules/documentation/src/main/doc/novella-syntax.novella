@@ -1,5 +1,5 @@
   \\General-syntax-for-Novellae
-== General syntax 
+== General syntax
 
 Novelang recognizes Novella files with the ``.novella`` suffix.
 Novella files are plain text files, containing pure textual content, plus a limited amount of
