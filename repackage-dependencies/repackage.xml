@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="repackage-dependencies" default="rebuild" >
+
+  <description>
+    This script rebuilds some projects with convenient options and installs them
+    in local Maven repository.
+    That's dirty stuff until those projects get correct Maven packaging.
+  </description>
+
+  <target name="rebuild" >
+    <antcall target="jaxen" />
+  </target>
+
+
+  
+  <target name="jaxen" >
+
+    <mkdir dir="jaxen" />
+    <get
+        src="http://dist.codehaus.org/jaxen/distributions/jaxen-1.1.3-src.zip"
+        dest="jaxen/jaxen-1.1.3-src.zip"
+    />
+    <unzip src="jaxen/jaxen-1.1.3-src.zip" dest="jaxen" />
+    <copy file="jaxen.pom.xml" tofile="jaxen/jaxen-1.1.3/pom.xml" />
+
+    <echo>Now go to jaxen/jaxen-1.1.3 directory and run 'maven clean install'.</echo>
+  </target>
+
+
+</project>
