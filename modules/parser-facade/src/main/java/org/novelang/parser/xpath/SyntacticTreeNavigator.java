@@ -34,7 +34,11 @@ import static org.novelang.parser.NodeKindTools.tokenNameAsXmlElementName;
 /**
  * Jaxen-specific logic to apply XPath expressions to a {@link Treepath} of
  * {@link SyntacticTree}s.
+ * <p>
  * TODO: add a set of {@link NodeKind}s recognized as elements.
+ * <p>
+ * TODO (not urgent): suppport namespaces in an orthodox manner
+ *     with {@link org.jaxen.XPath#addNamespace(java.lang.String, java.lang.String)}. 
  *
  * @author Laurent Caillette
  */

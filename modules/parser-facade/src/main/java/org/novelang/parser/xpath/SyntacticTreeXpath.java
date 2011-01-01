@@ -27,6 +27,9 @@ import org.novelang.common.tree.Treepath;
 
 /**
  * Type-safe XPath implementation.
+ * There is some cheating with namespaces: because it will always be "n:" its made
+ * optional and pre-processed by a regex for removal before passing it to the
+ * {@link SyntacticTreeNavigator} which doesn't support it.
  *
  * @author Laurent Caillette
  */
@@ -59,7 +62,14 @@ public class SyntacticTreeXpath {
         xpath.selectNodes( Treepath.create( tree ) ) ) ;
   }
 
-  private static final Pattern NAMESPACE_REMOVER = Pattern.compile( "((?<![0-9a-zA-Z_\\-])n:)" ) ;
+  /**
+   * We're lucky: axis selector like {@code child} don't end by a "n" so we shouldn't get
+   * confused by them.
+   * The regex below selects "n:" prefix if there is no preceding letter and if there
+   * is a letter right after it. 
+   */
+  private static final Pattern NAMESPACE_REMOVER =
+      Pattern.compile( "((?<![0-9a-zA-Z_\\-])n:(?=\\w))" ) ;
 
   private static String removeNamespaces( final String xpathExpression ) {
     return NAMESPACE_REMOVER.matcher( xpathExpression ).replaceAll( "" );

@@ -72,5 +72,18 @@ public class TreeXpathTest {
     new SyntacticTreeXpath( "xn:level" ).selectNodes( tree( OPUS, tree( _LEVEL ) ) ) ;
   }
 
+  @Test
+  public void twoChildren() throws JaxenException {
+    final SyntacticTreeXpath xpath = new SyntacticTreeXpath( "n:level" ) ;
+    final SyntacticTree level1 = tree( _LEVEL );
+    final SyntacticTree level2 = tree( _LEVEL );
+    final ImmutableList< Treepath< SyntacticTree > > treepaths =
+        xpath.selectNodes( tree( OPUS, level1, level2 ) ) ;
+
+    assertThat( treepaths ).hasSize( 2 ) ;
+    assertThat( treepaths.get( 0 ).getTreeAtEnd() ).isSameAs( level1 ) ;
+    assertThat( treepaths.get( 1 ).getTreeAtEnd() ).isSameAs( level2 ) ;
+  }
+
 
 }
