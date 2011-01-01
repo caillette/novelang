@@ -73,8 +73,8 @@ public class DesignatorTools {
 
 
   /**
-   * Extracts an identifier (either {@link org.novelang.parser.NodeKind#ABSOLUTE_IDENTIFIER} or
-   * {@link org.novelang.parser.NodeKind#RELATIVE_IDENTIFIER} if there is one as immediate child.
+   * Extracts an identifier (either {@link org.novelang.parser.NodeKind#ABSOLUTE_IDENTIFIER}
+   * if there is one as immediate child.
    */
   public static Treepath< SyntacticTree > findPathToExplicitIdentifier(
       final Treepath< SyntacticTree > parentOfIdentifier
@@ -82,7 +82,7 @@ public class DesignatorTools {
     final SyntacticTree parentTree = parentOfIdentifier.getTreeAtEnd() ;
     for( int i = 0 ; i < parentTree.getChildCount() ; i ++ ) {
       final SyntacticTree child = parentTree.getChildAt( i ) ;
-      if( child.isOneOf( NodeKind.ABSOLUTE_IDENTIFIER, NodeKind.RELATIVE_IDENTIFIER ) ) {
+      if( child.isOneOf( NodeKind.ABSOLUTE_IDENTIFIER ) ) {
         return Treepath.create( parentOfIdentifier, i ) ;
       }
     }

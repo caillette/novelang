@@ -52,8 +52,7 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
 
   /**
    * Returns the map of pure identifiers (those made out only from
-   * {@link org.novelang.parser.NodeKind#ABSOLUTE_IDENTIFIER} and
-   * {@link org.novelang.parser.NodeKind#RELATIVE_IDENTIFIER} nodes).
+   * {@link org.novelang.parser.NodeKind#ABSOLUTE_IDENTIFIER} nodes).
    *
    * @return a non-null, immutable map containing no nulls, with {@code Treepath} objects
    *     referencing the same tree as passed to the constructor.

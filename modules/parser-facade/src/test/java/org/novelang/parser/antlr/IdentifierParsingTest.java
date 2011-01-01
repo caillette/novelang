@@ -16,13 +16,11 @@
  */
 package org.novelang.parser.antlr;
 
-import static org.novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
-import static org.novelang.parser.NodeKind.RELATIVE_IDENTIFIER;
-import static org.novelang.parser.NodeKind.COMPOSITE_IDENTIFIER;
-import static org.novelang.parser.antlr.TreeFixture.tree;
-
 import antlr.RecognitionException;
 import org.junit.Test;
+
+import static org.novelang.parser.NodeKind.ABSOLUTE_IDENTIFIER;
+import static org.novelang.parser.antlr.TreeFixture.tree;
 
 /**
  * @author Laurent Caillette
@@ -39,15 +37,6 @@ public class IdentifierParsingTest {
   }
 
 
-  @Test
-  public void compositeIdentifier() throws RecognitionException {
-    PARSERMETHOD_COMPOSITEIDENTIFIER.checkTreeAfterSeparatorRemoval(
-        "\\\\absolute",
-        tree( COMPOSITE_IDENTIFIER, tree( "absolute" ) )
-
-    ) ;
-  }
-
 
 
 
@@ -58,7 +47,5 @@ public class IdentifierParsingTest {
 
   private static final ParserMethod PARSERMETHOD_ABSOLUTEIDENTIFIER = 
       new ParserMethod( "absoluteIdentifier" ) ;
-  private static final ParserMethod PARSERMETHOD_COMPOSITEIDENTIFIER =
-      new ParserMethod( "compositeIdentifier" ) ;
 
 }

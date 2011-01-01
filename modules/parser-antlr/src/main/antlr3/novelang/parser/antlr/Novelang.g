@@ -60,8 +60,6 @@ tokens {
   LINE_BREAK_ ;
   TAG ;
   ABSOLUTE_IDENTIFIER ;
-  RELATIVE_IDENTIFIER ;
-  COMPOSITE_IDENTIFIER ;
 
   PUNCTUATION_SIGN ;
   APOSTROPHE_WORDMATE ;
@@ -263,12 +261,6 @@ tags
 // ===========
 // Identifiers
 // ===========
-
-
-compositeIdentifier
-  : REVERSE_SOLIDUS REVERSE_SOLIDUS symbolicName
-    -> ^( COMPOSITE_IDENTIFIER { delegate.createTree( $symbolicName.text ) } )
-  ;
   
 
 absoluteIdentifier
@@ -276,10 +268,6 @@ absoluteIdentifier
     -> ^( ABSOLUTE_IDENTIFIER { delegate.createTree( $symbolicName.text ) } )
   ;
   
-//identifierSegment
-//  : symbolicName
-//    -> { delegate.createTree( $symbolicName.text ) }  
-//  ;
 
 // =====================
 // Paragraph and related
@@ -2211,7 +2199,7 @@ functionCallInsert
       ( mediumbreak p += keywordCreateLevel | mediumbreak p += keywordNoHead )?
       ( mediumbreak p += parameterLevelAbove )?
       ( mediumbreak p += parameterInsertStyle ) ?        
-      ( mediumbreak p += compositeIdentifier )*        
+      ( mediumbreak p += absoluteIdentifier )*        
     )
     -> ^( COMMAND_INSERT_ $p+ )
   ;

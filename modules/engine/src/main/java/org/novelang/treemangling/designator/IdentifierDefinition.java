@@ -9,6 +9,5 @@ public enum IdentifierDefinition
 {
   NONE,
   ABSOLUTE,
-  RELATIVE,
   IMPLICIT
 }

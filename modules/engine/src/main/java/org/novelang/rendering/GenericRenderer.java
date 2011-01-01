@@ -171,8 +171,6 @@ public class GenericRenderer implements Renderer {
         break ;
 
       case ABSOLUTE_IDENTIFIER :
-      case RELATIVE_IDENTIFIER :
-      case COMPOSITE_IDENTIFIER :
       case _EXPLICIT_IDENTIFIER :
       case _COLLIDING_EXPLICIT_IDENTIFIER :
       case _IMPLICIT_IDENTIFIER :

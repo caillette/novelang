@@ -135,7 +135,7 @@ public class BookParserTest {
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
-            tree( COMPOSITE_IDENTIFIER, tree( "z" ) )
+            tree( ABSOLUTE_IDENTIFIER, tree( "z" ) )
         )    
     ) ;
   }
@@ -147,8 +147,8 @@ public class BookParserTest {
         tree(
             COMMAND_INSERT_,
             tree( URL_LITERAL, "file:." ),
-            tree( COMPOSITE_IDENTIFIER, tree( "y" ) ),
-            tree( COMPOSITE_IDENTIFIER, tree( "z" ) )
+            tree( ABSOLUTE_IDENTIFIER, tree( "y" ) ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "z" ) )
         )    
     ) ;
   }
@@ -165,8 +165,8 @@ public class BookParserTest {
             tree( COMMAND_INSERT_SORT_, "version-" ),
             tree( COMMAND_INSERT_CREATELEVEL_ ),
             tree( COMMAND_INSERT_STYLE_, "whatever" ),
-            tree( COMPOSITE_IDENTIFIER, tree( "u-v_w" ) ),
-            tree( COMPOSITE_IDENTIFIER, tree( "xyz" ) )
+            tree( ABSOLUTE_IDENTIFIER, tree( "u-v_w" ) ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "xyz" ) )
         )    
     ) ;
   }

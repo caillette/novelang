@@ -41,9 +41,6 @@ public class SegmentExtractor
     if( NodeKindTools.is( NodeKind.ABSOLUTE_IDENTIFIER, tree ) ) {
       segment = extractSegment( tree ) ;
       identifierDefinition = IdentifierDefinition.ABSOLUTE ;
-    } else if( NodeKindTools.is( NodeKind.RELATIVE_IDENTIFIER, tree ) ) {
-      segment = extractSegment( tree ) ;
-      identifierDefinition = IdentifierDefinition.RELATIVE ;
     } else {
       String markerText ;
       final SyntacticTree titleTree = DesignatorTools.findTitleTree( treepath.getTreeAtEnd() ) ;
@@ -90,13 +87,6 @@ public class SegmentExtractor
     final SyntacticTree identifierTree = pathToIdentifier.getTreeAtEnd() ;
     if( NodeKind.ABSOLUTE_IDENTIFIER == identifierTree.getNodeKind() ) {
       return new FragmentIdentifier( extractSegment( identifierTree ) ) ;
-    } else if( NodeKind.RELATIVE_IDENTIFIER == identifierTree.getNodeKind() ) {
-      if( parentIdentifier == null ) {
-        throw new IllegalArgumentException( // TODO accumulate errors instead.
-            "Missing absolute identifier above relative identifier " + identifierTree ) ;
-      } else {
-        return new FragmentIdentifier( extractSegment( identifierTree ) ) ;
-      }
     }
     return null ;
   }

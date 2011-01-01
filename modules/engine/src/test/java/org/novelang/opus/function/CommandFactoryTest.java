@@ -53,8 +53,8 @@ public class CommandFactoryTest {
             tree( COMMAND_INSERT_CREATELEVEL_ ),
             tree( COMMAND_INSERT_LEVELABOVE_, "3" ),
             tree( COMMAND_INSERT_STYLE_, "whatever" ),
-            tree( COMPOSITE_IDENTIFIER, tree( "yyy" ) ),
-            tree( COMPOSITE_IDENTIFIER, tree( "zzz" ) )
+            tree( ABSOLUTE_IDENTIFIER, tree( "yyy" ) ),
+            tree( ABSOLUTE_IDENTIFIER, tree( "zzz" ) )
         )    
     ) ;
     assertTrue( "Got: " + command, command instanceof InsertCommand ) ;

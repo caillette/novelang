@@ -57,7 +57,7 @@ import org.novelang.treemangling.designator.FragmentMapper;
  *     ) containing resolved identifiers. 
  *     Those nodes enhance document readability as they show resolved identifiers.
  *     The same method removes 
- *     {@link NodeKind#ABSOLUTE_IDENTIFIER} {@link NodeKind#RELATIVE_IDENTIFIER} 
+ *     {@link NodeKind#ABSOLUTE_IDENTIFIER}
  *     nodes which don't improve readability.
  *   </li>
  *   <li>
@@ -200,8 +200,7 @@ public class DesignatorInterpreter {
       }
       treepath = removeDirectChildren(
           treepath,
-          NodeKind.ABSOLUTE_IDENTIFIER,
-          NodeKind.RELATIVE_IDENTIFIER
+          NodeKind.ABSOLUTE_IDENTIFIER
       ) ;
 
       final Treepath< SyntacticTree > next = DesignatorTools.TRAVERSAL.next( treepath ) ;
