@@ -1,0 +1,2 @@
+--- Fixed resource loading bug appeared in `0.53.5`, that caused to ignore overriden resources 
+(like stylesheets).
