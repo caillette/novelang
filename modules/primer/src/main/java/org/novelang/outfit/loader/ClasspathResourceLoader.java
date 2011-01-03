@@ -56,9 +56,13 @@ public class ClasspathResourceLoader extends AbstractResourceLoader {
 
   @Override
   protected String getMultilineDescription() {
-    return searchPathForDescription ;
+    return toString() ;
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "{classpath files and jars}" ;
+  }
 
   @Override
   public InputStream maybeGetInputStream( final ResourceName resourceName ) {

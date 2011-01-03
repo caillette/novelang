@@ -51,6 +51,8 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
     return inputStream ;
   }
 
+  protected abstract String getMultilineDescription() ;
+
   protected abstract InputStream maybeGetInputStream( final ResourceName resourceName ) ;
 
   /**
@@ -60,7 +62,7 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
    *
    * @return a non-null, non-empty {@code String}.
    */
-  protected abstract String getMultilineDescription() ;
+//  protected abstract String getMultilineDescription() ;
 
   @Override
   public String toString() {

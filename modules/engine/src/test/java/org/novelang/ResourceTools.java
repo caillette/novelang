@@ -52,7 +52,6 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.loader.UrlResourceLoader;
 

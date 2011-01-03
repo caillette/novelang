@@ -39,6 +39,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.LogbackConfigurationTools;
+import org.novelang.outfit.loader.AbstractResourceLoader;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
@@ -458,30 +459,20 @@ public class ConfigurationTools {
   ) {
     final ClasspathResourceLoader classpathResourceLoader =
         new ClasspathResourceLoader( BUNDLED_STYLE_DIR ) ;
-    final Iterator< File > userDefinedDirectoryIterator = userDefinedDirectories.iterator() ;
-    
-    if( userDefinedDirectoryIterator.hasNext() ) {
-      CompositeResourceLoader resultingResourceLoader = new CompositeResourceLoader( classpathResourceLoader ) ;
-      
-      while ( userDefinedDirectoryIterator.hasNext() ) {
-        final File userStyleDirectory = userDefinedDirectoryIterator.next() ;
-        final URL userStyleUrl ;
-        try {
-          userStyleUrl = userStyleDirectory.toURI().toURL();
-        } catch( MalformedURLException e ) {
-          throw new RuntimeException( e );
-        }
-        resultingResourceLoader = new CompositeResourceLoader(
-            resultingResourceLoader, new UrlResourceLoader( userStyleUrl )
-        ) ;
-      }
 
-      return resultingResourceLoader ;
-      
-    } else {
-      return classpathResourceLoader ;
+    final ImmutableList.Builder<AbstractResourceLoader> resourceLoaders =
+        ImmutableList.builder() ;
+    for( final File file : userDefinedDirectories ) {
+      final UrlResourceLoader urlResourceLoader ;
+      try {
+        urlResourceLoader = new UrlResourceLoader( file.toURI().toURL() ) ;
+      } catch( MalformedURLException e ) {
+        throw new RuntimeException( e ) ;
+      }
+      resourceLoaders.add( urlResourceLoader ) ;
     }
-    
+    resourceLoaders.add( classpathResourceLoader ) ;
+    return new CompositeResourceLoader( resourceLoaders.build() ) ;   
     
   }
 

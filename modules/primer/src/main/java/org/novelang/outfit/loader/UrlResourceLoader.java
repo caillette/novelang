@@ -35,7 +35,6 @@ public class UrlResourceLoader extends AbstractResourceLoader {
   private static final Logger LOGGER = LoggerFactory.getLogger( UrlResourceLoader.class ) ;
 
   private final URL base ;
-  private final String multilineDescription;
 
   public UrlResourceLoader( final URL base ) {
     final String urlAsString = base.toExternalForm();
@@ -48,12 +47,16 @@ public class UrlResourceLoader extends AbstractResourceLoader {
         throw new RuntimeException( e ) ;
       }
     }
-    this.multilineDescription = getClass().getSimpleName() + " " + base.toExternalForm() ;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "{" + base.toExternalForm() + "}" ;
   }
 
   @Override
   protected String getMultilineDescription() {
-    return multilineDescription ;
+    return toString() ;
   }
 
   @Override

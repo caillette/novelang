@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -39,11 +40,19 @@ public class CompositeResourceLoader implements ResourceLoader {
     this( ImmutableList.< AbstractResourceLoader >builder().add( resourceLoaders ).build() ) ;
   }
 
+  /**
+   * Trying to load from {@link AbstractResourceLoader}s in the order of the list.
+   * 
+   * @param resourceLoaders a non-null, non-empty {@code List}.
+   */
   public CompositeResourceLoader( final ImmutableList< AbstractResourceLoader > resourceLoaders ) {
     checkArgument( ! resourceLoaders.isEmpty() ) ;
     this.resourceLoaders = resourceLoaders ;
   }
 
+  /**
+   * First {@link AbstractResourceLoader}s tried first.
+   */
   public CompositeResourceLoader(
       final ResourceLoader first,
       final ResourceLoader second
