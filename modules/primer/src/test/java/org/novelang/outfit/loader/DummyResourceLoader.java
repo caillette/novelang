@@ -16,26 +16,28 @@
  */
 package org.novelang.outfit.loader;
 
-import org.junit.Test;
+import java.io.InputStream;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.apache.commons.io.input.NullInputStream;
 
 /**
- * Tests for {@link CompositeResourceLoader}.
+ * Useful for testing
+ * {@link org.novelang.outfit.loader.ResourceLoader#getInputStream(ResourceName)}'s
+ * object identitiy.
  *
- * @author Laurent Caillette
- */
-public class CompositeResourceLoaderTest {
+* @author Laurent Caillette
+*/
+public final class DummyResourceLoader extends AbstractResourceLoader {
 
+  public final NullInputStream inputStream = new NullInputStream( 0 ) ;
 
-  @Test
-  public void compose() {
-    final DummyResourceLoader resourceLoader1 = new DummyResourceLoader() ;
-    final DummyResourceLoader resourceLoader2 = new DummyResourceLoader() ;
-    final CompositeResourceLoader compositeResourceLoader =
-        new CompositeResourceLoader( resourceLoader1, resourceLoader2 ) ;
-    assertThat( compositeResourceLoader.getInputStream( new ResourceName( "r.x" ) ) )
-        .isSameAs( resourceLoader1.inputStream ) ;
+  @Override
+  protected InputStream maybeGetInputStream( final ResourceName resourceName ) {
+    return inputStream ;
   }
 
+  @Override
+  protected String getMultilineDescription() {
+    return getClass().getSimpleName() ;
+  }
 }

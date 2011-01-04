@@ -23,13 +23,19 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
+import org.fest.assertions.Assertions;
+import org.fest.reflect.core.Reflection;
+import org.fest.reflect.reference.TypeRef;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
+import org.novelang.common.FileTools;
 import org.novelang.common.filefixture.Relativizer;
 import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.common.filefixture.ResourceSchema;
@@ -39,14 +45,20 @@ import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.loader.AbstractResourceLoader;
+import org.novelang.outfit.loader.ClasspathResourceLoader;
+import org.novelang.outfit.loader.UrlResourceLoader;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.testing.DirectoryFixture;
+import org.novelang.testing.junit.NameAwareTestClassRunner;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.novelang.ResourcesForTests.FontStructure;
 import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT;
 import static org.novelang.configuration.parse.DaemonParameters.OPTIONNAME_HTTPDAEMON_SERVEREMOTES;
 import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONNAME_CONTENT_ROOT;
+import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONNAME_STYLE_DIRECTORIES;
 import static org.novelang.configuration.parse.GenericParametersConstants.OPTIONPREFIX;
 
 /**
@@ -59,6 +71,7 @@ import static org.novelang.configuration.parse.GenericParametersConstants.OPTION
  *
  * @author Laurent Caillette
  */
+@RunWith( NameAwareTestClassRunner.class )
 public class ConfigurationToolsTest {
 
 // ===================
@@ -204,6 +217,38 @@ public class ConfigurationToolsTest {
     Assert.assertEquals( ISO_8859_2, renderingConfiguration.getDefaultCharset() ) ;
   }
 
+  /**
+   * Checks that style directories appear in correct order.
+   * Dirty use of reflexion here. TODO: created dedicated files with known content.
+   */
+  @Test
+  public void createWithCorrectResourceLoaderOrder() throws ArgumentException, FOPException, IOException {
+    final File parent = new DirectoryFixture().getDirectory() ;
+    final File directory1 = FileTools.createFreshDirectory( parent, "first" ) ;
+    final File directory2 = FileTools.createFreshDirectory( parent, "second" ) ;
+
+    final DaemonParameters parameters = createDaemonParameters(
+        OPTIONPREFIX + OPTIONNAME_STYLE_DIRECTORIES,
+        directory1.getAbsolutePath(),
+        directory2.getAbsolutePath()
+    ) ;
+    final RenderingConfiguration renderingConfiguration = ConfigurationTools
+        .createRenderingConfiguration( parameters ) ;
+
+    final ImmutableList< AbstractResourceLoader > resourceLoaders =
+        Reflection.field( "resourceLoaders" )
+        .ofType( new TypeRef< ImmutableList< AbstractResourceLoader > >( ){} )
+        .in( renderingConfiguration.getResourceLoader() )
+        .get()
+    ;
+    assertThat( resourceLoaders.get( 0 ) ).isInstanceOf( UrlResourceLoader.class ) ;
+    assertThat( resourceLoaders.get( 0 ).toString() ).contains( "first" ) ;
+    assertThat( resourceLoaders.get( 1 ) ).isInstanceOf( UrlResourceLoader.class ) ;
+    assertThat( resourceLoaders.get( 1 ).toString() ).contains( "second" ) ;
+    assertThat( resourceLoaders.get( 2 ) ).isInstanceOf( ClasspathResourceLoader.class ) ;
+
+
+  }
 
 // ====================
 // ContentConfiguration
