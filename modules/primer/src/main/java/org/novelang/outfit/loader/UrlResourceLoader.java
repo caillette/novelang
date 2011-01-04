@@ -73,7 +73,7 @@ public class UrlResourceLoader extends AbstractResourceLoader {
     }
     try {
       final InputStream inputStream = resourceUrl.openStream() ;
-      LOGGER.debug( "Opened stream '", resourceUrl.toExternalForm(), "'" );
+      LOGGER.info( "Opened stream '", resourceUrl.toExternalForm(), "'." ) ;
       return inputStream ;
     } catch( IOException e ) {
       // Is there a case where this makes more sense than rethrowing in a RuntimeException?

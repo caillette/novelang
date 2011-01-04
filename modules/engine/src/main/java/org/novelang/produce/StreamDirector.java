@@ -62,10 +62,11 @@ public abstract class StreamDirector {
     } else {
       final ImmutableMap< PageIdentifier,String > pageMap =
           pageIdentifierExtractor.extractPages( renderable.getDocumentTree() ) ;
-      LOGGER.info( "PageMap: ", pageMap ) ;
       if( pageMap.isEmpty() ) {
+        LOGGER.info( "No pageMap defined." ) ;
         feedDefaultPage( renderable, streamFeeder ) ;
       } else {
+        LOGGER.info( "using pageMap: ", pageMap ) ;
         if( pageIdentifier == null ) {
           feedDefaultPage( renderable, streamFeeder ) ;
           if( supportsMultipage() ) {
