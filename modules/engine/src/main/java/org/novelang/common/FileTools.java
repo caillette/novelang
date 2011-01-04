@@ -334,6 +334,9 @@ final File relative = new File( parent, relativizePath( parent, child ) ) ;
         LOGGER.debug( "Created directory '", directory.getAbsolutePath(), "'" ) ;
       }
     }
+    if( ! directory.exists() ) {
+      throw new IllegalStateException( "Couldn't create '" +directory.getAbsolutePath() + "'" ) ;
+    }
     return directory ;
   }
 
