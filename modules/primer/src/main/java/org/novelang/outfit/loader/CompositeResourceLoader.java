@@ -16,25 +16,29 @@
  */
 package org.novelang.outfit.loader;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A {@link ResourceLoader} made of a chain of {@link AbstractResourceLoader}s.
+ * A {@link ResourceLoader} made of multiple {@link AbstractResourceLoader}s.
  * It tries all of them in sequence and throws a {@link ResourceNotFoundException}
  * referencing every place it tried.
+ * <p>
+ * The {@link org.novelang.outfit.loader.ClasspathResourceLoader}s are always tried last.
  *
  * @author Laurent Caillette
  */
 public class CompositeResourceLoader implements ResourceLoader {
 
-  private final ImmutableList< AbstractResourceLoader > resourceLoaders ;
+  private final ImmutableList< AbstractResourceLoader > preferredResourceLoaders;
+  private final ImmutableList< ClasspathResourceLoader > classpathResourceLoaders ;
 
   public CompositeResourceLoader( final AbstractResourceLoader... resourceLoaders ) {
     this( ImmutableList.< AbstractResourceLoader >builder().add( resourceLoaders ).build() ) ;
@@ -47,7 +51,27 @@ public class CompositeResourceLoader implements ResourceLoader {
    */
   public CompositeResourceLoader( final ImmutableList< AbstractResourceLoader > resourceLoaders ) {
     checkArgument( ! resourceLoaders.isEmpty() ) ;
-    this.resourceLoaders = resourceLoaders ;
+    final ImmutableList.Builder< AbstractResourceLoader > preferredResourceLoaderBuilder =
+        ImmutableList.builder() ;
+    final ImmutableList.Builder< ClasspathResourceLoader > classpathResourceLoaderBuilder =
+        ImmutableList.builder() ;
+    for( final AbstractResourceLoader resourceLoader : resourceLoaders ) {
+      if( resourceLoader instanceof ClasspathResourceLoader ) {
+        classpathResourceLoaderBuilder.add( ( ClasspathResourceLoader ) resourceLoader ) ;
+      } else {
+        preferredResourceLoaderBuilder.add( resourceLoader ) ;
+      }
+    }
+    preferredResourceLoaders = preferredResourceLoaderBuilder.build() ;
+    classpathResourceLoaders = classpathResourceLoaderBuilder.build() ;
+  }
+
+  /*package*/ ImmutableList< AbstractResourceLoader > getAll() {
+    return new ImmutableList.Builder< AbstractResourceLoader >()
+        .addAll( preferredResourceLoaders )
+        .addAll( classpathResourceLoaders )
+        .build()
+    ;
   }
 
   /**
@@ -69,7 +93,7 @@ public class CompositeResourceLoader implements ResourceLoader {
   ) {
     checkNotNull( resourceLoader ) ;
     if( resourceLoader instanceof CompositeResourceLoader ) {
-      return ( ( CompositeResourceLoader ) resourceLoader ).resourceLoaders ;
+      return ( ( CompositeResourceLoader ) resourceLoader ).getAll() ;
     } else if( resourceLoader instanceof AbstractResourceLoader ) {
       return ImmutableList.of( ( AbstractResourceLoader ) resourceLoader ) ;
     } else {
@@ -82,6 +106,26 @@ public class CompositeResourceLoader implements ResourceLoader {
       throws ResourceNotFoundException
   {
     final ImmutableList.Builder< String > missesBuilder = ImmutableList.builder() ;
+    InputStream inputStream ;
+
+    inputStream = tryResourceLoaders( preferredResourceLoaders, missesBuilder, resourceName ) ;
+    if( inputStream != null ) {
+      return inputStream ;
+    }
+    inputStream = tryResourceLoaders( classpathResourceLoaders, missesBuilder, resourceName ) ;
+    if( inputStream != null ) {
+      return inputStream ;
+    }
+
+    final ImmutableList< String > misses = missesBuilder.build() ;
+    throw new ResourceNotFoundException( resourceName, Joiner.on( "\n" ).join( misses ) ) ;
+  }
+
+  private static InputStream tryResourceLoaders(
+      final ImmutableList< ? extends AbstractResourceLoader > resourceLoaders,
+      final ImmutableList.Builder< String > missesBuilder,
+      final ResourceName resourceName
+  ) {
     for( final AbstractResourceLoader resourceLoader : resourceLoaders ) {
       final InputStream inputStream = resourceLoader.maybeGetInputStream( resourceName ) ;
       if( inputStream == null ) {
@@ -90,8 +134,7 @@ public class CompositeResourceLoader implements ResourceLoader {
         return inputStream ;
       }
     }
-    final ImmutableList< String > misses = missesBuilder.build() ;
-    throw new ResourceNotFoundException( resourceName, Joiner.on( "\n" ).join( misses ) ) ;
+    return null ;
   }
 
   @Override
@@ -100,12 +143,41 @@ public class CompositeResourceLoader implements ResourceLoader {
   }
 
   public String getMultilineDescription() {
-    final StringBuilder stringBuilder = new StringBuilder( this.toString() + ", made of:") ;
-    for( final AbstractResourceLoader resourceLoader : resourceLoaders ) {
+    final StringBuilder stringBuilder =
+        new StringBuilder( this.toString() + ", searching (in order):" ) ;
+    for( final AbstractResourceLoader resourceLoader : getAll() ) {
       stringBuilder.append( "\n  " ) ;
 //      stringBuilder.append( resourceLoader.toString() ) ;
       stringBuilder.append( resourceLoader.getMultilineDescription() ) ;
     }
     return stringBuilder.toString() ;
   }
+
+
+  public static CompositeResourceLoader create(
+      final String resourcePath,
+      final File... directories
+  ) {
+    final ImmutableList.Builder< UrlResourceLoader > urlResourceLoaders = ImmutableList.builder() ;
+    for( final File directory : directories ) {
+      try {
+        urlResourceLoaders.add( new UrlResourceLoader( directory.toURI().toURL() ) ) ;
+      } catch( MalformedURLException e ) {
+        throw new RuntimeException( e ) ;
+      }
+    }
+    return create( resourcePath, urlResourceLoaders.build() ) ;
+  }
+
+  public static CompositeResourceLoader create(
+      final String resourcePath,
+      final ImmutableList< UrlResourceLoader > urlResourceLoaders
+  ) {
+    final ImmutableList.Builder< AbstractResourceLoader > resourceLoaders =
+        ImmutableList.builder() ;
+    resourceLoaders.addAll( urlResourceLoaders ) ;
+    resourceLoaders.add( new ClasspathResourceLoader( resourcePath ) ) ;
+    return new CompositeResourceLoader( resourceLoaders.build() ) ;
+  }
+
 }

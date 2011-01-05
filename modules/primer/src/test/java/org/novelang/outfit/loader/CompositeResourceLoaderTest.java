@@ -29,13 +29,25 @@ public class CompositeResourceLoaderTest {
 
 
   @Test
-  public void compose() {
+  public void compose1() {
     final DummyResourceLoader resourceLoader1 = new DummyResourceLoader() ;
     final DummyResourceLoader resourceLoader2 = new DummyResourceLoader() ;
     final CompositeResourceLoader compositeResourceLoader =
         new CompositeResourceLoader( resourceLoader1, resourceLoader2 ) ;
     assertThat( compositeResourceLoader.getInputStream( new ResourceName( "r.x" ) ) )
         .isSameAs( resourceLoader1.inputStream ) ;
+  }
+
+
+  @Test
+  public void compose2() {
+    final AbstractResourceLoader resourceLoader1 = new DummyResourceLoader() ;
+    final AbstractResourceLoader resourceLoader2 = new ClasspathResourceLoader() ;
+    final AbstractResourceLoader resourceLoader3 = new DummyResourceLoader() ;
+    final CompositeResourceLoader compositeResourceLoader =
+        new CompositeResourceLoader( resourceLoader1, resourceLoader2, resourceLoader3 ) ;
+    assertThat( compositeResourceLoader.getAll() )
+        .containsExactly( resourceLoader1, resourceLoader3, resourceLoader2 ) ;
   }
 
 }

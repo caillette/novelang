@@ -61,6 +61,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.TextTools;
+import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.rendering.RenditionMimeType;
@@ -453,8 +454,7 @@ public class HttpDaemonTest {
     httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
         HTTP_DAEMON_PORT,
         resourceInstaller.getTargetDirectory(),
-        styleDirectory,
-        renderingCharset
+        CompositeResourceLoader.create( ConfigurationTools.BUNDLED_STYLE_DIR, styleDirectory )
     ) ) ;
     httpDaemon.start() ;
   }

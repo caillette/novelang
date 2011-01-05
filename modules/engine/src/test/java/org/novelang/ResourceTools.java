@@ -278,149 +278,158 @@ public final class ResourceTools {
     return EXECUTOR_SERVICE ;
   }
 
+  /**
+   * @deprecated silly semantics because of the support of multiple style directories.
+   */
   public static ProducerConfiguration createProducerConfiguration(
         final File contentDirectory,
         final File styleDirectory,
         final boolean shouldAddClasspathResourceLoader,
         final Charset renderingCharset
     ) {
-      Preconditions.checkNotNull( styleDirectory ) ;
-      return doCreateProducerConfiguration(
-          contentDirectory,
-          styleDirectory,
-          shouldAddClasspathResourceLoader,
-          renderingCharset
-      ) ;
-    }
+    Preconditions.checkNotNull( styleDirectory ) ;
+    return doCreateProducerConfiguration(
+        contentDirectory,
+        styleDirectory,
+        shouldAddClasspathResourceLoader,
+        renderingCharset
+    ) ;
+  }
 
-    public static ProducerConfiguration createProducerConfiguration(
-        final File contentDirectory,
-        final Charset renderingCharset
-    ) {
-      return doCreateProducerConfiguration(
-          contentDirectory,
-          null,
-          true,
-          renderingCharset
-      ) ;
-    }
+  public static ProducerConfiguration createProducerConfiguration(
+      final File contentDirectory,
+      final Charset renderingCharset
+  ) {
+    return doCreateProducerConfiguration(
+        contentDirectory,
+        null,
+        true,
+        renderingCharset
+    ) ;
+  }
 
-    public static ProducerConfiguration doCreateProducerConfiguration(
-        final File contentDirectory,
-        final File styleDirectory,
-        final boolean shouldAddClasspathResourceLoader,
-        final Charset renderingCharset
-    ) {
-      final CompositeResourceLoader resourceLoader ;
-      final CompositeResourceLoader customResourceLoader ;
-      if( styleDirectory == null ) {
-        resourceLoader = new CompositeResourceLoader(
-            new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ) ;
-      } else {
-        try {
-          customResourceLoader = new CompositeResourceLoader(
-              new UrlResourceLoader( styleDirectory.toURI().toURL() ) ) ;
-        } catch( MalformedURLException e ) {
-          throw new Error( e ) ;
-        }
-        if( shouldAddClasspathResourceLoader ) {
-          resourceLoader = new CompositeResourceLoader(
-              customResourceLoader,
-              new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
-          ) ;
-        } else {
-          resourceLoader = customResourceLoader ;
-        }
+  /**
+   * @deprecated silly semantics because of the support of multiple style directories.
+   */
+  private static ProducerConfiguration doCreateProducerConfiguration(
+      final File contentDirectory,
+      final File styleDirectory,
+      final boolean shouldAddClasspathResourceLoader,
+      final Charset renderingCharset
+  ) {
+    final CompositeResourceLoader resourceLoader ;
+    final CompositeResourceLoader customResourceLoader ;
+    if( styleDirectory == null ) {
+      resourceLoader = new CompositeResourceLoader(
+          new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR ) ) ;
+    } else {
+      try {
+        customResourceLoader = new CompositeResourceLoader(
+            new UrlResourceLoader( styleDirectory.toURI().toURL() ) ) ;
+      } catch( MalformedURLException e ) {
+        throw new Error( e ) ;
       }
-      return createProducerConfiguration( contentDirectory, resourceLoader, renderingCharset ) ;
-
+      if( shouldAddClasspathResourceLoader ) {
+        resourceLoader = new CompositeResourceLoader(
+            customResourceLoader,
+            new ClasspathResourceLoader( ConfigurationTools.BUNDLED_STYLE_DIR )
+        ) ;
+      } else {
+        resourceLoader = customResourceLoader ;
+      }
     }
+    return createProducerConfiguration( contentDirectory, resourceLoader, renderingCharset ) ;
 
-    public static DaemonConfiguration createDaemonConfiguration(
-        final int httpDaemonPort,
-        final File contentDirectory,
-        final File styleDirectory,
-        final Charset renderingCharset
-    ) {
-      final ProducerConfiguration producerConfiguration = createProducerConfiguration(
-          contentDirectory,
-          styleDirectory,
-          false,
-          renderingCharset
-      ) ;
+  }
 
-      return new DaemonConfiguration() {
-        @Override
-        public int getPort() {
-          return httpDaemonPort ;
-        }
-        @Override
-        public ProducerConfiguration getProducerConfiguration() {
-          return producerConfiguration ;
-        }
+  /**
+   * @deprecated silly semantics because of the support of multiple style directories.
+   */
+  public static DaemonConfiguration createDaemonConfiguration(
+      final int httpDaemonPort,
+      final File contentDirectory,
+      final File styleDirectory,
+      final Charset renderingCharset
+  ) {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        contentDirectory,
+        styleDirectory,
+        false,
+        renderingCharset
+    ) ;
 
-        @Override
-        public boolean getServeRemotes() {
-          return true ;
-        }
-      } ;
+    return new DaemonConfiguration() {
+      @Override
+      public int getPort() {
+        return httpDaemonPort ;
+      }
+      @Override
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
 
-    }
+      @Override
+      public boolean getServeRemotes() {
+        return true ;
+      }
+    } ;
 
-    public static DaemonConfiguration createDaemonConfiguration(
-        final int httpDaemonPort,
-        final File contentDirectory,
-        final Charset renderingCharset
-    ) {
-      final ProducerConfiguration producerConfiguration = createProducerConfiguration(
-          contentDirectory,
-          renderingCharset
-      ) ;
+  }
 
-      return new DaemonConfiguration() {
-        @Override
-        public int getPort() {
-          return httpDaemonPort ;
-        }
-        @Override
-        public ProducerConfiguration getProducerConfiguration() {
-          return producerConfiguration ;
-        }
+  public static DaemonConfiguration createDaemonConfiguration(
+      final int httpDaemonPort,
+      final File contentDirectory,
+      final Charset renderingCharset
+  ) {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        contentDirectory,
+        renderingCharset
+    ) ;
 
-        @Override
-        public boolean getServeRemotes() {
-          return true ;
-        }
-      } ;
+    return new DaemonConfiguration() {
+      @Override
+      public int getPort() {
+        return httpDaemonPort ;
+      }
+      @Override
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
 
-    }
+      @Override
+      public boolean getServeRemotes() {
+        return true ;
+      }
+    } ;
 
-    public static DaemonConfiguration createDaemonConfiguration(
-        final int httpDaemonPort,
-        final File contentDirectory,
-        final ResourceLoader resourceLoader
-    ) {
-      final ProducerConfiguration producerConfiguration = createProducerConfiguration(
-          contentDirectory,
-          resourceLoader,
-          DefaultCharset.RENDERING
-      ) ;
+  }
 
-      return new DaemonConfiguration() {
-        @Override
-        public int getPort() {
-          return httpDaemonPort ;
-        }
-        @Override
-        public ProducerConfiguration getProducerConfiguration() {
-          return producerConfiguration ;
-        }
+  public static DaemonConfiguration createDaemonConfiguration(
+      final int httpDaemonPort,
+      final File contentDirectory,
+      final ResourceLoader resourceLoader
+  ) {
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        contentDirectory,
+        resourceLoader,
+        DefaultCharset.RENDERING
+    ) ;
 
-        @Override
-        public boolean getServeRemotes() {
-          return true ;
-        }
-      } ;
+    return new DaemonConfiguration() {
+      @Override
+      public int getPort() {
+        return httpDaemonPort ;
+      }
+      @Override
+      public ProducerConfiguration getProducerConfiguration() {
+        return producerConfiguration ;
+      }
 
-    }
+      @Override
+      public boolean getServeRemotes() {
+        return true ;
+      }
+    } ;
+
+  }
 }

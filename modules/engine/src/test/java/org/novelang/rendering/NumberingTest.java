@@ -27,6 +27,7 @@ import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.produce.DocumentProducer;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.DocumentRequest;
@@ -50,8 +51,12 @@ public class NumberingTest {
 
     final ProducerConfiguration serverConfiguration = ResourceTools.createProducerConfiguration(
         resourceInstaller.getTargetDirectory(),
-        resourceInstaller.createFileObject( ResourcesForTests.XslFormatting.dir ),
-        true,
+//        resourceInstaller.createFileObject( ResourcesForTests.XslFormatting.dir ),
+//        true,
+        CompositeResourceLoader.create(
+            org.novelang.configuration.ConfigurationTools.BUNDLED_STYLE_DIR,
+            resourceInstaller.createFileObject( ResourcesForTests.XslFormatting.dir )
+        ),
         DefaultCharset.RENDERING
     ) ;
     final DocumentProducer documentProducer = new DocumentProducer( serverConfiguration ) ;

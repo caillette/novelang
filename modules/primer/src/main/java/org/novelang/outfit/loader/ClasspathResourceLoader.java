@@ -61,7 +61,11 @@ public class ClasspathResourceLoader extends AbstractResourceLoader {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "{classpath files and jars}" ;
+    if( path == null ) {
+      return getClass().getSimpleName() + "{classpath files and jars}" ;
+    } else {
+      return getClass().getSimpleName() + "{" + path + "}";
+    }
   }
 
   @Override

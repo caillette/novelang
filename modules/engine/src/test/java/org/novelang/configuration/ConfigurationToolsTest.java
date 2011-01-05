@@ -222,7 +222,7 @@ public class ConfigurationToolsTest {
    * Dirty use of reflexion here. TODO: created dedicated files with known content.
    */
   @Test
-  public void createWithCorrectResourceLoaderOrder() throws ArgumentException, FOPException, IOException {
+  public void createWithCorrectResourceLoaderOrder() throws Exception {
     final File parent = new DirectoryFixture().getDirectory() ;
     final File directory1 = FileTools.createFreshDirectory( parent, "first" ) ;
     final File directory2 = FileTools.createFreshDirectory( parent, "second" ) ;
@@ -235,11 +235,10 @@ public class ConfigurationToolsTest {
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
         .createRenderingConfiguration( parameters ) ;
 
-    final ImmutableList< AbstractResourceLoader > resourceLoaders =
-        Reflection.field( "resourceLoaders" )
-        .ofType( new TypeRef< ImmutableList< AbstractResourceLoader > >( ){} )
+    final ImmutableList< AbstractResourceLoader > resourceLoaders = Reflection.method( "getAll" )
+        .withReturnType( new TypeRef< ImmutableList< AbstractResourceLoader > >( ){} )
         .in( renderingConfiguration.getResourceLoader() )
-        .get()
+        .invoke()
     ;
     assertThat( resourceLoaders.get( 0 ) ).isInstanceOf( UrlResourceLoader.class ) ;
     assertThat( resourceLoaders.get( 0 ).toString() ).contains( "first" ) ;
