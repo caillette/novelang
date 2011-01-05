@@ -33,7 +33,6 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.loader.ResourceNotFoundException;
 import org.novelang.outfit.loader.UrlResourceLoader;
@@ -75,8 +74,8 @@ public class ResourceHandler extends GenericHandler {
 
   protected ResourceHandler( final ResourceLoader resourceLoader ) {
     this.resourceLoader = resourceLoader ;
-    LOGGER.debug(
-        "Using resourceLoader ",
+    LOGGER.info(
+        "Using ",
         resourceLoader instanceof CompositeResourceLoader
             ? ( ( CompositeResourceLoader ) resourceLoader ).getMultilineDescription()
             : resourceLoader 
@@ -91,7 +90,7 @@ public class ResourceHandler extends GenericHandler {
   )
       throws IOException, ServletException
   {
-    LOGGER.debug( "Handling ", request.getRequestURI(), "..." ) ;
+    LOGGER.debug( "Handling '", request.getRequestURI(), "'..." ) ;
 
     final ResourceRequest documentRequest;
     try {
@@ -134,7 +133,7 @@ public class ResourceHandler extends GenericHandler {
         ) ;
         
       } catch( ResourceNotFoundException e ) {
-        LOGGER.debug( "Could not serve ", request.getRequestURI() ) ;
+        LOGGER.trace( "Could not serve ", request.getRequestURI() ) ;
         // Then do nothing, we just don't handle that request.
       }
 

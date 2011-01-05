@@ -81,12 +81,12 @@ public class HttpDaemon {
     if( ! daemonConfiguration.getServeRemotes() ) {
       handlers.addHandler( new LocalhostOnlyHandler() ) ;
     }
-//    handlers.addHandler( new ShutdownHandler() ) ;
     handlers.addHandler( new FontDiscoveryHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
     handlers.addHandler( new DirectoryScanHandler(
         daemonConfiguration.getProducerConfiguration().getContentConfiguration() ) ) ;
     handlers.addHandler( new DocumentHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
     handlers.addHandler( new ResourceHandler( daemonConfiguration.getProducerConfiguration() ) ) ;
+    handlers.addHandler( new UnhandledRequestHandler() ) ; // Must be last.
     server = new Server( daemonConfiguration.getPort() ) ;
     server.setHandler( handlers ) ;
     server.setThreadPool( new JettyThreadPool() ) ;
