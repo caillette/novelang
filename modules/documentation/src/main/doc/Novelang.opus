@@ -6,25 +6,27 @@ mapstylesheet
 
 insert file:introduction.novella
 
+insert file:rationale.novella
+
+insert file:faq.novella
+
+
 insert file:status.novella
 
 insert file:versions/. sort=version- createlevel levelabove=1
 
-insert file:faq.novella
-
-insert file:rationale.novella
 
 insert file:architecture.novella
 
+insert file:layout.novella
+
 insert file:novella-syntax.novella
 
-insert file:layout.novella
+insert file:opus-syntax.novella
 
 insert file:i18n.novella
 
 insert file:stylesheets.novella
-
-insert file:opus-syntax.novella
 
 insert file:fonts.novella
 
@@ -47,8 +49,6 @@ insert file:level-exploder.novella
 
 insert file:common-options.novella levelabove=2
 
-
-insert file:tips.novella
 
 insert file:source-characters.novella style=character-escapes
 

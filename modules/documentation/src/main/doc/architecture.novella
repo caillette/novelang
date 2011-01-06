@@ -3,9 +3,6 @@
 Novelang runs as a batch tool, or as an HTTP dæmon.
 Both use the same engine, passing URL-like requests (like ``/doc/Novelang.pdf``).
 
-Novelang acts as a processing pipe, which doesn't keep any internal state between two
-document requests.
-
 The rendition of a document occurs through 3 mains stages:
 - Source parsing.
 - Tree mangling.
@@ -20,9 +17,6 @@ The AST is made of nodes with a text payload, an optional type label, and zero o
 The parser relies on "ANTLR-generated"
 http://antlr.org
 code. 
-The AST is an immutable object. As a consequence, many tricky parts of Novelang code don't do
-any side-effect, which greatly improve reliability. Novelang developed its own algorithms for
-dealing with immutable trees.
 
 Source parsing occurs in parallel when a single Opus file includes several Novella files.
 
@@ -45,4 +39,16 @@ Rendering converts the AST to a human-readable format, like PDF or HTML.
 There is a built-in renderer relying on XSL but as the Renderer is basically a function taking
 an output stream and an AST as input parameters, rendering can occur in virtually any format.
 
+%% Novelang renders single-page and multipage documents as well. The renderer decides of how to
+split the document into multiple pages (through a customizable stylesheet).
 
+
+=== Statelessness
+
+Novelang applies many features of functional programming.
+Most of Novelang's internal components don't retain any state past initialization.
+Most of data structures are immutable, especially the AST. (This required to develop specific
+algorithm to deal with immutable trees.)
+
+Because Novelang's code avoids unnecessary side-effects, this greatly improves its inherent
+stability.

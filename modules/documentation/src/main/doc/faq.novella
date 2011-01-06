@@ -2,9 +2,9 @@
 
 ** Is there a chance to see a WYSIWYG editor for Novelang? **
 
-Definitely no.
-Novelang's primary purpose is to reject the WYSIWYG (What You See Is What You Get) fraud.
-By the way WYSIWYG makes no sense when supporting multiple rendition formats.
+WYSIWYG (What You See Is What You Get) doesn't make much sense when output may occur in multiple
+formats. The closest thing that Novelang could offer is some plugins and configuration files
+for popular text editor supporting custom syntax highlighting.
 
 
 ** Why so many versions? **
@@ -15,12 +15,17 @@ Novelang's automated release process makes easy and cheap to deliver a lot.
 
 ** Is Novelang good enough for production? **
 
-Sure it is. Each new version passes more than 700 non-regression tests.
+Sure it is. The author is using it daily to dump the mess out of his mind. 
+
+
+** How unit-tested is Novelang? **
+
+Each new version passes more than 700 non-regression tests.
 
 
 ** Who's using Novelang? **
 
-Very few people. The author, Laurent Caillette, write most of his documents using Novelang.
+Less than 3 people in the world.
 
 
 ** Will Novelang become a commercial product? **

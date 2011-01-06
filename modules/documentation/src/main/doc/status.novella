@@ -1,8 +1,5 @@
 == Release notes 
 
-
-=== Meaning of the version number
-
 Version number has the "Major, Minor, Fix" form.
 Before Novelang reaches version `1.0.0`, a change in "Minor" means a new feature.
 A change in "Fix" means a bugfix, while retaining compatibiliy with documents and stylesheets.

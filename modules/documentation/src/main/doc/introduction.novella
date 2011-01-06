@@ -2,13 +2,16 @@
 
 Novelang transforms text files, written with a wiki-like syntax, into nicely-formatted documents
 like PDF or HTML, using customizable stylesheets.
-
 Novelang targets professional writers who need to focus on the content, letting the automated
 rendition do the boring job.
-Because of Novelang's fine-grained text parsing, rendition takes care of correct spacing and
-punctutation, which usually bring `80 %` of typographic errors. 
 
-Novelang is a project started by Laurent Caillette, a Java architect who believes in the power of simple, reliable tools.
+Novelang retains the spirit of compiler-based development tools, where the machine performs
+all possible validations before producing the final outpout.
+Novelang's unique fine-grained parsing grabs text details like parenthesized blocks or punctuation,
+and enforces consistent rendering. The result is `70 %` less typographic errors.
+
+Novelang is a project started by Laurent Caillette, a Java architect who believes in the power
+of simple, reliable tools.
 You can mail him on Users mailing list or leave a comment on the Novelang blog (see links).
 
 Novelang software is free to use and redistribute, under the terms of the GNU Public `License v3`.
