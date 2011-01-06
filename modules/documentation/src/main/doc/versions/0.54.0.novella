@@ -1,0 +1,8 @@
+--- Because of some cleanup, ``n:relative-identifier`` becomes illegal in stylesheets
+(wasn't generated since a few versions). This might break a few existing stylesheets.
+
+--- Better logging of accessed resources.
+
+--- Documentation enhancements.
+
+
