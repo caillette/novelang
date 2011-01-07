@@ -6,9 +6,10 @@ Novelang targets professional writers who need to focus on the content, letting 
 rendition do the boring job.
 
 Novelang retains the spirit of compiler-based development tools, where the machine performs
-all possible validations before producing the final outpout.
+all possible validations before producing the final output.
 Novelang's unique fine-grained parsing grabs text details like parenthesized blocks or punctuation,
-and enforces consistent rendering. The result is `70 %` less typographic errors.
+and enforces consistent structure and rendering.
+%%The result is `70 %` less typographic errors.
 
 Novelang is a project started by Laurent Caillette, a Java architect who believes in the power
 of simple, reliable tools.
