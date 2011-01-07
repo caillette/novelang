@@ -19,6 +19,7 @@ import org.novelang.configuration.ContentConfiguration;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
+import org.novelang.configuration.RenditionKinematic;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
@@ -122,6 +123,11 @@ public class TestDocumentProducer {
           @Override
           public Charset getDefaultCharset() {
             return DefaultCharset.RENDERING ;
+          }
+
+          @Override
+          public RenditionKinematic getRenderingKinematic() {
+            return RenditionKinematic.BATCH ;
           }
         } ;
       }

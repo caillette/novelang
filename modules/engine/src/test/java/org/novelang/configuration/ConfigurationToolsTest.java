@@ -28,7 +28,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.fop.apps.FOPException;
-import org.fest.assertions.Assertions;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import org.junit.Assert;
@@ -156,7 +155,9 @@ public class ConfigurationToolsTest {
       throws ArgumentException, FOPException, MalformedURLException {
     // 'fonts' directory has no 'fonts' subdirectory!
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
-        .createRenderingConfiguration( createDaemonParameters( defaultFontsDirectory ) ) ;
+        .createRenderingConfiguration(
+            createDaemonParameters( defaultFontsDirectory ), RenditionKinematic.DAEMON )
+    ;
 
     Assert.assertNotNull( renderingConfiguration.getResourceLoader() ) ;
     Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
@@ -170,7 +171,10 @@ public class ConfigurationToolsTest {
     // Sure that parent of 'fonts' subdirectory has a 'fonts' subdirectory!
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
         .createRenderingConfiguration(
-            createDaemonParameters( defaultFontsDirectory.getParentFile() ) ) ;
+            createDaemonParameters( defaultFontsDirectory.getParentFile() ),
+            RenditionKinematic.DAEMON
+        )
+    ;
 
     Assert.assertNotNull( renderingConfiguration.getResourceLoader() ) ;
     Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
@@ -192,7 +196,7 @@ public class ConfigurationToolsTest {
         fontDirNameAlternate
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
-        .createRenderingConfiguration( parameters ) ;
+        .createRenderingConfiguration( parameters, RenditionKinematic.DAEMON ) ;
 
     Assert.assertNotNull( renderingConfiguration.getResourceLoader() ) ;
     Assert.assertNotNull( renderingConfiguration.getFopFactory() ) ;
@@ -212,7 +216,7 @@ public class ConfigurationToolsTest {
         ISO_8859_2.name()
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
-        .createRenderingConfiguration( parameters ) ;
+        .createRenderingConfiguration( parameters, RenditionKinematic.DAEMON ) ;
     Assert.assertNotNull( renderingConfiguration.getDefaultCharset() ) ;
     Assert.assertEquals( ISO_8859_2, renderingConfiguration.getDefaultCharset() ) ;
   }
@@ -233,7 +237,7 @@ public class ConfigurationToolsTest {
         directory2.getAbsolutePath()
     ) ;
     final RenderingConfiguration renderingConfiguration = ConfigurationTools
-        .createRenderingConfiguration( parameters ) ;
+        .createRenderingConfiguration( parameters, RenditionKinematic.BATCH ) ;
 
     final ImmutableList< AbstractResourceLoader > resourceLoaders = Reflection.method( "getAll" )
         .withReturnType( new TypeRef< ImmutableList< AbstractResourceLoader > >( ){} )
@@ -293,7 +297,11 @@ public class ConfigurationToolsTest {
   @Test
   public void createProducerConfiguration() throws ArgumentException, FOPException {
     final ProducerConfiguration producerConfiguration =
-        ConfigurationTools.createProducerConfiguration( createDaemonParameters() ) ;
+        ConfigurationTools.createProducerConfiguration(
+            createDaemonParameters(),
+            RenditionKinematic.DAEMON
+        )
+    ;
     Assert.assertNotNull( producerConfiguration ) ;
     Assert.assertNotNull( producerConfiguration.getContentConfiguration() ) ;
     Assert.assertNotNull( producerConfiguration.getRenderingConfiguration() ) ;

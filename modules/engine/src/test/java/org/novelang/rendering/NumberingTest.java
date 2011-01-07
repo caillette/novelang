@@ -24,6 +24,7 @@ import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.configuration.ProducerConfiguration;
+import org.novelang.configuration.RenditionKinematic;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
@@ -57,7 +58,8 @@ public class NumberingTest {
             org.novelang.configuration.ConfigurationTools.BUNDLED_STYLE_DIR,
             resourceInstaller.createFileObject( ResourcesForTests.XslFormatting.dir )
         ),
-        DefaultCharset.RENDERING
+        DefaultCharset.RENDERING,
+        RenditionKinematic.BATCH
     ) ;
     final DocumentProducer documentProducer = new DocumentProducer( serverConfiguration ) ;
     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() ;

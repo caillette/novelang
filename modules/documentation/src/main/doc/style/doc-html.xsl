@@ -37,6 +37,9 @@
   <xsl:param name="filename"/>
   <xsl:param name="charset"/>
 
+  <!-- "batch" or "daemon" -->
+  <xsl:param name="rendition-kinematic"/>
+
   <xsl:variable name="page-name" select="/n:opus/n:meta/n:page/n:page-identifier"/>
   <xsl:variable name="page-path" select="/n:opus/n:meta/n:page/n:page-path"/>
 
@@ -46,7 +49,9 @@
   <xsl:variable name="page-id" select="generate-id( $page-nodeset )"/>
   <xsl:variable name="page-undefined" select="count( /n:opus/n:meta/n:page ) = 0"/>
 
-  <xsl:output method="html"/>
+  <xsl:variable name="resource-prefix" ><xsl:if test="$rendition-kinematic='DAEMON'" >/</xsl:if></xsl:variable>
+
+  <xsl:output method="xml"/>
 
   <xslmeta:multipage>
 
@@ -79,15 +84,25 @@
 
   <xsl:template match="/">
 
-    <html>
+    <html xmlns="http://www.w3.org/1999/xhtml" >
       <head>
-        <xsl:element name="meta">
+        <meta>
           <xsl:attribute name="http-equiv">content-type</xsl:attribute>
           <xsl:attribute name="content">text/html;charset=<xsl:value-of select="$charset"/>
           </xsl:attribute>
-        </xsl:element>
+        </meta>
 
         <meta name="Generator" content="Novelang"/>
+
+        <xsl:element name="meta" >
+          <xsl:attribute name="Copyright" />
+          <xsl:attribute name="content">
+            <xsl:apply-templates select="$author"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="$copyright-year"/>
+          </xsl:attribute>
+        </xsl:element>
+
         <meta name="Copyright">
           <xsl:attribute name="content">
             <xsl:apply-templates select="$author"/>
@@ -95,16 +110,19 @@
             <xsl:apply-templates select="$copyright-year"/>
           </xsl:attribute>
         </meta>
+
         <title>Novelang</title>
 
 
-        <!-- Ugly: support both relative (http://.../doc/) and absolute stylesheet (batch). -->
-        <link rel="stylesheet" type="text/css" href="/reset.css"/>
-        <link rel="stylesheet" type="text/css" href="reset.css"/>
-        <link rel="stylesheet" type="text/css" href="/layout.css"/>
-        <link rel="stylesheet" type="text/css" href="layout.css"/>
-        <link rel="stylesheet" type="text/css" href="/text.css"/>
-        <link rel="stylesheet" type="text/css" href="text.css"/>
+        <link rel="stylesheet" type="text/css" href="/reset.css">
+          <xsl:attribute name="href" ><xsl:value-of select="$resource-prefix" />reset.css</xsl:attribute>
+          </link>
+        <link rel="stylesheet" type="text/css" >
+          <xsl:attribute name="href" ><xsl:value-of select="$resource-prefix" />layout.css</xsl:attribute>
+          </link>
+        <link rel="stylesheet" type="text/css" href="/reset.css">
+          <xsl:attribute name="href" ><xsl:value-of select="$resource-prefix" />text.css</xsl:attribute>
+          </link>
 
         <link rel="alternate" type="application/atom+xml" title="News feed (Atom)">
           <xsl:attribute name="href">

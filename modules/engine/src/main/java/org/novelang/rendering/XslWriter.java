@@ -32,6 +32,7 @@ import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.configuration.RenderingConfiguration;
+import org.novelang.configuration.RenditionKinematic;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
@@ -74,6 +75,8 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
   protected final ResourceLoader resourceLoader ;
   protected final EntityEscapeSelector entityEscapeSelector ;
   private static final ResourceName IDENTITY_XSL_FILE_NAME = new ResourceName( "identity.xsl" ) ;
+
+  private final RenditionKinematic renditionKinematic;
 
   /**
    * Accumulates problems during XSL parsing and transformation.
@@ -169,6 +172,7 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
     super( namespaceUri, nameQualifier, charset, mimeType ) ;
     this.entityEscapeSelector = checkNotNull( entityEscapeSelector ) ;
     this.resourceLoader = checkNotNull( configuration.getResourceLoader() ) ;
+    this.renditionKinematic = checkNotNull( configuration.getRenderingKinematic() ) ;
 
     final ResourceName safeXslFileName;
     if( null == xslFileName ) {
@@ -227,12 +231,13 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
 
   }
 
-  private static void configure(
+  private void configure(
       final Transformer transformer,
       final DocumentMetadata documentMetadata
   ) {
     transformer.setParameter( "timestamp", documentMetadata.getCreationTimestamp() ) ;
     transformer.setParameter( "charset", documentMetadata.getCharset().name() ) ;
+    transformer.setParameter( "rendition-kinematic", renditionKinematic.name() ) ;
   }
 
   /**

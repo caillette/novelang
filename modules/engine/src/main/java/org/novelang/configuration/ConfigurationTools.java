@@ -18,13 +18,12 @@ package org.novelang.configuration;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.fop.apps.FOPException;
@@ -43,7 +42,6 @@ import org.novelang.outfit.loader.AbstractResourceLoader;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
-import org.novelang.outfit.loader.ResourceLoaderTools;
 import org.novelang.outfit.loader.UrlResourceLoader;
 import org.novelang.produce.DocumentRequest;
 
@@ -97,8 +95,9 @@ public class ConfigurationTools {
   private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool( 
       Runtime.getRuntime().availableProcessors(), EXECUTOR_THREAD_FACTORY ) ;
 
-  public static ProducerConfiguration createProducerConfiguration( 
-      final GenericParameters parameters 
+  public static ProducerConfiguration createProducerConfiguration(
+      final GenericParameters parameters,
+      final RenditionKinematic renderingKinematic
   )
       throws FOPException
   {
@@ -106,7 +105,7 @@ public class ConfigurationTools {
     extractLogDirectory( parameters ) ;
     
     final RenderingConfiguration renderingConfiguration =
-        createRenderingConfiguration( parameters ) ;
+        createRenderingConfiguration( parameters, renderingKinematic ) ;
     final ContentConfiguration contentConfiguration =
         createContentConfiguration( parameters ) ;
 
@@ -131,7 +130,10 @@ public class ConfigurationTools {
       throws FOPException
   {
 
-    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        parameters,
+        RenditionKinematic.DAEMON
+    ) ;
 
     final int port ;
     final Integer customPort = parameters.getHttpDaemonPort() ;
@@ -198,7 +200,10 @@ public class ConfigurationTools {
   public static LevelExploderConfiguration createExplodeLevelsConfiguration(
       final LevelExploderParameters parameters
   ) throws FOPException {
-    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        parameters,
+        RenditionKinematic.BATCH
+    ) ;
 
     final File outputDirectory ;
     outputDirectory = extractOutputDirectory( parameters ) ;
@@ -225,7 +230,8 @@ public class ConfigurationTools {
   )
       throws FOPException, IllegalArgumentException
   {
-    final ProducerConfiguration producerConfiguration = createProducerConfiguration( parameters ) ;
+    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
+        parameters, RenditionKinematic.BATCH ) ;
 
     final File outputDirectory ;
     outputDirectory = extractOutputDirectory( parameters ) ;
@@ -331,8 +337,9 @@ public class ConfigurationTools {
     } ;
   }
 
-  public static RenderingConfiguration createRenderingConfiguration( 
-      final GenericParameters parameters 
+  public static RenderingConfiguration createRenderingConfiguration(
+      final GenericParameters parameters,
+      final RenditionKinematic renditionKinematic
   )
       throws FOPException
   {
@@ -356,6 +363,8 @@ public class ConfigurationTools {
         .createFopFactory( fontDirectories, hyphenationDirectory ) ;
 
     final ResourceLoader resourceLoader = createResourceLoader( parameters ) ;
+
+    Preconditions.checkNotNull( renditionKinematic ) ;
 
     final Charset defaultRenderingCharset ;
     {
@@ -403,6 +412,11 @@ public class ConfigurationTools {
       @Override
       public Charset getDefaultCharset() {
         return defaultRenderingCharset ;
+      }
+
+      @Override
+      public RenditionKinematic getRenderingKinematic() {
+        return renditionKinematic ;
       }
     } ;
 

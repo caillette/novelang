@@ -16,11 +16,11 @@
   />
   <xsl:variable 
       name="author"     
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='AUTHOR'         ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='AUTHOR'         ]/n:cell[ 2 ]/n:block-of-literal-inside-grave-accents"
   />
   <xsl:variable
       name="copyright-year"
-      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='COPYRIGHT-YEAR' ]/n:cell[ 2 ]"
+      select="/n:opus/n:cell-rows-with-vertical-line[ n:style='parameters' ]/n:cell-row[ n:cell[ 1 ]='COPYRIGHT-YEAR' ]/n:cell[ 2 ]/n:block-of-literal-inside-grave-accents"
   />
   <xsl:variable
       name="sf-logo"

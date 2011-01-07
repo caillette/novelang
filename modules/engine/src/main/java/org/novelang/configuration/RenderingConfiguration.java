@@ -54,4 +54,6 @@ public interface RenderingConfiguration {
    */
   Charset getDefaultCharset() ;
 
+  RenditionKinematic getRenderingKinematic() ;
+
 }

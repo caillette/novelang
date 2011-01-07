@@ -17,12 +17,10 @@
 package org.novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
-import javax.xml.transform.TransformerConfigurationException;
 import junit.framework.Assert;
 import org.apache.fop.apps.FopFactory;
 import org.joda.time.DateTime;
@@ -34,12 +32,12 @@ import org.novelang.common.metadata.DocumentMetadata;
 import org.novelang.common.metadata.Page;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.RenderingConfiguration;
+import org.novelang.configuration.RenditionKinematic;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.rendering.xslt.validate.BadExpandedName;
 import org.novelang.rendering.xslt.validate.BadExpandedNamesException;
-import org.xml.sax.SAXException;
 
 /**
  * Tests for {@link org.novelang.rendering.XslWriter}.
@@ -159,6 +157,11 @@ public class XslWriterTest {
     @Override
     public Charset getDefaultCharset() {
       return DefaultCharset.RENDERING ;
+    }
+
+    @Override
+    public RenditionKinematic getRenderingKinematic() {
+      return RenditionKinematic.BATCH ;
     }
   }
 }

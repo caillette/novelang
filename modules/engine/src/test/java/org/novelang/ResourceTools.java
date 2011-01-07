@@ -31,7 +31,6 @@ import java.util.MissingResourceException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.io.FileUtils;
@@ -46,6 +45,7 @@ import org.novelang.configuration.DaemonConfiguration;
 import org.novelang.configuration.FopFontStatus;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenderingConfiguration;
+import org.novelang.configuration.RenditionKinematic;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
@@ -219,7 +219,8 @@ public final class ResourceTools {
     public static ProducerConfiguration createProducerConfiguration(
         final File contentDirectory,
         final ResourceLoader resourceLoader,
-        final Charset renderingCharset
+        final Charset renderingCharset,
+        final RenditionKinematic renditionKinematic
     ) {
       return new ProducerConfiguration() {
 
@@ -249,6 +250,10 @@ public final class ResourceTools {
               return renderingCharset ;
             }
 
+            @Override
+            public RenditionKinematic getRenderingKinematic() {
+              return renditionKinematic ;
+            }
           } ;
         }
 
@@ -278,33 +283,18 @@ public final class ResourceTools {
     return EXECUTOR_SERVICE ;
   }
 
-  /**
-   * @deprecated silly semantics because of the support of multiple style directories.
-   */
-  public static ProducerConfiguration createProducerConfiguration(
-        final File contentDirectory,
-        final File styleDirectory,
-        final boolean shouldAddClasspathResourceLoader,
-        final Charset renderingCharset
-    ) {
-    Preconditions.checkNotNull( styleDirectory ) ;
-    return doCreateProducerConfiguration(
-        contentDirectory,
-        styleDirectory,
-        shouldAddClasspathResourceLoader,
-        renderingCharset
-    ) ;
-  }
 
   public static ProducerConfiguration createProducerConfiguration(
       final File contentDirectory,
-      final Charset renderingCharset
+      final Charset renderingCharset,
+      final RenditionKinematic renderingKinematic
   ) {
     return doCreateProducerConfiguration(
         contentDirectory,
         null,
         true,
-        renderingCharset
+        renderingCharset,
+        renderingKinematic 
     ) ;
   }
 
@@ -315,8 +305,8 @@ public final class ResourceTools {
       final File contentDirectory,
       final File styleDirectory,
       final boolean shouldAddClasspathResourceLoader,
-      final Charset renderingCharset
-  ) {
+      final Charset renderingCharset,
+      RenditionKinematic renderingKinematic ) {
     final CompositeResourceLoader resourceLoader ;
     final CompositeResourceLoader customResourceLoader ;
     if( styleDirectory == null ) {
@@ -338,43 +328,11 @@ public final class ResourceTools {
         resourceLoader = customResourceLoader ;
       }
     }
-    return createProducerConfiguration( contentDirectory, resourceLoader, renderingCharset ) ;
+    return createProducerConfiguration(
+        contentDirectory, resourceLoader, renderingCharset, renderingKinematic ) ;
 
   }
 
-  /**
-   * @deprecated silly semantics because of the support of multiple style directories.
-   */
-  public static DaemonConfiguration createDaemonConfiguration(
-      final int httpDaemonPort,
-      final File contentDirectory,
-      final File styleDirectory,
-      final Charset renderingCharset
-  ) {
-    final ProducerConfiguration producerConfiguration = createProducerConfiguration(
-        contentDirectory,
-        styleDirectory,
-        false,
-        renderingCharset
-    ) ;
-
-    return new DaemonConfiguration() {
-      @Override
-      public int getPort() {
-        return httpDaemonPort ;
-      }
-      @Override
-      public ProducerConfiguration getProducerConfiguration() {
-        return producerConfiguration ;
-      }
-
-      @Override
-      public boolean getServeRemotes() {
-        return true ;
-      }
-    } ;
-
-  }
 
   public static DaemonConfiguration createDaemonConfiguration(
       final int httpDaemonPort,
@@ -383,7 +341,8 @@ public final class ResourceTools {
   ) {
     final ProducerConfiguration producerConfiguration = createProducerConfiguration(
         contentDirectory,
-        renderingCharset
+        renderingCharset,
+        RenditionKinematic.DAEMON
     ) ;
 
     return new DaemonConfiguration() {
@@ -412,7 +371,8 @@ public final class ResourceTools {
     final ProducerConfiguration producerConfiguration = createProducerConfiguration(
         contentDirectory,
         resourceLoader,
-        DefaultCharset.RENDERING
+        DefaultCharset.RENDERING,
+        RenditionKinematic.DAEMON
     ) ;
 
     return new DaemonConfiguration() {
