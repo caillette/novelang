@@ -23,6 +23,7 @@ import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.logger.ConsoleLogger;
 import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Helps logging system to initialize correctly.
@@ -34,6 +35,8 @@ import org.novelang.logger.Logger;
  * @author Laurent Caillette
  */
 public class LogbackConfigurationTools {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( LogbackConfigurationTools.class ) ;
 
   public static final String DEFAULT_LOG_DIR = ".";
 

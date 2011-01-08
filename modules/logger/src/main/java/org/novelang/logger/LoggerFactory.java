@@ -16,24 +16,93 @@
  */
 package org.novelang.logger;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * The API for obtaining instances of {@link Logger} object.
+ * <p>
  * This class delegates to a {@value #CONCRETE_LOGGER_FACTORY_CLASS_NAME} class, giving
  * pluggable implementation ability.
+ * <p>
+ *
+ * When not in a test environment (as reported by {@link #isTestEnvironment()}, provided
+ * loggers log in memory until the call to {@link #configurationComplete()} occurs.
  *
  * @author Laurent Caillette
  */
 public abstract class LoggerFactory {
 
-  private static final LoggerFactory concreteLoggerFactory ;
+  private static final boolean TESTING ;
+  static {
+    @SuppressWarnings( { "ThrowableInstanceNeverThrown" } )
+    final StackTraceElement[] stackTraceElements = new Exception().getStackTrace() ;
+    boolean junitPresent = false ;
+    for( final StackTraceElement stackTraceElement : stackTraceElements ) {
+      final String className = stackTraceElement.getClassName();
+      if( className.startsWith( "org.junit" ) || className.startsWith( "com.intellij.junit4" ) ) {
+        junitPresent = true ;
+        break ;
+      }
+    }
+    TESTING = junitPresent ;
+  }
+  @SuppressWarnings( { "StaticNonFinalField" } )
+  private static LoggerFactory loggerFactory ;
+  static {
+    if( isTestEnvironment() ) {
+      loggerFactory = createEffectiveLoggerFactory() ;
+    } else {
+      loggerFactory = new DeferringLoggerFactory() ;
+    }
+  }
+
+
+  public static Logger getLogger( final Class someClass ) {
+    return getLogger( someClass.getName() ) ;
+  }
+
+  public static Logger getLogger( final String name ) {
+    synchronized( LOCK ) {
+      if( isTestEnvironment() ) {
+        return new HookableLogger( loggerFactory.doGetLogger( name ) ) ;
+      } else {
+        return loggerFactory.doGetLogger( name ) ;
+      }
+    }
+  }
+
+  /**
+   * Switches from {@link org.novelang.logger.DeferringLoggerFactory} to some
+   * more interesting implementation.
+   *
+   * @throws IllegalStateException if {@link #isTestEnvironment()} or if already called.
+   */
+  public static void configurationComplete() {
+    synchronized( LOCK ) {
+      checkState( loggerFactory instanceof DeferringLoggerFactory ) ;
+      final LoggerFactory effectiveLoggerFactory = createEffectiveLoggerFactory() ;
+      DeferringLoggerFactory.flush( effectiveLoggerFactory ) ;
+      loggerFactory = effectiveLoggerFactory ;
+    }
+  }
+
+  protected abstract Logger doGetLogger( String name ) ;
+
+
+// =========
+// Internals
+// =========
+
+
+  private static final Object LOCK = new Object() ;
 
   private static final String CONCRETE_LOGGER_FACTORY_CLASS_NAME =
       "org.novelang.logger.ConcreteLoggerFactory";
 
-  static {
+
+  private static LoggerFactory createEffectiveLoggerFactory() {
     try {
-      concreteLoggerFactory = ( LoggerFactory ) Class.forName(
-          CONCRETE_LOGGER_FACTORY_CLASS_NAME ).newInstance() ;
+      return ( LoggerFactory ) Class.forName( CONCRETE_LOGGER_FACTORY_CLASS_NAME ).newInstance() ;
     } catch( ClassNotFoundException e ) {
       throw new RuntimeException( e ) ;
     } catch( InstantiationException e ) {
@@ -43,15 +112,16 @@ public abstract class LoggerFactory {
     }
   }
 
-  public static Logger getLogger( final Class someClass ) {
-    return getLogger( someClass.getName() ) ;
-  }
 
-  public static Logger getLogger( final String name ) {
-    return concreteLoggerFactory.doGetLogger( name ) ;
-  }
 
-  protected abstract Logger doGetLogger( String name ) ;
+  /**
+   * Returns true when running as JUnit test.
+   * When true, every {@link Logger} instance returned by {@link #getLogger(String)} is an instance
+   * of {@link org.novelang.logger.HookableLogger}.
+   */
+  public static boolean isTestEnvironment() {
+    return TESTING ;
+  }
 
 
 }

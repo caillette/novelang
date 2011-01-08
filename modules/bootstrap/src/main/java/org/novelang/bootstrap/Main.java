@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableMap;
 import org.novelang.batch.DocumentGenerator;
 import org.novelang.batch.LevelExploder;
 import org.novelang.daemon.HttpDaemon;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.LogbackConfigurationTools;
 import org.novelang.outfit.EnvironmentTools;
 
@@ -34,9 +35,14 @@ import org.novelang.outfit.EnvironmentTools;
 public class Main {
 
   public static void main( final String[] originalArguments ) throws Exception {
+
     // This must happen first. The need for originalArguments parameter prevents from
     // putting this initialization in a static block.
     LogbackConfigurationTools.fixLogDirectory( originalArguments ) ;
+
+    // Switch from deferred logging to real one.
+    LoggerFactory.configurationComplete() ;
+    
     EnvironmentTools.logSystemProperties() ;
 
     new Main().doMain( originalArguments ) ;

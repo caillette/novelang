@@ -24,6 +24,10 @@ package org.novelang.logger;
 @SuppressWarnings( { "UnusedDeclaration" } )
 public class ConcreteLoggerFactory extends org.novelang.logger.LoggerFactory {
 
+  static {
+    configurationComplete() ;
+  }
+
   @SuppressWarnings( { "StaticNonFinalField" } )
   private static org.apache.maven.plugin.logging.Log mojoLog = null ;
 
@@ -35,7 +39,7 @@ public class ConcreteLoggerFactory extends org.novelang.logger.LoggerFactory {
   @Override
   protected org.novelang.logger.Logger doGetLogger( final String name ) {
     if( mojoLog == null ) {
-      throw new IllegalStateException( "Not set: mojo log " ) ;
+      throw new IllegalStateException( "Not set: mojoLog " ) ;
     }
     return new MojoLoggerWrapper( name, mojoLog ) ;
   }

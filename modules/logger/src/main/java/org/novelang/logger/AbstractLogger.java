@@ -23,10 +23,6 @@ package org.novelang.logger;
  */
 /*package*/ abstract class AbstractLogger implements Logger {
 
-  enum Level {
-    ERROR, WARN, INFO, DEBUG, TRACE
-  }
-
   protected abstract void log( Level level, String message, Throwable throwable ) ;
 
 
