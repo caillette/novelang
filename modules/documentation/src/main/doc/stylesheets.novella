@@ -6,7 +6,7 @@ It's easy to customize rendering of PDF, HTML and plain text because Novelang re
 Novelang looks for stylesheets in that order:
 - In the directories set by ``--style-dirs`` option at startup.
 - Or in a ``style`` directory right under the project directory (from where Novelang was launched), if the ``--style-dirs`` option was not set.
-- Finally, inside ``Novelang-x.x.x.jar`` under the ``/style`` directory.
+- Finally, inside Novelang's jars files under the ``/style`` directory.
 
 By default Novelang attempts to render final document using the stylesheet with the name of
 corresponding format. Otherwise, it uses a default, built-in stylesheet.

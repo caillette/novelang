@@ -45,7 +45,7 @@ Yeah. This will occur one day.
 Yeah it sucks but it offers a single, well-documented mean to support various rendition formats.
 Using XSL out-of-the-box helps to focus on other topics, like defining a correct syntax
 for source documents.
-In the future, Novelang may support a dedicated language, probably based on Closure.
+In the future, Novelang may support a dedicated language, probably based on Clojure.
 There are already some interesting libraries for "XML"
 http://richhickey.github.com/clojure-contrib/prxml-api.html
 and "HTML"

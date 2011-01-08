@@ -15,7 +15,7 @@ If there is a directory named ``fonts`` right under your project root, it is aut
 You can specify alternate font directories by setting the ``--font-dirs`` option at startup. Directory names are whitespace-separated like this:
 
 <<<
---font-dirs=fonts/some-fonts fonts/other-fonts
+--font-dirs fonts/some-fonts fonts/other-fonts
 >>>
 
 === Font list
