@@ -56,6 +56,16 @@ public class GenericParametersConstants {
       .create()
   ;
 
+  public static final String OPTIONNAME_TEMPORARY_DIRECTORY = "temporary-dir" ;
+
+  public static final Option OPTION_TEMPORARY_DIRECTORY = OptionBuilder
+      .withLongOpt( OPTIONNAME_TEMPORARY_DIRECTORY )
+      .withDescription( "Directory for temporary files" )
+      .withValueSeparator()
+      .hasArg()
+      .create()
+  ;
+
   public static final String OPTIONNAME_STYLE_DIRECTORIES = "style-dirs" ;
 
   public static final Option OPTION_STYLE_DIRECTORIES = OptionBuilder

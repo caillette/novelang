@@ -23,6 +23,7 @@ import java.util.Iterator;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.ClassUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.novelang.ResourceTools;
 import org.novelang.logger.Logger;
@@ -45,7 +46,7 @@ public class ParametersTest {
 
   @Test
   public void voidDaemonParameters() throws ArgumentException {
-    final DaemonParameters parameters = new DaemonParameters( scratchDirectory, new String[ 0 ] ) ;
+    final DaemonParameters parameters = new DaemonParameters( scratchDirectory ) ;
     assertNull( parameters.getContentRoot() ) ;
     assertNull( parameters.getHttpDaemonPort() ) ;
     assertFalse( parameters.getStyleDirectories().iterator().hasNext() );
@@ -55,7 +56,7 @@ public class ParametersTest {
 
   @Test( expected = ArgumentException.class )
   public void voidBatchParameters() throws ArgumentException {
-    new DocumentGeneratorParameters( scratchDirectory, new String[ 0 ] ) ;
+    new DocumentGeneratorParameters( scratchDirectory, NO_PARAMETERS ) ;
   }
 
   @Test
@@ -174,7 +175,7 @@ public class ParametersTest {
 
   @Test
   public void batchParametersWantDocumentRequests() {
-    final String[] arguments = new String[ 0 ] ;
+    final String[] arguments = NO_PARAMETERS;
     try {
       new DocumentGeneratorParameters( scratchDirectory, arguments ) ;
       fail( "Exception should have been thrown" ) ;
@@ -183,17 +184,25 @@ public class ParametersTest {
     }
   }
 
+  @Test
+  @Ignore( "Missing implementation" )
+  public void temporaryDirectory() throws ArgumentException {
+    final String[] arguments = { DASHED_TEMPORARY_DIR, "my-temporary-directory" } ;
+    final DaemonParameters daemonParameters = new DaemonParameters( scratchDirectory, arguments ) ;
+  }
+
 // =======
 // Fixture
 // =======
 
   private static final Logger LOGGER = LoggerFactory.getLogger( ParametersTest.class );
 
-  private static final String DASHED_CONTENTROOT = "--content-root";
-  private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir";
-  private static final String DASHED_STYLE_DIRS = "--style-dirs";
-  private static final String DASHED_FONT_DIRS = "--font-dirs";
-  private static final String DASHED_LOG_DIR = "--log-dir";
+  private static final String DASHED_CONTENTROOT = "--content-root" ;
+  private static final String DASHED_HYPHENATION_DIR = "--hyphenation-dir" ;
+  private static final String DASHED_STYLE_DIRS = "--style-dirs" ;
+  private static final String DASHED_FONT_DIRS = "--font-dirs" ;
+  private static final String DASHED_LOG_DIR = "--log-dir" ;
+  private static final String DASHED_TEMPORARY_DIR = "--temporary-dir" ;
 
 
   private static< T > void assertOnIterable( final Iterable< T > actual, final T... expected ) {
@@ -242,5 +251,8 @@ public class ParametersTest {
     assertTrue( directoryCcc.exists() ) ;
     assertTrue( directoryCccDdd.exists() ) ;
   }
+
+  private static final String[] NO_PARAMETERS = new String[ 0 ] ;
+
 
 }

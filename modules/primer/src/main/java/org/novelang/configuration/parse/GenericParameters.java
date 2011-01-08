@@ -256,7 +256,7 @@ public abstract class GenericParameters {
   )
       throws ArgumentException
   {
-    final List directories = Lists.newArrayList() ;
+    final List< File > directories = Lists.newArrayList() ;
     for( final String directoryName : directoryNames ) {
       directories.add( extractDirectory( parent, directoryName, true ) ) ;
     }
