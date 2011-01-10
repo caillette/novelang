@@ -36,70 +36,16 @@ import org.novelang.produce.DocumentRequest;
  *
  * @author Laurent Caillette
  */
-public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
+public abstract class AbstractDocumentGenerator< PARAMETERS extends GenericParameters > {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( AbstractDocumentGenerator.class );
 
   protected static final String PROBLEMS_FILENAME = "problems.html" ;
 
-  protected abstract P createParameters(
-      final String[] arguments,
-      final File baseDirectory
-  ) throws ArgumentException ;
 
-  protected P createParametersOrExit(
-      final String commandName,
-      final boolean mayTerminateJvm, 
-      final String[] arguments,
-      final File baseDirectory
-  ) throws CannotStartException {
-    final P parameters ;
-    try {
-      parameters = createParameters( arguments, baseDirectory ) ;
-    } catch( ArgumentException e ) {
-      if( e.isHelpRequested() ) {
-        printHelpOnConsole( commandName, e ) ;
-        if( mayTerminateJvm ) {
-          System.exit( -1 ) ;
-        }
-        throw new CannotStartException( e ) ;
-      } else {
-        LOGGER.error( e, "Parameters exception, printing help and exiting." ) ;
-        printHelpOnConsole( commandName, e ) ;
-        if( mayTerminateJvm ) {
-          System.exit( -2 ) ;
-        }
-        throw new CannotStartException( e ) ;
-      }
-    }
-    return parameters;
-  }
+  public abstract void main( PARAMETERS parameters )
+      throws Exception ;
 
-  public void main( final String commandName, final String[] arguments ) throws Exception {
-    final File baseDirectory = new File( SystemUtils.USER_DIR ) ;
-    main( commandName, true, arguments, baseDirectory ) ;
-  }
-
-  public abstract void main(
-      String commandName,
-      boolean mayTerminateJvm,
-      String[] arguments,
-      File baseDirectory
-  ) throws Exception ;
-
-
-  private void printHelpOnConsole( final String commandName, final ArgumentException e ) {
-    if( null != e.getMessage() ) {
-      System.out.println( e.getMessage() ) ;
-    }
-    e.getHelpPrinter().print(
-        System.out,
-        commandName + getSpecificCommandLineParametersDescriptor(),
-        80
-    ) ;
-  }
-
-  protected abstract String getSpecificCommandLineParametersDescriptor() ;
 
   protected static void reportProblems(
       final File targetDirectory,
@@ -131,6 +77,9 @@ public abstract class AbstractDocumentGenerator< P extends GenericParameters > {
     return buffer.toString() ;
   }
 
+  /**
+   * Delete all previously-existing documents in target directory.
+   */
   public static void resetTargetDirectory(
       final File targetDirectory
   ) throws IOException {

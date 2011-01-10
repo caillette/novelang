@@ -18,24 +18,24 @@ package org.novelang.batch;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.Permission;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.configuration.ConfigurationTools;
+import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.multipage.MultipageFixture;
+import org.novelang.testing.NoSystemExit;
 import org.novelang.testing.junit.NameAwareTestClassRunner;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -49,32 +49,16 @@ import static org.novelang.produce.DocumentRequest.PAGEIDENTIFIER_PREFIX;
 @RunWith( value = NameAwareTestClassRunner.class )
 public class BatchTest {
 
-  @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
-  public void exitWithIncorrectParameters() throws Exception {
-    new DocumentGenerator().main( "testing", COMMAND_LINE_ARGUMENT_EMPTY ) ;
-  }
-
-  @Test( expected = CannotExitVirtualMachineWhileTestingException.class )
-  public void exitBecauseHelpRequeted() throws Exception {
-    new DocumentGenerator().main(
-        "testing",
-        new String[] { GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.HELP_OPTION_NAME }
-    ) ;
-  }
-
   @Test
   public void generateOneDocumentOk() throws Exception {
     final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copy( resource ) ;
-    final String renderedDocumentName = resource.getBaseName() + "." + MIME_FILE_EXTENSION;
+    final String renderedDocumentName = resource.getBaseName() + "." + MIME_FILE_EXTENSION ;
 
-    new DocumentGenerator().main(
-        "testing",
-        true,
-        new String[] { "/" + renderedDocumentName },
-        resourceInstaller.getTargetDirectory()
-    ) ;
+    final DocumentGeneratorParameters generatorParameters = DocumentGenerator.createParameters( 
+        new String[]{ "/" + renderedDocumentName }, resourceInstaller.getTargetDirectory() ) ;
+    new DocumentGenerator().main( generatorParameters ) ;
 
     final File renderedDocument = new File(
         new File(
@@ -84,7 +68,7 @@ public class BatchTest {
         renderedDocumentName
     ) ;
     LOGGER.debug( "Rendered document = '", renderedDocument.getAbsolutePath(), "'" ) ;
-    Assert.assertTrue( renderedDocument.exists() ) ;
+    assertThat( renderedDocument.exists() ).isTrue() ;
   }
 
   @Test
@@ -106,6 +90,9 @@ public class BatchTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( BatchTest.class );
 
+  private static final File USER_DIR = new File( SystemUtils.USER_DIR ) ;
+
+  private final NoSystemExit noSystemExit = new NoSystemExit() ;
 
   static {
     ResourcesForTests.initialize() ;
@@ -122,9 +109,7 @@ public class BatchTest {
     final MultipageFixture multipageFixture =
         new MultipageFixture( stylesheetResource, otherResources ) ;
 
-    new DocumentGenerator().main(
-        "testing",
-        false,
+    final DocumentGeneratorParameters parameters = DocumentGenerator.createParameters(
         new String[] {
             multipageFixture.requestForMain().getOriginalTarget(),
             GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_STYLE_DIRECTORIES,
@@ -133,25 +118,15 @@ public class BatchTest {
         multipageFixture.getBaseDirectory()
     ) ;
 
+    new DocumentGenerator().main( parameters ) ;
+
     multipageFixture.verifyGeneratedFiles() ;
   }
 
   
-  private SecurityManager savedSecurityManager ;
-
-
-  @Before
-  public void setUp() throws IOException {
-    savedSecurityManager = System.getSecurityManager() ;
-    System.setSecurityManager( new NoExitSecurityManager() ) ;
-
-//    Reflection.staticField( "DEBUG" ).ofType( Boolean.TYPE )
-//        .in( org.apache.xalan.transformer.TransformerHandlerImpl.class ).set( true ) ;
-  }
-
   @After
   public void tearDown() {
-    System.setSecurityManager( savedSecurityManager ) ;
+    noSystemExit.uninstall() ;
   }
 
   private static File createFileObject(
@@ -176,17 +151,4 @@ public class BatchTest {
         ancillaryDocumentFile, DefaultCharset.RENDERING.name() ) ;
     assertThat( fileContent ).contains( mustContain ) ;
   }
-
-
-  private static class NoExitSecurityManager extends SecurityManager {
-    @Override
-    public void checkExit( final int status ) {
-      throw new CannotExitVirtualMachineWhileTestingException() ;
-    }
-
-    @Override
-    public void checkPermission( final Permission perm ) { }
-  }
-
-  private static class CannotExitVirtualMachineWhileTestingException extends RuntimeException { }
 }

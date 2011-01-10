@@ -52,44 +52,31 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
 
   @Override
   public void main(
-      final String commandName,
-      final boolean mayTerminateJvm, 
-      final String[] arguments,
-      final File baseDirectory
+      final LevelExploderParameters parameters
   ) throws Exception {
 
-    final LevelExploderParameters parameters ;
 
-    parameters = createParametersOrExit( commandName, true, arguments, baseDirectory ) ;
+    final LevelExploderConfiguration configuration =
+        ConfigurationTools.createExplodeLevelsConfiguration( parameters ) ;
+    final File outputDirectory = configuration.getOutputDirectory();
+    resetTargetDirectory( outputDirectory ) ;
+    final DocumentProducer documentProducer =
+        new DocumentProducer( configuration.getProducerConfiguration() ) ;
+    final List< Problem > allProblems = Lists.newArrayList() ;
 
-    try {
-      LOGGER.info( "Starting ", getClass().getSimpleName(),
-          " with arguments ", asString( arguments ) );
+    Iterables.addAll(
+        allProblems,
+        processDocumentRequest( configuration, outputDirectory, documentProducer )
+    ) ;
 
-      final LevelExploderConfiguration configuration =
-          ConfigurationTools.createExplodeLevelsConfiguration( parameters ); ;
-      final File outputDirectory = configuration.getOutputDirectory();
-      resetTargetDirectory( outputDirectory ) ;
-      final DocumentProducer documentProducer =
-          new DocumentProducer( configuration.getProducerConfiguration() ) ;
-      final List< Problem > allProblems = Lists.newArrayList() ;
-
-      Iterables.addAll(
-          allProblems,
-          processDocumentRequest( configuration, outputDirectory, documentProducer )
-      ) ;
-
-      if( ! allProblems.isEmpty() ) {
-        reportProblems( outputDirectory, allProblems ) ;
-        System.err.println(
-            "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
-      }
-
-    } catch( Exception e ) {
-      LOGGER.error( e, "Fatal" ) ;
-      throw e ;
+    if( ! allProblems.isEmpty() ) {
+      reportProblems( outputDirectory, allProblems ) ;
+      System.err.println(
+          "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
     }
+
   }
+
 
   private Iterable< Problem > processDocumentRequest(
       final LevelExploderConfiguration configuration,
@@ -131,13 +118,15 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     ) ;
     LOGGER.debug( "Outputting to file '", destinationFile.getAbsolutePath(), "'" ) ;
     final FileOutputStream fileOutputStream = new FileOutputStream( destinationFile ) ;
-    new GenericRenderer( new NovellaWriter(
-        producerConfiguration.getRenderingConfiguration(),
-        null,
-        charset
-    ) ).render( new RenderingTools.RenderableTree( level, charset ), fileOutputStream, null ) ;
-    fileOutputStream.flush() ;
-    fileOutputStream.close() ;
+    try {
+      new GenericRenderer( new NovellaWriter(
+          producerConfiguration.getRenderingConfiguration(),
+          null,
+          charset
+      ) ).render( new RenderingTools.RenderableTree( level, charset ), fileOutputStream, null ) ;
+    } finally {
+      fileOutputStream.close() ;
+    }
   }
 
   private int titleGenerator = 0 ;
@@ -158,8 +147,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     return generatedTitle ;
   }
 
-  @Override
-  protected LevelExploderParameters createParameters(
+  public static LevelExploderParameters createParameters(
       final String[] arguments,
       final File baseDirectory
   ) throws ArgumentException {
@@ -169,8 +157,7 @@ public class LevelExploder extends AbstractDocumentGenerator<LevelExploderParame
     );
   }
 
-  @Override
-  protected String getSpecificCommandLineParametersDescriptor() {
+  public static String getSpecificCommandLineParametersDescriptor() {
     return " [OPTIONS] document-to-split.novella";
   }
 

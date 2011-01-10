@@ -18,11 +18,11 @@
 package org.novelang.batch;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.SystemUtils;
 import org.novelang.common.Problem;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.DocumentGeneratorConfiguration;
@@ -48,63 +48,50 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
 
   public static final String COMMAND_NAME = "generate";
 
-  /**
-   *
-   * @param commandName unused, except for displaying help message.
-   */
   @Override
   public void main(
-      final String commandName,
-      final boolean mayTerminateJvm,
-      final String[] arguments,
-      final File baseDirectory
+      final DocumentGeneratorParameters parameters
   ) throws Exception {
 
-    final DocumentGeneratorParameters parameters =
-        createParametersOrExit( commandName, mayTerminateJvm, arguments, baseDirectory ) ;
+    final DocumentGeneratorConfiguration configuration =
+        ConfigurationTools.createDocumentGeneratorConfiguration( parameters ) ;
+    final File outputDirectory = configuration.getOutputDirectory();
+    resetTargetDirectory( outputDirectory ) ;
+    final DocumentProducer documentProducer =
+        new DocumentProducer( configuration.getProducerConfiguration() ) ;
+    final List< Problem > allProblems = Lists.newArrayList() ;
 
-    try {
-      LOGGER.info( "Starting ", getClass().getSimpleName(),
-          " with arguments ", asString( arguments ) ) ;
+    processDocumentRequests(
+        configuration,
+        outputDirectory,
+        documentProducer,
+        allProblems
+    ) ;
 
-      final DocumentGeneratorConfiguration configuration =
-          ConfigurationTools.createDocumentGeneratorConfiguration( parameters ) ;
-      final File outputDirectory = configuration.getOutputDirectory();
-      resetTargetDirectory( outputDirectory ) ;
-      final DocumentProducer documentProducer =
-          new DocumentProducer( configuration.getProducerConfiguration() ) ;
-      final List< Problem > allProblems = Lists.newArrayList() ;
-
-      processDocumentRequests(
-          configuration,
-          outputDirectory,
-          documentProducer,
-          allProblems
-      ) ;
-
-      if( ! allProblems.isEmpty() ) {
-        reportProblems( outputDirectory, allProblems ) ;
-        //noinspection UseOfSystemOutOrSystemErr
-        System.err.println(
-            "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
-        throw new GenerationFailedException( allProblems ) ;
-      }
-
-    } catch( Exception e ) {
-      LOGGER.error( e, "Fatal" ) ;
-      throw e ;
+    if( ! allProblems.isEmpty() ) {
+      reportProblems( outputDirectory, allProblems ) ;
+      //noinspection UseOfSystemOutOrSystemErr
+      System.err.println(
+          "There were problems. See " + outputDirectory + "/" + PROBLEMS_FILENAME ) ;
+      throw new GenerationFailedException( allProblems ) ;
     }
+
   }
 
-  @Override
-  protected DocumentGeneratorParameters createParameters(
+  public static DocumentGeneratorParameters createParameters(
       final String[] arguments,
       final File baseDirectory
   ) throws ArgumentException {
     return new DocumentGeneratorParameters(
         baseDirectory,
         arguments
-    );
+    ) ;
+  }
+
+  public static DocumentGeneratorParameters createParameters(
+      final String[] arguments
+  ) throws ArgumentException {
+    return createParameters( arguments, new File( SystemUtils.USER_DIR ) ) ;
   }
 
   public static void processDocumentRequests(
@@ -125,8 +112,7 @@ public class DocumentGenerator extends AbstractDocumentGenerator< DocumentGenera
     }
   }
 
-  @Override
-  protected String getSpecificCommandLineParametersDescriptor() {
+  public static String getSpecificCommandLineParametersDescriptor() {
     return " [OPTIONS] document1 [document2...]";
   }
 

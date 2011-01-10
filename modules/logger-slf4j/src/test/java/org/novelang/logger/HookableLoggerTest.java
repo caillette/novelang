@@ -17,6 +17,7 @@
 package org.novelang.logger;
 
 import com.google.common.collect.ImmutableList;
+import org.junit.After;
 import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -36,9 +37,11 @@ public class HookableLoggerTest {
     assertThat( hookableLogger ).isSameAs( LOGGER ) ;
     hookableLogger.installHook( recordingLogger ) ;
 
+    assertThat( recordingLogger.getRecords() ).isEmpty() ;
+
     LOGGER.debug( "Hi, there" ) ;
 
-    final ImmutableList<LogRecord> loggingRecords = recordingLogger.getRecords() ;
+    final ImmutableList< LogRecord > loggingRecords = recordingLogger.getRecords() ;
     assertThat( loggingRecords ).hasSize( 1 ) ;
     assertThat( loggingRecords.get( 0 ).getLevel() ).isSameAs( Level.DEBUG ) ;
     assertThat( loggingRecords.get( 0 ).getMessage() ).isEqualTo( "Hi, there" ) ;
@@ -54,4 +57,10 @@ public class HookableLoggerTest {
 
   private static final String LOGGER_NAME = HookableLoggerTest.class.getName() ;
   private static final Logger LOGGER = LoggerFactory.getLogger( LOGGER_NAME ) ;
+
+  @After
+  public void tearDown() {
+    // In case of other tests that forget to do their cleanup:
+    HookableLogger.uninstallAllHooks() ;
+  }
 }

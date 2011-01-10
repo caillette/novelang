@@ -41,29 +41,17 @@ public class HttpDaemon {
   private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemon.class ) ;
 
   private final Server server ;
-  public static final String COMMAND_NAME = "httpdaemon";
+  public static final String COMMAND_NAME = "httpdaemon" ;
 
-  public static void main( final String commandName, final String[] args ) throws Exception {
+  public static DaemonParameters createParameters( final String... arguments )
+      throws ArgumentException
+  {
+    return new DaemonParameters( new File( SystemUtils.USER_DIR ), arguments ) ;
+  }
 
-    final DaemonParameters parameters ;
-
-    try {
-      parameters = new DaemonParameters( new File( SystemUtils.USER_DIR ), args ) ;
-    } catch( ArgumentException e ) {
-      if( e.isHelpRequested() ) {
-        printHelpOnConsole( commandName, e ) ;
-        System.exit( -1 ) ;
-        throw new Error( "Never executes but makes compiler happy" ) ;
-      } else {
-        LOGGER.error( e, "Parameters exception, printing help and exiting." ) ;
-        printHelpOnConsole( commandName, e ) ;
-        System.exit( -2 ) ;
-        throw new Error( "Never executes but makes compiler happy" ) ;
-      }
-    }
-
+  public static void main( final DaemonParameters daemonParameters ) throws Exception {
     final DaemonConfiguration daemonConfiguration =
-        ConfigurationTools.createDaemonConfiguration( parameters );
+        ConfigurationTools.createDaemonConfiguration( daemonParameters );
 
     final String starting =
         "Starting " + HttpDaemon.class.getName() +
@@ -103,15 +91,5 @@ public class HttpDaemon {
     LOGGER.info( "Server stopped on port ", port ) ;
   }
 
-  private static void printHelpOnConsole( final String commandName, final ArgumentException e ) {
-    if( null != e.getMessage() ) {
-      System.out.println( e.getMessage() ) ;
-    }
-    e.getHelpPrinter().print(
-        System.out,
-        commandName + " [OPTIONS]",
-        80
-    ) ;
-  }
 
 }
