@@ -58,10 +58,11 @@ public class LogbackConfigurationTools {
     ) ;
 
     System.setProperty( LOG_DIR_SYSTEMPROPERTYNAME, realLogDirectory.getPath() ) ;
-    System.out.println( "System property [" +
+    final String message = "System property [" +
         LogbackConfigurationTools.LOG_DIR_SYSTEMPROPERTYNAME + "] set to '" +
-        realLogDirectory.getAbsolutePath() + "'."
-    ) ;
+        realLogDirectory.getAbsolutePath() + "'.";
+    System.out.println( message ) ;
+    LOGGER.info( message ) ;
 
   }
 
@@ -72,13 +73,8 @@ public class LogbackConfigurationTools {
 
 
   /**
-   * This method gets also called by {@code ConfigurationTools} for proper logging,
-   * so logged messages must stay consistent.
-   * The first call is for configuring the logging system, the second call is for
-   * logging in the logging system.
-   * <p>
-   * Sidenote: a better logging system with in-memory, pre-configuration recording
-   * would remove that mess.
+   * This method gets also called by {@code ConfigurationTools}.
+   * Each caller passes its own {@link Logger} instance for cleaner logging.
    */
   public static File prepareLogDirectory(
       final File logDirectoryFromParameters,
@@ -119,5 +115,9 @@ public class LogbackConfigurationTools {
       throw new RuntimeException( e ) ;
     }
     return logDirectory ;
+  }
+
+  public static void printLogbackConfigurationFiles() {
+    throw new UnsupportedOperationException( "TODO" ) ;
   }
 }

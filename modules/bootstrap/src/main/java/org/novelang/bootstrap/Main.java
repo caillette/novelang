@@ -56,6 +56,7 @@ public class Main {
     final MainCaller caller = findMainCaller( originalArguments ) ;
     final GenericParameters parameters = createParametersOrExit( originalArguments, caller ) ;
 
+    LogbackConfigurationTools.printLogbackConfigurationFiles() ;
     LogbackConfigurationTools.fixLogDirectory( parameters.getLogDirectory() ) ;
 
     // Switch from deferred logging to real one.
