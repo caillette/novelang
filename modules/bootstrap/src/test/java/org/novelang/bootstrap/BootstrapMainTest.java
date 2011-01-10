@@ -31,12 +31,12 @@ public class BootstrapMainTest {
 
   @Test( expected = NoSystemExit.ExitTrappedException.class )
   public void exitWithIncorrectParameters() throws Exception {
-    new Main().doMain( new String[] { "unknowncommand" } ) ;
+    new Main().doMainWithoutSystemSetup( new String[] { "unknowncommand" } ) ;
   }
 
   @Test( expected = NoSystemExit.ExitTrappedException.class )
   public void exitBecauseHelpRequested() throws Exception {
-    new Main().doMain( new String[] {
+    new Main().doMainWithoutSystemSetup( new String[] {
         HttpDaemon.COMMAND_NAME,
         GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.HELP_OPTION_NAME
     } ) ;

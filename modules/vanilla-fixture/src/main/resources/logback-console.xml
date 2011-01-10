@@ -15,7 +15,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<configuration scan="true" scanPeriod="1 seconds" debug="true" >
+<configuration scan="true" scanPeriod="1 seconds" debug="false" >
 
   <appender
       name="STDOUT"

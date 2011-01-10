@@ -1,4 +1,4 @@
-<configuration debug="true" scanPeriod="1 seconds" >
+<configuration debug="false" scanPeriod="1 seconds" >
 
   <appender
       name="FILE"

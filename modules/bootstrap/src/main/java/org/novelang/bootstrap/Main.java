@@ -17,10 +17,9 @@
 package org.novelang.bootstrap;
 
 import java.io.File;
-import java.util.Map;
 import java.io.PrintStream;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.SystemUtils;
 import org.novelang.batch.CannotStartException;
 import org.novelang.batch.DocumentGenerator;
@@ -41,66 +40,85 @@ import org.novelang.outfit.EnvironmentTools;
  *
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
 public class Main {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Main.class ) ;
-  private static final File USER_DIRECTORY = new File( SystemUtils.USER_DIR );
+  private static final File USER_DIRECTORY = new File( SystemUtils.USER_DIR ) ;
 
   public static void main( final String[] originalArguments ) throws Exception {
+    new Main().doMainWithSystemSetup( originalArguments ) ;
+  }
 
-    // This must happen first. The need for originalArguments parameter prevents from
-    // putting this initialization in a static block.
-    LogbackConfigurationTools.fixLogDirectory( originalArguments ) ;
+
+  private void doMainWithSystemSetup( final String[] originalArguments ) throws Exception {
+
+    final MainCaller caller = findMainCaller( originalArguments ) ;
+    final GenericParameters parameters = createParametersOrExit( originalArguments, caller ) ;
+
+    LogbackConfigurationTools.fixLogDirectory( parameters.getLogDirectory() ) ;
 
     // Switch from deferred logging to real one.
     LoggerFactory.configurationComplete() ;
-    
+
     EnvironmentTools.logSystemProperties() ;
 
-    new Main().doMain( originalArguments ) ;
+    caller.main( parameters ) ;
+
   }
 
-  protected void doMain( final String[] originalArguments ) throws Exception {
+  protected void doMainWithoutSystemSetup( final String[] originalArguments ) throws Exception {
+    final MainCaller caller = findMainCaller( originalArguments ) ;
+    final GenericParameters parameters = createParametersOrExit( originalArguments, caller ) ;
+    caller.main( parameters ) ;
+  }
 
+  private static GenericParameters createParametersOrExit(
+      final String[] originalArguments,
+      final MainCaller caller
+  ) throws CannotStartException
+  {
+    final String[] trimmedArguments = new String[ originalArguments.length - 1 ] ;
+    System.arraycopy( originalArguments, 1, trimmedArguments,  0, trimmedArguments.length ) ;
+
+    final GenericParameters parameters ;
+    try {
+      parameters = caller.createParameters( trimmedArguments ) ;
+    } catch( ArgumentException e ) {
+      final String commandLineParametersDescriptor =
+          caller.getSpecificCommandLineParametersDescriptor() ;
+      if( e.isHelpRequested() ) {
+        printHelpOnConsole( caller.commandName, e, commandLineParametersDescriptor ) ;
+          System.exit( -1 ) ;
+        throw new CannotStartException( e ) ;
+      } else {
+        LOGGER.error( e, "Parameters exception, printing help and exiting." ) ;
+        printHelpOnConsole( caller.commandName, e, commandLineParametersDescriptor ) ;
+          System.exit( -2 ) ;
+        throw new CannotStartException( e ) ;
+      }
+    }
+    return parameters;
+  }
+
+  private MainCaller findMainCaller( final String[] originalArguments ) {
     if( 0 == originalArguments.length ) {
-      help() ;
+      justPrintHelp() ;
       System.exit( 1 ) ;
     }
     final String commandName = originalArguments[ 0 ];
-    final MainCaller caller = commands.get( commandName ) ;
+    final MainCaller caller = getMainCaller( commandName ) ;
     if( null == caller ) {
       help( commandName ) ;
       System.exit( -1 ) ;
-    } else {
-
-      final String[] trimmedArguments = new String[ originalArguments.length - 1 ] ;
-      System.arraycopy( originalArguments, 1, trimmedArguments,  0, trimmedArguments.length ) ;
-
-      final GenericParameters parameters ;
-      try {
-        parameters = caller.createParameters( trimmedArguments ) ;
-      } catch( ArgumentException e ) {
-        final String commandLineParametersDescriptor = caller.getSpecificCommandLineParametersDescriptor();
-        if( e.isHelpRequested() ) {
-          printHelpOnConsole( commandName, e, commandLineParametersDescriptor ) ;
-//          if( mayTerminateJvm ) {
-            System.exit( -1 ) ;
-//          }
-          throw new CannotStartException( e ) ;
-        } else {
-          LOGGER.error( e, "Parameters exception, printing help and exiting." ) ;
-          printHelpOnConsole( commandName, e, commandLineParametersDescriptor ) ;
-//          if( mayTerminateJvm ) {
-            System.exit( -2 ) ;
-//          }
-          throw new CannotStartException( e ) ;
-        }
-      }
-
-
-      caller.main( parameters ) ;
     }
+    return caller;
   }
+
+
+// =============
+// Help printers
+// =============
 
   @SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
   private static void printHelpOnConsole(
@@ -120,12 +138,10 @@ public class Main {
   }
 
 
-  @SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
-  private void help() {
+  private void justPrintHelp() {
     printHelp( System.out ) ;
   }
 
-  @SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
   private void help( final String badCommand ) {
     printBadCommand( System.out, badCommand ) ;
     printHelp( System.out ) ;
@@ -137,11 +153,14 @@ public class Main {
 
   private void printHelp( final PrintStream out ) {
     out.println( "Supported commands: " ) ;
-    for( final String commandName : commands.keySet() ) {
-      out.println( "  " + commandName + " <arguments>" ) ;
+    for( final MainCaller mainCaller : COMMANDS ) {
+      out.println( "  " + mainCaller.commandName + " <arguments>" ) ;
     }
     out.println( "Use <command> --help for help on a particular command." ) ;
   }
+
+
+
 
 
 // ========
@@ -149,17 +168,34 @@ public class Main {
 // ========
 
 
-  private interface MainCaller< PARAMETERS extends GenericParameters > {
+  private static abstract class MainCaller< PARAMETERS extends GenericParameters > {
 
-    public void main( PARAMETERS parameters ) throws Exception ;
+    private final String commandName ;
+
+    protected MainCaller( final String commandName ) {
+      this.commandName = commandName ;
+    }
+
+    public abstract void main( PARAMETERS parameters ) throws Exception ;
 
     /**
      * @param arguments arguments without the command name.
      */
-    public PARAMETERS createParameters( final String[] arguments ) throws ArgumentException ;
+    public abstract PARAMETERS createParameters( final String[] arguments )
+        throws ArgumentException ;
 
     public abstract String getSpecificCommandLineParametersDescriptor() ;
 
+  }
+
+  private static< PARAMETERS extends GenericParameters > MainCaller< PARAMETERS >
+  getMainCaller( final String commandName ) {
+    for( final MainCaller mainCaller : COMMANDS ) {
+      if( mainCaller.commandName.equals( commandName ) ) {
+        return mainCaller ;
+      }
+    }
+    return null ;
   }
 
   /**
@@ -168,67 +204,63 @@ public class Main {
    * So other classes are not loaded too soon, avoiding them to wake an unconfigured logging
    * system up during their static initialization.
    */
-  private final Map< String, ? extends MainCaller > commands = ImmutableMap.of(
-      HttpDaemon.COMMAND_NAME,
-      new MainCaller< DaemonParameters >() {
+  private static final ImmutableSet< ? extends MainCaller > COMMANDS = ImmutableSet.of(
 
-        @Override
-        public void main( final DaemonParameters parameters ) throws Exception {
-          HttpDaemon.main( parameters ) ;
-        }
+    new MainCaller< DaemonParameters >( HttpDaemon.COMMAND_NAME ) {
 
-        @Override
-        public DaemonParameters createParameters( final String[] arguments )
-            throws ArgumentException
-        {
-          return HttpDaemon.createParameters( arguments ) ;
-        }
-
-        @Override
-        public String getSpecificCommandLineParametersDescriptor() {
-          return " [OPTIONS]" ;
-        }
+      @Override
+      public void main( final DaemonParameters parameters ) throws Exception {
+        HttpDaemon.main( parameters ) ;
       }
-      ,
-      DocumentGenerator.COMMAND_NAME,
-       new MainCaller< DocumentGeneratorParameters >() {
-         @Override
-         public void main( final DocumentGeneratorParameters parameters ) throws Exception {
-           new DocumentGenerator().main( parameters ) ;
-         }
 
-         @Override
-         public DocumentGeneratorParameters createParameters( final String[] arguments )
-             throws ArgumentException
-         {
-           return DocumentGenerator.createParameters( arguments, USER_DIRECTORY ) ;
-         }
+      @Override
+      public DaemonParameters createParameters( final String[] arguments )
+          throws ArgumentException
+      {
+        return HttpDaemon.createParameters( arguments ) ;
+      }
 
-         @Override
-         public String getSpecificCommandLineParametersDescriptor() {
-           return DocumentGenerator.getSpecificCommandLineParametersDescriptor() ;
-         }
-       }
-      ,
-      "explodelevels",
-       new MainCaller< LevelExploderParameters >() {
-         @Override
-         public void main( final LevelExploderParameters parameters ) throws Exception {
-           new LevelExploder().main( parameters ) ;
-         }
+      @Override
+      public String getSpecificCommandLineParametersDescriptor() {
+        return " [OPTIONS]" ;
+      }
+    }
+    ,
+    new MainCaller< DocumentGeneratorParameters >( DocumentGenerator.COMMAND_NAME ) {
+      @Override
+      public void main( final DocumentGeneratorParameters parameters ) throws Exception {
+        new DocumentGenerator().main( parameters ) ;
+      }
 
-         @Override
-         public LevelExploderParameters createParameters( final String[] arguments )
-             throws ArgumentException
-         {
-           return LevelExploder.createParameters( arguments, USER_DIRECTORY ) ;
-         }
+      @Override
+      public DocumentGeneratorParameters createParameters( final String[] arguments )
+          throws ArgumentException {
+        return DocumentGenerator.createParameters( arguments, USER_DIRECTORY ) ;
+      }
 
-         @Override
-         public String getSpecificCommandLineParametersDescriptor() {
-           return LevelExploder.getSpecificCommandLineParametersDescriptor() ;
-         }
-       }
+      @Override
+      public String getSpecificCommandLineParametersDescriptor() {
+        return DocumentGenerator.getSpecificCommandLineParametersDescriptor() ;
+      }
+    }
+    ,
+    new MainCaller< LevelExploderParameters >( "explodelevels" ) {
+      @Override
+      public void main( final LevelExploderParameters parameters ) throws Exception {
+        new LevelExploder().main( parameters ) ;
+      }
+
+      @Override
+      public LevelExploderParameters createParameters( final String[] arguments )
+          throws ArgumentException {
+        return LevelExploder.createParameters( arguments, USER_DIRECTORY ) ;
+      }
+
+      @Override
+      public String getSpecificCommandLineParametersDescriptor() {
+        return LevelExploder.getSpecificCommandLineParametersDescriptor() ;
+      }
+    }
   ) ;
 
 
