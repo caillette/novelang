@@ -18,6 +18,7 @@ package org.novelang.outfit;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
@@ -35,6 +36,7 @@ import org.novelang.logger.NullLogger;
  *
  * @author Laurent Caillette
  */
+@SuppressWarnings( { "UseOfSystemOutOrSystemErr" } )
 public class LogbackConfigurationTools {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( LogbackConfigurationTools.class ) ;
@@ -118,6 +120,19 @@ public class LogbackConfigurationTools {
   }
 
   public static void printLogbackConfigurationFiles() {
-    throw new UnsupportedOperationException( "TODO" ) ;
+    if( ! printLogConfigurationFile( "/logback-test.xml" ) ) {
+      printLogConfigurationFile( "/logback.xml" ) ;
+    }
+  }
+
+  private static boolean printLogConfigurationFile( final String resourceName ) {
+    final URL url = LogbackConfigurationTools.class.getResource( resourceName ) ;
+    if( url == null ) {
+      System.out.println( "Could NOT find '" + resourceName + "'." ) ;
+      return false ;
+    } else {
+      System.out.println( "Found: '" + url.toExternalForm() + "'." ) ;
+      return true ;
+    }
   }
 }
