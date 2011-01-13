@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0
       http://maven.apache.org/xsd/assembly-1.1.0.xsd"
 >
-  <id/>
+  <id>distribution</id>
 
   <formats>
     <format>zip</format>
@@ -23,9 +23,9 @@
       <outputDirectory>lib</outputDirectory>
       <scope>runtime</scope>
       <excludes>
-        <exclude>*-distribution*</exclude>
-        <exclude>*-documentation*</exclude>
-        <exclude>*plugin*</exclude>
+        <exclude>${project.groupId}:*-distribution*</exclude>
+        <exclude>${project.groupId}:*-documentation*</exclude>
+        <exclude>${project.groupId}:*plugin*</exclude>
       </excludes>
     </dependencySet>
 
@@ -34,7 +34,7 @@
       <useTransitiveDependencies>true</useTransitiveDependencies>
       <outputDirectory>documentation</outputDirectory>
       <includes>
-        <include>*-documentation*</include>
+        <include>${project.groupId}:Novelang-documentation</include>
       </includes>
     </dependencySet>
 

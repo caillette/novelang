@@ -24,7 +24,7 @@
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <outputDirectory>${resourcesDestinationDirectory}</outputDirectory>
       <includes>
-        <include>*-insider</include>
+        <include>org.novelang:Novelang-insider</include>
       </includes>
     </dependencySet>
 

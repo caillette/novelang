@@ -103,7 +103,7 @@
         
         <configuration>
           <descriptors>
-            <descriptor>aggregated-sources.xml</descriptor>
+            <descriptor>src/assemble/aggregated-sources.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>

@@ -29,6 +29,10 @@
     <lib.cobertura.artifactid>cobertura-maven-plugin</lib.cobertura.artifactid>
     <lib.cobertura.version>2.4</lib.cobertura.version>
 
+    <lib.maven-antrun-plugin.groupid>org.apache.maven.plugins</lib.maven-antrun-plugin.groupid>
+    <lib.maven-antrun-plugin.artifactid>maven-antrun-plugin</lib.maven-antrun-plugin.artifactid>
+    <lib.maven-antrun-plugin.version>1.6</lib.maven-antrun-plugin.version>
+
     <lib.maven-plugin.groupid>org.apache.maven</lib.maven-plugin.groupid>
     <lib.maven-plugin.artifactid>maven-plugin-api</lib.maven-plugin.artifactid>
     <lib.maven-plugin.version>2.0</lib.maven-plugin.version>
@@ -43,7 +47,7 @@
 
     <lib.maven-assembly-plugin.groupId>org.apache.maven.plugins</lib.maven-assembly-plugin.groupId>
     <lib.maven-assembly-plugin.artifactid>maven-assembly-plugin</lib.maven-assembly-plugin.artifactid>
-    <lib.maven-assembly-plugin.version>2.2-beta-5</lib.maven-assembly-plugin.version>
+    <lib.maven-assembly-plugin.version>2.2</lib.maven-assembly-plugin.version>
 
     <lib.maven-compiler-plugin.groupId>org.apache.maven.plugins</lib.maven-compiler-plugin.groupId>
     <lib.maven-compiler-plugin.artifactid>maven-compiler-plugin</lib.maven-compiler-plugin.artifactid>
@@ -317,6 +321,12 @@
           <groupId>${lib.maven-surefire-plugin.groupId}</groupId>
           <artifactId>${lib.maven-surefire-plugin.artifactid}</artifactId>
           <version>${lib.maven-surefire-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>${lib.maven-antrun-plugin.groupid}</groupId>
+          <artifactId>${lib.maven-antrun-plugin.artifactid}</artifactId>
+          <version>${lib.maven-antrun-plugin.version}</version>
         </plugin>
 
 

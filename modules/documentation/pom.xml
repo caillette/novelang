@@ -171,8 +171,8 @@
         </dependencies>
         <configuration>
           <descriptors>
-            <descriptor>website.xml</descriptor>
-            <descriptor>release-notes.xml</descriptor>
+            <descriptor>src/assemble/website.xml</descriptor>
+            <descriptor>src/assemble/release-notes.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>
