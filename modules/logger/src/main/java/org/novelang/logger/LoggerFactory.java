@@ -74,17 +74,19 @@ public abstract class LoggerFactory {
   /**
    * Switches from {@link org.novelang.logger.DeferringLoggerFactory} to some
    * more interesting implementation.
+   * Does nothing if called more than once (like Maven plugin may do).
    *
    * @throws IllegalStateException if {@link #isTestEnvironment()} or if already called.
    */
   public static void configurationComplete() {
     synchronized( LOCK ) {
-      checkState( loggerFactory instanceof DeferringLoggerFactory ) ;
-      final LoggerFactory effectiveLoggerFactory = createEffectiveLoggerFactory() ;
-      DeferringLoggerFactory.flush( effectiveLoggerFactory ) ;
-      loggerFactory = effectiveLoggerFactory ;
-      LoggerFactory.getLogger( LoggerFactory.class )
-          .info( "Flushed deferred log in effective logger." ) ;
+      if( loggerFactory instanceof DeferringLoggerFactory ) {
+        final LoggerFactory effectiveLoggerFactory = createEffectiveLoggerFactory() ;
+        DeferringLoggerFactory.flush( effectiveLoggerFactory ) ;
+        loggerFactory = effectiveLoggerFactory ;
+        LoggerFactory.getLogger( LoggerFactory.class )
+            .info( "Flushed deferred log in effective logger." ) ;
+      }
     }
   }
 

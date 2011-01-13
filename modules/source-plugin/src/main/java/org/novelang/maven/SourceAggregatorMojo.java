@@ -31,6 +31,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.novelang.logger.ConcreteLoggerFactory;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Aggregates the sources of the dependencies.
@@ -76,6 +77,7 @@ public class SourceAggregatorMojo extends AbstractMojo {
   public void execute() throws MojoExecutionException, MojoFailureException {
 
     ConcreteLoggerFactory.setMojoLog( getLog() ) ;
+    LoggerFactory.configurationComplete() ;
 
     final List< File > sourcePathList = buildSourcePathList( project ) ;
 

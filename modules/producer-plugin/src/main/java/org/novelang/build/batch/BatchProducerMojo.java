@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.novelang.Version;
 import org.novelang.logger.ConcreteLoggerFactory;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.nhovestone.driver.DocumentGeneratorDriver;
 import org.novelang.nhovestone.driver.EngineDriver;
 import org.novelang.produce.DocumentProducer;
@@ -93,6 +94,8 @@ public class BatchProducerMojo extends AbstractProducerMojo {
   public void execute() throws MojoExecutionException, MojoFailureException {
 
     ConcreteLoggerFactory.setMojoLog( getLog() ) ;
+    LoggerFactory.configurationComplete() ;
+    
 
     final List< String > classpathElements;
     try {

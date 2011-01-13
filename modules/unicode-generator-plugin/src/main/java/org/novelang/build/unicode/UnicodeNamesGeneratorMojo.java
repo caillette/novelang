@@ -24,6 +24,7 @@ import org.novelang.logger.ConcreteLoggerFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Generates binary file containing names of Unicode characters that fit in a 16-bit representation.
@@ -46,9 +47,10 @@ public class UnicodeNamesGeneratorMojo extends AbstractMojo {
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
+    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
+    LoggerFactory.configurationComplete() ;
     getLog().info( "Generating into: '" + packageRootDirectory + "'" ) ;
 
-    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
 
     try {
       new UnicodeNamesGenerator(

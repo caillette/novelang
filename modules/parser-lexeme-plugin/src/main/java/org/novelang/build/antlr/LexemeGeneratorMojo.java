@@ -24,6 +24,7 @@ import org.novelang.logger.ConcreteLoggerFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Generates Java source containing lexemes extracted from an ANTLR grammar.
@@ -55,9 +56,10 @@ public class LexemeGeneratorMojo extends AbstractMojo {
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
+    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
+    LoggerFactory.configurationComplete() ;
     getLog().info( "Generating into: '" + packageRootDirectory + "'" ) ;
 
-    ConcreteLoggerFactory.setMojoLog( getLog() ) ;
 
     try {
       new LexemeGenerator(

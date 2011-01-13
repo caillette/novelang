@@ -22,6 +22,7 @@ import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 import javax.imageio.ImageIO;
+import org.apache.commons.lang.SystemUtils;
 import org.novelang.Version;
 import org.novelang.VersionFormatException;
 import org.novelang.common.FileTools;
@@ -61,9 +62,9 @@ public class Nhovestone {
       InterruptedException,
       ProcessInitializationException
   {
-    // This must happen first. The need for originalArguments parameter prevents from
-    // putting this initialization in a static block.
-    LogbackConfigurationTools.fixLogDirectory( arguments ) ;
+    LogbackConfigurationTools.fixLogDirectory( new File( SystemUtils.USER_DIR ) ) ;
+    LoggerFactory.configurationComplete() ;
+
     final Logger log = LoggerFactory.getLogger( Nhovestone.class );
     log.info( "Running with command-line arguments ", ImmutableList.of( arguments ), "..." ) ;
     EnvironmentTools.logSystemProperties() ;

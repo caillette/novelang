@@ -43,6 +43,8 @@ public class ShaveReleaseNotesMojo extends AbstractProducerMojo {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     ConcreteLoggerFactory.setMojoLog( getLog() ) ;
+    LoggerFactory.configurationComplete() ;
+    
     
     final Logger log = LoggerFactory.getLogger( getClass() ) ;
 

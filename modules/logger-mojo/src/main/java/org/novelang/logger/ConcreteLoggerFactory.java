@@ -24,10 +24,6 @@ package org.novelang.logger;
 @SuppressWarnings( { "UnusedDeclaration" } )
 public class ConcreteLoggerFactory extends org.novelang.logger.LoggerFactory {
 
-  static {
-    configurationComplete() ;
-  }
-
   @SuppressWarnings( { "StaticNonFinalField" } )
   private static org.apache.maven.plugin.logging.Log mojoLog = null ;
 

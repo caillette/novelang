@@ -60,6 +60,8 @@ public class NhovestoneMojo extends AbstractMojo {
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
     ConcreteLoggerFactory.setMojoLog( getLog() ) ;
+    LoggerFactory.configurationComplete() ;
+
     final Logger logger = LoggerFactory.getLogger( NhovestoneMojo.class ) ;
     logger.info( "Using working directory: '" + workingDirectory + "'." ) ;
     logger.info( "Using distributions directory: '" + distributionsDirectory + "'." ) ;
