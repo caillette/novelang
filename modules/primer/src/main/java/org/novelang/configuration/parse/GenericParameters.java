@@ -58,6 +58,7 @@ public abstract class GenericParameters {
   private final Charset defaultRenderingCharset ;
 
   private final File logDirectory ;
+  private final File temporaryDirectory ;
 
   public GenericParameters(
       final File baseDirectory,
@@ -76,6 +77,7 @@ public abstract class GenericParameters {
     options.addOption( GenericParametersConstants.OPTION_EMPTY ) ;
     options.addOption( GenericParametersConstants.OPTION_STYLE_DIRECTORIES ) ;
     options.addOption( GenericParametersConstants.OPTION_LOG_DIRECTORY ) ;
+    options.addOption( GenericParametersConstants.OPTION_TEMPORARY_DIRECTORY ) ;
     options.addOption( GenericParametersConstants.OPTION_HYPHENATION_DIRECTORY ) ;
     options.addOption( GenericParametersConstants.OPTION_DEFAULT_SOURCE_CHARSET ) ;
     options.addOption( GenericParametersConstants.OPTION_DEFAULT_RENDERING_CHARSET ) ;
@@ -93,7 +95,11 @@ public abstract class GenericParameters {
     try {
       line = parser.parse( options, parameters ) ;
 
-      logDirectory = extractDirectory( baseDirectory, GenericParametersConstants.OPTION_LOG_DIRECTORY, line, false ) ;
+      logDirectory = extractDirectory(
+          baseDirectory, GenericParametersConstants.OPTION_LOG_DIRECTORY, line, false ) ;
+
+      temporaryDirectory = extractDirectory(
+          baseDirectory, GenericParametersConstants.OPTION_TEMPORARY_DIRECTORY, line, false ) ;
 
       if( line.hasOption( GenericParametersConstants.OPTION_CONTENT_ROOT.getLongOpt() ) ) {
         contentRoot = extractDirectory( baseDirectory, GenericParametersConstants.OPTION_CONTENT_ROOT, line ) ;
@@ -200,6 +206,14 @@ public abstract class GenericParameters {
    */
   public File getLogDirectory() {
     return logDirectory;
+  }
+
+  /**
+   * Returns the directory to put temporary files into.
+   * @return a null object if undefined, a reference to an existing directory otherwise.
+   */
+  public File getTemporaryDirectory() {
+    return temporaryDirectory;
   }
 
   /**

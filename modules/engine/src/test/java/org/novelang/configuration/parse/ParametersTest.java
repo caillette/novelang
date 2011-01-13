@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.ClassUtils;
+import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -48,6 +49,8 @@ public class ParametersTest {
   public void voidDaemonParameters() throws ArgumentException {
     final DaemonParameters parameters = new DaemonParameters( scratchDirectory ) ;
     assertNull( parameters.getContentRoot() ) ;
+    assertNull( parameters.getLogDirectory() ) ;
+    assertNull( parameters.getTemporaryDirectory() ) ;
     assertNull( parameters.getHttpDaemonPort() ) ;
     assertFalse( parameters.getStyleDirectories().iterator().hasNext() );
     assertNull( parameters.getHyphenationDirectory() ) ;
@@ -57,6 +60,12 @@ public class ParametersTest {
   @Test( expected = ArgumentException.class )
   public void voidBatchParameters() throws ArgumentException {
     new DocumentGeneratorParameters( scratchDirectory, NO_PARAMETERS ) ;
+  }
+
+  @Test( expected = ArgumentException.class )
+  public void missingLogDirectory() throws ArgumentException {
+    new DocumentGeneratorParameters(
+        scratchDirectory, new String[] { DASHED_LOG_DIR, "doesnotexist" } ) ;
   }
 
   @Test
@@ -185,10 +194,10 @@ public class ParametersTest {
   }
 
   @Test
-  @Ignore( "Missing implementation" )
   public void temporaryDirectory() throws ArgumentException {
     final String[] arguments = { DASHED_TEMPORARY_DIR, "my-temporary-directory" } ;
     final DaemonParameters daemonParameters = new DaemonParameters( scratchDirectory, arguments ) ;
+    Assertions.assertThat( daemonParameters.getTemporaryDirectory() ).isNotNull() ;
   }
 
 // =======
