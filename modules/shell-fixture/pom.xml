@@ -36,7 +36,6 @@
 
   <build>
     <plugins>
-
       <plugin>
         <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
         <artifactId>${lib.maven-assembly-plugin.artifactid}</artifactId>
@@ -56,7 +55,6 @@
           </execution>
         </executions>
       </plugin>
-
     </plugins>
   </build>
 
