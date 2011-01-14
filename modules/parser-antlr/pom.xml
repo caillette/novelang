@@ -14,7 +14,8 @@
 
   <properties>
     <generated-binaries>${project.build.outputDirectory}</generated-binaries>
-    <grammar-dir>${basedir}/src/main/antlr3/novelang/parser/antlr</grammar-dir>
+    <grammar-relative-dir>novelang/parser/antlr</grammar-relative-dir>
+    <grammar-dir>${basedir}/src/main/antlr3/${grammar-relative-dir}</grammar-dir>
     <grammar-file>${grammar-dir}/Novelang.g</grammar-file>
   </properties>
 
@@ -26,9 +27,10 @@
       <!-- See: http://antlr.org/antlr3-maven-plugin/usage.html -->
 
       <plugin>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr3-maven-plugin</artifactId>
-        <version>3.3</version>
+        <groupId>${lib.antlr-plugin.groupid}</groupId>
+        <artifactId>${lib.antlr-plugin.artifactid}</artifactId>
+        <version>${lib.antlr-plugin.version}</version>
+        
 
         <executions>
 
@@ -42,17 +44,12 @@
               <debug>false</debug>
               <dfa>false</dfa>
               <nfa>false</nfa>
-              <!-- excludes><exclude/></excludes -->              
-              <includes><include>novelang/parser/antlr/*.g</include></includes>
-
-              <!-- libDirectory>src/main/antlr3/imports</libDirectory -->
-
+              <includes><include>${grammar-relative-dir}/*.g</include></includes>
               <messageFormat>antlr</messageFormat>
               <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
               <printGrammar>false</printGrammar>
               <profile>false</profile>
               <report>false</report>
-              <!-- sourceDirectory>${grammar-dir}</sourceDirectory -->
               <trace>false</trace>
               <verbose>true</verbose>
             </configuration>
@@ -60,32 +57,6 @@
           </execution>
         </executions>
       </plugin>
-
-<!--
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <configuration>
-              <target>
-
-                <property name="compile-classpath" refid="maven.compile.classpath" />
-
-                <java classname="org.antlr.Tool" fork="true" maxmemory="1G" failonerror="true" classpath="${compile-classpath}">
-                  <arg value="-fo" />
-                  <arg value="${project.build.sourceDirectory}" />
-                  <arg value="${grammar-file}" />
-                </java>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
--->
 
       <plugin>
         <groupId>${project.parent.groupId}</groupId>
@@ -142,12 +113,6 @@
       <version>${project.parent.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>${lib.antlr.groupid}</groupId>
-      <artifactId>${lib.antlr-compiler.artifactid}</artifactId>
-      <version>${lib.antlr.version}</version>
-      <scope>compile</scope>
-    </dependency>
 
     
   </dependencies>

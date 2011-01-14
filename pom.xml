@@ -25,6 +25,10 @@
 
     <!-- Dependencies. -->
 
+    <lib.antlr-plugin.groupid>org.antlr</lib.antlr-plugin.groupid>
+    <lib.antlr-plugin.artifactid>antlr3-maven-plugin</lib.antlr-plugin.artifactid>
+    <lib.antlr-plugin.version>3.3</lib.antlr-plugin.version>
+
     <lib.cobertura.groupid>org.codehaus.mojo</lib.cobertura.groupid>
     <lib.cobertura.artifactid>cobertura-maven-plugin</lib.cobertura.artifactid>
     <lib.cobertura.version>2.4</lib.cobertura.version>
@@ -120,12 +124,12 @@
     <lib.junit.groupid>junit</lib.junit.groupid>
     <lib.junit.artifactid>junit</lib.junit.artifactid>
     <lib.junit.version>4.8.2</lib.junit.version>
-
+<!--
     <lib.antlr.groupid>org.antlr</lib.antlr.groupid>
     <lib.antlr-compiler.artifactid>antlr</lib.antlr-compiler.artifactid>
     <lib.antlr-runtime.artifactid>antlr-runtime</lib.antlr-runtime.artifactid>
     <lib.antlr.version>3.2</lib.antlr.version>
-
+-->
     <lib.logback.groupid>ch.qos.logback</lib.logback.groupid>
     <lib.logback.version>0.9.24</lib.logback.version>
 
