@@ -23,18 +23,18 @@
       <outputDirectory>lib</outputDirectory>
       <scope>runtime</scope>
       <excludes>
-        <exclude>${project.groupId}:${parent.name}-distribution</exclude>
         <exclude>${project.groupId}:${parent.name}-documentation</exclude>
-        <exclude>${project.groupId}:${parent.name}-plugin*</exclude>
+        <exclude>${project.groupId}:${parent.name}-lexeme-table-plugin</exclude>
+        <exclude>${project.groupId}:${parent.name}-logger-mojo</exclude>
       </excludes>
     </dependencySet>
 
     <dependencySet>
       <unpack>true</unpack>
-      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
       <outputDirectory>documentation</outputDirectory>
       <includes>
-        <include>${project.groupId}:Novelang-documentation</include>
+        <include>${project.groupId}:${parent.name}-documentation</include>
       </includes>
     </dependencySet>
 
