@@ -23,9 +23,9 @@
       <outputDirectory>lib</outputDirectory>
       <scope>runtime</scope>
       <excludes>
-        <exclude>${project.groupId}:*-distribution*</exclude>
-        <exclude>${project.groupId}:*-documentation*</exclude>
-        <exclude>${project.groupId}:*plugin*</exclude>
+        <exclude>${project.groupId}:${parent.name}-distribution</exclude>
+        <exclude>${project.groupId}:${parent.name}-documentation</exclude>
+        <exclude>${project.groupId}:${parent.name}-plugin*</exclude>
       </excludes>
     </dependencySet>
 

@@ -11,7 +11,7 @@
 
   <artifactId>Novelang-parser-lexeme-plugin-test</artifactId>
   <name>${project.artifactId}</name>
-
+  <packaging>pom</packaging>
 
   <dependencies>
 

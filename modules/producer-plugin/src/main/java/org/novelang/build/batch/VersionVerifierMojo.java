@@ -37,6 +37,8 @@ import org.apache.maven.plugin.MojoFailureException;
  *
  * @requiresDependencyResolution runtime
  *
+ * @threadSafe
+ * 
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "UnusedDeclaration" } )

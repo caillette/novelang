@@ -11,6 +11,7 @@
 
   <artifactId>Novelang-unicode-generator-plugin-test</artifactId>
   <name>${project.artifactId}</name>
+  <packaging>pom</packaging>
 
 
   <dependencies>

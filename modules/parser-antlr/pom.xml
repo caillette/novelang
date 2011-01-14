@@ -56,7 +56,7 @@
           <execution>
             <phase>generate-sources</phase>
             <configuration>
-              <tasks>
+              <target>
 
                 <property name="compile-classpath" refid="maven.compile.classpath" />
 
@@ -65,7 +65,7 @@
                   <arg value="${project.build.sourceDirectory}" />
                   <arg value="${grammar-file}" />
                 </java>
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>

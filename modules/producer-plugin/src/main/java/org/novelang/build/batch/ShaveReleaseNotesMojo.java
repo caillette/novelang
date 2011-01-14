@@ -33,6 +33,8 @@ import org.novelang.logger.LoggerFactory;
  * @goal drop-snapshot-version-if-needed
  *
  * @requiresDependencyResolution runtime
+ * 
+ * @threadSafe
  *
  * @author Laurent Caillette
  */

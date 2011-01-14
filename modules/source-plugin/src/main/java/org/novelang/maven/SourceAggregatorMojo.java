@@ -38,6 +38,7 @@ import org.novelang.logger.LoggerFactory;
  *
  * @goal aggregate
  * @requiresDependencyResolution runtime
+ * @threadSafe
  * 
  * @author Laurent Caillette
  */

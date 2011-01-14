@@ -29,6 +29,7 @@ import org.novelang.logger.LoggerFactory;
  * Generates Java source containing lexemes extracted from an ANTLR grammar.
  *
  * @goal generate
+ * @threadSafe
  *
  * @author Laurent Caillette
  */

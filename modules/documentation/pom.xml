@@ -134,7 +134,7 @@
           <execution>
             <phase>process-classes</phase>
             <configuration>
-              <tasks>
+              <target>
 
                 <!--
                     We could do that with assembly plugin but this way we can inspect the
@@ -148,7 +148,7 @@
                   </fileset>
                 </copy>
 
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>

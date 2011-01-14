@@ -42,6 +42,7 @@ import org.apache.maven.plugin.MojoFailureException;
  *
  * @goal produce
  * @requiresDependencyResolution runtime
+ * @threadSafe
  * 
  * @author Laurent Caillette
  */

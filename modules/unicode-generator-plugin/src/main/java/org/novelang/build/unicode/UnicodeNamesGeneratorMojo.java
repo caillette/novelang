@@ -30,6 +30,7 @@ import org.novelang.logger.LoggerFactory;
  * Generates binary file containing names of Unicode characters that fit in a 16-bit representation.
  *
  * @goal generate
+ * @threadSafe
  * 
  * @author Laurent Caillette
  */

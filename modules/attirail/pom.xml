@@ -40,6 +40,7 @@
 
   <artifactId>Novelang-attirail</artifactId>
   <name>${project.artifactId}</name>
+  <packaging>jar</packaging>
 
 
   <properties>
