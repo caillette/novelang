@@ -20,6 +20,15 @@
       <artifactId>Novelang-logger-slf4j</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>Novelang-vanilla-fixture</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    
 
     <dependency>
       <groupId>${project.parent.groupId}</groupId>

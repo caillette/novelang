@@ -35,11 +35,12 @@
   <dependencies>
 
     <dependency>
-      <groupId>${lib.dom4j.groupId}</groupId>
-      <artifactId>${lib.dom4j.artifactid}</artifactId>
-      <version>${lib.dom4j.version}</version>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>Novelang-vanilla-fixture</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-bolt</artifactId>
@@ -53,6 +54,12 @@
       <scope>runtime</scope>
     </dependency>
 
+    <dependency>
+      <groupId>${lib.dom4j.groupId}</groupId>
+      <artifactId>${lib.dom4j.artifactid}</artifactId>
+      <version>${lib.dom4j.version}</version>
+    </dependency>
+    
     <dependency>
       <groupId>${lib.maven-plugin.groupid}</groupId>
       <artifactId>${lib.maven-plugin.artifactid}</artifactId>

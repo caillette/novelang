@@ -43,6 +43,13 @@
     </dependency>
 
     <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>Novelang-vanilla-fixture</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>${lib.jfree-jcommon.groupId}</groupId>
       <artifactId>${lib.jfreechart.artifactid}</artifactId>
       <version>${lib.jfreechart.version}</version>
