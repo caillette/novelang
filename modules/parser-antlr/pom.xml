@@ -14,7 +14,8 @@
 
   <properties>
     <generated-binaries>${project.build.outputDirectory}</generated-binaries>
-    <grammar-file>${basedir}/src/main/antlr3/novelang/parser/antlr/Novelang.g</grammar-file>
+    <grammar-dir>${basedir}/src/main/antlr3/novelang/parser/antlr</grammar-dir>
+    <grammar-file>${grammar-dir}/Novelang.g</grammar-file>
   </properties>
 
   
@@ -22,16 +23,12 @@
     <plugins>
 
 
-      <!-- Run with:
-          mvn org.antlr:antlr3-maven-plugin:antlr
-          http://www.antlr.org/wiki/display/ANTLR3/Using+ANTLR+3+with+Maven+2
-      *** Currently disabled as ANTLR-3.1.3 doesn't like this very Novelang grammar. ***
-      -->
-<!--
+      <!-- See: http://antlr.org/antlr3-maven-plugin/usage.html -->
+
       <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>antlr3-maven-plugin</artifactId>
-        <version>3.1.3-1</version>
+        <version>3.3</version>
 
         <executions>
 
@@ -41,15 +38,30 @@
             </goals>
 
             <configuration>
-              <sourceDirectory>src/main/antlr3</sourceDirectory>
+              <conversionTimeout>10000</conversionTimeout>
+              <debug>false</debug>
+              <dfa>false</dfa>
+              <nfa>false</nfa>
+              <!-- excludes><exclude/></excludes -->              
+              <includes><include>novelang/parser/antlr/*.g</include></includes>
+
+              <!-- libDirectory>src/main/antlr3/imports</libDirectory -->
+
+              <messageFormat>antlr</messageFormat>
+              <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+              <printGrammar>false</printGrammar>
+              <profile>false</profile>
+              <report>false</report>
+              <!-- sourceDirectory>${grammar-dir}</sourceDirectory -->
+              <trace>false</trace>
               <verbose>true</verbose>
             </configuration>
             
           </execution>
         </executions>
       </plugin>
--->
 
+<!--
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
@@ -73,7 +85,7 @@
           </execution>
         </executions>
       </plugin>
-
+-->
 
       <plugin>
         <groupId>${project.parent.groupId}</groupId>
