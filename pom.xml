@@ -263,7 +263,6 @@
   <url>http://novelang.sf.net</url>
 
   <modules>
-    <module>modules/assembly-descriptor</module>
     <module>modules/attirail</module>
     <module>modules/bolt</module>
     <module>modules/bootstrap</module>

@@ -163,13 +163,6 @@
         <groupId>${lib.maven-assembly-plugin.groupId}</groupId>
         <artifactId>${lib.maven-assembly-plugin.artifactid}</artifactId>
         <version>${lib.maven-assembly-plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>${project.parent.groupId}</groupId>
-            <artifactId>Novelang-assembly-descriptor</artifactId>
-            <version>${project.parent.version}</version>
-          </dependency>
-        </dependencies>
         <configuration>
           <descriptors>
             <descriptor>src/assemble/website.xml</descriptor>
