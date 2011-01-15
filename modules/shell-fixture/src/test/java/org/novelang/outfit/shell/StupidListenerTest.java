@@ -60,11 +60,12 @@ public class StupidListenerTest {
 
     final List< String > logLines = FileUtils.readLines( logFile ) ;
     
-    assertThat( logLines )
-        .contains( "Starting up and listening..."
+    assertThat( logLines.get( 0 ) )
+        .contains( "Starting up with" )
+        .contains( "and listening..." )
         // Don't assert on "Terminated." because it occurs in the shutdown hook and
         // we are running the test in-process here.
-    ) ;
+    ;
 
   }
 

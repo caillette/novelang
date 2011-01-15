@@ -328,10 +328,10 @@
           <groupId>${lib.maven-surefire-plugin.groupId}</groupId>
           <artifactId>${lib.maven-surefire-plugin.artifactid}</artifactId>
           <version>${lib.maven-surefire-plugin.version}</version>
-          <!-- configuration>
+          <configuration>
             <parallel>methods</parallel>
             <threadCount>10</threadCount>
-          </configuration -->
+          </configuration>
 
         </plugin>
 

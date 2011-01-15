@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Does stupid things for {@link org.novelang.outfit.shell.JavaShell} test.
@@ -48,7 +51,7 @@ public class StupidListener {
 
     System.out.println( "Started." ) ; // Used by startup sensor.
 
-    write( logFile, "Starting up and listening..." ) ;
+    write( logFile, "Starting up with " + Arrays.asList( arguments ) + " and listening..." ) ;
     
     final int port = Integer.parseInt( arguments[ 1 ] ) ;
     final ServerSocket serverSocket = new ServerSocket( port ) ;
@@ -59,10 +62,14 @@ public class StupidListener {
     }
   }
 
+  private static final String TIMESTAMP_FORMAT = "kk:mm:ss.SSS" ;
+
   private static void write( final File logFile, final String message ) throws IOException {
+    final String timestampedMessage =
+        new SimpleDateFormat( TIMESTAMP_FORMAT ).format( new Date() ) + " " + message ;
     final FileOutputStream fileOutputStream = new FileOutputStream( logFile, true ) ;
     try {
-      fileOutputStream.write( message.getBytes( ) ) ;
+      fileOutputStream.write( timestampedMessage.getBytes( ) ) ;
       fileOutputStream.write( "\n".getBytes( ) ) ;
     } finally {
       fileOutputStream.close() ;

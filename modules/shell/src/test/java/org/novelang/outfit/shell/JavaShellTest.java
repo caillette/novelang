@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.net.Socket;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +32,6 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.TcpPortBooker;
 import org.novelang.outfit.shell.insider.Insider;
-import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.RepeatedAssert;
 import org.novelang.testing.StandalonePredicate;
 import org.novelang.testing.junit.MethodSupport;
@@ -70,7 +68,7 @@ public class JavaShellTest {
   public void cannotStart() throws Exception {
 
     if( isLikelyToWork() ) {
-      final ShellFixture shellFixture = new ShellFixture() ;
+      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
       final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
           .withJavaClasses( new JavaClasses.ClasspathAndMain(
               "ThisClassDoesNotExist",
@@ -88,8 +86,8 @@ public class JavaShellTest {
   public void startTwice() throws Exception {
 
     if( isLikelyToWork() ) {
-      startAndShutdown( new JavaShell( new ShellFixture().getParameters() ) ) ;
-      startAndShutdown( new JavaShell( new ShellFixture().getParameters() ) ) ;
+      startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
+      startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
     }
   }
 
@@ -97,7 +95,8 @@ public class JavaShellTest {
   public void useAsJmxConnector() throws Exception {
 
     if( isLikelyToWork() ) {
-      final JavaShell javaShell = new JavaShell( new ShellFixture().getParameters() ) ;
+      final JavaShell javaShell =
+          new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ;
       javaShell.start() ;
       try {
         final RuntimeMXBean runtimeMXBean = javaShell.getManagedBean(
@@ -117,7 +116,7 @@ public class JavaShellTest {
 
     if( isLikelyToWork() ) {
 
-      final ShellFixture shellFixture = new ShellFixture() ;
+      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
       final int heartbeatFatalDelay = 1000 ;
       final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
               .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
@@ -143,7 +142,7 @@ public class JavaShellTest {
 
     if( isLikelyToWork() ) {
 
-      final ShellFixture shellFixture = new ShellFixture() ;
+      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
 
       final JavaShellParameters parameters = shellFixture.getParameters()
           .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
@@ -183,7 +182,7 @@ public class JavaShellTest {
   @Test
   public void startForeignProgram() throws Exception {
     if( isLikelyToWork() ) {
-      final ShellFixture shellFixture = new ShellFixture() ;
+      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
 
       final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
       try {
@@ -208,20 +207,20 @@ public class JavaShellTest {
 // Fixture
 // =======
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( JavaShellTest.class ) ;
+  static final Logger LOGGER = LoggerFactory.getLogger( JavaShellTest.class ) ;
 
   public static final long SHELL_STARTUP_TIMEOUT_DURATION = 20L ;
   public static final TimeUnit SHELL_STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
 
 
-  private static final Predicate< String > STUPID_LISTENER_STARTED = new Predicate< String >() {
+  static final Predicate< String > STUPID_LISTENER_STARTED = new Predicate< String >() {
     @Override
     public boolean apply( final String input ) {
       return input.startsWith( "Started." ) ;
     }
   } ;
   @Rule
-  public final MethodSupport methodSupport = new MethodSupport() ;
+  public final MethodSupport methodSupport = new MethodSupport( JavaShellTest.class ) ;
 
 
   @SuppressWarnings( { "ThrowableInstanceNeverThrown" } )
@@ -267,7 +266,7 @@ public class JavaShellTest {
       "org.novelang.outfit.shell.fixturejarfile" ;
 
 
-  private static File installFixturePrograms( final File directory ) throws IOException {
+  static File installFixturePrograms( final File directory ) throws IOException {
     final String fixtureJarFileAsString = System.getProperty( FIXTUREJARFILE_PROPERTYNAME ) ;
     if( fixtureJarFileAsString == null ) {
       final File jarFile = new File( directory, "java-program.jar" ) ;
@@ -303,61 +302,6 @@ public class JavaShellTest {
   @SuppressWarnings( { "HardcodedFileSeparator" } )
   private static final String FIXTURE_PROGRAM_JAR_RESOURCE_RADIX =
       "/Novelang-shell-fixture-" ;
-
-
-
-  private class ShellFixture {
-
-    private final File logFile ;
-    private final JavaShellParameters parameters ;
-    private final int dummyListenerPort ;
-    private final File jarFile ;
-
-    public File getLogFile() {
-      return logFile;
-    }
-
-    public JavaShellParameters getParameters() {
-      return parameters;
-    }
-
-    public File getJarFile() {
-      return jarFile ;
-    }
-
-    public ShellFixture() throws IOException {
-      final int jmxPort = org.novelang.outfit.TcpPortBooker.THIS.find() ;
-      dummyListenerPort = org.novelang.outfit.TcpPortBooker.THIS.find() ;
-      final File scratchDirectory = methodSupport.getDirectory() ;
-      logFile = new File( scratchDirectory, "dummy.txt" );
-      jarFile = installFixturePrograms( scratchDirectory ) ;
-
-      parameters = org.novelang.outfit.Husk.create( JavaShellParameters.class )
-          .withNickname( "Stupid" )
-          .withWorkingDirectory( scratchDirectory )
-          .withJavaClasses( new JavaClasses.ClasspathAndMain(
-              "org.novelang.outfit.shell.StupidListener",
-              jarFile
-          ) )
-          .withStartupSensor( STUPID_LISTENER_STARTED )
-          .withProgramArguments( of(
-              logFile.getAbsolutePath(),
-              Integer.toString( dummyListenerPort )
-          ) )
-          .withJmxPortConfiguredAtJvmStartup( jmxPort )
-          .withJmxKit( new DefaultJmxKit() )
-      ;
-    }
-
-    public void askForSelfTermination() {
-      try {
-        final Socket clientSocket = new Socket( "localhost", dummyListenerPort ) ;
-        clientSocket.close() ;
-      } catch( IOException e ) {
-        LOGGER.debug( "Couldn't open socket on port ", dummyListenerPort, ": ", e.getMessage() ) ;
-      }
-    }
-  }
 
 
   private static class MaybeDown implements StandalonePredicate {

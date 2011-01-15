@@ -203,9 +203,6 @@ public abstract class ProcessShell {
             exitCode = process.waitFor();
             interruptWatcherThreads() ;
           }
-        } else {
-            LOGGER.warn(
-                "Trying to shutdown while in ", state, " state for ", getNickname(), "." ) ;
         }
       } finally {
         process = null ;

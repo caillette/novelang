@@ -24,6 +24,8 @@ import com.google.common.base.Supplier;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.testing.DirectoryFixture;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -32,6 +34,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Laurent Caillette
  */
 public class MethodSupport implements MethodRule, Supplier< File > {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger( MethodSupport.class ) ;
 
   private String testName = null ;
 
@@ -116,12 +120,16 @@ public class MethodSupport implements MethodRule, Supplier< File > {
     }
 
     private void doEvaluate() throws Throwable {
+      LOGGER.info( "*** Evaluating ", getTestName(), "... ***" );
       try {
         beforeStatementEvaluation() ;
         base.evaluate();
+      } catch( Throwable throwable ) {
+        LOGGER.error( throwable, "Test failed." ) ;
       } finally {
         afterStatementEvaluation() ;
       }
+      LOGGER.info( "*** Done with ", getTestName(), ". ***" );
     }
   }
 
