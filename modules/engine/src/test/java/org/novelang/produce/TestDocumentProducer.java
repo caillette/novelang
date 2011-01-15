@@ -7,13 +7,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.fop.apps.FopFactory;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Renderable;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.ContentConfiguration;
 import org.novelang.configuration.FopFontStatus;
@@ -26,7 +26,7 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -39,7 +39,6 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
  * 
  * @author Laurent Caillette
  */
-@RunWith( NameAwareTestClassRunner.class )
 public class TestDocumentProducer {
 
   @Test
@@ -159,6 +158,10 @@ public class TestDocumentProducer {
   }
 
   private static final Logger LOGGER = LoggerFactory.getLogger( TestDocumentProducer.class ) ;
-  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
 
 }

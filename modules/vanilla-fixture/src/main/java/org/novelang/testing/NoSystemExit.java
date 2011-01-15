@@ -36,34 +36,46 @@ public class NoSystemExit {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( NoSystemExit.class ) ;
 
-  private final SecurityManager previous ;
-  private final AtomicBoolean installed = new AtomicBoolean( true ) ;
+  public static final NoSystemExit INSTANCE = new NoSystemExit() ;
 
-  public NoSystemExit() {
-    this.previous = System.getSecurityManager() ;
-    install() ;
+  /**
+   * Synchronize access on every field on this object.
+   */
+  private final Object lock = new Object() ;
+
+  private SecurityManager previous = null ;
+  private boolean installed = false ;
+
+
+  public void install() {
+    synchronized( lock ) {
+      checkState( ! installed, "Alread installed" ) ;
+      this.previous = System.getSecurityManager() ;
+      final SecurityManager securityManager = new NoExitSecurityManager() ;
+      System.setSecurityManager( securityManager ) ;
+      installed = true ;
+    }
+  }
+
+  public void uninstall() {
+    synchronized( lock ) {
+      checkState( installed, "Not installed" ) ;
+      System.setSecurityManager( previous ) ;
+      installed = false ;
+    }
   }
 
   public static class ExitTrappedException extends SecurityException { }
 
-  private static void install() {
-    final SecurityManager securityManager = new SecurityManager() {
-      @java.lang.Override
-      public void checkPermission( final Permission permission ) {
-	    final String permissionName = permission.getName() ;
-        if( permissionName.startsWith( "exitVM" ) ) {
-          LOGGER.debug( "Checking permission " + permissionName ) ;
-          throw new ExitTrappedException() ;
-        }
+
+  private static class NoExitSecurityManager extends SecurityManager {
+    @Override
+    public void checkPermission( final Permission permission ) {
+    final String permissionName = permission.getName() ;
+      if( permissionName.startsWith( "exitVM" ) ) {
+        LOGGER.debug( "Checking permission " + permissionName ) ;
+        throw new ExitTrappedException() ;
       }
-    } ;
-    System.setSecurityManager( securityManager ) ;
+    }
   }
-
-  public void uninstall() {
-    checkState( installed.compareAndSet( true, false ), "Alread uninstalled" ) ;
-    System.setSecurityManager( previous ) ;
-  }
-
-
 }

@@ -17,14 +17,12 @@
 package org.novelang.configuration.parse;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.ClassUtils;
 import org.fest.assertions.Assertions;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.ResourceTools;
 import org.novelang.logger.Logger;
@@ -32,7 +30,7 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.produce.MalformedRequestException;
-import org.novelang.testing.DirectoryFixture;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.junit.Assert.*;
 
@@ -245,21 +243,26 @@ public class ParametersTest {
     }
   }
 
-  @Before
-  public void setUp() throws IOException {
-    scratchDirectory =
-        new DirectoryFixture( ParametersTest.class ).getDirectory() ;
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() {
+    @Override
+    protected void beforeStatementEvaluation() throws Exception {
+      scratchDirectory = getDirectory() ;
 
-    directoryAaa = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
-    directoryBbb = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
-    directoryCcc = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
-    File directoryCccDdd=ResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD );
+      directoryAaa = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_AAA ) ;
+      directoryBbb = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_BBB ) ;
+      directoryCcc = ResourceTools.createDirectory( scratchDirectory, DIRECTORY_NAME_CCC ) ;
+      final File directoryCccDdd=ResourceTools.createDirectory( directoryCcc, DIRECTORY_NAME_DDD ) ;
 
-    assertTrue( directoryAaa.exists() ) ;
-    assertTrue( directoryBbb.exists() ) ;
-    assertTrue( directoryCcc.exists() ) ;
-    assertTrue( directoryCccDdd.exists() ) ;
-  }
+      assertTrue( directoryAaa.exists() ) ;
+      assertTrue( directoryBbb.exists() ) ;
+      assertTrue( directoryCcc.exists() ) ;
+      assertTrue( directoryCccDdd.exists() ) ;
+    }
+  } ;
+
+
+
 
   private static final String[] NO_PARAMETERS = new String[ 0 ] ;
 

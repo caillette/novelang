@@ -31,8 +31,8 @@ import org.apache.fop.apps.FOPException;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.FileTools;
 import org.novelang.common.filefixture.Relativizer;
@@ -48,8 +48,7 @@ import org.novelang.outfit.loader.AbstractResourceLoader;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.UrlResourceLoader;
 import org.novelang.produce.DocumentRequest;
-import org.novelang.testing.DirectoryFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -70,7 +69,6 @@ import static org.novelang.configuration.parse.GenericParametersConstants.OPTION
  *
  * @author Laurent Caillette
  */
-@RunWith( NameAwareTestClassRunner.class )
 public class ConfigurationToolsTest {
 
 // ===================
@@ -227,7 +225,7 @@ public class ConfigurationToolsTest {
    */
   @Test
   public void createWithCorrectResourceLoaderOrder() throws Exception {
-    final File parent = new DirectoryFixture().getDirectory() ;
+    final File parent = methodSupport.getDirectory() ;
     final File directory1 = FileTools.createFreshDirectory( parent, "first" ) ;
     final File directory2 = FileTools.createFreshDirectory( parent, "second" ) ;
 
@@ -339,41 +337,50 @@ public class ConfigurationToolsTest {
   private static final Charset ISO_8859_2 = Charset.forName( "ISO-8859-2" );
   private static final Charset MAC_ROMAN = Charset.forName( "MacRoman" );
 
-  private final File scratchDirectory ;
-  private final File someEmptyContentDirectory ;
-  private final File fontStructureDirectory ;
-  private final File defaultFontsDirectory ;
-  private final String fontFileNameDefault1 ;
-  private final String fontFileNameDefault2 ;
-  private final String fontFileNameAlternate ;
-  private final String fontDirNameAlternate ;
+  private File scratchDirectory ;
+  private File someEmptyContentDirectory ;
+  private File fontStructureDirectory ;
+  private File defaultFontsDirectory ;
+  private String fontFileNameDefault1 ;
+  private String fontFileNameDefault2 ;
+  private String fontFileNameAlternate ;
+  private String fontDirNameAlternate ;
 
   static {
     ResourcesForTests.initialize() ;
   }
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() {
+
+    @Override
+    protected void beforeStatementEvaluation() throws Exception {
+
+      scratchDirectory = getDirectory() ;
+      someEmptyContentDirectory = new File( scratchDirectory, "some-empty-content-root"  ) ;
+      someEmptyContentDirectory.mkdirs() ;
+
+      filer.copyContent( FontStructure.dir ) ;
+      defaultFontsDirectory = filer.createFileObject(
+          FontStructure.dir,
+          FontStructure.Fonts.dir
+      ) ;
+      fontStructureDirectory = scratchDirectory ;
+
+      final Relativizer relativizer = ResourceSchema.relativizer( FontStructure.dir ) ;
+      fontFileNameDefault1 = relativizer.apply( FontStructure.Fonts.MONO ) ;
+      fontFileNameDefault2 = relativizer.apply( FontStructure.Fonts.MONO_BOLD ) ;
+      fontDirNameAlternate = FontStructure.Alternate.dir.getName() ;
+      fontFileNameAlternate = relativizer.apply( FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
+
+    }
+  };
+
+  private final ResourceInstaller filer = new ResourceInstaller( methodSupport ) ;
 
   /**
    * Tested methods don't modify files so we can have the same scratch directory name for all.
    */
   public ConfigurationToolsTest() throws IOException {
-    scratchDirectory = new DirectoryFixture(
-        ConfigurationToolsTest.class ).getDirectory() ;
-    someEmptyContentDirectory = new File( scratchDirectory, "some-empty-content-root"  ) ;
-    someEmptyContentDirectory.mkdirs() ;
-    
-    final ResourceInstaller filer = new ResourceInstaller( scratchDirectory ) ;
-    filer.copyContent( FontStructure.dir ) ;
-    defaultFontsDirectory = filer.createFileObject(
-        FontStructure.dir,
-        FontStructure.Fonts.dir
-    ) ;
-    fontStructureDirectory = scratchDirectory ;
-
-    final Relativizer relativizer = ResourceSchema.relativizer( FontStructure.dir ) ;
-    fontFileNameDefault1 = relativizer.apply( FontStructure.Fonts.MONO ) ;
-    fontFileNameDefault2 = relativizer.apply( FontStructure.Fonts.MONO_BOLD ) ;
-    fontDirNameAlternate = FontStructure.Alternate.dir.getName() ;
-    fontFileNameAlternate = relativizer.apply( FontStructure.Alternate.MONO_BOLD_OBLIQUE ) ;
   }
 
   private DaemonParameters createDaemonParameters( final String... arguments )

@@ -17,14 +17,12 @@
 package org.novelang.novella;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.common.Problem;
 import org.novelang.common.ProblemCollector;
 import org.novelang.common.SyntacticTree;
@@ -34,8 +32,7 @@ import org.novelang.common.filefixture.ResourceSchema;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.testing.DirectoryFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.junit.Assert.assertSame;
 import static org.novelang.ResourcesForTests.Images;
@@ -48,7 +45,6 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
  * 
  * @author Laurent Caillette
  */
-@RunWith( value = NameAwareTestClassRunner.class )
 public class ImageFixerTest {
 
   @Test
@@ -305,18 +301,21 @@ public class ImageFixerTest {
   private File parentDirectory ;
   private File childDirectory ;
   private File grandChildDirectory ;
-  
-  @Before
-  public void before() throws IOException {
-    final String testName = NameAwareTestClassRunner.getTestName();
-    parentDirectory = new DirectoryFixture( testName ).getDirectory() ;
 
-    final ResourceInstaller filer = new ResourceInstaller( parentDirectory ) ;
-    filer.copyContent( Images.dir ) ;
-    
-    childDirectory = filer.createFileObject( Images.dir, Images.Child.dir );
-    grandChildDirectory = filer.createFileObject( Images.dir, Images.Child.Grandchild.dir ) ;
-  }
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() {
+    @Override
+    protected void beforeStatementEvaluation() throws Exception {
+      parentDirectory = getDirectory() ;
+
+      final ResourceInstaller filer = new ResourceInstaller( parentDirectory ) ;
+      filer.copyContent( Images.dir ) ;
+
+      childDirectory = filer.createFileObject( Images.dir, Images.Child.dir );
+      grandChildDirectory = filer.createFileObject( Images.dir, Images.Child.Grandchild.dir ) ;
+    }
+  };
+
 
   
 

@@ -22,19 +22,19 @@ import java.io.IOException;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourceTools;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Relativizer;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.common.filefixture.ResourceSchema;
 import org.novelang.designator.Tag;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.novelang.ResourcesForTests.Images;
 import static org.novelang.ResourcesForTests.initialize;
@@ -46,7 +46,6 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
  *
  * @author Laurent Caillette
  */
-@RunWith( value = NameAwareTestClassRunner.class )
 public class OpusWithImagesTest {
 
   /**
@@ -114,7 +113,10 @@ public class OpusWithImagesTest {
     RESOURCE_PATH_RED = relativizer.apply( Images.RED_PNG ) ;
 
   }
-  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
 
 
   private File bookWithImagesExplicit;

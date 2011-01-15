@@ -21,17 +21,17 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.commons.lang.SystemUtils;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Problem;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -45,7 +45,6 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "HardcodedFileSeparator" } )
-@RunWith( value = NameAwareTestClassRunner.class )
 public class OpusTest {
 
   /**
@@ -500,7 +499,10 @@ public class OpusTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( OpusTest.class );
 
-  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
 
   public static final String CUSTOM_STYLE = "mystyle" ;
 

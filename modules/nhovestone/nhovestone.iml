@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
+      <excludeFolder url="file://$MODULE_DIR$/target/surefire" />
       <excludeFolder url="file://$MODULE_DIR$/target/surefire-reports" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
@@ -87,7 +88,6 @@
     <orderEntry type="module" module-name="parser-antlr" />
     <orderEntry type="module" module-name="tree" />
     <orderEntry type="module" module-name="parser-ground" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr:3.2" level="project" />
     <orderEntry type="module" module-name="parser-supplement" />
     <orderEntry type="module" module-name="syntactic-tree" />
     <orderEntry type="module" module-name="unicode-reader" />
@@ -96,13 +96,14 @@
     <orderEntry type="module" module-name="insider" />
     <orderEntry type="module" module-name="insider" />
     <orderEntry type="library" name="Maven: com.sun:tools:1.6.0" level="project" />
+    <orderEntry type="module" module-name="vanilla-fixture" scope="TEST" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
     <orderEntry type="library" name="Maven: jfree:jfreechart:1.0.12" level="project" />
     <orderEntry type="library" name="Maven: jfree:jcommon:1.0.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.3" level="project" />
     <orderEntry type="library" name="Maven: commons-math:commons-math:1.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.easytesting:fest-assert:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.htmlunit:htmlunit:2.6" level="project" />

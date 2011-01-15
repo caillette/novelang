@@ -24,12 +24,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.designator.Tag;
 import org.novelang.designator.TagTestTools;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.common.metadata.PageIdentifier;
 
 import static org.junit.Assert.*;
 

@@ -19,6 +19,7 @@ package org.novelang.common.filefixture;
 import java.io.File;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Supplier;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 
@@ -30,26 +31,46 @@ public class ResourceInstaller extends AbstractResourceInstaller {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( ResourceInstaller.class );
 
-  private final File targetDirectory ;
+  private final Supplier< File > targetDirectorySupplier;
+
 
   /**
-   * Constructor. Creates a {@code Relocator} object with a parent directory used as reference
-   * for all other operations.
+   * Lazy constructor that doesn't check for {@code targetDirectorySupplier}'s
+   * directory existence because when instantiating with a
+   * {@link org.novelang.testing.junit.MethodSupport}, the directory doesn't exist until
+   * the test starts evaluating.
+   *
+   * @param targetDirectorySupplier a non-null object.
+   */
+  public ResourceInstaller( final Supplier< File > targetDirectorySupplier ) {
+    this.targetDirectorySupplier = Preconditions.checkNotNull( targetDirectorySupplier ) ;
+    LOGGER.debug(
+        "Created ", getClass().getSimpleName(),
+        " with ", targetDirectorySupplier, "."
+    ) ;
+  }
+
+  /**
+   * Constructor.
    *
    * @param targetDirectory a non-null object representing an existing directory.
    */
   public ResourceInstaller( final File targetDirectory ) {
-    Preconditions.checkArgument( targetDirectory.exists() ) ;
-    Preconditions.checkArgument( targetDirectory.isDirectory() ) ;
-    this.targetDirectory = targetDirectory;
-    LOGGER.debug(
-        "Created ", getClass().getSimpleName(),
-        " on directory '", targetDirectory.getAbsolutePath(), "'"
-    ) ;
+    this( new Supplier< File >() {
+      @Override
+      public File get() {
+        return targetDirectory ;
+      }
+
+      @Override
+      public String toString() {
+        return "Supplier[" + targetDirectory + "]";
+      }
+    } ) ;
   }
 
   @Override
   public File getTargetDirectory() {
-    return targetDirectory ;
+    return targetDirectorySupplier.get() ;
   }
 }

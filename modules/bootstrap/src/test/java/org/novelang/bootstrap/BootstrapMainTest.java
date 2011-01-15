@@ -17,10 +17,13 @@
 package org.novelang.bootstrap;
 
 import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Ignore ;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.daemon.HttpDaemon;
 import org.novelang.testing.NoSystemExit;
+import org.novelang.testing.junit.MethodSupport;
 
 /**
  * Tests for {@link Main}.
@@ -48,11 +51,23 @@ public class BootstrapMainTest {
 // Fixture
 // =======
 
-  private final NoSystemExit noSystemExit = new NoSystemExit() ;
+  /**
+   * The {@link org.novelang.testing.junit.MethodSupport} guarantees that test methods
+   * will NOT run in parallel because {@link org.novelang.testing.NoSystemExit} is a singleton.
+   */
+  @SuppressWarnings( { "UnusedDeclaration" } )
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport( NoSystemExit.INSTANCE ) {
+    @Override
+    protected void beforeStatementEvaluation() {
+      NoSystemExit.INSTANCE.install() ;
+    }
 
-  @After
-  public void tearDown() {
-    noSystemExit.uninstall() ;
-  }
+    @Override
+    protected void afterStatementEvaluation() {
+      NoSystemExit.INSTANCE.uninstall() ;
+    }
+  } ;
 
+  
 }

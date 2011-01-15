@@ -25,19 +25,19 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Location;
 import org.novelang.common.Problem;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.parser.NodeKind;
 import org.novelang.parser.SourceUnescape;
 import org.novelang.parser.antlr.TreeFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
@@ -45,7 +45,6 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
 /**
  * @author Laurent Caillette
  */
-@RunWith( value = NameAwareTestClassRunner.class )
 public class NovellaTest {
 
 
@@ -323,7 +322,10 @@ public class NovellaTest {
       ResourcesForTests.initialize() ;
   }
 
-  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
 
 
 

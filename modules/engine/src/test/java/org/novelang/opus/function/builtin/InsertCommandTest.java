@@ -23,14 +23,14 @@ import java.net.MalformedURLException;
 import com.google.common.collect.ImmutableList;
 import org.fest.reflect.core.Reflection;
 import org.fest.reflect.reference.TypeRef;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.Location;
 import org.novelang.common.SimpleTree;
 import org.novelang.common.SyntacticTree;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.common.tree.Treepath;
 import org.novelang.designator.FragmentIdentifier;
 import org.novelang.logger.Logger;
@@ -40,7 +40,7 @@ import org.novelang.opus.CommandExecutionContext;
 import org.novelang.opus.function.CommandParameterException;
 import org.novelang.opus.function.builtin.insert.LevelHead;
 import org.novelang.outfit.DefaultCharset;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -56,7 +56,6 @@ import static org.novelang.parser.antlr.TreeFixture.tree;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "HardcodedFileSeparator" } )
-@RunWith( value = NameAwareTestClassRunner.class )
 public class InsertCommandTest {
 
   @Test
@@ -666,12 +665,14 @@ public class InsertCommandTest {
   
   private static final Location NULL_LOCATION = new Location( "", -1, -1 ) ;
 
-  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
-
-
   static {
     initialize() ;
   }
+
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
 
 
   private static Treepath< SyntacticTree > callFindLastLevel(

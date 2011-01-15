@@ -21,27 +21,25 @@ import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.net.Socket;
-import java.rmi.ConnectException;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
+import org.apache.commons.io.FileUtils;
+import org.junit.Rule;
+import org.junit.Test;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.TcpPortBooker;
 import org.novelang.outfit.shell.insider.Insider;
 import org.novelang.testing.DirectoryFixture;
 import org.novelang.testing.RepeatedAssert;
 import org.novelang.testing.StandalonePredicate;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
-import org.apache.commons.io.FileUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.novelang.testing.junit.MethodSupport;
 
 import static com.google.common.collect.ImmutableList.of;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -57,7 +55,6 @@ import static org.junit.Assert.assertNotNull;
  * 
  * @author Laurent Caillette
  */
-@RunWith( NameAwareTestClassRunner.class )
 public class JavaShellTest {
 
   @Test
@@ -223,9 +220,12 @@ public class JavaShellTest {
       return input.startsWith( "Started." ) ;
     }
   } ;
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
 
   @SuppressWarnings( { "ThrowableInstanceNeverThrown" } )
-  private static boolean isLikelyToWork() {
+  private boolean isLikelyToWork() {
 
     for( final StackTraceElement element : new Exception().getStackTrace() ) {
       if( element.getClassName().contains( "org.apache.maven.surefire.Surefire" ) ) {
@@ -235,7 +235,7 @@ public class JavaShellTest {
     }
 
     final String warning = "Not running as Maven test, nor couldn't find agent jar file" +
-            " (check system properties). Skipping " + NameAwareTestClassRunner.getTestName() +
+            " (check system properties). Skipping " + methodSupport.getTestName() +
             " because needed resources may be missing."
     ;
     String message = warning ;
@@ -306,7 +306,7 @@ public class JavaShellTest {
 
 
 
-  private static class ShellFixture {
+  private class ShellFixture {
 
     private final File logFile ;
     private final JavaShellParameters parameters ;
@@ -328,7 +328,7 @@ public class JavaShellTest {
     public ShellFixture() throws IOException {
       final int jmxPort = org.novelang.outfit.TcpPortBooker.THIS.find() ;
       dummyListenerPort = org.novelang.outfit.TcpPortBooker.THIS.find() ;
-      final File scratchDirectory = new DirectoryFixture().getDirectory() ;
+      final File scratchDirectory = methodSupport.getDirectory() ;
       logFile = new File( scratchDirectory, "dummy.txt" );
       jarFile = installFixturePrograms( scratchDirectory ) ;
 

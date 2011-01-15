@@ -46,27 +46,27 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
-import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Directory;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.TcpPortBooker;
 import org.novelang.outfit.TextTools;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.multipage.MultipageFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.util.PDFTextStripper;
 
@@ -81,7 +81,6 @@ import static org.junit.Assert.assertTrue;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "HardcodedFileSeparator" } )
-@RunWith( value = NameAwareTestClassRunner.class )
 public class HttpDaemonTest {
 
   @Test
@@ -90,7 +89,7 @@ public class HttpDaemonTest {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     final String novellaSource = alternateSetup( resource, ISO_8859_1 ) ;
     final String generated = readAsString( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        "http://localhost:" + daemonPort + "/" +
         resource.getName()
     ) ) ;
     final String shaved = shaveComments( generated ) ;
@@ -106,7 +105,7 @@ public class HttpDaemonTest {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     alternateSetup( resource, ISO_8859_1 ) ;
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ) ;
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + PDF ) ) ;
     save( "generated.pdf", generated ) ;
     assertTrue( generated.length > 100 ) ;
   }
@@ -116,7 +115,7 @@ public class HttpDaemonTest {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
     final HttpGet httpGet = new HttpGet(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ;
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + PDF ) ;
     final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
     final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
     assertTrue( "Got:" + Arrays.asList( headers ), headers.length > 0 ) ;
@@ -141,7 +140,7 @@ public class HttpDaemonTest {
   public void emptyFontListingMakesNoSmoke() throws Exception {
     setup() ;
     final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + HTTP_DAEMON_PORT + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
+        new URL( "http://localhost:" + daemonPort + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
     save( "generated.pdf", generated ) ;
     final String pdfText = extractPdfText( generated ) ;
     assertThat( pdfText ).contains( "No font found." ) ;
@@ -151,7 +150,7 @@ public class HttpDaemonTest {
   public void fontListingMakesNoSmoke() throws Exception {
     daemonSetupWithFonts( ResourcesForTests.FontStructure.Parent.Child.dir ) ;
     final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + HTTP_DAEMON_PORT + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
+        new URL( "http://localhost:" + daemonPort + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
     save( "generated.pdf", generated ) ;
     final String pdfText = extractPdfText( generated ) ;
     assertThat( pdfText )
@@ -168,7 +167,7 @@ public class HttpDaemonTest {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML ) ) ;
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML ) ) ;
     assertTrue( generated.length > 100 ) ;
   }
 
@@ -179,7 +178,7 @@ public class HttpDaemonTest {
 
     final String brokentDocumentName = resource.getBaseName() + HTML ;
     final String brokenDocumentUrl =
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + brokentDocumentName ;
+        "http://localhost:" + daemonPort + "/" + brokentDocumentName ;
     final ResponseSnapshot responseSnapshot = followRedirection(
         brokenDocumentUrl ) ;
 
@@ -203,7 +202,7 @@ public class HttpDaemonTest {
     setup( resource ) ;
 
     final ResponseSnapshot responseSnapshot = followRedirection(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML +
         GenericRequest.ERRORPAGE_SUFFIX
     ) ;
 
@@ -217,7 +216,7 @@ public class HttpDaemonTest {
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
     final ResponseSnapshot responseSnapshot =
-        followRedirection( "http://localhost:" + HTTP_DAEMON_PORT ) ;
+        followRedirection( "http://localhost:" + daemonPort ) ;
     checkDirectoryListing( responseSnapshot, resource ) ;
   }
 
@@ -226,7 +225,7 @@ public class HttpDaemonTest {
       final Resource resource = ResourcesForTests.Served.GOOD_PART;
       resourceInstaller.copyWithPath( resource ) ;
       setup() ;
-    final String urlAsString = "http://localhost:" + HTTP_DAEMON_PORT + "/";
+    final String urlAsString = "http://localhost:" + daemonPort + "/";
     final ResponseSnapshot responseSnapshot = followRedirection( urlAsString ) ;
       checkDirectoryListing( responseSnapshot, resource ) ;
   }
@@ -237,7 +236,7 @@ public class HttpDaemonTest {
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
 
-    final String urlAsString = "http://localhost:" + HTTP_DAEMON_PORT + "/";
+    final String urlAsString = "http://localhost:" + daemonPort + "/";
     final ResponseSnapshot responseSnapshot = followRedirection(
         urlAsString,
         SAFARI_USER_AGENT
@@ -263,7 +262,7 @@ public class HttpDaemonTest {
     setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML +
                 "?stylesheet=" + ResourcesForTests.Served.Style.VOID_XSL.getName()
     ) ) ;
 
@@ -283,7 +282,7 @@ public class HttpDaemonTest {
 
 
     final ResponseSnapshot responseSnapshot = followRedirection(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML +
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML +
             "?stylesheet=" + stylesheetResource.getName()
     ) ;
 
@@ -305,7 +304,7 @@ public class HttpDaemonTest {
       setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
       final byte[] generated = readAsBytes( new URL(
-          "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + HTML ) ) ;
+          "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML ) ) ;
 
       save( "generated.html", generated ) ;
       assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
@@ -364,10 +363,10 @@ public class HttpDaemonTest {
     return buffer.toString() ;
   }
 
-  private static URL buildUrl( final DocumentRequest documentRequest )
+  private URL buildUrl( final DocumentRequest documentRequest )
       throws MalformedURLException
   {
-    return new URL( "http://localhost:" + HTTP_DAEMON_PORT + documentRequest.getOriginalTarget() ) ;
+    return new URL( "http://localhost:" + daemonPort + documentRequest.getOriginalTarget() ) ;
   }
 
   private static String readAsString( final URL url ) throws IOException {
@@ -402,7 +401,6 @@ public class HttpDaemonTest {
     LOGGER.info( "Wrote file '", file.getAbsolutePath(), "'" ) ;
   }
 
-  private static final int HTTP_DAEMON_PORT = 8081 ;
 
 
 
@@ -414,7 +412,15 @@ public class HttpDaemonTest {
   @SuppressWarnings( { "InstanceVariableMayNotBeInitialized" } )
   private HttpDaemon httpDaemon ;
 
-  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() {
+    @Override
+    protected void afterStatementEvaluation() throws Exception {
+      httpDaemon.stop() ;
+    }
+  };
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
 
 
 
@@ -452,7 +458,7 @@ public class HttpDaemonTest {
       throws Exception
   {
     httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
-        HTTP_DAEMON_PORT,
+        daemonPort,
         resourceInstaller.getTargetDirectory(),
         CompositeResourceLoader.create( ConfigurationTools.BUNDLED_STYLE_DIR, styleDirectory )
     ) ) ;
@@ -463,7 +469,7 @@ public class HttpDaemonTest {
       throws Exception
   {
     httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
-        HTTP_DAEMON_PORT,
+        daemonPort,
         resourceInstaller.getTargetDirectory(),
         renderingCharset
     ) ) ;
@@ -479,7 +485,7 @@ public class HttpDaemonTest {
     final DaemonParameters daemonParameters = new DaemonParameters(
         resourceInstaller.getTargetDirectory(),
         GenericParametersConstants.OPTIONPREFIX + DaemonParameters.OPTIONNAME_HTTPDAEMON_PORT,
-        "" + HTTP_DAEMON_PORT,
+        "" + daemonPort,
         GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_FONT_DIRECTORIES,
         directoryAsFile.getAbsolutePath()
     ) ;
@@ -491,10 +497,7 @@ public class HttpDaemonTest {
   }
 
 
-  @After
-  public void tearDown() throws Exception {
-    httpDaemon.stop() ;
-  }
+  private final int daemonPort = TcpPortBooker.THIS.find() ;
 
 
   private static final String CAMINO_USER_AGENT =
@@ -615,7 +618,7 @@ public class HttpDaemonTest {
       throws IOException
   {
     final HttpGet httpGet = new HttpGet(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" + resource.getBaseName() + PDF ) ;
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + PDF ) ;
     final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
 
     final ByteArrayOutputStream responseContent = new ByteArrayOutputStream() ;

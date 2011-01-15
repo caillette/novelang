@@ -21,14 +21,12 @@ import java.io.File;
 import java.io.IOException;
 
 import com.google.common.base.Preconditions;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.StandardToStringStyle;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 /**
  * Creates directories on-demand for test purposes.
@@ -43,13 +41,6 @@ public class DirectoryFixture {
 
   private final String testIdentifier ;
 
-  public DirectoryFixture() {
-    this( NameAwareTestClassRunner.getTestName() ) ;
-  }
-
-  public DirectoryFixture( final Class testClass ) {
-    this( ClassUtils.getShortClassName( testClass ) ) ;
-  }
 
   public DirectoryFixture( final String testIdentifier ) {
     Preconditions.checkArgument( ! StringUtils.isBlank( testIdentifier ) ) ;
@@ -76,37 +67,45 @@ public class DirectoryFixture {
   public static final String DEFAULT_SCRATCH_DIR_NAME = "test-scratch" ;
 
   /**
+   * Synchronize every access to static field on this.
+   */
+  private static final Object LOCK = new Object() ;
+
+  /**
    * Static field holding the directory once defined.
    */
-  private static File allFixturesDirectory ;
+  @SuppressWarnings( { "StaticNonFinalField" } )
+  private static File allFixturesDirectory = null ;
 
-  private File getAllFixturesDirectory() throws IOException {
-    File file = allFixturesDirectory ;
-    if( null == file ) {
+  private static File getAllFixturesDirectory() throws IOException {
+    synchronized( LOCK ) {
+      File file = allFixturesDirectory ;
+      if( null == file ) {
 
-      final String testfilesDirSystemProperty =
-          System.getProperty( SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME ) ;
-      if( null == testfilesDirSystemProperty ) {
-        file = new File( DEFAULT_SCRATCH_DIR_NAME ) ;
-      } else {
-        file = new File( testfilesDirSystemProperty ) ;
-      }
-
-      if(
-          file.exists() &&
-          ! "no".equalsIgnoreCase(
-              System.getProperty( DELETE_SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME ) )
-          ) {
-        FileUtils.deleteDirectory( file ) ;
-      } else {
-        if( file.mkdir() ) {
-          LOGGER.debug( "Created '", file.getAbsolutePath(), "'." ) ;
+        final String testfilesDirSystemProperty =
+            System.getProperty( SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME ) ;
+        if( null == testfilesDirSystemProperty ) {
+          file = new File( DEFAULT_SCRATCH_DIR_NAME ).getCanonicalFile() ;
+        } else {
+          file = new File( testfilesDirSystemProperty ).getCanonicalFile() ;
         }
+
+        if(
+            file.exists() &&
+            ! "no".equalsIgnoreCase(
+                System.getProperty( DELETE_SCRATCH_DIRECTORY_SYSTEM_PROPERTY_NAME ) )
+            ) {
+          FileUtils.deleteDirectory( file ) ;
+        } else {
+          if( file.mkdir() ) {
+            LOGGER.debug( "Created '", file.getAbsolutePath(), "'." ) ;
+          }
+        }
+        LOGGER.info( "Created ", file.getAbsolutePath(), "' as clean directory for all fixtures." ) ;
       }
-      LOGGER.info( "Created ", file.getAbsolutePath(), "' as clean directory for all fixtures." ) ;
+      allFixturesDirectory = file ;
+      return allFixturesDirectory ;
     }
-    allFixturesDirectory = file;
-    return allFixturesDirectory ;
   }
 
   public static final int TIMEOUT_SECONDS = 5 ;
@@ -124,15 +123,6 @@ public class DirectoryFixture {
       }
     }
     return scratchDirectory;
-  }
-
-  public File getDirectory( final String directoryName ) throws IOException {
-    Preconditions.checkArgument( ! StringUtils.isBlank( directoryName ) ) ;
-    final File directory = new File( getDirectory(), directoryName ) ;
-    if( directory.mkdirs() ) {
-      LOGGER.debug( "Created '", directory.getAbsolutePath(), "'." ) ;
-    }
-    return directory ;
   }
 
 

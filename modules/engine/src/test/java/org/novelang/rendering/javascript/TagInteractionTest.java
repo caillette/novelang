@@ -1,6 +1,5 @@
 package org.novelang.rendering.javascript;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,10 +24,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import org.apache.commons.io.FilenameUtils;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -39,8 +36,7 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.testing.DirectoryFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -58,7 +54,6 @@ import static org.novelang.ResourcesForTests.TaggedPart;
  * 
  * @author Laurent Caillette
  */
-@RunWith( value = NameAwareTestClassRunner.class )
 public class TagInteractionTest {
   @Test
   public void justLoadPage() throws IOException, InterruptedException {
@@ -138,28 +133,37 @@ public class TagInteractionTest {
   private HtmlCheckBoxInput tag2Checkbox;
 
 
-  @Before
-  public void before() throws Exception {
-    assertEquals( 24, ALL_HEADERS.size() ) ; 
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() {
+    @Override
+    protected void beforeStatementEvaluation() throws Exception {
+      assertEquals( 24, ALL_HEADERS.size() ) ;
 
-    final String testName = NameAwareTestClassRunner.getTestName() ;
-    final File testDirectory = new DirectoryFixture( testName ).getDirectory();
+      resourceInstaller.copyContent( TaggedPart.dir ) ;
 
-    final ResourceInstaller resourceInstaller = new ResourceInstaller( testDirectory ) ;
-    resourceInstaller.copyContent( TaggedPart.dir ) ;
+      final ResourceLoader resourceLoader =
+          new ClasspathResourceLoader( "/" + ConfigurationTools.BUNDLED_STYLE_DIR ) ;
 
-    final ResourceLoader resourceLoader =
-        new ClasspathResourceLoader( "/" + ConfigurationTools.BUNDLED_STYLE_DIR ) ;
+      httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
+          HTTP_DAEMON_PORT,
+          methodSupport.getDirectory(),
+          resourceLoader
+      ) ) ;
+      httpDaemon.start() ;
 
-    httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
-        HTTP_DAEMON_PORT,
-        testDirectory,
-        resourceLoader
-    ) ) ;
-    httpDaemon.start() ;
+      setupWebClient() ;
 
-    setupWebClient() ;
-  }
+    }
+
+    @Override
+    protected void afterStatementEvaluation() throws Exception {
+      httpDaemon.stop() ;      
+    }
+  } ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
+
+
 
   private void setupWebClient() throws IOException {
     final List< String > collectedStatusMessages =
@@ -202,12 +206,7 @@ public class TagInteractionTest {
     tag2Checkbox = tagList.getInputByName( TaggedPart.TAG2 );
   }
 
-  @After
-  public void tearDown() throws Exception {
-//    TimeUnit.SECONDS.sleep( 3600 ) ;
-    httpDaemon.stop() ;
-  }
-    
+
   private static List< HtmlElement > extractAllHeaders( final HtmlPage htmlPage ) {
     final List< HtmlElement > allHeaders = Lists.newArrayList() ;
     allHeaders.addAll( ( Collection< ? extends HtmlElement > )

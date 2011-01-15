@@ -21,8 +21,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.novelang.ResourcesForTests;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.DocumentRequest;
@@ -38,7 +38,7 @@ import static org.novelang.produce.DocumentRequest.PAGEIDENTIFIER_PREFIX;
  */
 public class MultipageFixture {
 
-  private final JUnitAwareResourceInstaller resourceInstaller ;
+  private final ResourceInstaller resourceInstaller ;
   private final Resource stylesheetResource ;
   private final File stylesheetFile ;
   protected final Resource opusResource ;
@@ -49,14 +49,7 @@ public class MultipageFixture {
   private final File outputDirectory;
 
   public MultipageFixture(
-      final Resource stylesheetResource,
-      final Resource... otherResources
-  ) throws Exception {
-    this( new JUnitAwareResourceInstaller(), stylesheetResource, otherResources ) ;
-  }
-
-  public MultipageFixture(
-      final JUnitAwareResourceInstaller resourceInstaller,
+      final ResourceInstaller resourceInstaller,
       final Resource stylesheetResource,
       final Resource... otherResources
   ) throws Exception {

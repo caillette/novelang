@@ -17,41 +17,32 @@
 package org.novelang.batch;
 
 import java.io.File;
-import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.SystemUtils;
-import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.configuration.ConfigurationTools;
 import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
-import org.novelang.outfit.DefaultCharset;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.multipage.MultipageFixture;
-import org.novelang.testing.NoSystemExit;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.novelang.produce.DocumentRequest.PAGEIDENTIFIER_PREFIX;
 
 /**
  * Tests for {@link DocumentGenerator}.
  *
  * @author Laurent Caillette
  */
-@RunWith( value = NameAwareTestClassRunner.class )
 public class BatchTest {
 
   @Test
   public void generateOneDocumentOk() throws Exception {
-    final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copy( resource ) ;
     final String renderedDocumentName = resource.getBaseName() + "." + MIME_FILE_EXTENSION ;
@@ -90,24 +81,27 @@ public class BatchTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( BatchTest.class );
 
-  private static final File USER_DIR = new File( SystemUtils.USER_DIR ) ;
-
-  private final NoSystemExit noSystemExit = new NoSystemExit() ;
 
   static {
     ResourcesForTests.initialize() ;
   }
 
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
+
+
   private static final String MIME_FILE_EXTENSION = RenditionMimeType.NOVELLA.getFileExtension() ;
-  private static final String[] COMMAND_LINE_ARGUMENT_EMPTY = new String[ 0 ];
 
 
-  private static void runMultipageRendering(
+
+  private void runMultipageRendering(
       final Resource stylesheetResource,
       final Resource... otherResources
   ) throws Exception {
     final MultipageFixture multipageFixture =
-        new MultipageFixture( stylesheetResource, otherResources ) ;
+        new MultipageFixture( resourceInstaller, stylesheetResource, otherResources ) ;
 
     final DocumentGeneratorParameters parameters = DocumentGenerator.createParameters(
         new String[] {
@@ -123,32 +117,5 @@ public class BatchTest {
     multipageFixture.verifyGeneratedFiles() ;
   }
 
-  
-  @After
-  public void tearDown() {
-    noSystemExit.uninstall() ;
-  }
 
-  private static File createFileObject(
-      final File outputDirectory,
-      final Resource opusResource,
-      final String pageIdentifierAsString
-  ) {
-    return new File(
-        outputDirectory,
-        opusResource.getBaseName()
-            + ( pageIdentifierAsString == null ? ""
-                : PAGEIDENTIFIER_PREFIX + pageIdentifierAsString )
-            + "." + MIME_FILE_EXTENSION
-    ) ;
-  }
-
-  private static void verify( final File ancillaryDocumentFile, final String mustContain )
-      throws IOException
-  {
-    assertThat( ancillaryDocumentFile ).exists() ;
-    final String fileContent = FileUtils.readFileToString(
-        ancillaryDocumentFile, DefaultCharset.RENDERING.name() ) ;
-    assertThat( fileContent ).contains( mustContain ) ;
-  }
 }

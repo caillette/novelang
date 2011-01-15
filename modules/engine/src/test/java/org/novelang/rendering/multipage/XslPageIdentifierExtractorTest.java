@@ -25,8 +25,8 @@ import com.google.common.collect.ImmutableSet;
 import javax.xml.transform.URIResolver;
 import org.apache.commons.io.FileUtils;
 import org.fest.assertions.Assertions;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
@@ -42,8 +42,7 @@ import org.novelang.outfit.xml.LocalEntityResolver;
 import org.novelang.outfit.xml.LocalUriResolver;
 import org.novelang.outfit.xml.SaxRecorder;
 import org.novelang.outfit.xml.TransformerCompositeException;
-import org.novelang.testing.DirectoryFixture;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -57,7 +56,6 @@ import static org.novelang.ResourcesForTests.initialize;
  *
  * @author Laurent Caillette
  */
-@RunWith( value = NameAwareTestClassRunner.class )
 public class XslPageIdentifierExtractorTest {
 
   @Test
@@ -111,15 +109,19 @@ public class XslPageIdentifierExtractorTest {
     initialize() ;
   }
 
-  private static void verify(
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
+
+
+  private void verify(
       final Resource novellaDocument,
       final ImmutableMap< PageIdentifier, String > expectedPages
   ) throws Exception {
-    final ResourceInstaller installer =
-        new ResourceInstaller( new DirectoryFixture().getDirectory() ) ;
     final File stylesheetFile =
-        installer.copy( ResourcesForTests.Multipage.MULTIPAGE_XSL ) ;
-    installer.copy( novellaDocument ) ;
+        resourceInstaller.copy( ResourcesForTests.Multipage.MULTIPAGE_XSL ) ;
+    resourceInstaller.copy( novellaDocument ) ;
 
     final ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader() ;
     final EntityResolver entityResolver =
@@ -150,8 +152,8 @@ public class XslPageIdentifierExtractorTest {
         entityResolver, uriResolver, stylesheetPlayer ) ;
 
     final Opus opus = new Opus(
-        installer.getTargetDirectory(),
-        installer.getTargetDirectory(),
+        resourceInstaller.getTargetDirectory(),
+        resourceInstaller.getTargetDirectory(),
         Executors.newSingleThreadExecutor(),
         "insert file:" + novellaDocument.getName(),
         DefaultCharset.SOURCE,

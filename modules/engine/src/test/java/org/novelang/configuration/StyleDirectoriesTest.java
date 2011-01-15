@@ -3,16 +3,16 @@ package org.novelang.configuration;
 import java.io.File;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourcesForTests;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.configuration.parse.ArgumentException;
 import org.novelang.configuration.parse.DaemonParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.outfit.loader.ResourceName;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 /**
  * Test for {@link ConfigurationTools} dedicated to style directories, which comes with some
@@ -20,7 +20,6 @@ import org.novelang.testing.junit.NameAwareTestClassRunner;
  * 
  * @author Laurent Caillette
  */
-@RunWith( NameAwareTestClassRunner.class )
 public class StyleDirectoriesTest {
   
   @Test
@@ -69,7 +68,10 @@ public class StyleDirectoriesTest {
     ResourcesForTests.initialize() ;
   }
   
-  private final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ; 
-  
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
+
   
 }

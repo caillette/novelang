@@ -81,7 +81,6 @@
     <orderEntry type="module" module-name="parser-antlr" />
     <orderEntry type="module" module-name="tree" />
     <orderEntry type="module" module-name="parser-ground" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr:3.2" level="project" />
     <orderEntry type="module" module-name="parser-supplement" />
     <orderEntry type="module" module-name="syntactic-tree" />
     <orderEntry type="module" module-name="unicode-reader" />

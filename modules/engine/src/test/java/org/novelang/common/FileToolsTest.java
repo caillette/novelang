@@ -24,8 +24,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.testing.DirectoryFixture;
+import org.novelang.testing.junit.MethodSupport;
 
 /**
  * Tests for {@link FileTools}.
@@ -101,18 +104,21 @@ public class FileToolsTest {
   private File childDirectory;
   private File childFile;
 
-  @Before
-  public void setUp() throws IOException {
-    
-    final DirectoryFixture fixture = new DirectoryFixture( getClass().getName() ) ;
-    final File scratchDirectory = fixture.getDirectory() ;
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() {
+    @Override
+    protected void beforeStatementEvaluation() throws Exception {
+      parentNoTrailingSeparator = createDirectory( getDirectory(), "parent" ) ;
+      parentWithTrailingSeparator = createDirectory( getDirectory(), "parent/" ) ;
+      childDirectory = createDirectory( parentNoTrailingSeparator, "childDirectory" ) ;
+      createDirectory( parentNoTrailingSeparator, "grandChildDirectory" );
+      childFile = new File( parentNoTrailingSeparator, "childFile" ) ;
 
-    parentNoTrailingSeparator = createDirectory( scratchDirectory, "parent" ) ;
-    parentWithTrailingSeparator = createDirectory( scratchDirectory, "parent/" ) ;
-    childDirectory = createDirectory( parentNoTrailingSeparator, "childDirectory" ) ;
-    createDirectory( parentNoTrailingSeparator, "grandChildDirectory" );
-    childFile = new File( parentNoTrailingSeparator, "childFile" ) ;
-  }
+
+    }
+  };
+
+
 
   private static File createDirectory( final File parent, final String name ) {
     final File directory = new File( parent, name ) ;

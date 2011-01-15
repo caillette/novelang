@@ -18,11 +18,11 @@ package org.novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
 
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
-import org.novelang.common.filefixture.JUnitAwareResourceInstaller;
+import org.novelang.common.filefixture.ResourceInstaller;
 import org.novelang.configuration.ProducerConfiguration;
 import org.novelang.configuration.RenditionKinematic;
 import org.novelang.logger.Logger;
@@ -30,23 +30,22 @@ import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.produce.DocumentProducer;
-import org.novelang.produce.GenericRequest;
 import org.novelang.produce.DocumentRequest;
+import org.novelang.produce.GenericRequest;
 import org.novelang.produce.StreamDirector;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 /**
  * Test for displaying page and chapter numbers, including a Java function call.
  *
  * @author Laurent Caillette
  */
-@RunWith( NameAwareTestClassRunner.class)
 public class NumberingTest {
 
 
   @Test
   public void testNodeset() throws Exception {
-    final JUnitAwareResourceInstaller resourceInstaller = new JUnitAwareResourceInstaller() ;
+
     resourceInstaller.copy( ResourcesForTests.XslFormatting.dir ) ;
 
 
@@ -94,5 +93,10 @@ public class NumberingTest {
   static {
     ResourcesForTests.initialize() ;
   }
+
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+  private final ResourceInstaller resourceInstaller = new ResourceInstaller( methodSupport ) ;
 
 }

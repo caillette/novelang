@@ -17,15 +17,12 @@
 package org.novelang.parser.antlr;
 
 import com.google.common.base.Joiner;
-import org.novelang.common.Problem;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
-import org.novelang.logger.Logger;
-import org.novelang.logger.LoggerFactory;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.novelang.common.Problem;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 
 import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
 
@@ -34,7 +31,6 @@ import static org.novelang.parser.antlr.AntlrTestHelper.BREAK;
  *
  * @author Laurent Caillette
  */
-@RunWith( value = NameAwareTestClassRunner.class )
 public class DelimiterProblemTest {
 
   @Test
@@ -114,12 +110,6 @@ public class DelimiterProblemTest {
 // =======
 
   private static final Logger LOGGER = LoggerFactory.getLogger( DelimiterProblemTest.class ) ;
-
-  @Before
-  public void before() {
-    final String testName = NameAwareTestClassRunner.getTestName() ;
-    LOGGER.info( "\n\nRunning ", testName ) ;
-  }
 
 
   private static void process( 

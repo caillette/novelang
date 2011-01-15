@@ -21,11 +21,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
-import org.novelang.testing.DirectoryFixture;
 import org.apache.commons.io.FileUtils;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.novelang.testing.junit.NameAwareTestClassRunner;
+import org.novelang.testing.junit.MethodSupport;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -35,14 +34,13 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Laurent Caillette
  */
-@RunWith( NameAwareTestClassRunner.class )
 public class StupidListenerTest {
 
   @Test
   public void startAndListen() throws IOException, InterruptedException {
     final int port = org.novelang.outfit.TcpPortBooker.THIS.find() ;
     final File logFile = new File(
-        new DirectoryFixture().getDirectory(),
+        methodSupport.getDirectory(),
         StupidListener.class.getSimpleName() + ".txt"
     ).getCanonicalFile() ;
 
@@ -69,4 +67,15 @@ public class StupidListenerTest {
     ) ;
 
   }
+
+
+// =======
+// Fixture
+// =======
+
+
+  @Rule
+  public final MethodSupport methodSupport = new MethodSupport() ;
+
+
 }
