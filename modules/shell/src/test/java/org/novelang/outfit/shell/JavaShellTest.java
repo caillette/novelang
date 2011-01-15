@@ -219,8 +219,9 @@ public class JavaShellTest {
       return input.startsWith( "Started." ) ;
     }
   } ;
+
   @Rule
-  public final MethodSupport methodSupport = new MethodSupport( JavaShellTest.class ) ;
+  public final MethodSupport methodSupport = new MethodSupport() ;
 
 
   @SuppressWarnings( { "ThrowableInstanceNeverThrown" } )
