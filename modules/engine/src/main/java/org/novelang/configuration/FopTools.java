@@ -167,7 +167,7 @@ public class FopTools {
   }
 
 
-  /*package*/ static FopFactory createFopFactory(
+  public static FopFactory createFopFactory(
       final Iterable< File > fontsDirectories,
       final File hyphenationDirectory
   )
@@ -178,7 +178,7 @@ public class FopTools {
     Configuration hyphenationBase = null ;
     boolean configure = false ;
 
-    if( fontsDirectories.iterator().hasNext() ) {
+    if( fontsDirectories != null && fontsDirectories.iterator().hasNext() ) {
       renderers = createRenderersConfiguration( fontsDirectories ) ;
       configure = true ;
     }

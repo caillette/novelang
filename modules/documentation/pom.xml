@@ -63,7 +63,8 @@
             <id>produce-documents</id>
             <phase>compile</phase>
             <goals>
-              <goal>produce</goal>
+              <!--<goal>produce</goal>-->
+              <goal>produceNoFork</goal>
             </goals>
             <configuration>
               <workingDirectory>${enhancedDocumentSources}</workingDirectory>

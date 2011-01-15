@@ -70,7 +70,7 @@ public class ConfigurationTools {
   public static final String DEFAULT_FONTS_DIRECTORY_NAME = "fonts" ;
   public static final String DEFAULT_HYPHENATION_DIRECTORY_NAME = "hyphenation" ;
   public static final String BUNDLED_STYLE_DIR = "style" ;
-  private static final String DEFAULT_STYLE_DIR = "style" ;
+  public static final String DEFAULT_STYLE_DIR = "style" ;
   public static final String DEFAULT_OUTPUT_DIRECTORY_NAME = "output" ;
   public static final Charset DEFAULT_RENDERING_CHARSET = DefaultCharset.RENDERING ;
 

@@ -33,6 +33,8 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.multipage.PagesExtractor;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Dispatches one or more {@link Page}s into {@code OutputStream}s, and feeds them with rendered
  * content.
@@ -142,7 +144,7 @@ public abstract class StreamDirector {
       final DocumentRequest documentRequest, 
       final File directory
   ) {
-    Preconditions.checkArgument( directory.isDirectory() ) ;
+    checkArgument( directory.isDirectory(), "Not a directory: '" + directory + "'" ) ;
 
     return new StreamDirector() {
       @Override
