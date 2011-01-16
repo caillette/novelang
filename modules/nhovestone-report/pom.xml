@@ -30,7 +30,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <nhovestoneWorkingDirectory>${build.directory}</nhovestoneWorkingDirectory>
+    <nhovestoneWorkingDirectory>${project.build.directory}</nhovestoneWorkingDirectory>
 
     <!-- Need a dedicated directory because Novelang batch generation cleans output directory. -->
     <nhovestoneReportDirectory>${nhovestoneWorkingDirectory}/report</nhovestoneReportDirectory>
@@ -46,6 +46,18 @@
     <dependency>
       <groupId>${project.parent.groupId}</groupId>
       <artifactId>Novelang-nhovestone-plugin</artifactId>
+      <version>${project.parent.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>${project.parent.groupId}</groupId>
+          <artifactId>Novelang-logger-mojo</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.parent.groupId}</groupId>
+      <artifactId>Novelang-logger-slf4j</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
 
@@ -65,6 +77,7 @@
         <executions>
           <execution>
             <phase>generate-resources</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -94,6 +107,7 @@
           <execution>
             <id>nhovestone</id>
             <phase>integration-test</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <goal>generate</goal>
             </goals>
@@ -122,7 +136,7 @@
               <contentRootDirectory>${nhovestoneWorkingDirectory}</contentRootDirectory>
               <outputDirectory>${nhovestoneReportDirectory}</outputDirectory>
               <documentsToRender>
-                <param>${nhovestoneReportFilename}</param>
+                <param>/${nhovestoneReportFilename}</param>
               </documentsToRender>
             </configuration>
           </execution>
@@ -145,6 +159,7 @@
           <execution>
             <id>upload-nhovestone-report</id>
             <phase>deploy</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <goal>upload</goal>
             </goals>

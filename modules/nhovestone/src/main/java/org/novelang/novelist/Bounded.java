@@ -34,7 +34,7 @@ public class Bounded {
 // Percentage
 // ==========
 
-  private static Percentage newPercentage( final float value ) {
+  public static Percentage newPercentage( final float value ) {
     return new Percentage( value ) ;
   }
 
