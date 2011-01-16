@@ -9,7 +9,6 @@
  */
 package org.novelang.outfit;
 
-import org.fest.assertions.Assert;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
