@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,7 @@ public class Nhovestone {
     }
 
 
-    run( log, scenariiDirectory, versionsDirectory, versions ) ;
+    run( log, scenariiDirectory, versionsDirectory, versions, 1000, 10000, 32 ) ;
 
     System.exit( 0 ) ;
   }
@@ -97,7 +96,10 @@ public class Nhovestone {
       final Logger log,
       final File scenariiDirectory,
       final File versionsDirectory,
-      final Iterable< Version > versions
+      final Iterable<Version> versions,
+      final int warmupIterationCount,
+      final int maximumIterations,
+      final int jvmHeapSizeMegabytes
   )
       throws
       IOException,
@@ -107,13 +109,13 @@ public class Nhovestone {
   {
     final ScenarioLibrary.ConfigurationForTimeMeasurement baseConfiguration =
         Husk.create( ScenarioLibrary.ConfigurationForTimeMeasurement.class )
-        .withWarmupIterationCount( 1000 )
-        .withMaximumIterations( 10000 )
+        .withWarmupIterationCount( warmupIterationCount )
+        .withMaximumIterations( maximumIterations )
         .withScenariiDirectory( scenariiDirectory )
         .withInstallationsDirectory( versionsDirectory )
         .withVersions( versions )
         .withFirstTcpPort( 9900 )
-        .withJvmHeapSizeMegabytes( 32 )
+        .withJvmHeapSizeMegabytes( jvmHeapSizeMegabytes )
         .withMeasurer( new TimeMeasurer() )
     ;
 

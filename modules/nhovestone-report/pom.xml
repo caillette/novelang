@@ -39,6 +39,10 @@
     <distributionsDirectory>../../distrib</distributionsDirectory>
     <nhovestoneReportFilename>nhovestone.pdf</nhovestoneReportFilename>
     <benchmarkedVersions>${project.version},0.43.0,0.38.1</benchmarkedVersions>
+    <warmupIterationCount>10</warmupIterationCount>
+    <maximumIterations>10000</maximumIterations>
+    <jvmHeapSizeMegabytes>24</jvmHeapSizeMegabytes>
+
   </properties>
 
   <dependencies>
@@ -115,6 +119,9 @@
               <workingDirectory>${nhovestoneWorkingDirectory}</workingDirectory>
               <distributionsDirectory>${distributionsDirectory}</distributionsDirectory>
               <novelangVersions>${benchmarkedVersions}</novelangVersions>
+              <warmupIterationCount>${warmupIterationCount}</warmupIterationCount>
+              <maximumIterations>${maximumIterations}</maximumIterations>
+              <jvmHeapSizeMegabytes>${jvmHeapSizeMegabytes}</jvmHeapSizeMegabytes>
             </configuration>
           </execution>
         </executions>

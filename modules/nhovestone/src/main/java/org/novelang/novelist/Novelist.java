@@ -84,7 +84,7 @@ public class Novelist {
       throws IOException
   {
     final File targetFile = new File( 
-        directory, prototype + "-" + String.format( "%04d", counter ) + ".novella" ) ;
+        directory, prototype + "-" + String.format( "%04d", counter ) + ".nlp" ) ;
     if( targetFile.exists() ) {
       if( ! targetFile.delete() ) {
         throw new IOException( "Could not delete file: '" + targetFile.getAbsolutePath() + "'" ) ;

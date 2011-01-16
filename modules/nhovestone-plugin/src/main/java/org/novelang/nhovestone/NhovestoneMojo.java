@@ -54,8 +54,31 @@ public class NhovestoneMojo extends AbstractMojo {
    * Comma-separated list of Novelang versions.
    *
    * @parameter
+   * @required
    */
   private String novelangVersions = null ;
+
+  /**
+   * Iteration count for warmump.
+   *
+   * @parameter
+   */
+  private int warmupIterationCount = 1000;
+
+
+  /**
+   * Maximum number of requests for each benchmarked Novelang server, iterations not included.
+   *
+   * @parameter
+   */
+  private int maximumIterations = 10000;
+
+  /**
+   * Size of JVM heap in megabytes.
+   *
+   * @parameter
+   */
+  private int jvmHeapSizeMegabytes = 32;
 
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
@@ -71,7 +94,15 @@ public class NhovestoneMojo extends AbstractMojo {
 
     try {
       final Iterable< Version > versions = NhovestoneTools.parseVersions( benchmarkedVersions ) ;
-      Nhovestone.run( logger, workingDirectory, distributionsDirectory, versions ) ;
+      Nhovestone.run(
+          logger,
+          workingDirectory,
+          distributionsDirectory,
+          versions,
+          warmupIterationCount,
+          maximumIterations,
+          jvmHeapSizeMegabytes
+      ) ;
     } catch( Exception e ) {
       throw new MojoExecutionException( "Couldn't run Nhovestone", e );
     }
