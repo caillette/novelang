@@ -41,7 +41,9 @@
     <benchmarkedVersions>${project.version},0.43.0,0.38.1</benchmarkedVersions>
     <warmupIterationCount>10</warmupIterationCount>
     <maximumIterations>10000</maximumIterations>
-    <jvmHeapSizeMegabytes>24</jvmHeapSizeMegabytes>
+
+    <!--24 is too small, breaks at startup.-->
+    <jvmHeapSizeMegabytes>32</jvmHeapSizeMegabytes>
 
   </properties>
 
