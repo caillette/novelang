@@ -62,5 +62,25 @@ public class TemporaryFileTools {
   private static final String DEFAULT_DIRECTORY_NAME = "$temporary$" ;
   private static final String JAVA_TEMPORARY_DIR_KEY = "java.io.tmpdir" ;
 
+  /**
+   * Default implementation that relies on {@value #JAVA_TEMPORARY_DIR_KEY}.
+   */
+  public static final TemporaryFileService TEMPORARY_FILE_SERVICE = new TemporaryFileService() {
+    @Override
+    public File createFile( final String prefix, final String suffix ) throws IOException {
+      return File.createTempFile( prefix, suffix ) ;
+    }
+
+    @Override
+    public File createDirectory( final String radix ) {
+      throw new UnsupportedOperationException( "TODO" ) ;
+    }
+
+    @Override
+    public FileSupplier createFileSupplier( final String prefix, final String suffix ) {
+      throw new UnsupportedOperationException( "TODO" ) ;
+    }
+  } ;
+
 
 }
