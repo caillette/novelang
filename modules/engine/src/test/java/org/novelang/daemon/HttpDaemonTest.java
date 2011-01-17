@@ -77,6 +77,20 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * End-to-end tests with {@link HttpDaemon} and the download of some generated documents.
+ * <p>
+ * TODO: fix font-related tests that sometimes break when ran in parallel.
+ * (This happened for {@link #fontListingMakesNoSmoke()} returning a valid page.)
+ * This is because FOP's font cache is not thread-safe, at least with FOP-0.96.
+ * Solutions:
+ * <ul>
+ *   <li>Find a way to configure FOP-1.0.
+ *   <li>Wait for next-to-FOP-1.0 version.
+ *       <a href="http://xmlgraphics.apache.org/fop/changes.html#Changes+to+the+Font+Subsystem">FOP Changelist</a>
+ *       says: "Reinstated support for being able to specify a font cache filepath in the fop
+ *       user configuration."
+ *   <li>Refactor tests to move all font-related tests in one test class and use a
+ *       monothreaded {@link org.novelang.testing.junit.MethodSupport}.
+ * </ul>
  *
  * @author Laurent Caillette
  */
