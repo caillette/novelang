@@ -166,10 +166,8 @@ public class JavaShellTest {
         ) ;
 
         final List< String > log = readLines( shellFixture.getLogFile() ) ;
-        assertThat( log )
-            .hasSize( 1 )
-            .contains( "Starting up and listening..." )
-        ;
+        assertThat( log ).hasSize( 1 ) ;
+        assertThat( log.get( 0 ) ).contains( "Starting up" ).contains( "listening..." ) ;
       } finally {
         javaShell.shutdown( ShutdownStyle.FORCED ) ;
       }
@@ -194,10 +192,9 @@ public class JavaShellTest {
       }
 
       final List< String > log = readLines( shellFixture.getLogFile() ) ;
-      assertThat( log )
-          .hasSize( 2 )
-          .contains( "Starting up and listening...", "Terminated." )
-      ;
+      assertThat( log ).hasSize( 2 ) ;
+      assertThat( log.get( 0 ) ).contains( "Starting up" ).contains( "listening" ) ;
+      assertThat( log.get( 1 ) ).contains( "Terminated." ) ;
     }
 
   }
