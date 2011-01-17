@@ -65,7 +65,7 @@ public abstract class StreamDirector {
       final ImmutableMap< PageIdentifier,String > pageMap =
           pageIdentifierExtractor.extractPages( renderable.getDocumentTree() ) ;
       if( pageMap.isEmpty() ) {
-        LOGGER.info( "No pageMap defined." ) ;
+        LOGGER.info( "No pageMap defined, the document is single-paged." ) ;
         feedDefaultPage( renderable, streamFeeder ) ;
       } else {
         LOGGER.info( "using pageMap: ", pageMap ) ;
