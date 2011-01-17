@@ -20,10 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.commons.lang.SystemUtils;
-import org.novelang.configuration.parse.GenericParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
-import org.novelang.logger.ConsoleLogger;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.logger.NullLogger;
@@ -85,10 +82,10 @@ public class LogbackConfigurationTools {
   ) {
     final File logDirectory;
     if( null == logDirectoryFromParameters ) {
-      logDirectory = canonicize( SystemUtils.getJavaIoTmpDir() ) ;
+      logDirectory = canonicize( new File( DEFAULT_LOG_DIR ) ) ;
       logger.info(
-          "Got log directory from default value (temporary directory) '",
-          logDirectory.getAbsolutePath(),
+          "Got log directory from default value '",
+          DEFAULT_LOG_DIR,
           "' (option not set: ",
           GenericParametersConstants.getLogDirectoryOptionDescription(),
           ")."

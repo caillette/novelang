@@ -29,7 +29,7 @@ The ``--log-dir`` option sets where Novelang writes its log files.
 --log-dir logs
 >>>
 
-Default value is the temporary dir (what's ``--temporary-dir`` option evaluates to).
+Default value is current directory (the value of ``user.dir`` system property).
 
 
 === The ``--font-dirs`` option
