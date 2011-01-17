@@ -90,6 +90,9 @@ public class NhovestoneMojo extends AbstractMojo {
     logger.info( "Using distributions directory: '" + distributionsDirectory + "'." ) ;
     final String benchmarkedVersions = novelangVersions == null ? "SNAPSHOT" : novelangVersions ;
     logger.info( "Using version(s): '" + benchmarkedVersions + "'." ) ;
+    logger.info( "Using warmupIterationCount: " + warmupIterationCount + "." ) ;
+    logger.info( "Using maximumIterations: " + maximumIterations + "." ) ;
+    logger.info( "Using jvmHeapSizeMegabytes: " + jvmHeapSizeMegabytes + "." ) ;
 
 
     try {

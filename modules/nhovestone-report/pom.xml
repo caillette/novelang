@@ -39,7 +39,10 @@
     <distributionsDirectory>../../distrib</distributionsDirectory>
     <nhovestoneReportFilename>nhovestone.pdf</nhovestoneReportFilename>
     <benchmarkedVersions>${project.version},0.43.0,0.38.1</benchmarkedVersions>
-    <warmupIterationCount>10</warmupIterationCount>
+
+    <!--100 is too small, erratic response time may trigger early termination.-->
+    <warmupIterationCount>1000</warmupIterationCount>
+
     <maximumIterations>10000</maximumIterations>
 
     <!--24 is too small, breaks at startup.-->
