@@ -84,8 +84,10 @@ public abstract class LoggerFactory {
         final LoggerFactory effectiveLoggerFactory = createEffectiveLoggerFactory() ;
         DeferringLoggerFactory.flush( effectiveLoggerFactory ) ;
         loggerFactory = effectiveLoggerFactory ;
-        LoggerFactory.getLogger( LoggerFactory.class )
-            .info( "Flushed deferred log in effective logger." ) ;
+        LoggerFactory.getLogger( LoggerFactory.class ).info(
+            "Flushed deferred log in effective logger " +
+            "(lines above may have slightly outdated timestamps)."
+        ) ;
       }
     }
   }

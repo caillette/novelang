@@ -10,18 +10,31 @@ The ``--content-root`` option sets the base directory to another value than curr
 >>>
 
 
-=== The ``--log-dir`` option
+=== The ``--temporary-dir`` option
 
-The ``--log-dir`` option sets where Novelang daemon writes its log files.
+The ``--temporary-dir`` option sets where Novelang writes its log files.
 
 <<<
---log-dir=logs
+--log-temporary temporary-files
 >>>
+
+Default value is ``$temporary$``.  
+
+
+=== The ``--log-dir`` option
+
+The ``--log-dir`` option sets where Novelang writes its log files.
+
+<<<
+--log-dir logs
+>>>
+
+Default value is the temporary dir (what's ``--temporary-dir`` option evaluates to).
 
 
 === The ``--font-dirs`` option
 
-The ``--font-dirs`` option sets multiple directories where Novelang daemon looks for fonts.
+The ``--font-dirs`` option sets multiple directories where Novelang looks for fonts.
 
 <<<
 --font-dirs my/fonts-1 /Users/Shared/Fonts
@@ -30,7 +43,7 @@ The ``--font-dirs`` option sets multiple directories where Novelang daemon looks
 
 === The ``--style-dirs`` option
 
-The ``--style-dirs`` option sets multiple directories where Novelang daemon looks for stylesheets 
+The ``--style-dirs`` option sets multiple directories where Novelang looks for stylesheets
 and related resources. See chapter about stylesheet for details.
 
 
@@ -44,7 +57,7 @@ and related resources. See chapter about stylesheet for details.
 The ``--hyphenation-dir`` option sets where Novelang should attempt to load hyphenation files from.
 
 <<<
---hyphenation-dir=my/directory
+--hyphenation-dir my/directory
 >>>
 
 

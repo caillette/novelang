@@ -34,6 +34,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.LogbackConfigurationTools;
 import org.novelang.outfit.EnvironmentTools;
+import org.novelang.outfit.TemporaryFileTools;
 
 /**
  * The single entry point for launching all Novelang commands.
@@ -56,6 +57,7 @@ public class Main {
     final MainCaller caller = findMainCaller( originalArguments ) ;
     final GenericParameters parameters = createParametersOrExit( originalArguments, caller ) ;
 
+    TemporaryFileTools.setupTemporaryDirectory( parameters.getTemporaryDirectory() ) ;
     LogbackConfigurationTools.printLogbackConfigurationFiles() ;
     LogbackConfigurationTools.fixLogDirectory( parameters.getLogDirectory() ) ;
 

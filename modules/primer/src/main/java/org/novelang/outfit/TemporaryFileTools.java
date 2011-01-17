@@ -54,6 +54,8 @@ public class TemporaryFileTools {
       LOGGER.info( "Created '", actualDirectory.getAbsolutePath(), "'." ) ;
     }
     System.setProperty( JAVA_TEMPORARY_DIR_KEY, actualDirectory.getAbsolutePath() ) ;
+    LOGGER.info( "System property [", JAVA_TEMPORARY_DIR_KEY, "] ",
+        "set to '", actualDirectory.getAbsolutePath(), "'." ) ;
     return actualDirectory ;
   }
 
