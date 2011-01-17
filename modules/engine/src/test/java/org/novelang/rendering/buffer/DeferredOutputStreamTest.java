@@ -20,8 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import org.fest.assertions.Assertions;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.outfit.TemporaryFileService;
@@ -30,17 +28,15 @@ import org.novelang.testing.junit.MethodSupport;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for {@link org.novelang.rendering.buffer.DeferringOutputStream}.
+ * Tests for {@link DeferredOutputStream}.
  *
  * @author Laurent Caillette
  */
-@Ignore( "Missing implementation")
-public class DeferringOutputStreamTest {
+public class DeferredOutputStreamTest {
 
   @Test
-  public void overflowHeapMemorySize() throws IOException {
-    final DeferringOutputStream deferringOutputStream = new DeferringOutputStream( 
-        fileSupplier, 1 ) ;
+  public void overflowHeapMemorySize2() throws IOException {
+    final DeferredOutputStream deferringOutputStream = createDeferredOutputStream( 1 );
     assertThat( fileSupplier.file ).doesNotExist() ;
     deferringOutputStream.write( 1 ) ;
     deferringOutputStream.write( 2 ) ;
@@ -55,10 +51,38 @@ public class DeferringOutputStreamTest {
     assertThat( fileSupplier.file ).doesNotExist() ;
   }
 
+  @Test
+  public void overflowHeapMemorySize4() throws IOException {
+    final DeferredOutputStream deferringOutputStream = createDeferredOutputStream( 1 );
+    assertThat( fileSupplier.file ).doesNotExist() ;
+    deferringOutputStream.write( new byte[] { 1, 2, 3, 4 }, 0, 4 ) ;
+    assertThat( fileSupplier.file ).exists() ;
+
+    deferringOutputStream.flush() ;
+    final ByteArrayOutputStream capture = new ByteArrayOutputStream() ;
+    deferringOutputStream.copy( capture ) ;
+    assertThat( capture.toByteArray() ).contains( new byte[]{ 1, 2, 3, 4 } ) ;
+
+    deferringOutputStream.release() ;
+    assertThat( fileSupplier.file ).doesNotExist() ;
+  }
+
+  @Test( expected = IllegalStateException.class )
+  public void noAccessPastRelease() throws IOException {
+    final DeferredOutputStream deferringOutputStream = createDeferredOutputStream( 1 ) ;
+    deferringOutputStream.write( 1 ) ;
+    deferringOutputStream.release() ;
+    deferringOutputStream.write( 1 ) ;
+  }
+
 
 // =======
 // Fixture
 // =======
+
+  private DeferredOutputStream createDeferredOutputStream( final int size ) {
+    return new DeferredOutputStream( fileSupplier, size ) ;
+  }
 
   @Rule
   public final MethodSupport methodSupport = new MethodSupport() {
