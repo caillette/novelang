@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
+import com.google.common.base.Throwables;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -126,6 +127,7 @@ public class MethodSupport implements MethodRule, Supplier< File > {
         base.evaluate();
       } catch( Throwable throwable ) {
         LOGGER.error( throwable, "Test failed." ) ;
+        Throwables.propagateIfPossible( throwable ) ;
       } finally {
         afterStatementEvaluation() ;
       }
