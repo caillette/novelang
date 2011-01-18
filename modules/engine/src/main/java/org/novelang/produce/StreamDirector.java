@@ -29,7 +29,7 @@ import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.TemporaryFileTools;
-import org.novelang.rendering.buffer.DeferredOutputStream;
+import org.novelang.rendering.buffer.CisternOutputStream;
 import org.novelang.rendering.multipage.PagesExtractor;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -52,7 +52,7 @@ public abstract class StreamDirector {
   private static final Logger LOGGER = LoggerFactory.getLogger( StreamDirector.class ) ;
 
   /**
-   * Buffer size for {@link org.novelang.rendering.buffer.DeferredOutputStream}.
+   * Buffer size for {@link org.novelang.rendering.buffer.CisternOutputStream}.
    */
   private static final int BUFFER_SIZE_BYTES = 1024 * 1024 ;
 
@@ -103,8 +103,8 @@ public abstract class StreamDirector {
  ) throws Exception {
     final OutputStream rawOutputStream =
         getOutputStream( page == null ? null : page.getPageIdentifier() ) ;
-    final DeferredOutputStream deferredOutputStream = new DeferredOutputStream(
-        TemporaryFileTools.TEMPORARY_FILE_SERVICE.createFileSupplier( "page", "bin" ),
+    final CisternOutputStream deferredOutputStream = new CisternOutputStream(
+        TemporaryFileTools.TEMPORARY_FILE_SERVICE.createFileSupplier( "page", ".any" ),
         BUFFER_SIZE_BYTES
     ) ;
     try {

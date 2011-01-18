@@ -36,9 +36,9 @@ import org.novelang.outfit.TemporaryFileService;
  *
  * @author Laurent Caillette
  */
-public class DeferredOutputStream extends OutputStream {
+public class CisternOutputStream extends OutputStream {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger( DeferredOutputStream.class ) ;
+  private static final Logger LOGGER = LoggerFactory.getLogger( CisternOutputStream.class ) ;
 
   private byte[] bytes ;
   private int byteCount ;
@@ -52,7 +52,7 @@ public class DeferredOutputStream extends OutputStream {
    * @param fileSupplier a non-null object.
    * @param maximumHeapMemorySizeInBytes maximum amount of bytes to keep in heap memory.
    */
-  public DeferredOutputStream(
+  public CisternOutputStream(
       final TemporaryFileService.FileSupplier fileSupplier,
       final int maximumHeapMemorySizeInBytes
   ) {
@@ -102,10 +102,6 @@ public class DeferredOutputStream extends OutputStream {
     Preconditions.checkState( file == null ) ;
     Preconditions.checkState( fileOutputStream == null ) ;
     file = fileSupplier.get() ;
-    if( ! file.createNewFile() ) {
-      throw new IllegalStateException(
-          "Did not create '" + file.getAbsolutePath() + "' (already exists?)." ) ;
-    }
     fileOutputStream = new FileOutputStream( file ) ;
     fileOutputStream.write( bytes, 0, byteCount ) ;
     LOGGER.debug( "Wrote ", byteCount, " bytes into '", file.getAbsolutePath(), "'." ) ;

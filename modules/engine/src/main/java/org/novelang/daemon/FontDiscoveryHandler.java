@@ -32,7 +32,7 @@ import org.novelang.outfit.TemporaryFileTools;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.rendering.RenditionMimeType;
-import org.novelang.rendering.buffer.DeferredOutputStream;
+import org.novelang.rendering.buffer.CisternOutputStream;
 import org.novelang.rendering.font.FontDiscoveryStreamer;
 import org.xml.sax.SAXException;
 
@@ -50,7 +50,7 @@ public class FontDiscoveryHandler extends GenericHandler{
   public static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
 
   /**
-   * Buffer size for {@link org.novelang.rendering.buffer.DeferredOutputStream}.
+   * Buffer size for {@link org.novelang.rendering.buffer.CisternOutputStream}.
    */
   private static final int BUFFER_SIZE_BYTES = 1024 * 1024 ;
 
@@ -81,8 +81,8 @@ public class FontDiscoveryHandler extends GenericHandler{
 
       response.setStatus( HttpServletResponse.SC_OK ) ;
 
-      final DeferredOutputStream deferredOutputStream = new DeferredOutputStream(
-            TemporaryFileTools.TEMPORARY_FILE_SERVICE.createFileSupplier( "page", "bin" ),
+      final CisternOutputStream deferredOutputStream = new CisternOutputStream(
+            TemporaryFileTools.TEMPORARY_FILE_SERVICE.createFileSupplier( "page", ".pdf" ),
             BUFFER_SIZE_BYTES
       ) ;
 

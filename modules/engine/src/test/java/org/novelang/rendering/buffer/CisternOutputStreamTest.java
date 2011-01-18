@@ -28,15 +28,15 @@ import org.novelang.testing.junit.MethodSupport;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for {@link DeferredOutputStream}.
+ * Tests for {@link CisternOutputStream}.
  *
  * @author Laurent Caillette
  */
-public class DeferredOutputStreamTest {
+public class CisternOutputStreamTest {
 
   @Test
   public void overflowHeapMemorySize2() throws IOException {
-    final DeferredOutputStream deferringOutputStream = createDeferredOutputStream( 1 );
+    final CisternOutputStream deferringOutputStream = createDeferredOutputStream( 1 );
     assertThat( fileSupplier.file ).doesNotExist() ;
     deferringOutputStream.write( 1 ) ;
     deferringOutputStream.write( 2 ) ;
@@ -53,7 +53,7 @@ public class DeferredOutputStreamTest {
 
   @Test
   public void overflowHeapMemorySize4() throws IOException {
-    final DeferredOutputStream deferringOutputStream = createDeferredOutputStream( 1 );
+    final CisternOutputStream deferringOutputStream = createDeferredOutputStream( 1 );
     assertThat( fileSupplier.file ).doesNotExist() ;
     deferringOutputStream.write( new byte[] { 1, 2, 3, 4 }, 0, 4 ) ;
     assertThat( fileSupplier.file ).exists() ;
@@ -69,7 +69,7 @@ public class DeferredOutputStreamTest {
 
   @Test( expected = IllegalStateException.class )
   public void noAccessPastRelease() throws IOException {
-    final DeferredOutputStream deferringOutputStream = createDeferredOutputStream( 1 ) ;
+    final CisternOutputStream deferringOutputStream = createDeferredOutputStream( 1 ) ;
     deferringOutputStream.write( 1 ) ;
     deferringOutputStream.close() ;
     deferringOutputStream.write( 1 ) ;
@@ -80,8 +80,8 @@ public class DeferredOutputStreamTest {
 // Fixture
 // =======
 
-  private DeferredOutputStream createDeferredOutputStream( final int size ) {
-    return new DeferredOutputStream( fileSupplier, size ) ;
+  private CisternOutputStream createDeferredOutputStream( final int size ) {
+    return new CisternOutputStream( fileSupplier, size ) ;
   }
 
   @Rule
