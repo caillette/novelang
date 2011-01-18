@@ -47,7 +47,7 @@ public class DeferredOutputStreamTest {
     deferringOutputStream.copy( capture ) ;
     assertThat( capture.toByteArray() ).contains( new byte[]{ 1 , 2 } ) ;
 
-    deferringOutputStream.release() ;
+    deferringOutputStream.close() ;
     assertThat( fileSupplier.file ).doesNotExist() ;
   }
 
@@ -63,7 +63,7 @@ public class DeferredOutputStreamTest {
     deferringOutputStream.copy( capture ) ;
     assertThat( capture.toByteArray() ).contains( new byte[]{ 1, 2, 3, 4 } ) ;
 
-    deferringOutputStream.release() ;
+    deferringOutputStream.close() ;
     assertThat( fileSupplier.file ).doesNotExist() ;
   }
 
@@ -71,7 +71,7 @@ public class DeferredOutputStreamTest {
   public void noAccessPastRelease() throws IOException {
     final DeferredOutputStream deferringOutputStream = createDeferredOutputStream( 1 ) ;
     deferringOutputStream.write( 1 ) ;
-    deferringOutputStream.release() ;
+    deferringOutputStream.close() ;
     deferringOutputStream.write( 1 ) ;
   }
 

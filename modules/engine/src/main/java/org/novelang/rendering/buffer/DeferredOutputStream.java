@@ -76,27 +76,11 @@ public class DeferredOutputStream extends OutputStream {
       fileOutputStream.flush() ;
       final FileInputStream fileInputStream = new FileInputStream( file ) ;
       try {
+        // No need to buffer, says the documentation.
         IOUtils.copy( fileInputStream, target ) ;
       } finally {
         fileInputStream.close() ;
       }
-    }
-  }
-
-  /**
-   * Releases underlying resources.
-   *
-   * @throws IllegalStateException if already released.
-   */
-  public void release() throws IOException {
-    checkState() ;
-    bytes = null ;
-    byteCount = -1 ;
-    if( file != null ) {
-      file.delete() ;
-      fileOutputStream.close() ;
-      file = null ;
-      fileOutputStream = null ;
     }
   }
 
@@ -170,4 +154,30 @@ public class DeferredOutputStream extends OutputStream {
       fileOutputStream.flush() ;
     }
   }
+
+  public boolean isOpen() {
+    return bytes != null || file != null ;
+  }
+
+  /**
+   * Releases underlying resources.
+   *
+   * @throws IllegalStateException if already released.
+   */
+  @Override
+  public void close() throws IOException {
+    checkState() ;
+    bytes = null ;
+    byteCount = -1 ;
+    if( fileOutputStream != null ) {
+      fileOutputStream.close() ;
+      fileOutputStream = null ;
+    }
+    if( file != null ) {
+      file.delete() ;
+      file = null ;
+    }
+  }
+
+  
 }

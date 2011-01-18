@@ -78,7 +78,12 @@ public class TemporaryFileTools {
 
     @Override
     public FileSupplier createFileSupplier( final String prefix, final String suffix ) {
-      throw new UnsupportedOperationException( "TODO" ) ;
+      return new FileSupplier() {
+        @Override
+        public File get() throws IOException {
+          return createFile( prefix, suffix ) ;
+        }
+      };
     }
   } ;
 

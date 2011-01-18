@@ -28,9 +28,11 @@ import org.novelang.configuration.RenderingConfiguration;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
+import org.novelang.outfit.TemporaryFileTools;
 import org.novelang.outfit.loader.ResourceName;
 import org.novelang.outfit.xml.TransformerCompositeException;
 import org.novelang.rendering.RenditionMimeType;
+import org.novelang.rendering.buffer.DeferredOutputStream;
 import org.novelang.rendering.font.FontDiscoveryStreamer;
 import org.xml.sax.SAXException;
 
@@ -46,6 +48,12 @@ public class FontDiscoveryHandler extends GenericHandler{
   private final RenderingConfiguration renderingConfiguration ;
   public static final String DOCUMENT_NAME = "/~fonts.pdf" ;
   public static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
+
+  /**
+   * Buffer size for {@link org.novelang.rendering.buffer.DeferredOutputStream}.
+   */
+  private static final int BUFFER_SIZE_BYTES = 1024 * 1024 ;
+
 
   public FontDiscoveryHandler( final ProducerConfiguration producerConfiguration ) {
     renderingConfiguration = producerConfiguration.getRenderingConfiguration() ;
@@ -72,10 +80,21 @@ public class FontDiscoveryHandler extends GenericHandler{
       }
 
       response.setStatus( HttpServletResponse.SC_OK ) ;
+
+      final DeferredOutputStream deferredOutputStream = new DeferredOutputStream(
+            TemporaryFileTools.TEMPORARY_FILE_SERVICE.createFileSupplier( "page", "bin" ),
+            BUFFER_SIZE_BYTES
+      ) ;
+
       try {
-        fontDiscoveryStreamer.generate( response.getOutputStream(), DefaultCharset.SOURCE ) ;
+        fontDiscoveryStreamer.generate( deferredOutputStream, DefaultCharset.SOURCE ) ;
+        deferredOutputStream.copy( response.getOutputStream() ) ;
       } catch( Exception e ) {
         throw new RuntimeException( e );
+      } finally {
+        if( deferredOutputStream != null && deferredOutputStream.isOpen() ) {
+          deferredOutputStream.close() ;
+        }
       }
 
       response.setContentType( RenditionMimeType.PDF.getMimeName() ) ;

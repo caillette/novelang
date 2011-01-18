@@ -17,20 +17,19 @@
 package org.novelang.produce;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.FileUtils;
 import org.novelang.common.Renderable;
-import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.Page;
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.TemporaryFileTools;
+import org.novelang.rendering.buffer.DeferredOutputStream;
 import org.novelang.rendering.multipage.PagesExtractor;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -52,6 +51,11 @@ public abstract class StreamDirector {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( StreamDirector.class ) ;
 
+  /**
+   * Buffer size for {@link org.novelang.rendering.buffer.DeferredOutputStream}.
+   */
+  private static final int BUFFER_SIZE_BYTES = 1024 * 1024 ;
+
   public void feedStreams(
       final Renderable renderable,
       final PagesExtractor pageIdentifierExtractor,
@@ -65,10 +69,10 @@ public abstract class StreamDirector {
       final ImmutableMap< PageIdentifier,String > pageMap =
           pageIdentifierExtractor.extractPages( renderable.getDocumentTree() ) ;
       if( pageMap.isEmpty() ) {
-        LOGGER.info( "No pageMap defined, the document is single-paged." ) ;
+        LOGGER.info( "The document is single-paged (no PageMap defined)." ) ;
         feedDefaultPage( renderable, streamFeeder ) ;
       } else {
-        LOGGER.info( "using pageMap: ", pageMap ) ;
+        LOGGER.info( "Using pageMap: ", pageMap ) ;
         if( pageIdentifier == null ) {
           feedDefaultPage( renderable, streamFeeder ) ;
           if( supportsMultipage() ) {
@@ -97,12 +101,23 @@ public abstract class StreamDirector {
       final StreamFeeder streamFeeder,
       final Page page
  ) throws Exception {
-    final OutputStream outputStream =
+    final OutputStream rawOutputStream =
         getOutputStream( page == null ? null : page.getPageIdentifier() ) ;
+    final DeferredOutputStream deferredOutputStream = new DeferredOutputStream(
+        TemporaryFileTools.TEMPORARY_FILE_SERVICE.createFileSupplier( "page", "bin" ),
+        BUFFER_SIZE_BYTES
+    ) ;
     try {
-      streamFeeder.feed( renderable, outputStream, page ) ;
+      streamFeeder.feed( renderable, deferredOutputStream, page ) ;
+      deferredOutputStream.copy( rawOutputStream ) ;
     } finally {
-      finishWith( outputStream ) ;
+      try {
+        finishWith( deferredOutputStream ) ;
+      } finally {
+        if( deferredOutputStream.isOpen() ) {
+          deferredOutputStream.close() ;
+        }
+      }
     }
   }
 
