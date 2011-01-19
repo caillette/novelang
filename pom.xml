@@ -11,6 +11,8 @@
     <novelang.bootstrap.mainClass>org.novelang.bootstrap.Main</novelang.bootstrap.mainClass>
     <novelang.bootstrap.batchCommand>generate</novelang.bootstrap.batchCommand>
 
+    <novelang.javadoc.skip>true</novelang.javadoc.skip>
+
 
     <!-- Publishing. TODO: prefix with "novelang." once it works. -->
 
@@ -343,7 +345,7 @@
 
         <!--
           Disable default deployment because we don't want to feed an Maven repository.
-          Instead, Wagon directly uploads files on SourceForge.
+          Instead, Novelang-distribution uses Wagon to upload files directly on SourceForge.
         -->
         <plugin>
           <groupId>${lib.maven-deploy-plugin.groupId}</groupId>
@@ -379,7 +381,7 @@
           <artifactId>${lib.maven-javadoc-plugin.artifactid}</artifactId>
           <version>${lib.maven-javadoc-plugin.version}</version>
           <configuration>
-            <skip>true</skip>
+            <skip>${novelang.javadoc.skip}</skip>
           </configuration>
         </plugin>
 
