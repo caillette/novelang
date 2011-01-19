@@ -221,6 +221,7 @@ public final class ResourcesForTests {
 
     Resource PART_SOMECHAPTERS = resource( "some-chapters.novella" ) ;
     Resource XSL_NUMBERING = resource( "format-numbering.xsl" ) ;
+    Resource XSL_STYLESHEET_PARAMETERS = resource( "stylesheet-parameters.xsl" ) ;
     Resource XSL_BADXPATH_1 = resource( "bad-xpath-1.xsl" ) ;
     Resource XSL_BADXPATH_2 = resource( "bad-xpath-2.xsl" ) ;
   }
