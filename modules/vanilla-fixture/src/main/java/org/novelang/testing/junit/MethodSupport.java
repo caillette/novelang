@@ -128,6 +128,8 @@ public class MethodSupport implements MethodRule, Supplier< File > {
       } catch( Throwable throwable ) {
         LOGGER.error( throwable, "Test failed." ) ;
         Throwables.propagateIfPossible( throwable ) ;
+        // Past the line above, this is a checked exception.
+        throw new RuntimeException( throwable ) ;
       } finally {
         afterStatementEvaluation() ;
       }
