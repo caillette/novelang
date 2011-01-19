@@ -16,7 +16,6 @@
  */
 package org.novelang.nhovestone.report;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import javax.imageio.ImageIO;
 import org.novelang.KnownVersions;
 import org.novelang.Version;
 import org.novelang.common.FileTools;
@@ -233,11 +231,12 @@ public class GrapherDemo {
   public static void main( final String[] args ) throws IOException {
     final File scenarioDirectory = FileTools.createFreshDirectory( "_scenario-demo" ) ;
 
-    final BufferedImage image = Grapher.create( buildUpsizings(), buildMap(), false ) ;
-    final File imageFile = new File( scenarioDirectory, "graph.png" );
-    ImageIO.write( image, "png", imageFile ) ;
+    final List< Long > upsizings = buildUpsizings() ;
+    final Map< Version, MeasurementBundle< TimeMeasurement > > versionMap = buildMap() ;
 
-    LOGGER.info( "Wrote '", imageFile.getAbsolutePath(), "'." ) ;
+    Grapher.writeBitmapImage( new File( scenarioDirectory, "graph.png" ), upsizings, versionMap ) ;
+    Grapher.exportChartAsSvg( new File( scenarioDirectory, "graph.svg" ), upsizings, versionMap ) ;
 
   }
+
 }

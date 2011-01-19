@@ -19,14 +19,26 @@ package org.novelang.nhovestone.report;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import javax.imageio.ImageIO;
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
 import org.novelang.Version;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.nhovestone.MeasurementBundle;
 import org.novelang.nhovestone.Termination;
 import org.novelang.nhovestone.scenario.TimeMeasurement;
@@ -45,6 +57,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 
 /**
  * Generates the graph representing {@link org.novelang.nhovestone.Scenario#getMeasurements()}.
@@ -53,14 +67,24 @@ import org.jfree.ui.TextAnchor;
  */
 public class Grapher {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( Grapher.class ) ;
+  private static final int DEFAULT_WIDTH_PIXELS = 600;
+  private static final int DEFAULT_HEIGHT_PIXELS = 300;
+
   private Grapher() { }
 
   public static BufferedImage create(
-      final List<Long> upsizings,
-      final Map<Version, MeasurementBundle<TimeMeasurement>> measurements,
+      final List< Long > upsizings,
+      final Map< Version, MeasurementBundle< TimeMeasurement > > measurements,
       final boolean showUpsizingCount 
   ) {
-    return create( upsizings, measurements, showUpsizingCount, 600, 300 ) ;
+    return create(
+        upsizings,
+        measurements,
+        showUpsizingCount,
+        DEFAULT_WIDTH_PIXELS,
+        DEFAULT_HEIGHT_PIXELS
+    ) ;
   }
 
   public static BufferedImage create(
@@ -70,7 +94,68 @@ public class Grapher {
       final int widthPixels,
       final int heightPixels
   ) {
+    final JFreeChart chart = createChart( upsizings, measurements, showUpsizingCount ) ;
+    return chart.createBufferedImage( widthPixels, heightPixels ) ;
+  }
 
+  public static void exportChartAsSvg(
+      final File svgFile,
+      final List< Long > upsizings,
+      final Map< Version, MeasurementBundle< TimeMeasurement > > measurements
+ )
+      throws IOException
+  {
+    final JFreeChart chart = createChart( upsizings, measurements, false ) ;
+    exportChartAsSvg( svgFile, chart, DEFAULT_WIDTH_PIXELS, DEFAULT_HEIGHT_PIXELS ) ;
+  }
+
+
+  /**
+     * Exports a JFreeChart to a SVG file.
+     *
+     * @param svgFile the output file.
+     * @param chart JFreeChart to export
+     * @param width
+     * @param height
+     * @throws IOException if writing the svgFile fails.
+     *
+     * @author Dolf Trieschnig http://dolf.trieschnigg.nl/jfreechart
+     */
+  public static void exportChartAsSvg(
+      final File svgFile,
+      final JFreeChart chart,
+      final int width,
+      final int height
+  ) throws IOException {
+    final DOMImplementation domImpl =
+        GenericDOMImplementation.getDOMImplementation();
+    final Document document = domImpl.createDocument( null, "svg", null ) ;
+
+    final SVGGraphics2D svgGenerator = new SVGGraphics2D( document );
+
+    final java.awt.geom.Rectangle2D bounds = new Rectangle( width, height ) ;
+    chart.draw( svgGenerator, bounds );
+
+    final OutputStream outputStream = new FileOutputStream( svgFile ) ;
+    try {
+      final Writer out = new OutputStreamWriter( outputStream, "UTF-8" ) ;
+      svgGenerator.stream( out, true /* use css */ );
+      out.flush() ;
+      out.close() ;
+    } finally {
+      outputStream.close();
+    }
+
+    LOGGER.info( "Wrote '", svgFile.getAbsolutePath(), "'." ) ;
+
+  }
+
+
+  private static JFreeChart createChart(
+      final List< Long > upsizings,
+      final Map< Version, MeasurementBundle< TimeMeasurement > > measurements,
+      final boolean showUpsizingCount
+  ) {
     final JFreeChart chart = ChartFactory.createXYLineChart(
         null,                      // chart title
         "Total source size (KiB)", // domain axis label
@@ -122,9 +207,7 @@ public class Grapher {
     final LegendTitle chartLegend = chart.getLegend() ;
     chartLegend.setBorder( 0.0, 0.0, 0.0, 0.0 ) ;
     chartLegend.setPosition( RectangleEdge.TOP );
-
-    return chart.createBufferedImage( widthPixels, heightPixels );
-
+    return chart;
   }
 
   private static void addMeasurementsDataset(
@@ -234,4 +317,13 @@ public class Grapher {
 
   private static final Color NULL_COLOR = new Color( 0, 0, 0, 0 ) ;
 
+  static void writeBitmapImage(
+      final File imageFile,
+      final List< Long > upsizings,
+      final Map< Version, MeasurementBundle<TimeMeasurement > > versionMap
+  ) throws IOException {
+    final BufferedImage image = create( upsizings, versionMap, false ) ;
+    ImageIO.write( image, "png", imageFile ) ;
+    LOGGER.info( "Wrote '", imageFile.getAbsolutePath(), "'." ) ;
+  }
 }
