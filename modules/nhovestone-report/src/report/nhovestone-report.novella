@@ -22,12 +22,12 @@ edit-and-review roundtrips.
 
 Before each HTTP request, there is a new Novella included in the document sources.
 
-./IncreasingNovellacount.png
+./IncreasingNovellacount.svg
 
 
 == Single ever-growing Novella
 
 The same Novella gets bigger and bigger before each HTTP request. 
 
-./SingleevergrowingNovella.png
+./SingleevergrowingNovella.svg
 

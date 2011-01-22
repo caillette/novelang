@@ -31,11 +31,16 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:n="http://novelang.org/book-xml/1.0"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+
 >
   <xsl:import href="default-pdf.xsl" />
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
+  <xsl:param name="content-directory"/>
   
   <xsl:variable 
       name="generationtimestamp"      
@@ -131,12 +136,30 @@
   <xsl:template match="n:raster-image/n:resource-location" >
     <fo:block>
       <fo:external-graphic>
-        <xsl:attribute name="src">.<xsl:value-of select="."/></xsl:attribute>
+        <xsl:attribute name="src"><xsl:value-of select="$content-directory"/><xsl:value-of select="."/></xsl:attribute>
         <xsl:attribute name="content-width"><xsl:value-of select="440"/></xsl:attribute>
         <xsl:attribute name="content-height"><xsl:value-of select="220"/></xsl:attribute>
       </fo:external-graphic>
     </fo:block>
   </xsl:template>
+
+
+  <!-- Transformation doesn't happen if absolute-position is other than "fixed". -->
+<!--
+  <xsl:template match="n:vector-image/n:resource-location" >
+    <fo:block>Transformed block:</fo:block>
+    <fo:block-container
+        absolute-position="fixed"
+        top="110mm"
+        left="61mm"
+        background-color="green"
+        fox:transform="scale(0.5)"
+    >
+      <xsl:apply-imports/>
+    </fo:block-container>
+  </xsl:template>
+-->
+
   
   <xsl:template match="n:level" >
     <fo:block keep-together="always" >

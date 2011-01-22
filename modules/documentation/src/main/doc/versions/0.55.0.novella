@@ -1,1 +1,5 @@
 --- New ``--temporary-dir`` option.
+
+--- Fixed SVG embedding for PDF. Now the image appears as true vector image inside the PDF.
+Correct reference to the SVG resource implied adding a ``$content-directory`` parameter
+passed to XSL stylesheets.

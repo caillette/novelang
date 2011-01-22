@@ -21,21 +21,29 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import javax.imageio.ImageIO;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.dom4j.DocumentException;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.novelang.Version;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -57,8 +65,12 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
+import org.novelang.novella.VectorImageTools;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * Generates the graph representing {@link org.novelang.nhovestone.Scenario#getMeasurements()}.
@@ -68,8 +80,23 @@ import org.w3c.dom.Document;
 public class Grapher {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( Grapher.class ) ;
+
   private static final int DEFAULT_WIDTH_PIXELS = 600;
   private static final int DEFAULT_HEIGHT_PIXELS = 300;
+
+  private static final int DEFAULT_WIDTH_VECTORUNIT = 500 ;
+  private static final int DEFAULT_HEIGHT_VECTORUNIT = 250 ;
+
+  /**
+   * Using pixels because it's the only way to control image size.
+   * Otherwise the image display remains the same whatever the absolute size is,
+   * and whatever is done to the viewport, including SVG scaling (but except rotating it with
+   * fox:transform but this requires block-container with absolute positioning).
+   * So we're depending on renderer's resolution here. 
+   */
+  private static final String VECTORUNIT = "px" ;
+
+  private static final Charset CHARSET = Charsets.UTF_8;
 
   private Grapher() { }
 
@@ -106,7 +133,13 @@ public class Grapher {
       throws IOException
   {
     final JFreeChart chart = createChart( upsizings, measurements, false ) ;
-    exportChartAsSvg( svgFile, chart, DEFAULT_WIDTH_PIXELS, DEFAULT_HEIGHT_PIXELS ) ;
+    exportChartAsSvg(
+        svgFile,
+        chart,
+        DEFAULT_WIDTH_VECTORUNIT,
+        DEFAULT_HEIGHT_VECTORUNIT,
+        VECTORUNIT
+    ) ;
   }
 
 
@@ -125,29 +158,61 @@ public class Grapher {
       final File svgFile,
       final JFreeChart chart,
       final int width,
-      final int height
+      final int height,
+      final String dimensionUnit
   ) throws IOException {
     final DOMImplementation domImpl =
         GenericDOMImplementation.getDOMImplementation();
-    final Document document = domImpl.createDocument( null, "svg", null ) ;
+    final Document w3cDocument = domImpl.createDocument( null, "svg", null ) ;
 
-    final SVGGraphics2D svgGenerator = new SVGGraphics2D( document );
+    final SVGGraphics2D svgGenerator = new SVGGraphics2D( w3cDocument ) ;
 
     final java.awt.geom.Rectangle2D bounds = new Rectangle( width, height ) ;
-    chart.draw( svgGenerator, bounds );
+    chart.draw( svgGenerator, bounds ) ;
+
+    // Don't know how to set properties of the root element.
+    // Accessing to svgGenerator.getRoot() has no effect.
+    // So we're taking the long way here.
+    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
+    svgGenerator.stream( new OutputStreamWriter( byteArrayOutputStream, CHARSET ), true ) ;
+
+    LOGGER.debug(
+        "Streamed this document: \n", new String( byteArrayOutputStream.toByteArray(), CHARSET ) ) ;
+
+    final org.dom4j.Document dom4jDocument ;
+    try {
+      dom4jDocument = VectorImageTools.loadSvgAsDom4jDocument( 
+          new InputSource( new ByteArrayInputStream( byteArrayOutputStream.toByteArray() ) ) ) ;
+    } catch( DocumentException e ) {
+      throw new RuntimeException( e ) ;
+    }
+    setSvgDimensions( dom4jDocument.getRootElement(), width, height, dimensionUnit ) ;
+
+    final OutputFormat prettyPrint = OutputFormat.createPrettyPrint();
+    prettyPrint.setEncoding( CHARSET.name() ) ;
+
 
     final OutputStream outputStream = new FileOutputStream( svgFile ) ;
     try {
-      final Writer out = new OutputStreamWriter( outputStream, "UTF-8" ) ;
-      svgGenerator.stream( out, true /* use css */ );
-      out.flush() ;
-      out.close() ;
+      final XMLWriter writer = new XMLWriter( outputStream, prettyPrint ) ;
+      writer.write( dom4jDocument ) ;
+      writer.flush() ;
     } finally {
-      outputStream.close();
+      outputStream.close() ;
     }
 
     LOGGER.info( "Wrote '", svgFile.getAbsolutePath(), "'." ) ;
 
+  }
+
+  private static void setSvgDimensions(
+      final org.dom4j.Element element,
+      final int width,
+      final int height,
+      final String dimensionUnit
+  ) {
+    element.addAttribute( "width", width + dimensionUnit ) ;
+    element.addAttribute( "height", height + dimensionUnit ) ;
   }
 
 
@@ -245,7 +310,7 @@ public class Grapher {
     measurementRangeAxis.setAutoRange( true ) ;
     measurementRangeAxis.setAxisLinePaint( NULL_COLOR ) ;
     plot.setRangeAxis( MEASUREMENTS_KEY, measurementRangeAxis ) ;
-    plot.mapDatasetToRangeAxis( MEASUREMENTS_KEY, MEASUREMENTS_KEY ); ;
+    plot.mapDatasetToRangeAxis( MEASUREMENTS_KEY, MEASUREMENTS_KEY ) ;
   }
 
 

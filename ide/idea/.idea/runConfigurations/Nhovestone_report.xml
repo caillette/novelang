@@ -2,8 +2,8 @@
   <configuration default="false" name="Nhovestone report" type="Application" factoryName="Application">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
     <option name="MAIN_CLASS_NAME" value="org.novelang.bootstrap.Main" />
-    <option name="VM_PARAMETERS" value="-Djava.awt.headless=true -Xmx1024M" />
-    <option name="PROGRAM_PARAMETERS" value="httpdaemon --log-dir ide/idea --style-dirs modules/engine/src/main/resources/style modules/nhovestone-report/src/report/style --content-root modules/nhovestone-report/src/report" />
+    <option name="VM_PARAMETERS" value="-Djava.awt.headless=true -Xmx1024M -Dlogback.configurationFile=modules/vanilla-fixture/src/main/resources/logback-console.xml" />
+    <option name="PROGRAM_PARAMETERS" value="httpdaemon --style-dirs modules/engine/src/main/resources/style modules/nhovestone-report/src/report/style --content-root modules/nhovestone-report/src/report" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../.." />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
