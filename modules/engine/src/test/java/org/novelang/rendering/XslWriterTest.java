@@ -17,7 +17,9 @@
 package org.novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
@@ -120,6 +122,11 @@ public class XslWriterTest {
     @Override
     public Page getPage() {
       return null ;
+    }
+
+    @Override
+    public URL getContentDirectory() {
+      throw new UnsupportedOperationException( "TODO" ) ;
     }
   }
 

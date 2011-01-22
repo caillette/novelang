@@ -17,6 +17,9 @@
 
 package org.novelang.common.metadata;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import org.joda.time.ReadableDateTime;
@@ -29,16 +32,26 @@ public interface DocumentMetadata {
   /**
    * @return a non-null object.
    */
-  public ReadableDateTime getCreationTimestamp() ;
+  ReadableDateTime getCreationTimestamp() ;
 
   /**
    * @return a non-null object.
    */
-  public Charset getCharset() ;
+  Charset getCharset() ;
 
   /**
    * @return a possibly null object.
    */
-  public Page getPage() ;
+  Page getPage() ;
+
+  /**
+   * Returns the URL that corresponds to
+   * {@link org.novelang.configuration.parse.GenericParametersConstants#OPTION_CONTENT_ROOT},
+   * with absolute path and no trailing solidus.
+   *
+   * @return a non-null object.
+   */
+  URL getContentDirectory() ;
+
 
 }

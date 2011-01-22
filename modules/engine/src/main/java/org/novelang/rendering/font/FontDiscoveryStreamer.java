@@ -16,8 +16,10 @@
  */
 package org.novelang.rendering.font;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Set;
 
@@ -113,7 +115,12 @@ public class FontDiscoveryStreamer {
 
       @Override
       public Page getPage() {
-        return null ;
+        throw new UnsupportedOperationException() ;
+      }
+
+      @Override
+      public URL getContentDirectory() {
+        throw new UnsupportedOperationException() ;
       }
     } ;
 

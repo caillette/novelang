@@ -17,6 +17,7 @@
 
 package org.novelang.rendering;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
@@ -83,14 +84,15 @@ public class GenericRenderer implements Renderer {
   final public void render(
       final Renderable rendered,
       final OutputStream outputStream,
-      final Page page
+      final Page page,
+      final File contentDirectory
   ) throws Exception {
     if( rendered.hasProblem() ) {
       renderProblems( rendered.getProblems(), outputStream ) ;
     } else {
       fragmentWriter.startWriting(
           outputStream,
-          MetadataHelper.createMetadata( rendered.getRenderingCharset(), page )
+          MetadataHelper.createMetadata( rendered.getRenderingCharset(), page, contentDirectory )
       ) ;
       final SyntacticTree root = MetadataHelper
           .createMetadataDecoration( rendered.getDocumentTree(), page ) ;
@@ -115,15 +117,22 @@ public class GenericRenderer implements Renderer {
     return fragmentWriter.getMimeType() ;
   }
 
+  /**
+   * TODO define a clearer contract forbidding nulls.
+   * By now some parameters are null when rendering a multipage embedded stylesheet.
+   * This works but gets things messy.
+   * Maybe another method with no parameter could be OK.
+   */
   public void renderTree(
       final SyntacticTree tree,
       final OutputStream outputStream,
       final Charset renderingCharset,
-      final Page page
+      final Page page,
+      final File contentDirectoryForResources
   ) throws Exception {
     fragmentWriter.startWriting(
         outputStream,
-        MetadataHelper.createMetadata( renderingCharset, page )
+        MetadataHelper.createMetadata( renderingCharset, page, contentDirectoryForResources )
     ) ;
     renderTreeInternal( MetadataHelper.createMetadataDecoration( tree, page ), null, null ) ;
     fragmentWriter.finishWriting() ;
@@ -193,13 +202,13 @@ public class GenericRenderer implements Renderer {
       case _PAGE_PATH :
       case _STYLE :
       case RAW_LINES :
-      case _IMAGE_WIDTH:
-      case _IMAGE_HEIGHT:
         final SyntacticTree literalTree = tree.getChildAt( 0 ) ;
         writeLiteral( fragmentWriter, newPath, literalTree.getText() ) ;
         break ;
 
       case RESOURCE_LOCATION:
+      case _IMAGE_WIDTH:
+      case _IMAGE_HEIGHT:
       case APOSTROPHE_WORDMATE :
       case SIGN_COLON :
       case SIGN_COMMA :

@@ -19,6 +19,8 @@ package org.novelang.rendering;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import com.google.common.collect.ImmutableMap;
@@ -27,6 +29,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.xalan.transformer.TransformerImpl;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.metadata.DocumentMetadata;
@@ -237,7 +240,18 @@ public class XslWriter extends XmlWriter implements PagesExtractor {
   ) {
     transformer.setParameter( "timestamp", documentMetadata.getCreationTimestamp() ) ;
     transformer.setParameter( "charset", documentMetadata.getCharset().name() ) ;
+    final String contentDirectoryUrl = removeTrailingSolidus( documentMetadata.getContentDirectory() ) ;
+    transformer.setParameter( "content-directory", contentDirectoryUrl ) ;
     transformer.setParameter( "rendition-kinematic", renditionKinematic.name() ) ;
+  }
+
+  private static String removeTrailingSolidus( final URL contentDirectoryUrl ) {
+    final String externalForm = contentDirectoryUrl.toExternalForm() ;
+    if( externalForm.endsWith( "/" ) ) {
+      return externalForm.substring( 0, externalForm.length() - 1 ) ;
+    } else {
+      return externalForm ;
+    }
   }
 
   /**

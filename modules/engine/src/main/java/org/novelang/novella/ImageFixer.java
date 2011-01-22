@@ -252,12 +252,14 @@ public class ImageFixer {
       final String height
   ) {
     Treepath< SyntacticTree > newTreepath = treepathToImage ;
-    if( ! StringUtils.isBlank( width ) && ! StringUtils.isBlank( height ) ) {
+    if( ! StringUtils.isBlank( width ) ) {
       newTreepath = addImageMetadata(
           newTreepath,
           NodeKind._IMAGE_WIDTH,
           width
       ) ;
+    }
+    if( ! StringUtils.isBlank( height ) ) {    
       newTreepath = addImageMetadata(
           newTreepath,
           NodeKind._IMAGE_HEIGHT,

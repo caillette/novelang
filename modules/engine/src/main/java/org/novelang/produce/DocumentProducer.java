@@ -142,7 +142,7 @@ public class DocumentProducer {
     
   }
 
-  private static void serve(
+  private void serve(
       final StreamDirector streamDirector,
       final GenericRenderer renderer,
       final PageIdentifier pageIdentifier,
@@ -159,7 +159,7 @@ public class DocumentProducer {
               final OutputStream outputStream,
               final Page page
           ) throws Exception {
-            renderer.render( someRenderable, outputStream, page ) ;
+            renderer.render( someRenderable, outputStream, page, basedir ) ;
           }
         }
 

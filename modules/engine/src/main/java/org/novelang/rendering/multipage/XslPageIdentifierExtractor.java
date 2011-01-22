@@ -104,7 +104,7 @@ public class XslPageIdentifierExtractor implements PagesExtractor {
 
     final GenericRenderer renderer = new GenericRenderer( xmlWriter ) ;
 
-    renderer.renderTree( documentTree, new NullOutputStream(), null, null  ) ;
+    renderer.renderTree( documentTree, new NullOutputStream(), null, null, null  ) ;
 
     transformerErrorListener.flush() ;
 

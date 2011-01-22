@@ -34,7 +34,7 @@
   <xsl:param name="filename"/>
   <xsl:param name="charset"/>
   <xsl:param name="rendition-kinematic"/>
-  <xsl:param name="content-root"/>
+  <xsl:param name="content-directory"/>
 
 
   <xsl:template match="/" >
@@ -42,7 +42,7 @@
     timestamp=<xsl:value-of select="$timestamp" />;
     filename=<xsl:value-of select="$filename" />;
     charset=<xsl:value-of select="$charset" />;
-    content-root=<xsl:value-of select="$content-root" />;
+    content-root=<xsl:value-of select="$content-directory" />;
     </p>
   </xsl:template>
 

@@ -17,6 +17,7 @@
 package org.novelang.rendering;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -33,6 +34,7 @@ import org.novelang.common.Problem;
 import org.novelang.common.Renderable;
 import org.novelang.common.StylesheetMap;
 import org.novelang.common.SyntacticTree;
+import org.novelang.common.metadata.MetadataHelper;
 import org.novelang.designator.Tag;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.parser.GeneratedLexemes;
@@ -65,7 +67,9 @@ public class RenderingTools {
       new GenericRenderer( fragmentWriter, false ).render(
           new RenderableTree( tree, charset ),
           byteArrayOutputStream,
-          null ) ;
+          null,
+          null // TODO find something better 
+      ) ;
     } catch ( Exception e ) {
       throw new RuntimeException( "Should not happen, no IO expected", e ) ;
     }

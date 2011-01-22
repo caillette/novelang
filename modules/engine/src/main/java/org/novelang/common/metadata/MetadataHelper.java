@@ -17,11 +17,15 @@
 
 package org.novelang.common.metadata;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -69,13 +73,51 @@ public class MetadataHelper {
   }
 
 
+  /**
+   * For tests only.
+   */
   public static DocumentMetadata createMetadata() {
-    return createMetadata( DefaultCharset.RENDERING, null ) ;
+    return new DocumentMetadata() {
+      @Override
+      public ReadableDateTime getCreationTimestamp() {
+        throw new UnsupportedOperationException() ;
+      }
+
+      @Override
+      public Charset getCharset() {
+        return DefaultCharset.RENDERING ;
+      }
+
+      @Override
+      public Page getPage() {
+        throw new UnsupportedOperationException() ;
+      }
+
+      @Override
+      public URL getContentDirectory() {
+        throw new UnsupportedOperationException() ;
+      }
+    } ;
   }
   
-  public static DocumentMetadata createMetadata( final Charset charset, final Page page ) {
+  public static DocumentMetadata createMetadata(
+      final Charset charset,
+      final Page page,
+      final File contentDirectory
+  ) {
 
     final ReadableDateTime timestamp = createTimestamp() ;
+
+    final URL contentDirectoryUrl ;
+    if( contentDirectory == null ) {
+      contentDirectoryUrl = NULL_URL ;
+    } else {
+      try {
+        contentDirectoryUrl = contentDirectory.toURI().toURL() ;
+      } catch( MalformedURLException e ) {
+        throw new RuntimeException( "Really unlikely", e ) ;
+      }
+    }
 
     return new DocumentMetadata() {
       @Override
@@ -92,8 +134,27 @@ public class MetadataHelper {
       public Page getPage() {
         return page ;
       }
+
+      @Override
+      public URL getContentDirectory() {
+        return contentDirectoryUrl ;
+      }
     } ;
   }
+
+  /**
+   * Really dangerous and stupid constant.
+   * TODO: find something better for handling null content directory.
+   */
+  public static final URL NULL_URL ;
+  static {
+    try {
+      NULL_URL = new URL( "file:null" ) ;
+    } catch( MalformedURLException e ) {
+      throw new RuntimeException( e ) ;
+    }
+  }
+
 
   /**
    * Decorates a tree with metadata.

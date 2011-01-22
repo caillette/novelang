@@ -87,7 +87,7 @@ public class XslParametersTest {
     assertThat( TIMESTAMP_REGEX.matcher( result ).find() ).isTrue() ;
     assertThat( result ).contains( "charset=UTF-8;" ) ;
     assertThat( result ).contains(
-        "content-root=" + resourceInstaller.getTargetDirectory().getAbsolutePath() ) ;
+        "content-root=file:" + resourceInstaller.getTargetDirectory().getAbsolutePath() ) ;
 
   }
 

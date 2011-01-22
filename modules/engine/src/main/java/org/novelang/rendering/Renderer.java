@@ -17,6 +17,7 @@
 
 package org.novelang.rendering;
 
+import java.io.File;
 import java.io.OutputStream;
 
 import org.novelang.common.Renderable;
@@ -35,11 +36,13 @@ public interface Renderer extends PagesExtractor {
    * @param outputStream cannot be null.
    * @param page may be null, if {@link #extractPages(org.novelang.common.SyntacticTree)}
    *          returned an empty {@code Map}.
+   * @param contentDirectory cannot be null. The base directory for resolving embedded resources.
    */
   void render(
       Renderable rendered,
       OutputStream outputStream,
-      Page page
+      Page page,
+      File contentDirectory
   ) throws Exception ;
 
   RenditionMimeType getMimeType() ;

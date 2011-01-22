@@ -53,7 +53,7 @@ public class GenericRendererTest {
         tree( WORD_, "second")
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals( "BLOCK_INSIDE_PARENTHESIS(first^second)", getRenderedText() ) ;
   }
 
@@ -64,7 +64,7 @@ public class GenericRendererTest {
         tree( WORD_, tree( "super"), tree( WORD_AFTER_CIRCUMFLEX_ACCENT, "script" ) )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals( "BLOCK_INSIDE_PARENTHESIS(superWORD_AFTER_CIRCUMFLEX_ACCENT(script))", getRenderedText() ) ;
   }
 
@@ -80,7 +80,7 @@ public class GenericRendererTest {
         )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "BLOCK_AFTER_TILDE(SUBBLOCK(xBLOCK_INSIDE_PARENTHESIS(y)z))",
         getRenderedText()
@@ -103,7 +103,7 @@ public class GenericRendererTest {
         tree( WORD_, "z" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "PARAGRAPH_REGULAR(BLOCK_AFTER_TILDE(SUBBLOCK(xBLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS(/)y))^z)",
         getRenderedText()
@@ -118,7 +118,7 @@ public class GenericRendererTest {
         tree( BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS, "z" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "PARAGRAPH_REGULAR(BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS(y)^BLOCK_OF_LITERAL_INSIDE_GRAVE_ACCENTS(z))",
         getRenderedText()
@@ -139,7 +139,7 @@ public class GenericRendererTest {
         tree( WORD_, "w3" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "PARAGRAPH_REGULAR(w0^BLOCK_INSIDE_PARENTHESIS(w1^w2PUNCTUATION_SIGN(SIGN_FULLSTOP(.)))^w3)",
         getRenderedText()
@@ -155,7 +155,7 @@ public class GenericRendererTest {
         tree( _EXPLICIT_IDENTIFIER, "Explicit" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "_LEVEL(_IMPLICIT_IDENTIFIER(Implicit)_EXPLICIT_IDENTIFIER(Explicit))",
         getRenderedText()
@@ -170,7 +170,7 @@ public class GenericRendererTest {
         tree( _PROMOTED_TAG, "Promoted" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "_LEVEL(_PROMOTED_TAG(Promoted))",
         getRenderedText()
@@ -186,7 +186,7 @@ public class GenericRendererTest {
         tree( _EXPLICIT_IDENTIFIER, "Explicit" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), true, "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "_LEVEL(_LOCATION((?) Here)_IMPLICIT_IDENTIFIER(Implicit)_EXPLICIT_IDENTIFIER(Explicit))",
         getRenderedText()
@@ -200,7 +200,7 @@ public class GenericRendererTest {
         new Location( "Here" )
     ) ;
     final GenericRenderer renderer = new GenericRenderer( new SimpleFragmentWriter(), true, "^" ) ;
-    renderer.render( createRenderable( tree ), outputStream, null ) ;
+    renderer.render( createRenderable( tree ), outputStream, null, null ) ;
     assertEquals(
         "PARAGRAPH_REGULAR(_LOCATION((?) Here))",
         getRenderedText()

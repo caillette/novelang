@@ -34,6 +34,8 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:n="http://novelang.org/book-xml/1.0"
     xmlns:xsltc-extension="http://xml.apache.org/xalan/xsltc"
     xmlns:nlx="xalan://org.novelang.rendering.xslt"
@@ -42,6 +44,7 @@
 
   <xsl:param name="timestamp"/>
   <xsl:param name="filename"/>
+  <xsl:param name="content-directory"/>
 
   <xsl:template match="/" >
     <fo:root>
@@ -425,11 +428,17 @@
   
   <xsl:template match="n:vector-image/n:resource-location" >
     <fo:block>
-      <fo:external-graphic>
-        <xsl:attribute name="src">.<xsl:value-of select="."/></xsl:attribute>
-        <xsl:attribute name="content-width"><xsl:value-of select="../n:image-width"/></xsl:attribute>
-        <xsl:attribute name="content-height"><xsl:value-of select="../n:image-height"/></xsl:attribute>
-      </fo:external-graphic>
+      <fo:instream-foreign-object>
+        <svg:svg>
+          <xsl:attribute name="width" ><xsl:value-of select="../n:image-width"/></xsl:attribute>
+          <xsl:attribute name="height" ><xsl:value-of select="../n:image-height"/></xsl:attribute>
+          <svg:image>
+            <xsl:attribute name="width" ><xsl:value-of select="../n:image-width"/></xsl:attribute>
+            <xsl:attribute name="height" ><xsl:value-of select="../n:image-height"/></xsl:attribute>
+            <xsl:attribute name="xlink:href" ><xsl:value-of select="$content-directory"/><xsl:value-of select="."/></xsl:attribute>
+          </svg:image>
+        </svg:svg>
+      </fo:instream-foreign-object>
     </fo:block>
   </xsl:template>
   
