@@ -21,15 +21,18 @@ import java.lang.management.ManagementFactory;
 import javax.management.MBeanServer;
 
 /**
- * A Java agent that works in 2 ways: install a
- * Installs the {@link Insider JMX bean}
- * and executes immediately for a {@link Runtime#halt(int)}.
- * .
+ * A Java agent that works in 2 ways:
+ * <ul>
+ *   <li>As pre-main at JVM startup for installing {@link Insider JMX bean}.
+ *   <li>After JVM startup for executing a {@link Runtime#halt(int)} immediately.
+ * </ul>
  * <p>
  * The JMX-based approach respects the Java Language Specification as it doesn't rely on
  * proprietary API. It is also faster.
  * <p>
- * The hot load of a Java agent relies on one of Sun's proprietary API. It is also looks slower.
+ * The hot load of a Java agent relies on one of Sun's proprietary API. It makes sense
+ * after a (lengthy) scan for JVMs on the local machine which have the
+ * "tattoo" (see {@code org.novelang.outfit.shell.ShutdownTools.SHUTDOWN_TATTOO_PROPERTYNAME}).
  * But it's a full Java, multiplatform mean to shutdown a JVM.
  *
  *
@@ -72,7 +75,7 @@ public class InsiderAgent
           }
           beanServer.registerMBean( managedBean, Insider.NAME ) ;
         } catch( Exception e ) {
-          // Checked exceptions prevent the JVM from loading the agent.
+          // Checked exceptions in method signature prevent the JVM from loading the agent.
           throw new RuntimeException( e ) ;
         }
         System.out.println( "Loaded " + InsiderAgent.class.getName() + "." ) ;
