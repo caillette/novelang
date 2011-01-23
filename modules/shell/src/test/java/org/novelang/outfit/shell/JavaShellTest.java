@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.base.Predicate;
 import org.apache.commons.io.FileUtils;
 import org.fest.reflect.core.Reflection;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.logger.Logger;
@@ -58,58 +57,42 @@ import static org.junit.Assert.assertNotNull;
 public class JavaShellTest {
 
   @Test
-//  @Ignore
   public void getTheOfficialJar() throws IOException {
-    if( isLikelyToWork() ) {
-      final File jarFile = AgentFileInstaller.getInstance().getJarFile() ;
-      assertThat( jarFile ).isNotNull() ;
-    }
+    final File jarFile = AgentFileInstaller.getInstance().getJarFile() ;
+    assertThat( jarFile ).isNotNull() ;
   }
 
 
   @Test( expected = ProcessInitializationException.class )
   public void cannotStart() throws Exception {
-
-    if( isLikelyToWork() ) {
-      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
-      final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
-          .withJavaClasses( new JavaClasses.ClasspathAndMain(
-              "ThisClassDoesNotExist",
-              shellFixture.getJarFile()
-          )
-      ) ) ;
-      javaShell.start() ;
-    } else {
-      throw new ProcessInitializationException( "Whatever", null ) ;
-    }
+    final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
+    final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
+        .withJavaClasses( new JavaClasses.ClasspathAndMain(
+            "ThisClassDoesNotExist",
+            shellFixture.getJarFile()
+        )
+    ) ) ;
+    javaShell.start() ;
   }
 
 
   @Test
-//  @Ignore
   public void startTwice() throws Exception {
-
-    if( isLikelyToWork() ) {
-      startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
-      startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
-    }
+    startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
+    startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
   }
 
   @Test
-//  @Ignore
   public void useAsJmxConnector() throws Exception {
-
-    if( isLikelyToWork() ) {
-      final JavaShell javaShell =
-          new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ;
-      javaShell.start() ;
-      try {
-        final String virtualMachineName = queryJvmName( javaShell ) ;
-        assertNotNull( virtualMachineName ) ;
-        LOGGER.info( "Returned VM name: '", virtualMachineName, "'" ) ;
-      } finally {
-        javaShell.shutdown( ShutdownStyle.FORCED ) ;
-      }
+    final JavaShell javaShell =
+        new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ;
+    javaShell.start() ;
+    try {
+      final String virtualMachineName = queryJvmName( javaShell ) ;
+      assertNotNull( virtualMachineName ) ;
+      LOGGER.info( "Returned VM name: '", virtualMachineName, "'" ) ;
+    } finally {
+      javaShell.shutdown( ShutdownStyle.FORCED ) ;
     }
   }
 
@@ -117,100 +100,87 @@ public class JavaShellTest {
 
   @Test
   public void detectProgramExitedOnItsOwn() throws Exception {
+    final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
+    final int heartbeatFatalDelay = 1000 ;
+    final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
+            .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
+            .withHeartbeatPeriodMilliseconds( 100 )
+    ) ;
+    javaShell.start() ;
+    final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
 
-    if( isLikelyToWork() ) {
+    // Be sure that JMX stuff started in watched JVM.
+    assertThat( queryJvmName( javaShell ) ).isNotNull() ;
 
-      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
-      final int heartbeatFatalDelay = 1000 ;
-      final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
-              .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
-              .withHeartbeatPeriodMilliseconds( 100 )
-      ) ;
-      javaShell.start() ;
-      final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
-
-      // Be sure that JMX stuff started in watched JVM.
-      assertThat( queryJvmName( javaShell ) ).isNotNull() ;
-
-      shellFixture.askForSelfTermination() ;
-      Thread.sleep( ( long ) heartbeatFatalDelay ) ;
-      assertThat( maybeDown.apply() ).isTrue() ;
-    }
+    shellFixture.askForSelfTermination() ;
+    Thread.sleep( ( long ) heartbeatFatalDelay ) ;
+    assertThat( maybeDown.apply() ).isTrue() ;
   }
 
 
 
   @Test
-//  @Ignore
   public void startForeignProgramAndMissHeartbeat() throws Exception {
 
-    final int heartbeatPeriod = /*10 * 000 **/ 100 ;
-    final int heartbeatFatalDelay = /*1000*/ 1000 ;
-    final long maybeDownCheckPeriod = /*200L*/ 100 ;
-    final int maybeDownRetryCount = 2 /*( int ) ( ( long ) heartbeatPeriod / maybeDownCheckPeriod )*/ ;
+    final int heartbeatPeriod = 100 ;
+    final int heartbeatFatalDelay = 1000 ;
+    final long maybeDownCheckPeriod = 100 ;
+    final int maybeDownRetryCount = 2 ;
 
-    if( isLikelyToWork() ) {
+    final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
 
-      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
+    final JavaShellParameters parameters = shellFixture.getParameters()
+        .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
+        .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
+        .withJmxPortConfiguredAtJvmStartup( TcpPortBooker.THIS.find() )
+        .withJmxKit( new DefaultJmxKit() )
+    ;
 
-      final JavaShellParameters parameters = shellFixture.getParameters()
-          .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
-          .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
-          .withJmxPortConfiguredAtJvmStartup( TcpPortBooker.THIS.find() )
-          .withJmxKit( new DefaultJmxKit() )
-      ;
+    final JavaShell javaShell = new JavaShell( parameters ) ;
+    try {
+      javaShell.start() ;
 
-      final JavaShell javaShell = new JavaShell( parameters ) ;
-      try {
-        javaShell.start() ;
+      final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
+      LOGGER.debug( "At this time, the JVM should be up." ) ;
+      assertThat( maybeDown.apply() ).isFalse() ; // Test health.
 
-        final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
-        LOGGER.debug( "At this time, the JVM should be up." ) ;
-        assertThat( maybeDown.apply() ).isFalse() ; // Test health.
+      final HeartbeatSender heartbeatSender = Reflection.field( "heartbeatSender" )
+          .ofType( HeartbeatSender.class ).in( javaShell ).get() ;
+      heartbeatSender.stop() ;
 
-        final HeartbeatSender heartbeatSender = Reflection.field( "heartbeatSender" )
-            .ofType( HeartbeatSender.class ).in( javaShell ).get() ;
-        heartbeatSender.stop() ;
+      RepeatedAssert.assertEventually(
+          maybeDown,
+          maybeDownCheckPeriod,
+          TimeUnit.MILLISECONDS,
+          maybeDownRetryCount
+      ) ;
 
-        RepeatedAssert.assertEventually(
-            maybeDown,
-            maybeDownCheckPeriod,
-            TimeUnit.MILLISECONDS,
-            maybeDownRetryCount
-        ) ;
-
-        final List< String > log = readLines( shellFixture.getLogFile() ) ;
-        assertThat( log ).isNotEmpty() ;
-        assertThat( log.get( 0 ) ).contains( "Starting up" ).contains( "listening..." ) ;
-      } finally {
-        javaShell.shutdown( ShutdownStyle.FORCED ) ;
-      }
-
+      final List< String > log = readLines( shellFixture.getLogFile() ) ;
+      assertThat( log ).isNotEmpty() ;
+      assertThat( log.get( 0 ) ).contains( "Starting up" ).contains( "listening..." ) ;
+    } finally {
+      javaShell.shutdown( ShutdownStyle.FORCED ) ;
     }
-
   }
 
 
   @Test
-//  @Ignore
   public void startForeignProgram() throws Exception {
-    if( isLikelyToWork() ) {
-      final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
+    final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
 
-      final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
-      try {
-        javaShell.start() ;
-        LOGGER.info( "Started process known as ", javaShell.getNickname(), "." ) ;
-        javaShell.shutdown( ShutdownStyle.GENTLE ) ;
-      } catch( Exception e ) {
-        javaShell.shutdown( ShutdownStyle.FORCED ) ;
-      }
-
-      final List< String > log = readLines( shellFixture.getLogFile() ) ;
-      assertThat( log ).hasSize( 2 ) ;
-      assertThat( log.get( 0 ) ).contains( "Starting up" ).contains( "listening" ) ;
-      assertThat( log.get( 1 ) ).contains( "Terminated." ) ;
+    final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
+    try {
+      javaShell.start() ;
+      LOGGER.info( "Started process known as ", javaShell.getNickname(), "." ) ;
+      javaShell.shutdown( ShutdownStyle.GENTLE ) ;
+    } catch( Exception e ) {
+      javaShell.shutdown( ShutdownStyle.FORCED ) ;
     }
+
+    final List< String > log = readLines( shellFixture.getLogFile() ) ;
+    assertThat( log ).hasSize( 2 ) ;
+    assertThat( log.get( 0 ) ).contains( "Starting up" ).contains( "listening" ) ;
+    assertThat( log.get( 1 ) ).contains( "Terminated." ) ;
 
   }
 
@@ -221,9 +191,6 @@ public class JavaShellTest {
 
   static final Logger LOGGER = LoggerFactory.getLogger( JavaShellTest.class ) ;
 
-  public static final long SHELL_STARTUP_TIMEOUT_DURATION = 20L ;
-  public static final TimeUnit SHELL_STARTUP_TIMEOUT_UNIT = TimeUnit.SECONDS ;
-
 
   static final Predicate< String > STUPID_LISTENER_STARTED = new Predicate< String >() {
     @Override
@@ -233,16 +200,21 @@ public class JavaShellTest {
   } ;
 
   @Rule
-  public final MethodSupport methodSupport = new MethodSupport() ;
+  public final MethodSupport methodSupport = new MethodSupport() {
+    @Override
+    protected String mayEvaluateInContext() {
+      return mayEvaluate() ;
+    }
+  } ;
 
 
   @SuppressWarnings( { "ThrowableInstanceNeverThrown" } )
-  private boolean isLikelyToWork() {
+  private String mayEvaluate() {
 
     for( final StackTraceElement element : new Exception().getStackTrace() ) {
       if( element.getClassName().contains( "org.apache.maven.surefire.Surefire" ) ) {
         // Maven tests should work all time unless broken for good reason.
-        return true ;
+        return null ;
       }
     }
 
@@ -260,10 +232,9 @@ public class JavaShellTest {
     }
 
     if( message == null ) {
-      return true ;
+      return null ;
     } else {
-      LOGGER.warn( message ) ;
-      return false ;
+      return message ;
     }
 
 
