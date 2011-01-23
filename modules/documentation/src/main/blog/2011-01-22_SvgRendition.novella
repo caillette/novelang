@@ -1,0 +1,40 @@
+== Secrets for embedding SVG images in PDF documents
+
+Nhovestone reports don't look good when zooming, because the charts are bitmap images.
+While trying to render them as vector images, a few interesting things did appear.
+
+(Most of them relate to `FOP-1.0` and `Batik-1.7` which are the latest versions at this time.)
+
+There was a bug (fixed in HEAD) preventing from embedding SVG images in PDF documents. Novelang resolves the image path (in ``n:vector-image/n:resource-location``)
+as relative to the content directory. But most of times the stylesheet doesn't reside right
+under the content root, so FOP (the PDF renderer) couldn't find the SVG file.
+Now XSL stylesheets receive a ``$content-directory`` parameter to solve this.
+
+There are several manners to embed an SVG file into a PDF. In order to keep the vector graphics
+(means: avoiding an ugly conversion to a bitmap) FOP needs a rather twisted declaration of the form:
+
+<<<
+<fo:instream-foreign-object>
+  <svg:svg width="123px" height="456px" >
+    <svg:image width="123px" height="456px" xlink:href="file:/my/image.svg" />
+  </svg:svg>
+>>>
+
+The documentation explains that width and the height must appear two times, with exactly the same
+values. 
+
+It's important to note that ** an SVG image must always have width and height **.
+Moreover, they must be in pixel unit. Pixel unit is bad, as it introduces a dependency to
+document's resolution.
+** But units other than pixel don't work **.
+
+Knowing this, the graphs started to look really good. Unfortunately, the grid becomes bigger
+when zooming in. In theory, the solution is to set line with to a zoom-independant value with
+``vector-effect="non-scaling-stroke"`` property. Unfortunately, this is `SVG 1.2`.
+Batik doesn't support this yet and some archived mails show this is somewhat tricky to implement.
+(Thanks to "StackOverflow"
+http://stackoverflow.com/questions/1039714/svg-problems/1039815#1039815
+).
+
+Conclusion: while SVG embedding in PDF is far from perfect, it's much better than rasterized
+images that seemed to be FOP's approach.
