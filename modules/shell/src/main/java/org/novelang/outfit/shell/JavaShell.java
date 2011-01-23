@@ -212,8 +212,9 @@ public class JavaShell extends ProcessShell {
         super.start( adjustedTimeoutDurationMilliseconds, TimeUnit.MILLISECONDS ) ;
         connect() ;
         if( insider != null ) {
-          insider.keepAlive() ; // Ensure JMX working.
           startHeartbeatSender() ;
+          insider.startWatchingKeepalive() ;
+//          insider.keepAlive() ; // Ensure JMX working.
         }
       }
       if( hasDefaultJmxKit() ) {

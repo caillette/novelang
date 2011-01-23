@@ -15,7 +15,7 @@
   </appender>
 
   <logger name="org.novelang" >
-    <level value="INFO" />
+    <level value="DEBUG" />
   </logger>
 
 

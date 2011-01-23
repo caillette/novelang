@@ -104,13 +104,13 @@ public abstract class ProcessShell {
       standardStreamWatcherThread = new Thread(
           threadGroup,
           createStandardOutputWatcher( process.getInputStream(), startupSemaphore ),
-          "standardWatcherThread"
+          "standardWatcher-" + nickname
       ) ;
 
       errorStreamWatcherThread = new Thread(
           threadGroup,
           createErrorOutputWatcher( process.getErrorStream() ),
-          "errorWatcherThread"
+          "errorWatcher-" + nickname
       ) ;
 
       standardStreamWatcherThread.setDaemon( true ) ;

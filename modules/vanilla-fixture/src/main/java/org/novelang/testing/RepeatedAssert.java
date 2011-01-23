@@ -40,8 +40,8 @@ public class RepeatedAssert {
       final TimeUnit timeUnit,
       final int retries
   ) {
-    checkArgument( retries > 0 ) ;
-    checkArgument( period > 0L ) ;
+    checkArgument( retries > 0, "Retries (currently %s) must be > 0", retries ) ;
+    checkArgument( period > 0L, "Period ( currently %s) must be > 0", period ) ;
 
     LOGGER.debug( "Asserting for a maximum duration of ",
         period * ( long ) retries, " ", timeUnit, "..." ) ;

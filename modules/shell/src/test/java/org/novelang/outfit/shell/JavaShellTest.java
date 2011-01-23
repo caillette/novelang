@@ -26,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
 import org.apache.commons.io.FileUtils;
+import org.fest.reflect.core.Reflection;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.logger.Logger;
@@ -56,6 +58,7 @@ import static org.junit.Assert.assertNotNull;
 public class JavaShellTest {
 
   @Test
+//  @Ignore
   public void getTheOfficialJar() throws IOException {
     if( isLikelyToWork() ) {
       final File jarFile = AgentFileInstaller.getInstance().getJarFile() ;
@@ -83,6 +86,7 @@ public class JavaShellTest {
 
 
   @Test
+//  @Ignore
   public void startTwice() throws Exception {
 
     if( isLikelyToWork() ) {
@@ -92,6 +96,7 @@ public class JavaShellTest {
   }
 
   @Test
+//  @Ignore
   public void useAsJmxConnector() throws Exception {
 
     if( isLikelyToWork() ) {
@@ -99,9 +104,7 @@ public class JavaShellTest {
           new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ;
       javaShell.start() ;
       try {
-        final RuntimeMXBean runtimeMXBean = javaShell.getManagedBean(
-            RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
-        final String virtualMachineName = runtimeMXBean.getVmName() ;
+        final String virtualMachineName = queryJvmName( javaShell ) ;
         assertNotNull( virtualMachineName ) ;
         LOGGER.info( "Returned VM name: '", virtualMachineName, "'" ) ;
       } finally {
@@ -109,6 +112,7 @@ public class JavaShellTest {
       }
     }
   }
+
 
 
   @Test
@@ -124,6 +128,10 @@ public class JavaShellTest {
       ) ;
       javaShell.start() ;
       final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
+
+      // Be sure that JMX stuff started in watched JVM.
+      assertThat( queryJvmName( javaShell ) ).isNotNull() ;
+
       shellFixture.askForSelfTermination() ;
       Thread.sleep( ( long ) heartbeatFatalDelay ) ;
       assertThat( maybeDown.apply() ).isTrue() ;
@@ -133,12 +141,13 @@ public class JavaShellTest {
 
 
   @Test
+//  @Ignore
   public void startForeignProgramAndMissHeartbeat() throws Exception {
 
-    final int heartbeatPeriod = 10 * 1000 ;
-    final int heartbeatFatalDelay = 1 * 1000 ; 
-    final long maybeDownCheckPeriod = 200L ;
-    final int maybeDownRetryCount = ( int ) ( ( long ) heartbeatPeriod / maybeDownCheckPeriod ) ;
+    final int heartbeatPeriod = /*10 * 000 **/ 100 ;
+    final int heartbeatFatalDelay = /*1000*/ 1000 ;
+    final long maybeDownCheckPeriod = /*200L*/ 100 ;
+    final int maybeDownRetryCount = 2 /*( int ) ( ( long ) heartbeatPeriod / maybeDownCheckPeriod )*/ ;
 
     if( isLikelyToWork() ) {
 
@@ -148,7 +157,7 @@ public class JavaShellTest {
           .withHeartbeatPeriodMilliseconds( heartbeatPeriod )
           .withHeartbeatFatalDelayMilliseconds( heartbeatFatalDelay )
           .withJmxPortConfiguredAtJvmStartup( TcpPortBooker.THIS.find() )
-          .withJmxKit( new DefaultJmxKit( ) )          
+          .withJmxKit( new DefaultJmxKit() )
       ;
 
       final JavaShell javaShell = new JavaShell( parameters ) ;
@@ -156,7 +165,12 @@ public class JavaShellTest {
         javaShell.start() ;
 
         final MaybeDown maybeDown = new MaybeDown( javaShell ) ;
+        LOGGER.debug( "At this time, the JVM should be up." ) ;
         assertThat( maybeDown.apply() ).isFalse() ; // Test health.
+
+        final HeartbeatSender heartbeatSender = Reflection.field( "heartbeatSender" )
+            .ofType( HeartbeatSender.class ).in( javaShell ).get() ;
+        heartbeatSender.stop() ;
 
         RepeatedAssert.assertEventually(
             maybeDown,
@@ -166,7 +180,7 @@ public class JavaShellTest {
         ) ;
 
         final List< String > log = readLines( shellFixture.getLogFile() ) ;
-        assertThat( log ).hasSize( 1 ) ;
+        assertThat( log ).isNotEmpty() ;
         assertThat( log.get( 0 ) ).contains( "Starting up" ).contains( "listening..." ) ;
       } finally {
         javaShell.shutdown( ShutdownStyle.FORCED ) ;
@@ -178,6 +192,7 @@ public class JavaShellTest {
 
 
   @Test
+//  @Ignore
   public void startForeignProgram() throws Exception {
     if( isLikelyToWork() ) {
       final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
@@ -329,5 +344,13 @@ public class JavaShellTest {
     }
   }
 
+  private static String queryJvmName( final JavaShell javaShell )
+      throws IOException, InterruptedException
+  {
+    final RuntimeMXBean runtimeMXBean = javaShell.getManagedBean(
+        RuntimeMXBean.class, JavaShellTools.RUNTIME_MX_BEAN_OBJECTNAME ) ;
+    final String virtualMachineName = runtimeMXBean.getVmName() ;
+    return virtualMachineName;
+  }
 
 }

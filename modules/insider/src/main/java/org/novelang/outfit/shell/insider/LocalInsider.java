@@ -31,6 +31,8 @@ import static java.lang.System.currentTimeMillis;
 public class LocalInsider implements Insider {
 
   private final AtomicLong keepaliveCounter ;
+  private final String virtualMachineName ;
+  private final Thread heartbeatReceiver ;
 
   public LocalInsider() {
     this( HEARTBEAT_FATAL_DELAY_MILLISECONDS ) ;
@@ -39,7 +41,7 @@ public class LocalInsider implements Insider {
 
   @SuppressWarnings( { "CallToThreadStartDuringObjectConstruction" } )
   public LocalInsider( final long delay ) {
-    final String virtualMachineName = ManagementFactory.getRuntimeMXBean().getName();
+    virtualMachineName = ManagementFactory.getRuntimeMXBean().getName() ;
 
     printStandard( "Initializing " + getClass().getSimpleName() + " "
         + "with: "
@@ -49,20 +51,28 @@ public class LocalInsider implements Insider {
 
     keepaliveCounter = new AtomicLong( currentTimeMillis() ) ;
 
-    final Thread heartbeatReceiver = new Thread(
+    heartbeatReceiver = new Thread(
         new Runnable() {
           @Override
           public void run() {
             printStandard(
-                "Started keepalive watcher from thread " + Thread.currentThread() + "." ) ;
+                "Started keepalive watcher from thread " + Thread.currentThread()
+                + " inside " + virtualMachineName + "."
+            ) ;
+
+            // Reset the counter for synchronization with thread start time.
+            keepAlive() ;
+
             while( true ) {
               try {
                 Thread.sleep( delay ) ;
                 final long lag = currentTimeMillis() - keepaliveCounter.get() ;
                 if( lag > delay ) {
                   printError(
-                      "No heartbeat for more than " + delay + " milliseconds, " +
-                      "halting with status of " + STATUS_HEARTBEAT_PERIOD_EXPIRED + "." ) ;
+                      "No heartbeat for more than " + delay + " milliseconds, "
+                      + "halting " + virtualMachineName + " with status of "
+                      + STATUS_HEARTBEAT_PERIOD_EXPIRED + "."
+                  ) ;
                   Runtime.getRuntime().halt( STATUS_HEARTBEAT_PERIOD_EXPIRED ) ;
                   break ; // Avoid a compilation warning because of infinite loop.
                 }
@@ -71,14 +81,27 @@ public class LocalInsider implements Insider {
           }
         }
         ,getClass().getSimpleName() + "-HeartbeatReceiver"
-    ) ;
+    );
     heartbeatReceiver.setDaemon( true ) ;
-    heartbeatReceiver.start() ;
 
-    // Reset the counter for an approximative synchronization with heartbeat thread start time.
-    // A semaphore may be overkill.
-    keepAlive() ;
-    
+  }
+
+  /**
+   * Call this method only after JMX registration happened. Otherwise there can be timing problems,
+   * especially when running tests in parallel.
+   */
+  @Override
+  public void startWatchingKeepalive() {
+    heartbeatReceiver.start() ;
+  }
+
+
+  /**
+   * Shortcut method for getting value returned by
+   * {@link java.lang.management.RuntimeMXBean#getName()}.
+   */
+  protected final String getVirtualMachineName() {
+    return virtualMachineName ;
   }
 
   /**
@@ -86,6 +109,7 @@ public class LocalInsider implements Insider {
    */
   @Override
   public void shutdown() {
+    heartbeatReceiver.interrupt() ; // Might avoid messy error messages in extreme cases.
     new Thread(
         new Runnable() {
           @Override

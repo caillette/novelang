@@ -45,6 +45,13 @@ public interface Insider {
 
   String MAXIMUM_HEARTBEATDELAY_PARAMETERNAME = "maximumHeartbeatDelay" ;
 
+  /**
+   * Call this method after obtaining JMX connection.
+   * This avoid a premature JVM shutdown when running tests which have non-deterministic
+   * timing on their side (especially with multiple tests running in parallel). 
+   */
+  void startWatchingKeepalive() ;
+
   void shutdown() ;
 
   /**

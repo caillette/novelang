@@ -56,7 +56,7 @@ class ShellFixture {
     jarFile = JavaShellTest.installFixturePrograms( scratchDirectory ) ;
 
     parameters = org.novelang.outfit.Husk.create( JavaShellParameters.class )
-        .withNickname( "Stupid" )
+        .withNickname( "Stupid-" + methodSupport.getTestName().substring( 0, 4 ) )
         .withWorkingDirectory( scratchDirectory )
         .withJavaClasses( new JavaClasses.ClasspathAndMain(
             "org.novelang.outfit.shell.StupidListener",

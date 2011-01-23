@@ -39,63 +39,58 @@ import javax.management.MBeanServer;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "UnusedDeclaration", "UseOfSystemOutOrSystemErr" } )
-public class InsiderAgent
-{
+public class InsiderAgent {
 
-    private InsiderAgent()
-    {
-    }
+    private InsiderAgent() { }
 
-    /**
-     * Called when launching a JVM with {@code -javaagent} option.
-     * See <a href="http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html">Java Instrumentation specification</a>.
-     */
-    public static void premain( final String arguments )
-    {
-        final MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer() ;
-        final LocalInsider managedBean ;
+  /**
+   * Called when launching a JVM with {@code -javaagent} option.
+   * See <a href="http://java.sun.com/javase/6/docs/api/java/lang/instrument/package-summary.html">Java Instrumentation specification</a>.
+   */
+  public static void premain( final String arguments ) {
+    final MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer() ;
+    final LocalInsider managedBean ;
 
+    try {
+      if( arguments != null
+          && arguments.startsWith( Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME )
+      ) out : {
+        final String delayAsString = arguments.substring(
+            Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME.length() ) ;
+        final long delay;
         try {
-          if( arguments != null
-              && arguments.startsWith( Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME )
-          ) out : {
-            final String delayAsString = arguments.substring(
-                Insider.MAXIMUM_HEARTBEATDELAY_PARAMETERNAME.length() ) ;
-            final long delay;
-            try {
-              delay = Long.parseLong( delayAsString );
-            } catch( NumberFormatException e ) {
-              System.err.println( "Couldn't parse arguments '" + arguments + "', using defaults." ) ;
-              managedBean = new LocalInsider() ;
-              break out ;
-            }
-            managedBean = new LocalInsider( delay ) ;
-          } else {
-            managedBean = new LocalInsider() ;
-          }
-          beanServer.registerMBean( managedBean, Insider.NAME ) ;
-        } catch( Exception e ) {
-          // Checked exceptions in method signature prevent the JVM from loading the agent.
-          throw new RuntimeException( e ) ;
+          delay = Long.parseLong( delayAsString );
+        } catch( NumberFormatException e ) {
+          System.err.println( "Couldn't parse arguments '" + arguments + "', using defaults." ) ;
+          managedBean = new LocalInsider() ;
+          break out ;
         }
-        System.out.println( "Loaded " + InsiderAgent.class.getName() + "." ) ;
+        managedBean = new LocalInsider( delay ) ;
+      } else {
+        managedBean = new LocalInsider() ;
+      }
+      beanServer.registerMBean( managedBean, Insider.NAME ) ;
+    } catch( Exception e ) {
+      // Checked exceptions in method signature prevent the JVM from loading the agent.
+      throw new RuntimeException( e ) ;
     }
+    System.out.println( "Loaded " + InsiderAgent.class.getName()
+        + " inside " + managedBean.getVirtualMachineName() + "." ) ;
+  }
 
 
-    /**
-     * Called when hot-loaded through
-     * <a href="http://java.sun.com/javase/6/docs/jdk/api/attach/spec/com/sun/tools/attach/VirtualMachine.html#loadAgent%28java.lang.String,%20java.lang.String%29">Attach API</a>.
-     */
-    public static void agentmain( final String args )
-    {
-        new Thread( new Runnable()
+  /**
+   * Called when hot-loaded through
+   * <a href="http://java.sun.com/javase/6/docs/jdk/api/attach/spec/com/sun/tools/attach/VirtualMachine.html#loadAgent%28java.lang.String,%20java.lang.String%29">Attach API</a>.
+   */
+  public static void agentmain( final String args ) {
+    new Thread( new Runnable() {
+      @Override
+        public void run()
         {
-            @Override
-            public void run()
-            {
-                System.out.println( getClass().getName() + " halting JVM..." ) ;
-                Runtime.getRuntime().halt( 1 ) ;
-            }
-        } ).start() ;
-    }
+            System.out.println( getClass().getName() + " halting JVM " + "..." ) ;
+            Runtime.getRuntime().halt( 1 ) ;
+        }
+      } ).start() ;
+  }
 }
