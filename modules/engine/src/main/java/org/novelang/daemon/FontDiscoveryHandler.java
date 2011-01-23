@@ -16,7 +16,10 @@
  */
 package org.novelang.daemon;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +48,13 @@ public class FontDiscoveryHandler extends GenericHandler{
 
   private static final Logger LOGGER = LoggerFactory.getLogger( FontDiscoveryHandler.class ) ;
 
+  /**
+   * Only because
+   * {@link org.novelang.rendering.Renderer#render(org.novelang.common.Renderable, java.io.OutputStream, org.novelang.common.metadata.Page, java.io.File)}
+   * requires a reference to content directory for other cases.
+   */
+  private final URL contentRoot ;
+
   private final RenderingConfiguration renderingConfiguration ;
   public static final String DOCUMENT_NAME = "/~fonts.pdf" ;
   public static final ResourceName STYLESHEET = new ResourceName( "font-list.xsl" ) ;
@@ -57,6 +67,12 @@ public class FontDiscoveryHandler extends GenericHandler{
 
   public FontDiscoveryHandler( final ProducerConfiguration producerConfiguration ) {
     renderingConfiguration = producerConfiguration.getRenderingConfiguration() ;
+    try {
+      contentRoot = producerConfiguration.getContentConfiguration()
+          .getContentRoot().toURI().toURL() ;
+    } catch( MalformedURLException e ) {
+      throw new RuntimeException( e ) ;
+    }
   }
 
   @Override
@@ -70,7 +86,8 @@ public class FontDiscoveryHandler extends GenericHandler{
 
       final FontDiscoveryStreamer  fontDiscoveryStreamer;
       try {
-        fontDiscoveryStreamer = new FontDiscoveryStreamer( renderingConfiguration, STYLESHEET );
+        fontDiscoveryStreamer =
+            new FontDiscoveryStreamer( renderingConfiguration, STYLESHEET, contentRoot );
       } catch( TransformerConfigurationException e ) {
         throw new ServletException( e ) ;
       } catch( SAXException e ) {

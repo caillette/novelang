@@ -33,6 +33,7 @@ import org.novelang.configuration.ConfigurationTools;
 import org.novelang.daemon.HttpDaemon;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.outfit.TcpPortBooker;
 import org.novelang.outfit.loader.ClasspathResourceLoader;
 import org.novelang.outfit.loader.ResourceLoader;
 import org.novelang.rendering.RenditionMimeType;
@@ -123,7 +124,8 @@ public class TagInteractionTest {
     ResourcesForTests.initialize() ;
   }
 
-  private static final int HTTP_DAEMON_PORT = 8081 ;
+  private final int httpDaemonPort = TcpPortBooker.THIS.find() ;
+  
   private static final int AJAX_TIMEOUT_MILLISECONDS = 10000 ;
 
 
@@ -145,7 +147,7 @@ public class TagInteractionTest {
           new ClasspathResourceLoader( "/" + ConfigurationTools.BUNDLED_STYLE_DIR ) ;
 
       httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
-          HTTP_DAEMON_PORT,
+          httpDaemonPort,
           methodSupport.getDirectory(),
           resourceLoader
       ) ) ;
@@ -179,7 +181,7 @@ public class TagInteractionTest {
     webClient.setAjaxController( new NicelyResynchronizingAjaxController() ) ;
     webClient.setRedirectEnabled( true ) ;
     final Page page = webClient.getPage(
-        "http://localhost:" + HTTP_DAEMON_PORT + "/" +
+        "http://localhost:" + httpDaemonPort + "/" +
         FilenameUtils.getBaseName( TaggedPart.TAGGED.getName() ) +
         "." + RenditionMimeType.HTML.getFileExtension()
     ) ;

@@ -23,6 +23,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
@@ -75,16 +76,25 @@ public class FontDiscoveryStreamer {
 
   private static final String ELEMENT_SENTENCE = "sentence" ;
 
+
   private final XslWriter xslWriter ;
   private final FopFontStatus fopFontStatus ;
+  /**
+   * Only because
+   * {@link org.novelang.rendering.Renderer#render(org.novelang.common.Renderable, java.io.OutputStream, org.novelang.common.metadata.Page, java.io.File)}
+   * requires a reference to content directory for other cases.
+   */
+  private final URL contentRoot ;
 
   public FontDiscoveryStreamer(
       final RenderingConfiguration renderingConfiguration,
-      final ResourceName resourceName
+      final ResourceName resourceName,
+      final URL contentDirectory
   ) throws IOException, TransformerConfigurationException, SAXException, TransformerCompositeException
   {
     xslWriter = createXslWriter( renderingConfiguration, resourceName ) ;
     fopFontStatus = renderingConfiguration.getCurrentFopFontStatus() ;
+    contentRoot = Preconditions.checkNotNull( contentDirectory ) ;
   }
 
 
@@ -115,12 +125,12 @@ public class FontDiscoveryStreamer {
 
       @Override
       public Page getPage() {
-        throw new UnsupportedOperationException() ;
+        return null ;
       }
 
       @Override
       public URL getContentDirectory() {
-        throw new UnsupportedOperationException() ;
+        return contentRoot ;
       }
     } ;
 

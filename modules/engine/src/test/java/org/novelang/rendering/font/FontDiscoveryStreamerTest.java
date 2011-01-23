@@ -18,6 +18,7 @@ package org.novelang.rendering.font;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import javax.xml.transform.TransformerConfigurationException;
@@ -51,7 +52,8 @@ public class FontDiscoveryStreamerTest {
 
     final FontDiscoveryStreamer streamer = new FontDiscoveryStreamer(
         HOLLOW_RENDERING_CONFIGURATION,
-        new ResourceName( "identity.xsl" )
+        new ResourceName( "identity.xsl" ),
+        new URL( "http://no.null.here" )
     ) {
       @Override
       protected XslWriter createXslWriter(
