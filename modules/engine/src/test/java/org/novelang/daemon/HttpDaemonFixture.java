@@ -19,10 +19,12 @@ package org.novelang.daemon;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.novelang.outfit.DefaultCharset;
@@ -54,6 +56,9 @@ import org.pdfbox.util.PDFTextStripper;
       "Version/3.1.2 Safari/525.22"
   ;
   public static final String DEFAULT_USER_AGENT = CAMINO_USER_AGENT ;
+
+  public static final Charset DEFAULT_PLATFORM_CHARSET = Charset.forName( SystemUtils.FILE_ENCODING ) ;
+
 
   private HttpDaemonFixture() { }
 

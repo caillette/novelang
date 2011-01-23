@@ -23,10 +23,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Preconditions;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Directory;
@@ -41,6 +40,8 @@ import org.novelang.outfit.DefaultCharset;
 import org.novelang.outfit.TcpPortBooker;
 import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.testing.junit.MethodSupport;
+
+import static com.google.common.base.Charsets.UTF_8;
 
 /**
  * A JUnit {@link org.junit.Rule} supporting concurrent test execution.
@@ -59,7 +60,6 @@ public class HttpDaemonSupport extends MethodSupport {
   protected final ResourceInstaller resourceInstaller;
 
   private HttpDaemon httpDaemon = null ;
-  private Charset renderingCharset = Charsets.UTF_8 ;
 
 
   public HttpDaemonSupport() {
@@ -84,7 +84,7 @@ public class HttpDaemonSupport extends MethodSupport {
 // ============
 
   protected final void setup() throws Exception {
-    daemonSetup( Charsets.ISO_8859_1 ) ; // TODO use default instead.
+    daemonSetup( UTF_8 ) ;
   }
 
   protected final String setup( final Resource resource ) throws Exception {
@@ -101,12 +101,13 @@ public class HttpDaemonSupport extends MethodSupport {
     daemonSetup( styleDirectory, renderingCharset ) ;
   }
 
-  protected final String alternateSetup( // TODO rename into setupAndLoadSourceDocument
-      final Resource resource,
-      final Charset sourceCharset
+  public final String alternateSetup( // TODO rename into setupAndLoadSourceDocument
+       final Resource resource,
+       final Charset sourceCharset,
+       final Charset renderingCharset
   ) throws Exception {
     resourceInstaller.copy( resource ) ;
-    setup() ;
+    daemonSetup( renderingCharset ) ;
     final String novellaSource = resource.getAsString( sourceCharset ) ;
     return novellaSource ;
   }
@@ -125,7 +126,6 @@ public class HttpDaemonSupport extends MethodSupport {
   private void daemonSetup( final Charset renderingCharset )
       throws Exception
   {
-    this.renderingCharset = Preconditions.checkNotNull( renderingCharset ) ;
     httpDaemon = new HttpDaemon( ResourceTools.createDaemonConfiguration(
         daemonPort,
         resourceInstaller.getTargetDirectory(),
@@ -154,6 +154,7 @@ public class HttpDaemonSupport extends MethodSupport {
     httpDaemon.start() ;
   }
 
+  
 // ========
 // Requests
 // ========
@@ -168,7 +169,7 @@ public class HttpDaemonSupport extends MethodSupport {
 
 
   public String readAsString( final Resource resource ) throws IOException {
-    return readAsString( "/" + resource.getName(), renderingCharset ) ;
+    return readAsString( "/" + resource.getName(), UTF_8 ) ;
   }
 
   public String readAsString( final Resource resource, final Charset charset ) throws IOException {
@@ -176,7 +177,7 @@ public class HttpDaemonSupport extends MethodSupport {
   }
 
   public String readAsString( final String documentRequestAsString ) throws IOException {
-    return new String( readAsBytes( documentRequestAsString ), renderingCharset ) ;
+    return new String( readAsBytes( documentRequestAsString ), UTF_8 ) ;
   }
 
   public String readAsString( final String documentRequestAsString, final Charset charset )

@@ -68,7 +68,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Laurent Caillette
  */
-public class AbstractHttpDaemonTest {
+public class AbstractTestHttpDaemon {
 
   static {
     ResourcesForTests.initialize() ;
@@ -84,7 +84,7 @@ public class AbstractHttpDaemonTest {
   @Rule
   public final MethodSupport methodSupport ;
 
-  public AbstractHttpDaemonTest() {
+  public AbstractTestHttpDaemon() {
     final Object methodSupportLock = getMethodSupportLock() ;
     methodSupport = methodSupportLock == null ? new DaemonMethodSupport()
         : new DaemonMethodSupport( methodSupportLock ) ;

@@ -92,12 +92,6 @@ public final class Resource extends SchemaNode implements Comparable< Resource >
 
   }
   public String getAsString( final Charset charset ) {
-      final byte[] bytes = getAsByteArray() ;
-      try {
-        return new String( bytes, charset.name() ) ;
-      } catch( UnsupportedEncodingException e ) {
-        throw new Error( "Could not create string with charset " + charset, e ) ;
-      }
-
+    return new String( getAsByteArray(), charset ) ;
   }
 }

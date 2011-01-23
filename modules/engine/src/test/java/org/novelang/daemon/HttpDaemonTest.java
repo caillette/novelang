@@ -20,11 +20,11 @@ import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
@@ -46,8 +46,26 @@ import static org.junit.Assert.assertTrue;
  * @author Laurent Caillette
  */
 @SuppressWarnings( { "HardcodedFileSeparator" } )
-public class HttpDaemonTest extends AbstractHttpDaemonTest {
+public class HttpDaemonTest extends AbstractTestHttpDaemon {
 
+  @Test
+//  @Ignore( "Moved to BetterHttpDaemonTest" )
+  public void novellaOk() throws Exception {
+
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
+    final String novellaSource = alternateSetup( resource, ISO_8859_1 ) ;
+    LOGGER.info( "Using default charset ", SystemUtils.FILE_ENCODING ) ;
+    final String generated = readAsString( new URL(
+        "http://localhost:" + daemonPort + "/" +
+        resource.getName()
+    ) ) ;
+    final String shaved = HttpDaemonFixture.shaveComments( generated ) ;
+    save( "generated.novella", generated ) ;
+    final String normalizedNovellaSource = TextTools.unixifyLineBreaks( novellaSource ) ;
+    final String normalizedShaved = TextTools.unixifyLineBreaks( shaved ) ;
+    assertEquals( normalizedNovellaSource, normalizedShaved ) ;
+
+  }
 
   @Test
   public void correctMimeTypeForPdf() throws Exception {

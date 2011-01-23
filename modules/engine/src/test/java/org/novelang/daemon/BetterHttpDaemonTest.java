@@ -22,6 +22,8 @@ import org.junit.Test;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 
+import static com.google.common.base.Charsets.ISO_8859_1;
+import static com.google.common.base.Charsets.UTF_8;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.novelang.daemon.HttpDaemonFixture.PDF;
 import static org.novelang.daemon.HttpDaemonFixture.shaveComments;
@@ -36,12 +38,16 @@ public class BetterHttpDaemonTest {
 
   /**
    * Tests if a Novella renders as its own source!
+   * In order to force character escape we use non-default encoding.
    */
   @Test
   public void novellaOk() throws Exception {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    final String novellaSource = support.alternateSetup( resource, Charsets.UTF_8 ) ;
-    final String generated = support.readAsString( resource, Charsets.UTF_8 ) ;
+    final String novellaSource = support.alternateSetup( resource, UTF_8, ISO_8859_1 ) ;
+    final String generated = support.readAsString(
+        resource,
+        HttpDaemonFixture.DEFAULT_PLATFORM_CHARSET // Weird, but forces correct escaping. 
+    ) ;
     final String normalizedNovellaSource = unixifyLineBreaks( novellaSource ) ;
     final String normalizedShaved = unixifyLineBreaks( shaveComments( generated ) ) ;
     assertThat( normalizedShaved ).isEqualTo( normalizedNovellaSource ) ;
@@ -51,7 +57,7 @@ public class BetterHttpDaemonTest {
   @Test
   public void pdfOk() throws Exception {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    support.alternateSetup( resource, Charsets.UTF_8 ) ;
+    support.alternateSetup( resource, UTF_8, ISO_8859_1 ) ;
     final byte[] generated = support.readAsBytes( "/" + resource.getBaseName() + PDF ) ;
     final String pdfText = HttpDaemonFixture.extractPdfText( generated ) ;
     assertThat( pdfText ).contains( "Used in HttpDaemonTest. Edit with care." ) ;
