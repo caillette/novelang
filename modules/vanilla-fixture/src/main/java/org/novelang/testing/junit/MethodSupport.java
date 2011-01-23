@@ -65,7 +65,12 @@ public class MethodSupport implements MethodRule, Supplier< File > {
   ) {
     synchronized( stateLock ) {
       testName = frameworkMethod.getName() ;
-      return new WrappedStatement( base, executionLock ) ;
+      final String reasonToNotApply = mayEvaluateInContext() ;
+      if( reasonToNotApply == null ) {
+        return new WrappedStatement( base, executionLock ) ;
+      } else {
+        return new UnappliableStatement( reasonToNotApply ) ;
+      }
     }
   }
 
@@ -98,6 +103,17 @@ public class MethodSupport implements MethodRule, Supplier< File > {
 
 
   protected void afterStatementEvaluation() throws Exception { }
+
+  /**
+   * Override to disable the test on a contextual basis (where {@code @Ignore} wouldn't fit).
+   * Return a non-null {@code String} to indicate the {@link Statement} shouldn't evaluate,
+   * indicating the reason why.
+   *
+   * @return null by default.
+   */
+  protected String mayEvaluateInContext() {
+    return null ;
+  }
 
 
   private class WrappedStatement extends Statement {
@@ -137,5 +153,18 @@ public class MethodSupport implements MethodRule, Supplier< File > {
     }
   }
 
+  private class UnappliableStatement extends Statement {
+
+    private final String reason ;
+
+    public UnappliableStatement( final String reason ) {
+      this.reason = reason ;
+    }
+
+    @Override
+    public void evaluate() throws Throwable {
+      LOGGER.info( "*** NOT Evaluating ", getTestName(), ", reason: " + reason + " ***" ) ;
+    }
+  }
 
 }
