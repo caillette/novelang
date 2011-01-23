@@ -59,7 +59,6 @@ import static org.junit.Assert.assertNotNull;
 public class JavaShellTest {
 
   @Test
-  @Ignore
   public void getTheOfficialJar() throws IOException {
     final File jarFile = AgentFileInstaller.getInstance().getJarFile() ;
     assertThat( jarFile ).isNotNull() ;
@@ -67,7 +66,6 @@ public class JavaShellTest {
 
 
   @Test( expected = ProcessInitializationException.class )
-  @Ignore
   public void cannotStart() throws Exception {
     final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
     final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
@@ -81,14 +79,13 @@ public class JavaShellTest {
 
 
   @Test
-//  @Ignore
+  @Ignore( "Takes too long (about 40 s)" )
   public void startTwice() throws Exception {
     startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
     startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
   }
 
   @Test
-  @Ignore
   public void useAsJmxConnector() throws Exception {
     final JavaShell javaShell =
         new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ;
@@ -105,7 +102,6 @@ public class JavaShellTest {
 
 
   @Test
-//  @Ignore
   public void detectProgramExitedOnItsOwn() throws Exception {
     final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
     final int heartbeatFatalDelay = 1000 ;
@@ -172,7 +168,6 @@ public class JavaShellTest {
 
 
   @Test
-//  @Ignore
   public void justStartForeignProgram() throws Exception {
     final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
 

@@ -118,6 +118,8 @@ public abstract class ProcessShell {
       errorStreamWatcherThread.setDaemon( true ) ;
       errorStreamWatcherThread.start() ;
 
+      LOGGER.debug( "Waiting for startup sensor to detect startup line..." );
+
       startupSemaphore.tryAcquire( 1, timeout, timeUnit ) ;
 
       if( state == State.BROKEN ) {
@@ -142,6 +144,7 @@ public abstract class ProcessShell {
         if( line != null ) {
           LOGGER.debug( "Standard output from ", getNickname(), ": >>> ", line ) ;
           if( /*startupSemaphore.availablePermits() == 0 &&*/ startupSensor.apply( line ) ) {
+            LOGGER.debug( "Startup detected for ", getNickname(), "." );
             startupSemaphore.release() ;
           }
         }
@@ -211,7 +214,7 @@ public abstract class ProcessShell {
         state = State.READY ; //TERMINATED ;
       }
     }
-    LOGGER.debug( "Process shutdown ended for ", getNickname(), ", returning ", exitCode, "'." ) ;
+    LOGGER.debug( "Process shutdown ended for ", getNickname(), ", returning ", exitCode, "." ) ;
     return exitCode ;
   }
 
