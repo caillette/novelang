@@ -25,8 +25,10 @@ import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
+import javax.management.InstanceNotFoundException;
 import org.apache.commons.io.FileUtils;
 import org.fest.reflect.core.Reflection;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.logger.Logger;
@@ -57,6 +59,7 @@ import static org.junit.Assert.assertNotNull;
 public class JavaShellTest {
 
   @Test
+  @Ignore
   public void getTheOfficialJar() throws IOException {
     final File jarFile = AgentFileInstaller.getInstance().getJarFile() ;
     assertThat( jarFile ).isNotNull() ;
@@ -64,6 +67,7 @@ public class JavaShellTest {
 
 
   @Test( expected = ProcessInitializationException.class )
+  @Ignore
   public void cannotStart() throws Exception {
     final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
     final JavaShell javaShell = new JavaShell( shellFixture.getParameters()
@@ -77,12 +81,14 @@ public class JavaShellTest {
 
 
   @Test
+//  @Ignore
   public void startTwice() throws Exception {
     startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
     startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
   }
 
   @Test
+  @Ignore
   public void useAsJmxConnector() throws Exception {
     final JavaShell javaShell =
         new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ;
@@ -99,6 +105,7 @@ public class JavaShellTest {
 
 
   @Test
+//  @Ignore
   public void detectProgramExitedOnItsOwn() throws Exception {
     final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
     final int heartbeatFatalDelay = 1000 ;
@@ -120,7 +127,7 @@ public class JavaShellTest {
 
 
   @Test
-  public void startForeignProgramAndMissHeartbeat() throws Exception {
+  public void missHeartbeat() throws Exception {
 
     final int heartbeatPeriod = 100 ;
     final int heartbeatFatalDelay = 1000 ;
@@ -165,7 +172,8 @@ public class JavaShellTest {
 
 
   @Test
-  public void startForeignProgram() throws Exception {
+//  @Ignore
+  public void justStartForeignProgram() throws Exception {
     final ShellFixture shellFixture = new ShellFixture( methodSupport ) ;
 
     final JavaShell javaShell = new JavaShell( shellFixture.getParameters() ) ;
@@ -175,6 +183,7 @@ public class JavaShellTest {
       javaShell.shutdown( ShutdownStyle.GENTLE ) ;
     } catch( Exception e ) {
       javaShell.shutdown( ShutdownStyle.FORCED ) ;
+      throw e ;
     }
 
     final List< String > log = readLines( shellFixture.getLogFile() ) ;
@@ -301,7 +310,9 @@ public class JavaShellTest {
       try {
         return ! insider.isAlive() ;
       } catch( UndeclaredThrowableException e ) {
-        if( e.getCause() instanceof java.rmi.ConnectException ) {
+        if( e.getCause() instanceof java.rmi.ConnectException
+            || e.getCause() instanceof InstanceNotFoundException
+        ) {
           return true ;
         } else {
           throw e ;
