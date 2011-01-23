@@ -132,7 +132,8 @@ public class FopTools {
     final FontCache fontCache = foUserAgent.getFactory().getFontManager().getFontCache() ;
     final Map< String, Long > fieldValue = Reflection.field( "failedFontMap" )
         .ofType( new TypeRef< Map< String, Long > >() {} ).in( fontCache ).get() ;
-    return ImmutableSet.copyOf( fieldValue.keySet() ) ;
+    return fieldValue == null ? ImmutableSet.< String >of()
+        : ImmutableSet.copyOf( fieldValue.keySet() ) ;
   }
 
   public static FopFontStatus createGlobalFontStatus(

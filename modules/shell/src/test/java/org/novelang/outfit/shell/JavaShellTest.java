@@ -79,7 +79,7 @@ public class JavaShellTest {
 
 
   @Test
-  @Ignore( "Takes too long (about 40 s)" )
+//  @Ignore( "Takes too long (about 40 s)" )
   public void startTwice() throws Exception {
     startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
     startAndShutdown( new JavaShell( new ShellFixture( methodSupport ).getParameters() ) ) ;
@@ -305,14 +305,21 @@ public class JavaShellTest {
       try {
         return ! insider.isAlive() ;
       } catch( UndeclaredThrowableException e ) {
-        if( e.getCause() instanceof java.rmi.ConnectException
-            || e.getCause() instanceof InstanceNotFoundException
-        ) {
+        final Throwable cause = e.getCause() ;
+        if( denotesConnectionLoss( cause ) ) {
           return true ;
         } else {
           throw e ;
         }
       }
+    }
+
+    private static boolean denotesConnectionLoss( final Throwable cause ) {
+      return cause instanceof java.rmi.ConnectException
+          || cause instanceof InstanceNotFoundException
+          || ( cause instanceof IOException
+              && cause.getMessage().contains( "The client has been closed." ) )
+      ;
     }
 
     @Override
