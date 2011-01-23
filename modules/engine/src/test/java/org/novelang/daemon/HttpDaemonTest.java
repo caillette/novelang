@@ -24,6 +24,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
@@ -47,39 +48,13 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings( { "HardcodedFileSeparator" } )
 public class HttpDaemonTest extends AbstractHttpDaemonTest {
 
-  @Test
-  public void novellaOk() throws Exception {
-
-    final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    final String novellaSource = alternateSetup( resource, ISO_8859_1 ) ;
-    final String generated = readAsString( new URL(
-        "http://localhost:" + daemonPort + "/" +
-        resource.getName()
-    ) ) ;
-    final String shaved = shaveComments( generated ) ;
-    save( "generated.novella", generated ) ;
-    final String normalizedNovellaSource = TextTools.unixifyLineBreaks( novellaSource ) ;
-    final String normalizedShaved = TextTools.unixifyLineBreaks( shaved ) ;
-    assertEquals( normalizedNovellaSource, normalizedShaved ) ;
-
-  }
-
-  @Test
-  public void pdfOk() throws Exception {
-    final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    alternateSetup( resource, ISO_8859_1 ) ;
-    final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + PDF ) ) ;
-    save( "generated.pdf", generated ) ;
-    assertTrue( generated.length > 100 ) ;
-  }
 
   @Test
   public void correctMimeTypeForPdf() throws Exception {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
     final HttpGet httpGet = new HttpGet(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + PDF ) ;
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.PDF ) ;
     final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
     final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
     assertTrue( "Got:" + Arrays.asList( headers ), headers.length > 0 ) ;
@@ -100,40 +75,13 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
     renderAndCheckStatusCode( novellaPolish, "polish.pdf" );
   }
 
-/*
-  @Test
-  public void emptyFontListingMakesNoSmoke() throws Exception {
-    setup() ;
-    final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + daemonPort + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
-    save( "generated.pdf", generated ) ;
-    final String pdfText = extractPdfText( generated ) ;
-    assertThat( pdfText ).contains( "No font found." ) ;
-  }
-
-  @Test
-  public void fontListingMakesNoSmoke() throws Exception {
-    daemonSetupWithFonts( ResourcesForTests.FontStructure.Parent.Child.dir ) ;
-    final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + daemonPort + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
-    save( "generated.pdf", generated ) ;
-    final String pdfText = extractPdfText( generated ) ;
-    assertThat( pdfText )
-        .contains( ResourcesForTests.FontStructure.Parent.Child.MONO_OBLIQUE.getBaseName() )
-        .contains( "There are broken fonts!" )
-        .contains( ResourcesForTests.FontStructure.Parent.Child.BAD.getBaseName() )
-    ;
-
-    LOGGER.debug( "Text extracted from PDF: ", pdfText ) ;
-  }
-*/
 
   @Test
   public void htmlNoSmoke() throws Exception {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML ) ) ;
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.HTML ) ) ;
     assertTrue( generated.length > 100 ) ;
   }
 
@@ -142,10 +90,10 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
     final Resource resource = ResourcesForTests.Served.BROKEN_NOVELLA;
     setup( resource ) ;
 
-    final String brokentDocumentName = resource.getBaseName() + HTML ;
+    final String brokentDocumentName = resource.getBaseName() + HttpDaemonFixture.HTML ;
     final String brokenDocumentUrl =
         "http://localhost:" + daemonPort + "/" + brokentDocumentName ;
-    final ResponseSnapshot responseSnapshot = followRedirection(
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection(
         brokenDocumentUrl ) ;
 
     assertTrue( responseSnapshot.getContent().contains( "Requested:" ) ) ;
@@ -167,8 +115,8 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     setup( resource ) ;
 
-    final ResponseSnapshot responseSnapshot = followRedirection(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML +
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection(
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.HTML +
         GenericRequest.ERRORPAGE_SUFFIX
     ) ;
 
@@ -181,7 +129,7 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
-    final ResponseSnapshot responseSnapshot =
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot =
         followRedirection( "http://localhost:" + daemonPort ) ;
     checkDirectoryListing( responseSnapshot, resource ) ;
   }
@@ -192,7 +140,7 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
       resourceInstaller.copyWithPath( resource ) ;
       setup() ;
     final String urlAsString = "http://localhost:" + daemonPort + "/";
-    final ResponseSnapshot responseSnapshot = followRedirection( urlAsString ) ;
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection( urlAsString ) ;
       checkDirectoryListing( responseSnapshot, resource ) ;
   }
 
@@ -203,9 +151,9 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
     setup() ;
 
     final String urlAsString = "http://localhost:" + daemonPort + "/";
-    final ResponseSnapshot responseSnapshot = followRedirection(
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection(
         urlAsString,
-        SAFARI_USER_AGENT
+        HttpDaemonFixture.SAFARI_USER_AGENT
     ) ;
 
     assertEquals( 1L, ( long ) responseSnapshot.getLocationsRedirectedTo().size() ) ;
@@ -228,7 +176,7 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
     setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
     final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML +
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.HTML +
                 "?stylesheet=" + ResourcesForTests.Served.Style.VOID_XSL.getName()
     ) ) ;
 
@@ -247,8 +195,8 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
     setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
 
-    final ResponseSnapshot responseSnapshot = followRedirection(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML +
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection(
+        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.HTML +
             "?stylesheet=" + stylesheetResource.getName()
     ) ;
 
@@ -270,7 +218,7 @@ public class HttpDaemonTest extends AbstractHttpDaemonTest {
       setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
 
       final byte[] generated = readAsBytes( new URL(
-          "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HTML ) ) ;
+          "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.HTML ) ) ;
 
       save( "generated.html", generated ) ;
       assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;

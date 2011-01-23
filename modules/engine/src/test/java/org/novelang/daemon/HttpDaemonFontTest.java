@@ -16,8 +16,7 @@
  */
 package org.novelang.daemon;
 
-import java.net.URL;
-
+import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.ResourcesForTests;
 import org.novelang.logger.Logger;
@@ -26,9 +25,9 @@ import org.novelang.logger.LoggerFactory;
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests separated from the rest as they sometimes break when ran in parallel.
+ * Tests separated from the rest as they sometimes broke when ran in parallel.
  * (This happened for {@link #fontListingMakesNoSmoke()} returning a valid page.)
- * This is because FOP's font cache is not thread-safe, at least with FOP-0.96.
+ * This is because each test can't have its own font cache in FOP, at least with FOP-0.96.
  * Solutions:
  * <ul>
  *   <li>Find a way to configure FOP-1.0.
@@ -42,27 +41,22 @@ import static org.fest.assertions.Assertions.assertThat;
  *
  * @author Laurent Caillette
  */
-@SuppressWarnings( { "HardcodedFileSeparator" } )
-public class HttpDaemonFontTest extends AbstractHttpDaemonTest {
+public class HttpDaemonFontTest  {
 
 
   @Test
   public void emptyFontListingMakesNoSmoke() throws Exception {
-    setup() ;
-    final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + daemonPort + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
-    save( "generated.pdf", generated ) ;
-    final String pdfText = extractPdfText( generated ) ;
+    support.setup() ;
+    final byte[] generated = support.readAsBytes( FontDiscoveryHandler.DOCUMENT_NAME ) ;
+    final String pdfText = HttpDaemonFixture.extractPdfText( generated ) ;
     assertThat( pdfText ).contains( "No font found." ) ;
   }
 
   @Test
   public void fontListingMakesNoSmoke() throws Exception {
-    daemonSetupWithFonts( ResourcesForTests.FontStructure.Parent.Child.dir ) ;
-    final byte[] generated = readAsBytes(
-        new URL( "http://localhost:" + daemonPort + FontDiscoveryHandler.DOCUMENT_NAME ) ) ;
-    save( "generated.pdf", generated ) ;
-    final String pdfText = extractPdfText( generated ) ;
+    support.setupWithFonts( ResourcesForTests.FontStructure.Parent.Child.dir ) ;
+    final byte[] generated = support.readAsBytes( FontDiscoveryHandler.DOCUMENT_NAME ) ;
+    final String pdfText = HttpDaemonFixture.extractPdfText( generated ) ;
     assertThat( pdfText )
         .contains( ResourcesForTests.FontStructure.Parent.Child.MONO_OBLIQUE.getBaseName() )
         .contains( "There are broken fonts!" )
@@ -79,10 +73,9 @@ public class HttpDaemonFontTest extends AbstractHttpDaemonTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemonFontTest.class ) ;
 
-  private static final Object METHOD_SUPPORT_LOCK = new Object() ;
+  private static final Object NO_CONCURRENT_TEST_METHODS = new Object() ;
 
-  @Override
-  protected Object getMethodSupportLock() {
-    return METHOD_SUPPORT_LOCK ;
-  }
+  @Rule
+  public final HttpDaemonSupport support = new HttpDaemonSupport( NO_CONCURRENT_TEST_METHODS ) ;
+
 }

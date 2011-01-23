@@ -38,11 +38,11 @@ public class LocalhostOnlyHandlerTest {
 // Fixture  
 // =======
   
-  private void expect( final String hostname, final boolean localhost ) {
+  private static void expect( final String hostname, final boolean localhost ) {
     Assert.assertEquals( "'" + hostname + "'", localhost, callIsLocalhostMethod( hostname ) ) ;
   }
 
-  private Boolean callIsLocalhostMethod( final String hostname ) {
+  private static Boolean callIsLocalhostMethod( final String hostname ) {
     return Reflection.staticMethod( "isLocalhost" ).
         withReturnType( Boolean.TYPE ).
         withParameterTypes( String.class ).
