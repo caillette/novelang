@@ -270,7 +270,6 @@
     <module>modules/bootstrap</module>
     <module>modules/code-generation</module>
     <module>modules/documentation</module>
-    <module>modules/distribution</module>
     <module>modules/engine</module>
     <module>modules/engine-driver</module>
     <module>modules/insider</module>
@@ -457,6 +456,7 @@
   </reporting>
 
   <profiles>
+
     <profile>
       <id>windows_profile</id>
       <activation>
@@ -468,6 +468,7 @@
         <toolsjar>${java.home}/../lib/tools.jar</toolsjar>
       </properties>
     </profile>
+
     <profile>
       <id>osx_profile</id>
       <activation>
@@ -479,6 +480,19 @@
         <toolsjar>${java.home}/../Classes/classes.jar</toolsjar>
       </properties>
     </profile>
+
+    <profile>
+      <id>official_release</id>
+      <activation>
+        <property>
+          <name>novelang.build.distribution</name>
+        </property>
+      </activation>
+      <modules>
+        <module>modules/distribution</module>        
+      </modules>
+    </profile>
+
   </profiles>
   
 
