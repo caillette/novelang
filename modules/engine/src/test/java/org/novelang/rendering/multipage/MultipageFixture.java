@@ -17,13 +17,10 @@
 package org.novelang.rendering.multipage;
 
 import java.io.File;
-import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.common.filefixture.ResourceInstaller;
-import org.novelang.configuration.ConfigurationTools;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.DocumentRequest;
 import org.novelang.produce.GenericRequest;
@@ -34,26 +31,25 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.novelang.produce.DocumentRequest.PAGEIDENTIFIER_PREFIX;
 
 /**
+ * Lots of things to test multipage.
+ * Defines one Opus which has 2 Levels, that give 1 {@link TargetPage#MAIN} page and two
+ * ancillary pages. 
+ *
  * @author Laurent Caillette
  */
 public class MultipageFixture {
 
-  private final ResourceInstaller resourceInstaller ;
   private final Resource stylesheetResource ;
   private final File stylesheetFile ;
   protected final Resource opusResource ;
 
-  private final File mainDocument ;
-  private final File ancillaryDocument0 ;
-  private final File ancillaryDocument1 ;
-  private final File outputDirectory;
+  public static final String MIME_FILE_EXTENSION = RenditionMimeType.NOVELLA.getFileExtension() ;
 
   public MultipageFixture(
       final ResourceInstaller resourceInstaller,
       final Resource stylesheetResource,
       final Resource... otherResources
   ) throws Exception {
-    this.resourceInstaller = resourceInstaller ;
     this.stylesheetResource = stylesheetResource ;
     for( final Resource otherResource : otherResources ) {
       resourceInstaller.copy( otherResource ) ;
@@ -64,100 +60,65 @@ public class MultipageFixture {
     resourceInstaller.copy( opusResource ) ;
     stylesheetFile = resourceInstaller.copy( stylesheetResource ) ;
 
-    outputDirectory = new File(
-        resourceInstaller.getTargetDirectory(),
-        ConfigurationTools.DEFAULT_OUTPUT_DIRECTORY_NAME
-    ) ;
-    mainDocument = createFileObject( outputDirectory, opusResource, null ) ;
-    ancillaryDocument0 = createFileObject( outputDirectory, opusResource, "Level-0" ) ;
-    ancillaryDocument1 = createFileObject( outputDirectory, opusResource, "Level-1" ) ;
-
+    
   }
 
-  public DocumentRequest requestForMain() throws MalformedRequestException {
-    return ( DocumentRequest ) GenericRequest.parse(
-        "/"
-      + opusResource.getBaseName() + "." + MIME_FILE_EXTENSION
-      + "?" + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME
-      + "=" + this.stylesheetResource.getName()
-    ) ;
+  public DocumentRequest requestFor( final TargetPage targetPage ) throws MalformedRequestException {
+    int index = 1 ;
+    switch( targetPage ) {
+      case MAIN :
+        return ( DocumentRequest ) GenericRequest.parse(
+            "/"
+          + opusResource.getBaseName() + "." + MIME_FILE_EXTENSION
+          + "?" + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME
+          + "=" + this.stylesheetResource.getName()
+        ) ;
+
+      case ZERO :
+        index = 0 ; // Stupid but saves one more instance method.
+      case ONE:
+        return ( DocumentRequest ) GenericRequest.parse(
+            "/"
+          + opusResource.getBaseName()
+          + PAGEIDENTIFIER_PREFIX + "Level-" + index
+          + "." + MIME_FILE_EXTENSION
+          + "?" + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME
+          + "=" + this.stylesheetResource.getName()
+        ) ;
+      default :
+        throw new IllegalArgumentException( "Unsupported: " + targetPage ) ;
+    }
   }
 
-  public DocumentRequest requestForAncillaryDocument0() throws MalformedRequestException {
-    return requestForAncillaryDocument( 0 ) ;
-  }
-
-  public DocumentRequest requestForAncillaryDocument1() throws MalformedRequestException {
-    return requestForAncillaryDocument( 1 ) ;
-  }
-
-  private DocumentRequest requestForAncillaryDocument( final int documentIndex )
-      throws MalformedRequestException
-  {
-    return ( DocumentRequest ) GenericRequest.parse(
-        "/"
-      + opusResource.getBaseName()
-      + PAGEIDENTIFIER_PREFIX + "Level-" + documentIndex
-      + "." + MIME_FILE_EXTENSION
-      + "?" + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME
-      + "=" + this.stylesheetResource.getName()
-    ) ;
-  }
 
   public File getStylesheetFile() {
     return stylesheetFile ;
   }
 
-  public File getOutputDirectory() {
-    return outputDirectory ;
-  }
 
-  public File getBaseDirectory() {
-    return resourceInstaller.getTargetDirectory() ;
-  }
-
-  public File getMainDocumentFile() {
-    return mainDocument ;
-  }
-
-  public File getAncillaryDocument0File() {
-    return ancillaryDocument0 ;
-  }
-
-  public File getAncillaryDocument1File() {
-    return ancillaryDocument1 ;
-  }
-
-  public void verifyGeneratedFiles() throws IOException {
-    assertThat( mainDocument ).exists() ;
-    verify( ancillaryDocument0, "Level-0/opus/level[1]" ) ;
-    verify( ancillaryDocument1, "Level-1/opus/level[2]" ) ;
+  public static void verify( final TargetPage targetPage, final byte[] bytes ) {
+    switch( targetPage ) {
+      case MAIN :
+        assertThat( bytes ).isNotEmpty() ;
+        break;
+      case ZERO:
+        verify( "Level-0/opus/level[1]", bytes ) ;
+        break;
+      case ONE:
+        verify( "Level-1/opus/level[2]", bytes ) ;
+        break;
+    }
   }
 
 
-  private static File createFileObject(
-      final File outputDirectory,
-      final Resource opusResource,
-      final String pageIdentifierAsString
-  ) {
-    return new File(
-        outputDirectory,
-        opusResource.getBaseName()
-            + ( pageIdentifierAsString == null ? ""
-                : PAGEIDENTIFIER_PREFIX + pageIdentifierAsString )
-            + "." + MIME_FILE_EXTENSION
-    ) ;
+  private static void verify( final String mustContain, final byte[] bytes ) {
+    assertThat( new String( bytes, DefaultCharset.RENDERING ) ).contains( mustContain ) ;
   }
 
-  private static void verify( final File ancillaryDocumentFile, final String mustContain )
-      throws IOException
-  {
-    assertThat( ancillaryDocumentFile ).exists() ;
-    final String fileContent = FileUtils.readFileToString(
-        ancillaryDocumentFile, DefaultCharset.RENDERING.name() ) ;
-    assertThat( fileContent ).contains( mustContain ) ;
-  }
 
-  private static final String MIME_FILE_EXTENSION = RenditionMimeType.NOVELLA.getFileExtension() ;
+
+  public enum TargetPage {
+    MAIN, ZERO, ONE
+  }
 
 }

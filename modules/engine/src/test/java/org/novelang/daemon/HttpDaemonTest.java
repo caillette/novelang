@@ -17,6 +17,7 @@
 package org.novelang.daemon;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.apache.http.Header;
@@ -29,6 +30,7 @@ import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.GenericRequest;
+import org.novelang.produce.MalformedRequestException;
 import org.novelang.rendering.multipage.MultipageFixture;
 
 import static com.google.common.base.Charsets.ISO_8859_1;
@@ -40,13 +42,16 @@ import static org.junit.Assert.assertTrue;
 import static org.novelang.daemon.HttpDaemonFixture.PDF;
 import static org.novelang.daemon.HttpDaemonFixture.shaveComments;
 import static org.novelang.outfit.TextTools.unixifyLineBreaks;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.MAIN;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ONE;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ZERO;
 
 /**
  * Tests for {@link HttpDaemon} based on {@link org.novelang.daemon.HttpDaemonSupport}.
  *
  * @author Laurent Caillette
  */
-public class BetterHttpDaemonTest {
+public class HttpDaemonTest {
 
 
   @Test
@@ -58,18 +63,15 @@ public class BetterHttpDaemonTest {
         ResourcesForTests.MainResources.Style.DEFAULT_NOVELLA_XSL
     ) ;
 
-    support.setup( multipageFixture.getStylesheetFile().getParentFile(), DefaultCharset.RENDERING ) ;
+    support.setup(
+        multipageFixture.getStylesheetFile().getParentFile(),
+        DefaultCharset.RENDERING
+    ) ;
 
-    support.setFileForNextResponseContent( multipageFixture.getAncillaryDocument0File() ) ;
-    support.readAsBytes( multipageFixture.requestForAncillaryDocument0().getOriginalTarget() ) ;
+    verify( multipageFixture, ZERO ) ;
+    verify( multipageFixture, MAIN ) ;
+    verify( multipageFixture, ONE ) ;
 
-    support.setFileForNextResponseContent( multipageFixture.getMainDocumentFile() ) ;
-    support.readAsBytes( multipageFixture.requestForMain().getOriginalTarget() ) ;
-
-    support.setFileForNextResponseContent( multipageFixture.getAncillaryDocument1File() ) ;
-    support.readAsBytes( multipageFixture.requestForAncillaryDocument1().getOriginalTarget() ) ;
-
-    multipageFixture.verifyGeneratedFiles() ;
   }
 
 
@@ -300,6 +302,16 @@ public class BetterHttpDaemonTest {
     support.setup( novellaGreek ) ;
     support.renderAndCheckStatusCode( "/" + resource.getBaseName() + PDF ) ;
   }
+
+
+  private void verify(
+      final MultipageFixture multipageFixture,
+      final MultipageFixture.TargetPage targetPage
+  ) throws IOException, MalformedRequestException {
+    MultipageFixture.verify( targetPage,
+        support.readAsBytes( multipageFixture.requestFor( targetPage ).getOriginalTarget() ) ) ;
+  }
+
 
   private static final String GOOD_PART_EXTRACT = "Used in HttpDaemonTest. Edit with care.";
 

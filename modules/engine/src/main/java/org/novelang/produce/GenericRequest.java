@@ -414,6 +414,23 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
 
   }
 
+// =========
+// Utilities
+// =========
+
+  /**
+   * Return the document name, plus the page identifier if any.
+   * @param documentRequest a non-null object.
+   * @return a non-null, non-empty {@code String}.
+   */
+  public static String getDocumentNameWithPageIdentifier( final DocumentRequest documentRequest ) {
+    return documentRequest.getDocumentSourceName() +
+        ( documentRequest.getPageIdentifier() == null
+            ? ""
+            : DocumentRequest.PAGEIDENTIFIER_PREFIX + documentRequest.getPageIdentifier().getName()
+        )
+    ;
+  }
 
 // ================
 // java.lang.Object

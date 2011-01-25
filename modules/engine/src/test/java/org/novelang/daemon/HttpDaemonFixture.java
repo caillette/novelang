@@ -19,9 +19,7 @@ package org.novelang.daemon;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,9 +27,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolException;
-import org.apache.http.impl.client.DefaultRedirectHandler;
-import org.apache.http.protocol.HttpContext;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
@@ -101,7 +96,7 @@ import static org.junit.Assert.assertTrue;
   protected static void checkDirectoryListing(
       final ResponseSnapshot responseSnapshot ,
       final Resource resource
-  ) throws IOException {
+  ) {
     final String fullPath = resource.getFullPath().substring( 1 ) ; // Remove leading solidus.
     final String filePath = fullPath + resource.getBaseName() + ".html" ;
 
@@ -119,7 +114,7 @@ import static org.junit.Assert.assertTrue;
 
   /**
    * We need to read several values from an {@link org.apache.http.HttpResponse} so it would be convenient
-   * to use it as return type for {@link HttpDaemonTest#followRedirection(String, String)}
+   * to use it as return type for {@link HttpDaemonSupport#followRedirection(String, String)}
    * but it's impossible to read the streamable content more than once.
    * We turn this by keeping a snapshot of everything needed.
    */

@@ -17,7 +17,9 @@
 package org.novelang.batch;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.ResourcesForTests;
@@ -28,11 +30,17 @@ import org.novelang.configuration.parse.DocumentGeneratorParameters;
 import org.novelang.configuration.parse.GenericParametersConstants;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
+import org.novelang.produce.DocumentRequest;
+import org.novelang.produce.GenericRequest;
+import org.novelang.produce.MalformedRequestException;
 import org.novelang.rendering.RenditionMimeType;
 import org.novelang.rendering.multipage.MultipageFixture;
 import org.novelang.testing.junit.MethodSupport;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.MAIN;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ONE;
+import static org.novelang.rendering.multipage.MultipageFixture.TargetPage.ZERO;
 
 /**
  * Tests for {@link DocumentGenerator}.
@@ -105,16 +113,35 @@ public class BatchTest {
 
     final DocumentGeneratorParameters parameters = DocumentGenerator.createParameters(
         new String[] {
-            multipageFixture.requestForMain().getOriginalTarget(),
-            GenericParametersConstants.OPTIONPREFIX + GenericParametersConstants.OPTIONNAME_STYLE_DIRECTORIES,
+            multipageFixture.requestFor( MAIN ).getOriginalTarget(),
+            GenericParametersConstants.OPTIONPREFIX
+                + GenericParametersConstants.OPTIONNAME_STYLE_DIRECTORIES,
             multipageFixture.getStylesheetFile().getParentFile().getCanonicalPath()
         },
-        multipageFixture.getBaseDirectory()
+        methodSupport.getDirectory()
     ) ;
 
     new DocumentGenerator().main( parameters ) ;
 
-    multipageFixture.verifyGeneratedFiles() ;
+    final File outputDirectory =
+        new File( methodSupport.getDirectory(), ConfigurationTools.DEFAULT_OUTPUT_DIRECTORY_NAME ) ;
+    verify( outputDirectory, MAIN, multipageFixture ) ;
+    verify( outputDirectory, ONE, multipageFixture ) ;
+    verify( outputDirectory, ZERO, multipageFixture ) ;
+
+  }
+
+  private static void verify(
+      final File outputDirectory,
+      final MultipageFixture.TargetPage targetPage,
+      final MultipageFixture multipageFixture
+  ) throws MalformedRequestException, IOException {
+    final DocumentRequest documentRequest = multipageFixture.requestFor( targetPage ) ;
+    final String fileName = GenericRequest.getDocumentNameWithPageIdentifier( documentRequest )
+        + "." + MultipageFixture.MIME_FILE_EXTENSION ;
+    final File file = new File( outputDirectory,  fileName ) ;
+    LOGGER.debug( "Verifying as ", targetPage, ": '", file.getAbsolutePath(), "'..." ) ;
+    MultipageFixture.verify( targetPage, FileUtils.readFileToByteArray( file ) ) ;
   }
 
 
