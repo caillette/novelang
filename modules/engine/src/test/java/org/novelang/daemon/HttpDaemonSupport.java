@@ -19,14 +19,25 @@ package org.novelang.daemon;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.HttpParams;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Directory;
@@ -43,6 +54,7 @@ import org.novelang.outfit.loader.CompositeResourceLoader;
 import org.novelang.testing.junit.MethodSupport;
 
 import static com.google.common.base.Charsets.UTF_8;
+import static org.junit.Assert.assertEquals;
 
 /**
  * A JUnit {@link org.junit.Rule} supporting concurrent test execution.
@@ -201,6 +213,59 @@ public class HttpDaemonSupport extends MethodSupport {
     return bytes ;
   }
 
+
+  protected final void renderAndCheckStatusCode( final String documentRequestAsString )
+      throws IOException
+  {
+    final HttpGet httpGet = new HttpGet(
+        "http://localhost:" + daemonPort + documentRequestAsString ) ;
+    final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
+
+    final ByteArrayOutputStream responseContent = new ByteArrayOutputStream() ;
+    IOUtils.copy( httpResponse.getEntity().getContent(), responseContent ) ;
+    saveResponseContent( responseContent.toByteArray() ) ;
+    final int statusCode = httpResponse.getStatusLine().getStatusCode();
+    assertEquals( ( long ) HttpStatus.SC_OK, ( long ) statusCode ) ;
+  }
+
+
+  protected final HttpDaemonFixture.ResponseSnapshot followRedirection( final String originalUrlAsString )
+      throws IOException
+  {
+    return followRedirection( originalUrlAsString, HttpDaemonFixture.DEFAULT_USER_AGENT ) ;
+  }
+
+  /**
+   * Follows redirection using {@link org.apache.http.client.HttpClient}'s default, and returns response body.
+   */
+  protected final HttpDaemonFixture.ResponseSnapshot followRedirection(
+      final String originalUrlAsString,
+      final String userAgent
+  ) throws IOException {
+
+    final List< Header > locationsRedirectedTo = Lists.newArrayList() ;
+
+    final AbstractHttpClient httpClient = new DefaultHttpClient() ;
+
+    httpClient.setRedirectHandler( new HttpDaemonFixture.RecordingRedirectHandler( locationsRedirectedTo ) ) ;
+    final HttpParams parameters = new BasicHttpParams() ;
+    parameters.setIntParameter( CoreConnectionPNames.SO_TIMEOUT, HttpDaemonFixture.TIMEOUT ) ;
+    final HttpGet httpGet = new HttpGet( originalUrlAsString ) ;
+    httpGet.setHeader( "User-Agent", userAgent ) ;
+    httpGet.setParams( parameters ) ;
+    final HttpResponse httpResponse = httpClient.execute( httpGet ) ;
+
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot =
+        new HttpDaemonFixture.ResponseSnapshot( httpResponse, locationsRedirectedTo ) ;
+    saveResponseContent( responseSnapshot.getContent().getBytes() ) ;
+
+    return responseSnapshot ;
+  }
+
+// =====
+// Other
+// =====
+
   /**
    * TODO: keep documents in memory, dump them only if the test fails.
    * This will avoid a few disk-based operations.
@@ -214,5 +279,13 @@ public class HttpDaemonSupport extends MethodSupport {
     LOGGER.info( "Wrote file '", savedContent.getAbsolutePath(), "'" ) ;    
   }
 
+  public URL createUrl( final String requestAsString ) {
+    try {
+      return new URL( "http://localhost:" + daemonPort + requestAsString ) ;
+    } catch( MalformedURLException e ) {
+      throw new IllegalArgumentException(
+          "Couldn't make a URL out from '" + requestAsString + "'", e ) ;
+    }
+  }
 
 }

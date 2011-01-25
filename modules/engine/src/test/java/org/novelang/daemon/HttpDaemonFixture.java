@@ -19,7 +19,9 @@ package org.novelang.daemon;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,10 +29,18 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
+import org.apache.http.impl.client.DefaultRedirectHandler;
+import org.apache.http.protocol.HttpContext;
+import org.novelang.common.filefixture.Resource;
+import org.novelang.logger.Logger;
+import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
 import org.novelang.rendering.RenditionMimeType;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.util.PDFTextStripper;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Collection of methods and small classes for tests.
@@ -39,6 +49,8 @@ import org.pdfbox.util.PDFTextStripper;
  */
 /*package*/ class HttpDaemonFixture {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger( HttpDaemonFixture.class ) ;
+  
   public static final int TIMEOUT = 5000 ;
 
   public static final String PDF = "." + RenditionMimeType.PDF.getFileExtension() ;
@@ -86,6 +98,25 @@ import org.pdfbox.util.PDFTextStripper;
     return buffer.toString() ;
   }
 
+  protected static void checkDirectoryListing(
+      final ResponseSnapshot responseSnapshot ,
+      final Resource resource
+  ) throws IOException {
+    final String fullPath = resource.getFullPath().substring( 1 ) ; // Remove leading solidus.
+    final String filePath = fullPath + resource.getBaseName() + ".html" ;
+
+    LOGGER.debug( "fullpath='", fullPath, "'" ) ;
+    LOGGER.debug( "filepath='", filePath, "'" ) ;
+    LOGGER.debug( "Checking response body: \n", responseSnapshot.getContent() ) ;
+
+    final String expectedFullPath = "<a href=\"" + fullPath + "\">" + fullPath + "</a>" ;
+    LOGGER.debug( "Expected fullPath='", expectedFullPath, "'" ) ;
+
+    assertTrue( responseSnapshot.getContent().contains( expectedFullPath ) ) ;
+    assertTrue( responseSnapshot.getContent()
+        .contains( "<a href=\"" + filePath + "\">" + filePath + "</a>" ) ) ;
+  }
+
   /**
    * We need to read several values from an {@link org.apache.http.HttpResponse} so it would be convenient
    * to use it as return type for {@link HttpDaemonTest#followRedirection(String, String)}
@@ -113,6 +144,29 @@ import org.pdfbox.util.PDFTextStripper;
 
     public List< Header > getLocationsRedirectedTo() {
       return locationsRedirectedTo ;
+    }
+  }
+
+  /**
+   * Used internally by {@link org.novelang.daemon.HttpDaemonSupport} and
+   * {@link org.novelang.daemon.AbstractTestHttpDaemon}.
+   * TODO move to {@link org.novelang.daemon.HttpDaemonSupport} after deleting
+   *     {@link org.novelang.daemon.AbstractTestHttpDaemon}.
+   */
+  static class RecordingRedirectHandler extends DefaultRedirectHandler {
+
+    private final List< Header > locations ;
+
+    public RecordingRedirectHandler( final List< Header > locations ) {
+      this.locations = locations ;
+    }
+
+    @Override
+    public URI getLocationURI( final HttpResponse response, final HttpContext context )
+        throws ProtocolException
+    {
+      locations.addAll( Arrays.asList( response.getHeaders( "Location" ) ) ) ;
+      return super.getLocationURI( response, context );
     }
   }
 }

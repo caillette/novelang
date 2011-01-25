@@ -18,21 +18,14 @@ package org.novelang.daemon;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
 
-import org.apache.commons.lang.SystemUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
 import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.outfit.DefaultCharset;
-import org.novelang.outfit.TextTools;
-import org.novelang.produce.GenericRequest;
 import org.novelang.rendering.multipage.MultipageFixture;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -51,76 +44,14 @@ public class HttpDaemonTest extends AbstractTestHttpDaemon {
 
 
   @Test
-  public void greekCharactersOk() throws Exception {
-    final Resource novellaGreek = ResourcesForTests.Parts.NOVELLA_GREEK ;
-    setup( novellaGreek ) ;
-    renderAndCheckStatusCode( novellaGreek, "greek.pdf" );
-  }
-
-  @Test
-  public void polishCharactersOk() throws Exception {
-    final Resource novellaPolish = ResourcesForTests.Parts.NOVELLA_POLISH ;
-    setup( novellaPolish ) ;
-    renderAndCheckStatusCode( novellaPolish, "polish.pdf" );
-  }
-
-
-  @Test
-  public void htmlNoSmoke() throws Exception {
-    final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    setup( resource ) ;
-    final byte[] generated = readAsBytes( new URL(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.HTML ) ) ;
-    assertTrue( generated.length > 100 ) ;
-  }
-
-  @Test
-  public void htmlBrokenCausesRedirection() throws Exception {
-    final Resource resource = ResourcesForTests.Served.BROKEN_NOVELLA;
-    setup( resource ) ;
-
-    final String brokentDocumentName = resource.getBaseName() + HttpDaemonFixture.HTML ;
-    final String brokenDocumentUrl =
-        "http://localhost:" + daemonPort + "/" + brokentDocumentName ;
-    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection(
-        brokenDocumentUrl ) ;
-
-    assertTrue( responseSnapshot.getContent().contains( "Requested:" ) ) ;
-
-    assertTrue(
-        "Expected link to requested page",
-        responseSnapshot.getContent().contains( brokentDocumentName )
-    ) ;
-
-    assertEquals( 1L, ( long ) responseSnapshot.getLocationsRedirectedTo().size() ) ;
-    assertEquals(
-        brokenDocumentUrl + GenericRequest.ERRORPAGE_SUFFIX,
-        responseSnapshot.getLocationsRedirectedTo().get( 0 ).getValue()
-    ) ;
-  }
-
-  @Test
-  public void errorPageForUnbrokenHtmlNotBrokenCausesRedirection() throws Exception {
-    final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    setup( resource ) ;
-
-    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.HTML +
-        GenericRequest.ERRORPAGE_SUFFIX
-    ) ;
-
-    assertFalse( responseSnapshot.getContent().contains( "Requested:" ) ) ;
-
-  }
-
-  @Test
+  @Ignore( "Moved to BetterHttpDaemonTest" )
   public void listDirectoryContentNoTrailingSolidus() throws Exception {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;
     resourceInstaller.copyWithPath( resource ) ;
     setup() ;
     final HttpDaemonFixture.ResponseSnapshot responseSnapshot =
         followRedirection( "http://localhost:" + daemonPort ) ;
-    checkDirectoryListing( responseSnapshot, resource ) ;
+    HttpDaemonFixture.checkDirectoryListing( responseSnapshot, resource ) ;
   }
 
   @Test
@@ -130,7 +61,7 @@ public class HttpDaemonTest extends AbstractTestHttpDaemon {
       setup() ;
     final String urlAsString = "http://localhost:" + daemonPort + "/";
     final HttpDaemonFixture.ResponseSnapshot responseSnapshot = followRedirection( urlAsString ) ;
-      checkDirectoryListing( responseSnapshot, resource ) ;
+      HttpDaemonFixture.checkDirectoryListing( responseSnapshot, resource ) ;
   }
 
   @Test
@@ -151,7 +82,7 @@ public class HttpDaemonTest extends AbstractTestHttpDaemon {
         responseSnapshot.getLocationsRedirectedTo().get( 0 ).getValue()
     ) ;
 
-    checkDirectoryListing( responseSnapshot, resource ) ;
+    HttpDaemonFixture.checkDirectoryListing( responseSnapshot, resource ) ;
 
   }
 

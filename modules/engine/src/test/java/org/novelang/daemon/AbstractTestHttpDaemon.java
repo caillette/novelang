@@ -21,10 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -33,15 +31,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.ProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HttpContext;
 import org.junit.Rule;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
@@ -245,7 +240,7 @@ public class AbstractTestHttpDaemon {
 
     final AbstractHttpClient httpClient = new DefaultHttpClient() ;
 
-    httpClient.setRedirectHandler( new RecordingRedirectHandler( locationsRedirectedTo ) ) ;
+    httpClient.setRedirectHandler( new HttpDaemonFixture.RecordingRedirectHandler( locationsRedirectedTo ) ) ;
     final HttpParams parameters = new BasicHttpParams() ;
     parameters.setIntParameter( CoreConnectionPNames.SO_TIMEOUT, HttpDaemonFixture.TIMEOUT ) ;
     final HttpGet httpGet = new HttpGet( originalUrlAsString ) ;
@@ -258,25 +253,6 @@ public class AbstractTestHttpDaemon {
     save( "generated.html", responseSnapshot.getContent() ) ;
 
     return responseSnapshot ;
-  }
-
-  protected static void checkDirectoryListing(
-      final HttpDaemonFixture.ResponseSnapshot responseSnapshot ,
-      final Resource resource
-  ) throws IOException {
-    final String fullPath = resource.getFullPath().substring( 1 ) ; // Remove leading solidus.
-    final String filePath = fullPath + resource.getBaseName() + ".html" ;
-
-    LOGGER.debug( "fullpath='", fullPath, "'" ) ;
-    LOGGER.debug( "filepath='", filePath, "'" ) ;
-    LOGGER.debug( "Checking response body: \n", responseSnapshot.getContent() ) ;
-
-    final String expectedFullPath = "<a href=\"" + fullPath + "\">" + fullPath + "</a>" ;
-    LOGGER.debug( "Expected fullPath='", expectedFullPath, "'" ) ;
-
-    assertTrue( responseSnapshot.getContent().contains( expectedFullPath ) ) ;
-    assertTrue( responseSnapshot.getContent()
-        .contains( "<a href=\"" + filePath + "\">" + filePath + "</a>" ) ) ;
   }
 
   protected final void renderAndCheckStatusCode(
@@ -294,23 +270,6 @@ public class AbstractTestHttpDaemon {
     save( savedFileName, responseContent.toByteArray() ) ;
     final int statusCode = httpResponse.getStatusLine().getStatusCode();
     assertEquals( ( long ) HttpStatus.SC_OK, ( long ) statusCode ) ;
-  }
-
-  private static class RecordingRedirectHandler extends DefaultRedirectHandler {
-
-    private final List< Header > locations ;
-
-    public RecordingRedirectHandler( final List< Header > locations ) {
-      this.locations = locations ;
-    }
-
-    @Override
-    public URI getLocationURI( final HttpResponse response, final HttpContext context )
-        throws ProtocolException
-    {
-      locations.addAll( Arrays.asList( response.getHeaders( "Location" ) ) ) ;
-      return super.getLocationURI( response, context );
-    }
   }
 
 }
