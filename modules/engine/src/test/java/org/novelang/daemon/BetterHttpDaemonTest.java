@@ -16,18 +16,20 @@
  */
 package org.novelang.daemon;
 
+import java.io.File;
 import java.nio.charset.Charset;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Resource;
+import org.novelang.outfit.DefaultCharset;
 import org.novelang.produce.GenericRequest;
+import org.novelang.rendering.multipage.MultipageFixture;
 
 import static com.google.common.base.Charsets.ISO_8859_1;
 import static com.google.common.base.Charsets.UTF_8;
@@ -46,6 +48,121 @@ import static org.novelang.outfit.TextTools.unixifyLineBreaks;
  */
 public class BetterHttpDaemonTest {
 
+
+  @Test
+  public void multipage() throws Exception {
+
+    final MultipageFixture multipageFixture = new MultipageFixture(
+        support.resourceInstaller,
+        ResourcesForTests.Multipage.MULTIPAGE_XSL,
+        ResourcesForTests.MainResources.Style.DEFAULT_NOVELLA_XSL
+    ) ;
+
+    support.setup( multipageFixture.getStylesheetFile().getParentFile(), DefaultCharset.RENDERING ) ;
+
+    support.setFileForNextResponseContent( multipageFixture.getAncillaryDocument0File() ) ;
+    support.readAsBytes( multipageFixture.requestForAncillaryDocument0().getOriginalTarget() ) ;
+
+    support.setFileForNextResponseContent( multipageFixture.getMainDocumentFile() ) ;
+    support.readAsBytes( multipageFixture.requestForMain().getOriginalTarget() ) ;
+
+    support.setFileForNextResponseContent( multipageFixture.getAncillaryDocument1File() ) ;
+    support.readAsBytes( multipageFixture.requestForAncillaryDocument1().getOriginalTarget() ) ;
+
+    multipageFixture.verifyGeneratedFiles() ;
+  }
+
+
+  @Test
+  public void testAlternateStylesheetInBook() throws Exception {
+      final Resource resource = ResourcesForTests.Served.BOOK_ALTERNATE_XSL ;
+      support.resourceInstaller.copy( resource ) ;
+      support.resourceInstaller.copy( ResourcesForTests.Served.GOOD_PART ) ;
+      final File stylesheetFile = support.resourceInstaller.copyScoped(
+          ResourcesForTests.Served.dir, ResourcesForTests.Served.Style.VOID_XSL ) ;
+      support.setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
+
+      final byte[] generated = support.readAsBytes(
+          "/" + resource.getBaseName() + HttpDaemonFixture.HTML ) ;
+
+      assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
+
+  }
+
+
+  @Test
+  public void indicateErrorLocationForBrokentStylesheet() throws Exception {
+    final Resource resource = ResourcesForTests.Served.GOOD_PART ;
+    support.resourceInstaller.copy( resource ) ;
+    final Resource stylesheetResource = ResourcesForTests.Served.Style.ERRONEOUS_XSL ;
+    final File stylesheetFile = support.resourceInstaller.copyScoped(
+        ResourcesForTests.Served.dir, stylesheetResource ) ;
+    support.setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
+
+
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = support.followRedirection(
+        support.createUrl( "/" + resource.getBaseName() + HttpDaemonFixture.HTML +
+            "?stylesheet=" + stylesheetResource.getName() ).toExternalForm()
+    ) ;
+
+    assertThat( responseSnapshot.getContent() ).contains(
+        "line=25; column=38 - "
+        + "xsl:this-is-not-supposed-to-work is not allowed in this position in the stylesheet"
+    ) ;
+
+  }
+
+
+  @Test
+  public void testAlternateStylesheetInQueryParameter() throws Exception {
+    final Resource resource = ResourcesForTests.Served.GOOD_BOOK ;
+    support.resourceInstaller.copy( resource ) ;
+    support.resourceInstaller.copy( ResourcesForTests.Served.GOOD_PART ) ;
+    final File stylesheetFile = support.resourceInstaller.copyScoped(
+        ResourcesForTests.Served.dir, ResourcesForTests.Served.Style.VOID_XSL ) ;
+    support.setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
+
+    final byte[] generated = support.readAsBytes(
+        "/" + resource.getBaseName() + HttpDaemonFixture.HTML +
+                "?stylesheet=" + ResourcesForTests.Served.Style.VOID_XSL.getName()
+    ) ;
+
+    assertTrue( new String( generated ).contains( "this is the void stylesheet" ) ) ;
+
+  }
+
+
+  @Test
+  public void listDirectoryContentWithSafari() throws Exception {
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
+    support.resourceInstaller.copyWithPath( resource ) ;
+    support.setup() ;
+
+    final String urlAsString = support.createUrl( "/" ).toExternalForm() ;
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = support.followRedirection(
+        urlAsString,
+        HttpDaemonFixture.SAFARI_USER_AGENT
+    ) ;
+
+    assertEquals( 1L, ( long ) responseSnapshot.getLocationsRedirectedTo().size() ) ;
+    assertEquals(
+        urlAsString + DirectoryScanHandler.MIME_HINT,
+        responseSnapshot.getLocationsRedirectedTo().get( 0 ).getValue()
+    ) ;
+
+    HttpDaemonFixture.checkDirectoryListing( responseSnapshot, resource ) ;
+
+  }
+
+  @Test
+  public void listDirectoryContentWithTrailingSolidus() throws Exception {
+      final Resource resource = ResourcesForTests.Served.GOOD_PART;
+      support.resourceInstaller.copyWithPath( resource ) ;
+      support.setup() ;
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = support.followRedirection(
+        support.createUrl( "/" ).toExternalForm() ) ;
+      HttpDaemonFixture.checkDirectoryListing( responseSnapshot, resource ) ;
+  }
 
   @Test
   public void listDirectoryContentNoTrailingSolidus() throws Exception {

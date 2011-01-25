@@ -147,26 +147,4 @@ import static org.junit.Assert.assertTrue;
     }
   }
 
-  /**
-   * Used internally by {@link org.novelang.daemon.HttpDaemonSupport} and
-   * {@link org.novelang.daemon.AbstractTestHttpDaemon}.
-   * TODO move to {@link org.novelang.daemon.HttpDaemonSupport} after deleting
-   *     {@link org.novelang.daemon.AbstractTestHttpDaemon}.
-   */
-  static class RecordingRedirectHandler extends DefaultRedirectHandler {
-
-    private final List< Header > locations ;
-
-    public RecordingRedirectHandler( final List< Header > locations ) {
-      this.locations = locations ;
-    }
-
-    @Override
-    public URI getLocationURI( final HttpResponse response, final HttpContext context )
-        throws ProtocolException
-    {
-      locations.addAll( Arrays.asList( response.getHeaders( "Location" ) ) ) ;
-      return super.getLocationURI( response, context );
-    }
-  }
 }

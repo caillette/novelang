@@ -20,24 +20,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.ProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HttpContext;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Directory;
@@ -247,7 +252,7 @@ public class HttpDaemonSupport extends MethodSupport {
 
     final AbstractHttpClient httpClient = new DefaultHttpClient() ;
 
-    httpClient.setRedirectHandler( new HttpDaemonFixture.RecordingRedirectHandler( locationsRedirectedTo ) ) ;
+    httpClient.setRedirectHandler( new RecordingRedirectHandler( locationsRedirectedTo ) ) ;
     final HttpParams parameters = new BasicHttpParams() ;
     parameters.setIntParameter( CoreConnectionPNames.SO_TIMEOUT, HttpDaemonFixture.TIMEOUT ) ;
     final HttpGet httpGet = new HttpGet( originalUrlAsString ) ;
@@ -266,16 +271,39 @@ public class HttpDaemonSupport extends MethodSupport {
 // Other
 // =====
 
+  private File fileForNextResponseContent = null ;
+
+  /**
+   * Hints {@link #saveResponseContent(byte[])} of the next file to save to.
+   * @param fileForNextResponseContent
+   */
+  public void setFileForNextResponseContent( final File fileForNextResponseContent ) {
+    Preconditions.checkState( this.fileForNextResponseContent == null,
+        "Already set: %s", this.fileForNextResponseContent );
+    this.fileForNextResponseContent = Preconditions.checkNotNull( fileForNextResponseContent ) ;
+  }
+
   /**
    * TODO: keep documents in memory, dump them only if the test fails.
    * This will avoid a few disk-based operations.
+   *
+   * @see #setFileForNextResponseContent(java.io.File)
    */
   private void saveResponseContent( final byte[] bytes ) throws IOException {
+    final int counter = documentWriteCounter.getAndIncrement() ;
     final File responseContentDirectory = new File( getDirectory(), "saved" ) ;
     responseContentDirectory.mkdirs() ;
-    final File savedContent = new File(
-        responseContentDirectory, "saved-" + documentWriteCounter.getAndIncrement() ) ;
-    FileUtils.writeByteArrayToFile( savedContent, bytes ) ;
+    final File savedContent ;
+    if( fileForNextResponseContent == null ) {
+      savedContent = new File( responseContentDirectory, "saved-" + counter ) ;
+    } else {
+      savedContent = fileForNextResponseContent ;
+    }
+    try {
+      FileUtils.writeByteArrayToFile( savedContent, bytes ) ;
+    } finally {
+      fileForNextResponseContent = null ;
+    }
     LOGGER.info( "Wrote file '", savedContent.getAbsolutePath(), "'" ) ;    
   }
 
@@ -288,4 +316,20 @@ public class HttpDaemonSupport extends MethodSupport {
     }
   }
 
+  private static class RecordingRedirectHandler extends DefaultRedirectHandler {
+
+    private final List< Header > locations ;
+
+    public RecordingRedirectHandler( final List< Header > locations ) {
+      this.locations = locations ;
+    }
+
+    @Override
+    public URI getLocationURI( final HttpResponse response, final HttpContext context )
+        throws ProtocolException
+    {
+      locations.addAll( Arrays.asList( response.getHeaders( "Location" ) ) ) ;
+      return super.getLocationURI( response, context );
+    }
+  }
 }
