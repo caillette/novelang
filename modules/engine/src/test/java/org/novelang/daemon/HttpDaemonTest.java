@@ -48,36 +48,7 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings( { "HardcodedFileSeparator" } )
 public class HttpDaemonTest extends AbstractTestHttpDaemon {
 
-  @Test
-//  @Ignore( "Moved to BetterHttpDaemonTest" )
-  public void novellaOk() throws Exception {
 
-    final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    final String novellaSource = alternateSetup( resource, ISO_8859_1 ) ;
-    LOGGER.info( "Using default charset ", SystemUtils.FILE_ENCODING ) ;
-    final String generated = readAsString( new URL(
-        "http://localhost:" + daemonPort + "/" +
-        resource.getName()
-    ) ) ;
-    final String shaved = HttpDaemonFixture.shaveComments( generated ) ;
-    save( "generated.novella", generated ) ;
-    final String normalizedNovellaSource = TextTools.unixifyLineBreaks( novellaSource ) ;
-    final String normalizedShaved = TextTools.unixifyLineBreaks( shaved ) ;
-    assertEquals( normalizedNovellaSource, normalizedShaved ) ;
-
-  }
-
-  @Test
-  public void correctMimeTypeForPdf() throws Exception {
-    final Resource resource = ResourcesForTests.Served.GOOD_PART;
-    setup( resource ) ;
-    final HttpGet httpGet = new HttpGet(
-        "http://localhost:" + daemonPort + "/" + resource.getBaseName() + HttpDaemonFixture.PDF ) ;
-    final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
-    final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
-    assertTrue( "Got:" + Arrays.asList( headers ), headers.length > 0 ) ;
-    assertEquals( "Got:" + Arrays.asList( headers ), "application/pdf", headers[ 0 ].getValue() ) ;
-  }
 
   @Test
   public void greekCharactersOk() throws Exception {

@@ -16,7 +16,14 @@
  */
 package org.novelang.daemon;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
 import com.google.common.base.Charsets;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.junit.Rule;
 import org.junit.Test;
 import org.novelang.ResourcesForTests;
@@ -25,6 +32,8 @@ import org.novelang.common.filefixture.Resource;
 import static com.google.common.base.Charsets.ISO_8859_1;
 import static com.google.common.base.Charsets.UTF_8;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.novelang.daemon.HttpDaemonFixture.PDF;
 import static org.novelang.daemon.HttpDaemonFixture.shaveComments;
 import static org.novelang.outfit.TextTools.unixifyLineBreaks;
@@ -46,7 +55,9 @@ public class BetterHttpDaemonTest {
     final String novellaSource = support.alternateSetup( resource, UTF_8, ISO_8859_1 ) ;
     final String generated = support.readAsString(
         resource,
-        HttpDaemonFixture.DEFAULT_PLATFORM_CHARSET // Weird, but forces correct escaping. 
+        // Weird, but forces correct escaping. Plays with partial compatiblity with ISO_8859_1.
+//        HttpDaemonFixture.DEFAULT_PLATFORM_CHARSET
+        MAC_ROMAN
     ) ;
     final String normalizedNovellaSource = unixifyLineBreaks( novellaSource ) ;
     final String normalizedShaved = unixifyLineBreaks( shaveComments( generated ) ) ;
@@ -64,11 +75,25 @@ public class BetterHttpDaemonTest {
   }
 
 
+  @Test
+  public void correctMimeTypeForPdf() throws Exception {
+    final Resource resource = ResourcesForTests.Served.GOOD_PART;
+    support.setup( resource ) ;
+    final HttpGet httpGet = support.createHttpGet(
+        "/" + resource.getBaseName() + HttpDaemonFixture.PDF ) ;
+    final HttpResponse httpResponse = new DefaultHttpClient().execute( httpGet ) ;
+    final Header[] headers = httpResponse.getHeaders( "Content-type" ) ;
+    assertThat( headers ).isNotEmpty() ;
+    assertThat( headers[ 0 ].getValue() ).isEqualTo( "application/pdf" ) ;
+  }
+
 // =======
 // Fixture
 // =======
 
   @Rule
   public final HttpDaemonSupport support = new HttpDaemonSupport() ;
+
+  private static final Charset MAC_ROMAN = Charset.forName( "MacRoman" ) ;
 
 }

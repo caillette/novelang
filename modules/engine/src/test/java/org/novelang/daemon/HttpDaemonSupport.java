@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.SystemUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.novelang.ResourceTools;
 import org.novelang.ResourcesForTests;
 import org.novelang.common.filefixture.Directory;
@@ -160,6 +161,10 @@ public class HttpDaemonSupport extends MethodSupport {
 // ========
 
   private final AtomicInteger documentWriteCounter = new AtomicInteger( 0 ) ;
+
+  public HttpGet createHttpGet( final String documentRequestAsString ) {
+    return new HttpGet( "http://localhost:" + daemonPort + documentRequestAsString ) ;
+  }
 
   public byte[] readAsBytes( final String documentRequestAsString )
       throws IOException
