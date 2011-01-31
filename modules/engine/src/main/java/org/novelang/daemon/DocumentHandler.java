@@ -179,8 +179,7 @@ public class DocumentHandler extends GenericHandler {
       final DocumentRequest documentRequest,
       final HttpServletResponse response
   ) throws IOException {
-    final String redirectionTarget =
-        documentRequest.getOriginalTarget() + GenericRequest.ERRORPAGE_SUFFIX ;
+    final String redirectionTarget = GenericRequest.getRedirectionWithError( documentRequest ) ;
     response.sendRedirect( redirectionTarget ) ;
     response.setStatus( HttpServletResponse.SC_FOUND ) ;
     LOGGER.info( "Redirected to '", redirectionTarget, "'" );

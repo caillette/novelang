@@ -1,5 +1,9 @@
---- New ``--temporary-dir`` option.
+--- New ``--temporary-dir`` option. For better error messages, Novelang HTTP Dæmon now renders
+the whole document before sending it to the HTTP client. If the document is really big, it goes in
+a temporary directory (and gets deleted immediately).
 
 --- Fixed SVG embedding for PDF. Now the image appears as true vector image inside the PDF.
 Correct reference to the SVG resource implied adding a ``$content-directory`` parameter
 passed to XSL stylesheets.
+
+--- Fixed loss of request parameters when issuing error page.

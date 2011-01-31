@@ -167,15 +167,16 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
     this.displayProblems = displayProblems ;
 
     this.resourceExtension = null ;
-    this.originalTarget = rebuildOriginalTarget() ;
+    this.originalTarget = rebuildOriginalTarget( false ) ;
   }
 
-  private String rebuildOriginalTarget() {
+  private String rebuildOriginalTarget( final boolean addProblemPage ) {
     final ImmutableList.Builder< String > parametersBuilder = ImmutableList.builder() ;
     if( alternateStylesheet != null ) {
       parametersBuilder.add(
           ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + alternateStylesheet.getName() ) ;
     }
+
     if( ! getTags().isEmpty() ) {
       final Iterable< String > tagNames = Iterables.transform( getTags(), Tag.EXTRACT_TAG_NAME ) ;
 
@@ -186,6 +187,7 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
     return documentSourceName
         + ( pageIdentifier == null ? "" : PAGEIDENTIFIER_PREFIX + pageIdentifier.getName() )
         + "." + renditionMimeType.getFileExtension()
+        + ( addProblemPage ? ERRORPAGE_SUFFIX : "" )
         + ( parameters.isEmpty() ? "" : "?" + Joiner.on( "&" ).join( parameters ) ) ;
   }
 
@@ -431,6 +433,16 @@ public final class GenericRequest implements DocumentRequest, ResourceRequest {
         )
     ;
   }
+
+  /**
+   * Return the URL path and parameters for an error page.
+   * @param documentRequest a non-null object. Must be a {@link GenericRequest} instance.
+   * @return a non-null, non-empty {@code String}.
+   */
+  public static String getRedirectionWithError( final DocumentRequest documentRequest ) {
+    return ( ( GenericRequest ) documentRequest ).rebuildOriginalTarget( true ) ;
+  }
+
 
 // ================
 // java.lang.Object

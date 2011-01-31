@@ -23,6 +23,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.designator.Tag;
@@ -31,6 +32,7 @@ import org.novelang.logger.Logger;
 import org.novelang.logger.LoggerFactory;
 import org.novelang.rendering.RenditionMimeType;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 /**
@@ -111,7 +113,7 @@ public class GenericRequestTest {
   }
 
   @Test
-  public void documentRequestWithTags() throws MalformedRequestException {
+  public void documentRequestWithStylesheetAndTags() throws MalformedRequestException {
     final DocumentRequest request =
         createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
     assertFalse( request.getDisplayProblems() ) ;
@@ -121,6 +123,36 @@ public class GenericRequestTest {
     assertEquals( TAGSET, request.getTags() ) ;
 
     assertFalse( StringUtils.isBlank( request.toString() ) ) ;
+  }
+
+  @Test
+  public void documentRequestWithStylesheetAndTagsAndError() throws MalformedRequestException {
+    final DocumentRequest request =
+        createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS_AND_ERROR ) ;
+    assertThat( request.getDisplayProblems() ).isTrue() ;
+    assertThat( request.getOriginalTarget() )
+        .isEqualTo( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ) ;
+    assertThat(  GenericRequest.getRedirectionWithError( request ) )
+        .isEqualTo( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS_AND_ERROR ) ;
+    assertThat( request.getRenditionMimeType() ).isEqualTo( RenditionMimeType.PDF ) ;
+    assertThat( request.getDocumentSourceName() ).isEqualTo( SIMPLE_REQUEST_BODY ) ;
+    assertThat( request.getTags() ).isEqualTo( TAGSET ) ;
+
+    assertThat( request.toString() ).isNotEmpty() ;
+  }
+
+  @Test
+  public void documentRequestWithStylesheetAndError() throws MalformedRequestException {
+    final DocumentRequest request =
+        createDocumentRequest( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_ERROR ) ;
+    assertThat( request.getOriginalTarget() ).isEqualTo( PDF_REQUEST_PATH_WITHSTYLESHEET ) ;
+    assertThat( GenericRequest.getRedirectionWithError( request ) )
+        .isEqualTo( PDF_REQUEST_PATH_WITHSTYLESHEET_AND_ERROR ) ;
+    assertThat( request.getRenditionMimeType() ).isEqualTo( RenditionMimeType.PDF ) ;
+    assertThat( request.getDocumentSourceName() ).isEqualTo( SIMPLE_REQUEST_BODY ) ;
+    assertThat( request.getTags() ).isEmpty() ;
+    assertThat( request.getDisplayProblems() ).isTrue() ;
+    assertThat(request.toString() ).isNotEmpty() ;
   }
 
   @Test
@@ -182,27 +214,34 @@ public class GenericRequestTest {
       "?stylesheet=" + STYLESHEET_RESOURCENAME
   ;
 
+  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_ERROR =
+      PDF_REQUEST_PATH
+      + GenericRequest.ERRORPAGE_SUFFIX
+      + "?stylesheet=" + STYLESHEET_RESOURCENAME
+  ;
+
   private static final ImmutableSet< Tag > TAGSET =
       ImmutableSet.of( new Tag( "tag-1" ), new Tag( "Tag2" ) ) ;
 
   private static final ImmutableSet< Tag > NO_TAG = ImmutableSet.of() ;
 
-  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS ;
-  static {
-    final Set< String > tagsAsString= Sets.newHashSet() ;
-    for( final Tag tag : TAGSET ) {
-      tagsAsString.add( TagTestTools.getTagAsString( tag ) ) ;
-    }
+  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
+      PDF_REQUEST_PATH +
+      "?" +
+      DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME +
+      "&" + GenericRequest.TAGSET_PARAMETER_NAME + "=" +
+      TagTestTools.getTagSetAsString( TAGSET, ";" )
+  ;
 
-    PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS =
-        PDF_REQUEST_PATH +
-        "?" +
-        DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME +
-        "&" +
-            GenericRequest.TAGSET_PARAMETER_NAME + "=" +
-                Joiner.on( ";" ).join( tagsAsString )
-    ;
-  }
+  private static final String PDF_REQUEST_PATH_WITHSTYLESHEET_AND_TAGS_AND_ERROR =
+      PDF_REQUEST_PATH
+      + GenericRequest.ERRORPAGE_SUFFIX
+      + "?"
+      + DocumentRequest.ALTERNATE_STYLESHEET_PARAMETER_NAME + "=" + STYLESHEET_RESOURCENAME
+      + "&" + GenericRequest.TAGSET_PARAMETER_NAME + "=" +
+      TagTestTools.getTagSetAsString( TAGSET, ";" )
+  ;
+
 
   private static final Set< String > TAGS_AS_STRINGSET = Sets.newHashSet();
   static {
