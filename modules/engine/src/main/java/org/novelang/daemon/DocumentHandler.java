@@ -197,7 +197,7 @@ public class DocumentHandler extends GenericHandler {
 
   }
 
-  private void renderProblemsAsRequested(
+  private static void renderProblemsAsRequested(
       final DocumentRequest documentRequest,
       final Renderable rendered,
       final ServletOutputStream outputStream

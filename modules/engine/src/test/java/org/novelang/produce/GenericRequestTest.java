@@ -19,11 +19,9 @@ package org.novelang.produce;
 
 import java.util.Set;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
-import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.novelang.common.metadata.PageIdentifier;
 import org.novelang.designator.Tag;
