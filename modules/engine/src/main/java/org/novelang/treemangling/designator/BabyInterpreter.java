@@ -8,6 +8,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
 import org.novelang.common.Problem;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.RobustPath;
@@ -116,15 +117,17 @@ public class BabyInterpreter implements FragmentMapper< RobustPath< SyntacticTre
           break ;
 
         case IMPLICIT :
-          explicitIdentifier = null ;
-          final FragmentIdentifier implicitAbsoluteIdentifier = new FragmentIdentifier( segment ) ;
-          if( collector.derivedIdentifiers.containsKey( implicitAbsoluteIdentifier ) ) {
-            collector.duplicateDerivedIdentifiers.add( implicitAbsoluteIdentifier ) ;
-          } else {
-            collector.derivedIdentifiers.put( 
-                implicitAbsoluteIdentifier,
-                RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
-            ) ;
+          if( ! StringUtils.isBlank( segment ) ) {
+            explicitIdentifier = null ;
+            final FragmentIdentifier implicitAbsoluteIdentifier = new FragmentIdentifier( segment ) ;
+            if( collector.derivedIdentifiers.containsKey( implicitAbsoluteIdentifier ) ) {
+              collector.duplicateDerivedIdentifiers.add( implicitAbsoluteIdentifier ) ;
+            } else {
+              collector.derivedIdentifiers.put(
+                  implicitAbsoluteIdentifier,
+                  RobustPath.create( treepath, DesignatorTools.IDENTIFIER_TREE_FILTER )
+              ) ;
+            }
           }
 
           break ;

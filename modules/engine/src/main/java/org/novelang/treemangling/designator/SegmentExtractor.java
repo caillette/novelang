@@ -13,6 +13,7 @@ import org.novelang.parser.NodeKindTools;
  * Given a {@link Treepath} to some identifier-bearing tree, extracts a single identifier
  * segment. The segment may be self-defining if the tree has a {@link NodeKind#ABSOLUTE_IDENTIFIER}
  * as immediate child, or may rely on other segments in the parents.
+ * TODO: some cleanup as this seems to deal with defunct relative identifiers.
  *
  * @author Laurent Caillette
 */

@@ -255,6 +255,21 @@ public class NovellaParsingTest {
   }
 
   @Test
+  public void partIsLevelWithJustAnEllipsis() throws RecognitionException {
+    PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
+        "== ...",
+        tree(
+            NOVELLA,
+            tree(
+                LEVEL_INTRODUCER_,
+                tree( LEVEL_INTRODUCER_INDENT_, "=="),
+                tree( LEVEL_TITLE, tree( PUNCTUATION_SIGN, tree( SIGN_ELLIPSIS, "..." ) ) )
+            )
+        )
+    ) ;
+  }
+
+  @Test
   public void partIsAnonymousSectionsWithLeadingBreaks() throws RecognitionException {
     PARSERMETHOD_NOVELLA.checkTreeAfterSeparatorRemoval(
         BREAK +

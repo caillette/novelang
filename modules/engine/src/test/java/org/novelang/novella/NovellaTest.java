@@ -258,6 +258,26 @@ public class NovellaTest {
     TreeFixture.assertEqualsWithSeparators( expected, partTree ) ;
   }
   
+  @Test( timeout = TEST_TIMEOUT_MILLISECONDS )
+  public void dontCalculateImpossibleIdentifier() {
+    final Novella novella = new Novella( "== ..." ) ;
+    final SyntacticTree expected = tree(
+        NOVELLA,
+        tree( _META,
+            tree( _WORD_COUNT, "0" )
+        ),
+        tree(
+            _LEVEL,
+            tree(
+                LEVEL_TITLE,
+                tree( PUNCTUATION_SIGN, tree( SIGN_ELLIPSIS, "..." ) )
+            )
+        )
+    ) ;
+    final SyntacticTree partTree = novella.makeStandalone().getDocumentTree() ;
+    TreeFixture.assertEqualsWithSeparators( expected, partTree ) ;
+  }
+
   @Test
   public void dontLoseLocationDuringLevelMangling() throws RecognitionException {
     
