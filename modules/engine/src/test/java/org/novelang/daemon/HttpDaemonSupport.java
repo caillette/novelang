@@ -91,7 +91,9 @@ public class HttpDaemonSupport extends MethodSupport {
 
   @Override
   protected void afterStatementEvaluation() throws Exception {
-    httpDaemon.stop() ;
+    if( httpDaemon != null ) { // Avoids adding noise to some failing test.
+      httpDaemon.stop() ;
+    }
     // Don't nullify. This prevents from calling a setup method a second time.
   }
 

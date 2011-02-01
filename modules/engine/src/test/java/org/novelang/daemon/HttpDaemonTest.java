@@ -55,6 +55,31 @@ public class HttpDaemonTest {
 
 
   @Test
+  public void redirectAfterHittingRenderingProblem() throws Exception {
+    final Resource resource = ResourcesForTests.Served.GOOD_PART ;
+    support.resourceInstaller.copy( resource ) ;
+    final Resource stylesheetResource = ResourcesForTests.XslFormatting.XSL_BROKEN_RENDERING ;
+    final File stylesheetFile = support.resourceInstaller.copyScoped(
+        ResourcesForTests.XslFormatting.dir, stylesheetResource ) ;
+    support.setup( stylesheetFile.getParentFile(), DefaultCharset.RENDERING ) ;
+
+
+    final HttpDaemonFixture.ResponseSnapshot responseSnapshot = support.followRedirection(
+        support.createUrl( "/" + resource.getBaseName() + HttpDaemonFixture.PDF +
+            "?stylesheet=" + stylesheetResource.getName() ).toExternalForm()
+    ) ;
+
+    // We can't cast some rubbish to ReadableDateTime.
+    assertThat( responseSnapshot.getContent() ).contains( "org.joda.time.ReadableDateTime" ) ;
+
+    // That's the matgic for a PDF document.
+    assertThat( responseSnapshot.getContent() ).doesNotContain( "%PDF-" ) ;
+
+  }
+
+
+
+  @Test
   public void multipage() throws Exception {
 
     final MultipageFixture multipageFixture = new MultipageFixture(
