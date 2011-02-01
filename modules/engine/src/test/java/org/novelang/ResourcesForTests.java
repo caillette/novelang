@@ -224,6 +224,7 @@ public final class ResourcesForTests {
     Resource XSL_STYLESHEET_PARAMETERS = resource( "stylesheet-parameters.xsl" ) ;
     Resource XSL_BADXPATH_1 = resource( "bad-xpath-1.xsl" ) ;
     Resource XSL_BADXPATH_2 = resource( "bad-xpath-2.xsl" ) ;
+    Resource XSL_BROKEN_RENDERING = resource( "broken-rendering.xsl" ) ;
   }
 
   /**
