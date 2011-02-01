@@ -254,6 +254,72 @@ public class UrlManglerTest {
   }
 
   @Test
+  public void namedUrlAtTheStartOfARegularParagraph() {
+    verifyFixNamedUrls(
+        tree(
+            PARAGRAPH_REGULAR,
+            tree(
+                _URL,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( URL_LITERAL, "http://foo.com" )
+            )
+        ),
+        tree(
+            PARAGRAPH_REGULAR,
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+            tree( LINE_BREAK_ ),
+            tree( URL_LITERAL, "http://foo.com" )
+
+        )
+    ) ;
+
+  }
+
+  @Test
+  public void namedUrlAtTheStartOfParagraphAsListItemWithTripleHyphen() {
+    verifyFixNamedUrls(
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+            tree(
+                _URL,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( URL_LITERAL, "http://foo.com" )
+            )
+        ),
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+            tree( LINE_BREAK_ ),
+            tree( URL_LITERAL, "http://foo.com" )
+
+        )
+    ) ;
+
+  }
+
+  @Test
+  public void namedUrlAtTheStartOfParagraphAsListItemWithDoubleHyphenAnNumberSign() {
+    verifyFixNamedUrls(
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN,
+            tree(
+                _URL,
+                tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                tree( URL_LITERAL, "http://foo.com" )
+            )
+        ),
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN,
+            tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+            tree( LINE_BREAK_ ),
+            tree( URL_LITERAL, "http://foo.com" )
+
+        )
+    ) ;
+
+  }
+
+  @Test
   public void fixUrlWithoutNameAtStartOfAParagraph() {
     verifyFixNamedUrls( 
         tree(

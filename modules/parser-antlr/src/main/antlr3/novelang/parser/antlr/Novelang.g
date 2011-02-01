@@ -1082,6 +1082,7 @@ astericizedSpreadBlock
 
 delimitedSpreadblockNoAsterisks
   : parenthesizedSpreadblock
+  | emphasizedSpreadBlock
   | squarebracketsSpreadblock
   | doubleQuotedSpreadBlock
   | hyphenPairSpreadBlock
@@ -1231,6 +1232,7 @@ astericizedTightblockNoSeparator
 
 delimitedTightblockNoAsterisks
   : parenthesizedTightblock
+  | emphasizedTightblock
   | squarebracketsTightblock
   | doubleQuotedTightblock
   | hyphenPairTightblock

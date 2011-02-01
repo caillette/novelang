@@ -257,6 +257,13 @@ public class ParagraphParsingTest {
   }
 
   @Test
+  public void asteriskPairInsideSolidusPair()
+      throws RecognitionException
+  {
+    PARSERMETHOD_PARAGRAPH.createTree( "**//w0//**" );
+  }
+
+  @Test
   public void paragraphIsWordsWithApostropheThenEmphasis() throws RecognitionException {
     PARSERMETHOD_PARAGRAPH.checkTreeAfterSeparatorRemoval( 
         "w0 w1'w2//w3//.", 
@@ -517,6 +524,22 @@ public class ParagraphParsingTest {
         ,
         tree(
             PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+            tree( WORD_, "w" ),
+            tree( URL_LITERAL, "http://novelang.sf.net" )
+        )
+    );
+  }
+
+  @Test
+  public void paragraphAsListItemWithDoubleHyphenAndNumberSignContainsUrl()
+      throws RecognitionException
+  {
+    PARSERMETHOD_BIG_NUMBERED_LIST_ITEM.checkTreeAfterSeparatorRemoval(
+        "--# w" + BREAK +
+        "http://novelang.sf.net"
+        ,
+        tree(
+            PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN,
             tree( WORD_, "w" ),
             tree( URL_LITERAL, "http://novelang.sf.net" )
         )
@@ -1030,6 +1053,8 @@ public class ParagraphParsingTest {
       new ParserMethod( "paragraph" ) ;
   private static final ParserMethod PARSERMETHOD_BIG_DASHED_LIST_ITEM =
       new ParserMethod( "bigDashedListItem" ) ;
+  private static final ParserMethod PARSERMETHOD_BIG_NUMBERED_LIST_ITEM =
+      new ParserMethod( "bigNumberedListItem" ) ;
 
   private static final SyntacticTree TREE_APOSTROPHE_WORDMATE = tree( APOSTROPHE_WORDMATE, "'" ) ;
 

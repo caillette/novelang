@@ -17,7 +17,8 @@ public class TreeManglingConstants {
   
   static final SyntacticTreeSet PARAGRAPH_NODEKINDS_CONTAINING_URL = SyntacticTreeSet.of(
       PARAGRAPH_REGULAR,
-      PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_
+      PARAGRAPH_AS_LIST_ITEM_WITH_TRIPLE_HYPHEN_,
+      PARAGRAPH_AS_LIST_ITEM_WITH_DOUBLE_HYPHEN_AND_NUMBER_SIGN
   ) ;
   
   static final SyntacticTreeSet CANDIDATE_URL_NAME_NODEKINDS = SyntacticTreeSet.of(
