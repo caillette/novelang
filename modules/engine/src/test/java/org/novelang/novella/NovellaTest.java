@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import org.antlr.runtime.RecognitionException;
+import org.fest.assertions.Assertions;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +40,7 @@ import org.novelang.parser.SourceUnescape;
 import org.novelang.parser.antlr.TreeFixture;
 import org.novelang.testing.junit.MethodSupport;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.novelang.parser.NodeKind.*;
 import static org.novelang.parser.antlr.TreeFixture.tree;
 
@@ -333,7 +335,9 @@ public class NovellaTest {
   @Test
   public void rewriteEarlyExitCountedAsAProblem() throws IOException {
     final Novella novella = new Novella( "\"\"" ) ;
-    Assert.assertTrue( novella.getProblems().iterator().hasNext() ) ;
+    assertThat( novella.getProblems() ).hasSize( 1 ) ;
+    final Problem problem = novella.getProblems().iterator().next() ;
+    assertThat( problem.getLocation().isPositionDefined() ).isTrue() ;
   }
 
 

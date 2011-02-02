@@ -41,14 +41,15 @@ import org.antlr.runtime.tree.Tree;
 public abstract class AbstractDelegatingParser {
 
   protected final NovelangParser antlrParser;
+  protected final NovelangLexer antlrLexer;
   private final GrammarDelegate delegate;
 
   public AbstractDelegatingParser( final String text, final GrammarDelegate delegate ) {
     this.delegate = delegate ;
     final CharStream stream = new ANTLRStringStream( text );
-    final NovelangLexer lexer = new NovelangLexer( stream );
-    lexer.setProblemDelegate( delegate ) ;
-    final CommonTokenStream tokens = new CommonTokenStream( lexer );
+    antlrLexer = new NovelangLexer( stream );
+    antlrLexer.setProblemDelegate( delegate ) ;
+    final CommonTokenStream tokens = new CommonTokenStream( antlrLexer );
     antlrParser = new NovelangParser( tokens ) ;
     final CustomTreeAdaptor treeAdaptor = new CustomTreeAdaptor( delegate.getLocationFactory() );
     delegate.setAdaptor( treeAdaptor ) ;
@@ -84,7 +85,11 @@ public abstract class AbstractDelegatingParser {
       getDelegate().report( e ) ;
       return null ;
     } catch( RewriteCardinalityException e ) {
-      getDelegate().report( e.getClass() + ": " + e.getMessage() ) ;
+      getDelegate().report(
+          e.getClass() + ": " + e.getMessage(),
+          antlrLexer.getLine(),
+          antlrLexer.getCharPositionInLine()
+      ) ;
       return null ;
     }
 
