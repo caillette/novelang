@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import org.antlr.runtime.RecognitionException;
 import com.google.common.base.Preconditions;
+import org.antlr.runtime.tree.RewriteCardinalityException;
 
 //import novelang.parser.antlr.AntlrErrorInterpreter;
 

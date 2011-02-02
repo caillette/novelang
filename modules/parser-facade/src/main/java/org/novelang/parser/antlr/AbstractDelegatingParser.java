@@ -28,6 +28,7 @@ import org.antlr.runtime.tree.CommonErrorNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import org.antlr.runtime.tree.RewriteCardinalityException;
 import org.novelang.common.Problem;
 import org.novelang.common.SyntacticTree;
 import org.antlr.runtime.tree.Tree;
@@ -82,8 +83,11 @@ public abstract class AbstractDelegatingParser {
     } catch( RecognitionException e ) {
       getDelegate().report( e ) ;
       return null ;
+    } catch( RewriteCardinalityException e ) {
+      getDelegate().report( e.getClass() + ": " + e.getMessage() ) ;
+      return null ;
     }
-    
+
 
     final SyntacticTree result ;
     if( tree instanceof CommonErrorNode ) {

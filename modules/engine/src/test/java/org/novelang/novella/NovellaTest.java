@@ -330,6 +330,13 @@ public class NovellaTest {
   }
 
 
+  @Test
+  public void rewriteEarlyExitCountedAsAProblem() throws IOException {
+    final Novella novella = new Novella( "\"\"" ) ;
+    Assert.assertTrue( novella.getProblems().iterator().hasNext() ) ;
+  }
+
+
 // =======
 // Fixture
 // =======
