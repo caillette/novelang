@@ -77,7 +77,7 @@ public class ParagraphParsingTest {
                 tree( WORD_, "z" )
             )            
         ) 
-    ); ;
+    ) ;
   }
 
 

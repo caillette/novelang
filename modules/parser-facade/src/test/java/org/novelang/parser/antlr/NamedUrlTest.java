@@ -74,8 +74,31 @@ public class NamedUrlTest {
   }
 
 
+  @Test
+  public void namedUrlInsideSquareBrackets() throws RecognitionException {
+    PARSERMETHOD_NOVELLA.checkTree(
+        "[\"name\"" + BREAK +
+        "http://foo.com" + BREAK +
+        "]"
+        ,
+        tree(
+            NOVELLA,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree( BLOCK_INSIDE_SQUARE_BRACKETS,
+                    tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                    tree( LINE_BREAK_ ),
+                    tree( URL_LITERAL, "http://foo.com" ),
+                    tree( LINE_BREAK_ )
+                    )
+            )
+        )
+    ) ;
+  }
+
+
   /**
-   * Get sure of what we get because {@link org.novelang.treemangling.UrlMangler} relies on this.
+   * Get sure of what we get because {@code org.novelang.treemangling.UrlMangler} relies on this.
    */
   @Test
   public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph1()
@@ -111,7 +134,7 @@ public class NamedUrlTest {
   }
 
   /**
-   * Get sure of what we get because {@link org.novelang.treemangling.UrlMangler} relies on this.
+   * Get sure of what we get because {@code org.novelang.treemangling.UrlMangler} relies on this.
    */
   @Test
   public void partHasCorrectSeparatorsBetweenSectionIntroducerAndParagraph2()
