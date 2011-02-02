@@ -14,7 +14,7 @@
 
   <properties>
     <generated-binaries>${project.build.outputDirectory}</generated-binaries>
-    <grammar-relative-dir>novelang/parser/antlr</grammar-relative-dir>
+    <grammar-relative-dir>org/novelang/parser/antlr</grammar-relative-dir>
     <grammar-dir>${basedir}/src/main/antlr3/${grammar-relative-dir}</grammar-dir>
     <grammar-file>${grammar-dir}/Novelang.g</grammar-file>
   </properties>
