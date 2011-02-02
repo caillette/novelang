@@ -10,3 +10,7 @@ passed to XSL stylesheets.
 --- Fixed loss of request parameters when issuing error page.
 
 --- Less verbose logging of Logback configuration at startup.
+
+--- Fixed various cases of bad problem reporting, where location in origin file was missing.
+
+--- Plenty of other small fixes.
