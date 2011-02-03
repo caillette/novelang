@@ -112,7 +112,7 @@ public class UrlMangler {
       }
 
       result = current ;
-      if( State.CANDIDATE_URL_NAME == state
+      if( ( State.CANDIDATE_URL_NAME == state /*&& hasOnlyUrlLiteralChild( current.getTreeAtEnd() )*/ )
        || current.getTreeAtEnd().isOneOf( _URL ) 
        || tree.isOneOf( TreeManglingConstants.SKIPPED_NODEKINDS_FOR_URLMANGLER )
       ) {
@@ -193,6 +193,22 @@ public class UrlMangler {
       final State negative
   ) {
     return tree.isOneOf( nodeKinds ) ? positive : negative ;
+  }
+
+  private static boolean hasOnlyUrlLiteralChild( final SyntacticTree tree ) {
+    boolean foundOnlyOneUrl = false ;
+    for( final SyntacticTree child : tree.getChildren() ) {
+      if( child.isOneOf( NodeKind.URL_LITERAL ) ) {
+        if( foundOnlyOneUrl ) {
+          return false ;
+        } else {
+          foundOnlyOneUrl = true ;
+        }
+      } else if( ! TreeManglingConstants.SEPARATOR_NODEKINDS.contains( child.getNodeKind() ) ) {
+        return false ;
+      }
+    }
+    return foundOnlyOneUrl ;
   }
 
   private enum State {

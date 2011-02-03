@@ -16,6 +16,7 @@
  */
 package org.novelang.treemangling;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.novelang.common.SyntacticTree;
 import org.novelang.common.tree.Treepath;
@@ -199,6 +200,71 @@ public class UrlManglerTest {
             )
         )
         
+    ) ;
+  }
+
+  @Test
+  @Ignore( "Awaiting fix")
+  public void namedUrlInsideSquareBrackets() {
+    verifyFixNamedUrls(
+        tree(
+            NOVELLA,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    BLOCK_INSIDE_SQUARE_BRACKETS,
+                    tree(
+                        _URL,
+                        tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                        tree( URL_LITERAL, "http://foo.com" )
+                    )
+                )
+            )
+        ),
+        tree(
+            NOVELLA,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    BLOCK_INSIDE_SQUARE_BRACKETS,
+                    tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                    tree( LINE_BREAK_ ),
+                    tree( URL_LITERAL, "http://foo.com" )
+                )
+            )
+        )
+    ) ;
+  }
+
+  @Test
+  public void namedUrlInsideParenthesis() {
+    verifyFixNamedUrls(
+        tree(
+            NOVELLA,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    BLOCK_INSIDE_PARENTHESIS,
+                    tree(
+                        _URL,
+                        tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                        tree( URL_LITERAL, "http://foo.com" )
+                    )
+                )
+            )
+        ),
+        tree(
+            NOVELLA,
+            tree(
+                PARAGRAPH_REGULAR,
+                tree(
+                    BLOCK_INSIDE_PARENTHESIS,
+                    tree( BLOCK_INSIDE_DOUBLE_QUOTES, tree( WORD_, "name" ) ),
+                    tree( LINE_BREAK_ ),
+                    tree( URL_LITERAL, "http://foo.com" )
+                )
+            )
+        )
     ) ;
   }
 
@@ -451,7 +517,7 @@ public class UrlManglerTest {
     TreeFixture.assertEqualsNoSeparators(
         expectedTreepath.getTreeAtEnd(),
         rehierarchized.getTreeAtEnd()
-    ); ;
+    ) ;
 
   }
 
