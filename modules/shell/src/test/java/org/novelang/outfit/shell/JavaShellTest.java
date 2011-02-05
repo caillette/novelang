@@ -16,6 +16,7 @@
  */
 package org.novelang.outfit.shell;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.RuntimeMXBean;
@@ -25,6 +26,7 @@ import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 import javax.management.InstanceNotFoundException;
 import org.apache.commons.io.FileUtils;
 import org.fest.reflect.core.Reflection;
@@ -305,7 +307,7 @@ public class JavaShellTest {
       try {
         return ! insider.isAlive() ;
       } catch( UndeclaredThrowableException e ) {
-        final Throwable cause = e.getCause() ;
+        final Throwable cause = Throwables.getRootCause( e ) ;
         if( denotesConnectionLoss( cause ) ) {
           return true ;
         } else {
@@ -317,6 +319,7 @@ public class JavaShellTest {
     private static boolean denotesConnectionLoss( final Throwable cause ) {
       return cause instanceof java.rmi.ConnectException
           || cause instanceof InstanceNotFoundException
+          || cause instanceof EOFException
           || ( cause instanceof IOException
               && cause.getMessage().contains( "The client has been closed." ) )
       ;
