@@ -49,9 +49,12 @@ public interface TcpPortBooker {
 
 
   /**
-   * Don't use port 1024 which is default for RMI registry. 
+   * Don't use port 1024 which is default for RMI registry.
+   * Ports below 10000 are reserved; using them can cause problems in some cases.
+   * (Like Firefox which doesn't want to connect to them, maybe annoying for projects
+   * reusing that stuff.
    */
-  int LOWEST_PORT = 2048 ;
+  int LOWEST_PORT = 10000 ;
 
   int HIGHEST_PORT = 65535 ;
 
