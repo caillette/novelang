@@ -38,7 +38,8 @@
         <version>${project.parent.version}</version>
         <executions>
           <execution>
-            <phase>validate</phase>
+             <phase>validate</phase>
+            <!--<phase>none</phase>  -->
             <goals>
               <goal>check</goal>
             </goals>
@@ -61,7 +62,8 @@
 
           <execution>
             <id>produce-documents</id>
-            <phase>compile</phase>
+             <phase>compile</phase>
+            <!--<phase>none</phase>-->
             <goals>
               <!--<goal>produce</goal>-->
               <goal>produceNoFork</goal>
@@ -89,7 +91,8 @@
         <version>${lib.maven-resources-plugin.version}</version>
         <executions>
           <execution>
-            <phase>generate-resources</phase>
+             <phase>generate-resources</phase>
+            <!--<phase>none</phase>  -->
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -116,7 +119,8 @@
         <version>${project.parent.version}</version>
         <executions>
           <execution>
-            <phase>process-resources</phase>
+             <phase>process-resources</phase>
+            <!--<phase>none</phase>  -->
             <goals>
               <goal>generate</goal>
             </goals>
@@ -133,7 +137,8 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <phase>process-classes</phase>
+             <phase>process-classes</phase>
+            <!--<phase>none</phase>  -->
             <configuration>
               <target>
 
@@ -172,7 +177,8 @@
         <executions>
           <execution>
             <id>make-assembly</id> <!-- This is used for inheritance merges. -->
-            <phase>package</phase>
+             <phase>package</phase>
+            <!--<phase>none</phase>  -->
             <goals>
               <goal>single</goal>
             </goals>
