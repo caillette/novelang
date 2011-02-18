@@ -1,0 +1,35 @@
+== Novelang-Desktop
+
+This is the result of a conversation with another Novelang user, coming with ideas for a better integration with the desktop environment.
+
+First, as strange as it seems, Novelang //is// a desktop application. While it embeds a Web server it's not meant to serve content to remote clients. The support of a Web client is just the fastest approach to give quick preview of files edited in a desktop-integrated text editor. (For serving Novelang documents on the World Wide Web, it's much faster to generate them as static files first.)
+
+By now the desktop integration relies on a ``java -jar Novelang-...jar`` typed in a command-line console. That's a bit harsh.
+
+The yet-to-develop Novelang-desktop project would be fancier. Novelang-desktop is a graphical application where user sets content roots and associated TCP ports. With this, editing or viewing Novelang documents from multiple content directories doesn't require to start several JVMs anymore.
+
+Here is a skeletal view of the main window of Novelang-desktop:
+
+<<<
+ ___________________________________________
+|  __________________________               |
+| | C:\projects\docs  | 8081 |  [ Add...  ] |
+| | I:\shared\foo     | 8082 |  [ Edit... ] |
+| |___________________|______|  [ Remove  ] |
+|                                           |
+| [?]                      [ Configure... ] |
+|___________________________________________|
+>>>
+
+Double-clicking on a table line opens a Web browser with the directory listing of the content root.
+
+The directory listing comes with great improvements. It shows every files, and each Novelang source file has several associated links:
+- Open in current Web browser (one link per rendition MIME type, like PDF, HTML, FO, XML).
+- Open in default editor.
+- Batch generation.
+
+For the last two there is a trick: the link loops back to a special service of Novelang-desktop, which has all the powers to execute arbitrary code and scan local filesystem.
+- For editor opening it executes a pre-configured command with the file path as an argument.
+- For batch generation first it opens a dialog requesting target directory.
+
+Novelang-desktop's configuration goes in user's home directory by default.  
