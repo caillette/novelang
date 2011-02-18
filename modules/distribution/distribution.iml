@@ -83,7 +83,6 @@
     <orderEntry type="module" module-name="parser-supplement" />
     <orderEntry type="module" module-name="syntactic-tree" />
     <orderEntry type="module" module-name="unicode-reader" />
-    <orderEntry type="module" module-name="documentation" />
     <orderEntry type="module" module-name="lexeme-table-plugin" />
     <orderEntry type="module" module-name="logger-mojo" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
