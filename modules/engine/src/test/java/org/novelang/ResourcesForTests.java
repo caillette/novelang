@@ -189,6 +189,7 @@ public final class ResourcesForTests {
     Resource NOVELLA_UTF8_BOM = resource( "utf8-with-bom.novella" ) ;
     Resource NOVELLA_GREEK = resource( "greek.novella" ) ;
     Resource NOVELLA_POLISH = resource( "polish.novella" ) ;
+    Resource NOVELLA_ROMANIAN = resource( "romanian.novella" ) ;
 
   }
 

@@ -302,6 +302,12 @@ public class HttpDaemonTest {
   }
 
   @Test
+  public void romanianCharactersOk() throws Exception {
+    final Resource resource = ResourcesForTests.Parts.NOVELLA_ROMANIAN ;
+    renderPdfAndCheckStatusCode( resource ) ;
+  }
+
+  @Test
 //  @Ignore( "Moved to BetterHttpDaemonTest" )
   public void htmlNoSmoke() throws Exception {
     final Resource resource = ResourcesForTests.Served.GOOD_PART;

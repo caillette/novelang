@@ -2447,6 +2447,9 @@ letterWithDiacritics
   | LATIN_SMALL_LETTER_AE
   | LATIN_CAPITAL_LETTER_AE
   
+  | LATIN_CAPITAL_LETTER_A_WITH_BREVE
+  | LATIN_SMALL_LETTER_A_WITH_BREVE
+  
   | LATIN_SMALL_LETTER_C_WITH_CEDILLA
   | LATIN_CAPITAL_LETTER_C_WITH_CEDILLA
 
@@ -2462,6 +2465,9 @@ letterWithDiacritics
   | LATIN_SMALL_LETTER_E_WITH_DIAERESIS
   | LATIN_CAPITAL_LETTER_E_WITH_DIAERESIS
 
+  | LATIN_CAPITAL_LETTER_E_WITH_BREVE
+  | LATIN_SMALL_LETTER_E_WITH_BREVE
+  
   | LATIN_SMALL_LETTER_I_WITH_CIRCUMFLEX
   | LATIN_CAPITAL_LETTER_I_WITH_CIRCUMFLEX
   
@@ -2471,6 +2477,9 @@ letterWithDiacritics
   | LATIN_SMALL_LETTER_I_WITH_ACUTE
   | LATIN_CAPITAL_LETTER_I_WITH_ACUTE
 
+  | LATIN_CAPITAL_LETTER_I_WITH_BREVE 
+  | LATIN_SMALL_LETTER_I_WITH_BREVE
+  
   | LATIN_SMALL_LETTER_O_WITH_CIRCUMFLEX
   | LATIN_CAPITAL_LETTER_O_WITH_CIRCUMFLEX
   
@@ -2479,6 +2488,18 @@ letterWithDiacritics
   
   | LATIN_SMALL_LETTER_O_WITH_DOUBLE_ACUTE
   | LATIN_CAPITAL_LETTER_O_WITH_DOUBLE_ACUTE
+  
+  | LATIN_CAPITAL_LETTER_S_WITH_COMMA_BELOW
+  | LATIN_SMALL_LETTER_S_WITH_COMMA_BELOW
+  
+  | LATIN_CAPITAL_LETTER_S_WITH_CEDILLA
+  | LATIN_SMALL_LETTER_S_WITH_CEDILLA
+  
+  | LATIN_CAPITAL_LETTER_T_WITH_COMMA_BELOW
+  | LATIN_SMALL_LETTER_T_WITH_COMMA_BELOW
+  
+  | LATIN_CAPITAL_LETTER_T_WITH_CEDILLA
+  | LATIN_SMALL_LETTER_T_WITH_CEDILLA 
   
   | LATIN_SMALL_LETTER_U_WITH_GRAVE
   | LATIN_CAPITAL_LETTER_U_WITH_GRAVE
@@ -2494,6 +2515,9 @@ letterWithDiacritics
   
   | LATIN_SMALL_LETTER_U_WITH_DOUBLE_ACUTE
   | LATIN_CAPITAL_LETTER_U_WITH_DOUBLE_ACUTE
+    
+  | LATIN_CAPITAL_LETTER_U_WITH_BREVE
+  | LATIN_SMALL_LETTER_U_WITH_BREVE  
     
   | LATIN_SMALL_LIGATURE_OE
   | LATIN_CAPITAL_LIGATURE_OE
@@ -2667,11 +2691,20 @@ LATIN_CAPITAL_LETTER_A_WITH_CIRCUMFLEX : '\u00c2' ;   // &Acirc;   "A"
 LATIN_SMALL_LETTER_A_WITH_DIAERESIS : '\u00e4' ;      // &auml;    "a"
 LATIN_CAPITAL_LETTER_A_WITH_DIAERESIS : '\u00c4' ;    // &Auml;    "A"
 
+LATIN_CAPITAL_LETTER_A_WITH_BREVE : '\u0102' ;        // &Abreve;  "A"
+LATIN_SMALL_LETTER_A_WITH_BREVE : '\u0103' ;          // &abreve;  "a"
+
 LATIN_SMALL_LETTER_AE : '\u00e6' ;                    // &aelig;   "ae"
 LATIN_CAPITAL_LETTER_AE : '\u00c6' ;                  // &AElig;   "AE"
+
+LATIN_SMALL_LETTER_A_WITH_OGONEK : '\u0105' ;         //           "a"
+LATIN_CAPITAL_LETTER_A_WITH_OGONEK : '\u0104' ;       //           "A"
   
 LATIN_SMALL_LETTER_C_WITH_CEDILLA : '\u00e7' ;        // &ccedil;  "c"
 LATIN_CAPITAL_LETTER_C_WITH_CEDILLA : '\u00c7' ;      // &Ccedil;  "C"
+
+LATIN_SMALL_LETTER_C_WITH_ACUTE : '\u0107' ;          //           "c"
+LATIN_CAPITAL_LETTER_C_WITH_ACUTE : '\u0106' ;        //           "C"
 
 LATIN_SMALL_LETTER_E_WITH_GRAVE : '\u00e8' ;          // &egrave;  "e"
 LATIN_CAPITAL_LETTER_E_WITH_GRAVE : '\u00c8' ;        // &Egrave;  "E"
@@ -2685,6 +2718,12 @@ LATIN_CAPITAL_LETTER_E_WITH_CIRCUMFLEX : '\u00ca' ;   // &Ecirc;   "E"
 LATIN_SMALL_LETTER_E_WITH_DIAERESIS : '\u00eb' ;      // &euml;    "e"
 LATIN_CAPITAL_LETTER_E_WITH_DIAERESIS : '\u00cb' ;    // &Euml;    "E"
 
+LATIN_SMALL_LETTER_E_WITH_OGONEK : '\u0119' ;         //           "e"
+LATIN_CAPITAL_LETTER_E_WITH_OGONEK : '\u0118' ;       //           "E"
+
+LATIN_CAPITAL_LETTER_E_WITH_BREVE : '\u0114' ;        // &Ebreve;  "E"
+LATIN_SMALL_LETTER_E_WITH_BREVE : '\u0115' ;          // &Ebreve;  "e"
+
 LATIN_SMALL_LETTER_I_WITH_CIRCUMFLEX : '\u00ee' ;     // &icirc;   "i"
 LATIN_CAPITAL_LETTER_I_WITH_CIRCUMFLEX : '\u00ce' ;   // &Icirc;   "I"
   
@@ -2693,6 +2732,19 @@ LATIN_CAPITAL_LETTER_I_WITH_DIAERESIS : '\u00cf' ;    // &Iuml;    "I"
 
 LATIN_SMALL_LETTER_I_WITH_ACUTE : '\u00ed' ;          //           "i"
 LATIN_CAPITAL_LETTER_I_WITH_ACUTE : '\u00cd' ;        //           "I"
+
+LATIN_CAPITAL_LETTER_I_WITH_BREVE : '\u012C' ;        // &Ibreve;  "I"
+LATIN_SMALL_LETTER_I_WITH_BREVE : '\u012D' ;          // &ibreve;  "i"
+
+LATIN_SMALL_LETTER_L_WITH_STROKE :   '\u0142' ;       //           "l"
+LATIN_CAPITAL_LETTER_L_WITH_STROKE : '\u0141' ;       //           "L"
+
+LATIN_SMALL_LETTER_N_WITH_ACUTE : '\u0144' ;          //           "n"
+LATIN_CAPITAL_LETTER_N_WITH_ACUTE : '\u0143' ;        //           "N"
+
+LATIN_SMALL_LETTER_O_WITH_ACUTE : '\u00f3' ;          //           "o"
+LATIN_CAPITAL_LETTER_O_WITH_ACUTE : '\u00D3' ;        //           "O"
+
 
 LATIN_SMALL_LETTER_O_WITH_CIRCUMFLEX : '\u00f4' ;     // &ocirc;   "o"
 LATIN_CAPITAL_LETTER_O_WITH_CIRCUMFLEX : '\u00d4' ;   // &Ocirc;   "O"
@@ -2703,6 +2755,26 @@ LATIN_CAPITAL_LETTER_O_WITH_DIAERESIS : '\u00d6' ;    // &Ouml;    "O"
 LATIN_SMALL_LETTER_O_WITH_DOUBLE_ACUTE : '\u0151' ;   //           "o"
 LATIN_CAPITAL_LETTER_O_WITH_DOUBLE_ACUTE : '\u0150' ; //           "O"
   
+LATIN_SMALL_LIGATURE_OE : '\u0153' ;                  // &oelig;   "oe"
+LATIN_CAPITAL_LIGATURE_OE : '\u0152' ;                // &OElig;   "OE"
+
+LATIN_SMALL_LETTER_S_WITH_ACUTE : '\u015B' ;          //           "s"
+LATIN_CAPITAL_LETTER_S_WITH_ACUTE : '\u015A' ;        //           "S"
+
+LATIN_SMALL_LETTER_Z_WITH_ACUTE : '\u017A' ;          //           "s"
+LATIN_CAPITAL_LETTER_Z_WITH_ACUTE : '\u0179' ;        //           "S"
+
+LATIN_CAPITAL_LETTER_S_WITH_COMMA_BELOW : '\u0218' ;  //           "S"
+LATIN_SMALL_LETTER_S_WITH_COMMA_BELOW : '\u0219' ;    //           "s"
+
+LATIN_CAPITAL_LETTER_S_WITH_CEDILLA : '\u015E' ;      // &Scedil;  "S"
+LATIN_SMALL_LETTER_S_WITH_CEDILLA : '\u015F' ;        // &scedil;  "s"
+
+LATIN_CAPITAL_LETTER_T_WITH_COMMA_BELOW : '\u021A' ;  //           "T"
+LATIN_SMALL_LETTER_T_WITH_COMMA_BELOW : '\u021B' ;    //           "t"
+LATIN_CAPITAL_LETTER_T_WITH_CEDILLA : '\u0162' ;      // &Tcedil;  "T"
+LATIN_SMALL_LETTER_T_WITH_CEDILLA : '\u0163' ;        // &tcedil;  "t"
+
 LATIN_SMALL_LETTER_U_WITH_GRAVE : '\u00f9' ;          // &ugrave;  "u"
 LATIN_CAPITAL_LETTER_U_WITH_GRAVE : '\u00d9' ;        // &Ugrave;  "U"
 
@@ -2718,32 +2790,8 @@ LATIN_CAPITAL_LETTER_U_WITH_ACUTE : '\u00da' ;        // &Ucute;   "U"
 LATIN_SMALL_LETTER_U_WITH_DOUBLE_ACUTE : '\u0171' ;   //           "u"
 LATIN_CAPITAL_LETTER_U_WITH_DOUBLE_ACUTE : '\u0170' ; //           "U"
     
-LATIN_SMALL_LIGATURE_OE : '\u0153' ;                  // &oelig;   "oe"
-LATIN_CAPITAL_LIGATURE_OE : '\u0152' ;                // &OElig;   "OE"
-
-LATIN_SMALL_LETTER_A_WITH_OGONEK : '\u0105' ;         //           "a"
-LATIN_CAPITAL_LETTER_A_WITH_OGONEK : '\u0104' ;       //           "A"
-
-LATIN_SMALL_LETTER_C_WITH_ACUTE : '\u0107' ;          //           "c"
-LATIN_CAPITAL_LETTER_C_WITH_ACUTE : '\u0106' ;        //           "C"
-
-LATIN_SMALL_LETTER_E_WITH_OGONEK : '\u0119' ;         //           "e"
-LATIN_CAPITAL_LETTER_E_WITH_OGONEK : '\u0118' ;       //           "E"
-
-LATIN_SMALL_LETTER_L_WITH_STROKE :   '\u0142' ;       //           "l"
-LATIN_CAPITAL_LETTER_L_WITH_STROKE : '\u0141' ;       //           "L"
-
-LATIN_SMALL_LETTER_N_WITH_ACUTE : '\u0144' ;          //           "n"
-LATIN_CAPITAL_LETTER_N_WITH_ACUTE : '\u0143' ;        //           "N"
-
-LATIN_SMALL_LETTER_O_WITH_ACUTE : '\u00f3' ;          //           "o"
-LATIN_CAPITAL_LETTER_O_WITH_ACUTE : '\u00D3' ;        //           "O"
-
-LATIN_SMALL_LETTER_S_WITH_ACUTE : '\u015B' ;          //           "s"
-LATIN_CAPITAL_LETTER_S_WITH_ACUTE : '\u015A' ;        //           "S"
-
-LATIN_SMALL_LETTER_Z_WITH_ACUTE : '\u017A' ;          //           "s"
-LATIN_CAPITAL_LETTER_Z_WITH_ACUTE : '\u0179' ;        //           "S"
+LATIN_CAPITAL_LETTER_U_WITH_BREVE : '\u016C' ;        // &Ubreve;  "U"
+LATIN_SMALL_LETTER_U_WITH_BREVE : '\u016D' ;          // &ubreve;  "u"
 
 LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE : '\u017C' ;      //           "z"
 LATIN_CAPITAL_LETTER_Z_WITH_DOT_ABOVE : '\u017B' ;    //           "Z"
