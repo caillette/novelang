@@ -24,6 +24,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeUnit;
+import java.net.ConnectException ;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
@@ -319,6 +320,7 @@ public class JavaShellTest {
     private static boolean denotesConnectionLoss( final Throwable cause ) {
       return cause instanceof java.rmi.ConnectException
           || cause instanceof InstanceNotFoundException
+          || cause instanceof ConnectException
           || cause instanceof EOFException
           || ( cause instanceof IOException
               && cause.getMessage().contains( "The client has been closed." ) )
