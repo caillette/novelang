@@ -1,0 +1,12 @@
+== Jekyll: a static website generator
+
+Quoting the presentation, "Jekyll"
+https://github.com/mojombo/jekyll
+is a simple, blog aware, static site generator. It takes a template directory (representing the raw form of a website), runs it through Textile or Markdown and Liquid converters, and spits out a complete, static website suitable for serving with Apache or your favorite web server.
+
+
+It's "github"
+http://github.com
+Wiki engine. These is a clever integration: the VCS tracks Wiki page changes, which means the project hosted by github has a wiki //and// versioned documentation along with sourcecode.
+
+Jekyll is a batch-only generator, so no interactive preview. Markdown and Textile are also more lenient about grammar validation. But Jekyll is probably much more lightweight than Novelang, which makes it a better choice for github.
