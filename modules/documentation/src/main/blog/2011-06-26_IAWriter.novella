@@ -2,7 +2,7 @@
 
 "iA Writer" 
 http://www.iawriter.com
-is the most clever text editor I've ever seen. Really. To get convinced, just watch its 1-minute presentation. It's a lot of fun. Watched it three times already. They say: 
+is the most clever text editor I've ever seen. Serious. To get convinced, just watch its 1-minute presentation. It's a lot of fun. I watched it three times already. They say: 
 
 <<
 iA Writer for Mac is a digital writing tool that makes sure that all your thoughts go into the text instead of the program.
@@ -36,11 +36,11 @@ During a presentation of Novelang for corporate use, a guy asked me: "Do you pla
 
 This was a decent answer, but iA Writer is more clever. I didn't envisage dynamic formatting, just because it seems hard to program. One author if "IntelliJ IDEA"
 http://www.jetbrains.com/idea 
-explained that they fully rewrote a Java parser by hand to be fault-tolerant. The rule about parsers is: don't write them by hand because you're not clever enough for that. 
+explained that they fully rewrote a Java parser by hand to be fault-tolerant. The rule about parsers is: don't write them by hand because you're not clever enough for that. And Novelang syntax is more complex than Java.
 
 I didn't play with iA Writer so I've no hint on how its parser works. Probably the display asks for a best effort given a paragraph, and when the parsing fails there is just no styling. Because of the interactive nature of the application, the user quickly learns how to fix broken text.
 
-Novelang's strict parser offers strong guarantees about correctness, and that's a strong point when it comes to generate the final document. But this all-or-nothing approach closed the door to the interactivity. 
+Novelang's strict parser offers strong guarantees about correctness, and that's a strong point when it comes to generate the final document. But this all-or-nothing approach greatly reduces interactivity. (Interactivity happens later in the Web browser, with some JavaScript to show metadata.) 
 
 iA Writer found a new path to the ultimate ease-of-use, while still relying on the Wiki syntax that's at the heart of Novelang philosophy. I'm just disappointed I didn't think first about an "augmented" text editor for aiding input of a Wiki text. On the other hand, this wouldn't have helped me to keep focused on a restrained feature set.
 
@@ -53,7 +53,7 @@ http://notepad-plus-plus.org
 http://git-scm.com 
 already offers a complete collaborative solution.
 
-But iA Writer is not the end of the story. By now it works with a full-size keyboard, or with iPad's emulated one, which is obviously not the most comfortable thing in the world. There are things to invent for a post-iPad world, when handheld devices will have something like a "decent virtual keyboard"
+But iA Writer is not the end of the story. By now it works with a full-size keyboard, or with iPad's keyboard emuvation -- not the most comfortable thing you can dream about-_. There are things to invent for a post-iPad world, when handheld devices will have something like a "decent virtual keyboard"
 http://www.8pen.com  
 . Starting experiments on a graphical interface with a dedicated parser could be a step in the future.
 
