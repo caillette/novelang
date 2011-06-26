@@ -2,7 +2,7 @@
 
 "iA Writer" 
 http://www.iawriter.com
-is the most clever text editor I've ever seen. Really. To get convinced, just watch its 1-minute presentation. It's a lot of fun. I watched it three times already. 
+is the most clever text editor I've ever seen. Really. To get convinced, just watch its 1-minute presentation. It's a lot of fun. Watched it three times already. They say: 
 
 <<
 iA Writer for Mac is a digital writing tool that makes sure that all your thoughts go into the text instead of the program.
@@ -10,7 +10,7 @@ iA Writer for Mac is a digital writing tool that makes sure that all your though
 
 That's a lot of shared mindset with Novelang, but while both tools leverage on a Wiki syntax, iA Writer tackles the problem with a dedicated graphical interface. It's a minimalistic text editor that dynamically adjusts its display according to a  Wiki syntax ("Markdown"
 http://daringfireball.net/projects/markdown/syntax
-). It has no menus, no preferences, and, well... almost no features. It's a paying application, only available on Mac and iPad, through the AppStore. Yes, it screws GPL lovers, but that's not a reason to not look closely at what it does.
+). It has no menus, no preferences, and, well... almost no features. You pay for getting rid of the crap. It's a paying application, only available on Mac and iPad, through the AppStore. Yes, it screws GPL lovers, but that's not a reason to not look closely at what it does.
 
 
 
@@ -27,13 +27,12 @@ Numbered lists contain a good idea : using plain ordinal numbers, so text source
 
 Markdown's syntax for links is a mess. There is an attempt to make a simple thing with single ``*`` and ``_`` as delimiters that work in the middle of a word, while ``**`` and ``__`` work for a whole sequence of words. 
 }}
-
 But Markdown is simple enough to be extremely fast to learn (especially with HTML left out). By sticking to this minimalistic level, iA Writer becomes easy to learn and keeps focused on the text being written. 
 
 
 === I should have invented it first!
 
-During a presentation of Novelang for corporate use, a guy asked me: "Do you plan some graphical editor for Novelang?" I answered: "Never, it would lose the purpose of the tool. Maybe I'll package some syntax highlighting configuration for text editors one day but there will be nothing like formatting."
+During a presentation of Novelang for corporate use, a guy asked me: "Do you plan some graphical editor for Novelang?" I answered: "Never, it would lose the purpose of the tool. Maybe I'll package some syntax highlighting configuration for text editors one day but nothing more."
 
 This was a decent answer, but iA Writer is more clever. I didn't envisage dynamic formatting, just because it seems hard to program. One author if "IntelliJ IDEA"
 http://www.jetbrains.com/idea 
@@ -50,7 +49,7 @@ iA Writer found a new path to the ultimate ease-of-use, while still relying on t
 
 Spending hundreds of hours of effort to mimick iA Writer sounds like a waste. On the other hand, iA Writer only runs on the ~Mac`/`~iOS platform and doesn't offer more than a text editor when inserted in a publication chain. By now, a simple mix of "`Notepad++`"
 http://notepad-plus-plus.org
-, Novelang ang "git" 
+, Novelang and "git" 
 http://git-scm.com 
 already offers a complete collaborative solution.
 
@@ -61,10 +60,10 @@ http://www.8pen.com
 
 === Conclusion
 
-By now, Novelang is good at what it does, but product's philosophy claims for a few more features: intralinks, embeddability, ePub, and "desktop integration"
+By now, Novelang is good at what it does, but lacks a few features: intralinks, embeddability, ePub, and "desktop integration"
 http://novelang.blogspot.com/2011/02/novelang-desktop.html
 . It's important to finish that first.
 
-Novelang could support Markdown as optional syntax. This would make iA Writer the editor of choice and keep Novelang project focused on document agregation and rendering. Two different syntaxes trigger the "double feature" alarm. There is always the trick is to make the source parser a pluggable thing and let other people implement the Markdown thing. By now, the very few users of Novelang were happy with the out-of-the-box experience and didn't ask for such geeky features. 
+Novelang could support Markdown as optional syntax. This would make iA Writer the editor of choice and keep Novelang project focused on document agregation and rendering. Two different syntaxes trigger the "double feature alarm". The source parser could become a pluggable thing, letting other people implement Markdown support. By now, the very few users of Novelang are happy with the out-of-the-box experience and didn't ask for such geeky features. 
 
-Hacking a special text editor component that behaves like iA Writer's one could be a nice experiment, but it shouldn't be part of Novelang's core before a few years.
+Hacking a special text editor component that behaves like iA Writer's one could be a nice experiment, but it shouldn't be part of Novelang's core before years.
