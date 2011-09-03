@@ -20,10 +20,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.novelang.nhovestone.Scenario;
+
 /**
+ * The general contract for something that performs a side-effect somewhere, causing an iteration
+ * in a {@link Scenario} to use bigger stuff.
  *
  * @author Laurent Caillette
-*/
+ */
 public interface Upsizer< UPSIZING > {
 
   /**

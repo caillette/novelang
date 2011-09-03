@@ -22,8 +22,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 
+import org.novelang.nhovestone.scenario.TimeMeasurer;
+
 /**
  * Kind of enum supporting inheritance.
+ *
+ * @see TimeMeasurer.Terminations
+ * @see Scenario.Terminations
  *
  * @author Laurent Caillette
  */

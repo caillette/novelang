@@ -66,6 +66,8 @@ public abstract class NovelistUpsizer implements Upsizer< Long > {
   }
 
   /**
+   * 
+   *
    * @author Laurent Caillette
    */
   public static class NovellaCount extends NovelistUpsizer {

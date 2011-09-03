@@ -43,8 +43,8 @@ import org.novelang.outfit.shell.ProcessCreationException;
 import org.novelang.outfit.shell.ProcessInitializationException;
 
 /**
- * Starts and queries several {@link org.novelang.nhovestone.driver.HttpDaemonDriver}s against an evolving
- * source document.
+ * Starts and queries several {@link org.novelang.nhovestone.driver.HttpDaemonDriver}s against an
+ * evolving source document.
  *
  * @author Laurent Caillette
  */

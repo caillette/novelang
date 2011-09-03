@@ -37,6 +37,11 @@ public class MeasurementBundle< MEASUREMENT > implements Iterable< MEASUREMENT >
     this.termination = termination;
   }
 
+  /**
+   * Seems that {@code null} means termination was OK.
+   * 
+   * @return a possibly null value?
+   */
   public Termination getTermination() {
     return termination ;
   }
